@@ -65,6 +65,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fLiteralText      = other.fLiteralText;
     fBadState         = other.fBadState;
     fNumCaptureGroups = other.fNumCaptureGroups;
+    fMaxCaptureDigits = other.fMaxCaptureDigits;
     if (fBadState) {
         return *this;
     }
@@ -108,6 +109,7 @@ void RegexPattern::init() {
     fFlags            = 0;
     fBadState         = FALSE;
     fNumCaptureGroups = 0;
+    fMaxCaptureDigits = 1;     // TODO:  calculate for real.
     fMatcher          = NULL;
     
     UErrorCode status=U_ZERO_ERROR;
@@ -301,6 +303,8 @@ UnicodeString RegexPattern::pattern() const {
 //---------------------------------------------------------------------
 //
 //   split
+//            TODO:  perl returns captured strings intermixed with the
+//                   fields.  Should we do this too?
 //
 //---------------------------------------------------------------------
 int32_t  RegexPattern::split(const UnicodeString &input,
@@ -359,9 +363,9 @@ int32_t  RegexPattern::split(const UnicodeString &input,
         if (fMatcher->find()) {
             // We found another delimiter.  Move everything from where we started looking
             //  up until the start of the delimiter into the next output string.
-            int32_t fieldLen = fMatcher->fLastMatchStart - nextOutputStringStart;
+            int32_t fieldLen = fMatcher->fMatchStart - nextOutputStringStart;
             dest[i].setTo(input, nextOutputStringStart, fieldLen);
-            nextOutputStringStart = fMatcher->fLastMatchEnd;
+            nextOutputStringStart = fMatcher->fMatchEnd;
             if (nextOutputStringStart == inputLen) {
                 // The delimiter was at the end of the string.  We're done.
                 break;
@@ -407,7 +411,7 @@ static char *opNames[] = {
         "NOP",
         "START_CAPTURE",
         "END_CAPTURE",
-        "?10",
+        "URX_BACKSLASH_A",
         "SETREF",
         "DOTANY",
         "JMP",

@@ -178,6 +178,7 @@ private:
                                    //  make new ones on each call.
 
     int32_t         fNumCaptureGroups;
+    int32_t         fMaxCaptureDigits;
 
     friend class RegexCompile;
     friend class RegexMatcher;
@@ -226,13 +227,16 @@ public:
     *   The append position is set to the position of the first
     *   character following the match in the input string.
     *
+    *   For complete, prepackaged, non-incremental find-and-replace
+    *   operations, see replaceFirst() or replaceAll().
+    *
     *   Returns:  This Matcher
     *
     *    error:  Illegal state - no match yet attemtped, or last match failed.
     *            IndexOutOfBounds - caputure string number from replacement string.
     */
     virtual RegexMatcher &appendReplacement(UnicodeString &dest,
-        const UnicodeString &replacement);
+        const UnicodeString &replacement, UErrorCode &status);
     
     
    /*
@@ -329,7 +333,8 @@ public:
     
     /*
     *    Replaces every subsequence of the input sequence that matches the pattern
-    *    with the given replacement string.
+    *    with the given replacement string.  This is a convenience function that
+    *    provides a complete find-and-replace-all operation.
     *
     *    This method first resets this matcher. It then scans the input sequence
     *    looking for matches of the pattern. Characters that are not part of any 
@@ -337,10 +342,7 @@ public:
     *    replacement string. The replacement string may contain references to
     *    captured subsequences as in the appendReplacement method. 
     *
-    *    @return   The target string.  Depending on how the RegexMatcher was
-    *              created, this may either be the original input string or a copy
-    *
-    *    Error:  Index out of bounds (replacement string capture group)
+    *    @return   A string containing the results of the find and replace.
     *
     */
     virtual UnicodeString replaceAll(const UnicodeString &replacement, UErrorCode &err); 
@@ -348,16 +350,15 @@ public:
     
     /*
     * Replaces the first subsequence of the input sequence that matches
-    * the pattern with the given replacement string. 
+    * the pattern with the given replacement string.   This is a convenience
+    * function that provides a complete find-and-replace operation.
+    *
     * This method first resets this matcher. It then scans the input sequence
     * looking for a match of the pattern. Characters that are not part
     * of the match are appended directly to the result string; the match is replaced
     * in the result by the replacement string. The replacement string may contain
     * references to captured subsequences as in the appendReplacement method. 
     *
-    *    Error:  Index out of bounds (replacement string capture group)
-    *            Illegal state (no match)
-    *      Note:  Javadoc doesn't list exceptions, but they gotta be there for consistency
     */
     virtual UnicodeString replaceFirst(const UnicodeString &replacement, UErrorCode &err); 
     
@@ -409,27 +410,33 @@ public:
 
 private:
     // Constructors and other object boilerplate are private.
-    // Creation by users is through factory method in RegexPattern
+    // Instances of RegexMatcher can not be assigned, copied, cloned, etc.
+    // Creation by users is only through the factory method in class RegexPattern
     RegexMatcher(const RegexPattern *pat); 
     RegexMatcher(const RegexMatcher &other);
     RegexMatcher &operator =(const RegexMatcher &rhs);
     friend class RegexPattern;
 
-    inline void backTrack(int32_t &inputIdx, int32_t &patIdx);
 
     //
     //  MatchAt   This is the internal interface to the match engine itself.
     //            Match status comes back in matcher member variables.
     //
-    virtual void MatchAt(int32_t startIdx, UErrorCode &status);   
+    void         MatchAt(int32_t startIdx, UErrorCode &status);   
+    inline  void backTrack(int32_t &inputIdx, int32_t &patIdx);
+    UBool        getCaptureText(const UnicodeString &rep,
+                                int32_t &repIdx,
+                                int32_t &textStart,
+                                int32_t &textEnd);
 
 
     const RegexPattern  *fPattern;
     const UnicodeString *fInput;
     int32_t              fInputLength;
-    UBool                fLastMatch;        // True if the last match was successful.
-    int32_t              fLastMatchStart;
-    int32_t              fLastMatchEnd;
+    UBool                fMatch;           // True if the last match was successful.
+    int32_t              fMatchStart;      // Position of the start of the most recent match
+    int32_t              fMatchEnd;        // First position after the end of the most recent match
+    int32_t              fLastMatchEnd;    // First position after the end of the previous match.
     UStack              *fBackTrackStack;
     UVector             *fCaptureStarts;
     UVector             *fCaptureEnds;

@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/regex.h"
 #include "unicode/uniset.h"
+#include "unicode/uchar.h"
 #include "uassert.h"
 #include "uvector.h"
 #include "regeximp.h"
@@ -54,20 +55,126 @@ RegexMatcher::~RegexMatcher() {
 
 
 
-
+static const UChar BACKSLASH  = 0x5c;
+static const UChar DOLLARSIGN = 0x24;
+//--------------------------------------------------------------------------------
+//
+//    appendReplacement
+//
+//--------------------------------------------------------------------------------
 RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
-                                              const UnicodeString &replacement) {
+                                              const UnicodeString &replacement,
+                                              UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *this;
+    }
+    if (fMatch == FALSE) {
+        status = U_REGEX_INVALID_STATE;
+        return *this;
+    }
+
+    // Copy input string from the end of previous match to start of current match
+    int32_t  len = fMatchStart-fLastMatchEnd;
+    if (len > 0) {
+        dest.append(*fInput, fLastMatchEnd, len);
+    }
+    
+
+    // scan the replacement text, looking for substitutions ($n) and \escapes.
+    int32_t  replLen = replacement.length();
+    int32_t  replIdx;
+    for (replIdx = 0; replIdx<replLen; replIdx++) {
+        UChar  c = replacement.charAt(replIdx);
+        if (c == BACKSLASH) {
+            // Backslash Escape.  Copy the following char out without further checks.
+            replIdx++;
+            if (replIdx >= replLen) {
+                break;
+            }
+            c = replacement.charAt(replIdx);
+            dest.append(c);
+            continue;
+        }
+
+        if (c != DOLLARSIGN) {
+            // Normal char, not a $.  Copy it out without further checks.
+            dest.append(c);
+            continue;
+        }
+
+        // We've got a $.  Pick up a capture group number if one follows.
+        // Consume at most the number of digits necessary for the largest capture
+        // number that is valid for this pattern.
+        if (++replIdx >= replLen) {
+            // $ was at the end of the replacement string.  Dump it out and be done.
+            dest.append(c);
+            break;
+        }
+
+        int32_t numDigits = 0;
+        int32_t groupNum  = 0;
+        for (;;) {
+            c = replacement.charAt(replIdx);
+            if (u_isdigit(c) == FALSE) {
+                break;
+            }
+            groupNum=groupNum*10 + u_charDigitValue(c);
+            numDigits++;
+            if (++replIdx >= replLen) {
+                break;
+            }
+            if (numDigits >= fPattern->fMaxCaptureDigits) {
+                break;
+            }
+        }
+
+        // We've scanned one char ahead in the pattern.  Back up so the
+        //  next iteration of the loop picks the char again.
+        --replIdx;
+
+        if (numDigits == 0) {
+            // The $ didn't introduce a group number at all.
+            // Treat it as just part of the substitution text.
+            dest.append(DOLLARSIGN);
+            continue;
+        }
+
+        // Finally, append the capture group data to the destination.
+        dest.append(group(groupNum, status));
+        if (U_FAILURE(status)) {
+            // Can fail if group number is out of range.
+            return *this;
+        }
+
+    }
+
     return *this;
 }
 
 
 
+//--------------------------------------------------------------------------------
+//
+//    appendTail     Intended to be used in conjunction with appendReplacement()
+//                   To the destination string, append everything following
+//                   the last match position from the input string.
+//
+//--------------------------------------------------------------------------------
 UnicodeString &RegexMatcher::appendTail(UnicodeString &dest) {
+    int32_t  len = fInputLength-fMatchEnd;
+    if (len > 0) {
+        dest.append(*fInput, fMatchEnd, len);
+    }
     return dest;
 }
 
 
 
+//--------------------------------------------------------------------------------
+//
+//   end
+//
+//--------------------------------------------------------------------------------
 int32_t RegexMatcher::end(UErrorCode &err) const {
     return end(0, err);
 }
@@ -78,7 +185,7 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
         return 0;
     }
-    if (fLastMatch == FALSE) {
+    if (fMatch == FALSE) {
         err = U_REGEX_INVALID_STATE;
         return 0;
     }
@@ -88,7 +195,7 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
     }
     int32_t e = 0;
     if (group == 0) {
-        e = fLastMatchEnd; 
+        e = fMatchEnd; 
     } else {
         int32_t s = fCaptureEnds->elementAti(group);
         // TODO:  what to do if no match on this specific group?
@@ -101,11 +208,16 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
 
 
 
+//--------------------------------------------------------------------------------
+//
+//   find()
+//
+//--------------------------------------------------------------------------------
 UBool RegexMatcher::find() {
     // Start at the position of the last match end.  (Will be zero if the
     //   matcher has been reset.
     UErrorCode status = U_ZERO_ERROR;
-    return find(fLastMatchEnd, status);
+    return find(fMatchEnd, status);
 }
 
 
@@ -128,16 +240,20 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
         if (U_FAILURE(status)) {
             return FALSE;
         }
-        if (fLastMatch) {
+        if (fMatch) {
             return TRUE;
         }
     }
-    fLastMatchStart = fLastMatchEnd = fInputLength;
     return FALSE;
 }
 
 
 
+//--------------------------------------------------------------------------------
+//
+//  group()
+//
+//--------------------------------------------------------------------------------
 UnicodeString RegexMatcher::group(UErrorCode &status) const {
     return group(0, status);
 }
@@ -181,7 +297,7 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
     }
     reset();
     MatchAt(0, status);
-    return fLastMatch;
+    return fMatch;
 }
 
 
@@ -192,7 +308,7 @@ UBool RegexMatcher::matches(UErrorCode &status) {
     }
     reset();
     MatchAt(0, status);
-    UBool   success  = (fLastMatch && fLastMatchEnd==fInputLength);
+    UBool   success  = (fMatch && fMatchEnd==fInputLength);
     return success;
 }
 
@@ -205,23 +321,58 @@ const RegexPattern &RegexMatcher::pattern() const {
 
 
 
-UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorCode &err) {
-    return UnicodeString();
+//--------------------------------------------------------------------------------
+//
+//    replaceAll
+//
+//--------------------------------------------------------------------------------
+UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *fInput;
+    }
+    UnicodeString destString;
+    for (reset(); find(); ) {
+        appendReplacement(destString, replacement, status);
+    }
+    appendTail(destString);
+    return destString;
 }
 
 
 
 
-UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErrorCode &err) {
-    return UnicodeString();
+//--------------------------------------------------------------------------------
+//
+//    replaceFirst
+//
+//--------------------------------------------------------------------------------
+UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return *fInput;
+    }
+    reset();
+    if (!find()) {
+        return *fInput;
+    }
+
+    UnicodeString destString;
+    appendReplacement(destString, replacement, status);
+    appendTail(destString);
+    return destString;
 }
 
 
 
+//--------------------------------------------------------------------------------
+//
+//     reset
+//
+//--------------------------------------------------------------------------------
 RegexMatcher &RegexMatcher::reset() {
-    fLastMatchStart = 0;
-    fLastMatchEnd   = 0;
-    fLastMatch      = FALSE;
+    fMatchStart   = 0;
+    fMatchEnd     = 0;
+    fLastMatchEnd = 0;
+    fMatch        = FALSE;
     int i;
     for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
         fCaptureStarts->setElementAt(i, -1);
@@ -252,7 +403,7 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
         return 0;
     }
-    if (fLastMatch == FALSE) {
+    if (fMatch == FALSE) {
         err = U_REGEX_INVALID_STATE;
         return 0;
     }
@@ -262,7 +413,7 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
     }
     int32_t s;
     if (group == 0) {
-        s = fLastMatchStart; 
+        s = fMatchStart; 
     } else {
         s = fCaptureStarts->elementAti(group);
         // TODO:  what to do if no match on this specific group?
@@ -272,6 +423,26 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
 
 
 
+//--------------------------------------------------------------------------------
+//
+//    getCaptureText    We have encountered a '\' that might preceed a
+//                      capture group specification. 
+//                      If a valid capture group number follows the '\', 
+//                      return the indicies to the start & end of the captured
+//                      text, and update the patIdx to the position following the
+//                      \n sequence.
+//
+//                      This function is used during find and replace operations when
+//                      processing caputure references in the replacement text.
+//
+//--------------------------------------------------------------------------------
+UBool  RegexMatcher::getCaptureText(const UnicodeString &rep,
+                                int32_t &repIdx,
+                                int32_t &textStart,
+                                int32_t &textEnd)
+{
+    return FALSE;
+}
 
 //--------------------------------------------------------------------------------
 //
@@ -408,6 +579,12 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             fCaptureEnds->setElementAt(inputIdx, opValue);
             break;
 
+        case URX_BACKSLASH_A:
+            if (inputIdx != 0) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
 
         case URX_SETREF:
             if (inputIdx < fInputLength) {
@@ -449,7 +626,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            U_ASSERT(false);
+            U_ASSERT(FALSE);
         }
 
         if (U_FAILURE(status)) {
@@ -458,10 +635,11 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     }
     
 breakFromLoop:
-    fLastMatch = isMatch;
+    fMatch = isMatch;
     if (isMatch) {
-        fLastMatchStart  = startIdx;
-        fLastMatchEnd    = inputIdx;
+        fLastMatchEnd = fMatchEnd;
+        fMatchStart   = startIdx;
+        fMatchEnd     = inputIdx;
         }
     return;
 }
