@@ -22,11 +22,13 @@
 #define UCOL_UCAELEMS_H
 
 #include "ucol_cnt.h"
-
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "ucol_imp.h"
 #include "cmemory.h"
+
+#ifdef UCOL_DEBUG
+#include <stdio.h>
+#endif
 
 typedef struct {
     uint32_t *CEs;
