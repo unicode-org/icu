@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.177 2002/11/01 19:12:24 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.178 2003/02/15 00:23:27 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -399,6 +399,8 @@ fi
 AC_SUBST(U_HAVE_NAMESPACE)
 
 AC_MSG_CHECKING([for properly overriding new and delete])
+U_OVERRIDE_CXX_ALLOCATION=0
+U_HAVE_PLACEMENT_NEW=0
 AC_CACHE_VAL(ac_cv_override_cxx_allocation_ok,
     [AC_TRY_LINK(
     changequote(<<, >>)dnl
@@ -406,19 +408,40 @@ AC_CACHE_VAL(ac_cv_override_cxx_allocation_ok,
     class UObject {
     void *operator new(size_t size) {return malloc(size);}
     void *operator new[](size_t size) {return malloc(size);}
-    void operator delete(void *p) {delete(p);}
-    void operator delete[](void *p) {delete(p);}
+    void operator delete(void *p) {free(p);}
+    void operator delete[](void *p) {free(p);}
     };
     >>,
     changequote([, ])dnl
     [], ac_cv_override_cxx_allocation_ok=yes, ac_cv_override_cxx_allocation_ok=no)] )
 AC_MSG_RESULT($ac_cv_override_cxx_allocation_ok)
-U_OVERRIDE_CXX_ALLOCATION=1
-if test $ac_cv_override_cxx_allocation_ok = no
+if test $ac_cv_override_cxx_allocation_ok = yes
 then
-    U_OVERRIDE_CXX_ALLOCATION=0
+    U_OVERRIDE_CXX_ALLOCATION=1
+    AC_MSG_CHECKING([for placement new and delete])
+    AC_CACHE_VAL(ac_cv_override_placement_new_ok,
+        [AC_TRY_LINK(
+        changequote(<<, >>)dnl
+        <<#include <stdlib.h>
+        class UObject {
+        void *operator new(size_t size) {return malloc(size);}
+        void *operator new[](size_t size) {return malloc(size);}
+        void operator delete(void *p) {free(p);}
+        void operator delete[](void *p) {free(p);}
+        void * operator new(size_t, void *ptr) { return ptr; }
+        void operator delete(void *, void *) {}
+        };
+        >>,
+        changequote([, ])dnl
+        [], ac_cv_override_placement_new_ok=yes, ac_cv_override_placement_new_ok=no)] )
+    AC_MSG_RESULT($ac_cv_override_placement_new_ok)
+    if test $ac_cv_override_placement_new_ok = yes
+    then
+        U_HAVE_PLACEMENT_NEW=1
+    fi
 fi
 AC_SUBST(U_OVERRIDE_CXX_ALLOCATION)
+AC_SUBST(U_HAVE_PLACEMENT_NEW)
 
 AC_LANG_C
 AC_CHECK_FUNC(popen)
