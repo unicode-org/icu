@@ -1114,6 +1114,7 @@ static const struct {
 static void U_CALLCONV
 printError(void *context, const char *fmt, va_list args) {
     vlog_info("[swap] ", fmt, args);
+    log_err("\n");  /* Register error */
 }
 
 static void
@@ -1129,6 +1130,21 @@ TestSwapCase(UDataMemory *pData, const char *name,
     UBool inEndian, oppositeEndian;
     uint8_t inCharset, oppositeCharset;
 
+    /* First we check that swapFn handles failures as expected. */
+    errorCode = U_UNSUPPORTED_ERROR;
+    length = swapFn(NULL, NULL, 0, buffer, &errorCode);
+    if (length != 0 || errorCode != U_UNSUPPORTED_ERROR) {
+        log_err("%s() did not fail as expected - %s\n", name, u_errorName(errorCode));
+    }
+    errorCode = U_ZERO_ERROR;
+    length = swapFn(NULL, NULL, 0, buffer, &errorCode);
+    if (length != 0 || errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("%s() did not fail as expected with bad arguments - %s\n", name, u_errorName(errorCode));
+    }
+
+
+    /* Continue with the rest of the tests. */
+    errorCode = U_ZERO_ERROR;
     inData=udata_getMemory(pData);
 
     /*
@@ -1305,13 +1321,18 @@ TestSwapCase(UDataMemory *pData, const char *name,
     }
 }
 
+static void U_CALLCONV
+printErrorToString(void *context, const char *fmt, va_list args) {
+    vsprintf((char *)context, fmt, args);
+}
+
 static void
 TestSwapData() {
     char name[100];
+    UDataSwapper *ds;
     UDataMemory *pData;
     uint8_t *buffer;
     const char *pkg, *nm;
-
     UErrorCode errorCode;
     int32_t i;
 
@@ -1319,6 +1340,19 @@ TestSwapData() {
     if(buffer==NULL) {
         log_err("unable to allocate %d bytes\n", 2*SWAP_BUFFER_SIZE);
         return;
+    }
+
+    /* Test that printError works as expected. */
+    errorCode=U_ZERO_ERROR;
+    ds=udata_openSwapper(U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         !U_IS_BIG_ENDIAN, U_ASCII_FAMILY,
+                         &errorCode);
+    ds->printError=printErrorToString;
+    ds->printErrorContext=name;
+    udata_printError(ds, "This %s a %s", "is", "test");
+    udata_closeSwapper(ds);
+    if (strcmp(name, "This is a test") != 0) {
+        log_err("udata_printError can't properly print error messages. Got = \n", name);
     }
 
     for(i=0; i<LENGTHOF(swapCases); ++i) {
