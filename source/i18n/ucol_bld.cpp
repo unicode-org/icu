@@ -1159,7 +1159,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
             el.cSize = 2;
           }
           ucol_setText(ucaEl, el.uchars, el.cSize, status);
-          while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
+          while ((int32_t)(el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
             el.noOfCEs++;
           }
           uprv_uca_addAnElement(t, &el, status);
