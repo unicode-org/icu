@@ -938,6 +938,10 @@ SOURCE=.\ucnv_io.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnvmbcs.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\udata.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
