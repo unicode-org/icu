@@ -1867,11 +1867,12 @@ private:
      * time.
      *
      * @param desiredLocale  The given locale.
+     * @param type           The calendar type identifier, e.g: gregorian, buddhist, etc.
      * @param success        Indicates the status of setting the week count data from
      *                       the resource for the given locale. Returns U_ZERO_ERROR if
      *                       constructed successfully.
      */
-    void        setWeekCountData(const Locale& desiredLocale, UErrorCode& success);
+    void        setWeekCountData(const Locale& desiredLocale, const char *type, UErrorCode& success);
 
     /**
      * Recompute the time and update the status fields isTimeSet
