@@ -838,12 +838,8 @@ void ParagraphLayout::appendRun(ParagraphLayout::Line *line, le_int32 run, le_in
     // from the middle of a layout. If we've got a right-to-left run, we
     // want the left-most glyph to start at the final x position of the
     // previous run, even though this glyph may be in the middle of the
-    // layout.
-    if (run == fFirstVisualRun) {
-        fVisualRunLastX = - fStyleRunInfo[run].positions[leftGlyph * 2];
-    } else if ((fStyleRunInfo[run].level & 1) != 0) {
-        fVisualRunLastX -= fStyleRunInfo[run].positions[leftGlyph * 2];
-    }
+    // run.
+	fVisualRunLastX -= fStyleRunInfo[run].positions[leftGlyph * 2];
  
     // Make rightGlyph be the glyph just to the right of
     // the run's glyphs
