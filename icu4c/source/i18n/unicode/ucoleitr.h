@@ -25,7 +25,7 @@
  * to be returned.
  * @stable ICU 2.0
  */
-#define UCOL_NULLORDER        0xFFFFFFFF
+#define UCOL_NULLORDER        ((int32_t)0xFFFFFFFF)
 
 #include "unicode/ucol.h"
 
