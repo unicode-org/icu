@@ -1998,7 +1998,7 @@ void NumberFormatRegressionTest::Test4179818(void) {
 void NumberFormatRegressionTest::Test4212072(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::getUS(), status);
-/*
+
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("#"), sym, status);
     failure(status, "DecimalFormat ct");
@@ -2083,7 +2083,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
               s + ", exp DOL");
     }
     sym.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, "USD");
-*/
+
     // Since the pattern logic has changed, make sure that patterns round
     // trip properly.  Test stream in/out integrity too.
     int32_t n;
