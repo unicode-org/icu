@@ -505,16 +505,16 @@ static const struct {
     uint32_t code;
     uint8_t generalCategory;
 } controlProps[]={
-    /* TAB */   0x9, U_SPACE_SEPARATOR,
-    /* VT */    0xb, U_SPACE_SEPARATOR,
-    /* LF */    0xa, U_PARAGRAPH_SEPARATOR,
-    /* FF */    0xc, U_LINE_SEPARATOR,
-    /* CR */    0xd, U_PARAGRAPH_SEPARATOR,
-    /* FS */    0x1c, U_PARAGRAPH_SEPARATOR,
-    /* GS */    0x1d, U_PARAGRAPH_SEPARATOR,
-    /* RS */    0x1e, U_PARAGRAPH_SEPARATOR,
-    /* US */    0x1f, U_SPACE_SEPARATOR,
-    /* NL */    0x85, U_PARAGRAPH_SEPARATOR
+    /* TAB */   {0x9, U_SPACE_SEPARATOR},
+    /* VT */    {0xb, U_SPACE_SEPARATOR},
+    /* LF */    {0xa, U_PARAGRAPH_SEPARATOR},
+    /* FF */    {0xc, U_LINE_SEPARATOR},
+    /* CR */    {0xd, U_PARAGRAPH_SEPARATOR},
+    /* FS */    {0x1c, U_PARAGRAPH_SEPARATOR},
+    /* GS */    {0x1d, U_PARAGRAPH_SEPARATOR},
+    /* RS */    {0x1e, U_PARAGRAPH_SEPARATOR},
+    /* US */    {0x1f, U_SPACE_SEPARATOR},
+    /* NL */    {0x85, U_PARAGRAPH_SEPARATOR}
 };
 
 static struct {

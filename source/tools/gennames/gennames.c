@@ -152,9 +152,9 @@ static UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x75, 0x6e, 0x61, 0x6d,     /* dataFormat="unam" */
-    1, 0, 0, 0,                 /* formatVersion */
-    3, 0, 0, 0                  /* dataVersion */
+    {0x75, 0x6e, 0x61, 0x6d},     /* dataFormat="unam" */
+    {1, 0, 0, 0},                 /* formatVersion */
+    {3, 0, 0, 0}                  /* dataVersion */
 };
 
 static UBool beVerbose=FALSE, beQuiet=FALSE, haveCopyright=TRUE;
@@ -181,7 +181,7 @@ typedef struct {
 static Line lines[MAX_LINE_COUNT];
 static Word words[MAX_WORD_COUNT];
 
-static uint32_t lineCount=0, wordCount=0, groupCount=0;
+static uint32_t lineCount=0, wordCount=0;
 
 static int16_t leadByteCount;
 
@@ -193,7 +193,7 @@ static uint32_t tokenCount;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-init();
+init(void);
 
 static void
 parseDB(const char *filename, UBool store10Names);
@@ -208,10 +208,10 @@ static int16_t
 getWord(char *line, int16_t start, int16_t limit);
 
 static void
-compress();
+compress(void);
 
 static void
-compressLines();
+compressLines(void);
 
 static int16_t
 compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop);
@@ -772,7 +772,7 @@ generateData(const char *dataDir) {
      * - the size of the data for the algorithmic names
      */
     tokenStringOffset=4+4+4+4+2+2*tokenCount;
-    groupsOffset=tokenStringOffset+(lineTop-groupTop+1)&~1;
+    groupsOffset=(tokenStringOffset+(lineTop-groupTop+1))&~1;
     groupStringOffset=groupsOffset+2+6*lineCount;
     algNamesOffset=(groupStringOffset+groupTop+3)&~3;
 

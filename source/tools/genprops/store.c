@@ -280,9 +280,9 @@ static UDataInfo dataInfo={
     U_SIZEOF_UCHAR,
     0,
 
-    0x55, 0x50, 0x72, 0x6f,     /* dataFormat="UPro" */
-    1, 3, 0, 0,                 /* formatVersion */
-    3, 0, 0, 0                  /* dataVersion */
+    {0x55, 0x50, 0x72, 0x6f},     /* dataFormat="UPro" */
+    {1, 3, 0, 0},                 /* formatVersion */
+    {3, 0, 0, 0}                  /* dataVersion */
 };
 
 /* definitions and arrays for the 3-stage lookup */
@@ -815,7 +815,7 @@ repeatFromStage2(uint16_t i2, uint32_t start, uint32_t limit, uint16_t i3Repeat,
     start&=STAGE_2_3_AREA-1;
     limit=((limit-1)&(STAGE_2_3_AREA-1))+1;
 
-    i2Limit=i2+(uint16_t)(limit>>STAGE_3_BITS);
+    i2Limit=(uint16_t)(i2+(limit>>STAGE_3_BITS));
     i2+=(uint16_t)(start>>STAGE_3_BITS);
 
     /* similar to repeatProps(), there may be 3 sub-areas */
@@ -1170,7 +1170,6 @@ getProps2(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3, uint16_t *pI4
     *pI4=i4=stage3[i3];
     return props32[i4];
 }
-#endif
 
 /* get properties before compacting them */
 static uint32_t
@@ -1182,6 +1181,7 @@ getProps(uint32_t c, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3) {
     *pI3=i3=(uint16_t)(stage2[i2]+(c&(STAGE_3_BLOCK-1)));
     return props[i3];
 }
+#endif
 
 /* set properties before compacting them */
 static void
