@@ -341,7 +341,7 @@ public:
   * @deprecated ICU 2.6 use the overload with UErrorCode &
   **/
   virtual EComparisonResult compare(const UnicodeString& source, 
-                                    const UnicodeString& target) const = 0;
+                                    const UnicodeString& target) const;
 
   /**
   * The comparison function compares the character data stored in two
@@ -373,7 +373,7 @@ public:
   */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
-                                    int32_t length) const = 0;
+                                    int32_t length) const;
     
   /**
   * Does the same thing as compare but limits the comparison to a specified 
@@ -410,7 +410,7 @@ public:
   */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
-                                    const = 0;
+                                    const;
 
   /**
   * The comparison function compares the character data stored in two
