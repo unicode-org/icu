@@ -43,7 +43,7 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 	/**
 	 * Used for toggling the debug mode
 	 */
-	public static final boolean debug = true;
+	public static final boolean debug = false;
 	/**
 	 * Used to count debug messages
 	 */
