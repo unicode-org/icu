@@ -121,6 +121,7 @@ ucol_closeElements(UCollationElements *elems);
 /**
  * Reset the collation elements to their initial state.
  * This will move the 'cursor' to the beginning of the text.
+ * Property settings for collation will be reset to the current status.
  * @param elems The UCollationElements to reset.
  * @see ucol_next
  * @see ucol_previous
@@ -172,6 +173,9 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
 
 /**
  * Set the text containing the collation elements.
+ * Property settings for collation will remain the same.
+ * In order to reset the iterator to the current collation property settings,
+ * the API reset() has to be called.
  * @param elems The UCollationElements to set.
  * @param text The source text containing the collation elements.
  * @param textLength The length of text, or -1 if null-terminated.
@@ -198,6 +202,9 @@ ucol_getOffset(const UCollationElements *elems);
 /**
  * Set the offset of the current source character.
  * This is an offset into the text of the character to be processed.
+ * Property settings for collation will remain the same.
+ * In order to reset the iterator to the current collation property settings,
+ * the API reset() has to be called.
  * @param elems The UCollationElements to set.
  * @param offset The desired character offset.
  * @param status A pointer to an UErrorCode to receive any errors.
