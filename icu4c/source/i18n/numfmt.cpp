@@ -95,6 +95,12 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 // -------------------------------------
 // SimpleNumberFormatFactory implementation
 NumberFormatFactory::~NumberFormatFactory() {}
+SimpleNumberFormatFactory::SimpleNumberFormatFactory(const Locale& locale, UBool visible)
+    : _visible(visible)
+    , _id(locale.getName())
+{
+}
+
 SimpleNumberFormatFactory::~SimpleNumberFormatFactory() {}
 
 UBool SimpleNumberFormatFactory::visible(void) const {
