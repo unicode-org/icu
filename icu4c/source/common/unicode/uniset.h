@@ -335,6 +335,25 @@ public:
      */
     UnicodeSet(const UnicodeString& pattern,
                uint32_t options,
+               const SymbolTable* symbols,
+               UErrorCode& status);
+
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param options bitmask for options to apply to the pattern.
+     * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param symbols a symbol table mapping variable names to values
+     * and stand-in characters to UnicodeSets; may be NULL
+     * @param status input-output error code
+     * @draft ICU 2.8
+     */
+    UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
+               uint32_t options,
+               const SymbolTable* symbols,
                UErrorCode& status);
 
 #ifdef U_USE_UNICODESET_DEPRECATES
@@ -432,6 +451,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
+     * @return a reference to this
      * @stable ICU 2.0
      */
     virtual UnicodeSet& applyPattern(const UnicodeString& pattern,
@@ -444,12 +464,49 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param symbols a symbol table mapping variable names to
+     * values and stand-ins to UnicodeSets; may be NULL
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
+     * @return a reference to this
      * @internal
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
                              uint32_t options,
+                             const SymbolTable* symbols,
+                             UErrorCode& status);
+
+    /**
+     * Parses the given pattern, starting at the given position.  The
+     * character at pattern.charAt(pos.getIndex()) must be '[', or the
+     * parse fails.  Parsing continues until the corresponding closing
+     * ']'.  If a syntax error is encountered between the opening and
+     * closing brace, the parse fails.  Upon return from a successful
+     * parse, the ParsePosition is updated to point to the character
+     * following the closing ']', and a StringBuffer containing a
+     * pairs list for the parsed pattern is returned.  This method calls
+     * itself recursively to parse embedded subpatterns.
+     *
+     * @param pattern the string containing the pattern to be parsed.
+     * The portion of the string from pos.getIndex(), which must be a
+     * '[', to the corresponding closing ']', is parsed.
+     * @param pos upon entry, the position at which to being parsing.
+     * The character at pattern.charAt(pos.getIndex()) must be a '['.
+     * Upon return from a successful parse, pos.getIndex() is either
+     * the character after the closing ']' of the parsed pattern, or
+     * pattern.length() if the closing ']' is the last character of
+     * the pattern string.
+     * @param options bitmask for options to apply to the pattern.
+     * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param symbols a symbol table mapping variable names to
+     * values and stand-ins to UnicodeSets; may be NULL
+     * @return a reference to this
+     * @draft ICU 2.8
+     */
+    UnicodeSet& applyPattern(const UnicodeString& pattern,
+                             ParsePosition& pos,
+                             uint32_t options,
+                             const SymbolTable* symbols,
                              UErrorCode& status);
 
     /**
@@ -1117,40 +1174,6 @@ private:
     // RuleBasedTransliterator support
     //----------------------------------------------------------------
 
-public:
-
-    /**
-     * Constructs a set from the given pattern.  See the class description
-     * for the syntax of the pattern language.
-
-     * @param pattern a string specifying what characters are in the set
-     * @param pos on input, the position in pattern at which to start parsing.
-     * On output, the position after the last character parsed.
-     * @param varNameToChar a mapping from variable names (String) to characters
-     * (Character).  May be null.  If varCharToSet is non-null, then names may
-     * map to either single characters or sets, depending on whether a mapping
-     * exists in varCharToSet.  If varCharToSet is null then all names map to
-     * single characters.
-     * @param varCharToSet a mapping from characters (Character objects from
-     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
-     * varNameToChar is also non-null.
-     * @exception <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
-     * contains a syntax error.
-     * @draft ICU 2.8
-     */
-    UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-               const SymbolTable& symbols,
-               UErrorCode& status);
-
-    /**
-     * Constructs a set from the given pattern.  Identical to the
-     * 4-parameter ParsePosition contstructor, but does not take a
-     * SymbolTable, and does not recognize embedded variables.
-     * @draft ICU 2.8
-     */
-    UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-               uint32_t options, UErrorCode& status);
-
 private:
 
     /**
@@ -1166,40 +1189,10 @@ private:
     // Implementation: Pattern parsing
     //----------------------------------------------------------------
 
-    /**
-     * Parses the given pattern, starting at the given position.  The
-     * character at pattern.charAt(pos.getIndex()) must be '[', or the
-     * parse fails.  Parsing continues until the corresponding closing
-     * ']'.  If a syntax error is encountered between the opening and
-     * closing brace, the parse fails.  Upon return from a successful
-     * parse, the ParsePosition is updated to point to the character
-     * following the closing ']', and a StringBuffer containing a
-     * pairs list for the parsed pattern is returned.  This method calls
-     * itself recursively to parse embedded subpatterns.
-     *
-     * @param pattern the string containing the pattern to be parsed.
-     * The portion of the string from pos.getIndex(), which must be a
-     * '[', to the corresponding closing ']', is parsed.
-     * @param pos upon entry, the position at which to being parsing.
-     * The character at pattern.charAt(pos.getIndex()) must be a '['.
-     * Upon return from a successful parse, pos.getIndex() is either
-     * the character after the closing ']' of the parsed pattern, or
-     * pattern.length() if the closing ']' is the last character of
-     * the pattern string.
-     * @return a StringBuffer containing a pairs list for the parsed
-     * substring of <code>pattern</code>
-     * @exception U_ILLEGAL_ARGUMENT_ERROR if the parse fails.
-     */
-    void applyPattern(const UnicodeString& pattern,
-                      ParsePosition& pos,
-                      uint32_t options,
-                      const SymbolTable* symbols,
-                      UErrorCode& status);
-
     void applyPattern(RuleCharacterIterator& chars,
                       const SymbolTable* symbols,
                       UnicodeString& rebuiltPat,
-                      int32_t options,
+                      uint32_t options,
                       UErrorCode& ec);
 
     //----------------------------------------------------------------

@@ -58,7 +58,7 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
                  UErrorCode* ec)
 {
     UnicodeString pat(patternLength==-1, pattern, patternLength);
-    UnicodeSet* set = new UnicodeSet(pat, options, *ec);
+    UnicodeSet* set = new UnicodeSet(pat, options, NULL, *ec);
     /* test for NULL */
     if(set == 0) {
         *ec = U_MEMORY_ALLOCATION_ERROR;

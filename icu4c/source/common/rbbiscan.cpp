@@ -1092,8 +1092,8 @@ void RBBIRuleScanner::scanSet() {
     pos.setIndex(fScanIndex);
     startPos = fScanIndex;
     UErrorCode localStatus = U_ZERO_ERROR;
-    uset = new UnicodeSet(fRB->fRules, pos,
-                         *fSymbolTable,
+    uset = new UnicodeSet(fRB->fRules, pos, USET_IGNORE_SPACE,
+                         fSymbolTable,
                          localStatus);
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
