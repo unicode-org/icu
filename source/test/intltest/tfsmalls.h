@@ -4,11 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-/**
- * TestChoiceFormat is a third level test class
- */
-
-
 #include "unicode/utypes.h"
 #include "intltest.h"
 
