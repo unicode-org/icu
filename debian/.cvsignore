@@ -15,3 +15,4 @@ prerm
 icu.postinst
 icu.prerm
 libicu[0-9]*.p*
+icu-doc
