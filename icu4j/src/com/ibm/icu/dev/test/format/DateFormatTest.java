@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2004/03/09 22:26:19 $ 
- * $Revision: 1.24 $
+ * $Date: 2004/03/11 07:04:29 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -178,13 +178,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Verify that returned field position indices are correct.
      */
     public void TestFieldPosition() {
-        DateFormat[] dateFormats = new DateFormat[4];
-        int COUNT = dateFormats.length;
         int i, j, exp;
         StringBuffer buf = new StringBuffer();
 
-        checkData();
-    
+        // Verify data
+        DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
+        assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
+        assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
+        assertTrue("Data", DateFormat.FIELD_COUNT == PATTERN_CHARS.length());
+
+        // Create test formatters
+        final int COUNT = 4;
+        DateFormat[] dateFormats = new DateFormat[COUNT];
         dateFormats[0] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
         dateFormats[1] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.FRANCE);
         // Make the pattern "G y M d..."
@@ -203,30 +208,27 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // Expected output field values for above DateFormats on aug13
         // Fields are given in order of DateFormat field number
-        final String expected[] = {
+        final String EXPECTED[] = {
             "", "1997", "August", "13", "", "", "34", "12", "",
             "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
 
             "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
             "mercredi", "", "", "", "", "", "", "", "GMT-07:00", "", "", "", "", "", "",
 
-            "AD", "1997", "8", "13", "14", "14", "34", "12", "513",
+            "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
             "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
 
-            "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "0513",
+            "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
             "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
         };
 
-        assertTrue("data size", expected.length == COUNT * DateFormat.FIELD_COUNT);
+        assertTrue("data size", EXPECTED.length == COUNT * DateFormat.FIELD_COUNT);
 
-        int qbase = 0;
-        String qs[] = new String[100];
-        
+        TimeZone PT = TimeZone.getTimeZone("America/Los_Angeles");
         for (j = 0, exp = 0; j < COUNT; ++j) {
           //  String str;
             DateFormat df = dateFormats[j];
-            TimeZone tz = TimeZone.getTimeZone("PST");
-            df.setTimeZone(tz);
+            df.setTimeZone(PT);
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
             try {
                 logln("  Result = " + df.format(aug13));
@@ -236,13 +238,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 continue;
             }
 
-            for (i = 0; i < DATEFORMAT_FIELD_NAMES.length; ++i, ++exp) {
+            for (i = 0; i < DateFormat.FIELD_COUNT; ++i, ++exp) {
                 FieldPosition pos = new FieldPosition(i);
                 buf.setLength(0);
                 df.format(aug13, buf, pos);    
                 String field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
-                String expStr = expected[exp];
-                assertEquals("field #" + i + " " + DATEFORMAT_FIELD_NAMES[i], expStr, field);
+                assertEquals("field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
+                             EXPECTED[exp], field);
             }
         }
     }
@@ -282,17 +284,24 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         "MILLISECONDS_IN_DAY_FIELD",
         "TIMEZONE_RFC_FIELD"
     };
-
-    /**
-     * Check the consistency of our data.
-     */
-    void checkData() {
-        DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
-        assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
-        assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
-        assertTrue("Data", DATEFORMAT_FIELD_NAMES.length == PATTERN_CHARS.length());
-    }
     
+    /**
+     * General parse/format tests.  Add test cases as needed.
+     */
+    public void TestGeneral() {
+        String DATA[] = {
+            "yyyy MM dd HH:mm:ss.SSS",
+
+            // Milliseconds are left-justified, since they format as fractions of a second
+            // Both format and parse should round HALF_UP
+            "y/M/d H:mm:ss.S", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.6", "2004 03 10 16:36:31.600",
+            "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.57", "2004 03 10 16:36:31.570",
+            "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567",
+            "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.568", "2004/3/10 16:36:31.5680",
+        };
+        expect(DATA, new Locale("en", "", ""));
+    }
+
     /**
      * Verify that strings which contain incomplete specifications are parsed
      * correctly.  In some instances, this means not being parsed at all, and
@@ -1365,5 +1374,141 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                       expstr);
             }
         }    
+    }
+
+    /**
+     * Test formatting and parsing.  Input is an array that starts
+     * with the following header:
+     *
+     * [0]   = pattern string to parse [i+2] with
+     *
+     * followed by test cases, each of which is 3 array elements:
+     *
+     * [i]   = pattern, or null to reuse prior pattern
+     * [i+1] = control string, either "fp", "pf", or "F".
+     * [i+2..] = data strings
+     *
+     * The number of data strings depends on the control string.
+     * Examples:
+     * 1. "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.56", "2004 03 10 16:36:31.560",
+     * 'f': Format date [i+2] (as parsed using pattern [0]) and expect string [i+3].
+     * 'p': Parse string [i+3] and expect date [i+4].
+     *
+     * 2. "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567"
+     * 'F': Format date [i+2] and expect string [i+3],
+     *      then parse string [i+3] and expect date [i+2].
+     *
+     * 3. "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.5670",
+     * 'p': Parse string [i+2] and expect date [i+3].
+     * 'f': Format date [i+3] and expect string [i+4].
+     */
+    void expect(String[] data, Locale loc) {
+        int i = 0;
+
+        SimpleDateFormat fmt = new SimpleDateFormat("", loc);
+        SimpleDateFormat ref = new SimpleDateFormat(data[i++], loc);
+        SimpleDateFormat univ = new SimpleDateFormat("EE G yyyy MM dd HH:mm:ss.SSS z", loc);
+
+        String currentPat = null;
+        while (i<data.length) {
+            String pattern  = data[i++];
+            if (pattern != null) {
+                fmt.applyPattern(pattern);
+                currentPat = pattern;
+            }
+
+            String control = data[i++];
+
+            if (control.equals("fp")) {
+                // 'f'
+                String datestr = data[i++];
+                String string = data[i++];
+                Date date = null;
+                try {
+                    date = ref.parse(datestr);
+                } catch (ParseException e) {
+                    errln("FAIL: Internal test error; can't parse " + datestr);
+                    return;
+                }
+                assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
+                             string,
+                             fmt.format(date));
+                // 'p'
+                datestr = data[i++];
+                try {
+                    date = ref.parse(datestr);
+                } catch (ParseException e2) {
+                    errln("FAIL: Internal test error; can't parse " + datestr);
+                    return;
+                }
+                try {
+                    Date parsedate = fmt.parse(string);
+                    assertEquals("\"" + currentPat + "\".parse(" + string + ")",
+                                 univ.format(date),
+                                 univ.format(parsedate));
+                } catch (ParseException e3) {
+                    errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
+                          e3);
+                }
+            }
+
+            else if (control.equals("pf")) {
+                // 'p'
+                String string = data[i++];
+                String datestr = data[i++];
+                Date date = null;
+                try {
+                    date = ref.parse(datestr);
+                } catch (ParseException e) {
+                    errln("FAIL: Internal test error; can't parse " + datestr);
+                    return;
+                }
+                try {
+                    Date parsedate = fmt.parse(string);
+                    assertEquals("\"" + currentPat + "\".parse(" + string + ")",
+                                 univ.format(date),
+                                 univ.format(parsedate));
+                } catch (ParseException e2) {
+                    errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
+                          e2);
+                }
+                // 'f'
+                string = data[i++];
+                assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
+                             string,
+                             fmt.format(date));
+            }
+
+            else if (control.equals("F")) {
+                String datestr  = data[i++];
+                String string   = data[i++];
+                Date date = null;
+                try {
+                    date = ref.parse(datestr);
+                } catch (ParseException e) {
+                    errln("FAIL: Internal test error; can't parse " + datestr);
+                    return;
+                }
+
+                assertEquals("\"" + currentPat + "\".format(" + datestr + ")",
+                             string,
+                             fmt.format(date));
+
+                try {
+                    Date parsedate = fmt.parse(string);
+                    assertEquals("\"" + currentPat + "\".parse(" + string + ")",
+                                 univ.format(date),
+                                 univ.format(parsedate));
+                } catch (ParseException e2) {
+                    errln("FAIL: \"" + currentPat + "\".parse(" + string + ") => " +
+                          e2);
+                }
+            }
+
+            else {
+                errln("FAIL: Invalid control string " + control);
+                return;
+            }
+        }
     }
 }
