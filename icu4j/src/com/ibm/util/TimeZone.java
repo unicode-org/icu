@@ -161,6 +161,23 @@ abstract public class TimeZone implements Serializable, Cloneable {
 	return getOffset(era, year, month, day, dayOfWeek, milliseconds);
     }
     
+    /**
+     * NEWCAL
+     * Gets the local time zone offset for this zone, for the given date.
+     * @param eyear the extended Gregorian year, with 0 = 1 BC, -1 = 2 BC,
+     * etc.
+     */
+    int getOffset(int eyear, int month, int dayOfMonth, int dayOfWeek,
+                  int milliseconds, int monthLength, int prevMonthLength) {
+        // TEMPORARY: Convert the eyear to an era/year and call old API
+        int era = GregorianCalendar.AD;
+        if (eyear < 1) {
+            era = GregorianCalendar.BC;
+            eyear = 1 - eyear;
+        }
+        return getOffset(era, eyear, month, dayOfMonth, dayOfWeek,
+                         milliseconds, monthLength, prevMonthLength);
+    }
 
     /**
      * Sets the base time zone offset to GMT.
@@ -402,13 +419,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
      */
     public static synchronized TimeZone getDefault() {
         if (defaultZone == null) {
-            // get the time zone ID from the system properties
-	    String zoneID = (String) AccessController.doPrivileged(
-		new GetPropertyAction("user.timezone"));
-
-	    // if the time zone ID is not set (yet), perform the
-	    // platform to Java time zone ID mapping.
-	    if (zoneID == null || zoneID.equals("")) { 
+            // The following causes an AccessControlException when run in an
+            // applet.  To get around this, we don't read the user.timezone
+            // property; instead we defer to TimeZone.getDefault(). - Liu
+            //!// get the time zone ID from the system properties
+            //!String zoneID = (String) AccessController.doPrivileged(
+            //!    new GetPropertyAction("user.timezone"));
+            //!
+	    //!// if the time zone ID is not set (yet), perform the
+	    //!// platform to Java time zone ID mapping.
+	    //!if (zoneID == null || zoneID.equals("")) { 
 		//String region = (String) AccessController.doPrivileged(
 		//    new GetPropertyAction("user.region"));
 		//String javaHome = (String) AccessController.doPrivileged(
@@ -419,7 +439,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
                 //        and then attempting to map the ID. - liu ]
                 java.util.TimeZone _default = java.util.TimeZone.getDefault();
                 if (false) System.out.println("java.util.TZ.default " + _default);
-                zoneID = _default.getID();
+                String zoneID = _default.getID();
                 defaultZone = TimeZoneData.get(zoneID);
                 if (defaultZone == null) {
                     // [icu4j This means that the zone returned by the JDK does
@@ -437,15 +457,16 @@ abstract public class TimeZone implements Serializable, Cloneable {
                     if (zoneID == null) {
                         zoneID = GMT_ID;
                     }
-                    final String id = zoneID;
-                    AccessController.doPrivileged(new PrivilegedAction() {
-                        public Object run() {
-                            System.setProperty("user.timezone", id);
-                            return null;
-                        }
-                    });
+                    // Again, we can't do this from outside the JDK in an applet.
+                    //!final String id = zoneID;
+                    //!AccessController.doPrivileged(new PrivilegedAction() {
+                    //!    public Object run() {
+                    //!        System.setProperty("user.timezone", id);
+                    //!        return null;
+                    //!    }
+                    //!});
                 }
-	    }
+            //!}
             if (defaultZone == null) {
                 defaultZone = getTimeZone(zoneID);
             }
