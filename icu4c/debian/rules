@@ -229,9 +229,12 @@ endif
 
 # Automatically update changelog and control
 update-debian-files:
-	cvers=`sed -n 's/^icu (\([^)]*\)).*/\1/p' debian/changelog | head -1`; if dpkg --compare-versions $$cvers lt $(version)-1; then \
-	    dch -v $(version)-1 "Update to ICU version $(version). (This comment is generated.)"; \
-	    sed 's/libicu[0-9][0-9]*/libicu$(major)/g' debian/control >debian/control.new && mv debian/control.new debian/control; \
+	if [ x"$$NO_AUTO_DCH" = x ]; \
+	then \
+	    cvers=`sed -n 's/^icu (\([^)]*\)).*/\1/p' debian/changelog | head -1`; if dpkg --compare-versions $$cvers lt $(version)-1; then \
+	        dch -v $(version)-1 "Update to ICU version $(version). (This comment is generated.)"; \
+	        sed 's/libicu[0-9][0-9]*/libicu$(major)/g' debian/control >debian/control.new && mv debian/control.new debian/control; \
+	    fi; \
 	fi
 
 binary: update-debian-files binary-indep binary-arch
