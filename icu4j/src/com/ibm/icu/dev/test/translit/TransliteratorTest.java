@@ -1,6 +1,7 @@
-package test.translit;
+package com.ibm.test.translit;
 import test.IntlTest;
 import com.ibm.text.*;
+import com.ibm.test.*;
 import com.ibm.Utility;
 import java.text.*;
 import java.util.*;
@@ -9,7 +10,7 @@ import java.util.*;
  * @test
  * @summary General test of Transliterator
  */
-public class TransliteratorTest extends IntlTest {
+public class TransliteratorTest extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new TransliteratorTest().run(args);
