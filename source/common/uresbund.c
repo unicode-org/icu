@@ -170,9 +170,10 @@ static int32_t ures_flushCache()
     * return 0
     */
     umtx_lock(&resbMutex);
-    if (cache == NULL)
+    if (cache == NULL) {
         umtx_unlock(&resbMutex);
         return 0;
+    }
 
     /*creates an enumeration to iterate through every element in the table */
     while ((e = uhash_nextElement(cache, &pos)) != NULL)
