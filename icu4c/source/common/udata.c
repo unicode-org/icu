@@ -1134,16 +1134,23 @@ doOpenChoice(const char *path, const char *type, const char *name,
             treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
             if(treeChar) { 
                 TinyString_append(&treeName, treeChar+1); /* following '-' */
-                if(!isICUData) {
-                    TinyString_appendn(&pkgName, path, (int32_t)(treeChar-path));
-                } else {
+                if(isICUData) {
                     TinyString_append(&pkgName, U_ICUDATA_NAME);
+                } else {
+                    TinyString_appendn(&pkgName, path, (int32_t)(treeChar-path));
+                    if (first == NULL) {
+                        /*
+                        This user data has no path, but there is a tree name.
+                        Look up the correct path from the data cache later.
+                        */
+                        path = pkgName.s;
+                    }
                 }
             } else {
-                if(!isICUData) {
-                    TinyString_append(&pkgName, path);
-                } else {
+                if(isICUData) {
                     TinyString_append(&pkgName, U_ICUDATA_NAME);
+                } else {
+                    TinyString_append(&pkgName, path);
                 }
             }
         }
