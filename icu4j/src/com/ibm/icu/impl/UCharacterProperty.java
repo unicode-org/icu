@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/22 20:41:10 $ 
-* $Revision: 1.13 $
+* $Date: 2002/07/22 23:28:21 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -144,22 +144,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
     public static final char LATIN_SMALL_LETTER_I_ = 0x69;
     
     // public methods ----------------------------------------------------
-  
-    /**
-    * toString method for printing
-    */
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer("Property block\n");
-        result.append(super.toString());
-        result.append("\nsize of property data ");
-        result.append(m_property_.length);
-        result.append("\nsize of exception data ");
-        result.append(m_exception_.length);
-        result.append("\nsize of case data ");
-        result.append(m_case_.length);
-        return result.toString();
-    }
         
     /**
     * Extracts out the type value from property.
@@ -1304,7 +1288,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @return 0 if names are equal, < 0 if name1 is less than name2 and > 0
      *         if name1 is greater than name2.
      */
-    public static int comparePropertyNames(String name1, String name2) 
+    /* to be implemented in 2.4
+     * public static int comparePropertyNames(String name1, String name2) 
     {
         int result = 0;
         int i1 = 0;
@@ -1317,7 +1302,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 ch1 = name1.charAt(i1 ++);
             }
             while (ch1 == '-' || ch1 == '_' || ch1 == ' ' || ch1 == '\t' 
-                   || ch1 == '\n' /* synwee what is || ch1 == '\v' */
+                   || ch1 == '\n' // synwee what is || ch1 == '\v'
                    || ch1 == '\f' || ch1=='\r') {
                 if (i1 < name1.length()) {
                     ch1 = name1.charAt(i1 ++);
@@ -1330,7 +1315,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 ch2 = name2.charAt(i2 ++);
             }
             while (ch2 == '-' || ch2 == '_' || ch2 == ' ' || ch2 == '\t' 
-                   || ch2 == '\n' /* synwee what is || ch1 == '\v' */ 
+                   || ch2 == '\n' // synwee what is || ch1 == '\v' 
                    || ch2 == '\f' || ch2=='\r') {
                 if (i2 < name2.length()) {
                     ch2 = name2.charAt(i2 ++);
@@ -1355,6 +1340,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
             }
         }
     }
+    */
     
     /**
      * Checks if the argument c is to be treated as a white space in ICU
@@ -1719,25 +1705,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                      
 	// private methods -------------------------------------------------------
 	
-	/**
-    * <p>Sets a codepoint to the argument char array.</p>
-    * <p>This method does not bother to check the validity of the codepoint</p>
-    * @param target char array to be set with the new code point
-    * @param char32 code point
-    * @return the size of the codepoint
-    */
-    private static int setCodePoint(char[] target, int char32)
-    {
-        // Write the UTF-16 values
-        if (char32 >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-            target[0] = UTF16.getLeadSurrogate(char32);
-            target[1] = UTF16.getTrailSurrogate(char32);
-            return 2;
-        }
-        target[0] = (char)char32;
-        return 1;
-    }
-    
     /**
     * <p>Returns a value indicating a code point's Unicode category.</p>
     * <p>This method does not check for the codepoint validity</p>
@@ -1832,38 +1799,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
 
         return false; // not preceded by TYPE_i
-    }
-
-    /**
-    * Determines if a string at offset is preceded by base characters 'I' with 
-    * no intervening combining class = 230
-    * @param uchariter text iterator to be determined
-    * @param offset offset in string to check
-    * @return true if some characters preceding the offset index is the
-    *         character 'I' with no intervening combining class = 230
-    * @see SpecialCasing.txt
-    */
-    private static boolean isAFTER_I(UnicodeCharacterIterator uchariter, int offset) 
-    {
-    	uchariter.setIndex(offset);
-    	
-    	int ch = uchariter.previousCodePoint();
-    	
-        while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
-            if (ch == LATIN_CAPITAL_LETTER_I_) {
-                return true; // preceded by I
-            }
-
-            int cc = NormalizerImpl.getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                // preceded by different base character (not I), or 
-                // intervening cc == 230
-                return false; 
-            }
- 			ch = uchariter.previousCodePoint();           
-        }
-
-        return false; // not preceded by I
     }
     
     /** 

@@ -24,8 +24,8 @@ import java.text.CharacterIterator;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {
-        new CollationAPITest().run(args);
-        // new CollationAPITest().TestDecomposition();
+        // new CollationAPITest().run(args);
+        new CollationAPITest().TestRuleBasedColl();
     }
     
     /**
@@ -454,7 +454,8 @@ public class CollationAPITest extends TestFmwk {
     
         String ruleset1 = "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E"; 
         String ruleset2 = "&9 < a, A < b, B < c, C < d, D, e, E";
-    
+        String ruleset3 = "&";
+        
         try {
             col1 = new RuleBasedCollator(ruleset1);
         } catch (Exception e) {
@@ -469,6 +470,14 @@ public class CollationAPITest extends TestFmwk {
             return;
         }
     
+        try {
+            // empty rules fail
+            col3 = new RuleBasedCollator(ruleset3);
+            errln("Failure: Empty rules for the collator should fail");
+            return;
+        } catch (Exception e) {
+        }
+        
         Locale locale = new Locale("aa", "AA");
         try {
             col3 = (RuleBasedCollator)Collator.getInstance(locale);
