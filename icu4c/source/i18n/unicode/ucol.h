@@ -616,7 +616,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * UCA version number (3.1.1, 4.0).
  * @param coll The UCollator to query.
  * @param info the version # information, the result will be filled in
- * @stable ICU 2.0
+ * @draft ICU 2.8
  */
 U_CAPI void U_EXPORT2
 ucol_getUCAVersion(const UCollator* coll, UVersionInfo info);
