@@ -247,6 +247,13 @@ protected:
     Format& operator=(const Format&); // Does nothing; for subclasses
 
        
+    /**
+     * Simple function for initializing a UParseError from a UnicodeString.
+     *
+     * @param pattern The pattern to copy into the parseError
+     * @param pos The position in pattern where the error occured
+     * @param parseError The UParseError object to fill in
+     */
     inline void syntaxError(const UnicodeString& pattern,
                             int32_t pos,
                             UParseError& parseError){
