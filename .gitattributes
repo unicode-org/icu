@@ -133,6 +133,7 @@ icu4c/source/samples/XMLConverter/samples/test.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/testit.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/utf8-sm_jis.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/x.xml svneol=native#text/xml
+icu4c/source/samples/translit/U0080.pdf -text
 icu4c/source/samples/ucnv/data01.ut8 -text svneol=unset#application/octet-stream
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/importtest.bin -text
