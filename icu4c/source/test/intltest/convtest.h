@@ -77,6 +77,9 @@ private:
                      const uint8_t *result, int32_t resultLength,
                      const int32_t *resultOffsets,
                      UErrorCode resultErrorCode);
+
+    UConverter *
+    cnv_open(const char *name, UErrorCode &errorCode);
 };
 
 #endif

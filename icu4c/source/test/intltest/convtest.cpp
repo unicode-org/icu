@@ -70,6 +70,13 @@ ConversionTest::TestToUnicode() {
         testData=dataModule->createTestData("toUnicode", errorCode);
         if(U_SUCCESS(errorCode)) {
             for(i=0; testData->nextCase(testCase, errorCode); ++i) {
+                if(U_FAILURE(errorCode)) {
+                    errln("error retrieving conversion/toUnicode test case %d - %s",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
                 cc.caseNr=i;
 
                 s=testCase->getString("charset", errorCode);
@@ -169,6 +176,13 @@ ConversionTest::TestFromUnicode() {
         testData=dataModule->createTestData("fromUnicode", errorCode);
         if(U_SUCCESS(errorCode)) {
             for(i=0; testData->nextCase(testCase, errorCode); ++i) {
+                if(U_FAILURE(errorCode)) {
+                    errln("error retrieving conversion/fromUnicode test case %d - %s",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
                 cc.caseNr=i;
 
                 s=testCase->getString("charset", errorCode);
@@ -269,6 +283,18 @@ ConversionTest::TestFromUnicode() {
             delete testData;
         }
         delete dataModule;
+    }
+}
+
+// open testdata or ICU data converter ------------------------------------- ***
+
+UConverter *
+ConversionTest::cnv_open(const char *name, UErrorCode &errorCode) {
+    if(name!=NULL && *name=='*') {
+        loadTestData(errorCode); /* set the data directory */
+        return ucnv_openPackage("testdata", name+1, &errorCode);
+    } else {
+        return ucnv_open(name, &errorCode);
     }
 }
 
@@ -444,8 +470,12 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
             }
         }
     } else /* step<0 */ {
-        // step==-1 or -2: call ucnv_toUnicode() and ucnv_getNextUChar() alternatingly
-        // step==-3: call only ucnv_getNextUChar()
+        /*
+         * step==-1: call only ucnv_getNextUChar()
+         * otherwise alternate between ucnv_toUnicode() and ucnv_getNextUChar()
+         *   if step==-2 or -3, then give ucnv_toUnicode() the whole remaining input,
+         *   else give it at most (-step-2)/2 bytes
+         */
         UChar32 c;
 
         // end the loop by getting an index out of bounds error
@@ -454,7 +484,7 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
             ucnv_resetFromUnicode(cnv);
 
             // convert
-            if((step&1)!=0 /* odd: -1 or -3 */) {
+            if((step&1)!=0 /* odd: -1, -3, -5, ... */) {
                 sourceLimit=source; // use sourceLimit not as a real limit
                                     // but to remember the pre-getNextUChar source pointer
                 c=ucnv_getNextUChar(cnv, &source, bytesLimit, pErrorCode);
@@ -487,19 +517,29 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                     *target++=U16_TRAIL(c);
                 }
 
-                // alternate between -1 and -2 but leave -3 alone
-                if(step==-1) {
-                    step=-2;
+                // alternate between -n-1 and -n but leave -1 alone
+                if(step<-1) {
+                    ++step;
                 }
-            } else /* step==-2 */ {
+            } else /* step is even */ {
                 // allow only one UChar output
                 targetLimit=target<resultLimit ? target+1 : resultLimit;
 
-                // as with ucnv_getNextUChar(), we always flush and never output offsets
+                // as with ucnv_getNextUChar(), we always flush (if we go to bytesLimit)
+                // and never output offsets
+                if(step==-2) {
+                    sourceLimit=bytesLimit;
+                } else {
+                    sourceLimit=source+(-step-2)/2;
+                    if(sourceLimit>bytesLimit) {
+                        sourceLimit=bytesLimit;
+                    }
+                }
+
                 ucnv_toUnicode(cnv,
                     &target, targetLimit,
-                    &source, bytesLimit,
-                    NULL, TRUE, pErrorCode);
+                    &source, sourceLimit,
+                    NULL, (UBool)(sourceLimit==bytesLimit), pErrorCode);
 
                 // check pointers and errors
                 if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
@@ -518,7 +558,7 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                     // some other error occurred, done
                     break;
                 } else {
-                    if(source!=bytesLimit) {
+                    if(source!=sourceLimit) {
                         // when no error occurs, then the input must be consumed
                         *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
                         break;
@@ -527,7 +567,7 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                     // we are done (flush==TRUE) but we continue, to get the index out of bounds error above
                 }
 
-                step=-1;
+                --step;
             }
         }
     }
@@ -542,7 +582,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
 
     // open the converter
     errorCode=U_ZERO_ERROR;
-    cnv=ucnv_open(cc.charset, &errorCode);
+    cnv=cnv_open(cc.charset, errorCode);
     if(U_FAILURE(errorCode)) {
         errln("toUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_open() failed - %s",
                 cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, u_errorName(errorCode));
@@ -572,14 +612,23 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
         { 1, "step=1" },
         { 3, "step=3" },
         { 7, "step=7" },
-        { -3, "getNext" },
-        { -1, "getNext+toU" },
-        { -2, "toU+getNext" }
+        { -1, "getNext" },
+        { -2, "toU(bulk)+getNext" },
+        { -3, "getNext+toU(bulk)" },
+        { -4, "toU(1)+getNext" },
+        { -5, "getNext+toU(1)" },
+        { -12, "toU(5)+getNext" },
+        { -13, "getNext+toU(5)" },
     };
     int32_t i, step;
 
     for(i=0; i<LENGTHOF(steps); ++i) {
         step=steps[i].step;
+        if(step<0 && !cc.finalFlush) {
+            // skip ucnv_getNextUChar() if !finalFlush because
+            // ucnv_getNextUChar() always implies flush
+            continue;
+        }
         if(step!=0) {
             // bulk test is first, then offsets are not checked any more
             cc.offsets=NULL;
@@ -597,7 +646,11 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
         ) {
             return FALSE;
         }
-        ucnv_resetToUnicode(cnv);
+        if(U_FAILURE(errorCode) || !cc.finalFlush) {
+            // reset if an error occurred or we did not flush
+            // otherwise do nothing to make sure that flushing resets
+            ucnv_resetToUnicode(cnv);
+        }
     }
 
     ucnv_close(cnv);
@@ -779,7 +832,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
 
     // open the converter
     errorCode=U_ZERO_ERROR;
-    cnv=ucnv_open(cc.charset, &errorCode);
+    cnv=cnv_open(cc.charset, errorCode);
     if(U_FAILURE(errorCode)) {
         errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_open() failed - %s",
                 cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, u_errorName(errorCode));
@@ -848,7 +901,11 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
         ) {
             return FALSE;
         }
-        ucnv_resetFromUnicode(cnv);
+        if(U_FAILURE(errorCode) || !cc.finalFlush) {
+            // reset if an error occurred or we did not flush
+            // otherwise do nothing to make sure that flushing resets
+            ucnv_resetFromUnicode(cnv);
+        }
     }
 
     ucnv_close(cnv);
