@@ -26,7 +26,7 @@ Description: International Components for Unicode (libraries)
  `icu' and `icu-locales` packages.
 
 Package: icu
-Section: admin
+Section: libs
 Architecture: any
 Depends: libicu${major} (>= ${Source-Version})
 Recommends: icu-locales
@@ -43,7 +43,7 @@ Description: International Components for Unicode (locale data)
  these data.
 
 Package: icu-locales
-Section: admin
+Section: libs
 Architecture: any
 Depends: libicu${major} (>= ${Source-Version})
 Description: Locale data for ICU
