@@ -6,20 +6,20 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Greek_Latin.txt
-// Date: Mon Jan 21 10:41:16 2002
+// Date: Fri Feb  8 15:53:54 2002
 //--------------------------------------------------------------------
 
 // Greek_Latin
 
-Greek_Latin {
+t_Grek_Latn {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Grek_Latn.txt,v $
-// $Date: 2002/01/24 17:24:32 $
-// $Revision: 1.9 $
+// $Date: 2002/02/09 00:27:08 $
+// $Revision: 1.10 $
 //--------------------------------------------------------------------
 
 // Rules are predicated on running NFD first, and NFC afterwards

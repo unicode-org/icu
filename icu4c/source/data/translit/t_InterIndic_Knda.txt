@@ -6,12 +6,12 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Kannada.txt
-// Date: Mon Jan 21 10:41:16 2002
+// Date: Fri Feb  8 15:53:54 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Kannada
 
-InterIndic_Kannada {
+t_InterIndic_Knda {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
