@@ -9,7 +9,7 @@ VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 
 ICUDATADIR=$(top_builddir)/data/
-UNICODEFILE=$(top_builddir)/../data/UnicodeData-$(UNICODE_VERSION).txt
+UNICODEDATADIR=$(top_srcdir)/../data/unidata
 
 ## Install directory information
 srcdir = @srcdir@
@@ -88,12 +88,10 @@ install-local: all-local build-data
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(DESTDIR)$(TARGET) $(sbindir)/$(TARGET)
 
-build-data: $(ICUDATADIR)/unames.dat
+build-data: $(ICUDATADIR)/uprops.dat
 
-# we set the ICU_DATA directory here so that unames.dat ends up in 
-# icu/data rather than PREFIX/share/icu/VERSION/
-$(ICUDATADIR)/unames.dat: $(UNICODEFILE) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(UNICODEFILE)
+$(ICUDATADIR)/uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TARGET)
+	./$(TARGET) -s $(UNICODEDATADIR) -d $(ICUDATADIR) -u $(UNICODE_VERSION)
 
 dist-local:
 
