@@ -147,6 +147,22 @@ public class TransliteratorTest extends IntlTest {
 //        }
 //    }
 
+    /**
+     * Test inline set syntax and set variable syntax.
+     */
+    public void TestInlineSet() {
+        expect("[:Ll:] (x) > y; [:Ll:] > z;", "aAbxq", "zAyzz");
+        expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
+
+        expect("digit = [0-9];" +
+               "alpha = [a-zA-Z];" +
+               "alphanumeric = [{digit}{alpha}];" + // ***
+               "special = [^{alphanumeric}];" +     // ***
+               "{alphanumeric} > -;" +
+               "{special} > *;",
+
+               "thx-1138", "---*----");
+    }
 
     /**
      * Create some inverses and confirm that they work.  We have to be
