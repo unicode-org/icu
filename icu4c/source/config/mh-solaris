@@ -39,7 +39,7 @@ MIDDLE_SO_TARGET =
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
-LIBICU = libicu-
+LIBICU = libicu
 ## Shared object suffix
 SO=		so
 ## Non-shared intermediate object suffix
