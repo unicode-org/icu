@@ -321,22 +321,6 @@ public:
      * Returns the contents of a string resource. Resource data is undifferentiated
      * Unicode text. The resource file may contain quoted strings or escape sequences;
      * these will be parsed prior to the data's return.
-     * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
-     *
-     * @param resourceTag  The resource tag of the string resource the caller wants
-     * @param theString    Receives the actual data in the resource
-     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                     specified tag couldn't be found.
-     * @deprecated removed
-    void                getString(  const char             *resourceTag,
-                                    UnicodeString&          theString,
-                                    UErrorCode&              err) const;
-     */
-
-    /**
-     * Returns the contents of a string resource. Resource data is undifferentiated
-     * Unicode text. The resource file may contain quoted strings or escape sequences;
-     * these will be parsed prior to the data's return.
      *
      * @param resourceTag  The resource tag of the string resource the caller wants
      * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
@@ -371,25 +355,6 @@ public:
                                             int32_t&                numArrayItems,
                                             UErrorCode&              err) const;
 
-    /**
-     * Returns a single item from a string-array resource. This will return the contents
-     * of a single item in a resource of string-array (comma-delimited-list) type. If
-     * the resource is not an array, a U_MISSING_RESOURCE_ERROR will be returned in err.
-     * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param index         The index (zero-based) of the particular array item the user
-     *                      wants to extract from the resource.
-     * @param theArrayItem  Receives the actual text of the desired array item.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified tag couldn't be found, or if the index was out of range.
-     * @deprecated removed
-    void                getArrayItem(   const char             *resourceTag,
-                                        int32_t                 index,
-                                        UnicodeString&          theArrayItem,
-                                        UErrorCode&              err) const;
-     */
 
     /**
      * Returns a single item from a string-array resource. This will return the contents
@@ -434,29 +399,6 @@ public:
                                        int32_t&             columnCount,
                                        UErrorCode&           err) const;
 
-    /**
-     * Return a single string from a 2-dimensional array resource. If the resource does
-     * not exists, or if it is not a 2-d array, or if the row or column indices are out
-     * of bounds, err is set to U_MISSING_RESOURCE_ERROR.
-     * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param rowIndex      The row index (zero-based) of the array item the user wants
-     *                      to extract from the resource.
-     * @param columnIndex   The column index (zero-based) of the array item the user
-     *                      wants to extract from the resource.
-     * @param theArrayItem  Receives the actual text of the desired array item.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified tag couldn't be found, if the resource data was in
-     *                      the wrong format, or if either index is out of bounds.
-     * @deprecated removed
-    void                get2dArrayItem(const char          *resourceTag,
-                                       int32_t              rowIndex,
-                                       int32_t              columnIndex,
-                                       UnicodeString&       theArrayItem,
-                                       UErrorCode&           err) const;
-    */
 
     /**
      * Return a single string from a 2-dimensional array resource. If the resource does
@@ -481,26 +423,6 @@ public:
                                             int32_t                    columnIndex,
                                             UErrorCode&                err) const;
 
-    /**
-     * Returns a single item from a tagged-array resource This will return the contents
-     * of a single item in a resource of type tagged-array. If this function is called
-     * for a resource that is not of type tagged-array, it will set err to
-     * MISSING_RESOUCE_ERROR.
-     * [THIS FUNCTION IS DEPRECATED; USE THE OVERLOAD BELOW INSTEAD]
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param itemTag       The item tag for the item the caller wants to extract.
-     * @param theArrayItem  Receives the text of the desired array item.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified resource tag couldn't be found, or if an item
-     *                      with the specified item tag couldn't be found in the resource.
-     * @deprecated removed 
-    void                getTaggedArrayItem( const char             *resourceTag,
-                                            const UnicodeString&    itemTag,
-                                            UnicodeString&          theArrayItem,
-                                            UErrorCode&              err) const;
-    */
 
     /**
      * Returns a single item from a tagged-array resource This will return the contents
