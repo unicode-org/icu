@@ -45,6 +45,11 @@ This binary file can then be read directly by ICU, or used by
 .BR pkgdata (8)
 for incorporation into a larger archive or library.
 .PP
+The
+.I convertertable
+must be in the IBM NLTC ucmap format in order to be understood by
+.BR makeconv .
+.PP
 Note that converters will not be automatically found by ICU. They need to
 be listed in the
 .BR convrtrs.txt (5)
