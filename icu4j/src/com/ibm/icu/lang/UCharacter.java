@@ -4553,6 +4553,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
     /**
      * Cover the JDK 1.5 API, for convenience.
+     * @see UTF16#CODEPOINT_MIN_VALUE
+     * @draft ICU 3.0
+     */
+    public static final int  MIN_CODE_POINT = UTF16.CODEPOINT_MIN_VALUE;
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.
      * @param cp the code point to check
      * @return true if cp is a valid code point
      * @draft ICU 3.0
@@ -4637,6 +4644,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index of the first or only char forming the code point
      * @return the code point at the index
      * @draft ICU 3.0
+     */
     public static final int codePointAt(CharSequence seq, int index) {
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
@@ -4649,8 +4657,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c1;
     }
-     */
 
+    /*
     public static final int codePointAt(String seq, int index) {
         char c1 = seq.charAt(index++);
         if (isHighSurrogate(c1)) {
@@ -4676,6 +4684,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c1;
     }
+    */
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
@@ -4707,6 +4716,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index after the last or only char forming the code point
      * @return the code point before the index
      * @draft ICU 3.0
+     */
     public static final int codePointBefore(CharSequence seq, int index) {
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
@@ -4719,8 +4729,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
-     */
 
+    /*
     public static final int codePointBefore(String seq, int index) {
         char c2 = seq.charAt(--index);
         if (isLowSurrogate(c2)) {
@@ -4746,6 +4756,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
+    */
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
@@ -4833,6 +4844,166 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // when ch is out of bounds getProperty == 0
         return (byte)((getProperty(cp) >> BIDI_SHIFT_) & BIDI_MASK_AFTER_SHIFT_);
+    }
+
+    /**
+     * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
+     * @param text the characters to check
+     * @param start the start of the range
+     * @param limit the limit of the range
+     * @return the number of code points in the range
+     * @draft ICU 3.0
+     */
+    public static int codePointCount(CharSequence text, int start, int limit) {
+	if (start < 0 || limit < start || limit > text.length()) {
+	    throw new IndexOutOfBoundsException("start (" + start +
+						") or limit (" + limit +
+						") invalid or out of range 0, " + text.length());
+	}
+
+	int len = limit - start;
+	while (limit > start) {
+	    char ch = text.charAt(--limit);
+	    while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+		ch = text.charAt(--limit);
+		if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+		    --len;
+		    break;
+		}
+	    }
+	}
+	return len;
+    }
+
+    /**
+     * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
+     * @param text the characters to check
+     * @param start the start of the range
+     * @param limit the limit of the range
+     * @return the number of code points in the range
+     * @draft ICU 3.0
+     */
+    public static int codePointCount(char[] text, int start, int limit) {
+	if (start < 0 || limit < start || limit > text.length) {
+	    throw new IndexOutOfBoundsException("start (" + start +
+						") or limit (" + limit +
+						") invalid or out of range 0, " + text.length);
+	}
+
+	int len = limit - start;
+	while (limit > start) {
+	    char ch = text[--limit];
+	    while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+		ch = text[--limit];
+		if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+		    --len;
+		    break;
+		}
+	    }
+	}
+	return len;
+    }
+
+    /**
+     * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
+     * @param text the characters to check
+     * @param index the index to adjust
+     * @param count the number of code points by which to offset the index
+     * @return the adjusted index
+     * @draft ICU 3.0
+     */
+    public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
+	if (index < 0 || index > text.length()) {
+	    throw new IndexOutOfBoundsException("index ( " + index +
+						") out of range 0, " + text.length());
+	}
+
+	if (codePointOffset < 0) {
+	    while (++codePointOffset <= 0) {
+		char ch = text.charAt(--index);
+		while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
+		    ch = text.charAt(--index);
+		    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+			if (++codePointOffset > 0) {
+			    return index+1;
+			}
+		    }
+		}
+	    }
+	} else {
+	    int limit = text.length();
+	    while (--codePointOffset >= 0) {
+		char ch = text.charAt(index++);
+		while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+		    ch = text.charAt(index++);
+		    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+			if (--codePointOffset < 0) {
+			    return index-1;
+			}
+		    }
+		}
+	    }
+	}
+
+	return index;
+    }
+
+    /**
+     * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.
+     * @param text the characters to check
+     * @param start the start of the range to check
+     * @param count the length of the range to check
+     * @param index the index to adjust
+     * @param count the number of code points by which to offset the index
+     * @return the adjusted index
+     * @draft ICU 3.0
+     */
+    public static int offsetByCodePoints(char[] text, int start, int count, int index, int codePointOffset) {
+	int limit = start + count;
+	if (start < 0 || limit < start || limit > text.length || index < start || index > limit) {
+	    throw new IndexOutOfBoundsException("index ( " + index +
+						") out of range " + start +
+						", " + limit +
+						" in array 0, " + text.length);
+	}
+
+	if (codePointOffset < 0) {
+	    while (++codePointOffset <= 0) {
+		char ch = text[--index];
+		if (index < start) {
+		    throw new IndexOutOfBoundsException("index ( " + index +
+							") < start (" + start +
+							")");
+		}
+		while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > start) {
+		    ch = text[--index];
+		    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+			if (++codePointOffset > 0) {
+			    return index+1;
+			}
+		    }
+		}
+	    }
+	} else {
+	    while (--codePointOffset >= 0) {
+		char ch = text[index++];
+		if (index > limit) {
+		    throw new IndexOutOfBoundsException("index ( " + index +
+							") > limit (" + limit +
+							")");
+		}
+		while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+		    ch = text[index++];
+		    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+			if (--codePointOffset < 0) {
+			    return index-1;
+			}
+		    }
+		}
+	    }
+	}
+
+	return index;
     }
 
     // protected data members --------------------------------------------
