@@ -34,6 +34,7 @@ enum
     _sa = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_ABOVE,
     _sb = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_BELOW,
     _iv = IndicClassTable::CC_INDEPENDENT_VOWEL,
+    _i2 = IndicClassTable::CC_INDEPENDENT_VOWEL_2,
     _ct = IndicClassTable::CC_CONSONANT | IndicClassTable::CF_CONSONANT,
     _cn = IndicClassTable::CC_CONSONANT_WITH_NUKTA | IndicClassTable::CF_CONSONANT,
     _nu = IndicClassTable::CC_NUKTA,
@@ -84,7 +85,7 @@ static const IndicClassTable::CharClass devaCharClasses[] =
 
 static const IndicClassTable::CharClass bengCharClasses[] =
 {
-    _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0980 - 098F
+    _xx, _ma, _mp, _mp, _xx, _i2, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _i2, // 0980 - 098F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0990 - 099F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _bb, _ct, _ct, _pb, // 09A0 - 09AF
     _rv, _xx, _ct, _xx, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _dr, _dl, // 09B0 - 09BF
