@@ -2141,7 +2141,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     UChar32 c;
 
-    int32_t sourceIndex, nextSourceIndex;
+    int32_t prevSourceIndex, sourceIndex, nextSourceIndex;
 
     UConverterCallbackReason reason;
     uint32_t stage2Entry;
@@ -2184,6 +2184,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     prevLength=cnv->fromUnicodeStatus;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
+    prevSourceIndex=-1;
     sourceIndex= c==0 ? 0 : -1;
     nextSourceIndex=0;
 
@@ -2525,7 +2526,10 @@ getTrail:
 
             /* normal end of conversion: prepare for a new character */
             c=0;
-            sourceIndex=nextSourceIndex;
+            if(offsets!=NULL) {
+                prevSourceIndex=sourceIndex;
+                sourceIndex=nextSourceIndex;
+            }
             continue;
 
             /*
@@ -2551,6 +2555,7 @@ callback:
              * The above branch for MBCS_OUTPUT_2_SISO has saved the previous state already.
              * See comments there.
              */
+            prevSourceIndex=sourceIndex;
 
             /* call the callback function */
             fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
@@ -2596,19 +2601,41 @@ callback:
         }
     }
 
-    if(pArgs->flush && source>=sourceLimit) {
-        /* reset the state for the next conversion */
-        if(c!=0 && U_SUCCESS(*pErrorCode)) {
+    if(pArgs->flush && source>=sourceLimit && U_SUCCESS(*pErrorCode)) {
+        /* end of input stream */
+        if(c!=0) {
             /* a Unicode code point remains incomplete (only a first surrogate) */
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+            /* the following may change with Jitterbug 2449: would prepare for callback instead of resetting */
+            c=0;
+            prevLength=1;
+        } else if(outputType==MBCS_OUTPUT_2_SISO && prevLength==2) {
+            /* EBCDIC_STATEFUL ending with DBCS: emit an SI to return the output stream to SBCS */
+            if(targetCapacity>0) {
+                *target++=(uint8_t)UCNV_SI;
+                if(offsets!=NULL) {
+                    /* set the last source character's index (sourceIndex points at sourceLimit now) */
+                    *offsets++=prevSourceIndex;
+                }
+            } else {
+                /* target is full */
+                cnv->charErrorBuffer[0]=(char)UCNV_SI;
+                cnv->charErrorBufferLength=1;
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            }
+            prevLength=1; /* we switched into SBCS */
         }
-        cnv->fromUSurrogateLead=0;
-        cnv->fromUnicodeStatus=1;
-    } else {
-        /* set the converter state back into UConverter */
-        cnv->fromUSurrogateLead=(UChar)c;
-        cnv->fromUnicodeStatus=prevLength;
+
+        /* reset the state for the next conversion */
+        if(U_SUCCESS(*pErrorCode)) {
+            c=0;
+            prevLength=1;
+        }
     }
+
+    /* set the converter state back into UConverter */
+    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUnicodeStatus=prevLength;
 
     /* write back the updated pointers */
     pArgs->source=source;

@@ -153,7 +153,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         0x9f, 0xaf, 0x9f, 0xb1, 0x89, 0x59 };
 
     static const uint8_t expskipIBM_930[] = { 
-        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x46, 0x6b };
+        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x46, 0x6b, 0x0f };
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
@@ -165,9 +165,9 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         static const UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
         static const UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
 
-        static const int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4};
-        static const int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3};
-        static const int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3};
+        static const int32_t  toIBM949Offsskip [] = { 0, 1, 1, 2, 2, 4, 4 };
+        static const int32_t  toIBM943Offsskip [] = { 0, 0, 1, 1, 3, 3 };
+        static const int32_t  toIBM930Offsskip [] = { 0, 0, 0, 1, 1, 3, 3, 3 };
 
         if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
@@ -190,8 +190,8 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
     {
         static const UChar fromU[] = { 0x61, 0xff5e, 0x62, 0x6d63, 0xff5e, 0x6d64, 0x63, 0xff5e, 0x6d66 };
-        static const uint8_t fromUBytes[] = { 0x62, 0x63, 0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x0f, 0x64, 0x0e, 0x46, 0x6b };
-        static const int32_t fromUOffsets[] = { 0, 2, 3, 3, 3, 5, 5, 6, 6, 8, 8, 8 };
+        static const uint8_t fromUBytes[] = { 0x62, 0x63, 0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x0f, 0x64, 0x0e, 0x46, 0x6b, 0x0f };
+        static const int32_t fromUOffsets[] = { 0, 2, 3, 3, 3, 5, 5, 6, 6, 8, 8, 8, 8 };
 
         /* test ibm-930 (EBCDIC_STATEFUL) with fallbacks that are not taken to check correct state transitions */
         if(!testConvertFromUnicode(fromU, sizeof(fromU)/U_SIZEOF_UCHAR,
@@ -1338,19 +1338,19 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         0x9f, 0xaf, 0x9f, 0xb1, 0xfc, 0xfc, 0x89, 0x59 };
 
     static const uint8_t expsubIBM_930[] = { 
-        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0xfe, 0xfe, 0x46, 0x6b };
+        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0xfe, 0xfe, 0x46, 0x6b, 0x0f };
 
     static const UChar IBM_949subtoUnicode[]= {0x0000, 0xAC00, 0xAC01, 0xfffd, 0xD700 };
     static const UChar IBM_943subtoUnicode[]= {0x6D63, 0x6D64, 0xfffd, 0x6D66 };
     static const UChar IBM_930subtoUnicode[]= {0x6D63, 0x6D64, 0xfffd, 0x6D66 };
 
-    static const int32_t toIBM949Offssub [] ={ 0, 1, 1, 2, 2, 3, 3, 4, 4};
-    static const int32_t toIBM943Offssub [] ={ 0, 0, 1, 1, 2, 2, 3, 3};
-    static const int32_t toIBM930Offssub [] ={ 0, 0, 0, 1, 1, 2, 2, 3, 3};
+    static const int32_t toIBM949Offssub [] ={ 0, 1, 1, 2, 2, 3, 3, 4, 4 };
+    static const int32_t toIBM943Offssub [] ={ 0, 0, 1, 1, 2, 2, 3, 3 };
+    static const int32_t toIBM930Offssub [] ={ 0, 0, 0, 1, 1, 2, 2, 3, 3, 3 };
 
-    static const int32_t  fromIBM949Offs [] = { 0, 1, 3, 5, 7};
-    static const int32_t  fromIBM943Offs [] = { 0, 2, 4, 6};
-    static const int32_t  fromIBM930Offs [] = { 1, 3, 5, 7};
+    static const int32_t  fromIBM949Offs [] = { 0, 1, 3, 5, 7 };
+    static const int32_t  fromIBM943Offs [] = { 0, 2, 4, 6 };
+    static const int32_t  fromIBM930Offs [] = { 1, 3, 5, 7 };
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
@@ -1823,11 +1823,11 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         0x25, 0x55, 0x36, 0x44, 0x36, 0x35, 0x89, 0x59 };
 
     const uint8_t expsubwvalIBM_930[] = {
-        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x0f, 0x6c, 0xe4, 0xf6, 0xc4, 0xf6, 0xf5, 0x0e, 0x46, 0x6b };
+        0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x0f, 0x6c, 0xe4, 0xf6, 0xc4, 0xf6, 0xf5, 0x0e, 0x46, 0x6b, 0x0f };
 
-    int32_t toIBM949Offs [] ={ 0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4};
-    int32_t toIBM943Offs [] = { 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3};
-    int32_t toIBM930Offs [] = { 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3}; /* last item: 3,3,3 because there's a shift plus a doublebyter .. */
+    int32_t toIBM949Offs [] ={ 0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4 };
+    int32_t toIBM943Offs [] = { 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3 };
+    int32_t toIBM930Offs [] = { 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3 }; /* last item: 3,3,3,3 because there's SO+DBCS+SI */
 
     gInBufferSize = inputsize;
     gOutBufferSize = outputsize;
