@@ -134,4 +134,5 @@ tools/unicodetools/com/ibm/text/UCA/norm_help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/norm_index_header.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/data/CheckCollationValidity.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/data/UCA_Rules.xml svneol=native#text/xml
+tools/unicodetools/com/ibm/text/data/UCA_Rules_SHORT.xml svneol=native#text/xml
 tools/unicodetools/license.html svneol=native#text/html
