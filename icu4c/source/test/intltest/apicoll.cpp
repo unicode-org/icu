@@ -1493,8 +1493,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 9: name = "TestDecomposition"; if (exec)   TestDecomposition(/* par */); break;
         case 10: name = "TestSafeClone"; if (exec)   TestSafeClone(/* par */); break;
         case 11: name = "TestSortKey";   if (exec)   TestSortKey(); break;
-          /* broken by weiv 12/17/2001 */
-        case 12: name = "TestMaxExpansion";   /*if (exec)   TestMaxExpansion();*/ break;
+        case 12: name = "TestMaxExpansion";   if (exec)   TestMaxExpansion(); break;
         case 13: name = "TestDisplayName";   if (exec)   TestDisplayName(); break;
         case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
