@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.39 $
+ * $Date: 2003/06/03 22:41:26 $
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,7 @@ public final class Utility {
 
     private static final char APOSTROPHE = '\'';
     private static final char BACKSLASH  = '\\';
+    private static final int MAGIC_UNSIGNED = 0x80000000;
 
     /**
      * Convenience utility to compare two Object[]s.
@@ -1616,9 +1617,8 @@ public final class Utility {
      */
     public static final int compareUnsigned(int source, int target)
     {
-        int MAGIC = 0x80000000;
-        source += MAGIC;
-        target += MAGIC;
+        source += MAGIC_UNSIGNED;
+        target += MAGIC_UNSIGNED;
         if (source < target) {
             return -1;
         } 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/06/03 18:49:30 $
-* $Revision: 1.56 $
+* $Date: 2003/06/03 22:41:26 $
+* $Revision: 1.57 $
 *
 *******************************************************************************
 */
@@ -284,6 +284,10 @@ public final class UCharacterTest extends TestFmwk
     */
     public void TestNumeric()
     {
+        if (UCharacter.getNumericValue(0x00BC) != -2) {
+            errln("Numeric value of 0x00BC expected to be -2");
+        }
+        
         for (int i = '0'; i < '9'; i ++) {
             int n1 = UCharacter.getNumericValue(i);
             double n2 = UCharacter.getUnicodeNumericValue(i);

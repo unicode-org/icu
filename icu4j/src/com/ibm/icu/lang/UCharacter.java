@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.76 $
+* $Date: 2003/06/03 22:41:25 $ 
+* $Revision: 1.77 $
 *
 *******************************************************************************
 */
@@ -2346,10 +2346,11 @@ public final class UCharacter
      * <li> It is &#92u001C, FILE SEPARATOR. 
      * <li> It is &#92u001D, GROUP SEPARATOR. 
      * <li> It is &#92u001E, RECORD SEPARATOR. 
-     * <li> It is &#92u001F, UNIT SEPARATOR. 
+     * <li> It is &#92u001F, UNIT SEPARATOR.  
      * </ul>
      *
-     * Up-to-date Unicode implementation of java.lang.Character.isWhitespace().
+     * This API tries to synch to the semantics of the Java API,
+     * java.lang.Character.isWhitespace(). 
      * @param ch code point to determine if it is a white space
      * @return true if the specified code point is a white space character
      * @stable ICU 2.1
@@ -2484,26 +2485,44 @@ public final class UCharacter
     }
 
     /**
-     * Determines if the specified code point should be regarded as an 
-     * ignorable character in a Unicode identifier.
-     * A character is ignorable in the Unicode standard if it is of the type 
-     * Cf, Formatting code.<br>
-     * Up-to-date Unicode implementation of 
-     * java.lang.Character.isIdentifierIgnorable().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
-     * @param ch code point to be determined if it can be ignored in a Unicode 
-     *        identifier.
-     * @return true if the code point is ignorable
+     * <p>
+     * Determines if the specified character should be regarded as an ignorable 
+     * character in a Java identifier or a Unicode identifier.
+     * </p>
+     * <p>
+     * The following Unicode characters are ignorable in a Java identifier or a 
+     * Unicode identifier:<br>
+     * ISO control characters that are not whitespace
+     * <ul>
+     * <li> '\u0000' through '\u0008'
+     * <li> '\u000E' through '\u001B'
+     * <li> '\u007F' through '\u009F' 
+     * <li> all characters that have the FORMAT general category value 
+     * </p>
+     * <p>
+     * Same as java.lang.Character.isIdentifierIgnorable()
+     * </p>
+     * <p>
+     * Note that Unicode just recommends to ignore Cf (format controls).
+     * </p>
+     * @param c the code point to be tested
+     * @return true if the code point is ignorable in identifiers according to 
+     *         Java
+     *
+     * @see #isUnicodeIdentifierStart(int)
+     * @see #isUnicodeIdentifierPart(int)
      * @stable ICU 2.1
      */
     public static boolean isIdentifierIgnorable(int ch)
     {
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
-        return ch <= 8 || (ch >= 0xe && ch <= 0x1b) 
-               || (ch >= 0x7f && ch <= 0x9f) 
-               || (ch >= 0x200a && ch <= 0x200f) 
-               || (ch >= 0x206a && ch <= 0x206f) || ch == 0xfeff;
+        if (ch <= 0x9f) {
+            return isISOControl(ch) 
+                   && !((ch >= 0x9 && ch <= 0xd) 
+                        || (ch >= 0x1c && ch <= 0x1f));
+        } 
+        return getType(ch) == UCharacterCategory.FORMAT;
     }
                       
     /**
@@ -4621,6 +4640,14 @@ public final class UCharacter
     ///CLOVER:ON 
     // private methods ---------------------------------------------------
     
+    /**
+     * Getting the digit values of characters like 'A' - 'Z', normal, 
+     * half-width and full-width. This method assumes that the other digit 
+     * characters are checked by the calling method.
+     * @param ch character to test
+     * @return -1 if ch is not a character of the form 'A' - 'Z', otherwise
+     *         its corresponding digit will be returned.
+     */
     private static int getEuropeanDigit(int ch) {
         if ((ch > 0x7a && ch < 0xff21)  
             || ch < 0x41 || (ch > 0x5a && ch < 0x61)
@@ -4665,11 +4692,14 @@ public final class UCharacter
     * This is optimized.
     * Note this is alittle different from CharTrie the index m_trieData_
     * is never negative.
+    * This is a duplicate of UCharacterProperty.getProperty. For optimization
+    * purposes, this method calls the trie data directly instead of through 
+    * UCharacterProperty.getProperty.
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point
     * @draft ICU 2.6
     */
-    public static int getProperty(int ch)
+    private static int getProperty(int ch)
     {
         if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE 
             || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE 
