@@ -25,6 +25,7 @@
 
 #include "ucol_elm.h"
 #include "unicode/uchar.h"
+#include "unormimp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -533,26 +534,38 @@ static void unsafeCPSet(uint8_t *table, UChar c) {
 
 
 /*  to the UnsafeCP hash table, add all chars with combining class != 0     */
-static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
-    UChar       c;
-    for (c=0; c<0xffff; c++) {
-        if (u_getCombiningClass(c) != 0)
-            unsafeCPSet(t->unsafeCP, c);
+static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t, UErrorCode *status) {
+
+    UChar              c;
+    uint16_t           fcd;     // Hi byte is lead combining class.
+                                // lo byte is trailing combing class.
+    const uint16_t    *fcdTrieData;
+
+    fcdTrieData = unorm_getFCDTrie(status);
+    if (U_FAILURE(*status)) {
+        return;
     }
+
+    for (c=0; c<0xffff; c++) {
+        fcd = unorm_getFCD16(fcdTrieData, c);
+        if (fcd >= 0x100 ||               // if the leading combining class(c) > 0 ||
+            (UTF_IS_LEAD(c) && fcd != 0)) //    c is a leading surrogate with some FCD data
+                unsafeCPSet(t->unsafeCP, c);
+    }
+
     if(t->prefixLookup != NULL) {
       int32_t i = -1;
       const UHashElement *e = NULL;
       UCAElements *element = NULL;
       UChar NFCbuf[256];
       uint32_t NFCbufLen = 0;
-      UErrorCode status = U_ZERO_ERROR;
       while((e = uhash_nextElement(t->prefixLookup, &i)) != NULL) {
         element = (UCAElements *)e->value.pointer;
         // codepoints here are in the NFD form. We need to add the
         // first code point of the NFC form to unsafe, because 
         // strcoll needs to backup over them.
         NFCbufLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0,
-          NFCbuf, 256, &status);
+          NFCbuf, 256, status);
         unsafeCPSet(t->unsafeCP, NFCbuf[0]);
       } 
     }
@@ -1169,7 +1182,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     tableOffset += (uint32_t)(paddedsize(maxexpansion->position * sizeof(uint8_t)));
 
     /* Unsafe chars table.  Finish it off, then copy it. */
-    uprv_uca_unsafeCPAddCCNZ(t);
+    uprv_uca_unsafeCPAddCCNZ(t, status);
     if (t->UCA != 0) {              /* Or in unsafebits from UCA, making a combined table.    */
        for (i=0; i<UCOL_UNSAFECP_TABLE_SIZE; i++) {    
            t->unsafeCP[i] |= t->UCA->unsafeCP[i];

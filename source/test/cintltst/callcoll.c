@@ -26,7 +26,7 @@
 /**
  * CollationDummyTest is a third level test class.  This tests creation of 
  * a customized collator object.  For example, number 1 to be sorted 
- * equlivalent to word 'one'.
+ * equlivalent to word 'one'. 
  */
 #ifndef INCLUDE_CALLCOLL_C
 
@@ -61,6 +61,9 @@ static void TestExtra(void);
 
 /* Test jitterbug 581 */
 static void TestJB581(void);
+
+/* Test jitterbug 1401 */
+static void TestJB1401(void);
 
 /* Test [variable top] in the rule syntax */
 static void TestVariableTop(void);
@@ -232,8 +235,8 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestVariableTop, "tscoll/callcoll/TestVariableTop");      
     addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");
     addTest(root, &TestInvalidRules, "tscoll/callcoll/TestInvalidRules");
-    
-}
+    addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");      
+   }
 
 static void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
@@ -506,6 +509,104 @@ static void TestJB581(void)
     }
     ucol_close(myCollator);
 }
+
+static void TestJB1401(void)
+{
+    UCollator     *myCollator = 0;
+    UErrorCode     status = U_ZERO_ERROR;
+    static UChar   NFD_UnsafeStartChars[] = {
+        0x0f73,          /* Tibetan Vowel Sign II */
+        0x0f75,          /* Tibetan Vowel Sign UU */
+        0x0f81,          /* Tibetan Vowel Sign Reversed II */
+            0
+    };
+    int            i;
+
+    
+    myCollator = ucol_open("en_US", &status);
+    if (U_FAILURE(status)){
+        int32_t     bufferLen   = 0;
+        UChar       dispName    [100]; 
+        bufferLen = uloc_getDisplayName("en_US", 0, dispName, 100, &status);
+        /*Report the error with display name... */
+        log_err("ERROR: Failed to create the collator for : \"%s\"\n", dispName);
+        return;
+    }
+    ucol_setAttribute(myCollator, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    if (U_FAILURE(status)){
+        log_err("ERROR: Failed to set normalization mode ON for collator.\n");
+        return;
+    }
+
+    for (i=0; ; i++) {
+        UChar    c;
+        UChar    X[4];
+        UChar    Y[20];
+        UChar    Z[20];
+
+        /*  Get the next funny character to be tested, and set up the
+         *  three test strings X, Y, Z, consisting of an A-grave + test char,
+         *    in original form, NFD, and then NFC form.
+         */
+        c = NFD_UnsafeStartChars[i];
+        if (c==0) {break;}
+
+        X[0]=0xC0; X[1]=c; X[2]=0;   /* \u00C0 is A Grave*/
+        
+        unorm_normalize(X, -1, UNORM_NFD, 0, Y, 20, &status);
+        unorm_normalize(Y, -1, UNORM_NFC, 0, Z, 20, &status);
+        if (U_FAILURE(status)){
+            log_err("ERROR: Failed to normalize test of character %x\n", c);
+            return;
+        }
+
+        /* Collation test.  All three strings should be equal.
+         *   doTest does both strcoll and sort keys, with params in both orders.
+         */
+        doTest(myCollator, X, Y, UCOL_EQUAL);
+        doTest(myCollator, X, Z, UCOL_EQUAL);
+        doTest(myCollator, Y, Z, UCOL_EQUAL);
+
+        /* Run collation element iterators over the three strings.  Results should be same for each.
+         */
+        {
+            UCollationElements *ceiX, *ceiY, *ceiZ;
+            int32_t             ceX,   ceY,   ceZ;
+            int                 j;
+
+            ceiX = ucol_openElements(myCollator, X, -1, &status);
+            ceiY = ucol_openElements(myCollator, Y, -1, &status);
+            ceiZ = ucol_openElements(myCollator, Z, -1, &status);
+            if (U_FAILURE(status)) {
+                log_err("ERROR: uucol_openElements failed.\n");
+                return;
+            }
+
+            for (j=0;; j++) {
+                ceX = ucol_next(ceiX, &status);
+                ceY = ucol_next(ceiY, &status);
+                ceZ = ucol_next(ceiZ, &status);
+                if (U_FAILURE(status)) {
+                    log_err("ERROR: ucol_next failed for iteration #%d.\n", j);
+                    break;
+                }
+                if (ceX != ceY || ceY != ceZ) {
+                    log_err("ERROR: ucol_next failed for iteration #%d.\n", j);
+                    break;
+                }
+                if (ceX == UCOL_NULLORDER) {
+                    break;
+                }
+            }
+            ucol_closeElements(ceiX);
+            ucol_closeElements(ceiY);
+            ucol_closeElements(ceiZ);
+        }
+    }
+    ucol_close(myCollator);
+}
+
+
 
 /**
 * Tests the [variable top] tag in rule syntax. Since the default [alternate]
