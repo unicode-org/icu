@@ -40,7 +40,7 @@
  *           here, and will pass the data address to ICU, which will then
  *           be able to fetch resources from the data.
  */
-extern  const void U_IMPORT *fortune_resources_dat; 
+extern  const void U_IMPORT *fortune_resources_dat;
 void u_write(const UChar *what, int len);
 
 
@@ -189,7 +189,8 @@ int main(int argc, char **argv)
         exit(-1);
     }
 
-    u_file_write(resString, len, u_stdout); 
+    u_file_write(resString, len, u_stdout);      /* Write out the message           */
+	u_fputc(0x0a, u_stdout);                     /*   and a trailing newline	    */
 
     return 0;
 }
