@@ -7194,8 +7194,10 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
     *status = U_PRIMARY_TOO_LONG_ERROR;
     return 0;
   }
-
-  coll->variableTopValue = (CE & UCOL_PRIMARYMASK)>>16;
+  if(coll->variableTopValue != (CE & UCOL_PRIMARYMASK)>>16) {
+    coll->variableTopValueisDefault = FALSE;
+    coll->variableTopValue = (CE & UCOL_PRIMARYMASK)>>16;
+  }
 
   return CE & UCOL_PRIMARYMASK;
 }
@@ -7212,7 +7214,11 @@ ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *stat
   if(U_FAILURE(*status) || coll == NULL) {
     return;
   }
-  coll->variableTopValue = (varTop & UCOL_PRIMARYMASK)>>16;
+
+  if(coll->variableTopValue != (varTop & UCOL_PRIMARYMASK)>>16) {
+      coll->variableTopValueisDefault = FALSE;
+      coll->variableTopValue = (varTop & UCOL_PRIMARYMASK)>>16;
+  }
 }
 /* Attribute setter API */
 U_CAPI void  U_EXPORT2

@@ -1005,6 +1005,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
  */
 U_CAPI uint32_t U_EXPORT2
 ucol_collatorToIdentifier(const UCollator *coll,
+                          const char *locale,
                           UErrorCode *status);
 
 /**
@@ -1038,6 +1039,20 @@ ucol_identifierToShortString(uint32_t identifier,
                              int32_t capacity,
                              UErrorCode *status);
 
+
+/**
+ * Universal attribute getter that returns UCOL_DEFAULT if the value is default
+ * @param coll collator which attributes are to be changed
+ * @param attr attribute type
+ * @return attribute value or UCOL_DEFAULT if the value is default
+ * @param status to indicate whether the operation went on smoothly or there were errors
+ * @see UColAttribute
+ * @see UColAttributeValue
+ * @see ucol_setAttribute
+ * @internal ICU 3.0
+ */
+U_CAPI UColAttributeValue  U_EXPORT2
+ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
