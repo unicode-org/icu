@@ -384,9 +384,9 @@ void TestSortKey()
         return;
     }
 
-    if(ucol_getNormalization(col) != UCOL_DEFAULT_NORMALIZATION)
+    if(ucol_getNormalization(col) != UCOL_DECOMP_CAN)
       {
-        log_err("ERROR: default collation did not have UCOL_DEFAULT_NORMALIZATION !\n");
+        log_err("ERROR: default collation did not have cannonical decomposition for normalization!\n");
       }
 
 
