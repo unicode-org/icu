@@ -757,14 +757,17 @@ static void
 write8str(FileStream *out, uint8_t byte) {
     char s[8];
 
-    sprintf(s, "\\x%02X", byte);
+    if (byte > 7)
+        sprintf(s, "\\x%X", byte);
+    else
+        sprintf(s, "\\%X", byte);
 
     /* write the value, possibly with comma and newline */
     if(column==MAX_COLUMN) {
         /* first byte */
         column=1;
         T_FileStream_writeLine(out, "\"");
-    } else if(column<16) {
+    } else if(column<24) {
         ++column;
     } else {
         T_FileStream_writeLine(out, "\"\n\"");
