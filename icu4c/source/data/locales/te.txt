@@ -4,12 +4,18 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.12 $
+// $Revision: 1.13 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
 te {
     Version{ "1.0" }
+    Countries {
+        IN { "\u0c2d\u0c3e\u0c30\u0c24 \u0c26\u0c46\u0c33\u0c66" }
+    }
+    Languages {
+        te { "\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41" }
+    }
     DayAbbreviations {
         "\u0c06\u0c26\u0c3f",
         "\u0c38\u0c4b\u0c2e",
