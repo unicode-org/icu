@@ -20,8 +20,9 @@ CLEANFILES = *~ $(DEPS)
 TARGET = iotest$(EXEEXT)
 
 BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
-BUILDDIR := $(BUILDDIR:test/iotest/../../=)
-BUILDDIR := $(BUILDDIR:test\\\\iotest/../../=)
+BUILDDIR := $(BUILDDIR:test/iotest/../../=)       # For Unix
+BUILDDIR := $(BUILDDIR:test\\\\iotest/../../=)    # For Windows
+BUILDDIR := $(BUILDDIR:TEST\\\\IOTEST/../../=)    # For Windows 98
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
 -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/io
