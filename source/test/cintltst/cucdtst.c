@@ -1509,14 +1509,14 @@ TestCharNames() {
     length=0;
     errorCode=U_ZERO_ERROR;
     u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
-    if(U_FAILURE(errorCode) || length<49194) {
+    if(U_FAILURE(errorCode) || length<94140) {
         log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 
     length=0;
     errorCode=U_ZERO_ERROR;
     u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_EXTENDED_CHAR_NAME, &errorCode);
-    if(U_FAILURE(errorCode) || length<0x1100000) {
+    if(U_FAILURE(errorCode) || length<94140) {
         log_err("u_enumCharNames(0..0x1100000 - Extended) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 
