@@ -310,10 +310,9 @@ main(int argc, char* argv[]) {
       o.fcn(&o, out, &status);
       pkg_mak_writeFooter(out, &o);
       T_FileStream_close(out);
-  } else if (o.install) {
-      fprintf(stderr, "warning: couldn't create %s, will use existing file if any\n", o.makeFile);
   } else {
-      status = U_FILE_ACCESS_ERROR;
+      fprintf(stderr, "warning: couldn't create %s, will use existing file if any\n", o.makeFile);
+      /*status = U_FILE_ACCESS_ERROR;*/
   }
 
   if(U_FAILURE(status)) {
