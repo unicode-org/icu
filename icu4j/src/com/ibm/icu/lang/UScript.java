@@ -20,6 +20,7 @@ import java.util.MissingResourceException;
  * (based on ISO 15924:2000, "Code for the representation of names of
  * scripts").  UTR #24 describes the basis for a new Unicode data file,
  * Scripts.txt.
+ * @stable ICU 2.4
  */
 public final class UScript {
     /**
@@ -27,54 +28,246 @@ public final class UScript {
      */
     private static final String copyrightNotice
         = "Copyright \u00a92001 IBM Corp.  All rights reserved.";
-        
+    
+    /**
+     * Invalid code
+     * @stable ICU 2.4
+     */    
     public static final int INVALID_CODE = -1;
+    /**
+     * Common
+     * @stable ICU 2.4
+     */
     public static final int COMMON       =  0;  /* Zyyy */
+    /**
+     * Inherited
+     * @stable ICU 2.4
+     */
     public static final int INHERITED    =  1;  /* Qaai */
+    /**
+     * Arabic
+     * @stable ICU 2.4
+     */
     public static final int ARABIC       =  2;  /* Arab */
+    /**
+     * Armenian
+     * @stable ICU 2.4
+     */
     public static final int ARMENIAN     =  3;  /* Armn */
+    /**
+     * Bengali
+     * @stable ICU 2.4
+     */
     public static final int BENGALI      =  4;  /* Beng */
+    /**
+     * Bopomofo
+     * @stable ICU 2.4
+     */
     public static final int BOPOMOFO     =  5;  /* Bopo */
+    /**
+     * Cherokee
+     * @stable ICU 2.4
+     */
     public static final int CHEROKEE     =  6;  /* Cher */
+    /**
+     * Coptic
+     * @stable ICU 2.4
+     */
     public static final int COPTIC       =  7;  /* Qaac */
+    /**
+     * Cyrillic
+     * @stable ICU 2.4
+     */
     public static final int CYRILLIC     =  8;  /* Cyrl (Cyrs) */
+    /**
+     * Deseret
+     * @stable ICU 2.4
+     */
     public static final int DESERET      =  9;  /* Dsrt */
+    /**
+     * Devanagari
+     * @stable ICU 2.4
+     */
     public static final int DEVANAGARI   = 10;  /* Deva */
+    /**
+     * Ethiopic
+     * @stable ICU 2.4
+     */
     public static final int ETHIOPIC     = 11;  /* Ethi */
+    /**
+     * Georgian
+     * @stable ICU 2.4
+     */
     public static final int GEORGIAN     = 12;  /* Geor (Geon; Geoa) */
+    /**
+     * Gothic
+     * @stable ICU 2.4
+     */
     public static final int GOTHIC       = 13;  /* Goth */
+    /**
+     * Greek
+     * @stable ICU 2.4
+     */
     public static final int GREEK        = 14;  /* Grek */
+    /**
+     * Gujarati
+     * @stable ICU 2.4
+     */
     public static final int GUJARATI     = 15;  /* Gujr */
+    /**
+     * Gurmukhi
+     * @stable ICU 2.4
+     */
     public static final int GURMUKHI     = 16;  /* Guru */
+    /**
+     * Han
+     * @stable ICU 2.4
+     */
     public static final int HAN          = 17;  /* Hani */
+    /**
+     * Hangul
+     * @stable ICU 2.4
+     */
     public static final int HANGUL       = 18;  /* Hang */
+    /**
+     * Hebrew
+     * @stable ICU 2.4
+     */
     public static final int HEBREW       = 19;  /* Hebr */
+    /**
+     * Hiragana
+     * @stable ICU 2.4
+     */
     public static final int HIRAGANA     = 20;  /* Hira */
+    /**
+     * Kannada
+     * @stable ICU 2.4
+     */
     public static final int KANNADA      = 21;  /* Knda */
+    /**
+     * Katakana
+     * @stable ICU 2.4
+     */
     public static final int KATAKANA     = 22;  /* Kana */
+    /**
+     * Khmer
+     * @stable ICU 2.4
+     */
     public static final int KHMER        = 23;  /* Khmr */
+    /**
+     * Lao
+     * @stable ICU 2.4
+     */
     public static final int LAO          = 24;  /* Laoo */
+    /**
+     * Latin
+     * @stable ICU 2.4
+     */
     public static final int LATIN        = 25;  /* Latn (Latf; Latg) */
+    /**
+     * Malayalam
+     * @stable ICU 2.4
+     */
     public static final int MALAYALAM    = 26;  /* Mlym */
+    /**
+     * Mangolian
+     * @stable ICU 2.4
+     */
     public static final int MONGOLIAN    = 27;  /* Mong */
+    /**
+     * Myammar
+     * @stable ICU 2.4
+     */
     public static final int MYANMAR      = 28;  /* Mymr */
+    /**
+     * Ogham
+     * @stable ICU 2.4
+     */
     public static final int OGHAM        = 29;  /* Ogam */
+    /**
+     * Old Itallic
+     * @stable ICU 2.4
+     */
     public static final int OLD_ITALIC   = 30;  /* Ital */
+    /**
+     * Oriya
+     * @stable ICU 2.4
+     */
     public static final int ORIYA        = 31;  /* Orya */
+    /**
+     * Runic
+     * @stable ICU 2.4
+     */
     public static final int RUNIC        = 32;  /* Runr */
+    /**
+     * Sinhala
+     * @stable ICU 2.4
+     */
     public static final int SINHALA      = 33;  /* Sinh */
+    /**
+     * Syriac
+     * @stable ICU 2.4
+     */
     public static final int SYRIAC       = 34;  /* Syrc (Syrj; Syrn; Syre) */
+    /**
+     * Tamil
+     * @stable ICU 2.4
+     */
     public static final int TAMIL        = 35;  /* Taml */
+    /**
+     * Telugu
+     * @stable ICU 2.4
+     */
     public static final int TELUGU       = 36;  /* Telu */
+    /**
+     * Thana
+     * @stable ICU 2.4
+     */
     public static final int THAANA       = 37;  /* Thaa */
+    /**
+     * Thai
+     * @stable ICU 2.4
+     */
     public static final int THAI         = 38;  /* Thai */
+    /**
+     * Tibetan
+     * @stable ICU 2.4
+     */
     public static final int TIBETAN      = 39;  /* Tibt */
+    /**
+     * Unified Canadian Aboriginal Symbols
+     * @stable ICU 2.4
+     */
     public static final int UCAS         = 40;  /* Cans */
+    /**
+     * Yi syllables
+     * @stable ICU 2.4
+     */
     public static final int YI           = 41;  /* Yiii */
+    /**
+     * Tagalog
+     * @stable ICU 2.4
+     */
     public static final int TAGALOG      = 42;  /* Tglg */
+    /**
+     * Hanunooo
+     * @stable ICU 2.4
+     */
     public static final int HANUNOO      = 43;  /* Hano */
+    /**
+     * Buhid
+     * @stable ICU 2.4
+     */
     public static final int BUHID        = 44;  /* Buhd */
+    /**
+     * Tagbanwa
+     * @stable ICU 2.4
+     */
     public static final int TAGBANWA     = 45;  /* Tagb */
+    /**
+     * Limit
+     * @stable ICU 2.4
+     */
     public static final int CODE_LIMIT   = 46; 
     
     private static final int SCRIPT_MASK   = 0x0000007f;
@@ -83,7 +276,6 @@ public final class UScript {
     /**
      * Helper function to find the code from locale.
      * @param Locale the locale.
-     * @exception MissingResourceException if LocaleScript cannot be opened
      */
     private static int[] findCodeFromLocale(Locale locale) {
 
@@ -98,11 +290,10 @@ public final class UScript {
         int[] result = new int[scripts.length];
         int w = 0;
         for (int i = 0; i < scripts.length; ++i) {
-            try {
-                int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
+              int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
                                                            scripts[i]);
-                result[w++] = code;
-            } catch (IllegalArgumentException e) {}
+              result[w++] = code;
+            
         }
 
         if (w < result.length) {
@@ -118,11 +309,9 @@ public final class UScript {
      * Returns LATIN given "en" OR "en_US" 
      * @param locale Locale
      * @return The script codes array. null if the the code cannot be found. 
-     * @exception MissingResourceException
-     * @draft 2.1
+     * @stable ICU 2.4
      */
-    public static final int[] getCode(Locale locale)
-        throws MissingResourceException {
+    public static final int[] getCode(Locale locale){
         return findCodeFromLocale(locale);
     }
     
@@ -137,7 +326,7 @@ public final class UScript {
      * data.
      * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
      * @return The script codes array. null if the the code cannot be found.
-     * @draft 2.1
+     * @stable ICU 2.4
      */
     public static final int[] getCode(String nameOrAbbrOrLocale){
         try {
@@ -155,8 +344,7 @@ public final class UScript {
      * Returns UScript.MALAYAM given 0x0D02 
      * @param codepoint UChar32 codepoint
      * @return The script code 
-     * @exception IllegalArgumentException
-     * @draft 2.1
+     * @stable ICU 2.4
      */
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
@@ -171,8 +359,7 @@ public final class UScript {
      * Returns  "Malayam" given MALAYAM
      * @param scriptCode int script code
      * @return script name as a string in full as given in TR#24
-     * @exception IllegalArgumentException
-     * @draft 2.1
+     * @stable ICU 2.4
      */
     public static final String getName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
@@ -185,13 +372,17 @@ public final class UScript {
      * Returns  "Mlym" given MALAYAM
      * @param scriptCode int script code 
      * @return script abbreviated name as a string  as given in TR#24
-     * @exception IllegalArgumentException
-     * @draft 2.1
+     * @stable ICU 2.4
      */
     public static final String getShortName(int scriptCode){
         return UCharacter.getPropertyValueName(UProperty.SCRIPT,
                                                scriptCode,
                                                UProperty.NameChoice.SHORT);
     }
+    
+    /**
+     *  Private Constructor. Never default construct
+     */
+    private UScript(){}
 }
 

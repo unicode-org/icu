@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeCompressor.java,v $ 
- * $Date: 2002/02/16 03:06:20 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/12/03 22:03:59 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -77,11 +77,7 @@ package com.ibm.icu.text;
 * @see UnicodeDecompressor
 *
 * @author Stephen F. Booth
-* @version 1.5 05 Aug 99
-* @version 1.4 21 Jul 99
-* @version 1.3 10 Mar 99
-* @version 1.2 08 Mar 99
-* @version 1.1 11 Jan 99 
+* @draft ICU 2.4
 */
 
 /*
@@ -294,6 +290,7 @@ public final class UnicodeCompressor implements SCSU
      * Create a UnicodeCompressor.
      * Sets all windows to their default values.
      * @see #reset
+     * @draft ICU 2.4
      */
     public UnicodeCompressor()
     {
@@ -305,6 +302,7 @@ public final class UnicodeCompressor implements SCSU
      * @param buffer The string to compress.
      * @return A byte array containing the compressed characters.
      * @see #compress(char [], int, int)
+     * @draft ICU 2.4
      */
     public static byte [] compress(String buffer)
     {
@@ -318,6 +316,7 @@ public final class UnicodeCompressor implements SCSU
      * @param limit The limit of the character run to compress.
      * @return A byte array containing the compressed characters.
      * @see #compress(String)
+     * @draft ICU 2.4
      */
     public static byte [] compress(char [] buffer,
 				   int start,
@@ -358,6 +357,7 @@ public final class UnicodeCompressor implements SCSU
      * compressed data.
      * @param byteBufferLimit The limiting offset for writing compressed data.
      * @return The number of bytes written to byteBuffer.
+     * @draft ICU 2.4
      */
     public int compress(char []     charBuffer,
 			int         charBufferStart,
@@ -822,7 +822,10 @@ public final class UnicodeCompressor implements SCSU
         return (bytePos - byteBufferStart);
     }
 
-    /** Reset the compressor to its initial state. */
+    /** 
+     * Reset the compressor to its initial state.
+     * @draft ICU 2.4
+     */
     public void reset()
     {
 	int i;

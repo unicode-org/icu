@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ComposedCharIter.java,v $ 
- * $Date: 2002/06/20 01:21:18 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/12/03 22:03:59 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -53,7 +53,7 @@ import com.ibm.icu.impl.Utility;
  * <tt>ComposedCharIter</tt> is currently based on version 2.1.8 of the
  * <a href="http://www.unicode.org" target="unicode">Unicode Standard</a>.
  * It will be updated as later versions of Unicode are released.
- * @deprecated
+ * @deprecated ICU 2.2
  */
 public final class ComposedCharIter {
     
@@ -61,6 +61,7 @@ public final class ComposedCharIter {
      * Constant that indicates the iteration has completed.
      * {@link #next} returns this value when there are no more composed characters
      * over which to iterate.
+     * @deprecated ICU 2.2
      */
     public static final  char DONE = (char) Normalizer.DONE;
     
@@ -68,6 +69,7 @@ public final class ComposedCharIter {
      * Construct a new <tt>ComposedCharIter</tt>.  The iterator will return
      * all Unicode characters with canonical decompositions, including Korean
      * Hangul characters.
+     * @deprecated ICU 2.2
      */
     public ComposedCharIter() {
         compat = false;
@@ -87,6 +89,7 @@ public final class ComposedCharIter {
      *                  causes this <tt>ComposedCharIter</tt> not to iterate
      *                  over the Hangul characters and their corresponding
      *                  Jamo decompositions.
+     * @deprecated ICU 2.2
      */
     public ComposedCharIter(boolean compat, int options) {
         this.compat = compat;
@@ -96,6 +99,7 @@ public final class ComposedCharIter {
     /**
      * Determines whether there any precomposed Unicode characters not yet returned
      * by {@link #next}.
+     * @deprecated ICU 2.2
      */
     public boolean hasNext() {
         if (nextChar == Normalizer.DONE)  {
@@ -110,6 +114,7 @@ public final class ComposedCharIter {
      * by Unicode, in ascending order.  After all precomposed characters have
      * been returned, {@link #hasNext} will return <tt>false</tt> and further calls
      * to <tt>next</tt> will return {@link #DONE}.
+     * @deprecated ICU 2.2
      */
     public char next() {
         if (nextChar == Normalizer.DONE)  {
@@ -125,6 +130,7 @@ public final class ComposedCharIter {
      * This method returns the decomposition of the precomposed character most
      * recently returned by {@link #next}.  The resulting decomposition is
      * affected by the settings of the options passed to the constructor.
+     * @deprecated ICU 2.2
      */
     public String decomposition() {
         // the decomposition buffer contains the decomposition of 

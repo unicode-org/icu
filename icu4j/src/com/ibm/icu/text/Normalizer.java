@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/11/21 18:19:48 $ 
- * $Revision: 1.27 $
+ * $Date: 2002/12/03 22:03:59 $ 
+ * $Revision: 1.28 $
  *
  *******************************************************************************
  */
@@ -116,6 +116,7 @@ import com.ibm.icu.impl.Utility;
  * often do not encode any combining marks by themselves. For conversion to such
  * character encodings the Unicode text needs to be normalized to NFC.
  * For more usage examples, see the Unicode Standard Annex.
+ * @draft ICU 2.2
  */
 
 public final class Normalizer implements Cloneable{
@@ -143,18 +144,23 @@ public final class Normalizer implements Cloneable{
     /**
      * Constant indicating that the end of the iteration has been reached.
      * This is guaranteed to have the same value as {@link UCharacterIterator#DONE}.
-     * 
+     * @draft ICU 2.2
      */
     public static final int DONE = UCharacterIterator.DONE;
 
     /**
      * Constants for normalization modes.
+     * @draft ICU 2.2
      */
     public static class Mode {
 		private int modeValue;
 		private Mode(int value){
 		    modeValue = value;
 		}
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected int normalize(char[] src, int srcStart, int srcLimit,
                      char[] dest, int destStart, int destLimit){
             int srcLen = (srcLimit - srcStart);
@@ -165,23 +171,45 @@ public final class Normalizer implements Cloneable{
             System.arraycopy(src,srcStart,dest,destStart,srcLen);
             return srcLen;
         }
-        
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected String normalize(String src){
             return src;
         }
-        
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected int getMinC(){
             return -1;
         }
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected int getMask(){
             return -1;
         }
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected IsPrevBoundary getPrevBoundary(){
             return null;
         }
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected IsNextBoundary getNextBoundary(){
             return null;
         }
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected QuickCheckResult quickCheck(char[] src,int start, int limit, 
                                               boolean allowMaybe){
             if(allowMaybe){
@@ -189,16 +217,26 @@ public final class Normalizer implements Cloneable{
             }
             return NO;
         }
+        /**
+         * This method is used for method dispatch
+         * @draft ICU 2.2
+         */
         protected boolean isNFSkippable(int c){
             return true;
         }
         
     }
     
-    /** No decomposition/composition.  */
+    /** 
+     * No decomposition/composition.  
+     * @draft ICU 2.2
+     */
     public static final Mode NONE = new Mode(1);
 
-    /** Canonical decomposition.  */
+    /** 
+     * Canonical decomposition.  
+     * @draft ICU 2.2
+     */
     public static final Mode NFD = new NFDMode(2);
     
     private static final class NFDMode extends Mode{
@@ -245,7 +283,10 @@ public final class Normalizer implements Cloneable{
         }           
     };
                                          
-    /** Compatibility decomposition.  */
+    /** 
+     * Compatibility decomposition.  
+     * @draft ICU 2.2
+     */
     public static final Mode NFKD = new NFKDMode(3);
     
     private static final class NFKDMode extends Mode{
@@ -291,7 +332,10 @@ public final class Normalizer implements Cloneable{
         }                                         
     };
                                          
-    /** Canonical decomposition followed by canonical composition.  */
+    /** 
+     * Canonical decomposition followed by canonical composition.  
+     * @draft ICU 2.2
+     */
     public static final Mode NFC = new NFCMode(4);
     
     private static final class NFCMode extends Mode{
@@ -343,10 +387,16 @@ public final class Normalizer implements Cloneable{
         } 
     };
                                          
-    /** Default normalization.  */
+    /** 
+     * Default normalization.  
+     * @draft ICU 2.2
+     */
     public static final Mode DEFAULT = NFC; 
     
-    /** Compatibility decomposition followed by canonical composition.  */
+    /** 
+     * Compatibility decomposition followed by canonical composition. 
+     * @draft ICU 2.2
+     */
     public static final Mode NFKC =new NFKCMode(5);
     
     private static final class NFKCMode extends Mode{
@@ -396,7 +446,10 @@ public final class Normalizer implements Cloneable{
         } 
     };
                                         
-    /** "Fast C or D" form. @since ICU 2.1 */
+    /** 
+     * "Fast C or D" form. 
+     * @draft ICU 2.2 
+     */
     public static final Mode FCD = new FCDMode(6);
     
     private static final class FCDMode extends Mode{
@@ -445,7 +498,7 @@ public final class Normalizer implements Cloneable{
      * altogether.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2003-Aug-31. Use Nomalizer.NONE
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. Use Nomalizer.NONE
      * @see #NONE
      */
     public static final Mode NO_OP = NONE;
@@ -463,7 +516,7 @@ public final class Normalizer implements Cloneable{
      * <b>C</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2003-Aug-31. Use Normalier.NFC
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. Use Normalier.NFC
      * @see #NFC
      */
     public static final Mode COMPOSE = NFC;
@@ -481,7 +534,7 @@ public final class Normalizer implements Cloneable{
      * <b>KC</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2003-Aug-31. Use Normalizer.NFKC
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. Use Normalizer.NFKC
      * @see #NFKC
      */
     public static final Mode COMPOSE_COMPAT = NFKC;
@@ -499,7 +552,7 @@ public final class Normalizer implements Cloneable{
      * <b>D</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2003-Aug-31.Use Normalizer.NFD
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31.Use Normalizer.NFD
      * @see #NFD
      */
     public static final Mode DECOMP = NFD;
@@ -517,7 +570,7 @@ public final class Normalizer implements Cloneable{
      * <b>KD</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2003-Aug-31. Use Normalizer.NFKD
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. Use Normalizer.NFKD
      * @see #NFKD
      */
     public static final Mode DECOMP_COMPAT = NFKD;
@@ -538,14 +591,14 @@ public final class Normalizer implements Cloneable{
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
-     * @deprecated To be removed after 2003-Aug-31.
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31.
      */
     public static final int IGNORE_HANGUL = 0x0001;
           
     /**
      * Result values for quickCheck().
      * For details see Unicode Technical Report 15.
-     * 
+     * @draft ICU 2.2
      */
     public static final class QuickCheckResult{
 		private int resultValue;
@@ -555,51 +608,54 @@ public final class Normalizer implements Cloneable{
     }
     /** 
      * Indicates that string is not in the normalized format
+     * @draft ICU 2.2
      */
     public static final QuickCheckResult NO = new QuickCheckResult(0);
 	
     /** 
      * Indicates that string is in the normalized format
+     * @draft ICU 2.2
      */
     public static final QuickCheckResult YES = new QuickCheckResult(1);
 
     /** 
      * Indicates it cannot be determined if string is in the normalized 
      * format without further thorough checks.
+     * @draft ICU 2.2
      */
     public static final QuickCheckResult MAYBE = new QuickCheckResult(2);
     
     /**
      * Option bit for compare:
      * Case sensitively compare the strings
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public static final int FOLD_CASE_DEFAULT    =      0x0000;
     
     /**
      * Option bit for compare:
      * Both input strings are assumed to fulfill FCD conditions.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public static final int INPUT_IS_FCD    =      0x20000;
 	
     /**
      * Option bit for compare:
      * Perform case-insensitive comparison.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public static final int COMPARE_IGNORE_CASE  =     0x10000;
 	
     /**
      * Option bit for compare:
      * Compare strings in code point order instead of code unit order.
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public static final int COMPARE_CODE_POINT_ORDER = 0x8000;
     
     /** Option value for case folding: exclude the mappings for dotted I 
      * and dotless i marked with 'I' in CaseFolding.txt. 
-     * @since ICU 2.2
+     * @draft ICU 2.2
      */
     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0x0001;
 	
@@ -615,6 +671,7 @@ public final class Normalizer implements Cloneable{
      *              will start at the beginning of the string.
      *
      * @param mode  The normalization mode.
+     * @draft ICU 2.2
      */
     public Normalizer(String str, Mode mode) {
         this.text = UCharacterIterator.getInstance(str);
@@ -637,8 +694,9 @@ public final class Normalizer implements Cloneable{
      *            Currently the only available option is {@link #IGNORE_HANGUL}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @deprecated To be removed after 2003-Aug-31. 
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. 
      *              Use Normalizer( String str, Mode mode).
+     * @draft ICU 2.2
      */
     public Normalizer(String str, Mode mode, int opt) {
         this.text = UCharacterIterator.getInstance(str);
@@ -654,7 +712,7 @@ public final class Normalizer implements Cloneable{
      *              will start at the beginning of the string.
      *
      * @param mode  The normalization mode.
-     *
+     * @draft ICU 2.2
      */
     public Normalizer(CharacterIterator iter, Mode mode) {
         this.text = UCharacterIterator.getInstance(
@@ -676,7 +734,7 @@ public final class Normalizer implements Cloneable{
      *            Currently the only available option is {@link #IGNORE_HANGUL}.
      *            If you want the default behavior corresponding to one of the
      *            standard Unicode Normalization Forms, use 0 for this argument.
-     * @deprecated To be removed after 2003-Aug-31. 
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. 
      *              Use Normalizer(CharacterIterator iter, Mode mode).
      */
     public Normalizer(CharacterIterator iter, Mode mode, int opt){
@@ -695,6 +753,7 @@ public final class Normalizer implements Cloneable{
      *              will start at the beginning of the string.
      *
      * @param mode  The normalization mode.
+     * @draft ICU 2.2
      */
     //internal constructor for now
     public Normalizer(UCharacterIterator iter, Mode mode){
@@ -715,6 +774,7 @@ public final class Normalizer implements Cloneable{
      * However, the text storage underlying
      * the <tt>CharacterIterator</tt> is not duplicated unless the
      * iterator's <tt>clone</tt> method does so.
+     * @draft ICU 2.2
      */
     public Object clone() {
         try {
@@ -744,6 +804,7 @@ public final class Normalizer implements Cloneable{
      *                    NFKC rules and if false will be composed according to 
      *                    NFC rules.
      * @return String    The composed string   
+     * @draft ICU 2.2
      */            
     public static String compose(String str, boolean compat){
         char[] dest = new char[str.length()*MAX_BUF_SIZE_COMPOSE];
@@ -769,7 +830,7 @@ public final class Normalizer implements Cloneable{
      *                    NFC rules.
      * @param options    The only recognized option is IGNORE_HANGUL
      * @return String    The composed string   
-     * @deprecated To be removed after 2003-Aug-31. 
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. 
      *              Use compose(String str, boolean compat).
      */            
     public static String compose(String str, boolean compat, int options){
@@ -787,7 +848,8 @@ public final class Normalizer implements Cloneable{
      * @return int   The total buffer size needed;if greater than length of 
      *                result, the output was truncated.
      * @exception IndexOutOfBoundsException if target.length is less than the 
-     *             required length  
+     *             required length
+     * @draft ICU 2.2  
      */         
     public static int compose(char[] source,char[] target, boolean compat){
         int length = NormalizerImpl.compose(source,0,source.length,
@@ -815,7 +877,8 @@ public final class Normalizer implements Cloneable{
      * @return int   The total buffer size needed;if greater than length of 
      *                result, the output was truncated.
      * @exception IndexOutOfBoundsException if target.length is less than the 
-     *             required length  
+     *             required length 
+     * @draft ICU 2.2 
      */         
     public static int compose(char[] src,int srcStart, int srcLimit,
                               char[] dest,int destStart, int destLimit,
@@ -840,7 +903,8 @@ public final class Normalizer implements Cloneable{
      * @param compat    If true the string will be decomposed accoding to NFKD 
      *                   rules and if false will be decomposed according to NFD 
      *                   rules.
-     * @return String   The decomposed string   
+     * @return String   The decomposed string  
+     * @draft ICU 2.2 
      */         
     public static String decompose(String str, boolean compat){
         char[] dest = new char[str.length()*MAX_BUF_SIZE_DECOMPOSE];
@@ -867,7 +931,7 @@ public final class Normalizer implements Cloneable{
      *                 rules and if false will be decomposed according to NFD 
      *                 rules.
      * @return String The decomposed string 
-     * @deprecated To be removed after 2003-Aug-31. 
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31. 
      *              Use decompose(String str, boolean compat).
      */         
     public static String decompose(String str, boolean compat, int options){
@@ -886,6 +950,7 @@ public final class Normalizer implements Cloneable{
      *                result,the output was truncated.
      * @exception IndexOutOfBoundsException if the target capacity is less than
      *             the required length   
+     * @draft ICU 2.2
      */
     public static int decompose(char[] source,char[] target, boolean compat){
         int[] trailCC = new int[1];
@@ -914,7 +979,8 @@ public final class Normalizer implements Cloneable{
      * @return int   The total buffer size needed;if greater than length of 
      *                result,the output was truncated.
      * @exception IndexOutOfBoundsException if the target capacity is less than
-     *             the required length   
+     *             the required length  
+     * @draft ICU 2.2 
      */
     public static int decompose(char[] src,int srcStart, int srcLimit,
                                 char[] dest,int destStart, int destLimit,
@@ -959,7 +1025,7 @@ public final class Normalizer implements Cloneable{
      * @param aMode     the normalization mode
      *
      * @param options   the optional features to be enabled.
-     * @deprecated     To be removed after 2003-Aug-31. 
+     * @deprecated     ICU 2.2. To be removed after 2003-Aug-31. 
      *                  Use normalize(String str, Mode mode).
      */
     public static String normalize(String str, Mode mode, int options){
@@ -975,6 +1041,7 @@ public final class Normalizer implements Cloneable{
      *                    Normalizer.NFD, Normalizer.NFC, Normalizer.NFKC, 
      *                    Normalizer.NFKD, Normalizer.DEFAULT
      * @return String    The normalized string
+     * @draft ICU 2.2
      *   
      */
     public static String normalize( String src,Mode mode){
@@ -992,7 +1059,8 @@ public final class Normalizer implements Cloneable{
      * @return int   The total buffer size needed;if greater than length of 
      *                result, the output was truncated.
      * @exception    IndexOutOfBoundsException if the target capacity is less 
-     *                than the required length     
+     *                than the required length
+     * @draft ICU 2.2     
      */
     public static int normalize(char[] source,char[] target, Mode  mode){
 		int length = normalize(source,0,source.length,target,0,target.length,mode);
@@ -1019,8 +1087,8 @@ public final class Normalizer implements Cloneable{
      * @return int      The total buffer size needed;if greater than length of 
      *                   result, the output was truncated.
      * @exception       IndexOutOfBoundsException if the target capacity is 
-     *                   less than
-     *             the required length     
+     *                   less than the required length
+     * @draft ICU 2.2     
      */       
     public static int normalize(char[] src,int srcStart, int srcLimit, 
                                 char[] dest,int destStart, int destLimit,
@@ -1039,6 +1107,7 @@ public final class Normalizer implements Cloneable{
      * @param char32    The input string to be normalized.
      * @param aMode     The normalization mode
      * @return String   The normalized string
+     * @draft ICU 2.2
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -1054,6 +1123,7 @@ public final class Normalizer implements Cloneable{
      *                  Normalizer.NFKC,Normalizer.NFKD)
      * @return         Return code to specify if the text is normalized or not 
      *                     (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
+     * @draft ICU 2.2
      */
     public static QuickCheckResult quickCheck( String source, Mode mode){
 	    return mode.quickCheck(source.toCharArray(),0,source.length(),true);
@@ -1068,6 +1138,7 @@ public final class Normalizer implements Cloneable{
      *                Normalizer.NFKC,Normalizer.NFKD)
      * @return       Return code to specify if the text is normalized or not 
      *                (Normalizer.YES, Normalizer.NO or Normalizer.MAYBE)
+     * @draft ICU 2.2
      */
     public static QuickCheckResult quickCheck(char[] source, Mode mode){
         return mode.quickCheck(source,0,source.length,true);
@@ -1092,6 +1163,7 @@ public final class Normalizer implements Cloneable{
      * @return          Return code to specify if the text is normalized or not 
      *                   (Normalizer.YES, Normalizer.NO or
      *                   Normalizer.MAYBE)
+     * @draft ICU 2.2
      */
 
     public static QuickCheckResult quickCheck(char[] source,int start, 
@@ -1120,6 +1192,7 @@ public final class Normalizer implements Cloneable{
      * @param aMode     the normalization mode
      * @return Boolean value indicating whether the source string is in the
      *         "mode" normalization form
+     * @draft ICU 2.2
      */
     public static boolean isNormalized(char[] src,int start,
                                        int limit, Mode mode) {
@@ -1132,6 +1205,7 @@ public final class Normalizer implements Cloneable{
      *                   normalized
      * @param aMode     the normalization mode
      * @see #isNormalized
+     * @draft ICU 2.2
      */
     public static boolean isNormalized(String str, Mode mode) {
         return (mode.quickCheck(str.toCharArray(),0,str.length(),false)==YES);
@@ -1143,6 +1217,7 @@ public final class Normalizer implements Cloneable{
      *                   normalized
      * @param aMode     the normalization mode
      * @see #isNormalized
+     * @draft ICU 2.2
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -1201,6 +1276,7 @@ public final class Normalizer implements Cloneable{
      *
      * @see #normalize
      * @see #FCD
+     * @draft ICU 2.2
      */
      public static int compare(char[] s1, int s1Start, int s1Limit,
                                char[] s2, int s2Start, int s2Limit,
@@ -1241,6 +1317,7 @@ public final class Normalizer implements Cloneable{
      *
      * @see #normalize
      * @see #FCD
+     * @draft ICU 2.2
      */
      public static int compare(String s1, String s2, int options){
          
@@ -1281,6 +1358,7 @@ public final class Normalizer implements Cloneable{
      *
      * @see #normalize
      * @see #FCD
+     * @draft ICU 2.2
      */
      public static int compare(char[] s1, char[] s2, int options){
          
@@ -1294,6 +1372,7 @@ public final class Normalizer implements Cloneable{
      * @param char32b    the second code point
      *
      * @param aMode     the normalization mode
+     * @draft ICU 2.2
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -1310,6 +1389,7 @@ public final class Normalizer implements Cloneable{
      * @param str2    the second string
      *
      * @param aMode     the normalization mode
+     * @draft ICU 2.2
      *
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
@@ -1357,6 +1437,7 @@ public final class Normalizer implements Cloneable{
      * @see #previous
      * @exception IndexOutOfBoundsException if target capacity is less than the
      *             required length
+     * @draft ICU 2.2
      */
      /* Concatenation of normalized strings --------------------------------- */
     
@@ -1494,6 +1575,7 @@ public final class Normalizer implements Cloneable{
      * @see #next
      * @see #previous
      * @see #concatenate
+     * @draft ICU 2.2
      */
     public static String concatenate(char[] left, char[] right,Mode mode){
         char[] result = new char[(left.length+right.length)* MAX_BUF_SIZE_DECOMPOSE];
@@ -1535,6 +1617,7 @@ public final class Normalizer implements Cloneable{
      * @see #next
      * @see #previous
      * @see #concatenate
+     * @draft ICU 2.2
      */
     public static String concatenate(String left, String right,Mode mode){
         char[] result = new char[(left.length()+right.length())* MAX_BUF_SIZE_DECOMPOSE];
@@ -1552,10 +1635,23 @@ public final class Normalizer implements Cloneable{
         }            
     }
     
+    /**
+     * Gets the FC_NFKC closure set from the normalization data
+     * @param c The code point whose closure set is to be retrieved
+     * @param dest The char array to recive the closure set
+     * @internal
+     * @draft ICU 2.4
+     */
     public static int getFC_NFKC_Closure(int c,char[] dest){
         return NormalizerImpl.getFC_NFKC_Closure(c,dest);
     }
-    
+    /**
+     * Gets the FC_NFKC closure set from the normalization data
+     * @param c The the code point whose closure set is to be retrieved
+     * @return String representation of the closure set
+     * @internal
+     * @draft ICU 2.4
+     */ 
     public static String getFC_NFKC_Closure(int c){
         char[] dest = new char[10];
         for(;;){
@@ -1574,6 +1670,7 @@ public final class Normalizer implements Cloneable{
     /**
      * Return the current character in the normalized text->
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int current() {
 		if(bufferPos<bufferLimit || nextNormalize()) {
@@ -1588,6 +1685,7 @@ public final class Normalizer implements Cloneable{
      * the iteration position by one.  If the end
      * of the text has already been reached, {@link #DONE} is returned.
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int next() {
 		if(bufferPos<bufferLimit ||  nextNormalize()) {
@@ -1605,6 +1703,7 @@ public final class Normalizer implements Cloneable{
      * the iteration position by one.  If the beginning
      * of the text has already been reached, {@link #DONE} is returned.
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int previous() {
 		if(bufferPos>0 || previousNormalize()) {
@@ -1619,6 +1718,7 @@ public final class Normalizer implements Cloneable{
    /**
     * Reset the index to the beginning of the text.
     * This is equivalent to setIndexOnly(startIndex)).
+    * @draft ICU 2.2
     */
     public void reset() {
         text.setIndex(0);
@@ -1633,6 +1733,7 @@ public final class Normalizer implements Cloneable{
     * specified here.
     *
     * @param index the desired index in the input text.
+    * @draft ICU 2.2
     */
     public void setIndexOnly(int index) {
         text.setIndex(index);
@@ -1659,6 +1760,7 @@ public final class Normalizer implements Cloneable{
      * @throws IllegalArgumentException if the given index is less than
      *          {@link #getBeginIndex} or greater than {@link #getEndIndex}.
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int setIndex(int index) {
 		setIndexOnly(index);
@@ -1669,7 +1771,7 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the start of the input text. This is the begin 
      * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
      * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
-     * @deprecated To be removed after 2003-aug-31. Use startIndex() instead.
+     * @deprecated ICU 2.2. To be removed after 2003-aug-31. Use startIndex() instead.
      * @return The codepoint as an int
      * @see #startIndex
      */
@@ -1681,9 +1783,10 @@ public final class Normalizer implements Cloneable{
      * Retrieve the index of the end of the input text.  This is the end index
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
-     * @deprecated To be removed after 2003-aug-31. Use endIndex() instead.
+     * @deprecated ICU 2.2. To be removed after 2003-aug-31. Use endIndex() instead.
      * @return The codepoint as an int
      * @see #endIndex
+     * @draft ICU 2.2
      */
     public int getEndIndex() {
         return text.getLength()-1;
@@ -1692,6 +1795,7 @@ public final class Normalizer implements Cloneable{
      * Return the first character in the normalized text->  This resets
      * the <tt>Normalizer's</tt> position to the beginning of the text->
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int first() {
 		reset();
@@ -1703,6 +1807,7 @@ public final class Normalizer implements Cloneable{
      * the <tt>Normalizer's</tt> position to be just before the
      * the input text corresponding to that normalized character.
      * @return The codepoint as an int
+     * @draft ICU 2.2
      */
     public int last() {
         text.setToLimit();
@@ -1723,7 +1828,8 @@ public final class Normalizer implements Cloneable{
      * correspondence between characters returned by <tt>next</tt> and
      * <tt>previous</tt> and the indices passed to and returned from
      * <tt>setIndex</tt> and {@link #getIndex}.
-     *@return The current iteration position
+     * @return The current iteration position
+     * @draft ICU 2.2
      */
     public int getIndex(){
 		if(bufferPos<bufferLimit) {
@@ -1738,6 +1844,7 @@ public final class Normalizer implements Cloneable{
      * index of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the 
      * <tt>String</tt> over which this <tt>Normalizer</tt> is iterating
      * @return The current iteration position
+     * @draft ICU 2.2
      */
     public int startIndex(){
 		return 0;
@@ -1748,6 +1855,7 @@ public final class Normalizer implements Cloneable{
      * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
      * over which this <tt>Normalizer</tt> is iterating
      * @return The current iteration position
+     * @draft ICU 2.2
      */
     public int endIndex(){
 		return text.getLength();
@@ -1780,6 +1888,7 @@ public final class Normalizer implements Cloneable{
      * </ul>
      *
      * @see #getMode
+     * @draft ICU 2.2
      */
     public void setMode(Mode newMode){
 		mode = newMode;
@@ -1788,6 +1897,7 @@ public final class Normalizer implements Cloneable{
      * Return the basic operation performed by this <tt>Normalizer</tt>
      *
      * @see #setMode
+     * @draft ICU 2.2
      */
     public Mode getMode() {
 		return mode;
@@ -1813,7 +1923,7 @@ public final class Normalizer implements Cloneable{
      *                  turn the option on and <tt>false</tt> to turn it off.
      *
      * @see #getOption
-     * @deprecated To be removed after 2003-Aug-31.
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31.
      */
     public void setOption(int option,boolean value) {
 		if (value) {
@@ -1827,7 +1937,7 @@ public final class Normalizer implements Cloneable{
      * Determine whether an option is turned on or off.
      * <p>
      * @see #setOption
-     * @deprecated To be removed after 2003-Aug-31.
+     * @deprecated ICU 2.2. To be removed after 2003-Aug-31.
      */
     public int getOption(int option){
 	    if((options & option)!=0){
@@ -1844,6 +1954,7 @@ public final class Normalizer implements Cloneable{
      *         underlying text storage
      * @throws IndexOutOfBoundsException
      * @see   #getLength
+     * @draft ICU 2.2
      */
     public int getText(char[] fillIn){
         return text.getText(fillIn);
@@ -1852,6 +1963,7 @@ public final class Normalizer implements Cloneable{
     /**
      * Gets the length of underlying text storage
      * @return the length
+     * @draft ICU 2.2
      */ 
     public int getLength(){
         return text.getLength();
@@ -1860,6 +1972,7 @@ public final class Normalizer implements Cloneable{
     /**
      * Returns the text under iteration as a string
      * @param result a copy of the text under iteration.
+     * @draft ICU 2.2
      */
     public String getText(){
         return text.getText();
@@ -1869,6 +1982,7 @@ public final class Normalizer implements Cloneable{
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @draft ICU 2.2
      */
     public void setText(StringBuffer newText){
         
@@ -1884,6 +1998,7 @@ public final class Normalizer implements Cloneable{
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @draft ICU 2.2
      */
     public void setText(char[] newText){
         
@@ -1899,6 +2014,7 @@ public final class Normalizer implements Cloneable{
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @draft ICU 2.2
      */
     public void setText(String newText){
 	    
@@ -1914,6 +2030,7 @@ public final class Normalizer implements Cloneable{
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the input text->
      * @param newText   The new string to be normalized.
+     * @draft ICU 2.2
      */
     public void setText(CharacterIterator newText){
         
@@ -1929,6 +2046,7 @@ public final class Normalizer implements Cloneable{
      * Set the input text over which this <tt>Normalizer</tt> will iterate.
      * The iteration position is set to the beginning of the string.
      * @param newText   The new string to be normalized.
+     * @draft ICU 2.2
      */
     //Internal method for now
     public void setText(UCharacterIterator newText){ 
@@ -2091,7 +2209,7 @@ public final class Normalizer implements Cloneable{
         return buffer.length-startIndex[0];
     }
     
-    protected static int previous(UCharacterIterator src,
+    private static int previous(UCharacterIterator src,
                    char[] dest, int destStart, int destLimit, 
                    Mode mode, 
                    /*int options,*/
@@ -2319,7 +2437,7 @@ public final class Normalizer implements Cloneable{
         return bufferIndex;
     }
     
-    protected static int next(UCharacterIterator src,
+    private static int next(UCharacterIterator src,
                            char[] dest, int destStart, int destLimit,
                            Normalizer.Mode mode, /*int options,*/
                            boolean doNormalize, boolean[] pNeededToNormalize){
