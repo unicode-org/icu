@@ -59,6 +59,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name makedata
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ustdio
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -395,6 +398,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name common
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ustdio"=..\extra\ustdio\ustdio.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
