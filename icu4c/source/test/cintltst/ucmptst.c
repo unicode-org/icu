@@ -195,7 +195,7 @@ static void TestUCMPE32API(){
 
     /*ucmpe32_open*/
     log_verbose("Testing ucmpe32_open()\n");
-    ucmpe32Array=ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAF | (LEAD_SURROGATE_TAG<<24), &status);
+    ucmpe32Array=ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), &status);
     if(U_FAILURE(status) || ucmpe32Array == NULL){
         log_err("ERROR: ucmpe32_open() failed\n");
         status = U_ZERO_ERROR;
