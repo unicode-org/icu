@@ -1,7 +1,8 @@
-package com.ibm.test.translit;
-import com.ibm.text.UCharacter;
-import com.ibm.text.UCharacterCategory;
-import com.ibm.text.*;
+package com.ibm.icu.dev.test.translit;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 public final class TestUtility {
 

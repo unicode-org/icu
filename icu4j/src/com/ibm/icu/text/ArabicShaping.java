@@ -5,7 +5,9 @@
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
+
+import com.ibm.icu.lang.*;
 
 /**
  * Shape Arabic text on a character basis.

@@ -3,17 +3,17 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ChineseDateFormat.java,v $
- * $Date: 2000/11/21 20:19:08 $
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:03 $
+ * $Revision: 1.4 $
  */
-package com.ibm.text;
-import com.ibm.util.*;
+package com.ibm.icu.text;
+import com.ibm.icu.util.*;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
 
 /**
- * A concrete {@link DateFormat} for {@link com.ibm.util.ChineseCalendar}.
+ * A concrete {@link DateFormat} for {@link com.ibm.icu.util.ChineseCalendar}.
  * This class handles a <code>ChineseCalendar</code>-specific field,
  * <code>ChineseCalendar.IS_LEAP_MONTH</code>.  It also redefines the
  * handling of two fields, <code>ERA</code> and <code>YEAR</code>.  The
@@ -35,7 +35,7 @@ import java.util.Locale;
  * l        is leap month           (Text)              4637
  * </pre>
  *
- * @see com.ibm.util.ChineseCalendar
+ * @see com.ibm.icu.util.ChineseCalendar
  * @see ChineseDateFormatSymbols
  * @author Alan Liu
  */

@@ -5,17 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleHoliday.java,v $ 
- * $Date: 2000/03/21 02:19:33 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:06:30 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
-import com.ibm.util.Calendar;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 
 /**
  * A holiday whose date can be represented by a SimpleDateRule object

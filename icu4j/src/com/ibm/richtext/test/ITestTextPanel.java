@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ITestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 03:31:34 $
+ * @(#)$RCSfile: ITestTextPanel.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:38 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,7 +12,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.richtext.tests;
+package com.ibm.richtext.test;
 
 import java.awt.Button;
 import java.awt.Frame;

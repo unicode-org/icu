@@ -5,18 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2001/11/29 17:28:38 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/02/16 03:05:00 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
-package com.ibm.demo.translit;
+package com.ibm.icu.dev.demo.translit;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import com.ibm.icu.demo.components.*;
-import com.ibm.text.*;
+import com.ibm.icu.dev.demo.impl.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * A frame that allows the user to experiment with keyboard
@@ -27,7 +28,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.11 $ $Date: 2001/11/29 17:28:38 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.12 $ $Date: 2002/02/16 03:05:00 $
  */
 public class Demo extends Frame {
 

@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2001/10/23 13:08:50 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:08 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -15,10 +15,11 @@
  * Source File: $ICU4CRoot/source/test/intltest/dtfmrgts.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -31,7 +32,7 @@ import java.io.*;
 /** 
  * Performs regression test for DateFormat
  **/
-public class DateFormatRegressionTest extends com.ibm.test.TestFmwk {
+public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception{
         new DateFormatRegressionTest().run(args);

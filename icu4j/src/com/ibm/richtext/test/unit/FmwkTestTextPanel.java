@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: FmwkTestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/26 17:39:58 $
+ * @(#)$RCSfile: FmwkTestTextPanel.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:39 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,10 +12,10 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.test.richtext;
+package com.ibm.richtext.test.unit;
 
-import com.ibm.test.TestFmwk;
-import com.ibm.richtext.tests.TestTextPanel;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.richtext.test.TestTextPanel;
 
 public final class FmwkTestTextPanel extends TestFmwk {
 

@@ -5,17 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/UInfo.java,v $ 
- * $Date: 2001/09/08 01:13:38 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:38 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.icu.internal;
+package com.ibm.icu.impl;
 
 import java.io.*;
 import java.util.*;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
 
 public final class UInfo {
     static final boolean DEBUG = false;

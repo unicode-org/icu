@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2000/11/30 21:29:49 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/16 03:06:29 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Locale;
@@ -40,7 +40,7 @@ import java.util.Locale;
  * constants rather than using actual, absolute numbers.
  * <p>
  *
- * @see com.ibm.util.GregorianCalendar
+ * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu

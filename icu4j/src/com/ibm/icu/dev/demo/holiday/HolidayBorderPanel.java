@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayBorderPanel.java,v $ 
- * $Date: 2001/10/30 02:42:50 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:04:55 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
-package com.ibm.demo.holiday;
+package com.ibm.icu.dev.demo.holiday;
 
-import com.ibm.demo.*;
+import com.ibm.icu.dev.demo.*;
 import java.awt.*;
 
 /**

@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/02/01 02:05:35 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:06:03 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
-import com.ibm.util.Utility;
+package com.ibm.icu.text;
+
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.lang.*;
 import java.util.Enumeration;
 import java.util.Vector;
-
 import java.util.*;
 
 /**

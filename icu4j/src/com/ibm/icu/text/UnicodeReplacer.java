@@ -8,7 +8,7 @@
 **********************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
 /**
  * <code>UnicodeReplacer</code> defines a protocol for objects that

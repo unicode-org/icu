@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringCharacterIterator.java,v $ 
- * $Date: 2000/03/10 04:07:23 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:06:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@
 // right with RuleBasedBreakIterator.  This class is unnecessary
 // when using RuleBasedBreakIterator with JDK 1.2.
 
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.text.CharacterIterator;
 
 /**

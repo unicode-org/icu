@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: Declaration.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: Declaration.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:38 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,11 +12,11 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.richtext.tests;
+package com.ibm.richtext.test;
 
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.StyledText;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 /**
  * This class contains the first four paragraphs of the Declaration

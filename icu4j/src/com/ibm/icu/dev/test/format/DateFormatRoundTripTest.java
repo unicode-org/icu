@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRoundTripTest.java,v $ 
- * $Date: 2001/11/06 11:07:16 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,10 +15,11 @@
  * Source File: $ICU4CRoot/source/test/intltest/dtfmtrtts.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.util.Date;
 import java.util.Random;
@@ -28,7 +29,7 @@ import java.text.ParseException;
 /** 
  * Performs round-trip tests for DateFormat
  **/
-public class DateFormatRoundTripTest extends com.ibm.test.TestFmwk {
+public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     public boolean INFINITE = false;
     public boolean quick = true;
     private SimpleDateFormat dateFormat;

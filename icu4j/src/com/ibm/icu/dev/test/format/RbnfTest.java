@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2001/11/12 20:02:46 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/16 03:05:16 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.rbnf;
+package com.ibm.icu.dev.test.rbnf;
 
-import com.ibm.text.RuleBasedNumberFormat;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.text.RuleBasedNumberFormat;
+import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
 import java.text.NumberFormat;
@@ -73,7 +73,7 @@ public class RbnfTest extends TestFmwk {
 
         NumberFormat decFormat = NumberFormat.getInstance(Locale.US);
         for (int j = 0; j < formatters.length; ++j) {
-            com.ibm.text.NumberFormat formatter = formatters[j];
+            com.ibm.icu.text.NumberFormat formatter = formatters[j];
             logln("formatter[" + j + "]");
             for (int i = 0; i < data.length; ++i) {
                 try {

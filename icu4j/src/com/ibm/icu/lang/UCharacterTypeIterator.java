@@ -5,15 +5,15 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterTypeIterator.java,v $
-* $Date: 2002/02/08 01:12:44 $
-* $Revision: 1.1 $
+* $Date: 2002/02/16 03:05:58 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.lang;
 
-import com.ibm.icu.internal.util.TrieIterator;
+import com.ibm.icu.impl.TrieIterator;
 
 /**
  * Class enabling iteration of the codepoints according to their types.

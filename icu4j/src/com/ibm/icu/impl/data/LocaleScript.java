@@ -4,10 +4,10 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle; 
-import com.ibm.text.UScript;
+import com.ibm.icu.text.UScript;
 
 public class LocaleScript extends ListResourceBundle { 
 

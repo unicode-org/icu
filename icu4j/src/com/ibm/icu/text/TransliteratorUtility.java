@@ -7,22 +7,22 @@
 *   11/29/2001  aliu        Creation.
 **********************************************************************
 */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
-import com.ibm.tools.translit.UnicodeSetClosure;
+import com.ibm.icu.dev.tool.translit.UnicodeSetClosure;
 import java.io.*;
 
 /**
- * This is a small class that resides in the com.ibm.text package in
+ * This is a small class that resides in the com.ibm.icu.text package in
  * order to access some package-private API.  It is used for
  * development purposes and should be ignored by end clients.
  * To run, use:
- * java -classpath classes com.ibm.text.TransliteratorUtility Latin-Katakana NFD lower
+ * java -classpath classes com.ibm.icu.text.TransliteratorUtility Latin-Katakana NFD lower
  * Output is produced in the command console, and a file with more detail is also written.
  * To see if it works, use:
- * java -classpath classes com.ibm.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
+ * java -classpath classes com.ibm.icu.dev.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
  * and 
- * java -classpath classes com.ibm.demo.translit.Demo
+ * java -classpath classes com.ibm.icu.dev.demo.translit.Demo
  */
 public class TransliteratorUtility {
 

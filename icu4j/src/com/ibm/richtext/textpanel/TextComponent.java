@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.4 $ $Date: 2001/10/30 02:42:48 $
+ * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.5 $ $Date: 2002/02/16 03:06:47 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -40,7 +40,7 @@ import com.ibm.richtext.textformat.TextOffset;
 
 import com.ibm.richtext.textformat.MFormatter;
 
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 class TextComponent extends FakeComponent
                     implements BehaviorOwner,

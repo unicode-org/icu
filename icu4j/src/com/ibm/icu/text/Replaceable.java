@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2002/02/09 01:01:47 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:06:12 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 /**
  * <code>Replaceable</code> is an interface that supports the
@@ -36,7 +36,7 @@ package com.ibm.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.5 $ $Date: 2002/02/09 01:01:47 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.6 $ $Date: 2002/02/16 03:06:12 $
  */
 public interface Replaceable {
     /**
@@ -61,7 +61,7 @@ public interface Replaceable {
      * code point of the surrogate pair.
      *
      * <p>Most subclasses can return
-     * <code>com.ibm.text.UTF16.charAt(this, offset)</code>.
+     * <code>com.ibm.icu.text.UTF16.charAt(this, offset)</code>.
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 32-bit code point of text at given offset

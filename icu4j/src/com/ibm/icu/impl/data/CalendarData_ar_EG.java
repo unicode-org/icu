@@ -1,4 +1,4 @@
-package com.ibm.util.resources;
+package com.ibm.icu.impl.data;
 import java.util.ListResourceBundle;
 
 // Arabic, Egypt

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.3 $ $Date: 2001/09/08 01:17:12 $
+ * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:39 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,14 +12,14 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.test.richtext;
+package com.ibm.richtext.test.unit;
 
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 
-import com.ibm.textlayout.attributes.AttributeSet;
-import com.ibm.textlayout.attributes.TextAttribute;
-import com.ibm.textlayout.attributes.Map;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeSet;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.Map;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 import java.util.Enumeration;
 
 // Java2 imports

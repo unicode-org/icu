@@ -4,11 +4,12 @@
  * @bug 4154525 4154537 4154542 4154650 4159922 4162593 4173604 4176686 4184229 4208960
  */
 
-package com.ibm.test.timezone;
-import com.ibm.util.*;
+package com.ibm.icu.dev.test.timezone;
+import com.ibm.icu.util.*;
 import java.io.*;
-import com.ibm.text.*;
-import com.ibm.test.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.dev.test.*;
 import java.util.Date;
 import java.util.Locale;
 

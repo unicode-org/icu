@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRoundTripTest.java,v $ 
- * $Date: 2001/10/19 12:14:56 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:12 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -15,16 +15,17 @@
  * Source File: $ICU4CRoot/source/test/intltest/nmfmtrt.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 
 /** 
  * Performs round-trip tests for NumberFormat
  **/
-public class NumberFormatRoundTripTest extends com.ibm.test.TestFmwk {
+public class NumberFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public double MAX_ERROR = 1e-14;
     public double max_numeric_error = 0.0;

@@ -5,13 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/02/08 01:13:42 $ 
-* $Revision: 1.11 $
+* $Date: 2002/02/16 03:06:20 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
+
+import com.ibm.icu.lang.*;
 
 /**
 * Standalone utility class providing UTF16 character conversions and indexing 
@@ -107,7 +109,7 @@ public final class UTF16
     public static final int SINGLE_CHAR_BOUNDARY = 1, 
                             LEAD_SURROGATE_BOUNDARY = 2, 
                             TRAIL_SURROGATE_BOUNDARY = 5;
-                              
+     
     // private variables ============================================
     	
     /** 

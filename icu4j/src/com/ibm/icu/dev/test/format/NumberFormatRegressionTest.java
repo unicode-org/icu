@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRegressionTest.java,v $ 
- * $Date: 2001/10/26 06:29:50 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:11 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,10 +15,11 @@
  * Source File: $ICU4CRoot/source/test/intltest/numrgts.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.util.Date;
 import java.text.ParseException;
@@ -27,7 +28,7 @@ import java.io.*;
 /** 
  * Performs regression test for MessageFormat
  **/
-public class NumberFormatRegressionTest extends com.ibm.test.TestFmwk {
+public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args) throws Exception{
         new NumberFormatRegressionTest().run(args);

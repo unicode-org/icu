@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/12/03 21:48:07 $ 
- * $Revision: 1.26 $
+ * $Date: 2002/02/16 03:05:01 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
-package com.ibm.test;
+package com.ibm.icu.dev.test;
 
 import java.lang.reflect.*;
 import java.util.Hashtable;
@@ -19,9 +19,9 @@ import java.util.Vector;
 import java.util.Comparator;
 import java.io.*;
 import java.text.*;
-import com.ibm.text.UTF16;
-import com.ibm.util.Utility;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.text.UnicodeSet;
 
 
 /**

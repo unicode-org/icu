@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2000/11/18 00:17:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:06 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.test.calendar;
+package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.test.*;
-import com.ibm.util.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 
 /**

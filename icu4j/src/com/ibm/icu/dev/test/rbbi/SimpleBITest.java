@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java,v $ 
- * $Date: 2000/03/10 03:47:46 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:05:16 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.rbbi;
+package com.ibm.icu.dev.test.rbbi;
 
 import java.util.Locale;
-import com.ibm.text.BreakIterator;
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.dev.test.TestFmwk;
 
 public class SimpleBITest extends TestFmwk{
     public static final String testText =

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NullTransliterator.java,v $ 
- * $Date: 2001/09/20 21:20:39 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:06:11 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
 
 /**

@@ -5,15 +5,15 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ByteTrie.java,v $ 
-* $Date: 2001/08/22 23:41:28 $ 
-* $Revision: 1.3 $
+* $Date: 2002/02/16 03:05:36 $ 
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
 
-package com.ibm.util;
+package com.ibm.icu.impl;
 
-import com.ibm.text.UCharacter;
+import com.ibm.icu.lang.UCharacter;
 
 /**
 * Class to manipulate and generate a trie.
@@ -43,7 +43,7 @@ import com.ibm.text.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.3 $
+* @version            $Revision: 1.4 $
 * @author             Syn Wee Quek
 */
 public final class ByteTrie

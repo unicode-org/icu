@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
- * $Date: 2001/10/24 20:00:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.*;
 
@@ -18,7 +18,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.3 $ $Date: 2001/10/24 20:00:08 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:09 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------

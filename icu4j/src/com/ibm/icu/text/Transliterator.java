@@ -5,20 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/02/09 01:01:47 $
- * $Revision: 1.73 $
+ * $Date: 2002/02/16 03:06:17 $
+ * $Revision: 1.74 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.util.*;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
 import java.io.UnsupportedEncodingException;
-import com.ibm.text.resources.ResourceReader;
-import com.ibm.util.CaseInsensitiveString;
-import com.ibm.util.Utility;
+import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.Utility;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.73 $ $Date: 2002/02/09 01:01:47 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.74 $ $Date: 2002/02/16 03:06:17 $
  */
 public abstract class Transliterator {
     /**
@@ -411,7 +411,7 @@ public abstract class Transliterator {
      * root will change to java.text.resources.LocaleElements
      */
     private static final String RB_LOCALE_ELEMENTS =
-        "com.ibm.text.resources.LocaleElements";
+        "com.ibm.icu.impl.data.LocaleElements";
 
     protected static final char ID_DELIM = ';';
 
@@ -425,7 +425,7 @@ public abstract class Transliterator {
      * To enable debugging output in the Transliterator component, set
      * DEBUG to true.
      *
-     * N.B. Make sure to recompile all of the com.ibm.text package
+     * N.B. Make sure to recompile all of the com.ibm.icu.text package
      * after changing this.  Easiest way to do this is 'ant clean
      * core' ('ant' will NOT pick up the dependency automatically).
      *

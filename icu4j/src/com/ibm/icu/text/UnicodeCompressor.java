@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeCompressor.java,v $ 
- * $Date: 2000/03/10 04:07:25 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:06:20 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 /**
 * A compression engine implementing the Standard Compression Scheme

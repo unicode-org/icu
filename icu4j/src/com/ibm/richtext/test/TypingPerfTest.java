@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.3 $ $Date: 2001/09/08 01:14:52 $
+ * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:39 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,7 +12,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.richtext.tests;
+package com.ibm.richtext.test;
 
 import java.awt.Button;
 import java.awt.GridLayout;
@@ -57,7 +57,7 @@ public class TypingPerfTest implements ActionListener {
     private static final String fgAtCurrentPosCommand = "Insert at current position";
     private static final String fgLotsOfTextCommand = "Insert a lot of text";
 
-    private static final String USAGE = "Usage: java com.ibm.richtext.tests.TypingPerfTest [file] [-insertionText text]";
+    private static final String USAGE = "Usage: java com.ibm.richtext.test.TypingPerfTest [file] [-insertionText text]";
     private char[] fInsText;
 
     public static void main(String[] args) throws IOException {

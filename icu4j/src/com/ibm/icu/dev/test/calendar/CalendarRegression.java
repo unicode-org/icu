@@ -1,8 +1,9 @@
-package com.ibm.test.calendar;
-import com.ibm.util.*;
+package com.ibm.icu.dev.test.calendar;
+import com.ibm.icu.util.*;
 import java.util.Date;
 import java.util.Locale;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * @test 1.32 99/11/14
@@ -12,7 +13,7 @@ import com.ibm.text.*;
  * 4145158 4145983 4147269 4149677 4162587 4165343 4166109 4167060 4173516
  * 4174361 4177484 4197699 4209071 4288792
  */
-public class CalendarRegression extends com.ibm.test.TestFmwk {
+public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new CalendarRegression().run(args);
@@ -852,7 +853,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     // in Sun's latest change to STZ.getOffset().  I have filed a Sun bug
     // against this problem.
 
-    // Re-enabled after 'porting' TZ and STZ from java.util to com.ibm.util.
+    // Re-enabled after 'porting' TZ and STZ from java.util to com.ibm.icu.util.
     /**
      * Prove that GregorianCalendar is proleptic (it used to cut off
      * at 45 BC, and not have leap years before then).

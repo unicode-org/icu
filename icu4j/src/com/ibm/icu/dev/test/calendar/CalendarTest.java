@@ -5,22 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2000/11/30 21:54:34 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/02/16 03:05:05 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.test.calendar;
+package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.test.*;
-import com.ibm.text.DateFormat;
-import com.ibm.text.SimpleDateFormat;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Hashtable;
 import java.util.Enumeration;
-import com.ibm.util.*;
+import com.ibm.icu.util.*;
 
 /**
  * A base class for classes that test individual Calendar subclasses.

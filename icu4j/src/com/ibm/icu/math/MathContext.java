@@ -1,6 +1,6 @@
 /* Generated from 'MathContext.nrx' 8 Sep 2000 11:07:48 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
-package com.ibm.math;
+package com.ibm.icu.math;
 
 /* ------------------------------------------------------------------ */
 /* MathContext -- Math context settings                               */
@@ -21,7 +21,7 @@ package com.ibm.math;
 /* 1998.05.02 Make the class immutable and final; drop set methods    */
 /* 1998.06.05 Add Round (rounding modes) property                     */
 /* 1998.06.25 Rename from DecimalContext; allow digits=0              */
-/* 1998.10.12 change to com.ibm.math package                          */
+/* 1998.10.12 change to com.ibm.icu.math package                          */
 /* 1999.02.06 add javadoc comments                                    */
 /* 1999.03.05 simplify; changes from discussion with J. Bloch         */
 /* 1999.03.13 1.00 release to IBM Centre for Java Technology          */
@@ -320,7 +320,7 @@ public final class MathContext implements java.io.Serializable{
   * @see #SCIENTIFIC
   * @see #ROUND_HALF_UP
   */
- public static final com.ibm.math.MathContext DEFAULT=new com.ibm.math.MathContext(DEFAULT_DIGITS,DEFAULT_FORM,DEFAULT_LOSTDIGITS,DEFAULT_ROUNDINGMODE);
+ public static final com.ibm.icu.math.MathContext DEFAULT=new com.ibm.icu.math.MathContext(DEFAULT_DIGITS,DEFAULT_FORM,DEFAULT_LOSTDIGITS,DEFAULT_ROUNDINGMODE);
 
  
  

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2000/03/10 04:07:18 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:06:03 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.util.Vector;
 import java.util.Locale;
@@ -538,7 +538,7 @@ public abstract class BreakIterator implements Cloneable
 //		System.out.println("rulesName: "+rulesName);
 //		System.out.println("dictionaryName: "+dictionaryName);
         ResourceBundle bundle = ResourceBundle.getBundle(           //ibm.597
-                        "com.ibm.text.resources.BreakIteratorRules", where);   //ibm.597
+                        "com.ibm.icu.impl.data.BreakIteratorRules", where);   //ibm.597
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");    //ibm.597
 
         String rules = bundle.getString(rulesName);                 //ibm.597

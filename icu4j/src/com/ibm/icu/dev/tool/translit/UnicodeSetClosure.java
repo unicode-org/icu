@@ -5,21 +5,21 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/UnicodeSetClosure.java,v $
- * $Date: 2001/12/03 18:22:59 $
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:05:35 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.translit;
-import com.ibm.text.*;
-import com.ibm.test.*;
-import com.ibm.util.Utility;
+package com.ibm.icu.dev.tool.translit;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.Utility;
 //import java.text.*;
 import java.io.*;
 import java.util.Locale;
 
-// com.ibm.tools.translit.UnicodeSetClosure
-// com.ibm.test.translit.TransliteratorTest
+// com.ibm.icu.dev.tool.translit.UnicodeSetClosure
+// com.ibm.icu.dev.test.translit.TransliteratorTest
 
 public class UnicodeSetClosure {
     public static void main(String[] args) throws Exception {

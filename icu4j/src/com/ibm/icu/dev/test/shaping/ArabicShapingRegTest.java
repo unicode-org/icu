@@ -5,11 +5,11 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.test.text;
+package com.ibm.icu.dev.test.text;
 
-import com.ibm.test.TestFmwk;
-import com.ibm.text.ArabicShaping;
-import com.ibm.text.ArabicShapingException;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.ArabicShaping;
+import com.ibm.icu.text.ArabicShapingException;
 
 /**
  * Regression test for Arabic shaping.

@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRules_en_US_TEST.java,v $
- * $Date: 2001/02/06 22:37:58 $
- * $Revision: 1.7 $
+ * $Date: 2002/02/16 03:05:14 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.rbbi;
+package com.ibm.icu.dev.test.rbbi;
 
 import java.util.ListResourceBundle;
 import java.net.URL;
@@ -207,7 +207,7 @@ public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
 
         // these two resources specify the pathnames of the dictionary files to
         // use for word breaking and line breaking.  Both currently refer to
-        // a file called english.dict placed in com\ibm\text\resources
+        // a file called english.dict placed in com.ibm.icu.impl.data
         // somewhere in the class path.  It's important to note that
         // english.dict was created for testing purposes only, and doesn't
         // come anywhere close to being an exhaustive dictionary of English

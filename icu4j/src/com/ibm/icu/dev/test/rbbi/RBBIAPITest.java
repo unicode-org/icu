@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/RBBIAPITest.java,v $ 
- * $Date: 2001/11/06 11:42:23 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -16,9 +16,9 @@
  * Source File: $ICU4CRoot/source/test/intltest/rbbiapts.cpp
  **/
 
-package com.ibm.test.rbbi;
+package com.ibm.icu.dev.test.rbbi;
 
-import com.ibm.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
 import java.util.Locale;
 import java.util.Vector;
 import java.io.*;
@@ -28,7 +28,7 @@ import java.text.StringCharacterIterator;
 /**
  * API Test the RuleBasedBreakIterator class
  */
-public class RBBIAPITest extends com.ibm.test.TestFmwk {
+public class RBBIAPITest extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args) throws Exception {
         new RBBIAPITest().run(args);

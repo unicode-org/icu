@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ClipWorkaround.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: ClipWorkaround.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:42 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -24,8 +24,8 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Line2D;
 //JDK12IMPORTS*/
 /*JDK11IMPORTS
-import com.ibm.textlayout.Graphics2D;
-import com.ibm.textlayout.Rectangle2D;
+import com.ibm.richtext.textlayout.Graphics2D;
+import com.ibm.richtext.textlayout.Rectangle2D;
 JDK11IMPORTS*/
 
 /**

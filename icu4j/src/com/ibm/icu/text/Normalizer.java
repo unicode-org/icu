@@ -5,18 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2001/11/21 00:56:22 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/02/16 03:06:10 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.lang.Character;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import com.ibm.util.CompactByteArray;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.CompactByteArray;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.lang.*;
 
 /**
  * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or

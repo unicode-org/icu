@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeNameTransliterator.java,v $ 
- * $Date: 2002/02/09 01:01:48 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/16 03:06:22 $ 
+ * $Revision: 1.7 $
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
+import com.ibm.icu.lang.*;
 
 /**
  * A transliterator that performs character to name mapping.

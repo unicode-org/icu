@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2001/10/30 02:42:49 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:06:07 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.math.BigInteger;
 
@@ -635,7 +635,7 @@ final class DigitList implements Cloneable {
      * @param fixedPoint If true, then maximumDigits is the maximum
      * fractional digits to be converted.  If false, total digits.
      */
-    public final void set(com.ibm.math.BigDecimal source,
+    public final void set(com.ibm.icu.math.BigDecimal source,
                           int maximumDigits, boolean fixedPoint) {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }

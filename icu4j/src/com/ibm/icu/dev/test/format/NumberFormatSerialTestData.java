@@ -4,13 +4,13 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatSerialTestData.java,v $ 
- * $Date: 2001/10/26 06:30:22 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:12 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
 public class NumberFormatSerialTestData {
     //get Content

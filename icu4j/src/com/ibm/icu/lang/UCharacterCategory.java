@@ -6,14 +6,15 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/02/15 02:53:35 $ 
-* $Revision: 1.4 $
+* $Date: 2002/02/16 03:05:56 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.lang;
 
+import com.ibm.icu.util.*;
 /**
 * Enumerated Unicode category types from the UnicodeData.txt file.
 * Used as return results from <a href=UCharacter.html>UCharacter</a>

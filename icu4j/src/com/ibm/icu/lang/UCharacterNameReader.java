@@ -5,25 +5,27 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/02/08 23:22:40 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/16 03:05:57 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import com.ibm.icu.internal.ICUBinary;
+import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.util.*;
+
 
 /**
 * <p>Internal reader class for ICU data file uname.dat containing 
 * Unicode codepoint name data.</p> 
 * <p>This class simply reads unames.dat, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
-* <a href=UCharacterNamehtml>com.ibm.text.UCharacterName</a>.
+* <a href=UCharacterNamehtml>com.ibm.icu.text.UCharacterName</a>.
 * </p> 
 * <p>For more information about the format of unames.dat refer to
 * <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>

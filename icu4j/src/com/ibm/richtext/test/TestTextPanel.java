@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.7 $ $Date: 2000/04/24 21:11:45 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.8 $ $Date: 2002/02/16 03:06:38 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,7 +12,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.richtext.tests;
+package com.ibm.richtext.test;
 
 import java.util.Random;
 import java.awt.Color;
@@ -33,17 +33,17 @@ import com.ibm.richtext.textpanel.TextPanelListener;
 
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.StyledText;
-import com.ibm.textlayout.attributes.TextAttribute;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import com.ibm.richtext.styledtext.StyleModifier;
-import com.ibm.textlayout.attributes.AttributeSet;
-import com.ibm.textlayout.attributes.TextAttribute;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeSet;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 // Note:  this used to be a TestFmwk test.  If you add
 // more tests to it, be sure to add them to 
-// com.ibm.test.richtext.FmwkTestTextPanel.test() -
+// com.ibm.richtext.test.unit.FmwkTestTextPanel.test() -
 // otherwise they won't get run!
 
 public class TestTextPanel /*extends TestFmwk*/ {

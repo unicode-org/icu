@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoUtility.java,v $ 
- * $Date: 2001/10/30 02:42:50 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:04:56 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.demo;
+package com.ibm.icu.dev.demo;
 
 import java.awt.*;
 import java.lang.*;

@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ReplaceableString.java,v $ 
- * $Date: 2002/02/09 01:01:47 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/16 03:06:12 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
 
 /**
  * <code>ReplaceableString</code> is an adapter class that implements the
@@ -26,7 +26,7 @@ import com.ibm.util.Utility;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.8 $ $Date: 2002/02/09 01:01:47 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.9 $ $Date: 2002/02/16 03:06:12 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;

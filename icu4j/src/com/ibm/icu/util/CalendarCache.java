@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarCache.java,v $ 
- * $Date: 2000/11/18 00:31:43 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:06:26 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
 public class CalendarCache
 {

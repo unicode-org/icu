@@ -5,19 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2001/09/08 01:15:15 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:05:04 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.calendar;
+package com.ibm.icu.dev.test.calendar;
 
 // AstroTest
 
-import com.ibm.test.*;
-import com.ibm.util.*;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.util.*;
 
-import com.ibm.util.CalendarAstronomer.*;
+import com.ibm.icu.util.CalendarAstronomer.*;
 
 // TODO: try finding next new moon after  07/28/1984 16:00 GMT
 

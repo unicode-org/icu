@@ -5,26 +5,26 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/02/08 23:22:40 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/16 03:05:58 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.util.Arrays;
 import java.io.IOException;
-import com.ibm.icu.util.CharTrie;
-import com.ibm.icu.internal.ICUBinary;
+import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.impl.ICUBinary;
 
 /**
 * <p>Internal reader class for ICU data file uprops.dat containing 
 * Unicode codepoint data.</p> 
 * <p>This class simply reads uprops.dat, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
-* <a href=UCharacterProperty.html>com.ibm.text.UCharacterProperty</a>.
+* <a href=UCharacterProperty.html>com.ibm.icu.text.UCharacterProperty</a>.
 * </p> 
 * <p>For more information about the format of uprops.dat refer to
 * <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>

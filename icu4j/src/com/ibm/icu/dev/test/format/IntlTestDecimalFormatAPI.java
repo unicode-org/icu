@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPI.java,v $ 
- * $Date: 2001/10/19 12:09:26 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:10 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -27,16 +27,17 @@ attribution to Taligent may not be removed.
   Taligent is a registered trademark of Taligent, Inc.
 */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.Format;
 import java.text.FieldPosition;
 
-public class IntlTestDecimalFormatAPI extends com.ibm.test.TestFmwk
+public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 {
     public static void main(String[] args)  throws Exception {
         new IntlTestDecimalFormatAPI().run(args);

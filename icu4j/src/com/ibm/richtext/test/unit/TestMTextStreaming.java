@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMTextStreaming.java,v $ $Revision: 1.2 $ $Date: 2000/04/24 20:52:58 $
+ * @(#)$RCSfile: TestMTextStreaming.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:40 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,9 +12,9 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.test.richtext;
+package com.ibm.richtext.test.unit;
 
-import com.ibm.test.TestFmwk;
+import com.ibm.icu.dev.test.TestFmwk;
 
 import java.io.*;
 import java.awt.Color;
@@ -24,8 +24,8 @@ import com.ibm.richtext.styledtext.StandardTabRuler;
 import com.ibm.richtext.styledtext.StyledText;
 import com.ibm.richtext.styledtext.StyleModifier;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
 public class TestMTextStreaming extends TestFmwk {
 

@@ -5,19 +5,19 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/02/08 01:08:38 $
-* $Revision: 1.1 $
+* $Date: 2002/02/16 03:05:37 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
 
-package com.ibm.icu.internal.util;
+package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import com.ibm.text.UTF16;
-import com.ibm.text.UCharacter;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * <p>A trie is a kind of compressed, serializable table of values 
@@ -53,10 +53,10 @@ public abstract class Trie
     // public class declaration ----------------------------------------
     
     /**
-    * Character data in com.ibm.util.Trie have different user-specified format
+    * Character data in com.ibm.icu.util.Trie have different user-specified format
     * for different purposes.
     * This interface specifies methods to be implemented in order for
-    * com.ibm.util.Trie, to surrogate offset information encapsulated within 
+    * com.ibm.icu.util.Trie, to surrogate offset information encapsulated within 
     * the data.
     * @draft 2.1
     */

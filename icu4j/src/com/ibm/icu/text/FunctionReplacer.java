@@ -8,8 +8,8 @@
 **********************************************************************
 */
 
-package com.ibm.text;
-import com.ibm.util.Utility;
+package com.ibm.icu.text;
+import com.ibm.icu.util.Utility;
 
 /**
  * A replacer that calls a transliterator to generate its output text.

@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java,v $ 
- * $Date: 2000/03/10 03:47:44 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:04:59 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.demo.rbnf;
+package com.ibm.icu.dev.demo.rbnf;
 
-import com.ibm.demo.*;
+import com.ibm.icu.dev.demo.*;
 import java.util.Locale;
 
 /**
@@ -28,7 +28,7 @@ import java.util.Locale;
  * please tell us!
  *
  * @author Richard Gillam
- * @version $Version$ $Date: 2000/03/10 03:47:44 $
+ * @version $Version$ $Date: 2002/02/16 03:04:59 $
  */
 public class RbnfSampleRuleSets {
     /**

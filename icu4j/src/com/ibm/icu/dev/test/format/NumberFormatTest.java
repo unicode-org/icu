@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2001/10/23 13:14:40 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:12 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,16 +15,17 @@
  * Source File: $ICU4CRoot/source/test/intltest/numfmtst.cpp
  **/
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.ParseException;
 import java.text.FieldPosition;
 
-public class NumberFormatTest extends com.ibm.test.TestFmwk {
+public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public static void main(String[] args) throws Exception {
         new NumberFormatTest().run(args);

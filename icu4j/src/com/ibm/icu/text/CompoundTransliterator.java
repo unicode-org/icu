@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2002/02/07 00:53:54 $ 
- * $Revision: 1.27 $
+ * $Date: 2002/02/16 03:06:05 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
-import com.ibm.util.Utility;
+package com.ibm.icu.text;
+import com.ibm.icu.util.Utility;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.27 $ $Date: 2002/02/07 00:53:54 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.28 $ $Date: 2002/02/16 03:06:05 $
  */
 public class CompoundTransliterator extends Transliterator {
 

@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarApp.java,v $ 
- * $Date: 2000/05/12 23:21:23 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:04:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.demo.calendar;
+package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.demo.*;
+import com.ibm.icu.dev.demo.*;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -21,8 +21,9 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 
-import com.ibm.util.*;
-import com.ibm.text.*;
+import com.ibm.icu.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * CalendarApp demonstrates how Calendar works.

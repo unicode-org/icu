@@ -5,26 +5,26 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2001/10/31 03:33:17 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:06:14 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
-import com.ibm.text.DateFormat;
+import com.ibm.icu.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 
-import com.ibm.util.TimeZone;
-import com.ibm.util.Calendar;
+import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import com.ibm.util.SimpleTimeZone;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.SimpleTimeZone;
+import com.ibm.icu.util.GregorianCalendar;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
@@ -175,9 +175,9 @@ import java.lang.StringIndexOutOfBoundsException;
  * format instances for each thread. If multiple threads access a format 
  * concurrently, it must be synchronized externally. 
  *
- * @see          com.ibm.util.Calendar
- * @see          com.ibm.util.GregorianCalendar
- * @see          com.ibm.util.TimeZone
+ * @see          com.ibm.icu.util.Calendar
+ * @see          com.ibm.icu.util.GregorianCalendar
+ * @see          com.ibm.icu.util.TimeZone
  * @see          DateFormat
  * @see          DateFormatSymbols
  * @see          DecimalFormat

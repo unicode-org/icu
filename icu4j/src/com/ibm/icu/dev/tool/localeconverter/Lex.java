@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/Lex.java,v $ 
- * $Date: 2002/01/31 03:00:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:29 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.localeconverter;
+package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
 import java.util.*;

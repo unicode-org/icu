@@ -7,8 +7,9 @@
 *   11/19/2001  aliu        Creation.
 **********************************************************************
 */
-package com.ibm.text;
-import com.ibm.util.Utility;
+package com.ibm.icu.text;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.lang.*;
 
 /**
  * A transliterator that converts Unicode escape forms to the
@@ -19,7 +20,7 @@ import com.ibm.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.3 $ $Date: 2002/02/09 01:01:47 $
+ * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:20 $
  */
 class UnescapeTransliterator extends Transliterator {
 

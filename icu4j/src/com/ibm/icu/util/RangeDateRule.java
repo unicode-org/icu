@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeDateRule.java,v $ 
- * $Date: 2000/03/10 04:17:59 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/16 03:06:29 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 
 import java.util.Date;
 import java.util.Vector;

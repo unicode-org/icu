@@ -1,8 +1,8 @@
 /* Generated from 'DiagBigDecimal.nrx' 27 Mar 2000 22:38:44 [v1.162] */
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
-package com.ibm.test.bigdec;
+package com.ibm.icu.dev.test.bigdec;
 import java.math.BigInteger;
-import com.ibm.math.*;
+import com.ibm.icu.math.*;
 
 /* ------------------------------------------------------------------ */
 /* Decimal diagnostic tests                                       mfc */
@@ -55,7 +55,7 @@ import com.ibm.math.*;
 /* 1999.12.21 multiplication fast path failure and edge cases         */
 /* 2000.01.01 copyright update                                        */
 /* 2000.03.26 cosmetic updates; add extra format() testcases          */
-/* 2000.03.27 1.00 move to com.ibm.math package; open source release; */
+/* 2000.03.27 1.00 move to com.ibm.icu.math package; open source release; */
 /*                 change to javadoc comments                         */
 /* ------------------------------------------------------------------ */
 
@@ -66,8 +66,8 @@ import com.ibm.math.*;
 
 /**
  * The <code>DiagBigDecimal</code> class forms a standalone test suite
- * for the <code>com.ibm.math.BigDecimal</code> and
- * <code>com.ibm.math.MathContext</code> classes (or, by changing the
+ * for the <code>com.ibm.icu.math.BigDecimal</code> and
+ * <code>com.ibm.icu.math.MathContext</code> classes (or, by changing the
  * <code>package</code> statement, other classes of the same names and
  * definition in other packages).  It may also be used as a constructed
  * object to embed the tests in an external test harness.
@@ -84,8 +84,8 @@ import com.ibm.math.*;
  * used to register tests so that a summary of failures (or success) can be
  * presented as each group is completed.
  *
- * @see     com.ibm.math.BigDecimal
- * @see     com.ibm.math.MathContext
+ * @see     com.ibm.icu.math.BigDecimal
+ * @see     com.ibm.icu.math.MathContext
  * @version 1.00 2000.03.27
  * @author  Mike Cowlishaw
  */
@@ -104,23 +104,23 @@ public class DiagBigDecimal{
  /* Count of test groups */
  private static final int testcount=38;
  
- private static final com.ibm.math.BigDecimal zero=com.ibm.math.BigDecimal.ZERO;
- private static final com.ibm.math.BigDecimal one=com.ibm.math.BigDecimal.ONE;
- private static final com.ibm.math.BigDecimal two=new com.ibm.math.BigDecimal(2);
- private static final com.ibm.math.BigDecimal ten=com.ibm.math.BigDecimal.TEN;
- private static final com.ibm.math.BigDecimal tenlong=new com.ibm.math.BigDecimal((long)1234554321); // 10-digiter
+ private static final com.ibm.icu.math.BigDecimal zero=com.ibm.icu.math.BigDecimal.ZERO;
+ private static final com.ibm.icu.math.BigDecimal one=com.ibm.icu.math.BigDecimal.ONE;
+ private static final com.ibm.icu.math.BigDecimal two=new com.ibm.icu.math.BigDecimal(2);
+ private static final com.ibm.icu.math.BigDecimal ten=com.ibm.icu.math.BigDecimal.TEN;
+ private static final com.ibm.icu.math.BigDecimal tenlong=new com.ibm.icu.math.BigDecimal((long)1234554321); // 10-digiter
  
  /* Some context objects -- [some of these are checked later] */
- private static final com.ibm.math.MathContext mcdef=com.ibm.math.MathContext.DEFAULT;
- private static final com.ibm.math.MathContext mc3=new com.ibm.math.MathContext(3);
- private static final com.ibm.math.MathContext mc6=new com.ibm.math.MathContext(6);
- private static final com.ibm.math.MathContext mc9=new com.ibm.math.MathContext(9);
- private static final com.ibm.math.MathContext mc50=new com.ibm.math.MathContext(50);
- private static final com.ibm.math.MathContext mcs=new com.ibm.math.MathContext(9,com.ibm.math.MathContext.SCIENTIFIC);
- private static final com.ibm.math.MathContext mce=new com.ibm.math.MathContext(9,com.ibm.math.MathContext.ENGINEERING);
- private static final com.ibm.math.MathContext mcld=new com.ibm.math.MathContext(9,com.ibm.math.MathContext.SCIENTIFIC,true); // lost digits
- private static final com.ibm.math.MathContext mcld0=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.SCIENTIFIC,true); // lost digits, digits=0
- private static final com.ibm.math.MathContext mcfd=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN); // fixed decimal style
+ private static final com.ibm.icu.math.MathContext mcdef=com.ibm.icu.math.MathContext.DEFAULT;
+ private static final com.ibm.icu.math.MathContext mc3=new com.ibm.icu.math.MathContext(3);
+ private static final com.ibm.icu.math.MathContext mc6=new com.ibm.icu.math.MathContext(6);
+ private static final com.ibm.icu.math.MathContext mc9=new com.ibm.icu.math.MathContext(9);
+ private static final com.ibm.icu.math.MathContext mc50=new com.ibm.icu.math.MathContext(50);
+ private static final com.ibm.icu.math.MathContext mcs=new com.ibm.icu.math.MathContext(9,com.ibm.icu.math.MathContext.SCIENTIFIC);
+ private static final com.ibm.icu.math.MathContext mce=new com.ibm.icu.math.MathContext(9,com.ibm.icu.math.MathContext.ENGINEERING);
+ private static final com.ibm.icu.math.MathContext mcld=new com.ibm.icu.math.MathContext(9,com.ibm.icu.math.MathContext.SCIENTIFIC,true); // lost digits
+ private static final com.ibm.icu.math.MathContext mcld0=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.SCIENTIFIC,true); // lost digits, digits=0
+ private static final com.ibm.icu.math.MathContext mcfd=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN); // fixed decimal style
  
  /* boundary primitive values */
  private static final byte bmin=-128;
@@ -336,11 +336,11 @@ public class DiagBigDecimal{
   java.math.BigInteger bip;
   java.math.BigInteger biz;
   java.math.BigInteger bin;
-  com.ibm.math.BigDecimal bda;
-  com.ibm.math.BigDecimal bdb;
-  com.ibm.math.BigDecimal bmc;
-  com.ibm.math.BigDecimal bmd;
-  com.ibm.math.BigDecimal bme;
+  com.ibm.icu.math.BigDecimal bda;
+  com.ibm.icu.math.BigDecimal bdb;
+  com.ibm.icu.math.BigDecimal bmc;
+  com.ibm.icu.math.BigDecimal bmd;
+  com.ibm.icu.math.BigDecimal bme;
   java.lang.RuntimeException e=null;
   char ca[];
   double dzer;
@@ -355,37 +355,37 @@ public class DiagBigDecimal{
   int i=0;
   
   // constants [statically-called constructors]
-  (new Test("con001")).ok=(com.ibm.math.BigDecimal.ZERO.toString()).equals("0");
-  (new Test("con002")).ok=(com.ibm.math.BigDecimal.ONE.toString()).equals("1");
-  (new Test("con003")).ok=(com.ibm.math.BigDecimal.TEN.toString()).equals("10");
-  (new Test("con004")).ok=(com.ibm.math.BigDecimal.ZERO.intValueExact())==0;
-  (new Test("con005")).ok=(com.ibm.math.BigDecimal.ONE.intValueExact())==1;
-  (new Test("con006")).ok=(com.ibm.math.BigDecimal.TEN.intValueExact())==10;
+  (new Test("con001")).ok=(com.ibm.icu.math.BigDecimal.ZERO.toString()).equals("0");
+  (new Test("con002")).ok=(com.ibm.icu.math.BigDecimal.ONE.toString()).equals("1");
+  (new Test("con003")).ok=(com.ibm.icu.math.BigDecimal.TEN.toString()).equals("10");
+  (new Test("con004")).ok=(com.ibm.icu.math.BigDecimal.ZERO.intValueExact())==0;
+  (new Test("con005")).ok=(com.ibm.icu.math.BigDecimal.ONE.intValueExact())==1;
+  (new Test("con006")).ok=(com.ibm.icu.math.BigDecimal.TEN.intValueExact())==10;
   
   // [java.math.] BigDecimal
-  (new Test("cbd001")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("0"))).toString()).equals("0");
-  (new Test("cbd002")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("1"))).toString()).equals("1");
-  (new Test("cbd003")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("10"))).toString()).equals("10");
-  (new Test("cbd004")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("1000"))).toString()).equals("1000");
-  (new Test("cbd005")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("10.0"))).toString()).equals("10.0");
-  (new Test("cbd006")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("10.1"))).toString()).equals("10.1");
-  (new Test("cbd007")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("-1.1"))).toString()).equals("-1.1");
-  (new Test("cbd008")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("-9.0"))).toString()).equals("-9.0");
-  (new Test("cbd009")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal("0.9"))).toString()).equals("0.9");
+  (new Test("cbd001")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("0"))).toString()).equals("0");
+  (new Test("cbd002")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("1"))).toString()).equals("1");
+  (new Test("cbd003")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("10"))).toString()).equals("10");
+  (new Test("cbd004")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("1000"))).toString()).equals("1000");
+  (new Test("cbd005")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("10.0"))).toString()).equals("10.0");
+  (new Test("cbd006")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("10.1"))).toString()).equals("10.1");
+  (new Test("cbd007")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("-1.1"))).toString()).equals("-1.1");
+  (new Test("cbd008")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("-9.0"))).toString()).equals("-9.0");
+  (new Test("cbd009")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal("0.9"))).toString()).equals("0.9");
   
   num="123456789.123456789";
-  (new Test("cbd010")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
+  (new Test("cbd010")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   num="123456789.000000000";
-  (new Test("cbd011")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
+  (new Test("cbd011")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   num="123456789000000000";
-  (new Test("cbd012")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
+  (new Test("cbd012")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   num="0.00000123456789";
-  (new Test("cbd013")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
+  (new Test("cbd013")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   num="0.000000123456789";
-  (new Test("cbd014")).ok=((new com.ibm.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
+  (new Test("cbd014")).ok=((new com.ibm.icu.math.BigDecimal(new java.math.BigDecimal(num))).toString()).equals(num);
   
   try{checknull:do{
-   new com.ibm.math.BigDecimal((java.math.BigDecimal)null);
+   new com.ibm.icu.math.BigDecimal((java.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $3){
@@ -397,11 +397,11 @@ public class DiagBigDecimal{
   bip=new BigInteger("987654321987654321987654321"); // biggie +ve
   biz=new BigInteger("0"); // biggie 0
   bin=new BigInteger("-12345678998765432112345678"); // biggie -ve
-  (new Test("cbi001")).ok=((new com.ibm.math.BigDecimal(bip)).toString()).equals(bip.toString());
-  (new Test("cbi002")).ok=((new com.ibm.math.BigDecimal(biz)).toString()).equals("0");
-  (new Test("cbi003")).ok=((new com.ibm.math.BigDecimal(bin)).toString()).equals(bin.toString());
+  (new Test("cbi001")).ok=((new com.ibm.icu.math.BigDecimal(bip)).toString()).equals(bip.toString());
+  (new Test("cbi002")).ok=((new com.ibm.icu.math.BigDecimal(biz)).toString()).equals("0");
+  (new Test("cbi003")).ok=((new com.ibm.icu.math.BigDecimal(bin)).toString()).equals(bin.toString());
   try{checknull:do{
-   new com.ibm.math.BigDecimal((java.math.BigInteger)null);
+   new com.ibm.icu.math.BigDecimal((java.math.BigInteger)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $4){
@@ -411,25 +411,25 @@ public class DiagBigDecimal{
   
   // BigInteger with scale
   bip=new BigInteger("123456789"); // bigish
-  bda=new com.ibm.math.BigDecimal(bip);
-  bdb=new com.ibm.math.BigDecimal(bip,5);
-  bmc=new com.ibm.math.BigDecimal(bip,15);
+  bda=new com.ibm.icu.math.BigDecimal(bip);
+  bdb=new com.ibm.icu.math.BigDecimal(bip,5);
+  bmc=new com.ibm.icu.math.BigDecimal(bip,15);
   (new Test("cbs001")).ok=(bda.toString()).equals("123456789");
   (new Test("cbs002")).ok=(bdb.toString()).equals("1234.56789");
   (new Test("cbs003")).ok=(bmc.toString()).equals("0.000000123456789");
   bip=new BigInteger("123456789123456789123456789"); // biggie
-  bda=new com.ibm.math.BigDecimal(bip);
-  bdb=new com.ibm.math.BigDecimal(bip,7);
-  bmc=new com.ibm.math.BigDecimal(bip,13);
-  bmd=new com.ibm.math.BigDecimal(bip,19);
-  bme=new com.ibm.math.BigDecimal(bip,29);
+  bda=new com.ibm.icu.math.BigDecimal(bip);
+  bdb=new com.ibm.icu.math.BigDecimal(bip,7);
+  bmc=new com.ibm.icu.math.BigDecimal(bip,13);
+  bmd=new com.ibm.icu.math.BigDecimal(bip,19);
+  bme=new com.ibm.icu.math.BigDecimal(bip,29);
   (new Test("cbs011")).ok=(bda.toString()).equals("123456789123456789123456789");
   (new Test("cbs012")).ok=(bdb.toString()).equals("12345678912345678912.3456789");
   (new Test("cbs013")).ok=(bmc.toString()).equals("12345678912345.6789123456789");
   (new Test("cbs014")).ok=(bmd.toString()).equals("12345678.9123456789123456789");
   (new Test("cbs015")).ok=(bme.toString()).equals("0.00123456789123456789123456789");
   try{checknull:do{
-   new com.ibm.math.BigDecimal((java.math.BigInteger)null,1);
+   new com.ibm.icu.math.BigDecimal((java.math.BigInteger)null,1);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $5){
@@ -437,7 +437,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("cbs004")).ok=flag;
   try{checkscale:do{
-   new com.ibm.math.BigDecimal(bip,-8);
+   new com.ibm.icu.math.BigDecimal(bip,-8);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $6){e=$6;
@@ -449,9 +449,9 @@ public class DiagBigDecimal{
   // We just test it's there
   // Functionality is tested by BigDecimal(String).
   ca=("123.45").toCharArray();
-  (new Test("cca001")).ok=((new com.ibm.math.BigDecimal(ca)).toString()).equals("123.45");
+  (new Test("cca001")).ok=((new com.ibm.icu.math.BigDecimal(ca)).toString()).equals("123.45");
   try{checknull:do{
-   new com.ibm.math.BigDecimal((char[])null);
+   new com.ibm.icu.math.BigDecimal((char[])null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $7){
@@ -463,48 +463,48 @@ public class DiagBigDecimal{
   // We just test it's there, and that offsets work.
   // Functionality is tested by BigDecimal(String).
   ca=("123.45").toCharArray();
-  (new Test("cca101")).ok=((new com.ibm.math.BigDecimal(ca,0,6)).toString()).equals("123.45");
-  (new Test("cca102")).ok=((new com.ibm.math.BigDecimal(ca,1,5)).toString()).equals("23.45");
-  (new Test("cca103")).ok=((new com.ibm.math.BigDecimal(ca,2,4)).toString()).equals("3.45");
-  (new Test("cca104")).ok=((new com.ibm.math.BigDecimal(ca,3,3)).toString()).equals("0.45");
-  (new Test("cca105")).ok=((new com.ibm.math.BigDecimal(ca,4,2)).toString()).equals("45");
-  (new Test("cca106")).ok=((new com.ibm.math.BigDecimal(ca,5,1)).toString()).equals("5");
+  (new Test("cca101")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,6)).toString()).equals("123.45");
+  (new Test("cca102")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,5)).toString()).equals("23.45");
+  (new Test("cca103")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,4)).toString()).equals("3.45");
+  (new Test("cca104")).ok=((new com.ibm.icu.math.BigDecimal(ca,3,3)).toString()).equals("0.45");
+  (new Test("cca105")).ok=((new com.ibm.icu.math.BigDecimal(ca,4,2)).toString()).equals("45");
+  (new Test("cca106")).ok=((new com.ibm.icu.math.BigDecimal(ca,5,1)).toString()).equals("5");
   
-  (new Test("cca110")).ok=((new com.ibm.math.BigDecimal(ca,0,1)).toString()).equals("1");
-  (new Test("cca111")).ok=((new com.ibm.math.BigDecimal(ca,1,1)).toString()).equals("2");
-  (new Test("cca112")).ok=((new com.ibm.math.BigDecimal(ca,2,1)).toString()).equals("3");
-  (new Test("cca113")).ok=((new com.ibm.math.BigDecimal(ca,4,1)).toString()).equals("4");
+  (new Test("cca110")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,1)).toString()).equals("1");
+  (new Test("cca111")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,1)).toString()).equals("2");
+  (new Test("cca112")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,1)).toString()).equals("3");
+  (new Test("cca113")).ok=((new com.ibm.icu.math.BigDecimal(ca,4,1)).toString()).equals("4");
   
-  (new Test("cca120")).ok=((new com.ibm.math.BigDecimal(ca,0,2)).toString()).equals("12");
-  (new Test("cca121")).ok=((new com.ibm.math.BigDecimal(ca,1,2)).toString()).equals("23");
-  (new Test("cca122")).ok=((new com.ibm.math.BigDecimal(ca,2,2)).toString()).equals("3");
-  (new Test("cca123")).ok=((new com.ibm.math.BigDecimal(ca,3,2)).toString()).equals("0.4");
+  (new Test("cca120")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,2)).toString()).equals("12");
+  (new Test("cca121")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,2)).toString()).equals("23");
+  (new Test("cca122")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,2)).toString()).equals("3");
+  (new Test("cca123")).ok=((new com.ibm.icu.math.BigDecimal(ca,3,2)).toString()).equals("0.4");
   
-  (new Test("cca130")).ok=((new com.ibm.math.BigDecimal(ca,0,3)).toString()).equals("123");
-  (new Test("cca131")).ok=((new com.ibm.math.BigDecimal(ca,1,3)).toString()).equals("23");
-  (new Test("cca132")).ok=((new com.ibm.math.BigDecimal(ca,2,3)).toString()).equals("3.4");
+  (new Test("cca130")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,3)).toString()).equals("123");
+  (new Test("cca131")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,3)).toString()).equals("23");
+  (new Test("cca132")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,3)).toString()).equals("3.4");
   
-  (new Test("cca140")).ok=((new com.ibm.math.BigDecimal(ca,0,4)).toString()).equals("123");
-  (new Test("cca141")).ok=((new com.ibm.math.BigDecimal(ca,1,4)).toString()).equals("23.4");
+  (new Test("cca140")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,4)).toString()).equals("123");
+  (new Test("cca141")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,4)).toString()).equals("23.4");
   
-  (new Test("cca150")).ok=((new com.ibm.math.BigDecimal(ca,0,5)).toString()).equals("123.4");
+  (new Test("cca150")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,5)).toString()).equals("123.4");
   
   // a couple of oddies
   ca=("x23.4x").toCharArray();
-  (new Test("cca160")).ok=((new com.ibm.math.BigDecimal(ca,1,4)).toString()).equals("23.4");
-  (new Test("cca161")).ok=((new com.ibm.math.BigDecimal(ca,1,1)).toString()).equals("2");
-  (new Test("cca162")).ok=((new com.ibm.math.BigDecimal(ca,4,1)).toString()).equals("4");
+  (new Test("cca160")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,4)).toString()).equals("23.4");
+  (new Test("cca161")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,1)).toString()).equals("2");
+  (new Test("cca162")).ok=((new com.ibm.icu.math.BigDecimal(ca,4,1)).toString()).equals("4");
   
   ca=("0123456789.9876543210").toCharArray();
-  (new Test("cca163")).ok=((new com.ibm.math.BigDecimal(ca,0,21)).toString()).equals("123456789.9876543210");
-  (new Test("cca164")).ok=((new com.ibm.math.BigDecimal(ca,1,20)).toString()).equals("123456789.9876543210");
-  (new Test("cca165")).ok=((new com.ibm.math.BigDecimal(ca,2,19)).toString()).equals("23456789.9876543210");
-  (new Test("cca166")).ok=((new com.ibm.math.BigDecimal(ca,2,18)).toString()).equals("23456789.987654321");
-  (new Test("cca167")).ok=((new com.ibm.math.BigDecimal(ca,2,17)).toString()).equals("23456789.98765432");
-  (new Test("cca168")).ok=((new com.ibm.math.BigDecimal(ca,2,16)).toString()).equals("23456789.9876543");
+  (new Test("cca163")).ok=((new com.ibm.icu.math.BigDecimal(ca,0,21)).toString()).equals("123456789.9876543210");
+  (new Test("cca164")).ok=((new com.ibm.icu.math.BigDecimal(ca,1,20)).toString()).equals("123456789.9876543210");
+  (new Test("cca165")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,19)).toString()).equals("23456789.9876543210");
+  (new Test("cca166")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,18)).toString()).equals("23456789.987654321");
+  (new Test("cca167")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,17)).toString()).equals("23456789.98765432");
+  (new Test("cca168")).ok=((new com.ibm.icu.math.BigDecimal(ca,2,16)).toString()).equals("23456789.9876543");
   
   try{checknull:do{
-   new com.ibm.math.BigDecimal((char[])null,0,1);
+   new com.ibm.icu.math.BigDecimal((char[])null,0,1);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $8){
@@ -513,7 +513,7 @@ public class DiagBigDecimal{
   (new Test("cca200")).ok=flag;
   
   try{checklen:do{
-   new com.ibm.math.BigDecimal("123".toCharArray(),0,0);
+   new com.ibm.icu.math.BigDecimal("123".toCharArray(),0,0);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $9){
@@ -522,7 +522,7 @@ public class DiagBigDecimal{
   (new Test("cca201")).ok=flag;
   
   try{checkbound:do{
-   new com.ibm.math.BigDecimal("123".toCharArray(),2,4);
+   new com.ibm.icu.math.BigDecimal("123".toCharArray(),2,4);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $10){ // anything OK
@@ -530,7 +530,7 @@ public class DiagBigDecimal{
   }/*checkbound*/
   (new Test("cca202")).ok=flag;
   try{checkbound2:do{
-   new com.ibm.math.BigDecimal("123".toCharArray(),-1,2);
+   new com.ibm.icu.math.BigDecimal("123".toCharArray(),-1,2);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $11){ // anything OK
@@ -538,7 +538,7 @@ public class DiagBigDecimal{
   }/*checkbound2*/
   (new Test("cca203")).ok=flag;
   try{checkbound3:do{
-   new com.ibm.math.BigDecimal("123".toCharArray(),1,-2);
+   new com.ibm.icu.math.BigDecimal("123".toCharArray(),1,-2);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $12){ // anything OK
@@ -552,54 +552,54 @@ public class DiagBigDecimal{
   dpos=(double)1;
   dpos=dpos/((double)10);
   dneg=(double)-dpos;
-  (new Test("cdo001")).ok=((new com.ibm.math.BigDecimal(dneg)).toString()).equals("-0.1000000000000000055511151231257827021181583404541015625");
+  (new Test("cdo001")).ok=((new com.ibm.icu.math.BigDecimal(dneg)).toString()).equals("-0.1000000000000000055511151231257827021181583404541015625");
   
-  (new Test("cdo002")).ok=((new com.ibm.math.BigDecimal(dzer)).toString()).equals("0"); // NB, not '0.0'
-  (new Test("cdo003")).ok=((new com.ibm.math.BigDecimal(dpos)).toString()).equals("0.1000000000000000055511151231257827021181583404541015625");
+  (new Test("cdo002")).ok=((new com.ibm.icu.math.BigDecimal(dzer)).toString()).equals("0"); // NB, not '0.0'
+  (new Test("cdo003")).ok=((new com.ibm.icu.math.BigDecimal(dpos)).toString()).equals("0.1000000000000000055511151231257827021181583404541015625");
   
   dpos5=(double)0.5D;
   dneg5=(double)-dpos5;
-  (new Test("cdo004")).ok=((new com.ibm.math.BigDecimal(dneg5)).toString()).equals("-0.5");
-  (new Test("cdo005")).ok=((new com.ibm.math.BigDecimal(dpos5)).toString()).equals("0.5");
+  (new Test("cdo004")).ok=((new com.ibm.icu.math.BigDecimal(dneg5)).toString()).equals("-0.5");
+  (new Test("cdo005")).ok=((new com.ibm.icu.math.BigDecimal(dpos5)).toString()).equals("0.5");
   dmin=java.lang.Double.MIN_VALUE;
   dmax=java.lang.Double.MAX_VALUE;
-  (new Test("cdo006")).ok=((new com.ibm.math.BigDecimal(dmin)).toString()).equals("0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625");
+  (new Test("cdo006")).ok=((new com.ibm.icu.math.BigDecimal(dmin)).toString()).equals("0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004940656458412465441765687928682213723650598026143247644255856825006755072702087518652998363616359923797965646954457177309266567103559397963987747960107818781263007131903114045278458171678489821036887186360569987307230500063874091535649843873124733972731696151400317153853980741262385655911710266585566867681870395603106249319452715914924553293054565444011274801297099995419319894090804165633245247571478690147267801593552386115501348035264934720193790268107107491703332226844753335720832431936092382893458368060106011506169809753078342277318329247904982524730776375927247874656084778203734469699533647017972677717585125660551199131504891101451037862738167250955837389733598993664809941164205702637090279242767544565229087538682506419718265533447265625");
   
-  (new Test("cdo007")).ok=((new com.ibm.math.BigDecimal(dmax)).toString()).equals("179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368");
+  (new Test("cdo007")).ok=((new com.ibm.icu.math.BigDecimal(dmax)).toString()).equals("179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368");
   
   
   // nasties
   d=(double)9;
   d=d/((double)10);
-  (new Test("cdo010")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.90000000000000002220446049250313080847263336181640625");
+  (new Test("cdo010")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.90000000000000002220446049250313080847263336181640625");
   
   d=d/((double)10);
-  (new Test("cdo011")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.0899999999999999966693309261245303787291049957275390625");
+  (new Test("cdo011")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.0899999999999999966693309261245303787291049957275390625");
   
   d=d/((double)10);
-  (new Test("cdo012")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.00899999999999999931998839741709161899052560329437255859375");
+  (new Test("cdo012")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.00899999999999999931998839741709161899052560329437255859375");
   
   d=d/((double)10);
-  (new Test("cdo013")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.00089999999999999997536692664112933925935067236423492431640625");
+  (new Test("cdo013")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.00089999999999999997536692664112933925935067236423492431640625");
   
   d=d/((double)10);
-  (new Test("cdo014")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.00008999999999999999211568180168541175589780323207378387451171875");
+  (new Test("cdo014")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.00008999999999999999211568180168541175589780323207378387451171875");
   
   d=d/((double)10);
-  (new Test("cdo015")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.00000899999999999999853394182236510090433512232266366481781005859375");
+  (new Test("cdo015")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.00000899999999999999853394182236510090433512232266366481781005859375");
   
   d=d/((double)10);
-  (new Test("cdo016")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.000000899999999999999853394182236510090433512232266366481781005859375");
+  (new Test("cdo016")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.000000899999999999999853394182236510090433512232266366481781005859375");
   
   d=d/((double)10);
-  (new Test("cdo017")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.0000000899999999999999853394182236510090433512232266366481781005859375");
+  (new Test("cdo017")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.0000000899999999999999853394182236510090433512232266366481781005859375");
   
   d=d/((double)10);
-  (new Test("cdo018")).ok=((new com.ibm.math.BigDecimal(d)).toString()).equals("0.000000008999999999999997872197332322678764437995369007694534957408905029296875");
+  (new Test("cdo018")).ok=((new com.ibm.icu.math.BigDecimal(d)).toString()).equals("0.000000008999999999999997872197332322678764437995369007694534957408905029296875");
   
   
   try{checkpin:do{
-   new com.ibm.math.BigDecimal(java.lang.Double.POSITIVE_INFINITY);
+   new com.ibm.icu.math.BigDecimal(java.lang.Double.POSITIVE_INFINITY);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $13){
@@ -607,7 +607,7 @@ public class DiagBigDecimal{
   }/*checkpin*/
   (new Test("cdo101")).ok=flag;
   try{checknin:do{
-   new com.ibm.math.BigDecimal(java.lang.Double.NEGATIVE_INFINITY);
+   new com.ibm.icu.math.BigDecimal(java.lang.Double.NEGATIVE_INFINITY);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $14){
@@ -615,7 +615,7 @@ public class DiagBigDecimal{
   }/*checknin*/
   (new Test("cdo102")).ok=flag;
   try{checknan:do{
-   new com.ibm.math.BigDecimal(java.lang.Double.NaN);
+   new com.ibm.icu.math.BigDecimal(java.lang.Double.NaN);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $15){
@@ -624,190 +624,190 @@ public class DiagBigDecimal{
   (new Test("cdo103")).ok=flag;
   
   // int
-  (new Test("cin001")).ok=((new com.ibm.math.BigDecimal(imin)).toString()).equals("-2147483648");
-  (new Test("cin002")).ok=((new com.ibm.math.BigDecimal(imax)).toString()).equals("2147483647");
-  (new Test("cin003")).ok=((new com.ibm.math.BigDecimal(ineg)).toString()).equals("-1");
-  (new Test("cin004")).ok=((new com.ibm.math.BigDecimal(izer)).toString()).equals("0");
-  (new Test("cin005")).ok=((new com.ibm.math.BigDecimal(ipos)).toString()).equals("1");
-  (new Test("cin006")).ok=((new com.ibm.math.BigDecimal(10)).toString()).equals("10");
-  (new Test("cin007")).ok=((new com.ibm.math.BigDecimal(9)).toString()).equals("9");
-  (new Test("cin008")).ok=((new com.ibm.math.BigDecimal(5)).toString()).equals("5");
-  (new Test("cin009")).ok=((new com.ibm.math.BigDecimal(2)).toString()).equals("2");
-  (new Test("cin010")).ok=((new com.ibm.math.BigDecimal(-2)).toString()).equals("-2");
-  (new Test("cin011")).ok=((new com.ibm.math.BigDecimal(-5)).toString()).equals("-5");
-  (new Test("cin012")).ok=((new com.ibm.math.BigDecimal(-9)).toString()).equals("-9");
-  (new Test("cin013")).ok=((new com.ibm.math.BigDecimal(-10)).toString()).equals("-10");
-  (new Test("cin014")).ok=((new com.ibm.math.BigDecimal(-11)).toString()).equals("-11");
-  (new Test("cin015")).ok=((new com.ibm.math.BigDecimal(-99)).toString()).equals("-99");
-  (new Test("cin016")).ok=((new com.ibm.math.BigDecimal(-100)).toString()).equals("-100");
-  (new Test("cin017")).ok=((new com.ibm.math.BigDecimal(-999)).toString()).equals("-999");
-  (new Test("cin018")).ok=((new com.ibm.math.BigDecimal(-1000)).toString()).equals("-1000");
+  (new Test("cin001")).ok=((new com.ibm.icu.math.BigDecimal(imin)).toString()).equals("-2147483648");
+  (new Test("cin002")).ok=((new com.ibm.icu.math.BigDecimal(imax)).toString()).equals("2147483647");
+  (new Test("cin003")).ok=((new com.ibm.icu.math.BigDecimal(ineg)).toString()).equals("-1");
+  (new Test("cin004")).ok=((new com.ibm.icu.math.BigDecimal(izer)).toString()).equals("0");
+  (new Test("cin005")).ok=((new com.ibm.icu.math.BigDecimal(ipos)).toString()).equals("1");
+  (new Test("cin006")).ok=((new com.ibm.icu.math.BigDecimal(10)).toString()).equals("10");
+  (new Test("cin007")).ok=((new com.ibm.icu.math.BigDecimal(9)).toString()).equals("9");
+  (new Test("cin008")).ok=((new com.ibm.icu.math.BigDecimal(5)).toString()).equals("5");
+  (new Test("cin009")).ok=((new com.ibm.icu.math.BigDecimal(2)).toString()).equals("2");
+  (new Test("cin010")).ok=((new com.ibm.icu.math.BigDecimal(-2)).toString()).equals("-2");
+  (new Test("cin011")).ok=((new com.ibm.icu.math.BigDecimal(-5)).toString()).equals("-5");
+  (new Test("cin012")).ok=((new com.ibm.icu.math.BigDecimal(-9)).toString()).equals("-9");
+  (new Test("cin013")).ok=((new com.ibm.icu.math.BigDecimal(-10)).toString()).equals("-10");
+  (new Test("cin014")).ok=((new com.ibm.icu.math.BigDecimal(-11)).toString()).equals("-11");
+  (new Test("cin015")).ok=((new com.ibm.icu.math.BigDecimal(-99)).toString()).equals("-99");
+  (new Test("cin016")).ok=((new com.ibm.icu.math.BigDecimal(-100)).toString()).equals("-100");
+  (new Test("cin017")).ok=((new com.ibm.icu.math.BigDecimal(-999)).toString()).equals("-999");
+  (new Test("cin018")).ok=((new com.ibm.icu.math.BigDecimal(-1000)).toString()).equals("-1000");
   
-  (new Test("cin019")).ok=((new com.ibm.math.BigDecimal(11)).toString()).equals("11");
-  (new Test("cin020")).ok=((new com.ibm.math.BigDecimal(99)).toString()).equals("99");
-  (new Test("cin021")).ok=((new com.ibm.math.BigDecimal(100)).toString()).equals("100");
-  (new Test("cin022")).ok=((new com.ibm.math.BigDecimal(999)).toString()).equals("999");
-  (new Test("cin023")).ok=((new com.ibm.math.BigDecimal(1000)).toString()).equals("1000");
+  (new Test("cin019")).ok=((new com.ibm.icu.math.BigDecimal(11)).toString()).equals("11");
+  (new Test("cin020")).ok=((new com.ibm.icu.math.BigDecimal(99)).toString()).equals("99");
+  (new Test("cin021")).ok=((new com.ibm.icu.math.BigDecimal(100)).toString()).equals("100");
+  (new Test("cin022")).ok=((new com.ibm.icu.math.BigDecimal(999)).toString()).equals("999");
+  (new Test("cin023")).ok=((new com.ibm.icu.math.BigDecimal(1000)).toString()).equals("1000");
   
   // long
-  (new Test("clo001")).ok=((new com.ibm.math.BigDecimal(lmin)).toString()).equals("-9223372036854775808");
-  (new Test("clo002")).ok=((new com.ibm.math.BigDecimal(lmax)).toString()).equals("9223372036854775807");
-  (new Test("clo003")).ok=((new com.ibm.math.BigDecimal(lneg)).toString()).equals("-1");
-  (new Test("clo004")).ok=((new com.ibm.math.BigDecimal(lzer)).toString()).equals("0");
-  (new Test("clo005")).ok=((new com.ibm.math.BigDecimal(lpos)).toString()).equals("1");
+  (new Test("clo001")).ok=((new com.ibm.icu.math.BigDecimal(lmin)).toString()).equals("-9223372036854775808");
+  (new Test("clo002")).ok=((new com.ibm.icu.math.BigDecimal(lmax)).toString()).equals("9223372036854775807");
+  (new Test("clo003")).ok=((new com.ibm.icu.math.BigDecimal(lneg)).toString()).equals("-1");
+  (new Test("clo004")).ok=((new com.ibm.icu.math.BigDecimal(lzer)).toString()).equals("0");
+  (new Test("clo005")).ok=((new com.ibm.icu.math.BigDecimal(lpos)).toString()).equals("1");
   
   // String [many more examples are elsewhere]
   // strings without E cannot generate E in result
-  (new Test("cst001")).ok=((new com.ibm.math.BigDecimal("12")).toString()).equals("12");
-  (new Test("cst002")).ok=((new com.ibm.math.BigDecimal("-76")).toString()).equals("-76");
-  (new Test("cst003")).ok=((new com.ibm.math.BigDecimal("12.76")).toString()).equals("12.76");
-  (new Test("cst004")).ok=((new com.ibm.math.BigDecimal("+12.76")).toString()).equals("12.76");
-  (new Test("cst005")).ok=((new com.ibm.math.BigDecimal("012.76")).toString()).equals("12.76");
-  (new Test("cst006")).ok=((new com.ibm.math.BigDecimal("+0.003")).toString()).equals("0.003");
-  (new Test("cst007")).ok=((new com.ibm.math.BigDecimal("17.")).toString()).equals("17");
-  (new Test("cst008")).ok=((new com.ibm.math.BigDecimal(".5")).toString()).equals("0.5");
-  (new Test("cst009")).ok=((new com.ibm.math.BigDecimal("044")).toString()).equals("44");
-  (new Test("cst010")).ok=((new com.ibm.math.BigDecimal("0044")).toString()).equals("44");
-  (new Test("cst011")).ok=((new com.ibm.math.BigDecimal("0.0005")).toString()).equals("0.0005");
-  (new Test("cst012")).ok=((new com.ibm.math.BigDecimal("00.00005")).toString()).equals("0.00005");
-  (new Test("cst013")).ok=((new com.ibm.math.BigDecimal("0.000005")).toString()).equals("0.000005");
-  (new Test("cst014")).ok=((new com.ibm.math.BigDecimal("0.0000005")).toString()).equals("0.0000005"); // \NR
-  (new Test("cst015")).ok=((new com.ibm.math.BigDecimal("0.00000005")).toString()).equals("0.00000005"); // \NR
-  (new Test("cst016")).ok=((new com.ibm.math.BigDecimal("12345678.876543210")).toString()).equals("12345678.876543210");
-  (new Test("cst017")).ok=((new com.ibm.math.BigDecimal("2345678.876543210")).toString()).equals("2345678.876543210");
-  (new Test("cst018")).ok=((new com.ibm.math.BigDecimal("345678.876543210")).toString()).equals("345678.876543210");
-  (new Test("cst019")).ok=((new com.ibm.math.BigDecimal("0345678.87654321")).toString()).equals("345678.87654321");
-  (new Test("cst020")).ok=((new com.ibm.math.BigDecimal("345678.8765432")).toString()).equals("345678.8765432");
-  (new Test("cst021")).ok=((new com.ibm.math.BigDecimal("+345678.8765432")).toString()).equals("345678.8765432");
-  (new Test("cst022")).ok=((new com.ibm.math.BigDecimal("+0345678.8765432")).toString()).equals("345678.8765432");
-  (new Test("cst023")).ok=((new com.ibm.math.BigDecimal("+00345678.8765432")).toString()).equals("345678.8765432");
-  (new Test("cst024")).ok=((new com.ibm.math.BigDecimal("-345678.8765432")).toString()).equals("-345678.8765432");
-  (new Test("cst025")).ok=((new com.ibm.math.BigDecimal("-0345678.8765432")).toString()).equals("-345678.8765432");
-  (new Test("cst026")).ok=((new com.ibm.math.BigDecimal("-00345678.8765432")).toString()).equals("-345678.8765432");
+  (new Test("cst001")).ok=((new com.ibm.icu.math.BigDecimal("12")).toString()).equals("12");
+  (new Test("cst002")).ok=((new com.ibm.icu.math.BigDecimal("-76")).toString()).equals("-76");
+  (new Test("cst003")).ok=((new com.ibm.icu.math.BigDecimal("12.76")).toString()).equals("12.76");
+  (new Test("cst004")).ok=((new com.ibm.icu.math.BigDecimal("+12.76")).toString()).equals("12.76");
+  (new Test("cst005")).ok=((new com.ibm.icu.math.BigDecimal("012.76")).toString()).equals("12.76");
+  (new Test("cst006")).ok=((new com.ibm.icu.math.BigDecimal("+0.003")).toString()).equals("0.003");
+  (new Test("cst007")).ok=((new com.ibm.icu.math.BigDecimal("17.")).toString()).equals("17");
+  (new Test("cst008")).ok=((new com.ibm.icu.math.BigDecimal(".5")).toString()).equals("0.5");
+  (new Test("cst009")).ok=((new com.ibm.icu.math.BigDecimal("044")).toString()).equals("44");
+  (new Test("cst010")).ok=((new com.ibm.icu.math.BigDecimal("0044")).toString()).equals("44");
+  (new Test("cst011")).ok=((new com.ibm.icu.math.BigDecimal("0.0005")).toString()).equals("0.0005");
+  (new Test("cst012")).ok=((new com.ibm.icu.math.BigDecimal("00.00005")).toString()).equals("0.00005");
+  (new Test("cst013")).ok=((new com.ibm.icu.math.BigDecimal("0.000005")).toString()).equals("0.000005");
+  (new Test("cst014")).ok=((new com.ibm.icu.math.BigDecimal("0.0000005")).toString()).equals("0.0000005"); // \NR
+  (new Test("cst015")).ok=((new com.ibm.icu.math.BigDecimal("0.00000005")).toString()).equals("0.00000005"); // \NR
+  (new Test("cst016")).ok=((new com.ibm.icu.math.BigDecimal("12345678.876543210")).toString()).equals("12345678.876543210");
+  (new Test("cst017")).ok=((new com.ibm.icu.math.BigDecimal("2345678.876543210")).toString()).equals("2345678.876543210");
+  (new Test("cst018")).ok=((new com.ibm.icu.math.BigDecimal("345678.876543210")).toString()).equals("345678.876543210");
+  (new Test("cst019")).ok=((new com.ibm.icu.math.BigDecimal("0345678.87654321")).toString()).equals("345678.87654321");
+  (new Test("cst020")).ok=((new com.ibm.icu.math.BigDecimal("345678.8765432")).toString()).equals("345678.8765432");
+  (new Test("cst021")).ok=((new com.ibm.icu.math.BigDecimal("+345678.8765432")).toString()).equals("345678.8765432");
+  (new Test("cst022")).ok=((new com.ibm.icu.math.BigDecimal("+0345678.8765432")).toString()).equals("345678.8765432");
+  (new Test("cst023")).ok=((new com.ibm.icu.math.BigDecimal("+00345678.8765432")).toString()).equals("345678.8765432");
+  (new Test("cst024")).ok=((new com.ibm.icu.math.BigDecimal("-345678.8765432")).toString()).equals("-345678.8765432");
+  (new Test("cst025")).ok=((new com.ibm.icu.math.BigDecimal("-0345678.8765432")).toString()).equals("-345678.8765432");
+  (new Test("cst026")).ok=((new com.ibm.icu.math.BigDecimal("-00345678.8765432")).toString()).equals("-345678.8765432");
   
   // exotics --
-  (new Test("cst035")).ok=((new com.ibm.math.BigDecimal("\u0e57.\u0e50")).toString()).equals("7.0");
-  (new Test("cst036")).ok=((new com.ibm.math.BigDecimal("\u0b66.\u0b67")).toString()).equals("0.1");
-  (new Test("cst037")).ok=((new com.ibm.math.BigDecimal("\u0b66\u0b66")).toString()).equals("0");
-  (new Test("cst038")).ok=((new com.ibm.math.BigDecimal("\u0b6a\u0b66")).toString()).equals("40");
+  (new Test("cst035")).ok=((new com.ibm.icu.math.BigDecimal("\u0e57.\u0e50")).toString()).equals("7.0");
+  (new Test("cst036")).ok=((new com.ibm.icu.math.BigDecimal("\u0b66.\u0b67")).toString()).equals("0.1");
+  (new Test("cst037")).ok=((new com.ibm.icu.math.BigDecimal("\u0b66\u0b66")).toString()).equals("0");
+  (new Test("cst038")).ok=((new com.ibm.icu.math.BigDecimal("\u0b6a\u0b66")).toString()).equals("40");
   
   // strings with E
-  (new Test("cst040")).ok=((new com.ibm.math.BigDecimal("1E+9")).toString()).equals("1E+9");
-  (new Test("cst041")).ok=((new com.ibm.math.BigDecimal("1e+09")).toString()).equals("1E+9");
-  (new Test("cst042")).ok=((new com.ibm.math.BigDecimal("1E+90")).toString()).equals("1E+90");
-  (new Test("cst043")).ok=((new com.ibm.math.BigDecimal("+1E+009")).toString()).equals("1E+9");
-  (new Test("cst044")).ok=((new com.ibm.math.BigDecimal("0E+9")).toString()).equals("0");
-  (new Test("cst045")).ok=((new com.ibm.math.BigDecimal("1E+9")).toString()).equals("1E+9");
-  (new Test("cst046")).ok=((new com.ibm.math.BigDecimal("1E+09")).toString()).equals("1E+9");
-  (new Test("cst047")).ok=((new com.ibm.math.BigDecimal("1e+90")).toString()).equals("1E+90");
-  (new Test("cst048")).ok=((new com.ibm.math.BigDecimal("1E+009")).toString()).equals("1E+9");
-  (new Test("cst049")).ok=((new com.ibm.math.BigDecimal("0E+9")).toString()).equals("0");
-  (new Test("cst050")).ok=((new com.ibm.math.BigDecimal("1E9")).toString()).equals("1E+9");
-  (new Test("cst051")).ok=((new com.ibm.math.BigDecimal("1e09")).toString()).equals("1E+9");
-  (new Test("cst052")).ok=((new com.ibm.math.BigDecimal("1E90")).toString()).equals("1E+90");
-  (new Test("cst053")).ok=((new com.ibm.math.BigDecimal("1E009")).toString()).equals("1E+9");
-  (new Test("cst054")).ok=((new com.ibm.math.BigDecimal("0E9")).toString()).equals("0");
-  (new Test("cst055")).ok=((new com.ibm.math.BigDecimal("0.000e+0")).toString()).equals("0");
-  (new Test("cst056")).ok=((new com.ibm.math.BigDecimal("0.000E-1")).toString()).equals("0");
-  (new Test("cst057")).ok=((new com.ibm.math.BigDecimal("4E+9")).toString()).equals("4E+9");
-  (new Test("cst058")).ok=((new com.ibm.math.BigDecimal("44E+9")).toString()).equals("4.4E+10");
-  (new Test("cst059")).ok=((new com.ibm.math.BigDecimal("0.73e-7")).toString()).equals("7.3E-8");
-  (new Test("cst060")).ok=((new com.ibm.math.BigDecimal("00E+9")).toString()).equals("0");
-  (new Test("cst061")).ok=((new com.ibm.math.BigDecimal("00E-9")).toString()).equals("0");
-  (new Test("cst062")).ok=((new com.ibm.math.BigDecimal("10E+9")).toString()).equals("1.0E+10");
-  (new Test("cst063")).ok=((new com.ibm.math.BigDecimal("10E+09")).toString()).equals("1.0E+10");
-  (new Test("cst064")).ok=((new com.ibm.math.BigDecimal("10e+90")).toString()).equals("1.0E+91");
-  (new Test("cst065")).ok=((new com.ibm.math.BigDecimal("10E+009")).toString()).equals("1.0E+10");
-  (new Test("cst066")).ok=((new com.ibm.math.BigDecimal("100e+9")).toString()).equals("1.00E+11");
-  (new Test("cst067")).ok=((new com.ibm.math.BigDecimal("100e+09")).toString()).equals("1.00E+11");
-  (new Test("cst068")).ok=((new com.ibm.math.BigDecimal("100E+90")).toString()).equals("1.00E+92");
-  (new Test("cst069")).ok=((new com.ibm.math.BigDecimal("100e+009")).toString()).equals("1.00E+11");
+  (new Test("cst040")).ok=((new com.ibm.icu.math.BigDecimal("1E+9")).toString()).equals("1E+9");
+  (new Test("cst041")).ok=((new com.ibm.icu.math.BigDecimal("1e+09")).toString()).equals("1E+9");
+  (new Test("cst042")).ok=((new com.ibm.icu.math.BigDecimal("1E+90")).toString()).equals("1E+90");
+  (new Test("cst043")).ok=((new com.ibm.icu.math.BigDecimal("+1E+009")).toString()).equals("1E+9");
+  (new Test("cst044")).ok=((new com.ibm.icu.math.BigDecimal("0E+9")).toString()).equals("0");
+  (new Test("cst045")).ok=((new com.ibm.icu.math.BigDecimal("1E+9")).toString()).equals("1E+9");
+  (new Test("cst046")).ok=((new com.ibm.icu.math.BigDecimal("1E+09")).toString()).equals("1E+9");
+  (new Test("cst047")).ok=((new com.ibm.icu.math.BigDecimal("1e+90")).toString()).equals("1E+90");
+  (new Test("cst048")).ok=((new com.ibm.icu.math.BigDecimal("1E+009")).toString()).equals("1E+9");
+  (new Test("cst049")).ok=((new com.ibm.icu.math.BigDecimal("0E+9")).toString()).equals("0");
+  (new Test("cst050")).ok=((new com.ibm.icu.math.BigDecimal("1E9")).toString()).equals("1E+9");
+  (new Test("cst051")).ok=((new com.ibm.icu.math.BigDecimal("1e09")).toString()).equals("1E+9");
+  (new Test("cst052")).ok=((new com.ibm.icu.math.BigDecimal("1E90")).toString()).equals("1E+90");
+  (new Test("cst053")).ok=((new com.ibm.icu.math.BigDecimal("1E009")).toString()).equals("1E+9");
+  (new Test("cst054")).ok=((new com.ibm.icu.math.BigDecimal("0E9")).toString()).equals("0");
+  (new Test("cst055")).ok=((new com.ibm.icu.math.BigDecimal("0.000e+0")).toString()).equals("0");
+  (new Test("cst056")).ok=((new com.ibm.icu.math.BigDecimal("0.000E-1")).toString()).equals("0");
+  (new Test("cst057")).ok=((new com.ibm.icu.math.BigDecimal("4E+9")).toString()).equals("4E+9");
+  (new Test("cst058")).ok=((new com.ibm.icu.math.BigDecimal("44E+9")).toString()).equals("4.4E+10");
+  (new Test("cst059")).ok=((new com.ibm.icu.math.BigDecimal("0.73e-7")).toString()).equals("7.3E-8");
+  (new Test("cst060")).ok=((new com.ibm.icu.math.BigDecimal("00E+9")).toString()).equals("0");
+  (new Test("cst061")).ok=((new com.ibm.icu.math.BigDecimal("00E-9")).toString()).equals("0");
+  (new Test("cst062")).ok=((new com.ibm.icu.math.BigDecimal("10E+9")).toString()).equals("1.0E+10");
+  (new Test("cst063")).ok=((new com.ibm.icu.math.BigDecimal("10E+09")).toString()).equals("1.0E+10");
+  (new Test("cst064")).ok=((new com.ibm.icu.math.BigDecimal("10e+90")).toString()).equals("1.0E+91");
+  (new Test("cst065")).ok=((new com.ibm.icu.math.BigDecimal("10E+009")).toString()).equals("1.0E+10");
+  (new Test("cst066")).ok=((new com.ibm.icu.math.BigDecimal("100e+9")).toString()).equals("1.00E+11");
+  (new Test("cst067")).ok=((new com.ibm.icu.math.BigDecimal("100e+09")).toString()).equals("1.00E+11");
+  (new Test("cst068")).ok=((new com.ibm.icu.math.BigDecimal("100E+90")).toString()).equals("1.00E+92");
+  (new Test("cst069")).ok=((new com.ibm.icu.math.BigDecimal("100e+009")).toString()).equals("1.00E+11");
   
-  (new Test("cst070")).ok=((new com.ibm.math.BigDecimal("1.265")).toString()).equals("1.265");
-  (new Test("cst071")).ok=((new com.ibm.math.BigDecimal("1.265E-20")).toString()).equals("1.265E-20");
-  (new Test("cst072")).ok=((new com.ibm.math.BigDecimal("1.265E-8")).toString()).equals("1.265E-8");
-  (new Test("cst073")).ok=((new com.ibm.math.BigDecimal("1.265E-4")).toString()).equals("1.265E-4");
-  (new Test("cst074")).ok=((new com.ibm.math.BigDecimal("1.265E-3")).toString()).equals("1.265E-3");
-  (new Test("cst075")).ok=((new com.ibm.math.BigDecimal("1.265E-2")).toString()).equals("1.265E-2");
-  (new Test("cst076")).ok=((new com.ibm.math.BigDecimal("1.265E-1")).toString()).equals("1.265E-1");
-  (new Test("cst077")).ok=((new com.ibm.math.BigDecimal("1.265E-0")).toString()).equals("1.265");
-  (new Test("cst078")).ok=((new com.ibm.math.BigDecimal("1.265E+1")).toString()).equals("1.265E+1");
-  (new Test("cst079")).ok=((new com.ibm.math.BigDecimal("1.265E+2")).toString()).equals("1.265E+2");
-  (new Test("cst080")).ok=((new com.ibm.math.BigDecimal("1.265E+3")).toString()).equals("1.265E+3");
-  (new Test("cst081")).ok=((new com.ibm.math.BigDecimal("1.265E+4")).toString()).equals("1.265E+4");
-  (new Test("cst082")).ok=((new com.ibm.math.BigDecimal("1.265E+8")).toString()).equals("1.265E+8");
-  (new Test("cst083")).ok=((new com.ibm.math.BigDecimal("1.265E+20")).toString()).equals("1.265E+20");
+  (new Test("cst070")).ok=((new com.ibm.icu.math.BigDecimal("1.265")).toString()).equals("1.265");
+  (new Test("cst071")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-20")).toString()).equals("1.265E-20");
+  (new Test("cst072")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-8")).toString()).equals("1.265E-8");
+  (new Test("cst073")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-4")).toString()).equals("1.265E-4");
+  (new Test("cst074")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-3")).toString()).equals("1.265E-3");
+  (new Test("cst075")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-2")).toString()).equals("1.265E-2");
+  (new Test("cst076")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-1")).toString()).equals("1.265E-1");
+  (new Test("cst077")).ok=((new com.ibm.icu.math.BigDecimal("1.265E-0")).toString()).equals("1.265");
+  (new Test("cst078")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+1")).toString()).equals("1.265E+1");
+  (new Test("cst079")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+2")).toString()).equals("1.265E+2");
+  (new Test("cst080")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+3")).toString()).equals("1.265E+3");
+  (new Test("cst081")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+4")).toString()).equals("1.265E+4");
+  (new Test("cst082")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+8")).toString()).equals("1.265E+8");
+  (new Test("cst083")).ok=((new com.ibm.icu.math.BigDecimal("1.265E+20")).toString()).equals("1.265E+20");
   
-  (new Test("cst090")).ok=((new com.ibm.math.BigDecimal("12.65")).toString()).equals("12.65");
-  (new Test("cst091")).ok=((new com.ibm.math.BigDecimal("12.65E-20")).toString()).equals("1.265E-19");
-  (new Test("cst092")).ok=((new com.ibm.math.BigDecimal("12.65E-8")).toString()).equals("1.265E-7");
-  (new Test("cst093")).ok=((new com.ibm.math.BigDecimal("12.65E-4")).toString()).equals("1.265E-3");
-  (new Test("cst094")).ok=((new com.ibm.math.BigDecimal("12.65E-3")).toString()).equals("1.265E-2");
-  (new Test("cst095")).ok=((new com.ibm.math.BigDecimal("12.65E-2")).toString()).equals("1.265E-1");
-  (new Test("cst096")).ok=((new com.ibm.math.BigDecimal("12.65E-1")).toString()).equals("1.265");
-  (new Test("cst097")).ok=((new com.ibm.math.BigDecimal("12.65E-0")).toString()).equals("1.265E+1");
-  (new Test("cst098")).ok=((new com.ibm.math.BigDecimal("12.65E+1")).toString()).equals("1.265E+2");
-  (new Test("cst099")).ok=((new com.ibm.math.BigDecimal("12.65E+2")).toString()).equals("1.265E+3");
-  (new Test("cst100")).ok=((new com.ibm.math.BigDecimal("12.65E+3")).toString()).equals("1.265E+4");
-  (new Test("cst101")).ok=((new com.ibm.math.BigDecimal("12.65E+4")).toString()).equals("1.265E+5");
-  (new Test("cst102")).ok=((new com.ibm.math.BigDecimal("12.65E+8")).toString()).equals("1.265E+9");
-  (new Test("cst103")).ok=((new com.ibm.math.BigDecimal("12.65E+20")).toString()).equals("1.265E+21");
+  (new Test("cst090")).ok=((new com.ibm.icu.math.BigDecimal("12.65")).toString()).equals("12.65");
+  (new Test("cst091")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-20")).toString()).equals("1.265E-19");
+  (new Test("cst092")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-8")).toString()).equals("1.265E-7");
+  (new Test("cst093")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-4")).toString()).equals("1.265E-3");
+  (new Test("cst094")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-3")).toString()).equals("1.265E-2");
+  (new Test("cst095")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-2")).toString()).equals("1.265E-1");
+  (new Test("cst096")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-1")).toString()).equals("1.265");
+  (new Test("cst097")).ok=((new com.ibm.icu.math.BigDecimal("12.65E-0")).toString()).equals("1.265E+1");
+  (new Test("cst098")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+1")).toString()).equals("1.265E+2");
+  (new Test("cst099")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+2")).toString()).equals("1.265E+3");
+  (new Test("cst100")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+3")).toString()).equals("1.265E+4");
+  (new Test("cst101")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+4")).toString()).equals("1.265E+5");
+  (new Test("cst102")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+8")).toString()).equals("1.265E+9");
+  (new Test("cst103")).ok=((new com.ibm.icu.math.BigDecimal("12.65E+20")).toString()).equals("1.265E+21");
   
-  (new Test("cst110")).ok=((new com.ibm.math.BigDecimal("126.5")).toString()).equals("126.5");
-  (new Test("cst111")).ok=((new com.ibm.math.BigDecimal("126.5E-20")).toString()).equals("1.265E-18");
-  (new Test("cst112")).ok=((new com.ibm.math.BigDecimal("126.5E-8")).toString()).equals("1.265E-6");
-  (new Test("cst113")).ok=((new com.ibm.math.BigDecimal("126.5E-4")).toString()).equals("1.265E-2");
-  (new Test("cst114")).ok=((new com.ibm.math.BigDecimal("126.5E-3")).toString()).equals("1.265E-1");
-  (new Test("cst115")).ok=((new com.ibm.math.BigDecimal("126.5E-2")).toString()).equals("1.265");
-  (new Test("cst116")).ok=((new com.ibm.math.BigDecimal("126.5E-1")).toString()).equals("1.265E+1");
-  (new Test("cst117")).ok=((new com.ibm.math.BigDecimal("126.5E-0")).toString()).equals("1.265E+2");
-  (new Test("cst118")).ok=((new com.ibm.math.BigDecimal("126.5E+1")).toString()).equals("1.265E+3");
-  (new Test("cst119")).ok=((new com.ibm.math.BigDecimal("126.5E+2")).toString()).equals("1.265E+4");
-  (new Test("cst120")).ok=((new com.ibm.math.BigDecimal("126.5E+3")).toString()).equals("1.265E+5");
-  (new Test("cst121")).ok=((new com.ibm.math.BigDecimal("126.5E+4")).toString()).equals("1.265E+6");
-  (new Test("cst122")).ok=((new com.ibm.math.BigDecimal("126.5E+8")).toString()).equals("1.265E+10");
-  (new Test("cst123")).ok=((new com.ibm.math.BigDecimal("126.5E+20")).toString()).equals("1.265E+22");
+  (new Test("cst110")).ok=((new com.ibm.icu.math.BigDecimal("126.5")).toString()).equals("126.5");
+  (new Test("cst111")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-20")).toString()).equals("1.265E-18");
+  (new Test("cst112")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-8")).toString()).equals("1.265E-6");
+  (new Test("cst113")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-4")).toString()).equals("1.265E-2");
+  (new Test("cst114")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-3")).toString()).equals("1.265E-1");
+  (new Test("cst115")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-2")).toString()).equals("1.265");
+  (new Test("cst116")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-1")).toString()).equals("1.265E+1");
+  (new Test("cst117")).ok=((new com.ibm.icu.math.BigDecimal("126.5E-0")).toString()).equals("1.265E+2");
+  (new Test("cst118")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+1")).toString()).equals("1.265E+3");
+  (new Test("cst119")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+2")).toString()).equals("1.265E+4");
+  (new Test("cst120")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+3")).toString()).equals("1.265E+5");
+  (new Test("cst121")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+4")).toString()).equals("1.265E+6");
+  (new Test("cst122")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+8")).toString()).equals("1.265E+10");
+  (new Test("cst123")).ok=((new com.ibm.icu.math.BigDecimal("126.5E+20")).toString()).equals("1.265E+22");
   
-  (new Test("cst130")).ok=((new com.ibm.math.BigDecimal("1265")).toString()).equals("1265");
-  (new Test("cst131")).ok=((new com.ibm.math.BigDecimal("1265E-20")).toString()).equals("1.265E-17");
-  (new Test("cst132")).ok=((new com.ibm.math.BigDecimal("1265E-8")).toString()).equals("1.265E-5");
-  (new Test("cst133")).ok=((new com.ibm.math.BigDecimal("1265E-4")).toString()).equals("1.265E-1");
-  (new Test("cst134")).ok=((new com.ibm.math.BigDecimal("1265E-3")).toString()).equals("1.265");
-  (new Test("cst135")).ok=((new com.ibm.math.BigDecimal("1265E-2")).toString()).equals("1.265E+1");
-  (new Test("cst136")).ok=((new com.ibm.math.BigDecimal("1265E-1")).toString()).equals("1.265E+2");
-  (new Test("cst137")).ok=((new com.ibm.math.BigDecimal("1265E-0")).toString()).equals("1.265E+3");
-  (new Test("cst138")).ok=((new com.ibm.math.BigDecimal("1265E+1")).toString()).equals("1.265E+4");
-  (new Test("cst139")).ok=((new com.ibm.math.BigDecimal("1265E+2")).toString()).equals("1.265E+5");
-  (new Test("cst140")).ok=((new com.ibm.math.BigDecimal("1265E+3")).toString()).equals("1.265E+6");
-  (new Test("cst141")).ok=((new com.ibm.math.BigDecimal("1265E+4")).toString()).equals("1.265E+7");
-  (new Test("cst142")).ok=((new com.ibm.math.BigDecimal("1265E+8")).toString()).equals("1.265E+11");
-  (new Test("cst143")).ok=((new com.ibm.math.BigDecimal("1265E+20")).toString()).equals("1.265E+23");
+  (new Test("cst130")).ok=((new com.ibm.icu.math.BigDecimal("1265")).toString()).equals("1265");
+  (new Test("cst131")).ok=((new com.ibm.icu.math.BigDecimal("1265E-20")).toString()).equals("1.265E-17");
+  (new Test("cst132")).ok=((new com.ibm.icu.math.BigDecimal("1265E-8")).toString()).equals("1.265E-5");
+  (new Test("cst133")).ok=((new com.ibm.icu.math.BigDecimal("1265E-4")).toString()).equals("1.265E-1");
+  (new Test("cst134")).ok=((new com.ibm.icu.math.BigDecimal("1265E-3")).toString()).equals("1.265");
+  (new Test("cst135")).ok=((new com.ibm.icu.math.BigDecimal("1265E-2")).toString()).equals("1.265E+1");
+  (new Test("cst136")).ok=((new com.ibm.icu.math.BigDecimal("1265E-1")).toString()).equals("1.265E+2");
+  (new Test("cst137")).ok=((new com.ibm.icu.math.BigDecimal("1265E-0")).toString()).equals("1.265E+3");
+  (new Test("cst138")).ok=((new com.ibm.icu.math.BigDecimal("1265E+1")).toString()).equals("1.265E+4");
+  (new Test("cst139")).ok=((new com.ibm.icu.math.BigDecimal("1265E+2")).toString()).equals("1.265E+5");
+  (new Test("cst140")).ok=((new com.ibm.icu.math.BigDecimal("1265E+3")).toString()).equals("1.265E+6");
+  (new Test("cst141")).ok=((new com.ibm.icu.math.BigDecimal("1265E+4")).toString()).equals("1.265E+7");
+  (new Test("cst142")).ok=((new com.ibm.icu.math.BigDecimal("1265E+8")).toString()).equals("1.265E+11");
+  (new Test("cst143")).ok=((new com.ibm.icu.math.BigDecimal("1265E+20")).toString()).equals("1.265E+23");
   
-  (new Test("cst150")).ok=((new com.ibm.math.BigDecimal("0.1265")).toString()).equals("0.1265");
-  (new Test("cst151")).ok=((new com.ibm.math.BigDecimal("0.1265E-20")).toString()).equals("1.265E-21");
-  (new Test("cst152")).ok=((new com.ibm.math.BigDecimal("0.1265E-8")).toString()).equals("1.265E-9");
-  (new Test("cst153")).ok=((new com.ibm.math.BigDecimal("0.1265E-4")).toString()).equals("1.265E-5");
-  (new Test("cst154")).ok=((new com.ibm.math.BigDecimal("0.1265E-3")).toString()).equals("1.265E-4");
-  (new Test("cst155")).ok=((new com.ibm.math.BigDecimal("0.1265E-2")).toString()).equals("1.265E-3");
-  (new Test("cst156")).ok=((new com.ibm.math.BigDecimal("0.1265E-1")).toString()).equals("1.265E-2");
-  (new Test("cst157")).ok=((new com.ibm.math.BigDecimal("0.1265E-0")).toString()).equals("1.265E-1");
-  (new Test("cst158")).ok=((new com.ibm.math.BigDecimal("0.1265E+1")).toString()).equals("1.265");
-  (new Test("cst159")).ok=((new com.ibm.math.BigDecimal("0.1265E+2")).toString()).equals("1.265E+1");
-  (new Test("cst160")).ok=((new com.ibm.math.BigDecimal("0.1265E+3")).toString()).equals("1.265E+2");
-  (new Test("cst161")).ok=((new com.ibm.math.BigDecimal("0.1265E+4")).toString()).equals("1.265E+3");
-  (new Test("cst162")).ok=((new com.ibm.math.BigDecimal("0.1265E+8")).toString()).equals("1.265E+7");
-  (new Test("cst163")).ok=((new com.ibm.math.BigDecimal("0.1265E+20")).toString()).equals("1.265E+19");
+  (new Test("cst150")).ok=((new com.ibm.icu.math.BigDecimal("0.1265")).toString()).equals("0.1265");
+  (new Test("cst151")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-20")).toString()).equals("1.265E-21");
+  (new Test("cst152")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-8")).toString()).equals("1.265E-9");
+  (new Test("cst153")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-4")).toString()).equals("1.265E-5");
+  (new Test("cst154")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-3")).toString()).equals("1.265E-4");
+  (new Test("cst155")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-2")).toString()).equals("1.265E-3");
+  (new Test("cst156")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-1")).toString()).equals("1.265E-2");
+  (new Test("cst157")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E-0")).toString()).equals("1.265E-1");
+  (new Test("cst158")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+1")).toString()).equals("1.265");
+  (new Test("cst159")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+2")).toString()).equals("1.265E+1");
+  (new Test("cst160")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+3")).toString()).equals("1.265E+2");
+  (new Test("cst161")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+4")).toString()).equals("1.265E+3");
+  (new Test("cst162")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+8")).toString()).equals("1.265E+7");
+  (new Test("cst163")).ok=((new com.ibm.icu.math.BigDecimal("0.1265E+20")).toString()).equals("1.265E+19");
   
-  (new Test("cst170")).ok=((new com.ibm.math.BigDecimal("0.09e999999999")).toString()).equals("9E+999999997");
-  (new Test("cst171")).ok=((new com.ibm.math.BigDecimal("0.9e999999999")).toString()).equals("9E+999999998");
-  (new Test("cst172")).ok=((new com.ibm.math.BigDecimal("9e999999999")).toString()).equals("9E+999999999");
-  (new Test("cst173")).ok=((new com.ibm.math.BigDecimal("9.9e999999999")).toString()).equals("9.9E+999999999");
-  (new Test("cst174")).ok=((new com.ibm.math.BigDecimal("9.99e999999999")).toString()).equals("9.99E+999999999");
-  (new Test("cst175")).ok=((new com.ibm.math.BigDecimal("9.99e-999999999")).toString()).equals("9.99E-999999999");
-  (new Test("cst176")).ok=((new com.ibm.math.BigDecimal("9.9e-999999999")).toString()).equals("9.9E-999999999");
-  (new Test("cst177")).ok=((new com.ibm.math.BigDecimal("9e-999999999")).toString()).equals("9E-999999999");
-  (new Test("cst179")).ok=((new com.ibm.math.BigDecimal("99e-999999999")).toString()).equals("9.9E-999999998");
-  (new Test("cst180")).ok=((new com.ibm.math.BigDecimal("999e-999999999")).toString()).equals("9.99E-999999997");
+  (new Test("cst170")).ok=((new com.ibm.icu.math.BigDecimal("0.09e999999999")).toString()).equals("9E+999999997");
+  (new Test("cst171")).ok=((new com.ibm.icu.math.BigDecimal("0.9e999999999")).toString()).equals("9E+999999998");
+  (new Test("cst172")).ok=((new com.ibm.icu.math.BigDecimal("9e999999999")).toString()).equals("9E+999999999");
+  (new Test("cst173")).ok=((new com.ibm.icu.math.BigDecimal("9.9e999999999")).toString()).equals("9.9E+999999999");
+  (new Test("cst174")).ok=((new com.ibm.icu.math.BigDecimal("9.99e999999999")).toString()).equals("9.99E+999999999");
+  (new Test("cst175")).ok=((new com.ibm.icu.math.BigDecimal("9.99e-999999999")).toString()).equals("9.99E-999999999");
+  (new Test("cst176")).ok=((new com.ibm.icu.math.BigDecimal("9.9e-999999999")).toString()).equals("9.9E-999999999");
+  (new Test("cst177")).ok=((new com.ibm.icu.math.BigDecimal("9e-999999999")).toString()).equals("9E-999999999");
+  (new Test("cst179")).ok=((new com.ibm.icu.math.BigDecimal("99e-999999999")).toString()).equals("9.9E-999999998");
+  (new Test("cst180")).ok=((new com.ibm.icu.math.BigDecimal("999e-999999999")).toString()).equals("9.99E-999999997");
   
   // baddies --
   badstrings=new java.lang.String[]{"1..2",".","..","++1","--1","-+1","+-1","12e","12e++","12f4"," +1","+ 1","12 "," + 1"," - 1 ","x","-1-","12-","3+","","1e-","7e1000000000","","e100","\u0e5a","\u0b65","99e999999999","999e999999999","0.9e-999999999","0.09e-999999999","0.1e1000000000","10e-1000000000","0.9e9999999999","99e-9999999999","111e9999999999","1111e-9999999999"+" "+"111e*123","111e123-","111e+12+","111e1-3-","111e1*23","111e1e+3","1e1.0","1e123e","ten","ONE","1e.1","1e1.","1ee","e+1"}; // 200-203
@@ -831,8 +831,8 @@ public class DiagBigDecimal{
   
   {int $16=badstrings.length;i=0;i:for(;$16>0;$16--,i++){
    try{
-    new com.ibm.math.BigDecimal(badstrings[i]);
-    say(">>> cst"+(200+i)+":"+" "+badstrings[i]+" "+(new com.ibm.math.BigDecimal(badstrings[i])).toString());
+    new com.ibm.icu.math.BigDecimal(badstrings[i]);
+    say(">>> cst"+(200+i)+":"+" "+badstrings[i]+" "+(new com.ibm.icu.math.BigDecimal(badstrings[i])).toString());
     flag=false;
    }
    catch (java.lang.NumberFormatException $17){
@@ -843,7 +843,7 @@ public class DiagBigDecimal{
   }/*i*/
   
   try{checknull:do{
-   new com.ibm.math.BigDecimal((java.lang.String)null);
+   new com.ibm.icu.math.BigDecimal((java.lang.String)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $18){
@@ -862,39 +862,39 @@ public class DiagBigDecimal{
   /* Final tests -- check constants haven't mutated                   */
   /*             -- also that MC objects haven't mutated              */
   /* ---------------------------------------------------------------- */
-  (new Test("cuc001")).ok=(com.ibm.math.BigDecimal.ZERO.toString()).equals("0");
-  (new Test("cuc002")).ok=(com.ibm.math.BigDecimal.ONE.toString()).equals("1");
-  (new Test("cuc003")).ok=(com.ibm.math.BigDecimal.TEN.toString()).equals("10");
+  (new Test("cuc001")).ok=(com.ibm.icu.math.BigDecimal.ZERO.toString()).equals("0");
+  (new Test("cuc002")).ok=(com.ibm.icu.math.BigDecimal.ONE.toString()).equals("1");
+  (new Test("cuc003")).ok=(com.ibm.icu.math.BigDecimal.TEN.toString()).equals("10");
   
-  (new Test("cuc010")).ok=com.ibm.math.BigDecimal.ROUND_CEILING==com.ibm.math.MathContext.ROUND_CEILING;
-  (new Test("cuc011")).ok=com.ibm.math.BigDecimal.ROUND_DOWN==com.ibm.math.MathContext.ROUND_DOWN;
-  (new Test("cuc012")).ok=com.ibm.math.BigDecimal.ROUND_FLOOR==com.ibm.math.MathContext.ROUND_FLOOR;
-  (new Test("cuc013")).ok=com.ibm.math.BigDecimal.ROUND_HALF_DOWN==com.ibm.math.MathContext.ROUND_HALF_DOWN;
-  (new Test("cuc014")).ok=com.ibm.math.BigDecimal.ROUND_HALF_EVEN==com.ibm.math.MathContext.ROUND_HALF_EVEN;
-  (new Test("cuc015")).ok=com.ibm.math.BigDecimal.ROUND_HALF_UP==com.ibm.math.MathContext.ROUND_HALF_UP;
-  (new Test("cuc016")).ok=com.ibm.math.BigDecimal.ROUND_UNNECESSARY==com.ibm.math.MathContext.ROUND_UNNECESSARY;
-  (new Test("cuc017")).ok=com.ibm.math.BigDecimal.ROUND_UP==com.ibm.math.MathContext.ROUND_UP;
+  (new Test("cuc010")).ok=com.ibm.icu.math.BigDecimal.ROUND_CEILING==com.ibm.icu.math.MathContext.ROUND_CEILING;
+  (new Test("cuc011")).ok=com.ibm.icu.math.BigDecimal.ROUND_DOWN==com.ibm.icu.math.MathContext.ROUND_DOWN;
+  (new Test("cuc012")).ok=com.ibm.icu.math.BigDecimal.ROUND_FLOOR==com.ibm.icu.math.MathContext.ROUND_FLOOR;
+  (new Test("cuc013")).ok=com.ibm.icu.math.BigDecimal.ROUND_HALF_DOWN==com.ibm.icu.math.MathContext.ROUND_HALF_DOWN;
+  (new Test("cuc014")).ok=com.ibm.icu.math.BigDecimal.ROUND_HALF_EVEN==com.ibm.icu.math.MathContext.ROUND_HALF_EVEN;
+  (new Test("cuc015")).ok=com.ibm.icu.math.BigDecimal.ROUND_HALF_UP==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
+  (new Test("cuc016")).ok=com.ibm.icu.math.BigDecimal.ROUND_UNNECESSARY==com.ibm.icu.math.MathContext.ROUND_UNNECESSARY;
+  (new Test("cuc017")).ok=com.ibm.icu.math.BigDecimal.ROUND_UP==com.ibm.icu.math.MathContext.ROUND_UP;
   
-  (new Test("cuc020")).ok=(com.ibm.math.MathContext.DEFAULT.getDigits())==9;
-  (new Test("cuc021")).ok=(com.ibm.math.MathContext.DEFAULT.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
-  (new Test("cuc022")).ok=(com.ibm.math.MathContext.DEFAULT.getLostDigits()?1:0)==0;
-  (new Test("cuc023")).ok=(com.ibm.math.MathContext.DEFAULT.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("cuc020")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getDigits())==9;
+  (new Test("cuc021")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
+  (new Test("cuc022")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getLostDigits()?1:0)==0;
+  (new Test("cuc023")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
   // mc9  =MathContext(9)
   // mcld =MathContext(9, SCIENTIFIC, 1)
   // mcfd =MathContext(0, PLAIN)
   (new Test("cuc030")).ok=(mc9.getDigits())==9;
-  (new Test("cuc031")).ok=(mc9.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
+  (new Test("cuc031")).ok=(mc9.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
   (new Test("cuc032")).ok=(mc9.getLostDigits()?1:0)==0;
-  (new Test("cuc033")).ok=(mc9.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("cuc033")).ok=(mc9.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   (new Test("cuc034")).ok=(mcld.getDigits())==9;
-  (new Test("cuc035")).ok=(mcld.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
+  (new Test("cuc035")).ok=(mcld.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
   (new Test("cuc036")).ok=(mcld.getLostDigits()?1:0)==1;
-  (new Test("cuc037")).ok=(mcld.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("cuc037")).ok=(mcld.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   (new Test("cuc038")).ok=(mcfd.getDigits())==0;
-  (new Test("cuc039")).ok=(mcfd.getForm())==com.ibm.math.MathContext.PLAIN;
+  (new Test("cuc039")).ok=(mcfd.getForm())==com.ibm.icu.math.MathContext.PLAIN;
   (new Test("cuc040")).ok=(mcfd.getLostDigits()?1:0)==0;
-  (new Test("cuc041")).ok=(mcfd.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("cuc041")).ok=(mcfd.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
   summary("No mutation");
   return;}
@@ -914,22 +914,22 @@ public class DiagBigDecimal{
   java.lang.ArithmeticException ae=null;
   
   // most of the function of this is tested by add
-  (new Test("abs001")).ok=((new com.ibm.math.BigDecimal("2")).abs().toString()).equals("2");
-  (new Test("abs002")).ok=((new com.ibm.math.BigDecimal("-2")).abs().toString()).equals("2");
-  (new Test("abs003")).ok=((new com.ibm.math.BigDecimal("+0.000")).abs().toString()).equals("0.000");
-  (new Test("abs004")).ok=((new com.ibm.math.BigDecimal("00.000")).abs().toString()).equals("0.000");
-  (new Test("abs005")).ok=((new com.ibm.math.BigDecimal("-0.000")).abs().toString()).equals("0.000");
-  (new Test("abs006")).ok=((new com.ibm.math.BigDecimal("+0.000")).abs(mcdef).toString()).equals("0");
-  (new Test("abs007")).ok=((new com.ibm.math.BigDecimal("00.000")).abs(mcdef).toString()).equals("0");
-  (new Test("abs008")).ok=((new com.ibm.math.BigDecimal("-0.000")).abs(mcdef).toString()).equals("0");
-  (new Test("abs009")).ok=((new com.ibm.math.BigDecimal("-2000000")).abs().toString()).equals("2000000");
-  (new Test("abs010")).ok=((new com.ibm.math.BigDecimal("-2000000")).abs(mcdef).toString()).equals("2000000");
-  (new Test("abs011")).ok=((new com.ibm.math.BigDecimal("-2000000")).abs(mc6).toString()).equals("2.00000E+6");
-  (new Test("abs012")).ok=((new com.ibm.math.BigDecimal("2000000")).abs(mc6).toString()).equals("2.00000E+6");
-  (new Test("abs013")).ok=((new com.ibm.math.BigDecimal("0.2")).abs().toString()).equals("0.2");
-  (new Test("abs014")).ok=((new com.ibm.math.BigDecimal("-0.2")).abs().toString()).equals("0.2");
-  (new Test("abs015")).ok=((new com.ibm.math.BigDecimal("0.01")).abs().toString()).equals("0.01");
-  (new Test("abs016")).ok=((new com.ibm.math.BigDecimal("-0.01")).abs().toString()).equals("0.01");
+  (new Test("abs001")).ok=((new com.ibm.icu.math.BigDecimal("2")).abs().toString()).equals("2");
+  (new Test("abs002")).ok=((new com.ibm.icu.math.BigDecimal("-2")).abs().toString()).equals("2");
+  (new Test("abs003")).ok=((new com.ibm.icu.math.BigDecimal("+0.000")).abs().toString()).equals("0.000");
+  (new Test("abs004")).ok=((new com.ibm.icu.math.BigDecimal("00.000")).abs().toString()).equals("0.000");
+  (new Test("abs005")).ok=((new com.ibm.icu.math.BigDecimal("-0.000")).abs().toString()).equals("0.000");
+  (new Test("abs006")).ok=((new com.ibm.icu.math.BigDecimal("+0.000")).abs(mcdef).toString()).equals("0");
+  (new Test("abs007")).ok=((new com.ibm.icu.math.BigDecimal("00.000")).abs(mcdef).toString()).equals("0");
+  (new Test("abs008")).ok=((new com.ibm.icu.math.BigDecimal("-0.000")).abs(mcdef).toString()).equals("0");
+  (new Test("abs009")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).abs().toString()).equals("2000000");
+  (new Test("abs010")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).abs(mcdef).toString()).equals("2000000");
+  (new Test("abs011")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).abs(mc6).toString()).equals("2.00000E+6");
+  (new Test("abs012")).ok=((new com.ibm.icu.math.BigDecimal("2000000")).abs(mc6).toString()).equals("2.00000E+6");
+  (new Test("abs013")).ok=((new com.ibm.icu.math.BigDecimal("0.2")).abs().toString()).equals("0.2");
+  (new Test("abs014")).ok=((new com.ibm.icu.math.BigDecimal("-0.2")).abs().toString()).equals("0.2");
+  (new Test("abs015")).ok=((new com.ibm.icu.math.BigDecimal("0.01")).abs().toString()).equals("0.01");
+  (new Test("abs016")).ok=((new com.ibm.icu.math.BigDecimal("-0.01")).abs().toString()).equals("0.01");
   try{checkdigits:do{
    tenlong.abs(mcld);
    flag=false;
@@ -948,7 +948,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("abs021")).ok=flag;
   try{checknull:do{
-   com.ibm.math.BigDecimal.TEN.abs((com.ibm.math.MathContext)null);
+   com.ibm.icu.math.BigDecimal.TEN.abs((com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $21){
@@ -964,221 +964,221 @@ public class DiagBigDecimal{
  
  public void diagadd(){
   boolean flag=false;
-  com.ibm.math.BigDecimal alhs;
-  com.ibm.math.BigDecimal arhs;
+  com.ibm.icu.math.BigDecimal alhs;
+  com.ibm.icu.math.BigDecimal arhs;
   java.lang.ArithmeticException ae=null;
   
   // [first group are 'quick confidence check']
-  (new Test("add001")).ok=((new com.ibm.math.BigDecimal(2)).add(new com.ibm.math.BigDecimal(3),mcdef).toString()).equals("5");
-  (new Test("add003")).ok=((new com.ibm.math.BigDecimal("5.75")).add(new com.ibm.math.BigDecimal("3.3"),mcdef).toString()).equals("9.05");
-  (new Test("add004")).ok=((new com.ibm.math.BigDecimal("5")).add(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("2");
-  (new Test("add005")).ok=((new com.ibm.math.BigDecimal("-5")).add(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("-8");
-  (new Test("add006")).ok=((new com.ibm.math.BigDecimal("-7")).add(new com.ibm.math.BigDecimal("2.5"),mcdef).toString()).equals("-4.5");
-  (new Test("add007")).ok=((new com.ibm.math.BigDecimal("0.7")).add(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("1.0");
-  (new Test("add008")).ok=((new com.ibm.math.BigDecimal("1.25")).add(new com.ibm.math.BigDecimal("1.25"),mcdef).toString()).equals("2.50");
-  (new Test("add009")).ok=((new com.ibm.math.BigDecimal("1.23456789")).add(new com.ibm.math.BigDecimal("1.00000000"),mcdef).toString()).equals("2.23456789");
+  (new Test("add001")).ok=((new com.ibm.icu.math.BigDecimal(2)).add(new com.ibm.icu.math.BigDecimal(3),mcdef).toString()).equals("5");
+  (new Test("add003")).ok=((new com.ibm.icu.math.BigDecimal("5.75")).add(new com.ibm.icu.math.BigDecimal("3.3"),mcdef).toString()).equals("9.05");
+  (new Test("add004")).ok=((new com.ibm.icu.math.BigDecimal("5")).add(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("2");
+  (new Test("add005")).ok=((new com.ibm.icu.math.BigDecimal("-5")).add(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("-8");
+  (new Test("add006")).ok=((new com.ibm.icu.math.BigDecimal("-7")).add(new com.ibm.icu.math.BigDecimal("2.5"),mcdef).toString()).equals("-4.5");
+  (new Test("add007")).ok=((new com.ibm.icu.math.BigDecimal("0.7")).add(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("1.0");
+  (new Test("add008")).ok=((new com.ibm.icu.math.BigDecimal("1.25")).add(new com.ibm.icu.math.BigDecimal("1.25"),mcdef).toString()).equals("2.50");
+  (new Test("add009")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).add(new com.ibm.icu.math.BigDecimal("1.00000000"),mcdef).toString()).equals("2.23456789");
   
-  (new Test("add010")).ok=((new com.ibm.math.BigDecimal("1.23456789")).add(new com.ibm.math.BigDecimal("1.00000011"),mcdef).toString()).equals("2.23456800");
-  
-  
-  (new Test("add011")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).add(new com.ibm.math.BigDecimal("0.5555555555"),mcdef).toString()).equals("1.00000000");
-  
-  (new Test("add012")).ok=((new com.ibm.math.BigDecimal("0.4444444440")).add(new com.ibm.math.BigDecimal("0.5555555555"),mcdef).toString()).equals("1.00000000");
-  
-  (new Test("add013")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).add(new com.ibm.math.BigDecimal("0.5555555550"),mcdef).toString()).equals("0.999999999");
-  
-  (new Test("add014")).ok=((new com.ibm.math.BigDecimal("0.4444444444999")).add(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0.444444444");
-  
-  (new Test("add015")).ok=((new com.ibm.math.BigDecimal("0.4444444445000")).add(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0.444444445");
+  (new Test("add010")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).add(new com.ibm.icu.math.BigDecimal("1.00000011"),mcdef).toString()).equals("2.23456800");
   
   
-  (new Test("add016")).ok=((new com.ibm.math.BigDecimal("70")).add(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add011")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).add(new com.ibm.icu.math.BigDecimal("0.5555555555"),mcdef).toString()).equals("1.00000000");
   
-  (new Test("add017")).ok=((new com.ibm.math.BigDecimal("700")).add(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add012")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444440")).add(new com.ibm.icu.math.BigDecimal("0.5555555555"),mcdef).toString()).equals("1.00000000");
   
-  (new Test("add018")).ok=((new com.ibm.math.BigDecimal("7000")).add(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add013")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).add(new com.ibm.icu.math.BigDecimal("0.5555555550"),mcdef).toString()).equals("0.999999999");
   
-  (new Test("add019")).ok=((new com.ibm.math.BigDecimal("70000")).add(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000001E+13");
+  (new Test("add014")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444999")).add(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0.444444444");
   
-  (new Test("add020")).ok=((new com.ibm.math.BigDecimal("700000")).add(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000007E+13");
+  (new Test("add015")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444445000")).add(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0.444444445");
+  
+  
+  (new Test("add016")).ok=((new com.ibm.icu.math.BigDecimal("70")).add(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  
+  (new Test("add017")).ok=((new com.ibm.icu.math.BigDecimal("700")).add(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  
+  (new Test("add018")).ok=((new com.ibm.icu.math.BigDecimal("7000")).add(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000000E+13");
+  
+  (new Test("add019")).ok=((new com.ibm.icu.math.BigDecimal("70000")).add(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000001E+13");
+  
+  (new Test("add020")).ok=((new com.ibm.icu.math.BigDecimal("700000")).add(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("1.00000007E+13");
   
   
   // [Now the same group with fixed arithmetic]
-  (new Test("add030")).ok=((new com.ibm.math.BigDecimal(2)).add(new com.ibm.math.BigDecimal(3)).toString()).equals("5");
-  (new Test("add031")).ok=((new com.ibm.math.BigDecimal("5.75")).add(new com.ibm.math.BigDecimal("3.3")).toString()).equals("9.05");
-  (new Test("add032")).ok=((new com.ibm.math.BigDecimal("5")).add(new com.ibm.math.BigDecimal("-3")).toString()).equals("2");
-  (new Test("add033")).ok=((new com.ibm.math.BigDecimal("-5")).add(new com.ibm.math.BigDecimal("-3")).toString()).equals("-8");
-  (new Test("add034")).ok=((new com.ibm.math.BigDecimal("-7")).add(new com.ibm.math.BigDecimal("2.5")).toString()).equals("-4.5");
-  (new Test("add035")).ok=((new com.ibm.math.BigDecimal("0.7")).add(new com.ibm.math.BigDecimal("0.3")).toString()).equals("1.0");
-  (new Test("add036")).ok=((new com.ibm.math.BigDecimal("1.25")).add(new com.ibm.math.BigDecimal("1.25")).toString()).equals("2.50");
-  (new Test("add037")).ok=((new com.ibm.math.BigDecimal("1.23456789")).add(new com.ibm.math.BigDecimal("1.00000000")).toString()).equals("2.23456789");
+  (new Test("add030")).ok=((new com.ibm.icu.math.BigDecimal(2)).add(new com.ibm.icu.math.BigDecimal(3)).toString()).equals("5");
+  (new Test("add031")).ok=((new com.ibm.icu.math.BigDecimal("5.75")).add(new com.ibm.icu.math.BigDecimal("3.3")).toString()).equals("9.05");
+  (new Test("add032")).ok=((new com.ibm.icu.math.BigDecimal("5")).add(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("2");
+  (new Test("add033")).ok=((new com.ibm.icu.math.BigDecimal("-5")).add(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("-8");
+  (new Test("add034")).ok=((new com.ibm.icu.math.BigDecimal("-7")).add(new com.ibm.icu.math.BigDecimal("2.5")).toString()).equals("-4.5");
+  (new Test("add035")).ok=((new com.ibm.icu.math.BigDecimal("0.7")).add(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("1.0");
+  (new Test("add036")).ok=((new com.ibm.icu.math.BigDecimal("1.25")).add(new com.ibm.icu.math.BigDecimal("1.25")).toString()).equals("2.50");
+  (new Test("add037")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).add(new com.ibm.icu.math.BigDecimal("1.00000000")).toString()).equals("2.23456789");
   
-  (new Test("add038")).ok=((new com.ibm.math.BigDecimal("1.23456789")).add(new com.ibm.math.BigDecimal("1.00000011")).toString()).equals("2.23456800");
-  
-  
-  (new Test("add039")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).add(new com.ibm.math.BigDecimal("0.5555555555")).toString()).equals("0.9999999999");
-  
-  (new Test("add040")).ok=((new com.ibm.math.BigDecimal("0.4444444440")).add(new com.ibm.math.BigDecimal("0.5555555555")).toString()).equals("0.9999999995");
-  
-  (new Test("add041")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).add(new com.ibm.math.BigDecimal("0.5555555550")).toString()).equals("0.9999999994");
-  
-  (new Test("add042")).ok=((new com.ibm.math.BigDecimal("0.4444444444999")).add(new com.ibm.math.BigDecimal("0")).toString()).equals("0.4444444444999");
-  
-  (new Test("add043")).ok=((new com.ibm.math.BigDecimal("0.4444444445000")).add(new com.ibm.math.BigDecimal("0")).toString()).equals("0.4444444445000");
+  (new Test("add038")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).add(new com.ibm.icu.math.BigDecimal("1.00000011")).toString()).equals("2.23456800");
   
   
-  (new Test("add044")).ok=((new com.ibm.math.BigDecimal("70")).add(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("10000000000070");
+  (new Test("add039")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).add(new com.ibm.icu.math.BigDecimal("0.5555555555")).toString()).equals("0.9999999999");
   
-  (new Test("add045")).ok=((new com.ibm.math.BigDecimal("700")).add(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("10000000000700");
+  (new Test("add040")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444440")).add(new com.ibm.icu.math.BigDecimal("0.5555555555")).toString()).equals("0.9999999995");
   
-  (new Test("add046")).ok=((new com.ibm.math.BigDecimal("7000")).add(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("10000000007000");
+  (new Test("add041")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).add(new com.ibm.icu.math.BigDecimal("0.5555555550")).toString()).equals("0.9999999994");
   
-  (new Test("add047")).ok=((new com.ibm.math.BigDecimal("70000")).add(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("10000000070000");
+  (new Test("add042")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444999")).add(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.4444444444999");
   
-  (new Test("add048")).ok=((new com.ibm.math.BigDecimal("700000")).add(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("10000000700000");
+  (new Test("add043")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444445000")).add(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.4444444445000");
+  
+  
+  (new Test("add044")).ok=((new com.ibm.icu.math.BigDecimal("70")).add(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("10000000000070");
+  
+  (new Test("add045")).ok=((new com.ibm.icu.math.BigDecimal("700")).add(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("10000000000700");
+  
+  (new Test("add046")).ok=((new com.ibm.icu.math.BigDecimal("7000")).add(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("10000000007000");
+  
+  (new Test("add047")).ok=((new com.ibm.icu.math.BigDecimal("70000")).add(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("10000000070000");
+  
+  (new Test("add048")).ok=((new com.ibm.icu.math.BigDecimal("700000")).add(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("10000000700000");
   
   
   // symmetry:
-  (new Test("add049")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add049")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("add050")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("700"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add050")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("700"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("add051")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("7000"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("add051")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("7000"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("add052")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70000"),mcdef).toString()).equals("1.00000001E+13");
+  (new Test("add052")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70000"),mcdef).toString()).equals("1.00000001E+13");
   
-  (new Test("add053")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("700000"),mcdef).toString()).equals("1.00000007E+13");
+  (new Test("add053")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("700000"),mcdef).toString()).equals("1.00000007E+13");
   
   
-  (new Test("add054")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70")).toString()).equals("10000000000070");
+  (new Test("add054")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70")).toString()).equals("10000000000070");
   
-  (new Test("add055")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("700")).toString()).equals("10000000000700");
+  (new Test("add055")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("700")).toString()).equals("10000000000700");
   
-  (new Test("add056")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("7000")).toString()).equals("10000000007000");
+  (new Test("add056")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("7000")).toString()).equals("10000000007000");
   
-  (new Test("add057")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70000")).toString()).equals("10000000070000");
+  (new Test("add057")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70000")).toString()).equals("10000000070000");
   
-  (new Test("add058")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("700000")).toString()).equals("10000000700000");
+  (new Test("add058")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("700000")).toString()).equals("10000000700000");
   
   // some rounding effects
-  (new Test("add059")).ok=((new com.ibm.math.BigDecimal("0.9998")).add(new com.ibm.math.BigDecimal("0.0000")).toString()).equals("0.9998");
+  (new Test("add059")).ok=((new com.ibm.icu.math.BigDecimal("0.9998")).add(new com.ibm.icu.math.BigDecimal("0.0000")).toString()).equals("0.9998");
   
-  (new Test("add060")).ok=((new com.ibm.math.BigDecimal("0.9998")).add(new com.ibm.math.BigDecimal("0.0001")).toString()).equals("0.9999");
+  (new Test("add060")).ok=((new com.ibm.icu.math.BigDecimal("0.9998")).add(new com.ibm.icu.math.BigDecimal("0.0001")).toString()).equals("0.9999");
   
-  (new Test("add061")).ok=((new com.ibm.math.BigDecimal("0.9998")).add(new com.ibm.math.BigDecimal("0.0002")).toString()).equals("1.0000");
+  (new Test("add061")).ok=((new com.ibm.icu.math.BigDecimal("0.9998")).add(new com.ibm.icu.math.BigDecimal("0.0002")).toString()).equals("1.0000");
   
-  (new Test("add062")).ok=((new com.ibm.math.BigDecimal("0.9998")).add(new com.ibm.math.BigDecimal("0.0003")).toString()).equals("1.0001");
+  (new Test("add062")).ok=((new com.ibm.icu.math.BigDecimal("0.9998")).add(new com.ibm.icu.math.BigDecimal("0.0003")).toString()).equals("1.0001");
   
   
   // MC
-  (new Test("add070")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70000"),mcfd).toString()).equals("10000000070000");
+  (new Test("add070")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70000"),mcfd).toString()).equals("10000000070000");
   
-  (new Test("add071")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70000"),mcdef).toString()).equals("1.00000001E+13");
+  (new Test("add071")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70000"),mcdef).toString()).equals("1.00000001E+13");
   
-  (new Test("add072")).ok=((new com.ibm.math.BigDecimal("10000e+9")).add(new com.ibm.math.BigDecimal("70000"),mc6).toString()).equals("1.00000E+13");
+  (new Test("add072")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).add(new com.ibm.icu.math.BigDecimal("70000"),mc6).toString()).equals("1.00000E+13");
   
   
   // zero preservation
-  (new Test("add080")).ok=(com.ibm.math.BigDecimal.ONE.add(new com.ibm.math.BigDecimal("0.0001"),mc6).toString()).equals("1.0001");
+  (new Test("add080")).ok=(com.ibm.icu.math.BigDecimal.ONE.add(new com.ibm.icu.math.BigDecimal("0.0001"),mc6).toString()).equals("1.0001");
   
-  (new Test("add081")).ok=(com.ibm.math.BigDecimal.ONE.add(new com.ibm.math.BigDecimal("0.00001"),mc6).toString()).equals("1.00001");
+  (new Test("add081")).ok=(com.ibm.icu.math.BigDecimal.ONE.add(new com.ibm.icu.math.BigDecimal("0.00001"),mc6).toString()).equals("1.00001");
   
-  (new Test("add082")).ok=(com.ibm.math.BigDecimal.ONE.add(new com.ibm.math.BigDecimal("0.000001"),mc6).toString()).equals("1.00000");
+  (new Test("add082")).ok=(com.ibm.icu.math.BigDecimal.ONE.add(new com.ibm.icu.math.BigDecimal("0.000001"),mc6).toString()).equals("1.00000");
   
-  (new Test("add083")).ok=(com.ibm.math.BigDecimal.ONE.add(new com.ibm.math.BigDecimal("0.0000001"),mc6).toString()).equals("1.00000");
+  (new Test("add083")).ok=(com.ibm.icu.math.BigDecimal.ONE.add(new com.ibm.icu.math.BigDecimal("0.0000001"),mc6).toString()).equals("1.00000");
   
-  (new Test("add084")).ok=(com.ibm.math.BigDecimal.ONE.add(new com.ibm.math.BigDecimal("0.00000001"),mc6).toString()).equals("1.00000");
+  (new Test("add084")).ok=(com.ibm.icu.math.BigDecimal.ONE.add(new com.ibm.icu.math.BigDecimal("0.00000001"),mc6).toString()).equals("1.00000");
   
   
   // more fixed, LHS swaps
-  (new Test("add090")).ok=((new com.ibm.math.BigDecimal("-56267E-10")).add(zero).toString()).equals("-0.0000056267");
-  (new Test("add091")).ok=((new com.ibm.math.BigDecimal("-56267E-6")).add(zero).toString()).equals("-0.056267");
-  (new Test("add092")).ok=((new com.ibm.math.BigDecimal("-56267E-5")).add(zero).toString()).equals("-0.56267");
-  (new Test("add093")).ok=((new com.ibm.math.BigDecimal("-56267E-4")).add(zero).toString()).equals("-5.6267");
-  (new Test("add094")).ok=((new com.ibm.math.BigDecimal("-56267E-3")).add(zero).toString()).equals("-56.267");
-  (new Test("add095")).ok=((new com.ibm.math.BigDecimal("-56267E-2")).add(zero).toString()).equals("-562.67");
-  (new Test("add096")).ok=((new com.ibm.math.BigDecimal("-56267E-1")).add(zero).toString()).equals("-5626.7");
-  (new Test("add097")).ok=((new com.ibm.math.BigDecimal("-56267E-0")).add(zero).toString()).equals("-56267");
-  (new Test("add098")).ok=((new com.ibm.math.BigDecimal("-5E-10")).add(zero).toString()).equals("-0.0000000005");
-  (new Test("add099")).ok=((new com.ibm.math.BigDecimal("-5E-5")).add(zero).toString()).equals("-0.00005");
-  (new Test("add100")).ok=((new com.ibm.math.BigDecimal("-5E-1")).add(zero).toString()).equals("-0.5");
-  (new Test("add101")).ok=((new com.ibm.math.BigDecimal("-5E-10")).add(zero).toString()).equals("-0.0000000005");
-  (new Test("add102")).ok=((new com.ibm.math.BigDecimal("-5E-5")).add(zero).toString()).equals("-0.00005");
-  (new Test("add103")).ok=((new com.ibm.math.BigDecimal("-5E-1")).add(zero).toString()).equals("-0.5");
-  (new Test("add104")).ok=((new com.ibm.math.BigDecimal("-5E10")).add(zero).toString()).equals("-50000000000");
-  (new Test("add105")).ok=((new com.ibm.math.BigDecimal("-5E5")).add(zero).toString()).equals("-500000");
-  (new Test("add106")).ok=((new com.ibm.math.BigDecimal("-5E1")).add(zero).toString()).equals("-50");
-  (new Test("add107")).ok=((new com.ibm.math.BigDecimal("-5E0")).add(zero).toString()).equals("-5");
+  (new Test("add090")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-10")).add(zero).toString()).equals("-0.0000056267");
+  (new Test("add091")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-6")).add(zero).toString()).equals("-0.056267");
+  (new Test("add092")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-5")).add(zero).toString()).equals("-0.56267");
+  (new Test("add093")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-4")).add(zero).toString()).equals("-5.6267");
+  (new Test("add094")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-3")).add(zero).toString()).equals("-56.267");
+  (new Test("add095")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-2")).add(zero).toString()).equals("-562.67");
+  (new Test("add096")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-1")).add(zero).toString()).equals("-5626.7");
+  (new Test("add097")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-0")).add(zero).toString()).equals("-56267");
+  (new Test("add098")).ok=((new com.ibm.icu.math.BigDecimal("-5E-10")).add(zero).toString()).equals("-0.0000000005");
+  (new Test("add099")).ok=((new com.ibm.icu.math.BigDecimal("-5E-5")).add(zero).toString()).equals("-0.00005");
+  (new Test("add100")).ok=((new com.ibm.icu.math.BigDecimal("-5E-1")).add(zero).toString()).equals("-0.5");
+  (new Test("add101")).ok=((new com.ibm.icu.math.BigDecimal("-5E-10")).add(zero).toString()).equals("-0.0000000005");
+  (new Test("add102")).ok=((new com.ibm.icu.math.BigDecimal("-5E-5")).add(zero).toString()).equals("-0.00005");
+  (new Test("add103")).ok=((new com.ibm.icu.math.BigDecimal("-5E-1")).add(zero).toString()).equals("-0.5");
+  (new Test("add104")).ok=((new com.ibm.icu.math.BigDecimal("-5E10")).add(zero).toString()).equals("-50000000000");
+  (new Test("add105")).ok=((new com.ibm.icu.math.BigDecimal("-5E5")).add(zero).toString()).equals("-500000");
+  (new Test("add106")).ok=((new com.ibm.icu.math.BigDecimal("-5E1")).add(zero).toString()).equals("-50");
+  (new Test("add107")).ok=((new com.ibm.icu.math.BigDecimal("-5E0")).add(zero).toString()).equals("-5");
   
   // more fixed, RHS swaps
-  (new Test("add108")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-10")).toString()).equals("-0.0000056267");
-  (new Test("add109")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-6")).toString()).equals("-0.056267");
-  (new Test("add110")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-5")).toString()).equals("-0.56267");
-  (new Test("add111")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-4")).toString()).equals("-5.6267");
-  (new Test("add112")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-3")).toString()).equals("-56.267");
-  (new Test("add113")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-2")).toString()).equals("-562.67");
-  (new Test("add114")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-1")).toString()).equals("-5626.7");
-  (new Test("add115")).ok=(zero.add(new com.ibm.math.BigDecimal("-56267E-0")).toString()).equals("-56267");
-  (new Test("add116")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-10")).toString()).equals("-0.0000000005");
-  (new Test("add117")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-5")).toString()).equals("-0.00005");
-  (new Test("add118")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-1")).toString()).equals("-0.5");
-  (new Test("add129")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-10")).toString()).equals("-0.0000000005");
-  (new Test("add130")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-5")).toString()).equals("-0.00005");
-  (new Test("add131")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E-1")).toString()).equals("-0.5");
-  (new Test("add132")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E10")).toString()).equals("-50000000000");
-  (new Test("add133")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E5")).toString()).equals("-500000");
-  (new Test("add134")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E1")).toString()).equals("-50");
-  (new Test("add135")).ok=(zero.add(new com.ibm.math.BigDecimal("-5E0")).toString()).equals("-5");
+  (new Test("add108")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-10")).toString()).equals("-0.0000056267");
+  (new Test("add109")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-6")).toString()).equals("-0.056267");
+  (new Test("add110")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-5")).toString()).equals("-0.56267");
+  (new Test("add111")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-4")).toString()).equals("-5.6267");
+  (new Test("add112")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-3")).toString()).equals("-56.267");
+  (new Test("add113")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-2")).toString()).equals("-562.67");
+  (new Test("add114")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-1")).toString()).equals("-5626.7");
+  (new Test("add115")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-56267E-0")).toString()).equals("-56267");
+  (new Test("add116")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-10")).toString()).equals("-0.0000000005");
+  (new Test("add117")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-5")).toString()).equals("-0.00005");
+  (new Test("add118")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-1")).toString()).equals("-0.5");
+  (new Test("add129")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-10")).toString()).equals("-0.0000000005");
+  (new Test("add130")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-5")).toString()).equals("-0.00005");
+  (new Test("add131")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E-1")).toString()).equals("-0.5");
+  (new Test("add132")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E10")).toString()).equals("-50000000000");
+  (new Test("add133")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E5")).toString()).equals("-500000");
+  (new Test("add134")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E1")).toString()).equals("-50");
+  (new Test("add135")).ok=(zero.add(new com.ibm.icu.math.BigDecimal("-5E0")).toString()).equals("-5");
   
   // [some of the next group are really constructor tests]
-  (new Test("add140")).ok=((new com.ibm.math.BigDecimal("00.0")).add(new com.ibm.math.BigDecimal("0.00"),mcdef).toString()).equals("0");
-  (new Test("add141")).ok=((new com.ibm.math.BigDecimal("0.00")).add(new com.ibm.math.BigDecimal("00.0"),mcdef).toString()).equals("0");
-  (new Test("add142")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
-  (new Test("add143")).ok=((new com.ibm.math.BigDecimal("3.")).add(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
-  (new Test("add144")).ok=((new com.ibm.math.BigDecimal("3.0")).add(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
-  (new Test("add145")).ok=((new com.ibm.math.BigDecimal("3.00")).add(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("3.30");
-  (new Test("add146")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("6");
-  (new Test("add147")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("+3"),mcdef).toString()).equals("6");
-  (new Test("add148")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("0");
-  (new Test("add149")).ok=((new com.ibm.math.BigDecimal("0.03")).add(new com.ibm.math.BigDecimal("-0.03"),mcdef).toString()).equals("0");
+  (new Test("add140")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).add(new com.ibm.icu.math.BigDecimal("0.00"),mcdef).toString()).equals("0");
+  (new Test("add141")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).add(new com.ibm.icu.math.BigDecimal("00.0"),mcdef).toString()).equals("0");
+  (new Test("add142")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
+  (new Test("add143")).ok=((new com.ibm.icu.math.BigDecimal("3.")).add(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
+  (new Test("add144")).ok=((new com.ibm.icu.math.BigDecimal("3.0")).add(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("3.3");
+  (new Test("add145")).ok=((new com.ibm.icu.math.BigDecimal("3.00")).add(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("3.30");
+  (new Test("add146")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("6");
+  (new Test("add147")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("+3"),mcdef).toString()).equals("6");
+  (new Test("add148")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("0");
+  (new Test("add149")).ok=((new com.ibm.icu.math.BigDecimal("0.03")).add(new com.ibm.icu.math.BigDecimal("-0.03"),mcdef).toString()).equals("0");
   
-  (new Test("add150")).ok=((new com.ibm.math.BigDecimal("00.0")).add(new com.ibm.math.BigDecimal("0.00")).toString()).equals("0.00");
-  (new Test("add151")).ok=((new com.ibm.math.BigDecimal("0.00")).add(new com.ibm.math.BigDecimal("00.0")).toString()).equals("0.00");
-  (new Test("add152")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal(".3")).toString()).equals("3.3");
-  (new Test("add153")).ok=((new com.ibm.math.BigDecimal("3.")).add(new com.ibm.math.BigDecimal(".3")).toString()).equals("3.3");
-  (new Test("add154")).ok=((new com.ibm.math.BigDecimal("3.0")).add(new com.ibm.math.BigDecimal(".3")).toString()).equals("3.3");
-  (new Test("add155")).ok=((new com.ibm.math.BigDecimal("3.00")).add(new com.ibm.math.BigDecimal(".3")).toString()).equals("3.30");
-  (new Test("add156")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("3")).toString()).equals("6");
-  (new Test("add157")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("+3")).toString()).equals("6");
-  (new Test("add158")).ok=((new com.ibm.math.BigDecimal("3")).add(new com.ibm.math.BigDecimal("-3")).toString()).equals("0");
-  (new Test("add159")).ok=((new com.ibm.math.BigDecimal("0.3")).add(new com.ibm.math.BigDecimal("-0.3")).toString()).equals("0.0");
-  (new Test("add160")).ok=((new com.ibm.math.BigDecimal("0.03")).add(new com.ibm.math.BigDecimal("-0.03")).toString()).equals("0.00");
-  (new Test("add161")).ok=((new com.ibm.math.BigDecimal("7E+12")).add(new com.ibm.math.BigDecimal("-1"),mcfd).toString()).equals("6999999999999");
+  (new Test("add150")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).add(new com.ibm.icu.math.BigDecimal("0.00")).toString()).equals("0.00");
+  (new Test("add151")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).add(new com.ibm.icu.math.BigDecimal("00.0")).toString()).equals("0.00");
+  (new Test("add152")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("3.3");
+  (new Test("add153")).ok=((new com.ibm.icu.math.BigDecimal("3.")).add(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("3.3");
+  (new Test("add154")).ok=((new com.ibm.icu.math.BigDecimal("3.0")).add(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("3.3");
+  (new Test("add155")).ok=((new com.ibm.icu.math.BigDecimal("3.00")).add(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("3.30");
+  (new Test("add156")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("6");
+  (new Test("add157")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("+3")).toString()).equals("6");
+  (new Test("add158")).ok=((new com.ibm.icu.math.BigDecimal("3")).add(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("0");
+  (new Test("add159")).ok=((new com.ibm.icu.math.BigDecimal("0.3")).add(new com.ibm.icu.math.BigDecimal("-0.3")).toString()).equals("0.0");
+  (new Test("add160")).ok=((new com.ibm.icu.math.BigDecimal("0.03")).add(new com.ibm.icu.math.BigDecimal("-0.03")).toString()).equals("0.00");
+  (new Test("add161")).ok=((new com.ibm.icu.math.BigDecimal("7E+12")).add(new com.ibm.icu.math.BigDecimal("-1"),mcfd).toString()).equals("6999999999999");
   
-  (new Test("add162")).ok=((new com.ibm.math.BigDecimal("7E+12")).add(new com.ibm.math.BigDecimal("1.11"),mcfd).toString()).equals("7000000000001.11");
+  (new Test("add162")).ok=((new com.ibm.icu.math.BigDecimal("7E+12")).add(new com.ibm.icu.math.BigDecimal("1.11"),mcfd).toString()).equals("7000000000001.11");
   
-  (new Test("add163")).ok=((new com.ibm.math.BigDecimal("1.11")).add(new com.ibm.math.BigDecimal("7E+12"),mcfd).toString()).equals("7000000000001.11");
+  (new Test("add163")).ok=((new com.ibm.icu.math.BigDecimal("1.11")).add(new com.ibm.icu.math.BigDecimal("7E+12"),mcfd).toString()).equals("7000000000001.11");
   
   
   // input preparation tests
-  alhs=new com.ibm.math.BigDecimal("12345678900000");
-  arhs=new com.ibm.math.BigDecimal("9999999999999");
+  alhs=new com.ibm.icu.math.BigDecimal("12345678900000");
+  arhs=new com.ibm.icu.math.BigDecimal("9999999999999");
   (new Test("add170")).ok=(alhs.add(arhs,mc3).toString()).equals("2.23E+13");
   (new Test("add171")).ok=(arhs.add(alhs,mc3).toString()).equals("2.23E+13");
-  (new Test("add172")).ok=((new com.ibm.math.BigDecimal("12E+3")).add(new com.ibm.math.BigDecimal("3456"),mc3).toString()).equals("1.55E+4");
+  (new Test("add172")).ok=((new com.ibm.icu.math.BigDecimal("12E+3")).add(new com.ibm.icu.math.BigDecimal("3456"),mc3).toString()).equals("1.55E+4");
   // next was 1.54E+4 under old [truncate to digits+1] rules
-  (new Test("add173")).ok=((new com.ibm.math.BigDecimal("12E+3")).add(new com.ibm.math.BigDecimal("3446"),mc3).toString()).equals("1.55E+4");
-  (new Test("add174")).ok=((new com.ibm.math.BigDecimal("12E+3")).add(new com.ibm.math.BigDecimal("3454"),mc3).toString()).equals("1.55E+4");
-  (new Test("add175")).ok=((new com.ibm.math.BigDecimal("12E+3")).add(new com.ibm.math.BigDecimal("3444"),mc3).toString()).equals("1.54E+4");
+  (new Test("add173")).ok=((new com.ibm.icu.math.BigDecimal("12E+3")).add(new com.ibm.icu.math.BigDecimal("3446"),mc3).toString()).equals("1.55E+4");
+  (new Test("add174")).ok=((new com.ibm.icu.math.BigDecimal("12E+3")).add(new com.ibm.icu.math.BigDecimal("3454"),mc3).toString()).equals("1.55E+4");
+  (new Test("add175")).ok=((new com.ibm.icu.math.BigDecimal("12E+3")).add(new com.ibm.icu.math.BigDecimal("3444"),mc3).toString()).equals("1.54E+4");
   
-  (new Test("add176")).ok=((new com.ibm.math.BigDecimal("3456")).add(new com.ibm.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
+  (new Test("add176")).ok=((new com.ibm.icu.math.BigDecimal("3456")).add(new com.ibm.icu.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
   // next was 1.54E+4 under old [truncate to digits+1] rules
-  (new Test("add177")).ok=((new com.ibm.math.BigDecimal("3446")).add(new com.ibm.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
-  (new Test("add178")).ok=((new com.ibm.math.BigDecimal("3454")).add(new com.ibm.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
-  (new Test("add179")).ok=((new com.ibm.math.BigDecimal("3444")).add(new com.ibm.math.BigDecimal("12E+3"),mc3).toString()).equals("1.54E+4");
+  (new Test("add177")).ok=((new com.ibm.icu.math.BigDecimal("3446")).add(new com.ibm.icu.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
+  (new Test("add178")).ok=((new com.ibm.icu.math.BigDecimal("3454")).add(new com.ibm.icu.math.BigDecimal("12E+3"),mc3).toString()).equals("1.55E+4");
+  (new Test("add179")).ok=((new com.ibm.icu.math.BigDecimal("3444")).add(new com.ibm.icu.math.BigDecimal("12E+3"),mc3).toString()).equals("1.54E+4");
   
   try{checknull:do{
-   ten.add((com.ibm.math.BigDecimal)null);
+   ten.add((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $22){
@@ -1186,7 +1186,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("add200")).ok=flag;
   try{checknull2:do{
-   ten.add(ten,(com.ibm.math.MathContext)null);
+   ten.add(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $23){
@@ -1195,7 +1195,7 @@ public class DiagBigDecimal{
   (new Test("add201")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.add(com.ibm.math.BigDecimal.ZERO,mcld);
+   tenlong.add(com.ibm.icu.math.BigDecimal.ZERO,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $24){ae=$24;
@@ -1203,7 +1203,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("add202")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ZERO.add(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ZERO.add(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $25){ae=$25;
@@ -1213,7 +1213,7 @@ public class DiagBigDecimal{
   
   // check lostdigits not raised if digits=0 [dyadic method]
   try{checkdigits:do{
-   tenlong.add(com.ibm.math.BigDecimal.ZERO,mcld0);
+   tenlong.add(com.ibm.icu.math.BigDecimal.ZERO,mcld0);
    flag=true;
   }while(false);}
   catch (java.lang.ArithmeticException $26){ae=$26;
@@ -1221,7 +1221,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("add204")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ZERO.add(tenlong,mcld0);
+   com.ibm.icu.math.BigDecimal.ZERO.add(tenlong,mcld0);
    flag=true;
   }while(false);}
   catch (java.lang.ArithmeticException $27){ae=$27;
@@ -1241,16 +1241,16 @@ public class DiagBigDecimal{
   // we assume add/subtract test function; this just
   // tests existence, exceptions, and possible results
   
-  (new Test("cpt001")).ok=((new com.ibm.math.BigDecimal("5")).compareTo(new com.ibm.math.BigDecimal("2")))==1;
-  (new Test("cpt002")).ok=((new com.ibm.math.BigDecimal("5")).compareTo(new com.ibm.math.BigDecimal("5")))==0;
-  (new Test("cpt003")).ok=((new com.ibm.math.BigDecimal("5")).compareTo(new com.ibm.math.BigDecimal("5.00")))==0;
-  (new Test("cpt004")).ok=((new com.ibm.math.BigDecimal("0.5")).compareTo(new com.ibm.math.BigDecimal("0.5")))==0;
-  (new Test("cpt005")).ok=((new com.ibm.math.BigDecimal("2")).compareTo(new com.ibm.math.BigDecimal("5")))==(-1);
-  (new Test("cpt006")).ok=((new com.ibm.math.BigDecimal("2")).compareTo(new com.ibm.math.BigDecimal("5"),mcdef))==(-1);
-  (new Test("cpt007")).ok=((new com.ibm.math.BigDecimal("2")).compareTo(new com.ibm.math.BigDecimal("5"),mc6))==(-1);
-  (new Test("cpt008")).ok=((new com.ibm.math.BigDecimal("2")).compareTo(new com.ibm.math.BigDecimal("5"),mcfd))==(-1);
+  (new Test("cpt001")).ok=((new com.ibm.icu.math.BigDecimal("5")).compareTo(new com.ibm.icu.math.BigDecimal("2")))==1;
+  (new Test("cpt002")).ok=((new com.ibm.icu.math.BigDecimal("5")).compareTo(new com.ibm.icu.math.BigDecimal("5")))==0;
+  (new Test("cpt003")).ok=((new com.ibm.icu.math.BigDecimal("5")).compareTo(new com.ibm.icu.math.BigDecimal("5.00")))==0;
+  (new Test("cpt004")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).compareTo(new com.ibm.icu.math.BigDecimal("0.5")))==0;
+  (new Test("cpt005")).ok=((new com.ibm.icu.math.BigDecimal("2")).compareTo(new com.ibm.icu.math.BigDecimal("5")))==(-1);
+  (new Test("cpt006")).ok=((new com.ibm.icu.math.BigDecimal("2")).compareTo(new com.ibm.icu.math.BigDecimal("5"),mcdef))==(-1);
+  (new Test("cpt007")).ok=((new com.ibm.icu.math.BigDecimal("2")).compareTo(new com.ibm.icu.math.BigDecimal("5"),mc6))==(-1);
+  (new Test("cpt008")).ok=((new com.ibm.icu.math.BigDecimal("2")).compareTo(new com.ibm.icu.math.BigDecimal("5"),mcfd))==(-1);
   try{checknull:do{
-   ten.compareTo((com.ibm.math.BigDecimal)null);
+   ten.compareTo((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $28){
@@ -1258,7 +1258,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("cpt100")).ok=flag;
   try{checknull2:do{
-   ten.compareTo(ten,(com.ibm.math.MathContext)null);
+   ten.compareTo(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $29){
@@ -1267,7 +1267,7 @@ public class DiagBigDecimal{
   (new Test("cpt101")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.compareTo(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.compareTo(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $30){ae=$30;
@@ -1275,7 +1275,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("cpt102")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.compareTo(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.compareTo(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $31){ae=$31;
@@ -1292,230 +1292,230 @@ public class DiagBigDecimal{
  
  public void diagdivide(){
   boolean flag=false;
-  com.ibm.math.MathContext rmcd;
+  com.ibm.icu.math.MathContext rmcd;
   int rhu;
   int rd;
   int ru;
   java.lang.RuntimeException e=null;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("div301")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("0.333333333");
-  (new Test("div302")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("0.666666667");
-  (new Test("div303")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
-  (new Test("div304")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("-1"),mcdef).toString()).equals("-2.4");
-  (new Test("div305")).ok=((new com.ibm.math.BigDecimal("-2.4")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("-2.4");
-  (new Test("div306")).ok=((new com.ibm.math.BigDecimal("-2.4")).divide(new com.ibm.math.BigDecimal("-1"),mcdef).toString()).equals("2.4");
-  (new Test("div307")).ok=((new com.ibm.math.BigDecimal("2.40")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
-  (new Test("div308")).ok=((new com.ibm.math.BigDecimal("2.400")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
-  (new Test("div309")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1.2");
-  (new Test("div310")).ok=((new com.ibm.math.BigDecimal("2.400")).divide(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1.2");
-  (new Test("div311")).ok=((new com.ibm.math.BigDecimal("2.")).divide(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1");
-  (new Test("div312")).ok=((new com.ibm.math.BigDecimal("20")).divide(new com.ibm.math.BigDecimal("20"),mcdef).toString()).equals("1");
-  (new Test("div313")).ok=((new com.ibm.math.BigDecimal("187")).divide(new com.ibm.math.BigDecimal("187"),mcdef).toString()).equals("1");
-  (new Test("div314")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("2.5");
-  (new Test("div315")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2.0"),mcdef).toString()).equals("2.5");
-  (new Test("div316")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2.000"),mcdef).toString()).equals("2.5");
-  (new Test("div317")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("0.200"),mcdef).toString()).equals("25");
-  (new Test("div318")).ok=((new com.ibm.math.BigDecimal("999999999")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
-  (new Test("div319")).ok=((new com.ibm.math.BigDecimal("999999999.4")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
-  (new Test("div320")).ok=((new com.ibm.math.BigDecimal("999999999.5")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
-  (new Test("div321")).ok=((new com.ibm.math.BigDecimal("999999999.9")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
-  (new Test("div322")).ok=((new com.ibm.math.BigDecimal("999999999.999")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
-  (new Test("div323")).ok=((new com.ibm.math.BigDecimal("0.0000E-50")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("0");
+  (new Test("div301")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("0.333333333");
+  (new Test("div302")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("0.666666667");
+  (new Test("div303")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
+  (new Test("div304")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("-1"),mcdef).toString()).equals("-2.4");
+  (new Test("div305")).ok=((new com.ibm.icu.math.BigDecimal("-2.4")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("-2.4");
+  (new Test("div306")).ok=((new com.ibm.icu.math.BigDecimal("-2.4")).divide(new com.ibm.icu.math.BigDecimal("-1"),mcdef).toString()).equals("2.4");
+  (new Test("div307")).ok=((new com.ibm.icu.math.BigDecimal("2.40")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
+  (new Test("div308")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("2.4");
+  (new Test("div309")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1.2");
+  (new Test("div310")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divide(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1.2");
+  (new Test("div311")).ok=((new com.ibm.icu.math.BigDecimal("2.")).divide(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1");
+  (new Test("div312")).ok=((new com.ibm.icu.math.BigDecimal("20")).divide(new com.ibm.icu.math.BigDecimal("20"),mcdef).toString()).equals("1");
+  (new Test("div313")).ok=((new com.ibm.icu.math.BigDecimal("187")).divide(new com.ibm.icu.math.BigDecimal("187"),mcdef).toString()).equals("1");
+  (new Test("div314")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("2.5");
+  (new Test("div315")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2.0"),mcdef).toString()).equals("2.5");
+  (new Test("div316")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2.000"),mcdef).toString()).equals("2.5");
+  (new Test("div317")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("0.200"),mcdef).toString()).equals("25");
+  (new Test("div318")).ok=((new com.ibm.icu.math.BigDecimal("999999999")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
+  (new Test("div319")).ok=((new com.ibm.icu.math.BigDecimal("999999999.4")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
+  (new Test("div320")).ok=((new com.ibm.icu.math.BigDecimal("999999999.5")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
+  (new Test("div321")).ok=((new com.ibm.icu.math.BigDecimal("999999999.9")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
+  (new Test("div322")).ok=((new com.ibm.icu.math.BigDecimal("999999999.999")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("1E+9");
+  (new Test("div323")).ok=((new com.ibm.icu.math.BigDecimal("0.0000E-50")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("0");
   // MC
-  (new Test("div325")).ok=((new com.ibm.math.BigDecimal("999999999")).divide(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
-  (new Test("div326")).ok=((new com.ibm.math.BigDecimal("999999999")).divide(new com.ibm.math.BigDecimal("1"),mc6).toString()).equals("1E+9");
-  (new Test("div327")).ok=((new com.ibm.math.BigDecimal("9999999")).divide(new com.ibm.math.BigDecimal("1"),mc6).toString()).equals("1E+7");
-  (new Test("div328")).ok=((new com.ibm.math.BigDecimal("999999")).divide(new com.ibm.math.BigDecimal("1"),mc6).toString()).equals("999999");
+  (new Test("div325")).ok=((new com.ibm.icu.math.BigDecimal("999999999")).divide(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("999999999");
+  (new Test("div326")).ok=((new com.ibm.icu.math.BigDecimal("999999999")).divide(new com.ibm.icu.math.BigDecimal("1"),mc6).toString()).equals("1E+9");
+  (new Test("div327")).ok=((new com.ibm.icu.math.BigDecimal("9999999")).divide(new com.ibm.icu.math.BigDecimal("1"),mc6).toString()).equals("1E+7");
+  (new Test("div328")).ok=((new com.ibm.icu.math.BigDecimal("999999")).divide(new com.ibm.icu.math.BigDecimal("1"),mc6).toString()).equals("999999");
   
   // check rounding explicitly [note: digits+1 truncation]
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_CEILING);
-  (new Test("div330")).ok=((new com.ibm.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div331")).ok=((new com.ibm.math.BigDecimal("1.51")).divide(one,rmcd).toString()).equals("1.6");
-  (new Test("div332")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_DOWN);
-  (new Test("div333")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div334")).ok=((new com.ibm.math.BigDecimal("1.59")).divide(one,rmcd).toString()).equals("1.5");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_FLOOR);
-  (new Test("div335")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div336")).ok=((new com.ibm.math.BigDecimal("1.59")).divide(one,rmcd).toString()).equals("1.5");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_HALF_DOWN);
-  (new Test("div337")).ok=((new com.ibm.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.4");
-  (new Test("div338")).ok=((new com.ibm.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div339")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_HALF_EVEN);
-  (new Test("div340")).ok=((new com.ibm.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.4");
-  (new Test("div341")).ok=((new com.ibm.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div342")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_HALF_UP);
-  (new Test("div343")).ok=((new com.ibm.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div344")).ok=((new com.ibm.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div345")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
-  rmcd=new com.ibm.math.MathContext(2,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_UP);
-  (new Test("div346")).ok=((new com.ibm.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
-  (new Test("div347")).ok=((new com.ibm.math.BigDecimal("1.51")).divide(one,rmcd).toString()).equals("1.6");
-  (new Test("div348")).ok=((new com.ibm.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_CEILING);
+  (new Test("div330")).ok=((new com.ibm.icu.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div331")).ok=((new com.ibm.icu.math.BigDecimal("1.51")).divide(one,rmcd).toString()).equals("1.6");
+  (new Test("div332")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_DOWN);
+  (new Test("div333")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div334")).ok=((new com.ibm.icu.math.BigDecimal("1.59")).divide(one,rmcd).toString()).equals("1.5");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_FLOOR);
+  (new Test("div335")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div336")).ok=((new com.ibm.icu.math.BigDecimal("1.59")).divide(one,rmcd).toString()).equals("1.5");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN);
+  (new Test("div337")).ok=((new com.ibm.icu.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.4");
+  (new Test("div338")).ok=((new com.ibm.icu.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div339")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.5");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN);
+  (new Test("div340")).ok=((new com.ibm.icu.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.4");
+  (new Test("div341")).ok=((new com.ibm.icu.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div342")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_HALF_UP);
+  (new Test("div343")).ok=((new com.ibm.icu.math.BigDecimal("1.45")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div344")).ok=((new com.ibm.icu.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div345")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
+  rmcd=new com.ibm.icu.math.MathContext(2,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_UP);
+  (new Test("div346")).ok=((new com.ibm.icu.math.BigDecimal("1.50")).divide(one,rmcd).toString()).equals("1.5");
+  (new Test("div347")).ok=((new com.ibm.icu.math.BigDecimal("1.51")).divide(one,rmcd).toString()).equals("1.6");
+  (new Test("div348")).ok=((new com.ibm.icu.math.BigDecimal("1.55")).divide(one,rmcd).toString()).equals("1.6");
   
   // fixed point...
-  (new Test("div350")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3")).toString()).equals("0");
-  (new Test("div351")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3")).toString()).equals("1");
-  (new Test("div352")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("2.4");
-  (new Test("div353")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("-1")).toString()).equals("-2.4");
-  (new Test("div354")).ok=((new com.ibm.math.BigDecimal("-2.4")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("-2.4");
-  (new Test("div355")).ok=((new com.ibm.math.BigDecimal("-2.4")).divide(new com.ibm.math.BigDecimal("-1")).toString()).equals("2.4");
-  (new Test("div356")).ok=((new com.ibm.math.BigDecimal("2.40")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("2.40");
-  (new Test("div357")).ok=((new com.ibm.math.BigDecimal("2.400")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("2.400");
-  (new Test("div358")).ok=((new com.ibm.math.BigDecimal("2.4")).divide(new com.ibm.math.BigDecimal("2")).toString()).equals("1.2");
-  (new Test("div359")).ok=((new com.ibm.math.BigDecimal("2.400")).divide(new com.ibm.math.BigDecimal("2")).toString()).equals("1.200");
-  (new Test("div360")).ok=((new com.ibm.math.BigDecimal("2.")).divide(new com.ibm.math.BigDecimal("2")).toString()).equals("1");
-  (new Test("div361")).ok=((new com.ibm.math.BigDecimal("20")).divide(new com.ibm.math.BigDecimal("20")).toString()).equals("1");
-  (new Test("div362")).ok=((new com.ibm.math.BigDecimal("187")).divide(new com.ibm.math.BigDecimal("187")).toString()).equals("1");
-  (new Test("div363")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2")).toString()).equals("3");
-  (new Test("div364")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2.0")).toString()).equals("3");
-  (new Test("div365")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("2.000")).toString()).equals("3");
-  (new Test("div366")).ok=((new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("0.200")).toString()).equals("25");
-  (new Test("div367")).ok=((new com.ibm.math.BigDecimal("5.0")).divide(new com.ibm.math.BigDecimal("2")).toString()).equals("2.5");
-  (new Test("div368")).ok=((new com.ibm.math.BigDecimal("5.0")).divide(new com.ibm.math.BigDecimal("2.0")).toString()).equals("2.5");
-  (new Test("div369")).ok=((new com.ibm.math.BigDecimal("5.0")).divide(new com.ibm.math.BigDecimal("2.000")).toString()).equals("2.5");
-  (new Test("div370")).ok=((new com.ibm.math.BigDecimal("5.0")).divide(new com.ibm.math.BigDecimal("0.200")).toString()).equals("25.0");
-  (new Test("div371")).ok=((new com.ibm.math.BigDecimal("999999999")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("999999999");
-  (new Test("div372")).ok=((new com.ibm.math.BigDecimal("999999999.4")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("999999999.4");
-  (new Test("div373")).ok=((new com.ibm.math.BigDecimal("999999999.5")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("999999999.5");
-  (new Test("div374")).ok=((new com.ibm.math.BigDecimal("999999999.9")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("999999999.9");
-  (new Test("div375")).ok=((new com.ibm.math.BigDecimal("999999999.999")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("999999999.999");
-  (new Test("div376")).ok=((new com.ibm.math.BigDecimal("0.0000E-5")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("0");
-  (new Test("div377")).ok=((new com.ibm.math.BigDecimal("0.000000000")).divide(new com.ibm.math.BigDecimal("1")).toString()).equals("0.000000000");
+  (new Test("div350")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("0");
+  (new Test("div351")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("1");
+  (new Test("div352")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("2.4");
+  (new Test("div353")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("-1")).toString()).equals("-2.4");
+  (new Test("div354")).ok=((new com.ibm.icu.math.BigDecimal("-2.4")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("-2.4");
+  (new Test("div355")).ok=((new com.ibm.icu.math.BigDecimal("-2.4")).divide(new com.ibm.icu.math.BigDecimal("-1")).toString()).equals("2.4");
+  (new Test("div356")).ok=((new com.ibm.icu.math.BigDecimal("2.40")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("2.40");
+  (new Test("div357")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("2.400");
+  (new Test("div358")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divide(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1.2");
+  (new Test("div359")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divide(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1.200");
+  (new Test("div360")).ok=((new com.ibm.icu.math.BigDecimal("2.")).divide(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1");
+  (new Test("div361")).ok=((new com.ibm.icu.math.BigDecimal("20")).divide(new com.ibm.icu.math.BigDecimal("20")).toString()).equals("1");
+  (new Test("div362")).ok=((new com.ibm.icu.math.BigDecimal("187")).divide(new com.ibm.icu.math.BigDecimal("187")).toString()).equals("1");
+  (new Test("div363")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("3");
+  (new Test("div364")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2.0")).toString()).equals("3");
+  (new Test("div365")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("2.000")).toString()).equals("3");
+  (new Test("div366")).ok=((new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("0.200")).toString()).equals("25");
+  (new Test("div367")).ok=((new com.ibm.icu.math.BigDecimal("5.0")).divide(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("2.5");
+  (new Test("div368")).ok=((new com.ibm.icu.math.BigDecimal("5.0")).divide(new com.ibm.icu.math.BigDecimal("2.0")).toString()).equals("2.5");
+  (new Test("div369")).ok=((new com.ibm.icu.math.BigDecimal("5.0")).divide(new com.ibm.icu.math.BigDecimal("2.000")).toString()).equals("2.5");
+  (new Test("div370")).ok=((new com.ibm.icu.math.BigDecimal("5.0")).divide(new com.ibm.icu.math.BigDecimal("0.200")).toString()).equals("25.0");
+  (new Test("div371")).ok=((new com.ibm.icu.math.BigDecimal("999999999")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("999999999");
+  (new Test("div372")).ok=((new com.ibm.icu.math.BigDecimal("999999999.4")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("999999999.4");
+  (new Test("div373")).ok=((new com.ibm.icu.math.BigDecimal("999999999.5")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("999999999.5");
+  (new Test("div374")).ok=((new com.ibm.icu.math.BigDecimal("999999999.9")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("999999999.9");
+  (new Test("div375")).ok=((new com.ibm.icu.math.BigDecimal("999999999.999")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("999999999.999");
+  (new Test("div376")).ok=((new com.ibm.icu.math.BigDecimal("0.0000E-5")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("0");
+  (new Test("div377")).ok=((new com.ibm.icu.math.BigDecimal("0.000000000")).divide(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("0.000000000");
   
   //- Fixed point; explicit scales & rounds [old BigDecimal divides]
-  rhu=com.ibm.math.MathContext.ROUND_HALF_UP;
-  rd=com.ibm.math.MathContext.ROUND_DOWN;
-  (new Test("div001")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3")).toString()).equals("0");
-  (new Test("div002")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),rhu).toString()).equals("0");
-  (new Test("div003")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),0,rhu).toString()).equals("0");
-  (new Test("div004")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),1,rhu).toString()).equals("0.0");
-  (new Test("div005")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),2,rhu).toString()).equals("0.00");
-  (new Test("div006")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),3,rhu).toString()).equals("0.000");
-  (new Test("div007")).ok=((new com.ibm.math.BigDecimal("0")).divide(new com.ibm.math.BigDecimal("3"),4,rhu).toString()).equals("0.0000");
-  (new Test("div008")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3")).toString()).equals("0");
-  (new Test("div009")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),rhu).toString()).equals("0");
-  (new Test("div010")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),0,rhu).toString()).equals("0");
-  (new Test("div011")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),1,rhu).toString()).equals("0.3");
-  (new Test("div012")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),2,rhu).toString()).equals("0.33");
-  (new Test("div013")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),3,rhu).toString()).equals("0.333");
-  (new Test("div014")).ok=((new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),4,rhu).toString()).equals("0.3333");
-  (new Test("div015")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3")).toString()).equals("1");
-  (new Test("div016")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),rhu).toString()).equals("1");
-  (new Test("div017")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),0,rhu).toString()).equals("1");
-  (new Test("div018")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),1,rhu).toString()).equals("0.7");
-  (new Test("div019")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),2,rhu).toString()).equals("0.67");
-  (new Test("div020")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),3,rhu).toString()).equals("0.667");
-  (new Test("div021")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),4,rhu).toString()).equals("0.6667");
+  rhu=com.ibm.icu.math.MathContext.ROUND_HALF_UP;
+  rd=com.ibm.icu.math.MathContext.ROUND_DOWN;
+  (new Test("div001")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("0");
+  (new Test("div002")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),rhu).toString()).equals("0");
+  (new Test("div003")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),0,rhu).toString()).equals("0");
+  (new Test("div004")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),1,rhu).toString()).equals("0.0");
+  (new Test("div005")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),2,rhu).toString()).equals("0.00");
+  (new Test("div006")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),3,rhu).toString()).equals("0.000");
+  (new Test("div007")).ok=((new com.ibm.icu.math.BigDecimal("0")).divide(new com.ibm.icu.math.BigDecimal("3"),4,rhu).toString()).equals("0.0000");
+  (new Test("div008")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("0");
+  (new Test("div009")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),rhu).toString()).equals("0");
+  (new Test("div010")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),0,rhu).toString()).equals("0");
+  (new Test("div011")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),1,rhu).toString()).equals("0.3");
+  (new Test("div012")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),2,rhu).toString()).equals("0.33");
+  (new Test("div013")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),3,rhu).toString()).equals("0.333");
+  (new Test("div014")).ok=((new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),4,rhu).toString()).equals("0.3333");
+  (new Test("div015")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("1");
+  (new Test("div016")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),rhu).toString()).equals("1");
+  (new Test("div017")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),0,rhu).toString()).equals("1");
+  (new Test("div018")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),1,rhu).toString()).equals("0.7");
+  (new Test("div019")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),2,rhu).toString()).equals("0.67");
+  (new Test("div020")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),3,rhu).toString()).equals("0.667");
+  (new Test("div021")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),4,rhu).toString()).equals("0.6667");
   
-  (new Test("div030")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("2000"),4,rhu).toString()).equals("0.5000");
-  (new Test("div031")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("2000"),3,rhu).toString()).equals("0.500");
-  (new Test("div032")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("2000"),2,rhu).toString()).equals("0.50");
-  (new Test("div033")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("2000"),1,rhu).toString()).equals("0.5");
-  (new Test("div034")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("2000"),0,rhu).toString()).equals("1");
+  (new Test("div030")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("2000"),4,rhu).toString()).equals("0.5000");
+  (new Test("div031")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("2000"),3,rhu).toString()).equals("0.500");
+  (new Test("div032")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("2000"),2,rhu).toString()).equals("0.50");
+  (new Test("div033")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("2000"),1,rhu).toString()).equals("0.5");
+  (new Test("div034")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("2000"),0,rhu).toString()).equals("1");
   
-  (new Test("div035")).ok=((new com.ibm.math.BigDecimal("100")).divide(new com.ibm.math.BigDecimal("5000"),4,rhu).toString()).equals("0.0200");
-  (new Test("div036")).ok=((new com.ibm.math.BigDecimal("100")).divide(new com.ibm.math.BigDecimal("5000"),3,rhu).toString()).equals("0.020");
-  (new Test("div037")).ok=((new com.ibm.math.BigDecimal("100")).divide(new com.ibm.math.BigDecimal("5000"),2,rhu).toString()).equals("0.02");
-  (new Test("div038")).ok=((new com.ibm.math.BigDecimal("100")).divide(new com.ibm.math.BigDecimal("5000"),1,rhu).toString()).equals("0.0");
-  (new Test("div039")).ok=((new com.ibm.math.BigDecimal("100")).divide(new com.ibm.math.BigDecimal("5000"),0,rhu).toString()).equals("0");
+  (new Test("div035")).ok=((new com.ibm.icu.math.BigDecimal("100")).divide(new com.ibm.icu.math.BigDecimal("5000"),4,rhu).toString()).equals("0.0200");
+  (new Test("div036")).ok=((new com.ibm.icu.math.BigDecimal("100")).divide(new com.ibm.icu.math.BigDecimal("5000"),3,rhu).toString()).equals("0.020");
+  (new Test("div037")).ok=((new com.ibm.icu.math.BigDecimal("100")).divide(new com.ibm.icu.math.BigDecimal("5000"),2,rhu).toString()).equals("0.02");
+  (new Test("div038")).ok=((new com.ibm.icu.math.BigDecimal("100")).divide(new com.ibm.icu.math.BigDecimal("5000"),1,rhu).toString()).equals("0.0");
+  (new Test("div039")).ok=((new com.ibm.icu.math.BigDecimal("100")).divide(new com.ibm.icu.math.BigDecimal("5000"),0,rhu).toString()).equals("0");
   
-  (new Test("div040")).ok=((new com.ibm.math.BigDecimal("9.99999999")).divide(new com.ibm.math.BigDecimal("9.77777777"),4,rhu).toString()).equals("1.0227");
-  (new Test("div041")).ok=((new com.ibm.math.BigDecimal("9.9999999")).divide(new com.ibm.math.BigDecimal("9.7777777"),4,rhu).toString()).equals("1.0227");
-  (new Test("div042")).ok=((new com.ibm.math.BigDecimal("9.999999")).divide(new com.ibm.math.BigDecimal("9.777777"),4,rhu).toString()).equals("1.0227");
-  (new Test("div043")).ok=((new com.ibm.math.BigDecimal("9.77777777")).divide(new com.ibm.math.BigDecimal("9.99999999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div044")).ok=((new com.ibm.math.BigDecimal("9.7777777")).divide(new com.ibm.math.BigDecimal("9.9999999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div045")).ok=((new com.ibm.math.BigDecimal("9.777777")).divide(new com.ibm.math.BigDecimal("9.999999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div046")).ok=((new com.ibm.math.BigDecimal("9.77777")).divide(new com.ibm.math.BigDecimal("9.99999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div047")).ok=((new com.ibm.math.BigDecimal("9.7777")).divide(new com.ibm.math.BigDecimal("9.9999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div048")).ok=((new com.ibm.math.BigDecimal("9.777")).divide(new com.ibm.math.BigDecimal("9.999"),4,rhu).toString()).equals("0.9778");
-  (new Test("div049")).ok=((new com.ibm.math.BigDecimal("9.77")).divide(new com.ibm.math.BigDecimal("9.99"),4,rhu).toString()).equals("0.9780");
-  (new Test("div050")).ok=((new com.ibm.math.BigDecimal("9.7")).divide(new com.ibm.math.BigDecimal("9.9"),4,rhu).toString()).equals("0.9798");
-  (new Test("div051")).ok=((new com.ibm.math.BigDecimal("9.")).divide(new com.ibm.math.BigDecimal("9."),4,rhu).toString()).equals("1.0000");
+  (new Test("div040")).ok=((new com.ibm.icu.math.BigDecimal("9.99999999")).divide(new com.ibm.icu.math.BigDecimal("9.77777777"),4,rhu).toString()).equals("1.0227");
+  (new Test("div041")).ok=((new com.ibm.icu.math.BigDecimal("9.9999999")).divide(new com.ibm.icu.math.BigDecimal("9.7777777"),4,rhu).toString()).equals("1.0227");
+  (new Test("div042")).ok=((new com.ibm.icu.math.BigDecimal("9.999999")).divide(new com.ibm.icu.math.BigDecimal("9.777777"),4,rhu).toString()).equals("1.0227");
+  (new Test("div043")).ok=((new com.ibm.icu.math.BigDecimal("9.77777777")).divide(new com.ibm.icu.math.BigDecimal("9.99999999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div044")).ok=((new com.ibm.icu.math.BigDecimal("9.7777777")).divide(new com.ibm.icu.math.BigDecimal("9.9999999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div045")).ok=((new com.ibm.icu.math.BigDecimal("9.777777")).divide(new com.ibm.icu.math.BigDecimal("9.999999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div046")).ok=((new com.ibm.icu.math.BigDecimal("9.77777")).divide(new com.ibm.icu.math.BigDecimal("9.99999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div047")).ok=((new com.ibm.icu.math.BigDecimal("9.7777")).divide(new com.ibm.icu.math.BigDecimal("9.9999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div048")).ok=((new com.ibm.icu.math.BigDecimal("9.777")).divide(new com.ibm.icu.math.BigDecimal("9.999"),4,rhu).toString()).equals("0.9778");
+  (new Test("div049")).ok=((new com.ibm.icu.math.BigDecimal("9.77")).divide(new com.ibm.icu.math.BigDecimal("9.99"),4,rhu).toString()).equals("0.9780");
+  (new Test("div050")).ok=((new com.ibm.icu.math.BigDecimal("9.7")).divide(new com.ibm.icu.math.BigDecimal("9.9"),4,rhu).toString()).equals("0.9798");
+  (new Test("div051")).ok=((new com.ibm.icu.math.BigDecimal("9.")).divide(new com.ibm.icu.math.BigDecimal("9."),4,rhu).toString()).equals("1.0000");
   
-  (new Test("div060")).ok=((new com.ibm.math.BigDecimal("9.99999999")).divide(new com.ibm.math.BigDecimal("9.77777777"),rhu).toString()).equals("1.02272727");
-  (new Test("div061")).ok=((new com.ibm.math.BigDecimal("9.9999999")).divide(new com.ibm.math.BigDecimal("9.7777777"),rhu).toString()).equals("1.0227273");
-  (new Test("div062")).ok=((new com.ibm.math.BigDecimal("9.999999")).divide(new com.ibm.math.BigDecimal("9.777777"),rhu).toString()).equals("1.022727");
-  (new Test("div063")).ok=((new com.ibm.math.BigDecimal("9.77777777")).divide(new com.ibm.math.BigDecimal("9.99999999"),rhu).toString()).equals("0.97777778");
-  (new Test("div064")).ok=((new com.ibm.math.BigDecimal("9.7777777")).divide(new com.ibm.math.BigDecimal("9.9999999"),rhu).toString()).equals("0.9777778");
-  (new Test("div065")).ok=((new com.ibm.math.BigDecimal("9.777777")).divide(new com.ibm.math.BigDecimal("9.999999"),rhu).toString()).equals("0.977778");
-  (new Test("div066")).ok=((new com.ibm.math.BigDecimal("9.77777")).divide(new com.ibm.math.BigDecimal("9.99999"),rhu).toString()).equals("0.97778");
-  (new Test("div067")).ok=((new com.ibm.math.BigDecimal("9.7777")).divide(new com.ibm.math.BigDecimal("9.9999"),rhu).toString()).equals("0.9778");
-  (new Test("div068")).ok=((new com.ibm.math.BigDecimal("9.777")).divide(new com.ibm.math.BigDecimal("9.999"),rhu).toString()).equals("0.978");
-  (new Test("div069")).ok=((new com.ibm.math.BigDecimal("9.77")).divide(new com.ibm.math.BigDecimal("9.99"),rhu).toString()).equals("0.98");
-  (new Test("div070")).ok=((new com.ibm.math.BigDecimal("9.7")).divide(new com.ibm.math.BigDecimal("9.9"),rhu).toString()).equals("1.0");
-  (new Test("div071")).ok=((new com.ibm.math.BigDecimal("9.")).divide(new com.ibm.math.BigDecimal("9."),rhu).toString()).equals("1");
+  (new Test("div060")).ok=((new com.ibm.icu.math.BigDecimal("9.99999999")).divide(new com.ibm.icu.math.BigDecimal("9.77777777"),rhu).toString()).equals("1.02272727");
+  (new Test("div061")).ok=((new com.ibm.icu.math.BigDecimal("9.9999999")).divide(new com.ibm.icu.math.BigDecimal("9.7777777"),rhu).toString()).equals("1.0227273");
+  (new Test("div062")).ok=((new com.ibm.icu.math.BigDecimal("9.999999")).divide(new com.ibm.icu.math.BigDecimal("9.777777"),rhu).toString()).equals("1.022727");
+  (new Test("div063")).ok=((new com.ibm.icu.math.BigDecimal("9.77777777")).divide(new com.ibm.icu.math.BigDecimal("9.99999999"),rhu).toString()).equals("0.97777778");
+  (new Test("div064")).ok=((new com.ibm.icu.math.BigDecimal("9.7777777")).divide(new com.ibm.icu.math.BigDecimal("9.9999999"),rhu).toString()).equals("0.9777778");
+  (new Test("div065")).ok=((new com.ibm.icu.math.BigDecimal("9.777777")).divide(new com.ibm.icu.math.BigDecimal("9.999999"),rhu).toString()).equals("0.977778");
+  (new Test("div066")).ok=((new com.ibm.icu.math.BigDecimal("9.77777")).divide(new com.ibm.icu.math.BigDecimal("9.99999"),rhu).toString()).equals("0.97778");
+  (new Test("div067")).ok=((new com.ibm.icu.math.BigDecimal("9.7777")).divide(new com.ibm.icu.math.BigDecimal("9.9999"),rhu).toString()).equals("0.9778");
+  (new Test("div068")).ok=((new com.ibm.icu.math.BigDecimal("9.777")).divide(new com.ibm.icu.math.BigDecimal("9.999"),rhu).toString()).equals("0.978");
+  (new Test("div069")).ok=((new com.ibm.icu.math.BigDecimal("9.77")).divide(new com.ibm.icu.math.BigDecimal("9.99"),rhu).toString()).equals("0.98");
+  (new Test("div070")).ok=((new com.ibm.icu.math.BigDecimal("9.7")).divide(new com.ibm.icu.math.BigDecimal("9.9"),rhu).toString()).equals("1.0");
+  (new Test("div071")).ok=((new com.ibm.icu.math.BigDecimal("9.")).divide(new com.ibm.icu.math.BigDecimal("9."),rhu).toString()).equals("1");
   
-  rd=com.ibm.math.MathContext.ROUND_DOWN; // test this is actually being used
-  (new Test("div080")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),0,rd).toString()).equals("0");
-  (new Test("div081")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),1,rd).toString()).equals("0.6");
-  (new Test("div082")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),2,rd).toString()).equals("0.66");
-  (new Test("div083")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),3,rd).toString()).equals("0.666");
-  (new Test("div084")).ok=((new com.ibm.math.BigDecimal("2")).divide(new com.ibm.math.BigDecimal("3"),4,rd).toString()).equals("0.6666");
+  rd=com.ibm.icu.math.MathContext.ROUND_DOWN; // test this is actually being used
+  (new Test("div080")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),0,rd).toString()).equals("0");
+  (new Test("div081")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),1,rd).toString()).equals("0.6");
+  (new Test("div082")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),2,rd).toString()).equals("0.66");
+  (new Test("div083")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),3,rd).toString()).equals("0.666");
+  (new Test("div084")).ok=((new com.ibm.icu.math.BigDecimal("2")).divide(new com.ibm.icu.math.BigDecimal("3"),4,rd).toString()).equals("0.6666");
   
-  ru=com.ibm.math.MathContext.ROUND_UNNECESSARY; // check for some 0 residues
-  (new Test("div090")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5"),4,ru).toString()).equals("200.0000");
-  (new Test("div091")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("50"),4,ru).toString()).equals("20.0000");
-  (new Test("div092")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("500"),4,ru).toString()).equals("2.0000");
-  (new Test("div093")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5000"),4,ru).toString()).equals("0.2000");
-  (new Test("div094")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5000"),3,ru).toString()).equals("0.200");
-  (new Test("div095")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5000"),2,ru).toString()).equals("0.20");
-  (new Test("div096")).ok=((new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5000"),1,ru).toString()).equals("0.2");
+  ru=com.ibm.icu.math.MathContext.ROUND_UNNECESSARY; // check for some 0 residues
+  (new Test("div090")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5"),4,ru).toString()).equals("200.0000");
+  (new Test("div091")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("50"),4,ru).toString()).equals("20.0000");
+  (new Test("div092")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("500"),4,ru).toString()).equals("2.0000");
+  (new Test("div093")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5000"),4,ru).toString()).equals("0.2000");
+  (new Test("div094")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5000"),3,ru).toString()).equals("0.200");
+  (new Test("div095")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5000"),2,ru).toString()).equals("0.20");
+  (new Test("div096")).ok=((new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5000"),1,ru).toString()).equals("0.2");
   
   // check rounding explicitly
-  (new Test("div101")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("0.06");
-  (new Test("div102")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("0.1");
-  (new Test("div103")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("1");
-  (new Test("div104")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0.05");
-  (new Test("div105")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0.0");
-  (new Test("div106")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0");
-  (new Test("div107")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0.05");
-  (new Test("div108")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0.0");
-  (new Test("div109")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0");
+  (new Test("div101")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("0.06");
+  (new Test("div102")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("0.1");
+  (new Test("div103")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("1");
+  (new Test("div104")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0.05");
+  (new Test("div105")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0.0");
+  (new Test("div106")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0");
+  (new Test("div107")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0.05");
+  (new Test("div108")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0.0");
+  (new Test("div109")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0");
   
-  (new Test("div110")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.04");
-  (new Test("div111")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
-  (new Test("div112")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
-  (new Test("div113")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.05");
-  (new Test("div114")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
-  (new Test("div115")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
-  (new Test("div116")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.05");
-  (new Test("div117")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.1");
-  (new Test("div118")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
+  (new Test("div110")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.04");
+  (new Test("div111")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
+  (new Test("div112")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
+  (new Test("div113")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.05");
+  (new Test("div114")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
+  (new Test("div115")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
+  (new Test("div116")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.05");
+  (new Test("div117")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.1");
+  (new Test("div118")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
   
-  (new Test("div120")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.04");
-  (new Test("div121")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
-  (new Test("div122")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
-  (new Test("div123")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.05");
-  (new Test("div124")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
-  (new Test("div125")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
-  (new Test("div126")).ok=((new com.ibm.math.BigDecimal("0.150")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.15");
-  (new Test("div127")).ok=((new com.ibm.math.BigDecimal("0.150")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.2");
-  (new Test("div128")).ok=((new com.ibm.math.BigDecimal("0.150")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
-  (new Test("div129")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.06");
-  (new Test("div130")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.1");
-  (new Test("div131")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("div120")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.04");
+  (new Test("div121")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
+  (new Test("div122")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("div123")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.05");
+  (new Test("div124")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
+  (new Test("div125")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("div126")).ok=((new com.ibm.icu.math.BigDecimal("0.150")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.15");
+  (new Test("div127")).ok=((new com.ibm.icu.math.BigDecimal("0.150")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.2");
+  (new Test("div128")).ok=((new com.ibm.icu.math.BigDecimal("0.150")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("div129")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.06");
+  (new Test("div130")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.1");
+  (new Test("div131")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
   
-  (new Test("div140")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.05");
-  (new Test("div141")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
-  (new Test("div142")).ok=((new com.ibm.math.BigDecimal("0.045")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
-  (new Test("div143")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.05");
-  (new Test("div144")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
-  (new Test("div145")).ok=((new com.ibm.math.BigDecimal("0.050")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
-  (new Test("div146")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.06");
-  (new Test("div147")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
-  (new Test("div148")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("div140")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.05");
+  (new Test("div141")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
+  (new Test("div142")).ok=((new com.ibm.icu.math.BigDecimal("0.045")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("div143")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.05");
+  (new Test("div144")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
+  (new Test("div145")).ok=((new com.ibm.icu.math.BigDecimal("0.050")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("div146")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.06");
+  (new Test("div147")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
+  (new Test("div148")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
   
-  (new Test("div150")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,2,com.ibm.math.MathContext.ROUND_UP).toString()).equals("0.06");
-  (new Test("div151")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,1,com.ibm.math.MathContext.ROUND_UP).toString()).equals("0.1");
-  (new Test("div52.")).ok=((new com.ibm.math.BigDecimal("0.055")).divide(one,0,com.ibm.math.MathContext.ROUND_UP).toString()).equals("1");
+  (new Test("div150")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,2,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("0.06");
+  (new Test("div151")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,1,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("0.1");
+  (new Test("div52.")).ok=((new com.ibm.icu.math.BigDecimal("0.055")).divide(one,0,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("1");
   
   //- error conditions ---
   try{checknull:do{
-   ten.divide((com.ibm.math.BigDecimal)null);
+   ten.divide((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $32){
@@ -1523,7 +1523,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("div201")).ok=flag;
   try{checknull2:do{
-   ten.divide(ten,(com.ibm.math.MathContext)null);
+   ten.divide(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $33){
@@ -1532,7 +1532,7 @@ public class DiagBigDecimal{
   (new Test("div202")).ok=flag;
   
   try{checkscale:do{
-   (new com.ibm.math.BigDecimal("1")).divide(new com.ibm.math.BigDecimal("3"),-8,0);
+   (new com.ibm.icu.math.BigDecimal("1")).divide(new com.ibm.icu.math.BigDecimal("3"),-8,0);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $34){e=$34;
@@ -1541,7 +1541,7 @@ public class DiagBigDecimal{
   (new Test("div203")).ok=flag;
   
   try{rounn:do{
-   (new com.ibm.math.BigDecimal("1000")).divide(new com.ibm.math.BigDecimal("5000"),0,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   (new com.ibm.icu.math.BigDecimal("1000")).divide(new com.ibm.icu.math.BigDecimal("5000"),0,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $35){ae=$35;
@@ -1549,7 +1549,7 @@ public class DiagBigDecimal{
   }/*rounn*/
   (new Test("div204")).ok=flag;
   try{rounn:do{
-   (new com.ibm.math.BigDecimal("1001")).divide(new com.ibm.math.BigDecimal("10"),0,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   (new com.ibm.icu.math.BigDecimal("1001")).divide(new com.ibm.icu.math.BigDecimal("10"),0,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $36){ae=$36;
@@ -1557,7 +1557,7 @@ public class DiagBigDecimal{
   }/*rounn*/
   (new Test("div205")).ok=flag;
   try{rounn:do{
-   (new com.ibm.math.BigDecimal("1001")).divide(new com.ibm.math.BigDecimal("100"),1,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   (new com.ibm.icu.math.BigDecimal("1001")).divide(new com.ibm.icu.math.BigDecimal("100"),1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $37){ae=$37;
@@ -1565,7 +1565,7 @@ public class DiagBigDecimal{
   }/*rounn*/
   (new Test("div206")).ok=flag;
   try{rounn:do{
-   (new com.ibm.math.BigDecimal("10001")).divide(new com.ibm.math.BigDecimal("10000"),1,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   (new com.ibm.icu.math.BigDecimal("10001")).divide(new com.ibm.icu.math.BigDecimal("10000"),1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $38){ae=$38;
@@ -1573,7 +1573,7 @@ public class DiagBigDecimal{
   }/*rounn*/
   (new Test("div207")).ok=flag;
   try{rounn:do{
-   (new com.ibm.math.BigDecimal("1.0001")).divide(new com.ibm.math.BigDecimal("1"),1,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   (new com.ibm.icu.math.BigDecimal("1.0001")).divide(new com.ibm.icu.math.BigDecimal("1"),1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $39){ae=$39;
@@ -1582,7 +1582,7 @@ public class DiagBigDecimal{
   (new Test("div208")).ok=flag;
   
   try{div0:do{
-   (new com.ibm.math.BigDecimal("5")).divide(new com.ibm.math.BigDecimal("0.00"));
+   (new com.ibm.icu.math.BigDecimal("5")).divide(new com.ibm.icu.math.BigDecimal("0.00"));
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $40){ae=$40;
@@ -1591,7 +1591,7 @@ public class DiagBigDecimal{
   (new Test("div209")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.divide(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.divide(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $41){ae=$41;
@@ -1599,7 +1599,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("div210")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.divide(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.divide(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $42){ae=$42;
@@ -1617,44 +1617,44 @@ public class DiagBigDecimal{
   boolean flag=false;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("dvI001")).ok=((new com.ibm.math.BigDecimal("101.3")).divideInteger(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("101");
-  (new Test("dvI002")).ok=((new com.ibm.math.BigDecimal("101.0")).divideInteger(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("101");
-  (new Test("dvI003")).ok=((new com.ibm.math.BigDecimal("101.3")).divideInteger(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("33");
-  (new Test("dvI004")).ok=((new com.ibm.math.BigDecimal("101.0")).divideInteger(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("33");
-  (new Test("dvI005")).ok=((new com.ibm.math.BigDecimal("2.4")).divideInteger(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("2");
-  (new Test("dvI006")).ok=((new com.ibm.math.BigDecimal("2.400")).divideInteger(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("2");
-  (new Test("dvI007")).ok=((new com.ibm.math.BigDecimal("18")).divideInteger(new com.ibm.math.BigDecimal("18"),mcdef).toString()).equals("1");
-  (new Test("dvI008")).ok=((new com.ibm.math.BigDecimal("1120")).divideInteger(new com.ibm.math.BigDecimal("1000"),mcdef).toString()).equals("1");
-  (new Test("dvI009")).ok=((new com.ibm.math.BigDecimal("2.4")).divideInteger(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1");
-  (new Test("dvI010")).ok=((new com.ibm.math.BigDecimal("2.400")).divideInteger(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1");
-  (new Test("dvI011")).ok=((new com.ibm.math.BigDecimal("0.5")).divideInteger(new com.ibm.math.BigDecimal("2.000"),mcdef).toString()).equals("0");
-  (new Test("dvI012")).ok=((new com.ibm.math.BigDecimal("8.005")).divideInteger(new com.ibm.math.BigDecimal("7"),mcdef).toString()).equals("1");
-  (new Test("dvI013")).ok=((new com.ibm.math.BigDecimal("5")).divideInteger(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("2");
-  (new Test("dvI014")).ok=((new com.ibm.math.BigDecimal("0")).divideInteger(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0");
-  (new Test("dvI015")).ok=((new com.ibm.math.BigDecimal("0.00")).divideInteger(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0");
+  (new Test("dvI001")).ok=((new com.ibm.icu.math.BigDecimal("101.3")).divideInteger(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("101");
+  (new Test("dvI002")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).divideInteger(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("101");
+  (new Test("dvI003")).ok=((new com.ibm.icu.math.BigDecimal("101.3")).divideInteger(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("33");
+  (new Test("dvI004")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).divideInteger(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("33");
+  (new Test("dvI005")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divideInteger(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("2");
+  (new Test("dvI006")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divideInteger(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("2");
+  (new Test("dvI007")).ok=((new com.ibm.icu.math.BigDecimal("18")).divideInteger(new com.ibm.icu.math.BigDecimal("18"),mcdef).toString()).equals("1");
+  (new Test("dvI008")).ok=((new com.ibm.icu.math.BigDecimal("1120")).divideInteger(new com.ibm.icu.math.BigDecimal("1000"),mcdef).toString()).equals("1");
+  (new Test("dvI009")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1");
+  (new Test("dvI010")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1");
+  (new Test("dvI011")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).divideInteger(new com.ibm.icu.math.BigDecimal("2.000"),mcdef).toString()).equals("0");
+  (new Test("dvI012")).ok=((new com.ibm.icu.math.BigDecimal("8.005")).divideInteger(new com.ibm.icu.math.BigDecimal("7"),mcdef).toString()).equals("1");
+  (new Test("dvI013")).ok=((new com.ibm.icu.math.BigDecimal("5")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("2");
+  (new Test("dvI014")).ok=((new com.ibm.icu.math.BigDecimal("0")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0");
+  (new Test("dvI015")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0");
   // MC
-  (new Test("dvI016")).ok=((new com.ibm.math.BigDecimal("5")).divideInteger(new com.ibm.math.BigDecimal("2"),mce).toString()).equals("2");
-  (new Test("dvI017")).ok=((new com.ibm.math.BigDecimal("5")).divideInteger(new com.ibm.math.BigDecimal("2"),mc6).toString()).equals("2");
+  (new Test("dvI016")).ok=((new com.ibm.icu.math.BigDecimal("5")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mce).toString()).equals("2");
+  (new Test("dvI017")).ok=((new com.ibm.icu.math.BigDecimal("5")).divideInteger(new com.ibm.icu.math.BigDecimal("2"),mc6).toString()).equals("2");
   
   // Fixed --
-  (new Test("dvI021")).ok=((new com.ibm.math.BigDecimal("101.3")).divideInteger(new com.ibm.math.BigDecimal("1")).toString()).equals("101");
-  (new Test("dvI022")).ok=((new com.ibm.math.BigDecimal("101.0")).divideInteger(new com.ibm.math.BigDecimal("1")).toString()).equals("101");
-  (new Test("dvI023")).ok=((new com.ibm.math.BigDecimal("101.3")).divideInteger(new com.ibm.math.BigDecimal("3")).toString()).equals("33");
-  (new Test("dvI024")).ok=((new com.ibm.math.BigDecimal("101.0")).divideInteger(new com.ibm.math.BigDecimal("3")).toString()).equals("33");
-  (new Test("dvI025")).ok=((new com.ibm.math.BigDecimal("2.4")).divideInteger(new com.ibm.math.BigDecimal("1")).toString()).equals("2");
-  (new Test("dvI026")).ok=((new com.ibm.math.BigDecimal("2.400")).divideInteger(new com.ibm.math.BigDecimal("1")).toString()).equals("2");
-  (new Test("dvI027")).ok=((new com.ibm.math.BigDecimal("18")).divideInteger(new com.ibm.math.BigDecimal("18")).toString()).equals("1");
-  (new Test("dvI028")).ok=((new com.ibm.math.BigDecimal("1120")).divideInteger(new com.ibm.math.BigDecimal("1000")).toString()).equals("1");
-  (new Test("dvI029")).ok=((new com.ibm.math.BigDecimal("2.4")).divideInteger(new com.ibm.math.BigDecimal("2")).toString()).equals("1");
-  (new Test("dvI030")).ok=((new com.ibm.math.BigDecimal("2.400")).divideInteger(new com.ibm.math.BigDecimal("2")).toString()).equals("1");
-  (new Test("dvI031")).ok=((new com.ibm.math.BigDecimal("0.5")).divideInteger(new com.ibm.math.BigDecimal("2.000")).toString()).equals("0");
-  (new Test("dvI032")).ok=((new com.ibm.math.BigDecimal("8.005")).divideInteger(new com.ibm.math.BigDecimal("7")).toString()).equals("1");
-  (new Test("dvI033")).ok=((new com.ibm.math.BigDecimal("5")).divideInteger(new com.ibm.math.BigDecimal("2")).toString()).equals("2");
-  (new Test("dvI034")).ok=((new com.ibm.math.BigDecimal("0")).divideInteger(new com.ibm.math.BigDecimal("2")).toString()).equals("0");
-  (new Test("dvI035")).ok=((new com.ibm.math.BigDecimal("0.00")).divideInteger(new com.ibm.math.BigDecimal("2")).toString()).equals("0");
+  (new Test("dvI021")).ok=((new com.ibm.icu.math.BigDecimal("101.3")).divideInteger(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("101");
+  (new Test("dvI022")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).divideInteger(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("101");
+  (new Test("dvI023")).ok=((new com.ibm.icu.math.BigDecimal("101.3")).divideInteger(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("33");
+  (new Test("dvI024")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).divideInteger(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("33");
+  (new Test("dvI025")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divideInteger(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("2");
+  (new Test("dvI026")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divideInteger(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("2");
+  (new Test("dvI027")).ok=((new com.ibm.icu.math.BigDecimal("18")).divideInteger(new com.ibm.icu.math.BigDecimal("18")).toString()).equals("1");
+  (new Test("dvI028")).ok=((new com.ibm.icu.math.BigDecimal("1120")).divideInteger(new com.ibm.icu.math.BigDecimal("1000")).toString()).equals("1");
+  (new Test("dvI029")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).divideInteger(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1");
+  (new Test("dvI030")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).divideInteger(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1");
+  (new Test("dvI031")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).divideInteger(new com.ibm.icu.math.BigDecimal("2.000")).toString()).equals("0");
+  (new Test("dvI032")).ok=((new com.ibm.icu.math.BigDecimal("8.005")).divideInteger(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("1");
+  (new Test("dvI033")).ok=((new com.ibm.icu.math.BigDecimal("5")).divideInteger(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("2");
+  (new Test("dvI034")).ok=((new com.ibm.icu.math.BigDecimal("0")).divideInteger(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0");
+  (new Test("dvI035")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).divideInteger(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0");
   
   try{checknull:do{
-   ten.divideInteger((com.ibm.math.BigDecimal)null);
+   ten.divideInteger((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $43){
@@ -1662,7 +1662,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("dvI101")).ok=flag;
   try{checknull2:do{
-   ten.divideInteger(ten,(com.ibm.math.MathContext)null);
+   ten.divideInteger(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $44){
@@ -1671,7 +1671,7 @@ public class DiagBigDecimal{
   (new Test("dvI102")).ok=flag;
   
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.divideInteger(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.divideInteger(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $45){ae=$45;
@@ -1680,7 +1680,7 @@ public class DiagBigDecimal{
   (new Test("dvI103")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.divideInteger(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.divideInteger(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $46){ae=$46;
@@ -1700,17 +1700,17 @@ public class DiagBigDecimal{
   
   // we assume add/subtract test function; this and min just
   // test existence and test the truth table
-  (new Test("max001")).ok=((new com.ibm.math.BigDecimal("5")).max(new com.ibm.math.BigDecimal("2")).toString()).equals("5");
-  (new Test("max002")).ok=((new com.ibm.math.BigDecimal("5")).max(new com.ibm.math.BigDecimal("5")).toString()).equals("5");
-  (new Test("max003")).ok=((new com.ibm.math.BigDecimal("2")).max(new com.ibm.math.BigDecimal("7")).toString()).equals("7");
-  (new Test("max004")).ok=((new com.ibm.math.BigDecimal("2")).max(new com.ibm.math.BigDecimal("7"),mcdef).toString()).equals("7");
-  (new Test("max005")).ok=((new com.ibm.math.BigDecimal("2")).max(new com.ibm.math.BigDecimal("7"),mc6).toString()).equals("7");
-  (new Test("max006")).ok=((new com.ibm.math.BigDecimal("2E+3")).max(new com.ibm.math.BigDecimal("7")).toString()).equals("2000");
-  (new Test("max007")).ok=((new com.ibm.math.BigDecimal("2E+3")).max(new com.ibm.math.BigDecimal("7"),mc3).toString()).equals("2E+3");
-  (new Test("max008")).ok=((new com.ibm.math.BigDecimal("7")).max(new com.ibm.math.BigDecimal("2E+3")).toString()).equals("2000");
-  (new Test("max009")).ok=((new com.ibm.math.BigDecimal("7")).max(new com.ibm.math.BigDecimal("2E+3"),mc3).toString()).equals("2E+3");
+  (new Test("max001")).ok=((new com.ibm.icu.math.BigDecimal("5")).max(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("5");
+  (new Test("max002")).ok=((new com.ibm.icu.math.BigDecimal("5")).max(new com.ibm.icu.math.BigDecimal("5")).toString()).equals("5");
+  (new Test("max003")).ok=((new com.ibm.icu.math.BigDecimal("2")).max(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("7");
+  (new Test("max004")).ok=((new com.ibm.icu.math.BigDecimal("2")).max(new com.ibm.icu.math.BigDecimal("7"),mcdef).toString()).equals("7");
+  (new Test("max005")).ok=((new com.ibm.icu.math.BigDecimal("2")).max(new com.ibm.icu.math.BigDecimal("7"),mc6).toString()).equals("7");
+  (new Test("max006")).ok=((new com.ibm.icu.math.BigDecimal("2E+3")).max(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("2000");
+  (new Test("max007")).ok=((new com.ibm.icu.math.BigDecimal("2E+3")).max(new com.ibm.icu.math.BigDecimal("7"),mc3).toString()).equals("2E+3");
+  (new Test("max008")).ok=((new com.ibm.icu.math.BigDecimal("7")).max(new com.ibm.icu.math.BigDecimal("2E+3")).toString()).equals("2000");
+  (new Test("max009")).ok=((new com.ibm.icu.math.BigDecimal("7")).max(new com.ibm.icu.math.BigDecimal("2E+3"),mc3).toString()).equals("2E+3");
   try{checknull:do{
-   ten.max((com.ibm.math.BigDecimal)null);
+   ten.max((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $47){
@@ -1718,7 +1718,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("max010")).ok=flag;
   try{checknull2:do{
-   ten.max(ten,(com.ibm.math.MathContext)null);
+   ten.max(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $48){
@@ -1726,7 +1726,7 @@ public class DiagBigDecimal{
   }/*checknull2*/
   (new Test("max011")).ok=flag;
   try{checkdigits:do{
-   tenlong.max(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.max(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $49){ae=$49;
@@ -1734,7 +1734,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("max012")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.max(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.max(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $50){ae=$50;
@@ -1748,23 +1748,23 @@ public class DiagBigDecimal{
  
  public void diagmin(){
   boolean flag=false;
-  com.ibm.math.BigDecimal minx=null;
+  com.ibm.icu.math.BigDecimal minx=null;
   java.lang.ArithmeticException ae=null;
   // we assume add/subtract test function; this and max just
   // test existence and test the truth table
   
-  (new Test("min001")).ok=((new com.ibm.math.BigDecimal("5")).min(new com.ibm.math.BigDecimal("2")).toString()).equals("2");
-  (new Test("min002")).ok=((new com.ibm.math.BigDecimal("5")).min(new com.ibm.math.BigDecimal("5")).toString()).equals("5");
-  (new Test("min003")).ok=((new com.ibm.math.BigDecimal("2")).min(new com.ibm.math.BigDecimal("7")).toString()).equals("2");
-  (new Test("min004")).ok=((new com.ibm.math.BigDecimal("2")).min(new com.ibm.math.BigDecimal("7"),mcdef).toString()).equals("2");
-  (new Test("min005")).ok=((new com.ibm.math.BigDecimal("1")).min(new com.ibm.math.BigDecimal("7"),mc6).toString()).equals("1");
-  (new Test("min006")).ok=((new com.ibm.math.BigDecimal("-2E+3")).min(new com.ibm.math.BigDecimal("7")).toString()).equals("-2000");
-  (new Test("min007")).ok=((new com.ibm.math.BigDecimal("-2E+3")).min(new com.ibm.math.BigDecimal("7"),mc3).toString()).equals("-2E+3");
-  (new Test("min008")).ok=((new com.ibm.math.BigDecimal("7")).min(new com.ibm.math.BigDecimal("-2E+3")).toString()).equals("-2000");
-  (new Test("min009")).ok=((new com.ibm.math.BigDecimal("7")).min(new com.ibm.math.BigDecimal("-2E+3"),mc3).toString()).equals("-2E+3");
+  (new Test("min001")).ok=((new com.ibm.icu.math.BigDecimal("5")).min(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("2");
+  (new Test("min002")).ok=((new com.ibm.icu.math.BigDecimal("5")).min(new com.ibm.icu.math.BigDecimal("5")).toString()).equals("5");
+  (new Test("min003")).ok=((new com.ibm.icu.math.BigDecimal("2")).min(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("2");
+  (new Test("min004")).ok=((new com.ibm.icu.math.BigDecimal("2")).min(new com.ibm.icu.math.BigDecimal("7"),mcdef).toString()).equals("2");
+  (new Test("min005")).ok=((new com.ibm.icu.math.BigDecimal("1")).min(new com.ibm.icu.math.BigDecimal("7"),mc6).toString()).equals("1");
+  (new Test("min006")).ok=((new com.ibm.icu.math.BigDecimal("-2E+3")).min(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("-2000");
+  (new Test("min007")).ok=((new com.ibm.icu.math.BigDecimal("-2E+3")).min(new com.ibm.icu.math.BigDecimal("7"),mc3).toString()).equals("-2E+3");
+  (new Test("min008")).ok=((new com.ibm.icu.math.BigDecimal("7")).min(new com.ibm.icu.math.BigDecimal("-2E+3")).toString()).equals("-2000");
+  (new Test("min009")).ok=((new com.ibm.icu.math.BigDecimal("7")).min(new com.ibm.icu.math.BigDecimal("-2E+3"),mc3).toString()).equals("-2E+3");
   try{checknull:do{
    minx=ten;
-   minx.min((com.ibm.math.BigDecimal)null);
+   minx.min((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $51){
@@ -1773,7 +1773,7 @@ public class DiagBigDecimal{
   (new Test("min010")).ok=flag;
   try{checknull2:do{
    minx=ten;
-   minx.min(ten,(com.ibm.math.MathContext)null);
+   minx.min(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $52){
@@ -1782,7 +1782,7 @@ public class DiagBigDecimal{
   (new Test("min011")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.min(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.min(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $53){ae=$53;
@@ -1790,7 +1790,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("min012")).ok=flag;
   try{checkdigits:do{
-   (new com.ibm.math.BigDecimal(9)).min(tenlong,mcld);
+   (new com.ibm.icu.math.BigDecimal(9)).min(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $54){ae=$54;
@@ -1805,171 +1805,171 @@ public class DiagBigDecimal{
  
  public void diagmultiply(){
   boolean flag=false;
-  com.ibm.math.BigDecimal l9;
-  com.ibm.math.BigDecimal l77e;
-  com.ibm.math.BigDecimal l12345;
-  com.ibm.math.BigDecimal edge;
-  com.ibm.math.BigDecimal tenedge;
-  com.ibm.math.BigDecimal hunedge;
-  com.ibm.math.BigDecimal opo;
-  com.ibm.math.BigDecimal d1=null;
-  com.ibm.math.BigDecimal d2=null;
+  com.ibm.icu.math.BigDecimal l9;
+  com.ibm.icu.math.BigDecimal l77e;
+  com.ibm.icu.math.BigDecimal l12345;
+  com.ibm.icu.math.BigDecimal edge;
+  com.ibm.icu.math.BigDecimal tenedge;
+  com.ibm.icu.math.BigDecimal hunedge;
+  com.ibm.icu.math.BigDecimal opo;
+  com.ibm.icu.math.BigDecimal d1=null;
+  com.ibm.icu.math.BigDecimal d2=null;
   java.lang.ArithmeticException oe=null;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("mul001")).ok=((new com.ibm.math.BigDecimal("2")).multiply(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("6");
-  (new Test("mul002")).ok=((new com.ibm.math.BigDecimal("5")).multiply(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("5");
-  (new Test("mul003")).ok=((new com.ibm.math.BigDecimal("5")).multiply(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("10");
-  (new Test("mul004")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("2.40");
-  (new Test("mul005")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0");
-  (new Test("mul006")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("-2"),mcdef).toString()).equals("-2.40");
-  (new Test("mul007")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("-2.40");
-  (new Test("mul008")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0");
-  (new Test("mul009")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("-2"),mcdef).toString()).equals("2.40");
-  (new Test("mul010")).ok=((new com.ibm.math.BigDecimal("5.09")).multiply(new com.ibm.math.BigDecimal("7.1"),mcdef).toString()).equals("36.139");
-  (new Test("mul011")).ok=((new com.ibm.math.BigDecimal("2.5")).multiply(new com.ibm.math.BigDecimal("4"),mcdef).toString()).equals("10.0");
-  (new Test("mul012")).ok=((new com.ibm.math.BigDecimal("2.50")).multiply(new com.ibm.math.BigDecimal("4"),mcdef).toString()).equals("10.00");
-  (new Test("mul013")).ok=((new com.ibm.math.BigDecimal("1.23456789")).multiply(new com.ibm.math.BigDecimal("1.00000000"),mcdef).toString()).equals("1.23456789");
+  (new Test("mul001")).ok=((new com.ibm.icu.math.BigDecimal("2")).multiply(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("6");
+  (new Test("mul002")).ok=((new com.ibm.icu.math.BigDecimal("5")).multiply(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("5");
+  (new Test("mul003")).ok=((new com.ibm.icu.math.BigDecimal("5")).multiply(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("10");
+  (new Test("mul004")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("2.40");
+  (new Test("mul005")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0");
+  (new Test("mul006")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("-2"),mcdef).toString()).equals("-2.40");
+  (new Test("mul007")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("-2.40");
+  (new Test("mul008")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0");
+  (new Test("mul009")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("-2"),mcdef).toString()).equals("2.40");
+  (new Test("mul010")).ok=((new com.ibm.icu.math.BigDecimal("5.09")).multiply(new com.ibm.icu.math.BigDecimal("7.1"),mcdef).toString()).equals("36.139");
+  (new Test("mul011")).ok=((new com.ibm.icu.math.BigDecimal("2.5")).multiply(new com.ibm.icu.math.BigDecimal("4"),mcdef).toString()).equals("10.0");
+  (new Test("mul012")).ok=((new com.ibm.icu.math.BigDecimal("2.50")).multiply(new com.ibm.icu.math.BigDecimal("4"),mcdef).toString()).equals("10.00");
+  (new Test("mul013")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).multiply(new com.ibm.icu.math.BigDecimal("1.00000000"),mcdef).toString()).equals("1.23456789");
   
-  (new Test("mul014")).ok=((new com.ibm.math.BigDecimal("9.999999999")).multiply(new com.ibm.math.BigDecimal("9.999999999"),mcdef).toString()).equals("100.000000");
+  (new Test("mul014")).ok=((new com.ibm.icu.math.BigDecimal("9.999999999")).multiply(new com.ibm.icu.math.BigDecimal("9.999999999"),mcdef).toString()).equals("100.000000");
   
-  (new Test("mul015")).ok=((new com.ibm.math.BigDecimal("2.50")).multiply(new com.ibm.math.BigDecimal("4"),mcdef).toString()).equals("10.00");
-  (new Test("mul016")).ok=((new com.ibm.math.BigDecimal("2.50")).multiply(new com.ibm.math.BigDecimal("4"),mc6).toString()).equals("10.00");
-  (new Test("mul017")).ok=((new com.ibm.math.BigDecimal("9.999999999")).multiply(new com.ibm.math.BigDecimal("9.999999999"),mc6).toString()).equals("100.000");
+  (new Test("mul015")).ok=((new com.ibm.icu.math.BigDecimal("2.50")).multiply(new com.ibm.icu.math.BigDecimal("4"),mcdef).toString()).equals("10.00");
+  (new Test("mul016")).ok=((new com.ibm.icu.math.BigDecimal("2.50")).multiply(new com.ibm.icu.math.BigDecimal("4"),mc6).toString()).equals("10.00");
+  (new Test("mul017")).ok=((new com.ibm.icu.math.BigDecimal("9.999999999")).multiply(new com.ibm.icu.math.BigDecimal("9.999999999"),mc6).toString()).equals("100.000");
   
   
-  (new Test("mul020")).ok=((new com.ibm.math.BigDecimal("2")).multiply(new com.ibm.math.BigDecimal("3")).toString()).equals("6");
-  (new Test("mul021")).ok=((new com.ibm.math.BigDecimal("5")).multiply(new com.ibm.math.BigDecimal("1")).toString()).equals("5");
-  (new Test("mul022")).ok=((new com.ibm.math.BigDecimal("5")).multiply(new com.ibm.math.BigDecimal("2")).toString()).equals("10");
-  (new Test("mul023")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("2")).toString()).equals("2.40");
-  (new Test("mul024")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("0")).toString()).equals("0.00");
-  (new Test("mul025")).ok=((new com.ibm.math.BigDecimal("1.20")).multiply(new com.ibm.math.BigDecimal("-2")).toString()).equals("-2.40");
-  (new Test("mul026")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("2")).toString()).equals("-2.40");
-  (new Test("mul027")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("0")).toString()).equals("0.00");
-  (new Test("mul028")).ok=((new com.ibm.math.BigDecimal("-1.20")).multiply(new com.ibm.math.BigDecimal("-2")).toString()).equals("2.40");
-  (new Test("mul029")).ok=((new com.ibm.math.BigDecimal("5.09")).multiply(new com.ibm.math.BigDecimal("7.1")).toString()).equals("36.139");
-  (new Test("mul030")).ok=((new com.ibm.math.BigDecimal("2.5")).multiply(new com.ibm.math.BigDecimal("4")).toString()).equals("10.0");
-  (new Test("mul031")).ok=((new com.ibm.math.BigDecimal("2.50")).multiply(new com.ibm.math.BigDecimal("4")).toString()).equals("10.00");
-  (new Test("mul032")).ok=((new com.ibm.math.BigDecimal("1.23456789")).multiply(new com.ibm.math.BigDecimal("1.00000000")).toString()).equals("1.2345678900000000");
+  (new Test("mul020")).ok=((new com.ibm.icu.math.BigDecimal("2")).multiply(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("6");
+  (new Test("mul021")).ok=((new com.ibm.icu.math.BigDecimal("5")).multiply(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("5");
+  (new Test("mul022")).ok=((new com.ibm.icu.math.BigDecimal("5")).multiply(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("10");
+  (new Test("mul023")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("2.40");
+  (new Test("mul024")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.00");
+  (new Test("mul025")).ok=((new com.ibm.icu.math.BigDecimal("1.20")).multiply(new com.ibm.icu.math.BigDecimal("-2")).toString()).equals("-2.40");
+  (new Test("mul026")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("-2.40");
+  (new Test("mul027")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.00");
+  (new Test("mul028")).ok=((new com.ibm.icu.math.BigDecimal("-1.20")).multiply(new com.ibm.icu.math.BigDecimal("-2")).toString()).equals("2.40");
+  (new Test("mul029")).ok=((new com.ibm.icu.math.BigDecimal("5.09")).multiply(new com.ibm.icu.math.BigDecimal("7.1")).toString()).equals("36.139");
+  (new Test("mul030")).ok=((new com.ibm.icu.math.BigDecimal("2.5")).multiply(new com.ibm.icu.math.BigDecimal("4")).toString()).equals("10.0");
+  (new Test("mul031")).ok=((new com.ibm.icu.math.BigDecimal("2.50")).multiply(new com.ibm.icu.math.BigDecimal("4")).toString()).equals("10.00");
+  (new Test("mul032")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).multiply(new com.ibm.icu.math.BigDecimal("1.00000000")).toString()).equals("1.2345678900000000");
   
-  (new Test("mul033")).ok=((new com.ibm.math.BigDecimal("1234.56789")).multiply(new com.ibm.math.BigDecimal("-1000.00000")).toString()).equals("-1234567.8900000000");
+  (new Test("mul033")).ok=((new com.ibm.icu.math.BigDecimal("1234.56789")).multiply(new com.ibm.icu.math.BigDecimal("-1000.00000")).toString()).equals("-1234567.8900000000");
   
-  (new Test("mul034")).ok=((new com.ibm.math.BigDecimal("-1234.56789")).multiply(new com.ibm.math.BigDecimal("1000.00000")).toString()).equals("-1234567.8900000000");
+  (new Test("mul034")).ok=((new com.ibm.icu.math.BigDecimal("-1234.56789")).multiply(new com.ibm.icu.math.BigDecimal("1000.00000")).toString()).equals("-1234567.8900000000");
   
-  (new Test("mul035")).ok=((new com.ibm.math.BigDecimal("9.999999999")).multiply(new com.ibm.math.BigDecimal("9.999999999")).toString()).equals("99.999999980000000001");
+  (new Test("mul035")).ok=((new com.ibm.icu.math.BigDecimal("9.999999999")).multiply(new com.ibm.icu.math.BigDecimal("9.999999999")).toString()).equals("99.999999980000000001");
   
-  (new Test("mul036")).ok=((new com.ibm.math.BigDecimal("5.00")).multiply(new com.ibm.math.BigDecimal("1E-3")).toString()).equals("0.00500");
-  (new Test("mul037")).ok=((new com.ibm.math.BigDecimal("00.00")).multiply(new com.ibm.math.BigDecimal("0.000")).toString()).equals("0.00000");
-  (new Test("mul038")).ok=((new com.ibm.math.BigDecimal("00.00")).multiply(new com.ibm.math.BigDecimal("0E-3")).toString()).equals("0.00"); // rhs is '0'
+  (new Test("mul036")).ok=((new com.ibm.icu.math.BigDecimal("5.00")).multiply(new com.ibm.icu.math.BigDecimal("1E-3")).toString()).equals("0.00500");
+  (new Test("mul037")).ok=((new com.ibm.icu.math.BigDecimal("00.00")).multiply(new com.ibm.icu.math.BigDecimal("0.000")).toString()).equals("0.00000");
+  (new Test("mul038")).ok=((new com.ibm.icu.math.BigDecimal("00.00")).multiply(new com.ibm.icu.math.BigDecimal("0E-3")).toString()).equals("0.00"); // rhs is '0'
   // 1999.12.21: next one is a edge case if intermediate longs are used
-  (new Test("mul039")).ok=((new com.ibm.math.BigDecimal("999999999999")).multiply(new com.ibm.math.BigDecimal("9765625")).toString()).equals("9765624999990234375");
+  (new Test("mul039")).ok=((new com.ibm.icu.math.BigDecimal("999999999999")).multiply(new com.ibm.icu.math.BigDecimal("9765625")).toString()).equals("9765624999990234375");
   
-  l9=new com.ibm.math.BigDecimal("123456789E+10");
-  l77e=new com.ibm.math.BigDecimal("77E-20");
-  (new Test("mul040")).ok=(l9.multiply(new com.ibm.math.BigDecimal("3456757")).toString()).equals("4267601195732730000000000");
-  (new Test("mul041")).ok=(l9.multiply(new com.ibm.math.BigDecimal("3456757"),mc3).toString()).equals("4.26E+24");
+  l9=new com.ibm.icu.math.BigDecimal("123456789E+10");
+  l77e=new com.ibm.icu.math.BigDecimal("77E-20");
+  (new Test("mul040")).ok=(l9.multiply(new com.ibm.icu.math.BigDecimal("3456757")).toString()).equals("4267601195732730000000000");
+  (new Test("mul041")).ok=(l9.multiply(new com.ibm.icu.math.BigDecimal("3456757"),mc3).toString()).equals("4.26E+24");
   (new Test("mul042")).ok=(l9.multiply(l77e).toString()).equals("0.95061727530000000000");
   (new Test("mul043")).ok=(l9.multiply(l77e,mc3).toString()).equals("0.947");
   (new Test("mul044")).ok=(l77e.multiply(l9,mc3).toString()).equals("0.947");
   
-  l12345=new com.ibm.math.BigDecimal("123.45");
-  (new Test("mul050")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e11"),mcdef).toString()).equals("1.2345E+13");
-  (new Test("mul051")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e11"),mcs).toString()).equals("1.2345E+13");
-  (new Test("mul052")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e+9"),mce).toString()).equals("123.45E+9");
-  (new Test("mul053")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e10"),mce).toString()).equals("1.2345E+12");
-  (new Test("mul054")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e11"),mce).toString()).equals("12.345E+12");
-  (new Test("mul055")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e12"),mce).toString()).equals("123.45E+12");
-  (new Test("mul056")).ok=(l12345.multiply(new com.ibm.math.BigDecimal("1e13"),mce).toString()).equals("1.2345E+15");
+  l12345=new com.ibm.icu.math.BigDecimal("123.45");
+  (new Test("mul050")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e11"),mcdef).toString()).equals("1.2345E+13");
+  (new Test("mul051")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e11"),mcs).toString()).equals("1.2345E+13");
+  (new Test("mul052")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e+9"),mce).toString()).equals("123.45E+9");
+  (new Test("mul053")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e10"),mce).toString()).equals("1.2345E+12");
+  (new Test("mul054")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e11"),mce).toString()).equals("12.345E+12");
+  (new Test("mul055")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e12"),mce).toString()).equals("123.45E+12");
+  (new Test("mul056")).ok=(l12345.multiply(new com.ibm.icu.math.BigDecimal("1e13"),mce).toString()).equals("1.2345E+15");
   
   // test some cases that are close to exponent overflow
-  (new Test("mul060")).ok=(one.multiply(new com.ibm.math.BigDecimal("9e999999999"),mcs).toString()).equals("9E+999999999");
-  (new Test("mul061")).ok=(one.multiply(new com.ibm.math.BigDecimal("9.9e999999999"),mcs).toString()).equals("9.9E+999999999");
-  (new Test("mul062")).ok=(one.multiply(new com.ibm.math.BigDecimal("9.99e999999999"),mcs).toString()).equals("9.99E+999999999");
-  (new Test("mul063")).ok=(ten.multiply(new com.ibm.math.BigDecimal("9e999999999"),mce).toString()).equals("90E+999999999");
-  (new Test("mul064")).ok=(ten.multiply(new com.ibm.math.BigDecimal("9.9e999999999"),mce).toString()).equals("99.0E+999999999");
-  edge=new com.ibm.math.BigDecimal("9.999e999999999");
+  (new Test("mul060")).ok=(one.multiply(new com.ibm.icu.math.BigDecimal("9e999999999"),mcs).toString()).equals("9E+999999999");
+  (new Test("mul061")).ok=(one.multiply(new com.ibm.icu.math.BigDecimal("9.9e999999999"),mcs).toString()).equals("9.9E+999999999");
+  (new Test("mul062")).ok=(one.multiply(new com.ibm.icu.math.BigDecimal("9.99e999999999"),mcs).toString()).equals("9.99E+999999999");
+  (new Test("mul063")).ok=(ten.multiply(new com.ibm.icu.math.BigDecimal("9e999999999"),mce).toString()).equals("90E+999999999");
+  (new Test("mul064")).ok=(ten.multiply(new com.ibm.icu.math.BigDecimal("9.9e999999999"),mce).toString()).equals("99.0E+999999999");
+  edge=new com.ibm.icu.math.BigDecimal("9.999e999999999");
   tenedge=ten.multiply(edge,mce);
   (new Test("mul065")).ok=(tenedge.toString()).equals("99.990E+999999999");
   hunedge=ten.multiply(tenedge,mce);
   (new Test("mul066")).ok=(hunedge.toString()).equals("999.900E+999999999");
-  opo=new com.ibm.math.BigDecimal("0.1"); // one tenth
-  (new Test("mul067")).ok=(opo.multiply(new com.ibm.math.BigDecimal("9e-999999998"),mcs).toString()).equals("9E-999999999");
-  (new Test("mul068")).ok=(opo.multiply(new com.ibm.math.BigDecimal("99e-999999998"),mcs).toString()).equals("9.9E-999999998");
-  (new Test("mul069")).ok=(opo.multiply(new com.ibm.math.BigDecimal("999e-999999998"),mcs).toString()).equals("9.99E-999999997");
+  opo=new com.ibm.icu.math.BigDecimal("0.1"); // one tenth
+  (new Test("mul067")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("9e-999999998"),mcs).toString()).equals("9E-999999999");
+  (new Test("mul068")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("99e-999999998"),mcs).toString()).equals("9.9E-999999998");
+  (new Test("mul069")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("999e-999999998"),mcs).toString()).equals("9.99E-999999997");
   
-  (new Test("mul070")).ok=(opo.multiply(new com.ibm.math.BigDecimal("9e-999999998"),mce).toString()).equals("9E-999999999");
-  (new Test("mul071")).ok=(opo.multiply(new com.ibm.math.BigDecimal("99e-999999998"),mce).toString()).equals("99E-999999999");
-  (new Test("mul072")).ok=(opo.multiply(new com.ibm.math.BigDecimal("999e-999999998"),mce).toString()).equals("999E-999999999");
-  (new Test("mul073")).ok=(opo.multiply(new com.ibm.math.BigDecimal("999e-999999997"),mce).toString()).equals("9.99E-999999996");
-  (new Test("mul074")).ok=(opo.multiply(new com.ibm.math.BigDecimal("9999e-999999997"),mce).toString()).equals("99.99E-999999996");
-  (new Test("mul074")).ok=(opo.multiply(new com.ibm.math.BigDecimal("99999e-999999997"),mce).toString()).equals("999.99E-999999996");
+  (new Test("mul070")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("9e-999999998"),mce).toString()).equals("9E-999999999");
+  (new Test("mul071")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("99e-999999998"),mce).toString()).equals("99E-999999999");
+  (new Test("mul072")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("999e-999999998"),mce).toString()).equals("999E-999999999");
+  (new Test("mul073")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("999e-999999997"),mce).toString()).equals("9.99E-999999996");
+  (new Test("mul074")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("9999e-999999997"),mce).toString()).equals("99.99E-999999996");
+  (new Test("mul074")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("99999e-999999997"),mce).toString()).equals("999.99E-999999996");
   
   // test some intermediate lengths
-  (new Test("mul080")).ok=(opo.multiply(new com.ibm.math.BigDecimal("123456789"),mcs).toString()).equals("12345678.9");
-  (new Test("mul081")).ok=(opo.multiply(new com.ibm.math.BigDecimal("12345678901234"),mcs).toString()).equals("1.23456789E+12");
-  (new Test("mul082")).ok=(opo.multiply(new com.ibm.math.BigDecimal("123456789123456789"),mcs).toString()).equals("1.23456789E+16");
-  (new Test("mul083")).ok=(opo.multiply(new com.ibm.math.BigDecimal("123456789"),mcfd).toString()).equals("12345678.9");
-  (new Test("mul084")).ok=(opo.multiply(new com.ibm.math.BigDecimal("12345678901234"),mcfd).toString()).equals("1234567890123.4");
-  (new Test("mul085")).ok=(opo.multiply(new com.ibm.math.BigDecimal("123456789123456789"),mcfd).toString()).equals("12345678912345678.9");
+  (new Test("mul080")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("123456789"),mcs).toString()).equals("12345678.9");
+  (new Test("mul081")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("12345678901234"),mcs).toString()).equals("1.23456789E+12");
+  (new Test("mul082")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("123456789123456789"),mcs).toString()).equals("1.23456789E+16");
+  (new Test("mul083")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("123456789"),mcfd).toString()).equals("12345678.9");
+  (new Test("mul084")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("12345678901234"),mcfd).toString()).equals("1234567890123.4");
+  (new Test("mul085")).ok=(opo.multiply(new com.ibm.icu.math.BigDecimal("123456789123456789"),mcfd).toString()).equals("12345678912345678.9");
   
-  (new Test("mul090")).ok=((new com.ibm.math.BigDecimal("123456789")).multiply(opo,mcs).toString()).equals("12345678.9");
-  (new Test("mul091")).ok=((new com.ibm.math.BigDecimal("12345678901234")).multiply(opo,mcs).toString()).equals("1.23456789E+12");
-  (new Test("mul092")).ok=((new com.ibm.math.BigDecimal("123456789123456789")).multiply(opo,mcs).toString()).equals("1.23456789E+16");
-  (new Test("mul093")).ok=((new com.ibm.math.BigDecimal("123456789")).multiply(opo,mcfd).toString()).equals("12345678.9");
-  (new Test("mul094")).ok=((new com.ibm.math.BigDecimal("12345678901234")).multiply(opo,mcfd).toString()).equals("1234567890123.4");
-  (new Test("mul095")).ok=((new com.ibm.math.BigDecimal("123456789123456789")).multiply(opo,mcfd).toString()).equals("12345678912345678.9");
+  (new Test("mul090")).ok=((new com.ibm.icu.math.BigDecimal("123456789")).multiply(opo,mcs).toString()).equals("12345678.9");
+  (new Test("mul091")).ok=((new com.ibm.icu.math.BigDecimal("12345678901234")).multiply(opo,mcs).toString()).equals("1.23456789E+12");
+  (new Test("mul092")).ok=((new com.ibm.icu.math.BigDecimal("123456789123456789")).multiply(opo,mcs).toString()).equals("1.23456789E+16");
+  (new Test("mul093")).ok=((new com.ibm.icu.math.BigDecimal("123456789")).multiply(opo,mcfd).toString()).equals("12345678.9");
+  (new Test("mul094")).ok=((new com.ibm.icu.math.BigDecimal("12345678901234")).multiply(opo,mcfd).toString()).equals("1234567890123.4");
+  (new Test("mul095")).ok=((new com.ibm.icu.math.BigDecimal("123456789123456789")).multiply(opo,mcfd).toString()).equals("12345678912345678.9");
   
   // test some more edge cases and carries
-  (new Test("mul101")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9")).toString()).equals("81");
-  (new Test("mul102")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90")).toString()).equals("810");
-  (new Test("mul103")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900")).toString()).equals("8100");
-  (new Test("mul104")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000")).toString()).equals("81000");
-  (new Test("mul105")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000")).toString()).equals("810000");
-  (new Test("mul106")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000")).toString()).equals("8100000");
-  (new Test("mul107")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000")).toString()).equals("81000000");
-  (new Test("mul108")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000")).toString()).equals("810000000");
-  (new Test("mul109")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000000")).toString()).equals("8100000000");
-  (new Test("mul110")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000000")).toString()).equals("81000000000");
-  (new Test("mul111")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000000")).toString()).equals("810000000000");
-  (new Test("mul112")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000000000")).toString()).equals("8100000000000");
-  (new Test("mul113")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000000000")).toString()).equals("81000000000000");
-  (new Test("mul114")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000000000")).toString()).equals("810000000000000");
-  (new Test("mul115")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000000000000")).toString()).equals("8100000000000000");
-  (new Test("mul116")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000000000000")).toString()).equals("81000000000000000");
-  (new Test("mul117")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000000000000")).toString()).equals("810000000000000000");
-  (new Test("mul118")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000000000000000")).toString()).equals("8100000000000000000");
-  (new Test("mul119")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000000000000000")).toString()).equals("81000000000000000000");
-  (new Test("mul120")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000000000000000")).toString()).equals("810000000000000000000");
-  (new Test("mul121")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("900000000000000000000")).toString()).equals("8100000000000000000000");
-  (new Test("mul122")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("9000000000000000000000")).toString()).equals("81000000000000000000000");
-  (new Test("mul123")).ok=((new com.ibm.math.BigDecimal("9")).multiply(new com.ibm.math.BigDecimal("90000000000000000000000")).toString()).equals("810000000000000000000000");
+  (new Test("mul101")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9")).toString()).equals("81");
+  (new Test("mul102")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90")).toString()).equals("810");
+  (new Test("mul103")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900")).toString()).equals("8100");
+  (new Test("mul104")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000")).toString()).equals("81000");
+  (new Test("mul105")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000")).toString()).equals("810000");
+  (new Test("mul106")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000")).toString()).equals("8100000");
+  (new Test("mul107")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000")).toString()).equals("81000000");
+  (new Test("mul108")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000")).toString()).equals("810000000");
+  (new Test("mul109")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000000")).toString()).equals("8100000000");
+  (new Test("mul110")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000000")).toString()).equals("81000000000");
+  (new Test("mul111")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000000")).toString()).equals("810000000000");
+  (new Test("mul112")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000000000")).toString()).equals("8100000000000");
+  (new Test("mul113")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000000000")).toString()).equals("81000000000000");
+  (new Test("mul114")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000000000")).toString()).equals("810000000000000");
+  (new Test("mul115")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000000000000")).toString()).equals("8100000000000000");
+  (new Test("mul116")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000000000000")).toString()).equals("81000000000000000");
+  (new Test("mul117")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000000000000")).toString()).equals("810000000000000000");
+  (new Test("mul118")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000000000000000")).toString()).equals("8100000000000000000");
+  (new Test("mul119")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000000000000000")).toString()).equals("81000000000000000000");
+  (new Test("mul120")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000000000000000")).toString()).equals("810000000000000000000");
+  (new Test("mul121")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("900000000000000000000")).toString()).equals("8100000000000000000000");
+  (new Test("mul122")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("9000000000000000000000")).toString()).equals("81000000000000000000000");
+  (new Test("mul123")).ok=((new com.ibm.icu.math.BigDecimal("9")).multiply(new com.ibm.icu.math.BigDecimal("90000000000000000000000")).toString()).equals("810000000000000000000000");
   // test some more edge cases without carries
-  (new Test("mul131")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3")).toString()).equals("9");
-  (new Test("mul132")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30")).toString()).equals("90");
-  (new Test("mul133")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300")).toString()).equals("900");
-  (new Test("mul134")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000")).toString()).equals("9000");
-  (new Test("mul135")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000")).toString()).equals("90000");
-  (new Test("mul136")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000")).toString()).equals("900000");
-  (new Test("mul137")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000")).toString()).equals("9000000");
-  (new Test("mul138")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000")).toString()).equals("90000000");
-  (new Test("mul139")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000000")).toString()).equals("900000000");
-  (new Test("mul140")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000000")).toString()).equals("9000000000");
-  (new Test("mul141")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000000")).toString()).equals("90000000000");
-  (new Test("mul142")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000000000")).toString()).equals("900000000000");
-  (new Test("mul143")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000000000")).toString()).equals("9000000000000");
-  (new Test("mul144")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000000000")).toString()).equals("90000000000000");
-  (new Test("mul145")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000000000000")).toString()).equals("900000000000000");
-  (new Test("mul146")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000000000000")).toString()).equals("9000000000000000");
-  (new Test("mul147")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000000000000")).toString()).equals("90000000000000000");
-  (new Test("mul148")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000000000000000")).toString()).equals("900000000000000000");
-  (new Test("mul149")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000000000000000")).toString()).equals("9000000000000000000");
-  (new Test("mul150")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000000000000000")).toString()).equals("90000000000000000000");
-  (new Test("mul151")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("300000000000000000000")).toString()).equals("900000000000000000000");
-  (new Test("mul152")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("3000000000000000000000")).toString()).equals("9000000000000000000000");
-  (new Test("mul153")).ok=((new com.ibm.math.BigDecimal("3")).multiply(new com.ibm.math.BigDecimal("30000000000000000000000")).toString()).equals("90000000000000000000000");
+  (new Test("mul131")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("9");
+  (new Test("mul132")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30")).toString()).equals("90");
+  (new Test("mul133")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300")).toString()).equals("900");
+  (new Test("mul134")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000")).toString()).equals("9000");
+  (new Test("mul135")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000")).toString()).equals("90000");
+  (new Test("mul136")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000")).toString()).equals("900000");
+  (new Test("mul137")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000")).toString()).equals("9000000");
+  (new Test("mul138")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000")).toString()).equals("90000000");
+  (new Test("mul139")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000000")).toString()).equals("900000000");
+  (new Test("mul140")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000000")).toString()).equals("9000000000");
+  (new Test("mul141")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000000")).toString()).equals("90000000000");
+  (new Test("mul142")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000000000")).toString()).equals("900000000000");
+  (new Test("mul143")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000000000")).toString()).equals("9000000000000");
+  (new Test("mul144")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000000000")).toString()).equals("90000000000000");
+  (new Test("mul145")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000000000000")).toString()).equals("900000000000000");
+  (new Test("mul146")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000000000000")).toString()).equals("9000000000000000");
+  (new Test("mul147")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000000000000")).toString()).equals("90000000000000000");
+  (new Test("mul148")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000000000000000")).toString()).equals("900000000000000000");
+  (new Test("mul149")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000000000000000")).toString()).equals("9000000000000000000");
+  (new Test("mul150")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000000000000000")).toString()).equals("90000000000000000000");
+  (new Test("mul151")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("300000000000000000000")).toString()).equals("900000000000000000000");
+  (new Test("mul152")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("3000000000000000000000")).toString()).equals("9000000000000000000000");
+  (new Test("mul153")).ok=((new com.ibm.icu.math.BigDecimal("3")).multiply(new com.ibm.icu.math.BigDecimal("30000000000000000000000")).toString()).equals("90000000000000000000000");
   
   try{checknull:do{
-   ten.multiply((com.ibm.math.BigDecimal)null);
+   ten.multiply((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $55){
@@ -1977,7 +1977,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("mul200")).ok=flag;
   try{checknull2:do{
-   ten.multiply(ten,(com.ibm.math.MathContext)null);
+   ten.multiply(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $56){
@@ -1986,8 +1986,8 @@ public class DiagBigDecimal{
   (new Test("mul201")).ok=flag;
   
   try{checkover:do{
-   d1=new com.ibm.math.BigDecimal("-1.23456789012345E-0");
-   d2=new com.ibm.math.BigDecimal("9E+999999999");
+   d1=new com.ibm.icu.math.BigDecimal("-1.23456789012345E-0");
+   d2=new com.ibm.icu.math.BigDecimal("9E+999999999");
    d1.multiply(d2,mcdef); // marginal overflow
    flag=false;
   }while(false);}
@@ -1996,8 +1996,8 @@ public class DiagBigDecimal{
   }/*checkover*/
   (new Test("mul202")).ok=flag;
   try{checkover:do{
-   d1=new com.ibm.math.BigDecimal("112");
-   d2=new com.ibm.math.BigDecimal("9E+999999999");
+   d1=new com.ibm.icu.math.BigDecimal("112");
+   d2=new com.ibm.icu.math.BigDecimal("9E+999999999");
    d1.multiply(d2,mce); // marginal overflow, engineering
    flag=false;
   }while(false);}
@@ -2007,8 +2007,8 @@ public class DiagBigDecimal{
   (new Test("mul203")).ok=flag;
   
   try{checkover:do{
-   d1=new com.ibm.math.BigDecimal("0.9");
-   d2=new com.ibm.math.BigDecimal("1E-999999999");
+   d1=new com.ibm.icu.math.BigDecimal("0.9");
+   d2=new com.ibm.icu.math.BigDecimal("1E-999999999");
    d1.multiply(d2,mcdef); // marginal negative overflow
    flag=false;
   }while(false);}
@@ -2017,8 +2017,8 @@ public class DiagBigDecimal{
   }/*checkover*/
   (new Test("mul204")).ok=flag;
   try{checkover:do{
-   d1=new com.ibm.math.BigDecimal("0.9");
-   d2=new com.ibm.math.BigDecimal("1E-999999999");
+   d1=new com.ibm.icu.math.BigDecimal("0.9");
+   d2=new com.ibm.icu.math.BigDecimal("1E-999999999");
    d1.multiply(d2,mce); // marginal negative overflow, engineering
    flag=false;
   }while(false);}
@@ -2028,7 +2028,7 @@ public class DiagBigDecimal{
   (new Test("mul205")).ok=flag;
   
   try{checkdigits:do{
-   tenlong.multiply(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.multiply(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $61){ae=$61;
@@ -2036,7 +2036,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("mul206")).ok=flag;
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.TEN.multiply(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.TEN.multiply(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $62){ae=$62;
@@ -2055,30 +2055,30 @@ public class DiagBigDecimal{
   boolean flag=false;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("neg001")).ok=((new com.ibm.math.BigDecimal("2")).negate().toString()).equals("-2");
-  (new Test("neg002")).ok=((new com.ibm.math.BigDecimal("-2")).negate().toString()).equals("2");
-  (new Test("neg003")).ok=((new com.ibm.math.BigDecimal("2.00")).negate(mcdef).toString()).equals("-2.00");
-  (new Test("neg004")).ok=((new com.ibm.math.BigDecimal("-2.00")).negate(mcdef).toString()).equals("2.00");
-  (new Test("neg005")).ok=((new com.ibm.math.BigDecimal("0")).negate(mcdef).toString()).equals("0");
-  (new Test("neg006")).ok=((new com.ibm.math.BigDecimal("0.00")).negate(mcdef).toString()).equals("0");
-  (new Test("neg007")).ok=((new com.ibm.math.BigDecimal("00.0")).negate(mcdef).toString()).equals("0");
-  (new Test("neg008")).ok=((new com.ibm.math.BigDecimal("00")).negate(mcdef).toString()).equals("0");
+  (new Test("neg001")).ok=((new com.ibm.icu.math.BigDecimal("2")).negate().toString()).equals("-2");
+  (new Test("neg002")).ok=((new com.ibm.icu.math.BigDecimal("-2")).negate().toString()).equals("2");
+  (new Test("neg003")).ok=((new com.ibm.icu.math.BigDecimal("2.00")).negate(mcdef).toString()).equals("-2.00");
+  (new Test("neg004")).ok=((new com.ibm.icu.math.BigDecimal("-2.00")).negate(mcdef).toString()).equals("2.00");
+  (new Test("neg005")).ok=((new com.ibm.icu.math.BigDecimal("0")).negate(mcdef).toString()).equals("0");
+  (new Test("neg006")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).negate(mcdef).toString()).equals("0");
+  (new Test("neg007")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).negate(mcdef).toString()).equals("0");
+  (new Test("neg008")).ok=((new com.ibm.icu.math.BigDecimal("00")).negate(mcdef).toString()).equals("0");
   
-  (new Test("neg010")).ok=((new com.ibm.math.BigDecimal("2.00")).negate().toString()).equals("-2.00");
-  (new Test("neg011")).ok=((new com.ibm.math.BigDecimal("-2.00")).negate().toString()).equals("2.00");
-  (new Test("neg012")).ok=((new com.ibm.math.BigDecimal("0")).negate().toString()).equals("0");
-  (new Test("neg013")).ok=((new com.ibm.math.BigDecimal("0.00")).negate().toString()).equals("0.00");
-  (new Test("neg014")).ok=((new com.ibm.math.BigDecimal("00.0")).negate().toString()).equals("0.0");
-  (new Test("neg015")).ok=((new com.ibm.math.BigDecimal("00.00")).negate().toString()).equals("0.00");
-  (new Test("neg016")).ok=((new com.ibm.math.BigDecimal("00")).negate().toString()).equals("0");
+  (new Test("neg010")).ok=((new com.ibm.icu.math.BigDecimal("2.00")).negate().toString()).equals("-2.00");
+  (new Test("neg011")).ok=((new com.ibm.icu.math.BigDecimal("-2.00")).negate().toString()).equals("2.00");
+  (new Test("neg012")).ok=((new com.ibm.icu.math.BigDecimal("0")).negate().toString()).equals("0");
+  (new Test("neg013")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).negate().toString()).equals("0.00");
+  (new Test("neg014")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).negate().toString()).equals("0.0");
+  (new Test("neg015")).ok=((new com.ibm.icu.math.BigDecimal("00.00")).negate().toString()).equals("0.00");
+  (new Test("neg016")).ok=((new com.ibm.icu.math.BigDecimal("00")).negate().toString()).equals("0");
   
-  (new Test("neg020")).ok=((new com.ibm.math.BigDecimal("-2000000")).negate().toString()).equals("2000000");
-  (new Test("neg021")).ok=((new com.ibm.math.BigDecimal("-2000000")).negate(mcdef).toString()).equals("2000000");
-  (new Test("neg022")).ok=((new com.ibm.math.BigDecimal("-2000000")).negate(mc6).toString()).equals("2.00000E+6");
-  (new Test("neg023")).ok=((new com.ibm.math.BigDecimal("2000000")).negate(mc6).toString()).equals("-2.00000E+6");
+  (new Test("neg020")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).negate().toString()).equals("2000000");
+  (new Test("neg021")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).negate(mcdef).toString()).equals("2000000");
+  (new Test("neg022")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).negate(mc6).toString()).equals("2.00000E+6");
+  (new Test("neg023")).ok=((new com.ibm.icu.math.BigDecimal("2000000")).negate(mc6).toString()).equals("-2.00000E+6");
   
   try{checknull:do{
-   ten.negate((com.ibm.math.MathContext)null);
+   ten.negate((com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $63){
@@ -2102,62 +2102,62 @@ public class DiagBigDecimal{
  
  public void diagplus(){
   boolean flag=false;
-  com.ibm.math.MathContext mche1;
+  com.ibm.icu.math.MathContext mche1;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("plu001")).ok=((new com.ibm.math.BigDecimal("2")).plus(mcdef).toString()).equals("2");
-  (new Test("plu002")).ok=((new com.ibm.math.BigDecimal("-2")).plus(mcdef).toString()).equals("-2");
-  (new Test("plu003")).ok=((new com.ibm.math.BigDecimal("2.00")).plus(mcdef).toString()).equals("2.00");
-  (new Test("plu004")).ok=((new com.ibm.math.BigDecimal("-2.00")).plus(mcdef).toString()).equals("-2.00");
-  (new Test("plu005")).ok=((new com.ibm.math.BigDecimal("0")).plus(mcdef).toString()).equals("0");
-  (new Test("plu006")).ok=((new com.ibm.math.BigDecimal("0.00")).plus(mcdef).toString()).equals("0");
-  (new Test("plu007")).ok=((new com.ibm.math.BigDecimal("00.0")).plus(mcdef).toString()).equals("0");
-  (new Test("plu008")).ok=((new com.ibm.math.BigDecimal("00")).plus(mcdef).toString()).equals("0");
+  (new Test("plu001")).ok=((new com.ibm.icu.math.BigDecimal("2")).plus(mcdef).toString()).equals("2");
+  (new Test("plu002")).ok=((new com.ibm.icu.math.BigDecimal("-2")).plus(mcdef).toString()).equals("-2");
+  (new Test("plu003")).ok=((new com.ibm.icu.math.BigDecimal("2.00")).plus(mcdef).toString()).equals("2.00");
+  (new Test("plu004")).ok=((new com.ibm.icu.math.BigDecimal("-2.00")).plus(mcdef).toString()).equals("-2.00");
+  (new Test("plu005")).ok=((new com.ibm.icu.math.BigDecimal("0")).plus(mcdef).toString()).equals("0");
+  (new Test("plu006")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).plus(mcdef).toString()).equals("0");
+  (new Test("plu007")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).plus(mcdef).toString()).equals("0");
+  (new Test("plu008")).ok=((new com.ibm.icu.math.BigDecimal("00")).plus(mcdef).toString()).equals("0");
   
-  (new Test("plu010")).ok=((new com.ibm.math.BigDecimal("2")).plus().toString()).equals("2");
-  (new Test("plu011")).ok=((new com.ibm.math.BigDecimal("-2")).plus().toString()).equals("-2");
-  (new Test("plu012")).ok=((new com.ibm.math.BigDecimal("2.00")).plus().toString()).equals("2.00");
-  (new Test("plu013")).ok=((new com.ibm.math.BigDecimal("-2.00")).plus().toString()).equals("-2.00");
-  (new Test("plu014")).ok=((new com.ibm.math.BigDecimal("0")).plus().toString()).equals("0");
-  (new Test("plu015")).ok=((new com.ibm.math.BigDecimal("0.00")).plus().toString()).equals("0.00");
-  (new Test("plu016")).ok=((new com.ibm.math.BigDecimal("00.0")).plus().toString()).equals("0.0");
-  (new Test("plu017")).ok=((new com.ibm.math.BigDecimal("00.00")).plus().toString()).equals("0.00");
-  (new Test("plu018")).ok=((new com.ibm.math.BigDecimal("00")).plus().toString()).equals("0");
+  (new Test("plu010")).ok=((new com.ibm.icu.math.BigDecimal("2")).plus().toString()).equals("2");
+  (new Test("plu011")).ok=((new com.ibm.icu.math.BigDecimal("-2")).plus().toString()).equals("-2");
+  (new Test("plu012")).ok=((new com.ibm.icu.math.BigDecimal("2.00")).plus().toString()).equals("2.00");
+  (new Test("plu013")).ok=((new com.ibm.icu.math.BigDecimal("-2.00")).plus().toString()).equals("-2.00");
+  (new Test("plu014")).ok=((new com.ibm.icu.math.BigDecimal("0")).plus().toString()).equals("0");
+  (new Test("plu015")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).plus().toString()).equals("0.00");
+  (new Test("plu016")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).plus().toString()).equals("0.0");
+  (new Test("plu017")).ok=((new com.ibm.icu.math.BigDecimal("00.00")).plus().toString()).equals("0.00");
+  (new Test("plu018")).ok=((new com.ibm.icu.math.BigDecimal("00")).plus().toString()).equals("0");
   
-  (new Test("plu020")).ok=((new com.ibm.math.BigDecimal("-2000000")).plus().toString()).equals("-2000000");
-  (new Test("plu021")).ok=((new com.ibm.math.BigDecimal("-2000000")).plus(mcdef).toString()).equals("-2000000");
-  (new Test("plu022")).ok=((new com.ibm.math.BigDecimal("-2000000")).plus(mc6).toString()).equals("-2.00000E+6");
-  (new Test("plu023")).ok=((new com.ibm.math.BigDecimal("2000000")).plus(mc6).toString()).equals("2.00000E+6");
+  (new Test("plu020")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).plus().toString()).equals("-2000000");
+  (new Test("plu021")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).plus(mcdef).toString()).equals("-2000000");
+  (new Test("plu022")).ok=((new com.ibm.icu.math.BigDecimal("-2000000")).plus(mc6).toString()).equals("-2.00000E+6");
+  (new Test("plu023")).ok=((new com.ibm.icu.math.BigDecimal("2000000")).plus(mc6).toString()).equals("2.00000E+6");
   
   // try some exotic but silly rounding [format checks more varieties]
   // [this mostly ensures we can set up and pass the setting]
-  mche1=new com.ibm.math.MathContext(1,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_HALF_EVEN);
-  (new Test("plu030")).ok=((new com.ibm.math.BigDecimal("0.24")).plus(mche1).toString()).equals("0.2");
-  (new Test("plu031")).ok=((new com.ibm.math.BigDecimal("0.25")).plus(mche1).toString()).equals("0.2");
-  (new Test("plu032")).ok=((new com.ibm.math.BigDecimal("0.26")).plus(mche1).toString()).equals("0.3");
-  (new Test("plu033")).ok=((new com.ibm.math.BigDecimal("0.14")).plus(mche1).toString()).equals("0.1");
-  (new Test("plu034")).ok=((new com.ibm.math.BigDecimal("0.15")).plus(mche1).toString()).equals("0.2");
-  (new Test("plu035")).ok=((new com.ibm.math.BigDecimal("0.16")).plus(mche1).toString()).equals("0.2");
+  mche1=new com.ibm.icu.math.MathContext(1,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN);
+  (new Test("plu030")).ok=((new com.ibm.icu.math.BigDecimal("0.24")).plus(mche1).toString()).equals("0.2");
+  (new Test("plu031")).ok=((new com.ibm.icu.math.BigDecimal("0.25")).plus(mche1).toString()).equals("0.2");
+  (new Test("plu032")).ok=((new com.ibm.icu.math.BigDecimal("0.26")).plus(mche1).toString()).equals("0.3");
+  (new Test("plu033")).ok=((new com.ibm.icu.math.BigDecimal("0.14")).plus(mche1).toString()).equals("0.1");
+  (new Test("plu034")).ok=((new com.ibm.icu.math.BigDecimal("0.15")).plus(mche1).toString()).equals("0.2");
+  (new Test("plu035")).ok=((new com.ibm.icu.math.BigDecimal("0.16")).plus(mche1).toString()).equals("0.2");
   
-  (new Test("plu040")).ok=((new com.ibm.math.BigDecimal("0.251")).plus(mche1).toString()).equals("0.3");
-  (new Test("plu041")).ok=((new com.ibm.math.BigDecimal("0.151")).plus(mche1).toString()).equals("0.2");
+  (new Test("plu040")).ok=((new com.ibm.icu.math.BigDecimal("0.251")).plus(mche1).toString()).equals("0.3");
+  (new Test("plu041")).ok=((new com.ibm.icu.math.BigDecimal("0.151")).plus(mche1).toString()).equals("0.2");
   
-  (new Test("plu050")).ok=((new com.ibm.math.BigDecimal("-0.24")).plus(mche1).toString()).equals("-0.2");
-  (new Test("plu051")).ok=((new com.ibm.math.BigDecimal("-0.25")).plus(mche1).toString()).equals("-0.2");
-  (new Test("plu052")).ok=((new com.ibm.math.BigDecimal("-0.26")).plus(mche1).toString()).equals("-0.3");
-  (new Test("plu053")).ok=((new com.ibm.math.BigDecimal("-0.14")).plus(mche1).toString()).equals("-0.1");
-  (new Test("plu054")).ok=((new com.ibm.math.BigDecimal("-0.15")).plus(mche1).toString()).equals("-0.2");
-  (new Test("plu055")).ok=((new com.ibm.math.BigDecimal("-0.16")).plus(mche1).toString()).equals("-0.2");
+  (new Test("plu050")).ok=((new com.ibm.icu.math.BigDecimal("-0.24")).plus(mche1).toString()).equals("-0.2");
+  (new Test("plu051")).ok=((new com.ibm.icu.math.BigDecimal("-0.25")).plus(mche1).toString()).equals("-0.2");
+  (new Test("plu052")).ok=((new com.ibm.icu.math.BigDecimal("-0.26")).plus(mche1).toString()).equals("-0.3");
+  (new Test("plu053")).ok=((new com.ibm.icu.math.BigDecimal("-0.14")).plus(mche1).toString()).equals("-0.1");
+  (new Test("plu054")).ok=((new com.ibm.icu.math.BigDecimal("-0.15")).plus(mche1).toString()).equals("-0.2");
+  (new Test("plu055")).ok=((new com.ibm.icu.math.BigDecimal("-0.16")).plus(mche1).toString()).equals("-0.2");
   
   // more fixed, potential LHS swaps if done by add 0
-  (new Test("plu060")).ok=((new com.ibm.math.BigDecimal("-56267E-10")).plus().toString()).equals("-0.0000056267");
-  (new Test("plu061")).ok=((new com.ibm.math.BigDecimal("-56267E-5")).plus().toString()).equals("-0.56267");
-  (new Test("plu062")).ok=((new com.ibm.math.BigDecimal("-56267E-2")).plus().toString()).equals("-562.67");
-  (new Test("plu063")).ok=((new com.ibm.math.BigDecimal("-56267E-1")).plus().toString()).equals("-5626.7");
-  (new Test("plu065")).ok=((new com.ibm.math.BigDecimal("-56267E-0")).plus().toString()).equals("-56267");
+  (new Test("plu060")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-10")).plus().toString()).equals("-0.0000056267");
+  (new Test("plu061")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-5")).plus().toString()).equals("-0.56267");
+  (new Test("plu062")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-2")).plus().toString()).equals("-562.67");
+  (new Test("plu063")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-1")).plus().toString()).equals("-5626.7");
+  (new Test("plu065")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-0")).plus().toString()).equals("-56267");
   
   try{checknull:do{
-   ten.plus((com.ibm.math.MathContext)null);
+   ten.plus((com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $65){
@@ -2181,85 +2181,85 @@ public class DiagBigDecimal{
  
  public void diagpow(){
   boolean flag;
-  com.ibm.math.BigDecimal x;
-  com.ibm.math.BigDecimal temp;
+  com.ibm.icu.math.BigDecimal x;
+  com.ibm.icu.math.BigDecimal temp;
   int n=0;
-  com.ibm.math.BigDecimal vx;
-  com.ibm.math.BigDecimal vn;
+  com.ibm.icu.math.BigDecimal vx;
+  com.ibm.icu.math.BigDecimal vn;
   java.lang.ArithmeticException ae=null;
   flag=true;
-  (new Test("pow001")).ok="1".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("0"),mcdef).toString());
-  (new Test("pow002")).ok="0.3".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("1"),mcdef).toString());
-  (new Test("pow003")).ok="0.3".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("1.00"),mcdef).toString());
-  (new Test("pow004")).ok="0.09".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("2.00"),mcdef).toString());
-  (new Test("pow005")).ok="0.09".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("2.000000000"),mcdef).toString());
-  (new Test("pow006")).ok=("1E-8").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-8"),mcdef).toString());
-  (new Test("pow007")).ok=("1E-7").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-7"),mcdef).toString());
-  (new Test("pow008")).ok="0.000001".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-6"),mcdef).toString());
-  (new Test("pow009")).ok="0.00001".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-5"),mcdef).toString());
-  (new Test("pow010")).ok="0.0001".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-4"),mcdef).toString());
-  (new Test("pow011")).ok="0.001".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-3"),mcdef).toString());
-  (new Test("pow012")).ok="0.01".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-2"),mcdef).toString());
-  (new Test("pow013")).ok="0.1".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-1"),mcdef).toString());
-  (new Test("pow014")).ok="1".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("0"),mcdef).toString());
-  (new Test("pow015")).ok="10".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("1"),mcdef).toString());
-  (new Test("pow016")).ok="100000000".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("8"),mcdef).toString());
-  (new Test("pow017")).ok=("1E+9").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("9"),mcdef).toString());
-  (new Test("pow018")).ok=("1E+99").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("99"),mcdef).toString());
-  (new Test("pow019")).ok=("1E+999999999").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999999"),mcdef).toString());
-  (new Test("pow020")).ok=("1E+999999998").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999998"),mcdef).toString());
-  (new Test("pow021")).ok=("1E+999999997").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999997"),mcdef).toString());
-  (new Test("pow022")).ok=("1E+333333333").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("333333333"),mcdef).toString());
-  (new Test("pow023")).ok=("1E-333333333").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-333333333"),mcdef).toString());
-  (new Test("pow024")).ok=("1E-999999998").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-999999998"),mcdef).toString());
-  (new Test("pow025")).ok=("1E-999999999").equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-999999999"),mcdef).toString());
-  (new Test("pow026")).ok="0.5".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-1"),mcdef).toString());
-  (new Test("pow027")).ok="0.25".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-2"),mcdef).toString());
-  (new Test("pow028")).ok="0.0625".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-4"),mcdef).toString());
+  (new Test("pow001")).ok="1".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString());
+  (new Test("pow002")).ok="0.3".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString());
+  (new Test("pow003")).ok="0.3".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("1.00"),mcdef).toString());
+  (new Test("pow004")).ok="0.09".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("2.00"),mcdef).toString());
+  (new Test("pow005")).ok="0.09".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("2.000000000"),mcdef).toString());
+  (new Test("pow006")).ok=("1E-8").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-8"),mcdef).toString());
+  (new Test("pow007")).ok=("1E-7").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-7"),mcdef).toString());
+  (new Test("pow008")).ok="0.000001".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-6"),mcdef).toString());
+  (new Test("pow009")).ok="0.00001".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-5"),mcdef).toString());
+  (new Test("pow010")).ok="0.0001".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-4"),mcdef).toString());
+  (new Test("pow011")).ok="0.001".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString());
+  (new Test("pow012")).ok="0.01".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-2"),mcdef).toString());
+  (new Test("pow013")).ok="0.1".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-1"),mcdef).toString());
+  (new Test("pow014")).ok="1".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString());
+  (new Test("pow015")).ok="10".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString());
+  (new Test("pow016")).ok="100000000".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("8"),mcdef).toString());
+  (new Test("pow017")).ok=("1E+9").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("9"),mcdef).toString());
+  (new Test("pow018")).ok=("1E+99").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("99"),mcdef).toString());
+  (new Test("pow019")).ok=("1E+999999999").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999999"),mcdef).toString());
+  (new Test("pow020")).ok=("1E+999999998").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999998"),mcdef).toString());
+  (new Test("pow021")).ok=("1E+999999997").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999997"),mcdef).toString());
+  (new Test("pow022")).ok=("1E+333333333").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("333333333"),mcdef).toString());
+  (new Test("pow023")).ok=("1E-333333333").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-333333333"),mcdef).toString());
+  (new Test("pow024")).ok=("1E-999999998").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-999999998"),mcdef).toString());
+  (new Test("pow025")).ok=("1E-999999999").equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-999999999"),mcdef).toString());
+  (new Test("pow026")).ok="0.5".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-1"),mcdef).toString());
+  (new Test("pow027")).ok="0.25".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-2"),mcdef).toString());
+  (new Test("pow028")).ok="0.0625".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-4"),mcdef).toString());
   
-  (new Test("pow050")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("1");
-  (new Test("pow051")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("0");
-  (new Test("pow052")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0");
-  (new Test("pow053")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("1");
-  (new Test("pow054")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("1"),mcdef).toString()).equals("1");
-  (new Test("pow055")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1");
-  (new Test("pow056")).ok=((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("1");
-  (new Test("pow057")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999999"),mcdef).toString()).equals("1E+999999999");
-  (new Test("pow058")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999998"),mcdef).toString()).equals("1E+999999998");
-  (new Test("pow059")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("999999997"),mcdef).toString()).equals("1E+999999997");
-  (new Test("pow060")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("333333333"),mcdef).toString()).equals("1E+333333333");
-  (new Test("pow061")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("77"),mcdef).toString()).equals("1E+77");
-  (new Test("pow062")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("22"),mcdef).toString()).equals("1E+22");
-  (new Test("pow063")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-77"),mcdef).toString()).equals("1E-77");
-  (new Test("pow064")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("-22"),mcdef).toString()).equals("1E-22");
-  (new Test("pow065")).ok=((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-1"),mcdef).toString()).equals("0.5");
-  (new Test("pow066")).ok=((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-2"),mcdef).toString()).equals("0.25");
-  (new Test("pow067")).ok=((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("-4"),mcdef).toString()).equals("0.0625");
-  (new Test("pow068")).ok=((new com.ibm.math.BigDecimal("6.0")).pow(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("36");
-  (new Test("pow069")).ok=((new com.ibm.math.BigDecimal("-3")).pow(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("9");/* from book */
-  (new Test("pow070")).ok=((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("2"),mcdef).pow(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("64");/* from book */
+  (new Test("pow050")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("1");
+  (new Test("pow051")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("0");
+  (new Test("pow052")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0");
+  (new Test("pow053")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("1");
+  (new Test("pow054")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("1"),mcdef).toString()).equals("1");
+  (new Test("pow055")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1");
+  (new Test("pow056")).ok=((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("1");
+  (new Test("pow057")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999999"),mcdef).toString()).equals("1E+999999999");
+  (new Test("pow058")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999998"),mcdef).toString()).equals("1E+999999998");
+  (new Test("pow059")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("999999997"),mcdef).toString()).equals("1E+999999997");
+  (new Test("pow060")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("333333333"),mcdef).toString()).equals("1E+333333333");
+  (new Test("pow061")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("77"),mcdef).toString()).equals("1E+77");
+  (new Test("pow062")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("22"),mcdef).toString()).equals("1E+22");
+  (new Test("pow063")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-77"),mcdef).toString()).equals("1E-77");
+  (new Test("pow064")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("-22"),mcdef).toString()).equals("1E-22");
+  (new Test("pow065")).ok=((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-1"),mcdef).toString()).equals("0.5");
+  (new Test("pow066")).ok=((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-2"),mcdef).toString()).equals("0.25");
+  (new Test("pow067")).ok=((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("-4"),mcdef).toString()).equals("0.0625");
+  (new Test("pow068")).ok=((new com.ibm.icu.math.BigDecimal("6.0")).pow(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("36");
+  (new Test("pow069")).ok=((new com.ibm.icu.math.BigDecimal("-3")).pow(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("9");/* from book */
+  (new Test("pow070")).ok=((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("2"),mcdef).pow(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("64");/* from book */
   
   // 1998.12.14 Next test removed as pow() no longer rounds RHS [as per ANSI]
   // Test('pow071').ok=BigDecimal('2').pow(BigDecimal('2.000000001'),mcdef).toString == '4'/* check input rounding */
   
   /* General tests from original Rexx diagnostics */
-  x=new com.ibm.math.BigDecimal("0.5");
-  temp=com.ibm.math.BigDecimal.ONE;
+  x=new com.ibm.icu.math.BigDecimal("0.5");
+  temp=com.ibm.icu.math.BigDecimal.ONE;
   flag=true;
   {n=1;n:for(;n<=10;n++){
-   temp=temp.multiply(x).divide(com.ibm.math.BigDecimal.ONE);
-   flag=flag&(x.pow(new com.ibm.math.BigDecimal(n),mcdef).toString()).equals(temp.toString());
+   temp=temp.multiply(x).divide(com.ibm.icu.math.BigDecimal.ONE);
+   flag=flag&(x.pow(new com.ibm.icu.math.BigDecimal(n),mcdef).toString()).equals(temp.toString());
    }
   }/*n*/
   (new Test("pow080")).ok=flag;
   
-  x=new com.ibm.math.BigDecimal("2");
-  temp=com.ibm.math.BigDecimal.ONE;
+  x=new com.ibm.icu.math.BigDecimal("2");
+  temp=com.ibm.icu.math.BigDecimal.ONE;
   flag=true;
   {n=1;n:for(;n<=29;n++){
-   temp=temp.multiply(x).divide(com.ibm.math.BigDecimal.ONE);
-   flag=flag&(x.pow(new com.ibm.math.BigDecimal(n),mcdef).toString()).equals(temp.toString());
-   flag=flag&(x.pow(new com.ibm.math.BigDecimal((int)-n),mcdef).toString()).equals(com.ibm.math.BigDecimal.ONE.divide(temp,mcdef).toString());
+   temp=temp.multiply(x).divide(com.ibm.icu.math.BigDecimal.ONE);
+   flag=flag&(x.pow(new com.ibm.icu.math.BigDecimal(n),mcdef).toString()).equals(temp.toString());
+   flag=flag&(x.pow(new com.ibm.icu.math.BigDecimal((int)-n),mcdef).toString()).equals(com.ibm.icu.math.BigDecimal.ONE.divide(temp,mcdef).toString());
    /* Note that rounding errors are possible for larger "n" */
    /* due to the information content of the exponent        */
    }
@@ -2269,43 +2269,43 @@ public class DiagBigDecimal{
   /* The Vienna case.  Checks both setup and 1/acc working precision */
   // Modified 1998.12.14 as RHS no longer rounded before use (must fit)
   // Modified 1990.02.04 as LHS is now rounded (instead of truncated to guard)
-  vx=new com.ibm.math.BigDecimal("123456789E+10"); // lhs .. rounded to 1.23E+18
-  vn=new com.ibm.math.BigDecimal("-1.23000e+2"); // rhs .. [was: -1.23455e+2, rounds to -123]
+  vx=new com.ibm.icu.math.BigDecimal("123456789E+10"); // lhs .. rounded to 1.23E+18
+  vn=new com.ibm.icu.math.BigDecimal("-1.23000e+2"); // rhs .. [was: -1.23455e+2, rounds to -123]
   (new Test("pow090")).ok=(vx.pow(vn,mc3).toString()).equals("8.74E-2226");
   
   //- fixed point versions ---
-  (new Test("pow101")).ok="1".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("0")).toString());
-  (new Test("pow102")).ok="0.3".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("1")).toString());
-  (new Test("pow103")).ok="0.3".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("1.00")).toString());
-  (new Test("pow104")).ok="0.09".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("2")).toString());
-  (new Test("pow105")).ok="0.09".equals((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("2.00")).toString());
-  (new Test("pow106")).ok="10".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("1")).toString());
-  (new Test("pow107")).ok="100000000".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("8")).toString());
-  (new Test("pow108")).ok="1000000000".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("9")).toString());
-  (new Test("pow109")).ok="10000000000".equals((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("10")).toString());
-  (new Test("pow110")).ok="1".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("0")).toString());
-  (new Test("pow111")).ok="16".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("4")).toString());
-  (new Test("pow112")).ok="256".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("8")).toString());
-  (new Test("pow113")).ok="1024".equals((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("10")).toString());
-  (new Test("pow114")).ok="1.0510100501".equals((new com.ibm.math.BigDecimal("1.01")).pow(new com.ibm.math.BigDecimal("5")).toString());
+  (new Test("pow101")).ok="1".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("0")).toString());
+  (new Test("pow102")).ok="0.3".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("1")).toString());
+  (new Test("pow103")).ok="0.3".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("1.00")).toString());
+  (new Test("pow104")).ok="0.09".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("2")).toString());
+  (new Test("pow105")).ok="0.09".equals((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("2.00")).toString());
+  (new Test("pow106")).ok="10".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("1")).toString());
+  (new Test("pow107")).ok="100000000".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("8")).toString());
+  (new Test("pow108")).ok="1000000000".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("9")).toString());
+  (new Test("pow109")).ok="10000000000".equals((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("10")).toString());
+  (new Test("pow110")).ok="1".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("0")).toString());
+  (new Test("pow111")).ok="16".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("4")).toString());
+  (new Test("pow112")).ok="256".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("8")).toString());
+  (new Test("pow113")).ok="1024".equals((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("10")).toString());
+  (new Test("pow114")).ok="1.0510100501".equals((new com.ibm.icu.math.BigDecimal("1.01")).pow(new com.ibm.icu.math.BigDecimal("5")).toString());
   
-  (new Test("pow120")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("0")).toString()).equals("1");
-  (new Test("pow121")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("1")).toString()).equals("0");
-  (new Test("pow122")).ok=((new com.ibm.math.BigDecimal("0")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("0");
-  (new Test("pow123")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("0")).toString()).equals("1");
-  (new Test("pow144")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("1")).toString()).equals("1");
-  (new Test("pow125")).ok=((new com.ibm.math.BigDecimal("1")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("1");
-  (new Test("pow126")).ok=((new com.ibm.math.BigDecimal("0.3")).pow(new com.ibm.math.BigDecimal("0")).toString()).equals("1");
-  (new Test("pow127")).ok=((new com.ibm.math.BigDecimal("10")).pow(new com.ibm.math.BigDecimal("7")).toString()).equals("10000000");
-  (new Test("pow128")).ok=((new com.ibm.math.BigDecimal("6.0")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("36.00");
-  (new Test("pow129")).ok=((new com.ibm.math.BigDecimal("6.00")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("36.0000");
-  (new Test("pow130")).ok=((new com.ibm.math.BigDecimal("6.000")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("36.000000");
-  (new Test("pow131")).ok=((new com.ibm.math.BigDecimal("-3")).pow(new com.ibm.math.BigDecimal("2")).toString()).equals("9");
-  (new Test("pow132")).ok=((new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("2")).pow(new com.ibm.math.BigDecimal("3")).toString()).equals("64");
+  (new Test("pow120")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("1");
+  (new Test("pow121")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("0");
+  (new Test("pow122")).ok=((new com.ibm.icu.math.BigDecimal("0")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0");
+  (new Test("pow123")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("1");
+  (new Test("pow144")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("1")).toString()).equals("1");
+  (new Test("pow125")).ok=((new com.ibm.icu.math.BigDecimal("1")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1");
+  (new Test("pow126")).ok=((new com.ibm.icu.math.BigDecimal("0.3")).pow(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("1");
+  (new Test("pow127")).ok=((new com.ibm.icu.math.BigDecimal("10")).pow(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("10000000");
+  (new Test("pow128")).ok=((new com.ibm.icu.math.BigDecimal("6.0")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("36.00");
+  (new Test("pow129")).ok=((new com.ibm.icu.math.BigDecimal("6.00")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("36.0000");
+  (new Test("pow130")).ok=((new com.ibm.icu.math.BigDecimal("6.000")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("36.000000");
+  (new Test("pow131")).ok=((new com.ibm.icu.math.BigDecimal("-3")).pow(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("9");
+  (new Test("pow132")).ok=((new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("2")).pow(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("64");
   
   /* errors */
   try{checknull:do{
-   ten.pow((com.ibm.math.BigDecimal)null);
+   ten.pow((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $67){
@@ -2313,7 +2313,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("pow150")).ok=flag;
   try{checknull2:do{
-   ten.pow(ten,(com.ibm.math.MathContext)null);
+   ten.pow(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $68){
@@ -2323,7 +2323,7 @@ public class DiagBigDecimal{
   
   flag=true;
   try{checkdigits:do{
-   tenlong.pow(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.pow(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $69){ae=$69;
@@ -2332,7 +2332,7 @@ public class DiagBigDecimal{
   (new Test("pow152")).ok=flag;
   
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.pow(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.pow(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $70){ae=$70;
@@ -2341,7 +2341,7 @@ public class DiagBigDecimal{
   (new Test("pow153")).ok=flag;
   
   try{checkpos:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("-71"));
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("-71"));
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $71){ae=$71;
@@ -2350,7 +2350,7 @@ public class DiagBigDecimal{
   (new Test("pow154")).ok=flag;
   
   try{checkwhole:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("1234"),mc3);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("1234"),mc3);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $72){ae=$72;
@@ -2359,7 +2359,7 @@ public class DiagBigDecimal{
   (new Test("pow155")).ok=flag;
   
   try{checkwhole1:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("12.34e+2"),mc3);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("12.34e+2"),mc3);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $73){ae=$73;
@@ -2368,7 +2368,7 @@ public class DiagBigDecimal{
   (new Test("pow156")).ok=flag;
   
   try{checkwhole2:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("12.4"),mcdef);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("12.4"),mcdef);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $74){ae=$74;
@@ -2377,7 +2377,7 @@ public class DiagBigDecimal{
   (new Test("pow157")).ok=flag;
   
   try{checkwhole3:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("1.01"),mcdef);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("1.01"),mcdef);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $75){ae=$75;
@@ -2386,7 +2386,7 @@ public class DiagBigDecimal{
   (new Test("pow158")).ok=flag;
   
   try{checkwhole4:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("1.000000001"),mcdef);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("1.000000001"),mcdef);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $76){ae=$76;
@@ -2395,7 +2395,7 @@ public class DiagBigDecimal{
   (new Test("pow159")).ok=flag;
   
   try{checkwhole5:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("1.000000001"),mc3);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("1.000000001"),mc3);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $77){ae=$77;
@@ -2404,7 +2404,7 @@ public class DiagBigDecimal{
   (new Test("pow160")).ok=flag;
   
   try{checkwhole6:do{
-   com.ibm.math.BigDecimal.ONE.pow(new com.ibm.math.BigDecimal("5.67E-987654321"),mc3);
+   com.ibm.icu.math.BigDecimal.ONE.pow(new com.ibm.icu.math.BigDecimal("5.67E-987654321"),mc3);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $78){ae=$78;
@@ -2423,128 +2423,128 @@ public class DiagBigDecimal{
   boolean flag=false;
   java.lang.ArithmeticException ae=null;
   
-  (new Test("rem001")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("1");
-  (new Test("rem002")).ok=((new com.ibm.math.BigDecimal("5")).remainder(new com.ibm.math.BigDecimal("5"),mcdef).toString()).equals("0");
-  (new Test("rem003")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("10"),mcdef).toString()).equals("3");
-  (new Test("rem004")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("50"),mcdef).toString()).equals("13");
-  (new Test("rem005")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("100"),mcdef).toString()).equals("13");
-  (new Test("rem006")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("1000"),mcdef).toString()).equals("13");
-  (new Test("rem007")).ok=((new com.ibm.math.BigDecimal(".13")).remainder(one).toString()).equals("0.13");
-  (new Test("rem008")).ok=((new com.ibm.math.BigDecimal("0.133")).remainder(one).toString()).equals("0.133");
-  (new Test("rem009")).ok=((new com.ibm.math.BigDecimal("0.1033")).remainder(one).toString()).equals("0.1033");
-  (new Test("rem010")).ok=((new com.ibm.math.BigDecimal("1.033")).remainder(one).toString()).equals("0.033");
-  (new Test("rem011")).ok=((new com.ibm.math.BigDecimal("10.33")).remainder(one).toString()).equals("0.33");
-  (new Test("rem012")).ok=((new com.ibm.math.BigDecimal("10.33")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("0.33");
-  (new Test("rem013")).ok=((new com.ibm.math.BigDecimal("103.3")).remainder(com.ibm.math.BigDecimal.ONE).toString()).equals("0.3");
-  (new Test("rem014")).ok=((new com.ibm.math.BigDecimal("133")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("3");
-  (new Test("rem015")).ok=((new com.ibm.math.BigDecimal("1033")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("3");
-  (new Test("rem016")).ok=((new com.ibm.math.BigDecimal("1033")).remainder(new com.ibm.math.BigDecimal(50),mcdef).toString()).equals("33");
-  (new Test("rem017")).ok=((new com.ibm.math.BigDecimal("101.0")).remainder(new com.ibm.math.BigDecimal(3),mcdef).toString()).equals("2.0");
-  (new Test("rem018")).ok=((new com.ibm.math.BigDecimal("102.0")).remainder(new com.ibm.math.BigDecimal(3),mcdef).toString()).equals("0");
-  (new Test("rem019")).ok=((new com.ibm.math.BigDecimal("103.0")).remainder(new com.ibm.math.BigDecimal(3),mcdef).toString()).equals("1.0");
-  (new Test("rem020")).ok=((new com.ibm.math.BigDecimal("2.40")).remainder(one).toString()).equals("0.40");
-  (new Test("rem021")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(one).toString()).equals("0.400");
-  (new Test("rem022")).ok=((new com.ibm.math.BigDecimal("2.4")).remainder(one).toString()).equals("0.4");
-  (new Test("rem023")).ok=((new com.ibm.math.BigDecimal("2.4")).remainder(new com.ibm.math.BigDecimal(2),mcdef).toString()).equals("0.4");
-  (new Test("rem024")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(new com.ibm.math.BigDecimal(2),mcdef).toString()).equals("0.400");
-  (new Test("rem025")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1");
-  (new Test("rem026")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.30"),mcdef).toString()).equals("0.10");
-  (new Test("rem027")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.300"),mcdef).toString()).equals("0.100");
-  (new Test("rem028")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.3000"),mcdef).toString()).equals("0.1000");
-  (new Test("rem029")).ok=((new com.ibm.math.BigDecimal("1.0")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1");
-  (new Test("rem030")).ok=((new com.ibm.math.BigDecimal("1.00")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.10");
-  (new Test("rem031")).ok=((new com.ibm.math.BigDecimal("1.000")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.100");
-  (new Test("rem032")).ok=((new com.ibm.math.BigDecimal("1.0000")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1000");
-  (new Test("rem033")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("2.001"),mcdef).toString()).equals("0.5");
+  (new Test("rem001")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("1");
+  (new Test("rem002")).ok=((new com.ibm.icu.math.BigDecimal("5")).remainder(new com.ibm.icu.math.BigDecimal("5"),mcdef).toString()).equals("0");
+  (new Test("rem003")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("10"),mcdef).toString()).equals("3");
+  (new Test("rem004")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("50"),mcdef).toString()).equals("13");
+  (new Test("rem005")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("100"),mcdef).toString()).equals("13");
+  (new Test("rem006")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("1000"),mcdef).toString()).equals("13");
+  (new Test("rem007")).ok=((new com.ibm.icu.math.BigDecimal(".13")).remainder(one).toString()).equals("0.13");
+  (new Test("rem008")).ok=((new com.ibm.icu.math.BigDecimal("0.133")).remainder(one).toString()).equals("0.133");
+  (new Test("rem009")).ok=((new com.ibm.icu.math.BigDecimal("0.1033")).remainder(one).toString()).equals("0.1033");
+  (new Test("rem010")).ok=((new com.ibm.icu.math.BigDecimal("1.033")).remainder(one).toString()).equals("0.033");
+  (new Test("rem011")).ok=((new com.ibm.icu.math.BigDecimal("10.33")).remainder(one).toString()).equals("0.33");
+  (new Test("rem012")).ok=((new com.ibm.icu.math.BigDecimal("10.33")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("0.33");
+  (new Test("rem013")).ok=((new com.ibm.icu.math.BigDecimal("103.3")).remainder(com.ibm.icu.math.BigDecimal.ONE).toString()).equals("0.3");
+  (new Test("rem014")).ok=((new com.ibm.icu.math.BigDecimal("133")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("3");
+  (new Test("rem015")).ok=((new com.ibm.icu.math.BigDecimal("1033")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("3");
+  (new Test("rem016")).ok=((new com.ibm.icu.math.BigDecimal("1033")).remainder(new com.ibm.icu.math.BigDecimal(50),mcdef).toString()).equals("33");
+  (new Test("rem017")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).remainder(new com.ibm.icu.math.BigDecimal(3),mcdef).toString()).equals("2.0");
+  (new Test("rem018")).ok=((new com.ibm.icu.math.BigDecimal("102.0")).remainder(new com.ibm.icu.math.BigDecimal(3),mcdef).toString()).equals("0");
+  (new Test("rem019")).ok=((new com.ibm.icu.math.BigDecimal("103.0")).remainder(new com.ibm.icu.math.BigDecimal(3),mcdef).toString()).equals("1.0");
+  (new Test("rem020")).ok=((new com.ibm.icu.math.BigDecimal("2.40")).remainder(one).toString()).equals("0.40");
+  (new Test("rem021")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(one).toString()).equals("0.400");
+  (new Test("rem022")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).remainder(one).toString()).equals("0.4");
+  (new Test("rem023")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).remainder(new com.ibm.icu.math.BigDecimal(2),mcdef).toString()).equals("0.4");
+  (new Test("rem024")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(new com.ibm.icu.math.BigDecimal(2),mcdef).toString()).equals("0.400");
+  (new Test("rem025")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1");
+  (new Test("rem026")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.30"),mcdef).toString()).equals("0.10");
+  (new Test("rem027")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.300"),mcdef).toString()).equals("0.100");
+  (new Test("rem028")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.3000"),mcdef).toString()).equals("0.1000");
+  (new Test("rem029")).ok=((new com.ibm.icu.math.BigDecimal("1.0")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1");
+  (new Test("rem030")).ok=((new com.ibm.icu.math.BigDecimal("1.00")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.10");
+  (new Test("rem031")).ok=((new com.ibm.icu.math.BigDecimal("1.000")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.100");
+  (new Test("rem032")).ok=((new com.ibm.icu.math.BigDecimal("1.0000")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.1000");
+  (new Test("rem033")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("2.001"),mcdef).toString()).equals("0.5");
   
-  (new Test("rem040")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.5000001"),mcdef).toString()).equals("0.5");
-  (new Test("rem041")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.50000001"),mcdef).toString()).equals("0.5");
-  (new Test("rem042")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.500000001"),mcdef).toString()).equals("0.5");
-  (new Test("rem043")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.5000000001"),mcdef).toString()).equals("0");
-  (new Test("rem044")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.50000000001"),mcdef).toString()).equals("0");
-  (new Test("rem045")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.4999999"),mcdef).toString()).equals("1E-7");
-  (new Test("rem046")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.49999999"),mcdef).toString()).equals("1E-8");
-  (new Test("rem047")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.499999999"),mcdef).toString()).equals("1E-9");
-  (new Test("rem048")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.4999999999"),mcdef).toString()).equals("0");
-  (new Test("rem049")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.49999999999"),mcdef).toString()).equals("0");
+  (new Test("rem040")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.5000001"),mcdef).toString()).equals("0.5");
+  (new Test("rem041")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.50000001"),mcdef).toString()).equals("0.5");
+  (new Test("rem042")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.500000001"),mcdef).toString()).equals("0.5");
+  (new Test("rem043")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.5000000001"),mcdef).toString()).equals("0");
+  (new Test("rem044")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.50000000001"),mcdef).toString()).equals("0");
+  (new Test("rem045")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.4999999"),mcdef).toString()).equals("1E-7");
+  (new Test("rem046")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.49999999"),mcdef).toString()).equals("1E-8");
+  (new Test("rem047")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.499999999"),mcdef).toString()).equals("1E-9");
+  (new Test("rem048")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.4999999999"),mcdef).toString()).equals("0");
+  (new Test("rem049")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.49999999999"),mcdef).toString()).equals("0");
   
-  (new Test("rem050")).ok=((new com.ibm.math.BigDecimal("0.03")).remainder(new com.ibm.math.BigDecimal("7"),mcdef).toString()).equals("0.03");
-  (new Test("rem051")).ok=((new com.ibm.math.BigDecimal("5")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1");
-  (new Test("rem052")).ok=((new com.ibm.math.BigDecimal("4.1")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.1");
-  (new Test("rem053")).ok=((new com.ibm.math.BigDecimal("4.01")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.01");
-  (new Test("rem054")).ok=((new com.ibm.math.BigDecimal("4.001")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.001");
-  (new Test("rem055")).ok=((new com.ibm.math.BigDecimal("4.0001")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.0001");
-  (new Test("rem056")).ok=((new com.ibm.math.BigDecimal("4.00001")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.00001");
-  (new Test("rem057")).ok=((new com.ibm.math.BigDecimal("4.000001")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("0.000001");
-  (new Test("rem058")).ok=((new com.ibm.math.BigDecimal("4.0000001")).remainder(new com.ibm.math.BigDecimal("2"),mcdef).toString()).equals("1E-7");
+  (new Test("rem050")).ok=((new com.ibm.icu.math.BigDecimal("0.03")).remainder(new com.ibm.icu.math.BigDecimal("7"),mcdef).toString()).equals("0.03");
+  (new Test("rem051")).ok=((new com.ibm.icu.math.BigDecimal("5")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1");
+  (new Test("rem052")).ok=((new com.ibm.icu.math.BigDecimal("4.1")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.1");
+  (new Test("rem053")).ok=((new com.ibm.icu.math.BigDecimal("4.01")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.01");
+  (new Test("rem054")).ok=((new com.ibm.icu.math.BigDecimal("4.001")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.001");
+  (new Test("rem055")).ok=((new com.ibm.icu.math.BigDecimal("4.0001")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.0001");
+  (new Test("rem056")).ok=((new com.ibm.icu.math.BigDecimal("4.00001")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.00001");
+  (new Test("rem057")).ok=((new com.ibm.icu.math.BigDecimal("4.000001")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("0.000001");
+  (new Test("rem058")).ok=((new com.ibm.icu.math.BigDecimal("4.0000001")).remainder(new com.ibm.icu.math.BigDecimal("2"),mcdef).toString()).equals("1E-7");
   
-  (new Test("rem060")).ok=((new com.ibm.math.BigDecimal("1.2")).remainder(new com.ibm.math.BigDecimal("0.7345"),mcdef).toString()).equals("0.4655");
-  (new Test("rem061")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("12"),mcdef).toString()).equals("0.8");
-  (new Test("rem062")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("0.2"),mcdef).toString()).equals("0");
-  (new Test("rem063")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.2");
-  (new Test("rem064")).ok=((new com.ibm.math.BigDecimal("0.800")).remainder(new com.ibm.math.BigDecimal("12"),mcdef).toString()).equals("0.800");
-  (new Test("rem065")).ok=((new com.ibm.math.BigDecimal("0.800")).remainder(new com.ibm.math.BigDecimal("1.7"),mcdef).toString()).equals("0.800");
-  (new Test("rem066")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(new com.ibm.math.BigDecimal(2),mcdef).toString()).equals("0.400");
+  (new Test("rem060")).ok=((new com.ibm.icu.math.BigDecimal("1.2")).remainder(new com.ibm.icu.math.BigDecimal("0.7345"),mcdef).toString()).equals("0.4655");
+  (new Test("rem061")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("12"),mcdef).toString()).equals("0.8");
+  (new Test("rem062")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("0.2"),mcdef).toString()).equals("0");
+  (new Test("rem063")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.2");
+  (new Test("rem064")).ok=((new com.ibm.icu.math.BigDecimal("0.800")).remainder(new com.ibm.icu.math.BigDecimal("12"),mcdef).toString()).equals("0.800");
+  (new Test("rem065")).ok=((new com.ibm.icu.math.BigDecimal("0.800")).remainder(new com.ibm.icu.math.BigDecimal("1.7"),mcdef).toString()).equals("0.800");
+  (new Test("rem066")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(new com.ibm.icu.math.BigDecimal(2),mcdef).toString()).equals("0.400");
   
   // MC --
-  (new Test("rem071")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(new com.ibm.math.BigDecimal(2),mc6).toString()).equals("0.400");
-  (new Test("rem072")).ok=((new com.ibm.math.BigDecimal("12345678900000")).remainder(new com.ibm.math.BigDecimal("12e+12"),mc3).toString()).equals("3E+11");
+  (new Test("rem071")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(new com.ibm.icu.math.BigDecimal(2),mc6).toString()).equals("0.400");
+  (new Test("rem072")).ok=((new com.ibm.icu.math.BigDecimal("12345678900000")).remainder(new com.ibm.icu.math.BigDecimal("12e+12"),mc3).toString()).equals("3E+11");
   
   // Fixed --
-  (new Test("rem101")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("3")).toString()).equals("1");
-  (new Test("rem102")).ok=((new com.ibm.math.BigDecimal("5")).remainder(new com.ibm.math.BigDecimal("5")).toString()).equals("0");
-  (new Test("rem103")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("10")).toString()).equals("3");
-  (new Test("rem104")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("50")).toString()).equals("13");
-  (new Test("rem105")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("100")).toString()).equals("13");
-  (new Test("rem106")).ok=((new com.ibm.math.BigDecimal("13")).remainder(new com.ibm.math.BigDecimal("1000")).toString()).equals("13");
-  (new Test("rem107")).ok=((new com.ibm.math.BigDecimal(".13")).remainder(one).toString()).equals("0.13");
-  (new Test("rem108")).ok=((new com.ibm.math.BigDecimal("0.133")).remainder(one).toString()).equals("0.133");
-  (new Test("rem109")).ok=((new com.ibm.math.BigDecimal("0.1033")).remainder(one).toString()).equals("0.1033");
-  (new Test("rem110")).ok=((new com.ibm.math.BigDecimal("1.033")).remainder(one).toString()).equals("0.033");
-  (new Test("rem111")).ok=((new com.ibm.math.BigDecimal("10.33")).remainder(one).toString()).equals("0.33");
-  (new Test("rem112")).ok=((new com.ibm.math.BigDecimal("10.33")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("0.33");
-  (new Test("rem113")).ok=((new com.ibm.math.BigDecimal("103.3")).remainder(com.ibm.math.BigDecimal.ONE).toString()).equals("0.3");
-  (new Test("rem114")).ok=((new com.ibm.math.BigDecimal("133")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("3");
-  (new Test("rem115")).ok=((new com.ibm.math.BigDecimal("1033")).remainder(com.ibm.math.BigDecimal.TEN).toString()).equals("3");
-  (new Test("rem116")).ok=((new com.ibm.math.BigDecimal("1033")).remainder(new com.ibm.math.BigDecimal(50)).toString()).equals("33");
-  (new Test("rem117")).ok=((new com.ibm.math.BigDecimal("101.0")).remainder(new com.ibm.math.BigDecimal(3)).toString()).equals("2.0");
-  (new Test("rem118")).ok=((new com.ibm.math.BigDecimal("102.0")).remainder(new com.ibm.math.BigDecimal(3)).toString()).equals("0");
-  (new Test("rem119")).ok=((new com.ibm.math.BigDecimal("103.0")).remainder(new com.ibm.math.BigDecimal(3)).toString()).equals("1.0");
-  (new Test("rem120")).ok=((new com.ibm.math.BigDecimal("2.40")).remainder(one).toString()).equals("0.40");
-  (new Test("rem121")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(one).toString()).equals("0.400");
-  (new Test("rem122")).ok=((new com.ibm.math.BigDecimal("2.4")).remainder(one).toString()).equals("0.4");
-  (new Test("rem123")).ok=((new com.ibm.math.BigDecimal("2.4")).remainder(new com.ibm.math.BigDecimal(2)).toString()).equals("0.4");
-  (new Test("rem124")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(new com.ibm.math.BigDecimal(2)).toString()).equals("0.400");
-  (new Test("rem125")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.1");
-  (new Test("rem126")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.30")).toString()).equals("0.10");
-  (new Test("rem127")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.300")).toString()).equals("0.100");
-  (new Test("rem128")).ok=((new com.ibm.math.BigDecimal("1")).remainder(new com.ibm.math.BigDecimal("0.3000")).toString()).equals("0.1000");
-  (new Test("rem129")).ok=((new com.ibm.math.BigDecimal("1.0")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.1");
-  (new Test("rem130")).ok=((new com.ibm.math.BigDecimal("1.00")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.10");
-  (new Test("rem131")).ok=((new com.ibm.math.BigDecimal("1.000")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.100");
-  (new Test("rem132")).ok=((new com.ibm.math.BigDecimal("1.0000")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.1000");
-  (new Test("rem133")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("2.001")).toString()).equals("0.5");
-  (new Test("rem134")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.500000001")).toString()).equals("0.5");
-  (new Test("rem135")).ok=((new com.ibm.math.BigDecimal("0.5")).remainder(new com.ibm.math.BigDecimal("0.5000000001")).toString()).equals("0.5");
-  (new Test("rem136")).ok=((new com.ibm.math.BigDecimal("0.03")).remainder(new com.ibm.math.BigDecimal("7")).toString()).equals("0.03");
-  (new Test("rem137")).ok=((new com.ibm.math.BigDecimal("5")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("1");
-  (new Test("rem138")).ok=((new com.ibm.math.BigDecimal("4.1")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.1");
-  (new Test("rem139")).ok=((new com.ibm.math.BigDecimal("4.01")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.01");
-  (new Test("rem140")).ok=((new com.ibm.math.BigDecimal("4.001")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.001");
-  (new Test("rem141")).ok=((new com.ibm.math.BigDecimal("4.0001")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.0001");
-  (new Test("rem142")).ok=((new com.ibm.math.BigDecimal("4.00001")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.00001");
-  (new Test("rem143")).ok=((new com.ibm.math.BigDecimal("4.000001")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.000001");
-  (new Test("rem144")).ok=((new com.ibm.math.BigDecimal("4.0000001")).remainder(new com.ibm.math.BigDecimal("2")).toString()).equals("0.0000001"); // 1E-7, plain
-  (new Test("rem145")).ok=((new com.ibm.math.BigDecimal("1.2")).remainder(new com.ibm.math.BigDecimal("0.7345")).toString()).equals("0.4655");
-  (new Test("rem146")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("12")).toString()).equals("0.8");
-  (new Test("rem147")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("0.2")).toString()).equals("0");
-  (new Test("rem148")).ok=((new com.ibm.math.BigDecimal("0.8")).remainder(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.2");
-  (new Test("rem149")).ok=((new com.ibm.math.BigDecimal("0.800")).remainder(new com.ibm.math.BigDecimal("12")).toString()).equals("0.800");
-  (new Test("rem150")).ok=((new com.ibm.math.BigDecimal("0.800")).remainder(new com.ibm.math.BigDecimal("1.7")).toString()).equals("0.800");
-  (new Test("rem151")).ok=((new com.ibm.math.BigDecimal("2.400")).remainder(new com.ibm.math.BigDecimal(2),mcdef).toString()).equals("0.400");
+  (new Test("rem101")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("1");
+  (new Test("rem102")).ok=((new com.ibm.icu.math.BigDecimal("5")).remainder(new com.ibm.icu.math.BigDecimal("5")).toString()).equals("0");
+  (new Test("rem103")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("10")).toString()).equals("3");
+  (new Test("rem104")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("50")).toString()).equals("13");
+  (new Test("rem105")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("100")).toString()).equals("13");
+  (new Test("rem106")).ok=((new com.ibm.icu.math.BigDecimal("13")).remainder(new com.ibm.icu.math.BigDecimal("1000")).toString()).equals("13");
+  (new Test("rem107")).ok=((new com.ibm.icu.math.BigDecimal(".13")).remainder(one).toString()).equals("0.13");
+  (new Test("rem108")).ok=((new com.ibm.icu.math.BigDecimal("0.133")).remainder(one).toString()).equals("0.133");
+  (new Test("rem109")).ok=((new com.ibm.icu.math.BigDecimal("0.1033")).remainder(one).toString()).equals("0.1033");
+  (new Test("rem110")).ok=((new com.ibm.icu.math.BigDecimal("1.033")).remainder(one).toString()).equals("0.033");
+  (new Test("rem111")).ok=((new com.ibm.icu.math.BigDecimal("10.33")).remainder(one).toString()).equals("0.33");
+  (new Test("rem112")).ok=((new com.ibm.icu.math.BigDecimal("10.33")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("0.33");
+  (new Test("rem113")).ok=((new com.ibm.icu.math.BigDecimal("103.3")).remainder(com.ibm.icu.math.BigDecimal.ONE).toString()).equals("0.3");
+  (new Test("rem114")).ok=((new com.ibm.icu.math.BigDecimal("133")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("3");
+  (new Test("rem115")).ok=((new com.ibm.icu.math.BigDecimal("1033")).remainder(com.ibm.icu.math.BigDecimal.TEN).toString()).equals("3");
+  (new Test("rem116")).ok=((new com.ibm.icu.math.BigDecimal("1033")).remainder(new com.ibm.icu.math.BigDecimal(50)).toString()).equals("33");
+  (new Test("rem117")).ok=((new com.ibm.icu.math.BigDecimal("101.0")).remainder(new com.ibm.icu.math.BigDecimal(3)).toString()).equals("2.0");
+  (new Test("rem118")).ok=((new com.ibm.icu.math.BigDecimal("102.0")).remainder(new com.ibm.icu.math.BigDecimal(3)).toString()).equals("0");
+  (new Test("rem119")).ok=((new com.ibm.icu.math.BigDecimal("103.0")).remainder(new com.ibm.icu.math.BigDecimal(3)).toString()).equals("1.0");
+  (new Test("rem120")).ok=((new com.ibm.icu.math.BigDecimal("2.40")).remainder(one).toString()).equals("0.40");
+  (new Test("rem121")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(one).toString()).equals("0.400");
+  (new Test("rem122")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).remainder(one).toString()).equals("0.4");
+  (new Test("rem123")).ok=((new com.ibm.icu.math.BigDecimal("2.4")).remainder(new com.ibm.icu.math.BigDecimal(2)).toString()).equals("0.4");
+  (new Test("rem124")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(new com.ibm.icu.math.BigDecimal(2)).toString()).equals("0.400");
+  (new Test("rem125")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.1");
+  (new Test("rem126")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.30")).toString()).equals("0.10");
+  (new Test("rem127")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.300")).toString()).equals("0.100");
+  (new Test("rem128")).ok=((new com.ibm.icu.math.BigDecimal("1")).remainder(new com.ibm.icu.math.BigDecimal("0.3000")).toString()).equals("0.1000");
+  (new Test("rem129")).ok=((new com.ibm.icu.math.BigDecimal("1.0")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.1");
+  (new Test("rem130")).ok=((new com.ibm.icu.math.BigDecimal("1.00")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.10");
+  (new Test("rem131")).ok=((new com.ibm.icu.math.BigDecimal("1.000")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.100");
+  (new Test("rem132")).ok=((new com.ibm.icu.math.BigDecimal("1.0000")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.1000");
+  (new Test("rem133")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("2.001")).toString()).equals("0.5");
+  (new Test("rem134")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.500000001")).toString()).equals("0.5");
+  (new Test("rem135")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).remainder(new com.ibm.icu.math.BigDecimal("0.5000000001")).toString()).equals("0.5");
+  (new Test("rem136")).ok=((new com.ibm.icu.math.BigDecimal("0.03")).remainder(new com.ibm.icu.math.BigDecimal("7")).toString()).equals("0.03");
+  (new Test("rem137")).ok=((new com.ibm.icu.math.BigDecimal("5")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("1");
+  (new Test("rem138")).ok=((new com.ibm.icu.math.BigDecimal("4.1")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.1");
+  (new Test("rem139")).ok=((new com.ibm.icu.math.BigDecimal("4.01")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.01");
+  (new Test("rem140")).ok=((new com.ibm.icu.math.BigDecimal("4.001")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.001");
+  (new Test("rem141")).ok=((new com.ibm.icu.math.BigDecimal("4.0001")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.0001");
+  (new Test("rem142")).ok=((new com.ibm.icu.math.BigDecimal("4.00001")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.00001");
+  (new Test("rem143")).ok=((new com.ibm.icu.math.BigDecimal("4.000001")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.000001");
+  (new Test("rem144")).ok=((new com.ibm.icu.math.BigDecimal("4.0000001")).remainder(new com.ibm.icu.math.BigDecimal("2")).toString()).equals("0.0000001"); // 1E-7, plain
+  (new Test("rem145")).ok=((new com.ibm.icu.math.BigDecimal("1.2")).remainder(new com.ibm.icu.math.BigDecimal("0.7345")).toString()).equals("0.4655");
+  (new Test("rem146")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("12")).toString()).equals("0.8");
+  (new Test("rem147")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("0.2")).toString()).equals("0");
+  (new Test("rem148")).ok=((new com.ibm.icu.math.BigDecimal("0.8")).remainder(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.2");
+  (new Test("rem149")).ok=((new com.ibm.icu.math.BigDecimal("0.800")).remainder(new com.ibm.icu.math.BigDecimal("12")).toString()).equals("0.800");
+  (new Test("rem150")).ok=((new com.ibm.icu.math.BigDecimal("0.800")).remainder(new com.ibm.icu.math.BigDecimal("1.7")).toString()).equals("0.800");
+  (new Test("rem151")).ok=((new com.ibm.icu.math.BigDecimal("2.400")).remainder(new com.ibm.icu.math.BigDecimal(2),mcdef).toString()).equals("0.400");
   
   try{checknull:do{
-   ten.remainder((com.ibm.math.BigDecimal)null);
+   ten.remainder((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $79){
@@ -2552,7 +2552,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("rem200")).ok=flag;
   try{checknull2:do{
-   ten.remainder(ten,(com.ibm.math.MathContext)null);
+   ten.remainder(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $80){
@@ -2561,7 +2561,7 @@ public class DiagBigDecimal{
   (new Test("rem201")).ok=flag;
   
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.remainder(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.remainder(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $81){ae=$81;
@@ -2586,227 +2586,227 @@ public class DiagBigDecimal{
  
  public void diagsubtract(){
   boolean flag=false;
-  com.ibm.math.BigDecimal alhs;
-  com.ibm.math.BigDecimal arhs;
+  com.ibm.icu.math.BigDecimal alhs;
+  com.ibm.icu.math.BigDecimal arhs;
   java.lang.ArithmeticException ae=null;
   
   // [first group are 'quick confidence check']
-  (new Test("sub301")).ok=((new com.ibm.math.BigDecimal(2)).subtract(new com.ibm.math.BigDecimal(3),mcdef).toString()).equals("-1");
-  (new Test("sub302")).ok=((new com.ibm.math.BigDecimal("5.75")).subtract(new com.ibm.math.BigDecimal("3.3"),mcdef).toString()).equals("2.45");
-  (new Test("sub303")).ok=((new com.ibm.math.BigDecimal("5")).subtract(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("8");
-  (new Test("sub304")).ok=((new com.ibm.math.BigDecimal("-5")).subtract(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("-2");
-  (new Test("sub305")).ok=((new com.ibm.math.BigDecimal("-7")).subtract(new com.ibm.math.BigDecimal("2.5"),mcdef).toString()).equals("-9.5");
-  (new Test("sub306")).ok=((new com.ibm.math.BigDecimal("0.7")).subtract(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("0.4");
-  (new Test("sub307")).ok=((new com.ibm.math.BigDecimal("1.3")).subtract(new com.ibm.math.BigDecimal("0.3"),mcdef).toString()).equals("1.0");
-  (new Test("sub308")).ok=((new com.ibm.math.BigDecimal("1.25")).subtract(new com.ibm.math.BigDecimal("1.25"),mcdef).toString()).equals("0");
-  (new Test("sub309")).ok=((new com.ibm.math.BigDecimal("1.23456789")).subtract(new com.ibm.math.BigDecimal("1.00000000"),mcdef).toString()).equals("0.23456789");
+  (new Test("sub301")).ok=((new com.ibm.icu.math.BigDecimal(2)).subtract(new com.ibm.icu.math.BigDecimal(3),mcdef).toString()).equals("-1");
+  (new Test("sub302")).ok=((new com.ibm.icu.math.BigDecimal("5.75")).subtract(new com.ibm.icu.math.BigDecimal("3.3"),mcdef).toString()).equals("2.45");
+  (new Test("sub303")).ok=((new com.ibm.icu.math.BigDecimal("5")).subtract(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("8");
+  (new Test("sub304")).ok=((new com.ibm.icu.math.BigDecimal("-5")).subtract(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("-2");
+  (new Test("sub305")).ok=((new com.ibm.icu.math.BigDecimal("-7")).subtract(new com.ibm.icu.math.BigDecimal("2.5"),mcdef).toString()).equals("-9.5");
+  (new Test("sub306")).ok=((new com.ibm.icu.math.BigDecimal("0.7")).subtract(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("0.4");
+  (new Test("sub307")).ok=((new com.ibm.icu.math.BigDecimal("1.3")).subtract(new com.ibm.icu.math.BigDecimal("0.3"),mcdef).toString()).equals("1.0");
+  (new Test("sub308")).ok=((new com.ibm.icu.math.BigDecimal("1.25")).subtract(new com.ibm.icu.math.BigDecimal("1.25"),mcdef).toString()).equals("0");
+  (new Test("sub309")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).subtract(new com.ibm.icu.math.BigDecimal("1.00000000"),mcdef).toString()).equals("0.23456789");
   
-  (new Test("sub310")).ok=((new com.ibm.math.BigDecimal("1.23456789")).subtract(new com.ibm.math.BigDecimal("1.00000089"),mcdef).toString()).equals("0.23456700");
+  (new Test("sub310")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).subtract(new com.ibm.icu.math.BigDecimal("1.00000089"),mcdef).toString()).equals("0.23456700");
   
-  (new Test("sub311")).ok=((new com.ibm.math.BigDecimal("0.5555555559")).subtract(new com.ibm.math.BigDecimal("0.0000000001"),mcdef).toString()).equals("0.555555556");
+  (new Test("sub311")).ok=((new com.ibm.icu.math.BigDecimal("0.5555555559")).subtract(new com.ibm.icu.math.BigDecimal("0.0000000001"),mcdef).toString()).equals("0.555555556");
   
-  (new Test("sub312")).ok=((new com.ibm.math.BigDecimal("0.5555555559")).subtract(new com.ibm.math.BigDecimal("0.0000000005"),mcdef).toString()).equals("0.555555556");
+  (new Test("sub312")).ok=((new com.ibm.icu.math.BigDecimal("0.5555555559")).subtract(new com.ibm.icu.math.BigDecimal("0.0000000005"),mcdef).toString()).equals("0.555555556");
   
-  (new Test("sub313")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).subtract(new com.ibm.math.BigDecimal("0.1111111111"),mcdef).toString()).equals("0.333333333");
+  (new Test("sub313")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).subtract(new com.ibm.icu.math.BigDecimal("0.1111111111"),mcdef).toString()).equals("0.333333333");
   
-  (new Test("sub314")).ok=((new com.ibm.math.BigDecimal("1.0000000000")).subtract(new com.ibm.math.BigDecimal("0.00000001"),mcdef).toString()).equals("0.99999999");
+  (new Test("sub314")).ok=((new com.ibm.icu.math.BigDecimal("1.0000000000")).subtract(new com.ibm.icu.math.BigDecimal("0.00000001"),mcdef).toString()).equals("0.99999999");
   
-  (new Test("sub315")).ok=((new com.ibm.math.BigDecimal("0.4444444444999")).subtract(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0.444444444");
+  (new Test("sub315")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444999")).subtract(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0.444444444");
   
-  (new Test("sub316")).ok=((new com.ibm.math.BigDecimal("0.4444444445000")).subtract(new com.ibm.math.BigDecimal("0"),mcdef).toString()).equals("0.444444445");
+  (new Test("sub316")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444445000")).subtract(new com.ibm.icu.math.BigDecimal("0"),mcdef).toString()).equals("0.444444445");
   
   
-  (new Test("sub317")).ok=((new com.ibm.math.BigDecimal("70")).subtract(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
+  (new Test("sub317")).ok=((new com.ibm.icu.math.BigDecimal("70")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
   
-  (new Test("sub318")).ok=((new com.ibm.math.BigDecimal("700")).subtract(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
+  (new Test("sub318")).ok=((new com.ibm.icu.math.BigDecimal("700")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
   
-  (new Test("sub319")).ok=((new com.ibm.math.BigDecimal("7000")).subtract(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
+  (new Test("sub319")).ok=((new com.ibm.icu.math.BigDecimal("7000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-1.00000000E+13");
   
-  (new Test("sub320")).ok=((new com.ibm.math.BigDecimal("70000")).subtract(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-9.9999999E+12");
+  (new Test("sub320")).ok=((new com.ibm.icu.math.BigDecimal("70000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-9.9999999E+12");
   
-  (new Test("sub321")).ok=((new com.ibm.math.BigDecimal("700000")).subtract(new com.ibm.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-9.9999993E+12");
+  (new Test("sub321")).ok=((new com.ibm.icu.math.BigDecimal("700000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9"),mcdef).toString()).equals("-9.9999993E+12");
   
   // symmetry:
-  (new Test("sub322")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("sub322")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("sub323")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("700"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("sub323")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("700"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("sub324")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("7000"),mcdef).toString()).equals("1.00000000E+13");
+  (new Test("sub324")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("7000"),mcdef).toString()).equals("1.00000000E+13");
   
-  (new Test("sub325")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70000"),mcdef).toString()).equals("9.9999999E+12");
+  (new Test("sub325")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70000"),mcdef).toString()).equals("9.9999999E+12");
   
-  (new Test("sub326")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("700000"),mcdef).toString()).equals("9.9999993E+12");
+  (new Test("sub326")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("700000"),mcdef).toString()).equals("9.9999993E+12");
   
   
   // [same with fixed point arithmetic]
-  (new Test("sub001")).ok=((new com.ibm.math.BigDecimal(2)).subtract(new com.ibm.math.BigDecimal(3)).toString()).equals("-1");
-  (new Test("sub002")).ok=((new com.ibm.math.BigDecimal("5.75")).subtract(new com.ibm.math.BigDecimal("3.3")).toString()).equals("2.45");
-  (new Test("sub003")).ok=((new com.ibm.math.BigDecimal("5")).subtract(new com.ibm.math.BigDecimal("-3")).toString()).equals("8");
-  (new Test("sub004")).ok=((new com.ibm.math.BigDecimal("-5")).subtract(new com.ibm.math.BigDecimal("-3")).toString()).equals("-2");
-  (new Test("sub005")).ok=((new com.ibm.math.BigDecimal("-7")).subtract(new com.ibm.math.BigDecimal("2.5")).toString()).equals("-9.5");
-  (new Test("sub006")).ok=((new com.ibm.math.BigDecimal("0.7")).subtract(new com.ibm.math.BigDecimal("0.3")).toString()).equals("0.4");
-  (new Test("sub007")).ok=((new com.ibm.math.BigDecimal("1.3")).subtract(new com.ibm.math.BigDecimal("0.3")).toString()).equals("1.0");
-  (new Test("sub008")).ok=((new com.ibm.math.BigDecimal("1.25")).subtract(new com.ibm.math.BigDecimal("1.25")).toString()).equals("0.00");
-  (new Test("sub009")).ok=((new com.ibm.math.BigDecimal("0.02")).subtract(new com.ibm.math.BigDecimal("0.02")).toString()).equals("0.00");
+  (new Test("sub001")).ok=((new com.ibm.icu.math.BigDecimal(2)).subtract(new com.ibm.icu.math.BigDecimal(3)).toString()).equals("-1");
+  (new Test("sub002")).ok=((new com.ibm.icu.math.BigDecimal("5.75")).subtract(new com.ibm.icu.math.BigDecimal("3.3")).toString()).equals("2.45");
+  (new Test("sub003")).ok=((new com.ibm.icu.math.BigDecimal("5")).subtract(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("8");
+  (new Test("sub004")).ok=((new com.ibm.icu.math.BigDecimal("-5")).subtract(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("-2");
+  (new Test("sub005")).ok=((new com.ibm.icu.math.BigDecimal("-7")).subtract(new com.ibm.icu.math.BigDecimal("2.5")).toString()).equals("-9.5");
+  (new Test("sub006")).ok=((new com.ibm.icu.math.BigDecimal("0.7")).subtract(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("0.4");
+  (new Test("sub007")).ok=((new com.ibm.icu.math.BigDecimal("1.3")).subtract(new com.ibm.icu.math.BigDecimal("0.3")).toString()).equals("1.0");
+  (new Test("sub008")).ok=((new com.ibm.icu.math.BigDecimal("1.25")).subtract(new com.ibm.icu.math.BigDecimal("1.25")).toString()).equals("0.00");
+  (new Test("sub009")).ok=((new com.ibm.icu.math.BigDecimal("0.02")).subtract(new com.ibm.icu.math.BigDecimal("0.02")).toString()).equals("0.00");
   
-  (new Test("sub010")).ok=((new com.ibm.math.BigDecimal("1.23456789")).subtract(new com.ibm.math.BigDecimal("1.00000000")).toString()).equals("0.23456789");
+  (new Test("sub010")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).subtract(new com.ibm.icu.math.BigDecimal("1.00000000")).toString()).equals("0.23456789");
   
-  (new Test("sub011")).ok=((new com.ibm.math.BigDecimal("1.23456789")).subtract(new com.ibm.math.BigDecimal("1.00000089")).toString()).equals("0.23456700");
+  (new Test("sub011")).ok=((new com.ibm.icu.math.BigDecimal("1.23456789")).subtract(new com.ibm.icu.math.BigDecimal("1.00000089")).toString()).equals("0.23456700");
   
-  (new Test("sub012")).ok=((new com.ibm.math.BigDecimal("0.5555555559")).subtract(new com.ibm.math.BigDecimal("0.0000000001")).toString()).equals("0.5555555558");
+  (new Test("sub012")).ok=((new com.ibm.icu.math.BigDecimal("0.5555555559")).subtract(new com.ibm.icu.math.BigDecimal("0.0000000001")).toString()).equals("0.5555555558");
   
-  (new Test("sub013")).ok=((new com.ibm.math.BigDecimal("0.5555555559")).subtract(new com.ibm.math.BigDecimal("0.0000000005")).toString()).equals("0.5555555554");
+  (new Test("sub013")).ok=((new com.ibm.icu.math.BigDecimal("0.5555555559")).subtract(new com.ibm.icu.math.BigDecimal("0.0000000005")).toString()).equals("0.5555555554");
   
-  (new Test("sub014")).ok=((new com.ibm.math.BigDecimal("0.4444444444")).subtract(new com.ibm.math.BigDecimal("0.1111111111")).toString()).equals("0.3333333333");
+  (new Test("sub014")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444")).subtract(new com.ibm.icu.math.BigDecimal("0.1111111111")).toString()).equals("0.3333333333");
   
-  (new Test("sub015")).ok=((new com.ibm.math.BigDecimal("1.0000000000")).subtract(new com.ibm.math.BigDecimal("0.00000001")).toString()).equals("0.9999999900");
+  (new Test("sub015")).ok=((new com.ibm.icu.math.BigDecimal("1.0000000000")).subtract(new com.ibm.icu.math.BigDecimal("0.00000001")).toString()).equals("0.9999999900");
   
-  (new Test("sub016")).ok=((new com.ibm.math.BigDecimal("0.4444444444999")).subtract(new com.ibm.math.BigDecimal("0")).toString()).equals("0.4444444444999");
+  (new Test("sub016")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444444999")).subtract(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.4444444444999");
   
-  (new Test("sub017")).ok=((new com.ibm.math.BigDecimal("0.4444444445000")).subtract(new com.ibm.math.BigDecimal("0")).toString()).equals("0.4444444445000");
+  (new Test("sub017")).ok=((new com.ibm.icu.math.BigDecimal("0.4444444445000")).subtract(new com.ibm.icu.math.BigDecimal("0")).toString()).equals("0.4444444445000");
   
   
-  (new Test("sub018")).ok=((new com.ibm.math.BigDecimal("70")).subtract(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("-9999999999930");
+  (new Test("sub018")).ok=((new com.ibm.icu.math.BigDecimal("70")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("-9999999999930");
   
-  (new Test("sub019")).ok=((new com.ibm.math.BigDecimal("700")).subtract(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("-9999999999300");
+  (new Test("sub019")).ok=((new com.ibm.icu.math.BigDecimal("700")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("-9999999999300");
   
-  (new Test("sub020")).ok=((new com.ibm.math.BigDecimal("7000")).subtract(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("-9999999993000");
+  (new Test("sub020")).ok=((new com.ibm.icu.math.BigDecimal("7000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("-9999999993000");
   
-  (new Test("sub021")).ok=((new com.ibm.math.BigDecimal("70000")).subtract(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("-9999999930000");
+  (new Test("sub021")).ok=((new com.ibm.icu.math.BigDecimal("70000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("-9999999930000");
   
-  (new Test("sub022")).ok=((new com.ibm.math.BigDecimal("700000")).subtract(new com.ibm.math.BigDecimal("10000e+9")).toString()).equals("-9999999300000");
+  (new Test("sub022")).ok=((new com.ibm.icu.math.BigDecimal("700000")).subtract(new com.ibm.icu.math.BigDecimal("10000e+9")).toString()).equals("-9999999300000");
   
   // symmetry:
-  (new Test("sub023")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70")).toString()).equals("9999999999930");
+  (new Test("sub023")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70")).toString()).equals("9999999999930");
   
-  (new Test("sub024")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("700")).toString()).equals("9999999999300");
+  (new Test("sub024")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("700")).toString()).equals("9999999999300");
   
-  (new Test("sub025")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("7000")).toString()).equals("9999999993000");
+  (new Test("sub025")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("7000")).toString()).equals("9999999993000");
   
-  (new Test("sub026")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70000")).toString()).equals("9999999930000");
+  (new Test("sub026")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70000")).toString()).equals("9999999930000");
   
-  (new Test("sub027")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("700000")).toString()).equals("9999999300000");
+  (new Test("sub027")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("700000")).toString()).equals("9999999300000");
   
   // MC
-  (new Test("sub030")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70000"),mcdef).toString()).equals("9.9999999E+12");
+  (new Test("sub030")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70000"),mcdef).toString()).equals("9.9999999E+12");
   
-  (new Test("sub031")).ok=((new com.ibm.math.BigDecimal("10000e+9")).subtract(new com.ibm.math.BigDecimal("70000"),mc6).toString()).equals("1.00000E+13");
+  (new Test("sub031")).ok=((new com.ibm.icu.math.BigDecimal("10000e+9")).subtract(new com.ibm.icu.math.BigDecimal("70000"),mc6).toString()).equals("1.00000E+13");
   
   
   // some of the next group are really constructor tests
-  (new Test("sub040")).ok=((new com.ibm.math.BigDecimal("00.0")).subtract(new com.ibm.math.BigDecimal("0.0")).toString()).equals("0.0");
-  (new Test("sub041")).ok=((new com.ibm.math.BigDecimal("00.0")).subtract(new com.ibm.math.BigDecimal("0.00")).toString()).equals("0.00");
-  (new Test("sub042")).ok=((new com.ibm.math.BigDecimal("0.00")).subtract(new com.ibm.math.BigDecimal("00.0")).toString()).equals("0.00");
-  (new Test("sub043")).ok=((new com.ibm.math.BigDecimal("00.0")).subtract(new com.ibm.math.BigDecimal("0.00"),mcdef).toString()).equals("0");
-  (new Test("sub044")).ok=((new com.ibm.math.BigDecimal("0.00")).subtract(new com.ibm.math.BigDecimal("00.0"),mcdef).toString()).equals("0");
-  (new Test("sub045")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
-  (new Test("sub046")).ok=((new com.ibm.math.BigDecimal("3.")).subtract(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
-  (new Test("sub047")).ok=((new com.ibm.math.BigDecimal("3.0")).subtract(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
-  (new Test("sub048")).ok=((new com.ibm.math.BigDecimal("3.00")).subtract(new com.ibm.math.BigDecimal(".3"),mcdef).toString()).equals("2.70");
-  (new Test("sub049")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("3"),mcdef).toString()).equals("0");
-  (new Test("sub050")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("+3"),mcdef).toString()).equals("0");
-  (new Test("sub051")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("-3"),mcdef).toString()).equals("6");
-  (new Test("sub052")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal(".3")).toString()).equals("2.7");
-  (new Test("sub053")).ok=((new com.ibm.math.BigDecimal("3.")).subtract(new com.ibm.math.BigDecimal(".3")).toString()).equals("2.7");
-  (new Test("sub054")).ok=((new com.ibm.math.BigDecimal("3.0")).subtract(new com.ibm.math.BigDecimal(".3")).toString()).equals("2.7");
-  (new Test("sub055")).ok=((new com.ibm.math.BigDecimal("3.00")).subtract(new com.ibm.math.BigDecimal(".3")).toString()).equals("2.70");
-  (new Test("sub056")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("3")).toString()).equals("0");
-  (new Test("sub057")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("+3")).toString()).equals("0");
-  (new Test("sub058")).ok=((new com.ibm.math.BigDecimal("3")).subtract(new com.ibm.math.BigDecimal("-3")).toString()).equals("6");
+  (new Test("sub040")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).subtract(new com.ibm.icu.math.BigDecimal("0.0")).toString()).equals("0.0");
+  (new Test("sub041")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).subtract(new com.ibm.icu.math.BigDecimal("0.00")).toString()).equals("0.00");
+  (new Test("sub042")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).subtract(new com.ibm.icu.math.BigDecimal("00.0")).toString()).equals("0.00");
+  (new Test("sub043")).ok=((new com.ibm.icu.math.BigDecimal("00.0")).subtract(new com.ibm.icu.math.BigDecimal("0.00"),mcdef).toString()).equals("0");
+  (new Test("sub044")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).subtract(new com.ibm.icu.math.BigDecimal("00.0"),mcdef).toString()).equals("0");
+  (new Test("sub045")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
+  (new Test("sub046")).ok=((new com.ibm.icu.math.BigDecimal("3.")).subtract(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
+  (new Test("sub047")).ok=((new com.ibm.icu.math.BigDecimal("3.0")).subtract(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("2.7");
+  (new Test("sub048")).ok=((new com.ibm.icu.math.BigDecimal("3.00")).subtract(new com.ibm.icu.math.BigDecimal(".3"),mcdef).toString()).equals("2.70");
+  (new Test("sub049")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("3"),mcdef).toString()).equals("0");
+  (new Test("sub050")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("+3"),mcdef).toString()).equals("0");
+  (new Test("sub051")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("-3"),mcdef).toString()).equals("6");
+  (new Test("sub052")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("2.7");
+  (new Test("sub053")).ok=((new com.ibm.icu.math.BigDecimal("3.")).subtract(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("2.7");
+  (new Test("sub054")).ok=((new com.ibm.icu.math.BigDecimal("3.0")).subtract(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("2.7");
+  (new Test("sub055")).ok=((new com.ibm.icu.math.BigDecimal("3.00")).subtract(new com.ibm.icu.math.BigDecimal(".3")).toString()).equals("2.70");
+  (new Test("sub056")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("3")).toString()).equals("0");
+  (new Test("sub057")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("+3")).toString()).equals("0");
+  (new Test("sub058")).ok=((new com.ibm.icu.math.BigDecimal("3")).subtract(new com.ibm.icu.math.BigDecimal("-3")).toString()).equals("6");
   
   // the above all from add; massaged and extended.  Now some new ones...
   // [particularly important for comparisons]
   // NB: -1E-7 below were non-exponents pre-ANSI
-  (new Test("sub080")).ok=("-1E-7").equals((new com.ibm.math.BigDecimal("10.23456784")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub081")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456785")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub082")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456786")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub083")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456787")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub084")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456788")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub085")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456789")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub086")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456790")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub087")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456791")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub088")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456792")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub089")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456793")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub090")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456794")).subtract(new com.ibm.math.BigDecimal("10.23456789"),mcdef).toString());
-  (new Test("sub091")).ok=("-1E-7").equals((new com.ibm.math.BigDecimal("10.23456781")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub092")).ok=("-1E-7").equals((new com.ibm.math.BigDecimal("10.23456782")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub093")).ok=("-1E-7").equals((new com.ibm.math.BigDecimal("10.23456783")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub094")).ok=("-1E-7").equals((new com.ibm.math.BigDecimal("10.23456784")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub095")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456785")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub096")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456786")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub097")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456787")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub098")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456788")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub099")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456789")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub100")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456790")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub101")).ok="0".equals((new com.ibm.math.BigDecimal("10.23456791")).subtract(new com.ibm.math.BigDecimal("10.23456786"),mcdef).toString());
-  (new Test("sub102")).ok="0".equals(com.ibm.math.BigDecimal.ONE.subtract(new com.ibm.math.BigDecimal("0.999999999"),mcdef).toString());
-  (new Test("sub103")).ok="0".equals((new com.ibm.math.BigDecimal("0.999999999")).subtract(com.ibm.math.BigDecimal.ONE,mcdef).toString());
+  (new Test("sub080")).ok=("-1E-7").equals((new com.ibm.icu.math.BigDecimal("10.23456784")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub081")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456785")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub082")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456786")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub083")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456787")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub084")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456788")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub085")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456789")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub086")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456790")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub087")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456791")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub088")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456792")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub089")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456793")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub090")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456794")).subtract(new com.ibm.icu.math.BigDecimal("10.23456789"),mcdef).toString());
+  (new Test("sub091")).ok=("-1E-7").equals((new com.ibm.icu.math.BigDecimal("10.23456781")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub092")).ok=("-1E-7").equals((new com.ibm.icu.math.BigDecimal("10.23456782")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub093")).ok=("-1E-7").equals((new com.ibm.icu.math.BigDecimal("10.23456783")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub094")).ok=("-1E-7").equals((new com.ibm.icu.math.BigDecimal("10.23456784")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub095")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456785")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub096")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456786")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub097")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456787")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub098")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456788")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub099")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456789")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub100")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456790")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub101")).ok="0".equals((new com.ibm.icu.math.BigDecimal("10.23456791")).subtract(new com.ibm.icu.math.BigDecimal("10.23456786"),mcdef).toString());
+  (new Test("sub102")).ok="0".equals(com.ibm.icu.math.BigDecimal.ONE.subtract(new com.ibm.icu.math.BigDecimal("0.999999999"),mcdef).toString());
+  (new Test("sub103")).ok="0".equals((new com.ibm.icu.math.BigDecimal("0.999999999")).subtract(com.ibm.icu.math.BigDecimal.ONE,mcdef).toString());
   
-  alhs=new com.ibm.math.BigDecimal("12345678900000");
-  arhs=new com.ibm.math.BigDecimal("9999999999999");
+  alhs=new com.ibm.icu.math.BigDecimal("12345678900000");
+  arhs=new com.ibm.icu.math.BigDecimal("9999999999999");
   (new Test("sub110")).ok=(alhs.subtract(arhs,mc3).toString()).equals("2.3E+12");
   (new Test("sub111")).ok=(arhs.subtract(alhs,mc3).toString()).equals("-2.3E+12");
   (new Test("sub112")).ok=(alhs.subtract(arhs).toString()).equals("2345678900001");
   (new Test("sub113")).ok=(arhs.subtract(alhs).toString()).equals("-2345678900001");
   
   // additional scaled arithmetic tests [0.97 problem]
-  (new Test("sub120")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".1")).toString()).equals("-0.1");
-  (new Test("sub121")).ok=((new com.ibm.math.BigDecimal("00")).subtract(new com.ibm.math.BigDecimal(".97983")).toString()).equals("-0.97983");
-  (new Test("sub122")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".9")).toString()).equals("-0.9");
-  (new Test("sub123")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("0.102")).toString()).equals("-0.102");
-  (new Test("sub124")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".4")).toString()).equals("-0.4");
-  (new Test("sub125")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".307")).toString()).equals("-0.307");
-  (new Test("sub126")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".43822")).toString()).equals("-0.43822");
-  (new Test("sub127")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".911")).toString()).equals("-0.911");
-  (new Test("sub128")).ok=((new com.ibm.math.BigDecimal(".0")).subtract(new com.ibm.math.BigDecimal(".02")).toString()).equals("-0.02");
-  (new Test("sub129")).ok=((new com.ibm.math.BigDecimal("00")).subtract(new com.ibm.math.BigDecimal(".392")).toString()).equals("-0.392");
-  (new Test("sub130")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".26")).toString()).equals("-0.26");
-  (new Test("sub131")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("0.51")).toString()).equals("-0.51");
-  (new Test("sub132")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".2234")).toString()).equals("-0.2234");
-  (new Test("sub133")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal(".2")).toString()).equals("-0.2");
-  (new Test("sub134")).ok=((new com.ibm.math.BigDecimal(".0")).subtract(new com.ibm.math.BigDecimal(".0008")).toString()).equals("-0.0008");
+  (new Test("sub120")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".1")).toString()).equals("-0.1");
+  (new Test("sub121")).ok=((new com.ibm.icu.math.BigDecimal("00")).subtract(new com.ibm.icu.math.BigDecimal(".97983")).toString()).equals("-0.97983");
+  (new Test("sub122")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".9")).toString()).equals("-0.9");
+  (new Test("sub123")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("0.102")).toString()).equals("-0.102");
+  (new Test("sub124")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".4")).toString()).equals("-0.4");
+  (new Test("sub125")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".307")).toString()).equals("-0.307");
+  (new Test("sub126")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".43822")).toString()).equals("-0.43822");
+  (new Test("sub127")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".911")).toString()).equals("-0.911");
+  (new Test("sub128")).ok=((new com.ibm.icu.math.BigDecimal(".0")).subtract(new com.ibm.icu.math.BigDecimal(".02")).toString()).equals("-0.02");
+  (new Test("sub129")).ok=((new com.ibm.icu.math.BigDecimal("00")).subtract(new com.ibm.icu.math.BigDecimal(".392")).toString()).equals("-0.392");
+  (new Test("sub130")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".26")).toString()).equals("-0.26");
+  (new Test("sub131")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("0.51")).toString()).equals("-0.51");
+  (new Test("sub132")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".2234")).toString()).equals("-0.2234");
+  (new Test("sub133")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal(".2")).toString()).equals("-0.2");
+  (new Test("sub134")).ok=((new com.ibm.icu.math.BigDecimal(".0")).subtract(new com.ibm.icu.math.BigDecimal(".0008")).toString()).equals("-0.0008");
   // 0. on left
-  (new Test("sub140")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.1")).toString()).equals("0.1");
-  (new Test("sub141")).ok=((new com.ibm.math.BigDecimal("0.00")).subtract(new com.ibm.math.BigDecimal("-.97983")).toString()).equals("0.97983");
-  (new Test("sub142")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.9")).toString()).equals("0.9");
-  (new Test("sub143")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-0.102")).toString()).equals("0.102");
-  (new Test("sub144")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.4")).toString()).equals("0.4");
-  (new Test("sub145")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.307")).toString()).equals("0.307");
-  (new Test("sub146")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.43822")).toString()).equals("0.43822");
-  (new Test("sub147")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.911")).toString()).equals("0.911");
-  (new Test("sub148")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.02")).toString()).equals("0.02");
-  (new Test("sub149")).ok=((new com.ibm.math.BigDecimal("0.00")).subtract(new com.ibm.math.BigDecimal("-.392")).toString()).equals("0.392");
-  (new Test("sub150")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.26")).toString()).equals("0.26");
-  (new Test("sub151")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-0.51")).toString()).equals("0.51");
-  (new Test("sub152")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.2234")).toString()).equals("0.2234");
-  (new Test("sub153")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.2")).toString()).equals("0.2");
-  (new Test("sub154")).ok=((new com.ibm.math.BigDecimal("0.0")).subtract(new com.ibm.math.BigDecimal("-.0008")).toString()).equals("0.0008");
+  (new Test("sub140")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.1")).toString()).equals("0.1");
+  (new Test("sub141")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).subtract(new com.ibm.icu.math.BigDecimal("-.97983")).toString()).equals("0.97983");
+  (new Test("sub142")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.9")).toString()).equals("0.9");
+  (new Test("sub143")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-0.102")).toString()).equals("0.102");
+  (new Test("sub144")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.4")).toString()).equals("0.4");
+  (new Test("sub145")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.307")).toString()).equals("0.307");
+  (new Test("sub146")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.43822")).toString()).equals("0.43822");
+  (new Test("sub147")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.911")).toString()).equals("0.911");
+  (new Test("sub148")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.02")).toString()).equals("0.02");
+  (new Test("sub149")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).subtract(new com.ibm.icu.math.BigDecimal("-.392")).toString()).equals("0.392");
+  (new Test("sub150")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.26")).toString()).equals("0.26");
+  (new Test("sub151")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-0.51")).toString()).equals("0.51");
+  (new Test("sub152")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.2234")).toString()).equals("0.2234");
+  (new Test("sub153")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.2")).toString()).equals("0.2");
+  (new Test("sub154")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).subtract(new com.ibm.icu.math.BigDecimal("-.0008")).toString()).equals("0.0008");
   // negatives of same
-  (new Test("sub160")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.1")).toString()).equals("0.1");
-  (new Test("sub161")).ok=((new com.ibm.math.BigDecimal("00")).subtract(new com.ibm.math.BigDecimal("-.97983")).toString()).equals("0.97983");
-  (new Test("sub162")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.9")).toString()).equals("0.9");
-  (new Test("sub163")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-0.102")).toString()).equals("0.102");
-  (new Test("sub164")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.4")).toString()).equals("0.4");
-  (new Test("sub165")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.307")).toString()).equals("0.307");
-  (new Test("sub166")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.43822")).toString()).equals("0.43822");
-  (new Test("sub167")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.911")).toString()).equals("0.911");
-  (new Test("sub168")).ok=((new com.ibm.math.BigDecimal(".0")).subtract(new com.ibm.math.BigDecimal("-.02")).toString()).equals("0.02");
-  (new Test("sub169")).ok=((new com.ibm.math.BigDecimal("00")).subtract(new com.ibm.math.BigDecimal("-.392")).toString()).equals("0.392");
-  (new Test("sub170")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.26")).toString()).equals("0.26");
-  (new Test("sub171")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-0.51")).toString()).equals("0.51");
-  (new Test("sub172")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.2234")).toString()).equals("0.2234");
-  (new Test("sub173")).ok=((new com.ibm.math.BigDecimal("0")).subtract(new com.ibm.math.BigDecimal("-.2")).toString()).equals("0.2");
-  (new Test("sub174")).ok=((new com.ibm.math.BigDecimal(".0")).subtract(new com.ibm.math.BigDecimal("-.0008")).toString()).equals("0.0008");
+  (new Test("sub160")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.1")).toString()).equals("0.1");
+  (new Test("sub161")).ok=((new com.ibm.icu.math.BigDecimal("00")).subtract(new com.ibm.icu.math.BigDecimal("-.97983")).toString()).equals("0.97983");
+  (new Test("sub162")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.9")).toString()).equals("0.9");
+  (new Test("sub163")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-0.102")).toString()).equals("0.102");
+  (new Test("sub164")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.4")).toString()).equals("0.4");
+  (new Test("sub165")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.307")).toString()).equals("0.307");
+  (new Test("sub166")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.43822")).toString()).equals("0.43822");
+  (new Test("sub167")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.911")).toString()).equals("0.911");
+  (new Test("sub168")).ok=((new com.ibm.icu.math.BigDecimal(".0")).subtract(new com.ibm.icu.math.BigDecimal("-.02")).toString()).equals("0.02");
+  (new Test("sub169")).ok=((new com.ibm.icu.math.BigDecimal("00")).subtract(new com.ibm.icu.math.BigDecimal("-.392")).toString()).equals("0.392");
+  (new Test("sub170")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.26")).toString()).equals("0.26");
+  (new Test("sub171")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-0.51")).toString()).equals("0.51");
+  (new Test("sub172")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.2234")).toString()).equals("0.2234");
+  (new Test("sub173")).ok=((new com.ibm.icu.math.BigDecimal("0")).subtract(new com.ibm.icu.math.BigDecimal("-.2")).toString()).equals("0.2");
+  (new Test("sub174")).ok=((new com.ibm.icu.math.BigDecimal(".0")).subtract(new com.ibm.icu.math.BigDecimal("-.0008")).toString()).equals("0.0008");
   
   // more fixed, LHS swaps [really same as testcases under add]
-  (new Test("sub180")).ok=((new com.ibm.math.BigDecimal("-56267E-10")).subtract(zero).toString()).equals("-0.0000056267");
-  (new Test("sub181")).ok=((new com.ibm.math.BigDecimal("-56267E-5")).subtract(zero).toString()).equals("-0.56267");
-  (new Test("sub182")).ok=((new com.ibm.math.BigDecimal("-56267E-2")).subtract(zero).toString()).equals("-562.67");
-  (new Test("sub183")).ok=((new com.ibm.math.BigDecimal("-56267E-1")).subtract(zero).toString()).equals("-5626.7");
-  (new Test("sub185")).ok=((new com.ibm.math.BigDecimal("-56267E-0")).subtract(zero).toString()).equals("-56267");
+  (new Test("sub180")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-10")).subtract(zero).toString()).equals("-0.0000056267");
+  (new Test("sub181")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-5")).subtract(zero).toString()).equals("-0.56267");
+  (new Test("sub182")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-2")).subtract(zero).toString()).equals("-562.67");
+  (new Test("sub183")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-1")).subtract(zero).toString()).equals("-5626.7");
+  (new Test("sub185")).ok=((new com.ibm.icu.math.BigDecimal("-56267E-0")).subtract(zero).toString()).equals("-56267");
   
   try{checknull:do{
-   ten.subtract((com.ibm.math.BigDecimal)null);
+   ten.subtract((com.ibm.icu.math.BigDecimal)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $83){
@@ -2814,7 +2814,7 @@ public class DiagBigDecimal{
   }/*checknull*/
   (new Test("sub200")).ok=flag;
   try{checknull2:do{
-   ten.subtract(ten,(com.ibm.math.MathContext)null);
+   ten.subtract(ten,(com.ibm.icu.math.MathContext)null);
    flag=false;
   }while(false);}
   catch (java.lang.NullPointerException $84){
@@ -2823,7 +2823,7 @@ public class DiagBigDecimal{
   (new Test("sub201")).ok=flag;
   
   try{checkdigits:do{
-   com.ibm.math.BigDecimal.ONE.subtract(tenlong,mcld);
+   com.ibm.icu.math.BigDecimal.ONE.subtract(tenlong,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $85){ae=$85;
@@ -2831,7 +2831,7 @@ public class DiagBigDecimal{
   }/*checkdigits*/
   (new Test("sub202")).ok=flag;
   try{checkdigits:do{
-   tenlong.subtract(com.ibm.math.BigDecimal.ONE,mcld);
+   tenlong.subtract(com.ibm.icu.math.BigDecimal.ONE,mcld);
    flag=false;
   }while(false);}
   catch (java.lang.ArithmeticException $86){ae=$86;
@@ -2857,36 +2857,36 @@ public class DiagBigDecimal{
   java.lang.String norm=null;
   
   
-  (new Test("byv001")).ok=((((byte)-128)))==((new com.ibm.math.BigDecimal("-128")).byteValue());
-  (new Test("byv002")).ok=((0))==((new com.ibm.math.BigDecimal("0")).byteValue());
-  (new Test("byv003")).ok=((1))==((new com.ibm.math.BigDecimal("1")).byteValue());
-  (new Test("byv004")).ok=((99))==((new com.ibm.math.BigDecimal("99")).byteValue());
-  (new Test("byv005")).ok=((127))==((new com.ibm.math.BigDecimal("127")).byteValue());
-  (new Test("byv006")).ok=((-128))==((new com.ibm.math.BigDecimal("128")).byteValue());
-  (new Test("byv007")).ok=((-127))==((new com.ibm.math.BigDecimal("129")).byteValue());
-  (new Test("byv008")).ok=((127))==((new com.ibm.math.BigDecimal("-129")).byteValue());
-  (new Test("byv009")).ok=((126))==((new com.ibm.math.BigDecimal("-130")).byteValue());
-  (new Test("byv010")).ok=((bmax))==((new com.ibm.math.BigDecimal(bmax)).byteValue());
-  (new Test("byv011")).ok=((bmin))==((new com.ibm.math.BigDecimal(bmin)).byteValue());
-  (new Test("byv012")).ok=((bneg))==((new com.ibm.math.BigDecimal(bneg)).byteValue());
-  (new Test("byv013")).ok=((bzer))==((new com.ibm.math.BigDecimal(bzer)).byteValue());
-  (new Test("byv014")).ok=((bpos))==((new com.ibm.math.BigDecimal(bpos)).byteValue());
-  (new Test("byv015")).ok=((bmin))==((new com.ibm.math.BigDecimal(bmax+1)).byteValue());
-  (new Test("byv016")).ok=((bmax))==((new com.ibm.math.BigDecimal(bmin-1)).byteValue());
+  (new Test("byv001")).ok=((((byte)-128)))==((new com.ibm.icu.math.BigDecimal("-128")).byteValue());
+  (new Test("byv002")).ok=((0))==((new com.ibm.icu.math.BigDecimal("0")).byteValue());
+  (new Test("byv003")).ok=((1))==((new com.ibm.icu.math.BigDecimal("1")).byteValue());
+  (new Test("byv004")).ok=((99))==((new com.ibm.icu.math.BigDecimal("99")).byteValue());
+  (new Test("byv005")).ok=((127))==((new com.ibm.icu.math.BigDecimal("127")).byteValue());
+  (new Test("byv006")).ok=((-128))==((new com.ibm.icu.math.BigDecimal("128")).byteValue());
+  (new Test("byv007")).ok=((-127))==((new com.ibm.icu.math.BigDecimal("129")).byteValue());
+  (new Test("byv008")).ok=((127))==((new com.ibm.icu.math.BigDecimal("-129")).byteValue());
+  (new Test("byv009")).ok=((126))==((new com.ibm.icu.math.BigDecimal("-130")).byteValue());
+  (new Test("byv010")).ok=((bmax))==((new com.ibm.icu.math.BigDecimal(bmax)).byteValue());
+  (new Test("byv011")).ok=((bmin))==((new com.ibm.icu.math.BigDecimal(bmin)).byteValue());
+  (new Test("byv012")).ok=((bneg))==((new com.ibm.icu.math.BigDecimal(bneg)).byteValue());
+  (new Test("byv013")).ok=((bzer))==((new com.ibm.icu.math.BigDecimal(bzer)).byteValue());
+  (new Test("byv014")).ok=((bpos))==((new com.ibm.icu.math.BigDecimal(bpos)).byteValue());
+  (new Test("byv015")).ok=((bmin))==((new com.ibm.icu.math.BigDecimal(bmax+1)).byteValue());
+  (new Test("byv016")).ok=((bmax))==((new com.ibm.icu.math.BigDecimal(bmin-1)).byteValue());
   
-  (new Test("byv021")).ok=((((byte)-128)))==((new com.ibm.math.BigDecimal("-128")).byteValueExact());
-  (new Test("byv022")).ok=((0))==((new com.ibm.math.BigDecimal("0")).byteValueExact());
-  (new Test("byv023")).ok=((1))==((new com.ibm.math.BigDecimal("1")).byteValueExact());
-  (new Test("byv024")).ok=((99))==((new com.ibm.math.BigDecimal("99")).byteValueExact());
-  (new Test("byv025")).ok=((127))==((new com.ibm.math.BigDecimal("127")).byteValueExact());
-  (new Test("byv026")).ok=((bmax))==((new com.ibm.math.BigDecimal(bmax)).byteValueExact());
-  (new Test("byv027")).ok=((bmin))==((new com.ibm.math.BigDecimal(bmin)).byteValueExact());
-  (new Test("byv028")).ok=((bneg))==((new com.ibm.math.BigDecimal(bneg)).byteValueExact());
-  (new Test("byv029")).ok=((bzer))==((new com.ibm.math.BigDecimal(bzer)).byteValueExact());
-  (new Test("byv030")).ok=((bpos))==((new com.ibm.math.BigDecimal(bpos)).byteValueExact());
+  (new Test("byv021")).ok=((((byte)-128)))==((new com.ibm.icu.math.BigDecimal("-128")).byteValueExact());
+  (new Test("byv022")).ok=((0))==((new com.ibm.icu.math.BigDecimal("0")).byteValueExact());
+  (new Test("byv023")).ok=((1))==((new com.ibm.icu.math.BigDecimal("1")).byteValueExact());
+  (new Test("byv024")).ok=((99))==((new com.ibm.icu.math.BigDecimal("99")).byteValueExact());
+  (new Test("byv025")).ok=((127))==((new com.ibm.icu.math.BigDecimal("127")).byteValueExact());
+  (new Test("byv026")).ok=((bmax))==((new com.ibm.icu.math.BigDecimal(bmax)).byteValueExact());
+  (new Test("byv027")).ok=((bmin))==((new com.ibm.icu.math.BigDecimal(bmin)).byteValueExact());
+  (new Test("byv028")).ok=((bneg))==((new com.ibm.icu.math.BigDecimal(bneg)).byteValueExact());
+  (new Test("byv029")).ok=((bzer))==((new com.ibm.icu.math.BigDecimal(bzer)).byteValueExact());
+  (new Test("byv030")).ok=((bpos))==((new com.ibm.icu.math.BigDecimal(bpos)).byteValueExact());
   try{
    v="-129";
-   (new com.ibm.math.BigDecimal(v)).byteValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).byteValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $87){ae=$87;
@@ -2895,7 +2895,7 @@ public class DiagBigDecimal{
   (new Test("byv100")).ok=flag;
   try{
    v="128";
-   (new com.ibm.math.BigDecimal(v)).byteValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).byteValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $88){ae=$88;
@@ -2904,7 +2904,7 @@ public class DiagBigDecimal{
   (new Test("byv101")).ok=flag;
   try{
    v="1.5";
-   (new com.ibm.math.BigDecimal(v)).byteValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).byteValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $89){ae=$89;
@@ -2912,7 +2912,7 @@ public class DiagBigDecimal{
   }
   (new Test("byv102")).ok=flag;
   
-  badstrings=new java.lang.String[]{"1234",(new com.ibm.math.BigDecimal(bmax)).add(one).toString(),(new com.ibm.math.BigDecimal(bmin)).subtract(one).toString(),"170","270","370","470","570","670","770","870","970","-170","-270","-370","-470","-570","-670","-770","-870","-970",(new com.ibm.math.BigDecimal(bmin)).multiply(two).toString(),(new com.ibm.math.BigDecimal(bmax)).multiply(two).toString(),(new com.ibm.math.BigDecimal(bmin)).multiply(ten).toString(),(new com.ibm.math.BigDecimal(bmax)).multiply(ten).toString(),"-1234"}; // 220
+  badstrings=new java.lang.String[]{"1234",(new com.ibm.icu.math.BigDecimal(bmax)).add(one).toString(),(new com.ibm.icu.math.BigDecimal(bmin)).subtract(one).toString(),"170","270","370","470","570","670","770","870","970","-170","-270","-370","-470","-570","-670","-770","-870","-970",(new com.ibm.icu.math.BigDecimal(bmin)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(bmax)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(bmin)).multiply(ten).toString(),(new com.ibm.icu.math.BigDecimal(bmax)).multiply(ten).toString(),"-1234"}; // 220
   // 221
   // 222
   // 223
@@ -2941,11 +2941,11 @@ public class DiagBigDecimal{
   {int $90=badstrings.length;i=0;i:for(;$90>0;$90--,i++){
    try{
     v=badstrings[i];
-    (new com.ibm.math.BigDecimal(v)).byteValueExact();
+    (new com.ibm.icu.math.BigDecimal(v)).byteValueExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $91){ae=$91;
-    norm=(new com.ibm.math.BigDecimal(v)).toString();
+    norm=(new com.ibm.icu.math.BigDecimal(v)).toString();
     flag=(ae.getMessage()).equals("Conversion overflow:"+" "+norm);
    }
    (new Test("byv"+(220+i))).ok=flag;
@@ -2960,16 +2960,16 @@ public class DiagBigDecimal{
  
  public void diagcomparetoObj(){
   boolean flag=false;
-  com.ibm.math.BigDecimal d;
-  com.ibm.math.BigDecimal long1;
-  com.ibm.math.BigDecimal long2;
+  com.ibm.icu.math.BigDecimal d;
+  com.ibm.icu.math.BigDecimal long1;
+  com.ibm.icu.math.BigDecimal long2;
   
-  d=new com.ibm.math.BigDecimal(17);
-  (new Test("cto001")).ok=(d.compareTo((java.lang.Object)(new com.ibm.math.BigDecimal(66))))==(-1);
-  (new Test("cto002")).ok=(d.compareTo((java.lang.Object)((new com.ibm.math.BigDecimal(10)).add(new com.ibm.math.BigDecimal(7)))))==0;
-  (new Test("cto003")).ok=(d.compareTo((java.lang.Object)(new com.ibm.math.BigDecimal(10))))==1;
-  long1=new com.ibm.math.BigDecimal("12345678903");
-  long2=new com.ibm.math.BigDecimal("12345678900");
+  d=new com.ibm.icu.math.BigDecimal(17);
+  (new Test("cto001")).ok=(d.compareTo((java.lang.Object)(new com.ibm.icu.math.BigDecimal(66))))==(-1);
+  (new Test("cto002")).ok=(d.compareTo((java.lang.Object)((new com.ibm.icu.math.BigDecimal(10)).add(new com.ibm.icu.math.BigDecimal(7)))))==0;
+  (new Test("cto003")).ok=(d.compareTo((java.lang.Object)(new com.ibm.icu.math.BigDecimal(10))))==1;
+  long1=new com.ibm.icu.math.BigDecimal("12345678903");
+  long2=new com.ibm.icu.math.BigDecimal("12345678900");
   (new Test("cto004")).ok=(long1.compareTo((java.lang.Object)long2))==1;
   (new Test("cto005")).ok=(long2.compareTo((java.lang.Object)long1))==(-1);
   (new Test("cto006")).ok=(long2.compareTo((java.lang.Object)long2))==0;
@@ -2999,19 +2999,19 @@ public class DiagBigDecimal{
   java.lang.String val;
   // 1999.03.07 Infinities no longer errors
   val="-1";
-  (new Test("dov001")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
+  (new Test("dov001")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
   val="-0.1";
-  (new Test("dov002")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
+  (new Test("dov002")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
   val="0";
-  (new Test("dov003")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
+  (new Test("dov003")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
   val="0.1";
-  (new Test("dov004")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
+  (new Test("dov004")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
   val="1";
-  (new Test("dov005")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
+  (new Test("dov005")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==((new java.lang.Double(val)).doubleValue());
   val="1e1000";
-  (new Test("dov006")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==java.lang.Double.POSITIVE_INFINITY;
+  (new Test("dov006")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==java.lang.Double.POSITIVE_INFINITY;
   val="-1e1000";
-  (new Test("dov007")).ok=((new com.ibm.math.BigDecimal(val)).doubleValue())==java.lang.Double.NEGATIVE_INFINITY;
+  (new Test("dov007")).ok=((new com.ibm.icu.math.BigDecimal(val)).doubleValue())==java.lang.Double.NEGATIVE_INFINITY;
   summary("doubleValue");
   return;}
 /* ----------------------------------------------------------------- */
@@ -3019,13 +3019,13 @@ public class DiagBigDecimal{
  /** Test the {@link BigDecimal#equals} method. */
  
  public void diagequals(){
-  com.ibm.math.BigDecimal d;
-  d=new com.ibm.math.BigDecimal(17);
+  com.ibm.icu.math.BigDecimal d;
+  d=new com.ibm.icu.math.BigDecimal(17);
   (new Test("equ001")).ok=(!(d.equals((java.lang.Object)null)));
   (new Test("equ002")).ok=(!(d.equals((java.lang.Object)"foo")));
-  (new Test("equ003")).ok=(!(d.equals((java.lang.Object)(new com.ibm.math.BigDecimal(66)))));
+  (new Test("equ003")).ok=(!(d.equals((java.lang.Object)(new com.ibm.icu.math.BigDecimal(66)))));
   (new Test("equ004")).ok=d.equals((java.lang.Object)d);
-  (new Test("equ005")).ok=d.equals((java.lang.Object)((new com.ibm.math.BigDecimal(10)).add(new com.ibm.math.BigDecimal(7))));
+  (new Test("equ005")).ok=d.equals((java.lang.Object)((new com.ibm.icu.math.BigDecimal(10)).add(new com.ibm.icu.math.BigDecimal(7))));
   summary("equals");
   return;}
 
@@ -3037,23 +3037,23 @@ public class DiagBigDecimal{
   java.lang.String val;
   // 1999.03.07 Infinities no longer errors
   val="-1";
-  (new Test("flv001")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
+  (new Test("flv001")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
   val="-0.1";
-  (new Test("flv002")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
+  (new Test("flv002")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
   val="0";
-  (new Test("flv003")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
+  (new Test("flv003")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
   val="0.1";
-  (new Test("flv004")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
+  (new Test("flv004")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
   val="1";
-  (new Test("flv005")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
+  (new Test("flv005")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==((new java.lang.Float(val)).floatValue());
   val="1e200";
-  (new Test("flv006")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==java.lang.Float.POSITIVE_INFINITY;
+  (new Test("flv006")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==java.lang.Float.POSITIVE_INFINITY;
   val="-1e200";
-  (new Test("flv007")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==java.lang.Float.NEGATIVE_INFINITY;
+  (new Test("flv007")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==java.lang.Float.NEGATIVE_INFINITY;
   val="1e1000";
-  (new Test("flv008")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==java.lang.Float.POSITIVE_INFINITY;
+  (new Test("flv008")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==java.lang.Float.POSITIVE_INFINITY;
   val="-1e1000";
-  (new Test("flv009")).ok=((new com.ibm.math.BigDecimal(val)).floatValue())==java.lang.Float.NEGATIVE_INFINITY;
+  (new Test("flv009")).ok=((new com.ibm.icu.math.BigDecimal(val)).floatValue())==java.lang.Float.NEGATIVE_INFINITY;
   summary("floatValue");
   return;}
 
@@ -3065,114 +3065,114 @@ public class DiagBigDecimal{
   boolean flag=false;
   int eng;
   int sci;
-  com.ibm.math.BigDecimal d04;
-  com.ibm.math.BigDecimal d05;
-  com.ibm.math.BigDecimal d06;
-  com.ibm.math.BigDecimal d15;
+  com.ibm.icu.math.BigDecimal d04;
+  com.ibm.icu.math.BigDecimal d05;
+  com.ibm.icu.math.BigDecimal d06;
+  com.ibm.icu.math.BigDecimal d15;
   java.lang.IllegalArgumentException iae=null;
-  com.ibm.math.BigDecimal d050;
-  com.ibm.math.BigDecimal d150;
-  com.ibm.math.BigDecimal m050;
-  com.ibm.math.BigDecimal m150;
-  com.ibm.math.BigDecimal d051;
-  com.ibm.math.BigDecimal d151;
-  com.ibm.math.BigDecimal d000;
-  com.ibm.math.BigDecimal d500;
+  com.ibm.icu.math.BigDecimal d050;
+  com.ibm.icu.math.BigDecimal d150;
+  com.ibm.icu.math.BigDecimal m050;
+  com.ibm.icu.math.BigDecimal m150;
+  com.ibm.icu.math.BigDecimal d051;
+  com.ibm.icu.math.BigDecimal d151;
+  com.ibm.icu.math.BigDecimal d000;
+  com.ibm.icu.math.BigDecimal d500;
   java.lang.ArithmeticException ae=null;
   // 1999.02.09 now only two signatures for format(), so some tests below
   //            may now be redundant
   
-  (new Test("for001")).ok=((new com.ibm.math.BigDecimal("12.3")).format(-1,-1)).equals("12.3");
-  (new Test("for002")).ok=((new com.ibm.math.BigDecimal("-12.73")).format(-1,-1)).equals("-12.73");
-  (new Test("for003")).ok=((new com.ibm.math.BigDecimal("0.000")).format(-1,-1)).equals("0.000");
-  (new Test("for004")).ok=((new com.ibm.math.BigDecimal("3E+3")).format(-1,-1)).equals("3000");
-  (new Test("for005")).ok=((new com.ibm.math.BigDecimal("3")).format(4,-1)).equals("   3");
-  (new Test("for006")).ok=((new com.ibm.math.BigDecimal("1.73")).format(4,0)).equals("   2");
-  (new Test("for007")).ok=((new com.ibm.math.BigDecimal("1.73")).format(4,1)).equals("   1.7");
-  (new Test("for008")).ok=((new com.ibm.math.BigDecimal("1.75")).format(4,1)).equals("   1.8");
-  (new Test("for009")).ok=((new com.ibm.math.BigDecimal("0.5")).format(4,1)).equals("   0.5");
-  (new Test("for010")).ok=((new com.ibm.math.BigDecimal("0.05")).format(4,1)).equals("   0.1");
-  (new Test("for011")).ok=((new com.ibm.math.BigDecimal("0.04")).format(4,1)).equals("   0.0");
-  (new Test("for012")).ok=((new com.ibm.math.BigDecimal("0")).format(4,0)).equals("   0");
-  (new Test("for013")).ok=((new com.ibm.math.BigDecimal("0")).format(4,1)).equals("   0.0");
-  (new Test("for014")).ok=((new com.ibm.math.BigDecimal("0")).format(4,2)).equals("   0.00");
-  (new Test("for015")).ok=((new com.ibm.math.BigDecimal("0")).format(4,3)).equals("   0.000");
-  (new Test("for016")).ok=((new com.ibm.math.BigDecimal("0")).format(4,4)).equals("   0.0000");
-  (new Test("for017")).ok=((new com.ibm.math.BigDecimal("0.005")).format(4,0)).equals("   0");
-  (new Test("for018")).ok=((new com.ibm.math.BigDecimal("0.005")).format(4,1)).equals("   0.0");
-  (new Test("for019")).ok=((new com.ibm.math.BigDecimal("0.005")).format(4,2)).equals("   0.01");
-  (new Test("for020")).ok=((new com.ibm.math.BigDecimal("0.004")).format(4,2)).equals("   0.00");
-  (new Test("for021")).ok=((new com.ibm.math.BigDecimal("0.005")).format(4,3)).equals("   0.005");
-  (new Test("for022")).ok=((new com.ibm.math.BigDecimal("0.005")).format(4,4)).equals("   0.0050");
+  (new Test("for001")).ok=((new com.ibm.icu.math.BigDecimal("12.3")).format(-1,-1)).equals("12.3");
+  (new Test("for002")).ok=((new com.ibm.icu.math.BigDecimal("-12.73")).format(-1,-1)).equals("-12.73");
+  (new Test("for003")).ok=((new com.ibm.icu.math.BigDecimal("0.000")).format(-1,-1)).equals("0.000");
+  (new Test("for004")).ok=((new com.ibm.icu.math.BigDecimal("3E+3")).format(-1,-1)).equals("3000");
+  (new Test("for005")).ok=((new com.ibm.icu.math.BigDecimal("3")).format(4,-1)).equals("   3");
+  (new Test("for006")).ok=((new com.ibm.icu.math.BigDecimal("1.73")).format(4,0)).equals("   2");
+  (new Test("for007")).ok=((new com.ibm.icu.math.BigDecimal("1.73")).format(4,1)).equals("   1.7");
+  (new Test("for008")).ok=((new com.ibm.icu.math.BigDecimal("1.75")).format(4,1)).equals("   1.8");
+  (new Test("for009")).ok=((new com.ibm.icu.math.BigDecimal("0.5")).format(4,1)).equals("   0.5");
+  (new Test("for010")).ok=((new com.ibm.icu.math.BigDecimal("0.05")).format(4,1)).equals("   0.1");
+  (new Test("for011")).ok=((new com.ibm.icu.math.BigDecimal("0.04")).format(4,1)).equals("   0.0");
+  (new Test("for012")).ok=((new com.ibm.icu.math.BigDecimal("0")).format(4,0)).equals("   0");
+  (new Test("for013")).ok=((new com.ibm.icu.math.BigDecimal("0")).format(4,1)).equals("   0.0");
+  (new Test("for014")).ok=((new com.ibm.icu.math.BigDecimal("0")).format(4,2)).equals("   0.00");
+  (new Test("for015")).ok=((new com.ibm.icu.math.BigDecimal("0")).format(4,3)).equals("   0.000");
+  (new Test("for016")).ok=((new com.ibm.icu.math.BigDecimal("0")).format(4,4)).equals("   0.0000");
+  (new Test("for017")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).format(4,0)).equals("   0");
+  (new Test("for018")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).format(4,1)).equals("   0.0");
+  (new Test("for019")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).format(4,2)).equals("   0.01");
+  (new Test("for020")).ok=((new com.ibm.icu.math.BigDecimal("0.004")).format(4,2)).equals("   0.00");
+  (new Test("for021")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).format(4,3)).equals("   0.005");
+  (new Test("for022")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).format(4,4)).equals("   0.0050");
   
-  (new Test("for023")).ok=((new com.ibm.math.BigDecimal("1.73")).format(4,2)).equals("   1.73");
-  (new Test("for024")).ok=((new com.ibm.math.BigDecimal("1.73")).format(4,3)).equals("   1.730");
-  (new Test("for025")).ok=((new com.ibm.math.BigDecimal("-.76")).format(4,1)).equals("  -0.8");
-  (new Test("for026")).ok=((new com.ibm.math.BigDecimal("-12.73")).format(-1,4)).equals("-12.7300");
+  (new Test("for023")).ok=((new com.ibm.icu.math.BigDecimal("1.73")).format(4,2)).equals("   1.73");
+  (new Test("for024")).ok=((new com.ibm.icu.math.BigDecimal("1.73")).format(4,3)).equals("   1.730");
+  (new Test("for025")).ok=((new com.ibm.icu.math.BigDecimal("-.76")).format(4,1)).equals("  -0.8");
+  (new Test("for026")).ok=((new com.ibm.icu.math.BigDecimal("-12.73")).format(-1,4)).equals("-12.7300");
   
-  (new Test("for027")).ok=((new com.ibm.math.BigDecimal("3.03")).format(4,-1)).equals("   3.03");
-  (new Test("for028")).ok=((new com.ibm.math.BigDecimal("3.03")).format(4,1)).equals("   3.0");
-  (new Test("for029")).ok=((new com.ibm.math.BigDecimal("3.03")).format(4,-1,3,-1,-1,-1)).equals("   3.03     ");
-  (new Test("for030")).ok=((new com.ibm.math.BigDecimal("3.03")).format(-1,-1,3,-1,-1,-1)).equals("3.03     ");
-  (new Test("for031")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,-1,-1,4,-1,-1)).equals("1.234573E+4");
-  (new Test("for032")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,-1,-1,5,-1,-1)).equals("12345.73");
-  (new Test("for033")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,-1,-1,6,-1,-1)).equals("12345.73");
+  (new Test("for027")).ok=((new com.ibm.icu.math.BigDecimal("3.03")).format(4,-1)).equals("   3.03");
+  (new Test("for028")).ok=((new com.ibm.icu.math.BigDecimal("3.03")).format(4,1)).equals("   3.0");
+  (new Test("for029")).ok=((new com.ibm.icu.math.BigDecimal("3.03")).format(4,-1,3,-1,-1,-1)).equals("   3.03     ");
+  (new Test("for030")).ok=((new com.ibm.icu.math.BigDecimal("3.03")).format(-1,-1,3,-1,-1,-1)).equals("3.03     ");
+  (new Test("for031")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,-1,-1,4,-1,-1)).equals("1.234573E+4");
+  (new Test("for032")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,-1,-1,5,-1,-1)).equals("12345.73");
+  (new Test("for033")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,-1,-1,6,-1,-1)).equals("12345.73");
   
-  (new Test("for034")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,8,-1,3,-1,-1)).equals("1.23457300E+4");
-  (new Test("for035")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,7,-1,3,-1,-1)).equals("1.2345730E+4");
-  (new Test("for036")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,6,-1,3,-1,-1)).equals("1.234573E+4");
-  (new Test("for037")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,5,-1,3,-1,-1)).equals("1.23457E+4");
-  (new Test("for038")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,4,-1,3,-1,-1)).equals("1.2346E+4");
-  (new Test("for039")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,3,-1,3,-1,-1)).equals("1.235E+4");
-  (new Test("for040")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,2,-1,3,-1,-1)).equals("1.23E+4");
-  (new Test("for041")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,1,-1,3,-1,-1)).equals("1.2E+4");
-  (new Test("for042")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,0,-1,3,-1,-1)).equals("1E+4");
+  (new Test("for034")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,8,-1,3,-1,-1)).equals("1.23457300E+4");
+  (new Test("for035")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,7,-1,3,-1,-1)).equals("1.2345730E+4");
+  (new Test("for036")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,6,-1,3,-1,-1)).equals("1.234573E+4");
+  (new Test("for037")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,5,-1,3,-1,-1)).equals("1.23457E+4");
+  (new Test("for038")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,4,-1,3,-1,-1)).equals("1.2346E+4");
+  (new Test("for039")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,3,-1,3,-1,-1)).equals("1.235E+4");
+  (new Test("for040")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,2,-1,3,-1,-1)).equals("1.23E+4");
+  (new Test("for041")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,1,-1,3,-1,-1)).equals("1.2E+4");
+  (new Test("for042")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,0,-1,3,-1,-1)).equals("1E+4");
   
-  (new Test("for043")).ok=((new com.ibm.math.BigDecimal("99999.99")).format(-1,6,-1,3,-1,-1)).equals("9.999999E+4");
-  (new Test("for044")).ok=((new com.ibm.math.BigDecimal("99999.99")).format(-1,5,-1,3,-1,-1)).equals("1.00000E+5");
-  (new Test("for045")).ok=((new com.ibm.math.BigDecimal("99999.99")).format(-1,2,-1,3,-1,-1)).equals("1.00E+5");
-  (new Test("for046")).ok=((new com.ibm.math.BigDecimal("99999.99")).format(-1,0,-1,3,-1,-1)).equals("1E+5");
-  (new Test("for047")).ok=((new com.ibm.math.BigDecimal("99999.99")).format(3,0,-1,3,-1,-1)).equals("  1E+5");
+  (new Test("for043")).ok=((new com.ibm.icu.math.BigDecimal("99999.99")).format(-1,6,-1,3,-1,-1)).equals("9.999999E+4");
+  (new Test("for044")).ok=((new com.ibm.icu.math.BigDecimal("99999.99")).format(-1,5,-1,3,-1,-1)).equals("1.00000E+5");
+  (new Test("for045")).ok=((new com.ibm.icu.math.BigDecimal("99999.99")).format(-1,2,-1,3,-1,-1)).equals("1.00E+5");
+  (new Test("for046")).ok=((new com.ibm.icu.math.BigDecimal("99999.99")).format(-1,0,-1,3,-1,-1)).equals("1E+5");
+  (new Test("for047")).ok=((new com.ibm.icu.math.BigDecimal("99999.99")).format(3,0,-1,3,-1,-1)).equals("  1E+5");
   
-  (new Test("for048")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,-1,2,2,-1,-1)).equals("1.234573E+04");
-  (new Test("for049")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,3,-1,0,-1,-1)).equals("1.235E+4");
-  (new Test("for050")).ok=((new com.ibm.math.BigDecimal("1.234573")).format(-1,3,-1,0,-1,-1)).equals("1.235");
-  (new Test("for051")).ok=((new com.ibm.math.BigDecimal("123.45")).format(-1,3,2,0,-1,-1)).equals("1.235E+02");
+  (new Test("for048")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,-1,2,2,-1,-1)).equals("1.234573E+04");
+  (new Test("for049")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,3,-1,0,-1,-1)).equals("1.235E+4");
+  (new Test("for050")).ok=((new com.ibm.icu.math.BigDecimal("1.234573")).format(-1,3,-1,0,-1,-1)).equals("1.235");
+  (new Test("for051")).ok=((new com.ibm.icu.math.BigDecimal("123.45")).format(-1,3,2,0,-1,-1)).equals("1.235E+02");
   
-  (new Test("for052")).ok=((new com.ibm.math.BigDecimal("0.444")).format(-1,0)).equals("0");
-  (new Test("for053")).ok=((new com.ibm.math.BigDecimal("-0.444")).format(-1,0)).equals("0");
-  (new Test("for054")).ok=((new com.ibm.math.BigDecimal("0.4")).format(-1,0)).equals("0");
-  (new Test("for055")).ok=((new com.ibm.math.BigDecimal("-0.4")).format(-1,0)).equals("0");
+  (new Test("for052")).ok=((new com.ibm.icu.math.BigDecimal("0.444")).format(-1,0)).equals("0");
+  (new Test("for053")).ok=((new com.ibm.icu.math.BigDecimal("-0.444")).format(-1,0)).equals("0");
+  (new Test("for054")).ok=((new com.ibm.icu.math.BigDecimal("0.4")).format(-1,0)).equals("0");
+  (new Test("for055")).ok=((new com.ibm.icu.math.BigDecimal("-0.4")).format(-1,0)).equals("0");
   
-  eng=com.ibm.math.MathContext.ENGINEERING;
-  sci=com.ibm.math.MathContext.SCIENTIFIC;
-  (new Test("for060")).ok=((new com.ibm.math.BigDecimal("1234.5")).format(-1,3,2,0,eng,-1)).equals("1.235E+03");
-  (new Test("for061")).ok=((new com.ibm.math.BigDecimal("12345")).format(-1,3,3,0,eng,-1)).equals("12.345E+003");
-  (new Test("for062")).ok=((new com.ibm.math.BigDecimal("12345")).format(-1,3,3,0,sci,-1)).equals("1.235E+004");
-  (new Test("for063")).ok=((new com.ibm.math.BigDecimal("1234.5")).format(4,3,2,0,eng,-1)).equals("   1.235E+03");
-  (new Test("for064")).ok=((new com.ibm.math.BigDecimal("12345")).format(5,3,3,0,eng,-1)).equals("   12.345E+003");
-  (new Test("for065")).ok=((new com.ibm.math.BigDecimal("12345")).format(6,3,3,0,sci,-1)).equals("     1.235E+004");
+  eng=com.ibm.icu.math.MathContext.ENGINEERING;
+  sci=com.ibm.icu.math.MathContext.SCIENTIFIC;
+  (new Test("for060")).ok=((new com.ibm.icu.math.BigDecimal("1234.5")).format(-1,3,2,0,eng,-1)).equals("1.235E+03");
+  (new Test("for061")).ok=((new com.ibm.icu.math.BigDecimal("12345")).format(-1,3,3,0,eng,-1)).equals("12.345E+003");
+  (new Test("for062")).ok=((new com.ibm.icu.math.BigDecimal("12345")).format(-1,3,3,0,sci,-1)).equals("1.235E+004");
+  (new Test("for063")).ok=((new com.ibm.icu.math.BigDecimal("1234.5")).format(4,3,2,0,eng,-1)).equals("   1.235E+03");
+  (new Test("for064")).ok=((new com.ibm.icu.math.BigDecimal("12345")).format(5,3,3,0,eng,-1)).equals("   12.345E+003");
+  (new Test("for065")).ok=((new com.ibm.icu.math.BigDecimal("12345")).format(6,3,3,0,sci,-1)).equals("     1.235E+004");
   
-  (new Test("for066")).ok=((new com.ibm.math.BigDecimal("1.2345")).format(-1,3,2,0,-1,-1)).equals("1.235    ");
-  (new Test("for067")).ok=((new com.ibm.math.BigDecimal("12345.73")).format(-1,-1,3,6,-1,-1)).equals("12345.73     ");
-  (new Test("for068")).ok=((new com.ibm.math.BigDecimal("12345e+5")).format(-1,0)).equals("1234500000");
-  (new Test("for069")).ok=((new com.ibm.math.BigDecimal("12345e+5")).format(-1,1)).equals("1234500000.0");
-  (new Test("for070")).ok=((new com.ibm.math.BigDecimal("12345e+5")).format(-1,2)).equals("1234500000.00");
-  (new Test("for071")).ok=((new com.ibm.math.BigDecimal("12345e+5")).format(-1,3)).equals("1234500000.000");
-  (new Test("for072")).ok=((new com.ibm.math.BigDecimal("12345e+5")).format(-1,4)).equals("1234500000.0000");
+  (new Test("for066")).ok=((new com.ibm.icu.math.BigDecimal("1.2345")).format(-1,3,2,0,-1,-1)).equals("1.235    ");
+  (new Test("for067")).ok=((new com.ibm.icu.math.BigDecimal("12345.73")).format(-1,-1,3,6,-1,-1)).equals("12345.73     ");
+  (new Test("for068")).ok=((new com.ibm.icu.math.BigDecimal("12345e+5")).format(-1,0)).equals("1234500000");
+  (new Test("for069")).ok=((new com.ibm.icu.math.BigDecimal("12345e+5")).format(-1,1)).equals("1234500000.0");
+  (new Test("for070")).ok=((new com.ibm.icu.math.BigDecimal("12345e+5")).format(-1,2)).equals("1234500000.00");
+  (new Test("for071")).ok=((new com.ibm.icu.math.BigDecimal("12345e+5")).format(-1,3)).equals("1234500000.000");
+  (new Test("for072")).ok=((new com.ibm.icu.math.BigDecimal("12345e+5")).format(-1,4)).equals("1234500000.0000");
   
   // some from ANSI Dallas [Nov 1998]
-  (new Test("for073")).ok=((new com.ibm.math.BigDecimal("99.999")).format(-1,2,-1,2,-1,-1)).equals("100.00");
-  (new Test("for074")).ok=((new com.ibm.math.BigDecimal("0.99999")).format(-1,4,2,2,-1,-1)).equals("1.0000    ");
+  (new Test("for073")).ok=((new com.ibm.icu.math.BigDecimal("99.999")).format(-1,2,-1,2,-1,-1)).equals("100.00");
+  (new Test("for074")).ok=((new com.ibm.icu.math.BigDecimal("0.99999")).format(-1,4,2,2,-1,-1)).equals("1.0000    ");
   
   // try some rounding modes [default ROUND_HALF_UP widely tested above]
   // the first few also tests that defaults are accepted for the others
-  d04=new com.ibm.math.BigDecimal("0.04");
-  d05=new com.ibm.math.BigDecimal("0.05");
-  d06=new com.ibm.math.BigDecimal("0.06");
-  d15=new com.ibm.math.BigDecimal("0.15");
+  d04=new com.ibm.icu.math.BigDecimal("0.04");
+  d05=new com.ibm.icu.math.BigDecimal("0.05");
+  d06=new com.ibm.icu.math.BigDecimal("0.06");
+  d15=new com.ibm.icu.math.BigDecimal("0.15");
   (new Test("for080")).ok=(d05.format(-1,1)).equals("0.1");
-  (new Test("for081")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_UP)).equals("0.1");
+  (new Test("for081")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_UP)).equals("0.1");
   (new Test("for082")).ok=(d05.format(-1,1,-1,-1,-1,-1)).equals("0.1");
   (new Test("for083")).ok=(d05.format(-1,-1,-1,-1,-1,-1)).equals("0.05");
   (new Test("for084")).ok=(d05.format(-1,-1)).equals("0.05");
@@ -3187,65 +3187,65 @@ public class DiagBigDecimal{
   
   (new Test("for090")).ok=(d04.format(-1,1)).equals("0.0");
   (new Test("for091")).ok=(d06.format(-1,1)).equals("0.1");
-  (new Test("for092")).ok=(d04.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_DOWN)).equals("0.0");
-  (new Test("for093")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_DOWN)).equals("0.0");
-  (new Test("for094")).ok=(d06.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_DOWN)).equals("0.1");
+  (new Test("for092")).ok=(d04.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN)).equals("0.0");
+  (new Test("for093")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN)).equals("0.0");
+  (new Test("for094")).ok=(d06.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN)).equals("0.1");
   
-  (new Test("for095")).ok=(d04.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
-  (new Test("for096")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
-  (new Test("for097")).ok=(d06.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.1");
-  (new Test("for098")).ok=(d15.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
-  d050=new com.ibm.math.BigDecimal("0.050");
-  d150=new com.ibm.math.BigDecimal("0.150");
-  (new Test("for099")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
-  (new Test("for100")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
-  m050=new com.ibm.math.BigDecimal("-0.050");
-  m150=new com.ibm.math.BigDecimal("-0.150");
-  (new Test("for101")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
-  (new Test("for102")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("-0.2");
-  d051=new com.ibm.math.BigDecimal("0.051");
-  d151=new com.ibm.math.BigDecimal("0.151");
-  (new Test("for103")).ok=(d051.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.1");
-  (new Test("for104")).ok=(d151.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
+  (new Test("for095")).ok=(d04.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
+  (new Test("for096")).ok=(d05.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
+  (new Test("for097")).ok=(d06.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.1");
+  (new Test("for098")).ok=(d15.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
+  d050=new com.ibm.icu.math.BigDecimal("0.050");
+  d150=new com.ibm.icu.math.BigDecimal("0.150");
+  (new Test("for099")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
+  (new Test("for100")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
+  m050=new com.ibm.icu.math.BigDecimal("-0.050");
+  m150=new com.ibm.icu.math.BigDecimal("-0.150");
+  (new Test("for101")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.0");
+  (new Test("for102")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("-0.2");
+  d051=new com.ibm.icu.math.BigDecimal("0.051");
+  d151=new com.ibm.icu.math.BigDecimal("0.151");
+  (new Test("for103")).ok=(d051.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.1");
+  (new Test("for104")).ok=(d151.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN)).equals("0.2");
   
-  (new Test("for105")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_CEILING)).equals("0.0");
-  (new Test("for106")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_CEILING)).equals("-0.1");
-  (new Test("for107")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_CEILING)).equals("0.1");
-  (new Test("for108")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_CEILING)).equals("0.2");
+  (new Test("for105")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_CEILING)).equals("0.0");
+  (new Test("for106")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_CEILING)).equals("-0.1");
+  (new Test("for107")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_CEILING)).equals("0.1");
+  (new Test("for108")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_CEILING)).equals("0.2");
   
-  (new Test("for109")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_FLOOR)).equals("-0.1");
-  (new Test("for110")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_FLOOR)).equals("-0.2");
-  (new Test("for111")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_FLOOR)).equals("0.0");
-  (new Test("for112")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_FLOOR)).equals("0.1");
+  (new Test("for109")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_FLOOR)).equals("-0.1");
+  (new Test("for110")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_FLOOR)).equals("-0.2");
+  (new Test("for111")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_FLOOR)).equals("0.0");
+  (new Test("for112")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_FLOOR)).equals("0.1");
   
-  (new Test("for113")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UP)).equals("-0.1");
-  (new Test("for114")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UP)).equals("-0.2");
-  (new Test("for115")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UP)).equals("0.1");
-  (new Test("for116")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UP)).equals("0.2");
+  (new Test("for113")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UP)).equals("-0.1");
+  (new Test("for114")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UP)).equals("-0.2");
+  (new Test("for115")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UP)).equals("0.1");
+  (new Test("for116")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UP)).equals("0.2");
   
-  (new Test("for117")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_DOWN)).equals("0.0");
-  (new Test("for118")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_DOWN)).equals("-0.1");
-  (new Test("for119")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_DOWN)).equals("0.0");
-  (new Test("for120")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_DOWN)).equals("0.1");
+  (new Test("for117")).ok=(m050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_DOWN)).equals("0.0");
+  (new Test("for118")).ok=(m150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_DOWN)).equals("-0.1");
+  (new Test("for119")).ok=(d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_DOWN)).equals("0.0");
+  (new Test("for120")).ok=(d150.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_DOWN)).equals("0.1");
   
-  d000=new com.ibm.math.BigDecimal("0.000");
-  d500=new com.ibm.math.BigDecimal("0.500");
-  (new Test("for121")).ok=(d000.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.0");
-  (new Test("for122")).ok=(d000.format(-1,2,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.00");
-  (new Test("for123")).ok=(d000.format(-1,3,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.000");
+  d000=new com.ibm.icu.math.BigDecimal("0.000");
+  d500=new com.ibm.icu.math.BigDecimal("0.500");
+  (new Test("for121")).ok=(d000.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.0");
+  (new Test("for122")).ok=(d000.format(-1,2,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.00");
+  (new Test("for123")).ok=(d000.format(-1,3,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.000");
   try{ // this should trap..
-   d050.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY);
+   d050.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
    flag=false;
   }
   catch (java.lang.ArithmeticException $95){ae=$95;
    flag=(ae.getMessage()).equals("Rounding necessary");
   }
   (new Test("for124")).ok=flag;
-  (new Test("for125")).ok=(d050.format(-1,2,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.05");
-  (new Test("for126")).ok=(d050.format(-1,3,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.050");
-  (new Test("for127")).ok=(d500.format(-1,1,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.5");
-  (new Test("for128")).ok=(d500.format(-1,2,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.50");
-  (new Test("for129")).ok=(d500.format(-1,3,-1,-1,-1,com.ibm.math.MathContext.ROUND_UNNECESSARY)).equals("0.500");
+  (new Test("for125")).ok=(d050.format(-1,2,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.05");
+  (new Test("for126")).ok=(d050.format(-1,3,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.050");
+  (new Test("for127")).ok=(d500.format(-1,1,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.5");
+  (new Test("for128")).ok=(d500.format(-1,2,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.50");
+  (new Test("for129")).ok=(d500.format(-1,3,-1,-1,-1,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY)).equals("0.500");
   
   // bad negs --
   try{
@@ -3305,15 +3305,15 @@ public class DiagBigDecimal{
  
  public void diaghashcode(){
   java.lang.String hs;
-  com.ibm.math.BigDecimal d;
+  com.ibm.icu.math.BigDecimal d;
   hs="27827817";
-  d=new com.ibm.math.BigDecimal(hs);
+  d=new com.ibm.icu.math.BigDecimal(hs);
   (new Test("has001")).ok=(d.hashCode())==(hs.hashCode());
   hs="1.265E+200";
-  d=new com.ibm.math.BigDecimal(hs);
+  d=new com.ibm.icu.math.BigDecimal(hs);
   (new Test("has002")).ok=(d.hashCode())==(hs.hashCode());
   hs="126.5E+200";
-  d=new com.ibm.math.BigDecimal(hs);
+  d=new com.ibm.icu.math.BigDecimal(hs);
   (new Test("has003")).ok=(d.hashCode())!=(hs.hashCode());
   summary("hashCode");
   return;}
@@ -3328,52 +3328,52 @@ public class DiagBigDecimal{
   java.lang.String badstrings[];
   int i=0;
   java.lang.String norm=null;
-  com.ibm.math.BigDecimal dimax;
-  com.ibm.math.BigDecimal num=null;
-  com.ibm.math.BigDecimal dv=null;
-  com.ibm.math.BigDecimal dimin;
+  com.ibm.icu.math.BigDecimal dimax;
+  com.ibm.icu.math.BigDecimal num=null;
+  com.ibm.icu.math.BigDecimal dv=null;
+  com.ibm.icu.math.BigDecimal dimin;
   
   
   // intValue --
   
-  (new Test("inv001")).ok=imin==((new com.ibm.math.BigDecimal(imin)).intValue());
-  (new Test("inv002")).ok=((99))==((new com.ibm.math.BigDecimal("99")).intValue());
-  (new Test("inv003")).ok=((1))==((new com.ibm.math.BigDecimal("1")).intValue());
-  (new Test("inv004")).ok=((0))==((new com.ibm.math.BigDecimal("0")).intValue());
-  (new Test("inv005")).ok=((-1))==((new com.ibm.math.BigDecimal("-1")).intValue());
-  (new Test("inv006")).ok=((-99))==((new com.ibm.math.BigDecimal("-99")).intValue());
-  (new Test("inv007")).ok=imax==((new com.ibm.math.BigDecimal(imax)).intValue());
-  (new Test("inv008")).ok=((5))==((new com.ibm.math.BigDecimal("5.0")).intValue());
-  (new Test("inv009")).ok=((5))==((new com.ibm.math.BigDecimal("5.3")).intValue());
-  (new Test("inv010")).ok=((5))==((new com.ibm.math.BigDecimal("5.5")).intValue());
-  (new Test("inv011")).ok=((5))==((new com.ibm.math.BigDecimal("5.7")).intValue());
-  (new Test("inv012")).ok=((5))==((new com.ibm.math.BigDecimal("5.9")).intValue());
-  (new Test("inv013")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.0")).intValue());
-  (new Test("inv014")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.3")).intValue());
-  (new Test("inv015")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.5")).intValue());
-  (new Test("inv016")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.7")).intValue());
-  (new Test("inv017")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.9")).intValue());
-  (new Test("inv018")).ok=((new com.ibm.math.BigDecimal("88888888888")).intValue())==(-1305424328); // ugh
-  (new Test("inv019")).ok=((new com.ibm.math.BigDecimal("-88888888888")).intValue())==1305424328; // ugh
-  (new Test("inv020")).ok=((imin))==((new com.ibm.math.BigDecimal((((long)imax))+1)).intValue());
-  (new Test("inv021")).ok=((imax))==((new com.ibm.math.BigDecimal((((long)imin))-1)).intValue());
+  (new Test("inv001")).ok=imin==((new com.ibm.icu.math.BigDecimal(imin)).intValue());
+  (new Test("inv002")).ok=((99))==((new com.ibm.icu.math.BigDecimal("99")).intValue());
+  (new Test("inv003")).ok=((1))==((new com.ibm.icu.math.BigDecimal("1")).intValue());
+  (new Test("inv004")).ok=((0))==((new com.ibm.icu.math.BigDecimal("0")).intValue());
+  (new Test("inv005")).ok=((-1))==((new com.ibm.icu.math.BigDecimal("-1")).intValue());
+  (new Test("inv006")).ok=((-99))==((new com.ibm.icu.math.BigDecimal("-99")).intValue());
+  (new Test("inv007")).ok=imax==((new com.ibm.icu.math.BigDecimal(imax)).intValue());
+  (new Test("inv008")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.0")).intValue());
+  (new Test("inv009")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.3")).intValue());
+  (new Test("inv010")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.5")).intValue());
+  (new Test("inv011")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.7")).intValue());
+  (new Test("inv012")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.9")).intValue());
+  (new Test("inv013")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.0")).intValue());
+  (new Test("inv014")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.3")).intValue());
+  (new Test("inv015")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.5")).intValue());
+  (new Test("inv016")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.7")).intValue());
+  (new Test("inv017")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.9")).intValue());
+  (new Test("inv018")).ok=((new com.ibm.icu.math.BigDecimal("88888888888")).intValue())==(-1305424328); // ugh
+  (new Test("inv019")).ok=((new com.ibm.icu.math.BigDecimal("-88888888888")).intValue())==1305424328; // ugh
+  (new Test("inv020")).ok=((imin))==((new com.ibm.icu.math.BigDecimal((((long)imax))+1)).intValue());
+  (new Test("inv021")).ok=((imax))==((new com.ibm.icu.math.BigDecimal((((long)imin))-1)).intValue());
   
   // intValueExact --
   
-  (new Test("inv101")).ok=imin==((new com.ibm.math.BigDecimal(imin)).intValueExact());
-  (new Test("inv102")).ok=((99))==((new com.ibm.math.BigDecimal("99")).intValue());
-  (new Test("inv103")).ok=((1))==((new com.ibm.math.BigDecimal("1")).intValue());
-  (new Test("inv104")).ok=((0))==((new com.ibm.math.BigDecimal("0")).intValue());
-  (new Test("inv105")).ok=((-1))==((new com.ibm.math.BigDecimal("-1")).intValue());
-  (new Test("inv106")).ok=((-99))==((new com.ibm.math.BigDecimal("-99")).intValue());
-  (new Test("inv107")).ok=imax==((new com.ibm.math.BigDecimal(imax)).intValue());
-  (new Test("inv108")).ok=((5))==((new com.ibm.math.BigDecimal("5.0")).intValue());
-  (new Test("inv109")).ok=((-5))==((new com.ibm.math.BigDecimal("-5.0")).intValue());
-  (new Test("inv110")).ok=imax==((new com.ibm.math.BigDecimal(imax)).intValueExact());
+  (new Test("inv101")).ok=imin==((new com.ibm.icu.math.BigDecimal(imin)).intValueExact());
+  (new Test("inv102")).ok=((99))==((new com.ibm.icu.math.BigDecimal("99")).intValue());
+  (new Test("inv103")).ok=((1))==((new com.ibm.icu.math.BigDecimal("1")).intValue());
+  (new Test("inv104")).ok=((0))==((new com.ibm.icu.math.BigDecimal("0")).intValue());
+  (new Test("inv105")).ok=((-1))==((new com.ibm.icu.math.BigDecimal("-1")).intValue());
+  (new Test("inv106")).ok=((-99))==((new com.ibm.icu.math.BigDecimal("-99")).intValue());
+  (new Test("inv107")).ok=imax==((new com.ibm.icu.math.BigDecimal(imax)).intValue());
+  (new Test("inv108")).ok=((5))==((new com.ibm.icu.math.BigDecimal("5.0")).intValue());
+  (new Test("inv109")).ok=((-5))==((new com.ibm.icu.math.BigDecimal("-5.0")).intValue());
+  (new Test("inv110")).ok=imax==((new com.ibm.icu.math.BigDecimal(imax)).intValueExact());
   
   try{
    v="-88588688888";
-   (new com.ibm.math.BigDecimal(v)).intValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).intValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $102){ae=$102;
@@ -3384,7 +3384,7 @@ public class DiagBigDecimal{
   // this one could raise either overflow or bad decimal part
   try{
    v="88088818888.00001";
-   (new com.ibm.math.BigDecimal(v)).intValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).intValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $103){
@@ -3393,7 +3393,7 @@ public class DiagBigDecimal{
   (new Test("inv201")).ok=flag;
   
   // 1999.10.28: the testcases marked '*' failed
-  badstrings=new java.lang.String[]{"12345678901",(new com.ibm.math.BigDecimal(imax)).add(one).toString(),(new com.ibm.math.BigDecimal(imin)).subtract(one).toString(),"3731367293","4731367293","5731367293","6731367293","7731367293","8731367293","9731367293","-3731367293","-4731367293","-5731367293","-6731367293","-7731367293","-8731367293","-9731367293",(new com.ibm.math.BigDecimal(imin)).multiply(two).toString(),(new com.ibm.math.BigDecimal(imax)).multiply(two).toString(),(new com.ibm.math.BigDecimal(imin)).multiply(ten).toString(),(new com.ibm.math.BigDecimal(imax)).multiply(ten).toString(),"4731367293","4831367293","4931367293","5031367293","5131367293","5231367293","5331367293","5431367293","5531367293","5631367293","5731367293","5831367293","5931367293","6031367293","6131367293","6231367293","6331367293","6431367293","6531367293","6631367293","6731367293","2200000000","2300000000","2400000000","2500000000","2600000000","2700000000","2800000000","2900000000","-2200000000","-2300000000","-2400000000","-2500000000","-2600000000","-2700000000","-2800000000","-2900000000","25E+8","-25E+8","-12345678901"}; // 220
+  badstrings=new java.lang.String[]{"12345678901",(new com.ibm.icu.math.BigDecimal(imax)).add(one).toString(),(new com.ibm.icu.math.BigDecimal(imin)).subtract(one).toString(),"3731367293","4731367293","5731367293","6731367293","7731367293","8731367293","9731367293","-3731367293","-4731367293","-5731367293","-6731367293","-7731367293","-8731367293","-9731367293",(new com.ibm.icu.math.BigDecimal(imin)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(imax)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(imin)).multiply(ten).toString(),(new com.ibm.icu.math.BigDecimal(imax)).multiply(ten).toString(),"4731367293","4831367293","4931367293","5031367293","5131367293","5231367293","5331367293","5431367293","5531367293","5631367293","5731367293","5831367293","5931367293","6031367293","6131367293","6231367293","6331367293","6431367293","6531367293","6631367293","6731367293","2200000000","2300000000","2400000000","2500000000","2600000000","2700000000","2800000000","2900000000","-2200000000","-2300000000","-2400000000","-2500000000","-2600000000","-2700000000","-2800000000","-2900000000","25E+8","-25E+8","-12345678901"}; // 220
   // 221
   // 222
   // 223
@@ -3457,11 +3457,11 @@ public class DiagBigDecimal{
   {int $104=badstrings.length;i=0;i:for(;$104>0;$104--,i++){
    try{
     v=badstrings[i];
-    (new com.ibm.math.BigDecimal(v)).intValueExact();
+    (new com.ibm.icu.math.BigDecimal(v)).intValueExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $105){ae=$105;
-    norm=(new com.ibm.math.BigDecimal(v)).toString();
+    norm=(new com.ibm.icu.math.BigDecimal(v)).toString();
     flag=(ae.getMessage()).equals("Conversion overflow:"+" "+norm);
    }
    (new Test("inv"+(220+i))).ok=flag;
@@ -3469,10 +3469,10 @@ public class DiagBigDecimal{
   }/*i*/
   
   // now slip in some single bits...
-  dimax=new com.ibm.math.BigDecimal(imax);
+  dimax=new com.ibm.icu.math.BigDecimal(imax);
   {i=0;i:for(;i<=49;i++){
    try{
-    num=two.pow(new com.ibm.math.BigDecimal(i),mc50);
+    num=two.pow(new com.ibm.icu.math.BigDecimal(i),mc50);
     dv=dimax.add(num,mc50);
     dv.intValueExact();
     flag=false;
@@ -3484,10 +3484,10 @@ public class DiagBigDecimal{
    (new Test("inv"+(300+i))).ok=flag;
    }
   }/*i*/
-  dimin=new com.ibm.math.BigDecimal(imin);
+  dimin=new com.ibm.icu.math.BigDecimal(imin);
   {i=50;i:for(;i<=99;i++){
    try{
-    num=two.pow(new com.ibm.math.BigDecimal(i),mc50);
+    num=two.pow(new com.ibm.icu.math.BigDecimal(i),mc50);
     dv=dimin.subtract(num,mc50);
     dv.intValueExact();
     flag=false;
@@ -3512,11 +3512,11 @@ public class DiagBigDecimal{
   {int $108=badstrings.length;i=0;i:for(;$108>0;$108--,i++){
    try{
     v=badstrings[i];
-    (new com.ibm.math.BigDecimal(v)).intValueExact();
+    (new com.ibm.icu.math.BigDecimal(v)).intValueExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $109){ae=$109;
-    norm=(new com.ibm.math.BigDecimal(v)).toString();
+    norm=(new com.ibm.icu.math.BigDecimal(v)).toString();
     flag=(ae.getMessage()).equals("Decimal part non-zero:"+" "+norm);
    }
    (new Test("inv"+(400+i))).ok=flag;
@@ -3537,49 +3537,49 @@ public class DiagBigDecimal{
   java.lang.String badstrings[];
   int i=0;
   java.lang.String norm=null;
-  com.ibm.math.BigDecimal dlmax;
-  com.ibm.math.BigDecimal num=null;
-  com.ibm.math.BigDecimal dv=null;
-  com.ibm.math.BigDecimal dlmin;
+  com.ibm.icu.math.BigDecimal dlmax;
+  com.ibm.icu.math.BigDecimal num=null;
+  com.ibm.icu.math.BigDecimal dv=null;
+  com.ibm.icu.math.BigDecimal dlmin;
   
   
   // longValue --
   
-  (new Test("lov001")).ok=lmin==((new com.ibm.math.BigDecimal(lmin)).longValue());
-  (new Test("lov002")).ok=(((long)99))==((new com.ibm.math.BigDecimal("99")).longValue());
-  (new Test("lov003")).ok=(((long)1))==((new com.ibm.math.BigDecimal("1")).longValue());
-  (new Test("lov004")).ok=(((long)0))==((new com.ibm.math.BigDecimal("0")).longValue());
-  (new Test("lov005")).ok=(((long)-1))==((new com.ibm.math.BigDecimal("-1")).longValue());
-  (new Test("lov006")).ok=(((long)-99))==((new com.ibm.math.BigDecimal("-99")).longValue());
-  (new Test("lov007")).ok=lmax==((new com.ibm.math.BigDecimal(lmax)).longValue());
-  (new Test("lov008")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.0")).longValue());
-  (new Test("lov009")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.3")).longValue());
-  (new Test("lov010")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.5")).longValue());
-  (new Test("lov011")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.7")).longValue());
-  (new Test("lov012")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.9")).longValue());
-  (new Test("lov013")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.0")).longValue());
-  (new Test("lov014")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.3")).longValue());
-  (new Test("lov015")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.5")).longValue());
-  (new Test("lov016")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.7")).longValue());
-  (new Test("lov017")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.9")).longValue());
-  (new Test("lov018")).ok=((new com.ibm.math.BigDecimal("888888888899999999998")).longValue())==3445173361941522430L; // ugh
-  (new Test("lov019")).ok=((new com.ibm.math.BigDecimal("-888888888899999999998")).longValue())==(-3445173361941522430L); // ugh
+  (new Test("lov001")).ok=lmin==((new com.ibm.icu.math.BigDecimal(lmin)).longValue());
+  (new Test("lov002")).ok=(((long)99))==((new com.ibm.icu.math.BigDecimal("99")).longValue());
+  (new Test("lov003")).ok=(((long)1))==((new com.ibm.icu.math.BigDecimal("1")).longValue());
+  (new Test("lov004")).ok=(((long)0))==((new com.ibm.icu.math.BigDecimal("0")).longValue());
+  (new Test("lov005")).ok=(((long)-1))==((new com.ibm.icu.math.BigDecimal("-1")).longValue());
+  (new Test("lov006")).ok=(((long)-99))==((new com.ibm.icu.math.BigDecimal("-99")).longValue());
+  (new Test("lov007")).ok=lmax==((new com.ibm.icu.math.BigDecimal(lmax)).longValue());
+  (new Test("lov008")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.0")).longValue());
+  (new Test("lov009")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.3")).longValue());
+  (new Test("lov010")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.5")).longValue());
+  (new Test("lov011")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.7")).longValue());
+  (new Test("lov012")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.9")).longValue());
+  (new Test("lov013")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.0")).longValue());
+  (new Test("lov014")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.3")).longValue());
+  (new Test("lov015")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.5")).longValue());
+  (new Test("lov016")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.7")).longValue());
+  (new Test("lov017")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.9")).longValue());
+  (new Test("lov018")).ok=((new com.ibm.icu.math.BigDecimal("888888888899999999998")).longValue())==3445173361941522430L; // ugh
+  (new Test("lov019")).ok=((new com.ibm.icu.math.BigDecimal("-888888888899999999998")).longValue())==(-3445173361941522430L); // ugh
   
   // longValueExact --
   
-  (new Test("lov101")).ok=lmin==((new com.ibm.math.BigDecimal(lmin)).longValue());
-  (new Test("lov102")).ok=(((long)99))==((new com.ibm.math.BigDecimal("99")).longValue());
-  (new Test("lov103")).ok=(((long)1))==((new com.ibm.math.BigDecimal("1")).longValue());
-  (new Test("lov104")).ok=(((long)0))==((new com.ibm.math.BigDecimal("0")).longValue());
-  (new Test("lov105")).ok=(((long)-1))==((new com.ibm.math.BigDecimal("-1")).longValue());
-  (new Test("lov106")).ok=(((long)-99))==((new com.ibm.math.BigDecimal("-99")).longValue());
-  (new Test("lov107")).ok=lmax==((new com.ibm.math.BigDecimal(lmax)).longValue());
-  (new Test("lov108")).ok=(((long)5))==((new com.ibm.math.BigDecimal("5.0")).longValue());
-  (new Test("lov109")).ok=(((long)-5))==((new com.ibm.math.BigDecimal("-5.0")).longValue());
+  (new Test("lov101")).ok=lmin==((new com.ibm.icu.math.BigDecimal(lmin)).longValue());
+  (new Test("lov102")).ok=(((long)99))==((new com.ibm.icu.math.BigDecimal("99")).longValue());
+  (new Test("lov103")).ok=(((long)1))==((new com.ibm.icu.math.BigDecimal("1")).longValue());
+  (new Test("lov104")).ok=(((long)0))==((new com.ibm.icu.math.BigDecimal("0")).longValue());
+  (new Test("lov105")).ok=(((long)-1))==((new com.ibm.icu.math.BigDecimal("-1")).longValue());
+  (new Test("lov106")).ok=(((long)-99))==((new com.ibm.icu.math.BigDecimal("-99")).longValue());
+  (new Test("lov107")).ok=lmax==((new com.ibm.icu.math.BigDecimal(lmax)).longValue());
+  (new Test("lov108")).ok=(((long)5))==((new com.ibm.icu.math.BigDecimal("5.0")).longValue());
+  (new Test("lov109")).ok=(((long)-5))==((new com.ibm.icu.math.BigDecimal("-5.0")).longValue());
   
   try{
    v="-888888888899999999998";
-   (new com.ibm.math.BigDecimal(v)).longValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).longValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $110){ae=$110;
@@ -3588,7 +3588,7 @@ public class DiagBigDecimal{
   (new Test("lov200")).ok=flag;
   try{
    v="88888887487487479488888";
-   (new com.ibm.math.BigDecimal(v)).longValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).longValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $111){ae=$111;
@@ -3597,7 +3597,7 @@ public class DiagBigDecimal{
   (new Test("lov201")).ok=flag;
   try{
    v="1.5";
-   (new com.ibm.math.BigDecimal(v)).longValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).longValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $112){ae=$112;
@@ -3605,7 +3605,7 @@ public class DiagBigDecimal{
   }
   (new Test("lov202")).ok=flag;
   
-  badstrings=new java.lang.String[]{"1234567890110987654321","-1234567890110987654321",(new com.ibm.math.BigDecimal(lmax)).add(one).toString(),(new com.ibm.math.BigDecimal(lmin)).subtract(one).toString(),(new com.ibm.math.BigDecimal(lmin)).multiply(two).toString(),(new com.ibm.math.BigDecimal(lmax)).multiply(two).toString(),(new com.ibm.math.BigDecimal(lmin)).multiply(ten).toString(),(new com.ibm.math.BigDecimal(lmax)).multiply(ten).toString(),"9223372036854775818","9323372036854775818","9423372036854775818","9523372036854775818","9623372036854775818","9723372036854775818","9823372036854775818","9923372036854775818","-9223372036854775818","-9323372036854775818","-9423372036854775818","-9523372036854775818","-9623372036854775818","-9723372036854775818","-9823372036854775818","-9923372036854775818","12345678901234567890"}; // 220
+  badstrings=new java.lang.String[]{"1234567890110987654321","-1234567890110987654321",(new com.ibm.icu.math.BigDecimal(lmax)).add(one).toString(),(new com.ibm.icu.math.BigDecimal(lmin)).subtract(one).toString(),(new com.ibm.icu.math.BigDecimal(lmin)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(lmax)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(lmin)).multiply(ten).toString(),(new com.ibm.icu.math.BigDecimal(lmax)).multiply(ten).toString(),"9223372036854775818","9323372036854775818","9423372036854775818","9523372036854775818","9623372036854775818","9723372036854775818","9823372036854775818","9923372036854775818","-9223372036854775818","-9323372036854775818","-9423372036854775818","-9523372036854775818","-9623372036854775818","-9723372036854775818","-9823372036854775818","-9923372036854775818","12345678901234567890"}; // 220
   // 221
   // 222
   // 223
@@ -3633,11 +3633,11 @@ public class DiagBigDecimal{
   {int $113=badstrings.length;i=0;i:for(;$113>0;$113--,i++){
    try{
     v=badstrings[i];
-    (new com.ibm.math.BigDecimal(v)).longValueExact();
+    (new com.ibm.icu.math.BigDecimal(v)).longValueExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $114){ae=$114;
-    norm=(new com.ibm.math.BigDecimal(v)).toString();
+    norm=(new com.ibm.icu.math.BigDecimal(v)).toString();
     flag=(ae.getMessage()).equals("Conversion overflow:"+" "+norm);
    }
    (new Test("lov"+(220+i))).ok=flag;
@@ -3645,10 +3645,10 @@ public class DiagBigDecimal{
   }/*i*/
   
   // now slip in some single bits...
-  dlmax=new com.ibm.math.BigDecimal(lmax);
+  dlmax=new com.ibm.icu.math.BigDecimal(lmax);
   {i=0;i:for(;i<=99;i++){
    try{
-    num=two.pow(new com.ibm.math.BigDecimal(i),mc50);
+    num=two.pow(new com.ibm.icu.math.BigDecimal(i),mc50);
     dv=dlmax.add(num,mc50);
     dv.longValueExact();
     flag=false;
@@ -3660,10 +3660,10 @@ public class DiagBigDecimal{
    (new Test("lov"+(300+i))).ok=flag;
    }
   }/*i*/
-  dlmin=new com.ibm.math.BigDecimal(lmin);
+  dlmin=new com.ibm.icu.math.BigDecimal(lmin);
   {i=0;i:for(;i<=99;i++){
    try{
-    num=two.pow(new com.ibm.math.BigDecimal(i),mc50);
+    num=two.pow(new com.ibm.icu.math.BigDecimal(i),mc50);
     dv=dlmin.subtract(num,mc50);
     dv.longValueExact();
     flag=false;
@@ -3684,37 +3684,37 @@ public class DiagBigDecimal{
  /** Test the {@link BigDecimal#movePointLeft} method. */
  
  public void diagmovepointleft(){
-  (new Test("mpl001")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(-10).toString()).equals("-10000000000");
-  (new Test("mpl002")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(-5).toString()).equals("-100000");
-  (new Test("mpl003")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(-1).toString()).equals("-10");
-  (new Test("mpl004")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(0).toString()).equals("-1");
-  (new Test("mpl005")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(+1).toString()).equals("-0.1");
-  (new Test("mpl006")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(+5).toString()).equals("-0.00001");
-  (new Test("mpl007")).ok=((new com.ibm.math.BigDecimal("-1")).movePointLeft(+10).toString()).equals("-0.0000000001");
+  (new Test("mpl001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(-10).toString()).equals("-10000000000");
+  (new Test("mpl002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(-5).toString()).equals("-100000");
+  (new Test("mpl003")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(-1).toString()).equals("-10");
+  (new Test("mpl004")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(0).toString()).equals("-1");
+  (new Test("mpl005")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(+1).toString()).equals("-0.1");
+  (new Test("mpl006")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(+5).toString()).equals("-0.00001");
+  (new Test("mpl007")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(+10).toString()).equals("-0.0000000001");
   
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(-10).toString()).equals("0");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(-5).toString()).equals("0");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(-1).toString()).equals("0");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(0).toString()).equals("0");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(+1).toString()).equals("0.0");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(+5).toString()).equals("0.00000");
-  (new Test("mpl010")).ok=((new com.ibm.math.BigDecimal("0")).movePointLeft(+10).toString()).equals("0.0000000000");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(-10).toString()).equals("0");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(-5).toString()).equals("0");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(-1).toString()).equals("0");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(0).toString()).equals("0");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(+1).toString()).equals("0.0");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(+5).toString()).equals("0.00000");
+  (new Test("mpl010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointLeft(+10).toString()).equals("0.0000000000");
   
-  (new Test("mpl020")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(-10).toString()).equals("10000000000");
-  (new Test("mpl021")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(-5).toString()).equals("100000");
-  (new Test("mpl022")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(-1).toString()).equals("10");
-  (new Test("mpl023")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(0).toString()).equals("1");
-  (new Test("mpl024")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(+1).toString()).equals("0.1");
-  (new Test("mpl025")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(+5).toString()).equals("0.00001");
-  (new Test("mpl026")).ok=((new com.ibm.math.BigDecimal("+1")).movePointLeft(+10).toString()).equals("0.0000000001");
+  (new Test("mpl020")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(-10).toString()).equals("10000000000");
+  (new Test("mpl021")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(-5).toString()).equals("100000");
+  (new Test("mpl022")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(-1).toString()).equals("10");
+  (new Test("mpl023")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(0).toString()).equals("1");
+  (new Test("mpl024")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(+1).toString()).equals("0.1");
+  (new Test("mpl025")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(+5).toString()).equals("0.00001");
+  (new Test("mpl026")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointLeft(+10).toString()).equals("0.0000000001");
   
-  (new Test("mpl030")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(-10).toString()).equals("50000000000");
-  (new Test("mpl031")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(-5).toString()).equals("500000");
-  (new Test("mpl032")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(-1).toString()).equals("50");
-  (new Test("mpl033")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(0).toString()).equals("5");
-  (new Test("mpl034")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(+1).toString()).equals("0.5");
-  (new Test("mpl035")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(+5).toString()).equals("0.00005");
-  (new Test("mpl036")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointLeft(+10).toString()).equals("0.0000000005");
+  (new Test("mpl030")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(-10).toString()).equals("50000000000");
+  (new Test("mpl031")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(-5).toString()).equals("500000");
+  (new Test("mpl032")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(-1).toString()).equals("50");
+  (new Test("mpl033")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(0).toString()).equals("5");
+  (new Test("mpl034")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(+1).toString()).equals("0.5");
+  (new Test("mpl035")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(+5).toString()).equals("0.00005");
+  (new Test("mpl036")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointLeft(+10).toString()).equals("0.0000000005");
   
   summary("movePointLeft");
   return;}
@@ -3723,37 +3723,37 @@ public class DiagBigDecimal{
  /** Test the {@link BigDecimal#movePointRight} method. */
  
  public void diagmovepointright(){
-  (new Test("mpr001")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(+10).toString()).equals("-10000000000");
-  (new Test("mpr002")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(+5).toString()).equals("-100000");
-  (new Test("mpr003")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(+1).toString()).equals("-10");
-  (new Test("mpr004")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(0).toString()).equals("-1");
-  (new Test("mpr005")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(-1).toString()).equals("-0.1");
-  (new Test("mpr006")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(-5).toString()).equals("-0.00001");
-  (new Test("mpr007")).ok=((new com.ibm.math.BigDecimal("-1")).movePointRight(-10).toString()).equals("-0.0000000001");
+  (new Test("mpr001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(+10).toString()).equals("-10000000000");
+  (new Test("mpr002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(+5).toString()).equals("-100000");
+  (new Test("mpr003")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(+1).toString()).equals("-10");
+  (new Test("mpr004")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(0).toString()).equals("-1");
+  (new Test("mpr005")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(-1).toString()).equals("-0.1");
+  (new Test("mpr006")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(-5).toString()).equals("-0.00001");
+  (new Test("mpr007")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(-10).toString()).equals("-0.0000000001");
   
-  (new Test("mpr010")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(+10).toString()).equals("0");
-  (new Test("mpr011")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(+5).toString()).equals("0");
-  (new Test("mpr012")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(+1).toString()).equals("0");
-  (new Test("mpr013")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(0).toString()).equals("0");
-  (new Test("mpr014")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(-1).toString()).equals("0.0");
-  (new Test("mpr015")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(-5).toString()).equals("0.00000");
-  (new Test("mpr016")).ok=((new com.ibm.math.BigDecimal("0")).movePointRight(-10).toString()).equals("0.0000000000");
+  (new Test("mpr010")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(+10).toString()).equals("0");
+  (new Test("mpr011")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(+5).toString()).equals("0");
+  (new Test("mpr012")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(+1).toString()).equals("0");
+  (new Test("mpr013")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(0).toString()).equals("0");
+  (new Test("mpr014")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(-1).toString()).equals("0.0");
+  (new Test("mpr015")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(-5).toString()).equals("0.00000");
+  (new Test("mpr016")).ok=((new com.ibm.icu.math.BigDecimal("0")).movePointRight(-10).toString()).equals("0.0000000000");
   
-  (new Test("mpr020")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(+10).toString()).equals("10000000000");
-  (new Test("mpr021")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(+5).toString()).equals("100000");
-  (new Test("mpr022")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(+1).toString()).equals("10");
-  (new Test("mpr023")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(0).toString()).equals("1");
-  (new Test("mpr024")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(-1).toString()).equals("0.1");
-  (new Test("mpr025")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(-5).toString()).equals("0.00001");
-  (new Test("mpr026")).ok=((new com.ibm.math.BigDecimal("+1")).movePointRight(-10).toString()).equals("0.0000000001");
+  (new Test("mpr020")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(+10).toString()).equals("10000000000");
+  (new Test("mpr021")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(+5).toString()).equals("100000");
+  (new Test("mpr022")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(+1).toString()).equals("10");
+  (new Test("mpr023")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(0).toString()).equals("1");
+  (new Test("mpr024")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(-1).toString()).equals("0.1");
+  (new Test("mpr025")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(-5).toString()).equals("0.00001");
+  (new Test("mpr026")).ok=((new com.ibm.icu.math.BigDecimal("+1")).movePointRight(-10).toString()).equals("0.0000000001");
   
-  (new Test("mpr030")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(+10).toString()).equals("50000000000");
-  (new Test("mpr031")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(+5).toString()).equals("500000");
-  (new Test("mpr032")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(+1).toString()).equals("50");
-  (new Test("mpr033")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(0).toString()).equals("5");
-  (new Test("mpr034")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(-1).toString()).equals("0.5");
-  (new Test("mpr035")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(-5).toString()).equals("0.00005");
-  (new Test("mpr036")).ok=((new com.ibm.math.BigDecimal("0.5E+1")).movePointRight(-10).toString()).equals("0.0000000005");
+  (new Test("mpr030")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(+10).toString()).equals("50000000000");
+  (new Test("mpr031")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(+5).toString()).equals("500000");
+  (new Test("mpr032")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(+1).toString()).equals("50");
+  (new Test("mpr033")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(0).toString()).equals("5");
+  (new Test("mpr034")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(-1).toString()).equals("0.5");
+  (new Test("mpr035")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(-5).toString()).equals("0.00005");
+  (new Test("mpr036")).ok=((new com.ibm.icu.math.BigDecimal("0.5E+1")).movePointRight(-10).toString()).equals("0.0000000005");
   
   summary("movePointRight");
   return;}
@@ -3762,23 +3762,23 @@ public class DiagBigDecimal{
  /** Test the {@link BigDecimal#scale} method. */
  
  public void diagscale(){
-  (new Test("sca001")).ok=((new com.ibm.math.BigDecimal("-1")).scale())==0;
-  (new Test("sca002")).ok=((new com.ibm.math.BigDecimal("-10")).scale())==0;
-  (new Test("sca003")).ok=((new com.ibm.math.BigDecimal("+1")).scale())==0;
-  (new Test("sca004")).ok=((new com.ibm.math.BigDecimal("+10")).scale())==0;
-  (new Test("sca005")).ok=((new com.ibm.math.BigDecimal("1E+10")).scale())==0;
-  (new Test("sca006")).ok=((new com.ibm.math.BigDecimal("1E-10")).scale())==10;
-  (new Test("sca007")).ok=((new com.ibm.math.BigDecimal("0E-10")).scale())==0;
-  (new Test("sca008")).ok=((new com.ibm.math.BigDecimal("0.000")).scale())==3;
-  (new Test("sca009")).ok=((new com.ibm.math.BigDecimal("0.00")).scale())==2;
-  (new Test("sca010")).ok=((new com.ibm.math.BigDecimal("0.0")).scale())==1;
-  (new Test("sca011")).ok=((new com.ibm.math.BigDecimal("0.1")).scale())==1;
-  (new Test("sca012")).ok=((new com.ibm.math.BigDecimal("0.12")).scale())==2;
-  (new Test("sca013")).ok=((new com.ibm.math.BigDecimal("0.123")).scale())==3;
-  (new Test("sca014")).ok=((new com.ibm.math.BigDecimal("-0.0")).scale())==1;
-  (new Test("sca015")).ok=((new com.ibm.math.BigDecimal("-0.1")).scale())==1;
-  (new Test("sca016")).ok=((new com.ibm.math.BigDecimal("-0.12")).scale())==2;
-  (new Test("sca017")).ok=((new com.ibm.math.BigDecimal("-0.123")).scale())==3;
+  (new Test("sca001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).scale())==0;
+  (new Test("sca002")).ok=((new com.ibm.icu.math.BigDecimal("-10")).scale())==0;
+  (new Test("sca003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).scale())==0;
+  (new Test("sca004")).ok=((new com.ibm.icu.math.BigDecimal("+10")).scale())==0;
+  (new Test("sca005")).ok=((new com.ibm.icu.math.BigDecimal("1E+10")).scale())==0;
+  (new Test("sca006")).ok=((new com.ibm.icu.math.BigDecimal("1E-10")).scale())==10;
+  (new Test("sca007")).ok=((new com.ibm.icu.math.BigDecimal("0E-10")).scale())==0;
+  (new Test("sca008")).ok=((new com.ibm.icu.math.BigDecimal("0.000")).scale())==3;
+  (new Test("sca009")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).scale())==2;
+  (new Test("sca010")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).scale())==1;
+  (new Test("sca011")).ok=((new com.ibm.icu.math.BigDecimal("0.1")).scale())==1;
+  (new Test("sca012")).ok=((new com.ibm.icu.math.BigDecimal("0.12")).scale())==2;
+  (new Test("sca013")).ok=((new com.ibm.icu.math.BigDecimal("0.123")).scale())==3;
+  (new Test("sca014")).ok=((new com.ibm.icu.math.BigDecimal("-0.0")).scale())==1;
+  (new Test("sca015")).ok=((new com.ibm.icu.math.BigDecimal("-0.1")).scale())==1;
+  (new Test("sca016")).ok=((new com.ibm.icu.math.BigDecimal("-0.12")).scale())==2;
+  (new Test("sca017")).ok=((new com.ibm.icu.math.BigDecimal("-0.123")).scale())==3;
   summary("scale");
   return;}
 
@@ -3790,81 +3790,81 @@ public class DiagBigDecimal{
   boolean flag=false;
   java.lang.RuntimeException e=null;
   
-  (new Test("ssc001")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(0).toString()).equals("-1");
-  (new Test("ssc002")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(1).toString()).equals("-1.0");
-  (new Test("ssc003")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(2).toString()).equals("-1.00");
-  (new Test("ssc004")).ok=((new com.ibm.math.BigDecimal("0")).setScale(0).toString()).equals("0");
-  (new Test("ssc005")).ok=((new com.ibm.math.BigDecimal("0")).setScale(1).toString()).equals("0.0");
-  (new Test("ssc006")).ok=((new com.ibm.math.BigDecimal("0")).setScale(2).toString()).equals("0.00");
-  (new Test("ssc007")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(0).toString()).equals("1");
-  (new Test("ssc008")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(1).toString()).equals("1.0");
-  (new Test("ssc009")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(2).toString()).equals("1.00");
-  (new Test("ssc010")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("-1");
-  (new Test("ssc011")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("-1.0");
-  (new Test("ssc012")).ok=((new com.ibm.math.BigDecimal("-1")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("-1.00");
-  (new Test("ssc013")).ok=((new com.ibm.math.BigDecimal("0")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
-  (new Test("ssc014")).ok=((new com.ibm.math.BigDecimal("0")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
-  (new Test("ssc015")).ok=((new com.ibm.math.BigDecimal("0")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
-  (new Test("ssc016")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
-  (new Test("ssc017")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.0");
-  (new Test("ssc018")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.00");
+  (new Test("ssc001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(0).toString()).equals("-1");
+  (new Test("ssc002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(1).toString()).equals("-1.0");
+  (new Test("ssc003")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(2).toString()).equals("-1.00");
+  (new Test("ssc004")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(0).toString()).equals("0");
+  (new Test("ssc005")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(1).toString()).equals("0.0");
+  (new Test("ssc006")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(2).toString()).equals("0.00");
+  (new Test("ssc007")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(0).toString()).equals("1");
+  (new Test("ssc008")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(1).toString()).equals("1.0");
+  (new Test("ssc009")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(2).toString()).equals("1.00");
+  (new Test("ssc010")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("-1");
+  (new Test("ssc011")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("-1.0");
+  (new Test("ssc012")).ok=((new com.ibm.icu.math.BigDecimal("-1")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("-1.00");
+  (new Test("ssc013")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("ssc014")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
+  (new Test("ssc015")).ok=((new com.ibm.icu.math.BigDecimal("0")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
+  (new Test("ssc016")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
+  (new Test("ssc017")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.0");
+  (new Test("ssc018")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.00");
   
-  (new Test("ssc020")).ok=((new com.ibm.math.BigDecimal("1.04")).setScale(3,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.040");
-  (new Test("ssc021")).ok=((new com.ibm.math.BigDecimal("1.04")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.04");
-  (new Test("ssc022")).ok=((new com.ibm.math.BigDecimal("1.04")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.0");
-  (new Test("ssc023")).ok=((new com.ibm.math.BigDecimal("1.04")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
-  (new Test("ssc024")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(3,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.050");
-  (new Test("ssc025")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.05");
-  (new Test("ssc026")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.1");
-  (new Test("ssc027")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
-  (new Test("ssc028")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(3,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.050");
-  (new Test("ssc029")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.05");
-  (new Test("ssc030")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.0");
-  (new Test("ssc031")).ok=((new com.ibm.math.BigDecimal("1.05")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1");
-  (new Test("ssc032")).ok=((new com.ibm.math.BigDecimal("1.06")).setScale(3,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.060");
-  (new Test("ssc033")).ok=((new com.ibm.math.BigDecimal("1.06")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.06");
-  (new Test("ssc034")).ok=((new com.ibm.math.BigDecimal("1.06")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.1");
-  (new Test("ssc035")).ok=((new com.ibm.math.BigDecimal("1.06")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
+  (new Test("ssc020")).ok=((new com.ibm.icu.math.BigDecimal("1.04")).setScale(3,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.040");
+  (new Test("ssc021")).ok=((new com.ibm.icu.math.BigDecimal("1.04")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.04");
+  (new Test("ssc022")).ok=((new com.ibm.icu.math.BigDecimal("1.04")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.0");
+  (new Test("ssc023")).ok=((new com.ibm.icu.math.BigDecimal("1.04")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
+  (new Test("ssc024")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(3,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.050");
+  (new Test("ssc025")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.05");
+  (new Test("ssc026")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.1");
+  (new Test("ssc027")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
+  (new Test("ssc028")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(3,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.050");
+  (new Test("ssc029")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.05");
+  (new Test("ssc030")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1.0");
+  (new Test("ssc031")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("1");
+  (new Test("ssc032")).ok=((new com.ibm.icu.math.BigDecimal("1.06")).setScale(3,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.060");
+  (new Test("ssc033")).ok=((new com.ibm.icu.math.BigDecimal("1.06")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.06");
+  (new Test("ssc034")).ok=((new com.ibm.icu.math.BigDecimal("1.06")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.1");
+  (new Test("ssc035")).ok=((new com.ibm.icu.math.BigDecimal("1.06")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1");
   
-  (new Test("ssc040")).ok=((new com.ibm.math.BigDecimal("-10")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("-10.00");
-  (new Test("ssc041")).ok=((new com.ibm.math.BigDecimal("+1")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("1.00");
-  (new Test("ssc042")).ok=((new com.ibm.math.BigDecimal("+10")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("10.00");
-  (new Test("ssc043")).ok=((new com.ibm.math.BigDecimal("1E+10")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("10000000000.00");
-  (new Test("ssc044")).ok=((new com.ibm.math.BigDecimal("1E-10")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
-  (new Test("ssc045")).ok=((new com.ibm.math.BigDecimal("1E-2")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.01");
-  (new Test("ssc046")).ok=((new com.ibm.math.BigDecimal("0E-10")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
+  (new Test("ssc040")).ok=((new com.ibm.icu.math.BigDecimal("-10")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("-10.00");
+  (new Test("ssc041")).ok=((new com.ibm.icu.math.BigDecimal("+1")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("1.00");
+  (new Test("ssc042")).ok=((new com.ibm.icu.math.BigDecimal("+10")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("10.00");
+  (new Test("ssc043")).ok=((new com.ibm.icu.math.BigDecimal("1E+10")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("10000000000.00");
+  (new Test("ssc044")).ok=((new com.ibm.icu.math.BigDecimal("1E-10")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
+  (new Test("ssc045")).ok=((new com.ibm.icu.math.BigDecimal("1E-2")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.01");
+  (new Test("ssc046")).ok=((new com.ibm.icu.math.BigDecimal("0E-10")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.00");
   
   // check rounding
-  (new Test("ssc050")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("0.01");
-  (new Test("ssc051")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("0.1");
-  (new Test("ssc052")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_CEILING).toString()).equals("1");
-  (new Test("ssc053")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0.00");
-  (new Test("ssc054")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0.0");
-  (new Test("ssc055")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_DOWN).toString()).equals("0");
-  (new Test("ssc056")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0.00");
-  (new Test("ssc057")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0.0");
-  (new Test("ssc058")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_FLOOR).toString()).equals("0");
-  (new Test("ssc059")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.00");
-  (new Test("ssc060")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
-  (new Test("ssc061")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
-  (new Test("ssc062")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.00");
-  (new Test("ssc063")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
-  (new Test("ssc064")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
-  (new Test("ssc065")).ok=((new com.ibm.math.BigDecimal("0.015")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.02");
-  (new Test("ssc066")).ok=((new com.ibm.math.BigDecimal("0.015")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
-  (new Test("ssc067")).ok=((new com.ibm.math.BigDecimal("0.015")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
-  (new Test("ssc068")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.01");
-  (new Test("ssc069")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
-  (new Test("ssc070")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
-  (new Test("ssc071")).ok=((new com.ibm.math.BigDecimal("0.095")).setScale(2,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.10");
-  (new Test("ssc072")).ok=((new com.ibm.math.BigDecimal("0.095")).setScale(1,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
-  (new Test("ssc073")).ok=((new com.ibm.math.BigDecimal("0.095")).setScale(0,com.ibm.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
-  (new Test("ssc074")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(2,com.ibm.math.MathContext.ROUND_UP).toString()).equals("0.01");
-  (new Test("ssc075")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(1,com.ibm.math.MathContext.ROUND_UP).toString()).equals("0.1");
-  (new Test("ssc076")).ok=((new com.ibm.math.BigDecimal("0.005")).setScale(0,com.ibm.math.MathContext.ROUND_UP).toString()).equals("1");
+  (new Test("ssc050")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("0.01");
+  (new Test("ssc051")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("0.1");
+  (new Test("ssc052")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_CEILING).toString()).equals("1");
+  (new Test("ssc053")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0.00");
+  (new Test("ssc054")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0.0");
+  (new Test("ssc055")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_DOWN).toString()).equals("0");
+  (new Test("ssc056")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0.00");
+  (new Test("ssc057")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0.0");
+  (new Test("ssc058")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_FLOOR).toString()).equals("0");
+  (new Test("ssc059")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.00");
+  (new Test("ssc060")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0.0");
+  (new Test("ssc061")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN).toString()).equals("0");
+  (new Test("ssc062")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.00");
+  (new Test("ssc063")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
+  (new Test("ssc064")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("ssc065")).ok=((new com.ibm.icu.math.BigDecimal("0.015")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.02");
+  (new Test("ssc066")).ok=((new com.ibm.icu.math.BigDecimal("0.015")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0.0");
+  (new Test("ssc067")).ok=((new com.ibm.icu.math.BigDecimal("0.015")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN).toString()).equals("0");
+  (new Test("ssc068")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.01");
+  (new Test("ssc069")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.0");
+  (new Test("ssc070")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("ssc071")).ok=((new com.ibm.icu.math.BigDecimal("0.095")).setScale(2,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.10");
+  (new Test("ssc072")).ok=((new com.ibm.icu.math.BigDecimal("0.095")).setScale(1,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0.1");
+  (new Test("ssc073")).ok=((new com.ibm.icu.math.BigDecimal("0.095")).setScale(0,com.ibm.icu.math.MathContext.ROUND_HALF_UP).toString()).equals("0");
+  (new Test("ssc074")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(2,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("0.01");
+  (new Test("ssc075")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(1,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("0.1");
+  (new Test("ssc076")).ok=((new com.ibm.icu.math.BigDecimal("0.005")).setScale(0,com.ibm.icu.math.MathContext.ROUND_UP).toString()).equals("1");
   
   try{checkscale:do{
-   (new com.ibm.math.BigDecimal(1)).setScale(-8);
+   (new com.ibm.icu.math.BigDecimal(1)).setScale(-8);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $117){e=$117;
@@ -3872,7 +3872,7 @@ public class DiagBigDecimal{
   }/*checkscale*/
   (new Test("ssc100")).ok=flag;
   try{checkrunn:do{
-   (new com.ibm.math.BigDecimal(1.0001D)).setScale(3);
+   (new com.ibm.icu.math.BigDecimal(1.0001D)).setScale(3);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $118){e=$118;
@@ -3880,7 +3880,7 @@ public class DiagBigDecimal{
   }/*checkrunn*/
   (new Test("ssc101")).ok=flag;
   try{checkrunn:do{
-   (new com.ibm.math.BigDecimal(1E-8D)).setScale(3);
+   (new com.ibm.icu.math.BigDecimal(1E-8D)).setScale(3);
    flag=false;
   }while(false);}
   catch (java.lang.RuntimeException $119){e=$119;
@@ -3902,28 +3902,28 @@ public class DiagBigDecimal{
   int i=0;
   java.lang.String norm=null;
   
-  (new Test("shv002")).ok=(((short)0))==((new com.ibm.math.BigDecimal("0")).shortValue());
-  (new Test("shv003")).ok=(((short)1))==((new com.ibm.math.BigDecimal("1")).shortValue());
-  (new Test("shv004")).ok=(((short)99))==((new com.ibm.math.BigDecimal("99")).shortValue());
-  (new Test("shv006")).ok=((smax))==((new com.ibm.math.BigDecimal(smax)).shortValue());
-  (new Test("shv007")).ok=((smin))==((new com.ibm.math.BigDecimal(smin)).shortValue());
-  (new Test("shv008")).ok=((sneg))==((new com.ibm.math.BigDecimal(sneg)).shortValue());
-  (new Test("shv009")).ok=((szer))==((new com.ibm.math.BigDecimal(szer)).shortValue());
-  (new Test("shv010")).ok=((spos))==((new com.ibm.math.BigDecimal(spos)).shortValue());
-  (new Test("shv011")).ok=((smin))==((new com.ibm.math.BigDecimal(smax+1)).shortValue());
-  (new Test("shv012")).ok=((smax))==((new com.ibm.math.BigDecimal(smin-1)).shortValue());
+  (new Test("shv002")).ok=(((short)0))==((new com.ibm.icu.math.BigDecimal("0")).shortValue());
+  (new Test("shv003")).ok=(((short)1))==((new com.ibm.icu.math.BigDecimal("1")).shortValue());
+  (new Test("shv004")).ok=(((short)99))==((new com.ibm.icu.math.BigDecimal("99")).shortValue());
+  (new Test("shv006")).ok=((smax))==((new com.ibm.icu.math.BigDecimal(smax)).shortValue());
+  (new Test("shv007")).ok=((smin))==((new com.ibm.icu.math.BigDecimal(smin)).shortValue());
+  (new Test("shv008")).ok=((sneg))==((new com.ibm.icu.math.BigDecimal(sneg)).shortValue());
+  (new Test("shv009")).ok=((szer))==((new com.ibm.icu.math.BigDecimal(szer)).shortValue());
+  (new Test("shv010")).ok=((spos))==((new com.ibm.icu.math.BigDecimal(spos)).shortValue());
+  (new Test("shv011")).ok=((smin))==((new com.ibm.icu.math.BigDecimal(smax+1)).shortValue());
+  (new Test("shv012")).ok=((smax))==((new com.ibm.icu.math.BigDecimal(smin-1)).shortValue());
   
-  (new Test("shv022")).ok=(((short)0))==((new com.ibm.math.BigDecimal("0")).shortValueExact());
-  (new Test("shv023")).ok=(((short)1))==((new com.ibm.math.BigDecimal("1")).shortValueExact());
-  (new Test("shv024")).ok=(((short)99))==((new com.ibm.math.BigDecimal("99")).shortValueExact());
-  (new Test("shv026")).ok=((smax))==((new com.ibm.math.BigDecimal(smax)).shortValueExact());
-  (new Test("shv027")).ok=((smin))==((new com.ibm.math.BigDecimal(smin)).shortValueExact());
-  (new Test("shv028")).ok=((sneg))==((new com.ibm.math.BigDecimal(sneg)).shortValueExact());
-  (new Test("shv029")).ok=((szer))==((new com.ibm.math.BigDecimal(szer)).shortValueExact());
-  (new Test("shv030")).ok=((spos))==((new com.ibm.math.BigDecimal(spos)).shortValueExact());
+  (new Test("shv022")).ok=(((short)0))==((new com.ibm.icu.math.BigDecimal("0")).shortValueExact());
+  (new Test("shv023")).ok=(((short)1))==((new com.ibm.icu.math.BigDecimal("1")).shortValueExact());
+  (new Test("shv024")).ok=(((short)99))==((new com.ibm.icu.math.BigDecimal("99")).shortValueExact());
+  (new Test("shv026")).ok=((smax))==((new com.ibm.icu.math.BigDecimal(smax)).shortValueExact());
+  (new Test("shv027")).ok=((smin))==((new com.ibm.icu.math.BigDecimal(smin)).shortValueExact());
+  (new Test("shv028")).ok=((sneg))==((new com.ibm.icu.math.BigDecimal(sneg)).shortValueExact());
+  (new Test("shv029")).ok=((szer))==((new com.ibm.icu.math.BigDecimal(szer)).shortValueExact());
+  (new Test("shv030")).ok=((spos))==((new com.ibm.icu.math.BigDecimal(spos)).shortValueExact());
   try{
    v="-88888888888";
-   (new com.ibm.math.BigDecimal(v)).shortValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).shortValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $120){ae=$120;
@@ -3932,7 +3932,7 @@ public class DiagBigDecimal{
   (new Test("shv100")).ok=flag;
   try{
    v="88888888888";
-   (new com.ibm.math.BigDecimal(v)).shortValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).shortValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $121){ae=$121;
@@ -3941,7 +3941,7 @@ public class DiagBigDecimal{
   (new Test("shv101")).ok=flag;
   try{
    v="1.5";
-   (new com.ibm.math.BigDecimal(v)).shortValueExact();
+   (new com.ibm.icu.math.BigDecimal(v)).shortValueExact();
    flag=false;
   }
   catch (java.lang.ArithmeticException $122){ae=$122;
@@ -3949,7 +3949,7 @@ public class DiagBigDecimal{
   }
   (new Test("shv102")).ok=flag;
   
-  badstrings=new java.lang.String[]{"123456",(new com.ibm.math.BigDecimal(smax)).add(one).toString(),(new com.ibm.math.BigDecimal(smin)).subtract(one).toString(),"71111","81111","91111","-71111","-81111","-91111",(new com.ibm.math.BigDecimal(smin)).multiply(two).toString(),(new com.ibm.math.BigDecimal(smax)).multiply(two).toString(),(new com.ibm.math.BigDecimal(smin)).multiply(ten).toString(),(new com.ibm.math.BigDecimal(smax)).multiply(ten).toString(),"-123456"}; // 220
+  badstrings=new java.lang.String[]{"123456",(new com.ibm.icu.math.BigDecimal(smax)).add(one).toString(),(new com.ibm.icu.math.BigDecimal(smin)).subtract(one).toString(),"71111","81111","91111","-71111","-81111","-91111",(new com.ibm.icu.math.BigDecimal(smin)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(smax)).multiply(two).toString(),(new com.ibm.icu.math.BigDecimal(smin)).multiply(ten).toString(),(new com.ibm.icu.math.BigDecimal(smax)).multiply(ten).toString(),"-123456"}; // 220
   // 221
   // 222
   // 223
@@ -3966,11 +3966,11 @@ public class DiagBigDecimal{
   {int $123=badstrings.length;i=0;i:for(;$123>0;$123--,i++){
    try{
     v=badstrings[i];
-    (new com.ibm.math.BigDecimal(v)).shortValueExact();
+    (new com.ibm.icu.math.BigDecimal(v)).shortValueExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $124){ae=$124;
-    norm=(new com.ibm.math.BigDecimal(v)).toString();
+    norm=(new com.ibm.icu.math.BigDecimal(v)).toString();
     flag=(ae.getMessage()).equals("Conversion overflow:"+" "+norm);
    }
    (new Test("shv"+(220+i))).ok=flag;
@@ -3987,23 +3987,23 @@ public class DiagBigDecimal{
  
  public void diagsignum(){
   // necessarily checks some obscure constructions, too
-  (new Test("sig001")).ok=(-1)==((new com.ibm.math.BigDecimal("-1")).signum());
-  (new Test("sig002")).ok=(-1)==((new com.ibm.math.BigDecimal("-0.0010")).signum());
-  (new Test("sig003")).ok=(-1)==((new com.ibm.math.BigDecimal("-0.001")).signum());
-  (new Test("sig004")).ok=0==((new com.ibm.math.BigDecimal("-0.00")).signum());
-  (new Test("sig005")).ok=0==((new com.ibm.math.BigDecimal("-0")).signum());
-  (new Test("sig006")).ok=0==((new com.ibm.math.BigDecimal("0")).signum());
-  (new Test("sig007")).ok=0==((new com.ibm.math.BigDecimal("00")).signum());
-  (new Test("sig008")).ok=0==((new com.ibm.math.BigDecimal("00.0")).signum());
-  (new Test("sig009")).ok=1==((new com.ibm.math.BigDecimal("00.01")).signum());
-  (new Test("sig010")).ok=1==((new com.ibm.math.BigDecimal("00.01")).signum());
-  (new Test("sig011")).ok=1==((new com.ibm.math.BigDecimal("00.010")).signum());
-  (new Test("sig012")).ok=1==((new com.ibm.math.BigDecimal("01.01")).signum());
-  (new Test("sig013")).ok=1==((new com.ibm.math.BigDecimal("+0.01")).signum());
-  (new Test("sig014")).ok=1==((new com.ibm.math.BigDecimal("+0.001")).signum());
-  (new Test("sig015")).ok=1==((new com.ibm.math.BigDecimal("1")).signum());
-  (new Test("sig016")).ok=1==((new com.ibm.math.BigDecimal("1e+12")).signum());
-  (new Test("sig017")).ok=0==((new com.ibm.math.BigDecimal("00e+12")).signum());
+  (new Test("sig001")).ok=(-1)==((new com.ibm.icu.math.BigDecimal("-1")).signum());
+  (new Test("sig002")).ok=(-1)==((new com.ibm.icu.math.BigDecimal("-0.0010")).signum());
+  (new Test("sig003")).ok=(-1)==((new com.ibm.icu.math.BigDecimal("-0.001")).signum());
+  (new Test("sig004")).ok=0==((new com.ibm.icu.math.BigDecimal("-0.00")).signum());
+  (new Test("sig005")).ok=0==((new com.ibm.icu.math.BigDecimal("-0")).signum());
+  (new Test("sig006")).ok=0==((new com.ibm.icu.math.BigDecimal("0")).signum());
+  (new Test("sig007")).ok=0==((new com.ibm.icu.math.BigDecimal("00")).signum());
+  (new Test("sig008")).ok=0==((new com.ibm.icu.math.BigDecimal("00.0")).signum());
+  (new Test("sig009")).ok=1==((new com.ibm.icu.math.BigDecimal("00.01")).signum());
+  (new Test("sig010")).ok=1==((new com.ibm.icu.math.BigDecimal("00.01")).signum());
+  (new Test("sig011")).ok=1==((new com.ibm.icu.math.BigDecimal("00.010")).signum());
+  (new Test("sig012")).ok=1==((new com.ibm.icu.math.BigDecimal("01.01")).signum());
+  (new Test("sig013")).ok=1==((new com.ibm.icu.math.BigDecimal("+0.01")).signum());
+  (new Test("sig014")).ok=1==((new com.ibm.icu.math.BigDecimal("+0.001")).signum());
+  (new Test("sig015")).ok=1==((new com.ibm.icu.math.BigDecimal("1")).signum());
+  (new Test("sig016")).ok=1==((new com.ibm.icu.math.BigDecimal("1e+12")).signum());
+  (new Test("sig017")).ok=0==((new com.ibm.icu.math.BigDecimal("00e+12")).signum());
   summary("signum");
   return;}
 
@@ -4012,16 +4012,16 @@ public class DiagBigDecimal{
  /** Test the {@link BigDecimal#toBigDecimal} method. */
  
  public void diagtobigdecimal(){
-  (new Test("tbd001")).ok=((new com.ibm.math.BigDecimal("0")).toBigDecimal().toString()).equals("0");
-  (new Test("tbd002")).ok=((new com.ibm.math.BigDecimal("-1")).toBigDecimal().toString()).equals("-1");
-  (new Test("tbd003")).ok=((new com.ibm.math.BigDecimal("+1")).toBigDecimal().toString()).equals("1");
-  (new Test("tbd004")).ok=((new com.ibm.math.BigDecimal("1")).toBigDecimal().toString()).equals("1");
-  (new Test("tbd005")).ok=((new com.ibm.math.BigDecimal("1E+2")).toBigDecimal().toString()).equals("100");
-  (new Test("tbd006")).ok=((new com.ibm.math.BigDecimal("1E-2")).toBigDecimal().toString()).equals("0.01");
-  (new Test("tbd007")).ok=((new com.ibm.math.BigDecimal("1E-8")).toBigDecimal().toString()).equals("0.00000001");
-  (new Test("tbd008")).ok=((new com.ibm.math.BigDecimal("1E-9")).toBigDecimal().toString()).equals("0.000000001");
-  (new Test("tbd009")).ok=((new com.ibm.math.BigDecimal("1E10")).toBigDecimal().toString()).equals("10000000000");
-  (new Test("tbd010")).ok=((new com.ibm.math.BigDecimal("1E12")).toBigDecimal().toString()).equals("1000000000000");
+  (new Test("tbd001")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigDecimal().toString()).equals("0");
+  (new Test("tbd002")).ok=((new com.ibm.icu.math.BigDecimal("-1")).toBigDecimal().toString()).equals("-1");
+  (new Test("tbd003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).toBigDecimal().toString()).equals("1");
+  (new Test("tbd004")).ok=((new com.ibm.icu.math.BigDecimal("1")).toBigDecimal().toString()).equals("1");
+  (new Test("tbd005")).ok=((new com.ibm.icu.math.BigDecimal("1E+2")).toBigDecimal().toString()).equals("100");
+  (new Test("tbd006")).ok=((new com.ibm.icu.math.BigDecimal("1E-2")).toBigDecimal().toString()).equals("0.01");
+  (new Test("tbd007")).ok=((new com.ibm.icu.math.BigDecimal("1E-8")).toBigDecimal().toString()).equals("0.00000001");
+  (new Test("tbd008")).ok=((new com.ibm.icu.math.BigDecimal("1E-9")).toBigDecimal().toString()).equals("0.000000001");
+  (new Test("tbd009")).ok=((new com.ibm.icu.math.BigDecimal("1E10")).toBigDecimal().toString()).equals("10000000000");
+  (new Test("tbd010")).ok=((new com.ibm.icu.math.BigDecimal("1E12")).toBigDecimal().toString()).equals("1000000000000");
   summary("toBigDecimal");
   return;}
 /* ----------------------------------------------------------------- */
@@ -4032,73 +4032,73 @@ public class DiagBigDecimal{
   boolean flag=false;
   java.lang.String badstrings[];
   int i=0;
-  (new Test("tbi001")).ok=((new com.ibm.math.BigDecimal("-1")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi002")).ok=((new com.ibm.math.BigDecimal("0")).toBigInteger().toString()).equals("0");
-  (new Test("tbi003")).ok=((new com.ibm.math.BigDecimal("+1")).toBigInteger().toString()).equals("1");
-  (new Test("tbi004")).ok=((new com.ibm.math.BigDecimal("10")).toBigInteger().toString()).equals("10");
-  (new Test("tbi005")).ok=((new com.ibm.math.BigDecimal("1000")).toBigInteger().toString()).equals("1000");
-  (new Test("tbi006")).ok=((new com.ibm.math.BigDecimal("-1E+0")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi007")).ok=((new com.ibm.math.BigDecimal("0E+0")).toBigInteger().toString()).equals("0");
-  (new Test("tbi008")).ok=((new com.ibm.math.BigDecimal("+1E+0")).toBigInteger().toString()).equals("1");
-  (new Test("tbi009")).ok=((new com.ibm.math.BigDecimal("10E+0")).toBigInteger().toString()).equals("10");
-  (new Test("tbi010")).ok=((new com.ibm.math.BigDecimal("1E+3")).toBigInteger().toString()).equals("1000");
-  (new Test("tbi011")).ok=((new com.ibm.math.BigDecimal("0.00")).toBigInteger().toString()).equals("0");
-  (new Test("tbi012")).ok=((new com.ibm.math.BigDecimal("0.01")).toBigInteger().toString()).equals("0");
-  (new Test("tbi013")).ok=((new com.ibm.math.BigDecimal("0.0")).toBigInteger().toString()).equals("0");
-  (new Test("tbi014")).ok=((new com.ibm.math.BigDecimal("0.1")).toBigInteger().toString()).equals("0");
-  (new Test("tbi015")).ok=((new com.ibm.math.BigDecimal("-0.00")).toBigInteger().toString()).equals("0");
-  (new Test("tbi016")).ok=((new com.ibm.math.BigDecimal("-0.01")).toBigInteger().toString()).equals("0");
-  (new Test("tbi017")).ok=((new com.ibm.math.BigDecimal("-0.0")).toBigInteger().toString()).equals("0");
-  (new Test("tbi018")).ok=((new com.ibm.math.BigDecimal("-0.1")).toBigInteger().toString()).equals("0");
-  (new Test("tbi019")).ok=((new com.ibm.math.BigDecimal("1.00")).toBigInteger().toString()).equals("1");
-  (new Test("tbi020")).ok=((new com.ibm.math.BigDecimal("1.01")).toBigInteger().toString()).equals("1");
-  (new Test("tbi021")).ok=((new com.ibm.math.BigDecimal("1.0")).toBigInteger().toString()).equals("1");
-  (new Test("tbi022")).ok=((new com.ibm.math.BigDecimal("1.1")).toBigInteger().toString()).equals("1");
-  (new Test("tbi023")).ok=((new com.ibm.math.BigDecimal("-1.00")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi024")).ok=((new com.ibm.math.BigDecimal("-1.01")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi025")).ok=((new com.ibm.math.BigDecimal("-1.0")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi026")).ok=((new com.ibm.math.BigDecimal("-1.1")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi027")).ok=((new com.ibm.math.BigDecimal("-111.111")).toBigInteger().toString()).equals("-111");
-  (new Test("tbi028")).ok=((new com.ibm.math.BigDecimal("+111.111")).toBigInteger().toString()).equals("111");
-  (new Test("tbi029")).ok=((new com.ibm.math.BigDecimal("0.09")).toBigInteger().toString()).equals("0");
-  (new Test("tbi030")).ok=((new com.ibm.math.BigDecimal("0.9")).toBigInteger().toString()).equals("0");
-  (new Test("tbi031")).ok=((new com.ibm.math.BigDecimal("1.09")).toBigInteger().toString()).equals("1");
-  (new Test("tbi032")).ok=((new com.ibm.math.BigDecimal("1.05")).toBigInteger().toString()).equals("1");
-  (new Test("tbi033")).ok=((new com.ibm.math.BigDecimal("1.04")).toBigInteger().toString()).equals("1");
-  (new Test("tbi034")).ok=((new com.ibm.math.BigDecimal("1.99")).toBigInteger().toString()).equals("1");
-  (new Test("tbi034")).ok=((new com.ibm.math.BigDecimal("1.9")).toBigInteger().toString()).equals("1");
-  (new Test("tbi035")).ok=((new com.ibm.math.BigDecimal("1.5")).toBigInteger().toString()).equals("1");
-  (new Test("tbi036")).ok=((new com.ibm.math.BigDecimal("1.4")).toBigInteger().toString()).equals("1");
-  (new Test("tbi037")).ok=((new com.ibm.math.BigDecimal("-1.09")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi038")).ok=((new com.ibm.math.BigDecimal("-1.05")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi039")).ok=((new com.ibm.math.BigDecimal("-1.04")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi040")).ok=((new com.ibm.math.BigDecimal("-1.99")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi041")).ok=((new com.ibm.math.BigDecimal("-1.9")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi042")).ok=((new com.ibm.math.BigDecimal("-1.5")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi043")).ok=((new com.ibm.math.BigDecimal("-1.4")).toBigInteger().toString()).equals("-1");
-  (new Test("tbi044")).ok=((new com.ibm.math.BigDecimal("1E-1000")).toBigInteger().toString()).equals("0");
-  (new Test("tbi045")).ok=((new com.ibm.math.BigDecimal("-1E-1000")).toBigInteger().toString()).equals("0");
+  (new Test("tbi001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi002")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigInteger().toString()).equals("0");
+  (new Test("tbi003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).toBigInteger().toString()).equals("1");
+  (new Test("tbi004")).ok=((new com.ibm.icu.math.BigDecimal("10")).toBigInteger().toString()).equals("10");
+  (new Test("tbi005")).ok=((new com.ibm.icu.math.BigDecimal("1000")).toBigInteger().toString()).equals("1000");
+  (new Test("tbi006")).ok=((new com.ibm.icu.math.BigDecimal("-1E+0")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi007")).ok=((new com.ibm.icu.math.BigDecimal("0E+0")).toBigInteger().toString()).equals("0");
+  (new Test("tbi008")).ok=((new com.ibm.icu.math.BigDecimal("+1E+0")).toBigInteger().toString()).equals("1");
+  (new Test("tbi009")).ok=((new com.ibm.icu.math.BigDecimal("10E+0")).toBigInteger().toString()).equals("10");
+  (new Test("tbi010")).ok=((new com.ibm.icu.math.BigDecimal("1E+3")).toBigInteger().toString()).equals("1000");
+  (new Test("tbi011")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).toBigInteger().toString()).equals("0");
+  (new Test("tbi012")).ok=((new com.ibm.icu.math.BigDecimal("0.01")).toBigInteger().toString()).equals("0");
+  (new Test("tbi013")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).toBigInteger().toString()).equals("0");
+  (new Test("tbi014")).ok=((new com.ibm.icu.math.BigDecimal("0.1")).toBigInteger().toString()).equals("0");
+  (new Test("tbi015")).ok=((new com.ibm.icu.math.BigDecimal("-0.00")).toBigInteger().toString()).equals("0");
+  (new Test("tbi016")).ok=((new com.ibm.icu.math.BigDecimal("-0.01")).toBigInteger().toString()).equals("0");
+  (new Test("tbi017")).ok=((new com.ibm.icu.math.BigDecimal("-0.0")).toBigInteger().toString()).equals("0");
+  (new Test("tbi018")).ok=((new com.ibm.icu.math.BigDecimal("-0.1")).toBigInteger().toString()).equals("0");
+  (new Test("tbi019")).ok=((new com.ibm.icu.math.BigDecimal("1.00")).toBigInteger().toString()).equals("1");
+  (new Test("tbi020")).ok=((new com.ibm.icu.math.BigDecimal("1.01")).toBigInteger().toString()).equals("1");
+  (new Test("tbi021")).ok=((new com.ibm.icu.math.BigDecimal("1.0")).toBigInteger().toString()).equals("1");
+  (new Test("tbi022")).ok=((new com.ibm.icu.math.BigDecimal("1.1")).toBigInteger().toString()).equals("1");
+  (new Test("tbi023")).ok=((new com.ibm.icu.math.BigDecimal("-1.00")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi024")).ok=((new com.ibm.icu.math.BigDecimal("-1.01")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi025")).ok=((new com.ibm.icu.math.BigDecimal("-1.0")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi026")).ok=((new com.ibm.icu.math.BigDecimal("-1.1")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi027")).ok=((new com.ibm.icu.math.BigDecimal("-111.111")).toBigInteger().toString()).equals("-111");
+  (new Test("tbi028")).ok=((new com.ibm.icu.math.BigDecimal("+111.111")).toBigInteger().toString()).equals("111");
+  (new Test("tbi029")).ok=((new com.ibm.icu.math.BigDecimal("0.09")).toBigInteger().toString()).equals("0");
+  (new Test("tbi030")).ok=((new com.ibm.icu.math.BigDecimal("0.9")).toBigInteger().toString()).equals("0");
+  (new Test("tbi031")).ok=((new com.ibm.icu.math.BigDecimal("1.09")).toBigInteger().toString()).equals("1");
+  (new Test("tbi032")).ok=((new com.ibm.icu.math.BigDecimal("1.05")).toBigInteger().toString()).equals("1");
+  (new Test("tbi033")).ok=((new com.ibm.icu.math.BigDecimal("1.04")).toBigInteger().toString()).equals("1");
+  (new Test("tbi034")).ok=((new com.ibm.icu.math.BigDecimal("1.99")).toBigInteger().toString()).equals("1");
+  (new Test("tbi034")).ok=((new com.ibm.icu.math.BigDecimal("1.9")).toBigInteger().toString()).equals("1");
+  (new Test("tbi035")).ok=((new com.ibm.icu.math.BigDecimal("1.5")).toBigInteger().toString()).equals("1");
+  (new Test("tbi036")).ok=((new com.ibm.icu.math.BigDecimal("1.4")).toBigInteger().toString()).equals("1");
+  (new Test("tbi037")).ok=((new com.ibm.icu.math.BigDecimal("-1.09")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi038")).ok=((new com.ibm.icu.math.BigDecimal("-1.05")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi039")).ok=((new com.ibm.icu.math.BigDecimal("-1.04")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi040")).ok=((new com.ibm.icu.math.BigDecimal("-1.99")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi041")).ok=((new com.ibm.icu.math.BigDecimal("-1.9")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi042")).ok=((new com.ibm.icu.math.BigDecimal("-1.5")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi043")).ok=((new com.ibm.icu.math.BigDecimal("-1.4")).toBigInteger().toString()).equals("-1");
+  (new Test("tbi044")).ok=((new com.ibm.icu.math.BigDecimal("1E-1000")).toBigInteger().toString()).equals("0");
+  (new Test("tbi045")).ok=((new com.ibm.icu.math.BigDecimal("-1E-1000")).toBigInteger().toString()).equals("0");
   
   // Exact variety --
-  (new Test("tbi101")).ok=((new com.ibm.math.BigDecimal("-1")).toBigIntegerExact().toString()).equals("-1");
-  (new Test("tbi102")).ok=((new com.ibm.math.BigDecimal("0")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi103")).ok=((new com.ibm.math.BigDecimal("+1")).toBigIntegerExact().toString()).equals("1");
-  (new Test("tbi104")).ok=((new com.ibm.math.BigDecimal("10")).toBigIntegerExact().toString()).equals("10");
-  (new Test("tbi105")).ok=((new com.ibm.math.BigDecimal("1000")).toBigIntegerExact().toString()).equals("1000");
-  (new Test("tbi106")).ok=((new com.ibm.math.BigDecimal("-1E+0")).toBigIntegerExact().toString()).equals("-1");
-  (new Test("tbi107")).ok=((new com.ibm.math.BigDecimal("0E+0")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi108")).ok=((new com.ibm.math.BigDecimal("+1E+0")).toBigIntegerExact().toString()).equals("1");
-  (new Test("tbi109")).ok=((new com.ibm.math.BigDecimal("10E+0")).toBigIntegerExact().toString()).equals("10");
-  (new Test("tbi110")).ok=((new com.ibm.math.BigDecimal("1E+3")).toBigIntegerExact().toString()).equals("1000");
-  (new Test("tbi111")).ok=((new com.ibm.math.BigDecimal("0.00")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi112")).ok=((new com.ibm.math.BigDecimal("0.0")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi113")).ok=((new com.ibm.math.BigDecimal("-0.00")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi114")).ok=((new com.ibm.math.BigDecimal("-0.0")).toBigIntegerExact().toString()).equals("0");
-  (new Test("tbi115")).ok=((new com.ibm.math.BigDecimal("1.00")).toBigIntegerExact().toString()).equals("1");
-  (new Test("tbi116")).ok=((new com.ibm.math.BigDecimal("1.0")).toBigIntegerExact().toString()).equals("1");
-  (new Test("tbi117")).ok=((new com.ibm.math.BigDecimal("-1.00")).toBigIntegerExact().toString()).equals("-1");
-  (new Test("tbi118")).ok=((new com.ibm.math.BigDecimal("-1.0")).toBigIntegerExact().toString()).equals("-1");
-  (new Test("tbi119")).ok=((new com.ibm.math.BigDecimal("1.00000000000000000000000000000")).toBigIntegerExact().toString()).equals("1");
+  (new Test("tbi101")).ok=((new com.ibm.icu.math.BigDecimal("-1")).toBigIntegerExact().toString()).equals("-1");
+  (new Test("tbi102")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi103")).ok=((new com.ibm.icu.math.BigDecimal("+1")).toBigIntegerExact().toString()).equals("1");
+  (new Test("tbi104")).ok=((new com.ibm.icu.math.BigDecimal("10")).toBigIntegerExact().toString()).equals("10");
+  (new Test("tbi105")).ok=((new com.ibm.icu.math.BigDecimal("1000")).toBigIntegerExact().toString()).equals("1000");
+  (new Test("tbi106")).ok=((new com.ibm.icu.math.BigDecimal("-1E+0")).toBigIntegerExact().toString()).equals("-1");
+  (new Test("tbi107")).ok=((new com.ibm.icu.math.BigDecimal("0E+0")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi108")).ok=((new com.ibm.icu.math.BigDecimal("+1E+0")).toBigIntegerExact().toString()).equals("1");
+  (new Test("tbi109")).ok=((new com.ibm.icu.math.BigDecimal("10E+0")).toBigIntegerExact().toString()).equals("10");
+  (new Test("tbi110")).ok=((new com.ibm.icu.math.BigDecimal("1E+3")).toBigIntegerExact().toString()).equals("1000");
+  (new Test("tbi111")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi112")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi113")).ok=((new com.ibm.icu.math.BigDecimal("-0.00")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi114")).ok=((new com.ibm.icu.math.BigDecimal("-0.0")).toBigIntegerExact().toString()).equals("0");
+  (new Test("tbi115")).ok=((new com.ibm.icu.math.BigDecimal("1.00")).toBigIntegerExact().toString()).equals("1");
+  (new Test("tbi116")).ok=((new com.ibm.icu.math.BigDecimal("1.0")).toBigIntegerExact().toString()).equals("1");
+  (new Test("tbi117")).ok=((new com.ibm.icu.math.BigDecimal("-1.00")).toBigIntegerExact().toString()).equals("-1");
+  (new Test("tbi118")).ok=((new com.ibm.icu.math.BigDecimal("-1.0")).toBigIntegerExact().toString()).equals("-1");
+  (new Test("tbi119")).ok=((new com.ibm.icu.math.BigDecimal("1.00000000000000000000000000000")).toBigIntegerExact().toString()).equals("1");
   
   // the following should all raise exceptions
   
@@ -4114,7 +4114,7 @@ public class DiagBigDecimal{
   
   {int $125=badstrings.length;i=0;i:for(;$125>0;$125--,i++){
    try{
-    (new com.ibm.math.BigDecimal(badstrings[i])).toBigIntegerExact();
+    (new com.ibm.icu.math.BigDecimal(badstrings[i])).toBigIntegerExact();
     flag=false;
    }
    catch (java.lang.ArithmeticException $126){
@@ -4134,13 +4134,13 @@ public class DiagBigDecimal{
  public void diagtochararray(){
   java.lang.String str;
   char car[];
-  com.ibm.math.BigDecimal d;
+  com.ibm.icu.math.BigDecimal d;
   char ca[];
   // the function of this has been tested above, this is simply an
   // existence proof and type-check
   str="-123.45";
   car=(str).toCharArray();
-  d=new com.ibm.math.BigDecimal(str);
+  d=new com.ibm.icu.math.BigDecimal(str);
   ca=d.toCharArray();
   (new Test("tca001")).ok=ca.length==car.length;
   (new Test("tca002")).ok=(new java.lang.String(ca)).equals((java.lang.Object)(new java.lang.String(car)));
@@ -4156,14 +4156,14 @@ public class DiagBigDecimal{
  public void diagtostring(){
   java.lang.String str;
   char car[];
-  com.ibm.math.BigDecimal d;
+  com.ibm.icu.math.BigDecimal d;
   char ca[];
   java.lang.String cs;
   // the function of this has been tested above, this is simply an
   // existence proof and type-check
   str="123.45";
   car=(str).toCharArray();
-  d=new com.ibm.math.BigDecimal(car,0,car.length);
+  d=new com.ibm.icu.math.BigDecimal(car,0,car.length);
   ca=d.toCharArray();
   cs=d.toString();
   (new Test("tos001")).ok=(str.toCharArray().length)==ca.length;
@@ -4181,34 +4181,34 @@ public class DiagBigDecimal{
  
  public void diagunscaledvalue(){
   // just like toBigInteger, but scaly bits are preserved [without dots]
-  (new Test("uns001")).ok=((new com.ibm.math.BigDecimal("-1")).unscaledValue().toString()).equals("-1");
-  (new Test("uns002")).ok=((new com.ibm.math.BigDecimal("0")).unscaledValue().toString()).equals("0");
-  (new Test("uns003")).ok=((new com.ibm.math.BigDecimal("+1")).unscaledValue().toString()).equals("1");
-  (new Test("uns004")).ok=((new com.ibm.math.BigDecimal("10")).unscaledValue().toString()).equals("10");
-  (new Test("uns005")).ok=((new com.ibm.math.BigDecimal("1000")).unscaledValue().toString()).equals("1000");
-  (new Test("uns006")).ok=((new com.ibm.math.BigDecimal("-1E+0")).unscaledValue().toString()).equals("-1");
-  (new Test("uns007")).ok=((new com.ibm.math.BigDecimal("0E+0")).unscaledValue().toString()).equals("0");
-  (new Test("uns008")).ok=((new com.ibm.math.BigDecimal("+1E+0")).unscaledValue().toString()).equals("1");
-  (new Test("uns009")).ok=((new com.ibm.math.BigDecimal("10E+0")).unscaledValue().toString()).equals("10");
-  (new Test("uns010")).ok=((new com.ibm.math.BigDecimal("1E+3")).unscaledValue().toString()).equals("1000");
-  (new Test("uns011")).ok=((new com.ibm.math.BigDecimal("0.00")).unscaledValue().toString()).equals("0");
-  (new Test("uns012")).ok=((new com.ibm.math.BigDecimal("0.01")).unscaledValue().toString()).equals("1");
-  (new Test("uns013")).ok=((new com.ibm.math.BigDecimal("0.0")).unscaledValue().toString()).equals("0");
-  (new Test("uns014")).ok=((new com.ibm.math.BigDecimal("0.1")).unscaledValue().toString()).equals("1");
-  (new Test("uns015")).ok=((new com.ibm.math.BigDecimal("-0.00")).unscaledValue().toString()).equals("0");
-  (new Test("uns016")).ok=((new com.ibm.math.BigDecimal("-0.01")).unscaledValue().toString()).equals("-1");
-  (new Test("uns017")).ok=((new com.ibm.math.BigDecimal("-0.0")).unscaledValue().toString()).equals("0");
-  (new Test("uns018")).ok=((new com.ibm.math.BigDecimal("-0.1")).unscaledValue().toString()).equals("-1");
-  (new Test("uns019")).ok=((new com.ibm.math.BigDecimal("1.00")).unscaledValue().toString()).equals("100");
-  (new Test("uns020")).ok=((new com.ibm.math.BigDecimal("1.01")).unscaledValue().toString()).equals("101");
-  (new Test("uns021")).ok=((new com.ibm.math.BigDecimal("1.0")).unscaledValue().toString()).equals("10");
-  (new Test("uns022")).ok=((new com.ibm.math.BigDecimal("1.1")).unscaledValue().toString()).equals("11");
-  (new Test("uns023")).ok=((new com.ibm.math.BigDecimal("-1.00")).unscaledValue().toString()).equals("-100");
-  (new Test("uns024")).ok=((new com.ibm.math.BigDecimal("-1.01")).unscaledValue().toString()).equals("-101");
-  (new Test("uns025")).ok=((new com.ibm.math.BigDecimal("-1.0")).unscaledValue().toString()).equals("-10");
-  (new Test("uns026")).ok=((new com.ibm.math.BigDecimal("-1.1")).unscaledValue().toString()).equals("-11");
-  (new Test("uns027")).ok=((new com.ibm.math.BigDecimal("-111.111")).unscaledValue().toString()).equals("-111111");
-  (new Test("uns028")).ok=((new com.ibm.math.BigDecimal("+111.111")).unscaledValue().toString()).equals("111111");
+  (new Test("uns001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).unscaledValue().toString()).equals("-1");
+  (new Test("uns002")).ok=((new com.ibm.icu.math.BigDecimal("0")).unscaledValue().toString()).equals("0");
+  (new Test("uns003")).ok=((new com.ibm.icu.math.BigDecimal("+1")).unscaledValue().toString()).equals("1");
+  (new Test("uns004")).ok=((new com.ibm.icu.math.BigDecimal("10")).unscaledValue().toString()).equals("10");
+  (new Test("uns005")).ok=((new com.ibm.icu.math.BigDecimal("1000")).unscaledValue().toString()).equals("1000");
+  (new Test("uns006")).ok=((new com.ibm.icu.math.BigDecimal("-1E+0")).unscaledValue().toString()).equals("-1");
+  (new Test("uns007")).ok=((new com.ibm.icu.math.BigDecimal("0E+0")).unscaledValue().toString()).equals("0");
+  (new Test("uns008")).ok=((new com.ibm.icu.math.BigDecimal("+1E+0")).unscaledValue().toString()).equals("1");
+  (new Test("uns009")).ok=((new com.ibm.icu.math.BigDecimal("10E+0")).unscaledValue().toString()).equals("10");
+  (new Test("uns010")).ok=((new com.ibm.icu.math.BigDecimal("1E+3")).unscaledValue().toString()).equals("1000");
+  (new Test("uns011")).ok=((new com.ibm.icu.math.BigDecimal("0.00")).unscaledValue().toString()).equals("0");
+  (new Test("uns012")).ok=((new com.ibm.icu.math.BigDecimal("0.01")).unscaledValue().toString()).equals("1");
+  (new Test("uns013")).ok=((new com.ibm.icu.math.BigDecimal("0.0")).unscaledValue().toString()).equals("0");
+  (new Test("uns014")).ok=((new com.ibm.icu.math.BigDecimal("0.1")).unscaledValue().toString()).equals("1");
+  (new Test("uns015")).ok=((new com.ibm.icu.math.BigDecimal("-0.00")).unscaledValue().toString()).equals("0");
+  (new Test("uns016")).ok=((new com.ibm.icu.math.BigDecimal("-0.01")).unscaledValue().toString()).equals("-1");
+  (new Test("uns017")).ok=((new com.ibm.icu.math.BigDecimal("-0.0")).unscaledValue().toString()).equals("0");
+  (new Test("uns018")).ok=((new com.ibm.icu.math.BigDecimal("-0.1")).unscaledValue().toString()).equals("-1");
+  (new Test("uns019")).ok=((new com.ibm.icu.math.BigDecimal("1.00")).unscaledValue().toString()).equals("100");
+  (new Test("uns020")).ok=((new com.ibm.icu.math.BigDecimal("1.01")).unscaledValue().toString()).equals("101");
+  (new Test("uns021")).ok=((new com.ibm.icu.math.BigDecimal("1.0")).unscaledValue().toString()).equals("10");
+  (new Test("uns022")).ok=((new com.ibm.icu.math.BigDecimal("1.1")).unscaledValue().toString()).equals("11");
+  (new Test("uns023")).ok=((new com.ibm.icu.math.BigDecimal("-1.00")).unscaledValue().toString()).equals("-100");
+  (new Test("uns024")).ok=((new com.ibm.icu.math.BigDecimal("-1.01")).unscaledValue().toString()).equals("-101");
+  (new Test("uns025")).ok=((new com.ibm.icu.math.BigDecimal("-1.0")).unscaledValue().toString()).equals("-10");
+  (new Test("uns026")).ok=((new com.ibm.icu.math.BigDecimal("-1.1")).unscaledValue().toString()).equals("-11");
+  (new Test("uns027")).ok=((new com.ibm.icu.math.BigDecimal("-111.111")).unscaledValue().toString()).equals("-111111");
+  (new Test("uns028")).ok=((new com.ibm.icu.math.BigDecimal("+111.111")).unscaledValue().toString()).equals("111111");
   summary("unscaledValue");
   return;}
 
@@ -4230,35 +4230,35 @@ public class DiagBigDecimal{
   
   // valueOf(long [,scale]) --
   
-  (new Test("val001")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)-2)).toString()).equals("-2");
-  (new Test("val002")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)-1)).toString()).equals("-1");
-  (new Test("val003")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)-0)).toString()).equals("0");
-  (new Test("val004")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)+1)).toString()).equals("1");
-  (new Test("val005")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)+2)).toString()).equals("2");
-  (new Test("val006")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)10)).toString()).equals("10");
-  (new Test("val007")).ok=(com.ibm.math.BigDecimal.valueOf((long)((byte)11)).toString()).equals("11");
-  (new Test("val008")).ok=(com.ibm.math.BigDecimal.valueOf(lmin).toString()).equals("-9223372036854775808");
-  (new Test("val009")).ok=(com.ibm.math.BigDecimal.valueOf(lmax).toString()).equals("9223372036854775807");
-  (new Test("val010")).ok=(com.ibm.math.BigDecimal.valueOf(lneg).toString()).equals("-1");
-  (new Test("val011")).ok=(com.ibm.math.BigDecimal.valueOf(lzer).toString()).equals("0");
-  (new Test("val012")).ok=(com.ibm.math.BigDecimal.valueOf(lpos).toString()).equals("1");
-  (new Test("val013")).ok=(com.ibm.math.BigDecimal.valueOf(lmin,0).toString()).equals("-9223372036854775808");
-  (new Test("val014")).ok=(com.ibm.math.BigDecimal.valueOf(lmax,0).toString()).equals("9223372036854775807");
-  (new Test("val015")).ok=(com.ibm.math.BigDecimal.valueOf(lneg,0).toString()).equals("-1");
-  (new Test("val016")).ok=(com.ibm.math.BigDecimal.valueOf(lpos,0).toString()).equals("1");
+  (new Test("val001")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)-2)).toString()).equals("-2");
+  (new Test("val002")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)-1)).toString()).equals("-1");
+  (new Test("val003")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)-0)).toString()).equals("0");
+  (new Test("val004")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)+1)).toString()).equals("1");
+  (new Test("val005")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)+2)).toString()).equals("2");
+  (new Test("val006")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)10)).toString()).equals("10");
+  (new Test("val007")).ok=(com.ibm.icu.math.BigDecimal.valueOf((long)((byte)11)).toString()).equals("11");
+  (new Test("val008")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmin).toString()).equals("-9223372036854775808");
+  (new Test("val009")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmax).toString()).equals("9223372036854775807");
+  (new Test("val010")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lneg).toString()).equals("-1");
+  (new Test("val011")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer).toString()).equals("0");
+  (new Test("val012")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lpos).toString()).equals("1");
+  (new Test("val013")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmin,0).toString()).equals("-9223372036854775808");
+  (new Test("val014")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmax,0).toString()).equals("9223372036854775807");
+  (new Test("val015")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lneg,0).toString()).equals("-1");
+  (new Test("val016")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lpos,0).toString()).equals("1");
   
-  (new Test("val017")).ok=(com.ibm.math.BigDecimal.valueOf(lzer,0).toString()).equals("0");
-  (new Test("val018")).ok=(com.ibm.math.BigDecimal.valueOf(lzer,1).toString()).equals("0.0");
-  (new Test("val019")).ok=(com.ibm.math.BigDecimal.valueOf(lzer,2).toString()).equals("0.00");
-  (new Test("val020")).ok=(com.ibm.math.BigDecimal.valueOf(lzer,3).toString()).equals("0.000");
-  (new Test("val021")).ok=(com.ibm.math.BigDecimal.valueOf(lzer,10).toString()).equals("0.0000000000");
+  (new Test("val017")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer,0).toString()).equals("0");
+  (new Test("val018")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer,1).toString()).equals("0.0");
+  (new Test("val019")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer,2).toString()).equals("0.00");
+  (new Test("val020")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer,3).toString()).equals("0.000");
+  (new Test("val021")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lzer,10).toString()).equals("0.0000000000");
   
-  (new Test("val022")).ok=(com.ibm.math.BigDecimal.valueOf(lmin,7).toString()).equals("-922337203685.4775808");
-  (new Test("val023")).ok=(com.ibm.math.BigDecimal.valueOf(lmax,11).toString()).equals("92233720.36854775807");
+  (new Test("val022")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmin,7).toString()).equals("-922337203685.4775808");
+  (new Test("val023")).ok=(com.ibm.icu.math.BigDecimal.valueOf(lmax,11).toString()).equals("92233720.36854775807");
   
   
   try{checkscale:do{
-   com.ibm.math.BigDecimal.valueOf((long)23,-8);
+   com.ibm.icu.math.BigDecimal.valueOf((long)23,-8);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $127){e=$127;
@@ -4272,41 +4272,41 @@ public class DiagBigDecimal{
   dpos=(double)1;
   dpos=dpos/((double)10);
   dneg=(double)-dpos;
-  (new Test("val201")).ok=(com.ibm.math.BigDecimal.valueOf(dneg).toString()).equals("-0.1");
-  (new Test("val202")).ok=(com.ibm.math.BigDecimal.valueOf(dzer).toString()).equals("0.0"); // cf. constructor
-  (new Test("val203")).ok=(com.ibm.math.BigDecimal.valueOf(dpos).toString()).equals("0.1");
+  (new Test("val201")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dneg).toString()).equals("-0.1");
+  (new Test("val202")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dzer).toString()).equals("0.0"); // cf. constructor
+  (new Test("val203")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dpos).toString()).equals("0.1");
   dpos5=(double)0.5D;
   dneg5=(double)-dpos5;
-  (new Test("val204")).ok=(com.ibm.math.BigDecimal.valueOf(dneg5).toString()).equals("-0.5");
-  (new Test("val205")).ok=(com.ibm.math.BigDecimal.valueOf(dpos5).toString()).equals("0.5");
+  (new Test("val204")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dneg5).toString()).equals("-0.5");
+  (new Test("val205")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dpos5).toString()).equals("0.5");
   dmin=java.lang.Double.MIN_VALUE;
   dmax=java.lang.Double.MAX_VALUE;
-  (new Test("val206")).ok=(com.ibm.math.BigDecimal.valueOf(dmin).toString()).equals("4.9E-324");
-  (new Test("val207")).ok=(com.ibm.math.BigDecimal.valueOf(dmax).toString()).equals("1.7976931348623157E+308");
+  (new Test("val206")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dmin).toString()).equals("4.9E-324");
+  (new Test("val207")).ok=(com.ibm.icu.math.BigDecimal.valueOf(dmax).toString()).equals("1.7976931348623157E+308");
   
   // nasties
   d=(double)9;
   d=d/((double)10);
-  (new Test("val210")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("0.9");
+  (new Test("val210")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.9");
   d=d/((double)10);
-  (new Test("val211")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("0.09");
+  (new Test("val211")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.09");
   d=d/((double)10);
-  (new Test("val212")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("0.0090");
+  (new Test("val212")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("0.0090");
   d=d/((double)10);
-  (new Test("val213")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("9.0E-4");
+  (new Test("val213")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("9.0E-4");
   d=d/((double)10);
-  (new Test("val214")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-5");
+  (new Test("val214")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-5");
   d=d/((double)10);
-  (new Test("val215")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-6");
+  (new Test("val215")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-6");
   d=d/((double)10);
-  (new Test("val216")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-7");
+  (new Test("val216")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-7");
   d=d/((double)10);
-  (new Test("val217")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-8");
+  (new Test("val217")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999999E-8");
   d=d/((double)10);
-  (new Test("val218")).ok=(com.ibm.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999998E-9");
+  (new Test("val218")).ok=(com.ibm.icu.math.BigDecimal.valueOf(d).toString()).equals("8.999999999999998E-9");
   
   try{checkpin:do{
-   com.ibm.math.BigDecimal.valueOf(java.lang.Double.POSITIVE_INFINITY);
+   com.ibm.icu.math.BigDecimal.valueOf(java.lang.Double.POSITIVE_INFINITY);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $128){
@@ -4314,7 +4314,7 @@ public class DiagBigDecimal{
   }/*checkpin*/
   (new Test("val301")).ok=flag;
   try{checknin:do{
-   com.ibm.math.BigDecimal.valueOf(java.lang.Double.NEGATIVE_INFINITY);
+   com.ibm.icu.math.BigDecimal.valueOf(java.lang.Double.NEGATIVE_INFINITY);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $129){
@@ -4322,7 +4322,7 @@ public class DiagBigDecimal{
   }/*checknin*/
   (new Test("val302")).ok=flag;
   try{checknan:do{
-   com.ibm.math.BigDecimal.valueOf(java.lang.Double.NaN);
+   com.ibm.icu.math.BigDecimal.valueOf(java.lang.Double.NaN);
    flag=false;
   }while(false);}
   catch (java.lang.NumberFormatException $130){
@@ -4338,60 +4338,60 @@ public class DiagBigDecimal{
  /** Test the {@link MathContext} class. */
  
  public void diagmathcontext(){
-  com.ibm.math.MathContext mccon1;
-  com.ibm.math.MathContext mccon2;
-  com.ibm.math.MathContext mccon3;
-  com.ibm.math.MathContext mccon4;
-  com.ibm.math.MathContext mcrmc;
-  com.ibm.math.MathContext mcrmd;
-  com.ibm.math.MathContext mcrmf;
-  com.ibm.math.MathContext mcrmhd;
-  com.ibm.math.MathContext mcrmhe;
-  com.ibm.math.MathContext mcrmhu;
-  com.ibm.math.MathContext mcrmun;
-  com.ibm.math.MathContext mcrmu;
+  com.ibm.icu.math.MathContext mccon1;
+  com.ibm.icu.math.MathContext mccon2;
+  com.ibm.icu.math.MathContext mccon3;
+  com.ibm.icu.math.MathContext mccon4;
+  com.ibm.icu.math.MathContext mcrmc;
+  com.ibm.icu.math.MathContext mcrmd;
+  com.ibm.icu.math.MathContext mcrmf;
+  com.ibm.icu.math.MathContext mcrmhd;
+  com.ibm.icu.math.MathContext mcrmhe;
+  com.ibm.icu.math.MathContext mcrmhu;
+  com.ibm.icu.math.MathContext mcrmun;
+  com.ibm.icu.math.MathContext mcrmu;
   boolean flag=false;
   java.lang.IllegalArgumentException e=null;
   // these tests are mostly existence checks
-  (new Test("mcn001")).ok=(com.ibm.math.MathContext.DEFAULT.getDigits())==9;
-  (new Test("mcn002")).ok=(com.ibm.math.MathContext.DEFAULT.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
-  (new Test("mcn003")).ok=(com.ibm.math.MathContext.DEFAULT.getForm())!=com.ibm.math.MathContext.ENGINEERING;
-  (new Test("mcn004")).ok=(com.ibm.math.MathContext.DEFAULT.getForm())!=com.ibm.math.MathContext.PLAIN;
-  (new Test("mcn005")).ok=(com.ibm.math.MathContext.DEFAULT.getLostDigits()?1:0)==0;
-  (new Test("mcn006")).ok=(com.ibm.math.MathContext.DEFAULT.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("mcn001")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getDigits())==9;
+  (new Test("mcn002")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
+  (new Test("mcn003")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getForm())!=com.ibm.icu.math.MathContext.ENGINEERING;
+  (new Test("mcn004")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getForm())!=com.ibm.icu.math.MathContext.PLAIN;
+  (new Test("mcn005")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getLostDigits()?1:0)==0;
+  (new Test("mcn006")).ok=(com.ibm.icu.math.MathContext.DEFAULT.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
-  (new Test("mcn010")).ok=com.ibm.math.MathContext.ROUND_CEILING>=0;
-  (new Test("mcn011")).ok=com.ibm.math.MathContext.ROUND_DOWN>=0;
-  (new Test("mcn012")).ok=com.ibm.math.MathContext.ROUND_FLOOR>=0;
-  (new Test("mcn013")).ok=com.ibm.math.MathContext.ROUND_HALF_DOWN>=0;
-  (new Test("mcn014")).ok=com.ibm.math.MathContext.ROUND_HALF_EVEN>=0;
-  (new Test("mcn015")).ok=com.ibm.math.MathContext.ROUND_HALF_UP>=0;
-  (new Test("mcn016")).ok=com.ibm.math.MathContext.ROUND_UNNECESSARY>=0;
-  (new Test("mcn017")).ok=com.ibm.math.MathContext.ROUND_UP>=0;
+  (new Test("mcn010")).ok=com.ibm.icu.math.MathContext.ROUND_CEILING>=0;
+  (new Test("mcn011")).ok=com.ibm.icu.math.MathContext.ROUND_DOWN>=0;
+  (new Test("mcn012")).ok=com.ibm.icu.math.MathContext.ROUND_FLOOR>=0;
+  (new Test("mcn013")).ok=com.ibm.icu.math.MathContext.ROUND_HALF_DOWN>=0;
+  (new Test("mcn014")).ok=com.ibm.icu.math.MathContext.ROUND_HALF_EVEN>=0;
+  (new Test("mcn015")).ok=com.ibm.icu.math.MathContext.ROUND_HALF_UP>=0;
+  (new Test("mcn016")).ok=com.ibm.icu.math.MathContext.ROUND_UNNECESSARY>=0;
+  (new Test("mcn017")).ok=com.ibm.icu.math.MathContext.ROUND_UP>=0;
   
-  mccon1=new com.ibm.math.MathContext(111);
+  mccon1=new com.ibm.icu.math.MathContext(111);
   (new Test("mcn021")).ok=(mccon1.getDigits())==111;
-  (new Test("mcn022")).ok=(mccon1.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
+  (new Test("mcn022")).ok=(mccon1.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
   (new Test("mcn023")).ok=(mccon1.getLostDigits()?1:0)==0;
-  (new Test("mcn024")).ok=(mccon1.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("mcn024")).ok=(mccon1.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
-  mccon2=new com.ibm.math.MathContext(78,com.ibm.math.MathContext.ENGINEERING);
+  mccon2=new com.ibm.icu.math.MathContext(78,com.ibm.icu.math.MathContext.ENGINEERING);
   (new Test("mcn031")).ok=(mccon2.getDigits())==78;
-  (new Test("mcn032")).ok=(mccon2.getForm())==com.ibm.math.MathContext.ENGINEERING;
+  (new Test("mcn032")).ok=(mccon2.getForm())==com.ibm.icu.math.MathContext.ENGINEERING;
   (new Test("mcn033")).ok=(mccon2.getLostDigits()?1:0)==0;
-  (new Test("mcn034")).ok=(mccon2.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("mcn034")).ok=(mccon2.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
-  mccon3=new com.ibm.math.MathContext(5,com.ibm.math.MathContext.PLAIN,true);
+  mccon3=new com.ibm.icu.math.MathContext(5,com.ibm.icu.math.MathContext.PLAIN,true);
   (new Test("mcn041")).ok=(mccon3.getDigits())==5;
-  (new Test("mcn042")).ok=(mccon3.getForm())==com.ibm.math.MathContext.PLAIN;
+  (new Test("mcn042")).ok=(mccon3.getForm())==com.ibm.icu.math.MathContext.PLAIN;
   (new Test("mcn043")).ok=(mccon3.getLostDigits()?1:0)==1;
-  (new Test("mcn044")).ok=(mccon3.getRoundingMode())==com.ibm.math.MathContext.ROUND_HALF_UP;
+  (new Test("mcn044")).ok=(mccon3.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_HALF_UP;
   
-  mccon4=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.SCIENTIFIC,false,com.ibm.math.MathContext.ROUND_FLOOR);
+  mccon4=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.SCIENTIFIC,false,com.ibm.icu.math.MathContext.ROUND_FLOOR);
   (new Test("mcn051")).ok=(mccon4.getDigits())==0;
-  (new Test("mcn052")).ok=(mccon4.getForm())==com.ibm.math.MathContext.SCIENTIFIC;
+  (new Test("mcn052")).ok=(mccon4.getForm())==com.ibm.icu.math.MathContext.SCIENTIFIC;
   (new Test("mcn053")).ok=(mccon4.getLostDigits()?1:0)==0;
-  (new Test("mcn054")).ok=(mccon4.getRoundingMode())==com.ibm.math.MathContext.ROUND_FLOOR;
+  (new Test("mcn054")).ok=(mccon4.getRoundingMode())==com.ibm.icu.math.MathContext.ROUND_FLOOR;
   
   (new Test("mcn061")).ok=(mccon1.toString()).equals("digits=111 form=SCIENTIFIC lostDigits=0 roundingMode=ROUND_HALF_UP");
   
@@ -4403,14 +4403,14 @@ public class DiagBigDecimal{
   
   
   // complete testing rounding modes round trips
-  mcrmc=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_CEILING);
-  mcrmd=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_DOWN);
-  mcrmf=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_FLOOR);
-  mcrmhd=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_HALF_DOWN);
-  mcrmhe=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_HALF_EVEN);
-  mcrmhu=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_HALF_UP);
-  mcrmun=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_UNNECESSARY);
-  mcrmu=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,com.ibm.math.MathContext.ROUND_UP);
+  mcrmc=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_CEILING);
+  mcrmd=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_DOWN);
+  mcrmf=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_FLOOR);
+  mcrmhd=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_HALF_DOWN);
+  mcrmhe=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_HALF_EVEN);
+  mcrmhu=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_HALF_UP);
+  mcrmun=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_UNNECESSARY);
+  mcrmu=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,com.ibm.icu.math.MathContext.ROUND_UP);
   
   (new Test("mcn071")).ok=(mcrmc.toString()).equals("digits=0 form=PLAIN lostDigits=0 roundingMode=ROUND_CEILING");
   
@@ -4434,7 +4434,7 @@ public class DiagBigDecimal{
   // errors...
   
   try{checkdig:do{
-   new com.ibm.math.MathContext(-1);
+   new com.ibm.icu.math.MathContext(-1);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $131){e=$131;
@@ -4442,7 +4442,7 @@ public class DiagBigDecimal{
   }/*checkdig*/
   (new Test("mcn101")).ok=flag;
   try{checkdigbig:do{
-   new com.ibm.math.MathContext(1000000000);
+   new com.ibm.icu.math.MathContext(1000000000);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $132){e=$132;
@@ -4451,7 +4451,7 @@ public class DiagBigDecimal{
   (new Test("mcn102")).ok=flag;
   
   try{checkform:do{
-   new com.ibm.math.MathContext(0,5);
+   new com.ibm.icu.math.MathContext(0,5);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $133){e=$133;
@@ -4459,7 +4459,7 @@ public class DiagBigDecimal{
   }/*checkform*/
   (new Test("mcn111")).ok=flag;
   try{checkformneg:do{
-   new com.ibm.math.MathContext(0,-1);
+   new com.ibm.icu.math.MathContext(0,-1);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $134){e=$134;
@@ -4470,7 +4470,7 @@ public class DiagBigDecimal{
   // [lostDigits cannot be invalid]
   
   try{checkround:do{
-   new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,12);
+   new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,12);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $135){e=$135;
@@ -4478,7 +4478,7 @@ public class DiagBigDecimal{
   }/*checkround*/
   (new Test("mcn121")).ok=flag;
   try{checkroundneg:do{
-   new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,-1);
+   new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,-1);
    flag=false;
   }while(false);}
   catch (java.lang.IllegalArgumentException $136){e=$136;
@@ -4507,8 +4507,8 @@ public class DiagBigDecimal{
   */
  
  public void diagmath(){
-  com.ibm.math.MathContext def;
-  def=com.ibm.math.MathContext.DEFAULT;
+  com.ibm.icu.math.MathContext def;
+  def=com.ibm.icu.math.MathContext.DEFAULT;
   mathtest(1,def,"-9375284.42","5516.99832E+27276984","5.51699832E+27276987","-5.51699832E+27276987","-5.17234284E+27276994","-1.69934516E-27276981","0","-9375284.42","6.79057752E+41");
   mathtest(2,def,"-410.832710","99.3588243E-502740862","-410.832710","-410.832710","-4.08198550E-502740858","-4.13483868E+502740862","","","1.36977786E+26");
   mathtest(3,def,"80025.2340","-8.03097581","80017.2030","80033.2650","-642680.718","-9964.57167","-9964","4.59102916","5.94544517E-40");
@@ -5033,17 +5033,17 @@ public class DiagBigDecimal{
   an empty string.
   */
  
- private void mathtest(int test,com.ibm.math.MathContext mc,java.lang.String slhs,java.lang.String srhs,java.lang.String add,java.lang.String sub,java.lang.String mul,java.lang.String div,java.lang.String idv,java.lang.String rem,java.lang.String pow){
-  com.ibm.math.BigDecimal lhs;
-  com.ibm.math.BigDecimal rhs;
+ private void mathtest(int test,com.ibm.icu.math.MathContext mc,java.lang.String slhs,java.lang.String srhs,java.lang.String add,java.lang.String sub,java.lang.String mul,java.lang.String div,java.lang.String idv,java.lang.String rem,java.lang.String pow){
+  com.ibm.icu.math.BigDecimal lhs;
+  com.ibm.icu.math.BigDecimal rhs;
   java.lang.String res=null;
   java.lang.String sn=null;
   int e=0;
   
   
   
-  lhs=new com.ibm.math.BigDecimal(slhs);
-  rhs=new com.ibm.math.BigDecimal(srhs);
+  lhs=new com.ibm.icu.math.BigDecimal(slhs);
+  rhs=new com.ibm.icu.math.BigDecimal(srhs);
   
   try{
    res=lhs.add(rhs,mc).toString();
@@ -5105,9 +5105,9 @@ public class DiagBigDecimal{
    e=sn.indexOf("E",0);
    if (e>0) 
     sn=sn.substring(0,e);
-   sn=(new com.ibm.math.BigDecimal(sn)).format(-1,0);
+   sn=(new com.ibm.icu.math.BigDecimal(sn)).format(-1,0);
    
-   res=lhs.pow(new com.ibm.math.BigDecimal(sn),mc).toString();
+   res=lhs.pow(new com.ibm.icu.math.BigDecimal(sn),mc).toString();
   }
   catch (java.lang.ArithmeticException $143){
    res="";
@@ -5126,7 +5126,7 @@ public class DiagBigDecimal{
     Show error message if a problem, otherwise return quietly
     */
  
- private void mathtestcheck(int test,com.ibm.math.BigDecimal lhs,com.ibm.math.BigDecimal rhs,java.lang.String op,java.lang.String got,java.lang.String want){
+ private void mathtestcheck(int test,com.ibm.icu.math.BigDecimal lhs,com.ibm.icu.math.BigDecimal rhs,java.lang.String op,java.lang.String got,java.lang.String want){
   boolean flag;
   java.lang.String testnum;
   
@@ -5135,7 +5135,7 @@ public class DiagBigDecimal{
   if ((!flag)) 
    say(">"+test+">"+" "+lhs.toString()+" "+op+" "+rhs.toString()+" "+"="+" "+want+" "+"[got"+" "+got+"]");
   
-  testnum="gen"+right((new com.ibm.math.BigDecimal(test+1000)).toString(),3);
+  testnum="gen"+right((new com.ibm.icu.math.BigDecimal(test+1000)).toString(),3);
   
   (new Test(testnum)).ok=flag;
   return;
@@ -5270,7 +5270,7 @@ public class DiagBigDecimal{
  * Its <code>ok</flag> is assigned directly to record whether the
  * test succeeded (1) or failed (0).
  *
- * @see     com.ibm.math.DiagBigDecimal
+ * @see     com.ibm.icu.math.DiagBigDecimal
  * @version 1.00 2000.03.27
  * @author  Mike Cowlishaw
  */
@@ -5313,7 +5313,7 @@ public class DiagBigDecimal{
   * The <code>DiagException</code> class is used to signal the failure
   * of a test group.  It records the number of failures in the group.
   *
-  * @see     com.ibm.math.DiagBigDecimal
+  * @see     com.ibm.icu.math.DiagBigDecimal
   * @version 1.00 2000.03.27
   * @author  Mike Cowlishaw
   */

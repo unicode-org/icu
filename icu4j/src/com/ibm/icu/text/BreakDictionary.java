@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $ 
- * $Date: 2000/09/25 21:33:43 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/16 03:06:03 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
@@ -22,7 +22,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
 
-import com.ibm.util.CompactByteArray;
+import com.ibm.icu.util.CompactByteArray;
 
 /**
  * This is the class that represents the list of known words used by

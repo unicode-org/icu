@@ -5,17 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixCharMap.java,v $ 
- * $Date: 2002/01/31 01:22:21 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:30 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
  
-package com.ibm.tools.localeconverter;
+package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
 import java.util.*;
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 public class PosixCharMap {
     private Hashtable table = new Hashtable();

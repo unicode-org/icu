@@ -5,15 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/12/13 23:00:49 $
- * $Revision: 1.54 $
+ * $Date: 2002/02/16 03:06:22 $
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.*;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.lang.*;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -204,7 +205,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.54 $ $Date: 2001/12/13 23:00:49 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.55 $ $Date: 2002/02/16 03:06:22 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1516,7 +1517,7 @@ public class UnicodeSet extends UnicodeFilter {
             // Debug parser
             System.out.println("UnicodeSet(" +
                                pattern.substring(start, i+1) + ") -> " +
-                               com.ibm.util.Utility.escape(toString()));
+                               com.ibm.icu.util.Utility.escape(toString()));
         }
     }
 

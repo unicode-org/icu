@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/rbbi/BuildDictionaryFile.java,v $ 
- * $Date: 2001/12/04 20:09:08 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:35 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.rbbi;
+package com.ibm.icu.dev.tool.rbbi;
 
-import com.ibm.util.CompactByteArray;
-import com.ibm.text.UnicodeSet;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.CompactByteArray;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.Utility;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Vector;

@@ -5,10 +5,10 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.test.text;
+package com.ibm.icu.dev.test.text;
 
-import com.ibm.text.ArabicShaping;
-import com.ibm.text.ArabicShapingException;
+import com.ibm.icu.text.ArabicShaping;
+import com.ibm.icu.text.ArabicShapingException;
 
 /**
  * Interactive test for Arabic shaping.

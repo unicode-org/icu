@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/Selection.java,v $ 
- * $Date: 2001/11/28 19:27:09 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:04:57 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.demo.components;
+package com.ibm.icu.dev.demo.impl;
 import java.text.*;
 
 public final class Selection {

@@ -1,8 +1,8 @@
 /* Generated from 'BigDecimal.nrx' 8 Sep 2000 11:10:50 [v2.00] */
 /* Options: Binary Comments Crossref Format Java Logo Strictargs Strictcase Trace2 Verbose3 */
-package com.ibm.math;
+package com.ibm.icu.math;
 import java.math.BigInteger;
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
 
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
@@ -71,7 +71,7 @@ import com.ibm.util.Utility;
 /* 1998.07.07 scaled division  [divide(BigDecimal, int, int)]         */
 /* 1998.07.08 setScale, faster equals                                 */
 /* 1998.07.11 allow 1E6 (no sign) <sigh>; new double/float conversion */
-/* 1998.10.12 change package to com.ibm.math                          */
+/* 1998.10.12 change package to com.ibm.icu.math                          */
 /* 1998.12.14 power operator no longer rounds RHS [to match ANSI]     */
 /*            add toBigDecimal() and BigDecimal(java.math.BigDecimal) */
 /* 1998.12.29 improve byteaddsub by using table lookup                */
@@ -271,7 +271,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @see #TEN
   * @since IBM JDK 1.1.8
   */
- public static final com.ibm.math.BigDecimal ZERO=new com.ibm.math.BigDecimal((long)0); // use long as we want the int constructor
+ public static final com.ibm.icu.math.BigDecimal ZERO=new com.ibm.icu.math.BigDecimal((long)0); // use long as we want the int constructor
  // .. to be able to use this, for speed
  
  /**
@@ -281,7 +281,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @see #ZERO
   * @since IBM JDK 1.1.8
   */
- public static final com.ibm.math.BigDecimal ONE=new com.ibm.math.BigDecimal((long)1); // use long as we want the int constructor
+ public static final com.ibm.icu.math.BigDecimal ONE=new com.ibm.icu.math.BigDecimal((long)1); // use long as we want the int constructor
  // .. to be able to use this, for speed
  
  /**
@@ -291,59 +291,59 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @see #ZERO
   * @since IBM JDK 1.1.8
   */
- public static final com.ibm.math.BigDecimal TEN=new com.ibm.math.BigDecimal(10);
+ public static final com.ibm.icu.math.BigDecimal TEN=new com.ibm.icu.math.BigDecimal(10);
  
  // the rounding modes (copied here for upwards compatibility)
  /**
   * Rounding mode to round to a more positive number.
   * See {@Link MathContext#ROUND_CEILING}.
   */
- public static final int ROUND_CEILING=com.ibm.math.MathContext.ROUND_CEILING;
+ public static final int ROUND_CEILING=com.ibm.icu.math.MathContext.ROUND_CEILING;
  
  /**
   * Rounding mode to round towards zero.
   * See {@Link MathContext#ROUND_DOWN}.
   */
- public static final int ROUND_DOWN=com.ibm.math.MathContext.ROUND_DOWN;
+ public static final int ROUND_DOWN=com.ibm.icu.math.MathContext.ROUND_DOWN;
  
  /**
   * Rounding mode to round to a more negative number.
   * See {@Link MathContext#ROUND_FLOOR}.
   */
- public static final int ROUND_FLOOR=com.ibm.math.MathContext.ROUND_FLOOR;
+ public static final int ROUND_FLOOR=com.ibm.icu.math.MathContext.ROUND_FLOOR;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded down.
   * See {@Link MathContext#ROUND_HALF_DOWN}.
   */
- public static final int ROUND_HALF_DOWN=com.ibm.math.MathContext.ROUND_HALF_DOWN;
+ public static final int ROUND_HALF_DOWN=com.ibm.icu.math.MathContext.ROUND_HALF_DOWN;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded to the nearest even neighbor.
   * See {@Link MathContext#ROUND_HALF_EVEN}.
   */
- public static final int ROUND_HALF_EVEN=com.ibm.math.MathContext.ROUND_HALF_EVEN;
+ public static final int ROUND_HALF_EVEN=com.ibm.icu.math.MathContext.ROUND_HALF_EVEN;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded up.
   * See {@Link MathContext#ROUND_HALF_UP}.
   */
- public static final int ROUND_HALF_UP=com.ibm.math.MathContext.ROUND_HALF_UP;
+ public static final int ROUND_HALF_UP=com.ibm.icu.math.MathContext.ROUND_HALF_UP;
  
  /**
   * Rounding mode to assert that no rounding is necessary.
   * See {@Link MathContext#ROUND_UNNECESSARY}.
   */
- public static final int ROUND_UNNECESSARY=com.ibm.math.MathContext.ROUND_UNNECESSARY;
+ public static final int ROUND_UNNECESSARY=com.ibm.icu.math.MathContext.ROUND_UNNECESSARY;
  
  /**
   * Rounding mode to round away from zero.
   * See {@Link MathContext#ROUND_UP}.
   */
- public static final int ROUND_UP=com.ibm.math.MathContext.ROUND_UP;
+ public static final int ROUND_UP=com.ibm.icu.math.MathContext.ROUND_UP;
  
  /* properties constant private */ // locals
  private static final byte ispos=1; // ind: indicates positive (must be 1)
@@ -356,7 +356,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  private static final int MinArg=-999999999; // minimum argument integer
  private static final int MaxArg=999999999; // maximum argument integer
  
- private static final com.ibm.math.MathContext plainMC=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN); // context for plain unlimited math
+ private static final com.ibm.icu.math.MathContext plainMC=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN); // context for plain unlimited math
  
  /* properties constant private unused */ // present but not referenced
  
@@ -402,7 +402,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *
   * @serial
   */
- private byte form=(byte)com.ibm.math.MathContext.PLAIN; // assumed PLAIN
+ private byte form=(byte)com.ibm.icu.math.MathContext.PLAIN; // assumed PLAIN
  // We only need two bits for this, at present, but use a byte
  // [again, to allow for smooth future extension]
  
@@ -453,7 +453,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * The parameter must not be <code>null</code>.
   * <p>
   * <i>(Note: this constructor is provided only in the
-  * <code>com.ibm.math</code> version of the BigDecimal class.
+  * <code>com.ibm.icu.math</code> version of the BigDecimal class.
   * It would not be present in a <code>java.math</code> version.)</i>
   *
   * @param bd The <code>BigDecimal</code> to be translated.
@@ -779,7 +779,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     // now determine form
     if (hadexp) 
      {
-      form=(byte)com.ibm.math.MathContext.SCIENTIFIC;
+      form=(byte)com.ibm.icu.math.MathContext.SCIENTIFIC;
       // 1999.06.29 check for overflow
       mag=(exp+mant.length)-1; // true exponent in scientific notation
       if ((mag<MinExp)|(mag>MaxExp)) 
@@ -1044,7 +1044,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *         value of this <code>BigDecimal</code>.
   */
  
- public com.ibm.math.BigDecimal abs(){
+ public com.ibm.icu.math.BigDecimal abs(){
   return this.abs(plainMC);
   }
 
@@ -1065,7 +1065,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal abs(com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal abs(com.ibm.icu.math.MathContext set){
   if (this.ind==isneg) 
    return this.negate(set);
   return this.plus(set);
@@ -1088,7 +1088,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *             <code>this+rhs</code>, using fixed point arithmetic.
   */
  
- public com.ibm.math.BigDecimal add(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal add(com.ibm.icu.math.BigDecimal rhs){
   return this.add(rhs,plainMC);
   }
 
@@ -1108,10 +1108,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal add(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
-  com.ibm.math.BigDecimal lhs;
+ public com.ibm.icu.math.BigDecimal add(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
+  com.ibm.icu.math.BigDecimal lhs;
   int reqdig;
-  com.ibm.math.BigDecimal res;
+  com.ibm.icu.math.BigDecimal res;
   byte usel[];
   int usellen;
   byte user[];
@@ -1134,10 +1134,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   /* Quick exit for add floating 0 */
   // plus() will optimize to return same object if possible
   if (lhs.ind==0) 
-   if (set.form!=com.ibm.math.MathContext.PLAIN) 
+   if (set.form!=com.ibm.icu.math.MathContext.PLAIN) 
     return rhs.plus(set);
   if (rhs.ind==0) 
-   if (set.form!=com.ibm.math.MathContext.PLAIN) 
+   if (set.form!=com.ibm.icu.math.MathContext.PLAIN) 
     return lhs.plus(set);
   
   /* Prepare numbers (round, unless unlimited precision) */
@@ -1151,7 +1151,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    // [we could reuse the new LHS for result in this case]
    }
   
-  res=new com.ibm.math.BigDecimal(); // build result here
+  res=new com.ibm.icu.math.BigDecimal(); // build result here
   
   /* Now see how much we have to pad or truncate lhs or rhs in order
      to align the numbers.  If one number is much larger than the
@@ -1281,7 +1281,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
         {
          if (ib>eb) 
           {/* identical */
-           if (set.form!=com.ibm.math.MathContext.PLAIN) 
+           if (set.form!=com.ibm.icu.math.MathContext.PLAIN) 
             return ZERO;
            // [if PLAIN we must do the subtract, in case of 0.000 results]
            break compare;
@@ -1341,7 +1341,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @see    #compareTo(Object)
   */
  
- public int compareTo(com.ibm.math.BigDecimal rhs){
+ public int compareTo(com.ibm.icu.math.BigDecimal rhs){
   return this.compareTo(rhs,plainMC);
   }
 
@@ -1377,10 +1377,10 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public int compareTo(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public int compareTo(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   int thislength=0;
   int i=0;
-  com.ibm.math.BigDecimal newrhs;
+  com.ibm.icu.math.BigDecimal newrhs;
   // rhs=null will raise NullPointerException, as per Comparable interface
   if (set.lostDigits) 
    checkdigits(rhs,set.digits);
@@ -1442,7 +1442,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal divide(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal divide(com.ibm.icu.math.BigDecimal rhs){
   return this.dodivide('D',rhs,plainMC,-1);
   }
 
@@ -1476,9 +1476,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *               represent the result exactly.
   */
  
- public com.ibm.math.BigDecimal divide(com.ibm.math.BigDecimal rhs,int round){
-  com.ibm.math.MathContext set;
-  set=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,round); // [checks round, too]
+ public com.ibm.icu.math.BigDecimal divide(com.ibm.icu.math.BigDecimal rhs,int round){
+  com.ibm.icu.math.MathContext set;
+  set=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,round); // [checks round, too]
   return this.dodivide('D',rhs,set,-1); // take scale from LHS
   }
 
@@ -1515,11 +1515,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *               is insufficient to represent the result exactly.
   */
  
- public com.ibm.math.BigDecimal divide(com.ibm.math.BigDecimal rhs,int scale,int round){
-  com.ibm.math.MathContext set;
+ public com.ibm.icu.math.BigDecimal divide(com.ibm.icu.math.BigDecimal rhs,int scale,int round){
+  com.ibm.icu.math.MathContext set;
   if (scale<0) 
    throw new java.lang.ArithmeticException("Negative scale:"+" "+scale);
-  set=new com.ibm.math.MathContext(0,com.ibm.math.MathContext.PLAIN,false,round); // [checks round]
+  set=new com.ibm.icu.math.MathContext(0,com.ibm.icu.math.MathContext.PLAIN,false,round); // [checks round]
   return this.dodivide('D',rhs,set,scale);
   }
 
@@ -1540,7 +1540,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal divide(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal divide(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   return this.dodivide('D',rhs,set,-1);
   }
 
@@ -1560,7 +1560,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal divideInteger(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal divideInteger(com.ibm.icu.math.BigDecimal rhs){
   // scale 0 to drop .000 when plain
   return this.dodivide('I',rhs,plainMC,0);
   }
@@ -1585,7 +1585,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal divideInteger(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal divideInteger(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   // scale 0 to drop .000 when plain
   return this.dodivide('I',rhs,set,0);
   }
@@ -1604,7 +1604,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *             the maximum of <code>this</code> and <code>rhs</code>.
   */
  
- public com.ibm.math.BigDecimal max(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal max(com.ibm.icu.math.BigDecimal rhs){
   return this.max(rhs,plainMC);
   }
 
@@ -1631,7 +1631,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal max(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal max(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   if ((this.compareTo(rhs,set))>=0) 
    return this.plus(set);
   else 
@@ -1652,7 +1652,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *             the minimum of <code>this</code> and <code>rhs</code>.
   */
  
- public com.ibm.math.BigDecimal min(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal min(com.ibm.icu.math.BigDecimal rhs){
   return this.min(rhs,plainMC);
   }
 
@@ -1679,7 +1679,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal min(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal min(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   if ((this.compareTo(rhs,set))<=0) 
    return this.plus(set);
   else 
@@ -1704,7 +1704,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *             <code>this*rhs</code>, using fixed point arithmetic.
   */
  
- public com.ibm.math.BigDecimal multiply(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal multiply(com.ibm.icu.math.BigDecimal rhs){
   return this.multiply(rhs,plainMC);
   }
 
@@ -1724,15 +1724,15 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal multiply(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
-  com.ibm.math.BigDecimal lhs;
+ public com.ibm.icu.math.BigDecimal multiply(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
+  com.ibm.icu.math.BigDecimal lhs;
   int padding;
   int reqdig;
   byte multer[]=null;
   byte multand[]=null;
   int multandlen;
   int acclen=0;
-  com.ibm.math.BigDecimal res;
+  com.ibm.icu.math.BigDecimal res;
   byte acc[];
   int n=0;
   byte mult=0;
@@ -1785,7 +1785,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    acclen=multandlen;
   
   /* Now the main long multiplication loop */
-  res=new com.ibm.math.BigDecimal(); // where we'll build result
+  res=new com.ibm.icu.math.BigDecimal(); // where we'll build result
   acc=new byte[acclen]; // accumulator, all zeros
   // 1998.07.01: calculate from left to right so that accumulator goes
   // to likely final length on first addition; this avoids a one-digit
@@ -1830,7 +1830,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *         <code>-this</code>.
   */
  
- public com.ibm.math.BigDecimal negate(){
+ public com.ibm.icu.math.BigDecimal negate(){
   return this.negate(plainMC);
   }
 
@@ -1848,12 +1848,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal negate(com.ibm.math.MathContext set){
-  com.ibm.math.BigDecimal res;
+ public com.ibm.icu.math.BigDecimal negate(com.ibm.icu.math.MathContext set){
+  com.ibm.icu.math.BigDecimal res;
   // Originally called minus(), changed to matched Java precedents
   // This simply clones, flips the sign, and possibly rounds
   if (set.lostDigits) 
-   checkdigits((com.ibm.math.BigDecimal)null,set.digits);
+   checkdigits((com.ibm.icu.math.BigDecimal)null,set.digits);
   res=clone(this); // safe copy
   res.ind=(byte)-res.ind;
   return res.finish(set,false);
@@ -1875,7 +1875,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *         <code>+this</code>.
   */
  
- public com.ibm.math.BigDecimal plus(){
+ public com.ibm.icu.math.BigDecimal plus(){
   return this.plus(plainMC);
   }
 
@@ -1897,14 +1897,14 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal plus(com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal plus(com.ibm.icu.math.MathContext set){
   // This clones and forces the result to the new settings
   // May return same object
   if (set.lostDigits) 
-   checkdigits((com.ibm.math.BigDecimal)null,set.digits);
+   checkdigits((com.ibm.icu.math.BigDecimal)null,set.digits);
   // Optimization: returns same object for some common cases
-  if (set.form==com.ibm.math.MathContext.PLAIN) 
-   if (this.form==com.ibm.math.MathContext.PLAIN) 
+  if (set.form==com.ibm.icu.math.MathContext.PLAIN) 
+   if (this.form==com.ibm.icu.math.MathContext.PLAIN) 
     {
      if (this.mant.length<=set.digits) 
       return this;
@@ -1941,7 +1941,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal pow(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal pow(com.ibm.icu.math.BigDecimal rhs){
   return this.pow(rhs,plainMC);
   }
  // The name for this method is inherited from the precedent set by the
@@ -1974,14 +1974,14 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal pow(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal pow(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   int n;
-  com.ibm.math.BigDecimal lhs;
+  com.ibm.icu.math.BigDecimal lhs;
   int reqdig;
   int workdigits=0;
   int L=0;
-  com.ibm.math.MathContext workset;
-  com.ibm.math.BigDecimal res;
+  com.ibm.icu.math.MathContext workset;
+  com.ibm.icu.math.BigDecimal res;
   boolean seenbit;
   int i=0;
   if (set.lostDigits) 
@@ -2013,7 +2013,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   /* Create a copy of set for working settings */
   // Note: no need to check for lostDigits again.
   // 1999.07.17 Note: this construction must follow RHS check
-  workset=new com.ibm.math.MathContext(workdigits,set.form,false,set.roundingMode);
+  workset=new com.ibm.icu.math.MathContext(workdigits,set.form,false,set.roundingMode);
   
   res=ONE; // accumulator
   if (n==0) 
@@ -2058,7 +2058,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal remainder(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal remainder(com.ibm.icu.math.BigDecimal rhs){
   return this.dodivide('R',rhs,plainMC,-1);
   }
 
@@ -2085,7 +2085,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal remainder(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
+ public com.ibm.icu.math.BigDecimal remainder(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
   return this.dodivide('R',rhs,set,-1);
   }
 
@@ -2106,7 +2106,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *             <code>this-rhs</code>, using fixed point arithmetic.
   */
  
- public com.ibm.math.BigDecimal subtract(com.ibm.math.BigDecimal rhs){
+ public com.ibm.icu.math.BigDecimal subtract(com.ibm.icu.math.BigDecimal rhs){
   return this.subtract(rhs,plainMC);
   }
 
@@ -2126,8 +2126,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since  IBM JDK 1.1.8
   */
  
- public com.ibm.math.BigDecimal subtract(com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set){
-  com.ibm.math.BigDecimal newrhs;
+ public com.ibm.icu.math.BigDecimal subtract(com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set){
+  com.ibm.icu.math.BigDecimal newrhs;
   if (set.lostDigits) 
    checkdigits(rhs,set.digits);
   // [add will recheck .. but would report -rhs]
@@ -2187,7 +2187,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  
  public int compareTo(java.lang.Object rhsobj){
   // the cast in the next line will raise ClassCastException if necessary
-  return compareTo((com.ibm.math.BigDecimal)rhsobj,plainMC);
+  return compareTo((com.ibm.icu.math.BigDecimal)rhsobj,plainMC);
   }
 
  /**
@@ -2238,16 +2238,16 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
  
  public boolean equals(java.lang.Object obj){
-  com.ibm.math.BigDecimal rhs;
+  com.ibm.icu.math.BigDecimal rhs;
   int i=0;
   char lca[]=null;
   char rca[]=null;
   // We are equal iff toString of both are exactly the same
   if (obj==null) 
    return false; // not equal
-  if ((!(((obj instanceof com.ibm.math.BigDecimal))))) 
+  if ((!(((obj instanceof com.ibm.icu.math.BigDecimal))))) 
    return false; // not a decimal
-  rhs=(com.ibm.math.BigDecimal)obj; // cast; we know it will work
+  rhs=(com.ibm.icu.math.BigDecimal)obj; // cast; we know it will work
   if (this.ind!=rhs.ind) 
    return false; // different signs never match
   if (((this.mant.length==rhs.mant.length)&(this.exp==rhs.exp))&(this.form==rhs.form)) 
@@ -2358,7 +2358,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
  
  public java.lang.String format(int before,int after){
-  return format(before,after,-1,-1,com.ibm.math.MathContext.SCIENTIFIC,ROUND_HALF_UP);
+  return format(before,after,-1,-1,com.ibm.icu.math.MathContext.SCIENTIFIC,ROUND_HALF_UP);
   }
 
  /**
@@ -2472,7 +2472,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
  
  public java.lang.String format(int before,int after,int explaces,int exdigits,int exformint,int exround){
-  com.ibm.math.BigDecimal num;
+  com.ibm.icu.math.BigDecimal num;
   int mag=0;
   int thisafter=0;
   int lead=0;
@@ -2497,12 +2497,12 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   if (exdigits<(-1)) 
    badarg("format",4,java.lang.String.valueOf(explaces));
   {/*select*/
-  if (exformint==com.ibm.math.MathContext.SCIENTIFIC)
+  if (exformint==com.ibm.icu.math.MathContext.SCIENTIFIC)
    ;
-  else if (exformint==com.ibm.math.MathContext.ENGINEERING)
+  else if (exformint==com.ibm.icu.math.MathContext.ENGINEERING)
    ;
   else if (exformint==(-1))
-   exformint=com.ibm.math.MathContext.SCIENTIFIC;
+   exformint=com.ibm.icu.math.MathContext.SCIENTIFIC;
    // note PLAIN isn't allowed
   else{
    badarg("format",5,java.lang.String.valueOf(exformint));
@@ -2515,7 +2515,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (exround==(-1)) 
      exround=ROUND_HALF_UP;
     else 
-     new com.ibm.math.MathContext(9,com.ibm.math.MathContext.SCIENTIFIC,false,exround);
+     new com.ibm.icu.math.MathContext(9,com.ibm.icu.math.MathContext.SCIENTIFIC,false,exround);
    }
    catch (java.lang.IllegalArgumentException $10){
     badarg("format",6,java.lang.String.valueOf(exround));
@@ -2537,9 +2537,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   /* determine form */
   {setform:do{/*select*/
   if (exdigits==(-1))
-   num.form=(byte)com.ibm.math.MathContext.PLAIN;
+   num.form=(byte)com.ibm.icu.math.MathContext.PLAIN;
   else if (num.ind==iszero)
-   num.form=(byte)com.ibm.math.MathContext.PLAIN;
+   num.form=(byte)com.ibm.icu.math.MathContext.PLAIN;
   else{
    // determine whether triggers
    mag=num.exp+num.mant.length;
@@ -2549,7 +2549,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     if (mag<(-5)) 
      num.form=(byte)exformint;
     else 
-     num.form=(byte)com.ibm.math.MathContext.PLAIN;
+     num.form=(byte)com.ibm.icu.math.MathContext.PLAIN;
   }
   }while(false);}/*setform*/
   
@@ -2561,9 +2561,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    {setafter:for(;;){
     // calculate the current after-length
     {/*select*/
-    if (num.form==com.ibm.math.MathContext.PLAIN)
+    if (num.form==com.ibm.icu.math.MathContext.PLAIN)
      thisafter=(int)-num.exp; // has decimal part
-    else if (num.form==com.ibm.math.MathContext.SCIENTIFIC)
+    else if (num.form==com.ibm.icu.math.MathContext.SCIENTIFIC)
      thisafter=num.mant.length-1;
     else{ // engineering
      lead=(((num.exp+num.mant.length)-1))%3; // exponent to use
@@ -2912,8 +2912,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *           <code>n</code> places to the left.
   */
  
- public com.ibm.math.BigDecimal movePointLeft(int n){
-  com.ibm.math.BigDecimal res;
+ public com.ibm.icu.math.BigDecimal movePointLeft(int n){
+  com.ibm.icu.math.BigDecimal res;
   // very little point in optimizing for shift of 0
   res=clone(this);
   res.exp=res.exp-n;
@@ -2941,8 +2941,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *           <code>n</code> places to the right.
   */
  
- public com.ibm.math.BigDecimal movePointRight(int n){
-  com.ibm.math.BigDecimal res;
+ public com.ibm.icu.math.BigDecimal movePointRight(int n){
+  com.ibm.icu.math.BigDecimal res;
   res=clone(this);
   res.exp=res.exp+n;
   return res.finish(plainMC,false);
@@ -2991,7 +2991,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *               non-zero digits.
   */
  
- public com.ibm.math.BigDecimal setScale(int scale){
+ public com.ibm.icu.math.BigDecimal setScale(int scale){
   return setScale(scale,ROUND_UNNECESSARY);
   }
 
@@ -3028,16 +3028,16 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *               reducing scale would discard non-zero digits.
   */
  
- public com.ibm.math.BigDecimal setScale(int scale,int round){
+ public com.ibm.icu.math.BigDecimal setScale(int scale,int round){
   int ourscale;
-  com.ibm.math.BigDecimal res;
+  com.ibm.icu.math.BigDecimal res;
   int padding=0;
   int newlen=0;
   // at present this naughtily only checks the round value if it is
   // needed (used), for speed
   ourscale=this.scale();
   if (ourscale==scale)  // already correct scale
-   if (this.form==com.ibm.math.MathContext.PLAIN)  // .. and form
+   if (this.form==com.ibm.icu.math.MathContext.PLAIN)  // .. and form
     return this;
   res=clone(this); // need copy
   if (ourscale<=scale) 
@@ -3065,7 +3065,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
       res.exp=res.exp-1;
      }
    }
-  res.form=(byte)com.ibm.math.MathContext.PLAIN; // by definition
+  res.form=(byte)com.ibm.icu.math.MathContext.PLAIN; // by definition
   return res;
   }
 
@@ -3118,7 +3118,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * were used to construct the result.
   * <p>
   * <i>(Note: this method is provided only in the
-  * <code>com.ibm.math</code> version of the BigDecimal class.
+  * <code>com.ibm.icu.math</code> version of the BigDecimal class.
   * It would not be present in a <code>java.math</code> version.)</i>
   *
   * @return The <code>java.math.BigDecimal</code> equal in value
@@ -3143,16 +3143,16 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
  
  public java.math.BigInteger toBigInteger(){
-  com.ibm.math.BigDecimal res=null;
+  com.ibm.icu.math.BigDecimal res=null;
   int newlen=0;
   byte newmant[]=null;
   {/*select*/
-  if ((exp>=0)&(form==com.ibm.math.MathContext.PLAIN))
+  if ((exp>=0)&(form==com.ibm.icu.math.MathContext.PLAIN))
    res=this; // can layout simply
   else if (exp>=0)
    {
     res=clone(this); // safe copy
-    res.form=(byte)com.ibm.math.MathContext.PLAIN; // .. and request PLAIN
+    res.form=(byte)com.ibm.icu.math.MathContext.PLAIN; // .. and request PLAIN
    }
   else{
    { // exp<0; scale to be truncated
@@ -3166,7 +3166,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
       newmant=new byte[newlen]; // [shorter]
       java.lang.System.arraycopy((java.lang.Object)res.mant,0,(java.lang.Object)newmant,0,newlen);
       res.mant=newmant;
-      res.form=(byte)com.ibm.math.MathContext.PLAIN;
+      res.form=(byte)com.ibm.icu.math.MathContext.PLAIN;
       res.exp=0;
      }
    }
@@ -3251,7 +3251,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   */
  
  public java.math.BigInteger unscaledValue(){
-  com.ibm.math.BigDecimal res=null;
+  com.ibm.icu.math.BigDecimal res=null;
   if (exp>=0) 
    res=this;
   else 
@@ -3284,11 +3284,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @since IBM JDK 1.1.8
   */
  
- public static com.ibm.math.BigDecimal valueOf(double dub){
+ public static com.ibm.icu.math.BigDecimal valueOf(double dub){
   // Reminder: a zero double returns '0.0', so we cannot fastpath to
   // use the constant ZERO.  This might be important enough to justify
   // a factory approach, a cache, or a few private constants, later.
-  return new com.ibm.math.BigDecimal((new java.lang.Double(dub)).toString());
+  return new com.ibm.icu.math.BigDecimal((new java.lang.Double(dub)).toString());
   }
 
  /**
@@ -3301,7 +3301,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   *              <code>lint</code>.
   */
  
- public static com.ibm.math.BigDecimal valueOf(long lint){
+ public static com.ibm.icu.math.BigDecimal valueOf(long lint){
   return valueOf(lint,0);
   }
 
@@ -3327,8 +3327,8 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   * @throws NumberFormatException if the scale is negative.
   */
  
- public static com.ibm.math.BigDecimal valueOf(long lint,int scale){
-  com.ibm.math.BigDecimal res=null;
+ public static com.ibm.icu.math.BigDecimal valueOf(long lint,int scale){
+  com.ibm.icu.math.BigDecimal res=null;
   {/*select*/
   if (lint==0)
    res=ZERO;
@@ -3337,7 +3337,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   else if (lint==10)
    res=TEN;
   else{
-   res=new com.ibm.math.BigDecimal(lint);
+   res=new com.ibm.icu.math.BigDecimal(lint);
   }
   }
   if (scale==0) 
@@ -3380,14 +3380,14 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    }
   }/*i*/
   
-  if (form!=com.ibm.math.MathContext.PLAIN) 
+  if (form!=com.ibm.icu.math.MathContext.PLAIN) 
    {/* exponential notation needed */
     sb=new java.lang.StringBuffer(cmant.length+15); // -x.xxxE+999999999
     if (ind==isneg) 
      sb.append('-');
     euse=(exp+cmant.length)-1; // exponent to use
     /* setup sig=significant digits and copy to result */
-    if (form==com.ibm.math.MathContext.SCIENTIFIC) 
+    if (form==com.ibm.icu.math.MathContext.SCIENTIFIC) 
      { // [default]
       sb.append(cmant[0]); // significant character
       if (cmant.length>1)  // have decimal part
@@ -3551,11 +3551,11 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     For extended commentary, see DMSRCN.
   */
  
- private com.ibm.math.BigDecimal dodivide(char code,com.ibm.math.BigDecimal rhs,com.ibm.math.MathContext set,int scale){
-  com.ibm.math.BigDecimal lhs;
+ private com.ibm.icu.math.BigDecimal dodivide(char code,com.ibm.icu.math.BigDecimal rhs,com.ibm.icu.math.MathContext set,int scale){
+  com.ibm.icu.math.BigDecimal lhs;
   int reqdig;
   int newexp;
-  com.ibm.math.BigDecimal res;
+  com.ibm.icu.math.BigDecimal res;
   int newlen;
   byte var1[];
   int var1len;
@@ -3585,7 +3585,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    throw new java.lang.ArithmeticException("Divide by 0"); // includes 0/0
   if (lhs.ind==0) 
    { // 0/x => 0 [possibly with .0s]
-    if (set.form!=com.ibm.math.MathContext.PLAIN) 
+    if (set.form!=com.ibm.icu.math.MathContext.PLAIN) 
      return ZERO;
     if (scale==(-1)) 
      return lhs;
@@ -3630,7 +3630,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     }
   
   /* We need slow division */
-  res=new com.ibm.math.BigDecimal(); // where we'll build result
+  res=new com.ibm.icu.math.BigDecimal(); // where we'll build result
   res.ind=(byte)(lhs.ind*rhs.ind); // final sign (for D/I)
   res.exp=newexp; // initial exponent (for D/I)
   res.mant=new byte[reqdig+1]; // where build the result
@@ -4042,9 +4042,9 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     Arg1 is the BigDecimal to clone (non-null)
     */
  
- private static final com.ibm.math.BigDecimal clone(com.ibm.math.BigDecimal dec){
-  com.ibm.math.BigDecimal copy;
-  copy=new com.ibm.math.BigDecimal();
+ private static final com.ibm.icu.math.BigDecimal clone(com.ibm.icu.math.BigDecimal dec){
+  com.ibm.icu.math.BigDecimal copy;
+  copy=new com.ibm.icu.math.BigDecimal();
   copy.ind=dec.ind;
   copy.exp=dec.exp;
   copy.form=dec.form;
@@ -4057,7 +4057,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     Arg2 is current DIGITS setting
     returns quietly or throws an exception */
  
- private void checkdigits(com.ibm.math.BigDecimal rhs,int dig){
+ private void checkdigits(com.ibm.icu.math.BigDecimal rhs,int dig){
   if (dig==0) 
    return; // don't check if digits=0
   // first check lhs...
@@ -4076,7 +4076,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     Arg1 is requested MathContext [with length and rounding mode]
     returns this, for convenience */
  
- private com.ibm.math.BigDecimal round(com.ibm.math.MathContext set){
+ private com.ibm.icu.math.BigDecimal round(com.ibm.icu.math.MathContext set){
   return round(set.digits,set.roundingMode);
   }
 
@@ -4093,7 +4093,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
     </sgml>
     */
  
- private com.ibm.math.BigDecimal round(int len,int mode){
+ private com.ibm.icu.math.BigDecimal round(int len,int mode){
   int adjust;
   int sign;
   byte oldmant[];
@@ -4257,7 +4257,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
    returns this, for convenience
    */
  
- private com.ibm.math.BigDecimal finish(com.ibm.math.MathContext set,boolean strip){
+ private com.ibm.icu.math.BigDecimal finish(com.ibm.icu.math.MathContext set,boolean strip){
   int d=0;
   int i=0;
   byte newmant[]=null;
@@ -4271,7 +4271,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   /* If strip requested (and standard formatting), remove
      insignificant trailing zeros. */
   if (strip) 
-   if (set.form!=com.ibm.math.MathContext.PLAIN) 
+   if (set.form!=com.ibm.icu.math.MathContext.PLAIN) 
     {
      d=this.mant.length;
      /* see if we need to drop any trailing zeros */
@@ -4290,7 +4290,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
       }
     }
   
-  form=(byte)com.ibm.math.MathContext.PLAIN; // preset
+  form=(byte)com.ibm.icu.math.MathContext.PLAIN; // preset
   
   /* Now check for leading- and all- zeros in mantissa */
   {int $26=this.mant.length;i=0;i:for(;$26>0;$26--,i++){
@@ -4322,7 +4322,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
      if ((mag<MinExp)|(mag>MaxExp)) 
       {overflow:do{
        // possible reprieve if form is engineering
-       if (form==com.ibm.math.MathContext.ENGINEERING) 
+       if (form==com.ibm.icu.math.MathContext.ENGINEERING) 
         {
          sig=mag%3; // leftover
          if (sig<0) 
@@ -4343,7 +4343,7 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
   // Drop through to here only if mantissa is all zeros
   ind=iszero;
   {/*select*/
-  if (set.form!=com.ibm.math.MathContext.PLAIN)
+  if (set.form!=com.ibm.icu.math.MathContext.PLAIN)
    exp=0; // standard result; go to '0'
   else if (exp>0)
    exp=0; // +ve exponent also goes to '0'

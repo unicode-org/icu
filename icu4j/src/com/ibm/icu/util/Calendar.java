@@ -28,7 +28,7 @@
  *
  */
 
-package com.ibm.util;
+package com.ibm.icu.util;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -39,9 +39,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import com.ibm.text.DateFormat;
-import com.ibm.text.DateFormatSymbols;
-import com.ibm.text.SimpleDateFormat;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.SimpleDateFormat;
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
@@ -309,7 +309,7 @@ import com.ibm.text.SimpleDateFormat;
  * <code>HebrewCalendar</code>, <code>IslamicCalendar</code>, and
  * <code>JapaneseCalendar</code>, the subclassing API has been reworked
  * thoroughly. This section details the new subclassing API and other
- * ways in which <code>com.ibm.util.Calendar</code> differs from
+ * ways in which <code>com.ibm.icu.util.Calendar</code> differs from
  * <code>java.util.Calendar</code>.
  * </p>
  * 
@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.22 $ $Date: 2001/10/10 21:26:20 $
+ * @version      $Revision: 1.23 $ $Date: 2002/02/16 03:06:24 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2046,7 +2046,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
-     * The <code>com.ibm.util.Calendar</code> implementation of this method is able to roll
+     * The <code>com.ibm.icu.util.Calendar</code> implementation of this method is able to roll
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>roll</code>.
@@ -2383,7 +2383,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
-     * The <code>com.ibm.util.Calendar</code> implementation of this method is able to add to
+     * The <code>com.ibm.icu.util.Calendar</code> implementation of this method is able to add to
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
      * additional fields in their overrides of <code>add</code>.
@@ -3203,7 +3203,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private void setWeekendData(Locale loc) {
         ResourceBundle resource =
-            ResourceBundle.getBundle("com.ibm.util.resources.CalendarData",
+            ResourceBundle.getBundle("com.ibm.icu.impl.data.CalendarData",
                                      loc);
         String[] data = resource.getStringArray("Weekend");
         weekendOnset       = Integer.parseInt(data[0]);

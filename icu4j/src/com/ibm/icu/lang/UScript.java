@@ -5,13 +5,13 @@
 *******************************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 
-import com.ibm.text.resources.LocaleScript;
+import com.ibm.icu.impl.data.LocaleScript;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import com.ibm.text.UCharacter;
+import com.ibm.icu.lang.UCharacter;
 
 /**
  * A class to reflect UTR #24: Script Names
@@ -768,7 +768,7 @@ public final class UScript {
         return -1;
     }
 
-    private static final String localeScript = "com.ibm.text.resources.LocaleScript";
+    private static final String localeScript = "com.ibm.icu.impl.data.LocaleScript";
     
     /**
      * Helper function to find the code from locale.

@@ -5,21 +5,21 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/FCDBuilder.java,v $ 
-* $Date: 2001/10/30 02:42:49 $ 
-* $Revision: 1.6 $
+* $Date: 2002/02/16 03:05:33 $ 
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
 
-package com.ibm.tools.normalizer;
+package com.ibm.icu.dev.tool.normalizer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
-import com.ibm.util.CharTrie;
-import com.ibm.text.UCharacter;
-import com.ibm.text.UTF16;
-import com.ibm.text.Normalizer;
+import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.Normalizer;
 
 /**
 * Class to generate modified checkFCD data for collation.

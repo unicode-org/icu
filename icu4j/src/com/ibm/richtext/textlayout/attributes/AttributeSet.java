@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AttributeSet.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:33:31 $
+ * @(#)$RCSfile: AttributeSet.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:45 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -13,7 +13,7 @@
  * will not be liable for any third party claims against you.
  */
 // Requires Java2
-package com.ibm.textlayout.attributes;
+package com.ibm.richtext.textlayout.attributes;
 
 import java.util.Hashtable;
 import java.util.Enumeration;

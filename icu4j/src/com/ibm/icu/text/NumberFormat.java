@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2001/10/19 12:35:49 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/02/16 03:06:11 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import com.ibm.util.OverlayBundle;
+import com.ibm.icu.util.OverlayBundle;
 import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
 
 /**
@@ -151,7 +151,7 @@ import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.10 $
+ * @version      $Revision: 1.11 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -187,8 +187,8 @@ public abstract class NumberFormat extends Format{
             return format((BigInteger) number, toAppendTo, pos);
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
-        } else if (number instanceof com.ibm.math.BigDecimal) {
-            return format((com.ibm.math.BigDecimal) number, toAppendTo, pos);
+        } else if (number instanceof com.ibm.icu.math.BigDecimal) {
+            return format((com.ibm.icu.math.BigDecimal) number, toAppendTo, pos);
         } else if (number instanceof Number) {
             return format(((Number)number).doubleValue(), toAppendTo, pos);
         } else {
@@ -238,11 +238,11 @@ public abstract class NumberFormat extends Format{
                       new FieldPosition(0)).toString();
     }
 
-    /* this has been removed pending addition of com.ibm.math packge to ICU4J
+    /* this has been removed pending addition of com.ibm.icu.math packge to ICU4J
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
      */
-    public final String format(com.ibm.math.BigDecimal number) {
+    public final String format(com.ibm.icu.math.BigDecimal number) {
         return format(number, new StringBuffer(),
                       new FieldPosition(0)).toString();
     }
@@ -283,7 +283,7 @@ public abstract class NumberFormat extends Format{
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
      */
-    public abstract StringBuffer format(com.ibm.math.BigDecimal number,
+    public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
    
@@ -384,7 +384,7 @@ public abstract class NumberFormat extends Format{
      * Returns an integer number format for the current default locale. The
      * returned number format is configured to round floating point numbers
      * to the nearest integer using IEEE half-even rounding (see {@link 
-     * com.ibm.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
+     * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
      * and to parse only the integer part of an input string (see {@link
      * #isParseIntegerOnly isParseIntegerOnly}).
      *
@@ -399,7 +399,7 @@ public abstract class NumberFormat extends Format{
      * Returns an integer number format for the specified locale. The
      * returned number format is configured to round floating point numbers
      * to the nearest integer using IEEE half-even rounding (see {@link 
-     * com.ibm.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
+     * com.ibm.icu.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
      * and to parse only the integer part of an input string (see {@link
      * #isParseIntegerOnly isParseIntegerOnly}).
      *
@@ -653,7 +653,7 @@ public abstract class NumberFormat extends Format{
          * it is not a good long-term mechanism.
          * 
          * We should replace this code with a data-driven mechanism
-         * that reads the bundle com.ibm.text.resources.LocaleElements
+         * that reads the bundle com.ibm.icu.impl.data.LocaleElements
          * and parses an exception table that overrides the standard
          * data at java.text.resource.LocaleElements*.java.
          * Alternatively, we should create our own copy of the
@@ -682,7 +682,7 @@ public abstract class NumberFormat extends Format{
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
         if (numberPatterns == null) {
             OverlayBundle resource = new OverlayBundle(new String[]
-                { "com.ibm.text.resources.LocaleElements", RESOURCE_BASE }, forLocale);
+                { "com.ibm.icu.impl.data.LocaleElements", RESOURCE_BASE }, forLocale);
             numberPatterns = resource.getStringArray("NumberPatterns");
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 

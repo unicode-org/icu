@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/29 21:57:48 $
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:06:26 $
+ * $Revision: 1.10 $
  */
-package com.ibm.util;
-import com.ibm.text.*;
+package com.ibm.icu.util;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 import java.util.Date;
 import java.util.Locale;
 
@@ -67,7 +68,7 @@ import java.util.Locale;
  * Calendar FAQ</a></li>
  *
  * </ul>
- * @see com.ibm.text.ChineseDateFormat
+ * @see com.ibm.icu.text.ChineseDateFormat
  * @author Alan Liu
  */
 public class ChineseCalendar extends Calendar {

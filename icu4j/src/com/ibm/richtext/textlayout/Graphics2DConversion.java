@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: Graphics2DConversion.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:30:44 $
+ * @(#)$RCSfile: Graphics2DConversion.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:44 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -13,7 +13,7 @@
  * will not be liable for any third party claims against you.
  */
 // Requires Java2
-package com.ibm.textlayout;
+package com.ibm.richtext.textlayout;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

@@ -5,12 +5,13 @@
 ************************************************************************
 */
 
-package com.ibm.test.normalizer;
+package com.ibm.icu.dev.test.normalizer;
 
 import java.io.*;
-import com.ibm.test.*;
-import com.ibm.text.*;
-import com.ibm.util.Utility;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.Utility;
 
 public class ConformanceTest extends TestFmwk {
 

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: CodeEdit.java,v $ $Revision: 1.2 $ $Date: 2001/09/08 01:14:31 $
+ * @(#)$RCSfile: CodeEdit.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:33 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -22,8 +22,8 @@ import java.awt.Toolkit;
 
 import java.io.File;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
 import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.TextPanel;

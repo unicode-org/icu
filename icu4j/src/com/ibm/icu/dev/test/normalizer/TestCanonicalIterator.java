@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/02/01 02:05:35 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:05:14 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.normalizer;
+package com.ibm.icu.dev.test.normalizer;
 
-import com.ibm.test.*;
-import com.ibm.text.*;
-import com.ibm.util.Utility;
+import com.ibm.icu.dev.test.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.Utility;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.*;

@@ -5,18 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2000/11/28 00:50:13 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/02/16 03:06:28 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
-package com.ibm.util;
+package com.ibm.icu.util;
 
-import com.ibm.util.Calendar;
+import com.ibm.icu.util.Calendar;
 import java.util.Date;
-import com.ibm.util.GregorianCalendar;
+import com.ibm.icu.util.GregorianCalendar;
 import java.util.Locale;
-import com.ibm.util.CalendarAstronomer;
+import com.ibm.icu.util.CalendarAstronomer;
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>
@@ -68,7 +68,7 @@ import com.ibm.util.CalendarAstronomer;
  * fixed-cycle civil calendar is used.  However, if <code>setCivil(false)</code>
  * is called, an approximation of the true lunar calendar will be used.
  *
- * @see com.ibm.util.GregorianCalendar
+ * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu

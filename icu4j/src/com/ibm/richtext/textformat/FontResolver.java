@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: FontResolver.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: FontResolver.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:43 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -15,10 +15,10 @@
 // Requires Java2
 package com.ibm.richtext.textformat;
 
-import com.ibm.textlayout.attributes.AttributeMap;
-import com.ibm.textlayout.attributes.TextAttribute;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.TextAttribute;
 
-import com.ibm.textlayout.FontUtils;
+import com.ibm.richtext.textlayout.FontUtils;
 
 import java.util.Hashtable;
 import java.awt.Font;

@@ -1,6 +1,6 @@
 
-package com.ibm.test.calendar;
-import com.ibm.util.*;
+package com.ibm.icu.dev.test.calendar;
+import com.ibm.icu.util.*;
 import java.util.Date;
 
 public class ChineseTestCase extends TestCase {

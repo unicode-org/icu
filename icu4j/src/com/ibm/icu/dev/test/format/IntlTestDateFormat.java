@@ -1,7 +1,7 @@
 /***************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormat.java,v $ 
- * $Date: 2001/10/23 13:11:35 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:05:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -27,17 +27,18 @@ attribution to Taligent may not be removed.
   Taligent is a registered trademark of Taligent, Inc.
 */
 
-package com.ibm.icu.test.format;
+package com.ibm.icu.dev.test.format;
 
-import com.ibm.text.*;
-import com.ibm.util.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
+import com.ibm.icu.util.*;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Date;
 
-public class IntlTestDateFormat extends com.ibm.test.TestFmwk {
+public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
     // Values in milliseconds (== Date)
     private static final long ONESECOND = 1000;
     private static final long ONEMINUTE = 60 * ONESECOND;

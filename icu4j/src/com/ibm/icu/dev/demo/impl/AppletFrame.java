@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/AppletFrame.java,v $ 
- * $Date: 2001/12/03 17:49:03 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/02/16 03:04:56 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.demo.components;
+package com.ibm.icu.dev.demo.impl;
 import java.applet.*;
 import java.net.URL;
 import java.util.Enumeration;
@@ -37,7 +37,7 @@ import java.io.IOException;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.3 $ $Date: 2001/12/03 17:49:03 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:04:56 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 

@@ -5,21 +5,22 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/15 02:53:32 $ 
-* $Revision: 1.22 $
+* $Date: 2002/02/16 03:05:56 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
 
 
-package com.ibm.text;
+package com.ibm.icu.lang;
 
 import java.util.Locale;
-import com.ibm.util.Utility;
+import com.ibm.icu.impl.Trie;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.text.BreakIterator;
-import com.ibm.text.RuleBasedBreakIterator;
-
+import com.ibm.icu.util.Utility;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.text.UTF16;
 /**
 * <p>
 * The UCharacter class provides extensions to the 
@@ -42,12 +43,12 @@ import com.ibm.text.RuleBasedBreakIterator;
 * <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.<br>
 * Otherwise, another method would be to copy the files uprops.dat and 
 * unames.dat from the icu4j source subdirectory 
-* <i>$ICU4J_SRC/src/com/ibm/text/resources</i> to your class directory 
-* <i>$ICU4J_CLASS/com/ibm/text/resources</i>.
+* <i>$ICU4J_SRC/src/com.ibm.icu.impl.data</i> to your class directory 
+* <i>$ICU4J_CLASS/com.ibm.icu.impl.data</i>.
 * </p>
 * <p>
 * For more information about the data file format, please refer to 
-* <a href=http://oss.software.ibm.com/icu4j/doc/com/ibm/text/ReadMe.html>
+* <a href=http://oss.software.ibm.com/icu4j/doc/com.ibm.icu.text/ReadMe.html>
 * Read Me</a>.
 * </p>
 * <p>
@@ -86,13 +87,13 @@ import com.ibm.text.RuleBasedBreakIterator;
 *      </ul>
 * <p>
 * Further detail differences can be determined from the program 
-*        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/test/text/UCharacterCompare.java>
-*        com.ibm.icu.test.text.UCharacterCompare</a>
+*        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com.ibm.icu.dev.test/text/UCharacterCompare.java>
+*        com.ibm.icu.dev.test.text.UCharacterCompare</a>
 * </p>
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.text.UCharacterCategory
-* @see com.ibm.text.UCharacterDirection
+* @see com.ibm.icu.text.UCharacterCategory
+* @see com.ibm.icu.text.UCharacterDirection
 */
 
 public final class UCharacter
@@ -1467,8 +1468,8 @@ public final class UCharacter
 	/**
     * Shift and mask value for surrogates
     */
-	protected static final int LEAD_SURROGATE_SHIFT_ = 10;
-	protected static final int TRAIL_SURROGATE_MASK_ = 0x3FF;
+	public static final int LEAD_SURROGATE_SHIFT_ = 10;
+	public static final int TRAIL_SURROGATE_MASK_ = 0x3FF;
                               
     // protected methods -------------------------------------------------
       
@@ -1480,28 +1481,26 @@ public final class UCharacter
     * @param trail trailing surrogate character
     * @return code point of the supplementary character
     */
-    protected static int getRawSupplementary(char lead, char trail)
+    public static int getRawSupplementary(char lead, char trail)
     {
         return (lead << LEAD_SURROGATE_SHIFT_) + trail + SURROGATE_OFFSET_;
     }
     
-    // TODO: Make public API
     /**
      * returns the maximum amount that a single character will expand in
      * upper, lower, title, or fold case operations
      */
-    static int getMaxCaseExpansion() {
+    public static int getMaxCaseExpansion() {
         return 10;
     }
-    
-    // TODO: Make public API?
+
     /**
      * produces the result of converting a single (possibly surrogate)
      * character in a string.
      * @param result 
      * @return length of returned value IF there is a change. -1 otherwise.
      */
-    static int toLowerCase(Locale locale, String str, int offset, 
+    public static int toLowerCase(Locale locale, String str, int offset, 
                            char[] result) {
         // NOTE: we have to keep the original string around, because it is 
         // used for the context
@@ -1535,14 +1534,14 @@ public final class UCharacter
         return -1;
     }
     
-    // TODO: Make public API?
+ 
     /**
      * produces the result of converting a single (possibly surrogate)
      * character in a string.
      * @param result 
      * @return length of returned value IF there is a change. -1 otherwise.
      */
-    static int toUpperCase(Locale locale, String str, int offset, 
+    public static int toUpperCase(Locale locale, String str, int offset, 
                            char[] result) {
         // NOTE: we have to keep the original string around, because it is 
         // used for the context
@@ -1575,15 +1574,14 @@ public final class UCharacter
         }
         return -1;
     }
-  
-    // TODO: Make public API?
+
     /**
      * produces the result of converting a single (possibly surrogate)
      * character in a string.
      * @param result 
      * @return length of returned value IF there is a change. -1 otherwise.
      */
-    static int toTitleCase(Locale locale, String str, int offset, 
+    public static int toTitleCase(Locale locale, String str, int offset, 
                            char[] result) {
         // NOTE: we have to keep the original string around, because it is 
         // used for the context

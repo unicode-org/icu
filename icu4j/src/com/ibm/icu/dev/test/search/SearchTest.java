@@ -5,19 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2001/12/03 21:48:03 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/02/16 03:05:17 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
-package com.ibm.test.search;
+package com.ibm.icu.dev.test.search;
 
 import java.text.*;
 import java.util.*;
 
-//import com.ibm.text.*;
-import com.ibm.text.SearchIterator;
-import com.ibm.text.StringSearch;
+import com.ibm.icu.text.SearchIterator;
+import com.ibm.icu.text.StringSearch;
 
 /**
  * Unit and regression tests for the StringSearch and SearchIterator classes.
@@ -25,7 +24,7 @@ import com.ibm.text.StringSearch;
  * and displaying the output.  Basically, any method here that starts with
  * <code>Test</code> is run as a test.
  */
-public class SearchTest extends com.ibm.test.TestFmwk {
+public class SearchTest extends com.ibm.icu.dev.test.TestFmwk {
     public static void main(String[] args) throws Exception {
         new SearchTest().run(args);
     }

@@ -4,13 +4,13 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2001/10/30 02:42:49 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/02/16 03:05:06 $ 
+ * $Revision: 1.6 $
  *******************************************************************************
  */
-package com.ibm.test.calendar;
-import com.ibm.test.TestFmwk;
-import com.ibm.util.*;
+package com.ibm.icu.dev.test.calendar;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.*;
 import java.text.*;
 import java.util.Date;
 import java.util.Locale;

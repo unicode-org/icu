@@ -5,16 +5,16 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java,v $ 
-* $Date: 2001/03/23 19:52:03 $ 
-* $Revision: 1.6 $
+* $Date: 2002/02/16 03:05:23 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.test.text;
+package com.ibm.icu.dev.test.text;
 
-import com.ibm.text.UCharacter;
-import com.ibm.text.UCharacterCategory;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Hashtable;
@@ -25,7 +25,7 @@ import java.util.Enumeration;
 * UCharacter
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.text.UCharacter
+* @see com.ibm.icu.text.UCharacter
 */
 
 public final class UCharacterCompare

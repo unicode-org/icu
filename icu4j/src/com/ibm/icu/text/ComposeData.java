@@ -6,12 +6,12 @@
 * > THIS FILE WAS MACHINE GENERATED <
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
-* Tool: com.ibm.text.Normalizer
+* Tool: com.ibm.icu.text.Normalizer
 * Creation date: Fri Jul 21 13:41:45 PDT 2000
 */
 
-package com.ibm.text;
-import com.ibm.util.*;
+package com.ibm.icu.text;
+import com.ibm.icu.util.*;
 
 class ComposeData {
     static final short BASE_COUNT = 748;

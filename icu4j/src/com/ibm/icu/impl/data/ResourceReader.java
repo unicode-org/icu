@@ -1,4 +1,4 @@
-package com.ibm.text.resources;
+package com.ibm.icu.impl.data;
 import java.io.*;
 
 /**
@@ -11,7 +11,7 @@ import java.io.*;
  * object the encoding is specified.
  *
  * <p>Although this class has a public API, it is designed for
- * internal use by classes in the <code>com.ibm.text</code> package.
+ * internal use by classes in the <code>com.ibm.icu.text</code> package.
  *
  * @author Alan Liu
  */

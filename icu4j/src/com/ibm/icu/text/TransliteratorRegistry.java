@@ -8,11 +8,11 @@
 **********************************************************************
 */
 
-package com.ibm.text;
+package com.ibm.icu.text;
 import java.util.*;
 import java.io.UnsupportedEncodingException;
-import com.ibm.text.resources.ResourceReader;
-import com.ibm.util.CaseInsensitiveString;
+import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.util.CaseInsensitiveString;
 
 class TransliteratorRegistry {
 
@@ -34,7 +34,7 @@ class TransliteratorRegistry {
      * Resource bundle containing locale-specific transliterator data.
      */
     private static final String RB_LOCALE_ELEMENTS =
-        "com.ibm.text.resources.LocaleElements";
+        "com.ibm.icu.impl.data.LocaleElements";
 
     /**
      * Locale indicating the root.

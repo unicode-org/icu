@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/02/01 02:05:35 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/16 03:06:23 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
-import com.ibm.util.Utility;
+import com.ibm.icu.util.Utility;
 //import java.text.*;
 import java.util.*;
 import java.io.*;

@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
- * $Date: 2001/10/30 02:42:49 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/16 03:04:55 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 
-package com.ibm.demo.holiday;
+package com.ibm.icu.dev.demo.holiday;
 
-import com.ibm.demo.*;
+import com.ibm.icu.dev.demo.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,15 +22,15 @@ import java.net.*;
 import java.io.*;
 
 //import java.text.SimpleDateFormat;
-import com.ibm.text.SimpleDateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
 //import java.util.SimpleTimeZone;
-import com.ibm.util.SimpleTimeZone;
+import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Locale;
 import java.util.Vector;
 import java.util.Date;
 
-import com.ibm.util.*;
+import com.ibm.icu.util.*;
 
 /**
  * CalendarDemo demonstrates how Calendar works.
@@ -440,7 +440,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	repaint();
     	}
 
-    	public com.ibm.util.Calendar getCalendar() {
+    	public com.ibm.icu.util.Calendar getCalendar() {
         	return fCalendar;
     	}
 

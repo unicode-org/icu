@@ -5,12 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2000/03/10 04:07:21 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:06:09 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.text;
+package com.ibm.icu.text;
 
 import java.text.*;
 import java.util.Vector;
@@ -21,7 +21,7 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:21 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:09 $
  */
 final class NFRuleSet {
     //-----------------------------------------------------------------------

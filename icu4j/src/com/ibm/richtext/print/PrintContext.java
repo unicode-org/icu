@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: PrintContext.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:44:33 $
+ * @(#)$RCSfile: PrintContext.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:34 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -17,7 +17,7 @@
 package com.ibm.richtext.print;
 
 import com.ibm.richtext.styledtext.MConstText;
-import com.ibm.textlayout.attributes.AttributeMap;
+import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import java.awt.Frame;
 import java.awt.Graphics;

@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/compression/CompressionTableGenerator.java,v $ 
- * $Date: 2000/03/10 04:17:56 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/02/16 03:05:25 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
-package com.ibm.tools.compression;
+package com.ibm.icu.dev.tool.compression;
 
-import com.ibm.text.*;
+import com.ibm.icu.lang.*;
+import com.ibm.icu.text.*;
 
 /**
  * Utility class to generate the tables used by the SCSU interface and

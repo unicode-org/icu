@@ -5,13 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/15 02:53:32 $ 
-* $Revision: 1.22 $
+* $Date: 2002/02/16 03:05:24 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.test.text;
+package com.ibm.icu.dev.test.text;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,13 +19,13 @@ import java.io.FileNotFoundException;
 import java.util.Locale;
 import java.io.File;
 import java.util.Vector;
-import com.ibm.test.TestFmwk;
-import com.ibm.text.UCharacter;
-import com.ibm.text.UCharacterCategory;
-import com.ibm.text.UCharacterDirection;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
+import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.text.UTF16;
-import com.ibm.util.Utility;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.Utility;
 
 /**
 * Testing class for UCharacter
@@ -424,7 +424,7 @@ public final class UCharacterTest extends TestFmwk
   * path is provided relative to the src path, however the user could 
   * set a system property to change the directory path.<br>
   * e.g. java -DUnicodeData="data_directory_path" 
-  * com.ibm.test.text.UCharacterTest
+  * com.ibm.icu.dev.test.text.UCharacterTest
   */
   public void TestUnicodeData()
   {
@@ -536,7 +536,7 @@ public final class UCharacterTest extends TestFmwk
       errln("FAIL UnicodeData.txt not found\n" +
             "Configure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.test.text.UCharacterTest");
+            "com.ibm.icu.dev.test.text.UCharacterTest");
     }
     catch (Exception e)
     {
@@ -797,7 +797,7 @@ public final class UCharacterTest extends TestFmwk
   * This method reads in SpecialCasing.txt file for testing purposes. 
   * A default path is provided relative to the src path, however the user 
   * could set a system property to change the directory path.<br>
-  * e.g. java -DUnicodeData="data_dir_path" com.ibm.test.text.UCharacterTest
+  * e.g. java -DUnicodeData="data_dir_path" com.ibm.icu.dev.test.text.UCharacterTest
   */
   public void TestSpecialCasing()
   {
@@ -935,7 +935,7 @@ public final class UCharacterTest extends TestFmwk
       errln("FAIL SpecialCasing.txt not found\n" +
             "Configure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
-            "com.ibm.icu.test.text.UCharacterTest");
+            "com.ibm.icu.dev.test.text.UCharacterTest");
     }
     catch (Exception e)
     {
