@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2003/10/02 20:50:26 $
- * $Revision: 1.18 $
+ * $Date: 2003/12/02 01:34:31 $
+ * $Revision: 1.19 $
  */
 package com.ibm.icu.util;
 import com.ibm.icu.text.*;
@@ -754,7 +754,7 @@ public class ChineseCalendar extends Calendar {
      * @param eyear the extended year
      * @param month the zero-based month.  The month is also determined
      * by reading the IS_LEAP_MONTH field.
-     * @param return the Julian day number of the day before the first
+     * @return the Julian day number of the day before the first
      * day of the given month and year
      * @draft ICU 2.4
      */

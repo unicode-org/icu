@@ -1741,7 +1741,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     /**
      * Sets this Calendar's current time from the given long value.
-     * @param date the new time in UTC milliseconds from the epoch.
+     * @param millis the new time in UTC milliseconds from the epoch.
      * @stable ICU 2.0
      */
     public void setTimeInMillis( long millis ) {
@@ -2950,14 +2950,14 @@ public abstract class Calendar implements Serializable, Cloneable {
      *              {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
      *              Should be 1 for the first day of the period.
      *
-     * @param knownDayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR}
+     * @param dayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR}
      *              or {@link #DAY_OF_MONTH DAY_OF_MONTH} for a day in the period whose
      *              {@link #DAY_OF_WEEK DAY_OF_WEEK} is specified by the
-     *              <code>knownDayOfWeek</code> parameter.
+     *              <code>dayOfWeek</code> parameter.
      *              Should be 1 for first day of period.
      *
-     * @param knownDayOfWeek  The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
-     *              corresponding to the <code>knownDayOfPeriod</code> parameter.
+     * @param dayOfWeek  The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     *              corresponding to the <code>dayOfPeriod</code> parameter.
      *              1-based with 1=Sunday.
      *
      * @return      The week number (one-based), or zero if the day falls before
@@ -3007,7 +3007,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      *                      {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
      *                      Should be 1 for the first day of the period.
      *
-     * @param dayofWeek     The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     * @param dayOfWeek     The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
      *                      corresponding to the <code>dayOfPeriod</code> parameter.
      *                      1-based with 1=Sunday.
      *
@@ -4341,7 +4341,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param useMonth if false, compute the day before the first day of
      * the given year, otherwise, compute the day before the first day of
      * the given month
-     * @param return the Julian day number of the day before the first
+     * @return the Julian day number of the day before the first
      * day of the given month and year
      * @stable ICU 2.0
      */

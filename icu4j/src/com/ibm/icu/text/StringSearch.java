@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/11/18 17:53:53 $ 
- * $Revision: 1.27 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -165,7 +165,7 @@ public final class StringSearch extends SearchIterator
      * @param pattern text to look for.
      * @param target target text to search for pattern. 
      * @param collator RuleBasedCollator that defines the language rules
-     * @param breaker A {@link BreakIterator} that is used to determine the 
+     * @param breakiter A {@link BreakIterator} that is used to determine the 
      *                boundaries of a logical match. This argument can be null.
      * @exception IllegalArgumentException thrown when argument target is null,
      *            or of length 0

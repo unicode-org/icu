@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AttributeMap.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:45 $
+ * @(#)$RCSfile: AttributeMap.java,v $ $Revision: 1.3 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -95,7 +95,7 @@ public final class AttributeMap implements java.util.Map,
     /**
      * Create an AttributeMap with the same key-value
      * entries as the given Hashtable.
-     * @param table a Hashtable whose key-value entries will
+     * @param hashtable a Hashtable whose key-value entries will
      *      become the entries for this AttributeMap. <code>table</code>
      *      is not modified.
      */
@@ -107,7 +107,7 @@ public final class AttributeMap implements java.util.Map,
     /**
      * Create an AttributeMap with a single entry of
      * <code>{attribute, value}</code>.
-     * @param attribute the key in this AttributeMap's single entry
+     * @param key the key in this AttributeMap's single entry
      * @param value the value in this AttributeMap's single entry
      */
     public AttributeMap(Object key, Object value) {
@@ -193,7 +193,7 @@ public final class AttributeMap implements java.util.Map,
 
     /**
      * Return true if the given value is in this AttributeMap.
-     * @param key the value to test
+     * @param value the value to test
      * @return true if <code>value</code> is in this AttributeMap
      */
     public boolean containsValue(Object value) {

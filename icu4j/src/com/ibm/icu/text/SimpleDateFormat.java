@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/10/02 20:50:25 $ 
- * $Revision: 1.24 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -407,8 +407,8 @@ public class SimpleDateFormat extends DateFormat {
      * since January 1, 1970, 00:00:00 GMT.
      * <p>Example: using the US locale:
      * "yyyy.MM.dd G 'at' HH:mm:ss zzz" ->> 1996.07.10 AD at 15:08:56 PDT
-     * @param date the date-time value to be formatted into a date-time string.
-     * @param toAppendTo where the new date-time text is to be appended.
+     * @param cal the calendar whose date-time value is to be formatted into a date-time string
+     * @param toAppendTo where the new date-time text is to be appended
      * @param pos the formatting position. On input: an alignment field,
      * if desired. On output: the offsets of the alignment field.
      * @return the formatted date-time string.
@@ -1403,7 +1403,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Allows you to set the date/time formatting data.
-     * @param newFormatData the given date-time formatting data.
+     * @param newFormatSymbols the new symbols
      * @stable ICU 2.0
      */
     public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)

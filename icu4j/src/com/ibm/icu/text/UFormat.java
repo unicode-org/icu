@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UFormat.java,v $ 
- * $Date: 2003/12/01 23:39:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -33,7 +33,6 @@ public abstract class UFormat extends Format {
      * @param type The type fo the locale that should returned.
      * @return ULocale object for the type requested
      * @see ULocale
-     * @see ULocale#ULocaleDataType
      * @draft ICU 2.8
      */
     public abstract ULocale getLocale(ULocale.ULocaleDataType type);

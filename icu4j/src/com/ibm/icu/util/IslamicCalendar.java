@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2003/10/02 20:50:26 $ 
- * $Revision: 1.21 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -485,8 +485,8 @@ public class IslamicCalendar extends Calendar {
     /**
      * Return the length (in days) of the given month.
      *
-     * @param year  The hijri year
-     * @param year  The hijri month, 0-based
+     * @param extendedYear  The hijri year
+     * @param month The hijri month, 0-based
      * @draft ICU 2.4
      */
     protected int handleGetMonthLength(int extendedYear, int month) {

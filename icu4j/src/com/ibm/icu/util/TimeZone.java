@@ -495,7 +495,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * associated with the given country.  These IDs may be passed to
      * <code>get()</code> to construct the corresponding TimeZone
      * object.
-     * @param a two-letter ISO 3166 country code, or <code>null</code>
+     * @param country a two-letter ISO 3166 country code, or <code>null</code>
      * to return zones not associated with any country
      * @return an array of IDs for system TimeZones in the given
      * country.  If there are none, return a zero-length array.

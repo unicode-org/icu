@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
- * $Date: 2003/11/21 22:43:41 $
- * $Revision: 1.4 $ 
+ * $Date: 2003/12/02 01:34:32 $
+ * $Revision: 1.5 $ 
  *
  *****************************************************************************************
  */
@@ -300,7 +300,7 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertToASCII(UCharacterIterator srcIter, int options)
+    public static StringBuffer convertToASCII(UCharacterIterator src, int options)
                 throws StringPrepParseException{
         
         boolean[] caseFlags = null;
@@ -315,7 +315,7 @@ public final class IDNA {
     
         int failPos = -1;
         // step 2
-        StringBuffer processOut = singleton.namePrep.prepare(srcIter,options);
+        StringBuffer processOut = singleton.namePrep.prepare(src, options);
         int poLen = processOut.length();
         StringBuffer dest = new StringBuffer();
         // step 3 & 4
@@ -401,7 +401,7 @@ public final class IDNA {
      * and then convert. This function does not offer that level of granularity. The options once  
      * set will apply to all labels in the domain name
      *
-     * @param iter      The input string as UCharacterIterator to be processed
+     * @param src       The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -419,9 +419,9 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNToASCII(UCharacterIterator iter,int options)
+    public static StringBuffer convertIDNToASCII(UCharacterIterator src, int options)
             throws StringPrepParseException{
-        return convertIDNToASCII(iter.getText(), options);          
+        return convertIDNToASCII(src.getText(), options);          
     }
     
     /**
@@ -436,7 +436,7 @@ public final class IDNA {
      * and then convert. This function does not offer that level of granularity. The options once  
      * set will apply to all labels in the domain name
      *
-     * @param src       The input string as StringBuffer to be processed
+     * @param src       The input string as a StringBuffer to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -454,9 +454,9 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNToASCII(StringBuffer str,int options)
+    public static StringBuffer convertIDNToASCII(StringBuffer src, int options)
             throws StringPrepParseException{
-            return convertIDNToASCII(str.toString(), options);          
+            return convertIDNToASCII(src.toString(), options);          
     }
     
     /**
@@ -581,7 +581,7 @@ public final class IDNA {
      * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
      * "www","example", and "com".
      * 
-     * @param iter       The input string as UCharacterIterator to be processed
+     * @param src       The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -599,7 +599,7 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertToUnicode(UCharacterIterator iter, int options)
+    public static StringBuffer convertToUnicode(UCharacterIterator src, int options)
            throws StringPrepParseException{
         
         boolean[] caseFlags = null;
@@ -614,26 +614,26 @@ public final class IDNA {
         
         int failPos = -1;
         int ch;
-        int saveIndex = iter.getIndex();
+        int saveIndex = src.getIndex();
         // step 1: find out if all the codepoints in src are ASCII  
-        while((ch=iter.next())!= UCharacterIterator.DONE){
+        while((ch=src.next())!= UCharacterIterator.DONE){
             if(ch>0x7F){
                 srcIsASCII = false;
             }
             if((srcIsLDH = isLDHChar(ch))==false){
-                failPos = iter.getIndex();
+                failPos = src.getIndex();
             }
         }
         StringBuffer processOut;
         
         if(srcIsASCII == false){
             // step 2: process the string
-            iter.setIndex(saveIndex);
-            processOut = singleton.namePrep.prepare(iter,options);
+            src.setIndex(saveIndex);
+            processOut = singleton.namePrep.prepare(src,options);
 
         }else{
             //just point to source
-            processOut = new StringBuffer(iter.getText());
+            processOut = new StringBuffer(src.getText());
         }
         // TODO:
         // The RFC states that 
@@ -689,7 +689,7 @@ public final class IDNA {
                 }
             }
             // just return the source
-            return new StringBuffer(iter.getText());
+            return new StringBuffer(src.getText());
         }  
     }
     
@@ -702,7 +702,7 @@ public final class IDNA {
      * and then convert. This function does not offer that level of granularity. The options once  
      * set will apply to all labels in the domain name
      *
-     * @param iter       The input string as UCharacterIterator to be processed
+     * @param src       The input string as UCharacterIterator to be processed
      * @param options   A bit set of options:
      *  - IDNA.DEFAULT              Use default options, i.e., do not process unassigned code points
      *                              and do not use STD3 ASCII rules
@@ -720,9 +720,9 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNToUnicode(UCharacterIterator iter, int options)
+    public static StringBuffer convertIDNToUnicode(UCharacterIterator src, int options)
         throws StringPrepParseException{
-        return convertIDNToUnicode(iter.getText(), options);
+        return convertIDNToUnicode(src.getText(), options);
     }
     
     /**
@@ -752,9 +752,9 @@ public final class IDNA {
      * @throws ParseException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNToUnicode(StringBuffer str, int options)
+    public static StringBuffer convertIDNToUnicode(StringBuffer src, int options)
         throws StringPrepParseException{
-        return convertIDNToUnicode(str.toString(), options);
+        return convertIDNToUnicode(src.toString(), options);
     }
     
     /**
@@ -912,13 +912,13 @@ public final class IDNA {
      * @draft ICU 2.8
      */
     //  TODO: optimize
-    public static int compare(UCharacterIterator i1, UCharacterIterator i2, int options)
+    public static int compare(UCharacterIterator s1, UCharacterIterator s2, int options)
         throws StringPrepParseException{
-        if(i1==null || i2 == null){
+        if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
-        StringBuffer s1Out = convertIDNToASCII(i1.getText(), options);
-        StringBuffer s2Out = convertIDNToASCII(i2.getText(), options);
+        StringBuffer s1Out = convertIDNToASCII(s1.getText(), options);
+        StringBuffer s2Out = convertIDNToASCII(s2.getText(), options);
         return compareCaseInsensitiveASCII(s1Out,s2Out);
     }
 }

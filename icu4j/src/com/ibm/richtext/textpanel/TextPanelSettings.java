@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextPanelSettings.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:48 $
+ * @(#)$RCSfile: TextPanelSettings.java,v $ $Revision: 1.3 $ $Date: 2003/12/02 01:34:32 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -179,7 +179,7 @@ public final class TextPanelSettings implements Cloneable, Serializable {
 
     /**
      * Set the editable setting.
-     * @param selectable the selectable setting.  If true,
+     * @param editable the editable setting.  If true,
      * the selectable setting is also set to true.
      */
     public void setEditable(boolean editable) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2003/06/18 00:58:21 $ 
-* $Revision: 1.32 $
+* $Date: 2003/12/02 01:34:31 $ 
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -413,7 +413,7 @@ public final class UTF16
      * If a validity check is required, use <code>
      * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on 
      * char32 before calling.
-     * @param ch the input codepoint.
+     * @param char32 the input codepoint.
      * @return 2 if is in supplementary space, otherwise 1. 
      * @stable ICU 2.1
      */
@@ -565,7 +565,7 @@ public final class UTF16
 
     /**
      * Determines whether the code value is a surrogate.
-     * @param ch the input character.
+     * @param char16 the input character.
      * @return true iff the input character is a surrogate.
      * @stable ICU 2.1
      */
@@ -1288,7 +1288,7 @@ public final class UTF16
 
     /**
      * Shifts offset16 by the argument number of codepoints
-     * @param target string buffer
+     * @param source string buffer
      * @param offset16 UTF16 position to shift
      * @param shift32 number of codepoints to shift
      * @return new shifted offset16 
@@ -1325,7 +1325,7 @@ public final class UTF16
 
     /**
      * Shifts offset16 by the argument number of codepoints within a subarray.
-     * @param target char array
+     * @param source char array
      * @param start position of the subarray to be performed on
      * @param limit position of the subarray to be performed on
      * @param offset16 UTF16 position to shift relative to start
@@ -2011,7 +2011,7 @@ public final class UTF16
     /**
      * Returns a new UTF16 format Unicode string resulting from replacing all 
      * occurrences of oldStr in source with newStr. 
-     * If the character oldStr does not occur in the UTF16 format Unicode
+     * If the string oldStr does not occur in the UTF16 format Unicode
      * string source, then source will be returned. Otherwise, a new String 
      * object is created that represents a codepoint sequence identical to the 
      * codepoint sequence represented by source, except that every occurrence 
@@ -2021,7 +2021,7 @@ public final class UTF16
      * UTF16.replace("mesquite in your cellar", "e", "o");<br>
      *        returns "mosquito in your collar"<br>
      * UTF16.replace("mesquite in your cellar", "mesquite", "cat");<br>
-     *        returns "cat in your collar"<br>
+     *        returns "cat in your cellar"<br>
      * UTF16.replace("JonL", "q", "x");<br>
      *        returns "JonL" (no change)<br>
      * UTF16.replace("Supplementary character \ud800\udc00", "\ud800\udc00",
@@ -2032,13 +2032,13 @@ public final class UTF16
      * </p>
      * Note this method is provided as support to jdk 1.3, which does not 
      * support supplementary characters to its fullest.
-     * @param source UTF16 format Unicode string which the codepoint 
+     * @param source UTF16 format Unicode string which the 
      *               replacements will be based on.
-     * @param oldChar32 non-zero old codepoint to be replaced.
-     * @param newChar32 the new codepoint to replace oldChar32
+     * @param oldStr non-zero-length string to be replaced.
+     * @param newStr the new string to replace oldStr
      * @return new String derived from source by replacing every occurrence 
-     *         of oldChar32 with newChar32, unless when no oldChar32 is found
-     *         in source then source will be returned.
+     *         of oldStr with newStr.  When no oldStr is found
+     *         in source, then source will be returned.
      * @stable ICU 2.6
      */
     public static String replace(String source, String oldStr, 
@@ -2413,7 +2413,7 @@ public final class UTF16
          * is true, otherwise case sensitive comparison mode if set to false.
          * @param ignorecase true for case-insitive comparison, false for
          *        case sensitive comparison
-         * @param foldcaseoptions FOLD_CASE_DEFAULT or 
+         * @param foldcaseoption FOLD_CASE_DEFAULT or 
          *        FOLD_CASE_EXCLUDE_SPECIAL_I. This option is used only when
          *        ignorecase is set to true. If ignorecase is false, this option
          *        is ignored.

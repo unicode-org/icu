@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Holiday.java,v $ 
- * $Date: 2003/12/01 21:30:06 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/12/02 01:34:31 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -140,7 +140,7 @@ public abstract class Holiday implements DateRule
      * as a key to look up the holiday's localized name in a ResourceBundle object
      * named HolidayBundle.
      *
-     * @param loc   A locale specifying the language in which the name is desired.
+     * @param locale   A locale specifying the language in which the name is desired.
      *
      * @see ResourceBundle
      * @draft ICU 2.8
