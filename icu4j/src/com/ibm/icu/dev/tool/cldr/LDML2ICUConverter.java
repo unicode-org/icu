@@ -73,6 +73,8 @@ public class LDML2ICUConverter {
     private String locName            = null;
     
     private static final boolean DEBUG = false;
+
+    HashMap overrideMap = new HashMap(); // list of locales to take regardless of draft status.  Written by writeDeprecated
     
     public static void main(String[] args) {
         LDML2ICUConverter cnv = new LDML2ICUConverter();
@@ -129,6 +131,10 @@ public class LDML2ICUConverter {
             }
             writeDeprecated();
             System.exit(0);
+        }
+        if((writeDraft == false) && (specialsDir != null)) {
+            System.out.println("INFO: Reading alias table searching for draft overrides");
+            writeDeprecated(); // actually just reads the alias
         }
         if(options[SUPPLEMENTAL].doesOccur) {
             writeSupplemental = true;
@@ -199,6 +205,11 @@ public class LDML2ICUConverter {
                         int index = locName.indexOf(".xml");
                         if(index > -1){
                             locName = locName.substring(0,index);
+                        }
+                        if((writeDraft==false) && (overrideMap.containsKey(locName))) {
+                            System.out.println("INFO: Overriding draft status for " + locName);
+                            writeDraft = true;
+                            // TODO: save/restore writeDraft
                         }
                     }
                     /*
@@ -3364,14 +3375,17 @@ public class LDML2ICUConverter {
     private void writeDeprecated(){
         // TODO: separate out reading this file to another item.. need to force -f option.
         File f = new File(specialsDir + File.separator + "..", DEPRECATED_LIST);
-        File depF = new File(options[WRITE_DEPRECATED].value);
-        if(!depF.isDirectory()) {
-            System.err.println("Error:  " + options[WRITE_DEPRECATED].value + " isn't a directory.");
-            usage();
-            return; // NOTREACHED
+        String myTreeName = null;
+        File depF = null;
+        if(writeDeprecated==true) {
+            depF = new File(options[WRITE_DEPRECATED].value);
+            if(!depF.isDirectory()) {
+                System.err.println("Error:  " + options[WRITE_DEPRECATED].value + " isn't a directory.");
+                usage();
+                return; // NOTREACHED
+            }
+            myTreeName = depF.getName();
         }
-        HashMap overrideMap = new HashMap(); // list of locales to take regardless of draft status.
-        String myTreeName = depF.getName();
         //   System.out.println("myTreeName = " + myTreeName);
         //   System.out.println("deprecated file " + f.toString());
         try {
@@ -3403,6 +3417,10 @@ public class LDML2ICUConverter {
                     } else if(!aName.equals("deprecates")) {
                         throw new IllegalArgumentException("ERR: unknown node: " + aName);
                         // NOTREACHED 
+                    }
+                    
+                    if(writeDeprecated==false) { 
+                        continue; // just looking for overrideDraft
                     }
                     //String type;
                     // System.out.println("Node: " + name.toString());
@@ -3553,6 +3571,9 @@ public class LDML2ICUConverter {
             System.err.println(e);
             e.printStackTrace();
             System.exit(1);
+        }
+        if(writeDeprecated==false) { 
+            return; // just looking for overrideDraft
         }
         System.out.println("done.");
         System.err.println("Error: did not find tree " + myTreeName + " in the deprecated alias table.");
