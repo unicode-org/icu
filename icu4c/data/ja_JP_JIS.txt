@@ -9,6 +9,213 @@ ja_JP_JIS {
     CollationElements { 
 	    Version { "3.0" }
 		Sequence {
+		"&' '=\u3000" // IDEOGRAPHIC SPACE
+		"&'!'=\uff01" // FULLWIDTH EXCLAMATION MARK
+		"&'\u0022'=\uff02" // FULLWIDTH QUOTATION MARK
+		"&'#'=\uff03" // FULLWIDTH NUMBER SIGN
+		"&'$'=\uff04" // FULLWIDTH DOLLAR SIGN
+		"&'%'=\uff05" // FULLWIDTH PERCENT SIGN
+		"&'&'=\uff06" // FULLWIDTH AMPERSAND
+		"&''=\uff07" // FULLWIDTH APOSTROPHE
+		"&'('=\uff08" // FULLWIDTH LEFT PARENTHESIS
+		"&')'=\uff09" // FULLWIDTH RIGHT PARENTHESIS
+		"&'*'=\uff0a" // FULLWIDTH ASTERISK
+		"&'+'=\uff0b" // FULLWIDTH PLUS SIGN
+		"&','=\uff0c" // FULLWIDTH COMMA
+		"&'-'=\uff0d" // FULLWIDTH HYPHEN-MINUS
+		"&'.'=\uff0e" // FULLWIDTH FULL STOP
+		"&'/'=\uff0f" // FULLWIDTH SOLIDUS
+		"&'0'=\uff10" // FULLWIDTH DIGIT ZERO
+		"&'1'=\uff11" // FULLWIDTH DIGIT ONE
+		"&'2'=\uff12" // FULLWIDTH DIGIT TWO
+		"&'3'=\uff13" // FULLWIDTH DIGIT THREE
+		"&'4'=\uff14" // FULLWIDTH DIGIT FOUR
+		"&'5'=\uff15" // FULLWIDTH DIGIT FIVE
+		"&'6'=\uff16" // FULLWIDTH DIGIT SIX
+		"&'7'=\uff17" // FULLWIDTH DIGIT SEVEN
+		"&'8'=\uff18" // FULLWIDTH DIGIT EIGHT
+		"&'9'=\uff19" // FULLWIDTH DIGIT NINE
+		"&':'=\uff1a" // FULLWIDTH COLON
+		"&';'=\uff1b" // FULLWIDTH SEMICOLON
+		"&'<'=\uff1c" // FULLWIDTH LESS-THAN SIGN
+		"&'='=\uff1d" // FULLWIDTH EQUALS SIGN
+		"&'>'=\uff1e" // FULLWIDTH GREATER-THAN SIGN
+		"&'?'=\uff1f" // FULLWIDTH QUESTION MARK
+		"&'@'=\uff20" // FULLWIDTH COMMERCIAL AT
+		"&'A'=\uff21" // FULLWIDTH LATIN CAPITAL LETTER A
+		"&'B'=\uff22" // FULLWIDTH LATIN CAPITAL LETTER B
+		"&'C'=\uff23" // FULLWIDTH LATIN CAPITAL LETTER C
+		"&'D'=\uff24" // FULLWIDTH LATIN CAPITAL LETTER D
+		"&'E'=\uff25" // FULLWIDTH LATIN CAPITAL LETTER E
+		"&'F'=\uff26" // FULLWIDTH LATIN CAPITAL LETTER F
+		"&'G'=\uff27" // FULLWIDTH LATIN CAPITAL LETTER G
+		"&'H'=\uff28" // FULLWIDTH LATIN CAPITAL LETTER H
+		"&'I'=\uff29" // FULLWIDTH LATIN CAPITAL LETTER I
+		"&'J'=\uff2a" // FULLWIDTH LATIN CAPITAL LETTER J
+		"&'K'=\uff2b" // FULLWIDTH LATIN CAPITAL LETTER K
+		"&'L'=\uff2c" // FULLWIDTH LATIN CAPITAL LETTER L
+		"&'M'=\uff2d" // FULLWIDTH LATIN CAPITAL LETTER M
+		"&'N'=\uff2e" // FULLWIDTH LATIN CAPITAL LETTER N
+		"&'O'=\uff2f" // FULLWIDTH LATIN CAPITAL LETTER O
+		"&'P'=\uff30" // FULLWIDTH LATIN CAPITAL LETTER P
+		"&'Q'=\uff31" // FULLWIDTH LATIN CAPITAL LETTER Q
+		"&'R'=\uff32" // FULLWIDTH LATIN CAPITAL LETTER R
+		"&'S'=\uff33" // FULLWIDTH LATIN CAPITAL LETTER S
+		"&'T'=\uff34" // FULLWIDTH LATIN CAPITAL LETTER T
+		"&'U'=\uff35" // FULLWIDTH LATIN CAPITAL LETTER U
+		"&'V'=\uff36" // FULLWIDTH LATIN CAPITAL LETTER V
+		"&'W'=\uff37" // FULLWIDTH LATIN CAPITAL LETTER W
+		"&'X'=\uff38" // FULLWIDTH LATIN CAPITAL LETTER X
+		"&'Y'=\uff39" // FULLWIDTH LATIN CAPITAL LETTER Y
+		"&'Z'=\uff3a" // FULLWIDTH LATIN CAPITAL LETTER Z
+		"&'['=\uff3b" // FULLWIDTH LEFT SQUARE BRACKET
+		"&'\u005c'=\uff3c" // FULLWIDTH REVERSE SOLIDUS
+		"&']'=\uff3d" // FULLWIDTH RIGHT SQUARE BRACKET
+		"&'^'=\uff3e" // FULLWIDTH CIRCUMFLEX ACCENT
+		"&'_'=\uff3f" // FULLWIDTH LOW LINE
+		"&'`'=\uff40" // FULLWIDTH GRAVE ACCENT
+		"&'a'=\uff41" // FULLWIDTH LATIN SMALL LETTER A
+		"&'b'=\uff42" // FULLWIDTH LATIN SMALL LETTER B
+		"&'c'=\uff43" // FULLWIDTH LATIN SMALL LETTER C
+		"&'d'=\uff44" // FULLWIDTH LATIN SMALL LETTER D
+		"&'e'=\uff45" // FULLWIDTH LATIN SMALL LETTER E
+		"&'f'=\uff46" // FULLWIDTH LATIN SMALL LETTER F
+		"&'g'=\uff47" // FULLWIDTH LATIN SMALL LETTER G
+		"&'h'=\uff48" // FULLWIDTH LATIN SMALL LETTER H
+		"&'i'=\uff49" // FULLWIDTH LATIN SMALL LETTER I
+		"&'j'=\uff4a" // FULLWIDTH LATIN SMALL LETTER J
+		"&'k'=\uff4b" // FULLWIDTH LATIN SMALL LETTER K
+		"&'l'=\uff4c" // FULLWIDTH LATIN SMALL LETTER L
+		"&'m'=\uff4d" // FULLWIDTH LATIN SMALL LETTER M
+		"&'n'=\uff4e" // FULLWIDTH LATIN SMALL LETTER N
+		"&'o'=\uff4f" // FULLWIDTH LATIN SMALL LETTER O
+		"&'p'=\uff50" // FULLWIDTH LATIN SMALL LETTER P
+		"&'q'=\uff51" // FULLWIDTH LATIN SMALL LETTER Q
+		"&'r'=\uff52" // FULLWIDTH LATIN SMALL LETTER R
+		"&'s'=\uff53" // FULLWIDTH LATIN SMALL LETTER S
+		"&'t'=\uff54" // FULLWIDTH LATIN SMALL LETTER T
+		"&'u'=\uff55" // FULLWIDTH LATIN SMALL LETTER U
+		"&'v'=\uff56" // FULLWIDTH LATIN SMALL LETTER V
+		"&'w'=\uff57" // FULLWIDTH LATIN SMALL LETTER W
+		"&'x'=\uff58" // FULLWIDTH LATIN SMALL LETTER X
+		"&'y'=\uff59" // FULLWIDTH LATIN SMALL LETTER Y
+		"&'z'=\uff5a" // FULLWIDTH LATIN SMALL LETTER Z
+		"&'{'=\uff5b" // FULLWIDTH LEFT CURLY BRACKET
+		"&'|'=\uff5c" // FULLWIDTH VERTICAL LINE
+		"&'}'=\uff5d" // FULLWIDTH RIGHT CURLY BRACKET
+		"&'~'=\uff5e" // FULLWIDTH TILDE
+		"&'\u3002'=\uff61" // HALFWIDTH IDEOGRAPHIC FULL STOP
+		"&'\u300c'=\uff62" // HALFWIDTH LEFT CORNER BRACKET
+		"&'\u300d'=\uff63" // HALFWIDTH RIGHT CORNER BRACKET
+		"&'\u3001'=\uff64" // HALFWIDTH IDEOGRAPHIC COMMA
+		"&'\u30fb'=\uff65" // HALFWIDTH KATAKANA MIDDLE DOT
+		"&'\u30f2'=\uff66" // HALFWIDTH KATAKANA LETTER WO
+		"&'\u30a1'=\uff67" // HALFWIDTH KATAKANA LETTER SMALL A
+		"&'\u30a3'=\uff68" // HALFWIDTH KATAKANA LETTER SMALL I
+		"&'\u30a5'=\uff69" // HALFWIDTH KATAKANA LETTER SMALL U
+		"&'\u30a7'=\uff6a" // HALFWIDTH KATAKANA LETTER SMALL E
+		"&'\u30a9'=\uff6b" // HALFWIDTH KATAKANA LETTER SMALL O
+		"&'\u30e3'=\uff6c" // HALFWIDTH KATAKANA LETTER SMALL YA
+		"&'\u30e5'=\uff6d" // HALFWIDTH KATAKANA LETTER SMALL YU
+		"&'\u30e7'=\uff6e" // HALFWIDTH KATAKANA LETTER SMALL YO
+		"&'\u30c3'=\uff6f" // HALFWIDTH KATAKANA LETTER SMALL TU
+		"&'\u30fc'=\uff70" // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
+		"&'\u30a2'=\uff71" // HALFWIDTH KATAKANA LETTER A
+		"&'\u30a4'=\uff72" // HALFWIDTH KATAKANA LETTER I
+		"&'\u30a6'=\uff73" // HALFWIDTH KATAKANA LETTER U
+		"&'\u30a8'=\uff74" // HALFWIDTH KATAKANA LETTER E
+		"&'\u30aa'=\uff75" // HALFWIDTH KATAKANA LETTER O
+		"&'\u30ab'=\uff76" // HALFWIDTH KATAKANA LETTER KA
+		"&'\u30ad'=\uff77" // HALFWIDTH KATAKANA LETTER KI
+		"&'\u30af'=\uff78" // HALFWIDTH KATAKANA LETTER KU
+		"&'\u30b1'=\uff79" // HALFWIDTH KATAKANA LETTER KE
+		"&'\u30b3'=\uff7a" // HALFWIDTH KATAKANA LETTER KO
+		"&'\u30b5'=\uff7b" // HALFWIDTH KATAKANA LETTER SA
+		"&'\u30b7'=\uff7c" // HALFWIDTH KATAKANA LETTER SI
+		"&'\u30b9'=\uff7d" // HALFWIDTH KATAKANA LETTER SU
+		"&'\u30bb'=\uff7e" // HALFWIDTH KATAKANA LETTER SE
+		"&'\u30bd'=\uff7f" // HALFWIDTH KATAKANA LETTER SO
+		"&'\u30bf'=\uff80" // HALFWIDTH KATAKANA LETTER TA
+		"&'\u30c1'=\uff81" // HALFWIDTH KATAKANA LETTER TI
+		"&'\u30c4'=\uff82" // HALFWIDTH KATAKANA LETTER TU
+		"&'\u30c6'=\uff83" // HALFWIDTH KATAKANA LETTER TE
+		"&'\u30c8'=\uff84" // HALFWIDTH KATAKANA LETTER TO
+		"&'\u30ca'=\uff85" // HALFWIDTH KATAKANA LETTER NA
+		"&'\u30cb'=\uff86" // HALFWIDTH KATAKANA LETTER NI
+		"&'\u30cc'=\uff87" // HALFWIDTH KATAKANA LETTER NU
+		"&'\u30cd'=\uff88" // HALFWIDTH KATAKANA LETTER NE
+		"&'\u30ce'=\uff89" // HALFWIDTH KATAKANA LETTER NO
+		"&'\u30cf'=\uff8a" // HALFWIDTH KATAKANA LETTER HA
+		"&'\u30d2'=\uff8b" // HALFWIDTH KATAKANA LETTER HI
+		"&'\u30d5'=\uff8c" // HALFWIDTH KATAKANA LETTER HU
+		"&'\u30d8'=\uff8d" // HALFWIDTH KATAKANA LETTER HE
+		"&'\u30db'=\uff8e" // HALFWIDTH KATAKANA LETTER HO
+		"&'\u30de'=\uff8f" // HALFWIDTH KATAKANA LETTER MA
+		"&'\u30df'=\uff90" // HALFWIDTH KATAKANA LETTER MI
+		"&'\u30e0'=\uff91" // HALFWIDTH KATAKANA LETTER MU
+		"&'\u30e1'=\uff92" // HALFWIDTH KATAKANA LETTER ME
+		"&'\u30e2'=\uff93" // HALFWIDTH KATAKANA LETTER MO
+		"&'\u30e4'=\uff94" // HALFWIDTH KATAKANA LETTER YA
+		"&'\u30e6'=\uff95" // HALFWIDTH KATAKANA LETTER YU
+		"&'\u30e8'=\uff96" // HALFWIDTH KATAKANA LETTER YO
+		"&'\u30e9'=\uff97" // HALFWIDTH KATAKANA LETTER RA
+		"&'\u30ea'=\uff98" // HALFWIDTH KATAKANA LETTER RI
+		"&'\u30eb'=\uff99" // HALFWIDTH KATAKANA LETTER RU
+		"&'\u30ec'=\uff9a" // HALFWIDTH KATAKANA LETTER RE
+		"&'\u30ed'=\uff9b" // HALFWIDTH KATAKANA LETTER RO
+		"&'\u30ef'=\uff9c" // HALFWIDTH KATAKANA LETTER WA
+		"&'\u30f3'=\uff9d" // HALFWIDTH KATAKANA LETTER N
+		"&'\u3099'=\uff9e" // HALFWIDTH KATAKANA VOICED SOUND MARK
+		"&'\u309a'=\uff9f" // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+		"&'\u00a2'=\uffe0" // FULLWIDTH CENT SIGN
+		"&'\u00a3'=\uffe1" // FULLWIDTH POUND SIGN
+		"&'\u00ac'=\uffe2" // FULLWIDTH NOT SIGN
+		"&' \u0304'=\uffe3" // FULLWIDTH MACRON
+		"&'\u00a6'=\uffe4" // FULLWIDTH BROKEN BAR
+		"&'\u00a5'=\uffe5" // FULLWIDTH YEN SIGN
+		"&'\u20a9'=\uffe6" // FULLWIDTH WON SIGN
+		"&'\u2502'=\uffe8" // HALFWIDTH FORMS LIGHT VERTICAL
+		"&'\u2190'=\uffe9" // HALFWIDTH LEFTWARDS ARROW
+		"&'\u2191'=\uffea" // HALFWIDTH UPWARDS ARROW
+		"&'\u2192'=\uffeb" // HALFWIDTH RIGHTWARDS ARROW
+		"&'\u2193'=\uffec" // HALFWIDTH DOWNWARDS ARROW
+		"&'\u25a0'=\uffed" // HALFWIDTH BLACK SQUARE
+		"&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
+        "&[before 3]\u30a2"
+        "<<<\u30a1|\u30fc=\u30a2|\u30fc=\u30ab|\u30fc=\u30f5|\u30fc"
+          "=\u30b5|\u30fc=\u30bf|\u30fc=\u30ca|\u30fc=\u30cf|\u30fc"
+          "=\u30de|\u30fc=\u30e3|\u30fc=\u30e4|\u30fc=\u30e9|\u30fc"
+          "=\u30ef|\u30fc=\u30ee|\u30fc"
+          "=\u30ab\u3099|\u30fc=\u30b5\u3099|\u30fc=\u30bf\u3099|\u30fc=\u30cf\u3099|\u30fc"
+          "=\u30cf\u309a|\u30fc"
+        "&[before 3]\u30a4"
+        "<<<\u30a3|\u30fc=\u30a4|\u30fc=\u30ad|\u30fc=\u30b7|\u30fc"
+          "=\u30c1|\u30fc=\u30cb|\u30fc=\u30d2|\u30fc=\u30df|\u30fc"
+          "=\u30ea|\u30fc=\u30f0|\u30fc"
+          "=\u30ad\u3099|\u30fc=\u30b7\u3099|\u30fc=\u30c1\u3099|\u30fc"
+          "=\u30d2\u3099|\u30fc=\u30f0\u3099\u30fc"
+          "=\u30d2\u309a\u30fc"
+        "&[before 3]\u30a6"
+        "<<<\u30a5|\u30fc=\u30a6|\u30fc=\u30af|\u30fc=\u30b9|\u30fc"
+          "=\u30c4|\u30fc=\u30c3|\u30fc=\u30cc|\u30fc=\u30d5|\u30fc"
+          "=\u30e0|\u30fc=\u30e5|\u30fc=\u30e6|\u30fc=\u30eb|\u30fc"
+          "=\u30af\u3099|\u30fc=\u30b9\u3099|\u30fc=\u30c4\u3099|\u30fc"
+          "=\u30d5\u3099|\u30fc=\u30a6\u3099|\u30fc"
+          "=\u30d5\u309a\u30fc"
+        "&[before 3]\u30a8"
+        "<<<\u30a7|\u30fc=\u30a8|\u30fc=\u30b1|\u30fc=\u30f6|\u30fc"
+          "=\u30bb|\u30fc=\u30c6|\u30fc=\u30cd|\u30fc=\u30d8|\u30fc"
+          "=\u30e1|\u30fc=\u30ec|\u30fc=\u30f1|\u30fc"
+          "=\u30b1\u3099|\u30fc=\u30bb\u3099|\u30fc\u30c6\u3099|\u30fc"
+          "\u30d8\u3099|\u30fc=\u30f1\u3099|\u30fc"
+          "=\u30d8\u309a|\u30fc"
+        "&[before 3]\u30aa"
+        "<<<\u30a9|\u30fc=\u30aa|\u30fc=\u30b3|\u30fc=\u30bd|\u30fc"
+          "=\u30c8|\u30fc=\u30ce|\u30fc=\u30db|\u30fc=\u30e2|\u30fc"
+          "=\u30e7|\u30fc=\u30e8|\u30fc=\u30ed|\u30fc=\u30f2|\u30fc"
+          "=\u30b3\u3099|\u30fc=\u30bd\u3099|\u30fc=\u30c8\u3099|\u30fc"
+          "=\u30db\u3099|\u30fc=\u30f2\u3099|\u30fc"
+          "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
 		"&\u3041<<<\u3041|\u309d"
 		"&\u3042<<<\u3042|\u309d"
 		"&\u3043<<<\u3043|\u309d"
@@ -891,213 +1098,6 @@ ja_JP_JIS {
         "<\u9f5f<\u9f60<\u9f61<\u9f66<\u9f67<\u9f6c<\u9f6a<\u9f77<\u9f72"
         "<\u9f76<\u9f95<\u9f9c<\u9fa0<\u582f<\u69c7<\u9059<\u7464<\u51dc"
         "<\u7199"
-		"&' '=\u3000" // IDEOGRAPHIC SPACE
-		"&'!'=\uff01" // FULLWIDTH EXCLAMATION MARK
-		"&'\u0022'=\uff02" // FULLWIDTH QUOTATION MARK
-		"&'#'=\uff03" // FULLWIDTH NUMBER SIGN
-		"&'$'=\uff04" // FULLWIDTH DOLLAR SIGN
-		"&'%'=\uff05" // FULLWIDTH PERCENT SIGN
-		"&'&'=\uff06" // FULLWIDTH AMPERSAND
-		"&''=\uff07" // FULLWIDTH APOSTROPHE
-		"&'('=\uff08" // FULLWIDTH LEFT PARENTHESIS
-		"&')'=\uff09" // FULLWIDTH RIGHT PARENTHESIS
-		"&'*'=\uff0a" // FULLWIDTH ASTERISK
-		"&'+'=\uff0b" // FULLWIDTH PLUS SIGN
-		"&','=\uff0c" // FULLWIDTH COMMA
-		"&'-'=\uff0d" // FULLWIDTH HYPHEN-MINUS
-		"&'.'=\uff0e" // FULLWIDTH FULL STOP
-		"&'/'=\uff0f" // FULLWIDTH SOLIDUS
-		"&'0'=\uff10" // FULLWIDTH DIGIT ZERO
-		"&'1'=\uff11" // FULLWIDTH DIGIT ONE
-		"&'2'=\uff12" // FULLWIDTH DIGIT TWO
-		"&'3'=\uff13" // FULLWIDTH DIGIT THREE
-		"&'4'=\uff14" // FULLWIDTH DIGIT FOUR
-		"&'5'=\uff15" // FULLWIDTH DIGIT FIVE
-		"&'6'=\uff16" // FULLWIDTH DIGIT SIX
-		"&'7'=\uff17" // FULLWIDTH DIGIT SEVEN
-		"&'8'=\uff18" // FULLWIDTH DIGIT EIGHT
-		"&'9'=\uff19" // FULLWIDTH DIGIT NINE
-		"&':'=\uff1a" // FULLWIDTH COLON
-		"&';'=\uff1b" // FULLWIDTH SEMICOLON
-		"&'<'=\uff1c" // FULLWIDTH LESS-THAN SIGN
-		"&'='=\uff1d" // FULLWIDTH EQUALS SIGN
-		"&'>'=\uff1e" // FULLWIDTH GREATER-THAN SIGN
-		"&'?'=\uff1f" // FULLWIDTH QUESTION MARK
-		"&'@'=\uff20" // FULLWIDTH COMMERCIAL AT
-		"&'A'=\uff21" // FULLWIDTH LATIN CAPITAL LETTER A
-		"&'B'=\uff22" // FULLWIDTH LATIN CAPITAL LETTER B
-		"&'C'=\uff23" // FULLWIDTH LATIN CAPITAL LETTER C
-		"&'D'=\uff24" // FULLWIDTH LATIN CAPITAL LETTER D
-		"&'E'=\uff25" // FULLWIDTH LATIN CAPITAL LETTER E
-		"&'F'=\uff26" // FULLWIDTH LATIN CAPITAL LETTER F
-		"&'G'=\uff27" // FULLWIDTH LATIN CAPITAL LETTER G
-		"&'H'=\uff28" // FULLWIDTH LATIN CAPITAL LETTER H
-		"&'I'=\uff29" // FULLWIDTH LATIN CAPITAL LETTER I
-		"&'J'=\uff2a" // FULLWIDTH LATIN CAPITAL LETTER J
-		"&'K'=\uff2b" // FULLWIDTH LATIN CAPITAL LETTER K
-		"&'L'=\uff2c" // FULLWIDTH LATIN CAPITAL LETTER L
-		"&'M'=\uff2d" // FULLWIDTH LATIN CAPITAL LETTER M
-		"&'N'=\uff2e" // FULLWIDTH LATIN CAPITAL LETTER N
-		"&'O'=\uff2f" // FULLWIDTH LATIN CAPITAL LETTER O
-		"&'P'=\uff30" // FULLWIDTH LATIN CAPITAL LETTER P
-		"&'Q'=\uff31" // FULLWIDTH LATIN CAPITAL LETTER Q
-		"&'R'=\uff32" // FULLWIDTH LATIN CAPITAL LETTER R
-		"&'S'=\uff33" // FULLWIDTH LATIN CAPITAL LETTER S
-		"&'T'=\uff34" // FULLWIDTH LATIN CAPITAL LETTER T
-		"&'U'=\uff35" // FULLWIDTH LATIN CAPITAL LETTER U
-		"&'V'=\uff36" // FULLWIDTH LATIN CAPITAL LETTER V
-		"&'W'=\uff37" // FULLWIDTH LATIN CAPITAL LETTER W
-		"&'X'=\uff38" // FULLWIDTH LATIN CAPITAL LETTER X
-		"&'Y'=\uff39" // FULLWIDTH LATIN CAPITAL LETTER Y
-		"&'Z'=\uff3a" // FULLWIDTH LATIN CAPITAL LETTER Z
-		"&'['=\uff3b" // FULLWIDTH LEFT SQUARE BRACKET
-		"&'\u005c'=\uff3c" // FULLWIDTH REVERSE SOLIDUS
-		"&']'=\uff3d" // FULLWIDTH RIGHT SQUARE BRACKET
-		"&'^'=\uff3e" // FULLWIDTH CIRCUMFLEX ACCENT
-		"&'_'=\uff3f" // FULLWIDTH LOW LINE
-		"&'`'=\uff40" // FULLWIDTH GRAVE ACCENT
-		"&'a'=\uff41" // FULLWIDTH LATIN SMALL LETTER A
-		"&'b'=\uff42" // FULLWIDTH LATIN SMALL LETTER B
-		"&'c'=\uff43" // FULLWIDTH LATIN SMALL LETTER C
-		"&'d'=\uff44" // FULLWIDTH LATIN SMALL LETTER D
-		"&'e'=\uff45" // FULLWIDTH LATIN SMALL LETTER E
-		"&'f'=\uff46" // FULLWIDTH LATIN SMALL LETTER F
-		"&'g'=\uff47" // FULLWIDTH LATIN SMALL LETTER G
-		"&'h'=\uff48" // FULLWIDTH LATIN SMALL LETTER H
-		"&'i'=\uff49" // FULLWIDTH LATIN SMALL LETTER I
-		"&'j'=\uff4a" // FULLWIDTH LATIN SMALL LETTER J
-		"&'k'=\uff4b" // FULLWIDTH LATIN SMALL LETTER K
-		"&'l'=\uff4c" // FULLWIDTH LATIN SMALL LETTER L
-		"&'m'=\uff4d" // FULLWIDTH LATIN SMALL LETTER M
-		"&'n'=\uff4e" // FULLWIDTH LATIN SMALL LETTER N
-		"&'o'=\uff4f" // FULLWIDTH LATIN SMALL LETTER O
-		"&'p'=\uff50" // FULLWIDTH LATIN SMALL LETTER P
-		"&'q'=\uff51" // FULLWIDTH LATIN SMALL LETTER Q
-		"&'r'=\uff52" // FULLWIDTH LATIN SMALL LETTER R
-		"&'s'=\uff53" // FULLWIDTH LATIN SMALL LETTER S
-		"&'t'=\uff54" // FULLWIDTH LATIN SMALL LETTER T
-		"&'u'=\uff55" // FULLWIDTH LATIN SMALL LETTER U
-		"&'v'=\uff56" // FULLWIDTH LATIN SMALL LETTER V
-		"&'w'=\uff57" // FULLWIDTH LATIN SMALL LETTER W
-		"&'x'=\uff58" // FULLWIDTH LATIN SMALL LETTER X
-		"&'y'=\uff59" // FULLWIDTH LATIN SMALL LETTER Y
-		"&'z'=\uff5a" // FULLWIDTH LATIN SMALL LETTER Z
-		"&'{'=\uff5b" // FULLWIDTH LEFT CURLY BRACKET
-		"&'|'=\uff5c" // FULLWIDTH VERTICAL LINE
-		"&'}'=\uff5d" // FULLWIDTH RIGHT CURLY BRACKET
-		"&'~'=\uff5e" // FULLWIDTH TILDE
-		"&'\u3002'=\uff61" // HALFWIDTH IDEOGRAPHIC FULL STOP
-		"&'\u300c'=\uff62" // HALFWIDTH LEFT CORNER BRACKET
-		"&'\u300d'=\uff63" // HALFWIDTH RIGHT CORNER BRACKET
-		"&'\u3001'=\uff64" // HALFWIDTH IDEOGRAPHIC COMMA
-		"&'\u30fb'=\uff65" // HALFWIDTH KATAKANA MIDDLE DOT
-		"&'\u30f2'=\uff66" // HALFWIDTH KATAKANA LETTER WO
-		"&'\u30a1'=\uff67" // HALFWIDTH KATAKANA LETTER SMALL A
-		"&'\u30a3'=\uff68" // HALFWIDTH KATAKANA LETTER SMALL I
-		"&'\u30a5'=\uff69" // HALFWIDTH KATAKANA LETTER SMALL U
-		"&'\u30a7'=\uff6a" // HALFWIDTH KATAKANA LETTER SMALL E
-		"&'\u30a9'=\uff6b" // HALFWIDTH KATAKANA LETTER SMALL O
-		"&'\u30e3'=\uff6c" // HALFWIDTH KATAKANA LETTER SMALL YA
-		"&'\u30e5'=\uff6d" // HALFWIDTH KATAKANA LETTER SMALL YU
-		"&'\u30e7'=\uff6e" // HALFWIDTH KATAKANA LETTER SMALL YO
-		"&'\u30c3'=\uff6f" // HALFWIDTH KATAKANA LETTER SMALL TU
-		"&'\u30fc'=\uff70" // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-		"&'\u30a2'=\uff71" // HALFWIDTH KATAKANA LETTER A
-		"&'\u30a4'=\uff72" // HALFWIDTH KATAKANA LETTER I
-		"&'\u30a6'=\uff73" // HALFWIDTH KATAKANA LETTER U
-		"&'\u30a8'=\uff74" // HALFWIDTH KATAKANA LETTER E
-		"&'\u30aa'=\uff75" // HALFWIDTH KATAKANA LETTER O
-		"&'\u30ab'=\uff76" // HALFWIDTH KATAKANA LETTER KA
-		"&'\u30ad'=\uff77" // HALFWIDTH KATAKANA LETTER KI
-		"&'\u30af'=\uff78" // HALFWIDTH KATAKANA LETTER KU
-		"&'\u30b1'=\uff79" // HALFWIDTH KATAKANA LETTER KE
-		"&'\u30b3'=\uff7a" // HALFWIDTH KATAKANA LETTER KO
-		"&'\u30b5'=\uff7b" // HALFWIDTH KATAKANA LETTER SA
-		"&'\u30b7'=\uff7c" // HALFWIDTH KATAKANA LETTER SI
-		"&'\u30b9'=\uff7d" // HALFWIDTH KATAKANA LETTER SU
-		"&'\u30bb'=\uff7e" // HALFWIDTH KATAKANA LETTER SE
-		"&'\u30bd'=\uff7f" // HALFWIDTH KATAKANA LETTER SO
-		"&'\u30bf'=\uff80" // HALFWIDTH KATAKANA LETTER TA
-		"&'\u30c1'=\uff81" // HALFWIDTH KATAKANA LETTER TI
-		"&'\u30c4'=\uff82" // HALFWIDTH KATAKANA LETTER TU
-		"&'\u30c6'=\uff83" // HALFWIDTH KATAKANA LETTER TE
-		"&'\u30c8'=\uff84" // HALFWIDTH KATAKANA LETTER TO
-		"&'\u30ca'=\uff85" // HALFWIDTH KATAKANA LETTER NA
-		"&'\u30cb'=\uff86" // HALFWIDTH KATAKANA LETTER NI
-		"&'\u30cc'=\uff87" // HALFWIDTH KATAKANA LETTER NU
-		"&'\u30cd'=\uff88" // HALFWIDTH KATAKANA LETTER NE
-		"&'\u30ce'=\uff89" // HALFWIDTH KATAKANA LETTER NO
-		"&'\u30cf'=\uff8a" // HALFWIDTH KATAKANA LETTER HA
-		"&'\u30d2'=\uff8b" // HALFWIDTH KATAKANA LETTER HI
-		"&'\u30d5'=\uff8c" // HALFWIDTH KATAKANA LETTER HU
-		"&'\u30d8'=\uff8d" // HALFWIDTH KATAKANA LETTER HE
-		"&'\u30db'=\uff8e" // HALFWIDTH KATAKANA LETTER HO
-		"&'\u30de'=\uff8f" // HALFWIDTH KATAKANA LETTER MA
-		"&'\u30df'=\uff90" // HALFWIDTH KATAKANA LETTER MI
-		"&'\u30e0'=\uff91" // HALFWIDTH KATAKANA LETTER MU
-		"&'\u30e1'=\uff92" // HALFWIDTH KATAKANA LETTER ME
-		"&'\u30e2'=\uff93" // HALFWIDTH KATAKANA LETTER MO
-		"&'\u30e4'=\uff94" // HALFWIDTH KATAKANA LETTER YA
-		"&'\u30e6'=\uff95" // HALFWIDTH KATAKANA LETTER YU
-		"&'\u30e8'=\uff96" // HALFWIDTH KATAKANA LETTER YO
-		"&'\u30e9'=\uff97" // HALFWIDTH KATAKANA LETTER RA
-		"&'\u30ea'=\uff98" // HALFWIDTH KATAKANA LETTER RI
-		"&'\u30eb'=\uff99" // HALFWIDTH KATAKANA LETTER RU
-		"&'\u30ec'=\uff9a" // HALFWIDTH KATAKANA LETTER RE
-		"&'\u30ed'=\uff9b" // HALFWIDTH KATAKANA LETTER RO
-		"&'\u30ef'=\uff9c" // HALFWIDTH KATAKANA LETTER WA
-		"&'\u30f3'=\uff9d" // HALFWIDTH KATAKANA LETTER N
-		"&'\u3099'=\uff9e" // HALFWIDTH KATAKANA VOICED SOUND MARK
-		"&'\u309a'=\uff9f" // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-		"&'\u00a2'=\uffe0" // FULLWIDTH CENT SIGN
-		"&'\u00a3'=\uffe1" // FULLWIDTH POUND SIGN
-		"&'\u00ac'=\uffe2" // FULLWIDTH NOT SIGN
-		"&' \u0304'=\uffe3" // FULLWIDTH MACRON
-		"&'\u00a6'=\uffe4" // FULLWIDTH BROKEN BAR
-		"&'\u00a5'=\uffe5" // FULLWIDTH YEN SIGN
-		"&'\u20a9'=\uffe6" // FULLWIDTH WON SIGN
-		"&'\u2502'=\uffe8" // HALFWIDTH FORMS LIGHT VERTICAL
-		"&'\u2190'=\uffe9" // HALFWIDTH LEFTWARDS ARROW
-		"&'\u2191'=\uffea" // HALFWIDTH UPWARDS ARROW
-		"&'\u2192'=\uffeb" // HALFWIDTH RIGHTWARDS ARROW
-		"&'\u2193'=\uffec" // HALFWIDTH DOWNWARDS ARROW
-		"&'\u25a0'=\uffed" // HALFWIDTH BLACK SQUARE
-		"&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
-        "&[before 3]\u30a2"
-        "<<<\u30a1|\u30fc=\u30a2|\u30fc=\u30ab|\u30fc=\u30f5|\u30fc"
-          "=\u30b5|\u30fc=\u30bf|\u30fc=\u30ca|\u30fc=\u30cf|\u30fc"
-          "=\u30de|\u30fc=\u30e3|\u30fc=\u30e4|\u30fc=\u30e9|\u30fc"
-          "=\u30ef|\u30fc=\u30ee|\u30fc"
-          "=\u30ab\u3099|\u30fc=\u30b5\u3099|\u30fc=\u30bf\u3099|\u30fc=\u30cf\u3099|\u30fc"
-          "=\u30cf\u309a|\u30fc"
-        "&[before 3]\u30a4"
-        "<<<\u30a3|\u30fc=\u30a4|\u30fc=\u30ad|\u30fc=\u30b7|\u30fc"
-          "=\u30c1|\u30fc=\u30cb|\u30fc=\u30d2|\u30fc=\u30df|\u30fc"
-          "=\u30ea|\u30fc=\u30f0|\u30fc"
-          "=\u30ad\u3099|\u30fc=\u30b7\u3099|\u30fc=\u30c1\u3099|\u30fc"
-          "=\u30d2\u3099|\u30fc=\u30f0\u3099\u30fc"
-          "=\u30d2\u309a\u30fc"
-        "&[before 3]\u30a6"
-        "<<<\u30a5|\u30fc=\u30a6|\u30fc=\u30af|\u30fc=\u30b9|\u30fc"
-          "=\u30c4|\u30fc=\u30c3|\u30fc=\u30cc|\u30fc=\u30d5|\u30fc"
-          "=\u30e0|\u30fc=\u30e5|\u30fc=\u30e6|\u30fc=\u30eb|\u30fc"
-          "=\u30af\u3099|\u30fc=\u30b9\u3099|\u30fc=\u30c4\u3099|\u30fc"
-          "=\u30d5\u3099|\u30fc=\u30a6\u3099|\u30fc"
-          "=\u30d5\u309a\u30fc"
-        "&[before 3]\u30a8"
-        "<<<\u30a7|\u30fc=\u30a8|\u30fc=\u30b1|\u30fc=\u30f6|\u30fc"
-          "=\u30bb|\u30fc=\u30c6|\u30fc=\u30cd|\u30fc=\u30d8|\u30fc"
-          "=\u30e1|\u30fc=\u30ec|\u30fc=\u30f1|\u30fc"
-          "=\u30b1\u3099|\u30fc=\u30bb\u3099|\u30fc\u30c6\u3099|\u30fc"
-          "\u30d8\u3099|\u30fc=\u30f1\u3099|\u30fc"
-          "=\u30d8\u309a|\u30fc"
-        "&[before 3]\u30aa"
-        "<<<\u30a9|\u30fc=\u30aa|\u30fc=\u30b3|\u30fc=\u30bd|\u30fc"
-          "=\u30c8|\u30fc=\u30ce|\u30fc=\u30db|\u30fc=\u30e2|\u30fc"
-          "=\u30e7|\u30fc=\u30e8|\u30fc=\u30ed|\u30fc=\u30f2|\u30fc"
-          "=\u30b3\u3099|\u30fc=\u30bd\u3099|\u30fc=\u30c8\u3099|\u30fc"
-          "=\u30db\u3099|\u30fc=\u30f2\u3099|\u30fc"
-          "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
 		}
 	}
 }
