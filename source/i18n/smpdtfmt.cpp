@@ -582,11 +582,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case kYearWOYField:
         if (count >= 4) 
             zeroPaddingNumber(appendTo, value, 4, maxIntCount);
-        else 
+        else if(count == 1) 
+            zeroPaddingNumber(appendTo, value, count, maxIntCount);
+        else
             zeroPaddingNumber(appendTo, value, 2, 2);
-
-        // SRL TODO:  add 'y', unpadded value
-        break;
+        break;  // TODO: this needs to be synced with Java, with GCL/Shanghai's work
 
     // for "MMMM", write out the whole month name, for "MMM", write out the month
     // abbreviation, for "M" or "MM", write out the month as a number with the
