@@ -16,6 +16,7 @@
 
 #include "ucln.h"
 #include "ucln_in.h"
+#include "uassert.h"
 
 /* Leave this copyright notice here! It needs to go somewhere in this library. */
 static const char copyright[] = U_COPYRIGHT_STRING;
