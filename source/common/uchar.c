@@ -892,9 +892,16 @@ u_getUnicodeProperties(UChar32 c, int32_t column) {
 }
 
 U_CFUNC int32_t
-uprv_getMaxValues() {
+uprv_getMaxValues(int32_t column) {
     if(HAVE_DATA) {
-        return indexes[UPROPS_MAX_VALUES_INDEX];
+        switch(column) {
+        case 0:
+            return indexes[UPROPS_MAX_VALUES_INDEX];
+        case 2:
+            return indexes[UPROPS_MAX_VALUES_2_INDEX];
+        default:
+            return 0;
+        }
     } else {
         return 0;
     }
@@ -1103,7 +1110,7 @@ static U_INLINE UBool
 isCased(UChar32 c, uint32_t category) {
     /* Lt+Uppercase+Lowercase = Lt+Lu+Ll+Other_Uppercase+Other_Lowercase */
     return (FLAG(category)&(_Lt|_Lu|_Ll))!=0 ||
-            (u_getUnicodeProperties(c, 1)&(FLAG(UPROPS_OTHER_UPPERCASE)|FLAG(UPROPS_OTHER_LOWERCASE)))!=0;
+            (u_getUnicodeProperties(c, 1)&(FLAG(UPROPS_UPPERCASE)|FLAG(UPROPS_LOWERCASE)))!=0;
 }
 
 /* Is Soft_Dotted? */
