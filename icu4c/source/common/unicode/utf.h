@@ -127,13 +127,13 @@
 #   define U_SIZEOF_WCHAR_T 4
 #endif
 
-/**
+/*
  * \def U_WCHAR_IS_UTF16
  * Defined if wchar_t uses UTF-16.
  *
  * @stable ICU 2.0
  */
-/**
+/*
  * \def U_WCHAR_IS_UTF32
  * Defined if wchar_t uses UTF-32.
  *
