@@ -77,24 +77,31 @@ public final class RawCollationKey extends ByteArrayWrapper
     }
     
     /**
-     * RawCollationKey created, adopting bytes as the internal byte array.
-     * Size of the internal byte array will be set to size.
-     * @param bytes byte array to be adopted by RawCollationKey
-     * @param size non-negative designated size of bytes
-     * @exception ArrayIndexOutOfBoundsException thrown if size is &gt; 
-     *            bytes.length
+     * Construct a RawCollationKey from a byte array and size.
+     * @param bytesToAdopt the byte array to adopt
+     * @param size the length of valid data in the byte array
+     * @throws IndexOutOfBoundsException if bytesToAdopt == null and size != 0, or
+     * size < 0, or size > bytesToAdopt.length.
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public RawCollationKey(byte[] bytes, int size) 
+    public RawCollationKey(byte[] bytesToAdopt, int size) 
     {
-        if (size < 0 || (size != 0 && bytes == null) 
-            || (bytes.length < size)) {
-            throw new ArrayIndexOutOfBoundsException(
-                                            "Expected bytes.length >= size");
-        }
-        this.bytes = bytes;
-        this.size = size;
+        super(bytesToAdopt, size);
     }
-    
+
+    /**
+     * Compare this RawCollationKey to another, which must not be null.  This overrides
+     * the inherited implementation to ensure the returned values are -1, 0, or 1.
+     * @param rhs the RawCollationKey to compare to.
+     * @return -1, 0, or 1 as this compares less than, equal to, or
+     * greater than rhs.
+     * @throws ClassCastException if the other object is not a RawCollationKey.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public int compareTo(Object rhs) {
+        int result = super.compareTo((RawCollationKey)rhs);
+        return result < 0 ? -1 : result == 0 ? 0 : 1;
+    }
 }

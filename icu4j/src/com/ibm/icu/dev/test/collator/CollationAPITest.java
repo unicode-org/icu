@@ -187,13 +187,13 @@ public class CollationAPITest extends TestFmwk {
             key = new RawCollationKey(array, 129);
             errln("Constructor taking an array and a size > array.length "
                   + "expected to throw an exception"); 
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
         }
         try {
             key = new RawCollationKey(array, -1);
             errln("Constructor taking an array and a size < 0 "
                   + "expected to throw an exception"); 
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
         }
         key = new RawCollationKey(array, array.length >> 1);
         if (key.bytes != array || key.size != (array.length >> 1)) {
