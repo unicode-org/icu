@@ -36,9 +36,7 @@
 
 
 /* include standard headers */
-#ifndef OS390
 #include <time.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -75,11 +73,6 @@
 #   include <link.h>
 #elif defined(HPUX)
 #   include <dl.h>
-#elif defined(OS390)
-#define _SHR_TIMEZONE 
-#define _SHR_TZNAME
-#define _SHR_DAYLIGHT
-#include <time.h>
 #endif 
 
 /* floating point implementations ------------------------------------------- */
