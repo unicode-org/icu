@@ -1825,6 +1825,7 @@ inline UChar getPrevNormalizedChar(collIterate *data);
 uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
   collIterateState entryState;
   backupState(source, &entryState);
+  UChar32 cp = ch;
 
   //UChar *entryPos = source->pos;
   for (;;) {
@@ -1854,10 +1855,10 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
             // We need to backup
             loadState(source, &state, TRUE);
-          } else if (getCETag(CE) == IMPLICIT_TAG) { // got an untailored surrogate here
-            uint32_t cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
-            return getImplicit(cp, source, 0);
-          }
+            return CE;
+          } 
+          // calculate the supplementary code point value, if surrogate was not tailored
+          cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         }
       }
       break;
@@ -2100,17 +2101,17 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
     /* various implicits optimization */
     /* need to fill out the collation table for them to work */
     case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-      return getImplicit(ch, source, 0x04000000);
+      return getImplicit(cp, source, 0x04000000);
     case IMPLICIT_TAG:        /* everything that is not defined otherwise */
       /* UCA is filled with these. Tailorings are NOT_FOUND */
-      return getImplicit(ch, source, 0);
+      return getImplicit(cp, source, 0);
     case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
       return 0; /* broken surrogate sequence */
     case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
       UChar nextChar;
       if( (((source->flags & UCOL_ITER_HASLEN) == 0 ) || (source->pos<source->endp)) &&
         UTF_IS_SECOND_SURROGATE((nextChar=*source->pos))) {
-        uint32_t cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+        cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         source->pos++;
         return getImplicit(cp, source, 0);
       } else {
