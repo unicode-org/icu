@@ -62,7 +62,7 @@ U_CDECL_BEGIN
 
 /**
  * Alias for standard ICU data 
- * @draft ICU 3.0
+ * @internal ICU 3.0
  */
 #define U_ICUDATA_ALIAS "ICUDATA"
 
