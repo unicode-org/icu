@@ -311,7 +311,7 @@ UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
             }
             result += c;
         } else {
-            char buf[2] = { chars[i], 0 };
+            char buf[] = { chars[i], 0 };
             result += buf;
             ++i;
         }
