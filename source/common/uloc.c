@@ -1034,6 +1034,7 @@ static void _lazyEvaluate_installedLocales()
     int32_t i = 0;
     int32_t len = 0;
 
+    ures_setIsStackObject(&installed, TRUE);
     index = ures_open(NULL, kIndexLocaleName, &status);
     ures_getByKey(index, kIndexTag, &installed, &status);
 
