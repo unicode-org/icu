@@ -35,7 +35,7 @@ ibm-869.ucm\
 ibm-1275.ucm\
 ibm-1276.ucm ibm-5104.ucm ibm-872.ucm\
 ibm-1277.ucm ibm-874.ucm\
-ibm-1280.ucm ibm-5210.ucm ibm-878.ucm\
+ibm-1280.ucm ibm-878.ucm\
 ibm-1281.ucm ibm-901.ucm\
 ibm-1282.ucm ibm-902.ucm\
 ibm-1283.ucm\
@@ -50,7 +50,7 @@ ibm-922.ucm\
 ibm-848.ucm\
 ibm-9238.ucm\
 ibm-17248.ucm ibm-849.ucm\
-ibm-21427.ucm ibm-850.ucm\
+ibm-850.ucm\
 ibm-851.ucm\
 ibm-852.ucm\
 ibm-855.ucm ibm-942_P120-2000.ucm\
