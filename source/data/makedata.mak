@@ -306,7 +306,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu" "$(ICUBLD)\cnvalias.icu" "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\invuca.icu" "$(ICUBLD)\uidna.spp" $(BRK_FILES) $(INDEX_COL_FILES) $(COL_COL_FILES) $(INDEX_RBNF_FILES) $(RBNF_RES_FILES) $(ALL_RES) "$(ICUTMP)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	cd "$(ICUBLD)"
-	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD)" -s . <<$(ICUTMP)\pkgdatain.txt
+	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD)" -s . <<"$(ICUTMP)\pkgdatain.txt"
 unorm.icu
 uprops.icu
 pnames.icu
@@ -394,7 +394,7 @@ CLEAN : GODATA
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -d"$(ICUBLD)" $<
 
 # Batch inference rule for creating transliterator resource files
-{$(ICUSRCDATA)\$(ICUTRNS)}.txt.res::
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt.res::
 	@echo Making Transliterator Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" $<
 
