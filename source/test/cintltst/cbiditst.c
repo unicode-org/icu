@@ -25,7 +25,7 @@
 
 /* prototypes ---------------------------------------------------------------*/
 
-extern void
+static void
 doBiDiTest(void);
 
 static void
@@ -37,8 +37,8 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart);
 static void
 testReordering(UBiDi *pBiDi, int testNumber);
 
-extern void
-doInverseBiDiTest();
+static void
+doInverseBiDiTest(void);
 
 static void
 testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction);
@@ -49,8 +49,8 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
 static void
 testWriteReverse(void);
 
-extern void
-doArabicShapingTest();
+static void
+doArabicShapingTest(void);
 
 /* helpers ------------------------------------------------------------------ */
 
@@ -71,7 +71,7 @@ addComplexTest(TestNode** root) {
     addTest(root, doArabicShapingTest, "complex/arabic-shaping");
 }
 
-extern void
+static void
 doBiDiTest() {
     UBiDi *pBiDi, *pLine=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -394,7 +394,7 @@ static const struct {
 
 static int countRoundtrips=0, countNonRoundtrips=0;
 
-extern void
+static void
 doInverseBiDiTest() {
     UBiDi *pBiDi;
     UErrorCode errorCode;
@@ -572,7 +572,7 @@ testWriteReverse() {
 
 /* arabic shaping ----------------------------------------------------------- */
 
-extern void
+static void
 doArabicShapingTest() {
     static const UChar
     source[]={
