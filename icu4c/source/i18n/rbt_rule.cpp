@@ -336,7 +336,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 
     for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
         UChar keyChar = pattern.charAt(oPattern);
-        const UnicodeMatcher* matcher = data->lookup(keyChar);
+        UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
             if (oText >= pos.contextStart &&
                 keyChar == text.charAt(oText)) {
@@ -394,7 +394,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         int32_t matchLimit = (oPattern < keyLength) ? pos.limit : pos.contextLimit;
         
         UChar keyChar = pattern.charAt(anteContextLength + oPattern++);
-        const UnicodeMatcher* matcher = data->lookup(keyChar);
+        UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
             // Don't need the oText < pos.contextLimit check if
             // incremental is TRUE (because it's done above); do need

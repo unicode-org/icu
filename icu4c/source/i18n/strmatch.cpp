@@ -54,14 +54,14 @@ UnicodeMatcher* StringMatcher::clone() const {
 UMatchDegree StringMatcher::matches(const Replaceable& text,
                                     int32_t& offset,
                                     int32_t limit,
-                                    UBool incremental) const {
+                                    UBool incremental) {
     int32_t i;
     int32_t cursor = offset;
     if (limit < cursor) {
         // Match in the reverse direction
         for (i=pattern.length()-1; i>=0; --i) {
             UChar keyChar = pattern.charAt(i);
-            const UnicodeMatcher* subm = data.lookup(keyChar);
+            UnicodeMatcher* subm = data.lookup(keyChar);
             if (subm == 0) {
                 if (cursor >= limit &&
                     keyChar == text.charAt(cursor)) {
@@ -81,9 +81,8 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
         // forward start, limit, and only if a prior match does not
         // exist -- we want the rightmost match.
         if (matchStart < 0) {
-            // cast away const -- should modify method to be non-const
-            ((StringMatcher*)this)->matchStart = cursor+1;
-            ((StringMatcher*)this)->matchLimit = offset+1;
+            matchStart = cursor+1;
+            matchLimit = offset+1;
         }
     } else {
         for (i=0; i<pattern.length(); ++i) {
@@ -93,7 +92,7 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
                 return U_PARTIAL_MATCH;
             }
             UChar keyChar = pattern.charAt(i);
-            const UnicodeMatcher* subm = data.lookup(keyChar);
+            UnicodeMatcher* subm = data.lookup(keyChar);
             if (subm == 0) {
                 // Don't need the cursor < limit check if
                 // incremental is TRUE (because it's done above); do need
@@ -113,9 +112,8 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
             }
         }
         // Record the match position
-        // cast away const -- should modify method to be non-const
-        ((StringMatcher*)this)->matchStart = offset;
-        ((StringMatcher*)this)->matchLimit = cursor;
+        matchStart = offset;
+        matchLimit = cursor;
     }
 
     offset = cursor;

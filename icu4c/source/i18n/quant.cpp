@@ -42,7 +42,7 @@ UnicodeMatcher* Quantifier::clone() const {
 UMatchDegree Quantifier::matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
-                                 UBool incremental) const {
+                                 UBool incremental) {
     int32_t start = offset;
     uint32_t count = 0;
     while (count < maxCount) {

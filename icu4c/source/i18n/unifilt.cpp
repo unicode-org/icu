@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 UMatchDegree UnicodeFilter::matches(const Replaceable& text,
                                     int32_t& offset,
                                     int32_t limit,
-                                    UBool incremental) const {
+                                    UBool incremental) {
     UChar32 c;
     if (offset < limit &&
         contains(c = text.char32At(offset))) {
