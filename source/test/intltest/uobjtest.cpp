@@ -151,6 +151,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unesctrn.h"
 #include "uni2name.h"
 #include "uvector.h"
+#include "islamcal.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -236,6 +237,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_DEFAULT(FieldPosition);
     TESTCLASSID_DEFAULT(Formattable);
     TESTCLASSID_CTOR(GregorianCalendar, (status));
+    TESTCLASSID_CTOR(IslamicCalendar, (Locale::getUS(), status));
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
