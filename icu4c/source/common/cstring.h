@@ -47,6 +47,15 @@
 #define icu_toupper(c) toupper(c)
 #define icu_tolower(c) tolower(c)
 
+/*===========================================================================*/
+/* Wide-character functions                                                  */
+/*===========================================================================*/
+#define icu_wcscat(dst, src) wcscat(dst, src)
+#define icu_wcscpy(dst, src) wcscpy(dst, src)
+#define icu_wcslen(src) wcslen(src)
+#define icu_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
+#define icu_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
+
 CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);
 

@@ -19,6 +19,8 @@
 #define _UNUM
 
 #include "utypes.h"
+#include "umisc.h"
+
 /**
  * Number Format C API  Provides functions for
  * formatting and parsing a number.  Also provides methods for
