@@ -4,5 +4,5 @@
 @rem *****************************************************************************
 mkdir docs\api
 @set DOC_TYPE=-private
-javadoc -d docs/api -classpath lib/xerces.jar -sourcepath ../../../ -windowTitle "RBManager" -bottom "Copyright IBM 2000-2004" %DOC_TYPE% com.ibm.rbm
+javadoc -d docs/api -classpath lib/xerces.jar -sourcepath ../../../ -windowTitle "RBManager" -bottom "Copyright IBM 2000-2004" %DOC_TYPE% com.ibm.rbm com.ibm.rbm.gui
 @if errorlevel 1 pause
