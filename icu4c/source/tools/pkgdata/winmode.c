@@ -78,7 +78,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
-      uprv_strcpy(tmp, LIB_PREFIX");
+      uprv_strcpy(tmp, LIB_PREFIX);
       uprv_strcat(tmp, o->cShortName);
       uprv_strcat(tmp, UDATA_SO_SUFFIX);
 
@@ -123,7 +123,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   {
       uprv_strcpy(tmp, LIB_PREFIX);
       uprv_strcat(tmp, o->cShortName);
-      uprv_stract(tmp, UDATA_LIB_SUFFIX);
+      uprv_strcat(tmp, UDATA_LIB_SUFFIX);
 
       pkg_sttc_writeReadme(o, tmp, status);
       if(U_FAILURE(*status))
