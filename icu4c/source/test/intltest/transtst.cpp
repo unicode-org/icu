@@ -920,9 +920,15 @@ void TransliteratorTest::TestFilterIDs(void) {
         "Unicode-Hex[^5];Hex-Unicode[aeiou]",
         "quizzical",
         "q\\u0075izzical",
-    };
 
-    for (int i=0; i<6; i+=4) {
+        "Null[abc]",
+        "Null[abc]",
+        "xyz",
+        "xyz",
+    };
+    enum { DATA_length = sizeof(DATA) / sizeof(DATA[0]) };
+
+    for (int i=0; i<DATA_length; i+=4) {
         UnicodeString ID(DATA[i], "");
         Transliterator *t = Transliterator::createInstance(ID);
         if (t == 0) {
