@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/03/08 01:58:23 $ 
-* $Revision: 1.2 $
+* $Date: 2002/03/13 05:44:14 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -66,13 +66,19 @@ final class UCharacterPropertyReader
     {
         // read the indexes
         int count = INDEX_SIZE_;
-        m_propertyOffset_  = m_dataInputStream_.readInt();
+        m_propertyOffset_          = m_dataInputStream_.readInt();
         count --;
-        m_exceptionOffset_ = m_dataInputStream_.readInt();
+        m_exceptionOffset_         = m_dataInputStream_.readInt();
         count --;
-        m_caseOffset_      = m_dataInputStream_.readInt();
+        m_caseOffset_              = m_dataInputStream_.readInt();
         count --;
-        m_reservedOffset_  = m_dataInputStream_.readInt();
+        m_additionalOffset_        = m_dataInputStream_.readInt();
+        count --;
+    	m_additionalVectorsOffset_ = m_dataInputStream_.readInt();
+    	count --;
+    	m_additionalColumnsCount_  = m_dataInputStream_.readInt();
+    	count --;
+        m_reservedOffset_          = m_dataInputStream_.readInt();
         count --;
         m_dataInputStream_.skipBytes(count << 2);
         
@@ -95,12 +101,25 @@ final class UCharacterPropertyReader
         }
         
         // reads the 32 bit case block
-        size = (m_reservedOffset_ - m_caseOffset_) << 1;
+        size = (m_additionalOffset_ - m_caseOffset_) << 1;
         ucharppty.m_case_ = new char[size];
         for (int i = 0; i < size; i ++) {
             ucharppty.m_case_[i] = m_dataInputStream_.readChar();
         }
+        
+        // reads the additional property block
+        ucharppty.m_additionalTrie_ = new CharTrie(m_dataInputStream_, 
+                                                   ucharppty);
+                                                           
+        // additional properties
+        size = m_reservedOffset_ - m_additionalVectorsOffset_;
+        ucharppty.m_additionalVectors_ = new int[size];
+        for (int i = 0; i < size; i ++) {
+            ucharppty.m_additionalVectors_[i] = m_dataInputStream_.readInt();
+        }
+        
         m_dataInputStream_.close();
+        ucharppty.m_additionalColumnsCount_ = m_additionalColumnsCount_;
         ucharppty.m_unicodeVersion_ = VersionInfo.getInstance(
                          (int)UNICODE_VERSION_[0], (int)UNICODE_VERSION_[1],
                          (int)UNICODE_VERSION_[2], (int)UNICODE_VERSION_[3]);
@@ -124,16 +143,20 @@ final class UCharacterPropertyReader
     private int m_propertyOffset_;
     private int m_exceptionOffset_;
     private int m_caseOffset_;
+    private int m_additionalOffset_;
+    private int m_additionalVectorsOffset_;
+    private int m_additionalColumnsCount_;
     private int m_reservedOffset_;
-                                  
+                                      
     /**
     * File format version that this class understands.
     * No guarantees are made if a older version is used
     */
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x50, 
                                                     (byte)0x72, (byte)0x6F};
-    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x1, 
-                                                        (byte)0x5, (byte)0x2};
+    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x3, (byte)0x0, 
+                                             (byte)Trie.INDEX_STAGE_1_SHIFT_, 
+                                             (byte)Trie.INDEX_STAGE_2_SHIFT_};
     private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
                                                     (byte)0x1, (byte)0x0};  
 }
