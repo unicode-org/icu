@@ -25,7 +25,7 @@ class DataDrivenCollatorTest: public IntlTestCollator {
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
 public:
     DataDrivenCollatorTest();
-    ~DataDrivenCollatorTest();
+    virtual ~DataDrivenCollatorTest();
 protected:
 
     void DataDrivenTest(char *par);

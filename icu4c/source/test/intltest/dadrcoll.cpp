@@ -39,7 +39,7 @@ DataDrivenCollatorTest::~DataDrivenCollatorTest()
   delete driver;
 }
 
-void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
   if(driver != NULL) {
     if (exec)
