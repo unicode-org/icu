@@ -269,7 +269,7 @@ $(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
 	@-$(RMV) $@
 	@for file in $(ALLFILES390); do \
-	  echo $$file >> $@; \
+	  echo $(BUILDDIR)/$(ICUDT)$$file >> $@; \
 	done;
 
 #########################################################################
