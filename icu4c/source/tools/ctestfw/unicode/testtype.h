@@ -18,6 +18,12 @@
     #define T_CTEST_IMPORT
 #endif
 
+#if defined(_WIN32)
+#define T_CTEST_EXPORT2 __cdecl
+#else
+#define T_CTEST_EXPORT2
+#endif
+
 #ifdef __cplusplus
     #define C_CTEST_API extern "C"
 #else

@@ -76,7 +76,8 @@ extern T_CTEST_EXPORT_API UTraceLevel ICU_TRACE;
  * @param root Subtree of tests.
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void showTests ( const TestNode *root);
+T_CTEST_API void T_CTEST_EXPORT2
+showTests ( const TestNode *root);
 
 /**
  * Run a subtree of tests.
@@ -84,7 +85,8 @@ T_CTEST_API void showTests ( const TestNode *root);
  * @param root Subtree of tests.
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void runTests ( const TestNode* root);
+T_CTEST_API void T_CTEST_EXPORT2
+runTests ( const TestNode* root);
 
 /**
  * Add a test to the subtree.
@@ -98,11 +100,19 @@ T_CTEST_API void runTests ( const TestNode* root);
  * @param path Path from root under which test will be placed. Ex. '/a/b/mytest'
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void addTest ( TestNode** root,
-           TestFunctionPtr test,
-           const char *path);
+T_CTEST_API void T_CTEST_EXPORT2
+addTest(TestNode** root,
+        TestFunctionPtr test,
+        const char *path);
 
-T_CTEST_API void cleanUpTestTree(TestNode *tn);
+/**
+ * Clean up any allocated memory.
+ * Conditions for calling this function are the same as u_cleanup().
+ * @see u_cleanup
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_API void T_CTEST_EXPORT2
+cleanUpTestTree(TestNode *tn);
 
 /**
  * Retreive a specific subtest. (subtree).
@@ -112,8 +122,9 @@ T_CTEST_API void cleanUpTestTree(TestNode *tn);
  * @return The subtest, or NULL on failure.
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API const TestNode* getTest (const TestNode* root,
-                                     const char *path);
+T_CTEST_API const TestNode* T_CTEST_EXPORT2
+getTest(const TestNode* root,
+        const char *path);
 
 
 /**
@@ -121,14 +132,16 @@ T_CTEST_API const TestNode* getTest (const TestNode* root,
  * @param pattern printf-style format string
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void log_err(const char* pattern, ...);
+T_CTEST_API void T_CTEST_EXPORT2
+log_err(const char* pattern, ...);
 
 /**
  * Log an informational message. (printf style)
  * @param pattern printf-style format string
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void log_info(const char* pattern, ...);
+T_CTEST_API void T_CTEST_EXPORT2
+log_info(const char* pattern, ...);
 
 /**
  * Log an informational message. (vprintf style)
@@ -137,7 +150,8 @@ T_CTEST_API void log_info(const char* pattern, ...);
  * @param ap variable-arguments list
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void vlog_info(const char *prefix, const char *pattern, va_list ap);
+T_CTEST_API void T_CTEST_EXPORT2
+vlog_info(const char *prefix, const char *pattern, va_list ap);
 
 /**
  * Log a verbose informational message. (printf style)
@@ -145,7 +159,8 @@ T_CTEST_API void vlog_info(const char *prefix, const char *pattern, va_list ap);
  * @param pattern printf-style format string
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void log_verbose(const char* pattern, ...);
+T_CTEST_API void T_CTEST_EXPORT2
+log_verbose(const char* pattern, ...);
 
 /**
  * Log an error message concerning missing data. (printf style)
@@ -154,7 +169,8 @@ T_CTEST_API void log_verbose(const char* pattern, ...);
  * @param pattern printf-style format string
  * @internal Internal APIs for testing purpose only
  */
-T_CTEST_API void log_data_err(const char *pattern, ...);
+T_CTEST_API void T_CTEST_EXPORT2
+log_data_err(const char *pattern, ...);
 
 /**
  * Processes the command line arguments.
@@ -169,14 +185,14 @@ T_CTEST_API void log_data_err(const char *pattern, ...);
  * @return positive for error count, 0 for success, negative for illegal argument
  * @internal Internal APIs for testing purpose only
  */
+T_CTEST_API int T_CTEST_EXPORT2 
+processArgs(const TestNode* root,
+            int argc,
+            const char* const argv[]);
 
-T_CTEST_API int processArgs(const TestNode* root,
-                             int argc,
-                             const char* const argv[]);
 
-
-T_CTEST_API 
-const char* getTestName(void);
+T_CTEST_API const char* T_CTEST_EXPORT2
+getTestName(void);
 
 
 
