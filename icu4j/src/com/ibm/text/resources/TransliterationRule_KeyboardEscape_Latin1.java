@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_KeyboardEscape_Latin1.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -22,15 +22,15 @@ public class TransliterationRule_KeyboardEscape_Latin1 extends ListResourceBundl
         return new Object[][] {
             { "Rule",
                 "$esc='';"
-                + "$grave=`;"
+                + "$grave='`';"
                 + "$acute='';"
-                + "$hat=^;"
-                + "$tilde=~;"
-                + "$umlaut=:;"
-                + "$ring=.;"
-                + "$cedilla=,;"
-                + "$slash=/;"
-                + "$super=^;"
+                + "$hat='^';"
+                + "$tilde='~';"
+                + "$umlaut=':';"
+                + "$ring='.';"
+                + "$cedilla=',';"
+                + "$slash='/';"
+                + "$super='^';"
 
                 // Make keyboard entry of {esc} possible
                 // and of backslash
@@ -45,17 +45,17 @@ public class TransliterationRule_KeyboardEscape_Latin1 extends ListResourceBundl
                 + "div$esc>\u00F7;"
 
                 + "\\ $esc>\u00A0;" // non-breaking space
-                + "!$esc>\u00A1;" // inverted exclamation
-                + "c/$esc>\u00A2;" // cent sign
+                + "'!'$esc>\u00A1;" // inverted exclamation
+                + "c'/'$esc>\u00A2;" // cent sign
                 + "lb$esc>\u00A3;" // pound sign
                 + "'|'$esc>\u00A6;" // broken vertical bar
-                + ":$esc>\u00A8;" // umlaut
+                + "':'$esc>\u00A8;" // umlaut
                 + "$super a$esc>\u00AA;" // feminine ordinal
                 + "'<<'$esc>\u00AB;"
                 + "r$esc>\u00AE;"
-                + "--$esc>\u00AF;"
-                + "-$esc>\u00AD;"
-                + "+-$esc>\u00B1;"
+                + "'--'$esc>\u00AF;"
+                + "'-'$esc>\u00AD;"
+                + "'+-'$esc>\u00B1;"
                 + "$super 2$esc>\u00B2;"
                 + "$super 3$esc>\u00B3;"
                 + "$acute$esc>\u00B4;"
@@ -66,10 +66,10 @@ public class TransliterationRule_KeyboardEscape_Latin1 extends ListResourceBundl
                 + "$super 1$esc>\u00B9;"
                 + "$super o$esc>\u00BA;" // masculine ordinal
                 + "'>>'$esc>\u00BB;"
-                + "1/4$esc>\u00BC;"
-                + "1/2$esc>\u00BD;"
-                + "3/4$esc>\u00BE;"
-                + "?$esc>\u00BF;"
+                + "'1/4'$esc>\u00BC;"
+                + "'1/2'$esc>\u00BD;"
+                + "'3/4'$esc>\u00BE;"
+                + "'?'$esc>\u00BF;"
                 + "A$grave$esc>\u00C0;"
                 + "A$acute$esc>\u00C1;"
                 + "A$hat$esc>\u00C2;"
@@ -86,7 +86,7 @@ public class TransliterationRule_KeyboardEscape_Latin1 extends ListResourceBundl
                 + "I$acute$esc>\u00CD;"
                 + "I$hat$esc>\u00CE;"
                 + "I$umlaut$esc>\u00CF;"
-                + "D-$esc>\u00D0;"
+                + "'D-'$esc>\u00D0;"
                 + "N$tilde$esc>\u00D1;"
                 + "O$grave$esc>\u00D2;"
                 + "O$acute$esc>\u00D3;"
@@ -118,7 +118,7 @@ public class TransliterationRule_KeyboardEscape_Latin1 extends ListResourceBundl
                 + "i$acute$esc>\u00ED;"
                 + "i$hat$esc>\u00EE;"
                 + "i$umlaut$esc>\u00EF;"
-                + "d-$esc>\u00F0;"
+                + "'d-'$esc>\u00F0;"
                 + "n$tilde$esc>\u00F1;"
                 + "o$grave$esc>\u00F2;"
                 + "o$acute$esc>\u00F3;"

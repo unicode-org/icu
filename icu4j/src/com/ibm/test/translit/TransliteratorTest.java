@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/04/19 16:37:38 $ 
- * $Revision: 1.15 $
+ * $Date: 2000/04/22 00:04:39 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -103,13 +103,13 @@ public class TransliteratorTest extends TestFmwk {
         /* Test categories
          */
         Transliterator t = new RuleBasedTransliterator("<ID>",
-                                                       "dummy=\uE100;" +
-                                                       "vowel=[aeiouAEIOU];" +
-                                                       "lu=[:Lu:];" +
-                                                       "{vowel} ({lu}) > !;" +
-                                                       "{vowel} > &;" +
-                                                       "(!) {lu} > ^;" +
-                                                       "{lu} > *;" +
+                                                       "$dummy=\uE100;" +
+                                                       "$vowel=[aeiouAEIOU];" +
+                                                       "$lu=[:Lu:];" +
+                                                       "$vowel } $lu > '!';" +
+                                                       "$vowel > '&';" +
+                                                       "'!' { $lu > '^';" +
+                                                       "$lu > '*';" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
     }
@@ -118,7 +118,7 @@ public class TransliteratorTest extends TestFmwk {
      * Test undefined variable.
      */
     public void TestUndefinedVariable() {
-        String rule = "({initial}) a <> \u1161;";
+        String rule = "$initial } a <> \u1161;";
         try {
             Transliterator t = new RuleBasedTransliterator("<ID>", rule);
         } catch (IllegalArgumentException e) {
@@ -133,22 +133,22 @@ public class TransliteratorTest extends TestFmwk {
      * Test empty context.
      */
     public void TestEmptyContext() {
-        expect("() a () > b;", "xay a ", "xby b ");
+        expect(" { a } > b;", "xay a ", "xby b ");
     }
 
     /**
      * Test inline set syntax and set variable syntax.
      */
     public void TestInlineSet() {
-        expect("[:Ll:] (x) > y; [:Ll:] > z;", "aAbxq", "zAyzz");
+        expect("{ [:Ll:] } x > y; [:Ll:] > z;", "aAbxq", "zAyzz");
         expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
 
-        expect("digit = [0-9];" +
-               "alpha = [a-zA-Z];" +
-               "alphanumeric = [{digit}{alpha}];" + // ***
-               "special = [^{alphanumeric}];" +     // ***
-               "{alphanumeric} > -;" +
-               "{special} > *;",
+        expect("$digit = [0-9];" +
+               "$alpha = [a-zA-Z];" +
+               "$alphanumeric = [$digit $alpha];" + // ***
+               "$special = [^$alphanumeric];" +     // ***
+               "$alphanumeric > '-';" +
+               "$special > '*';",
 
                "thx-1138", "---*----");
     }
@@ -419,7 +419,7 @@ public class TransliteratorTest extends TestFmwk {
         // Array of 3n items
         // Each item is <rules>, <input>, <expected output>
         String[] DATA = {
-            "$([a-z]$) . $([0-9]$) > $2-$1",
+            "([a-z]) '.' ([0-9]) > $2 '-' $1",
             "abc.123.xyz.456",
             "ab1-c23.xy4-z56",
         };

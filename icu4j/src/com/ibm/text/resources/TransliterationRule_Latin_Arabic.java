@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Arabic.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -140,26 +140,26 @@ public class TransliterationRule_Latin_Arabic extends ListResourceBundle {
                 "7>\u0667;"+ // Arabic digit 7
                 "8>\u0668;"+ // Arabic digit 8
                 "9>\u0669;"+ // Arabic digit 9
-                "%>\u066A;"+ // Arabic %
-                ".>\u066B;"+ // Arabic decimal separator
-                ",>\u066C;"+ // Arabic thousands separator
-                "*>\u066D;"+ // Arabic five-pointed star
+                "'%'>\u066A;"+ // Arabic %
+                "'.'>\u066B;"+ // Arabic decimal separator
+                "','>\u066C;"+ // Arabic thousands separator
+                "'*'>\u066D;"+ // Arabic five-pointed star
 
-                "`0>0;"+ // Escaped forms of the above
-                "`1>1;"+
-                "`2>2;"+
-                "`3>3;"+
-                "`4>4;"+
-                "`5>5;"+
-                "`6>6;"+
-                "`7>7;"+
-                "`8>8;"+
-                "`9>9;"+
-                "`%>%;"+
-                "`.>.;"+
-                "`,>,;"+
-                "`*>*;"+
-                "``>`;"+
+                "'`0'>0;"+ // Escaped forms of the above
+                "'`1'>1;"+
+                "'`2'>2;"+
+                "'`3'>3;"+
+                "'`4'>4;"+
+                "'`5'>5;"+
+                "'`6'>6;"+
+                "'`7'>7;"+
+                "'`8'>8;"+
+                "'`9'>9;"+
+                "'`%'>'%';"+
+                "'`.'>'.';"+
+                "'`,'>',';"+
+                "'`*'>'*';"+
+                "'``'>'`';"+
 
                 "''>;"+
 

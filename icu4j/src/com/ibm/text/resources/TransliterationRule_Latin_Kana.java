@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Kana.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
             // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.3 $
+                //# $Revision: 1.4 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.
@@ -382,10 +382,10 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "BU>$BU;"
                 + "BE>$BE;"
                 + "BO>$BO;"
-                + "BY>$BI|~Y;"
+                + "BY>$BI|'~Y';"
 
                 + "CHI>$TI;"
-                + "CH>$TI|~Y;"
+                + "CH>$TI|'~Y';"
 
                 + "C}I>|S;"
                 + "C}E>|S;"
@@ -397,7 +397,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "DO>$DO;"
                 + "DZU>$DU;"
                 + "DJI>$DI;"
-                + "DJ>$DI|~Y;"
+                + "DJ>$DI|'~Y';"
 
                 + "E>$E;"
 
@@ -408,7 +408,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "GU>$GU;"
                 + "GE>$GE;"
                 + "GO>$GO;"
-                + "GY>$GI|~Y;"
+                + "GY>$GI|'~Y';"
 
                 + "HA>$HA;"
                 + "HI>$HI;"
@@ -425,14 +425,14 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "KU>$KU;"
                 + "KE>$KE;"
                 + "KO>$KO;"
-                + "KY>$KI|~Y;"
+                + "KY>$KI|'~Y';"
 
                 + "MA>$MA;"
                 + "MI>$MI;"
                 + "MU>$MU;"
                 + "ME>$ME;"
                 + "MO>$MO;"
-                + "MY>$MI|~Y;"
+                + "MY>$MI|'~Y';"
                 
                 + "M}P>$N;"
                 + "M}B>$N;"
@@ -444,7 +444,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "NU>$NU;"
                 + "NE>$NE;"
                 + "NO>$NO;"
-                + "NY>$NI|~Y;"
+                + "NY>$NI|'~Y';"
 
                 + "O>$O;"
 
@@ -453,14 +453,14 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "PU>$PU;"
                 + "PE>$PE;"
                 + "PO>$PO;"
-                + "PY>$PI|~Y;"
+                + "PY>$PI|'~Y';"
 
                 + "RA>$RA;"
                 + "RI>$RI;"
                 + "RU>$RU;"
                 + "RE>$RE;"
                 + "RO>$RO;"
-                + "RY>$RI|~Y;"
+                + "RY>$RI|'~Y';"
 
                 + "SA>$SA;"
                 + "SI>$SE$I2;"
@@ -469,7 +469,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "SO>$SO;"
 
                 + "SHI>$SI;"
-                + "SH>$SI|~Y;"
+                + "SH>$SI|'~Y';"
                 
                 + "TA>$TA;"
                 + "TI>$TE$I2;"
@@ -478,7 +478,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "TO>$TO;"
                 
                 + "TSU>$TU;"
-                //+ "TS>$TU|~;"
+                //+ "TS>$TU|'~';"
 
                 + "U>$U;"
 
@@ -504,20 +504,20 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
 
                 // SMALL FORMS
                 
-                + "~A>$A2;"
-                + "~I>$I2;"
-                + "~U>$U2;"
-                + "~E>$E2;"
-                + "~O>$O2;"
-                + "~KA>$KA2;"
-                + "~KE>$KE2;"
-                + "~TSU>$TU2;"
-                + "~WA>$WA2;"
-                + "~YA>$YA2;"
-                + "~YI>$YI2;"
-                + "~YU>$YU2;"
-                + "~YE>$YE2;"
-                + "~YO>$YO2;"
+                + "'~A'>$A2;"
+                + "'~I'>$I2;"
+                + "'~U'>$U2;"
+                + "'~E'>$E2;"
+                + "'~O'>$O2;"
+                + "'~KA'>$KA2;"
+                + "'~KE'>$KE2;"
+                + "'~TSU'>$TU2;"
+                + "'~WA'>$WA2;"
+                + "'~YA'>$YA2;"
+                + "'~YI'>$YI2;"
+                + "'~YU'>$YU2;"
+                + "'~YE'>$YE2;"
+                + "'~YO'>$YO2;"
 
                 // DOUBLE CONSONANTS
                 
@@ -580,12 +580,12 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 // SIMPLE SUBSTITUTIONS USING BACKUP
                 
                 + "C>|K;"
-                + "F>$HU|~;"
-                + "J>$ZI|~Y;"
+                + "F>$HU|'~';"
+                + "J>$ZI|'~Y';"
                 + "L>|R;"
                 + "Q>|K;" // BACKUP AND REDO
-                + "V>$VU|~;"
-                + "W>$U|~;"
+                + "V>$VU|'~';"
+                + "W>$U|'~';"
                 + "X>|KS;"
 
                 // WE HAD TO LIST THE LONGER ONES FIRST,
@@ -826,18 +826,18 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 
                 // SMALL FORMS
                 
-                + "~A<$A2;"
-                + "~I<$I2;"
-                + "~U<$U2;"
-                + "~E<$E2;"
-                + "~O<$O2;"
-                + "~KA<$KA2;"
-                + "~KE<$KE2;"
-                + "~YA<$YA2;"
-                + "~YU<$YU2;"
-                + "~YO<$YO2;"
-                + "~TSU<$TU2;"
-                + "~WA<$WA2;"
+                + "'~A'<$A2;"
+                + "'~I'<$I2;"
+                + "'~U'<$U2;"
+                + "'~E'<$E2;"
+                + "'~O'<$O2;"
+                + "'~KA'<$KA2;"
+                + "'~KE'<$KE2;"
+                + "'~YA'<$YA2;"
+                + "'~YU'<$YU2;"
+                + "'~YO'<$YO2;"
+                + "'~TSU'<$TU2;"
+                + "'~WA'<$WA2;"
                 
                 // LENGTH MARK. LATER, COULD USE CIRCUMFLEX
 
@@ -859,10 +859,10 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "bu>$bu;"
                 + "be>$be;"
                 + "bo>$bo;"
-                + "by>$bi|~y;"
+                + "by>$bi|'~y';"
 
                 + "chi>$ti;"
-                + "ch>$ti|~y;"
+                + "ch>$ti|'~y';"
 
                 + "c}i>|s;"
                 + "c}e>|s;"
@@ -874,7 +874,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "do>$do;"
                 + "dzu>$du;"
                 + "dji>$di;"
-                + "dj>$di|~y;"
+                + "dj>$di|'~y';"
 
                 + "e>$e;"
 
@@ -885,7 +885,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "gu>$gu;"
                 + "ge>$ge;"
                 + "go>$go;"
-                + "gy>$gi|~y;"
+                + "gy>$gi|'~y';"
 
                 + "ha>$ha;"
                 + "hi>$hi;"
@@ -902,14 +902,14 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "ku>$ku;"
                 + "ke>$ke;"
                 + "ko>$ko;"
-                + "ky>$ki|~y;"
+                + "ky>$ki|'~y';"
 
                 + "ma>$ma;"
                 + "mi>$mi;"
                 + "mu>$mu;"
                 + "me>$me;"
                 + "mo>$mo;"
-                + "my>$mi|~y;"
+                + "my>$mi|'~y';"
                 
                 + "m}p>$n;"
                 + "m}b>$n;"
@@ -921,7 +921,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "nu>$nu;"
                 + "ne>$ne;"
                 + "no>$no;"
-                + "ny>$ni|~y;"
+                + "ny>$ni|'~y';"
 
                 + "o>$o;"
 
@@ -930,14 +930,14 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "pu>$pu;"
                 + "pe>$pe;"
                 + "po>$po;"
-                + "py>$pi|~y;"
+                + "py>$pi|'~y';"
 
                 + "ra>$ra;"
                 + "ri>$ri;"
                 + "ru>$ru;"
                 + "re>$re;"
                 + "ro>$ro;"
-                + "ry>$ri|~y;"
+                + "ry>$ri|'~y';"
 
                 + "sa>$sa;"
                 + "si>$se$i2;"
@@ -946,7 +946,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "so>$so;"
 
                 + "shi>$si;"
-                + "sh>$si|~y;"
+                + "sh>$si|'~y';"
                 
                 + "ta>$ta;"
                 + "ti>$te$i2;"
@@ -955,7 +955,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "to>$to;"
                 
                 + "tsu>$tu;"
-                //+ "ts>$tu|~;"
+                //+ "ts>$tu|'~';"
 
                 + "u>$u;"
 
@@ -981,20 +981,20 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
 
                 // small forms
                 
-                + "~a>$a2;"
-                + "~i>$i2;"
-                + "~u>$u2;"
-                + "~e>$e2;"
-                + "~o>$o2;"
-                + "~ka>$ka2;"
-                + "~ke>$ke2;"
-                + "~tsu>$tu2;"
-                + "~wa>$wa2;"
-                + "~ya>$ya2;"
-                + "~yi>$yi2;"
-                + "~yu>$yu2;"
-                + "~ye>$ye2;"
-                + "~yo>$yo2;"
+                + "'~a'>$a2;"
+                + "'~i'>$i2;"
+                + "'~u'>$u2;"
+                + "'~e'>$e2;"
+                + "'~o'>$o2;"
+                + "'~ka'>$ka2;"
+                + "'~ke'>$ke2;"
+                + "'~tsu'>$tu2;"
+                + "'~wa'>$wa2;"
+                + "'~ya'>$ya2;"
+                + "'~yi'>$yi2;"
+                + "'~yu'>$yu2;"
+                + "'~ye'>$ye2;"
+                + "'~yo'>$yo2;"
 
                 // Double Consonants
                 
@@ -1057,12 +1057,12 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 // simple substitutions using backup
                 
                 + "c>|k;"
-                + "f>$hu|~;"
-                + "j>$zi|~y;"
+                + "f>$hu|'~';"
+                + "j>$zi|'~y';"
                 + "l>|r;"
                 + "q>|k;" // backup and redo
-                + "v>$vu|~;"
-                + "w>$u|~;"
+                + "v>$vu|'~';"
+                + "w>$u|'~';"
                 + "x>|ks;"
 
                 // We had to list the longer ones first,
@@ -1303,18 +1303,18 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 
                 // small forms
                 
-                + "~a<$a2;"
-                + "~i<$i2;"
-                + "~u<$u2;"
-                + "~e<$e2;"
-                + "~o<$o2;"
-              //masked: + "~ka<$ka2;" ({~ka} is an alias for {~KA})
-              //masked: + "~ke<$ke2;" ({~ke} is an alias for {~KE})
-                + "~ya<$ya2;"
-                + "~yu<$yu2;"
-                + "~yo<$yo2;"
-                + "~tsu<$tu2;"
-                + "~wa<$wa2;"
+                + "'~a'<$a2;"
+                + "'~i'<$i2;"
+                + "'~u'<$u2;"
+                + "'~e'<$e2;"
+                + "'~o'<$o2;"
+              //masked: + "'~ka'<$ka2;" ({~ka} is an alias for {~KA})
+              //masked: + "'~ke'<$ke2;" ({~ke} is an alias for {~KE})
+                + "'~ya'<$ya2;"
+                + "'~yu'<$yu2;"
+                + "'~yo'<$yo2;"
+                + "'~tsu'<$tu2;"
+                + "'~wa'<$wa2;"
                 
                 // length mark. Later, could use circumflex
 
@@ -1327,10 +1327,10 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 //#######################################
                 // Non-shared stuff goes here
                 
-                + "~>;"        // remove if not used
+                + "'~'>;"        // remove if not used
                 + "$quote>;"  // remove if not used
                 //+ "<$quote;"
-                + "->$long;"
+                + "'-'>$long;"
 
             }
         };

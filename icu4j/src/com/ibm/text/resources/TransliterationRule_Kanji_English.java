@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Kanji_English.java,v $ 
- * $Date: 2000/03/10 04:07:30 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/22 00:04:25 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -148,7 +148,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u4F38>'[extend]'",
       "\u4F3A>'[serve]'",
       "\u4F3C>'[resemble]'",
-      "\u4F3D>'[transcription of sanskrit gha in buddhist texts ('\u00ebm\u00e2\u00e6 \"samgha\"')]'",
+      "\u4F3D>'[transcription of sanskrit gha in buddhist texts ('\u00ebm\u00e2\u00e6' \"samgha\")]'",
       "\u4F43>'[tenant farmer]'",
       "\u4F46>'[only]'",
       "\u4F47>'[wait]'",
@@ -631,7 +631,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u53F7>'[mark]'",
       "\u53F8>'[take charge of]'",
       //"\u53F9>'[sigh]'",
-      "\u5401>'['interjection \"Alas!\"']'",
+      "\u5401>'[interjection \"Alas!\"]'",
       "\u5403>'[eat]'",
       "\u5404>'[each]'",
       "\u5408>'[combine]'",
@@ -659,7 +659,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u5439>'[blow]'",
       "\u543B>'[kiss]'",
       "\u543C>'[roar]'",
-      "\u543D>'['\"OM\"']'",
+      "\u543D>'[\"OM\"]'",
       "\u543E>'[i]'",
       "\u5440>'[particle used express surprise]'",
       "\u5442>'[surname]'",
@@ -1262,7 +1262,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u5C31>'[just]'",
       "\u5C38>'[corpse]'",
       "\u5C39>'[govern]'",
-      "\u5C3A>'['chinese measure approx. \"foot\"']'",
+      "\u5C3A>'[chinese measure approx. \"foot\"]'",
       "\u5C3B>'[end of spine]'",
       "\u5C3C>'[buddhist nun]'",
       "\u5C3D>'[exhaust]'",
@@ -2250,7 +2250,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u670D>'[clothes]'",
       "\u670F>'[light of crescent moon]'",
       "\u6714>'[first day of lunar month]'",
-      "\u6715>'['pronoun \"i\"']'",
+      "\u6715>'[pronoun \"i\"]'",
       "\u6716>'[clear]'",
       "\u6717>'[clear]'",
       "\u671B>'[look at or forward]'",
@@ -4651,7 +4651,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u85A4>'[allium bakeri]'",
       "\u85A6>'[offer]'",
       "\u85A8>'[death of prince]'",
-      "\u85A9>'['transliteration of\"sat\" of boddhisattva etc.']'",
+      "\u85A9>'[transliteration of \"sat\" of boddhisattva etc.]'",
       "\u85AA>'[fuel]'",
       "\u85AB>'[a medicinal herb]'",
       "\u85AC>'[drugs]'",
@@ -4854,7 +4854,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u889E>'[ceremonial dress worn by emperor]'",
       "\u88A2>'[robe]'",
       "\u88A4>'[longitude]'",
-      "\u88AB>'['passive indicator \"by\"']'",
+      "\u88AB>'[passive indicator \"by\"]'",
       //"\u88AE>'[................................]'",
       //"\u88B0>'[................................]'",
       "\u88B1>'[piece of cloth used wrap bundles]'",
@@ -5779,7 +5779,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       //"\u9665>'[submerge]'",
       "\u966A>'[accompany]'",
       "\u966C>'[corner]'",
-      "\u9670>'['\"female\" principle']'",
+      "\u9670>'[\"female\" principle]'",
       "\u9672>'[frontier]'",
       "\u9673>'[exhibit]'",
       "\u9675>'[hill]'",
@@ -5787,7 +5787,7 @@ public class TransliterationRule_Kanji_English extends ListResourceBundle {
       "\u9677>'[submerge]'",
       "\u9678>'[land]'",
       "\u967A>'[narrow pass]'",
-      "\u967D>'['\"male\" principle']'",
+      "\u967D>'[\"male\" principle]'",
       "\u9685>'[corner]'",
       "\u9686>'[prosperous]'",
       "\u9688>'[cove]'",
