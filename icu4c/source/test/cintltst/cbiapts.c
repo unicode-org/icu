@@ -33,6 +33,8 @@ void addBrkIterAPITest(TestNode** root)
 
 }
 
+#define CLONETEST_ITERATOR_COUNT 2
+
 static void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -41,8 +43,16 @@ static void TestBreakIteratorCAPI()
     UTextOffset start,pos,end,to;
     int32_t i;
     int32_t count = 0;
+
+   	UBreakIterator * someIterators [CLONETEST_ITERATOR_COUNT];
+	UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
+	UBreakIterator * brk;
+	uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
+	uint32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
     status  = U_ZERO_ERROR;
+
 
 /*test ubrk_open()*/
     log_verbose("\nTesting BreakIterator open functions\n");
@@ -196,12 +206,97 @@ static void TestBreakIteratorCAPI()
     }
     ubrk_close(b);
 
-  
-    
     ubrk_close(word);
     ubrk_close(sentence);
     ubrk_close(line);
     ubrk_close(character);
 
+    /*Testing ubrk_safeClone */
 
+	/* US & Thai - rule-based & dictionary based */
+	someIterators[0] = ubrk_open(UBRK_WORD, "en_US", text, u_strlen(text), &status);
+	someIterators[1] = ubrk_open(UBRK_WORD, "th_TH", text, u_strlen(text), &status);
+	
+    /* test each type of iterator */
+    for (i = 0; i < CLONETEST_ITERATOR_COUNT; i++)
+	{
+
+	    /* Check the various error & informational states */
+
+	    /* Null status - just returns NULL */
+	    if (0 != ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, 0))
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with null status\n");
+	    }
+	    /* error status - should return 0 & keep error the same */
+	    status = U_MEMORY_ALLOCATION_ERROR;
+	    if (0 != ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, &status) || status != U_MEMORY_ALLOCATION_ERROR)
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with incoming error status\n");
+	    }
+	    status = U_ZERO_ERROR;
+
+	    /* Null buffer size pointer - just returns NULL & set error to U_ILLEGAL_ARGUMENT_ERROR*/
+	    if (0 != ubrk_safeClone(someIterators[i], buffer[i], 0, &status) || status != U_ILLEGAL_ARGUMENT_ERROR)
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with null bufferSize pointer\n");
+	    }
+	    status = U_ZERO_ERROR;
+	
+	    /* buffer size pointer is 0 - fill in pbufferSize with a size */
+	    bufferSize = 0;
+	    if (0 != ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, &status) || U_FAILURE(status) || bufferSize <= 0)
+	    {
+		    log_err("FAIL: Cloned Iterator failed a sizing request ('preflighting')\n");
+	    }
+	    /* Verify our define is large enough  */
+	    if (U_BRK_SAFECLONE_BUFFERSIZE < bufferSize)
+	    {
+		    log_err("FAIL: Pre-calculated buffer size is too small\n");
+	    }
+	    /* Verify we can use this run-time calculated size */
+	    if (0 == (brk = ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, &status)) || U_FAILURE(status))
+	    {
+		    log_err("FAIL: Iterator can't be cloned with run-time size\n");
+	    }
+	    if (brk) ubrk_close(brk);
+	    /* size one byte too small - should allocate & let us know */
+	    --bufferSize;
+	    if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_ERROR)
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with too-small buffer size\n");
+	    }
+	    if (brk) ubrk_close(brk);
+	    status = U_ZERO_ERROR;
+	    bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+
+    	/* Null buffer pointer - return Iterator & set error to U_SAFECLONE_ALLOCATED_ERROR */
+	    if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_ERROR)
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with null buffer pointer\n");
+	    }
+	    if (brk) ubrk_close(brk);
+	    status = U_ZERO_ERROR;
+
+	    /* Null Iterator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
+	    if (0 != ubrk_safeClone(0, buffer[i], &bufferSize, &status) || status != U_ILLEGAL_ARGUMENT_ERROR)
+	    {
+		    log_err("FAIL: Cloned Iterator failed to deal correctly with null Iterator pointer\n");
+	    }
+	    status = U_ZERO_ERROR;
+	
+    	/* Do these cloned Iterators work at all - make a first & next call */
+		bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
+		someClonedIterators[i] = ubrk_safeClone(someIterators[i], buffer[i], &bufferSize, &status);
+
+	    start = ubrk_first(someClonedIterators[i]);
+        if(start!=0)
+            log_err("error ubrk_start(clone) did not return 0\n");
+        pos=ubrk_next(someClonedIterators[i]);
+        if(pos!=4)
+            log_err("error ubrk_next(clone) did not return 4\n");
+    		
+	    ubrk_close(someClonedIterators[i]);
+		ubrk_close(someIterators[i]);
+	}
 }
