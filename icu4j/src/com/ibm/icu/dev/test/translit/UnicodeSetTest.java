@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/12/04 00:25:52 $ 
- * $Revision: 1.39 $
+ * $Date: 2003/01/21 21:11:58 $ 
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -825,6 +825,15 @@ public class UnicodeSetTest extends TestFmwk {
             "[:nv=0.5:]",
             "\u00BD\u0F2A",
             "\u00BC",
+
+            // JB#2653: Age
+            "[:Age=1.1:]",
+            "\u03D6", // 1.1
+            "\u03D8\u03D9", // 3.2
+
+            "[:Age=3.2:]",
+            "\u03D8\u03D9",
+            "\u03D6", // 1.1
         };
 
         for (int i=0; i<DATA.length; i+=3) {

@@ -766,6 +766,15 @@ void UnicodeSetTest::TestPropertySet() {
         "[:nv=0.5:]",
         "\\u00BD\\u0F2A",
         "\\u00BC",
+
+        // JB#2653: Age
+        "[:Age=1.1:]",
+        "\\u03D6", // 1.1
+        "\\u03D8\\u03D9", // 3.2
+        
+        "[:Age=3.2:]",
+        "\\u03D8\\u03D9",
+        "\\u03D6", // 1.1
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
