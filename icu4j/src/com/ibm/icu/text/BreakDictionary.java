@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $ 
- * $Date: 2002/02/16 03:06:03 $ 
- * $Revision: 1.7 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $
+ * $Date: 2002/12/05 01:14:32 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -34,11 +34,13 @@ import com.ibm.icu.util.CompactByteArray;
  * as a two-dimensional array that can be treated as a table of state
  * transitions.  Indexes are used to compress this array, taking
  * advantage of the fact that this array will always be very sparse.
+ * @internal
  */
 public class BreakDictionary {
     //=================================================================================
     // testing and debugging
     //=================================================================================
+    /** @internal */
     public static void main(String args[])
             throws FileNotFoundException, UnsupportedEncodingException, IOException {
         String filename = args[0];
@@ -46,18 +48,19 @@ public class BreakDictionary {
         BreakDictionary dictionary = new BreakDictionary(new FileInputStream(filename));
 
         PrintWriter out = null;
-        
+
         if(args.length >= 2) {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UnicodeLittle"));
         }
-        
+
         dictionary.printWordList("", 0, out);
-        
+
         if (out != null) {
             out.close();
         }
     }
 
+    /** @internal */
     public void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
         if (state == 0xFFFF) {
@@ -69,15 +72,15 @@ public class BreakDictionary {
         else {
             for (int i = 0; i < numCols; i++) {
                 int newState = (at(state, i)) & 0xFFFF;
-                
+
                 if (newState != 0) {
                     char newChar = reverseColumnMap[i];
                     String newPartialWord = partialWord;
-                    
+
                     if (newChar != 0) {
                         newPartialWord += newChar;
                     }
-                    
+
                     printWordList(newPartialWord, newState, out);
                 }
             }
@@ -158,16 +161,18 @@ public class BreakDictionary {
     // deserialization
     //=================================================================================
 
+    /** @internal */
     public BreakDictionary(InputStream dictionaryStream) throws IOException {
         readDictionaryFile(new DataInputStream(dictionaryStream));
     }
 
+    /** @internal */
     public void readDictionaryFile(DataInputStream in) throws IOException {
         int l;
 
         // read in the version number (right now we just ignore it)
         in.readInt();
-        
+
         // read in the column map (this is serialized in its internal form:
         // an index array followed by a data array)
         l = in.readInt();
@@ -235,6 +240,7 @@ public class BreakDictionary {
      * @param row The current state
      * @param ch The character whose column we're interested in
      * @return The new state to transition to
+     * @internal
      */
     public final short at(int row, char ch) {
         int col = columnMap.elementAt(ch);
@@ -251,6 +257,7 @@ public class BreakDictionary {
      * @param col The column number of the input character (0 means "not a
      * dictionary character")
      * @return The row number of the new state to transition to
+     * @internal
      */
     public final short at(int row, int col) {
         if (cellIsPopulated(row, col)) {
