@@ -1113,7 +1113,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     }
     // process digits or Inf, find decimal position
     status[fgStatusInfinite] = FALSE;
-    int32_t infLen = fSymbols->compareInfinity(text, parsePosition.getIndex());;
+    int32_t infLen = fSymbols->compareInfinity(text, position);
     if (!isExponent && infLen)
     {
         // Found a infinite number.
@@ -1686,7 +1686,7 @@ int8_t DecimalFormat::getMinimumExponentDigits() {
  * @see #setExponentSignAlwaysShown
  */
 void DecimalFormat::setMinimumExponentDigits(int8_t minExpDig) {
-    fMinExponentDigits = (minExpDig > 0) ? minExpDig : 1;
+    fMinExponentDigits = (int8_t)((minExpDig > 0) ? minExpDig : 1);
 }
 
 /**
@@ -2193,7 +2193,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         minus             = fSymbols->getMinusSign();
         padEscape         = fSymbols->getPadEscape();
     }
-    UChar nineDigit = zeroDigit + 9;
+    UChar nineDigit = (UChar)(zeroDigit + 9);
 
     int32_t pos = 0;
     // Part 0 is the positive pattern.  Part 1, if present, is the negative
