@@ -56,16 +56,16 @@ void TestConvert()
     FILE*               ucs_file_in         =   NULL;
     UChar                BOM                 =   0x0000;
     UChar                myUChar           =   0x0000;
-    char                mytarget[MAX_FILE_LEN];
-    char*               mytarget_1=mytarget;
-    char*               mytarget_use        = mytarget;
+    char*               mytarget; /*    [MAX_FILE_LEN] */
+    char*               mytarget_1;
+    char*               mytarget_use;
     UChar*                consumedUni         =   NULL;
     char*               consumed            =   NULL;
-    char                output_cp_buffer    [MAX_FILE_LEN];
-    UChar                ucs_file_buffer     [MAX_FILE_LEN];
-    UChar*                ucs_file_buffer_use = ucs_file_buffer;
-    UChar                my_ucs_file_buffer  [MAX_FILE_LEN];
-    UChar*                my_ucs_file_buffer_1=my_ucs_file_buffer;
+    char*                 output_cp_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                ucs_file_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                ucs_file_buffer_use;
+    UChar*                my_ucs_file_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                my_ucs_file_buffer_1;
     int32_t             i                   =   0;
     int8_t                ii                  =   0;
     int32_t             j                   =   0;
@@ -176,6 +176,17 @@ void TestConvert()
     UConverterToUCallback oldToUAction = NULL;
     void* oldFromUContext = NULL;
     void* oldToUContext = NULL;
+
+	/* Allocate memory */
+	mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
+	output_cp_buffer = (char*) malloc(MAX_FILE_LEN * sizeof(output_cp_buffer[0]));
+	ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(ucs_file_buffer[0]));
+	my_ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(my_ucs_file_buffer[0]));
+
+	ucs_file_buffer_use = ucs_file_buffer;
+	mytarget_1=mytarget;
+	mytarget_use        = mytarget;
+	my_ucs_file_buffer_1=my_ucs_file_buffer;
 
     /* flush the converter cache to get a consistent state before the flushing is tested */
     flushCount = ucnv_flushCache();
@@ -934,6 +945,10 @@ void TestConvert()
     if (uchar3 != 0) free(uchar3);    
     }
     
+    free((void*)mytarget);
+    free((void*)output_cp_buffer);
+    free((void*)ucs_file_buffer);
+    free((void*)my_ucs_file_buffer);
 }
 
 void WriteToFile(const UChar *a, FILE *myfile)
