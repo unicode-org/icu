@@ -1,0 +1,72 @@
+## -*-makefile-*-
+## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
+## to Rhapsody, aka Mac OS X Server)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -dynamic -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -dynamic -c
+
+## Extra commands to build and link
+LIBTOOL=        /usr/bin/libtool
+
+## Commands to link
+LINK.c=		$(LIBTOOL) $(LDFLAGS) -static
+LINK.cc=	$(LIBTOOL) $(LDFLAGS) -static
+
+## Commands to make a shared library
+SHLIB.c=	$(LIBTOOL) $(LDFLAGS) -dynamic
+#SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -dynamic
+SHLIB.cc=	$(LIBTOOL) $(LDFLAGS) -dynamic
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	
+LD_RPATH_PRE=	-Wl,-rpath,
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+LIBICU = libicu-
+## Shared object suffix
+SO=		dylib
+
+## Force removal [for make clean]
+RMV = rm -rf
+## Platform command to move executable target
+INSTALL-S = $(INSTALL)
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End Darwin-specific setup
