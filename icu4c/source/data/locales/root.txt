@@ -10,14 +10,6 @@
  *  ICU <specials> source: ../../../locale/icu/main\root.xml
  */
 root{
-    boundaries {
-        grapheme { "char" }
-        line { "line" }
-        sentence { "sent" }
-        title { "title" }
-        word { "word" }
-    }
-
     Currencies{
         EUR{
             "€",
@@ -40,7 +32,7 @@ root{
             "JPY",
         }
         USD{
-            "US$",
+            "$",
             "USD",
         }
     }
@@ -74,6 +66,13 @@ root{
         210,
     }
     Version{"1.2"}
+    boundaries{
+        grapheme{"char"}
+        line{"line"}
+        sentence{"sent"}
+        title{"title"}
+        word{"word"}
+    }
     calendar{
         buddhist{
             DateTimePatterns{
@@ -292,8 +291,8 @@ root{
             weekend:intvector{
                 7,
                 0,
-                2,
-                0,
+                1,
+                86400000,
             }
         }
         hebrew{

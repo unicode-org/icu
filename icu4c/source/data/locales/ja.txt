@@ -10,9 +10,6 @@
  *  ICU <specials> source: ../../../locale/icu/main\ja.xml
  */
 ja{
-    boundaries {
-        word { "word_ja" }
-    }
     Countries{
         AD{"アンドラ"}
         AE{"アラブ首長国連邦"}
@@ -2080,6 +2077,9 @@ ja{
         REVISED{"改訂版"}
     }
     Version{"1.2"}
+    boundaries{
+        word{"word_ja"}
+    }
     calendar{
         gregorian{
             AmPmMarkers{
@@ -2410,28 +2410,12 @@ ja{
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
         {
-            "PST",
-            "太平洋標準時",
-            "PST",
-            "太平洋夏時間",
-            "PDT",
-            "ロサンゼルス",
-        }
-        {
             "America/Los_Angeles",
             "太平洋標準時",
             "PST",
             "太平洋夏時間",
             "PDT",
             "ロサンゼルス",
-        }
-        {
-            "MST",
-            "山地標準時",
-            "MST",
-            "山地夏時間",
-            "MDT",
-            "デンバー",
         }
         {
             "America/Denver",
@@ -2442,28 +2426,12 @@ ja{
             "デンバー",
         }
         {
-            "PNT",
-            "山地標準時",
-            "MST",
-            "山地標準時",
-            "MST",
-            "フェニックス",
-        }
-        {
             "America/Phoenix",
             "山地標準時",
             "MST",
             "山地標準時",
             "MST",
             "フェニックス",
-        }
-        {
-            "CST",
-            "中部標準時",
-            "CST",
-            "中部夏時間",
-            "CDT",
-            "シカゴ",
         }
         {
             "America/Chicago",
@@ -2474,28 +2442,12 @@ ja{
             "シカゴ",
         }
         {
-            "EST",
-            "東部標準時",
-            "EST",
-            "東部夏時間",
-            "EDT",
-            "ニューヨーク",
-        }
-        {
             "America/New_York",
             "東部標準時",
             "EST",
             "東部夏時間",
             "EDT",
             "ニューヨーク",
-        }
-        {
-            "IET",
-            "東部標準時",
-            "EST",
-            "東部標準時",
-            "EST",
-            "インディアナポリス",
         }
         {
             "America/Indianapolis",
@@ -2506,28 +2458,12 @@ ja{
             "インディアナポリス",
         }
         {
-            "HST",
-            "ハワイ標準時",
-            "HST",
-            "ハワイ標準時",
-            "HST",
-            "ホノルル",
-        }
-        {
             "Pacific/Honolulu",
             "ハワイ標準時",
             "HST",
             "ハワイ標準時",
             "HST",
             "ホノルル",
-        }
-        {
-            "AST",
-            "アラスカ標準時",
-            "AST",
-            "アラスカ夏時間",
-            "ADT",
-            "アンカレッジ",
         }
         {
             "America/Anchorage",
@@ -2546,28 +2482,12 @@ ja{
             "ハリファクス",
         }
         {
-            "CNT",
-            "ニューファンドランド島標準時",
-            "CNT",
-            "ニューファンドランド島夏時間",
-            "CDT",
-            "セントジョンズ",
-        }
-        {
             "America/St_Johns",
             "ニューファンドランド島標準時",
             "CNT",
             "ニューファンドランド島夏時間",
             "CDT",
             "セントジョンズ",
-        }
-        {
-            "ECT",
-            "中欧標準時",
-            "CET",
-            "中欧夏時間",
-            "CEST",
-            "パリ",
         }
         {
             "Europe/Paris",
@@ -2578,7 +2498,7 @@ ja{
             "パリ",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "グリニッジ標準時",
             "GMT",
             "グリニッジ標準時",
@@ -2602,14 +2522,6 @@ ja{
             "エルサレム",
         }
         {
-            "JST",
-            "日本標準時",
-            "JST",
-            "日本標準時",
-            "JST",
-            "東京",
-        }
-        {
             "Asia/Tokyo",
             "日本標準時",
             "JST",
@@ -2624,14 +2536,6 @@ ja{
             "東欧夏時間",
             "EEST",
             "ブカレスト",
-        }
-        {
-            "CTT",
-            "中国標準時",
-            "CTT",
-            "中国標準時",
-            "CDT",
-            "上海",
         }
         {
             "Asia/Shanghai",

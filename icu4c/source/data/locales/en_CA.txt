@@ -12,10 +12,6 @@ en_CA{
             "$",
             "Canadian Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
     NumberPatterns{
         "#,##0.###;-#,##0.###",
@@ -26,6 +22,10 @@ en_CA{
     Version{"1.2"}
     calendar{
         gregorian{
+            DateTimeElements:intvector{
+                1,
+                4,
+            }
             DateTimePatterns{
                 "h:mm:ss a z",
                 "h:mm:ss a z",

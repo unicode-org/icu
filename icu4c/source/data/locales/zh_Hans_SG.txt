@@ -17,7 +17,6 @@ zh_Hans_SG{
         SA{"沙地阿拉伯"}
     }
     Languages{
-        ko{"韩文"}
         root{"根 源"}
         sh{"塞尔维亚克罗地亚文"}
     }

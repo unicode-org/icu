@@ -228,7 +228,7 @@ es{
         TR{"Turquía"}
         TT{"Trinidad y Tabago"}
         TV{"Tuvalu"}
-        TW{"Taiwán, República de China"}
+        TW{"Taiwán"}
         TZ{"Tanzania"}
         UA{"Ucrania"}
         UG{"Uganda"}
@@ -2170,28 +2170,12 @@ es{
     localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
     zoneStrings{
         {
-            "PST",
-            "Hora estándar del Pacífico",
-            "PST",
-            "Hora de verano del Pacífico",
-            "PDT",
-            "Los Ángeles",
-        }
-        {
             "America/Los_Angeles",
             "Hora estándar del Pacífico",
             "PST",
             "Hora de verano del Pacífico",
             "PDT",
             "Los Ángeles",
-        }
-        {
-            "MST",
-            "Hora estándar de Montaña",
-            "MST",
-            "Hora de verano de Montaña",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2202,28 +2186,12 @@ es{
             "Denver",
         }
         {
-            "PNT",
-            "Hora estándar de Montaña",
-            "MST",
-            "Hora estándar de Montaña",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Hora estándar de Montaña",
             "MST",
             "Hora estándar de Montaña",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Hora estándar central",
-            "CST",
-            "Hora de verano central",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2234,28 +2202,12 @@ es{
             "Chicago",
         }
         {
-            "EST",
-            "Hora estándar oriental",
-            "EST",
-            "Hora de verano oriental",
-            "EDT",
-            "Nueva York",
-        }
-        {
             "America/New_York",
             "Hora estándar oriental",
             "EST",
             "Hora de verano oriental",
             "EDT",
             "Nueva York",
-        }
-        {
-            "IET",
-            "Hora estándar oriental",
-            "EST",
-            "Hora estándar oriental",
-            "EST",
-            "Indianápolis",
         }
         {
             "America/Indianapolis",
@@ -2266,28 +2218,12 @@ es{
             "Indianápolis",
         }
         {
-            "HST",
-            "Hora estándar de Hawai",
-            "HST",
-            "Hora estándar de Hawai",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Hora estándar de Hawai",
             "HST",
             "Hora estándar de Hawai",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Hora estándar de Alaska",
-            "AST",
-            "Hora de verano de Alaska",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2306,28 +2242,12 @@ es{
             "Halifax",
         }
         {
-            "CNT",
-            "Hora estándar de Newfoundland",
-            "CNT",
-            "Hora de verano de Newfoundland",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Hora estándar de Newfoundland",
             "CNT",
             "Hora de verano de Newfoundland",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Hora estándar de Europa Central",
-            "CET",
-            "Hora de verano de Europa Central",
-            "CEST",
-            "París",
         }
         {
             "Europe/Paris",
@@ -2338,7 +2258,7 @@ es{
             "París",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Hora media de Greenwich",
             "GMT",
             "Hora media de Greenwich",
@@ -2362,14 +2282,6 @@ es{
             "Jerusalén",
         }
         {
-            "JST",
-            "Hora estándar de Japón",
-            "JST",
-            "Hora estándar de Japón",
-            "JST",
-            "Tokio",
-        }
-        {
             "Asia/Tokyo",
             "Hora estándar de Japón",
             "JST",
@@ -2384,14 +2296,6 @@ es{
             "Hora de verano de Europa del Este",
             "EEST",
             "Bucarest",
-        }
-        {
-            "CTT",
-            "Hora estándar de China",
-            "CTT",
-            "Hora estándar de China",
-            "CDT",
-            "Shanghai",
         }
         {
             "Asia/Shanghai",

@@ -10,10 +10,6 @@ de_AT{
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                1,
-            }
             DateTimePatterns{
                 "HH:mm' Uhr 'z",
                 "HH:mm:ss z",

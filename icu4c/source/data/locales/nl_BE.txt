@@ -18,7 +18,7 @@ nl_BE{
         gregorian{
             DateTimeElements:intvector{
                 2,
-                1,
+                4,
             }
             DateTimePatterns{
                 "HH.mm' u. 'z",

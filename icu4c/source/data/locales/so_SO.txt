@@ -12,6 +12,10 @@ so_SO{
             "$",
             "SOS",
         }
+        USD{
+            "US$",
+            "USD",
+        }
     }
     NumberPatterns{
         "#,##0.###;-#,##0.###",

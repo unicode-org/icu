@@ -12,10 +12,6 @@ en_AU{
             "$",
             "Australian Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
     Version{"1.2"}
     calendar{

@@ -2065,6 +2065,10 @@ fr{
     Version{"1.2"}
     calendar{
         gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
             DateTimePatterns{
                 "HH' h 'mm z",
                 "HH:mm:ss z",
@@ -2208,235 +2212,163 @@ fr{
     localPatternChars{"GaMjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
         {
-            "PST",
-            "Heure Normale du Pacifique",
-            "PST",
-            "Heure Avancée du Pacifique",
-            "PDT",
-            "Los Angeles",
+            "America/Vancouver",
+            "Heure normale du Pacifique",
+            "HNP",
+            "Heure avancée du Pacifique",
+            "HAP",
+            "Vancouver",
         }
         {
             "America/Los_Angeles",
-            "Heure Normale du Pacifique",
-            "PST",
-            "Heure Avancée du Pacifique",
-            "PDT",
+            "Heure normale du Pacifique (ÉUA)",
+            "HNP (ÉUA)",
+            "Heure avancée du Pacifique (ÉUA)",
+            "HAP (ÉUA)",
             "Los Angeles",
         }
         {
-            "MST",
-            "Heure Normale des Rocheuses",
-            "MST",
-            "Heure Avancée des Rocheuses",
-            "MDT",
-            "Denver",
+            "America/Edmonton",
+            "Heure normale des Rocheuses",
+            "HNR",
+            "Heure avancée des Rocheuses",
+            "HAR",
+            "Edmonton",
         }
         {
             "America/Denver",
-            "Heure Normale des Rocheuses",
-            "MST",
-            "Heure Avancée des Rocheuses",
-            "MDT",
+            "Heure normale des Rocheuses (ÉUA)",
+            "HNR (ÉUA)",
+            "Heure avancée des Rocheuses (ÉUA)",
+            "HAR (ÉUA)",
             "Denver",
         }
         {
-            "PNT",
-            "Heure Normale des Rocheuses",
-            "MST",
-            "Heure Normale des Rocheuses",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
-            "Heure Normale des Rocheuses",
-            "MST",
-            "Heure Normale des Rocheuses",
-            "MST",
+            "Heure normale des Rocheuses (ÉUA)",
+            "HNR (ÉUA)",
+            "Heure avancée des Rocheuses (ÉUA)",
+            "HAR (ÉUA)",
             "Phoenix",
         }
         {
-            "CST",
-            "Heure Normale du Centre",
-            "CST",
-            "Heure Avancée du Centre",
-            "CDT",
-            "Chicago",
+            "America/Winnipeg",
+            "Heure normale du Centre",
+            "HNC",
+            "Heure avancée du Centre",
+            "HAC",
+            "Winnipeg",
         }
         {
             "America/Chicago",
-            "Heure Normale du Centre",
-            "CST",
-            "Heure Avancée du Centre",
-            "CDT",
+            "Heure normale du Centre (ÉUA)",
+            "HNC (ÉUA)",
+            "Heure avancée du Centre (ÉUA)",
+            "HAC (ÉUA)",
             "Chicago",
         }
         {
-            "EST",
-            "Heure Normale de l’Est",
-            "EST",
-            "Heure Avancée de l’Est",
-            "EDT",
-            "New York",
+            "America/Montreal",
+            "Heure normale de l’Est",
+            "HNE",
+            "Heure avancée de l’Est",
+            "HAE",
+            "Montréal",
         }
         {
             "America/New_York",
-            "Heure Normale de l’Est",
-            "EST",
-            "Heure Avancée de l’Est",
-            "EDT",
+            "Heure normale de l’Est (ÉUA)",
+            "HNE (ÉUA)",
+            "Heure avancée de l’Est (ÉUA)",
+            "HAE (ÉUA)",
             "New York",
         }
         {
-            "IET",
-            "Heure Normale de l’Est",
-            "EST",
-            "Heure Normale de l’Est",
-            "EST",
-            "Indianapolis",
-        }
-        {
             "America/Indianapolis",
-            "Heure Normale de l’Est",
-            "EST",
-            "Heure Normale de l’Est",
-            "EST",
+            "Heure normale de l’Est (ÉUA)",
+            "HNE (ÉUA)",
+            "Heure avancée de l’Est (ÉUA)",
+            "HAE (ÉUA)",
             "Indianapolis",
-        }
-        {
-            "HST",
-            "Heure Normale de Hawaï",
-            "HST",
-            "Heure Normale de Hawaï",
-            "HST",
-            "Honolulu",
         }
         {
             "Pacific/Honolulu",
-            "Heure Normale de Hawaï",
+            "Heure normale d’Hawaï",
             "HST",
-            "Heure Normale de Hawaï",
-            "HST",
+            "Heure avancée d’Hawaï",
+            "HDT",
             "Honolulu",
         }
         {
-            "AST",
-            "Heure Normale de l’Alaska",
-            "AST",
-            "Heure Avancée de l’Alaska",
-            "ADT",
-            "Anchorage",
-        }
-        {
             "America/Anchorage",
-            "Heure Normale de l’Alaska",
-            "AST",
-            "Heure Avancée de l’Alaska",
-            "ADT",
+            "Heure normale de l’Alaska",
+            "HNAK",
+            "Heure avancée de l’Alaska",
+            "HAAK",
             "Anchorage",
         }
         {
             "America/Halifax",
-            "Heure Normale de l’Atlantique",
-            "AST",
-            "Heure Avancée de l’Atlantique",
-            "ADT",
+            "Heure normale de l’Atlantique",
+            "HNA",
+            "Heure avancée de l’Atlantique",
+            "HAA",
             "Halifax",
         }
         {
-            "CNT",
-            "Heure Normale de Terre-Neuve",
-            "CNT",
-            "Heure Avancée de Terre-Neuve",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
-            "Heure Normale de Terre-Neuve",
-            "CNT",
-            "Heure Avancée de Terre-Neuve",
-            "CDT",
-            "St. Johns",
-        }
-        {
-            "ECT",
-            "Heure Normale de l’Europe Centrale",
-            "CET",
-            "Heure Avancée de l’Europe Centrale",
-            "CEST",
-            "Paris",
+            "Heure normale de Terre-Neuve",
+            "HNT",
+            "Heure avancée de Terre-Neuve",
+            "HAT",
+            "Saint-Jean de Terre-Neuve",
         }
         {
             "Europe/Paris",
-            "Heure Normale de l’Europe Centrale",
-            "CET",
-            "Heure Avancée de l’Europe Centrale",
-            "CEST",
+            "Heure normale de l’Europe centrale",
+            "HNEC",
+            "Heure avancée de l’Europe centrale",
+            "HAEC",
             "Paris",
         }
         {
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "London",
-        }
-        {
-            "Africa/Casablanca",
+            "Etc/GMT",
             "Temps Moyen de Greenwich",
             "GMT",
             "Temps Moyen de Greenwich",
             "GMT",
-            "Casablanca",
+            "(GMT)",
         }
         {
             "Asia/Jerusalem",
-            "Heure Normale d’Israël",
-            "IST",
-            "Heure Avancée d’Israël",
-            "IDT",
-            "Jerusalem",
-        }
-        {
-            "JST",
-            "Heure Normale du Japon",
-            "JST",
-            "Heure Normale du Japon",
-            "JST",
-            "Tokyo",
+            "Heure normale d’Israël",
+            "HNI",
+            "Heure avancée d’Israël",
+            "HAI",
+            "Jérusalem",
         }
         {
             "Asia/Tokyo",
-            "Heure Normale du Japon",
-            "JST",
-            "Heure Normale du Japon",
-            "JST",
+            "Heure normale du Japon",
+            "HNJ",
+            "Heure avancée du Japon",
+            "HAJ",
             "Tokyo",
         }
         {
             "Europe/Bucharest",
-            "Heure Normale de l’Europe de l’Est",
-            "EET",
-            "Heure Avancée de l’Europe de l’Est",
-            "EEST",
-            "Bucharest",
-        }
-        {
-            "CTT",
-            "Heure Normale de Chine",
-            "CTT",
-            "Heure Normale de Chine",
-            "CDT",
-            "Shanghai",
+            "Heure normale de l’Europe de l’Est",
+            "HEE",
+            "Heure avancée de l’Europe de l’Est",
+            "HAEE",
+            "Bucarest",
         }
         {
             "Asia/Shanghai",
-            "Heure Normale de Chine",
-            "CTT",
-            "Heure Normale de Chine",
-            "CDT",
+            "Heure normale de Chine",
+            "HNC",
+            "Heure avancée de Chine",
+            "HAC",
             "Shanghai",
         }
     }

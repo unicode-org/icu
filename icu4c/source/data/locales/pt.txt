@@ -2427,23 +2427,9 @@ pt{
                     }
                 }
             }
-            weekend:intvector{
-                7,
-                0,
-                1,
-                86400000,
-            }
         }
     }
     zoneStrings{
-        {
-            "PST",
-            "Horário Padrão do Pacífico",
-            "PST",
-            "Horário de Verão do Pacífico",
-            "PDT",
-            "Los Angeles",
-        }
         {
             "America/Los_Angeles",
             "Horário Padrão do Pacífico",
@@ -2451,14 +2437,6 @@ pt{
             "Horário de Verão do Pacífico",
             "PDT",
             "Los Angeles",
-        }
-        {
-            "MST",
-            "Horário Padrão Montanha",
-            "MST",
-            "Horário de Verão Montanha",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2469,28 +2447,12 @@ pt{
             "Denver",
         }
         {
-            "PNT",
-            "Horário Padrão Montanha",
-            "MST",
-            "Horário Padrão Montanha",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Horário Padrão Montanha",
             "MST",
             "Horário Padrão Montanha",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Horário Padrão Central",
-            "CST",
-            "Horário de Verão Central",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2501,28 +2463,12 @@ pt{
             "Chicago",
         }
         {
-            "EST",
-            "Horário Padrão Oriental",
-            "EST",
-            "Horário de Verão Oriental",
-            "EDT",
-            "Nova Iorque",
-        }
-        {
             "America/New_York",
             "Horário Padrão Oriental",
             "EST",
             "Horário de Verão Oriental",
             "EDT",
             "Nova Iorque",
-        }
-        {
-            "IET",
-            "Horário Padrão Oriental",
-            "EST",
-            "Horário Padrão Oriental",
-            "EST",
-            "Indianapolis",
         }
         {
             "America/Indianapolis",
@@ -2533,28 +2479,12 @@ pt{
             "Indianápolis",
         }
         {
-            "HST",
-            "Horário Padrão do Havaí",
-            "HST",
-            "Horário Padrão do Havaí",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Horário Padrão do Havaí",
             "HST",
             "Horário Padrão do Havaí",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Horário Padrão do Alasca",
-            "AST",
-            "Horário de Verão do Alasca",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2573,28 +2503,12 @@ pt{
             "Halifax",
         }
         {
-            "CNT",
-            "Horário Padrão de Terra Nova",
-            "CNT",
-            "Horário de Verão de Terra Nova",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Horário Padrão de Terra Nova",
             "CNT",
             "Horário de Verão de Terra Nova",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Horário Padrão Europa Central",
-            "CET",
-            "Horário de Verão Europa Central",
-            "CEST",
-            "Paris",
         }
         {
             "Europe/Paris",
@@ -2605,7 +2519,7 @@ pt{
             "Paris",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Horário do Meridiano de Greenwich",
             "GMT",
             "Horário do Meridiano de Greenwich",
@@ -2629,14 +2543,6 @@ pt{
             "Jerusalém",
         }
         {
-            "JST",
-            "Horário Padrão do Japão",
-            "JST",
-            "Horário Padrão do Japão",
-            "JST",
-            "Tóquio",
-        }
-        {
             "Asia/Tokyo",
             "Horário Padrão do Japão",
             "JST",
@@ -2651,14 +2557,6 @@ pt{
             "Horário de Verão da Europa Oriental",
             "EEST",
             "Bucareste",
-        }
-        {
-            "CTT",
-            "Horário Padrão da China",
-            "CTT",
-            "Horário Padrão da China",
-            "CDT",
-            "Xangai",
         }
         {
             "Asia/Shanghai",

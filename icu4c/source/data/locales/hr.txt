@@ -228,7 +228,6 @@ hr{
         TR{"Turska"}
         TT{"Trinidad i Tobago"}
         TV{"Tuvalu"}
-        TW{"Tajvan, Kineska Pokrajina"}
         TZ{"Tanzanija"}
         UA{"Ukrajina"}
         UG{"Uganda"}

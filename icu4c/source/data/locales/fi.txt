@@ -2313,17 +2313,6 @@ fi{
                 2,
                 4,
             }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "d. MMMM'ta 'yyyy",
-                "d. MMMM'ta 'yyyy",
-                "d.M.yyyy",
-                "d.M.yyyy",
-                "{1} {0}",
-            }
             dayNames{
                 format{
                     abbreviated{
@@ -2458,28 +2447,12 @@ fi{
     localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
     zoneStrings{
         {
-            "PST",
-            "Tyynenmeren normaaliaika",
-            "PST",
-            "Tyynenmeren kesäaika",
-            "PDT",
-            "Los Angeles",
-        }
-        {
             "America/Los_Angeles",
             "Tyynenmeren normaaliaika",
             "PST",
             "Tyynenmeren kesäaika",
             "PDT",
             "Los Angeles",
-        }
-        {
-            "MST",
-            "Kalliovuorten normaaliaika",
-            "MST",
-            "Kalliovuorten kesäaika",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2490,28 +2463,12 @@ fi{
             "Denver",
         }
         {
-            "PNT",
-            "Kalliovuorten normaaliaika",
-            "MST",
-            "Kalliovuorten normaaliaika",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Kalliovuorten normaaliaika",
             "MST",
             "Kalliovuorten normaaliaika",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Keskinen normaaliaika",
-            "CST",
-            "Keskinen kesäaika",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2522,28 +2479,12 @@ fi{
             "Chicago",
         }
         {
-            "EST",
-            "Itäinen normaaliaika",
-            "EST",
-            "Itäinen kesäaika",
-            "EDT",
-            "New York",
-        }
-        {
             "America/New_York",
             "Itäinen normaaliaika",
             "EST",
             "Itäinen kesäaika",
             "EDT",
             "New York",
-        }
-        {
-            "IET",
-            "Itäinen normaaliaika",
-            "EST",
-            "Itäinen normaaliaika",
-            "EST",
-            "Indianapolis",
         }
         {
             "America/Indianapolis",
@@ -2554,28 +2495,12 @@ fi{
             "Indianapolis",
         }
         {
-            "HST",
-            "Havaijin normaaliaika",
-            "HST",
-            "Havaijin kesäaika",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Havaijin normaaliaika",
             "HST",
             "Havaijin normaaliaika",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Alaskan normaaliaika",
-            "AST",
-            "Alaskan kesäaika",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2594,28 +2519,12 @@ fi{
             "Halifax",
         }
         {
-            "CNT",
-            "Newfoundlandin normaaliaika",
-            "CNT",
-            "Newfoundlandin kesäaika",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Newfoundlandin normaaliaika",
             "CNT",
             "Newfoundlandin kesäaika",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Keski-Euroopan normaaliaika",
-            "CET",
-            "Keski-Euroopan kesäaika",
-            "CEST",
-            "Pariisi",
         }
         {
             "Europe/Paris",
@@ -2626,7 +2535,7 @@ fi{
             "Pariisi",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Greenwichin aika",
             "GMT",
             "Greenwichin aika",
@@ -2650,14 +2559,6 @@ fi{
             "Jerusalem",
         }
         {
-            "JST",
-            "Japanin normaaliaika",
-            "JST",
-            "Japanin normaaliaika",
-            "JST",
-            "Tokio",
-        }
-        {
             "Asia/Tokyo",
             "Japanin normaaliaika",
             "JST",
@@ -2672,14 +2573,6 @@ fi{
             "Itä-Euroopan kesäaika",
             "EEST",
             "Bukarest",
-        }
-        {
-            "CTT",
-            "Kiinan normaaliaika",
-            "CTT",
-            "Kiinan normaaliaika",
-            "CDT",
-            "Shanghai",
         }
         {
             "Asia/Shanghai",

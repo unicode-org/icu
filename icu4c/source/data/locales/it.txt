@@ -228,7 +228,6 @@ it{
         TR{"Turchia"}
         TT{"Trinidad e Tobago"}
         TV{"Tuvalu"}
-        TW{"Taiwan (provincia della Cina)"}
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}
@@ -2448,28 +2447,12 @@ it{
     }
     zoneStrings{
         {
-            "PST",
-            "Ora Standard Pacifico",
-            "PST",
-            "Ora Legale Pacifico",
-            "PDT",
-            "Los Angeles",
-        }
-        {
             "America/Los_Angeles",
             "Ora Standard Pacifico",
             "PST",
             "Ora Legale Pacifico",
             "PDT",
             "Los Angeles",
-        }
-        {
-            "MST",
-            "Ora Standard Mountain",
-            "MST",
-            "Ora Legale Mountain",
-            "MDT",
-            "Denver",
         }
         {
             "America/Denver",
@@ -2480,28 +2463,12 @@ it{
             "Denver",
         }
         {
-            "PNT",
-            "Ora Standard Mountain",
-            "MST",
-            "Ora Standard Mountain",
-            "MST",
-            "Phoenix",
-        }
-        {
             "America/Phoenix",
             "Ora Standard Mountain",
             "MST",
             "Ora Standard Mountain",
             "MST",
             "Phoenix",
-        }
-        {
-            "CST",
-            "Ora Standard Centrale",
-            "CST",
-            "Ora Legale Centrale",
-            "CDT",
-            "Chicago",
         }
         {
             "America/Chicago",
@@ -2512,28 +2479,12 @@ it{
             "Chicago",
         }
         {
-            "EST",
-            "Ora Standard Orientale",
-            "EST",
-            "Ora Legale Orientale",
-            "EDT",
-            "New York",
-        }
-        {
             "America/New_York",
             "Ora Standard Orientale",
             "EST",
             "Ora Legale Orientale",
             "EDT",
             "New York",
-        }
-        {
-            "IET",
-            "Ora Standard Orientale",
-            "EST",
-            "Ora Standard Orientale",
-            "EST",
-            "Indianapolis",
         }
         {
             "America/Indianapolis",
@@ -2544,28 +2495,12 @@ it{
             "Indianapolis",
         }
         {
-            "HST",
-            "Ora Standard Hawaii",
-            "HST",
-            "Ora Standard Hawaii",
-            "HST",
-            "Honolulu",
-        }
-        {
             "Pacific/Honolulu",
             "Ora Standard Hawaii",
             "HST",
             "Ora Standard Hawaii",
             "HST",
             "Honolulu",
-        }
-        {
-            "AST",
-            "Ora Standard Alaska",
-            "AST",
-            "Ora Legale Alaska",
-            "ADT",
-            "Anchorage",
         }
         {
             "America/Anchorage",
@@ -2584,28 +2519,12 @@ it{
             "Halifax",
         }
         {
-            "CNT",
-            "Ora Standard Newfoundland",
-            "CNT",
-            "Ora Legale Newfoundland",
-            "CDT",
-            "St. Johns",
-        }
-        {
             "America/St_Johns",
             "Ora Standard Newfoundland",
             "CNT",
             "Ora Legale Newfoundland",
             "CDT",
             "St. Johns",
-        }
-        {
-            "ECT",
-            "Ora Standard Centrale Europeo",
-            "CET",
-            "Ora Legale Centrale Europeo",
-            "CEST",
-            "Parigi",
         }
         {
             "Europe/Paris",
@@ -2616,7 +2535,7 @@ it{
             "Parigi",
         }
         {
-            "GMT",
+            "Etc/GMT",
             "Ora Meridiano Greenwich",
             "GMT",
             "Ora Meridiano Greenwich",
@@ -2640,14 +2559,6 @@ it{
             "Gerusalemme",
         }
         {
-            "JST",
-            "Ora Standard Giappone",
-            "JST",
-            "Ora Standard Giappone",
-            "JST",
-            "Tokyo",
-        }
-        {
             "Asia/Tokyo",
             "Ora Standard Giappone",
             "JST",
@@ -2662,14 +2573,6 @@ it{
             "Ora Legale Europa Orientale",
             "EEST",
             "Bucarest",
-        }
-        {
-            "CTT",
-            "Ora Standard Cina",
-            "CTT",
-            "Ora Standard Cina",
-            "CDT",
-            "Shanghai",
         }
         {
             "Asia/Shanghai",

@@ -30,10 +30,6 @@ fr_CH{
     Version{"1.2"}
     calendar{
         gregorian{
-            DateTimeElements:intvector{
-                2,
-                4,
-            }
             DateTimePatterns{
                 "HH.mm:ss' h' z",
                 "HH:mm:ss z",
