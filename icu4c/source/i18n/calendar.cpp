@@ -712,7 +712,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
     }
     char *end;
 
-    string.extract(0, len, number);
+    string.extract(0, len, number, "");
     number[len] = 0;
     int32_t value = (int32_t)strtol(number, &end, 10); // Radix 10
 
