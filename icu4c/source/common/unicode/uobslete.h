@@ -9,20 +9,21 @@
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   Created by: Created by: gendraft.pl, a perl script written by Ram Viswanadha
+*   Created by: gendraft.pl, a perl script written by Ram Viswanadha
 *
-*  Contains data for commenting out APIs marked draft.
+*  Contains data for commenting out APIs.
 *  Gets included by umachine.h
 *
 *  THIS FILE IS MACHINE-GENERATED, DON'T PLAY WITH IT IF YOU DON'T KNOW WHAT
 *  YOU ARE DOING, OTHERWISE VERY BAD THINGS WILL HAPPEN!
 */
 
-#ifndef UOBSOLETE_H
-#define UOBSOLETE_H
+#ifndef UOBSLETE_H
+#define UOBSLETE_H
 
 #ifdef U_HIDE_OBSOLETE_API
 
 
 #endif /* U_HIDE_OBSOLETE_API */
-#endif /* UOBSOLETE_H */
+#endif /* UOBSLETE_H */
+

@@ -16,3 +16,4 @@ MessageFormat	EFormatNumber	ICU 3.0.  The 10-argument limit was removed as of IC
 MessageFormat	kMaxFormat	ICU 3.0.  The 10-argument limit was removed as of ICU 2.6,
 Transliterator	countAvailableIDs	ICU 3.4 use getAvailableIDs() instead
 Transliterator	getAvailableID	ICU 3.4 use getAvailableIDs() instead
+
