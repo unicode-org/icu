@@ -104,7 +104,7 @@ const char* Transliterator::RB_RULE = "Rule";
  * Default constructor.
  * @param theID the string identifier for this transliterator
  * @param theFilter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
@@ -837,7 +837,7 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
     UChar c;
     const UnicodeFilter* filter = getFilter();
     return (filter == 0) ? text.charAt(i) :
-        (filter->isIn(c = text.charAt(i)) ? c : (UChar)0xFFFF);
+        (filter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFF);
 }
 
 /**

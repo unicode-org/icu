@@ -420,7 +420,7 @@ class TestFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter(*this);
     }
-    virtual bool_t isIn(UChar c) const {
+    virtual bool_t contains(UChar c) const {
         return c != (UChar)'c';
     }
 };

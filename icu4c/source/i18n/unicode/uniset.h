@@ -10,6 +10,7 @@
 #ifndef UNICODESET_H
 #define UNICODESET_H
 
+#include "unicode/unifilt.h"
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
@@ -244,7 +245,7 @@ class TransliterationRule;
  *
  * @author Alan Liu
  */
-class U_I18N_API UnicodeSet {
+class U_I18N_API UnicodeSet : public UnicodeFilter {
 
     /**
      * The internal representation is a UnicodeString of even length.
@@ -362,6 +363,13 @@ public:
      * <tt>true</tt> if the specified set is not equal to this set.
      */
     bool_t operator!=(const UnicodeSet& o) const;
+
+    /**
+     * Returns a copy of this object.  All UnicodeFilter objects have
+     * to support cloning in order to allow classes using
+     * UnicodeFilters, such as Transliterator, to implement cloning.
+     */
+    virtual UnicodeFilter* clone() const;
 
     /**
      * Returns the hash code value for this set.

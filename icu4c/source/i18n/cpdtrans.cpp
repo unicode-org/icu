@@ -19,7 +19,7 @@
  * @param transliterators array of <code>Transliterator</code>
  * objects
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
