@@ -466,6 +466,7 @@ typedef struct {
   uint32_t firstMid; uint32_t lastMid;   uint32_t midCount; uint32_t midByteCount;
   uint32_t firstLow; uint32_t lastLow;   uint32_t lowCount; uint32_t lowByteCount;
   uint32_t byteSize; uint32_t start; uint32_t limit;
+  int32_t maxCount;
   int32_t count;
   uint32_t current;
   uint32_t fLow; /*forbidden Low */
@@ -573,7 +574,7 @@ void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, 
 void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status);
 
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
-int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
+int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
 
 #endif
