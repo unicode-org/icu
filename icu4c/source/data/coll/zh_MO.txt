@@ -1,0 +1,14 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_MO {
+    Version{ "2.0" }
+    collations { 
+        default { "traditional" }
+    }
+}
+

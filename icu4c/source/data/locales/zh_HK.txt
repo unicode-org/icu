@@ -7,9 +7,6 @@
 
 zh_HK {
     Version{ "2.0" }
-    collations { 
-        default { "traditional" }
-    }
     Countries:alias { "zh_TW" }
 
     DateTimePatterns { 

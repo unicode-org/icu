@@ -1,0 +1,17 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr {
+    Version{"2.0"}
+    collations {
+        standard { 
+            Version { "2.0" }
+            Sequence { "[backwards 2]"
+            "&A<<\u00c6/E &a<<\u00e6/e" }
+        }
+    }
+}

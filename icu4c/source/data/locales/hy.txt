@@ -338,7 +338,6 @@ hy{
         "+",
     }
     // /**************** Info Below is needed ****************/
-    // collations{}    // To be supplied from Unicode
     // currencies
     //
 }

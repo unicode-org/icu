@@ -235,14 +235,6 @@ mr {
             "IST"
         }
     }
-    collations {
-      standard { 
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
-      }
-    }
     LocaleScript:array { 
         "Deva"        // ISO 15924 Name 
     }

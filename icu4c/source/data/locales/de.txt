@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -24,26 +24,6 @@ de {
     AmPmMarkers {
         "vorm.",
         "nachm.",
-    }
-    collations {
-        standard { 
-            Version { "1.0" }
-            Sequence { 
-                "&A<<\u00c6/E"
-                "&a<<\u00e6/e" 
-            }
-        }
-        phonebook {
-            Version { "2.0" }
-            Sequence { 
-                "&a<<\u00e6/e<<\u00E4/e"
-                "&A<<\u00c6/E<<\u00C4/E" 
-                "&\u0153<<\u00F6/e"
-                "&\u0152<<\u00D6/E" 
-                "&u<<\u00FC/e"
-                "&U<<\u00DC/E" 
-            }
-        }
     }
     // Currency display names
 
