@@ -1,4 +1,5 @@
 package com.ibm.text.utility;
+import com.ibm.icu.text.UnicodeSet;
 
 final class UnicodeMapInt {
     private int [] index = new int[1];
@@ -16,7 +17,7 @@ final class UnicodeMapInt {
         int i = findIndex(cp);
         
         // A1. if cp already has the value, return
-        if (data[i - 1] == value) return;
+        if (data[i - 1] == value) return cp;
         
         int rangeStart = index[i-1];
         int rangeLimit = index[i];
@@ -74,7 +75,7 @@ final class UnicodeMapInt {
     }
     
     /** Finds the least index with a value greater than cp */
-    private int findIndex(cp) {
+    private int findIndex( int cp) {
         if (cp > 0x10FFFF) throw new ArrayIndexOutOfBoundsException("Code point too large: " + cp); // out of bounds!
         int i = -1;
         while (true) {

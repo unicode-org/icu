@@ -1,3 +1,4 @@
+package com.ibm.text.UCD;
 public class ListNFComplete {
     
     // find all the characters that are 
@@ -11,7 +12,7 @@ public class ListNFComplete {
     //    add an ogonek it changes to a-ogonek + breve
         
     public static void main (String[] args) {
-        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        //Normalizer nfd = new Normalizer(Normalizer.NFD);
         
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ProcessUnihan.java,v $
-* $Date: 2002/07/14 22:07:00 $
-* $Revision: 1.1 $
+* $Date: 2003/04/25 01:39:15 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ import com.ibm.text.utility.*;
 import com.ibm.icu.text.UTF16;
 import java.util.*;
 
+// stub file, ignore
 
 public final class ProcessUnihan {
     
@@ -49,7 +50,7 @@ public final class ProcessUnihan {
         //out = Utility.openPrintWriter("Transliterate_Han_English.txt");
         //err = Utility.openPrintWriter("Transliterate_Han_English.log.txt");
         
-        BufferedReader in = Utility.openUnicodeFile("Unihan", "3.2.0", true);
+        BufferedReader in = Utility.openUnicodeFile("Unihan", "3.2.0", Utility.UTF8);
         while (true) {
             Utility.dot(++lineCounter);
             
@@ -62,10 +63,12 @@ public final class ProcessUnihan {
             int count = Utility.split(line, '#', parts);
             
             int code = Integer.parseInt(parts[0].substring(2), 16);
-            Byte itag = tags.get(tag);
-            if (itag == null)
+            Byte itag = tags.get("a");
+            if (itag == null) {}
             String tag = parts[1];
             String value = parts[2];
-            if (tags.containsKey(tag))
-            
+            if (tags.containsKey(tag)) {}
+        }
+    }
+}
             

@@ -1,4 +1,5 @@
-public class NFSkippable {
+package com.ibm.text.UCD;
+public class NFCSkippable {
     
     // find all the characters that are 
     // a) not decomposed by this normalization form
@@ -10,9 +11,8 @@ public class NFSkippable {
     //    Example: a-breve might satisfy a-d, but if you
     //    add an ogonek it changes to a-ogonek + breve
     
-    public NF
-    
     public boolean is(int cp) {
+    	return false;
     }
         
     public static void main (String[] args) {
