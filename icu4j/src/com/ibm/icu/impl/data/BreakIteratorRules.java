@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules.java,v $
- * $Date: 2002/02/16 03:05:38 $
- * $Revision: 1.9 $
+ * $Date: 2002/03/01 02:37:47 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -38,7 +38,8 @@ public class BreakIteratorRules extends ListResourceBundle {
             new String[] { "RuleBasedBreakIterator",     // character-break iterator class
                            "RuleBasedBreakIterator",     // word-break iterator class
                            "RuleBasedBreakIterator",     // line-break iterator class
-                           "RuleBasedBreakIterator" }    // sentence-break iterator class
+                           "RuleBasedBreakIterator",     // sentence-break iterator class
+                           "RuleBasedBreakIterator"}     // Title-Case break iterator class
         },
 
         // rules describing how to break between logical characters
@@ -116,7 +117,7 @@ public class BreakIteratorRules extends ListResourceBundle {
             // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
             // other letters, and digits
             + "$danda=[\u0964\u0965];"
-            + "$kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d$surr_hi_ideo$pua];"
+            + "$kanji=[\u3005\u3400-\u4db5\u4e00-\u9fa5\uf900-\ufa6a$surr_hi_ideo$pua];"
             + "$kata=[\u3099-\u309c\u30a1-\u30fe];"
             + "$hira=[\u3041-\u309e\u30fc];"
             + "$let=[[[:L:][:Mc:]$surr_hi_let]-[$kanji$kata$hira]];"
@@ -234,7 +235,7 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // Kanji: actually includes both Kanji and Kana, except for small Kana and
             // CJK diacritics
-            + "$kanji=[[$surr_hi_ideo$pua\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[$post_word$_ignore_]];"
+            + "$kanji=[[$surr_hi_ideo$pua\u3400-\u4db5\u4e00-\u9fa5\uf900-\ufa6a\u3041-\u3094\u30a1-\u30fa]-[$post_word$_ignore_]];"
 
             // digits
             + "$digit=[[:Nd:][:No:]];"
@@ -360,6 +361,31 @@ public class BreakIteratorRules extends ListResourceBundle {
             // followed by an optional run of ending punctuation, followed by
             // a sentence terminator, this is a safe place to turn around
             + "![$sent_start$lc$digit]$start*$space*$end*$term;"
-        }
+        },
+
+		// default rules for finding Title Case boundaries.
+		//   See  Unicode Technical Report #21 more information about these rules.
+		{ "TitleBreakRules",
+               "$case_ignorable=[[:Mn:][:Me:][:Cf:][:Lm:][:Sk:]\\u0027\u00AD\u2019];"
+             + "$cased=[[[:Lu:][:Lt:][:Ll:]"
+             +     "\u2160-\u216f"                       // Other Uppercase
+             +     "\u24b6-\u24cf"
+             +     "\u02b0-\u02b8"                       // Other Lower case
+             +     "\u02c0-\u02c1"
+             +     "\u02e0-\u02e4"
+             +     "\u0345\u037a"
+             +     "\u2170-\u217f"
+             +     "\u24d0-\u24e9]"
+             +     "-$case_ignorable];"                  // Remove anything that is case_ignorable
+                                                         //   from $cased.
+		     + "$not_cased=[^$cased$case_ignorable];"
+             // First time only, eat through any leading non-word-like stuff.
+		     + "[$not_cased$case_ignorable]*;"
+             //  Match a word (a cased item), plus any following spaces or other non-cased junk,
+             //    up to the start of the next cased item.
+             + "$cased[$cased$case_ignorable]*[$not_cased]*;"
+             + "!$not_cased*[$cased$case_ignorable]*$not_cased*;"   // Backwards rule.
+	    }
+
     };
 }
