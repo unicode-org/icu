@@ -34,4 +34,4 @@
 # In addition, some property names may be the same as some property value names.
 #
 # The combination of property value and property name is, however, unique.
-# For more information, see UTR #24: Regular Expression Guidelines
+# For more information, see UTR #18: Regular Expression Guidelines

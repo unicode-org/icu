@@ -5,21 +5,25 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/09/25 06:40:13 $
-* $Revision: 1.18 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.BitSet;
 import java.util.Map;
+
 import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.BufferedReader;
 
 import com.ibm.text.utility.*;
 
@@ -31,7 +35,7 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "3.2.0";
+    public static final String latestVersion = "3.2.1";
 
     /**
      * Create singleton instance for default (latest) version
@@ -651,7 +655,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getCategoryID_fromIndex(byte prop) {
-        return UCD_Names.GC[prop];
+        return getCategoryID_fromIndex(prop, NORMAL);
     }
     
     public static String getCategoryID_fromIndex(byte prop, byte style) {
@@ -660,7 +664,7 @@ public final class UCD implements UCD_Types {
     
     
     public String getCombiningClassID(int codePoint) {
-        return getCombiningClassID_fromIndex(getCombiningClass(codePoint), NORMAL);
+        return getCombiningClassID(codePoint, NORMAL);
     }
 
     public String getCombiningClassID(int codePoint, byte style) {
@@ -681,9 +685,9 @@ public final class UCD implements UCD_Types {
             case 7: s = style < LONG ? "NK" :  "Nukta"; break;
             case 8: s = style < LONG ? "KV" :  "KanaVoicing"; break;
             case 9: s = style < LONG ? "VR" :  "Virama"; break;
-            case 202: s = style < LONG ? "ATBL" :  "AttachedBelowLeft"; break;
-            case 204: s = style < LONG ? "ATB" :  "AttachedBelow"; break;
-            case 206: s = style < LONG ? "ATBR" :  "AttachedBelowRight"; break;
+            case 200: s = style < LONG ? "ATBL" :  "AttachedBelowLeft"; break;
+            case 202: s = style < LONG ? "ATB" :  "AttachedBelow"; break;
+            case 204: s = style < LONG ? "ATBR" :  "AttachedBelowRight"; break;
             case 208: s = style < LONG ? "ATL" :  "AttachedLeft"; break;
             case 210: s = style < LONG ? "ATR" :  "AttachedRight"; break;
             case 212: s = style < LONG ? "ATAL" :  "AttachedAboveLeft"; break;
@@ -734,7 +738,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getNumericTypeID_fromIndex(byte prop) {
-        return UCD_Names.NT[prop];
+        return getNumericTypeID_fromIndex(prop, NORMAL);
     }
 
     public static String getNumericTypeID_fromIndex(byte prop, byte style) {
@@ -746,7 +750,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getEastAsianWidthID_fromIndex(byte prop) {
-        return UCD_Names.EA[prop];
+        return getEastAsianWidthID_fromIndex(prop, NORMAL);
     }
 
     public static String getEastAsianWidthID_fromIndex(byte prop, byte style) {
@@ -758,7 +762,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getLineBreakID_fromIndex(byte prop) {
-        return UCD_Names.LB[prop];
+        return getLineBreakID_fromIndex(prop, NORMAL);
     }
 
     public static String getLineBreakID_fromIndex(byte prop, byte style) {
@@ -770,7 +774,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getJoiningTypeID_fromIndex(byte prop) {
-        return UCD_Names.JOINING_TYPE[prop];
+        return getJoiningTypeID_fromIndex(prop, NORMAL);
     }
 
     public static String getJoiningTypeID_fromIndex(byte prop, byte style) {
@@ -782,7 +786,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getJoiningGroupID_fromIndex(byte prop) {
-        return UCD_Names.JOINING_GROUP[prop];
+        return getJoiningGroupID_fromIndex(prop, NORMAL);
     }
 
     public static String getJoiningGroupID_fromIndex(byte prop, byte style) {
@@ -795,7 +799,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getScriptID_fromIndex(byte prop) {
-        return UCD_Names.SCRIPT[prop];
+        return getScriptID_fromIndex(prop, NORMAL);
     }
 
     public static String getScriptID_fromIndex(byte prop, byte length) {
@@ -808,7 +812,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getAgeID_fromIndex(byte prop) {
-        return UCD_Names.AGE[prop];
+        return getAgeID_fromIndex(prop, NORMAL);
     }
 
     public static String getAgeID_fromIndex(byte prop, byte style) {
@@ -1304,6 +1308,55 @@ to guarantee identifier closure.
                     dataIn.close();
                 } catch (IOException e) {}
             }
+        }
+    }
+    
+    public static class BlockData {
+        public int start;
+        public int end;
+        public String name;
+    }
+    
+    public boolean getBlockData(int blockId, BlockData output) {
+        if (blocks == null) loadBlocks();
+        BlockData temp;
+        try {
+            temp = (BlockData) blocks.get(blockId);
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+        output.name = temp.name;
+        output.start = temp.start;
+        output.end = temp.end;
+        return true;
+    }
+    
+    private List blocks = null;
+    
+    private void loadBlocks() {
+        blocks = new ArrayList();
+        try {
+            BufferedReader in = Utility.openUnicodeFile("Blocks", version, true, Utility.LATIN1);
+            try {
+                while (true) {
+                    // 0000..007F; Basic Latin
+                    String line = Utility.readDataLine(in);
+                    if (line == null) break;
+                    if (line.length() == 0) continue;
+                    int pos1 = line.indexOf('.');
+                    int pos2 = line.indexOf(';', pos1);
+                    
+                    BlockData blockData = new BlockData();
+                    blockData.start = Integer.parseInt(line.substring(0, pos1), 16);
+                    blockData.end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
+                    blockData.name = line.substring(pos2+1).trim().replace(' ', '_');
+                    blocks.add(blockData);
+                }
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Can't read block file");
         }
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2002/10/03 22:58:17 $
-* $Revision: 1.13 $
+* $Date: 2002/10/05 01:28:56 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -921,14 +921,35 @@ public class WriteCharts implements UCD_Types {
             + "<br><tt>" + Utility.hex(comp) + "</tt></td>";
     }
 
+    
 
     public static void writeAllocation() throws IOException {
     	Default.setUCD();
+        String[] names = new String[300]; // HACK, 300 is plenty for now. Fix if it ever gets larger
+        int[] starts = new int[names.length];
+        int[] ends = new int[names.length];
+        
+        UCD.BlockData blockData = new UCD.BlockData();
+        
         int counter = 0;
-        UnicodeSet[] values = new UnicodeSet[500];
-        String[] names = new String[values.length];
-        int[] starts = new int[values.length];
-        int[] ends = new int[values.length];
+        int blockId = 0;
+        while (Default.ucd.getBlockData(blockId++, blockData)) {
+            names[counter] = blockData.name;
+            starts[counter] = blockData.start;
+            ends[counter] = blockData.end;
+            //System.out.println(names[counter] + ", " + values[counter]);
+            ++counter;
+                
+            // HACK
+            if (blockData.name.equals("Tags")) {
+                names[counter] = "<i>reserved default ignorable</i>";
+                starts[counter] = 0xE0080;
+                ends[counter] = 0xE0FFF;
+                ++counter;
+            }                   
+        }
+        
+        /*
         BufferedReader in = Utility.openUnicodeFile("Blocks", "", true, false);
         try {
             while (true) {
@@ -947,42 +968,79 @@ public class WriteCharts implements UCD_Types {
                 ends[counter] = end;
                 //System.out.println(names[counter] + ", " + values[counter]);
                 ++counter;
+                
+                // HACK
+                if (name.equals("Tags")) {
+                    names[counter] = "<i>reserved default ignorable</i>";
+                    values[counter] = new UnicodeSet(0xE0080, 0xE0FFF);
+                    starts[counter] = 0xE0080;
+                    ends[counter] = 0xE0FFF;
+                    ++counter;
+                }                   
             }
         } finally {
             in.close();
         }
+        */
             
-        PrintWriter out = Utility.openPrintWriter("Allocation.html", Utility.LATIN1_WINDOWS);
+            
+        /*
+            Graphic
+            Format
+            Control
+            Private Use
+            Surrogate
+            Noncharacter
+            Reserved (default ignorable)
+            Reserved (other)
+        */
+            
+        PrintWriter out = Utility.openPrintWriter("allocation.html", Utility.LATIN1_WINDOWS);
         try {
             out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
             out.println("<title>Unicode Allocation</title></head>");
             out.println("<body bgcolor='#FFFFFF'><h1 align='center'><a href='#Notes'>Unicode Allocation</a></h1>");
-            out.println("<table border='1' width='100%' cellspacing='0'>");
-            out.println("<tr><th>Start</th><th align='left'>Block Name</th><th align='left'>Size</th></tr>");
   
-            UnicodeSetIterator it = new UnicodeSetIterator();
 
-            int lastEnd = -1;
-            for (int i = 0; i < counter; ++i) {
-                if (starts[i] != lastEnd + 1) {
-                    drawAllocation(out, lastEnd + 1, "<i>reserved</i>", starts[i] - lastEnd + 1, 0);
+            for (int textOnly = 0; textOnly < 2; ++textOnly) {
+                out.println("<table border='1' cellspacing='0'>"); // width='100%' 
+                if (textOnly == 0) {
+                    out.println("<tr><th>Start</th><th align='left'>Block Name</th><th align='left'>Size</th></tr>");
+                } else {
+                    out.println("<tr><th>Block Name</th><th>Start</th><th>Total</th><th>Assigned</th></tr>");
                 }
-                int total = values[i].size();
-                int alloc = 0;
-                it.reset(values[i]);
-                while (it.nextRange()) {
-                    for (int j = it.codepoint; j <= it.codepointEnd; ++j) {
+                int lastEnd = -1;
+                for (int i = 0; i < counter; ++i) {
+                    if (starts[i] != lastEnd + 1) {
+                        drawAllocation(out, lastEnd + 1, "<i>reserved</i>", starts[i] - lastEnd + 1, 0, "#000000", "#000000", textOnly);
+                    }
+                    int total = ends[i] - starts[i] + 1;
+                    int alloc = 0;
+                    for (int j = starts[i]; j <= ends[i]; ++j) {
                         if (Default.ucd.isAllocated(j)) ++alloc;
                     }
+                    //System.out.println(names[i] + "\t" + alloc + "\t" + total);
+                    String color = names[i].indexOf("Surrogates") >= 0 ? "#FF0000"
+                        : names[i].indexOf("Private") >= 0 ? "#0000FF"
+                        : "#00FF00";
+                    String colorReserved = names[i].indexOf("reserved default ignorable") >= 0 ? "#CCCCCC"
+                        : "#000000";
+                    drawAllocation(out, starts[i], names[i], total, alloc, color, colorReserved, textOnly);
+                    lastEnd = ends[i];
                 }
-                System.out.println(names[i] + "\t" + alloc + "\t" + total);
-                drawAllocation(out, starts[i], names[i], total, alloc);
-                lastEnd = ends[i];
+                out.println("</table><p>&nbsp;</p>");
             }
-            out.println("</table>");
-            out.println("<p><a name='Notes'></a>This chart lists all the Unicode blocks and their starting code points. "
-                + "The area of each bar is proportional to the total number of code points in each block, "
-                + "with green for the proportion of assigned code points. "
+            out.println("<h2>Key</h2><p><a name='Notes'></a>This chart lists all the Unicode blocks and their starting code points. "
+                + "The area of each bar is proportional to the total number of code points in each block. "
+                + "The colors have the following significance:<br>"
+                + "<table border='1' cellspacing='0' cellpadding='4'>"
+                + "<tr><td>Green</td><td>Graphic, Control, Format, Noncharacter* code points</td></tr>"
+                + "<tr><td>Red</td><td>Surrogate code points</td></tr>"
+                + "<tr><td>Blue</td><td>Private Use code points</td></tr>"
+                + "<tr><td>Gray</td><td>Reserved (default ignorable) code points</td></tr>"
+                + "<tr><td>Black</td><td>Reserved (other) code points</td></tr>"
+                + "</table><br>"
+                + "* Control, Format, and Noncharacter are not distinguished from Graphic characters by color, since they are mixed into other blocks. "
                 + "Tooltips on the bars show the total number of code points and the number assigned. "
                 + "(Remember that assigned <i>code points</i> are not necessarily assigned <i>characters</i>.)"
                 + "</p>");
@@ -997,23 +1055,27 @@ public class WriteCharts implements UCD_Types {
     static NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
     static {nf.setMaximumFractionDigits(0);}
     
-    static void drawAllocation(PrintWriter out, int start, String title, int total, int alloc) {
-        int unalloc = total - alloc;
-        
-        double totalWidth = longestBar*(Math.sqrt(total) / Math.sqrt(longestBlock));
-        double allocWidth = alloc * totalWidth / total;
-        double unallocWidth = totalWidth - allocWidth;
- 
-        out.println("<tr><td  align='right'><code>" + Utility.hex(start)
-            + "</code></td><td>" + title
-            + "</td><td title='total: " + nf.format(total) + ", assigned: " + nf.format(alloc)
-            + "'><table border='0' cellspacing='0' cellpadding='0'><tr>");
-                
-        if (alloc != 0) out.println("<td style='font-size:1;width:" + allocWidth + ";height:" + totalWidth
-            + "' bgcolor='#00FF00'>&nbsp;</td>");
-        if (unalloc != 0) out.println("<td style='font-size:1;width:" + unallocWidth + ";height:" + totalWidth
-            + "' bgcolor='#000000'>&nbsp;</td>");
-        out.println("</tr></table></td></tr>");
+    static void drawAllocation(PrintWriter out, int start, String title, int total, int alloc, String color, String colorReserved, int textOnly) {
+        if (textOnly == 0) {
+            int unalloc = total - alloc;
+            
+            double totalWidth = longestBar*(Math.sqrt(total) / Math.sqrt(longestBlock));
+            double allocWidth = alloc * totalWidth / total;
+            double unallocWidth = totalWidth - allocWidth;
+     
+            out.println("<tr><td  align='right'><code>" + Utility.hex(start)
+                + "</code></td><td>" + title
+                + "</td><td title='total: " + nf.format(total) + ", assigned: " + nf.format(alloc)
+                + "'><table border='0' cellspacing='0' cellpadding='0'><tr>");
+            
+            if (alloc != 0) out.println("<td style='font-size:1;width:" + allocWidth + ";height:" + totalWidth
+                + "' bgcolor='" + color + "'>&nbsp;</td>");
+            if (unalloc != 0) out.println("<td style='font-size:1;width:" + unallocWidth + ";height:" + totalWidth
+                + "' bgcolor='" + colorReserved + "'>&nbsp;</td>");
+            out.println("</tr></table></td></tr>");
+        } else {
+            out.println("<tr><td>" + title + "</td><td align='right'>" + start + "</td><td align='right'>" + total + "</td><td align='right'>" + alloc + "</td></tr>");
+        }
     }
     
 }

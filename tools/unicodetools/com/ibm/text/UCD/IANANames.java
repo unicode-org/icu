@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/IANANames.java,v $
-* $Date: 2002/08/08 15:38:16 $
-* $Revision: 1.1 $
+* $Date: 2002/10/05 01:28:58 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -65,7 +65,7 @@ public class IANANames implements UCD_Types {
     }
     
     public IANANames() throws IOException {
-        BufferedReader in = Utility.openReadFile(BASE_DIR + "IANA\\character-sets.txt", false);
+        BufferedReader in = Utility.openReadFile(BASE_DIR + "IANA\\character-sets.txt", Utility.LATIN1);
         try {
             boolean atStart = true;
             String lastName = "";

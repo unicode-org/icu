@@ -29,7 +29,7 @@
 # and '_' are ignored.
 #
 # NOTE: The Block property values are in Blocks.txt, and not repeated here.
-# For more information on the use of blocks, see UTR #24: Regular Expression Guidelines
+# For more information on the use of blocks, see UTR #18: Regular Expression Guidelines
 #
 # NOTE: Currently there is at most one abbreviated name and one long name for
 # property value. However, in the future additional aliases

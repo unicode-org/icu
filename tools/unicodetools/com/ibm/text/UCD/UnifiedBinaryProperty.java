@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2002/08/04 21:38:44 $
-* $Revision: 1.9 $
+* $Date: 2002/10/05 01:28:57 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -299,13 +299,13 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             case COMBINING_CLASS>>8: return ucd.getCombiningClassID_fromIndex((byte)propValue, style);
             case BIDI_CLASS>>8: return ucd.getBidiClassID_fromIndex((byte)propValue, style);
             case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionTypeID_fromIndex((byte)propValue, style);
-            case NUMERIC_TYPE>>8: ucd.getNumericTypeID_fromIndex((byte)propValue, style);
-            case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidthID_fromIndex((byte)propValue);
+            case NUMERIC_TYPE>>8: return ucd.getNumericTypeID_fromIndex((byte)propValue, style);
+            case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidthID_fromIndex((byte)propValue, style);
             case LINE_BREAK>>8: return ucd.getLineBreakID_fromIndex((byte)propValue, style);
-            case JOINING_TYPE>>8: return ucd.getJoiningTypeID_fromIndex((byte)propValue);
-            case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex((byte)propValue);
+            case JOINING_TYPE>>8: return ucd.getJoiningTypeID_fromIndex((byte)propValue, style);
+            case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex((byte)propValue, style);
             case BINARY_PROPERTIES>>8: return ucd.getBinaryPropertiesID_fromIndex((byte)propValue, style);
-            case SCRIPT>>8: return ucd.getScriptID_fromIndex((byte)propValue);
+            case SCRIPT>>8: return ucd.getScriptID_fromIndex((byte)propValue, style);
             case AGE>>8: return ucd.getAgeID_fromIndex((byte)propValue);
                 /*
             case DERIVED>>8:
