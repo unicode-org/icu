@@ -252,7 +252,8 @@ ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex
 #define UCNV_TO_U_USE_FALLBACK(cnv) TRUE
 
 /** Use fallbacks from Unicode to codepage when cnv->useFallback or for private-use code points */
-#define FROM_U_USE_FALLBACK(useFallback, c) ((useFallback) || (uint32_t)((c)-0xe000)<0x1900 || (uint32_t)((c)-0xf0000)<0x20000)
+#define IS_PRIVATE_USE(c) ((uint32_t)((c)-0xe000)<0x1900 || (uint32_t)((c)-0xf0000)<0x20000)
+#define FROM_U_USE_FALLBACK(useFallback, c) ((useFallback) || IS_PRIVATE_USE(c))
 #define UCNV_FROM_U_USE_FALLBACK(cnv, c) FROM_U_USE_FALLBACK((cnv)->useFallback, c)
 
 /**
