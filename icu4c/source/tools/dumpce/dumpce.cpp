@@ -1428,7 +1428,7 @@ void serializeScripts() {
     }
 
     outputListHTMLHeader(list);
-    int count = 0;
+    fprintf(list, "<blockquote>\n");
     while (TRUE) {
         UErrorCode error = U_ZERO_ERROR;
         COLLATOR_ = ucol_open(locale, &error);
@@ -1441,11 +1441,7 @@ void serializeScripts() {
             error != U_USING_DEFAULT_WARNING) ||
             checkLocaleForLanguage(locale)) {
             fprintf(list, "<a href=%s.html>%s</a> ", locale, locale);
-			count ++;
-			if (count % 3 == 0) {
-                fprintf(list, "<br>\n");
-			}
-            setAttributes(COLLATOR_, &error);
+	    setAttributes(COLLATOR_, &error);
             setNormalization(COLLATOR_);
             if (U_FAILURE(error)) {
                fprintf(stdout, "Collator attribute setting failed:");
@@ -1482,6 +1478,7 @@ void serializeScripts() {
         locale = ucol_getAvailable(localelist);
     }
     fprintf(list, "<br><a href=help.html>help</a><br>");
+    fprintf(list, "</blockquote>\n");
     outputListHTMLFooter(list);
     fclose(list);
 }
