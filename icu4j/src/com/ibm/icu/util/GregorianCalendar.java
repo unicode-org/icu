@@ -661,17 +661,17 @@ public class GregorianCalendar extends Calendar {
     }
 
 
-    /**
-     * Overrides Calendar
-     * Time Field Rolling function.
-     * Rolls (up/down) a single unit of time on the given time field.
-     * @param field the time field.
-     * @param up Indicates if rolling up or rolling down the field value.
-     * @exception IllegalArgumentException if an unknown field value is given.
-     */
-    public void roll(int field, boolean up) {
-        roll(field, up ? +1 : -1);
-    }
+//|    /**
+//|     * Overrides Calendar
+//|     * Time Field Rolling function.
+//|     * Rolls (up/down) a single unit of time on the given time field.
+//|     * @param field the time field.
+//|     * @param up Indicates if rolling up or rolling down the field value.
+//|     * @exception IllegalArgumentException if an unknown field value is given.
+//|     */
+//|    public void roll(int field, boolean up) {
+//|        roll(field, up ? +1 : -1);
+//|    }
 
     /**
      * Roll a field by a signed amount.
@@ -1859,39 +1859,39 @@ public class GregorianCalendar extends Calendar {
             Math.max(stamp_a, stamp_b) : UNSET;
     }
 
-    /**
-     * Return the week number of a day, within a period. This may be the week number in
-     * a year, or the week number in a month. Usually this will be a value >= 1, but if
-     * some initial days of the period are excluded from week 1, because
-     * minimalDaysInFirstWeek is > 1, then the week number will be zero for those
-     * initial days. Requires the day of week for the given date in order to determine
-     * the day of week of the first day of the period.
-     *
-     * @param dayOfPeriod  Day-of-year or day-of-month. Should be 1 for first day of period.
-     * @param day   Day-of-week for given dayOfPeriod. 1-based with 1=Sunday.
-     * @return      Week number, one-based, or zero if the day falls in part of the
-     *              month before the first week, when there are days before the first
-     *              week because the minimum days in the first week is more than one.
-     */
-    private final int weekNumber(int dayOfPeriod, int dayOfWeek) {
-        // Determine the day of the week of the first day of the period
-        // in question (either a year or a month).  Zero represents the
-        // first day of the week on this calendar.
-        int periodStartDayOfWeek = (dayOfWeek - getFirstDayOfWeek() - dayOfPeriod + 1) % 7;
-        if (periodStartDayOfWeek < 0) periodStartDayOfWeek += 7;
-
-        // Compute the week number.  Initially, ignore the first week, which
-        // may be fractional (or may not be).  We add periodStartDayOfWeek in
-        // order to fill out the first week, if it is fractional.
-        int weekNo = (dayOfPeriod + periodStartDayOfWeek - 1)/7;
-
-        // If the first week is long enough, then count it.  If
-        // the minimal days in the first week is one, or if the period start
-        // is zero, we always increment weekNo.
-        if ((7 - periodStartDayOfWeek) >= getMinimalDaysInFirstWeek()) ++weekNo;
-
-        return weekNo;
-    }
+//|    /**
+//|     * Return the week number of a day, within a period. This may be the week number in
+//|     * a year, or the week number in a month. Usually this will be a value >= 1, but if
+//|     * some initial days of the period are excluded from week 1, because
+//|     * minimalDaysInFirstWeek is > 1, then the week number will be zero for those
+//|     * initial days. Requires the day of week for the given date in order to determine
+//|     * the day of week of the first day of the period.
+//|     *
+//|     * @param dayOfPeriod  Day-of-year or day-of-month. Should be 1 for first day of period.
+//|     * @param day   Day-of-week for given dayOfPeriod. 1-based with 1=Sunday.
+//|     * @return      Week number, one-based, or zero if the day falls in part of the
+//|     *              month before the first week, when there are days before the first
+//|     *              week because the minimum days in the first week is more than one.
+//|     */
+//|    private final int weekNumber(int dayOfPeriod, int dayOfWeek) {
+//|        // Determine the day of the week of the first day of the period
+//|        // in question (either a year or a month).  Zero represents the
+//|        // first day of the week on this calendar.
+//|        int periodStartDayOfWeek = (dayOfWeek - getFirstDayOfWeek() - dayOfPeriod + 1) % 7;
+//|        if (periodStartDayOfWeek < 0) periodStartDayOfWeek += 7;
+//|
+//|        // Compute the week number.  Initially, ignore the first week, which
+//|        // may be fractional (or may not be).  We add periodStartDayOfWeek in
+//|        // order to fill out the first week, if it is fractional.
+//|        int weekNo = (dayOfPeriod + periodStartDayOfWeek - 1)/7;
+//|
+//|        // If the first week is long enough, then count it.  If
+//|        // the minimal days in the first week is one, or if the period start
+//|        // is zero, we always increment weekNo.
+//|        if ((7 - periodStartDayOfWeek) >= getMinimalDaysInFirstWeek()) ++weekNo;
+//|
+//|        return weekNo;
+//|    }
 
     private final int monthLength(int month, int year) {
         return isLeapYear(year) ? LEAP_MONTH_LENGTH[month] : MONTH_LENGTH[month];

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/HebrewCalendar.java,v $ 
- * $Date: 2000/05/12 23:20:10 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/10/17 18:26:44 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -65,7 +65,7 @@ import java.util.Locale;
  *
  * @author Laura Werner
  */
-public class HebrewCalendar extends IBMCalendar {
+public class HebrewCalendar extends Calendar {
 
     private static String copyright = "Copyright \u00a9 1997-1998 IBM Corp. All Rights Reserved.";
 
