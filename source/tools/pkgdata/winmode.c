@@ -96,7 +96,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
 	  sprintf(tmp2, 
 		  "LINK32 = link.exe\n"
-		  "LINK32_FLAGS = /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" /comment:\"%s\"\n",
+		  "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" /comment:\"%s\"\n",
 		  o->comment
 		);
       T_FileStream_writeLine(makefile, tmp2);
@@ -106,6 +106,13 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 		  separator, WINBUILDMODE);
       T_FileStream_writeLine(makefile, tmp2);
 
+      T_FileStream_writeLine(makefile, "\n"
+          "# Windows specific DLL version information.\n"
+          "!IF EXISTS(\".\\icudata.res\")\n"
+          "DATA_VER_INFO=\".\\icudata.res\"\n"
+          "!ELSE\n"
+          "DATA_VER_INFO=\n"
+          "!ENDIF\n\n");
 
 
       uprv_strcpy(tmp, UDATA_CMN_PREFIX);
@@ -140,7 +147,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
-				    "\t@$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n\n");
+				    "\t@$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
       T_FileStream_writeLine(makefile, tmp);
       sprintf(tmp, "\"$(TARGETDIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
 				    "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
