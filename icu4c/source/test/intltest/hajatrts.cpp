@@ -25,16 +25,13 @@
 /*converts a Unicodestring to integer*/
 static int32_t getInt(UnicodeString str)
 {
-    int len=str.length();
-    char *alias;
-    char *buffer=new char[len+1];
-    alias=buffer;
-    for(int i=0; i< len; i++){
-        *alias=(char)str.charAt(i);
-        alias++;
-    }
-    *alias='\0';
-    return atoi(buffer);
+  int32_t result = 0;
+  int32_t len = str.length();
+  int32_t i = 0;
+  for(i=0; i<len; i++) {
+    result = result*10+u_charDigitValue(str.char32At(i));
+  }
+  return result;
 }
 //---------------------------------------------
 // runIndexedTest
