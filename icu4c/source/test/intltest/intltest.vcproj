@@ -452,6 +452,12 @@
 				RelativePath=".\itrbnf.h">
 			</File>
 			<File
+				RelativePath=".\itrbnfp.cpp">
+			</File>
+			<File
+				RelativePath=".\itrbnfp.h">
+			</File>
+			<File
 				RelativePath=".\itrbnfrt.cpp">
 			</File>
 			<File
