@@ -10,17 +10,17 @@
 //      ICU Regular Expressions test, part of intltest.
 //
 
-#include "unicode/utypes.h"
+#include "intltest.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
-#include "intltest.h"
 #include "regextst.h"
 #include "uvector.h"
-#include "stdlib.h"
 #include "charstr.h"
 #include "util.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 
 //---------------------------------------------------------------------------

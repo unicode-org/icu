@@ -12,7 +12,8 @@
 #include "itrbnfrt.h"
 
 #include "unicode/fmtable.h"
-#include "math.h" // fabs
+#include <math.h> // fabs
+#include <stdio.h>
 
 // current macro not in icu1.8.1
 #define TESTCASE(id,test)             \

@@ -14,6 +14,7 @@
 #include "unicode/ustring.h"
 #include "unicode/schriter.h"
 #include <string.h>
+#include <stdio.h>
 
 // private definitions -----------------------------------------------------
 

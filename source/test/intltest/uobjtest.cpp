@@ -6,6 +6,7 @@
 
 #include "uobjtest.h"
 #include <string.h>
+#include <stdio.h>
 
 /**
  * 

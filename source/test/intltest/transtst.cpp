@@ -17,13 +17,10 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/normlzr.h"
 #include "unicode/translit.h"
-#include "unicode/ucnv.h"
-#include "unicode/ucnv_err.h"
 #include "unicode/uchar.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unitohex.h"
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/usetiter.h"
 #include "unicode/uscript.h"
@@ -42,6 +39,7 @@
 #include "unesctrn.h"
 #include "uni2name.h"
 #include "cstring.h"
+#include <stdio.h>
 
 /***********************************************************************
 

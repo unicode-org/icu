@@ -52,7 +52,6 @@ private:
     int32_t pass;
     int32_t fail;
 
-    IntlTest& OUT;
 };
 
 #endif
