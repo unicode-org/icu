@@ -129,31 +129,38 @@ ljamo {
 
   // Rules for inserting ' when mapping separated digraphs back
   // from Hangul to Latin. Catch every letter that can be the
-  // LAST of a digraph (or multigraph)
+  // LAST of a digraph (or multigraph) AND first of an initial
 
-  "''u < ({ye}) \u116e;"   // hangul jungseong u
-  "''t < (l) \u11c0;"      // hangul jongseong thieuth
-  "''t < (l) \u1110;"      // hangul choseong thieuth
-  "''s < ({lsgb}) \u11ba;" // hangul jongseong sios
-  "''s < ({lsgb}) \u1109;" // hangul choseong sios
-  "''p < (l) \u11c1;"      // hangul jongseong phieuph
-  "''p < (l) \u1111;"      // hangul choseong phieuph
-  "''o < ({ywe}) \u1169;"  // hangul jungseong o
-  "''m < (l) \u11b7;"      // hangul jongseong mieum
-  "''m < (l) \u1106;"      // hangul choseong mieum
-  "''j < (n) \u11bd;"      // hangul jongseong cieuc
-  "''j < (n) \u110c;"      // hangul choseong cieuc
-  "''i < ({yw}) \u1175;"   // hangul jungseong i
-  "''h < ({nl}) \u11c2;"   // hangul jongseong hieuh
-  "''h < ({nl}) \u1112;"   // hangul choseong hieuh
-  "''g < ({gnl}) \u11a9;"  // hangul jongseong ssangkiyeok
-  "''g < ({gnl}) \u1100;"  // hangul choseong kiyeok
-  "''e < ({ywao}) \u1166;" // hangul jungseong e
-  "''d < (d) \u11ae;"      // hangul jongseong tikeut
-  "''d < (d) \u1103;"      // hangul choseong tikeut
-  "''b < ({bl}) \u11b8;"   // hangul jongseong pieup
-  "''b < ({bl}) \u1107;"   // hangul choseong pieup
-  "''a < ({yw}) \u1161;"   // hangul jungseong a
+  "'' < (l) (\u11c0;"      // hangul jongseong thieuth
+  "'' < ({lsgb}) (\u11ba;" // hangul jongseong sios
+  "'' < (l) (\u11c1;"      // hangul jongseong phieuph
+  "'' < (l) (\u11b7;"      // hangul jongseong mieum
+  "'' < (n) (\u11bd;"      // hangul jongseong cieuc
+  "'' < ({nl}) (\u11c2;"   // hangul jongseong hieuh
+  "'' < ({gnl}) (\u11a9;"  // hangul jongseong ssangkiyeok
+  "'' < ({bl}) (\u11b8;"   // hangul jongseong pieup
+  "'' < (d) (\u11ae;"      // hangul jongseong tikeut
+  
+  "'' < ({ye}) (\u116e;"   // hangul jungseong u
+  "'' < ({ywe}) (\u1169;"  // hangul jungseong o
+  "'' < ({yw}) (\u1175;"   // hangul jungseong i
+  "'' < ({ywao}) (\u1166;" // hangul jungseong e
+  "'' < ({yw}) (\u1161;"   // hangul jungseong a
+  
+  "'' < (l) (\u1110;"      // hangul choseong thieuth
+  "'' < ({lsgb}) (\u110a;" // hangul choseong ssangsios
+  "'' < ({lsgb}) (\u1109;" // hangul choseong sios
+  "'' < (l) (\u1111;"      // hangul choseong phieuph
+  "'' < (l) (\u1106;"      // hangul choseong mieum
+  "'' < (n) (\u110c;"      // hangul choseong cieuc
+  "'' < (n) (\u110d;"
+  "'' < ({nl}) (\u1112;"   // hangul choseong hieuh
+  "'' < ({gnl}) (\u1101;"  // hangul choseong ssangkiyeok
+  "'' < ({gnl}) (\u1100;"  // hangul choseong kiyeok
+  "'' < (d) (\u1103;"      // hangul choseong tikeut
+  "'' < (d) (\u1104;"
+  "'' < ({bl}) (\u1107;"   // hangul choseong pieup
+  "'' < ({bl}) (\u1108;"
 
   // INITIALS
 
@@ -171,8 +178,10 @@ ljamo {
   "g ({vowel}) <> \u1100;"   // hangul choseong kiyeok
   "d ({vowel}) <> \u1103;"   // hangul choseong tikeut
   "c ({vowel}) <> \u110e;"   // hangul choseong chieuch
-  "bb ({vowel}) <> \u1108;"  // hangul choseong ssangpieup
-  "b ({vowel}) <> \u1107;"   // hangul choseong pieup
+  "b ({vowel}) <> \u1107;"   // hangul choseong pieup  
+  "bb ({vowel}) <> \u1108;"
+  "jj ({vowel}) <> \u110d;"
+  "dd ({vowel}) <> \u1104;"
   
   // If we have gotten through to these rules, and we start with
   // a consonant, then the remaining mappings would be to F,
@@ -182,6 +191,11 @@ ljamo {
   // to still make it an initial, but also insert an "u",
   // so we end up with F, I, u, and then continue with the C
 
+  // special, only initial
+  "bb > \u1108\u116e;"  // hangul choseong ssangpieup
+  "jj > \u1108\u110d;"   // hangul choseong ssangcieuc
+  "dd > \u1108\u1104;"   // hangul choseong ssangtikeut
+  
   "({final}) t > \u1110\u116e;"   // hangul choseong thieuth
   "({final}) ss > \u110a\u116e;"  // hangul choseong ssangsios
   "({final}) s > \u1109\u116e;"   // hangul choseong sios
@@ -196,9 +210,8 @@ ljamo {
   "({final}) g > \u1100\u116e;"   // hangul choseong kiyeok
   "({final}) d > \u1103\u116e;"   // hangul choseong tikeut
   "({final}) c > \u110e\u116e;"   // hangul choseong chieuch
-  "({final}) bb > \u1108\u116e;"  // hangul choseong ssangpieup
   "({final}) b > \u1107\u116e;"   // hangul choseong pieup
-
+  
   // MEDIALS after INITIALS
   
   "({initial}) yu <> \u1172;"   // hangul jungseong yu
@@ -268,13 +281,11 @@ ljamo {
   "lb <> \u11b2;"   // hangul jongseong rieul-pieup
   "l <> \u11af;"    // hangul jongseong rieul
   "k <> \u11bf;"    // hangul jongseong khieukh
-  "jj <> \u110d;"   // hangul choseong ssangcieuc
   "j <> \u11bd;"    // hangul jongseong cieuc
   "h <> \u11c2;"    // hangul jongseong hieuh
   "gs <> \u11aa;"   // hangul jongseong kiyeok-sios
   "gg <> \u11a9;"   // hangul jongseong ssangkiyeok
   "g <> \u11a8;"    // hangul jongseong kiyeok
-  "dd <> \u1104;"   // hangul choseong ssangtikeut
   "d <> \u11ae;"    // hangul jongseong tikeut
   "c <> \u11be;"     // hangul jongseong chieuch
   "bs <> \u11b9;"   // hangul jongseong pieup-sios
@@ -284,7 +295,7 @@ ljamo {
   // {moved to bottom - aliu}
 
   "z > |s;"
-  //{ "Z > |s;" } masked
+  //{ + "Z > |s;" } masked
   "x > |ks;"
   "X > |ks;"
   "v > |b;"
@@ -295,7 +306,7 @@ ljamo {
   "Q > |k;"
   "f > |p;"
   "F > |p;"
-  //{ "c > |k;" } masked
+  //{ + "c > |k;" } masked
   "C > |k;"
   
   "y > \u1172;"   // hangul jungseong yu
