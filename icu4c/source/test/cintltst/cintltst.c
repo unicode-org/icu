@@ -42,7 +42,7 @@ static char* _testDirectory=NULL;
 /*
  *  Forward Declarations
  */
-void ctest_setICU_DATA();
+void ctest_setICU_DATA(void);
 
 int main(int argc, const char* const argv[])
 {
