@@ -56,8 +56,7 @@ struct SResTable {
 
 struct SResource* table_open(struct SRBRoot *bundle, char *tag, UErrorCode *status);
 void table_close(struct SResource *table, UErrorCode *status);
-void table_add(struct SResource *table, struct SResource *res, UErrorCode *status);
-struct SResource *table_get(struct SResource *table, char *key, UErrorCode *status);
+void table_add(struct SResource *table, struct SResource *res, int linenumber, UErrorCode *status);
 
 struct SResArray {
     uint32_t fCount;
@@ -108,6 +107,7 @@ struct SResource {
     UResType fType;
     uint16_t fKey;
     uint32_t fSize; /* Size in bytes outside the header part */
+    int      line;  /* used internally to report duplicate keys in tables */
     struct SResource *fNext; /*This is for internal chaining while building*/
     union {
         struct SResTable fTable;
@@ -120,8 +120,5 @@ struct SResource {
 };
 
 void res_close(struct SResource *res, UErrorCode *status);
-
-
-
 
 #endif /* #ifndef RESLIST_H */

@@ -15,20 +15,30 @@
 *******************************************************************************
 */
 
+#include <stdarg.h>
+#include <stdio.h>
 #include "cstring.h"
 #include "error.h"
 
-/* This is incredibly non thread-safe, but it doesn't matter for this util */
-static char gErrorText[200] = { "" };
-
-void
-setErrorText(const char *s)
+void error(uint32_t linenumber, const char *msg, ...)
 {
-  uprv_strcpy(gErrorText, s);
+    va_list va;
+
+    va_start(va, msg);
+    fprintf(stderr, "%s:%d: ", gCurrentFileName, linenumber);
+    vfprintf(stderr, msg, va);
+    fprintf(stderr, "\n");
+    va_end(va);
 }
 
-const char*
-getErrorText()
+void warning(uint32_t linenumber, const char *msg, ...)
 {
-  return gErrorText[0] != 0 ? gErrorText : NULL;
+    va_list va;
+
+    va_start(va, msg);
+    fprintf(stderr, "%s:%d: warning: ", gCurrentFileName, linenumber);
+    vfprintf(stderr, msg, va);
+    fprintf(stderr, "\n");
+    va_end(va);
 }
+
