@@ -23,10 +23,10 @@
 *   also for irregular sequences when the strict option is set.
 *   "Unsafe" macros are designed for maximum speed.
 *   utf16.h is included by utf.h after unicode/umachine.h
-*   and some common definitions.
+*   and some common definitions.</p>
 *   <b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros
 *                  Compound statements (curly braces {}) must be used  for if-else-while... 
-*                  bodies and all macro statements should be terminated with semicolon.</p>
+*                  bodies and all macro statements should be terminated with semicolon.
 */
 
 #ifndef __UTF16_H__

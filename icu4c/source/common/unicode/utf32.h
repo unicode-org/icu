@@ -20,11 +20,11 @@
 *   This file defines macros to deal with UTF-32 code units and code points.
 *   Signatures and semantics are the same as for the similarly named macros
 *   in utf16.h.
-*   utf32.h is included by utf.h after unicode/umachine.h
+*   utf32.h is included by utf.h after unicode/umachine.h</p>
 *   and some common definitions.
 *   <b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros
 *                  Compound statements (curly braces {}) must be used  for if-else-while... 
-*                  bodies and all macro statements should be terminated with semicolon.</p>
+*                  bodies and all macro statements should be terminated with semicolon.
 */
 
 #ifndef __UTF32_H__
