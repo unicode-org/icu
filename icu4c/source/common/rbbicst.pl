@@ -307,7 +307,7 @@ print " };\n";
 #
 #    This array is used for producing debugging output from the rule parser.
 #
-print "static const char *RBBIRuleStateNames[] = {";
+print "static const char * const RBBIRuleStateNames[] = {";
 for ($state=0; $state<$num_states; $state++) {
     if ($stateNames[$state] ne "") {
         print "     \"$stateNames[$state]\",\n";

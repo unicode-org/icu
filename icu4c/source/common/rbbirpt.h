@@ -160,7 +160,7 @@ static const struct RBBIRuleTableEl gRuleParseStateTable[] = {
     , {doRuleErrorAssignExpr, 255, 86,0,  FALSE}     //  85 
     , {doExit, 255, 86,0,  TRUE}     //  86      errorDeath
  };
-static const char *RBBIRuleStateNames[] = {    0,
+static const char * const RBBIRuleStateNames[] = {    0,
      "start",
     0,
     0,
