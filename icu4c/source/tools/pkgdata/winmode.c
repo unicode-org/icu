@@ -16,9 +16,10 @@
 *   (DLL, common data, etc.)
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
+
+#ifdef WIN32
+
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -28,8 +29,9 @@
 #include "uoptions.h"
 #include "pkgtypes.h"
 #include "makefile.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-#ifdef WIN32
 #define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")
 
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
