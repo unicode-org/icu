@@ -858,26 +858,75 @@ ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode
     return UCOL_DEFAULT;
 }
 
+
+struct contContext {
+    const UCollator *coll;
+    USet      *conts;
+    UErrorCode *status;
+};
+
+
+
+static void
+addContraction(const UCollator *coll, USet *contractions, UChar *buffer, int32_t bufLen, 
+               uint32_t CE, int32_t leftIndex, int32_t rightIndex, UErrorCode *status) 
+{
+    int32_t lI = leftIndex, rI = rightIndex;
+    const UChar *UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+    uint32_t newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+    // we might have a contraction that ends from previous level
+    if(newCE != UCOL_NOT_FOUND && rightIndex > leftIndex) {
+        uset_addString(contractions, buffer+leftIndex, rightIndex - leftIndex + 1);
+    }
+
+    UCharOffset++;
+    while(*UCharOffset != 0xFFFF) {
+        // depending on how we got here, we want to put chars in
+        // either from left or from right (Japanese tends to start with a contraction,
+        // only to throw you a prefix, just for a spin ;)
+        newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+        if(getCETag(CE) == CONTRACTION_TAG) {
+            if(rI == internalBufferSize-1) {
+                *status = U_INTERNAL_PROGRAM_ERROR;
+                return;
+            }
+            buffer[++rI] = *UCharOffset;
+        } else {
+            if(lI == 0) {
+                *status = U_INTERNAL_PROGRAM_ERROR;
+                return;
+            }
+            buffer[--lI] = *UCharOffset;
+        }
+        if(isSpecial(newCE) && (getCETag(newCE) == CONTRACTION_TAG || getCETag(newCE) == SPEC_PROC_TAG)) {
+            addContraction(coll, contractions, buffer, bufLen, newCE, lI, rI, status);
+        } else {
+            uset_addString(contractions, buffer+lI, rI - lI + 1);
+        }
+        lI = leftIndex; rI = rightIndex;
+        UCharOffset++;
+    }
+}
+
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-_processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t value) 
+_processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t CE) 
 {
-    UErrorCode status = U_ZERO_ERROR;
-    USet *unsafe = (USet *)context;
-    UChar contraction[256];
-    if(value > UCOL_NOT_FOUND && getCETag(value) == CONTRACTION_TAG) {
-        // this is a contraction
-        // we want to add the code point for sure
-        while(start < limit) {
-            //uset_add(unsafe, start);
-            contraction[0] = (UChar)start;
-            // get the rest of the contraction string from the data structure
+    UErrorCode *status = ((contContext *)context)->status;
+    USet *unsafe = ((contContext *)context)->conts;
+    const UCollator *coll = ((contContext *)context)->coll;
+    UChar contraction[internalBufferSize];
+    if(isSpecial(CE) && (getCETag(CE) == CONTRACTION_TAG || getCETag(CE) == SPEC_PROC_TAG)) {
+        while(start < limit && U_SUCCESS(*status)) {
+            // we start our contraction from middle, since we don't know if it
+            // will grow toward right or left
+            int32_t middle = internalBufferSize/2;
+            contraction[middle] = (UChar)start;
+            addContraction(coll, unsafe, contraction, internalBufferSize, CE, middle, middle, status);
             start++;
         }
-        // check if there is anything else to add - if these lead
-        // to a longer contraction
     }
-    if(U_FAILURE(status)) {
+    if(U_FAILURE(*status)) {
         return FALSE;
     } else {
         return TRUE;
@@ -891,56 +940,6 @@ _getTrieFoldingOffset(uint32_t data)
 }
 U_CDECL_END
 
-U_CAPI int32_t U_EXPORT2
-ucol_getUnsafeSet( const UCollator *coll,
-                  USet *unsafe,
-                  UErrorCode *status)
-{
-    uset_clear(unsafe);
-    // add Thai/Lao prevowels
-    uset_addRange(unsafe, 0xe40, 0xe44);
-    uset_addRange(unsafe, 0xec0, 0xec4);
-    // add lead/trail surrogates
-    uset_addRange(unsafe, 0xd800, 0xdfff);
-
-
-    // add FCD things
-    const uint16_t *fcdTrieIndex=unorm_getFCDTrie(status);
-    int32_t i = 0;
-
-    // add unsafe BMPs
-    uint16_t fcd, leadFCD;
-    UChar32 c;
-    for(c = 0; c < 0xffff; c++) {
-        if(c==0xd800) {
-            c=0xe000;
-        }
-        fcd = unorm_getFCD16(fcdTrieIndex, (UChar)c);
-        if (fcd != 0) {
-            uset_add(unsafe, c);
-        }
-    }
-
-    // add unsafe supplementaries
-    for(c = 0x10000; c < 0x110000; ) {
-        leadFCD=unorm_getFCD16(fcdTrieIndex, U16_LEAD(c));
-        if(leadFCD==0) {
-            c+=0x400;
-        } else {
-            for(i=0; i<0x400; ++c, ++i) {
-                // either i or U16_TRAIL(c) can be used because only the lower 10 bits are relevant
-                fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, U16_LEAD(c), U16_TRAIL(c));
-                if (fcd != 0) {
-                    uset_add(unsafe, c);
-                }
-            }
-        }
-    }
-
-
-
-    return uset_size(unsafe);
-}
 
 
 /**
@@ -958,25 +957,60 @@ ucol_getContractions( const UCollator *coll,
                   USet *contractions,
                   UErrorCode *status)
 {
-    // add contractions from the UCA
-    int32_t width = coll->UCA->image->contractionUCACombosWidth;
-    int32_t size = coll->UCA->image->contractionUCACombosSize;
-    UChar *conts = (UChar *)((uint8_t *)coll->UCA->image + coll->UCA->image->contractionUCACombos);
-    int32_t i = 0;
-    while(i < size * width) {
-        if(*(conts + i + 2)) {
-            uset_addString(contractions, conts+i, 3);
-        } else {
-            uset_addString(contractions, conts+i, 2);
-        }
+    uset_clear(contractions);
+    contContext c = { NULL, contractions, status };
 
-        i += 3;
-    }
-    // This is collator specific. Add contractions from a collator
     coll->mapping->getFoldingOffset = _getTrieFoldingOffset;
-    utrie_enum(coll->mapping, NULL, _processContractions, contractions);
 
-    return uset_size(contractions);
+    // Add the UCA contractions
+    c.coll = coll->UCA;
+    utrie_enum(coll->UCA->mapping, NULL, _processContractions, &c);
+    
+    // This is collator specific. Add contractions from a collator
+    c.coll = coll;
+    utrie_enum(coll->mapping, NULL, _processContractions, &c);
+
+    return uset_getItemCount(contractions);
 
 }
 
+U_CAPI int32_t U_EXPORT2
+ucol_getUnsafeSet( const UCollator *coll,
+                  USet *unsafe,
+                  UErrorCode *status)
+{
+    uset_clear(unsafe);
+
+    // add chars that fail the fcd check
+    UChar buffer[internalBufferSize];
+    static const char* fcdUnsafes = "[[:^tccc=0:][:^lccc=0:]]";
+    int32_t len = uprv_strlen(fcdUnsafes);   
+    u_charsToUChars(fcdUnsafes, buffer, internalBufferSize);
+    uset_applyPattern(unsafe, buffer, len, USET_IGNORE_SPACE, status);
+
+    // add Thai/Lao prevowels
+    uset_addRange(unsafe, 0xe40, 0xe44);
+    uset_addRange(unsafe, 0xec0, 0xec4);
+    // add lead/trail surrogates
+    uset_addRange(unsafe, 0xd800, 0xdfff);
+
+    USet *contractions = uset_open(0,0);
+
+    int32_t i = 0, j = 0;
+    int32_t contsSize = ucol_getContractions(coll, contractions, status);
+    // Contraction set consists only of strings
+    // to get unsafe code points, we need to 
+    // break the strings apart and add them to the unsafe set
+    for(i = 0; i < contsSize; i++) {
+        len = uset_getItem(contractions, i, NULL, NULL, buffer, internalBufferSize, status);
+        if(len > 0) {
+            for(j = 0; j < len; j++) {
+                uset_add(unsafe, buffer[j]);
+            }
+        }
+    }
+
+    uset_close(contractions);
+
+    return uset_size(unsafe);
+}
