@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.3 $ $Date: 2000/04/21 22:48:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -93,12 +93,23 @@ public final class TestTextPanel extends TestFmwk {
         }
         
         void assertNotExpectingEvents() {
+            assertNotExpectingEvents(false, 0, false);
+        }
+        
+        void assertNotExpectingEvents(int iterationCount, boolean exp) {
+            assertNotExpectingEvents(true, iterationCount, exp);
+        }
+        
+        private void assertNotExpectingEvents(boolean logDetails, int iterationCount, boolean exp) {
             
             boolean e = false;
             for (int i=0; i < status.length; i++) {
                 if (status[i] == DEFINITELY) {
-                    System.out.println("Expecting event " +
-                                    (i+TextPanelEvent.TEXT_PANEL_FIRST));
+                    if (logDetails) {
+                        logln("Expecting event " +
+                                        (i+TextPanelEvent.TEXT_PANEL_FIRST));
+                        logln("iterationCount="+iterationCount+";  expexting="+exp);
+                    }
                     e = true;
                 }
             }
@@ -210,6 +221,12 @@ public final class TestTextPanel extends TestFmwk {
     protected void errln(String message) {
     
         super.errln(message);
+    }
+    
+    // For inner class accessibility
+    protected void logln(String message) {
+    
+        super.logln(message);
     }
     
     public TestTextPanel(MTextPanel panel) {
@@ -468,18 +485,18 @@ public final class TestTextPanel extends TestFmwk {
             fListener.expectEvent(TextPanelEvent.UNDO_STATE_CHANGED);
             exp = true;
         }
-        try {
+        //try {
             fTextPanel.setCommandLogSize(BIG_COMMAND_LOG_SIZE);
             
             if (fTextPanel.canRedo()) {
                 errln("canRedo after setCommandLogSize");
             }
-            fListener.assertNotExpectingEvents();
-        }
-        catch(Error e) {
-            System.out.println("iterationCount="+iterationCount+";  expexting="+exp);
-            throw e;
-        }
+            fListener.assertNotExpectingEvents(iterationCount, exp);
+        //}
+        //catch(Error e) {
+        //    logln("iterationCount="+iterationCount+";  expexting="+exp);
+        //    throw e;
+        //}
 
         MConstText insText = new StyledText("7",
                                 AttributeMap.EMPTY_ATTRIBUTE_MAP);
@@ -817,13 +834,13 @@ public final class TestTextPanel extends TestFmwk {
                 fListener.expectEvent(TextPanelEvent.SELECTION_RANGE_CHANGED);
             }
             forwarder.handleKeyEvent(event);
-            try {
-                fListener.assertNotExpectingEvents();
-            }
-            catch(Error e) {
-                System.out.println("i="+i+"; typedChar="+Integer.toHexString(typedChar));
-                throw e;
-            }
+            //try {
+                fListener.assertNotExpectingEvents(i, false);
+            //}
+            //catch(Error e) {
+            //    logln("i="+i+"; typedChar="+Integer.toHexString(typedChar));
+            //    throw e;
+            //}
         }
         fListener.allowAll();
     }

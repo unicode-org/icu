@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:57 $
+ * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:48:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,20 +14,42 @@
  */
 package com.ibm.richtext.tests;
 
-public class TestAll {
+import com.ibm.test.TestFmwk;
+
+public class TestAll extends TestFmwk {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
 
-    public static void main(String[] args) {
-
-        TestAttributeSet.main(args);
-        TestAttributeMap.main(args);
-        TestFormatter.main(args);
-        TestMText.main(args);
-        TestMTextStreaming.main(args);
-        TestParagraphStyles.main(args);
-        TestTextPanel.main(args);
-        System.out.println("TestAll:  DONE");
+    public static void main(String[] args) throws Exception {
+        new TestAll().run(args);
+    }
+    
+    public void TestAttributeSet() throws Exception {
+        run(new TestAttributeSet());
+    }
+    
+    public void TestAttributeMap() throws Exception {
+        run(new TestAttributeMap());
+    }
+    
+    public void TestFormatter() throws Exception {
+        run(new TestFormatter());
+    }
+    
+    public void TestMText() throws Exception {
+        run(new TestMText());
+    }
+    
+    public void TestParagraphStyles() throws Exception {
+        run(new TestParagraphStyles());
+    }
+    
+    public void TestMTextStreaming() throws Exception {
+        run(new TestMTextStreaming());
+    }
+    
+    public void TestTextPanel() throws Exception {
+        run(new TestTextPanel());
     }
 }

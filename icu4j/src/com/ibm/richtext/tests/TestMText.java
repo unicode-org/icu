@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
+ * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.3 $ $Date: 2000/04/21 22:48:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -341,10 +341,10 @@ public class TestMText extends TestFmwk {
             }
             if (damageStart != text.damagedRangeStart() ||
                             damageLimit != text.damagedRangeLimit()) {
-                System.out.println("Test iteration: " + testIteration);
-                System.out.println("startingAt: " + startingAt + ";  endingAt: " + endingAt);
-                System.out.println("damageStart: " + damageStart + ";  damageLimit: " + damageLimit);
-                System.out.println("text.rangeStart: " + text.damagedRangeStart() +
+                logln("Test iteration: " + testIteration);
+                logln("startingAt: " + startingAt + ";  endingAt: " + endingAt);
+                logln("damageStart: " + damageStart + ";  damageLimit: " + damageLimit);
+                logln("text.rangeStart: " + text.damagedRangeStart() +
                                    "text.rangeLimit: " + text.damagedRangeLimit());
                 errln("Damage range start or limit is not expected value");
             }
@@ -425,7 +425,7 @@ public class TestMText extends TestFmwk {
                 casesExecuted[theCase] = true;
 
                 if (testIteration == stopAt) {
-                    System.out.println("Stop here!");
+                    testIteration = stopAt;  // Convenient place to put breakpoint
                 }
 
                 int timeStamp = buf.getTimeStamp();
@@ -618,8 +618,8 @@ public class TestMText extends TestFmwk {
                 if (oldPlainText != null) {
                     if ((timeStamp==buf.getTimeStamp()) !=
                                     oldPlainText.equals(plainText)) {
-                        System.out.println("plainText hashCode: " + plainText.hashCode());
-                        System.out.println("oldPlainText hashCode: " + oldPlainText.hashCode());
+                        logln("plainText hashCode: " + plainText.hashCode());
+                        logln("oldPlainText hashCode: " + oldPlainText.hashCode());
                         errln("Time stamp is incorrect");
                     }
                 }
@@ -715,7 +715,7 @@ public class TestMText extends TestFmwk {
             }
         }
         //if (allCasesExecuted) {
-        //    System.out.println("All cases executed.");
+        //    logln("All cases executed.");
         //}
     }
 }

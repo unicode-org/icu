@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
+ * @(#)$RCSfile: TestAttributeMap.java,v $ $Revision: 1.3 $ $Date: 2000/04/21 22:48:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -256,12 +256,12 @@ public class TestAttributeMap extends TestFmwk  {
 
         if (!equalMaps(lhs, rhs)) {
             map.intersectWith(intersect);
-            System.out.println("intersect: " + intersect);
-            System.out.println("keySet: " + keySet);
-            System.out.println("removeSet: " + removeSet);
-            System.out.println("map: " + map);
-            System.out.println("lhs: " + lhs);
-            System.out.println("rhs: " + rhs);
+            logln("intersect: " + intersect);
+            logln("keySet: " + keySet);
+            logln("removeSet: " + removeSet);
+            logln("map: " + map);
+            logln("lhs: " + lhs);
+            logln("rhs: " + rhs);
             errln("Maps are not equal.");
         }
     }
