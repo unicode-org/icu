@@ -134,30 +134,11 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
 
         // for Unicode, unitCount can only be 1, 2, 3, or 4
         // 1 is handled above
-        switch(unitCount) {
-        case 2:
-          while(i < length) {
-            fArray[i++]=units[0];
-            fArray[i++]=units[1];
+        while(i < length) {
+          int32_t unitIdx = 0;
+          while(unitIdx < UTF_MAX_CHAR_LENGTH) {
+            fArray[i++]=units[unitIdx++];
           }
-          break;
-        case 3:
-          while(i < length) {
-            fArray[i++]=units[0];
-            fArray[i++]=units[1];
-            fArray[i++]=units[2];
-          }
-          break;
-        case 4:
-          while(i < length) {
-            fArray[i++]=units[0];
-            fArray[i++]=units[1];
-            fArray[i++]=units[2];
-            fArray[i++]=units[3];
-          }
-          break;
-        default:
-          break;
         }
       }
     }
@@ -1023,7 +1004,7 @@ UnicodeString::toUpper(const Locale &locale) {
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-  return caseMap(*((const Locale *)NULL), options, FOLD_CASE);
+    return caseMap(Locale::getDefault(), options, FOLD_CASE);
 }
 
 // static helper function for string case mapping
