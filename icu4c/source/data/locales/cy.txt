@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\cy.xml
+// * Source File: ../../../locale/common/main/cy.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\cy.xml
+ *  ICU <specials> source: ../../../locale/icu/main/cy.xml
  */
 cy{
     Countries{
@@ -20,9 +20,6 @@ cy{
     LocaleScript{
         "Latn",
     }
-    /**
-     * Draft
-     */
     Version{"1.2"}
     calendar{
         gregorian{

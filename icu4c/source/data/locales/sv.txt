@@ -3,17 +3,17 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\sv.xml
+// * Source File: ../../../locale/common/main/sv.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\sv.xml
+ *  ICU <specials> source: ../../../locale/icu/main/sv.xml
  */
 sv{
     Countries{
         AD{"Andorra"}
         AE{"Förenade Arabemiraten"}
-        AF{"Afganistan"}
+        AF{"Afghanistan"}
         AG{"Antigua och Barbuda"}
         AI{"Anguilla"}
         AL{"Albanien"}
@@ -93,7 +93,7 @@ sv{
         GL{"Grönland"}
         GM{"Gambia"}
         GN{"Guinea"}
-        GP{"Guadelope"}
+        GP{"Guadeloupe"}
         GQ{"Ekvatorialguinea"}
         GR{"Grekland"}
         GS{"Sydgeorgien och Södra Sandwichöarna"}
@@ -120,16 +120,16 @@ sv{
         JO{"Jordanien"}
         JP{"Japan"}
         KE{"Kenya"}
-        KG{"Kirgisistan"}
+        KG{"Kirgizistan"}
         KH{"Kambodja"}
         KI{"Kiribati"}
         KM{"Komorerna"}
-        KN{"S:t Christopher och Nevis"}
+        KN{"S:t Kitts och Nevis"}
         KP{"Nordkorea"}
         KR{"Sydkorea"}
         KW{"Kuwait"}
-        KY{"Kajmanöarna"}
-        KZ{"Kazachstan"}
+        KY{"Caymanöarna"}
+        KZ{"Kazakstan"}
         LA{"Laos"}
         LB{"Libanon"}
         LC{"S:t Lucia"}
@@ -194,7 +194,7 @@ sv{
         RO{"Rumänien"}
         RU{"Ryssland"}
         RW{"Rwanda"}
-        SA{"Saudi-Arabien"}
+        SA{"Saudiarabien"}
         SB{"Salomonöarna"}
         SC{"Seychellerna"}
         SD{"Sudan"}
@@ -232,8 +232,8 @@ sv{
         TZ{"Tanzania"}
         UA{"Ukraina"}
         UG{"Uganda"}
-        UM{"Små, avlägset belägna öar som tillhör Förenta staterna"}
-        US{"Amerikas Förenta Stater"}
+        UM{"USAs yttre öar"}
+        US{"USA"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
         VA{"Vatikanstaten"}
@@ -243,7 +243,7 @@ sv{
         VI{"Amerikanska Jungfruöarna"}
         VN{"Vietnam"}
         VU{"Vanuatu"}
-        WF{"Wallis och Futunaöarna"}
+        WF{"Wallis- och Futunaöarna"}
         WS{"Samoa"}
         YE{"Jemen"}
         YT{"Mayotte"}
@@ -267,7 +267,7 @@ sv{
         }
         AIF{
             "AIF",
-            "Affars and Issas franc",
+            "Affars och Issas-franc",
         }
         ALK{
             "ALK",
@@ -347,19 +347,19 @@ sv{
         }
         AZM{
             "AZM",
-            "Azerbajdzansk manat",
+            "Azerbajdzjansk manat",
         }
         BAD{
             "BAD",
-            "Bosnisk-Hercegovinsk dinar",
+            "Bosnisk-hercegovinsk dinar",
         }
         BAM{
             "KM",
-            "Bosnisk-Hercegovinsk konvertibel mark",
+            "Konvertibel bosnisk-hercegovinsk mark",
         }
         BAN{
             "BAN",
-            "Bosnisk-Hercegovinsk ny dinar",
+            "Bosnisk-hercegovinsk ny dinar",
         }
         BBD{
             "BDS$",
@@ -523,7 +523,7 @@ sv{
         }
         CFF{
             "CFF",
-            "Centralafrikanska CFA-franc",
+            "Centralafrikansk CFA-franc",
         }
         CHF{
             "SwF",
@@ -531,7 +531,7 @@ sv{
         }
         CKD{
             "CKD",
-            "Cooköisk dollar",
+            "Cook-dollar",
         }
         CLC{
             "CLC",
@@ -543,7 +543,7 @@ sv{
         }
         CLF{
             "CLF",
-            "Chilensk unidades de fomento",
+            "Chilensk unidad de fomento",
         }
         CLP{
             "Ch$",
@@ -559,7 +559,7 @@ sv{
         }
         CNX{
             "CNX",
-            "Kinesiska US Dollar Foreign Exchange Certificates",
+            "Kinesisk USA-dollar Foreign Exchange Certificates",
         }
         CNY{
             "Y",
@@ -579,7 +579,7 @@ sv{
         }
         CRC{
             "C",
-            "Costarikansk colon",
+            "Costarikansk colón",
         }
         CSC{
             "CSC",
@@ -603,7 +603,7 @@ sv{
         }
         CWG{
             "CWG",
-            "Curacaoisk gulden",
+            "Curaçao-gulden",
         }
         CYP{
             "£C",
@@ -663,7 +663,7 @@ sv{
         }
         EGP{
             "EGP",
-            "Egyptisk  pund",
+            "Egyptiskt pund",
         }
         ERN{
             "ERN",
@@ -687,11 +687,11 @@ sv{
         }
         FIM{
             "FIM",
-            "Finska mark",
+            "Finsk mark",
         }
         FIN{
             "FIN",
-            "Finska mark (1860-1962)",
+            "Finsk mark (1860-1962)",
         }
         FJD{
             "F$",
@@ -707,7 +707,7 @@ sv{
         }
         FOK{
             "FOK",
-            "Färöisk kronar",
+            "Färöisk krona",
         }
         FRF{
             "FRF",
@@ -723,7 +723,7 @@ sv{
         }
         GBP{
             "£",
-            "Britiskt pound sterling",
+            "Brittiskt pund sterling",
         }
         GEK{
             "GEK",
@@ -811,15 +811,15 @@ sv{
         }
         GWE{
             "GWE",
-            "Portugisisk guineas escudo",
+            "Portugisiska Guinea-escudo",
         }
         GWM{
             "GWM",
-            "Portugisiska guineas mil reis",
+            "Portugisiska Guinea-mil reis",
         }
         GWP{
             "GWP",
-            "Guinea-Bissauisk peso",
+            "Guinea-Bissau-peso",
         }
         GYD{
             "G$",
@@ -887,7 +887,7 @@ sv{
         }
         IMP{
             "IMP",
-            "Isle of Man pund sterling",
+            "Isle of Man-pund sterling",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
@@ -911,7 +911,7 @@ sv{
         }
         JEP{
             "JEP",
-            "Jersey pound sterling",
+            "Jersey-pund sterling",
         }
         JMD{
             "J$",
@@ -979,7 +979,7 @@ sv{
         }
         KYD{
             "KYD",
-            "Caymanöisk dollar",
+            "Cayman-dollar",
         }
         KZR{
             "KZR",
@@ -1183,7 +1183,7 @@ sv{
         }
         NCF{
             "NCF",
-            "Nya Kaledonisk franc germinal",
+            "Nykaledonsk franc germinal",
         }
         NGN{
             "NGN",
@@ -1195,7 +1195,7 @@ sv{
         }
         NHF{
             "NHF",
-            "Nya Hebridiska CFP-franc",
+            "Nyhebridisk CFP-franc",
         }
         NIC{
             "NIC",
@@ -1203,7 +1203,7 @@ sv{
         }
         NIG{
             "NIG",
-            "Nicaraguansk guldcordoba",
+            "Nicaraguansk guldcórdoba",
         }
         NIO{
             "NIO",
@@ -1227,7 +1227,7 @@ sv{
         }
         NZP{
             "NZP",
-            "Nyzeeländsk pund",
+            "Nyzeeländskt pund",
         }
         OMR{
             "RO",
@@ -1243,7 +1243,7 @@ sv{
         }
         PDK{
             "PDK",
-            "Transdniestrisk rubekupong",
+            "Transdniestrisk rubelkupong",
         }
         PDN{
             "PDN",
@@ -1311,7 +1311,7 @@ sv{
         }
         REF{
             "REF",
-            "Reunion-franc",
+            "Réunion-franc",
         }
         ROL{
             "leu",
@@ -1343,7 +1343,7 @@ sv{
         }
         SBD{
             "SI$",
-            "Salomonöisk dollar",
+            "Salomon-dollar",
         }
         SCR{
             "SR",
@@ -1367,7 +1367,7 @@ sv{
         }
         SHP{
             "SHP",
-            "Saint Helena-pund",
+            "S:t Helena-pund",
         }
         SIB{
             "SIB",
@@ -1403,7 +1403,7 @@ sv{
         }
         SSP{
             "SSP",
-            "Skottskt pund",
+            "Skotskt pund",
         }
         STD{
             "Db",
@@ -1423,7 +1423,7 @@ sv{
         }
         SVC{
             "SVC",
-            "Salvadoransk colon",
+            "Salvadoransk colón",
         }
         SYP{
             "LS",
@@ -1467,7 +1467,7 @@ sv{
         }
         TOS{
             "TOS",
-            "Tongansk pound sterling",
+            "Tonganskt pund sterling",
         }
         TPE{
             "TPE",
@@ -1551,7 +1551,7 @@ sv{
         }
         VAL{
             "VAL",
-            "Heliga Stolen-lira",
+            "Vatikansk lira",
         }
         VDD{
             "VDD",
@@ -1663,15 +1663,15 @@ sv{
         }
         YUF{
             "YUF",
-            "Jugoslavisk Federation-dinar",
+            "Jugoslavisk federationsdinar",
         }
         YUG{
             "YUG",
-            "Jugoslavisk 1994 dinar",
+            "Jugoslavisk dinar (1994)",
         }
         YUM{
             "YUM",
-            "Jugoslavisk noviy dinar",
+            "Dinar (Serbien och Montenegro)",
         }
         YUN{
             "YUN",
@@ -1679,11 +1679,11 @@ sv{
         }
         YUO{
             "YUO",
-            "Jugoslavisk oktober dinar",
+            "Jugoslavisk oktoberdinar",
         }
         YUR{
             "YUR",
-            "Jugoslavisk reformed dinar",
+            "Jugoslavisk reformerad dinar",
         }
         ZAL{
             "ZAL",
@@ -1738,11 +1738,11 @@ sv{
         ak{"akan"}
         akk{"akkadiska"}
         ale{"aleutiska"}
-        alg{"Algonkinspråk"}
+        alg{"algonquinspråk"}
         am{"amhariska"}
         an{"aragonesiska"}
-        ang{"fornengelska (ca. 450-1100)"}
-        apa{"Apache-språk"}
+        ang{"fornengelska (ca 450-1100)"}
+        apa{"apachespråk"}
         ar{"arabiska"}
         arc{"arameiska"}
         arn{"araukanska"}
@@ -1751,15 +1751,15 @@ sv{
         arw{"arawakiska"}
         as{"assami"}
         ast{"asturiska"}
-        ath{"Athapaskiska språk"}
-        aus{"Australiska språk"}
+        ath{"athapasiska språk"}
+        aus{"australiska språk"}
         av{"avariska"}
         awa{"awadhi"}
         ay{"aymara"}
-        az{"azerbadzjanska"}
+        az{"azerbajdzjanska"}
         ba{"basjkiriska"}
         bad{"banda"}
-        bai{"Bamilekiska språk"}
+        bai{"bamilekiska språk"}
         bal{"baluchi"}
         ban{"balinesiska"}
         bas{"basa"}
@@ -1804,12 +1804,12 @@ sv{
         chp{"chipewyan"}
         chr{"cherokesiska"}
         chy{"cheyenne"}
-        cmc{"Chami-språk"}
-        co{"korsiska"}
+        cmc{"chamispråk"}
+        co{"korsikanska"}
         cop{"koptiska"}
-        cpe{"kreolska och pidgin, engelsk-baserat (annat)"}
-        cpf{"kreolska och pidgin, fransk-baserat (annat)"}
-        cpp{"kreolska och pidgin, portugisisk-baserat (annat)"}
+        cpe{"kreolska och pidgin, engelskbaserade (övriga)"}
+        cpf{"kreolska och pidgin, franskbaserade (övriga)"}
+        cpp{"kreolska och pidgin, portugisiskbaserade (övriga)"}
         cr{"cree"}
         crh{"krimturkiska; krimtatar"}
         crp{"kreolska och pidgin (annat)"}
@@ -1832,7 +1832,7 @@ sv{
         dra{"dravidiskt (annat)"}
         dsb{"lågsorbiska"}
         dua{"duala"}
-        dum{"medelnederländska (ca. 1050-1350)"}
+        dum{"medelnederländska (ca 1050-1350)"}
         dv{"divehi"}
         dyu{"dyula"}
         dz{"dzongkha"}
@@ -1858,9 +1858,9 @@ sv{
         fj{"fidjianska"}
         fo{"färöiska"}
         fr{"franska"}
-        frm{"medelfranska (ca.1400-1600)"}
-        fro{"fornfranska (842- ca.1400)"}
-        fur{"friuilian"}
+        frm{"medelfranska (ca 1400-1600)"}
+        fro{"fornfranska (842- ca 1400)"}
+        fur{"friulianska"}
         fy{"frisiska"}
         ga{"irländsk gaeliska"}
         gaa{"ga"}
@@ -1908,7 +1908,7 @@ sv{
         ik{"inupiaq"}
         ilo{"iloko"}
         inc{"indiskt (annat)"}
-        ine{"indo-europeiskt (annat)"}
+        ine{"indoeuropeiskt (annat)"}
         inh{"ingusjiska"}
         io{"ido"}
         ira{"iranska"}
@@ -1920,7 +1920,7 @@ sv{
         jbo{"lojban"}
         jpr{"judisk farsi"}
         jrb{"judisk arabiska"}
-        jv{"javanska"}
+        jv{"javanesiska"}
         ka{"georgiska"}
         kaa{"karakalpakiska"}
         kab{"kabyliska"}
@@ -1935,9 +1935,9 @@ sv{
         kho{"khotanesiska"}
         ki{"kikuyu"}
         kj{"kuanyama"}
-        kk{"kazakiska"}
+        kk{"kazakstanska"}
         kl{"grönländska"}
-        km{"kambodjanska; khmer"}
+        km{"kambodjanska; khmeriska"}
         kmb{"kinbundu"}
         kn{"kanaresiska; kannada"}
         ko{"koreanska"}
@@ -1948,7 +1948,7 @@ sv{
         krc{"karachay-balkar"}
         kro{"kru"}
         kru{"kurukh"}
-        ks{"kashmiri"}
+        ks{"kashmiriska"}
         ku{"kurdiska"}
         kum{"kumyk"}
         kut{"kutenai"}
@@ -1990,22 +1990,22 @@ sv{
         mi{"maori"}
         mic{"mic-mac"}
         min{"minangkabau"}
-        mis{"Blandade språk"}
+        mis{"blandade språk"}
         mk{"makedonska"}
-        mkh{"mon-khmer (annat)"}
+        mkh{"mon-khmeriska (annat)"}
         ml{"malayalam"}
         mn{"mongoliska"}
-        mnc{"manchu"}
+        mnc{"manchuriska"}
         mni{"manipuri"}
-        mno{"manobo-sråk"}
+        mno{"manobospråk"}
         mo{"moldaviska"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
         ms{"malajiska"}
         mt{"maltesiska"}
-        mul{"Flera språk"}
-        mun{"Munda-språk"}
+        mul{"flera språk"}
+        mun{"mundaspråk"}
         mus{"muskogee"}
         mwr{"marwari"}
         my{"burmanska"}
@@ -2018,7 +2018,7 @@ sv{
         nb{"norskt bokmål"}
         nd{"nord­ndebele"}
         nds{"lågtyska; lågsaxiska"}
-        ne{"nepali"}
+        ne{"nepalesisika"}
         new{"newari"}
         ng{"ndonga"}
         nia{"nias"}
@@ -2031,21 +2031,21 @@ sv{
         non{"fornnordiska"}
         nr{"syd­ndebele"}
         nso{"sotho, nord"}
-        nub{"Nubiska språk"}
+        nub{"nubiska språk"}
         nv{"navaho"}
         ny{"nyanja"}
         nym{"nyamwezi"}
         nyn{"nyankole"}
         nyo{"nyoro"}
         nzi{"nzima"}
-        oc{"provensalska (efter 1500"}
+        oc{"provensalska (efter 1500); occitanska"}
         oj{"odjibwa; chippewa"}
         om{"oromo"}
         or{"oriya"}
         os{"ossetiska"}
         osa{"osage"}
         ota{"ottomanturkiska (1500-1928)"}
-        oto{"Oto-mangue-språk"}
+        oto{"otomanguespråk"}
         pa{"panjabi"}
         paa{"papuaspråk (annat)"}
         pag{"pangasinan"}
@@ -2053,13 +2053,13 @@ sv{
         pam{"pampanga"}
         pap{"papiamento"}
         pau{"palau"}
-        peo{"fornpersiska (ca.600-400 b.c.)"}
+        peo{"fornpersiska (ca 600-400 f.Kr.)"}
         phi{"filippinskt språk (annat)"}
         phn{"kananeiska; feniciska"}
         pi{"pali"}
         pl{"polska"}
         pon{"ponape"}
-        pra{"Prakritspråk"}
+        pra{"prakrit"}
         pro{"fornprovensalska (till 1500)"}
         ps{"pashto; afghanska"}
         pt{"portugisiska"}
@@ -2078,8 +2078,8 @@ sv{
         sad{"sandawe"}
         sah{"jakutiska"}
         sai{"nordamerikanskt indianskt (annat)"}
-        sal{"salish-språk"}
-        sam{"samaritanska"}
+        sal{"salishspråk"}
+        sam{"samariska"}
         sas{"sasak"}
         sat{"santali"}
         sc{"sardiska"}
@@ -2096,7 +2096,7 @@ sv{
         si{"singalesiska"}
         sid{"sidamo"}
         sio{"siouxspråk"}
-        sit{"Sinotibetanska språk"}
+        sit{"sinotibetanska språk"}
         sk{"slovakiska"}
         sl{"slovenska"}
         sla{"slaviskt (annat)"}
@@ -2108,7 +2108,7 @@ sv{
         sms{"skoltsamiska"}
         sn{"shona; manshona"}
         snk{"soninke"}
-        so{"somali"}
+        so{"somaliska"}
         sog{"sogdiska"}
         son{"songhai"}
         sq{"albanska"}
@@ -2136,22 +2136,22 @@ sv{
         tig{"tigré"}
         tiv{"tivi"}
         tk{"turkmeniska"}
-        tkl{"tokelau"}
+        tkl{"tokelauiska"}
         tl{"tagalog"}
         tli{"tlingit"}
         tmh{"tamashek"}
         tn{"tswana"}
-        to{"tonga"}
-        tog{"tonga-Nyasa"}
+        to{"tonganska"}
+        tog{"tonganska (Nyasa)"}
         tpi{"tok pisin"}
         tr{"turkiska"}
         ts{"tsonga"}
         tsi{"tsimshian"}
         tt{"tatariska"}
         tum{"tumbuka"}
-        tup{"Tupi-språk"}
+        tup{"tupispråk"}
         tut{"altaiskt (annat)"}
-        tvl{"tuvaluan"}
+        tvl{"tuvaluanska"}
         tw{"twi"}
         ty{"tahitiska"}
         tyv{"tuviniska"}
@@ -2172,13 +2172,13 @@ sv{
         wal{"walamo"}
         war{"waray"}
         was{"washo"}
-        wen{"Sorbiska språk"}
+        wen{"sorbiska språk"}
         wo{"wolof"}
         xal{"kalmuckiska"}
         xh{"xhosa"}
         yi{"jiddisch"}
         yo{"yoruba"}
-        ypk{"Yupiska språk"}
+        ypk{"yupiska språk"}
         za{"zhuang"}
         zap{"zapotek"}
         zen{"zenaga"}
@@ -2205,31 +2205,61 @@ sv{
         "+",
     }
     Scripts{
+        Arab{"arabiska"}
+        Armn{"armeniska"}
+        Beng{"bengaliska"}
         Bopo{"bopomofo"}
+        Brai{"blindskrift"}
         Buhd{"buhid"}
         Cans{"kanadensiska stavelsetecken"}
         Cher{"cherokee"}
+        Copt{"koptiska"}
+        Cprt{"cypriotiska"}
+        Cyrl{"kyrilliska"}
         Deva{"devanagari"}
         Dsrt{"deseret"}
+        Ethi{"etiopiska"}
+        Geor{"georgiska"}
+        Goth{"gotiska"}
+        Grek{"grekiska"}
         Gujr{"gujarati"}
         Guru{"gurmukhi"}
         Hang{"hangul"}
         Hani{"han"}
+        Hano{"hanunå"}
         Hans{"förenklad han"}
         Hant{"traditionell han"}
+        Hebr{"hebreiska"}
         Hira{"hiragana"}
         Hrkt{"katakana/hiragana"}
+        Ital{"fornitaliska"}
         Kana{"katakana"}
-        Khmr{"khmer"}
+        Khmr{"khmeriskt"}
+        Knda{"kanaresiska"}
+        Laoo{"laotiska"}
+        Latn{"latinskt"}
         Limb{"limbu"}
+        Linb{"linear B"}
         Mlym{"malayalam"}
+        Mong{"mongoliska"}
+        Mymr{"burmesiska"}
         Ogam{"ogham"}
         Orya{"oriya"}
+        Osma{"osmanskt"}
         Qaai{"ärvd"}
+        Runr{"runor"}
+        Shaw{"shawiska"}
+        Sinh{"singalesiska"}
+        Syrc{"syriska"}
         Tagb{"tagbanwa"}
         Tale{"tai le"}
+        Taml{"tamilskt"}
         Telu{"telugu"}
         Tglg{"tagalog"}
+        Thaa{"taana"}
+        Thai{"thailändska"}
+        Tibt{"tibetanska"}
+        Ugar{"ugaritiska"}
         Yiii{"yi"}
         Zyyy{"vanligt"}
     }

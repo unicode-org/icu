@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\fi.xml
+// * Source File: ../../../locale/common/main/fi.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\fi.xml
+ *  ICU <specials> source: ../../../locale/icu/main/fi.xml
  */
 fi{
     Countries{

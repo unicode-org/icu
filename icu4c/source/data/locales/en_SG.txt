@@ -3,7 +3,7 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\en_SG.xml
+// * Source File: ../../../locale/common/main/en_SG.xml
 // *
 // ***************************************************************************
 en_SG{
@@ -31,16 +31,6 @@ en_SG{
                 "dd/MM/yy",
                 "{1} {0}",
             }
-        }
-    }
-    zoneStrings{
-        {
-            "Pacific/Guadalcanal",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore",
         }
     }
 }
