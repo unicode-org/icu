@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -140,6 +140,10 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
         int32_t numberElementsLength = ures_getSize(numberElementsRes);
 
+        if (numberElementsLength > (int32_t)kFormatSymbolCount) {
+            /* Warning: Invalid format. Array too large. */
+            numberElementsLength = (int32_t)kFormatSymbolCount;
+        }
         // If the array size is too small, something is wrong with the resource
         // bundle, returns the failure error code.
         if (numberElementsLength < 11 || U_FAILURE(status)) {
@@ -151,7 +155,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             for(i = 0; i<numberElementsLength; i++) {
                 int32_t len = 0;
                 const UChar *resUChars = ures_getStringByIndex(numberElementsRes, i, &len, &status);
-                numberElements[i].fastCopyFrom(UnicodeString(TRUE, resUChars, len));
+                numberElements[i].setTo(TRUE, resUChars, len); /* This setTo does aliasing */
             }
 
             if (U_SUCCESS(status)) {
