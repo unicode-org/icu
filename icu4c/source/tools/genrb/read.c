@@ -46,10 +46,10 @@ static UBool didInit=FALSE;
 extern int32_t lineCount;
 
 /* Protos */
-static enum ETokenType getStringToken(UCHARBUF* buf, UChar initialChar,
+static enum ETokenType getStringToken(UCHARBUF* buf, UChar32 initialChar,
                       struct UString *token,
                       UErrorCode *status);
-static UChar getNextChar(UCHARBUF* buf, UBool skipwhite, UErrorCode *status);
+static UChar32 getNextChar(UCHARBUF* buf, UBool skipwhite, UErrorCode *status);
 static void seekUntilNewline(UCHARBUF* buf, UErrorCode *status);
 static void seekUntilEndOfComment(UCHARBUF* buf, UErrorCode *status);
 static UBool isWhitespace(UChar32 c);
@@ -68,7 +68,7 @@ enum ETokenType getNextToken(UCHARBUF* buf,
                              struct UString *token,
                              UErrorCode *status)
 {
-    UChar c;
+    UChar32 c;
 
     /*enum ETokenType tokenType;*/
 
@@ -137,7 +137,7 @@ enum ETokenType getNextToken(UCHARBUF* buf,
    intervening space.  Otherwise a single SPACE character is
    inserted. */
 static enum ETokenType getStringToken(UCHARBUF* buf,
-                                      UChar initialChar,
+                                      UChar32 initialChar,
                                       struct UString *token,
                                       UErrorCode *status)
 {
@@ -175,7 +175,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
         /*  c = u_fgetc(f, status);*/
 
         /* EOF reached */
-        if(c == (UChar)U_EOF) {
+        if(c == U_EOF) {
             return tok_EOF;
         }
         /* Unterminated quoted strings */
@@ -208,7 +208,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
         pTarget=target;
         c = unescape(buf, status);
         /* EOF reached */
-        if(c == (UChar)U_EOF) {
+        if(c ==U_EOF) {
             return tok_error;
         }
       }
@@ -223,7 +223,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
         /* DON'T skip whitespace */
         c = getNextChar(buf, FALSE, status);
         /* EOF reached */
-        if(c == (UChar)U_EOF) {
+        if(c == U_EOF) {
           ucbuf_ungetc(c, buf);
           return tok_string;
         }
@@ -275,19 +275,19 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
 
 /* Retrieve the next character, ignoring comments.  If skipwhite is
    true, whitespace is skipped as well. */
-static UChar getNextChar(UCHARBUF* buf,
+static UChar32 getNextChar(UCHARBUF* buf,
                          UBool skipwhite,
                          UErrorCode *status)
 {
-  UChar c;
+  UChar32 c;
 
   if(U_FAILURE(*status))
     return U_EOF;
 
   for(;;) {
-    c = (UChar)ucbuf_getc(buf,status);
+    c = ucbuf_getc(buf,status);
     /*c = u_fgetc(f, status);*/
-    if(c == (UChar)U_EOF)
+    if(c == U_EOF)
       return U_EOF;
 
     if(skipwhite && isWhitespace(c))
@@ -297,9 +297,9 @@ static UChar getNextChar(UCHARBUF* buf,
     if(c != SLASH)
       return c;
 
-    c = (UChar)ucbuf_getc(buf,status);
+    c = ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
-    if(c == (UChar)U_EOF)
+    if(c == U_EOF)
       return U_EOF;
 
     switch(c) {
@@ -324,15 +324,15 @@ static UChar getNextChar(UCHARBUF* buf,
 static void seekUntilNewline(UCHARBUF* buf,
                              UErrorCode *status)
 {
-  UChar c;
+  UChar32 c;
 
   if(U_FAILURE(*status))
     return;
 
   do {
-    c = (UChar)ucbuf_getc(buf,status);
+    c = ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
-  } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
+  } while(! isNewline(c) && c != U_EOF && *status == U_ZERO_ERROR);
 
   /*if(U_FAILURE(*status))
     err = kItemNotFound;*/
@@ -341,16 +341,16 @@ static void seekUntilNewline(UCHARBUF* buf,
 static void seekUntilEndOfComment(UCHARBUF* buf,
                                   UErrorCode *status)
 {
-  UChar c, d;
+  UChar32 c, d;
 
   if(U_FAILURE(*status))
     return;
 
   do {
-    c =(UChar) ucbuf_getc(buf,status);
+    c =ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
     if(c == ASTERISK) {
-        d =(UChar) ucbuf_getc(buf,status);
+        d = ucbuf_getc(buf,status);
         /*  d = u_fgetc(f, status);*/
       if(d != SLASH)
         ucbuf_ungetc(d, buf);
@@ -358,9 +358,9 @@ static void seekUntilEndOfComment(UCHARBUF* buf,
       else
         break;
     }
-  } while(c != (UChar)U_EOF && *status == U_ZERO_ERROR);
+  } while(c != U_EOF && *status == U_ZERO_ERROR);
 
-  if(c == (UChar)U_EOF) {
+  if(c == U_EOF) {
     *status = U_INVALID_FORMAT_ERROR;
     setErrorText("Unterminated comment detected");
   }

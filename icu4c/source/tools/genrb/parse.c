@@ -523,9 +523,7 @@ parse(UCHARBUF* buf, const char *inputDir,
                     UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
                     UChar* target = pTarget;
                     UChar* targetLimit = pTarget+size;
-                    if(ucbuf_autodetect(in,&cp)){
-                    }
-                    ucbuf= ucbuf_open(in,cp,status);
+                    ucbuf= ucbuf_open(in,status);
                     do{
                         c = ucbuf_getc(ucbuf,status);
                         ucbuf_ungetc(c,ucbuf);
