@@ -12,11 +12,8 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/parseerr.h"
-#include "unicode/resbund.h"
 #include "unicode/translit.h"
+#include "unicode/resbund.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
 #include "rbt.h"
