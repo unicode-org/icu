@@ -41,6 +41,7 @@
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
 #include "unicode/uclean.h"
+#include "unicode/putil.h"
 
 #include "cintltst.h"
 #include "ccolltst.h"

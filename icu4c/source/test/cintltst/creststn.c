@@ -18,7 +18,7 @@
 #include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
-#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "string.h"

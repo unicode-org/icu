@@ -7,6 +7,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
+#include "unicode/putil.h"
 #include "cstring.h"
 #include "uparse.h"
 #include "ucdtest.h"
@@ -139,14 +140,7 @@ void UnicodeTest::TestAdditionalProperties() {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     /* Look inside ICU_DATA first */
-    strcpy(newPath, u_getDataDirectory());
-
-    // remove trailing "out/"
-    length=uprv_strlen(newPath);
-    if(length>=4 && uprv_strcmp(newPath+length-4, "out" U_FILE_SEP_STRING)==0) {
-        newPath[length-4]=0;
-    }
-
+    strcpy(newPath, pathToDataDirectory());
     strcat(newPath, "unidata" U_FILE_SEP_STRING "DerivedCoreProperties.txt");
 
     // As a fallback, try to guess where the source data was located
