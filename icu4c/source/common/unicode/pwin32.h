@@ -21,6 +21,12 @@
 #define WIN32
 #endif
 
+#if defined(__BORLANDC__)
+#define U_HAVE_PLACEMENT_NEW 0
+#define U_HAVE_INTTYPES_H 1
+#define __STDC_CONSTANT_MACROS
+#endif
+
 /* Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
 #define U_HAVE_INTTYPES_H 0
@@ -46,35 +52,35 @@
 
 /* Determines whether specific types are available */
 #ifndef U_HAVE_INT8_T
-#define U_HAVE_INT8_T 0
+#define U_HAVE_INT8_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_UINT8_T
-#define U_HAVE_UINT8_T 0
+#define U_HAVE_UINT8_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_INT16_T
-#define U_HAVE_INT16_T 0
+#define U_HAVE_INT16_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_UINT16_T
-#define U_HAVE_UINT16_T 0
+#define U_HAVE_UINT16_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_INT32_T
-#define U_HAVE_INT32_T 0
+#define U_HAVE_INT32_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_UINT32_T
-#define U_HAVE_UINT32_T 0
+#define U_HAVE_UINT32_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_INT64_T
-#define U_HAVE_INT64_T 0
+#define U_HAVE_INT64_T U_HAVE_INTTYPES_H
 #endif
 
 #ifndef U_HAVE_UINT64_T
-#define U_HAVE_UINT64_T 0
+#define U_HAVE_UINT64_T U_HAVE_INTTYPES_H
 #endif
 
 /* Define 64 bit limits */
