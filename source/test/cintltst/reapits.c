@@ -72,6 +72,9 @@ void TestRegexCAPI(void) {
     UErrorCode           status = U_ZERO_ERROR;
     URegularExpression  *re;
     UChar                pat[200];
+    UChar               *minus1;
+
+    memset(&minus1, -1, sizeof(minus1));
 
     /* Mimimalist open/close */
     u_uastrncpy(pat, "abc*", sizeof(pat)/2);
@@ -750,7 +753,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT(numFields == 2);
         TEST_ASSERT_STRING("first ",  fields[0], TRUE);
         TEST_ASSERT_STRING(" second:  third", fields[1], TRUE);
-        TEST_ASSERT(fields[2] == (UChar *)-1);
+        TEST_ASSERT(!memcmp(&fields[2],&minus1,sizeof(UChar*)));
 
         spaceNeeded = u_strlen(textToSplit) -
                       (numFields - 1)  +  /* Field delimiters do not appear in output */
@@ -829,7 +832,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT(numFields == 2);
         TEST_ASSERT_STRING("first ",  fields[0], TRUE);
         TEST_ASSERT_STRING(" second<tag-b>  third", fields[1], TRUE);
-        TEST_ASSERT(fields[2] == (UChar *)-1);
+        TEST_ASSERT(!memcmp(&fields[2],&minus1,sizeof(UChar*)));
 
         spaceNeeded = strlen("first . second<tag-b>  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
@@ -844,7 +847,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING("first ",  fields[0], TRUE);
         TEST_ASSERT_STRING("tag-a",   fields[1], TRUE);
         TEST_ASSERT_STRING(" second<tag-b>  third", fields[2], TRUE);
-        TEST_ASSERT(fields[3] == (UChar *)-1);
+        TEST_ASSERT(!memcmp(&fields[3],&minus1,sizeof(UChar*)));
 
         spaceNeeded = strlen("first .tag-a. second<tag-b>  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
@@ -861,7 +864,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING(" second", fields[2], TRUE);
         TEST_ASSERT_STRING("tag-b",   fields[3], TRUE);
         TEST_ASSERT_STRING("  third", fields[4], TRUE);
-        TEST_ASSERT(fields[5] == (UChar *)-1);
+        TEST_ASSERT(!memcmp(&fields[5],&minus1,sizeof(UChar*)));
 
         spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
@@ -883,7 +886,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING("tag-b",   fields[3], TRUE);
         TEST_ASSERT(fields[4] == NULL);
         TEST_ASSERT(fields[8] == NULL);
-        TEST_ASSERT(fields[9] == (UChar *)-1);
+        TEST_ASSERT(!memcmp(&fields[9],&minus1,sizeof(UChar*)));
         spaceNeeded = strlen("first .tag-a. second.tag-b.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
