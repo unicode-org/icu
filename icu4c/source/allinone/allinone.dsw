@@ -102,6 +102,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "gencnval"=..\tools\gencnval\gencnval.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "gencol"=..\tools\gencol\gencol.dsp - Package Owner=<4>
 
 Package=<5>
