@@ -129,6 +129,7 @@ LocaleUtility::cleanup(void) {
     cache = NULL;
   }
   umtx_destroy(&lock);
+  return TRUE;
 }
 
 Hashtable * LocaleUtility::cache = NULL;
