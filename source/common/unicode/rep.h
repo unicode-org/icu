@@ -76,7 +76,7 @@ public:
     /**
      * Returns the number of 16-bit code units in the text.
      * @return number of 16-bit code units in text
-     * @since ICU 1.8
+     * @stable ICU 1.8
      */ 
     inline int32_t length() const;
 
@@ -85,7 +85,7 @@ public:
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 16-bit code unit of text at given offset
-     * @since ICU 1.8
+     * @stable ICU 1.8
      */
     inline UChar charAt(int32_t offset) const;
 
@@ -99,7 +99,7 @@ public:
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return 32-bit code point of text at given offset
-     * @since ICU 1.8
+     * @stable ICU 1.8
      */
     inline UChar32 char32At(int32_t offset) const;
 
@@ -111,7 +111,7 @@ public:
      * be copied
      * @param target UnicodeString into which to copy characters.
      * @return A reference to <TT>target</TT>
-     * @since ICU 2.1
+     * @stable ICU 2.1
      */
     virtual void extractBetween(int32_t start,
                                 int32_t limit,
@@ -174,7 +174,7 @@ public:
      * to the Replaceable API may be optimized to improve performance.
      * The default implementation returns true.
      * @return true if this object contains metadata
-     * @since ICU 2.2
+     * @stable ICU 2.2
      */
     virtual UBool hasMetaData() const;
 
@@ -182,21 +182,25 @@ protected:
 
     /**
      * Default constructor.
+     * @draft ICU 2.4
      */
     Replaceable();
 
     /**
      * Virtual version of length().
+     * @draft ICU 2.4
      */ 
     virtual int32_t getLength() const = 0;
 
     /**
      * Virtual version of charAt().
+     * @draft ICU 2.4
      */
     virtual UChar getCharAt(int32_t offset) const = 0;
 
     /**
      * Virtual version of char32At().
+     * @draft ICU 2.4
      */
     virtual UChar32 getChar32At(int32_t offset) const = 0;
 };
