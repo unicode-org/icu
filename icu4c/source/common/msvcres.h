@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Copyright (c) 2003 International Business Machines
+// Copyright (c) 2003-2005 International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Used by common.rc and other .rc files.
@@ -17,3 +17,4 @@ STLPort's broken stddef.h from being used when rc.exe parses this file.
 
 #include "unicode/uversion.h"
 
+#define ICU_WEBSITE "http://ibm.com/software/globalization/icu/"
