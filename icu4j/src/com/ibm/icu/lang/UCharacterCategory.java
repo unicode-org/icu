@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/11 23:37:43 $ 
-* $Revision: 1.11 $
+* $Date: 2003/05/24 00:48:08 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -39,7 +39,7 @@ public final class UCharacterCategory
     /**
      * Character type Cn
      * Not Assigned (no characters in [UnicodeData.txt] have this property) 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final int GENERAL_OTHER_TYPES     = 0;
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2003/05/14 19:03:48 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/05/24 00:48:08 $ 
+ * $Revision: 1.13 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -19,7 +19,7 @@ import java.util.HashMap;
 /**
  * Class to store version numbers of the form major.minor.milli.micro.
  * @author synwee
- * @draft ICU 2.1
+ * @stable ICU 2.6
  */
 public final class VersionInfo
 {
@@ -27,72 +27,72 @@ public final class VersionInfo
         
     /**
      * Unicode 1.0 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_1_0;
     /**
      * Unicode 1.0.1 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_1_0_1;
     /**
      * Unicode 1.1.0 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_1_1_0;
     /**
      * Unicode 1.1.5 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_1_1_5;
     /**
      * Unicode 2.0 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_2_0;        
     /**
      * Unicode 2.1.2 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_2_1_2;
     /**
      * Unicode 2.1.5 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_2_1_5;
     /**
      * Unicode 2.1.8 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_2_1_8;
     /**
      * Unicode 2.1.9 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_2_1_9;
     /**
      * Unicode 3.0 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_3_0;
     /**
      * Unicode 3.0.1 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_3_0_1;
     /**
      * Unicode 3.1.0 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_3_1_0;
     /**
      * Unicode 3.1.1 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_3_1_1;
     /**
      * Unicode 3.2 version
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static final VersionInfo UNICODE_3_2;
     
@@ -121,7 +121,7 @@ public final class VersionInfo
      * @return an instance of VersionInfo with the argument version.
      * @exception throws an IllegalArgumentException when the argument version 
      *                is not in the right format
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getInstance(String version)
     {
@@ -166,7 +166,7 @@ public final class VersionInfo
      * @param micro micro version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
      *                                     negative or > 255 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor, int milli, 
                                           int micro)
@@ -195,7 +195,7 @@ public final class VersionInfo
      * @param milli milli version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
      *                                     negative or > 255 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor, int milli)
     {
@@ -209,7 +209,7 @@ public final class VersionInfo
      * @param minor minor version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
      *                                     negative or > 255 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major, int minor)
     {
@@ -222,7 +222,7 @@ public final class VersionInfo
      * @param major major version, non-negative number <= 255.
      * @exception throws an IllegalArgumentException when either arguments are
      *                                     negative or > 255 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getInstance(int major)
     {
@@ -233,7 +233,7 @@ public final class VersionInfo
      * Returns the String representative of VersionInfo in the format of 
      * "major.minor.milli.micro"   
      * @return String representative of VersionInfo
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public String toString()
     {
@@ -251,7 +251,7 @@ public final class VersionInfo
     /** 
      * Returns the major version number
      * @return the major version number    
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public int getMajor()
     {
@@ -261,7 +261,7 @@ public final class VersionInfo
     /** 
      * Returns the minor version number
      * @return the minor version number    
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public int getMinor()
     {
@@ -271,7 +271,7 @@ public final class VersionInfo
     /** 
      * Returns the milli version number
      * @return the milli version number    
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public int getMilli()
     {
@@ -281,7 +281,7 @@ public final class VersionInfo
     /** 
      * Returns the micro version number
      * @return the micro version number
-     * @draft ICU 2.1    
+     * @stable ICU 2.6    
      */
     public int getMicro()
     {
@@ -293,7 +293,7 @@ public final class VersionInfo
      * @param other object to be compared
      * @return true if other is equals to this object's version information, 
      *         false otherwise
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public boolean equals(Object other)
     {
@@ -309,7 +309,7 @@ public final class VersionInfo
      *           version information greater than this object. 
      *           Greater than 0 if the argument is a VersionInfo object that 
      *           has version information less than this object.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public int compareTo(VersionInfo other)
     {

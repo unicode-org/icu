@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2003/02/11 01:19:01 $ 
-* $Revision: 1.29 $
+* $Date: 2003/05/24 00:48:07 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -1510,7 +1510,7 @@ public final class UTF16
      * @param char32 codepoint to search for 
      * @return the index of the first occurrence of the codepoint in the 
      *         argument Unicode string, or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int indexOf(String source, int char32)  
     {
@@ -1570,7 +1570,7 @@ public final class UTF16
      * @param str UTF16 format Unicode string to search for
      * @return the index of the first occurrence of the codepoint in the 
      *         argument Unicode string, or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int indexOf(String source, String str)  
     {
@@ -1619,7 +1619,7 @@ public final class UTF16
      * @return the index of the first occurrence of the codepoint in the 
      *         argument Unicode string at or after fromIndex, or -1 if the 
      *         codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int indexOf(String source, int char32, int fromIndex) 
     {
@@ -1680,7 +1680,7 @@ public final class UTF16
      * @param fromIndex the index to start the search from. 
      * @return the index of the first occurrence of the codepoint in the 
      *         argument Unicode string, or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int indexOf(String source, String str, int fromIndex)  
     {
@@ -1727,7 +1727,7 @@ public final class UTF16
      * @param char32 codepoint to search for 
      * @return the index of the last occurrence of the codepoint in source, 
      *         or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int lastIndexOf(String source, int char32)  
     {
@@ -1786,7 +1786,7 @@ public final class UTF16
      * @param str UTF16 format Unicode string to search for 
      * @return the index of the last occurrence of the codepoint in source, 
      *         or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int lastIndexOf(String source, String str)  
     {
@@ -1843,7 +1843,7 @@ public final class UTF16
      *                  the same effect as if it were -1: -1 is returned. 
      * @return the index of the last occurrence of the codepoint in source, 
      *         or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int lastIndexOf(String source, int char32, int fromIndex)
     {
@@ -1914,7 +1914,7 @@ public final class UTF16
      *                  the same effect as if it were -1: -1 is returned. 
      * @return the index of the last occurrence of the codepoint in source, 
      *         or -1 if the codepoint does not occur.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int lastIndexOf(String source, String str, int fromIndex)  
     {
@@ -1970,7 +1970,7 @@ public final class UTF16
      * @return new String derived from source by replacing every occurrence 
      *         of oldChar32 with newChar32, unless when no oldChar32 is found
      *         in source then source will be returned.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static String replace(String source, int oldChar32, 
                                  int newChar32)  
@@ -2039,7 +2039,7 @@ public final class UTF16
      * @return new String derived from source by replacing every occurrence 
      *         of oldChar32 with newChar32, unless when no oldChar32 is found
      *         in source then source will be returned.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static String replace(String source, String oldStr, 
                                  String newStr)  
@@ -2076,7 +2076,7 @@ public final class UTF16
      * @param source the source StringBuffer that contains UTF16 format 
      *        Unicode string to be reversed
      * @return a modified source with reversed UTF16 format Unicode string.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static StringBuffer reverse(StringBuffer source)      
     {

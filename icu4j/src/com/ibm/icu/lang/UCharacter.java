@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/05/14 18:38:09 $ 
-* $Revision: 1.73 $
+* $Date: 2003/05/24 00:48:08 $ 
+* $Revision: 1.74 $
 *
 *******************************************************************************
 */
@@ -2965,7 +2965,7 @@ public final class UCharacter
      * incurs a one-time initialisation cost to construct the name tables.
      * @param ch the code point for which to get the name
      * @return a name for the argument codepoint
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static String getExtendedName(int ch) 
     {
@@ -3053,7 +3053,7 @@ public final class UCharacter
      * @param name codepoint name
      * @return code point associated with the name or -1 if the name is not
      *         found.
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static int getCharFromExtendedName(String name)
     {
@@ -3294,7 +3294,7 @@ public final class UCharacter
      * @param breakiter break iterator to determine the positions in which
      *        the character should be title cased.
      * @return lowercase version of the argument string
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static String toTitleCase(String str, BreakIterator breakiter)
     {
@@ -3353,7 +3353,7 @@ public final class UCharacter
      * @param breakiter break iterator to determine the positions in which
      *        the character should be title cased.
      * @return lowercase version of the argument string
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static String toTitleCase(Locale locale, String str, 
                                      BreakIterator breakiter)
@@ -3871,7 +3871,7 @@ public final class UCharacter
      * }
      * </pre>
      * @return an iterator 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static RangeValueIterator getTypeIterator()
     {
@@ -3896,7 +3896,7 @@ public final class UCharacter
      * <p>The maximal range which the name iterator iterates is from 
      * UCharacter.MIN_VALUE to UCharacter.MAX_VALUE.</p>
      * @return an iterator 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static ValueIterator getNameIterator()
     {
@@ -3924,7 +3924,7 @@ public final class UCharacter
      * </pre>
      * <p>The maximal range which the name iterator iterates is from 
      * @return an iterator 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static ValueIterator getName1_0Iterator()
     {
@@ -3952,7 +3952,7 @@ public final class UCharacter
      * </pre>
      * <p>The maximal range which the name iterator iterates is from 
      * @return an iterator 
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static ValueIterator getExtendedNameIterator()
     {
@@ -3973,7 +3973,7 @@ public final class UCharacter
      * <p>The data is from the UCD file DerivedAge.txt.</p>
      * @param ch The code point.
      * @return the Unicode version number
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public static VersionInfo getAge(int ch) 
     {
@@ -4006,7 +4006,7 @@ public final class UCharacter
 	 *         Unicode version does not have data for the property at all, or 
 	 *         not for this code point.
 	 * @see com.ibm.icu.lang.UProperty
-	 * @draft ICU 2.1
+	 * @stable ICU 2.6
 	 */
 	public static boolean hasBinaryProperty(int ch, int property) 
 	{
@@ -4020,7 +4020,7 @@ public final class UCharacter
 	 * <p>Check if a code point has the Alphabetic Unicode property.</p> 
 	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).</p>
 	 * <p>Different from UCharacter.isLetter(ch)!</p> 
-	 * @draft ICU 2.1
+	 * @stable ICU 2.6
 	 * @param ch codepoint to be tested
 	 */
 	public static boolean isUAlphabetic(int ch)
@@ -4033,7 +4033,7 @@ public final class UCharacter
 	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.LOWERCASE).</p>
 	 * <p>This is different from UCharacter.isLowerCase(ch)!</p>
 	 * @param ch codepoint to be tested
-	 * @draft ICU 2.1
+	 * @stable ICU 2.6
 	 */
 	public static boolean isULowercase(int ch) 
 	{
@@ -4045,7 +4045,7 @@ public final class UCharacter
 	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.UPPERCASE).</p>
 	 * <p>This is different from UCharacter.isUpperCase(ch)!</p>
 	 * @param ch codepoint to be tested
-	 * @draft ICU 2.1
+	 * @stable ICU 2.6
 	 */
 	public static boolean isUUppercase(int ch) 
 	{
@@ -4058,7 +4058,7 @@ public final class UCharacter
 	 * <p>This is different from both UCharacter.isSpace(ch) and 
 	 * UCharacter.isWhitespace(ch)!</p>
 	 * @param ch codepoint to be tested
-	 * @draft ICU 2.1
+	 * @stable ICU 2.6
 	 */
 	public static boolean isUWhiteSpace(int ch) 
 	{
@@ -4667,6 +4667,7 @@ public final class UCharacter
     * is never negative.
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point
+    * @draft ICU 2.6
     */
     public static int getProperty(int ch)
     {
