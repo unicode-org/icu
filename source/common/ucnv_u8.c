@@ -12,6 +12,10 @@
 *   created by: Markus W. Scherer
 *
 *   UTF-8 converter implementation. Used to be in ucnv_utf.c.
+*
+*   Also, CESU-8 implementation, see UTR 26.
+*   The CESU-8 converter uses all the same functions as the
+*   UTF-8 converter, with a branch for converting supplementary code points.
 */
 
 #include "unicode/utypes.h"
@@ -109,7 +113,8 @@ T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
     /* copy the toUBytes to the invalidCharBuffer */
     uprv_memcpy(converter->invalidCharBuffer,
                 converter->toUBytes,
-                converter->invalidCharLength);
+                converter->toULength);
+    converter->invalidCharLength = converter->toULength;
 
     /* Call the ErrorFunction */
     args->converter->fromCharErrorBehaviour(converter->toUContext,
@@ -148,15 +153,16 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
     const UChar *targetLimit = args->targetLimit;
     unsigned char *toUBytes = args->converter->toUBytes;
-    UBool invalidTailChar = FALSE;
-    uint32_t ch, ch2 = 0, i;
-    uint32_t inBytes;  /* Total number of bytes in the current UTF8 sequence */
+    UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
+    uint32_t ch, ch2 = 0;
+    int32_t i, inBytes;
   
     /* Restore size of current sequence */
+start:
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
-        inBytes = args->converter->toULength;       /* restore # of bytes to consume */
-        i = args->converter->invalidCharLength;     /* restore # of bytes consumed */
+        inBytes = args->converter->mode;            /* restore # of bytes to consume */
+        i = args->converter->toULength;             /* restore # of bytes consumed */
 
         ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -183,14 +189,13 @@ morebytes:
             {
                 if (mySource < sourceLimit)
                 {
-                    toUBytes[i] = (char) (ch2 = *(mySource++));
+                    toUBytes[i] = (char) (ch2 = *mySource);
                     if (!UTF8_IS_TRAIL(ch2))
                     {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        invalidTailChar = TRUE;
-                        break;
+                        break; /* i < inBytes */
                     }
                     ch = (ch << 6) + ch2;
+                    ++mySource;
                     i++;
                 }
                 else
@@ -205,8 +210,8 @@ morebytes:
                     else
                     {    /* stores a partially calculated target*/
                         args->converter->toUnicodeStatus = ch;
-                        args->converter->toULength = (int8_t) inBytes;
-                        args->converter->invalidCharLength = (int8_t) i;
+                        args->converter->mode = inBytes;
+                        args->converter->toULength = (int8_t) i;
                     }
                     goto donefornow;
                 }
@@ -221,12 +226,14 @@ morebytes:
              * - use the right number of trail bytes for a given lead byte
              * - encode a code point <= U+10ffff
              * - use the fewest possible number of bytes for their code points
-             * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+             * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
              *
              * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
              * There are no irregular sequences any more.
+             * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
              */
-            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
+            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] &&
+                (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -258,32 +265,19 @@ morebytes:
             {
                 args->source = (const char *) mySource;
                 args->target = myTarget;
-                args->converter->invalidCharLength = (int8_t)i;
+
+                args->converter->toULength = (int8_t)i;
                 if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
                 {
                     /* Stop if the error wasn't handled */
                     break;
                 }
-                args->converter->invalidCharLength = 0;
+
                 mySource = (unsigned char *) args->source;
                 myTarget = args->target;
-                if (invalidTailChar)
-                {
-                    /* Treat the tail as ASCII*/
-                    if (myTarget < targetLimit)
-                    {
-                        *(myTarget++) = (UChar) ch2;
-                        invalidTailChar = FALSE;
-                    }
-                    else
-                    {
-                        /* Put in overflow buffer (not handled here) */
-                        args->converter->UCharErrorBuffer[0] = (UChar) ch2;
-                        args->converter->UCharErrorBufferLength = 1;
-                        *err = U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
-                }
+
+                /* goto the start to handle state left behind by the callback */
+                goto start;
             }
         }
     }
@@ -309,15 +303,16 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
     const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
     const UChar *targetLimit = args->targetLimit;
     unsigned char *toUBytes = args->converter->toUBytes;
-    UBool invalidTailChar = FALSE;
-    uint32_t ch, ch2 = 0, i;
-    uint32_t inBytes;
+    UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
+    uint32_t ch, ch2 = 0;
+    int32_t i, inBytes;
 
     /* Restore size of current sequence */
+start:
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
-        inBytes = args->converter->toULength;       /* restore # of bytes to consume */
-        i = args->converter->invalidCharLength;     /* restore # of bytes consumed */
+        inBytes = args->converter->mode;            /* restore # of bytes to consume */
+        i = args->converter->toULength;             /* restore # of bytes consumed */
 
         ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
         args->converter->toUnicodeStatus = 0;
@@ -343,14 +338,13 @@ morebytes:
             {
                 if (mySource < sourceLimit)
                 {
-                    toUBytes[i] = (char) (ch2 = *(mySource++));
+                    toUBytes[i] = (char) (ch2 = *mySource);
                     if (!UTF8_IS_TRAIL(ch2))
                     {
-                        *err = U_TRUNCATED_CHAR_FOUND;
-                        invalidTailChar = TRUE;
-                        break;
+                        break; /* i < inBytes */
                     }
                     ch = (ch << 6) + ch2;
+                    ++mySource;
                     i++;
                 }
                 else
@@ -366,8 +360,8 @@ morebytes:
                     else
                     {
                         args->converter->toUnicodeStatus = ch;
-                        args->converter->toULength = (int8_t)inBytes;
-                        args->converter->invalidCharLength = (int8_t)i;
+                        args->converter->mode = inBytes;
+                        args->converter->toULength = (int8_t)i;
                     }
                     goto donefornow;
                 }
@@ -382,12 +376,14 @@ morebytes:
              * - use the right number of trail bytes for a given lead byte
              * - encode a code point <= U+10ffff
              * - use the fewest possible number of bytes for their code points
-             * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+             * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
              *
              * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
              * There are no irregular sequences any more.
+             * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
              */
-            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] && !UTF_IS_SURROGATE(ch))
+            if (i == inBytes && ch <= MAXIMUM_UTF && ch >= utf8_minChar32[i] &&
+                (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                 if (ch <= MAXIMUM_UCS2) 
@@ -419,12 +415,11 @@ morebytes:
             }
             else
             {
-                UBool useOffset;
-
                 args->source = (const char *) mySource;
                 args->target = myTarget;
                 args->offsets = myOffsets;
-                args->converter->invalidCharLength = (int8_t)i;
+
+                args->converter->toULength = (int8_t)i;
                 if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args,
                     offsetNum, UCNV_ILLEGAL, err))
                 {
@@ -432,37 +427,13 @@ morebytes:
                     break;
                 }
 
-                args->converter->invalidCharLength = 0;
+                offsetNum += i + ((unsigned char *) args->source - mySource);
                 mySource = (unsigned char *) args->source;
                 myTarget = args->target;
-
-                useOffset = (UBool)(myOffsets != args->offsets);
                 myOffsets = args->offsets;
-                offsetNum += i;
 
-                if (invalidTailChar)
-                {
-                    /* Treat the tail as ASCII*/
-                    if (myTarget < targetLimit)
-                    {
-                        *(myTarget++) = (UChar) ch2;
-                        *myOffsets = offsetNum++;
-                        if (useOffset)
-                        {
-                            /* Increment when the target was consumed */
-                            myOffsets++;
-                        }
-                        invalidTailChar = FALSE;
-                    }
-                    else
-                    {
-                        /* Put in overflow buffer (not handled here) */
-                        args->converter->UCharErrorBuffer[0] = (UChar) ch2;
-                        args->converter->UCharErrorBufferLength = 1;
-                        *err = U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
-                }
+                /* goto the start to handle state left behind by the callback */
+                goto start;
             }
         }
     }
@@ -486,6 +457,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
     unsigned char *myTarget = (unsigned char *) args->target;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
     uint32_t ch, ch2;
     int16_t indexToWrite;
     char temp[4];
@@ -522,7 +494,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
         else
         /* Check for surrogates */
         {
-            if(UTF_IS_SURROGATE(ch) /* && not CESU-8 */) {
+            if(UTF_IS_SURROGATE(ch) && !isCESU8) {
                 if(UTF_IS_SURROGATE_FIRST(ch)) {
 lowsurrogate:
                     if (mySource < sourceLimit) {
@@ -649,6 +621,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
     int32_t *myOffsets = args->offsets;
     const UChar *sourceLimit = args->sourceLimit;
     const unsigned char *targetLimit = (unsigned char *) args->targetLimit;
+    UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
     uint32_t ch, ch2;
     int32_t offsetNum = 0, nextSourceIndex;
     int16_t indexToWrite;
@@ -691,7 +664,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
         {
             nextSourceIndex = offsetNum + 1;
 
-            if(UTF_IS_SURROGATE(ch) /* && not CESU-8 */) {
+            if(UTF_IS_SURROGATE(ch) && !isCESU8) {
                 if(UTF_IS_SURROGATE_FIRST(ch)) {
 lowsurrogate:
                     if (mySource < sourceLimit) {
@@ -822,12 +795,14 @@ lowsurrogate:
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode *err) {
     UChar buffer[2];
-    char const *sourceInitial;
+    const char *sourceInitial;
+    const uint8_t *source;
     UChar* myUCharPtr;
     uint16_t extraBytesToWrite;
     uint8_t myByte;
     UChar32 ch;
     int8_t isLegalSequence;
+    UBool isCESU8 = (UBool)(args->converter->sharedData == &_CESU8Data);
 
     while (args->source < args->sourceLimit)
     {
@@ -846,7 +821,8 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
         }
 
         /*The byte sequence is longer than the buffer area passed*/
-        if ((args->source + extraBytesToWrite - 1) > args->sourceLimit)
+        source = (const uint8_t *)args->source;
+        if (((const char *)source + extraBytesToWrite - 1) > args->sourceLimit)
         {
             *err = U_TRUNCATED_CHAR_FOUND;
             return 0xffff;
@@ -859,7 +835,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             {     
               /* note: code falls through cases! (sic)*/ 
             case 6:
-                ch += (myByte = (uint8_t)*(args->source++));
+                ch += (myByte = *source++);
                 ch <<= 6;
                 if (!UTF8_IS_TRAIL(myByte))
                 {
@@ -867,7 +843,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                     break;
                 }
             case 5:
-                ch += (myByte = *(args->source++));
+                ch += (myByte = *source++);
                 ch <<= 6;
                 if (!UTF8_IS_TRAIL(myByte))
                 {
@@ -875,7 +851,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                     break;
                 }
             case 4:
-                ch += (myByte = *(args->source++));
+                ch += (myByte = *source++);
                 ch <<= 6;
                 if (!UTF8_IS_TRAIL(myByte))
                 {
@@ -883,7 +859,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                     break;
                 }
             case 3:
-                ch += (myByte = *(args->source++));
+                ch += (myByte = *source++);
                 ch <<= 6;
                 if (!UTF8_IS_TRAIL(myByte))
                 {
@@ -891,7 +867,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                     break;
                 }
             case 2:
-                ch += (myByte = *(args->source++));
+                ch += (myByte = *source++);
                 if (!UTF8_IS_TRAIL(myByte))
                 {
                     isLegalSequence = 0;
@@ -899,6 +875,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
             };
         }
         ch -= offsetsFromUTF8[extraBytesToWrite];
+        args->source = (const char *)source;
 
         /*
          * Legal UTF-8 byte sequences in Unicode 3.0.1 and up:
@@ -906,13 +883,34 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
          * - use the right number of trail bytes for a given lead byte
          * - encode a code point <= U+10ffff
          * - use the fewest possible number of bytes for their code points
-         * - use at most 4 bytes (for i>=4 it is 0x10ffff<utf8_minChar32[])
+         * - use at most 4 bytes (for i>=5 it is 0x10ffff<utf8_minChar32[])
          *
          * Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8.
          * There are no irregular sequences any more.
+         * In CESU-8, only surrogates, not supplementary code points, are encoded directly.
          */
-        if (isLegalSequence && (uint32_t)ch <= MAXIMUM_UTF && (uint32_t)ch >= utf8_minChar32[extraBytesToWrite] && !UTF_IS_SURROGATE(ch)) {
-            return ch; /* return the code point */
+        if (isLegalSequence && (uint32_t)ch <= MAXIMUM_UTF && (uint32_t)ch >= utf8_minChar32[extraBytesToWrite]) {
+            if(isCESU8) {
+                if(extraBytesToWrite <= 3) {
+                    if( UTF_IS_FIRST_SURROGATE(ch) &&
+                        (const char *)(source + 3) <= args->sourceLimit &&
+                        source[0] == 0xed && (source[1] & 0xf0) == 0xb0 && (source[2] & 0xc0) == 0x80
+                    ) {
+                        /* ch is a lead surrogate followed by a trail surrogate */
+                        ch = (ch << 10) +
+                             ((source[1] & 0xf) << 6) + (source[2] & 0x3f) -
+                             ((0xd800 << 10) - 0x10000);
+                        args->source = (const char *)(source + 3);
+                    }
+                    return ch; /* return the code point */
+                }
+                /* illegal CESU-8 */
+            } else {
+                if(!UTF_IS_SURROGATE(ch)) {
+                    return ch; /* return the code point */
+                }
+                /* illegal UTF-8 */
+            }
         }
 
 CALL_ERROR_FUNCTION:
@@ -952,6 +950,8 @@ CALL_ERROR_FUNCTION:
     return 0xffff;
 } 
 
+/* UTF-8 converter data ----------------------------------------------------- */
+
 static const UConverterImpl _UTF8Impl={
     UCNV_UTF8,
 
@@ -968,6 +968,8 @@ static const UConverterImpl _UTF8Impl={
     T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
     T_UConverter_getNextUChar_UTF8,
 
+    NULL,
+    NULL,
     NULL,
     NULL
 };
@@ -986,6 +988,25 @@ static const UConverterStaticData _UTF8StaticData={
 
 const UConverterSharedData _UTF8Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF8StaticData, FALSE, &_UTF8Impl, 
+    NULL, NULL, &_UTF8StaticData, FALSE, &_UTF8Impl,
+    0
+};
+
+/* CESU-8 converter data ---------------------------------------------------- */
+
+static const UConverterStaticData _CESU8StaticData={
+    sizeof(UConverterStaticData),
+    "CESU-8",
+    0, UCNV_UNKNOWN, UCNV_CESU8, 1, 3,
+    { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
+    0,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+
+const UConverterSharedData _CESU8Data={
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_CESU8StaticData, FALSE, &_UTF8Impl,
     0
 };
