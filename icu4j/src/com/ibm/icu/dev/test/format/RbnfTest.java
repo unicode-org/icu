@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/07/31 17:37:07 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/08/02 20:54:37 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -33,52 +33,76 @@ public class RbnfTest extends TestFmwk {
         }
         catch (Throwable e) {
             System.out.println("Entire test failed because of exception: "
-                            + e.toString());
+                               + e.toString());
             e.printStackTrace();
         }
     }
 
-    static final String fracRules = 
-	    "%main:\n" +
-	    // this rule formats the number if it's 1 or more.  It formats
-	    // the integral part using a DecimalFormat ("#,##0" puts
-	    // thousands separators in the right places) and the fractional
-	    // part using %%frac.  If there is no fractional part, it
-	    // just shows the integral part.
-	    "    x.0: <#,##0<[ >%%frac>];\n" +
-	    // this rule formats the number if it's between 0 and 1.  It
-	    // shows only the fractional part (0.5 shows up as "1/2," not
-	    // "0 1/2")
-	    "    0.x: >%%frac>;\n" +
-	    // the fraction rule set.  This works the same way as the one in the
-	    // preceding example: We multiply the fractional part of the number
-	    // being formatted by each rule's base value and use the rule that
-	    // produces the result closest to 0 (or the first rule that produces 0).
-	    // Since we only provide rules for the numbers from 2 to 10, we know
-	    // we'll get a fraction with a denominator between 2 and 10.
-	    // "<0<" causes the numerator of the fraction to be formatted
-	    // using numerals
-	    "%%frac:\n" +
-	    "    2: 1/2;\n" +
-	    "    3: <0</3;\n" +
-	    "    4: <0</4;\n" +
-	    "    5: <0</5;\n" +
-	    "    6: <0</6;\n" +
-	    "    7: <0</7;\n" +
-	    "    8: <0</8;\n" +
-	    "    9: <0</9;\n" +
-	    "   10: <0</10;\n";
+    static String fracRules = 
+        "%main:\n" +
+        // this rule formats the number if it's 1 or more.  It formats
+        // the integral part using a DecimalFormat ("#,##0" puts
+        // thousands separators in the right places) and the fractional
+        // part using %%frac.  If there is no fractional part, it
+        // just shows the integral part.
+        "    x.0: <#,##0<[ >%%frac>];\n" +
+        // this rule formats the number if it's between 0 and 1.  It
+        // shows only the fractional part (0.5 shows up as "1/2," not
+        // "0 1/2")
+        "    0.x: >%%frac>;\n" +
+        // the fraction rule set.  This works the same way as the one in the
+        // preceding example: We multiply the fractional part of the number
+        // being formatted by each rule's base value and use the rule that
+        // produces the result closest to 0 (or the first rule that produces 0).
+        // Since we only provide rules for the numbers from 2 to 10, we know
+        // we'll get a fraction with a denominator between 2 and 10.
+        // "<0<" causes the numerator of the fraction to be formatted
+        // using numerals
+        "%%frac:\n" +
+        "    2: 1/2;\n" +
+        "    3: <0</3;\n" +
+        "    4: <0</4;\n" +
+        "    5: <0</5;\n" +
+        "    6: <0</6;\n" +
+        "    7: <0</7;\n" +
+        "    8: <0</8;\n" +
+        "    9: <0</9;\n" +
+        "   10: <0</10;\n";
 
-	static final String durationInSecondsRules =
+    static {
+        // mondo hack
+	char[] fracRulesArr = fracRules.toCharArray();
+        int len = fracRulesArr.length;
+        int change = 2;
+        for (int i = 0; i < len; ++i) {
+            char ch = fracRulesArr[i];
+            if (ch == '\n') {
+                change = 2; // change ok
+            } else if (ch == ':') {
+                change = 1; // change, but once we hit a non-space char, don't change
+            } else if (ch == ' ') {
+                if (change != 0) {
+                    fracRulesArr[i] = (char)0x200e;
+                }
+            } else {
+                if (change == 1) {
+                    change = 0;
+                }
+            }
+        }
+	fracRules = new String(fracRulesArr);
+    }
+
+    static final String durationInSecondsRules =
         // main rule set for formatting with words
         "%with-words:\n"
-               // take care of singular and plural forms of "second"
+        // take care of singular and plural forms of "second"
         + "    0 seconds; 1 second; =0= seconds;\n"
-               // use %%min to format values greater than 60 seconds
+        // use %%min to format values greater than 60 seconds
         + "    60/60: <%%min<[, >>];\n"
-               // use %%hr to format values greater than 3,600 seconds
-               // (the ">>>" below causes us to see the number of minutes
-               // when when there are zero minutes)
+        // use %%hr to format values greater than 3,600 seconds
+        // (the ">>>" below causes us to see the number of minutes
+        // when when there are zero minutes)
         + "    3600/60: <%%hr<[, >>>];\n"
         // this rule set takes care of the singular and plural forms
         // of "minute"
@@ -91,13 +115,13 @@ public class RbnfTest extends TestFmwk {
 
         // main rule set for formatting in numerals
         + "%in-numerals:\n"
-               // values below 60 seconds are shown with "sec."
+        // values below 60 seconds are shown with "sec."
         + "    =0= sec.;\n"
-               // higher values are shown with colons: %%min-sec is used for
-               // values below 3,600 seconds...
+        // higher values are shown with colons: %%min-sec is used for
+        // values below 3,600 seconds...
         + "    60: =%%min-sec=;\n"
-               // ...and %%hr-min-sec is used for values of 3,600 seconds
-               // and above
+        // ...and %%hr-min-sec is used for values of 3,600 seconds
+        // and above
         + "    3600: =%%hr-min-sec=;\n"
         // this rule causes values of less than 10 minutes to show without
         // a leading zero
@@ -116,104 +140,104 @@ public class RbnfTest extends TestFmwk {
         + "    & : = . = ' ' = -;\n";
 
     public void TestCoverage() {
-	// extra calls to boost coverage numbers
-	RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
-	RuleBasedNumberFormat fmt1 = (RuleBasedNumberFormat)fmt0.clone();
-	RuleBasedNumberFormat fmt2 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
-	if (!fmt0.equals(fmt0)) {
-	    errln("self equality fails");
-	}
-	if (!fmt0.equals(fmt1)) {
-	    errln("clone equality fails");
-	}
-	if (!fmt0.equals(fmt2)) {
-	    errln("duplicate equality fails");
-	}
-	String str = fmt0.toString();
-	logln(str);
+        // extra calls to boost coverage numbers
+        RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+        RuleBasedNumberFormat fmt1 = (RuleBasedNumberFormat)fmt0.clone();
+        RuleBasedNumberFormat fmt2 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+        if (!fmt0.equals(fmt0)) {
+            errln("self equality fails");
+        }
+        if (!fmt0.equals(fmt1)) {
+            errln("clone equality fails");
+        }
+        if (!fmt0.equals(fmt2)) {
+            errln("duplicate equality fails");
+        }
+        String str = fmt0.toString();
+        logln(str);
 
-	RuleBasedNumberFormat fmt3 =  new RuleBasedNumberFormat(durationInSecondsRules);
+        RuleBasedNumberFormat fmt3 =  new RuleBasedNumberFormat(durationInSecondsRules);
 
-	if (fmt0.equals(fmt3)) {
-	    errln("nonequal fails");
-	}
-	if (!fmt3.equals(fmt3)) {
-	    errln("self equal 2 fails");
-	}
-	str = fmt3.toString();
-	logln(str);
+        if (fmt0.equals(fmt3)) {
+            errln("nonequal fails");
+        }
+        if (!fmt3.equals(fmt3)) {
+            errln("self equal 2 fails");
+        }
+        str = fmt3.toString();
+        logln(str);
 
-	String[] names = fmt3.getRuleSetNames();
+        String[] names = fmt3.getRuleSetNames();
 
-	try {
-	    fmt3.setDefaultRuleSet(null);
-	    fmt3.setDefaultRuleSet("%%foo");
-	    errln("sdrf %%foo didn't fail");
-	}
-	catch (Exception e) {
-	}
+        try {
+            fmt3.setDefaultRuleSet(null);
+            fmt3.setDefaultRuleSet("%%foo");
+            errln("sdrf %%foo didn't fail");
+        }
+        catch (Exception e) {
+        }
 
-	try {
-	    fmt3.setDefaultRuleSet("%bogus");
-	    errln("sdrf %bogus didn't fail");
-	}
-	catch (Exception e) {
-	}
+        try {
+            fmt3.setDefaultRuleSet("%bogus");
+            errln("sdrf %bogus didn't fail");
+        }
+        catch (Exception e) {
+        }
 
-	try {
-	    str = fmt3.format(2.3, names[0]);
-	    logln(str);
-	    str = fmt3.format(2.3, "%%foo");
-	    errln("format double %%foo didn't fail");
-	}
-	catch (Exception e) {
-	}
+        try {
+            str = fmt3.format(2.3, names[0]);
+            logln(str);
+            str = fmt3.format(2.3, "%%foo");
+            errln("format double %%foo didn't fail");
+        }
+        catch (Exception e) {
+        }
 
-	try {
-	    str = fmt3.format(123L, names[0]);
-	    logln(str);
-	    str = fmt3.format(123L, "%%foo");
-	    errln("format double %%foo didn't fail");
-	}
-	catch (Exception e) {
-	}
+        try {
+            str = fmt3.format(123L, names[0]);
+            logln(str);
+            str = fmt3.format(123L, "%%foo");
+            errln("format double %%foo didn't fail");
+        }
+        catch (Exception e) {
+        }
 
-	RuleBasedNumberFormat fmt4 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
-	RuleBasedNumberFormat fmt5 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
-	str = fmt4.toString();
-	logln(str);
-	if (!fmt4.equals(fmt5)) {
-	    errln("duplicate 2 equality failed");
-	}
-	str = fmt4.format(123L);
-	logln(str);
-	try {
-	    Number num = fmt4.parse(str);
-	    logln(num.toString());
-	}
-	catch (Exception e) {
-	    errln("parse caught exception");
-	}
+        RuleBasedNumberFormat fmt4 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+        RuleBasedNumberFormat fmt5 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+        str = fmt4.toString();
+        logln(str);
+        if (!fmt4.equals(fmt5)) {
+            errln("duplicate 2 equality failed");
+        }
+        str = fmt4.format(123L);
+        logln(str);
+        try {
+            Number num = fmt4.parse(str);
+            logln(num.toString());
+        }
+        catch (Exception e) {
+            errln("parse caught exception");
+        }
 
-	str = fmt4.format(.000123);
-	logln(str);
-	try {
-	    Number num = fmt4.parse(str);
-	    logln(num.toString());
-	}
-	catch (Exception e) {
-	    errln("parse caught exception");
-	}
+        str = fmt4.format(.000123);
+        logln(str);
+        try {
+            Number num = fmt4.parse(str);
+            logln(num.toString());
+        }
+        catch (Exception e) {
+            errln("parse caught exception");
+        }
 
-	str = fmt4.format(456.000123);
-	logln(str);
-	try {
-	    Number num = fmt4.parse(str);
-	    logln(num.toString());
-	}
-	catch (Exception e) {
-	    errln("parse caught exception");
-	}
+        str = fmt4.format(456.000123);
+        logln(str);
+        try {
+            Number num = fmt4.parse(str);
+            logln(num.toString());
+        }
+        catch (Exception e) {
+            errln("parse caught exception");
+        }
     }
 
     public void TestUndefinedSpellout() {
@@ -270,8 +294,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestEnglishSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.US,
-                        RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(Locale.US,
+                                        RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "one" },
             { "15", "fifteen" },
@@ -290,7 +314,7 @@ public class RbnfTest extends TestFmwk {
             { "4,567", "four thousand five hundred and sixty-seven" },
             { "15,943", "fifteen thousand nine hundred and forty-three" },
             { "2,345,678", "two million, three hundred and forty-five "
-                        + "thousand, six hundred and seventy-eight" },
+              + "thousand, six hundred and seventy-eight" },
             { "-36", "minus thirty-six" },
             { "234.567", "two hundred and thirty-four point five six seven" }
         };
@@ -316,8 +340,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestOrdinalAbbreviations() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.US,
-                        RuleBasedNumberFormat.ORDINAL);
+            = new RuleBasedNumberFormat(Locale.US,
+                                        RuleBasedNumberFormat.ORDINAL);
         String[][] testData = {
             { "1", "1st" },
             { "2", "2nd" },
@@ -346,10 +370,10 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestDurations() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.US,
-                        RuleBasedNumberFormat.DURATION);
+            = new RuleBasedNumberFormat(Locale.US,
+                                        RuleBasedNumberFormat.DURATION);
         String[][] testData = {
-            { "3,600", "1:00:00" },		//move me and I fail
+            { "3,600", "1:00:00" },             //move me and I fail
             { "0", "0 sec." },
             { "1", "1 sec." },
             { "24", "24 sec." },
@@ -357,7 +381,7 @@ public class RbnfTest extends TestFmwk {
             { "73", "1:13" },
             { "145", "2:25" },
             { "666", "11:06" },
-//            { "3,600", "1:00:00" },
+            //            { "3,600", "1:00:00" },
             { "3,740", "1:02:20" },
             { "10,293", "2:51:33" }
         };
@@ -376,8 +400,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestSpanishSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(new Locale("es", "es",
-                        ""), RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(new Locale("es", "es",
+                                                   ""), RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "uno" },
             { "6", "seis" },
@@ -398,7 +422,7 @@ public class RbnfTest extends TestFmwk {
             { "4,567", "cuatro mil quinientos sesenta y siete" },
             { "15,943", "quince mil novecientos cuarenta y tres" },
             { "2,345,678", "dos mill\u00f3n trescientos cuarenta y cinco mil "
-                    + "seiscientos setenta y ocho"},
+              + "seiscientos setenta y ocho"},
             { "-36", "menos treinta y seis" },
             { "234.567", "doscientos treinta y cuatro punto cinco seis siete" }
         };
@@ -411,8 +435,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestFrenchSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.FRANCE,
-                        RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(Locale.FRANCE,
+                                        RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "un" },
             { "15", "quinze" },
@@ -438,7 +462,7 @@ public class RbnfTest extends TestFmwk {
             { "4,567", "quatre mille cinq cents soixante-sept" },
             { "15,943", "quinze mille neuf cents quarante-trois" },
             { "2,345,678", "deux million trois cents quarante-cinq mille "
-                        + "six cents soixante-dix-huit" },
+              + "six cents soixante-dix-huit" },
             { "-36", "moins trente-six" },
             { "234.567", "deux cents trente-quatre virgule cinq six sept" }
         };
@@ -458,8 +482,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestSwissFrenchSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(new Locale("fr", "CH",
-                        ""), RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(new Locale("fr", "CH",
+                                                   ""), RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "un" },
             { "15", "quinze" },
@@ -485,7 +509,7 @@ public class RbnfTest extends TestFmwk {
             { "4,567", "quatre mille cinq cents soixante-sept" },
             { "15,943", "quinze mille neuf cents quarante-trois" },
             { "2,345,678", "deux million trois cents quarante-cinq mille "
-                        + "six cents septante-huit" },
+              + "six cents septante-huit" },
             { "-36", "moins trente-six" },
             { "234.567", "deux cents trente-quatre virgule cinq six sept" }
         };
@@ -498,8 +522,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestItalianSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.ITALIAN,
-                        RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(Locale.ITALIAN,
+                                        RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "uno" },
             { "15", "quindici" },
@@ -531,8 +555,8 @@ public class RbnfTest extends TestFmwk {
      */
     public void TestGermanSpellout() {
         RuleBasedNumberFormat formatter
-                        = new RuleBasedNumberFormat(Locale.GERMANY,
-                        RuleBasedNumberFormat.SPELLOUT);
+            = new RuleBasedNumberFormat(Locale.GERMANY,
+                                        RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
             { "1", "eins" },
             { "15", "f\u00fcnfzehn" },
@@ -551,7 +575,7 @@ public class RbnfTest extends TestFmwk {
             { "4,567", "viertausendf\u00fcnfhundertsiebenundsechzig" },
             { "15,943", "f\u00fcnfzehntausendneunhundertdreiundvierzig" },
             { "2,345,678", "zwei Millionen dreihundertf\u00fcnfundvierzigtausend"
-                        + "sechshundertachtundsiebzig" }
+              + "sechshundertachtundsiebzig" }
         };
 
         doTest(formatter, testData, true);
@@ -569,33 +593,33 @@ public class RbnfTest extends TestFmwk {
     public void TestThaiSpellout() {
         RuleBasedNumberFormat formatter
             = new RuleBasedNumberFormat(new Locale("th", "TH", ""),
-                        RuleBasedNumberFormat.SPELLOUT);
+                                        RuleBasedNumberFormat.SPELLOUT);
         String[][] testData = {
-      { "0", "\u0e28\u0e39\u0e19\u0e22\u0e4c" },
-      { "1", "\u0e2b\u0e19\u0e36\u0e48\u0e07" },
-      { "10", "\u0e2a\u0e34\u0e1a" },
-      { "11", "\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
-	  { "21", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
-      { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e2b\u0e19\u0e36\u0e48\u0e07" },
-      { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
+            { "0", "\u0e28\u0e39\u0e19\u0e22\u0e4c" },
+            { "1", "\u0e2b\u0e19\u0e36\u0e48\u0e07" },
+            { "10", "\u0e2a\u0e34\u0e1a" },
+            { "11", "\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
+            { "21", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
+            { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e2b\u0e19\u0e36\u0e48\u0e07" },
+            { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
         };
 
         doTest(formatter, testData, true);
 
         /*
-        formatter.setLenientParseMode(true);
-        String[][] lpTestData = {
-            { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
-        };
-        doLenientParseTest(formatter, lpTestData);
+          formatter.setLenientParseMode(true);
+          String[][] lpTestData = {
+          { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" }
+          };
+          doLenientParseTest(formatter, lpTestData);
         */
     }
 
     public void TestFractionalRuleSet() {
 
 
-	RuleBasedNumberFormat formatter =
-	    new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+        RuleBasedNumberFormat formatter =
+            new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
 
         String[][] testData = {
             { "0", "0" },
@@ -622,7 +646,7 @@ public class RbnfTest extends TestFmwk {
             { ".5555", "5/9" },
             { "1.2856", "1 2/7" }
         };
-       doTest(formatter, testData, false); // exact values aren't parsable from fractions
+        doTest(formatter, testData, false); // exact values aren't parsable from fractions
     }
 
     public void TestSwedishSpellout()
@@ -691,23 +715,23 @@ public class RbnfTest extends TestFmwk {
             for (int i = 0; i < testData.length; i++) {
                 String number = testData[i][0];
                 String expectedWords = testData[i][1];
-		logln("test[" + i + "] number: " + number + " target: " + expectedWords);
-		Number num = decFmt.parse(number);
+                logln("test[" + i + "] number: " + number + " target: " + expectedWords);
+                Number num = decFmt.parse(number);
                 String actualWords = formatter.format(num);
 
                 if (!actualWords.equals(expectedWords)) {
                     errln("Spot check failed: for " + number + ", expected "
-                                + expectedWords + ", but got " +
-                                actualWords);
+                          + expectedWords + ", but got " +
+                          actualWords);
                 }
                 else if (testParsing) {
                     String actualNumber = decFmt.format(formatter
-                                    .parse(actualWords));
+                                                        .parse(actualWords));
 
                     if (!actualNumber.equals(number)) {
                         errln("Spot check failed: for " + actualWords +
-                                ", expected " + number + ", but got " +
-                                actualNumber);
+                              ", expected " + number + ", but got " +
+                              actualNumber);
                     }
                 }
             }
@@ -719,7 +743,7 @@ public class RbnfTest extends TestFmwk {
     }
 
     void doLenientParseTest(RuleBasedNumberFormat formatter,
-                    String[][] testData) {
+                            String[][] testData) {
         NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
 
         try {
@@ -730,8 +754,8 @@ public class RbnfTest extends TestFmwk {
 
                 if (!actualNumber.equals(expectedNumber)) {
                     errln("Lenient-parse spot check failed: for "
-                                + words + ", expected " + expectedNumber
-                                + ", but got " + actualNumber);
+                          + words + ", expected " + expectedNumber
+                          + ", but got " + actualNumber);
                 }
             }
         }
