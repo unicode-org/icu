@@ -226,8 +226,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>PD</am>
 				<pm>MD</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">p.e.r.</era>
+						<era type="2">n.e.r.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

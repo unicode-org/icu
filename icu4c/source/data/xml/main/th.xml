@@ -356,6 +356,11 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="buddhist">
+				<eras>
+					<eraAbbr>
+						<era type="1">พ.ศ.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -467,6 +472,12 @@
 				</days>
 				<am>ก่อนเที่ยง</am>
 				<pm>หลังเที่ยง</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">ปีก่อนคริสต์กาลที่</era>
+						<era type="2">ค.ศ.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -74,6 +74,10 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

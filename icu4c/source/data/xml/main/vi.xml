@@ -319,8 +319,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>SA</am>
 				<pm>CH</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">tr. CN</era>
+						<era type="2">sau CN</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

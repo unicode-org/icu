@@ -74,8 +74,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
 				<am>soodo</am>
 				<pm>hawwaro</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">YIA</era>
+						<era type="2">YIG</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

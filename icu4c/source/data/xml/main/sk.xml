@@ -344,6 +344,16 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">pred n.l.</era>
+						<era type="2">n.l.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -76,8 +76,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
 				<am>saaku</am>
 				<pm>carra</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Yaasuusuk Duma</era>
+						<era type="2">Yaasuusuk Wadir</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

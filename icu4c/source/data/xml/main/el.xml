@@ -346,8 +346,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>ΠΜ</am>
 				<pm>ΜΜ</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">π.Χ.</era>
+						<era type="2">μ.Χ.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -154,6 +154,9 @@
 			<territory type="IN">भारत</territory>
 		</territories>
 	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[[:Deva:]-[क़-य़]‌‍]</exemplarCharacters>
+	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
@@ -191,6 +194,15 @@
 				</months>
 				<days>
 					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">रवि</day>
+							<day type="mon">सोम</day>
+							<day type="tue">मंगळ</day>
+							<day type="wed">बुध</day>
+							<day type="thu">गुरु</day>
+							<day type="fri">शुक्र</day>
+							<day type="sat">शनि</day>
+						</dayWidth>
 						<dayWidth type="wide">
 							<day type="sun">रविवार</day>
 							<day type="mon">सोमवार</day>
@@ -206,5 +218,25 @@
 				<pm>म.नं.</pm>
 			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="Asia/Calcutta">
+				<long>
+				<standard>भारतीय समय</standard>
+				<daylight>भारतीय समय</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
 	</dates>
+	<numbers>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

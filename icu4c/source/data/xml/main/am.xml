@@ -348,6 +348,12 @@
 					<minDays count="1"/>
 					<firstDay day="sat"/>
 				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">ዓ/ዓ</era>
+						<era type="2">ዓ/ም</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>

@@ -323,6 +323,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">שנת היג'רה</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="arabic-civil">
 				<months>
@@ -357,6 +362,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">שנת היג'רה</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="gregorian">
 				<months>
@@ -413,6 +423,12 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<eras>
+					<eraAbbr>
+						<era type="1">לפנה"ס</era>
+						<era type="2">לסה"נ</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -502,6 +518,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">לבה"ע</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>

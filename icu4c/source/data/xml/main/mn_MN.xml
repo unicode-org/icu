@@ -7,12 +7,12 @@
 		<language type="mn" /> 
 		<territory type="MN" /> 
 	</identity>
-<numbers>
-	<currencies>
-		<currency type="MNT">
-			<displayName>MNT</displayName>
-			<symbol>₮</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	<numbers>
+		<currencies>
+			<currency type="MNT">
+				<displayName>MNT</displayName>
+				<symbol>₮</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

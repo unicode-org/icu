@@ -42,6 +42,10 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

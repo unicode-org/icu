@@ -431,6 +431,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">MF</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="arabic-civil">
 				<months>
@@ -465,6 +470,18 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">MF</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="buddhist">
+				<eras>
+					<eraAbbr>
+						<era type="1">BK</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 			<calendar type="gregorian">
 				<months>
@@ -521,8 +538,18 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
 				<am>DE</am>
 				<pm>DU</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">i.e.</era>
+						<era type="2">i.u.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -612,6 +639,11 @@
 						</monthWidth>
 					</monthContext>
 				</months>
+				<eras>
+					<eraAbbr>
+						<era type="1">TÉ</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>

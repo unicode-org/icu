@@ -45,6 +45,12 @@
 				</months>
 				<am>Առ․</am>
 				<pm>Կե․</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Մ․Թ․Ա․</era>
+						<era type="2">Մ․Թ․</era>
+					</eraAbbr>
+				</eras>
 			</calendar>
 		</calendars>
 	</dates>
