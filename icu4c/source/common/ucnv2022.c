@@ -59,7 +59,7 @@
 #define  MBCS_FROM_UCHAR32_ISO2022(sharedData,c,  value, useFallback, length, outputType) {\
     const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;\
     uint32_t stage2Entry;\
-    uint32_t myValue;\
+    uint32_t myValue=0;\
     const uint8_t *p;\
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */\
     if(c<0x10000 || (sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {\
@@ -1286,7 +1286,7 @@ toUnicodeCallback(UConverterToUnicodeArgs* args, const uint32_t sourceChar,const
         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =(char) sourceChar;
     }
 
-    if(targetUniChar == 0xfffe){
+    if(targetUniChar == (missingCharMarker-1/*0xfffe*/)){
         reason = UCNV_UNASSIGNED;
         *err = U_INVALID_CHAR_FOUND;
     }
@@ -1896,7 +1896,7 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 /* For non-valid state MBCS and others */
                 break;
             }
-            if(targetUniChar < 0xfffe){
+            if(targetUniChar < (missingCharMarker-1/*0xfffe*/)){
                 if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myConverterType[*currentState] <= SBCS);
@@ -2209,7 +2209,6 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
-    char *tempLimit = &tempBuf[2]+1;
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
@@ -2483,7 +2482,6 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     const UChar* source = args->source;
     const UChar* sourceLimit = args->sourceLimit;
     int32_t* offsets = args->offsets;
-    int32_t offset =0;
     uint32_t targetByteUnit = missingCharMarker;
     uint32_t sourceChar  =0x0000;
     const char* escSeq = NULL;
@@ -3077,26 +3075,23 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 continue;
 
             }
-            if(targetUniChar < 0xfffe){
+            if(targetUniChar < (missingCharMarker-1/*0xfffe*/)){
                 if(args->offsets){
                    args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
                 }
                 *(myTarget++)=(UChar)targetUniChar;
             }
-            else if(targetUniChar > 0xffff){
-				UChar32 temp=0;
+            else if(targetUniChar > missingCharMarker){
                 /* disassemble the surrogate pair and write to output*/
                 targetUniChar-=0x0010000;
-                temp=(UChar)(0xd800+(UChar)(targetUniChar>>10));
-				*(myTarget++) = temp;
+				*(myTarget++) = (UChar)(0xd800+(UChar)(targetUniChar>>10));
 				if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
                 }
                 if(myTarget< args->targetLimit){ 
-					temp=(UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
-					*(myTarget)++ = temp;
+					*(myTarget)++ = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
                     if(args->offsets){
                         args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
