@@ -321,7 +321,7 @@ u_vsscanf(const UChar   *buffer,
 
     /* convert from the default codepage to Unicode */
     pattern = ufmt_defaultCPToUnicode(patternSpecification,
-        strlen(patternSpecification));
+        strlen(patternSpecification)+1);
     if(pattern == 0) {
         return 0;
     }
