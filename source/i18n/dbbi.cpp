@@ -252,7 +252,7 @@ void
 DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t endPos)
 {
     // to avoid casts throughout the rest of this function
-    DictionaryBasedBreakIteratorTables* tables
+    DictionaryBasedBreakIteratorTables* dictionaryTables
             = (DictionaryBasedBreakIteratorTables*)(this->tables);
 
     // the range we're dividing may begin or end with non-dictionary characters
@@ -261,10 +261,10 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // range to the first dictionary character
     text->setIndex(startPos);
     UChar c = text->current();
-    int category = tables->lookupCategory(c, this);
-    while (category == IGNORE || !tables->categoryFlags[category]) {
+    int category = dictionaryTables->lookupCategory(c, this);
+    while (category == IGNORE || !dictionaryTables->categoryFlags[category]) {
         c = text->next();
-        category = tables->lookupCategory(c, this);
+        category = dictionaryTables->lookupCategory(c, this);
     }
     
 
@@ -311,12 +311,12 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // if we can transition to state "-1" from our current state, we're
         // on the last character of a legal word.  Push that position onto
         // the possible-break-positions stack
-        if (tables->dictionary.at(state, (int32_t)0) == -1) {
+        if (dictionaryTables->dictionary.at(state, (int32_t)0) == -1) {
             possibleBreakPositions.push((void*)text->getIndex());
         }
 
         // look up the new state to transition to in the dictionary
-        state = tables->dictionary.at(state, c);
+        state = dictionaryTables->dictionary.at(state, c);
 
         // if the character we're sitting on causes us to transition to
         // the "end of word" state, then it was a non-dictionary character
