@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/05/31 01:41:04 $
-* $Revision: 1.13 $
+* $Date: 2002/06/04 01:59:02 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -71,6 +71,7 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
             
             else if (arg.equalsIgnoreCase("checkBIDI")) VerifyUCD.checkBIDI();
+            else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
             
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();

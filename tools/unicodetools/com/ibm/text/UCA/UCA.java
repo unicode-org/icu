@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/06/02 05:07:08 $ 
-* $Revision: 1.12 $
+* $Date: 2002/06/04 01:58:56 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -1183,8 +1183,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     public static final int 
     	CJK_BASE = 0x4E00,
     	CJK_LIMIT = 0x9FFF+1,
-    	CJK_BASE_COMPAT_USED = 0xFA0E,
-    	CJK_LIMIT_COMPAT_USED = 0xFA2F+1,
+    	CJK_COMPAT_USED_BASE = 0xFA0E,
+    	CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
     	CJK_A_BASE = 0x3400,
     	CJK_A_LIMIT = 0x4DBF+1,
     	CJK_B_BASE = 0x20000,
@@ -1504,7 +1504,7 @@ Compat:
             if (!toD.isNormalized(value)) record = false;
             
             // collect CEs
-            if (value == 0x2F00) {
+            if (false && value == 0x2F00) {
             	System.out.println("debug");
             }
             
@@ -1648,7 +1648,7 @@ Compat:
                 Object probe = contractingTable.get(shorter);
                 if (probe == null) {
                     int len = getCEs(shorter, true, temp1);
-                    System.out.println("WARNING: CLOSING: " + UCD.make().getCodeAndName(shorter) + " => " + ceToString(temp1, len));
+                    if (false) System.out.println("WARNING: CLOSING: " + UCD.make().getCodeAndName(shorter) + " => " + ceToString(temp1, len));
                     add(shorter, temp1, len);
                     // missingStrings.put(shorter,"");
                     // collationElements[sequence.charAt(0)] = UNSUPPORTED; // nuke all bad values
