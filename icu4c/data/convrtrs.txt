@@ -89,15 +89,17 @@ LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csi
 US-ASCII { MIME }        ascii ascii-7 ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
 ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
-ISO_2022,locale=ja,version=1     ISO-2022-JP-1
+ISO_2022,locale=ja,version=1     ISO-2022-JP-1, JIS 
 ISO_2022,locale=ja,version=2     ISO-2022-JP-2 { IANA MIME } csISO2022JP2
-ISO_2022,locale=ko               ISO-2022-KR { IANA MIME } csISO2022KR
+ISO_2022,locale=ja,version=3     JIS7
+ISO_2022,locale=ja,version=4     JIS8
+ISO_2022,locale=ko,version=0     ISO-2022-KR { IANA MIME } csISO2022KR
 ISO_2022,locale=zh,version=0     ISO-2022-CN { MIME } csISO2022CN
 ISO_2022,locale=zh,version=1     ISO-2022-CN-EXT
 HZ                               HZ-GB-2312 { MIME }
-LMBCS-1                  lmbcs
+LMBCS-1                          lmbcs
 LMBCS-2
-LMBCS-3         
+LMBCS-3
 LMBCS-4
 LMBCS-5
 LMBCS-6
@@ -307,13 +309,13 @@ ibm-12712-s390         # EBCDIC Hebrew
 ibm-16804-s390         # EBCDIC Arabic
 
 # Added for ISO-2022 support
-jisx-201                                   # Can be used by other converters
-jisx-208                                   # Can be used by other converters if pure DBCS conversion is needed
-jisx-212                           # Can be used by other converters if pure DBCS conversion is needed
-gb_2312_80-1               # Can be used by other converters if pure DBCS conversion is needed
-iso-ir-165                         # Can be used by other converters if pure DBCS conversion is needed
-ksc_5601_1                         # Can be used by other converters if pure DBCS conversion is needed
-cns-11643-1992             # ISO-2022-CN specific.Cannot be used by other converters
+jisx-201               # Can be used by other converters
+jisx-208               # Can be used by other converters if pure DBCS conversion is needed
+jisx-212               # Can be used by other converters if pure DBCS conversion is needed
+gb_2312_80-1           # Can be used by other converters if pure DBCS conversion is needed
+iso-ir-165             # Can be used by other converters if pure DBCS conversion is needed
+ksc_5601_1             # Can be used by other converters if pure DBCS conversion is needed
+cns-11643-1992         # ISO-2022-CN specific.Cannot be used by other converters
 
 # GB 18030 is partly algorithmic, using the MBCS converter
 gb18030
