@@ -493,34 +493,87 @@ Calendar::complete(UErrorCode& status)
 
 // -------------------------------------
 
-int32_t Calendar::fieldDifference(UDate when, EDateFields field, UErrorCode& status) {
-    if (U_FAILURE(status)) return 0;
-    int32_t result = 0;
-    double ms = getTimeInMillis(status);
-    if (ms < when) {
-        while (U_SUCCESS(status)) {
-            add(field, 1, status);
-            double newMs = getTimeInMillis(status);
-            if (newMs > when) {
-                setTimeInMillis(ms, status);
+int32_t Calendar::fieldDifference(UDate targetMs, EDateFields field, UErrorCode& ec) {
+    if (U_FAILURE(ec)) return 0;
+    int32_t min = 0;
+    double startMs = getTimeInMillis(ec);
+    // Always add from the start millis.  This accomodates
+    // operations like adding years from February 29, 2000 up to
+    // February 29, 2004.  If 1, 1, 1, 1 is added to the year
+    // field, the DOM gets pinned to 28 and stays there, giving an
+    // incorrect DOM difference of 1.  We have to add 1, reset, 2,
+    // reset, 3, reset, 4.
+    if (startMs < targetMs) {
+        int32_t max = 1;
+        // Find a value that is too large
+        while (U_SUCCESS(ec)) {
+            setTimeInMillis(startMs, ec);
+            add(field, max, ec);
+            double ms = getTimeInMillis(ec);
+            if (ms == targetMs) {
+                return max;
+            } else if (ms > targetMs) {
                 break;
+            } else {
+                max <<= 1;
+                if (max < 0) {
+                    // Field difference too large to fit into int32_t
+                    ec = U_ILLEGAL_ARGUMENT_ERROR;
+                }
             }
-            ms = newMs;
-            ++result;
         }
-    } else if (ms > when) {
-        while (U_SUCCESS(status)) {
-            add(field, -1, status);
-            double newMs = getTimeInMillis(status);
-            if (newMs < when) {
-                setTimeInMillis(ms, status);
-                break;
+        // Do a binary search
+        while ((max - min) > 1 && U_SUCCESS(ec)) {
+            int32_t t = (min + max) / 2;
+            setTimeInMillis(startMs, ec);
+            add(field, t, ec);
+            double ms = getTimeInMillis(ec);
+            if (ms == targetMs) {
+                return t;
+            } else if (ms > targetMs) {
+                max = t;
+            } else {
+                min = t;
             }
-            ms = newMs;
-            --result;
+        }
+    } else if (startMs > targetMs) {
+        int32_t max = -1;
+        // Find a value that is too small
+        while (U_SUCCESS(ec)) {
+            setTimeInMillis(startMs, ec);
+            add(field, max, ec);
+            double ms = getTimeInMillis(ec);
+            if (ms == targetMs) {
+                return max;
+            } else if (ms < targetMs) {
+                break;
+            } else {
+                max <<= 1;
+                if (max == 0) {
+                    // Field difference too large to fit into int32_t
+                    ec = U_ILLEGAL_ARGUMENT_ERROR;
+                }
+            }
+        }
+        // Do a binary search
+        while ((min - max) > 1 && U_SUCCESS(ec)) {
+            int32_t t = (min + max) / 2;
+            setTimeInMillis(startMs, ec);
+            add(field, t, ec);
+            double ms = getTimeInMillis(ec);
+            if (ms == targetMs) {
+                return t;
+            } else if (ms < targetMs) {
+                max = t;
+            } else {
+                min = t;
+            }
         }
     }
-    return result;
+    // Set calendar to end point
+    setTimeInMillis(startMs, ec);
+    add(field, min, ec);
+    return min;
 }
 
 // -------------------------------------
