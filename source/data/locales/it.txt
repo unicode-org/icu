@@ -1,0 +1,584 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+it {
+    Version{ "2.0" }
+
+    AmPmMarkers { 
+        "m.",
+        "p.",
+    }
+    Countries { 
+        Fallback{ "en"}
+        //AD { "Andorra" }
+        AE { "Emirati Arabi Uniti" }
+        //AF { "Afghanistan" }
+        AG { "Antigua e Barbuda" }
+        //AI { "Anguilla" }
+        //AL { "Albania" }
+        //AM { "Armenia" }
+        AN { "Antille Olandesi" }
+        //AO { "Angola" }
+        AQ { "Antartico" }
+        //AR { "Argentina" }
+        AS { "Samoa Americane" }
+        //AT { "Austria" }
+        //AU { "Australia" }
+        //AW { "Aruba" }
+        //AZ { "Azerbaijan" }
+        BA { "Bosnia Erzegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgio" }
+        //BF { "Burkina Faso" }
+        //BG { "Bulgaria" }
+        //BH { "Bahrain" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        //BN { "Brunei" }
+        //BO { "Bolivia" }
+        BR { "Brasile" }
+        //BS { "Bahamas" }
+        //BT { "Bhutan" }
+        BV { "Isola Bouvet" }
+        //BW { "Botswana" }
+        BY { "Bielorussia" }
+        //BZ { "Belize" }
+        //CA { "Canada" }
+        CC { "Isole Cocos (Keeling)" }
+        CD { "Repubblica Democratica del Congo" }
+        CF { "Repubblica Centrafricana" }
+        //CG { "Congo" }
+        CH { "Svizzera" }
+        CI { "Costa d'Avorio" }
+        CK { "Isole Cook" }
+        CL { "Cile" }
+        CM { "Camerun" }
+        CN { "Cina" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        //CU { "Cuba" }
+        CV { "Capo Verde" }
+        CX { "Isola di Natale" }
+        CY { "Cipro" }
+        CZ { "Repubblica Ceca" }
+        DE { "Germania" }
+        DJ { "Gibuti" }
+        DK { "Danimarca" }
+        //DM { "Dominica" }
+        DO { "Repubblica Dominicana" }
+        //DZ { "Algeria" }
+        //EC { "Ecuador" }
+        //EE { "Estonia" }
+        EG { "Egitto" }
+        EH { "Sahara Occidentale" }
+        //ER { "Eritrea" }
+        ES { "Spagna" }
+        ET { "Etiopia" }
+        FI { "Finlandia" }
+        //FJ { "Fiji" }
+        FK { "Isole Falkland" }
+        //FM { "Micronesia" }
+        FO { "Isole Faroe" }
+        FR { "Francia" }
+        //GA { "Gabon" }
+        GB { "Regno Unito" }
+        //GD { "Grenada" }
+        //GE { "Georgia" }
+        GF { "Guiana Francese" }
+        //GH { "Ghana" }
+        GI { "Gibilterra" }
+        GL { "Groenlandia" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
+        GP { "Guadalupa" }
+        GQ { "Guinea Equatoriale" }
+        GR { "Grecia" }
+        GS { "Sud Georgia e Isole Sandwich del Sud" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
+        HK { "Hong Kong (Cina)" }
+        HM { "Isole Heard ed Isole McDonald" }
+        //HN { "Honduras" }
+        HR { "Croazia" }
+        //HT { "Haiti" }
+        HU { "Ungheria" }
+        //ID { "Indonesia" }
+        IE { "Irlanda" }
+        IL { "Israele" }
+        //IN { "India" }
+        IO { "Territori Britannici dell'Oceano Indiano" }
+        //IQ { "Iraq" }
+        //IR { "Iran" }
+        IS { "Islanda" }
+        IT { "Italia" }
+        JM { "Giamaica" }
+        JO { "Giordania" }
+        JP { "Giappone" }
+        //KE { "Kenya" }
+        KG { "Kirghizistan" }
+        KH { "Cambogia" }
+        //KI { "Kiribati" }
+        KM { "Comore" }
+        KN { "Saint Kitts e Nevis" }
+        KP { "Corea del Nord" }    // alternate name { "Corea, Repubblica Popolare Democratica" }
+        KR { "Corea del Sud" }    // alternate name { "Corea, Repubblica" }
+        //KW { "Kuwait" }
+        KY { "Isole Cayman" }
+        KZ { "Kazakistan" }
+        //LA { "Laos" }
+        LB { "Libano" }
+        LC { "Santa Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Lituania" }
+        LU { "Lussemburgo" }
+        LV { "Lettonia" }
+        LY { "Libia" }
+        MA { "Marocco" }
+        //MC { "Monaco" }
+        MD { "Moldavia" }
+        //MG { "Madagascar" }
+        MH { "Isole Marshall" }
+        MK { "Macedonia, Repubblica" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        //MN { "Mongolia" }
+        MO { "Macao (Cina)" }
+        //MP { "Northern Mariana Islands" }
+        MQ { "Martinica" }
+        //MR { "Mauritania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Maldive" }
+        //MW { "Malawi" }
+        MX { "Messico" }
+        MY { "Malesia" }
+        MZ { "Mozambico" }
+        //NA { "Namibia" }
+        NC { "Nuova Caledonia" }
+        //NE { "Niger" }
+        NF { "Isola Norfolk" }
+        //NG { "Nigeria" }
+        //NI { "Nicaragua" }
+        NL { "Olanda" }
+        NO { "Norvegia" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Nuova Zelanda" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Polinesia Francese" }
+        PG { "Papua Nuova Guinea" }
+        PH { "Filippine" }
+        //PK { "Pakistan" }
+        PL { "Polonia" }
+        PM { "Saint Pierre e Miquelon" }
+        //PN { "Pitcairn" }
+        PR { "Portorico" }
+        PS { "Palestina" }
+        PT { "Portogallo" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        //QA { "Qatar" }
+        RE { "Reunion" }
+        //RO { "Romania" }
+        RU { "Federazione Russa" }
+        RW { "Ruanda" }
+        SA { "Arabia Saudita" }
+        SB { "Isole Solomon" }
+        //SC { "Seychelles" }
+        //SD { "Sudan" }
+        SE { "Svezia" }
+        //SG { "Singapore" }
+        //SH { "Saint Helena" }
+        //SI { "Slovenia" }
+        SJ { "Svalbard e Jan Mayen" }
+        SK { "Slovacchia" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
+        //SR { "Suriname" }
+        ST { "Sao Tome e Principe" }
+        //SV { "El Salvador" }
+        SY { "Siria" }    // alternate name { "Repubblica Araba di Siria" }
+        //SZ { "Swaziland" }
+        TC { "Isole Turks e Caicos" }
+        TD { "Ciad" }
+        TF { "Territori francesi del sud" }
+        //TG { "Togo" }
+        TH { "Thailandia" }
+        //TJ { "Tajikistan" }
+        //TK { "Tokelau" }
+        TL { "Timor Est" }
+        //TM { "Turkmenistan" }
+        //TN { "Tunisia" }
+        //TO { "Tonga" }
+        TR { "Turchia" }
+        TT { "Trinidad e Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Taiwan (provincia della Cina)" }    // alternate name { "Taiwan" }
+        //TZ { "Tanzania" }
+        UA { "Ucraina" }
+        //UG { "Uganda" }
+        UM { "Isole minori Americane" }
+        US { "Stati Uniti" }
+        //UY { "Uruguay" }
+        //UZ { "Uzbekistan" }
+        VA { "Vaticano" }
+        VC { "Saint Vincent e Grenadines" }
+        //VE { "Venezuela" }
+        VG { "Isole Vergini Britanniche" }
+        VI { "Isole Vergini Americane" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis e Futuna" }
+        //WS { "Samoa" }
+        //YE { "Yemen" }
+        //YT { "Mayotte" }
+        //YU { "Yugoslavia" }
+        ZA { "Sud Africa" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
+    }
+    // Currency display names
+    Currencies {
+        ARP { "ARP", "Peso Argentino (vecchio Cod.)" } // Argentine Peso
+        ARS { "ARS", "Peso Argentino" } // Argentine Peso
+        ATS { "ATS", "Scellino Austriaco" } // Schilling
+        AUD { "AUD", "Dollaro Australiano" } // Australian Dollar
+        BAM { "KM", "Marco Conv. Bosnia-Erzegovina" } // Convertible Marks
+        BEF { "BEF", "Franco Belga" } // Belgian Franc
+        BGL { "BGL", "Lev Bulgaro" } // Lev
+        BOB { "BOB", "Boliviano" } // Boliviano
+        BRL { "BRL", "Real Brasiliano" } // Brazilian Real
+        CAD { "CAD", "Dollaro Canadese" } // Canadian Dollar
+        CHF { "SFr.", "Franco Svizzero" } // Swiss Franc
+        CLP { "CLP", "Peso Cileno" } // Chilean Peso
+        CNY { "CNY", "Renmimbi Cinese" } // Yuan Renminbi
+        CYP { "CYP", "Sterlina Cipriota" } // Cyprus Pound
+        CZK { "CZK", "Corona Ceca" } // Czech Koruna
+        DEM { "DEM", "Marco Tedesco" } // Deutsche Mark
+        DKK { "DKK", "Corona Danese" } // Danish Krone
+        EEK { "EEK", "Corona dell'Estonia" } // Kroon
+        EGP { "EGP", "Sterlina Egiziana" } // Egyptian Pound
+        ESP { "ESP", "Peseta Spagnola" } // Spanish Peseta
+        EUR { "\u20AC", "Euro" } // Euro
+        FIM { "FIM", "Markka Finlandese" } // Markka
+        FRF { "FRF", "Franco Francese" } // French Franc
+        GBP { "\u00A3", "Sterlina Inglese" } // Pound Sterling
+        GRD { "GRD", "Dracma Greca" } // Drachma
+        HKD { "HKD", "Dollaro di Hong Kong" } // Hong Kong Dollar
+        HUF { "HUF", "Fiorino Ungherese" } // Forint
+        IDR { "IDR", "Rupia Indiana" } // Rupiah
+        IEP { "IEP", "Lira Irlandese" } // Irish Pound
+        ITL { "\u20A4", "Lira Italiana" } // Lira
+        JOD { "JOD", "Dinaro Giordano" } // Jordanian Dinar
+        JPY { "\u00A5", "Yen Giapponese" } // Yen
+        LTL { "LTL", "Lita Lituana" } // Lithuanian Litas
+        MAD { "MAD", "Dirham Marocchino" } // Moroccan Dirham
+        NGN { "NGN", "Naira Nigeriana" } // Naira
+        NLG { "NLG", "Fiorino Olandese" } // Netherlands Guilder
+        NOK { "NOK", "Corona Norvegese" } // Norwegian Krone
+        PHP { "PHP", "Peso delle Filippine" } // Philippine Peso
+        PLZ { "PLZ", "Zloty Polacco" } // Zloty
+        PTE { "PTE", "Escudo Portoghese" } // Portugese Escudo
+        ROL { "ROL", "Leu della Romania" } // Leu
+        RUR { "RUR", "Rublo della CSI" } // Russian Ruble
+        SAR { "SAR", "Ryal Saudita" } // Saudi Riyal
+        SEK { "SEK", "Corona Svedese" } // Swedish Krona
+        SGD { "SGD", "Dollaro di Singapore" } // Singapore Dollar
+        SIT { "SIT", "Tallero Sloveno" } // Tolar
+        THB { "THB", "Baht Tailandese" } // Baht
+        TRL { "TRL", "Lira Turca" } // Turkish Lira
+        UAH { "UAH", "Hrivna Ucraina" } // Hryvnia
+        USD { "$", "Dollaro Statunitense" } // US Dollar
+        YUD { "YUD", "Yud" } // New Yugoslavian
+        ZAR { "ZAR", "Rand Sudafricano" } // Rand
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd/MMM/yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "dom",
+        "lun",
+        "mar",
+        "mer",
+        "gio",
+        "ven",
+        "sab",
+    }
+    DayNames { 
+        "domenica",
+        "luned\u00EC",
+        "marted\u00EC",
+        "mercoled\u00EC",
+        "gioved\u00EC",
+        "venerd\u00EC",
+        "sabato",
+    }
+    Eras { 
+        "aC",
+        "dC",
+    }
+    Languages {
+        Fallback{ "en"}
+
+        af { "afrikaans" }
+        am { "amarico" }
+        ar { "arabo" }
+        be { "bielorusso" }
+        bg { "bulgaro" }
+        bn { "bengali" }
+        ca { "catalano" }
+        cs { "ceco" }
+        da { "danese" }
+        de { "tedesco" }
+        el { "greco" }
+        en { "inglese" }
+        eo { "esperanto" }
+        es { "spagnolo" }
+        et { "estone" }
+        eu { "basco" }
+        fa { "persiano" }
+        fi { "finlandese" }
+        fo { "faroese" }
+        fr { "francese" }
+        ga { "irlandese" }
+        gl { "galiziano" }
+        gu { "gujarati" }
+        gv { "manx" }
+        haw { "hawaiano" }
+        he { "ebreo" }
+        hi { "hindi" }
+        hr { "croato" }
+        hu { "ungherese" }
+        hy { "armeno" }
+        id { "indonesiano" }
+        is { "islandese" }
+        it { "italiano" }
+        iu { "inuktitut" }
+        ja { "giapponese" }
+        kl { "kalaallisut" }
+        kn { "kannada" }
+        ko { "coreano" }
+        kw { "cornish" }
+        lt { "lituano" }
+        lv { "lettone" }
+        mk { "macedone" }
+        mr { "marathi" }
+        mt { "maltese" }
+        nb { "norvegese bokm\u00e5l" }
+        nl { "olandese" }
+        no { "norvegese" }
+        nn { "norvegese nynorsk" }
+        om { "oromo" }
+        pl { "polacco" }
+        pt { "portoghese" }
+        ro { "romeno" }
+        ru { "russo" }
+        sh { "serbo-croata" }
+        sk { "slovacco" }
+        sl { "sloveno" }
+        so { "somalo" }
+        sq { "albanian" }
+        sr { "serbo" }
+        sv { "svedese" }
+        sw { "swahili" }
+        ta { "tamil" }
+        th { "thai" }
+        ti { "tigrinya" }
+        tr { "turco" }
+        uk { "ucraino" }
+        vi { "vietnamita" }
+        zh { "cinese" }
+        //zh_cn { "Cinese (Semplificato)" }
+        //zh_tw { "Cinese (Tradizionale)" }
+    }
+    ExemplarCharacters { "[a-z\u00e9\u00f3\u00e0\u00e8\u00ec\u00f2\u00ed\u00fa\u00f9\u00ef]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    MonthAbbreviations { 
+        "gen",
+        "feb",
+        "mar",
+        "apr",
+        "mag",
+        "giu",
+        "lug",
+        "ago",
+        "set",
+        "ott",
+        "nov",
+        "dic",
+    }
+    MonthNames { 
+        "gennaio",
+        "febbraio",
+        "marzo",
+        "aprile",
+        "maggio",
+        "giugno",
+        "luglio",
+        "agosto",
+        "settembre",
+        "ottobre",
+        "novembre",
+        "dicembre",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    Types{
+        TRADITIONAL { "Tradizionale" }
+    }
+    Variants{
+        REVISED { "Modificato" }
+    }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//   * Spellout rules for Italian.  Like German, most Italian numbers are
+//   * written as single words.  What makes these rules complicated is the rule
+//   * that says that when a word ending in a vowel and a word beginning with
+//   * a vowel are combined into a compound, the vowel is dropped from the
+//   * end of the first word: 180 is "centottanta," not "centoottanta."
+//   * The complexity of this rule set is to produce this behavior.
+
+    // Can someone confirm that I did the vowel-eliding thing right?  I'm
+    // not 100% sure I'm doing it in all the right places, or completely
+    // correctly.  Also, I don't have information for negatives and decimals,
+    // and I lack words fror values from 1,000,000 on up.
+
+    SpelloutRules {
+        // main rule set.  Follows the patterns of the preceding rule sets,
+        // except that the final vowel is omitted from words ending in
+        // vowels when they are followed by another word; instead, we have
+        // separate rule sets that are identical to this one, except that
+        // all the words that don't begin with a vowel have a vowel tacked
+        // onto them at the front.  A word ending in a vowel calls a
+        // substitution that will supply that vowel, unless that vowel is to
+        // be elided.
+        "%main:\n"
+            "-x: meno >>;\n"
+            "x.x: << virgola >>;\n"
+            "zero; uno; due; tre; quattro; cinque; sei; sette; otto; nove;\n"
+            "dieci; undici; dodici; tredici; quattordici; quindici; sedici;\n"
+            "    diciasette; diciotto; diciannove;\n"
+            "20: venti; vent>%%with-i>;\n"
+            "30: trenta; trent>%%with-i>;\n"
+            "40: quaranta; quarant>%%with-a>;\n"
+            "50: cinquanta; cinquant>%%with-a>;\n"
+            "60: sessanta; sessant>%%with-a>;\n"
+            "70: settanta; settant>%%with-a>;\n"
+            "80: ottanta; ottant>%%with-a>;\n"
+            "90: novanta; novant>%%with-a>;\n"
+            "100: cento; cent[>%%with-o>];\n"
+            "200: <<cento; <<cent[>%%with-o>];\n"
+            "1000: mille; mill[>%%with-i>];\n"
+            "2000: <<mila; <<mil[>%%with-a>];\n"
+            "100,000>>: <<mila[ >>];\n"
+            "1,000,000: =#,##0= (incomplete data);\n"
+        "%%with-a:\n"
+            "azero; uno; adue; atre; aquattro; acinque; asei; asette; otto; anove;\n"
+            "adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;\n"
+            "    adiciasette; adiciotto; adiciannove;\n"
+            "20: aventi; avent>%%with-i>;\n"
+            "30: atrenta; atrent>%%with-i>;\n"
+            "40: aquaranta; aquarant>%%with-a>;\n"
+            "50: acinquanta; acinquant>%%with-a>;\n"
+            "60: asessanta; asessant>%%with-a>;\n"
+            "70: asettanta; asettant>%%with-a>;\n"
+            "80: ottanta; ottant>%%with-a>;\n"
+            "90: anovanta; anovant>%%with-a>;\n"
+            "100: acento; acent[>%%with-o>];\n"
+            "200: <%%with-a<cento; <%%with-a<cent[>%%with-o>];\n"
+            "1000: amille; amill[>%%with-i>];\n"
+            "2000: <%%with-a<mila; <%%with-a<mil[>%%with-a>];\n"
+            "100,000: =%main=;\n"
+        "%%with-i:\n"
+            "izero; uno; idue; itre; iquattro; icinque; isei; isette; otto; inove;\n"
+            "idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;\n"
+            "    idiciasette; idiciotto; idiciannove;\n"
+            "20: iventi; ivent>%%with-i>;\n"
+            "30: itrenta; itrent>%%with-i>;\n"
+            "40: iquaranta; iquarant>%%with-a>;\n"
+            "50: icinquanta; icinquant>%%with-a>;\n"
+            "60: isessanta; isessant>%%with-a>;\n"
+            "70: isettanta; isettant>%%with-a>;\n"
+            "80: ottanta; ottant>%%with-a>;\n"
+            "90: inovanta; inovant>%%with-a>;\n"
+            "100: icento; icent[>%%with-o>];\n"
+            "200: <%%with-i<cento; <%%with-i<cent[>%%with-o>];\n"
+            "1000: imille; imill[>%%with-i>];\n"
+            "2000: <%%with-i<mila; <%%with-i<mil[>%%with-a>];\n"
+            "100,000: =%main=;\n"
+        "%%with-o:\n"
+            "ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto; onove;\n"
+            "odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;\n"
+            "    odiciasette; odiciotto; odiciannove;\n"
+            "20: oventi; ovent>%%with-i>;\n"
+            "30: otrenta; otrent>%%with-i>;\n"
+            "40: oquaranta; oquarant>%%with-a>;\n"
+            "50: ocinquanta; ocinquant>%%with-a>;\n"
+            "60: osessanta; osessant>%%with-a>;\n"
+            "70: osettanta; osettant>%%with-a>;\n"
+            "80: ottanta; ottant>%%with-a>;\n"
+            "90: onovanta; onovant>%%with-a>;\n"
+            "100: ocento; ocent[>%%with-o>];\n"
+            "200: <%%with-o<cento; <%%with-o<cent[>%%with-o>];\n"
+            "1000: omille; omill[>%%with-i>];\n"
+            "2000: <%%with-o<mila; <%%with-o<mil[>%%with-a>];\n"
+            "100,000: =%main=;\n" 
+    }
+    zoneStrings { 
+        {
+            "Europe/Rome",
+            "CET",
+            "CET",
+            "CET",
+            "CET",
+            "Rome",
+        }
+    }
+}
