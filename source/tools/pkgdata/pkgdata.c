@@ -39,7 +39,9 @@ U_CDECL_END
 static int executeMakefile(const UPKGOptions *o);
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
+#ifndef WIN32
 static void fillInMakefileFromICUConfig(UOption *option);
+#endif
 
 /* This sets the modes that are available */
 static struct
@@ -148,10 +150,12 @@ main(int argc, char* argv[]) {
             return 1;
         }
 
+#ifndef WIN32
         if(!options[1].doesOccur) {
           /* Try to fill in from icu-config or equivalent */
           fillInMakefileFromICUConfig(&options[1]);
         }
+#endif
         
         if(!options[1].doesOccur) {
           fprintf(stderr, " required parameter is missing: -O is required \n");
@@ -539,4 +543,4 @@ void fillInMakefileFromICUConfig(UOption *option)
   option->value = buf;
   option->doesOccur = TRUE;
 }
-#endif
+#endif /* WIN32 */
