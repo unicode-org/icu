@@ -212,7 +212,7 @@ sh {
         "HH.mm.ss z",
         "H.mm.ss",
         "H.mm",
-        "EEEE, dd. MMMM yyyy. ",
+        "EEEE, dd. MMMM yyyy.",
         "EEEE, d.MM.yyyy.",
         "dd.MM.yyyy.",
         "d.M.yy.",

@@ -8,8 +8,8 @@
 sv_FI {
     Version { "1.0" }
     CurrencyElements { 
-        "mk",
-        "FIM",
+        "\u20AC",
+        "EUR",
         ",",
     }
     NumberPatterns { 

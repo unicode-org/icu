@@ -11,7 +11,7 @@ af_ZA {
     CurrencyElements { 
         "R",
         "ZAR",
-        ",",
+        ".",
     }
     DateTimePatterns { 
         "h:mm:ss a",
