@@ -29,8 +29,8 @@ ifeq ($(USE_ICU_CONFIG),1)
 	LDIRS=$(shell icu-config --prefix)/include/layout
 else
 	include ../../config/Makefile.inc
-	DIRS=../../common/unicode ../../i18n/unicode ../../extra/ustdio/unicode
-	LDIRS=../../layout/layout ../../layoutex/layout
+	DIRS=../../../common/unicode ../../../i18n/unicode ../../../extra/ustdio/unicode
+	LDIRS=../../../layout/layout ../../../layoutex/layout
 endif
 
 all: 
