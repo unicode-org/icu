@@ -50,6 +50,8 @@ import java.util.*;
  * @see java.util.ResourceBundle
  * @author Alan Liu
  */
+// prepare to deprecate in next release
+///CLOVER:OFF
 public class OverlayBundle extends ResourceBundle {
 
     /**
