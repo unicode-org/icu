@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/12/11 23:36:08 $
- * $Revision: 1.11 $
+ * $Date: 2003/04/19 05:53:48 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -52,23 +52,50 @@ public class Currency implements Serializable {
      */
     private String isoCode;
 
+    /**
+     * Selector for getName() indicating a symbolic name for a
+     * currency, such as "$" for USD.
+     * @draft ICU 2.6
+     */
+    public static final int SYMBOL_NAME = 0;
+
+    /**
+     * Selector for ucurr_getName indicating the long name for a
+     * currency, such as "US Dollar" for USD.
+     * @draft ICU 2.6
+     */
+    public static final int LONG_NAME = 1;
+
     // begin registry stuff 
     ///CLOVER:OFF
+    private static class CurrencyFactory extends ICUResourceBundleFactory {
+        protected Object handleCreate(Locale loc, int kind, ICUService service) {
+            String country = loc.getCountry();
+            String variant = loc.getVariant();
+            if (variant.equals("PREEURO") || variant.equals("EURO")) {
+                country = country + '_' + variant;
+            }
+            ResourceBundle bundle = ICULocaleData.getLocaleElements(new Locale("", "", ""));
+            Object[][] cm = (Object[][]) bundle.getObject("CurrencyMap");
+
+            // Do a linear search
+            String curriso = null;
+            for (int i=0; i<cm.length; ++i) {
+                if (country.equals((String) cm[i][0])) {
+                    curriso = (String) cm[i][1];
+                    break;
+                }
+            }
+            
+            return curriso != null ? new Currency(curriso) : null;
+        }
+    }
+            
     private static ICULocaleService service;
 
     private static ICULocaleService getService() {
         if (service == null) {
             ICULocaleService newService = new ICULocaleService("Currency");
-
-            class CurrencyFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
-                    ResourceBundle bundle = ICULocaleData.getLocaleElements(loc);
-                    String[] ce = bundle.getStringArray("CurrencyElements");
-                    // System.out.println("currency factory loc: " + loc + " rb: " + bundle + "ce[1]" + ce[1]);
-                    return new Currency(ce[1]);
-                }
-            }
-            
             newService.registerFactory(new CurrencyFactory());
             synchronized (Currency.class) {
                 if (service == null) {
@@ -171,48 +198,121 @@ public class Currency implements Serializable {
     }
 
     /**
-     * Returns the display string for this currency object in the
-     * given locale.  For example, the display string for the USD
-     * currency object in the en_US locale is "$".
-     * @draft ICU 2.2
+     * Fallback from the given locale name by removing the rightmost
+     * _-delimited element.  If there is none, return the root locale ("",
+     * "", "").  If this is the root locale, return null.  NOTE: The
+     * string "root" is not recognized; do not use it.
+     * @return a new Locale that is a fallback from the given locale, or
+     * null.
      */
-    public String getSymbol(Locale locale) {
+    private static Locale fallback(Locale loc) {
+
+        // Split the locale into parts and remove the rightmost part
+        String[] parts = new String[]
+            { loc.getLanguage(), loc.getCountry(), loc.getVariant() };
+        int i;
+        for (i=2; i>=0; --i) {
+            if (parts[i].length() != 0) {
+                parts[i] = "";
+                break;
+            }
+        }
+        if (i<0) {
+            return null; // All parts were empty
+        }
+        return new Locale(parts[0], parts[1], parts[2]);
+    }
+
+    /**
+     * Returns the display name for the given currency in the
+     * given locale.  For example, the display name for the USD
+     * currency object in the en_US locale is "$".
+     * @param locale locale in which to display currency
+     * @param nameStyle selector for which kind of name to return
+     * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
+     * if the returned value is a ChoiceFormat pattern; otherwise it
+     * is set to false
+     * @return display string for this currency.  If the resource data
+     * contains no entry for this currency, then the ISO 4217 code is
+     * returned.  If isChoiceFormat[0] is true, then the result is a
+     * ChoiceFormat pattern.  Otherwise it is a static string.
+     * @draft ICU 2.6
+     */
+    public String getName(Locale locale,
+                          int nameStyle,
+                          boolean[] isChoiceFormat) {
+
         // Look up the Currencies resource for the given locale.  The
-        // Currencies locale looks like this in the original C
-        // resource file:
+        // Currencies locale data looks like this:
         //|en {
         //|  Currencies { 
-        //|    USD { "$" }
-        //|    CHF { "sFr" }
+        //|    USD { "US$", "US Dollar" }
+        //|    CHF { "Sw F", "Swiss Franc" }
+        //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
         //|    //...
         //|  }
         //|}
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-        // We can't cast this to String[][]; the cast has to happen later
-        try {
-            Object[][] currencies = (Object[][]) rb.getObject("Currencies");
-            // Do a linear search
-            for (int i=0; i<currencies.length; ++i) {
-                if (isoCode.equals((String) currencies[i][0])) {
-                    return (String) currencies[i][1];
-                }
-            }
-        }
-        catch (MissingResourceException e) {}
 
-        try {
-            // Since the Currencies resource is not fully populated yet,
-            // check to see if we can find what we want in the CurrencyElements
-            // resource.
-            String[] currencyElements = rb.getStringArray("CurrencyElements");
-            if (currencyElements[1].equals(isoCode)) {
-                return currencyElements[0];
-            }
+        if (nameStyle < 0 || nameStyle > 1) {
+            throw new IllegalArgumentException();
         }
-        catch (MissingResourceException e2) {}
+    
+        // In the future, resource bundles may implement multi-level
+        // fallback.  That is, if a currency is not found in the en_US
+        // Currencies data, then the en Currencies data will be searched.
+        // Currently, if a Currencies datum exists in en_US and en, the
+        // en_US entry hides that in en.
 
-        // If we fail to find a match, use the full ISO code
-        return isoCode;
+        // We want multi-level fallback for this resource, so we implement
+        // it manually.
+
+        String s = null;
+
+        // Multi-level resource inheritance fallback loop
+        while (locale != null) {
+            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+            // We can't cast this to String[][]; the cast has to happen later
+            try {
+                Object[][] currencies = (Object[][]) rb.getObject("Currencies");
+                // Do a linear search
+                for (int i=0; i<currencies.length; ++i) {
+                    if (isoCode.equals((String) currencies[i][0])) {
+                        s = ((String[]) currencies[i][1])[nameStyle];
+                        break;
+                    }
+                }                
+            }
+            catch (MissingResourceException e) {}
+
+            // If we've succeeded we're done.  Otherwise, try to fallback.
+            // If that fails (because we are already at root) then exit.
+            if (s != null) {
+                break;
+            }
+            locale = fallback(locale);
+        }
+
+        // Determine if this is a ChoiceFormat pattern.  One leading mark
+        // indicates a ChoiceFormat.  Two indicates a static string that
+        // starts with a mark.  In either case, the first mark is ignored,
+        // if present.  Marks in the rest of the string have no special
+        // meaning.
+        isChoiceFormat[0] = false;
+        if (s != null) {
+            int i=0;
+            while (i < s.length() && s.charAt(i) == '=' && i < 2) {
+                ++i;
+            }
+            isChoiceFormat[0]= (i == 1);
+            if (i != 0) {
+                // Skip over first mark
+                s = s.substring(1);
+            }
+            return s;
+        }
+
+        // If we fail to find a match, use the ISO 4217 code
+        return isoCode;        
     }
 
     /**
