@@ -6,7 +6,7 @@
 *
 ******************************************************************************
 */
-// $Revision: 1.12 $
+// $Revision: 1.13 $
 //============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -83,9 +83,7 @@ protected:
 private:
 
     static uint32_t             LocaleCount;
-    static ILcidPosixMap*       PosixIDmap;
-
-    static const char*          WildCard;
+    static const ILcidPosixMap* PosixIDmap;
 };
 
 #endif

@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.23 $
+// $Revision: 1.24 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -33,8 +33,13 @@
  * This means that this could be much simpler code, and the mapping
  * from Win32 locale ID numbers to POSIX locale strings should
  * be the faster one.
+ *
  * In order to test this code, please use the lcid test program.
+ *
  * The LCID values come from winnt.h
+ *
+ * It is more important to get the LCID to ICU locale mapping correct
+ * than to get a correct ICU locale to LCID mapping.
  */
 
 #include "locmap.h"
@@ -180,6 +185,7 @@ IGlobalLocales::initializeMapRegions()
         {0x3409, "en_PH"},
         {0x2C09, "en_TT"},    //Todo: Data does not exist
         {0x0409, "en_US"},
+//        {0x007f, "en_US_POSIX"},  // Need to verify
         {0x2409, "en_VI"},
         {0x1c09, "en_ZA"},
         {0x3009, "en_ZW"}
@@ -228,11 +234,18 @@ IGlobalLocales::initializeMapRegions()
     ILCID_POSIX_ELEMENT_ARRAY(0x0447, gu, gu_IN)    //Todo: Data does not exist
     ILCID_POSIX_ELEMENT_ARRAY(0x040d, he, he_IL)
     ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
-    ILCID_POSIX_ELEMENT_ARRAY(0x041a, hr, hr_HR)
+
+    // This LCID is really three different locales.
+    static const ILcidPosixElement hr[] = {
+        {0x1a,   "hr"},
+        {0x041a, "hr_HR"},  // Croatian
+        {0x081a, "sh_YU"},  // Serbo-Croatian
+        {0x0c1a, "sr_YU"},  // Serbian
+    };
+
     ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
     ILCID_POSIX_ELEMENT_ARRAY(0x042b, hy, hy_AM)    //Todo: Data does not exist
     ILCID_POSIX_ELEMENT_ARRAY(0x0421, id, id_ID)
-    //ILCID_POSIX_ELEMENT_ARRAY(0x0421, in, in_ID)    //Should really be id_ID
     ILCID_POSIX_ELEMENT_ARRAY(0x040f, is, is_IS)
 
     static const ILcidPosixElement it[] = {
@@ -270,7 +283,6 @@ IGlobalLocales::initializeMapRegions()
 
     // The MSJDK documentation says this is maltese, but it's not supported.
     ILCID_POSIX_ELEMENT_ARRAY(0x043a, mt, mt_MT)
-    ILCID_POSIX_ELEMENT_ARRAY(0x0414, nb, nb_NO)
 
     static const ILcidPosixElement ne[] = {         //Todo: Data does not exist
         {0x61,   "ne"},
@@ -284,13 +296,12 @@ IGlobalLocales::initializeMapRegions()
         {0x0413, "nl_NL"}
     };
 
+    // The no locale split into nb and nn.  By default in ICU, no is nb.
     static const ILcidPosixElement no[] = {
-        {0x14,   "no"},         // really nb
-        {0x0414, "no_NO"},      // really nb_NO
+        {0x14,   "nb"},         // really nb
+        {0x0414, "nb_NO"},      // really nb_NO
         {0x0814, "nn_NO_NY"}    // really nn_NO
     };
-
-    ILCID_POSIX_ELEMENT_ARRAY(0x0814, nn, nn_NO)
 
     // Declared as or_IN to get around compiler errors
     static const ILcidPosixElement or_IN[] = {      //Todo: Data does not exist
@@ -316,11 +327,9 @@ IGlobalLocales::initializeMapRegions()
     ILCID_POSIX_ELEMENT_ARRAY(0x0419, ru, ru_RU)
     ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)    //Todo: Data does not exist
     ILCID_POSIX_ELEMENT_ARRAY(0x0459, sd, sd_IN)    //Todo: Data does not exist
-    ILCID_POSIX_ELEMENT_ARRAY(0x081a, sh, sh_YU)
     ILCID_POSIX_ELEMENT_ARRAY(0x041b, sk, sk_SK)
     ILCID_POSIX_ELEMENT_ARRAY(0x0424, sl, sl_SI)
     ILCID_POSIX_ELEMENT_ARRAY(0x041c, sq, sq_AL)
-    ILCID_POSIX_ELEMENT_ARRAY(0x0c1a, sr, sr_YU)
 
     static const ILcidPosixElement sv[] = {
         {0x1d,   "sv"},
@@ -360,7 +369,7 @@ IGlobalLocales::initializeMapRegions()
     };
 
     // This must be static
-    static ILcidPosixMap localPosixIDmap[] = {
+    static const ILcidPosixMap localPosixIDmap[] = {
         ILCID_POSIX_MAP(af),    //  af  Afrikaans                 0x36
         ILCID_POSIX_MAP(ar),    //  ar  Arabic                    0x01
         ILCID_POSIX_MAP(as),    //  as  Assamese                  0x4d
@@ -407,11 +416,11 @@ IGlobalLocales::initializeMapRegions()
         ILCID_POSIX_MAP(mr),    //  mr  Marathi                   0x4e
         ILCID_POSIX_MAP(ms),    //  ms  Malay                     0x3e
         ILCID_POSIX_MAP(mt),    //  mt  Maltese                   0x3a
-        ILCID_POSIX_MAP(nb),    //  no  Norwegian                 0x14
+//        ILCID_POSIX_MAP(nb),    //  no  Norwegian                 0x14
         ILCID_POSIX_MAP(ne),    //  ne  Nepali                    0x61
         ILCID_POSIX_MAP(nl),    //  nl  Dutch                     0x13
-        ILCID_POSIX_MAP(nn),    //  no  Norwegian                 0x14
-        ILCID_POSIX_MAP(no),    //  no  Norwegian                 0x14
+//        ILCID_POSIX_MAP(nn),    //  no  Norwegian                 0x14
+        ILCID_POSIX_MAP(no),    //  nb/nn Norwegian (formerly no) 0x14
         ILCID_POSIX_MAP(or_IN), //  or  Oriya                     0x48
         ILCID_POSIX_MAP(pa),    //  pa  Punjabi                   0x46
         ILCID_POSIX_MAP(pl),    //  pl  Polish                    0x15
@@ -421,11 +430,11 @@ IGlobalLocales::initializeMapRegions()
         ILCID_POSIX_MAP(ru),    //  ru  Russian                   0x19
         ILCID_POSIX_MAP(sa),    //  sa  Sanskrit                  0x4f
         ILCID_POSIX_MAP(sd),    //  sd  Sindhi                    0x59
-        ILCID_POSIX_MAP(sh),    //  sh  Serbo-Croatian            0x1a
+//        ILCID_POSIX_MAP(sh),    //  sh  Serbo-Croatian            0x1a
         ILCID_POSIX_MAP(sk),    //  sk  Slovak                    0x1b
         ILCID_POSIX_MAP(sl),    //  sl  Slovenian                 0x24
         ILCID_POSIX_MAP(sq),    //  sq  Albanian                  0x1c
-        ILCID_POSIX_MAP(sr),    //  sr  Serbian                   0x1a
+//        ILCID_POSIX_MAP(sr),    //  sr  Serbian                   0x1a
         ILCID_POSIX_MAP(sv),    //  sv  Swedish                   0x1d
         ILCID_POSIX_MAP(sw),    //  sw  Swahili                   0x41
         ILCID_POSIX_MAP(ta),    //  ta  Tamil                     0x49
@@ -440,14 +449,14 @@ IGlobalLocales::initializeMapRegions()
         ILCID_POSIX_MAP(zh),    //  zh  Chinese                   0x04
     };
 
-    // This assignment is okay because the local variable is static within the function.
+    // This assignment is okay because the local variable is static within the function,
+    // and no memory is allocated.
     PosixIDmap  = localPosixIDmap;
     LocaleCount = sizeof(localPosixIDmap)/sizeof(ILcidPosixMap);
 }
 
-uint32_t       IGlobalLocales::LocaleCount = 0;
-ILcidPosixMap *IGlobalLocales::PosixIDmap  = NULL;
-const char    *IGlobalLocales::WildCard = "??_??";
+uint32_t             IGlobalLocales::LocaleCount = 0;
+const ILcidPosixMap *IGlobalLocales::PosixIDmap  = NULL;
 
 //////////////////////////////////////
 //
@@ -473,7 +482,7 @@ IGlobalLocales::convertToPosix(uint32_t hostid, UErrorCode *status)
 
     //no match found
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return WildCard;
+    return "??_??";
 }
 
 U_CFUNC const char *
