@@ -1923,4 +1923,10 @@ public class CollationMiscTest extends TestFmwk{
             errln("Jitterbug 3347 failed");
         }
     }
+    
+    public void TestPinyinProblem()
+	{
+    	String test[] = { "\u4E56\u4E56\u7761", "\u4E56\u5B69\u5B50" };
+    	genericLocaleStarter(new Locale("zh", "", "PINYIN"), test);   	
+    }
 }
