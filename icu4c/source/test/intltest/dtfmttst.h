@@ -35,7 +35,7 @@ public:
 public: // package
     // internal utility routine (genrates escape sequences for characters)
     static UnicodeString& escape(UnicodeString& s);
-    static char* fieldNames[];
+    static const char* fieldNames[];
  
 public:
     /**
