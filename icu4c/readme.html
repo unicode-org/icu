@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Jun-06<br>
+    <p>Version: 2003-Jun-13<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -142,7 +142,7 @@
     </ul>
 
     <p>ICU has a sister project <a href=
-    "http://oss.software.ibm.com/icu4j/">ICU4J</a> that extends the
+    "http://oss.software.ibm.com/icu4j/index.html">ICU4J</a> that extends the
     internationalization capabilities of Java to a level similar to ICU. The
     ICU C/C++ project is also called ICU4C when a distinction is necessary.</p>
 
@@ -165,14 +165,14 @@
         <td>ICU Homepage</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a></td>
+        "http://oss.software.ibm.com/icu/index.html">http://oss.software.ibm.com/icu/index.html</a></td>
       </tr>
 
       <tr>
         <td>ICU4J Homepage</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu4j/">http://oss.software.ibm.com/icu4j/</a></td>
+        "http://oss.software.ibm.com/icu4j/index.html">http://oss.software.ibm.com/icu4j/index.html</a></td>
       </tr>
 
       <tr>
@@ -186,35 +186,35 @@
         <td>ICU User's Guide</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/userguide/">http://oss.software.ibm.com/icu/userguide/</a></td>
+        "http://oss.software.ibm.com/icu/userguide/index.html">http://oss.software.ibm.com/icu/userguide/index.html</a></td>
       </tr>
 
       <tr>
         <td>Download ICU Releases</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/download/">http://oss.software.ibm.com/icu/download/</a></td>
+        "http://oss.software.ibm.com/icu/download/index.html">http://oss.software.ibm.com/icu/download/index.html</a></td>
       </tr>
 
       <tr>
         <td>API Documentation Online</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/apiref/">http://oss.software.ibm.com/icu/apiref/</a></td>
+        "http://oss.software.ibm.com/icu/apiref/index.html">http://oss.software.ibm.com/icu/apiref/index.html</a></td>
       </tr>
 
       <tr>
         <td>Online ICU Demos</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/demo/">http://oss.software.ibm.com/icu/demo/</a></td>
+        "http://oss.software.ibm.com/icu/demo/index.html">http://oss.software.ibm.com/icu/demo/index.html</a></td>
       </tr>
 
       <tr>
         <td>Contacts and Bug Reports/Feature Requests</td>
 
         <td><a href=
-        "http://oss.software.ibm.com/icu/archives/">http://oss.software.ibm.com/icu/archives/</a></td>
+        "http://oss.software.ibm.com/icu/archives/index.html">http://oss.software.ibm.com/icu/archives/index.html</a></td>
       </tr>
     </table>
 
@@ -226,15 +226,16 @@
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. For more news about
     this release, see the <a href=
-    "http://oss.software.ibm.com/icu/download/2.6/">ICU 2.6 download
+    "http://oss.software.ibm.com/icu/download/2.6/index.html">ICU 2.6 download
     page</a>.</p>
 
     <h3>Library Initialization</h3>
 
-    <p>ICU4C 2.6 introduces a library initialization function. It is required to
-    call&nbsp; it before using any ICU services in a multi-threaded environment.
-    For details please see the <a href="http://oss.software.ibm.com/icu/apiref/">documentation</a>
-    of <code>u_init()</code> in the <code>unicode/uclean.h</code> header file.</p>
+    <p>ICU4C 2.6 introduces a library initialization function. It is required
+    to call&nbsp; it before using any ICU services in a multi-threaded
+    environment. For details please see the <a href=
+    "http://oss.software.ibm.com/icu/apiref/index.html">documentation</a> of
+    <code>u_init()</code> in the <code>unicode/uclean.h</code> header file.</p>
 
     <h3>Support for Unicode 4.0</h3>
 
@@ -318,7 +319,8 @@
       list packages directly instead of just a single folder.</li>
 
       <li>Predictability: The search path can be set via the ICU_DATA
-      environment variable or via the u_setDataDirectory() function.<br>
+      environment variable or via the <code>u_setDataDirectory()</code>
+      function.<br>
        ICU does not perform any other heuristics any more.</li>
     </ul>
 
@@ -350,7 +352,8 @@
     data can be added back into a customized ICU build, see the <a href=
     "http://oss.software.ibm.com/icu/userguide/icudata.html">User Guide Data
     chapter</a>. It can also still be viewed with the <a href=
-    "http://oss.software.ibm.com/icu/demo/">LocaleExplorer demo</a>.</p>
+    "http://oss.software.ibm.com/icu/demo/index.html">LocaleExplorer
+    demo</a>.</p>
     <hr>
 
     <h2><a name="Download" href="#Download">How To Download the Source
@@ -365,7 +368,7 @@
       versions are tested more thoroughly than day-to-day development builds of
       the system, and they are packaged in zip and tar files for convenient
       download. These packaged files can be found at <a href=
-      "http://oss.software.ibm.com/icu/download/">http://oss.software.ibm.com/icu/download/</a>.<br>
+      "http://oss.software.ibm.com/icu/download/index.html">http://oss.software.ibm.com/icu/download/index.html</a>.<br>
 
        The packaged snapshots are named <strong>icu-nnnn.zip</strong> or
       <strong>icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip
@@ -628,7 +631,7 @@
       <tr>
         <td>Windows XP</td>
 
-        <td>Microsoft Visual C++ .NET 7.0</td>
+        <td>Microsoft Visual C++ .NET 2002 (7.0)</td>
 
         <td>Reference platform</td>
       </tr>
@@ -766,6 +769,14 @@
       </tr>
 
       <tr>
+        <td>QNX</td>
+
+        <td>gcc</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
         <td>NetBSD, OpenBSD</td>
 
         <td>gcc</td>
@@ -835,7 +846,7 @@
 
       <li>Be sure that the ICU binary directory, <i>&lt;ICU&gt;</i>\bin\, is
       included in the <strong>PATH</strong> environment variable. The tests
-      will not work without the location of the ICU dll files in the path.</li>
+      will not work without the location of the ICU DLL files in the path.</li>
 
       <li>Set the <strong>TZ</strong> environment variable to
       <strong>PST8PDT</strong>. The tests will not work in any other time
@@ -917,12 +928,14 @@
     binary locale data files).</p>
 
     <p><a name="HowToBuildWindowsDotNet"><strong>Microsoft Visual Studio .NET
-    Note:</strong></a> ICU will build with Microsoft Visual Studio .NET, though
-    this is not a supported platform at the time of this writing. Visual Studio
-    .NET will offer to convert the project files when you open the existing
-    workspace file. Choose "Yes to All" in the dialog asking whether to convert
-    the files or not (this creates new files) and then follow the rest of the
-    build instructions.</p>
+    Note:</strong></a> ICU will build with Microsoft Visual Studio .NET 2002.
+    It is recommended that you use the
+    "<i>&lt;ICU&gt;</i>\source\allinone\allinone.sln" solution workspace to
+    build ICU. The instructions for building with Visual Studio .NET are
+    similar to the instructions for Visual Studio .NET. If you have Microsoft
+    Visual Studio .NET 2003 the Visual Studio .NET 2002 project files will
+    automatically be converted to 2003 project files when you open the solution
+    workspace for the first time.</p>
 
     <h3><a name="HowToBuildWindowsXP64" href="#HowToBuildWindowsXP64">How To
     Build And Install On Windows XP on IA64</a></h3>
@@ -1021,7 +1034,7 @@
     --help"</tt> to print the available configure options that you may want to
     give runConfigureICU. If you are not using the runConfigureICU script, or
     your platform is not supported by the script, you may need to set your
-    CC,CXX, CFLAGS and CXXFLAGS environment variables, and type
+    CC, CXX, CFLAGS and CXXFLAGS environment variables, and type
     <tt>"./configure"</tt>. Some of the more frequently used options to
     configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
     to do out of source builds (build the libraries in the current location).
@@ -1085,7 +1098,7 @@
       <li>
         <p>z/OS supports both native S/390 hexadecimal floating point and,
         (with OS/390 2.6 and later) IEEE binary floating point. This is a
-        compile time option. Applications built with IEEE should use ICU dlls
+        compile time option. Applications built with IEEE should use ICU DLLs
         that are built with IEEE (and vice versa). The environment variable
         IEEE390=1 will cause the z/OS version of ICU to be built with IEEE
         floating point. The default is native hexadecimal floating point.<br>
@@ -1116,7 +1129,7 @@
 
       <li>Since the default make on z/OS is not gmake, the pkgdata tool
       requires that the "make" command is aliased to your installed version of
-      gmake. You may also need to set $MAKE equal to the fully-qualified path
+      gmake. You may also need to set $MAKE equal to the fully qualified path
       of GNU make. GNU make is available with the "z/OS Unix - Tools and Toys"
       that was mentioned above. The required version is the same Unix build
       instructions.</li>
@@ -1133,7 +1146,7 @@
         result can run on that level of the operating system and later, such as
         z/OS 1.3 and z/OS 1.4. It's possible that you may have a z/OS 1.4
         system and, for example, need to deliver binaries on z/OS 1.2 and
-        above. z/OS gives you this ability by targetting the complier and
+        above. z/OS gives you this ability by targeting the complier and
         linker to run at the older level, thereby producing the desired
         binaries.</p>
 
@@ -1168,8 +1181,8 @@
     the batch environment. When OS390BATCH is set, the libicuuc<i>XX</i>.dll,
     libicudt<i>XX</i>e.dll, and libicudt<i>XX</i>e_stub.dll binaries are built
     into data sets (the native file system). Turning on OS390BATCH does not
-    turn off the normal z/OS UNIX build. This means that the The z/OS UNIX
-    (HFS) dlls will always be created.</p>
+    turn off the normal z/OS UNIX build. This means that the z/OS UNIX
+    (HFS) DLLs will always be created.</p>
 
     <p>Two additional environment variables indicate the names of the z/OS data
     sets to use. The LOADMOD environment variable identifies the name of the
@@ -1403,9 +1416,9 @@ del common/libicuuc.so
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
-    "http://oss.software.ibm.com/icu/userguide/">User's Guide</a>. The <a href=
-    "#SourceCode">ICU Source Code Organization</a> section of this readme.html
-    gives a more complete description of the libraries.</p>
+    "http://oss.software.ibm.com/icu/userguide/index.html">User's Guide</a>.
+    The <a href="#SourceCode">ICU Source Code Organization</a> section of this
+    readme.html gives a more complete description of the libraries.</p>
 
     <table border="1" cellpadding="3">
       <caption>
@@ -1514,18 +1527,17 @@ del common/libicuuc.so
 
       <li>ICU is used on Mac OS X</li>
 
-      <li>ICU is used on HP-UX and the program's main() function is not
-      declared in a C++ file.</li>
+      <li>ICU is used on HP-UX and the program's <code>main()</code> function
+      is not declared in a C++ file.</li>
     </ul>
 
     <p>Upon the first usage of most ICU APIs, the global mutex will get
-    initialized. For example, you could call uloc_countAvailable() or
-    uloc_getDefault() from your main() function before any threads are created.
-    Those functions will initialize the global mutex. Without one of these
-    function calls from a single thread, the data caches inside ICU may get
-    initialized more than once, which may cause memory leaks and other
-    problems. This problem normally does not happen when C++ static
-    initialization works properly.</p>
+    initialized, but you can use the <code>u_init()</code> function from
+    uclean.h to ensure that it is initialized. Without one of these function
+    calls from a single thread, the data caches inside ICU may get initialized
+    more than once, which may cause memory leaks and other problems. This
+    problem normally does not happen when C++ static initialization works
+    properly.</p>
 
     <p>ICU does not use C++ static initialization for anything else, and
     disabling threads in ICU will disable all C++ static initialization in ICU.
@@ -1823,9 +1835,9 @@ del common/libicuuc.so
       for console window output.</li>
 
       <li>On some Unix-type systems, non-standard names are used for encodings,
-      or non-standard encodings are used altogether. Although ICU supports 200
-      encodings in its standard build and many more aliases for them, it will
-      not be able to recognize such non-standard names.</li>
+      or non-standard encodings are used altogether. Although ICU supports over
+      200 encodings in its standard build and many more aliases for them, it
+      will not be able to recognize such non-standard names.</li>
 
       <li>Some systems do not have a notion of a system or process codepage,
       and may not have APIs for that.</li>
