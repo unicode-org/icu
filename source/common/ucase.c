@@ -39,9 +39,6 @@ struct UCaseProps {
 
 /* data loading etc. -------------------------------------------------------- */
 
-static UCaseProps *singletonCaseProps=NULL;
-static UErrorCode singletonErrorCode=U_ZERO_ERROR;
-
 static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
