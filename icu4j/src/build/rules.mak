@@ -27,7 +27,8 @@ classes: delete.classlist $(FILES_class) $(FILES_dics)
 	if exist $(CLASSLIST) $(JAVAC) @$(CLASSLIST)
 	rm -f $(CLASSLIST)
 !ifdef FILES_dict
-    cp $(SRC_FILES_dict) $(TARGDIR)
+# 	cp $(SRC_FILES_dict) $(TARGDIR)
+	cp $(SRC_FILES_dict) $(CLASSDIR)\com\ibm\text\resources\
 !endif
 !ifdef SUBDIRS
 	@for %%d in ( $(SUBDIRS) ) do cd %d && $(MAKE) classes && cd ..
@@ -36,7 +37,8 @@ classes: delete.classlist $(FILES_class) $(FILES_dics)
 dict: $(SRC_FILES_dict)
 	echo $(FILES_dict)
 	echo $(SRC_FILES_dict)
-	cp $(SRC_FILES_dict) $(CLASSDIR)/$(PKGPATH)/
+	cp $(SRC_FILES_dict) $(CLASSDIR)\com\ibm\text\resources\
+#	cp $(SRC_FILES_dict) $(TARGDIR)
 
 delete.classlist:
 	@rm -f $(CLASSLIST)
