@@ -2789,10 +2789,10 @@ ja {
         "H:mm:ss:z",
         "H:mm:ss",
         "H:mm",
-        "yyyy G'\u5E74'M'\u6708'd'\u65E5'",
-        "yyyy G/MM/dd",
-        "yyyy G/MM/dd",
-        "yyyy G/MM/dd",
+        "Gy'\u5E74'M'\u6708'd'\u65E5'",
+        "G yy/MM/dd",
+        "G yy/MM/dd",
+        "G yy/MM/dd",
         "{1} {0}",
     }
 
