@@ -137,13 +137,15 @@
         }
     }
 
+
+
 #elif MAP_IMPLEMENTATION==MAP_POSIX
-    static UBool
+    UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
         int fd;
         int length;
         struct stat mystat;
-        const void *data;
+        void *data;
 
         UDataMemory_init(pData); /* Clear the output struct.        */
 
@@ -167,38 +169,30 @@
 #endif
         close(fd); /* no longer needed */
         if(data==MAP_FAILED) {
-
-#       ifdef UDATA_DEBUG
-              perror("mmap");
-#       endif
-
             return FALSE;
         }
 
-#       ifdef UDATA_DEBUG
-            fprintf(stderr, "mmap of %s [%d bytes] succeeded, -> 0x%X\n", path, length, data);
-            fflush(stderr);
-#       endif
-
-        pData->map=length;
+		pData->map = (char *)data + length;
         pData->pHeader=(const DataHeader *)data;
         pData->mapAddr = data;
         return TRUE;
     }
 
-    static void
+	
+	
+    void
     uprv_unmapFile(UDataMemory *pData) {
-        if(pData!=NULL && pData->map>0) {
-            if(munmap((void *)pData->mapAddr, pData->map)==-1) {
-#               ifdef UDATA_DEBUG
-                    perror("munmap");
-#               endif
+        if(pData!=NULL && pData->map!=NULL) {
+			size_t dataLen = (char *)pData->map - (char *)pData->mapAddr;
+            if(munmap(pData->mapAddr, dataLen)==-1) {
             }
             pData->pHeader=NULL;
             pData->map=0;
             pData->mapAddr=NULL;
         }
     }
+
+
 
 #elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
     static UBool
@@ -221,7 +215,7 @@
             return FALSE;
         }
 
-        /* allocate the data structure */
+        /* allocate the memory to hold the file data */
         p=uprv_malloc(fileLength);
         if(p==NULL) {
             T_FileStream_close(file);
