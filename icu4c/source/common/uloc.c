@@ -52,14 +52,16 @@ U_CFUNC const char *locale_get_default(void);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
-static const char _kLanguages[]      = "Languages";
-static const char _kScripts[]        = "Scripts";
-static const char _kCountries[]      = "Countries";
-static const char _kVariants[]       = "Variants";
-static const char _kKeys[]           = "Keys";
+static const char _kLanguages[]       = "Languages";
+static const char _kScripts[]         = "Scripts";
+static const char _kCountries[]       = "Countries";
+static const char _kVariants[]        = "Variants";
+static const char _kKeys[]            = "Keys";
+static const char _kTypes[]           = "Types";
 static const char _kIndexLocaleName[] = "res_index";
-static const char _kIndexTag[]       = "InstalledLocales";
-
+static const char _kIndexTag[]        = "InstalledLocales";
+static const char _kCurrency[]        = "currency";
+static const char _kCurrencies[]      = "Currencies";
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
@@ -1334,7 +1336,8 @@ uloc_getLCID(const char* localeID)
  */
 static const UChar *
 _res_getTableStringWithFallback(const char *path, const char *locale,
-                              const char *tableKey, const char *itemKey,
+                              const char *tableKey, const char *subTableKey,
+                              const char *itemKey,
                               int32_t *pLength,
                               UErrorCode *pErrorCode)
 {
@@ -1400,7 +1403,14 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
 
         /* try to open the requested item in the table */
         errorCode=U_ZERO_ERROR;
-        item=ures_getStringByKey(&table, itemKey, pLength, &errorCode);
+        if(subTableKey == NULL){
+            item=ures_getStringByKey(&table, itemKey, pLength, &errorCode);
+        }else{
+            UResourceBundle subTable;
+            ures_initStackObject(&subTable);
+            ures_getByKey(&table, subTableKey, &subTable, &errorCode);
+            item = ures_getStringByKey(&subTable, itemKey, pLength, &errorCode);
+        }
         if(U_SUCCESS(errorCode)) {
             /* if the item for the key is empty ... override the explicit fall back set */
             if(item[0]==0 && efnLen > 0){
@@ -1476,7 +1486,9 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
 
 static int32_t
 _getStringOrCopyKey(const char *path, const char *locale,
-                    const char *tableKey, const char *itemKey,
+                    const char *tableKey, 
+                    const char* subTableKey,
+                    const char *itemKey,
                     const char *substitute,
                     UChar *dest, int32_t destCapacity,
                     UErrorCode *pErrorCode) {
@@ -1496,7 +1508,9 @@ _getStringOrCopyKey(const char *path, const char *locale,
     } else {
         /* second-level item, use special fallback */
         s=_res_getTableStringWithFallback(path, locale,
-                                           tableKey, itemKey,
+                                           tableKey, 
+                                           subTableKey,
+                                           itemKey,
                                            &length,
                                            pErrorCode);
     }
@@ -1544,8 +1558,8 @@ uloc_getDisplayLanguage(const char *locale,
     }
 
     return _getStringOrCopyKey(NULL, displayLocale,
-                               _kLanguages, localeBuffer,
-                               localeBuffer,
+                               _kLanguages, NULL, localeBuffer,
+                               localeBuffer, 
                                dest, destCapacity,
                                pErrorCode);
 }
@@ -1580,11 +1594,14 @@ uloc_getDisplayScript(const char* locale,
     }
 
     return _getStringOrCopyKey(NULL, displayLocale,
-                               _kScripts, localeBuffer,
+                               _kScripts, NULL, 
+                               localeBuffer,
                                localeBuffer,
                                dest, destCapacity,
                                pErrorCode);
 }
+
+
 
 U_CAPI int32_t U_EXPORT2
 uloc_getDisplayCountry(const char *locale,
@@ -1615,7 +1632,8 @@ uloc_getDisplayCountry(const char *locale,
     }
 
     return _getStringOrCopyKey(NULL, displayLocale,
-                               _kCountries, localeBuffer,
+                               _kCountries, NULL,
+                               localeBuffer,
                                localeBuffer,
                                dest, destCapacity,
                                pErrorCode);
@@ -1660,7 +1678,8 @@ uloc_getDisplayVariant(const char *locale,
 
     /* pass itemKey=NULL to look for a top-level item */
     return _getStringOrCopyKey(NULL, displayLocale,
-                               _kVariants, localeBuffer, 
+                               _kVariants, NULL,
+                               localeBuffer, 
                                localeBuffer,      
                                dest, destCapacity,
                                pErrorCode);
@@ -1807,6 +1826,143 @@ uloc_getDisplayName(const char *locale,
     }
 
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_getDisplayKeyword(const char* keyword,
+                       const char* displayLocale,
+                       UChar* dest,
+                       int32_t destCapacity,
+                       UErrorCode* status){
+
+    /* argument checking */
+    if(status==NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+
+    /* pass itemKey=NULL to look for a top-level item */
+    return _getStringOrCopyKey(NULL, displayLocale,
+                               _kKeys, NULL, 
+                               keyword, 
+                               keyword,      
+                               dest, destCapacity,
+                               status);
+
+}
+/**
+ * Modify the given locale name by removing the rightmost _-delimited
+ * element.  If there is none, empty the string ("" == root).
+ * NOTE: The string "root" is not recognized; do not use it.
+ * @return TRUE if the fallback happened; FALSE if locale is already
+ * root ("").
+ */
+static UBool fallback(char *loc) {
+    UErrorCode status = U_ZERO_ERROR;
+    
+    if (!*loc) {
+        return FALSE;
+    }
+    uloc_getParent(loc, loc, uprv_strlen(loc), &status);
+
+    return TRUE;
+}
+
+#define UCURRENCY_DISPLAY_NAME_INDEX 1
+
+U_CAPI int32_t U_EXPORT2
+uloc_getDisplayKeywordValue(   const char* locale,
+                               const char* keyword,
+                               const char* displayLocale,
+                               UChar* dest,
+                               int32_t destCapacity,
+                               UErrorCode* status){
+
+    char loc[ULOC_FULLNAME_CAPACITY*4];
+    int32_t locLen = 0;
+    char keywordValue[ULOC_FULLNAME_CAPACITY*4];
+    int32_t capacity = ULOC_FULLNAME_CAPACITY*4;
+    int32_t keywordValueLen =0;
+
+    /* argument checking */
+    if(status==NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *status=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* get the keyword value */
+    keywordValueLen = uloc_getKeywordValue(locale, keyword, keywordValue, capacity, status);
+
+    /* 
+     * if the keyword is equal to currency .. then to get the display name 
+     * we need to do the fallback ourselves
+     */
+    if(uprv_stricmp(keyword, _kCurrency)==0){
+
+        UErrorCode ec2 = U_ZERO_ERROR;
+        int32_t dispNameLen = 0;
+        const UChar *dispName = NULL;
+
+        for (;;) {
+            UResourceBundle* rb = ures_open(NULL, displayLocale, &ec2);
+            UResourceBundle* curr = ures_getByKey(rb, _kCurrencies, NULL, &ec2);
+            UResourceBundle* names = ures_getByKey(curr, keywordValue, NULL, &ec2);
+                        
+            dispName = ures_getStringByIndex(names, UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, &ec2);
+            ures_close(names);
+            ures_close(curr);
+            ures_close(rb);
+
+            /* If we've succeeded we're done.  Otherwise, try to fallback.
+             * If that fails (because we are already at root) then exit.
+             */
+            if (U_SUCCESS(ec2) || !fallback(loc)) {
+                break;
+            }
+        }
+        if(U_FAILURE(ec2)){
+            *status = ec2;
+            return 0;
+        }
+        /* now copy the dispName over if not NULL */
+        if(dispName != NULL){
+            if(dispNameLen <= destCapacity){
+                uprv_memcpy(dest, dispName, dispNameLen * U_SIZEOF_UCHAR);
+                return u_terminateUChars(dest, destCapacity, dispNameLen, status);
+            }else{
+                *status = U_BUFFER_OVERFLOW_ERROR;
+                return dispNameLen;
+            }
+        }else{
+            /* we have not found the display name for the value .. just copy over */
+            if(keywordValueLen <= destCapacity){
+                u_charsToUChars(keywordValue, dest, keywordValueLen);
+                return u_terminateUChars(dest, destCapacity, keywordValueLen, status);
+            }else{
+                 *status = U_BUFFER_OVERFLOW_ERROR;
+                return keywordValueLen;
+            }
+        }
+
+        
+    }else{
+
+        return _getStringOrCopyKey(NULL, displayLocale,
+                                   _kTypes, keyword, 
+                                   keywordValue,
+                                   keywordValue,
+                                   dest, destCapacity,
+                                   status);
+    }
 }
 
 static void _load_installedLocales()
