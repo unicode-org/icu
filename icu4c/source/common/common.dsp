@@ -467,10 +467,6 @@ SOURCE=.\uprops.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\upropset.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\uresbund.c
 # End Source File
 # Begin Source File
@@ -2553,10 +2549,6 @@ InputPath=.\unicode\uobject.h
 # Begin Source File
 
 SOURCE=.\uprops.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\upropset.h
 # End Source File
 # Begin Source File
 

@@ -260,6 +260,18 @@ uprv_isRuleWhiteSpace(UChar32 c) {
         u_hasBinaryProperty(c, UCHAR_WHITE_SPACE);
 }
 
+static const UChar _PATTERN[] = {
+    /* "[[:Cf:][:WSpace:]]" */
+    91, 91, 58, 67, 102, 58, 93, 91, 58, 87,
+    83, 112, 97, 99, 101, 58, 93, 93, 0
+};
+
+U_CAPI USet* U_EXPORT2
+uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
+    return uset_openPattern(_PATTERN,
+                            sizeof(_PATTERN)/sizeof(_PATTERN[0])-1, ec);
+}
+
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
