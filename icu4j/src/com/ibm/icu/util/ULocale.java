@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration; // get rid of this
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -911,8 +910,8 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets an enumeration of keywords for the specified locale.
-     * @return enumeration of keywords or null if there are no keywords.
+     * Gets an iterator over keywords for the specified locale.
+     * @return iterator over keywords
      * @draft ICU 3.0
      */
     public Iterator getKeywords() {
@@ -1527,7 +1526,7 @@ public final class ULocale implements Serializable {
 	 * present.
 	 */
 	public String getKeywordValue(String keywordName) {
-	    return (String)getKeywordMap().get(keywordName);
+	    return (String)getKeywordMap().get(keywordName.trim().toLowerCase());
 	}
     }
 
@@ -1638,10 +1637,29 @@ public final class ULocale implements Serializable {
 	return EMPTY_STRING;
     }
     
+    // display names
+
     /**
-     * Returns a name for the locale's language that is appropriate for display to the
-     * user's defalt locale.
-     * @return String the display string
+     * Utility to fetch locale display data from resource bundle tables.
+     */
+    private static String getTableString(String tableName, String subtableName, String item, ULocale displayLocale) {
+	try {
+	    ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
+	    ICUResourceBundle table = bundle.get(tableName);
+	    if (subtableName != null) {
+		table = bundle.get(subtableName);
+	    }
+	    return table.getString(item);
+	}
+	catch (Exception e) {
+	    System.out.println(e.getMessage());
+	}
+	return item;
+    }
+
+    /**
+     * Return this locale's language localized for display in the default locale.
+     * @return the localized language name.
      * @draft ICU 3.0
      */
     public String getDisplayLanguage() {
@@ -1649,44 +1667,52 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets the language name suitable for display for the specified locale.
-     *
-     * @param displayLocale Specifies the locale to be used to display the name.  In other words,
-     *                 if the locale's language code is "en", passing Locale::getFrench() for
-     *                 inLocale would result in "Anglais", while passing Locale::getGerman()
-     *                 for inLocale would result in "Englisch".
-     * @return String the displayable language string.
+     * Return this locale's language localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized language name.
      * @draft ICU 3.0
      */
     public String getDisplayLanguage(ULocale displayLocale) {
-	return getDisplayLanguage(localeID, displayLocale.localeID);
+	return getDisplayLanguage(localeID, displayLocale);
     }
     
     /**
-     * Returns a name for the locale's language that is appropriate for display to the
-     * user's defalt locale.  This is a cover for the ICU4C API.
-     * @param localeID
-     * @param displayLocaleID
-     * @return String the display string
+     * Return a locale's language localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose language will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized language name.
      * @draft ICU 3.0
      */
-    public static String getDisplayLanguage(String localeID, String displaylocaleID) {
-	// TODO: get resource information
-	return null;
+    public static String getDisplayLanguage(String localeID, String displayLocaleID) {
+	return getDisplayLanguage(localeID, new ULocale(displayLocaleID));
+    }
+
+    /**
+     * Return a locale's language localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose language will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized language name.
+     * @draft ICU 3.0
+     */
+    public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
+	return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocale);
     }
     
     /**
-     * Gets the script name suitable for display for the user's default locale.
-     * @return String the displayable script string.
-     * @draft ICU 3.0   
+     * Return this locale's script localized for display in the default locale.
+     * @return the localized script name.
+     * @draft ICU 3.0
      */
     public String getDisplayScript() {
 	return getDisplayScript(getDefault());
     }
+
     /**
-     * Gets the script name suitable for display for the specified locale.
-     * @param displayLocale the locale to get the displayable script code with. Null may be used to specify the default.
-     * @return String the displayable script string.
+     * Return this locale's script localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized script name.
      * @draft ICU 3.0
      */
     public String getDisplayScript(ULocale displayLocale) {
@@ -1694,181 +1720,201 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Gets the script name suitable for display for the specified locale.
-     * @param localeID
-     * @param displayLocale the locale to get the displayable script code with. Null may be used to specify the default.
-     * @return String the displayable script string.
+     * Return a locale's script localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose script will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized script name.
      * @draft ICU 3.0
      */
-    public static String getDisplayScript(String localeID, String displaylocaleID) {
-	// TODO: get resource information
-	return null;
+    public static String getDisplayScript(String localeID, String displayLocaleID) {
+	return getDisplayScript(localeID, new ULocale(displayLocaleID));
     }
     
     /**
-     * Gets the country name suitable for display for the user's default locale.
-     * @return String the displayable country string. 
-     * @draft ICU 3.0   
+     * Return a locale's script localized for display in the provided locale.
+     * @param localeID the id of the locale whose script will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized script name.
+     * @draft ICU 3.0
+     */
+    public static String getDisplayScript(String localeID, ULocale displayLocale) {
+	return getTableString("Scripts", null, new IDParser(localeID).getScript(), displayLocale);
+    }
+
+    /**
+     * Return this locale's country localized for display in the default locale.
+     * @return the localized country name.
+     * @draft ICU 3.0
      */
     public String getDisplayCountry() {
 	return getDisplayCountry(getDefault());
     }
     
     /**
-     * Gets the country name suitable for display for the specified locale.
-     * @param displayLocale the locale to get the displayable country code with. Null may be used to specify the default.
-     * @return String the displayable country string.
+     * Return this locale's country localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized country name.
      * @draft ICU 3.0
      */
     public String getDisplayCountry(ULocale displayLocale){
-	return getDisplayCountry(localeID, displayLocale.localeID);   
+	return getDisplayCountry(localeID, displayLocale);   
     }
     
     /**
-     * Gets the country name suitable for display for the user's default locale.
-     * @return String the displayable country string. 
-     * @draft ICU 3.0   
+     * Return a locale's country localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose country will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized country name.
+     * @draft ICU 3.0
      */
-    public static String getDisplayCountry(String localeID, String displaylocaleID) {
-	// TODO: get resource information
-	return null;
+    public static String getDisplayCountry(String localeID, String displayLocaleID) {
+	return getDisplayCountry(localeID, new ULocale(displayLocaleID));
     }
 
     /**
-     * Gets the variant name suitable for display for the specified locale.
-     * @return String the displayable variant string.
+     * Return a locale's country localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose country will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized country name.
      * @draft ICU 3.0
      */
-    public String getDisplayVariant(){
+    public static String getDisplayCountry(String localeID, ULocale displayLocale) {
+	return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocale);
+    }
+    
+    /**
+     * Return this locale's variant localized for display in the default locale.
+     * @return the localized variant name.
+     * @draft ICU 3.0
+     */
+    public String getDisplayVariant() {
 	return getDisplayVariant(getDefault());   
     }
+
     /**
-     * Gets the variant name suitable for display for the specified locale.
-     * @param displayLocale the locale to get the displayable variant code with. Null may be used to specify the default.
-     * @return String the displayable variant string.
+     * Return this locale's variant localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized variant name.
      * @draft ICU 3.0
      */
     public String getDisplayVariant(ULocale displayLocale){
-	return getDisplayVariant(localeID, displayLocale.localeID);   
+	return getDisplayVariant(localeID, displayLocale);   
     }
     
     /**
-     * Gets the variant name suitable for display for the specified locale.
-     * @return String the displayable variant string.
+     * Return a locale's variant localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose variant will be displayed
+     * @param displayLocaleID the id of the locale in which to display the name.
+     * @return the localized variant name.
      * @draft ICU 3.0
      */
-    public static String getDisplayVariant(String localeID, String displaylocaleID){
-	// TODO: get resource information
-	return null;   
+    public static String getDisplayVariant(String localeID, String displayLocaleID){
+	return getDisplayVariant(localeID, new ULocale(displayLocaleID));
     }
     
     /**
-     * Gets the keyword name suitable for display for the user's default locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for the keyword collation. 
-     * Usage:
-     * <code>
-     *    TODO
-     * </code>
-     * @param keyword           The keyword whose display string needs to be returned.
-     * @return String the display keyword string.  
+     * Return a locale's variant localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
+     * @param localeID the id of the locale whose variant will be displayed.
+     * @param displayLocale the locale in which to display the name.
+     * @return the localized variant name.
+     * @draft ICU 3.0
+     */
+    public static String getDisplayVariant(String localeID, ULocale displayLocale) {
+	return getTableString("Variants", null, new IDParser(localeID).getVariant(), displayLocale);
+    }
+
+    /**
+     * Return a keyword localized for display in the default locale.
+     * @param keyword the keyword to be displayed.
+     * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
      */
-    public static String getDisplayKeyword(String keyword){
+    public static String getDisplayKeyword(String keyword) {
 	return getDisplayKeyword(keyword, getDefault());   
     }
     
     /**
-     * Gets the keyword name suitable for display for the specified locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for the keyword collation. 
-     * Usage:
-     * <code>
-     *    TODO
-     * </code>
-     * @param keyword           The keyword whose display string needs to be returned.
-     * @param displayLocale     Specifies the locale to be used to display the name.  In other words,
-     *                          if the locale's language code is "en", passing Locale::getFrench() for
-     *                          inLocale would result in "Anglais", while passing Locale::getGerman()
-     *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
-     * @return String the display keyword string.  
+     * Return a keyword localized for display in the specified locale.
+     * @param keyword the keyword to be displayed.
+     * @param displayLocaleID the id of the locale in which to display the keyword.
+     * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
      */
-    public static String getDisplayKeyword(String keyword, ULocale displayLocale){
-	return getDisplayKeyword(keyword, displayLocale.localeID);   
+    public static String getDisplayKeyword(String keyword, String displayLocaleID) {
+	return getDisplayKeyword(keyword, new ULocale(displayLocaleID));   
     }
 
     /**
-     * Gets the keyword name suitable for display for the user's default locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for the keyword collation. 
-     * Usage:
-     * <code>
-     *    TODO
-     * </code>
-     * @param keyword           The keyword whose display string needs to be returned.
-     * @return String the display keyword string.  
+     * Return a keyword localized for display in the specified locale.
+     * @param keyword the keyword to be displayed.
+     * @param displayLocale the locale in which to display the keyword.
+     * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
      */
-    public static String getDisplayKeyword(String keyword, String displayLocaleID){
-	// TODO: get resource information
-	return null;   
+    public static String getDisplayKeyword(String keyword, ULocale displayLocale) {
+	return getTableString("Keys", null, keyword.trim().toLowerCase(), displayLocale);
     }
-    
+
     /**
-     * Gets the value of the keyword suitable for display for the user's default locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
-     *
-     * @param keyword           The keyword for whose value should be used.
-     * @return String the displayable keyword value.  
+     * Return a keyword value localized for display in the default locale.
+     * @param keyword the keyword whose value is to be displayed.
+     * @return the localized value name.
      * @draft ICU 3.0
      */
-    public String getDisplayKeywordValue(String keyword){
+    public String getDisplayKeywordValue(String keyword) {
 	return getDisplayKeywordValue(keyword, getDefault());   
     }
     
     /**
-     * Gets the value of the keyword suitable for display for the specified locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
-     *
-     * @param keyword           The keyword for whose value should be used.
-     * @param displayLocale     Specifies the locale to be used to display the name.  In other words,
-     *                          if the locale's language code is "en", passing Locale::getFrench() for
-     *                          inLocale would result in "Anglais", while passing Locale::getGerman()
-     *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
-     * @return String the displayable keyword value.  
+     * Return a keyword value localized for display in the specified locale.
+     * @param keyword the keyword whose value is to be displayed.
+     * @param displayLocale the locale in which to display the value.
+     * @return the localized value name.
      * @draft ICU 3.0
      */
-    public String getDisplayKeywordValue(String keyword, ULocale displayLocale){
-	return getDisplayKeywordValue(localeID, keyword, displayLocale.localeID);   
+    public String getDisplayKeywordValue(String keyword, ULocale displayLocale) {
+	return getDisplayKeywordValue(localeID, keyword, displayLocale);   
     }
 
     /**
-     * Gets the value of the keyword suitable for display for the specified locale.
-     * E.g: for the locale string de_DE@collation=PHONEBOOK, this API gets the display 
-     * string for PHONEBOOK, in the display locale, when "collation" is specified as the keyword.
-     *
-     * @param keyword           The keyword whose value should be used.
-     * @param displayLocale     Specifies the locale to be used to display the name.  In other words,
-     *                          if the locale's language code is "en", passing Locale::getFrench() for
-     *                          inLocale would result in "Anglais", while passing Locale::getGerman()
-     *                          for inLocale would result in "Englisch". NULL may be used to specify the default.
-     * @return String the displayable keyword value.  
+     * Return a keyword value localized for display in the specified locale.
+     * @param localeID the id of the locale whose keyword value is to be displayed.
+     * @param keyword the keyword whose value is to be displayed.
+     * @param displayLocaleID the id of the locale in which to display the value.
+     * @return the localized value name.
      * @draft ICU 3.0
      */
-    public static String getDisplayKeywordValue(String localeID, String keyword, String displaylocaleID){
-	// TODO: get resource information
-	return null;   
+    public String getDisplayKeywordValue(String localeID, String keyword, String displayLocaleID) {
+	return getDisplayKeywordValue(localeID, keyword, new ULocale(displayLocaleID));
+    }
+
+    /**
+     * Return a keyword value localized for display in the specified locale.
+     * @param localeID the id of the locale whose keyword value is to be displayed.
+     * @param keyword the keyword whose value is to be displayed.
+     * @param displayLocaleID the id of the locale in which to display the value.
+     * @return the localized value name.
+     * @draft ICU 3.0
+     */
+    public static String getDisplayKeywordValue(String localeID, String keyword, ULocale displayLocale) {
+	// TODO: funky currency fallback
+
+	keyword = keyword.trim().toLowerCase();
+	String value = new IDParser(localeID).getKeywordValue(keyword);
+	return getTableString("Types", keyword, value, displayLocale);
     }
     
     /**
-     * Gets the full name suitable for display for the user's default locale.
-     * @return  the displayable name for this locale
+     * Return this locale name localized for display in the default locale.
+     * @return the localized locale name.
      * @draft ICU 3.0
      */
     public String getDisplayName() {
@@ -1876,27 +1922,89 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Gets the full name suitable for display for the specified locale.
-     *
-     * @param displayLocale Specifies the locale to be used to display the name.  In other words,
-     *                   if the locale's language code is "en", passing ULocale(Locale::getFrench()) for
-     *                   inLocale would result in "Anglais", while passing ULocale(Locale::getGerman())
-     *                   for displayLocale would result in "Englisch". NULL may be used to specify the default.
-     * @return the displayable name for this locale
+     * Return this locale name localized for display in the provided locale.
+     * @param displayLocale the locale in which to display the locale name.
+     * @return the localized locale name.
      * @draft ICU 3.0
      */
     public String getDisplayName(ULocale displayLocale) {
-	return getDisplayName(localeID, displayLocale.localeID);
+	return getDisplayName(localeID, displayLocale);
     }
     
     /**
-     * Gets the full name suitable for display for the user's default locale.
-     * @return  the displayable name for this locale
+     * Return the locale ID localized for display in the provided locale.
+     * @param localeID the locale whose name is to be displayed.
+     * @param displayLocaleID the id of the locale in which to display the locale name.
+     * @return the localized locale name.
      * @draft ICU 3.0
      */
-    public static String getDisplayName(String localeID, String displaylocaleID) {
-	// TODO: get resource information
-	return null;
+    public static String getDisplayName(String localeID, String displayLocaleID) {
+	return getDisplayName(localeID, new ULocale(displayLocaleID));
+    }
+
+    /**
+     * Return the locale ID localized for display in the provided locale.
+     * @param the locale whose name is to be displayed.
+     * @param displayLocale the locale in which to display the locale name.
+     * @return the localized locale name.
+     * @draft ICU 3.0
+     */
+    public static String getDisplayName(String localeID, ULocale displayLocale) {
+	// the ICU4C code takes care to generate display names when the language is empty,
+	// but i'm not sure when this can happen???
+
+	// lang
+	// lang (script, country, variant, keyword=value, ...)
+	// script, country, variant, keyword=value, ...
+	final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
+
+	IDParser parser = new IDParser(localeID);
+	String[] names = parser.getLanguageScriptCountryVariant();
+	Iterator keys = parser.getKeywordMap().entrySet().iterator();
+
+	StringBuffer buf = new StringBuffer();
+
+	boolean haveLanguage = names[0].length() > 0;
+	boolean openParen = false;
+
+	for (int i = 0; i < names.length; ++i) {
+	    String name = names[i];
+	    if (name.length() > 0) {
+		name = getTableString(tableNames[i], null, name, displayLocale);
+		if (buf.length() > 0) { // need a separator
+		    if (haveLanguage & !openParen) {
+			buf.append(" (");
+			openParen = true;
+		    } else {
+			buf.append(", ");
+		    }
+		}
+		buf.append(name);
+	    }
+	}
+
+	while (keys.hasNext()) {
+	    if (buf.length() > 0) {
+		if (haveLanguage & !openParen) {
+		    buf.append(" (");
+		    openParen = true;
+		} else {
+		    buf.append(", ");
+		}
+	    }
+	    Map.Entry e = (Map.Entry)keys.next();
+	    String key = (String)e.getKey();
+	    String val = (String)e.getValue();
+	    buf.append(getTableString("Keys", null, key, displayLocale));
+	    buf.append("=");
+	    buf.append(getTableString("Types", key, val, displayLocale));
+	}
+
+	if (openParen) {
+	    buf.append(")");
+	}
+	    
+	return buf.toString();
     }
 
     /** 
