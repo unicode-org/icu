@@ -8,11 +8,13 @@ SHELL = @SHELL@
 VERSION = @VERSION@
 
 SECTION = 8
-MAN_FILES = $(TARGET).$(SECTION)
 
+MANX_FILES = $(TARGET).$(SECTION)
 MAN5_FILES = convrtrs.txt.5 cnvalias.dat.5
 
-ALL_MAN_FILES = $(MAN_FILES) $(MAN5_FILES)
+GENERATED_MAN_FILES = $(TARGET).$(SECTION) convrtrs.txt.5
+
+ALL_MAN_FILES = $(MANX_FILES) $(MAN5_FILES)
 
 ICUDATADIR=$(top_builddir)/data/
 CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
@@ -55,7 +57,7 @@ top_builddir = ../..
 subdir = tools/gencnval
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(ALL_MAN_FILES)
+CLEANFILES = *~ $(GENERATED_MAN_FILES)
 
 ## Target information
 TARGET = gencnval
@@ -76,7 +78,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data install-man install-man-files install-man5-files
+check-local build-data install-man install-man5 install-manx
 
 ## Clear suffix list
 .SUFFIXES :
@@ -121,14 +123,13 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 # man page
-install-man: install-man-files install-man5-files
-
-install-man-files: $(MAN_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
-install-man5-files: $(MAN5_FILES)
+install-man: install-man5 install-manx
+install-man5: $(MAN5_FILES)
 	$(mkinstalldirs) $(DESTDIR)$(mandir)/man5
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
+install-manx: $(MANX_FILES)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
