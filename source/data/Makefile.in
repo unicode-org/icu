@@ -97,6 +97,7 @@ cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 clean-local: cleanpackage cleanfiles
+	$(RMV) testdata.dat
 
 
 distclean-local: clean-local
