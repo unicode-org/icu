@@ -495,7 +495,7 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const Resou
         *field = new UnicodeString[length];
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
-                *(*(field)+i) = data.getStringEx(i, status);
+                (*(field)+i)->fastCopyFrom(data.getStringEx(i, status));
             }
         }
         else {
@@ -586,7 +586,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     initField(&fMonths, fMonthsCount, resource.get(fgMonthNamesTag, status), status);
     initField(&fShortMonths, fShortMonthsCount, resource.get(fgMonthAbbreviationsTag, status), status);
     initField(&fAmPms, fAmPmsCount, resource.get(fgAmPmMarkersTag, status), status);
-    fLocalPatternChars = resource.getStringEx(fgLocalPatternCharsTag, status);
+    fLocalPatternChars.fastCopyFrom(resource.getStringEx(fgLocalPatternCharsTag, status));
 
     ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
     fZoneStringsRowCount = zoneArray.getSize();
@@ -608,7 +608,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         }
         zoneRow = zoneArray.get(i, status);
         for(int32_t j = 0; j<fZoneStringsColCount; j++) {
-            fZoneStrings[i][j] = zoneRow.getStringEx(j, status);
+            fZoneStrings[i][j].fastCopyFrom(zoneRow.getStringEx(j, status));
         }
     }
 
@@ -623,7 +623,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     }
     fWeekdays[0] = UnicodeString();
     for(i = 0; i<fWeekdaysCount; i++) {
-        fWeekdays[i+1] = weekdaysData.getStringEx(i, status);
+        fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
 
     ResourceBundle lsweekdaysData = resource.get(fgDayAbbreviationsTag, status);
@@ -636,7 +636,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     }
     fShortWeekdays[0] = UnicodeString();
     for(i = 0; i<fShortWeekdaysCount; i++) {
-        fShortWeekdays[i+1] = lsweekdaysData.getStringEx(i, status);
+        fShortWeekdays[i+1].fastCopyFrom(lsweekdaysData.getStringEx(i, status));
     }
 
     fWeekdaysCount = fShortWeekdaysCount = 8;
@@ -687,14 +687,8 @@ int32_t DateFormatSymbols::getZoneIndex(const UnicodeString& ID) const
  */
 int32_t DateFormatSymbols::_getZoneIndex(const UnicodeString& ID) const
 {
-    // {sfb} kludge to support case-insensitive comparison
-    UnicodeString lcaseID(ID);
-    lcaseID.toLower();
-    
     for(int32_t index = 0; index < fZoneStringsRowCount; index++) {
-        UnicodeString lcase(fZoneStrings[index][0]);
-        lcase.toLower();
-        if (lcaseID == lcase) {
+        if (0 == ID.caseCompare(fZoneStrings[index][0], 0)) {
             return index;
         }
     }
