@@ -170,9 +170,13 @@ DateFormat*
 DateFormat::createDateInstance(DateFormat::EStyle style,
                                const Locale& aLocale)
 {
-    // +4 to set the correct index for getting data out of
-    // LocaleElements.
-    return create(kNone, (EStyle) (style + kDateOffset), aLocale);
+  // +4 to set the correct index for getting data out of
+  // LocaleElements.
+  if(style != kNone)
+  {
+    style += kDateOffset;
+  }
+  return create(kNone, (EStyle) (style), aLocale);
 }
 
 //----------------------------------------------------------------------
@@ -182,7 +186,11 @@ DateFormat::createDateTimeInstance(EStyle dateStyle,
                                    EStyle timeStyle,
                                    const Locale& aLocale)
 {
-    return create(timeStyle, (EStyle) (dateStyle + kDateOffset), aLocale);
+  if(dateStyle != kNone)
+  {
+    dateStyle += kDateOffset;
+  }
+  return create(timeStyle, dateStyle, aLocale);
 }
 
 //----------------------------------------------------------------------
