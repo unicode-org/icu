@@ -498,7 +498,7 @@ ResourceBundleTest::TestGetSize(void)
     { "emptyint", 1}, 
     { "emptybin", 1},
     { "testinclude", 1},
-    { "CollationElements", 3}, /* not 2 - there is hidden %%CollationBin */
+    { "collations", 1}, /* not 2 - there is hidden %%CollationBin */
   };
 
   UErrorCode status = U_ZERO_ERROR;
@@ -585,7 +585,7 @@ ResourceBundleTest::TestGetLocaleByType(void)
     }
 
     locale = res.getLocale(ULOC_REQUESTED_LOCALE, status);
-    if(strcmp(locale.getName(), test[i].requestedLocale) != 0) {
+    if(locale != Locale::getDefault()) {
       err("Expected requested locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
     }
     locale = res.getLocale(ULOC_VALID_LOCALE, status);
