@@ -94,6 +94,8 @@ main(int argc,
   }
 
   /* generate the binary collation files */
+  coll = ucol_open("default", &status);
+  ucol_close(coll);
   for(i = 0; i < uloc_countAvailable(); ++i) {
     status = U_ZERO_ERROR;
     loc = uloc_getAvailable(i);
