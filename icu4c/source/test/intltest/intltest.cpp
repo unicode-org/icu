@@ -974,19 +974,19 @@ main(int argc, char* argv[])
     argc = ccommand( &argv );
 #endif
 
-    /* try opening the data from dll instead of the dat file */
-    cnv = ucnv_open(TRY_CNV_1, &errorCode);
-    if(cnv != 0) {
-        /* ok */
-        ucnv_close(cnv);
-    } else {
+    /* Initialize ICU */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
         fprintf(stderr,
-                "#### WARNING! The converter for " TRY_CNV_1 " cannot be loaded from data dll/so."
-                "Proceeding to load data from dat file.\n");
+                "#### WARNING! u_init() failed."
+                "Trying again with a synthesized ICU_DATA setting.\n");
+        IntlTest::setICU_DATA();
         errorCode = U_ZERO_ERROR;
-
     }
+
     // If user didn't set ICU_DATA, attempt to generate one.
+    // Do this whether or not the u_init(), above, succeeded because we need the
+    //   data path to find some of the test data.
     IntlTest::setICU_DATA();
 
     for (int i = 1; i < argc; ++i) {

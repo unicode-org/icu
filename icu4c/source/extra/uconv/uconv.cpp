@@ -20,6 +20,7 @@
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
+#include <unicode/uclean.h>
 
 #include <stdio.h>
 #include <errno.h>
@@ -796,6 +797,15 @@ int main(int argc, char **argv)
     int printTranslits = 0;
 
     int verbose = 0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
 
     // Get and prettify pname.
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);

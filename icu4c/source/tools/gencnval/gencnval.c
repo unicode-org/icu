@@ -29,6 +29,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include "unicode/uclean.h"
 #include "unewdata.h"
 #include "uoptions.h"
 
@@ -209,6 +210,15 @@ main(int argc, char* argv[]) {
     FileStream *in;
     UNewDataMemory *out;
     UErrorCode errorCode=U_ZERO_ERROR;
+
+    /* Initialize ICU */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
+            argv[0], u_errorName(errorCode));
+        exit(1);
+    }
+    errorCode = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 

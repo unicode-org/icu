@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/uclean.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
 #include "cmemory.h"
@@ -55,6 +56,16 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    /* Initialize ICU */
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
+            argv[0], u_errorName(errorCode));
+        exit(1);
+    }
+    errorCode = U_ZERO_ERROR;
+
     /* preset then read command line options */
     options[2].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
