@@ -2328,7 +2328,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
 	df->adoptNumberFormat(nf);
 
 	// set parsing to lenient & parse
-	df->setLenient(true);
+	df->setLenient(TRUE);
 	UDate ulocdat = df->parse(udt, status);
 	
 	// format back to a string
