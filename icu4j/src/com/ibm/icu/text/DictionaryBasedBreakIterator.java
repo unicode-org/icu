@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2000/05/12 01:30:35 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/20 17:02:08 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -550,7 +550,9 @@ switch (categoryFlags.length % 4) {
             categoryFlags = new boolean[categories.size()];
             for (int i = 0; i < categories.size(); i++) {
                 UnicodeSet cs = (UnicodeSet)categories.elementAt(i);
-                if (dictionaryChars.containsAll(cs)) {
+                
+                cs.retainAll(dictionaryChars);
+                if (!cs.isEmpty()) {
                     categoryFlags[i] = true;
                 }
             }
