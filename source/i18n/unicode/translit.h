@@ -1209,24 +1209,33 @@ protected:
 public:
 
     /**
+     * Return the class ID for this class.  This is useful only for
+     * comparing to a return value from getDynamicClassID().  
+     * Note that Transliterator is an abstract base class, and therefor
+     * no fully constructed object will  have a dynamic
+     * UCLassID that equals the UClassID returned from
+     * TRansliterator::getStaticClassID().
+     * @return       The class ID for class Transliterator.
+     * @stable ICU 2.0
+     */
+    static UClassID getStaticClassID(void);
+
+    /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
      * is to implement a simple version of RTTI, since not all C++
      * compilers support genuine RTTI.  Polymorphic operator==() and
      * clone() methods call this method.
      *
-     * <p>Concrete subclasses of Transliterator that wish clients to
-     * be able to identify them should implement getDynamicClassID()
-     * and also a static method and data member:
-     *
-     * Subclasses that do not implement this method will have a
-     * dynamic class ID of Transliterator::getStatisClassID().
+     * <p>Concrete subclasses of Transliterator must use the
+     *    UOBJECT_DEFINE_RTTI_IMPLEMENTATION macro from
+     *    uobject.h to provide the RTTI functions.
      *
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const;
 
 private:
     static UBool initializeRegistry(void);
