@@ -1949,6 +1949,8 @@ void TransliteratorTest::TestAliasInverseID() {
         errln((UnicodeString)"FAIL: Inverse of " + ID + " is " + got +
               ", expected " + exp);
     }
+    delete t;
+    delete u;
 }
 
 /**
@@ -1975,6 +1977,8 @@ void TransliteratorTest::TestCompoundInverseID() {
         errln((UnicodeString)"FAIL: Inverse of " + ID + " is " + got +
               ", expected " + exp);
     }
+    delete t;
+    delete u;
 }
 
 /**
