@@ -173,25 +173,25 @@ void AstroTest::TestCoverage(void) {
   };
   
   for (uint32_t i = 0; i < sizeof(astronomers)/sizeof(astronomers[0]); ++i) {
-    CalendarAstronomer *astro = astronomers[i];
+    CalendarAstronomer *anAstro = astronomers[i];
 
     //logln("astro: " + astro);
-    logln((UnicodeString)"   date: " + astro->getTime());
-    logln((UnicodeString)"   cent: " + astro->getJulianCentury());
-    logln((UnicodeString)"   gw sidereal: " + astro->getGreenwichSidereal());
-    logln((UnicodeString)"   loc sidereal: " + astro->getLocalSidereal());
-    logln((UnicodeString)"   equ ecl: " + (astro->eclipticToEquatorial(eq,ecl)).toString());
-    logln((UnicodeString)"   equ long: " + (astro->eclipticToEquatorial(eq, eclLong)).toString());
-    logln((UnicodeString)"   horiz: " + (astro->eclipticToHorizon(hor, eclLong)).toString());
-    logln((UnicodeString)"   sunrise: " + (astro->getSunRiseSet(TRUE)));
-    logln((UnicodeString)"   sunset: " + (astro->getSunRiseSet(FALSE)));
-    logln((UnicodeString)"   moon phase: " + astro->getMoonPhase());
-    logln((UnicodeString)"   moonrise: " + (astro->getMoonRiseSet(TRUE)));
-    logln((UnicodeString)"   moonset: " + (astro->getMoonRiseSet(FALSE)));
-    logln((UnicodeString)"   prev summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), FALSE)));
-    logln((UnicodeString)"   next summer solstice: " + (astro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), TRUE)));
-    logln((UnicodeString)"   prev full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON(), FALSE)));
-    logln((UnicodeString)"   next full moon: " + (astro->getMoonTime(CalendarAstronomer::FULL_MOON(), TRUE)));
+    logln((UnicodeString)"   date: " + anAstro->getTime());
+    logln((UnicodeString)"   cent: " + anAstro->getJulianCentury());
+    logln((UnicodeString)"   gw sidereal: " + anAstro->getGreenwichSidereal());
+    logln((UnicodeString)"   loc sidereal: " + anAstro->getLocalSidereal());
+    logln((UnicodeString)"   equ ecl: " + (anAstro->eclipticToEquatorial(eq,ecl)).toString());
+    logln((UnicodeString)"   equ long: " + (anAstro->eclipticToEquatorial(eq, eclLong)).toString());
+    logln((UnicodeString)"   horiz: " + (anAstro->eclipticToHorizon(hor, eclLong)).toString());
+    logln((UnicodeString)"   sunrise: " + (anAstro->getSunRiseSet(TRUE)));
+    logln((UnicodeString)"   sunset: " + (anAstro->getSunRiseSet(FALSE)));
+    logln((UnicodeString)"   moon phase: " + anAstro->getMoonPhase());
+    logln((UnicodeString)"   moonrise: " + (anAstro->getMoonRiseSet(TRUE)));
+    logln((UnicodeString)"   moonset: " + (anAstro->getMoonRiseSet(FALSE)));
+    logln((UnicodeString)"   prev summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), FALSE)));
+    logln((UnicodeString)"   next summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), TRUE)));
+    logln((UnicodeString)"   prev full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), FALSE)));
+    logln((UnicodeString)"   next full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), TRUE)));
   }
 
   delete myastro2;
