@@ -24,7 +24,7 @@ import com.ibm.icu.impl.CharTrie;
 * @internal
 * 
 */
-class RBBIDataWrapper {
+final class RBBIDataWrapper {
     //
     // These fields are the ready-to-use compiled rule data, as
     //   read from the file.
@@ -74,7 +74,7 @@ class RBBIDataWrapper {
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
      */
-    static class RBBIDataHeader {
+    final static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0 
         int         fVersion;       //  == 1 
         int         fLength;        //  Total length in bytes of this RBBI Data, 

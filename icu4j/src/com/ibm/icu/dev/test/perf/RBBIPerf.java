@@ -64,9 +64,9 @@ public class RBBIPerf extends PerfTest {
         return new PerfTest.Function() {
             
         	public void call() {
-        		bi.first();
-        		int n=0;
-        		for (n=bi.first(); n != BreakIterator.DONE; n=bi.next()) {
+                int n;
+        		n = bi.first();
+        		for (; n != BreakIterator.DONE; n=bi.next()) {
         		}   
         	}
         	

@@ -234,7 +234,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @stable ICU 2.0
      */
 	public int next() {
-		return  handleNext();
+        return handleNext(fRData.fFTable);
 	}
     
     
@@ -634,21 +634,78 @@ public int getRuleStatusVec(int[] fillInArray) {
         this.first();
 	}
     
+    // 23 bit Char value returned from when an iterator has run out of range.
+    //     Positive value so fast case (not end, not surrogate) can be checked
+    //     with a single test.
+    private static int CI_DONE32 = 0x7fffffff;
     
+    /**
+     * Move the iterator forward to the next code point, and return that code point,
+     *   leaving the iterator positioned at char returned.
+     *   For Supplementary chars, the iterator is left positioned at the lead surrogate.
+     * @param ci  The character iterator
+     * @return    The next code point.
+     */
     private static int CINext32(CharacterIterator ci) {
-        int retVal;
-        int curChar = CICurrent32(ci);
-        ci.next();
-        if (curChar >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-            ci.next();   
+        // If the current position is at a surrogate pair, move to the trail surrogate
+        //   which leaves it in positon for underlying iterator's next() to work.
+        int c= ci.current();
+        if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE && c<=UTF16.LEAD_SURROGATE_MAX_VALUE) {
+            c = ci.next();   
+            if (c<UTF16.TRAIL_SURROGATE_MIN_VALUE || c>UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+               c = ci.previous();   
+            }
         }
-        retVal = CICurrent32(ci);
-        return retVal;
+
+        // For BMP chars, this next() is the real deal.
+        c = ci.next();
+        
+        // If we might have a lead surrogate, we need to peak ahead to get the trail 
+        //  even though we don't want to really be positioned there.
+        if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
+            c = CINextTrail32(ci, c);   
+        }
+        
+        if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c != CI_DONE32) {
+            // We got a supplementary char.  Back the iterator up to the postion
+            // of the lead surrogate.
+            ci.previous();   
+        }
+        return c;
    }
+
     
-    
+    // Out-of-line portion of the in-line Next32 code.
+    // The call site does an initial ci.next() and calls this function
+    //    if the 16 bit value it gets is >= LEAD_SURROGATE_MIN_VALUE.
+    // NOTE:  we leave the underlying char iterator positioned in the
+    //        middle of a surroage pair.  ci.next() will work correctly
+    //        from there, but the ci.getIndex() will be wrong, and needs
+    //        adjustment.
+    private static int CINextTrail32(CharacterIterator ci, int lead) {
+    	int retVal = lead;
+    	if (lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+    		char  cTrail = ci.next();
+    		if (UTF16.isTrailSurrogate(cTrail)) {
+    			retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+				            (cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+						    UTF16.SUPPLEMENTARY_MIN_VALUE;
+    		} else {
+    			ci.previous();
+            }
+    	} else {
+    		if (lead == CharacterIterator.DONE && ci.getIndex() >= ci.getEndIndex()) {
+    			retVal = CI_DONE32;
+    		}
+    	}
+    	return retVal;
+    }
+       
     private static int CIPrevious32(CharacterIterator ci) {
         int retVal = 0;
+        if (ci.getIndex() == 0) {
+            return CI_DONE32;   
+        }
         char cTrail = ci.previous();
         retVal = (int)cTrail;
         if (UTF16.isTrailSurrogate(cTrail)) {
@@ -667,6 +724,9 @@ public int getRuleStatusVec(int[] fillInArray) {
     private static int CICurrent32(CharacterIterator ci) {
         char  lead   = ci.current();
         int   retVal = lead;
+        if (retVal < UTF16.LEAD_SURROGATE_MIN_VALUE) {
+            return retVal;   
+        }
         if (UTF16.isLeadSurrogate(lead)) {
             int  trail = (int)ci.next();
             ci.previous();
@@ -675,18 +735,14 @@ public int getRuleStatusVec(int[] fillInArray) {
                          (trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
 						 UTF16.SUPPLEMENTARY_MIN_VALUE;
             }
+         } else {
+            if (lead == CharacterIterator.DONE) {
+                if (ci.getIndex() >= ci.getEndIndex())   {
+                    retVal = CI_DONE32;   
+                }
+            }
          }
         return retVal;
-    }
-    
-    private static boolean CIHasNext(CharacterIterator ci) {
-        if (ci == null) {
-            return false;
-        }
-        if (ci.getIndex() >= ci.getEndIndex()) {
-            return false;
-        }
-        return true;
     }
     
     private static boolean CIHasPrevious(CharacterIterator ci) {
@@ -706,15 +762,15 @@ public int getRuleStatusVec(int[] fillInArray) {
 
     
     private int handleNext(short stateTable[]) {
-        if (fTrace) {
-            System.out.println("Handle Next   pos      char  state category");
-        }
+        //if (fTrace) {
+        //    System.out.println("Handle Next   pos      char  state category");
+        //}
 
         // No matter what, handleNext alway correctly sets the break tag value.
         fLastStatusIndexValid = true;
 
         // if we're already at the end of the text, return DONE.
-        if (CIHasNext(fText) == false) {
+        if (fText == null) {
             fLastRuleStatusIndex = 0;
             return BreakIterator.DONE;
         }
@@ -726,7 +782,14 @@ public int getRuleStatusVec(int[] fillInArray) {
         // Initialize the state machine.  Begin in state 1
         int               state           = START_STATE;
         short             category;
-        int               c               = CICurrent32(fText);
+        int               c               = fText.current();
+        if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
+        	c = CINextTrail32(fText, c);
+        	if (c == CI_DONE32) {
+        		fLastRuleStatusIndex = 0;
+        		return BreakIterator.DONE;
+        	}
+        }
         int               row             = fRData.getRowIndex(state); 
         int               lookaheadStatus = 0;
         int               lookaheadTagIdx = 0;
@@ -736,19 +799,16 @@ public int getRuleStatusVec(int[] fillInArray) {
         // Character Category fetch for starting character.
         //    See comments on character category code within loop, below.
         category = (short)fRData.fTrie.getCodePointValue(c);
-        if ((category & 0x4000) != 0)  {
+        //if ((category & 0x4000) != 0)  {
               // fDictionaryCharCount++;
-              category &= ~0x4000;
-            }
+        //      category &= ~0x4000;
+        //    }
 
         // loop until we reach the end of the text or transition to state 0
         while (state != STOP_STATE) {
-            if (c == CharacterIterator.DONE && CIHasNext(fText)== false) {
+            if (c == CI_DONE32) {
                 // Reached end of input string.
-                //    Note: CharacterIterator::DONE is 0xffff, which is also a legal
-                //          character value.  Check for DONE first, because it's quicker,
-                //          but also need to check fText->hasNext() to be certain.
-
+ 
                 if (lookaheadResult > result) {
                     // We ran off the end of the string with a pending look-ahead match.
                     // Treat this as if the look-ahead condition had been met, and return
@@ -761,7 +821,6 @@ public int getRuleStatusVec(int[] fillInArray) {
                     // move forward one
                     fText.setIndex(initialPosition);
                     CINext32(fText);
-                    // fText.getIndex();   // Why was this here?
                 }
                 break;
             }
@@ -774,27 +833,37 @@ public int getRuleStatusVec(int[] fillInArray) {
             //  Note:  not using the old style dictionary stuff in this Java engine.
             //         But the bit can be set by the C++ rule compiler, and
             //         we need to clear it out here to be safe.
-            category &= ~0x4000;
- 
-            if (fTrace) {
-                System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
-                System.out.print(RBBIDataWrapper.intToHexString(c, 10));
-                System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
-            }
+            //category &= ~0x4000;  // TODO:  commented out for perf.  
+
+            //if (fTrace) {
+            //    System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
+            //    System.out.print(RBBIDataWrapper.intToHexString(c, 10));
+            //    System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
+            //}
 
             // look up a state transition in the state table
             //     state = row->fNextState[category];
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row   = fRData.getRowIndex(state);
+            // row   = fRData.getRowIndex(state);   // #$%^&* JITs don't inline!!!!
+            row   = RBBIDataWrapper.ROW_DATA + state * (fRData.fHeader.fCatCount + 4);
 
             // Get the next character.  Doing it here positions the iterator
             //    to the correct position for recording matches in the code that
             //    follows.
-            c = CINext32(fText);
+            c = (int)fText.next(); 
+            if (c >= 0xd800) {
+                c = CINextTrail32(fText, c);
+            }
 
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
                 // Match found, common case, could have lookahead so we move on to check it
                 result = fText.getIndex();
+                if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c != CI_DONE32) {
+                    // The iterator has been left in the middle of a surrogate pair.
+                    // We want the start of it.
+                    result--;
+                }
+
                 //  Remember the break status (tag) values.
                 fLastRuleStatusIndex = stateTable[row + RBBIDataWrapper.TAGIDX];
             }
@@ -817,8 +886,12 @@ public int getRuleStatusVec(int[] fillInArray) {
                     continue;
                 }
 
-                int  r = fText.getIndex();
-                lookaheadResult = r;
+                lookaheadResult = fText.getIndex();
+                if (c>=UTF16.SUPPLEMENTARY_MIN_VALUE && c!=CI_DONE32) {
+                    // The iterator has been left in the middle of a surrogate pair.
+                    // We want the beginning  of it.
+                    lookaheadResult--;
+                }
                 lookaheadStatus = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
                 lookaheadTagIdx = stateTable[row + RBBIDataWrapper.TAGIDX];
                 continue;
@@ -843,9 +916,9 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         // Leave the iterator at our result position.
         fText.setIndex(result);
-        if (fTrace) {
-            System.out.println("result = " + result);
-        }
+        // if (fTrace) {
+        //     System.out.println("result = " + result);
+        // }
         return result;
     }
 
@@ -882,7 +955,7 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         // loop until we reach the beginning of the text or transition to state 0
         for (;;) {
-            if (c == CharacterIterator.DONE && CIHasPrevious(fText)==false) {
+            if (c == CI_DONE32) {
                 break;
             }
 
@@ -969,7 +1042,7 @@ public int getRuleStatusVec(int[] fillInArray) {
         // Note:  the result position isn't what is returned to the user by previous(),
         //        but where the implementation of previous() turns around and
         //        starts iterating forward again.
-        if (c == CharacterIterator.DONE && CIHasPrevious(fText)==false) {
+        if (c == CI_DONE32) {
             result = fText.getBeginIndex();
         }
         fText.setIndex(result);
