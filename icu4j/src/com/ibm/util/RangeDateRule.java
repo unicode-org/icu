@@ -3,6 +3,7 @@
 package com.ibm.util;
 
 import java.util.Date;
+import java.util.Vector;
 
 public class RangeDateRule implements DateRule
 {
