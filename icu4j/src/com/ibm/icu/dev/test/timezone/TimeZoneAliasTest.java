@@ -5,16 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java,v $ 
- * $Date: 2004/02/07 00:59:26 $ 
- * $Revision: 1.3 $
+ * $Date: 2004/02/25 00:04:07 $ 
+ * $Revision: 1.4 $
  *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.timezone;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,6 @@ import java.text.NumberFormat;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.VersionInfo;
 
 
 /**
@@ -157,11 +157,11 @@ public class TimeZoneAliasTest extends TestFmwk {
         static private final long DAY = 24*HOUR;
         static private final long GROSS_PERIOD = 30*DAY;
         static private final long EPSILON = HOUR/4;
-        static private final int currentYear = new Date().getYear() + 1900;
-        static private final long endDate = new Date((currentYear+1)-1900,0,1).getTime();
-        static private final long endDate2 = new Date((currentYear+1)-1900,6,1).getTime();
-        static private final long recentLimit = new Date((currentYear-1)-1900,6,1).getTime();
-        static private final long startDate = new Date(1905-1900,0,1).getTime();
+        static private final int currentYear = new GregorianCalendar().get(Calendar.YEAR);
+        static private final long endDate = getDate((currentYear+1),0,1).getTime();
+        static private final long endDate2 = getDate((currentYear+1),6,1).getTime();
+        static private final long recentLimit = getDate((currentYear-1),6,1).getTime();
+        static private final long startDate = getDate(1905,0,1).getTime();
         
         static private final Map idToZone = new HashMap();
         static private final Set zoneSet = new TreeSet();
