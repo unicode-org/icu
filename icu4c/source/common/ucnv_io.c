@@ -260,6 +260,38 @@ ucnv_io_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
 }
 
 U_CFUNC uint16_t
+ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode)) {
+        return aliasTable[1+2*(*aliasTable)];
+    }
+    return 0;
+}
+
+U_CFUNC const char *
+ucnv_io_getAvailableConverter(uint16_t index, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode)) {
+        const uint16_t *p=aliasTable+1+2*(*aliasTable);
+        if(index<*p) {
+            return (const char *)aliasTable+p[1+2*index];
+        }
+    }
+    return NULL;
+}
+
+U_CFUNC void
+ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode)) {
+        const uint16_t *p=aliasTable+1+2*(*aliasTable);
+        uint16_t count=*p++;
+        while(count>0) {
+            *aliases++=(const char *)aliasTable+*p;
+            p+=2;
+            --count;
+        }
+    }
+}
+
+U_CFUNC uint16_t
 ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
         return *aliasTable;
@@ -270,7 +302,7 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
 U_CFUNC const char *
 ucnv_io_getAvailableAlias(uint16_t index, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && index<*aliasTable) {
-        return (const char *)aliasTable+*(aliasTable+1+2*index);
+        return (const char *)aliasTable+*(aliasTable+1+index);
     }
     return NULL;
 }
@@ -282,7 +314,7 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
         uint16_t count=*p++;
         while(count>0) {
             *aliases++=(const char *)aliasTable+*p;
-            p+=2;
+            ++p;
             --count;
         }
     }
