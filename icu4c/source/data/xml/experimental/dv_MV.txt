@@ -5,10 +5,9 @@
 // *
 // ***************************************************************************
 
-div_MV{
+dv_MV{
     Version { "x0.2" }
     LocaleID:int { 0x0465 }
-//    ShortCountry { MDV }
     CurrencyElements{
         "\u0783.",
         "MVR",
