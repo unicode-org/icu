@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.2 $ $Date: 1999/12/21 23:58:44 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.3 $ $Date: 1999/12/22 01:05:54 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.3  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
  * Revision 1.2  1999/12/21 23:58:44  Alan
  * Detect a>x masking a>y
  *
@@ -88,7 +91,8 @@ class TransliterationRule {
     private int cursorPos;
 
     /**
-     * A string used to implement masks().
+     * A string used to implement masks().  It is the concatenated anteContext,
+     * key, and postContext.  See freeze() method.
      */
     private String maskKey;
 
@@ -134,7 +138,7 @@ class TransliterationRule {
          * This is what the freeze() method does.  After freeze() has been
          * called, the method masks() must NOT be called.
          */
-        maskKey = key;
+        maskKey = anteContext != null ? (anteContext + key) : key;
         if (postContext != null) {
             maskKey += postContext;
         }
@@ -190,17 +194,21 @@ class TransliterationRule {
      * <p>This method must not be called after freeze() is called.
      */
     public boolean masks(TransliterationRule r2) {
-        /* There are three cases of masking.  In each instance, rule1
-         * masks rule2.
+        /* Rule r1 masks rule r2 if the string formed of the
+         * antecontext, key, and postcontext overlaps in the following
+         * way:
          *
-         * 1. KEY mask: len(key1) <= len(key2), key2 starts with key1.
-         * 1<2 detects a>b masking ab>c; 1=2 detects a>b masking a>c.
-         *
-         * 2. PREFIX mask: key1 == key2, len(prefix1) < len(prefix2),
-         * prefix2 ends with prefix1, suffix2 starts with suffix1.
-         *
-         * 3. SUFFIX mask: key1 == key2, len(suffix1) < len(suffix2),
-         * prefix2 ends with prefix1, suffix2 starts with suffix1.
+         * r1:      aakkkpppp
+         * r2:     aaakkkkkpppp
+         *            ^
+         * 
+         * The strings must be aligned at the first character of the
+         * key.  The length of r1 to the left of the alignment point
+         * must be <= the length of r2 to the left; ditto for the
+         * right.  The characters of r1 must equal (or be a superset
+         * of) the corresponding characters of r2.  The superset
+         * operation should be performed to check for UnicodeSet
+         * masking.
          */
 
         /* LIMITATION of the current mask algorithm: Some rule
@@ -210,13 +218,13 @@ class TransliterationRule {
          * currently do not have.  This can be added later.
          */
 
-        // maskKey = key + postContext
-        return ((maskKey.length() <= r2.maskKey.length() &&
-                 r2.maskKey.startsWith(maskKey)) ||
-                (r2.anteContext != null && maskKey.equals(r2.maskKey) &&
-                 ((anteContext == null) ||
-                  (anteContext.length() < r2.anteContext.length() &&
-                   r2.anteContext.endsWith(anteContext)))));
+        // maskKey = anteContext + key + postContext
+        int left = getAnteContextLength();
+        int left2 = r2.getAnteContextLength();
+        int right = maskKey.length() - left;
+        int right2 = r2.maskKey.length() - left2;
+        return left <= left2 && right <= right2 &&
+            r2.maskKey.substring(left2 - left).startsWith(maskKey);
     }
 
     /**
@@ -232,7 +240,7 @@ class TransliterationRule {
      * @return string representation of this object
      */
     public String toString() {
-        return getClass().getName() + '['
+        return getClass().getName() + '{'
             + escape((anteContext != null ? ("[" + anteContext + ']') : "")
             + key
             + (postContext != null ? ("[" + postContext + ']') : "")
@@ -240,7 +248,7 @@ class TransliterationRule {
             + (cursorPos < output.length()
                ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
                : output))
-            + ']';
+            + '}';
     }
 
     /**

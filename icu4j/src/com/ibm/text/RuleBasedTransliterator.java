@@ -181,7 +181,12 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.3 $ $Date: 1999/12/20 20:25:00 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:05:54 $
+ *
+ * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.4  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
  */
 public class RuleBasedTransliterator extends Transliterator {
     /**
@@ -199,6 +204,8 @@ public class RuleBasedTransliterator extends Transliterator {
     private Data data;
 
     static final boolean DEBUG = false;
+
+    static final boolean CHECK_MASKING = false;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -593,6 +600,7 @@ public class RuleBasedTransliterator extends Transliterator {
         private void parseRules() {
             determineVariableRange();
 
+            StringBuffer errors = null;
             int n = rules.length();
             int i = 0;
             while (i<n) {
@@ -608,9 +616,43 @@ public class RuleBasedTransliterator extends Transliterator {
                 }
                 // Skip over empty lines and line starting with #
                 if (limit > i && rules.charAt(i) != RULE_COMMENT_CHAR) {
-                    applyRule(i, limit);
+                    try {
+                        applyRule(i, limit);
+                    } catch (IllegalArgumentException e) {
+                        if (errors == null) {
+                            errors = new StringBuffer(e.getMessage());
+                        } else {
+                            errors.append("\n").append(e.getMessage());
+                        }
+                    }
                 }
                 i = limit + 1;
+            }
+
+            // Check for masking, O(n^2).
+            // Build time, no checking  : 3400 ms
+            // Build time, with checking: 8200 ms
+            if (CHECK_MASKING) {
+                n = data.ruleSet.size();
+                for (i=0; i<n-1; ++i) {
+                    TransliterationRule r1 = data.ruleSet.elementAt(i);
+                    // Earlier rules must not mask later ones
+                    for (int j=i+1; j<n; ++j) {
+                        TransliterationRule r2 = data.ruleSet.elementAt(j);
+                        if (r1.masks(r2)) {
+                            if (errors == null) {
+                                errors = new StringBuffer();
+                            } else {
+                                errors.append("\n");
+                            }
+                            errors.append("Rule " + r1 + " masks " + r2);
+                        }
+                    }
+                }
+            }
+
+            if (errors != null) {
+                throw new IllegalArgumentException(errors.toString());
             }
 
             data.ruleSet.freeze();
