@@ -152,274 +152,1158 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\anytrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\bocsu.c
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\calendar.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\caniter.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\choicfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\coleitr.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\coll.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\cpdtrans.cpp
-# End Source File
-# Begin Source File
 
-SOURCE=.\ucurr.cpp
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\datefmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dcfmtsym.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\decimfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\dtfmtsym.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\esctrn.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\fmtable.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\format.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\funcrepl.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\gregocal.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\hextouni.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\msgfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\name2uni.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nfrs.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nfrule.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nfsubs.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nortrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\nultrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\numfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\quant.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbnf.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_data.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_pars.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_rule.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\rbt_set.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\remtrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\search.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\simpletz.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\smpdtfmt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\sortkey.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\strmatch.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\strrepl.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\stsearch.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tblcoll.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\timezone.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\titletrn.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tolowtrn.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\toupptrn.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\translit.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\transreg.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\tridpars.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucal.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucln_in.c
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol_bld.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol_cnt.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol_elm.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol_tok.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucol_wgt.c
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucoleitr.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucurr.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\udat.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\umsg.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unesctrn.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\uni2name.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unifltlg.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unitohex.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\unum.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\usearch.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\utrans.cpp
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# ADD CPP /G6
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -669,53 +1553,6 @@ InputPath=.\unicode\cpdtrans.h
 InputPath=.\unicode\cpdtrans.h
 
 "..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ucurr.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -2003,6 +2840,53 @@ InputPath=.\unicode\ucoleitr.h
 InputPath=.\unicode\ucoleitr.h
 
 "..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucurr.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build

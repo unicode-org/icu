@@ -81,14 +81,14 @@ static UChar* toUChar(const char *src, void **freeHook) {
                   &status);
 
     destSize = (numUChars+1) * sizeof(UChar) + sizeof(struct StringStruct);
-    dest = (StringStruct *)uprv_malloc(destSize);
+    dest = (StringStruct *)malloc(destSize);
     if (dest != NULL) {
         if (status == U_BUFFER_OVERFLOW_ERROR || status == U_STRING_NOT_TERMINATED_WARNING) {
             ucnv_toUChars(cnv, dest->str, numUChars+1, src, -1, &status);
         } else if (status == U_ZERO_ERROR) {
             u_strcpy(dest->str, stackBuf);
         } else {
-            uprv_free(dest);
+            free(dest);
             dest = NULL;
         }
     }
@@ -108,7 +108,7 @@ static void freeToUCharStrings(void **hook) {
     StringStruct  *s = *(StringStruct **)hook;
     while (s != NULL) {
         StringStruct *next = s->link;
-        uprv_free(s);
+        free(s);
         s = next;
     }
 }

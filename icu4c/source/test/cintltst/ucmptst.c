@@ -165,9 +165,9 @@ openAdopt, initAdopt, openAlias, initAlias
       int32_t count = ucmp8_getCount(&ucmp8Array1);
       const uint16_t *tIndex = ucmp8_getIndex(&ucmp8Array1);
       const int8_t *tValues = ucmp8_getArray(&ucmp8Array1);
-      uint16_t *index = (uint16_t *)malloc(UCMP8_kIndexCount*sizeof(uint16_t));
+      uint16_t *index = (uint16_t *)uprv_malloc(UCMP8_kIndexCount*sizeof(uint16_t));
 
-      values = (int8_t *)malloc(count);
+      values = (int8_t *)uprv_malloc(count);
 
       memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
       memcpy(values, tValues, count);
@@ -180,17 +180,17 @@ openAdopt, initAdopt, openAlias, initAlias
       query(pAliaser);
       ucmp8_close(pAliaser);
 
-      ucmp8_initAdopt(&adopter, index, values, count);
+      ucmp8_initAdopt(&adopter, index, values, count);    /* TODO:  BAD API.  Adopted memory MUST be allocated with uprv_malloc  */
       query(&adopter);
       ucmp8_close(&adopter);
 
-      index = (uint16_t *)malloc(UCMP8_kIndexCount*sizeof(uint16_t));
-      values = (int8_t *)malloc(count);
+      index = (uint16_t *)uprv_malloc(UCMP8_kIndexCount*sizeof(uint16_t));
+      values = (int8_t *)uprv_malloc(count);
 
       memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
       memcpy(values, tValues, count);
 
-      pAdopter = ucmp8_openAdopt(index, values, count);
+      pAdopter = ucmp8_openAdopt(index, values, count);   /*  TODO:  BAD API  */
       query(pAdopter);
       ucmp8_close(pAdopter);
 

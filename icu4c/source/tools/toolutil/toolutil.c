@@ -32,7 +32,7 @@
 #include "cstring.h"
 #include "toolutil.h"
 
-U_CFUNC const char *
+U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
 #ifdef WIN32
     /* anticipate problems with "short" pathnames */
@@ -55,7 +55,7 @@ getLongPathname(const char *pathname) {
     return pathname;
 }
 
-U_CFUNC const char *
+U_CAPI const char * U_EXPORT2
 findBasename(const char *filename) {
     const char *basename=uprv_strrchr(filename, U_FILE_SEP_CHAR);
     if(basename!=NULL) {

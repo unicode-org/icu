@@ -97,8 +97,7 @@ int main(int argc, const char* const argv[])
         }
 
         /* If no ICU_DATA environment was set, try to fake up one. */
-        
-        fprintf(stdout, "u_getDataDirectory() = %s\n", u_getDataDirectory());
+        /* fprintf(stderr, "u_getDataDirectory() = %s\n", u_getDataDirectory()); */
 
 #ifdef XP_MAC_CONSOLE
         argc = ccommand((char***)&argv);
@@ -195,7 +194,7 @@ static void ctest_appendToDataDirectory(const char *toAppend)
     } else {
         oldLen = strlen(oldPath);
         newLen = strlen(toAppend)+1+oldLen;
-        
+
         if(newLen > 1022)
         {
             newPath = (char *)ctst_malloc(newLen);
@@ -204,16 +203,16 @@ static void ctest_appendToDataDirectory(const char *toAppend)
         strcpy(newPath, oldPath);
         strcpy(newPath+oldLen, U_PATH_SEP_STRING);
         strcpy(newPath+oldLen+1, toAppend);
-        
+
         u_setDataDirectory(newPath);
-        
+
         if(newPath != newBuf)
         {
             free(newPath);
         }
     }
 }
-    
+
 
 void
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
@@ -334,7 +333,7 @@ const char *ctest_dataOutDir()
  *                       tests dynamically load some data.
  */
 void ctest_setICU_DATA() {
-    
+
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
@@ -411,9 +410,9 @@ const char* loadTestData(UErrorCode* err){
         strcat(tdpath, tdrelativepath);
         strcat(tdpath,"testdata");
 
-    
+
         test=ures_open(tdpath, "testtypes", err);
-    
+
         /* Fall back did not succeed either so return */
         if(U_FAILURE(*err)){
             *err = U_FILE_ACCESS_ERROR;

@@ -10,6 +10,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/datefmt.h"
 #include "unicode/simpletz.h"
+#include "cmemory.h"
 
 // *****************************************************************************
 // class DateFormatTest
@@ -130,7 +131,8 @@ void DateFormatTest::TestWallyWedel()
         delete fmtDstOffset;
     }
     delete cal;
-    delete ids;
+    //  delete ids;   // TODO:  BAD API
+    uprv_free(ids);
     delete sdf;
     delete tz;
 }

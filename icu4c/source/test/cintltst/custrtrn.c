@@ -458,7 +458,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err=U_ZERO_ERROR;
-            wDest =(wchar_t*) uprv_malloc(sizeof(wchar_t) * (reqLen+1));
+            wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
             wDestLen = reqLen+1;
             u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
         }
@@ -469,7 +469,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err =U_ZERO_ERROR;
-            uDest = (UChar*) uprv_malloc(sizeof(UChar) * (reqLen+1));
+            uDest = (UChar*) malloc(sizeof(UChar) * (reqLen+1));
             uDestLen = reqLen + 1;
             u_strFromWCS(uDest, uDestLen,&reqLen,wDest,reqLen,&err);
         }else if(U_FAILURE(err)){
@@ -491,8 +491,8 @@ static void Test_UChar_WCHART_API(void){
         if(failed){
             log_err("u_strToWCS() failed \n");
         }
-        uprv_free(wDest);
-        uprv_free(uDest);
+        free(wDest);
+        free(uDest);
         
        
         /* test with embeded nulls */
@@ -507,7 +507,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err=U_ZERO_ERROR;
-            wDest =(wchar_t*) uprv_malloc(sizeof(wchar_t) * (reqLen+1));
+            wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
             wDestLen = reqLen+1;
             u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
         }
@@ -517,7 +517,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err =U_ZERO_ERROR;
-            uDest = (UChar*) uprv_malloc(sizeof(UChar) * (reqLen+1));
+            uDest = (UChar*) malloc(sizeof(UChar) * (reqLen+1));
             uDestLen = reqLen + 1;
             u_strFromWCS(uDest, uDestLen,&reqLen,wDest,reqLen,&err);
         }
@@ -536,8 +536,8 @@ static void Test_UChar_WCHART_API(void){
         if(failed){
             log_err("u_strToWCS() failed \n");
         }
-        uprv_free(wDest);
-        uprv_free(uDest);
+        free(wDest);
+        free(uDest);
 
     }
 
@@ -555,7 +555,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err=U_ZERO_ERROR;
-            wDest =(wchar_t*) uprv_malloc(sizeof(wchar_t) * (reqLen+1));
+            wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
             wDestLen = reqLen+1;
             u_strToWCS(wDest,wDestLen,&reqLen,uSrc,-1,&err);
         }
@@ -565,7 +565,7 @@ static void Test_UChar_WCHART_API(void){
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err =U_ZERO_ERROR;
-            uDest = (UChar*) uprv_malloc(sizeof(UChar) * (reqLen+1));
+            uDest = (UChar*) malloc(sizeof(UChar) * (reqLen+1));
             uDestLen = reqLen + 1;
             u_strFromWCS(uDest, uDestLen,&reqLen,wDest,-1,&err);
         }
@@ -584,8 +584,8 @@ static void Test_UChar_WCHART_API(void){
         if(failed){
             log_err("u_strToWCS() failed \n");
         }
-        uprv_free(wDest);
-        uprv_free(uDest);
+        free(wDest);
+        free(uDest);
     }
 
 } 

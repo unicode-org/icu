@@ -167,7 +167,7 @@ void TestGetDefaultRules(){
         log_err("Error: ucol_getDefaultRulesArray() failed\n");
     }
 
-    uprv_free(binColData);
+    free(binColData);
     ures_close(binColl);
     ures_close(res);
     ucol_close(coll);
@@ -315,7 +315,7 @@ void TestProperty()
     doAssert( tempLength != 0, "getRules() result incorrect" );
     log_verbose("getRules tests end.\n");
     {
-        UChar *buffer = (UChar *)uprv_malloc(200000*sizeof(UChar));
+        UChar *buffer = (UChar *)malloc(200000*sizeof(UChar));
         int32_t bufLen = 200000;
         buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
@@ -327,7 +327,7 @@ void TestProperty()
         tempLength=ucol_getRulesEx(col,UCOL_FULL_RULES,buffer,bufLen );
         doAssert( tempLength != 0, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
-        uprv_free(buffer);
+        free(buffer);
     }
     ucol_close(ruled);
     ucol_close(col);

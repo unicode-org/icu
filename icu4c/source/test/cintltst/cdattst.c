@@ -127,10 +127,10 @@ static void TestDateFormat()
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         if(result != NULL) {
-            uprv_free(result);
+            free(result);
             result = NULL;
         }
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(def, d, result, resultlength, NULL, &status);
     }
     if(U_FAILURE(status))
@@ -147,7 +147,7 @@ static void TestDateFormat()
     
     u_uastrcpy(temp, "10 juil. 96 16 h 05 GMT-07:00");
     if(result != NULL) {
-        uprv_free(result);
+        free(result);
         result = NULL;
     }
     result=myDateFormat(fr, d);
@@ -210,7 +210,7 @@ static void TestDateFormat()
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(def1, FALSE, result, resultlength, &status);
     }
     if(U_FAILURE(status))
@@ -224,7 +224,7 @@ static void TestDateFormat()
         log_verbose("PASS: applyPattern and toPattern work fine\n");
     
     if(result != NULL) {
-        uprv_free(result);    
+        free(result);    
         result = NULL;
     }
     
@@ -299,7 +299,7 @@ static void TestDateFormat()
         log_verbose("PASS: getting and setting calendar successful\n");
         
     if(result!=NULL) {
-        uprv_free(result);
+        free(result);
     }
     
     /*Closing the UDateForamt */
@@ -363,7 +363,7 @@ static void TestSymbols()
 
     /*testing getSymbols*/
     log_verbose("\nTesting getSymbols\n");
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * 10);
+    pattern=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(pattern, "jeudi");
     resultlength=0;
     resultlengthout=udat_getSymbols(fr, UDAT_WEEKDAYS, 5 , NULL, resultlength, &status);
@@ -372,10 +372,10 @@ static void TestSymbols()
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         if(result != NULL) {
-            uprv_free(result);
+            free(result);
             result = NULL;
         }
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_WEEKDAYS, 5, result, resultlength, &status);
         
     }
@@ -408,10 +408,10 @@ static void TestSymbols()
 
 
     if(result != NULL) {
-        uprv_free(result);
+        free(result);
         result = NULL;
     }
-uprv_free(pattern);    
+free(pattern);    
     
     log_verbose("\nTesting setSymbols\n");
     /*applying the pattern so that setSymbolss works */
@@ -421,7 +421,7 @@ uprv_free(pattern);
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
-        pattern=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        pattern=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE, pattern, resultlength, &status);
     }
     if(U_FAILURE(status))
@@ -438,10 +438,10 @@ uprv_free(pattern);
         status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
         if(result != NULL) {
-            uprv_free(result);
+            free(result);
             result = NULL;
         }
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE,result, resultlength, &status);
     }
     if(U_FAILURE(status))
@@ -454,7 +454,7 @@ uprv_free(pattern);
     else
         log_err("pattern could not be applied properly\n");
 
-uprv_free(pattern);
+free(pattern);
     /*testing set symbols */
     resultlength=0;
     resultlengthout=udat_getSymbols(fr, UDAT_MONTHS, 11 , NULL, resultlength, &status);
@@ -462,10 +462,10 @@ uprv_free(pattern);
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
         if(result != NULL) {
-            uprv_free(result);
+            free(result);
             result = NULL;
         }
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(fr, UDAT_MONTHS, 11, result, resultlength, &status);
         
     }
@@ -486,7 +486,7 @@ uprv_free(pattern);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
-        value=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(def, UDAT_MONTHS, 11, value, resultlength, &status);
     }
     if(U_FAILURE(status))
@@ -525,10 +525,10 @@ uprv_free(pattern);
     udat_close(fr);
     udat_close(def);
     if(result != NULL) {
-        uprv_free(result);
+        free(result);
         result = NULL;
     }
-    uprv_free(value);
+    free(value);
     
 }
 
@@ -632,7 +632,7 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     int32_t resultlength, resultlengthout;
 
     
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(expected)+1));
+    pattern=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1));
     u_uastrcpy(pattern, expected);
     resultlength=0;
     resultlengthout=udat_getSymbols(datfor, type, index , NULL, resultlength, &status);
@@ -640,7 +640,7 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
         
     }
@@ -655,8 +655,8 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
         log_err("FAlL: getSymbols retrieved the wrong value\n Expected %s Got %s\n", austrdup(pattern), 
             austrdup(result) );
     }
-    uprv_free(result);
-    uprv_free(pattern);
+    free(result);
+    free(pattern);
 }
 
 static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
@@ -666,7 +666,7 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     int32_t resultlength, resultlengthout;
     UErrorCode status = U_ZERO_ERROR;
 
-    value=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(expected) + 1));
+    value=(UChar*)malloc(sizeof(UChar) * (strlen(expected) + 1));
     u_uastrcpy(value, expected);
     udat_setSymbols(datfor, type, index, value, u_strlen(value), &status);
     if(U_FAILURE(status))
@@ -680,7 +680,7 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
     }
     if(U_FAILURE(status)){
@@ -696,8 +696,8 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     else
         log_verbose("PASS: setSymbols successful\n");
 
-    uprv_free(value);
-    uprv_free(result);
+    free(value);
+    free(result);
 }
 
 
@@ -713,7 +713,7 @@ static void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatS
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
-        result=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(from, type, index, result, resultlength, &status);
     }
     if(U_FAILURE(status)){
@@ -734,7 +734,7 @@ static void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatS
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         resultlength=resultlengthout+1;
-        value=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(to, type, index, value, resultlength, &status);
     }
     if(U_FAILURE(status)){
@@ -750,8 +750,8 @@ static void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatS
     else
         log_verbose("PASS: setSymbols successful\n");
 
-    uprv_free(value);
-    uprv_free(result);
+    free(value);
+    free(result);
 }
 
 

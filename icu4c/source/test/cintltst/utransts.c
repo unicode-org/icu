@@ -54,13 +54,13 @@ typedef struct XReplaceable {
 } XReplaceable;
 
 static void InitXReplaceable(XReplaceable* rep, const char* cstring) {
-    rep->text = uprv_malloc(sizeof(UChar) * (uprv_strlen(cstring)+1));
+    rep->text = malloc(sizeof(UChar) * (uprv_strlen(cstring)+1));
     u_uastrcpy(rep->text, cstring);
 }
 
 static void FreeXReplaceable(XReplaceable* rep) {
     if (rep->text != NULL) {
-        uprv_free(rep->text);
+        free(rep->text);
         rep->text = NULL;
     }
 }
@@ -88,11 +88,11 @@ static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
               const UChar* text, int32_t textLength) {
     XReplaceable* x = (XReplaceable*)rep;
     int32_t newLen = Xlength(rep) + limit - start + textLength;
-    UChar* newText = (UChar*) uprv_malloc(sizeof(UChar) * (newLen+1));
+    UChar* newText = (UChar*) malloc(sizeof(UChar) * (newLen+1));
     u_strncpy(newText, x->text, start);
     u_strncpy(newText + start, text, textLength);
     u_strcpy(newText + start + textLength, x->text + limit);
-    uprv_free(x->text);
+    free(x->text);
     x->text = newText;
 }
 
@@ -100,11 +100,11 @@ static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
 static void Xcopy(UReplaceable* rep, int32_t start, int32_t limit, int32_t dest) {
     XReplaceable* x = (XReplaceable*)rep;
     int32_t newLen = Xlength(rep) + limit - start;
-    UChar* newText = (UChar*) uprv_malloc(sizeof(UChar) * (newLen+1));
+    UChar* newText = (UChar*) malloc(sizeof(UChar) * (newLen+1));
     u_strncpy(newText, x->text, dest);
     u_strncpy(newText + dest, x->text + start, limit - start);
     u_strcpy(newText + dest + limit - start, x->text + dest);
-    uprv_free(x->text);
+    free(x->text);
     x->text = newText;
 }
 

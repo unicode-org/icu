@@ -41,9 +41,9 @@ typedef struct chArrayContext chArrayContext;
 static void U_CALLCONV
 chArrayClose(UEnumeration *en) {
     if(cont->currUChar != NULL) {
-        uprv_free(cont->currUChar);
+        free(cont->currUChar);
     }
-    uprv_free(en);
+    free(en);
 }
 
 static int32_t U_CALLCONV
@@ -58,7 +58,7 @@ chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
     }
     
     if(cont->currUChar == NULL) {
-        cont->currUChar = (UChar *)uprv_malloc(1024*sizeof(UChar));
+        cont->currUChar = (UChar *)malloc(1024*sizeof(UChar));
     }
     
     cont->currChar = (cont->array)[cont->currIndex];
@@ -101,7 +101,7 @@ UEnumeration chEnum = {
 };
 
 static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
-    UEnumeration *en = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+    UEnumeration *en = (UEnumeration *)malloc(sizeof(UEnumeration));
     memcpy(en, &chEnum, sizeof(UEnumeration));
     cont->array = (char **)source;
     cont->maxIndex = size;

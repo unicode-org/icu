@@ -1292,7 +1292,7 @@ static UBool testTag(const char* frag,
                     free(base);
                     base = NULL;
                 }
-                base=(UChar*)uprv_malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
+                base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
                 u_uastrcpy(base,NAME[j]);
 
                 break;
@@ -1302,7 +1302,7 @@ static UBool testTag(const char* frag,
                     free(base);
                     base = NULL;
                 }
-                base = (UChar*) uprv_malloc(sizeof(UChar) * 1);
+                base = (UChar*) malloc(sizeof(UChar) * 1);
                 *base = 0x0000;
             }
         }
@@ -1323,11 +1323,11 @@ static UBool testTag(const char* frag,
 
         string=ures_getStringByKey(theBundle, tag, &len, &status);
         if(U_SUCCESS(status)) {
-            expected_string=(UChar*)uprv_malloc(sizeof(UChar)*(u_strlen(base) + 4));
+            expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 4));
             u_strcpy(expected_string,base);
             CONFIRM_INT_EQ(len, u_strlen(expected_string));
         }else{
-            expected_string = (UChar*)uprv_malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
+            expected_string = (UChar*)malloc(sizeof(UChar)*(u_strlen(kERROR) + 1));
             u_strcpy(expected_string,kERROR);
             string=kERROR;
         }

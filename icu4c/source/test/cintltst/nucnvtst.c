@@ -64,9 +64,9 @@ static void TestEBCDICUS4XML(void);
 static void TestJitterbug915(void);
 static void TestISCII(void);
 static void TestConv(const uint16_t in[],
-                     int len, 
-                     const char* conv, 
-                     const char* lang, 
+                     int len,
+                     const char* conv,
+                     const char* lang,
                      char byteArr[],
                      int byteArrLen);
 static void TestRoundTrippingAllUTF(void);
@@ -292,7 +292,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     log_verbose("\n=========  %s\n", gNuConvTestName);
 
     conv = my_ucnv_open(codepage, &status);
-    
+
     if(U_FAILURE(status))
     {
         log_err("Couldn't open converter %s\n",codepage);
@@ -1058,16 +1058,16 @@ static void TestCoverageMBCS(){
 
 #if 0
     char* tdpath = NULL;
-    char* saveDirectory = (char*)uprv_malloc(sizeof(char) *(strlen(u_getDataDirectory())+1));
+    char* saveDirectory = (char*)malloc(sizeof(char) *(strlen(u_getDataDirectory())+1));
     int len = strlen(directory);
     char* index=NULL;
 
-    tdpath = (char*) uprv_malloc(sizeof(char) * (len * 2));
+    tdpath = (char*) malloc(sizeof(char) * (len * 2));
     uprv_strcpy(saveDirectory,u_getDataDirectory());
-    log_verbose("Retrieved data directory %s \n",saveDirectory); 
-    uprv_strcpy(tdpath,directory); 
-    index=strrchr(tdpath,(char)U_FILE_SEP_CHAR); 
-    
+    log_verbose("Retrieved data directory %s \n",saveDirectory);
+    uprv_strcpy(tdpath,directory);
+    index=strrchr(tdpath,(char)U_FILE_SEP_CHAR);
+
     if((unsigned int)(index-tdpath) != (strlen(tdpath)-1)){
             *(index+1)=0;
     }
@@ -1150,11 +1150,11 @@ static void TestCoverageMBCS(){
 
     }
 #if 0
-    uprv_free(tdpath);
+    free(tdpath);
     /* restore the original data directory */
     log_verbose("Setting the data directory to %s \n", saveDirectory);
     u_setDataDirectory(saveDirectory);
-    uprv_free(saveDirectory);
+    free(saveDirectory);
 #endif
 
 }
@@ -1389,21 +1389,21 @@ static void TestAmbiguous()
     ucnv_close(ascii_cnv);
 }
 
-static void 
+static void
 TestSignatureDetection(){
     /* with null terminated strings */
     {
-        static const char* data[] = { 
+        static const char* data[] = {
                 "\xFE\xFF\x00\x00",     /* UTF-16BE */
                 "\xFF\xFE\x00\x00",     /* UTF-16LE */
                 "\xEF\xBB\xBF\x00",     /* UTF-8    */
                 "\x0E\xFE\xFF\x00",     /* SCSU     */
-               
+
                 "\xFE\xFF",             /* UTF-16BE */
                 "\xFF\xFE",             /* UTF-16LE */
                 "\xEF\xBB\xBF",         /* UTF-8    */
                 "\x0E\xFE\xFF",         /* SCSU     */
-                
+
                 "\xFE\xFF\x41\x42",     /* UTF-16BE */
                 "\xFF\xFE\x41\x41",     /* UTF-16LE */
                 "\xEF\xBB\xBF\x41",     /* UTF-8    */
@@ -1467,7 +1467,7 @@ TestSignatureDetection(){
         }
     }
     {
-        static const char* data[] = { 
+        static const char* data[] = {
                 "\xFE\xFF\x00",         /* UTF-16BE */
                 "\xFF\xFE\x00",         /* UTF-16LE */
                 "\xEF\xBB\xBF\x00",     /* UTF-8    */
@@ -2659,14 +2659,14 @@ static int TestJitterbug930(const char* enc){
     int numOffWritten=0;
     UBool flush = 0;
     converter = my_ucnv_open(enc, &err);
-    
+
     in[0] = 0x41;     /* 0x4E00;*/
     in[1] = 0x4E01;
     in[2] = 0x4E02;
     in[3] = 0x4E03;
-    
+
     memset(off, '*', sizeof(off));
-    
+
     ucnv_fromUnicode (converter,
             &target,
             target+2,
@@ -2675,7 +2675,7 @@ static int TestJitterbug930(const char* enc){
             offsets,
             flush,
             &err);
-    
+
         /* writes three bytes into the output buffer: 41 1B 24
         * but offsets contains 0 1 1
     */
@@ -2687,11 +2687,11 @@ static int TestJitterbug930(const char* enc){
     if(numOffWritten!= (int)(target-out)){
         log_err("Jitterbug 930 test for enc: %s failed. Expected: %i Got: %i",enc, (int)(target-out),numOffWritten);
     }
-    
+
     err = U_ZERO_ERROR;
-    
+
     memset(off,'*' , sizeof(off));
-    
+
     flush = 1;
     offsets=off;
     ucnv_fromUnicode (converter,
@@ -2798,7 +2798,7 @@ TestHZ() {
     free(cBuf);
 }
 
-static void 
+static void
 TestISCII(){
         /* test input */
     static const uint16_t in[]={
@@ -2851,7 +2851,7 @@ TestISCII(){
         0x0961 /* Vocallic LL 0xa6, 0xE9 */,
         0x0963 /* Vowel Sign Vocallic LL 0xdb, 0xE9, */,
         0x0950 /* OM Symbol 0xa1, 0xE9,*/,
-        0x093D /* Avagraha  0xEA, 0xE9*/, 
+        0x093D /* Avagraha  0xEA, 0xE9*/,
         0x0958,
         0x0959,
         0x095A,
@@ -2899,33 +2899,33 @@ TestISCII(){
         /* anudatta and abbreviation sign */
         0xEF, 0x42, 0xF0, 0xBF, 0xF0, 0xB8,
 
-       
+
         0xAA, 0xE9,/* RI + NUKTA 0x0960*/
-        
+
         0xDF, 0xE9,/* Vowel sign RI + NUKTA 0x0944*/
-        
+
         0xa6, 0xE9,/* Vowel I + NUKTA 0x090C*/
-        
+
         0xdb, 0xE9,/* Vowel sign I + Nukta 0x0962*/
-        
+
         0xa7, 0xE9,/* Vowel II + NUKTA 0x0961*/
-        
+
         0xdc, 0xE9,/* Vowel sign II + Nukta 0x0963*/
-        
+
         0xa1, 0xE9,/* chandrabindu + Nukta 0x0950*/
-        
+
         0xEA, 0xE9, /* Danda + Nukta 0x093D*/
-        
+
         0xB3, 0xE9, /* Ka + NUKTA */
-        
+
         0xB4, 0xE9, /* Kha + NUKTA */
-        
+
         0xB5, 0xE9, /* Ga + NUKTA */
 
         0xBA, 0xE9,
 
         0xBF, 0xE9,
-        
+
         0xC0, 0xE9,
 
         0xC9, 0xE9,
@@ -3196,7 +3196,7 @@ TestFullRoundtrip(const char* cp){
         nsrc[1]=usource[0];
         nsrc[2]=usource[1];
         nsrc[len+1]=0x5555;
-        TestConv(nsrc,len+2,cp,"",NULL,0);        
+        TestConv(nsrc,len+2,cp,"",NULL,0);
         uprv_memset(usource,0,sizeof(UChar)*10);
     }
 }
@@ -3322,16 +3322,16 @@ TestSCSU() {
         0x9785, 0x9791, 0x00BD, 0x0390, 0x0385, 0x0386, 0x0388, 0x0389, 0x000D, 0x000A,
         0x038E, 0x038F, 0x0390, 0x0391, 0x0392, 0x0393, 0x0394, 0x0395, 0x000D, 0x000A,
         0x0396, 0x0397, 0x0398, 0x0399, 0x039A, 0x038A, 0x038C, 0x039C, 0x000D, 0x000A,
-        /* test non-BMP code points */ 
-        0xD869, 0xDE99, 0xD869, 0xDE9C, 0xD869, 0xDE9D, 0xD869, 0xDE9E, 0xD869, 0xDE9F, 
-        0xD869, 0xDEA0, 0xD869, 0xDEA5, 0xD869, 0xDEA6, 0xD869, 0xDEA7, 0xD869, 0xDEA8, 
+        /* test non-BMP code points */
+        0xD869, 0xDE99, 0xD869, 0xDE9C, 0xD869, 0xDE9D, 0xD869, 0xDE9E, 0xD869, 0xDE9F,
+        0xD869, 0xDEA0, 0xD869, 0xDEA5, 0xD869, 0xDEA6, 0xD869, 0xDEA7, 0xD869, 0xDEA8,
         0xD869, 0xDEAB, 0xD869, 0xDEAC, 0xD869, 0xDEAD, 0xD869, 0xDEAE, 0xD869, 0xDEAF,
-        0xD869, 0xDEB0, 0xD869, 0xDEB1, 0xD869, 0xDEB3, 0xD869, 0xDEB5, 0xD869, 0xDEB6, 
-        0xD869, 0xDEB7, 0xD869, 0xDEB8, 0xD869, 0xDEB9, 0xD869, 0xDEBA, 0xD869, 0xDEBB, 
-        0xD869, 0xDEBC, 0xD869, 0xDEBD, 0xD869, 0xDEBE, 0xD869, 0xDEBF, 0xD869, 0xDEC0, 
-        0xD869, 0xDEC1, 0xD869, 0xDEC2, 0xD869, 0xDEC3, 0xD869, 0xDEC4, 0xD869, 0xDEC8, 
-        0xD869, 0xDECA, 0xD869, 0xDECB, 0xD869, 0xDECD, 0xD869, 0xDECE, 0xD869, 0xDECF, 
-        0xD869, 0xDED0, 0xD869, 0xDED1, 0xD869, 0xDED2, 0xD869, 0xDED3, 0xD869, 0xDED4, 
+        0xD869, 0xDEB0, 0xD869, 0xDEB1, 0xD869, 0xDEB3, 0xD869, 0xDEB5, 0xD869, 0xDEB6,
+        0xD869, 0xDEB7, 0xD869, 0xDEB8, 0xD869, 0xDEB9, 0xD869, 0xDEBA, 0xD869, 0xDEBB,
+        0xD869, 0xDEBC, 0xD869, 0xDEBD, 0xD869, 0xDEBE, 0xD869, 0xDEBF, 0xD869, 0xDEC0,
+        0xD869, 0xDEC1, 0xD869, 0xDEC2, 0xD869, 0xDEC3, 0xD869, 0xDEC4, 0xD869, 0xDEC8,
+        0xD869, 0xDECA, 0xD869, 0xDECB, 0xD869, 0xDECD, 0xD869, 0xDECE, 0xD869, 0xDECF,
+        0xD869, 0xDED0, 0xD869, 0xDED1, 0xD869, 0xDED2, 0xD869, 0xDED3, 0xD869, 0xDED4,
         0xD869, 0xDED5, 0xD800, 0xDC00, 0xD800, 0xDC00, 0xD800, 0xDC00, 0xDBFF, 0xDFFF,
         0xDBFF, 0xDFFF, 0xDBFF, 0xDFFF,
 
@@ -3351,10 +3351,10 @@ TestSCSU() {
           "Hello \\u9292 \\u9192 World!",
           "Hell\\u0429o \\u9292 \\u9192 W\\u00e4rld!",
           "Hell\\u0429o \\u9292 \\u9292W\\u00e4rld!",
-  
+
           "\\u0648\\u06c8", /* catch missing reset*/
           "\\u0648\\u06c8",
-  
+
           "\\u4444\\uE001", /* lowest quotable*/
           "\\u4444\\uf2FF", /* highest quotable*/
           "\\u4444\\uf188\\u4444",
@@ -3365,7 +3365,7 @@ TestSCSU() {
           "Hell\\u0429o \\u9292 \\u9292W\\u00e4rld!",
           "Hello World!123456",
           "Hello W\\u0081\\u011f\\u0082!", /* Latin 1 run*/
-  
+
           "abc\\u0301\\u0302",  /* uses SQn for u301 u302*/
           "abc\\u4411d",      /* uses SQU*/
           "abc\\u4411\\u4412d",/* uses SCU*/
@@ -3375,11 +3375,11 @@ TestSCSU() {
           "\\u9191\\u9191\\u3041\\u9191\\u3041\\u3041\\u3000",
           "\\u9999\\u3051\\u300c\\u9999\\u9999\\u3060\\u9999\\u3065\\u3065\\u3065\\u300c",
           "\\u3000\\u266a\\u30ea\\u30f3\\u30b4\\u53ef\\u611b\\u3044\\u3084\\u53ef\\u611b\\u3044\\u3084\\u30ea\\u30f3\\u30b4\\u3002",
-  
+
           "", /* empty input*/
           "\\u0000", /* smallest BMP character*/
           "\\uFFFF", /* largest BMP character*/
-  
+
           /* regression tests*/
           "\\u6441\\ub413\\ua733\\uf8fe\\ueedb\\u587f\\u195f\\u4899\\uf23d\\u49fd\\u0aac\\u5792\\ufc22\\ufc3c\\ufc46\\u00aa",
           "\\u00df\\u01df\\uf000\\udbff\\udfff\\u000d\n\\u0041\\u00df\\u0401\\u015f\\u00df\\u01df\\uf000\\udbff\\udfff",
@@ -3397,11 +3397,11 @@ TestSCSU() {
         UChar* src;
         /* UConverter* cnv = ucnv_open("SCSU",&status); */
         cSrcLen= srcLen =  uprv_strlen(fTestCases[i]);
-        src = (UChar*) uprv_malloc((sizeof(UChar) * srcLen) + sizeof(UChar));
+        src = (UChar*) malloc((sizeof(UChar) * srcLen) + sizeof(UChar));
         srcLen=unescape(src,srcLen,cSrc,cSrcLen,&status);
         log_verbose("Testing roundtrip for src: %s at index :%d\n",cSrc,i);
         TestConv(src,srcLen,"SCSU","Coverage",NULL,0);
-        uprv_free(src);
+        free(src);
     }
     TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU","all features", (char *)allFeaturesSCSU,sizeof(allFeaturesSCSU));
     TestConv(allFeaturesUTF16,(sizeof(allFeaturesUTF16)/2),"SCSU","all features",(char *)allFeaturesSCSU,sizeof(allFeaturesSCSU));
@@ -3892,7 +3892,7 @@ TestJIS(){
 }
 
 static void TestJitterbug915(){
-/* tests for roundtripping of the below sequence 
+/* tests for roundtripping of the below sequence
 \x1b$)G\x0E#!#"###$#%#&#'#(#)#*#+          / *plane 1 * /
 \x1b$*H\x1bN"!\x1bN""\x1bN"#\x1bN"$\x1bN"% / *plane 2 * /
 \x1b$+I\x1bO"D\x1bO"E\x1bO"F\x1bO"G\x1bO"H / *plane 3 * /
@@ -3975,16 +3975,16 @@ TestISO_2022_CN_EXT() {
     /* test input */
     static const uint16_t in[]={
                 /* test Non-BMP code points */
-         0xD869, 0xDE99, 0xD869, 0xDE9C, 0xD869, 0xDE9D, 0xD869, 0xDE9E, 0xD869, 0xDE9F, 
-         0xD869, 0xDEA0, 0xD869, 0xDEA5, 0xD869, 0xDEA6, 0xD869, 0xDEA7, 0xD869, 0xDEA8, 
+         0xD869, 0xDE99, 0xD869, 0xDE9C, 0xD869, 0xDE9D, 0xD869, 0xDE9E, 0xD869, 0xDE9F,
+         0xD869, 0xDEA0, 0xD869, 0xDEA5, 0xD869, 0xDEA6, 0xD869, 0xDEA7, 0xD869, 0xDEA8,
          0xD869, 0xDEAB, 0xD869, 0xDEAC, 0xD869, 0xDEAD, 0xD869, 0xDEAE, 0xD869, 0xDEAF,
-         0xD869, 0xDEB0, 0xD869, 0xDEB1, 0xD869, 0xDEB3, 0xD869, 0xDEB5, 0xD869, 0xDEB6, 
-         0xD869, 0xDEB7, 0xD869, 0xDEB8, 0xD869, 0xDEB9, 0xD869, 0xDEBA, 0xD869, 0xDEBB, 
-         0xD869, 0xDEBC, 0xD869, 0xDEBD, 0xD869, 0xDEBE, 0xD869, 0xDEBF, 0xD869, 0xDEC0, 
-         0xD869, 0xDEC1, 0xD869, 0xDEC2, 0xD869, 0xDEC3, 0xD869, 0xDEC4, 0xD869, 0xDEC8, 
-         0xD869, 0xDECA, 0xD869, 0xDECB, 0xD869, 0xDECD, 0xD869, 0xDECE, 0xD869, 0xDECF, 
-         0xD869, 0xDED0, 0xD869, 0xDED1, 0xD869, 0xDED2, 0xD869, 0xDED3, 0xD869, 0xDED4, 
-         0xD869, 0xDED5, 
+         0xD869, 0xDEB0, 0xD869, 0xDEB1, 0xD869, 0xDEB3, 0xD869, 0xDEB5, 0xD869, 0xDEB6,
+         0xD869, 0xDEB7, 0xD869, 0xDEB8, 0xD869, 0xDEB9, 0xD869, 0xDEBA, 0xD869, 0xDEBB,
+         0xD869, 0xDEBC, 0xD869, 0xDEBD, 0xD869, 0xDEBE, 0xD869, 0xDEBF, 0xD869, 0xDEC0,
+         0xD869, 0xDEC1, 0xD869, 0xDEC2, 0xD869, 0xDEC3, 0xD869, 0xDEC4, 0xD869, 0xDEC8,
+         0xD869, 0xDECA, 0xD869, 0xDECB, 0xD869, 0xDECD, 0xD869, 0xDECE, 0xD869, 0xDECF,
+         0xD869, 0xDED0, 0xD869, 0xDED1, 0xD869, 0xDED2, 0xD869, 0xDED3, 0xD869, 0xDED4,
+         0xD869, 0xDED5,
 
          0x4DB3, 0x4DB4, 0x4DB5, 0x4E00, 0x4E00, 0x4E01, 0x4E02, 0x4E03, 0x000D, 0x000A,
          0x0392, 0x0393, 0x0394, 0x0395, 0x0396, 0x0397, 0x33E0, 0x33E6, 0x000D, 0x000A,
@@ -4004,7 +4004,7 @@ TestISO_2022_CN_EXT() {
          0x60F6, 0x60F7, 0x60F8, 0x60F9, 0x60FA, 0x60FB, 0x60FC, 0x60FD, 0x000D, 0x000A,
          0x60FE, 0x60FF, 0x6100, 0x6101, 0x6102, 0x0041, 0x0042, 0x0043, 0x000D, 0x000A,
          0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x004B, 0x000D, 0x000A,
- 
+
          0x33E7, 0x33E8, 0x33E9, 0x33EA, 0x000D, 0x000A
 
       };
@@ -4978,7 +4978,7 @@ static void TestJitterbug981(){
   UCollator* myCollator;
   char buff[50000];
   int numNeeded=0;
-  utf8cnv = ucnv_open ("utf8", &status); 
+  utf8cnv = ucnv_open ("utf8", &status);
   if(U_FAILURE(status)){
       log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
   }
@@ -5032,5 +5032,5 @@ static void TestJitterbug1293(){
     }
     ucnv_close(conv);
 }
-    
+
 #endif

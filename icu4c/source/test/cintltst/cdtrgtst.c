@@ -68,7 +68,7 @@ void Test4029195()
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
-        pat=(UChar*)uprv_malloc(sizeof(UChar) * resultlength);
+        pat=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(df, TRUE, pat, resultlength, &status);
     }
     
@@ -78,7 +78,7 @@ void Test4029195()
     fmdt = myFormatit(df, today);
     log_verbose("today: %s\n", austrdup(fmdt));
     
-    temp=(UChar*)uprv_malloc(sizeof(UChar) * 10);
+    temp=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(temp, "M yyyy dd");
     udat_applyPattern(df, TRUE, temp, u_strlen(temp));
     
@@ -102,9 +102,9 @@ void Test4029195()
     else
         log_verbose("Pass: parse and format working fine\n");
     udat_close(df);
-    uprv_free(temp);
+    free(temp);
     if(pat != NULL) {
-        uprv_free(pat);
+        free(pat);
     }
 }
 
@@ -133,7 +133,7 @@ void Test4056591()
         };
 
     log_verbose("Testing s[get] 2 digit year start regressively\n");
-    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){
@@ -182,7 +182,7 @@ void Test4056591()
     
     udat_close(def);
     ucal_close(cal);
-    uprv_free(tzID);
+    free(tzID);
 }
 
 
@@ -196,7 +196,7 @@ void Test4059917()
     UErrorCode status = U_ZERO_ERROR;
     UChar *pattern;
     log_verbose("Testing apply pattern and to pattern regressively\n");
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * 11);
+    pattern=(UChar*)malloc(sizeof(UChar) * 11);
     u_uastrcpy(pattern, "yyyy/MM/dd");
     log_verbose("%s\n", austrdup(pattern) );
     def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
@@ -205,7 +205,7 @@ void Test4059917()
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
         return;
     }
-    myDate=(UChar*)uprv_malloc(sizeof(UChar) * 11);
+    myDate=(UChar*)malloc(sizeof(UChar) * 11);
     u_uastrcpy(myDate, "1970/01/12");
         
     aux917( def, myDate );
@@ -221,8 +221,8 @@ void Test4059917()
     u_uastrcpy(myDate, "19700112");
     aux917( def, myDate );
     udat_close(def);    
-    uprv_free(pattern);
-    uprv_free(myDate);
+    free(pattern);
+    free(myDate);
     
 }
 
@@ -240,7 +240,7 @@ void aux917( UDateFormat *fmt, UChar* str)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
-        pat=(UChar*)uprv_malloc(sizeof(UChar) * (resultlength));
+        pat=(UChar*)malloc(sizeof(UChar) * (resultlength));
         udat_toPattern(fmt, TRUE, pat, resultlength, &status);
     }
     if(U_FAILURE(status)){
@@ -253,7 +253,7 @@ void aux917( UDateFormat *fmt, UChar* str)
     if( u_strcmp(formatted,str)!=0) {
         log_err("Fail: Want %s Got: %s\n", austrdup(str),  austrdup(formatted) );
     }
-    uprv_free(pat);
+    free(pat);
 }
 
 /**
@@ -385,7 +385,7 @@ void Test4073003()
     
         for(i= 0; i < 4; i+=2) {
             status=U_ZERO_ERROR;
-            datestr=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(tests[i])+1));
+            datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i])+1));
             u_uastrcpy(datestr, tests[i]);
             
             pos=0;
@@ -394,8 +394,8 @@ void Test4073003()
                 log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
             }
             
-            uprv_free(datestr);
-            datestr=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(tests[i+1])+1));
+            free(datestr);
+            datestr=(UChar*)malloc(sizeof(UChar) * (strlen(tests[i+1])+1));
             u_uastrcpy(datestr, tests[i+1]);
         
             pos=0;
@@ -404,7 +404,7 @@ void Test4073003()
             if(U_FAILURE(status)){
                 log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
             }
-            uprv_free(datestr);
+            free(datestr);
             
             result =myFormatit(fmt, d);
             result2 =myFormatit(fmt, dd);

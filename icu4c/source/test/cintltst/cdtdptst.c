@@ -50,7 +50,7 @@ void TestTwoDigitYearDSTParse()
     UChar *s;
     int32_t pos;
 
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
+    pattern=(UChar*)malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
     fullFmt= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))    {
@@ -63,7 +63,7 @@ void TestTwoDigitYearDSTParse()
     fmt= udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);
     
     
-    s=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("03-Apr-04 2:20:47 o'clock AM PST")+1) );
+    s=(UChar*)malloc(sizeof(UChar) * (strlen("03-Apr-04 2:20:47 o'clock AM PST")+1) );
     u_uastrcpy(s, "03-Apr-04 2:20:47 o'clock AM PST");
     pos=0;
     d = udat_parse(fmt, s, u_strlen(s), &pos, &status);
@@ -89,8 +89,8 @@ void TestTwoDigitYearDSTParse()
     
     udat_close(fullFmt);
     udat_close(fmt);
-    uprv_free(pattern);
-    uprv_free(s);
+    free(pattern);
+    free(s);
 }
 
 
@@ -116,7 +116,7 @@ void TestPartialParse994()
         log_err("FAIL: ErrorCode received during test: %s\n", myErrorName(status));
         return;
     }
-    s=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("01/01/1997 10:11:42 AM")+1) );
+    s=(UChar*)malloc(sizeof(UChar) * (strlen("01/01/1997 10:11:42 AM")+1) );
     u_uastrcpy(s, "01/01/1997 10:11:42 AM");
     pos=0;
     d = udat_parse(f, s, u_strlen(s), &pos, &status);
@@ -127,7 +127,7 @@ void TestPartialParse994()
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01 ", null);
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01", null);
     udat_close(f);
-    uprv_free(s);
+    free(s);
 }
  
 
@@ -140,9 +140,9 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
     UDate null=0;
     int32_t pos;
     UErrorCode status = U_ZERO_ERROR;
-    str=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(s) + 1) );
+    str=(UChar*)malloc(sizeof(UChar) * (strlen(s) + 1) );
     u_uastrcpy(str, s);
-    pat=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(pattern) + 1) );
+    pat=(UChar*)malloc(sizeof(UChar) * (strlen(pattern) + 1) );
     u_uastrcpy(pat, pattern);
     log_verbose("Pattern : %s ;  String : %s\n", austrdup(pat), austrdup(str));
     udat_applyPattern(format, FALSE, pat, u_strlen(pat));
@@ -162,8 +162,8 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
             log_err("FAIL: Expected : %s\n", austrdup(str) );
     }
     
-    uprv_free(str);
-    uprv_free(pat);
+    free(str);
+    free(pat);
 }
  
 
@@ -178,7 +178,7 @@ void TestRunTogetherPattern985()
     UDateFormat *format;
     UDate date1, date2;
     UErrorCode status = U_ZERO_ERROR;
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("yyyyMMddHHmmssSSS")+1) );
+    pattern=(UChar*)malloc(sizeof(UChar) * (strlen("yyyyMMddHHmmssSSS")+1) );
     u_uastrcpy(pattern, "yyyyMMddHHmmssSSS");
     format = udat_open(UDAT_IGNORE, UDAT_IGNORE, NULL, NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
@@ -196,7 +196,7 @@ void TestRunTogetherPattern985()
     if (!(date2 == date1)) log_err("FAIL\n");
     
     udat_close(format);
-    uprv_free(pattern);
+    free(pattern);
        
 }
 
@@ -225,11 +225,11 @@ void TestCzechMonths459()
     lneed=udat_toPattern(fmt, TRUE, NULL, lneed, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
-        pattern=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        pattern=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         udat_toPattern(fmt, TRUE, pattern, lneed+1, &status);
     }
     if(U_FAILURE(status)){ log_err("Error in extracting the pattern\n"); }
-    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "GMT");
     cal=ucal_open(tzID, u_strlen(tzID), "cs", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){ log_err("error in ucal_open caldef : %s\n", myErrorName(status));    }
@@ -261,8 +261,8 @@ void TestCzechMonths459()
     
     udat_close(fmt);
     ucal_close(cal);
-    uprv_free(pattern);
-    uprv_free(tzID);
+    free(pattern);
+    free(tzID);
 }
  
 /**
@@ -277,7 +277,7 @@ void TestQuotePattern161()
     UChar *dateString;
     UErrorCode status = U_ZERO_ERROR;
     const char* expStr = "04/13/1999 at 10:42:28 AM ";
-    pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
+    pattern=(UChar*)malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
@@ -288,7 +288,7 @@ void TestQuotePattern161()
         log_err("error in udat_open: %s\n", myErrorName(status));
         return;
     }
-    tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
+    tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
@@ -300,7 +300,7 @@ void TestQuotePattern161()
     currentTime_1 = ucal_getMillis(cal, &status);
     
     dateString = myDateFormat(format, currentTime_1);
-    exp=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(expStr) + 1) );
+    exp=(UChar*)malloc(sizeof(UChar) * (strlen(expStr) + 1) );
     u_uastrcpy(exp, expStr);
     
     log_verbose("%s\n", austrdup(dateString) );
@@ -309,8 +309,8 @@ void TestQuotePattern161()
 
     udat_close(format);
     ucal_close(cal);
-    uprv_free(exp);
-    uprv_free(tzID);
-    uprv_free(pattern);
+    free(exp);
+    free(tzID);
+    free(pattern);
     
 }
