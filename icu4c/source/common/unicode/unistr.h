@@ -2214,6 +2214,19 @@ public:
   // Implementation methods
   //========================================
 
+protected:
+  /**
+   * The change in Replaceable to use virtual getCharAt() allows
+   * UnicodeString::charAt() to be inline again (see jitterbug 709).
+   */
+  virtual UChar getCharAt(UTextOffset offset) const;
+
+  /**
+   * The change in Replaceable to use virtual getChar32At() allows
+   * UnicodeString::char32At() to be inline again (see jitterbug 709).
+   */
+  virtual UChar32 getChar32At(UTextOffset offset) const;
+
 private:
 
   inline int8_t
@@ -2425,9 +2438,10 @@ private:
    * on 64-bit machines (8-byte pointers), it should be 40 bytes.
    */
   // (implicit) *vtable;
-  UChar     *fArray;        // the Unicode data
-  int32_t   fLength;        // number characters in fArray
+  // fLength is moved into the superclass Replaceable (jitterbug 709)
+  // int32_t   fLength;        // number characters in fArray
   int32_t   fCapacity;      // sizeof fArray
+  UChar     *fArray;        // the Unicode data
   uint16_t  fFlags;         // bit flags: see constants above
 #if UTF_SIZE==32
   uint16_t  fPadding;       // padding to align the fStackBuffer for UTF-32

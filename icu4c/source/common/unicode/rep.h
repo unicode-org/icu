@@ -54,18 +54,18 @@ public:
     /**
      * Return the number of characters in the text.
      * @return number of characters in text
-     * @draft
+     * @draft ICU 1.8
      */ 
-    virtual int32_t length() const = 0;
+    inline int32_t length() const;
 
     /**
      * Return the Unicode code unit at the given offset into the text.
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
      * @return code unit of text at given offset
-     * @draft
+     * @draft ICU 1.8
      */
-    virtual UChar charAt(UTextOffset offset) const = 0;
+    inline UChar charAt(UTextOffset offset) const;
 
     /**
      * Return the Unicode code point that contains the code unit
@@ -74,9 +74,9 @@ public:
      * inclusive that indicates the text offset of any of the code units
      * that will be assembled into a code point (21-bit value) and returned
      * @return code point of text at given offset
-     * @draft
+     * @draft ICU 1.8
      */
-    virtual UChar32 char32At(UTextOffset offset) const = 0;
+    inline UChar32 char32At(UTextOffset offset) const;
 
     /**
      * Copy characters from this object into the destination character
@@ -158,10 +158,51 @@ protected:
      * Default constructor.
      */
     Replaceable();
+
+    /**
+     * Constructor with initial length.
+     */
+    Replaceable(int32_t initialLength);
+
+    /**
+     * Virtual version of charAt().
+     * This allows UnicodeString::charAt() to be inline again (see jitterbug 709).
+     */
+    virtual UChar getCharAt(UTextOffset offset) const = 0;
+
+    /**
+     * Virtual version of char32At().
+     * This allows UnicodeString::char32At() to be inline again (see jitterbug 709).
+     */
+    virtual UChar32 getChar32At(UTextOffset offset) const = 0;
+
+    /**
+     * This field must always reflect the number of UChars in the text
+     * object. A subclass must keep this up to date.
+     * Moved here from UnicodeString so that length() can be inline (see jitterbug 709).
+     */
+    int32_t   fLength;        // number characters in fArray
 };
 
-inline Replaceable::Replaceable() {}
+inline Replaceable::Replaceable() : fLength(0) {}
+
+inline Replaceable::Replaceable(int32_t initialLength) : fLength(initialLength) {}
 
 inline Replaceable::~Replaceable() {}
+
+inline int32_t
+Replaceable::length() const {
+    return fLength;
+}
+
+inline UChar
+Replaceable::charAt(UTextOffset offset) const {
+    return getCharAt(offset);
+}
+
+inline UChar32
+Replaceable::char32At(UTextOffset offset) const {
+    return getChar32At(offset);
+}
 
 #endif
