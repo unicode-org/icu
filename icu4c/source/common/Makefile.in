@@ -61,7 +61,7 @@ endif
 
 # todo:  need t make $(LIBICUDT) conditional on using dll-based data.
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUDT) $(BATCH_LIBICUDT) @LIBS@
+LIBS = $(BATCH_LIBICUDT) $(LIBICUDT) @LIBS@
 
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
