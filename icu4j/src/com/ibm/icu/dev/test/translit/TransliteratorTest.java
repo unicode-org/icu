@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/21 00:06:49 $
- * $Revision: 1.75 $
+ * $Date: 2001/11/21 00:07:29 $
+ * $Revision: 1.76 $
  *
  *****************************************************************************************
  */
@@ -1546,7 +1546,7 @@ public class TransliteratorTest extends TestFmwk {
         // Katakana should be untouched
         expect(t, "a\u3042\u30A2", "\u3042\u3042\u30A2");
 
-        if (FALSE) {
+        if (false) {
             // This test will only work if Transliterator.ROLLBACK is
             // true.  Otherwise, this test will fail, revealing a
             // limitation of global filters in incremental mode.
