@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2003, International Business Machines Corporation and
+# Copyright (c) 2002-2004, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -94,10 +94,6 @@ my %UNSUPPORTED = (Composition_Exclusion => 1,
                    Expands_On_NFKD => 1,
                    FC_NFKC_Closure => 1,
                    ID_Start_Exceptions => 1,
-                   NFC_Quick_Check => 1,
-                   NFD_Quick_Check => 1,
-                   NFKC_Quick_Check => 1,
-                   NFKD_Quick_Check => 1,
                    Special_Case_Condition => 1,
                    );
 
@@ -1198,6 +1194,25 @@ sub read_uchar {
     }
 
     $in->close();
+
+    # hardcode known values for the normalization quick check properties
+    # see unorm.h for the UNormalizationCheckResult enum
+
+    addDatum($hash, 'NFC_QC', 'UNORM_NO',    'N');
+    addDatum($hash, 'NFC_QC', 'UNORM_YES',   'Y');
+    addDatum($hash, 'NFC_QC', 'UNORM_MAYBE', 'M');
+
+    addDatum($hash, 'NFKC_QC', 'UNORM_NO',    'N');
+    addDatum($hash, 'NFKC_QC', 'UNORM_YES',   'Y');
+    addDatum($hash, 'NFKC_QC', 'UNORM_MAYBE', 'M');
+
+    # no "maybe" values for NF[K]D
+
+    addDatum($hash, 'NFD_QC', 'UNORM_NO',    'N');
+    addDatum($hash, 'NFD_QC', 'UNORM_YES',   'Y');
+
+    addDatum($hash, 'NFKD_QC', 'UNORM_NO',    'N');
+    addDatum($hash, 'NFKD_QC', 'UNORM_YES',   'Y');
 
     $hash;
 }

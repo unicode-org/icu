@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (c) 1996-2003, International Business Machines
+* Copyright (c) 1996-2004, International Business Machines
 * Corporation and others. All Rights Reserved.
 ******************************************************************************
 * File unorm.cpp
@@ -1161,6 +1161,32 @@ unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
         uset_add(set, c+1);
     }
     uset_add(set, HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
+}
+
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
+    static const uint32_t qcMask[UNORM_MODE_COUNT]={
+        0, 0, _NORM_QC_NFD, _NORM_QC_NFKD, _NORM_QC_NFC, _NORM_QC_NFKC
+    };
+
+    UErrorCode errorCode;
+    uint32_t norm32;
+
+    errorCode=U_ZERO_ERROR;
+    if(!_haveData(errorCode)) {
+        return UNORM_YES;
+    }
+
+    UTRIE_GET32(&normTrie, c, norm32);
+    norm32&=qcMask[mode];
+
+    if(norm32==0) {
+        return UNORM_YES;
+    } else if(norm32&_NORM_QC_ANY_NO) {
+        return UNORM_NO;
+    } else /* _NORM_QC_ANY_MAYBE */ {
+        return UNORM_MAYBE;
+    }
 }
 
 /* reorder UTF-16 in-place -------------------------------------------------- */
