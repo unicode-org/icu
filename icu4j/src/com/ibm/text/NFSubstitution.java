@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:51 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.2 $ $Date: 2000/02/27 06:24:34 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -917,7 +917,6 @@ class ModulusSubstitution extends NFSubstitution {
         // format the substitution value
         } else {
             long numberToFormat = transformNumber(number);
-
             ruleToUse.doFormat(numberToFormat, toInsertInto, pos + this.pos);
         }
     }
