@@ -112,6 +112,8 @@ typedef struct {
 /* they can be used to assure that the CEs will be always positioned in  */
 /* the same place relative to a point with known properties (e.g. first  */
 /* primary ignorable). */
+static indirectBoundaries ucolIndirectBoundaries[11];
+/*
 static indirectBoundaries ucolIndirectBoundaries[11] = {
   { UCOL_RESET_TOP_VALUE,               0, 
     UCOL_NEXT_TOP_VALUE,                0 },
@@ -136,6 +138,23 @@ static indirectBoundaries ucolIndirectBoundaries[11] = {
   { UCOL_LAST_NON_VARIABLE,             0, 
     0,                                  0 },
 };
+*/
+
+static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *end) { 
+  
+  // Set values for the top - TODO: once we have values for all the indirects, we are going
+  // to initalize here.
+  ucolIndirectBoundaries[indexR].startCE = start[0];
+  ucolIndirectBoundaries[indexR].startContCE = start[1];
+  if(end) {
+    ucolIndirectBoundaries[indexR].limitCE = end[0];
+    ucolIndirectBoundaries[indexR].limitContCE = end[1];
+  } else {
+    ucolIndirectBoundaries[indexR].limitCE = 0;
+    ucolIndirectBoundaries[indexR].limitContCE = 0;
+  }
+}
+
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
@@ -203,8 +222,9 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
 
   // rulesToParse = src->source;
   src->lh = 0;
-  src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
-  /* test for NULL */
+  src->listCapacity = 1024;
+  src->lh = (UColTokListHeader *)uprv_malloc(src->listCapacity*sizeof(UColTokListHeader));
+  //Test for NULL
   if (src->lh == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
@@ -212,13 +232,30 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->resultLen = 0;
 
   UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
-  
-  // Set values for the top - TODO: once we have values for all the indirects, we are going
-  // to initalize here.
-  ucolIndirectBoundaries[0].startCE =  consts->UCA_RESET_TOP_VALUE;
-  ucolIndirectBoundaries[0].startContCE =  0;
-  ucolIndirectBoundaries[0].limitCE =  consts->UCA_NEXT_TOP_VALUE;
-  ucolIndirectBoundaries[0].limitContCE =  0;
+
+  // UCOL_RESET_TOP_VALUE
+  setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT); 
+  // UCOL_FIRST_PRIMARY_IGNORABLE
+  setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
+  // UCOL_LAST_PRIMARY_IGNORABLE
+  setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
+  // UCOL_FIRST_SECONDARY_IGNORABLE
+  setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
+  // UCOL_LAST_SECONDARY_IGNORABLE
+  setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
+  // UCOL_FIRST_TERTIARY_IGNORABLE
+  setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
+  // UCOL_LAST_TERTIARY_IGNORABLE
+  setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
+  // UCOL_FIRST_VARIABLE
+  setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
+  // UCOL_LAST_VARIABLE
+  setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
+  // UCOL_FIRST_NON_VARIABLE
+  setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
+  // UCOL_LAST_NON_VARIABLE
+  setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, 0);
+
 }
 
 static inline 
@@ -750,7 +787,14 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                   *src->extraCurrent++ = 0xFFFE;
                   *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
                   *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
-                  newCharsLen = 3;
+                  if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
+                    newCharsLen = 3;
+                  } else {
+                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
+                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
+                    newCharsLen = 5;
+                  }
+
                   src->current++;
                   goto EndOfLoop;
                 } else {
@@ -964,6 +1008,15 @@ Processing Description
 
 static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint32_t *expandNext,
                                       UParseError *parseError, UErrorCode *status) {
+  if(src->resultLen == src->listCapacity) {
+    // Unfortunately, this won't work, as we store addresses of lhs in token
+    src->listCapacity *= 2;
+    src->lh = (UColTokListHeader *)uprv_realloc(src->lh, src->listCapacity*sizeof(UColTokListHeader));
+    if(src->lh == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
+  }
   /* do the reset thing */
   UColToken *sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
   /* test for NULL */
@@ -1024,6 +1077,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
   }
 
   src->resultLen++;
+
   uhash_put(src->tailored, sourceToken, sourceToken, status);
 
   return sourceToken;

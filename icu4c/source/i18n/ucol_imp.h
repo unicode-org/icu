@@ -424,6 +424,7 @@ enum {
     UCOL_BYTE_UNSHIFTED_MAX = 0xFF
 }; 
 
+#if 0
 #define UCOL_RESET_TOP_VALUE                0x9F000303
 #define UCOL_FIRST_PRIMARY_IGNORABLE        0x00008705
 #define UCOL_LAST_PRIMARY_IGNORABLE         0x0000DD05
@@ -449,6 +450,7 @@ enum {
 
 #define PRIMARY_IMPLICIT_MIN 0xE8000000
 #define PRIMARY_IMPLICIT_MAX 0xF0000000
+#endif
 
 /* These constants can be changed - sortkey size is affected by them */
 #define UCOL_PROPORTION2 0.5
@@ -532,23 +534,24 @@ typedef struct {
 } UColOptionSet;
 
 typedef struct {
-  uint32_t UCA_RESET_TOP_VALUE;                /*0x9F000303*/
-#if 0
-  uint32_t UCA_FIRST_PRIMARY_IGNORABLE;        /*0x00008705*/
-  uint32_t UCA_LAST_PRIMARY_IGNORABLE;         /*0x0000DD05*/
-  uint32_t UCA_LAST_PRIMARY_IGNORABLE_CONT;    /*0x0000C1C0*/
-  uint32_t UCA_FIRST_SECONDARY_IGNORABLE;      /*0x00000000*/
-  uint32_t UCA_LAST_SECONDARY_IGNORABLE;       /*0x00000500*/
-  uint32_t UCA_FIRST_TERTIARY_IGNORABLE;       /*0x00000000*/
-  uint32_t UCA_LAST_TERTIARY_IGNORABLE;        /*0x00000000*/
-  uint32_t UCA_FIRST_VARIABLE;                 /*0x05070505*/
-  uint32_t UCA_LAST_VARIABLE;                  /*0x13CF0505*/
-  uint32_t UCA_FIRST_NON_VARIABLE;             /*0x16200505*/
-  uint32_t UCA_LAST_NON_VARIABLE;              /*0x767C0505*/
-#endif
+  uint32_t UCA_FIRST_TERTIARY_IGNORABLE[2];       /*0x00000000*/
+  uint32_t UCA_LAST_TERTIARY_IGNORABLE[2];        /*0x00000000*/
+  uint32_t UCA_FIRST_PRIMARY_IGNORABLE[2];        /*0x00008705*/
+  uint32_t UCA_FIRST_SECONDARY_IGNORABLE[2];      /*0x00000000*/
+  uint32_t UCA_LAST_SECONDARY_IGNORABLE[2];       /*0x00000500*/
+  uint32_t UCA_LAST_PRIMARY_IGNORABLE[2];         /*0x0000DD05*/
+  uint32_t UCA_FIRST_VARIABLE[2];                 /*0x05070505*/
+  uint32_t UCA_LAST_VARIABLE[2];                  /*0x13CF0505*/
+  uint32_t UCA_FIRST_NON_VARIABLE[2];             /*0x16200505*/
+  uint32_t UCA_LAST_NON_VARIABLE[2];              /*0x767C0505*/
+  uint32_t UCA_RESET_TOP_VALUE[2];                /*0x9F000303*/
+  uint32_t UCA_FIRST_IMPLICIT[2];
+  uint32_t UCA_LAST_IMPLICIT[2]; 
+  uint32_t UCA_FIRST_TRAILING[2];
+  uint32_t UCA_LAST_TRAILING[2]; 
 
-  uint32_t UCA_NEXT_TOP_VALUE;                 /*0xE8960303*/
 #if 0
+  uint32_t UCA_NEXT_TOP_VALUE[2];                 /*0xE8960303*/
   uint32_t UCA_NEXT_FIRST_PRIMARY_IGNORABLE;   /*0x00008905*/
   uint32_t UCA_NEXT_LAST_PRIMARY_IGNORABLE;    /*0x03000303*/
   uint32_t UCA_NEXT_FIRST_SECONDARY_IGNORABLE; /*0x00008705*/
@@ -559,8 +562,13 @@ typedef struct {
   uint32_t UCA_NEXT_LAST_VARIABLE;             /*0x16200505*/
 #endif
 
+  uint32_t UCA_PRIMARY_TOP_MIN;
   uint32_t UCA_PRIMARY_IMPLICIT_MIN; /*0xE8000000*/
   uint32_t UCA_PRIMARY_IMPLICIT_MAX; /*0xF0000000*/
+  uint32_t UCA_PRIMARY_TRAILING_MIN; /*0xE8000000*/
+  uint32_t UCA_PRIMARY_TRAILING_MAX; /*0xF0000000*/
+  uint32_t UCA_PRIMARY_SPECIAL_MIN; /*0xE8000000*/
+  uint32_t UCA_PRIMARY_SPECIAL_MAX; /*0xF0000000*/
 } UCAConstants;
 
 typedef struct {
@@ -569,7 +577,7 @@ typedef struct {
       /* to get the address add to the header address and cast properly */
       uint32_t options; /* these are the default options for the collator */
       uint32_t UCAConsts; /* structure which holds values for indirect positioning and implicit ranges */
-      /*uint32_t contractionUCACombos;*/        /* this one is needed only for UCA, to copy the appropriate contractions */
+      uint32_t contractionUCACombos;        /* this one is needed only for UCA, to copy the appropriate contractions */
       uint32_t unusedReserved1;         /* reserved for future use */
       uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
       uint32_t expansion;        /* uint32_t *expansion;            */
@@ -801,7 +809,7 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
     hash = c;
     if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
-      if(UTF_IS_TRAIL(c)) {
+      if(UTF_IS_LEAD(c) || UTF_IS_TRAIL(c)) {
             /*  Trail surrogate                     */
             /*  These are always considered unsafe. */
             return TRUE;

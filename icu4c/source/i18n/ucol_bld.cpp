@@ -875,6 +875,43 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
   }
 }
 
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+_processUCACompleteIgnorables(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+  UErrorCode status = U_ZERO_ERROR;
+  tempUCATable *t = (tempUCATable *)context;
+  if(value == 0) {
+    UChar32 stopHere = start;
+    while(start < limit) {
+      uint32_t CE = utrie_get32(t->mapping, start, NULL);
+      if(CE == UCOL_NOT_FOUND) {
+        UCAElements el;
+        el.isThai = FALSE;
+        el.prefixSize = 0;
+        el.prefixChars[0] = 0;
+        el.prefix = el.prefixChars;
+        el.cPoints = el.uchars;
+
+        el.cSize = 0;
+        UTF_APPEND_CHAR(el.uchars, el.cSize, 1024, start);
+
+        el.noOfCEs = 1;
+        el.CEs[0] = 0;
+        uprv_uca_addAnElement(t, &el, &status);
+
+      }
+      start++;
+    }
+  }
+  if(U_FAILURE(status)) {
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+}
+U_CDECL_END
+
+
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
   if(U_FAILURE(*status)) {
@@ -1015,8 +1052,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* copy contractions from the UCA - this is felt mostly for cyrillic*/
 
     uint32_t tailoredCE = UCOL_NOT_FOUND;
-    UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts+sizeof(UCAConstants));
-    //UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+    //UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts+sizeof(UCAConstants));
+    UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
     UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
     while(*conts != 0) {
       /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
@@ -1054,6 +1091,10 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
     ucol_closeElements(ucaEl);
   }
+
+  // Add completely ignorable elements
+  utrie_enum(t->UCA->mapping, NULL, _processUCACompleteIgnorables, t);
+
 
   // canonical closure
   uprv_uca_canonicalClosure(t, status);
