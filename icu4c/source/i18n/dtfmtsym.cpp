@@ -644,7 +644,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    initField(&fEras, fErasCount, getData(resource, gErasTag, type, status), status);
+    ResourceBundle data = getData(resource, gErasTag, type, status);
+    uprv_strcpy(validLocale, data.getLocale(ULOC_VALID_LOCALE, status).getName());
+    uprv_strcpy(actualLocale, data.getLocale(ULOC_ACTUAL_LOCALE, status).getName());
+    initField(&fEras, fErasCount, data, status);
     initField(&fMonths, fMonthsCount, getData(resource, gMonthNamesTag, type, status), status);
     initField(&fShortMonths, fShortMonthsCount, getData(resource, gMonthAbbreviationsTag, type, status), status);
     initField(&fAmPms, fAmPmsCount, getData(resource, gAmPmMarkersTag, type, status), status);
