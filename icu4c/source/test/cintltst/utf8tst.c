@@ -341,19 +341,19 @@ static void TestNextPrevChar(){
             0xf4, 0x8f, 0xbf, 0xbe  /* U+10fffe */
         };
 
-        UChar32 c;
-        int32_t i;
+        UChar32 ch;
+        int32_t idx;
 
-        for(i=0; i<sizeof(nonChars);) {
-            U8_NEXT(nonChars, i, sizeof(nonChars), c);
-            if(!U_IS_UNICODE_NONCHAR(c)) {
-                log_err("U8_NEXT(before %d) failed to read a non-character\n", i);
+        for(idx=0; idx<(int32_t)sizeof(nonChars);) {
+            U8_NEXT(nonChars, idx, sizeof(nonChars), ch);
+            if(!U_IS_UNICODE_NONCHAR(ch)) {
+                log_err("U8_NEXT(before %d) failed to read a non-character\n", idx);
             }
         }
-        for(i=sizeof(nonChars); i>0;) {
-            U8_PREV(nonChars, 0, i, c);
-            if(!U_IS_UNICODE_NONCHAR(c)) {
-                log_err("U8_PREV(at %d) failed to read a non-character\n", i);
+        for(idx=(int32_t)sizeof(nonChars); idx>0;) {
+            U8_PREV(nonChars, 0, idx, ch);
+            if(!U_IS_UNICODE_NONCHAR(ch)) {
+                log_err("U8_PREV(at %d) failed to read a non-character\n", idx);
             }
         }
     }
