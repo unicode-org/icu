@@ -114,7 +114,7 @@ fi {
                     }
                 }
             }
-            Eras {
+            eras {
                 "eaa.",
                 "jaa."
             }
