@@ -75,6 +75,8 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
         }
     }
     
+    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
+
     return result;
 }
 
@@ -119,6 +121,8 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
         }
     }
     
+    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
+
     return result;
 }
 
@@ -145,6 +149,8 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
         }
     }
     
+    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
+
     return result;
 }
 
@@ -171,6 +177,8 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
         }
     }
     
+    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
+
     return result;
 }
 
