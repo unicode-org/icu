@@ -3,15 +3,16 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/29 17:27:44 $
-# $Revision: 1.15 $
+# $Date: 2001/11/30 03:11:15 $
+# $Revision: 1.16 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
-# [\u0000-\u007F \u00B7 [:Greek:] [:Latin:] [:nonspacing mark:]] ;
+# :: [\u0000-\u007F \u0370-\u03FF [:Greek:] [:nonspacing mark:]] ;
+# MINIMAL FILTER GENERATED FOR: Greek-Latin
+:: [;\u00B5\u00B7\u00C4\u00CB\u00CF\u00D6\u00DC\u00E4\u00EB\u00EF\u00F6\u00FC\u00FF-\u0101\u0112-\u0113\u012A-\u012B\u014C-\u014D\u016A-\u016B\u0178\u01D5-\u01DC\u01DE-\u01E3\u01EC-\u01ED\u022A-\u022D\u0230-\u0233\u0304\u0308\u0313-\u0314\u0342-\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D6\u03F0-\u03F5\u0401\u0407\u0451\u0457\u04D2-\u04D3\u04DA-\u04DF\u04E2-\u04E7\u04EA-\u04F1\u04F4-\u04F5\u04F8-\u04F9\u1E14-\u1E17\u1E20-\u1E21\u1E26-\u1E27\u1E2E-\u1E2F\u1E38-\u1E39\u1E4E-\u1E53\u1E5C-\u1E5D\u1E7A-\u1E7B\u1E84-\u1E85\u1E8C-\u1E8D\u1E97\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FC1-\u1FC4\u1FC6-\u1FCC\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDF-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126] ;
 
-:: [\u0000-\u007F \u0370-\u03FF [:Greek:] [:nonspacing mark:]] ;
-:: NFKD (NFC) ; 
+:: NFD (NFC) ; 
 
 # TEST CASES
 
@@ -25,9 +26,13 @@
 
 # Useful variables
 
-$lower = [:Ll:] ; 
-$upper = [:Lu:] ; 
-$accent = [:M:] ; 
+$lower = [[:latin:][:greek:] & [:Ll:]]; 
+$upper = [[:latin:][:greek:] & [:Lu:]] ; 
+$accent = [:M:] ;
+
+# NOTE: restrict to just the Greek & Latin accents that we care about
+# TODO: broaden out once interation is fixed
+$accentMinus = [ [\u0300-\u0345] & [:M:] - [\u0338]]
 
 $macron = \u0304 ;
 $ddot = \u0308 ;
@@ -41,8 +46,6 @@ $lcgvowelC = [$lcgvowel $accent] ;
 $evowel = [aeiouyAEIOUY];
 $vowel = [ $evowel $gvowel] ; 
 
-$beforeLower = $accent * $lower ; 
-
 $gammaLike = [ΓΚΞΧγκξχϰ] ; 
 $egammaLike = [GKXCgkxc] ; 
 $smooth = ̓ ; 
@@ -55,6 +58,9 @@ $underbar = \u0331;
 
 $afterLetter = [:L:] [[:M:]\']* ;
 $beforeLetter = [[:M:]\']* [:L:] ;
+$beforeLower = $accent * $lower ; 
+
+$notLetter = [^[:L:][:M:]] ;
 
 # Fix punctuation
 
@@ -78,8 +84,8 @@ $accent_minus = [[$accent]-[$iotasub$macron]];
 $upper $accent * { $iotasub > I ; 
 $iotasub > i ; 
 
-| $1 $iotasub < ($evowel $macron [:M:]*) i ;
-| $1 $iotasub < ($evowel $macron [:M:]*) I ;
+| $1 $iotasub < ($evowel $macron $accentMinus *) i ;
+| $1 $iotasub < ($evowel $macron $accentMinus *) I ;
 
 # BREATHING
 
@@ -152,9 +158,9 @@ $smooth > ;
 # insert in Greek
 # the assumption is that all Marks are on letters.
 
- | $1 $smooth < [^[:L:][:M:]] { ([rR]) } [^hH$smooth$rough] ;
- | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron? $evowel $macron?) } [^$smooth$rough] ;
- | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron?) } [^$evowel$smooth$rough] ;
+ | $1 $smooth < $notLetter { ([rR]) } [^hH$smooth$rough] ;
+ | $1 $smooth < $notLetter { ($evowel $macron? $evowel $macron?) } [^$smooth$rough] ;
+ | $1 $smooth < $notLetter { ($evowel $macron?) } [^$evowel$smooth$rough] ;
 
 # TODO: preserve smooth/rough breathing if not 
 # on initial vowel sequence
@@ -280,14 +286,16 @@ $ignore = [[:Mark:]''] * ;
 | ph < f ;
 | i  < j ;
 | k < q ;
+| b < v } $vowel ;
+| b < w } $vowel;
 | u < v ;
-| u < w ;
+| u < w;
 | K < C ;
-| PH < F } $ignore [:UppercaseLetter:] ;
-| PH < [:UppercaseLetter:] $ignore { F ;
-| PH < F ;
+| Ph < F ;
 | I < J ;
 | K < Q ;
+| B < V  } $vowel ;
+| B < W  } $vowel ;
 | U < V ;
 | U < W ;
 
@@ -320,6 +328,9 @@ $rough <> h ;
  < [Ππ] { \' } [Ss] ;
  < [Νν] { \' } $egammaLike ;
 
-::NFC (NFKD) ;
+::NFC (NFD) ;
 # ([\u0000-\u007F [:Latin:] [:Greek:] [:nonspacing mark:]]) ;
-:: ([\u0000-\u007F \u00B7 [:Latin:] [:nonspacing mark:]]) ;
+# ([\u0000-\u007F \u00B7 [:Latin:] [:nonspacing mark:]]) ;
+# MINIMAL FILTER GENERATED FOR: Latin-Greek BACKWARD
+:: ( [':?A-Za-z\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01F0\u01F4-\u01F5\u01F8-\u021B\u021E-\u021F\u0226-\u0233\u0300-\u0337\u0339-\u0345\u0385-\u0386\u0388-\u038A\u038C\u038E-\u0390\u03AA-\u03B0\u03CA-\u03CE\u03D3-\u03D4\u0400-\u0401\u0403\u0407\u040C-\u040E\u0419\u0439\u0450-\u0451\u0453\u0457\u045C-\u045E\u0476-\u0477\u04C1-\u04C2\u04D0-\u04D3\u04D6-\u04D7\u04DA-\u04DF\u04E2-\u04E7\u04EA-\u04F5\u04F8-\u04F9\u1E00-\u1E99\u1EA0-\u1EF9\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB2\u1FB4\u1FB6-\u1FBB\u1FC1-\u1FC2\u1FC4\u1FC6-\u1FCB\u1FCD-\u1FD3\u1FD6-\u1FDB\u1FDD-\u1FEE\u1FF2\u1FF4\u1FF6-\u1FFB\u212A-\u212B] ) ;
+

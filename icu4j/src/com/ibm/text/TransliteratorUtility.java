@@ -20,7 +20,9 @@ import java.io.*;
  * java -classpath classes com.ibm.text.TransliteratorUtility Latin-Katakana NFD lower
  * Output is produced in the command console, and a file with more detail is also written.
  * To see if it works, use:
- * java -classpath classescom.ibm.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
+ * java -classpath classes com.ibm.test.translit.TransliteratorTest -v -nothrow TestIncrementalProgress
+ * and 
+ * java -classpath classes com.ibm.demo.translit.Demo
  */
 public class TransliteratorUtility {
 
@@ -65,6 +67,7 @@ public class TransliteratorUtility {
         out = new PrintWriter(
             new OutputStreamWriter(
                 new FileOutputStream(filename), "UTF-8"));
+        out.print('\uFEFF'); // BOM
         System.out.println();
         System.out.println("Writing " + filename);
         Transliterator t = Transliterator.getInstance(ID);
@@ -82,7 +85,6 @@ public class TransliteratorUtility {
         }
         System.out.println(t.getID() + ": " +
                            sourceSet.toPattern(true));
-        out.print('\uFEFF'); // BOM
         out.println("# MINIMAL FILTER GENERATED FOR: " + t.getID() + (forward ? "" : " BACKWARD"));
         out.println(":: " 
             + (forward ? "" : "( ") 

@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/28 02:03:39 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/30 03:11:15 $ 
+ * $Revision: 1.7 $
  **************************************************************************
  */
 
@@ -22,16 +22,18 @@ public class LocaleElements_el extends ListResourceBundle {
               new String[] { "UNGEGN",
 
 "# Rules are predicated on running NFD first, and NFC afterwards\n"+
+// MINIMAL FILTER GENERATED FOR: Greek-Latin/UNGEGN
+":: [;\u00B5\u00B7\u00C0\u00C2\u00C8\u00CA\u00CC\u00CE\u00D2\u00D4\u00D9\u00DB\u00E0\u00E2\u00E8\u00EA\u00EC\u00EE\u00F2\u00F4\u00F9\u00FB\u0108-\u0109\u011C-\u011D\u0124-\u0125\u0134-\u0135\u015C-\u015D\u0174-\u0177\u01DB-\u01DC\u01F8-\u01F9\u0300\u0302\u0313-\u0314\u0340\u0342-\u0343\u0345\u037A\u037E\u0386-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D6\u03F0-\u03F5\u0400\u040D\u0450\u045D\u1E14-\u1E15\u1E50-\u1E51\u1E80-\u1E81\u1E90-\u1E91\u1EA4-\u1EAD\u1EB0-\u1EB1\u1EBE-\u1EC7\u1ED0-\u1ED9\u1EDC-\u1EDD\u1EEA-\u1EEB\u1EF2-\u1EF3\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FC1-\u1FC4\u1FC6-\u1FCD\u1FCF-\u1FD3\u1FD6-\u1FDB\u1FDD\u1FDF-\u1FED\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126] ;"+
 
-":: [\\u0000-\\u007F \\u00B7 [:Greek:] [:nonspacing mark:]] ;"+
-"::NFKD (NFC) ; "+
+// ":: [\\u0000-\\u007F \\u00B7 [:Greek:] [:nonspacing mark:]] ;"+
+"::NFD (NFC) ; "+
 
 "# For modern Greek.\n"+
 
 "# Useful variables\n"+
 
-"$lower = [:Ll:] ; "+
-"$upper = [:Lu:] ; "+
+"$lower = [[:latin:][:greek:] & [:Ll:]] ; "+
+"$upper = [[:latin:][:greek:] & [:Lu:]] ; "+
 "$accent = [:M:] ; "+
 
 "$macron = \u0304 ;"+
@@ -98,7 +100,7 @@ public class LocaleElements_el extends ListResourceBundle {
 "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"+
 
 "\u03bc\u03c0 < b ; "+
-"\u039c\u03c0 < B { $beforeLower ; "+
+"\u039c\u03c0 < B } $beforeLower ; "+
 "\u039c\u03a0 < B ; "+
 
 "# handle diphthongs ending with upsilon\n"+
@@ -197,12 +199,14 @@ public class LocaleElements_el extends ListResourceBundle {
 
 "# Completeness for ASCII\n"+
 
-"$ignore = [[:Mark:]''] * ;"+
+// "$ignore = [[:Mark:]''] * ;"+
 
 "| ch < h ;"+
 "| k  < c ;"+
 "| i  < j ;"+
 "| k < q ;"+
+"| b < u } $vowel ;"+
+"| b < w } $vowel ;"+
 "| y < u ;"+
 "| y < w ;"+
 
@@ -210,6 +214,8 @@ public class LocaleElements_el extends ListResourceBundle {
 "| K < C ;"+
 "| I < J ;"+
 "| K < Q ;"+
+"| B < W } $vowel ;"+
+"| B < U } $vowel ;"+
 "| Y < W ;"+
 "| Y < U ;"+
 
@@ -234,9 +240,12 @@ public class LocaleElements_el extends ListResourceBundle {
 " < [\u03a0\u03c0] { \\' } [Ss] ;"+
 " < [\u039d\u03bd] { \\' } $egammaLike ;"+
 
-"::NFC (NFKD) ; "+
+"::NFC (NFD) ; "+
 
-":: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;"
+// MINIMAL FILTER GENERATED FOR: Latin-Greek/UNGEGN BACKWARD
+":: ( [':?A-Za-z\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E1\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB\u0200-\u021B\u021E-\u021F\u0226-\u0233\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B] ) ;"
+
+// ":: ([\\u0000-\\u007F [:Latin:] [:nonspacing mark:]]) ;"
 
               }
             }
