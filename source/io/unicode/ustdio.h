@@ -78,6 +78,8 @@
     u_fflush with a u_frewind.
  * scanf(%i) should detect what type of number to use.
  * Add more testing of the alternate format, %#
+ * Look at newline handling of fputs/puts
+ * Think more about codeunit/codepoint error handling/support in %S,%s,%C,%c,%[]
  * Complete the file documentation with proper doxygen formatting.
     See http://oss.software.ibm.com/pipermail/icu/2003-July/005647.html
 */
@@ -134,8 +136,8 @@ Format modifiers
 <tr><td>%ll</td><td>%u</td><td>uint64_t</td><td><b>(Unimplemented)</b> long long format</td></tr>
 <tr><td>%-</td><td><i>all</i></td><td>N/A</td><td>Left justify</td></tr>
 <tr><td>%+</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Always show the plus or minus sign. Needs data for plus sign.</td></tr>
-<tr><td>% </td><td></td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G<td>N/A</td><td>Instead of a "+" output a blank character for positive numbers.</td></tr>
-<tr><td>%#</td><td></td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G<td>N/A</td><td>Precede octal value with 0, hex with 0x and show the 
+<tr><td>% </td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Instead of a "+" output a blank character for positive numbers.</td></tr>
+<tr><td>%#</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Precede octal value with 0, hex with 0x and show the 
                 decimal point for floats.</td></tr>
 <tr><td>%n</td><td><i>all</i></td><td>N/A</td><td>Width of input/output. num is an actual number from 0 to 
                 some large number.</td></tr>
@@ -416,6 +418,7 @@ u_vfprintf_u(UFILE      *f,
  * @param s The UChar* to write.
  * @param f The UFILE to which to write.
  * @return A non-negative number if successful, EOF otherwise.
+ * @see u_file_write
  * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
@@ -429,8 +432,8 @@ u_fputs(const UChar *s,
  * @return The character written if successful, EOF otherwise.
  * @draft 3.0
  */
-U_CAPI int32_t U_EXPORT2
-u_fputc(UChar   uc,
+U_CAPI UChar32 U_EXPORT2
+u_fputc(UChar32  uc,
         UFILE  *f);
 
 /**
