@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -84,17 +84,17 @@ endif
 #    - $(ICULIBS_LAYOUT)  - ICU layout library. 
 #    - $(ICULIBS_USTDIO)  - ICU stdio equivalent library
 
-ICULIBS_COMMON = -l$(ICUPREFIX)uc$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_DATA   = -l$(ICUPREFIX)data$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_I18N   = -l$(ICUPREFIX)i18n$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_TOOLUTIL = -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_CTESTFW = -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_USTDIO = -lustdio$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
-ICULIBS_LAYOUT = -l$(ICUPREFIX)le$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_COMMON = -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_DATA   = -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_I18N   = -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_TOOLUTIL = -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_CTESTFW = -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_USTDIO = -lustdio$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
+ICULIBS_LAYOUT = -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(ICULIBSUFFIX_VERSION)
 ICULIBS_BASE = $(LIBS) -L$(libdir)
 
 # for icu-config to test with
-ICULIBS_COMMON_LIB_NAME = ${LIBICU}uc${ICULIBSUFFIX_VERSION}${ICULIBSUFFIX}.${SO}
+ICULIBS_COMMON_LIB_NAME = ${LIBICU}uc${ICULIBSUFFIX}${ICULIBSUFFIX_VERSION}.${SO}
 
 # ICULIBS is the set of libraries your application should link
 # with usually. Many applications will want to add $(ICULIBS_I18N) as well. 
