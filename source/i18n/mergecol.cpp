@@ -79,6 +79,7 @@ MergeCollation::MergeCollation(const    UnicodeString&  pattern,
     }
 
   setPattern(pattern, decompMode, status);
+
   if (U_FAILURE(status))
     {
       delete [] statusArray;
@@ -112,6 +113,13 @@ MergeCollation::operator=(const MergeCollation& other)
   if (this != &other)
   {
     *patterns = *other.patterns;
+
+    if(lastEntry != 0) {
+        if (lastEntry->strength == PatternEntry::RESET) {
+            delete lastEntry;
+        }
+    }
+
     lastEntry = 0;
     saveEntry = 0;
 
@@ -130,6 +138,12 @@ MergeCollation::operator=(const MergeCollation& other)
  */
 MergeCollation::~MergeCollation()
 {
+    if(lastEntry != 0) {
+        if (lastEntry->strength == PatternEntry::RESET) {
+            delete lastEntry;
+        }
+    }
+
   delete patterns;
   delete [] statusArray;
 }
@@ -294,7 +308,14 @@ void MergeCollation::addPattern(const   UnicodeString&  pattern,
     }
 
       entry = parser->next(success);
+
+      if (entry == (PatternEntry *)0x032ac2c0)
+      {
+            int i=0;
+      }
     }
+  // WEIV tentatively - is there a leak at the end???
+  delete parser;
 }
 
 /**
@@ -407,6 +428,11 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
       newEntry->extension.insert(0, excess);
       if (lastIndex != patterns->size())
         {
+          if(lastEntry != 0) {
+            if (lastEntry->strength == PatternEntry::RESET) {
+                delete lastEntry;
+            }
+          }
           lastEntry = saveEntry;
           changeLastEntry = FALSE;
             }
@@ -422,13 +448,18 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
       else
     {
       patterns->atInsert(lastIndex, newEntry);  // add at end
-        }
     }
+  }
     
   if (changeLastEntry)
-    {
-      lastEntry = newEntry;
-    }
+  {
+      if(lastEntry != 0) {
+            if (lastEntry->strength == PatternEntry::RESET) {
+                delete lastEntry;
+            }
+     }
+     lastEntry = newEntry;
+   }
 }
 
 int32_t

@@ -934,10 +934,10 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     data = 0;
   }
   
-  char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
-					localeFileName, UnicodeString(kFilenameSuffix,""));
-  
     if(tryBinaryFile) {
+      char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
+					    localeFileName, UnicodeString(kFilenameSuffix,""));
+  
         // Try to load up the collation from a binary file first
         constructFromFile(binaryFilePath, status);
         #ifdef COLLDEBUG
@@ -950,6 +950,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
         if(status == U_FILE_ACCESS_ERROR) {
             status = U_ZERO_ERROR;
         }
+        delete [] binaryFilePath;
     }
 
   // Now try to load it up from a resource bundle text source file
@@ -965,7 +966,6 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   // if there is no resource bundle file for the give locale, break out
   if(U_FAILURE(status))
   {
-      delete [] binaryFilePath;
       return;
   }
 
@@ -986,14 +986,12 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
 
     if(colString.isBogus()) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete [] binaryFilePath;
         return;
     }
 
   // if this bundle doesn't contain collation data, break out
   if(U_FAILURE(intStatus)) {
     status = U_MISSING_RESOURCE_ERROR;
-    delete [] binaryFilePath;
     return;
   }
 
@@ -1004,14 +1002,12 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   colString.insert(0, DEFAULTRULES);
   if(colString.isBogus()) {
     status = U_MEMORY_ALLOCATION_ERROR;
-    delete [] binaryFilePath;
     return;
   }
     
   constructFromRules(colString, intStatus);
   if(intStatus == U_MEMORY_ALLOCATION_ERROR) {
     status = U_MEMORY_ALLOCATION_ERROR;
-    delete [] binaryFilePath;
     return;
   }
   
@@ -1029,19 +1025,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
 #ifdef COLLDEBUG
   cerr << localeFileName << " ascii load " << (U_SUCCESS(status) ? "OK" : "Failed") << " - try= " << (tryBinaryFile?"true":"false") << endl;
 #endif
-  
-  if(U_SUCCESS(status) && tryBinaryFile) {
-    // If we get a RuleBasedCollator result, even if it is derived
-    // from a default or a fallback, then we write it out as a
-    // binary file to the disk.  The next time the system wants to
-    // get this collation, it will load up very quickly from the
-    // binary file.
-    /*UBool ok = writeToFile(binaryFilePath);*/ /*!*/
-    delete [] binaryFilePath;
-#ifdef COLLDEBUG
-    cerr << localeFileName << " binary write " << (ok? "OK" : "Failed") << endl;
-#endif
-  }
+
 }
 
 RuleBasedCollator::~RuleBasedCollator()
@@ -1137,6 +1121,8 @@ RuleBasedCollator::getRules() const
         // the rules from.  Therefore, we fetch the rules off the disk.
         // Notice that we pass in a tryBinaryFile value of FALSE, since
         // by design the binary file has NO rules in it!
+        //UErrorCode status = U_ZERO_ERROR;
+        //RuleBasedCollator temp(data->realLocaleName, status);
         RuleBasedCollator temp;
         UErrorCode status = U_ZERO_ERROR;
         temp.constructFromFile(data->desiredLocale, data->realLocaleName, FALSE, status);

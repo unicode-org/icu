@@ -375,7 +375,8 @@ void ResourceBundle::resetIterator(void) {
 }
 
 ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
-    return ResourceBundle(ures_getNextResource(resource, 0, &status));
+    UResourceBundle r;
+    return ResourceBundle(ures_getNextResource(resource, &r, &status));
 }
 
 UnicodeString ResourceBundle::getNextString(UErrorCode& status) {
@@ -391,7 +392,8 @@ UnicodeString ResourceBundle::getNextString(const char ** key, UErrorCode& statu
 }
 
 ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
-    return ResourceBundle(ures_getByIndex(resource, indexR, 0, &status));
+    UResourceBundle r;
+    return ResourceBundle(ures_getByIndex(resource, indexR, &r, &status));
 }
 
 UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) const {
@@ -401,7 +403,8 @@ UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) co
 }
 
 ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
-    return ResourceBundle(ures_getByKey(resource, key, 0, &status));
+    UResourceBundle r;
+    return ResourceBundle(ures_getByKey(resource, key, &r, &status));
 }
 
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
@@ -522,7 +525,8 @@ ResourceBundle::get2dArray(const char *resourceTag,
                            int32_t&             columnCount,
                            UErrorCode&           err) const
 {
-    UnicodeString **result = 0;
+    //UnicodeString **result = 0;
+    UnicodeString **result;
     String2dList *sldata = 0;
     int32_t len=0;
 

@@ -62,6 +62,7 @@ String2dList::~String2dList()
   for(int32_t i = 0; i < fRowCount; ++i) {
     delete[] fStrings[i]; 
   }
+  delete[] fStrings;
 }
   
 const UnicodeString& 
