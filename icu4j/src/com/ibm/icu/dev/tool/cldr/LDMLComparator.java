@@ -690,9 +690,21 @@ public class LDMLComparator {
                 }
                 if(m_Vetting) {
                     String altText = (String)element.platformData.get("ALT");
-                    writer.print("<td>" + value + "</td>");
+                    writer.print("<td>" + value);
+                    String parName = mapToAbbr(element.parentNode);
+                    if ((parName.indexOf("_dateFormat")!=-1)
+                        || (parName.indexOf("_timeFormat")!=-1))
+                            {
+                                writer.print("<form method=\"POST\" action=\"http://oss.software.ibm.com/cgi-bin/icu/lx/\">" +
+                                    "<input type=hidden name=\"_\" value=\"" + localeStr + "\"/>" +
+                                    "<input type=hidden name=\"x\" value=\"" + "dat" + "\"/>" +
+                                    "<input type=hidden name=\"str\" value=\"" + value + "\"/>" +
+                                    "<input type=submit value=\"" + "Test" + "\"/>" +
+                                    "</form>");
+                            }
+                    writer.print("</td>");
                     if(altText!=null) { 
-                        writer.print("                <td bgcolor="+ALT_COLOR+">"+altText);
+                        writer.print("        <td bgcolor="+ALT_COLOR+">"+altText);
                         writer.print("</td>\n");
                     }
                 } else {
