@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SymbolTable.java,v $ 
- * $Date: 2002/02/16 03:06:16 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/12/04 00:03:40 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ import java.text.ParsePosition;
  * <p>Currently, RuleBasedTransliterator and UnicodeSet use this
  * interface to share variable definitions.
  */
-public interface SymbolTable {
+interface SymbolTable {
 
     /**
      * The character preceding a symbol reference name.
