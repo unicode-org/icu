@@ -1,6 +1,7 @@
 package test.translit;
 import test.IntlTest;
 import com.ibm.text.*;
+import com.ibm.Utility;
 import java.text.*;
 import java.util.*;
 
@@ -265,7 +266,7 @@ public class TransliteratorTest extends IntlTest {
     }
 
     private void keyboardAux(Transliterator t, String[] DATA) {
-        int[] index = {0, 0, 0};
+        Transliterator.Position index = new Transliterator.Position();
         ReplaceableString s = new ReplaceableString();
         for (int i=0; i<DATA.length; i+=2) {
             StringBuffer log;
@@ -280,12 +281,12 @@ public class TransliteratorTest extends IntlTest {
             }
             String str = s.toString();
             // Show the start index '{' and the cursor '|'
-            log.append(str.substring(0, index[Transliterator.START])).
+            log.append(str.substring(0, index.start)).
                 append('{').
-                append(str.substring(index[Transliterator.START],
-                                     index[Transliterator.CURSOR])).
+                append(str.substring(index.start,
+                                     index.cursor)).
                 append('|').
-                append(str.substring(index[Transliterator.CURSOR]));
+                append(str.substring(index.cursor));
             if (str.equals(DATA[i+1])) {
                 logln(log.toString());
             } else {
@@ -373,7 +374,7 @@ public class TransliteratorTest extends IntlTest {
         };
 
         for (int i=0; i<DATA.length; i+=3) {
-            logln("Pattern: " + escape(DATA[i]));
+            logln("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
             expect(t, DATA[i+1], DATA[i+2]);
         }
@@ -407,7 +408,7 @@ public class TransliteratorTest extends IntlTest {
         // Test keyboard (incremental) transliteration -- this result
         // must be the same after we finalize (see below).
         rsource.getStringBuffer().setLength(0);
-        int[] index = { 0, 0, 0 };
+        Transliterator.Position index = new Transliterator.Position();
         StringBuffer log = new StringBuffer();
 
         for (int i=0; i<source.length(); ++i) {
@@ -420,9 +421,9 @@ public class TransliteratorTest extends IntlTest {
             // Append the string buffer with a vertical bar '|' where
             // the committed index is.
             String s = rsource.toString();
-            log.append(s.substring(0, index[Transliterator.CURSOR])).
+            log.append(s.substring(0, index.cursor)).
                 append('|').
-                append(s.substring(index[Transliterator.CURSOR]));
+                append(s.substring(index.cursor));
         }
         
         // As a final step in keyboard transliteration, we must call
@@ -447,37 +448,11 @@ public class TransliteratorTest extends IntlTest {
     void expectAux(String tag, String summary, boolean pass,
                    String expectedResult) {
         if (pass) {
-            logln("("+tag+") " + escape(summary));
+            logln("("+tag+") " + Utility.escape(summary));
         } else {
             errln("FAIL: ("+tag+") "
-                  + escape(summary)
-                  + ", expected " + escape(expectedResult));
+                  + Utility.escape(summary)
+                  + ", expected " + Utility.escape(expectedResult));
         }
-    }
-    
-    /**
-     * Escape non-ASCII characters as Unicode.
-     */
-    public static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<s.length(); ++i) {
-            char c = s.charAt(i);
-            if (c >= ' ' && c <= 0x007F) {
-                buf.append(c);
-            } else {
-                buf.append("\\u");
-                if (c < 0x1000) {
-                    buf.append('0');
-                    if (c < 0x100) {
-                        buf.append('0');
-                        if (c < 0x10) {
-                            buf.append('0');
-                        }
-                    }
-                }
-                buf.append(Integer.toHexString(c));
-            }
-        }
-        return buf.toString();
     }
 }
