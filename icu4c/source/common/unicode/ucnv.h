@@ -197,10 +197,35 @@ U_CDECL_END
 
 /**
  * Converter option for specifying a locale.
+ * For example, ucnv_open("SCSU,locale=ja", &errorCode);
+ * See convrtrs.txt.
+ *
  * @see ucnv_open
  * @stable
  */
 #define UCNV_LOCALE_OPTION_STRING ",locale="
+
+/**
+ * Converter option for specifying a version selector (0..9) for some converters.
+ * For example, ucnv_open("UTF-7,version=1", &errorCode);
+ * See convrtrs.txt.
+ *
+ * @see ucnv_open
+ * @draft ICU 2.4
+ */
+#define UCNV_VERSION_OPTION_STRING ",version="
+
+/**
+ * Converter option for EBCDIC SBCS or mixed-SBCS/DBCS (stateful) codepages.
+ * Swaps Unicode mappings for EBCDIC LF and NL codes, as used on
+ * S/390 (z/OS) Unix System Services (Open Edition).
+ * For example, ucnv_open("ibm-1047,swaplfnl", &errorCode);
+ * See convrtrs.txt.
+ *
+ * @see ucnv_open
+ * @draft ICU 2.4
+ */
+#define UCNV_SWAP_LFNL_OPTION_STRING ",swaplfnl"
 
 /**
  * Do a fuzzy compare of a two converter/alias names.  The comparison
@@ -311,11 +336,12 @@ ucnv_openU (const UChar * name,
  *     cnv=ucnv_open(name, &errorCode);
  * \endcode
  *
- * In order to open a converter with the IBM S/390 Unix System Services variant of a Unicode/EBCDIC conversion table,
- * you can use the prefix "ibm-" together with the suffix "-s390":
+ * In order to open a converter with the IBM S/390 Unix System Services variant
+ * of a Unicode/EBCDIC conversion table,
+ * you can use the prefix "ibm-" together with the option string UCNV_SWAP_LFNL_OPTION_STRING:
  * \code
  *     char name[20];
- *     sprintf(name, "ibm-%hu-s390", ccsid);
+ *     sprintf(name, "ibm-%hu" UCNV_SWAP_LFNL_OPTION_STRING, ccsid);
  *     cnv=ucnv_open(name, &errorCode);
  * \endcode
  *
