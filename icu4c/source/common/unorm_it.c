@@ -55,7 +55,7 @@ struct UNormIterator {
     uint32_t state;
 
     /* there are UChars available before start or after limit? */
-    UBool hasPrevious, hasNext;
+    UBool hasPrevious, hasNext, isStackAllocated;
 
     UNormalizationMode mode;
 
@@ -548,7 +548,7 @@ static const UCharIterator unormIterator={
 /* Setup functions ---------------------------------------------------------- */
 
 U_CAPI UNormIterator * U_EXPORT2
-unorm_openIter(UErrorCode *pErrorCode) {
+unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode) {
     UNormIterator *uni;
 
     /* argument checking */
@@ -557,14 +557,33 @@ unorm_openIter(UErrorCode *pErrorCode) {
     }
 
     /* allocate */
-    uni=(UNormIterator *)uprv_malloc(sizeof(UNormIterator));
-    if(uni==NULL) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+    uni=NULL;
+    if(stackMem!=NULL && stackMemSize>=sizeof(UNormIterator)) {
+        size_t align=U_ALIGNMENT_OFFSET(stackMem);
+        if(align==0) {
+            /* already aligned */
+            uni=(UNormIterator *)stackMem;
+        } else if((stackMemSize-=align)>=sizeof(UNormIterator)) {
+            /* needs alignment */
+            uni=(UNormIterator *)((char *)stackMem+align);
+        } else {
+            /* does not fit */
+        }
+    }
+
+    if(uni!=NULL) {
+        uprv_memset(uni, 0, sizeof(UNormIterator));
+        uni->isStackAllocated=TRUE;
+    } else {
+        uni=(UNormIterator *)uprv_malloc(sizeof(UNormIterator));
+        if(uni==NULL) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        uprv_memset(uni, 0, sizeof(UNormIterator));
     }
 
     /* initialize */
-    uprv_memset(uni, 0, sizeof(UNormIterator));
     uni->chars=uni->charsBuffer;
     uni->states=uni->statesBuffer;
     uni->capacity=initialCapacity;
@@ -581,7 +600,9 @@ unorm_closeIter(UNormIterator *uni) {
             /* chars and states are allocated in the same memory block */
             uprv_free(uni->states);
         }
-        uprv_free(uni);
+        if(!uni->isStackAllocated) {
+            uprv_free(uni);
+        }
     }
 }
 
