@@ -150,7 +150,7 @@ Gurmukhi-Tamil:alias:NFD;Gurmukhi-InterIndic;InterIndic-Tamil;NFC
 Gurmukhi-Telugu:alias:NFD;Gurmukhi-InterIndic;InterIndic-Telugu;NFC
 Gurmukhi-Kannada:alias:NFD;Gurmukhi-InterIndic;InterIndic-Kannada;NFC
 Gurmukhi-Malayalam:alias:NFD;Gurmukhi-InterIndic;InterIndic-Malayalam;NFC
-Gujarati-Devanagari:alias:Gujarati-InterIndic;InterIndic-Devanagari;NFC
+Gujarati-Devanagari:alias:NFD;Gujarati-InterIndic;InterIndic-Devanagari;NFC
 Gujarati-Bengali:alias:NFD;Gujarati-InterIndic;InterIndic-Bengali;NFC
 Gujarati-Gurmukhi:alias:NFD;Gujarati-InterIndic;InterIndic-Gurmukhi;NFC
 Gujarati-Oriya:alias:NFD;Gujarati-InterIndic;InterIndic-Oriya;NFC
