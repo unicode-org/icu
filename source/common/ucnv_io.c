@@ -51,13 +51,11 @@
  * followed by its aliases. All offsets to strings are offsets from the
  * beginning of the data.
  *
- * More formal file data structure (data format 1.0):
+ * More formal file data structure (data format 2.0):
  *
  * uint16_t aliasCount;
- * struct {
- *     uint16_t aliasOffset;
- *     uint16_t converterIndex;
- * } aliases[aliasCount];
+ * uint16_t aliasOffsets[aliasCount];
+ * uint16_t converterIndexes[aliasCount];
  *
  * uint16_t converterCount;
  * struct {
@@ -88,7 +86,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==1;
+        pInfo->formatVersion[0]==2;
 }
 
 static bool_t
@@ -197,7 +195,7 @@ findAlias(const char *alias) {
     start=0;
     while(start<limit-1) {
         i=(start+limit)/2;
-        if(strHalfCaseCmp(name, (const char *)aliasTable+p[2*i])<0) {
+        if(strHalfCaseCmp(name, (const char *)aliasTable+p[i])<0) {
             limit=i;
         } else {
             start=i;
@@ -205,15 +203,14 @@ findAlias(const char *alias) {
     }
 
     /* did we really find it? */
-    if(icu_strcmp(name, (const char *)aliasTable+p[2*start])==0) {
-        /*
-         * turn p back to aliasTable and
-         * skip the entire alias table, both table counts,
-         * and point into the converter table
-         */
-        i=p[2*start+1]; /* converter index */
-        --p;
-        return p+2*(*p+1+i);
+    if(icu_strcmp(name, (const char *)aliasTable+p[start])==0) {
+        limit=*(p-1);       /* aliasCount */
+        p+=limit;           /* advance to the second column of the alias table */
+        i=p[start];         /* converter index */
+        return
+            p+limit+        /* beginning of converter table */
+            1+              /* skip its count */
+            2*i;            /* go to this converter's entry and return a pointer to it */
     } else {
         return NULL;
     }
@@ -301,7 +298,7 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode) {
  * It assumes that setting a pointer is atomic.
  */
 
-static const char *defaultConverterNameBuffer[100];
+static char defaultConverterNameBuffer[100];
 static const char *defaultConverterName = NULL;
 
 U_CFUNC const char *
