@@ -1168,8 +1168,8 @@ ucol_strcoll(    const    UCollator    *coll,
     collIterate sColl, tColl;
 
     if(cppColl->getDecomposition() == Normalizer::NO_OP) {
-        init_collIterate(source, sourceLength, &sColl, FALSE);
-        init_collIterate(target, targetLength, &tColl, FALSE);
+        init_collIterate(source, sourceLength == -1 ? u_strlen(source) : sourceLength, &sColl, FALSE);
+        init_collIterate(target, targetLength == -1 ? u_strlen(target) : targetLength, &tColl, FALSE);
     } else { /* TODO: This is bad behaved if we're working with small buffers */
              /* We really need the normalization quick check here*/
 	    UNormalizationMode normMode = ucol_getNormalization(coll);

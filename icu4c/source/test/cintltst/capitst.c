@@ -38,6 +38,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");
     addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
     addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");
+    addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     
 }
 
@@ -358,6 +359,38 @@ void TestCompare()
    
 }
 /*
+---------------------------------------------
+ tests decomposition setting
+*/
+void TestDecomposition() {
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *en_US, *el_GR, *vi_VN;
+    en_US = ucol_open("en_US", &status);
+    el_GR = ucol_open("el_GR", &status);
+    vi_VN = ucol_open("vi_VN", &status);
+
+    /* there is no reason to have canonical decomposition in en_US OR default locale */
+    if(ucol_getNormalization(vi_VN) != UCOL_DECOMP_CAN)
+      {
+        log_err("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+      }
+
+    if(ucol_getNormalization(el_GR) != UCOL_DECOMP_CAN)
+      {
+        log_err("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+      }
+
+    if(ucol_getNormalization(en_US) != UNORM_NONE)
+      {
+        log_err("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+      }
+
+    ucol_close(en_US);
+    ucol_close(el_GR);
+    ucol_close(vi_VN);
+
+}
+/*
 ----------------------------------------------------------------------------
  ctor -- Tests the getSortKey
 */
@@ -383,11 +416,6 @@ void TestSortKey()
         log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
         return;
     }
-
-    if(ucol_getNormalization(col) != UCOL_DECOMP_CAN)
-      {
-        log_err("ERROR: default collation did not have cannonical decomposition for normalization!\n");
-      }
 
 
     if(ucol_getStrength(col) != UCOL_DEFAULT_STRENGTH)
