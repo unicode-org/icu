@@ -22,6 +22,7 @@
 #ifdef XP_CPLUSPLUS
 #   include "unicode/chariter.h"
 #endif
+#include "utrie.h"
 #include "ustr_imp.h"
 
 /*
@@ -29,27 +30,6 @@
  * unorm.dat, which is generated with the gennorm tool.
  * The format of that file is described at the end of this file.
  */
-
-/* trie constants */
-enum {
-    /**
-     * Normalization trie table shift value.
-     * This value must be <=10:
-     * above 10, a lead surrogate's block is smaller than a stage 2 block
-     */
-    _NORM_TRIE_SHIFT=5,
-
-    _NORM_STAGE_2_BLOCK_COUNT=1<<_NORM_TRIE_SHIFT,
-    _NORM_STAGE_2_MASK=_NORM_STAGE_2_BLOCK_COUNT-1,
-
-    _NORM_STAGE_1_BMP_COUNT=(1<<(16-_NORM_TRIE_SHIFT)),
-
-    _NORM_SURROGATE_BLOCK_BITS=10-_NORM_TRIE_SHIFT,
-    _NORM_SURROGATE_BLOCK_COUNT=(1<<_NORM_SURROGATE_BLOCK_BITS)
-};
-
-/* this may be >0xffff and may not work as an enum */
-#define _NORM_STAGE_1_MAX_COUNT (0x110000>>_NORM_TRIE_SHIFT)
 
 /* norm32 value constants */
 enum {
@@ -96,26 +76,22 @@ enum {
 
 /* indexes[] value names */
 enum {
-    _NORM_INDEX_COUNT,
-    _NORM_INDEX_TRIE_SHIFT,
-    _NORM_INDEX_TRIE_INDEX_COUNT,
-    _NORM_INDEX_TRIE_DATA_COUNT,
-    _NORM_INDEX_UCHAR_COUNT,
+    _NORM_INDEX_TRIE_SIZE,              /* number of bytes in normalization trie */
+    _NORM_INDEX_UCHAR_COUNT,            /* number of UChars in extra data */
 
-    _NORM_INDEX_COMBINE_DATA_COUNT,
-    _NORM_INDEX_COMBINE_FWD_COUNT,
-    _NORM_INDEX_COMBINE_BOTH_COUNT,
-    _NORM_INDEX_COMBINE_BACK_COUNT,
+    _NORM_INDEX_COMBINE_DATA_COUNT,     /* number of uint16_t words for combining data */
+    _NORM_INDEX_COMBINE_FWD_COUNT,      /* number of code points that combine forward */
+    _NORM_INDEX_COMBINE_BOTH_COUNT,     /* number of code points that combine forward and backward */
+    _NORM_INDEX_COMBINE_BACK_COUNT,     /* number of code points that combine backward */
 
-    _NORM_INDEX_MIN_NFC_NO_MAYBE,
-    _NORM_INDEX_MIN_NFKC_NO_MAYBE,
-    _NORM_INDEX_MIN_NFD_NO_MAYBE,
-    _NORM_INDEX_MIN_NFKD_NO_MAYBE,
+    _NORM_INDEX_MIN_NFC_NO_MAYBE,       /* first code point with quick check NFC NO/MAYBE */
+    _NORM_INDEX_MIN_NFKC_NO_MAYBE,      /* first code point with quick check NFKC NO/MAYBE */
+    _NORM_INDEX_MIN_NFD_NO_MAYBE,       /* first code point with quick check NFD NO/MAYBE */
+    _NORM_INDEX_MIN_NFKD_NO_MAYBE,      /* first code point with quick check NFKD NO/MAYBE */
 
-    _NORM_INDEX_FCD_TRIE_INDEX_COUNT,
-    _NORM_INDEX_FCD_TRIE_DATA_COUNT,
+    _NORM_INDEX_FCD_TRIE_SIZE,          /* number of bytes in FCD trie */
 
-    _NORM_INDEX_TOP=16
+    _NORM_INDEX_TOP=32                  /* changing this requires a new formatVersion */
 };
 
 enum {
@@ -215,10 +191,10 @@ inline uint16_t
 unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
     return
         fcdTrieIndex[
-            fcdTrieIndex[
-                c>>_NORM_TRIE_SHIFT
-            ]+
-            (c&_NORM_STAGE_2_MASK)
+            (fcdTrieIndex[
+                c>>UTRIE_SHIFT
+            ]<<UTRIE_INDEX_SHIFT)+
+            (c&UTRIE_MASK)
         ];
 }
 
@@ -235,16 +211,12 @@ unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
  */
 inline uint16_t
 unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UChar c2) {
-    /* the surrogate index in fcd16 is an absolute offset over the start of stage 1 */
-    uint32_t c=
-        ((uint32_t)fcd16<<10)|
-        (c2&0x3ff);
     return
         fcdTrieIndex[
-            fcdTrieIndex[
-                c>>_NORM_TRIE_SHIFT
-            ]+
-            (c&_NORM_STAGE_2_MASK)
+            (fcdTrieIndex[
+                (int32_t)fcd16+((c2&0x3ff)>>UTRIE_SHIFT)
+            ]<<UTRIE_INDEX_SHIFT)+
+            (c2&UTRIE_MASK)
         ];
 }
 
@@ -386,7 +358,7 @@ unorm_previousNormalize(UChar *dest, int32_t destCapacity,
 U_CDECL_END
 
 /**
- * Description of the format of unorm.dat.
+ * Description of the format of unorm.dat. ### TODO describe 2.0 with UTrie
  *
  * For more details of how to use the data structures see the code
  * in unorm.cpp (runtime normalization code) and

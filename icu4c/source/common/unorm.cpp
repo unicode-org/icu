@@ -109,22 +109,14 @@ static UDataMemory *normData=NULL;
 static UErrorCode dataErrorCode=U_ZERO_ERROR;
 static int8_t haveNormData=0;
 
+static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
+static UTrie normTrie={ 0 }, fcdTrie={ 0 };
+
 /*
  * pointers into the memory-mapped unorm.dat
  */
-static const uint16_t *indexes=NULL,
-                      *normTrieIndex=NULL, *extraData=NULL,
-                      *combiningTable=NULL,
-                      *fcdTrieIndex=NULL;
-
-/*
- * note that there is no uint32_t *normTrieData:
- * the indexes in the trie are adjusted so that they point to the data based on
- * (uint32_t *)normTrieIndex - this saves one variable at runtime
- */
-#define normTrieData ((uint32_t *)normTrieIndex)
-
-/* similarly for the FCD trie index and data - but both are uint16_t * */
+static const uint16_t *extraData=NULL,
+                      *combiningTable=NULL;
 
 /* the Unicode version of the normalization data */
 static UVersionInfo dataVersion={ 3, 1, 0, 0 };
@@ -155,8 +147,9 @@ isAcceptable(void * /* context */,
         pInfo->dataFormat[1]==0x6f &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6d &&
-        pInfo->formatVersion[0]==1 &&
-        pInfo->formatVersion[3]==_NORM_TRIE_SHIFT
+        pInfo->formatVersion[0]==2 &&
+        pInfo->formatVersion[2]==UTRIE_SHIFT &&
+        pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
         uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
         return TRUE;
@@ -171,8 +164,9 @@ static int8_t
 loadNormData(UErrorCode &errorCode) {
     /* load Unicode normalization data from file */
     if(haveNormData==0) {
+        UTrie _normTrie={ 0 }, _fcdTrie={ 0 };
         UDataMemory *data;
-        const uint16_t *p=NULL;
+        const int32_t *p=NULL;
 
         if(&errorCode==NULL || U_FAILURE(errorCode)) {
             return 0;
@@ -185,23 +179,37 @@ loadNormData(UErrorCode &errorCode) {
             return haveNormData=-1;
         }
 
-        p=(const uint16_t *)udata_getMemory(data);
+        p=(const int32_t *)udata_getMemory(data);
+
+        utrie_unserialize(&_normTrie, (uint8_t *)(p+_NORM_INDEX_TOP), p[_NORM_INDEX_TRIE_SIZE], &errorCode);
+        utrie_unserialize(
+            &_fcdTrie,
+            (uint8_t *)(p+_NORM_INDEX_TOP)+p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2,
+            p[_NORM_INDEX_FCD_TRIE_SIZE],
+            &errorCode);
+        if(U_FAILURE(errorCode)) {
+            dataErrorCode=errorCode;
+            udata_close(data);
+            return haveNormData=-1;
+        }
 
         /* in the mutex block, set the data for this process */
         umtx_lock(NULL);
         if(normData==NULL) {
             normData=data;
             data=NULL;
-            indexes=p;
-            p=NULL;
+
+            uprv_memcpy(&indexes, p, sizeof(indexes));
+            uprv_memcpy(&normTrie, &_normTrie, sizeof(UTrie));
+            uprv_memcpy(&fcdTrie, &_fcdTrie, sizeof(UTrie));
+        } else {
+            p=(const int32_t *)udata_getMemory(normData);
         }
         umtx_unlock(NULL);
 
         /* initialize some variables */
-        normTrieIndex=indexes+indexes[_NORM_INDEX_COUNT];
-        extraData=normTrieIndex+indexes[_NORM_INDEX_TRIE_INDEX_COUNT]+2*indexes[_NORM_INDEX_TRIE_DATA_COUNT];
+        extraData=(uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+indexes[_NORM_INDEX_TRIE_SIZE]);
         combiningTable=extraData+indexes[_NORM_INDEX_UCHAR_COUNT];
-        fcdTrieIndex=combiningTable+indexes[_NORM_INDEX_COMBINE_DATA_COUNT];
         haveNormData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -231,7 +239,7 @@ unorm_haveData(UErrorCode *pErrorCode) {
 U_CAPI const uint16_t * U_EXPORT2
 unorm_getFCDTrie(UErrorCode *pErrorCode) {
     if(_haveData(*pErrorCode)) {
-        return fcdTrieIndex;
+        return fcdTrie.index;
     } else {
         return NULL;
     }
@@ -241,29 +249,20 @@ unorm_getFCDTrie(UErrorCode *pErrorCode) {
 
 static inline uint32_t
 _getNorm32(UChar c) {
-    return
-        normTrieData[
-            normTrieIndex[
-                c>>_NORM_TRIE_SHIFT
-            ]+
-            (c&_NORM_STAGE_2_MASK)
-        ];
+    return UTRIE_GET32_FROM_LEAD(&normTrie, c);
 }
 
 static inline uint32_t
 _getNorm32FromSurrogatePair(uint32_t norm32, UChar c2) {
-    /* the surrogate index in norm32 is an offset over the BMP top of stage 1 */
-    uint32_t c=
-        ((norm32>>(_NORM_EXTRA_SHIFT-10))&0xffc00)|
-        (c2&0x3ff);
-    return
-        normTrieData[
-            normTrieIndex[
-                _NORM_STAGE_1_BMP_COUNT+
-                (c>>_NORM_TRIE_SHIFT)
-            ]+
-            (c&_NORM_STAGE_2_MASK)
-        ];
+    /*
+     * the surrogate index in norm32 stores only the number of the surrogate index block
+     * see gennorm/store.c/getFoldedNormValue()
+     */
+    norm32=
+        UTRIE_BMP_INDEX_LENGTH+
+            ((norm32>>(_NORM_EXTRA_SHIFT-UTRIE_SURROGATE_BLOCK_BITS))&
+             (0x3ff<<UTRIE_SURROGATE_BLOCK_BITS));
+    return UTRIE_GET32_FROM_OFFSET_TRAIL(&normTrie, norm32, c2);
 }
 
 /*
@@ -282,28 +281,13 @@ _getNorm32(const UChar *p, uint32_t mask) {
 
 static inline uint16_t
 _getFCD16(UChar c) {
-    return
-        fcdTrieIndex[
-            fcdTrieIndex[
-                c>>_NORM_TRIE_SHIFT
-            ]+
-            (c&_NORM_STAGE_2_MASK)
-        ];
+    return UTRIE_GET16_FROM_LEAD(&fcdTrie, c);
 }
 
 static inline uint16_t
 _getFCD16FromSurrogatePair(uint16_t fcd16, UChar c2) {
     /* the surrogate index in fcd16 is an absolute offset over the start of stage 1 */
-    uint32_t c=
-        ((uint32_t)fcd16<<10)|
-        (c2&0x3ff);
-    return
-        fcdTrieIndex[
-            fcdTrieIndex[
-                c>>_NORM_TRIE_SHIFT
-            ]+
-            (c&_NORM_STAGE_2_MASK)
-        ];
+    return UTRIE_GET16_FROM_OFFSET_TRAIL(&fcdTrie, fcd16, c2);
 }
 
 static inline const uint16_t *
