@@ -66,7 +66,6 @@ struct UResourceBundle {
     Resource fRes;
 };
 
-U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
 U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state);
 U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 
