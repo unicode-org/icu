@@ -6,30 +6,29 @@
 *
 *******************************************************************************
 *
-* File uscnf_p.h
+* File sscnf_p.h
 *
 * Modification History:
 *
 *   Date        Name        Description
-*   12/02/98    stephen        Creation.
-*   03/13/99    stephen     Modified for new C API.
+*   02/08/00    george      Creation. Copied from uscnf_p.h
 *******************************************************************************
 */
 
-#ifndef _USCANF_P
-#define _USCANF_P
+#ifndef _USSCANF_P_H
+#define _USSCANF_P_H
 
-#include "uscanf.h"
+#include "sscanf.h"
 
 /**
  * Struct encapsulating a single u_scanf format specification.
  */
-struct u_scanf_spec {
-  u_scanf_spec_info    fInfo;        /* Information on this spec */
+struct u_sscanf_spec {
+  u_sscanf_spec_info    fInfo;        /* Information on this spec */
   int32_t        fArgPos;    /* Position of data in arg list */
   UBool        fSkipArg;    /* TRUE if arg should be skipped */
 };
-typedef struct u_scanf_spec u_scanf_spec;
+typedef struct u_sscanf_spec u_sscanf_spec;
 
 /**
  * Parse a single u_scanf format specifier.
@@ -39,8 +38,8 @@ typedef struct u_scanf_spec u_scanf_spec;
  * @return The number of characters contained in this specifier.
  */
 int32_t
-u_scanf_parse_spec (const UChar     *fmt,
-            u_scanf_spec    *spec);
+u_sscanf_parse_spec (const UChar     *fmt,
+            u_sscanf_spec    *spec);
 
 
 #endif

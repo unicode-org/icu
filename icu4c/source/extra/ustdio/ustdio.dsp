@@ -103,6 +103,22 @@ SOURCE=.\loccache.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\sprintf.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\sprntf_p.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\sscanf.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\sscanf_p.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ufile.c
 # End Source File
 # Begin Source File
@@ -144,6 +160,22 @@ SOURCE=.\locbund.h
 # Begin Source File
 
 SOURCE=.\loccache.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sprintf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sprntf_p.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sscanf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sscanf_p.h
 # End Source File
 # Begin Source File
 

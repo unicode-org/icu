@@ -6,26 +6,25 @@
 *
 *******************************************************************************
 *
-* File uprintf.c
+* File sprintf.c
 *
 * Modification History:
 *
 *   Date        Name        Description
-*   11/19/98    stephen        Creation.
-*   03/12/99    stephen     Modified for new C API.
-*                           Added conversion from default codepage.
+*   02/08/00    george      Creation. Copied from uprintf.c
 *******************************************************************************
 */
 
 #include "unicode/utypes.h"
-#include "uprintf.h"
-#include "uprntf_p.h"
+#include "sprintf.h"
+#include "sprntf_p.h"
 #include "unicode/ustdio.h"
-#include "ufile.h"
 #include "unicode/ustring.h"
 #include "locbund.h"
+#include "loccache.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
+#include "unicode/uloc.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -34,160 +33,160 @@
 /* --- Prototypes ---------------------------- */
 
 int32_t
-u_printf_simple_percent_handler(UFILE                 *stream,
-                const u_printf_spec_info     *info,
+u_sprintf_simple_percent_handler(u_localized_string *output,
+                const u_sprintf_spec_info     *info,
                 const ufmt_args            *args);
 
 int32_t
-u_printf_string_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_string_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 int32_t
-u_printf_date_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_date_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args         *args);
 
 int32_t
-u_printf_scientific_handler(UFILE             *stream,
-                const u_printf_spec_info     *info,
+u_sprintf_scientific_handler(u_localized_string *output,
+                const u_sprintf_spec_info     *info,
                 const ufmt_args            *args);
 
 int32_t
-u_printf_scidbl_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_scidbl_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 int32_t
-u_printf_uchar_handler(UFILE                 *stream,
-               const u_printf_spec_info     *info,
+u_sprintf_uchar_handler(u_localized_string *output,
+               const u_sprintf_spec_info     *info,
                const ufmt_args            *args);
 
 int32_t
-u_printf_currency_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_currency_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args            *args);
 
 int32_t
-u_printf_ustring_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_ustring_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args         *args);
 
 int32_t
-u_printf_percent_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_percent_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args);
 
 int32_t
-u_printf_time_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_time_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args         *args);
 
 int32_t
-u_printf_spellout_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_spellout_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args            *args);
 
 int32_t
-u_printf_hex_handler(UFILE             *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_hex_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args);
 
 int32_t
-u_printf_char_handler(UFILE                 *stream,
-              const u_printf_spec_info         *info,
+u_sprintf_char_handler(u_localized_string *output,
+              const u_sprintf_spec_info         *info,
               const ufmt_args              *args);
 
 int32_t
-u_printf_integer_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_integer_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args);
 
 int32_t
-u_printf_uinteger_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_uinteger_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args);
 
 int32_t
-u_printf_double_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_double_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 int32_t
-u_printf_count_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_count_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 int32_t
-u_printf_octal_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_octal_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 int32_t
-u_printf_pointer_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_pointer_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args);
 
 /* ANSI style formatting */
 /* Use US-ASCII characters only for formatting */
 
 /* % */
-#define UFMT_SIMPLE_PERCENT {ufmt_simple_percent, u_printf_simple_percent_handler}
+#define UFMT_SIMPLE_PERCENT {ufmt_simple_percent, u_sprintf_simple_percent_handler}
 /* s */
-#define UFMT_STRING         {ufmt_string, u_printf_string_handler}
+#define UFMT_STRING         {ufmt_string, u_sprintf_string_handler}
 /* c */
-#define UFMT_CHAR           {ufmt_char, u_printf_char_handler}
+#define UFMT_CHAR           {ufmt_char, u_sprintf_char_handler}
 /* d, i */
-#define UFMT_INT            {ufmt_int, u_printf_integer_handler}
+#define UFMT_INT            {ufmt_int, u_sprintf_integer_handler}
 /* u */
-#define UFMT_UINT           {ufmt_int, u_printf_uinteger_handler}
+#define UFMT_UINT           {ufmt_int, u_sprintf_uinteger_handler}
 /* o */
-#define UFMT_OCTAL          {ufmt_int, u_printf_octal_handler}
+#define UFMT_OCTAL          {ufmt_int, u_sprintf_octal_handler}
 /* x, X */
-#define UFMT_HEX            {ufmt_int, u_printf_hex_handler}
+#define UFMT_HEX            {ufmt_int, u_sprintf_hex_handler}
 /* f */
-#define UFMT_DOUBLE         {ufmt_double, u_printf_double_handler}
+#define UFMT_DOUBLE         {ufmt_double, u_sprintf_double_handler}
 /* e, E */
-#define UFMT_SCIENTIFIC     {ufmt_double, u_printf_scientific_handler}
+#define UFMT_SCIENTIFIC     {ufmt_double, u_sprintf_scientific_handler}
 /* g, G */
-#define UFMT_SCIDBL         {ufmt_double, u_printf_scidbl_handler}
+#define UFMT_SCIDBL         {ufmt_double, u_sprintf_scidbl_handler}
 /* n */
-#define UFMT_COUNT          {ufmt_count, u_printf_count_handler}
+#define UFMT_COUNT          {ufmt_count, u_sprintf_count_handler}
 
 /* non-ANSI extensions */
 /* Use US-ASCII characters only for formatting */
 
 /* p */
-#define UFMT_POINTER        {ufmt_pointer, u_printf_pointer_handler}
+#define UFMT_POINTER        {ufmt_pointer, u_sprintf_pointer_handler}
 /* D */
-#define UFMT_DATE           {ufmt_date, u_printf_date_handler}
+#define UFMT_DATE           {ufmt_date, u_sprintf_date_handler}
 /* T */
-#define UFMT_TIME           {ufmt_date, u_printf_time_handler}
+#define UFMT_TIME           {ufmt_date, u_sprintf_time_handler}
 /* V */
-#define UFMT_SPELLOUT       {ufmt_double, u_printf_spellout_handler}
+#define UFMT_SPELLOUT       {ufmt_double, u_sprintf_spellout_handler}
 /* P */
-#define UFMT_PERCENT        {ufmt_double, u_printf_percent_handler}
+#define UFMT_PERCENT        {ufmt_double, u_sprintf_percent_handler}
 /* M */
-#define UFMT_CURRENCY       {ufmt_double, u_printf_currency_handler}
+#define UFMT_CURRENCY       {ufmt_double, u_sprintf_currency_handler}
 /* K */
-#define UFMT_UCHAR          {ufmt_uchar, u_printf_uchar_handler}
+#define UFMT_UCHAR          {ufmt_uchar, u_sprintf_uchar_handler}
 /* U */
-#define UFMT_USTRING        {ufmt_ustring, u_printf_ustring_handler}
+#define UFMT_USTRING        {ufmt_ustring, u_sprintf_ustring_handler}
 
 
 #define UFMT_EMPTY {ufmt_empty, NULL}
 
-struct u_printf_info {
-    ufmt_type_info info;
-    u_printf_handler handler;
+struct u_sprintf_info {
+    enum ufmt_type_info info;
+    u_sprintf_handler handler;
 };
-typedef struct u_printf_info u_printf_info;
+typedef struct u_sprintf_info u_sprintf_info;
 
 /* Use US-ASCII characters only for formatting. Most codepages have
  characters 20-7F from Unicode. Using any other codepage specific
  characters will make it very difficult to format the string on
  non-Unicode machines */
-static const u_printf_info g_u_printf_infos[108] = {
+static const u_sprintf_info g_u_sprintf_infos[108] = {
 /* 0x20 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
@@ -225,50 +224,97 @@ static const u_printf_info g_u_printf_infos[108] = {
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 };
 
-#define UPRINTF_NUM_FMT_HANDLERS sizeof(g_u_printf_infos)
+#define USPRINTF_NUM_FMT_HANDLERS sizeof(g_u_sprintf_infos)
 
 /* We do not use handlers for 0-0x1f */
-#define UPRINTF_BASE_FMT_HANDLERS 0x20
+#define USPRINTF_BASE_FMT_HANDLERS 0x20
 
 /* buffer size for formatting */
-#define UFPRINTF_BUFFER_SIZE 1024
+#define USPRINTF_BUFFER_SIZE 1024
 
 int32_t 
-u_fprintf(    UFILE        *f,
+u_sprintf(UChar       *buffer,
+        const char    *locale,
         const char    *patternSpecification,
         ... )
 {
   va_list ap;
-  int32_t count;
+  int32_t written;
   
   va_start(ap, patternSpecification);
-  count = u_vfprintf(f, patternSpecification, ap);
+  written = u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
   va_end(ap);
   
-  return count;
+  return written;
 }
 
 int32_t 
-u_fprintf_u(    UFILE        *f,
+u_sprintf_u(UChar     *buffer,
+        const char     *locale,
         const UChar    *patternSpecification,
         ... )
 {
   va_list ap;
-  int32_t count;
+  int32_t written;
   
   va_start(ap, patternSpecification);
-  count = u_vfprintf_u(f, patternSpecification, ap);
+  written = u_vsnprintf_u(buffer, INT32_MAX, locale, patternSpecification, ap);
   va_end(ap);
   
-  return count;
+  return written;
 }
 
 int32_t 
-u_vfprintf(    UFILE        *f,
-        const char    *patternSpecification,
-        va_list        ap)
+u_vsprintf(UChar       *buffer,
+        const char     *locale,
+        const char     *patternSpecification,
+        va_list         ap)
 {
-  int32_t count;
+  return u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
+}
+
+int32_t 
+u_snprintf(UChar       *buffer,
+        int32_t         count,
+        const char    *locale,
+        const char    *patternSpecification,
+        ... )
+{
+  va_list ap;
+  int32_t written;
+  
+  va_start(ap, patternSpecification);
+  written = u_vsnprintf(buffer, count, locale, patternSpecification, ap);
+  va_end(ap);
+  
+  return written;
+}
+
+int32_t 
+u_snprintf_u(UChar     *buffer,
+        int32_t        count,
+        const char     *locale,
+        const UChar    *patternSpecification,
+        ... )
+{
+  va_list ap;
+  int32_t written;
+  
+  va_start(ap, patternSpecification);
+  written = u_vsnprintf_u(buffer, count, locale, patternSpecification, ap);
+  va_end(ap);
+  
+  return written;
+}
+
+int32_t 
+u_vsnprintf(UChar       *buffer,
+        int32_t         count,
+        const char     *locale,
+        const char     *patternSpecification,
+        va_list         ap)
+{
+  int32_t written;
   UChar *pattern;
   
   /* convert from the default codepage to Unicode */
@@ -277,67 +323,97 @@ u_vfprintf(    UFILE        *f,
   if(pattern == 0) {
     return 0;
   }
-  
+
   /* do the work */
-  count = u_vfprintf_u(f, pattern, ap);
+  written = u_vsnprintf_u(buffer, count, locale, pattern, ap);
 
   /* clean up */
   free(pattern);
   
-  return count;
+  return written;
+}
+
+static UChar *
+u_strset(UChar *str, int32_t count, UChar c) {
+    int32_t idx;
+    for(idx = 0; idx < count; ++idx) {
+         str[idx] = c;
+    }
+    return str;
+}
+
+/* copies the minimum number of code units of (count or output->available) */
+static int32_t
+u_minstrncpy(u_localized_string *output, const UChar *str, int32_t count) {
+    int32_t size = ufmt_min(count, output->available);
+
+    u_strncpy(output->str + (output->len - output->available), str, size);
+    output->available -= size;
+    return size;
 }
 
 static int32_t
-u_printf_pad_and_justify(UFILE              *stream,
-                const u_printf_spec_info    *info,
+u_sprintf_pad_and_justify(u_localized_string *output,
+                const u_sprintf_spec_info    *info,
                 const UChar                 *result,
                 int32_t                     resultLen)
 {
-  int32_t written, i;
+    int32_t written;
 
-  /* pad and justify, if needed */
-  if(info->fWidth != -1 && resultLen < info->fWidth) {
-    /* left justify */
-    if(info->fLeft) {
-      written = u_file_write(result, resultLen, stream);
-      for(i = 0; i < info->fWidth - resultLen; ++i) {
-        written += u_file_write(&info->fPadChar, 1, stream);
-      }
+    resultLen = ufmt_min(resultLen, output->available);
+    written = resultLen;
+
+    /* pad and justify, if needed */
+    if(info->fWidth != -1 && resultLen < info->fWidth) {
+        int32_t paddingLeft = info->fWidth - resultLen;
+        int32_t outputPos = output->len - output->available;
+
+        if (paddingLeft + resultLen > output->available) {
+            paddingLeft = output->available - resultLen;
+        }
+        written += paddingLeft;
+
+        /* left justify */
+        if(info->fLeft) {
+            written += u_minstrncpy(output, result, resultLen);
+            u_strset(&output->str[outputPos + resultLen], paddingLeft, info->fPadChar);
+        }
+        /* right justify */
+        else {
+            u_strset(&output->str[outputPos + resultLen], paddingLeft, info->fPadChar);
+            written += u_minstrncpy(output, result, resultLen);
+        }
     }
-    /* right justify */
+    /* just write the formatted output */
     else {
-      written = 0;
-      for(i = 0; i < info->fWidth - resultLen; ++i) {
-        written += u_file_write(&info->fPadChar, 1, stream);
-      }
-      written += u_file_write(result, resultLen, stream);
+        written += u_minstrncpy(output, result, resultLen);
     }
-  }
-  /* just write the formatted output */
-  else
-    written = u_file_write(result, resultLen, stream);
 
-  return written;
+    output->available -= written;
+    return written;
 }
 
 /* handle a '%' */
 
 int32_t
-u_printf_simple_percent_handler(UFILE                 *stream,
-                const u_printf_spec_info     *info,
+u_sprintf_simple_percent_handler(u_localized_string *output,
+                const u_sprintf_spec_info     *info,
                 const ufmt_args            *args)
 {
-  /* put a single '%' on the stream */
-  u_fputc(0x0025, stream);
-  /* we wrote one character */
-  return 1;
+    /* put a single '%' on the stream */
+    if (output->available >= 1) {
+        output->str[output->len - output->available--] = 0x0025;
+        /* we wrote one character */
+        return 1;
+    }
+    return 0;
 }
 
 /* handle 's' */
 
 int32_t
-u_printf_string_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_string_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args)
 {
   UChar *s;
@@ -357,11 +433,11 @@ u_printf_string_handler(UFILE                 *stream,
   /* precision takes precedence over width */
   /* determine if the string should be truncated */
   if(info->fPrecision != -1 && len > info->fPrecision) {
-    written = u_file_write(s, info->fPrecision, stream);
+    written = u_minstrncpy(output, s, info->fPrecision);
   }
   /* determine if the string should be padded */
   else {
-    written = u_printf_pad_and_justify(stream, info, s, len);
+    written = u_sprintf_pad_and_justify(output, info, s, len);
   }
 
   /* clean up */
@@ -372,13 +448,13 @@ u_printf_string_handler(UFILE                 *stream,
 
 /* HSYS */
 int32_t
-u_printf_integer_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_integer_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args)
 {
   long            num         = (long) (args[0].intValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDigits     = -1;
   UErrorCode        status        = U_ZERO_ERROR;
 
@@ -390,7 +466,7 @@ u_printf_integer_handler(UFILE                 *stream,
     num &= UINT32_MAX;
 
   /* get the formatter */
-  format = u_locbund_getNumberFormat(stream->fBundle);
+  format = u_locbund_getNumberFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -401,10 +477,10 @@ u_printf_integer_handler(UFILE                 *stream,
   /* set the minimum integer digits */
   if(info->fPrecision != -1) {
     /* clone the stream's bundle if it isn't owned */
-    if(! stream->fOwnBundle) {
-      stream->fBundle     = u_locbund_clone(stream->fBundle);
-      stream->fOwnBundle = TRUE;
-      format           = u_locbund_getNumberFormat(stream->fBundle);
+    if(! output->fOwnBundle) {
+      output->fBundle     = u_locbund_clone(output->fBundle);
+      output->fOwnBundle = TRUE;
+      format           = u_locbund_getNumberFormat(output->fBundle);
     }
 
     /* set the minimum # of digits */
@@ -415,10 +491,10 @@ u_printf_integer_handler(UFILE                 *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* clone the stream's bundle if it isn't owned */
-    if(! stream->fOwnBundle) {
-      stream->fBundle     = u_locbund_clone(stream->fBundle);
-      stream->fOwnBundle = TRUE;
-      format           = u_locbund_getNumberFormat(stream->fBundle);
+    if(! output->fOwnBundle) {
+      output->fBundle     = u_locbund_clone(output->fBundle);
+      output->fOwnBundle = TRUE;
+      format           = u_locbund_getNumberFormat(output->fBundle);
     }
 
     /* set whether to show the sign*/
@@ -426,23 +502,23 @@ u_printf_integer_handler(UFILE                 *stream,
   }
 
   /* format the number */
-  unum_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
   
   /* restore the number format */
   if(minDigits != -1)
     unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 int32_t
-u_printf_hex_handler(UFILE             *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_hex_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args)
 {
   long            num         = (long) (args[0].intValue);
-  UChar            result         [UFPRINTF_BUFFER_SIZE];
-  int32_t         len        = UFPRINTF_BUFFER_SIZE;
+  UChar            result         [USPRINTF_BUFFER_SIZE];
+  int32_t         len        = USPRINTF_BUFFER_SIZE;
 
 
   /* mask off any necessary bits */
@@ -455,9 +531,9 @@ u_printf_hex_handler(UFILE             *stream,
   ufmt_ltou(result, &len, num, 16,
         (UBool)(info->fSpec == 0x0078),
         (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
-  
+
   /* convert to alt form, if desired */
-  if(num != 0 && info->fAlt && len < UFPRINTF_BUFFER_SIZE - 2) {
+  if(num != 0 && info->fAlt && len < USPRINTF_BUFFER_SIZE - 2) {
     /* shift the formatted string right by 2 chars */
     memmove(result + 2, result, len * sizeof(UChar));
     result[0] = 0x0030;
@@ -465,18 +541,18 @@ u_printf_hex_handler(UFILE             *stream,
     len += 2;
   }
 
-  return u_printf_pad_and_justify(stream, info, result, len);
+  return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
 int32_t
-u_printf_octal_handler(UFILE                 *stream,
-               const u_printf_spec_info     *info,
+u_sprintf_octal_handler(u_localized_string *output,
+               const u_sprintf_spec_info     *info,
                const ufmt_args            *args)
 {
   int32_t         written     = 0;
   long            num         = (long) (args[0].intValue);
-  UChar            result         [UFPRINTF_BUFFER_SIZE];
-  int32_t         len        = UFPRINTF_BUFFER_SIZE;
+  UChar            result         [USPRINTF_BUFFER_SIZE];
+  int32_t         len        = USPRINTF_BUFFER_SIZE;
 
 
   /* mask off any necessary bits */
@@ -491,26 +567,26 @@ u_printf_octal_handler(UFILE                 *stream,
         info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
 
   /* convert to alt form, if desired */
-  if(info->fAlt && result[0] != 0x0030 && len < UFPRINTF_BUFFER_SIZE - 1) {
+  if(info->fAlt && result[0] != 0x0030 && len < USPRINTF_BUFFER_SIZE - 1) {
     /* shift the formatted string right by 1 char */
     memmove(result + 1, result, len * sizeof(UChar));
     result[0] = 0x0030;
     len += 1;
   }
 
-  return u_printf_pad_and_justify(stream, info, result, len);
+  return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
 
 int32_t
-u_printf_uinteger_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_uinteger_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args)
 {
-    u_printf_spec_info uint_info;
+    u_sprintf_spec_info uint_info;
     ufmt_args uint_args;
 
-    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
+    memcpy(&uint_info, info, sizeof(u_sprintf_spec_info));
     memcpy(&uint_args, args, sizeof(ufmt_args));
 
     uint_info.fPrecision = 0;
@@ -519,17 +595,17 @@ u_printf_uinteger_handler(UFILE                 *stream,
     /* Get around int32_t limitations */
     uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
 
-    return u_printf_double_handler(stream, &uint_info, &uint_args);
+    return u_sprintf_double_handler(output, &uint_info, &uint_args);
 }
 
 int32_t
-u_printf_double_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_double_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args)
 {
   double        num         = (double) (args[0].doubleValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDecimalDigits;
   int32_t        maxDecimalDigits;
   UErrorCode        status        = U_ZERO_ERROR;
@@ -539,7 +615,7 @@ u_printf_double_handler(UFILE                 *stream,
       num &= DBL_MAX;*/
 
   /* get the formatter */
-  format = u_locbund_getNumberFormat(stream->fBundle);
+  format = u_locbund_getNumberFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -548,10 +624,10 @@ u_printf_double_handler(UFILE                 *stream,
   /* set the appropriate flags on the formatter */
 
   /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getNumberFormat(stream->fBundle);
+  if(! output->fOwnBundle) {
+    output->fBundle     = u_locbund_clone(output->fBundle);
+    output->fOwnBundle     = TRUE;
+    format           = u_locbund_getNumberFormat(output->fBundle);
   }
 
   /* set the number of decimal digits */
@@ -585,19 +661,19 @@ u_printf_double_handler(UFILE                 *stream,
   }
 
   /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
   
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 
 int32_t
-u_printf_char_handler(UFILE                 *stream,
-              const u_printf_spec_info         *info,
+u_sprintf_char_handler(u_localized_string *output,
+              const u_sprintf_spec_info         *info,
               const ufmt_args              *args)
 {
   UChar *s;
@@ -609,6 +685,8 @@ u_printf_char_handler(UFILE                 *stream,
   if(s == 0) {
     return 0;
   }
+
+  /* Remember that this may be a surrogate pair */
   len = u_strlen(s);
   
   /* width = minimum # of characters to write */
@@ -617,11 +695,11 @@ u_printf_char_handler(UFILE                 *stream,
   /* precision takes precedence over width */
   /* determine if the string should be truncated */
   if(info->fPrecision != -1 && len > info->fPrecision) {
-    written = u_file_write(s, info->fPrecision, stream);
+    written = u_minstrncpy(output, s, info->fPrecision);
   }
   else {
     /* determine if the string should be padded */
-    written = u_printf_pad_and_justify(stream, info, s, len);
+    written = u_sprintf_pad_and_justify(output, info, s, len);
   }
 
   /* clean up */
@@ -632,30 +710,30 @@ u_printf_char_handler(UFILE                 *stream,
 
 
 int32_t
-u_printf_pointer_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_pointer_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args)
 {
   long            num         = (long) (args[0].intValue);
-  UChar            result         [UFPRINTF_BUFFER_SIZE];
-  int32_t         len        = UFPRINTF_BUFFER_SIZE;
+  UChar            result         [USPRINTF_BUFFER_SIZE];
+  int32_t         len        = USPRINTF_BUFFER_SIZE;
 
 
   /* format the pointer in hex */
   ufmt_ltou(result, &len, num, 16, TRUE, info->fPrecision);
 
-  return u_printf_pad_and_justify(stream, info, result, len);
+  return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
 
 int32_t
-u_printf_scientific_handler(UFILE             *stream,
-                const u_printf_spec_info     *info,
+u_sprintf_scientific_handler(u_localized_string *output,
+                const u_sprintf_spec_info     *info,
                 const ufmt_args            *args)
 {
   double        num         = (double) (args[0].doubleValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDecimalDigits;
   int32_t        maxDecimalDigits;
   UErrorCode        status        = U_ZERO_ERROR;
@@ -666,7 +744,7 @@ u_printf_scientific_handler(UFILE             *stream,
       num &= DBL_MAX;*/
 
   /* get the formatter */
-  format = u_locbund_getScientificFormat(stream->fBundle);
+  format = u_locbund_getScientificFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -675,10 +753,10 @@ u_printf_scientific_handler(UFILE             *stream,
   /* set the appropriate flags on the formatter */
 
   /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getScientificFormat(stream->fBundle);
+  if(! output->fOwnBundle) {
+    output->fBundle     = u_locbund_clone(output->fBundle);
+    output->fOwnBundle     = TRUE;
+    format           = u_locbund_getScientificFormat(output->fBundle);
   }
 
   /* set the number of decimal digits */
@@ -712,72 +790,72 @@ u_printf_scientific_handler(UFILE             *stream,
   }
 
   /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 int32_t
-u_printf_date_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_date_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args         *args)
 {
   UDate            num         = (UDate) (args[0].dateValue);
   UDateFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* get the formatter */
-  format = u_locbund_getDateFormat(stream->fBundle);
+  format = u_locbund_getDateFormat(output->fBundle);
   
   /* handle error */
   if(format == 0)
     return 0;
 
   /* format the date */
-  udat_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 int32_t
-u_printf_time_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_time_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args         *args)
 {
   UDate            num         = (UDate) (args[0].dateValue);
   UDateFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   UErrorCode        status        = U_ZERO_ERROR;
 
 
   /* get the formatter */
-  format = u_locbund_getTimeFormat(stream->fBundle);
+  format = u_locbund_getTimeFormat(output->fBundle);
   
   /* handle error */
   if(format == 0)
     return 0;
 
   /* format the time */
-  udat_format(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 
 int32_t
-u_printf_percent_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_percent_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args            *args)
 {
   double        num         = (double) (args[0].doubleValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDecimalDigits;
   int32_t        maxDecimalDigits;
   UErrorCode        status        = U_ZERO_ERROR;
@@ -788,7 +866,7 @@ u_printf_percent_handler(UFILE                 *stream,
       num &= DBL_MAX;*/
 
   /* get the formatter */
-  format = u_locbund_getPercentFormat(stream->fBundle);
+  format = u_locbund_getPercentFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -797,10 +875,10 @@ u_printf_percent_handler(UFILE                 *stream,
   /* set the appropriate flags on the formatter */
 
   /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getPercentFormat(stream->fBundle);
+  if(! output->fOwnBundle) {
+    output->fBundle     = u_locbund_clone(output->fBundle);
+    output->fOwnBundle     = TRUE;
+    format           = u_locbund_getPercentFormat(output->fBundle);
   }
 
   /* set the number of decimal digits */
@@ -834,24 +912,24 @@ u_printf_percent_handler(UFILE                 *stream,
   }
 
   /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 
 int32_t
-u_printf_currency_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_currency_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args            *args)
 {
   double        num         = (double) (args[0].doubleValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDecimalDigits;
   int32_t        maxDecimalDigits;
   UErrorCode        status        = U_ZERO_ERROR;
@@ -862,7 +940,7 @@ u_printf_currency_handler(UFILE             *stream,
       num &= DBL_MAX;*/
 
   /* get the formatter */
-  format = u_locbund_getCurrencyFormat(stream->fBundle);
+  format = u_locbund_getCurrencyFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -871,10 +949,10 @@ u_printf_currency_handler(UFILE             *stream,
   /* set the appropriate flags on the formatter */
 
   /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getCurrencyFormat(stream->fBundle);
+  if(! output->fOwnBundle) {
+    output->fBundle     = u_locbund_clone(output->fBundle);
+    output->fOwnBundle     = TRUE;
+    format           = u_locbund_getCurrencyFormat(output->fBundle);
   }
 
   /* set the number of decimal digits */
@@ -908,18 +986,18 @@ u_printf_currency_handler(UFILE             *stream,
   }
 
   /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 int32_t
-u_printf_ustring_handler(UFILE                 *stream,
-             const u_printf_spec_info     *info,
+u_sprintf_ustring_handler(u_localized_string *output,
+             const u_sprintf_spec_info     *info,
              const ufmt_args         *args)
 {
   int32_t len, written;
@@ -934,11 +1012,11 @@ u_printf_ustring_handler(UFILE                 *stream,
   /* precision takes precedence over width */
   /* determine if the string should be truncated */
   if(info->fPrecision != -1 && len > info->fPrecision) {
-    written = u_file_write(arg, info->fPrecision, stream);
+    written = u_minstrncpy(output, arg, info->fPrecision);
   }
   else {
     /* determine if the string should be padded */
-    written = u_printf_pad_and_justify(stream, info, arg, len);
+    written = u_sprintf_pad_and_justify(output, info, arg, len);
   }
 
   return written;
@@ -947,8 +1025,8 @@ u_printf_ustring_handler(UFILE                 *stream,
 
 
 int32_t
-u_printf_uchar_handler(UFILE                 *stream,
-               const u_printf_spec_info     *info,
+u_sprintf_uchar_handler(u_localized_string *output,
+               const u_sprintf_spec_info     *info,
                const ufmt_args            *args)
 {
   int32_t written = 0;
@@ -966,15 +1044,15 @@ u_printf_uchar_handler(UFILE                 *stream,
   }
   else {
     /* determine if the string should be padded */
-    written = u_printf_pad_and_justify(stream, info, &arg, 1);
+    written = u_sprintf_pad_and_justify(output, info, &arg, 1);
   }
 
   return written;
 }
 
 int32_t
-u_printf_scidbl_handler(UFILE                 *stream,
-            const u_printf_spec_info     *info,
+u_sprintf_scidbl_handler(u_localized_string *output,
+            const u_sprintf_spec_info     *info,
             const ufmt_args            *args)
 {
   double     num = (double)(args[0].doubleValue);
@@ -982,7 +1060,7 @@ u_printf_scidbl_handler(UFILE                 *stream,
 
   /* a precision of 0 is taken as 1 */
   if(info->fPrecision == 0)
-    ((u_printf_spec_info*)info)->fPrecision = 1;
+    ((u_sprintf_spec_info*)info)->fPrecision = 1;
 
   /* determine whether to use 'e' or 'f' */
   useE = (UBool)(num < 0.0001
@@ -991,23 +1069,23 @@ u_printf_scidbl_handler(UFILE                 *stream,
   /* use 'e' */
   if(useE) {
     /* adjust the specifier */
-    ((u_printf_spec_info*)info)->fSpec = 0x0065;
+    ((u_sprintf_spec_info*)info)->fSpec = 0x0065;
     /* call the scientific handler */
-    return u_printf_scientific_handler(stream, info, args);
+    return u_sprintf_scientific_handler(output, info, args);
   }
   /* use 'f' */
   else {
     /* adjust the specifier */
-    ((u_printf_spec_info*)info)->fSpec = 0x0066;
+    ((u_sprintf_spec_info*)info)->fSpec = 0x0066;
     /* call the double handler */
-    return u_printf_double_handler(stream, info, args);
+    return u_sprintf_double_handler(output, info, args);
   }
 }
 
 
 int32_t
-u_printf_count_handler(UFILE                 *stream,
-               const u_printf_spec_info     *info,
+u_sprintf_count_handler(u_localized_string *output,
+               const u_sprintf_spec_info     *info,
                const ufmt_args            *args)
 {
   int *count = (int*)(args[0].ptrValue);
@@ -1021,13 +1099,13 @@ u_printf_count_handler(UFILE                 *stream,
 
 
 int32_t
-u_printf_spellout_handler(UFILE             *stream,
-              const u_printf_spec_info     *info,
+u_sprintf_spellout_handler(u_localized_string *output,
+              const u_sprintf_spec_info     *info,
               const ufmt_args            *args)
 {
   double        num         = (double) (args[0].doubleValue);
   UNumberFormat        *format;
-  UChar            result        [UFPRINTF_BUFFER_SIZE];
+  UChar            result        [USPRINTF_BUFFER_SIZE];
   int32_t        minDecimalDigits;
   int32_t        maxDecimalDigits;
   UErrorCode        status        = U_ZERO_ERROR;
@@ -1038,7 +1116,7 @@ u_printf_spellout_handler(UFILE             *stream,
       num &= DBL_MAX;*/
 
   /* get the formatter */
-  format = u_locbund_getSpelloutFormat(stream->fBundle);
+  format = u_locbund_getSpelloutFormat(output->fBundle);
 
   /* handle error */
   if(format == 0)
@@ -1047,10 +1125,10 @@ u_printf_spellout_handler(UFILE             *stream,
   /* set the appropriate flags on the formatter */
 
   /* clone the stream's bundle if it isn't owned */
-  if(! stream->fOwnBundle) {
-    stream->fBundle     = u_locbund_clone(stream->fBundle);
-    stream->fOwnBundle     = TRUE;
-    format           = u_locbund_getSpelloutFormat(stream->fBundle);
+  if(! output->fOwnBundle) {
+    output->fBundle     = u_locbund_clone(output->fBundle);
+    output->fOwnBundle     = TRUE;
+    format           = u_locbund_getSpelloutFormat(output->fBundle);
   }
 
   /* set the number of decimal digits */
@@ -1084,58 +1162,75 @@ u_printf_spellout_handler(UFILE             *stream,
   }
 
   /* format the number */
-  unum_formatDouble(format, num, result, UFPRINTF_BUFFER_SIZE, 0, &status);
+  unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
   /* restore the number format */
   unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
-  return u_printf_pad_and_justify(stream, info, result, u_strlen(result));
+  return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
 #define UP_PERCENT 0x0025
 
 int32_t 
-u_vfprintf_u(    UFILE        *f,
+u_vsnprintf_u(UChar    *buffer,
+        int32_t        count,
+        const char     *locale,
         const UChar    *patternSpecification,
         va_list        ap)
 {
-  u_printf_spec   spec;
-  const UChar     *alias;
-  int32_t         count, written;
-  uint16_t      handlerNum;
+  const UChar       *alias = patternSpecification;
+  const UChar       *lastAlias;
+  int32_t           patCount;
+  int32_t           written = 0;
+  uint16_t          handlerNum;
 
-  ufmt_args       args;  
-        
+  ufmt_args         args;  
+  u_localized_string outStr;
+  u_sprintf_spec    spec;
   ufmt_type_info    info;
-  u_printf_handler handler;
+  u_sprintf_handler handler;
 
-  /* alias the pattern */
-  alias = patternSpecification;
-  
-  /* haven't written anything yet */
-  written = 0;
+  if (count < 0) {
+    count = INT32_MAX;
+  }
+
+  outStr.str = buffer;
+  outStr.len = count;
+  outStr.available = count;
+
+  /* if locale is 0, use the default */
+  if(locale == 0) {
+    locale = uloc_getDefault();
+  }
+  outStr.fBundle = u_loccache_get(locale);
+
+  if(outStr.fBundle == 0) {
+    return 0;
+  }
+  outStr.fOwnBundle     = FALSE;
 
   /* iterate through the pattern */
-  for(;;) {
+  while(outStr.available > 0) {
 
     /* find the next '%' */
-    count = 0;
+    lastAlias = alias;
     while(*alias != UP_PERCENT && *alias != 0x0000) {
       alias++;
-      ++count;
     }
 
     /* write any characters before the '%' */
-    if(count > 0)
-      written += u_file_write(alias - count, count, f);
+    if(alias > lastAlias) {
+      written += u_minstrncpy(&outStr, lastAlias, (int32_t)(alias - lastAlias));
+    }
 
     /* break if at end of string */
     if(*alias == 0x0000)
       break;
     
     /* parse the specifier */
-    count = u_printf_parse_spec(alias, &spec);
+    patCount = u_sprintf_parse_spec(alias, &spec);
 
     /* fill in the precision and width, if specified out of line */
 
@@ -1171,10 +1266,10 @@ u_vfprintf_u(    UFILE        *f,
         spec.fInfo.fPrecision = 0;
     }
     
-    handlerNum = (uint16_t)(spec.fInfo.fSpec - UPRINTF_BASE_FMT_HANDLERS);
-    if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
+    handlerNum = (uint16_t)(spec.fInfo.fSpec - USPRINTF_BASE_FMT_HANDLERS);
+    if (handlerNum < USPRINTF_NUM_FMT_HANDLERS) {
         /* query the info function for argument information */
-        info = g_u_printf_infos[ handlerNum ].info;
+        info = g_u_sprintf_infos[ handlerNum ].info;
         if(info > ufmt_simple_percent) { 
           switch(info) {
 
@@ -1226,22 +1321,22 @@ u_vfprintf_u(    UFILE        *f,
         }
 
         /* call the handler function */
-        handler = g_u_printf_infos[ handlerNum ].handler;
+        handler = g_u_sprintf_infos[ handlerNum ].handler;
         if(handler != 0) {
-           written += (*handler)(f, &spec.fInfo, &args);
+           written += (*handler)(&outStr, &spec.fInfo, &args);
         }
         else {
           /* just echo unknown tags */
-          written += u_file_write(alias, count, f);
+          written += u_minstrncpy(&outStr, lastAlias, (int32_t)(alias - lastAlias));
         }
     }
     else {
       /* just echo unknown tags */
-      written += u_file_write(alias, count, f);
+      written += u_minstrncpy(&outStr, lastAlias, (int32_t)(alias - lastAlias));
     }
     
     /* update the pointer in pattern and continue */
-    alias += count;
+    alias += patCount;
   }
   
   /* return # of UChars written */
