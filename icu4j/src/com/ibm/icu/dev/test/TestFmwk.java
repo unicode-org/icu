@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2000/05/18 19:09:51 $ 
- * $Revision: 1.12 $
+ * $Date: 2000/07/13 21:34:32 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -147,6 +147,10 @@ public class TestFmwk implements TestLog {
             params.indentLevel--;
         }
 	}
+
+    protected boolean isVerbose() {
+        return params.verbose;
+    }
 
     /**
      * Adds given string to the log if we are in verbose mode.
