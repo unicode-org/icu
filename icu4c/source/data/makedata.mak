@@ -86,21 +86,37 @@ PKGOPT=R:$(ICUP)
 !IF EXISTS("$(ICUDATA)\ucmfiles.mk")
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
 UCM_SOURCE=$(UCM_SOURCE)
-!IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
-!INCLUDE "$(ICUDATA)\ucmebcdic.mk"
-UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) 
-!IF EXISTS("$(ICUDATA)\ucmlocal.mk")
-!INCLUDE "$(ICUDATA)\ucmlocal.mk"
-UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
-!ELSE
-#!MESSAGE Warning: cannot find "ucmlocal.mk"
-!ENDIF
-!ELSE
-!MESSAGE Warning: cannot find "ucmebcdic.mk".Not building EBCDIC converter files
-!ENDIF
 !ELSE
 !ERROR ERROR: cannot find "ucmfiles.mk"
 !ENDIF
+
+!IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
+!INCLUDE "$(ICUDATA)\ucmebcdic.mk"
+!ELSE
+!MESSAGE Warning: cannot find "ucmebcdic.mk".Not building EBCDIC converter files
+!ENDIF
+
+!IF EXISTS("$(ICUDATA)\ucmlocal.mk")
+!INCLUDE "$(ICUDATA)\ucmlocal.mk"
+!IFDEF UCM_SOURCE_LOCAL
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+!ENDIF
+!ELSE
+#!MESSAGE Warning: cannot find "ucmlocal.mk"
+!ENDIF
+
+# Note that UCM_SOURCE_EBCDIC could be defined in either of ucmlocal.mk or ucmebcdic.mk.
+# Note also that subsequent dependency rules fail if there are leading spaces on UCM_SOURCE,
+#      hence the contorted logic here.
+!IF ("$(UCM_SOURCE_EBCDIC)" != "")
+!IF ("$(UCM_SOURCE)" == "")
+UCM_SOURCE=$(UCM_SOURCE_EBCDIC)
+!ELSE
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC)
+!ENDIF
+!ENDIF
+
+
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 
 # Read list of resource bundle files
