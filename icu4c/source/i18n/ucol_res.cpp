@@ -354,7 +354,7 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
   if(delta == UCOL_FULL_RULES) {
     /* take the UCA rules and append real rules at the end */
     /* UCA rules will be probably coming from the root RB */
-    ucaRules = ures_getStringByKey(coll->rb,"%%UCARULES",&UCAlen,&status);
+    ucaRules = ures_getStringByKey(coll->rb,"UCARules",&UCAlen,&status);
     /*
     UResourceBundle* cresb = ures_getByKeyWithFallback(coll->rb, "collations", NULL, &status);
     UResourceBundle*  uca = ures_getByKeyWithFallback(cresb, "UCA", NULL, &status);

@@ -1,16 +1,16 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/collation/sq.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/collation/sq.xml
+ *  ICU <specials> source: ./xml/collation/sq.xml
  */
 sq{
-    Version{"1.2"}
+    Version{"1.18"}
     collations{
         standard{
             Sequence{
@@ -26,7 +26,7 @@ sq{
                 "&[before 1]Y<xh<<<Xh<<<XH"
                 "&[before 1]Ʒ<zh<<<Zh<<<ZH"
             }
-            Version{"2.0"}
+            Version{"1.3"}
         }
     }
 }

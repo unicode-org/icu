@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/root.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/root.xml
+ *  ICU <specials> source: ./xml/main/root.xml
  */
 root{
     Currencies{
@@ -56,8 +56,8 @@ root{
         "+",
     }
     NumberPatterns{
-        "#,##0.###;-#,##0.###",
-        "¤ #,##0.00;-¤ #,##0.00",
+        "#,##0.###",
+        "¤ #,##0.00",
         "#,##0%",
         "#E0",
     }
@@ -65,7 +65,7 @@ root{
         297,
         210,
     }
-    Version{"1.2"}
+    Version{"1.41"}
     boundaries{
         grapheme{"char"}
         line{"line"}
@@ -162,36 +162,6 @@ root{
                         "7",
                     }
                 }
-                stand-alone{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                    default{"wide"}
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                    }
-                }
             }
             eras{
                 abbreviated{
@@ -202,51 +172,6 @@ root{
             monthNames{
                 default{"format"}
                 format{
-                    abbreviated{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    default{"wide"}
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                    wide{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
-                }
-                stand-alone{
                     abbreviated{
                         "1",
                         "2",

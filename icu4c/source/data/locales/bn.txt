@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/bn.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/bn.xml
+ *  ICU <specials> source: ./xml/main/bn.xml
  */
 bn{
     Countries{
@@ -136,7 +136,7 @@ bn{
     LocaleScript{
         "Beng",
     }
-    Version{"1.2"}
+    Version{"1.29"}
     calendar{
         gregorian{
             AmPmMarkers{

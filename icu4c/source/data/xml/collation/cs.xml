@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.3/ldml.dtd" 
 [
-      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.3/ldmlICU.dtd"> 
 %icu;
 ]
 >
@@ -13,9 +13,4 @@
 	</identity>
 	<characters>
 	</characters>
-	<collations>
-		<collation type="standard" >
-			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-		</collation  >
-	</collations>
 </ldml>

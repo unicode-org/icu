@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/id.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/id.xml
+ *  ICU <specials> source: ./xml/main/id.xml
  */
 id{
     Countries{
@@ -207,7 +207,6 @@ id{
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalia"}
-        SP{"Serbia"}
         SR{"Suriname"}
         ST{"Sao Tome dan Principe"}
         SV{"El Salvador"}
@@ -501,12 +500,12 @@ id{
         "+",
     }
     NumberPatterns{
-        "#,##0.###;-#,##0.###",
-        "¤#,##0.00;-¤#,##0.00",
+        "#,##0.###",
+        "¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    Version{"1.2"}
+    Version{"1.33"}
     calendar{
         gregorian{
             DateTimeElements:intvector{
