@@ -51,7 +51,7 @@ U_NAMESPACE_BEGIN
  * <P>
  *
  * @subclassing Do not subclass.
- * @deprecated To be removed after 2002-sep-30; use the C API, see uchar.h and utf.h.
+ * @obsolete ICU 2.4. Use the C API in uchar.h and utf.h instead since this API will be removed in that release.
  */
 class U_COMMON_API Unicode
 {
@@ -61,7 +61,7 @@ public:
      * enum values are more like C #define's.
      * The following is a collection of constants, not an enumeration type.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     enum {
         /** The lowest Unicode code point value. Code points are non-negative. */
@@ -111,7 +111,7 @@ public:
     /**
      * Public data for enumerated Unicode general category types
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
 
     enum EUnicodeGeneralTypes
@@ -153,7 +153,7 @@ public:
     /**
      * These are the same values as uchar.h::UCharScript
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     enum EUnicodeScript 
     {
@@ -250,7 +250,7 @@ public:
     /**
      * This specifies the language directional property of a character set.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     enum EDirectionProperty { 
         LEFT_TO_RIGHT               = 0, 
@@ -278,7 +278,7 @@ public:
      * Values returned by the getCellWidth() function.
      * @see Unicode#getCellWidth
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     enum ECellWidths
     {
@@ -297,7 +297,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isSingle(UChar c);
 
@@ -308,7 +308,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isLead(UChar c);
 
@@ -319,7 +319,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isTrail(UChar c);
 
@@ -332,7 +332,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isSurrogate(UChar32 c);
 
@@ -347,7 +347,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isUnicodeChar(UChar32 c);
 
@@ -361,7 +361,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isError(UChar32 c);
 
@@ -373,7 +373,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isValid(UChar32 c);
 
@@ -387,7 +387,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool needMultipleUChar(UChar32 c);
 
@@ -398,7 +398,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int32_t charLength(UChar32 c);
 
@@ -414,7 +414,7 @@ public:
      *         (Only UTF-16 is supported right now, therefore,
      *         this will always be <code>size</code> itself. This may change in the future.)
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int32_t arraySize(int32_t size);
 
@@ -429,7 +429,7 @@ public:
      * @see Unicode#isTitleCase
      * @see Unicode#toLowerCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isLowerCase(UChar32 ch);
 
@@ -443,7 +443,7 @@ public:
      * @see Unicode#isTitleCase
      * @see Unicode#toUpperCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isUpperCase(UChar32 ch);
 
@@ -457,7 +457,7 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#toTitleCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isTitleCase(UChar32 ch);
 
@@ -471,7 +471,7 @@ public:
      * @see     Unicode#forDigit
      * @see     Unicode#digitValue
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isDigit(UChar32 ch);
 
@@ -489,7 +489,7 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isDefined(UChar32 ch);
 
@@ -502,7 +502,7 @@ public:
      *
      * @see Unicode#isPrintable
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isControl(UChar32 ch);
 
@@ -515,7 +515,7 @@ public:
      *
      * @see Unicode#isControl
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isPrintable(UChar32 ch);
 
@@ -529,7 +529,7 @@ public:
      * @see Unicode#isLetter
      * @see Unicode#isDigit
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
      static inline UBool isBaseForm(UChar32 ch);
 
@@ -547,7 +547,7 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isLetter(UChar32 ch);
 
@@ -570,7 +570,7 @@ public:
      * @see     isLetter
      * @see     isUnicodeIdentifierStart
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isJavaIdentifierStart(UChar32 ch);
 
@@ -601,7 +601,7 @@ public:
      * @see     isDigit
      * @see     isUnicodeIdentifierPart
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isJavaIdentifierPart(UChar32 ch);
 
@@ -618,7 +618,7 @@ public:
      * @see     isLetter
      * @see     isUnicodeIdentifierPart
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isUnicodeIdentifierStart(UChar32 ch);
 
@@ -647,7 +647,7 @@ public:
      * @see     isLetterOrDigit
      * @see     isUnicodeIdentifierStart
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isUnicodeIdentifierPart(UChar32 ch);
 
@@ -675,7 +675,7 @@ public:
      * @see     isJavaIdentifierPart
      * @see     isUnicodeIdentifierPart
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isIdentifierIgnorable(UChar32 ch);
 
@@ -702,7 +702,7 @@ public:
      * @see Unicode#toUpperCase
      * @see Unicode#toTitleCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
    static inline UChar32 toLowerCase(UChar32 ch); 
 
@@ -726,7 +726,7 @@ public:
      * @see Unicode#toLowerCase
      * @see Unicode#toTitleCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UChar32 toUpperCase(UChar32 ch);
 
@@ -746,7 +746,7 @@ public:
      * @see Unicode#toUpperCase
      * @see Unicode#toLowerCase
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UChar32 toTitleCase(UChar32 ch);
 
@@ -762,7 +762,7 @@ public:
      * @return      the case folding equivalent of the character, if any;
      *              otherwise the character itself.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UChar32
     foldCase(UChar32 c, uint32_t options);
@@ -774,7 +774,7 @@ public:
      * @param ch    the character to be tested
      * @return  true if the character is a space character; false otherwise.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isSpaceChar(UChar32 ch);
 
@@ -805,7 +805,7 @@ public:
      *          false otherwise.
      * @see     #isSpaceChar
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isWhitespace(UChar32 ch);
 
@@ -842,7 +842,7 @@ public:
      * @see Unicode#MODIFIER_SYMBOL
      * @see Unicode#OTHER_SYMBOL
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int8_t getType(UChar32 ch);
 
@@ -852,7 +852,7 @@ public:
      * @param c the code point of the character
      * @return the combining class of the character
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline uint8_t getCombiningClass(UChar32 c);
 
@@ -864,7 +864,7 @@ public:
      * property.
      * @see #EDirectionProperty
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      * @param ch The character to be tested
      * @return the linguistic direction property of a character
      */
@@ -879,7 +879,7 @@ public:
      * @param c the character (code point, Unicode scalar value) to be tested
      * @return TRUE if the character has the "mirrored" property
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UBool isMirrored(UChar32 c);
 
@@ -898,7 +898,7 @@ public:
      *         substitute, or c itself if there is no such mapping or c
      *         does not have the "mirrored" property
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UChar32 charMirror(UChar32 c);
 
@@ -908,7 +908,7 @@ public:
      * @param ch The character to be tested
      * @return the script associated with a character
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline EUnicodeScript getScript(UChar32 ch);
 
@@ -962,7 +962,7 @@ public:
      * consonant.  The results may be slightly off with Korean text following different
      * conventions.
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      * @return a value indicating the display-cell width of the character
      */
     static inline uint16_t getCellWidth(UChar32 ch);
@@ -993,7 +993,7 @@ public:
      * &#32;   UnicodeString name(buffer, length, "");
      * </pre>
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int32_t
     getCharName(uint32_t code,
@@ -1009,7 +1009,7 @@ public:
      * @see     Unicode#forDigit
      * @see     Unicode#isDigit
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int32_t digitValue(UChar32 ch);     
 
@@ -1049,7 +1049,7 @@ public:
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline int32_t digit(UChar32 ch, int8_t radix);
 
@@ -1079,7 +1079,7 @@ public:
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static inline UChar32 forDigit(int32_t digit, int8_t radix);
 
@@ -1087,7 +1087,7 @@ public:
      * Retrieves the Unicode Standard Version number that is used
      * @param info the version # information, the result will be filled in
      *
-     * @deprecated See the Unicode class description.
+     * @obsolete ICU 2.4. Use the parallel uchar.h/utf.h C API instead since this API will be removed in that release.
      */
     static void getUnicodeVersion(UVersionInfo info);
 
@@ -1356,7 +1356,7 @@ Unicode::getUnicodeVersion(UVersionInfo versionArray) {
 U_NAMESPACE_END
 #else
 
-#error "The unicode/unicode.h header is deprecated. Please use the Unicode C API in unicode/uchar.h instead."
+#error "The unicode/unicode.h header is obsolete. Please use the Unicode C API in unicode/uchar.h instead."
 
 #endif /* ICU_UNICODE_CLASS_USE_DEPRECATES */
 
