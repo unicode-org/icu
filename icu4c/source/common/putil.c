@@ -985,7 +985,7 @@ findLibraryPath(char *path, int size) {
 }
 
 /* define a path for fallbacks */
-#define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING ICU_VERSION U_FILE_SEP_STRING
+#define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
 
 /* #include <stdio.h> */
 /* #include <unistd.h> */
@@ -1463,6 +1463,32 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
 #endif
         --length;
     }
+}
+
+U_CAPI int32_t U_EXPORT2
+u_getVersion(uint8_t* versionArray)
+{
+    int32_t len = uprv_strlen(U_ICU_VERSION), i = 0, part = 0;
+    char verString[U_MAX_VERSION_STRING], *begin;
+    
+    if (versionArray == 0) 
+    {
+        return U_MAX_VERSION_LEN;
+    }
+    begin = &(verString[0]);
+    uprv_strcpy(verString, U_ICU_VERSION);
+    uprv_memset(versionArray, 0, U_MAX_VERSION_LEN); 
+    do {
+        if (verString[i] == U_VERSION_DELIMITER)
+        {
+            verString[i] = 0;
+            versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+            begin = &(verString[i+1]);
+        }
+    }
+    while (i++ < len);
+    versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+    return U_MAX_VERSION_LEN;
 }
 
 /* u_errorName() ------------------------------------------------------------ */

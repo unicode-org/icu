@@ -257,10 +257,10 @@ Unicode::forDigit(int32_t digit, int8_t radix) {
                    + digit);
 }
 
-const char*
-Unicode::getVersion()
+int32_t
+Unicode::getVersion(uint8_t* versionArray)
 {
-	return (u_getVersion() );
+	return (u_getVersion(versionArray) );
 }
 
 

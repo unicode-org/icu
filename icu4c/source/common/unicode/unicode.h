@@ -752,7 +752,7 @@ public:
 	 * Retrieves the Unicode Standard Version number that is used
 	 * @return the Unicode Standard Version Number.
 	 */
-	static const char*   getVersion(void);
+	static int32_t   getVersion(uint8_t *versionArray);
 
 protected:
     // These constructors, destructor, and assignment operator must
