@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.174 2002/08/09 17:20:56 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.175 2002/08/21 01:42:18 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -592,7 +592,7 @@ else
     AC_DEFINE(HAVE_WCHAR_H)
     U_HAVE_WCHAR_H=1
     dnl Some broken systems have wchar.h but not some of its functions...
-    AC_SEARCH_LIBS(wcscpy, wcs)
+    AC_SEARCH_LIBS(wcscpy, wcs w)
     if test "$ac_cv_search_wcscpy" != no; then
       U_HAVE_WCSCPY=1
     else
