@@ -1159,15 +1159,20 @@ static void TestStringFunctions()
     /* test u_strcmpCodePointOrder() */
     {
         /* these strings are in ascending order */
-        static const UChar strings[5][3]={
-            { 0x61, 0 },            /* U+0061 */
-            { 0x20ac, 0 },          /* U+20ac */
-            { 0xff61, 0 },          /* U+ff61 */
-            { 0xd800, 0xdc02, 0 },  /* U+10002 */
-            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
+        static const UChar strings[][4]={
+            { 0x61, 0 },                    /* U+0061 */
+            { 0x20ac, 0xd801, 0 },          /* U+20ac U+d801 */
+            { 0x20ac, 0xd800, 0xdc00, 0 },  /* U+20ac U+10000 */
+            { 0xd800, 0 },                  /* U+d800 */
+            { 0xd800, 0xff61, 0 },          /* U+d800 U+ff61 */
+            { 0xdfff, 0 },                  /* U+dfff */
+            { 0xff61, 0xdfff, 0 },          /* U+ff61 U+dfff */
+            { 0xff61, 0xd800, 0xdc02, 0 },  /* U+ff61 U+10002 */
+            { 0xd800, 0xdc02, 0 },          /* U+10002 */
+            { 0xd84d, 0xdc56, 0 }           /* U+23456 */
         };
 
-        for(i=0; i<4; ++i) {
+        for(i=0; i<(sizeof(strings)/sizeof(strings[0])-1); ++i) {
             if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
                 log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
             }
