@@ -345,18 +345,28 @@ typedef void* UClassID;
  * Error codes should be tested using U_FAILURE() and U_SUCCESS().
  */
 enum UErrorCode {
-    U_ERROR_INFO_START        = -128,   /**< Start of information results (semantically successful) */
-      /** @deprecated use the enum that ends in _WARNING */
-    U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
+    /* The ordering of U_ERROR_INFO_START Vs U_USING_FALLBACK_WARNING looks weird
+     * and is that way because VC++ debugger displays first encountered constant, 
+     * which is not the what the code is used for
+     */
+
     U_USING_FALLBACK_WARNING  = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
-      /** @deprecated use the enum that ends in _WARNING */
-    U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
+    /** @deprecated use the enum that ends in _WARNING */
+    U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
+
+    U_ERROR_WARNING_START        = -128,   /**< Start of information results (semantically successful) */
+
     U_USING_DEFAULT_WARNING   = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
-      /** @deprecated use the enum that ends in _WARNING */
-    U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
+    /** @deprecated use the enum that ends in _WARNING */
+    U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
+
     U_SAFECLONE_ALLOCATED_WARNING = -126, /**< A SafeClone operation required allocating memory (informational only) */
+    /** @deprecated use the enum that ends in _WARNING */
+    U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
+    
     U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
-    U_ERROR_INFO_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
+
+    U_ERROR_WARNING_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
 
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
 
@@ -387,8 +397,8 @@ enum UErrorCode {
     /* 
      * the error code range 0x10000 0x10100 are reserved for Transliterator
      */
-    U_PARSE_ERROR_START = 0x10000,      /**< start of Transliterator specific parse Errors */
     U_BAD_VARIABLE_DEFINITION=0x10000,
+    U_PARSE_ERROR_START = 0x10000,      /**< start of Transliterator specific parse Errors */
     U_MALFORMED_RULE,
     U_MALFORMED_SET,
     U_MALFORMED_SYMBOL_REFERENCE,
@@ -414,8 +424,8 @@ enum UErrorCode {
     /* 
      * the error code range 0x10100 0x10200 are reserved for formatting API parsing error
      */
-    U_FMT_PARSE_ERROR_START=0x10100,
     U_UNEXPECTED_TOKEN=0x10100,
+    U_FMT_PARSE_ERROR_START=0x10100,
     U_MULTIPLE_DECIMAL_SEPERATORS,
     U_MULTIPLE_EXPONENTIAL_SYMBOLS,
     U_MALFORMED_EXPONENTIAL_PATTERN,
