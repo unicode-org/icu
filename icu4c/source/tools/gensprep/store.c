@@ -18,13 +18,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
 #include "unicode/udata.h"
 #include "utrie.h"
-#include "unicode/uset.h"
 #include "unewdata.h"
 #include "gensprep.h"
 #include "uhash.h"
