@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -19,7 +19,6 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.2 $ $Date: 2001/12/03 20:50:11 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2001-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -36,7 +36,6 @@ U_NAMESPACE_BEGIN
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: esctrn.h,v $ $Revision: 1.1 $ $Date: 2001/11/21 07:02:14 $
  */
 class U_I18N_API EscapeTransliterator : public Transliterator {
 
