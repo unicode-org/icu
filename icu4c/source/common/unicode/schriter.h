@@ -139,7 +139,7 @@ public:
    * @param result Receives a copy of the text under iteration.  
    * @stable ICU 2.0
    */
-  virtual void            getText(UnicodeString& result);
+  virtual void            getText(UnicodeString& result) const;
 
   /**
    * Return a class ID for this object (not really public) 
