@@ -76,7 +76,7 @@ static void                loadZoneData(void);
 
 U_NAMESPACE_BEGIN
 static TimeZone*           DEFAULT_ZONE = NULL;
-static TimeZone*           GMT = NULL;
+static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
 static UnicodeString*      ZONE_IDS = 0;
 const char                 TimeZone::fgClassID = 0; // Value is irrelevant
 
@@ -122,9 +122,9 @@ UBool timeZone_cleanup()
         umtx_destroy(&LOCK);
         LOCK = NULL;
     }
-    if (U_NAMESPACE_QUALIFIER GMT) {
-        delete U_NAMESPACE_QUALIFIER GMT;
-        U_NAMESPACE_QUALIFIER GMT = NULL;
+    if (_GMT) {
+        delete _GMT;
+        _GMT = NULL;
     }
     if (DEFAULT_ZONE) {
         delete DEFAULT_ZONE;
@@ -150,54 +150,84 @@ UBool timeZone_cleanup()
 static void loadZoneData() {
     U_NAMESPACE_USE
 
+    if (DATA_LOADED) {
+        return;
+    }
+
+    // Cleanup handles both _GMT and the UDataMemory-based statics
+    ucln_i18n_registerCleanup();
+
+    // Initialize _GMT independently; it should be valid even if we
+    // can't load the time zone UDataMemory.
+    TimeZone* gmt = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
+    umtx_lock(&LOCK);
+    if (_GMT == NULL) {
+        _GMT = gmt;
+        gmt = NULL;
+    }
+    umtx_unlock(&LOCK);
+    delete gmt;
+
+    // Open a data memory object, to be closed either later in this
+    // function or in timeZone_cleanup().  Purify (etc.) may
+    // mistakenly report this as a leak.
+    UErrorCode status = U_ZERO_ERROR;
+    UDataMemory* data = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME,
+        (UDataMemoryIsAcceptable*)isTimeZoneDataAcceptable, 0, &status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    TZHeader* tzh = (TZHeader*)udata_getMemory(data);
+    // Result guaranteed to be nonzero if 'data' is nonzero
+
+    const uint32_t* index_by_id =
+        (const uint32_t*)((int8_t*)tzh + tzh->nameIndexDelta);
+    const OffsetIndex* index_by_offset =
+        (const OffsetIndex*)((int8_t*)tzh + tzh->offsetIndexDelta);
+    const CountryIndex* index_by_country =
+        (const CountryIndex*)((int8_t*)tzh + tzh->countryIndexDelta);
+
+    // Construct the available IDs array. The ordering
+    // of this array conforms to the ordering of the
+    // index by name table.
+    UnicodeString* zone_ids = new UnicodeString[tzh->count];
+    // Find start of name table, and walk through it
+    // linearly.  If you're wondering why we don't use
+    // the INDEX_BY_ID, it's because that indexes the
+    // zone objects, not the name table.  The name
+    // table is unindexed.
+    const char* name = (const char*)tzh + tzh->nameTableDelta;
+    int32_t length;
+    for (uint32_t i=0; i<tzh->count; ++i) {
+        zone_ids[i] = UnicodeString(name, ""); // invariant converter
+        length = zone_ids[i].length();  // add a NUL but don't count it so that
+        zone_ids[i].append((UChar)0);   // getBuffer() gets a terminated string
+        zone_ids[i].truncate(length);
+        name += uprv_strlen(name) + 1;
+    }
+
+    // Keep mutexed operations as short as possible by doing all
+    // computations first, then doing pointer copies within the mutex.
+    umtx_lock(&LOCK);
     if (!DATA_LOADED) {
-        Mutex lock(&LOCK);
-        if (!DATA_LOADED) {
-            UErrorCode status = U_ZERO_ERROR;
-            UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
-                   (UDataMemoryIsAcceptable*)isTimeZoneDataAcceptable, 0, &status); // see the comment on udata_close line
-            UDataMemory *data = UDATA_POINTER;
-            if (U_SUCCESS(status)) {
-                DATA = (TZHeader*)udata_getMemory(data);
-                // Result guaranteed to be nonzero if data is nonzero
+        DATA = tzh;
+        INDEX_BY_ID = index_by_id;
+        INDEX_BY_OFFSET = index_by_offset;
+        INDEX_BY_COUNTRY = index_by_country;
+        UDATA_POINTER = data;
+        ZONE_IDS = zone_ids;
 
-                INDEX_BY_ID =
-                    (const uint32_t*)((int8_t*)DATA + DATA->nameIndexDelta);
-                INDEX_BY_OFFSET =
-                    (const OffsetIndex*)((int8_t*)DATA + DATA->offsetIndexDelta);
-                INDEX_BY_COUNTRY =
-                    (const CountryIndex*)((int8_t*)DATA + DATA->countryIndexDelta);
-                
-                // Construct the available IDs array. The ordering
-                // of this array conforms to the ordering of the
-                // index by name table.
-                ZONE_IDS = new UnicodeString[DATA->count];
-                // Find start of name table, and walk through it
-                // linearly.  If you're wondering why we don't use
-                // the INDEX_BY_ID, it's because that indexes the
-                // zone objects, not the name table.  The name
-                // table is unindexed.
-                const char* name = (const char*)DATA + DATA->nameTableDelta;
-                int32_t length;
-                for (uint32_t i=0; i<DATA->count; ++i) {
-                    ZONE_IDS[i] = UnicodeString(name, ""); // invariant converter
-                    length = ZONE_IDS[i].length();  // add a NUL but don't count it so that
-                    ZONE_IDS[i].append((UChar)0);   // getBuffer() gets a terminated string
-                    ZONE_IDS[i].truncate(length);
-                    name += uprv_strlen(name) + 1;
-                }
+        data = NULL;
+        DATA_LOADED = TRUE;
+    }
+    umtx_unlock(&LOCK);
 
-                //udata_close(data);    // Without udata_close purify will report a leak. However, DATA_LOADED is 
-                                        // static, and udata_openChoice will be called only once, and data from
-                                        // udata_openChoice needs to stick around.
-                                        
-            }
-
-            // Whether we succeed or fail, stop future attempts
-            DATA_LOADED = TRUE;
-            U_NAMESPACE_QUALIFIER GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
-            ucln_i18n_registerCleanup();
-        }
+    // If another thread initialized the statics first, then delete
+    // our unused data.
+    if (data != NULL) {
+        udata_close(data);
+        delete[] zone_ids;
     }
 }
 
@@ -209,7 +239,7 @@ TimeZone::getGMT(void)
     if (!DATA_LOADED) {
         loadZoneData();
     }
-    return GMT;
+    return _GMT;
 }
 
 // *****************************************************************************
@@ -341,87 +371,96 @@ TimeZone::initDefault()
     if (!DATA_LOADED) {
         loadZoneData();
     }
+
     // This function is called by createDefault() to initialize
-    // fgDefaultZone from the system default time zone.  If
-    // fgDefaultZone is already filled in, we obviously don't have to
+    // DEFAULT_ZONE from the system default time zone.  If
+    // DEFAULT_ZONE is already filled in, we obviously don't have to
     // do anything.
-    if (DEFAULT_ZONE == 0) {
-        Mutex lock(&LOCK);
-        if (DEFAULT_ZONE == 0) {
-            // We access system timezone data through TPlatformUtilities,
-            // including tzset(), timezone, and tzname[].
-            int32_t rawOffset = 0;
-            const char *hostID;
+    if (DEFAULT_ZONE != NULL) {
+        return;
+    }
 
-            // First, try to create a system timezone, based
-            // on the string ID in tzname[0].
-            {
-                // NOTE: Global mutex here; TimeZone mutex above
-                // mutexed to avoid threading issues in the platform fcns.
-                // Some of the locale/timezone OS functions may not be thread safe, 
-                //  so the intent is that any setting from anywhere within ICU 
-                //  happens with the ICU global mutex held.
-                Mutex lock; 
-                uprv_tzset(); // Initialize tz... system data
-                
-                // get the timezone ID from the host.
-                hostID = uprv_tzname(0);
-                
-                // Invert sign because UNIX semantics are backwards
-                rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
+    // We access system timezone data through TPlatformUtilities,
+    // including tzset(), timezone, and tzname[].
+    int32_t rawOffset = 0;
+    const char *hostID;
+
+    // First, try to create a system timezone, based
+    // on the string ID in tzname[0].
+    {
+        // NOTE: Global mutex here; TimeZone mutex above
+        // mutexed to avoid threading issues in the platform fcns.
+        // Some of the locale/timezone OS functions may not be thread safe, 
+        //  so the intent is that any setting from anywhere within ICU 
+        //  happens with the ICU global mutex held.
+        Mutex lock; 
+        uprv_tzset(); // Initialize tz... system data
+        
+        // get the timezone ID from the host.
+        hostID = uprv_tzname(0);
+        
+        // Invert sign because UNIX semantics are backwards
+        rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
+    }
+
+    // Try to create a system zone with the given ID.  This
+    // _always fails on Windows_ because Windows returns a
+    // non-standard localized zone name, e.g., "Pacific
+    // Standard Time" on U.S. systems set to PST.  One way to
+    // fix this is to add a Windows-specific mapping table,
+    // but that means we'd have to do so for every locale.  A
+    // better way is to use the offset and find a
+    // corresponding zone, which is what we do below.
+    TimeZone* default_zone = createSystemTimeZone(hostID);
+
+    // If we couldn't get the time zone ID from the host, use
+    // the default host timezone offset.  Further refinements
+    // to this include querying the host to determine if DST
+    // is in use or not and possibly using the host locale to
+    // select from multiple zones at a the same offset.  We
+    // don't do any of this now, but we could easily add this.
+    if (default_zone == 0 && DATA != 0) {
+        // Use the designated default in the time zone list that has the
+        // appropriate GMT offset, if there is one.
+        
+        const OffsetIndex* index = INDEX_BY_OFFSET;
+        
+        for (;;) {
+            if (index->gmtOffset > rawOffset) {
+                // Went past our desired offset; no match found
+                break;
             }
-
-            // Try to create a system zone with the given ID.  This
-            // _always fails on Windows_ because Windows returns a
-            // non-standard localized zone name, e.g., "Pacific
-            // Standard Time" on U.S. systems set to PST.  One way to
-            // fix this is to add a Windows-specific mapping table,
-            // but that means we'd have to do so for every locale.  A
-            // better way is to use the offset and find a
-            // corresponding zone, which is what we do below.
-            DEFAULT_ZONE = createSystemTimeZone(hostID);
-
-            // If we couldn't get the time zone ID from the host, use
-            // the default host timezone offset.  Further refinements
-            // to this include querying the host to determine if DST
-            // is in use or not and possibly using the host locale to
-            // select from multiple zones at a the same offset.  We
-            // don't do any of this now, but we could easily add this.
-            if (DEFAULT_ZONE == 0 && DATA != 0) {
-                // Use the designated default in the time zone list that has the
-                // appropriate GMT offset, if there is one.
-
-                const OffsetIndex* index = INDEX_BY_OFFSET;
-                
-                for (;;) {
-                    if (index->gmtOffset > rawOffset) {
-                        // Went past our desired offset; no match found
-                        break;
-                    }
-                    if (index->gmtOffset == rawOffset) {
-                        // Found our desired offset
-                        DEFAULT_ZONE = createTimeZone(ZONE_IDS[index->defaultZone]);
-                        break;
-                    }
-                    // Compute the position of the next entry.  If the delta value
-                    // in this entry is zero, then there is no next entry.
-                    uint16_t delta = index->nextEntryDelta;
-                    if (delta == 0) {
-                        break;
-                    }
-                    index = (const OffsetIndex*)((int8_t*)index + delta);
-                }
+            if (index->gmtOffset == rawOffset) {
+                // Found our desired offset
+                DEFAULT_ZONE = createTimeZone(ZONE_IDS[index->defaultZone]);
+                break;
             }
-
-            // If we _still_ don't have a time zone, use GMT.  This
-            // can only happen if the raw offset returned by
-            // uprv_timezone() does not correspond to any system zone.
-            if (DEFAULT_ZONE == 0) {
-                DEFAULT_ZONE = getGMT()->clone();
+            // Compute the position of the next entry.  If the delta value
+            // in this entry is zero, then there is no next entry.
+            uint16_t delta = index->nextEntryDelta;
+            if (delta == 0) {
+                break;
             }
-            ucln_i18n_registerCleanup();
+            index = (const OffsetIndex*)((int8_t*)index + delta);
         }
     }
+
+    // If we _still_ don't have a time zone, use GMT.  This
+    // can only happen if the raw offset returned by
+    // uprv_timezone() does not correspond to any system zone.
+    if (default_zone == NULL) {
+        default_zone = getGMT()->clone();
+    }
+
+    // If DEFAULT_ZONE is still NULL, set it up.
+    umtx_lock(&LOCK);
+    if (DEFAULT_ZONE == NULL) {
+        DEFAULT_ZONE = default_zone;
+        default_zone = NULL;
+    }
+    umtx_unlock(&LOCK);
+
+    delete default_zone;
 }
 
 // -------------------------------------
@@ -429,7 +468,7 @@ TimeZone::initDefault()
 TimeZone*
 TimeZone::createDefault()
 {
-    initDefault(); // After this call fgDefaultZone is not NULL
+    initDefault(); // After this call DEFAULT_ZONE is not NULL
     Mutex lock(&LOCK); // In case adoptDefault is called
     return DEFAULT_ZONE->clone();
 }
@@ -441,13 +480,14 @@ TimeZone::adoptDefault(TimeZone* zone)
 {
     if (zone != NULL)
     {
-        Mutex mutex(&LOCK);
+        TimeZone* old = NULL;
 
-        if (DEFAULT_ZONE != NULL) {
-            delete DEFAULT_ZONE;
-        }
-
+        umtx_lock(&LOCK);
+        old = DEFAULT_ZONE;
         DEFAULT_ZONE = zone;
+        umtx_unlock(&LOCK);
+
+        delete old;
     }
 }
 // -------------------------------------
