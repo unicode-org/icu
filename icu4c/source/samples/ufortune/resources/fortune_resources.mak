@@ -32,9 +32,10 @@ ICUDIR=..\..\..\..
 
 #
 #  Inference rule, for compiling a .txt file into a .res file.
+#  -t fools make into thinking there are files such as es.res, etc
 #
 .txt.res:
-	$(ICUDIR)\bin\genrb -d . $*.txt
+	$(ICUDIR)\bin\genrb -t --package-name fortune_resources -d . $*.txt
 
 
 #
