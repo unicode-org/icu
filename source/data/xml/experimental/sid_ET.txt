@@ -1,0 +1,42 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Sidama language locale for Ethiopia.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Sidama terms provided by Dessalegn Garsamo Gabbiso <gabbiso2001@yahoo.com>
+// *    of the National University of Ireland, Dublin and A.H. Weno
+// *    <bus1hwa@east-01.novell.leeds.ac.uk>.
+
+sid_ET {
+    Version{ "x0.1" }
+
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    // }
+}

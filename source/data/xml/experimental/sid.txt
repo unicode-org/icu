@@ -1,0 +1,102 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Sidama language locale.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Sidama terms provided by Dessalegn Garsamo Gabbiso <gabbiso2001@yahoo.com>
+// *    of the National University of Ireland, Dublin and A.H. Weno
+// *    <bus1hwa@east-01.novell.leeds.ac.uk>.
+
+sid {
+    Version{ "x0.1" }
+    AmPmMarkers {
+        "soodo",
+        "hawwaro",
+    }
+    Countries { 
+        ET { "Itiyoophiya" }
+    }
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
+    DayAbbreviations {
+        //"Aca", // Too many days, and this doesn't look right.
+        "Sam",
+        "San",
+        "Mak",
+        "Row",
+        "Ham",
+        "Arb",
+        "Qid",
+    }
+    DayNames {
+        //"Qubee", // Too many days, and this doesn't look right.
+        "Sambata",
+        "Sanyo",
+        "Maakisanyo",
+        "Roowe",
+        "Hamuse",
+        "Arbe",
+        "Qidaame",
+    }
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM dd, yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    Eras { 
+        "YIA", // Yesus ilama albaani",
+        "YIG", // Yesus ilama gedensaani"
+    }
+    Languages { 
+        sid { "Sidaamu Afo" }
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript:array{ "Latn" }
+    // Sidama also uses a lunar calendar, when the Gregorian calendar is used
+    // it is used unmodified:
+    // TODO: Get translations for the lunar calendar when the calendar becomes available in ICU.
+    MonthAbbreviations {
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    }
+    MonthNames {
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    }
+}

@@ -1,0 +1,45 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Blin language locale.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// * Blin terms are provided by Tekie Alibekit with coordination of the
+// * Blin Language and Culture Association in Norway.
+
+byn_ER{ 
+    Version{ "x0.1" }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE\u1361 dd MMMM \u130D\u122D\u130B yyyy G",
+        "dd MMMM yyyy",
+        "dd-MMM-yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}
