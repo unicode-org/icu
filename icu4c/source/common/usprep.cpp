@@ -413,34 +413,28 @@ uprv_syntaxError(const UChar* rules,
     if(parseError == NULL){
         return;
     }
-    if(pos == rulesLen && rulesLen >0){
-        pos--;
-    }
     parseError->offset = pos;
     parseError->line = 0 ; // we are not using line numbers 
     
     // for pre-context
     int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-    int32_t stop  = pos;
+    int32_t limit = pos;
     
-    u_memcpy(parseError->preContext,rules+start,stop-start);
+    u_memcpy(parseError->preContext,rules+start,limit-start);
     //null terminate the buffer
-    parseError->preContext[stop-start] = 0;
+    parseError->preContext[limit-start] = 0;
     
-    //for post-context
+    // for post-context; include error rules[pos]
     start = pos;
-    if(start<rulesLen) {
-        U16_FWD_1(rules, start, rulesLen);
+    limit = start + (U_PARSE_CONTEXT_LEN-1);
+    if (limit > rulesLen) {
+        limit = rulesLen;
     }
-
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN)) : 
-                                                            rulesLen;
-    if(start < stop){
-        u_memcpy(parseError->postContext,rules+start,stop-start);
-        //null terminate the buffer
-        parseError->postContext[stop-start]= 0;
+    if (start < rulesLen) {
+        u_memcpy(parseError->postContext,rules+start,limit-start);
     }
-    
+    //null terminate the buffer
+    parseError->postContext[limit-start]= 0;
 }
 
 
