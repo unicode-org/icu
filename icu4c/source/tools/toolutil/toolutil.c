@@ -1,0 +1,64 @@
+/*
+*******************************************************************************
+*                                                                             *
+* COPYRIGHT:                                                                  *
+*   (C) Copyright International Business Machines Corporation, 1999           *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure   *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *
+*                                                                             *
+*******************************************************************************
+*   file name:  toolutil.c
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 1999nov19
+*   created by: Markus W. Scherer
+*
+*   This file contains utility functions for ICU tools like genccode.
+*/
+
+#ifdef WIN32
+#   define VC_EXTRALEAN
+#   define WIN32_LEAN_AND_MEAN
+#   include <windows.h>
+#endif
+#include "utypes.h"
+#include "putil.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "toolutil.h"
+
+U_CFUNC char *
+getLongPathname(char *pathname) {
+#ifdef WIN32
+    /* anticipate problems with "short" pathnames */
+    static WIN32_FIND_DATA info;
+    HANDLE file=FindFirstFile(pathname, &info);
+    if(file!=INVALID_HANDLE_VALUE) {
+        if(info.cAlternateFileName[0]!=0) {
+            /* this file has a short name, get and use the long one */
+            const char *basename=findBasename(pathname);
+            if(basename!=pathname) {
+                /* prepend the long filename with the original path */
+                icu_memmove(info.cFileName+(basename-pathname), info.cFileName, icu_strlen(info.cFileName)+1);
+                icu_memcpy(info.cFileName, pathname, basename-pathname);
+            }
+            pathname=info.cFileName;
+        }
+        FindClose(file);
+    }
+#endif
+    return pathname;
+}
+
+U_CFUNC const char *
+findBasename(const char *filename) {
+    const char *basename=icu_strrchr(filename, U_FILE_SEP_CHAR);
+    if(basename!=NULL) {
+        return basename+1;
+    } else {
+        return filename;
+    }
+}
