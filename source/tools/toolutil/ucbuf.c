@@ -24,6 +24,7 @@
 
 #define MAX_BUF 1000
 
+/* Autodetects UTF8, UTF-16-BigEndian and UTF-16-LittleEndian BOMs*/
 U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp){
   UBool autodetect = FALSE;
@@ -46,6 +47,7 @@ ucbuf_autodetect(FileStream* in,const char** cp){
   return autodetect;
 }
 
+/* fill the uchar buffer */
 static UCHARBUF* 
 ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* pTarget=NULL;
@@ -100,6 +102,8 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     return buf;
 }
 
+/* get a UChar from the stream*/
+
 U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
     UChar32 c =0;
@@ -130,6 +134,7 @@ _charAt(int32_t offset, void *context) {
     return ((UCHARBUF*) context)->currentPos[offset];
 }
 
+/* getc and escape it */
 U_CAPI UChar32 U_EXPORT2
 ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     int32_t length;
@@ -176,7 +181,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     return c32;
 }
 
-
+/* open a UCHARBUF */
 U_CAPI UCHARBUF* U_EXPORT2
 ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
 
@@ -207,19 +212,25 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
     }
 }
 
-static void 
-ucbuf_closebuf(UCHARBUF* buf){
-    uprv_free(buf->buffer);
-}
-
+/* TODO: this method will fail if at the 
+   begining of buffer and the uchar to unget
+   is from the previous buffer. Need to implement
+   system to take care of that situation.
+*/
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
     if(buf->currentPos!=buf->buffer){
         buf->currentPos--;
     }
-
 }
 
+/* frees the resources of UChar* buffer */
+static void 
+ucbuf_closebuf(UCHARBUF* buf){
+    uprv_free(buf->buffer);
+}
+
+/* close the buf and release resources*/
 U_CAPI void U_EXPORT2
 ucbuf_close(UCHARBUF* buf){
     if(buf->conv){
@@ -230,4 +241,18 @@ ucbuf_close(UCHARBUF* buf){
     buf->bufLimit=NULL;
     ucbuf_closebuf(buf);
     uprv_free(buf);
+}
+
+/* rewind the buf and file stream */
+U_CAPI void U_EXPORT2
+ucbuf_rewind(UCHARBUF* buf){
+	if(buf){
+		const char* cp="";
+		buf->currentPos=buf->buffer;
+		buf->bufLimit=buf->buffer;
+		ucnv_reset(buf->conv);
+		T_FileStream_rewind(buf->in);
+		ucbuf_autodetect(buf->in,&cp);
+		buf->remaining=T_FileStream_size(buf->in);
+	}
 }
