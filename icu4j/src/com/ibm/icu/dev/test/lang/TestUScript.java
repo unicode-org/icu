@@ -9,6 +9,7 @@ package com.ibm.icu.test.text;
 
 import com.ibm.text.UScript;
 import com.ibm.test.TestFmwk;
+import java.util.Locale;
 
 public class TestUScript extends TestFmwk{
   
@@ -19,61 +20,92 @@ public class TestUScript extends TestFmwk{
     {
     }
     
-    public void TestGetCode(){
-        try{
-            final String[] testNames={
-                /* test locale */
-                "en", "en_US", "sr", "ta" , "te_IN",
-                "hi", "he", "ar",
-                /* test abbr */
-                "Hani", "Hang","Hebr","Hira",
-                "Knda","Kana","Khmr","Lao",
-                "Latn",/*"Latf","Latg",*/ 
-                "Mlym", "Mong",
-                
-                /* test names */
-                "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-                "GOTHIC",  "GREEK",  "GUJARATI", 
-                /* test lower case names */
-                "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
-                "oriya",     "runic",     "sinhala", "syriac","tamil",     
-                "telugu",    "thaana",    "thai",    "tibetan", 
-                /* test the bounds*/
-                "ucas", "arabic",
-            };
-            final int[] expected ={
+    public void TestLocaleGetCode(){
+        final Locale[] testNames={
+        /* test locale */
+        new Locale("en",""), new Locale("en","US"),
+        new Locale("sr",""), new Locale("ta","") , 
+        new Locale("te","IN"),
+        new Locale("hi",""), 
+        new Locale("he",""), new Locale("ar",""),
+        };
+        final int[] expected ={
                 /* locales should return */
-                UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN, UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_TAMIL, UScript.USCRIPT_TELUGU, 
-                UScript.USCRIPT_DEVANAGARI, UScript.USCRIPT_HEBREW, UScript.USCRIPT_ARABIC,
-                /* abbr should return */
-                UScript.USCRIPT_HAN, UScript.USCRIPT_HANGUL, UScript.USCRIPT_HEBREW, UScript.USCRIPT_HIRAGANA,
-                UScript.USCRIPT_KANNADA, UScript.USCRIPT_KATAKANA, UScript.USCRIPT_KHMER, UScript.USCRIPT_LAO,
-                UScript.USCRIPT_LATIN,/* UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN,*/ 
-                UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN,
-                /* names should return */
-                UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_DESERET, UScript.USCRIPT_DEVANAGARI, UScript.USCRIPT_ETHIOPIC, UScript.USCRIPT_GEORGIAN,
-                UScript.USCRIPT_GOTHIC, UScript.USCRIPT_GREEK, UScript.USCRIPT_GUJARATI,
-                /* lower case names should return */    
-                UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN, UScript.USCRIPT_MYANMAR, UScript.USCRIPT_OGHAM, UScript.USCRIPT_OLD_ITALIC,
-                UScript.USCRIPT_ORIYA, UScript.USCRIPT_RUNIC, UScript.USCRIPT_SINHALA, UScript.USCRIPT_SYRIAC, UScript.USCRIPT_TAMIL,
-                UScript.USCRIPT_TELUGU, UScript.USCRIPT_THAANA, UScript.USCRIPT_THAI, UScript.USCRIPT_TIBETAN,
-                /* bounds */
-                UScript.USCRIPT_UCAS, UScript.USCRIPT_ARABIC,
-            };
-            int i =0;
-            int numErrors =0;
+                UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN, 
+                UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_TAMIL, 
+                UScript.USCRIPT_TELUGU,UScript.USCRIPT_DEVANAGARI, 
+                UScript.USCRIPT_HEBREW, UScript.USCRIPT_ARABIC,
+        };
+        int i =0;
+        int numErrors =0;
 
-            for( ; i<testNames.length; i++){
-                int code = UScript.getCode(testNames[i]);
-                if( code != expected[i]){
-                    logln("Error getting script code Got: " +code + " Expected: " +expected[i] +" for name "+testNames[i]);
-                    numErrors++;
-                }
+        for( ; i<testNames.length; i++){
+            int code = UScript.getCode(testNames[i]);
+            if( code != expected[i]){
+                logln("Error getting script code Got: " +code + " Expected: " +expected[i] +" for name "+testNames[i]);
+                numErrors++;
             }
-            if(numErrors >0 ){
-                errln("Number of Errors in UScript.getCode() : " + numErrors);
+        }
+        if(numErrors >0 ){
+            errln("Number of Errors in UScript.getCode() : " + numErrors);
+        }            
+    }
+    
+    public void TestGetCode(){
+
+        final String[] testNames={
+            /* test locale */                
+            "en", "en_US", "sr", "ta" , "te_IN",                
+            "hi", "he", "ar",
+            /* test abbr */
+            "Hani", "Hang","Hebr","Hira",
+            "Knda","Kana","Khmr","Lao",
+            "Latn",/*"Latf","Latg",*/ 
+            "Mlym", "Mong",
+                
+            /* test names */
+            "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
+            "GOTHIC",  "GREEK",  "GUJARATI", 
+            /* test lower case names */
+            "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
+            "oriya",     "runic",     "sinhala", "syriac","tamil",     
+            "telugu",    "thaana",    "thai",    "tibetan", 
+            /* test the bounds*/
+            "ucas", "arabic",
+        };
+        final int[] expected ={
+            /* locales should return */
+            UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN, 
+            UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_TAMIL, 
+            UScript.USCRIPT_TELUGU,UScript.USCRIPT_DEVANAGARI, 
+            UScript.USCRIPT_HEBREW, UScript.USCRIPT_ARABIC,
+            /* abbr should return */
+            UScript.USCRIPT_HAN, UScript.USCRIPT_HANGUL, UScript.USCRIPT_HEBREW, UScript.USCRIPT_HIRAGANA,
+            UScript.USCRIPT_KANNADA, UScript.USCRIPT_KATAKANA, UScript.USCRIPT_KHMER, UScript.USCRIPT_LAO,
+            UScript.USCRIPT_LATIN,/* UScript.USCRIPT_LATIN, UScript.USCRIPT_LATIN,*/ 
+            UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN,
+            /* names should return */
+            UScript.USCRIPT_CYRILLIC, UScript.USCRIPT_DESERET, UScript.USCRIPT_DEVANAGARI, UScript.USCRIPT_ETHIOPIC, UScript.USCRIPT_GEORGIAN,
+            UScript.USCRIPT_GOTHIC, UScript.USCRIPT_GREEK, UScript.USCRIPT_GUJARATI,
+            /* lower case names should return */    
+            UScript.USCRIPT_MALAYALAM, UScript.USCRIPT_MONGOLIAN, UScript.USCRIPT_MYANMAR, UScript.USCRIPT_OGHAM, UScript.USCRIPT_OLD_ITALIC,
+            UScript.USCRIPT_ORIYA, UScript.USCRIPT_RUNIC, UScript.USCRIPT_SINHALA, UScript.USCRIPT_SYRIAC, UScript.USCRIPT_TAMIL,
+            UScript.USCRIPT_TELUGU, UScript.USCRIPT_THAANA, UScript.USCRIPT_THAI, UScript.USCRIPT_TIBETAN,
+            /* bounds */
+            UScript.USCRIPT_UCAS, UScript.USCRIPT_ARABIC,
+        };
+        int i =0;
+        int numErrors =0;
+
+        for( ; i<testNames.length; i++){
+            int code = UScript.getCode(testNames[i]);
+            if( code != expected[i]){
+                logln("Error getting script code Got: " +code + " Expected: " +expected[i] +" for name "+testNames[i]);
+                numErrors++;
             }
-        }catch(Exception e){
+        }
+        if(numErrors >0 ){
+            errln("Number of Errors in UScript.getCode() : " + numErrors);
         }
     }
     public void TestGetName(){

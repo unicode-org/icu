@@ -221,6 +221,11 @@ public class LocaleScript extends ListResourceBundle {
                                       "Latg",
                                  }
            },
+           {"iw", new String[] {
+                                      "Hebrew",
+                                      "Hebr",
+                                 }
+           },
            {"kl", new String[] {
                                       "Latin",
                                       "Latn",
