@@ -3142,6 +3142,7 @@ public class LDML2ICUConverter {
     private static final String ICU_CLASS       = "icu:class";
     private static final String ICU_IMPORT      = "icu:import";
     private static final String ICU_APPEND      = "icu:append";
+    private static final String ICU_IMPORT_FILE = "icu:importFile";
     
     private ICUResourceWriter.Resource parseBoundaries(Node root, StringBuffer xpath){
         ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
@@ -3207,11 +3208,24 @@ public class LDML2ICUConverter {
             }else if(name.equals(ICU_BOUNDARIES)){
                 res = parseBoundaries(node,xpath);
             }else if(name.equals(ICU_BDD)){
-                ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
-                str.name = (String) keyNameMap.get(name);
-                str.val = LDMLUtilities.getAttributeValue(node, ICU_IMPORT);
-                if(str.val!=null){ 
-                    res = str;
+                String importFile = LDMLUtilities.getAttributeValue(node, ICU_IMPORT_FILE);
+                String importStr = LDMLUtilities.getAttributeValue(node, ICU_IMPORT);
+                if(importFile!=null){
+                    ICUResourceWriter.ResourceImport str = new ICUResourceWriter.ResourceImport();
+                    str.name = (String) keyNameMap.get(name);
+                    str.val = importFile;
+                    if(str.val!=null){ 
+                        res = str;
+                    }
+                }else if(importStr!= null){
+                    ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+                    str.name = (String) keyNameMap.get(name);
+                    str.val = importFile;
+                    if(str.val!=null){ 
+                        res = str;
+                    }  
+                }else{
+                    System.err.println("WARNING: icu:breakDictionaryData element does not have either import or importFile attributes!");
                 }
             }else{
                 System.err.println("Encountered unknown element: "+name);
