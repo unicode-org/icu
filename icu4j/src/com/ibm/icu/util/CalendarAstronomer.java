@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2002/02/16 03:06:25 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/11/22 22:45:19 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.util;
 
 import java.util.*;
-import java.text.*;
 
 /**
  * <code>CalendarAstronomer</code> is a class that can perform the calculations to
@@ -177,7 +176,7 @@ public class CalendarAstronomer {
      * the specified time.  The time is expressed as a number of milliseconds since
      * January 1, 1970 AD (Gregorian).
      *
-     * @see java.util.Date#getTime
+     * @see java.util.Date#getTime()
      */
     public CalendarAstronomer(long aTime) {
         time = aTime;
@@ -194,7 +193,7 @@ public class CalendarAstronomer {
      * @param latitude  The desired latitude, in <em>degrees</em>.  Positive
      *                  values signify North, negative South.
      *
-     * @see java.util.Date#getTime
+     * @see java.util.Date#getTime()
      */
     public CalendarAstronomer(double longitude, double latitude) {
         this();

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/08/22 21:55:29 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/11/22 22:45:19 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,6 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.lang.UCharacter;
@@ -149,7 +148,8 @@ import java.util.ResourceBundle;
  * "01/11/12" would be interpreted as Jan 11, 2012 while the string "05/04/64"
  * would be interpreted as May 4, 1964.
  * During parsing, only strings consisting of exactly two digits, as defined by
- * {@link Character#isDigit(char)}, will be parsed into the default century.
+ * {@link java.lang.Character#isDigit(char)}, will be parsed into the default
+ * century.
  * Any other numeric string, such as a one digit string, a three or more digit
  * string, or a two digit string that isn't all digits (for example, "-1"), is
  * interpreted literally.  So "01/02/3" or "01/02/003" are parsed, using the

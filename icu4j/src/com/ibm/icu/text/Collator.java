@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/11/21 23:47:42 $ 
-* $Revision: 1.15 $
+* $Date: 2002/11/22 22:45:19 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -305,7 +305,7 @@ public abstract class Collator implements Comparator, Cloneable
      *         is created successfully. Otherwise if there is no Collator
      *         associated with the current locale, the default UCA collator 
      *         will be returned.
-     * @see java.util.Locale#getDefault
+     * @see java.util.Locale#getDefault()
      * @see #getInstance(Locale)
      * @draft 2.2
      */
