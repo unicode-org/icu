@@ -1094,7 +1094,7 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
 
     myData=((UConverterDataISO2022*)(args->converter->extraInfo));
     
-    do{
+    while (args->source < args->sourceLimit) {
         mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
 
@@ -1176,7 +1176,7 @@ T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
                err);
         myOffset += args->source - sourceStart;
 
-    }while(mySourceLimit != args->sourceLimit);
+    }
     if( (args->source == args->sourceLimit) && args->flush){
         _ISO2022Reset(args->converter,UCNV_RESET_TO_UNICODE);
     }
