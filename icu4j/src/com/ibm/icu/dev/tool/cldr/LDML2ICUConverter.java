@@ -1428,6 +1428,13 @@ public class LDML2ICUConverter {
         getXPath(root, xpath);
         int oldLength = xpath.length();
         
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         ICUResourceWriter.ResourceString type = new ICUResourceWriter.ResourceString();
         
         ICUResourceWriter.ResourceString ss = new ICUResourceWriter.ResourceString();
@@ -1458,7 +1465,7 @@ public class LDML2ICUConverter {
                 Node ssn = getVettedNode(node, LDMLConstants.STANDARD, xpath);
                 Node sdn = getVettedNode(node, LDMLConstants.DAYLIGHT, xpath);
                 if(ssn==null||sdn==null){
-                    System.err.println("Could not get timeZone string for " + xpath.toString());
+                    System.err.println("ERROR: Could not get timeZone string for " + xpath.toString());
                     System.exit(-1);
                 }
                 ss.val = LDMLUtilities.getNodeValue(ssn);
@@ -1476,7 +1483,7 @@ public class LDML2ICUConverter {
                 Node lsn = getVettedNode(node, LDMLConstants.STANDARD, xpath);
                 Node ldn = getVettedNode(node, LDMLConstants.DAYLIGHT, xpath);
                 if(lsn==null||ldn==null){
-                    System.err.println("Could not get timeZone string for " + xpath.toString());
+                    System.err.println("ERROR: Could not get timeZone string for " + xpath.toString());
                     System.exit(-1);
                 }
                 ls.val = LDMLUtilities.getNodeValue(lsn);
@@ -2048,7 +2055,7 @@ public class LDML2ICUConverter {
         if(LDMLUtilities.isNodeDraft(node)){
             return true;
         }
-        if(LDMLUtilities.isDraft(fullyResolvedDoc, xpath)){
+        if(fullyResolvedDoc!=null && LDMLUtilities.isDraft(fullyResolvedDoc, xpath)){
             return true;
         }
         return false;
@@ -3448,7 +3455,7 @@ public class LDML2ICUConverter {
                                 // DEBUGGING LINE
                                 //  System.out.println("FROM: " + from + ", TO: " + to + ((xpath!=null)?(", XPATH: " + xpath):("")));
                             } catch(Exception e) {
-                                System.err.println("While parsing an alias: " + e.toString() + " - " + alias.toString());
+                                System.err.println("ERROR: While parsing an alias: " + e.toString() + " - " + alias.toString());
                                 e.printStackTrace();
                                 System.exit(1);
                             }
