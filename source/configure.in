@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.93 2000/11/14 21:45:26 emader Exp $
+dnl $Id: configure.in,v 1.94 2000/11/22 05:08:51 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -324,8 +324,10 @@ dnl Check for endianness
 AC_C_BIGENDIAN(unknown)
 if test $ac_cv_c_bigendian = no; then
 U_IS_BIG_ENDIAN=0
+U_ENDIAN_CHAR="l"
 else
 U_IS_BIG_ENDIAN=1
+U_ENDIAN_CHAR="b"
 fi
 AC_SUBST(U_IS_BIG_ENDIAN)
 
@@ -619,7 +621,10 @@ Additionally, the variable FORCE_LIBS may be set before calling configure. If se
 	samples=true)
 ICU_CONDITIONAL(SAMPLES, test "$samples" = true)
 
+ICUDATA_CHAR=$U_ENDIAN_CHAR
+
 dnl Platform-specific Makefile setup
+dnl set ICUDATA_CHAR to 'e' for any EBCDIC (which should be big endian) platform.
 case "${host}" in
 	*-*-solaris*) 	platform=U_SOLARIS ;;
 	*-*-linux*) 	platform=U_LINUX ;;
@@ -628,11 +633,14 @@ case "${host}" in
 	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-irix*)      platform=IRIX ;;
-	*-*-os390*)	platform=OS390 ;;
-	*-*-os400*)	platform=OS400 ;;
+	*-*-os390*)	platform=OS390
+			ICUDATA_CHAR="e" ;;
+	*-*-os400*)	platform=OS400
+			ICUDATA_CHAR="e" ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
+AC_SUBST(ICUDATA_CHAR)
 AC_SUBST(platform)
 platform_make_fragment_name="$icu_cv_host_frag"
 platform_make_fragment='$(top_srcdir)/config/'"$platform_make_fragment_name"
