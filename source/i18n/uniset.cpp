@@ -889,6 +889,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // - an anchor (trailing '$', indicating RBT ether)
     UBool rebuildPattern = FALSE;
     UnicodeString newPat(SET_OPEN);
+    int32_t nestedPatStart; // see below for usage
+    UBool nestedPatDone; // see below for usage
 
     UBool invert = FALSE;
     clear();
@@ -944,6 +946,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             if (ivarValueBuffer < varValueBuffer->length()) {
                 c = varValueBuffer->charAt(ivarValueBuffer++);
                 nestedSet = symbols->lookupSet(c); // may be NULL
+                nestedPatDone = FALSE;
             } else {
                 varValueBuffer = NULL;
                 c = pattern.charAt(i);
@@ -1062,6 +1065,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
              * If that is the case, the mode will be set accordingly.
              */
             else if (!isLiteral && c == SET_OPEN) {
+                // Record position before nested pattern
+                nestedPatStart = newPat.length();
+
                 // Handle "[:...:]", representing a character category
                 UChar d = charAfter(pattern, i);
                 if (d == COLON) {
@@ -1076,6 +1082,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     pattern.extractBetween(i, j, scratch);
                     nestedAux.applyCategory(scratch, status);
                     nestedSet = &nestedAux;
+                    nestedPatDone = TRUE; // We're going to do it just below
                     if (U_FAILURE(status)) {
                         return;
                     }
@@ -1095,7 +1102,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
                     if (mode == 3) {
                         // Entire pattern is a category; leave parse
-                        // loop.  This is oneof 2 ways we leave this
+                        // loop.  This is one of 2 ways we leave this
                         // loop if the pattern is well-formed.
                         *this = *nestedSet;
                         break;
@@ -1111,6 +1118,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     }
                     nestedAux._applyPattern(pattern, pos, symbols, newPat, status);
                     nestedSet = &nestedAux;
+                    nestedPatDone =  TRUE;
                     if (U_FAILURE(status)) {
                         return;
                     }
@@ -1135,23 +1143,43 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     return;
                 }
                 add(lastChar, lastChar);
-                _appendToPat(newPat, lastChar, FALSE);
+                if (nestedPatDone) {
+                    // If there was a character before the nested set,
+                    // then we need to insert it in newPat before the
+                    // pattern for the nested set.  This position was
+                    // recorded in nestedPatStart.
+                    UnicodeString s;
+                    _appendToPat(s, lastChar, FALSE);
+                    newPat.insert(nestedPatStart, s);
+                } else {
+                    _appendToPat(newPat, lastChar, FALSE);
+                }
                 lastChar = -1;
             }
             switch (lastOp) {
             case HYPHEN:
-                rebuildPattern = TRUE;
                 removeAll(*nestedSet);
                 break;
             case INTERSECTION:
-                rebuildPattern = TRUE;
                 retainAll(*nestedSet);
                 break;
             case 0:
                 addAll(*nestedSet);
                 break;
             }
+
+            // Get the pattern for the nested set, if we haven't done so
+            // already.
+            if (!nestedPatDone) {
+                if (lastOp != 0) {
+                    newPat.append(lastOp);
+                }
+                nestedSet->_toPattern(newPat, FALSE);
+            }
+            rebuildPattern = TRUE;
+
             lastOp = 0;
+
         } else if (!isLiteral && c == SET_CLOSE) {
             // Final closing delimiter.  This is one of 2 ways we
             // leave this loop if the pattern is well-formed.
