@@ -1531,7 +1531,7 @@ void DecimalFormat::setFormatWidth(int32_t width) {
  * @see #getPadPosition
  * @see #setPadPosition
  */
-UChar DecimalFormat::getPadCharacter() {
+UnicodeString DecimalFormat::getPadCharacterString() {
     return fPad;
 }
 
@@ -1545,8 +1545,8 @@ UChar DecimalFormat::getPadCharacter() {
  * @see #getPadPosition
  * @see #setPadPosition
  */
-void DecimalFormat::setPadCharacter(UChar padChar) {
-    fPad = padChar;
+void DecimalFormat::setPadCharacter(UnicodeString padChar) {
+    fPad = padChar.length() > 0 ? padChar.charAt(0) : kPatternPadEscape;
 }
 
 /**
