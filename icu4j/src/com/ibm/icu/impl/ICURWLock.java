@@ -1,6 +1,6 @@
 package com.ibm.icu.impl;
 
-// See Allan Holub's 1999 column in JavaWorld.
+// See Allan Holub's 1999 column in JavaWorld, and Doug Lea's code for RWLocks with writer preference.
 
 import java.util.LinkedList;
 
@@ -26,16 +26,13 @@ import java.util.LinkedList;
  * to return statistics on the use of the lock.</p>
  */
 public class ICURWLock {
-    private LinkedList ww;  // list of waiting writers
+    private Object writeLock = new Object();
+    private Object readLock = new Object();
     private int wwc; // waiting writers
     private int rc; // active readers, -1 if there's an active writer
     private int wrc; // waiting readers
 
-    private int stat_rc; // any read access granted
-    private int stat_mrc; // multiple read access granted
-    private int stat_wrc; // wait for read
-    private int stat_wc; // write access granted
-    private int stat_wwc; // wait for write 
+    private Stats stats = new Stats(); // maybe don't init to start...
 
     /**
      * Internal class used to gather statistics on the RWLock.
@@ -44,30 +41,33 @@ public class ICURWLock {
 	/**
 	 * Number of times read access granted (read count).
 	 */
-	public final int _rc;
+	public int _rc;
 
 	/**
 	 * Number of times concurrent read access granted (multiple read count).
 	 */
-	public final int _mrc;
+	public int _mrc;
 
 	/**
 	 * Number of times blocked for read (waiting reader count).
 	 */
-	public final int _wrc; // wait for read
+	public int _wrc; // wait for read
 
 	/**
 	 * Number of times write access granted (writer count).
 	 */
-	public final int _wc;
+	public int _wc;
 
 	/**
 	 * Number of times blocked for write (waiting writer count).
 	 */
-	public final int _wwc;
+	public int _wwc;
 
-	private Stats(ICURWLock lock) {
-	    this(lock.stat_rc, lock.stat_mrc, lock.stat_wrc, lock.stat_wc, lock.stat_wwc);
+	private Stats() {
+	}
+
+	private Stats(Stats rhs) {
+	    this(rhs._rc, rhs._mrc, rhs._wrc, rhs._wc, rhs._wwc);
 	}
 
 	private Stats(int rc, int mrc, int wrc, int wc, int wwc) {
@@ -87,19 +87,108 @@ public class ICURWLock {
     }
 
     /**
-     * Reset the stats.
+     * Reset the stats.  Returns existing stats, if any.
      */
-    public void clearStats() {
-	stat_rc = stat_mrc = stat_wrc = stat_wc = stat_wwc = 0;
+    public synchronized Stats resetStats() {
+	Stats result = stats;
+	stats = new Stats();
+	return result;
+    }
+
+    /**
+     * Clear the stats (stop collecting stats).  Returns existing stats, if any.
+     */
+    public synchronized Stats clearStats() {
+	Stats result = stats;
+	stats = null;
+	return result;
     }
     
     /**
-     * Return a snapshot of the current stats.  This does not clear the stats.
+     * Return a snapshot of the current stats.  This does not reset the stats.
      */
-    public Stats getStats() {
-	return new Stats(this);
+    public synchronized Stats getStats() {
+	return new Stats(stats);
     }
 
+    // utilities
+
+    private synchronized boolean gotRead() {
+	++rc;
+	if (stats != null) {
+	    ++stats._rc;
+	    if (rc > 1) ++stats._mrc;
+	}
+	return true;
+    }
+
+    private synchronized boolean getRead() {
+	if (rc >= 0 && wwc == 0) {
+	    return gotRead();
+	}
+	++wrc;
+	return false;
+    }
+
+    private synchronized boolean retryRead() {
+	if (stats != null) ++stats._wrc;
+	if (rc >= 0 && wwc == 0) {
+	    --wrc;
+	    return gotRead();
+	}
+	return false;
+    }
+
+    private synchronized boolean finishRead() {
+	if (rc > 0) {
+	    return (0 == --rc && wwc > 0);
+	}
+	throw new InternalError("no current reader to release");
+    }
+	
+    private synchronized boolean gotWrite() {
+	rc = -1;
+	if (stats != null) {
+	    ++stats._wc;
+	}
+	return true;
+    }
+
+    private synchronized boolean getWrite() {
+	if (rc == 0) {
+	    return gotWrite();
+	}
+	++wwc;
+	return false;
+    }
+
+    private synchronized boolean retryWrite() {
+	if (stats != null) ++stats._wwc;
+	if (rc == 0) {
+	    --wwc;
+	    return gotWrite();
+	}
+	return false;
+    }
+
+    private static final int NOTIFY_NONE = 0;
+    private static final int NOTIFY_WRITERS = 1;
+    private static final int NOTIFY_READERS = 2;
+
+    private synchronized int finishWrite() {
+	if (rc < 0) {
+	    rc = 0;
+	    if (wwc > 0) {
+		return NOTIFY_WRITERS;
+	    } else if (wrc > 0) {
+		return NOTIFY_READERS;
+	    } else {
+		return NOTIFY_NONE;
+	    }
+	}
+	throw new InternalError("no current writer to release");
+    }
+	
     /**
      * <p>Acquire a read lock, blocking until a read lock is
      * available.  Multiple readers can concurrently hold the read
@@ -110,18 +199,19 @@ public class ICURWLock {
      * increment the active reader count and return.  Caller must call
      * releaseRead when done (for example, in a finally block).</p> 
      */
-    public synchronized void acquireRead() {
-	if (rc >= 0 && wwc == 0) {
-	    ++rc;
-	    ++stat_rc;
-	    if (rc > 1) ++stat_mrc;
-	} else {
-	    ++wrc;
-	    ++stat_wrc;
-	    try {
-		wait();
-	    }
-	    catch (InterruptedException e) {
+    public void acquireRead() {
+	if (!getRead()) {
+	    for (;;) {
+		try {
+		    synchronized (readLock) {
+			readLock.wait();
+		    }
+		    if (retryRead()) {
+			return;
+		    }
+		}
+		catch (InterruptedException e) {
+		}
 	    }
 	}
     }
@@ -134,13 +224,11 @@ public class ICURWLock {
      * waiting writer.  Call when finished with work
      * controlled by acquireRead.</p>
      */
-    public synchronized void releaseRead() {
-	if (rc > 0) {
-	    if (0 == --rc) {
-		notifyWaitingWriter();
+    public void releaseRead() {
+	if (finishRead()) {
+	    synchronized (writeLock) {
+		writeLock.notify();
 	    }
-	} else {
-	    throw new InternalError("no current reader to release");
 	}
     }
 
@@ -156,49 +244,18 @@ public class ICURWLock {
      * block).<p> 
      */
     public void acquireWrite() {
-	// Do a quick check up top, to save us the lock allocation and
-	// extra synch in the case where there is no contention for
-	// writing.  This is common in ICUService.
-
-	synchronized (this) {
-	    if (rc == 0 && wwc == 0) {
-		rc = -1;
-		++stat_wc;
-		return;
-	    }
-	}
-
-	// We assume at this point that there is an active reader or a
-	// waiting writer, so we don't recheck, though we could.
-
-	// Create a lock for this thread only, it will be the only
-	// thread notified when the lock comes to the front of the
-	// waiting writer list.  We synchronize on the lock first, and
-	// then this, because when we release the lock on this, the
-	// lock will be available to the world.  If another thread
-	// removed and notified that lock before we synchronized and
-	// waited on it, we'd miss the only notification, and we would
-	// wait on it forever.  So we synchronized on it before we
-	// make it available, so that we're guaranteed to be waiting on
-	// it before any notification can occur.
-
-	Object lock = new Object();
-	synchronized (lock) {
-	    synchronized (this) {
-		// again, we've assumed we don't have multiple waiting
-		// writers, so we leave this null until we need it.
-		// Once created, we keep it around.
-		if (ww == null) {
-		    ww = new LinkedList();
+	if (!getWrite()) {
+	    for (;;) {
+		try {
+		    synchronized (writeLock) {
+			writeLock.wait();
+		    }
+		    if (retryWrite()) {
+			return;
+		    }
 		}
-		ww.addLast(lock);
-		++wwc;
-		++stat_wwc;
-	    }
-	    try {
-		lock.wait();
-	    }
-	    catch (InterruptedException e) {
+		catch (InterruptedException e) {
+		}
 	    }
 	}
     }
@@ -212,43 +269,20 @@ public class ICURWLock {
      * writer, if any.  Call when finished with work controlled by
      * acquireWrite.</p> 
      */
-    public synchronized void releaseWrite() {
-	if (rc < 0) {
-	    if (wrc > 0) {
-		rc = wrc;
-		wrc = 0;
-		if (rc > 0) {
-		    stat_rc += rc;
-		    if (rc > 1) {
-			stat_mrc += rc - 1;
-		    }
-		}
-		notifyAll();
-	    } else {
-		rc = 0;
-		notifyWaitingWriter();
+    public void releaseWrite() {
+	switch (finishWrite()) {
+	case NOTIFY_WRITERS:
+	    synchronized (writeLock) {
+		writeLock.notify();
 	    }
-	} else {
-	    throw new InternalError("no current writer to release");
-	}
-    }
-
-    /**
-     * If there is a waiting writer thread, mark us as active for
-     * writing, remove it from the list, and notify it.  
-     */
-    private void notifyWaitingWriter() {
-	// only called within a block synchronized on this
-	// we don't assume there is necessarily a waiting writer,
-	// no no error if there isn't.
-	if (wwc > 0) {
-	    rc = -1;
-	    Object lock = ww.removeFirst();
-	    --wwc;
-	    ++stat_wc;
-	    synchronized (lock) {
-		lock.notify();
+	    break;
+	case NOTIFY_READERS:
+	    synchronized (readLock) {
+		readLock.notifyAll();
 	    }
+	    break;
+	case NOTIFY_NONE:
+	    break;
 	}
     }
 }
