@@ -1074,8 +1074,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
         pCommonData=openCommonData(path, isICUData, &errorCode); /** search for pkg **/
 
         if(U_SUCCESS(errorCode)) {
+            int32_t length;
+
             /* look up the data piece in the common data */
-            pHeader=pCommonData->vFuncs->Lookup(pCommonData, tocEntryName, &errorCode);
+            pHeader=pCommonData->vFuncs->Lookup(pCommonData, tocEntryName, &length, &errorCode);
 #ifdef UDATA_DEBUG
             fprintf(stderr, "pHeader=%p\n", pHeader);
 #endif
@@ -1088,6 +1090,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                     return NULL;
                 }
                 if (pEntryData != NULL) {
+                    pEntryData->length = length;
                     return pEntryData;
                 }
             }
