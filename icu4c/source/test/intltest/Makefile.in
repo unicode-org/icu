@@ -76,7 +76,7 @@ distclean-local: clean-local
 -include Makefile.local
 
 check-local: all-local
-	 TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTEST_OPTS) || true
+	$(INVOKE) ./$(TARGET) $(INTLTEST_OPTS) || true
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -84,9 +84,6 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
-
-invoke:
-	ICU_DATA=$${ICU_DATA:-$(top_builddir)/data/} TZ=PST8PDT $(INVOKE) $(INVOCATION)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
