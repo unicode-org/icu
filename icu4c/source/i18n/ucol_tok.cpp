@@ -396,8 +396,8 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, U
     U_STRING_INIT(option_12, "before",         6);  
     U_STRING_INIT(option_13, "hiraganaQ",      9);
     U_STRING_INIT(option_14, "strength",       8);
-    U_STRING_INIT(option_15, "last",           4);
-    U_STRING_INIT(option_16, "first",          5);
+    U_STRING_INIT(option_15, "first",          5);
+    U_STRING_INIT(option_16, "last",           4);
   }
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
