@@ -23,8 +23,6 @@
 #include "unicode/translit.h"
 #include "unicode/uniset.h"
 #include "rbt.h"
-#include "unitohex.h"
-#include "hextouni.h"
 #include "unicode/unifilt.h"
 #include "cpdtrans.h"
 #include "nultrans.h"
@@ -44,9 +42,9 @@ TransliteratorErrorTest::runIndexedTest(int32_t index, UBool exec,
     switch (index) {
         TESTCASE(0,TestTransliteratorErrors);
         TESTCASE(1, TestUnicodeSetErrors);
-        TESTCASE(2, TestUniToHexErrors);
-        TESTCASE(3, TestRBTErrors);
-        TESTCASE(4, TestHexToUniErrors);
+        TESTCASE(2, TestRBTErrors);
+        //TESTCASE(3, TestUniToHexErrors);
+        //TESTCASE(4, TestHexToUniErrors);
         // TODO: Add a subclass to test clone().
         default: name = ""; break;
     }
@@ -192,29 +190,29 @@ void TransliteratorErrorTest::TestUnicodeSetErrors() {
     delete set1;
 }
 
-void TransliteratorErrorTest::TestUniToHexErrors() {
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator *t = new UnicodeToHexTransliterator("", TRUE, NULL, status);
-    if (U_SUCCESS(status)) {
-        errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
-    }
-    delete t;
-
-    status = U_ZERO_ERROR;
-    t = new UnicodeToHexTransliterator("\\x", TRUE, NULL, status);
-    if (U_SUCCESS(status)) {
-        errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
-    }
-    delete t;
-
-    status = U_ZERO_ERROR;
-    t = new UnicodeToHexTransliterator();
-    ((UnicodeToHexTransliterator*)t)->applyPattern("\\x", status);
-    if (U_SUCCESS(status)) {
-        errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad pattern.");
-    }
-    delete t;
-}
+//void TransliteratorErrorTest::TestUniToHexErrors() {
+//    UErrorCode status = U_ZERO_ERROR;
+//    Transliterator *t = new UnicodeToHexTransliterator("", TRUE, NULL, status);
+//    if (U_SUCCESS(status)) {
+//        errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
+//    }
+//    delete t;
+//
+//    status = U_ZERO_ERROR;
+//    t = new UnicodeToHexTransliterator("\\x", TRUE, NULL, status);
+//    if (U_SUCCESS(status)) {
+//        errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
+//    }
+//    delete t;
+//
+//    status = U_ZERO_ERROR;
+//    t = new UnicodeToHexTransliterator();
+//    ((UnicodeToHexTransliterator*)t)->applyPattern("\\x", status);
+//    if (U_SUCCESS(status)) {
+//        errln("FAIL: UnicodeToHexTransliterator::applyPattern succeeded with a bad pattern.");
+//    }
+//    delete t;
+//}
 
 void TransliteratorErrorTest::TestRBTErrors() {
 
@@ -244,26 +242,26 @@ void TransliteratorErrorTest::TestRBTErrors() {
     } 
 }
 
-void TransliteratorErrorTest::TestHexToUniErrors() {
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator *t = new HexToUnicodeTransliterator("", NULL, status);
-    if (U_FAILURE(status)) {
-        errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
-    }
-    delete t;
-    status = U_ZERO_ERROR;
-    t = new HexToUnicodeTransliterator("\\x", NULL, status);
-    if (U_SUCCESS(status)) {
-        errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
-    }
-    delete t;
-    status = U_ZERO_ERROR;
-    t = new HexToUnicodeTransliterator();
-    ((HexToUnicodeTransliterator*)t)->applyPattern("\\x", status);
-    if (U_SUCCESS(status)) {
-        errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad pattern.");
-    }
-    delete t;
-}
+//void TransliteratorErrorTest::TestHexToUniErrors() {
+//    UErrorCode status = U_ZERO_ERROR;
+//    Transliterator *t = new HexToUnicodeTransliterator("", NULL, status);
+//    if (U_FAILURE(status)) {
+//        errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
+//    }
+//    delete t;
+//    status = U_ZERO_ERROR;
+//    t = new HexToUnicodeTransliterator("\\x", NULL, status);
+//    if (U_SUCCESS(status)) {
+//        errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
+//    }
+//    delete t;
+//    status = U_ZERO_ERROR;
+//    t = new HexToUnicodeTransliterator();
+//    ((HexToUnicodeTransliterator*)t)->applyPattern("\\x", status);
+//    if (U_SUCCESS(status)) {
+//        errln("FAIL: HexToUnicodeTransliterator::applyPattern succeeded with a bad pattern.");
+//    }
+//    delete t;
+//}
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */

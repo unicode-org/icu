@@ -37,11 +37,11 @@ public:
     
     void TestUnicodeSetErrors(void);
 
-    void TestUniToHexErrors(void);
+    //void TestUniToHexErrors(void);
 
     void TestRBTErrors(void);
 
-    void TestHexToUniErrors(void);
+    //void TestHexToUniErrors(void);
 
 };
 
