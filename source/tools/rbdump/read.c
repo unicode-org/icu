@@ -31,7 +31,6 @@
 static void usage();
 static void version();
 static void processFile(const char *filename, UErrorCode *status);
-static const char* errorName(UErrorCode status);
 int main(int argc, char **argv);
 
 /* The version of rbdump */
