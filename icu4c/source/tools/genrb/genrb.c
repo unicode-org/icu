@@ -187,7 +187,6 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     if(inputDir == NULL) {
         in = T_FileStream_open(filename, "rb");
     } else {
-        char *openFileName = NULL;
         int32_t dirlen  = uprv_strlen(inputDir);
         int32_t filelen = uprv_strlen(filename);
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
