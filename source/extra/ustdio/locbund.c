@@ -15,6 +15,7 @@
 *
 *   Date        Name        Description
 *   11/18/98    stephen        Creation.
+*   12/10/1999  bobbyr@optiosoftware.com       Fix for memory leak + string allocation bugs
 *******************************************************************************
 */
 
@@ -33,7 +34,7 @@ u_locbund_new(const char *loc)
     return 0;
 
   len = (loc == 0 ? strlen(uloc_getDefault()) : strlen(loc));
-  result->fLocale = (char*) malloc(len);
+  result->fLocale = (char*) malloc(len + 1);
   if(result->fLocale == 0) {
     free(result);
     return 0;
@@ -61,15 +62,13 @@ u_locbund_clone(const ULocaleBundle *bundle)
   if(result == 0)
     return 0;
   
-  result->fLocale = (char*) malloc(strlen(bundle->fLocale));
+  result->fLocale = (char*) malloc(strlen(bundle->fLocale) + 1);
   if(result->fLocale == 0) {
     free(result);
     return 0;
   }
   
   strcpy(result->fLocale, bundle->fLocale );
-  
-  result->fLocale         = bundle->fLocale;
   
   result->fNumberFormat     = (bundle->fNumberFormat == 0 ? 0 :
                    unum_clone(bundle->fNumberFormat, &status));
