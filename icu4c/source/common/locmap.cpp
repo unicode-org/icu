@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.17 $
+// $Revision: 1.18 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -719,7 +719,7 @@ ILcidPosixMap::hostID(const char* posixID) const
     char     hostID[ULOC_FULLNAME_CAPACITY];
     char    *hostPtr = hostID;
     uint32_t value;
-    uint32_t hostLen = strlen(posixID);
+    int32_t hostLen = (int32_t)(strlen(posixID));
     int32_t  size, hostSize;
 
     // Check for incomplete id. All LCIDs have a default country,
