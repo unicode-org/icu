@@ -9,36 +9,32 @@
 // Submitted by Deborah Goldsmith, Apple Computer, Inc.
 
 haw {
-    Version { "x0.1" } 
+    Version { "x0.2" } 
     CollationElements { 
-        // "&a <<< A" is redundant but is included for clarity
-        Version { "1.0" }
+        Version { "1.1" }
         Sequence {
-		"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
-//		"&h <<< H"
-//		"&k <<< K"
-//		"&l <<< L"
-//		"&m <<< M"
-//		"&n <<< N"
-//		"&p <<< P"
-//		"&w <<< W"
-//		"&b <<< B"
-//		"&c <<< C"
-//		"&d <<< D"
-//		"&f <<< F"
-//		"&g <<< G"
-//		"&j <<< J"
-//		"&q <<< Q"
-//		"&r <<< R"
-//		"&s <<< S"
-//		"&t <<< T"
-//		"&v <<< V"
-//		"&x <<< X"
-//		"&y <<< Y"
-//		"&z <<< Z"
-		 }
+            "&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
+            "&a <<< A"
+            "&e <<< E"
+            "&i <<< I"
+            "&o <<< O"
+            "&u <<< U"
+            "&h <<< H"
+            "&k <<< K"
+            "&l <<< L"
+            "&m <<< M"
+            "&n <<< N"
+            "&p <<< P"
+            "&w <<< W"
+            // This is the real alphabet
+            //"&a < e < i < o < u < h < k < l < m < n < p < w < \u02bb"
+            // or maybe
+            //"&u < h < k < l < m < n < p < w < \u02bb < b < c < d < f < g < j < q < r < s < t < v < x < y < z"
+        }
     }
-
+    Countries {
+        US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
+    }
     DayAbbreviations {
         "LP",
         "P1",
@@ -48,7 +44,6 @@ haw {
         "P5",
         "P6",
     }
-
     DayNames {
         "L\u0101pule",
         "Po\u02bbakahi",
@@ -58,7 +53,11 @@ haw {
         "Po\u02bbalima",
         "Po\u02bbaono",
     }
-
+    ExemplarCharacters{"[\u0101\u0113\u012B\u014D\u016Baeiouhklmnpw\u02BB]"}
+    Languages {
+        haw { "\u02bb\u014dlelo Hawai\u02bbi" }
+    }
+    LocaleScript:array{ "Latn" }
     MonthAbbreviations {
         "Ian.",
         "Pep.",
@@ -73,7 +72,6 @@ haw {
         "Now.",
         "Kek.",
     }
-
     MonthNames {
         "Ianuali",
         "Pepeluali",
@@ -88,14 +86,4 @@ haw {
         "Nowemapa",
         "Kekemapa",
     }
-
-    Countries {
-        US { "\u02bbAmelika Hui P\u016b \u02bbIa" }
-    }
-    Languages {
-        haw { "\u02bb\u014dlelo Hawai\u02bbi" }
-    }
-
-    ExemplarCharacters{"[a-z \u02bb \u0101 \u0113 \u012b \u014d \u016b ]"}
-
 }
