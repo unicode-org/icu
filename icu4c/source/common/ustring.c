@@ -91,6 +91,18 @@ u_strchr(const UChar     *s,
   return NULL;
 }
 
+U_CAPI UChar * U_EXPORT2
+u_strstr(const UChar *s, const UChar *substring) {
+  if(*substring == 0) {
+    return (UChar *)s;
+  } else if(substring[1] == 0) {
+    return u_strchr(s, *substring);
+  } else {
+    /* ### TBD */
+    return NULL;
+  }
+}
+
 int32_t  
 u_strcmp(const UChar *s1, 
     const UChar *s2) 

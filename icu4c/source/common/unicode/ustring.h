@@ -70,6 +70,13 @@ u_strchr(const UChar     *s,
     UChar     c);
 
 /**
+ * Find the first occurrence of a substring in a string.
+ * ### TBD
+ */
+U_CAPI UChar * U_EXPORT2
+u_strstr(const UChar *s, const UChar *substring);
+
+/**
  * Compare two ustrings for bitwise equality.
  *
  * @param s1 A string to compare.
