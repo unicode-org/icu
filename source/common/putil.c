@@ -1319,7 +1319,7 @@ u_getDataDirectory(void) {
 #           if defined(UDATA_DLL)
                 uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING LIB_PREFIX U_ICUDATA_NAME UDATA_SO_SUFFIX);
 #           elif defined(UDATA_MAP)
-                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING U_ICUDATA_FILE "." DATA_TYPE); /* XXX Sloppy, won't be good enough on OS390 probably. */
+                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING U_ICUDATA_NAME "." DATA_TYPE); /* XXX Sloppy, won't be good enough on OS390 probably. */
 #	    elif defined(UDATA_FILES)
                 uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING "uprops.dat");
 #           endif
