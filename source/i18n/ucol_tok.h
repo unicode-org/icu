@@ -134,8 +134,8 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
                         UParseError *parseError,
                         UErrorCode *status);
 
-U_CFUNC int32_t uhash_hashTokens(const UHashKey k);
-U_CFUNC UBool uhash_compareTokens(const UHashKey key1, const UHashKey key2);
+U_CFUNC int32_t uhash_hashTokens(const UHashTok k);
+U_CFUNC UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2);
 U_CFUNC void deleteToken(void *token);
 
 #endif

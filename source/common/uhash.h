@@ -76,20 +76,20 @@
 U_CDECL_BEGIN
 
 /**
- * A key within the hashtable.  The key may be either a 32-bit
+ * A key or value within the hashtable.  It may be either a 32-bit
  * integral value or an opaque void* pointer.  The void* pointer may
  * be smaller than 32 bits (e.g. 24 bits) or may be larger (e.g. 64
  * bits).  The hashing and comparison functions take a pointer to a
- * UHashKey, but the deleter receives the void* pointer within it.
+ * UHashTok, but the deleter receives the void* pointer within it.
  *
- * Because a UHashKey is the size of a native pointer or a 32-bit
+ * Because a UHashTok is the size of a native pointer or a 32-bit
  * integer, we pass it around by value.
  */
-union UHashKey {
+union UHashTok {
     void*   pointer;
     int32_t integer;
 };
-typedef union UHashKey UHashKey;
+typedef union UHashTok UHashTok;
 
 /**
  * This is a single hash element.
@@ -97,8 +97,8 @@ typedef union UHashKey UHashKey;
 struct UHashElement {
     /* Reorder these elements to pack nicely if necessary */
     int32_t  hashcode;
-    void*    value;
-    UHashKey key;
+    UHashTok value;
+    UHashTok key;
 };
 typedef struct UHashElement UHashElement;
 
@@ -107,7 +107,7 @@ typedef struct UHashElement UHashElement;
  * @param key A key stored in a hashtable
  * @return A NON-NEGATIVE hash code for parm.
  */
-typedef int32_t (* U_CALLCONV UHashFunction)(const UHashKey key);
+typedef int32_t (* U_CALLCONV UHashFunction)(const UHashTok key);
 
 /**
  * A key comparison function.
@@ -115,8 +115,8 @@ typedef int32_t (* U_CALLCONV UHashFunction)(const UHashKey key);
  * @param key2 A key stored in a hashtable
  * @return TRUE if the two keys are equal.
  */
-typedef UBool (* U_CALLCONV UKeyComparator)(const UHashKey key1,
-                                            const UHashKey key2);
+typedef UBool (* U_CALLCONV UKeyComparator)(const UHashTok key1,
+                                            const UHashTok key2);
 
 /**
  * A function called by <TT>uhash_remove</TT>,
@@ -300,7 +300,7 @@ uhash_put(UHashtable *hash,
 
 /* NEW */
 U_CAPI void*
-uhash_puti(UHashtable *hash,
+uhash_iput(UHashtable *hash,
            int32_t key,
            void* value,
            UErrorCode *status);
@@ -317,7 +317,7 @@ uhash_get(const UHashtable *hash,
 
 /* NEW */
 U_CAPI void*
-uhash_geti(const UHashtable *hash,
+uhash_iget(const UHashtable *hash,
            int32_t key);
 
 /**
@@ -332,7 +332,7 @@ uhash_remove(UHashtable *hash,
 
 /* NEW */
 U_CAPI void*
-uhash_removei(UHashtable *hash,
+uhash_iremove(UHashtable *hash,
               int32_t key);
 
 /**
@@ -399,7 +399,7 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e);
  * @return A hash code for the key.
  */
 U_CAPI int32_t
-uhash_hashUChars(const UHashKey key);
+uhash_hashUChars(const UHashTok key);
 
 /**
  * Generate a hash code for a null-terminated char* string.  If the
@@ -409,7 +409,7 @@ uhash_hashUChars(const UHashKey key);
  * @return A hash code for the key.
  */
 U_CAPI int32_t
-uhash_hashChars(const UHashKey key);
+uhash_hashChars(const UHashTok key);
 
 /* Used by UnicodeString to compute its hashcode - Not public API. */
 U_CAPI int32_t
@@ -423,28 +423,28 @@ uhash_hashUCharsN(const UChar *key, int32_t length);
  * @return A hash code for the key.
  */
 U_CAPI int32_t
-uhash_hashIChars(const UHashKey key);
+uhash_hashIChars(const UHashTok key);
 
 /**
  * Comparator for null-terminated UChar* strings.  Use together with
  * uhash_hashUChars.
  */
 U_CAPI UBool
-uhash_compareUChars(const UHashKey key1, const UHashKey key2);
+uhash_compareUChars(const UHashTok key1, const UHashTok key2);
 
 /**
  * Comparator for null-terminated char* strings.  Use together with
  * uhash_hashChars.
  */
 U_CAPI UBool
-uhash_compareChars(const UHashKey key1, const UHashKey key2);
+uhash_compareChars(const UHashTok key1, const UHashTok key2);
 
 /**
  * Case-insensitive comparator for null-terminated char* strings.  Use
  * together with uhash_hashIChars.
  */
 U_CAPI UBool
-uhash_compareIChars(const UHashKey key1, const UHashKey key2);
+uhash_compareIChars(const UHashTok key1, const UHashTok key2);
 
 /********************************************************************
  * UnicodeString Support Functions
@@ -454,27 +454,27 @@ uhash_compareIChars(const UHashKey key1, const UHashKey key2);
  * Hash function for UnicodeString* keys.
  */
 U_CAPI int32_t
-uhash_hashUnicodeString(const UHashKey key);
+uhash_hashUnicodeString(const UHashTok key);
 
 /**
  * Hash function for UnicodeString* keys (case insensitive).
  * Make sure to use together with uhash_compareCaselessUnicodeString.
  */
 U_CAPI int32_t
-uhash_hashCaselessUnicodeString(const UHashKey key);
+uhash_hashCaselessUnicodeString(const UHashTok key);
 
 /**
  * Comparator function for UnicodeString* keys.
  */
 U_CAPI UBool
-uhash_compareUnicodeString(const UHashKey key1, const UHashKey key2);
+uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2);
 
 /**
  * Comparator function for UnicodeString* keys (case insensitive).
  * Make sure to use together with uhash_hashCaselessUnicodeString.
  */
 U_CAPI UBool
-uhash_compareCaselessUnicodeString(const UHashKey key1, const UHashKey key2);
+uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2);
 
 /**
  * Deleter function for UnicodeString* keys or values.
@@ -490,13 +490,13 @@ uhash_deleteUnicodeString(void *obj);
  * Hash function for 32-bit integer keys.
  */
 U_CAPI int32_t
-uhash_hashLong(const UHashKey key);
+uhash_hashLong(const UHashTok key);
 
 /**
  * Comparator function for 32-bit integer keys.
  */
 U_CAPI UBool
-uhash_compareLong(const UHashKey key1, const UHashKey key2);
+uhash_compareLong(const UHashTok key1, const UHashTok key2);
 
 /********************************************************************
  * Other Support Functions
