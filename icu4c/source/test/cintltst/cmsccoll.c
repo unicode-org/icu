@@ -3300,6 +3300,13 @@ static void TestPrefixCompose() {
 
 }
 
+static int tMemCmp(const uint8_t *first, const uint8_t *second) {
+  int32_t firstLen = uprv_strlen((const char *)first);
+  int32_t secondLen = uprv_strlen((const char *)second);
+  return uprv_memcmp(first, second, uprv_min(firstLen, secondLen));
+}
+
+
 
 static void TestMergeSortKeys() {
   UErrorCode status = U_ZERO_ERROR;
@@ -3312,7 +3319,7 @@ static void TestMergeSortKeys() {
   uint32_t casesSize = sizeof(cases)/sizeof(cases[0]);
   const char* prefix = "foo";
   const char* suffix = "egg";
-  char outBuff[256];
+  char outBuff1[256], outBuff2[256];
   
   uint8_t **sortkeys = (uint8_t **)uprv_malloc(casesSize*sizeof(uint8_t *));
   uint8_t **mergedPrefixkeys = (uint8_t **)uprv_malloc(casesSize*sizeof(uint8_t *));
@@ -3321,7 +3328,7 @@ static void TestMergeSortKeys() {
   uint8_t prefixKey[256], suffixKey[256];
   uint32_t prefixKeyLen = 0, suffixKeyLen = 0, i = 0;
   UChar buffer[256];
-  uint32_t unescapedLen = 0, l = 0;
+  uint32_t unescapedLen = 0, l1 = 0, l2 = 0;
   UColAttributeValue strength;
 
   UCollator *coll = ucol_open("en", &status);
@@ -3352,17 +3359,17 @@ static void TestMergeSortKeys() {
       ucol_mergeSortkeys(prefixKey, prefixKeyLen, sortkeys[i], sortKeysLen[i], mergedPrefixkeys[i], 256);
       ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
       if(i>0) {
-        if(uprv_strcmp((char *)mergedPrefixkeys[i-1], (char *)mergedPrefixkeys[i]) != -1) {
+        if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) != -1) {
           log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
           log_err("%s\n%s\n", 
-                      ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff, &l),
-                      ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff, &l));
+                      ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
+                      ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
         }
-        if(uprv_strcmp((char *)mergedSuffixkeys[i-1], (char *)mergedSuffixkeys[i]) != -1) {
+        if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) != -1) {
           log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
           log_err("%s\n%s\n", 
-                      ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff, &l),
-                      ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff, &l));
+                      ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
+                      ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, &l2));
         }
       }
     }
