@@ -218,6 +218,22 @@
     "http://oss.software.ibm.com/icu/download/2.2/">ICU 2.2 download
     page</a>.</p>
 
+    <h3>Unicode-handling macros (utf*.h)</h3>
+
+    <p>The macros in <code>source/common/unicode/utf*.h</code> have been
+    revamped, improved, simplified, and renamed. The old macros continue to be
+    available. They are in <code>utf_old.h</code>, together with an explanation
+    of the change. <code>utf.h</code>, <code>utf8.h</code> and <code>utf16.h</code>
+    contain the new macros instead. The new macros are intended to be more
+    consistent, more useful, and less confusing. Some macros were simply renamed
+    for consistency with a new naming scheme.</p>
+
+    <p>A related change is that <code>UChar32</code> is not a platform-dependent
+    type any more, but is now always defined to be the same as <code>int32_t</code>.
+    This allows for consistent, more portable code and C++ function overloading
+    as well as negative values as sentinels on all platforms. See the definition
+    in <code>utf.h</code>.</p>
+
     <h3>ICU code library size</h3>
 
     <p>ICU code libraries can be made smaller by removing functionality. See <a href="#MakeICUSmaller">How
