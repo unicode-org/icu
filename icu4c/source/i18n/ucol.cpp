@@ -897,6 +897,74 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
 
 }
 
+void ucol_setupClosureCE(tempUCATable *t, UChar *decomp, uint32_t noOfDec, UCAElements *el, UErrorCode *status) {
+  uint32_t j = 0, i = 0;
+  uint32_t CE = 0;
+  collIterate colIt;
+  UBool lastNotFound = FALSE;
+
+  
+  while(j<noOfDec) {
+    CE = ucmp32_get(t->mapping, decomp[j]);
+    if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
+      lastNotFound = FALSE;
+      init_collIterate(decomp+j, 1, &colIt, TRUE);
+      while(CE != UCOL_NO_MORE_CES) {
+        CE = ucol_getNextCE(UCA, &colIt, status);
+        if(CE != UCOL_NO_MORE_CES) {
+          el->CEs[el->noOfCEs++] = CE;
+        }
+      }     
+    } else if(CE < UCOL_NOT_FOUND) { /*normal CE */
+      el->CEs[el->noOfCEs++] = CE;
+    } else { /* special CE, contraction, expansion or Thai */
+      for(;;) {
+        uint32_t tag = getCETag(CE);
+        if(tag == THAI_TAG || tag == EXPANSION_TAG) {
+            uint32_t *CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (paddedsize(sizeof(UCATableHeader))>>2)); /* find the offset to expansion table */
+            uint32_t size = getExpansionCount(CE);
+            if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+              for(i = 1; i<size; i++) {
+                 el->CEs[el->noOfCEs++] = *CEOffset++;
+              }
+            } else { /* else, we do */
+              while(*CEOffset != 0) {
+                el->CEs[el->noOfCEs++] = *CEOffset++;
+              }
+            }
+            break;
+        } else if(tag == CONTRACTION_TAG) {
+            ContractionTable *ctb = t->contractions->elements[getContractOffset(CE)];
+            UChar c = decomp[++j];
+            /* what if this is already over */
+            i = 0;
+            while(c > ctb->codePoints[i] && i < ctb->position) {
+              i++;
+            }
+            if(c == ctb->codePoints[i] && j<noOfDec) {
+              CE = ctb->CEs[i];
+            } else {
+              CE = ctb->CEs[0];
+              j--;
+            }
+            if(CE == UCOL_NOT_FOUND) {
+              lastNotFound = TRUE;
+              j--;
+              break;
+            } else if(CE > UCOL_NOT_FOUND) {
+              continue;
+            } else {
+              el->CEs[el->noOfCEs++] = CE;
+              break;
+            }
+        }
+      }
+
+    }
+    j++;
+  }
+}
+
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
 /*
@@ -965,9 +1033,37 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     UChar decomp[256];
     uint32_t noOfDec = 0, i = 0, CE = UCOL_NOT_FOUND;
     uint32_t u = 0;
-    collIterate colIt;
     UCAElements el;
     el.isThai = FALSE;
+    collIterate colIt;
+/*
+   myData = uprv_uca_assembleTable(t, status);  
+   UCollator *temp = ucol_initCollator(myData, NULL, status);
+   temp->rules = NULL;
+   temp->rb = NULL;
+   temp->hasRealData = FALSE;
+*/
+  /* produce canonical & compatibility closure */
+    for(u = 0; u < 0x10000; u++) {
+      
+      if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1) {
+      /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1) {*/
+        for(i = 0; i<noOfDec; i++) {
+          if((CE = ucmp32_get(t->mapping, decomp[i])) != UCOL_NOT_FOUND) {
+            el.uchars[0] = (UChar)u;
+            el.cPoints = el.uchars;
+            el.codepoint = (UChar)u;
+            el.cSize = 1;
+            el.noOfCEs = 0;
+            ucol_setupClosureCE(t, decomp, noOfDec, &el, status);
+            uprv_uca_addAnElement(t, &el, status);
+            break;
+          }        
+        }
+      }
+    }
+  /*ucol_close(temp);*/
+
   /* add latin-1 stuff */
     for(u = 0; u<0x100; u++) {
       if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND /*) {*/
@@ -993,41 +1089,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         uprv_uca_addAnElement(t, &el, status);
       }
     }
-
-   myData = uprv_uca_assembleTable(t, status);  
-   UCollator *temp = ucol_initCollator(myData, NULL, status);
-   temp->rules = NULL;
-   temp->rb = NULL;
-   temp->hasRealData = FALSE;
-
-  /* produce canonical & compatibility closure */
-    for(u = 0; u < 0x10000; u++) {
-      if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1) {
-        for(i = 0; i<noOfDec; i++) {
-          if((CE = ucmp32_get(t->mapping, decomp[i])) != UCOL_NOT_FOUND) {
-            el.uchars[0] = (UChar)u;
-            el.cPoints = el.uchars;
-            el.codepoint = (UChar)u;
-            el.cSize = 1;
-            el.noOfCEs = 0;
-            init_collIterate(decomp, noOfDec, &colIt, TRUE);
-            while(CE != UCOL_NO_MORE_CES) {
-              CE = ucol_getNextCE(temp, &colIt, status);
-              /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
-              if(CE != UCOL_NO_MORE_CES) {
-                el.CEs[el.noOfCEs++] = CE;
-              }
-            }
-            uprv_uca_addAnElement(t, &el, status);
-            break;
-          }        
-        }
-      }
-    }
-  ucol_close(temp);
   }
 
-  myData = uprv_uca_reassembleTable(t, myData, status);  
+  myData = uprv_uca_assembleTable(t, status);  
 
   uhash_close(tailored);
   uprv_uca_closeTempTable(t);    
