@@ -51,55 +51,7 @@ static void debug_islamcal_msg(const char *pat, ...)
 // --- The cache --
 // cache of months
 static UMTX astroLock = 0;  // pod bay door lock
-static UHashtable *monthCache = NULL;
-
-static void createCache(UErrorCode &success) {
-  if(monthCache == NULL) {
-    monthCache = uhash_openSize(uhash_hashLong, uhash_compareLong, 32, &success);
-  }
-  ucln_i18n_registerCleanup();
-}
-
-/**
- * Delete the cache, clean up. 
- * called by calendar_islamic_cleanup()
- */
-static void deleteCache() {
-  if(monthCache != NULL) {
-    uhash_close(monthCache);
-    monthCache = NULL;
-  }
-  umtx_destroy(&astroLock);
-  astroLock = NULL;
-}
-
-static void putCache(int32_t month, int32_t start, UErrorCode &status) {
-  umtx_lock(&astroLock);
-  uhash_puti(monthCache, (void*)month, start, &status);
-  U_DEBUG_ISLAMCAL_MSG(("Add: m%d, st%d\n", month, start));
-  umtx_unlock(&astroLock);
-}
-
-static int32_t getCache(int32_t month, UBool& found, UErrorCode &success) {
-  int32_t res = 0;
-
-  umtx_lock(&astroLock);
-  if(monthCache == NULL) {
-    createCache(success);
-  }
-  
-  res = uhash_geti(monthCache, (void*)month);
-  
-  umtx_unlock(&astroLock);
-  if(res!=0) { 
-    found=TRUE;
-  } else { 
-    found=FALSE;
-  }
-  
-  U_DEBUG_ISLAMCAL_MSG(("Get: m%d, res%d, found%s\n", month, res, found?"Y":"N"));
-  return res;
-}
+static CalendarCache *monthCache = NULL;
 
 U_NAMESPACE_BEGIN
 
@@ -253,11 +205,10 @@ int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
  */
 int32_t IslamicCalendar::trueMonthStart(int32_t month) const
 {
-  UBool found;
   UErrorCode status = U_ZERO_ERROR;
-  int32_t start = getCache(month, found, status);
+  int32_t start = CalendarCache::get(&monthCache, month, status);
   
-  if (found==FALSE) {
+  if (start==0) {
     // Make a guess at when the month started, using the average length
     UDate origin = HIJRA_MILLIS 
       + uprv_floor(month * CalendarAstronomer::SYNODIC_MONTH - 1) * kOneDay;
@@ -279,7 +230,7 @@ int32_t IslamicCalendar::trueMonthStart(int32_t month) const
       } while (age < 0);
     }
     start = (int32_t)Math::floorDivide((origin - HIJRA_MILLIS), (double)kOneDay) + 1;
-    putCache(month, start, status);
+    CalendarCache::put(&monthCache, month, start, status);
   }
   if(U_FAILURE(status)) {
     start = 0;
@@ -560,7 +511,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IslamicCalendar)
 U_NAMESPACE_END
 
 U_CFUNC UBool calendar_islamic_cleanup(void) {
-  deleteCache();
+  delete monthCache;
+  monthCache = NULL;
   return TRUE;
 }
 
