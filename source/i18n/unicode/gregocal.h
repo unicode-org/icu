@@ -544,7 +544,7 @@ public:
      * @return   The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static inline UClassID getStaticClassID(void);
+    static UClassID getStaticClassID(void);
 
     /**
      * Get the calendar type, "gregorian", for use in DateFormatSymbols.
@@ -568,7 +568,7 @@ protected:
      * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
      * @internal
      */
-    virtual inline int32_t getDefaultMonthInYear() const { return 0; }
+    virtual int32_t getDefaultMonthInYear() const;
 
 
     /**
@@ -576,7 +576,7 @@ protected:
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
      * @internal
      */
-    virtual inline int32_t getDefaultDayInMonth(int32_t /*month*/) const { return 1; }
+    virtual int32_t getDefaultDayInMonth(int32_t /*month*/) const;
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
@@ -780,8 +780,6 @@ protected:
      */
     int32_t fGregorianCutoverYear;// = 1582;
 
-    static const char fgClassID;
-
     /**
      * Converts time as milliseconds to Julian date. The Julian date used here is not a
      * true Julian date, since it is measured from midnight, not noon.
@@ -877,14 +875,6 @@ protected:
     static void  initializeSystemDefaultCentury(void);
 
 };
-
-inline UClassID
-GregorianCalendar::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-GregorianCalendar::getDynamicClassID(void) const
-{ return GregorianCalendar::getStaticClassID(); }
 
 inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
 {
