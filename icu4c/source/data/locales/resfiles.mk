@@ -77,6 +77,7 @@ id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_PREEURO.txt\
 ja.txt ja_JP.txt ja_JP_TRADITIONAL.txt\
+kk.txt kk_KZ.txt\
 kl.txt kl_GL.txt\
 ko.txt ko_KR.txt\
 kok.txt kok_IN.txt\
@@ -86,11 +87,13 @@ lt.txt lt_LT.txt\
 lv.txt lv_LV.txt\
 mk.txt mk_MK.txt\
 mr.txt mr_IN.txt\
+ms.txt ms_MY.txt ms_BN.txt\
 mt.txt mt_MT.txt\
 nb.txt nb_NO.txt\
 nl.txt nl_BE.txt nl_BE_PREEURO.txt nl_NL.txt nl_NL_PREEURO.txt\
 nn.txt nn_NO.txt\
 om.txt om_ET.txt om_KE.txt\
+pa.txt pa_IN.txt\
 pl.txt pl_PL.txt\
 ps.txt ps_AF.txt\
 pt.txt pt_BR.txt pt_PT.txt pt_PT_PREEURO.txt\
