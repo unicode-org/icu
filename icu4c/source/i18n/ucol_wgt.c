@@ -76,7 +76,7 @@ setWeightByte(uint32_t weight, int32_t index, uint32_t byte) {
     uint32_t mask; /* 0xffffffff except a 00 "hole" for the index-th byte */
 
     index*=8;
-    mask=0xffffffff>>index;
+    mask=((uint32_t)0xffffffff)>>index;
     index=32-index;
     mask|=0xffffff00<<index;
     return (uint32_t)((weight&mask)|(byte<<index));
