@@ -41,28 +41,27 @@ void TimeZoneBoundaryTest::runIndexedTest( int32_t index, UBool exec, const char
 // *****************************************************************************
 // class TimeZoneBoundaryTest
 // *****************************************************************************
- 
-UDate TimeZoneBoundaryTest::ONE_SECOND = 1000;
- 
-UDate TimeZoneBoundaryTest::ONE_MINUTE = 60 * ONE_SECOND;
- 
-UDate TimeZoneBoundaryTest::ONE_HOUR = 60 * ONE_MINUTE;
- 
-UDate TimeZoneBoundaryTest::ONE_DAY = 24 * ONE_HOUR;
- 
-UDate TimeZoneBoundaryTest::ONE_YEAR = uprv_floor(365.25 * ONE_DAY);
- 
-UDate TimeZoneBoundaryTest::SIX_MONTHS = ONE_YEAR / 2;
- 
-int32_t TimeZoneBoundaryTest::MONTH_LENGTH[] = {
+
+TimeZoneBoundaryTest::TimeZoneBoundaryTest()
+:
+ONE_SECOND(1000),
+ONE_MINUTE(60 * ONE_SECOND),
+ONE_HOUR(60 * ONE_MINUTE),
+ONE_DAY(24 * ONE_HOUR),
+ONE_YEAR(uprv_floor(365.25 * ONE_DAY)),
+SIX_MONTHS(ONE_YEAR / 2)
+{
+}
+
+const int32_t TimeZoneBoundaryTest::MONTH_LENGTH[] = {
     31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 };
  
-UDate TimeZoneBoundaryTest::PST_1997_BEG = 860320800000.0;
+const UDate TimeZoneBoundaryTest::PST_1997_BEG = 860320800000.0;
  
-UDate TimeZoneBoundaryTest::PST_1997_END = 877856400000.0;
+const UDate TimeZoneBoundaryTest::PST_1997_END = 877856400000.0;
  
-UDate TimeZoneBoundaryTest::INTERVAL = 10;
+const UDate TimeZoneBoundaryTest::INTERVAL = 10;
  
 // -------------------------------------
  
