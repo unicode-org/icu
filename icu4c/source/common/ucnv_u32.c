@@ -1042,7 +1042,7 @@ static const UConverterImpl _UTF32LEImpl = {
 static const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
     "UTF-32LE",
-    1232,
+    1234,
     UCNV_IBM, UCNV_UTF32_LittleEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     0,
@@ -1298,7 +1298,7 @@ static const UConverterImpl _UTF32Impl = {
 static const UConverterStaticData _UTF32StaticData = {
     sizeof(UConverterStaticData),
     "UTF-32",
-    1232, /* ### TODO review correctness of all Unicode CCSIDs */
+    0, /* ### TODO review correctness of all Unicode CCSIDs */
     UCNV_IBM, UCNV_UTF32, 4, 4,
 #if U_IS_BIG_ENDIAN
     { 0, 0, 0xff, 0xfd }, 4,
