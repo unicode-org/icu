@@ -47,6 +47,7 @@ static const SearchData BASIC[] = {
     {"a\\u0300\\u0325", "\\u0300\\u0325", NULL, UCOL_TERTIARY, NULL, {1, -1}, 
     {2}},
     {"a\\u0300b", "\\u0300", NULL, UCOL_TERTIARY, NULL, {1, -1}, {1}},
+    {"É", "e", NULL, UCOL_PRIMARY,  NULL, {0, -1}, {1}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -65,6 +66,7 @@ static const SearchData BREAKITERATOREXACT[] = {
      "characterbreaker", {1, 17, 30, -1}, {1, 1, 1}},
     {"testing that string ab\\u00e9cd does not match e", "e", NULL, 
      UCOL_TERTIARY, "characterbreaker", {1, 28, 41, -1}, {1, 1, 1}},
+    {"É", "e", "fr", UCOL_PRIMARY,  "characterbreaker", {0, -1}, {1}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -296,6 +298,7 @@ static const SearchData BREAKITERATORCANONICAL[] = {
      "characterbreaker", {1, 17, 30, -1}, {1, 1, 1}},
     {"testing that string ab\\u00e9cd does not match e", "e", NULL, 
      UCOL_TERTIARY, "characterbreaker", {1, 28, 41, -1}, {1, 1, 1}},
+    {"É", "e", "fr", UCOL_PRIMARY,  "characterbreaker", {0, -1}, {1}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
