@@ -248,8 +248,8 @@ Locale::~Locale()
         fullName = NULL;
     }
     if (baseName && baseName != baseNameBuffer) {
-      uprv_free(baseName);
-      baseName = NULL;
+        uprv_free(baseName);
+        baseName = NULL;
     }
 }
 
@@ -558,12 +558,12 @@ Locale& Locale::init(const char* localeID)
         }
         if (fieldLen[1] == 4) {
             /* We have at least a script */
-            uprv_memcpy(script, fullName + fieldLen[0], fieldLen[1]);
+            uprv_memcpy(script, field[1], fieldLen[1]);
             script[fieldLen[1]] = 0;
             variantField = 3;
             if (fieldLen[2] > 0) {
                 /* We have a country */
-                uprv_memcpy(country, fullName + fieldLen[0] + fieldLen[1], fieldLen[2]);
+                uprv_memcpy(country, field[2], fieldLen[2]);
                 country[fieldLen[2]] = 0;
             }
         }
@@ -647,7 +647,7 @@ Locale
 Locale::createFromName (const char *name)
 {
     if (name) {
-        Locale l;
+        Locale l("");
         l.init(name);
         return l;
     }
