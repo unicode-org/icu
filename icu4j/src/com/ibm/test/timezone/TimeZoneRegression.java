@@ -310,11 +310,9 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4151429() {
         try {
             TimeZone tz = TimeZone.getTimeZone("GMT");
-            /* not used 
             String name = tz.getDisplayName(true, Integer.MAX_VALUE,
                                             Locale.getDefault());
-                                            */
-            tz = null;
+            name = null;
             errln("IllegalArgumentException not thrown by TimeZone.getDisplayName()");
         } catch(IllegalArgumentException e) {
             System.out.print("");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarPanel.java,v $ 
- * $Date: 2000/10/19 00:27:16 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/09/08 01:38:55 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -161,6 +161,7 @@ class CalendarPanel extends Canvas {
         c.getTime();        // JDK 1.1.2 bug workaround
         c.add(Calendar.SECOND, -1);
         Date endOfMonth = c.getTime();
+        endOfMonth = null;
         int lastWeek = c.get(Calendar.WEEK_OF_MONTH);
 
         // Calculate the number of full or partial weeks in this month.
