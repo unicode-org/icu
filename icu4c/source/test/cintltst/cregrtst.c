@@ -44,10 +44,11 @@ void addElement(Vector *q, const char* string)
 {
 
     Vector *p;
-        p=(Vector*)malloc(sizeof(Vector));
-        p->text=(UChar*)malloc(sizeof(UChar) * (strlen(string)+1));
-        u_uastrcpy(p->text, string);
-        p->link=NULL;
+
+    p=(Vector*)malloc(sizeof(Vector));
+    p->text=(UChar*)malloc(sizeof(UChar) * (strlen(string)+1));
+    u_uastrcpy(p->text, string);
+    p->link=NULL;
     while(q->link!=NULL)
         q=q->link;
     q->link=p;
@@ -55,12 +56,12 @@ void addElement(Vector *q, const char* string)
 }
 UChar* addElement2(Vector *q, const UChar* string)
 {
-
     Vector *p;
-        p=(Vector*)malloc(sizeof(Vector));
-        p->text=(UChar*)malloc(sizeof(UChar) * (u_strlen(string)+1));
-        u_strcpy(p->text, string);
-        p->link=NULL;
+
+    p=(Vector*)malloc(sizeof(Vector));
+    p->text=(UChar*)malloc(sizeof(UChar) * (u_strlen(string)+1));
+    u_strcpy(p->text, string);
+    p->link=NULL;
     while(q->link!=NULL)
         q=q->link;
     q->link=p;
@@ -152,17 +153,17 @@ const UChar cannedTestArray[] = {
 
 void AllocateTextBoundary()
 {
-    
-   cannedTestChars=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestArray) + 10));
-   u_uastrcpy(cannedTestChars,"");
-   u_uastrcpy(cannedTestChars,"0x0000");
-   u_strcat(cannedTestChars, cannedTestArray);
-    
+
+    cannedTestChars=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestArray) + 10));
+    u_uastrcpy(cannedTestChars,"");
+    u_uastrcpy(cannedTestChars,"0x0000");
+    u_strcat(cannedTestChars, cannedTestArray);
+
 }
 
 void FreeTextBoundary()
 {
-   free(cannedTestChars);
+    free(cannedTestChars);
 }
 
 /*Add Word Data*/
@@ -250,9 +251,9 @@ void addTestWordData()
     addElement(wordSelectionData, "all");
     addElement(wordSelectionData, " ");
 
-  /* to test for bug #4097779 */
-   free(addElement2(wordSelectionData, CharsToUChars("aa\\u0300a")));
-   addElement(wordSelectionData, " ");
+    /* to test for bug #4097779 */
+    free(addElement2(wordSelectionData, CharsToUChars("aa\\u0300a")));
+    addElement(wordSelectionData, " ");
 
    /* to test for bug #4098467
      What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -785,12 +786,15 @@ void TestBackwardSentenceIndexSelection()
 void TestSentenceInvariants()
 {
     int x;
-   UChar *s;
+    UChar *s;
+    UChar *tempStr;
 AllocateTextBoundary();
-   x=u_strlen(cannedTestChars);
-   s=(UChar*)malloc(sizeof(UChar) * (x + 15));
-   u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUChars(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff"));
+    x=u_strlen(cannedTestChars);
+    s=(UChar*)malloc(sizeof(UChar) * (x + 15));
+    u_strcpy(s, cannedTestChars);
+    tempStr = CharsToUChars(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
+    u_strcat(s, tempStr);
+    free(tempStr);
     log_verbose("Testing sentence Other invariants.....\n");
     doOtherInvariantTest(UBRK_SENTENCE, s);
     free(s);
@@ -913,17 +917,22 @@ void TestBackwardWordIndexSelection()
 
 void TestWordInvariants()
 {
-   UChar *s;
-   int x;
+    UChar *s;
+    UChar *tempStr;
+    int x;
 AllocateTextBoundary();
-   x=u_strlen(cannedTestChars);
-   s=(UChar*)malloc(sizeof(UChar) * (x + 15));
-   u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
+    x=u_strlen(cannedTestChars);
+    s=(UChar*)malloc(sizeof(UChar) * (x + 15));
+    u_strcpy(s, cannedTestChars);
+    tempStr = CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    u_strcat(s, tempStr);
+    free(tempStr);
     log_verbose("Testing word break invariant.....\n");
     doBreakInvariantTest(UBRK_WORD, s);
     u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
+    tempStr = CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    u_strcat(s, tempStr);
+    free(tempStr);
     doOtherInvariantTest(UBRK_WORD, s);
     free(s);
 FreeTextBoundary();    
@@ -1046,27 +1055,32 @@ void TestLineInvariants()
     UChar c;
     UBreakIterator *e;
     UErrorCode status = U_ZERO_ERROR;
-   UChar noBreak[10], dashes[10];
-   UBool saw2;
-   UChar work[5];
-   UChar *s;
-AllocateTextBoundary();   
-   s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 20));
-   u_strcpy(s, cannedTestChars);
-   u_strcat(s, CharsToUChars(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02"));
-    log_verbose("Testing line break Invariant.....\n");
-   doBreakInvariantTest(UBRK_LINE, s);
-   log_verbose("Testing line other Invariant....\n");
-   doOtherInvariantTest(UBRK_LINE, s);
+    UChar noBreak[10], dashes[10];
+    UBool saw2;
+    UChar work[5];
+    UChar *s, *ustr;
 
-    
+AllocateTextBoundary();   
+    s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 20));
+    u_strcpy(s, cannedTestChars);
+    ustr = CharsToUChars(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
+    u_strcat(s, ustr);
+    free(ustr);
+    log_verbose("Testing line break Invariant.....\n");
+    doBreakInvariantTest(UBRK_LINE, s);
+    log_verbose("Testing line other Invariant....\n");
+    doOtherInvariantTest(UBRK_LINE, s);
+
+
 
     /* in addition to the other invariants, a line-break iterator should make sure that:
        it doesn't break around the non-breaking characters */
     e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
     errorCount=0;
     status=U_ZERO_ERROR;
-    u_strcpy(noBreak, CharsToUChars("\\u00a0\\u2007\\u2011\\ufeff"));
+    ustr = CharsToUChars("\\u00a0\\u2007\\u2011\\ufeff");
+    u_strcpy(noBreak, ustr);
+    free(ustr);
     u_uastrcpy(work, "aaa");
     for (i = 0; i < u_strlen(s); i++) {
          c = s[i];
@@ -1079,14 +1093,14 @@ AllocateTextBoundary();
                 work[2] = s[k];                
                 ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
-                log_err("FAIL: Error in opening the word break Iterator in testLineInvaiants:\n %s\n", myErrorName(status));
-                return;
+                    log_err("FAIL: Error in opening the word break Iterator in testLineInvaiants:\n %s\n", myErrorName(status));
+                    return;
                 }
                 for (l = ubrk_first(e); l != UBRK_DONE; l = ubrk_next(e))
                     if (l == 1 || l == 2) {
                         log_err("Got break between U+%s  and U+%s\n", austrdup(UCharToUCharArray(work[l - 1])),
                                                           austrdup(UCharToUCharArray(work[l])) );
-                        
+
                         errorCount++;
                         if (errorCount >= 75)
                             return;
@@ -1097,7 +1111,9 @@ AllocateTextBoundary();
 
     /* it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
        a currency symbol, a non-breaking space, or a line or paragraph separator) */
-    u_strcpy(dashes, CharsToUChars("-\\u00ad\\u2010\\u2012\\u2013\\u2014"));
+    ustr = CharsToUChars("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
+    u_strcpy(dashes, ustr);
+    free(ustr);
 
     for (i = 0; i < u_strlen(s); i++) {
         work[0] = s[i];
@@ -1257,14 +1273,20 @@ void TestBackwardCharacterIndexSelection()
 void TestCharacterInvariants()
 {
    UChar *s;
+   UChar *tempStr;
+
 AllocateTextBoundary();
    s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 15));
-   u_strcpy(s, cannedTestChars);    
-   u_strcat(s, CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
+   u_strcpy(s, cannedTestChars);
+   tempStr = CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+   u_strcat(s, tempStr);
+   free(tempStr);
    log_verbose("Testing character break invariant.....\n");
    doBreakInvariantTest(UBRK_CHARACTER, s);
-   u_strcpy(s, cannedTestChars);        
-   u_strcat(s, CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
+   u_strcpy(s, cannedTestChars);
+   tempStr = CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+   u_strcat(s, tempStr);
+   free(tempStr);
    log_verbose("Testing character other invariant.....\n");
    doOtherInvariantTest(UBRK_CHARACTER, s);
    free(s);
@@ -1585,16 +1607,19 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
     UChar work[3]; 
     UChar breaks[10];
     UChar c;
+    UChar *ustr;
     UBool seen2;
     int errorCount = 0;
     status=U_ZERO_ERROR;
-   
+
     u_uastrcpy(work, "aaa");
-    
+
     log_verbose("doBreakInvariantTest text of length: %d\n", u_strlen(testChars));
     /* a break should always occur after CR (unless followed by LF), LF, PS, and LS */
-      
-    u_strcpy(breaks, CharsToUChars("\r\n\\u2029\\u2028"));
+
+    ustr = CharsToUChars("\r\n\\u2029\\u2028");
+    u_strcpy(breaks, ustr);
+    free(ustr);
     
     tb = ubrk_open(type, "en_US", work, u_strlen(work), &status);
     
