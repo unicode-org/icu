@@ -30,6 +30,7 @@ static void TestNextUCharError(UConverter* cnv, const char* source, const char* 
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
+static void TestUTF7(void);
 static void TestUTF8(void);
 static void TestUTF16BE(void);
 static void TestUTF16LE(void);
@@ -172,6 +173,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestOutBufSizes, "tsconv/nucnvtst/TestOutBufSizes");
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
+   addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
    addTest(root, &TestUTF16LE, "tsconv/nucnvtst/TestUTF16LE");
@@ -1138,6 +1140,45 @@ static void TestAmbiguous()
     ucnv_close(ascii_cnv);
 }
   
+void
+static TestUTF7() {
+    /* test input */
+    static const uint8_t in[]={
+        /* H - +Jjo- - ! +- +2AHcAQ */
+        0x48,
+        0x2d,
+        0x2b, 0x4a, 0x6a, 0x6f,
+        0x2d, 0x2d,
+        0x21,
+        0x2b, 0x2d,
+        0x2b, 0x32, 0x41, 0x48, 0x63, 0x41, 0x51
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x48,
+        1, 0x2d,
+        4, 0x263a, /* <WHITE SMILING FACE> */
+        2, 0x2d,
+        1, 0x21,
+        2, 0x2b,
+        7, 0x10401
+    };
+
+    const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("UTF-7", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-7 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    TestNextUChar(cnv, source, limit, results, "UTF-7");
+    /* Test the condition when source >= sourceLimit */
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+    ucnv_close(cnv);
+}
+
 void
 static TestUTF8() {
     /* test input */
