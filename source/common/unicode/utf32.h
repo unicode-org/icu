@@ -17,7 +17,7 @@
  * \file
  * \brief C API: UTF-32 macros
  *
- * This file is deprecated and its contents moved to utf_old.h.
+ * This file is obsolete and its contents moved to utf_old.h.
  * See utf_old.h and Jitterbug 2150 and its discussion on the ICU mailing list
  * in September 2002.
  */

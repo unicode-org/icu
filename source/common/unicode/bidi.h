@@ -28,7 +28,7 @@
 
 U_NAMESPACE_BEGIN
 /**
- * This class is deprecated and will be removed.
+ * This class is obsolete and will be removed.
  * Use the C API with the UBiDi type and ubidi_... functions.
  * The BiDi class was just a pure 1:1 wrapper for the ubidi_ API.
  *

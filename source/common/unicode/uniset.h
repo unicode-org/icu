@@ -322,10 +322,10 @@ public:
                UErrorCode& status);
 
     /**
-     * DEPRECATED Constructs a set from the given Unicode character category.
+     * Obsolete: Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
      * defined in uchar.h.
-     * @deprecated To be removed after 2002-DEC-31
+     * @obsolete ICU 2.6. Use a pattern with the category instead since this API will be removed in that release.
      */
     UnicodeSet(int8_t category, UErrorCode& status);
 

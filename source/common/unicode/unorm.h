@@ -140,49 +140,49 @@ typedef enum {
   /** One more than the highest normalization mode constant. @stable ICU 2.0 */
   UNORM_MODE_COUNT
 
-  /* *** The rest of this enum is entirely deprecated. *** */
+  /* *** The rest of this enum is obsolete. *** */
 
 #ifdef ICU_UNORM_USE_DEPRECATES
   /**
    * No decomposition/composition
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NONE.
+   * @obsolete ICU 2.4. Use UNORM_NONE instead since this API will be removed in that release.
    */
   ,UCOL_NO_NORMALIZATION = 1,
   /**
    * Canonical decomposition
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NFD.
+   * @obsolete ICU 2.4. Use UNORM_NFD instead since this API will be removed in that release.
    */
   UCOL_DECOMP_CAN = 2,
   /**
    * Compatibility decomposition
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKD.
+   * @obsolete ICU 2.4. Use UNORM_NFKD instead since this API will be removed in that release.
    */
   UCOL_DECOMP_COMPAT = 3,
   /**
    * Default normalization
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKD or UNORM_DEFAULT.
+   * @obsolete ICU 2.4. Use UNORM_NFKD or UNORM_DEFAULT instead since this API will be removed in that release.
    */
   UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
   /**
    * Canonical decomposition followed by canonical composition
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NFC.
+   * @obsolete ICU 2.4. Use UNORM_NFC instead since this API will be removed in that release.
    */
   UCOL_DECOMP_CAN_COMP_COMPAT = 4,
   /**
    * Compatibility decomposition followed by canonical composition
-   * @deprecated To be removed after 2002-sep-30, use UNORM_NFKC.
+   * @obsolete ICU 2.4. Use UNORM_NFKC instead since this API will be removed in that release.
    */
   UCOL_DECOMP_COMPAT_COMP_CAN =5,
 
   /**
    * Do not normalize Hangul.
-   * @deprecated To be removed without replacement after 2002-mar-31.
+   * @obsolete ICU 2.2. Obsolete option, to be removed (or moved to private for documentation) in that release.
    */
   UCOL_IGNORE_HANGUL    = 16,
 
   /**
    * Do not normalize Hangul.
-   * @deprecated To be removed without replacement after 2002-mar-31.
+   * @obsolete ICU 2.2. Obsolete option, to be removed (or moved to private for documentation) in that release.
    */
   UNORM_IGNORE_HANGUL    = 16
 #endif /* ICU_UNORM_USE_DEPRECATES */
@@ -216,8 +216,8 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
 #ifdef ICU_UNORM_USE_DEPRECATES
 /**
  * The function u_normalize() has been renamed to unorm_normalize()
- * for consistency. The old name is deprecated.
- * @deprecated To be removed after 2002-mar-31.
+ * for consistency. The old name is obsolete.
+ * @obsolete ICU 2.2. Use unorm_normalize instead since this API will be removed in that release.
  */
 #define u_normalize unorm_normalize
 #endif /* ICU_UNORM_USE_DEPRECATES */

@@ -225,7 +225,7 @@ ures_openDirect(const char* path,
 *@param status: fills in the outgoing error code.
 *@see ures_close
 *@return : a newly allocated resource bundle.
-*@deprecated remove after Aug 2002
+* @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
 */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_openW(const wchar_t* path, 
@@ -254,7 +254,7 @@ ures_openU(const UChar* path,
 
 /**
  * Returns the number of strings/arrays in resource bundles.
- * Better to use user_getSize, as this function will be deprecated. 
+ * Better to use ures_getSize, as this function will be deprecated. 
  *
  *@param resourceBundle: resource bundle containing the desired strings
  *@param resourceKey: key tagging the resource
