@@ -254,7 +254,7 @@ static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeS
 
 UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode& status) {
     char key[64];
-    ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, US_INV);
+    ruleid.extract(0, sizeof(key)-1, key, (int32_t)sizeof(key)-1, US_INV);
     U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
     UResourceBundle *r = ures_getByKey(top, kRULES, oldbundle, &status);
     U_DEBUG_TZ_MSG(("loadRule(%s) -> kRULES [%s]\n", key, u_errorName(status)));
