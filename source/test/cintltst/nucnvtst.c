@@ -2998,10 +2998,14 @@ TestRoundTrippingAllUTF(void){
         TestFullRoundtrip("UTF-16BE");
         log_verbose("Running exhaustive round trip test for UTF-16LE\n");
         TestFullRoundtrip("UTF-16LE");
+        log_verbose("Running exhaustive round trip test for UTF-16\n");
+        TestFullRoundtrip("UTF-16");
         log_verbose("Running exhaustive round trip test for UTF-32BE\n");
         TestFullRoundtrip("UTF-32BE");
         log_verbose("Running exhaustive round trip test for UTF-32LE\n");
         TestFullRoundtrip("UTF-32LE");
+        log_verbose("Running exhaustive round trip test for UTF-32\n");
+        TestFullRoundtrip("UTF-32");
         log_verbose("Running exhaustive round trip test for UTF-7\n");
         TestFullRoundtrip("UTF-7");
         log_verbose("Running exhaustive round trip test for UTF-7\n");
