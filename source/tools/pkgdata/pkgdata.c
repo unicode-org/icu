@@ -30,18 +30,6 @@
 U_CDECL_BEGIN
 #include "pkgtypes.h"
 #include "makefile.h"
-
-#ifdef WIN32
-extern void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status);
-#else /*#ifdef WIN32*/
-#ifdef UDATA_SO_SUFFIX
-extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status);
-#endif /*#ifdef UDATA_SO_SUFFIX*/
-extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *status);
-#endif /*#ifdef WIN32*/
-
-extern void pkg_mode_files(UPKGOptions* o, FileStream *stream, UErrorCode *status);
-
 U_CDECL_END
 
 static int executeMakefile(const UPKGOptions *o);
