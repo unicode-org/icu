@@ -24,6 +24,7 @@
 #include "string.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "unicode/uchar.h"
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -486,6 +487,35 @@ static void TestNewTypes() {
             }
         }
     }
+	/* this tests if unescaping works are expected */
+	{
+			char* pattern = "[ \\u0020 \\u00A0 \\u1680 \\u2000 \\u2001 \\u2002 \\u2003 \\u2004 \\u2005 \\u2006 \\u2007 \\u2008 "
+					"\\u2009 \\u200A \\u200B \\u202F \\u205F \\u3000 \\u0000-\\u001F \\u007F \\u0080-\\u009F \\u06DD "
+					"\\u070F \\u180E \\u200C \\u200D \\u2028 \\u2029 \\u2060 \\u2061 \\u2062 \\u2063 \\u206A-\\u206F "
+					"\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD \\U00100000-\\U0010FFFD "
+					"\\uFDD0-\\uFDEF \\uFFFE-\\uFFFF \\U0001FFFE-\\U0001FFFF \\U0002FFFE-\\U0002FFFF \\U0003FFFE-\\U0003FFFF "
+					"\\U0004FFFE-\\U0004FFFF \\U0005FFFE-\\U0005FFFF \\U0006FFFE-\\U0006FFFF \\U0007FFFE-\\U0007FFFF "
+					"\\U0008FFFE-\\U0008FFFF \\U0009FFFE-\\U0009FFFF \\U000AFFFE-\\U000AFFFF \\U000BFFFE-\\U000BFFFF "
+					"\\U000CFFFE-\\U000CFFFF \\U000DFFFE-\\U000DFFFF \\U000EFFFE-\\U000EFFFF \\U000FFFFE-\\U000FFFFF "
+					"\\U0010FFFE-\\U0010FFFF \\uD800-\\uDFFF \\uFFF9 \\uFFFA \\uFFFB \\uFFFC \\uFFFD \\u2FF0-\\u2FFB "
+					"\\u0340 \\u0341 \\u200E \\u200F \\u202A \\u202B \\u202C \\u202D \\u202E \\u206A \\u206B \\u206C "
+					"\\u206D \\u206E \\u206F \\U000E0001 \\U000E0020-\\U000E007F ]";
+			
+			UErrorCode status = U_ZERO_ERROR;
+			int32_t patternLen =uprv_strlen(pattern), len=0, i=0;
+			UChar* expected = (UChar*)uprv_malloc(U_SIZEOF_UCHAR* patternLen);
+			const UChar* got = ures_getStringByKey(theBundle,"test_unescaping",&len,&status);
+			int32_t expectedLen = u_unescape(pattern,expected,patternLen);
+			if(u_strncmp(expected,got,expectedLen)!=0 || expectedLen != len){
+				log_err("genrb failed to unescape string\n");
+			}
+			for(i=0;i<expectedLen;i++){
+				if(expected[i] != got[i]){
+					log_verbose("Expected: 0x%04X Got: 0x%04X \n",expected[i], got[i]);
+				}
+			}
+
+	}
     /* test for jitterbug#1435 */
     {
         const UChar* str = ures_getStringByKey(theBundle,"test_underscores",&len,&status);
