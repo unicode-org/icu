@@ -608,10 +608,6 @@ SOURCE=.\translit.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\txtbdry.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ubrk.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1636,10 +1632,6 @@ InputPath=.\unicode\translit.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\txtbdry.h
 # End Source File
 # Begin Source File
 
