@@ -44,6 +44,7 @@ scriptNames[]={
    { "CANADIAN_ABORIGINAL", USCRIPT_UCAS        },
    { "CHEROKEE",            USCRIPT_CHEROKEE    },
    { "COMMON",              USCRIPT_COMMON      },
+   { "COPTIC",              USCRIPT_COPTIC      },
    { "CYRILLIC",            USCRIPT_CYRILLIC    },
    { "DESERET",             USCRIPT_DESERET     },
    { "DEVANAGARI",          USCRIPT_DEVANAGARI  },
