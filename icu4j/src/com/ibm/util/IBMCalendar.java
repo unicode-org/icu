@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/IBMCalendar.java,v $ 
- * $Date: 2000/03/21 02:51:35 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/04/27 22:34:40 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -30,8 +30,8 @@ import com.ibm.text.SimpleDateFormat;
  *
  * The API methods on this class fall into several categories:
  * <ul>
- *  <li>Static methods for retrieving {@link java.text.DateFormat} and
- *      {@link java.text.DateFormatSymbols} objects that match a particular
+ *  <li>Static methods for retrieving {@link DateFormat} and
+ *      {@link DateFormatSymbols} objects that match a particular
  *      subclass of <code>Calendar</code>.
  *
  *  <li>Methods that were added to {@link java.util.Calendar Calendar} in JDK 1.2 or that
@@ -890,7 +890,7 @@ public abstract class IBMCalendar extends Calendar {
      *
      * @param locale The locale for which the date format is desired.
      *
-     * @see java.text.DateFormat#getDateInstance
+     * @see DateFormat#getDateInstance
      */
     static public DateFormat getDateFormat(Calendar cal, int dateStyle, Locale locale)
     {
@@ -912,7 +912,7 @@ public abstract class IBMCalendar extends Calendar {
      *
      * @param locale The locale for which the time format is desired.
      *
-     * @see java.text.DateFormat#getTimeInstance
+     * @see DateFormat#getTimeInstance
      */
     static public DateFormat getTimeFormat(Calendar cal, int timeStyle, Locale locale)
     {
@@ -938,7 +938,7 @@ public abstract class IBMCalendar extends Calendar {
      *
      * @param locale The locale for which the date/time format is desired.
      *
-     * @see java.text.DateFormat#getDateTimeInstance
+     * @see DateFormat#getDateTimeInstance
      */
     static public DateFormat getDateTimeFormat(Calendar cal, int dateStyle,
                                         int timeStyle, Locale locale)
@@ -1006,7 +1006,7 @@ public abstract class IBMCalendar extends Calendar {
      * @param cal       The calendar system whose date format symbols are desired.
      * @param locale    The locale whose symbols are desired.
      *
-     * @see java.text.DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
      */
     static public DateFormatSymbols getDateFormatSymbols(Calendar cal,
                                                          Locale locale)
@@ -1029,7 +1029,7 @@ public abstract class IBMCalendar extends Calendar {
      * Fetch a custom calendar's DateFormatSymbols out of the given resource
      * bundle.  Symbols that are not overridden are inherited from the
      * default DateFormatSymbols for the locale.
-     * @see java.text.DateFormatSymbols#DateFormatSymbols
+     * @see DateFormatSymbols#DateFormatSymbols
      */
     static protected DateFormatSymbols getDateFormatSymbols(DateFormatSymbols result,
                                                             ResourceBundle bundle,
@@ -1102,7 +1102,7 @@ public abstract class IBMCalendar extends Calendar {
      *
      * @param loc       The locale for which the date/time format is desired.
      *
-     * @see java.text.DateFormat#getDateTimeInstance
+     * @see DateFormat#getDateTimeInstance
      */
     static private DateFormat getDateTimeFormat(Calendar cal, Locale loc,
                                             int dateStyle, int timeStyle)
