@@ -689,10 +689,11 @@ typedef enum UCellWidth UCellWidth;
 
 /**
  * Selector constants for u_charName().
- * <code>u_charName() returns either the "modern" name of a
- * Unicode character or the name that was defined in
+ * <code>u_charName() returns the "modern" name of a
+ * Unicode character; or the name that was defined in
  * Unicode version 1.0, before the Unicode standard merged
- * with ISO-10646.
+ * with ISO-10646; or an "extended" name that gives each
+ * Unicode code point a unique name.
  *
  * @see u_charName
  * @stable
@@ -700,7 +701,7 @@ typedef enum UCellWidth UCellWidth;
 enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
-    U_UNICODE_EXTENDED_CHAR_NAME,
+    U_EXTENDED_CHAR_NAME,
     U_CHAR_NAME_CHOICE_COUNT
 };
 
@@ -989,7 +990,11 @@ U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);
 
 /**
- * Returns a value indicating a character category according to UnicodeData.txt.
+ * Returns a value indicating a character category.
+ * The categories are taken from the Unicode Character Database (UCD) in
+ * UnicodeData.txt.
+ * ICU changes the category of some of the ISO control characters to various
+ * separators categories.
  *
  * @param c            the character to be tested
  * @return a value of type int, the character category.
@@ -1112,13 +1117,16 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  * Find a Unicode character by its name and return its code point value.
  * The name is matched exactly and completely.
  * A Unicode 1.0 name is matched only if it differs from the modern name.
- * Unicode names are all uppercase.
+ * Unicode names are all uppercase. Extended names are all lowercase and
+ * within angle brackets.
  *
  * @param nameChoice Selector for which name to match.
  * @param name The name to match.
  * @param pErrorCode Pointer to a UErrorCode variable
  * @return The Unicode code point value of the character with the given name,
- *         or 0xffff if there is no such character.
+ *         or 0xffff if there is no such character or if the extended name
+ *         corresponds to U+FFFF. In the latter case, the variable pointed
+ *         to by pErrorCode is not set to an error code.
  *
  * @see UCharNameChoice
  * @see u_charName
