@@ -123,36 +123,6 @@ static uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc){
     return(crc);
 }
 
-/*check the language with ISO 639 standard*/
-static UBool checkISOLanguage(char* language) {
-    int i = 0;
-    int result = -1;
-
-    while(ISOLanguages[i] != '\0') {
-        result = uprv_strcmp(language, ISOLanguages[i]);
-        if(result == 0) {
-            return TRUE;
-        }
-        i++;
-    }
-    return FALSE;
-}
-
-/*check the language with ISO 639 standard*/
-static UBool checkISOCountry(char* country) {
-    int i = 0;
-    int result = -1;
-
-    while(ISOCountries[i]!='\0') {
-        result = uprv_strcmp(country, ISOCountries[i]);
-        if(result == 0) {
-            return TRUE;
-        }
-        i++;
-    }
-    return FALSE;
-}
-
 static void strnrepchr(char* src, int32_t srcLen, char s, char r){
     int32_t i = 0;
     for(i=0;i<srcLen;i++){
