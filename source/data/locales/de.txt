@@ -654,13 +654,13 @@ de {
         ISK { "ISK", "Isl\u00E4ndische Krone" }
         JMD { "JMD", "Jamaika Dollar" }
         JOD { "JOD", "Jordanischer Dinar" }
-        JPY { "JPY", "Yen" }
+        JPY { "\uFFE5", "Yen" }
         KES { "KES", "Kenia Schilling" }
         KGS { "KGS", "SOM" }
         KHR { "KHR", "Riel" }
         KMF { "KMF", "Komoren Franc" }
         KPW { "KPW", "Nordkoreanischer Won" }
-        KRW { "KRW", "S\u00FCdkoreanischer Won" }
+        KRW { "\u20A9", "S\u00FCdkoreanischer Won" }
         KWD { "KWD", "Kuwait Dinar" }
         KYD { "KYD", "Kaiman-Dollar" }
         KZT { "KZT", "Tenge" }
@@ -689,7 +689,7 @@ de {
         MYR { "MYR", "Malaysischer Ringgit" }
         MZM { "MZM", "Metical" }
         NAD { "NAD", "Namibia Dollar" }
-        NGN { "NGN", "Naira" }
+        NGN { "\u20A6", "Naira" }
         NIO { "NIO", "Gold-Cordoba" }
         NOK { "NOK", "Norwegische Krone" }
         NPR { "NPR", "Nepalesische Rupie" }
