@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.4 $ $Date: 2000/04/22 03:31:34 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.5 $ $Date: 2000/04/24 20:28:24 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -43,11 +43,12 @@ import com.ibm.textlayout.attributes.AttributeSet;
 import com.ibm.textlayout.attributes.TextAttribute;
 import com.ibm.textlayout.attributes.AttributeMap;
 
-public final class TestTextPanel extends TestFmwk {
+public class TestTextPanel /*extends TestFmwk*/ {
 
     public static void main(String[] args) throws Exception {
 
-        new TestTextPanel().run(args);
+        //new TestTextPanel().run(args);
+        new TestTextPanel().test();
     }
 
     private final class TestListener implements TextPanelListener {
@@ -106,15 +107,15 @@ public final class TestTextPanel extends TestFmwk {
             for (int i=0; i < status.length; i++) {
                 if (status[i] == DEFINITELY) {
                     if (logDetails) {
-                        logln("Expecting event " +
+                        logMessage("Expecting event " +
                                         (i+TextPanelEvent.TEXT_PANEL_FIRST));
-                        logln("iterationCount="+iterationCount+";  expexting="+exp);
+                        logMessage("iterationCount="+iterationCount+";  expexting="+exp);
                     }
                     e = true;
                 }
             }
             if (e) {
-                errln("Some events pending");
+                reportError("Some events pending");
             }
         }
         
@@ -122,7 +123,7 @@ public final class TestTextPanel extends TestFmwk {
             
             int index = event.getID() - TextPanelEvent.TEXT_PANEL_FIRST;
             if (status[index] == NO_WAY) {
-                errln("Unexpected event: " + event);
+                reportError("Unexpected event: " + event);
             }
             else if (status[index] == DEFINITELY) {
                 status[index] = NO_WAY;
@@ -216,17 +217,23 @@ public final class TestTextPanel extends TestFmwk {
         fClipboard = new Clipboard("TestTextPanel");
         incRandSeed();
     }
+
+    /**
+     * Note:  TestTextPanel uses the following two methods in place
+     * of errln and logln in TestFmwk.  To make a TestFmwk version,
+     * just override these two methods to call errln and logln.
+     */    
+    protected void reportError(String message) {
     
-    // For inner class accessibility
-    protected void errln(String message) {
-    
-        super.errln(message);
+        System.err.println(message);
+        throw new RuntimeException(message);
+        //super.errln(message);
     }
     
-    // For inner class accessibility
-    protected void logln(String message) {
+    protected void logMessage(String message) {
     
-        super.logln(message);
+        System.err.println(message);
+        //super.logMessage(message);
     }
     
     public TestTextPanel(MTextPanel panel) {
@@ -364,10 +371,10 @@ public final class TestTextPanel extends TestFmwk {
         }
         
         if (fTextPanel.getSelectionStart() != start) {
-            errln("getSelectionStart is incorrect after set");
+            reportError("getSelectionStart is incorrect after set");
         }
         if (fTextPanel.getSelectionEnd() != limit) {
-            errln("getSelectionEnd is incorrect after set");
+            reportError("getSelectionEnd is incorrect after set");
         }
         fListener.assertNotExpectingEvents();
         fListener.allowAll();
@@ -399,7 +406,7 @@ public final class TestTextPanel extends TestFmwk {
 
         int textLength = fTextPanel.getTextLength();
         if (textLength != fTextPanel.getText().length()) {
-            errln("Text panel length is not correct");
+            reportError("Text panel length is not correct");
         }
 
         setAndTestSelection(0, textLength / 2);
@@ -438,7 +445,7 @@ public final class TestTextPanel extends TestFmwk {
         fListener.assertNotExpectingEvents();
         
         if (fTextPanel.getSelectionStart() != oldText.length() + insLength) {
-            errln("Append didn't result in correct selection");
+            reportError("Append didn't result in correct selection");
         }
 
         fListener.expectEvent(TextPanelEvent.TEXT_CHANGED);
@@ -448,27 +455,27 @@ public final class TestTextPanel extends TestFmwk {
         fListener.allowAll();
         
         if (fTextPanel.getSelectionStart() != insLength) {
-            errln("Insert didn't result in correct selection");
+            reportError("Insert didn't result in correct selection");
         }
 
         fTextPanel.replaceRange(insertionText, insLength, insLength+oldText.length());
         if (fTextPanel.getSelectionStart() != insLength*2) {
-            errln("Replace didn't result in correct selection");
+            reportError("Replace didn't result in correct selection");
         }
         if (fTextPanel.getSelectionEnd() != insLength*2) {
-            errln("Replace didn't result in correct selection");
+            reportError("Replace didn't result in correct selection");
         }
         if (fTextPanel.getTextLength() != insLength*3) {
-            errln("textLength is incorrect");
+            reportError("textLength is incorrect");
         }
 
         if (restoreOldText) {
             fTextPanel.setText(oldText);
             if (fTextPanel.getSelectionStart() != oldText.length()) {
-                errln("setText didn't result in correct selection");
+                reportError("setText didn't result in correct selection");
             }
             if (fTextPanel.getTextLength() != oldText.length()) {
-                errln("length incorrect after setText");
+                reportError("length incorrect after setText");
             }
         }
         
@@ -489,12 +496,12 @@ public final class TestTextPanel extends TestFmwk {
             fTextPanel.setCommandLogSize(BIG_COMMAND_LOG_SIZE);
             
             if (fTextPanel.canRedo()) {
-                errln("canRedo after setCommandLogSize");
+                reportError("canRedo after setCommandLogSize");
             }
             fListener.assertNotExpectingEvents(iterationCount, exp);
         //}
         //catch(Error e) {
-        //    logln("iterationCount="+iterationCount+";  expexting="+exp);
+        //    logMessage("iterationCount="+iterationCount+";  expexting="+exp);
         //    throw e;
         //}
 
@@ -526,17 +533,17 @@ public final class TestTextPanel extends TestFmwk {
             fListener.assertNotExpectingEvents();
         }
         if (!fTextPanel.canUndo()) {
-            errln("Command log is too small");
+            reportError("Command log is too small");
         }
         
         fListener.allowAll();
         fTextPanel.undo();
         if (fTextPanel.canUndo()) {
-            errln("Command log is too large");
+            reportError("Command log is too large");
         }
 
         if (fTextPanel.getTextLength() != origLength * insText.length()) {
-            errln("Text length was not restored");
+            reportError("Text length was not restored");
         }
 
         for (int i=0; i < BIG_COMMAND_LOG_SIZE; i++) {
@@ -544,11 +551,11 @@ public final class TestTextPanel extends TestFmwk {
         }
 
         if (fTextPanel.getTextLength() != origLength+BIG_COMMAND_LOG_SIZE) {
-            errln("Text length was not restored after redo");
+            reportError("Text length was not restored after redo");
         }
 
         if (fTextPanel.canRedo()) {
-            errln("Should not be able to redo");
+            reportError("Should not be able to redo");
         }
 
         fTextPanel.undo();
@@ -556,27 +563,27 @@ public final class TestTextPanel extends TestFmwk {
         fTextPanel.setCommandLogSize(SMALL_COMMAND_LOG_SIZE);
 
         if (fTextPanel.canRedo()) {
-            errln("canRedo after setCommandLogSize(small)");
+            reportError("canRedo after setCommandLogSize(small)");
         }
 
         for (int i=0; i < SMALL_COMMAND_LOG_SIZE; i++) {
             if (!fTextPanel.canUndo()) {
-                errln("should be able to undo");
+                reportError("should be able to undo");
             }
             fTextPanel.undo();
         }
         if (fTextPanel.canUndo()) {
-            errln("should not be able to undo after setCommandLogSize(small)");
+            reportError("should not be able to undo after setCommandLogSize(small)");
         }
         if (!fTextPanel.canRedo()) {
-            errln("why can't this redo???");
+            reportError("why can't this redo???");
         }
         fTextPanel.redo();
 
         fTextPanel.clearCommandLog();
 
         if (fTextPanel.canUndo() || fTextPanel.canRedo()) {
-            errln("Command log wasn't cleared");
+            reportError("Command log wasn't cleared");
         }
     }
 
@@ -594,29 +601,29 @@ public final class TestTextPanel extends TestFmwk {
                 }
             });
             if (!fTextPanel.clipboardNotEmpty()) {
-                errln("MTextPanel doesn't recognize string content.");
+                reportError("MTextPanel doesn't recognize string content.");
             }
 
             fTextPanel.setCaretPosition(fTextPanel.getSelectionStart());
             int oldLength = fTextPanel.getTextLength();
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != oldLength + STRING_CONTENT.length()) {
-                errln("Text length is wrong after paste.");
+                reportError("Text length is wrong after paste.");
             }
 
             if (!fTextPanel.canUndo()) {
-                errln("canUndo should be true");
+                reportError("canUndo should be true");
             }
             fTextPanel.undo();
             if (fTextPanel.getTextLength() != oldLength) {
-                errln("Length is wrong after undo");
+                reportError("Length is wrong after undo");
             }
             if (!fTextPanel.canRedo()) {
-                errln("canRedo should be true");
+                reportError("canRedo should be true");
             }
             fTextPanel.redo();
             if (fTextPanel.getTextLength() != oldLength + STRING_CONTENT.length()) {
-                errln("Text length is wrong after redo.");
+                reportError("Text length is wrong after redo.");
             }
         }
 
@@ -624,14 +631,14 @@ public final class TestTextPanel extends TestFmwk {
         fTextPanel.selectAll();
         fTextPanel.clear();
         if (fTextPanel.getTextLength() != 0) {
-            errln("Length is nonzero after clear");
+            reportError("Length is nonzero after clear");
         }
         if (!fTextPanel.canUndo()) {
-            errln("canUndo should be true");
+            reportError("canUndo should be true");
         }
         fTextPanel.undo();
         if (fTextPanel.getTextLength() != origLength) {
-            errln("Old text not restored");
+            reportError("Old text not restored");
         }
 
         if (origLength > 0) {
@@ -639,22 +646,22 @@ public final class TestTextPanel extends TestFmwk {
             fTextPanel.select(0, 1);
             fTextPanel.cut();
             if (fTextPanel.getTextLength() != origLength-1) {
-                errln("Length wrong after cut");
+                reportError("Length wrong after cut");
             }
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != origLength) {
-                errln("Length wrong after paste");
+                reportError("Length wrong after paste");
             }
             fTextPanel.select(0, origLength);
             fTextPanel.copy();
             fTextPanel.setCaretPosition(0);
             fTextPanel.paste();
             if (fTextPanel.getTextLength() != 2*origLength) {
-                errln("Length wrong after paste");
+                reportError("Length wrong after paste");
             }
             fTextPanel.undo();
             if (fTextPanel.getTextLength() != origLength) {
-                errln("Length wrong after undo");
+                reportError("Length wrong after undo");
             }
         }
     }
@@ -665,7 +672,7 @@ public final class TestTextPanel extends TestFmwk {
         fTextPanel.setModified(modified);
         for (int i=0; i < depth; i++) {
             if (!fTextPanel.canUndo()) {
-                errln("Panel cannot undo at valid depth.  Depth=" + i);
+                reportError("Panel cannot undo at valid depth.  Depth=" + i);
             }
             fTextPanel.undo();
             fTextPanel.setModified(modified);
@@ -673,13 +680,13 @@ public final class TestTextPanel extends TestFmwk {
 
         // check that all mod flags are false:
         if (fTextPanel.isModified() != modified) {
-            errln("isModified is not correct");
+            reportError("isModified is not correct");
         }
 
         for (int i=0; i < depth; i++) {
             fTextPanel.redo();
             if (fTextPanel.isModified() != modified) {
-                errln("isModified is not correct");
+                reportError("isModified is not correct");
             }
         }
     }
@@ -705,7 +712,7 @@ public final class TestTextPanel extends TestFmwk {
         }
 
         if (fTextPanel.getTextLength() != oldLength) {
-            errln("Undo did not restore old text.");
+            reportError("Undo did not restore old text.");
         }
     }
 
@@ -767,7 +774,7 @@ public final class TestTextPanel extends TestFmwk {
                 break;
             
             default:
-                errln("Invalid operation!");
+                reportError("Invalid operation!");
         }
         fListener.assertNotExpectingEvents();
         fListener.allowAll();
@@ -838,7 +845,7 @@ public final class TestTextPanel extends TestFmwk {
                 fListener.assertNotExpectingEvents(i, false);
             //}
             //catch(Error e) {
-            //    logln("i="+i+"; typedChar="+Integer.toHexString(typedChar));
+            //    logMessage("i="+i+"; typedChar="+Integer.toHexString(typedChar));
             //    throw e;
             //}
         }
