@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.155 2002/02/14 19:51:22 yves-oss Exp $
+dnl $Id: configure.in,v 1.156 2002/02/20 22:28:44 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -546,9 +546,8 @@ AC_CHECK_TYPE(int16_t,signed short)
 AC_CHECK_TYPE(uint16_t,unsigned short)
 AC_CHECK_TYPE(int32_t,signed long)
 AC_CHECK_TYPE(uint32_t,unsigned long)
-dnl Not sure if this is a good idea to have in ICU
-AC_CHECK_TYPE(int64_t,signed long)
-AC_CHECK_TYPE(uint64_t,unsigned long)
+AC_CHECK_TYPE(int64_t,signed long long)
+AC_CHECK_TYPE(uint64_t,unsigned long long)
 
 if test $ac_cv_type_int8_t = no; then
 HAVE_INT8_T=0
@@ -767,8 +766,10 @@ AC_ARG_WITH(library-suffix,
 	[ICULIBSUFFIX="${withval}"],
 	[ICULIBSUFFIX=])
 msg=$ICULIBSUFFIX
-if test x"$msg" = x; then
+U_HAVE_ICULIBSUFFIXCNAME=1
+if test "$msg" = ""; then
     msg=none
+    U_HAVE_ICULIBSUFFIXCNAME=0
 fi
 AC_MSG_RESULT($msg)
 AC_SUBST(ICULIBSUFFIX)
@@ -778,6 +779,7 @@ then
     ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
 fi
 changequote([, ])dnl
+AC_SUBST(U_HAVE_ICULIBSUFFIXCNAME)
 AC_SUBST(ICULIBSUFFIXCNAME)
 
 dnl Enable/disable tests
