@@ -231,7 +231,7 @@ void writeConverterData(UConverterSharedData *mySharedData,
     sz2 = udata_finish(mem, status);
     if(size != sz2)
     {
-        fprintf(stderr, "error: wrote %ld bytes to the .cnv file but counted %ld bytes\n", sz2, size);
+        fprintf(stderr, "error: wrote %d bytes to the .cnv file but counted %d bytes\n", sz2, size);
         *status=U_INTERNAL_PROGRAM_ERROR;
     }
     if(VERBOSE)
