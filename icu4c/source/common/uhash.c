@@ -792,7 +792,7 @@ _uhash_put(UHashtable *hash,
     }
     assert(hash != NULL);
     /* Cannot always check pointer here or iSeries sees NULL every time. */
-    if ((hint & HINT_KEY_POINTER) && value.pointer == NULL) {
+    if (value.integer == 0) {
         /* Disallow storage of NULL values, since NULL is returned by
          * get() to indicate an absent key.  Storing NULL == removing.
          */
