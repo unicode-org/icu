@@ -24,33 +24,47 @@ public:
     virtual ~ScriptCompositeFontInstance();
 
     /**
-     * This method is provided so that clients can tell if
-     * a given LEFontInstance is an instance of a composite
-     * font.
-     * 
-     * @return <code>true</code> if the instance represents a composite font, <code>false</code> otherwise.
+     * Get a physical font which can render the given text. For composite fonts,
+	 * if there is no single physical font which can render all of the text,
+	 * return a physical font which can render an initial substring of the text,
+	 * along with the limit offset of that substring.
+	 *
+	 * Internally, the LayoutEngine works with runs of text all in the same
+	 * font and script, so it is best to call this method with text which is
+	 * in a single script, passing the script code in as a hint. If you don't
+	 * know the script of the text, you can pass <code>zyyyScriptCode</code>,
+	 * which is the script code for characters used in more than one script.
+	 *
+	 * The default implementation of this method is intended for instances of
+	 * <code>LEFontInstance</code> which represent a physical font. It returns
+	 * <code>this</code> and indicates that the entire string can be rendered.
+	 *
+	 * Sublcasses which implement composite fonts must override this method.
+	 * Where it makes sense, they should use the script code as a hint to render
+	 * characters from the COMMON script in the font which is used for the given
+	 * script. For example, if the input text is a series of Arabic words separated
+	 * by spaces, and the script code passed in is <code>arabScriptCode</code> you
+	 * should return the font used for Arabic characters for all of the text.
      *
+     * @param chars   - the array of Unicode characters.
+     * @param start   - a pointer to the starting offset in the text. On exit this
+	 *                  will be set the the limit offset of the text which can be
+	 *                  rendered using the returned font.
+     * @param limit   - the limit offset for the input text.
+     * @param script  - the script hint.
+     * @param success - set to an error code if the arguments are illegal, or no font
+     *                  can be returned for some reason. May also be set to
+     *                  <code>LE_NO_SUBFONT_WARNING</code> if there is no subfont which
+     *                  can render the text.
+     *
+     * @return an <code>LEFontInstance</code> for the sub font which can render the characters, or
+     *         <code>NULL</code> if there is an error.
+     *
+	 * @see LEScripts.h
+	 *
      * @draft ICU 2.6
      */
-    virtual le_bool isComposite() const;
-
-    /**
-     * Get a sub-font for a run of text from a composite font. This method examines the
-     * given text, finding a run of text which can all be rendered
-     * using the same sub-font. Subclassers should try to keep all the text in a single
-     * sub-font if they can.
-     *
-     * @param chars  - the array of unicode characters
-     * @param offset - a pointer to the starting offset in the text. This will be
-     *                 set to the limit offset of the run on exit.
-     * @param count  - the number of characters in the array. Can be used as a hint for selecting a sub-font.
-     * @param script - the script of the characters.
-     *
-     * @return an <code>LEFontInstance</code> for the sub font which can render the characters.
-     *
-     * @draft ICU 2.6
-     */
-    const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const;
+    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit, le_int32 script, LEErrorCode &success) const;
 
     /**
      * This method maps a single character to a glyph index, using the
@@ -86,14 +100,31 @@ public:
 
     float getScaleFactorY() const;
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 protected:
     FontMap *fFontMap;
-};
 
-inline le_bool ScriptCompositeFontInstance::isComposite() const
-{
-    return true;
-}
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
+};
 
 inline const void *ScriptCompositeFontInstance::getFontTable(LETag tableTag) const
 {

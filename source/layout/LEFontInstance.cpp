@@ -12,9 +12,28 @@
  */
 
 #include "LETypes.h"
+#include "LEScripts.h"
 #include "LEFontInstance.h"
 
 U_NAMESPACE_BEGIN
+
+const char LEFontInstance::fgClassID=0;
+
+const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit,
+                                                       le_int32 script, LEErrorCode &success) const
+{
+	if (LE_FAILURE(success)) {
+		return NULL;
+	}
+
+	if (chars == NULL || *start < 0 || limit < 0 || *start >= limit || script < 0 || script >= scriptCodeCount) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return NULL;
+	}
+
+    *start = limit;
+    return this;
+}
 
 void LEFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count,
                                       le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const
