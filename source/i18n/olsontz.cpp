@@ -130,14 +130,18 @@ static void dayToFields(double day, int32_t& year, int32_t& month,
 //----------------------------------------------------------------------
 
 /**
- * Default constructor
+ * Default constructor.  Creates a time zone with an empty ID and
+ * a fixed GMT offset of zero.
  */
 OlsonTimeZone::OlsonTimeZone() : finalZone(0), finalYear(INT32_MAX) {
     constructEmpty();
 }
 
+/**
+ * Construct a GMT+0 zone with no transitions.  This is done when a
+ * constructor fails so the resultant object is well-behaved.
+ */
 void OlsonTimeZone::constructEmpty() {
-    // Construct a GMT+0 zone with no transitions
     transitionCount = 0;
     typeCount = 1;
     transitionTimes = typeOffsets = ZEROS;
@@ -146,6 +150,10 @@ void OlsonTimeZone::constructEmpty() {
 
 /**
  * Construct from a resource bundle
+ * @param top the top-level zoneinfo resource bundle.  This is used
+ * to lookup the rule that `res' may refer to, if there is one.
+ * @param res the resource bundle of the zone to be constructed
+ * @param ec input-output error code
  */
 OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
@@ -179,7 +187,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         r = ures_getByIndex(res, 1, NULL, &ec);
         typeOffsets = ures_getIntVector(r, &i, &ec);
         ures_close(r);
-        if ((i<2 || i>0x7FFF || ((i&1)!=0)) && U_SUCCESS(ec)) {
+        if ((i<2 || i>0x7FFE || ((i&1)!=0)) && U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;
         }
         typeCount = (int16_t) i >> 1;
@@ -193,6 +201,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
             ec = U_INVALID_FORMAT_ERROR;
         }
 
+        // Process final rule and data, if any
         if (size == 5) {
             UnicodeString ruleid = ures_getUnicodeStringByIndex(res, 3, &ec);
             r = ures_getByIndex(res, 4, NULL, &ec);
@@ -278,10 +287,10 @@ OlsonTimeZone::~OlsonTimeZone() {
 UBool OlsonTimeZone::operator==(const TimeZone& other) const {
     const OlsonTimeZone* z = (const OlsonTimeZone*) &other;
 
-    // typeData points into memory-mapped or DLL space, so if two
-    // zones are the same, their pointers will be equal.
     return TimeZone::operator==(other) &&
-        // [sic] pointer comparison:
+        // [sic] pointer comparison: typeData points into
+        // memory-mapped or DLL space, so if two zones have the same
+        // pointer, they are equal.
         (typeData == z->typeData ||
          // If the pointers are not equal, the zones may still
          // be equal if their rules and transitions are equal
@@ -389,6 +398,9 @@ int32_t OlsonTimeZone::getRawOffset() const {
     return raw;
 }
 
+/**
+ * TimeZone API.
+ */
 void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
                               int32_t& dstoff, UErrorCode& ec) const {
     if (U_FAILURE(ec)) {
@@ -396,23 +408,23 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
     }
 
     int32_t year, month, dom, dow;
-    double t = uprv_floor(date / U_MILLIS_PER_SECOND);
-    double d = uprv_floor(date / U_MILLIS_PER_DAY);
+    double secs = uprv_floor(date / U_MILLIS_PER_SECOND);
+    double days = uprv_floor(date / U_MILLIS_PER_DAY);
 
-    dayToFields(d, year, month, dom, dow);
+    dayToFields(days, year, month, dom, dow);
 
     if (year > finalYear) { // [sic] >, not >=; see above
         U_ASSERT(finalZone != 0);
-        int32_t millis = (int32_t) (date - d * U_MILLIS_PER_DAY);
+        int32_t millis = (int32_t) (date - days * U_MILLIS_PER_DAY);
         rawoff = finalZone->getRawOffset();
 
         if (!local) {
             // Adjust from GMT to local
             date += rawoff;
-            double d2 = uprv_floor(date / U_MILLIS_PER_DAY);
-            millis = (int32_t) (date - d2 * U_MILLIS_PER_DAY);
-            if (d2 != d) {
-                dayToFields(d2, year, month, dom, dow);
+            double days2 = uprv_floor(date / U_MILLIS_PER_DAY);
+            millis = (int32_t) (date - days2 * U_MILLIS_PER_DAY);
+            if (days2 != days) {
+                dayToFields(days2, year, month, dom, dow);
             }
         }
 
@@ -422,7 +434,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
         return;
     }
 
-    int16_t i = findTransition(t, local);
+    int16_t i = findTransition(secs, local);
     rawoff = rawOffset(i) * U_MILLIS_PER_SECOND;
     dstoff = dstOffset(i) * U_MILLIS_PER_SECOND;
 }
@@ -473,17 +485,17 @@ int16_t OlsonTimeZone::findTransition(double time, UBool local) const {
  * TimeZone API.
  */
 UBool OlsonTimeZone::useDaylightTime() const {
-    // For most clients, if DST was observed in 1942 (for example) but
-    // has never been observed from 1943 to the present, most clients
-    // expect this method to return FALSE.  This method determines
-    // whether DST is in use in the current year (at any point in the
-    // year) and returns TRUE if so.
+    // If DST was observed in 1942 (for example) but has never been
+    // observed from 1943 to the present, most clients will expect
+    // this method to return FALSE.  This method determines whether
+    // DST is in use in the current year (at any point in the year)
+    // and returns TRUE if so.
 
-    int32_t d = floorDivide(uprv_getUTCtime(), SECONDS_PER_DAY); // epoch days
+    int32_t days = floorDivide(uprv_getUTCtime(), SECONDS_PER_DAY); // epoch days
 
     int32_t year, month, dom, dow;
     
-    dayToFields(d, year, month, dom, dow);
+    dayToFields(days, year, month, dom, dow);
 
     if (year > finalYear) { // [sic] >, not >=; see above
         U_ASSERT(finalZone != 0 && finalZone->useDaylightTime());
