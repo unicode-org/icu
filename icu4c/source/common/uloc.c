@@ -2286,7 +2286,8 @@ uloc_getDisplayName(const char *locale,
               dest[length + length3]=0x2c;
               dest[length + length3+1]=0x20;
             }
-            length3++;
+            length3++; /* ',' */
+            length3++; /* ' ' */ 
           }
     }
     uenum_close(keywordEnum);
