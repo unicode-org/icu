@@ -11,7 +11,12 @@
  *  of converters and related structures.
  *  uses uconv_io.h routines to access disk information
  *  is used by ucnv.h to implement public API create/delete/flushCache routines
- */
+ * Modification History:
+ * 
+ *   Date        Name        Description
+ * 
+ *   06/20/2000  helena      OS/400 port changes; mostly typecast.
+*/
 
 
 #include "ucnv_io.h"
@@ -415,7 +420,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
     const UConverterStaticData *source = (const UConverterStaticData *) raw;
     UConverterSharedData *data;
-    UConverterType type = source->conversionType;
+    UConverterType type = (UConverterType)source->conversionType;
 
     if(U_FAILURE(*status))
         return NULL;

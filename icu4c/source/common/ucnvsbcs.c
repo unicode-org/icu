@@ -14,6 +14,7 @@
 *   Change history:
 *
 *   05/09/00    helena      Added implementation to handle fallback mappings.
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 */
 
 #include "unicode/utypes.h"
@@ -29,7 +30,7 @@
 static void
 _SBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
     const uint8_t *oldraw = raw;
-    sharedData->table->sbcs.toUnicode = (uint16_t*)raw;
+    sharedData->table->sbcs.toUnicode = (UChar *)raw;
     raw += sizeof(uint16_t)*256; oldraw = raw;
     ucmp8_initFromData(&sharedData->table->sbcs.fromUnicode, &raw, pErrorCode);
     if (sharedData->staticData->hasFromUnicodeFallback == TRUE)
@@ -44,7 +45,7 @@ _SBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErr
         if(((raw-oldraw)&3)!=0) {
             raw+=4-((raw-oldraw)&3);    /* pad to 4 */
         }
-        sharedData->table->sbcs.toUnicodeFallback = (uint16_t*)raw;
+        sharedData->table->sbcs.toUnicodeFallback = (UChar *)raw;
     }
 }
 

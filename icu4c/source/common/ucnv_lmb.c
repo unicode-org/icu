@@ -10,6 +10,11 @@
 *
 *   created on: 2000feb09
 *   created by: Brendan Murray
+* Modification History:
+* 
+*   Date        Name        Description
+* 
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 */
 
 #include "unicode/utypes.h"
@@ -227,7 +232,7 @@ ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
    
    if (pTable->uniStartRange == 0xFFFF) 
    {
-      *err = ULMBCS_INVALIDCHAR;
+      *err = (UErrorCode)ULMBCS_INVALIDCHAR;
    }
    return ULMBCS_GRP_UNICODE;
 }
@@ -345,7 +350,7 @@ int LMBCSConversionWorker (
    uint8_t mbChar [ULMBCS_CHARSIZE_MAX];
    uint8_t * pmbChar = mbChar;
    UBool isDoubleByteGroup = (group >= ULMBCS_DOUBLEOPTGROUP) ? TRUE : FALSE;
-   UErrorCode localErr = 0;
+   UErrorCode localErr = U_ZERO_ERROR;
    int bytesConverted =0;
 
    MyAssert(xcnv);
@@ -974,7 +979,7 @@ static void _LMBCSOpenWorker(UConverter*  _this,
                        ulmbcs_grp_t OptGroup
                        )
 {
-   UConverterDataLMBCS * extraInfo = uprv_malloc (sizeof (UConverterDataLMBCS));
+   UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *)uprv_malloc (sizeof (UConverterDataLMBCS));
    
 
    if(extraInfo != NULL)

@@ -4,7 +4,7 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* File CRESBUND.CPP
+* File URESBUND.C
 *
 * Modification History:
 *
@@ -14,6 +14,7 @@
 *   07/20/99    stephen     Changed for UResourceBundle typedef'd to void*
 *   11/09/99    weiv            Added ures_getLocale()
 *   March 2000  weiv        Total overhaul - using data in DLLs
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 *******************************************************************************
 */
 
@@ -384,7 +385,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
  */
 U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status) {
     int32_t en_US = uprv_strcmp(localeID, "en_US");
-    UResourceBundle *r = uprv_malloc(sizeof(UResourceBundle));
+    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
     if(r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -418,7 +419,7 @@ U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* local
 
 UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB) {
     if(resB == NULL) {
-        resB = uprv_malloc(sizeof(UResourceBundle));
+        resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         resB->fIsStackObject = FALSE;
     } else {
         resB->fIsStackObject = TRUE;
@@ -446,7 +447,7 @@ UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original) {
     if(original != NULL) {
         if(r == NULL) {
             isStackObject = FALSE;
-            r = uprv_malloc(sizeof(UResourceBundle));
+            r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         } else {
             isStackObject = TRUE;
         }
@@ -502,6 +503,8 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
             return NULL;
             break;
     }
+
+	return NULL;
 }
 
 U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
@@ -529,6 +532,7 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
     break;
   }
 
+  return NULL;
 }
 
 U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *status) {
@@ -546,9 +550,9 @@ U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *s
 
 U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
   if(resB == NULL) {
-    return RES_BOGUS;
+    return (UResType) RES_BOGUS;
   }
-  return(RES_GET_TYPE(resB->fRes));
+  return (UResType) (RES_GET_TYPE(resB->fRes));
 }
 
 U_CAPI const char * U_EXPORT2 ures_getKey(UResourceBundle *resB) {
@@ -622,8 +626,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
       return NULL;
       break;
     }
+
   }
-  /*return NULL;*/
+  return NULL;
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UResourceBundle *fillIn, UErrorCode *status) {
@@ -669,6 +674,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
             break;
         }
     }
+	return NULL;
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, int32_t indexR, UResourceBundle *fillIn, UErrorCode *status) {
@@ -713,6 +719,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
         *status = U_MISSING_RESOURCE_ERROR;
         return NULL;
     }
+	return NULL;
 }
 
 U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status) {
@@ -757,6 +764,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
         *status = U_MISSING_RESOURCE_ERROR;
         return NULL;
     }
+	return NULL;
 }
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
@@ -803,6 +811,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         *status = U_RESOURCE_TYPE_MISMATCH;
         return NULL;
     }
+	return NULL;
 }
 
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
@@ -851,6 +860,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
         *status = U_RESOURCE_TYPE_MISMATCH;
         return NULL;
     }
+	return NULL;
 }
 
 
@@ -879,6 +889,7 @@ U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UE
         *status = U_INTERNAL_PROGRAM_ERROR;
         return NULL;
     }
+	return NULL;
 }
 
 static void entryCloseInt(UResourceDataEntry *resB) {
@@ -972,7 +983,7 @@ U_CAPI UResourceBundle* ures_open(const char* path,
                     UErrorCode* status)
 {
     UResourceDataEntry *hasData = NULL;
-    UResourceBundle *r = uprv_malloc(sizeof(UResourceBundle));
+    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
     if(r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;

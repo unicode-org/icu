@@ -4,7 +4,7 @@
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
-* File UCHAR.CPP
+* File UCHAR.C
 *
 * Modification History:
 *
@@ -16,6 +16,7 @@
 *   8/19/1999   srl         Upgraded scripts to Unicode3.0 
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
 *   01/11/2000  helena      Renamed u_getVersion to u_getUnicodeVersion.
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 ********************************************************************************************
 */
 #include "unicode/utypes.h"
@@ -637,7 +638,7 @@ U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c) {   
     uint32_t props=GET_PROPS(c);
     if(props!=0) {
-        return (props>>BIDI_SHIFT)&0x1f;
+        return (UCharDirection)(props>>BIDI_SHIFT)&0x1f;
     } else {
         return U_BOUNDARY_NEUTRAL;
     }
