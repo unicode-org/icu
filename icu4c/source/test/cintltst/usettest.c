@@ -167,7 +167,13 @@ static void TestAPI() {
     uset_set(set, 0x0067, 0x0069);
 
     /* [a-c g-i] */
+    if (uset_containsSome(set, set2)) {
+        log_err("set should not contain some of set2 yet\n");
+    }
     uset_complementAll(set, set2);
+    if (!uset_containsSome(set, set2)) {
+        log_err("set should contain some of set2\n");
+    }
     expect(set, "abcghi", "def{bc}", NULL);
 
     /* [g-i] */
