@@ -778,7 +778,7 @@ void TestMessageFormat::testParse()
         it_errln("*** MSG parse (ustring, Formattable, parsepos ) error.");
     }else{
         it_out << "MSG parse -- count: " << count << endl;
-        const Formattable* tmpfmt = fmta.getArray( count );
+        fmta.getArray(count);
         if (count != 2) {
             it_errln("*** MSG parse (ustring, Formattable, parsepos ) count err.");
         }else{
