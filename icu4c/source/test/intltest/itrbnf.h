@@ -20,6 +20,7 @@ class IntlTestRBNF : public IntlTest {
   // IntlTest override
   virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par);
 
+#if U_HAVE_RBNF
   /** 
    * Perform an API test
    */
@@ -30,12 +31,14 @@ class IntlTestRBNF : public IntlTest {
    */
   virtual void TestFractionalRuleSet();
 
+#if 0
   /**
    * Perform API tests on llong
    */
   virtual void TestLLong();
   virtual void TestLLongConstructors();
   virtual void TestLLongSimpleOperators();
+#endif
 
   /**
    * Perform a simple spot check on the English spellout rules
@@ -85,6 +88,14 @@ class IntlTestRBNF : public IntlTest {
  protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing);
   virtual void doLenientParseTest(RuleBasedNumberFormat* formatter, const char* testData[][2]);
+
+/* U_HAVE_RBNF */
+#else
+
+  virtual void TestRBNFDisabled();
+
+/* U_HAVE_RBNF */
+#endif
 };
 
 // endif ITRBNF_H

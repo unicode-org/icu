@@ -137,8 +137,11 @@ unum_open(  UNumberFormatStyle    style,
         break;
 
       case UNUM_SPELLOUT:
+#if U_HAVE_RBNF
         return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
-
+#else
+		// fall through
+#endif
       default:
         *status = U_UNSUPPORTED_ERROR;
         return 0;
