@@ -3172,12 +3172,18 @@ ucol_strcoll(    const    UCollator    *coll,
         UnicodeString sourceDecomp, targetDecomp;
 
         int8_t comparison;
+        UErrorCode status = U_ZERO_ERROR;
         
-        Normalizer::normalize(UnicodeString(source, sourceLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, sourceDecomp,  status);
+        /* 
+        synwee : called c++ codes since normalization is implemented in c++
+        */
+        Normalizer::EMode mode = Normalizer::getNormalizerEMode(
+                                                 ucol_getNormalization(coll), status);
+        Normalizer::normalize(UnicodeString(source, sourceLength), mode, 0, 
+                              sourceDecomp,  status);
 
-        Normalizer::normalize(UnicodeString(target, targetLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, targetDecomp,  status);
+        Normalizer::normalize(UnicodeString(target, targetLength), mode, 0, 
+                              targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
 
@@ -3708,11 +3714,15 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 
         int8_t comparison;
         
-        Normalizer::normalize(UnicodeString(sColl.stringP, sColl.len-sColl.stringP-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, sourceDecomp,  status);
+        /* synwee : implemented in c++ since normalizer is implemented there */
+        Normalizer::EMode mode = Normalizer::getNormalizerEMode(
+                                                 ucol_getNormalization(coll), status);
+        
+        Normalizer::normalize(UnicodeString(sColl.stringP, sColl.len-sColl.stringP-1), 
+                              mode, 0, sourceDecomp,  status);
 
-        Normalizer::normalize(UnicodeString(tColl.stringP, tColl.len-tColl.stringP-1), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, targetDecomp,  status);
+        Normalizer::normalize(UnicodeString(tColl.stringP, tColl.len-tColl.stringP-1), 
+                              mode, 0, targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
 
