@@ -234,27 +234,29 @@ uprv_comparePropertyNames(const char *name1, const char *name2);
 #define _Pf     FLAG(U_FINAL_PUNCTUATION)
 
 /** Some code points. @internal */
-#define TAB     0x0009
-#define LF      0x000a
-#define FF      0x000c
-#define CR      0x000d
-#define _A      0x0041
-#define _Z      0x005a
-#define _a      0x0061
-#define _z      0x007a
-#define DEL     0x007f
-#define NL      0x0085
-#define NBSP    0x00a0
-#define CGJ     0x034f
-#define HAIRSP  0x200a
-#define ZWNJ    0x200c
-#define ZWJ     0x200d
-#define RLM     0x200f
-#define NNBSP   0x202f
-#define WJ      0x2060
-#define INHSWAP 0x206a
-#define NOMDIG  0x206f
-#define ZWNBSP  0xfeff
+enum {
+    TAB     =0x0009,
+    LF      =0x000a,
+    FF      =0x000c,
+    CR      =0x000d,
+    _A      =0x0041,
+    _Z      =0x005a,
+    _a      =0x0061,
+    _z      =0x007a,
+    DEL     =0x007f,
+    NL      =0x0085,
+    NBSP    =0x00a0,
+    CGJ     =0x034f,
+    HAIRSP  =0x200a,
+    ZWNJ    =0x200c,
+    ZWJ     =0x200d,
+    RLM     =0x200f,
+    NNBSP   =0x202f,
+    WJ      =0x2060,
+    INHSWAP =0x206a,
+    NOMDIG  =0x206f,
+    ZWNBSP  =0xfeff
+};
 
 /**
  * Is this character a "white space" in the sense of ICU rule parsers?
