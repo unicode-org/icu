@@ -1195,6 +1195,7 @@
 #define PairPositioningSubtable PairPositioningSubtable_2_4
 #define ParseData ParseData_2_4
 #define ParsePosition ParsePosition_2_4
+#define PropertyAliases PropertyAliases_2_4
 #define Quantifier Quantifier_2_4
 #define RBBIDataWrapper RBBIDataWrapper_2_4
 #define RBBINode RBBINode_2_4
@@ -1289,10 +1290,11 @@
 #define UppercaseTransliterator UppercaseTransliterator_2_4
 #define ValueRecord ValueRecord_2_4
 #define _UF _UF_2_4
-#define chooseNameInGroup chooseNameInGroup_2_4
-#define getValueMap getValueMap_2_4
+#define gNullFilterClassID gNullFilterClassID_2_4
+#define gUnicodeAndFilterClassID gUnicodeAndFilterClassID_2_4
+#define gUnicodeNotFilterClassID gUnicodeNotFilterClassID_2_4
+#define gUnicodeOrFilterClassID gUnicodeOrFilterClassID_2_4
 #define locale_set_default_internal locale_set_default_internal_2_4
-#define mungeCharName mungeCharName_2_4
 #define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_4
 #define uprv_growTable uprv_growTable_2_4
 #define uprv_uca_addContraction uprv_uca_addContraction_2_4
