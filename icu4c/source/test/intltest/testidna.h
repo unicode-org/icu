@@ -38,6 +38,7 @@ U_CDECL_END
 
 // test the API
 
+class NamePrepTransform;
 
 /**
  * @test
@@ -60,6 +61,7 @@ public:
     void TestIDNAMonkeyTest();
     void TestConformance();
 
+    static NamePrepTransform* prep;
 private:
     void testToASCII(const char* testName, TestFunc func);
     void testToUnicode(const char* testName, TestFunc func);
@@ -97,6 +99,7 @@ private:
                          const char* IDNToUnicodeName, TestFunc IDNToUnicode,
                          const char* toUnicodeName, TestFunc toUnicode
                          );
+
 };
 
 // test the TRIE data structure

@@ -64,7 +64,7 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         const UChar* ruleUChar = ures_getStringByKey(bundle, "MapNFKC",&ruleLen, &status);
         UnicodeString rule(ruleUChar, ruleLen);
         
-        mapping = Transliterator::createFromRules("NamePrepTransform", rule,
+        mapping = Transliterator::createFromRules(UnicodeString("NamePrepTransform", ""), rule,
                                                    UTRANS_FORWARD, parseError,status);
 
         //create the unassigned set
