@@ -43,6 +43,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				ProgramDatabaseFile=".\..\..\..\lib\icutu33.pdb"
+				EnableCOMDATFolding="2"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\..\lib\icutu.lib"/>
 			<Tool

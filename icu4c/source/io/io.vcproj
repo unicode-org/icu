@@ -43,6 +43,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\..\..\lib\icuio33.pdb"
+				EnableCOMDATFolding="2"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuio.lib"/>
 			<Tool
