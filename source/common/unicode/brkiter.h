@@ -177,7 +177,7 @@ U_NAMESPACE_BEGIN
  * \endcode
  * </pre>
  */
-class U_I18N_API BreakIterator {
+class U_COMMON_API BreakIterator {
 public:
     virtual ~BreakIterator();
 

@@ -183,7 +183,7 @@ class BreakIterator;
  *
  * @author Richard Gillam
  */
-class U_I18N_API RuleBasedBreakIterator : public BreakIterator {
+class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
 
 public:
     /**

@@ -98,6 +98,14 @@ SOURCE=.\bidi.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\brkdict.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\brkiter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\chariter.cpp
 # End Source File
 # Begin Source File
@@ -111,6 +119,14 @@ SOURCE=.\cstring.c
 # Begin Source File
 
 SOURCE=.\cwchar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi_tbl.cpp
 # End Source File
 # Begin Source File
 
@@ -143,6 +159,14 @@ SOURCE=.\putil.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\rbbi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi_tbl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\resbund.cpp
 # End Source File
 # Begin Source File
@@ -164,6 +188,10 @@ SOURCE=.\ubidiln.c
 # Begin Source File
 
 SOURCE=.\ubidiwrt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ubrk.cpp
 # End Source File
 # Begin Source File
 
@@ -318,6 +346,10 @@ SOURCE=.\ushape.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustrcase.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustrfmt.c
 # End Source File
 # Begin Source File
@@ -365,6 +397,37 @@ InputPath=.\unicode\bidi.h
 
 "..\..\include\unicode\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\brkdict.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\brkiter.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\brkiter.h
+
+"..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\brkiter.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\brkiter.h
+
+"..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\brkiter.h                ..\..\include\unicode
 
 # End Custom Build
 
@@ -440,6 +503,37 @@ SOURCE=.\cstring.h
 # Begin Source File
 
 SOURCE=.\cwchar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\dbbi.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\dbbi.h
+
+"..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\dbbi.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\dbbi.h
+
+"..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\dbbi.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi_tbl.h
 # End Source File
 # Begin Source File
 
@@ -568,6 +662,37 @@ InputPath=.\unicode\pwin32.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\rbbi.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\rbbi.h
+
+"..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\rbbi.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\rbbi.h
+
+"..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\rbbi.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi_tbl.h
 # End Source File
 # Begin Source File
 
@@ -707,6 +832,33 @@ InputPath=.\unicode\ubidi.h
 # Begin Source File
 
 SOURCE=.\ubidiimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ubrk.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ubrk.h
+
+"..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\ubrk.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ubrk.h
+
+"..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\ubrk.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
