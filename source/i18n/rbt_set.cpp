@@ -12,9 +12,11 @@
 #include "unicode/unistr.h"
 #include "cmemory.h"
 
+U_CDECL_BEGIN
 static void U_CALLCONV _deleteRule(void *rule) {
     delete (U_NAMESPACE_QUALIFIER TransliterationRule *)rule;
 }
+U_CDECL_END
 
 // Fill the precontext and postcontext with the patterns of the rules
 // that are masking one another.
