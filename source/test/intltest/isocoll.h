@@ -34,7 +34,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 5 };
 
     CollationISOTest();
-    ~CollationISOTest();
+    virtual ~CollationISOTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // test proper comparing for 3774 entries of ISO 14651 characters

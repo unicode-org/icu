@@ -99,13 +99,13 @@ public:
      * Returns true if "other" is the same as "this"
      * @stable
      */
-    virtual     bool_t          operator==(const CollationElementIterator& other) const;
+    bool_t          operator==(const CollationElementIterator& other) const;
 
     /**
      * Returns true if "other" is not the same as "this".
      * @stable
      */
-    virtual     bool_t          operator!=(const CollationElementIterator& other) const;
+    bool_t          operator!=(const CollationElementIterator& other) const;
 
     /**
      * Resets the cursor to the beginning of the string.
