@@ -1,21 +1,21 @@
-# *******************************************************************************
+# ***************************************************************************
 # *
-# *   Copyright (C) 1995-2001, International Business Machines
+# *   Copyright (C) 1995-2002, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
-# *******************************************************************************
+# ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Feb 23 2001)
-# from source files 34B02346.RPMAP100 and 234634B0.TPMAP100
+# File created by rptp2ucm (compiled on Dec  3 2002)
+# from source files 34B00346.RPMAP100 and 034634B0.TPMAP100
 #
-<code_set_name>               "ibm-9030_P100-2000"
+<code_set_name>               "ibm-838_P100-1995"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
 <subchar>                     \x3F
 <icu:charsetFamily>           "EBCDIC"
-<icu:alias>                   "ibm-9030_STD"
+<icu:alias>                   "ibm-838_STD"
 
 CHARMAP
 <U0000> \x00 |0
