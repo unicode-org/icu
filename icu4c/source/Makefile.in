@@ -96,7 +96,7 @@ install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ READ
 	    $(RM) Makefile.inc && ln -s current/Makefile.inc .
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
-	$(INSTALL_SCRIPT) README $(DESTDIR)$(pkgdatadir)/$(VERSION)/README
+	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/$(VERSION)/README
 
 $(DESTDIR)$(pkglibdir)/$(VERSION)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
