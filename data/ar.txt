@@ -11,9 +11,9 @@ ar {
             "\u0645",
     }
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "2.0" }
             Override { "FALSE" }
-            Sequence { "& \u0361 = \u0640= \u064B= \u064C= \u064D= \u064E= \u064F"
+            Sequence { "[normalization on]& \u0361 = \u0640= \u064B= \u064C= \u064D= \u064E= \u064F"
         "= \u0650= \u0652= \u066D= \u06D6= \u06D7= \u06D8= \u06D9= \u06DA= \u06DB= \u06DC"
         "= \u06DD= \u06DE= \u06DF= \u06E0= \u06E1= \u06E2= \u06E3= \u06E4= \u06E5= \u06E6"
         "= \u06E7= \u06E8= \u06E9= \u06EA= \u06EB= \u06EC= \u06ED& 0 < \u0660 < \u06F0& "
