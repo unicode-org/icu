@@ -98,8 +98,8 @@ unum_open(  UNumberFormatStyle    style,
     }else{
         /* we don't support RBNF patterns yet */
         UParseError tErr;
-        int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-        const UnicodeString pat((UChar*)pattern, len, len);
+        /* UnicodeString can handle the case when patternLength = -1. */
+        const UnicodeString pat(pattern, patternLength);
         DecimalFormatSymbols *syms = 0;
         
         if(parseErr==NULL){
