@@ -284,48 +284,48 @@ public:
 
 #endif /* ICU_LOCID_USE_DEPRECATES */
 
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getEnglish(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getFrench(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getGerman(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getItalian(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getJapanese(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getKorean(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getChinese(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getSimplifiedChinese(void);
-    /** Useful constant for this language. @draft ICU 2.0 */
+    /** Useful constant for this language. @stable */
     static const Locale &getTraditionalChinese(void);
 
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getFrance(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getGermany(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getItaly(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getJapan(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getKorea(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getChina(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getPRC(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getTaiwan(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getUK(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getUS(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getCanada(void);
-    /** Useful constant for this country/region. @draft ICU 2.0 */
+    /** Useful constant for this country/region. @stable */
     static const Locale &getCanadaFrench(void);
 
 
