@@ -116,6 +116,9 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #   define POSIX
 #endif
 
+#ifdef POSIX
+#include <langinfo.h>
+#endif
 /*---------------------------------------------------------------------------
   Universal Implementations
   These are designed to work on all platforms.  Try these, and if they don't
@@ -1403,6 +1406,9 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
   return U_IS_BIG_ENDIAN ? (char*)(d + 1) - n : (char*)d;
 }
 
+U_CAPI const char *
+uprv_defaultCodePageForLocale(const char *locale);
+
 const char* uprv_getDefaultCodepage()
 {
 #if defined(OS400)
@@ -1417,7 +1423,53 @@ const char* uprv_getDefaultCodepage()
   uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
 #elif defined(POSIX)
-  return "LATIN_1";
+    static char codesetName[100];
+    char *name = NULL;
+    char *euro = NULL;
+    char *localeName = NULL;
+ 
+    uprv_memset(codesetName, 0, 100);
+    localeName = setlocale(LC_CTYPE, "");
+    if (localeName != NULL) 
+    {
+        uprv_strcpy(codesetName, localeName);
+        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL) 
+        {
+            /* strip the locale name and look at the suffix only */
+            name++;
+            if ((euro  = (uprv_strchr(name, (int)'@'))) != NULL)
+            {
+               *euro  = 0;
+            }
+            /* if we can find the codset name from setlocale, return that. */
+            if (uprv_strlen(name) != 0) 
+            {
+                return name;
+            }
+        } 
+    }
+    if (strlen(codesetName) != 0) 
+    {
+        uprv_memset(codesetName, 0, 100);
+    }
+#ifdef LINUX
+    if (nl_langinfo(_NL_CTYPE_CODESET_NAME) != NULL)
+        uprv_strcpy(codesetName, nl_langinfo(_NL_CTYPE_CODESET_NAME));     
+#else
+    if (nl_langinfo(CODESET) != NULL)
+        uprv_strcpy(codesetName, nl_langinfo(CODESET));    
+#endif  
+    if (uprv_strlen(codesetName) == 0) 
+    {
+         /* look up in srl's table */
+         uprv_strcpy(codesetName, uprv_defaultCodePageForLocale(localeName));
+     }
+    /* if the table lookup failed, return latin1. */
+    if (uprv_strlen(codesetName) == 0)
+    {
+        uprv_strcpy(codesetName, "LATIN_1");
+    } 
+    return codesetName;
 #else
   return "LATIN_1";
 #endif
@@ -1593,3 +1645,114 @@ u_errorName(UErrorCode code) {
         return "[BOGUS UErrorCode]";
     }
 }
+
+struct
+{
+  char loc[20];
+  char charmap[40];
+} 
+_localeToDefaultCharmapTable [] =
+{
+/*
+  See:         http://czyborra.com/charsets/iso8859.html
+*/
+
+/* xx_XX locales first, so they will match: */
+ { "zh_CN", "gb2312" },  /* Chinese (Simplified) */
+ { "zh_TW", "Big5" },    /* Chinese (Traditional) */
+
+ { "af", "iso-8859-1" },  /* Afrikaans */
+ { "ar", "iso-8859-6" },  /* Arabic */
+ { "be", "iso-8859-5" },  /* Byelorussian */
+ { "bg", "iso-8859-5" },  /* Bulgarian */
+ { "ca", "iso-8859-1" },  /* Catalan */
+ { "cs", "iso-8859-2" },  /* Czech */
+ { "da", "iso-8859-1" },  /* Danish */
+ { "de", "iso-8859-1" },  /* German */
+ { "el", "iso-8859-7" },  /* Greek */ 
+ { "en", "iso-8859-1" },  /* English */
+ { "eo", "iso-8859-3" },  /* Esperanto */
+ { "es", "iso-8859-1" },  /* Spanish */
+ { "et", "iso-8859-4" },  /* Estonian  */
+ { "eu", "iso-8859-1" },  /* basque */
+ { "fi", "iso-8859-1" },  /* Finnish */
+ { "fo", "iso-8859-1" },  /* faroese */
+ { "fr", "iso-8859-1" },  /* French */
+ { "ga", "iso-8859-1" },  /* Irish (Gaelic) */
+ { "gd", "iso-8859-1" },  /* Scottish */
+ { "he", "iso-8859-8" },  /* hebrew */
+ { "hr", "iso-8859-2" },  /* Croatian */
+ { "hu", "iso-8859-2" },  /* Hungarian */
+ { "in", "iso-8859-1" },  /* Indonesian */
+ { "is", "iso-8859-1" },  /* Icelandic */
+ { "it", "iso-8859-1" },  /* Italian  */
+ { "iw", "iso-8859-8" },  /* hebrew */
+ { "ja", "Shift_JIS"  },  /* Japanese [was: ja_JP ] */
+ { "ji", "iso-8859-8" },  /* Yiddish */
+ { "kl", "iso-8859-4" },  /* Greenlandic */
+ { "ko", "euc-kr"     },  /* korean [was: ko_KR ] */
+ { "lt", "iso-8859-4" },  /* Lithuanian */
+ { "lv", "iso-8859-4" },  /* latvian (lettish) */
+ { "mk", "iso-8859-5" },  /* Macedonian */
+ { "mt", "iso-8859-3" },  /* Maltese  */
+ { "nl", "iso-8859-1" },  /* dutch */
+ { "no", "iso-8859-1" },  /* Norwegian */
+ { "pl", "iso-8859-2" },  /* Polish */
+ { "pt", "iso-8859-1" },  /* Portugese */
+ { "rm", "iso-8859-1" },  /* Rhaeto-romance */
+ { "ro", "iso-8859-2" },  /* Romanian */
+ { "ru", "iso-8859-5" },  /* Russian */
+ { "sk", "iso-8859-2" },  /* Slovak  */
+ { "sl", "iso-8859-2" },  /* Slovenian */
+ { "sq", "iso-8859-1" },  /* albanian */
+ { "sr", "iso-8859-5" },  /* Serbian */
+ { "sv", "iso-8859-1" },  /* Swedish */
+ { "sw", "iso-8859-1" },  /* Swahili */
+ { "th", "tis-620"    },  /* Thai [windows-874] */
+ { "tr", "iso-8859-9" },  /* Turkish */
+ { "uk", "iso-8859-5" },  /* pre 1990 Ukranian... see: <http://czyborra.com/charsets/cyrillic.html#KOI8-U>  */
+ { "zh", "Big-5"      },  /* Chinese (Traditional) */
+ {  "",  ""           }
+};
+
+/* Not-used list, overridden old data  */
+#if 0
+/**/ { "ar", "ibm-1256"   }, /* arabic */
+/**/ { "ko", "ibm-949"}, /* korean  */
+/**/ { "ru", "ibm-878"  }, /* Russian- koi8-r */
+/**/ { "sk", "ibm-912"  }, 
+#endif
+
+U_CAPI const char *
+uprv_defaultCodePageForLocale(const char *locale)
+{
+  int32_t i;
+  int32_t locale_len;
+
+  if (locale == NULL) 
+  {
+    return NULL;
+  }
+  locale_len = uprv_strlen(locale);
+
+  if(locale_len < 2)
+    {
+      return NULL; /* non existent. Not a complete check, but it will
+                    * make sure that 'c' doesn't match catalan, etc.
+                    **/
+    }
+  
+  for(i=0; _localeToDefaultCharmapTable[i].loc[0]; i++)
+  {
+    if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc, 
+                    uprv_min(locale_len, 
+                             uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
+       == 0)
+    {
+      return _localeToDefaultCharmapTable[i].charmap;
+    }
+  }
+
+  return NULL;
+}
+
