@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPI.java,v $ 
- * $Date: 2002/08/01 20:27:21 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/02/21 01:49:23 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  **/
@@ -24,9 +24,8 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import com.ibm.icu.util.*;
+import com.ibm.icu.math.BigDecimal;
 import java.util.Locale;
 import java.text.ParsePosition;
 import java.text.Format;
@@ -37,8 +36,58 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     public static void main(String[] args)  throws Exception {
         new IntlTestDecimalFormatAPI().run(args);
     }
+    
+    /**
+     * Problem 1: simply running 
+     * decF4.setRoundingMode(java.math.BigDecimal.ROUND_HALF_UP) does not work 
+     * as decF4.setRoundingIncrement(.0001) must also be run.
+     * Problem 2: decF4.format(8.88885) does not return 8.8889 as expected. 
+     * You must run decF4.format(new BigDecimal(Double.valueOf(8.88885))) in 
+     * order for this to work as expected.
+     * Problem 3: There seems to be no way to set half up to be the default 
+     * rounding mode.
+     * We solved the problem with the code at the bottom of this page however 
+     * this is not quite general purpose enough to include in icu4j. A static
+     * setDefaultRoundingMode function would solve the problem nicely. Also 
+     * decimal places past 20 are not handled properly. A small ammount of work 
+     * would make bring this up to snuff.
+     */
+    public void testJB1871()
+    {
+        // problem 2
+        DecimalFormat dec = new DecimalFormat(",##0.0000");
+        double roundinginc = 0.0001;
+        double number = 8.88885;
+        String expected = "8.8889";
+        
+        dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        dec.setRoundingIncrement(roundinginc);
+        if (!dec.format(number).equals(expected)) {
+            errln("Error formating " + number + ", expected " + expected);
+        }   
+        
+        dec = new DecimalFormat(",##0.0001");
+        dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        if (!dec.format(number).equals(expected)) {
+            errln("Error formating " + number + ", expected " + expected);
+        }  
+        
+        // testing 20 decimal places
+        dec = new DecimalFormat(",##0.00000000000000000001");
+        BigDecimal bignumber = new BigDecimal("8.888888888888888888885");
+        expected = "8.88888888888888888889";
+        
+        dec.setRoundingMode(BigDecimal.ROUND_HALF_UP);
+        if (!dec.format(bignumber).equals(expected)) {
+            errln("Error formating " + bignumber + ", expected " + expected);
+        }   
+        
+    }
 
-    // This test checks various generic API methods in DecimalFormat to achieve 100% API coverage.
+    /** 
+     * This test checks various generic API methods in DecimalFormat to achieve 
+     * 100% API coverage.
+     */
     public void TestAPI()
     {
         logln("DecimalFormat API test---"); logln("");
@@ -213,20 +262,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
         if( ! s3.equals(p2) ) {
             errln("ERROR: toLocalizedPattern() result did not match pattern applied");
         }
-
-        // ======= Test getStaticClassID()
-
-//        logln("Testing instanceof()");
-
-//        try {
- //           NumberFormat test = new DecimalFormat();
-
-//            if (! (test instanceof DecimalFormat)) {
-//                errln("ERROR: instanceof failed");
-//            }
-//        }
-//        catch (Exception e) {
-//            errln("ERROR: Couldn't create a DecimalFormat");
-//        }
     }
 }
+
+

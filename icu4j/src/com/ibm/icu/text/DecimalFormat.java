@@ -5,24 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/12/05 01:21:38 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/02/21 01:49:21 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.Currency;
-import java.text.Format;
 import java.text.ParsePosition;
 import java.text.FieldPosition;
 import java.math.BigInteger;
-import java.util.ResourceBundle;
 import java.util.Locale;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Hashtable;
-import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
 
 /**
  * <code>DecimalFormat</code> is a concrete subclass of
@@ -496,8 +492,9 @@ public class DecimalFormat extends NumberFormat {
 
         // Apply rounding after multiplier
         if (roundingDouble > 0.0) {
-            number = roundingDouble
-                * round(number / roundingDouble, roundingMode, isNegative);
+            // number = roundingDouble
+            //  * round(number / roundingDouble, roundingMode, isNegative);
+            number = round(number, roundingDouble, roundingMode, isNegative);
         }
 
         if (Double.isInfinite(number))
@@ -529,46 +526,74 @@ public class DecimalFormat extends NumberFormat {
             return subformat(result, fieldPosition, isNegative, false);
         }
     }
-
+    
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Round a double value to the nearest integer according to the
      * given mode.
-     * @param a the absolute value of the number to be rounded
+     * Note this is changed from the version in 2.4, since division of doubles
+     * have inaccuracies. jitterbug 1871.
+     * @param number the absolute value of the number to be rounded
+     * @param roundingInc the rounding increment
      * @param mode a BigDecimal rounding mode
      * @param isNegative true if the number to be rounded is negative
      * @return the absolute value of the rounded result
      */
-    private static double round(double a, int mode, boolean isNegative) {
+    private static double round(double number, double roundingInc, 
+                                int mode, boolean isNegative) {
+        double div = number / roundingInc;
         switch (mode) {
         case java.math.BigDecimal.ROUND_CEILING:
-            return isNegative ? Math.floor(a) : Math.ceil(a);
+            return (isNegative ? Math.floor(div) : Math.ceil(div)) 
+                                                                 * roundingInc;
         case java.math.BigDecimal.ROUND_FLOOR:
-            return isNegative ? Math.ceil(a) : Math.floor(a);
+            return (isNegative ? Math.ceil(div) : Math.floor(div)) 
+                                                                 * roundingInc;
         case java.math.BigDecimal.ROUND_DOWN:
-            return Math.floor(a);
+            return (Math.floor(div)) * roundingInc;
         case java.math.BigDecimal.ROUND_UP:
-            return Math.ceil(a);
+            return (Math.ceil(div)) * roundingInc;
         case java.math.BigDecimal.ROUND_HALF_EVEN:
             // We should be able to just return Math.rint(a), but this
             // doesn't work in some VMs.
-            {
-                double f = Math.floor(a);
-                if ((a - f) != 0.5) {
-                    return Math.rint(a);
+            {   double ceildiff = (Math.ceil(div) * roundingInc) - number;
+                double floor = Math.floor(div);
+                double floordiff = number - (floor * roundingInc);
+                if (ceildiff != floordiff) {
+                    return (Math.rint(div)) * roundingInc;
                 }
-                f /= 2.0;
-                return f == Math.floor(f) ? Math.floor(a) : (Math.floor(a) + 1.0);
+                floor /= 2.0;
+                return (floor == Math.floor(floor) ? Math.floor(div) 
+                                                  : (Math.floor(div) + 1.0)) 
+                                                  * roundingInc;
             }
         case java.math.BigDecimal.ROUND_HALF_DOWN:
-            return ((a - Math.floor(a)) <= 0.5) ? Math.floor(a) : Math.ceil(a);
+            {
+                double ceil = Math.ceil(div);
+                double ceildiff = (ceil * roundingInc) - number;
+                double floor = Math.floor(div);
+                double floordiff = number - (floor * roundingInc);
+                if (ceildiff < floordiff) {
+                    return ceil * roundingInc;
+                }
+                return floor * roundingInc;
+            }
         case java.math.BigDecimal.ROUND_HALF_UP:
-            return ((a - Math.floor(a)) < 0.5) ? Math.floor(a) : Math.ceil(a);
+            {
+                double ceil = Math.ceil(div);
+                double ceildiff = (ceil * roundingInc) - number;
+                double floor = Math.floor(div);
+                double floordiff = number - (floor * roundingInc);
+                if (ceildiff <= floordiff) {
+                    return ceil * roundingInc;
+                }
+                return floor * roundingInc;
+            }
         case java.math.BigDecimal.ROUND_UNNECESSARY:
-            if (a != Math.floor(a)) {
+            if (div != Math.floor(div)) {
                 throw new ArithmeticException("Rounding necessary");
             }
-            return a;
+            return number;
         default:
             throw new IllegalArgumentException("Invalid rounding mode: " + mode);
         }
