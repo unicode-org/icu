@@ -119,7 +119,7 @@ int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
     }
   }
 
-  if(first == CE && second == SecondCE) {
+  if((first == CE && second == SecondCE)) {
     return i;
   } else {
     return -1;
@@ -220,51 +220,64 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokListHeader *lh) {
     lh->pos[i] = -1;
   }
 
-  for(;;) {
-    if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
-      if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
-        lh->fStrToken[tokStrength] = tok;
-      } else {
-        /* Error */
-        fprintf(stderr, "Error! couldn't find the CE!\n");
-      }
-    }
-
-    while(tok != NULL && tok->strength >= tokStrength) {
+  if(lh->baseCE == UCOL_RESET_TOP_VALUE && lh->baseContCE == 0) {
+    lh->pos[0] = 0;
+    t1 = UCOL_RESET_TOP_VALUE;
+    t2 = 0;
+    lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK);
+    lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16;
+    lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+    t1 = UCOL_NEXT_TOP_VALUE;
+    t2 = 0;
+    lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK);
+    lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16;
+    lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24;
+  } else {
+    for(;;) {
       if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
-        lh->lStrToken[tokStrength] = tok;
+        if((lh->pos[tokStrength] = ucol_inv_getNext(lh, tokStrength)) >= 0) {
+          lh->fStrToken[tokStrength] = tok;
+        } else {
+          /* Error */
+          fprintf(stderr, "Error! couldn't find the CE!\n");
+        }
       }
-      tok = tok->next;
-    }
-    if(tokStrength < UCOL_CE_STRENGTH_LIMIT-1) {
-      /* check if previous interval is the same and merge the intervals if it is so */
-      if(lh->pos[tokStrength] == lh->pos[tokStrength+1]) {
-        lh->fStrToken[tokStrength] = lh->fStrToken[tokStrength+1];
-        lh->fStrToken[tokStrength+1] = NULL;
-        lh->lStrToken[tokStrength+1] = NULL;
-        lh->pos[tokStrength+1] = -1;
-      }
-    }
-    if(tok != NULL) {
-      tokStrength = tok->strength;
-    } else {
-      break;
-    }
-  }
 
-  for(st = 0; st < 3; st++) {
-    if((pos = lh->pos[st]) >= 0) {
-      t1 = *(CETable+3*(pos));
-      t2 = *(CETable+3*(pos)+1);
-      lh->gapsHi[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
-      lh->gapsHi[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
-      lh->gapsHi[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
-      pos--;
-      t1 = *(CETable+3*(pos));
-      t2 = *(CETable+3*(pos)+1);
-      lh->gapsLo[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
-      lh->gapsLo[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
-      lh->gapsLo[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+      while(tok != NULL && tok->strength >= tokStrength) {
+        if(tokStrength < UCOL_CE_STRENGTH_LIMIT) {
+          lh->lStrToken[tokStrength] = tok;
+        }
+        tok = tok->next;
+      }
+      if(tokStrength < UCOL_CE_STRENGTH_LIMIT-1) {
+        /* check if previous interval is the same and merge the intervals if it is so */
+        if(lh->pos[tokStrength] == lh->pos[tokStrength+1]) {
+          lh->fStrToken[tokStrength] = lh->fStrToken[tokStrength+1];
+          lh->fStrToken[tokStrength+1] = NULL;
+          lh->lStrToken[tokStrength+1] = NULL;
+          lh->pos[tokStrength+1] = -1;
+        }
+      }
+      if(tok != NULL) {
+        tokStrength = tok->strength;
+      } else {
+        break;
+      }
+    }
+    for(st = 0; st < 3; st++) {
+      if((pos = lh->pos[st]) >= 0) {
+        t1 = *(CETable+3*(pos));
+        t2 = *(CETable+3*(pos)+1);
+        lh->gapsHi[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
+        lh->gapsHi[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
+        lh->gapsHi[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+        pos--;
+        t1 = *(CETable+3*(pos));
+        t2 = *(CETable+3*(pos)+1);
+        lh->gapsLo[3*st] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
+        lh->gapsLo[3*st+1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
+        lh->gapsLo[3*st+2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
+      }
     }
   }
 
@@ -365,7 +378,51 @@ U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g) {
 static uint32_t fbHigh[3] = {0, /*0,*/UCOL_COMMON_TOP2, 0};
 static uint32_t fbLow[3] = {0, /*0,*/UCOL_COMMON_BOT2, 0};
 
-U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t high, UColToken *tok, uint32_t strength) {
+U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t high, UColToken *tok, uint32_t strength) {
+  uint32_t count = tok->toInsert;
+  uint32_t lobytes = 0xFFFFFFFF, hibytes = 0xFFFFFFFF;
+
+  g->fHigh = fbHigh[strength];
+  g->fLow = fbLow[strength];
+
+  ucol_countBytes(low, lobytes);
+  ucol_countBytes(high, hibytes);
+
+  g->lowCount = high-low;
+  g->midCount = 0;
+  g->highCount = 0;
+
+  g->count = count + g->fHigh-g->fLow;
+
+  g->byteSize = 0xFFFFFFFF;
+  g->start = 0;
+  g->limit = 0;
+
+  if(g->lowCount >= g->count) {
+    g->byteSize = lobytes;
+    g->start = low;
+    g->limit = high;
+  } else if((g->lowCount)*254 > g->count) {
+    g->byteSize = lobytes+1;
+    g->start = low | (0x02 << (32-g->byteSize*8));
+    g->limit = high;
+  }
+
+  g->current = g->start;
+  g->fLow = g->fLow << 24;
+  g->fHigh = g->fHigh << 24;
+
+  if(g->current > g->fLow && g->current < g->fHigh) {
+    g->current = g->fHigh;
+  }
+  return g->current;
+
+}
+
+U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t* highs, UColToken *tok, uint32_t strength) {
+  uint32_t low = lows[tok->strength*3+strength];
+  uint32_t high = highs[tok->strength*3+strength];
+
   uint32_t count = tok->toInsert;
 
   g->fHigh = fbHigh[strength];
@@ -377,7 +434,17 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t 
   ucol_countBytes(high, hibytes);
 
   if(low == high && strength > 0) {
-    high = (0xFF << (32-hibytes*8));
+#ifdef UCOL_DEBUG
+    fprintf(stderr, "problem?\n");
+#endif
+    if(lows[tok->strength*3+(strength-1)] != highs[tok->strength*3+(strength-1)]) {
+      low = (0x02 << (32-lobytes*8));
+      high = (0x00 << (32-hibytes*8));
+    } else {
+#ifdef UCOL_DEBUG
+      fprintf(stderr, "bad!\n");
+#endif
+    }
   }
 
 
@@ -385,11 +452,28 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t 
   g->lastHigh = high - (1 << (32-hibytes*8));
 
   if(g->firstLow != g->lastHigh) {
-    g->firstMid = low + (1 << (32-(lobytes-1)*8)) & (0xFFFFFF00 << (32-lobytes*8));
-    g->lastMid = high - (1 << (32-(hibytes-1)*8)) & (0xFFFFFF00 << (32-hibytes*8));
 
-    g->lastLow = g->firstMid - (1 << (32-lobytes*8));
-    g->firstHigh = g->lastMid + (1 << (32-(hibytes-1)*8)) + (0x02 << (32-(hibytes)*8));
+    if(lobytes > 1) {
+      g->firstMid = g->firstLow + (1 << (32-(lobytes-1)*8)) & (0xFFFFFF00 << (32-lobytes*8));
+      g->lastLow = g->firstMid - (1 << (32-lobytes*8));
+    } else if(lobytes < hibytes) {
+      g->lastLow = g->lastHigh - (1 << (32-(hibytes-1)*8)) & (0xFFFFFF00 << (32-hibytes*8));
+      g->firstMid = g->lastMid = 0;
+    } else {
+      g->lastLow = g->lastHigh;
+      g->firstMid = g->lastMid = 0;
+    }
+
+    if(hibytes > 1) {
+      g->lastMid = g->lastHigh - (1 << (32-(hibytes-1)*8)) & (0xFFFFFF00 << (32-hibytes*8));
+      g->firstHigh = g->lastMid + (1 << (32-(hibytes-1)*8)) + (0x02 << (32-(hibytes)*8));
+    } else if(lobytes > hibytes) {
+      g->firstHigh = g->firstLow + (1 << (32-(lobytes-1)*8)) & (0xFFFFFF00 << (32-lobytes*8));
+      g->firstMid = g->lastMid = 0;
+    } else {
+      g->firstHigh = g->firstLow;
+      g->firstMid = g->lastMid = 0;
+    }
 
     ucol_countBytes(g->lastLow, g->lowByteCount);
     ucol_countBytes(g->lastMid, g->midByteCount);
@@ -632,7 +716,8 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
     }
     CEparts[0] = lh->gapsLo[fStrength*3];
     CEparts[1] = lh->gapsLo[fStrength*3+1];
-    CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok, UCOL_TERTIARY); 
+    /*CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok, UCOL_TERTIARY); */
+    CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], lh->gapsLo, lh->gapsHi, tok, UCOL_TERTIARY); 
 
     while(tok != NULL && tok->strength >= UCOL_TERTIARY) {
       ucol_doCE(CEparts, tok, tailored, status);
@@ -660,9 +745,10 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
     /* &0 [, <funny_tertiary_different_zero>] ;  <funny_secondary_different_zero> = FunnySecZero */
 
       CEparts[0] = lh->gapsLo[fStrength*3];
-      CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok, 1);
+      /*CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo[fStrength*3+1], lh->gapsHi[fStrength*3+1], tok, 1);*/
+      CEparts[1] = ucol_getCEGenerator(&Gens[1], lh->gapsLo, lh->gapsHi, tok, 1);
       if(tok->next->strength == UCOL_TERTIARY) {
-        CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+        CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
       } else {
         CEparts[UCOL_TERTIARY] = 0x03000000;
       }
@@ -679,7 +765,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
           if(tok->next->strength == UCOL_SECONDARY) {
             CEparts[UCOL_TERTIARY] = 0x03000000;
           } else {
-            CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+            CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
           }
           ucol_doCE(CEparts, tok, tailored, status);
         } else { /* Strength is identical */
@@ -719,16 +805,17 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
     /* How should the things be set up */
 
     if(tok->next != NULL) {
-      CEparts[UCOL_PRIMARY] = ucol_getCEGenerator(&Gens[0], lh->gapsLo[0], lh->gapsHi[0], tok, UCOL_PRIMARY);
+      /*CEparts[UCOL_PRIMARY] = ucol_getCEGenerator(&Gens[0], lh->gapsLo[0], lh->gapsHi[0], tok, UCOL_PRIMARY);*/
+      CEparts[UCOL_PRIMARY] = ucol_getCEGenerator(&Gens[0], lh->gapsLo, lh->gapsHi, tok, UCOL_PRIMARY);
       if(tok->next->strength == UCOL_PRIMARY) {
         CEparts[1] = 0x03000000;
         CEparts[2] = 0x03000000;
       } else { /* Secondaries will also be generated */
-        CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next, 1);
+        CEparts[1] = ucol_getSimpleCEGenerator(&Gens[1], 0x03000000, 0xFF000000, tok->next, 1);
         if(tok->next->strength == UCOL_SECONDARY) {
           CEparts[UCOL_TERTIARY] = 0x03000000;
         } else {
-          CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+          CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
         }
       }
 
@@ -747,7 +834,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
         } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
           if(tok->next->strength == UCOL_TERTIARY) {
-            CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+            CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
           } else { /* UCOL_SECONDARY */
             CEparts[UCOL_TERTIARY] = 0x03000000;
           }
@@ -761,9 +848,9 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
             if(tok->next->strength == UCOL_SECONDARY) {
               CEparts[UCOL_TERTIARY] = 0x03000000;
             } else { /* UCOL_TERTIARY */
-              CEparts[UCOL_TERTIARY] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next, UCOL_TERTIARY);
+              CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[2], 0x03000000, 0xFF000000, tok->next, UCOL_TERTIARY);
             }
-            CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next, 1);
+            CEparts[1] = ucol_getSimpleCEGenerator(&Gens[1], 0x03000000, 0xFF000000, tok->next, 1);
           }
           ucol_doCE(CEparts, tok, tailored, status);
         }
@@ -1076,7 +1163,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     ucol_initBuffers(&src->lh[i], tailored, status);
   }
 
-  tempUCATable *t = uprv_uca_initTempTable(src->image, status);
+  tempUCATable *t = uprv_uca_initTempTable(src->image, UCA, status);
 
 
   /* After this, we have assigned CE values to all regular CEs      */
@@ -1101,8 +1188,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     uint32_t compCE[256];
     uint32_t compRes = 0;
 
-
-  /* produce canonical & compatibility closure */
+    /* produce canonical closure */
     for(u = 0; u < 0x10000; u++) {
       /*if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
         || (noOfDec == 1 && *decomp != (UChar)u))*/
@@ -1119,6 +1205,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         }
       }
     }
+
+    /* still need to produce compatibility closure */
 
   /* add latin-1 stuff */
     for(u = 0; u<0x100; u++) {
@@ -1225,7 +1313,7 @@ ucol_openRules(    const    UChar                  *rules,
   UCollator *result = NULL;
   UCATableHeader *table = NULL;
 
-  if(src.lh != NULL) { /* we have a set of rules, let's make something of it */
+  if(src.resultLen > 0) { /* we have a set of rules, let's make something of it */
     table = ucol_assembleTailoringTable(&src, status);
     result = ucol_initCollator(table,0,status);
     result->hasRealData = TRUE;

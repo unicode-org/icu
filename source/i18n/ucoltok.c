@@ -102,58 +102,6 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   uhash_setValueDeleter(uchars2tokens, deleteToken);
 }
 
-/*
- * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
- * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
- * &#32;   static UBool didInit=FALSE;
- * &#32;
- * &#32;   int32_t function() {
- * &#32;       if(!didInit) {
- * &#32;           U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
- * &#32;           U_STRING_INIT(ustringVar2, "jumps 5%", 8);
- * &#32;           didInit=TRUE;
- * &#32;       }
- * &#32;       return u_strcmp(ustringVar1, ustringVar2);
- * &#32;   }
- */
-#define UTOK_OPTION_COUNT 12
-
-static didInit = FALSE;
-/* we can be strict, or we can be lenient */
-/* I'd surely be lenient with the option arguments */
-/* maybe even with options */
- U_STRING_DECL(option_00, "undefined",      9);
- U_STRING_DECL(option_01, "rearrange",      9);  
- U_STRING_DECL(option_02, "alternate",      9);
- U_STRING_DECL(option_03, "backwards",      9);  
- U_STRING_DECL(option_04, "variable top",  12); 
- U_STRING_DECL(option_05, "top",            3);  
- U_STRING_DECL(option_06, "normalization", 13); 
- U_STRING_DECL(option_07, "caseLevel",      9);  
- U_STRING_DECL(option_08, "caseFirst",      9); 
- U_STRING_DECL(option_09, "scriptOrder",   11);  
- U_STRING_DECL(option_10, "charsetname",   11); 
- U_STRING_DECL(option_11, "charset",        7);  
-
- struct {
-   const UChar *optionName;
-   int32_t optionLen;
-   UChar *argument;
- } rulesOptions[UTOK_OPTION_COUNT] = {
-   {option_00,  9, NULL},
-   {option_01,  9, NULL},
-   {option_02,  9, NULL},
-   {option_03,  9, NULL},
-   {option_04, 12, NULL},
-   {option_05,  3, NULL},
-   {option_06, 13, NULL},
-   {option_07,  9, NULL},
-   {option_08,  9, NULL},
-   {option_09, 11, NULL},
-   {option_10, 11, NULL},
-   {option_11,  7, NULL}
- };
-
 /* -1 off, 1 on, 0 neither */
 int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff) {
   if(onoff) {
@@ -172,12 +120,117 @@ int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff) {
   return 0;
 }
 
-UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UErrorCode *status) {
+void ucol_uprv_tok_setOptionInImage(UCATableHeader *image, UColAttribute attrib, UColAttributeValue value) {
+  switch(attrib) {
+  case UCOL_FRENCH_COLLATION:
+    image->frenchCollation = value;
+    break;
+  case UCOL_ALTERNATE_HANDLING:
+    image->alternateHandling = value;
+    break;
+  case UCOL_CASE_FIRST:
+    image->caseFirst = value;
+    break;
+  case UCOL_CASE_LEVEL:
+    image->caseLevel = value;
+    break;
+  case UCOL_NORMALIZATION_MODE:
+    image->normalizationMode = value;
+    break;
+  case UCOL_STRENGTH:
+    image->strength = value;
+    break;
+  case UCOL_ATTRIBUTE_COUNT:
+  default:
+    break;
+  }
+}
+
+#define UTOK_OPTION_COUNT 12
+
+static didInit = FALSE;
+/* we can be strict, or we can be lenient */
+/* I'd surely be lenient with the option arguments */
+/* maybe even with options */
+U_STRING_DECL(suboption_00, "non-ignorable", 13);
+U_STRING_DECL(suboption_01, "shifted",        7);
+
+U_STRING_DECL(suboption_02, "lower",          5);
+U_STRING_DECL(suboption_03, "upper",          5);
+U_STRING_DECL(suboption_04, "off",            3);
+U_STRING_DECL(suboption_05, "on",             2);
+U_STRING_DECL(suboption_06, "2",              1);
+
+
+
+U_STRING_DECL(option_00,    "undefined",      9);
+U_STRING_DECL(option_01,    "rearrange",      9);  
+U_STRING_DECL(option_02,    "alternate",      9);
+U_STRING_DECL(option_03,    "backwards",      9);  
+U_STRING_DECL(option_04,    "variable top",  12); 
+U_STRING_DECL(option_05,    "top",            3);  
+U_STRING_DECL(option_06,    "normalization", 13); 
+U_STRING_DECL(option_07,    "caseLevel",      9);  
+U_STRING_DECL(option_08,    "caseFirst",      9); 
+U_STRING_DECL(option_09,    "scriptOrder",   11);  
+U_STRING_DECL(option_10,    "charsetname",   11); 
+U_STRING_DECL(option_11,    "charset",        7);  
+
+ucolTokSuboption alternateSub[2] = {
+  {suboption_00, 13, UCOL_NON_IGNORABLE},
+  {suboption_01,  7, UCOL_SHIFTED}
+};
+
+ucolTokSuboption caseFirstSub[3] = {
+  {suboption_02, 13, UCOL_LOWER_FIRST},
+  {suboption_03,  7, UCOL_UPPER_FIRST},
+  {suboption_04,  2, UCOL_OFF},
+};
+
+ucolTokSuboption onOffSub[2] = {
+  {suboption_04, 3, UCOL_OFF},
+  {suboption_05, 2, UCOL_ON}
+};
+
+ucolTokSuboption frenchSub[1] = {
+  {suboption_06, 1, UCOL_ON}
+};
+
+
+
+ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
+ {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate"      */   
+ {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */   
+ {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL}, /*"caseLevel"      */   
+ {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"      */   
+ {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization"  */
+ {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
+ {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */   
+ {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */         
+ {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
+ {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */ 
+ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */ 
+ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */     
+};
+
+UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status) {
   uint32_t i = 0;
+  int32_t j=0;
   int32_t onOff = 0;
   UBool foundOption = FALSE;
   const UChar *optionArg = NULL;
   if(!didInit) {
+    U_STRING_INIT(suboption_00, "non-ignorable", 13);
+    U_STRING_INIT(suboption_01, "shifted",        7);
+
+    U_STRING_INIT(suboption_02, "lower",          5);
+    U_STRING_INIT(suboption_03, "upper",          5);
+    U_STRING_INIT(suboption_04, "off",            3);
+    U_STRING_INIT(suboption_05, "on",             2);
+
+    U_STRING_INIT(suboption_06, "2",              1);
+
+
     U_STRING_INIT(option_00, "undefined",      9);
     U_STRING_INIT(option_01, "rearrange",      9);  
     U_STRING_INIT(option_02, "alternate",      9);
@@ -211,81 +264,29 @@ UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, 
     return FALSE;
   }
 
-  switch(i) {
-  case 2 /*"alternate"*/:
+  if(i<5) {
     if(optionArg) {
-      if(u_tolower(*optionArg) == 0x006e) /*'n'*/ { /* non ignorable */
-        image->alternateHandling = UCOL_NON_IGNORABLE;
-        return TRUE;
-      } else if(u_tolower(*optionArg) == 0x0073 /*'s'*/) { /* shifted */
-        image->alternateHandling = UCOL_SHIFTED;
-        return TRUE;
-      } 
-    }
-    break;
-  case 3 /*"backwards"*/:
-    if(optionArg && *optionArg == 0x0032) {
-      image->frenchCollation = UCOL_ON;
-      return TRUE;
-    }
-    break;
-  case 4 /*"variable top"*/:
-    *variableTop = TRUE;
-    return TRUE;
-    break;
-  case 6 /*"normalization"*/:
-    if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == 1) {
-      image->normalizationMode = UCOL_ON;
-      return TRUE;
-    } else if(onOff == -1) {
-      image->normalizationMode = UCOL_OFF;
-      return TRUE;
-    }
-    break;
-  case 7 /*"caseLevel"*/:
-    if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == 1) {
-      image->caseLevel = UCOL_ON;
-      return TRUE;
-    } else if(onOff == -1) {
-      image->caseLevel = UCOL_OFF;
-      return TRUE;
-    }
-    break;
-  case 8 /*"caseFirst"*/:
-    if(optionArg) {
-      if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == -1) {
-        image->caseLevel = UCOL_OFF;
-        return TRUE;
-      } else if(u_tolower(*optionArg) == 0x0075 /*'u'*/) {
-        image->caseLevel = UCOL_UPPER_FIRST;
-        return TRUE;
-      } else if(u_tolower(*optionArg) == 0x006C /*'l'*/) {
-        image->caseLevel = UCOL_LOWER_FIRST;
-        return TRUE;
+      for(j = 0; j<rulesOptions[i].subSize; j++) {
+        if(u_strncmp(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
+          ucol_uprv_tok_setOptionInImage(image, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
+          return TRUE;
+        }
       }
     }
-    break;
-  case 5 /*"top"*/:
-    /* what's top??? */
-  case 1 /*"rearrange"*/:
-    /* read all the rearangees - should rewrite isthai to isrearanged and have a list of */
-    /* rearanged things - do later */
-  case 0 /*"undefined"*/:
-    /* post 1.8 */
-  case 9 /*"scriptOrder"*/:
-    /* post 1.8 */
-  case 10 /*"charsetname"*/:
-    /* post 1.8 */
-  case 11 /*"charset"*/:
-    /* post 1.8 */
-  default:
-    /* never going to happen */
-    break;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return FALSE;
+  } else if(i == 5) { /* variable top */
+    *variableTop = TRUE;
+    return TRUE;
+  } else if(i == 6) {  /*rearange */
+    return TRUE;
+  } else if(i == 7) {  /*top */
+    *top = TRUE;
+    return TRUE;
+  } else {
+    *status = U_UNSUPPORTED_ERROR;
+    return FALSE;
   }
-
-  *status = U_ILLEGAL_ARGUMENT_ERROR;
-  return FALSE;
-
 }
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
@@ -306,6 +307,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t expandNext = 0;
   UBool variableTop = FALSE;
+  UBool top = FALSE;
 
   UColTokListHeader *ListList = NULL;
 
@@ -405,11 +407,19 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             case 0x005b/*'['*/:
               /* options - read an option, analyze it */
               if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-                ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, status);
+                ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, &top, status);
+                src->current = optionEnd;
+                if(top == TRUE) {
+                  if(newStrength == UCOL_TOK_RESET) { 
+                    src->current++;
+                    goto EndOfLoop;
+                  } else {
+                    *status = U_INVALID_FORMAT_ERROR;
+                  }
+                }
                 if(U_FAILURE(*status)) {
                   return 0;
                 }
-                src->current = optionEnd+1;
               }
               break;
 
@@ -489,7 +499,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         return 0;
       }
 
-      if (newCharsLen == 0) {
+      if (newCharsLen == 0 && top == FALSE) {
         *status = U_INVALID_FORMAT_ERROR;
         return 0;
       }
@@ -674,23 +684,29 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 very next item to have one. They may be contractions, if they are found 
                 earlier in the list. 
           */
-          if(newCharsLen > 1) {
-            sourceToken->source = 0x01000000 | charsOffset;
-          } 
+          if(top == FALSE) {
+            if(newCharsLen > 1) {
+              sourceToken->source = 0x01000000 | charsOffset;
+            } 
 
  
-          init_collIterate(src->source+charsOffset, 1, &s, FALSE); /* or newCharsLen instead of 1??? */
+            init_collIterate(src->source+charsOffset, 1, &s, FALSE); /* or newCharsLen instead of 1??? */
 
-          CE = ucol_getNextCE(src->UCA, &s, status);
-          /*UCOL_GETNEXTCE(CE, src->UCA, s, &status);*/
+            CE = ucol_getNextCE(src->UCA, &s, status);
+            /*UCOL_GETNEXTCE(CE, src->UCA, s, &status);*/
 
-          SecondCE = ucol_getNextCE(src->UCA, &s, status);
-          /*UCOL_GETNEXTCE(SecondCE, src->UCA, s, &status);*/
+            SecondCE = ucol_getNextCE(src->UCA, &s, status);
+            /*UCOL_GETNEXTCE(SecondCE, src->UCA, s, &status);*/
     
-          ListList[src->resultLen].baseCE = CE;
-          if(isContinuation(SecondCE)) {
-            ListList[src->resultLen].baseContCE = SecondCE;
-          } else {
+            ListList[src->resultLen].baseCE = CE;
+            if(isContinuation(SecondCE)) {
+              ListList[src->resultLen].baseContCE = SecondCE;
+            } else {
+              ListList[src->resultLen].baseContCE = 0;
+            }
+          } else { /* top == TRUE */
+            top = FALSE;
+            ListList[src->resultLen].baseCE = UCOL_RESET_TOP_VALUE;
             ListList[src->resultLen].baseContCE = 0;
           }
 
