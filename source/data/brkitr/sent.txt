@@ -1,0 +1,76 @@
+#
+#   Copyright (C) 2002, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  sent.txt   
+#
+#   ICU Sentence Break Rules
+#      See Unicode Technical Report #29.
+#      These rules are based on the proposed draft dated 2002-08-09
+#
+    
+
+#
+# Character categories as defined in TR 29
+#
+$Sep     = [\u000d \u000a \u0085 \u2028 \u2029];
+$Format  = [[:Cf:]];
+$Sp      = [[:Whitespace:] - $Sep];
+$Lower   = [[:Lowercase:]];
+$Upper   = [[:Lt:] [:Uppercase:]];
+$OLetter = [[:Alphabetic:] \u02b9-\u02ba  \u02c2-\u02cf  \u02d2-\u02df  \u02e5-\u02ed  \u05f3];
+
+                           #  The chars listed by number below are those with "Linebreak=QU"
+$Close   = [[:Pe:] [:Po:]  \u0022 \u0027 \u00AB \u00BB \u2018 \u2019 \u201B-\u201C 
+                           \u201D \u201F \u2039 \u203A \u23B6 \u275B-\u275E ];
+                           
+$ATerm = [\u002e];  
+$Term  = [\u0021 \u003F \u0589 \u061F \u06D4 \u0701 \u0702 \u0700 \u0964
+          \u1362 \u1367 \u1368 \u1803 \u203C \u203D \u2048 \u2049 \u3002
+          \uFE52 \uFE57 \uFF01 \uFF0E \uFF1F \uFF61];
+$AnyTerm = [$ATerm $Term];	
+
+# From Grapheme Cluster
+$Extend   = [[:Mn:] [:Me:] [:Mc:] \uff9e-\uff9f];   #  FF9E..FF9F    ; Other_Grapheme_Extend
+
+#
+#  $SepSeq keeps together CRLF as a separator.
+#
+$SepSeq  = $Sep | \u000d\u000a;
+
+# $InteriorChars are those that never cause a break.
+$InteriorChars = [^$AnyTerm $Sep];
+
+
+
+# Sentence Break Rules 8, 9, 11
+# $EndSequence matches a "Normal" sentence, which is one not containg any extra ATerms (periods)
+#              that do not cause a break for one exceptional reason or another.
+$EndSequence       = $InteriorChars* $AnyTerm? ($Close | $AnyTerm | $Format | $Extend)*
+                               ($AnyTerm | $Format | $Sp | $Extend)*  $SepSeq?;
+
+# Rule 6   Matches a sentence fragment containing "." that should not cause a sentence break,
+#          because a lower case word follows the period.
+$LowerWordFollows  = $InteriorChars* $ATerm [^$OLetter $Upper]* $Lower;
+
+
+# Rule 7.  $UpperFollowsImmediately
+#          Matches a fragment containing in a "." that should not cause a sentence break
+#          because an uppercase letter follows the period with no intervening spaces.
+$UpperFollowsImmediately = $InteriorChars* $ATerm ($Format | $Extend)* $Upper;
+
+# Put them all together.  
+($LowerWordFollows |  $UpperFollowsImmediately)*  $EndSequence;
+
+     
+#
+#  Reverse Rules
+#
+$EndGorp                  = ($AnyTerm | $Sep | $Close | $Extend | $Format | $Sp);
+$RevEndSequence           = $EndGorp* $InteriorChars* $EndGorp*;
+$ReverseLowerWordFollows  = $Lower [^$OLetter $Upper]* $ATerm $InteriorChars*;
+$ReverseUpperFollowsIm    = $Upper ($Format | $Extend)* $ATerm $InteriorChars*;
+
+! $RevEndSequence? ($ReverseLowerWordFollows | $ReverseUpperFollowsIm)* .?;
+#! .*;
+ 

@@ -1,0 +1,32 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kl_GL {
+    Version { "1.0" }
+    CurrencyElements {
+        "kr",
+        "DKK",
+        ",",
+    }
+    DateTimePatterns {
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "MMM dd,yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;\u00a4 -#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}

@@ -1,0 +1,6 @@
+*.d
+Debug
+Makefile
+Release
+testmap
+testmap.plg

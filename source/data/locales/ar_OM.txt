@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_OM {
+    Version{"1.0"}
+    CurrencyElements { 
+        "\u0631.\u0639.\u200F",
+        "OMR",
+        ".",
+    }
+//    LocaleString { "ar_OM" }
+//    ShortCountry { "OMN" }
+    LocaleID:int { 0x2001 }
+}

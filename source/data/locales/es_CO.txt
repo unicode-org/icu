@@ -1,0 +1,42 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es_CO {
+    Version { "1.0" }
+    CurrencyElements { 
+        "$",
+        "COP",
+        ",",
+    }
+    DateTimePatterns { 
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "d/MM/yyyy",
+        "d/MM/yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x240a }
+//    LocaleString { "es_CO" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortCountry { "COL" }
+}

@@ -1,0 +1,80 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kw{
+    Version { "1.0" }
+    DayAbbreviations { 
+        "Sul",
+        "Lun",
+        "Mth",
+        "Mhr",
+        "Yow",
+        "Gwe",
+        "Sad",
+    }
+    DayNames { 
+        "De Sul",
+        "De Lun",
+        "De Merth",
+        "De Merher",
+        "De Yow",
+        "De Gwener",
+        "De Sadorn",
+    }
+    MonthAbbreviations { 
+        "Gen",
+        "Whe",
+        "Mer",
+        "Ebr",
+        "Me",
+        "Evn",
+        "Gor",
+        "Est",
+        "Gwn",
+        "Hed",
+        "Du",
+        "Kev",
+    }
+    MonthNames { 
+        "Mys Genver",
+        "Mys Whevrel",
+        "Mys Merth",
+        "Mys Ebrel",
+        "Mys Me",
+        "Mys Evan",
+        "Mys Gortheren",
+        "Mye Est",
+        "Mys Gwyngala",
+        "Mys Hedra",
+        "Mys Du",
+        "Mys Kevardhu",
+    }
+//    NumberElements { 
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+}
