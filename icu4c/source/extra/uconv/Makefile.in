@@ -55,9 +55,11 @@ LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
 
 ifeq ($(UCONVMSG_STATIC),YES)
 LIBS += -L$(MSGNAME) -l$(MSGNAME)
-CPPFLAGS += -DUCONVMSG_STATIC=$(MSGNAME) -I$(RESDIR)
+CPPFLAGS += -DUCONVMSG_STATIC=$(MSGNAME)
 UCONVMSG_LIB=$(RESDIR)/lib$(MSGNAME).a
-UCONVMSG_HDR=$(RESDIR)/$(MSGNAME).h
+PKGMODE = static
+else
+PKGMODE = dll
 endif
 
 OBJECTS = uconv.o uwmsg.o
@@ -116,13 +118,12 @@ resfiles: $(RESFILES) package-resfiles
 
 
 ifeq ($(UCONVMSG_STATIC),YES)
-$(UCONVMSG_HDR) $(UCONVMSG_LIB): resfiles
-uconv.o: $(UCONVMSG_HDR)
+$(UCONVMSG_LIB): resfiles
 endif
 
 
 package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m static -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
@@ -134,7 +135,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 ifneq ($(UCONVMSG_STATIC),YES)
 install-resfiles: $(RESFILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m static -d $(RESDIR) -I $(DESTDIR)$(ICUDATA_DIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -I $(DESTDIR)$(ICUDATA_DIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 endif
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
