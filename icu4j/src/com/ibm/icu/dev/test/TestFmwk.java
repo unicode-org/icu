@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2000/04/26 17:11:52 $ 
- * $Revision: 1.11 $
+ * $Date: 2000/05/18 19:09:51 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -58,6 +58,41 @@ public class TestFmwk implements TestLog {
             }
         }
     }
+
+    private void _run() throws Exception {
+        writeTestName(getClass().getName());
+        params.indentLevel++;
+		Enumeration methodsToRun;
+		
+		if (testsToRun != null && testsToRun.size() >= 1) {
+			methodsToRun = testsToRun.elements();
+		} else {
+			methodsToRun = testMethods.elements();
+		}
+
+        int oldClassCount = params.errorCount;
+
+        // Run the list of tests given in the test arguments
+        while (methodsToRun.hasMoreElements()) {
+            int oldCount = params.errorCount;
+
+           	Method testMethod = (Method)methodsToRun.nextElement();
+            writeTestName(testMethod.getName());
+
+            try {
+                testMethod.invoke(this, new Object[0]);
+            } catch( IllegalAccessException e ) {
+                errln("Can't access test method " + testMethod.getName());
+            } catch( InvocationTargetException e ) {
+                errln("Uncaught exception \""+e+"\"thrown in test method "
+                        + testMethod.getName());
+                e.getTargetException().printStackTrace(this.params.log);
+            }
+            writeTestResult(params.errorCount - oldCount);
+        }
+        params.indentLevel--;
+        writeTestResult(params.errorCount - oldClassCount);
+    }
     
     public void run(String[] args) throws Exception {
     	if (params == null) params = new TestParams();
@@ -85,37 +120,7 @@ public class TestFmwk implements TestLog {
         }
 
     	if (params == null) params = new TestParams();
-        System.out.println(getClass().getName() + " {");
-        params.indentLevel++;
-		Enumeration methodsToRun;
-		
-		if (testsToRun.size() < 1) {
-			methodsToRun = testMethods.elements();
-		} else {
-			methodsToRun = testsToRun.elements();
-		}
-
-        // Run the list of tests given in the test arguments
-        while (methodsToRun.hasMoreElements()) {
-            int oldCount = params.errorCount;
-
-           	Method testMethod = (Method)methodsToRun.nextElement();
-            writeTestName(testMethod.getName());
-
-            try {
-                testMethod.invoke(this, new Object[0]);
-            }
-            catch( IllegalAccessException e ) {
-                errln("Can't acces test method " + testMethod.getName());
-            } catch( InvocationTargetException e ) {
-                errln("Uncaught exception \""+e+"\"thrown in test method "
-                        + testMethod.getName());
-                e.getTargetException().printStackTrace(this.params.log);
-            }
-            writeTestResult(params.errorCount - oldCount);
-        }
-        params.indentLevel--;
-        writeTestResult(params.errorCount);
+        _run();
 
         if (params.prompt) {
             System.out.println("Hit RETURN to exit...");
@@ -131,13 +136,17 @@ public class TestFmwk implements TestLog {
     }
 
 	protected void run(TestFmwk childTest) throws Exception {
-		childTest.setParent(this);
-		childTest.run(new String[0]);
+        run(new TestFmwk[] { childTest });
 	}
 
-    private void setParent(TestFmwk parent) {
-    	params = parent.params;
-    }
+	protected void run(TestFmwk[] tests) throws Exception {
+        for (int i=0; i<tests.length; ++i) {
+            tests[i].params = this.params;
+            params.indentLevel++;
+            tests[i]._run();
+            params.indentLevel--;
+        }
+	}
 
     /**
      * Adds given string to the log if we are in verbose mode.
@@ -191,7 +200,7 @@ public class TestFmwk implements TestLog {
         params.needLineFeed = false;
 
         if (count != 0) {
-            params.log.println(" FAILED");
+            params.log.println(" FAILED (" + count + " failures)");
         } else {
             params.log.println(" Passed");
         }
@@ -257,6 +266,3 @@ public class TestFmwk implements TestLog {
 	private Vector testsToRun;
     private final String spaces = "                                          ";
 }
-
-
-
