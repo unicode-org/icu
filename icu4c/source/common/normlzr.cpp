@@ -147,7 +147,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 
 Normalizer::Normalizer(const Normalizer &copy) :
     fUMode(copy.fUMode), fOptions(copy.fOptions),
-    currentIndex(copy.nextIndex), nextIndex(copy.nextIndex),
+    currentIndex(copy.currentIndex), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
 {
     init(((CharacterIterator *)(copy.text->context))->clone());
