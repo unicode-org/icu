@@ -32,7 +32,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationEnglishTest();
-    ~CollationEnglishTest();
+    virtual ~CollationEnglishTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // main test routine, tests rules defined by the "en" locale

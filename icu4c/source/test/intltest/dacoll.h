@@ -32,7 +32,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationDanishTest();
-    ~CollationDanishTest();
+    virtual ~CollationDanishTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // main test routine, Tests rules specific to danish collation
