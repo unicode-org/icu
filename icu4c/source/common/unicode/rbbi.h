@@ -195,10 +195,11 @@ public:
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
      * Differs from the copy constructor in that it is polymorphic, and
-     *   will correctly clone (copy) a derived class.
+     * will correctly clone (copy) a derived class.
      * clone() is thread safe.  Multiple threads may simultaeneously
      * clone the same source break iterator.
-     *  @stable ICU 2.0
+     * @return a newly-constructed RuleBasedBreakIterator
+     * @stable ICU 2.0
      */
     virtual BreakIterator* clone() const;
 
@@ -342,7 +343,7 @@ public:
      * and soft (potential) break positions.
      * <p>
      * <code>getRuleStatus()</code> can be called after obtaining a boundary
-     * position from <code>next()<code>, <code>previous()</code>, or 
+     * position from <code>next()</code>, <code>previous()</code>, or 
      * any other break iterator functions that returns a boundary position.
      * <p>
      * When creating custom break rules, one is free to define whatever
