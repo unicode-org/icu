@@ -35,6 +35,7 @@
 #include "ucmp32.h"
 #include "umutex.h"
 #include "uhash.h"
+#include "ucln_in.h" 
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>
@@ -51,6 +52,8 @@
 #define ZERO_CC_LIMIT_            0xC0
 
 static UCollator* UCA = NULL;
+static UDataMemory* UCA_DATA_MEM = NULL;
+
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
@@ -809,42 +812,69 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     return result;
 }
 
-void ucol_initUCA(UErrorCode *status) {
-  if(U_FAILURE(*status)) return;
-
-  if(UCA == NULL) {
-    UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
-    UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
-
-    if(U_FAILURE(*status)) {
-        udata_close(result);
-        uprv_free(newUCA);
+U_CFUNC UBool
+ucol_cleanup(void)
+{
+    if (UCA_DATA_MEM) {
+        udata_close(UCA_DATA_MEM);
+        UCA_DATA_MEM = NULL;
     }
+    if (UCA) {
+        /* Since UCA was opened with ucol_initCollator, ucol_close won't work. */
+        ucmpe32_close(UCA->mapping);
+        uprv_free(UCA);
+        UCA = NULL;
+    }
+    return TRUE;
+}
 
-    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-      newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
-      if(U_SUCCESS(*status)){
-        newUCA->rb = NULL;
-        umtx_lock(NULL);
-        if(UCA == NULL) {
-            UCA = newUCA;
-            newUCA = NULL;
+void ucol_initUCA(UErrorCode *status) {
+    if(U_FAILURE(*status))
+        return;
+    
+    if(UCA == NULL) {
+        UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
+        if (newUCA == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
         }
-        umtx_unlock(NULL);
-
-        if(newUCA != NULL) {
-            udata_close(result);
+        
+        UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
+        
+        if(U_FAILURE(*status)) {
+            if (result) {
+                udata_close(result);
+            }
             uprv_free(newUCA);
         }
-      }else{
-        udata_close(result);
-        uprv_free(newUCA);
-        UCA= NULL;
-      }
-
+        
+        if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
+            newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
+            if(U_SUCCESS(*status)){
+                newUCA->rb = NULL;
+                umtx_lock(NULL);
+                if(UCA == NULL) {
+                    UCA = newUCA;
+                    UCA_DATA_MEM = result;
+                    result = NULL;
+                    newUCA = NULL;
+                }
+                umtx_unlock(NULL);
+                
+                if(newUCA != NULL) {
+                    udata_close(result);
+                    uprv_free(newUCA);
+                }
+                else {
+                    i18n_registerCleanup();
+                }
+            }else{
+                udata_close(result);
+                uprv_free(newUCA);
+                UCA= NULL;
+            }
+        }
     }
-
-  }
 }
 
 /*    collIterNormalize     Incremental Normalization happens here.                       */
