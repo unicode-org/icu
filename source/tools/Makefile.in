@@ -118,12 +118,12 @@ $(OBJDATADIR)/%.brk: $(SRCDATADIR)/%LE.brk
 	cp $< $@
 endif
 
-include $(srcdir)/makeconv/ucmfiles.mk
--include $(srcdir)/makeconv/ucmlocal.mk
+#include $(srcdir)/makeconv/ucmfiles.mk
+#-include $(srcdir)/makeconv/ucmlocal.mk
 ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 
-include $(srcdir)/genrb/genrbfiles.mk
--include $(srcdir)/genrb/reslocal.mk
+#include $(srcdir)/genrb/genrbfiles.mk
+#-include $(srcdir)/genrb/reslocal.mk
 ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURCE_LOCAL)
 
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
@@ -148,7 +148,10 @@ install-udata: install-pkgdata
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
 	$(INSTALL_DATA) $(top_srcdir)/../data/convrtrs.txt $(DESTDIR)$(pkgsysconfdir)
 
-install-local: all-local install-udata
+#install-local: all-local install-udata
+
+install-local:
+
 
 dist-local:
 
@@ -196,12 +199,15 @@ $(TMPDATADIR)2/icupkg.inc: pkgdata/icupkg.inc
 
 # build the ICU and test data
 
-build-local build-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/icupkg.inc $(TMPDATADIR)2/testdata.lst $(DATAFILES) $(top_builddir)/test/testdata/root.res
-	@$(MKINSTALLDIRS) $(TMPDATADIR)
-	@$(MKINSTALLDIRS) $(TMPDATADIR)2
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst   )
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst )
-	(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
+build-local:
+
+
+#build-local build-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/icupkg.inc $(TMPDATADIR)2/testdata.lst $(DATAFILES) $(top_builddir)/test/testdata/root.res
+#	@$(MKINSTALLDIRS) $(TMPDATADIR)
+#	@$(MKINSTALLDIRS) $(TMPDATADIR)2
+#	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst   )
+#	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst )
+#	(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
