@@ -476,6 +476,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\digitlst.cpp">
+			</File>
+			<File
+				RelativePath=".\digitlst.h">
+			</File>
+			<File
 				RelativePath=".\dtfmtsym.cpp">
 			</File>
 			<File
