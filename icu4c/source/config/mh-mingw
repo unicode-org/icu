@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin/MinGW specific setup
-## Copyright (c) 2001-2004, International Business Machines Corporation and
+## Copyright (c) 2001-2005, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # TODO: Finish the rest of this port. This platform port is incomplete.
@@ -68,11 +68,14 @@ DATA_STUBNAME = dt
 I18N_STUBNAME = in
 LIBICU = $(STATIC_PREFIX_WHEN_USED)$(ICUPREFIX)
 
+## These are the library specific LDFLAGS
+LDFLAGSICUDT=-nodefaultlibs -nostdlib
+
 # The #M# is used to delete lines for icu-config
 # Current full path directory.
-CURR_FULL_DIR=$(shell cygpath -dma .)#M#
+CURR_FULL_DIR=$(shell pwd -W)#M#
 # Current full path directory for use in source code in a -D compiler option.
-CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))#M#
+CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
@@ -106,8 +109,8 @@ MIDDLE_SO_TARGET=$(FINAL_SO_TARGET)
 
 ## Special pkgdata information that is needed
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
-ICUPKGDATA_INSTALL_DIR = $(shell cygpath -dma $(DESTDIR)$(ICUPKGDATA_DIR))#M#
-ICUPKGDATA_INSTALL_LIBDIR = $(shell cygpath -dma $(DESTDIR)$(libdir))#M#
+#ICUPKGDATA_INSTALL_DIR = $(shell cygpath -dma $(DESTDIR)$(ICUPKGDATA_DIR))#M#
+#ICUPKGDATA_INSTALL_LIBDIR = $(shell cygpath -dma $(DESTDIR)$(libdir))#M#
 
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
