@@ -70,36 +70,36 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
                     o->entryName,
                     o->version);
     T_FileStream_writeLine(f, linebuf);
-    
+
     sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"
         "LISTFILES= ",
         pkg_countCharList(o->fileListFiles));
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->fileListFiles, " ", " \\\n", 0);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
+
     sprintf(linebuf, "## Data Files [%d]\n"
         "DATAFILES= ",
         pkg_countCharList(o->files));
-    
+
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->files, " ", " \\\n", -1);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
+
     sprintf(linebuf, "## Data File Paths [%d]\n"
-                    "DATAFILEPATHS= ",
-                    pkg_countCharList(o->filePaths));
-    
+        "DATAFILEPATHS= ",
+        pkg_countCharList(o->filePaths));
+
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->filePaths, " ", " \\\n", 1);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
+
 }
 
 /* Write a stanza in the makefile, with specified   "target: parents...  \n\n\tcommands" [etc] */
@@ -197,36 +197,36 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
     {
         T_FileStream_writeLine(f, "TARG_PATH=$(TARGETDIR)/\n");
     }
-    
-    sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"
+
+    sprintf(linebuf, "## List files [%u] containing data files to process (note: - means stdin)\n"
                     "LISTFILES= ",
-                    pkg_countCharList(o->fileListFiles));
+                    (int)pkg_countCharList(o->fileListFiles));
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->fileListFiles, " ", " \\\n",0);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
-    sprintf(linebuf, "## Data Files [%d]\n"
+
+    sprintf(linebuf, "## Data Files [%u]\n"
         "DATAFILES= ",
-        pkg_countCharList(o->files));
-    
+        (int)pkg_countCharList(o->files));
+
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->files, " ", " \\\n",-1);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
-    sprintf(linebuf, "## Data File Paths [%d]\n"
+
+    sprintf(linebuf, "## Data File Paths [%u]\n"
                     "DATAFILEPATHS= ",
-                    pkg_countCharList(o->filePaths));
-    
+                    (int)pkg_countCharList(o->filePaths));
+
     T_FileStream_writeLine(f, linebuf);
-    
+
     pkg_writeCharListWrap(f, o->filePaths, " ", " \\\n",0);
-    
+
     T_FileStream_writeLine(f, "\n\n\n");
-    
+
 }
 
 /* Write a stanza in the makefile, with specified   "target: parents...  \n\n\tcommands" [etc] */

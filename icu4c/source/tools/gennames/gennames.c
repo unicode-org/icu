@@ -591,7 +591,7 @@ compress() {
         }
     }
     if(!beQuiet) {
-        printf("number of letters used in the names: %d\n", letterCount);
+        printf("number of letters used in the names: %d\n", (int)letterCount);
     }
 
     /* do we need double-byte tokens? */
@@ -603,7 +603,7 @@ compress() {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                            i, (long)words[wordNumber].weight,
+                            (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
                 ++wordNumber;
@@ -674,7 +674,7 @@ compress() {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                            i, (long)words[wordNumber].weight,
+                            (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
                 ++wordNumber;
@@ -689,7 +689,7 @@ compress() {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                            i, (long)words[wordNumber].weight,
+                            (int)i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
                 ++wordNumber;
