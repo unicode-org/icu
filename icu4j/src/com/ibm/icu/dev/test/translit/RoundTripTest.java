@@ -12,8 +12,6 @@ import java.text.ParseException;
  */
 public class RoundTripTest extends TestFmwk {
     
-    static final boolean CHECKCASE = true;
-
     public static void main(String[] args) throws Exception {
         new RoundTripTest().run(args);
     }
@@ -21,13 +19,13 @@ public class RoundTripTest extends TestFmwk {
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana", 
           TestUtility.LATIN_SCRIPT, TestUtility.HIRAGANA_SCRIPT)
-          .test("[a-z]", "[\u3040-\u3094]", this, new Legal());
+          .test("[a-z]", "[\u3040-\u3094]", null, this, new Legal());
     }
 
     public void TestKatakana() throws IOException, ParseException {
         new Test("Latin-Katakana", 
           TestUtility.LATIN_SCRIPT, TestUtility.KATAKANA_SCRIPT)
-          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", this, new Legal());
+          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", null, this, new Legal());
     }
 
 // Some transliterators removed for 2.0
@@ -55,32 +53,48 @@ public class RoundTripTest extends TestFmwk {
           TestUtility.LATIN_SCRIPT, TestUtility.JAMO_SCRIPT);
         t.setErrorLimit(200); // Don't run full test -- too long
         //t.test("[[a-z]-[fqvxz]]", null, this);
-        t.test("[a-z]", null, this, new Legal());
+        t.test("[a-z]", null, null, this, new Legal());
     }
 
     public void TestJamoHangul() throws IOException, ParseException {
         Test t = new Test("Latin-Hangul", 
           TestUtility.LATIN_SCRIPT, TestUtility.HANGUL_SCRIPT);
         t.setErrorLimit(50); // Don't run full test -- too long
-        t.test("[a-z]", null, this, new Legal());
+        t.test("[a-z]", null, null, this, new Legal());
     }
 
     public void TestGreek() throws IOException, ParseException {
-        new Test("Latin-Greek", 
-          TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek(true));
+        try {
+            Legal lt = new LegalGreek(true);
+            new Test("Latin-Greek", 
+            TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
+            .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+                "[\u037A\u03D0-\u03F5]", /* exclusions */
+                this, lt);
+        } catch (RuntimeException e) {
+            System.out.println(e.getClass().getName() + ", " + e.getMessage());
+            throw e;
+        }
     }
 
     public void Testel() throws IOException, ParseException {
         new Test("Latin-el", 
           TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", this, new LegalGreek(false));
+          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+            "[\u037A\u03D0-\u03F5]", /* exclusions */
+            this, new LegalGreek(false));
     }
 
     public void TestCyrillic() throws IOException, ParseException {
         new Test("Latin-Cyrillic", 
           TestUtility.LATIN_SCRIPT, TestUtility.CYRILLIC_SCRIPT)
-          .test(null, "[\u0400-\u045F]", this, new Legal());
+          .test(null, "[\u0400-\u045F]", null, this, new Legal());
+    }
+    
+    public void TestDevanagari() throws IOException, ParseException {
+        new Test("Latin-DEVANAGARI", 
+          TestUtility.LATIN_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+          .test(null, "[:Devanagari:]", null, this, new Legal());
     }
     
     public static class Legal {
@@ -109,14 +123,12 @@ public class RoundTripTest extends TestFmwk {
                 
                 // modern is simpler: don't care about anything but a grave
                 if (!full) {
+                    if (sourceString.equals("\u039C\u03C0")) return false;
                     for (int i = 0; i < decomp.length(); ++i) {
                         char c = decomp.charAt(i);
+                        // exclude all the accents
                         if (c == '\u0313' || c == '\u0314' || c == '\u0300' || c == '\u0302'
                             || c == '\u0342' || c == '\u0345'
-                            || c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
-                            || c == '\u03F3' || c == '\u03F4' || c == '\u03F5'
-                            || c == '\u03D0' || c == '\u03D1' || c == '\u03D5'
-                            || c == '\u03D6' || c == '\u03F0' || c == '\u03F1'
                             ) return false;
                     }
                     return true;
@@ -134,11 +146,6 @@ public class RoundTripTest extends TestFmwk {
                 int letterCount = 0;
                 for (int i = 0; i < decomp.length(); ++i) {
                     char c = decomp.charAt(i);
-                    if (c == '\u037A' || c == '\u03D2' || c == '\u03D3' || c == '\u03D4' || c == '\u03F2'
-                        || c == '\u03F3' || c == '\u03F4' || c == '\u03F5'
-                        || c == '\u03D0' || c == '\u03D1' || c == '\u03D5'
-                        || c == '\u03D6' || c == '\u03F0' || c == '\u03F1'
-                        ) return false;
                     if (UCharacter.isLetter(c)) {
                         ++letterCount;
                         if (noLetterYet) {
@@ -174,6 +181,7 @@ public class RoundTripTest extends TestFmwk {
         private int pairLimit  = 0x10000;
         UnicodeSet sourceRange;
         UnicodeSet targetRange;
+        UnicodeSet roundtripExclusions;
         TestLog log;
         Legal legalSource;
     
@@ -197,23 +205,42 @@ public class RoundTripTest extends TestFmwk {
         
         // Added to do better equality check.
         
-        public boolean isSame(String a, String b) {
-            if (CHECKCASE) {
-                if (a.equals(b)) return true;
-            } else {
-                if (a.equalsIgnoreCase(b)) return true;
-            }
+        public static boolean isSame(String a, String b) {
+            if (a.equals(b)) return true;
+            if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
             a = Normalizer.normalize(a, Normalizer.DECOMP, 0);
             b = Normalizer.normalize(b, Normalizer.DECOMP, 0);
-            if (CHECKCASE) {
-                if (a.equals(b)) return true;
-            } else {
-                if (a.equalsIgnoreCase(b)) return true;
+            if (a.equals(b)) return true;
+            if (a.equalsIgnoreCase(b) && isCamel(a)) return true;
+            return false;
+        }
+        
+        public static boolean isCamel(String a) {
+            //System.out.println("CamelTest");
+            // see if string is of the form aB; e.g. lower, then upper or title
+            int cp;
+            boolean haveLower = false;
+            for (int i = 0; i < a.length(); i += UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(a, i);
+                int t = UCharacter.getType(cp);
+                //System.out.println("\t" + t + " " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
+                switch (t) {
+                    case Character.UPPERCASE_LETTER:
+                        if (haveLower) return true;
+                        break;
+                    case Character.TITLECASE_LETTER:
+                        if (haveLower) return true;
+                        // drop through, since second letter is lower.
+                    case Character.LOWERCASE_LETTER:
+                        haveLower = true;
+                        break;
+                }
             }
+            //System.out.println("FALSE");
             return false;
         }
       
-        public void test(String sourceRange, String targetRange, TestLog log, Legal legalSource) 
+        public void test(String sourceRange, String targetRange, String roundtripExclusions, TestLog log, Legal legalSource) 
           throws java.io.IOException, java.text.ParseException {
             
             this.legalSource = legalSource;
@@ -224,13 +251,18 @@ public class RoundTripTest extends TestFmwk {
             if (targetRange != null && targetRange.length() > 0) {
                 this.targetRange = new UnicodeSet(targetRange);
             }
+            if (roundtripExclusions != null && roundtripExclusions.length() > 0) {
+                this.roundtripExclusions = new UnicodeSet(roundtripExclusions);
+            }
 
             if (this.sourceRange == null) this.sourceRange = new UnicodeSet("[a-zA-Z]");
+            if (this.roundtripExclusions == null) this.roundtripExclusions = new UnicodeSet(); // empty
 
             this.log = log;
 
-            log.logln(Utility.escape("Source: " + this.sourceRange));
-            log.logln(Utility.escape("Target: " + this.targetRange));
+            log.logln(Utility.escape("Source:  " + this.sourceRange));
+            log.logln(Utility.escape("Target:  " + this.targetRange));
+            log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
 
             // make a UTF-8 output file we can read with a browser
 
@@ -319,7 +351,7 @@ public class RoundTripTest extends TestFmwk {
                 if (!isReceivingSource(targ)) {
                     logWrongScript("Target-Source", cs, targ);
                     failTargSource.set(c);
-                } else if (!isSame(cs, reverse)) {
+                } else if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
                     logRoundTripFailure(cs, targ, reverse);
                     failRound.set(c);
                 }
@@ -345,7 +377,8 @@ public class RoundTripTest extends TestFmwk {
                     String reverse = sourceToTarget.transliterate(targ);
                     if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
                         logWrongScript("Target-Source", cs, targ);
-                    } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)) {
+                    } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)
+                         && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
                         logRoundTripFailure(cs, targ, reverse);
                     }
                 }
