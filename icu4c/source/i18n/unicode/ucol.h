@@ -804,7 +804,7 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
- * @draft ICU 2.8
+ * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
 U_CAPI const char * U_EXPORT2
 ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
