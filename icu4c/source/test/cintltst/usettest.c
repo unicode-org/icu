@@ -49,6 +49,7 @@ static void Testj2269() {
   uset_addString(s, a, 3);
   a[0] = 0x63; a[1] = 0x63;
   expect(s, "{abc}", "{ccc}", &status);
+  uset_close(s);
 }
 
 static const UChar PAT[] = {91,97,45,99,123,97,98,125,93,0}; /* "[a-c{ab}]" */
