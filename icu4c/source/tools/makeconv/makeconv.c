@@ -252,17 +252,16 @@ static UOption options[]={
 
 int main(int argc, const char *argv[])
 {
-  UConverterSharedData* mySharedData = NULL; 
-  UErrorCode err = U_ZERO_ERROR;
-  char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  const char* destdir, *arg;
-  size_t destdirlen;
-  char* dot = NULL, *outBasename;
-  char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  int i;
+    UConverterSharedData* mySharedData = NULL; 
+    UErrorCode err = U_ZERO_ERROR;
+    char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+    const char* destdir, *arg;
+    size_t destdirlen;
+    char* dot = NULL, *outBasename;
+    char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
 
 #ifdef XP_MAC_CONSOLE
-   argc = ccommand((char***)&argv);
+    argc = ccommand((char***)&argv);
 #endif
 
     /* preset then read command line options */
@@ -410,7 +409,7 @@ int main(int argc, const char *argv[])
     }
 
   return err;
-      
+
 }
 
 
@@ -498,7 +497,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
                   uprv_strcpy((char*)myConverter->name, converterName);
                   myConverter->platform = UCNV_IBM;
               }
-            	                    
+
             }
 
           /*get conversion type*/
@@ -1253,7 +1252,7 @@ static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterShar
                 udata_writePadding(pData, 4-(size%4) );
                 size+= 4-(size%4);
             }
-            size += udata_write_ucmp16(pData,&data->table->dbcs.toUnicodeFallback);        
+            size += udata_write_ucmp16(pData,&data->table->dbcs.toUnicodeFallback);
         }
       }
       break;
