@@ -8,6 +8,8 @@
 //  11/17/99    aliu        Added support for transliterators.
 //  01/15/2002  grhoten     Synchronized the language and contry codes with ISO standards
 
+// ***  Note: do NOT translate or modify (customize) this root locale.  
+//      Instead, put translations in sub locales.
 
 root {
     Version { "3.2" }
@@ -1606,9 +1608,34 @@ root {
             "Heisei",                       // 1989             
        }
 
+       DateTimePatterns_japanese:array {
+                "h:mm:ss a z", // full time pattern
+                "h:mm:ss a z", // long time pattern
+                "h:mm:ss a", // medium time pattern
+                "h:mm a", // short time pattern
+                "EEEE, MMMM d, y G", // full date pattern
+                "MMMM d, y G", // long date pattern
+                "MMM d, y G", // medium date pattern
+                "M/d/yy", // short date pattern
+                "{1} {0}" // date-time pattern
+       }
+
        // Buddhist calendar data
        Eras_buddhist:array {
            "BE"                             // Buddhist Era  = 543 BC Gregorian 
        }
+
+       DateTimePatterns_buddhist { // shorten year, use Era 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, y G",
+        "MMMM d, y G",
+        "MMM d, y G",
+        "M/d/y",
+        "{1} {0}",
+    }
+
 }
 

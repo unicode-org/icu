@@ -550,7 +550,7 @@ public:
      * Get the calendar type, "gregorian", for use in DateFormatSymbols.
      *
      * @return calendar type
-     * @draft ICU 2.6
+     * @internal
      */
     virtual const char * getType() const;
 
@@ -560,7 +560,22 @@ protected:
      * Called by computeFields. Converts calendar's year into Gregorian Extended Year (where negative = BC)
      * @internal
      */
-    virtual int32_t getGregorianYear(UErrorCode &status);
+    virtual int32_t getGregorianYear(UErrorCode &status) const;
+
+    /***
+     * Called by computeJulianDay.  Returns the default month (0-based) for the year,
+     * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
+     */
+    virtual int32_t getDefaultMonthInYear() const { return 0; }
+
+
+    /***
+     * Called by computeJulianDay.  Returns the default day (1-based) for the month,
+     * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
+     */
+    virtual int32_t getDefaultDayInMonth(int32_t month) const { return 1; }
+
+
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
@@ -849,6 +864,72 @@ protected:
      * @return the floor of the quotient.
      */
     static int32_t floorDivide(double numerator, int32_t denominator, int32_t remainder[]);
+
+ public: // internal implementation
+
+    /**
+     * @internal 
+     * @return TRUE if this calendar has the notion of a default century
+     */
+    virtual UBool haveDefaultCentury() const;
+
+    /**
+     * @internal
+     * @return the start of the default century
+     */
+    virtual UDate defaultCenturyStart() const;
+
+    /**
+     * @internal 
+     * @return the beginning year of the default century
+     */
+    virtual int32_t defaultCenturyStartYear() const;
+
+ private:
+    /**
+     * The system maintains a static default century start date.  This is initialized
+     * the first time it is used.  Before then, it is set to SYSTEM_DEFAULT_CENTURY to
+     * indicate an uninitialized state.  Once the system default century date and year
+     * are set, they do not change.
+     */
+    static UDate         fgSystemDefaultCenturyStart;
+
+    /**
+     * See documentation for systemDefaultCenturyStart.
+     */
+    static int32_t          fgSystemDefaultCenturyStartYear;
+
+    /**
+     * Default value that indicates the defaultCenturyStartYear is unitialized
+     */
+    static const int32_t    fgSystemDefaultCenturyYear;
+
+    /**
+     * TODO: (ICU 2.8) use this value instead of SimpleDateFormat::fgSystemDefaultCentury
+     */
+    //static const UDate        fgSystemDefaultCentury;
+
+    /**
+     * Returns the beginning date of the 100-year window that dates with 2-digit years
+     * are considered to fall within.
+     * @return    the beginning date of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
+     */
+    UDate         internalGetDefaultCenturyStart(void) const;
+
+    /**
+     * Returns the first year of the 100-year window that dates with 2-digit years
+     * are considered to fall within.
+     * @return    the first year of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
+     */
+    int32_t          internalGetDefaultCenturyStartYear(void) const;
+
+    /**
+     * Initializes the 100-year window that dates with 2-digit years are considered
+     * to fall within so that its start date is 80 years before the current time.
+     */
+    static void  initializeSystemDefaultCentury(void);
 
 };
 

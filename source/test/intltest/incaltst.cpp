@@ -14,7 +14,7 @@
 
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
-      errln((UnicodeString(u_errorName(status)) + UnicodeString("err " ) )+ msg); \
+      errln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
         return; \
     }
 
@@ -30,6 +30,9 @@
 
 static UnicodeString fieldName(UCalendarDateFields f);
 
+// Turn this on to dump the calendar fields 
+#define U_DEBUG_DUMPCALS  
+
 static UnicodeString calToStr(const Calendar & cal)
 {
 
@@ -41,7 +44,7 @@ static UnicodeString calToStr(const Calendar & cal)
   }
   out += UnicodeString(cal.getType());
 
-  out += cal.inDaylightTime(status)?UnicodeString("DAYLIGHT"):UnicodeString("NORMAL");
+  out += cal.inDaylightTime(status)?UnicodeString("- DAYLIGHT"):UnicodeString("- NORMAL");
 
   UnicodeString str2;
   out += cal.getTimeZone().getDisplayName(str2);
@@ -49,27 +52,24 @@ static UnicodeString calToStr(const Calendar & cal)
   return out;
 }
 
+#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
+
+
 void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite IntlCalendarTest");
     switch (index) {
-        case 0:
-            name = "TestTypes";
-            if (exec) {
-                logln("TestTypes---"); logln("");
-                TestTypes();
-            }
-            break;
-        case 1:
-            name = "TestBuddhist";
-            if (exec) {
-                logln("TestBuddhist---"); logln("");
-                TestBuddhist();
-            }
-            break;
+      CASE(0,TestTypes);
+      CASE(1,TestGregorian);
+      CASE(2,TestBuddhist);
+      CASE(3,TestJapanese);
+      CASE(4,TestBuddhistFormat);
+      CASE(5,TestJapaneseFormat);
         default: name = ""; break;
     }
 }
+
+#undef CASE
 
 // ---------------------------------------------------------------------------------
 
@@ -110,15 +110,11 @@ IntlCalendarTest::TestTypes()
   UErrorCode status = U_ZERO_ERROR;
   int j;
   const char *locs [40] = { "en_US_VALLEYGIRL",     
-#if 0
                             "ja_JP_TRADITIONAL",   
-#endif
                             "th_TH_TRADITIONAL", 
                             "en_US", NULL };
   const char *types[40] = { "gregorian", 
-#if 0
                             "japanese",
-#endif
                             "buddhist",           
                             "gregorian", NULL };
 
@@ -175,13 +171,15 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
     cal.set(UCAL_ERA, era);
     cal.set(year, month, dayOfMonth);
     UDate d = cal.getTime(status);
-    //    logln((UnicodeString)"cal  : " + calToStr(cal));
-    //    logln((UnicodeString)"grego: " + calToStr(*grego));
+#ifdef U_DEBUG_DUMPCALS
+    logln((UnicodeString)"cal  : " + calToStr(cal));
+    logln((UnicodeString)"grego: " + calToStr(*grego));
+#endif
     if (d == D) {
       logln(UnicodeString("OK: ") + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
-            " => " + d + " (" + UnicodeString(cal.getType()));
+            " => " + d + " (" + UnicodeString(cal.getType()) + ")");
     } else {
-      errln(UnicodeString("Fail: ") + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
+      errln(UnicodeString("Fail: (fields to millis)") + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
             " => " + d + ", expected " + D + " (" + UnicodeString(cal.getType()) + "Off by: " + (d-D));
     }
     
@@ -190,14 +188,16 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
     cal.setTime(D, status);
     int e = cal.get(UCAL_ERA, status);
     int y = cal.get(UCAL_YEAR, status);
-    //logln((UnicodeString)"cal  : " + calToStr(cal));
-    //logln((UnicodeString)"grego: " + calToStr(*grego));
+#ifdef U_DEBUG_DUMPCALS
+    logln((UnicodeString)"cal  : " + calToStr(cal));
+    logln((UnicodeString)"grego: " + calToStr(*grego));
+#endif
     if (y == year && e == era) {
       logln((UnicodeString)"OK: " + D + " => " + cal.get(UCAL_ERA, status) + ":" +
             cal.get(UCAL_YEAR, status) + "/" +
-            (cal.get(UCAL_MONTH, status)+1) + "/" + cal.get(UCAL_DATE, status) +  " (" + UnicodeString(cal.getType()));
+            (cal.get(UCAL_MONTH, status)+1) + "/" + cal.get(UCAL_DATE, status) +  " (" + UnicodeString(cal.getType()) + ")");
     } else {
-      errln((UnicodeString)"Fail: " + D + " => " + cal.get(UCAL_ERA, status) + ":" +
+      errln((UnicodeString)"Fail: (millis to fields)" + D + " => " + cal.get(UCAL_ERA, status) + ":" +
             cal.get(UCAL_YEAR, status) + "/" +
             (cal.get(UCAL_MONTH, status)+1) + "/" + cal.get(UCAL_DATE, status) +
             ", expected " + era + ":" + year + "/" + (month+1) + "/" +
@@ -206,6 +206,26 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
   }
   delete grego;
   CHECK(status, "err during quasiGregorianTest()");
+}
+
+// Verify that Gregorian works like Gregorian
+void IntlCalendarTest::TestGregorian() { 
+  int32_t data[] = { 
+    GregorianCalendar::AD, 1868, 1868, UCAL_SEPTEMBER, 8,
+    GregorianCalendar::AD, 1868, 1868, UCAL_SEPTEMBER, 9,
+    GregorianCalendar::AD, 1869, 1869, UCAL_JUNE, 4,
+    GregorianCalendar::AD, 1912, 1912, UCAL_JULY, 29,
+    GregorianCalendar::AD, 1912, 1912, UCAL_JULY, 30,
+    GregorianCalendar::AD, 1912, 1912, UCAL_AUGUST, 1,
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+  };
+  
+  Calendar *cal;
+  UErrorCode status = U_ZERO_ERROR;
+  cal = Calendar::createInstance("de_DE", status);
+  CHECK(status, UnicodeString("Creating de_CH calendar"));
+  quasiGregorianTest(*cal,Locale("fr_FR"),data);
+  delete cal;
 }
 
 /**
@@ -231,6 +251,50 @@ void IntlCalendarTest::TestBuddhist() {
   cal = Calendar::createInstance("th_TH_TRADITIONAL", status);
   CHECK(status, UnicodeString("Creating th_TH_TRADITIONAL calendar"));
   quasiGregorianTest(*cal,Locale("th_TH"),data);
+}
+
+/**
+ * Verify that JapaneseCalendar shifts years to Japanese Eras but otherwise
+ * behaves like GregorianCalendar.
+ */
+void IntlCalendarTest::TestJapanese() {
+  
+/* Sorry.. japancal.h is private! */
+#define JapaneseCalendar_MEIJI  232
+#define JapaneseCalendar_TAISHO 233
+#define JapaneseCalendar_SHOWA  234
+#define JapaneseCalendar_HEISEI 235
+
+  // BE 2542 == 1999 CE
+  int32_t data[] = { 
+    //       Jera         Jyr  Gyear   m             d
+    JapaneseCalendar_MEIJI, 1, 1868, UCAL_SEPTEMBER, 8,
+    JapaneseCalendar_MEIJI, 1, 1868, UCAL_SEPTEMBER, 9,
+    JapaneseCalendar_MEIJI, 2, 1869, UCAL_JUNE, 4,
+    JapaneseCalendar_MEIJI, 45, 1912, UCAL_JULY, 29,
+    JapaneseCalendar_TAISHO, 1, 1912, UCAL_JULY, 30,
+    JapaneseCalendar_TAISHO, 1, 1912, UCAL_AUGUST, 1,
+
+    // new tests (not in java)
+    JapaneseCalendar_SHOWA,     64,   1989,  UCAL_JANUARY, 7,
+    JapaneseCalendar_HEISEI,    1,   1989,  UCAL_JANUARY, 8,
+    JapaneseCalendar_HEISEI,    1,   1989,  UCAL_JANUARY, 9,
+    JapaneseCalendar_HEISEI,    1,   1989,  UCAL_DECEMBER, 20,
+    JapaneseCalendar_HEISEI,  15,  2003,  UCAL_MAY, 22,
+       -1,-1,-1,-1,-1,-1,-1,-1,-1,-1 };
+
+  Calendar *cal;
+  UErrorCode status = U_ZERO_ERROR;
+  cal = Calendar::createInstance("ja_JP_TRADITIONAL", status);
+  CHECK(status, UnicodeString("Creating ja_JP_TRADITIONAL calendar"));
+  quasiGregorianTest(*cal,Locale("ja_JP"),data);
+}
+
+void IntlCalendarTest::TestBuddhistFormat() {
+  Calendar *cal;
+  UErrorCode status = U_ZERO_ERROR;
+  cal = Calendar::createInstance("th_TH_TRADITIONAL", status);
+  CHECK(status, UnicodeString("Creating th_TH_TRADITIONAL calendar"));
 
   // Test simple parse/format with adopt
   
@@ -262,6 +326,54 @@ void IntlCalendarTest::TestBuddhist() {
     }
     delete fmt;
   }
+  delete cal;
+  CHECK(status, "Error occured");
+}
+
+
+void IntlCalendarTest::TestJapaneseFormat() {
+  Calendar *cal;
+  UErrorCode status = U_ZERO_ERROR;
+  cal = Calendar::createInstance("ja_JP_TRADITIONAL", status);
+  CHECK(status, UnicodeString("Creating ja_JP_TRADITIONAL calendar"));
+
+  Calendar *cal2 = cal->clone();
+
+  // Test simple parse/format with adopt
+  
+  UDate aDate = 999932400000.0; 
+  SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yy G"), Locale("en_US"), status);
+  CHECK(status, "creating date format instance");
+  if(!fmt) { 
+    errln("Coudln't create en_US instance");
+  } else {
+    UnicodeString str;
+    fmt->format(aDate, str);
+    logln(UnicodeString() + "Test Date: " + str);
+    str.remove();
+    fmt->adoptCalendar(cal);
+    cal = NULL;
+    fmt->format(aDate, str);
+    logln(UnicodeString() + "as Japanese Calendar: " + str);
+    UnicodeString expected("September 8, 13 Heisei");
+    if(str != expected) {
+      errln("Expected " + expected + " but got " + str);
+    }
+    UDate otherDate = fmt->parse(expected, status);
+    if(otherDate != aDate) { 
+      UnicodeString str3;
+      ParsePosition pp;
+      fmt->parse(expected, *cal2, pp);
+      fmt->format(otherDate, str3);
+      errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  " = " +   otherDate + ", " + str3 + " = " + calToStr(*cal2) );
+  
+    } else {
+      logln("Parsed OK: " + expected);
+    }
+    delete fmt;
+  }
+  delete cal;
+  delete cal2;
   CHECK(status, "Error occured");
 }
 
