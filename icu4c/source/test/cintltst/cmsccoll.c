@@ -538,6 +538,7 @@ static void PrintMarkDavis( )
 }
 
 static void CollationLocaleTest( ) {
+/*
   UErrorCode status = U_ZERO_ERROR;
   UResourceBundle *rb = ures_open(NULL, "fr_FR_you_ll_never_find_this_locale", &status);
   const char *rbLocale = ures_getLocale(rb, &status);
@@ -545,6 +546,29 @@ static void CollationLocaleTest( ) {
 
   UResourceBundle *coll = ures_getByKey(rb, "CollationElements", NULL, &status);
   const char *locale = ures_getLocale(coll, &status);
+*/
+/*
+** check for actual locale via ICU resource bundles
+**
+** lp points to the original locale ("fr_FR_....")
+*/
+
+UResourceBundle *lr,*cr;
+UErrorCode              lec = U_ZERO_ERROR;
+const char *lp = "fr_FR_you_ll_never_find_this_locale";
+
+if ((lr = ures_open(NULL,lp,&lec))) {
+         if ((cr = ures_getByKey(lr,"CollationElements",0,&lec))) {
+                 if ((lp = ures_getLocale(cr,&lec))) {
+                         if (U_SUCCESS(lec)) {
+                         /* copy the fallback locale into the definition */                     
+                                 /*cpynbuf(pkdef->kseg_desc,lp,ctKSEGDLEN);*/
+                         }
+                 }
+                 ures_close(cr);
+         }
+         ures_close(lr);
+}
 
 }
 
@@ -564,9 +588,9 @@ void testPrimary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"Primary failed  source: %s target: %s \n", utfSource,utfTarget);
     }
 */
-    source[0] = 0x00E0;
+    source[0] = 0x0491;
     u_strcat(source,p);
-    target[0] = 0x0061;
+    target[0] = 0x0413;
     u_strcat(target,q);
     doTest(col, source, target, UCOL_LESS);
 /*
@@ -596,9 +620,9 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
        fprintf(file,"secondary failed  source: %s target: %s \n", utfSource,utfTarget);
     }
 */
-    source[0] = 0x0041;
+    source[0] = 0x0053;
     u_strcat(source,p);
-    target[0]= 0x0061;
+    target[0]= 0x0073;
     u_strcat(target,q);
 
     doTest(col, source, target, UCOL_LESS);
@@ -718,13 +742,13 @@ void testCollator(UCollator* col, const UChar* p,const UChar* q, uint32_t streng
 }
 
 static char* localesToTest[] = {
-"ar", "bg", "ca", "cs", "da", 
-"el", "en_BE", /*"en_US_POSIX", */
+"ar", "bg", "ca", "cs", /*"da", */
+"el", "en_BE", "en_US_POSIX", 
 "es", "et", "fi", "fr", "hi", 
-"hr", "hu", "is", "iw", /*"ja", */
-/*"ko",*/ "lt", "lv", "mk", "mt", 
+"hr", "hu", "is", "iw", "ja", 
+"ko", "lt", "lv", "mk", "mt", 
 "nb", "nn", "nn_NO", "pl", "ro", 
-"ru", "sh", "sk", "sl", "sq", 
+"ru", /*"sh",*/ "sk", "sl", "sq", 
 "sr", "sv", "th", "tr", "uk", 
 "vi", "zh", "zh_TW"
 };
@@ -738,6 +762,7 @@ static void RamsRulesTest( ) {
   uint32_t strength = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t rExpsLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
@@ -753,7 +778,7 @@ static void RamsRulesTest( ) {
 
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
-    fprintf(stderr, "%s\n", localesToTest[i]);
+    /*fprintf(stderr, "%s\n", localesToTest[i]);*/
     rules = ucol_getRules(coll, &ruleLen);
     if(U_SUCCESS(status) && ruleLen > 0) {
       rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
@@ -770,12 +795,36 @@ static void RamsRulesTest( ) {
         startOfRules = FALSE;
 
         u_strncpy(second,rulesCopy+chOffset, chLen);
+        second[chLen] = 0;
+
         if(exLen > 0) {
           u_strncat(second+chLen, rulesCopy+exOffset, exLen);
+          second[chLen+exLen] = 0;
+        } 
+/*      
+       else if (exLen == 0 && rExpsLen > 0) {
+          u_strcat(second+chLen, rExps);
+          *rExps = 0;
+          rExpsLen = 0;
+        } else if (exLen > 0 && rExpsLen > 0) {
+          fprintf(stderr, "Bad rule - both reset and explicit expansion\n");
         }
-        second[chLen+exLen] = 0;
+*/
         if(strength != UCOL_TOK_RESET) {
           testCollator(coll,first,second,strength);
+        } else {
+/*
+          if(chLen > 1) {
+            rExpsLen = chLen-1;
+            second[0] = *(rulesCopy+chOffset);
+            second[1] = 0;
+            u_strncpy(rExps, rulesCopy+chOffset+1, rExpsLen);
+            rExps[rExpsLen] = 0;
+          } else {
+            *rExps = 0;
+            rExpsLen = 0;
+          }
+*/
         }
         u_strcpy(first, second);
 
@@ -793,339 +842,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
     addTest(root, &CollationLocaleTest, "tscoll/cmsccoll/CollationLocaleTest");
-    /*addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");*/
+    addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
 }
 
-#if 0
-
-/* Ram's rule test */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "unicode\ucol.h"
-#include "unicode\ustdio.h"
-#include "unicode\ustring.h"
-#include "ucol_tok.h"
-#define AMP    '&'
-#define GREAT  '<'
-#define EQUAL  '='
-#define COMA   ','
-#define SEMIC  ';'
-#define BRACKET '['
-#define ACCENT '@'
-#define AMP_STR    "&"
-#define GREAT_STR  "<"
-#define EQUAL_STR  "="
-#define COMA_STR   ","
-#define SEMIC_STR  ";"
-#define DG_STR     "<<"
-#define TG_STR     "<<<"
-
-static FILE* file;
-
-
-int32_t transformUTF16ToUTF8(uint8_t *dest, int32_t destCapacity,
-                             const UChar *src, int32_t srcLength) {
-    int32_t srcIndex, destIndex;
-    UChar32 c;
-
-    for(srcIndex=destIndex=0; srcIndex<srcLength && destIndex<destCapacity;) {
-        /* get code point from UTF-16 */
-        UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
-        /* write code point in UTF-8 */
-        UTF8_APPEND_CHAR_SAFE(dest, destIndex, destCapacity, c);
-    }
-
-    return destIndex; /* return destination length */
-}
-void resetBuf(UChar** src,int len){
-    UChar* local = *src;
-    int i=0;
-    while(i<len){
-        *local++ = '\0';
-        i++;
-    }
-
-}
-
-UChar* findDelimiter(UChar* source,int srcLen){
-    UChar* local = source;
-    int i=0;
-    while(i<srcLen){
-        switch(*local){
-        case AMP:
-        case EQUAL :
-        case COMA  : 
-        case SEMIC :
-        case GREAT :
-            return local;
-        default:
-            break;
-        }
-        local++;
-        i++;
-    }
-    return NULL;
-}
-char *aescstrdup(const UChar* unichars, char* buf,int len){
-    int length;
-    char *newString,*targetLimit,*target;
-    UConverterFromUCallback cb;
-    void *p;
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UConverter* conv = ucnv_open("US-ASCII",&errorCode);
-    length = u_strlen( unichars);
-    newString = buf;
-    target = newString;
-    targetLimit = newString+len;
-    ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_JAVA, &cb, &p, &errorCode);
-    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
-    *target = '\0';
-    return newString;
-}
-UChar* consumeDelimiter(UChar** source, int srcLen,int* strength, UChar** delimiter){
-     UChar* local = *source;
-     UBool foundDelimiter = FALSE;
-     int i=0;
-     while(i<srcLen){
-        switch(*local){
-        case AMP:
-            *strength=1;
-            *delimiter = (UChar*)AMP_STR ;
-            if(*(local+1) == BRACKET ||*(local+2) == BRACKET  ){
-                local++;
-                continue;
-            }
-            if(*(local-1)!= 0x0027)
-                foundDelimiter = TRUE;
-            break;
-        case BRACKET:
-            {
-             if(*(local-1)!= 0x0027){
-                UChar* limit;
-                limit = findDelimiter(local,srcLen-i);
-                *source=local=limit;
-                continue;
-             }
-            }
-            break;
-        case EQUAL :
-            *strength=0;
-            if(*(local-1)!= 0x0027){
-                *delimiter = (UChar*)EQUAL_STR;
-                foundDelimiter = TRUE;
-            }
-            break;
-        case COMA  : 
-            *strength = 3;
-            *delimiter =(UChar*)COMA_STR ;
-            foundDelimiter = TRUE;
-            break;
-        case SEMIC :
-            *delimiter = (UChar*)SEMIC_STR;
-            *strength = 2;
-            foundDelimiter = TRUE;
-            break;
-        case GREAT :
-             if(*(local+1)== GREAT){
-                 local++; 
-                 if(*(local+2)==GREAT){
-                     *delimiter = (UChar*)DG_STR;
-                     *strength = 2;
-                     local++;
-                 }
-                 else{
-                      *delimiter = (UChar*)TG_STR;
-                      *strength =3;
-                 }
-            }
-            else{
-               *delimiter = (UChar*)GREAT_STR ;
-               *strength =1;
-            }
-            if(*(local-1)!= 0x0027)
-                foundDelimiter =TRUE;
-            break;
-        default:
-            break;
-        }
-        if(foundDelimiter){
-            if(local ==*source){
-                *source = ++local;
-                return NULL;
-            }
-            else{
-                return local;
-            }
-        }
-        local++;
-        i++;
-     }
-     return NULL;
-}
-UChar* istrncpy(UChar* dst,const UChar* src,int32_t n){
-
-    UChar *anchor = dst;            /* save a pointer to start of dst */
-
-    while( (n-- > 0) ) {   /* copy string 2 over              */
-        if(*src!=0x0020 && *src!=0 && *src!=0x0027){
-             *(dst++) = *(src);
-        }
-        *src++;
-    }
-
-    return anchor;
-
-}
-
-
-void parseAndPrintRules(UCollator* col,const char* loc, const UChar* rules, int length){
-    UChar *local = (UChar*)rules;
-    UChar current[20]={'\0'};
-    UChar previous[20]= {'\0'};
-    UChar *first =current, *second = previous;
-    UChar* delimiter = (UChar*)" ";
-    int i = 0, strength;
-    char fileName[20] = {'\0'};
-    UBool gotBoth = FALSE;
-
-    if(loc){
-        strcpy(fileName,loc);
-    }
-    strcat(fileName,"TestCases.txt");
-    file = fopen(fileName,"wb");
-    if(file){
-        while((local-rules < length) && i<300){
-            UChar* limit =consumeDelimiter(&local,length-i,&strength,&delimiter);
-            if(limit==NULL ){
-                if(u_strcmp(delimiter ,(UChar*) AMP_STR)==0){
-                    resetBuf(&first,20);
-                }
-                limit =findDelimiter(local,length-(local-rules));
-                if(limit==NULL){
-                    limit= (UChar*)rules+length;
-                }
-
-            }
-
-            if(limit){
-                if(*first=='\0'){
-                    istrncpy(first,local,(int)(limit-local));
-                    local=limit;
-
-                }
-                else{
-                    if((local-rules) < length){
-                        istrncpy(second,local,(int)(limit-local));
-                    }
-                    local=limit;
-                    gotBoth=TRUE;
-                }
-            }
-            if(gotBoth){
-                unsigned char tempFirst[20] = {'\0'};
-                unsigned char tempSecond[20] = {'\0'};
-                aescstrdup(first,tempFirst,20);
-                aescstrdup(second,tempSecond,20);
-                //fprintf(file,"first:%s second: %s delimiter: %s strength:%i \n ",tempFirst,tempSecond,delimiter,strength);
-                
-                testCollator(col,first,second,delimiter,strength);
-
-                //fprintf(file,"first:%s second: %s delimiter: %s strength:%i \n ",tempFirst,tempSecond,delimiter,strength);
-                resetBuf(&first,20);
-                u_strcpy(first,second);
-                resetBuf(&second,20);
-                gotBoth=FALSE;
-            }
-            i++;
-           
-        }
-           
-    }
-}
-
-void parseAndPrintRules2(UCollator* col,const char* loc, const UChar* rules, int length){
-    UChar *local = (UChar*)rules;
-    UChar current[20]={'\0'};
-    UChar previous[20]= {'\0'};
-    UChar *first =current, *second = previous;
-    UChar* delimiter = (UChar*)" ";
-    int i = 0, strength;
-    char fileName[20] = {'\0'};
-    UBool gotBoth = FALSE;
-
-    if(loc){
-        strcpy(fileName,loc);
-    }
-    strcat(fileName,"TestCases.txt");
-    file = fopen(fileName,"wb");
-    if(file){
-            if(limit){
-                if(*first=='\0'){
-                    istrncpy(first,local,(int)(limit-local));
-                    local=limit;
-
-                }
-                else{
-                    if((local-rules) < length){
-                        istrncpy(second,local,(int)(limit-local));
-                    }
-                    local=limit;
-                    gotBoth=TRUE;
-                }
-            }
-            if(gotBoth){
-                unsigned char tempFirst[20] = {'\0'};
-                unsigned char tempSecond[20] = {'\0'};
-                aescstrdup(first,tempFirst,20);
-                aescstrdup(second,tempSecond,20);
-                //fprintf(file,"first:%s second: %s delimiter: %s strength:%i \n ",tempFirst,tempSecond,delimiter,strength);
-                
-                testCollator(col,first,second,delimiter,strength);
-
-                //fprintf(file,"first:%s second: %s delimiter: %s strength:%i \n ",tempFirst,tempSecond,delimiter,strength);
-                resetBuf(&first,20);
-                u_strcpy(first,second);
-                resetBuf(&second,20);
-                gotBoth=FALSE;
-            }
-            i++;
-           
-        }
-           
-    }
-}
-
-void processRules(const char* loc){
-    UErrorCode status = U_ZERO_ERROR;
-    UCollator* col = ucol_open(loc,&status);
-    int length=0;
-    const UChar* rules;
-    if(loc){
-        rules = ucol_getRules(col,&length);
-    }
-    ucol_setAttribute(col,UCOL_STRENGTH,UCOL_QUATERNARY,&status);
-    parseAndPrintRules2(col,loc,rules,length);
-}
-
-
-extern int
-main(int argc, const char *argv[]) {
-    if(argc<2) {
-
-        fprintf(stderr,
-               "usage: %s { rpmap/rxmap-filename }+\n",
-                argv[0]);
-        exit(1);
-    }
-
-    while(--argc>0) {
-        processRules(*++argv);
-    }
-
-    return 0;
-}
-
-#endif
