@@ -46,7 +46,9 @@
 #include "unicode/smpdtfmt.h"  /* for the public field (!) SimpleDateFormat::fgSystemDefaultCentury */
 #include "mutex.h"
 
+#ifdef U_DEBUG_GREGOCAL
 #include <stdio.h>
+#endif
 
 
 // *****************************************************************************
@@ -732,7 +734,9 @@ GregorianCalendar::validateFields() const
             field != UCAL_DAY_OF_YEAR &&
             isSet((UCalendarDateFields)field) &&
             ! boundsCheck(internalGet((UCalendarDateFields)field), (UCalendarDateFields)field))
+#ifdef U_DEBUG_GREGOCAL
           fprintf(stderr, " field %d set to %d but out of bounds\n", field, internalGet((UCalendarDateFields)field));fflush(stderr);
+#endif
             return FALSE;
     }
 
@@ -742,7 +746,9 @@ GregorianCalendar::validateFields() const
         int32_t date = internalGet(UCAL_DATE);
         if (date < getMinimum(UCAL_DATE) ||
             date > monthLength(internalGet(UCAL_MONTH))) {
+#ifdef U_DEBUG_GREGOCAL
           fprintf(stderr, " date %d out of bounds\n", internalGet(UCAL_DATE));fflush(stderr);
+#endif
             return FALSE;
         }
     }
@@ -750,7 +756,9 @@ GregorianCalendar::validateFields() const
     if (isSet(UCAL_DAY_OF_YEAR)) {
         int32_t days = internalGet(UCAL_DAY_OF_YEAR);
         if (days < 1 || days > yearLength()) {
+#ifdef U_DEBUG_GREGOCAL
           fprintf(stderr, " doy %d out of bounds\n", internalGet(UCAL_DAY_OF_YEAR));fflush(stderr);
+#endif
             return FALSE;
         }
     }
@@ -759,7 +767,9 @@ GregorianCalendar::validateFields() const
     // We've checked against minimum and maximum above already.
     if (isSet(UCAL_DAY_OF_WEEK_IN_MONTH) &&
         0 == internalGet(UCAL_DAY_OF_WEEK_IN_MONTH)) {
+#ifdef U_DEBUG_GREGOCAL
             fprintf(stderr, " DOWIM == %d, should be 0\n", internalGet(UCAL_DAY_OF_WEEK_IN_MONTH));fflush(stderr);
+#endif
             return FALSE;
     }
 
@@ -802,7 +812,9 @@ GregorianCalendar::getGregorianYear(UErrorCode &status) const
             year = 1 - year;
         // Even in lenient mode we disallow ERA values other than AD & BC
         else if (era != AD) {
+#ifdef U_DEBUG_GREGOCAL
             fprintf(stderr,"Era = %d, not AD/BC\n", era); fflush(stderr);
+#endif
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return kEpochYear;
         }
@@ -817,7 +829,9 @@ GregorianCalendar::computeTime(UErrorCode& status)
         return;
 
     if (! isLenient() && ! validateFields()) {
+#ifdef U_DEBUG_GREGOCAL
       fprintf(stderr,"validate failed\n"); fflush(stderr);
+#endif
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1284,7 +1298,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
           //doy = 1;
           // For Gregorian the following will always be  1:     kNumDays[UCAL_JANUARY] + 1
           int32_t defMonth = getDefaultMonthInYear();  // 0 for gregorian
-          int32_t defDay = getDefaultDayInMonth(month); // 1 for gregorian
+          int32_t defDay = getDefaultDayInMonth(defMonth); // 1 for gregorian
           
           doy = defDay + (isLeap ? kLeapNumDays[defMonth] : kNumDays[defMonth]); 
           doCutoverAdjustment = FALSE;
