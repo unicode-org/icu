@@ -952,10 +952,8 @@ static void TestStringFunctions()
 
     log_verbose("Testing u_strtok_r()");
     {
-        const char tokString[]  = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
+        const char tokString[] = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
         const char *tokens[] = {",", "1", "2", "3", "AHHHHH!", "5.5", "6", "7", "8\n"};
-        const char *delim1 = " ";
-        const char *delim2 = " ,";
         UChar delimBuf[sizeof(test)];
         UChar currTokenBuf[sizeof(tokString)];
         UChar *state;
@@ -963,10 +961,10 @@ static void TestStringFunctions()
         UChar *ptr;
 
         u_uastrcpy(temp, tokString);
-        u_uastrcpy(delimBuf, delim1);
+        u_uastrcpy(delimBuf, " ");
 
         ptr = u_strtok_r(temp, delimBuf, &state);
-        u_uastrcpy(delimBuf, delim2);
+        u_uastrcpy(delimBuf, " ,");
         while (ptr != NULL) {
             u_uastrcpy(currTokenBuf, tokens[currToken]);
             if (u_strcmp(ptr, currTokenBuf) != 0) {
@@ -995,6 +993,7 @@ static void TestStringFunctions()
         if (state != NULL) {
             log_err("State should be NULL for a string of delimiters\n");
         }
+
         state = delimBuf;       /* Give it an "invalid" saveState */
         u_uastrcpy(currTokenBuf, "q, ,");
         if (u_strtok_r(currTokenBuf, delimBuf, &state) == NULL) {
@@ -1005,6 +1004,18 @@ static void TestStringFunctions()
         }
         if (state != NULL) {
             log_err("State should be NULL for empty string\n");
+        }
+
+        state = delimBuf;       /* Give it an "invalid" saveState */
+        u_uastrcpy(currTokenBuf, tokString);
+        u_uastrcpy(temp, tokString);
+        u_uastrcpy(delimBuf, "q");  /* Give it a delimiter that it can't find. */
+        ptr = u_strtok_r(currTokenBuf, delimBuf, &state);
+        if (ptr == NULL || u_strcmp(ptr, temp) != 0) {
+            log_err("Should have recieved the same string when there are no delimiters\n");
+        }
+        if (u_strtok_r(NULL, delimBuf, &state) != NULL) {
+            log_err("Should not have found another token in a one token string\n");
         }
     }
 
