@@ -96,7 +96,7 @@ clean:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	# dh_clean -k
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tmp
@@ -186,7 +186,7 @@ binary-arch: build install
 	dh_installcron
 	dh_installmanpages -picu
 	dh_installinfo
-	dh_undocumented -picu genccode.8 gencmn.8 gennames.8 \
+	dh_undocumented -picu genccode.8 gennames.8 \
 	    genprops.8 gentz.8 genfchk.8 genqchk.8 pkgdata.8
 	dh_installchangelogs 
 	dh_link
