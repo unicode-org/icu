@@ -34,9 +34,9 @@
  
 U_NAMESPACE_BEGIN
 
-const char DecimalFormatSymbols::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormatSymbols)
 
-const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
+static const char gNumberElements[] = "NumberElements";
 
 static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 
@@ -136,7 +136,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 
     // Gets the number element array.
     int32_t i = 0;
-    ResourceBundle numberElementsRes = resource.get(fgNumberElements, status);
+    ResourceBundle numberElementsRes = resource.get(gNumberElements, status);
     int32_t numberElementsLength = numberElementsRes.getSize();
 
     // If the array size is too small, something is wrong with the resource
