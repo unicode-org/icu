@@ -42,15 +42,15 @@ private:
 
 private:
 
-    void _testComplement(int32_t a);
+    void _testComplement(int32_t a, UnicodeSet&, UnicodeSet&);
 
-    void _testAdd(int32_t a, int32_t b);
+    void _testAdd(int32_t a, int32_t b, UnicodeSet&, UnicodeSet&, UnicodeSet&);
 
-    void _testRetain(int32_t a, int32_t b);
+    void _testRetain(int32_t a, int32_t b, UnicodeSet&, UnicodeSet&, UnicodeSet&);
 
-    void _testRemove(int32_t a, int32_t b);
+    void _testRemove(int32_t a, int32_t b, UnicodeSet&, UnicodeSet&, UnicodeSet&);
 
-    void _testXor(int32_t a, int32_t b);
+    void _testXor(int32_t a, int32_t b, UnicodeSet&, UnicodeSet&, UnicodeSet&);
 
     /**
      * Check that ranges are monotonically increasing and non-
@@ -61,7 +61,7 @@ private:
     /**
      * Convert a bitmask to a UnicodeSet.
      */
-    static UnicodeSet bitsToSet(int32_t a);
+    static void bitsToSet(int32_t a, UnicodeSet&);
 
     /**
      * Convert a UnicodeSet to a bitmask.  Only the characters
