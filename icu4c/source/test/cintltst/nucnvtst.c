@@ -21,6 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/ucol.h"
+#include "cmemory.h"
 
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
@@ -1031,39 +1032,25 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 }
 
 static void TestCoverageMBCS(){
-    char tdpath[256];
-    char tdfallbackpath[256];
-    char saveDirectory[256];
-    const char *directory= u_getDataDirectory();
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    UConverter* conv = NULL;
+    char* saveDirectory = (char*)uprv_malloc(sizeof(char) *(strlen(u_getDataDirectory())));
+    const char *directory;
+    char* tdpath = NULL;
     UErrorCode status = U_ZERO_ERROR;
-
-    /*save the data directory */
-    strcpy(saveDirectory, directory);
+    int len = 0;
+    char* index=NULL;
+    directory = loadTestData(&status);
+    len = strlen(directory);
+    tdpath = (char*) uprv_malloc(sizeof(char) * (len * 2));
+    uprv_strcpy(saveDirectory,u_getDataDirectory());
+    log_verbose("Retrieved data directory %s \n",saveDirectory); 
+    uprv_strcpy(tdpath,directory); 
+    index=strrchr(tdpath,(char)U_FILE_SEP_CHAR); 
     
-    strcpy(tdpath, directory);
-    strcat(tdpath,tdrelativepath);
-    
-    /* set the fallback path for Memory Mapped build */
-    strcpy(tdfallbackpath,directory);
-    strcat(tdfallbackpath,".."U_FILE_SEP_STRING);
-    strcat(tdfallbackpath,tdrelativepath);
-
-    u_setDataDirectory(tdpath);
-    /* test if we can open test1.cnv from testdatapath */
-    conv = ucnv_open("test1",&status);
-    if(U_FAILURE(status)){
-        status=U_ZERO_ERROR;
-        /* try the fallback path */
-        u_setDataDirectory(tdfallbackpath);
-        conv= ucnv_open("test1",&status);
-        if(U_FAILURE(status)){
-            log_err("Could not open converters from fallback path :%s . Error : %s \n",tdfallbackpath,u_errorName(status));
-        }
-        ucnv_close(conv);
+    if((unsigned int)(index-tdpath) != (strlen(tdpath)-1)){
+            *(index+1)=0;
     }
-    ucnv_close(conv);
+    u_setDataDirectory(tdpath);
+    log_verbose("ICU data directory is set to: %s \n" ,tdpath);
 
     /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
       which is test file for MBCS conversion with single-byte codepage data.*/
@@ -1139,9 +1126,11 @@ static void TestCoverageMBCS(){
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
 
     }
-
+    uprv_free(tdpath);
     /* restore the original data directory */
+    log_verbose("Setting the data directory to %s \n", saveDirectory);
     u_setDataDirectory(saveDirectory);
+    uprv_free(saveDirectory);
 
 }
 
