@@ -31,11 +31,15 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
 {
     static le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
     static le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
-
-    fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
-    fGPOSTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
+    const GlyphPositioningTableHeader *gposTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
 
     setScriptAndLanguageTags();
+
+    fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
+    
+    if (gposTable != NULL && gposTable->coversScriptAndLanguage(fScriptTag, fLangSysTag)) {
+        fGPOSTable = gposTable;
+    }
 }
 
 void OpenTypeLayoutEngine::reset()
