@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/05/09 22:44:28 $ 
-* $Revision: 1.17 $
+* $Date: 2000/06/06 23:25:08 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -137,7 +137,7 @@
     the root ICU4J directory.-->
     <zip zipfile="${zipbin.file}"
          basedir="."
-         excludes="${richedit.dist.dir},${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
   <target name="zip">
@@ -148,7 +148,7 @@
     UnicodeData-2.1.8.txt -->
     <zip zipfile="${zip.file}"
          basedir="."
-         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
   </target>
 
   <target name="clean">
