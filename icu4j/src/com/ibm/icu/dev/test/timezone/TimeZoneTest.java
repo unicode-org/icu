@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2004/02/06 21:53:59 $
- * $Revision: 1.19 $
+ * $Date: 2004/03/12 20:56:34 $
+ * $Revision: 1.20 $
  *
  *******************************************************************************
  */
@@ -26,6 +26,7 @@ import com.ibm.icu.util.*;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.lang.reflect.InvocationTargetException;
 
 public class TimeZoneTest extends TestFmwk
 {
@@ -832,10 +833,21 @@ public class TimeZoneTest extends TestFmwk
 	    final Object[] args = new Object[0];
 	    final Class[] argtypes = new Class[0];
 	    java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
-	    dst_java = ((Integer) m.invoke(tz_java, args)).intValue();   
-	} catch (Exception e) {
-		// see JDKTimeZone for the reason for this code
-		dst_java = 3600000;
+	    dst_java = ((Integer) m.invoke(tz_java, args)).intValue();
+	    if (dst_java <= 0 || dst_java >= 3600000) { // didn't get the fractional time zone we wanted
+		errln("didn't get fractional time zone!");
+	    }
+	} catch (NoSuchMethodException e) {
+	    // see JDKTimeZone for the reason for this code
+	    dst_java = 3600000;
+	} catch (IllegalAccessException e) {
+	    // see JDKTimeZone for the reason for this code
+	    errln(e.getMessage());
+	    dst_java = 3600000;
+	} catch (InvocationTargetException e) {
+	    // see JDKTimeZone for the reason for this code
+	    errln(e.getMessage());
+	    dst_java = 3600000;
 	}
 	
 	com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
@@ -847,6 +859,25 @@ public class TimeZoneTest extends TestFmwk
 		  " for tz " + tz_icu.getID());
 	} else {
 	    logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
+	}
+    }
+
+    public void TestGetOffsetDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(1997, Calendar.JANUARY, 30);
+        long date = cal.getTimeInMillis();
+
+	TimeZone tz_icu = TimeZone.getTimeZone("America/Los_Angeles");
+	int offset = tz_icu.getOffset(date);
+	if (offset != -28800000) {
+	    errln("expected offset -28800000, got: " + offset);
+	}
+
+	cal.set(1997, Calendar.JULY, 30);
+	date = cal.getTimeInMillis();
+	offset = tz_icu.getOffset(date);
+	if (offset != -25200000) {
+	    errln("expected offset -25200000, got: " + offset);
 	}
     }
 }
