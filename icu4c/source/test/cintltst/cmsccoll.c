@@ -1386,7 +1386,7 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   UChar rlz[2048] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+  UCollator *coll = ucol_openRules(rlz, rlen, UNORM_DEFAULT, UCOL_DEFAULT, &status);
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
@@ -1776,9 +1776,9 @@ static void TestRedundantRules() {
   for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
     log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
     rlen = u_unescape(rules[i], rlz, 2048);
-    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    credundant = ucol_openRules(rlz, rlen, UNORM_DEFAULT, UCOL_DEFAULT, &status);
     rlen = u_unescape(expectedRules[i], rlz, 2048);
-    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    cresulting = ucol_openRules(rlz, rlen, UNORM_DEFAULT, UCOL_DEFAULT, &status);
 
     testAgainstUCA(cresulting, credundant, 0, "expected", &status);
 
