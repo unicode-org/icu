@@ -46,7 +46,7 @@ U_CFUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char
  */
  
 U_CFUNC char *austrdup(const UChar* unichars);
-U_CFUNC char *aescstrdup(const UChar* unichars);
+U_CFUNC char *aescstrdup(const UChar* unichars, int32_t length);
 U_CFUNC void *ctst_malloc(size_t size);
 U_CFUNC void ctst_freeAll();
 
