@@ -341,7 +341,7 @@ void TestMessageFormat::sample()
     delete form;
 }
 
-
+/* Who knows what kind of static format we are talking about. */
 void TestMessageFormat::testStaticFormat(/* char* par */)
 {
     logln("running TestMessageFormat::testStaticFormat");
@@ -353,28 +353,28 @@ void TestMessageFormat::testStaticFormat(/* char* par */)
         Formattable(UDate(8.71068e+011), Formattable::kIsDate),
         "a disturbance in the Force"
         };
-   
-        UnicodeString result;
-        result = MessageFormat::format(
-            "At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",
-            arguments,
-            3,
-            result,
-            err);
 
-        if (U_FAILURE(err)) {
-            errln("TestMessageFormat::testStaticFormat #1");
-            logln(UnicodeString("TestMessageFormat::testStaticFormat failed test #1 with error code ")+(int32_t)err);
-            return;
-        }
+    UnicodeString result;
+    result = MessageFormat::format(
+        "At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",
+        arguments,
+        3,
+        result,
+        err);
 
-        static const UnicodeString expected = 
-                "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.";
-        if (result != expected) {
-            errln("TestMessageFormat::testStaticFormat failed on test");
-            logln( UnicodeString("     Result: ") + result );
-            logln( UnicodeString("   Expected: ") + expected );
-        }
+    if (U_FAILURE(err)) {
+        errln("TestMessageFormat::testStaticFormat #1");
+        logln(UnicodeString("TestMessageFormat::testStaticFormat failed test #1 with error code ")+(int32_t)err);
+        return;
+    }
+
+    static const UnicodeString expected(
+            "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.", "");
+    if (result != expected) {
+        errln("TestMessageFormat::testStaticFormat failed on test");
+        logln( UnicodeString("     Result: ") + result );
+        logln( UnicodeString("   Expected: ") + expected );
+    }
 }
 
 
