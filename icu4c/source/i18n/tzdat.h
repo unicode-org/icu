@@ -155,6 +155,6 @@ struct OffsetIndex {
 
 // Fields in UDataInfo:
 static const char TZ_SIG[] = "zone";     // dataFormat
-static const int8_t TZ_FORMAT_VERSION = 1; // formatVersion[0]
+static const int8_t TZ_FORMAT_VERSION = 2; // formatVersion[0]
 
 #endif
