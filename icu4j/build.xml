@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/11/24 22:27:54 $
-* $Revision: 1.83 $
+* $Date: 2003/12/02 03:08:38 $
+* $Revision: 1.84 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -436,7 +436,7 @@
     </target>
     <target name="collatorTests" depends="collator">
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/collator/**/*.java,com/ibm/icu/dev/test/search/**/*.java"
-            excludes="**/CVS/**/*"
+            excludes="**/CVS/**/*, com/ibm/icu/dev/test/collator/RandomCollator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
