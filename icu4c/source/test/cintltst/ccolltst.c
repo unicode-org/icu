@@ -82,7 +82,7 @@ void reportCResult( const UChar source[], const UChar target[],
         
         appendCompareResult(compareResult, sResult);
         appendCompareResult(expectedResult, sExpect);
-        log_err("Compare(%s , %s) returned: %s expected: %s\n", aescstrdup(source), aescstrdup(target),
+        log_err("Compare(%s , %s) returned: %s expected: %s\n", aescstrdup(source,-1), aescstrdup(target,-1),
             austrdup(sResult), austrdup(sExpect) );
     }
 
@@ -91,7 +91,7 @@ void reportCResult( const UChar source[], const UChar target[],
         
         appendCompareResult(incResult, sResult);
         appendCompareResult(expectedResult, sExpect);
-        log_err("incCompare(%s , %s) returned: %s expected: %s\n", aescstrdup(source), aescstrdup(target),
+        log_err("incCompare(%s , %s) returned: %s expected: %s\n", aescstrdup(source,-1), aescstrdup(target,-1),
             austrdup(sResult), austrdup(sExpect) );
     }
 
@@ -101,7 +101,7 @@ void reportCResult( const UChar source[], const UChar target[],
         appendCompareResult(keyResult, sResult);
         appendCompareResult(expectedResult, sExpect);
 
-        log_err("KeyCompare(%s , %s) returned: %s expected: %s\n", aescstrdup(source), aescstrdup(target), 
+        log_err("KeyCompare(%s , %s) returned: %s expected: %s\n", aescstrdup(source,-1), aescstrdup(target,-1), 
             austrdup(sResult), austrdup(sExpect) );
 
     
@@ -113,7 +113,7 @@ void reportCResult( const UChar source[], const UChar target[],
         appendCompareResult(keyResult, sResult);
         appendCompareResult(compareResult, sExpect);
 
-        log_err("difference between sortkey and compare result for (%s , %s) Keys: %s compare %s\n", aescstrdup(source), aescstrdup(target), 
+        log_err("difference between sortkey and compare result for (%s , %s) Keys: %s compare %s\n", aescstrdup(source,-1), aescstrdup(target,-1), 
             austrdup(sResult), austrdup(sExpect) );
 
     

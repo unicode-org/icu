@@ -56,8 +56,8 @@ TestCaseLower() {
             u_errorName(errorCode),
             uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)==0 &&
 buffer[length]==0 ? "yes" : "no",
-            aescstrdup(lowerRoot),
-            aescstrdup(buffer));
+            aescstrdup(lowerRoot,-1),
+            aescstrdup(buffer,-1));
     }
 
     /* lowercase with turkish locale and in the same buffer */
