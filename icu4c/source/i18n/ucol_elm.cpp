@@ -157,37 +157,70 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
 return t;
 }
 
-tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t) {
+tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
+
   tempUCATable *r = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
-  uint16_t *index = (uint16_t *)uprv_malloc(sizeof(uint16_t)*t->mapping->fCount);
-  int32_t *array = (int32_t *)uprv_malloc(sizeof(int32_t)*t->mapping->fCount);
+  uprv_memset(r, 0, sizeof(tempUCATable));
 
   /* mapping */
-  uprv_memcpy(index, t->mapping->fIndex, t->mapping->fCount*sizeof(uint16_t));
-  uprv_memcpy(array, t->mapping->fArray, t->mapping->fCount*sizeof(int32_t));
-  r->mapping = ucmp32_openAdopt(index, array, t->mapping->fCount);
+  if(t->mapping != NULL) {
+    uint16_t *index = (uint16_t *)uprv_malloc(sizeof(uint16_t)*t->mapping->fCount);
+    int32_t *array = (int32_t *)uprv_malloc(sizeof(int32_t)*t->mapping->fCount);
+
+    uprv_memcpy(array, t->mapping->fArray, t->mapping->fCount*sizeof(int32_t));
+    uprv_memcpy(index, t->mapping->fIndex, UCMP32_kIndexCount*sizeof(uint16_t));
+
+    r->mapping = ucmp32_openAdopt(index, array, t->mapping->fCount);
+  }
 
   /* expansions */
-  r->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
-  r->expansions->position = t->expansions->position;
-  r->expansions->size = t->expansions->size;
-  r->expansions->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*r->expansions->size);
+  if(t->expansions != NULL) {
+    r->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
+    r->expansions->position = t->expansions->position;
+    r->expansions->size = t->expansions->size;
+    if(t->expansions->CEs != NULL) {
+      r->expansions->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->expansions->size);
+      uprv_memcpy(r->expansions->CEs, t->expansions->CEs, sizeof(uint32_t)*t->expansions->size);
+    } else {
+      t->expansions->CEs = NULL;
+    }
+  }
 
-  r->contractions = uprv_cnttab_clone(t->contractions);
+  if(t->contractions != NULL) {
+    r->contractions = uprv_cnttab_clone(t->contractions);
+    r->contractions->mapping = r->mapping;
+  }
 
-  r->maxExpansions = (MaxExpansionTable *)uprv_malloc(sizeof(MaxExpansionTable));
-  r->maxExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxExpansions->size);
-  r->maxExpansions->expansionCESize = (uint8_t *)uprv_malloc(sizeof(uint8_t)*t->maxExpansions->size);
-  r->maxExpansions->size = t->maxExpansions->size;
-  r->maxExpansions->position = t->maxExpansions->position;
+  if(t->maxExpansions != NULL) {
+    r->maxExpansions = (MaxExpansionTable *)uprv_malloc(sizeof(MaxExpansionTable));
+    r->maxExpansions->size = t->maxExpansions->size;
+    r->maxExpansions->position = t->maxExpansions->position;
+    if(t->maxExpansions->endExpansionCE != NULL) {
+      r->maxExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxExpansions->size);
+      uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->size*sizeof(uint32_t));
+    } else {
+      r->maxExpansions->endExpansionCE = NULL;
+    }
+    if(t->maxExpansions->expansionCESize != NULL) {
+      r->maxExpansions->expansionCESize = (uint8_t *)uprv_malloc(sizeof(uint8_t)*t->maxExpansions->size);
+      uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->size*sizeof(uint8_t));
+    } else {
+      r->maxExpansions->expansionCESize = NULL;
+    }
+  }
 
-  uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->position*sizeof(uint32_t));
-  uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->position*sizeof(uint8_t));
+  if(t->unsafeCP != NULL) {
+    r->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
+    uprv_memcpy(r->unsafeCP, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
+  }
 
-  r->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-  r->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
-  uprv_memcpy(r->unsafeCP, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
-  uprv_memcpy(r->contrEndCP, t->contrEndCP, UCOL_UNSAFECP_TABLE_SIZE);
+  if(t->contrEndCP != NULL) {
+    r->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
+    uprv_memcpy(r->contrEndCP, t->contrEndCP, UCOL_UNSAFECP_TABLE_SIZE);
+  }
 
   r->UCA = t->UCA;
   r->image = t->image;
