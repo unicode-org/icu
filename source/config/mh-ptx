@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## PTX-specific setup
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code

@@ -1,3 +1,10 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
 root {
    Version { "1.0" }
     // TODO: Remove this

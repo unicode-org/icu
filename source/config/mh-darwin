@@ -1,7 +1,7 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Flags for position independent code

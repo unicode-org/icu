@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2003, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2004, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
