@@ -70,6 +70,7 @@
 #       define LIB_PREFIX_LENGTH 3
 #       define LIB_SUFFIX ".dll"
 #       define MAP_IMPLEMENTATION MAP_390DLL
+#       define U_MAKE_STR(name) #name
 #   else
 #       define MAP_IMPLEMENTATION MAP_POSIX
 #   endif
@@ -271,7 +272,6 @@
         const char *inBasename;
         char *basename, *suffix, *tempbasename;
         char pathBuffer[1024];
-        char entryName[100];
         const DataHeader *pHeader;
         dllhandle *handle;
         char filename[1024];
@@ -290,32 +290,32 @@
             int length;
             struct stat mystat;
             void *data;
-            UDataMemory_init(pData); /* Clear the output struct.        */
+            UDataMemory_init(pData); /* Clear the output struct. */
 
             /* determine the length of the file */
             if(stat(path, &mystat)!=0 || mystat.st_size<=0) {
                 return FALSE;
-           }
+            }
             length=mystat.st_size;
-     
+
             /* open the file */
             fd=open(path, O_RDONLY);
             if(fd==-1) {
                 return FALSE;
             }
-    
+
             /* get a view of the mapping */
             data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
             close(fd); /* no longer needed */
             if(data==MAP_FAILED) {
                 return FALSE;
-            }      
+            }
             pData->map = (char *)data + length;
             pData->pHeader=(const DataHeader *)data;
             pData->mapAddr = data;
             return TRUE;
         }
-        
+
 #       ifdef OS390BATCH
         /* ### hack: we still need to get u_getDataDirectory() fixed
         for OS/390 (batch mode - always return "//"? )
@@ -326,7 +326,7 @@
             /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
             /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
             /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-            uprv_strcpy(pathBuffer, "//IXMICUDA"); /*390port*/
+            uprv_strcpy(pathBuffer, "//IXMICUDA");
 #       else
             /* set up the library name */
             uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
@@ -337,34 +337,34 @@
                 ++inBasename;
             }
             uprv_strcpy(suffix, LIB_SUFFIX);
-#       endif      
-     
+#       endif
+
 #       ifdef UDATA_DEBUG
              fprintf(stderr, "dllload: %s ", pathBuffer);
 #       endif
-                
+
         handle=dllload(pathBuffer);
-    
+
 #       ifdef UDATA_DEBUG
                fprintf(stderr, " -> %08X\n", handle );
 #       endif
-            
+
         if(handle != NULL) {
                /* we have a data DLL - what kind of lookup do we need here? */
                /* try to find the Table of Contents */
-               uprv_strcpy(entryName, U_ICUDATA_NAME);
-               uprv_strcat(entryName, "_" DATA_TYPE);
-            
                UDataMemory_init(pData); /* Clear the output struct.        */
-               val=dllqueryvar((dllhandle*)handle,entryName);
+               val=dllqueryvar((dllhandle*)handle, U_MAKE_STR(U_ICUDATA_ENTRY_POINT));
                if(val == 0) {
                     /* failed... so keep looking */
                     return FALSE;
                }
 #              ifdef UDATA_DEBUG
-                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n", handle, entryName, val);
+                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n",
+                                    handle,
+                                    U_MAKE_STR(U_ICUDATA_ENTRY_POINT),
+                                    val);
 #              endif
-        
+
                pData->pHeader=(const DataHeader *)val;
                return TRUE;
          } else {
