@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.3 $ $Date: 2000/02/16 19:04:29 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.4 $ $Date: 2000/02/16 19:37:33 $
 # 
 
 TOPDIR=		..
@@ -15,8 +15,8 @@ DOCDIR=	 	$(TOPDIR)\docs
 DOCINDEX=	$(DOCDIR)/index.html
 
 javadoc: FORCE
-    rm -rf $(DOCDIR)
-    mkdir $(DOCDIR)
+	rm -rf $(DOCDIR)
+	mkdir $(DOCDIR)
 	javadoc -d $(DOCDIR)  \
 		-nodeprecatedlist \
 		-windowTitle "International Classes for Java" \
@@ -27,11 +27,28 @@ javadoc: FORCE
 	    com/ibm/text/*.java com/ibm/util/*.java
 
 
-# tests: 
+tools: classes
+	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
 
-# demos:
+tests: classes
+	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
 
-complete: classes javadoc
+demos: classes
+	cd com\ibm\demo && nmake -nologo classes && cd ..\..\..
+
+
+toolsinternal: FORCE
+	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
+
+testsinternal: FORCE
+	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
+
+demosinternal: FORCE
+	cd com\ibm\demo && nmake -nologo classes && cd ..\..\..
+
+
+
+complete: classes testsinternal toolsinternal demosinternal javadoc
 
 !include $(TOPDIR)/src/build/rules.mak
 
