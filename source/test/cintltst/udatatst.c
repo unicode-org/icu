@@ -51,7 +51,6 @@ addUDataTest(TestNode** root)
 }
 
 static void TestUDataOpen(){
-    int i;
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
     const char* memMap[][2]={
@@ -79,16 +78,24 @@ static void TestUDataOpen(){
         udata_close(result);
     }
 
-    for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
-        status=U_ZERO_ERROR;
-        result=udata_open(path, memMap[i][1], memMap[i][0], &status);
-        if(U_FAILURE(status)) {
-            log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
-        } else {
-            log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
-            udata_close(result);
+#if 0
+    {
+        int i;
+        /* These tests assume that the ICU data dll can be opened by name.     */
+        /* This is no longer true.  For common data, only .dat files can be    */
+        /* dynamicallyopened, not libraries                                    */
+        for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+            status=U_ZERO_ERROR;
+            result=udata_open(path, memMap[i][1], memMap[i][0], &status);
+            if(U_FAILURE(status)) {
+                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
+            } else {
+                log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
+                udata_close(result);
+            }
         }
     }
+#endif
 
     log_verbose("Testing udata_open() with a non existing binary file\n");
     result=udata_open(path, "tst", "nonexist", &status);
@@ -360,9 +367,9 @@ static void TestUDataGetInfo() {
 
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
-    result=udata_open(path, type, name, &status);
+    result=udata_open(NULL, type, name, &status);
     if(U_FAILURE(status)){
-        log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, name, type, myErrorName(status));
+        log_err("FAIL: udata_open() failed for path = NULL, name=%s, type=%s, \n errorcode=%s\n", path, name, type, myErrorName(status));
         return;
     }
     udata_getInfo(result, &dataInfo);
