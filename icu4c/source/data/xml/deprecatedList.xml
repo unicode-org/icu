@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <!DOCTYPE deprecatedList SYSTEM "deprecatedList.dtd" >
 <deprecatedList>
+  <!-- list of locales which ICU will take anyway, regardless of draft status. Equivalent of '-f' on that locale. -->
+  <overrideDraft locale="cy"/>
+
+  <!-- collation aliases -->
   <deprecates type="collation"> 
     <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/> 
     <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/> 
@@ -8,6 +12,8 @@
     <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/> 
     <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/> 
   </deprecates> 
+
+  <!-- locale aliases (main) -->
   <deprecates type="main" > 
     <alias from="in" to="id" /> 
     <alias from="in_ID" to="id_ID" /> 
@@ -16,6 +22,7 @@
     <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/> 
     <alias from="ji" to="yi" /> 
     <alias from="jw" to="jv"/> 
+    <alias from="no" to="nb"/> 
     <alias from="no_NO" to="nb_NO"/> 
     <alias from="no_NO_NY" to="nn_NO" /> 
     <alias from="th_TH_TRADITIONAL" to="th_TH@calendar=buddhist" xpath="//ldml/dates/calendars/default[@type='buddhist']" /> 

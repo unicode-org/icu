@@ -4,8 +4,11 @@
     DTD for the ICU deprecated-locales list.
 -->
 
-<!ELEMENT deprecatedList ( deprecates* ) >
+<!ELEMENT deprecatedList ( overrideDraft*, deprecates* ) >
 <!ATTLIST deprecatedList version CDATA #FIXED "1.0" >
+
+<!ELEMENT overrideDraft EMPTY >
+<!ATTLIST overrideDraft locale NMTOKEN #REQUIRED >
 
 <!ELEMENT deprecates ( alias | aliasLocale )* >
 <!ATTLIST deprecates type NMTOKEN #REQUIRED >
