@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeValueIterator.java,v $
-* $Date: 2002/02/08 23:44:22 $
-* $Revision: 1.2 $
+* $Date: 2002/04/05 01:48:28 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -14,9 +14,12 @@
 package com.ibm.icu.util;
 
 /**
- * <p>Interface for enabling iteration over any set of integers, giving
- * back a maximum continuous range of integer result with a common value. 
- * The result is represented by [start, limit, value] where</p>
+ * <p>Interface for enabling iteration over sets of <int index, int value>, 
+ * where index is the sorted integer index in ascending order and value, its 
+ * associated integer value.</p>
+ * <p>The result for each iteration is the consecutive range of 
+ * <int index, int value> with the same value. Result is represented by 
+ * <start, limit, value> where</p>
  * <ul>
  * <li> start is the starting integer of the result range
  * <li> limit is 1 after the maximum integer that follows start, such that
