@@ -1,9 +1,9 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 // Experimental locales are commented out
 
@@ -49,6 +49,7 @@ index {
         de__PHONEBOOK,
         de_AT,
         de_AT_PREEURO,
+        de_BE,
         de_CH,
         de_DE,
         de_DE_PREEURO,
