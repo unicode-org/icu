@@ -1310,13 +1310,13 @@ UnicodeString::extract(UTextOffset start,
     return length;
   }
 
-
-  /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-  if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
-    myTargetLimit = (char*)U_MAX_PTR;
-  }
-
   if (myTarget != NULL) {
+
+    /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
+    if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
+      myTargetLimit = (char*)U_MAX_PTR(myTarget);
+    }
+
     ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
              &mySource, mySourceLimit, 0, TRUE, &status);
   } else {
