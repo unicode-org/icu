@@ -70,7 +70,7 @@ typedef enum {
     UCNV_UTF16_LittleEndian = 6,
     UCNV_EBCDIC_STATEFUL = 7,
     UCNV_ISO_2022 = 8,
-    /** Number of converter types for which we have conversion routines. */
+    /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = 9,
     UCNV_JIS = 9,
     UCNV_EUC = 10,

@@ -16,6 +16,8 @@
 
 #include "utypes.h"
 /**
+ * @name Collator C API
+ *
  * The C API for Collator performs locale-sensitive
  * <code>String</code> comparison. You use this class to build
  * searching and sorting routines for natural language text.
@@ -94,7 +96,10 @@
  * @see            UCollationStrength
  * @see         UCollationElements
  */
-/** A collator */
+
+ /** A collator.
+ *  For usage in C programs.
+ */
 typedef void* UCollator;
 
     /**
@@ -194,6 +199,8 @@ typedef enum UCollationStrength UCollationStrength;
 =================================================
 ===============================================*/
 /**
+ * @name Unicode normalization API
+ *
  * <tt>u_normalize</tt> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
  * <tt>u_normalize</tt> supports the standard normalization forms described in
@@ -541,7 +548,9 @@ ucol_keyHashCode(    const    uint8_t*    key,
             int32_t        length);
 
 
-/** The UCollationElements struct */
+/** The UCollationElements struct.
+ *  For usage in C programs.
+ */
 struct UCollationElements;
 typedef struct UCollationElements UCollationElements;
 /**
@@ -592,8 +601,10 @@ typedef struct UCollationElements UCollationElements;
  *
  * @see                Collator
  */
+
 /**
  * Open the collation elements for a string.
+ *
  * @param coll The collator containing the desired collation rules.
  * @param text The text to iterate over.
  * @param textLength The number of characters in text, or -1 if null-terminated
@@ -605,16 +616,18 @@ ucol_openElements(    const    UCollator       *coll,
             int32_t                  textLength,
             UErrorCode         *status);
 
-/** Bit mask for primary collation strength */
+/* Bit mask for primary collation strength. */
 #define UCOL_PRIMARYMASK    0xFFFF0000
 
-/** Bit mask for secondary collation strength */
+/* Bit mask for secondary collation strength. */
 #define UCOL_SECONDARYMASK  0x0000FF00
 
-/** Bit mask for tertiary collation strength */
+/* Bit mask for tertiary collation strength. */
 #define UCOL_TERTIARYMASK   0x000000FF
 
-/** This indicates the last element in a UCollationElements has been consumed. */
+/** This indicates the last element in a UCollationElements has been consumed. 
+ *
+ */
 #define UCOL_NULLORDER        0xFFFFFFFF
 
 /**

@@ -71,6 +71,7 @@ U_CAPI void     U_EXPORT2 icu_longBitsFromDouble(double d, int32_t *hi, uint32_t
  */
 /**
  * Returns the common log of the double value d.
+ *
  * @param d the double value to apply the common log function for.
  * @return the log of value d.
  */
@@ -78,6 +79,7 @@ U_CAPI int16_t  U_EXPORT2 icu_log10(double d);
 
 /**
  * Returns the number of digits after the decimal point in a double number x.
+ *
  * @param x the double number
  */
 U_CAPI int32_t  U_EXPORT2 icu_digitsAfterDecimal(double x);

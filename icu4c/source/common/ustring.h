@@ -23,7 +23,8 @@
 #include "utypes.h"
 
 /** 
- * Determine the length of an array of UChar
+ * Determine the length of an array of UChar.
+ *
  * @param s The array of UChars, NULL (U+0000) terminated.
  * @return The number of UChars in <TT>chars</TT>, minus the terminator.
  */
@@ -59,6 +60,7 @@ u_strncat(UChar     *dst,
 
 /**
  * Find the first occurrence of a specified character in a ustring.
+ *
  * @param s The string to search.
  * @param c The character to find.
  * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
@@ -70,6 +72,7 @@ u_strchr(const UChar     *s,
 
 /**
  * Compare two ustrings for bitwise equality.
+ *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
  * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
