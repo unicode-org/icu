@@ -48,8 +48,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 
 !ELSEIF  "$(CFG)" == "uresb - Win32 Debug"
 
@@ -64,16 +64,17 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ  /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../../include" /I "../../tools/toolutil" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD BASE RSC /l 0xc1a /d "_DEBUG"
 # ADD RSC /l 0xc1a /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuuc.lib ustdio.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/debug"
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 icuuc.lib ustdio.lib toolutil.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/debug" /libpath:"../../tools/toolutil/debug"
+# SUBTRACT LINK32 /verbose
 
 !ENDIF 
 
@@ -96,6 +97,10 @@ SOURCE=.\uresb.c
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# End Group
+# Begin Group "resource bundles"
+
+# PROP Default_Filter ".txt"
 # Begin Source File
 
 SOURCE=.\en.txt
@@ -104,13 +109,12 @@ SOURCE=.\en.txt
 
 !ELSEIF  "$(CFG)" == "uresb - Win32 Debug"
 
-# Begin Custom Build
+# Begin Custom Build - Performing Custom Build Step on $(InputPath)
 InputPath=.\en.txt
-InputName=en
 
-"en.res" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	..\..\tools\genrb\debug\genrb -s . -d . $(InputName)
-
+"res1" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	..\..\tools\genrb\debug\genrb -s . -d . $(InputPath) 
+	
 # End Custom Build
 
 !ENDIF 
@@ -119,10 +123,40 @@ InputName=en
 # Begin Source File
 
 SOURCE=.\root.txt
+
+!IF  "$(CFG)" == "uresb - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "uresb - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\root.txt
+
+"res2" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	..\..\tools\genrb\debug\genrb -s . -d . $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\sr.txt
+
+!IF  "$(CFG)" == "uresb - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "uresb - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\sr.txt
+
+"res3" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	..\..\tools\genrb\debug\genrb -s . -d . -e cp1251 $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # End Group
 # End Target
