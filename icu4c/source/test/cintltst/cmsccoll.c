@@ -660,8 +660,8 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
                       &chOffset, &chLen, &exOffset, &exLen,
                       &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
-      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
-      top_ = ((specs & UCOL_TOK_TOP) != 0);
+      varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
 
@@ -974,8 +974,8 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, const cha
                       &chOffset, &chLen, &exOffset, &exLen,
                       &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
-      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
-      top_ = ((specs & UCOL_TOK_TOP) != 0);
+      varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
 
       u_strncpy(second,rulesCopy+chOffset, chLen);
       second[chLen] = 0;
@@ -1059,8 +1059,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
                       &chOffset, &chLen, &exOffset, &exLen,
                       &specs, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
-      varT = ((specs & UCOL_TOK_VARIABLE_TOP) != 0);
-      top_ = ((specs & UCOL_TOK_TOP) != 0);
+      varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
 
       init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
 
@@ -1224,7 +1224,7 @@ static void RamsRulesTest( ) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t i = 0;
   UCollator *coll = NULL;
-  UCollator *UCA = ucol_open("", &status);
+/*  UCollator *UCA = ucol_open("", &status); */
   UChar rule[2048];
   uint32_t ruleLen;
   int32_t noOfLoc = uloc_countAvailable();
@@ -1688,15 +1688,15 @@ static void TestJ815() {
 
 
 /*
-"& a < b < c < d& r < c",									"& a < b < d& r < c",
-"& a < b < c < d& c < m",									"& a < b < c < m < d",
-"& a < b < c < d& a < m",									"& a < m < b < c < d",
-"& a <<< b << c < d& a < m",								"& a <<< b << c < m < d",
-"& a < b < c < d& [before 1] c < m",						"& a < b < m < c < d",
-"& a << b <<< c << d <<< e& [before 3] e <<< x",			"& a << b <<< c << d <<< x <<< e",
-"& a << b <<< c << d <<< e& [before 2] e <<< x",			"& a << b <<< c <<< x << d <<< e",
-"& a << b <<< c << d <<< e& [before 1] e <<< x",			"& a <<< x << b <<< c << d <<< e",
-"& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",	"& a << b <<< c << d <<< e <<< f < x < g",
+"& a < b < c < d& r < c",                                   "& a < b < d& r < c",
+"& a < b < c < d& c < m",                                   "& a < b < c < m < d",
+"& a < b < c < d& a < m",                                   "& a < m < b < c < d",
+"& a <<< b << c < d& a < m",                                "& a <<< b << c < m < d",
+"& a < b < c < d& [before 1] c < m",                        "& a < b < m < c < d",
+"& a << b <<< c << d <<< e& [before 3] e <<< x",            "& a << b <<< c << d <<< x <<< e",
+"& a << b <<< c << d <<< e& [before 2] e <<< x",            "& a << b <<< c <<< x << d <<< e",
+"& a << b <<< c << d <<< e& [before 1] e <<< x",            "& a <<< x << b <<< c << d <<< e",
+"& a << b <<< c << d <<< e <<< f < g& [before 1] e < x",    "& a << b <<< c << d <<< e <<< f < x < g",
 */
 static void TestRedundantRules() {
   int32_t i;
@@ -1900,11 +1900,13 @@ static void TestCase( )
 static void TestIncrementalNormalize() {
 
     UChar baseA     =0x41;
-    UChar baseB     = 0x42;
+/*    UChar baseB     = 0x42;*/
     UChar ccMix[]   = {0x316, 0x321, 0x300};
-    //  0x316 is combining grave accent below, cc=220
-    //  0x321 is combining palatalized hook below, cc=202
-    //  0x300 is combining grave accent, cc=230
+    /*
+        0x316 is combining grave accent below, cc=220
+        0x321 is combining palatalized hook below, cc=202
+        0x300 is combining grave accent, cc=230
+    */
 
     int          maxSLen   = 2000;
     int          sLen;
@@ -1921,7 +1923,7 @@ static void TestIncrementalNormalize() {
     coll = ucol_open("en_US", &status);
     ucol_setNormalization(coll, UNORM_NFD);
 
-    // for (sLen = 4; sLen<maxSLen; sLen++) {
+    /* for (sLen = 4; sLen<maxSLen; sLen++) { */
     for (sLen = 1000; sLen<1001; sLen++) {
         strA[0] = baseA;
         strB[0] = baseA;
