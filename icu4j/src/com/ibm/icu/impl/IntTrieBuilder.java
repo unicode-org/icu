@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrieBuilder.java,v $ 
-* $Date: 2002/07/12 22:02:06 $ 
-* $Revision: 1.1 $
+* $Date: 2002/08/30 23:19:11 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -31,7 +31,7 @@ import java.util.Arrays;
  *     <LI>Smaller memory footprint.
  * </UL>
  * This is a direct port from the ICU4C version
- * @version            $Revision: 1.1 $
+ * @version            $Revision: 1.2 $
  * @author             Syn Wee Quek
  */
 public class IntTrieBuilder extends TrieBuilder
@@ -101,7 +101,7 @@ public class IntTrieBuilder extends TrieBuilder
 	}
 
 	// public methods -------------------------------------------------------
-	
+        
     /**
      * Gets a 32 bit data from the table data
      * @param ch codepoint which data is to be retrieved
@@ -191,7 +191,6 @@ public class IntTrieBuilder extends TrieBuilder
 	// public data member ---------------------------------------------
 		
 	protected int m_data_[];
-	protected boolean m_isDataAllocated_;
 	protected int m_initialValue_;  
 	
 	// private methods ------------------------------------------------------
@@ -247,7 +246,7 @@ public class IntTrieBuilder extends TrieBuilder
         // compaction
         // initialize the index map with "block is used/unused" flags
         findUnusedBlocks();
-    
+        
         // if Latin-1 is preallocated and linear, then do not compact Latin-1 
         // data
         int overlapStart = DATA_BLOCK_LENGTH_;
@@ -323,10 +322,9 @@ public class IntTrieBuilder extends TrieBuilder
     
             prevEnd = newStart - 1;
         }
-    
         // now adjust the index (stage 1) table
         for (int i = 0; i < m_indexLength_; ++ i) {
-            m_index_[i] = m_map_[Math.abs(m_index_[i]) >> SHIFT_];
+            m_index_[i] = m_map_[m_index_[i] >>> SHIFT_];
         }
         m_dataLength_ = newStart;
     }
@@ -376,7 +374,7 @@ public class IntTrieBuilder extends TrieBuilder
         // copy the lead surrogate indexes into a temporary array
         System.arraycopy(index, 0xd800 >> SHIFT_, leadIndexes, 0, 
                          SURROGATE_BLOCK_COUNT_);
-    
+        
         // to protect the copied lead surrogate values,
         // mark all their indexes as repeat blocks
         // (causes copy-on-write)
@@ -386,7 +384,7 @@ public class IntTrieBuilder extends TrieBuilder
                 index[c >> SHIFT_] =- block;
             }
         }
-    
+     
         // Fold significant index values into the area just after the BMP 
         // indexes.
         // In case the first lead surrogate has significant data,
@@ -417,7 +415,7 @@ public class IntTrieBuilder extends TrieBuilder
                         // move the actual index (stage 1) entries from the 
                         // supplementary position to the new one
                         System.arraycopy(index, c >> SHIFT_, index, indexLength,
-                                         SURROGATE_BLOCK_COUNT_ << 2);
+                                         SURROGATE_BLOCK_COUNT_);
                         indexLength += SURROGATE_BLOCK_COUNT_;
                     }
                 }
@@ -427,7 +425,7 @@ public class IntTrieBuilder extends TrieBuilder
                 c += DATA_BLOCK_LENGTH_;
             }
         }
-    
+        
         // index array overflow?
         // This is to guarantee that a folding offset is of the form
         // UTRIE_BMP_INDEX_LENGTH+n*UTRIE_SURROGATE_BLOCK_COUNT with n=0..1023.
