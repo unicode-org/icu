@@ -1921,8 +1921,13 @@ public class LDML2ICUConverter {
 
     
     private ICUResourceWriter.Resource parseWeek(Node root, StringBuffer xpath){
+        int saveLength = xpath.length();
+        getXPath(root,xpath);
+        int oldLength = xpath.length();
         ICUResourceWriter.Resource dte = parseDTE(root, xpath);
+        xpath.setLength(oldLength);
         ICUResourceWriter.Resource wkend = parseWeekend(root, xpath);
+        xpath.setLength(saveLength);
         if(dte!=null){
             dte.next = wkend;
             return dte;
@@ -2122,6 +2127,7 @@ public class LDML2ICUConverter {
         NodeList list = LDMLUtilities.getNodeList(parent, childName, fullyResolvedDoc, xpath.toString());
         int oldLength=xpath.length();
         Node ret = null;
+
         if(list!=null){
            ret = getVettedNode(list,xpath.append("/"+childName));
         }
@@ -2205,7 +2211,8 @@ public class LDML2ICUConverter {
             ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
             Node temp = (Node)list.get(i);
             if(temp==null){
-                throw new RuntimeException("Did not get expected output for Date and Time patterns!!");
+                System.err.println("WARNING: Some elements of DateTimePatterns resource are marked draft producing this resource.");
+                break;
             }
             str.val = LDMLUtilities.getNodeValue(temp);
             if(str.val!=null){
@@ -2246,7 +2253,7 @@ public class LDML2ICUConverter {
             }
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            getXPath(node, xpath);
+            
             if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
                 res.name = name;
@@ -2298,8 +2305,10 @@ public class LDML2ICUConverter {
         if(isAlternate(root)){
             return null;
         }
+
         int savedLength = xpath.length();
         getXPath(root, xpath);
+
         //TODO figure out what to do for alias
         ArrayList list = new ArrayList();
         list.add(getVettedNode(root, "decimal", xpath));
@@ -2322,7 +2331,7 @@ public class LDML2ICUConverter {
             ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
             Node temp = (Node)list.get(i);
             if(temp==null){
-                throw new RuntimeException("Did not get expected output for Date and Time patterns!!");
+                throw new RuntimeException("Did not get expected output for symbols!!");
             }
             str.val = LDMLUtilities.getNodeValue(temp);
             if(str.val!=null){
@@ -2414,7 +2423,7 @@ public class LDML2ICUConverter {
             }
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            getXPath(node, xpath);
+
             if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
                 res.name = name;
@@ -2474,7 +2483,7 @@ public class LDML2ICUConverter {
         ICUResourceWriter.ResourceArray arr = new ICUResourceWriter.ResourceArray();
         arr.name = LDMLUtilities.getAttributeValue(root, LDMLConstants.TYPE);
         if(symbolNode==null||displayNameNode==null){
-            throw new RuntimeException("Could not get dispaly name and symbol from currency resource!!");
+            throw new RuntimeException("Could not get display name and symbol from currency resource!!");
         }
         ICUResourceWriter.ResourceString symbol = new ICUResourceWriter.ResourceString();
         symbol.val = LDMLUtilities.getNodeValue(symbolNode);
