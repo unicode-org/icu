@@ -119,7 +119,8 @@ utrie_clone(UNewTrie *fillIn, const UNewTrie *other, uint32_t *aliasData, int32_
         uprv_free(aliasData);
     } else {
         uprv_memcpy(trie->index, other->index, sizeof(trie->index));
-        uprv_memcpy(trie->data, other->data, other->dataCapacity*4);
+        uprv_memcpy(trie->data, other->data, other->dataLength*4);
+        trie->dataLength=other->dataLength;
         trie->isDataAllocated=isDataAllocated;
     }
 
