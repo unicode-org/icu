@@ -2085,7 +2085,7 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
     }
 }
 
-static int TestJitterbug930(char* enc){
+static int TestJitterbug930(const char* enc){
    UErrorCode err = U_ZERO_ERROR;
    UConverter*converter;
    char out[80];
