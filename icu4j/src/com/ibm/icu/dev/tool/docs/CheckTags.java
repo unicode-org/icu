@@ -180,7 +180,7 @@ public class CheckTags {
 
     static final String[] tagKinds = {
         "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws"
+        "@param", "@return", "@throws, @obsolete"
     };
 
     static final int UNKNOWN = -1;
@@ -195,6 +195,7 @@ public class CheckTags {
     static final int PARAM = 8;
     static final int RETURN = 9;
     static final int THROWS = 10;
+    static final int OBSOLETE = 11;
 
     static int tagKindIndex(String kind) {
         for (int i = 0; i < tagKinds.length; ++i) {
@@ -291,6 +292,8 @@ public class CheckTags {
                 break;
 
             case DRAFT:
+            case DEPRECATED:
+            case OBSOLETE:
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
                 }
@@ -309,16 +312,6 @@ public class CheckTags {
 
             case SINCE:
                 tagErr(tag);
-                break;
-
-            case DEPRECATED: 
-                {
-                    String text = tag.text();
-                    if (text.indexOf("ICU") != 0 || text.indexOf("be removed") == -1) {
-                        tagErr(tag);
-                    }
-                    foundRequiredTag = true;
-                }
                 break;
 
             case AUTHOR:
