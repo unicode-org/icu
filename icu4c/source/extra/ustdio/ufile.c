@@ -68,7 +68,9 @@ u_fopen(const char    *filename,
 
     result = u_finit(systemFile, locale, codepage);
 
-    result->fOwnFile = TRUE;
+    if (result) {
+        result->fOwnFile = TRUE;
+    }
 
     return result;
 }
@@ -116,28 +118,26 @@ u_finit(FILE        *f,
         return result;
     }
 
-    /* if the codepage is 0, use the default for the locale */
-    if(codepage == 0) {
-        codepage = uprv_defaultCodePageForLocale(locale);
-
-        /* if the codepage is still 0, the default codepage will be used */
-        if(codepage == 0) {
-            result->fConverter = ucnv_open(0, &status);
-            if(U_FAILURE(status) || result->fConverter == 0) {
-                /* DO NOT fclose here!!!!!! */
-                uprv_free(result);
-                return 0;
-            }
+    /* if the codepage is NULL, use the default for the locale */
+    if(codepage == NULL) {
+        if(!useSysCP) { /* if both locale and codepage are NULL, use the system default codepage */
+            codepage = uprv_defaultCodePageForLocale(locale);
         }
-    } else if (*codepage != '\0') {
+
+        /* if the codepage is still NULL, the default codepage will be used */
         result->fConverter = ucnv_open(codepage, &status);
-        if(U_FAILURE(status) || result->fConverter == 0) {
+        if(U_FAILURE(status) || result->fConverter == NULL) {
             /* DO NOT fclose here!!!!!! */
             uprv_free(result);
             return 0;
         }
-    } else if(useSysCP) { /* if both locale and codepage are 0, use the system default codepage */
-        codepage = 0;
+    } else if (*codepage != '\0') {
+        result->fConverter = ucnv_open(codepage, &status);
+        if(U_FAILURE(status) || result->fConverter == NULL) {
+            /* DO NOT fclose here!!!!!! */
+            uprv_free(result);
+            return 0;
+        }
     }
     return result;
 }
@@ -196,11 +196,13 @@ U_CAPI const char* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 
 u_fgetcodepage(UFILE        *file)
 {
     UErrorCode     status = U_ZERO_ERROR;
-    const char     *codepage;
+    const char     *codepage = NULL;
 
-    codepage = ucnv_getName(file->fConverter, &status);
-    if(U_FAILURE(status))
-        return 0;
+    if (file->fConverter) {
+        codepage = ucnv_getName(file->fConverter, &status);
+        if(U_FAILURE(status))
+            return 0;
+    }
     return codepage;
 }
 
