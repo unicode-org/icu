@@ -7,10 +7,10 @@
 //*******************************************************************************
 
 bn_IN {
-   Version{ "1.0" }
+    Version{ "1.0" }
     CurrencyElements { 
             "\u099F\u09BE\u0995\u09BE",
-            "INR ",
+            "INR",
             ".",
     }
     DateTimePatterns { 
