@@ -730,12 +730,12 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
     log_verbose("Test surrogate behaviour for UTF8\n");
     {
-        const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801};
+        const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01 };
         const uint8_t expectedUTF8test2[]= { 0xe2, 0x82, 0xac,
                            0xf0, 0x90, 0x90, 0x81,
-                           0xed, 0xb0, 0x81, 0xed, 0xa0, 0x81
+                           0xef, 0xbf, 0xbd
         };
-        int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4 };
+        int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3 };
         if(!testConvertFromU(testinput, sizeof(testinput)/sizeof(testinput[0]),
             expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets,FALSE ))
         log_err("u-> UTF8 did not match.\n");
