@@ -126,6 +126,7 @@ BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$
 #invoke pkgdata
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(ALL_RES) 
 	@echo Building icu data
+	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
 uprops.dat
 unames.dat
@@ -211,14 +212,17 @@ CLEAN :
 	@cd "$(ICUTOOLS)"
 
 # Inference rule for creating resource bundles
-{"$(ICUDATA)"}.txt{.}.res:
+{$(TESTDATA)}.txt.res:
+        @echo Making Resource Bundle files
+        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
+
+{$(ICUDATA)}.txt.res:
 	@echo Making Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(ICUDATA) -d$(@D) $(?F)
-	@echo FILE is $(?F) 
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
-{"$(ICUDATA)"}.ucm{.}.cnv:
+{$(ICUDATA)}.ucm.cnv::
 	@echo Generating converters and c source files
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(ICUDBLD)
