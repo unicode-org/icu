@@ -818,6 +818,8 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
                             *(fillIn)++=code;
                             numFilled++;
                         }else{
+                            ures_close(resD);
+                            ures_close(resB);
                             *err=U_BUFFER_OVERFLOW_ERROR;
                             return len;
                         }
