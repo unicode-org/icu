@@ -811,7 +811,7 @@ NewResourceBundleTest::testTag(const char* frag,
             char buf[32];
             status = U_ZERO_ERROR;
             string = kERROR;
-            char item_tag[6];
+            char item_tag[8];
             uprv_strcpy(item_tag, "tag");
             uprv_strcat(item_tag, itoa(index,buf));
             ResourceBundle tags=theBundle.get(tag, status);
