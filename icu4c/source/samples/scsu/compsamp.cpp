@@ -30,6 +30,7 @@
 #include "unicode/scsu.h"     
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"  /* some more string fcns*/
+#include "unicode/uloc.h"
 
 /* Some utility functions */
 
@@ -206,7 +207,7 @@ UErrorCode compsample_02()
          "Sample 02: C: bulk Unicode compression\n");
 
 #define SAMPLE2BUFFERSIZE 1024  /* larger than our largest data */
-  const UChar input[SAMPLE2BUFFERSIZE];
+  UChar input[SAMPLE2BUFFERSIZE];
   const UChar *source;
   uint8_t output[SAMPLE2BUFFERSIZE];
   uint8_t *target; 
@@ -228,11 +229,8 @@ UErrorCode compsample_02()
   count = countOurDataStrings();
   for(i=0;i<count;i++)
     {
-      printf("%d of %d - ", i, count);
       sourceLen = getOurDataString(i, input, SAMPLE2BUFFERSIZE);
       charsIn += sourceLen;
-      printf("%d in ", sourceLen);
-      printf("\n");
       //      printUChars("src", input);
 
       /* Now, loop and write out all of the data */
@@ -244,11 +242,9 @@ UErrorCode compsample_02()
           scsu_compress(&comp, &target, output+SAMPLE2BUFFERSIZE,
                         &source, input+sourceLen, &status);
           
-          fprintf(stderr, "ptr at: %d\n", target-output);
-          
           if( (status == U_ZERO_ERROR) || (status == U_INDEX_OUTOFBOUNDS_ERROR)) {
             /* got all of it */
-            printBytes("out", output, target-output);
+//            printBytes("out", output, target-output); // Uncomment for very verbose output..
             
             fwrite(output, 1, target-output, f);
             bytesOut += (target-output);
