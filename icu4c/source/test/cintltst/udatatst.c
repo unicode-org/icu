@@ -108,7 +108,6 @@ static void TestUDataOpen(){
     const char* name            = "test";
     const char* type            = "icu";
     const char  dirSepString[]  = {U_FILE_SEP_CHAR, 0};
-    const char  pathSepString[] = {U_PATH_SEP_CHAR, 0};
 
     char* path=(char*)malloc(sizeof(char) * (strlen(ctest_dataOutDir())
                                            + strlen(U_ICUDATA_NAME)
@@ -1031,63 +1030,63 @@ static const struct {
     /* resource bundles */
 
     /* resource bundle with many data types */
-    "*testtypes",               "res", ures_swap,
+    {"*testtypes",               "res", ures_swap},
     /* resource bundle with collation data */
-    "ja",                       "res", ures_swap,
+    {"ja",                       "res", ures_swap},
     /* resource bundle with options-only collation data */
-    "ru",                       "res", ures_swap,
-    "el",                       "res", ures_swap,
+    {"ru",                       "res", ures_swap},
+    {"el",                       "res", ures_swap},
     /* ICU's root */
-    "root",                     "res", ures_swap,
+    {"root",                     "res", ures_swap},
 
     /* ICU 2.6 resource bundle - data format 1.0, without indexes[] (little-endian ASCII) */
-    "*icu26_testtypes",         "res", ures_swap,
+    {"*icu26_testtypes",         "res", ures_swap},
     /* same for big-endian EBCDIC */
-    "*icu26e_testtypes",        "res", ures_swap,
+    {"*icu26e_testtypes",        "res", ures_swap},
 
 #if !UCONFIG_NO_COLLATION
     /* standalone collation data files */
-    "ucadata",                  "icu", ucol_swap,
-    "invuca",                   "icu", ucol_swapInverseUCA,
+    {"ucadata",                  "icu", ucol_swap},
+    {"invuca",                   "icu", ucol_swapInverseUCA},
 #endif
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
     /* conversion table files */
 
     /* SBCS conversion table file without extension */
-    "ibm-913_P100-2000",        "cnv", ucnv_swap,
+    {"ibm-913_P100-2000",        "cnv", ucnv_swap},
     /* EBCDIC_STATEFUL conversion table file with extension */
-    "ibm-1390_P110-2003",       "cnv", ucnv_swap,
+    {"ibm-1390_P110-2003",       "cnv", ucnv_swap},
     /* DBCS extension-only conversion table file */
-    "ibm-16684_P110-2003",      "cnv", ucnv_swap,
+    {"ibm-16684_P110-2003",      "cnv", ucnv_swap},
     /* EUC-TW (3-byte) conversion table file without extension */
-    "ibm-964_P110-1999",        "cnv", ucnv_swap,
+    {"ibm-964_P110-1999",        "cnv", ucnv_swap},
     /* GB 18030 (4-byte) conversion table file without extension */
-    "gb18030",                  "cnv", ucnv_swap,
+    {"gb18030",                  "cnv", ucnv_swap},
     /* MBCS conversion table file with extension */
-    "*test4x",                  "cnv", ucnv_swap,
+    {"*test4x",                  "cnv", ucnv_swap},
 
     /* alias table */
-    "cnvalias",                 "icu", ucnv_swapAliases,
+    {"cnvalias",                 "icu", ucnv_swapAliases},
 #endif
 
 #if !UCONFIG_NO_IDNA
-    "uidna",                    "spp", usprep_swap,
+    {"uidna",                    "spp", usprep_swap},
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    "char",                     "brk", ubrk_swap,
+    {"char",                     "brk", ubrk_swap},
 #endif
 
     /* the last item should not be #if'ed so that it can reliably omit the last comma */
 
     /* Unicode properties */
-    "unames",                   "icu", uchar_swapNames,
-    "pnames",                   "icu", upname_swap,
+    {"unames",                   "icu", uchar_swapNames},
+    {"pnames",                   "icu", upname_swap},
 #if !UCONFIG_NO_NORMALIZATION
-    "unorm",                    "icu", unorm_swap,
+    {"unorm",                    "icu", unorm_swap},
 #endif
-    "uprops",                   "icu", uprops_swap
+    {"uprops",                   "icu", uprops_swap}
 };
 
 #define SWAP_BUFFER_SIZE 1000000
