@@ -192,7 +192,7 @@ esac
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
-		common/Makefile common/platform.h i18n/Makefile \
+		common/Makefile common/platform.h config/Makefile i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
