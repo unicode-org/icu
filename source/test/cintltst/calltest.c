@@ -18,6 +18,7 @@
 
 void addUtility(TestNode** root);
 void addBreakIter(TestNode** root);
+void addStandardNamesTest(TestNode **root);
 void addFormatTest(TestNode** root);
 void addConvert(TestNode** root);
 void addCollTest(TestNode** root);
@@ -31,16 +32,18 @@ void addCompactArrayTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
+    addStandardNamesTest(root);
     addUTF16Test(root);
     addUTF8Test(root);
-	addUtility(root);
+    addUtility(root);
     addBreakIter(root);
     addFormatTest(root);
     addConvert(root);
     addCollTest(root);
     addComplexTest(root);
-	addUDataTest(root);
+    addUDataTest(root);
     addUTransTest(root);
     addPUtilTest(root);
     addCompactArrayTest(root);
 }
+
