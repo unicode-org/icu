@@ -13,29 +13,25 @@ vi {
     }
     collations {
         standard { 
-            Version { "2.0" }
-            Sequence { "[normalization on]&\u0300<<\u0309<<\u0303<<\u0301<<"
-                "\u0323<<\u0306<<\u0302<<\u031B"
-                "&D<\u0111<<<\u0110" }
+            Version { "3.0" }
+              Sequence { "[normalization on]"
+		  // accented letters are actually ordered like this:
+		  // grave, hook above, tilde, acute, dot below.
+		  "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
+		  // primary differences
+                  "&a<\u0103<<<\u0102<\u00E2<<<\u00C2"
+                  "&c<ch<<<Ch<<<CH"
+                  "&d<\u0111<<<\u0110"
+                  "&e<\u00EA<<<\u00CA"
+                  "&g<gi<<<Gi<<<GI"
+                  "&k<kh<<<Kh<<<KH"
+                  "&n<ng<<<Ng<<<NG<nh<<<Nh<<<NH"
+                  "&o<\u00F4<<<\u00D4<\u01A1<<<\u01A0"
+                  "&p<ph<<<Ph<<<PH"
+                  "&t<th<<<Th<<<TH<tr<<<Tr<<<TR"
+                  "&u<\u01B0<<<\u01AF"
+              }
         }
-// This might be a better version of vietnamese collation
-//            Sequence { "[normalization on]"
-//                "&A<\u0103<<<\u0102"
-//                "&\u0103<\u00E2<<<\u00C2"
-//                "&C<ch<<<Ch<<<CH"
-//                "&D<\u0111<<<\u0110"
-//                "&e<\u00EA<<<\u00CA"
-//                "&g<gi<<<Gi<<<GI"
-//                "&k<kh<<<Kh<<<KH"
-//                "&n<ng<<<Ng<<<NG"
-//                "&ng<nh<<<Nh<<<NH"
-//                "&o<\u00F4<<<\u00D4"
-//                "&\u00F4<\u01A1<<<\u01A0"
-//                "&p<ph<<<Ph<<<PH"
-//                "&t<th<<<Th<<<TH"
-//                "&th<tr<<<Tr<<<TR"
-//                "&u<\u01B0<<<\u01AF"
-//            }
     }
     // Note many of the country names have dashes in the name. This seems to be correct.
     // Translations that are done poorly seem to remove them. This doesn't mean that all the dashes are correct,
