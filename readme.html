@@ -1077,7 +1077,9 @@
     configure are --disable-64bit-libs to create 32-bit libraries, and --srcdir
     to do out of source builds (build the libraries in the current location).
     HP-UX user's, please see this <a href="#ImportantNotesHPUX">note regarding
-    multithreaded build issues</a> with newer compilers.</p>
+    multithreaded build issues</a> with newer compilers. Solaris user's, please
+		see this <a href="#ImportantNotesSolaris">note regarding multithreaded build
+		issues</a>.</p>
 
     <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
@@ -1569,6 +1571,52 @@ del common/libicuuc.so
     -AA</a> compiler flag. To turn off this behavior in ICU, you will need to
     use the --with-iostream= old configure option when you first use
     runConfigureICU.</p>
+
+    <h4><a name="ImportantNotesSolaris" href="#ImportantNotesSolaris">Using ICU in a
+    Multithreaded Environment on Solaris</a></h4>
+
+    <h5>Solaris Deadlock Issues in Solaris 2.8, and Earlier</h5>
+    <p>Solaris 2.8, and earlier, has outstanding thread deadlocking issues
+    that MAY be problematic for applications using either native, or POSIX,
+    threading on these platforms. Sun states that Solaris 2.9 DOES NOT have the
+    deadlock problems. Deadlocks MAY occur either during initialization of the
+    Solaris threading library, or at any other time.</p>
+    <p>Sun Microsystems has provided a Sun Alert Notification regarding the
+    issue. Users SHOULD consider applying the latest OS patches to their
+    Solaris installations in order to help avoid deadlock. Further information
+    regarding the issue, and links to applicable patches, may be found at:</p>
+    <p>[1] "<i>Applications Linked to libthread May Hang</i>", Sun Alert
+    Notification, Sun Microsystems, Inc., 04-Sep-2002
+    <br />
+     <a
+    href="http://sunsolve.sun.com/pub-cgi/retrieve.pl?doc=fsalert%2F46867&amp;zone_32=4663077">
+    http://sunsolve.sun.com/pub-cgi/retrieve.pl?doc=fsalert%2F46867&amp;zone_32=4663077</a></p>
+    <p>Sun is NOT providing patches for Solaris 2.6, or earlier.</p>
+    <p>Sun states that by applying the patch users will avoid the deadlock
+    issues. However, with all applicable patches applied, deadlock MAY still be
+    seen, as demonstrated by the ICU Mutex unit tests. The unit test will hang
+    indefinitely. No bug exists in ICU. However, a latent bug still exists in
+    Solaris, which Sun Microsystems has yet to resolve. In order to avoid this,
+    users are SUGGESTED to modify their LD_LIBRARY_PATH according to the
+    guidelines specified by Sun Microsystems in the Sun Alert Notification.</p>
+
+    <h5>Linking on Solaris</h5>
+    <p>In order to avoid synchronization and threading issues, developers are
+    SUGGESTED to strictly follow the compiling and linking guidelines for
+    multithreaded applications, specified in the following document from Sun
+    Microsystems. Most notably, pay strict attention to the following
+    statements from Sun:</p>
+    <blockquote>
+      <p>To use libthread, specify -lthread before -lc on the ld command line,
+      or last on the cc command line.</p>
+      <p>To use libpthread, specify -lpthread before -lc on the ld command
+      line, or last on the cc command line.</p>
+    </blockquote>
+    <p>Failure to do this may cause spurious lock conflicts, recursive mutex
+    failure, and deadlock.</p>
+    <p>[2] "<i>Solaris Multithreaded Programming Guide, Compiling and
+    Debugging</i>", Sun Microsystems, Inc., Apr 2004<br/> <a
+    href="http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view">http://docs.sun.com/db/doc/806-6867/6jfpgdcob?a=view</a></p>
 
     <h3><a name="CharStrings" href="#CharStrings">char * strings in
     ICU</a></h3>
