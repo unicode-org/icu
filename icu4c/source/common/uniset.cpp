@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -346,6 +346,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     _dbgct(this);
 }
 
+#ifdef U_USE_UNICODESET_DEPRECATES
 /**
  * DEPRECATED Constructs a set from the given Unicode character category.
  * @param category an integer indicating the character category as
@@ -377,6 +378,7 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
     }
     _dbgct(this);
 }
+#endif
 
 /**
  * Constructs a set that is identical to the given UnicodeSet.

@@ -714,27 +714,6 @@ public:
   virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const = 0;
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-  // start obsolete APIs
-  /**
-  * Get the decomposition mode of the Collator object.
-  * @return the decomposition mode
-  * @see Collator#setDecomposition
-  * @obsolete ICU 2.4 Use getAttribute() instead since this API will be removed in that release.
-  */
-  virtual Normalizer::EMode getDecomposition(void) const = 0;
-
-  /**
-  * Set the decomposition mode of the Collator object. success is equal to 
-  * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
-  * @param the new decomposition mode
-  * @see Collator#getDecomposition
-  * @obsolete ICU 2.4 Use setAttribute() instead since this API will be removed in that release.
-  */
-  virtual void setDecomposition(Normalizer::EMode  mode) = 0;
-#endif /* ICU_NORMALIZER_USE_DEPRECATES */
-
-
     /**
      * Produce a bound for a given sortkey and a number of levels.
      * Return value is always the number of bytes needed, regardless of 

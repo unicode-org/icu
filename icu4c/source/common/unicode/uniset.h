@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2003, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
@@ -341,6 +341,7 @@ public:
                uint32_t options,
                UErrorCode& status);
 
+#ifdef U_USE_UNICODESET_DEPRECATES
     /**
      * Obsolete: Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
@@ -348,6 +349,7 @@ public:
      * @obsolete ICU 2.6. Use a pattern with the category instead since this API will be removed in that release.
      */
     UnicodeSet(int8_t category, UErrorCode& status);
+#endif
 
     /**
      * Constructs a set that is identical to the given UnicodeSet.

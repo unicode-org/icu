@@ -1016,26 +1016,6 @@ enum UBlockCode {
 typedef enum UBlockCode UBlockCode;
 
 /**
- * Values returned by the u_getCellWidth() function.
- * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
- */
-enum UCellWidth
-{
-    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-    U_ZERO_WIDTH              = 0,
-    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-    U_HALF_WIDTH              = 1,
-    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-    U_FULL_WIDTH              = 2,
-    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-    U_NEUTRAL_WIDTH           = 3,
-    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-    U_CELL_WIDTH_COUNT
-};
-
-typedef enum UCellWidth UCellWidth; /**< C typedef for struct UCellWidth. @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
-
-/**
  * East Asian Width constants.
  *
  * @see UCHAR_EAST_ASIAN_WIDTH
@@ -1979,67 +1959,6 @@ U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
 
 /**
- * Obsolete because the "cell width" functions and implementation are
- * out of date compared with Unicode Standard Annex #11.
- * Use u_getIntPropertyValue with UCHAR_EAST_ASIAN_WIDTH.
- * See http://www.unicode.org/reports/tr11/
- *
- * Returns a value indicating the display-cell width of the character
- * when used in Asian text, according to the Unicode standard (see p. 6-130
- * of The Unicode Standard, Version 2.0).  The results for various characters
- * are as follows:
- * <P>
- *      U_ZERO_WIDTH: Characters which are considered to take up no display-cell space:
- *          control characters
- *          format characters
- *          line and paragraph separators
- *          non-spacing marks
- *          combining Hangul jungseong
- *          combining Hangul jongseong
- *          unassigned Unicode values
- * <P>
- *      U_HALF_WIDTH: Characters which take up half a cell in standard Asian text:
- *          all characters in the General Scripts Area except combining Hangul choseong
- *              and the characters called out specifically above as ZERO_WIDTH
- *          alphabetic and Arabic presentation forms
- *          halfwidth CJK punctuation
- *          halfwidth Katakana
- *          halfwidth Hangul Jamo
- *          halfwidth forms, arrows, and shapes
- * <P>
- *      U_FULL_WIDTH:  Characters which take up a full cell in standard Asian text:
- *          combining Hangul choseong
- *          all characters in the CJK Phonetics and Symbols Area
- *          all characters in the CJK Ideographs Area
- *          all characters in the Hangul Syllables Area
- *          CJK compatibility ideographs
- *          CJK compatibility forms
- *          small form variants
- *          fullwidth ASCII
- *          fullwidth punctuation and currency signs
- * <P>
- *      U_NEUTRAL_WIDTH:  Characters whose cell width is context-dependent:
- *          all characters in the Symbols Area, except those specifically called out above
- *          all characters in the Surrogates Area
- *          all charcaters in the Private Use Area
- * <P>
- * For Korean text, this algorithm should work properly with properly normalized Korean
- * text.  Precomposed Hangul syllables and non-combining jamo are all considered full-
- * width characters.  For combining jamo, we treat we treat choseong (initial consonants)
- * as double-width characters and junseong (vowels) and jongseong (final consonants)
- * as non-spacing marks.  This will work right in text that uses the precomposed
- * choseong characters instead of teo choseong characters in a row, and which uses the
- * choseong filler character at the beginning of syllables that don't have an initial
- * consonant.  The results may be slightly off with Korean text following different
- * conventions.
- * @param c The character to be tested
- * @return a value indicating the display-cell width of the character when used in Asian text
- * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
- */
-U_CAPI uint16_t U_EXPORT2
-u_charCellWidth(UChar32 c);
-
-/**
  * Returns the general category value for the code point.
  *
  * Same as java.lang.Character.getType().
@@ -2782,16 +2701,6 @@ u_getUnicodeVersion(UVersionInfo versionArray);
  */
 U_CAPI int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
-
-
-#ifdef ICU_UCHAR_USE_DEPRECATES
-/**
- * @obsolete ICU 2.4. Use ublock_getCode() instead since this API will be removed in that release.
- */
-#define u_charScript ublock_getCode
-/** @obsolete ICU 2.4. Use UBlockCode instead since this API will be removed in that release. */
-typedef UBlockCode UCharScript;
-#endif /* ICU_UCHAR_USE_DEPRECATES */
 
 U_CDECL_END
 

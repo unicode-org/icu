@@ -103,12 +103,6 @@ U_NAMESPACE_BEGIN
 
 const char UnicodeString::fgClassID=0;
 
-#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
-
-const char UCharReference::fgClassID=0;
-
-#endif
-
 //========================================
 // Reference Counting functions, put at top of file so that optimizing compilers
 //                               have a chance to automatically inline.
@@ -528,50 +522,6 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
 //========================================
 // Miscellaneous operations
 //========================================
-int32_t
-UnicodeString::numDisplayCells( int32_t start,
-                int32_t length,
-                UBool asian) const
-{
-  // pin indices to legal values
-  pinIndices(start, length);
-
-  UChar32 c;
-  int32_t result = 0;
-  int32_t limit = start + length;
-
-  while(start < limit) {
-    UTF_NEXT_CHAR(fArray, start, limit, c);
-    switch(u_charCellWidth(c)) {
-    case U_ZERO_WIDTH:
-      break;
-
-    case U_HALF_WIDTH:
-      result += 1;
-      break;
-
-    case U_FULL_WIDTH:
-      result += 2;
-      break;
-
-    case U_NEUTRAL_WIDTH:
-      result += (asian ? 2 : 1);
-      break;
-    }
-  }
-
-  return result;
-}
-
-#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
-
-UCharReference
-UnicodeString::operator[] (int32_t pos)
-{
-  return UCharReference(this, pos);
-}
-
-#endif
 
 UnicodeString UnicodeString::unescape() const {
     UnicodeString result;

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1996-2002, International Business Machines
+*   Copyright (C) 1996-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -506,19 +506,6 @@ typedef enum UErrorCode {
     U_DIFFERENT_UCA_VERSION = -121,     /**< ucol_open encountered a mismatch between UCA version and collator image version, so the collator was constructed from rules. No impact to further function */
 
     U_ERROR_WARNING_LIMIT,              /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
-
-#ifdef ICU_UERRORCODE_USE_DEPRECATES
-    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
-    U_USING_FALLBACK_ERROR    = -128,
-    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
-    U_ERROR_INFO_START        = U_ERROR_WARNING_START,
-    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
-    U_USING_DEFAULT_ERROR     = -127,
-    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
-    U_SAFECLONE_ALLOCATED_ERROR = -126,
-    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
-    U_ERROR_INFO_LIMIT        = U_ERROR_WARNING_LIMIT,
-#endif /* ICU_UERRORCODE_USE_DEPRECATES */
 
 
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
