@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TabRulerImpl.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:52:32 $
+ * @(#)$RCSfile: TabRulerImpl.java,v $ $Revision: 1.2 $ $Date: 2000/05/10 21:52:50 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -138,6 +138,9 @@ public final class TabRulerImpl implements MouseListener, MouseMotionListener
             Image image = fImage;
             if (image == null || image.getWidth(fComponent) < width
                               || image.getHeight(fComponent) < height) {
+		if (!fComponent.isVisible()) { // fix race condition if component not fully initialized
+		    return null;
+		}
                 image = fComponent.createImage(width, height);
             }
             Graphics g = image.getGraphics();
