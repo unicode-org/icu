@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $ 
- * $Date: 2000/03/10 04:07:18 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/07/20 17:01:36 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -45,15 +45,17 @@ public class BreakDictionary {
 
         BreakDictionary dictionary = new BreakDictionary(new FileInputStream(filename));
 
-        String outputFile = "";
-        if(args.length >= 2) {
-            outputFile = args[1];
-        }
         PrintWriter out = null;
-        if (outputFile.length() != 0) {
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UnicodeLittle"));
+        
+        if(args.length >= 2) {
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UnicodeLittle"));
         }
+        
         dictionary.printWordList("", 0, out);
+        
+        if (out != null) {
+            out.close();
+        }
     }
 
     public void printWordList(String partialWord, int state, PrintWriter out)
@@ -66,8 +68,10 @@ public class BreakDictionary {
         }
         else {
             for (int i = 0; i < numCols; i++) {
-                if (at(state, i) != 0) {
-                    printWordList(partialWord + reverseColumnMap[i], at(state, i), out);
+                int newState = (at(state, i)) & 0xFFFF;
+                
+                if (newState != 0) {
+                    printWordList(partialWord + reverseColumnMap[i], newState, out);
                 }
             }
         }
