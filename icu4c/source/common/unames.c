@@ -160,7 +160,6 @@ U_CAPI UTextOffset U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, UTextOffset bufferLength,
            UErrorCode *pErrorCode) {
-    UCharNameChoice uniNameChoice;
     AlgorithmicRange *algRange;
     uint32_t *p;
     uint32_t i;
@@ -180,8 +179,6 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
         return u_terminateChars(buffer, bufferLength, 0, pErrorCode);
     }
 
-    uniNameChoice = nameChoice == U_EXTENDED_CHAR_NAME ? U_UNICODE_CHAR_NAME : nameChoice;
-
     length=0;
 
     /* try algorithmic names first */
@@ -190,7 +187,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     algRange=(AlgorithmicRange *)(p+1);
     while(i>0) {
         if(algRange->start<=(uint32_t)code && (uint32_t)code<=algRange->end) {
-            length=getAlgName(algRange, (uint32_t)code, uniNameChoice, buffer, (uint16_t)bufferLength);
+            length=getAlgName(algRange, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
             break;
         }
         algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
@@ -214,7 +211,6 @@ U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
                const char *name,
                UErrorCode *pErrorCode) {
-    UCharNameChoice uniNameChoice;
     char upper[120], lower[120];
     FindName findName;
     AlgorithmicRange *algRange;
@@ -297,14 +293,12 @@ u_charFromName(UCharNameChoice nameChoice,
         return error;
     }
 
-    uniNameChoice = nameChoice == U_EXTENDED_CHAR_NAME ? U_UNICODE_CHAR_NAME : nameChoice;
-
     /* try algorithmic names now */
     p=(uint32_t *)((uint8_t *)uCharNames+uCharNames->algNamesOffset);
     i=*p;
     algRange=(AlgorithmicRange *)(p+1);
     while(i>0) {
-        if((c=findAlgName(algRange, uniNameChoice, upper))!=0xffff) {
+        if((c=findAlgName(algRange, nameChoice, upper))!=0xffff) {
             return c;
         }
         algRange=(AlgorithmicRange *)((uint8_t *)algRange+algRange->size);
@@ -604,7 +598,7 @@ expandName(UCharNames *names,
     uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
     uint8_t c;
 
-    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         /*
          * skip the modern name if it is not requested _and_
          * if the semicolon byte value is a character, not a token number
@@ -686,7 +680,7 @@ compareName(UCharNames *names,
     uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
     uint8_t c;
 
-    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         /*
          * skip the modern name if it is not requested _and_
          * if the semicolon byte value is a character, not a token number
@@ -869,7 +863,7 @@ getAlgName(AlgorithmicRange *range, uint32_t code, UCharNameChoice nameChoice,
      * extension A was only introduced with Unicode 3.0, and
      * the Hangul syllable block was moved and changed around Unicode 1.1.5.
      */
-    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         /* zero-terminate */
         if(bufferLength>0) {
             *buffer=0;
@@ -1029,7 +1023,7 @@ enumAlgNames(AlgorithmicRange *range,
     char buffer[200];
     uint16_t length;
 
-    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         return TRUE;
     }
 
@@ -1167,7 +1161,7 @@ static UChar32
 findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName) {
     UChar32 code;
 
-    if(nameChoice!=U_UNICODE_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
         return 0xffff;
     }
 
