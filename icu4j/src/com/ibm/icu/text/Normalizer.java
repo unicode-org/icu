@@ -1459,17 +1459,15 @@ public final class Normalizer implements Cloneable{
     /**
      * Convenience method that can have faster implementation
      * by not allocating buffers.
-     * @internal
-     * @param char32a   the first code point to be checked against the
+     * @param char32a   the first code point to be checked against
      * @param str2      the second string
      * @param options   A bit set of options
      * @stable ICU 2.8
-     *
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
-    public static int compare(int charA, String str2, int options) {
-        return compare(UTF16.valueOf(charA), str2, options);
+    public static int compare(int char32a, String str2, int options) {
+        return compare(UTF16.valueOf(char32a), str2, options);
     }
    
     /**

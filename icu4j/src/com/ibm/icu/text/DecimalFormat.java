@@ -3787,7 +3787,7 @@ public class DecimalFormat extends NumberFormat {
      * to one.  If the minimum significant digits count is greater
      * than <code>max</code>, then it is set to <code>max</code>. This
      * value has no effect unless areSignificantDigitsUsed() returns true.
-     * @param min the most significant digits to be shown 
+     * @param max the most significant digits to be shown 
      * @draft ICU 3.0
      */
     public void setMaximumSignificantDigits(int max) {
@@ -3813,7 +3813,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Sets whether significant digits are in use, or integer and
      * fraction digit counts are in use.
-     * @param useSignficantDigits true to use significant digits, or
+     * @param useSignificantDigits true to use significant digits, or
      * false to use integer and fraction digit counts
      * @draft ICU 3.0
      */
