@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/07/30 02:32:56 $
- * $Revision: 1.9 $
+ * $Date: 2002/08/07 18:07:56 $
+ * $Revision: 1.10 $
  *******************************************************************************
  */
  
@@ -694,7 +694,6 @@ public final class NormalizerImpl {
 	            trailCC=prevCC;
 	            back=preBack;
 	            while(start<preBack) {
-	                prevArgs.current=preBack;
 	                prevCC=getPrevCC(prevArgs);
 	                preBack=prevArgs.current;
 	                if(cc>=prevCC) {
