@@ -1486,37 +1486,6 @@ ures_open(const char* path,
     return r;
 }
 
-#ifdef ICU_URES_USE_DEPRECATES
-U_CAPI UResourceBundle*  U_EXPORT2
-ures_openW(const wchar_t* myPath,
-                    const char* localeID,
-                    UErrorCode* status)
-{
-    UResourceBundle *r;
-    size_t pathSize = (uprv_wcslen(myPath) + 1) * sizeof(int32_t);
-    char *path = (char *)uprv_malloc(pathSize);
-    /* test for NULL */
-    if (path == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-
-    uprv_wcstombs(path, myPath, pathSize);
-
-    /*u_UCharsToChars(myPath, path, uprv_wcslen(myPath)+1);*/
-
-    r = ures_open(path, localeID, status);
-    uprv_free(path);
-
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    return r;
-}
-#endif /* ICU_URES_USE_DEPRECATES */
-
-
 U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath, 
                   const char* localeID, 
                   UErrorCode* status)
