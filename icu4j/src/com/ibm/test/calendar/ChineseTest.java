@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/ChineseTest.java,v $
- * $Date: 2000/11/21 06:58:06 $
- * $Revision: 1.2 $
+ * $Date: 2000/11/21 20:20:44 $
+ * $Revision: 1.3 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -235,8 +235,8 @@ public class ChineseTest extends CalendarTest {
      */
     public void TestFormat() {
         ChineseCalendar cal = new ChineseCalendar();
-        DateFormat fmt = cal.getDateTimeFormat(
-            DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
+        DateFormat fmt = DateFormat.getDateTimeInstance(cal,
+                                    DateFormat.DEFAULT, DateFormat.DEFAULT);
 
         Date[] DATA = {
             new Date(2001-1900, Calendar.MAY, 22),
