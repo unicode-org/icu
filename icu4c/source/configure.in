@@ -191,6 +191,57 @@ U_IS_BIG_ENDIAN=1
 fi
 AC_SUBST(U_IS_BIG_ENDIAN)
 
+dnl Define a sizeof checking macro that is a bit better than autoconf's
+dnl builtin (and heavily based on it, of course). The new macro is
+dnl AC_DO_CHECK_SIZEOF(TYPE [, CROSS_SIZE [, INCLUDES])
+AC_DEFUN(AC_DO_CHECK_SIZEOF,
+[changequote(<<, >>)dnl
+dnl The name to #define.
+define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
+dnl The cache variable name.
+define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
+changequote([, ])dnl
+AC_MSG_CHECKING(size of $1)
+AC_CACHE_VAL(AC_CV_NAME,
+[AC_TRY_RUN($3
+[#include <stdio.h>
+main()
+{
+  FILE *f=fopen("conftestval", "w");
+  if (!f) exit(1);
+  fprintf(f, "%d\n", sizeof($1));
+  exit(0);
+}], AC_CV_NAME=`cat conftestval`, AC_CV_NAME=0, ifelse([$2], , , AC_CV_NAME=$2))])dnl
+AC_MSG_RESULT($AC_CV_NAME)
+AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
+undefine([AC_TYPE_NAME])dnl
+undefine([AC_CV_NAME])dnl
+])
+
+dnl Do various wchar_t related checks
+AC_CHECK_HEADER(wchar.h)
+if test "$ac_cv_header_wchar_h" = no
+then
+    U_HAVE_WCHAR_H=0
+else
+    AC_DEFINE(HAVE_WCHAR_H)
+    U_HAVE_WCHAR_H=1
+fi
+AC_SUBST(U_HAVE_WCHAR_H)
+
+ac_default_sizeof_wchar_t=4
+AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
+#if STDC_HEADERS
+#include <stddef.h>
+#endif
+#if HAVE_WCHAR_H
+#include <wchar.h>
+#endif])
+dnl We could set ac_cv_sizeof_wchar_t to the default if the check returned
+dnl 0 (unknown) but we'd rather do it in the headers, so we know we had no
+dnl clue at configure time.
+U_SIZEOF_WCHAR_T=$ac_cv_sizeof_wchar_t
+AC_SUBST(U_SIZEOF_WCHAR_T)
 
 dnl Checks for typedefs
 AC_CHECK_TYPE(int8_t,signed char)
@@ -385,7 +436,7 @@ fi
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
-		common/Makefile common/unicode/platform.h config/Makefile i18n/Makefile \
+		common/Makefile config/Makefile i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
@@ -394,7 +445,8 @@ AC_OUTPUT([Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
-		samples/XMLConverter/Makefile])
+		samples/XMLConverter/Makefile \
+		common/unicode/platform.h])
 
 
 dnl create the data directory
