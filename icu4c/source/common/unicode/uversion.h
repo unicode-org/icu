@@ -136,18 +136,23 @@ u_getVersion(UVersionInfo versionArray);
 /** If the version is different, sortkeys for the same string could be different */
 /** version 2 was in ICU 1.8.1. changed is: compression intervals, French secondary */
 /** compression, generating quad level always when strength is quad or more */
-#define UCOL_RUNTIME_VERSION 3
+/** version 4 - ICU 2.2 - tracking UCA changes, ignore completely ignorables */
+/** in contractions, ignore primary ignorables after shifted */
+#define UCOL_RUNTIME_VERSION 4
 
 /** Builder code version. When this is different, same tailoring might result */
 /** in assigning different collation elements to code points                  */
 /** version 2 was in ICU 1.8.1. added support for prefixes, tweaked canonical */
 /** closure. However, the tailorings should probably get same CEs assigned    */
-#define UCOL_BUILDER_VERSION 4
+/** version 5 - ICU 2.2 - fixed some bugs, renamed some indirect values.      */
+/** Backward compatible with the old rules. */
+#define UCOL_BUILDER_VERSION 5
 
 /* This is the version of FractionalUCA.txt tailoring rules*/
 /* Version 1 was in ICU 1.8.1. Version two contains canonical closure for */
 /* supplementary code points */
-#define UCOL_FRACTIONAL_UCA_VERSION 3
+/* Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 */
+#define UCOL_FRACTIONAL_UCA_VERSION 4
 
 /** This is the version of the tailorings */
 #define UCOL_TAILORINGS_VERSION 1
