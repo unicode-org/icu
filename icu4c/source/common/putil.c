@@ -102,11 +102,9 @@
 #if IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
-#else
-#ifdef OS390
+#elif defined(OS390)
 #define NAN_TOP ((int16_t)0x7F08)
 #define INF_TOP ((int16_t)0x3F00)
-#endif
 #endif
 
 #define SIGN 0x80000000L
@@ -152,23 +150,23 @@ int32_t
 uprv_getUTCtime()
 {
 #ifdef XP_MAC
-  time_t t, t1, t2;
-  struct tm tmrec;
-  
-  memset( &tmrec, 0, sizeof(tmrec) );
-  tmrec.tm_year = 70;
-  tmrec.tm_mon = 0;
-  tmrec.tm_mday = 1;
-  t1 = mktime(&tmrec);    /* seconds of 1/1/1970*/
-  
-  time(&t);
-  memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
-  t2 = mktime(&tmrec);    /* seconds of current GMT*/
-  return t2 - t1;         /* GMT (or UTC) in seconds since 1970*/
+    time_t t, t1, t2;
+    struct tm tmrec;
+
+    memset( &tmrec, 0, sizeof(tmrec) );
+    tmrec.tm_year = 70;
+    tmrec.tm_mon = 0;
+    tmrec.tm_mday = 1;
+    t1 = mktime(&tmrec);    /* seconds of 1/1/1970*/
+
+    time(&t);
+    memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
+    t2 = mktime(&tmrec);    /* seconds of current GMT*/
+    return t2 - t1;         /* GMT (or UTC) in seconds since 1970*/
 #else
-  time_t epochtime;
-  time(&epochtime);
-  return epochtime;
+    time_t epochtime;
+    time(&epochtime);
+    return epochtime;
 #endif
 }
 
@@ -186,42 +184,43 @@ UBool
 uprv_isNaN(double number)
 {
 #if IEEE_754
-  /* This should work in theory, but it doesn't, so we resort to the more*/
-  /* complicated method below.*/
-  /*  return number != number;*/
-  
-  /* You can't return number == getNaN() because, by definition, NaN != x for*/
-  /* all x, including NaN (that is, NaN != NaN).  So instead, we compare*/
-  /* against the known bit pattern.  We must be careful of endianism here.*/
-  /* The pattern we are looking for id:*/
-  
-  /*   7FFy yyyy yyyy yyyy  (some y non-zero)*/
-  
-  /* There are two different kinds of NaN, but we ignore the distinction*/
-  /* here.  Note that the y value must be non-zero; if it is zero, then we*/
-  /* have infinity.*/
-  
-  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
+    /* This should work in theory, but it doesn't, so we resort to the more*/
+    /* complicated method below.*/
+    /*  return number != number;*/
+
+    /* You can't return number == getNaN() because, by definition, NaN != x for*/
+    /* all x, including NaN (that is, NaN != NaN).  So instead, we compare*/
+    /* against the known bit pattern.  We must be careful of endianism here.*/
+    /* The pattern we are looking for id:*/
+
+    /*   7FFy yyyy yyyy yyyy  (some y non-zero)*/
+
+    /* There are two different kinds of NaN, but we ignore the distinction*/
+    /* here.  Note that the y value must be non-zero; if it is zero, then we*/
+    /* have infinity.*/
+
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
                               sizeof(uint32_t));
-  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
                              sizeof(uint32_t));
 
-  return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) && 
-    (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
-#else
-  /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
-  /* you'll need to replace this default implementation with what's correct*/
-  /* for your platform.*/
-#ifdef OS390
-  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
-                            sizeof(uint32_t));
-  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
-                           sizeof(uint32_t));
+    return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) && 
+      (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
 
-  return ((highBits & 0x7F080000L) == 0x7F080000L) &&
-    (lowBits == 0x00000000L);
-#endif
-  return number != number;
+#elif defined(OS390)
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                        sizeof(uint32_t));
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
+                        sizeof(uint32_t));
+
+    return ((highBits & 0x7F080000L) == 0x7F080000L) &&
+      (lowBits == 0x00000000L);
+
+#else
+    /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
+    /* you'll need to replace this default implementation with what's correct*/
+    /* for your platform.*/
+    return number != number;
 #endif
 }
 
@@ -229,38 +228,39 @@ UBool
 uprv_isInfinite(double number)
 {
 #if IEEE_754
-  /* We know the top bit is the sign bit, so we mask that off in a copy of */
-  /* the number and compare against infinity. [LIU]*/
-  /* The following approach doesn't work for some reason, so we go ahead and */
-  /* scrutinize the pattern itself. */
-  /*  double a = number; */
-  /*  *(int8_t*)u_topNBytesOfDouble(&a, 1) &= 0x7F;*/
-  /*  return a == uprv_getInfinity();*/
-  /* Instead, We want to see either:*/
-  
-  /*   7FF0 0000 0000 0000*/
-  /*   FFF0 0000 0000 0000*/
-  
-  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
-                              sizeof(uint32_t));
-  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
-                             sizeof(uint32_t));
-  
-  return (UBool)(((highBits  & ~SIGN) == 0x7FF00000L) &&
-      (lowBits == 0x00000000L));
-#else
-  /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
-  /* value, you'll need to replace this default implementation with what's*/
-  /* correct for your platform.*/
-#ifdef OS390
-  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
-                              sizeof(uint32_t));
-  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
-                             sizeof(uint32_t));
+    /* We know the top bit is the sign bit, so we mask that off in a copy of */
+    /* the number and compare against infinity. [LIU]*/
+    /* The following approach doesn't work for some reason, so we go ahead and */
+    /* scrutinize the pattern itself. */
+    /*  double a = number; */
+    /*  *(int8_t*)u_topNBytesOfDouble(&a, 1) &= 0x7F;*/
+    /*  return a == uprv_getInfinity();*/
+    /* Instead, We want to see either:*/
 
-return ((highBits  & ~SIGN) == 0x70FF0000L) && (lowBits == 0x00000000L);
-#endif 
-  return number == (2.0 * number);
+    /*   7FF0 0000 0000 0000*/
+    /*   FFF0 0000 0000 0000*/
+  
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
+                        sizeof(uint32_t));
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
+                        sizeof(uint32_t));
+
+    return (UBool)(((highBits  & ~SIGN) == 0x7FF00000L) &&
+      (lowBits == 0x00000000L));
+
+#elif defined(OS390)
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                        sizeof(uint32_t));
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
+                        sizeof(uint32_t));
+
+    return ((highBits  & ~SIGN) == 0x70FF0000L) && (lowBits == 0x00000000L);
+
+#else
+    /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
+    /* value, you'll need to replace this default implementation with what's*/
+    /* correct for your platform.*/
+    return number == (2.0 * number);
 #endif
 }
 
@@ -268,9 +268,9 @@ UBool
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
-  return (UBool)(number > 0 && uprv_isInfinite(number));
+    return (UBool)(number > 0 && uprv_isInfinite(number));
 #else
-  return uprv_isInfinite(number);
+    return uprv_isInfinite(number);
 #endif
 }
 
@@ -278,11 +278,12 @@ UBool
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
-  return (UBool)(number < 0 && uprv_isInfinite(number));
+    return (UBool)(number < 0 && uprv_isInfinite(number));
+
 #else
-  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
-                            sizeof(uint32_t));
-  return((highBits & SIGN) && uprv_isInfinite(number));
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                        sizeof(uint32_t));
+    return((highBits & SIGN) && uprv_isInfinite(number));
 
 #endif
 }
@@ -291,24 +292,24 @@ double
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
-  if( ! fgNaNInitialized) {
-    umtx_lock(NULL);
-    if( ! fgNaNInitialized) {
-      int i;
-      int8_t* p = (int8_t*)&fgNan;
-      for(i = 0; i < sizeof(double); ++i) 
-    *p++ = 0;
-      *(int16_t*)u_topNBytesOfDouble(&fgNan, sizeof(NAN_TOP)) = NAN_TOP;
-      fgNaNInitialized = TRUE;
+    if( !fgNaNInitialized) {
+        umtx_lock(NULL);
+        if( ! fgNaNInitialized) {
+            int i;
+            int8_t* p = (int8_t*)&fgNan;
+            for(i = 0; i < sizeof(double); ++i) 
+                *p++ = 0;
+            *(int16_t*)u_topNBytesOfDouble(&fgNan, sizeof(NAN_TOP)) = NAN_TOP;
+            fgNaNInitialized = TRUE;
+        }
+        umtx_unlock(NULL);
     }
-    umtx_unlock(NULL);
-  }
-  return fgNan;
+    return fgNan;
 #else
-  /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
-  /* you'll need to replace this default implementation with what's correct*/
-  /* for your platform.*/
-  return 0.0;
+    /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
+    /* you'll need to replace this default implementation with what's correct*/
+    /* for your platform.*/
+    return 0.0;
 #endif
 }
 
@@ -316,62 +317,59 @@ double
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
-  if (!fgInfInitialized)
+    if (!fgInfInitialized)
     {
-      int i;
-      int8_t* p = (int8_t*)&fgInf;
-      for(i = 0; i < sizeof(double); ++i) 
-    *p++ = 0;
-      *(int16_t*)u_topNBytesOfDouble(&fgInf, sizeof(INF_TOP)) = INF_TOP;
-      fgInfInitialized = TRUE;
+        int i;
+        int8_t* p = (int8_t*)&fgInf;
+        for(i = 0; i < sizeof(double); ++i) 
+            *p++ = 0;
+        *(int16_t*)u_topNBytesOfDouble(&fgInf, sizeof(INF_TOP)) = INF_TOP;
+        fgInfInitialized = TRUE;
     }
-  return fgInf;
+    return fgInf;
 #else
-  /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
-  /* value, you'll need to replace this default implementation with what's*/
-  /* correct for your platform.*/
-  return 0.0;
+    /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
+    /* value, you'll need to replace this default implementation with what's*/
+    /* correct for your platform.*/
+    return 0.0;
 #endif
 }
 
 double 
 uprv_floor(double x)
 {
-  return floor(x);
+    return floor(x);
 }
 
 double 
 uprv_ceil(double x)
 {
-  return ceil(x);
+    return ceil(x);
 }
 
 double 
 uprv_fabs(double x)
 {
-  return fabs(x);
+    return fabs(x);
 }
 
 double 
 uprv_modf(double x, double* y)
 {
-  return modf(x, y);
+    return modf(x, y);
 }
 
 double 
 uprv_fmod(double x, double y)
 {
-  return fmod(x, y);
+    return fmod(x, y);
 }
 
 double
 uprv_pow10(int32_t x)
 {
-#ifdef XP_MAC
-  return pow(10.0, (double)x);
-#else
-  return pow(10.0, x);
-#endif
+    /* This is declared as "double pow(double x, double y)" */
+    return pow(10.0, (double)x);
 }
 
 /**
@@ -403,55 +401,55 @@ double
 uprv_IEEEremainder(double x, double p)
 {
 #if IEEE_754
-  int32_t hx, hp;
-  uint32_t sx, lx, lp;
-  double p_half;
+    int32_t hx, hp;
+    uint32_t sx, lx, lp;
+    double p_half;
 
-  hx = *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t));
-  lx = *(uint32_t*)u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
+    hx = *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t));
+    lx = *(uint32_t*)u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
 
-  hp = *(int32_t*)u_topNBytesOfDouble(&p, sizeof(int32_t));
-  lp = *(uint32_t*)u_bottomNBytesOfDouble(&p, sizeof(uint32_t));
+    hp = *(int32_t*)u_topNBytesOfDouble(&p, sizeof(int32_t));
+    lp = *(uint32_t*)u_bottomNBytesOfDouble(&p, sizeof(uint32_t));
 
-  sx = hx & SIGN;
+    sx = hx & SIGN;
 
-  hp &= 0x7fffffff;
-  hx &= 0x7fffffff;
+    hp &= 0x7fffffff;
+    hx &= 0x7fffffff;
 
-  /* purge off exception values */
-  if((hp|lp) == 0) 
-    return (x*p) / (x*p);     /* p = 0 */
-  if((hx >= 0x7ff00000)||        /* x not finite */
-     ((hp>=0x7ff00000) &&    /* p is NaN */
+    /* purge off exception values */
+    if((hp|lp) == 0) 
+        return (x*p) / (x*p);     /* p = 0 */
+    if((hx >= 0x7ff00000)||        /* x not finite */
+      ((hp>=0x7ff00000) &&    /* p is NaN */
       (((hp-0x7ff00000)|lp) != 0)))
-    return (x*p) / (x*p);
+        return (x*p) / (x*p);
 
-
-  if(hp <= 0x7fdfffff) 
-    x = uprv_fmod(x, p + p);    /* now x < 2p */
-  if(((hx-hp)|(lx-lp)) == 0) 
-    return 0.0 * x;
-  x  = uprv_fabs(x);
-  p  = uprv_fabs(p);
-  if (hp < 0x00200000) {
-    if(x + x > p) {
-      x -= p;
-      if(x + x >= p) 
-    x -= p;
+    if(hp <= 0x7fdfffff) 
+        x = uprv_fmod(x, p + p);    /* now x < 2p */
+    if(((hx-hp)|(lx-lp)) == 0) 
+        return 0.0 * x;
+    x = uprv_fabs(x);
+    p = uprv_fabs(p);
+    if (hp < 0x00200000) {
+        if(x + x > p) {
+            x -= p;
+            if(x + x >= p) 
+                x -= p;
+        }
     }
-  } 
-  else {
-    p_half = 0.5 * p;
-    if(x > p_half) {
-      x -= p;
-      if(x >= p_half) 
-    x -= p;
+    else {
+        p_half = 0.5 * p;
+        if(x > p_half) {
+            x -= p;
+            if(x >= p_half) 
+                x -= p;
+        }
     }
-  }
 
-  *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t)) ^= sx;
+    *(int32_t*)u_topNBytesOfDouble(&x, sizeof(int32_t)) ^= sx;
 
-  return x;
+    return x;
+
 #else
     /* INACCURATE but portable implementation of IEEEremainder.  This
      * implementation should work on platforms that do not have IEEE
@@ -482,67 +480,58 @@ double
 uprv_fmax(double x, double y)
 {
 #if IEEE_754
-  int32_t lowBits;
+    int32_t lowBits;
 
-  /* first handle NaN*/
-  if(uprv_isNaN(x) || uprv_isNaN(y))
-    return uprv_getNaN();
+    /* first handle NaN*/
+    if(uprv_isNaN(x) || uprv_isNaN(y))
+        return uprv_getNaN();
 
-  /* check for -0 and 0*/
-  lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
-  if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
-    return y; 
+    /* check for -0 and 0*/
+    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
+    if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
+        return y; 
 
-  return (x > y ? x : y);
+    return (x > y ? x : y);
 #else
-  /* {sfb} fix this*/
-#ifdef OS390
-/* this should work for all flt point w/o NaN and Infpecial cases */
-  return (x > y ? x : y);
-#else
-  return x;
-#endif
+
+    /* this should work for all flt point w/o NaN and Infpecial cases */
+    return (x > y ? x : y);
 #endif
 }
 
 int32_t 
 uprv_max(int32_t x, int32_t y)
 {
-  return (x > y ? x : y);
+    return (x > y ? x : y);
 }
 
 double 
 uprv_fmin(double x, double y)
 {
 #if IEEE_754
-  int32_t lowBits;
+    int32_t lowBits;
 
-  /* first handle NaN*/
-  if(uprv_isNaN(x) || uprv_isNaN(y))
-    return uprv_getNaN();
+    /* first handle NaN*/
+    if(uprv_isNaN(x) || uprv_isNaN(y))
+        return uprv_getNaN();
 
-  /* check for -0 and 0*/
-  lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
-  if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
-    return y; 
+    /* check for -0 and 0*/
+    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
+    if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
+        return y; 
 
-  return (x > y ? y : x);
+    return (x > y ? y : x);
 #else
-  /* {sfb} fix this*/
-#ifdef OS390
-/* this should work for all flt point w/o NaN and Inf special cases */
 
-  return (x > y ? y : x);
-#else
-  return x;
-#endif
+    /* this should work for all flt point w/o NaN and Inf special cases */
+    return (x > y ? y : x);
 #endif
 }
 
 int32_t 
 uprv_min(int32_t x, int32_t y)
 {
-  return (x > y ? y : x);
+    return (x > y ? y : x);
 }
 
 /**
@@ -556,28 +545,31 @@ double
 uprv_trunc(double d)
 {
 #if IEEE_754
+    int32_t lowBits;
 
-  int32_t lowBits;
-  
-  /* handle error cases*/
-  if(uprv_isNaN(d))        return uprv_getNaN();
-  if(uprv_isInfinite(d))        return uprv_getInfinity();
-  
-  lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-  if( (d == 0.0 && (lowBits & SIGN)) || d < 0)
-    return ceil(d);
-  else
-    return floor(d);
+    /* handle error cases*/
+    if(uprv_isNaN(d))
+        return uprv_getNaN();
+    if(uprv_isInfinite(d))
+        return uprv_getInfinity();
+
+    lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
+    if( (d == 0.0 && (lowBits & SIGN)) || d < 0)
+        return ceil(d);
+    else
+        return floor(d);
+
 #else
   return d >= 0 ? floor(d) : ceil(d);
+
 #endif
 }
 
 void 
 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
-  *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
-  *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
+    *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
+    *lo = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
 }
 
 
@@ -591,66 +583,66 @@ uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 int16_t 
 uprv_log10(double d)
 {
-  /* The reason this routine is needed is that simply taking the*/
-  /* log and dividing by log10 yields a result which may be off*/
-  /* by 1 due to rounding errors.  For example, the naive log10*/
-  /* of 1.0e300 taken this way is 299, rather than 300.*/
-  double alog10 = log(d) / log(10.0);
-  int16_t ailog10 = (int16_t) floor(alog10);
+    /* The reason this routine is needed is that simply taking the*/
+    /* log and dividing by log10 yields a result which may be off*/
+    /* by 1 due to rounding errors.  For example, the naive log10*/
+    /* of 1.0e300 taken this way is 299, rather than 300.*/
+    double alog10 = log(d) / log(10.0);
+    int16_t ailog10 = (int16_t) floor(alog10);
 
-  /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
-  if (alog10 > 0 && d >= pow(10.0, ailog10 + 1))
-    ++ailog10;
+    /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
+    if (alog10 > 0 && d >= pow(10.0, ailog10 + 1))
+        ++ailog10;
 
-  /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
-  else if (alog10 < 0 && d < pow(10.0, ailog10))
-    --ailog10;
+    /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
+    else if (alog10 < 0 && d < pow(10.0, ailog10))
+        --ailog10;
 
-  return ailog10;
+    return ailog10;
 }
 
 int32_t 
 uprv_digitsAfterDecimal(double x)
 {
-  char buffer[20];
-  int32_t numDigits;
-  char *p;
-  int32_t ptPos, exponent;
+    char buffer[20];
+    int32_t numDigits;
+    char *p;
+    int32_t ptPos, exponent;
 
-  /* negative numbers throw off the calculations*/
-  x = fabs(x);
+    /* negative numbers throw off the calculations*/
+    x = fabs(x);
 
-  /* cheat and use the string-format routine to get a string representation*/
-  /* (it handles mathematical inaccuracy better than we can), then find out */
-  /* many characters are to the right of the decimal point */
-  sprintf(buffer, "%.9g", x);
-  p = uprv_strchr(buffer, '.');
-  if (p == 0)
-    return 0;
+    /* cheat and use the string-format routine to get a string representation*/
+    /* (it handles mathematical inaccuracy better than we can), then find out */
+    /* many characters are to the right of the decimal point */
+    sprintf(buffer, "%.9g", x);
+    p = uprv_strchr(buffer, '.');
+    if (p == 0)
+        return 0;
 
-  ptPos = (int16_t)(p - buffer);
-  numDigits = (int16_t)(strlen(buffer) - ptPos - 1);
+    ptPos = (int16_t)(p - buffer);
+    numDigits = (int16_t)(strlen(buffer) - ptPos - 1);
 
-  /* if the number's string representation is in scientific notation, find */
-  /* the exponent and take it into account*/
-  exponent = 0;
-  p = uprv_strchr(buffer, 'e');
-  if (p != 0) {
-    int16_t expPos = (int16_t)(p - buffer);
-    numDigits -= strlen(buffer) - expPos;
-    exponent = (int16_t)(atoi(p + 1));
-  }
+    /* if the number's string representation is in scientific notation, find */
+    /* the exponent and take it into account*/
+    exponent = 0;
+    p = uprv_strchr(buffer, 'e');
+    if (p != 0) {
+        int16_t expPos = (int16_t)(p - buffer);
+        numDigits -= strlen(buffer) - expPos;
+        exponent = (int16_t)(atoi(p + 1));
+    }
 
-  /* the string representation may still have spurious decimal digits in it, */
-  /* so we cut off at the ninth digit to the right of the decimal, and have */
-  /* to search backward from there to the first non-zero digit*/
-  if (numDigits > 9) {
-    numDigits = 9;
-    while (numDigits > 0 && buffer[ptPos + numDigits] == '0')
-      --numDigits;
-  }
-  numDigits -= exponent;
-  return numDigits;
+    /* the string representation may still have spurious decimal digits in it, */
+    /* so we cut off at the ninth digit to the right of the decimal, and have */
+    /* to search backward from there to the first non-zero digit*/
+    if (numDigits > 9) {
+        numDigits = 9;
+        while (numDigits > 0 && buffer[ptPos + numDigits] == '0')
+            --numDigits;
+    }
+    numDigits -= exponent;
+    return numDigits;
 }
 
 /*---------------------------------------------------------------------------
@@ -666,7 +658,7 @@ uprv_tzset()
 #ifdef U_TZSET
     U_TZSET();
 #else
-  /* no initialization*/
+    /* no initialization*/
 #endif
 }
 
@@ -676,23 +668,23 @@ uprv_timezone()
 #ifdef U_TIMEZONE
     return U_TIMEZONE;
 #else
-  time_t t, t1, t2;
-  struct tm tmrec;
-  UBool dst_checked;
-  int32_t tdiff = 0;
+    time_t t, t1, t2;
+    struct tm tmrec;
+    UBool dst_checked;
+    int32_t tdiff = 0;
 
-  time(&t);
-  memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
-  dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
-  t1 = mktime(&tmrec);                 /* local time in seconds*/
-  memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
-  t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
-  tdiff = t2 - t1;
-  /* imitate NT behaviour, which returns same timezone offset to GMT for 
-     winter and summer*/
-  if (dst_checked)
-    tdiff += 3600;
-  return tdiff;
+    time(&t);
+    memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
+    dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
+    t1 = mktime(&tmrec);                 /* local time in seconds*/
+    memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
+    t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
+    tdiff = t2 - t1;
+    /* imitate NT behaviour, which returns same timezone offset to GMT for 
+       winter and summer*/
+    if (dst_checked)
+        tdiff += 3600;
+    return tdiff;
 #endif
 }
 
@@ -702,7 +694,7 @@ uprv_tzname(int n)
 #ifdef U_TZNAME
     return U_TZNAME[n];
 #else
-  return "";
+    return "";
 #endif
 }
 
@@ -761,9 +753,9 @@ pascal	OSErr	FSpGetFullPath(const FSSpec *spec,
 							   short *fullPathLength,
 							   Handle *fullPath)
 {
-  *fullPath = NULL;
-  *fullPathLength = 0;
-  return fnfErr; 
+    *fullPath = NULL;
+    *fullPathLength = 0;
+    return fnfErr; 
 }
 # endif /* XP_MAC */
 
@@ -775,38 +767,41 @@ pascal	OSErr	FSpGetFullPath(const FSSpec *spec,
  */
 static int
 getSystemPath(char *path, int size) {
-#   if defined(XP_MAC)
-        int16_t volNum;
-        path[0]=0;
-        OSErr err=GetVol((unsigned char*)path, &volNum);
-        if(err==noErr) {
-            int length=(uint8_t)path[0];
-            if(length>0) {
-                /* convert the Pascal string to a C string */
-                uprv_memmove(path, path+1, length);
-                path[length]=0;
-            }
-            return length;
+#if defined(XP_MAC)
+    int16_t volNum;
+    path[0]=0;
+    OSErr err=GetVol((unsigned char*)path, &volNum);
+    if(err==noErr) {
+        int length=(uint8_t)path[0];
+        if(length>0) {
+            /* convert the Pascal string to a C string */
+            uprv_memmove(path, path+1, length);
+            path[length]=0;
         }
-#   elif defined(WIN32)
-        if(GetSystemDirectory(path, size)>=2 && path[1]==':') {
-            /* remove the rest of the path - "\\winnt\\system32" or similar */
-            path[2]=0;
-            return 2;
-        }
-#   elif defined(OS2)
-        APIRET rc;
-        ULONG bootDrive=0;  /* 1=A, 2=B, 3=C, ... */
-    
-        rc=DosQuerySysInfo(QSV_BOOT_DRIVE, QSV_BOOT_DRIVE, (PVOID)&bootDrive, sizeof(ULONG));
-        if(rc==NO_ERROR) {
-            /* convert the numeric boot drive to a string */
-            path[0]='A'+bootDrive-1;
-            path[1]=':';
-            path[2]=0;
-            return 2;
-        }
-#   endif
+        return length;
+    }
+
+#elif defined(WIN32)
+    if(GetSystemDirectory(path, size)>=2 && path[1]==':') {
+        /* remove the rest of the path - "\\winnt\\system32" or similar */
+        path[2]=0;
+        return 2;
+    }
+
+#elif defined(OS2)
+    APIRET rc;
+    ULONG bootDrive=0;  /* 1=A, 2=B, 3=C, ... */
+
+    rc=DosQuerySysInfo(QSV_BOOT_DRIVE, QSV_BOOT_DRIVE, (PVOID)&bootDrive, sizeof(ULONG));
+    if(rc==NO_ERROR) {
+        /* convert the numeric boot drive to a string */
+        path[0]='A'+bootDrive-1;
+        path[1]=':';
+        path[2]=0;
+        return 2;
+    }
+#endif
+
     return 0;
 }
 
@@ -819,110 +814,110 @@ getSystemPath(char *path, int size) {
  */
 static int
 getLibraryPath(char *path, int size) {
-#   ifdef WIN32
-        HINSTANCE mod=GetModuleHandle("icuuc.dll");
-        if(mod!=NULL) {
-            if(GetModuleFileName(mod, path, size)>0) {
-                /* remove the basename and the last file separator */
-                char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
-                if(lastSep!=NULL) {
-                    *lastSep=0;
-                    return lastSep-path;
-                }
+#ifdef WIN32
+    HINSTANCE mod=GetModuleHandle("icuuc.dll");
+    if(mod!=NULL) {
+        if(GetModuleFileName(mod, path, size)>0) {
+            /* remove the basename and the last file separator */
+            char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
+            if(lastSep!=NULL) {
+                *lastSep=0;
+                return lastSep-path;
             }
         }
-#   elif defined(OS2)
-        HMODULE mod=NULLHANDLE;
-        APIRET rc=DosQueryModuleHandle("icuuc.dll", &mod);
+    }
+
+#elif defined(OS2)
+    HMODULE mod=NULLHANDLE;
+    APIRET rc=DosQueryModuleHandle("icuuc.dll", &mod);
+    if(rc==NO_ERROR) {
+        rc=DosQueryModuleName(mod, (LONG)size, path);
         if(rc==NO_ERROR) {
-            rc=DosQueryModuleName(mod, (LONG)size, path);
-            if(rc==NO_ERROR) {
-                /* remove the basename and the last file separator */
-                char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
-                if(lastSep!=NULL) {
-                    *lastSep=0;
-                    return lastSep-path;
-                }
+            /* remove the basename and the last file separator */
+            char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
+            if(lastSep!=NULL) {
+                *lastSep=0;
+                return lastSep-path;
             }
         }
-#   elif defined(OS390)
-#   elif defined(OS400)
-#   elif defined(XP_MAC)
-#   elif defined(U_SOLARIS)
-        void *handle=dlopen(U_COMMON_LIBNAME, RTLD_LAZY); /* "libicu-uc.so" */
-        if(handle!=NULL) {
-            Link_map *p=NULL;
-            char *s;
-            int rc, length=0;
+    }
 
-            /* get the Link_map list */
-            rc=dlinfo(handle, RTLD_DI_LINKMAP, (void *)&p);
-            if(rc>=0) {
-                /* search for the list item for the library itself */
-                while(p!=NULL) {
-       	           s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
-                    if(s!=NULL) {
-                        if(s>p->l_name) {
-                            /* copy the path, without the basename and the last separator */
-                            length=(s-p->l_name)-1;
-                            if(0<length && length<size) {
-                                uprv_memcpy(path, p->l_name, length);
-                                path[length]=0;
-                            } else {
-                                length=0;
-                            }
+#elif defined(U_SOLARIS)
+    void *handle=dlopen(U_COMMON_LIBNAME, RTLD_LAZY); /* "libicu-uc.so" */
+    if(handle!=NULL) {
+        Link_map *p=NULL;
+        char *s;
+        int rc, length=0;
+
+        /* get the Link_map list */
+        rc=dlinfo(handle, RTLD_DI_LINKMAP, (void *)&p);
+        if(rc>=0) {
+            /* search for the list item for the library itself */
+            while(p!=NULL) {
+       	       s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
+                if(s!=NULL) {
+                    if(s>p->l_name) {
+                        /* copy the path, without the basename and the last separator */
+                        length=(s-p->l_name)-1;
+                        if(0<length && length<size) {
+                            uprv_memcpy(path, p->l_name, length);
+                            path[length]=0;
+                        } else {
+                            length=0;
                         }
-                        break;
                     }
-                    p=p->l_next;
+                    break;
                 }
+                p=p->l_next;
             }
-            dlclose(handle);
-            return length;
         }
-#   elif defined(U_LINUX)
-#   elif defined(AIX)
-        void *handle=(void*)load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
-        if(handle!=NULL) {
-            uint8_t buffer[4096];
-            struct ld_info *p=NULL;
-            char *s;
-            int rc, length=0;
+        dlclose(handle);
+        return length;
+    }
 
-            /* copy the linked list of loaded libraries into the buffer */
-            rc=loadquery(L_GETINFO, buffer, sizeof(buffer));
-            if(rc>=0) {
-                /* search for the list item for the library itself */
-                p=(struct ld_info *)buffer;
-                for(;;) {
-                    /* advance (ignore the first list item) */
-                    if(p->ldinfo_next==0) {
-                        break;
-                    }
-                    p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
+#elif defined(AIX)
+    void *handle=(void*)load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
+    if(handle!=NULL) {
+        uint8_t buffer[4096];
+        struct ld_info *p=NULL;
+        char *s;
+        int rc, length=0;
 
-                    s=uprv_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
-                    if(s!=NULL) {
-                        if(s>p->ldinfo_filename) {
-                            /* copy the path, without the basename and the last separator */
-                            length=(s-p->ldinfo_filename)-1;
-                            if(0<length && length<size) {
-                                uprv_memcpy(path, p->ldinfo_filename, length);
-                                path[length]=0;
-                            } else {
-                                length=0;
-                            }
+        /* copy the linked list of loaded libraries into the buffer */
+        rc=loadquery(L_GETINFO, buffer, sizeof(buffer));
+        if(rc>=0) {
+            /* search for the list item for the library itself */
+            p=(struct ld_info *)buffer;
+            for(;;) {
+                /* advance (ignore the first list item) */
+                if(p->ldinfo_next==0) {
+                    break;
+                }
+                p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
+
+                s=uprv_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
+                if(s!=NULL) {
+                    if(s>p->ldinfo_filename) {
+                        /* copy the path, without the basename and the last separator */
+                        length=(s-p->ldinfo_filename)-1;
+                        if(0<length && length<size) {
+                            uprv_memcpy(path, p->ldinfo_filename, length);
+                            path[length]=0;
+                        } else {
+                            length=0;
                         }
-                        break;
                     }
-                    /* p=p->l_next; */
+                    break;
                 }
+                /* p=p->l_next; */
             }
-            unload(handle);
-            return length;
         }
-#   elif defined(HPUX)
-     {
+        unload(handle);
+        return length;
+    }
+
+#elif defined(HPUX)
+    {
         struct shl_descriptor *p=NULL;
         char *s;
         int i=1, rc, length=0;
@@ -952,12 +947,43 @@ getLibraryPath(char *path, int size) {
             ++i;
         }
         return length;
-     }
-#   elif defined(TANDEM)
-#   elif defined(U_POSIX)
-#   endif
+    }
+
+#elif defined(OS390)
+#elif defined(OS400)
+#elif defined(XP_MAC)
+#elif defined(U_LINUX)
+#elif defined(TANDEM)
+#elif defined(U_POSIX)
+#endif
+
     return 0;
 }
+
+#ifdef WIN32
+#   define LIB_PATH_VAR "PATH"
+#   define LIB_FILENAME "icuuc.dll"
+#elif defined(U_LINUX)
+#   define LIB_PATH_VAR "LD_LIBRARY_PATH"
+#   define LIB_FILENAME "libicuuc.so"
+#elif defined(OS2)
+#   define LIB_PATH_VAR "LIBPATH"
+#   define LIB_FILENAME "icuuc.dll"
+#elif defined(OS390)
+#   define LIB_PATH_VAR "LIBPATH"
+#   define LIB_FILENAME "libicuuc.a"
+#elif defined(TANDEM)
+#   define LIB_PATH_VAR "LIBPATH"
+#   define LIB_FILENAME "libicuuc.a"
+#elif defined(OS400)
+#elif defined(XP_MAC)
+#elif defined(U_SOLARIS)
+#elif defined(AIX)
+#elif defined(HPUX)
+#elif defined(U_POSIX)
+#   define LIB_PATH_VAR "LIBPATH"
+#   define LIB_FILENAME "libicuuc.so"
+#endif
 
 /*
  * search for the ICU dynamic library and set the path
@@ -966,90 +992,65 @@ getLibraryPath(char *path, int size) {
  */
 static int
 findLibraryPath(char *path, int size) {
-#   ifdef WIN32
-#       define LIB_PATH_VAR "PATH"
-#       define LIB_FILENAME "icuuc.dll"
-#   elif defined(OS2)
-#       define LIB_PATH_VAR "LIBPATH"
-#       define LIB_FILENAME "icuuc.dll"
-#   elif defined(OS390)
-#       define LIB_PATH_VAR "LIBPATH"
-#       define LIB_FILENAME "libicuuc.a"
-#   elif defined(OS400)
-#   elif defined(XP_MAC)
-#   elif defined(U_SOLARIS)
-#   elif defined(U_LINUX)
-#       define LIB_PATH_VAR "LD_LIBRARY_PATH"
-#       define LIB_FILENAME "libicuuc.so"
-#   elif defined(AIX)
-#   elif defined(HPUX)
-#   elif defined(TANDEM)
-#       define LIB_PATH_VAR "LIBPATH"
-#       define LIB_FILENAME "libicuuc.a"
-#   elif defined(U_POSIX)
-#       define LIB_PATH_VAR "LIBPATH"
-#       define LIB_FILENAME "libicuuc.so"
-#   endif
-
     /* common implementation for searching the library path */
-#   ifdef LIB_FILENAME
-        const char *libPath=getenv(LIB_PATH_VAR);
+#ifdef LIB_FILENAME
+    const char *libPath=getenv(LIB_PATH_VAR);
 
-        if(libPath!=NULL) {
-            /* loop over all paths */
-            FileStream *f;
-            const char *end;
-            int length;
+    if(libPath!=NULL) {
+        /* loop over all paths */
+        FileStream *f;
+        const char *end;
+        int length;
 
-            for(;;) {
-                /* find the end of the path */
-                end=libPath;
-                while(*end!=0 && *end!=U_PATH_SEP_CHAR) {
-                    ++end;
-                }
-
-                if(end!=libPath) {
-                    /* try this non-empty path */
-                    length=end-libPath;
-
-                    /* do not terminate the path */
-                    if(*(end-1)==U_FILE_SEP_CHAR) {
-                        --length;
-                    }
-
-                    /* copy the path and add the library filename */
-                    uprv_memcpy(path, libPath, length);
-                    uprv_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
-
-                    /* does this file exist in this path? */
-                    f=T_FileStream_open(path, "rb");
-                    if(f!=NULL) {
-                        /* yes, clean up and return */
-                        T_FileStream_close(f);
-                        path[length]=0;
-                        return length;
-                    }
-                }
-
-                if(*end==0) {
-                    break;  /* no more path */
-                }
-
-                /* *end==U_PATH_SEP_CHAR, go to the next path */
-                libPath=end+1;
+        for(;;) {
+            /* find the end of the path */
+            end=libPath;
+            while(*end!=0 && *end!=U_PATH_SEP_CHAR) {
+                ++end;
             }
+
+            if(end!=libPath) {
+                /* try this non-empty path */
+                length=end-libPath;
+
+                /* do not terminate the path */
+                if(*(end-1)==U_FILE_SEP_CHAR) {
+                    --length;
+                }
+
+                /* copy the path and add the library filename */
+                uprv_memcpy(path, libPath, length);
+                uprv_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
+
+                /* does this file exist in this path? */
+                f=T_FileStream_open(path, "rb");
+                if(f!=NULL) {
+                    /* yes, clean up and return */
+                    T_FileStream_close(f);
+                    path[length]=0;
+                    return length;
+                }
+            }
+
+            if(*end==0) {
+                break;  /* no more path */
+            }
+
+            /* *end==U_PATH_SEP_CHAR, go to the next path */
+            libPath=end+1;
         }
-#   endif
+    }
+#endif
     return 0;
 }
 
 /* define a path for fallbacks */
 #ifdef WIN32
-#define FALLBACK_PATH U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data"
+#   define FALLBACK_PATH U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data"
 #elif defined(XP_MAC)
-#define FALLBACK_PATH U_FILE_SEP_STRING "ICU" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
+#   define FALLBACK_PATH U_FILE_SEP_STRING "ICU" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
 #else
-#define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
+#   define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
 #endif
 
 /* #include <stdio.h> */
@@ -1299,8 +1300,10 @@ mac_lc_rec mac_lc_recs[] = {
 static const char *uprv_getPOSIXID()
 {
   const char* posixID = getenv("LC_ALL");
-  if (posixID == 0) posixID = getenv("LANG");
-  if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
+  if (posixID == 0)
+    posixID = getenv("LANG");
+  if (posixID == 0)
+    posixID = setlocale(LC_ALL, NULL);
 
   if ( (posixID==0) || 
        (uprv_strcmp("C", posixID) == 0) ||
@@ -1371,14 +1374,18 @@ uprv_getDefaultLocaleID()
   }
   
   return posixID;
-#endif
 
-#ifdef OS400
-  /* TBD */
-  return "";
-#endif
+#elif defined(WIN32)
+    UErrorCode status = U_ZERO_ERROR;
+    LCID id = GetThreadLocale();
+    const char* locID = T_convertToPosix(id, &status);
 
-#ifdef XP_MAC
+    if (U_FAILURE(status)) {
+        locID = "en_US";
+    }
+    return locID;
+
+#elif defined(XP_MAC)
   int32_t script = MAC_LC_INIT_NUMBER; 
   /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
   int32_t region = MAC_LC_INIT_NUMBER; 
@@ -1390,7 +1397,8 @@ uprv_getDefaultLocaleID()
   Intl1Hndl ih;
   
   ih = (Intl1Hndl) GetIntlResource(1);
-  if (ih) date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
+  if (ih)
+    date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
   
   int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
   for (int32_t i = 0; i < count; i++) {
@@ -1409,20 +1417,8 @@ uprv_getDefaultLocaleID()
   }
   
   return posixID;
-#endif
 
-#ifdef WIN32
-    UErrorCode status = U_ZERO_ERROR;
-    LCID id = GetThreadLocale();
-    const char* locID = T_convertToPosix(id, &status);
-
-    if (U_FAILURE(status)) {
-        locID = "en_US";
-    }
-    return locID;
-#endif
-
-#ifdef OS2
+#elif defined(OS2)
     char * locID;
 
     locID = getenv("LC_ALL");
@@ -1435,6 +1431,11 @@ uprv_getDefaultLocaleID()
         !stricmp(locID, "univ"))
         locID = "en_US";
     return locID;
+
+#elif defined(OS400)
+    /* Todo: TBD needs to be implemented */
+    return "";
+
 #endif
 
 }
@@ -1510,23 +1511,22 @@ uprv_nextDouble(double d, UBool next)
   *lowResult  = lowMagnitude;
   return result;
 #else
-#ifdef OS390
-  double last_eps,sum;
-#endif
+
   /* This is the portable implementation...*/
   /* a small coefficient within the precision of the mantissa*/
   static const double smallValue = 1e-10;  
   double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
-  if (epsilon == 0) epsilon = smallValue; /* for very small d's*/
-  if (!next) epsilon = -epsilon;
+  double last_eps, sum;
+
+  if (epsilon == 0)
+    epsilon = smallValue; /* for very small d's*/
+  if (!next)
+    epsilon = -epsilon;
   /* avoid higher precision possibly used for temporay values*/
-#ifdef OS390
+
   last_eps = epsilon * 2.0;
   sum = d + epsilon;
-#else
-  double last_eps = epsilon * 2.0;
-  double sum = d + epsilon; 
-#endif
+
   while ((sum != d) && (epsilon != last_eps)) {
     last_eps = epsilon;
     epsilon /= 2.0;
@@ -1554,16 +1554,19 @@ const char* uprv_getDefaultCodepage()
 {
 #if defined(OS400)
   return "ibm-37";
+
 #elif defined(OS390)
   return "ibm-1047-s390";
+
 #elif defined(XP_MAC)
-  return "ibm-1275"; /* Macintosh Roman... There must be a better way...
-                        fixme! */
+  return "ibm-1275"; /* Macintosh Roman. There must be a better way. fixme! */
+
 #elif defined(WIN32)
   static char tempString[10] = "";
   static char codepage[12]={ "cp" };
   uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
+
 #elif U_POSIX_LOCALE
     static char codesetName[100];
     char *name = NULL;
@@ -1997,10 +2000,10 @@ _localeToDefaultCharmapTable [] =
 
 /* Not-used list, overridden old data  */
 #if 0
-/**/ { "ar", "ibm-1256"   }, /* arabic */
-/**/ { "ko", "ibm-949"}, /* korean  */
-/**/ { "ru", "ibm-878"  }, /* Russian- koi8-r */
-/**/ { "sk", "ibm-912"  }, 
+ { "ar", "ibm-1256" }, /* arabic */
+ { "ko", "ibm-949" }, /* korean  */
+ { "ru", "ibm-878" }, /* Russian- koi8-r */
+ { "sk", "ibm-912" }, 
 #endif
 
 U_CAPI const char *
