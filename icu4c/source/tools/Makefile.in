@@ -43,8 +43,10 @@ endif
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
+#SRCDATADIR=$(shell cd $(top_srcdir)/../data && /bin/pwd)
 SRCDATADIR=$(top_srcdir)/../data
-OBJDATADIR=$(top_builddir)/data
+
+OBJDATADIR=$(shell cd $(top_builddir)/data && /bin/pwd)
 # tmpdir is INSIDE pkgdata dir. if you change TMPDATADIR then the invokation
 # of pkgdata will break...
 TMPDATADIR=tmp
@@ -53,6 +55,7 @@ TMPDATADIR=tmp
 # from the temporary directory.
 
 DATABUILDDIR=$(shell cd $(OBJDATADIR) && /bin/pwd)
+CURDIR=$(shell /bin/pwd)
 
 # relative lib links from pkgdata are the same as for tmp
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
@@ -141,10 +144,10 @@ include $(srcdir)/genrb/genrbfiles.mk
 -include $(srcdir)/genrb/reslocal.mk
 ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURCE_LOCAL)
 
-UCM_FILES = $(ALL_UCM_SOURCE:%=$(top_srcdir)/../data/%)
+UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(OBJDATADIR)/%.cnv)
 
-RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(top_srcdir)/../data/%)
+RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(SRCDATADIR)/%)
 RES_FILES = $(ALL_RES_SOURCE:%.txt=$(OBJDATADIR)/%.res)
 
 DATAFILESC=$(CNV_FILES)
@@ -181,9 +184,8 @@ $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbf
 	@echo Generating $@ list of data files
 	@$(mkinstalldirs) $(TMPDATADIR)
 	@-$(RMV) $(TMPDATADIR)/icudata.lst
-	@pwd=`pwd`; \
 	for file in $(DATAFILES); do \
-	  echo $$pwd/$$file >> $(TMPDATADIR)/icudata.lst; \
+	  echo $$file >> $(TMPDATADIR)/icudata.lst; \
 	done;
 
 $(TMPDATADIR)/testdata.lst: Makefile

@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -80,7 +80,7 @@ ld_rpath_suf=@ld_rpath_suf@
 # end host fragment
 
 
-
+DEFAULT_MODE=@DATA_PACKAGING_MODE@
 
 GENCCODE=$(sbindir)/genccode
 GENCMN=$(sbindir)/gencmn
