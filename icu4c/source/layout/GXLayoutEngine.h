@@ -2,7 +2,7 @@
 /*
  * @(#)GXLayoutEngine.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
  *
  */
 
@@ -23,6 +23,8 @@ U_NAMESPACE_BEGIN
  * fonts. A font is a GX or AAT font if it contains a 'mort' table. See Apple's
  * TrueType Reference Manual (http://fonts.apple.com/TTRefMan/index.html) for details.
  * Information about 'mort' tables is in the chapter titled "Font Files."
+ *
+ * @internal
  */
 class GXLayoutEngine : public LayoutEngine
 {
@@ -43,11 +45,15 @@ public:
      *
      * @see LayoutEngine::layoutEngineFactory
      * @see ScriptAndLangaugeTags.h for script and language codes
+     *
+     * @internal
      */
     GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
+     *
+     * @internal
      */
     virtual ~GXLayoutEngine();
 
@@ -69,6 +75,8 @@ protected:
 
     /**
      * The address of the 'mort' table
+     *
+     * @internal
      */
     const MorphTableHeader *fMorphTable;
 
@@ -90,6 +98,8 @@ protected:
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the glyph index array
+     *
+     * @internal
      */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
         LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
@@ -107,6 +117,8 @@ protected:
      * Output parameters:
      * @param positions - the output X and Y positions (two entries per glyph)
      * @param success - set to an error code if the operation fails
+     *
+     * @internal
      */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[],
         le_int32 glyphCount, float positions[], LEErrorCode &success);
