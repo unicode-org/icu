@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/05/15 20:54:40 $
-* $Revision: 1.29 $
+* $Date: 2003/05/23 19:06:28 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -308,6 +308,11 @@ public abstract class Collator implements Comparator, Cloneable
         return getInstance(Locale.getDefault());
     }
 
+    /**
+     * Clone the collator.
+     * @draft ICU 2.6
+     * @return a clone of this collator.
+     */
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
@@ -369,6 +374,13 @@ public abstract class Collator implements Comparator, Cloneable
          * @draft ICU 2.6
          */
         public abstract Set getSupportedLocaleIDs();
+
+        /**
+         * Empty default constructor.
+         * @draft ICU 2.6
+         */
+        protected CollatorFactory() {
+        }
     }
 
     static abstract class ServiceShim {
@@ -478,7 +490,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param objectLocale the locale of the collator
      * @param displayLocale the locale for the collator's display name
      * @return the display name
-     * @draft 2.6
+     * @draft ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
         return getShim().getDisplayName(objectLocale, displayLocale);
@@ -488,7 +500,7 @@ public abstract class Collator implements Comparator, Cloneable
      * Get the name of the collator for the objectLocale, localized for the current locale.
      * @param objectLocale the locale of the collator
      * @return the display name
-     * @draft 2.6
+     * @draft ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale) {
         return getShim().getDisplayName(objectLocale, Locale.getDefault());
