@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/12/26 22:42:15 $ 
-* $Revision: 1.22 $
+* $Date: 2000/12/27 00:34:15 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -152,7 +152,7 @@
          includes="${richedit.cont.dir}/**/*"/>
   </target>
   
-  <target name="zipbin" depends="docs,jar">
+  <target name="zipbin" depends="docs,jar,ucharacterjar">
     <!--Create a zip archive of the source, docs, and jar file for
     distribution.  The zip file will be created in the directory above
     the root ICU4J directory.-->
