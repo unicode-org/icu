@@ -7,9 +7,9 @@
 *******************************************************************************
 *
 *  ucnv.c:
-*  Implements APIs for the ICU's codeset conversion library
-*  mostly calls through internal functions created and maintained 
-*  by Bertrand A. Damiba
+*  Implements APIs for the ICU's codeset conversion library;
+*  mostly calls through internal functions;
+*  created by Bertrand A. Damiba
 *
 * Modification History:
 *
@@ -631,16 +631,33 @@ void ucnv_fromUnicode (UConverter * _this,
                        UErrorCode * err)
 {
   UConverterFromUnicodeArgs args;
+  const char *t;
+
   /*
    * Check parameters in for all conversions
    */
-  if (U_FAILURE (*err))   return;
-  if ((_this == NULL) || ((char *) targetLimit < *target) || (sourceLimit < *source))
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
-    }
-  
+  if (err == NULL || U_FAILURE (*err)) {
+    return;
+  }
+
+  if (_this == NULL || target == NULL || source == NULL) {
+    *err = U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+
+  t = *target;
+  if (targetLimit < t || sourceLimit < *source) {
+    *err = U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+
+  /*
+   * Make sure that the target buffer size does not exceed the number range for int32_t
+   * because some functions use the size rather than comparing pointers.
+   */
+  if(targetLimit - t < 0 && targetLimit > t) {
+    targetLimit = t + 0x7fffffff;
+  }
 
   /*
    * Deal with stored carry over data.  This is done in the common location
@@ -651,7 +668,7 @@ void ucnv_fromUnicode (UConverter * _this,
       int32_t myTargetIndex = 0;
 
       flushInternalCharBuffer (_this, 
-                               (char *) *target,
+                               (char *)t,
                                &myTargetIndex,
                                targetLimit - *target,
                                offsets?&offsets:NULL,
@@ -703,15 +720,33 @@ void   ucnv_toUnicode (UConverter * _this,
                        UErrorCode * err)
 {
   UConverterToUnicodeArgs args;
+  const UChar *t;
+
   /*
    * Check parameters in for all conversions
    */
-  if (U_FAILURE (*err))   return;
-  if ((_this == NULL) || ((UChar *) targetLimit < *target) || (sourceLimit < *source))
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return;
-    }
+  if (err == NULL || U_FAILURE (*err)) {
+    return;
+  }
+
+  if (_this == NULL || target == NULL || source == NULL) {
+    *err = U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+
+  t = *target;
+  if (targetLimit < t || sourceLimit < *source) {
+    *err = U_ILLEGAL_ARGUMENT_ERROR;
+    return;
+  }
+
+  /*
+   * Make sure that the target buffer size does not exceed the number range for int32_t
+   * because some functions use the size rather than comparing pointers.
+   */
+  if(targetLimit - t < 0 && targetLimit > t) {
+    targetLimit = t + 0x3fffffff;
+  }
 
   /*
    * Deal with stored carry over data.  This is done in the common location
@@ -722,7 +757,7 @@ void   ucnv_toUnicode (UConverter * _this,
       int32_t myTargetIndex = 0;
 
       flushInternalUnicodeBuffer (_this, 
-                                  *target,
+                                  (UChar *)t,
                                   &myTargetIndex,
                                   targetLimit - *target,
                                   offsets?&offsets:NULL,
@@ -1009,6 +1044,11 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
 
   if(err == NULL || U_FAILURE(*err)) {
       return 0xffff;
+  }
+
+  if(converter == NULL || source == NULL || sourceLimit < *source) {
+    *err = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0xffff;
   }
 
   /* In case internal data had been stored
