@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/OverlayBundle.java,v $
- * $Date: 2002/12/04 16:38:52 $
- * $Revision: 1.6 $
+ * $Date: 2002/12/18 19:24:15 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -63,6 +63,7 @@ import java.util.*;
  * @see java.util.ResourceBundle
  * @author Alan Liu
  * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
  */
 // prepare to deprecate in next release
 ///CLOVER:OFF
@@ -89,6 +90,7 @@ public class OverlayBundle extends ResourceBundle {
      * Construct an overlay bundle given a sequence of base names and
      * a locale.
      * @internal
+     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public OverlayBundle(String[] baseNames,
                          Locale locale) {
@@ -101,6 +103,7 @@ public class OverlayBundle extends ResourceBundle {
      * ResourceBundle framework method.  Delegates to
      * bundles[i].getObject().
      * @internal
+     * @deprecated ICU 2.4. This class may be removed or modified.
      */ 
    protected Object handleGetObject(String key) 
         throws MissingResourceException {
@@ -128,6 +131,7 @@ public class OverlayBundle extends ResourceBundle {
      * ResourceBundle framework method.  Delegates to
      * bundles[bundles.length-1].getKeys().
      * @internal
+     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public Enumeration getKeys() {
         // Return the enumeration of the last bundle, which is the base
