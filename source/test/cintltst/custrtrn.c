@@ -707,7 +707,6 @@ Test_WCHART_LongString(){
         return;
     }
 
-
     /* pre-flight*/
     u_strToWCS(wDest,wDestLen,&reqLen,uSrc,-1,&status);
 
@@ -744,6 +743,7 @@ Test_WCHART_LongString(){
     }
     free(wDest);
     free(uDest);
-    
+    /* close the bundle */
+    ures_close(theBundle);    
     
 }
