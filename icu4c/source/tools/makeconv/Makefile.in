@@ -52,7 +52,7 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
 
-OBJECTS = makeconv.o ucnvstat.o genmbcs.o newconv.o
+OBJECTS = makeconv.o ucnvstat.o genmbcs.o
 
 DEPS = $(OBJECTS:.o=.d)
 

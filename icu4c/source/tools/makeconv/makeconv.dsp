@@ -113,10 +113,6 @@ SOURCE=.\makeconv.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\newconv.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucnvstat.c
 # End Source File
 # End Group
@@ -126,6 +122,10 @@ SOURCE=.\ucnvstat.c
 # Begin Source File
 
 SOURCE=.\genmbcs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\makeconv.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
