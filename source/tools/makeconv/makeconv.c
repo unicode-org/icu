@@ -431,7 +431,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       return;
     } 
   
-  myUConverterTable->sbcs.toUnicode = malloc(sizeof(UChar)*256);
+  myUConverterTable->sbcs.toUnicode = (UChar*)malloc(sizeof(UChar)*256);
   /*fills in the toUnicode array with the Unicode Replacement Char*/
   for (i=0;i<255;i++) myUConverterTable->sbcs.toUnicode[i] = unicodeValue;
 
@@ -490,7 +490,7 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
       return;
     }
   
-  myUConverterTable->mbcs.starters = icu_malloc(sizeof(bool_t)*256);
+  myUConverterTable->mbcs.starters = (bool_t*)(icu_malloc(sizeof(bool_t)*256));
   if (myUConverterTable->mbcs.starters == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
