@@ -556,7 +556,7 @@ static void TestIdentifier()
  * Then it should check that the areas contain all the same properties except where overridden.
  * For this, it would have had to set a flag for which code points were listed explicitly.
  */
-void U_CALLCONV
+static void U_CALLCONV
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode)
