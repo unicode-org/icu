@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharArrayIterator.java,v $ 
-* $Date: 2002/06/20 01:18:09 $ 
-* $Revision: 1.1 $
+* $Date: 2002/07/31 03:04:28 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -73,9 +73,6 @@ public final class UCharArrayIterator extends UCharacterIterator {
         return len;
     }
 
-    public String getString() {
-        return new String(text, start, limit - start);
-    }
     /**
      * Creates a copy of this iterator, does not clone the underlying 
      * <code>Replaceable</code>object
