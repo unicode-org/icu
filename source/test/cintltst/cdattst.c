@@ -371,7 +371,7 @@ void TestSymbols()
     VerifygetSymbols(def, UDAT_SHORT_WEEKDAYS, 7, "Sat");
     VerifygetSymbols(def, UDAT_MONTHS, 11, "December");
     VerifygetSymbols(def, UDAT_MONTHS, 0, "January");
-    VerifygetSymbols(fr, UDAT_ERAS, 0, "BC");
+    VerifygetSymbols(fr, UDAT_ERAS, 0, "av. J.-C.");
     VerifygetSymbols(def, UDAT_AM_PMS, 0, "AM");
     VerifygetSymbols(def, UDAT_AM_PMS, 1, "PM");
     VerifygetSymbols(fr, UDAT_SHORT_MONTHS, 0, "janv.");
