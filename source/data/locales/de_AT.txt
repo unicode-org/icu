@@ -1,0 +1,71 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+de_AT {
+    Version{"1.0"}
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "HH:mm' Uhr 'z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, dd. MMMM yyyy",
+        "dd. MMMM yyyy",
+        "dd.MM.yyyy",
+        "dd.MM.yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x0c07 }
+//    LocaleString { "de_AT" }
+    MonthAbbreviations { 
+        "J\u00E4n",
+        "Feb",
+        "M\u00E4r",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    }
+    MonthNames { 
+        "J\u00E4nner",
+        "Februar",
+        "M\u00E4rz",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember",
+    }
+    /* Discarding duplicate data for tag: NumberPatterns */
+//    ShortCountry { "AUT" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+}

@@ -1,0 +1,23 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hr_HR {
+    Version{ "1.2" }
+    CurrencyElements { 
+        "Kn",
+        "HRK",
+        ",",
+    }
+//    LocaleString { "hr_HR" }
+//    NumberPatterns { 
+//        "#,##0.###;-#,##0.###",
+//        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+//        "#,##0%",
+//    }
+//    ShortCountry { "HRV" }
+    LocaleID:int { 0x041a }
+}

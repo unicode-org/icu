@@ -1,0 +1,21 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ca_ES_PREEURO {
+    Version{ "1.0" }
+    NumberPatterns { 
+        "#,##0.###;#,##0.###",
+        "\u00A4 #,##0;-\u00A4 #,##0",
+        "#,##0%",
+        "#E0",
+    }
+    CurrencyElements { 
+        "Pts",
+        "ESP",
+        ",",
+    }
+}

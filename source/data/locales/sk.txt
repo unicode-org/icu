@@ -1,0 +1,114 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sk {
+    Version{ "1.1" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& A < a\u0308 , A\u0308 & C "
+        "< c\u030C , C\u030C & D < \u0111, \u0110 & H < ch , cH , Ch , CH & L < \u0142 ,"
+        " \u0141 & O < o\u0302 , O\u0302 & R < r\u030C , R\u030C & S < s\u030C , S\u030C"
+        " & Z < z\u030C , Z\u030C < z\u0307 , Z\u0307" }
+    }
+    Countries { 
+        SK { "Slovensk\u00E1 republika" }
+    }
+    DateTimePatterns { 
+        "H:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE, d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "d.M.yyyy",
+        "d.M.yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Ne",
+        "Po",
+        "Ut",
+        "St",
+        "\u0160t",
+        "Pa",
+        "So",
+    }
+    DayNames { 
+        "Nede\u013Ee",
+        "Pondelok",
+        "Utorok",
+        "Streda",
+        "\u0160tvrtok",
+        "Piatok",
+        "Sobota",
+    }
+    Eras { 
+        "pred n.l.",
+        "n.l.",
+    }
+    Languages { 
+        sk { "Sloven\u010Dina" }
+    }
+    LocaleID:int { 0x1b }
+//    LocaleString { "sk" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "m\u00E1j",
+        "j\u00FAn",
+        "j\u00FAl",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "janu\u00E1r",
+        "febru\u00E1r",
+        "marec",
+        "apr\u00EDl",
+        "m\u00E1j",
+        "j\u00FAn",
+        "j\u00FAl",
+        "august",
+        "september",
+        "okt\u00F3ber",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "slk" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00fd \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e4 \u00f4 \u013a \u0155 \u010d \u010f \u013e \u0148 \u0161 \u0165 \u017e]" }
+}

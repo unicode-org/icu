@@ -1,0 +1,121 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+nb {
+    Version{"1.0"}
+    CollationElements {
+	    Version { "1.0" }
+		Sequence { "& Z < \u00E6, \u00C6  < a\u0308, A\u0308< \u00F8, \u00D8"
+        " < o\u0308, O\u0308< o\u030B, O\u030B < a\u030A, A\u030A, aa , aA , Aa , AA  & "
+        "V, w, W" }
+	}
+    Countries {
+        NO { "Norge" }
+    }
+    DateTimeElements:intvector {
+        2,
+        4,
+    }
+    DateTimePatterns {
+	    "'kl 'HH.mm z",
+	    "HH:mm:ss z",
+	    "HH:mm:ss",
+	    "HH:mm",
+	    "d. MMMM yyyy",
+	    "d. MMMM yyyy",
+	    "dd.MMM.yy",
+	    "dd.MM.yy",
+	    "{1} {0}",
+    }
+    DayAbbreviations {
+	    "s\u00F8",
+	    "ma",
+	    "ti",
+	    "on",
+	    "to",
+	    "fr",
+	    "l\u00F8",
+    }
+    DayNames {
+	    "s\u00F8ndag",
+	    "mandag",
+	    "tirsdag",
+	    "onsdag",
+	    "torsdag",
+	    "fredag",
+	    "l\u00F8rdag",
+    }
+    Languages {
+        nb { "bokm\u00E5l" }
+        nn { "nynorsk" }
+        no { "norsk" }
+    }
+    LocaleID:int { 0x14 }
+//    LocaleString { "nb" }
+    MonthAbbreviations {
+	    "jan",
+	    "feb",
+	    "mar",
+	    "apr",
+	    "mai",
+	    "jun",
+	    "jul",
+	    "aug",
+	    "sep",
+	    "okt",
+	    "nov",
+	    "des",
+    }
+    MonthNames {
+	    "januar",
+	    "februar",
+	    "mars",
+	    "april",
+	    "mai",
+	    "juni",
+	    "juli",
+	    "august",
+	    "september",
+	    "oktober",
+	    "november",
+	    "desember",
+    }
+    NumberElements {
+	    ",",
+	    "\u00A0",
+	    ";",
+	    "%",
+	    "0",
+	    "#",
+	    "-",
+	    "E",
+	    "\u2030",
+	    "\u221E",
+	    "\uFFFD",
+    }
+//    ShortLanguage { "nor" }
+    Eras {
+	    "f.Kr.",
+	    "e.Kr.",
+    }
+
+    zoneStrings {
+        {
+	        "Europe/Oslo",
+	        "Central European Time",
+	        "MET",
+	        "Central European Time (DST)",
+	        "MET",
+	        "Oslo"
+        }
+    }
+//    LocaleScript{  
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e9 \u00f3 \u00f4 \u00e0 \u00fc \u01ce]" }
+
+}

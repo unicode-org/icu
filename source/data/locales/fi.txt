@@ -1,0 +1,224 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fi {
+    Version { "1.0" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& V ; w , W & Z < a\u030A , A\u030A< a\u0308 , A\u0308 "
+            "< o\u0308 , O\u0308< o\u030B , O\u030B ; \u00F8 , \u00D8&  Y ; u\u030B, U\u030B"
+            " ; u\u0308 , U\u0308"
+        }
+    }
+    Countries { 
+        AE { "Yhdistyneet Arabiemiraatit" }
+        AT { "It\u00e4valta" }
+        BA { "Bosnia" }
+        BE { "Belgia" }
+        BR { "Brasilia" }
+        BY { "Valko-Ven\u00e4j\u00e4" }
+        CA { "Kanada" }
+        CH { "Sveitsi" }
+        CN { "Kiina" }
+        CO { "Kolumbia" }
+        CZ { "Tsekin tasavalta" }
+        DE { "Saksa" }
+        DK { "Tanska" }
+        DO { "Dominikaaninen tasavalta" }
+        EC { "Equador" }
+        EE { "Viro" }
+        EG { "Egypti" }
+        ES { "Espanja" }
+        FI { "Suomi" }
+        FR { "Ranska" }
+        GB { "Iso-Britannia" }
+        GR { "Kreikka" }
+        HR { "Kroatia" }
+        HU { "Unkari" }
+        HK { "Hongknog, erit.hall.alue" }
+        IE { "Irlanti" }
+        IN { "Intia" }
+        IS { "Islanti" }
+        IT { "Italia" }
+        JO { "Jordania" }
+        JP { "Japani" }
+        KR { "Korea" }
+        LA { "Latinalainen Amerikka" }
+        LB { "Libanon" }
+        LT { "Liettua" }
+        LU { "Luxemburg" }
+        MA { "Marokko" }
+        MK { "Makedonia (FYR)" }
+        MO { "Macao, erit.hall.alue" }
+        MX { "Meksiko" }
+        NL { "Alankomaat" }
+        NO { "Norja" }
+        NZ { "Uusi Seelanti" }
+        PL { "Puola" }
+        PT { "Portugali" }
+        RU { "Ven\u00e4j\u00e4" }
+        SA { "Saudi-Arabia" }
+        SE { "Ruotsi" }
+        SY { "Syyria" }
+        TH { "Thaimaa" }
+        TR { "Turkki" }
+        UA { "Ukraina" }
+        US { "Yhdysvallat" }
+        YE { "Jemen" }
+        ZA { "Etel\u00e4-Afrikka" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "d. MMMM'ta 'yyyy",
+        "d. MMMM'ta 'yyyy",
+        "d.M.yyyy",
+        "d.M.yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "su",
+        "ma",
+        "ti",
+        "ke",
+        "to",
+        "pe",
+        "la",
+    }
+    DayNames { 
+        "sunnuntai",
+        "maanantai",
+        "tiistai",
+        "keskiviikko",
+        "torstai",
+        "perjantai",
+        "lauantai",
+    }
+    Languages { 
+        ar { "arabia" }
+        az { "azerbaizani" }
+        ba { "baski" }
+        be { "valkoven\u00e4j\u00e4" }
+        bg { "bulgaria" }
+        bh { "bihari" }
+        bn { "bengali" }
+        ca { "katalaani" }
+        cs { "tsekki" }
+        da { "tanska" }
+        de { "saksa" }
+        el { "kreikka" }
+        en { "englanti" }
+        es { "espanja" }
+        et { "viro" }
+        fa { "farsi" }
+        fi { "suomi" }
+        fr { "ranska" }
+        he { "heprea" }
+        hi { "hindi" }
+        hr { "kroatia" }
+        hu { "unkari" }
+        id { "indonesia" }
+        it { "italia" }
+        ja { "japani" }
+        ka { "georgia" }
+        kk { "kazakki" }
+        km { "khmer" }
+        kn { "kannada" }
+        ko { "korea" }
+        ku { "kurdi" }
+        la { "latinalainen" }
+        lt { "liettua" }
+        lv { "latvia" }
+        mk { "makedonia" }
+        mr { "marathi" }
+        my { "burma" }
+        nl { "hollanti" }
+        no { "norja" }
+        pl { "puola" }
+        pt { "portugali" }
+        ro { "romania" }
+        ru { "ven\u00e4j\u00e4" }
+        sk { "slovakia" }
+        sl { "slovenia" }
+        sq { "albania" }
+        sr { "serbia" }
+        sv { "ruotsi" }
+        sw { "swahili" }
+        te { "telugu" }
+        th { "thai" }
+        tk { "tagalog" }
+        tr { "turkki" }
+        uk { "ukraina" }
+        ur { "urdu" }
+        uz { "uzbekki" }
+        zh { "kiina" }
+    }
+    LocaleID:int { 0x0b }
+//    LocaleString { "fi" }
+    MonthAbbreviations { 
+        "tammi",
+        "helmi",
+        "maalis",
+        "huhti",
+        "touko",
+        "kes\u00E4",
+        "hein\u00E4",
+        "elo",
+        "syys",
+        "loka",
+        "marras",
+        "joulu",
+    }
+    MonthNames { 
+        "tammikuu",
+        "helmikuu",
+        "maaliskuu",
+        "huhtikuu",
+        "toukokuu",
+        "kes\u00E4kuu",
+        "hein\u00E4kuu",
+        "elokuu",
+        "syyskuu",
+        "lokakuu",
+        "marraskuu",
+        "joulukuu",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "fin" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    ExemplarCharacters { "[a-z \u00e4 \u00f6]" }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+}
