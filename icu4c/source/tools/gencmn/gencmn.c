@@ -267,7 +267,7 @@ main(int argc, char* argv[]) {
             }
 
             if (verbose) {
-                printf("adding %s (%ld byte%s)\n", files[i].pathname, files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
+                printf("adding %s (%ld byte%s)\n", files[i].pathname, (long)files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
             }
 
             /* copy the next file */
@@ -288,7 +288,7 @@ main(int argc, char* argv[]) {
             length=files[i].fileSize;
 
             if (nread != files[i].fileSize) {
-                fprintf(stderr, "gencmn: unable to read %s properly (got %ld/%ld byte%s)\n", files[i].pathname, nread, files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
+                fprintf(stderr, "gencmn: unable to read %s properly (got %ld/%ld byte%s)\n", files[i].pathname, (long)nread, (long)files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
                 exit(U_FILE_ACCESS_ERROR);
             }
         }
@@ -445,7 +445,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         /* do not add files that are longer than maxSize */
         if(maxSize && length>maxSize) {
             if (verbose) {
-                printf("%s ignored (size %ld > %ld)\n", length, maxSize);
+                printf("%s ignored (size %ld > %ld)\n", filename, (long)length, (long)maxSize);
             }
             return;
         }
