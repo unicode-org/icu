@@ -90,7 +90,7 @@ install-local: target-clean-local all-local
 #	$(mkinstalldirs) $(sbindir)
 #	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
-	cp $(top_srcdir)/../data/*.col $(pkgdatadir)/$(VERSION)
+	cp @DATABUILDDIR@/*.col $(pkgdatadir)/$(VERSION)
 
 dist-local:
 
@@ -103,7 +103,7 @@ clean-local: target-clean-local
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) $(CNV_FILES)
-	rm -f $(top_srcdir)/../data/*.col
+	rm -f @DATABUILDDIR@/*.col
 
 check-local:
 
@@ -117,7 +117,4 @@ $(TARGET) : $(OBJECTS)
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
 endif
-
-
-
 
