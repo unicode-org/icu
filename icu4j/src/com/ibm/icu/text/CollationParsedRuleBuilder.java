@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/08/01 21:09:17 $ 
-* $Revision: 1.4 $
+* $Date: 2002/09/06 01:53:18 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -36,7 +36,7 @@ import com.ibm.icu.util.RangeValueIterator;
 * @since release 2.2, June 11 2002
 * @draft 2.2
 */
-class CollationParsedRuleBuilder
+final class CollationParsedRuleBuilder
 {     
 	// package private constructors ------------------------------------------
 
@@ -468,7 +468,7 @@ class CollationParsedRuleBuilder
 		
 		BuildTable t = new BuildTable(m_parser_);
 		
-		// After this, we have assigned CE values to all regular CEs now we 
+        // After this, we have assigned CE values to all regular CEs now we 
 		// will go through list once more and resolve expansions, make 
 		// UCAElements structs and add them to table               
 		for (int i = 0; i < m_parser_.m_resultLength_; i ++) {
@@ -478,7 +478,7 @@ class CollationParsedRuleBuilder
 		    createElements(t, m_parser_.m_listHeader_[i]);
 		}
 		
-		Elements el = new Elements();
+        Elements el = new Elements();
         el.m_isThai_ = false;
 		el.m_prefixChars_ = null;
 		int ce[] = new int[256];
@@ -510,20 +510,20 @@ class CollationParsedRuleBuilder
 		        }
                 el.m_CEs_ = new int[ceoffset];
                 System.arraycopy(ce, 0, el.m_CEs_, 0, ceoffset);
-		        addAnElement(t, el);
+                addAnElement(t, el);
 		    }
 		}
-		
+        
         // copy contractions from the UCA - this is felt mostly for cyrillic
 		char conts[] = RuleBasedCollator.UCA_CONTRACTIONS_;
         int offset = 0;
 		while (conts[offset] != 0) {
 		    // tailoredCE = ucmpe32_get(t.m_mapping, *conts);
-		    int tailoredCE = t.m_mapping_.getValue(conts[offset]);
+            int tailoredCE = t.m_mapping_.getValue(conts[offset]);
 		    if (tailoredCE != CE_NOT_FOUND_) {         
 		        boolean needToAdd = true;
 		        if (isContractionTableElement(tailoredCE)) {
-		            if (isTailored(t.m_contractions_, tailoredCE, 
+                    if (isTailored(t.m_contractions_, tailoredCE, 
                                    conts, offset + 1) == true) {
 		                needToAdd = false;
 		            }
@@ -558,12 +558,13 @@ class CollationParsedRuleBuilder
 		    }
 		    offset += 3;
 		}
-		
+        
         // Add completely ignorable elements
         processUCACompleteIgnorables(t);
-  
+        
         // canonical closure 
         canonicalClosure(t);
+  
 		// still need to produce compatibility closure
 		assembleTable(t, collator);  
     }
@@ -766,7 +767,7 @@ class CollationParsedRuleBuilder
 	{
 		// package private methods ------------------------------------------
 		
-		/**
+        /**
 		 * For construction of the Trie tables.
 		 * Has to be labeled public
 		 * @param table build table
@@ -2157,7 +2158,7 @@ class CollationParsedRuleBuilder
 	    return (CE & RuleBasedCollator.CE_TAG_MASK_) >>> 
 	           RuleBasedCollator.CE_TAG_SHIFT_;
 	}
-	
+    
 	/**
 	 * Gets the ce at position in contraction table
 	 * @param table contraction table
@@ -2168,14 +2169,7 @@ class CollationParsedRuleBuilder
 	                               int position) 
 	{
 		element &= 0xFFFFFF;
-        BasicContractionTable tbl = null;
-
-        if (element == 0xFFFFFF || table.m_elements_.get(element) == null) {
-            tbl = null;
-        } 
-        else {
-        	tbl = (BasicContractionTable)table.m_elements_.get(element);
-        }	
+        BasicContractionTable tbl = getBasicContractionTable(table, element);
         
     	if (tbl == null) {
             return CE_NOT_FOUND_;
@@ -2880,7 +2874,7 @@ class CollationParsedRuleBuilder
                     b = (maxByte << 24) | (maxByte << 16) | (maxByte << 8)
                         | maxByte; // this used to be 0xffffffff 
                     ranges[0].m_end_ = truncateWeight(ranges[0].m_end_, i) 
-                                       | (b >> (i << 3)) 
+                                       | (b >>> (i << 3)) 
                                        & (b << ((4 - minLength) << 3));
                     // set the start of the second range to immediately follow 
                     // the end of the first one
@@ -3138,10 +3132,56 @@ class CollationParsedRuleBuilder
      * @param length
      * @return new weight
      */
-    private static final int decWeightTrail(int weight, int length) 
+    private static int decWeightTrail(int weight, int length) 
     {
         return weight - (1 << ((4 - length) << 3));
     }
+    
+    /**
+     * Gets the codepoint 
+     * @param table contraction table
+     * @param codePoint code point to look for
+     * @return the offset to the code point
+     */
+    private static int findCP(BasicContractionTable tbl, char codePoint) 
+    {
+        int position = 0;
+        while (codePoint > tbl.m_codePoints_.charAt(position)) {
+             position ++;
+             if (position > tbl.m_codePoints_.length()) {
+                 return -1;
+             }
+        }
+        if (codePoint == tbl.m_codePoints_.charAt(position)) {
+            return position;
+        } 
+        else {
+            return -1;
+        }
+    }
+
+    /**
+     * Finds a contraction ce
+     * @param table
+     * @param element
+     * @param ch
+     * @return ce
+     */
+    private static int findCE(ContractionTable table, int element, char ch) 
+    {
+        if (table == null) {
+            return CE_NOT_FOUND_;
+        }
+        BasicContractionTable tbl = getBasicContractionTable(table, element);
+        if (tbl == null) {
+            return CE_NOT_FOUND_;
+        }
+        int position = findCP(tbl, ch);
+        if (position > tbl.m_CEs_.size() || position < 0) {
+            return CE_NOT_FOUND_;
+        } 
+        return ((Integer)tbl.m_CEs_.get(position)).intValue();
+    }    
     
     /**
      * Checks if the string is tailored in the contraction
@@ -3151,11 +3191,11 @@ class CollationParsedRuleBuilder
      * @param offset array offset
      * @return true if it is tailored
      */
-    private boolean isTailored(ContractionTable table, int element, 
-                               char array[], int offset) 
+    private static boolean isTailored(ContractionTable table, int element, 
+                                      char array[], int offset) 
     {
         while (array[offset] != 0) {
-            element = getCE(table, element, array[offset]);
+            element = findCE(table, element, array[offset]);
             if (element == CE_NOT_FOUND_) {
                 return false;
             }
@@ -3183,19 +3223,20 @@ class CollationParsedRuleBuilder
         Vector expansions = t.m_expansions_;
         ContractionTable contractions = t.m_contractions_;
         MaxExpansionTable maxexpansion = t.m_maxExpansions_;
-    
+        
         // contraction offset has to be in since we are building on the 
         // UCA contractions 
         // int beforeContractions = (HEADER_SIZE_ 
         //                         + paddedsize(expansions.size() << 2)) >>> 1;
         collator.m_contractionOffset_ = 0;
         int contractionsSize = constructTable(contractions);
-    
+        
         // the following operation depends on the trie data. Therefore, we have 
         // to do it before the trie is compacted 
         // sets jamo expansions
         getMaxExpansionJamo(mapping, maxexpansion, t.m_maxJamoExpansions_,
                             collator.m_isJamoSpecial_);
+        
         // TODO: LATIN1 array is now in the utrie - it should be removed from 
         // the calculation
         setAttributes(collator, t.m_options_);
@@ -3218,7 +3259,7 @@ class CollationParsedRuleBuilder
                 collator.m_contractionCE_[i] = ((Integer)
                                         contractions.m_CEs_.get(i)).intValue();
             }
-        } 
+        }
         // copy mapping table
         collator.m_trie_ = mapping.serialize(t, 
                                RuleBasedCollator.DataManipulate.getInstance());

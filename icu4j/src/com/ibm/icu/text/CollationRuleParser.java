@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/08/01 21:11:27 $ 
-* $Revision: 1.5 $
+* $Date: 2002/09/06 01:53:18 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -655,7 +655,10 @@ class CollationRuleParser
 		
         while (m_current_ < sourcelimit) {
             m_parsedToken_.m_prefixOffset_ = 0;
-		    parseNextToken(lastToken == null);
+		    if (parseNextToken(lastToken == null) < 0) {
+                // we have reached the end
+                continue;
+            }
 		    char specs = m_parsedToken_.m_flags_;
 		    boolean variableTop = ((specs & TOKEN_VARIABLE_TOP_MASK_) != 0);
 		    boolean top = ((specs & TOKEN_TOP_MASK_) != 0);
@@ -1448,7 +1451,6 @@ class CollationRuleParser
         }
         if (m_parsedToken_.m_charsLen_ == 0 && top == false) {
 		    throwParseException(m_rules_, m_current_); 
-		    return -1;
 		}
 		
 		m_parsedToken_.m_strength_ = newstrength; 

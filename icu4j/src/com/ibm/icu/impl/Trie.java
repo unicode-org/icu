@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/06/22 00:02:41 $
-* $Revision: 1.6 $
+* $Date: 2002/09/06 01:53:16 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.lang.UCharacter;
 
@@ -83,6 +84,26 @@ public abstract class Trie
     public final boolean isLatin1Linear()
     {
     	return m_isLatin1Linear_;
+    }
+    
+    /**
+     * Checks if the argument Trie has the same data as this Trie.
+     * Attributes are checked but not the index data.
+     * @param other Trie to check
+     * @return true if the argument Trie has the same data as this Trie, false
+     *         otherwise
+     */
+    public boolean equals(Object other) 
+    {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Trie)) {
+            return false;
+        }
+        Trie othertrie = (Trie)other;
+        return m_isLatin1Linear_ == othertrie.m_isLatin1Linear_
+               && m_options_ == othertrie.m_options_;
     }
 
     // protected constructor -------------------------------------------

@@ -20,13 +20,14 @@ package com.ibm.icu.dev.test.collator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ICULocaleData;
 import java.util.Locale;
 
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
         new CollationMiscTest().run(args);
-        // new CollationMiscTest().TestRuleOptions();
+        // new CollationMiscTest().TestLocaleRuleBasedCollators();
     }
     
     public void TestRuleOptions() {
@@ -1577,5 +1578,31 @@ public class CollationMiscTest extends TestFmwk{
             return;
         }
         doTest(coll, src, tgt, 1);
+    }
+    
+     public void TestLocaleRuleBasedCollators() {
+        if (getInclusion() < 5) {
+            // not serious enough to run this
+            return;
+        }
+        Locale locale[] = ICULocaleData.getAvailableLocales();
+        
+        for (int i = 0; i < locale.length; i ++) {
+            Locale l = locale[i];
+            try {
+                RuleBasedCollator col1 = 
+                                  (RuleBasedCollator)Collator.getInstance(l);
+                String rule = col1.getRules();
+                if (rule != null && rule.length() > 0) {
+                    RuleBasedCollator col2 = new RuleBasedCollator(rule);
+                    if (!col1.equals(col2)) {
+                        errln("Error creating RuleBasedCollator from " +
+                              "locale rules");
+                    }
+                }
+            } catch (Exception e) {
+                errln("Error retrieving resource bundle for testing");
+            }
+        }
     }
 }
