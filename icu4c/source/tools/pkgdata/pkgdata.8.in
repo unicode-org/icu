@@ -35,6 +35,9 @@
 .BI "\-r\fP, \fB\-\-revision" " version"
 ]
 [
+.BI "\-M" " arg"
+]
+[
 .BI "\-F\fP, \fB\-\-rebuild"
 ]
 [
@@ -107,6 +110,12 @@ small packages for distribution with operating systems such as Debian
 GNU/Linux for example. Please refer to the packaging documentation in
 the ICU source distribution for further information on the use of this
 mode.
+.PP
+.B pkgdata
+relies on GNU
+.BR make (1)
+to do the packaging, and generates a makefile with rules to build
+and package the correct data.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
@@ -174,6 +183,12 @@ is supplied then the version is
 assumed to be
 .IR major .0
 for versioning purposes.
+.TP
+.BI "\-M" " arg"
+Pass
+.I arg
+to 
+.BR make (1).
 .TP
 .BI "\-F\fP, \fB\-\-rebuild"
 Force the rebuilding of all data and their repackaging.

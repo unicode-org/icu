@@ -72,7 +72,8 @@ static UOption options[]={
 /*13*/    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
 /*14*/    UOPTION_SOURCEDIR ,
 /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
-/*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG)
+/*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
+/*17*/    UOPTION_DEF( 0, 'M', UOPT_REQUIRES_ARG)
 };
 
 const char options_help[][160]={
@@ -96,7 +97,8 @@ const char options_help[][160]={
   "Install the data (specify target)",
   "Specify a custom source directory",
   "Specify a custom entrypoint name (default: short name)",
-  "Specify a version when packaging in DLL mode"
+  "Specify a version when packaging in DLL mode",
+  "Pass the next argument to make(1)"
 };
 
 int
@@ -113,6 +115,7 @@ main(int argc, char* argv[]) {
   progname = argv[0];
 
   options[2].value = "common";
+  options[17].value = "";
 
   /* read command line options */
   argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -157,10 +160,11 @@ main(int argc, char* argv[]) {
 
     fprintf(stderr, "\n options:\n");
     for(i=0;i<(sizeof(options)/sizeof(options[0]));i++) {
-      fprintf(stderr, "%-5s -%c or --%-10s  %s\n",
+      fprintf(stderr, "%-5s -%c %s%-10s  %s\n",
               (i<2?"[REQ]":""),
               options[i].shortName,
-              options[i].longName,
+              options[i].longName ? "or --" : "     ",
+              options[i].longName ? options[i].longName : "",
               options_help[i]);
     }
 
@@ -182,6 +186,7 @@ main(int argc, char* argv[]) {
 
   o.mode      = options[2].value;
   o.version   = options[16].doesOccur ? options[16].value : 0;
+  o.makeArgs  = options[17].value;
 
   o.fcn = NULL;
 
@@ -338,32 +343,35 @@ static int executeMakefile(const UPKGOptions *o)
 
   /*getcwd(pwd, 1024);*/
 #ifdef WIN32
-  sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s",
+  sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s %s",
           make,
           o->install ? "INSTALLTO=" : "",
           o->install ? o->install    : "",
           o->makeFile,
           o->clean   ? "clean"      : "",
           o->rebuild ? "rebuild"    : "",
-          o->install ? "install"    : "");
+          o->install ? "install"    : "",
+          o->makeArgs);
 #elif OS400
-  sprintf(cmd, "CALL GNU/GMAKE PARM(%s%s%s '-f' '%s' %s %s %s)",
+  sprintf(cmd, "CALL GNU/GMAKE PARM(%s%s%s '-f' '%s' %s %s %s %s)",
           o->install ? "'INSTALLTO=" : "",
           o->install ? o->install    : "",
           o->install ? "'"           : "",
           o->makeFile,
           o->clean   ? "'clean'"     : "",
           o->rebuild ? "'rebuild'"   : "",
-          o->install ? "'install'"   : "");
+          o->install ? "'install'"   : "",
+          o->makeArgs);
 #else
-  sprintf(cmd, "%s %s%s -f %s %s %s %s",
+  sprintf(cmd, "%s %s%s -f %s %s %s %s %s",
           make,
           o->install ? "INSTALLTO=" : "",
           o->install ? o->install    : "",
           o->makeFile,
           o->clean   ? "clean"      : "",
           o->rebuild ? "rebuild"    : "",
-          o->install ? "install"    : "");
+          o->install ? "install"    : "",
+          o->makeArgs);
 #endif
   if(o->verbose) {
     puts(cmd);
