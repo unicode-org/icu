@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/08/30 20:40:30 $ 
- * $Revision: 1.38 $
+ * $Date: 2000/08/31 17:11:42 $ 
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -149,6 +149,32 @@ import com.ibm.util.Utility;
  * represent the input string segments, in left-to-right order of
  * definition.</p>
  * 
+ * <p><b>Anchors</b></p>
+ * 
+ * <p>Patterns can be anchored to the beginning or the end of the text. This is done with the
+ * special characters '<code>^</code>' and '<code>$</code>'. For example:</p>
+ * 
+ * <blockquote>
+ *   <p><code>^ a&nbsp;&nbsp; &gt; 'BEG_A'; &nbsp;&nbsp;# match 'a' at start of text<br>
+ *   &nbsp; a&nbsp;&nbsp; &gt; 'A';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # match other instances
+ *   of 'a'<br>
+ *   &nbsp; z $ &gt; 'END_Z'; &nbsp;&nbsp;# match 'z' at end of text<br>
+ *   &nbsp; z&nbsp;&nbsp; &gt; 'Z';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # match other instances
+ *   of 'z'</code></p>
+ * </blockquote>
+ * 
+ * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet</code>.
+ * This is done by including a virtual anchor character '<code>$</code>' at the end of the
+ * set pattern. Although this is usually the match chafacter for the end anchor, the set will
+ * match either the beginning or the end of the text, depending on its placement. For
+ * example:</p>
+ * 
+ * <blockquote>
+ *   <p><code>$x = [a-z$]; &nbsp;&nbsp;# match 'a' through 'z' OR anchor<br>
+ *   $x 1&nbsp;&nbsp;&nbsp; &gt; 2;&nbsp;&nbsp; # match '1' after a-z or at the start<br>
+ *   &nbsp;&nbsp; 3 $x &gt; 4; &nbsp;&nbsp;# match '3' before a-z or at the end</code></p>
+ * </blockquote>
+ * 
  * <p><b>Example</b> </p>
  * 
  * <p>The following example rules illustrate many of the features of
@@ -252,7 +278,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.38 $ $Date: 2000/08/30 20:40:30 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.39 $ $Date: 2000/08/31 17:11:42 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -1323,6 +1349,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.39  2000/08/31 17:11:42  alan4j
+ * Implement anchors.
+ *
  * Revision 1.38  2000/08/30 20:40:30  alan4j
  * Implement anchors.
  *
