@@ -37,7 +37,7 @@
 #include "tzdat.h"
 
 #define INPUT_FILE "tz.txt"
-#define OUTPUT_FILE "tz.dat"
+#define OUTPUT_FILE "tz.icu"
 
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo = {
@@ -87,7 +87,7 @@ class gentz {
     char buffer[BUFLEN];
     int32_t lineNumber;
 
-    // Binary data that we construct from tz.txt and write out as tz.dat
+    // Binary data that we construct from tz.txt and write out as tz.icu
     TZHeader              header;
     TZEquivalencyGroup*   equivTable;
     OffsetIndex*          offsetIndex;
