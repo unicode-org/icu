@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.2 $
+* $Date: 2002/07/25 22:49:51 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.Arrays;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.UCharacterProperty;
 
 /**
 * Class for parsing collation rules, produces a list of tokens that will be 
@@ -1117,8 +1118,9 @@ class CollationRuleParser
 	            }
 	        }
             else {
-	            // Sets the strength for this entry
-	            switch (ch) {
+                if (!UCharacterProperty.isRuleWhiteSpace(ch)) {
+                    // Sets the strength for this entry
+	                switch (ch) {
 	                case 0x003D : // '='
 	                    if (newstrength != TOKEN_UNSET_) {
 	                        return doEndParseNextToken(newstrength, newcharslen, 
@@ -1304,14 +1306,6 @@ class CollationRuleParser
 		                    }  
 		                }
 		                break;
-		            // Ignore the white spaces
-                    case 0x0021: // '!' // ignoring java set thai reordering
-		            case 0x0009 : // '\t'
-		            case 0x000C : // '\f'
-		            case 0x000D : // '\r'
-		            case 0x000A : // '\n'
-		            case 0x0020 : // ' '
-		                break; // skip whitespace TODO use Unicode
 		            case 0x002F : // '/'
 		                wasinquote = false; // if we were copying source 
 		                                    // characters, we want to stop now
@@ -1397,6 +1391,8 @@ class CollationRuleParser
 		                m_current_ ++;
 		                ch = m_source_.charAt(m_current_); 
 		                break;
+                    case 0x0021: // '!' // ignoring java set thai reordering
+                        break;
 	                default :
 	                    if (newstrength == TOKEN_UNSET_) {
 	                        // throwParseException(m_rules_, m_current_);
@@ -1424,6 +1420,7 @@ class CollationRuleParser
 	                    break;
 	                }
 	            }   
+            }
 	        if (wasinquote) {
 	            if (ch != 0x27) {
 	              	m_source_.append(ch);
