@@ -15,6 +15,7 @@ CFG=Debug
 
 #Let's see if user has given us a path to ICU
 #This could be found according to the path to makefile, but for now it is this way
+!MESSAGE ICUP=$(ICUP)
 !IF "$(ICUP)"=="" 
 !ERROR Can't find path!
 !ELSE
@@ -51,6 +52,8 @@ NULL=
 !ELSE 
 NULL=nul
 !ENDIF 
+
+PATH = $(PATH);$(ICUP)\icu\bin\$(CFG)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .col .res .txt .c
@@ -131,7 +134,8 @@ $(CNV_FILES:.cnv =.cnv
 
 # nothing works without this target, but we're making 
 # these files while creating converters
-$(C_CNV_FILES) :
+$(C_CNV_FILES) : $(CNV_FILES)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
 
 # utility to send us to the right dir
 GODATA : 
@@ -169,12 +173,12 @@ CLEAN :
 	@echo Generating converters and c source files
 	@cd $(ICUDATA)
 	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
-	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
+#	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
 
 # Inference rule for creating collation files - 
 # this should be integrated in genrb
 .txt.col::
-	@echo making Collation files
+	@echo Making Collation files
 	@cd $(ICUDATA)
 	$(ICUTOOLS)\genrb\$(CFG)\genrb $<
 
@@ -187,16 +191,16 @@ $(CPP_FLAGS) $<
 
 # Targets for unames.dat
 unames.dat : UnicodeData-3.0.0.txt
-	$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- $?
+	$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
 
-unames_dat.c : unames.dat
+unames_dat.c : unames.dat 
 	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for converters
 cnvalias.dat : convrtrs.txt
 	$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
 	
-cnvalias_dat.c : cnvalias.dat
+cnvalias_dat.c : cnvalias.dat 
 	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for tz
@@ -205,3 +209,16 @@ tz.dat : {$(ICUTOOLS)\gentz}tz.txt
 
 tz_dat.c : tz.dat
 	$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+
+# Dependencies on the tools
+UnicodeData-3.0.0.txt : {$(ICUTOOLS)\gennames\$(CFG)}gennames.exe
+
+convrtrs.txt : {$(ICUTOOLS)\gencnval\$(CFG)}gencnval.exe
+
+tz.txt : {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
+
+unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
+
+$(GENRB_SOURCE) $(GENCOL_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
+
+$(UCM_SOURCE) : {$(ICUTOOLS)\makeconv\$(CFG)}makeconv.exe {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
