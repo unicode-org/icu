@@ -45,7 +45,7 @@ UTF16_BigEndian         utf-16be
 UTF16_LittleEndian      utf-16le
 UTF16_PlatformEndian    iso-10646-ucs-2 csUnicode utf16 utf-16 ibm-1200 ibm1200 cp1200 ucs-2
 UTF16_OppositeEndian
-LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us cp367 csASCII ibm367 iso-8859-1:1987 l1 iso_8859_1 ansi_x3.110-1983 iso8859-1   #!!!!! There's whole lot of names for this - cp367 csASCII etc.
+LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1  8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 cp367 ibm367 iso-8859-1:1987 l1 iso_8859_1 ansi_x3.110-1983 iso8859-1   #!!!!! There's whole lot of names for this
 ISO_2022                iso-2022 2022 cp2022 iso2022 iso_2022
 LMBCS-1                 lmbcs 
 LMBCS-2
@@ -60,8 +60,9 @@ LMBCS-17
 LMBCS-18
 LMBCS-19
 
-
 # Table-based
+
+ibm-367 usascii ascii ascii-7 us-ascii usascii ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us
@@ -256,3 +257,4 @@ ibm-1149-s390      ibm1149-s390  # EBCDIC Iceland
 ibm-1153-s390      ibm1153-s390  # EBCDIC latin 2
 ibm-12712-s390     ibm12712-s390 # EBCDIC Hebrew
 ibm-16804-s390     ibm16804-s390 # EBCDIC Arabic
+
