@@ -364,7 +364,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.9 $ $Date: 2000/10/17 20:54:49 $
+ * @version      $Revision: 1.10 $ $Date: 2000/10/27 22:25:52 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -765,16 +765,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected int           fields[]; // NOTE: Make transient when possible
 
     /**
-     * The flags which tell if a specified time field for the calendar is set.
-     * A new object has no fields set.  After the first call to a method
-     * which generates the fields, they all remain set after that.
-     * This is an array of <code>FIELD_COUNT</code> booleans, with index values
-     * <code>ERA</code> through <code>DST_OFFSET</code>.
-     * @serial
-     */
-    protected boolean       isSet[]; // NOTE: Remove when possible
-
-    /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
@@ -949,7 +939,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected Calendar(TimeZone zone, Locale aLocale)
     {
         fields = new int[FIELD_COUNT];
-        isSet = new boolean[FIELD_COUNT];
         stamp = new int[FIELD_COUNT];
 
         this.zone = zone;
@@ -1113,7 +1102,6 @@ public abstract class Calendar implements Serializable, Cloneable {
         fields[field] = value;
         stamp[field] = nextStamp++;
         areFieldsSet = false;
-        isSet[field] = true; // Remove later
     }
 
     /**
@@ -1184,7 +1172,6 @@ public abstract class Calendar implements Serializable, Cloneable {
         stamp = new int[FIELD_COUNT];
         areFieldsSet = false;
         areAllFieldsSet = false;
-        isSet = new boolean[FIELD_COUNT]; // Remove later
         isTimeSet = false;
     }
 
@@ -1198,7 +1185,6 @@ public abstract class Calendar implements Serializable, Cloneable {
         stamp[field] = UNSET;
         areFieldsSet = false;
         areAllFieldsSet = false;
-        isSet[field] = false; // Remove later
         isTimeSet = false;
     }
 
@@ -1209,7 +1195,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     public final boolean isSet(int field)
     {
         return stamp[field] != UNSET;
-        // return isSet[field];
     }
 
     /**
@@ -2747,10 +2732,8 @@ public abstract class Calendar implements Serializable, Cloneable {
             Calendar other = (Calendar) super.clone();
 
             other.fields = new int[FIELD_COUNT];
-            other.isSet = new boolean[FIELD_COUNT];
             other.stamp = new int[FIELD_COUNT];
             System.arraycopy(this.fields, 0, other.fields, 0, FIELD_COUNT);
-            System.arraycopy(this.isSet, 0, other.isSet, 0, FIELD_COUNT);
             System.arraycopy(this.stamp, 0, other.stamp, 0, FIELD_COUNT);
 
             other.zone = (TimeZone) zone.clone();
@@ -2876,6 +2859,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Reconstitute this object from a stream (i.e., deserialize it).
      */
+    /*
     private void readObject(ObjectInputStream stream)
          throws IOException, ClassNotFoundException
     {
@@ -2899,5 +2883,17 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
 
         serialVersionOnStream = currentSerialVersion;
+    }
+    */
+
+    //----------------------------------------------------------------------
+    // Subclass API
+    //  For use by subclasses of Calendar
+    //----------------------------------------------------------------------
+
+    protected void _TEMPORARY_markAllFieldsSet() {
+        for (int i=0; i<stamp.length; ++i) {
+            stamp[i] = INTERNALLY_SET;
+        }
     }
 }

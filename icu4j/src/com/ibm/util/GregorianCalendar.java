@@ -1225,10 +1225,7 @@ public class GregorianCalendar extends Calendar {
         // Careful here: We are manually setting the time stamps[] flags to
         // INTERNALLY_SET, so we must be sure that the above code actually does
         // set all these fields.
-        for (int i=0; i<FIELD_COUNT; ++i) {
-            stamp[i] = INTERNALLY_SET;
-            isSet[i] = true; // Remove later
-        }
+        _TEMPORARY_markAllFieldsSet();
     }
 
     /**
