@@ -86,6 +86,7 @@ CC = @CC@
 CXX = @CXX@
 AIX_SHLIB = @AIX_SHLIB@
 AR = @AR@
+ARFLAGS := @ARFLAGS@ $(ARFLAGS)
 RANLIB = @RANLIB@
 
 # Echo w/o newline
