@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/02/07 00:53:54 $
- * $Revision: 1.72 $
+ * $Date: 2002/02/09 01:01:47 $
+ * $Revision: 1.73 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.72 $ $Date: 2002/02/07 00:53:54 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.73 $ $Date: 2002/02/09 01:01:47 $
  */
 public abstract class Transliterator {
     /**
@@ -758,14 +758,14 @@ public abstract class Transliterator {
                 // Advance past filtered chars
                 int c;
                 while (index.start < globalLimit &&
-                       !filter.contains(c=UTF16.charAt(text, index.start))) {
+                       !filter.contains(c=text.char32At(index.start))) {
                     index.start += UTF16.getCharCount(c);
                 }
                 
                 // Find the end of this run of unfiltered chars
                 index.limit = index.start;
                 while (index.limit < globalLimit &&
-                       filter.contains(c=UTF16.charAt(text, index.limit))) {
+                       filter.contains(c=text.char32At(index.limit))) {
                     index.limit += UTF16.getCharCount(c);
                 }
             }
@@ -855,7 +855,7 @@ public abstract class Transliterator {
                 for (;;) {
                     // Length of additional code point, either one or two
                     int charLength =
-                        UTF16.getCharCount(UTF16.charAt(text, passLimit));
+                        UTF16.getCharCount(text.char32At(passLimit));
                     passLimit += charLength;
                     if (passLimit > runLimit) {
                         break;

@@ -197,7 +197,7 @@ class StringReplacer implements UnicodeReplacer {
                 int n = cursorPos;
                 // Outside the output string, cursorPos counts code points
                 while (n < 0 && newStart > 0) {
-                    newStart -= UTF16.getCharCount(UTF16.charAt(text, newStart-1));
+                    newStart -= UTF16.getCharCount(text.char32At(newStart-1));
                     ++n;
                 }
                 newStart += n;
@@ -206,7 +206,7 @@ class StringReplacer implements UnicodeReplacer {
                 int n = cursorPos - output.length();
                 // Outside the output string, cursorPos counts code points
                 while (n > 0 && newStart < text.length()) {
-                    newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
+                    newStart += UTF16.getCharCount(text.char32At(newStart));
                     --n;
                 }
                 newStart += n;

@@ -19,7 +19,7 @@ import com.ibm.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.2 $ $Date: 2001/11/21 07:08:46 $
+ * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.3 $ $Date: 2002/02/09 01:01:47 $
  */
 class UnescapeTransliterator extends Transliterator {
 
@@ -192,7 +192,7 @@ class UnescapeTransliterator extends Transliterator {
                             }
                             break;
                         }
-                        int ch = UTF16.charAt(text, s);
+                        int ch = text.char32At(s);
                         int digit = UCharacter.digit(ch, radix);
                         if (digit < 0) {
                             break;
@@ -241,7 +241,7 @@ class UnescapeTransliterator extends Transliterator {
             }
 
             if (start < limit) {
-                start += UTF16.getCharCount(UTF16.charAt(text, start));
+                start += UTF16.getCharCount(text.char32At(start));
             }
         }
 

@@ -32,7 +32,7 @@ import com.ibm.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.2 $ $Date: 2001/11/20 23:55:09 $
+ * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.3 $ $Date: 2002/02/09 01:01:47 $
  */
 class EscapeTransliterator extends Transliterator {
 
@@ -167,7 +167,7 @@ class EscapeTransliterator extends Transliterator {
         boolean redoPrefix = false;
 
         while (start < limit) {
-            int c = grokSupplementals ? UTF16.charAt(text, start) : text.charAt(start);
+            int c = grokSupplementals ? text.char32At(start) : text.charAt(start);
             int charLen = grokSupplementals ? UTF16.getCharCount(c) : 1;
 
             if ((c & 0xFFFF0000) != 0 && supplementalHandler != null) {

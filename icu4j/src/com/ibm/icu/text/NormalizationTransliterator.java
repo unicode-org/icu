@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.14 $ $Date: 2001/12/03 02:10:26 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.15 $ $Date: 2002/02/09 01:01:47 $
  */
 final class NormalizationTransliterator extends Transliterator {
     
@@ -143,7 +143,7 @@ final class NormalizationTransliterator extends Transliterator {
         int lastSafe = start; // go back to start in any event
         int cp;
         for (int i = start+1; i < limit; i += UTF16.getCharCount(cp)) {
-            cp = UTF16.charAt(text, i);
+            cp = text.char32At(i);
             if (UCharacter.getCombiningClass(cp) == 0 && !UNSAFE_START.contains(cp)) {
                 int delta = convert(text, lastSafe, i, null);
                 i += delta;
