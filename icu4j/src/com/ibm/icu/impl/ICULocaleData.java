@@ -76,17 +76,22 @@ public class ICULocaleData {
     }
 
     /**
+     * The default name for resources containing ICU locale data.
+     */
+    public static final String LOCALE_ELEMENTS = "LocaleElements";
+
+    /**
      * Gets a LocaleElements resource bundle.
      */
     public static ResourceBundle getLocaleElements(Locale locale) {
-        return getResourceBundle("LocaleElements", locale);
+        return getResourceBundle(LOCALE_ELEMENTS, locale);
     }
 
     /**
      * Gets a LocaleElements resource bundle.
      */
     public static ResourceBundle getLocaleElements(String localeName) {
-	return getResourceBundle("LocaleElements", localeName);
+	return getResourceBundle(LOCALE_ELEMENTS, localeName);
     }
 
     /**
@@ -114,19 +119,66 @@ public class ICULocaleData {
 	if (locale == null) {
 	    locale = Locale.getDefault();
 	}
-	ResourceBundle rb = null;
-	for (int i = 0; i < packageNames.length && rb == null; ++i) {
+	for (int i = 0; i < packageNames.length; ++i) {
 	    try {
 		String path = packageNames[i] + "." + bundleName;
-		if (debug) System.out.println("calling getBundle: " + path + "_" + locale);
-		rb = instantiateBundle(path, locale);
+		if (debug) System.out.println("calling instantiateBundle: " + path + "_" + locale);
+		ResourceBundle rb = instantiateBundle(path, locale);
+		return rb;
 	    } 
 	    catch (MissingResourceException e) {
 		if (debug) System.out.println(bundleName + "_" + locale + " not found in " + packageNames[i]);
 	    }
 	}
 
-	return rb;
+	return null;
+    }
+
+    /**
+     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
+     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
+     */
+    public static ResourceBundle loadResourceBundle(String bundleName, Locale locale) {
+	if (locale == null) {
+	    locale = Locale.getDefault();
+	}
+	return loadResourceBundle(bundleName, locale.toString());
+    }
+
+    /**
+     * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
+     * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
+     */
+    public static ResourceBundle loadResourceBundle(String bundleName, String localeName) {
+	if (localeName != null) {
+	    bundleName = bundleName + "_" + localeName;
+	}
+	for (int i = 0; i < packageNames.length; ++i) {
+	    String name = packageNames[i] + "." + bundleName;
+	    try {
+		if (name.indexOf("_zh_") == -1) { // DLF temporary hack
+		    Class rbclass = ICULocaleData.class.forName(name);
+		    ResourceBundle rb = (ResourceBundle)rbclass.newInstance();
+		    return rb;
+		}
+	    } 
+	    catch (ClassNotFoundException e) {
+		if (debug) {
+		    System.out.println(bundleName + " not found in " + packageNames[i]);
+		}
+		// ignore, keep looking
+	    }
+	    catch (Exception e) {
+		if (debug) {
+		    System.out.println(e.getMessage());
+		}
+	    }
+	}
+	if (debug) {
+	    System.out.println(bundleName + " not found.");
+	}
+	
+	return null;
     }
 
     // ========== privates ==========

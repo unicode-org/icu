@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
- * $Date: 2002/04/25 00:02:37 $
- * $Revision: 1.3 $
+ * $Date: 2002/06/19 21:03:12 $
+ * $Revision: 1.4 $
  *  *****************************************************************************************
  */
  
@@ -68,4 +68,56 @@ public class LocaleUtility {
     public static boolean isFallbackOf(Locale parent, Locale child) {
         return isFallbackOf(parent.toString(), child.toString());
     }
+
+
+    /**
+     * You'd think that Locale canonicalizes, since it munges the
+     * renamed languages, but it doesn't quite.  It forces the region
+     * to be upper case but doesn't do anything about the language or
+     * variant.  Our canonical form is 'lower_UPPER_UPPER'.  
+     */
+    public static String canonicalLocaleString(String id) {
+	if (id != null) {
+	    int x = id.indexOf("_");
+	    if (x == -1) {
+		id = id.toLowerCase(Locale.ENGLISH);
+	    } else {
+		StringBuffer buf = new StringBuffer();
+		buf.append(id.substring(0, x).toLowerCase(Locale.ENGLISH));
+		buf.append(id.substring(x).toUpperCase(Locale.ENGLISH));
+		    
+		int len = buf.length();
+		int n = len;
+		while (--n >= 0 && buf.charAt(n) == '_') {};
+		if (++n != len) {
+		    buf.delete(n, len);
+		}
+		id = buf.toString();
+	    }
+	}
+	return id;
+    }
+
+    /*
+    public static String getDisplayLanguage(String languageID, Locale l) {
+    }
+
+    public static String getDisplayRegion(String regionID, Locale l) {
+    }
+
+    public static String getDisplayVariant(String variantID, Locale l) {
+    }
+
+    public static String getDisplayName(String localeName) {
+	return getDisplayName(getLocaleFromString(localeName));
+    }
+
+    public static String getDisplayName(Locale locale) {
+	String lang = locale.getLanguage();
+	String region = locale.getCountry();
+	String var = locale.getVariant();
+
+	StringBuffer buf = new StringBuffer(lang);
+    }
+    */
 }
