@@ -171,9 +171,9 @@ void ConvertTest::TestConvert()
             (char)0xB0, (char)0xAD
         }
     };
-    UConverterFromUCallback fromUAction;
+    UConverterFromUCallback fromUAction = NULL;
     void* fromUContext = NULL;
-    UConverterToUCallback toUAction;
+    UConverterToUCallback toUAction = NULL;
     void* toUContext = NULL;
 
     /*Calling all the UnicodeConverterCPP API and checking functionality*/
