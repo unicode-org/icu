@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/16 00:50:47 $
- * $Revision: 1.71 $
+ * $Date: 2001/11/16 21:50:40 $
+ * $Revision: 1.72 $
  *
  *****************************************************************************************
  */
@@ -2047,7 +2047,7 @@ public class TransliteratorTest extends TestFmwk {
                 }
             } catch (IllegalArgumentException e) {
                 if (DATA[i+1] == null) {
-                    errln("Ok: getInstance(" + DATA[i] + ") => " + e.getMessage());
+                    logln("Ok: getInstance(" + DATA[i] + ") => " + e.getMessage());
                 } else {
                     errln("FAIL: getInstance(" + DATA[i] + ") => " + e.getMessage());
                 }
