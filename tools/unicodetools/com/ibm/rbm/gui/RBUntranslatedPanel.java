@@ -250,3 +250,62 @@ class RBUntranslatedPanel extends JPanel {
 	}
 }
 
+/**
+ * The table model for untranslated Items
+ */
+
+class UntranslatedItemsTableModel extends AbstractTableModel {
+	Bundle bundle;
+	
+	public UntranslatedItemsTableModel(Bundle bundle) {
+		this.bundle = bundle;
+	}
+	
+	public void setBundle(Bundle bundle) {
+		this.bundle = bundle;
+		update();
+	}
+	
+	public int getColumnCount() { return 3; }
+		    
+	public int getRowCount() {
+		return bundle.getUntranslatedItemsSize();
+	}
+	
+	public Object getValueAt(int row, int col) {
+		BundleItem item = bundle.getUntranslatedItem(row);
+		String retStr = null;
+				
+		switch(col) {
+		case 0:
+			retStr = item.getKey();
+			break;
+		case 1:
+			retStr = item.getTranslation();
+			break;
+		case 2:
+			retStr = (item.getParentGroup() == null ? "" : item.getParentGroup().getName());
+			break;
+		default:
+			retStr = Resources.getTranslation("table_cell_error");
+		}
+				
+		return retStr;
+	}
+			
+	public String getColumnName(int col) {
+		if (col == 0) return Resources.getTranslation("languageuntrans_column_key");
+		else if (col == 1) return Resources.getTranslation("languageuntrans_column_translation");
+		else if (col == 2) return Resources.getTranslation("languageuntrans_column_group");
+		else return Resources.getTranslation("table_column_error");
+	}
+	
+	public BundleItem getBundleItem(int row) {
+		return bundle.getUntranslatedItem(row);
+	}
+	
+	public void update() {
+		fireTableDataChanged();
+	}
+}
+

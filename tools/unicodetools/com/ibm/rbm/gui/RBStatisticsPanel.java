@@ -160,7 +160,7 @@ class RBStatisticsPanel extends JPanel {
 			jTextFieldStatsCountry.setColumns(25);
 			jTextFieldStatsVariant.setColumns(25);
 			
-			updateButton.setEnabled(false);
+			//updateButton.setEnabled(false);
 			
 			// Update the display
 			if (mainBox != null){
@@ -168,7 +168,8 @@ class RBStatisticsPanel extends JPanel {
 			} else {
 				mainBox = new Box(BoxLayout.Y_AXIS);
 			}
-			if (dupBox != null) dupBox.removeAll();
+			if (dupBox != null)
+				dupBox.removeAll();
 			removeAll();
 			mainBox.add(jLabelStatsTitle);
 			mainBox.add(Box.createVerticalStrut(10));
