@@ -566,7 +566,7 @@ public class TestIDNA extends TestFmwk {
     
     private static final int loopCount = 100;
     private static final int maxCharCount = 15;
-    private static final int maxCodePoint = 0x10ffff;
+   // private static final int maxCodePoint = 0x10ffff;
     private Random random = null;
     
     /**
@@ -583,7 +583,7 @@ public class TestIDNA extends TestFmwk {
     }
 
     private int randi(int n){
-        return (int) (random.nextInt(0x7fff) % (n+1));
+        return (random.nextInt(0x7fff) % (n+1));
     }
 
     private StringBuffer getTestSource(StringBuffer fillIn) {
@@ -598,7 +598,7 @@ public class TestIDNA extends TestFmwk {
             if(codepoint == 0x0000){
                 continue;
             }
-            UTF16.append(fillIn, (int)codepoint);
+            UTF16.append(fillIn, codepoint);
             i++;
         }
         return fillIn;
