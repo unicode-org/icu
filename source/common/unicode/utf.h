@@ -190,6 +190,9 @@ typedef int32_t UTextOffset;
  * @internal
  */
 #define UTF8_ERROR_VALUE_1 0x15
+/**
+ * See documentation on UTF8_ERROR_VALUE_1 for details.
+ */
 #define UTF8_ERROR_VALUE_2 0x9f
 
 /**
