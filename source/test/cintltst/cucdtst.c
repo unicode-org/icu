@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1757,6 +1757,16 @@ TestCharNames() {
 
 static void
 TestMirroring() {
+    USet *set;
+    UErrorCode errorCode;
+
+    UChar32 start, end, c2, c3;
+    int32_t i;
+
+    U_STRING_DECL(mirroredPattern, "[:Bidi_Mirrored:]", 17);
+
+    U_STRING_INIT(mirroredPattern, "[:Bidi_Mirrored:]", 17);
+
     log_verbose("Testing u_isMirrored()\n");
     if(!(u_isMirrored(0x28) && u_isMirrored(0xbb) && u_isMirrored(0x2045) && u_isMirrored(0x232a) &&
          !u_isMirrored(0x27) && !u_isMirrored(0x61) && !u_isMirrored(0x284) && !u_isMirrored(0x3400)
@@ -1773,6 +1783,21 @@ TestMirroring() {
     ) {
         log_err("u_charMirror() does not work correctly\n");
     }
+
+    /* verify that Bidi_Mirroring_Glyph roundtrips */
+    errorCode=U_ZERO_ERROR;
+    set=uset_openPattern(mirroredPattern, 17, &errorCode);
+    for(i=0; 0==uset_getItem(set, i, &start, &end, NULL, 0, &errorCode); ++i) {
+        do {
+            c2=u_charMirror(start);
+            c3=u_charMirror(c2);
+            if(c3!=start) {
+                log_err("u_charMirror() does not roundtrip: U+%04lx->U+%04lx->U+%04lx\n", (long)start, (long)c2, (long)c3);
+            }
+        } while(++start<=end);
+    }
+
+    uset_close(set);
 }
 
 
@@ -2160,7 +2185,7 @@ TestAdditionalProperties() {
         { 0xfa11, UCHAR_UNIFIED_IDEOGRAPH, TRUE },
         { 0xfa12, UCHAR_UNIFIED_IDEOGRAPH, FALSE },
 
-        { -1, 0x401, 0 },
+        { -1, 0x401, 0 }, /* version break for Unicode 4.0.1 */
 
         { 0x002e, UCHAR_S_TERM, TRUE },
         { 0x0061, UCHAR_S_TERM, FALSE },
@@ -2175,7 +2200,7 @@ TestAdditionalProperties() {
         /* UCHAR_BIDI_CLASS tested for assigned characters in TestUnicodeData() */
         /* test default Bidi classes for unassigned code points */
         { 0x0590, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
-        { 0x05a2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x05c7, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x07f2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
@@ -2263,7 +2288,6 @@ TestAdditionalProperties() {
         { 0x232A, UCHAR_LINE_BREAK, U_LB_CLOSE_PUNCTUATION },
         { 0x3401, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
         { 0x4e02, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
-        { 0xac03, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
         { 0x20004, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
         { 0xf905, UCHAR_LINE_BREAK, U_LB_IDEOGRAPHIC },
         { 0xdb7e, UCHAR_LINE_BREAK, U_LB_SURROGATE },
@@ -2312,6 +2336,49 @@ TestAdditionalProperties() {
         { 0xd7a3, UCHAR_HANGUL_SYLLABLE_TYPE, U_HST_LVT_SYLLABLE },
 
         { 0xd7a4, UCHAR_HANGUL_SYLLABLE_TYPE, 0 },
+
+        { -1, 0x410, 0 }, /* version break for Unicode 4.1 */
+
+        { 0x00d7, UCHAR_PATTERN_SYNTAX, TRUE },
+        { 0xfe45, UCHAR_PATTERN_SYNTAX, TRUE },
+        { 0x0061, UCHAR_PATTERN_SYNTAX, FALSE },
+
+        { 0x0020, UCHAR_PATTERN_WHITE_SPACE, TRUE },
+        { 0x0085, UCHAR_PATTERN_WHITE_SPACE, TRUE },
+        { 0x200f, UCHAR_PATTERN_WHITE_SPACE, TRUE },
+        { 0x00a0, UCHAR_PATTERN_WHITE_SPACE, FALSE },
+        { 0x3000, UCHAR_PATTERN_WHITE_SPACE, FALSE },
+
+        { 0x1d200, UCHAR_BLOCK, UBLOCK_ANCIENT_GREEK_MUSICAL_NOTATION },
+        { 0x2c8e,  UCHAR_BLOCK, UBLOCK_COPTIC },
+        { 0xfe17,  UCHAR_BLOCK, UBLOCK_VERTICAL_FORMS },
+
+        { 0x1a00,  UCHAR_SCRIPT, USCRIPT_BUGINESE },
+        { 0x2cea,  UCHAR_SCRIPT, USCRIPT_COPTIC },
+        { 0xa82b,  UCHAR_SCRIPT, USCRIPT_SYLOTI_NAGRI },
+        { 0x103d0, UCHAR_SCRIPT, USCRIPT_OLD_PERSIAN },
+
+        { 0xcc28, UCHAR_LINE_BREAK, U_LB_H2 },
+        { 0xcc29, UCHAR_LINE_BREAK, U_LB_H3 },
+        { 0xac03, UCHAR_LINE_BREAK, U_LB_H3 },
+        { 0x115f, UCHAR_LINE_BREAK, U_LB_JL },
+        { 0x11aa, UCHAR_LINE_BREAK, U_LB_JT },
+        { 0x11a1, UCHAR_LINE_BREAK, U_LB_JV },
+
+        { 0xb2c9, UCHAR_GRAPHEME_CLUSTER_BREAK, U_GCB_LVT },
+        { 0x036f, UCHAR_GRAPHEME_CLUSTER_BREAK, U_GCB_EXTEND },
+        { 0x0000, UCHAR_GRAPHEME_CLUSTER_BREAK, U_GCB_CONTROL },
+        { 0x1160, UCHAR_GRAPHEME_CLUSTER_BREAK, U_GCB_V },
+
+        { 0x05f4, UCHAR_WORD_BREAK, U_WB_MIDLETTER },
+        { 0x4ef0, UCHAR_WORD_BREAK, U_WB_OTHER },
+        { 0x19d9, UCHAR_WORD_BREAK, U_WB_NUMERIC },
+        { 0x2044, UCHAR_WORD_BREAK, U_WB_MIDNUM },
+
+        { 0xfffd, UCHAR_SENTENCE_BREAK, U_SB_OTHER },
+        { 0x1ffc, UCHAR_SENTENCE_BREAK, U_SB_UPPER },
+        { 0xff63, UCHAR_SENTENCE_BREAK, U_SB_CLOSE },
+        { 0x2028, UCHAR_SENTENCE_BREAK, U_SB_SEP },
 
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },

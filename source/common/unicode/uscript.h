@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -85,6 +85,15 @@ typedef enum UScriptCode {
 
       /** New script code in Unicode 4.0.1 @draft ICU 3.0 */
       USCRIPT_KATAKANA_OR_HIRAGANA,/*Hrkt */
+
+      /* New scripts in Unicode 4.1 @draft ICU 3.4 */
+      USCRIPT_BUGINESE,           /* Bugi */
+      USCRIPT_GLAGOLITIC,         /* Glag */
+      USCRIPT_KHAROSHTHI,         /* Khar */
+      USCRIPT_SYLOTI_NAGRI,       /* Sylo */
+      USCRIPT_NEW_TAI_LUE,        /* Talu */
+      USCRIPT_TIFINAGH,           /* Tfng */
+      USCRIPT_OLD_PERSIAN,        /* Xpeo */
 
       USCRIPT_CODE_LIMIT
 } UScriptCode;

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -89,24 +89,25 @@ U_CDECL_END
 static const struct C99_Map {
     const char* name;
     C99_Property_Function func;
+    UPropertySource src;
 } C99_DISPATCH[] = {
     // These three entries omitted; they clash with PropertyAliases
     // names for Unicode properties, so UnicodeSet already maps them
     // to those properties.
-    //{ "alpha", u_isalpha },
-    //{ "lower", u_islower },
-    //{ "upper", u_isupper },
+    //{ "alpha", u_isalpha, UPROPS_SRC_PROPSVEC },
+    //{ "lower", u_islower, UPROPS_SRC_CASE },
+    //{ "upper", u_isupper, UPROPS_SRC_CASE },
 
     // MUST be in SORTED order
-    { "blank", u_isblank },
-    { "cntrl", u_iscntrl },
-    { "digit", u_isdigit },
-    { "graph", u_isgraph },
-    { "print", u_isprint },
-    { "punct", u_ispunct },
-    { "space", u_isspace },
-    { "title", u_istitle },
-    { "xdigit", u_isxdigit }
+    { "blank", u_isblank, UPROPS_SRC_PROPSVEC },
+    { "cntrl", u_iscntrl, UPROPS_SRC_CHAR },
+    { "digit", u_isdigit, UPROPS_SRC_CHAR },
+    { "graph", u_isgraph, UPROPS_SRC_CHAR },
+    { "print", u_isprint, UPROPS_SRC_CHAR },
+    { "punct", u_ispunct, UPROPS_SRC_CHAR },
+    { "space", u_isspace, UPROPS_SRC_CHAR },
+    { "title", u_istitle, UPROPS_SRC_CHAR },
+    { "xdigit", u_isxdigit, UPROPS_SRC_CHAR }
 };
 #define C99_COUNT (9)
 
@@ -1048,7 +1049,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     if (!mungeCharName(buf, vname, sizeof(buf))) FAIL(ec);
                     UVersionInfo version;
                     u_versionFromString(version, buf);
-                    applyFilter(versionFilter, &version, UPROPS_SRC_CHAR, ec);
+                    applyFilter(versionFilter, &version, UPROPS_SRC_PROPSVEC, ec);
                     return *this;
                 }
                 break;
@@ -1086,7 +1087,7 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     for (int32_t i=0; i<C99_COUNT; ++i) {
                         int32_t c = uprv_comparePropertyNames(pname, C99_DISPATCH[i].name);
                         if (c == 0) {
-                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], UPROPS_SRC_CHAR, ec);
+                            applyFilter(c99Filter, (void*) &C99_DISPATCH[i], C99_DISPATCH[i].src, ec);
                             return *this;
                         } else if (c < 0) {
                             // Further entries will not match; bail out
@@ -1335,6 +1336,9 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
             switch(src) {
             case UPROPS_SRC_CHAR:
                 uchar_addPropertyStarts(&sa, &status);
+                break;
+            case UPROPS_SRC_PROPSVEC:
+                upropsvec_addPropertyStarts(&sa, &status);
                 break;
             case UPROPS_SRC_HST:
                 uhst_addPropertyStarts(&sa, &status);

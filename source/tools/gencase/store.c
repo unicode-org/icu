@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -216,14 +216,45 @@ static UChar unfold[UGENCASE_UNFOLD_MAX_ROWS*UGENCASE_UNFOLD_WIDTH]={
 static uint16_t unfoldRows=0;
 static uint16_t unfoldTop=UGENCASE_UNFOLD_WIDTH;
 
-/* -------------------------------------------------------------------------- */
+/* Unicode versions --------------------------------------------------------- */
+
+static const UVersionInfo
+unicodeVersions[]={
+    { 1, 0, 0, 0 },
+    { 1, 1, 0, 0 },
+    { 2, 0, 0, 0 },
+    { 3, 0, 0, 0 },
+    { 3, 1, 0, 0 },
+    { 3, 2, 0, 0 },
+    { 4, 0, 0, 0 },
+    { 4, 0, 1, 0 },
+    { 4, 1, 0, 0 }
+};
+
+int32_t ucdVersion=UNI_4_1;
+
+static int32_t
+findUnicodeVersion(const UVersionInfo version) {
+    int32_t i;
+
+    for(i=0; /* while(version>unicodeVersions[i]) {} */
+        i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)>0;
+        ++i) {}
+    if(0<i && i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)<0) {
+        --i; /* fix 4.0.2 to land before 4.1, for valid x>=ucdVersion comparisons */
+    }
+    return i; /* version>=unicodeVersions[i] && version<unicodeVersions[i+1]; possible: i==UNI_VER_COUNT */
+}
 
 extern void
 setUnicodeVersion(const char *v) {
     UVersionInfo version;
     u_versionFromString(version, v);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
+    ucdVersion=findUnicodeVersion(version);
 }
+
+/* -------------------------------------------------------------------------- */
 
 static void
 addUnfolding(UChar32 c, const UChar *s, int32_t length) {
@@ -255,6 +286,7 @@ setProps(Props *p) {
     UErrorCode errorCode;
     uint32_t value, oldValue;
     int32_t delta;
+    UBool isCaseIgnorable;
 
     /* get the non-UnicodeData.txt properties */
     value=oldValue=upvec_getValue(pv, p->code, 0);
@@ -313,12 +345,28 @@ setProps(Props *p) {
     }
 
     /* encode case-ignorable as delta==1 on uncased characters */
-    if(
-        (value&UCASE_TYPE_MASK)==UCASE_NONE &&
-        p->code!=0x307 &&
-        ((U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
-            p->code==0x27 || p->code==0xad || p->code==0x2019)
-    ) {
+    isCaseIgnorable=FALSE;
+    if((value&UCASE_TYPE_MASK)==UCASE_NONE) {
+        if(ucdVersion>=UNI_4_1) {
+            /* Unicode 4.1 and up: (D47a) Word_Break=MidLetter or Mn, Me, Cf, Lm, Sk */
+            if(
+                (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
+                ((upvec_getValue(pv, p->code, 1)>>UGENCASE_IS_MID_LETTER_SHIFT)&1)!=0
+            ) {
+                isCaseIgnorable=TRUE;
+            }
+        } else {
+            /* before Unicode 4.1: Mn, Me, Cf, Lm, Sk or 0027 or 00AD or 2019 */
+            if(
+                (U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
+                p->code==0x27 || p->code==0xad || p->code==0x2019
+            ) {
+                isCaseIgnorable=TRUE;
+            }
+        }
+    }
+
+    if(isCaseIgnorable && p->code!=0x307) {
         /*
          * We use one of the delta/exception bits, which works because we only
          * store the case-ignorable flag for uncased characters.
