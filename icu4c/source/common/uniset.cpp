@@ -1068,8 +1068,10 @@ UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
     if (s.length() == 0) return *this;
     int32_t cp = getSingleCP(s);
     if (cp < 0) {
-        _add(s);
-        pat.truncate(0);
+        if (!strings->contains((void*) &s)) {
+            _add(s);
+            pat.truncate(0);
+        }
     } else {
         add((UChar32)cp, (UChar32)cp);
     }

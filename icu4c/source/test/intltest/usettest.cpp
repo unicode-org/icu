@@ -579,6 +579,13 @@ void UnicodeSetTest::TestStringPatterns() {
         const char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
         expectToPattern(*s, "[a-z{\\u4E01\\u4E02}{\\n\\r}]", exp5);
 
+        // j2189
+        s->clear();
+        s->add(UnicodeString("abc", ""));
+        s->add(UnicodeString("abc", ""));
+        const char* exp6[] = {"abc", NOT, "ab", NULL};
+        expectToPattern(*s, "[{abc}]", exp6);
+
         break;
     }
 
