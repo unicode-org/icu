@@ -6,29 +6,32 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/03/15 00:40:28 $ 
-* $Revision: 1.4 $
+* $Date: 2000/04/13 22:52:41 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
+* This is the ant build file for ICU4J.  See readme.html for more information.
 */
 -->
 
 <project name="ICU4J" default="core" basedir=".">
 
-  <property name="src.dir" value="src"/>
-  <property name="doc.dir" value="doc"/>
-  <property name="build.dir" value="classes"/>
-  <property name="classpath" value="${build.dir}"/>
-  <property name="build.compiler" value="classic"/>
-  
+  <target name="init">
+    <property name="src.dir" value="src"/>
+    <property name="doc.dir" value="doc"/>
+    <property name="build.dir" value="classes"/>
+    <property name="classpath" value="${build.dir}"/>
+    <property name="build.compiler" value="classic"/>
+  </target>
+
   <target name="all" depends="core,tests,tools,demos,jar,docs"/>
   
   <target name="core">
     <mkdir dir="${build.dir}"/>
     <copyfile src="${src.dir}/com/ibm/text/resources/thai_dict"
     	   dest="${build.dir}/com/ibm/text/resources/thai_dict"/>
-    <compile srcfiles="com/ibm/util,com/ibm/text"
-    	   srcdir="${src.dir}"
+    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java"
+           srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
@@ -36,7 +39,7 @@
   
   <target name="tests" depends="core">
     <mkdir dir="${build.dir}"/>
-    <compile srcfiles="com/ibm/test"
+    <javac includes="com/ibm/test/**/*.java"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
@@ -45,7 +48,7 @@
   
   <target name="demos" depends="core">
     <mkdir dir="${build.dir}"/>
-    <compile srcfiles="com/ibm/demo"
+    <javac includes="com/ibm/demo/**/*.java"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
@@ -56,30 +59,30 @@
   
   <target name="tools" depends="core">
     <mkdir dir="${build.dir}"/>
-    <compile srcfiles="com/ibm/tools"
+    <javac includes="com/ibm/tools/**/*.java"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
   </target>
   
-  <target name="docs" depends="core,tests,tools">
+  <target name="docs" depends="core">
     <mkdir dir="${doc.dir}"/>
-    <docs sourcepath="${src.dir}"
+    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math"
+              sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
 			  windowtitle="ICU4J"
 			  doctitle="ICU4J"
 			  encoding="iso-8859-1"
 			  docencoding="iso-8859-1"
-			  bottom="&quot;&lt;font size=-1>Copyright (c); 1998-2000 IBM Corporation.&lt;/font>&quot;"
-	    	  sourcefiles="src/com/ibm/text/*.java src/com/ibm/util/*.java"
-    		  />
-    		  
+			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation.&lt;/font>"
+	    	  
+    		  />    		  
   </target>
 
   <target name="jar" depends="core">
-     <jar jarfile="ICU4J.jar" basedir="${build.dir}" includes="com"/>
+     <jar jarfile="ICU4J.jar" basedir="${build.dir}"/>
   </target>
 
   <target name="clean">
