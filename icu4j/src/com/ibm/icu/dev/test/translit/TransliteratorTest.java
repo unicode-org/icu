@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/03/29 18:33:08 $
- * $Revision: 1.102 $
+ * $Date: 2002/04/01 22:15:23 $
+ * $Revision: 1.103 $
  *
  *****************************************************************************************
  */
@@ -2473,10 +2473,15 @@ public class TransliteratorTest extends TestFmwk {
 
     public void TestInvalidBackRef() {
         String rule =  ". > $1;";
-        
+        String rule2 ="(.) <> &hex/unicode($1) &name($1); . > $1; [{}] >\u0020;";
         try {
             Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
             if (t != null) {
+                errln("FAIL: createFromRules should have returned NULL");
+            }
+	        errln("FAIL: Ok: . > $1; => no error");
+	        Transliterator t2= Transliterator.createFromRules("Test2", rule2, Transliterator.FORWARD);
+            if (t2 != null) {
                 errln("FAIL: createFromRules should have returned NULL");
             }
 	        errln("FAIL: Ok: . > $1; => no error");
