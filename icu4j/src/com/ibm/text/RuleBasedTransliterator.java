@@ -197,9 +197,12 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.15 $ $Date: 2000/02/10 07:36:25 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.16 $ $Date: 2000/02/24 20:46:49 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.16  2000/02/24 20:46:49  liu
+ * Add infinite loop check
+ *
  * Revision 1.15  2000/02/10 07:36:25  johnf
  * fixed imports for com.ibm.util.Utility
  *
@@ -316,10 +319,27 @@ public class RuleBasedTransliterator extends Transliterator {
                 Utility.escape(rsubstring(text, cursor, limit)) + "\"");
         }
 
+        /* A rule like
+         *   a>b|a
+         * creates an infinite loop. To prevent that, we put an arbitrary
+         * limit on the number of iterations that we take, one that is
+         * high enough that any reasonable rules are ok, but low enough to
+         * prevent a server from hanging.  The limit is 16 times the
+         * number of characters n, unless n is so large that 16n exceeds a
+         * uint32_t.
+         */
+        int loopCount = 0;
+        int loopLimit = limit - cursor;
+        if (loopLimit >= 0x08000000) {
+            loopLimit = 0x7FFFFFFF;
+        } else {
+            loopLimit <<= 4;
+        }
+
         boolean partial[] = new boolean[1];
         partial[0] = false;
 
-        while (cursor < limit) {
+        while (cursor < limit && loopCount <= loopLimit) {
             TransliterationRule r = incremental ?
                 data.ruleSet.findIncrementalMatch(text, start, limit, cursor,
                                                   data, partial, getFilter()) :
@@ -343,6 +363,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
                 limit += r.getOutput().length() - r.getKeyLength();
                 cursor += r.getCursorPos();
+                ++loopCount;
             }
         }
 
