@@ -27,9 +27,6 @@
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
 
-/* forward declaration */
-class ComposedCharIter;
-
 /**
  * <tt>Normalizer</tt> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
@@ -246,6 +243,7 @@ class U_COMMON_API Normalizer
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
+     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
      */
     IGNORE_HANGUL     = 0x001
   };
@@ -500,14 +498,14 @@ class U_COMMON_API Normalizer
              UErrorCode&          status);
 
   //-------------------------------------------------------------------------
-  // CharacterIterator overrides
+  // Iteration API
   //-------------------------------------------------------------------------
   
   /**
    * Return the current character in the normalized text.
    * @draft
    */
-  UChar32              current(void) const;
+  UChar32              current(void);
 
   /**
    * Return the first character in the normalized text.  This resets
@@ -555,9 +553,11 @@ class U_COMMON_API Normalizer
    *
    * @return      the first normalized character that is the result of iterating
    *              forward starting at the given index.
-   * @draft
+   * @deprecated To be removed after 2002-aug-31. Use setIndexOnly().
    */
   UChar32              setIndex(UTextOffset index);
+
+  void                 setIndexOnly(UTextOffset index);
 
   /**
    * Reset the iterator so that it is in the same state that it was just after
@@ -740,58 +740,11 @@ class U_COMMON_API Normalizer
 private:
   // Private utility methods for iteration
   // For documentation, see the source code
-  UChar nextCompose(void);
-  UChar prevCompose(void);
-  UChar nextDecomp(void);
-  UChar prevDecomp(void);
+  UBool nextNormalize();
+  UBool previousNormalize();
 
-  UChar curForward(void);
-  UChar curBackward(void);
-
-  void    init(CharacterIterator* iter, 
-         EMode mode, 
-         int32_t option);
-  void    initBuffer(void);
+  void    init(CharacterIterator* iter, EMode mode, int32_t option);
   void    clearBuffer(void);
-
-  // Utilities used by Compose
-  static void        bubbleAppend(UnicodeString& target, 
-                     UChar ch, 
-                     uint32_t cclass);
-  static uint32_t     getComposeClass(UChar ch);
-  static uint16_t    composeLookup(UChar ch);
-  static uint16_t    composeAction(uint16_t baseIndex, 
-                      uint16_t comIndex);
-  static void        explode(UnicodeString& target, 
-                uint16_t index);
-  static UChar    pairExplode(UnicodeString& target, 
-                    uint16_t action);
-
-  // Utilities used by Decompose
-  static void        fixCanonical(UnicodeString& result);    // Reorders combining marks
-  static uint8_t    getClass(UChar ch);                    // Gets char's combining class
-
-  // Other static utility methods
-  static void doAppend(const UChar source[], 
-               uint16_t offset, 
-               UnicodeString& dest);
-  static void doInsert(const UChar source[], 
-               uint16_t offset, 
-               UnicodeString& dest, 
-               UTextOffset pos);
-  static uint16_t doReplace(const UChar source[], 
-               uint16_t offset, 
-               UnicodeString& dest, 
-               UTextOffset pos);
-
-  static void hangulToJamo(UChar ch, 
-               UnicodeString& result, 
-               uint16_t decompLimit);
-  static void jamoAppend(UChar ch, 
-             uint16_t decompLimit, 
-             UnicodeString& dest);
-  static void jamoToHangul(UnicodeString& buffer, 
-               UTextOffset start);
 
   //-------------------------------------------------------------------------
   // Private data
@@ -799,39 +752,16 @@ private:
 
   EMode         fMode;
   int32_t       fOptions;
-  int16_t    minDecomp;
 
   // The input text and our position in it
   CharacterIterator*  text;
+  // The next index (if >= 0) to set in text for next(), which is
+  // necessary to make current() and setIndex() work reasonably.
+  UTextOffset         nextIndex;
 
   // A buffer for holding intermediate results
   UnicodeString       buffer;
-  UTextOffset          bufferPos;
-  UTextOffset          bufferLimit;
-  UChar             currentChar;
-
-  // Another buffer for use during iterative composition
-  UnicodeString       explodeBuf;
-
-  enum {
-    EMPTY = -1,
-    STR_INDEX_SHIFT = 2, //Must agree with the constants used in NormalizerBuilder
-    STR_LENGTH_MASK = 0x0003
-  };
-
-  enum {
-    HANGUL_BASE = 0xac00,
-    HANGUL_LIMIT = 0xd7a4,
-    JAMO_LBASE = 0x1100,
-    JAMO_VBASE = 0x1161,
-    JAMO_TBASE = 0x11a7,
-    JAMO_LCOUNT = 19,
-    JAMO_VCOUNT = 21,
-    JAMO_TCOUNT = 28,
-    JAMO_NCOUNT = JAMO_VCOUNT * JAMO_TCOUNT
-  };
-
-  friend class ComposedCharIter;
+  UTextOffset         bufferPos;
 };
 
 inline UBool
