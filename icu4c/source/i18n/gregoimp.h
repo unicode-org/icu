@@ -98,7 +98,29 @@ class U_I18N_API Math {
 
 #define kLatestViableMillis     185753453990400000.0  // max representable by julian day      +1e17
 
+/**
+ * The minimum supported Julian day.  This value is equivalent to
+ * MIN_MILLIS.
+ */
+#define MIN_JULIAN (-0x7F000000)
 
+/**
+ * The minimum supported epoch milliseconds.  This value is equivalent
+ * to MIN_JULIAN.
+ */
+#define MIN_MILLIS ((MIN_JULIAN - kEpochStartAsJulianDay) * kOneDay)
+
+/**
+ * The maximum supported Julian day.  This value is equivalent to
+ * MAX_MILLIS.
+ */
+#define MAX_JULIAN (+0x7F000000)
+
+/**
+ * The maximum supported epoch milliseconds.  This value is equivalent
+ * to MAX_JULIAN.
+ */
+#define MAX_MILLIS ((MAX_JULIAN - kEpochStartAsJulianDay) * kOneDay)
 
 /**
  * A utility class providing proleptic Gregorian calendar functions

@@ -886,12 +886,7 @@ static void TestExtremeDates() {
                     0, 0, 0, 0, &ec);
     if (!assertSuccess("udat_open", &ec)) return;
 
-// TEMPORARILY DISABLE
-// TEMPORARILY DISABLE
-// TEMPORARILY DISABLE
-#if 0
     _aux2ExtremeDates(fmt, small, large, buf, LEN(buf), cbuf, 0, &ec);
-#endif
 
     udat_close(fmt);
 }
