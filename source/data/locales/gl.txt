@@ -1,13 +1,12 @@
-﻿
-// *******************************************************************************
+﻿// *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
 gl {
-   Version { "x0.0" }
+    Version { "x0.0" }
     DayAbbreviations { 
             "Dom",
             "Lun",
@@ -76,7 +75,6 @@ gl {
                 "Latf",  // ISO 15924 Name 
                 "Latg",  // ISO 15924 Name 
     }
-	            
             // /**************** Info Below is needed ****************/
             // CollationElements{}
             // Countries{}
