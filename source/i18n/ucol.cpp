@@ -2408,23 +2408,28 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
 #ifdef UCOL_PRIM_COMPRESSION
+            /* calculate sortkey size */
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
-                  if(primary1 != leadPrimary) {
-                    if(leadPrimary != 0) {
-                      currentSize++;
-                    }
-                    currentSize++;
-                    leadPrimary = primary1; 
-                  } 
+                if(leadPrimary == primary1) {
                   currentSize++;
-                } else { /* This is a one byter, no compression */
-                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
+                } else {
+                  if(leadPrimary != 0) {
                     currentSize++;
-                    leadPrimary = 0;
                   }
-                  currentSize++;
+                  if(primary2 == UCOL_IGNORABLE) {
+                  /* one byter, not compressed */
+                      currentSize++;
+                      leadPrimary = 0;
+                  } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
+                      (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) { 
+                  /* not compressible */
+                      leadPrimary = 0;
+                      currentSize+=2;
+                  } else { /* compress */
+                      leadPrimary = primary1; 
+                      currentSize+=2;
+                  } 
                 }
               } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
                 currentSize++;
@@ -2432,7 +2437,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                   currentSize++;
                 }
               }
-            }
+            } 
 #else
             if(primary1 != UCOL_IGNORABLE) {
               currentSize++;
@@ -2812,30 +2817,37 @@ ucol_calcSortKey(const    UCollator    *coll,
               /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
               /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
 #ifdef UCOL_PRIM_COMPRESSION
-            if(primary1 != UCOL_IGNORABLE) {
-              if(notIsContinuation) {
-                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
-                  if(primary1 != leadPrimary) {
+/* regular and simple sortkey calc */
+              if(primary1 != UCOL_IGNORABLE) {
+                if(notIsContinuation) {
+                  if(leadPrimary == primary1) {
+                    *primaries++ = primary2;
+                  } else {
                     if(leadPrimary != 0) {
                       *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
                     }
-                    *primaries++ = leadPrimary = primary1; 
+                    if(primary2 == UCOL_IGNORABLE) {
+                    /* one byter, not compressed */
+                        *primaries++ = primary1;
+                        leadPrimary = 0;
+                    } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
+                        (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) { 
+                    /* not compressible */
+                        leadPrimary = 0;
+                        *primaries++ = primary1;
+                        *primaries++ = primary2;
+                    } else { /* compress */
+                        *primaries++ = leadPrimary = primary1; 
+                        *primaries++ = primary2;
+                    } 
                   }
-                  *primaries++ = primary2; /* second part */
-                } else { /* This is a one byter, no compression */
-                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
-                    *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
-                    leadPrimary = 0; /* and reset it */
+                } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
+                  *primaries++ = primary1; 
+                  if(primary2 != UCOL_IGNORABLE) {
+                    *primaries++ = primary2; /* second part */
                   }
-                  *primaries++ = primary1; /* add the primary */
                 }
-              } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
-                *primaries++ = primary1; 
-                if(primary2 != UCOL_IGNORABLE) {
-                  *primaries++ = primary2; /* second part */
-                }
-              }
-            }
+              } 
 #else
               if(primary1 != UCOL_IGNORABLE) {
                 *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
@@ -3270,22 +3282,29 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
             /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
 #ifdef UCOL_PRIM_COMPRESSION
+/* regular and simple sortkey calc */
             if(primary1 != UCOL_IGNORABLE) {
               if(notIsContinuation) {
-                if(primary2 != UCOL_IGNORABLE) { /* This is a two byter, should be compressed */
-                  if(primary1 != leadPrimary) {
-                    if(leadPrimary != 0) {
-                      *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
-                    }
-                    *primaries++ = leadPrimary = primary1; 
-                  } 
-                  *primaries++ = primary2; /* second part */
-                } else { /* This is a one byter, no compression */
-                  if(leadPrimary != 0) { /* But if there was some, finish the sequence */
+                if(leadPrimary == primary1) {
+                  *primaries++ = primary2;
+                } else {
+                  if(leadPrimary != 0) {
                     *primaries++ = (primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN;
-                    leadPrimary = 0;
                   }
-                  *primaries++ = primary1; /* add the primary */
+                  if(primary2 == UCOL_IGNORABLE) {
+                  /* one byter, not compressed */
+                      *primaries++ = primary1;
+                      leadPrimary = 0;
+                  } else if(primary1<UCOL_BYTE_FIRST_NON_LATIN_PRIMARY ||
+                      (primary1 > (UCOL_RESET_TOP_VALUE>>24) && primary1 < (UCOL_NEXT_TOP_VALUE>>24))) { 
+                  /* not compressible */
+                      leadPrimary = 0;
+                      *primaries++ = primary1;
+                      *primaries++ = primary2;
+                  } else { /* compress */
+                      *primaries++ = leadPrimary = primary1; 
+                      *primaries++ = primary2;
+                  } 
                 }
               } else { /* we are in continuation, so we're gonna add primary to the key don't care about compression */
                 *primaries++ = primary1; 
@@ -3293,7 +3312,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                   *primaries++ = primary2; /* second part */
                 }
               }
-            }
+            } 
 #else
             if(primary1 != UCOL_IGNORABLE) {
               *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
