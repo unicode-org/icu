@@ -1799,9 +1799,8 @@ ucnv_usesFallback(const UConverter *cnv);
  * @param signatureLength   A pointer to int32_t to receive the number of bytes that make up the signature 
  *                          of the detected UTF. 0 if not detected.
  *                          Can be a NULL pointer.
- * @param pErrorCode        A pointer to receive information about any errors that may occur during detection.
- *                          Must be a valid pointer to an error code value, which must not indicate a failure
- *                          before the function call.
+ * @param pErrorCode        ICU error code in/out parameter.
+ *                          Must fulfill U_SUCCESS before the function call.
  * @return The name of the encoding detected. NULL if encoding is not detected. 
  * @stable ICU 2.4
  */
@@ -1812,30 +1811,32 @@ ucnv_detectUnicodeSignature(const char* source,
                             UErrorCode *pErrorCode);
 
 /**
- * Returns the number of UChars held in the in the converter's internal state 
- * because more input is needed for completing the conversion.
+ * Returns the number of UChars held in the converter's internal state 
+ * because more input is needed for completing the conversion. This function is 
+ * useful for mapping semantics of ICU's converter interface to those of iconv,
+ * and this information is not needed for normal conversion.
  * @param cnv       The converter in which the input is held
- * @param status    A pointer to receive information about any errors that may occur during detection.
- *                  Must be a valid pointer to an error code value, which must not indicate a failure
- *                  before the function call.
- * @return The number of UChars in the state. 0 if none and -1 if the converter is NULL.
+ * @param status    ICU error code in/out parameter.
+ *                  Must fulfill U_SUCCESS before the function call.
+ * @return The number of UChars in the state. -1 if an error is encountered.
  * @draft ICU 3.4
  */
 U_DRAFT int32_t U_EXPORT2
-ucnv_fromUInputHeld(const UConverter* cnv, UErrorCode* status);
+ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status);
 
 /**
- * Returns the number of chars held in the in the converter's internal state
- * because more input is needed for completing the conversion.
+ * Returns the number of chars held in the converter's internal state
+ * because more input is needed for completing the conversion. This function is 
+ * useful for mapping semantics of ICU's converter interface to those of iconv,
+ * and this information is not needed for normal conversion.
  * @param cnv       The converter in which the input is held as internal state
- * @param status    A pointer to receive information about any errors that may occur during detection.
- *                  Must be a valid pointer to an error code value, which must not indicate a failure
- *                  before the function call.
- * @return The number of chars in the state. -1 if an error is encountered is NULL.
+ * @param status    ICU error code in/out parameter.
+ *                  Must fulfill U_SUCCESS before the function call.
+ * @return The number of chars in the state. -1 if an error is encountered.
  * @draft ICU 3.4
  */
 U_DRAFT int32_t U_EXPORT2
-ucnv_toUInputHeld(const UConverter* cnv, UErrorCode* status);
+ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status);
 
 #endif
 
