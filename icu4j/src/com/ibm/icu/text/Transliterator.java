@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/10/03 16:26:50 $
- * $Revision: 1.45 $
+ * $Date: 2001/10/05 18:15:54 $
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.45 $ $Date: 2001/10/03 16:26:50 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.46 $ $Date: 2001/10/05 18:15:54 $
  */
 public abstract class Transliterator {
     /**
@@ -348,43 +348,11 @@ public abstract class Transliterator {
     private int maximumContextLength = 0;
 
     /**
-     * Cache of system transliterators.  Keys are <code>String</code>
-     * names, values are one of the following:
-     *
-     * <ul><li><code>String</code> objects.  These represent
-     * RuleBasedTransliterators that have not been loaded yet, or
-     * aliases.  The first character determines the type: 'f'
-     * indicates a FORWARD RBT, with the rest of the string giving the
-     * resource name and encoding, separated by a colon.  'r' is
-     * similar, but indicates a REVERSE RBT.  'a' indicates an alias,
-     * with the rest of the string giving the ID to create.
-     *
-     * <li><code>Class</code> objects.  Such objects must represent
-     * subclasses of <code>Transliterator</code>, and must satisfy the
-     * constraints described in <code>registerClass()</code>.
-     *
-     * <li><code>RuleBasedTransliterator.Data</code> objects.  These
-     * are built in-memory transliterator data cores that are wrapped
-     * thinly to create RuleBasedTransliterator objects.  When an RBT
-     * is created, its Data core is cached and shared among future
-     * instances of the same ID.
-     * </ul>
+     * System transliterator registry.
      */
-    private static Hashtable cache;
-
-    /**
-     * Identical to 'cache' but contains internal transliterators.
-     * These are not enumerated by getAvailableIDs().
-     */
-    private static Hashtable internalCache;
+    private static TransliteratorRegistry registry;
 
     private static Hashtable displayNameCache;
-
-    // TODO Add documentation
-    // TODO Add documentation
-    // TODO Add documentation
-    // TODO Add documentation
-    private static TransliteratorRegistry registry;
 
     /**
      * Prefix for resource bundle key for the display name for a
@@ -981,9 +949,8 @@ public abstract class Transliterator {
                 // idBlock and data -- this is a compound
                 // RBT
                 Transliterator t = new RuleBasedTransliterator("_", data, null);
-                t = new CompoundTransliterator(ID, idBlock.toString(), idSplitPoint[0],
-                                               t);
-                return t;
+                return new CompoundTransliterator(ID, idBlock.toString(), idSplitPoint[0],
+                                                  t);
             }
         }        
     }
@@ -1040,14 +1007,7 @@ public abstract class Transliterator {
                 parseID(id, regenID, p, sawDelimiter, dir, true);
 
             if (p[0] == pos || (p[0] < id.length() && !sawDelimiter[0])) {
-                // TODO
-                //throw new IllegalArgumentException("Invalid ID " + id);
-                throw new IllegalArgumentException("Invalid ID " + id +
-                                                   " p[0]=" + p[0] +
-                                                   " pos=" + pos +
-                                                   " id.length()=" + id.length() +
-                                                   " sawDelimite[0]=" + sawDelimiter[0] +
-                                                   "");
+                throw new IllegalArgumentException("Invalid ID " + id);
             }
             pos = p[0];
             // The return value may be NULL when, for instance, creating a
@@ -1394,26 +1354,6 @@ public abstract class Transliterator {
         return pos;
     }
 
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    // TODO Remove remove remove
-    static Transliterator tempGet(String id, StringBuffer aliasReturn) {
-        aliasReturn.setLength(0);
-        if (id.equalsIgnoreCase(NullTransliterator.SHORT_ID)) {
-            id = NullTransliterator._ID;
-            // Temporary hack to make this work
-        }
-        return internalGetInstance(id);
-    }
-
     /**
      * Returns this transliterator's inverse.  See the class
      * documentation for details.  This implementation simply inverts
@@ -1439,116 +1379,6 @@ public abstract class Transliterator {
     }
 
     /**
-     * Returns a transliterator object given its ID.  Unlike getInstance(),
-     * this method returns null if it cannot make use of the given ID.
-     */
-    private static Transliterator internalGetInstance(String ID) {
-        RuleBasedTransliterator.Data data = null;
-        Hashtable sourceCache = cache;
-        CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
-        Object obj = cache.get(ciID);
-        if (obj == null) {
-            obj = internalCache.get(ciID);
-            sourceCache = internalCache;
-        }
-
-        if (obj != null) {
-            if (obj instanceof RuleBasedTransliterator.Data) {
-                data = (RuleBasedTransliterator.Data) obj;
-                // Fall through to construct transliterator from cached Data object.
-            } else if (obj instanceof Class) {
-                try {
-                    return (Transliterator) ((Class) obj).newInstance();
-                } catch (InstantiationException e) {
-                } catch (IllegalAccessException e2) {}
-            } else if (obj instanceof Factory) {
-                return ((Factory) obj).getInstance();
-            } else if (obj instanceof String) {
-                String spec = (String) obj;
-                if (spec.charAt(0) == 'a') {
-                    // alias
-                    Transliterator t = getInstance(spec.substring(1));
-                    t.ID = ID;
-                    return t;
-                } else {
-                    synchronized (cache) {
-                        // file, either forward or reverse
-                        int dir = (spec.charAt(0) == 'f') ? FORWARD:REVERSE;
-                        int colon = spec.indexOf(':', 1);
-                        String resourceName = spec.substring(1, colon);
-                        String encoding = spec.substring(colon+1);
-                        ResourceReader r = null;
-                        try {
-                            r = new ResourceReader(resourceName, encoding);
-                        } catch (UnsupportedEncodingException e) {
-                            // This should never happen; UTF8 is always supported
-                        } catch (IllegalArgumentException e2) {
-                            // Can't load UTF8 file
-                        }
-
-                        if (r != null) {
-                            data = RuleBasedTransliterator.parse(r, dir);
-                            sourceCache.put(ciID, data);
-                            // Fall through to construct transliterator from Data object.
-                        }
-                    }
-                }
-            } else {
-                throw new RuntimeException("Bogus cache object");
-            }
-
-            if (data != null) {
-                return new RuleBasedTransliterator(ID, data, null);
-            }
-        }
-
-        return null;
-    }
-
-// Currently unused, but may be of use in the future.
-//    /**
-//     * Find a path through the composed transliterator graph.  This
-//     * will not necessarily be the only path, or the shortest path.
-//     * This is a simple recursive algorithm.
-//     *
-//     * <p><code>composedGraph</code> is the links table.
-//     * composedGraph.get(x) should return a String[] array, each of
-//     * which is a node that x is connected to.
-//     * @param start the starting node
-//     * @param end the ending node
-//     * @param path the result vector; should be empty on entry.  Upon
-//     * success, it will contain successive nodes on the path from
-//     * start to end, including start and end.  If false is returned,
-//     * then path is unchanged.
-//     * @return true if a path from start to end is found
-//     */
-//    private static boolean findComposedPath(String start, String end,
-//                                            Vector path) {
-//        path.addElement(start);
-//        // composedGraph lists all links emanating from a node
-//        String[] links = (String[]) composedGraph.get(start);
-//        if (links != null) {
-//            for (int i=0; i<links.length; ++i) {
-//                if (links[i].equals(end)) {
-//                    path.addElement(end);
-//                    return true;
-//                }
-//            }
-//            for (int i=0; i<links.length; ++i) {
-//                // Avoid cycles: ignore links already on our path
-//                if (path.indexOf(links[i]) >= 0) {
-//                    continue;
-//                }
-//                if (findComposedPath(links[i], end, path)) {
-//                    return true;
-//                }
-//            }
-//        }
-//        path.removeElementAt(path.size() - 1);
-//        return false;
-//    }
-
-    /**
      * Registers a subclass of <code>Transliterator</code> with the
      * system.  This subclass must have a public constructor taking no
      * arguments.  When that constructor is called, the resulting
@@ -1561,7 +1391,7 @@ public abstract class Transliterator {
      * @see #unregister
      */
     public static void registerClass(String ID, Class transClass, String displayName) {
-        cache.put(new CaseInsensitiveString(ID), transClass);
+        registry.put(ID, transClass, true);
         if (displayName != null) {
             displayNameCache.put(new CaseInsensitiveString(ID), displayName);
         }
@@ -1574,7 +1404,7 @@ public abstract class Transliterator {
      * @param factory the factory object
      */
     public static void registerFactory(String ID, Factory factory) {
-        cache.put(new CaseInsensitiveString(ID), factory);
+        registry.put(ID, factory, true);
     }
 
     /**
@@ -1582,35 +1412,12 @@ public abstract class Transliterator {
      * a system transliterator or a user transliterator or class.
      *
      * @param ID the ID of the transliterator or class
-     * @return the <code>Object</code> that was registered with
-     * <code>ID</code>, or <code>null</code> if none was
      * @see #registerClass
      */
-    public static Object unregister(String ID) {
-        CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
-        displayNameCache.remove(ciID);
-        return cache.remove(ciID);
+    public static void unregister(String ID) {
+        displayNameCache.remove(new CaseInsensitiveString(ID));
+        registry.remove(ID);
     }
-
-    /**
-     * An internal class that adapts an enumeration over
-     * CaseInsensitiveStrings to an enumeration over Strings.
-     */
-    private static class IDEnumeration implements Enumeration {
-        Enumeration enum;
-
-        public IDEnumeration(Enumeration e) {
-            enum = e;
-        }
-
-        public boolean hasMoreElements() {
-            return enum.hasMoreElements();
-        }
-
-        public Object nextElement() {
-            return ((CaseInsensitiveString) enum.nextElement()).getString();
-        }
-    };
 
     /**
      * Returns an enumeration over the programmatic names of registered
@@ -1624,9 +1431,20 @@ public abstract class Transliterator {
      * @see #registerClass
      */
     public static final Enumeration getAvailableIDs() {
-        // Since the cache contains CaseInsensitiveString objects, but
-        // the caller expects Strings, we have to use an intermediary.
-        return new IDEnumeration(cache.keys());
+        return registry.getAvailableIDs();
+    }
+
+    public static final Enumeration getAvailableSources() {
+        return registry.getAvailableSources();
+    }
+
+    public static final Enumeration getAvailableTargets(String source) {
+        return registry.getAvailableTargets(source);
+    }
+
+    public static final Enumeration getAvailableVariants(String source,
+                                                         String target) {
+        return registry.getAvailableVariants(source, target);
     }
 
     /**
@@ -1651,21 +1469,18 @@ public abstract class Transliterator {
     }
 
     static {
-        // TODO FINISH
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
         displayNameCache = new Hashtable();
 
-        // Read the index file and construct the cache/internalCache.
+        // Read the index file and populate the registry.
         // Each line of the index file is either blank, a '#' comment,
         // or a colon-delimited line.  In the latter case the first
         // field is the ID being defined.  The second field is one of
         // three strings: "file", "internal", or "alias".  Remaining
         // fields vary according the value fo the second field.  See
         // the index file itself for further documentation.
-        cache = new Hashtable();
-        internalCache = new Hashtable();
         ResourceReader r = new ResourceReader("Transliterator_index.txt");
         for (;;) {
             String line = null;
@@ -1693,19 +1508,21 @@ public abstract class Transliterator {
             String type = line.substring(pos, colon);
             pos = colon+1;
 
-            CaseInsensitiveString ciID = new CaseInsensitiveString(ID);
             if (type.equals("file") || type.equals("internal")) {
                 // Rest of line is <resource>:<encoding>:<direction>
+                //                pos       colon      c2
                 colon = line.indexOf(':', pos);
-                colon = line.indexOf(':', colon+1); // skip over 1 colon
-                String fileNameAndEncoding = line.substring(pos, colon);
-                pos = colon+1;
-                boolean isForward = line.substring(pos).equals("FORWARD");
-                Hashtable h = type.equals("internal") ? internalCache:cache;
-                h.put(ciID, (isForward ? "f" : "r") + fileNameAndEncoding);
+                int c2 = line.indexOf(':', colon+1);
+                int dir = line.substring(c2+1).equals("FORWARD") ?
+                    FORWARD :  REVERSE;
+                registry.put(ID,
+                             line.substring(pos, colon), // resource
+                             line.substring(colon+1, c2), // encoding
+                             dir,
+                             !type.equals("internal"));
             } else if (type.equals("alias")) {
                 // Rest of line is the <getInstanceArg>
-                cache.put(ciID, "a" + line.substring(pos));
+                registry.put(ID, line.substring(pos), true);
             } else {
                 // Unknown type
                 throw new RuntimeException("Can't parse line: " + line);
