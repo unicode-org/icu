@@ -103,7 +103,7 @@ mkdir($OUTDIR,0777);
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
@@ -287,7 +287,15 @@ sub file {
     # and taking other text and enclosing it in double quotes
     while (<IN>) {
         my $raw = $_;
-
+		# ignore $Source $Revision $Date CVS keyword substitutions
+		next if /\$Source/ ;
+		next if /\$Revision/ ;
+		next if /\$Date/ ;
+		
+		# we have printed out the copyright info ... ignore one in Java version
+		next if /Copyright/ ;
+		next if /Corporation/;
+		
         # Look for and delete BOM
         if ($first) {
             s/^$BOM//;
