@@ -4378,6 +4378,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                isAvailable == FALSE);
 }
 
+/* supercedes TestJ784 */
 static void TestBeforePinyin(void) {
     char rules[] = { 
         "&[before 2]A << \\u0101  <<< \\u0100 << \\u00E1 <<< \\u00C1 << \\u01CE <<< \\u01CD << \\u00E0 <<< \\u00C0"
@@ -4399,6 +4400,7 @@ static void TestBeforePinyin(void) {
     };
 
     genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
+    genericLocaleStarter("zh", test, sizeof(test)/sizeof(test[0]));
 }
 
 static void TestBeforeTightening(void) {
@@ -4548,6 +4550,24 @@ static void TestMoreBefore(void) {
     }
 }
 
+void TestTailorNULL( void ) {
+    const static char* rule = "&[last tertiary ignorable] <<< '\\u0000'";
+    const static char* order[] = { "a", "\\u0000" };
+    UErrorCode status = U_ZERO_ERROR;
+    UChar rlz[RULE_BUFFER_LEN] = { 0 };
+    uint32_t rlen = 0;
+    UChar a = 1, null = 0;
+    UCollationResult res = UCOL_EQUAL;
+
+    UCollator *coll = NULL;
+
+
+    rlen = u_unescape(rule, rlz, RULE_BUFFER_LEN);
+    coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
+    res = ucol_strcoll(coll, &a, 1, &null, 1);
+    ucol_close(coll);
+    genericRulesStarter(rule, order, sizeof(order)/sizeof(order[0]));
+}
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -4579,7 +4599,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestImplicitTailoring);
     TEST(TestFCDProblem);
     TEST(TestEmptyRule);
-    TEST(TestJ784);
+    /*TEST(TestJ784);*/ /* 'zh' locale has changed - now it is getting tested by TestBeforePinyin */
     TEST(TestJ815);
     /*TEST(TestJ831);*/ /* we changed lv locale */
     TEST(TestBefore);
@@ -4611,6 +4631,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestBeforePinyin);
     TEST(TestBeforeTightening);
     /*TEST(TestMoreBefore);*/
+    TEST(TestTailorNULL);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
