@@ -191,7 +191,12 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     */
 
     public void Test4059654() {
-        GregorianCalendar gc = new GregorianCalendar();
+	// work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
+	// jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
+	java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
+	TimeZone icuzone = TimeZone.getTimeZone("GMT");
+
+        GregorianCalendar gc = new GregorianCalendar(icuzone);
         
         gc.set(1997, 3, 1, 15, 16, 17); // April 1, 1997
 
@@ -202,7 +207,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         gc.set(Calendar.MILLISECOND, 0);
 
         Date cd = gc.getTime();
-        java.util.Calendar cal = java.util.Calendar.getInstance();
+        java.util.Calendar cal = java.util.Calendar.getInstance(javazone);
         cal.clear();
         cal.set(1997, 3, 1, 0, 0, 0);
         Date exp = cal.getTime();
@@ -291,8 +296,13 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void Test4071385() {
-        Calendar cal = Calendar.getInstance();
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+	// work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
+	// jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
+	java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
+	TimeZone icuzone = TimeZone.getTimeZone("GMT");
+
+        Calendar cal = Calendar.getInstance(icuzone);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance(javazone);
         tempcal.clear();
         tempcal.set(1998, Calendar.JUNE, 24);
         cal.setTime(tempcal.getTime());
