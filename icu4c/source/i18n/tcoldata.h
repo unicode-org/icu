@@ -115,6 +115,7 @@ private:
      * to change, although this is not really advised.
      */
     friend class RuleBasedCollator;
+    friend      class               CollationElementIterator;
 
     bool_t                      isFrenchSec;
     int16_t                     maxSecOrder;
