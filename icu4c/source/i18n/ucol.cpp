@@ -4283,6 +4283,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
 {
     UCollator * localCollator;
     int32_t bufferSizeNeeded = (int32_t)sizeof(UCollator);
+    char *stackBufferChars = (char *)stackBuffer;
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
@@ -4291,7 +4292,17 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundry in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        *pBufferSize -= offsetUp;
+        stackBufferChars += offsetUp;
+    }
+    stackBuffer = (void *)stackBufferChars;
+
+    if (*pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
         *pBufferSize =  bufferSizeNeeded;
         return 0;
     }

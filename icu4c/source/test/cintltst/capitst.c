@@ -470,12 +470,13 @@ void TestSafeClone() {
     UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * col;
     UErrorCode err = U_ZERO_ERROR;
+    int8_t testSize = 6;    /* Leave this here to test buffer alingment in memory*/
     uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     int index;
     
-    test1=(UChar*)malloc(sizeof(UChar) * 6);
-    test2=(UChar*)malloc(sizeof(UChar) * 6);
+    test1=(UChar*)malloc(sizeof(UChar) * testSize);
+    test2=(UChar*)malloc(sizeof(UChar) * testSize);
     u_uastrcpy(test1, "abCda");
     u_uastrcpy(test2, "abcda");
     

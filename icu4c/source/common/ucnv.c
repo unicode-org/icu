@@ -135,6 +135,7 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
 {
     UConverter * localConverter;
     int32_t bufferSizeNeeded;
+    char *stackBufferChars = (char *)stackBuffer;
 
     if (status == NULL || U_FAILURE(*status)){
         return 0;
@@ -143,6 +144,15 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundry in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        *pBufferSize -= offsetUp;
+        stackBufferChars += offsetUp;
+    }
+    stackBuffer = (void *)stackBufferChars;
     
     if (cnv->sharedData->impl->safeClone != NULL) {
         /* call the custom safeClone function for sizing */
@@ -154,7 +164,7 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
         bufferSizeNeeded = sizeof(UConverter);
     }
 
-    if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+    if (*pBufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
         *pBufferSize = bufferSizeNeeded;
         return 0;
     }

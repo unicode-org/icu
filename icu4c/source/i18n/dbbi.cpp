@@ -268,17 +268,22 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     int32_t bufferSizeNeeded = 0; 
     UBool IterIsUChar = FALSE;
     UBool IterIsString = FALSE;
+    char *stackBufferChars = (char *)stackBuffer;
 
     if (U_FAILURE(status)){
         return 0;
     }
-/*  // Never check for NULL on the 'this' pointer.
-    // It should be a fatal error when 'this' is ever NULL. [grhoten]
-    if (!this){
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+
+    /* Pointers on 64-bit platforms need to be aligned
+     * on a 64-bit boundry in memory.
+     */
+    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
+        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
+        BufferSize -= offsetUp;
+        stackBufferChars += offsetUp;
     }
-*/
+    stackBuffer = (void *)stackBufferChars;
+
     if (text == NULL)
     {
         bufferSizeNeeded = (int32_t) sizeof(DictionaryBasedBreakIterator);
@@ -297,7 +302,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     {
         // code has changed - time to make a real CharacterIterator::CreateBufferClone()
     }
-    if (BufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+    if (BufferSize <= 0){ /* 'preflighting' request - set needed size into *pBufferSize */
         BufferSize = bufferSizeNeeded;
         return 0;
     }
