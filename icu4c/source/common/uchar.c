@@ -4922,7 +4922,7 @@ u_charDirection(UChar32 ch )
 UCharScript
 u_charScript(UChar32 ch)
 {
-    int32_t index, j;
+    int32_t idx, j;
     UCharScript returnValue = U_NO_SCRIPT;
 
     /* surrogate support is still incomplete */
@@ -4930,18 +4930,18 @@ u_charScript(UChar32 ch)
         return U_NO_SCRIPT;
     }
 
-    index = -1;
-    for( j = 0; index == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
+    idx = -1;
+    for( j = 0; idx == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
-            index = j;
+            idx = j;
 	    if(j == U_CHAR_SCRIPT_COUNT) /* "U_SPECIALS 2" */
-	      index = U_SPECIALS;
+	      idx = U_SPECIALS;
         }
-    if(index >= U_CHAR_SCRIPT_COUNT) {
+    if(idx >= U_CHAR_SCRIPT_COUNT) {
         returnValue = U_NO_SCRIPT;
     }
-    else if( index != -1 ) {
-        returnValue = (UCharScript)index;
+    else if( idx != -1 ) {
+        returnValue = (UCharScript)idx;
     } 
 
     return returnValue;

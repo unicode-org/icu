@@ -424,7 +424,7 @@ uloc_getDisplayName(const char* localeID,
  * @stable
  */
 U_CAPI const char* U_EXPORT2
-uloc_getAvailable(int32_t index);
+uloc_getAvailable(int32_t idx);
 
 /**
  * Gets the size of the all available locale list.

@@ -187,7 +187,6 @@ int16_t _findIndex(const char* list, int32_t listLength, const char* key)
   const char* anchor = list;
   const char* listEnd = anchor + listLength;
   bool_t found = FALSE;
-  int index = 0;
   int tokenSize = uprv_strlen(list)+1; /*gets the size of the tokens*/
   
   while (!found && list<listEnd)
@@ -466,31 +465,31 @@ int32_t uloc_getName(const char* localeID,
 
 const char* uloc_getISO3Language(const char* localeID) 
 {
-  int16_t index;
+  int16_t idx;
   char lang[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
   if (U_FAILURE(err)) return "";
-  index = _findIndex(_languages, sizeof(_languages),lang);
-  if (index < 0) return "";
-  return &(_languages3[index * 4]);
+  idx = _findIndex(_languages, sizeof(_languages),lang);
+  if (idx < 0) return "";
+  return &(_languages3[idx * 4]);
 }
 
 const char* uloc_getISO3Country(const char* localeID) 
 {
-  int16_t index;
+  int16_t idx;
   char cntry[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
   if (U_FAILURE(err)) return "";
-  index = _findIndex(_countries, sizeof(_countries), cntry);
-  if (index < 0) return "";
+  idx = _findIndex(_countries, sizeof(_countries), cntry);
+  if (idx < 0) return "";
 
-  return &(_countries3[index * 4]);
+  return &(_countries3[idx * 4]);
 }
 
 uint32_t uloc_getLCID(const char* localeID) 
@@ -525,7 +524,6 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   const UChar* result = NULL;
   int32_t i = 0;
   int langBufSize;
-  bool_t doneDefaultLocale = FALSE;
   char inLanguageBuffer[TEMPBUFSIZE];
   char inLocaleBuffer[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
@@ -585,7 +583,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       
       if (U_SUCCESS(err))
         {
-          UErrorCode err = U_ZERO_ERROR;
+          err = U_ZERO_ERROR;
           temp = ures_getTaggedArrayItem(bundle,
                          _kLanguages,
                          inLanguageBuffer, 
@@ -651,7 +649,6 @@ int32_t uloc_getDisplayCountry(const char* locale,
   const UChar* result = NULL;
   int32_t i = 0;
   int cntryBufSize;
-  bool_t doneDefaultLocale = FALSE;
   char inCountryBuffer[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle = NULL;
@@ -772,7 +769,6 @@ int32_t uloc_getDisplayVariant(const char* locale,
   const UChar* result = NULL;
   int32_t i = 0;
   int varBufSize;
-  bool_t doneDefaultLocale = FALSE;
   char inVariantBuffer[TEMPBUFSIZE];
   char* inVariant = inVariantBuffer;
   UErrorCode err = U_ZERO_ERROR;
@@ -1020,13 +1016,13 @@ int32_t uloc_getDisplayName(const char* locale,
 U_CAPI UnicodeString** T_ResourceBundle_listInstalledLocales(const char* path, int32_t* numInstalledLocales);
 
 const char*
-uloc_getAvailable(int32_t index) 
+uloc_getAvailable(int32_t idx) 
 {
   
   if (_installedLocales == NULL) _lazyEvaluate_installedLocales();
   
-  if (index > _installedLocalesCount) return NULL;
-  else  return _installedLocales[index];
+  if (idx > _installedLocalesCount) return NULL;
+  else  return _installedLocales[idx];
   
 }
 

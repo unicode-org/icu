@@ -216,10 +216,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
   int32_t sourceLength = sourceLimit - (char *) mySource;
   uint32_t ch = 0, ch2 = 0, i = 0;
   uint32_t inBytes = 0;
-  int32_t* originalOffsets = offsets;
 
-
-  
   if (_this->toUnicodeStatus)
     {
       i = _this->invalidCharLength;
@@ -357,8 +354,6 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  int8_t targetCharByteNum = 0;
-  UChar mySourceChar = 0x0000;
   uint32_t ch;
   int16_t i, bytesToWrite = 0;
   uint32_t ch2;
@@ -469,8 +464,6 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
   int32_t sourceLength = sourceLimit - mySource;
-  int8_t targetCharByteNum = 0;
-  UChar mySourceChar = 0x0000;
   uint32_t ch;
   int16_t i, bytesToWrite = 0;
   uint32_t ch2;
@@ -697,11 +690,11 @@ static const UConverterImpl _UTF8Impl={
     NULL
 };
 
-extern const UConverterSharedData _UTF8Data={
+const UConverterSharedData _UTF8Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF8Impl, "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
-    { 0, 3, 0xef, 0xbf, 0xbd, 0 }
+    { 0, 3, { 0xef, 0xbf, 0xbd, 0 } }
 };
 
 /* UTF-16BE ----------------------------------------------------------------- */
@@ -891,11 +884,11 @@ static const UConverterImpl _UTF16BEImpl={
     NULL
 };
 
-extern const UConverterSharedData _UTF16BEData={
+const UConverterSharedData _UTF16BEData={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16BEImpl, "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
-    { 0, 2, 0xff, 0xfd, 0, 0 }
+    { 0, 2, { 0xff, 0xfd, 0, 0 } }
 };
 
 /* UTF-16LE ----------------------------------------------------------------- */
@@ -915,8 +908,6 @@ void  T_UConverter_toUnicode_UTF16_LE (UConverter * _this,
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
   int32_t sourceLength = sourceLimit - (char *) mySource;
-  CompactShortArray *myToUnicode = NULL;
-  UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
   while (mySourceIndex < sourceLength)
@@ -1089,9 +1080,9 @@ static const UConverterImpl _UTF16LEImpl={
     NULL
 };
 
-extern const UConverterSharedData _UTF16LEData={
+const UConverterSharedData _UTF16LEData={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16LEImpl, "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
-    { 0, 2, 0xfd, 0xff, 0, 0 }
+    { 0, 2, { 0xfd, 0xff, 0, 0 } }
 };

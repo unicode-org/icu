@@ -201,7 +201,7 @@ expandGroupName(UCharNames *names, Group *group,
                    (group->offsetHigh<<16|group->offsetLow);
 
     /* read the length of this string and get the group strings offset */
-    uint16_t i=0, offset=0, length=0, nameOffset, nameLength;
+    uint16_t i=0, offset=0, length=0, nameOffset=0, nameLength=0;
     uint8_t lengthByte;
 
     /* all 32 lengths must be read to get the offset of the first group string */

@@ -17,13 +17,13 @@
 #include "unicode/ubidi.h"
 #include "cbiditst.h"
 
-extern const char *
+const char *
 dirPropNames[dirPropCount]={
     "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S", "WS", "ON",
     "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
-extern const UChar
+const UChar
 charFromDirProp[dirPropCount]={
  /* L     R      EN    ES    ET    AN     CS    B    S    WS    ON */
     0x61, 0x5d0, 0x30, 0x2f, 0x25, 0x660, 0x2c, 0xa, 0x9, 0x20, 0x26,
@@ -313,7 +313,7 @@ testLevels20[]={
     2
 };
 
-extern BiDiTestData
+BiDiTestData
 tests[]={
     testText1,  ARRAY_LENGTH(testText1),  UBIDI_DEFAULT_LTR, -1, -1,
         UBIDI_LTR, 0,
@@ -377,5 +377,5 @@ tests[]={
         testLevels20, testVisualMap19
 };
 
-extern int
+int
 bidiTestCount=ARRAY_LENGTH(tests);

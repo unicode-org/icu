@@ -90,8 +90,6 @@
 
 #define SIGN 0x80000000L
 
-static char tempString[10] = "";
-
 /* statics */
 static bool_t fgNaNInitialized = FALSE;
 static double fgNan;
@@ -572,18 +570,18 @@ uprv_log10(double d)
   /* log and dividing by log10 yields a result which may be off*/
   /* by 1 due to rounding errors.  For example, the naive log10*/
   /* of 1.0e300 taken this way is 299, rather than 300.*/
-  double log10 = log(d) / log(10.0);
-  int16_t ilog10 = (int16_t)floor(log10);
+  double alog10 = log(d) / log(10.0);
+  int16_t ailog10 = (int16_t) floor(alog10);
   
   /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
-  if (log10 > 0 && d >= pow(10.0, ilog10 + 1))
-    ++ilog10;
+  if (alog10 > 0 && d >= pow(10.0, ailog10 + 1))
+    ++ailog10;
   
   /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
-  else if (log10 < 0 && d < pow(10.0, ilog10))
-    --ilog10;
+  else if (alog10 < 0 && d < pow(10.0, ailog10))
+    --ailog10;
   
-  return ilog10;
+  return ailog10;
 }
 
 int32_t 
@@ -689,10 +687,10 @@ uprv_timezone()
 }
 
 char* 
-uprv_tzname(int index)
+uprv_tzname(int idx)
 {
 #ifdef POSIX
-  return tzname[index];
+  return tzname[idx];
 #endif
 
 #if defined(OS400) || defined(XP_MAC)
@@ -744,6 +742,8 @@ u_setDataDirectory(const char *directory) {
     }
 }
 
+#ifndef ICU_DATA_DIR
+
 /*
  * get the system drive or volume path
  * (Windows: e.g. "C:" or "D:")
@@ -787,6 +787,8 @@ getSystemPath(char *path, int size) {
 #   endif
     return 0;
 }
+
+#endif
 
 /*
  * get the path to the ICU dynamic library
@@ -1032,7 +1034,7 @@ u_getDataDirectory(void) {
     if(!gHaveDataDirectory) {
         /* we need to look for it */
         char pathBuffer[1024];
-        char *path;
+        const char *path;
         int length;
 
 #       if !defined(XP_MAC)
@@ -1226,7 +1228,7 @@ const char*
 uprv_getDefaultLocaleID()
 {
 #ifdef POSIX
-  char* posixID = getenv("LC_ALL");
+  const char* posixID = getenv("LC_ALL");
   if (posixID == 0) posixID = getenv("LANG");
   if (posixID == 0) posixID = setlocale(LC_ALL, NULL);
   if (uprv_strcmp("C", posixID) == 0) posixID = "en_US";
@@ -1315,11 +1317,11 @@ uprv_nextDouble(double d, bool_t next)
   /* zero's are also a special case */
   if (d == 0.0) {
     double smallestPositiveDouble = 0.0;
-    uint32_t *lowBits = 
+    uint32_t *plowBits = 
       (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble, 
                      sizeof(uint32_t));
     
-    *lowBits = 1;
+    *plowBits = 1;
     
     if (next) {
       return smallestPositiveDouble;
@@ -1410,6 +1412,7 @@ const char* uprv_getDefaultCodepage()
 #elif defined(XP_MAC)
   /* TBD */
 #elif defined(WIN32)
+  static char tempString[10] = "";
   static char codepage[12]={ "cp" };
   uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
