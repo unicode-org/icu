@@ -1,0 +1,29 @@
+// srl@monkey.sbay.org, with help from Shehnaz Nagpurwala and Anwar Nagpurwala
+// Hindi locale. Need to work on unicodizing more of the text..
+
+hi_IN {
+    ShortCountry { IND }
+
+    CurrencyElements {
+        "\u0930\u0942",
+        RUP,  // Rs. ? No.
+        "."
+    }
+    DateTimePatterns {
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd mm yyyy",
+        "d m yy",
+        "{1} {0}"
+    }
+    DateTimeElements {
+        "1",
+        "1"
+    }
+   Version { "0.3" }     
+
+}
