@@ -173,7 +173,8 @@ enum {
     taggedAliasListsIndex=6,
     reservedIndex1=7,
     stringTableIndex=8,
-    minTocLength=8 /* does not count the tocLengthIndex! */
+    minTocLength=8, /* min. tocLength in the file, does not count the tocLengthIndex! */
+    offsetsCount    /* length of the swapper's temporary offsets[] */
 };
 
 static const uint16_t *gConverterList = NULL;
@@ -1126,8 +1127,8 @@ ucnv_swapAliases(const UDataSwapper *ds,
     int32_t headerSize;
 
     const uint16_t *inTable;
-    uint32_t toc[1+minTocLength];
-    uint32_t offsets[1+minTocLength]; /* 16-bit-addressed offsets from inTable/outTable */
+    uint32_t toc[offsetsCount];
+    uint32_t offsets[offsetsCount]; /* 16-bit-addressed offsets from inTable/outTable */
     uint32_t i, count, tocLength, topOffset;
 
     Row rows[STACK_ROW_CAPACITY];
@@ -1186,7 +1187,7 @@ ucnv_swapAliases(const UDataSwapper *ds,
     }
 
     /* compute the overall size of the after-header data, in numbers of 16-bit units */
-    topOffset=offsets[i]=offsets[i-1]+toc[i-1];
+    topOffset=offsets[i-1]+toc[i-1];
 
     if(length>=0) {
         uint16_t *outTable;
