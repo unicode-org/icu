@@ -121,37 +121,39 @@ const char UnicodeSet::fgClassID = 0;
 #ifdef DEBUG_MEM
 #include <stdio.h>
 static int32_t _dbgCount = 0;
-#endif
 
 static inline void _dbgct(UnicodeSet* set) {
-#ifdef DEBUG_MEM
     UnicodeString str;
     set->toPattern(str, TRUE);
     char buf[40];
     str.extract(0, 39, buf, "");
     printf("DEBUG UnicodeSet: ct 0x%08X; %d %s\n", set, ++_dbgCount, buf);
-#endif
 }
 
 static inline void _dbgdt(UnicodeSet* set) {
-#ifdef DEBUG_MEM
     UnicodeString str;
     set->toPattern(str, TRUE);
     char buf[40];
     str.extract(0, 39, buf, "");
     printf("DEBUG UnicodeSet: dt 0x%08X; %d %s\n", set, --_dbgCount, buf);
-#endif
 }
+
+#else
+
+#define _dbgct(set)
+#define _dbgdt(set)
+
+#endif
 
 //----------------------------------------------------------------
 // UnicodeString in UVector support
 //----------------------------------------------------------------
 
-static void cloneUnicodeString(UHashTok dst, UHashTok src) {
+static void U_CALLCONV cloneUnicodeString(UHashTok dst, UHashTok src) {
     dst.pointer = new UnicodeString(*(UnicodeString*)src.pointer);
 }
 
-static int8_t compareUnicodeString(UHashTok t1, UHashTok t2) {
+static int8_t U_CALLCONV compareUnicodeString(UHashTok t1, UHashTok t2) {
     const UnicodeString &a = *(const UnicodeString*)t1.pointer;
     const UnicodeString &b = *(const UnicodeString*)t2.pointer;
     return a.compare(b);
@@ -820,24 +822,24 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
                 if (forward && c > firstChar) break;
                 if (c != firstChar) continue;
                         
-                int32_t len = matchRest(text, offset, limit, trial);
+                int32_t matchLen = matchRest(text, offset, limit, trial);
 
                 if (incremental) {
                     int32_t maxLen = forward ? limit-offset : offset-limit;
-                    if (len == maxLen) {
+                    if (matchLen == maxLen) {
                         // We have successfully matched but only up to limit.
                         return U_PARTIAL_MATCH;
                     }
                 }
 
-                if (len == trial.length()) {
+                if (matchLen == trial.length()) {
                     // We have successfully matched the whole string.
-                    if (len > highWaterLength) {
-                        highWaterLength = len;
+                    if (matchLen > highWaterLength) {
+                        highWaterLength = matchLen;
                     }
                     // In the forward direction we know strings
                     // are sorted so we can bail early.
-                    if (forward && len < highWaterLength) {
+                    if (forward && matchLen < highWaterLength) {
                         break;
                     }
                     continue;
