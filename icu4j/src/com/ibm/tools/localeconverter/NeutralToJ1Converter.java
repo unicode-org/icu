@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/localeconverter/Attic/NeutralToJ1Converter.java,v $ 
- * $Date: 2002/01/31 01:22:21 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/01/31 02:47:27 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -185,7 +185,7 @@ public class NeutralToJ1Converter extends LocaleConverter {
         
         parentLocale = new Locale(language, country, variant);
         defaultData =
-            ResourceBundle.getBundle("com.ibm.jtc.localeconverter.myLocaleElements", parentLocale);
+            ResourceBundle.getBundle("com.ibm.tools.localeconverter.myLocaleElements", parentLocale);
             //{{INIT_CONTROLS
 		//}}
 }
