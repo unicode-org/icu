@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Cyrillic.java,v $ 
- * $Date: 2000/05/23 16:47:48 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/05 23:07:58 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -136,17 +136,17 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
 
                 + "Sh''ch<>$SH$ch;" // LIU Distinguish $SH$ch from $SHCH
                 
-                + "Ch>$CH;" + "Ch<$CH}$lower;"
-                + "Kh>$KH;" + "Kh<$KH}$lower;"
-                + "Shch>$SHCH;" + "Shch<$SHCH}$lower;"
-                + "Sh>$SH;" + "Sh<$SH}$lower;"
-                + "Ts>$TS;"  + "Ts<$TS}$lower;"
-                + "Zh>$ZH;" + "Zh<$ZH}$lower;"
-                + "Yi>$YI;"  //+ "Yi<$YI}$lower;"
-                + "Ye>$YE;"  //+ "Ye<$YE}$lower;"
-                + "Yo>$YO;" //+ "Yo<$YO}$lower;"
-                + "Yu>$YU;" //+ "Yu<$YU}$lower;"
-                + "Ya>$YA;" //+ "Ya<$YA}$lower;"
+                + "Ch   <> {$CH}  $lower;"
+                + "Kh   <> {$KH}  $lower;"
+                + "Shch <> {$SHCH}$lower;"
+                + "Sh   <> {$SH}  $lower;"
+                + "Ts   <> {$TS}  $lower;"
+                + "Zh   <> {$ZH}  $lower;"
+                + "Yi>$YI;"
+                + "Ye>$YE;"
+                + "Yo>$YO;"
+                + "Yu>$YU;"
+                + "Ya>$YA;"
                 
                 // #############################################
                 // Rules to Duplicate
