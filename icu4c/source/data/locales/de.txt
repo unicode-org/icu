@@ -574,6 +574,13 @@ de {
     }
 
     // Currency display names
+
+    // See for example "W\u00e4hrungscodes" at
+    // http://www-cik.uni-paderborn.de/vddk/Dokumentationen/Dokumentation_IDM_1_3/ISO-Tabellen/Wahrungscodes/body_wahrungscodes.html
+    // (On the page it says "Quelle: gem\u00e4\u00df ISO 4217 3-alpha-code (Stand: Juli 2000)"
+    // and "Verzeichnis der ISO-Codes für W\u00e4hrung mit Land".)
+
+    // See also http://umrechnen.de/
     Currencies {
         AED { "AED", "UAE Dirham" }
         AFA { "AFA", "Afghani" }
@@ -584,13 +591,14 @@ de {
         AON { "AON", "Neuer Kwanza" }
         AOR { "AOR", "Kwanza Reajustado" }
         ARS { "ARS", "Argentinischer Peso" }
-        ATS { "\u00F6S", "ATS" }
+        ATS { "\u00F6S", "\u00D6sterreichischer Schilling" }
         AUD { "AUD", "Australischer Dollar" }
         AWG { "AWG", "Aruba Florin" }
         AZM { "AZM", "Aserbeidschan Manat" }
-        BAM { "BAM", "konvertierbare Mark" }
+        BAM { "BAM", "Konvertierbare Mark" }
         BBD { "BBD", "Barbados-Dollar" }
         BDT { "BDT", "Taka" }
+        BEF { "BEF", "Belgischer Franc" }
         BGL { "BGL", "Lew" }
         BGN { "BGN", "Bulgarian Lev" }
         BHD { "BHD", "Bahrain-Dinar" }
@@ -598,13 +606,13 @@ de {
         BMD { "BMD", "Bermuda-Dollar" }
         BND { "BND", "Brunei-Dollar" }
         BOB { "BOB", "Boliviano" }
-        BOV { "BOV", "MVDOL" }
+        // BOV { "BOV", "MVDOL" } -- don't know what this is; MVDOL does not make sense to me -- markus 20030424
         BRL { "BRL", "Real" }
         BSD { "BSD", "Bahama-Dollar" }
         BTN { "BTN", "Ngultrum" }
         BWP { "BWP", "Pula" }
         BYB { "BYB", "Belarus Rubel (alt)" }
-        BYR { "BYR", "Belarussian Ruble (neu)" }
+        BYR { "BYR", "Belarus Rubel (neu)" }
         BZD { "BZD", "Belize-Dollar" }
         CAD { "CAD", "Kanadischer Dollar" }
         CDF { "CDF", "Franc congolais" }
@@ -618,26 +626,30 @@ de {
         CVE { "CVE", "Kap Verde Escudo" }
         CYP { "CYP", "Zypern Pfund" }
         CZK { "CZK", "Tschechische Krone" }
-        DEM { "DM", "DEM" }
+        DEM { "DM",  "Deutsche Mark" }
         DJF { "DJF", "Dschibuti-Franc" }
         DKK { "DKK", "D\u00E4nische Krone" }
         DOP { "DOP", "Dominikanischer Peso" }
         DZD { "DZD", "Algerischer Dinar" }
-        ECS { "ECS", "Sucre" }
+        ECS { "ECS", "Ecuadorianischer Sucre" }
         ECV { "ECV", "Verrechnungseinheit f\u00FCr EC" }
         EEK { "EEK", "Estnische Krone" }
         EGP { "EGP", "\u00C4gyptisches Pfund" }
         ERN { "ERN", "Nakfa" }
+        ESP { "ESP", "Spanische Pesete" }
         ETB { "ETB", "Birr" }
         EUR { "\u20AC", "Euro" }
+        FIM { "FIM", "Finnische Mark" }
         FJD { "FJD", "Fidschi Dollar" }
         FKP { "FKP", "Falkland Pfund" }
+        FRF { "FF",  "FF, Franz\u00F6sischer Franc" }
         GBP { "GBP", "Pfund Sterling" }
         GEL { "GEL", "Georgischer Lari" }
         GHC { "GHC", "Cedi" }
         GIP { "GIP", "Gibraltar Pfund" }
         GMD { "GMD", "Dalasi" }
         GNF { "GNF", "Guinea Franc" }
+        GRD { "GRD", "Griechische Drachme" }
         GTQ { "GTQ", "Quetzal" }
         GWP { "GWP", "Guinea Bissau Peso" }
         GYD { "GYD", "Guyana Dollar" }
@@ -647,16 +659,18 @@ de {
         HTG { "HTG", "Gourde" }
         HUF { "HUF", "Forint" }
         IDR { "IDR", "Rupiah" }
+        IEP { "IEP", "Irisches Pfund" }
         ILS { "ILS", "Schekel" }
         INR { "INR", "Indische Rupie" }
         IQD { "IQD", "Irak Dinar" }
         IRR { "IRR", "Rial" }
         ISK { "ISK", "Isl\u00E4ndische Krone" }
+        ITL { "ITL", "Italienische Lire" }
         JMD { "JMD", "Jamaika Dollar" }
         JOD { "JOD", "Jordanischer Dinar" }
-        JPY { "\uFFE5", "Yen" }
+        JPY { "\u00A5", "Yen" }
         KES { "KES", "Kenia Schilling" }
-        KGS { "KGS", "SOM" }
+        // KGS { "KGS", "SOM" } -- not useful, commented out -- markus 20030424
         KHR { "KHR", "Riel" }
         KMF { "KMF", "Komoren Franc" }
         KPW { "KPW", "Nordkoreanischer Won" }
@@ -670,6 +684,7 @@ de {
         LRD { "LRD", "Liberianischer Dollar" }
         LSL { "LSL", "Loti" }
         LTL { "LTL", "Litauischer Litas" }
+        LUF { "LUF", "Luxemburgischer Franc" }
         LVL { "LVL", "Lettischer Lats" }
         LYD { "LYD", "Libyscher Dinar" }
         MAD { "MAD", "Marokkanischer Dirham" }
@@ -691,6 +706,7 @@ de {
         NAD { "NAD", "Namibia Dollar" }
         NGN { "\u20A6", "Naira" }
         NIO { "NIO", "Gold-Cordoba" }
+        NLG { "NLG", "Holl\u00e4ndischer Gulden" }
         NOK { "NOK", "Norwegische Krone" }
         NPR { "NPR", "Nepalesische Rupie" }
         NZD { "NZD", "Neuseeland Dollar" }
@@ -701,6 +717,7 @@ de {
         PHP { "PHP", "Philippinischer Peso" }
         PKR { "PKR", "Pakistanische Rupie" }
         PLN { "PLN", "Zloty" }
+        PTE { "PTE", "Portugiesischer Escudo" }
         PYG { "PYG", "Guarani" }
         QAR { "QAR", "Katar Riyal" }
         ROL { "ROL", "Leu" }
