@@ -376,18 +376,19 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
      * of transliterator i+1.  Finally, the overall limit is fixed
      * up before we return.
      *
-     * Assumptions we make for each call to filteredTransliterate:
-     * (1) contextStart <= start <= limit <= contextLimit
-     * (2) start <= start' <= limit' ;cursor doesn't move back
-     * (3) start <= limit'           ;text before start unchanged
-     * - start' is the value of start after calling filteredTransliterate
-     * - limit' is the value of limit after calling filteredTransliterate
+     * Assumptions we make here:
+     * (1) contextStart <= start <= limit <= contextLimit <= text.length()
+     * (2) start <= start' <= limit'  ;cursor doesn't move back
+     * (3) start <= limit'            ;text before cursor unchanged
+     * - start' is the value of start after calling handleKT
+     * - limit' is the value of limit after calling handleKT
      */
-
+    
     /**
      * Example: 3 transliterators.  This example illustrates the
      * mechanics we need to implement.  C, S, and L are the contextStart,
-     * start, and limit.  gl is the globalLimit.
+     * start, and limit.  gl is the globalLimit.  contextLimit is
+     * equal to limit throughout.
      *
      * 1. h-u, changes hex to Unicode
      *
@@ -411,7 +412,7 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
      *
      *    4  7  a  d  0  3
      *    abc/u0041/u0041/u    
-     *    C              S L
+     *    C S L
      */
 
     if (count < 1) {

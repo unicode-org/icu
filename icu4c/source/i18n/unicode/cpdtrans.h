@@ -29,15 +29,10 @@ class TransliteratorRegistry;
  * transliterator.  See the class documentation for {@link
  * Transliterator} for details.
  *
- * <p>If a non-<tt>null</tt> <tt>UnicodeFilter</tt> is applied to a
- * <tt>CompoundTransliterator</tt>, it has the effect of being
- * logically <b>and</b>ed with the filter of each transliterator in
- * the chain.
- *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.24 $ $Date: 2001/11/17 00:25:26 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.25 $ $Date: 2001/11/19 19:53:10 $
  * @deprecated To be removed after 2002-sep-30.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -77,10 +72,10 @@ public:
 
     /**
      * Constructs a new compound transliterator.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
+     * @param id compound ID
+     * @param dir either UTRANS_FORWARD or UTRANS_REVERSE
+     * @param adoptedFilter a global filter for this compound transliterator
+     * or NULL
      * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
      */
     CompoundTransliterator(const UnicodeString& id,
