@@ -142,21 +142,31 @@ void TestConstruction1()
     const char*        directory=NULL;
     const char*      locale="te_IN";
     char testdatapath[256];
-    
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    
+    /* u_getDataDirectory shoul return \source\data ... set the
+     * directory to ..\source\data\..\test\testdata\out\testdata
+     */
+    uprv_strcat(testdatapath, tdrelativepath);
+    uprv_strcat(testdatapath,"testdata");
     log_verbose("Testing ures_open()......\n");
     
     test1=ures_open(testdatapath, NULL, &err);
-    test2=ures_open(testdatapath, locale, &err);
     
     if(U_FAILURE(err))
     {
-        log_err("construction did not succeed :  %s \n", myErrorName(err));
+        log_err("construction of NULL did not succeed  :  %s \n", myErrorName(err));
         return;
     }
     
+    test2=ures_open(testdatapath, locale, &err);
+    if(U_FAILURE(err))
+    {
+        log_err("construction of %s did not succeed :  %s \n",locale, myErrorName(err));
+        return;
+    }
     result1= ures_getStringByKey(test1, "string_in_Root_te_te_IN", &resultLen, &err);
     result2= ures_getStringByKey(test2, "string_in_Root_te_te_IN", &resultLen, &err);
     

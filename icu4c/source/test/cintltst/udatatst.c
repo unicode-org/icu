@@ -78,14 +78,18 @@ static void TestUDataOpen(){
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory())
                                            + strlen(U_ICUDATA_NAME)
                                            + strlen("/build")+1 ) );
-    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
     char        *icuDataFilePath = 0;
     struct stat stat_buf;
+    
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 +strlen(tdrelativepath)) );
+
+    strcpy(testPath, u_getDataDirectory());
+    strcat(testPath,tdrelativepath);
+    strcat(testPath, "testdata");
 
     strcat(strcpy(path, u_getDataDirectory()), U_ICUDATA_NAME);
-    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
-
 
     log_verbose("Testing udata_open()\n");
     result=udata_open(testPath, type, name, &status);
@@ -181,6 +185,7 @@ static void TestUDataOpen(){
     log_verbose("Testing udata_open, with base_name.type style fallback to individual file.\n");
     icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
     strcpy(icuDataFilePath, u_getDataDirectory());
+    strcat(icuDataFilePath,tdrelativepath);
     strcat(icuDataFilePath, "testudata");
     status = U_ZERO_ERROR;
     result = udata_open( icuDataFilePath, "typ", "nam", &status);
@@ -198,6 +203,7 @@ static void TestUDataOpen(){
     log_verbose("Testing udata_open, with path containing a trailing directory separator.\n");
     icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
     strcpy(icuDataFilePath, u_getDataDirectory());
+    strcat(icuDataFilePath,tdrelativepath);
     status = U_ZERO_ERROR;
     result = udata_open( icuDataFilePath, "cnv", "test1", &status);
     if (status != U_ZERO_ERROR) {
@@ -237,18 +243,22 @@ static void TestUDataSetAppData(){
 
     UErrorCode        status=U_ZERO_ERROR;
     int               fileHandle = 0;              /* We are going to read the testdata.dat file */
-    char             *filePath = 0;
     struct stat       statBuf;
     size_t            fileSize = 0;
     char             *fileBuf = 0;
 
     size_t            i;
-    
-    log_verbose("Testing udata_setAppData()\n");
-    
+       
     /* Open the testdata.dat file, using normal   */
-    filePath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + 100) );
-    strcat(strcpy(filePath, u_getDataDirectory()), "testdata.dat");
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    char* filePath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata.dat") +1 +strlen(tdrelativepath)) );
+
+    strcpy(filePath, u_getDataDirectory());
+    strcat(filePath,tdrelativepath);
+    strcat(filePath, "testdata.dat");
+
+    log_verbose("Testing udata_setAppData()\n");
+
 #ifdef WIN32
     fileHandle = open( filePath, O_RDONLY | O_BINARY );
 #else

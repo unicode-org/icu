@@ -291,15 +291,18 @@ static void TestNewTypes() {
     UChar expected[] = { 'a','b','c','\0','d','e','f' };
     const char* expect ="tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''";
     UChar uExpect[200];
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    
     u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
     strcpy(action, "Construction of testtypes bundle");
 
     strcpy(testdatapath, directory);
+    strcat(testdatapath,tdrelativepath);
     strcat(testdatapath, "testdata");
     theBundle = ures_open(testdatapath, "testtypes", &status);
 
     empty = ures_getStringByKey(theBundle, "emptystring", &len, &status);
-    if(*empty != 0 || len != 0) {
+    if(empty && (*empty != 0 || len != 0)) {
       log_err("Empty string returned invalid value\n");
     }
 
@@ -437,9 +440,12 @@ static void TestEmptyTypes() {
     int32_t intResult = 0;
     const UChar *zeroString;
     const int32_t *zeroIntVect;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
     strcpy(action, "Construction of testtypes bundle");
 
     strcpy(testdatapath, directory);
+    strcat(testdatapath,tdrelativepath);
     strcat(testdatapath, "testdata");
     theBundle = ures_open(testdatapath, "testtypes", &status);
 
@@ -568,7 +574,10 @@ static void TestEmptyBundle(){
     char testdatapath[256];
     const char *directory= u_getDataDirectory();
     UResourceBundle *resb=0, *dResB=0;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
     strcpy(testdatapath, directory);
+    strcat(testdatapath,tdrelativepath);
     strcat(testdatapath, "testdata");
     resb = ures_open(testdatapath, "testempty", &status);
 
@@ -594,9 +603,11 @@ static void TestBinaryCollationData(){
     uint8_t *binResult = NULL;
     int32_t len=0;
     const char* action="testing the binary collaton data";
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath,tdrelativepath);
     uprv_strcat(testdatapath, "testdata");
 
     log_verbose("Testing binary collation data resource......\n");
@@ -647,8 +658,11 @@ static void TestAPI() {
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
+    char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath,tdrelativepath);
     uprv_strcat(testdatapath, "testdata");
     u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
     /*u_uastrcpy(utestdatapath, testdatapath);*/
@@ -766,9 +780,12 @@ static void TestErrorConditions(){
     UResourceBundle *teFillin2=NULL;
     uint8_t *binResult = NULL;
     int32_t resultLen;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath,tdrelativepath);
     uprv_strcat(testdatapath, "testdata");
     u_uastrcpy(utestdatapath, testdatapath);
   
@@ -1024,6 +1041,9 @@ static void TestConstruction1()
     const char*        directory=NULL;
     const char*      locale="te_IN";
     char testdatapath[256];
+
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    
     int32_t len1=0;
     int32_t len2=0;
     UVersionInfo versionInfo;
@@ -1038,7 +1058,8 @@ static void TestConstruction1()
 
     directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    uprv_strcat(testdatapath, tdrelativepath);
+    uprv_strcat(testdatapath,"testdata");
     log_verbose("Testing ures_open()......\n");
 
     empty = ures_open(testdatapath, "testempty", &status);
@@ -1048,14 +1069,18 @@ static void TestConstruction1()
     ures_close(empty);
 
     test1=ures_open(testdatapath, NULL, &err);
-    test2=ures_open(testdatapath, locale, &err);
 
     if(U_FAILURE(err))
     {
-        log_err("construction did not succeed :  %s \n", myErrorName(status));
+        log_err("construction of NULL did not succeed :  %s \n", myErrorName(status));
         return;
     }
-
+    test2=ures_open(testdatapath, locale, &err);
+    if(U_FAILURE(err))
+    {
+        log_err("construction of %s did not succeed :  %s \n", locale, myErrorName(status));
+        return;
+    }
     result1= ures_getStringByKey(test1, "string_in_Root_te_te_IN", &len1, &err);
     result2= ures_getStringByKey(test2, "string_in_Root_te_te_IN", &len2, &err);
     if (U_FAILURE(err) || len1==0 || len2==0) {
@@ -1182,8 +1207,10 @@ static UBool testTag(const char* frag,
     UResourceBundle* arrayItem1=NULL;
 
     const char*    directory =  u_getDataDirectory();
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
 
     uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath,tdrelativepath);
     uprv_strcat(testdatapath, "testdata");
 
     is_in[0] = in_Root;

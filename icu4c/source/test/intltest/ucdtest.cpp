@@ -488,11 +488,13 @@ void UnicodeTest::TestUnicodeData()
     strcat(backupPath, U_FILE_SEP_STRING);
     strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
+    u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
+
     errorCode=U_ZERO_ERROR;
-    u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
     if(errorCode==U_FILE_ACCESS_ERROR) {
         errorCode=U_ZERO_ERROR;
-        u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
+        u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
+
     }
     if(U_FAILURE(errorCode)) {
         errln("error parsing UnicodeData.txt: %s\n" + UnicodeString(u_errorName(errorCode), ""));
