@@ -8,7 +8,7 @@
 // Created by Roozbeh Pournader <roozbeh@sharif.edu>
 
 fa_IR {
-    Version { "2.0" }
+    Version { "3.0" }
     DateTimeElements:intvector {
         7,      // Saturday
         1,

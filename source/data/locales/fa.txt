@@ -8,7 +8,7 @@
 // Created by Roozbeh Pournader <roozbeh@sharif.edu>
 
 fa {
-    Version { "2.0" }
+    Version { "3.0" }
     AmPmMarkers { 
         "\u0642.\u0638.",
         "\u0628.\u0638.",
