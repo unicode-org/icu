@@ -21,6 +21,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "makefile.h"
 #include "cstring.h"
 #include <stdio.h>

@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 
 #ifndef WIN32
 #include "cmemory.h"

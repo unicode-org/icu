@@ -17,6 +17,7 @@
 #define USTRING_H
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/uiter.h"
 
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
