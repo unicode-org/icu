@@ -1,0 +1,20 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1999-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//              or better http://www.jtcsv.com/cgibin/icu-bugs
+
+eo {
+    Version { "4.0" } 
+    // collation: accented characters have primary (base character) differences
+    // see Jitterbug 1440 http://www.jtcsv.com/cgibin/icu-bugs?findid=1440
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { "&C<\u0109<<<\u0108 &G<\u011d<<<\u011c &H<\u0125<<<\u0124"
+                       "&J<\u0135<<<\u0134 &S<\u015d<<<\u015c &U<\u016d<<<\u016c" }
+        }
+    }
+}

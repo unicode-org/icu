@@ -1,0 +1,24 @@
+/*
+**********************************************************************
+* Copyright (c) 2002-2003, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
+#include "unicode/unifunct.h"
+
+U_NAMESPACE_BEGIN
+
+UnicodeFunctor::~UnicodeFunctor() {}
+
+UnicodeMatcher* UnicodeFunctor::toMatcher() const {
+    return 0;
+}
+
+UnicodeReplacer* UnicodeFunctor::toReplacer() const {
+    return 0;
+}
+
+U_NAMESPACE_END
+
+//eof

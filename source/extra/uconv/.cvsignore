@@ -1,0 +1,12 @@
+*.d
+uconv
+uconv.plg
+uconv.opt
+uconv.ncb
+Debug
+Release
+Makefile
+uconvmsg
+uconv.1
+pkgdata.inc
+pkgdatain.txt

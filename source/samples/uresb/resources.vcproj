@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="resources"
+	SccProjectName=""
+	SccLocalPath=""
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\resources_Win32_Debug"
+			IntermediateDirectory=".\resources_Win32_Debug"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
+				Output="uresb_root.res"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\resources_Win32_Release"
+			IntermediateDirectory=".\resources_Win32_Release"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="nmake /f &quot;resources.mak&quot;"
+				ReBuildCommandLine="nmake /f &quot;resources.mak&quot; /a"
+				Output="uresb_root.res"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;txt">
+			<File
+				RelativePath=".\en.txt">
+			</File>
+			<File
+				RelativePath=".\root.txt">
+			</File>
+			<File
+				RelativePath=".\sr.txt">
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

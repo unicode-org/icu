@@ -1,0 +1,22 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kk {
+    Version{ "1.0" }
+    collations {
+        standard {
+            Version { "1.0" }
+            Sequence { 
+                "[normalization on]"
+                // weiv 04/20/04: usual suppressions for modern Cyrillic scripts
+                "[suppressContractions [\u0400-\u045f]]"
+                // weiv 04/20/04: In Kazakh, straight U with stroke sorts before vanilla straight U.
+                "&[before 1]\u04AF < \u04B1 <<< \u04B0"
+            }
+        }
+    }
+}

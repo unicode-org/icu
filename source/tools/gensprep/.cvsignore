@@ -1,0 +1,8 @@
+*.d
+*.pdb
+Debug
+Makefile
+Release
+gensprep
+gensprep.8
+gensprep.plg

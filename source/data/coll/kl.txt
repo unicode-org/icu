@@ -1,0 +1,23 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kl{
+    Version { "2.0" }
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { 
+                "&D<<\u0111<<<\u0110<<\u00F0<<<\u00D0"
+                "&Q<<\u0138<<<K''"	// Greenland only
+                "&t<<<\u00FE/h"
+                "&T<<<\u00DE/H"
+                "&Y<<u\u0308<<<U\u0308<<u\u030B<<<U\u030B"
+                "&[before 1]\u0292<\u00E6<<<\u00C6<<\u00E4<<<\u00C4<<e\u0328<<<E\u0328<\u00F8<<<\u00D8<<\u00F6<<<\u00D6<<\u0151<<<\u0150<<\u0153<<<\u0152<\u00E5<<<\u00C5"
+            }
+        }
+    }
+}
