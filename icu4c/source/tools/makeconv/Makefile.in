@@ -1,10 +1,6 @@
 ## Makefile.in for ICU - tools/makeconv
 ## Stephen F. Booth
 
-## List of converter tables to build
-include ucmfiles.mk
--include ucmlocal.mk
-
 ## Shell to use
 SHELL = @SHELL@
 
@@ -23,6 +19,10 @@ includedir = @includedir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
+
+## List of converter tables to build
+include $(srcdir)/ucmfiles.mk
+-include $(srcdir)/ucmlocal.mk
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -51,7 +51,7 @@ CLEANFILES = *~
 TARGET = makeconv
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -64,7 +64,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ALL_UCM = $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM:%=$(top_srcdir)/../data/%)
-CNV_FILES = $(UCM_FILES:.ucm=.cnv)
+CNV_FILES = $(UCM_FILES:$(top_srcdir)/../data/%.ucm=$(top_builddir)/data/%.cnv)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -90,8 +90,8 @@ all-local: $(TARGET) $(CNV_FILES)
 #	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 #	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
 #	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
-#		echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-#		$(INSTALL_DATA) $(top_srcdir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+#		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+#		$(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 #	done
 
 dist-local:
@@ -120,9 +120,9 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.c) -o $@ $^ $(LIBS)
 
 # Rule to build a compiled cnv file
-%.cnv : %.ucm
+$(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm
 	@echo -n "$< -> "
-	@ICU_DATA=$(top_builddir)/../data/ ./makeconv $<
+	@ICU_DATA=$(top_builddir)/data ./makeconv $<
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)

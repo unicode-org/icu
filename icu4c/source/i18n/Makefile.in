@@ -47,7 +47,7 @@ CLEANFILES = *~
 TARGET = libicu-i18n.$(SO)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+CPPFLAGS = @CPPFLAGS@ -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
@@ -95,8 +95,8 @@ install-library: all-local
 install-headers:
 	$(mkinstalldirs) $(includedir)/unicode
 	@list='$(HEADERS)'; for file in $$list; do \
-	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
-	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
+	 echo " $(INSTALL_DATA) $(srcdir)/$$file $(includedir)/$$file"; \
+	 $(INSTALL_DATA) $(srcdir)/$$file $(includedir)/$$file; \
 	done
 
 dist-local:

@@ -427,8 +427,9 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
 		Transliterator::Position index = {0, 0, 0};
 	    UErrorCode status=U_ZERO_ERROR;
         UnicodeString s;
+	int i;
         logln("Testing transliterate(Replaceable, int32_t, UnicodeString, UErrorCode)");
-        for (int i=0; i<10; i=i+2) {
+        for (i=0; i<10; i=i+2) {
            UnicodeString log;
            if (Data[i+0] != "") {
                log = s + " + " + Data[i+0] + " -> ";

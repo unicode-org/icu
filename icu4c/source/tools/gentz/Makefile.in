@@ -7,9 +7,9 @@
 SHELL = @SHELL@
 VERSION = @VERSION@
 
-ICUDATADIR=$(top_builddir)/../data/
-TZFILE=tz.txt
-TZALIAS=tz.alias
+ICUDATADIR=$(top_builddir)/data/
+TZFILE=$(srcdir)/tz.txt
+TZALIAS=$(srcdir)/tz.alias
 
 ## Install directory information
 srcdir = @srcdir@
@@ -54,7 +54,7 @@ CLEANFILES = *~
 TARGET = gentz
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \

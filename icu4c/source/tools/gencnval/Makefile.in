@@ -7,8 +7,8 @@
 SHELL = @SHELL@
 VERSION = @VERSION@
 
-ICUDATADIR=$(top_builddir)/../data/
-CONVRTRSFILE=$(top_builddir)/../data/convrtrs.txt
+ICUDATADIR=$(top_builddir)/data/
+CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
 
 ## Install directory information
 srcdir = @srcdir@
@@ -53,7 +53,7 @@ CLEANFILES = *~
 TARGET = gencnval
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -92,7 +92,7 @@ build-data: $(ICUDATADIR)/cnvalias.dat
 # we set the ICU_DATA directory here so that unames.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
 $(ICUDATADIR)/cnvalias.dat: $(CONVRTRSFILE) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET)
+	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(CONVRTRSFILE)
 
 dist-local:
 
