@@ -33,7 +33,7 @@ class LineInfo;
 class Paragraph
 {
 public:
-    Paragraph(const LEUnicode chars[], le_int32 charCount, const FontRuns *fontRuns);
+    Paragraph(const LEUnicode chars[], le_int32 charCount, const FontRuns *fontRuns, LEErrorCode &status);
 
     ~Paragraph();
 
