@@ -37,7 +37,7 @@ class TransliteratorRegistry;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.23 $ $Date: 2001/11/16 23:50:17 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.24 $ $Date: 2001/11/17 00:25:26 $
  * @deprecated To be removed after 2002-sep-30.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -74,13 +74,14 @@ public:
     CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t transliteratorCount,
                            UnicodeFilter* adoptedFilter = 0);
-private:
+
     /**
      * Constructs a new compound transliterator.
      * @param filter the filter.  Any character for which
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
+     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -91,14 +92,14 @@ private:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
+     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
                            UErrorCode& status);
-public:
     /**
      * Destructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual ~CompoundTransliterator();
 
