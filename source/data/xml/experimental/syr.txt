@@ -1,18 +1,32 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2003, International Business Machines
+// *   Copyright (C) 2001-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
+// There are two major dialects of Aramaic, Western (also refered to as
+// palastinian dialect, the dialect of EESHO (Jesus)) and Eastern (also
+// referred to as "Syriac dialect").
+// "Syriac" is a dialect of Aramaic, NOT a language.
+//
+// Above information found from on-line research [grhoten 2004-Feb-04]
 
 syr{
     Version{ "x0.2" }
-    Languages {
-        syr { "\u0723\u0718\u072A\u071D\u071D\u0710" }
-    }
     AmPmMarkers{
         "\u0729.\u071B",
         "\u0712.\u071B"
+    }
+    collations {
+        standard {
+            Version { "1.0" }
+            Sequence { 
+                "[normalization on]"
+            }
+        }
+    }
+    Currencies {
+        SYP { "\u0644.\u0633.\u200F", "SYP" }
     }
     DayNames{
         "\u071A\u0715\u00A0\u0712\u072B\u0712\u0710",
@@ -23,7 +37,6 @@ syr{
         "\u0725\u072A\u0718\u0712\u072C\u0710",
         "\u072B\u0712\u072C\u0710"
     }
-
     DayAbbreviations{
         "\u070F\u0710\u00A0\u070F\u0712\u072B",
         "\u070F\u0712\u00A0\u070F\u0712\u072B",
@@ -33,7 +46,11 @@ syr{
         "\u070F\u0725\u072A\u0718\u0712",
         "\u070F\u072B\u0712"
     }
-
+    Languages {
+        syr { "\u0723\u0718\u072A\u071D\u071D\u0710" }
+    }
+    LocaleScript:array { "Syrc" }
+    ExemplarCharacters{ "[[:Syrc:]\u200c\u200d\u200f\u200e]"}
     MonthNames{
         "\u071F\u0722\u0718\u0722\u00A0\u0710\u071A\u072A\u071D",
         "\u072B\u0712\u071B",
@@ -48,7 +65,6 @@ syr{
         "\u072C\u072B\u072A\u071D\u00A0\u0710\u071A\u072A\u071D",
         "\u071F\u0722\u0718\u0722\u00A0\u0729\u0715\u071D\u0721",
     }
-
     MonthAbbreviations {
         "\u070F\u071F\u0722\u00A0\u070F\u0712",
         "\u072B\u0712\u071B",
@@ -77,17 +93,4 @@ syr{
 //        "\u221e",
 //        "\ufffd",
 //    }
-    LocaleScript:array { "Syrc" }
-    ExemplarCharacters{ "[[:Syrc:]\u200c\u200d\u200f\u200e]"}
-    collations {
-      standard {
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
-      }
-    }
-    Currencies {
-        SYP { "\u0644.\u0633.\u200F", "SYP" }
-    }
 }
