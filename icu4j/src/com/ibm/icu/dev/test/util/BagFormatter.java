@@ -6,14 +6,28 @@
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.text.*;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.impl.*;
-
-import java.io.*;
-import java.util.*;
-//import java.util.regex.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 public class BagFormatter {
     static final boolean DEBUG = false;
