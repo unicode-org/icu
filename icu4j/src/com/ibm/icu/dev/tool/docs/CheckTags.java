@@ -261,7 +261,7 @@ public class CheckTags {
             // synthetic constructors.  So you'll have to live with spurious errors or 'implement'
             // the synthetic constructors...
 
-            boolean isClass = doc.isClass();
+            boolean isClass = doc.isClass() || doc.isInterface();
             String header = "--- " + (isClass ? doc.qualifiedName() : doc.name());
             if (doc instanceof ExecutableMemberDoc) {
                 header += ((ExecutableMemberDoc)doc).flatSignature();
