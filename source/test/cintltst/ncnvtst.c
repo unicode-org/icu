@@ -414,6 +414,7 @@ void TestRegression(){
     UChar *extractedTarget=0;
     UChar *target=0;
     UChar *limit=0;
+    int32_t count=0;
   
     int32_t offset=0;
     int32_t sourceLength=0, i=0;
@@ -432,9 +433,11 @@ void TestRegression(){
         extractedTargetBuffer[i]=(UChar)0xFFFE;
     }
     for(c=0x0000; c <= UNICODE_LIMIT; c++){
-        UTF_APPEND_CHAR_SAFE(source, offset, u_strlen(source), c);
+        UTF16_APPEND_CHAR_SAFE(source, offset, TEST_BUFFER_SIZE, c);
+        count++;
     }
-      
+    log_verbose("\nThe the No: of code units=%ld,  The no: of Code Points=%d\n", offset, count);
+    
     src=source;
     sourceLimit=src+(offset);
     targ=buffer;
