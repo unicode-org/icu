@@ -32,8 +32,11 @@
 #   define NOMCX
 #   include <windows.h>
 #   include <direct.h>
-#   include <errno.h>
+#else
+#   include <sys/stat.h>
+#   include <sys/types.h>
 #endif
+#include <errno.h>
 
 U_CAPI const char * U_EXPORT2
 getLongPathname(const char *pathname) {
