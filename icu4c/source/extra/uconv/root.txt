@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.4 $
+// $Revision: 1.5 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -35,9 +35,9 @@ root
   help { "Options:  -h, --help\t\tprint this message\n"
 	  "          -l, --list\t\tlist all available encodings\n"
 	  "          -L, --list-transliterators\tlist all available transliterators\n"
+	  "          -x transliterator\trun everything through transliterator\n" 
 	  "          -f, --from-code code\tset the original encoding\n"
 	  "          -t, --to-code code\tset the destination encoding\n" 
-	  "          -x transliterator\trun everything through transliterator\n" 
 }
 
 
