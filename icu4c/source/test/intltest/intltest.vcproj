@@ -24,7 +24,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\..\..\include,..\..\..\source\common,..\..\..\source\i18n,..\..\tools\toolutil"
-				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,UDATA_MAP_DLL"
+				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				DisableLanguageExtensions="TRUE"
@@ -42,7 +42,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="odbc32.lib odbccp32.lib"
 				OutputFile=".\Debug/intltest.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -97,7 +96,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="odbc32.lib odbccp32.lib"
 				OutputFile=".\Release/intltest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
