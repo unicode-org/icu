@@ -45,6 +45,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
     addTest(root, &TestCEs, "tscoll/citertst/TestCEs");
     addTest(root, &TestDiscontiguos, "tscoll/citertst/TestDiscontiguos");
+    addTest(root, &TestCEBufferOverflow, "tscoll/citertst/TestCEBufferOverflow");
 }
 
 /* The locales we support */
@@ -1308,3 +1309,32 @@ static void TestDiscontiguos() {
     ucol_close(coll);
 }
 
+static void TestCEBufferOverflow() 
+{
+    UChar               str[UCOL_EXPAND_CE_BUFFER_SIZE + 1];
+    UErrorCode          status = U_ZERO_ERROR;
+    UChar               rule[10];
+    UCollator          *coll;
+    UCollationElements *iter;
+    
+    u_uastrcpy(rule, "&z < AB");
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION,  
+                                           UCOL_DEFAULT_STRENGTH, &status);
+    if (U_FAILURE(status)) {
+        log_err("Rule based collator not created for testing ce buffer overflow\n");
+    }
+    
+    /* 0xE0E0 is a private character hence deemed unsafe by the heuristic
+    test. this will cause an overflow in getPrev */
+    str[0] = 'A';
+    uprv_memset(str + 1, 0xE0, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);
+    str[UCOL_EXPAND_CE_BUFFER_SIZE] = 'B';
+    iter = ucol_openElements(coll, str, UCOL_EXPAND_CE_BUFFER_SIZE + 1, 
+                             &status);
+    if (ucol_previous(iter, &status) != UCOL_NULLORDER ||
+        status != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("CE buffer expected to overflow with long string of private characters\n");
+    }
+    ucol_closeElements(iter);
+    ucol_close(coll);
+}
