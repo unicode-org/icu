@@ -192,6 +192,7 @@ int main(int argc, const char* const argv[])
         }
         u_cleanup();
         errorCode = U_ZERO_ERROR;
+        utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData, ICU_TRACE, &errorCode);
 
         /* Initialize ICU */
         ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */

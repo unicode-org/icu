@@ -18,7 +18,7 @@
 static UTraceEntry     *pTraceEntryFunc = NULL;
 static UTraceExit      *pTraceExitFunc  = NULL;
 static UTraceData      *pTraceDataFunc  = NULL;
-static void            *gTraceContext   = NULL;
+static const void      *gTraceContext   = NULL;
 
 U_EXPORT int32_t
 utrace_level;
@@ -59,19 +59,21 @@ static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, i
     int32_t i;
     if (*outIx < capacity) {
         outBuf[*outIx] = c;
-        if (c != 0) {
-            /* Nulls only appear as end-of-string terminators.  Move them to the output
-             *  buffer, but do not update the length of the buffer, so that any
-             *  following output will overwrite the null. */
-            (*outIx)++;
-        };
     }
+    if (c != 0) {
+        /* Nulls only appear as end-of-string terminators.  Move them to the output
+         *  buffer, but do not update the length of the buffer, so that any
+         *  following output will overwrite the null. */
+        (*outIx)++;
+    }
+
+    /* Handle indenting at the start of lines */
     if (c == '\n') {
         for(i=0; i<indent; i++) {
             if (*outIx < capacity) {
                 outBuf[*outIx] = ' ';
-                (*outIx)++;
             }
+            (*outIx)++;
         }
     }
 }
@@ -288,8 +290,8 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
              outputChar(fmtC, outBuf, &outIx, capacity, indent);
         }
     }
-    outputChar(0, outBuf, &outIx, capacity, indent);
-    return outIx;
+    outputChar(0, outBuf, &outIx, capacity, indent);  /* Make sure that output is null terminated  */
+    return outIx + 1;     /* outIx + 1 because outIx does not increment when outputing final null. */
 }
 
 
@@ -349,7 +351,20 @@ utrace_setFunctions(const void *context,
     pTraceExitFunc  = x;
     pTraceDataFunc  = d;
     utrace_level    = traceLevel;
+    gTraceContext   = context;
 }
+
+
+U_CFUNC UBool 
+utrace_cleanup() {
+    pTraceEntryFunc = NULL;
+    pTraceExitFunc  = NULL;
+    pTraceDataFunc  = NULL;
+    utrace_level    = UTRACE_OFF;
+    gTraceContext   = NULL;
+    return TRUE;
+}
+
 
 static const char * const
 trFnName[] = {"u_init",
