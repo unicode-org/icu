@@ -351,7 +351,7 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 
-#define isContinuation(CE) (((CE) & 0xC0) == 0x80)
+#define isContinuation(CE) (((CE) & 0x80) == 0x80)
 #define isFlagged(CE) (((CE) & 0x80) == 0x80)
 #define isLongPrimary(CE) (((CE) & 0xC0) == 0xC0)
 
@@ -361,6 +361,8 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define getContractOffset(CE) ((CE)&0xFFFFFF)
 #define getExpansionOffset(CE) (((CE)&0x00FFFFF0)>>4)
 #define getExpansionCount(CE) ((CE)&0xF)
+#define isCEIgnorable(CE) (((CE) & 0xFFFFFFBF) == 0)
+
 
 #define UCA_DATA_TYPE "dat"
 #define UCA_DATA_NAME "ucadata"
@@ -368,7 +370,7 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_FLAG_BIT_MASK 0x80
 #define INVC_DATA_TYPE "dat"
 #define INVC_DATA_NAME "invuca"
-#define UCOL_COMMON_TOP2 0x81  
+#define UCOL_COMMON_TOP2 0x79  
 #define UCOL_COMMON_BOT2 0x03  
 #define UCOL_TOP_COUNT2  0x40 
 #define UCOL_BOT_COUNT2  0x3D
@@ -381,6 +383,18 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_COMMON2 0x03
 #define UCOL_COMMON3 0x03
 #define UCOL_COMMON4 0xFF
+
+/* constants for case level/case first handling */
+/* used to instantiate UCollators fields in ucol_updateInternalState */
+#define UCOL_CASE_SWITCH      0x40
+#define UCOL_NO_CASE_SWITCH   0x00
+
+#define UCOL_REMOVE_CASE      0x3F
+#define UCOL_KEEP_CASE        0x7F
+
+#define UCOL_CASE_BIT_MASK    0x40
+
+#define UCOL_TERT_CASE_MASK   0x7F
 
 typedef enum {
     NOT_FOUND_TAG = 0,
@@ -445,6 +459,8 @@ struct UCollator {
     const uint8_t *scriptOrder;
     uint8_t variableMax1;
     uint8_t variableMax2;
+    uint8_t caseSwitch;
+    uint8_t tertiaryMask;
     UChar variableTopValue;
     UColAttributeValue frenchCollation;
     UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
@@ -482,6 +498,7 @@ void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCo
 
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
+void ucol_updateInternalState(UCollator *coll);
 
 #endif
 
