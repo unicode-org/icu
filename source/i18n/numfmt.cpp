@@ -89,9 +89,27 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 };
 
 // -------------------------------------
-// default constructor
+// SimpleNumberFormatFactory implementation
 SimpleNumberFormatFactory::~SimpleNumberFormatFactory() {}
 
+UBool SimpleNumberFormatFactory::visible(void) const {
+    return _visible;
+}
+
+const UnicodeString *
+getSupportedIDs(int32_t &count, UErrorCode& status) const 
+{
+    if (U_SUCCESS(status)) {
+        count = 1;
+        return &_id;
+    }
+    count = 0;
+    return NULL;
+}
+
+
+// -------------------------------------
+// default constructor
 NumberFormat::NumberFormat()
 :   fGroupingUsed(TRUE),
     fMaxIntegerDigits(fgMaxIntegerDigits),
@@ -408,7 +426,7 @@ public:
   NFFactory(NumberFormatFactory* delegate) 
     : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
     , _delegate(delegate)
-	, _ids(NULL)
+    , _ids(NULL)
   {
   }
 

@@ -757,10 +757,10 @@ public:
     virtual NumberFormat* createFormat(const Locale& loc, UNumberFormatStyle formatType) = 0;
 };
 
-    /**
-     * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
-     * @prototype 
-     */
+/**
+ * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
+ * @prototype 
+ */
 class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:
     /**
@@ -788,27 +788,17 @@ public:
     /**
      * @draft ICU 3.0
      */
-    ~SimpleNumberFormatFactory();
+    virtual ~SimpleNumberFormatFactory();
 
     /**
      * @draft ICU 2.6
      */
-    virtual UBool visible(void) const {
-        return _visible;
-    }
+    virtual UBool visible(void) const;
 
     /**
      * @draft ICU 2.6
      */
-    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const 
-      {
-        if (U_SUCCESS(status)) {
-          count = 1;
-          return &_id;
-        }
-        count = 0;
-        return NULL;
-      }
+    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const;
 };
 
 
