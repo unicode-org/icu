@@ -222,7 +222,7 @@ const UChar testCases[][4] =
 
 #ifndef INCLUDE_CALLCOLL_C
 
-static void TestJitterbug1098();
+static void TestJitterbug1098(void);
 
 void addAllCollTest(TestNode** root)
 {
@@ -797,17 +797,16 @@ TestInvalidRules(){
         }
     }  
 }
+
 static void
 TestJitterbug1098(){
     UChar rule[1000];
     UCollator* c1 = NULL;
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
-    int32_t length = 1000;
     char preContext[200]={0};
     char postContext[200]={0};
-    const UChar* retRule=NULL;
-    int i=0;    
+    int i=0;
     const char* rules[] = {
          "&''<\\\\",
          "&\\'<\\\\",
@@ -816,7 +815,7 @@ TestJitterbug1098(){
          '\0'
 
     };
-    const UCollationResult results[] = {
+    const UCollationResult results1098[] = {
         UCOL_LESS,
         UCOL_LESS, 
         UCOL_LESS,
@@ -844,7 +843,7 @@ TestJitterbug1098(){
         }
         X[0] = input[i][0];
         Y[0] = input[i][1];
-        doTest(c1,X,Y,results[i]);
+        doTest(c1,X,Y,results1098[i]);
         ucol_close(c1);
     }
 }

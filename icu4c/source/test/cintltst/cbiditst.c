@@ -73,7 +73,9 @@ printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
 
 /* regression tests ---------------------------------------------------------*/
 
-extern void
+void addComplexTest(TestNode** root);
+
+void
 addComplexTest(TestNode** root) {
     addTest(root, doBiDiTest, "complex/bidi");
     addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
