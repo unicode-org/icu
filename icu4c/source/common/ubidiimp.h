@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -116,14 +116,15 @@ static Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 
 typedef struct Run {
     UTextOffset logicalStart,   /* first character of the run; b31 indicates even/odd level */
-                visualLimit;    /* last visual position of the run +1 */
+                visualLimit;    /* last visual position of the run +1;
+                                   b31 indicates that the run needs an LRM fixup for "inverse BiDi" */
 } Run;
 
 /* in a Run, logicalStart will get this bit set if the run level is odd */
-#define INDEX_ODD_BIT (1UL<<31)
+#define INDEX_ODD_BIT (1L<<31)
 
-#define MAKE_INDEX_ODD_PAIR(index, level) (index|((uint32_t)level<<31))
-#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((uint32_t)level<<31))
+#define MAKE_INDEX_ODD_PAIR(index, level) (index|((int32_t)level<<31))
+#define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)level<<31))
 #define REMOVE_ODD_BIT(x)                 ((x)&=~INDEX_ODD_BIT)
 
 #define GET_INDEX(x)   (x&~INDEX_ODD_BIT)
@@ -131,9 +132,15 @@ typedef struct Run {
 #define IS_ODD_RUN(x)  ((x&INDEX_ODD_BIT)!=0)
 #define IS_EVEN_RUN(x) ((x&INDEX_ODD_BIT)==0)
 
+U_CFUNC bool_t
+ubidi_getRuns(UBiDi *pBiDi);
+
 /* UBiDi structure ----------------------------------------------------------- */
 
 struct UBiDi {
+    /* alias pointer to the current text */
+    const UChar *text;
+
     /* length of the current text */
     UTextOffset length;
 
@@ -152,14 +159,17 @@ struct UBiDi {
     const DirProp *dirProps;
     UBiDiLevel *levels;
 
+    /* are we performing an approximation of the "inverse BiDi" algorithm? */
+    bool_t isInverse;
+
     /* the paragraph level */
     UBiDiLevel paraLevel;
 
-    /* flags is a bit set for which directional properties are in the text */
-    Flags flags;
-
     /* the overall paragraph or line directionality - see UBiDiDirection */
     UBiDiDirection direction;
+
+    /* flags is a bit set for which directional properties are in the text */
+    Flags flags;
 
     /* characters after trailingWSStart are WS and are */
     /* implicitly at the paraLevel (rule (L1)) - levels may not reflect that */

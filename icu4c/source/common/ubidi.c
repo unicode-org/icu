@@ -1,7 +1,7 @@
 /*  
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -254,6 +254,24 @@ ubidi_close(UBiDi *pBiDi) {
     }
 }
 
+/* set to approximate "inverse BiDi" ---------------------------------------- */
+
+U_CAPI void U_EXPORT2
+ubidi_setInverse(UBiDi *pBiDi, bool_t isInverse) {
+    if(pBiDi!=NULL) {
+        pBiDi->isInverse=isInverse;
+    }
+}
+
+U_CAPI bool_t U_EXPORT2
+ubidi_isInverse(UBiDi *pBiDi) {
+    if(pBiDi!=NULL) {
+        return pBiDi->isInverse;
+    } else {
+        return FALSE;
+    }
+}
+
 /* ubidi_setPara ------------------------------------------------------------ */
 
 U_CAPI void U_EXPORT2
@@ -278,6 +296,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
     }
 
     /* initialize the UBiDi structure */
+    pBiDi->text=text;
     pBiDi->length=length;
     pBiDi->paraLevel=paraLevel;
     pBiDi->direction=UBIDI_LTR;
@@ -346,6 +365,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
      * The steps after (X9) in the UBiDi algorithm are performed only if
      * the paragraph text has mixed directionality!
      */
+    pBiDi->direction=direction;
     switch(direction) {
     case UBIDI_LTR:
         /* make sure paraLevel is even */
@@ -422,16 +442,27 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
                    are no implicit types to be resolved */
                 if(!(level&UBIDI_LEVEL_OVERRIDE)) {
                     resolveImplicitLevels(pBiDi, start, limit, sor, eor);
+                } else {
+                    /* remove the UBIDI_LEVEL_OVERRIDE flags */
+                    do {
+                        levels[start++]&=~UBIDI_LEVEL_OVERRIDE;
+                    } while(start<limit);
                 }
             } while(limit<length);
         }
 
         /* reset the embedding levels for some non-graphic characters (L1), (X9) */
         adjustWSLevels(pBiDi);
+
+        /* for "inverse BiDi", ubidi_getRuns() modifies the levels of numeric runs following RTL runs */
+        if(pBiDi->isInverse) {
+            if(!ubidi_getRuns(pBiDi)) {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
         break;
     }
-
-    pBiDi->direction=direction;
 }
 
 /* perform (P2)..(P3) ------------------------------------------------------- */
@@ -575,8 +606,9 @@ resolveExplicitLevels(UBiDi *pBiDi) {
     /* we may not need to resolve any explicit levels */
     if(direction!=UBIDI_MIXED) {
         /* not mixed directionality: levels don't matter - trailingWSStart will be 0 */
-    } else if(!(flags&MASK_EXPLICIT)) {
+    } else if(!(flags&MASK_EXPLICIT) || pBiDi->isInverse) {
         /* mixed, but all characters are at the same embedding level */
+        /* or we are in "inverse BiDi" */
         /* set all levels to the paragraph level */
         for(i=0; i<length; ++i) {
             levels[i]=level;
@@ -800,7 +832,8 @@ resolveImplicitLevels(UBiDi *pBiDi,
     UBiDiLevel *levels=pBiDi->levels;
 
     UTextOffset i, next, neutralStart=-1;
-    DirProp prevDirProp, dirProp, nextDirProp, lastStrong, beforeNeutral = L;
+    DirProp prevDirProp, dirProp, nextDirProp, lastStrong, beforeNeutral=L;
+    UBiDiLevel numberLevel;
     uint8_t historyOfEN;
 
     /* initialize: current at sor, next at start (it is start<limit) */
@@ -808,6 +841,21 @@ resolveImplicitLevels(UBiDi *pBiDi,
     dirProp=lastStrong=sor;
     nextDirProp=dirProps[next];
     historyOfEN=0;
+
+    if(pBiDi->isInverse) {
+        /*
+         * For "inverse BiDi", we set the levels of numbers just like for
+         * regular L characters, plus a flag that ubidi_getRuns() will use
+         * to set a similar flag on the corresponding output run.
+         */
+        numberLevel=levels[start]/* ### try without this flag for now |UBIDI_LEVEL_OVERRIDE*/;
+        if(numberLevel&1) {
+            ++numberLevel;
+        }
+    } else {
+        /* normal BiDi: least greater even level */
+        numberLevel=(levels[start]+2)&~1;
+    }
 
     /*
      * In all steps of this implementation, BN and explicit embedding codes
@@ -918,15 +966,18 @@ resolveImplicitLevels(UBiDi *pBiDi,
             break;
         case ET:
             /* get sequence of ET; advance only next, not current, previous or historyOfEN */
-            while(next<limit && DIRPROP_FLAG(nextDirProp)&MASK_ET_NSM_BN /* (W1), (X9) */) {
-                if(++next<limit) {
-                    nextDirProp=dirProps[next];
-                } else {
-                    nextDirProp=eor;
-                    break;
+            if(next<limit) {
+                while(DIRPROP_FLAG(nextDirProp)&MASK_ET_NSM_BN /* (W1), (X9) */) {
+                    if(++next<limit) {
+                        nextDirProp=dirProps[next];
+                    } else {
+                        nextDirProp=eor;
+                        break;
+                    }
                 }
             }
 
+            /* now process the sequence of ET like a single ET */
             if( historyOfEN&PREV_EN_AFTER_W4 ||     /* previous was EN before (W5) */
                 nextDirProp==EN && lastStrong!=AL   /* next is EN and (W2) won't make it AN */
             ) {
@@ -967,6 +1018,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
         /* here, it is always [prev,this,next]dirProp!=BN; it may be next>i+1 */
 
         /* perform (Nn) - here, only L, R, EN, AN, and neutrals are left */
+        /* for "inverse BiDi", treat neutrals like L */
         /* this is one iteration late for the neutrals */
         if(DIRPROP_FLAG(dirProp)&MASK_N) {
             if(neutralStart<0) {
@@ -986,17 +1038,34 @@ resolveImplicitLevels(UBiDi *pBiDi,
             if(neutralStart>=0) {
                 UBiDiLevel final;
                 /* end of a sequence of neutrals (dirProp is "afterNeutral") */
-                if(beforeNeutral==L) {
-                    if(dirProp==L) {
-                        final=0;                /* make all neutrals L (N1) */
-                    } else {
-                        final=level;            /* make all neutrals "e" (N2) */
+                if(!(pBiDi->isInverse)) {
+                    if(beforeNeutral==L) {
+                        if(dirProp==L) {
+                            final=0;                /* make all neutrals L (N1) */
+                        } else {
+                            final=level;            /* make all neutrals "e" (N2) */
+                        }
+                    } else /* beforeNeutral is one of { R, EN, AN } */ {
+                        if(dirProp==L) {
+                            final=level;            /* make all neutrals "e" (N2) */
+                        } else {
+                            final=1;                /* make all neutrals R (N1) */
+                        }
                     }
-                } else /* beforeNeutral is one of { R, EN, AN } */ {
-                    if(dirProp==L) {
-                        final=level;            /* make all neutrals "e" (N2) */
-                    } else {
-                        final=1;                /* make all neutrals R (N1) */
+                } else {
+                    /* "inverse BiDi": collapse [before]dirProps L, EN, AN into L */
+                    if(beforeNeutral!=R) {
+                        if(dirProp!=R) {
+                            final=0;                /* make all neutrals L (N1) */
+                        } else {
+                            final=level;            /* make all neutrals "e" (N2) */
+                        }
+                    } else /* beforeNeutral is one of { R, EN, AN } */ {
+                        if(dirProp!=R) {
+                            final=level;            /* make all neutrals "e" (N2) */
+                        } else {
+                            final=1;                /* make all neutrals R (N1) */
+                        }
                     }
                 }
                 /* perform (In) on the sequence of neutrals */
@@ -1029,7 +1098,8 @@ resolveImplicitLevels(UBiDi *pBiDi,
                     i=next;     /* we keep the levels */
                 }
             } else /* EN or AN */ {
-                level=(level+2)&~1;     /* least greater even level */
+                /* this level depends on whether we do "inverse BiDi" */
+                level=numberLevel;
             }
 
             /* apply the new level to the sequence, if necessary */
@@ -1052,17 +1122,34 @@ resolveImplicitLevels(UBiDi *pBiDi,
         UBiDiLevel level=levels[neutralStart], final;
 
         /* end of a sequence of neutrals (eor is "afterNeutral") */
-        if(beforeNeutral==L) {
-            if(eor==L) {
-                final=0;                /* make all neutrals L (N1) */
-            } else {
-                final=level;            /* make all neutrals "e" (N2) */
+        if(!(pBiDi->isInverse)) {
+            if(beforeNeutral==L) {
+                if(eor==L) {
+                    final=0;                /* make all neutrals L (N1) */
+                } else {
+                    final=level;            /* make all neutrals "e" (N2) */
+                }
+            } else /* beforeNeutral is one of { R, EN, AN } */ {
+                if(eor==L) {
+                    final=level;            /* make all neutrals "e" (N2) */
+                } else {
+                    final=1;                /* make all neutrals R (N1) */
+                }
             }
-        } else /* beforeNeutral is one of { R, EN, AN } */ {
-            if(eor==L) {
-                final=level;            /* make all neutrals "e" (N2) */
-            } else {
-                final=1;                /* make all neutrals R (N1) */
+        } else {
+            /* "inverse BiDi": collapse [before]dirProps L, EN, AN into L */
+            if(beforeNeutral!=R) {
+                if(eor!=R) {
+                    final=0;                /* make all neutrals L (N1) */
+                } else {
+                    final=level;            /* make all neutrals "e" (N2) */
+                }
+            } else /* beforeNeutral is one of { R, EN, AN } */ {
+                if(eor!=R) {
+                    final=level;            /* make all neutrals "e" (N2) */
+                } else {
+                    final=1;                /* make all neutrals R (N1) */
+                }
             }
         }
         /* perform (In) on the sequence of neutrals */
@@ -1113,14 +1200,6 @@ adjustWSLevels(UBiDi *pBiDi) {
             }
         }
     }
-
-    /* now remove the UBIDI_LEVEL_OVERRIDE flags, if any */
-    /* (a separate loop can be optimized more easily by a compiler) */
-    if(pBiDi->flags&MASK_OVERRIDE) {
-        for(i=pBiDi->trailingWSStart; i>0;) {
-            levels[--i]&=~UBIDI_LEVEL_OVERRIDE;
-        }
-    }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1131,6 +1210,15 @@ ubidi_getDirection(const UBiDi *pBiDi) {
         return pBiDi->direction;
     } else {
         return UBIDI_LTR;
+    }
+}
+
+U_CAPI const UChar * U_EXPORT2
+ubidi_getText(const UBiDi *pBiDi) {
+    if(pBiDi!=NULL) {
+        return pBiDi->text;
+    } else {
+        return NULL;
     }
 }
 
