@@ -10,6 +10,7 @@
 
 #include "unicode/rbt.h"
 #include "unicode/parseerr.h"
+#include "unicode/unorm.h"
 
 U_NAMESPACE_BEGIN
 
@@ -174,6 +175,42 @@ private:
     int32_t parseRule(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
+     * Set the variable range to [start, end] (inclusive).
+     */
+    void setVariableRange(int32_t start, int32_t end);
+
+    /**
+     * Set the maximum backup to 'backup', in response to a pragma
+     * statement.
+     */
+    void pragmaMaximumBackup(int32_t backup);
+
+    /**
+     * Begin normalizing all rules using the given mode, in response
+     * to a pragma statement.
+     */
+    void pragmaNormalizeRules(UNormalizationMode mode);
+
+    /**
+     * Return true if the given rule looks like a pragma.
+     * @param pos offset to the first non-whitespace character
+     * of the rule.
+     * @param limit pointer past the last character of the rule.
+     */
+    static UBool resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit);
+
+    /**
+     * Parse a pragma.  This method assumes resemblesPragma() has
+     * already returned true.
+     * @param pos offset to the first non-whitespace character
+     * of the rule.
+     * @param limit pointer past the last character of the rule.
+     * @return the position index after the final ';' of the pragma,
+     * or -1 on failure.
+     */
+    int32_t parsePragma(const UnicodeString& rule, int32_t pos, int32_t limit);
+
+    /**
      * Called by main parser upon syntax error.  Search the rule string
      * for the probable end of the rule.  Of course, if the error is that
      * the end of rule marker is missing, then the rule end will not be found.
@@ -218,16 +255,6 @@ private:
     UChar getSegmentStandin(int32_t r);
 
     /**
-     * Determines what part of the private use region of Unicode we can use for
-     * variable stand-ins.  The correct way to do this is as follows: Parse each
-     * rule, and for forward and reverse rules, take the FROM expression, and
-     * make a hash of all characters used.  The TO expression should be ignored.
-     * When done, everything not in the hash is available for use.  In practice,
-     * this method may employ some other algorithm for improved speed.
-     */
-    void determineVariableRange(const UnicodeString&);
-
-    /**
      * Returns the index of a character, ignoring quoted text.
      * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
      * found by a search for 'h'.
@@ -242,6 +269,50 @@ private:
     static int32_t quotedIndexOf(const UnicodeString& text,
                                  int32_t start, int32_t limit,
                                  UChar c);
+
+    //------------------------------------------------------------
+    // Utility methods -- temporarily here
+    //------------------------------------------------------------
+
+    /**
+     * Skip over a sequence of zero or more white space characters
+     * at pos.  Return the index of the first non-white-space character
+     * at or after pos, or str.length(), if there is none.
+     */
+    static int32_t skipWhitespace(const UnicodeString& str, int32_t pos);
+
+    /**
+     * Parse a pattern string starting at offset pos.  Keywords are
+     * matched case-insensitively.  Spaces may be skipped and may be
+     * optional or required.  Integer values may be parsed, and if
+     * they are, they will be returned in the given array.  If
+     * successful, the offset of the next non-space character is
+     * returned.  On failure, -1 is returned.
+     * @param pattern must only contain lowercase characters, which
+     * will match their uppercase equivalents as well.  A space
+     * character matches one or more required spaces.  A '~' character
+     * matches zero or more optional spaces.  A '#' character matches
+     * an integer and stores it in parsedInts, which the caller must
+     * ensure has enough capacity.
+     * @param parsedInts array to receive parsed integers.  Caller
+     * must ensure that parsedInts.length is >= the number of '#'
+     * signs in 'pattern'.
+     * @return the position after the last character parsed, or -1 if
+     * the parse failed
+     */
+    static int32_t parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
+                                const UnicodeString& pattern, int32_t* parsedInts);
+        
+    /**
+     * Parse an integer at pos, either of the form \d+ or of the form
+     * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
+     * or octal format.
+     * @param pos INPUT-OUTPUT parameter.  On input, the first
+     * character to parse.  On output, the character after the last
+     * parsed character.
+     */
+    static int32_t parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit);
+
 
     friend class RuleHalf;
 
