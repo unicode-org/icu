@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/04 19:20:52 $ 
- * $Revision: 1.22 $
+ * $Date: 2003/04/04 20:43:38 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -1201,25 +1201,6 @@ public class DecimalFormat extends NumberFormat {
             return false;
         }
 
-//        // check for positivePrefix; take longest
-//        boolean gotPositive = text.regionMatches(position,positivePrefix,0,
-//                                                 positivePrefix.length());
-//        boolean gotNegative = text.regionMatches(position,negativePrefix,0,
-//                                                 negativePrefix.length());
-//        if (gotPositive && gotNegative) {
-//            if (positivePrefix.length() > negativePrefix.length())
-//                gotNegative = false;
-//            else if (positivePrefix.length() < negativePrefix.length())
-//                gotPositive = false;
-//        }
-//        if (gotPositive) {
-//            position += positivePrefix.length();
-//        } else if (gotNegative) {
-//            position += negativePrefix.length();
-//        } else {
-//            //PP:parsePosition.errorIndex = position;
-//            return false;
-//        }
         // process digits or Inf, find decimal position
         status[STATUS_INFINITE] = false;
         if (!isExponent && text.regionMatches(position,symbols.getInfinity(),0,
@@ -1417,32 +1398,6 @@ public class DecimalFormat extends NumberFormat {
 
         status[STATUS_POSITIVE] = (posMatch >= 0);
 
-//        // check for positiveSuffix
-//        if (gotPositive)
-//            gotPositive = text.regionMatches(position,positiveSuffix,0,
-//                                             positiveSuffix.length());
-//        if (gotNegative)
-//            gotNegative = text.regionMatches(position,negativeSuffix,0,
-//                                             negativeSuffix.length());
-//
-//        // if both match, take longest
-//        if (gotPositive && gotNegative) {
-//            if (positiveSuffix.length() > negativeSuffix.length())
-//                gotNegative = false;
-//            else if (positiveSuffix.length() < negativeSuffix.length())
-//                gotPositive = false;
-//        }
-//
-//        // fail if neither or both
-//        if (gotPositive == gotNegative) {
-//            //PP:parsePosition.errorIndex = position;
-//            return false;
-//        }
-//
-//        parsePosition.setIndex(position +
-//            (gotPositive ? positiveSuffix.length() : negativeSuffix.length())); // mark success!
-//
-//        status[STATUS_POSITIVE] = gotPositive;
         if (parsePosition.getIndex() == oldStart) {
             //PP:parsePosition.errorIndex = position;
             return false;
