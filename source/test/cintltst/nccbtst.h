@@ -26,6 +26,7 @@ static void TestSubWithValueCallBack(void);
 static void TestLegalAndOtherCallBack(void);
 static void TestSingleByteCallBack(void);
 
+
 static void TestSkip(int32_t inputsize, int32_t outputsize);
 
 static void TestStop(int32_t inputsize, int32_t outputsize);
@@ -36,13 +37,16 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize);
 
 static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize);
 static void TestSingleByte(int32_t inputsize, int32_t outputsize);
+static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize);
 
 UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
-			    const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets);
+			    const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets,
+                const char *mySubChar, int8_t len);
 
 
 UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
-		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets);
+		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets,
+               const char *mySubChar, int8_t len);
 
 
 static void printSeq(const char* a, int len);
