@@ -350,9 +350,17 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
         } else {
           tree[0] = 0;
         }
+#ifdef OS400
+        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(CNAME)%s -d $(TEMP_DIR) $(SRCDIR)/%s", tree, infiles->str);
+#else
         sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(CNAME)%s -d $(TEMP_DIR) $<", tree);
+#endif
       } else {
+#ifdef OS400
+        sprintf(stanza, "$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) %s", infiles->str);
+#else
         sprintf(stanza, "$(INVOKE) $(GENCCODE) -d $(TEMP_DIR) $<");
+#endif
       }
       
       if(o->numeric) {
@@ -366,6 +374,18 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       
       commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
       
+#ifdef OS400
+      /* This builds the file into one .c file */
+      sprintf(stanza, "@cat $(TEMP_PATH)%s >> $(TEMP_PATH)/$(NAME)all.c", cfile);
+      commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+      sprintf(stanza, "@$(RMV) $(TEMP_DIR)/%s", cfile);
+      commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+        
+      T_FileStream_write(makefile, "\t", 1);
+      pkg_writeCharList(makefile, commands, "\n\t",0);
+      T_FileStream_write(makefile, "\n\n", 2);
+#else
       if(genFileOffset > 0) {    /* for AS/400 */
         sprintf(stanza, "@mv $(TEMP_PATH)%s $(TEMP_PATH)%s", cfile, cfile+genFileOffset);
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
@@ -379,6 +399,7 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       
       sprintf(stanza, "$(TEMP_PATH)%s", tmp+genFileOffset); /* for AS/400 */
       pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
+#endif
       
       pkg_deleteList(parents);
       pkg_deleteList(commands);
