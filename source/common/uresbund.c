@@ -302,13 +302,10 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     umtx_lock(&resbMutex);
     r = init_entry(localeID, path, &initstatus);
     uprv_strcpy(name, r->fName);
-    isDefault = (uprv_strcmp(name, uloc_getDefault()) == 0);
+    isDefault = (uprv_strncmp(name, uloc_getDefault(), uprv_strlen(name)) == 0);
     hasRealData = (r->fBogus == U_ZERO_ERROR);
-    if(isDefault == TRUE && r->fBogus != U_ZERO_ERROR) { /*there is a case when default locale is invalid - we have to be graceful about it*/
-        r->fBogus = U_USING_DEFAULT_ERROR;
-    }
 
-	isRoot = (uprv_strcmp(name, kRootLocaleName) == 0);
+    isRoot = (uprv_strcmp(name, kRootLocaleName) == 0);
 
     /*Fallback data stuff*/
     hasChopped = chopLocale(name);
@@ -346,6 +343,9 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
         /* insert root locale */
         t2 = init_entry(kRootLocaleName, r->fPath, status);
+	if(!hasRealData) {
+	  r->fBogus = U_USING_DEFAULT_ERROR;
+	}
         hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
         t1->fParent = t2;
         t1 = t2;
