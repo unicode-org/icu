@@ -20,6 +20,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
+#include "udataswp.h"
 
 /*
  * A Resource is a 32-bit value that has 2 bit fields:
@@ -177,10 +178,6 @@ U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, Resource array, 
 U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, Resource table, int32_t indexS, const char ** key);
 U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, Resource table, int32_t *indexS, const char* * key);
 U_CFUNC Resource res_findResource(const ResourceData *pResData, Resource r, const char** path, const char** key);
-
-/* forward declaration */
-struct UDataSwapper;
-typedef struct UDataSwapper UDataSwapper;
 
 /**
  * Swap an ICU resource bundle. See udataswp.h.
