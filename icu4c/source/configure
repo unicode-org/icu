@@ -4126,7 +4126,7 @@ fi
 
 
 if test $hpuxcma = true; then
-	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT_4 -DHPUX_CMA"
+	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT4 -DHPUX_CMA"
 fi
 
 
