@@ -21,8 +21,6 @@
 #ifndef UNISTR_H
 #define UNISTR_H
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
 #include "unicode/rep.h"
 
 struct UConverter;          // unicode/ucnv.h
@@ -47,7 +45,6 @@ u_strlen(const UChar *s);
 U_NAMESPACE_BEGIN
 
 class Locale;               // unicode/locid.h
-class UCharReference;
 class StringCharacterIterator;
 class BreakIterator;        // unicode/brkiter.h
 
