@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2004, International Business Machines
+# *   Copyright (C) 1995-2005, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -687,7 +687,6 @@ ibm-1125_P100-1997 { UTR22* }   ibm-1125 { IBM* JAVA } cp1125 { JAVA* }         
 ibm-1129_P100-1997 { UTR22* }   ibm-1129 { IBM* }                                       # ISO Vietnamese
 ibm-1131_P100-1997 { UTR22* }   ibm-1131 { IBM* JAVA } cp1131 { JAVA* }                 # Cyrillic Belarus PC
 ibm-1133_P100-1997 { UTR22* }   ibm-1133 { IBM* }                                       # ISO Lao
-ibm-1381_P110-1999 { UTR22* }   ibm-1381 { IBM* JAVA } cp1381 { JAVA* } 1381 { JAVA }   # S-Ch PC Data mixed (IBM GB) 
 
 
 # Partially algorithmic converters
@@ -905,4 +904,5 @@ ebcdic-xml-us
 #ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host. Euro update of ibm-28709. This is used in combination with another CCSID mapping.
 #ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* }   # DBCS T-Ch Host. Euro update of ibm-835. DBCS portion of ibm-1371.
 
+#ibm-1381_P110-1999 { UTR22* }   ibm-1381 { IBM* JAVA } cp1381 { JAVA* } 1381 { JAVA }   # S-Ch PC Data mixed (IBM GB) 
 
