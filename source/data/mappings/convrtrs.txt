@@ -508,11 +508,16 @@ ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
                         950 { JAVA }
-macos-2566-10.2 { UTR22* }
+macos-2566-10.2 { UTR22* }      # This uses supplementary characters.
                         Big5-HKSCS { IANA* JAVA* }
                         big5hk { JAVA }
                         HKSCS-BIG5  # From http://www.openi18n.org/localenameguide/
                         # big5-hkscs:unicode3.0 # This is actually post 3.0 data, which has different mappings
+ibm-1375_P100-2003 { UTR22* }   # IBM's interpretation of Windows' Taiwan Big-5 w/ HKSCS extensions
+                        ibm-1375 { IBM* }
+                        Big5-HKSCS
+                        # windows-950 # Windows-950 can be w/ or w/o HKSCS extensions. By default it's not.
+                        # windows-950_hkscs
 
 ibm-1386_P100-2002  { UTR22* }
                         ibm-1386 { IBM* JAVA }
