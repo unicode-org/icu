@@ -118,8 +118,10 @@ int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UError
 
 tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
-  MaxExpansionTable *maxet = (MaxExpansionTable *)uprv_malloc(
+  MaxExpansionTable *maxet  = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
+  MaxJamoExpansionTable *maxjet = (MaxJamoExpansionTable *)uprv_malloc(
+                                               sizeof(MaxJamoExpansionTable));
   t->image = image;
   t->options = opts;
 
@@ -151,6 +153,11 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   else {
     maxet->size     = 0;
   }
+  t->maxJamoExpansions = maxjet;
+  maxjet->size = 0;
+  maxjet->maxLSize = 1;
+  maxjet->maxVSize = 1;
+  maxjet->maxTSize = 1;
 
   t->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
   t->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
@@ -214,6 +221,27 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     }
   }
 
+  if(t->maxJamoExpansions != NULL) {
+    r->maxJamoExpansions = (MaxJamoExpansionTable *)uprv_malloc(sizeof(MaxJamoExpansionTable));
+    r->maxJamoExpansions->size = t->maxJamoExpansions->size;
+    r->maxJamoExpansions->position = t->maxJamoExpansions->position;
+    r->maxJamoExpansions->maxLSize = t->maxJamoExpansions->maxLSize;
+    r->maxJamoExpansions->maxVSize = t->maxJamoExpansions->maxVSize;
+    r->maxJamoExpansions->maxTSize = t->maxJamoExpansions->maxTSize;
+    if(t->maxJamoExpansions->endExpansionCE != NULL) {
+      r->maxJamoExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxJamoExpansions->size);
+      uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->size*sizeof(uint32_t));
+    } else {
+      r->maxJamoExpansions->endExpansionCE = NULL;
+    }
+    if(t->maxJamoExpansions->isV != NULL) {
+      r->maxJamoExpansions->isV = (UBool *)uprv_malloc(sizeof(UBool)*t->maxJamoExpansions->size);
+      uprv_memcpy(r->maxJamoExpansions->isV, t->maxJamoExpansions->isV, t->maxJamoExpansions->size*sizeof(UBool));
+    } else {
+      r->maxJamoExpansions->isV = NULL;
+    }
+  }
+
   if(t->unsafeCP != NULL) {
     r->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
     uprv_memcpy(r->unsafeCP, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
@@ -243,6 +271,13 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_free(t->maxExpansions->endExpansionCE);
   uprv_free(t->maxExpansions->expansionCESize);
   uprv_free(t->maxExpansions);
+
+  if (t->maxJamoExpansions->size > 0) {
+    uprv_free(t->maxJamoExpansions->endExpansionCE);
+    uprv_free(t->maxJamoExpansions->isV);
+    uprv_free(t->maxJamoExpansions);
+  }
+
   uprv_free(t->unsafeCP);
   uprv_free(t->contrEndCP);
 
@@ -380,6 +415,94 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
   return maxexpansion->position;
 }
 
+/**
+* Sets the maximum length of all jamo expansion sequences ending with the same
+* collation element. The size required for maxexpansion and maxsize is 
+* returned if the arrays are too small.
+* @param ch the jamo codepoint
+* @param endexpansion the last expansion collation element to be added
+* @param expansionsize size of the expansion
+* @param maxexpansion data structure to store the maximum expansion data.
+* @param status error status
+* @returns size of the maxexpansion and maxsize used.
+*/
+int uprv_uca_setMaxJamoExpansion(UChar                  ch,
+                                 uint32_t               endexpansion,
+                                 uint8_t                expansionsize,
+                                 MaxJamoExpansionTable *maxexpansion,
+                                 UErrorCode            *status)
+{
+  UBool isV = TRUE;
+  if (((uint32_t)ch - 0x1100) <= (0x1112 - 0x1100)) {
+      /* determines L for Jamo, doesn't need to store this since it is never
+      at the end of a expansion */
+      if (maxexpansion->maxLSize < expansionsize) {
+          maxexpansion->maxLSize = expansionsize;
+      }
+      return maxexpansion->position;
+  }
+
+  if (((uint32_t)ch - 0x1161) <= (0x1175 - 0x1161)) {
+      /* determines V for Jamo */
+      if (maxexpansion->maxVSize < expansionsize) {
+          maxexpansion->maxVSize = expansionsize;
+      }
+  }
+
+  if (((uint32_t)ch - 0x11A8) <= (0x11C2 - 0x11A8)) {
+      isV = FALSE;
+      /* determines T for Jamo */
+      if (maxexpansion->maxTSize < expansionsize) {
+          maxexpansion->maxTSize = expansionsize;
+      }
+  }
+
+  if (maxexpansion->size == 0) {
+    /* we'll always make the first element 0, for easier manipulation */
+    maxexpansion->endExpansionCE = 
+               (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(uint32_t));
+    *(maxexpansion->endExpansionCE) = 0;
+    maxexpansion->isV = 
+                 (UBool *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(UBool));
+    *(maxexpansion->isV) = 0;
+    maxexpansion->size     = INIT_EXP_TABLE_SIZE;
+    maxexpansion->position = 0;
+  }
+
+  if (maxexpansion->position + 1 == maxexpansion->size) {
+    uint32_t *neweece = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
+                                   2 * maxexpansion->size * sizeof(uint32_t));
+    UBool    *newisV  = (UBool *)uprv_realloc(maxexpansion->isV, 
+                                   2 * maxexpansion->size * sizeof(UBool));
+    if (neweece == NULL || newisV == NULL) {
+#ifdef UCOL_DEBUG
+      fprintf(stderr, "out of memory for maxExpansions\n");
+#endif
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return -1;
+    }
+    maxexpansion->endExpansionCE  = neweece;
+    maxexpansion->isV             = newisV;
+    maxexpansion->size *= 2;
+  }
+
+  uint32_t *pendexpansionce = maxexpansion->endExpansionCE;
+  int       pos             = maxexpansion->position;
+
+  while (pos > 0) {
+      if (*(pendexpansionce + pos) == endexpansion) {
+          return maxexpansion->position;
+      }
+      pos --;
+  }
+
+  *(pendexpansionce + maxexpansion->position) = endexpansion;
+  *(maxexpansion->isV + maxexpansion->position) = isV;
+  maxexpansion->position ++;
+  
+  return maxexpansion->position;
+}
+
 
 static void ContrEndCPSet(uint8_t *table, UChar c) {
     uint32_t    hash;
@@ -488,6 +611,11 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
                              status);
     if(UCOL_ISJAMO(element->cPoints[0])) {
       t->image->jamoSpecial = TRUE;
+      uprv_uca_setMaxJamoExpansion(element->cPoints[0],
+                               element->CEs[element->noOfCEs - 1],
+                               (uint8_t)element->noOfCEs,
+                               t->maxJamoExpansions,
+                               status);
     }
   }
 
@@ -592,13 +720,14 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     }
 }
 
-void uprv_uca_getMaxExpansionJamo(CompactIntArray   *mapping, 
-                                    MaxExpansionTable *maxexpansion,
-                                    UBool             jamospecial,
-                                    UErrorCode        *status)
+void uprv_uca_getMaxExpansionJamo(CompactIntArray       *mapping, 
+                                  MaxExpansionTable     *maxexpansion,
+                                  MaxJamoExpansionTable *maxjamoexpansion,
+                                  UBool                  jamospecial,
+                                  UErrorCode            *status)
 {
   const uint32_t VBASE  = 0x1161;
-  const uint32_t TBASE  = 0x11A7;
+  const uint32_t TBASE  = 0x11A8;
   const uint32_t VCOUNT = 21;
   const uint32_t TCOUNT = 28;
   
@@ -606,46 +735,44 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray   *mapping,
   uint32_t t = TBASE + TCOUNT - 1;
   uint32_t ce;
 
+  while (v >= VBASE) {
+      ce = ucmp32_get(mapping, v);
+      if (ce < UCOL_SPECIAL_FLAG) {
+          uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
+      }
+      v --;
+  }
+
+  while (t >= TBASE)
+  {
+      ce = ucmp32_get(mapping, t);
+      if (ce < UCOL_SPECIAL_FLAG) {
+          uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
+      }
+      t --;
+  }
+  /*  According to the docs, 99% of the time, the Jamo will not be special */
   if (jamospecial) {
       /* gets the max expansion in all unicode characters */
-      int     count   = maxexpansion->position;
-      uint8_t maxsize = 0;
+      int     count    = maxjamoexpansion->position;
+      uint8_t maxTSize = maxjamoexpansion->maxLSize + 
+                         maxjamoexpansion->maxVSize +
+                         maxjamoexpansion->maxTSize;
+      uint8_t maxVSize = maxjamoexpansion->maxLSize + 
+                         maxjamoexpansion->maxVSize;
 
-      while (count >= 0) {
-          uint8_t size = maxexpansion->expansionCESize[count];
-          if (size > maxsize) {
-              maxsize = size;
-          }
+      while (count > 0) {
           count --;
-      }
-
-      while (v >= VBASE)
-      {
-        ce = ucmp32_get(mapping, v);
-        uprv_uca_setMaxExpansion(ce, maxsize << 1, maxexpansion, status);
-        v --;
-      }
-
-      while (t >= TBASE)
-      {
-        ce = ucmp32_get(mapping, t);
-        uprv_uca_setMaxExpansion(ce, maxsize * 3, maxexpansion, status);
-        t --;
-      }
-  }
-  else {
-      while (v >= VBASE)
-      {
-        ce = ucmp32_get(mapping, v);
-        uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
-        v --;
-      }
-
-      while (t >= TBASE)
-      {
-        ce = ucmp32_get(mapping, t);
-        uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
-        t --;
+          if (*(maxjamoexpansion->isV + count) == TRUE) {
+                uprv_uca_setMaxExpansion(
+                                   *(maxjamoexpansion->endExpansionCE + count), 
+                                   maxVSize, maxexpansion, status);
+          }
+          else {
+                uprv_uca_setMaxExpansion(
+                                   *(maxjamoexpansion->endExpansionCE + count), 
+                                   maxTSize, maxexpansion, status);
+          }
       }
   }
 }
@@ -672,8 +799,8 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);
 
     /* sets jamo expansions */
-    uprv_uca_getMaxExpansionJamo(mapping, maxexpansion, t->image->jamoSpecial, 
-                                 status);
+    uprv_uca_getMaxExpansionJamo(mapping, maxexpansion, t->maxJamoExpansions,
+                                 t->image->jamoSpecial, status);
 
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
