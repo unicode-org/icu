@@ -1460,20 +1460,15 @@ public class DecimalFormat extends NumberFormat {
 		// hack quick long
 		if (digitList.decimalAt < 12) { // quick check for long
 		    long l = 0;
-		    boolean negate = false;
 		    if (digitList.count > 0) {
 			int nx = 0;
-			if (digitList.digits[0] == '-') {
-			    negate = true;
-			    nx = 1;
-			}
 			while (nx < digitList.count) {
 			    l = l * 10 + (char)digitList.digits[nx++] - '0';
 			}
 			while (nx++ < digitList.decimalAt) {
 			    l *= 10;
 			}
-			if (negate) {
+			if (!status[STATUS_POSITIVE]) {
 			    l = -l;
 			}
 		    }
