@@ -1419,7 +1419,7 @@ u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options) {
 
                 /* copy the result string */
                 i=0;
-                while(i<props) {
+                while(i<(int32_t)props) {
                     dest[i++]=*uchars++;
                 }
                 return i;
