@@ -1,5 +1,5 @@
 /*
- * $RCSfile: IBMCalendar.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:55 $
+ * $RCSfile: IBMCalendar.java,v $ $Revision: 1.2 $ $Date: 2000/03/01 01:23:26 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -15,12 +15,6 @@
  */
 package com.ibm.util;
 
-import com.ibm.text.DateFormatSymbols;
-import com.ibm.text.SimpleDateFormat;
-
-import java.text.DateFormat;
-import java.text.MessageFormat;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,6 +22,11 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import java.text.MessageFormat;
+import java.text.DateFormat;
+import com.ibm.text.DateFormatSymbols;
+import com.ibm.text.SimpleDateFormat;
+
 
 /**
  * Calendar utility class.

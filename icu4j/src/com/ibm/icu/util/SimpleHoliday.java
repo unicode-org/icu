@@ -2,7 +2,9 @@
 
 package com.ibm.util;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A holiday whose date can be represented by a SimpleDateRule object

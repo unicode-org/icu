@@ -1,5 +1,5 @@
 /*
- * $RCSfile: IslamicCalendar.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:55 $
+ * $RCSfile: IslamicCalendar.java,v $ $Revision: 1.2 $ $Date: 2000/03/01 01:24:36 $
  *
  * (C) Copyright IBM Corp. 1997-1998.  All Rights Reserved.
  *
@@ -20,8 +20,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import com.ibm.util.CalendarAstronomer.*;
+import com.ibm.util.CalendarAstronomer;
 
 /**
  * <code>IslamicCalendar</code> is a subclass of <code>Calendar</code>
