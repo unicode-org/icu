@@ -279,7 +279,7 @@ void TestToUnicodeErrorBehaviour()
   
 }
 void TestGetNextErrorBehaviour(){
-   /*Test for Illegal character*/
+   /*Test for unassigned character*/
     static const char input1[]={ (char)0x70 };
     const char* source=(const char*)input1;
     UErrorCode err=U_ZERO_ERROR;
@@ -287,10 +287,11 @@ void TestGetNextErrorBehaviour(){
     UConverter *cnv=ucnv_open("ibm-1159", &err);
     if(U_FAILURE(err)) {
         log_err("Unable to open a SBCS(ibm-1159) converter: %s\n", u_errorName(err));
+        return;
     }
     c=ucnv_getNextUChar(cnv, &source, source+sizeof(source), &err);
-    if(err != U_INVALID_CHAR_FOUND && c!= 0xFFFD){
-        log_err("FAIL: Expected: U_INVALID_CHAR_ERROR ----Got:%s\n Expected 0xFFFD Got %lx\n",  myErrorName(err), c);
+    if(err != U_INVALID_CHAR_FOUND && c!=0xfffd){
+        log_err("FAIL in TestGetNextErrorBehaviour(unassigned): Expected: U_INVALID_CHAR_ERROR or 0xfffd ----Got:%s and 0x%lx\n",  myErrorName(err), c);
     }
     ucnv_close(cnv);
      

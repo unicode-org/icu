@@ -106,7 +106,7 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        (pInfo->formatVersion[0]==4 || pInfo->formatVersion[0]==5);
+        pInfo->formatVersion[0]==5;
 }
 
 #define DATA_TYPE "cnv"
@@ -418,7 +418,7 @@ UConverter *
 
 UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
-    UDataInfo info;
+    /* UDataInfo info; -- necessary only if some converters have different formatVersion */
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
     const UConverterStaticData *source = (const UConverterStaticData *) raw;
     UConverterSharedData *data;
@@ -435,6 +435,8 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
         return NULL;
     }
 
+#if 0
+    /* necessary only if some converters have different formatVersion; now everything is at version 5 */
     /* test for the format version: MBCS is at version 5, the rest still at 4 */
     info.size=sizeof(UDataInfo);
     udata_getInfo(pData, &info);
@@ -442,6 +444,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
         *status = U_INVALID_TABLE_FORMAT;
         return NULL;
     }
+#endif
 
     data = (UConverterSharedData *)uprv_malloc(sizeof(UConverterSharedData));
     if(data == NULL) {

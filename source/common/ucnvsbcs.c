@@ -82,7 +82,7 @@ void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
           /*gets the corresponding UniChar */
           targetUniChar = myToUnicode[(unsigned char) mySource[mySourceIndex++]];
 
-          if (targetUniChar != missingUCharMarker)
+          if (targetUniChar < 0xfffe)
             {
               /* writes the UniChar to the output stream */
               myTarget[myTargetIndex++] = targetUniChar;
@@ -93,19 +93,30 @@ void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
                   (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
               {
                   /* Look up in the fallback table first */
-                  targetUniChar = myToUnicodeFallback[(unsigned char) mySource[mySourceIndex-1]];
-                  if (targetUniChar != missingUCharMarker)
+                  UChar fallbackUniChar = myToUnicodeFallback[(unsigned char) mySource[mySourceIndex-1]];
+                  if (fallbackUniChar < 0xfffe)
                   {
-                      myTarget[myTargetIndex++] = targetUniChar;
+                      myTarget[myTargetIndex++] = targetUniChar = fallbackUniChar;
                   }
               }
-              if (targetUniChar == missingUCharMarker)
+              if (targetUniChar >= 0xfffe)
               {
                   const char *saveSource = args->source;
                   UChar *saveTarget = args->target;
                   int32_t *saveOffsets = args->offsets;
+                  UConverterCallbackReason reason;
 
-                  *err = U_INVALID_CHAR_FOUND;
+                  if (targetUniChar == 0xfffe)
+                  {
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                  }
+                  else
+                  {
+                    reason = UCNV_ILLEGAL;
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                  }
+
                   args->converter->invalidCharBuffer[0] = (char) mySource[mySourceIndex - 1];
                   args->converter->invalidCharLength = 1;
 
@@ -117,7 +128,7 @@ void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
                                      args,
                                      args->converter->invalidCharBuffer,
                                      args->converter->invalidCharLength, 
-                                     UCNV_UNASSIGNED,
+                                     reason,
                                      err);
                   /* Hsys: calculate the source and target advancement */
                   args->source = saveSource;
@@ -238,7 +249,7 @@ void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
                                          args->converter->invalidUCharLength,
                                          (UChar32) (args->converter->invalidUCharLength == 2 ? 
                                              UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
-                                                                  args->converter->invalidUCharBuffer[2]) 
+                                                                  args->converter->invalidUCharBuffer[1]) 
                                                     : args->converter->invalidUCharBuffer[0]),
                                          reason,
                                          err);
@@ -273,45 +284,52 @@ UChar32 T_UConverter_getNextUChar_SBCS(UConverterToUnicodeArgs* args,
 {
   UChar myUChar;
   
-  if (U_FAILURE(*err)) return 0xFFFD;
+  if (U_FAILURE(*err)) return 0xffff;
 
   if (args->source+1 > args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return 0xFFFD;
+      return 0xffff;
     }
   
   /*Gets the corresponding codepoint*/
   myUChar = args->converter->sharedData->table->sbcs.toUnicode[(unsigned char)*(args->source++)];
   
-  if (myUChar != 0xFFFD) return myUChar;
+  if (myUChar < 0xfffe) return myUChar;
   else
     {      
       UChar* myUCharPtr = &myUChar;
-      const char* sourceFinal = args->source;
+      UConverterCallbackReason reason;
 
       /* Do the fallback stuff */
       if ((args->converter->useFallback == TRUE)&&
           (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
       {
-          myUChar = args->converter->sharedData->table->sbcs.toUnicodeFallback[ (unsigned char)*(args->source-1)];
-          if (myUChar != 0xFFFD) return myUChar;
+          UChar fallbackUChar = args->converter->sharedData->table->sbcs.toUnicodeFallback[ (unsigned char)*(args->source-1)];
+          if (fallbackUChar < 0xfffe) return fallbackUChar;
       }
 
-      *err = U_INVALID_CHAR_FOUND;
-      
-      /*Calls the ErrorFunctor after rewinding the input buffer*/
-      args->source--;
+      if (myUChar == 0xfffe)
+      {
+        reason = UCNV_UNASSIGNED;
+        *err = U_INVALID_CHAR_FOUND;
+      }
+      else
+      {
+        reason = UCNV_ILLEGAL;
+        *err = U_ILLEGAL_CHAR_FOUND;
+      }
+
+      /*Calls the ErrorFunctor */
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
       args->target = myUCharPtr;
       args->targetLimit = myUCharPtr + 1;
-      args->source = sourceFinal;
       args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                     args,
-                                    sourceFinal,
+                                    args->source - 1,
                                     1,
-                                    UCNV_UNASSIGNED,
+                                    reason,
                                     err);
 
       /*makes the internal caching transparent to the user*/
@@ -429,7 +447,7 @@ void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
               targetUniChar = (UChar) ucmp16_getu (myToUnicode, mySourceChar);
 
               /*writing the UniChar to the output stream */
-              if (targetUniChar != missingUCharMarker)
+              if (targetUniChar < 0xfffe)
                 {
                   /*writes the UniChar to the output stream */
                   myTarget[myTargetIndex++] = targetUniChar;
@@ -437,19 +455,30 @@ void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
               else if ((args->converter->useFallback == TRUE) &&
                   (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
               {
-                  targetUniChar = (UChar) ucmp16_getu(myToUnicodeFallback, mySourceChar);
-                  if (targetUniChar != missingUCharMarker)
+                  UChar fallbackUniChar = (UChar) ucmp16_getu(myToUnicodeFallback, mySourceChar);
+                  if (fallbackUniChar < 0xfffe)
                   {
-                      myTarget[myTargetIndex++] = targetUniChar;
+                      myTarget[myTargetIndex++] = targetUniChar = fallbackUniChar;
                   }
               }
-              if (targetUniChar == missingUCharMarker)
+              if (targetUniChar >= 0xfffe)
                 {
                   const char *saveSource = args->source;
                   UChar *saveTarget = args->target;
                   int32_t *saveOffsets = args->offsets;
+                  UConverterCallbackReason reason;
 
-                  *err = U_INVALID_CHAR_FOUND;
+                  if (targetUniChar == 0xfffe)
+                  {
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                  }
+                  else
+                  {
+                    reason = UCNV_ILLEGAL;
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                  }
+
                   args->converter->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
                   args->converter->invalidCharBuffer[1] = (char) mySourceChar;
                   args->converter->invalidCharLength = 2;
@@ -462,7 +491,7 @@ void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
                                      args,
                                      args->converter->invalidCharBuffer,
                                      args->converter->invalidCharLength, 
-                                     UCNV_UNASSIGNED,
+                                     reason,
                                      err);
                   /* Hsys: calculate the source and target advancement */
                   args->source = saveSource;
@@ -616,7 +645,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
                                          args->converter->invalidUCharLength,
                                          (UChar32) (args->converter->invalidUCharLength == 2 ? 
                                              UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
-                                                                  args->converter->invalidUCharBuffer[2]) 
+                                                                  args->converter->invalidUCharBuffer[1]) 
                                                     : args->converter->invalidUCharBuffer[0]),
                                          reason,
                                          err);
@@ -650,7 +679,7 @@ UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
 {
   UChar myUChar;
   
-  if (U_FAILURE(*err)) return 0xFFFD;
+  if (U_FAILURE(*err)) return 0xffff;
   /*Checks boundaries and set appropriate error codes*/
   if (args->source+2 > args->sourceLimit) 
     {
@@ -665,7 +694,7 @@ UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
           *err = U_TRUNCATED_CHAR_FOUND;
         }
       
-      return 0xFFFD;
+      return 0xffff;
     }
 
   /*Gets the corresponding codepoint*/
@@ -674,39 +703,45 @@ UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
   
   /*update the input pointer*/
   args->source += 2;
-  if (myUChar != 0xFFFD) return myUChar;
+  if (myUChar < 0xfffe) return myUChar;
   else
     {      
       UChar* myUCharPtr = &myUChar;
-      const char* sourceFinal = args->source;
+      UConverterCallbackReason reason;
 
-      /* rewinding the input buffer*/
-      args->source -= 2;
       /* Do the fallback stuff */
       if ((args->converter->useFallback == TRUE) &&
           (args->converter->sharedData->staticData->hasToUnicodeFallback == TRUE))
       {
-          myUChar = ucmp16_getu((&args->converter->sharedData->table->dbcs.toUnicodeFallback),
+          UChar fallbackUChar = ucmp16_getu((&args->converter->sharedData->table->dbcs.toUnicodeFallback),
                             (uint16_t)(((UChar)((*(args->source))) << 8) |((uint8_t)*(args->source-1))));
-          if (myUChar != 0xFFFD) 
+          if (fallbackUChar < 0xfffe)
           {
               args->source += 2;
-              return myUChar;
+              return fallbackUChar;
           }
       }
       
-      *err = U_INVALID_CHAR_FOUND;
-    
+      if (myUChar == 0xfffe)
+      {
+        reason = UCNV_UNASSIGNED;
+        *err = U_INVALID_CHAR_FOUND;
+      }
+      else
+      {
+        reason = UCNV_ILLEGAL;
+        *err = U_ILLEGAL_CHAR_FOUND;
+      }
+
       args->target = myUCharPtr;
       args->targetLimit = myUCharPtr + 1;
-      args->source = sourceFinal;
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
       args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                     args,
-                                    sourceFinal,
+                                    args->source - 2,
                                     2,
-                                    UCNV_UNASSIGNED,
+                                    reason,
                                     err);
       /*makes the internal caching transparent to the user*/
       if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;

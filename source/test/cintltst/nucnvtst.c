@@ -1678,13 +1678,13 @@ TestLMBCS() {
          {
               log_err("Unexpected pointer move in 0 byte source request \n");
          }
-         /*0 byte source request - GetNextUChar : error & value == FFFD */
+         /*0 byte source request - GetNextUChar : error & value == fffe or ffff */
          uniChar = ucnv_getNextUChar(cnv, &pLIn, pLIn, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
          {
             log_err("Unexpected Error on 0-byte source request to ucnv_getnextUChar: %s\n", u_errorName(errorCode));
          }
-         if (uniChar != 0xFFFD) /* would like to use an exported define here */
+         if (((uint32_t)uniChar - 0xfffe) > 1) /* not 0xfffe<=uniChar<=0xffff */
          {
             log_err("Unexpected value on 0-byte source request to ucnv_getnextUChar \n");
          }

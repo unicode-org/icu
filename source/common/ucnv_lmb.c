@@ -967,7 +967,7 @@ GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode 
      if (args->source+index > args->sourceLimit){\
          *err = U_TRUNCATED_CHAR_FOUND;\
          args->source = saveSource;\
-         return missingUCharMarker;}
+         return 0xffff;}
 
 
 /* Return the Unicode representation for the current LMBCS character
@@ -990,7 +990,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
    if (args->source >= args->sourceLimit)
    {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return missingUCharMarker;
+      return 0xffff;
    }
    /* Grab first byte & save address for error recovery */
    CurByte = *((ulmbcs_byte_t  *) (saveSource = args->source++));
@@ -1133,7 +1133,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
          }
       }
    }
-   if (((uint32_t)uniChar - 0xfffd) <= 2) /* 0xfffd<=uniChar<=0xffff, was: uniChar == missingUCharMarker */
+   if (((uint32_t)uniChar - 0xfffe) <= 1) /* 0xfffe<=uniChar<=0xffff */
    {
        /*It is very likely that the ErrorFunctor will write to the
        *internal buffers */
@@ -1141,10 +1141,21 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
       /* This code needs updating when new error callbacks are installed */
 
       UChar * pUniChar = (UChar *)&uniChar;
-      *err = U_INVALID_CHAR_FOUND;
+      UConverterCallbackReason reason;
+
+      if (uniChar == 0xfffe)
+      {
+        reason = UCNV_UNASSIGNED;
+        *err = U_INVALID_CHAR_FOUND;
+      }
+      else
+      {
+        reason = UCNV_ILLEGAL;
+        *err = U_ILLEGAL_CHAR_FOUND;
+      }
+
       args->target = pUniChar;
       args->targetLimit = pUniChar + 1;
-      args->source = saveSource;
       args->flush = TRUE;
       args->offsets = NULL;  
       args->size = sizeof(args);
@@ -1152,7 +1163,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                                     args,
                                     saveSource,
                                     args->sourceLimit - saveSource,
-                                    UCNV_UNASSIGNED,
+                                    reason,
                                     err);
       args->source = saveSource;
    }
@@ -1237,7 +1248,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
       }
       if (U_SUCCESS(*err))
       {
-         if (uniChar != missingUCharMarker)
+         if (uniChar < 0xfffe)
          {
             *(args->target)++ = uniChar;
             if(args->offsets)
@@ -1245,9 +1256,13 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                *(args->offsets)++ = saveSource - pStartLMBCS;
             }
          }
-         else
+         else if (uniChar == 0xfffe)
          {
             *err = U_INVALID_CHAR_FOUND;
+         }
+         else /* if (uniChar == 0xffff) */
+         {
+            *err = U_ILLEGAL_CHAR_FOUND;
          }
       }
    }
