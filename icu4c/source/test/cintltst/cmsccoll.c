@@ -2926,7 +2926,21 @@ static void TestSurrogates() {
   genericRulesStarter(rule, test, 14);
 }
 
+/* This is a test for prefix implementation, used by JIS X 4061 collation rules */
+static void TestPrefix() {
+  static const char *rules = 		
+      "&z <<< z|a";
+  /* this should yield in zz<<< za */
+  static const char *testaz[] = {  
+    "zz", "za"
+  };
+  genericRulesStarter(rules, testaz, 2);
+}
+
+/* This test uses data suplied by Masashiko Maedera to test the implementation */
+/* JIS X 4061 collation order implementation                                   */
 static void TestNewJapanese() {
+
   UErrorCode status = U_ZERO_ERROR;
   /*UParseError parseError;*/
   UCollator *coll = NULL;  
@@ -2937,12 +2951,6 @@ static void TestNewJapanese() {
         /*UCollator *coll = ucol_open("ja_JP_JIS", &status);  */
   /*"&\u304b\u3099<<<\u304c|\u309d=\u304b|\u309d\u3099=\u304c|\u309d\u3099"*/
 
-  static const char *rules = 		
-        "&z <<< z|a";
-    /* this should yield in zz<<< za */
-    static const char *testaz[] = {       "\\u30d7\\u30fd",
-      "\\u3077\\u3075",
-/*"zz", "za"*/ };
 
   static const char *test[] = {
       "\\u30b7\\u30e3\\u30fc\\u30ec",
@@ -3022,7 +3030,12 @@ static void TestNewJapanese() {
       "\\u30d7\\u30fd",
       "\\u3077\\u3075",
   };
-
+  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
+}
+/* this peace of code should be in some sort of verbose mode     */
+/* it gets the collation elements for elements and prints them   */
+/* This is useful when trying to see whether the problem is      */
+/* 
 /*
   uint32_t i = 0;
   UCollationElements *it = NULL;
@@ -3047,9 +3060,6 @@ static void TestNewJapanese() {
   ucol_closeElements(it);
   ucol_close(coll);
 */
-  /*genericRulesStarter(rules, testaz, 2);*/
-  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
-}
 
 void addMiscCollTest(TestNode** root)
 {
