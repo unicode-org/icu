@@ -2186,6 +2186,10 @@ InputPath=.\unicode\unorm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unorm_it.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unormimp.h
 # End Source File
 # End Group
@@ -3391,5 +3395,9 @@ InputPath=.\unicode\utf_old.h
 
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\unorm_it.c
+# End Source File
 # End Target
 # End Project
