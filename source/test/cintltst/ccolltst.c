@@ -12,15 +12,16 @@
 *     Madhu Katragadda               Creation
 *********************************************************************************
 */
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "unicode/ucol.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 
 UChar U_CALLCONV testInc(void *context);
+
+void addCollTest(TestNode** root);
 
 void addCollTest(TestNode** root)
 {
@@ -67,8 +68,8 @@ void reportCResult( const UChar source[], const UChar target[],
                          UCollationResult expectedResult )
 {
     UChar *sResult, *sExpect;
-    sResult=(UChar*)malloc(sizeof(UChar) * 10);
-    sExpect=(UChar*)malloc(sizeof(UChar) * 10);
+    sResult=(UChar*)uprv_malloc(sizeof(UChar) * 10);
+    sExpect=(UChar*)uprv_malloc(sizeof(UChar) * 10);
     if (expectedResult < -1 || expectedResult > 1)
     {
         log_err("***** invalid call to reportCResult ****\n");
@@ -124,8 +125,8 @@ void reportCResult( const UChar source[], const UChar target[],
       log_verbose("SortKey2: %s\n", dumpSk(targetKey, sk));
     }
 
-    free(sExpect);
-    free(sResult);
+    uprv_free(sExpect);
+    uprv_free(sResult);
 }
 
 UChar* appendCompareResult(UCollationResult result, UChar* target)
@@ -153,7 +154,7 @@ UChar* appendCompareResult(UCollationResult result, UChar* target)
 UChar* CharsToUChars(const char* str) {
     /* Might be faster to just use uprv_strlen() as the preflight len - liu */
     int32_t len = u_unescape(str, 0, 0); /* preflight */
-    UChar *buf = (UChar*) malloc(sizeof(UChar) * len);
+    UChar *buf = (UChar*) uprv_malloc(sizeof(UChar) * len);
     u_unescape(str, buf, len);
     return buf;
 }
