@@ -242,4 +242,12 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
 U_CFUNC UConverterType
 _MBCSGetType(const UConverter* converter);
 
+U_CFUNC void 
+_MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode);
+U_CFUNC void 
+_MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                          UErrorCode *pErrorCode);
+
+
 #endif
