@@ -367,7 +367,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_FIND("\\D+", "<0>non digits</0>");
+    REGEX_FIND("(?:ABC)+", "<0>ABCABCABC</0>D");
     }
     exit(1);
 #endif
@@ -856,17 +856,21 @@ void RegexTest::API_Pattern() {
     RegexPattern         *pat1a = RegexPattern::compile(re1, pe, status);
     REGEX_ASSERT(*pat1a == *pat1);
 
+#if 0
     // Compile with different flags should be not equal
     RegexPattern        *pat1b = RegexPattern::compile(re1, UREGEX_CASE_INSENSITIVE, pe, status);
     REGEX_CHECK_STATUS;
+
     REGEX_ASSERT(*pat1b != *pat1a);
     REGEX_ASSERT(pat1b->flags() == UREGEX_CASE_INSENSITIVE);
     REGEX_ASSERT(pat1a->flags() == 0);
+    delete pat1b;
+#endif    // add test back in when we actually support flag settings.
 
     // clone
-    RegexPattern *pat1c = pat1b->clone();
-    REGEX_ASSERT(*pat1b == *pat1c);
-    REGEX_ASSERT(*pat1a != *pat1c);
+    RegexPattern *pat1c = pat1->clone();
+    REGEX_ASSERT(*pat1c == *pat1);
+    REGEX_ASSERT(*pat1c != *pat2);
 
 
     // TODO:  Actually do some matches with the cloned/copied/assigned patterns.
@@ -874,7 +878,6 @@ void RegexTest::API_Pattern() {
 
 
     delete pat1c;
-    delete pat1b;
     delete pat1a;
     delete pat1;
     delete pat2;
@@ -1081,6 +1084,18 @@ void RegexTest::Extended() {
     // (?# comment) doesn't muck up pattern
     REGEX_FIND("Hello (?# this is a comment) world", "  <0>Hello  world</0>...");
 
+    // Check some implementation corner cases base on the way literal strings are compiled.
+    REGEX_FIND("A", "<0>A</0>");
+    REGEX_FIND("AB", "<0>AB</0>ABABAB");
+    REGEX_FIND("AB+", "<0>ABBB</0>A");
+    REGEX_FIND("AB+", "<0>AB</0>ABAB");
+    REGEX_FIND("ABC+", "<0>ABC</0>ABC");
+    REGEX_FIND("ABC+", "<0>ABCCCC</0>ABC");
+    REGEX_FIND("(?:ABC)+", "<0>ABCABCABC</0>D");
+    REGEX_FIND("(?:ABC)DEF+", "<0>ABCDEFFF</0>D");
+    REGEX_FIND("AB\\.C\\eD\\u0666E", "<0>AB.C\\u001BD\\u0666E</0>F");
+
+
 }
 
 
@@ -1122,6 +1137,18 @@ void RegexTest::Errors() {
 
     // {Numeric Quantifiers}
     REGEX_ERR("abc{4}", 1, 5, U_REGEX_UNIMPLEMENTED);
+
+    // Attempt to use non-default flags 
+    {
+        UParseError   pe;
+        UErrorCode    status = U_ZERO_ERROR;
+        int32_t       flags  = UREGEX_CASE_INSENSITIVE | UREGEX_CANON_EQ |
+                               UREGEX_COMMENTS         | UREGEX_DOTALL   |
+                               UREGEX_MULTILINE;
+        RegexPattern *pat1= RegexPattern::compile(".*", UREGEX_CASE_INSENSITIVE, pe, status);
+        REGEX_ASSERT(status == U_REGEX_UNIMPLEMENTED);
+        delete pat1;
+    }
 
 
     // Quantifiers are allowed only after something that can be quantified.
