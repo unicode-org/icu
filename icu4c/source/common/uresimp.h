@@ -66,6 +66,7 @@ struct UResourceBundle {
     Resource fRes;
 };
 
+U_CFUNC void ures_initStackObject(UResourceBundle* resB);
 U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state);
 U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 
