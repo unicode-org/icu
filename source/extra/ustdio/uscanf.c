@@ -28,8 +28,8 @@
 #include "unicode/udat.h"
 #include "unicode/uset.h"
 #include "uscanf.h"
-#include "uscanf_p.h"
 #include "ufile.h"
+#include "uscanf_p.h"
 #include "locbund.h"
 
 #include "cmemory.h"
@@ -876,7 +876,7 @@ u_scanf_scanset_handler(UFILE             *input,
     return 1;
 }
 
-int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fscanf(UFILE        *f,
          const char    *patternSpecification,
          ... )
@@ -891,7 +891,7 @@ u_fscanf(UFILE        *f,
     return converted;
 }
 
-int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fscanf_u(UFILE        *f,
            const UChar    *patternSpecification,
            ... )
