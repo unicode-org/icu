@@ -463,6 +463,10 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         fRB->fRules.extractBetween(n->fFirstPos, n->fLastPos, n->fText);
         break;
 
+    case doTagExpectedError:
+        error(U_BRK_MALFORMED_RULE_TAG);
+        returnVal = FALSE;
+        break;
 
     case doOptionStart:
         // Scanning a !!option.   At the start of string.

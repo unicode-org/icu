@@ -27,6 +27,11 @@
  */
 
 
+#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {\
+errln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
+
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
+errln("Test Failure at file %s, line %d", __FILE__, __LINE__);}}
 
 void RBBIAPITest::TestCloneEquals()
 {
@@ -598,6 +603,13 @@ void RBBIAPITest::TestRuleStatus() {
                  errln("FAIL: incorrect tag value %d at position %d", tag, pos);
                  break;
              }
+             
+             // Check that we get the same tag values from getRuleStatusVec()
+             int32_t vec[10];
+             int t = bi->getRuleStatusVec(vec, 10, status);
+             TEST_ASSERT_SUCCESS(status);
+             TEST_ASSERT(t==1);
+             TEST_ASSERT(vec[0] == tag);
          }
      }
      delete bi;
@@ -648,6 +660,87 @@ void RBBIAPITest::TestRuleStatus() {
 
 }
 
+
+//
+//  TestRuleStatusVec
+//      Test the vector form of  break rule status.
+//
+void RBBIAPITest::TestRuleStatusVec() {
+    UnicodeString rulesString  = "[A-N]{100}; \n"
+                                 "[a-w]{200}; \n"
+                                 "[\\p{L}]{300}; \n"
+                                 "[\\p{N}]{400}; \n"
+                                 "[0-5]{500}; \n"
+                                  "!.*;\n";
+     UnicodeString testString1  = "Aapz5?";
+     int32_t  statusVals[10];
+     int32_t  numStatuses;
+     int32_t  pos;
+
+     UErrorCode status=U_ZERO_ERROR;
+     UParseError    parseError;
+     
+     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString, parseError, status);
+     TEST_ASSERT_SUCCESS(status);
+     if (U_SUCCESS(status)) {
+         bi->setText(testString1);
+
+         // A
+         pos = bi->next();
+         TEST_ASSERT(pos==1);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 100);
+         TEST_ASSERT(statusVals[1] == 300);
+
+         // a
+         pos = bi->next();
+         TEST_ASSERT(pos==2);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 200);
+         TEST_ASSERT(statusVals[1] == 300);
+
+         // p
+         pos = bi->next();
+         TEST_ASSERT(pos==3);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 200);
+         TEST_ASSERT(statusVals[1] == 300);
+
+         // z
+         pos = bi->next();
+         TEST_ASSERT(pos==4);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 1);
+         TEST_ASSERT(statusVals[0] == 300);
+
+         // 5
+         pos = bi->next();
+         TEST_ASSERT(pos==5);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 400);
+         TEST_ASSERT(statusVals[1] == 500);
+
+         // ?
+         pos = bi->next();
+         TEST_ASSERT(pos==6);
+         numStatuses = bi->getRuleStatusVec(statusVals, 10, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 1);
+         TEST_ASSERT(statusVals[0] == 0);
+
+     }
+     delete bi;
+
+}
 
 //
 //   Bug 2190 Regression test.   Builder crash on rule consisting of only a
@@ -853,10 +946,11 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
         case  9: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
-        case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
-        case 11: name = "TestRegistration"; if (exec) TestRegistration(); break;
-        case 12: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
-        case 13: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
+        case 10: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
+        case 11: name = "TestBug2190"; if (exec) TestBug2190(); break;
+        case 12: name = "TestRegistration"; if (exec) TestRegistration(); break;
+        case 13: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+        case 14: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
 
         default: name = ""; break; // needed to end loop
     }
