@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/sample/ModuleTestSampleData.java,v $
- * $Date: 2002/08/13 22:00:58 $
- * $Revision: 1.3 $
+ * $Date: 2003/07/15 22:50:45 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -155,6 +155,20 @@ public class ModuleTestSampleData extends ListResourceBundle {
 		    new Object[] { "1", "2", "3" },
 		    new Object[] { "4", "5" }, // too short
 		    new Object[] { "6", "7", "8" },
+		}},
+	    }},
+
+	    { "Test09", new Object[][] {
+		{ "Info", new Object[][] {
+		    { "Description", "A test with data stored as int arrays instead of strings" },
+		    { "Headers", new String[] {
+			"Radix", "Power", "Value"
+		    }},
+		}},
+		{ "Cases", new Object[] {
+		    new Object[] { "2", new int[] { 1, 2, 3 }, new int[] { 2, 4, 8 }},
+		    new Object[] { "3", new int[] { 3, 4, 5 }, new int[] { 27, 81, 243 }},
+		    new Object[] { "2", new int[] { 0, 8, 16, 24 }, new int[] { 1, 256, 65536, 65536 * 256 }},
 		}},
 	    }},
 	}},
