@@ -365,6 +365,9 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
 
     expect(TOK_STRING, &tokenValue, &line, status);
 
+    if(isVerbose()){
+        printf(" %s at line %i \n", tag,startline);
+    }
     /* make the filename including the directory */
     if (inputdir != NULL)
     {
@@ -483,7 +486,9 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
     {
         return parseUCARules(tag, startline, status);
     }
-
+    if(isVerbose()){
+        printf(" string %s at line %i \n", tag,startline);
+    }
     expect(TOK_STRING, &tokenValue, NULL, status);
 
     if (U_SUCCESS(*status))
@@ -512,7 +517,11 @@ parseAlias(char *tag, uint32_t startline, UErrorCode *status)
     struct SResource *result = NULL;
 
     expect(TOK_STRING, &tokenValue, NULL, status);
-
+    
+    if(isVerbose()){
+        printf(" alias %s at line %i \n", tag,startline);
+    }
+    
     if (U_SUCCESS(*status))
     {
         /* create the string now - tokenValue doesn't survive a call to getToken (and therefore
@@ -550,7 +559,9 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     {
         return NULL;
     }
-
+    if(isVerbose()){
+        printf(" collation elements %s at line %i \n", tag,startline);
+    }
     /* '{' . (name resource)* '}' */
     for (;;)
     {
@@ -649,6 +660,10 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                 else
                 {
                     warning(line, "could not obtain rules from collator");
+                    if(isStrict()){
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return NULL;
+                    }
                 }
 
                 ucol_close(coll);
@@ -656,6 +671,10 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             else
             {
                 warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+                if(isStrict()){
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return NULL;
+                }
             }
 #endif
         }
@@ -690,6 +709,9 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
     UBool             readToken = FALSE;
 
     /* '{' . (name resource)* '}' */
+    if(isVerbose()){
+        printf(" parsing table %s at line %i \n", tag,startline);
+    }
     for (;;)
     {
         token = getToken(&tokenValue, &line, status);
@@ -762,7 +784,9 @@ parseTable(char *tag, uint32_t startline, UErrorCode *status)
     {
         return parseCollationElements(tag, startline, status);
     }
-
+    if(isVerbose()){
+        printf(" table %s at line %i \n", tag,startline);
+    }
     result = table_open(bundle, tag, status);
 
     if (result == NULL || U_FAILURE(*status))
@@ -788,7 +812,9 @@ parseArray(char *tag, uint32_t startline, UErrorCode *status)
     {
         return NULL;
     }
-
+    if(isVerbose()){
+        printf(" array %s at line %i \n", tag,startline);
+    }
     /* '{' . resource [','] '}' */
     for (;;)
     {
@@ -875,6 +901,10 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
+    if(isVerbose()){
+        printf(" vector %s at line %i \n", tag,startline);
+    }
+    
     /* '{' . string [','] '}' */
     for (;;)
     {
@@ -972,6 +1002,10 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
         uprv_free(string);
         return NULL;
     }
+    
+    if(isVerbose()){
+        printf(" binary %s at line %i \n", tag,startline);
+    }
 
     count = uprv_strlen(string);
     if (count > 0){
@@ -1048,6 +1082,10 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
+    if(isVerbose()){
+        printf(" integer %s at line %i \n", tag,startline);
+    }
+    
     if (uprv_strlen(string) <= 0)
     {
         warning(startline, "Encountered empty integer. Default value is 0.");
@@ -1100,6 +1138,10 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
+    if(isVerbose()){
+        printf(" import %s at line %i \n", tag,startline);
+    }
+    
     /* Open the input file for reading */
     if (inputdir == NULL)
     {
@@ -1212,6 +1254,9 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
+    if(isVerbose()){
+        printf(" include %s at line %i \n", tag,startline);
+    }
 
     fullname = (char *) uprv_malloc(inputdirLength + count + 2);
     /* test for NULL */
@@ -1270,7 +1315,11 @@ parseResource(char *tag, UErrorCode *status)
     uint32_t                 line;
 
     token = getToken(&tokenValue, &startline, status);
-
+    
+    if(isVerbose()){
+        printf(" resource %s at line %i \n", tag,startline);
+    }
+    
     /* name . [ ':' type ] '{' resource '}' */
     /* This function parses from the colon onwards.  If the colon is present, parse the
     type then try to parse a resource of that type.  If there is no explicit type,
@@ -1473,6 +1522,10 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     if (getToken(NULL, &line, status) != TOK_EOF)
     {
         warning(line, "extraneous text after resource bundle (perhaps unmatched braces)");
+        if(isStrict()){
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
     }
 
     return bundle;
