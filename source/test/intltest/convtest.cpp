@@ -836,7 +836,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     }
 
     ucnv_close(cnv);
-    return TRUE;
+    return ok;
 }
 
 UBool
@@ -1130,7 +1130,7 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     }
 
     ucnv_close(cnv);
-    return TRUE;
+    return ok;
 }
 
 UBool
