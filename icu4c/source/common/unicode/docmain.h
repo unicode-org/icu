@@ -18,7 +18,7 @@
  * \section API API Reference Usage
  * 
  * <h3>C++ Programmers:</h3>
- * <p>Use  <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html"> Alphabetical List </a>
+ * <p>Use <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html"> Alphabetical List </a>
  * or <a href="annotated.html"> Compound List</a>
  * to find the class you are interested in. For example, to find BreakIterator,
  * you can go to the <a href="classes.html"> Alphabetical List</a>, then click on
@@ -27,7 +27,7 @@
  * then detailed member descriptions.</p>
  * 
  * <h3>C Programmers:</h3>
- * <p>Use <a href="#Module">Module List</a> or <a href="globals.html"> File Members</a>
+ * <p>Use <a href="#Module">Module List</a> or <a href="globals.html">File Members</a>
  * to find a list of all the functions and constants.
  * For example, to find BreakIterator functions you would click on
  * <a href="files.html"> File List</a>,
@@ -58,7 +58,7 @@
  *
  * <hr>
  *
- * <h2>Module List</h2>
+ * <h2><a name="Module">Module List</a></h2>
  * <table border="1" cols="3" align="center">
  *   <tr>
  *     <td><strong>Module Name</strong></td>
