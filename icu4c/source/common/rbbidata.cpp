@@ -222,6 +222,114 @@ void  RBBIDataWrapper::printData() {
 #endif
 }
 
+//-----------------------------------------------------------------------------
+//
+//  ubrk_swap   -  byte swap and char encoding swap of RBBI data
+//
+//-----------------------------------------------------------------------------
+
+U_CAPI int32_t U_EXPORT2
+ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outData,
+           UErrorCode *status) {
+
+    if (status == NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+
+    //
+    //  Check that the data header is for for break data.
+    //    (Header contents are defined in genbrk.cpp)
+    //
+    const UDataInfo *pInfo = (const UDataInfo *)((const char *)inData+4);
+    if(!(  pInfo->dataFormat[0]==0x42 &&   /* dataFormat="Brk " */
+           pInfo->dataFormat[1]==0x72 &&
+           pInfo->dataFormat[2]==0x6b &&
+           pInfo->dataFormat[3]==0x20 &&
+           pInfo->formatVersion[0]==2  )) {
+        udata_printError(ds, "ubrk_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0]);
+        *status=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    //
+    // Swap the data header.  (This is the generic ICU Data Header, not the RBBI Specific
+    //                         RBBIDataHeader).  This swap also conveniently gets us
+    //                         the size of the ICU d.h., which lets us locate the start
+    //                         of the RBBI specific data.
+    //
+    int32_t headerSize=udata_swapDataHeader(ds, inData, length, outData, status);
+
+
+    //
+    // Get the RRBI Data Header, and check that it appears to be OK.
+    //
+    const uint8_t  *inBytes =(const uint8_t *)inData+headerSize;
+    RBBIDataHeader *rbbiDH = (RBBIDataHeader *)inBytes;
+    if (rbbiDH->fMagic   != 0xb1a0 ||
+        rbbiDH->fVersion != 1      ||
+        rbbiDH->fLength  <  sizeof(RBBIDataHeader)) 
+    {
+        udata_printError(ds, "ubrk_swap(): RBBI Data header is invalid.\n");
+        *status=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    //
+    // Prefight operation?  Just return the size
+    //
+    int32_t totalSize = headerSize + rbbiDH->fLength;
+    if (length < 0) {
+        return totalSize;
+    }
+
+    //
+    // Check that length passed in is consistent with length from RBBI data header.
+    //
+    if (length > 0) {
+        length -= headerSize;
+        if ((uint32_t)length < rbbiDH->fLength) {
+            udata_printError(ds, "ubrk_swap(): too few bytes (%d after ICU Data header) for break data.\n",
+                             length);
+            *status=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+    }
+
+    //
+    // Swap the Data.  Do the data itself first, then the RBBI Data Header, because
+    //                 we need to reference the header to locate the data, and an
+    //                 inplace swap of the header leaves it unusable.
+    //
+    char *outBytes = (char *)outData + headerSize;
+
+    // Note:  there's no point doing a byte copy from the input to the output in
+    //        advance of swapping.  100% of the RBBI data requires swapping.
+
+    // Forward state table.  Two int32_t vars at the start, then all int16_ts.
+    ds->swapArray32(ds, inBytes+rbbiDH->fFTable, 8, 
+                        outBytes+rbbiDH->fFTable, status);
+    ds->swapArray16(ds, inBytes+rbbiDH->fFTable+8, rbbiDH->fFTableLen-8,
+                        outBytes+rbbiDH->fFTable+8, status);
+    
+    // Reverse state table.  Same layout as forward table, above.
+    ds->swapArray32(ds, inBytes+rbbiDH->fRTable,   8,                    outBytes, status);
+    ds->swapArray16(ds, inBytes+rbbiDH->fRTable+8, rbbiDH->fRTableLen-8, outBytes, status);
+
+    // Trie table for character categories
+    utrie_swap(ds, inBytes+rbbiDH->fTrie, rbbiDH->fTrieLen, outBytes+rbbiDH->fTrie, status);
+
+    // Source Rules Text.  It's UChar data
+    ds->swapArray16(ds, inBytes+rbbiDH->fRuleSource, rbbiDH->fRuleSourceLen,
+                    outBytes+rbbiDH->fRuleSource, status);
+
+    // And, last, the header.  All 32 bit values.
+    ds->swapArray32(ds, inBytes,  sizeof(RBBIDataHeader), outBytes, status);
+
+    return totalSize;
+}
 
 
 U_NAMESPACE_END

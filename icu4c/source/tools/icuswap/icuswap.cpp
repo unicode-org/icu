@@ -44,6 +44,7 @@
 #include "unormimp.h"
 #include "sprpimpl.h"
 #include "propname.h"
+#include "rbbidata.h"
 
 /* swapping implementations in i18n */
 
@@ -297,6 +298,9 @@ static const struct {
 #if !UCONFIG_NO_COLLATION
     { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
     { { 0x49, 0x6e, 0x76, 0x43 }, ucol_swapInverseUCA },/* dataFormat="InvC" */
+#endif
+#if !UCONFIG_NO_BREAK_ITERATION
+    { { 0x42, 0x72, 0x6b, 0x20 }, ubrk_swap },          /* dataFormat="Brk " */
 #endif
     { { 0x70, 0x6e, 0x61, 0x6d }, upname_swap },        /* dataFormat="pnam" */
     { { 0x75, 0x6e, 0x61, 0x6d }, uchar_swapNames }     /* dataFormat="unam" */
