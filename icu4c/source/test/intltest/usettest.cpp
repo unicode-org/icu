@@ -96,7 +96,8 @@ UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
     // TODO do these in hex
     //String source = "0x" + Integer.toString(start,16).toUpperCase();
     //if (start != end) source += "..0x" + Integer.toString(end,16).toUpperCase();
-    UnicodeString source((uint32_t)start);
+    UnicodeString source;
+    source = source + (uint32_t)start;
     if (start != end) 
         source = source + ".." + (uint32_t)end;
     UnicodeSet testSet;
