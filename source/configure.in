@@ -195,7 +195,7 @@ dnl
 AC_CACHE_CHECK([for definition of U_INLINE for C], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
-  AC_TRY_COMPILE(, [} $ac_kw foo() {], [ac_cv_c_inline=$ac_kw; break])
+  AC_TRY_COMPILE(, [return 0;} $ac_kw int foo() {], [ac_cv_c_inline=$ac_kw; break])
   done
   ])
 case "$ac_cv_c_inline" in
@@ -462,7 +462,8 @@ AC_CACHE_VAL(ac_cv_override_cxx_allocation_ok,
     [AC_TRY_LINK(
     changequote(<<, >>)dnl
     <<#include <stdlib.h>
-    class UObject {
+    class UMemory {
+    public:
     void *operator new(size_t size) {return malloc(size);}
     void *operator new[](size_t size) {return malloc(size);}
     void operator delete(void *p) {free(p);}
@@ -480,7 +481,8 @@ then
         [AC_TRY_LINK(
         changequote(<<, >>)dnl
         <<#include <stdlib.h>
-        class UObject {
+        class UMemory {
+        public:
         void *operator new(size_t size) {return malloc(size);}
         void *operator new[](size_t size) {return malloc(size);}
         void operator delete(void *p) {free(p);}
@@ -534,6 +536,7 @@ changequote(<<, >>)dnl
 <<#ifndef __USE_POSIX
 #define __USE_POSIX
 #endif
+#include <stdlib.h>
 #include <time.h>
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
@@ -547,7 +550,8 @@ else
   AC_CACHE_CHECK(for _tzname,ac_cv_var__tzname,
   [AC_TRY_LINK(
   changequote(<<, >>)dnl
-  <<#include <time.h>
+  <<#include <stdlib.h>
+  #include <time.h>
   extern char *_tzname[];
   >>,
   changequote([, ])dnl
