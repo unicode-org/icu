@@ -31,7 +31,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationFinnishTest();
-    ~CollationFinnishTest();
+    virtual ~CollationFinnishTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // main test routine, tests rules specific to the finish locale

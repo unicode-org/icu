@@ -19,8 +19,7 @@ class CollationThaiTest : public IntlTest {
 public:
 
     CollationThaiTest();
-
-    ~CollationThaiTest();
+    virtual ~CollationThaiTest();
 
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
     

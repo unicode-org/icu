@@ -56,7 +56,7 @@ public:
     enum ETotal_Test { TOTALTESTSET = 30 };
 
     G7CollationTest() {}
-    ~G7CollationTest() {}
+    virtual ~G7CollationTest() {}
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // main test routine, tests comparisons for a set of strings against sets of expected results

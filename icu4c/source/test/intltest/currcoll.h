@@ -39,8 +39,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 16 };
 
     CollationCurrencyTest();
-    ~CollationCurrencyTest();
-
+    virtual ~CollationCurrencyTest();
     void runIndexedTest(int32_t index, bool_t exec, char* &name, char* par = NULL);
 
     void currencyTest(char *par);

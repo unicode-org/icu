@@ -32,7 +32,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationSpanishTest();
-    ~CollationSpanishTest();
+    virtual ~CollationSpanishTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // amin test routine, tests rules specific to the spanish locale

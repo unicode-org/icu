@@ -35,7 +35,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationDummyTest();
-    ~CollationDummyTest();
+    virtual ~CollationDummyTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // main test method called with different strengths,

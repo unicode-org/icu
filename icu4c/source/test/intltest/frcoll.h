@@ -30,7 +30,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationFrenchTest();
-    ~CollationFrenchTest();
+    virtual ~CollationFrenchTest();
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
 
     // amin test routine, test rules specific to the french locale
