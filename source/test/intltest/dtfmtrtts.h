@@ -26,7 +26,7 @@ class DateFormatRoundTripTest : public IntlTest {
 public:
     void TestDateFormatRoundTrip(void);
     void test(const Locale& loc);
-    void test(DateFormat *fmt, UBool timeOnly = FALSE );
+    void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = FALSE );
     int32_t getField(UDate d, int32_t f);
     UnicodeString& escape(const UnicodeString& src, UnicodeString& dst);
     UDate generateDate(void); 
