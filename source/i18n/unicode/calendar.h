@@ -137,6 +137,7 @@ U_NAMESPACE_BEGIN
  * For example, subtracting 5 days from the date <code>September 12, 1996</code>
  * results in <code>September 7, 1996</code>.
  *
+ * @stable
  */
 class U_I18N_API Calendar {
 public:
@@ -145,6 +146,7 @@ public:
      * Field IDs for date and time. Used to specify date/time fields. ERA is calendar
      * specific. Example ranges given are for illustration only; see specific Calendar
      * subclasses for actual ranges.
+     * @stable
      */
     enum EDateFields {
         ERA,                  // Example: 0..1
@@ -176,6 +178,7 @@ public:
      * Useful constant for days of week. Note: Calendar day-of-week is 1-based. Clients
      * who create locale resources for the field of first-day-of-week should be aware of
      * this. For instance, in US locale, first-day-of-week is set to 1, i.e., SUNDAY.
+     * @stable
      */
     enum EDaysOfWeek {
         SUNDAY = 1,
@@ -189,6 +192,7 @@ public:
 
     /**
      * Useful constants for month. Note: Calendar month is 0-based.
+     * @stable
      */
     enum EMonths {
         JANUARY,
@@ -208,6 +212,7 @@ public:
 
     /**
      * Useful constants for hour in 12-hour clock. Used in GregorianCalendar.
+     * @stable
      */
     enum EAmpm {
         AM,
@@ -544,6 +549,7 @@ public:
      * @return the difference, either positive or negative, between
      * this calendar's time and <code>when</code>, in terms of
      * <code>field</code>.
+     * @stable
      */
     virtual int32_t fieldDifference(UDate when, EDateFields field, UErrorCode& status);
 

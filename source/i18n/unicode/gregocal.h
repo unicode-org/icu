@@ -131,12 +131,14 @@ U_NAMESPACE_BEGIN
  *     delete calendar; // also deletes pdt
  * \endcode
  * </pre>
+ * @stable
  */
 class U_I18N_API GregorianCalendar: public Calendar {
 public:
 
     /**
      * Useful constants for GregorianCalendar and TimeZone.
+     * @stable
      */
     enum EEras {
         BC,
