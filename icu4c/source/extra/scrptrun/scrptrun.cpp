@@ -167,7 +167,7 @@ UBool ScriptRun::next()
             }
         }
 
-		if (sameScript(scriptCode, sc)) {
+        if (sameScript(scriptCode, sc)) {
             if (scriptCode <= USCRIPT_INHERITED && sc > USCRIPT_INHERITED) {
                 scriptCode = sc;
 

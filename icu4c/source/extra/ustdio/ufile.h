@@ -69,7 +69,7 @@ U_CAPI int32_t U_EXPORT2
 u_file_write_flush(    const UChar     *chars, 
         int32_t        count, 
         UFILE         *f,
-	 UBool         flush);
+        UBool         flush);
 
 /**
  * Fill a UFILE's buffer with converted codepage data.

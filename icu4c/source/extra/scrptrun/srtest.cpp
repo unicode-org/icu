@@ -33,6 +33,6 @@ void main()
         int32_t     end   = scriptRun.getScriptEnd();
         UScriptCode code  = scriptRun.getScriptCode();
 
-		printf("Script '%s' from %d to %d.\n", uscript_getName(code), start, end);
-	}
+        printf("Script '%s' from %d to %d.\n", uscript_getName(code), start, end);
+    }
 }
