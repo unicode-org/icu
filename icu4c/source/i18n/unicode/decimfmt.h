@@ -430,11 +430,11 @@ class ChoiceFormat;
  * <ul>
  * <li>In order to enable significant digits formatting, use a pattern
  * containing the <code>'@'</code> pattern character.  Alternatively,
- * call setSignificantDigits(TRUE).
+ * call setSignificantDigitsUsed(TRUE).
  *
  * <li>In order to disable significant digits formatting, use a
  * pattern containing the <code>'0'</code> pattern
- * character. Alternatively, call setSignificantDigits(FALSE).
+ * character. Alternatively, call setSignificantDigitsUsed(FALSE).
  *
  * <li>If a pattern uses significant digits, it may not contain
  * the <code>'0'</code> character, nor may it include a fraction
@@ -1461,7 +1461,7 @@ public:
 
     /**
      * Returns the minimum number of significant digits that will be
-     * displayed. This value has no effect unless isSignficantDigits()
+     * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the fewest significant digits that will be shown
      * @draft ICU 3.0
@@ -1470,7 +1470,7 @@ public:
 
     /**
      * Returns the maximum number of significant digits that will be
-     * displayed. This value has no effect unless isSignficantDigits()
+     * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the most significant digits that will be shown
      * @draft ICU 3.0
@@ -1482,7 +1482,7 @@ public:
      * displayed.  If <code>min</code> is less than one then it is set
      * to one.  If the maximum significant digits count is less than
      * <code>min</code>, then it is set to <code>min</code>. This
-     * value has no effect unless isSignficantDigits() returns true.
+     * value has no effect unless areSignificantDigits() returns true.
      * @param min the fewest significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -1493,7 +1493,7 @@ public:
      * displayed.  If <code>max</code> is less than one then it is set
      * to one.  If the minimum significant digits count is greater
      * than <code>max</code>, then it is set to <code>max</code>.
-     * This value has no effect unless isSignficantDigits() returns
+     * This value has no effect unless areSignificantDigits() returns
      * true.
      * @param max the most significant digits to be shown 
      * @draft ICU 3.0
@@ -1506,7 +1506,7 @@ public:
      * @return true if significant digits are in use
      * @draft ICU 3.0
      */
-    UBool isSignificantDigits() const;
+    UBool areSignificantDigitsUsed() const;
 
     /**
      * Sets whether significant digits are in use, or integer and
@@ -1515,7 +1515,7 @@ public:
      * false to use integer and fraction digit counts
      * @draft ICU 3.0
      */
-    void setSignificantDigits(UBool useSignificantDigits);
+    void setSignificantDigitsUsed(UBool useSignificantDigits);
 
  public:
     /**
