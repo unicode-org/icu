@@ -141,7 +141,7 @@ ufmt_uto64(const UChar     *buffer,
     /* intialize parameters */
     limit     = buffer + *len;
     count     = 0;
-    result     = 0;
+    result    = 0;
     
     /* iterate through buffer */
     while(ufmt_isdigit(*buffer, radix) && buffer < limit) {
@@ -156,6 +156,39 @@ ufmt_uto64(const UChar     *buffer,
     
     *len = count;
     return result;
+}
+
+void *
+ufmt_utop(const UChar     *buffer,
+          int32_t     *len)
+{
+    /*
+    TODO: Fix this code so that it will work with pointers that are 2<=sizeof(void*)<=16
+    */
+    const UChar *limit;
+    int32_t     count;
+    int64_t     result;
+    
+    
+    /* intialize parameters */
+    limit     = buffer + *len;
+    count     = 0;
+    result    = 0;
+    
+    /* iterate through buffer */
+    /* limit to sixteen iterations since that is the max that an int64_t can contain for pointer work */
+    while(ufmt_isdigit(*buffer, 16) && buffer < limit) {
+        
+        /* read the next digit */
+        result *= 16;
+        result += ufmt_digitvalue(*buffer++);
+        
+        /* increment our count */
+        ++count;
+    }
+    
+    *len = count;
+    return (void *)result;
 }
 
 UChar*
