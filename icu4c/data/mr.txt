@@ -242,9 +242,12 @@ mr {
       }
     }
 
-//    CollationElements {
-//            ""
-//      }
+    CollationElements {	    
+		Version { "1.0" }
+		Sequence { 
+            "[normalization on]"
+		}
+      }
 }
 
 

@@ -80,8 +80,11 @@ fa {
             "#,##0%",
     }
     LocaleID{ "29"}
+	CollationElements {
+	    Version { "1.0" }
+		Sequence { "[normalizaton on]" }
+	}
             // /**************** Info Below is needed ****************/
-            // CollationElements{}
             // Countries{}
             // Eras{}
             // Languages{}
