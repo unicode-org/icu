@@ -115,7 +115,7 @@ void TransliteratorTest::TestSimpleRules(void) {
      * [exz]|d   no match, copy d to transliterated buffer
      * [exzd]|   done
      */
-    expect(UnicodeString("ab>x|y;") +
+    expect(UnicodeString("ab>x|y;", "") +
            "yc>z",
            "eabcd", "exzd");        /* Another set of rules:
      *    1. ab>x|yzacw
@@ -140,15 +140,17 @@ void TransliteratorTest::TestSimpleRules(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t(
         "<ID>",
-        UnicodeString("dummy=").append((UChar)0xE100) + ";" +
-        "          vowel = [aeiouAEIOU];" +
-        "             lu = [:Lu:];" +
+        UnicodeString("dummy=").append((UChar)0xE100) +
+        UnicodeString(
+        ";"
+        "          vowel = [aeiouAEIOU];"
+        "             lu = [:Lu:];"
 
-        " {vowel} ({lu}) > ! ;" +
-        " {vowel}        > & ;" +
-        "        !) {lu} > ^ ;" +
-        "           {lu} > * ;" +
-        "              a > ERROR",
+        " {vowel} ({lu}) > ! ;"
+        " {vowel}        > & ;"
+        "        !) {lu} > ^ ;"
+        "           {lu} > * ;"
+        "              a > ERROR", ""),
         status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
@@ -164,13 +166,13 @@ void TransliteratorTest::TestInlineSet(void) {
     expect("[:Ll:] (x) > y; [:Ll:] > z;", "aAbxq", "zAyzz");
     expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
     
-    expect((UnicodeString)
-           "digit = [0-9];" +
-           "alpha = [a-zA-Z];" +
-           "alphanumeric = [{digit}{alpha}];" + // ***
-           "special = [^{alphanumeric}];" +     // ***
-           "{alphanumeric} > -;" +
-           "{special} > *;",
+    expect(UnicodeString(
+           "digit = [0-9];"
+           "alpha = [a-zA-Z];"
+           "alphanumeric = [{digit}{alpha}];" // ***
+           "special = [^{alphanumeric}];"     // ***
+           "{alphanumeric} > -;"
+           "{special} > *;", ""),
            
            "thx-1138", "---*----");
 }

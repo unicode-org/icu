@@ -736,7 +736,7 @@ void NumberFormatTest::TestPatterns2(void) {
     expectPat(fmt, "AA#,##0.00ZZ*^");
 
     //            12  3456789012
-    UnicodeString exp("AA*^#,##0.00ZZ");
+    UnicodeString exp("AA*^#,##0.00ZZ", "");
     fmt.setFormatWidth(12);
     fmt.setPadPosition(DecimalFormat::kPadAfterPrefix);
     expectPat(fmt, exp);
