@@ -189,7 +189,7 @@ RBBIDataWrapper *RBBIDataWrapper::addReference() {
 //  getRuleSourceString
 //
 //-----------------------------------------------------------------------------
-const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
+const UnicodeString &RBBIDataWrapper::getRuleSourceString() const {
     return fRuleString;
 }
 

@@ -80,12 +80,12 @@ public:
 
     void     build();
     void     addValToSets(UVector *sets, uint32_t val);
-    int32_t  getNumCharCategories();   // CharCategories are the same as input symbol set to the
+    int32_t  getNumCharCategories() const;   // CharCategories are the same as input symbol set to the
                                    //    runtime state machine, which are the same as
                                    //    columns in the DFA state table
-    int32_t  getTrieSize();        // Size in bytes of the serialized Trie.
+    int32_t  getTrieSize() /*const*/;        // Size in bytes of the serialized Trie.
     void     serializeTrie(uint8_t *where);  // write out the serialized Trie.
-    UChar32  getFirstChar(int32_t  val);
+    UChar32  getFirstChar(int32_t  val) const;
 #ifdef RBBI_DEBUG
     void     printSets();
     void     printRanges();
