@@ -917,20 +917,17 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
      * other of these will wrap.  We've modified the test given in the bug
      * report to therefore only check the behavior of a calendar with a zero raw
      * offset zone.
-     *
-     * NEWCAL We no longer support dates before Calendar.MIN_DATE or after
-     * Calendar.MAX_DATE.  Modify this test.
      */
     public void Test4145158() {
         GregorianCalendar calendar = new GregorianCalendar();
 
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        calendar.setTime(Calendar.MIN_DATE);
+        calendar.setTime(new Date(Long.MIN_VALUE));
         int year1 = calendar.get(Calendar.YEAR);
         int era1 = calendar.get(Calendar.ERA);
         
-        calendar.setTime(Calendar.MAX_DATE);
+        calendar.setTime(new Date(Long.MAX_VALUE));
         int year2 = calendar.get(Calendar.YEAR);
         int era2 = calendar.get(Calendar.ERA);
         
@@ -945,7 +942,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     public void Test4145983() {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date[] DATES = { Calendar.MAX_DATE, Calendar.MIN_DATE };
+        Date[] DATES = { new Date(Long.MAX_VALUE), new Date(Long.MIN_VALUE) };
         for (int i=0; i<DATES.length; ++i) {
             calendar.setTime(DATES[i]);
             int year = calendar.get(Calendar.YEAR);
@@ -1000,16 +997,16 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             GregorianCalendar calendar = new GregorianCalendar(zones[i]);
 
             // Make sure extreme values don't wrap around
-            calendar.setTime(Calendar.MIN_DATE);
+            calendar.setTime(new Date(Long.MIN_VALUE));
             if (calendar.get(Calendar.ERA) != GregorianCalendar.BC) {
-                errln("Fail: Calendar.MIN_DATE has an AD year");
+                errln("Fail: Long.MIN_VALUE ms has an AD year");
             }
-            calendar.setTime(Calendar.MAX_DATE);
+            calendar.setTime(new Date(Long.MAX_VALUE));
             if (calendar.get(Calendar.ERA) != GregorianCalendar.AD) {
-                errln("Fail: Calendar.MAX_DATE has a BC year");
+                errln("Fail: Long.MAX_VALUE ms has a BC year");
             }
 
-            calendar.setGregorianChange(Calendar.MAX_DATE);
+            calendar.setGregorianChange(new Date(Long.MAX_VALUE));
             // to obtain a pure Julian calendar
             
             boolean is100Leap = calendar.isLeapYear(100);
@@ -1144,9 +1141,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             for (int j=0; j<calendars.length; ++j) {
                 GregorianCalendar calendar = calendars[j];
                 if (k == 1) {
-                    calendar.setGregorianChange(Calendar.MIN_DATE);
+                    calendar.setGregorianChange(new Date(Long.MIN_VALUE));
                 } else if (k == 2) {
-                    calendar.setGregorianChange(Calendar.MAX_DATE);
+                    calendar.setGregorianChange(new Date(Long.MAX_VALUE));
                 }
 
                 format.setCalendar((Calendar)calendar.clone());

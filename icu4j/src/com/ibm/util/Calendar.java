@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.18 $ $Date: 2000/11/28 22:16:31 $
+ * @version      $Revision: 1.19 $ $Date: 2000/11/30 21:54:16 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1125,40 +1125,40 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <code>MIN_MILLIS</code> and <code>MIN_DATE</code>.
      * @see #JULIAN_DAY
      */
-    public static final int MIN_JULIAN = -0x7F000000;
+    protected static final int MIN_JULIAN = -0x7F000000;
 
     /**
      * The minimum supported epoch milliseconds.  This value is equivalent
      * to <code>MIN_JULIAN</code> and <code>MIN_DATE</code>.
      */
-    public static final long MIN_MILLIS = -184303902528000000L;
+    protected static final long MIN_MILLIS = -184303902528000000L;
     // Get around bug in jikes 1.12 for now.  Later, use:
-    //public static final long MIN_MILLIS = (MIN_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+    //protected static final long MIN_MILLIS = (MIN_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
 
     /**
      * The minimum supported <code>Date</code>.  This value is equivalent
      * to <code>MIN_JULIAN</code> and <code>MIN_MILLIS</code>.
      */
-    public static final Date MIN_DATE = new Date(MIN_MILLIS);
+    protected static final Date MIN_DATE = new Date(MIN_MILLIS);
 
     /**
      * The maximum supported Julian day.  This value is equivalent to
      * <code>MAX_MILLIS</code> and <code>MAX_DATE</code>.
      * @see #JULIAN_DAY
      */
-    public static final int MAX_JULIAN = +0x7F000000;
+    protected static final int MAX_JULIAN = +0x7F000000;
 
     /**
      * The maximum supported epoch milliseconds.  This value is equivalent
      * to <code>MAX_JULIAN</code> and <code>MAX_DATE</code>.
      */
-    public static final long MAX_MILLIS = (MAX_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+    protected static final long MAX_MILLIS = (MAX_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
 
     /**
      * The maximum supported <code>Date</code>.  This value is equivalent
      * to <code>MAX_JULIAN</code> and <code>MAX_MILLIS</code>.
      */
-    public static final Date MAX_DATE = new Date(MAX_MILLIS);
+    protected static final Date MAX_DATE = new Date(MAX_MILLIS);
 
     // Internal notes:
     // Calendar contains two kinds of time representations: current "time" in
@@ -1516,6 +1516,11 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param date the new time in UTC milliseconds from the epoch.
      */
     public void setTimeInMillis( long millis ) {
+        if (millis > MAX_MILLIS) {
+            millis = MAX_MILLIS;
+        } else if (millis < MIN_MILLIS) {
+            millis = MIN_MILLIS;
+        }
         time = millis;
         isTimeSet = true;
         computeFields();

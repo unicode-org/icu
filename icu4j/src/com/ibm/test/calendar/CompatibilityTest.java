@@ -75,7 +75,7 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
     public void TestMapping() {
         if (false) {
             Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
-            Date PURE_JULIAN = GregorianCalendar.PURE_JULIAN; // new Date(Long.MAX_VALUE);
+            Date PURE_JULIAN = new Date(Long.MAX_VALUE);
             GregorianCalendar cal =
                 new GregorianCalendar(TimeZone.getTimeZone("UTC"));
             final int EPOCH_JULIAN = 2440588;
@@ -125,10 +125,8 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         try {
             TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
             //NEWCAL
-            //Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
-            //Date PURE_JULIAN = new Date(Long.MAX_VALUE);
-            Date PURE_GREGORIAN = Calendar.MIN_DATE;
-            Date PURE_JULIAN = Calendar.MAX_DATE;
+            Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
+            Date PURE_JULIAN = new Date(Long.MAX_VALUE);
             GregorianCalendar cal = new GregorianCalendar();
             final int EPOCH_JULIAN = 2440588;
             final long ONE_DAY = 24*60*60*1000L;

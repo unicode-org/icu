@@ -301,18 +301,6 @@ public class GregorianCalendar extends Calendar {
         return LIMITS[field][limitType];
     }
 
-    /**
-     * Use this date as the Gregorian cutover to create a pure
-     * Gregorian calendar.  Corresponds to Julian day -0x7FFFFFF0.
-     */
-    public static final Date PURE_GREGORIAN = new Date(-185753452608000000L);
-
-    /**
-     * Use this date as the Gregorian cutover to create a pure
-     * Julian calendar.  Corresponds to Julian day +0x7FFFFFF0.
-     */
-    public static final Date PURE_JULIAN = new Date(+185331719001600000L);
-
 /////////////////////
 // Instance Variables
 /////////////////////
@@ -472,15 +460,24 @@ public class GregorianCalendar extends Calendar {
     public void setGregorianChange(Date date) {
         gregorianCutover = date.getTime();
 
-        // Precompute two internal variables which we use to do the actual
-        // cutover computations.  These are the Julian day of the cutover
-        // and the cutover year.
-        cutoverJulianDay = (int) floorDivide(gregorianCutover, ONE_DAY);
-
-        // Convert cutover millis to extended year
-        GregorianCalendar cal = new GregorianCalendar(getTimeZone());
-        cal.setTime(date);
-        gregorianCutoverYear = cal.get(EXTENDED_YEAR);
+        // If the cutover has an extreme value, then create a pure
+        // Gregorian or pure Julian calendar by giving the cutover year and
+        // JD extreme values.
+        if (gregorianCutover <= MIN_MILLIS) {
+            gregorianCutoverYear = cutoverJulianDay = Integer.MIN_VALUE;
+        } else if (gregorianCutover >= MAX_MILLIS) {
+            gregorianCutoverYear = cutoverJulianDay = Integer.MAX_VALUE;
+        } else {
+            // Precompute two internal variables which we use to do the actual
+            // cutover computations.  These are the Julian day of the cutover
+            // and the cutover year.
+            cutoverJulianDay = (int) floorDivide(gregorianCutover, ONE_DAY);
+            
+            // Convert cutover millis to extended year
+            GregorianCalendar cal = new GregorianCalendar(getTimeZone());
+            cal.setTime(date);
+            gregorianCutoverYear = cal.get(EXTENDED_YEAR);
+        }
     }
 
     /**
