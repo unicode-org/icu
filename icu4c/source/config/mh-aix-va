@@ -3,28 +3,30 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.21 2002/03/21 01:26:39 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.22 2002/05/01 23:48:08 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -qroconst -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
+COMPILE.c=	$(CC) -qroconst $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
+COMPILE.cc=	$(CXX) -qroconst $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
+
+LDFLAGS += -brtl -bh:5
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) -brtl -bh:5 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 ## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
 ## -bh:8 means halt on errors or worse.  We don't display warnings about
 ##      duplicate inline symbols.
-SHLIB.c=	$(CXX) -qmkshrobj -G -brtl $(LDFLAGS)
-SHLIB.cc=	$(CXX) -qmkshrobj -G -brtl -bh:5 $(LDFLAGS)
+SHLIB.c=	$(CXX) -qmkshrobj -G $(LDFLAGS)
+SHLIB.cc=	$(CXX) -qmkshrobj -G $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I

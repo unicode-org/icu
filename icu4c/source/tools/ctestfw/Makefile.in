@@ -11,9 +11,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = tools/ctestfw
 
@@ -21,14 +18,9 @@ subdir = tools/ctestfw
 CLEANFILES = *~ $(DEPS) $(ALL_TARGETS)
 
 ## Target information
-#TARGET = libctestfw.$(SO)
-
-ENABLE_STATIC = @ENABLE_STATIC@
-ENABLE_SHARED = @ENABLE_SHARED@
 
 ifneq ($(ENABLE_STATIC),)
 TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).a
-RANLIB = @RANLIB@
 endif
 
 ifneq ($(ENABLE_SHARED),)
@@ -42,12 +34,7 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@
-LIBS = @LIBS@
+LIBS = $(DEFAULT_LIBS)
 
 OBJECTS = ctest.o
 
