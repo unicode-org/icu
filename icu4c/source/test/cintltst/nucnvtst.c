@@ -5099,48 +5099,47 @@ static void TestEBCDICUS4XML()
 
 #if !UCONFIG_NO_COLLATION
 
-#define TESTJITTERBUG981_BUFF_SIZE 131072
 static void TestJitterbug981(){
-  const UChar* rules;
-  int32_t rules_length, target_cap, bytes_needed;
-  UErrorCode status = U_ZERO_ERROR;
-  UConverter *utf8cnv;
-  UCollator* myCollator;
-  char *buff;
-  int numNeeded=0;
-  buff = uprv_malloc(TESTJITTERBUG981_BUFF_SIZE);
-  utf8cnv = ucnv_open ("utf8", &status);
-  if(U_FAILURE(status)){
-      log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
-      return;
-  }
-  myCollator = ucol_open("zh", &status);
-  if(U_FAILURE(status)){
-      log_err("Could not open collator for zh locale. Error: %s", u_errorName(status));
-      return;
-  }
-
-  rules = ucol_getRules(myCollator, &rules_length);
-
-  target_cap = 0;
-  do {
-      ucnv_reset(utf8cnv);
-      status = U_ZERO_ERROR;
-      if(target_cap >= TESTJITTERBUG981_BUFF_SIZE) {
-        log_err("wanted %d bytes, only %d available\n", target_cap, TESTJITTERBUG981_BUFF_SIZE);
+    const UChar* rules;
+    int32_t rules_length, target_cap, bytes_needed, buff_size;
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *utf8cnv;
+    UCollator* myCollator;
+    char *buff;
+    int numNeeded=0;
+    utf8cnv = ucnv_open ("utf8", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
         return;
-      }
-      bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
-                                     rules, rules_length, &status);
-      target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
-      if(numNeeded!=0 && numNeeded!= bytes_needed){
-          log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");
-      }
-      numNeeded = bytes_needed;
-  } while (status == U_BUFFER_OVERFLOW_ERROR);
-  ucol_close(myCollator);
-  ucnv_close(utf8cnv);
-  free(buff);
+    }
+    myCollator = ucol_open("zh", &status);
+    if(U_FAILURE(status)){
+        log_err("Could not open collator for zh locale. Error: %s", u_errorName(status));
+        return;
+    }
+
+    rules = ucol_getRules(myCollator, &rules_length);
+    buff_size = rules_length * ucnv_getMaxCharSize(utf8cnv);
+    buff = malloc(buff_size);
+
+    target_cap = 0;
+    do {
+        ucnv_reset(utf8cnv);
+        status = U_ZERO_ERROR;
+        if(target_cap >= buff_size) {
+            log_err("wanted %d bytes, only %d available\n", target_cap, buff_size);
+            return;
+        }
+        bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
+            rules, rules_length, &status);
+        target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
+        if(numNeeded!=0 && numNeeded!= bytes_needed){
+            log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");
+        }
+        numNeeded = bytes_needed;
+    } while (status == U_BUFFER_OVERFLOW_ERROR);
+    ucol_close(myCollator);
+    ucnv_close(utf8cnv);
 }
 
 #endif
