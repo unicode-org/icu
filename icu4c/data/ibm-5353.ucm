@@ -10,6 +10,8 @@
 # File created by dtcocm version 3.00
 # from source files 44B014E9.RPMAP100 and 14E944B0.TPMAP100
 #
+# Patched for jitterbug 792
+#
 # Table Version : 1.01
 #
 <code_set_name>               "IBM-5353"
@@ -157,15 +159,10 @@ CHARMAP
 <U0088> \x88 |0
 <U008A> \x8A |0
 <U008C> \x8C |0
-<U008D> \x8D |0
-<U008E> \x8E |0
-<U008F> \x8F |0
 <U0090> \x90 |0
 <U0098> \x98 |0
 <U009A> \x9A |0
 <U009C> \x9C |0
-<U009D> \x9D |0
-<U009E> \x9E |0
 <U009F> \x9F |0
 <U00A0> \xA0 |0
 <U00A2> \xA2 |0
@@ -173,18 +170,22 @@ CHARMAP
 <U00A4> \xA4 |0
 <U00A6> \xA6 |0
 <U00A7> \xA7 |0
+<U00A8> \x8D |0
 <U00A9> \xA9 |0
 <U00AB> \xAB |0
 <U00AC> \xAC |0
 <U00AD> \xAD |0
 <U00AE> \xAE |0
+<U00AF> \x9D |0
 <U00B0> \xB0 |0
 <U00B1> \xB1 |0
 <U00B2> \xB2 |0
 <U00B3> \xB3 |0
+<U00B4> \xB4 |0
 <U00B5> \xB5 |0
 <U00B6> \xB6 |0
 <U00B7> \xB7 |0
+<U00B8> \x8F |0
 <U00B9> \xB9 |0
 <U00BB> \xBB |0
 <U00BC> \xBC |0
@@ -259,6 +260,9 @@ CHARMAP
 <U017C> \xFD |0
 <U017D> \xDE |0
 <U017E> \xFE |0
+<U02C7> \x8E |0
+<U02D9> \xFF |0
+<U02DB> \x9E |0
 <U2013> \x96 |0
 <U2014> \x97 |0
 <U2018> \x91 |0

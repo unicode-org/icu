@@ -10,6 +10,8 @@
 # File created by dtcocm version 3.00
 # from source files 44B014E7.RPMAP100 and 14E744B0.TPMAP100
 #
+# Patched for jitterbug 792
+#
 # Table Version : 1.01
 #
 <code_set_name>               "IBM-5351"
@@ -165,6 +167,7 @@ CHARMAP
 <U009E> \x9E |0
 <U009F> \x9F |0
 <U00A0> \xA0 |0
+<U00A1> \xA1 |0
 <U00A2> \xA2 |0
 <U00A3> \xA3 |0
 <U00A5> \xA5 |0
@@ -185,11 +188,15 @@ CHARMAP
 <U00B5> \xB5 |0
 <U00B6> \xB6 |0
 <U00B7> \xB7 |0
+<U00B8> \xB8 |0
 <U00B9> \xB9 |0
 <U00BB> \xBB |0
 <U00BC> \xBC |0
 <U00BD> \xBD |0
 <U00BE> \xBE |0
+<U00BF> \xBF |0
+<U00D7> \xAA |0
+<U00F7> \xBA |0
 <U0192> \x83 |0
 <U02C6> \x88 |0
 <U02DC> \x98 |0
@@ -242,6 +249,8 @@ CHARMAP
 <U05F0> \xD4 |0
 <U05F1> \xD5 |0
 <U05F2> \xD6 |0
+<U05F3> \xD7 |0
+<U05F4> \xD8 |0
 <U200E> \xFD |0
 <U200F> \xFE |0
 <U2013> \x96 |0
