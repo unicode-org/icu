@@ -653,11 +653,11 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         const uint8_t sampleTxt_iscii[]={ 
             0x41,   
             0xa1,   
-            0x80,    /*unassigned*/ 
+            0xEB,    /*unassigned*/ 
             0x26,   
             0x30,
             0xa2, 
-            0x8E,/*unassigned*/ 
+            0xEC,    /*unassigned*/ 
             0x42,
         };
         UChar isciitoUnicode[]={  
@@ -1922,23 +1922,23 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         int32_t from_hzOffs [] ={0,3,5,5,5,5,5,5,5,5,7,11,14,14,14,14,14,14,14,14,18,  };
 
        
-        /*hz*/
+        /*iscii*/
         const uint8_t sampleTxt_iscii[]={ 
             0x41,   
             0x30,   
-            0x8E, /*unassigned*/ 
+            0xEB, /*unassigned*/ 
             0xa3,
             0x42, 
-            0x8E,/*unassigned*/ 
+            0xEC, /*unassigned*/ 
             0x42,
         };
         UChar isciitoUnicode[]={  
             0x41,
             0x30,
-            0x25,  0x58,  0x38, 0x45,
+            0x25,  0x58,  0x45, 0x42,
             0x0903, 
             0x42,
-            0x25,  0x58,  0x38, 0x45,
+            0x25,  0x58,  0x45, 0x43,
             0x42,};
 
         int32_t from_isciiOffs [] ={0,1,2,2,2,2,3,4,5,5,5,5,6  };
