@@ -885,7 +885,20 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
+    // initial check for the default converter
+    UErrorCode errorCode = U_ZERO_ERROR;
+    /* try opening the data from dll instead of the dat file */
+    UConverter *cnv = ucnv_open("iso-8859-7", &errorCode);
+    if(cnv != 0) {
+        /* ok */
+        ucnv_close(cnv);
+    } else {
+        fprintf(stderr,
+                "#### WARNING! The converter for iso-8859-7 cannot be loaded from data dll/so."
+                "Proceeding to load data from dat file.\n");
+        errorCode = U_ZERO_ERROR;
 
+    }
     // If user didn't set ICU_DATA, attempt to generate one.
     IntlTest::setICU_DATA();
 
@@ -964,8 +977,8 @@ main(int argc, char* argv[])
     fprintf(stdout, "-----------------------------------------------\n");
 
     // initial check for the default converter
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UConverter *cnv = ucnv_open(0, &errorCode);
+    errorCode = U_ZERO_ERROR;
+    cnv = ucnv_open(0, &errorCode);
     if(cnv != 0) {
         // ok
         ucnv_close(cnv);
