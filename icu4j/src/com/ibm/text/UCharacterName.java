@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.3 $
+* $Date: 2001/10/23 17:08:13 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -74,7 +74,7 @@ final class UCharacterName
   */
   protected static String getName(int ch, int choice)
   {
-    if (ch < 0 || ch > 0x1ffff || 
+    if (ch < UCharacter.MIN_VALUE || ch > UCharacter.MAX_VALUE || 
         choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT) {
       return null;
     }
