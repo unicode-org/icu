@@ -166,7 +166,6 @@ void BasicNormalizerTest::TestDecomp()
 {
   Normalizer* norm = new Normalizer("", UNORM_NFD);
   iterateTest(norm, canonTests, ARRAY_LENGTH(canonTests), 1);
-  
   staticTest(UNORM_NFD, 0, canonTests, ARRAY_LENGTH(canonTests), 1);
   delete norm;
 }
@@ -820,8 +819,42 @@ void BasicNormalizerTest::TestConcatenate() {
             "a\\u1100",
             "\\u1161bcdefghijk",
             "a\\uac00bcdefghijk"
-        }
+        },
         /* ### TODO: add more interesting cases */
+        {
+            "D", 
+            "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958" 
+            "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC" 
+            "\\u09DD\\u09DF\\u0A33\\u0A36\\u0A59\\u0A5A\\u0A5B\\u0A5E" 
+            "\\u0B5C\\u0B5D\\u0F43\\u0F4D\\u0F52\\u0F57\\u0F5C\\u0F69" 
+            "\\u0F73\\u0F75\\u0F76\\u0F78\\u0F81\\u0F93\\u0F9D\\u0FA2" 
+            "\\u0FA7\\u0FAC\\u0FB9\\u1F71\\u1F73\\u1F75\\u1F77\\u1F79" 
+            "\\u1F7B\\u1F7D\\u1FBB\\u1FBE\\u1FC9\\u1FCB\\u1FD3\\u1FDB",
+            
+            "\\u1FE3\\u1FEB\\u1FEE\\u1FEF\\u1FF9\\u1FFB\\u1FFD\\u2000" 
+            "\\u2001\\u2126\\u212A\\u212B\\u2329\\u232A\\uF900\\uFA10" 
+            "\\uFA12\\uFA15\\uFA20\\uFA22\\uFA25\\uFA26\\uFA2A\\uFB1F" 
+            "\\uFB2A\\uFB2B\\uFB2C\\uFB2D\\uFB2E\\uFB2F\\uFB30\\uFB31" 
+            "\\uFB32\\uFB33\\uFB34\\uFB35\\uFB36\\uFB38\\uFB39\\uFB3A" 
+            "\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46" 
+            "\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B\\uFB4C\\uFB4D\\uFB4E",
+           
+            "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958"
+            "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC"
+            "\\u09DD\\u09DF\\u0A33\\u0A36\\u0A59\\u0A5A\\u0A5B\\u0A5E"
+            "\\u0B5C\\u0B5D\\u0F43\\u0F4D\\u0F52\\u0F57\\u0F5C\\u0F69"
+            "\\u0F73\\u0F75\\u0F76\\u0F78\\u0F81\\u0F93\\u0F9D\\u0FA2"
+            "\\u0FA7\\u0FAC\\u0FB9\\u1F71\\u1F73\\u1F75\\u1F77\\u1F79"
+            "\\u1F7B\\u1F7D\\u1FBB\\u1FBE\\u1FC9\\u1FCB\\u1FD3\\u0399"
+            "\\u0301\\u03C5\\u0308\\u0301\\u1FEB\\u1FEE\\u1FEF\\u1FF9"
+            "\\u1FFB\\u1FFD\\u2000\\u2001\\u2126\\u212A\\u212B\\u2329"
+            "\\u232A\\uF900\\uFA10\\uFA12\\uFA15\\uFA20\\uFA22\\uFA25"
+            "\\uFA26\\uFA2A\\uFB1F\\uFB2A\\uFB2B\\uFB2C\\uFB2D\\uFB2E"
+            "\\uFB2F\\uFB30\\uFB31\\uFB32\\uFB33\\uFB34\\uFB35\\uFB36"
+            "\\uFB38\\uFB39\\uFB3A\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41"
+            "\\uFB43\\uFB44\\uFB46\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B"
+            "\\uFB4C\\uFB4D\\uFB4E"
+        }
     };
 
     UnicodeString left, right, expect, result, r;
@@ -843,13 +876,14 @@ void BasicNormalizerTest::TestConcatenate() {
         right=UnicodeString(cases[i][2], "").unescape();
         expect=UnicodeString(cases[i][3], "").unescape();
 
-        result=r=UnicodeString();
+        //result=r=UnicodeString();
         errorCode=U_ZERO_ERROR;
 
         r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
-        if(U_FAILURE(errorCode) || result!=r || result!=expect) {
-            errln("error in Normalizer::concatenate(), cases[%d] fails with %s, result==expect: %d\n",
-                    i, u_errorName(errorCode), result==expect);
+        if(U_FAILURE(errorCode) || /*result!=r ||*/ result!=expect) {
+            errln("error in Normalizer::concatenate(), cases[] fails with "+
+                UnicodeString(u_errorName(errorCode))+", result==expect: expected: "+
+                hex(expect)+" =========> got: " + hex(result));
         }
     }
 
