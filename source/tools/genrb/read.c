@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -44,7 +44,7 @@ static UBool didInit=FALSE;
 extern int32_t lineCount;
 
 /* Protos */
-static enum ETokenType getStringToken(UFILE *f, UChar initialChar, 
+static enum ETokenType getStringToken(UFILE *f, UChar initialChar,
                       struct UString *token,
                       UErrorCode *status);
 static UChar unescape(UFILE *f, UErrorCode *status);
@@ -53,7 +53,7 @@ static void seekUntilNewline(UFILE *f, UErrorCode *status);
 static void seekUntilEndOfComment(UFILE *f, UErrorCode *status);
 static UBool isWhitespace(UChar c);
 static UBool isNewline(UChar c);
-     
+
 
 /* Read and return the next token from the stream.  If the token is of
    type eString, fill in the token parameter with the token.  If the
@@ -89,7 +89,7 @@ enum ETokenType getNextToken(UFILE *f,
     case COLON:        return tok_colon;
       c = getNextChar(f, TRUE, status);
       tokenType = getStringToken(f, c, token, status);
-      break;              
+      break;
 */
     default:           return getStringToken(f, c, token, status);
     }
@@ -167,7 +167,7 @@ static enum ETokenType getStringToken(UFILE *f,
           return tok_error;
       }
       lastStringWasQuoted = TRUE;
-      
+
       for(;;) {
         c = u_fgetc(f);
         /*  c = u_fgetc(f, status);*/
@@ -179,9 +179,9 @@ static enum ETokenType getStringToken(UFILE *f,
         /* Unterminated quoted strings */
         if(U_FAILURE(*status))
           return tok_error;
-        if(c == QUOTE) 
+        if(c == QUOTE)
           break;
-        if(c == ESCAPE) 
+        if(c == ESCAPE)
           c = unescape(f, status);
         ustr_ucat(token, c, status);
         if(U_FAILURE(*status))
@@ -195,8 +195,8 @@ static enum ETokenType getStringToken(UFILE *f,
           return tok_error;
       }
       lastStringWasQuoted = FALSE;
-      
-      if(c == ESCAPE) 
+
+      if(c == ESCAPE)
         c = unescape(f, status);
       ustr_ucat(token, c, status);
       if(U_FAILURE(*status))
@@ -211,7 +211,7 @@ static enum ETokenType getStringToken(UFILE *f,
           return tok_string;
         }
 
-        if(U_FAILURE(*status)) 
+        if(U_FAILURE(*status))
           return tok_string;
 
         if(c == QUOTE
@@ -225,22 +225,22 @@ static enum ETokenType getStringToken(UFILE *f,
             break;
           }
 
-        if(isWhitespace(c)) 
+        if(isWhitespace(c))
           break;
 
-        if(c == ESCAPE) 
+        if(c == ESCAPE)
           c = unescape(f, status);
         ustr_ucat(token, c, status);
         if(U_FAILURE(*status))
           return tok_error;
       }
     }
-    
+
     /* DO skip whitespace */
     c = getNextChar(f, TRUE, status);
-    if(U_FAILURE(*status)) 
+    if(U_FAILURE(*status))
       return tok_string;
-    
+
     if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA/* || c == COLON*/) {
        u_fungetc(c, f);
        /*u_fungetc(c, f, status);*/
@@ -252,7 +252,7 @@ static enum ETokenType getStringToken(UFILE *f,
 /* Retrieve the next character, ignoring comments.  If skipwhite is
    true, whitespace is skipped as well. */
 static UChar getNextChar(UFILE *f,
-                         UBool skipwhite, 
+                         UBool skipwhite,
                          UErrorCode *status)
 {
   UChar c;
@@ -266,13 +266,13 @@ static UChar getNextChar(UFILE *f,
     if(c == (UChar)U_EOF)
       return U_EOF;
 
-    if(skipwhite && isWhitespace(c)) 
+    if(skipwhite && isWhitespace(c))
       continue;
-    
+
     /* This also handles the get() failing case */
     if(c != SLASH)
       return c;
-    
+
     c = u_fgetc(f);
     /*  c = u_fgetc(f, status);*/
     if(c == (UChar)U_EOF)
@@ -282,12 +282,12 @@ static UChar getNextChar(UFILE *f,
     case SLASH:
       seekUntilNewline(f, status);
       break;
-      
+
     case ASTERISK:
       /* Note that we silently ignore an unterminated comment */
       seekUntilEndOfComment(f, status);
       break;
-      
+
     default:
         u_fungetc(c, f);
         /*u_fungetc(c, f, status);*/
@@ -309,7 +309,7 @@ static void seekUntilNewline(UFILE *f,
     c = u_fgetc(f);
     /*  c = u_fgetc(f, status);*/
   } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
-  
+
   /*if(U_FAILURE(*status))
     err = kItemNotFound;*/
 }
@@ -358,7 +358,7 @@ static UBool isWhitespace(UChar c)
   switch (c) {
     /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
   case 0x000A:
-  case 0x2029: 
+  case 0x2029:
     lineCount++;
   case 0x000D:
   case 0x0020:
@@ -378,7 +378,7 @@ static UBool isNewline(UChar c)
   case 0x000A:
   case 0x2029:
     lineCount++;
-  case 0x000D: 
+  case 0x000D:
     return TRUE;
 
   default:

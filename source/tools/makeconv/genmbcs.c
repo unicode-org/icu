@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1242,7 +1242,7 @@ compactToUnicode2(MBCSData *mbcsData) {
  * recursive sub-function of compactToUnicodeHelper()
  * returns:
  * >0 number of bytes that are used in unicodeCodeUnits[] that could be saved,
- *    if all sequences from this state are unassigned, returns the 
+ *    if all sequences from this state are unassigned, returns the
  * <0 there are assignments in unicodeCodeUnits[]
  * 0  no use of unicodeCodeUnits[]
  */

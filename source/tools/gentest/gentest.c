@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -75,7 +75,7 @@ main(int argc, char* argv[]) {
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    printf("Generating the test memory mapped file\n"); 
+    printf("Generating the test memory mapped file\n");
     createData(options[2].value);
     return 0;
 }
@@ -87,7 +87,7 @@ createData(const char* outputDirectory) {
     UErrorCode errorCode=U_ZERO_ERROR;
     char stringValue[]={'Y', 'E', 'A', 'R', '\0'};
     uint16_t intValue=2000;
-    
+
     long dataLength;
     uint32_t size;
 

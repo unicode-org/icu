@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -20,9 +20,9 @@
 #include "cmemory.h"
 
 static int32_t findOverlappingPosition(CompactByteArray* this,
-                       uint32_t start, 
-                       const UChar *tempIndex, 
-                       int32_t tempIndexCount, 
+                       uint32_t start,
+                       const UChar *tempIndex,
+                       int32_t tempIndexCount,
                        uint32_t cycle);
 
 /* internal constants*/
@@ -47,7 +47,7 @@ int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
 int32_t ucmp8_getkIndexCount(){ return UCMP8_kIndexCount;}
 /* debug flags*/
 /*=======================================================*/
-U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index) 
+U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index)
 {
     return (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)]);
 }
@@ -80,35 +80,35 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
  */
   CompactByteArray* this = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   int32_t i;
-  
+
   if (this == NULL) return NULL;
 
-  this->fArray = NULL; 
+  this->fArray = NULL;
   this->fIndex = NULL;
   this->fCount = UCMP8_kUnicodeCount;
-  this->fCompact = FALSE; 
+  this->fCompact = FALSE;
   this->fBogus = FALSE;
 
 
   this->fArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
-  if (!this->fArray) 
+  if (!this->fArray)
     {
       this->fBogus = TRUE;
       return NULL;
     }
   this->fIndex = (uint16_t*) uprv_malloc(sizeof(uint16_t) * UCMP8_kIndexCount);
-  if (!this->fIndex) 
+  if (!this->fIndex)
     {
       uprv_free(this->fArray);
       this->fArray = NULL;
       this->fBogus = TRUE;
       return NULL;
     }
-  for (i = 0; i < UCMP8_kUnicodeCount; ++i) 
+  for (i = 0; i < UCMP8_kUnicodeCount; ++i)
     {
       this->fArray[i] = defaultValue;
     }
-  for (i = 0; i < UCMP8_kIndexCount; ++i) 
+  for (i = 0; i < UCMP8_kIndexCount; ++i)
     {
       this->fIndex[i] = (uint16_t)(i << UCMP8_kBlockShift);
     }
@@ -122,12 +122,12 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
 {
   CompactByteArray* this = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   if (!this) return NULL;
-  
+
   this->fArray = NULL;
-  this->fIndex = NULL; 
+  this->fIndex = NULL;
   this->fCount = count;
   this->fBogus = FALSE;
-  
+
   this->fArray = newValues;
   this->fIndex = indexArray;
   this->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
@@ -136,8 +136,8 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
 }
 
 /*=======================================================*/
- 
-void ucmp8_close(CompactByteArray* this) 
+
+void ucmp8_close(CompactByteArray* this)
 {
   uprv_free(this->fArray);
   this->fArray = NULL;
@@ -150,8 +150,8 @@ void ucmp8_close(CompactByteArray* this)
 
 
 /*=======================================================*/
- 
-void ucmp8_expand(CompactByteArray* this) 
+
+void ucmp8_expand(CompactByteArray* this)
 {
   /* can optimize later.
    * if we have to expand, then walk through the blocks instead of using Get
@@ -167,20 +167,20 @@ void ucmp8_expand(CompactByteArray* this)
    * ARRAY  abcdeababcedzyabcdea...
    */
   int32_t i;
-  if (this->fCompact) 
+  if (this->fCompact)
     {
       int8_t* tempArray;
       tempArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
-      if (!tempArray) 
+      if (!tempArray)
     {
       this->fBogus = TRUE;
       return;
     }
-      for (i = 0; i < UCMP8_kUnicodeCount; ++i) 
+      for (i = 0; i < UCMP8_kUnicodeCount; ++i)
     {
       tempArray[i] = ucmp8_get(this,(UChar)i);  /* HSYS : How expand?*/
         }
-      for (i = 0; i < UCMP8_kIndexCount; ++i) 
+      for (i = 0; i < UCMP8_kIndexCount; ++i)
     {
       this->fIndex[i] = (uint16_t)(i<< UCMP8_kBlockShift);
         }
@@ -189,7 +189,7 @@ void ucmp8_expand(CompactByteArray* this)
       this->fCompact = FALSE;
     }
 }
- 
+
 
 /*=======================================================*/
 /* this->fArray:    an array to be overlapped
@@ -199,35 +199,35 @@ void ucmp8_expand(CompactByteArray* this)
  *      inputHash[i] = XOR of values from i-count+1 to i
  */
 int32_t
-findOverlappingPosition(CompactByteArray* this, 
+findOverlappingPosition(CompactByteArray* this,
             uint32_t start,
             const UChar* tempIndex,
             int32_t tempIndexCount,
-            uint32_t cycle) 
+            uint32_t cycle)
 {
   /* this is a utility routine for finding blocks that overlap.
    * IMPORTANT: the cycle number is very important. Small cycles take a lot
    * longer to work. In some cases, they may be able to get better compaction.
    */
-    
+
   int32_t i;
   int32_t j;
   int32_t currentCount;
-  
-  for (i = 0; i < tempIndexCount; i += cycle) 
+
+  for (i = 0; i < tempIndexCount; i += cycle)
     {
       currentCount = UCMP8_kBlockCount;
-      if (i + UCMP8_kBlockCount > tempIndexCount) 
+      if (i + UCMP8_kBlockCount > tempIndexCount)
     {
       currentCount = tempIndexCount - i;
-        } 
-      for (j = 0; j < currentCount; ++j) 
+        }
+      for (j = 0; j < currentCount; ++j)
     {
       if (this->fArray[start + j] != this->fArray[tempIndex[i + j]]) break;
         }
       if (j == currentCount) break;
     }
-  
+
   return i;
 }
 
@@ -249,19 +249,19 @@ ucmp8_getIndex(const CompactByteArray* this)
   return this->fIndex;
 }
 
-int32_t 
+int32_t
 ucmp8_getCount(const CompactByteArray* this)
 {
   return this->fCount;
 }
 
 
-void 
+void
 ucmp8_set(CompactByteArray* this,
       UChar c,
       int8_t value)
 {
-  if (this->fCompact == TRUE) 
+  if (this->fCompact == TRUE)
     {
       ucmp8_expand(this);
       if (this->fBogus) return;
@@ -270,19 +270,19 @@ ucmp8_set(CompactByteArray* this,
 }
 
 
-void 
+void
 ucmp8_setRange(CompactByteArray* this,
            UChar start,
            UChar end,
            int8_t value)
 {
   int32_t i;
-  if (this->fCompact == TRUE) 
+  if (this->fCompact == TRUE)
     {
       ucmp8_expand(this);
       if (this->fBogus) return;
     }
-  for (i = start; i <= end; ++i) 
+  for (i = start; i <= end; ++i)
     {
       this->fArray[i] = value;
     }
@@ -290,12 +290,12 @@ ucmp8_setRange(CompactByteArray* this,
 
 
 /*=======================================================*/
- 
-void 
+
+void
 ucmp8_compact(CompactByteArray* this,
-          uint32_t cycle) 
+          uint32_t cycle)
 {
-  if (!this->fCompact) 
+  if (!this->fCompact)
     {
       /* this actually does the compaction.
        * it walks throught the contents of the expanded array, finding the
@@ -311,46 +311,46 @@ ucmp8_compact(CompactByteArray* this,
       int32_t     tempIndexCount;
       int8_t*     tempArray;
       int32_t     iBlock, iIndex;
-      
+
       /* fix cycle, must be 0 < cycle <= blockcount*/
       if (cycle < 0) cycle = 1;
       else if (cycle > (uint32_t)UCMP8_kBlockCount) cycle = UCMP8_kBlockCount;
-      
+
       /* make temp storage, larger than we need*/
       tempIndex = (UChar*) uprv_malloc(sizeof(UChar)* UCMP8_kUnicodeCount);
-      if (!tempIndex) 
+      if (!tempIndex)
     {
       this->fBogus = TRUE;
       return;
-        }               
+        }
       /* set up first block.*/
       tempIndexCount = UCMP8_kBlockCount;
-      for (iIndex = 0; iIndex < UCMP8_kBlockCount; ++iIndex) 
+      for (iIndex = 0; iIndex < UCMP8_kBlockCount; ++iIndex)
     {
       tempIndex[iIndex] = (uint16_t)iIndex;
         }; /* endfor (iIndex = 0; .....)*/
       this->fIndex[0] = 0;
-      
+
       /* for each successive block, find out its first position in the compacted array*/
-      for (iBlock = 1; iBlock < UCMP8_kIndexCount; ++iBlock) 
+      for (iBlock = 1; iBlock < UCMP8_kIndexCount; ++iBlock)
     {
       int32_t newCount, firstPosition, block;
       block = iBlock << UCMP8_kBlockShift;
       /*      if (debugSmall) if (block > debugSmallLimit) break;*/
-      firstPosition = findOverlappingPosition(this, 
+      firstPosition = findOverlappingPosition(this,
                           block,
                           tempIndex,
                           tempIndexCount,
                           cycle);
-      
+
       /* if not contained in the current list, copy the remainder
        * invariant; cumulativeHash[iBlock] = XOR of values from iBlock-kBlockCount+1 to iBlock
        * we do this by XORing out cumulativeHash[iBlock-kBlockCount]
        */
       newCount = firstPosition + UCMP8_kBlockCount;
-      if (newCount > tempIndexCount) 
+      if (newCount > tempIndexCount)
         {
-          for (iIndex = tempIndexCount; iIndex < newCount; ++iIndex) 
+          for (iIndex = tempIndexCount; iIndex < newCount; ++iIndex)
         {
           tempIndex[iIndex] = (uint16_t)(iIndex - firstPosition + block);
         } /* endfor (iIndex = tempIndexCount....)*/
@@ -358,24 +358,24 @@ ucmp8_compact(CompactByteArray* this,
             } /* endif (newCount > tempIndexCount)*/
       this->fIndex[iBlock] = (uint16_t)firstPosition;
         } /* endfor (iBlock = 1.....)*/
-      
+
       /* now allocate and copy the items into the array*/
       tempArray = (int8_t*) uprv_malloc(tempIndexCount * sizeof(int8_t));
-      if (!tempArray) 
+      if (!tempArray)
     {
       this->fBogus = TRUE;
       uprv_free(tempIndex);
       return;
         }
-      for (iIndex = 0; iIndex < tempIndexCount; ++iIndex) 
+      for (iIndex = 0; iIndex < tempIndexCount; ++iIndex)
     {
       tempArray[iIndex] = this->fArray[tempIndex[iIndex]];
         }
       uprv_free(this->fArray);
       this->fArray = tempArray;
       this->fCount = tempIndexCount;
-      
-      
+
+
       /* free up temp storage*/
       uprv_free(tempIndex);
       this->fCompact = TRUE;

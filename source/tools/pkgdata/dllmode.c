@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -13,7 +13,7 @@
 *   created by: Steven \u24C7 Loomis
 *
 *   This program packages the ICU data into different forms
-*   (DLL, common data, etc.) 
+*   (DLL, common data, etc.)
 */
 
 #include <stdio.h>
@@ -89,7 +89,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   CharList *objects = NULL;
   CharList *iter;
 
-  if(U_FAILURE(*status)) { 
+  if(U_FAILURE(*status)) {
     return;
   }
 
@@ -116,11 +116,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 #ifdef OS390
   if(uprv_isOS390BatchMode()) {
     if (uprv_strcmp(o->shortName, U_ICUDATA_NAME) == 0)
-      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUDA)'\"\n\n"); 
+      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUDA)'\"\n\n");
     else if (uprv_strcmp(o->shortName, "testdata") == 0)
-      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUTE)'\"\n\n"); 
+      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUTE)'\"\n\n");
     else if (uprv_strcmp(o->shortName, U_ICUDATA_NAME"_390") == 0)
-      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUD1)'\"\n\n"); 
+      sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUD1)'\"\n\n");
     T_FileStream_writeLine(makefile, tmp);
   }
 #endif
@@ -178,8 +178,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
   T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
- 
-#ifdef HPUX 
+
+#ifdef HPUX
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES) $(BIR_DEPS)\n"
                                    "\t$(SHLIB.cc) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ) $(BIR_LDFLAGS)\n"
                                    "\t-ls -l $@\n\n");
@@ -206,7 +206,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   T_FileStream_writeLine(makefile, "CLEANFILES= $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
   T_FileStream_writeLine(makefile, "\n\n");
-  
+
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(TARGET)\n"
                                    "\t$(INSTALL-L) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
 

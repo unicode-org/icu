@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2000, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -198,7 +198,7 @@ char *getModificationData(struct UFILE *file, UErrorCode *status) {
                 uprv_free(retValue);
             }
         }
-    } 
+    }
     setErrorText("Invalid modificator directive");
     *status = U_INVALID_FORMAT_ERROR;
 
@@ -232,7 +232,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     struct SResource *temp2 = NULL;
     UBool colEl = FALSE, colOverride = FALSE, ucaEl = FALSE;
     UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
-    UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; 
+    UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000};
 
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;
@@ -418,7 +418,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                     /* importing a file and storing it in a binary object */
                     else if(uprv_strcmp(modificator, "import") == 0) {
                       FileStream *importFile;
-                      int32_t len; 
+                      int32_t len;
                       uint8_t *binData;
                       char *fileName;
                       fprintf(stdout, "import\n");
@@ -495,7 +495,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         case eStr:
             /* check if we have reached here after finding %%UCARULES */
             if(ucaEl==TRUE){
-                UChar *c,*end,*ucaRulesStr;    
+                UChar *c,*end,*ucaRulesStr;
                 FileStream *in =NULL;
                 UFILE* ufile=NULL;
                 int fileLength = 0;
@@ -549,7 +549,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                     fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag );
                     goto finish;
                 }
-     
+
             }else{
                 if(temp != NULL) {
                     *status = U_INTERNAL_PROGRAM_ERROR;
@@ -580,8 +580,8 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
-          /* Record a comma-delimited list string */      
+
+          /* Record a comma-delimited list string */
         case eListStr:
             temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
             array_add(temp, temp1, status);
@@ -590,7 +590,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
           /* End a string list */
         case eEndList:
             /*uhash_put(data, tag.fChars, status);*/
@@ -601,7 +601,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eBeg2dList:
             if(temp != NULL) {
                 *status = U_INTERNAL_PROGRAM_ERROR;
@@ -613,7 +613,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eEnd2dList:
             /*uhash_put(data, tag.fChars, status);*/
             put(data, &tag, status);
@@ -625,7 +625,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case e2dStr:
             temp2 = string_open(bundle, NULL, token.fChars, token.fLength, status);
             array_add(temp1, temp2, status);
@@ -634,7 +634,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eNewRow:
             array_add(temp, temp1, status);
             temp1 = array_open(bundle, NULL, status);
@@ -642,7 +642,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eBegTagged:
             if(temp != NULL) {
                 *status = U_INTERNAL_PROGRAM_ERROR;
@@ -654,7 +654,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eEndTagged:
             /*uhash_put(data, tag.fChars, status);*/
             put(data, &tag, status);
@@ -664,7 +664,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eTaggedStr:
             temp1 = string_open(bundle, cSubTag, token.fChars, token.fLength, status);
             table_add(temp, temp1, status);
@@ -674,7 +674,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             /* We have seen the Override tag aleady, now checks if the value is "TRUE" or "FALSE". */
-            if (uprv_strcmp(cSubTag, "Override") == 0) 
+            if (uprv_strcmp(cSubTag, "Override") == 0)
             {
                 if (u_strncmp(token.fChars, trueValue, u_strlen(trueValue)) == 0)
                 {
@@ -699,7 +699,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 /* do the collation elements */
                 int32_t len = 0;
                 uint8_t *binColData = NULL;
-                UCollator *coll = NULL; 
+                UCollator *coll = NULL;
                 UChar *rules = NULL;
                 struct UString newTag;
 
@@ -727,7 +727,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 ustr_initChars(&newTag, "CollationElements", -1, &intStatus);
                 if(U_FAILURE(intStatus)) {
                     goto finish;
-                } 
+                }
                 put(data, &newTag, &intStatus);
                 ustr_deinit(&newTag);
                 if(U_FAILURE(intStatus)) {
@@ -747,7 +747,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 goto finish;
             }
             break;
-      
+
         case eOpen:
             if(data != 0) {
                 *status = U_INTERNAL_PROGRAM_ERROR;
@@ -761,7 +761,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             data = uhash_open(hashUString, compareUString, status);
             uhash_setKeyDeleter(data, freeUString);
             break;
-      
+
         case eClose:
             if(data == 0) {
                 *status = U_INTERNAL_PROGRAM_ERROR;

@@ -2,7 +2,7 @@
 .\"
 .\" genuca.8: manual page for the genuca utility
 .\"
-.\" Copyright (C) 2000 IBM, Inc. and others.
+.\" Copyright (C) 2000-2001 IBM, Inc. and others.
 .\"
 .TH GENUCA 8 "22 February 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME

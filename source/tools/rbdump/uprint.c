@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -51,13 +51,13 @@ uprint(const UChar *s,
 
   /* open a default converter */
   converter = ucnv_open(0, status);
-  
+
   /* if we failed, clean up and exit */
   if(U_FAILURE(*status)) goto finish;
 
   /* output unicode characters properly */
   ucnv_setFromUCallBack(converter, UCNV_FROM_U_CALLBACK_ESCAPE, NULL, oldFromUAction, &oldFromUContext, status);
-  
+
   if(U_FAILURE(*status)) goto finish;
 
   /* perform the conversion */
@@ -77,10 +77,10 @@ uprint(const UChar *s,
     myTarget     = buf;
     arraySize    = BUF_SIZE;
   }
-  while(*status == U_BUFFER_OVERFLOW_ERROR); 
+  while(*status == U_BUFFER_OVERFLOW_ERROR);
 
  finish:
-  
+
   /* close the converter */
   ucnv_close(converter);
 }

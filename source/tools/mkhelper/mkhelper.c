@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -376,7 +376,7 @@ void processLine(int fileNo, int varNo, char* line, UBool isFirstLine, TokenHand
     if (isFirstLine) {
         /* Call once with NULL for initialization */
         (*proc)(NULL, 0, fileNo, varNo);
-    }        
+    }
     for (;;) {
         int32_t len = 0;
         char* p;

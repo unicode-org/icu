@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -21,7 +21,7 @@
  * As a matter of policy, the perl script tz.pl wants to do as much of
  * the parsing, data processing, and error checking as possible, and
  * this program wants to just do the binary translation step.
- * 
+ *
  * See tz.pl for the file format that is READ by this program.
  */
 
@@ -65,7 +65,7 @@ class gentz {
            STANDARD_TIME,
            UTC_TIME
     };
-    
+
     // The largest number of zones we accept as sensible.  Anything
     // larger is considered an error.  Adjust as needed.
     enum { MAX_ZONES = 1000 };
@@ -84,7 +84,7 @@ class gentz {
     static const char DST_MARK;
     static const char SEP;
     static const char NUL;
-    
+
     static const char* END_KEYWORD;
 
     enum { BUFLEN = 1024 };
@@ -294,7 +294,7 @@ void gentz::parseTzTextFile(FileStream* in) {
 
     // Parse the equivalency groups
     equivTable = parseEquivTable(in);
-    
+
     // Parse the GMT offset index table
     offsetIndex = parseOffsetIndexTable(in);
 
@@ -386,7 +386,7 @@ TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
         // This pointer will be adjusted to point to the start of the
         // list of zones in this group.
         uint16_t* pList = 0;
-        
+
         switch (flavor) {
         case STANDARD_MARK:
             eg->isDST = 0;
@@ -414,7 +414,7 @@ TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
             *pList++ = (uint16_t) parseInteger(p, (j==(egCount-1)) ? NUL : SEP,
                                                0, header.count-1);
         }
-        
+
         // At this point pList points to the byte after the last byte of this
         // equiv group struct.  Time to 4-align it.
         uint16_t structSize = (uint16_t) (((int8_t*)pList) - ((int8_t*)eg));
@@ -497,7 +497,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
             zoneNumberArray[alignedCount++] = (uint16_t)0xFFFF;
         }
         int8_t* nextIndex = (int8_t*)&(zoneNumberArray[alignedCount]);
-	
+
         index->nextEntryDelta = (uint16_t) ((i==(n-1)) ? 0 : (nextIndex - (int8_t*)index));
         index = (OffsetIndex*)nextIndex;
     }

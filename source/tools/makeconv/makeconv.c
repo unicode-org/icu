@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-1999, International Business Machines
+ *   Copyright (C) 1998-2001, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -14,7 +14,7 @@
  *  05/04/2000    helena     Added fallback mapping into the picture...
  *  06/29/2000  helena      Major rewrite of the callback APIs.
  */
-   
+
 #include <stdio.h>
 #include "unicode/putil.h"
 #include "ucmp16.h"
@@ -124,7 +124,7 @@ static char *
       {
           uprv_memset(pound, ' ', fallback-pound);
       }
-      else 
+      else
       {
           *pound = '\0';
       }
@@ -134,7 +134,7 @@ static char *
 
 /* Returns true in c is a in set 'setOfChars', false otherwise
  */
-static UBool 
+static UBool
   isInSet (char c, const char *setOfChars)
 {
   uint8_t i = 0;
@@ -150,7 +150,7 @@ static UBool
 
 /* Returns pointer to the next non-whitespace (or non-separator)
  */
-static int32_t 
+static int32_t
   nextTokenOffset (const char *line, const char *separators)
 {
   int32_t i = 0;
@@ -192,9 +192,9 @@ static UDataInfo dataInfo={
     {0, 0, 0, 0}                  /* dataVersion (calculated at runtime) */
 };
 
-void writeConverterData(UConverterSharedData *mySharedData, 
-                        const char *cnvName, 
-                        const char *cnvDir, 
+void writeConverterData(UConverterSharedData *mySharedData,
+                        const char *cnvName,
+                        const char *cnvDir,
                         UErrorCode *status)
 {
     UNewDataMemory *mem = NULL;
@@ -221,7 +221,7 @@ void writeConverterData(UConverterSharedData *mySharedData,
       {
         fprintf(stderr, "- Opened udata %s.%s\n", cnvName, "cnv");
       }
-  
+
     /* all read only, clean, platform independent data.  Mmmm. :)  */
     udata_writeBlock(mem, mySharedData->staticData, sizeof(UConverterStaticData));
     size += sizeof(UConverterStaticData); /* Is 4-aligned  - by size */
@@ -236,12 +236,12 @@ void writeConverterData(UConverterSharedData *mySharedData,
     }
     if(VERBOSE)
     {
-      fprintf(stderr, "- Wrote %d bytes to the udata.\n", sz2); 
+      fprintf(stderr, "- Wrote %d bytes to the udata.\n", sz2);
     }
 }
 
 static UOption options[]={
-    UOPTION_HELP_H,              /* 0  Numbers for those who*/ 
+    UOPTION_HELP_H,              /* 0  Numbers for those who*/
     UOPTION_HELP_QUESTION_MARK,  /* 1   can't count. */
     UOPTION_COPYRIGHT,           /* 2 */
     UOPTION_VERSION,             /* 3 */
@@ -251,7 +251,7 @@ static UOption options[]={
 
 int main(int argc, char* argv[])
 {
-    UConverterSharedData* mySharedData = NULL; 
+    UConverterSharedData* mySharedData = NULL;
     UErrorCode err = U_ZERO_ERROR;
     char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     const char* destdir, *arg;
@@ -319,7 +319,7 @@ int main(int argc, char* argv[])
         destdirlen = 0;
         outBasename = outFileName;
     }
-    
+
 #if DEBUG
     {
       int i;
@@ -359,7 +359,7 @@ int main(int argc, char* argv[])
 
       /*removes the extension if any is found*/
       dot = uprv_strrchr(outBasename, '.');
-      if (dot) 
+      if (dot)
         {
           *dot = '\0';
         }
@@ -388,7 +388,7 @@ int main(int argc, char* argv[])
           /* Make the static data name equal to the file name */
           if( /*VERBOSE &&  */ uprv_stricmp(cnvName,mySharedData->staticData->name))
           {
-            fprintf(stderr, "Warning: %s%s claims to be '%s'\n", 
+            fprintf(stderr, "Warning: %s%s claims to be '%s'\n",
                     cnvName,
                     CONVERTER_FILE_EXTENSION,
                     mySharedData->staticData->name);
@@ -647,7 +647,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
         *pErrorCode=U_INVALID_TABLE_FORMAT;
     }
 }
-  
+
 void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, UErrorCode* err)
 {
     char storageLine[200];
@@ -799,15 +799,15 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   UConverterStaticData* myStaticData = NULL;
 
   if (U_FAILURE(*err)) return NULL;
-  
+
   convFile = T_FileStream_open(converterName, "r");
-  if (convFile == NULL) 
+  if (convFile == NULL)
     {
       *err = U_FILE_ACCESS_ERROR;
       return NULL;
     }
-  
-  
+
+
   mySharedData = (UConverterSharedData*) uprv_malloc(sizeof(UConverterSharedData));
   if (mySharedData == NULL)
     {
@@ -815,9 +815,9 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       T_FileStream_close(convFile);
       return NULL;
     }
-  
+
   uprv_memset(mySharedData, 0, sizeof(UConverterSharedData));
-  
+
   mySharedData->structSize = sizeof(UConverterSharedData);
 
   myStaticData =  (UConverterStaticData*) uprv_malloc(sizeof(UConverterStaticData));
@@ -826,7 +826,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       *err = U_MEMORY_ALLOCATION_ERROR;
       T_FileStream_close(convFile);
       return NULL;
-    }  
+    }
   uprv_memset(myStaticData, 0, sizeof(UConverterStaticData));
   mySharedData->staticData = myStaticData;
   myStaticData->structSize = sizeof(UConverterStaticData);
@@ -839,10 +839,10 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   readHeaderFromFile(mySharedData, convFile, converterName, err);
 
   if (U_FAILURE(*err)) return NULL;
-  
+
   switch (myStaticData->conversionType)
     {
-    case UCNV_SBCS: 
+    case UCNV_SBCS:
       {
         /* SBCS: use MBCS data structure with a default state table */
         if(mySharedData->staticData->maxBytesPerChar!=1) {
@@ -865,12 +865,12 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
         }
         break;
       }
-    case UCNV_MBCS: 
+    case UCNV_MBCS:
       {
         /* MBCSOpen() was called by readHeaderFromFile() */
         break;
       }
-    case UCNV_EBCDIC_STATEFUL: 
+    case UCNV_EBCDIC_STATEFUL:
       {
         /* EBCDIC_STATEFUL: use MBCS data structure with a default state table */
         if(mySharedData->staticData->maxBytesPerChar!=2) {
@@ -898,7 +898,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
         }
         break;
       }
-    case UCNV_DBCS: 
+    case UCNV_DBCS:
       {
         /* DBCS: use MBCS data structure with a default state table */
         if(mySharedData->staticData->maxBytesPerChar!=2) {
@@ -939,7 +939,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
     }
 
   T_FileStream_close(convFile);
-  
+
   return mySharedData;
 }
 

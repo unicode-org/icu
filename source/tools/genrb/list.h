@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -36,7 +36,7 @@ struct SStringList2d {
   UChar **fData;
   int32_t fCount;
   int32_t fCapacity;
-  
+
   int32_t *fRows;
   int32_t fRowCount;
   int32_t fRowCapacity;
@@ -64,9 +64,9 @@ struct STaggedList {
 
 struct SList* taglist_open(UErrorCode *status);
 void taglist_close(struct SList *list, UErrorCode *status);
-void taglist_add(struct SList *list, const UChar *tag, 
+void taglist_add(struct SList *list, const UChar *tag,
 		 const UChar *data, UErrorCode *status);
-const UChar* taglist_get(const struct SList *list, const char *tag, 
+const UChar* taglist_get(const struct SList *list, const char *tag,
 			 UErrorCode *status);
 
 /* Types of lists */
@@ -80,7 +80,7 @@ enum EListType {
 /* A generic list container */
 struct SList {
   enum EListType fType; /* type of element in union */
-  
+
   union {
     struct SStringList fStringList;
     struct SStringList2d fStringList2d;
