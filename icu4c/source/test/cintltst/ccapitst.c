@@ -324,6 +324,7 @@ void TestConvert()
 
     }
       /*Testing ucnv_convert()*/
+    do /* do {} while(0) allows to leave this block with a break */
     {
         int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
         const uint8_t source[]={ 0x00, 0x04, 0x05, 0x06, 0xa2, 0xb4, 0x00};
@@ -339,9 +340,10 @@ void TestConvert()
             targetLimit=targetCapacity+1;
             target=(char*)malloc(sizeof(char) * targetLimit);
             targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
-            if(U_FAILURE(err)){
-                log_err("FAILURE! ucnv_convert(ibm-1363->ibm-1364) failed. %s\n", myErrorName(err));
-            }
+        }
+        if(U_FAILURE(err)){
+            log_err("FAILURE! ucnv_convert(ibm-1363->ibm-1364) failed. %s\n", myErrorName(err));
+            break;
         }
         for(i=0; i<targetCapacity; i++){
             if(target[i] != expectedTarget[i]){
@@ -372,7 +374,7 @@ void TestConvert()
         err=U_ZERO_ERROR;
         free(target);
         ucnv_flushCache();
-    }
+    } while(0);
 
     /*Testing ucnv_open()*/
     /* Note: These converters have been chosen because they do NOT
@@ -841,7 +843,7 @@ void TestConvert()
     {
       log_err("ERR: calling toUChars: Didn't get U_BUFFER_OVERFLOW .. expected it.\n");
     }
-     /*Testing ucnv_fromUChars and ucnv_toUChars wwith error conditions*/
+     /*Testing ucnv_fromUChars and ucnv_toUChars with error conditions*/
       err=U_ILLEGAL_ARGUMENT_ERROR;
       log_verbose("\n---Testing ucnv_fromUChars() with err != U_ZERO_ERROR\n");
       targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);

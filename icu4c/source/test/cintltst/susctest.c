@@ -531,7 +531,7 @@ myMultipassTest(const UChar *chars,
 		  chars + len,
 		  &status);
     
-    if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
+    if(status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(status)) {
       log_err("Failing status code at line %d.\n", __LINE__);
       return;
     }
@@ -549,7 +549,7 @@ myMultipassTest(const UChar *chars,
     
     totalBytesWritten += (myCTarget - myCompressionBuffer);
     
-  } while(status == U_INDEX_OUTOFBOUNDS_ERROR/*totalCharsCompressed < len*/);
+  } while(status == U_BUFFER_OVERFLOW_ERROR/*totalCharsCompressed < len*/);
   
   /* reset */
   scsu_reset(&myCompressor);
@@ -570,7 +570,7 @@ myMultipassTest(const UChar *chars,
 		    myCompressed + totalBytesWritten,
 		    &status);
     
-    if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
+    if(status != U_BUFFER_OVERFLOW_ERROR && U_FAILURE(status)) {
       log_err("Failing status code at line %d.\n", __LINE__);
       return;
     }
@@ -588,7 +588,7 @@ myMultipassTest(const UChar *chars,
 
     totalCharsWritten += (myDTarget - myDecompressionBuffer);
   
-  } while(status == U_INDEX_OUTOFBOUNDS_ERROR/*totalBytesDecompressed < totalBytesWritten*/);
+  } while(status == U_BUFFER_OVERFLOW_ERROR/*totalBytesDecompressed < totalBytesWritten*/);
   
   /* find differences */
   if( printDiffs(chars, len, myDecompressed, totalCharsWritten) == FALSE) {
