@@ -649,7 +649,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
-    
+
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
                       &prefixOffset, &prefixLen,
@@ -1616,7 +1616,7 @@ static void TestUCARules() {
   ucol_getSortKey(coll, b, 1, res, 256);
 */
   ucol_close(coll);
-  if(rules != b) {  
+  if(rules != b) {
     free(rules);
   }
 }
@@ -1948,7 +1948,7 @@ static void TestCase( )
         }
       }
     }
-    ucol_close(myCollation);    
+    ucol_close(myCollation);
     {
       const static char *lowerFirst[] = {
         "h",
@@ -2018,13 +2018,13 @@ static void TestIncrementalNormalize() {
         /*          most buffers along the way.*/
         UChar            *strA;
         UChar            *strB;
-        
+
         strA = uprv_malloc((maxSLen+1) * sizeof(UChar));
         strB = uprv_malloc((maxSLen+1) * sizeof(UChar));
-        
+
         coll = ucol_open("en_US", &status);
         ucol_setNormalization(coll, UNORM_NFD);
-        
+
         /* for (sLen = 4; sLen<maxSLen; sLen++) { */
         for (sLen = 1000; sLen<1001; sLen++) {
             strA[0] = baseA;
@@ -2035,7 +2035,7 @@ static void TestIncrementalNormalize() {
             }
             strA[sLen]   = 0;
             strB[sLen]   = 0;
-            
+
             ucol_setStrength(coll, UCOL_TERTIARY);   /* Do test with default strength, which runs*/
             doTest(coll, strA, strB, UCOL_EQUAL);    /*   optimized functions in the impl*/
             ucol_setStrength(coll, UCOL_IDENTICAL);   /* Do again with the slow, general impl.*/
@@ -2048,16 +2048,16 @@ static void TestIncrementalNormalize() {
 
     /*  Test 2:  Non-normal sequence in a string that extends to the last character*/
     /*         of the string.  Checks a couple of edge cases.*/
-    
+
     {
-        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};   
-        UChar strB[] = {0x41, 0xc0, 0x316, 0};   
+        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};
+        UChar strB[] = {0x41, 0xc0, 0x316, 0};
         ucol_setStrength(coll, UCOL_TERTIARY);
         doTest(coll, strA, strB, UCOL_EQUAL);
     }
 
     /*  Test 3:  Non-normal sequence is terminated by a surrogate pair.*/
-    
+
     {
         UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};
         UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
@@ -2066,7 +2066,7 @@ static void TestIncrementalNormalize() {
     }
 
     /*  Test 4:  Imbedded nulls do not terminate a string when length is specified.*/
-    
+
     {
         UChar strA[] = {0x41, 0x00, 0x42, 0x00};
         UChar strB[] = {0x41, 0x00, 0x00, 0x00};
@@ -2124,9 +2124,9 @@ static void TestIncrementalNormalize() {
         ucol_setStrength(coll, UCOL_TERTIARY);
     }
 
-    
+
     /*  Test 5:  Null characters in non-normal source strings.*/
-    
+
     {
         UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42, 0x00};
         UChar strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00, 0x00};
@@ -2184,9 +2184,9 @@ static void TestIncrementalNormalize() {
         ucol_setStrength(coll, UCOL_TERTIARY);
     }
 
-    
+
     /*  Test 6:  Null character as base of a non-normal combining sequence.*/
-    
+
     {
         UChar strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302, 0x00};
         UChar strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300, 0x00};
@@ -2223,7 +2223,7 @@ static void TestGetCaseBit() {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *UCA = ucol_open("", &status);
   uint8_t res = 0;
-  
+
   for(i = 0; i<sizeof(results)/sizeof(results[0]); i++) {
     blen = u_unescape(caseBitData[i], b, 256);
     res = ucol_uprv_getCaseBits(UCA, b, blen, &status);
@@ -2236,19 +2236,19 @@ static void TestGetCaseBit() {
 
 static void TestHangulTailoring() {
     static const char *koreanData[] = {
-        "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475", 
-            "\\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef", 
-            "\\u6b4c", "\\u73c2", "\\u75c2", "\\u7a3c", "\\u82db", "\\u8304", "\\u8857", "\\u8888", 
-            "\\u8a36", "\\u8cc8", "\\u8dcf", "\\u8efb", "\\u8fe6", "\\u99d5", 
-            "\\u4EEE", "\\u50A2", "\\u5496", "\\u54FF", "\\u5777", "\\u5B8A", "\\u659D", "\\u698E", 
+        "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475",
+            "\\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef",
+            "\\u6b4c", "\\u73c2", "\\u75c2", "\\u7a3c", "\\u82db", "\\u8304", "\\u8857", "\\u8888",
+            "\\u8a36", "\\u8cc8", "\\u8dcf", "\\u8efb", "\\u8fe6", "\\u99d5",
+            "\\u4EEE", "\\u50A2", "\\u5496", "\\u54FF", "\\u5777", "\\u5B8A", "\\u659D", "\\u698E",
             "\\u6A9F", "\\u73C8", "\\u7B33", "\\u801E", "\\u8238", "\\u846D", "\\u8B0C"
     };
 
-    const char *rules = 
-        "&\\uac00 <<< \\u4f3d <<< \\u4f73 <<< \\u5047 <<< \\u50f9 <<< \\u52a0 <<< \\u53ef <<< \\u5475 " 
-        "<<< \\u54e5 <<< \\u5609 <<< \\u5ac1 <<< \\u5bb6 <<< \\u6687 <<< \\u67b6 <<< \\u67b7 <<< \\u67ef " 
-        "<<< \\u6b4c <<< \\u73c2 <<< \\u75c2 <<< \\u7a3c <<< \\u82db <<< \\u8304 <<< \\u8857 <<< \\u8888 " 
-        "<<< \\u8a36 <<< \\u8cc8 <<< \\u8dcf <<< \\u8efb <<< \\u8fe6 <<< \\u99d5 " 
+    const char *rules =
+        "&\\uac00 <<< \\u4f3d <<< \\u4f73 <<< \\u5047 <<< \\u50f9 <<< \\u52a0 <<< \\u53ef <<< \\u5475 "
+        "<<< \\u54e5 <<< \\u5609 <<< \\u5ac1 <<< \\u5bb6 <<< \\u6687 <<< \\u67b6 <<< \\u67b7 <<< \\u67ef "
+        "<<< \\u6b4c <<< \\u73c2 <<< \\u75c2 <<< \\u7a3c <<< \\u82db <<< \\u8304 <<< \\u8857 <<< \\u8888 "
+        "<<< \\u8a36 <<< \\u8cc8 <<< \\u8dcf <<< \\u8efb <<< \\u8fe6 <<< \\u99d5 "
         "<<< \\u4EEE <<< \\u50A2 <<< \\u5496 <<< \\u54FF <<< \\u5777 <<< \\u5B8A <<< \\u659D <<< \\u698E "
         "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C";
 
@@ -2268,7 +2268,7 @@ static void TestHangulTailoring() {
   }
 
   log_verbose("Setting jamoSpecial to TRUE and testing once more\n");
-  ((UCATableHeader *)coll->image)->jamoSpecial = TRUE; // don't try this at home
+  ((UCATableHeader *)coll->image)->jamoSpecial = TRUE; /* don't try this at home  */
   genericOrderingTest(coll, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
 
   ucol_close(coll);
@@ -2303,27 +2303,27 @@ static void TestCompressOverlap() {
     secstr[count] = 0x0332; /* [, 87, 05] */
     tertstr[count] = 0x3000; /* [06, 05, 07] */
 
-    /* no compression secstr should have 150 secondary bytes, tertstr should 
+    /* no compression secstr should have 150 secondary bytes, tertstr should
     have 150 tertiary bytes.
-    with correct overlapping compression, secstr should have 4 secondary 
+    with correct overlapping compression, secstr should have 4 secondary
     bytes, tertstr should have > 2 tertiary bytes */
     resultlen = ucol_getSortKey(coll, secstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strchr(result, 1) + 1;
     while (*(tempptr + 1) != 1) {
-        /* the last secondary collation element is not checked since it is not 
+        /* the last secondary collation element is not checked since it is not
         part of the compression */
         if (*tempptr < UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2) {
             log_err("Secondary compression overlapped\n");
         }
         tempptr ++;
     }
-    
+
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
     resultlen = ucol_getSortKey(coll, tertstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strrchr(result, 1) + 1;
     while (*(tempptr + 1) != 0) {
-        /* the last secondary collation element is not checked since it is not 
+        /* the last secondary collation element is not checked since it is not
         part of the compression */
         if (*tempptr < coll->tertiaryTop - coll->tertiaryTopCount) {
             log_err("Tertiary compression overlapped\n");
@@ -2337,20 +2337,20 @@ static void TestCompressOverlap() {
     resultlen = ucol_getSortKey(coll, secstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strchr(result, 1) + 1;
     while (*(tempptr + 1) != 1) {
-        /* the last secondary collation element is not checked since it is not 
+        /* the last secondary collation element is not checked since it is not
         part of the compression */
         if (*tempptr > UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2) {
             log_err("Secondary compression overlapped\n");
         }
         tempptr ++;
     }
-    
+
     /* tertiary top/bottom/common for en_US is similar to the secondary
     top/bottom/common */
     resultlen = ucol_getSortKey(coll, tertstr, 150, (uint8_t *)result, 250);
     tempptr = uprv_strrchr(result, 1) + 1;
     while (*(tempptr + 1) != 0) {
-        /* the last secondary collation element is not checked since it is not 
+        /* the last secondary collation element is not checked since it is not
         part of the compression */
         if (*tempptr > coll->tertiaryBottom + coll->tertiaryBottomCount) {
             log_err("Tertiary compression overlapped\n");
@@ -2423,8 +2423,8 @@ static void TestContraction() {
             return;
         }
         while (j < 2) {
-            UCollationElements *iter2 = ucol_openElements(coll, 
-                                                         &(testdata[i][j]), 
+            UCollationElements *iter2 = ucol_openElements(coll,
+                                                         &(testdata[i][j]),
                                                          1, &status);
             uint32_t ce;
             if (U_FAILURE(status)) {
@@ -2454,13 +2454,13 @@ static void TestContraction() {
     coll = ucol_openRules(rule, rlen, UCOL_ON, UCOL_TERTIARY,NULL, &status);
     if (ucol_strcoll(coll, testdata2[0], 2, testdata2[1], 2) != UCOL_LESS) {
         log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
-                testdata2[0][0], testdata2[0][1], testdata2[1][0], 
+                testdata2[0][0], testdata2[0][1], testdata2[1][0],
                 testdata2[1][1]);
         return;
     }
     if (ucol_strcoll(coll, testdata2[1], 2, testdata2[2], 2) != UCOL_LESS) {
         log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
-                testdata2[1][0], testdata2[1][1], testdata2[2][0], 
+                testdata2[1][0], testdata2[1][1], testdata2[2][0],
                 testdata2[2][1]);
         return;
     }
@@ -2527,7 +2527,7 @@ static void TestExpansion() {
         {0x004A /*'J'*/, 0x0043 /*'C'*/, 0},
         {0x004D /*'M'*/, 0x0043 /*'C'*/, 0}
     };
-    
+
     UErrorCode  status   = U_ZERO_ERROR;
     UCollator  *coll;
     UChar       rule[256] = {0};
@@ -2543,7 +2543,7 @@ static void TestExpansion() {
             log_err("Collator creation failed %s\n", testrules[i]);
             return;
         }
-        
+
         for (j = 0; j < 5; j ++) {
             doTest(coll, testdata[j], testdata[j + 1], UCOL_LESS);
         }
@@ -2663,13 +2663,13 @@ static void TestVariableTopSetting() {
 
   uint32_t strength = 0;
   uint8_t specs = 0;
-  uint32_t chOffset = 0; 
+  uint32_t chOffset = 0;
   uint32_t chLen = 0;
-  uint32_t exOffset = 0; 
+  uint32_t exOffset = 0;
   uint32_t exLen = 0;
-  uint32_t oldChOffset = 0; 
+  uint32_t oldChOffset = 0;
   uint32_t oldChLen = 0;
-  uint32_t oldExOffset = 0; 
+  uint32_t oldExOffset = 0;
   uint32_t oldExLen = 0;
   uint32_t prefixOffset = 0;
   uint32_t prefixLen = 0;
@@ -2751,9 +2751,9 @@ static void TestVariableTopSetting() {
         }
       }
       if(strength != UCOL_TOK_RESET) {
-        oldChOffset = chOffset; 
+        oldChOffset = chOffset;
         oldChLen = chLen;
-        oldExOffset = exOffset; 
+        oldExOffset = exOffset;
         oldExLen = exLen;
       }
     }
@@ -2848,7 +2848,7 @@ static void TestNonChars() {
   } else {
     log_err("Unable to open collator\n");
   }
-  
+
   ucol_close(coll);
 }
 
@@ -2911,11 +2911,11 @@ static void TestSurrogates() {
        "\\ud800\\udc00f",  "\\ud800\\udc00",
        "\\ud800\\udc00c", "\\ud800\\udc00b",
        "\\ud800\\udc00fa", "\\ud800\\udc00fb",
-       "\\ud800\\udc00a",  
+       "\\ud800\\udc00a",
        "c", "b"
   };
 
-  static const char *rule = 
+  static const char *rule =
     "&z < \\ud900\\udc25   < \\ud805\\udc50"
        "< \\ud800\\udc00y  < \\ud800\\udc00r"
        "< \\ud800\\udc00f  << \\ud800\\udc00"
@@ -2927,10 +2927,10 @@ static void TestSurrogates() {
 
 void addMiscCollTest(TestNode** root)
 {
-    /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/   
-    addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");   
-    addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");   
-    addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");   
+    /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
+    addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
+    addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
+    addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");
     addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
     addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
