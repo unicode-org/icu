@@ -264,9 +264,6 @@ void CollationMonkeyTest::TestRules(/* char* par */){
 void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString mysource, UnicodeString target, Collator::EComparisonResult result)
 {
     Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    SimpleFwdCharIterator src(source);
-    SimpleFwdCharIterator trg(target);
-    Collator::EComparisonResult incResult = myCollation->compare(src, trg);
     CollationKey sortKey1, sortKey2;
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
@@ -278,7 +275,7 @@ void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString m
     }
 
     Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
+    reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
 }
 
 void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )

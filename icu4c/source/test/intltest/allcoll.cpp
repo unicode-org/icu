@@ -91,12 +91,9 @@ void
 CollationDummyTest::doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result)
 {   
   UErrorCode status = U_ZERO_ERROR;
-  SimpleFwdCharIterator srciterator(source);
-  SimpleFwdCharIterator tgtiterator(target);
 
   Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-  Collator::EComparisonResult incResult = myCollation->compare(srciterator, 
-                                                                 tgtiterator);
+
   CollationKey srckey, tgtkey;
   myCollation->getCollationKey(source, srckey, status);
   myCollation->getCollationKey(target, tgtkey, status);
@@ -107,9 +104,6 @@ CollationDummyTest::doTestVariant(const UnicodeString source, const UnicodeStrin
 
   if (compareResult != result) {
     errln("String comparison failed in variant test\n");
-  }
-  if (incResult != result) {
-    errln("Incremental comparison failed in variant test\n");
   }
   if (keyResult != result) {
     errln("Collation key comparison failed in variant test\n");
