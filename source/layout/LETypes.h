@@ -18,7 +18,7 @@ typedef uint16_t le_uint16;
 typedef int8_t le_int8;
 typedef uint8_t le_uint8;
 
-typedef bool_t le_bool;
+typedef UBool le_bool;
 
 #ifndef true
 #define true 1

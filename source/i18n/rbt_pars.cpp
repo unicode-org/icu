@@ -489,7 +489,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     ParsePosition pp;
     int32_t cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
     UnicodeString scratch;
-    bool_t done = FALSE;
+    UBool done = FALSE;
     int32_t quoteStart = -1; // Most recent 'single quoted string'
     int32_t quoteLimit = -1;
     int32_t varStart = -1; // Most recent $variableReference

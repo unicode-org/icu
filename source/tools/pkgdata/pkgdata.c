@@ -103,7 +103,7 @@ main(int argc, char* argv[]) {
   UPKGOptions  o;
   CharList    *tail;
   const char  *progname;
-  bool_t       needsHelp = FALSE;
+  UBool        needsHelp = FALSE;
   UErrorCode   status = U_ZERO_ERROR;
   char         tmp[1024];
   int32_t i;
