@@ -2405,6 +2405,8 @@ private:
   friend class UnicodeStreamer;
 
   friend class StringCharacterIterator;
+  friend class SearchIterator;
+  friend class StringSearch;
 
   /*
    * The following are all the class fields that are stored
