@@ -25,9 +25,14 @@
  */
 
 #include "unicode/utypes.h"
+
 #ifdef XP_CPLUSPLUS
-#   include "unicode/chariter.h"
-#   include "unicode/rep.h"
+    U_NAMESPACE_BEGIN
+
+    class CharacterIterator;
+    class Replaceable;
+
+    U_NAMESPACE_END
 #endif
 
 U_CDECL_BEGIN
@@ -42,7 +47,7 @@ typedef struct UCharIterator UCharIterator;
  * @draft ICU 2.1
  */
 enum UCharIteratorOrigin {
-    UITER_START, UITER_CURRENT, UITER_LIMIT
+    UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
 };
 typedef enum UCharIteratorOrigin UCharIteratorOrigin;
 
@@ -53,7 +58,7 @@ typedef enum UCharIteratorOrigin UCharIteratorOrigin;
  * iteration range.
  *
  * @param iter the UCharIterator structure ("this pointer")
- * @param origin move relative to the start, limit, or current index
+ * @param origin get the 0, start, limit, length, or current index
  * @return the requested index
  *
  * @see UCharIteratorOrigin
@@ -66,6 +71,8 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
 /**
  * Function type declaration for UCharIterator.move().
  *
+ * Use iter->move(iter, index, UITER_ZERO) like CharacterIterator::setIndex(index).
+ *
  * Moves the current position relative to the start or limit of the
  * iteration range, or relative to the current position itself.
  * The movement is expressed in numbers of code units forward
@@ -73,7 +80,7 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
- * @param origin move relative to the start, limit, or current index
+ * @param origin move relative to the 0, start, limit, length, or current index
  * @return the new index
  *
  * @see UCharIteratorOrigin
