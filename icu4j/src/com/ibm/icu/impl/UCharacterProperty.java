@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/12/10 21:47:31 $ 
-* $Revision: 1.20 $
+* $Date: 2002/12/11 21:19:41 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -360,20 +360,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
                      m_additionalTrie_.getCodePointValue(codepoint) + column]; 
    	} 
    	
-    public boolean isOptimizedLetter(int ch)
-    {
-        return 0 != (MY_MASK 
-            & m_property_[m_trie_.m_data_[
-            (m_trie_.m_index_[ch >> 5] << 2) + (ch & 0x1F)]]);
-        /*
-        int index = (m_trie_.m_index_[ch >> 5] << 2) + (ch & 0x1F);
-        return 0 != (MY_MASK 
-            & m_property_[index > 0 
-                ? m_trie_.m_data_[index]
-                : m_trie_.m_initialValue_]);
-        */
-    }
-    
     static final int MY_MASK = UCharacterProperty.TYPE_MASK
         & ((1<<UCharacterCategory.UPPERCASE_LETTER) |
             (1<<UCharacterCategory.LOWERCASE_LETTER) | 
