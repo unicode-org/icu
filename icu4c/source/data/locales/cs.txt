@@ -56,7 +56,7 @@ cs {
     Languages { 
         cs { "\u010De\u0161tina" }
     }
-    LocaleID { "05" }
+    LocaleID:int { 0x05 }
 //    LocaleString { "cs" }
     MonthAbbreviations { 
         "I",

@@ -20,5 +20,5 @@ ru_RU {
         "#E0",
     }
 //    ShortCountry { "RUS" }
-    LocaleID { "0419" }
+    LocaleID:int { 0x0419 }
 }

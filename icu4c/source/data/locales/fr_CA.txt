@@ -23,7 +23,7 @@ fr_CA {
         "yy-MM-dd",
         "{1} {0}",
     }
-    LocaleID { "0c0c" }
+    LocaleID:int { 0x0c0c }
 //    LocaleString { "fr_CA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

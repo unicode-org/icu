@@ -20,5 +20,5 @@ ja_JP {
         "#E0",
     }
 //    ShortCountry { "JPN" }
-    LocaleID { "0411" }
+    LocaleID:int { 0x0411 }
 }

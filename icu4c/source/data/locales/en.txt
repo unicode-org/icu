@@ -252,7 +252,7 @@ en {
             "Shanghai",
         }
     }
-    LocaleID { "09" }
+    LocaleID:int { 0x09 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

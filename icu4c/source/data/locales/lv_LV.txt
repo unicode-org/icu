@@ -20,5 +20,5 @@ lv_LV {
         "#E0",
     }
 //    ShortCountry { "LVA" }
-    LocaleID { "0426" }
+    LocaleID:int { 0x0426 }
 }

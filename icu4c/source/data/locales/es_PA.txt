@@ -23,7 +23,7 @@ es_PA {
         "MM/dd/yy",
         "{1} {0}",
     }
-    LocaleID { "180a" }
+    LocaleID:int { 0x180a }
 //    LocaleString { "es_PA" }
 //    NumberElements { 
 //        ".",

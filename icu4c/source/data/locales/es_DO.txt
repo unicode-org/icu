@@ -23,7 +23,7 @@ es_DO {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "1c0a" }
+    LocaleID:int { 0x1c0a }
 //    LocaleString { "es_DO" }
 //    NumberElements {
 //        ".",

@@ -20,5 +20,5 @@ be_BY {
         "#E0",
     }
 //    ShortCountry { "BLR" }
-    LocaleID { "0423" }
+    LocaleID:int { 0x0423 }
 }

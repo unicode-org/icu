@@ -20,5 +20,5 @@ uk_UA {
         "#E0",
     }
 //    ShortCountry { "UKR" }
-    LocaleID { "0422" }
+    LocaleID:int { 0x0422 }
 }

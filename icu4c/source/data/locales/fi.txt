@@ -163,7 +163,7 @@ fi {
         uz { "uzbekki" }
         zh { "kiina" }
     }
-    LocaleID { "0b" }
+    LocaleID:int { 0x0b }
 //    LocaleString { "fi" }
     MonthAbbreviations { 
         "tammi",

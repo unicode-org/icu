@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 af {
-    Version { "1.0" }
+    Version { "2.0" }
 
     AmPmMarkers { 
         "VM",
@@ -72,7 +72,7 @@ af {
         "\u221e",
         "\ufffd",
     }
-    LocaleID {"36"}
+    LocaleID:int { 0x36 }
 //    LocaleScript{ 
 //                "Latn",  // ISO 15924 Name 
 //    }

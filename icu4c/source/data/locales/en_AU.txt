@@ -36,7 +36,7 @@ en_AU {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "0c09" }
+    LocaleID:int { 0x0c09 }
 //    LocaleString { "en_AU" }
 //    ShortCountry { "AUS" }
 }

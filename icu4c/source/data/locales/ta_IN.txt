@@ -9,7 +9,7 @@
 
 ta_IN {
     Version { "1.3" }
-    LocaleID { "449" }
+    LocaleID:int { 0x449 }
 //    ShortCountry { IND }
 
     CurrencyElements {

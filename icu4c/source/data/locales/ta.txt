@@ -250,7 +250,7 @@ ta {
         Version { "1.0" }
         Sequence { "[normalization on]" }
     }
-    LocaleID { "49" }
+    LocaleID:int { 0x49 }
     LocaleScript:array {
         "Taml"   // ISO 15924 Name 
     }

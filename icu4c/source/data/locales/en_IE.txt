@@ -40,7 +40,7 @@ en_IE {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "1809" }
+    LocaleID:int { 0x1809 }
 //    LocaleString { "en_IE" }
 //    ShortCountry { "IRL" }
     zoneStrings { 

@@ -27,7 +27,7 @@ fr_BE {
         "2",
         "1",
     }
-    LocaleID { "080c" }
+    LocaleID:int { 0x080c }
 //    LocaleString { "fr_BE" }
     NumberElements { 
         ",",

@@ -1124,7 +1124,7 @@ zh_HK {
         "\u4E94",
         "\u516D",
     }
-    LocaleID { "0c04" }
+    LocaleID:int { 0x0c04 }
 //    LocaleString { "zh_HK" }
     MonthAbbreviations { 
         "1\u6708",

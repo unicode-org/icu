@@ -20,5 +20,5 @@ ro_RO {
         "#E0",
     }
 //    ShortCountry { "ROM" }
-    LocaleID { "0418" }
+    LocaleID:int { 0x0418 }
 }

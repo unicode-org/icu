@@ -20,5 +20,5 @@ mk_MK {
         "#E0",
     }
 //    ShortCountry { "MKD" }
-    LocaleID { "042f" }
+    LocaleID:int { 0x042f }
 }

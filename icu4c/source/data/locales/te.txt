@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.10 $
+// $Revision: 1.11 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -70,7 +70,7 @@ te {
 //        "\u221e",
 //        "\ufffd",
 //    }
-    LocaleID { "4a"}
+    LocaleID:int { 0x4a }
     CollationElements {
         Version { "1.0" }
         Sequence { "[normalization on]" }

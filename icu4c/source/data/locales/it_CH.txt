@@ -23,7 +23,7 @@ it_CH {
         "dd.MM.yy",
         "{1} {0}",
     }
-    LocaleID { "0810" }
+    LocaleID:int { 0x0810 }
 //    LocaleString { "it_CH" }
     NumberElements { 
         ".",

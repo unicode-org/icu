@@ -20,5 +20,5 @@ sv_SE {
         "#E0",
     }
 //    ShortCountry { "SWE" }
-    LocaleID { "041d" }
+    LocaleID:int { 0x041d }
 }

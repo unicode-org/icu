@@ -40,7 +40,7 @@ en_GB {
 //    Languages { 
 //        en { "English" }
 //    }
-    LocaleID { "0809" }
+    LocaleID:int { 0x0809 }
 //    LocaleString { "en_GB" }
 //    ShortCountry { "GBR" }
     zoneStrings { 

@@ -5,7 +5,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.4 $
+// $Revision: 1.5 $
 // Singapore locale: Data By Syn Wee Quek
 
 
@@ -44,7 +44,7 @@ zh_SG {
         "{1} {0}"
     }
 
-    LocaleID { "1004" }
+    LocaleID:int { 0x1004 }
 
 //    ShortCountry { "SIN" } // copied from zh_EN.txt
 

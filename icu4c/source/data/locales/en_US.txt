@@ -20,5 +20,5 @@ en_US {
         "#E0",
     }
 //    ShortCountry { "USA" }
-    LocaleID { "0409" }
+    LocaleID:int { 0x0409 }
 }

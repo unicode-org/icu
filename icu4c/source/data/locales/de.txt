@@ -459,7 +459,7 @@ de {
         // ? za { "Zhuang" }
         // same as in root?? zu { "Zulu" }
     }
-    LocaleID { "07" }
+    LocaleID:int { 0x07 }
 //    LocaleString { "de" }
     MonthAbbreviations { 
         "Jan",
@@ -489,7 +489,7 @@ de {
         "November",
         "Dezember",
     }
-    NumberElements { 
+    NumberElements {
         ",",
         ".",
         ";",

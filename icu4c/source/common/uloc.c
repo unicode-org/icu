@@ -798,22 +798,22 @@ U_CAPI uint32_t  U_EXPORT2
 uloc_getLCID(const char* localeID) 
 {
     UErrorCode err = U_ZERO_ERROR;
-    char temp[30];
-    const UChar* lcid = NULL;
-    int32_t lcidLen = 0;
     uint32_t result = 0;
     UResourceBundle* bundle = ures_open(NULL, localeID, &err);
     
     if (U_SUCCESS(err))
     {
-        lcid = ures_getStringByKey(bundle, _kLocaleID, &lcidLen, &err);
-        ures_close(bundle);
-        if (U_FAILURE(err) || !lcid || lcidLen == 0)
+        UResourceBundle *localeID = ures_getByKey(bundle, _kLocaleID, NULL, &err);
+        if (U_SUCCESS(err))
         {
-            return 0;
+            result = ures_getInt(localeID, &err);
+            if (U_FAILURE(err))
+            {
+                result = 0;
+            }
+            ures_close(localeID);
         }
-        u_UCharsToChars(lcid, temp, lcidLen + 1);
-        result = (uint32_t)T_CString_stringToInteger(temp, 16);
+        ures_close(bundle);
     }
     
     return result;

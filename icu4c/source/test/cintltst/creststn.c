@@ -1678,22 +1678,22 @@ static void TestFallback()
     /* Temporary hack err actually should be U_USING_FALLBACK_ERROR */
     /* Test Jitterbug 552 fallback mechanism of aliased data */
     {
-        char tempChars[256];
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
-        const UChar*  myLocID = ures_getStringByKey(myResB, "LocaleID", &resultLen, &err);
+        UResourceBundle* resLocID = ures_getByKey(myResB, "LocaleID", NULL, &err);
         UResourceBundle* tResB;
         if(err != U_ZERO_ERROR){
             log_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for LocaleID err=%s\n",u_errorName(err));
+            return;
         }
-        u_UCharsToChars(myLocID, tempChars, u_strlen(myLocID) + 1);
-        if(uprv_strcmp(tempChars, "0814")){
-            log_err("Expected LocaleID=814, but got %s\n", tempChars);
+        if(ures_getInt(resLocID, &err) != 0x814){
+            log_err("Expected LocaleID=814, but got 0x%X\n", ures_getInt(resLocID, &err));
         }
         tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
         if(err != U_USING_FALLBACK_ERROR){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for DayNames err=%s\n",u_errorName(err));
         }
+        ures_close(resLocID);
         ures_close(myResB);
         ures_close(tResB);
 

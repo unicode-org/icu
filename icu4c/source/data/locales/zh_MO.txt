@@ -1125,7 +1125,7 @@ zh_MO {
         "\u4E94",
         "\u516D",
     }
-    LocaleID { "1404" }
+    LocaleID:int { 0x1404 }
 //    LocaleString { "zh_MO" }
     MonthAbbreviations { 
         "1\u6708",

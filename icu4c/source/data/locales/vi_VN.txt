@@ -12,7 +12,7 @@ vi_VN {
         "VND",
         ",",
     }
-    LocaleID { "042A" }
+    LocaleID:int { 0x042A }
 //    LocaleString { "vi_VN" }
 //    ShortCountry { "VNM" }
 }

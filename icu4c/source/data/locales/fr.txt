@@ -323,7 +323,7 @@ fr {
         "av. J.-C.",
         "ap. J.-C.",
     }
-    LocaleID { "0c" }
+    LocaleID:int { 0x0c }
 //    LocaleString { "fr" }
     MonthAbbreviations { 
         "janv.",

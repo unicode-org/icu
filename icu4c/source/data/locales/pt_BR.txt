@@ -23,7 +23,7 @@ pt_BR {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID { "0416" }
+    LocaleID:int { 0x0416 }
 //    LocaleString { "pt_BR" }
 //    NumberPatterns { 
 //        "#,##0.###;-#,##0.###",

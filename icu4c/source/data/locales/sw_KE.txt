@@ -23,5 +23,5 @@ sw_KE {
         "#E0",
     }
 //    ShortCountry { "KEN" }
-    LocaleID { "0441" }
+    LocaleID:int { 0x0441 }
 }

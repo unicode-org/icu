@@ -23,5 +23,5 @@ id_ID {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID{ "0421"}
+    LocaleID:int { 0x0421 }
 }

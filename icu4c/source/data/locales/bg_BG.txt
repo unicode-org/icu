@@ -20,5 +20,5 @@ bg_BG {
         "#E0",
     }
 //    ShortCountry { "BGR" }
-    LocaleID { "0402" }
+    LocaleID:int { 0x0402 }
 }

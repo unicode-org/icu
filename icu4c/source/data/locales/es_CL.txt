@@ -23,7 +23,7 @@ es_CL {
         "dd-MM-yy",
         "{1} {0}",
     }
-    LocaleID { "340a" }
+    LocaleID:int { 0x340a }
 //    LocaleString { "es_CL" }
     NumberElements {
         ",",

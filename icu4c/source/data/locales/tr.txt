@@ -57,7 +57,7 @@ tr {
     Languages { 
         tr { "T\u00FCrk\u00E7e" }
     }
-    LocaleID { "1f" }
+    LocaleID:int { 0x1f }
 //    LocaleString { "tr" }
     MonthAbbreviations { 
         "Oca",

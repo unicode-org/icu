@@ -47,6 +47,6 @@ en_PH {
         "#,##0%",
         "#E0",
     }
-    LocaleID { "3409" }
+    LocaleID:int { 0x3409 }
 
 }

@@ -26,6 +26,6 @@ mt_MT {
         "#E0",
     }
 
-    LocaleID {"043A"}
+    LocaleID:int { 0x043A }
 
 }

@@ -798,7 +798,7 @@ mt {
         }
     }
 
-    LocaleID {"3A"}
+    LocaleID:int { 0x3A }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

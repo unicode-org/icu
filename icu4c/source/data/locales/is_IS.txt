@@ -20,5 +20,5 @@ is_IS {
         "#E0",
     }
 //    ShortCountry { "ISL" }
-    LocaleID { "040f" }
+    LocaleID:int { 0x040f }
 }
