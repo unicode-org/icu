@@ -129,13 +129,15 @@ public class CollationThaiTest extends TestFmwk {
         BufferedReader in = null;
         String fileName = "riwords.txt";
         try {
-            in = new BufferedReader(
-                    new InputStreamReader(
-                        new FileInputStream(TestUtil.getDataFile(fileName)),
-                                            "UTF-8"));
+            in = TestUtil.getDataReader(fileName, "UTF-8");
+        } catch (SecurityException e) {
+            warnln("Security exception encountered reading test data file.");
+                   return;
         } catch (Exception e) {
             try {
-                in.close();
+                if (in != null) {
+                    in.close();
+                }
             } catch (IOException ioe) {}
             errln("Error: could not open test file: " + fileName 
                   + ". Aborting test.");

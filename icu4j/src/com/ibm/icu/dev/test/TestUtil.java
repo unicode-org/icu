@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/08/21 23:42:03 $
- * $Revision: 1.6 $
+ * $Date: 2003/11/14 21:56:53 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -18,12 +18,14 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import com.ibm.icu.dev.data.TestData;
 
 public class TestUtil {
     /**
      * Standard path to the test data.
      */
-    public static final String DATA_PATH = "/src/com/ibm/icu/dev/data";
+    public static final String DATA_PATH = "/src/com/ibm/icu/dev/data/";
 
     /**
      * Property for user-defined data path.
@@ -37,65 +39,46 @@ public class TestUtil {
     public static final String DATA_MODULAR_BUILD_PROPERTY = "ICUModularBuild";
 
     /**
-     * Get path to test data.<p>
-     *
-     * path is provided relative to the src path, however the user could
-     * set a system property to change the directory path.<br>
+     * Compute a full data path using the ICUDataPath, if defined, or the user.dir, if we
+     * are allowed access to it.
      */
-    public static final File getDataPathRoot() {
+    private static final String dataPath(String fileName) {
         String s = System.getProperty(DATA_PATH_PROPERTY);
         if (s == null) {
             // assume user.dir is directly above src directory
-            s = System.getProperty("user.dir");
+	    // data path must end in '/' or '\', fileName should not start with one
+            s = System.getProperty("user.dir"); // protected property
             s = s + DATA_PATH;
         }
-
-        File f = new File(s);
-        if (!f.exists()) {
-            throw new InternalError("cannot find ICU data root '" + f.getAbsolutePath() + "', try definining " + DATA_PATH_PROPERTY);
-        }
-
-        return f;
-    }
-
-    /**
-     * Return the data file at path 'name' rooted at the data path.
-     * For example, <pre>getDataFile("unicode/UnicodeData.txt");</pre>
-     */
-    public static final File getDataFile(String name) {
-        File f = new File(getDataPathRoot(), name);
-        if (!f.exists()) {
-            throw new InternalError("cannot find ICU data file '" + f.getAbsolutePath() + "'");
-        }
-
-        return f;
-    }
-
-    /**
-     * Return a buffered reader on the data file at path 'name' rooted at the data path
-     * with initial buffer size 'bufSize'.
-     */
-    public static final BufferedReader getDataReader(String name, int bufSize) throws IOException {
-        File f = getDataFile(name);
-        FileReader fr = new FileReader(f);
-        BufferedReader br = new BufferedReader(fr, bufSize);
-        return br;
+	return s + fileName;
     }
 
     /**
      * Return a buffered reader on the data file at path 'name' rooted at the data path.
      */
     public static final BufferedReader getDataReader(String name) throws IOException {
-        return getDataReader(name, 1024);
+	InputStream is = new FileInputStream(dataPath(name));
+	InputStreamReader isr = new InputStreamReader(is);
+	return new BufferedReader(isr);
     }
+
+    /**
+     * Return a buffered reader on the data file at path 'name' rooted at the data path,
+     * using the provided encoding.
+     */
+    public static final BufferedReader getDataReader(String name, String charset) throws IOException {
+	InputStream is = new FileInputStream(dataPath(name));
+	InputStreamReader isr = new InputStreamReader(is, charset);
+	return new BufferedReader(isr);
+    }
+
     /**
      * Return an input stream on the data file at path 'name' rooted at the data path
      */
     public static final InputStream getDataStream(String name) throws IOException{
-        File file = getDataFile(name);
-        FileInputStream st = new FileInputStream(file);
-        return st;
+        return new FileInputStream(dataPath(name));
     }
+
     static final char DIGITS[] = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',

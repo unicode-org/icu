@@ -75,8 +75,8 @@ public final class ZoneMeta {
             // (Better than nothing.)
             if (unused.size() > 0) {
                 list.clear();
-                list.add(Arrays.asList((String[]) COUNTRY_MAP.get("")));
-                list.add(unused);
+                list.addAll(Arrays.asList((String[]) COUNTRY_MAP.get("")));
+                list.addAll(unused);
                 Collections.sort(list);                
                 COUNTRY_MAP.put("", list.toArray(EMPTY));
             }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2003/10/09 02:49:40 $
- * $Revision: 1.14 $
+ * $Date: 2003/11/14 21:56:53 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
@@ -630,7 +630,7 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("date = "+date);
 
         Calendar cal = Calendar.getInstance();
-	cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angels"));
+        cal.setTimeZone(TimeZone.getTimeZone("America/Los_Angels"));
         cal.setTime(date);
 
         int offset = cal.getTimeZone().getOffset(cal.get(Calendar.ERA),
@@ -758,14 +758,14 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         boolean ok = false;
 
         try {
-            FileOutputStream f = new FileOutputStream(FILENAME);
+            ByteArrayOutputStream f = new ByteArrayOutputStream();
             ObjectOutput s = new ObjectOutputStream(f);
             s.writeObject(PREFIX);
             s.writeObject(cal);
             s.writeObject(POSTFIX);
             f.close();
 
-            FileInputStream in = new FileInputStream(FILENAME);
+            ByteArrayInputStream in = new ByteArrayInputStream(f.toByteArray());
             ObjectInputStream t = new ObjectInputStream(in);
             String pre = (String)t.readObject();
             Calendar c = (Calendar)t.readObject();
@@ -775,9 +775,6 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
             ok = pre.equals(PREFIX) &&
                 post.equals(POSTFIX) &&
                 cal.equals(c);
-
-            File fl = new File(FILENAME);
-            fl.delete();
         }
         catch (IOException e) {
             errln("FAIL: Exception received:");
