@@ -292,7 +292,7 @@ int32_t StringPrep::map(const UChar* src, int32_t srcLength,
                     destIndex +=2;
                 }
             }else{
-                syntaxError(src, srcIndex-1, srcLength,parseError);
+                syntaxError(src, (srcIndex>0) ? (srcIndex-1) : 0, srcLength,parseError);
                 status = U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR;
                 return 0;
             }
@@ -462,7 +462,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
         if(flag == UIDNA_PROHIBITED 
             && isNotProhibited(ch) == FALSE){
             status = U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR;
-            syntaxError(b1,b2Index-1,b2Len, parseError);
+            syntaxError(b1, (b2Index>0) ? (b2Index-1) : b2Index, b2Len, parseError);
             goto CLEANUP;
         }
 
@@ -490,7 +490,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
     //satisfy 3
     if(rightToLeft == TRUE && firstCharDir != direction  ){
         status = U_IDNA_CHECK_BIDI_ERROR;
-        syntaxError(b2,b2Index-1,b2Len,parseError);
+        syntaxError(b2, (b2Index>0) ? (b2Index-1) : b2Index,b2Len,parseError);
         return FALSE;
     }
 
