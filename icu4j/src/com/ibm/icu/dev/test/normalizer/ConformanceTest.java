@@ -14,11 +14,19 @@ import com.ibm.util.Utility;
 
 public class ConformanceTest extends TestFmwk {
 
+    Normalizer normalizer;
+
     static final String TEST_SUITE_FILE =
         "src/data/unicode/Draft-TestSuite.txt";
 
     public static void main(String[] args) throws Exception {
         new ConformanceTest().run(args);
+    }
+
+    public ConformanceTest() {
+        // Doesn't matter what the string and mode are; we'll change
+        // them later as needed.
+        normalizer = new Normalizer("", Normalizer.COMPOSE);
     }
 
     /**
@@ -44,9 +52,8 @@ public class ConformanceTest extends TestFmwk {
                 // Expect 5 columns of this format:
                 // 1E0C;1E0C;0044 0323;1E0C;0044 0323; # <comments>
 
-                // Parse out the comment.
-                int i = line.indexOf('#');
-                if (i == 0) continue;
+                // Skip comments
+                if (line.charAt(0) == '#') continue;
 
                 // Parse out the fields
                 hexsplit(line, ';', fields, buf);
@@ -54,6 +61,9 @@ public class ConformanceTest extends TestFmwk {
                     ++passCount;
                 } else {
                     ++failCount;
+                }
+                if ((count % 1000) == 999) {
+                    logln("Line " + (count+1));
                 }
             }
         } catch (IOException ex) {
@@ -92,24 +102,68 @@ public class ConformanceTest extends TestFmwk {
      */
     private boolean checkConformance(String[] field, String line) {
         boolean pass = true;
+        StringBuffer buf = new StringBuffer(); // scratch
+        String out;
+        
         for (int i=0; i<5; ++i) {
             if (i<3) {
-                String nfc = Normalizer.normalize(field[i], Normalizer.COMPOSE, 0);
-                String nfd = Normalizer.normalize(field[i], Normalizer.DECOMP, 0);
-                pass &= assertEqual("C", field[i], nfc, field[1], "c2!=C(c" + (i+1));
-                pass &= assertEqual("D", field[i], nfd, field[2], "c3!=D(c" + (i+1));
+                out = Normalizer.normalize(field[i], Normalizer.COMPOSE, 0);
+                pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.COMPOSE, buf, +1);
+                pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.COMPOSE, buf, -1);
+                pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c" + (i+1));
+
+                out = Normalizer.normalize(field[i], Normalizer.DECOMP, 0);
+                pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.DECOMP, buf, +1);
+                pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c" + (i+1));
+                out = iterativeNorm(field[i], Normalizer.DECOMP, buf, -1);
+                pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c" + (i+1));
             }
-            String nfkc = Normalizer.normalize(field[i],
-                                               Normalizer.COMPOSE_COMPAT, 0);
-            String nfkd = Normalizer.normalize(field[i],
-                                               Normalizer.DECOMP_COMPAT, 0);
-            pass &= assertEqual("KC", field[i], nfkc, field[3], "c4!=KC(c" + (i+1));
-            pass &= assertEqual("KD", field[i], nfkd, field[4], "c5!=KD(c" + (i+1));
+            out = Normalizer.normalize(field[i], Normalizer.COMPOSE_COMPAT, 0);
+            pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.COMPOSE_COMPAT, buf, +1);
+            pass &= assertEqual("KD(+1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.COMPOSE_COMPAT, buf, -1);
+            pass &= assertEqual("KD(-1)", field[i], out, field[3], "c4!=KC(c" + (i+1));
+
+            out = Normalizer.normalize(field[i], Normalizer.DECOMP_COMPAT, 0);
+            pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.DECOMP_COMPAT, buf, +1);
+            pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
+            out = iterativeNorm(field[i], Normalizer.DECOMP_COMPAT, buf, -1);
+            pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c" + (i+1));
         }
         if (!pass) {
             errln("FAIL: " + line);
         }
         return pass;
+    }
+
+    /**
+     * Do a normalization using the iterative API in the given direction.
+     * @param buf scratch buffer
+     * @param dir either +1 or -1
+     */
+    private String iterativeNorm(String str, Normalizer.Mode mode,
+                                 StringBuffer buf, int dir) {
+        normalizer.setText(str);
+        normalizer.setMode(mode);
+        buf.setLength(0);
+        char ch;
+        if (dir > 0) {
+            for (ch = normalizer.first(); ch != Normalizer.DONE;
+                 ch = normalizer.next()) {
+                buf.append(ch);
+            }
+        } else {
+            for (ch = normalizer.last(); ch != Normalizer.DONE;
+                 ch = normalizer.previous()) {
+                buf.insert(0, ch);
+            }
+        }
+        return buf.toString();
     }
 
     /**
@@ -122,7 +176,9 @@ public class ConformanceTest extends TestFmwk {
      */
     private boolean assertEqual(String op, String s, String got,
                                 String exp, String msg) {
-        if (exp.equals(got)) return true;
+        if (exp.equals(got)) {
+            return true;
+        }
         errln(Utility.escape("      " + msg + ") " + op + "(" + s + ")=" + got +
                              ", exp. " + exp));
         return false;
@@ -173,32 +229,20 @@ public class ConformanceTest extends TestFmwk {
         }
     }
 
-    // Specific tests for debugging.  These are generally failures taken from
-    // the conformance file, but culled out to make debugging easier.
+    // Specific tests for debugging.  These are generally failures
+    // taken from the conformance file, but culled out to make
+    // debugging easier.  These can be eliminated without affecting
+    // coverage.
 
-    public void TestCase1() {
-        String s = "a\u0315\u0300\u05ae\u0300b";
-        String cs = "\u00e0\u05ae\u0300\u0315b"; // expected C(s)
-        String t = Normalizer.normalize(s, Normalizer.COMPOSE, 0);
-        if (!cs.equals(t)) {
-            errln(Utility.escape("FAIL: C(" + s + ")=" + t +
-                                 ", exp. " + cs));
-        }
+    public void _hideTestCase6() {
+        _testOneLine("0385;0385;00A8 0301;0020 0308 0301;0020 0308 0301;");
     }
 
-    public void TestCase2() {
-        String s = "\u1fee";
-        String cs = "\u0385"; // expected C(s)
-        String kcs = " \u0308\u0301"; // expected KC(s)
-        String t = Normalizer.normalize(s, Normalizer.COMPOSE, 0);
-        if (!cs.equals(t)) {
-            errln(Utility.escape("FAIL: C(" + s + ")=" + t +
-                                 ", exp. " + cs));
-        }
-        t = Normalizer.normalize(s, Normalizer.COMPOSE_COMPAT, 0);
-        if (!kcs.equals(t)) {
-            errln(Utility.escape("FAIL: KC(" + s + ")=" + t +
-                                 ", exp. " + kcs));
-        }
+    public void _testOneLine(String line) {
+        String[] fields = new String[5];
+        StringBuffer buf = new StringBuffer();
+        // Parse out the fields
+        hexsplit(line, ';', fields, buf);
+        checkConformance(fields, line);
     }
 }
