@@ -139,9 +139,11 @@ as/400 machines.
 #define U_HAVE_NL_LANGINFO_CODESET      0
 #define U_NL_LANGINFO_CODESET
 
+/* These cannot be defined for this platform
 #define U_TZSET
 #define U_TIMEZONE
 #define U_TZNAME
+*/
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
