@@ -185,6 +185,10 @@ af {
                 "v.C.",
                 "n.C."
             }
+            AmPmMarkers{
+	          "vm.",
+              "nm."
+            }
             dayNames{
                 format{        
                     abbreviated { 
@@ -253,7 +257,6 @@ af {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
 

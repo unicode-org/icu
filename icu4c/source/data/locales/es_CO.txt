@@ -19,7 +19,6 @@ es_CO {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
     // Currency display names

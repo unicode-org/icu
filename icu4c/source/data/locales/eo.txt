@@ -419,7 +419,6 @@ eo {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
     localPatternChars { "GjMtkHmslTDUSnahKzJdugAZ" }

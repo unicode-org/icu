@@ -29,7 +29,6 @@ pa {
         "\u2030",
         "\u221e",
         "\ufffd",
-        ".",
         "+",
     }
     Currencies {

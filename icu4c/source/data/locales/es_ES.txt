@@ -19,7 +19,6 @@ es_ES {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ",",
         "+",
     }
     NumberPatterns { 
