@@ -175,9 +175,9 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
 /*		0						1						2						3						4						5						6			7			8			9			*/
 
      NULL					,NULL					,NULL					,NULL					,NULL					,"latin1"				,"latin1"   ,"latin1"	,"ibm-865"  ,"ibm-865"    
-	,"ibm-865"				,"ibm-865"				,"ibm-865"				,"ibm-865"				,"ibm-895"				,"JISX-201"				,"latin1"   ,"latin1"	,NULL		,"ibm-955"    
-	,"GB2312"				,"JISX-208"				,NULL					,"UTF8"					,"ISO-8859-1"			,"ISO-8859-7"			,NULL		,"ibm-955"  ,"bm-367"   ,"ibm-952"   
-	,"ibm-949"				,"JISX-212"				,"ibm-1383"				,"ibm-952"				,"ibm-964"				,"ibm-964"				,"ibm-964"  ,"ibm-964"  ,"ibm-964"  ,"ibm-964"    
+	,"ibm-865"				,"ibm-865"				,"ibm-865"				,"ibm-865"				,"ibm-895"				,"jisx-201"				,"latin1"   ,"latin1"	,NULL		,"ibm-955"    
+	,"GB2312"				,"jisx-208"				,NULL					,"UTF8"					,"ISO-8859-1"			,"ISO-8859-7"			,NULL		,"ibm-955"  ,"bm-367"   ,"ibm-952"   
+	,"ibm-949"				,"jisx-212"				,"ibm-1383"				,"ibm-952"				,"ibm-964"				,"ibm-964"				,"ibm-964"  ,"ibm-964"  ,"ibm-964"  ,"ibm-964"    
 	,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,"UTF16_PlatformEndian"	,NULL		,"latin1"   ,"ibm-912"  ,"ibm-913"    
 	,"ibm-914"				,"ibm-813"				,"ibm-1089","ibm-920"	,"ibm-915"				,"ibm-915"				,"latin1"};
 
@@ -230,9 +230,9 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
 			myConverterData->myConverterArray[0]=	ucnv_open("ASCII", errorCode );
 			myConverterData->myConverterArray[1]=	ucnv_open("ISO8859_1", errorCode);
 			myConverterData->myConverterArray[2]=	ucnv_open("ISO8859_7", errorCode);
-			myConverterData->myConverterArray[3]=	ucnv_open("JISX-201", errorCode);
-			myConverterData->myConverterArray[4]=	ucnv_open("JISX-208", errorCode);
-			myConverterData->myConverterArray[5]=	ucnv_open("JISX-212", errorCode);
+			myConverterData->myConverterArray[3]=	ucnv_open("jisx-201", errorCode);
+			myConverterData->myConverterArray[4]=	ucnv_open("jisx-208", errorCode);
+			myConverterData->myConverterArray[5]=	ucnv_open("jisx-212", errorCode);
 			myConverterData->myConverterArray[6]=	ucnv_open("GB2312", errorCode);
 			myConverterData->myConverterArray[7]=	ucnv_open("KSC5601", errorCode);
 
@@ -388,9 +388,9 @@ static char* convNameArray[8]={
 		"ASCII",
 		"ISO8859_1" ,
 		"ISO8859_7" 
-		"JISX201" ,
-		"JISX208" ,
-		"JISX212" ,
+		"jisx-201" ,
+		"jisx-208" ,
+		"jisx-212" ,
 		"GB2312"  ,
 		"KSC5601" ,
 
