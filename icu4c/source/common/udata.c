@@ -331,14 +331,14 @@ typedef struct TinyString {
     int32_t    fCapacity;
 } TinyString;
 
-static TinyString_init(TinyString *This) {
+static void TinyString_init(TinyString *This) {
     This->s = This->fStaticBuf;
     *This->s = 0;
     This->length = 0;
     This->fCapacity = sizeof(This->fStaticBuf)-1;
 }
 
-static TinyString_append(TinyString *This, const char *what) {
+static void TinyString_append(TinyString *This, const char *what) {
     int32_t  newLen;
     newLen = This->length + uprv_strlen(what); 
     if (newLen >= This->fCapacity) { 
@@ -359,7 +359,7 @@ static TinyString_append(TinyString *This, const char *what) {
     } 
 }
     
-static TinyString_dt(TinyString *This) {
+static void TinyString_dt(TinyString *This) {
     if (This->s != This->fStaticBuf) { 
         uprv_free(This->s); 
     }
