@@ -886,7 +886,7 @@ getTrailSingle:
                     dynamicWindow=window;
                     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
                     useDynamicWindow(scsu, dynamicWindow);
-                    c=((uint32_t)(SC0+window)<<8)|(c-currentOffset)|0x80;
+                    c=((uint32_t)(SC0+dynamicWindow)<<8)|(c-currentOffset)|0x80;
                     length=2;
                     goto outputBytes;
                 } else if((code=getDynamicOffset(c, &offset))>=0) {
@@ -896,7 +896,7 @@ getTrailSingle:
                     dynamicWindow=getNextDynamicWindow(scsu);
                     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow]=offset;
                     useDynamicWindow(scsu, dynamicWindow);
-                    c=((uint32_t)SDX<<24)|((uint32_t)window<<21)|((uint32_t)code<<8)|(c-currentOffset)|0x80;
+                    c=((uint32_t)SDX<<24)|((uint32_t)dynamicWindow<<21)|((uint32_t)code<<8)|(c-currentOffset)|0x80;
                     length=4;
                     goto outputBytes;
                 } else {
@@ -930,7 +930,7 @@ getTrailSingle:
                         dynamicWindow=window;
                         currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
                         useDynamicWindow(scsu, dynamicWindow);
-                        c=((uint32_t)(SC0+window)<<8)|(c-currentOffset)|0x80;
+                        c=((uint32_t)(SC0+dynamicWindow)<<8)|(c-currentOffset)|0x80;
                         length=2;
                         goto outputBytes;
                     } else {
@@ -1021,7 +1021,7 @@ getTrailSingle:
                         dynamicWindow=window;
                         currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
                         useDynamicWindow(scsu, dynamicWindow);
-                        c=((uint32_t)(UC0+window)<<8)|(c-currentOffset)|0x80;
+                        c=((uint32_t)(UC0+dynamicWindow)<<8)|(c-currentOffset)|0x80;
                         length=2;
                         goto outputBytes;
                     } else if((code=getDynamicOffset(c, &offset))>=0) {
@@ -1081,7 +1081,7 @@ getTrailUnicode:
                     dynamicWindow=window;
                     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
                     useDynamicWindow(scsu, dynamicWindow);
-                    c=((uint32_t)(UC0+window)<<8)|(c-currentOffset)|0x80;
+                    c=((uint32_t)(UC0+dynamicWindow)<<8)|(c-currentOffset)|0x80;
                     length=2;
                     goto outputBytes;
                 } else if(source<sourceLimit && lead==*source && /* too lazy to check trail in same window as source[1] */
@@ -1093,7 +1093,7 @@ getTrailUnicode:
                     dynamicWindow=getNextDynamicWindow(scsu);
                     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow]=offset;
                     useDynamicWindow(scsu, dynamicWindow);
-                    c=((uint32_t)UDX<<24)|((uint32_t)window<<21)|((uint32_t)code<<8)|(c-currentOffset)|0x80;
+                    c=((uint32_t)UDX<<24)|((uint32_t)dynamicWindow<<21)|((uint32_t)code<<8)|(c-currentOffset)|0x80;
                     length=4;
                     goto outputBytes;
                 } else {
