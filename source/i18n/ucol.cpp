@@ -209,6 +209,8 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
     result->variableMax = (variableMaxCE & 0xFF000000) >> 24;
 
+    result->scriptOrder = NULL;
+
     result->zero = 0;
     result->rules = NULL;
 
@@ -306,15 +308,12 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
         uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
         collationSource->pos++;
         /* This is a code point minus 0x10000, that's what algorithm requires */
-        order = 0xE0800303 | (cp & 0xF0000) << 8 | (cp & 0xFE00) << 7;
-        *(collationSource->CEpos++) = 0xF0040000 | (cp & 0x1FF) << 19;
+        order = 0xE08080C3 | (cp & 0xF0000) << 8 | (cp & 0x0FFFC) << 7;
+        *(collationSource->CEpos++) = 0x20000080 | (cp & 0x00003) << 30;
       } else {
         /* otherwise */
         /* Make up an artifical CE from code point as per UCA */
-        order = 0xD08004F1;
-        /*order = 0xD01004F1;*/
-        order |= ((uint32_t)ch & 0xF000)<<12;
-        order |= ((uint32_t)ch & 0x0FFF)<<11;
+        order = 0xD08004C3 | (ch & 0xF000) << 12 | (ch & 0x0FFF) << 11;
       }
     }
     return order; /* return the CE */
@@ -541,6 +540,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
     int32_t caseShift = 0;
+    uint32_t c2 = 0, c3 = 0, c4 = 0; /* variables for compression */
     
 
     for(;;) {
@@ -561,11 +561,17 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           primary2 = (order >>= 8) & 0xFF;;
           primary1 = order >>= 8;
 
-          if(isLongPrimary(ce)) { 
-            /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
-            primary3 = secondary;
-            secondary = UCOL_UNMARKED;
-            tertiary += MIN_VALUE;
+          if(isFlagged(ce)) { 
+            if(isLongPrimary(ce)) {
+              /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
+              primary3 = secondary;
+              secondary = UCOL_UNMARKED;
+              tertiary ^= 0x40;
+            }
+            tertiary ^= 0x80;
+          } else {
+            /* it appears tht something should be done with the case bit */
+            /* however, it is not clear when */
           }
 
           if(shifted && primary1 < variableMax && primary1 != 0) { 
@@ -588,12 +594,19 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }               
 
             if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
-              /* This thing should also contain the compression logic, as in: */
-              /*  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2) */
-              /*      ++secondary[-1]; */ /* simply increment!! */
-              /*  else *secondary++ = ws;             */
-
-              currentSize++;
+              if (secondary == UCOL_COMMON2) {
+                c2++;
+              } else {
+                if(c2 > 0) {
+    			  if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+                    currentSize += (c2/UCOL_TOP_COUNT2)+1;
+                  } else {
+                    currentSize += (c2/UCOL_BOT_COUNT2)+1;
+                  }
+                  c2 = 0;
+                }
+                currentSize++;
+              }
             }
 
             if(doCase) {
@@ -605,15 +618,29 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }
 
             if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
-              /* This thing should also contain the compression logic, as in: */
-              /* if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)   */
-              /*      ++secondary[-1];  */ /* simply increment!! */
-              /*  else *secondary++ = ws;  */
-              currentSize++;
+              if (tertiary == UCOL_COMMON3) {
+                c3++;
+              } else {
+                if(c3 > 0) {
+    			  if (tertiary > UCOL_COMMON3) { // not necessary for 4th level.
+                    currentSize += (c3/UCOL_TOP_COUNT3)+1;
+                  } else {
+                    currentSize += (c3/UCOL_BOT_COUNT3)+1;
+                  }
+                  c3 = 0;
+                }
+                currentSize++;
+              }
             }
 
             if(shifted && primary1 > compareQuad) {
-              currentSize++;
+              if(c4 == 0) {
+                currentSize++;
+                c4++;
+              }
+              if(c4 >= 0xFF) {
+                c4 = 0;
+              }
             }
 
           }
@@ -687,6 +714,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && (compareTer == 0);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
+    const uint8_t *scriptOrder = coll->scriptOrder;
 
     /* support for special features like caselevel and funky secondaries */
     uint8_t *frenchStartPtr = NULL;
@@ -749,6 +777,8 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     int32_t compressedSecs = 0;
 
+    uint32_t count2 = 0, count3 = 0;
+
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
@@ -763,23 +793,33 @@ ucol_calcSortKey(const    UCollator    *coll,
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
             ce = order;
 
-            tertiary = (order & UCOL_NEW_TERTIARYORDERMASK);
+            tertiary = (order & UCOL_TERTIARYORDERMASK);
             secondary = (order >>= 8) & 0xFF;
             primary3 = 0; /* the third primary */
-            primary2 = (order >>= 8) & 0xFF;
+            primary2 = (order >>= 8) & 0xFF;;
             primary1 = order >>= 8;
 
-            if(upperFirst && ((ce & 0x80) == 0)) { /* if there is a case bit */
-              /* Upper cases have this bit turned on, so that they always come after the lower cases */
-              /* if we want to reverse this situation, we'll flip this bit */
-              tertiary ^= UCOL_CASE_BIT_MASK;
-            }
-            
-            if(isLongPrimary(ce)) { 
-              /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
-              primary3 = secondary;
-              secondary = UCOL_UNMARKED;
-              tertiary += MIN_VALUE;
+            if(isFlagged(ce)) { 
+              if(isLongPrimary(ce)) {
+                /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
+                primary3 = secondary;
+                secondary = UCOL_UNMARKED;
+                if(scriptOrder != NULL) {
+                  primary1 = scriptOrder[primary1];
+                }
+              }
+              tertiary &= 0x3F;
+            } else {
+              /* it appears tht something should be done with the case bit */
+              /* however, it is not clear when */
+              if(upperFirst) { /* if there is a case bit */
+                /* Upper cases have this bit turned on, so that they always come after the lower cases */
+                /* if we want to reverse this situation, we'll flip this bit */
+                tertiary ^= UCOL_CASE_BIT_MASK;
+              }
+              if(scriptOrder != NULL) {
+                primary1 = scriptOrder[primary1];
+              }
             }
 
 
@@ -814,15 +854,40 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }               
 
+              if(doCase) {
+                if (caseShift  == 0) {
+                  *cases++ = 0x80;
+                  sortKeySize++;
+                  caseShift = 7;
+                }
+                *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
+              }
+
               if(secondary > compareSec) { 
-                /* This thing should also contain the compression logic, as in: */
-                if (secondary == UCOL_COMMON2 && *(secondaries-1) == UCOL_COMMON2 && compressedSecs < UCOL_COMMON_MAX2 - UCOL_COMMON2) {
-			          compressedSecs++;
+                /* This is compression code. */
+                if (secondary == UCOL_COMMON2) {
+				  ++count2;
                 } else {
-                  if(compressedSecs != 0) {
-                    *(secondaries-1) = UCOL_COMMON_MAX2 - compressedSecs;
-                    compressedSecs = 0;
-                  }
+				  if (count2 > 0) {
+					if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+					  while (count2 >= UCOL_TOP_COUNT2) {
+						*secondaries++ = UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2;
+                        sortKeySize++;
+						count2 -= UCOL_TOP_COUNT2;
+					  }
+					  *secondaries++ = UCOL_COMMON_TOP2 - count2;
+                      sortKeySize++;
+					} else {
+					  while (count2 >= UCOL_BOT_COUNT2) {
+						*secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
+                        sortKeySize++;
+						count2 -= UCOL_BOT_COUNT2;
+					  }
+					  *secondaries++ = UCOL_COMMON_BOT2 + count2;
+                      sortKeySize++;
+					}
+					count2 = 0;
+				  }
                   *secondaries++ = secondary;
                   sortKeySize++;
                   if(isFrenchSec) {
@@ -841,36 +906,50 @@ ucol_calcSortKey(const    UCollator    *coll,
                     }
                   }
                 }
-              }
-
-              if(doCase) {
-                if (caseShift  == 0) {
-                  *cases++ = 0x80;
-                  sortKeySize++;
-                  caseShift = 7;
+                if(tertiary > compareTer) { 
+                  /* This is compression code. */
+                  /* sequence size check is included in the if clause */
+                  if (tertiary == UCOL_COMMON3) {
+				    ++count3;
+                  } else {
+                    if(tertiary > UCOL_COMMON3) {
+                      tertiary |= UCOL_FLAG_BIT_MASK;
+                    }
+				    if (count3 > 0) {
+					  if (tertiary > UCOL_COMMON3) {
+						while (count3 >= UCOL_TOP_COUNT3) {
+						  *tertiaries++ = UCOL_COMMON_TOP3 - UCOL_TOP_COUNT3;
+                          sortKeySize++;
+  						  count3 -= UCOL_TOP_COUNT3;
+						}
+						*tertiaries++ = UCOL_COMMON_TOP3 - count3;
+                        sortKeySize++;
+					  } else {
+						while (count3 >= UCOL_BOT_COUNT3) {
+						  *tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
+                          sortKeySize++;
+						  count3 -= UCOL_BOT_COUNT3;
+						}
+						*tertiaries++ = UCOL_COMMON_BOT3 + count3;
+                        sortKeySize++;
+					  }
+					  count3 = 0;
+				    }
+                    *tertiaries++ = tertiary;
+                    sortKeySize++;
+                  }
+                  if(shifted && primary1 > compareQuad) {
+                    /* here is only the compression bit, since only one value can happen here: 0xFF */
+                    /* sequence size check is included in the if clause */
+                    if((uint8_t)(*(quads-1)-variableMax) > (0xFF-variableMax-1)) {
+                      *quads++ = variableMax;
+                      sortKeySize++;
+                    } else {
+                      (*(quads-1))++;
+                    }
+                  }
                 }
-                *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
               }
-
-              if(tertiary > compareTer) { 
-                /* This thing should also contain the compression logic, as in: */
-                if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) {
-                    ++*(tertiaries-1); /* simply increment!! */
-                } else {
-                  *tertiaries++ = tertiary;
-                  sortKeySize++;
-                }
-              }
-
-              if(shifted && primary1 > compareQuad) {
-                /* Some compression should go here also */
-                /*if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) { */
-                /*    ++*(tertiaries-1); */ /* simply increment!! */
-                /*} else { */
-                *quads++ = 0xFF;
-                sortKeySize++;
-              }
-
             }
 
             if(sortKeySize>resultLength) { /* We have stepped over the primary buffer */
@@ -936,58 +1015,56 @@ ucol_calcSortKey(const    UCollator    *coll,
         uint32_t tersize = tertiaries - terStart;
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
-      }
+        if(compareQuad == 0) {
+            uint32_t quadsize = quads - quadStart;
+            uprv_memcpy(primaries, quadStart, quadsize);
+            primaries += quadsize;
+        }
 
-      if(compareQuad == 0) {
-          uint32_t quadsize = quads - quadStart;
-          uprv_memcpy(primaries, quadStart, quadsize);
-          primaries += quadsize;
-      }
+        if(compareIdent) {
+		    UChar *ident = s.string;
+            uint8_t idByte = 0;
+            sortKeySize += len * sizeof(UChar);
+            *(primaries++) = UCOL_LEVELTERMINATOR;
+            if(sortKeySize <= resultLength) {
+		        while(ident < s.len) {
+                    idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                    if(idByte < 0x02) {
+                        if(sortKeySize < resultLength) {
+                            *(primaries++) = 0x01;
+                            sortKeySize++;
+                            *(primaries++) = idByte + 1;
+                        }
+                    } else {
+                        *(primaries++) = idByte;
+                    }
+                    idByte = (*(ident) & 0xFF);
+                    if(idByte < 0x02) {
+                        if(sortKeySize < resultLength) {
+                            *(primaries++) = 0x01;
+                            sortKeySize++;
+                            *(primaries++) = idByte + 1;
+                        }
+                    } else {
+                        *(primaries++) = idByte;
+                    }
 
-      if(compareIdent) {
-		  UChar *ident = s.string;
-          uint8_t idByte = 0;
-          sortKeySize += len * sizeof(UChar);
-          *(primaries++) = UCOL_LEVELTERMINATOR;
-          if(sortKeySize <= resultLength) {
-		      while(ident < s.len) {
-                  idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                  if(idByte < 0x02) {
-                      if(sortKeySize < resultLength) {
-                          *(primaries++) = 0x01;
-                          sortKeySize++;
-                          *(primaries++) = idByte + 1;
-                      }
-                  } else {
-                      *(primaries++) = idByte;
-                  }
-                  idByte = (*(ident) & 0xFF);
-                  if(idByte < 0x02) {
-                      if(sortKeySize < resultLength) {
-                          *(primaries++) = 0x01;
-                          sortKeySize++;
-                          *(primaries++) = idByte + 1;
-                      }
-                  } else {
-                      *(primaries++) = idByte;
-                  }
-
-		        ident++;
-            }
-          } else {
-		      while(ident < s.len) {
-                  idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                  if(idByte < 0x02) {
-                      sortKeySize++;
-                  }
-                  idByte = (*(ident) & 0xFF);
-                  if(idByte < 0x02) {
-                      sortKeySize++;
-                  }
-		        ident++;
+		          ident++;
               }
-          }
-
+            } else {
+		        while(ident < s.len) {
+                    idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                    if(idByte < 0x02) {
+                        sortKeySize++;
+                    }
+                    idByte = (*(ident) & 0xFF);
+                    if(idByte < 0x02) {
+                        sortKeySize++;
+                    }
+		          ident++;
+                }
+            }
+        }
       }
 
       *(primaries++) = '\0';
