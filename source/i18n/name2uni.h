@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
  * A transliterator that performs name to character mapping.
  * It recognizes the Perl syntax \N{name}.
  * @author Alan Liu
- * @draft ICU 2.0
+ * @stable
  */
 class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
@@ -37,32 +37,32 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
     /**
      * Constructs a transliterator.
      * @param adoptedFilter    the filter for this transliterator.
-     * @draft ICU 2.0
+     * @stable
      */
     NameUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Destructor.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual ~NameUnicodeTransliterator();
 
     /**
      * Copy constructor.
-     * @draft ICU 2.0
+     * @stable
      */
     NameUnicodeTransliterator(const NameUnicodeTransliterator&);
 
     /**
      * Assignment operator.
-     * @draft ICU 2.0
+     * @stable
      */
     NameUnicodeTransliterator& operator=(const NameUnicodeTransliterator&);
 
     /**
      * Transliterator API.
      * @return    A copy of the object.
-     * @draft ICU 2.0
+     * @stable
      */
     Transliterator* clone(void) const;
 
@@ -90,7 +90,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
      *                      of the cursor, and the start and limit of transliteration.
      * @param incremental   if true, assume more text may be coming after
      *                      pos.contextLimit. Otherwise, assume the text is complete.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

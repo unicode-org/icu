@@ -770,7 +770,7 @@ public:
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
      * @param adoptedFilter the new filter to be adopted.
-     * @draft ICU 2.0
+     * @stable
      */
     void adoptFilter(UnicodeFilter* adoptedFilter);
 #endif
@@ -810,7 +810,7 @@ public:
      * @see #registerInstance
      * @see #getAvailableIDs
      * @see #getID
-     * @draft ICU 2.0
+     * @stable
      */
     static Transliterator* createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
@@ -825,7 +825,7 @@ public:
      * @param dir        either FORWARD or REVERSE.
      * @param status     Output param to filled in with a success or an error.
      * @return A <code>Transliterator</code> object with the given ID
-     * @draft ICU 2.0
+     * @stable
      */
     static Transliterator* createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
@@ -843,7 +843,7 @@ public:
      * @param parseError    Struct to recieve information on position 
      *                      of error if an error is encountered
      * @param status        Output param set to success/failure code.
-     * @draft ICU 2.0
+     * @stable
      */
     static Transliterator* createFromRules(const UnicodeString& ID,
                                            const UnicodeString& rules,
@@ -860,7 +860,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
@@ -921,7 +921,7 @@ public:
      * @param context a context pointer that will be stored and
      * later passed to the factory function when an ID matching
      * the registration ID is being instantiated with this factory.
-     * @draft ICU 2.0
+     * @stable
      */
     static void registerFactory(const UnicodeString& id,
                                 Factory factory,
@@ -1046,7 +1046,7 @@ public:
     /**
      * Return the number of registered source specifiers.
      * @return the number of registered source specifiers.
-     * @draft ICU 2.0
+     * @stable
      */
     static int32_t countAvailableSources(void);
     
@@ -1057,7 +1057,7 @@ public:
      * @param result fill-in paramter to receive the source specifier.
      * If index is out of range, result will be empty.
      * @return reference to result
-     * @draft ICU 2.0
+     * @stable
      */
     static UnicodeString& getAvailableSource(int32_t index,
                                              UnicodeString& result);
@@ -1068,7 +1068,7 @@ public:
      * @param source the given source specifier.
      * @return the number of registered target specifiers for a given
      *         source specifier.
-     * @draft ICU 2.0
+     * @stable
      */
     static int32_t countAvailableTargets(const UnicodeString& source);
     
@@ -1081,7 +1081,7 @@ public:
      * If source is invalid or if index is out of range, result will
      * be empty.
      * @return reference to result
-     * @draft ICU 2.0
+     * @stable
      */
     static UnicodeString& getAvailableTarget(int32_t index,
                                              const UnicodeString& source,
@@ -1092,7 +1092,7 @@ public:
      * source-target pair.
      * @param source    the source specifiers.
      * @param target    the target specifiers.
-     * @draft ICU 2.0
+     * @stable
      */
     static int32_t countAvailableVariants(const UnicodeString& source,
                                           const UnicodeString& target);
@@ -1108,7 +1108,7 @@ public:
      * specifier.  If source is invalid or if target is invalid or if
      * index is out of range, result will be empty.
      * @return reference to result
-     * @draft ICU 2.0
+     * @stable
      */
     static UnicodeString& getAvailableVariant(int32_t index,
                                               const UnicodeString& source,
@@ -1170,7 +1170,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @draft ICU 2.0
+     * @stable
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -1195,7 +1195,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
 

@@ -371,7 +371,7 @@ public:
      * Returns a copy of this object.  All UnicodeFunctor objects have
      * to support cloning in order to allow classes using
      * UnicodeFunctors, such as Transliterator, to implement cloning.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeFunctor* clone() const;
 
@@ -427,7 +427,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
                                      UBool escapeUnprintable = FALSE) const;
@@ -451,7 +451,7 @@ public:
      *
      * @return a reference to this set
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.4
      */
     UnicodeSet& applyIntPropertyValue(UProperty prop,
                                       int32_t value,
@@ -482,7 +482,7 @@ public:
      *
      * @return a reference to this set
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.4
      */
     UnicodeSet& applyPropertyAlias(const UnicodeString& prop,
                                    const UnicodeString& value,
@@ -509,7 +509,7 @@ public:
      * Returns true if this set contains the given character.
      * @param c character to be checked for containment
      * @return true if the test condition is met
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UBool contains(UChar32 c) const;
     
@@ -519,7 +519,7 @@ public:
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the test condition is met
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UBool contains(UChar32 start, UChar32 end) const;
 
@@ -682,7 +682,7 @@ public:
      * to this set.
      * @param end last character, inclusive, of range to be added
      * to this set.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeSet& add(UChar32 start, UChar32 end);
 
@@ -690,7 +690,7 @@ public:
      * Adds the specified character to this set if it is not already
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
-     * @draft ICU 2.0
+     * @stable
      */
     UnicodeSet& add(UChar32 c);
 
@@ -776,14 +776,14 @@ public:
      * to this set.
      * @param end last character, inclusive, of range to be retained
      * to this set.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeSet& retain(UChar32 start, UChar32 end);
 
 
     /**
      * Retain the specified character from this set if it is present.
-     * @draft ICU 2.0
+     * @stable
      */
     UnicodeSet& retain(UChar32 c);
 
@@ -797,7 +797,7 @@ public:
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeSet& remove(UChar32 start, UChar32 end);
 
@@ -805,7 +805,7 @@ public:
      * Removes the specified character from this set if it is present.
      * The set will not contain the specified range once the call
      * returns.
-     * @draft ICU 2.0
+     * @stable
      */
     UnicodeSet& remove(UChar32 c);
 
@@ -837,7 +837,7 @@ public:
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UnicodeSet& complement(UChar32 start, UChar32 end);
 
@@ -845,7 +845,7 @@ public:
      * Complements the specified character in this set.  The character
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
-     * @draft ICU 2.0
+     * @stable
      */
     UnicodeSet& complement(UChar32 c);
 
