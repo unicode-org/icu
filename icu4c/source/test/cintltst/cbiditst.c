@@ -80,13 +80,13 @@ void addComplexTest(TestNode** root);
 
 void
 addComplexTest(TestNode** root) {
-    addTest(root, doBiDiTest, "complex/bidi");
+    addTest(root, doBiDiTest, "complex/bidi/BiDiTest");
     addTest(root, doInverseBiDiTest, "complex/bidi/inverse");
-    addTest(root, doArabicShapingTest, "complex/arabic-shaping");
+    addTest(root, TestReorder,"complex/bidi/TestReorder");
+    addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
     addTest(root, doTashkeelSpecialVLTRArabicShapingTest, "complex/arabic-shaping/tashkeel");
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
-    addTest(root, TestReorder,"complex/bidi/TestReorder");
 }
 
 static void
@@ -428,7 +428,7 @@ static void TestReorder(){
         uprv_free(src);
         uprv_free(dest);
     }
-
+    ubidi_close(bidi);
 }
 
 static void
