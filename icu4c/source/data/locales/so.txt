@@ -12,6 +12,34 @@
 
 so{ 
     Version{ "2.0" }
+    AmPmMarkers {
+        "sn",
+        "gn",
+    }
+    Countries { 
+        DJ { "Jabuuti" }
+        ET { "Itoobiya" }
+        KE { "Kiiniya" }
+        SO { "Soomaaliya" }
+    }
+    Currencies {
+        KES { "Ksh", "KES" }
+    }
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM dd, yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
     DayAbbreviations {
         "Axa",
         "Isn",
@@ -29,6 +57,17 @@ so{
         "Khamiis",
         "Jimco",
         "Sabti",
+    }
+    Eras { 
+        "Ciise ka hor",
+        "Ciise ka dib"
+    }
+    ExemplarCharacters { "[a-z]" }
+    LocaleScript:array{ 
+       "Latn",  // ISO 15924 Name 
+    }
+    Languages { 
+        so { "Soomaali" }
     }
     MonthAbbreviations {
         "Kob",
@@ -58,47 +97,6 @@ so{
         "Bisha Kow iyo Tobnaad",
         "Bisha Laba iyo Tobnaad",
     }
-    Eras { 
-        "Ciise ka hor",
-        "Ciise ka dib"
-    }
-    Languages { 
-        so { "Soomaali" }
-    }
-    Countries { 
-        DJ { "Jabuuti" }
-        ET { "Itoobiya" }
-        KE { "Kiiniya" }
-        SO { "Soomaaliya" }
-    }
-    AmPmMarkers {
-        "sn",
-        "gn",
-    }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
-    DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM dd, yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
-
-    // Currency display names
-    Currencies {
-        KES { "Ksh", "KES" }
-    }
-    LocaleScript:array{ 
-       "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters{
-	"[a-z]"
-    }
 }
+
+
