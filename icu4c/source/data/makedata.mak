@@ -325,12 +325,12 @@ CLEAN :
 # Batch infrence rule for creating transliterator resource files
 {$(ICUTRNS)}.txt.res::
 	@echo Making Transliterator Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -d"$(ICUDBLD)" $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -d"$(ICUDBLD)" $<
 
 # Inference rule for creating resource bundle files
 {$(ICULOC)}.txt.res::
 	@echo Making Locale Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -d"$(ICUDBLD)" $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -d"$(ICUDBLD)" $<
 
 # DLL version information
 "$(ICUDBLD)\icudata.res": "$(ICUMISC)\icudata.rc"
