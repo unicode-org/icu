@@ -77,9 +77,12 @@ Transliterator* UppercaseTransliterator::clone(void) const {
  */
 void UppercaseTransliterator::handleTransliterate(Replaceable& text,
                                  UTransPosition& offsets, 
-                                 UBool isIncremental) const {
+                                 UBool /*isIncremental*/) const
+{
+    /* TODO: Verify that isIncremental can be ignored */
     int32_t textPos = offsets.start;
-    if (textPos >= offsets.limit) return;
+    if (textPos >= offsets.limit)
+        return;
 
     // get string for context
     
