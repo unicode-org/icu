@@ -1000,6 +1000,13 @@ void ParagraphLayout::Line::computeMetrics()
 
 const char ParagraphLayout::VisualRun::fgClassID = 0;
 
+ParagraphLayout::VisualRun::~VisualRun()
+{
+    LE_DELETE_ARRAY(fGlyphToCharMap);
+    LE_DELETE_ARRAY(fPositions);
+    LE_DELETE_ARRAY(fGlyphs);
+}
+
 U_NAMESPACE_END
 
 #endif
