@@ -124,21 +124,15 @@ public class RBImporter extends JDialog {
         BundleGroup group = null;
         BundleGroup backup_group = null;
 		
-        if (group_name == null) group_name = getDefaultGroup();
-        if (encoding == null) return;
+        if (group_name == null)
+        	group_name = getDefaultGroup();
+        if (encoding == null)
+        	return;
         // Get the bundle to which we will be adding this resource
-        if (rbm.hasResource(encoding)) {
-            Vector bv = rbm.getBundles();
-            for (int i = 0; i < bv.size(); i++) {
-                Bundle tempb = (Bundle)bv.elementAt(i);
-                if (tempb.encoding.equals(encoding)) {
-                    bundle = tempb;
-                    break;
-                }
-            }
-        }
+        bundle = rbm.getBundle(encoding);
         // Skip this import if the bundle is non-existent (Should have been resolved if wanted)
-        if (bundle == null) return;
+        if (bundle == null)
+        	return;
         // Find the group in the bundle, Ungrouped if non-existent
         Vector gv = bundle.getGroupsAsVector();
         for (int i=0; i < gv.size(); i++) {

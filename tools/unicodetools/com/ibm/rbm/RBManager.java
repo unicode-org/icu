@@ -557,18 +557,20 @@ public class RBManager {
      * @param groupComment An optional comment to be added to the group, can be <CODE>null</CODE>
      * @return An error response. If the creation was successful <CODE>true</CODE> is returned, if there was an error <CODE>false</CODE> is returned.
      */
-	
     public boolean createGroup(String groupName, String groupComment) {
-        if (groupName == null || groupName.equals("")) return false;
+        if (groupName == null || groupName.equals(""))
+        	return false;
         // Check to see if the group exists
         Bundle mainBundle = (Bundle)bundles.firstElement();
-        if (mainBundle.hasGroup(groupName)) return false;
+        if (mainBundle.hasGroup(groupName))
+        	return false;
 		
         // Create the group
         for (int i=0; i < bundles.size(); i++) {
             Bundle bundle = (Bundle)bundles.elementAt(i);
             BundleGroup bg = new BundleGroup(bundle, groupName);
-            if (groupComment != null) bg.setComment(groupComment);
+            if (groupComment != null)
+            	bg.setComment(groupComment);
             bundle.addBundleGroup(bg);
         }
         return true;
@@ -849,6 +851,24 @@ public class RBManager {
         return bundles;
     }
     
+    /**
+     * Return a bundle from a locale
+     * @return The requested resource bundle
+     */
+    public Bundle getBundle(String locale) {
+    	Bundle bundle = null;
+        if (hasResource(locale)) {
+            for (int i = 0; i < bundles.size(); i++) {
+                Bundle tempb = (Bundle)bundles.elementAt(i);
+                if (tempb.encoding.equals(locale)) {
+                    bundle = tempb;
+                    break;
+                }
+            }
+        }
+        return bundle;
+    }
+
     /**
      * Returns the name of the file that is the base class file for the resource bundle.
      */
