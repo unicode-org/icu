@@ -19,8 +19,6 @@
 
 #include "unicode/utypes.h"
 
-/* ### TBD: implement letter shaping and remove comment about it missing (jitterbug 471) */
-
 /**
  * \file
  * \brief C API:  Arabic shaping
@@ -60,9 +58,6 @@
  * character code points. These operations can be performed for either
  * Arabic-Indic Digits (U+0660...U+0669) or Eastern (Extended) Arabic-Indic
  * digits (U+06f0...U+06f9).</p>
- *
- * <p><em>Note: </em>Right now, the letter shaping is not yet implemented here.
- * Only digit shaping is currently supported.</p>
  *
  * <p>Some replacements may result in more or fewer characters (code points).
  * By default, this means that the destination buffer may receive text with a
@@ -155,11 +150,8 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 /** Letter shaping option: replace "shaped" letter characters by abstract ones. */
 #define U_SHAPE_LETTERS_UNSHAPE                 0x10
 
-/**
- * Letter shaping option: replace abstract letter characters by "shaped" ones,
- * but do not process Tashkeel characters.
- */
-#define U_SHAPE_LETTERS_EXCEPT_TASHKEEL         0x18
+/** Not a valid option value. */
+#define U_SHAPE_LETTERS_RESERVED                0x18
 
 /** Bit mask for letter shaping options. */
 #define U_SHAPE_LETTERS_MASK                    0x18
