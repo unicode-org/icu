@@ -219,7 +219,7 @@ IntlTestRBNF::TestAPI() {
   }
   result.remove();
   expected = "four";
-  formatter->format((long)4,result);
+  formatter->format((int)4,result);
   if(result != expected) {
       errln("Formatted 4, expected " + expected + " got " + result);
   } else {
