@@ -97,7 +97,7 @@ mk {
         ",",
         "+",
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeugAZ" }
 
     LocaleScript{   
         "Cyrl",     // ISO 15924 Name 

@@ -753,7 +753,7 @@ de {
         ",",
         "+",
     }
-    localPatternChars { "GjMtkHmsSEDFwWahKzJe" }
+    localPatternChars { "GjMtkHmsSEDFwWahKzJeugAZ" }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }

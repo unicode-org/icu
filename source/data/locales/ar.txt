@@ -376,7 +376,7 @@ ar {
         "#,##0%",
         "#E0",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript:array {
         "Arab"

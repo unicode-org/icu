@@ -2328,7 +2328,7 @@ ko {
         "\uC11C\uAE30",
 //        "\uB2E8\uAE30"   // AD + 2333 but ICU doesn't use it.
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     LocaleScript{ "Hang", "Hani" }
     ExemplarCharacters{
         "["

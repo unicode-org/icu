@@ -280,7 +280,7 @@ fi {
         vi { "vietnam" }
         zh { "kiina" }
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     ExemplarCharacters { "[a-z \u00e4 \u00f6]" }
     LocaleScript{ 

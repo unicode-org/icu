@@ -1127,7 +1127,7 @@ root {
         zun { "zun" }
     }
 
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
+    localPatternChars { "GyMdkHmsSEDFwWahKzYeugAZ" }
 
     ExemplarCharacters{"[]"}
     LocaleScript:array {

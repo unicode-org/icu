@@ -470,7 +470,7 @@ th {
         "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
         "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     /*
     zoneStrings { 
         {
