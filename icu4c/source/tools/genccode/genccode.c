@@ -61,7 +61,7 @@ static UOption options[]={
      UOPTION_HELP_QUESTION_MARK,
      UOPTION_DESTDIR,
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
-UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+     UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
 #ifdef CAN_GENERATE_OBJECTS
 /*5*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
 #endif
