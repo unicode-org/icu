@@ -12,7 +12,7 @@
 *   Created by: Vladimir Weinstein
 *
 *  Contains all the important version numbers for ICU. 
-*  Gets included by utypes.h
+*  Gets included by utypes.h and Windows .rc files
 */
 
 /*===========================================================================*/
@@ -24,15 +24,22 @@
 
 /** IMPORTANT: When updating version, the following things need to be done:   */
 /** source/common/unicode/uversion.h - this file: update major, minor,        */
-/**                   patchlevel, suffix, version and short version constants */
+/**        patchlevel, suffix, version, short version constants and copyright */
 /** source/common/common.dsp - update 'Output file name' on the link tab so   */
 /**                   that it contains the new major/minor combination        */
 /** source/i18n/i18n.dsp - same as for the common.dsp                         */
+/** source/layout/layout.dsp - same as for the common.dsp                     */
+/** source/ustdio/ustdio.dsp - same as for the common.dsp                     */
 /** source/data/build/makedata.mak - change U_ICUDATA_NAME so that it contains*/
 /**                   the new major/minor combination                         */
 /** source/tools/genren/genren.pl - use this script according to the README   */
 /**                    in that folder                                         */
 
+/** The standard copyright notice that gets compiled into each library. */
+#define U_COPYRIGHT_STRING \
+  " Copyright (C) 2001, International Business Machines Corporation and others. All Rights Reserved. "
+
+#define U_COPYRIGHT_STRING_LENGTH  128
 
 /** The current ICU major version as an integer. */
 #define U_ICU_VERSION_MAJOR_NUM 1
@@ -104,7 +111,6 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  * @param versionArray the version # information, the result will be filled in
  * @stable
  */
-
 U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
 
