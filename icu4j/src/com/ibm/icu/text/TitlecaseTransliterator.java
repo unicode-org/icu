@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/10/31 22:36:48 $ 
- * $Revision: 1.18 $
+ * $Date: 2004/02/20 00:16:41 $ 
+ * $Revision: 1.19 $
  */
 package com.ibm.icu.text;
 import java.util.*;
@@ -27,13 +27,22 @@ class TitlecaseTransliterator extends Transliterator {
      * The set of characters we skip.  These are neither cased nor
      * non-cased, to us; we copy them verbatim.
      */
-    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]");
+    static UnicodeSet SKIP = null;
 
     /**
      * The set of characters that cause the next non-SKIP character
      * to be lowercased.
      */
-    static final UnicodeSet CASED = new UnicodeSet("[[:Lu:] [:Ll:] [:Lt:]]");
+    static UnicodeSet CASED = null;
+
+    /**
+     * Initialize static variables.  We defer intilization because it
+     * is slow (typically over 1000 ms).
+     */
+    private static final void initStatics() {
+        SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:] [:Sk:]]");
+        CASED = new UnicodeSet("[[:Lu:] [:Ll:] [:Lt:]]");
+    }
 
     /**
      * System registration hook.
@@ -63,6 +72,9 @@ class TitlecaseTransliterator extends Transliterator {
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
+        if (SKIP == null) {
+            initStatics();
+        }
 
         // Our mode; we are either converting letter toTitle or
         // toLower.
