@@ -54,7 +54,8 @@ enum
 {
     HELP1,
     HELP2,
-    VERBOSE,
+/*    VERBOSE, */
+    QUIET,
     VERSION,
     SOURCEDIR,
     DESTDIR,
@@ -65,7 +66,8 @@ enum
 UOption options[]={
                       UOPTION_HELP_H,
                       UOPTION_HELP_QUESTION_MARK,
-                      UOPTION_VERBOSE,
+/*                      UOPTION_VERBOSE, */
+                      UOPTION_QUIET,
                       UOPTION_VERSION,
                       UOPTION_SOURCEDIR,
                       UOPTION_DESTDIR,
@@ -86,7 +88,7 @@ main(int argc,
     const char *outputDir = NULL; /* NULL = no output directory, use current */
     const char *inputDir  = NULL;
     const char *encoding  = "";
-    UBool       verbose;
+/*    UBool       verbose; */
     int         i;
 
 #ifdef XP_MAC_CONSOLE
@@ -116,22 +118,27 @@ main(int argc,
                 "Usage: %s [OPTIONS] [FILES]\n"
                 "\treads the list of resource bundle source files and creates\n"
                 "\tbinary version of reosurce bundles (.res files)\n"
-                "\tOptions:\n"
-                "\t\t-h, -? or --help     this usage text\n"
-                "\t\t-V or --version      prints out version number and exits\n"
-                "\t\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
-                "\t\t-v or --verbose      be verbose\n"
-                "\t\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
-                "\t\t                     NOTE: ICU must be completely built to use this option\n"
-                "\t\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
-                "\t\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t\t                     followed by path, defaults to %s\n",
+                "Options:\n"
+                "\t-h, -? or --help     this usage text\n"
+                "\t-V or --version      prints out version number and exits\n"
+                "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
+/*                "\t-v or --verbose      be verbose\n"*/
+                "\t-q or --quiet        do not display warnings\n"
+                "\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
+                "\t                     NOTE: ICU must be completely built to use this option\n"
+                "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
+                "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
+                "\t                     followed by path, defaults to %s\n",
                 argv[0], u_getDataDirectory(), u_getDataDirectory(),u_getDataDirectory());
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    if(options[VERBOSE].doesOccur) {
+/*    if(options[VERBOSE].doesOccur) {
         verbose = TRUE;
+    }*/
+
+    if(options[QUIET].doesOccur) {
+        setShowWarning(FALSE);
     }
 
     if(options[SOURCEDIR].doesOccur) {

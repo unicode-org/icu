@@ -31,14 +31,24 @@ void error(uint32_t linenumber, const char *msg, ...)
     va_end(va);
 }
 
+static gShowWarning = TRUE;
+
+void setShowWarning(UBool val)
+{
+    gShowWarning = val;
+}
+
 void warning(uint32_t linenumber, const char *msg, ...)
 {
-    va_list va;
+    if (gShowWarning)
+    {
+        va_list va;
 
-    va_start(va, msg);
-    fprintf(stderr, "%s:%d: warning: ", gCurrentFileName, linenumber);
-    vfprintf(stderr, msg, va);
-    fprintf(stderr, "\n");
-    va_end(va);
+        va_start(va, msg);
+        fprintf(stderr, "%s:%d: warning: ", gCurrentFileName, linenumber);
+        vfprintf(stderr, msg, va);
+        fprintf(stderr, "\n");
+        va_end(va);
+    }
 }
 
