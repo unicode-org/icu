@@ -48,19 +48,20 @@ const char* rawData[27][7] = {
         // display country (French)
         {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "",     "YY" },
         // display variant (French)
-        {   "",     "",     "",     "",     "Nynorsk",     "",     "" },
+        {   "",     "",     "",     "",     "NY",     "",     "" },
         // display name (French)
         //{   "anglais (États-Unis)", "français (France)", "catalan (Espagne)", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)", "italien", "xx (YY)" }, // STILL not right
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)" }, // STILL not right
 
-        // display langage (Catalan)
-        {   "",  "", "catal\\u00E0", "",    "", "", "xx" },
-        // display country (Catalan)
-        {   "",    "",   "Espanya",  "",   "", "", "YY" },
-        // display variant (Catalan)
-        {   "",     "",     "",     "",     "", "", ""},
-        // display name (Catalan)
-        {   "", "", "catal\\u00E0 (Espanya)", "", "",  "", "xx (YY)" },
+
+        /* display language (Catalan) */
+        {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
+        /* display country (Catalan) */
+        {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega" },
+        /* display variant (Catalan) */
+        {   "", "", "",                    "", "NY" },
+        /* display name (Catalan) */
+        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)" },
 
         // display langage (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
@@ -1346,10 +1347,10 @@ LocaleTest::Test4147552()
     ndn += "l)";
     UnicodeString norwegianDisplayNames [] = { 
                                                 "Norsk (Norge)",
-                                                //"norsk (Norge,B)", 
-                                                ndn, 
-                                                 //"norsk (Norge,NY)" 
-                                                 "Norsk (Noreg, Nynorsk)" 
+                                                "Norsk (Norge, B)", 
+                                                //ndn, 
+                                                 "Norsk (Noreg, NY)" 
+                                                 //"Norsk (Noreg, Nynorsk)" 
     };
 
     for (int32_t i = 0; i < 3; ++i) {
