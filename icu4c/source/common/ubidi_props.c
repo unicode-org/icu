@@ -258,7 +258,6 @@ ubidi_getDummy(UErrorCode *pErrorCode) {
         return bdp;
     } else /* bdp==NULL */ {
         /* create the dummy object */
-        UBiDiProps *bdp;
         int32_t *indexes;
         
         bdp=(UBiDiProps *)uprv_malloc(sizeof(UBiDiProps)+UBIDI_IX_TOP*4+UTRIE_DUMMY_SIZE);

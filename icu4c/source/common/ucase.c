@@ -262,7 +262,6 @@ ucase_getDummy(UErrorCode *pErrorCode) {
         return csp;
     } else /* csp==NULL */ {
         /* create the dummy object */
-        UCaseProps *csp;
         int32_t *indexes;
         
         csp=(UCaseProps *)uprv_malloc(sizeof(UCaseProps)+UCASE_IX_TOP*4+UTRIE_DUMMY_SIZE);

@@ -1547,11 +1547,10 @@ U_NAMESPACE_END
 
 U_CAPI int32_t
 utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorCode *status) {
-    const UChar *sourceStart = source;
+    //const UChar *sourceStart = source;
     const UChar *targetStart = target;
     const UChar *sourceLimit = source+sourceLen;
     UChar *targetLimit = target+sourceLen;
-    uint32_t isError = 0;
     UChar32 c = 0;
     UBool quoted = FALSE;
     int32_t index;

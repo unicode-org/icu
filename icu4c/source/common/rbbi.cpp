@@ -650,7 +650,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
  * @return The current iteration position.
  */
 int32_t RuleBasedBreakIterator::current(void) const {
-    return (fText != NULL) ? fText->getIndex() : BreakIterator::DONE;
+    return (fText != NULL) ? fText->getIndex() : (int32_t)BreakIterator::DONE;
 }
 
 //=======================================================================
