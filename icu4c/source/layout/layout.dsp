@@ -162,10 +162,6 @@ SOURCE=.\ArabicLayoutEngine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ArabicLigatureData.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ArabicShaping.cpp
 # End Source File
 # Begin Source File
@@ -243,14 +239,6 @@ SOURCE=.\GXLayoutEngine.cpp
 # Begin Source File
 
 SOURCE=.\HanLayoutEngine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\HebrewLigatureData.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\HebrewShaping.cpp
 # End Source File
 # Begin Source File
 
@@ -535,10 +523,6 @@ SOURCE=.\GXLayoutEngine.h
 # Begin Source File
 
 SOURCE=.\HanLayoutEngine.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\HebrewShaping.h
 # End Source File
 # Begin Source File
 
