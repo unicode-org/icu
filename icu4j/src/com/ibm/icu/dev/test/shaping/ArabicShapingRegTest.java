@@ -138,7 +138,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         "\u0061" +  /* latin:a */
         "\u0034";   /* en:4 */
 
-    private static final TestData[] tests = {
+    private static final TestData[] standardTests = {
         /* lam alef special visual ltr */
         TestData.standard(lamAlefSpecialVLTR,
                           LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR,
@@ -280,7 +280,9 @@ public class ArabicShapingRegTest extends TestFmwk {
         TestData.standard(numSource, 
                           0,
                           numSource),
+    };
 
+    private static final TestData[] preflightTests = {
         /* preflight */
         TestData.preflight("\u0644\u0627",
                            LETTERS_SHAPE | LENGTH_GROW_SHRINK,
@@ -297,7 +299,9 @@ public class ArabicShapingRegTest extends TestFmwk {
         TestData.preflight("\ufef7",
                            LETTERS_UNSHAPE | LENGTH_GROW_SHRINK,
                            2),
+    };
 
+    private static final TestData[] errorTests = {
         /* bad data */
         TestData.error("\u0020\ufef7\u0644\u0020",
                        LETTERS_UNSHAPE | LENGTH_FIXED_SPACES_NEAR,
@@ -315,52 +319,91 @@ public class ArabicShapingRegTest extends TestFmwk {
         TestData.error("\ufef7",
                        0xffffffff,
                        IllegalArgumentException.class),
+                       
+        TestData.error("\ufef7",
+                       LETTERS_UNSHAPE | LENGTH_GROW_SHRINK,
+                       ArabicShapingException.class),
+                       
+        TestData.error(null,
+                       LETTERS_UNSHAPE | LENGTH_FIXED_SPACES_AT_END,
+                       IllegalArgumentException.class),
     };
 
     public void testStandard() {
-        for (int i = 0; i < tests.length; ++i) {
-            TestData test = tests[i];
+        for (int i = 0; i < standardTests.length; ++i) {
+            TestData test = standardTests[i];
 
             Exception ex = null;
             String result = null;
-            char src[] = null;
-            int len = 0;
             ArabicShaping shaper = null;
             
             try {
                 shaper = new ArabicShaping(test.flags);
-
-                switch (test.type) {
-                case TestData.STANDARD:
-                    result = shaper.shape(test.source);
-                    if (!test.result.equals(result)) {
-                        reportTestFailure(i, test, shaper, result, ex);
-                    }
-                    break;
-                    
-                case TestData.PREFLIGHT:
-                    src = test.source.toCharArray();
-                    len = shaper.shape(src, 0, src.length, null, 0, 0);
-                    
-                    if (test.length != len) {
-                        reportTestFailure(i, test, shaper, test.source, ex);
-                    }
-                    break;
-
-                case TestData.ERROR:
-                    src = test.source.toCharArray();
-                    shaper.shape(src, 0, src.length);
-                    
-                    if (!test.error.isInstance(ex)) {
-                        reportTestFailure(i, test, shaper, test.source, ex);
-                    }
-                    break;
-                }
+                result = shaper.shape(test.source);
             }
             catch (Exception e) {
                 ex = e;
             }
-        }                    
+            
+            if (!test.result.equals(result)) {
+                reportTestFailure(i, test, shaper, result, ex);
+            }
+        }
+    }
+    
+    public void testPreflight() {
+        for (int i = 0; i < preflightTests.length; ++i) {
+            TestData test = preflightTests[i];
+
+            Exception ex = null;
+            char src[] = null;
+            int len = 0;
+            ArabicShaping shaper = null;
+            
+            if (test.source != null) {
+                src = test.source.toCharArray();
+            }
+            
+            try {
+                shaper = new ArabicShaping(test.flags);
+                len = shaper.shape(src, 0, src.length, null, 0, 0);
+            }
+            catch (Exception e) {
+                ex = e;
+            }
+            
+            if (test.length != len) {
+                reportTestFailure(i, test, shaper, test.source, ex);
+            }
+        }
+    }
+    
+    public void testError() {            
+        for (int i = 0; i < errorTests.length; ++i) {
+            TestData test = errorTests[i];
+
+            Exception ex = null;
+            char src[] = null;
+            int len = 0;
+            ArabicShaping shaper = null;
+            
+            if (test.source != null) {
+                src = test.source.toCharArray();
+                len = src.length;
+            }
+            
+            try {
+                shaper = new ArabicShaping(test.flags);
+                shaper.shape(src, 0, len);
+            }
+            catch (Exception e) {
+                ex = e;
+            }
+            
+            if (!test.error.isInstance(ex)) {
+                reportTestFailure(i, test, shaper, test.source, ex);
+            }
+        }
     }
 
     public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
