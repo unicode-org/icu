@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 *
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -605,7 +605,7 @@ public:
   virtual void            getText(UnicodeString&  result) = 0;
 
 protected:
-  CharacterIterator() {}
+  CharacterIterator();
   CharacterIterator(int32_t length);
   CharacterIterator(int32_t length, int32_t position);
   CharacterIterator(int32_t length, int32_t textBegin, int32_t textEnd, int32_t position);

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -38,6 +38,8 @@ public:
 
     void TestUCharIterator();
     void TestUCharIterator(UCharIterator *iter, CharacterIterator &ci, const char *moves, const char *which);
+
+    void TestCharIteratorSubClasses();
 };
 
 #endif
