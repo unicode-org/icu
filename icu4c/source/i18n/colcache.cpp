@@ -28,10 +28,6 @@
 #include "tcoldata.h"
 #include "hash.h"
 
-#ifdef COLLDEBUG
-#include <iostream.h>
-#endif
-
 //--------------------------------------------------------------------------------
 // CollationCache implementation
 //--------------------------------------------------------------------------------
@@ -41,28 +37,9 @@ static void U_CALLCONV deleteTCD(void* TCD)
   delete (TableCollationData*)TCD;
 }
 
-CollationCache::CollationCache()
+CollationCache::CollationCache() : fHashtable()
 {
-  UErrorCode err = U_ZERO_ERROR;
-  fHashtable = new Hashtable(err);
-  fHashtable->setValueDeleter(deleteTCD);
-}
-
-
-CollationCache::~CollationCache()
-{
-  delete fHashtable;
-}
-
-void CollationCache::Add(const UnicodeString& key, TableCollationData* value)
-{
-  UErrorCode err = U_ZERO_ERROR;
-  fHashtable->put(key, value, err);
-}
-
-TableCollationData* CollationCache::Find(const UnicodeString& keyString)
-{
-  return (TableCollationData*) fHashtable->get(keyString);
+  fHashtable.setValueDeleter(deleteTCD);
 }
 
 //eof
