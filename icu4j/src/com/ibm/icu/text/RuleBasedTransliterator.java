@@ -196,9 +196,12 @@ import java.text.ParsePosition;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.10 $ $Date: 2000/01/13 23:53:23 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.11 $ $Date: 2000/01/18 02:30:49 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.11  2000/01/18 02:30:49  Alan
+ * Add Jamo-Hangul, Hangul-Jamo, fix rules, add compound ID support
+ *
  * Revision 1.10  2000/01/13 23:53:23  Alan
  * Fix bugs found during ICU port
  *
@@ -221,17 +224,6 @@ import java.text.ParsePosition;
  * Improve masking checking; turn it off by default, for better performance
  */
 public class RuleBasedTransliterator extends Transliterator {
-    /**
-     * Direction constant passed to constructor to create a transliterator
-     * using the forward rules.
-     */
-    public static final int FORWARD = 0;
-
-    /**
-     * Direction constant passed to constructor to create a transliterator
-     * using the reverse rules.
-     */
-    public static final int REVERSE = 1;    
 
     private Data data;
 
