@@ -38,7 +38,6 @@
 #include <wchar.h>
 #include <stdlib.h>
 
-#include "unicode/uversion.h"
 /*===========================================================================*/
 /* Include platform-dependent definitions                                    */
 /* which are contained in the platform-specific file platform.h              */
@@ -142,14 +141,19 @@ typedef int32_t UTextOffset;
 /*===========================================================================*/
 typedef uint16_t UChar;
 
+/* U_SIZEOF_UCHAR==sizeof(UChar) */
+#define U_SIZEOF_UCHAR 2
+
 /*===========================================================================*/
 /* Related version information                                               */
 /*===========================================================================*/
+#define U_ICU_VERSION "1.4.0"
 
-typedef uint8_t UVersionInfo[U_MAX_VERSION_LEN];
+#define U_MAX_VERSION_LENGTH 4
+#define U_VERSION_DELIMITER '.'
+#define U_MAX_VERSION_STRING_LENGTH 20
 
-/* U_SIZEOF_UCHAR==sizeof(UChar) */
-#define U_SIZEOF_UCHAR 2
+typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 /*===========================================================================*/
 /* For C wrappers, we use the symbol U_CAPI.                                   */

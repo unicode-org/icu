@@ -27,7 +27,7 @@
 /*===========================================================================*/
 /* Unicode version number                                                    */
 /*===========================================================================*/
-#define UNICODE_VERSION  "3.0.0"
+#define U_UNICODE_VERSION "3.0.0"
 
 /**
  * The Unicode C API allows you to query the properties associated with individual 

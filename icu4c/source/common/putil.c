@@ -1462,29 +1462,40 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
     }
 }
 
-U_CAPI void U_EXPORT2
-u_getVersion(UVersionInfo versionArray)
-{
-    int32_t len = uprv_strlen(U_ICU_VERSION), i = 0, part = 0;
-    char verString[U_MAX_VERSION_STRING], *begin;
-    
-    if (versionArray == 0) 
-    {
+/* this function will become public */
+U_CFUNC void
+u_versionFromString(UVersionInfo versionArray, const char *versionString) {
+    char *end;
+    uint16_t part=0;
+
+    if(versionArray==NULL) {
         return;
     }
-    begin = &(verString[0]);
-    uprv_strcpy(verString, U_ICU_VERSION);
-    uprv_memset(versionArray, 0, U_MAX_VERSION_LEN); 
-    do {
-        if (verString[i] == U_VERSION_DELIMITER)
-        {
-            verString[i] = 0;
-            versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
-            begin = &(verString[i+1]);
+
+    if(versionString!=NULL) {
+        for(;;) {
+            versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
+            if(*end!=U_VERSION_DELIMITER || ++part==U_MAX_VERSION_LENGTH) {
+                break;
+            }
+            versionString=end+1;
         }
     }
-    while (i++ < len);
-    versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+
+    while(part<U_MAX_VERSION_LENGTH) {
+        versionArray[part++]=0;
+    }
+}
+
+/* also, need
+U_CAPI void U_EXPORT2
+u_versionToString(UVersionInfo versionArray, char *versionString) {
+}
+*/
+
+U_CAPI void U_EXPORT2
+u_getVersion(UVersionInfo versionArray) {
+    u_versionFromString(versionArray, U_ICU_VERSION);
 }
 
 /* u_errorName() ------------------------------------------------------------ */
