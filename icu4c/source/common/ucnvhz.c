@@ -32,21 +32,21 @@
 #define ESC_LEN       2
 
 
-#define CONCAT_ESCAPE_MACRO( args, targetIndex,targetLength,strToAppend, err, len,sourceIndex){\
-    while(len-->0){\
-        if(targetIndex < targetLength){\
-            args->target[targetIndex] = (unsigned char) *strToAppend;\
-            if(args->offsets!=NULL){\
-                *(offsets++) = sourceIndex-1;\
-            }\
-            targetIndex++;\
-        }\
-        else{\
-            args->converter->charErrorBuffer[(int)args->converter->charErrorBufferLength++] = (unsigned char) *strToAppend;\
-            *err =U_BUFFER_OVERFLOW_ERROR;\
-        }\
-        strToAppend++;\
-    }\
+#define CONCAT_ESCAPE_MACRO( args, targetIndex,targetLength,strToAppend, err, len,sourceIndex){                             \
+    while(len-->0){                                                                                                         \
+        if(targetIndex < targetLength){                                                                                     \
+            args->target[targetIndex] = (unsigned char) *strToAppend;                                                       \
+            if(args->offsets!=NULL){                                                                                        \
+                *(offsets++) = sourceIndex-1;                                                                               \
+            }                                                                                                               \
+            targetIndex++;                                                                                                  \
+        }                                                                                                                   \
+        else{                                                                                                               \
+            args->converter->charErrorBuffer[(int)args->converter->charErrorBufferLength++] = (unsigned char) *strToAppend; \
+            *err =U_BUFFER_OVERFLOW_ERROR;                                                                                  \
+        }                                                                                                                   \
+        strToAppend++;                                                                                                      \
+    }                                                                                                                       \
 }
 
 
@@ -216,11 +216,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataHZ* myData=(UConverterDataHZ*)(args->converter->extraInfo);
-    
-    /*Arguments Check*/
-    if (U_FAILURE(*err)) 
-        return;
-    
+       
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -431,10 +427,6 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int len =0;
     const char* escSeq=NULL;
     
-    /*Arguments Check*/
-    if (U_FAILURE(*err)) 
-        return;
-    
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -543,6 +535,7 @@ getTrail:
                                 mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
                                 /* there are no surrogates in GB2312*/
+                                *err = U_INVALID_CHAR_FOUND;
                                 reason=UCNV_UNASSIGNED;
                                 /* exit this condition tree */
                             } else {
@@ -693,10 +686,10 @@ _HZ_SafeClone(const UConverter *cnv,
     }
 
     localClone = (struct cloneStruct *)stackBuffer;
-    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+    uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
     localClone->cnv.isCopyLocal = TRUE;
 
-    memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
+    uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
     localClone->cnv.extraInfo = &localClone->mydata;
 
     return &localClone->cnv;
