@@ -442,7 +442,7 @@ protected:
      * is found, the method returns <tt>USEARCH_DONE</tt>.
      * <p>
      * The <tt>StringSearch</tt> is adjusted so that its current index 
-     * (as returned by {@link #getOffset()}) is the match position if one was 
+     * (as returned by {@link #getOffset }) is the match position if one was 
      * found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the <tt>StringSearch</tt> will be adjusted to the index USEARCH_DONE.
@@ -466,7 +466,7 @@ protected:
      * is found, the method returns <tt>USEARCH_DONE</tt>.
      * <p>
      * The <tt>StringSearch</tt> is adjusted so that its current index 
-     * (as returned by {@link #getOffset() }) is the match position if one was 
+     * (as returned by {@link #getOffset }) is the match position if one was 
      * found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the <tt>StringSearch</tt> will be adjusted to the index USEARCH_DONE.
