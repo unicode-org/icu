@@ -870,18 +870,18 @@ void UnicodeSetTest::copyWithIterator(UnicodeSet& t, const UnicodeSet& s, UBool 
     UnicodeSetIterator it(s);
     if (withRange) {
         while (it.nextRange()) {
-            if (it.codepoint == UnicodeSetIterator::IS_STRING) {
-                t.add(*it.string);
+            if (it.isString()) {
+                t.add(it.getString());
             } else {
-                t.add(it.codepoint, it.codepointEnd);
+                t.add(it.getCodepoint(), it.getCodepointEnd());
             }
         }
     } else {
         while (it.next()) {
-            if (it.codepoint == UnicodeSetIterator::IS_STRING) {
-                t.add(*it.string);
+            if (it.isString()) {
+                t.add(it.getString());
             } else {
-                t.add(it.codepoint);
+                t.add(it.getCodepoint());
             }
         }
     }
