@@ -7,6 +7,360 @@
 
 ja {
     Version { "2.0" }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u5348\u524d",
+                "\u5348\u5f8c",
+            }
+            DateTimePatterns{
+                "H'\u6642'mm'\u5206'ss'\u79d2'z",
+                "H:mm:ss:z",
+                "H:mm:ss",
+                "H:mm",
+                "yyyy'\u5e74'M'\u6708'd'\u65e5'EEEE",
+                "yyyy'\u5e74'M'\u6708'd'\u65e5'",
+                "yyyy/MM/dd",
+                "yy/MM/dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    narrow{
+                        "\u65e5",
+                        "\u6708",
+                        "\u706b",
+                        "\u6c34",
+                        "\u6728",
+                        "\u91d1",
+                        "\u571f",
+                    }
+                   abbreviated{
+                        "\u65e5",
+                        "\u6708",
+                        "\u706b",
+                        "\u6c34",
+                        "\u6728",
+                        "\u91d1",
+                        "\u571f",
+                    }
+                    wide{
+                        "\u65e5\u66dc\u65e5",
+                        "\u6708\u66dc\u65e5",
+                        "\u706b\u66dc\u65e5",
+                        "\u6c34\u66dc\u65e5",
+                        "\u6728\u66dc\u65e5",
+                        "\u91d1\u66dc\u65e5",
+                        "\u571f\u66dc\u65e5",
+                    }
+                }
+            }
+            eras{
+                "\u7d00\u5143\u524d",
+                "\u897f\u66a6",
+            }
+            monthNames{
+                format{
+                    wide{
+                        "1\u6708",
+                        "2\u6708",
+                        "3\u6708",
+                        "4\u6708",
+                        "5\u6708",
+                        "6\u6708",
+                        "7\u6708",
+                        "8\u6708",
+                        "9\u6708",
+                        "10\u6708",
+                        "11\u6708",
+                        "12\u6708",
+                    }
+                    // Below are same as root
+//                    abbreviated{
+//                        "1",
+//                        "2",
+//                        "3",
+//                        "4",
+//                        "5",
+//                        "6",
+//                        "7",
+//                        "8",
+//                        "9",
+//                        "10",
+//                        "11",
+//                        "12",
+//                    }
+//                    narrow{
+//                        "1",
+//                        "2",
+//                        "3",
+//                        "4",
+//                        "5",
+//                        "6",
+//                        "7",
+//                        "8",
+//                        "9",
+//                        "10",
+//                        "11",
+//                        "12",
+//                    }
+              }
+            }
+        }
+        japanese{
+            eras{
+                // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
+
+                "\u5927\u5316",             //  645 Taika
+                "\u767d\u96c9",             //  650 Hakuchi
+                "\u767d\u9cef",             //  672 Hakuho
+                "\u6731\u9ce5",             //  686 Shucho
+                "\u5927\u5b9d",             //  701 Taiho
+                "\u6176\u96f2",             //  704 Keiun
+                "\u548c\u9285",             //  708 Wado
+                "\u970a\u4e80",             //  715 Reiki
+                "\u990a\u8001",             //  717 Yoro
+                "\u795e\u4e80",             //  724 Jinki
+                "\u5929\u5e73",             //  729 Tempyo
+                "\u5929\u5e73\u611f\u5b9d", //  749 Tempyo-kampo
+                "\u5929\u5e73\u52dd\u5b9d", //  749 Tempyo-shoho
+                "\u5929\u5e73\u5b9d\u5b57", //  757 Tempyo-hoji
+                "\u5929\u5e73\u795e\u8b77", //  765 Tempho-jingo
+                "\u795e\u8b77\u666f\u96f2", //  767 Jingo-keiun
+                "\u5b9d\u4e80",             //  770 Hoki
+                "\u5929\u5fdc",             //  781 Ten-o
+                "\u5ef6\u66a6",             //  782 Enryaku
+                "\u5927\u540c",             //  806 Daido
+                "\u5f18\u4ec1",             //  810 Konin
+                "\u5929\u9577",             //  824 Tencho
+                "\u627f\u548c",             //  834 Showa
+                "\u5609\u7965",             //  848 Kajo
+                "\u4ec1\u5bff",             //  851 Ninju
+                "\u6589\u8861",             //  854 Saiko
+                "\u5929\u5b89",             //  857 Tennan
+                "\u8c9e\u89b3",             //  859 Jogan
+                "\u5143\u6176",             //  877 Genkei
+                "\u4ec1\u548c",             //  885 Ninna
+                "\u5bdb\u5e73",             //  889 Kampyo
+                "\u660c\u6cf0",             //  898 Shotai
+                "\u5ef6\u559c",             //  901 Engi
+                "\u5ef6\u9577",             //  923 Encho
+                "\u627f\u5e73",             //  931 Shohei
+                "\u5929\u6176",             //  938 Tengyo
+                "\u5929\u66a6",             //  947 Tenryaku
+                "\u5929\u5fb3",             //  957 Tentoku
+                "\u5fdc\u548c",             //  961 Owa
+                "\u5eb7\u4fdd",             //  964 Koho
+                "\u5b89\u548c",             //  968 Anna
+                "\u5929\u7984",             //  970 Tenroku
+                "\u5929\u5ef6",             //  973 Ten-en
+                "\u8c9e\u5143",             //  976 Jogen
+                "\u5929\u5143",             //  978 Tengen
+                "\u6c38\u89b3",             //  983 Eikan
+                "\u5bdb\u548c",             //  985 Kanna
+                "\u6c38\u5ef6",             //  987 Ei-en
+                "\u6c38\u795a",             //  989 Eiso
+                "\u6b63\u66a6",             //  990 Shoryaku
+                "\u9577\u5fb3",             //  995 Chotoku
+                "\u9577\u4fdd",             //  999 Choho
+                "\u5bdb\u5f18",             // 1004 Kanko
+                "\u9577\u548c",             // 1012 Chowa
+                "\u5bdb\u4ec1",             // 1017 Kannin
+                "\u6cbb\u5b89",             // 1021 Jian
+                "\u4e07\u5bff",             // 1024 Manju
+                "\u9577\u5143",             // 1028 Chogen
+                "\u9577\u66a6",             // 1037 Choryaku
+                "\u9577\u4e45",             // 1040 Chokyu
+                "\u5bdb\u5fb3",             // 1044 Kantoku
+                "\u6c38\u627f",             // 1046 Eisho
+                "\u5929\u559c",             // 1053 Tengi
+                "\u5eb7\u5e73",             // 1058 Kohei
+                "\u6cbb\u66a6",             // 1065 Jiryaku
+                "\u5ef6\u4e45",             // 1069 Enkyu
+                "\u627f\u4fdd",             // 1074 Shoho
+                "\u627f\u66a6",             // 1077 Shoryaku
+                "\u6c38\u4fdd",             // 1081 Eiho
+                "\u5fdc\u5fb3",             // 1084 Otoku
+                "\u5bdb\u6cbb",             // 1087 Kanji
+                "\u5609\u4fdd",             // 1094 Kaho
+                "\u6c38\u9577",             // 1096 Eicho
+                "\u627f\u5fb3",             // 1097 Shotoku
+                "\u5eb7\u548c",             // 1099 Kowa
+                "\u9577\u6cbb",             // 1104 Choji
+                "\u5609\u627f",             // 1106 Kasho
+                "\u5929\u4ec1",             // 1108 Tennin
+                "\u5929\u6c38",             // 1110 Ten-ei
+                "\u6c38\u4e45",             // 1113 Eikyu
+                "\u5143\u6c38",             // 1118 Gen-ei
+                "\u4fdd\u5b89",             // 1120 Hoan
+                "\u5929\u6cbb",             // 1124 Tenji
+                "\u5927\u6cbb",             // 1126 Daiji
+                "\u5929\u627f",             // 1131 Tensho
+                "\u9577\u627f",             // 1132 Chosho
+                "\u4fdd\u5ef6",             // 1135 Hoen
+                "\u6c38\u6cbb",             // 1141 Eiji
+                "\u5eb7\u6cbb",             // 1142 Koji
+                "\u5929\u990a",             // 1144 Tenyo
+                "\u4e45\u5b89",             // 1145 Kyuan
+                "\u4ec1\u5e73",             // 1151 Ninpei
+                "\u4e45\u5bff",             // 1154 Kyuju
+                "\u4fdd\u5143",             // 1156 Hogen
+                "\u5e73\u6cbb",             // 1159 Heiji
+                "\u6c38\u66a6",             // 1160 Eiryaku
+                "\u5fdc\u4fdd",             // 1161 Oho
+                "\u9577\u5bdb",             // 1163 Chokan
+                "\u6c38\u4e07",             // 1165 Eiman
+                "\u4ec1\u5b89",             // 1166 Nin-an
+                "\u5609\u5fdc",             // 1169 Kao
+                "\u627f\u5b89",             // 1171 Shoan
+                "\u5b89\u5143",             // 1175 Angen
+                "\u6cbb\u627f",             // 1177 Jisho
+                "\u990a\u548c",             // 1181 Yowa
+                "\u5bff\u6c38",             // 1182 Juei
+                "\u5143\u66a6",             // 1184 Genryuku
+                "\u6587\u6cbb",             // 1185 Bunji
+                "\u5efa\u4e45",             // 1190 Kenkyu
+                "\u6b63\u6cbb",             // 1199 Shoji
+                "\u5efa\u4ec1",             // 1201 Kennin
+                "\u5143\u4e45",             // 1204 Genkyu
+                "\u5efa\u6c38",             // 1206 Ken-ei
+                "\u627f\u5143",             // 1207 Shogen
+                "\u5efa\u66a6",             // 1211 Kenryaku
+                "\u5efa\u4fdd",             // 1213 Kenpo
+                "\u627f\u4e45",             // 1219 Shokyu
+                "\u8c9e\u5fdc",             // 1222 Joo
+                "\u5143\u4ec1",             // 1224 Gennin
+                "\u5609\u7984",             // 1225 Karoku
+                "\u5b89\u8c9e",             // 1227 Antei
+                "\u5bdb\u559c",             // 1229 Kanki
+                "\u8c9e\u6c38",             // 1232 Joei
+                "\u5929\u798f",             // 1233 Tempuku
+                "\u6587\u66a6",             // 1234 Bunryaku
+                "\u5609\u798e",             // 1235 Katei
+                "\u66a6\u4ec1",             // 1238 Ryakunin
+                "\u5ef6\u5fdc",             // 1239 En-o
+                "\u4ec1\u6cbb",             // 1240 Ninji
+                "\u5bdb\u5143",             // 1243 Kangen
+                "\u5b9d\u6cbb",             // 1247 Hoji
+                "\u5efa\u9577",             // 1249 Kencho
+                "\u5eb7\u5143",             // 1256 Kogen
+                "\u6b63\u5609",             // 1257 Shoka
+                "\u6b63\u5143",             // 1259 Shogen
+                "\u6587\u5fdc",             // 1260 Bun-o
+                "\u5f18\u9577",             // 1261 Kocho
+                "\u6587\u6c38",             // 1264 Bun-ei
+                "\u5efa\u6cbb",             // 1275 Kenji
+                "\u5f18\u5b89",             // 1278 Koan
+                "\u6b63\u5fdc",             // 1288 Shoo
+                "\u6c38\u4ec1",             // 1293 Einin
+                "\u6b63\u5b89",             // 1299 Shoan
+                "\u4e7e\u5143",             // 1302 Kengen
+                "\u5609\u5143",             // 1303 Kagen
+                "\u5fb3\u6cbb",             // 1306 Tokuji
+                "\u5ef6\u6176",             // 1308 Enkei
+                "\u5fdc\u9577",             // 1311 Ocho
+                "\u6b63\u548c",             // 1312 Showa
+                "\u6587\u4fdd",             // 1317 Bunpo
+                "\u5143\u5fdc",             // 1319 Geno
+                "\u5143\u4ea8",             // 1321 Genkyo
+                "\u6b63\u4e2d",             // 1324 Shochu
+                "\u5609\u66a6",             // 1326 Kareki
+                "\u5143\u5fb3",             // 1329 Gentoku
+                "\u5143\u5f18",             // 1331 Genko
+                "\u5efa\u6b66",             // 1334 Kemmu
+                "\u5ef6\u5143",             // 1336 Engen
+                "\u8208\u56fd",             // 1340 Kokoku
+                "\u6b63\u5e73",             // 1346 Shohei
+                "\u5efa\u5fb3",             // 1370 Kentoku
+                "\u6587\u4e2d",             // 1372 Bunchu
+                "\u5929\u6388",             // 1375 Tenju
+                "\u5eb7\u66a6",             // 1379 Koryaku
+                "\u5f18\u548c",             // 1381 Kowa
+                "\u5143\u4e2d",             // 1384 Genchu
+                "\u81f3\u5fb3",             // 1384 Meitoku
+                "\u5609\u6176",             // 1387 Kakei
+                "\u5eb7\u5fdc",             // 1389 Koo
+                "\u660e\u5fb3",             // 1390 Meitoku
+                "\u5fdc\u6c38",             // 1394 Oei
+                "\u6b63\u9577",             // 1428 Shocho
+                "\u6c38\u4eab",             // 1429 Eikyo
+                "\u5609\u5409",             // 1441 Kakitsu
+                "\u6587\u5b89",             // 1444 Bun-an
+                "\u5b9d\u5fb3",             // 1449 Hotoku
+                "\u4eab\u5fb3",             // 1452 Kyotoku
+                "\u5eb7\u6b63",             // 1455 Kosho
+                "\u9577\u7984",             // 1457 Choroku
+                "\u5bdb\u6b63",             // 1460 Kansho
+                "\u6587\u6b63",             // 1466 Bunsho
+                "\u5fdc\u4ec1",             // 1467 Onin
+                "\u6587\u660e",             // 1469 Bunmei
+                "\u9577\u4eab",             // 1487 Chokyo
+                "\u5ef6\u5fb3",             // 1489 Entoku
+                "\u660e\u5fdc",             // 1492 Meio
+                "\u6587\u4e80",             // 1501 Bunki
+                "\u6c38\u6b63",             // 1504 Eisho
+                "\u5927\u6c38",             // 1521 Taiei
+                "\u4eab\u7984",             // 1528 Kyoroku
+                "\u5929\u6587",             // 1532 Tenmon
+                "\u5f18\u6cbb",             // 1555 Koji
+                "\u6c38\u7984",             // 1558 Eiroku
+                "\u5143\u4e80",             // 1570 Genki
+                "\u5929\u6b63",             // 1573 Tensho
+                "\u6587\u7984",             // 1592 Bunroku
+                "\u6176\u9577",             // 1596 Keicho
+                "\u5143\u548c",             // 1615 Genwa
+                "\u5bdb\u6c38",             // 1624 Kan-ei
+                "\u6b63\u4fdd",             // 1644 Shoho
+                "\u6176\u5b89",             // 1648 Keian
+                "\u627f\u5fdc",             // 1652 Shoo
+                "\u660e\u66a6",             // 1655 Meiryaku
+                "\u4e07\u6cbb",             // 1658 Manji
+                "\u5bdb\u6587",             // 1661 Kanbun
+                "\u5ef6\u5b9d",             // 1673 Enpo
+                "\u5929\u548c",             // 1681 Tenwa
+                "\u8c9e\u4eab",             // 1684 Jokyo
+                "\u5143\u7984",             // 1688 Genroku
+                "\u5b9d\u6c38",             // 1704 Hoei
+                "\u6b63\u5fb3",             // 1711 Shotoku
+                "\u4eab\u4fdd",             // 1716 Kyoho
+                "\u5143\u6587",             // 1736 Genbun
+                "\u5bdb\u4fdd",             // 1741 Kanpo
+                "\u5ef6\u4eab",             // 1744 Enkyo
+                "\u5bdb\u5ef6",             // 1748 Kan-en
+                "\u5b9d\u66a6",             // 1751 Horyaku
+                "\u660e\u548c",             // 1764 Meiwa
+                "\u5b89\u6c38",             // 1772 An-ei
+                "\u5929\u660e",             // 1781 Tenmei
+                "\u5bdb\u653f",             // 1789 Kansei
+                "\u4eab\u548c",             // 1801 Kyowa
+                "\u6587\u5316",             // 1804 Bunka
+                "\u6587\u653f",             // 1818 Bunsei
+                "\u5929\u4fdd",             // 1830 Tenpo
+                "\u5f18\u5316",             // 1844 Koka
+                "\u5609\u6c38",             // 1848 Kaei
+                "\u5b89\u653f",             // 1854 Ansei
+                "\u4e07\u5ef6",             // 1860 Man-en
+                "\u6587\u4e45",             // 1861 Bunkyu
+                "\u5143\u6cbb",             // 1864 Genji
+                "\u6176\u5fdc",             // 1865 Keio
+                "\u660e\u6cbb",             // 1868 Meiji
+                "\u5927\u6b63",             // 1912 Taisho
+                "\u662d\u548c",             // 1926 Showa
+                "\u5e73\u6210"             // 1989 Heisei
+            }
+            DateTimePatterns {
+                "H'\u6642'mm'\u5206'ss'\u79d2'z",
+                "H:mm:ss:z",
+                "H:mm:ss",
+                "H:mm",
+                "Gy'\u5e74'M'\u6708'd'\u65e5'EEEE",
+                "Gy'\u5e74'M'\u6708'd'\u65e5'",
+                "G yy/MM/dd",
+                "G yy/MM/dd",
+                "{1} {0}",
+            }
+        }
+    }
     Countries { 
         AD { "\u30a2\u30f3\u30c9\u30e9" }
         AE { "\u30a2\u30e9\u30d6\u9996\u9577\u56fd\u9023\u90a6" }
@@ -500,240 +854,6 @@ ja {
 //        "\ufffd",
 //    }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
-    zoneStrings { 
-         {
-            "PST",
-            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
-            "PST",
-            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
-            "PDT",
-            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
-        }
-        {
-            "America/Los_Angeles",
-            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
-            "PST",
-            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
-            "PDT",
-            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
-        }
-        {
-            "MST",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u5c71\u5730\u590f\u6642\u9593",
-            "MDT",
-            "\u30c7\u30f3\u30d0\u30fc",
-        }
-        {
-            "America/Denver",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u5c71\u5730\u590f\u6642\u9593",
-            "MDT",
-            "\u30c7\u30f3\u30d0\u30fc",
-        }
-        {
-            "PNT",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
-        }
-        {
-            "America/Phoenix",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u5c71\u5730\u6a19\u6e96\u6642",
-            "MST",
-            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
-        }
-        {
-            "CST",
-            "\u4e2d\u90e8\u6a19\u6e96\u6642",
-            "CST",
-            "\u4e2d\u90e8\u590f\u6642\u9593",
-            "CDT",
-            "\u30b7\u30ab\u30b4",
-        }
-        {
-            "America/Chicago",
-            "\u4e2d\u90e8\u6a19\u6e96\u6642",
-            "CST",
-            "\u4e2d\u90e8\u590f\u6642\u9593",
-            "CDT",
-            "\u30b7\u30ab\u30b4",
-        }
-        {
-            "EST",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u6771\u90e8\u590f\u6642\u9593",
-            "EDT",
-            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
-        }
-        {
-            "America/New_York",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u6771\u90e8\u590f\u6642\u9593",
-            "EDT",
-            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
-        }
-        {
-            "IET",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
-        }
-        {
-            "America/Indianapolis",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u6771\u90e8\u6a19\u6e96\u6642",
-            "EST",
-            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
-        }
-        {
-            "HST",
-            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
-            "HST",
-            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
-            "HST",
-            "\u30db\u30ce\u30eb\u30eb",
-        }
-        {
-            "Pacific/Honolulu",
-            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
-            "HST",
-            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
-            "HST",
-            "\u30db\u30ce\u30eb\u30eb",
-        }
-        {
-            "AST",
-            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
-            "AST",
-            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
-            "ADT",
-            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8"
-        }
-        {
-            "America/Anchorage",
-            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
-            "AST",
-            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
-            "ADT",
-            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8",
-        }
-        {
-            "America/Halifax",
-            "\u5927\u897f\u6d0b\u6a19\u6e96\u6642",
-            "AST",
-            "\u5927\u897f\u6d0b\u590f\u6642\u9593",
-            "ADT",
-            "\u30cf\u30ea\u30d5\u30a1\u30af\u30b9"
-        }
-        {
-            "CNT",
-            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
-            "CNT",
-            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
-            "CDT",
-            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
-        }
-        {
-            "America/St_Johns",
-            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
-            "CNT",
-            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
-            "CDT",
-            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
-        }
-        {
-            "ECT",
-            "\u4e2d\u6b27\u6a19\u6e96\u6642",
-            "CET",
-            "\u4e2d\u6b27\u590f\u6642\u9593",
-            "CEST",
-            "\u30d1\u30ea",
-        }
-        {
-            "Europe/Paris",
-            "\u4e2d\u6b27\u6a19\u6e96\u6642",
-            "CET",
-            "\u4e2d\u6b27\u590f\u6642\u9593",
-            "CEST",
-            "\u30d1\u30ea",
-        }
-        {
-            "GMT",
-            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
-            "GMT",
-            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
-            "GMT",
-            "\u30ed\u30f3\u30c9\u30f3",
-        }
-        {
-            "Africa/Casablanca",
-            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
-            "GMT",
-            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
-            "GMT",
-            "\u30ab\u30b5\u30d6\u30e9\u30f3\u30ab",
-        }
-        {
-            "Asia/Jerusalem",
-            "\u30a4\u30b9\u30e9\u30a8\u30eb\u6a19\u6e96\u6642",
-            "IST",
-            "\u30a4\u30b9\u30e9\u30a8\u30eb\u590f\u6642\u9593",
-            "IDT",
-            "\u30a8\u30eb\u30b5\u30ec\u30e0",
-        }
-        {
-            "JST",
-            "\u65e5\u672c\u6a19\u6e96\u6642",
-            "JST",
-            "\u65e5\u672c\u6a19\u6e96\u6642",
-            "JST",
-            "\u6771\u4eac",
-        }
-        {
-            "Asia/Tokyo",
-            "\u65e5\u672c\u6a19\u6e96\u6642",
-            "JST",
-            "\u65e5\u672c\u6a19\u6e96\u6642",
-            "JST",
-            "\u6771\u4eac",
-        }
-        {
-            "Europe/Bucharest",
-            "\u6771\u6b27\u6a19\u6e96\u6642",
-            "EET",
-            "\u6771\u6b27\u590f\u6642\u9593",
-            "EEST",
-            "\u30d6\u30ab\u30ec\u30b9\u30c8",
-        }
-        {
-            "CTT",
-            "\u4e2d\u56fd\u6a19\u6e96\u6642",
-            "CTT",
-            "\u4e2d\u56fd\u6a19\u6e96\u6642",
-            "CDT",
-            "\u4e0a\u6d77",
-        }
-        {
-            "Asia/Shanghai",
-            "\u4e2d\u56fd\u6a19\u6e96\u6642",
-            "CTT",
-            "\u4e2d\u56fd\u6a19\u6e96\u6642",
-            "CDT",
-            "\u4e0a\u6d77",
-        }
-    }
     LocaleScript{ "Kana","Hira", "Hani" }
 
     ExemplarCharacters{ 
@@ -1099,7 +1219,7 @@ ja {
         EGP { "EGP", "\u30a8\u30b8\u30d7\u30c8 \u30dd\u30f3\u30c9" } // Egyptian Pound
         ERN { "ERN", "\u30a8\u30ea\u30c8\u30ea\u30a2 \u30ca\u30af\u30d5\u30a1" } // 1997-
         ESP { "ESP", "\u30b9\u30da\u30a4\u30f3 \u30da\u30bb\u30bf" } // 01/01/1859-02/28/2002
-        ETB { "ETB",  "\u30a8\u30c1\u30aa\u30d4\u30a2 \u30d6\u30eb" } // 09/15/1976-
+        ETB { "ETB", "\u30a8\u30c1\u30aa\u30d4\u30a2 \u30d6\u30eb" } // 09/15/1976-
         ETD { "ETD", "\u30a8\u30c1\u30aa\u30d4\u30a2 \u30c9\u30eb" } // 07/23/1945-09/15/1976
         EUR { "\u20ac", "\u30e6\u30fc\u30ed" } // Euro
         FIM { "FIM", "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9 \u30de\u30eb\u30ab" } // 1/1/1963-2002
@@ -1111,7 +1231,7 @@ ja {
         FRF { "FRF", "\u30d5\u30e9\u30f3\u30b9 \u30d5\u30e9\u30f3" } // 01/01/1960-2002
         FRG { "FRG", "\u30d5\u30e9\u30f3\u30b9 \u30d5\u30e9\u30f3 (Franc Germinal/Franc Poincare)" } // 04/07/1803-12/31/1959
         GAF { "GAF", "\u30ac\u30dc\u30f3 CFA \u30d5\u30e9\u30f3"      } // 04/01/1973-1992
-        GBP { "\u00a3",  "\u82f1\u56fd\u30dd\u30f3\u30c9" } // 07/27/1694-
+        GBP { "\u00a3", "\u82f1\u56fd\u30dd\u30f3\u30c9" } // 07/27/1694-
         GEK { "GEK", "\u30b0\u30eb\u30b8\u30a2 \u30af\u30fc\u30dd\u30f3 \u30e9\u30ea" } // 04/05/1993-09/23/1995
         GEL { "GEL", "\u30b0\u30eb\u30b8\u30a2 \u30e9\u30ea" } // 09/23/1995-
         GHC { "GHC", "\u30ac\u30fc\u30ca \u30bb\u30c7\u30a3" } // 03/09/1979-
@@ -1323,7 +1443,7 @@ ja {
         VDP { "VDP", "\u5317\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3 (VDP)" } // 11/3/1946-1953
         VEB { "VEB", "\u30d9\u30cd\u30ba\u30a8\u30e9 \u30dc\u30ea\u30d0\u30eb" } // Bolivar
         VGD { "VGD", "\u82f1\u9818\u30d0\u30fc\u30b8\u30f3\u8af8\u5cf6 \u30c9\u30eb" } // 1973-
-        VND { "\u0111",  "\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3"  } // 09/14/1985-
+        VND { "\u0111", "\u30d9\u30c8\u30ca\u30e0 \u30c9\u30f3"  } // 09/14/1985-
         VNN { "VNN", "\u30d9\u30c8\u30ca\u30e0 \u65b0\u30c9\u30f3" } // 05/03/1978-09/14/1985
         VNR { "VNR", "\u30d9\u30c8\u30ca\u30e0\u5171\u548c\u56fd \u30c9\u30f3" } // 12/29/1954-9/22/1975
         VNS { "VNS", "\u30d9\u30c8\u30ca\u30e0\u81ea\u6cbb\u533a \u30c9\u30f3" } // 09/22/1975-05/03/1978
@@ -1351,7 +1471,7 @@ ja {
         XOF { "XOF", "CFA \u30d5\u30e9\u30f3 BCEAO" } // 12/04/1958-
         XPF { "XPF", "CFP \u30d5\u30e9\u30f3" } // 12/26/1945-
         //XPS { "XPS", "\u9280\u30dd\u30f3\u30c9" } // 07/27/1694-
-        XSS { "XSS", "\u30b7\u30ea\u30f3\u30b0 \u30dd\u30f3\u30c9"    } // 07/27/1694-
+        //XSS { "XSS", "\u30b7\u30ea\u30f3\u30b0 \u30dd\u30f3\u30c9"    } // 07/27/1694-
         XTR { "XTR", "\u30b3\u30e1\u30b3\u30f3\u632f\u66ff\u30eb\u30fc\u30d6\u30eb" } // 1960-1992
         YDD { "YDD", "\u30a4\u30a8\u30e1\u30f3 \u30c7\u30a3\u30ca\u30fc\u30eb"         } // 4/1/1965-05/22/1990
         YEI { "YEI", "\u30a4\u30a8\u30e1\u30f3 \u30ea\u30a2\u30eb (YEI)"   } // 1904-02/1964
@@ -1399,358 +1519,238 @@ ja {
         //PREEURO { "\u65e7\u901a\u8ca8" }
         REVISED { "\u6539\u8a02\u7248" }
     }
-    calendar{
-        gregorian{
-            AmPmMarkers{
-                "\u5348\u524d",
-                "\u5348\u5f8c",
-            }
-            DateTimePatterns{
-                "H'\u6642'mm'\u5206'ss'\u79d2'z",
-                "H:mm:ss:z",
-                "H:mm:ss",
-                "H:mm",
-                "yyyy'\u5e74'M'\u6708'd'\u65e5'EEEE",
-                "yyyy'\u5e74'M'\u6708'd'\u65e5'",
-                "yyyy/MM/dd",
-                "yy/MM/dd",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    narrow{
-                        "\u65e5",
-                        "\u6708",
-                        "\u706b",
-                        "\u6c34",
-                        "\u6728",
-                        "\u91d1",
-                        "\u571f",
-                    }
-                   abbreviated{
-                        "\u65e5",
-                        "\u6708",
-                        "\u706b",
-                        "\u6c34",
-                        "\u6728",
-                        "\u91d1",
-                        "\u571f",
-                    }
-                    wide{
-                        "\u65e5\u66dc\u65e5",
-                        "\u6708\u66dc\u65e5",
-                        "\u706b\u66dc\u65e5",
-                        "\u6c34\u66dc\u65e5",
-                        "\u6728\u66dc\u65e5",
-                        "\u91d1\u66dc\u65e5",
-                        "\u571f\u66dc\u65e5",
-                    }
-                }
-            }
-            eras{
-                "\u7d00\u5143\u524d",
-                "\u897f\u66a6",
-            }
-            monthNames{
-                format{
-                    wide{
-                        "1\u6708",
-                        "2\u6708",
-                        "3\u6708",
-                        "4\u6708",
-                        "5\u6708",
-                        "6\u6708",
-                        "7\u6708",
-                        "8\u6708",
-                        "9\u6708",
-                        "10\u6708",
-                        "11\u6708",
-                        "12\u6708",
-                    }
-                    // Below are same as root
-//                    abbreviated{
-//                        "1",
-//                        "2",
-//                        "3",
-//                        "4",
-//                        "5",
-//                        "6",
-//                        "7",
-//                        "8",
-//                        "9",
-//                        "10",
-//                        "11",
-//                        "12",
-//                    }
-//                    narrow{
-//                        "1",
-//                        "2",
-//                        "3",
-//                        "4",
-//                        "5",
-//                        "6",
-//                        "7",
-//                        "8",
-//                        "9",
-//                        "10",
-//                        "11",
-//                        "12",
-//                    }
-              }
-            }
+    zoneStrings { 
+         {
+            "PST",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
+            "PST",
+            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
+            "PDT",
+            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
         }
-        japanese{
-            eras{
-                // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
-
-                "\u5927\u5316",             //  645 Taika
-                "\u767d\u96c9",             //  650 Hakuchi
-                "\u767d\u9cef",             //  672 Hakuho
-                "\u6731\u9ce5",             //  686 Shucho
-                "\u5927\u5b9d",             //  701 Taiho
-                "\u6176\u96f2",             //  704 Keiun
-                "\u548c\u9285",             //  708 Wado
-                "\u970a\u4e80",             //  715 Reiki
-                "\u990a\u8001",             //  717 Yoro
-                "\u795e\u4e80",             //  724 Jinki
-                "\u5929\u5e73",             //  729 Tempyo
-                "\u5929\u5e73\u611f\u5b9d", //  749 Tempyo-kampo
-                "\u5929\u5e73\u52dd\u5b9d", //  749 Tempyo-shoho
-                "\u5929\u5e73\u5b9d\u5b57", //  757 Tempyo-hoji
-                "\u5929\u5e73\u795e\u8b77", //  765 Tempho-jingo
-                "\u795e\u8b77\u666f\u96f2", //  767 Jingo-keiun
-                "\u5b9d\u4e80",             //  770 Hoki
-                "\u5929\u5fdc",             //  781 Ten-o
-                "\u5ef6\u66a6",             //  782 Enryaku
-                "\u5927\u540c",             //  806 Daido
-                "\u5f18\u4ec1",             //  810 Konin
-                "\u5929\u9577",             //  824 Tencho
-                "\u627f\u548c",             //  834 Showa
-                "\u5609\u7965",             //  848 Kajo
-                "\u4ec1\u5bff",             //  851 Ninju
-                "\u6589\u8861",             //  854 Saiko
-                "\u5929\u5b89",             //  857 Tennan
-                "\u8c9e\u89b3",             //  859 Jogan
-                "\u5143\u6176",             //  877 Genkei
-                "\u4ec1\u548c",             //  885 Ninna
-                "\u5bdb\u5e73",             //  889 Kampyo
-                "\u660c\u6cf0",             //  898 Shotai
-                "\u5ef6\u559c",             //  901 Engi
-                "\u5ef6\u9577",             //  923 Encho
-                "\u627f\u5e73",             //  931 Shohei
-                "\u5929\u6176",             //  938 Tengyo
-                "\u5929\u66a6",             //  947 Tenryaku
-                "\u5929\u5fb3",             //  957 Tentoku
-                "\u5fdc\u548c",             //  961 Owa
-                "\u5eb7\u4fdd",             //  964 Koho
-                "\u5b89\u548c",             //  968 Anna
-                "\u5929\u7984",             //  970 Tenroku
-                "\u5929\u5ef6",             //  973 Ten-en
-                "\u8c9e\u5143",             //  976 Jogen
-                "\u5929\u5143",             //  978 Tengen
-                "\u6c38\u89b3",             //  983 Eikan
-                "\u5bdb\u548c",             //  985 Kanna
-                "\u6c38\u5ef6",             //  987 Ei-en
-                "\u6c38\u795a",             //  989 Eiso
-                "\u6b63\u66a6",             //  990 Shoryaku
-                "\u9577\u5fb3",             //  995 Chotoku
-                "\u9577\u4fdd",             //  999 Choho
-                "\u5bdb\u5f18",             // 1004 Kanko
-                "\u9577\u548c",             // 1012 Chowa
-                "\u5bdb\u4ec1",             // 1017 Kannin
-                "\u6cbb\u5b89",             // 1021 Jian
-                "\u4e07\u5bff",             // 1024 Manju
-                "\u9577\u5143",             // 1028 Chogen
-                "\u9577\u66a6",             // 1037 Choryaku
-                "\u9577\u4e45",             // 1040 Chokyu
-                "\u5bdb\u5fb3",             // 1044 Kantoku
-                "\u6c38\u627f",             // 1046 Eisho
-                "\u5929\u559c",             // 1053 Tengi
-                "\u5eb7\u5e73",             // 1058 Kohei
-                "\u6cbb\u66a6",             // 1065 Jiryaku
-                "\u5ef6\u4e45",             // 1069 Enkyu
-                "\u627f\u4fdd",             // 1074 Shoho
-                "\u627f\u66a6",             // 1077 Shoryaku
-                "\u6c38\u4fdd",             // 1081 Eiho
-                "\u5fdc\u5fb3",             // 1084 Otoku
-                "\u5bdb\u6cbb",             // 1087 Kanji
-                "\u5609\u4fdd",             // 1094 Kaho
-                "\u6c38\u9577",             // 1096 Eicho
-                "\u627f\u5fb3",             // 1097 Shotoku
-                "\u5eb7\u548c",             // 1099 Kowa
-                "\u9577\u6cbb",             // 1104 Choji
-                "\u5609\u627f",             // 1106 Kasho
-                "\u5929\u4ec1",             // 1108 Tennin
-                "\u5929\u6c38",             // 1110 Ten-ei
-                "\u6c38\u4e45",             // 1113 Eikyu
-                "\u5143\u6c38",             // 1118 Gen-ei
-                "\u4fdd\u5b89",             // 1120 Hoan
-                "\u5929\u6cbb",             // 1124 Tenji
-                "\u5927\u6cbb",             // 1126 Daiji
-                "\u5929\u627f",             // 1131 Tensho
-                "\u9577\u627f",             // 1132 Chosho
-                "\u4fdd\u5ef6",             // 1135 Hoen
-                "\u6c38\u6cbb",             // 1141 Eiji
-                "\u5eb7\u6cbb",             // 1142 Koji
-                "\u5929\u990a",             // 1144 Tenyo
-                "\u4e45\u5b89",             // 1145 Kyuan
-                "\u4ec1\u5e73",             // 1151 Ninpei
-                "\u4e45\u5bff",             // 1154 Kyuju
-                "\u4fdd\u5143",             // 1156 Hogen
-                "\u5e73\u6cbb",             // 1159 Heiji
-                "\u6c38\u66a6",             // 1160 Eiryaku
-                "\u5fdc\u4fdd",             // 1161 Oho
-                "\u9577\u5bdb",             // 1163 Chokan
-                "\u6c38\u4e07",             // 1165 Eiman
-                "\u4ec1\u5b89",             // 1166 Nin-an
-                "\u5609\u5fdc",             // 1169 Kao
-                "\u627f\u5b89",             // 1171 Shoan
-                "\u5b89\u5143",             // 1175 Angen
-                "\u6cbb\u627f",             // 1177 Jisho
-                "\u990a\u548c",             // 1181 Yowa
-                "\u5bff\u6c38",             // 1182 Juei
-                "\u5143\u66a6",             // 1184 Genryuku
-                "\u6587\u6cbb",             // 1185 Bunji
-                "\u5efa\u4e45",             // 1190 Kenkyu
-                "\u6b63\u6cbb",             // 1199 Shoji
-                "\u5efa\u4ec1",             // 1201 Kennin
-                "\u5143\u4e45",             // 1204 Genkyu
-                "\u5efa\u6c38",             // 1206 Ken-ei
-                "\u627f\u5143",             // 1207 Shogen
-                "\u5efa\u66a6",             // 1211 Kenryaku
-                "\u5efa\u4fdd",             // 1213 Kenpo
-                "\u627f\u4e45",             // 1219 Shokyu
-                "\u8c9e\u5fdc",             // 1222 Joo
-                "\u5143\u4ec1",             // 1224 Gennin
-                "\u5609\u7984",             // 1225 Karoku
-                "\u5b89\u8c9e",             // 1227 Antei
-                "\u5bdb\u559c",             // 1229 Kanki
-                "\u8c9e\u6c38",             // 1232 Joei
-                "\u5929\u798f",             // 1233 Tempuku
-                "\u6587\u66a6",             // 1234 Bunryaku
-                "\u5609\u798e",             // 1235 Katei
-                "\u66a6\u4ec1",             // 1238 Ryakunin
-                "\u5ef6\u5fdc",             // 1239 En-o
-                "\u4ec1\u6cbb",             // 1240 Ninji
-                "\u5bdb\u5143",             // 1243 Kangen
-                "\u5b9d\u6cbb",             // 1247 Hoji
-                "\u5efa\u9577",             // 1249 Kencho
-                "\u5eb7\u5143",             // 1256 Kogen
-                "\u6b63\u5609",             // 1257 Shoka
-                "\u6b63\u5143",             // 1259 Shogen
-                "\u6587\u5fdc",             // 1260 Bun-o
-                "\u5f18\u9577",             // 1261 Kocho
-                "\u6587\u6c38",             // 1264 Bun-ei
-                "\u5efa\u6cbb",             // 1275 Kenji
-                "\u5f18\u5b89",             // 1278 Koan
-                "\u6b63\u5fdc",             // 1288 Shoo
-                "\u6c38\u4ec1",             // 1293 Einin
-                "\u6b63\u5b89",             // 1299 Shoan
-                "\u4e7e\u5143",             // 1302 Kengen
-                "\u5609\u5143",             // 1303 Kagen
-                "\u5fb3\u6cbb",             // 1306 Tokuji
-                "\u5ef6\u6176",             // 1308 Enkei
-                "\u5fdc\u9577",             // 1311 Ocho
-                "\u6b63\u548c",             // 1312 Showa
-                "\u6587\u4fdd",             // 1317 Bunpo
-                "\u5143\u5fdc",             // 1319 Geno
-                "\u5143\u4ea8",             // 1321 Genkyo
-                "\u6b63\u4e2d",             // 1324 Shochu
-                "\u5609\u66a6",             // 1326 Kareki
-                "\u5143\u5fb3",             // 1329 Gentoku
-                "\u5143\u5f18",             // 1331 Genko
-                "\u5efa\u6b66",             // 1334 Kemmu
-                "\u5ef6\u5143",             // 1336 Engen
-                "\u8208\u56fd",             // 1340 Kokoku
-                "\u6b63\u5e73",             // 1346 Shohei
-                "\u5efa\u5fb3",             // 1370 Kentoku
-                "\u6587\u4e2d",             // 1372 Bunchu
-                "\u5929\u6388",             // 1375 Tenju
-                "\u5eb7\u66a6",             // 1379 Koryaku
-                "\u5f18\u548c",             // 1381 Kowa
-                "\u5143\u4e2d",             // 1384 Genchu
-                "\u81f3\u5fb3",             // 1384 Meitoku
-                "\u5609\u6176",             // 1387 Kakei
-                "\u5eb7\u5fdc",             // 1389 Koo
-                "\u660e\u5fb3",             // 1390 Meitoku
-                "\u5fdc\u6c38",             // 1394 Oei
-                "\u6b63\u9577",             // 1428 Shocho
-                "\u6c38\u4eab",             // 1429 Eikyo
-                "\u5609\u5409",             // 1441 Kakitsu
-                "\u6587\u5b89",             // 1444 Bun-an
-                "\u5b9d\u5fb3",             // 1449 Hotoku
-                "\u4eab\u5fb3",             // 1452 Kyotoku
-                "\u5eb7\u6b63",             // 1455 Kosho
-                "\u9577\u7984",             // 1457 Choroku
-                "\u5bdb\u6b63",             // 1460 Kansho
-                "\u6587\u6b63",             // 1466 Bunsho
-                "\u5fdc\u4ec1",             // 1467 Onin
-                "\u6587\u660e",             // 1469 Bunmei
-                "\u9577\u4eab",             // 1487 Chokyo
-                "\u5ef6\u5fb3",             // 1489 Entoku
-                "\u660e\u5fdc",             // 1492 Meio
-                "\u6587\u4e80",             // 1501 Bunki
-                "\u6c38\u6b63",             // 1504 Eisho
-                "\u5927\u6c38",             // 1521 Taiei
-                "\u4eab\u7984",             // 1528 Kyoroku
-                "\u5929\u6587",             // 1532 Tenmon
-                "\u5f18\u6cbb",             // 1555 Koji
-                "\u6c38\u7984",             // 1558 Eiroku
-                "\u5143\u4e80",             // 1570 Genki
-                "\u5929\u6b63",             // 1573 Tensho
-                "\u6587\u7984",             // 1592 Bunroku
-                "\u6176\u9577",             // 1596 Keicho
-                "\u5143\u548c",             // 1615 Genwa
-                "\u5bdb\u6c38",             // 1624 Kan-ei
-                "\u6b63\u4fdd",             // 1644 Shoho
-                "\u6176\u5b89",             // 1648 Keian
-                "\u627f\u5fdc",             // 1652 Shoo
-                "\u660e\u66a6",             // 1655 Meiryaku
-                "\u4e07\u6cbb",             // 1658 Manji
-                "\u5bdb\u6587",             // 1661 Kanbun
-                "\u5ef6\u5b9d",             // 1673 Enpo
-                "\u5929\u548c",             // 1681 Tenwa
-                "\u8c9e\u4eab",             // 1684 Jokyo
-                "\u5143\u7984",             // 1688 Genroku
-                "\u5b9d\u6c38",             // 1704 Hoei
-                "\u6b63\u5fb3",             // 1711 Shotoku
-                "\u4eab\u4fdd",             // 1716 Kyoho
-                "\u5143\u6587",             // 1736 Genbun
-                "\u5bdb\u4fdd",             // 1741 Kanpo
-                "\u5ef6\u4eab",             // 1744 Enkyo
-                "\u5bdb\u5ef6",             // 1748 Kan-en
-                "\u5b9d\u66a6",             // 1751 Horyaku
-                "\u660e\u548c",             // 1764 Meiwa
-                "\u5b89\u6c38",             // 1772 An-ei
-                "\u5929\u660e",             // 1781 Tenmei
-                "\u5bdb\u653f",             // 1789 Kansei
-                "\u4eab\u548c",             // 1801 Kyowa
-                "\u6587\u5316",             // 1804 Bunka
-                "\u6587\u653f",             // 1818 Bunsei
-                "\u5929\u4fdd",             // 1830 Tenpo
-                "\u5f18\u5316",             // 1844 Koka
-                "\u5609\u6c38",             // 1848 Kaei
-                "\u5b89\u653f",             // 1854 Ansei
-                "\u4e07\u5ef6",             // 1860 Man-en
-                "\u6587\u4e45",             // 1861 Bunkyu
-                "\u5143\u6cbb",             // 1864 Genji
-                "\u6176\u5fdc",             // 1865 Keio
-                "\u660e\u6cbb",             // 1868 Meiji
-                "\u5927\u6b63",             // 1912 Taisho
-                "\u662d\u548c",             // 1926 Showa
-                "\u5e73\u6210"             // 1989 Heisei
-            }
-            DateTimePatterns {
-                "H'\u6642'mm'\u5206'ss'\u79d2'z",
-                "H:mm:ss:z",
-                "H:mm:ss",
-                "H:mm",
-                "Gy'\u5e74'M'\u6708'd'\u65e5'EEEE",
-                "Gy'\u5e74'M'\u6708'd'\u65e5'",
-                "G yy/MM/dd",
-                "G yy/MM/dd",
-                "{1} {0}",
-            }
+        {
+            "America/Los_Angeles",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642",
+            "PST",
+            "\u592a\u5e73\u6d0b\u590f\u6642\u9593",
+            "PDT",
+            "\u30ed\u30b5\u30f3\u30bc\u30eb\u30b9",
+        }
+        {
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u590f\u6642\u9593",
+            "MDT",
+            "\u30c7\u30f3\u30d0\u30fc",
+        }
+        {
+            "America/Denver",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u590f\u6642\u9593",
+            "MDT",
+            "\u30c7\u30f3\u30d0\u30fc",
+        }
+        {
+            "PNT",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
+        }
+        {
+            "America/Phoenix",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u5c71\u5730\u6a19\u6e96\u6642",
+            "MST",
+            "\u30d5\u30a7\u30cb\u30c3\u30af\u30b9",
+        }
+        {
+            "CST",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642",
+            "CST",
+            "\u4e2d\u90e8\u590f\u6642\u9593",
+            "CDT",
+            "\u30b7\u30ab\u30b4",
+        }
+        {
+            "America/Chicago",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642",
+            "CST",
+            "\u4e2d\u90e8\u590f\u6642\u9593",
+            "CDT",
+            "\u30b7\u30ab\u30b4",
+        }
+        {
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u590f\u6642\u9593",
+            "EDT",
+            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
+        }
+        {
+            "America/New_York",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u590f\u6642\u9593",
+            "EDT",
+            "\u30cb\u30e5\u30fc\u30e8\u30fc\u30af",
+        }
+        {
+            "IET",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
+        }
+        {
+            "America/Indianapolis",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642",
+            "EST",
+            "\u30a4\u30f3\u30c7\u30a3\u30a2\u30ca\u30dd\u30ea\u30b9",
+        }
+        {
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30db\u30ce\u30eb\u30eb",
+        }
+        {
+            "Pacific/Honolulu",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30cf\u30ef\u30a4\u6a19\u6e96\u6642",
+            "HST",
+            "\u30db\u30ce\u30eb\u30eb",
+        }
+        {
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
+            "ADT",
+            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8"
+        }
+        {
+            "America/Anchorage",
+            "\u30a2\u30e9\u30b9\u30ab\u6a19\u6e96\u6642",
+            "AST",
+            "\u30a2\u30e9\u30b9\u30ab\u590f\u6642\u9593",
+            "ADT",
+            "\u30a2\u30f3\u30ab\u30ec\u30c3\u30b8",
+        }
+        {
+            "America/Halifax",
+            "\u5927\u897f\u6d0b\u6a19\u6e96\u6642",
+            "AST",
+            "\u5927\u897f\u6d0b\u590f\u6642\u9593",
+            "ADT",
+            "\u30cf\u30ea\u30d5\u30a1\u30af\u30b9"
+        }
+        {
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
+            "CDT",
+            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
+        }
+        {
+            "America/St_Johns",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u6a19\u6e96\u6642",
+            "CNT",
+            "\u30cb\u30e5\u30fc\u30d5\u30a1\u30f3\u30c9\u30e9\u30f3\u30c9\u5cf6\u590f\u6642\u9593",
+            "CDT",
+            "\u30bb\u30f3\u30c8\u30b8\u30e7\u30f3\u30ba",
+        }
+        {
+            "ECT",
+            "\u4e2d\u6b27\u6a19\u6e96\u6642",
+            "CET",
+            "\u4e2d\u6b27\u590f\u6642\u9593",
+            "CEST",
+            "\u30d1\u30ea",
+        }
+        {
+            "Europe/Paris",
+            "\u4e2d\u6b27\u6a19\u6e96\u6642",
+            "CET",
+            "\u4e2d\u6b27\u590f\u6642\u9593",
+            "CEST",
+            "\u30d1\u30ea",
+        }
+        {
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30ed\u30f3\u30c9\u30f3",
+        }
+        {
+            "Africa/Casablanca",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30b0\u30ea\u30cb\u30c3\u30b8\u6a19\u6e96\u6642",
+            "GMT",
+            "\u30ab\u30b5\u30d6\u30e9\u30f3\u30ab",
+        }
+        {
+            "Asia/Jerusalem",
+            "\u30a4\u30b9\u30e9\u30a8\u30eb\u6a19\u6e96\u6642",
+            "IST",
+            "\u30a4\u30b9\u30e9\u30a8\u30eb\u590f\u6642\u9593",
+            "IDT",
+            "\u30a8\u30eb\u30b5\u30ec\u30e0",
+        }
+        {
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u6771\u4eac",
+        }
+        {
+            "Asia/Tokyo",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642",
+            "JST",
+            "\u6771\u4eac",
+        }
+        {
+            "Europe/Bucharest",
+            "\u6771\u6b27\u6a19\u6e96\u6642",
+            "EET",
+            "\u6771\u6b27\u590f\u6642\u9593",
+            "EEST",
+            "\u30d6\u30ab\u30ec\u30b9\u30c8",
+        }
+        {
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CDT",
+            "\u4e0a\u6d77",
+        }
+        {
+            "Asia/Shanghai",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CTT",
+            "\u4e2d\u56fd\u6a19\u6e96\u6642",
+            "CDT",
+            "\u4e0a\u6d77",
         }
     }
 }

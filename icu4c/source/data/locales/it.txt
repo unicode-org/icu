@@ -7,6 +7,110 @@
 
 it {
     Version{ "3.0" }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "m.",
+                "p.",
+            }
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MMM/yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "G",
+                        "V",
+                        "S",
+                    }
+                    wide{
+                        "domenica",
+                        "luned\u00EC",
+                        "marted\u00EC",
+                        "mercoled\u00EC",
+                        "gioved\u00EC",
+                        "venerd\u00EC",
+                        "sabato",
+                    }
+                }
+            }
+            eras{
+                "aC",
+                "dC",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "gen",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mag",
+                        "giu",
+                        "lug",
+                        "ago",
+                        "set",
+                        "ott",
+                        "nov",
+                        "dic",
+                    }
+                    narrow{
+                        "G",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "G",
+                        "L",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }  
+                    wide{
+                        "gennaio",
+                        "febbraio",
+                        "marzo",
+                        "aprile",
+                        "maggio",
+                        "giugno",
+                        "luglio",
+                        "agosto",
+                        "settembre",
+                        "ottobre",
+                        "novembre",
+                        "dicembre",
+                    }
+                }
+            }
+        }
+    }
     Countries { 
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -613,7 +717,7 @@ it {
         XOF { "XOF", "Franco CFA BCEAO" }
         XPF { "CFPF","Franco CFP" }
         //XPS { "XPS", "Lira Sterlina" }
-        XSS { "XSS", "Sterlina" }
+        //XSS { "XSS", "Sterlina" }
         XTR { "XTR", "Rublo Trasferibile COMECON" }
         YDD { "YDD", "Dinaro dello Yemen" }
         YEI { "YEI", "Riyal Imadi dello Yemen" }
@@ -1308,111 +1412,6 @@ it {
         REVISED { "Modificato" }
     }
 
-    calendar{
-        gregorian{
-            AmPmMarkers{
-                "m.",
-                "p.",
-            }
-            DateTimeElements:intvector {
-                2,
-                4,
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM yyyy",
-                "dd MMMM yyyy",
-                "dd/MMM/yy",
-                "dd/MM/yy",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mer",
-                        "gio",
-                        "ven",
-                        "sab",
-                    }
-                    narrow{
-		                "D",
-		                "L",
-		                "M",
-		                "M",
-		                "G",
-		                "V",
-		                "S",
-                    }
-                    wide{
-                        "domenica",
-                        "luned\u00EC",
-                        "marted\u00EC",
-                        "mercoled\u00EC",
-                        "gioved\u00EC",
-                        "venerd\u00EC",
-                        "sabato",
-                    }
-                }
-            }
-            eras{
-                "aC",
-                "dC",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "gen",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "mag",
-                        "giu",
-                        "lug",
-                        "ago",
-                        "set",
-                        "ott",
-                        "nov",
-                        "dic",
-                    }
-                    narrow{
-		                "G",
-		                "F",
-		                "M",
-		                "A",
-		                "M",
-		                "G",
-		                "L",
-		                "A",
-		                "S",
-		                "O",
-		                "N",
-		                "D",
-                    }  
-                    wide{
-                        "gennaio",
-                        "febbraio",
-                        "marzo",
-                        "aprile",
-                        "maggio",
-                        "giugno",
-                        "luglio",
-                        "agosto",
-                        "settembre",
-                        "ottobre",
-                        "novembre",
-                        "dicembre",
-                    }
-                }
-            }
-        }
-    }
-    
     zoneStrings {
         {
             "PST",

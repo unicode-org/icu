@@ -7,6 +7,25 @@
 
 zh_TW {
     Version{ "3.0" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
+                "ahh'\u6642'mm'\u5206'ss'\u79D2'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yyyy/M/d",
+                "yyyy/M/d",
+                "{1} {0}",
+            }
+            eras{
+                "\u6C11\u570B\u524D",
+                "\u6C11\u570B",
+            }
+        }
+    }
     Countries { 
         AD { "\u5B89\u9053\u723E" }
         AE { "\u963F\u62C9\u4F2F\u806F\u5408\u5927\u516C\u570B" }
@@ -724,14 +743,14 @@ zh_TW {
         ADP { "ADP", "\u5b89\u9053\u723e\u966a\u58eb\u7279" } // 1936-
         AED { "AED", "\u963f\u62c9\u4f2f\u806f\u5408\u5927\u516c\u570b\u8fea\u723e\u6c57" } // 12/2/1971-
         AFA { "AFA", "\u963f\u5bcc\u6c57\u5c3c (1927-2002)" } // 1927-
-        AFN { "AFN",  "\u963f\u5bcc\u6c57\u5c3c" }
+        AFN { "AFN", "\u963f\u5bcc\u6c57\u5c3c" }
         AIF { "AIF", "\u963f\u6cd5\u723e\u548c\u4f0a\u85a9\u6cd5\u90ce" } // 07/05/1967-06/27/1977
         ALK { "ALK", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b (1946-1961)" } // 1946-1961
         ALL { "ALL", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b" } // 1961-
         ALV { "ALV", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b\u5e63" } // 1992-1993
         ALX { "ALX", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5143\u5916\u532f\u5238" } // 1953-1965
-        AMD { "AMD","\u4e9e\u7f8e\u5c3c\u4e9e\u5fb7\u62c9\u59c6" } // 11/22/1993-
-        ANG { "ANG","\u8377\u862d \u5b89\u68af\u862d \u76fe" } // 05/10/1940-
+        AMD { "AMD", "\u4e9e\u7f8e\u5c3c\u4e9e\u5fb7\u62c9\u59c6" } // 11/22/1993-
+        ANG { "ANG", "\u8377\u862d \u5b89\u68af\u862d \u76fe" } // 05/10/1940-
         AOA { "AOA", "\u5b89\u54e5\u62c9\u5bec\u624e" } // 09/1926-12/31/1958
         AOK { "AOK", "\u5b89\u54e5\u62c9\u5bec\u624e(1977-1990)" } // 01/08/1977-09/25/1990
         AON { "AON", "\u5b89\u54e5\u62c9\u65b0\u5bec\u624e (1990-2000)" } // 09/25/1990-07/01/1995
@@ -740,44 +759,44 @@ zh_TW {
         ARA { "ARA", "\u963f\u6839\u5ef7\u5967\u65af\u7279\u7d0d\u723e" } // 06/14/1985-01/01/1992
         ARM { "ARM", "\u963f\u6839\u5ef7\u62ab\u7d22 Moneda Nacional" } // 1899-01/01/1970
         ARP { "ARP", "\u963f\u6839\u5ef7\u62ab\u7d22(1983-1985)" } // 06/01/1983-06/14/1985
-        ARS { "ARS","\u963f\u6839\u5ef7\u62ab\u7d22" } // 01/01/1992-
+        ARS { "ARS", "\u963f\u6839\u5ef7\u62ab\u7d22" } // 01/01/1992-
         ATS { "ATS", "\u5967\u5730\u5229\u5148\u4ee4" } // 12/04/1947-02/28/2002
-        AUD { "AUD",  "\u6fb3\u5e63" } // 02/14/1966-
+        AUD { "AUD", "\u6fb3\u5e63" } // 02/14/1966-
         AUP { "AUP", "\u6fb3\u5927\u5229\u4e9e\u938a" } // 1902-02/14/1966
         AWG { "AWG", "\u963f\u9b6f\u5df4\u76fe" } // 01/01/1986-
         AZM { "AZM", "\u963f\u585e\u62dc\u5f4a\u99ac\u7279\u7d0d" } // 1992-
         BAD { "BAD", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u7b2c\u7d0d\u723e" } // 07/01/1992-08/15/1994
-        BAM { "BAM",  "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u53ef\u8f49\u63db\u99ac\u514b" } // 01/01/1995-
+        BAM { "BAM", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u53ef\u8f49\u63db\u99ac\u514b" } // 01/01/1995-
         BAN { "BAN", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u65b0\u7b2c\u7d0d\u723e" } // 08/15/1994-01/01/1995
-        BBD { "BBD","\u5df4\u8c9d\u591a\u5143" } // 11/29/1966-
-        BDT { "BDT",  "\u5b5f\u52a0\u62c9\u5854\u5361" } // 01/01/1972-
+        BBD { "BBD", "\u5df4\u8c9d\u591a\u5143" } // 11/29/1966-
+        BDT { "BDT", "\u5b5f\u52a0\u62c9\u5854\u5361" } // 01/01/1972-
         BEC { "BEC", "\u6bd4\u5229\u6642\u6cd5\u90ce \uff08\u53ef\u8f49\u63db\uff09" }
-        BEF { "BEF",  "\u6bd4\u5229\u6642\u6cd5\u90ce" } // 1831-2002
+        BEF { "BEF", "\u6bd4\u5229\u6642\u6cd5\u90ce" } // 1831-2002
         BEL { "BEL", "\u6bd4\u5229\u6642\u6cd5\u90ce \uff08\u91d1\u878d\uff09" }
         BGL { "BGL", "\u4fdd\u52a0\u5229\u4e9e\u786c\u5217\u5f17" } // 01/01/1962-01/01/1999
         BGM { "BGM", "\u4fdd\u52a0\u5229\u4e9e \u793e\u6703\u4e3b\u7fa9\u5217\u5f17" } // 05/1952-01/01/1962
         BGN { "BGN", "\u4fdd\u52a0\u5229\u4e9e\u65b0\u5217\u5f17" } // 01/01/1999-
         BGO { "BGO", "\u4fdd\u52a0\u5229\u4e9e\u5217\u5f17 (1879-1952)" } // 07/08/1879-05/1952
         BGX { "BGX", "\u4fdd\u52a0\u5229\u4e9e\u5217\u5f17\u5916\u532f\u5238" } // 1965-1986
-        BHD { "BHD",  "\u5df4\u6797\u7b2c\u7d0d\u723e" } // 10/1965-
+        BHD { "BHD", "\u5df4\u6797\u7b2c\u7d0d\u723e" } // 10/1965-
         BIF { "BIF", "\u84b2\u9686\u5730\u6cd5\u90ce" } // 05/19/1964-
-        BMD { "BMD","\u767e\u6155\u9054\u5e63" } // 02/06/1970-
+        BMD { "BMD", "\u767e\u6155\u9054\u5e63" } // 02/06/1970-
         BMP { "BMP", "\u767e\u6155\u9054\u938a" } // 1914-02/06/1970
         BND { "BND", "\u6c76\u840a\u5143" } // 06/12/1967-
-        BOB { "BOB",  "\u73bb\u5229\u7dad\u4e9e\u8ca8\u5e63\u55ae\u4f4d" } // 1986-
+        BOB { "BOB", "\u73bb\u5229\u7dad\u4e9e\u8ca8\u5e63\u55ae\u4f4d" } // 1986-
         BOL { "BOL", "\u73bb\u5229\u7dad\u4e9e\u820a\u8ca8\u5e63\u55ae\u4f4d (1863-1962)" } // 06/23/1863-12/31/1962
         BOP { "BOP", "\u73bb\u5229\u7dad\u4e9e\u62ab\u7d22" } // 01/01/1963-1986
         BOV { "BOV", "\u73bb\u5229\u7dad\u4e9e \u5e55\u591a" }
         BRB { "BRB", "\u5df4\u897f\u514b\u9b6f\u85a9\u591a \u8fb2\u74e6 (1967-1986)" } // 02/13/1967-02/28/1986
         BRC { "BRC", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85" } // 02/28/1986-01/15/1989
         BRE { "BRE", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85 (1990-1993)" } // 03/16/1990-08/01/1993
-        BRL { "BRL",  "\u5df4\u897f\u91cc\u62c9" } // 07/01/1994-
+        BRL { "BRL", "\u5df4\u897f\u91cc\u62c9" } // 07/01/1994-
         BRN { "BRN", "\u5df4\u897f \u514b\u5982\u723e\u9054 \u8fb2\u74e6" } // 01/15/1989-03/16/1990
         BRR { "BRR", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85" } // 08/01/1993-07/01/1994
         BRZ { "BRZ", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85 (1942-1967)" } // 1942-1967
         BSD { "BSD", "\u5df4\u54c8\u99ac\u5143" } // 5/25/1966-
         BSP { "BSP", "\u5df4\u54c8\u99ac\u938a" } // 1869-5/25/1966
-        BTN { "BTN",  "\u4e0d\u4e39\u52aa\u624e\u59c6" } // 1974-
+        BTN { "BTN", "\u4e0d\u4e39\u52aa\u624e\u59c6" } // 1974-
         BTR { "BTR", "\u4e0d\u4e39\u76e7\u5e03" } // 1928-1974
         BUK { "BUK", "\u7dec\u7538\u5143" } // 01/04/1948-06/18/1989
         BUR { "BUR", "\u7dec\u7538\u76e7\u5e03" } // 04/01/1937-07/01/1952
@@ -787,7 +806,7 @@ zh_TW {
         BYR { "BYR", "\u767d\u4fc4\u7f85\u65af\u76e7\u5e03" } // 01/01/2000-
         BZD { "BZD", "\u4f2f\u5229\u8332\u5143" } // 1973-
         BZH { "BZH", "\u82f1\u570b\u7684\u6d2a\u90fd\u62c9\u65af\u5143r" } // 1855-1972
-        CAD { "CAD","\u52a0\u5e63" } // 1858-
+        CAD { "CAD", "\u52a0\u5e63" } // 1858-
         CDF { "CDF", "\u525b\u679c\u6cd5\u90ce" } // 07/1998-
         CDG { "CDG", "\u525b\u679c\u5171\u548c\u570b\u6cd5\u90ce" } // 06/30/1960-07/22/1967
         CDL { "CDL", "\u525b\u679c\u624e\u4f0a\u723e" } // 07/23/1967-10/27/1971
@@ -801,26 +820,26 @@ zh_TW {
         CMF { "CMF", "\u5361\u9ea5\u9686\u897f\u975e\u6cd5\u90ce" } // 01/01/1960-1992
         CNP { "CNP", "\u4e2d\u570b\u4eba\u6c11\u5e63\u5143" } // 1948-04/30/1953
         CNX { "CNX", "\u4e2d\u570b\u7f8e\u5143\u5916\u532f\u5238" } // 1979-1998
-        CNY { "CNY",   "\u4eba\u6c11\u5e63" } // 03/01/1953-
+        CNY { "CNY", "\u4eba\u6c11\u5e63" } // 03/01/1953-
         COB { "COB", "\u54e5\u502b\u6bd4\u4e9e\u62ab\u7d22\u9214" }
         COF { "COF", "\u525b\u679c\u897f\u975e\u6cd5\u90ce" } // 04/01/1973-1992
-        COP { "COP","\u54e5\u502b\u6bd4\u4e9e\u62ab\u7d22" } // 6/9/1871-
-        CRC { "CRC",   "\u54e5\u65af\u5927\u9ece\u52a0\u79d1\u90ce" } // 10/26/1896-
+        COP { "COP", "\u54e5\u502b\u6bd4\u4e9e\u62ab\u7d22" } // 6/9/1871-
+        CRC { "CRC", "\u54e5\u65af\u5927\u9ece\u52a0\u79d1\u90ce" } // 10/26/1896-
         CSC { "CSC", "\u6377\u514b\u514b\u6717" } // 05/1945-06/01/1953
         CSK { "CSK", "\u6377\u514b\u65af\u6d1b\u4f10\u514b\u786c\u514b\u6717" } // 06/01/1953-12/31/1992
         CUP { "CUP", "\u53e4\u5df4\u62ab\u7d22" } // 1881-
         CUX { "CUX", "\u53e4\u5df4\u4eba\u5916\u532f\u5238" } // 1985-
-        CVE { "CVE","\u7dad\u5fb7\u89d2\u57c3\u65af\u5eab\u591a" } // 05/22/1911-
+        CVE { "CVE", "\u7dad\u5fb7\u89d2\u57c3\u65af\u5eab\u591a" } // 05/22/1911-
         CWG { "CWG", "\u5eab\u62c9\u514b \u76fe" } // 1848-1960
-        CYP { "CYP","\u8cfd\u6d66\u8def\u65af\u938a" } // 9/5/1917-
+        CYP { "CYP", "\u8cfd\u6d66\u8def\u65af\u938a" } // 9/5/1917-
         CZK { "CZK", "\u6377\u514b\u514b\u6717" } // 01/01/1993-
         DDM { "DDM", "\u6771\u5fb7\u6771\u5fb7\u99ac\u514b" } // 07/20/1948-10/02/1990
         DEM { "DEM", "\u5fb7\u570b\u99ac\u514b" } // 6/20/1948-2002
         DES { "DES", "\u5fb7\u570b \u8607\u99ac\u514bSperrmark" } // 03/31/1951-12/29/1958
-        DJF { "DJF",  "\u5409\u5e03\u5730\u6cd5\u90ce" } // 06/27/1977-
+        DJF { "DJF", "\u5409\u5e03\u5730\u6cd5\u90ce" } // 06/27/1977-
         DKK { "DKK", "\u4e39\u9ea5\u514b\u7f85\u7d0d" } // 5/27/1873-
         DOP { "DOP", "\u591a\u660e\u5c3c\u52a0\u62ab\u7d22" } // 10/1947-
-        DZD { "DZD",  "\u963f\u723e\u53ca\u5229\u4e9e\u7b2c\u7d0d\u723e" } // 04/01/1964-
+        DZD { "DZD", "\u963f\u723e\u53ca\u5229\u4e9e\u7b2c\u7d0d\u723e" } // 04/01/1964-
         DZF { "DZF", "\u963f\u723e\u53ca\u5229\u4e9e\u65b0\u6cd5\u90ce" } // 01/01/1960-04/01/1964
         DZG { "DZG", "\u963f\u723e\u53ca\u5229\u4e9e\u6cd5\u90ce Germinal" } // 08/04/1851-12/31/1959
         ECS { "ECS", "\u5384\u74dc\u591a\u8607\u514b\u96f7" } // 4/1/1884-2000
@@ -828,22 +847,22 @@ zh_TW {
         EEK { "EEK", "\u611b\u6c99\u5c3c\u4e9e\u514b\u6717" } // 06/21/1992-
         EGP { "EGP", "\u57c3\u53ca\u938a" } // 11/14/1885-
         ERN { "ERN", "\u5384\u7acb\u7279\u91cc\u4e9e\u7d0d\u514b\u6cd5" } // 1997-
-        ESP { "ESP","\u897f\u73ed\u7259\u966a\u58eb\u7279" } // 01/01/1859-02/28/2002
-        ETB { "ETB",  "\u8863\u7d22\u6bd4\u4e9e\u6bd4\u723e" } // 09/15/1976-
+        ESP { "ESP", "\u897f\u73ed\u7259\u966a\u58eb\u7279" } // 01/01/1859-02/28/2002
+        ETB { "ETB", "\u8863\u7d22\u6bd4\u4e9e\u6bd4\u723e" } // 09/15/1976-
         ETD { "ETD", "\u57c3\u8cfd\u4fc4\u6bd4\u4e9e\u5143" } // 07/23/1945-09/15/1976
-        EUR { "EUR","\u6b50\u5143" } // 01/01/1999-
+        EUR { "EUR", "\u6b50\u5143" } // 01/01/1999-
         FIM { "FIM", "\u82ac\u862d\u99ac\u514b" } // 1/1/1963-2002
         FIN { "FIN", "\u82ac\u862d\u99ac\u514b (1860-1962)" } // 4/4/1860-12/31/1962
-        FJD { "FJD",  "\u6590\u6fdf\u5143" } // 01/13/1969-
+        FJD { "FJD", "\u6590\u6fdf\u5143" } // 01/13/1969-
         FJP { "FJP", "\u6590\u6fdf\u938a" } // 1917-01/13/1969
         FKP { "FKP", "\u798f\u514b\u862d\u7fa4\u5cf6\u938a" } // 1901-
         FOK { "FOK", "\u6cd5\u7f85\u5cf6\u514b\u6717" } // 1940-
         FRF { "FRF", "\u6cd5\u570b\u6cd5\u90ce" } // 01/01/1960-2002
         FRG { "FRG", "\u6cd5\u570b\u6cd5\u90ce \u6377\u7c73\u90a3/\u9f90\u52a0\u840a\u6cd5\u90ce" } // 04/07/1803-12/31/1959
         GAF { "GAF", "\u52a0\u84ec\u897f\u975e\u6cd5\u90ce" } // 04/01/1973-1992
-        GBP { "GBP","\u82f1\u938a" } // 07/27/1694-
+        GBP { "GBP", "\u82f1\u938a" } // 07/27/1694-
         GEK { "GEK", "\u55ac\u6cbb \u5eab\u65c1 \u62c9\u91cc" } // 04/05/1993-09/23/1995
-        GEL { "GEL","\u55ac\u6cbb\u62c9\u91cc" } // 09/23/1995-
+        GEL { "GEL", "\u55ac\u6cbb\u62c9\u91cc" } // 09/23/1995-
         GHC { "GHC", "\u8fe6\u7d0d\u4ed9\u8515" } // 03/09/1979-
         GHO { "GHO", "\u8fe6\u7d0d\u820a\u4ed9\u8515" } // 07/19/1965-02/17/1967
         GHP { "GHP", "\u8fe6\u7d0d\u938a" } // 07/14/1958-
@@ -852,7 +871,7 @@ zh_TW {
         GLK { "GLK", "\u683c\u9675\u862d\u514b\u7f85\u9209" } // 1874-07/01/1967
         GMD { "GMD", "\u7518\u6bd4\u4e9e\u9054\u62c9\u897f" } // 07/01/1971-
         GMP { "GMP", "\u5ca1\u6bd4\u4e9e\u938a" } // 05/13/1964-07/01/1971
-        GNF { "GNF",  "\u5e7e\u5167\u4e9e\u6cd5\u90ce" } // 01/06/1986-
+        GNF { "GNF", "\u5e7e\u5167\u4e9e\u6cd5\u90ce" } // 01/06/1986-
         GNI { "GNI", "\u5e7e\u5167\u4e9e\u6cd5\u90ce (1960-1972)" } // 03/01/1960-10/02/1972
         GNS { "GNS", "\u5e7e\u5167\u4e9e\u897f\u91cc" } // 10/02/1972-01/06/1986
         GPF { "GPF", "\u74dc\u5fb7\u7f85\u666e\u5cf6\u6cd5\u90ce" } // 07/11/1851-12/31/1959
@@ -861,67 +880,67 @@ zh_TW {
         GQP { "GQP", "\u8d64\u9053\u5e7e\u5167\u4e9e\u6bd4\u585e\u5854" } // 10/12/1968-07/07/1975
         GRD { "GRD", "\u5e0c\u81d8\u5fb7\u62c9\u514b\u99ac" } // 05/01/1954-2002
         GRN { "GRN", "\u5e0c\u81d8\u65b0\u5fb7\u62c9\u514b\u99ac" } // 11/11/1944-05/01/1954
-        GTQ { "GTQ",   "\u74dc\u5730\u99ac\u62c9\u683c\u67e5\u723e" } // 05/27/1925-
+        GTQ { "GTQ", "\u74dc\u5730\u99ac\u62c9\u683c\u67e5\u723e" } // 05/27/1925-
         GUF { "GUF", "\u6cd5\u5c6c\u572d\u4e9e\u90a3\u6cd5\u90ce\u572d\u4e9e\u90a3" } // 07/11/1851-12/31/1959
         GWE { "GWE", "\u8461\u5c6c\u5e7e\u5167\u4e9e\u57c3\u65af\u5eab\u591a" } // 1879-09/10/1974
         GWM { "GWM", "\u8461\u5c6c\u5e7e\u5167\u4e9e\u7c73\u723e\u91cc\u65af" } // 1879-09/10/1974
         GWP { "GWP", "\u5e7e\u5167\u4e9e\u62ab\u7d22\u62ab\u7d22" } // 9/10/1974-12/31/1996
-        GYD { "GYD",  "\u572d\u4e9e\u90a3\u5143" } // 05/26/1966-
+        GYD { "GYD", "\u572d\u4e9e\u90a3\u5143" } // 05/26/1966-
         HKD { "HK$", "\u6e2f\u5143" } // 2/2/1895-
-        HNL { "HNL",   "\u6d2a\u90fd\u62c9\u65af\u502b\u76ae\u62c9" } // 04/03/1926-
+        HNL { "HNL", "\u6d2a\u90fd\u62c9\u65af\u502b\u76ae\u62c9" } // 04/03/1926-
         HRD { "HRD", "\u514b\u7f85\u5730\u4e9e\u7b2c\u7d0d\u723e" }
         HRK { "HRK", "\u514b\u7f85\u5730\u4e9e\u5eab\u7d0d" } // 05/30/1994-
         HTG { "HTG", "\u6d77\u5730\u53e4\u5fb7" } // 08/26/1872-
-        HUF { "HUF",  "\u5308\u7259\u5229 - \u798f\u6797" } // 07/23/1946-
+        HUF { "HUF", "\u5308\u7259\u5229 - \u798f\u6797" } // 07/23/1946-
         IBP { "IBP", "\u5317\u611b\u723e\u862d\u938a" } // 07/27/1694-
         IDG { "IDG", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u5c3c\u53ef\u76fe" } // 09/1945-05/13/1950
         IDJ { "IDJ", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u722a\u54c7\u76e7\u5e03" } // 10/17/1945-03/13/1950
         IDN { "IDN", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u65b0\u76e7\u5e03" } // 11/02/1949-12/13/1965
-        IDR { "IDR",  "\u5370\u5c3c - \u76e7\u5e03" } // 12/13/1965-
-        IEP { "IEP","\u611b\u723e\u862d\u938a" } // 1922-2001
+        IDR { "IDR", "\u5370\u5c3c - \u76e7\u5e03" } // 12/13/1965-
+        IEP { "IEP", "\u611b\u723e\u862d\u938a" } // 1922-2001
         ILL { "ILL", "\u4ee5\u8272\u5217\u8b1d\u5ba2\u723e" } // 02/22/1980-09/04/1985
         ILP { "ILP", "\u4ee5\u8272\u5217\u938a" } // 08/16/1948-02/22/1980
-        ILS { "ILS","\u4ee5\u8272\u5217\u65b0\u8b1d\u514b\u723e" } // 09/04/1985-
+        ILS { "ILS", "\u4ee5\u8272\u5217\u65b0\u8b1d\u514b\u723e" } // 09/04/1985-
         IMP { "IMP", "\u66fc\u57ce\u5cf6\u82f1\u938a" } // 1865-
         INR { "=0#Rs.|1#Re.|1<Rs.", "\u5370\u5ea6\u76e7\u5e03" } // 08/17/1835-
-        IQD { "IQD",  "\u4f0a\u62c9\u514b\u7b2c\u7d0d\u723e" } // 04/19/1931-
-        IRR { "IRR",  "\u4f0a\u6717\u91cc\u4e9e\u723e" } // 05/13/1932-
+        IQD { "IQD", "\u4f0a\u62c9\u514b\u7b2c\u7d0d\u723e" } // 04/19/1931-
+        IRR { "IRR", "\u4f0a\u6717\u91cc\u4e9e\u723e" } // 05/13/1932-
         ISK { "ISK", "\u51b0\u5cf6\u514b\u6717" } // 12/1/1918-
         ITL { "ITL", "\u7fa9\u5927\u5229\u91cc\u62c9" } // 11/10/1859-
         JEP { "JEP", "\u6fa4\u897f\u938a" } // 1840-
-        JMD { "JMD",  "\u7259\u8cb7\u52a0\u5143" } // 09/08/1969-
+        JMD { "JMD", "\u7259\u8cb7\u52a0\u5143" } // 09/08/1969-
         JMP { "JMP", "\u7259\u8cb7\u52a0\u938a" } // 1900-09/08/1969
-        JOD { "JOD",  "\u7d04\u65e6\u7b2c\u7d0d\u723e" } // 07/01/1950-
+        JOD { "JOD", "\u7d04\u65e6\u7b2c\u7d0d\u723e" } // 07/01/1950-
         JPY { "JP\u00a5", "\u65e5\u5713" } // 06/1871
         KES { "KES", "\u80af\u5c3c\u4e9e\u5148\u4ee4" } // 09/14/1966-
         KGS { "KGS", "\u5409\u723e\u5409\u65af\u7d22\u99ac" } // 05/10/1993-
         KHO { "KHO", "\u67ec\u57d4\u5be8\u820a\u745e\u723e" } // 01/01/1955-1975
-        KHR { "KHR",  "\u67ec\u57d4\u5be8\u745e\u723e" } // 03/20/1980-
+        KHR { "KHR", "\u67ec\u57d4\u5be8\u745e\u723e" } // 03/20/1980-
         KID { "KID", "\u57fa\u91cc\u5df4\u65af\u5143" } // 07/12/1979-
-        KMF { "KMF",  "\u79d1\u6469\u7f85\u6cd5\u90ce" } // 07/06/1975-
+        KMF { "KMF", "\u79d1\u6469\u7f85\u6cd5\u90ce" } // 07/06/1975-
         KPP { "KPP", "\u5317\u671d\u9bae\u4eba\u6c11\u5e63" } // 1947-02/1959
         KPW { "KPW", "\u5317\u671d\u9bae\u5e63" } // 02/1959-
         KRH { "KRH", "\u97d3\u570b \u54c8\u74e6" } // 02/15/1953-06/10/1962
         KRO { "KRO", "\u5357\u97d3\u820a\u5e63" } // 1947-02/15/1953
-        KRW { "KRW","\u97d3\u570b\u571c" } // 06/10/1962-
-        KWD { "KWD",  "\u79d1\u5a01\u7279\u7b2c\u7d0d\u723e" } // 04/01/1961-
+        KRW { "KRW", "\u97d3\u570b\u571c" } // 06/10/1962-
+        KWD { "KWD", "\u79d1\u5a01\u7279\u7b2c\u7d0d\u723e" } // 04/01/1961-
         KYD { "KYD", "\u958b\u66fc\u7fa4\u5cf6\u7f8e\u5143" } // 1971-
         KZR { "KZR", "\u5361\u624e\u514b\u65af\u5766\u76e7\u5e03" } // 08/1993-11/05/1993
-        KZT { "KZT",   "\u5361\u624e\u514b\u65af\u5766\u5766\u5409" } // 11/05/1993-
-        LAK { "LAK","\u8001\u64be \u958b\u666e" } // 05/05/1955-
-        LBP { "LBP",  "\u9ece\u5df4\u5ae9\u938a" } // 01/01/1948-
+        KZT { "KZT", "\u5361\u624e\u514b\u65af\u5766\u5766\u5409" } // 11/05/1993-
+        LAK { "LAK", "\u8001\u64be \u958b\u666e" } // 05/05/1955-
+        LBP { "LBP", "\u9ece\u5df4\u5ae9\u938a" } // 01/01/1948-
         LIF { "LIF", "\u5217\u652f\u6566\u65af\u767b\u6cd5\u90ce" } // 03/17/1799-
-        LKR { "LKR","\u65af\u91cc\u862d\u5361\u76e7\u5e03" } // 05/22/1978-
+        LKR { "LKR", "\u65af\u91cc\u862d\u5361\u76e7\u5e03" } // 05/22/1978-
         LNR { "LNR", "\u932b\u862d\u76e7\u5e03" } // 12/16/1949-05/22/1978
         LRD { "LRD", "\u8cf4\u6bd4\u745e\u4e9e\u5143" } // 01/01/1944-
-        LSL { "LSL",   "\u8cf4\u7d22\u6258\u7f85\u8482" } // 01/22/1980-
+        LSL { "LSL", "\u8cf4\u7d22\u6258\u7f85\u8482" } // 01/22/1980-
         LTL { "LTL", "\u7acb\u9676\u5b9b\u91cc\u5854" } // 06/25/1993-
         LTT { "LTT", "\u7acb\u9676\u5b9b\u7279\u7f85" } // 10/1/1992-06/25/1993
         LUF { "LUF", "\u76e7\u68ee\u5821\u6cd5\u90ce" } // 12/20/1848-
         LVL { "LVL", "\u62c9\u812b\u7dad\u4e9e\u62c9\u7279\u9280\u5e63" } // 06/28/1993-
         LVR { "LVR", "\u62c9\u812b\u7dad\u4e9e\u76e7\u5e03" } // 05/07/1992-10/17/1993
         LYB { "LYB", "\u5229\u6bd4\u4e9e\u82f1\u570b\u7684\u8ecd\u4e8b\u7576\u5c40\u91cc\u62c9" } // 1941-12/24/1951
-        LYD { "LYD",  "\u5229\u6bd4\u4e9e\u7b2c\u7d0d\u723e" } // 09/01/1971-
+        LYD { "LYD", "\u5229\u6bd4\u4e9e\u7b2c\u7d0d\u723e" } // 09/01/1971-
         LYP { "LYP", "\u5229\u6bd4\u4e9e\u938a" } // 12/24/1951-09/01/1971
         MAD { "MAD", "\u6469\u6d1b\u54e5\u8fea\u62c9\u59c6" } // 10/17/1959-
         MAF { "MAF", "\u6469\u6d1b\u54e5\u6cd5\u90ce" } // 1881-10/17/1959
@@ -933,7 +952,7 @@ zh_TW {
         MGA { "MGA", "\u99ac\u9054\u52a0\u65af\u52a0\u827e\u745e\u723e" } // 11/01/1983-
         MGF { "MGF", "\u99ac\u9054\u52a0\u65af\u52a0\u6cd5\u90ce" } // 07/01/1963-
         MHD { "MHD", "\u99ac\u7d39\u723e\u7fa4\u5cf6\u7f8e\u5143" } // 1979-
-        MKD { "MKD","\u99ac\u5176\u9813\u7b2c\u7d0d\u723e" } // 05/20/1993-
+        MKD { "MKD", "\u99ac\u5176\u9813\u7b2c\u7d0d\u723e" } // 05/20/1993-
         MKN { "MKN", "\u99ac\u5176\u9813\u7b2c\u7d0d\u723e(1992-1993)" } // 04/26/1992-05/20/1993
         MLF { "MLF", "\u99ac\u91cc\u6cd5\u90ce" } // 07/02/1962-1984
         MMK { "MMK", "\u7dec\u7538\u5143" } // 06/18/1989-
@@ -941,21 +960,21 @@ zh_TW {
         MNT { "MNT", "\u8499\u53e4\u5716\u683c\u91cc\u514b" } // 03/13/1921-
         MOP { "MOP", "\u6fb3\u9580\u5143" } // 1895-
         MQF { "MQF", "\u99ac\u63d0\u5c3c\u514b\u5cf6\u6cd5\u90ce" } // 07/11/1851-1959
-        MRO { "MRO",  "\u8305\u5229\u5854\u5c3c\u4e9e\u70cf\u5409\u4e9e" } // 06/29/1973-
-        MTL { "MTL",  "\u99ac\u723e\u4ed6\u91cc\u62c9" }
+        MRO { "MRO", "\u8305\u5229\u5854\u5c3c\u4e9e\u70cf\u5409\u4e9e" } // 06/29/1973-
+        MTL { "MTL", "\u99ac\u723e\u4ed6\u91cc\u62c9" }
         MTP { "MTP", "\u99ac\u723e\u4ed6\u938a" } // 08/13/1914-
         MUR { "MUR", "\u6a21\u91cc\u897f\u65af\u76e7\u5e03" } // 1848-03/12/1968
         MVP { "MVP", "\u99ac\u723e\u5730\u592b\u76e7\u5e03" } // 1960-07/01/1981
         MVR { "MVR", "\u99ac\u723e\u5730\u592b\u6d77\u5cf6\u76e7\u975e\u4e9e" } // 07/01/1981-
-        MWK { "MWK",  "\u99ac\u62c9\u7dad\u514b\u74e6\u67e5" } // 02/15/1971-
+        MWK { "MWK", "\u99ac\u62c9\u7dad\u514b\u74e6\u67e5" } // 02/15/1971-
         MWP { "MWP", "\u99ac\u62c9\u7dad\u938a" } // 07/06/1964-02/15/1971
-        MXN { "MXN","\u58a8\u897f\u54e5 - \u62ab\u7d22" } // 01/01/1993-
+        MXN { "MXN", "\u58a8\u897f\u54e5 - \u62ab\u7d22" } // 01/01/1993-
         MXP { "MXP", "\u58a8\u897f\u54e5\u9280\u62ab\u7d22 (1861-1992)" } // 1822-12/31/1992
         MXV { "MXV", "\u58a8\u897f\u54e5\u6cd5\u5f8b\u53cd\u8f49(UDI)" } // 1975-
-        MYR { "MYR",  "\u99ac\u4f86\u897f\u4e9e - \u6797\u5409\u7279" } // 9/16/1963-
+        MYR { "MYR", "\u99ac\u4f86\u897f\u4e9e - \u6797\u5409\u7279" } // 9/16/1963-
         MZE { "MZE", "\u83ab\u6851\u6bd4\u514b\u57c3\u65af\u5eab\u591a" } // 09/01/1922-06/16/1980
-        MZM { "MZM",  "\u83ab\u4e09\u6bd4\u514b\u6885\u8482\u5361\u723e" } // 06/16/1980-
-        NAD { "NAD",  "\u7d0d\u7c73\u6bd4\u4e9e\u5143" } // 1993-
+        MZM { "MZM", "\u83ab\u4e09\u6bd4\u514b\u6885\u8482\u5361\u723e" } // 06/16/1980-
+        NAD { "NAD", "\u7d0d\u7c73\u6bd4\u4e9e\u5143" } // 1993-
         NCF { "NCF", "\u8d6b\u5e03\u91cc\u5e95\u7fa4\u5cf6 CFP \u6cd5\u90ce" } // 12/26/1945-1992
         NGN { "NGN", "\u5948\u53ca\u5229\u4e9e\u5948\u62c9" } // 01/01/1973-
         NGP { "NGP", "\u5948\u53ca\u5229\u4e9e\u938a" } // 07/01/1959-01/01/1973
@@ -968,7 +987,7 @@ zh_TW {
         NPR { "NPR", "\u5c3c\u6cca\u723e\u76e7\u5e03" } // 1945-
         NZD { "$NZ", "\u7d10\u897f\u862d\u5e63" } // 07/10/1967-
         NZP { "NZP", "\u7d10\u897f\u862d\u938a" } // 1907-07/10/1967
-        OMR { "OMR",  "\u963f\u66fc\u91cc\u5967" } // 11/11/1972-
+        OMR { "OMR", "\u963f\u66fc\u91cc\u5967" } // 11/11/1972-
         OMS { "OMS", "\u963f\u66fc\u91cc\u4e9e\u723e\u4ed9\u8515i" } // 07/25/1970-11/11/1972
         PAB { "PAB", "\u5df4\u62ff\u99ac\u5df4\u6ce2\u4e9e" } // 1904-
         PDK { "PDK", "\u8eca\u57ce\u76e7\u5e03 Kupon" } // 12/01/1994-12/31/2000
@@ -980,14 +999,14 @@ zh_TW {
         PGK { "PGK", "\u5df4\u5e03\u4e9e\u7d10\u5e7e\u5167\u4e9e\u57fa\u90a3" } // 09/16/1975-
         PHP { "PHP", "\u83f2\u5f8b\u8cd3\u62ab\u7d22" } // 03/02/1903-
         PKR { "PKR", "\u5df4\u57fa\u65af\u5766\u76e7\u5e03" } // 04/01/1948-
-        PLN { "PLN",  "\u6ce2\u862d\u8332\u7f85\u63d0" } // 01/01/1995-
+        PLN { "PLN", "\u6ce2\u862d\u8332\u7f85\u63d0" } // 01/01/1995-
         PLX { "PLX", "\u6ce2\u862d\u7f8e\u5143\u5916\u532f\u5238" } // 1960-
         PLZ { "PLZ", "\u6ce2\u862d\u8332\u7f85\u63d0 (1950-1995)" } // 10/28/1950-12/31/1994
         PSP { "PSP", "\u5df4\u52d2\u65af\u5766\u938a" } // 11/01/1927-07/01/1950
         PTC { "PTC", "\u8461\u8404\u7259 \u5eb7\u62d6" } // 06/09/1931-2002
         PTE { "PTE", "\u8461\u8404\u7259\u57c3\u65af\u5eab\u591a" } // 05/22/1911-2002
         PYG { "PYG", "\u5df4\u62c9\u572d\u74dc\u62c9\u5c3c" } // 11/1943-
-        QAR { "QAR",  "\u5361\u9054\u723e\u91cc\u4e9e\u723e" } // 05/19/1973-
+        QAR { "QAR", "\u5361\u9054\u723e\u91cc\u4e9e\u723e" } // 05/19/1973-
         REF { "REF", "\u7559\u5c3c\u6c6a\u5cf6\u6cd5\u90ce" } // 07/11/1851-12/31/1959
         ROL { "ROL", "\u7f85\u99ac\u5c3c\u4e9e\u5217\u4f0a" } // 01/28/1952-
         RON { "RON", "\u7f85\u99ac\u5c3c\u4e9e\u65b0\u5217\u4f0a" } // 08/15/1947-01/28/1952
@@ -997,28 +1016,28 @@ zh_TW {
         SAR { "SRl", "\u6c99\u70cf\u5730\u91cc\u96c5" } // 10/22/1952-
         SAS { "SAS", "\u6c99\u70cf\u5730\u5b97\u4e3b\u91cc\u96c5" } // 01/01/1936-10/22/1952
         SBD { "SBD", "\u7d22\u7f85\u9580\u7fa4\u5cf6\u5143" } // 10/24/1977-
-        SCR { "SCR",  "\u585e\u820c\u723e\u7fa4\u5cf6\u76e7\u5e03" } // 1900-
+        SCR { "SCR", "\u585e\u820c\u723e\u7fa4\u5cf6\u76e7\u5e03" } // 1900-
         SDD { "SDD", "\u8607\u4e39\u7b2c\u7d0d\u723e" } // 1992-Kenya Shilling
         SDP { "SDP", "\u8607\u4e39\u938a" } // 04/08/1957-06/1998
         SEK { "SEK", "\u745e\u5178\u514b\u7f85\u7d0d" } // 5/27/1873-
-        SGD { "SGD",  "\u65b0\u52a0\u5761\u5e63" } // 8/9/1965-
+        SGD { "SGD", "\u65b0\u52a0\u5761\u5e63" } // 8/9/1965-
         SHP { "SHP", "\u8056\u8d6b\u52d2\u62ff \u938a" } // 1917-
         SIB { "SIB", "\u65af\u6d1b\u6587\u5c3c\u4e9e Tolar Bons" } // 10/08/1991-10/07/1992
         SIT { "SIT", "\u65af\u6d1b\u7dad\u5c3c\u4e9e\u6258\u52d2" } // 10/07/1992-
-        SKK { "SKK",  "\u65af\u6d1b\u4f10\u514b\u514b\u6717" } // 01/31/1992-
+        SKK { "SKK", "\u65af\u6d1b\u4f10\u514b\u514b\u6717" } // 01/31/1992-
         SLL { "SLL", "\u7345\u5b50\u5c71\u5229\u6602" } // 08/04/1964-
         SML { "SML", "\u8056\u99ac\u5229\u8afe\u91cc\u62c9" } // 12/23/1865-
         SOS { "SOS","\u7d22\u99ac\u5229\u4e9e\u5148\u4ee4" } // 07/01/1960-05/24/1991
         SQS { "SQS", "\u7d22\u99ac\u91cc\u862d\u5148\u4ee4" } // 05/24/1991-
-        SRG { "SRG",  "\u8607\u91cc\u5357\u76fe" } // 12/25/1975-
+        SRG { "SRG", "\u8607\u91cc\u5357\u76fe" } // 12/25/1975-
         SSP { "SSP", "\u8607\u683c\u862d\u938a" } // 1707-
-        STD { "STD",  "\u8056\u591a\u7f8e\u5cf6\u548c\u666e\u6797\u897f\u6bd4\u5cf6\u591a\u5e03\u62c9" }
+        STD { "STD", "\u8056\u591a\u7f8e\u5cf6\u548c\u666e\u6797\u897f\u6bd4\u5cf6\u591a\u5e03\u62c9" }
         STE { "STE", "\u8056\u591a\u7f8e\u5cf6\u548c\u666e\u6797\u897f\u6bd4\u5cf6\u57c3\u65af\u5eab\u591a" } // 05/22/1911-07/05/1975
         SUN { "SUN", "\u8607\u806f\u65b0\u76e7\u5e03" } // 12/16/1947-12/31/1960
         SUR { "SUR", "\u8607\u806f\u76e7\u5e03" } // 01/01/1961-12/25/1991
         SVC { "SVC", "\u611b\u723e \u85a9\u723e\u74e6\u591a\u79d1\u90ce" } // 11/11/1919-
-        SYP { "SYP",  "\u6558\u5229\u4e9e\u938a" } // 01/01/1948-
-        SZL { "SZL",   "\u65af\u5a01\u58eb\u862d \u91cc\u90ce" } // 09/06/1974-
+        SYP { "SYP", "\u6558\u5229\u4e9e\u938a" } // 01/01/1948-
+        SZL { "SZL", "\u65af\u5a01\u58eb\u862d \u91cc\u90ce" } // 09/06/1974-
         TCC { "TCC", "\u571f\u8033\u5176\u4eba\u548c\u51f1\u79d1\u65af\u51a0" } // 1971-
         TDF { "TDF", "\u4e4d\u5f97 \u897f\u975e \u6cd5\u90ce" } // 04/01/1973-1992
         THB { "THB", "\u6cf0\u9296" } // 04/15/1928-
@@ -1026,16 +1045,16 @@ zh_TW {
         TJS { "TJS", "\u5854\u5409\u514b\u65af\u5766 \u7d22\u83ab\u5c3c" } // 01/01/2001-
         TMM { "TMM", "\u571f\u5eab\u66fc\u99ac\u7d0d\u7279" } // 11/01/1993-
         TND { "TND", "\u7a81\u5c3c\u897f\u4e9e\u7b2c\u7d0d\u723e" } // 11/01/1958-
-        TOP { "TOP",  "\u6771\u52a0\u6f58\u52a0" } // 02/14/1966-
+        TOP { "TOP", "\u6771\u52a0\u6f58\u52a0" } // 02/14/1966-
         TOS { "TOS", "\u6e6f\u52a0\u82f1\u938a" } // 1921-02/14/1966
         TPE { "TPE", "\u5e1d\u6c76 \u57c3\u65af\u5eab\u591a" } // 01/02/1959-12/07/1975
         TPP { "TPP", "\u5e1d\u6c76\u5143" } // 1895-12/31/1958
-        TRL { "TRL",  "\u571f\u8033\u5176\u91cc\u62c9" } // 11/01/1922-
+        TRL { "TRL", "\u571f\u8033\u5176\u91cc\u62c9" } // 11/01/1922-
         TTD { "TTD", "\u5343\u91cc\u9054\u53ca\u6258\u5df4\u54e5r" } // 08/31/1962-
         TTO { "TTO", "\u7279\u7acb\u5c3c\u9054\u548c\u591a\u5df4\u54e5\u820a\u5143r" } // 01/01/1899-08/01/1951
         TVD { "TVD", "\u5410\u74e6\u9b6f\u7f8e\u5143" } // 1979-
         TWD { "NT$", "\u65b0\u81fa\u5e63" } // 6/15/1949-
-        TZS { "TZS","\u5766\u6851\u5c3c\u4e9e \u5148\u4ee4" } // 06/14/1966-
+        TZS { "TZS", "\u5766\u6851\u5c3c\u4e9e \u5148\u4ee4" } // 06/14/1966-
         UAH { "UAH", "\u70cf\u514b\u862d\u683c\u91cc\u592b\u90a3" } // 09/02/1996-
         UAK { "UAK", "\u70cf\u514b\u862d \u5361\u672c\u74e6\u90a3\u8332" } // 11/13/1992-10/17/1993
         UGS { "UGS", "\u70cf\u5e72\u9054\u5148\u4ee4 (1966-1987)" } // 08/15/1966-05/15/1987
@@ -1052,13 +1071,13 @@ zh_TW {
         VDD { "VDD", "\u5317\u8d8a\u5357 \u76ae\u963f\u65af\u7279\u8d8a\u5357\u76fe" } // 1953-02/28/1958
         VDN { "VDN", "\u5317\u8d8a\u5357\u65b0\u76fe" } // 02/28/1958-05/03/1978
         VDP { "VDP", "\u5317\u8d8a\u5357 \u540d \u76ae\u963f\u65af\u7279\u8d8a\u5357\u76fe" } // 11/3/1946-1953
-        VEB { "VEB",  "\u59d4\u5167\u745e\u62c9\u535a\u5229\u74e6" } // 05/11/1871-
+        VEB { "VEB", "\u59d4\u5167\u745e\u62c9\u535a\u5229\u74e6" } // 05/11/1871-
         VGD { "VGD", "\u82f1\u5c6c\u7dad\u723e\u65af\u7fa4\u5cf6\u5143" } // 1973-
         VND { "VND", "\u8d8a\u5357\u76fe" } // 09/14/1985-
         VNN { "VNN", "\u8d8a\u5357\u65b0\u76fe" } // 05/03/1978-09/14/1985
         VNR { "VNR", "\u8d8a\u5357\u5171\u548c\u570b \u76fe" } // 12/29/1954-9/22/1975
         VNS { "VNS", "\u8d8a\u5357\u570b\u5bb6\u76fe" } // 09/22/1975-05/03/1978
-        VUV { "VUV",  "\u842c\u90a3\u675c\u842c\u675c" } // 01/01/1981-
+        VUV { "VUV", "\u842c\u90a3\u675c\u842c\u675c" } // 01/01/1981-
         WSP { "WSP", "\u897f\u85a9\u6469\u4e9e\u938a" } // 12/17/1920-07/10/1962
         WST { "WST", "\u897f\u85a9\u6469\u4e9e\u5854\u62c9" } // 07/10/1967-
         XAD { "XAD", "\u4e9e\u6d32\u7b2c\u7d0d\u723e\u6703\u8a08\u55ae\u4f4d" }
@@ -1080,9 +1099,9 @@ zh_TW {
         XMF { "XMF", "\u6cd5\u570b\u5927\u57ce\u5e02\u65b0 \u6cd5\u90ce" } // 1960-
         XNF { "XNF", "\u6cd5\u570b\u5b89\u7684\u5217\u65af\u7fa4\u5cf6 \u897f\u975e \u6cd5\u90ce" } // 01/01/1960-1975
         XOF { "XOF", "\u897f\u975e \u6cd5\u90ce BCEAO" } // 12/04/1958-
-        XPF { "XPF","CFP \u6cd5\u90ce" } // 12/26/1945-
+        XPF { "XPF", "CFP \u6cd5\u90ce" } // 12/26/1945-
         //XPS { "XPS", "\u82f1\u938a" } // 07/27/1694-
-        XSS { "XSS", "\u5148\u4ee4\u82f1\u938a" } // 07/27/1694-
+        //XSS { "XSS", "\u5148\u4ee4\u82f1\u938a" } // 07/27/1694-
         XTR { "XTR", "COMECON \u53ef\u8f49\u79fb\u76e7\u5e03" } // 1960-1992
         YDD { "YDD", "\u8449\u9580\u7b2c\u7d0d\u723e" } // 4/1/1965-05/22/1990
         YEI { "YEI", "\u4e5f\u9580\u963f\u99ac\u8fea\u91cc\u4e9e\u723e" } // 1904-02/1964
@@ -1096,12 +1115,12 @@ zh_TW {
         YUR { "YUR", "\u5357\u65af\u62c9\u592b\u6539\u5236\u5f8c\u7684\u7b2c\u7d0d\u723e" } // 07/1992-10/1993
         ZAL { "ZAL", "\u5357\u975e - \u862d\u7279 (\u91d1\u878d)" }
         ZAP { "ZAP", "\u5357\u975e\u938a" } // 1920-02/14/1961
-        ZAR { "ZAR",   "\u5357\u975e\u862d\u7279" } // 02/14/1961-
+        ZAR { "ZAR", "\u5357\u975e\u862d\u7279" } // 02/14/1961-
         ZMK { "ZMK", "\u5c1a\u6bd4\u4e9e\u514b\u74e6\u67e5" } // 01/16/1968-
         ZMP { "ZMP", "\u8d0a\u6bd4\u4e9e\u938a" } // 08/07/1964-01/16/1968
         ZRN { "ZRN", "\u85a9\u4f0a\u624e\u65b0\u4f0a\u723e" } // 11/01/1993-07/1998
         ZRZ { "ZRZ", "\u624e\u4f0a\u723e\u624e\u4f0a\u723e" } // 10/27/1971-11/01/1993
-        ZWD { "ZWD",  "\u8f9b\u5df4\u5a01\u5143" } // 04/18/1980-
+        ZWD { "ZWD", "\u8f9b\u5df4\u5a01\u5143" } // 04/18/1980-
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
@@ -1357,26 +1376,6 @@ zh_TW {
         REVISED { "\u5DF2\u4FEE\u8A02" }
     }
 
-    calendar{
-        gregorian{
-            DateTimePatterns{
-                "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
-                "ahh'\u6642'mm'\u5206'ss'\u79D2'",
-                "a h:mm:ss",
-                "a h:mm",
-                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
-                "yyyy/M/d",
-                "yyyy/M/d",
-                "{1} {0}",
-            }
-            eras{
-                "\u6C11\u570B\u524D",
-                "\u6C11\u570B",
-            }
-        }
-    }
-    
     zoneStrings {
          {
             "PST",

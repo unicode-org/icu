@@ -720,7 +720,7 @@ es {
         XOF { "XOF", "franco CFA BCEAO" }
         XPF { "CFPF","franco CFP" }
         //XPS { "XPS", "libra esterlina" }
-        XSS { "XSS", "chel\u00EDn esterlino" }
+        //XSS { "XSS", "chel\u00EDn esterlino" }
         XTR { "XTR", "rublo transferible del COMECON" }
         YDD { "YDD", "dinar yemen\u00ED" }
         YEI { "YEI", "riyal Imadi yemen\u00ED" }
