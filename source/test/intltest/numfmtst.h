@@ -18,7 +18,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
-    /*
+    /**
+     * Test APIs (to increase code coverage)
+     */   
+    virtual void TestAPI(void);
+    /**
      * Test the handling of quotes
      **/
     virtual void TestQuotes(void);
