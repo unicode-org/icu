@@ -516,6 +516,76 @@ void UnicodeSetTest::TestAPI() {
     } else {
         errln((UnicodeString)"FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
     }
+
+    // Additional tests for coverage JB#2118
+    //UnicodeSet::complement(class UnicodeString const &)
+    //UnicodeSet::complementAll(class UnicodeString const &)
+    //UnicodeSet::containsNone(class UnicodeSet const &)
+    //UnicodeSet::containsNone(long,long)
+    //UnicodeSet::containsSome(class UnicodeSet const &)
+    //UnicodeSet::containsSome(long,long)
+    //UnicodeSet::removeAll(class UnicodeString const &)
+    //UnicodeSet::retain(long)
+    //UnicodeSet::retainAll(class UnicodeString const &)
+    //UnicodeSet::serialize(unsigned short *,long,enum UErrorCode &)
+    //UnicodeSetIterator::getString(void)
+    set.clear();
+    set.complement("ab");
+    exp.applyPattern("[{ab}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: complement(\"ab\")"); return; }
+    
+    UnicodeSetIterator iset(set);
+    if (!iset.next() || !iset.isString()) {
+        errln("FAIL: UnicodeSetIterator::next/isString");
+    } else if (iset.getString() != "ab") {
+        errln("FAIL: UnicodeSetIterator::getString");
+    }
+
+    set.add((UChar32)0x61, (UChar32)0x7A);
+    set.complementAll("alan");
+    exp.applyPattern("[{ab}b-kmo-z]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: complementAll(\"alan\")"); return; }
+
+    exp.applyPattern("[a-z]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+    exp.applyPattern("[aln]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+
+    if (set.containsNone((UChar32)0x61, (UChar32)0x7A)) {
+        errln("FAIL: containsNone(UChar32, UChar32)");
+        return;
+    }
+    if (!set.containsNone((UChar32)0x41, (UChar32)0x5A)) {
+        errln("FAIL: containsNone(UChar32, UChar32)");
+        return;
+    }
+
+    set.removeAll("liu");
+    exp.applyPattern("[{ab}b-hj-kmo-tv-z]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: removeAll(\"liu\")"); return; }
+
+    set.retainAll("star");
+    exp.applyPattern("[rst]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: retainAll(\"star\")"); return; }
+
+    set.retain((UChar32)0x73);
+    exp.applyPattern("[s]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    if (set != exp) { errln("FAIL: retain('s')"); return; }
+
+    uint16_t buf[32];
+    int32_t slen = set.serialize(buf, sizeof(buf)/sizeof(buf[0]), status);
+    if (U_FAILURE(status)) { errln("FAIL: serialize"); return; }
+    if (slen != 3 || buf[0] != 2 || buf[1] != 0x73 || buf[2] != 0x74) {
+        errln("FAIL: serialize");
+        return;
+    }
 }
 
 void UnicodeSetTest::TestStrings() {
