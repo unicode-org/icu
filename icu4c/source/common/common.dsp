@@ -185,14 +185,6 @@ SOURCE=.\ucmndata.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucmp16.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucmp32.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucmp8.c
 # End Source File
 # Begin Source File
@@ -802,14 +794,6 @@ SOURCE=.\ucln_cmn.h
 # Begin Source File
 
 SOURCE=.\ucmndata.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucmp16.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucmp32.h
 # End Source File
 # Begin Source File
 
