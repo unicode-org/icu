@@ -164,7 +164,10 @@ ULine* UPerfTest::getLines(UErrorCode& status){
     return lines;
 }
 const UChar* UPerfTest::getBuffer(int32_t& len, UErrorCode& status){
-    buffer =  ucbuf_getBuffer(ucharBuf,&bufferLen,&status);
+    len = ucbuf_size(ucharBuf);
+    buffer =  (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (len+1));
+    u_strncpy(buffer,ucbuf_getBuffer(ucharBuf,&bufferLen,&status),len);
+    buffer[len]=0;
     len = bufferLen;
     return buffer;
 }
@@ -254,7 +257,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
     const char*   name;
     UBool  run_this_test;
     UBool  rval = FALSE;
-
+    UErrorCode status = U_ZERO_ERROR;
     UPerfTest* saveTest = gTest;
     gTest = this;
     do {
@@ -289,9 +292,9 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 }
                 // Run the test function for specified of passe and iterations
                 for(int32_t ps =0; ps < passes; ps++){
-                    t = testFunction->time(n);
-					if(U_FAILURE(testFunction->getStatus())){
-						printf("Performance test failed with error: %s \n", u_errorName(testFunction->getStatus()));
+                    t = testFunction->time(n,&status);
+					if(U_FAILURE(status)){
+						printf("Performance test failed with error: %s \n", u_errorName(status));
 						break;
 					}
                 }
@@ -322,9 +325,9 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                             }
                         }
                         //System.out.println("# " + meth.getName() + " x " + loops);
-                        t = testFunction->time(loops);
-						if(U_FAILURE(testFunction->getStatus())){
-							printf("Performance test failed with error: %s \n", u_errorName(testFunction->getStatus()));
+                        t = testFunction->time(loops,&status);
+						if(U_FAILURE(status)){
+							printf("Performance test failed with error: %s \n", u_errorName(status));
 							break;
 						}
                     }
@@ -397,6 +400,9 @@ UBool UPerfTest::callTest( UPerfTest& testToBeCalled, char* par )
 UPerfTest::~UPerfTest(){
     if(lines!=NULL){
         delete[] lines;
+    }
+    if(buffer!=NULL){
+        uprv_free(buffer);
     }
     ucbuf_close(ucharBuf);
 }

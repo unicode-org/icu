@@ -1,5 +1,17 @@
+/*
+**********************************************************************
+* Copyright (c) 2002, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+**********************************************************************
+*/
+/** 
+ * This Program tests the performance of ICU's Normalization engine against Windows
+ * to run it use the command like
+ *
+ * c:\normperf.exe -s C:\work\ICUCupertinoRep\icu4c\collation-perf-data  -i 10 -p 15 -f TestNames_Asian.txt -u -e UTF-8  -l
+ */
 #include "normperf.h"
-
 
 UPerfFunction* NormalizerPerformanceTest::runIndexedTest(int32_t index, UBool exec,const char* &name, char* par) {
     switch (index) {
