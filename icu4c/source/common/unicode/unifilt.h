@@ -72,17 +72,6 @@ public:
     virtual UnicodeMatcher* toMatcher() const;
 
     /**
-     * UnicodeMatcher API.  This class stubs this out.
-     */
-    UnicodeString& toPattern(UnicodeString& result,
-                             UBool escapeUnprintable) const;
-
-    /**
-     * UnicodeMatcher API.  This class stubs this out.
-     */
-    UBool matchesIndexValue(uint8_t v) const;
-
-    /**
      * Implement UnicodeMatcher API.
      */
     virtual UMatchDegree matches(const Replaceable& text,
@@ -108,13 +97,6 @@ public:
      * @draft ICU 2.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-    /**
-     * Stubbed out implementation of UnicodeMatcher API.
-     * @param toUnionTo the set into which to union the source characters
-     * @return a reference to toUnionTo
-     */
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
 
 protected:
 

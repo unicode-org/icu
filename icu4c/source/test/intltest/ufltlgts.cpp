@@ -41,6 +41,15 @@ class Filter1: public UnicodeFilter{
         else
             return TRUE;
     }
+    // Stubs
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+        return result;
+    }
+    virtual UBool matchesIndexValue(uint8_t v) const {
+        return FALSE;
+    }
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 class Filter2: public UnicodeFilter{
     virtual UnicodeFunctor* clone() const{
@@ -52,6 +61,15 @@ class Filter2: public UnicodeFilter{
         else
             return TRUE;
     }
+    // Stubs
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+        return result;
+    }
+    virtual UBool matchesIndexValue(uint8_t v) const {
+        return FALSE;
+    }
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 
 
