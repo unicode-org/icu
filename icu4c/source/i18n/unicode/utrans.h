@@ -481,7 +481,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
 
 #ifdef U_USE_DEPRECATED_FORMAT_API
 
-#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=0))
+#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=1))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
     U_CAPI UTransliterator* U_EXPORT2 
@@ -494,7 +494,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
         return utrans_open(id,dir,rules,rulesLength,parseErr,status);
     }
 
-#   define utrans_open_2_0(id,dir,status) utrans_open(id,dir,NULL,0,NULL,status)
+#   define utrans_open_2_1(id,dir,status) utrans_open(id,dir,NULL,0,NULL,status)
 
 #endif
 #endif
