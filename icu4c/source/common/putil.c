@@ -126,6 +126,9 @@
 /* Define the extension for data files, again... */
 #define DATA_TYPE "dat"
 
+/* Leave this copyright notice here! */
+static const char copyright[] = U_COPYRIGHT_STRING;
+
 /* floating point implementations ------------------------------------------- */
 
 /* We return QNAN rather than SNAN*/
