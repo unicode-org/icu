@@ -784,6 +784,9 @@ void Builder::fixupMiscellaneousOffsets() {
     header.enumToName_offset = enumToName_offset;
     header.nameToEnum_offset = nameToEnum_offset;
     header.enumToValue_offset = enumToValue_offset;
+    // header meta-info used by Java:
+	U_ASSERT(total_size > 0 && total_size < 0x7FFF);
+    header.total_size = (int16_t) total_size;
     header.valueMap_offset = valueMap_offset;
     header.valueMap_count = (int16_t) valueMap_count;
     header.nameGroupPool_offset = nameGroupPool_offset;
