@@ -617,16 +617,17 @@ typedef enum UErrorCode {
     /*
      * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
      */
-     U_REGEX_ERROR_START=0x10300,          /**< Start of codes indicating Regexp failures */
-     U_REGEX_INTERNAL_ERROR,               /**< An internal error (bug) was detected.     */
-     U_REGEX_RULE_SYNTAX,                  /**< Syntax error in regexp pattern.           */
+     U_REGEX_ERROR_START=0x10300,          /**< Start of codes indicating Regexp failures         */
+     U_REGEX_INTERNAL_ERROR,               /**< An internal error (bug) was detected.             */
+     U_REGEX_RULE_SYNTAX,                  /**< Syntax error in regexp pattern.                   */
      U_REGEX_INVALID_STATE,                /**< RegexMatcher in invalid state for requested operation */
      U_REGEX_BAD_ESCAPE_SEQUENCE,          /**< Unrecognized backslash escape sequence in pattern */
-     U_REGEX_PROPERTY_SYNTAX,              /**< Incorrect Unicode property                */
+     U_REGEX_PROPERTY_SYNTAX,              /**< Incorrect Unicode property                        */
      U_REGEX_UNIMPLEMENTED,                /**< Use of regexp feature that is not yet implemented. */
      U_REGEX_MISMATCHED_PAREN,             /**< Incorrectly nested parentheses in regexp pattern. */
-     U_REGEX_NUMBER_TOO_BIG,               /**< Decimal number is too large.              */
-     U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval        */
+     U_REGEX_NUMBER_TOO_BIG,               /**< Decimal number is too large.                      */
+     U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval                       */
+     U_REGEX_MAX_LT_MIN,                   /**< In {min,max}, max is less than min.               */
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
     U_ERROR_LIMIT=U_REGEX_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
