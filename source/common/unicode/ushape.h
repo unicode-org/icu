@@ -50,13 +50,12 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 #define U_SHAPE_DIGITS_AN2EN                    0x40
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_LR          0x60
 #define U_SHAPE_DIGITS_ALEN2AN_INIT_AL          0x80
-#define U_SHAPE_DIGITS_RESERVED1                0xa0
-#define U_SHAPE_DIGITS_RESERVED2                0xc0
-#define U_SHAPE_DIGITS_RESERVED3                0xe0
+#define U_SHAPE_DIGITS_RESERVED                 0xa0
 #define U_SHAPE_DIGITS_MASK                     0xe0
 
 #define U_SHAPE_DIGIT_TYPE_AN                   0
 #define U_SHAPE_DIGIT_TYPE_AN_EXTENDED          0x100
-#define U_SHAPE_DIGIT_TYPE_MASK                 0x100
+#define U_SHAPE_DIGIT_TYPE_RESERVED             0x200
+#define U_SHAPE_DIGIT_TYPE_MASK                 0x3f00
 
 #endif
