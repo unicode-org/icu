@@ -675,10 +675,12 @@ SimpleDateFormat::subFormat(UnicodeString& result,
 UnicodeString&
 SimpleDateFormat::zeroPaddingNumber(UnicodeString& result, int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
+    FieldPosition pos(0);
+
     result.remove();
     fNumberFormat->setMinimumIntegerDigits(minDigits);
     fNumberFormat->setMaximumIntegerDigits(maxDigits);
-    return fNumberFormat->format(value, result, FieldPosition(0));  // 3rd arg is there to speed up processing
+    return fNumberFormat->format(value, result, pos);  // 3rd arg is there to speed up processing
 }
 
 //----------------------------------------------------------------------
