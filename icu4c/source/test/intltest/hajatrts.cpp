@@ -52,6 +52,22 @@ void HangToJamoTransliteratorTest::runIndexedTest( int32_t index, UBool exec, co
         default: name = ""; break; /*needed to end loop*/
     }
 }
+
+// This test used to call handleTransliterate.  That is a protected
+// method that isn't supposed to be called externally.  This method is
+// a workaround to make it call the correct method.
+static void pseudoHandleTransliterate(const Transliterator* t,
+                                      Replaceable& text,
+                                      UTransPosition& index,
+                                      UBool incremental) {
+    if (incremental) {
+        UErrorCode status = U_ZERO_ERROR;
+        t->transliterate(text, index, status);
+    } else {
+        t->finishTransliteration(text, index);
+    }
+}
+
 /**
  * Used by TestConstruction() and TestTransliterate.
  */
@@ -254,7 +270,7 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     index.start = cursor;
     index.limit = limit;
     UnicodeString rsource(source);
-    t.handleTransliterate(rsource, index, FALSE);
+    pseudoHandleTransliterate(&t, rsource, index, FALSE);
     expectAux(t.getID() + ":handleTransliterator(increment=FALSE) " + message, source + "-->" + rsource, rsource==expectedResult, expectedResult);
 
     UnicodeString rsource2(source);
@@ -264,7 +280,7 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     _index.start = cursor;
     _index.limit = limit;
     uprv_memcpy(&index, &_index, sizeof(index));
-    t.handleTransliterate(rsource2, index, TRUE);
+    pseudoHandleTransliterate(&t, rsource2, index, TRUE);
     expectAux(t.getID() + ":handleTransliterator(increment=TRUE) " + message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
     /*ceates a copy constructor and checks the transliteration*/
@@ -272,13 +288,13 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    copy->handleTransliterate(rsource2, index, FALSE);
+    pseudoHandleTransliterate(copy, rsource2, index, FALSE);
     expectAux(t.getID() + "COPY:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    copy->handleTransliterate(rsource2, index, TRUE);
+    pseudoHandleTransliterate(copy, rsource2, index, TRUE);
     expectAux(t.getID() + "COPY:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     delete copy;
 
@@ -287,13 +303,13 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    clone->handleTransliterate(rsource2, index, FALSE);
+    pseudoHandleTransliterate(clone, rsource2, index, FALSE);
     expectAux(t.getID() + "CLONE:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    clone->handleTransliterate(rsource2, index, TRUE);
+    pseudoHandleTransliterate(clone, rsource2, index, TRUE);
     expectAux(t.getID() + "CLONE:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
     /*Uses the assignment operator to create a transliterator and tests transliteration*/
@@ -301,13 +317,13 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    equal.handleTransliterate(rsource2, index, FALSE);
+    pseudoHandleTransliterate(&equal, rsource2, index, FALSE);
     expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
     rsource2.remove();
     rsource2.append(source);
     uprv_memcpy(&index, &_index, sizeof(index));
-    equal.handleTransliterate(rsource2, index, TRUE);
+    pseudoHandleTransliterate(&equal, rsource2, index, TRUE);
     expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     delete clone;
 
@@ -329,7 +345,7 @@ void HangToJamoTransliteratorTest::expect(const HangulJamoTransliterator& t,
     index.contextLimit=source.length();
     index.start=0;
     index.limit=source.length();
-    t.handleTransliterate(rsource, index, TRUE);
+    pseudoHandleTransliterate(&t, rsource, index, TRUE);
     expectAux(t.getID() + ":handleTransliterate " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
 
 }
