@@ -384,7 +384,7 @@ void DateFormatRegressionTest::Test4061287()
     bool_t ok = FALSE;
     //try {
     logln(UnicodeString("") + df->parse("35/01/1971", status));
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         ok = TRUE;
     //logln(df.parse("35/01/1971").toString());
     //} catch (ParseException e) {ok=TRUE;}
@@ -858,7 +858,7 @@ void DateFormatRegressionTest::Test4106807()
             format->setTimeZone(*gmt); 
             dt = format->parse(dateString, status);
             // {sfb} some of these parses will fail purposely
-            if(FAILURE(status))
+            if(U_FAILURE(status))
                 break;
             status = U_ZERO_ERROR;
             UnicodeString fmtd;
@@ -990,12 +990,12 @@ DateFormatRegressionTest::Test4162071()
     UnicodeString format("EEE', 'dd-MMM-yyyy HH:mm:ss z"); // RFC 822/1123
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat df(format, Locale::US, status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         errln("Couldn't create SimpleDateFormat");
     
     //try {
         UDate x = df.parse(dateString, status);
-        if(SUCCESS(status))
+        if(U_SUCCESS(status))
             logln("Parse format \"" + format + "\" ok");
         else
             errln("Parse format \"" + format + "\" failed.");
@@ -1014,7 +1014,7 @@ void DateFormatRegressionTest::Test4182066() {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat fmt("MM/dd/yy", Locale::US, status);
     SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::US, status);
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         errln("Couldn't create SimpleDateFormat");
         return;
     }
@@ -1054,7 +1054,7 @@ void DateFormatRegressionTest::Test4182066() {
         UDate expected = DATES[i];
         status = U_ZERO_ERROR;
         UDate actual = fmt.parse(str, status);
-        if (FAILURE(status)) {
+        if (U_FAILURE(status)) {
             actual = FAIL_DATE;
         }
         UnicodeString actStr;
@@ -1099,7 +1099,7 @@ DateFormatRegressionTest::Test4210209() {
     SimpleDateFormat sdisp("MMM dd yyyy GG", Locale::US, status);
     DateFormat& fmt = *(DateFormat*)&sfmt; // Yuck: See j25
     DateFormat& disp = *(DateFormat*)&sdisp; // Yuck: See j25
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         errln("Couldn't create SimpleDateFormat");
         return;
     }
@@ -1124,7 +1124,7 @@ DateFormatRegressionTest::Test4210209() {
     // succeed, the bug is fixed.  If the bug isn't fixed, they will throw
     // an exception.
     GregorianCalendar cal(status);
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         errln("FAIL: Unable to create Calendar");
         return;
     }
@@ -1133,7 +1133,7 @@ DateFormatRegressionTest::Test4210209() {
     cal.set(2000, Calendar::FEBRUARY, 29); // This should work!
     logln(UnicodeString("Attempt to set Calendar to Feb 29 2000: ") +
                         disp.format(cal.getTime(status), ss.remove()));
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         errln("FAIL: Unable to set Calendar to Feb 29 2000");
     }
 }

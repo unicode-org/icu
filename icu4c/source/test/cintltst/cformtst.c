@@ -95,7 +95,7 @@ UChar* myDateFormat(UDateFormat* dat, UDate d1)
         result1=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(dat, d1, result1, resultlength, &pos, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using udat_format(.....): %s\n", myErrorName(status));
         return 0;

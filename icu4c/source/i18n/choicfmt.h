@@ -299,7 +299,7 @@ public:
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -311,7 +311,7 @@ public:
      * </pre>
      * @return          The class ID for all objects of this class.
      */
-    static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
     /*
      * Finds the least double greater than d (if positive == true),
@@ -369,7 +369,7 @@ private:
     int32_t         fCount;
 };
  
-inline ClassID 
+inline UClassID 
 ChoiceFormat::getDynamicClassID() const
 { 
     return ChoiceFormat::getStaticClassID(); 

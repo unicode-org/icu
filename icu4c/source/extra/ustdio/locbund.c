@@ -123,7 +123,7 @@ u_locbund_getNumberFormat(ULocaleBundle *bundle)
   
   if(bundle->fNumberFormat == 0) {
     bundle->fNumberFormat = unum_open(UNUM_DEFAULT, bundle->fLocale, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
   }
   
@@ -137,7 +137,7 @@ u_locbund_getPercentFormat(ULocaleBundle *bundle)
   
   if(bundle->fPercentFormat == 0) {
     bundle->fPercentFormat = unum_open(UNUM_PERCENT, bundle->fLocale, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
   }
   
@@ -152,7 +152,7 @@ u_locbund_getCurrencyFormat(ULocaleBundle *bundle)
   if(bundle->fCurrencyFormat == 0) {
     bundle->fCurrencyFormat = unum_open(UNUM_CURRENCY, bundle->fLocale, 
                     &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
   }
   
@@ -174,7 +174,7 @@ u_locbund_getScientificFormat(ULocaleBundle *bundle)
     bundle->fScientificFormat = unum_openPattern(pattern, -1,
                          bundle->fLocale, &status);
     
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
   }
   

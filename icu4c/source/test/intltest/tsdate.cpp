@@ -155,7 +155,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
         UErrorCode status = U_ZERO_ERROR;
         if (i == 0) date[i] = theDate;
         else date[i] = fFormat->parse(string[i-1], status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             describeTest();
             errln("********** FAIL: Parse of " + string[i-1] + " failed.");

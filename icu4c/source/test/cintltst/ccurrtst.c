@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda             Ported for CAPI
+*     Madhu Katragadda             Ported for C API
 *********************************************************************************
 */
 
@@ -72,7 +72,7 @@ void currTest()
     UCollationResult expectedResult = UCOL_EQUAL;
     log_verbose("Testing currency of all locales\n");
     c = ucol_open(NULL, &status);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err("collator open failed! :%s\n", myErrorName(status));
         return;

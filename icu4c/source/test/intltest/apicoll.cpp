@@ -76,7 +76,7 @@ CollationAPITest::TestProperty( char* par )
     logln("Test ctors : ");
     col = Collator::createInstance(success);
 
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Default Collator creation failed.");
         return;
@@ -134,7 +134,7 @@ CollationAPITest::TestProperty( char* par )
 
     delete col; col = 0;
     col = Collator::createInstance(Locale::FRENCH, success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Creating French collation failed.");
         return;
@@ -157,7 +157,7 @@ CollationAPITest::TestProperty( char* par )
     Collator *junk = 0;
     junk = Collator::createInstance(abcd, success);
 
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Junk collation creation failed, should at least return default.");
         delete col;
@@ -166,7 +166,7 @@ CollationAPITest::TestProperty( char* par )
 
     delete col;
     col = Collator::createInstance(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Creating default collator failed.");
         delete junk;
@@ -175,7 +175,7 @@ CollationAPITest::TestProperty( char* par )
 
     doAssert((*col == *junk), "The default collation should be returned.");
     Collator *frCol = Collator::createInstance(Locale::FRANCE, success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Creating French collator failed.");
         delete col; delete junk;
@@ -200,7 +200,7 @@ CollationAPITest::TestHashCode( char* par )
     UErrorCode success = U_ZERO_ERROR;
     Collator *col1 = 0;
     col1 = Collator::createInstance(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
         return;
@@ -209,7 +209,7 @@ CollationAPITest::TestHashCode( char* par )
     Collator *col2 = 0;
     Locale dk("da", "DK", "");
     col2 = Collator::createInstance(dk, success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Danish collation creation failed.");
         return;
@@ -217,7 +217,7 @@ CollationAPITest::TestHashCode( char* par )
 
     Collator *col3 = 0;
     col3 = Collator::createInstance(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("2nd default collation creation failed.");
         return;
@@ -245,7 +245,7 @@ CollationAPITest::TestCollationKey( char* par )
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
         return;
@@ -329,7 +329,7 @@ CollationAPITest::TestElemIter( char* par )
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
         return;
@@ -347,7 +347,7 @@ CollationAPITest::TestElemIter( char* par )
     doAssert((*iterator1 == *iterator2), "The two iterators should be the same"); 
     doAssert((*iterator1 != *iterator3), "The two iterators should be different");
     order1 = iterator1->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -355,7 +355,7 @@ CollationAPITest::TestElemIter( char* par )
 
     doAssert((*iterator1 != *iterator2), "The first iterator advance failed");
     order2 = iterator2->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -364,7 +364,7 @@ CollationAPITest::TestElemIter( char* par )
     doAssert((*iterator1 == *iterator2), "The second iterator advance failed"); 
     doAssert((order1 == order2), "The order result should be the same");
     order3 = iterator3->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -378,7 +378,7 @@ CollationAPITest::TestElemIter( char* par )
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be the same");
 
     order1 = iterator1->next(success); order3 = iterator3->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -396,7 +396,7 @@ CollationAPITest::TestElemIter( char* par )
 
     iterator1->reset(); iterator2->reset(); iterator3->reset();
     order1 = iterator1->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -405,7 +405,7 @@ CollationAPITest::TestElemIter( char* par )
     doAssert((*iterator1 != *iterator2), "The first iterator advance failed");
 
     order2 = iterator2->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -415,7 +415,7 @@ CollationAPITest::TestElemIter( char* par )
     doAssert((order1 == order2), "The order result should be the same");
 
     order3 = iterator3->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -429,7 +429,7 @@ CollationAPITest::TestElemIter( char* par )
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be the same");
 
     order1 = iterator1->next(success); order2 = iterator2->next(success); order3 = iterator3->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -441,7 +441,7 @@ CollationAPITest::TestElemIter( char* par )
         CollationElementIterator::tertiaryOrder(order3)), "The tertiary orders should be different");
 
     order1 = iterator1->next(success); order3 = iterator3->next(success);
-    if (FAILURE(success))
+    if (U_FAILURE(success))
     {
         errln("Somehow ran out of memory stepping through the iterator.");
         return;
@@ -468,13 +468,13 @@ CollationAPITest::TestOperators( char* par )
     UnicodeString ruleset1("< a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     UnicodeString ruleset2("< a, A < b, B < c, C < d, D, e, E");
     RuleBasedCollator *col1 = new RuleBasedCollator(ruleset1, success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         errln("RuleBasedCollator creation failed.");
         return;
     }
     success = U_ZERO_ERROR;
     RuleBasedCollator *col2 = new RuleBasedCollator(ruleset2, success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         errln("The RuleBasedCollator constructor failed when building with the 2nd rule set.");
         return;
     }
@@ -486,7 +486,7 @@ CollationAPITest::TestOperators( char* par )
         
     success = U_ZERO_ERROR;
     Collator *col3 = Collator::createInstance(success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         errln("Default collation creation failed.");
         return;
     }
@@ -500,7 +500,7 @@ CollationAPITest::TestOperators( char* par )
 
     const UnicodeString& defRules = ((RuleBasedCollator*)col3)->getRules();
     RuleBasedCollator* col6 = new RuleBasedCollator(defRules, success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         errln("Creating default collation with rules failed.");
         return;
     }
@@ -521,7 +521,7 @@ CollationAPITest::TestDuplicate( char* par )
 {
     UErrorCode status = U_ZERO_ERROR;
     Collator *col1 = Collator::createInstance(status);
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         logln("Default collator creation failed.");
         return;
     }
@@ -544,7 +544,7 @@ CollationAPITest::TestCompare( char* par )
     Collator *col = 0;
     UErrorCode success = U_ZERO_ERROR;
     col = Collator::createInstance(success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         errln("Default collation creation failed.");
         return;
     }

@@ -196,7 +196,7 @@ LocaleTest::TestDisplayNames()
     UErrorCode err = U_ZERO_ERROR;
 
     Locale::setDefault(english, err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         errln("Locale::setDefault returned error code " + (int)err);
         return;
     }
@@ -214,7 +214,7 @@ LocaleTest::TestDisplayNames()
     doTestDisplayNames(greek, DLANG_EL, FALSE);
 
     Locale::setDefault(french, err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         errln("Locale::setDefault returned error code " + (int)err);
         return;
     }
@@ -232,7 +232,7 @@ LocaleTest::TestDisplayNames()
     doTestDisplayNames(greek, DLANG_EL, TRUE);
 
     Locale::setDefault(saveDefault, err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         errln("Locale::setDefault returned error code " + (int)err);
         return;
     }
@@ -645,7 +645,7 @@ LocaleTest::TestISO3Fallback()
         result = test.getISO3Language(result, err);
     //}
     //catch (MissingResourceException e) {
-        if(FAILURE(err))
+        if(U_FAILURE(err))
             gotException = TRUE;
     //}
     if (!gotException)
@@ -657,7 +657,7 @@ LocaleTest::TestISO3Fallback()
         result = test.getISO3Country(result, err);
     //}
     //catch (MissingResourceException e) {
-        if(FAILURE(err))
+        if(U_FAILURE(err))
             gotException = TRUE;
     //}
     if (!gotException)
@@ -1217,7 +1217,7 @@ LocaleTest::date(int32_t y, int32_t m, int32_t d, int32_t hr, int32_t min, int32
     cal->clear();
     cal->set(1900 + y, m, d, hr, min, sec); // Add 1900 to follow java.util.Date protocol
     UDate dt = cal->getTime(status);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
         return 0.0;
     
     delete cal;
@@ -1257,7 +1257,7 @@ LocaleTest::Test4147315()
         locale.getISO3Country(result, err);
 
         UnicodeString temp;
-        if(SUCCESS(err))
+        if(U_SUCCESS(err))
             errln("ERROR: getISO3Country() returns: " + result + 
                 " for locale '" + locale.getName(temp) + "' rather than exception" );
     //} catch(MissingResourceException e) { }
@@ -1281,7 +1281,7 @@ LocaleTest::Test4147317()
         locale.getISO3Language(result, err);
 
         UnicodeString temp;
-        if(SUCCESS(err))
+        if(U_SUCCESS(err))
             errln("ERROR: getISO3Language() returns: " + result + 
                " for locale '" + locale.getName(temp) + "' rather than exception" );
     //} catch(MissingResourceException e) { }
@@ -1406,7 +1406,7 @@ LocaleTest::Test4105828()
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t i = 0; i < 4; ++i) {
         NumberFormat *fmt = NumberFormat::createPercentInstance(LOC[i], status);
-        if(FAILURE(status)) {
+        if(U_FAILURE(status)) {
             errln("Couldn't create NumberFormat");
             return;
         }

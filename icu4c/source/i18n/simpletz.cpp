@@ -53,7 +53,7 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
     endDayOfWeek(0),
     endTime(0),
     startYear(0),
-    dstSavings(kMillisPerHour),
+    dstSavings(U_MILLIS_PER_HOUR),
     useDaylight(FALSE)
 {
     setID(ID);
@@ -79,7 +79,7 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     this->endDay         = endDay;
     this->endDayOfWeek     = endDayOfWeek;
     this->endTime         = endTime;
-    this->dstSavings     = kMillisPerHour;
+    this->dstSavings     = U_MILLIS_PER_HOUR;
 
     decodeRules(status);
 }
@@ -352,7 +352,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t millis, 
                            int32_t monthLength, UErrorCode& status) const
 {
-    if(FAILURE(status)) return 0;
+    if(U_FAILURE(status)) return 0;
 
     if ((era != GregorianCalendar::AD && era != GregorianCalendar::BC)
         || month < Calendar::JANUARY
@@ -362,7 +362,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         || dayOfWeek < Calendar::SUNDAY
         || dayOfWeek > Calendar::SATURDAY
         || millis < 0
-        || millis >= kMillisPerDay
+        || millis >= U_MILLIS_PER_DAY
         || monthLength < 28
         || monthLength > 31) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -397,8 +397,8 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
          * passed in to convert them from standard to wall time.  We then must
          * normalize the millis to the range 0..millisPerDay-1. */
         millis += dstSavings; // Assume dstSavings > 0
-        while(millis >= kMillisPerDay) {
-            millis -= kMillisPerDay;
+        while(millis >= U_MILLIS_PER_DAY) {
+            millis -= U_MILLIS_PER_DAY;
             ++day;
             dayOfWeek = 1 + (dayOfWeek % 7); // Assume dayOfWeek is one-based
             if (day > monthLength) {
@@ -563,7 +563,7 @@ bool_t SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
     // This method is wasteful since it creates a new GregorianCalendar and
     // deletes it each time it is called.  However, this is a deprecated method
     // and provided only for Java compatibility as of 8/6/97 [LIU].
-    if (FAILURE(status)) return FALSE;
+    if (U_FAILURE(status)) return FALSE;
     GregorianCalendar *gc = new GregorianCalendar(*this, status);
     gc->setTime(date, status);
     bool_t result = gc->inDaylightTime(status);
@@ -701,7 +701,7 @@ SimpleTimeZone::decodeRules(UErrorCode& status)
 void 
 SimpleTimeZone::decodeStartRule(UErrorCode& status) 
 {
-    if(FAILURE(status)) return;
+    if(U_FAILURE(status)) return;
 
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (startDay != 0) {
@@ -709,7 +709,7 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        if (startTime < 0 || startTime > kMillisPerDay) {
+        if (startTime < 0 || startTime > U_MILLIS_PER_DAY) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
@@ -752,7 +752,7 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
 void 
 SimpleTimeZone::decodeEndRule(UErrorCode& status) 
 {
-    if(FAILURE(status)) return;
+    if(U_FAILURE(status)) return;
 
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (endDay != 0) {
@@ -760,7 +760,7 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        if (endTime < 0 || endTime > kMillisPerDay) {
+        if (endTime < 0 || endTime > U_MILLIS_PER_DAY) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }

@@ -293,7 +293,7 @@ class RuleBasedCollatorStreamer;
  * .     RuleBasedCollator* en_USCollation = 
  * .         (RuleBasedCollator*) Collator::createInstance(Locale::US, status);
  * .     // Always check the error code after each call.
- * .     if (FAILURE(status)) return;
+ * .     if (U_FAILURE(status)) return;
  * .     // add a few Japanese character to sort before English characters
  * .     // suppose the last character before the first base letter 'a' in
  * .     // the English collation rule is 0x2212
@@ -476,7 +476,7 @@ public :
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-  virtual ClassID getDynamicClassID(void) const
+  virtual UClassID getDynamicClassID(void) const
     { return RuleBasedCollator::getStaticClassID(); }
 
 
@@ -490,7 +490,7 @@ public :
      *
      * @return          The class ID for all objects of this class.
      */
-  static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
   /*****************************************************************************
  * PRIVATE

@@ -95,7 +95,7 @@
  * for the United States:
  * <blockquote>
  * <pre>
- * .      uloc_US
+ * .      ULOC_US
  * </pre>
  * </blockquote>
  *
@@ -176,32 +176,32 @@
  *
  * Useful constants for language.
  */
-#define uloc_ENGLISH "en"
-#define uloc_FRENCH "fr"
-#define uloc_GERMAN "de"
-#define uloc_ITALIAN "it"
-#define uloc_JAPANESE "ja"
-#define uloc_KOREAN "ko"
-#define uloc_CHINESE "zh"
-#define uloc_SIMPLIFIED_CHINESE "zh_CN"
-#define uloc_TRADITIONAL_CHINESE "zh_TW"
+#define ULOC_ENGLISH "en"
+#define ULOC_FRENCH "fr"
+#define ULOC_GERMAN "de"
+#define ULOC_ITALIAN "it"
+#define ULOC_JAPANESE "ja"
+#define ULOC_KOREAN "ko"
+#define ULOC_CHINESE "zh"
+#define ULOC_SIMPLIFIED_CHINESE "zh_CN"
+#define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
 /**
  *
  * Useful constants for country.
  */
-#define uloc_FRANCE "fr_FR"
-#define uloc_GERMANY "de_DE"
-#define uloc_ITALY "it_IT"
-#define uloc_JAPAN "ja_JP"
-#define uloc_KOREA "ko_KR"
-#define uloc_CHINA "zh_CN"
-#define uloc_PRC "zh_CN"
-#define uloc_TAIWAN "zh_TW"
-#define uloc_UK "en_GB"
-#define uloc_US "en_US"
-#define uloc_CANADA "en_CA"
-#define uloc_CANADA_FRENCH "fr_CA"
+#define ULOC_FRANCE "fr_FR"
+#define ULOC_GERMANY "de_DE"
+#define ULOC_ITALY "it_IT"
+#define ULOC_JAPAN "ja_JP"
+#define ULOC_KOREA "ko_KR"
+#define ULOC_CHINA "zh_CN"
+#define ULOC_PRC "zh_CN"
+#define ULOC_TAIWAN "zh_TW"
+#define ULOC_UK "en_GB"
+#define ULOC_US "en_US"
+#define ULOC_CANADA "en_CA"
+#define ULOC_CANADA_FRENCH "fr_CA"
 
 
 
@@ -212,7 +212,7 @@
  * @return the system default locale
  */
 
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
@@ -221,7 +221,7 @@ uloc_getDefault(void);
  * @param localeID the new system default locale
  * @param status the error information if the setting of default locale fails
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 uloc_setDefault(const char* localeID,
         UErrorCode*       status);
 
@@ -237,7 +237,7 @@ uloc_setDefault(const char* localeID,
  * than languageCapacity, the returned language code will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getLanguage(const char*    localeID,
          char* language,
          int32_t languageCapacity,
@@ -255,7 +255,7 @@ uloc_getLanguage(const char*    localeID,
  * than countryCapacity, the returned country code will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getCountry(const char*    localeID,
         char* country,
         int32_t countryCapacity,
@@ -273,7 +273,7 @@ uloc_getCountry(const char*    localeID,
  * than variantCapacity, the returned variant code will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getVariant(const char*    localeID,
         char* variant,
         int32_t variantCapacity,
@@ -290,7 +290,7 @@ uloc_getVariant(const char*    localeID,
  * than nameCapacity, the returned full name will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getName(const char*    localeID,
          char* name,
          int32_t nameCapacity,
@@ -302,7 +302,7 @@ uloc_getName(const char*    localeID,
  * @param localeID the locale to get the ISO langauge code with
  * @return language the ISO langauge code for localeID
  */
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uloc_getISO3Language(const char* localeID);
 
 
@@ -313,7 +313,7 @@ uloc_getISO3Language(const char* localeID);
  * @return country the ISO country code for localeID
  */
 
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uloc_getISO3Country(const char* localeID);
 
 /**
@@ -323,7 +323,7 @@ uloc_getISO3Country(const char* localeID);
  * @return country the Win32 LCID for localeID
  */
 
-CAPI uint32_t U_EXPORT2
+U_CAPI uint32_t U_EXPORT2
 uloc_getLCID(const char* localeID);
 
 /**
@@ -337,7 +337,7 @@ uloc_getLCID(const char* localeID);
  * @return the actual buffer size needed for the displayable langauge code.  If it's greater 
  * than languageCapacity, the returned language code will be truncated.  
  */
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayLanguage(const char* locale,
             const char* inLocale,
             UChar* language,
@@ -356,7 +356,7 @@ uloc_getDisplayLanguage(const char* locale,
  * than countryCapacity, the returned displayable country code will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayCountry(const char* locale,
             const char* inLocale,
             UChar* country,
@@ -376,7 +376,7 @@ uloc_getDisplayCountry(const char* locale,
  * than variantCapacity, the returned displayable variant code will be truncated.  
  */
  
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayVariant(const char* locale,
             const char* inLocale,
                UChar* variant,
@@ -395,7 +395,7 @@ uloc_getDisplayVariant(const char* locale,
  * than variantCapacity, the returned displayable name will be truncated.  
  */
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayName(const char* localeID,
             const char* inLocaleID, /* NULL may be used to specify the default */
             UChar* result,
@@ -413,7 +413,7 @@ uloc_getDisplayName(const char* localeID,
  * @param index the specific locale name index of the available locale list
  * @return a specified locale name of all available locales
  */
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uloc_getAvailable(int32_t index);
 
 /**
@@ -421,7 +421,7 @@ uloc_getAvailable(int32_t index);
  * Gets the size of the all available locale list.
  * @return the size of the locale list
  */
-CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
+U_CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
 
 /**
  *
@@ -431,7 +431,7 @@ CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
  * terminated with a null pointer.
  * @return a list of all available language codes
  */
-CAPI const char* const* U_EXPORT2
+U_CAPI const char* const* U_EXPORT2
 uloc_getISOLanguages(void);
 
 /**
@@ -442,7 +442,7 @@ uloc_getISOLanguages(void);
  * terminated with a null pointer.
  * @return a list of all available country codes
  */
-CAPI const char* const* U_EXPORT2
+U_CAPI const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
 /**
@@ -450,7 +450,7 @@ uloc_getISOCountries(void);
  * Gets the directory containing the locale data files.
  * @return the locale data file directory
  */
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 uloc_getDataDirectory(void);
 
 /**
@@ -459,7 +459,7 @@ uloc_getDataDirectory(void);
  * @return the new directory to fetch locale data from
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 uloc_setDataDirectory(const char* newDirectory);
 
 /*Internal function */

@@ -42,9 +42,9 @@
 /* UnicodeString stuff */
 typedef struct UnicodeString UnicodeString;
 
-CAPI const UChar* T_UnicodeString_getUChars(const UnicodeString *s);
+U_CAPI const UChar* T_UnicodeString_getUChars(const UnicodeString *s);
 /* Locale stuff */
-CAPI void locale_set_default(const char *id);
+U_CAPI void locale_set_default(const char *id);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
@@ -225,7 +225,7 @@ void uloc_setDefault(const char*   newDefaultLocale,
              UErrorCode* err) 
 {
 
-  if (FAILURE(*err))    return;
+  if (U_FAILURE(*err))    return;
   /* the error code isn't currently used for anything by this function*/
   
   if (newDefaultLocale == NULL) 
@@ -256,7 +256,7 @@ int32_t uloc_getParent(const char*    localeID,
   int offset = 0;
   int count = 0;
 
-  if (FAILURE(*err)) return 0;
+  if (U_FAILURE(*err)) return 0;
 
   if (localeID == NULL)    localeID = uloc_getDefault();
   
@@ -299,7 +299,7 @@ uloc_getLanguage(const char*    localeID,
   int i=0;
   
   
-  if (FAILURE(*err)) return 0;
+  if (U_FAILURE(*err)) return 0;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
 
@@ -323,7 +323,7 @@ uloc_getLanguage(const char*    localeID,
       /*We need to normalize for changes in ISO language names,
         We special case out the recent ISO changes, translating them
         internally to the old iso codes.*/
-      if (SUCCESS(*err))
+      if (U_SUCCESS(*err))
     {
       if (icu_strcmp("he", language) == 0) icu_strcpy(language, "iw");
       else if (icu_strcmp("yi", language) == 0) icu_strcpy(language, "ji");
@@ -342,7 +342,7 @@ int32_t uloc_getCountry(const char* localeID,
 {
   int i=0;
   
-  if (FAILURE(*err)) return 0;
+  if (U_FAILURE(*err)) return 0;
   if (localeID == NULL)    localeID = uloc_getDefault();
   
   localeID = _findCharSeparator(localeID);
@@ -376,7 +376,7 @@ int32_t uloc_getVariant(const char* localeID,
 {
   int i=0;
   
-  if (FAILURE(*err)) return 0;
+  if (U_FAILURE(*err)) return 0;
   if (localeID == NULL)    localeID = uloc_getDefault();
   
   localeID = _findCharSeparator(localeID);
@@ -416,7 +416,7 @@ int32_t uloc_getName(const char* localeID,
   int cntSze = 0;
   UErrorCode int_err = U_ZERO_ERROR;
   
-  if (FAILURE(*err)) return 0;
+  if (U_FAILURE(*err)) return 0;
   /*First we preflight the components in order to ensure a valid return value*/
   if (localeID == NULL)    localeID = uloc_getDefault();
 
@@ -453,7 +453,7 @@ int32_t uloc_getName(const char* localeID,
   /*We fill in the users buffer*/
   if ((nameCapacity>0) && cntSze)
     {
-      if (SUCCESS(int_err)) icu_strcat(name, "_");
+      if (U_SUCCESS(int_err)) icu_strcat(name, "_");
       
       uloc_getCountry(localeID,
           name + icu_strlen(name),
@@ -462,7 +462,7 @@ int32_t uloc_getName(const char* localeID,
       
       if (varSze)
     {
-      if (SUCCESS(int_err)) icu_strcat(name, "_");
+      if (U_SUCCESS(int_err)) icu_strcat(name, "_");
       
       uloc_getVariant(localeID,
                    name + icu_strlen(name),
@@ -484,7 +484,7 @@ const char* uloc_getISO3Language(const char* localeID)
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
-  if (FAILURE(err)) return "";
+  if (U_FAILURE(err)) return "";
   index = _findIndex(_languages, sizeof(_languages),lang);
   if (index < 0) return "";
   return &(_languages3[index * 4]);
@@ -498,7 +498,7 @@ const char* uloc_getISO3Country(const char* localeID)
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
-  if (FAILURE(err)) return "";
+  if (U_FAILURE(err)) return "";
   index = _findIndex(_countries, sizeof(_countries), cntry);
   if (index < 0) return "";
 
@@ -513,11 +513,11 @@ uint32_t uloc_getLCID(const char* localeID)
   uint32_t result = 0;
   UResourceBundle* bundle = ures_open(uloc_getDataDirectory(), localeID, &err);
   
-  if (SUCCESS(err))
+  if (U_SUCCESS(err))
     {
       lcid = ures_get(bundle, _kLocaleID, &err);
       ures_close(bundle);
-      if (FAILURE(err) || !lcid || u_strlen(lcid) == 0)    
+      if (U_FAILURE(err) || !lcid || u_strlen(lcid) == 0)    
     {
       return 0;
     }
@@ -547,7 +547,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   const char* dataDir = uloc_getDataDirectory();
   bool_t done = FALSE;
 
-  if (FAILURE(*status)) return 0;
+  if (U_FAILURE(*status)) return 0;
   
   if (inLocale == NULL)    
     {
@@ -595,14 +595,14 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       
       bundle = ures_open(dataDir, inLocale, &err);
       
-      if (SUCCESS(err))
+      if (U_SUCCESS(err))
         {
           UErrorCode err = U_ZERO_ERROR;
           temp = ures_getTaggedArrayItem(bundle,
                          _kLanguages,
                          inLanguageBuffer, 
                          &err);
-          if (SUCCESS(err))        result = temp;
+          if (U_SUCCESS(err))        result = temp;
           ures_close(bundle);      
           }
 
@@ -672,7 +672,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
   const char* dataDir = uloc_getDataDirectory();
   bool_t done = FALSE;
 
-  if (FAILURE(*status)) return 0;
+  if (U_FAILURE(*status)) return 0;
   
   
 
@@ -720,7 +720,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
 
       bundle = ures_open(dataDir, inLocale, &err);      
       
-      if (SUCCESS(err))
+      if (U_SUCCESS(err))
     {
       const UChar* temp;
       
@@ -728,7 +728,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
                      _kCountries,
                      inCountryBuffer, 
                      &err);
-      if (SUCCESS(err))  
+      if (U_SUCCESS(err))  
         result = temp;
       ures_close(bundle);
     }
@@ -796,7 +796,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
   const char* dataDir = uloc_getDataDirectory();
   bool_t done = FALSE;
 
-  if (FAILURE(*status)) return 0;
+  if (U_FAILURE(*status)) return 0;
   
   inVariantTagBuffer[0] = '\0';
   
@@ -857,14 +857,14 @@ int32_t uloc_getDisplayVariant(const char* locale,
       
       bundle = ures_open(dataDir, inLocale, &err);      
       
-      if (SUCCESS(err))
+      if (U_SUCCESS(err))
     {
       const UChar* temp;
       
       temp = ures_get(bundle,
               inVariantTag, 
               &err);
-      if (SUCCESS(err))  result = temp;
+      if (U_SUCCESS(err))  result = temp;
       ures_close(bundle);
     }
 
@@ -982,9 +982,9 @@ int32_t uloc_getDisplayName(const char* locale,
                     nameCapacity, 
                     &int_err) - 1;
 
-  if (SUCCESS(int_err)&&cntSze)
+  if (U_SUCCESS(int_err)&&cntSze)
     {
-      if (SUCCESS(int_err))
+      if (U_SUCCESS(int_err))
     {
       if (has_lang) 
         {
@@ -1001,7 +1001,7 @@ int32_t uloc_getDisplayName(const char* locale,
       
       if (varSze)
     {
-      if (SUCCESS(int_err))      
+      if (U_SUCCESS(int_err))      
         {
           u_strcat(result, comma);
           result_size += 2;
@@ -1014,7 +1014,7 @@ int32_t uloc_getDisplayName(const char* locale,
         }
     }
       
-      if (SUCCESS(int_err)&&has_lang) u_strcat(result, closeParen);
+      if (U_SUCCESS(int_err)&&has_lang) u_strcat(result, closeParen);
     }
   
   *err  = int_err;
@@ -1029,7 +1029,7 @@ int32_t uloc_getDisplayName(const char* locale,
  * it contains are owned by ICU and should not be deleted or written through
  * by the caller.  The array is terminated by a null pointer. RTG
  */
-CAPI UnicodeString** T_ResourceBundle_listInstalledLocales(const char* path, int32_t* numInstalledLocales);
+U_CAPI UnicodeString** T_ResourceBundle_listInstalledLocales(const char* path, int32_t* numInstalledLocales);
 
 const char*
 uloc_getAvailable(int32_t index) 

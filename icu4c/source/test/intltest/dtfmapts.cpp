@@ -31,7 +31,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &n
                     logln("DateFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
                     Locale::setDefault(Locale::ENGLISH, status);
-                    if(FAILURE(status)) {
+                    if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(par);
@@ -68,7 +68,7 @@ void IntlTestDateFormatAPI::TestEquals()
     {
         double ONE_YEAR = 365*24*60*60*1000.0;
         ((SimpleDateFormat*)b)->set2DigitYearStart(start + 50*ONE_YEAR, status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
             errln("FAIL: setTwoDigitStartDate failed.");
         else if (*a == *b)
             errln("FAIL: DateFormat objects with different two digit start dates are equal.");
@@ -114,7 +114,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
     
     status = U_ZERO_ERROR;
     res1 = fr->format(d, res1, pos1, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: format() failed (French)");
     }
     logln( (UnicodeString) "" + d + " formatted to " + res1);
@@ -141,7 +141,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     result2 = def->parse(text, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: parse() failed");
     }
     logln(text + " parsed into " + result2);
@@ -198,7 +198,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     DateFormat *test = new SimpleDateFormat(status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create a DateFormat");
     }
 

@@ -49,7 +49,7 @@ void flushInternalCharBuffer (UConverter * _this,
 			      UErrorCode * err);
 
 #define FromU_CALLBACK_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-	      if (_this->fromUCharErrorBehaviour == (UCNV_FromUCallBack) MissingUnicodeAction_STOP) break;\
+	      if (_this->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
 	      else \
 		{ \
 		  char *myTargetCopy = myTarget + myTargetIndex; \
@@ -70,7 +70,7 @@ void flushInternalCharBuffer (UConverter * _this,
                 }
 
 #define ToU_CALLBACK_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromCharErrorBehaviour == (UCNV_ToUCallBack) MissingCharAction_STOP) break; \
+              if (_this->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
               else \
                 { \
                   UChar *myTargetCopy = myTarget + myTargetIndex; \
@@ -90,7 +90,7 @@ void flushInternalCharBuffer (UConverter * _this,
                 }
 
 #define FromU_CALLBACK_OFFSETS_LOGIC_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-	      if (_this->fromUCharErrorBehaviour == (UCNV_FromUCallBack) MissingUnicodeAction_STOP) break;\
+	      if (_this->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
 	      else \
 		{ \
 		  char *myTargetCopy = myTarget + myTargetIndex; \
@@ -115,7 +115,7 @@ void flushInternalCharBuffer (UConverter * _this,
 
 
 #define ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this, myTarget, myTargetIndex, targetLimit, mySource, mySourceIndex, sourceLimit, offsets, flush, err) \
-              if (_this->fromCharErrorBehaviour == (UCNV_ToUCallBack) MissingCharAction_STOP) break; \
+              if (_this->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
               else \
                 { \
                   UChar *myTargetCopy = myTarget + myTargetIndex; \
@@ -307,7 +307,7 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
 				 flush,
 				 err);
 	      
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidCharLength = 0;
 	    }
 	}
@@ -392,7 +392,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
 				     flush,
 				     err);
 
-		  if (FAILURE (*err))   break;
+		  if (U_FAILURE (*err))   break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -412,7 +412,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
       && (_this->toUnicodeStatus != 0x00))
     {
        
-      if (SUCCESS(*err)) 
+      if (U_SUCCESS(*err)) 
 	{
 	  *err = U_TRUNCATED_CHAR_FOUND;
 	  _this->toUnicodeStatus = 0x00;
@@ -510,7 +510,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
 				   flush, 
 				   err);
 
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -579,7 +579,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
 				   offsets, 
 				   flush, 
 				   err);
-	      if (FAILURE (*err))
+	      if (U_FAILURE (*err))
 		{
 		  break;
 		}
@@ -685,7 +685,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
 				     flush,
 				     err);
 
-		  if (FAILURE (*err))  break;
+		  if (U_FAILURE (*err))  break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -704,7 +704,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
 	&& (mySourceIndex == sourceLength)
 	&& (flush == TRUE))
       {
-	if (SUCCESS(*err)) 
+	if (U_SUCCESS(*err)) 
 	  {
 	    *err = U_TRUNCATED_CHAR_FOUND;
 	    _this->toUnicodeStatus = 0x00;
@@ -813,7 +813,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 						   err);
 		  
 		  
-		  if (FAILURE (*err))   break;
+		  if (U_FAILURE (*err))   break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -832,7 +832,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 	&& (mySourceIndex == sourceLength)
 	&& (flush == TRUE))
       {
-	if (SUCCESS(*err)) 
+	if (U_SUCCESS(*err)) 
 	  {
 	    *err = U_TRUNCATED_CHAR_FOUND;
 	    _this->toUnicodeStatus = 0x00;
@@ -935,7 +935,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
 				     flush,
 				     err);
 
-		  if (FAILURE (*err))    break;
+		  if (U_FAILURE (*err))    break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -954,7 +954,7 @@ void T_UConverter_toUnicode_MBCS (UConverter * _this,
       && (mySourceIndex == sourceLength)
       && (flush == TRUE))
     {
-      if (SUCCESS(*err)) 
+      if (U_SUCCESS(*err)) 
 	{
 	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
@@ -1071,7 +1071,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 						   flush,
 						   err);
           
-		  if (FAILURE (*err))    break;
+		  if (U_FAILURE (*err))    break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -1090,7 +1090,7 @@ void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
       && (mySourceIndex == sourceLength)
       && (flush == TRUE))
     {
-      if (SUCCESS(*err)) 
+      if (U_SUCCESS(*err)) 
 	{
 	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
@@ -1203,7 +1203,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
 				   flush, 
 				   err);
 
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -1329,7 +1329,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
 						 flush, 
 						 err);
 	      
-	      if (FAILURE (*err))	break;
+	      if (U_FAILURE (*err))	break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -1420,7 +1420,7 @@ void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
 				   flush, 
 				   err);
 
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -1519,7 +1519,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
 						 flush, 
 						 err);
 	      
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -1643,7 +1643,7 @@ void changeState_2022(UConverter* _this,
   UConverter* myUConverter;
   uint32_t key = _this->toUnicodeStatus;
   UCNV_TableStates_2022 value;
-  UCNV_Data2022* myData2022 = ((UCNV_Data2022*)_this->extraInfo);
+  UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
   const char* chosenConverterName = NULL;
   int32_t offset;
   
@@ -1792,7 +1792,7 @@ void changeState_2022(UConverter* _this,
 #ifdef Debug
     printf("Error = %d open \"%s\"\n", *err, chosenConverterName);
 #endif /*Debug*/
-    if (SUCCESS(*err)) 
+    if (U_SUCCESS(*err)) 
       {
 	/*Customize the converter with the attributes set on the 2022 converter*/
 	myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
@@ -1864,7 +1864,7 @@ void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
   char const* sourceStart;
   
   /*Arguments Check*/
-  if (FAILURE(*err)) return;
+  if (U_FAILURE(*err)) return;
   if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1885,7 +1885,7 @@ void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
 	  printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
 #endif /*Debug*/
 	  
-	  ucnv_toUnicode(((UCNV_Data2022*)(_this->extraInfo))->currentConverter,
+	  ucnv_toUnicode(((UConverterDataISO2022*)(_this->extraInfo))->currentConverter,
 			 target,
 			 targetLimit,
 			 source,
@@ -1905,7 +1905,7 @@ void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
 	-Error while converting
       */
 	
-      if (FAILURE(*err) || (*source == sourceLimit)) return;
+      if (U_FAILURE(*err) || (*source == sourceLimit)) return;
 #ifdef Debug	        
       puts("Got Here!");
       fflush(stdout);
@@ -1938,7 +1938,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   char const* sourceStart;
   
   /*Arguments Check*/
-  if (FAILURE(*err)) return;
+  if (U_FAILURE(*err)) return;
   if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1958,7 +1958,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
 	  printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
 #endif /*Debug*/
 	  
-	  ucnv_toUnicode(((UCNV_Data2022*)(_this->extraInfo))->currentConverter,
+	  ucnv_toUnicode(((UConverterDataISO2022*)(_this->extraInfo))->currentConverter,
 			 target,
 			 targetLimit,
 			 source,
@@ -1985,7 +1985,7 @@ void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
 	-Error while converting
       */
 	
-      if (FAILURE(*err) || (*source == sourceLimit)) return;
+      if (U_FAILURE(*err) || (*source == sourceLimit)) return;
 #ifdef Debug	        
       puts("Got Here!");
       fflush(stdout);
@@ -2074,7 +2074,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
 				   flush, 
 				   err);
 
-	      if (FAILURE (*err)) break;
+	      if (U_FAILURE (*err)) break;
 	      _this->invalidUCharLength = 0;
 	    }
 	}
@@ -2469,11 +2469,11 @@ void T_UConverter_toUnicode_UTF16_BE (UConverter * _this,
 	}
     }
 
-  if (SUCCESS(*err) && flush
+  if (U_SUCCESS(*err) && flush
       && (mySourceIndex == sourceLength)
       && (_this->toUnicodeStatus != 0x00))
     {
-      if (SUCCESS(*err)) 
+      if (U_SUCCESS(*err)) 
 	{
 	  *err = U_TRUNCATED_CHAR_FOUND;
 	  _this->toUnicodeStatus = 0x00;
@@ -2537,11 +2537,11 @@ void  T_UConverter_toUnicode_UTF16_LE (UConverter * _this,
     }
 
 
-  if (SUCCESS(*err) && flush
+  if (U_SUCCESS(*err) && flush
       && (mySourceIndex == sourceLength)
       && (_this->toUnicodeStatus != 0x00))
     {
-      if (SUCCESS(*err)) 
+      if (U_SUCCESS(*err)) 
 	{
 	  *err = U_TRUNCATED_CHAR_FOUND; 
 	  _this->toUnicodeStatus = 0x00;
@@ -2613,7 +2613,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 		      {
 			if (flush)
 			  {
-			    if (SUCCESS(*err)) 
+			    if (U_SUCCESS(*err)) 
 			      {
 				*err = U_TRUNCATED_CHAR_FOUND;
 				_this->toUnicodeStatus = 0x00;
@@ -2679,7 +2679,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
 				     offsets,
 				     flush,
 				     err);
-		  if (FAILURE (*err))   break;
+		  if (U_FAILURE (*err))   break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -2752,7 +2752,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 		      {
 			if (flush)
 			  {
-			    if (SUCCESS(*err)) 
+			    if (U_SUCCESS(*err)) 
 			      {
 				*err = U_TRUNCATED_CHAR_FOUND;
 				_this->toUnicodeStatus = 0x00;
@@ -2821,7 +2821,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
 						   err);
 
 		  
-		  if (FAILURE (*err))   break;
+		  if (U_FAILURE (*err))   break;
 		  _this->invalidCharLength = 0;
 		}
 	    }
@@ -3024,7 +3024,7 @@ UChar T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
       if (converter->mode == UCNV_SO) /*Already doing some conversion*/
 	{
 	  
-	  return ucnv_getNextUChar(((UCNV_Data2022*)(converter->extraInfo))->currentConverter,
+	  return ucnv_getNextUChar(((UConverterDataISO2022*)(converter->extraInfo))->currentConverter,
 				   source,
 				   mySourceLimit,
 				   err);

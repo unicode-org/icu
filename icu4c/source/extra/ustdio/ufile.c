@@ -169,7 +169,7 @@ u_fopen(const char    *filename,
     codepage = 0;
 
   result->fConverter = ucnv_open(codepage, &status);
-  if(FAILURE(status) || result->fConverter == 0) {
+  if(U_FAILURE(status) || result->fConverter == 0) {
     fclose(result->fFile);
     free(result);
     return 0;
@@ -219,7 +219,7 @@ u_finit(FILE        *f,
     codepage = 0;
 
   result->fConverter = ucnv_open(codepage, &status);
-  if(FAILURE(status) || result->fConverter == 0) {
+  if(U_FAILURE(status) || result->fConverter == 0) {
     fclose(result->fFile);
     free(result);
     return 0;
@@ -274,7 +274,7 @@ u_fgetcodepage(UFILE        *file)
   const char     *codepage;
 
   codepage = ucnv_getName(file->fConverter, &status); 
-  if(FAILURE(status)) return 0;
+  if(U_FAILURE(status)) return 0;
   return codepage;
 }
 
@@ -293,7 +293,7 @@ u_fsetcodepage(    const char    *codepage,
 
   ucnv_close(file->fConverter);
   file->fConverter = ucnv_open(codepage, &status);
-  if(FAILURE(status))
+  if(U_FAILURE(status))
     return -1;
   return 0;
 }

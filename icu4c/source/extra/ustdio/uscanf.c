@@ -194,7 +194,7 @@ u_scanf_string_handler(UFILE             *stream,
   /* open the default converter */
   conv = ucnv_open(ucnv_getDefaultName(), &status);
 
-  if(FAILURE(status))
+  if(U_FAILURE(status))
     return -1;
 
   /* since there is no real limit, just use a reasonable value */
@@ -211,7 +211,7 @@ u_scanf_string_handler(UFILE             *stream,
     ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
              NULL, TRUE, &status);
     
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return -1;
     
     /* increment the count */
@@ -1198,7 +1198,7 @@ u_scanf_scanset_handler(UFILE             *stream,
   conv = ucnv_open(ucnv_getDefaultName(), &status);
 
   /* verify that the parse was successful and the converter opened */
-  if(! success || FAILURE(status))
+  if(! success || U_FAILURE(status))
     return -1;
 
   /* grab characters one at a time and make sure they are in the scanset */
@@ -1209,7 +1209,7 @@ u_scanf_scanset_handler(UFILE             *stream,
       ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
                NULL, TRUE, &status);
       
-      if(FAILURE(status))
+      if(U_FAILURE(status))
     return -1;
     }
     /* if the character's not in the scanset, break out */

@@ -71,7 +71,7 @@ CollationElementIterator::CollationElementIterator( const UnicodeString& sourceT
   bufferAlias(NULL),
   orderAlias(order)
 {
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         return;
     }
 
@@ -107,7 +107,7 @@ CollationElementIterator::CollationElementIterator( const CharacterIterator& sou
   bufferAlias(NULL),
   orderAlias(order)
 {
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         return;
     }
 
@@ -231,7 +231,7 @@ void
 CollationElementIterator::setText(const UnicodeString&  source,
                                         UErrorCode&      status)
 {
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         return;
     }
@@ -256,7 +256,7 @@ void
 CollationElementIterator::setText(CharacterIterator&  source,
                                         UErrorCode&      status)
 {
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         return;
     }
 
@@ -282,7 +282,7 @@ CollationElementIterator::setText(CharacterIterator&  source,
 int32_t
 CollationElementIterator::next(UErrorCode& status)
 {
-    if (text == NULL || FAILURE(status))
+    if (text == NULL || U_FAILURE(status))
     {
         return NULLORDER;
     }
@@ -328,7 +328,7 @@ CollationElementIterator::next(UErrorCode& status)
     UChar ch = text->current();
     text->next();
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         return NULLORDER;
     }
@@ -374,7 +374,7 @@ CollationElementIterator::next(UErrorCode& status)
 int32_t
 CollationElementIterator::previous(UErrorCode& status)
 {
-    if (text == NULL || FAILURE(status))
+    if (text == NULL || U_FAILURE(status))
     {
         return NULLORDER;
     }
@@ -457,7 +457,7 @@ void
 CollationElementIterator::setOffset(UTextOffset newOffset, 
                                     UErrorCode& status)
 {
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         return;
     }
@@ -500,7 +500,7 @@ CollationElementIterator::nextContractChar(UChar ch,
 
     while ((ch = text->current()) != Normalizer::DONE)
     {
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             return NULLORDER;
         }
@@ -552,7 +552,7 @@ int32_t CollationElementIterator::prevContractChar(UChar ch,
         {
             ch = text->next();
 
-            if (FAILURE(status))
+            if (U_FAILURE(status))
             {
                 return NULLORDER;
             }

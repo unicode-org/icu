@@ -139,7 +139,7 @@ ufmt_defaultCPToUnicode(const char *s,
   UErrorCode status = U_ZERO_ERROR;
 
   defConverter = ucnv_open(ucnv_getDefaultName(), &status);
-  if(FAILURE(status) || defConverter == 0)
+  if(U_FAILURE(status) || defConverter == 0)
     return 0;
 
   /* perform the conversion in one swoop */
@@ -173,7 +173,7 @@ ufmt_unicodeToDefaultCP(const UChar *s,
   UErrorCode status = U_ZERO_ERROR;
 
   defConverter = ucnv_open(ucnv_getDefaultName(), &status);
-  if(FAILURE(status) || defConverter == 0)
+  if(U_FAILURE(status) || defConverter == 0)
     return 0;
 
   /* perform the conversion in one swoop */

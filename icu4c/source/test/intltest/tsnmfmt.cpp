@@ -88,7 +88,7 @@ IntlTestNumberFormat::testLocale(char* par, const Locale& locale, const UnicodeS
 void
 IntlTestNumberFormat::testFormat(char *par)
 {
-    if (FAILURE(fStatus))
+    if (U_FAILURE(fStatus))
     { 
         errln((UnicodeString)"********** FAIL: createXxxInstance failed.");
         if (fFormat != 0) errln("********** FAIL: Non-null format returned by createXxxInstance upon failure.");
@@ -211,7 +211,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
         UErrorCode status = U_ZERO_ERROR;
         if (i == 0) number[i].setDouble(aNumber);
         else fFormat->parse(string[i-1], number[i], status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("********** FAIL: Parse of " + string[i-1] + " failed.");
             dump = TRUE;
@@ -279,7 +279,7 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
         UErrorCode status = U_ZERO_ERROR;
         if (i == 0) number[i].setLong(aNumber);
         else fFormat->parse(string[i-1], number[i], status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("********** FAIL: Parse of " + string[i-1] + " failed.");
             dump = TRUE;

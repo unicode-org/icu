@@ -263,7 +263,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
                 if (braceStack == 0) {
                     part = 0;
                     makeFormat(i, formatNumber, segments, success);
-                    if(FAILURE(success))
+                    if(U_FAILURE(success))
                         return;
                     formatNumber++;
                 } else {
@@ -516,7 +516,7 @@ MessageFormat::format(const Formattable* source,
                       FieldPosition& ignore, 
                       UErrorCode& success) const
 {
-    if (FAILURE(success)) 
+    if (U_FAILURE(success)) 
         return result;
     
     return format(source, cnt, result, ignore, 0, success);
@@ -536,7 +536,7 @@ MessageFormat::format(  const UnicodeString& pattern,
 {
     // {sfb} why does this use a local when so many other places use a static?
     MessageFormat *temp = new MessageFormat(pattern, success);
-    if (FAILURE(success)) 
+    if (U_FAILURE(success)) 
         return result;
     FieldPosition ignore(0);
     temp->format(arguments, cnt, result, ignore, success);
@@ -557,7 +557,7 @@ MessageFormat::format(const Formattable& source,
 {
     int32_t cnt;
 
-    if (FAILURE(success)) 
+    if (U_FAILURE(success)) 
         return result;
     if (source.getType() != Formattable::kArray) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
@@ -621,13 +621,13 @@ MessageFormat::format(const Formattable* arguments,
                  (obj.getType() == Formattable::kLong)) {
             NumberFormat *numTemplate = NULL;
             numTemplate = NumberFormat::createInstance(fLocale, success);
-            if (FAILURE(success)) { 
+            if (U_FAILURE(success)) { 
                 delete numTemplate; 
                 return result; 
             }
             numTemplate->format((obj.getType() == Formattable::kDouble) ? obj.getDouble() : obj.getLong(), arg);
             delete numTemplate;
-            if (FAILURE(success)) 
+            if (U_FAILURE(success)) 
                 return result;
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
@@ -652,10 +652,10 @@ MessageFormat::format(const Formattable* arguments,
         if (tryRecursion && arg.indexOf("{") >= 0) {
             MessageFormat *temp = NULL;
             temp = new MessageFormat(arg, fLocale, success);
-            if (FAILURE(success)) 
+            if (U_FAILURE(success)) 
                 return result;
             temp->format(arguments, cnt, result, status, recursionProtection, success);
-            if (FAILURE(success)) { 
+            if (U_FAILURE(success)) { 
                 delete temp; 
                 return result; 
             }
@@ -849,7 +849,7 @@ MessageFormat::getNumberFormat(UErrorCode &status)
     if(theFormat == 0) // If we weren't able to pull it out of the cache, then we have to create it.
     {
         theFormat = NumberFormat::createInstance(Locale::US, status);
-        if(FAILURE(status))
+        if(U_FAILURE(status))
             return 0;
         theFormat->setParseIntegerOnly(TRUE);
     }
@@ -886,7 +886,7 @@ MessageFormat::stoi(const UnicodeString& string,
 {
     NumberFormat *myFormat = getNumberFormat(status);
 
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         return -1; // OK?
 
     Formattable result;
@@ -896,7 +896,7 @@ MessageFormat::stoi(const UnicodeString& string,
     releaseNumberFormat(myFormat);
 
     int32_t value = 0;
-    if (SUCCESS(status) && result.getType() == Formattable::kLong)
+    if (U_SUCCESS(status) && result.getType() == Formattable::kLong)
         value = result.getLong();
 
 
@@ -917,7 +917,7 @@ MessageFormat::itos(int32_t i,
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *myFormat = getNumberFormat(status);
 
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         return (string = "<ERROR>"); // _REVISIT_ maybe toPattern should take an errorcode.
 
     UnicodeString &retval = myFormat->format(i, string);
@@ -936,7 +936,7 @@ MessageFormat::makeFormat(int32_t position,
                           UnicodeString* segments,
                           UErrorCode& success)
 {
-    if(FAILURE(success))
+    if(U_FAILURE(success))
         return;
 
     // get the number
@@ -972,13 +972,13 @@ MessageFormat::makeFormat(int32_t position,
             break;
         default: // pattern
             newFormat = NumberFormat::createInstance(fLocale, success);
-            if(FAILURE(success)) {
+            if(U_FAILURE(success)) {
                 newFormat = NULL;
                 return;
             }
             if(newFormat->getDynamicClassID() == DecimalFormat::getStaticClassID())
                 ((DecimalFormat*)newFormat)->applyPattern(segments[3], success);
-            if(FAILURE(success)) {
+            if(U_FAILURE(success)) {
                 fMaxOffset = oldMaxOffset;
                 success = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
@@ -1008,7 +1008,7 @@ MessageFormat::makeFormat(int32_t position,
             newFormat = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
                 if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID())
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
-                if(FAILURE(success)) {
+                if(U_FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
                     success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
@@ -1037,7 +1037,7 @@ MessageFormat::makeFormat(int32_t position,
             newFormat = DateFormat::createTimeInstance(DateFormat::kDefault, fLocale);
                 if(newFormat->getDynamicClassID() == SimpleDateFormat::getStaticClassID())
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
-                if(FAILURE(success)) {
+                if(U_FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
                     success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
@@ -1047,7 +1047,7 @@ MessageFormat::makeFormat(int32_t position,
         break;
     case 7: case 8:// choice
             newFormat = new ChoiceFormat(segments[3], success);
-        if(FAILURE(success)) {
+        if(U_FAILURE(success)) {
             fMaxOffset = oldMaxOffset;
             success = U_ILLEGAL_ARGUMENT_ERROR;
             return;

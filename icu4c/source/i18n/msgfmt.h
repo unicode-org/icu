@@ -429,7 +429,7 @@ public:
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -441,7 +441,7 @@ public:
      * </pre>
      * @return          The class ID for all objects of this class.
      */
-    static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
 private:
     static char fgClassID;
@@ -548,7 +548,7 @@ private:
     static UnicodeString& itos(int32_t i, UnicodeString& string);
 };
  
-inline ClassID 
+inline UClassID 
 MessageFormat::getDynamicClassID() const
 { 
     return MessageFormat::getStaticClassID(); 

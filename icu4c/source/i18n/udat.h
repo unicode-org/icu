@@ -133,7 +133,7 @@ typedef enum UDateFormatStyle UDateFormatStyle;
 * an error occurred.
 * @see udat_openPattern
 */
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_open(UDateFormatStyle  timeStyle, 
           UDateFormatStyle  dateStyle,
           const char        *locale,
@@ -153,7 +153,7 @@ udat_open(UDateFormatStyle  timeStyle,
 * an error occurred.
 * @see udat_open
 */
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_openPattern(    const   UChar           *pattern, 
             int32_t         patternLength,
             const   char         *locale,
@@ -164,7 +164,7 @@ udat_openPattern(    const   UChar           *pattern,
 * Once closed, a UDateFormat may no longer be used.
 * @param fmt The formatter to close.
 */
-CAPI void
+U_CAPI void
 udat_close(UDateFormat* format);
 
 /**
@@ -174,7 +174,7 @@ udat_close(UDateFormat* format);
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
  */
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_clone(const UDateFormat *fmt,
        UErrorCode *status);
 
@@ -191,7 +191,7 @@ udat_clone(const UDateFormat *fmt,
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
 */
-CAPI int32_t
+U_CAPI int32_t
 udat_format(    const    UDateFormat*    format,
                         UDate           dateToFormat,
                         UChar*          result,
@@ -212,7 +212,7 @@ udat_format(    const    UDateFormat*    format,
 * @return The value of the parsed date/time
 * @see udat_format
 */
-CAPI UDate
+U_CAPI UDate
 udat_parse(    const    UDateFormat*    format,
             const    UChar*          text,
                     int32_t         textLength,
@@ -227,7 +227,7 @@ udat_parse(    const    UDateFormat*    format,
 * @return TRUE if fmt is set to perform lenient parsing, FALSE otherwise.
 * @see udat_setLenient
 */
-CAPI bool_t
+U_CAPI bool_t
 udat_isLenient(const UDateFormat* fmt);
 
 /**
@@ -238,7 +238,7 @@ udat_isLenient(const UDateFormat* fmt);
 * @param isLenient TRUE if fmt should perform lenient parsing, FALSE otherwise.
 * @see dat_isLenient
 */
-CAPI void
+U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
                     bool_t          isLenient);
 
@@ -250,7 +250,7 @@ udat_setLenient(    UDateFormat*    fmt,
 * @return A pointer to the UCalendar used by fmt.
 * @see udat_setCalendar
 */
-CAPI const UCalendar*
+U_CAPI const UCalendar*
 udat_getCalendar(const UDateFormat* fmt);
 
 /**
@@ -261,7 +261,7 @@ udat_getCalendar(const UDateFormat* fmt);
 * @param calendarToSet A pointer to an UCalendar to be used by fmt.
 * @see udat_setCalendar
 */
-CAPI void
+U_CAPI void
 udat_setCalendar(            UDateFormat*    fmt,
                     const   UCalendar*      calendarToSet);
 
@@ -273,7 +273,7 @@ udat_setCalendar(            UDateFormat*    fmt,
 * @return A pointer to the UNumberFormat used by fmt to format numbers.
 * @see udat_setNumberFormat
 */
-CAPI const UNumberFormat*
+U_CAPI const UNumberFormat*
 udat_getNumberFormat(const UDateFormat* fmt);
 
 /**
@@ -284,7 +284,7 @@ udat_getNumberFormat(const UDateFormat* fmt);
 * @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
 * @see udat_getNumberFormat
 */
-CAPI void
+U_CAPI void
 udat_setNumberFormat(            UDateFormat*    fmt,
                         const   UNumberFormat*  numberFormatToSet);
 
@@ -296,7 +296,7 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 * @return A locale for which date/time formatting patterns are available, or 0 if none.
 * @see udat_countAvailable
 */
-CAPI const char*
+U_CAPI const char*
 udat_getAvailable(int32_t index);
 
 /**
@@ -306,7 +306,7 @@ udat_getAvailable(int32_t index);
 * @return The number of locales for which date/time formatting patterns are available.
 * @see udat_getAvailable
 */
-CAPI int32_t
+U_CAPI int32_t
 udat_countAvailable(void);
 
 /**
@@ -318,7 +318,7 @@ udat_countAvailable(void);
 * @return The year relative to which all 2-digit years are interpreted.
 * @see udat_Set2DigitYearStart
 */
-CAPI UDate
+U_CAPI UDate
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                                     UErrorCode      *status);
 
@@ -331,7 +331,7 @@ udat_get2DigitYearStart(    const   UDateFormat     *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @see udat_Set2DigitYearStart
 */
-CAPI void
+U_CAPI void
 udat_set2DigitYearStart(    UDateFormat     *fmt,
                             UDate           d,
                             UErrorCode      *status);
@@ -347,7 +347,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPattern
 */
-CAPI int32_t
+U_CAPI int32_t
 udat_toPattern(    const   UDateFormat     *fmt,
                         bool_t          localized,
                         UChar           *result,
@@ -363,7 +363,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see udat_toPattern
 */
-CAPI void
+U_CAPI void
 udat_applyPattern(            UDateFormat     *format,
                             bool_t          localized,
                     const   UChar           *pattern,
@@ -407,7 +407,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @see udat_countSymbols
 * @see udat_setSymbols
 */
-CAPI int32_t
+U_CAPI int32_t
 udat_getSymbols(const   UDateFormat             *fmt,
                         UDateFormatSymbolType   type,
                         int32_t                 index,
@@ -426,7 +426,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 * @see udat_getSymbols
 * @see udat_setSymbols
 */
-CAPI int32_t
+U_CAPI int32_t
 udat_countSymbols(    const    UDateFormat                *fmt,
                             UDateFormatSymbolType    type);
 
@@ -445,7 +445,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @see udat_getSymbols
 * @see udat_countSymbols
 */
-CAPI void
+U_CAPI void
 udat_setSymbols(    UDateFormat             *format,
                     UDateFormatSymbolType   type,
                     int32_t                 index,

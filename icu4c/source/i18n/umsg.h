@@ -173,7 +173,7 @@
 * output was truncated.
 * @see u_parseMessage
 */
-CAPI int32_t
+U_CAPI int32_t
 u_formatMessage(    const    char        *locale,
             const    UChar        *pattern,
                 int32_t        patternLength,
@@ -197,7 +197,7 @@ u_formatMessage(    const    char        *locale,
 * specified in pattern.
 * @see u_formatMessage
 */
-CAPI void 
+U_CAPI void 
 u_parseMessage(    const    char        *locale,
         const    UChar        *pattern,
             int32_t        patternLength,

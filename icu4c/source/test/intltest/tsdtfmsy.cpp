@@ -71,13 +71,13 @@ void IntlTestDateFormatSymbols::testSymbols(char *par)
     UErrorCode status = U_ZERO_ERROR;
 
     DateFormatSymbols fr(Locale::FRENCH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create French DateFormatSymbols");
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols en(Locale::ENGLISH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create English DateFormatSymbols");
     }
 

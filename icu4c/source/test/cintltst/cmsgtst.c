@@ -98,7 +98,7 @@ void MessageFormatTest( void )
         u_formatMessage( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
             &status, 1, 3456.00, d1);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
     }
     if(u_strcmp(result, testResultStrings[i])==0){
@@ -139,7 +139,7 @@ void TestSampleMessageFormat()
       result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
       u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, d);
     }
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error: failure in message format on test#1: %s\n", myErrorName(status));
   }
   if(u_strcmp(result, expected)==0)
@@ -170,7 +170,7 @@ void TestSampleMessageFormat()
       result=(UChar*)realloc(result, sizeof(UChar) * (resultlength+1));
       u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 23);
     }
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error: failure in message format on test#2 : %s\n", myErrorName(status));
   }
   if(u_strcmp(result, expected)==0)
@@ -195,7 +195,7 @@ void TestSampleMessageFormat()
       result=(UChar*)malloc(sizeof(UChar) * resultlength);
       u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 500.00);
     }
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error: failure in message format on test#3 : %s\n", myErrorName(status));
   }
   if(u_strcmp(result, expected)==0)
@@ -231,12 +231,12 @@ void TestSampleFormatAndParse()
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("error in ucal_open caldef : %s\n", myErrorName(status) );
     }
     ucal_setDateTime(cal, 1999, UCAL_MARCH, 18, 0, 0, 0, &status);
     d1=ucal_getMillis(cal, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
             log_err("Error: failure in get millis: %s\n", myErrorName(status) );
     }
     
@@ -254,7 +254,7 @@ void TestSampleFormatAndParse()
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, d1, str, 7);
         
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in message format test#4: %s\n", myErrorName(status));
     }
     if(u_strcmp(result, expected)==0)
@@ -268,12 +268,12 @@ void TestSampleFormatAndParse()
     /*try to parse this and check*/
     log_verbose("\nTesting the parse Message test#5\n");
     def1 = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat using short date and time style:\n %s\n", myErrorName(status));
     }
     u_parseMessage("en_US", pattern, u_strlen(pattern), result, u_strlen(result), &status, &d, ret, &value);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
     }
     if(value!=7.00 && u_strcmp(str,ret)!=0)
@@ -319,7 +319,7 @@ void TestMsgFormatChoice()
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 100., str);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#6 : %s\n", myErrorName(status));
     }
     if(u_strcmp(result, expected)==0)
@@ -341,7 +341,7 @@ void TestMsgFormatChoice()
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 0., str);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#7 : %s\n", myErrorName(status));
     }
     if(u_strcmp(result, expected)==0)
@@ -363,7 +363,7 @@ void TestMsgFormatChoice()
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, 1., str);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in message format on test#8 : %s\n", myErrorName(status));
     }
     if(u_strcmp(result, expected)==0)
@@ -394,7 +394,7 @@ void TestParseMessage()
     u_uastrcpy(res,"deposited");
         
     u_parseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, str, &value);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#9: %s\n", myErrorName(status));
     }
     if(value==500.00  && u_strcmp(str,res)==0)
@@ -411,7 +411,7 @@ void TestParseMessage()
     u_uastrcpy(res,"MyDisk");
         
     u_parseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, &value, str);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#10: %s\n", myErrorName(status));
     }
     if(value==123.00 && u_strcmp(str,res)==0)

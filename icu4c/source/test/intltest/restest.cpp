@@ -262,7 +262,7 @@ ResourceBundleTest::TestConstruction()
         test1.getString("string_in_Default_te_te_IN", result1, err);
         test2.getString("string_in_Default_te_te_IN", result2, err);
 
-        if (FAILURE(err)) {
+        if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
             return;
         }
@@ -311,7 +311,7 @@ ResourceBundleTest::TestConstruction()
 
         test2.getString("string_in_Default_te_te_IN", result2, err);
 
-        if (FAILURE(err)) {
+        if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
             return;
         }
@@ -415,7 +415,7 @@ ResourceBundleTest::testTag(const char* frag,
         CONFIRM_UErrorCode(status, expected_resource_status);
 
         UnicodeString expected_string;
-        expected_string = SUCCESS(status) ? base : kERROR;
+        expected_string = U_SUCCESS(status) ? base : kERROR;
 
         CONFIRM_EQ(string, expected_string);
 
@@ -435,7 +435,7 @@ ResourceBundleTest::testTag(const char* frag,
         const UnicodeString* array = theBundle.getStringArray(tag, count, status);
         CONFIRM_UErrorCode(status,expected_resource_status);
 
-        if (SUCCESS(status))
+        if (U_SUCCESS(status))
         {
             CONFIRM_GE(count,1);
             CONFIRM_NE((int32_t)array,(int32_t)0);
@@ -472,7 +472,7 @@ ResourceBundleTest::testTag(const char* frag,
             expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
-            if (SUCCESS(status))
+            if (U_SUCCESS(status))
             {
                 char buf[32];
                 expected_string = base;
@@ -501,7 +501,7 @@ ResourceBundleTest::testTag(const char* frag,
         const UnicodeString** array2d = theBundle.get2dArray(tag, row_count, column_count, status);
         CONFIRM_UErrorCode(status,expected_resource_status);
 
-        if (SUCCESS(status))
+        if (U_SUCCESS(status))
         {
             CONFIRM_GE(row_count,1);
             CONFIRM_GE(column_count,(int32_t)0);
@@ -546,7 +546,7 @@ ResourceBundleTest::testTag(const char* frag,
 	      expected_resource_status: U_MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
-            if (SUCCESS(status))
+            if (U_SUCCESS(status))
             {
                 char buf[32];
                 expected_string = base;
@@ -580,7 +580,7 @@ ResourceBundleTest::testTag(const char* frag,
         theBundle.getTaggedArray(tag, tags, items, expected_count, status);
         CONFIRM_UErrorCode(status, expected_resource_status);
 
-        if (SUCCESS(status)) {
+        if (U_SUCCESS(status)) {
             CONFIRM_GE((int32_t)expected_count, (int32_t)0);
             CONFIRM_NE((int32_t)tags, (int32_t)0);
             CONFIRM_NE((int32_t)items, (int32_t)0);

@@ -43,7 +43,7 @@ u_fputs(const UChar *s,
 {
   int32_t count;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   count = u_file_write(s, u_strlen(s), f, status);
   count += u_file_write(DELIMITERS, u_strlen(DELIMITERS), f, status);
@@ -55,7 +55,7 @@ u_fputc(UChar uc,
 	UFILE *f,
 	UErrorCode *status)
 {
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
 
   return u_file_write(&uc, 1, f, status) == 1 ? uc : U_EOF;
 }
@@ -74,7 +74,7 @@ u_file_write(const UChar *chars,
   int32_t		bufferSize	= UFILE_CHARBUFFER_SIZE;
   int32_t		written		= 0;
  
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
   
   /* Perform the conversion in a loop */
   do {
@@ -115,7 +115,7 @@ u_fgets(UFILE *f,
   int32_t count;
   UChar *alias;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   /* subtract 1 from n to compensate for the terminator */
   --n;
@@ -145,7 +145,7 @@ u_fgets(UFILE *f,
 
     /* refill the buffer */
     ufile_fill_uchar_buffer(f, status);
-    if(FAILURE(*status)) return 0;
+    if(U_FAILURE(*status)) return 0;
     
     /* skip over any remaining delimiters */
     while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
@@ -161,7 +161,7 @@ u_fgets(UFILE *f,
     
     /* refill the buffer */
     ufile_fill_uchar_buffer(f, status);
-    if(FAILURE(*status)) return 0;
+    if(U_FAILURE(*status)) return 0;
     
     /* determine the amount of data in the buffer */
     dataSize = f->fUCLimit - f->fUCPos;
@@ -188,7 +188,7 @@ u_fgets(UFILE *f,
 
       /* refill the buffer */
       ufile_fill_uchar_buffer(f, status);
-      if(FAILURE(*status)) return 0;
+      if(U_FAILURE(*status)) return 0;
 
       /* skip over any remaining delimiters */
       while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
@@ -213,7 +213,7 @@ UChar
 u_fgetc(UFILE *f,
 	UErrorCode *status)
 {
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
 
   /* if we have an available character in the buffer, return it */
   if(f->fUCPos < f->fUCLimit)
@@ -221,7 +221,7 @@ u_fgetc(UFILE *f,
   /* otherwise, fill the buffer and return the next character */
   else {
     ufile_fill_uchar_buffer(f, status);
-    if(FAILURE(*status)) return U_EOF;
+    if(U_FAILURE(*status)) return U_EOF;
     if(f->fUCPos < f->fUCLimit) {
       return *(f->fUCPos)++;
     }
@@ -237,7 +237,7 @@ u_fungetc(UChar c,
 	  UFILE *f,
 	  UErrorCode *status)
 {
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
 
   /* if we're at the beginning of the buffer, sorry! */
   if(f->fUCPos == f->fUCBuffer) {
@@ -260,7 +260,7 @@ u_file_read(UChar *chars,
   int32_t dataSize;
   int32_t read;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   /* determine the amount of data in the buffer */
   dataSize = f->fUCLimit - f->fUCPos;
@@ -282,7 +282,7 @@ u_file_read(UChar *chars,
     
     /* refill the buffer */
     ufile_fill_uchar_buffer(f, status);
-    if(FAILURE(*status)) return read;
+    if(U_FAILURE(*status)) return read;
     
     /* determine the amount of data in the buffer */
     dataSize = f->fUCLimit - f->fUCPos;

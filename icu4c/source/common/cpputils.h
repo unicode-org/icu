@@ -49,7 +49,7 @@ icu_arrayCopy(const UChar *src, int32_t srcStart,
  * Simple utility to set output buffer parameters
  ******************************************************/
 
-CAPI void U_EXPORT2 T_fillOutputParams(const UnicodeString* temp,
+U_CAPI void U_EXPORT2 T_fillOutputParams(const UnicodeString* temp,
 				       UChar* result, 
 				       const int32_t resultLength,
 				       int32_t* resultLengthOut, 

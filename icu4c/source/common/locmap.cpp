@@ -11,7 +11,7 @@
 *                                                                             *
 *******************************************************************************
 */
-// $Revision: 1.2 $
+// $Revision: 1.3 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -216,7 +216,7 @@ IGlobalLocales::convertToPosix(uint32_t hostid)
   return ILcidPosixMap::fgWildCard;
 }
 
-C_FUNC const char*
+U_CFUNC const char*
 T_convertToPosix(int32_t hostid)
 {
   return IGlobalLocales::convertToPosix(hostid);

@@ -140,7 +140,7 @@ typedef void* UResourceBundle;
 *@param status : fills in the outgoing error code.
 * The UErrorCode err parameter is used to return status information to the user. To
      * check whether the construction succeeded or not, you should check the value of
-     * SUCCESS(err). If you wish more detailed information, you can check for
+     * U_SUCCESS(err). If you wish more detailed information, you can check for
      * informational error results which still indicate success. U_USING_FALLBACK_ERROR
      * indicates that a fall back locale was used. For example, 'de_CH' was requested,
      * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
@@ -149,7 +149,7 @@ typedef void* UResourceBundle;
 *@return      : a newly allocated resource bundle.
 *@see ures_close
 */
-CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if none */
+U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if none */
 					   const char*  locale, /* NULL if none */
 					   UErrorCode*     status);
 
@@ -172,7 +172,7 @@ CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if non
 *@see ures_close
 *@return : a newly allocated resource bundle.
 */
-CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path, 
+U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path, 
                   const char* locale, 
                   UErrorCode* status);
 
@@ -191,7 +191,7 @@ CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path,
 *@see ures_get2dArrayItem
 *@see ures_getTaggedItem
 */
-CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
+U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
                const char*              resourceTag,
                UErrorCode*               status);
 
@@ -211,7 +211,7 @@ CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
 *@see ures_get2dArrayItem
 *@see ures_getTaggedItem
 */
-CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourceBundle,
+U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     const char*               resourceTag,
                     int32_t                   resourceIndex,
                     UErrorCode*                status);
@@ -234,7 +234,7 @@ CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourc
 *@see ures_getTaggedItem
 */
 
-CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
+U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       int32_t                 rowIndex,
                       int32_t                 columnIndex,
@@ -257,7 +257,7 @@ CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourc
 *@see ures_get2dItem
 */
 
-CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
+U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
                       UErrorCode*              status);
@@ -283,7 +283,7 @@ CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   res
 *@see ures_get2dArrayItem
 */
 
-CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundle,
+U_CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* err);
 /**
@@ -297,7 +297,7 @@ CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundl
 * @see ures_open
 * @see ures_openW
 */
-CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
+U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
 /**
      * Return the version number associated with this ResourceBundle. This version
      * number is a string of the form MAJOR.MINOR, where MAJOR is the version number of
@@ -316,6 +316,6 @@ CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
      *          representing the resource data file. The caller does not own this
      *          string.
      */
-CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
+U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
 #endif /*_URES*/
 /*eof*/

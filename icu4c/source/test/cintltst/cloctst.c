@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *********************************************************************************
 */
 #include "utypes.h"
@@ -99,7 +99,7 @@ void TestBasicGetters() {
             temp=(char*)malloc(sizeof(char) * (cap+1));
             uloc_getLanguage(testLocale, temp, cap, &status);
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getLanguage  %s\n", myErrorName(status));
         }
         if (0 !=strcmp(temp,rawData2[LANG][i]))    {
@@ -114,7 +114,7 @@ void TestBasicGetters() {
             temp=(char*)realloc(temp, sizeof(char) * (cap+1));
             uloc_getCountry(testLocale, temp, cap, &status);
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getCountry  %s\n", myErrorName(status));
         }
         if (0 != strcmp(temp, rawData2[CTRY][i])) {
@@ -128,7 +128,7 @@ void TestBasicGetters() {
             temp=(char*)realloc(temp, sizeof(char) * (cap+1));
             uloc_getVariant(testLocale, temp, cap, &status);
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
         }
         if (0 != strcmp(temp, rawData2[VAR][i])) {
@@ -144,7 +144,7 @@ void TestBasicGetters() {
             name=(char*)malloc(sizeof(char) * (cap+1));
             uloc_getName(testLocale, name, cap, &status);
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getName   %s\n", myErrorName(status));
         }
         if (0 != strcmp(name, rawData2[NAME][i])){
@@ -221,7 +221,7 @@ void TestDisplayNames()
     strcpy(defaultLocale, saveDefault);
 
     uloc_setDefault("en_US", &err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         log_err("uloc_setDefault returned error code ");
         return;
     }
@@ -242,7 +242,7 @@ void TestDisplayNames()
     doTestDisplayNames("el_GR", DLANG_EL, FALSE);
 
    uloc_setDefault("fr_FR", &err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
         return;
     }
@@ -261,7 +261,7 @@ void TestDisplayNames()
     doTestDisplayNames("el_GR", DLANG_EL, TRUE);
 
     uloc_setDefault(defaultLocale, &err);
-    if (FAILURE(err)) {
+    if (U_FAILURE(err)) {
         log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
         return;
     }
@@ -374,7 +374,7 @@ void doTestDisplayNames(const char* inLocale,
     
        
     uloc_getLanguage(uloc_getDefault(), temp, 5, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in getDefault  %s \n", myErrorName(status));
     }
     if (defaultIsFrench && 0 != strcmp(temp, "fr"))    {
@@ -408,7 +408,7 @@ void doTestDisplayNames(const char* inLocale,
 
 
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                     log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
                     
             }
@@ -420,7 +420,7 @@ void doTestDisplayNames(const char* inLocale,
                 testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
                 uloc_getDisplayCountry(testLocale, NULL, testCtry, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                     log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
                     
             }
@@ -433,7 +433,7 @@ void doTestDisplayNames(const char* inLocale,
                 testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayVariant(testLocale, NULL, testVar, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
                 
             }
@@ -445,7 +445,7 @@ void doTestDisplayNames(const char* inLocale,
                 testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayName(testLocale, NULL, testName, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                     log_err("Error in getDisplayName()  %s\n", myErrorName(status));
                 
             }
@@ -460,7 +460,7 @@ void doTestDisplayNames(const char* inLocale,
                 testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayLanguage(testLocale, inLocale, testLang, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                 log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
             }
 
@@ -472,7 +472,7 @@ void doTestDisplayNames(const char* inLocale,
                 testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayCountry(testLocale, inLocale, testCtry, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                 log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
             }
             
@@ -484,7 +484,7 @@ void doTestDisplayNames(const char* inLocale,
                 testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayVariant(testLocale, inLocale, testVar, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
             }
             
@@ -496,7 +496,7 @@ void doTestDisplayNames(const char* inLocale,
                 testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
                 uloc_getDisplayName(testLocale, inLocale, testName, maxresultsize, &status);
             }
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                 log_err("Error in getDisplayName()  %s\n", myErrorName(status));
             }
 

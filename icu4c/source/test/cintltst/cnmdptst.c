@@ -65,7 +65,7 @@ void TestPatterns()
       status = U_ZERO_ERROR;
       u_uastrcpy(upat, pat[i]);
       fmt= unum_openPattern(upat, u_strlen(upat), "en_US", &status);
-      if (FAILURE(status)) {
+      if (U_FAILURE(status)) {
 	log_err("FAIL: Number format constructor failed for pattern %s\n", pat[i]);
 	continue; 
       }
@@ -76,7 +76,7 @@ void TestPatterns()
 	unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
 	unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
       }
-      if(FAILURE(status)){
+      if(U_FAILURE(status)){
 	log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
       }
       u_uastrcpy(unewpat, newpat[i]);
@@ -90,7 +90,7 @@ void TestPatterns()
 	str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
 	unum_format(fmt, 0, str, lneed+1,  &pos, &status);
       }
-      if(FAILURE(status))	{
+      if(U_FAILURE(status))	{
 	log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
       }
       u_uastrcpy(unum, num[i]);
@@ -115,7 +115,7 @@ void TestQuotes()
   log_verbose("\nTestting the handling of quotes in number format\n");
   u_uastrcpy(pat, "a'fo''o'b#");
   fmt =unum_openPattern(pat, u_strlen(pat), "en_US", &status);
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
   }
   lneed=0;
@@ -125,7 +125,7 @@ void TestQuotes()
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_format(fmt, 123, str, lneed+1,  &pos, &status);
   }
-  if(FAILURE(status))	{
+  if(U_FAILURE(status))	{
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
   log_verbose("Pattern \"%s\" \n", austrdup(pat) );
@@ -143,7 +143,7 @@ void TestQuotes()
     
 	
   fmt =unum_openPattern(pat, u_strlen(pat), "en_US", &status);
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error in number format costruction using pattern \"a''b#\"\n");
   }
   lneed=0;
@@ -153,7 +153,7 @@ void TestQuotes()
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_format(fmt, 123, str, lneed+1,  &pos, &status);
   }
-  if(FAILURE(status))	{
+  if(U_FAILURE(status))	{
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
   log_verbose("Pattern \"%s\" \n", austrdup(pat) );
@@ -225,7 +225,7 @@ void TestExponential()
       upat=(UChar*)malloc(sizeof(UChar) * (strlen(pat[p])+1) );
       u_uastrcpy(upat, pat[p]);
       fmt=unum_openPattern(upat, u_strlen(upat), "en_US", &status);
-      if (FAILURE(status)) { 
+      if (U_FAILURE(status)) { 
 	log_err("FAIL: Bad status returned by Number format construction with pattern %s\n, pat[i]"); 
 	continue; 
       }
@@ -242,7 +242,7 @@ void TestExponential()
 	    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
 	    unum_formatDouble(fmt, val[v], str, lneed+1,  &pos, &status);
 	  }
-	  if(FAILURE(status))	{
+	  if(U_FAILURE(status))	{
 	    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
 	  }
 	  
@@ -274,7 +274,7 @@ void TestExponential()
 	    str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
 	    unum_formatDouble(fmt, lval[v], str, lneed+1,  &pos, &status);
 	  }
-	  if(FAILURE(status))	{
+	  if(U_FAILURE(status))	{
 	    log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
 	  }
 	  /*printf(" Format %e -> %s\n",  lval[v], austrdup(str) );*/
@@ -319,7 +319,7 @@ void TestCurrencySign()
   pattern=(UChar*)malloc(sizeof(UChar) * (strlen("\xA4#,##0.00;-\xA4#,##0.00") + 1) );
   u_uastrcpy(pattern, "\xA4#,##0.00;-\xA4#,##0.00");
   fmt = unum_openPattern(pattern, u_strlen(pattern), "en_US", &status);
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
   }
   lneed=0; 
@@ -329,7 +329,7 @@ void TestCurrencySign()
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, 1234.56, str, lneed+1,  &pos, &status);
   }
-  if(FAILURE(status))	{
+  if(U_FAILURE(status))	{
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
   lneed=0;
@@ -356,7 +356,7 @@ void TestCurrencySign()
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(fmt, -1234.56, str, lneed+1,  &pos, &status);
   }
-  if(FAILURE(status))	{
+  if(U_FAILURE(status))	{
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
   }
   res=(UChar*)malloc(sizeof(UChar) * (strlen("-$1,234.56")+1) );
@@ -384,7 +384,7 @@ void TestCurrency()
   for(i=0; i < 3; i++)
     {
       currencyFmt = unum_open(UNUM_CURRENCY, locale[i], &status);
-      if(FAILURE(status)){log_err("Error in the construction of number format with style currency:\n%s\n",
+      if(U_FAILURE(status)){log_err("Error in the construction of number format with style currency:\n%s\n",
 				  myErrorName(status));
       }
       lneed=0;
@@ -394,7 +394,7 @@ void TestCurrency()
 	str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
 	unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
       }
-      if(FAILURE(status))	{
+      if(U_FAILURE(status))	{
 	log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
       res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
@@ -412,7 +412,7 @@ void TestRounding487()
   UNumberFormat *nnf;
   UErrorCode status = U_ZERO_ERROR;
   nnf = unum_open(UNUM_DEFAULT, NULL, &status);
-  if(FAILURE(status)){
+  if(U_FAILURE(status)){
     log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
   }
   roundingTest(nnf, 0.00159999, 4, "0.0016");
@@ -443,7 +443,7 @@ void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const 
     out=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
     unum_formatDouble(nf, x, out, lneed+1, &pos, &status);
   }
-  if(FAILURE(status))	{
+  if(U_FAILURE(status))	{
     log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
   }
   /*Need to use log_verbose here. Problem with the float*/

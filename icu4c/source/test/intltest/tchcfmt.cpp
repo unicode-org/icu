@@ -26,7 +26,7 @@
 
 static bool_t chkstatus( UErrorCode &status, char* msg = NULL )
 {
-    bool_t ok = SUCCESS(status);
+    bool_t ok = U_SUCCESS(status);
     if (!ok) it_errln( msg );
     return ok;
 }
@@ -390,7 +390,7 @@ TestChoiceFormat::TestComplexExample( void )
     }
 
     /*
-    ClassID classID = ChoiceFormat::getStaticClassID();
+    UClassID classID = ChoiceFormat::getStaticClassID();
     if (classID == form_pat.getDynamicClassID()) {
         it_out << "getStaticClassID and getDynamicClassID tested." << endl;
     }else{

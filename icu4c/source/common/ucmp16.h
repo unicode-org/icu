@@ -76,12 +76,11 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.2 $ 8/25/98
+ * @version            $Revision: 1.3 $ 8/25/98
  * @author             Helena Shih
  */
 
-typedef struct 
-{
+typedef struct CompactShortArray {
   int16_t* fArray;
   uint16_t* fIndex;
   int32_t* fHashes;
@@ -94,14 +93,14 @@ typedef struct
 } CompactShortArray;
 
 
-CAPI int32_t U_EXPORT2 ucmp16_getkUnicodeCount(void);
-CAPI int32_t U_EXPORT2 ucmp16_getkBlockCount(void);
+U_CAPI int32_t U_EXPORT2 ucmp16_getkUnicodeCount(void);
+U_CAPI int32_t U_EXPORT2 ucmp16_getkBlockCount(void);
 
 /**
  * Construct an empty CompactShortArray.
  * @param defaultValue the default value for all characters not explicitly in the array
  */
-CAPI  CompactShortArray* U_EXPORT2 ucmp16_open(int16_t defaultValue);
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_open(int16_t defaultValue);
 
  /**
   * Construct a CompactShortArray from a pre-computed index and values array. The values
@@ -115,24 +114,24 @@ CAPI  CompactShortArray* U_EXPORT2 ucmp16_open(int16_t defaultValue);
   * @param defaultValue the default value for all characters not explicitly in the array
   * @see compact
   */
-CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdopt(uint16_t *indexArray,
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdopt(uint16_t *indexArray,
 						    int16_t *newValues,
 						    int32_t count,
 						    int16_t defaultValue );
 
-CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
+U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
 								  int16_t *newValues,
 								  int32_t count,
 								  int16_t defaultValue,
 								  int32_t blockShift);
 
 
-CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
+U_CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
  /**
   * Returns TRUE if the creation of the compact array fails.
   */
 
-CAPI  bool_t U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
+U_CAPI  bool_t U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
 
 /**
  *
@@ -153,7 +152,7 @@ CAPI  bool_t U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
   * @param index the character to set the mapped value with
   * @param value the new mapped value
   */
-CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
+U_CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
 				UChar index,
 				int16_t value);
 
@@ -165,7 +164,7 @@ CAPI  void U_EXPORT2 ucmp16_set(CompactShortArray *array,
   * @param end the ending offset of the range
   * @param value the new mapped value
   */
-CAPI  void U_EXPORT2 ucmp16_setRange(CompactShortArray* array,
+U_CAPI  void U_EXPORT2 ucmp16_setRange(CompactShortArray* array,
 				     UChar start,
 				     UChar end, 
 				     int16_t value);
@@ -177,33 +176,33 @@ CAPI  void U_EXPORT2 ucmp16_setRange(CompactShortArray* array,
  * want better compaction, you can do your own compaction and use
  * the constructor that lets you pass in the pre-computed arrays.
  */
-CAPI  void U_EXPORT2 ucmp16_compact(CompactShortArray* array);
+U_CAPI  void U_EXPORT2 ucmp16_compact(CompactShortArray* array);
 
 /**
  * Get the default value.
  */
-CAPI  int16_t U_EXPORT2 ucmp16_getDefaultValue(const CompactShortArray* array);
+U_CAPI  int16_t U_EXPORT2 ucmp16_getDefaultValue(const CompactShortArray* array);
 
 /**
  *
  * Get the number of elements in the value array.
  * @return the number of elements in the value array.
  */
-CAPI  uint32_t U_EXPORT2 ucmp16_getCount(const CompactShortArray* array);
+U_CAPI  uint32_t U_EXPORT2 ucmp16_getCount(const CompactShortArray* array);
 
 /**
  *
  * Get the address of the value array.
  * @return the address of the value array
  */
-CAPI  const int16_t* U_EXPORT2 ucmp16_getArray(const CompactShortArray* array);
+U_CAPI  const int16_t* U_EXPORT2 ucmp16_getArray(const CompactShortArray* array);
 
 /**
  *
  * Get the address of the index array.
  * @return the address of the index array
  */
-CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array);
+U_CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array);
 
 
 

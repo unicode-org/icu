@@ -18,14 +18,14 @@
 #include "ustring.h"
 #include "uchriter.h"
 
-CAPI UBreakIterator*
+U_CAPI UBreakIterator*
 ubrk_open(UBreakIteratorType type,
       const char *locale,
       const UChar *text,
       int32_t textLength,
       UErrorCode *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   BreakIterator *result = 0;
   
@@ -67,75 +67,75 @@ ubrk_open(UBreakIteratorType type,
   return (UBreakIterator*)result;
 }
 
-CAPI UBreakIterator*
+U_CAPI UBreakIterator*
 ubrk_openRules(const UChar *rules,
            int32_t rulesLength,
            const UChar *text,
            int32_t textLength,
            UErrorCode *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   return 0;
 }
 
-CAPI void
+U_CAPI void
 ubrk_close(UBreakIterator *bi)
 {
   delete (BreakIterator*) bi;
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_current(const UBreakIterator *bi)
 {
   return ((BreakIterator*)bi)->current();
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_next(UBreakIterator *bi)
 {
   return ((BreakIterator*)bi)->next();
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_previous(UBreakIterator *bi)
 {
   return ((BreakIterator*)bi)->previous();
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_first(UBreakIterator *bi)
 {
   return ((BreakIterator*)bi)->first();
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_last(UBreakIterator *bi)
 {
   return ((BreakIterator*)bi)->last();
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_preceding(UBreakIterator *bi,
            UTextOffset offset)
 {
   return ((BreakIterator*)bi)->preceding(offset);
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ubrk_following(UBreakIterator *bi,
            UTextOffset offset)
 {
   return ((BreakIterator*)bi)->following(offset);
 }
 
-CAPI const char*
+U_CAPI const char*
 ubrk_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ubrk_countAvailable()
 {
   return uloc_countAvailable();

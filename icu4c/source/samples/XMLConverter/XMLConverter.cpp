@@ -155,7 +155,7 @@ int main(int argc, char** argv)
     }
 
 	conv = ucnv_open(encName, &err);
-	if (FAILURE(err))
+	if (U_FAILURE(err))
 	{
         if (verbose)
         {
@@ -382,7 +382,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
              }
          }
 
-        if ((err != U_BUFFER_OVERFLOW_ERROR) && FAILURE(err) )
+        if ((err != U_BUFFER_OVERFLOW_ERROR) && U_FAILURE(err) )
         {
 #if defined(_DEBUG)
             fprintf (stderr, "Error transcoding rest of the file: (%s) %d\n", errorName(err), err);
@@ -520,7 +520,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
     {
 	    err = U_ZERO_ERROR;
     }
-	else if (FAILURE(err))
+	else if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
 		printf ("Error transcoding first line of input file: (%s) %d\n", errorName(err), err);
@@ -538,7 +538,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 			bytesRead,
 			&err);										 
 
-	if (FAILURE(err))
+	if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
 		printf ("Error transcoding2 first line of input file: (%s) %d\n", errorName(err), err);
@@ -783,7 +783,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
             {
 	            err = U_ZERO_ERROR;
             }
-	        else if (FAILURE(err))
+	        else if (U_FAILURE(err))
 	        {
 #if defined(_DEBUG)
 		        fprintf (stderr, "Error transcoding char-by-char: (%s) %d\n", errorName(err), err);
@@ -800,7 +800,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
                 (const char*) stringTwo,
 			    1,
 			    &err);
-	        if (FAILURE(err))
+	        if (U_FAILURE(err))
 	        {
 #if defined(_DEBUG)
 		        fprintf (stderr, "Error transcoding2 char-by-char: (%s) %d\n", errorName(err), err);
@@ -856,7 +856,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
     {
 	    err = U_ZERO_ERROR;
     }
-	else if (FAILURE(err))
+	else if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
 		fprintf (stderr, "Error transcoding from ascii to input encoding: (%s) %d\n", errorName(err), err);
@@ -872,7 +872,7 @@ long convertFirstLine( FILE* inF, char* inEncName,
 			(const char*) oldBuf,
 			bufHere,
 			&err);										 
-	if (FAILURE(err))
+	if (U_FAILURE(err))
 	{
 #if defined(_DEBUG)
 		fprintf (stderr, "Error transcoding2 from ascii to input encoding: (%s) %d\n", errorName(err), err);
@@ -902,7 +902,7 @@ int32_t  XMLUConvert( UConverter* inConverter,
     const char* outBufferEnd = outBuffer + outBufCapacity;
     //const char* consumed;
     
-    if (FAILURE(*err)) return 0;
+    if (U_FAILURE(*err)) return 0;
     
     XMLU_fromCodepageToCodepage(outConverter,
         inConverter,
@@ -939,7 +939,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
     UChar const* consumed_UChars;
     
     
-    if (FAILURE(*err)) return;
+    if (U_FAILURE(*err)) return;
     
     *consumed = *source;
     /*loops until the input buffer is completely consumed
@@ -948,7 +948,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
     *then from Unicode to outConverter codepage
     */
     
-    while ((sourceLimit != *source) && SUCCESS(*err))
+    while ((sourceLimit != *source) && U_SUCCESS(*err))
     {
         out_chunk_alias = out_chunk;
         *source = *consumed;
@@ -966,12 +966,12 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
             *we will require at least another loop (it's a recoverable error)
         */
         
-        if (SUCCESS(*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
+        if (U_SUCCESS(*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
         {
             *err = U_ZERO_ERROR;
             out_chunk_alias2 = out_chunk;
             
-            while ((out_chunk_alias2 != out_chunk_alias) && SUCCESS(*err))
+            while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS(*err))
             {
                 ucnv_fromUnicode(outConverter,
                     target,
@@ -997,7 +997,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
   UChar const *out_chunk_alias2;
 
 
-  if (FAILURE (*err))    return;
+  if (U_FAILURE (*err))    return;
 
 
   /*loops until the input buffer is completely consumed
@@ -1005,7 +1005,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
    *first we convert from inConverter codepage to Unicode
    *then from Unicode to outConverter codepage
    */
-  while ((*source != sourceLimit) && SUCCESS (*err))
+  while ((*source != sourceLimit) && U_SUCCESS (*err))
     {
       out_chunk_alias = out_chunk;
       ucnv_toUnicode (inConverter,
@@ -1021,12 +1021,12 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
        *we will require at least another loop (it's a recoverable error)
        */
 
-      if (SUCCESS (*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
+      if (U_SUCCESS (*err) || (*err == U_INDEX_OUTOFBOUNDS_ERROR))
 	{
 	  *err = U_ZERO_ERROR;
 	  out_chunk_alias2 = out_chunk;
 
-	  while ((out_chunk_alias2 != out_chunk_alias) && SUCCESS (*err))
+	  while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS (*err))
 	    {
 	      ucnv_fromUnicode (outConverter,
 				target,

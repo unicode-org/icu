@@ -56,16 +56,16 @@
 #define icu_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
 #define icu_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
 
-CAPI char* U_EXPORT2
+U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);
 
-CAPI char* U_EXPORT2
+U_CAPI char* U_EXPORT2
 T_CString_toUpperCase(char* str);
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 T_CString_integerToString(char *buffer, int32_t n, int32_t radix);
 
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix);
 
 #endif /* ! CSTRING_H */

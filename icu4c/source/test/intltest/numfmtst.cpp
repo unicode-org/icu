@@ -25,7 +25,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-#define CHECK(status,str) if (FAILURE(status)) { errln(UnicodeString("FAIL: ") + str); return; }
+#define CHECK(status,str) if (U_FAILURE(status)) { errln(UnicodeString("FAIL: ") + str); return; }
 
 void NumberFormatTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -57,7 +57,7 @@ NumberFormatTest::TestPatterns()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
-    if (FAILURE(status)) { errln("FAIL: Could not construct DecimalFormatSymbols"); return; }
+    if (U_FAILURE(status)) { errln("FAIL: Could not construct DecimalFormatSymbols"); return; }
 
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
     int32_t pat_length = sizeof(pat) / sizeof(pat[0]);
@@ -67,7 +67,7 @@ NumberFormatTest::TestPatterns()
     {
         status = U_ZERO_ERROR;
         DecimalFormat fmt(pat[i], sym, status);
-        if (FAILURE(status)) { errln((UnicodeString)"FAIL: DecimalFormat constructor failed for " + pat[i]); continue; }
+        if (U_FAILURE(status)) { errln((UnicodeString)"FAIL: DecimalFormat constructor failed for " + pat[i]); continue; }
         UnicodeString newp; fmt.toPattern(newp);
         if (!(newp == newpat[i]))
             errln((UnicodeString)"FAIL: Pattern " + pat[i] + " should transmute to " + newpat[i] +
@@ -91,7 +91,7 @@ NumberFormatTest::TestExponential()
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
-    if (FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormatSymbols ct"); return; }
+    if (U_FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormatSymbols ct"); return; }
     char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
     int32_t pat_length = sizeof(pat) / sizeof(pat[0]);
     double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
@@ -138,7 +138,7 @@ NumberFormatTest::TestExponential()
     for (int32_t p=0; p<pat_length; ++p)
     {
         DecimalFormat fmt(pat[p], sym, status);
-        if (FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormat ct"); continue; }
+        if (U_FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormat ct"); continue; }
         UnicodeString pattern;
         logln((UnicodeString)"Pattern \"" + pat[p] + "\" -toPattern-> \"" +
           fmt.toPattern(pattern) + "\"");
@@ -258,7 +258,7 @@ NumberFormatTest::TestCurrencySign()
     if (s != "USD -1,234.56") errln((UnicodeString)"FAIL: Expected USD -1,234.56");
     delete fmt;
     delete sym;
-    if (FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 }
  
 // -------------------------------------
@@ -311,7 +311,7 @@ NumberFormatTest::TestCurrency()
     logln((UnicodeString)"Un pauvre en France a....." + s);
     if (!(s=="1,50 F")) errln((UnicodeString)"FAIL: Expected 1,50 F");
     delete currencyFmt;
-    if (FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 }
  
 // -------------------------------------
@@ -331,7 +331,7 @@ NumberFormatTest::TestParse()
         if (n.getType() != Formattable::kLong ||
             n.getLong() != 0) errln((UnicodeString)"FAIL: Expected 0");
     delete format;
-    if (FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
     //}
     //catch(Exception e) {
     //    errln((UnicodeString)"Exception caught: " + e);
@@ -356,7 +356,7 @@ NumberFormatTest::TestRounding487()
     roundingTest(*nf, 12.4999, 0, "12");
     roundingTest(*nf, - 19.5, 0, "-20");
     delete nf;
-    if (FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 }
  
 // -------------------------------------
@@ -705,7 +705,7 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
     UChar apad = 0;
     UErrorCode status = U_ZERO_ERROR;
     fmt.applyPattern(pat, status);
-    if (SUCCESS(status)) {
+    if (U_SUCCESS(status)) {
         apos = fmt.getPadPosition();
         awidth = fmt.getFormatWidth();
         apad = fmt.getPadCharacter();

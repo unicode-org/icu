@@ -169,7 +169,7 @@ umsg_getNumberFormat(UErrorCode& status)
   
   if(theFormat == 0) {
     theFormat = NumberFormat::createInstance(Locale::US, status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
     theFormat->setParseIntegerOnly(TRUE);
   }
@@ -198,7 +198,7 @@ umsg_stoi(const UnicodeString& string,
 {
   NumberFormat *myFormat = umsg_getNumberFormat(status);
   
-  if(FAILURE(status))
+  if(U_FAILURE(status))
     return -1; // OK?
   
   Formattable result;
@@ -208,7 +208,7 @@ umsg_stoi(const UnicodeString& string,
   umsg_releaseNumberFormat(myFormat);
   
   int32_t value = 0;
-  if(SUCCESS(status) && result.getType() == Formattable::kLong)
+  if(U_SUCCESS(status) && result.getType() == Formattable::kLong)
     value = result.getLong();
   
   return value;
@@ -221,7 +221,7 @@ umsg_itos(int32_t i,
   UErrorCode status = U_ZERO_ERROR;
   NumberFormat *myFormat = umsg_getNumberFormat(status);
   
-  if(FAILURE(status))
+  if(U_FAILURE(status))
     return (string = "<ERROR>");
   
   myFormat->format(i, string);
@@ -242,7 +242,7 @@ umsg_itos(int32_t i,
 //
 // Right now this imposes the same limit as MessageFormat in C++
 // Namely, only MAX_ARGS arguments are supported
-CAPI int32_t
+U_CAPI int32_t
 u_formatMessage(    const    char        *locale,
             const    UChar        *pattern,
                 int32_t        patternLength,
@@ -251,7 +251,7 @@ u_formatMessage(    const    char        *locale,
                 UErrorCode    *status,
                 ...)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t patLen = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   int32_t actLen;
@@ -413,7 +413,7 @@ u_formatMessage(    const    char        *locale,
 //  1. Call through to the C++ APIs
 //  2. Just assume the user passed in enough arguments.
 //  3. Iterate through each formattable returned, and assign to the arguments
-CAPI void 
+U_CAPI void 
 u_parseMessage(    const    char        *locale,
         const    UChar        *pattern,
             int32_t        patternLength,
@@ -422,7 +422,7 @@ u_parseMessage(    const    char        *locale,
             UErrorCode    *status,
             ...)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   int32_t patLen = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   int32_t srcLen = (sourceLength == -1 ? u_strlen(source) : sourceLength);

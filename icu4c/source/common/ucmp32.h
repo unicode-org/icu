@@ -75,7 +75,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.2 $ 8/25/98
+ * @version            $Revision: 1.3 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -93,8 +93,8 @@ typedef struct{
     bool_t fBogus;
 } CompactIntArray;
 
-    CAPI int32_t U_EXPORT2 ucmp32_getkUnicodeCount(void);
-    CAPI int32_t U_EXPORT2 ucmp32_getkBlockCount(void);
+    U_CAPI int32_t U_EXPORT2 ucmp32_getkUnicodeCount(void);
+    U_CAPI int32_t U_EXPORT2 ucmp32_getkBlockCount(void);
 
     
 /**
@@ -102,7 +102,7 @@ typedef struct{
  * Construct an empty CompactIntArray.
  * @param defaultValue the default value for all characters not explicitly in the array
  */
-CAPI CompactIntArray* U_EXPORT2 ucmp32_open(int32_t defaultValue);
+U_CAPI CompactIntArray* U_EXPORT2 ucmp32_open(int32_t defaultValue);
 
  /**
   * Construct a CompactIntArray from a pre-computed index and values array. The values
@@ -115,25 +115,25 @@ CAPI CompactIntArray* U_EXPORT2 ucmp32_open(int32_t defaultValue);
   * @param count the number of entries in the value array
   * @see compact
   */
-CAPI CompactIntArray* U_EXPORT2 ucmp32_openAdopt(uint16_t *indexArray,
+U_CAPI CompactIntArray* U_EXPORT2 ucmp32_openAdopt(uint16_t *indexArray,
                           int32_t *newValues,
                           int32_t count);
 
-CAPI void U_EXPORT2 ucmp32_close(CompactIntArray* array);
+U_CAPI void U_EXPORT2 ucmp32_close(CompactIntArray* array);
 
 /**
   * Returns TRUE if the creation of the compact array fails.
   */
 
-CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
+U_CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
 /**
   *
   * Get the mapped value of a Unicode character.
   * @param index the character to get the mapped value with
   * @return the mapped value of the given character
   */
-CAPI int32_t U_EXPORT2 ucmp32_get(CompactIntArray* array, uint16_t index); 
-CAPI uint32_t U_EXPORT2 ucmp32_getu(CompactIntArray* array, uint16_t index); 
+U_CAPI int32_t U_EXPORT2 ucmp32_get(CompactIntArray* array, uint16_t index); 
+U_CAPI uint32_t U_EXPORT2 ucmp32_getu(CompactIntArray* array, uint16_t index); 
 
 /**
   * Set a new value for a Unicode character.
@@ -141,7 +141,7 @@ CAPI uint32_t U_EXPORT2 ucmp32_getu(CompactIntArray* array, uint16_t index);
   * @param index the character to set the mapped value with
   * @param value the new mapped value
   */
-CAPI  void U_EXPORT2 ucmp32_set(CompactIntArray *array,
+U_CAPI  void U_EXPORT2 ucmp32_set(CompactIntArray *array,
                   UChar index,
                   int32_t value);
 
@@ -152,7 +152,7 @@ CAPI  void U_EXPORT2 ucmp32_set(CompactIntArray *array,
   * @param end the ending offset of the range
   * @param value the new mapped value
   */
-CAPI  void U_EXPORT2 ucmp32_setRange(CompactIntArray* array,
+U_CAPI  void U_EXPORT2 ucmp32_setRange(CompactIntArray* array,
                    UChar start,
                    UChar end, 
                    int32_t value);
@@ -164,36 +164,36 @@ CAPI  void U_EXPORT2 ucmp32_setRange(CompactIntArray* array,
  * then using that will be faster than cycle = 1, and get almost the
  * same compression.
  */
-CAPI  void U_EXPORT2 ucmp32_compact(CompactIntArray* array, int32_t cycle);
+U_CAPI  void U_EXPORT2 ucmp32_compact(CompactIntArray* array, int32_t cycle);
 /**
  * Expands the compacted array.
  * Takes the array back to a 65536 element array
  */
 
-CAPI  void U_EXPORT2 ucmp32_expand(CompactIntArray* array);
+U_CAPI  void U_EXPORT2 ucmp32_expand(CompactIntArray* array);
 /**
  *
  * Get the number of elements in the value array.
  * @return the number of elements in the value array.
  */
-CAPI  uint32_t U_EXPORT2 ucmp32_getCount(const CompactIntArray* array);
+U_CAPI  uint32_t U_EXPORT2 ucmp32_getCount(const CompactIntArray* array);
 
 /**
  *
  * Get the address of the value array.
  * @return the address of the value array
  */
-CAPI  const int32_t* U_EXPORT2 ucmp32_getArray(const CompactIntArray* array);
+U_CAPI  const int32_t* U_EXPORT2 ucmp32_getArray(const CompactIntArray* array);
 
 /**
  *
  * Get the address of the index array.
  * @return the address of the index array
  */
-CAPI  const uint16_t* U_EXPORT2 ucmp32_getIndex(const CompactIntArray* array);
+U_CAPI  const uint16_t* U_EXPORT2 ucmp32_getIndex(const CompactIntArray* array);
 
-CAPI void U_EXPORT2 ucmp32_streamIn( CompactIntArray* array, FileStream* is);
-CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
+U_CAPI void U_EXPORT2 ucmp32_streamIn( CompactIntArray* array, FileStream* is);
+U_CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
 
 
 

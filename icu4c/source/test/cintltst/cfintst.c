@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *********************************************************************************
 /**
  * CollationFinnishTest is a third level test class.  This tests the locale
@@ -101,7 +101,7 @@ void TestTertiary( )
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fi_FI", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     log_verbose("Testing Finnish Collation with Tertiary strength\n");
@@ -119,7 +119,7 @@ void TestPrimary()
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fi_FI", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     log_verbose("Testing Finnish Collation with Tertiary strength\n");

@@ -158,7 +158,7 @@ main(int argc,
   /* print the cal */
   cal(month, year, useLongNames, &status);
 
-  return (FAILURE(status) ? 1 : 0);
+  return (U_FAILURE(status) ? 1 : 0);
 }
 
 /* Usage information */
@@ -202,7 +202,7 @@ cal(int32_t month,
   const UChar *months [MONTH_COUNT];
   int32_t fdow;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Create a new calendar */
   c = ucal_open(0, -1, uloc_getDefault(), UCAL_TRADITIONAL, status);
@@ -265,7 +265,7 @@ get_days(const UChar *days [],
   int32_t i, count;
   const char *key = (useLongNames ? "DayNames" : "DayAbbreviations");
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* fdow is 1-based */
   --fdow;
@@ -292,7 +292,7 @@ get_months(const UChar *months [],
   int32_t i, count;
   const char *key = (useLongNames ? "MonthNames" : "MonthAbbreviations");
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   bundle = ures_open(0, 0, status);
   count = ures_countArrayItems(bundle, key, status);
@@ -331,7 +331,7 @@ print_days(const UChar *days [],
 {
   int32_t i;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Print the day names */
   for(i = 0; i < DAY_COUNT; ++i) {
@@ -357,7 +357,7 @@ print_month(UCalendar *c,
   const UChar *pat = (useLongNames ? sLongPat : sShortPat);
   int32_t len = (useLongNames ? 9 : 8);
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
 
   /* ========== Generate the header containing the month and year */
@@ -470,7 +470,7 @@ print_year(UCalendar *c,
   int32_t left_firstday, right_firstday, left_current, right_current;
   int32_t left_month, right_month;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Alias */
   left_cal = c;
