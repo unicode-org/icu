@@ -42,9 +42,10 @@ The resulting files have a
 extension while resource bundle source files typically have a 
 .B .txt
 extension.
-The
+.PP
+For locale data to be useable by ICU, the
 .I bundle
-file name should be a local identifier, e.g.
+file name should be a locale identifier, e.g.
 .B ja_JP.txt
 for Japanese (Japan) data, or
 .B root.txt
