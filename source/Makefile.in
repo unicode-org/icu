@@ -47,7 +47,7 @@ UNICODE_VERSION = @UNICODE_VERSION@
 @SAMPLES_FALSE@SAMPLE = 
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ 
 
 DOCDIRS = common i18n
 SUBDIRS = common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
@@ -120,7 +120,7 @@ clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-local:
-	rm -f Makefile config.cache config.log config.status
+	rm -f Makefile config.cache config.log config.status config/Makefile
 	rm -f common/platform.h common/icucfg.h
 
 check-local:
