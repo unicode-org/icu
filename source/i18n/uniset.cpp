@@ -1043,8 +1043,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
              */
             if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
                 ParsePosition pp(i-1);
-                nestedSet = UnicodePropertySet::createFromPattern(pattern, pp);
-                if (nestedSet == NULL) {
+                UnicodeSet *s = UnicodePropertySet::createFromPattern(pattern, pp);
+                if (s == NULL) {
                     // assert(pp.getIndex() == i-1);
                     //throw new IllegalArgumentException("Invalid property pattern " +
                     //                                   pattern.substring(i-1));
@@ -1056,8 +1056,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 // the future so that either (1) we just use the new set
                 // directly, and delete it when we're done, or (2) even better,
                 // UnicodePropertySet takes an existing set.
-                nestedAux = *nestedSet;
-                delete nestedSet;
+                nestedAux = *s;
+                delete s;
                 nestedSet = &nestedAux;
                 nestedPatStart = newPat.length();
                 nestedPatDone = TRUE; // we're going to do it just below
