@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1997-2003, International Business Machines
+ *   Copyright (C) 1997-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 *
@@ -126,6 +126,7 @@ void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
     UErrorCode   status = U_ZERO_ERROR;
+    UBool canonicalize = FALSE;
 
     // If given a NULL string for the locale id, grab the default
     //   name from the system.
@@ -135,6 +136,7 @@ void locale_set_default_internal(const char *id)
         umtx_lock(NULL);
         id = uprv_getDefaultLocaleID();
         umtx_unlock(NULL);
+        canonicalize = TRUE; // always canonicalize host ID
     }
 
     // put the locale id into a canonical form,
@@ -144,7 +146,11 @@ void locale_set_default_internal(const char *id)
     status = U_ZERO_ERROR;
     char localeNameBuf[512];
 
-    uloc_getName(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
+    if (canonicalize) {
+        uloc_canonicalize(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
+    } else {
+        uloc_getName(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
+    }
     localeNameBuf[sizeof(localeNameBuf)-1] = 0;  // Force null termination in event of
                                                  //   a long name filling the buffer.
                                                  //   (long names are truncated.)
@@ -188,7 +194,7 @@ void locale_set_default_internal(const char *id)
             // No way to report errors from here.
             return;
         }
-        newDefault->init(localeNameBuf);
+        newDefault->init(localeNameBuf, FALSE);
 
         // Add newly created Locale to the hash table of default Locales
         const char *key = newDefault->getName();
@@ -256,7 +262,7 @@ Locale::~Locale()
 Locale::Locale()
     : UObject(), fullName(fullNameBuffer), baseName(NULL)
 {
-    init(NULL);
+    init(NULL, FALSE);
 }
 
 /*
@@ -279,7 +285,7 @@ Locale::Locale( const   char * newLanguage,
 {
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
     {
-        init(NULL); /* shortcut */
+        init(NULL, FALSE); /* shortcut */
     }
     else
     {
@@ -409,7 +415,7 @@ Locale::Locale( const   char * newLanguage,
 
         // Parse it, because for example 'language' might really be a complete
         // string.
-        init(togo);
+        init(togo, FALSE);
 
         if (togo_heap) {
             uprv_free(togo_heap);
@@ -483,7 +489,7 @@ Locale::operator==( const   Locale& other) const
 }
 
 /*This function initializes a Locale from a C locale ID*/
-Locale& Locale::init(const char* localeID)
+Locale& Locale::init(const char* localeID, UBool canonicalize)
 {
     fIsBogus = FALSE;
     /* Free our current storage */
@@ -519,7 +525,10 @@ Locale& Locale::init(const char* localeID)
 
         // "canonicalize" the locale ID to ICU/Java format
         err = U_ZERO_ERROR;
-        length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
+        length = canonicalize ?
+            uloc_canonicalize(localeID, fullName, sizeof(fullNameBuffer), &err) :
+            uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
+
         if(err == U_BUFFER_OVERFLOW_ERROR || length >= (int32_t)sizeof(fullNameBuffer)) {
             /*Go to heap for the fullName if necessary*/
             fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
@@ -528,7 +537,9 @@ Locale& Locale::init(const char* localeID)
                 break; // error: out of memory
             }
             err = U_ZERO_ERROR;
-            length = uloc_getName(localeID, fullName, length + 1, &err);
+            length = canonicalize ?
+                uloc_canonicalize(localeID, fullName, length+1, &err) :
+                uloc_getName(localeID, fullName, length+1, &err);
         }
         if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
             /* should never occur */
@@ -537,7 +548,7 @@ Locale& Locale::init(const char* localeID)
 
         variantBegin = length;
 
-        /* after uloc_getName() we know that only '_' are separators */
+        /* after uloc_getName/canonicalize() we know that only '_' are separators */
         separator = field[0] = fullName;
         fieldIdx = 1;
         while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) && fieldIdx < (int32_t)(sizeof(field)/sizeof(field[0]))-1) {
@@ -631,11 +642,7 @@ Locale::getDefault()
     retLocale = gDefaultLocale;
     umtx_unlock(NULL);
     if (retLocale == NULL) {
-        umtx_lock(NULL);
-        /* uprv_getDefaultLocaleID is not thread safe, so we surround it with a mutex */
-        const char *cLocale = uprv_getDefaultLocaleID();
-        umtx_unlock(NULL);
-        locale_set_default_internal(cLocale);
+        locale_set_default_internal(NULL);
         umtx_lock(NULL);
         // Need a mutex  in case some other thread set a new
         // default inbetween when we set and when we get the new default.  For
@@ -669,7 +676,7 @@ Locale::createFromName (const char *name)
 {
     if (name) {
         Locale l("");
-        l.init(name);
+        l.init(name, FALSE);
         return l;
     }
     else {
@@ -677,6 +684,12 @@ Locale::createFromName (const char *name)
     }
 }
 
+Locale
+Locale::createCanonical(const char* name) {
+    Locale loc("");
+    loc.init(name, TRUE);
+    return loc;
+}
 
 const char *
 Locale::getISO3Language() const
@@ -979,7 +992,7 @@ const char* const* Locale::getISOLanguages()
 // Set the locale's data based on a posix id.
 void Locale::setFromPOSIXID(const char *posixID)
 {
-    init(posixID);
+    init(posixID, TRUE);
 }
 
 const Locale &
