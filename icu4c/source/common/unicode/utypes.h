@@ -719,6 +719,12 @@ U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 
+#ifdef U_HIDE_DRAFT_API
+#   define U_DRAFT static
+#else
+#   define U_DRAFT  U_CAPI
+#endif
+
 
 /*===========================================================================*/
 /* Include header for platform utilies */

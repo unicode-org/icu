@@ -53,6 +53,9 @@
 #if !UCONFIG_NO_IDNA
 
 #include "unicode/parseerr.h"
+
+#ifndef U_HIDE_DRAFT_API
+
 /**
  * The StringPrep profile
  * @draft ICU 2.8
@@ -77,6 +80,7 @@ typedef struct UStringPrepProfile UStringPrepProfile;
 #define USPREP_ALLOW_UNASSIGNED 0x0001
 
 
+#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Creates a StringPrep profile from the data file.
@@ -93,7 +97,7 @@ typedef struct UStringPrepProfile UStringPrepProfile;
  * @see usprep_close()
  * @draft ICU 2.8
  */
-U_CAPI UStringPrepProfile* U_EXPORT2
+U_DRAFT UStringPrepProfile* U_EXPORT2
 usprep_open(const char* path, 
             const char* fileName,
             UErrorCode* status);
@@ -104,7 +108,7 @@ usprep_open(const char* path,
  * @param profile The profile to close
  * @draft ICU 2.8
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 usprep_close(UStringPrepProfile* profile);
 
 
@@ -137,7 +141,7 @@ usprep_close(UStringPrepProfile* profile);
  * @draft ICU 2.8
  */
 
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 usprep_prepare(   const UStringPrepProfile* prep,
                   const UChar* src, int32_t srcLength, 
                   UChar* dest, int32_t destCapacity,
