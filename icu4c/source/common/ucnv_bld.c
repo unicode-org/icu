@@ -95,7 +95,9 @@ static struct {
   { "cesu8", UCNV_CESU8 },
 #if !UCONFIG_NO_LEGACY_CONVERSION
   { "hz",UCNV_HZ },
+#endif
   { "imapmailboxname", UCNV_IMAP_MAILBOX },
+#if !UCONFIG_NO_LEGACY_CONVERSION
   { "iscii", UCNV_ISCII },
   { "iso2022", UCNV_ISO_2022 },
 #endif
