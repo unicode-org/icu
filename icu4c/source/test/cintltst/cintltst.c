@@ -89,10 +89,10 @@ int main(int argc, const char* const argv[])
 
     /* Checkargs */
     for(i=1;i<argc;i++) {
-      if(!strcmp(argv[i],"-w")) {
-	warnOnMissingData = 1;
-	warnOrErr = "Warning";
-      }
+        if(!strcmp(argv[i],"-w")) {
+            warnOnMissingData = 1;
+            warnOrErr = "Warning";
+        }
     }
 
     while (REPEAT_TESTS > 0) {
@@ -130,10 +130,10 @@ int main(int argc, const char* const argv[])
                 "*** %s! The default converter cannot be opened.\n"
                 "*** Check the ICU_DATA environment variable and \n"
                 "*** check that the data files are present.\n", warnOrErr);
-	    if(warnOnMissingData == 0) {
-	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
-	      return 1;
-	    }
+            if(warnOnMissingData == 0) {
+                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                return 1;
+            }
         }
 
         /* try more data */
@@ -146,10 +146,10 @@ int main(int argc, const char* const argv[])
                     "*** %s! The converter for " TRY_CNV_2 " cannot be opened.\n"
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
-	    if(warnOnMissingData == 0) {
-	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
-	      return 1;
-	    }
+            if(warnOnMissingData == 0) {
+                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                return 1;
+            }
         }
 
         rb = ures_open(NULL, "en", &errorCode);
@@ -161,10 +161,10 @@ int main(int argc, const char* const argv[])
                     "*** %s! The \"en\" locale resource bundle cannot be opened.\n"
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
-	    if(warnOnMissingData == 0) {
-	      fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
-	      return 1;
-	    }
+            if(warnOnMissingData == 0) {
+                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                return 1;
+            }
         }
 
         fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
