@@ -32,9 +32,9 @@ nn{
         "{1} {0}",
     }
     Languages {
-        nb { "bokm\u00E5l" }
-        nn { "nynorsk" }
-        no { "norsk" }
+        nb { "Norsk bokm\u00E5l" }
+        nn { "Norsk nynorsk" }
+        no { "Norsk" }
     }
     MonthAbbreviations {
         "jan",
