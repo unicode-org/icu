@@ -8,7 +8,7 @@ icu (1.6.0.1-20001027-1) unstable; urgency=low
     of the libicuXX packages. The symlink will always point to the
     highest numbered version of ICU.
 
- -- Yves Arrouye <yves@debian.org>  Tue, 26 Oct 2000 11:14:22 -0700
+ -- Yves Arrouye <yves@debian.org>  Fri, 27 Oct 2000 15:40:12 -0700
 
 icu (1.6.0.1-20001017-1) unstable; urgency=low
 
