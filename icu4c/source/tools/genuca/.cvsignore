@@ -5,3 +5,4 @@ Makefile
 *.d
 *.pdb
 genuca
+genuca.8
