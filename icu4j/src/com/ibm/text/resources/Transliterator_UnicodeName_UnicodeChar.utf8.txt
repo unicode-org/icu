@@ -1,0 +1,1522 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:42:08 2001
+#--------------------------------------------------------------------
+
+# UnicodeName-UnicodeChar
+
+'account of%'>℀
+'addressed to the subject%'>℁
+'adi shakti%'>☬
+'airplane%'>✈
+'all equal to%'>≌
+'almost equal or equal to%'>≊
+'almost equal to%'>≈
+'angle%'>∠
+'angstrom unit%'>Å
+'ankh%'>☥
+'anticlockwise contour integral%'>∳
+'anticlockwise open circle arrow%'>↺
+'anticlockwise top semicircle arrow%'>↶
+'apl compose operator%'>⌀
+'apl out%'>⌁
+'apple logo%'>
+'approaches the limit%'>≐
+'approximately but not actually equal to%'>≆
+'approximately equal to or the image of%'>≒
+'approximately equal to%'>≅
+'aquarius%'>♒
+'arc%'>⌒
+'aries%'>♈
+'ascending node%'>☊
+'assertion%'>⊦
+'asterisk operator%'>∗
+'asterism%'>⁂
+'asymptotically equal to%'>≃
+'back-tilted shadowed white right arrow%'>➫
+'balloon-spoked asterisk%'>❉
+'ballot box with check%'>☑
+'ballot box with x%'>☒
+'ballot box%'>☐
+'ballot x%'>✘
+'barred eighth notes%'>♫
+'barred sixteenth notes%'>♬
+'because%'>∵
+'benzene ring%'>⌬
+'between%'>≬
+'biohazard%'>☣
+'black center white star%'>✬
+'black chess bishop%'>♝
+'black chess king%'>♚
+'black chess knight%'>♞
+'black chess pawn%'>♟
+'black chess queen%'>♛
+'black chess rook%'>♜
+'black circle%'>●
+'black club suit%'>♣
+'black diamond minus white x%'>❖
+'black diamond suit%'>♦
+'black diamond%'>◆
+'black down pointing small triangle%'>▾
+'black down pointing triangle%'>▼
+'black florette%'>✿
+'black four pointed star%'>✦
+'black heart suit%'>♥
+'black left pointing index%'>☚
+'black left pointing pointer%'>◄
+'black left pointing small triangle%'>◂
+'black left pointing triangle%'>◀
+'black lower left triangle%'>◣
+'black lower right triangle%'>◢
+'black nib%'>✒
+'black parallelogram%'>▰
+'black rectangle%'>▬
+'black right arrow%'>➡
+'black right arrowhead%'>➤
+'black right pointing index%'>☛
+'black right pointing pointer%'>►
+'black right pointing small triangle%'>▸
+'black right pointing triangle%'>▶
+'black scissors%'>✂
+'black small square%'>▪
+'black smiling face%'>☻
+'black spade suit%'>♠
+'black square%'>■
+'black star%'>★
+'black sun with rays%'>☀
+'black telephone%'>☎
+'black up pointing small triangle%'>▴
+'black up pointing triangle%'>▲
+'black upper left triangle%'>◤
+'black upper right triangle%'>◥
+'black vertical rectangle%'>▮
+'black-feathered lower right arrow%'>➴
+'black-feathered right arrow%'>➵
+'black-feathered upper right arrow%'>➶
+'black-letter c%'>ℭ
+'black-letter h%'>ℌ
+'black-letter i%'>ℑ
+'black-letter r%'>ℜ
+'black-letter z%'>ℨ
+'blank%'>␢
+'bottom half integral%'>⌡
+'bottom left corner%'>⌞
+'bottom left crop%'>⌍
+'bottom right corner%'>⌟
+'bottom right crop%'>⌌
+'bowtie%'>⋈
+'bra%'>〈
+'broken vertical bar%'>¦
+'bullet operator%'>∙
+'bullet%'>•
+'bullseye%'>◎
+'c l symbol%'>℄
+'cada una%'>℆
+'caduceus%'>☤
+'cancer%'>♋
+'capricorn%'>♑
+'care of%'>℅
+'caret insertion point%'>⁁
+'caret%'>‸
+'caution sign%'>☡
+'cent sign%'>¢
+'character tie%'>⁀
+'check mark%'>✓
+'chi rho%'>☧
+'circle with all but upper left quadrant black%'>◕
+'circle with left half black%'>◐
+'circle with lower half black%'>◒
+'circle with right half black%'>◑
+'circle with upper half black%'>◓
+'circle with upper right quadrant black%'>◔
+'circle with vertical fill%'>◍
+'circled asterisk operator%'>⊛
+'circled dash%'>⊝
+'circled digit eight%'>⑧
+'circled digit five%'>⑤
+'circled digit four%'>④
+'circled digit nine%'>⑨
+'circled digit one%'>①
+'circled digit seven%'>⑦
+'circled digit six%'>⑥
+'circled digit three%'>③
+'circled digit two%'>②
+'circled digit zero%'>⓪
+'circled division slash%'>⊘
+'circled dot operator%'>⊙
+'circled equals%'>⊜
+'circled heavy white right arrow%'>➲
+'circled latin capital letter a%'>Ⓐ
+'circled latin capital letter b%'>Ⓑ
+'circled latin capital letter c%'>Ⓒ
+'circled latin capital letter d%'>Ⓓ
+'circled latin capital letter e%'>Ⓔ
+'circled latin capital letter f%'>Ⓕ
+'circled latin capital letter g%'>Ⓖ
+'circled latin capital letter h%'>Ⓗ
+'circled latin capital letter i%'>Ⓘ
+'circled latin capital letter j%'>Ⓙ
+'circled latin capital letter k%'>Ⓚ
+'circled latin capital letter l%'>Ⓛ
+'circled latin capital letter m%'>Ⓜ
+'circled latin capital letter n%'>Ⓝ
+'circled latin capital letter o%'>Ⓞ
+'circled latin capital letter p%'>Ⓟ
+'circled latin capital letter q%'>Ⓠ
+'circled latin capital letter r%'>Ⓡ
+'circled latin capital letter s%'>Ⓢ
+'circled latin capital letter t%'>Ⓣ
+'circled latin capital letter u%'>Ⓤ
+'circled latin capital letter v%'>Ⓥ
+'circled latin capital letter w%'>Ⓦ
+'circled latin capital letter x%'>Ⓧ
+'circled latin capital letter y%'>Ⓨ
+'circled latin capital letter z%'>Ⓩ
+'circled latin small letter a%'>ⓐ
+'circled latin small letter b%'>ⓑ
+'circled latin small letter c%'>ⓒ
+'circled latin small letter d%'>ⓓ
+'circled latin small letter e%'>ⓔ
+'circled latin small letter f%'>ⓕ
+'circled latin small letter g%'>ⓖ
+'circled latin small letter h%'>ⓗ
+'circled latin small letter i%'>ⓘ
+'circled latin small letter j%'>ⓙ
+'circled latin small letter k%'>ⓚ
+'circled latin small letter l%'>ⓛ
+'circled latin small letter m%'>ⓜ
+'circled latin small letter n%'>ⓝ
+'circled latin small letter o%'>ⓞ
+'circled latin small letter p%'>ⓟ
+'circled latin small letter q%'>ⓠ
+'circled latin small letter r%'>ⓡ
+'circled latin small letter s%'>ⓢ
+'circled latin small letter t%'>ⓣ
+'circled latin small letter u%'>ⓤ
+'circled latin small letter v%'>ⓥ
+'circled latin small letter w%'>ⓦ
+'circled latin small letter x%'>ⓧ
+'circled latin small letter y%'>ⓨ
+'circled latin small letter z%'>ⓩ
+'circled minus%'>⊖
+'circled number eighteen%'>⑱
+'circled number eleven%'>⑪
+'circled number fifteen%'>⑮
+'circled number fourteen%'>⑭
+'circled number nineteen%'>⑲
+'circled number seventeen%'>⑰
+'circled number sixteen%'>⑯
+'circled number ten%'>⑩
+'circled number thirteen%'>⑬
+'circled number twelve%'>⑫
+'circled number twenty%'>⑳
+'circled open center eight pointed star%'>❂
+'circled plus%'>⊕
+'circled postal mark%'>〶
+'circled ring operator%'>⊚
+'circled sans serif digit eight%'>➇
+'circled sans serif digit five%'>➄
+'circled sans serif digit four%'>➃
+'circled sans serif digit nine%'>➈
+'circled sans serif digit one%'>➀
+'circled sans serif digit seven%'>➆
+'circled sans serif digit six%'>➅
+'circled sans serif digit three%'>➂
+'circled sans serif digit two%'>➁
+'circled sans serif number ten%'>➉
+'circled times%'>⊗
+'circled white star%'>✪
+'clear key%'>⌧
+'clockwise contour integral%'>∲
+'clockwise integral%'>∱
+'clockwise open circle arrow%'>↻
+'clockwise top semicircle arrow%'>↷
+'closing angle bracket%'>〉
+'closing black lenticular bracket%'>】
+'closing corner bracket%'>」
+'closing double angle bracket%'>》
+'closing tortoise shell bracket%'>〕
+'closing white corner bracket%'>』
+'closing white lenticular bracket%'>〗
+'closing white square bracket%'>〛
+'closing white tortoise shell bracket%'>〙
+'cloud%'>☁
+'colon equal%'>≔
+'colon sign%'>₡
+'comet%'>☄
+'command key%'>⌘
+'complement%'>∁
+'conjunction%'>☌
+'contains as member%'>∋
+'contains as normal subgroup or equal to%'>⊵
+'contains as normal subgroup%'>⊳
+'contour integral%'>∮
+'copyright sign%'>©
+'corresponds to%'>≘
+'cross of jerusalem%'>☩
+'cross of lorraine%'>☨
+'cruzeiro sign%'>₢
+'cube root%'>∛
+'curly logical and%'>⋏
+'curly logical or%'>⋎
+'currency sign%'>¤
+'curved stem paragraph sign ornament%'>❡
+'dagger%'>†
+'dark shade%'>▓
+'dashed triangle-headed right arrow%'>➟
+'degree sign%'>°
+'degrees centigrade%'>℃
+'degrees fahrenheit%'>℉
+'degrees kelvin%'>K
+'delete to the left key%'>⌫
+'delete to the right key%'>⌦
+'delta equal to%'>≜
+'descending node%'>☋
+'diamond operator%'>⋄
+'difference between%'>≏
+'digit eight period%'>⒏
+'digit five period%'>⒌
+'digit four period%'>⒋
+'digit nine period%'>⒐
+'digit one period%'>⒈
+'digit seven period%'>⒎
+'digit six period%'>⒍
+'digit three period%'>⒊
+'digit two period%'>⒉
+'ditto mark%'>〃
+'divides%'>∣
+'division sign%'>÷
+'division slash%'>∕
+'division times%'>⋇
+'does not contain as member%'>∌
+'does not contain as normal subgroup or equal%'>⋭
+'does not contain as normal subgroup%'>⋫
+'does not divide%'>∤
+'does not force%'>⊮
+'does not precede or equal%'>⋠
+'does not precede%'>⊀
+'does not prove%'>⊬
+'does not succeed or equal%'>⋡
+'does not succeed%'>⊁
+'dot minus%'>∸
+'dot operator%'>⋅
+'dot plus%'>∔
+'dotted circle%'>◌
+'double comma quotation mark%'>”
+'double dagger%'>‡
+'double exclamation mark%'>‼
+'double hyphen%'>‿
+'double integral%'>∬
+'double intersection%'>⋒
+'double prime quotation mark%'>〞
+'double prime%'>″
+'double reversed comma quotation mark%'>‟
+'double subset%'>⋐
+'double superset%'>⋑
+'double turned comma quotation mark%'>“
+'double union%'>⋓
+'double vertical bar double right turnstile%'>⊫
+'double vertical bar%'>‖
+'double-struck c%'>ℂ
+'double-struck h%'>ℍ
+'double-struck n%'>ℕ
+'double-struck p%'>ℙ
+'double-struck q%'>ℚ
+'double-struck r%'>ℝ
+'double-struck z%'>ℤ
+'down arrow from bar%'>↧
+'down arrow with corner left%'>↵
+'down arrow with double stroke%'>⇟
+'down arrow with tip left%'>↲
+'down arrow with tip right%'>↳
+'down arrow%'>↓
+'down arrowhead%'>⌄
+'down dashed arrow%'>⇣
+'down double arrow%'>⇓
+'down harpoon with barb left%'>⇃
+'down harpoon with barb right%'>⇂
+'down paired arrows%'>⇊
+'down right diagonal ellipsis%'>⋱
+'down tack%'>⊤
+'down two headed arrow%'>↡
+'down zigzag arrow%'>↯
+'drafting point right arrow%'>➛
+'earth%'>♁
+'eight petalled outlined black florette%'>❁
+'eight pointed black star%'>✴
+'eight pointed pinwheel star%'>✵
+'eight pointed rectilinear black star%'>✷
+'eight spoked asterisk%'>✳
+'eight teardrop-spoked propeller asterisk%'>❊
+'eighth note%'>♪
+'element of%'>∈
+'small element of%'>∊
+'element precedes under relation%'>⊰
+'element succeeds under relation%'>⊱
+'em dash%'>—
+'em quad%'> 
+'em space%'> 
+'empty set%'>∅
+'en dash%'>–
+'en quad%'> 
+'en space%'> 
+'enclosing circle slash%'>⃠
+'enclosing circle%'>⃝
+'enclosing diamond%'>⃟
+'enclosing square%'>⃞
+'end of proof%'>∎
+'enter key%'>⌤
+'envelope%'>✉
+'equal and parallel to%'>⋕
+'equal colon%'>≕
+'equal to by definition%'>≝
+'equal to or greater than%'>⋝
+'equal to or less than%'>⋜
+'equal to or precedes%'>⋞
+'equal to or succeeds%'>⋟
+'equiangular to%'>≚
+'equivalent to%'>≍
+'estimates%'>≙
+'eulers%'>ℇ
+'euro-currency sign%'>₠
+'european standard packaging%'>℮
+'excess%'>∹
+'female sign%'>♀
+'feminine ordinal indicator%'>ª
+'figure dash%'>‒
+'figure space%'> 
+'first quarter moon%'>☽
+'first transfinite cardinal%'>ℵ
+'fisheye%'>◉
+'flat%'>♭
+'floral heart%'>❦
+'for all%'>∀
+'forces%'>⊩
+'forms double down and horizontal%'>╦
+'forms double down and left%'>╗
+'forms double down and right%'>╔
+'forms double horizontal%'>═
+'forms double up and horizontal%'>╩
+'forms double up and left%'>╝
+'forms double up and right%'>╚
+'forms double vertical and horizontal%'>╬
+'forms double vertical and left%'>╣
+'forms double vertical and right%'>╠
+'forms double vertical%'>║
+'forms down double and horizontal single%'>╥
+'forms down double and left single%'>╖
+'forms down double and right single%'>╓
+'forms down heavy and horizontal light%'>┰
+'forms down heavy and left light%'>┒
+'forms down heavy and left up light%'>┧
+'forms down heavy and right light%'>┎
+'forms down heavy and right up light%'>┟
+'forms down heavy and up horizontal light%'>╁
+'forms down light and horizontal heavy%'>┯
+'forms down light and left heavy%'>┑
+'forms down light and left up heavy%'>┩
+'forms down light and right heavy%'>┍
+'forms down light and right up heavy%'>┡
+'forms down light and up horizontal heavy%'>╇
+'forms down single and horizontal double%'>╤
+'forms down single and left double%'>╕
+'forms down single and right double%'>╒
+'forms heavy double dash horizontal%'>╍
+'forms heavy double dash vertical%'>╏
+'forms heavy down and horizontal%'>┳
+'forms heavy down and left%'>┓
+'forms heavy down and right%'>┏
+'forms heavy down%'>╻
+'forms heavy horizontal%'>━
+'forms heavy left and light right%'>╾
+'forms heavy left%'>╸
+'forms heavy quadruple dash horizontal%'>┉
+'forms heavy quadruple dash vertical%'>┋
+'forms heavy right%'>╺
+'forms heavy triple dash horizontal%'>┅
+'forms heavy triple dash vertical%'>┇
+'forms heavy up and horizontal%'>┻
+'forms heavy up and left%'>┛
+'forms heavy up and light down%'>╿
+'forms heavy up and right%'>┗
+'forms heavy up%'>╹
+'forms heavy vertical and horizontal%'>╋
+'forms heavy vertical and left%'>┫
+'forms heavy vertical and right%'>┣
+'forms heavy vertical%'>┃
+'forms left down heavy and right up light%'>╅
+'forms left heavy and right down light%'>┭
+'forms left heavy and right up light%'>┵
+'forms left heavy and right vertical light%'>┽
+'forms left lighand right down heavy%'>┲
+'forms left light and right down heavy%'>┲
+'forms left light and right up heavy%'>┺
+'forms left light and right vertical heavy%'>╊
+'forms left up heavy and right down light%'>╃
+'forms light arc down and left%'>╮
+'forms light arc down and right%'>╭
+'forms light arc up and left%'>╯
+'forms light arc up and right%'>╰
+'forms light diagonal cross%'>╳
+'forms light diagonal upper left to lower right%'>╲
+'forms light diagonal upper right to lower left%'>╱
+'forms light double dash horizontal%'>╌
+'forms light double dash vertical%'>╎
+'forms light down and horizontal%'>┬
+'forms light down and left%'>┐
+'forms light down and right%'>┌
+'forms light down%'>╷
+'forms light horizontal%'>─
+'forms light left and heavy right%'>╼
+'forms light left%'>╴
+'forms light quadruple dash horizontal%'>┈
+'forms light quadruple dash vertical%'>┊
+'forms light right%'>╶
+'forms light triple dash horizontal%'>┄
+'forms light triple dash vertical%'>┆
+'forms light up and heavy down%'>╽
+'forms light up and horizontal%'>┴
+'forms light up and left%'>┘
+'forms light up and right%'>└
+'forms light up%'>╵
+'forms light vertical and horizontal%'>┼
+'forms light vertical and left%'>┤
+'forms light vertical and right%'>├
+'forms light vertical%'>│
+'forms right down heavy and left up light%'>╆
+'forms right heavy and left down light%'>┮
+'forms right heavy and left up light%'>┶
+'forms right heavy and left vertical light%'>┾
+'forms right light and left down heavy%'>┱
+'forms right light and left up heavy%'>┹
+'forms right light and left vertical heavy%'>╉
+'forms right up heavy and left down light%'>╄
+'forms up double and horizontal single%'>╨
+'forms up double and left single%'>╜
+'forms up double and right single%'>╙
+'forms up heavy and down horizontal light%'>╀
+'forms up heavy and horizontal light%'>┸
+'forms up heavy and left down light%'>┦
+'forms up heavy and left light%'>┚
+'forms up heavy and right down light%'>┞
+'forms up heavy and right light%'>┖
+'forms up light and down horizontal heavy%'>╈
+'forms up light and horizontal heavy%'>┷
+'forms up light and left down heavy%'>┪
+'forms up light and left heavy%'>┙
+'forms up light and right down heavy%'>┢
+'forms up light and right heavy%'>┕
+'forms up single and horizontal double%'>╧
+'forms up single and left double%'>╛
+'forms up single and right double%'>╘
+'forms vertical double and horizontal single%'>╫
+'forms vertical double and left single%'>╢
+'forms vertical double and right single%'>╟
+'forms vertical heavy and horizontal light%'>╂
+'forms vertical heavy and left light%'>┨
+'forms vertical heavy and right light%'>┠
+'forms vertical light and horizontal heavy%'>┿
+'forms vertical light and left heavy%'>┥
+'forms vertical light and right heavy%'>┝
+'forms vertical single and horizontal double%'>╪
+'forms vertical single and left double%'>╡
+'forms vertical single and right double%'>╞
+'four balloon-spoked asterisk%'>✣
+'four club-spoked asterisk%'>✥
+'four teardrop-spoked asterisk%'>✢
+'four-per-em space%'> 
+'fourth root%'>∜
+'fourth transfinite cardinal%'>ℸ
+'fraction five eighths%'>⅝
+'fraction five sixths%'>⅚
+'fraction four fifths%'>⅘
+'fraction numerator one%'>⅟
+'fraction one eighth%'>⅛
+'fraction one fifth%'>⅕
+'fraction one half%'>½
+'fraction one quarter%'>¼
+'fraction one sixth%'>⅙
+'fraction one third%'>⅓
+'fraction seven eighths%'>⅞
+'fraction slash%'>⁄
+'fraction three eighths%'>⅜
+'fraction three fifths%'>⅗
+'fraction three quarters%'>¾
+'fraction two fifths%'>⅖
+'fraction two thirds%'>⅔
+'french franc sign%'>₣
+'front-tilted shadowed white right arrow%'>➬
+'frown%'>⌢
+'full block%'>█
+'gemini%'>♊
+'geometric proportion%'>∺
+'geometrically equal to%'>≑
+'geometrically equivalent to%'>≎
+'geta mark%'>〓
+'graphic for acknowledge%'>␆
+'graphic for backspace%'>␈
+'graphic for bell%'>␇
+'graphic for cancel%'>␘
+'graphic for carriage return%'>␍
+'graphic for data link escape%'>␐
+'graphic for delete%'>␡
+'graphic for device control four%'>␔
+'graphic for device control one%'>␑
+'graphic for device control three%'>␓
+'graphic for device control two%'>␒
+'graphic for end of medium%'>␙
+'graphic for end of text%'>␃
+'graphic for end of transmission block%'>␗
+'graphic for end of transmission%'>␄
+'graphic for enquiry%'>␅
+'graphic for escape%'>␛
+'graphic for file separator%'>␜
+'graphic for form feed%'>␌
+'graphic for group separator%'>␝
+'graphic for horizontal tabulation%'>␉
+'graphic for line feed%'>␊
+'graphic for negative acknowledge%'>␕
+'graphic for newline%'>␤
+'graphic for null%'>␀
+'graphic for record separator%'>␞
+'graphic for shift in%'>␏
+'graphic for shift out%'>␎
+'graphic for space%'>␠
+'graphic for start of heading%'>␁
+'graphic for start of text%'>␂
+'graphic for substitute%'>␚
+'graphic for synchronous idle%'>␖
+'graphic for unit separator%'>␟
+'graphic for vertical tabulation%'>␋
+'greater than but not equal to%'>≩
+'greater than but not equivalent to%'>⋧
+'greater than equal to or less than%'>⋛
+'greater than or equal to%'>≥
+'greater than or equivalent to%'>≳
+'greater than or less than%'>≷
+'greater than over equal to%'>≧
+'greater than with dot%'>⋗
+'hair space%'> 
+'hammer and sickle%'>☭
+'hangul double dot tone mark%'>〯
+'hangul single dot tone mark%'>〮
+'hangzhou numeral eight%'>〨
+'hangzhou numeral five%'>〥
+'hangzhou numeral four%'>〤
+'hangzhou numeral nine%'>〩
+'hangzhou numeral one%'>〡
+'hangzhou numeral seven%'>〧
+'hangzhou numeral six%'>〦
+'hangzhou numeral three%'>〣
+'hangzhou numeral two%'>〢
+'heavy asterisk%'>✱
+'heavy black curved down and right arrow%'>➥
+'heavy black curved up and right arrow%'>➦
+'heavy black heart%'>❤
+'heavy black-feathered lower right arrow%'>➷
+'heavy black-feathered right arrow%'>➸
+'heavy black-feathered upper right arrow%'>➹
+'heavy check mark%'>✔
+'heavy chevron snowflake%'>❆
+'heavy concave-pointed black right arrow%'>➨
+'heavy dashed triangle-headed right arrow%'>➠
+'heavy double comma quotation mark ornament%'>❞
+'heavy double turned comma quotation mark ornament%'>❝
+'heavy eight pointed rectilinear black star%'>✸
+'heavy eight teardrop-spoked propeller asterisk%'>❋
+'heavy exclamation mark ornament%'>❢
+'heavy four balloon-spoked asterisk%'>✤
+'heavy greek cross%'>✚
+'heavy heart exclamation mark ornament%'>❣
+'heavy lower right arrow%'>➘
+'heavy lower right-shadowed white right arrow%'>➭
+'heavy multiplication x%'>✖
+'heavy open center cross%'>✜
+'heavy outlined black star%'>✮
+'heavy right arrow%'>➙
+'heavy round-tipped right arrow%'>➜
+'heavy single comma quotation mark ornament%'>❜
+'heavy single turned comma quotation mark ornament%'>❛
+'heavy sparkle%'>❈
+'heavy teardrop-shanked right arrow%'>➻
+'heavy teardrop-spoked asterisk%'>✽
+'heavy teardrop-spoked pinwheel asterisk%'>❃
+'heavy triangle-headed right arrow%'>➞
+'heavy upper right arrow%'>➚
+'heavy upper right-shadowed white right arrow%'>➮
+'heavy vertical bar%'>❚
+'heavy wedge-tailed right arrow%'>➽
+'heavy wide-headed right arrow%'>➔
+'hermitian conjugate matrix%'>⊹
+'homothetic%'>∻
+'horizontal ellipsis%'>…
+'hot springs%'>♨
+'hourglass%'>⌛
+'house%'>⌂
+'hyphen bullet%'>⁃
+'hyphen%'>‐
+'hyphenation point%'>‧
+'identical to%'>≡
+'ideographic closing mark%'>〆
+'ideographic comma%'>、
+'ideographic departing tone mark%'>〬
+'ideographic ditto mark%'>〄
+'ideographic entering tone mark%'>〭
+'ideographic half fill space%'>〿
+'ideographic iteration mark%'>々
+'ideographic level tone mark%'>〪
+'ideographic number zero%'>〇
+'ideographic period%'>。
+'ideographic rising tone mark%'>〫
+'ideographic space%'>　
+'image of or approximately equal to%'>≓
+'image of%'>⊷
+'increment%'>∆
+'infinity%'>∞
+'integral%'>∫
+'intercalate%'>⊺
+'interrobang%'>‽
+'intersection%'>∩
+'inverse bullet%'>◘
+'inverse circled digit eight%'>❽
+'inverse circled digit five%'>❺
+'inverse circled digit four%'>❹
+'inverse circled digit nine%'>❾
+'inverse circled digit one%'>❶
+'inverse circled digit seven%'>❼
+'inverse circled digit six%'>❻
+'inverse circled digit three%'>❸
+'inverse circled digit two%'>❷
+'inverse circled number ten%'>❿
+'inverse circled sans serif digit eight%'>➑
+'inverse circled sans serif digit five%'>➎
+'inverse circled sans serif digit four%'>➍
+'inverse circled sans serif digit nine%'>➒
+'inverse circled sans serif digit one%'>➊
+'inverse circled sans serif digit seven%'>➐
+'inverse circled sans serif digit six%'>➏
+'inverse circled sans serif digit three%'>➌
+'inverse circled sans serif digit two%'>➋
+'inverse circled sans serif number ten%'>➓
+'inverse white circle%'>◙
+'inverted exclamation mark%'>¡
+'inverted lazy s%'>∾
+'inverted question mark%'>¿
+'jupiter%'>♃
+'ket%'>〉
+'keyboard%'>⌨
+'l b bar symbol%'>℔
+'last quarter moon%'>☾
+'latin cross%'>✝
+'left arrow from bar%'>↤
+'left arrow over right arrow%'>⇆
+'left arrow to bar over right arrow to bar%'>↹
+'left arrow to bar%'>⇤
+'left arrow with hook%'>↩
+'left arrow with loop%'>↫
+'left arrow with stroke%'>↚
+'left arrow with tail%'>↢
+'left arrow%'>←
+'left ceiling%'>⌈
+'left dashed arrow%'>⇠
+'left double arrow with stroke%'>⇍
+'left double arrow%'>⇐
+'left five eighths block%'>▋
+'left floor%'>⌊
+'left half black circle%'>◖
+'left half block%'>▌
+'left harpoon over right harpoon%'>⇋
+'left harpoon with barb down%'>↽
+'left harpoon with barb up%'>↼
+'left normal factor semidirect product%'>⋉
+'left one eighth block%'>▏
+'left one quarter block%'>▎
+'left paired arrows%'>⇇
+'left pointing guillemet%'>«
+'left pointing single guillemet%'>‹
+'left right arrow with stroke%'>↮
+'left right arrow%'>↔
+'left right double arrow with stroke%'>⇎
+'left right double arrow%'>⇔
+'left right wave arrow%'>↭
+'left semidirect product%'>⋋
+'left seven eighths block%'>▉
+'left squiggle arrow%'>⇜
+'left tack%'>⊣
+'left three eighths block%'>▍
+'left three quarter block%'>▊
+'left triple arrow%'>⇚
+'left two headed arrow%'>↞
+'left wave arrow%'>↜
+'left-shaded white right arrow%'>➪
+'left-to-right embedding%'>‪
+'left-to-right mark%'>‎
+'left-to-right override%'>‭
+'leo%'>♌
+'less than but not equal to%'>≨
+'less than but not equivalent to%'>⋦
+'less than equal to or greater than%'>⋚
+'less than or equal to%'>≤
+'less than or equivalent to%'>≲
+'less than or greater than%'>≶
+'less than over equal to%'>≦
+'less than with dot%'>⋖
+'libra%'>♎
+'light shade%'>░
+'light vertical bar%'>❘
+'lightning%'>☇
+'line separator%'> 
+'lira sign%'>₤
+'logical and%'>∧
+'logical or%'>∨
+'low double comma quotation mark%'>„
+'low double prime quotation mark%'>〟
+'low single comma quotation mark%'>‚
+'lower blade scissors%'>✃
+'lower five eighths block%'>▅
+'lower half block%'>▄
+'lower half circle%'>◡
+'lower half inverse white circle%'>◛
+'lower left arrow%'>↙
+'lower left double arrow%'>⇙
+'lower left quadrant circular arc%'>◟
+'lower one eighth block%'>▁
+'lower one quarter block%'>▂
+'lower right arrow%'>↘
+'lower right double arrow%'>⇘
+'lower right drop-shadowed white square%'>❏
+'lower right pencil%'>✎
+'lower right quadrant circular arc%'>◞
+'lower right shadowed white square%'>❑
+'lower seven eighths block%'>▇
+'lower three eighths block%'>▃
+'lower three quarter block%'>▆
+'lozenge%'>◊
+'male sign%'>♂
+'maltese cross%'>✠
+'masculine ordinal indicator%'>º
+'measured angle%'>∡
+'measured by%'>≞
+'medium shade%'>▒
+'medium vertical bar%'>❙
+'mercury%'>☿
+'mho%'>℧
+'micro sign%'>µ
+'middle dot%'>·
+'midline horizontal ellipsis%'>⋯
+'mill sign%'>₥
+'minus sign%'>−
+'minus tilde%'>≂
+'minus-or-plus sign%'>∓
+'models%'>⊧
+'modifier letter acute%'>ˊ
+'modifier letter apostrophe%'>ʼ
+'modifier letter centered left half ring%'>˓
+'modifier letter centered right half ring%'>˒
+'modifier letter circumflex%'>ˆ
+'modifier letter double prime%'>ʺ
+'modifier letter down arrowhead%'>˅
+'modifier letter down tack%'>˕
+'modifier letter extra-high tone bar%'>˥
+'modifier letter extra-low tone bar%'>˩
+'modifier letter glottal stop%'>ˀ
+'modifier letter grave%'>ˋ
+'modifier letter hacek%'>ˇ
+'modifier letter half triangular colon%'>ˑ
+'modifier letter high tone bar%'>˦
+'modifier letter left arrowhead%'>˂
+'modifier letter left half ring%'>ʿ
+'modifier letter low acute%'>ˏ
+'modifier letter low grave%'>ˎ
+'modifier letter low macron%'>ˍ
+'modifier letter low tone bar%'>˨
+'modifier letter low vertical line%'>ˌ
+'modifier letter macron%'>ˉ
+'modifier letter mid tone bar%'>˧
+'modifier letter minus sign%'>˗
+'modifier letter plus sign%'>˖
+'modifier letter prime%'>ʹ
+'modifier letter reversed comma%'>ʽ
+'modifier letter reversed glottal stop%'>ˁ
+'modifier letter rhotic hook%'>˞
+'modifier letter right arrowhead%'>˃
+'modifier letter right half ring%'>ʾ
+'modifier letter small capital inverted r%'>ʶ
+'modifier letter small gamma%'>ˠ
+'modifier letter small h hook%'>ʱ
+'modifier letter small h%'>ʰ
+'modifier letter small j%'>ʲ
+'modifier letter small l%'>ˡ
+'modifier letter small r%'>ʳ
+'modifier letter small reversed glottal stop%'>ˤ
+'modifier letter small s%'>ˢ
+'modifier letter small turned r hook%'>ʵ
+'modifier letter small turned r%'>ʴ
+'modifier letter small w%'>ʷ
+'modifier letter small x%'>ˣ
+'modifier letter small y%'>ʸ
+'modifier letter triangular colon%'>ː
+'modifier letter turned comma%'>ʻ
+'modifier letter up arrowhead%'>˄
+'modifier letter up tack%'>˔
+'modifier letter vertical line%'>ˈ
+'much greater than%'>≫
+'much less than%'>≪
+'multimap%'>⊸
+'multiplication sign%'>×
+'multiplication x%'>✕
+'multiset multiplication%'>⊍
+'multiset union%'>⊎
+'multiset%'>⊌
+'n-ary coproduct%'>∐
+'n-ary intersection%'>⋂
+'n-ary logical and%'>⋀
+'n-ary logical or%'>⋁
+'n-ary product%'>∏
+'n-ary summation%'>∑
+'n-ary union%'>⋃
+'nabla%'>∇
+'naira sign%'>₦
+'nand%'>⊼
+'natural%'>♮
+'negated double vertical bar double right turnstile%'>⊯
+'neither a subset of nor equal to%'>⊈
+'neither a superset of nor equal to%'>⊉
+'neither approximately nor actually equal to%'>≇
+'neither greater than nor equal to%'>≱
+'neither greater than nor equivalent to%'>≵
+'neither greater than nor less than%'>≹
+'neither less than nor equal to%'>≰
+'neither less than nor equivalent to%'>≴
+'neither less than nor greater than%'>≸
+'neptune%'>♆
+'new sheqel sign%'>₪
+'non-breaking hyphen%'>‑
+'non-breaking space%'> 
+'non-spacing acute below%'>̗
+'non-spacing acute tone mark%'>͈
+'non-spacing acute%'>́
+'non-spacing anticlockwise arrow above%'>⃔
+'non-spacing anticlockwise ring overlay%'>⃚
+'non-spacing breve below%'>̮
+'non-spacing breve%'>̆
+'non-spacing bridge below%'>̪
+'non-spacing candrabindu%'>̐
+'non-spacing cedilla%'>̧
+'non-spacing centerline overscore%'>́
+'non-spacing centerline underscore%'>ͅ
+'non-spacing circumflex below%'>̭
+'non-spacing circumflex%'>̂
+'non-spacing clockwise arrow above%'>⃕
+'non-spacing clockwise ring overlay%'>⃙
+'non-spacing comma above right%'>̕
+'non-spacing comma above%'>̓
+'non-spacing comma below%'>̦
+'non-spacing dashed overscore%'>̀
+'non-spacing dashed underscore%'>̈́
+'non-spacing diaeresis%'>̈
+'non-spacing dot above%'>̇
+'non-spacing dot below%'>̣
+'non-spacing double acute%'>̋
+'non-spacing double dot below%'>̤
+'non-spacing double grave%'>̏
+'non-spacing double overscore%'>̿
+'non-spacing double underscore%'>̳
+'non-spacing double vertical line above%'>̎
+'non-spacing double wavy overscore%'>̓
+'non-spacing down tack below%'>̞
+'non-spacing four dots above%'>⃜
+'non-spacing grave below%'>̖
+'non-spacing grave tone mark%'>͇
+'non-spacing grave%'>̀
+'non-spacing hacek below%'>̬
+'non-spacing hacek%'>̌
+'non-spacing hook above%'>̉
+'non-spacing horn%'>̛
+'non-spacing inverted breve below%'>̯
+'non-spacing inverted breve%'>̑
+'non-spacing inverted bridge below%'>̺
+'non-spacing inverted double arch below%'>̫
+'non-spacing left angle above%'>̚
+'non-spacing left arrow above%'>⃖
+'non-spacing left half ring below%'>̜
+'non-spacing left harpoon above%'>⃐
+'non-spacing left right arrow above%'>⃡
+'non-spacing left tack below%'>̘
+'non-spacing long bar overlay%'>̶
+'non-spacing long slash overlay%'≯
+'non-spacing long vertical bar overlay%'>⃒
+'non-spacing macron below%'>̱
+'non-spacing macron%'>̄
+'non-spacing minus sign below%'>̠
+'non-spacing ogonek%'>̨
+'non-spacing overscore%'>̅
+'non-spacing palatalized hook below%'>̡
+'non-spacing plus sign below%'>̟
+'non-spacing retroflex hook below%'>̢
+'non-spacing reversed comma above%'>̔
+'non-spacing right arrow above%'>⃗
+'non-spacing right half ring below%'>̹
+'non-spacing right harpoon above%'>⃑
+'non-spacing right tack below%'>̙
+'non-spacing ring above%'>̊
+'non-spacing ring below%'>̥
+'non-spacing ring overlay%'>⃘
+'non-spacing seagull below%'>̼
+'non-spacing short bar overlay%'>̵
+'non-spacing short slash overlay%'>̷
+'non-spacing short vertical bar overlay%'>⃓
+'non-spacing square below%'>̻
+'non-spacing three dots above%'>⃛
+'non-spacing tilde below%'>̰
+'non-spacing tilde overlay%'>̴
+'non-spacing tilde%'>̃
+'non-spacing turned comma above%'>̒
+'non-spacing underscore%'>̲
+'non-spacing up tack below%'>̝
+'non-spacing vertical line above%'>̍
+'non-spacing vertical line below%'>̩
+'non-spacing vertical tilde%'>̾
+'non-spacing wavy overscore%'>͂
+'non-spacing wavy underscore%'>͆
+'non-spacing x above%'>̽
+'nor%'>⊽
+'normal subgroup of or equal to%'>⊴
+'normal subgroup of%'>⊲
+'not a subset of%'>⊄
+'not a superset of%'>⊅
+'not almost equal to%'>≉
+'not an element of%'>∉
+'not asymptotically equal to%'>≄
+'not equal to%'>≠
+'not equivalent to%'>≭
+'not greater than%'>≯
+'not identical to%'>≢
+'not less than%'>≮
+'not normal subgroup of or equal to%'>⋬
+'not normal subgroup of%'>⋪
+'not parallel to%'>∦
+'not sign%'>¬
+'not square image of or equal to%'>⋢
+'not square original of or equal to%'>⋣
+'not tilde%'>≁
+'not true%'>⊭
+'notched lower right-shadowed white right arrow%'>➯
+'notched upper right-shadowed white right arrow%'>➱
+'number eighteen period%'>⒙
+'number eleven period%'>⒒
+'number fifteen period%'>⒖
+'number fourteen period%'>⒕
+'number nineteen period%'>⒚
+'number seventeen period%'>⒘
+'number sixteen period%'>⒗
+'number ten period%'>⒑
+'number thirteen period%'>⒔
+'number twelve period%'>⒓
+'number twenty period%'>⒛
+'numero%'>№
+'ocr amount of check%'>⑇
+'ocr belt buckle%'>⑄
+'ocr bow tie%'>⑅
+'ocr branch bank identification%'>⑆
+'ocr chair%'>⑁
+'ocr customer account number%'>⑉
+'ocr dash%'>⑈
+'ocr double backslash%'>⑊
+'ocr fork%'>⑂
+'ocr hook%'>⑀
+'ocr inverted fork%'>⑃
+'ohm%'>Ω
+'one dot leader%'>․
+'open box%'>␣
+'open center asterisk%'>✲
+'open center black star%'>✫
+'open center cross%'>✛
+'open center teardrop-spoked asterisk%'>✼
+'open-outlined right arrow%'>➾
+'opening angle bracket%'>〈
+'opening black lenticular bracket%'>【
+'opening corner bracket%'>「
+'opening double angle bracket%'>《
+'opening tortoise shell bracket%'>〔
+'opening white corner bracket%'>『
+'opening white lenticular bracket%'>〖
+'opening white square bracket%'>〚
+'opening white tortoise shell bracket%'>〘
+'opposition%'>☍
+'option key%'>⌥
+'original of%'>⊶
+'orthodox cross%'>☦
+'ounce%'>℥
+'outlined black star%'>✭
+'outlined greek cross%'>✙
+'outlined latin cross%'>✟
+'paragraph separator%'> 
+'paragraph sign%'>¶
+'parallel to%'>∥
+'parenthesized digit eight%'>⑻
+'parenthesized digit five%'>⑸
+'parenthesized digit four%'>⑷
+'parenthesized digit nine%'>⑼
+'parenthesized digit one%'>⑴
+'parenthesized digit seven%'>⑺
+'parenthesized digit six%'>⑹
+'parenthesized digit three%'>⑶
+'parenthesized digit two%'>⑵
+'parenthesized latin small letter a%'>⒜
+'parenthesized latin small letter b%'>⒝
+'parenthesized latin small letter c%'>⒞
+'parenthesized latin small letter d%'>⒟
+'parenthesized latin small letter e%'>⒠
+'parenthesized latin small letter f%'>⒡
+'parenthesized latin small letter g%'>⒢
+'parenthesized latin small letter h%'>⒣
+'parenthesized latin small letter i%'>⒤
+'parenthesized latin small letter j%'>⒥
+'parenthesized latin small letter k%'>⒦
+'parenthesized latin small letter l%'>⒧
+'parenthesized latin small letter m%'>⒨
+'parenthesized latin small letter n%'>⒩
+'parenthesized latin small letter o%'>⒪
+'parenthesized latin small letter p%'>⒫
+'parenthesized latin small letter q%'>⒬
+'parenthesized latin small letter r%'>⒭
+'parenthesized latin small letter s%'>⒮
+'parenthesized latin small letter t%'>⒯
+'parenthesized latin small letter u%'>⒰
+'parenthesized latin small letter v%'>⒱
+'parenthesized latin small letter w%'>⒲
+'parenthesized latin small letter x%'>⒳
+'parenthesized latin small letter y%'>⒴
+'parenthesized latin small letter z%'>⒵
+'parenthesized number eighteen%'>⒅
+'parenthesized number eleven%'>⑾
+'parenthesized number fifteen%'>⒂
+'parenthesized number fourteen%'>⒁
+'parenthesized number nineteen%'>⒆
+'parenthesized number seventeen%'>⒄
+'parenthesized number sixteen%'>⒃
+'parenthesized number ten%'>⑽
+'parenthesized number thirteen%'>⒀
+'parenthesized number twelve%'>⑿
+'parenthesized number twenty%'>⒇
+'partial differential%'>∂
+'peace symbol%'>☮
+'pencil%'>✏
+'per mille sign%'>‰
+'per ten thousand sign%'>‱
+'perspective%'>⌆
+'peseta sign%'>₧
+'pinwheel star%'>✯
+'pisces%'>♓
+'pitchfork%'>⋔
+'planck constant over 2 pi%'>ℏ
+'planck constant%'>ℎ
+'plus-or-minus sign%'>±
+'pluto%'>♇
+'pop directional embedding%'>‬
+'position indicator%'>⌖
+'postal mark face%'>〠
+'postal mark%'>〒
+'pound sign%'>£
+'precedes but not equivalent to%'>⋨
+'precedes or equal to%'>≼
+'precedes or equivalent to%'>≾
+'precedes%'>≺
+'prescription take%'>℞
+'prime%'>′
+'projective%'>⌅
+'proportion%'>∷
+'proportional to%'>∝
+'punctuation space%'> 
+'quarter note%'>♩
+'questioned equal to%'>≟
+'quotation dash%'>―
+'radioactive%'>☢
+'ratio%'>∶
+'reference mark%'>※
+'registered trade mark sign%'>®
+'response%'>℟
+'reversed double prime quotation mark%'>〝
+'reversed double prime%'>‶
+'reversed not sign%'>⌐
+'reversed prime%'>‵
+'reversed tilde equals%'>⋍
+'reversed tilde%'>∽
+'reversed triple prime%'>‷
+'right angle with arc%'>⊾
+'right angle%'>∟
+'right arrow from bar%'>↦
+'right arrow over left arrow%'>⇄
+'right arrow to bar%'>⇥
+'right arrow with corner down%'>↴
+'right arrow with hook%'>↪
+'right arrow with loop%'>↬
+'right arrow with stroke%'>↛
+'right arrow with tail%'>↣
+'right arrow%'>→
+'right ceiling%'>⌉
+'right dashed arrow%'>⇢
+'right double arrow with stroke%'>⇏
+'right double arrow%'>⇒
+'right floor%'>⌋
+'right half black circle%'>◗
+'right half block%'>▐
+'right harpoon over left harpoon%'>⇌
+'right harpoon with barb down%'>⇁
+'right harpoon with barb up%'>⇀
+'right normal factor semidirect product%'>⋊
+'right one eighth block%'>▕
+'right paired arrows%'>⇉
+'right pointing guillemet%'>»
+'right pointing single guillemet%'>›
+'right semidirect product%'>⋌
+'right squiggle arrow%'>⇝
+'right tack%'>⊢
+'right triangle%'>⊿
+'right triple arrow%'>⇛
+'right two headed arrow%'>↠
+'right wave arrow%'>↝
+'right-shaded white right arrow%'>➩
+'right-to-left embedding%'>‫
+'right-to-left mark%'>‏
+'right-to-left override%'>‮
+'ring equal to%'>≗
+'ring in equal to%'>≖
+'ring operator%'>∘
+'roman numeral eight%'>Ⅷ
+'roman numeral eleven%'>Ⅺ
+'roman numeral fifty%'>Ⅼ
+'roman numeral five hundred%'>Ⅾ
+'roman numeral five thousand%'>ↁ
+'roman numeral five%'>Ⅴ
+'roman numeral four%'>Ⅳ
+'roman numeral nine%'>Ⅸ
+'roman numeral one hundred%'>Ⅽ
+'roman numeral one thousand c d%'>ↀ
+'roman numeral one thousand%'>Ⅿ
+'roman numeral one%'>Ⅰ
+'roman numeral seven%'>Ⅶ
+'roman numeral six%'>Ⅵ
+'roman numeral ten thousand%'>ↂ
+'roman numeral ten%'>Ⅹ
+'roman numeral three%'>Ⅲ
+'roman numeral twelve%'>Ⅻ
+'roman numeral two%'>Ⅱ
+'rotated floral heart bullet%'>❧
+'rotated heavy black heart bullet%'>❥
+'rupee sign%'>₨
+'sagittarius%'>♐
+'saltire%'>☓
+'saturn%'>♄
+'scorpius%'>♏
+'script b%'>ℬ
+'script e%'>ℰ
+'script f%'>ℱ
+'script h%'>ℋ
+'script i%'>ℐ
+'script l%'>ℒ
+'script m%'>ℳ
+'script p%'>℘
+'script r%'>ℛ
+'script small e%'>ℯ
+'script small g%'>ℊ
+'script small l%'>ℓ
+'script small o%'>ℴ
+'scruple%'>℈
+'second transfinite cardinal%'>ℶ
+'section sign%'>§
+'sector%'>⌔
+'segment%'>⌓
+'service mark%'>℠
+'set minus%'>∖
+'shadowed white circle%'>❍
+'shadowed white latin cross%'>✞
+'shadowed white star%'>✰
+'sharp%'>♯
+'sine wave%'>∿
+'single comma quotation mark%'>’
+'single reversed comma quotation mark%'>‛
+'single turned comma quotation mark%'>‘
+'six petalled black and white florette%'>✾
+'six pointed black star%'>✶
+'six-per-em space%'> 
+'sixteen pointed asterisk%'>✺
+'skull and crossbones%'>☠
+'small contains as member%'>∍
+'small roman numeral eight%'>ⅷ
+'small roman numeral eleven%'>ⅺ
+'small roman numeral fifty%'>ⅼ
+'small roman numeral five hundred%'>ⅾ
+'small roman numeral five%'>ⅴ
+'small roman numeral four%'>ⅳ
+'small roman numeral nine%'>ⅸ
+'small roman numeral one hundred%'>ⅽ
+'small roman numeral one thousand%'>ⅿ
+'small roman numeral one%'>ⅰ
+'small roman numeral seven%'>ⅶ
+'small roman numeral six%'>ⅵ
+'small roman numeral ten%'>ⅹ
+'small roman numeral three%'>ⅲ
+'small roman numeral twelve%'>ⅻ
+'small roman numeral two%'>ⅱ
+'smile%'>⌣
+'snowflake%'>❄
+'snowman%'>☃
+'soft hyphen%'>­
+'sound recording copyright%'>℗
+'spacing acute%'>´
+'spacing breve%'>˘
+'spacing cedilla%'>¸
+'spacing diaeresis%'>¨
+'spacing dot above%'>˙
+'spacing double acute%'>˝
+'spacing double underscore%'>‗
+'spacing macron%'>¯
+'spacing ogonek%'>˛
+'spacing overscore%'>‾
+'spacing ring above%'>˚
+'spacing tilde%'>˜
+'sparkle%'>❇
+'spherical angle%'>∢
+'square cap%'>⊓
+'square cup%'>⊔
+'square image of or equal to%'>⊑
+'square image of or not equal to%'>⋤
+'square image of%'>⊏
+'square lozenge%'>⌑
+'square original of or equal to%'>⊒
+'square original of or not equal to%'>⋥
+'square original of%'>⊐
+'square root%'>√
+'square with diagonal crosshatch fill%'>▩
+'square with horizontal fill%'>▤
+'square with left half black%'>◧
+'square with lower right diagonal half black%'>◪
+'square with orthogonal crosshatch fill%'>▦
+'square with right half black%'>◨
+'square with upper left diagonal half black%'>◩
+'square with upper left to lower right fill%'>▧
+'square with upper right to lower left fill%'>▨
+'square with vertical fill%'>▥
+'squared dot operator%'>⊡
+'squared minus%'>⊟
+'squared plus%'>⊞
+'squared times%'>⊠
+'squat black right arrow%'>➧
+'star and crescent%'>☪
+'star equals%'>≛
+'star of david%'>✡
+'star operator%'>⋆
+'stop directional override%'> 
+'strictly equivalent to%'>≣
+'subscript closing parenthesis%'>₎
+'subscript digit eight%'>₈
+'subscript digit five%'>₅
+'subscript digit four%'>₄
+'subscript digit nine%'>₉
+'subscript digit one%'>₁
+'subscript digit seven%'>₇
+'subscript digit six%'>₆
+'subscript digit three%'>₃
+'subscript digit two%'>₂
+'subscript digit zero%'>₀
+'subscript equals sign%'>₌
+'subscript hyphen-minus%'>₋
+'subscript opening parenthesis%'>₍
+'subscript plus sign%'>₊
+'subset of or equal to%'>⊆
+'subset of or not equal to%'>⊊
+'subset of%'>⊂
+'succeeds but not equivalent to%'>⋩
+'succeeds or equal to%'>≽
+'succeeds or equivalent to%'>≿
+'succeeds%'>≻
+'superscript closing parenthesis%'>⁾
+'superscript digit eight%'>⁸
+'superscript digit five%'>⁵
+'superscript digit four%'>⁴
+'superscript digit nine%'>⁹
+'superscript digit one%'>¹
+'superscript digit seven%'>⁷
+'superscript digit six%'>⁶
+'superscript digit three%'>³
+'superscript digit two%'>²
+'superscript digit zero%'>⁰
+'superscript equals sign%'>⁼
+'superscript hyphen-minus%'>⁻
+'superscript latin small letter n%'>ⁿ
+'superscript opening parenthesis%'>⁽
+'superscript plus sign%'>⁺
+'superset of or equal to%'>⊇
+'superset of or not equal to%'>⊋
+'superset of%'>⊃
+'surface integral%'>∯
+'symbol of iran%'>☫
+'t e l symbol%'>℡
+'tape drive%'>✇
+'taurus%'>♉
+'teardrop-barbed right arrow%'>➺
+'teardrop-spoked asterisk%'>✻
+'telephone location sign%'>✆
+'telephone recorder%'>⌕
+'there does not exist%'>∄
+'there exists%'>∃
+'therefore%'>∴
+'thin space%'> 
+'third transfinite cardinal%'>ℷ
+'three-d bottom-lighted right arrowhead%'>➣
+'three-d top-lighted right arrowhead%'>➢
+'three-per-em space%'> 
+'thunderstorm%'>☈
+'tight trifoliate snowflake%'>❅
+'tilde operator%'>∼
+'top half integral%'>⌠
+'top left corner%'>⌜
+'top left crop%'>⌏
+'top right corner%'>⌝
+'top right crop%'>⌎
+'trademark%'>™
+'triangle-headed right arrow%'>➝
+'triangular bullet%'>‣
+'trigram for earth%'>☷
+'trigram for fire%'>☲
+'trigram for heaven%'>☰
+'trigram for lake%'>☱
+'trigram for mountain%'>☶
+'trigram for thunder%'>☳
+'trigram for water%'>☵
+'trigram for wind%'>☴
+'triple integral%'>∭
+'triple prime%'>‴
+'triple tilde%'>≋
+'triple vertical bar right turnstile%'>⊪
+'true%'>⊨
+'turned f%'>Ⅎ
+'turned greek small letter iota%'>℩
+'turned not sign%'>⌙
+'twelve pointed black star%'>✹
+'two dot leader%'>‥
+'umbrella%'>☂
+'union%'>∪
+'up arrow from bar%'>↥
+'up arrow left of down arrow%'>⇅
+'up arrow with double stroke%'>⇞
+'up arrow with tip left%'>↰
+'up arrow with tip right%'>↱
+'up arrow%'>↑
+'up arrowhead%'>⌃
+'up dashed arrow%'>⇡
+'up double arrow%'>⇑
+'up down arrow with base%'>↨
+'up down arrow%'>↕
+'up down double arrow%'>⇕
+'up harpoon with barb left%'>↿
+'up harpoon with barb right%'>↾
+'up paired arrows%'>⇈
+'up pointing triangle with left half black%'>◭
+'up pointing triangle with right half black%'>◮
+'up right diagonal ellipsis%'>⋰
+'up tack%'>⊥
+'up two headed arrow%'>↟
+'upper blade scissors%'>✁
+'upper half block%'>▀
+'upper half circle%'>◠
+'upper half inverse white circle%'>◚
+'upper left arrow to long bar%'>↸
+'upper left arrow%'>↖
+'upper left double arrow%'>⇖
+'upper left quadrant circular arc%'>◜
+'upper one eighth block%'>▔
+'upper right arrow%'>↗
+'upper right double arrow%'>⇗
+'upper right drop-shadowed white square%'>❐
+'upper right pencil%'>✐
+'upper right quadrant circular arc%'>◝
+'upper right shadowed white square%'>❒
+'uranus%'>♅
+'versicle%'>℣
+'vertical ellipsis%'>⋮
+'vertical kana repeat mark lower half%'>〵
+'vertical kana repeat mark upper half%'>〳
+'vertical kana repeat mark%'>〱
+'vertical kana repeat with voiced sound mark upper half%'>〴
+'vertical kana repeat with voiced sound mark%'>〲
+'very much greater than%'>⋙
+'very much less than%'>⋘
+'victory hand%'>✌
+'viewdata square%'>⌗
+'virgo%'>♍
+'volume integral%'>∰
+'watch%'>⌚
+'wave dash%'>〜
+'wavy dash%'>〰
+'wavy line%'>⌇
+'wedge-tailed right arrow%'>➼
+'wheel of dharma%'>☸
+'white bullet%'>◦
+'white chess bishop%'>♗
+'white chess king%'>♔
+'white chess knight%'>♘
+'white chess pawn%'>♙
+'white chess queen%'>♕
+'white chess rook%'>♖
+'white circle%'>○
+'white club suit%'>♧
+'white diamond containing black small diamond%'>◈
+'white diamond suit%'>♢
+'white diamond%'>◇
+'white down arrow%'>⇩
+'white down pointing index%'>☟
+'white down pointing small triangle%'>▿
+'white down pointing triangle%'>▽
+'white florette%'>❀
+'white four pointed star%'>✧
+'white frowning face%'>☹
+'white heart suit%'>♡
+'white left arrow%'>⇦
+'white left pointing index%'>☜
+'white left pointing pointer%'>◅
+'white left pointing small triangle%'>◃
+'white left pointing triangle%'>◁
+'white nib%'>✑
+'white parallelogram%'>▱
+'white rectangle%'>▭
+'white right arrow%'>⇨
+'white right pointing index%'>☞
+'white right pointing pointer%'>▻
+'white right pointing small triangle%'>▹
+'white right pointing triangle%'>▷
+'white scissors%'>✄
+'white small square%'>▫
+'white smiling face%'>☺
+'white spade suit%'>♤
+'white square containing black small square%'>▣
+'white square with rounded corners%'>▢
+'white square with vertical bisecting line%'>◫
+'white square%'>□
+'white star%'>☆
+'white sun with rays%'>☼
+'white telephone%'>☏
+'white up arrow from bar%'>⇪
+'white up arrow%'>⇧
+'white up pointing index%'>☝
+'white up pointing small triangle%'>▵
+'white up pointing triangle with dot%'>◬
+'white up pointing triangle%'>△
+'white vertical rectangle%'>▯
+'white-feathered right arrow%'>➳
+'won sign%'>₩
+'wreath product%'>≀
+'writing hand%'>✍
+'x mark3%'>✗
+'xor%'>⊻
+'yen sign%'>¥
+'yin yang%'>☯
+'zero width joiner%'>‍
+'zero width non-joiner%'>‌
+'zero width space%'>​
+
+# eof

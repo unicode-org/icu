@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2000/10/06 23:07:40 $ 
- * $Revision: 1.22 $
+ * $Date: 2001/02/03 00:46:21 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,8 @@ package com.ibm.text;
 
 import java.util.*;
 import java.text.MessageFormat;
+import java.io.UnsupportedEncodingException;
+import com.ibm.text.resources.ResourceReader;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -210,7 +212,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.22 $ $Date: 2000/10/06 23:07:40 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.23 $ $Date: 2001/02/03 00:46:21 $
  */
 public abstract class Transliterator {
     /**
@@ -417,6 +419,16 @@ public abstract class Transliterator {
      * Resource bundle key for the RuleBasedTransliterator rule.
      */
     private static final String RB_RULE = "Rule";
+
+    /**
+     * Prefix string to identify UTF8 RuleBasedTransliterator resource.
+     */
+    private static final String RBT_UTF8_PREFIX = "Transliterator_";
+
+    /**
+     * Suffix string to identify UTF8 RuleBasedTransliterator resource.
+     */
+    private static final String RBT_UTF8_SUFFIX = ".utf8.txt";
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -873,37 +885,60 @@ public abstract class Transliterator {
             } else {
                 synchronized (cache) {
                     boolean isReverse = (obj == REVERSE_RULE_BASED_PLACEHOLDER);
-                    String resourceName = RB_RULE_BASED_PREFIX;
+                    String resourceName = ID;
                     int i = ID.indexOf('-');
-                    if (i < 0) {
-                        resourceName += ID;
-                    } else {
+                    if (i > 0) {
                         String IDLeft  = ID.substring(0, i);
                         String IDRight = ID.substring(i+1);
-                        resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
-                                                  : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
+                        resourceName = isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
+                                                 : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
                     }
+
+                    ResourceReader r = null;
                     try {
-                        ResourceBundle resource = ResourceBundle.getBundle(resourceName);
-
-                        // We allow the resource bundle to contain either an array
-                        // of rules, or a single rule string.
-                        String[] ruleArray;
-                        try {
-                            ruleArray = resource.getStringArray(RB_RULE);
-                        } catch (Exception e) {
-                            // This is a ClassCastException under JDK 1.1.8
-                            ruleArray = new String[] { resource.getString(RB_RULE) };
-                        }
-
-                        data = RuleBasedTransliterator.parse(ruleArray,
+                        r = new ResourceReader(RBT_UTF8_PREFIX + resourceName + RBT_UTF8_SUFFIX,
+                                               "UTF8");
+                    } catch (UnsupportedEncodingException e) {
+                        // This should never happen; UTF8 is always supported
+                    } catch (IllegalArgumentException e2) {
+                        // Can't load UTF8 file
+                    }
+                    
+                    if (r != null) {
+                        data = RuleBasedTransliterator.parse(r,
                                                              isReverse
                                                              ? RuleBasedTransliterator.REVERSE
                                                              : RuleBasedTransliterator.FORWARD);
-
+                        
                         cache.put(ID, data);
                         // Fall through to construct transliterator from Data object.
-                    } catch (MissingResourceException e) {}
+                    } else {
+                        // Unable to load the UTF8 file; try the resource
+                        // bundles.  Eventually, when we phase support for this
+                        // out, we can delete this clause.  Leave it in for now.
+                        try {
+                            ResourceBundle resource = ResourceBundle.getBundle(RB_RULE_BASED_PREFIX +
+                                                                               resourceName);
+                            
+                            // We allow the resource bundle to contain either an array
+                            // of rules, or a single rule string.
+                            String[] ruleArray;
+                            try {
+                                ruleArray = resource.getStringArray(RB_RULE);
+                            } catch (Exception e) {
+                                // This is a ClassCastException under JDK 1.1.8
+                                ruleArray = new String[] { resource.getString(RB_RULE) };
+                            }
+                            
+                            data = RuleBasedTransliterator.parse(ruleArray,
+                                                                 isReverse
+                                                                 ? RuleBasedTransliterator.REVERSE
+                                                                 : RuleBasedTransliterator.FORWARD);
+                            
+                            cache.put(ID, data);
+                            // Fall through to construct transliterator from Data object.
+                        } catch (MissingResourceException e) {}
+                    }
                 }
             }
 
