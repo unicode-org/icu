@@ -63,16 +63,17 @@ This section is most useful for understanding the genesis and structure of GB 18
     <li>U+0080 is not currently mapped by the standard.
         Also, there is a small number of known errors, typos, and ambiguities in the original standard publication.
         See <a href="ftp://ftp.oreilly.com/pub/examples/nutshell/cjkv/pdf/GB18030_Summary.pdf">this summary</a>.
-        I have added U+0080=GB+8432eb38 to my data.
+        I have added U+0080=GB+8432eb38 to my data, corrected GB+fe5e=U+2e97, and added fallbacks from GB to Unicode
+        for the four-byte codes for U+2e97 and U+303e.
         This is not official at this point!</li>
     <li>You should arrive at data like <a href="gbkuni30.txt">gbkuni30.txt</a>.
         This file has the following simplified format on each line:<br>
-        <code>unicode (':' | '>') gb ['*' ['*']]</code><br>
+        <code>unicode (':' | '>' | '<') gb ['*' ['*']]</code><br>
         The left column contains the Unicode code point, the right column the byte sequence in GB 18030.
         The delimiter is either a colon for roundtrip mappings or a greater-than sign
-        for fallbacks from Unicode to the codepage.
+        for fallbacks from Unicode to the codepage, or a less-than sign for fallbacks from the codepage to Unicode.
         I have marked mappings of the appendix E characters with a star.
-        In addition, I have marked one pair of mappings that <em>should be</em> in appendix E with a double star.</li>
+        In addition, I have marked mappings that <em>should be</em> in appendix E with a double star.</li>
     <li>Now compile <a href="gbmake4.c">gbmake4</a> and run it with the above file as stdin input.
         You will get as output all the four-byte mappings for all
         BMP code points that do not have a one-byte or two-byte mapping.</li>
@@ -110,7 +111,8 @@ This section is most useful for understanding the genesis and structure of GB 18
         add the header information.
         Keep the roundtrip/fallback information:
         roundtrip mappings (':') need a trailing "|0", fallback mappings ('>') a trailing "|1".
-        You can use <a href="gbtoucm.c">gbtoucm</a>.</li>
+        You can use <a href="gbtoucm.c">gbtoucm</a>.<br>
+        Use <a href="gbucm.bat">gbucm.bat</a> to generate such a file from the data provided here.</li>
     <li>Also for an ICU MBCS converter, you need to specify a state table for the codepage
         that describes its structure. For example, with the supplementary planes and the
         <a href="ranges.txt">suggested ranges</a> handled algorithmically and therefore
@@ -126,10 +128,12 @@ contains only mappings from Unicode to GB or only from GB to Unicode.
 and outputs even simpler format:<br>
 With no command line argument, it writes<br>
     <code>unicode ':' gb</code><br>
-including the fallback mappings.
+including the fallback mappings from Unicode to the codepage.
 With a "gb" argument, it writes<br>
     <code>gb ':' unicode</code><br>
-excluding the fallback mappings according to their definition.
+including the fallback mappings from the codepage to Unicode.<br>
+Use <a href="gbbmp.bat">gbbmp.bat</a> to generate such files (and one combined file)
+for all BMP code points from the data provided here.
 </p>
 
 </body>
