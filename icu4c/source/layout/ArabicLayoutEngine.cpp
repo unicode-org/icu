@@ -35,7 +35,7 @@ private:
 
 public:
     CharSubstitutionFilter(const LEFontInstance *fontInstance);
-	~CharSubstitutionFilter();
+    ~CharSubstitutionFilter();
 
     le_bool accept(LEGlyphID glyph) const;
 };
