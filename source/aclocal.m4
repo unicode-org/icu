@@ -118,22 +118,15 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     )
     dnl These results can't be cached because is sets compiler flags.
     AC_MSG_CHECKING([for 64-bit executable support])
-    if test "$ENABLE_64BIT_LIBS" = no; then
-        case "${host}" in
-        *-*-hpux*)
-#            case "${CXX}" in
-#            *CC)
-#                CFLAGS="${CFLAGS} +DAportable"
-#                CXXFLAGS="${CXXFLAGS} +DAportable"
-#                ;;
-#            esac;;
-        esac
-    else
+    if test "$ENABLE_64BIT_LIBS" != no; then
         case "${host}" in
         *-*-solaris*)
-            if test "$GCC" = no; then
+            SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
+            if test "$GCC" = yes; then
+                # We could add a check for -m64 depending on the gcc version.
+                ENABLE_64BIT_LIBS=no
+            else
                 SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
-                SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
                 if test -z "$SOL64" && test -n "$SPARCV9"; then
                     CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
                     CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
@@ -142,8 +135,6 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 else
                     ENABLE_64BIT_LIBS=no
                 fi
-            else
-                ENABLE_64BIT_LIBS=no
             fi
             ;;
         ia64-*-linux*)
