@@ -2304,7 +2304,7 @@ _getPrevNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
         }
     } else {
         /* unpaired second surrogate, undo the c2=src.previous() movement */
-        src.move(&src, 1, UITERATOR_CURRENT);
+        src.move(&src, 1, UITER_CURRENT);
         return 0;
     }
 }
@@ -2364,7 +2364,7 @@ _findPreviousIterationBoundary(UCharIterator &src,
 
             if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferCapacity, bufferLength)) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                src.move(&src, 0, UITERATOR_START);
+                src.move(&src, 0, UITER_START);
                 return 0;
             }
 
@@ -2456,7 +2456,7 @@ unorm_previous(UCharIterator *src,
                     }
                     c=c2; /* lead surrogate to be written below */
                 } else {
-                    src->move(src, 1, UITERATOR_CURRENT);
+                    src->move(src, 1, UITER_CURRENT);
                 }
             }
 
@@ -2530,7 +2530,7 @@ _getNextNorm32(UCharIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar
     norm32=_getNorm32(c);
     if(UTF_IS_FIRST_SURROGATE(c)) {
         if(src.hasNext(&src) && UTF_IS_SECOND_SURROGATE(c2=(UChar)src.current(&src))) {
-            src.move(&src, 1, UITERATOR_CURRENT); /* skip the c2 surrogate */
+            src.move(&src, 1, UITER_CURRENT); /* skip the c2 surrogate */
             if((norm32&mask)==0) {
                 /* irrelevant data */
                 return 0;
@@ -2601,7 +2601,7 @@ _findNextIterationBoundary(UCharIterator &src,
         if(UTF_IS_SECOND_SURROGATE(c2=(UChar)src.next(&src))) {
             buffer[bufferIndex++]=c2;
         } else {
-            src.move(&src, -1, UITERATOR_CURRENT); /* back out the non-trail-surrogate */
+            src.move(&src, -1, UITER_CURRENT); /* back out the non-trail-surrogate */
         }
     }
 
@@ -2610,7 +2610,7 @@ _findNextIterationBoundary(UCharIterator &src,
     while(src.hasNext(&src)) {
         if(isNextBoundary(src, minC, mask, c, c2)) {
             /* back out the latest movement to stop at the boundary */
-            src.move(&src, c2==0 ? -1 : -2, UITERATOR_CURRENT);
+            src.move(&src, c2==0 ? -1 : -2, UITER_CURRENT);
             break;
         } else {
             if(bufferIndex+(c2==0 ? 1 : 2)<=bufferCapacity ||
@@ -2625,7 +2625,7 @@ _findNextIterationBoundary(UCharIterator &src,
                 }
             } else {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                src.move(&src, 0, UITERATOR_LIMIT);
+                src.move(&src, 0, UITER_LIMIT);
                 return 0;
             }
         }
@@ -2703,7 +2703,7 @@ unorm_next(UCharIterator *src,
                     }
                     /* lead surrogate to be written below */
                 } else {
-                    src->move(src, -1, UITERATOR_CURRENT);
+                    src->move(src, -1, UITER_CURRENT);
                 }
             }
 

@@ -42,7 +42,7 @@ typedef struct UCharIterator UCharIterator;
  * @draft ICU 2.1
  */
 enum UCharIteratorOrigin {
-    UITERATOR_START, UITERATOR_CURRENT, UITERATOR_LIMIT
+    UITER_START, UITER_CURRENT, UITER_LIMIT
 };
 typedef enum UCharIteratorOrigin UCharIteratorOrigin;
 
@@ -297,6 +297,61 @@ struct UCharIterator {
      */
     UCharIteratorReserved *reservedFn;
 };
+
+/**
+ * Helper function for UCharIterator to get the code point
+ * at the current index.
+ *
+ * Return the code point that includes the code unit at the current position,
+ * or -1 if there is none (index is at the limit).
+ * If the current code unit is a lead or trail surrogate,
+ * then the following or preceding surrogate is used to form
+ * the code point value.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @return the current code point
+ *
+ * @see UCharIterator
+ * @see UTF_GET_CHAR
+ * @see UnicodeString::char32At()
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+uiter_current32(UCharIterator *iter);
+
+/**
+ * Helper function for UCharIterator to get the next code point.
+ *
+ * Return the code point at the current index and increment
+ * the index (post-increment, like s[i++]),
+ * or return -1 if there is none (index is at the limit).
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @return the current code point (and post-increment the current index)
+ *
+ * @see UCharIterator
+ * @see UTF_NEXT_CHAR
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+uiter_next32(UCharIterator *iter);
+
+/**
+ * Helper function for UCharIterator to get the previous code point.
+ *
+ * Decrement the index and return the code point from there
+ * (pre-decrement, like s[--i]),
+ * or return -1 if there is none (index is at the start).
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @return the previous code point (after pre-decrementing the current index)
+ *
+ * @see UCharIterator
+ * @see UTF_PREV_CHAR
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+uiter_previous32(UCharIterator *iter);
 
 /**
  * Set up a UCharIterator to iterate over a string.
