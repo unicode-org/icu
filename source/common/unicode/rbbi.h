@@ -1,5 +1,9 @@
 /*
-* Copyright (C) {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
+***************************************************************************
+*   Copyright (C) 1999-2002 International Business Machines Corporation   *
+*   and others. All rights reserved.                                      *
+***************************************************************************
+
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.
@@ -28,25 +32,17 @@ class BreakIterator;
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
  *
- * <p>There are two kinds of rules, which are separated by semicolons: <i>substitutions</i>
+ * <p>There are two kinds of rules, which are separated by semicolons: <i>variable definitions</i>
  * and <i>regular expressions.</i></p>
  *
- * <p>A substitution rule defines a name that can be used in place of an expression. It
- * consists of a name, which is a string of characters contained in angle brackets, an equals
- * sign, and an expression. (There can be no whitespace on either side of the equals sign.)
- * To keep its syntactic meaning intact, the expression must be enclosed in parentheses or
- * square brackets. A substitution is visible after its definition, and is filled in using
- * simple textual substitution. Substitution definitions can contain other substitutions, as
- * long as those substitutions have been defined first. Substitutions are generally used to
- * make the regular expressions (which can get quite complex) shorted and easier to read.
+ * <p>A varialbe definition defines a variable name that can be used in subsequent expressions.
+ * It consists of a name preceded by a dollar sign, an equals
+ * sign, and an expression.
+ * A $variable is visible after its definition.
+ * Variable definitions can contain other variables, as
+ * long as those variables have been defined first. Variables are generally used to
+ * make the regular expressions (which can get quite complex) shorter and easier to read.
  * They typically define either character categories or commonly-used subexpressions.</p>
- *
- * <p>There is one special substitution.&nbsp; If the description defines a substitution
- * called &quot;&lt;ignore&gt;&quot;, the expression must be a [] expression, and the
- * expression defines a set of characters (the &quot;<em>ignore characters</em>&quot;) that
- * will be transparent to the BreakIterator.&nbsp; A sequence of characters will break the
- * same way it would if any ignore characters it contains are taken out.&nbsp; Break
- * positions never occur befoer ignore characters.</p>
  *
  * <p>A regular expression uses a subset of the normal Unix regular-expression syntax, and
  * defines a sequence of characters to be kept together. With one significant exception, the
@@ -64,10 +60,6 @@ class BreakIterator;
  *       of times (including not at all).</td>
  *     </tr>
  *     <tr>
- *       <td width="6%">{}</td>
- *       <td width="94%">Encloses a sequence of characters that is optional.</td>
- *     </tr>
- *     <tr>
  *       <td width="6%">()</td>
  *       <td width="94%">Encloses a sequence of characters.&nbsp; If followed by *, the sequence
  *       repeats.&nbsp; Otherwise, the parentheses are just a grouping device and a way to delimit
@@ -76,29 +68,17 @@ class BreakIterator;
  *     <tr>
  *       <td width="6%">|</td>
  *       <td width="94%">Separates two alternative sequences of characters.&nbsp; Either one
- *       sequence or the other, but not both, matches this expression.&nbsp; The | character can
- *       only occur inside ().</td>
+ *       sequence or the other, but not both, matches this expression.</td>
  *     </tr>
  *     <tr>
  *       <td width="6%">.</td>
  *       <td width="94%">Matches any character.</td>
  *     </tr>
  *     <tr>
- *       <td width="6%">*?</td>
- *       <td width="94%">Specifies a non-greedy asterisk.&nbsp; *? works the same way as *, except
- *       when there is overlap between the last group of characters in the expression preceding the
- *       * and the first group of characters following the *.&nbsp; When there is this kind of
- *       overlap, * will match the longest sequence of characters that match the expression before
- *       the *, and *? will match the shortest sequence of characters matching the expression
- *       before the *?.&nbsp; For example, if you have &quot;xxyxyyyxyxyxxyxyxyy&quot; in the text,
- *       &quot;x[xy]*x&quot; will match through to the last x (i.e., &quot;<strong>xxyxyyyxyxyxxyxyx</strong>yy&quot;,
- *       but &quot;x[xy]*?x&quot; will only match the first two xes (&quot;<strong>xx</strong>yxyyyxyxyxxyxyxyy&quot;).</td>
- *     </tr>
- *     <tr>
  *       <td width="6%">[]</td>
- *       <td width="94%">Specifies a group of alternative characters.&nbsp; A [] expression will
+ *       <td width="94%">Specify a set of characters.&nbsp; A [] expression will
  *       match any single character that is specified in the [] expression.&nbsp; For more on the
- *       syntax of [] expressions, see below.</td>
+ *       syntax of [] expressions, see the ICU User Guide description of UnicodeSet.</td>
  *     </tr>
  *     <tr>
  *       <td width="6%">/</td>
@@ -111,24 +91,16 @@ class BreakIterator;
  *     <tr>
  *       <td width="6%">\</td>
  *       <td width="94%">Escape character.&nbsp; The \ itself is ignored, but causes the next
- *       character to be treated as literal character.&nbsp; This has no effect for many
- *       characters, but for the characters listed above, this deprives them of their special
- *       meaning.&nbsp; (There are no special escape sequences for Unicode characters, or tabs and
- *       newlines; these are all handled by a higher-level protocol.&nbsp; In a Java string,
- *       &quot;\n&quot; will be converted to a literal newline character by the time the
- *       regular-expression parser sees it.&nbsp; Of course, this means that \ sequences that are
- *       visible to the regexp parser must be written as \\ when inside a Java string.)&nbsp; All
- *       characters in the ASCII range except for letters, digits, and control characters are
- *       reserved characters to the parser and must be preceded by \ even if they currently don't
- *       mean anything.</td>
+ *       character to be treated as literal character.&nbsp;  Except for letters and numbers,
+ *       characters in the ASCII range must be escaped to be considered as literals.</td>
  *     </tr>
  *     <tr>
  *       <td width="6%">!</td>
  *       <td width="94%">If ! appears at the beginning of a regular expression, it tells the regexp
  *       parser that this expression specifies the backwards-iteration behavior of the iterator,
- *       and not its normal iteration behavior.&nbsp; This is generally only used in situations
- *       where the automatically-generated backwards-iteration brhavior doesn't produce
- *       satisfactory results and must be supplemented with extra client-specified rules.</td>
+ *       and not its normal iteration behavior.&nbsp;  The backwards rules must move the
+ *       iterator to a safe position at or before the previous break position; forwards rules
+ *       will then be used to find the exact previous position</td>
  *     </tr>
  *     <tr>
  *       <td width="6%"><em>(all others)</em></td>
@@ -137,52 +109,6 @@ class BreakIterator;
  *     </tr>
  *   </table>
  * </blockquote>
- *
- * <p>Within a [] expression, a number of other special characters can be used to specify
- * groups of characters:</p>
- *
- * <blockquote>
- *   <table border="1" width="100%">
- *     <tr>
- *       <td width="6%">-</td>
- *       <td width="94%">Specifies a range of matching characters.&nbsp; For example
- *       &quot;[a-p]&quot; matches all lowercase Latin letters from a to p (inclusive).&nbsp; The -
- *       sign specifies ranges of continuous Unicode numeric values, not ranges of characters in a
- *       language's alphabetical order: &quot;[a-z]&quot; doesn't include capital letters, nor does
- *       it include accented letters such as a-umlaut.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">::</td>
- *       <td width="94%">A pair of colons containing a one- or two-letter code matches all
- *       characters in the corresponding Unicode category.&nbsp; The two-letter codes are the same
- *       as the two-letter codes in the Unicode database (for example, &quot;[:Sc::Sm:]&quot;
- *       matches all currency symbols and all math symbols).&nbsp; Specifying a one-letter code is
- *       the same as specifying all two-letter codes that begin with that letter (for example,
- *       &quot;[:L:]&quot; matches all letters, and is equivalent to
- *       &quot;[:Lu::Ll::Lo::Lm::Lt:]&quot;).&nbsp; Anything other than a valid two-letter Unicode
- *       category code or a single letter that begins a Unicode category code is illegal within
- *       colons.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">[]</td>
- *       <td width="94%">[] expressions can nest.&nbsp; This has no effect, except when used in
- *       conjunction with the ^ token.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%">^</td>
- *       <td width="94%">Excludes the character (or the characters in the [] expression) following
- *       it from the group of characters.&nbsp; For example, &quot;[a-z^p]&quot; matches all Latin
- *       lowercase letters except p.&nbsp; &quot;[:L:^[\u4e00-\u9fff]]&quot; matches all letters
- *       except the Han ideographs.</td>
- *     </tr>
- *     <tr>
- *       <td width="6%"><em>(all others)</em></td>
- *       <td width="94%">All other characters are treated as literal characters.&nbsp; (For
- *       example, &quot;[aeiou]&quot; specifies just the letters a, e, i, o, and u.)</td>
- *     </tr>
- *   </table>
- * </blockquote>
- *
  */
 
 
@@ -201,7 +127,9 @@ protected:
     //
     RBBIDataWrapper    *fData;
     UTrie              *fCharMappings;
-    int32_t             fLastBreakTag;      // Rule {tag} value for the most recent match.
+
+    // Rule {tag} value for the most recent match.
+    int32_t             fLastBreakTag;
 
     //
     // Counter for the number of characters encountered with the "dictionary"
@@ -215,7 +143,7 @@ protected:
     // Debugging flag.
     //
     static UBool        fTrace;
-    
+
 
 
 private:
@@ -228,7 +156,7 @@ protected:
     //=======================================================================
     // constructors
     //=======================================================================
-     
+
      // This constructor uses the udata interface to create a BreakIterator whose
      // internal tables live in a memory-mapped file.  "image" is a pointer to the
      // beginning of that file.
@@ -248,7 +176,7 @@ protected:
      friend class BreakIterator;
 
 
-     
+
  public:
 
      /** Default constructor.  Creates an empty shell of an iterator, with no
@@ -500,7 +428,7 @@ protected:
       * Return true if the category lookup for this char
       * indicates that it is in the set of dictionary lookup chars.
       * This function is intended for use by dictionary based break iterators.
-      */               
+      */
     virtual UBool isDictionaryChar(UChar32);
 
     /**
@@ -513,7 +441,7 @@ protected:
 
 
 
-    
+
 //----------------------------------------------------------------------------------
 //
 //   Inline Functions Definitions ...

@@ -201,8 +201,8 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //
     //   Generate the DFA state transition table.
     //
-    builder.fForwardTables = new RBBITableBuilder(&builder, builder.fForwardTree);
-    builder.fReverseTables = new RBBITableBuilder(&builder, builder.fReverseTree);
+    builder.fForwardTables = new RBBITableBuilder(&builder, &builder.fForwardTree);
+    builder.fReverseTables = new RBBITableBuilder(&builder, &builder.fReverseTree);
     builder.fForwardTables->build();
     builder.fReverseTables->build();
     if (U_FAILURE(status)) {
