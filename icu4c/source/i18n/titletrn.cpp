@@ -28,7 +28,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TitlecaseTransliterator)
 /**
  * ID for this transliterator.
  */
-const char TitlecaseTransliterator::_ID[] = "Any-Title";
+const char CURR_ID[] = "Any-Title";
 
 /**
  * The set of characters we skip.  These are neither cased nor
@@ -45,7 +45,7 @@ static UnicodeSet* SKIP = NULL;
 static UnicodeSet* CASED = NULL;
 
 TitlecaseTransliterator::TitlecaseTransliterator(const Locale& theLoc) :
-    Transliterator(_ID, 0),
+    Transliterator(UnicodeString(CURR_ID, ""), 0),
     loc(theLoc), 
     buffer(0)
 {

@@ -70,7 +70,6 @@ static const UChar         CUSTOM_ID[] =
 static UMTX                LOCK;
 static TimeZone*           DEFAULT_ZONE = NULL;
 static TimeZone*           _GMT = NULL; // cf. TimeZone::GMT
-const char                 TimeZone::fgClassID = 0; // Value is irrelevant
 
 // #ifdef ICU_TIMEZONE_USE_DEPRECATES
 static UnicodeString* OLSON_IDS = 0;

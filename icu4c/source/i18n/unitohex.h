@@ -53,11 +53,6 @@ private:
     };
 
     /**
-     * ID for this transliterator.
-     */
-    static const char _ID[];
-
-    /**
      * The pattern set by applyPattern() and returned by toPattern().
      */
     UnicodeString pattern;

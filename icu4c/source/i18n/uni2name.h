@@ -81,10 +81,6 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
 
-private:
-
-    static const char _ID[];
-
 };
 
 U_NAMESPACE_END
