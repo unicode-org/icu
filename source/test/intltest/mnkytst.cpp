@@ -4,26 +4,11 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _MNKYTST
 #include "mnkytst.h"
-#endif
-
 #include "sfwdchit.h"
 
 #include <stdlib.h>
@@ -39,8 +24,8 @@
 #endif
 
 CollationMonkeyTest::CollationMonkeyTest()
-: myCollator(0),
-  source("-abcdefghijklmnopqrstuvwxyz#&^$@", "")
+: source("-abcdefghijklmnopqrstuvwxyz#&^$@", ""),
+  myCollator(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollator = Collator::createInstance("en_US", status);
