@@ -1,5 +1,10 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" genrb.8: manual page for the genrb utility
+.\"
+.\" Copyright (C) 2000 IBM, Inc. and others.
+.\"
 .TH GENRB 8 "19 September 2000" "ICU @VERSION@"
-\" -*-nroff-*-   $Revision: 1.2 $ 
 .SH NAME
 .B genrb
 \- compile a resource bundle
@@ -94,4 +99,6 @@ is set.
 @VERSION@
 .SH COPYRIGHT
 Copyright (C) 2000 IBM, Inc. and others.
+.SH SEE ALSO
+.BR pkgdata (8)
 
