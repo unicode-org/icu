@@ -61,6 +61,42 @@ static UDataInfo dummyDataInfo = {
 
 #else
 
+static const UDataInfo ucaDataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    {UCA_DATA_FORMAT_0, UCA_DATA_FORMAT_1, UCA_DATA_FORMAT_2, UCA_DATA_FORMAT_3},     /* dataFormat="UCol"            */
+    /* 03/26/2002 bumped up version since format has changed */
+    /* 09/16/2002 bumped up version since we went from UColAttributeValue */
+    /*            to int32_t in UColOptionSet */
+    /* 05/13/2003 This one also updated since we added UCA and UCD versions */
+    /*            to header */
+    /* 09/11/2003 Adding information required by data swapper */
+    {UCA_FORMAT_VERSION_0, UCA_FORMAT_VERSION_1, UCA_FORMAT_VERSION_2, UCA_FORMAT_VERSION_3},                 /* formatVersion                */
+    {0, 0, 0, 0}                  /* dataVersion = Unicode Version*/
+};
+
+static const UDataInfo invUcaDataInfo={
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    {INVUCA_DATA_FORMAT_0, INVUCA_DATA_FORMAT_1, INVUCA_DATA_FORMAT_2, INVUCA_DATA_FORMAT_3},     /* dataFormat="InvC"            */
+    /* 03/26/2002 bumped up version since format has changed */
+    /* 04/29/2003 2.1 format - we have added UCA version to header */
+    {INVUCA_FORMAT_VERSION_0, INVUCA_FORMAT_VERSION_1, INVUCA_FORMAT_VERSION_2, INVUCA_FORMAT_VERSION_3},                 /* formatVersion                */
+    {0, 0, 0, 0}                  /* dataVersion = Unicode Version*/
+};
+
 UCAElements le;
 
 int32_t readElement(char **from, char *to, char separator, UErrorCode *status) {
@@ -1046,7 +1082,7 @@ int main(int argc, char* argv[]) {
 #if UCONFIG_NO_COLLATION
             0, 0
 #else
-            ucaDataInfo.formatVersion[0], ucaDataInfo.formatVersion[1]
+            UCA_FORMAT_VERSION_0, UCA_FORMAT_VERSION_1
 #endif
             );
         fprintf(stdout, U_COPYRIGHT_STRING"\n");
