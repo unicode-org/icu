@@ -137,7 +137,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
 
 static void
 _ISO2022Close(UConverter *converter) {
-    if (converter->mode == UCNV_SO) {
+    if (converter->extraInfo != NULL) {
         ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
         uprv_free (converter->extraInfo);
     }
@@ -668,7 +668,7 @@ UChar T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
   return 0xFFFD;
 }
 
-static UConverterImpl _ISO2022Impl={
+static const UConverterImpl _ISO2022Impl={
     UCNV_ISO_2022,
 
     NULL,
@@ -682,10 +682,12 @@ static UConverterImpl _ISO2022Impl={
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_ISO_2022,
     T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC,
-    T_UConverter_getNextUChar_ISO_2022
+    T_UConverter_getNextUChar_ISO_2022,
+
+    NULL
 };
 
-extern UConverterSharedData _ISO2022Data={
+extern const UConverterSharedData _ISO2022Data={
     sizeof(UConverterSharedData), ~0,
     NULL, NULL, &_ISO2022Impl, "ISO_2022",
     2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
@@ -1272,7 +1274,7 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
     }
 } 
 
-static UConverterImpl _EBCDICStatefulImpl={
+static const UConverterImpl _EBCDICStatefulImpl={
     UCNV_EBCDIC_STATEFUL,
 
     _DBCSLoad,
@@ -1286,10 +1288,12 @@ static UConverterImpl _EBCDICStatefulImpl={
     T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_EBCDIC_STATEFUL,
     T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,
-    T_UConverter_getNextUChar_EBCDIC_STATEFUL
+    T_UConverter_getNextUChar_EBCDIC_STATEFUL,
+
+    NULL
 };
 
-extern UConverterSharedData _EBCDICStatefulData={
+extern const UConverterSharedData _EBCDICStatefulData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_EBCDICStatefulImpl, "EBCDICStateful",
     0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,

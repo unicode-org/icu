@@ -556,7 +556,13 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
     }
 } 
 
-static UConverterImpl _MBCSImpl={
+void
+_MBCSGetStarters(const UConverter* converter, bool_t starters[256], UErrorCode *pErrorCode) {
+    /* fills in the starters boolean array */
+    uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
+}
+
+static const UConverterImpl _MBCSImpl={
     UCNV_MBCS,
 
     _MBCSLoad,
@@ -570,10 +576,12 @@ static UConverterImpl _MBCSImpl={
     T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_MBCS,
     T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC,
-    T_UConverter_getNextUChar_MBCS
+    T_UConverter_getNextUChar_MBCS,
+
+    _MBCSGetStarters
 };
 
-extern UConverterSharedData _MBCSData={
+extern const UConverterSharedData _MBCSData={
     sizeof(UConverterSharedData), 1,
     NULL, NULL, &_MBCSImpl, "MBCS",
     0, UCNV_IBM, UCNV_MBCS, 1, 1,

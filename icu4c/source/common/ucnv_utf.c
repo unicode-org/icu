@@ -693,7 +693,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
   }
 } 
 
-static UConverterImpl _UTF8Impl={
+static const UConverterImpl _UTF8Impl={
     UCNV_UTF8,
 
     NULL,
@@ -707,10 +707,12 @@ static UConverterImpl _UTF8Impl={
     T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_UTF8,
     T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
-    T_UConverter_getNextUChar_UTF8
+    T_UConverter_getNextUChar_UTF8,
+
+    NULL
 };
 
-extern UConverterSharedData _UTF8Data={
+extern const UConverterSharedData _UTF8Data={
     sizeof(UConverterSharedData), ~0,
     NULL, NULL, &_UTF8Impl, "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
@@ -865,7 +867,7 @@ UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
   return myUChar;
 } 
 
-static UConverterImpl _UTF16BEImpl={
+static const UConverterImpl _UTF16BEImpl={
     UCNV_UTF16_BigEndian,
 
     NULL,
@@ -879,10 +881,12 @@ static UConverterImpl _UTF16BEImpl={
     NULL,
     T_UConverter_fromUnicode_UTF16_BE,
     NULL,
-    T_UConverter_getNextUChar_UTF16_BE
+    T_UConverter_getNextUChar_UTF16_BE,
+
+    NULL
 };
 
-extern UConverterSharedData _UTF16BEData={
+extern const UConverterSharedData _UTF16BEData={
     sizeof(UConverterSharedData), ~0,
     NULL, NULL, &_UTF16BEImpl, "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
@@ -1041,7 +1045,7 @@ UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
   return myUChar;
 } 
 
-static UConverterImpl _UTF16LEImpl={
+static const UConverterImpl _UTF16LEImpl={
     UCNV_UTF16_LittleEndian,
 
     NULL,
@@ -1055,10 +1059,12 @@ static UConverterImpl _UTF16LEImpl={
     NULL,
     T_UConverter_fromUnicode_UTF16_LE,
     NULL,
-    T_UConverter_getNextUChar_UTF16_LE
+    T_UConverter_getNextUChar_UTF16_LE,
+
+    NULL
 };
 
-extern UConverterSharedData _UTF16LEData={
+extern const UConverterSharedData _UTF16LEData={
     sizeof(UConverterSharedData), ~0,
     NULL, NULL, &_UTF16LEImpl, "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
