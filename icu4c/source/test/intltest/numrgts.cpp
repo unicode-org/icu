@@ -1153,7 +1153,9 @@ void NumberFormatRegressionTest::Test4061302(void)
         monDecSeparator == 0x0000) {
         errln("getCurrencySymbols failed, got empty string.");
     }
-    logln("Before set ==> Currency : " + currency + " Intl Currency : " + intlCurrency + " Monetary Decimal Separator : " + monDecSeparator);
+    UnicodeString monDecSeparatorStr;
+    monDecSeparatorStr.append(monDecSeparator);
+    logln((UnicodeString)"Before set ==> Currency : " + currency +(UnicodeString)" Intl Currency : " + intlCurrency + (UnicodeString)" Monetary Decimal Separator : " + monDecSeparatorStr);
     fmt->setCurrencySymbol(UnicodeString("XYZ"));
     fmt->setInternationalCurrencySymbol(UnicodeString("ABC"));
     fmt->setMonetaryDecimalSeparator(0x002A/*'*'*/);
@@ -1165,7 +1167,9 @@ void NumberFormatRegressionTest::Test4061302(void)
         monDecSeparator != 0x002A/*'*'*/) {
         errln("setCurrencySymbols failed.");
     }
-    logln("After set ==> Currency : " + currency + " Intl Currency : " + intlCurrency + " Monetary Decimal Separator : " + monDecSeparator);
+    monDecSeparatorStr.remove();
+    monDecSeparatorStr.append(monDecSeparator);
+    logln("After set ==> Currency : " + currency + " Intl Currency : " + intlCurrency + " Monetary Decimal Separator : " + monDecSeparatorStr);
 
     delete fmt;
 }
