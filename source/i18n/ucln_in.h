@@ -36,4 +36,6 @@ U_CFUNC UBool regex_cleanup(void);
 
 U_CFUNC UBool numfmt_cleanup(void);
 
+U_CFUNC UBool currency_cleanup(void);
+
 #endif
