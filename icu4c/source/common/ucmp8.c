@@ -6,11 +6,6 @@
 ********************************************************************
 */
 
-#ifndef _STDLIB_H
-#include <stdlib.h>
-#endif
-
-
 #include "ucmp8.h"
 #include "cmemory.h"
 
