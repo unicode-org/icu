@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003, International Business Machines Corporation and         *
+* Copyright (C) 2003-2004, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -18,6 +18,7 @@
 #include "japancal.h"
 #include "unicode/gregocal.h"
 #include "mutex.h"
+#include "uassert.h"
 
 //#define U_DEBUG_JCAL
 
@@ -200,10 +201,10 @@ static const struct {
       {  1370,    7, 24 },   // Kentoku       160
       {  1372,    4,  1 },   // Bunch\u0169
       {  1375,    5, 27 },   // Tenju
+      {  1379,    3, 22 },   // Koryaku
       {  1381,    2, 10 },   // Kowa
       {  1384,    4, 28 },   // Gench\u0169
       {  1384,    2, 27 },   // Meitoku
-      {  1379,    3, 22 },   // Koryaku
       {  1387,    8, 23 },   // Kakei
       {  1389,    2,  9 },   // Koo
       {  1390,    3, 26 },   // Meitoku
@@ -470,7 +471,7 @@ int32_t JapaneseCalendar::defaultCenturyStartYear() const
 static int32_t gJapanCalendarLimits[2][4] = {
   //    Minimum  Greatest min      Least max   Greatest max
   {        0,        0, JapaneseCalendar::kCurrentEra, JapaneseCalendar::kCurrentEra }, // ERA
-  {        1,        1,           0,           0 }, // YEAR
+  {        1,        1,           0,           0 }, // YEAR least-max/greatest-max computed at runtime
 };
 
 static UBool gJapanYearLimitsKnown = FALSE;
@@ -490,17 +491,20 @@ int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType l
         int32_t max = min;
         for (uint32_t i=2; i<kEraCount; i++) { // counting by year, not field (3's)
           int32_t d = kEraInfo[i].year - kEraInfo[i-1].year;
+          U_ASSERT(d >= 0);
           if (d < min) {
             min = d;
-          } else if (d > max) {
+          }
+          if (d > max) {
             max = d;
           }
         }
+        U_ASSERT(min >= 0 && max > min);
         { 
           Mutex m;
           if(gJapanYearLimitsKnown==FALSE) {
-            gJapanCalendarLimits[field][UCAL_LEAST_MAXIMUM] = min;
-            gJapanCalendarLimits[field][UCAL_MAXIMUM] = max;
+            gJapanCalendarLimits[field][UCAL_LIMIT_LEAST_MAXIMUM] = min;
+            gJapanCalendarLimits[field][UCAL_LIMIT_MAXIMUM] = max;
             gJapanYearLimitsKnown = TRUE;
           }
         }
