@@ -1,5 +1,7 @@
 /*
-* Copyright (C) 1999-2003, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+* Copyright (C) 1999-2003, International Business Machines
+* Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -19,11 +21,8 @@
 
 U_NAMESPACE_BEGIN
 
-class Replaceable;
 class UnicodeFilter;
 class UnicodeSet;
-class TransliterationRuleData;
-class U_I18N_API UVector;
 class CompoundTransliterator;
 class TransliteratorParser;
 class NormalizationTransliterator;
