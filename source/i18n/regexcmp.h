@@ -111,6 +111,8 @@ private:
                                int32_t end);
     void        matchStartType();
     void        stripNOPs();
+    void        OptEndingLoop();
+    void        OptDotStar();
 
 
     UErrorCode                    *fStatus;

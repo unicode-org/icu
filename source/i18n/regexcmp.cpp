@@ -522,13 +522,11 @@ void    RegexCompile::compile(
     fRXPat->fMinMatchLen = minMatchLength(3, fRXPat->fCompiledPat->size()-1);
 
     //
-    // Optimization pass:  Categorize how a match can start, for use by find()
+    // Optimization passes
     //  
-    matchStartType();
-
-    // Optimization: strip out uneeded NOPs from the compiled pattern.
+    matchStartType();  
     stripNOPs();
-
+    OptEndingLoop();
 
     //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
@@ -2276,6 +2274,8 @@ void   RegexCompile::matchStartType() {
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
+        case URX_DOTANY_ALL_PL:
+        case URX_DOTANY_PL:
             if (currentLen == 0) {
                 // These constructs are all bad news when they appear at the start
                 //   of a match.  Any character can begin the match.
@@ -2310,6 +2310,7 @@ void   RegexCompile::matchStartType() {
             break;
 
         case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
             // Combo of state save to the next loc, + jmp backwards.
             //   Net effect on min. length computation is nothing.
             atStart = FALSE;
@@ -2601,6 +2602,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_LD_SP:
 
         case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
             break;
             
 
@@ -2614,6 +2616,8 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
+        case URX_DOTANY_PL:
+        case URX_DOTANY_ALL_PL:
             currentLen++;
             break;
 
@@ -2840,6 +2844,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_BACKREF:         // BackRef.  Must assume that it might be a zero length match
         case URX_BACKREF_I:
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+        case URX_DOTANY_PL:
+        case URX_DOTANY_ALL_PL:
             currentLen = INT32_MAX;
             break;
 
@@ -2869,6 +2875,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_JMP:
         case URX_JMPX:
         case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
             {
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest < loc) {
@@ -3034,6 +3041,7 @@ void RegexCompile::stripNOPs() {
         case URX_RELOC_OPRND:
         case URX_JMPX:
         case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
             // These are instructions with operands that refer to code locations.
             {
                 int32_t  operandAddress = URX_VAL(op);
@@ -3060,10 +3068,11 @@ void RegexCompile::stripNOPs() {
         case URX_FAIL:
         case URX_BACKSLASH_B:
         case URX_BACKSLASH_G:
-        case URX_UNUSED_1:
         case URX_BACKSLASH_X:
         case URX_BACKSLASH_Z:
         case URX_DOTANY_ALL:
+        case URX_DOTANY_ALL_PL:
+        case URX_DOTANY_PL:
         case URX_BACKSLASH_D:
         case URX_CARET:
         case URX_DOLLAR:
@@ -3101,6 +3110,166 @@ void RegexCompile::stripNOPs() {
 }
 
 
+
+//----------------------------------------------------------------------------------------
+//
+//   OptEndingLoop    Optimize patterns that end with a '*' or a '+' to not
+//                    save state on each iteration, when possible.
+//                    These patterns end with a JMP_SAV op.  Replace it with
+//                    a JMP_SAV_X if the body of the loop is simple
+//                          (does not itself do any state saves.)
+//
+//----------------------------------------------------------------------------------------
+void RegexCompile::OptEndingLoop() {
+    // Scan backwards in the pattern, looking for a JMP_SAV near the end.
+    int32_t  jmp_loc;
+    int32_t  op;
+    int32_t  opType;
+    for (jmp_loc=fRXPat->fCompiledPat->size(); jmp_loc--;) {
+        U_ASSERT(jmp_loc>0);
+        op     = fRXPat->fCompiledPat->elementAti(jmp_loc);
+        opType = URX_TYPE(op);
+        switch(opType) { 
+
+            
+        case URX_END:
+        case URX_NOP:
+        case URX_END_CAPTURE:
+            // These ops may follow the JMP_SAV without preventing us from
+            //   doing this optimization.
+            continue;
+
+        case URX_JMP_SAV:
+            // Got a trailing JMP_SAV that's a candidate for optimization.
+            break;
+
+        default:
+            // This optimization not possible.
+            return;
+        }
+        break;   // from the for loop.
+    }
+
+    // We found in URX_JMP_SAV near the end that is a candidate for optimizing.
+    // Scan the body of the loop for anything that prevents the optimization,
+    //   which is anything that does a state save, or anything that 
+    //   alters the current stack frame (like a capture start/end)
+    int32_t  loopTopLoc = URX_VAL(op);
+    U_ASSERT(loopTopLoc > 1 && loopTopLoc < jmp_loc);
+    int32_t  loc;
+    for (loc=loopTopLoc; loc<jmp_loc; loc++) {
+        op     = fRXPat->fCompiledPat->elementAti(loc);
+        opType = URX_TYPE(op);
+        switch(opType) { 
+
+        case URX_STATE_SAVE:
+        case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_LD_SP:
+        case URX_END_CAPTURE:
+        case URX_START_CAPTURE:
+            // These ops do a state save.
+            // Can not do the optimization.
+            return;
+
+        default:
+            // Other ops within the loop are OK.
+            ;//    keep looking.
+        }
+    }
+
+    // Everything checks out.  We can do the optimization.
+    insertOp(jmp_loc);   // Make space for the extra operand word 0f URX_JMP_SAV_X
+    op = URX_BUILD(URX_JMP_SAV_X, loopTopLoc);
+    fRXPat->fCompiledPat->setElementAt(op, jmp_loc);
+
+    int32_t dataLoc = fRXPat->fDataSize;
+    fRXPat->fDataSize += 1; 
+    fRXPat->fCompiledPat->setElementAt(dataLoc, jmp_loc+1);
+}
+
+
+//----------------------------------------------------------------------------------------
+//
+//   OptDotStar       Optimize patterns that end with a '.*' to
+//                    just advance the input to the end without further todo.
+//
+//----------------------------------------------------------------------------------------
+void RegexCompile::OptDotStar() {
+    // Scan backwards in the pattern, looking for a JMP_SAV near the end.
+    int32_t  jmp_loc;
+    int32_t  op;
+    int32_t  opType;
+    for (jmp_loc=fRXPat->fCompiledPat->size(); jmp_loc--;) {
+        U_ASSERT(jmp_loc>0);
+        op     = fRXPat->fCompiledPat->elementAti(jmp_loc);
+        opType = URX_TYPE(op);
+        switch(opType) { 
+
+            
+        case URX_END:
+        case URX_NOP:
+        case URX_END_CAPTURE:
+            // These ops may follow the JMP_SAV without preventing us from
+            //   doing this optimization.
+            continue;
+
+        case URX_JMP_SAV:
+            // Got a trailing JMP_SAV that's a candidate for optimization.
+            break;
+
+        default:
+            // This optimization not possible.
+            return;
+        }
+        break;   // from the for loop.
+    }
+
+    // We found in URX_JMP_SAV near the end that is a candidate for optimizing.
+    // Scan the body of the loop for anything that prevents the optimization,
+    //   which is anything that does a state save, or anything that 
+    //   alters the current stack frame (like a capture start/end)
+    int32_t  loopTopLoc = URX_VAL(op);
+    U_ASSERT(loopTopLoc > 1 && loopTopLoc < jmp_loc);
+    int32_t  loc;
+    for (loc=loopTopLoc; loc<jmp_loc; loc++) {
+        op     = fRXPat->fCompiledPat->elementAti(loc);
+        opType = URX_TYPE(op);
+        switch(opType) { 
+
+        case URX_STATE_SAVE:
+        case URX_JMP_SAV:
+        case URX_JMP_SAV_X:
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_LD_SP:
+        case URX_END_CAPTURE:
+        case URX_START_CAPTURE:
+            // These ops do a state save.
+            // Can not do the optimization.
+            return;
+
+        default:
+            // Other ops within the loop are OK.
+            ;//    keep looking.
+        }
+    }
+
+    // Everything checks out.  We can do the optimization.
+    insertOp(jmp_loc);   // Make space for the extra operand word 0f URX_JMP_SAV_X
+    op = URX_BUILD(URX_JMP_SAV_X, loopTopLoc);
+    fRXPat->fCompiledPat->setElementAt(op, jmp_loc);
+
+    int32_t dataLoc = fRXPat->fDataSize;
+    fRXPat->fDataSize += 1; 
+    fRXPat->fCompiledPat->setElementAt(dataLoc, jmp_loc+1);
+}
 
 //----------------------------------------------------------------------------------------
 //

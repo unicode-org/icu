@@ -925,6 +925,11 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     fp->fPatIdx   = 0;
     fp->fInputIdx = startIdx;
 
+    // Zero out the pattern's static data
+    int32_t i;
+    for (i = 0; i<fPattern->fDataSize; i++) {
+        fData[i] = 0;
+    }
 
     //
     //  Main loop for interpreting the compiled pattern.
@@ -1010,16 +1015,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 }
                 break;
 
-#if 0
-                if (stringEndIndex <= inputLen &&
-                    u_strncmp(inputBuf+fp->fInputIdx, litText+stringStartIdx, stringLen) == 0) {
-                    // Success.  Advance the current input position.
-                    fp->fInputIdx = stringEndIndex;
-                } else {
-                    // No match.  Back up matching to a saved state
-                    fp = (REStackFrame *)fStack->popFrame(frameSize);
-                }
-#endif
             }
             break;
 
@@ -1348,6 +1343,51 @@ GC_Done:
             }
             break;
 
+        case URX_DOTANY_PL:
+            // Match all up to and end-of-line or end-of-input.
+            {
+                //  Fail if input already exhausted.
+                if (fp->fInputIdx >= inputLen) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+                
+                // There is input left. Fail if we are  at the end of a line.
+                UChar32 c;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
+                    (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                    // End of line in normal mode.   . does not match.
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+                
+                // There was input left.  Consume it until we hit the end of a line,
+                //   or until it's exhausted.
+                while  (fp->fInputIdx < inputLen) {
+                    U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                    if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
+                        (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                        U16_BACK_1(inputBuf, 0, fp->fInputIdx)
+                            // Scan has reached a line-end.  We are done.
+                            break;
+                    }
+                }
+            }
+            break;
+
+        case URX_DOTANY_ALL_PL:
+            {
+                // Match up to end of input.  Fail if already at end of input.
+                if (fp->fInputIdx >= inputLen) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                } else {
+                    fp->fInputIdx = inputLen;
+                }
+            }
+            break;
+
+
         case URX_JMP:
             fp->fPatIdx = opValue;
             break;
@@ -1357,8 +1397,31 @@ GC_Done:
             goto breakFromLoop;
 
         case URX_JMP_SAV:
+            U_ASSERT(opValue < fPattern->fCompiledPat->size());
             fp = StateSave(fp, fp->fPatIdx, frameSize, status);  // State save to loc following current
             fp->fPatIdx = opValue;                               // Then JMP.
+            break;
+
+        case URX_JMP_SAV_X:
+            // This opcode is used when a pattern ends with (something)*
+            // There is no need to save state with each loop for the '*', because
+            //  there is no following pattern that could use that saved state.
+            //  Use a flag to only save state the first time through.
+            {
+                U_ASSERT(opValue < fPattern->fCompiledPat->size());
+                int32_t  dataLoc = URX_VAL(pat[fp->fPatIdx]);
+                U_ASSERT(dataLoc >= 0 && dataLoc < frameSize);
+                int32_t flag = fData[dataLoc];
+                U_ASSERT(flag==0 || flag==1);
+                if (flag == 0) {
+                     fp = StateSave(fp, (fp->fPatIdx)+1, frameSize, status); 
+                     fData[dataLoc] = 1;
+                } else {
+                    REStackFrame *prevFrame = (REStackFrame *)((int32_t *)fp-frameSize);
+                    prevFrame->fInputIdx = fp->fInputIdx;
+                }
+                fp->fPatIdx = opValue;
+            }
             break;
 
         case URX_CTR_INIT:
