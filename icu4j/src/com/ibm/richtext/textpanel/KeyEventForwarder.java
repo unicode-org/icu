@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: KeyEventForwarder.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: KeyEventForwarder.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:10:10 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -19,21 +19,28 @@ import java.awt.event.KeyEvent;
 /**
  * This class forwards key events to a TextPanel component for
  * testing purposes.
- * It's sole reason for existence is to prevent the key-event
- * API from being public on TextPanel, and being mistaken for
- * standard API.  This class is only for testing!
+ * Its sole reason for existence is to prevent the key-event
+ * API from being public on MTextPanel, and being mistaken for
+ * standard API.  This class is only for testing!  It may be
+ * removed from public API at any time.  Do not depend on this
+ * class.
  */
 public final class KeyEventForwarder {
 
-    private TextPanel fRichText;
+    private ATextPanelImpl fPanelImpl;
 
-    public KeyEventForwarder(TextPanel richText) {
+    public KeyEventForwarder(TextPanel textPanel) {
 
-        fRichText = richText;
+        fPanelImpl = textPanel.getImpl();
+    }
+    
+    public KeyEventForwarder(JTextPanel textPanel) {
+    
+        fPanelImpl = textPanel.getImpl();
     }
 
     public void handleKeyEvent(KeyEvent keyEvent) {
 
-        fRichText.handleKeyEvent(keyEvent);
+        fPanelImpl.handleKeyEvent(keyEvent);
     }
 }

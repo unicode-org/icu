@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:10:10 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -147,6 +147,14 @@ class TextComponent extends FakeComponent
                 }
             }
         });
+    }
+    
+    /**
+     * ATextPanelImpl's use only!
+     */
+    Component getHost() {
+    
+        return fHost;
     }
     
     // Create document view here.  TextComponent isn't fully constructed
