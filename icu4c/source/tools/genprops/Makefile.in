@@ -31,7 +31,7 @@ TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = genprops.o props2.o propsvec.o store.o
+OBJECTS = genprops.o props2.o store.o
 
 DEPS = $(OBJECTS:.o=.d)
 

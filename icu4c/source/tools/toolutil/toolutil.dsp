@@ -154,6 +154,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\propsvec.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\toolutil.c
 # ADD CPP /Ze
 # End Source File
@@ -193,6 +197,10 @@ SOURCE=.\uperf.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\propsvec.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\toolutil.h
