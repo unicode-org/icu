@@ -544,6 +544,11 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortkEmpty.compareTo(sortk1) == Collator::LESS, "Result should be (empty key) <<< \"Abcda\"");
     doAssert(sortk1.compareTo(sortkEmpty) == Collator::GREATER, "Result should be \"Abcda\" >>> (empty key)");
     doAssert(sortkEmpty.compareTo(sortkEmpty) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
+    doAssert(sortk1.compareTo(sortk3, success) == Collator::GREATER, "Result should be \"Abcda\" >>> \"abcda\"");
+    doAssert(sortk2.compareTo(sortk3, success) == Collator::EQUAL, "Result should be \"abcda\" == \"abcda\"");
+    doAssert(sortkEmpty.compareTo(sortk1, success) == Collator::LESS, "Result should be (empty key) <<< \"Abcda\"");
+    doAssert(sortk1.compareTo(sortkEmpty, success) == Collator::GREATER, "Result should be \"Abcda\" >>> (empty key)");
+    doAssert(sortkEmpty.compareTo(sortkEmpty, success) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
 
     int32_t    cnt1, cnt2, cnt3, cnt4;
 
@@ -934,6 +939,30 @@ CollationAPITest::TestCompare(/* char* par */)
     doAssert((col->equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
     doAssert((!col->greater(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
     doAssert((col->greaterOrEqual(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
+
+    // Test different APIs
+    const UChar* t1 = test1.getBuffer();
+    int32_t t1Len = test1.length();
+    const UChar* t2 = test2.getBuffer();
+    int32_t t2Len = test2.length();
+
+    doAssert((col->compare(test1, test2) == Collator::EQUAL), "Problem");
+    doAssert((col->compare(test1, test2, success) == UCOL_EQUAL), "Problem");
+    doAssert((col->compare(t1, t1Len, t2, t2Len) == Collator::EQUAL), "Problem");
+    doAssert((col->compare(t1, t1Len, t2, t2Len, success) == UCOL_EQUAL), "Problem");
+    doAssert((col->compare(test1, test2, t1Len) == Collator::EQUAL), "Problem");
+    doAssert((col->compare(test1, test2, t1Len, success) == UCOL_EQUAL), "Problem");
+
+    col->setAttribute(UCOL_STRENGTH, UCOL_TERTIARY, success);
+    doAssert((col->compare(test1, test2) == Collator::GREATER), "Problem");
+    doAssert((col->compare(test1, test2, success) == UCOL_GREATER), "Problem");
+    doAssert((col->compare(t1, t1Len, t2, t2Len) == Collator::GREATER), "Problem");
+    doAssert((col->compare(t1, t1Len, t2, t2Len, success) == UCOL_GREATER), "Problem");
+    doAssert((col->compare(test1, test2, t1Len) == Collator::GREATER), "Problem");
+    doAssert((col->compare(test1, test2, t1Len, success) == UCOL_GREATER), "Problem");
+
+
+
     logln("The compare tests end.");
     delete col;
 }
