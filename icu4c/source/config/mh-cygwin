@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.6 2002/03/19 18:13:48 yves-oss Exp $
+## $Id: mh-cygwin,v 1.7 2003/02/11 00:13:03 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -33,6 +33,17 @@ LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
 SO = dll
 ## Non-shared intermediate object suffix
 STATIC_O = lib
+#LIBICU = $(ICUPREFIX)
+
+## Link commands to link to ICU libs
+LIBICUDT=	-L$(top_builddir)/stubdata/ -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUUC=	-L$(top_builddir)/common/ -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUI18N=	-L$(top_builddir)/i18n/ -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICULE=	-L$(top_builddir)/layout/ -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBCTESTFW=	-L$(top_builddir)/tools/ctestfw/ -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUTOOLUTIL=	-L$(top_builddir)/tools/toolutil/ -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
@@ -61,12 +72,15 @@ STATIC_O = lib
 		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'
 
-## Versioned libraries rules
+## Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
 
-%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
 	$(RM) $@ && cp $< $@
-%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && cp $*.$(SO).$(SO_TARGET_VERSION) $@
+%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $< $@
 
 ##  Bind internal references
 
