@@ -238,7 +238,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
         message="Display name for ID:" + t->getID();
       //  doTest(message, name, dispNames[i+1]); //!!! This will obviously fail for any locale other than english and its children!!!
         name=""; 
-        t->getDisplayName(t->getID(), Locale::US, name);
+        t->getDisplayName(t->getID(), Locale::getUS(), name);
         message.remove();
         message.append("Display name for on english locale ID:");
         message.append(t->getID());

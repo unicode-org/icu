@@ -27,7 +27,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const cha
                 if (exec) {
                     logln("DateFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
-                    Locale::setDefault(Locale::ENGLISH, status);
+                    Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
@@ -94,8 +94,8 @@ void IntlTestDateFormatAPI::testAPI(/* char* par */)
     logln("Testing DateFormat constructors");
 
     DateFormat *def = DateFormat::createInstance();
-    DateFormat *fr = DateFormat::createTimeInstance(DateFormat::FULL, Locale::FRENCH);
-    DateFormat *it = DateFormat::createDateInstance(DateFormat::MEDIUM, Locale::ITALIAN);
+    DateFormat *fr = DateFormat::createTimeInstance(DateFormat::FULL, Locale::getFrench());
+    DateFormat *it = DateFormat::createDateInstance(DateFormat::MEDIUM, Locale::getItalian());
     DateFormat *de = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG, Locale::getGerman());
 
 // ======= Test equality

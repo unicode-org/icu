@@ -733,7 +733,7 @@ TimeZoneTest::TestDisplayName()
     int32_t i;
     TimeZone *zone = TimeZone::createTimeZone("PST");
     UnicodeString name;
-    zone->getDisplayName(Locale::ENGLISH, name);
+    zone->getDisplayName(Locale::getEnglish(), name);
     logln("PST->" + name);
     if (name.compare("Pacific Standard Time") != 0)
         errln("Fail: Expected \"Pacific Standard Time\" but got " + name);
@@ -762,7 +762,7 @@ TimeZoneTest::TestDisplayName()
         name.remove();
         name = zone->getDisplayName(kData[i].useDst,
                                    kData[i].style,
-                                   Locale::ENGLISH, name);
+                                   Locale::getEnglish(), name);
         if (name.compare(kData[i].expect) != 0)
             errln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
         logln("PST [with options]->" + name);
@@ -782,14 +782,14 @@ TimeZoneTest::TestDisplayName()
         errln("Some sort of error..." + UnicodeString(u_errorName(status))); // REVISIT
     }
     name.remove();
-    name = zone2->getDisplayName(Locale::ENGLISH,name);
+    name = zone2->getDisplayName(Locale::getEnglish(),name);
     logln("Modified PST->" + name);
     if (name.compare("Pacific Standard Time") != 0)
         errln("Fail: Expected \"Pacific Standard Time\"");
 
     // Make sure we get the default display format for Locales
     // with no display name data.
-    Locale zh_CN = Locale::SIMPLIFIED_CHINESE;
+    Locale zh_CN = Locale::getSimplifiedChinese();
     name.remove();
     name = zone->getDisplayName(zh_CN,name);
     //*****************************************************************
@@ -803,7 +803,7 @@ TimeZoneTest::TestDisplayName()
     // Now be smart -- check to see if zh resource is even present.
     // If not, we expect the en fallback behavior.
     ResourceBundle enRB(u_getDataDirectory(),
-                            Locale::ENGLISH, status);
+                            Locale::getEnglish(), status);
     if(U_FAILURE(status))
         errln("Couldn't get ResourceBundle for en");
 
@@ -835,7 +835,7 @@ TimeZoneTest::TestDisplayName()
     delete zone2;
     zone2 = new SimpleTimeZone(90*60*1000, "xyzzy");
     name.remove();
-    name = zone2->getDisplayName(Locale::ENGLISH,name);
+    name = zone2->getDisplayName(Locale::getEnglish(),name);
     logln("GMT+90min->" + name);
     if (name.compare("GMT+01:30") &&
         name.compare("GMT+1:30") &&
