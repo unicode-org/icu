@@ -599,6 +599,10 @@ SOURCE=.\ucol_tok.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucol_wgt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucoleitr.cpp
 # End Source File
 # Begin Source File
@@ -1669,6 +1673,10 @@ SOURCE=.\ucol_imp.h
 # Begin Source File
 
 SOURCE=.\ucol_tok.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_wgt.h
 # End Source File
 # Begin Source File
 
