@@ -72,8 +72,8 @@ enum {
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
      * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
      * match all except 'a', 'A', 'b', and 'B'. This adds the lower-,
-     * title-, and uppercase mappings of each existing element in the
-     * set.
+     * title-, and uppercase mappings as well as the case folding
+     * of each existing element in the set.
      * @draft ICU 3.2
      */
     USET_ADD_CASE_MAPPINGS = 4,
