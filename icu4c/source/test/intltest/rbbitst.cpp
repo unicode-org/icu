@@ -2364,7 +2364,8 @@ public:
     virtual          ~RBBILineMonkey();
     virtual  UVector *charClasses();
     virtual  void     setText(const UnicodeString &s);
-    virtual int32_t   next(int32_t i);
+    virtual  int32_t  next(int32_t i);
+    virtual  void     rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar);
 private:
     UVector      *fSets;
 
@@ -2509,45 +2510,83 @@ void RBBILineMonkey::setText(const UnicodeString &s) {
 }
 
 
-int32_t RBBILineMonkey::next(int32_t prevPos) {
+void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar) {
+    int32_t  nPos = *nextPos;
+    
+    // LB 6  Treat Korean Syllables as a single unit
+    int32_t  hangultype = u_getIntPropertyValue(*posChar, UCHAR_HANGUL_SYLLABLE_TYPE);
+    if (hangultype != U_HST_NOT_APPLICABLE) {
+        nPos = fCharBI->following(pos);   // Advance by grapheme cluster, which
+        //  contains the logic to locate Hangul syllables.
+    }
+    
+    // LB 7b  Keep combining sequences together.  Here we just locate the end of "thisChar".
+    //                                            (except for Hangul, which we did above.
+    if (hangultype == U_HST_NOT_APPLICABLE) {
+        //  advance over any CM class chars
+        for (;;) {
+            *nextChar = fText->char32At(nPos);
+            if (!fCM->contains(*nextChar)) {
+                break;
+            }
+            nPos = fText->moveIndex32(nPos, 1);
+        }
+    }
+    
+    
+    // LB 7a In a SP CM* sequence, treat the SP as an ID
+    if (nPos != *nextPos && fSP->contains(*posChar)) {
+        *posChar = 0x3400;   // 0x3400 is a CJK Ideograph, linebreak type is ID.
+    }
+    
+    // LB 7b Treat X CM* as if it were x.
+    //       No explicit action required.  
+    
+    // LB 7c  Treat any remaining combining mark as AL
+    if (fCM->contains(*posChar)) {
+        *posChar = 0x41;   // thisChar = 'A';
+    }
+}
+
+
+
+int32_t RBBILineMonkey::next(int32_t startPos) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t    pos;       //  Index of the char following a potential break position
-    int32_t    nextPos;   //  Index of the next potential "pos" to test.
+    UChar32    thisChar;  //  Character at above position "pos"
+
+    int32_t    prevPos;   //  Index of the char preceding a potential break position
+    UChar32    prevChar;  //  Character at above position.  Note that prevChar
+                          //   and thisChar may not be adjacent because combining
+                          //   characters between them will be ignored.
+
+    int32_t    nextPos;   //  Index of the next character following pos.
                           //     Usually skips over combining marks.
     int32_t    nextCPPos; //  Index of the code point following "pos."
-                          //     Allows for surrogates.  Ignores combining marks.
+                          //     May point to a combining mark.
     int32_t    tPos;      //  temp value.
 
-    if (prevPos >= fText->length()) {
+    if (startPos >= fText->length()) {
         return -1;
     }
 
-    // We need to figure out where the next character of interest starts
-    //   Depends on the previous char, and whether it eats following CombiningMarks
-    //   or not.
-    UChar32   c = fText->char32At(prevPos);
-    nextPos = fText->moveIndex32(prevPos, 1);
-    if (!(c == 0x0d || c == 0x0a || c == 0x85 || c == 0x200b /* ZW */ || fBK->contains(c))) {
-        for (;;) {
-            c = fText->char32At(nextPos);
-            if (!fCM->contains(c)) {
-                break;
-            }
-            nextPos = fText->moveIndex32(nextPos, 1);
-        }
-    }
-    pos = prevPos;
+
+    // Initial values for loop.  Loop will run the first time without finding breaks,
+    //                           while the invalid values shift out and the "this" and
+    //                           "prev" positions are filled in with good values.
+    pos      = prevPos   = -1;    // Invalid value, serves as flag for initial loop iteration.
+    thisChar = prevChar  = 0;
+    nextPos  = nextCPPos = startPos;
 
 
     // Loop runs once per position in the test text, until a break position
     //  is found.
     for (;;) {
         prevPos   = pos;
-        pos       = nextPos;
+        prevChar  = thisChar;
 
-        // TODO:  prevChar = thisChar;   // So adjustments to thisChar stick for next iteration.
-        UChar32 prevChar = fText->char32At(prevPos);
-        UChar32 thisChar = fText->char32At(pos);
+        pos       = nextPos;
+        thisChar  = fText->char32At(pos);
 
         nextCPPos = fText->moveIndex32(pos, 1);
         nextPos   = nextCPPos;
@@ -2591,7 +2630,11 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
             break;
         }
 
+        rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
+        UChar32 c = fText->char32At(nextPos);
+        rule67Adjust(pos,     &thisChar, &nextPos, &c);
 
+        // TODO:  move this code into rule67Adjust
         // LB 6  Treat Korean Syllables as a single unit
         int32_t  hangultype = u_getIntPropertyValue(thisChar, UCHAR_HANGUL_SYLLABLE_TYPE);
         if (hangultype != U_HST_NOT_APPLICABLE) {
@@ -2615,7 +2658,7 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
 
         // LB 7a In a SP CM* sequence, treat the SP as an ID
         if (nextCPPos != nextPos && fSP->contains(thisChar)) {
-            thisChar = 0x3400;   // 0x3400 is a CJK Ideograph, type is ID.
+            thisChar = 0x3400;   // 0x3400 is a CJK Ideograph, linebreak type is ID.
         }
 
         // LB 7b Treat X CM* as if it were x.
@@ -2624,6 +2667,14 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
         // LB 7c  Treat any remaining combining mark as AL
         if (fCM->contains(thisChar)) {
             thisChar = 0x41;   // thisChar = 'A';
+        }
+
+        // All adjustment of character values and positions is complete.
+        // If the loop is still warming up - if we haven't shifted the initial
+        //   -1 positions out of prevPos yet - loop back to advance the
+        //    position in the input without any further looking for breaks.
+        if (prevPos == -1) {
+            continue;
         }
 
         // LB 8  Don't break before closings.
