@@ -213,17 +213,12 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
     fItemCache = 0;
     int32_t patlen = path.length();
 
-//    char name[128];
-//    u_UCharsToChars(localeName.getUChars(), name, localeName.length()+1);
     if(patlen > 0) {
         char pathName[128];
-        //u_UCharsToChars(path.getUChars(), pathName, path.length()+1);
         path.extract(0, patlen, pathName, "");
         pathName[patlen] = '\0';
         resource = ures_openNoFallback(pathName, localeName, &status);
-        //ures_openNoFallback(&resource, pathName, name, &status);
     } else {
-        //ures_openNoFallback(&resource, 0, name, &status);
         resource = ures_openNoFallback(0, localeName, &status);
     }
 
@@ -272,7 +267,6 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
         resource = 0;
     }
     UErrorCode status = U_ZERO_ERROR;
-    //if(other.resource->fData != 0) {
     if(other.resource->fIsTopLevel == TRUE) {
         constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
     } else {
@@ -314,13 +308,10 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 
 
     if(patlen > 0) {
-        //u_UCharsToChars(path.getUChars(), name, path.length()+1);
         path.extract(0, patlen, name, "");
         name[patlen] = '\0';
-        //resource = ures_openFillIn(&resource, name, locale.getName(), &error);
         resource = ures_open(name, locale.getName(), &error);
     } else {
-        //resource = ures_openFillIn(&resource, 0, locale.getName(), &error);
         resource = ures_open(0, locale.getName(), &error);
     }
     if(U_SUCCESS(error)) {
@@ -615,8 +606,6 @@ ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
     char item[256];
     char key[256];
     int32_t taglen = itemTag.length();
-    //u_UCharsToChars(itemTag.getUChars(), key, itemTag.length()+1);
-    //u_UCharsToChars(itemTag.getUChars(), item, itemTag.length()+1);
     itemTag.extract(0, taglen, key, "");
     key[taglen] = '\0';
     itemTag.extract(0, taglen, item, "");
@@ -687,75 +676,11 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
     }
 }
 
-// start removed API
-
-/*
-void
-ResourceBundle::get2dArrayItem(const char *resourceTag,
-			       int32_t              rowIndex,
-			       int32_t              columnIndex,
-			       UnicodeString&       theArrayItem,
-			       UErrorCode&           err) const
-{
-  if(U_FAILURE(err)) 
-    return;
-  
-  const UnicodeString* temp = get2dArrayItem(resourceTag, rowIndex, 
-					     columnIndex, err);
-  
-  if(U_SUCCESS(err))
-    theArrayItem = *temp;
-}
-*/
-
-/*
-void
-ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
-                                    const UnicodeString&    itemTag,
-                                    UnicodeString&          theArrayItem,
-                                    UErrorCode&              err) const
-{
-  if(U_FAILURE(err)) 
-    return;
-  
-  const UnicodeString* temp = getTaggedArrayItem(resourceTag, itemTag, err);
-    
-  if(U_SUCCESS(err)) 
-    theArrayItem = *temp;
-}
-*/
-
-/*
-void
-ResourceBundle::getArrayItem(   const char             *resourceTag,
-                                int32_t                 index,
-                                UnicodeString&          theArrayItem,
-                                UErrorCode&              err) const
-{
-  if(U_FAILURE(err)) 
-    return;
-
-  const UnicodeString* temp = getArrayItem(resourceTag, index, err);
-  if(U_SUCCESS(err))
-    theArrayItem = *temp;
-}
-*/
-
-
-/*
-void
-ResourceBundle::getString(  const char             *resourceTag,
-                            UnicodeString&          theString,
-                            UErrorCode&              err) const
-{
-  if(U_FAILURE(err)) 
-    return;
-  
-  const UnicodeString* temp = getString(resourceTag, err);
-  if(U_SUCCESS(err))
-    theString = *temp;
-}
-*/
-
-
 //eof
+
+
+
+
+
+
+
