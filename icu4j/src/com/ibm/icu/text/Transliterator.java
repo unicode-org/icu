@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/12/02 01:34:31 $
- * $Revision: 1.93 $
+ * $Date: 2004/02/20 00:17:28 $
+ * $Revision: 1.94 $
  *
  *****************************************************************************************
  */
@@ -1707,51 +1707,27 @@ public abstract class Transliterator {
         return registry.getAvailableVariants(source, target);
     }
 
-// REMOVED: ICU 2.4
-//  /**
-//   * Method for subclasses to use to obtain a character in the given
-//   * string, with filtering.  If the character at the given offset
-//   * is excluded by this transliterator's filter, then U+FFFE is returned.
-//   *
-//   * <p><b>Note:</b> Most subclasses that implement
-//   * handleTransliterator() will <em>not</em> want to use this
-//   * method, since characters they see are already filtered.
-//   *
-//   * @deprecated the new architecture provides filtering at the top
-//   * level.  This method will be removed Dec 31 2001.
-//   */
-//  protected char filteredCharAt(Replaceable text, int i) {
-//      char c;
-//      UnicodeFilter filter = getFilter();
-//      return (filter == null) ? text.charAt(i) :
-//          (filter.contains(c = text.charAt(i)) ? c : '\uFFFE');
-//  }
-
     static {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
         displayNameCache = new Hashtable();
 
-        // Read the index file and populate the registry.
-        // Each line of the index file is either blank, a '#' comment,
-        // or a colon-delimited line.  In the latter case the first
-        // field is the ID being defined.  The second field is one of
-        // three strings: "file", "internal", or "alias".  Remaining
-        // fields vary according the value fo the second field.  See
-        // the index file itself for further documentation.
+        // Read the index file and populate the registry.  Each line
+        // of the index file is either blank, a '#' comment, or a
+        // colon-delimited line.  In the latter case the format is one
+        // of the following:
+        //#   <id>:file:<resource>:<encoding>:<direction>
+        //#   <id>:internal:<resource>:<encoding>:<direction>
+        //#   <id>:alias:<getInstanceArg>
         ResourceReader r = new ResourceReader("Transliterator_index.txt");
         for (;;) {
             String line = null;
             try {
                 line = r.readLine();
-            } catch (java.io.IOException e) {
-                throw new RuntimeException("Can't read Transliterator_index.txt");
-            }
-            if (line == null) {
-                break;
-            }
-            try {
+                if (line == null) {
+                    break;
+                }
                 // Skip over whitespace
                 int pos = 0;
                 while (pos < line.length() &&
@@ -1800,6 +1776,8 @@ public abstract class Transliterator {
                 }
             } catch (StringIndexOutOfBoundsException e) {
                 throw new RuntimeException("Can't parse line: " + line);
+            } catch (java.io.IOException e2) {
+                throw new RuntimeException("Can't read Transliterator_index.txt");
             }
         }
 
