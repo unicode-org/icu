@@ -2954,9 +2954,11 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
+U_HAVE_TZSET=0
 if test x$ac_cv_func_tzset = xyes
 then
     U_TZSET=tzset
+    U_HAVE_TZSET=1
 else
     echo $ac_n "checking for _tzset""... $ac_c" 1>&6
 echo "configure:2963: checking for _tzset" >&5
@@ -3008,10 +3010,14 @@ fi
 
     if test x$ac_cv_func__tzset = xyes
     then
-	U_TZSET=_tzset
+        U_TZSET=_tzset
+        U_HAVE_TZSET=1
     fi
 fi
 
+
+
+U_HAVE_TZNAME=0
 echo $ac_n "checking for tzname""... $ac_c" 1>&6
 echo "configure:3017: checking for tzname" >&5
 if eval "test \"`echo '$''{'ac_cv_var_tzname'+set}'`\" = set"; then
@@ -3046,6 +3052,7 @@ fi
 echo "$ac_t""$ac_cv_var_tzname" 1>&6
 if test $ac_cv_var_tzname = yes; then
   U_TZNAME=tzname
+  U_HAVE_TZNAME=1
 else
   echo $ac_n "checking for _tzname""... $ac_c" 1>&6
 echo "configure:3052: checking for _tzname" >&5
@@ -3077,6 +3084,7 @@ fi
 echo "$ac_t""$ac_cv_var__tzname" 1>&6
     if test $ac_cv_var__tzname = yes; then
       U_TZNAME=_tzname
+      U_HAVE_TZNAME=1
     fi
 fi
 
@@ -4290,7 +4298,9 @@ s%@U_HAVE_NAMESPACE@%$U_HAVE_NAMESPACE%g
 s%@U_OVERRIDE_CXX_ALLOCATION@%$U_OVERRIDE_CXX_ALLOCATION%g
 s%@U_HAVE_PLACEMENT_NEW@%$U_HAVE_PLACEMENT_NEW%g
 s%@U_HAVE_POPEN@%$U_HAVE_POPEN%g
+s%@U_HAVE_TZSET@%$U_HAVE_TZSET%g
 s%@U_TZSET@%$U_TZSET%g
+s%@U_HAVE_TZNAME@%$U_HAVE_TZNAME%g
 s%@U_TZNAME@%$U_TZNAME%g
 s%@U_HAVE_TIMEZONE@%$U_HAVE_TIMEZONE%g
 s%@U_TIMEZONE@%$U_TIMEZONE%g
