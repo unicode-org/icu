@@ -302,6 +302,53 @@ ucol_openRules( const UChar        *rules,
                 UErrorCode         *status);
 
 /** 
+ * Open a collator defined by a short form string.
+ * The structure and the syntax of the string is defined in the "Naming collators"
+ * section of the users guide: 
+ * http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
+ * The call to this function is equivalent to a call to ucol_open, followed by a 
+ * series of calls to ucol_setAttribute and ucol_setVariableTop.
+ * @param definition A short string containing a locale and a set of attributes. 
+ *                   Attributes not explicitly mentioned are left at the default
+ *                   state for a locale.
+ * @param parseError if not NULL, structure that will get filled with error's pre
+ *                   and post context in case of error.
+ * @param status     Error code. Apart from regular error conditions connected to 
+ *                   instantiating collators (like out of memory or similar), this
+ *                   API will return an error if an invalid attribute or attribute/value
+ *                   combination is specified.
+ * @return           A pointer to a UCollator or 0 if an error occured (including an 
+ *                   invalid attribute).
+ * @see ucol_open
+ * @see ucol_setAttribute
+ * @see ucol_setVariableTop
+ * @see ucol_getShortDefinitionString
+ * @see ucol_normalizeShortDefinitionString
+ * @draft ICU 3.0
+ *
+ */
+U_CAPI UCollator* U_EXPORT2
+ucol_openFromShortString( const char *definition,
+                          UParseError *parseError,
+                          UErrorCode *status);
+
+/**
+ * Get a set containing the contractions defined by the collator. The set includes
+ * both the UCA contractions and the contractions defined by the collator
+ * @param coll collator 
+ * @param conts the set to hold the result
+ * @param status to hold the error code
+ * @return the size of the contraction set
+ *
+ * @draft ICU 3.0
+ */
+U_CAPI int32_t U_EXPORT2
+ucol_getContractions( const UCollator *coll,
+                  USet *conts,
+                  UErrorCode *status);
+
+
+/** 
  * Close a UCollator.
  * Once closed, a UCollator should not be used.\ Every open collator should
  * be closed.\ Otherwise, a memory leak will result.
@@ -561,6 +608,58 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
 U_STABLE const UChar* U_EXPORT2 
 ucol_getRules(    const    UCollator    *coll, 
         int32_t            *length);
+
+/** Get the short definition string for a collator. This API harvests the collator's
+ *  locale and the attribute set and produces a string that can be used for opening 
+ *  a collator with the same properties using the ucol_openFromShortString API.
+ *  This string will be normalized.
+ *  The structure and the syntax of the string is defined in the "Naming collators"
+ *  section of the users guide: 
+ *  http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
+ *  This API supports preflighting.
+ *  @param coll a collator
+ *  @param locale locale for the collator. If NULL, collator's real locale will be used
+ *  @param buffer space to hold the resulting string
+ *  @param capacity capacity of the buffer
+ *  @status for returning errors. All the preflighting errors are featured
+ *  @return length of the resulting string
+ *  @see ucol_openFromShortString
+ *  @see ucol_normalizeShortDefinitionString
+ *  @draft ICU 3.0
+ */
+U_CAPI int32_t U_EXPORT2
+ucol_getShortDefinitionString(const UCollator *coll,
+                              const char *locale,
+                              char *buffer,
+                              int32_t capacity,
+                              UErrorCode *status);
+
+/** Verifies and normalizes short definition string.
+ *  Normalized short definition string has all the option sorted by the argument name,
+ *  so that equivalent definition strings are the same. 
+ *  This API supports preflighting.
+ *  @param source definition string
+ *  @param destination space to hold the resulting string
+ *  @param capacity capacity of the buffer
+ *  @param parseError if not NULL, structure that will get filled with error's pre
+ *                   and post context in case of error.
+ *  @param status     Error code. This API will return an error if an invalid attribute 
+ *                    or attribute/value combination is specified. All the preflighting 
+ *                    errors are also featured
+ *
+ *  @see ucol_openFromShortString
+ *  @see ucol_getShortDefinitionString
+ * 
+ *  @draft ICU 3.0
+ */
+
+U_CAPI int32_t U_EXPORT2
+ucol_normalizeShortDefinitionString(const char *source,
+                                    char *destination,
+                                    int32_t capacity,
+                                    UParseError *parseError,
+                                    UErrorCode *status);
+        
 
 /**
  * Get a sort key for a string from a UCollator.
@@ -893,6 +992,52 @@ ucol_getLocaleByType(const UCollator *coll, ULocDataLocaleType type, UErrorCode 
  */
 U_STABLE USet * U_EXPORT2
 ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
+
+
+/**
+ * Get a 31-bit identifier given a collator. 
+ * @param coll UCollator
+ * @param status set U_BUFFER_OVERFLOW_ERROR if collator cannot be encoded
+ * @return 31-bit identifier. MSB is not used, hence the 31 bits
+ * @see ucol_openFromIdentifier
+ * @see ucol_identifierToShortString
+ * @internal ICU 3.0
+ */
+U_CAPI uint32_t U_EXPORT2
+ucol_collatorToIdentifier(const UCollator *coll,
+                          UErrorCode *status);
+
+/**
+ * Open a collator given a 31-bit identifier
+ * @param identifier 31-bit identifier, encoded by calling ucol_collatorToIdentifier
+ * @param status for returning errors
+ * @return UCollator object
+ * @see ucol_collatorToIdentifier
+ * @see ucol_identifierToShortString
+ * @internal ICU 3.0
+ */
+U_CAPI UCollator* U_EXPORT2
+ucol_openFromIdentifier(uint32_t identifier,
+                        UErrorCode *status);
+
+
+/**
+ * Calculate the short definition string given an identifier. Supports preflighting.
+ * @param identifier 31-bit identifier, encoded by calling ucol_collatorToIdentifier
+ * @param buffer buffer to store the result
+ * @param capacity buffer capacity
+ * @param status for returning errors
+ * @return length of the short definition string
+ * @see ucol_collatorToIdentifier
+ * @see ucol_openFromIdentifier
+ * @internal ICU 3.0
+ */
+U_CAPI int32_t U_EXPORT2
+ucol_identifierToShortString(uint32_t identifier,
+                             char *buffer,
+                             int32_t capacity,
+                             UErrorCode *status);
+
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
