@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.16 2002/01/11 17:33:52 grhoten-oss Exp $
+## $Id: mh-os400,v 1.17 2002/01/25 06:28:45 yves-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -27,9 +27,6 @@ ARFLAGS = -cuv
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
 LD_RPATH_PRE=	-I
-
-## Environment variable to set a runtime search path
-LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
