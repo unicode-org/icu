@@ -18,16 +18,25 @@
 *     Madhu Katragadda            Ported for C API, added tests for string functions
 *********************************************************************************
 */
+
+#include <stdio.h>
+#include <string.h>
 #include "uchar.h"
 #include "utypes.h"
+#include "cstring.h"
 #include "cintltst.h"
 #include "cucdtst.h"
 #include "utypes.h"
 #include "ustring.h"
 #include "uloc.h"
 
-#include <stdio.h>
-#include<string.h>
+/* prototypes --------------------------------------------------------------- */
+
+static void
+TestCharNames();
+
+/* test data ---------------------------------------------------------------- */
+
 UChar*** dataTable = 0;
 const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
@@ -98,8 +107,9 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestIdentifier, "tsutil/cucdtst/TestIdentifier");
     addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
-
+    addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
 }
+
 /*==================================================== */
 /* test u_toupper() and u_tolower()                    */
 /*==================================================== */
@@ -561,7 +571,33 @@ void TestStringFunctions()
     
 }
 
+/* test u_charName() -------------------------------------------------------- */
 
+static struct { uint32_t code; const char *name; } names[]={
+    0x0061, "LATIN SMALL LETTER A",
+    0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
+    0x3401, "CJK UNIFIED IDEOGRAPH-3401",
+    0x7fed, "CJK UNIFIED IDEOGRAPH-7FED",
+    0xac00, "HANGUL SYLLABLE GA",
+    0xd7a3, "HANGUL SYLLABLE HIH"
+};
 
+static void
+TestCharNames() {
+    static char name[80];
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UTextOffset length;
+    int i;
 
-     
+    log_verbose("Testing u_charName()\n");
+    for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
+        length=u_charName(names[i].code, U_UNICODE_CHAR_NAME, name, sizeof(name), &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("u_charName(0x%lx) error %s\n", names[i].code, errorName(errorCode));
+            return;
+        }
+        if(length<=0 || 0!=icu_strcmp(name, names[i].name)) {
+            log_err("u_charName(0x%lx) gets %s instead of %s\n", names[i].code, name, names[i].name);
+        }
+    }
+}
