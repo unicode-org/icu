@@ -12,7 +12,7 @@ sw_KE {
     CurrencyElements { 
             "KSh",
             "KES",
-            "",
+            ".",
     }
     LocaleString { "sw_KE" }
     NumberPatterns { 
