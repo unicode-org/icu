@@ -84,21 +84,29 @@ main(int argc, char* argv[]) {
             argv[-argc]);
     }
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        /*
+         * Broken into chucks because the C89 standard says the minimum
+         * required supported string length is 509 bytes.
+         */
         fprintf(stderr,
-            "usage: %s [-options] [suffix]\n"
-            "\tread the UnicodeData.txt file and other Unicode properties files and\n"
-            "\tcreate a binary file " DATA_NAME "." DATA_TYPE " with the character properties\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-v or --verbose     verbose output\n"
-            "\t\t-c or --copyright   include a copyright notice\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-s or --sourcedir   source directory, followed by the path\n"
-            "\t\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n"
-            "\t\tsuffix              suffix that is to be appended with a '-'\n"
-            "\t\t                    to the source file basenames before opening;\n"
-            "\t\t                    'genprops new' will read UnicodeData-new.txt etc.\n",
+            "Usage: %s [-options] [suffix]\n"
+            "\n"
+            "read the UnicodeData.txt file and other Unicode properties files and\n"
+            "create a binary file " DATA_NAME "." DATA_TYPE " with the character properties\n"
+            "\n",
             argv[0]);
+        fprintf(stderr,
+            "Options:\n"
+            "\t-h or -? or --help  this usage text\n"
+            "\t-v or --verbose     verbose output\n"
+            "\t-c or --copyright   include a copyright notice\n"
+            "\t-u or --unicode     Unicode version, followed by the version like 3.0.0\n");
+        fprintf(stderr,
+            "\t-d or --destdir     destination directory, followed by the path\n"
+            "\t-s or --sourcedir   source directory, followed by the path\n"
+            "\tsuffix              suffix that is to be appended with a '-'\n"
+            "\t                    to the source file basenames before opening;\n"
+            "\t                    'genprops new' will read UnicodeData-new.txt etc.\n");
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
