@@ -34,6 +34,8 @@
 #   include "unicode/pos2.h"
 #elif defined(__OS400__)
 #   include "unicode/pos400.h"
+#elif defined(__MWERKS__)
+#   include "unicode/pmacos.h"
 #else
 #   include "unicode/platform.h"
 #endif
