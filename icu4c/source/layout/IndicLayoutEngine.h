@@ -19,7 +19,6 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 
-#include "CDACLayout.h"
 #include <string.h>
 
 /**
