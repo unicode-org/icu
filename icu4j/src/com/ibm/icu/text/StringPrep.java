@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrep.java,v $
- * $Date: 2003/11/14 00:09:37 $
- * $Revision: 1.3 $ 
+ * $Date: 2003/11/21 22:43:41 $
+ * $Revision: 1.4 $ 
  *
  *****************************************************************************************
  */
@@ -54,6 +54,7 @@ import com.ibm.icu.lang.UCharacterDirection;
  *           error.  </li>
  * </ol>
  * @author Ram Viswanadha
+ * @draft ICU 2.8
  */
 public final class StringPrep {
     /** 
