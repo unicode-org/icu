@@ -3129,6 +3129,32 @@ static void TestStrCollIdenticalPrefix() {
 }
 
 static void TestBeforePrefixFailure() {
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+    {   "&b<\\u00e4\\u00e4",
+      { "b", "\\u00e4\\u00e4", "a\\u0308a\\u0308", "\\u00e4a\\u0308", "a\\u0308\\u00e4" }, 5},
+    {   "&b<\\u00C5",
+      { "b", "\\u00C5", "A\\u030A", "\\u212B" }, 4},
+    {   "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
+        "&\\u30A8=\\u30A8=\\u3048=\\uff74"
+        "&[before 3]\\u30a7<<<\\u30a9", 
+      {"\\u30a9", "\\u30a7"}, 2 },
+    {   "&[before 3]\\u30a7<<<\\u30a9"
+        "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
+        "&\\u30A8=\\u30A8=\\u3048=\\uff74",
+      {"\\u30a9", "\\u30a7"}, 2 },
+  };
+  uint32_t i;
+
+
+  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
+
+#if 0
   const char* rule1 = 
         "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
         "&\\u30A8=\\u30A8=\\u3048=\\uff74"
@@ -3143,7 +3169,7 @@ static void TestBeforePrefixFailure() {
   };
   genericRulesStarter(rule1, test, sizeof(test)/sizeof(test[0]));
   genericRulesStarter(rule2, test, sizeof(test)/sizeof(test[0]));
-/* this peace of code should be in some sort of verbose mode     */
+/* this piece of code should be in some sort of verbose mode     */
 /* it gets the collation elements for elements and prints them   */
 /* This is useful when trying to see whether the problem is      */
   { 
@@ -3177,6 +3203,7 @@ static void TestBeforePrefixFailure() {
     ucol_closeElements(it);
     ucol_close(coll);
   }
+#endif
 }
 
 static void TestPrefixCompose() {
