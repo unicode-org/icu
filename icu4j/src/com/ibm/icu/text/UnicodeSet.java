@@ -2819,7 +2819,9 @@ public class UnicodeSet extends UnicodeFilter {
                     v = UCharacter.getPropertyValueEnum(p, valueAlias);
                 } catch (IllegalArgumentException e) {
                     // Handle numeric CCC
-                    if (p == UProperty.CANONICAL_COMBINING_CLASS) {
+                    if (p == UProperty.CANONICAL_COMBINING_CLASS ||
+                		p == UProperty.LEAD_CANONICAL_COMBINING_CLASS ||
+						p == UProperty.TRAIL_CANONICAL_COMBINING_CLASS) {
                         v = Integer.parseInt(Utility.deleteRuleWhiteSpace(valueAlias));
                         // If the resultant set is empty then the numeric value
                         // was invalid.

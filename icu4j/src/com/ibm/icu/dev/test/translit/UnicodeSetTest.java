@@ -913,7 +913,27 @@ public class UnicodeSetTest extends TestFmwk {
 
             "[ab\uDC00cd]", // JB#2906: isolated trail in middle
             "abcd\uDC00",
-            "ef\uD800\\U00010000"
+            "ef\uD800\\U00010000",
+			
+			"[:^lccc=0:]", // Lead canonical class
+			"\u0300\u0301",
+			"abcd\u00c0\u00c5",
+
+			"[:^tccc=0:]", // Trail canonical class
+			"\u0300\u0301\u00c0\u00c5",
+			"abcd",
+
+			"[[:^lccc=0:][:^tccc=0:]]", // Lead and trail canonical class
+			"\u0300\u0301\u00c0\u00c5",
+			"abcd",
+
+			"[[:^lccc=0:]-[:^tccc=0:]]", // Stuff that starts with an accent but ends with a base (none right now)
+			"",
+			"abcd\u0300\u0301\u00c0\u00c5",
+			
+			"[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
+			"\u0F73\u0F75\u0F81",
+			"abcd\u0300\u0301\u00c0\u00c5",
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
