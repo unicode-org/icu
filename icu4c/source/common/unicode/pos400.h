@@ -44,12 +44,14 @@
 #endif
 
 /* Determines whether specific types are available */
-#define HAVE_INT8_T 0
-#define HAVE_UINT8_T 0
-#define HAVE_INT16_T 0
-#define HAVE_UINT16_T 0
-#define HAVE_INT32_T 0
-#define HAVE_UINT32_T 0
+#define U_HAVE_INT8_T 0
+#define U_HAVE_UINT8_T 0
+#define U_HAVE_INT16_T 0
+#define U_HAVE_UINT16_T 0
+#define U_HAVE_INT32_T 0
+#define U_HAVE_UINT32_T 0
+#define U_HAVE_INT64_T 0
+#define U_HAVE_UINT64_T 0
 
 /* Define whether namespace is supported */
 #define U_HAVE_NAMESPACE 0
@@ -70,28 +72,36 @@
 #include <inttypes.h>
 #else
 
-#if ! HAVE_INT8_T
+#if ! U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
 
-#if ! HAVE_UINT8_T
+#if ! U_HAVE_UINT8_T
 typedef unsigned char uint8_t;
 #endif
 
-#if ! HAVE_INT16_T
+#if ! U_HAVE_INT16_T
 typedef signed short int16_t;
 #endif
 
-#if ! HAVE_UINT16_T
+#if ! U_HAVE_UINT16_T
 typedef unsigned short uint16_t;
 #endif
 
-#if ! HAVE_INT32_T
+#if ! U_HAVE_INT32_T
 typedef signed long int32_t;
 #endif
 
-#if ! HAVE_UINT32_T
+#if ! U_HAVE_UINT32_T
 typedef unsigned long uint32_t;
+#endif
+
+#if ! U_HAVE_INT64_T
+typedef signed long long int64_t;
+#endif
+
+#if ! U_HAVE_UINT64_T
+typedef unsigned long long uint64_t;
 #endif
 
 #endif
