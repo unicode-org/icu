@@ -1,5 +1,4 @@
-﻿
-// *******************************************************************************
+﻿// *******************************************************************************
 // *
 // *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -7,12 +6,12 @@
 // *******************************************************************************
 
 
-
 fa {
-
-   Version { "x0.0" }
-
-
+    Version { "x0.1" }
+    AmPmMarkers { 
+            "صبح",
+            "عصر",
+    }
     DayAbbreviations { 
             "ی∔",
             "د∔",
@@ -80,13 +79,13 @@ fa {
             "#,##0%",
     }
     LocaleID{ "29"}
-	CollationElements {
-	    Version { "1.0" }
-		Sequence { "[normalization on]" }
-	}
+    CollationElements {
+        Version { "1.0" }
+        Sequence { "[normalization on]" }
+    }
     LocaleScript{ 
-                "Arabic",// Script Name  
-                "Arab"   // ISO 15924 Name 
+        "Arabic",// Script Name  
+        "Arab"   // ISO 15924 Name 
     }
             // /**************** Info Below is needed ****************/
             // Countries{}
