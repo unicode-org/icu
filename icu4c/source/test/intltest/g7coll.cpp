@@ -128,7 +128,7 @@ void G7CollationTest::TestG7Locales( char* par )
             continue;
         }
 
-        const UnicodeString& defRules = ((RuleBasedCollator*)myCollation)->getRules();
+//        const UnicodeString& defRules = ((RuleBasedCollator*)myCollation)->getRules();
         status = U_ZERO_ERROR;
         tblColl1 = new RuleBasedCollator(((RuleBasedCollator*)myCollation)->getRules(), status);
         if (U_FAILURE(status))
@@ -150,7 +150,7 @@ void G7CollationTest::TestG7Locales( char* par )
         msg += "tests start :";
         logln(msg);
 
-        int32_t j = 0, n = 0;
+        int32_t j, n;
         for (j = 0; j < FIXEDTESTSET; j++)
         {
             for (n = j+1; n < FIXEDTESTSET; n++)
@@ -180,7 +180,7 @@ void G7CollationTest::TestDemo1( char* par )
         return;
     }
 
-    int32_t j = 0, n = 0;
+    int32_t j, n;
     for (j = 0; j < FIXEDTESTSET; j++)
     {
         for (n = j+1; n < FIXEDTESTSET; n++)
@@ -209,7 +209,7 @@ void G7CollationTest::TestDemo2( char* par )
         return;
     }
 
-    int32_t j = 0;
+    int32_t j;
     for (j; j < TOTALTESTSET; j++)
     {
         for (int32_t n = j+1; n < TOTALTESTSET; n++)
@@ -238,7 +238,7 @@ void G7CollationTest::TestDemo3( char* par )
         return;
     }
 
-    int32_t j = 0;
+    int32_t j;
     for (j = 0; j < TOTALTESTSET; j++)
     {
         for (int32_t n = j+1; n < TOTALTESTSET; n++)
