@@ -1027,11 +1027,11 @@ LocaleTest::TestAtypicalLocales()
                                     "Belgique" };
     UnicodeString spanishDisplayNames [] = {
                                      CharsToUnicodeString("alem\\u00E1n (Canad\\u00E1)"),
-                                     CharsToUnicodeString("japon\\u00E9s (South Africa)"),
+                                     CharsToUnicodeString("japon\\u00E9s (Sud\\u00E1frica)"),
                                      CharsToUnicodeString("ruso (M\\u00E9xico)"),
                                      CharsToUnicodeString("ingl\\u00E9s (Francia)"),
                                      CharsToUnicodeString("espa\\u00F1ol (Alemania)"),
-                                     "Croatia",
+                                     "Croacia",
                                      "Suecia",
                                      CharsToUnicodeString("Rep\\u00FAblica Dominicana"),
                                      CharsToUnicodeString("B\\u00E9lgica") };
