@@ -1472,6 +1472,9 @@ void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
+  } else if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
+    return;
   } else {
     log_err("Unable to open collator for locale %s\n", locale);
   }
@@ -1538,6 +1541,8 @@ static void genericRulesTestWithResult(const char *rules, const char *s[], uint3
   if(U_SUCCESS(status)) {
     genericOrderingTestWithResult(coll, s, size, result);
     ucol_close(coll);
+  } else if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
   } else {
     log_err("Unable to open collator with rules %s\n", rules);
   }
@@ -1683,6 +1688,16 @@ static void TestComposeDecompose(void) {
 
     t = malloc(0x30000 * sizeof(tester *));
     t[0] = (tester *)malloc(sizeof(tester));
+    log_verbose("Testing UCA extensively\n");
+    coll = ucol_open("", &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening collator\n");
+      return;
+    }
+
 
     for(u = 0; u < 0x30000; u++) {
       len = 0;
@@ -1703,8 +1718,6 @@ static void TestComposeDecompose(void) {
         } 
     }
 
-    log_verbose("Testing UCA extensively\n");
-    coll = ucol_open("", &status);
     for(u=0; u<(UChar32)noCases; u++) {
       if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
         log_err("Failure: codePoint %05X fails TestComposeDecompose in the UCA\n", t[u]->u);
@@ -1775,9 +1788,17 @@ static void TestUCARules(void) {
   UErrorCode status = U_ZERO_ERROR;
   UChar b[256];
   UChar *rules = b;
+  uint32_t ruleLen = 0;
   UCollator *UCAfromRules = NULL;
   UCollator *coll = ucol_open("", &status);
-  uint32_t ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, 256);
+  if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
+    return;
+  } else if(U_FAILURE(status)) {
+    log_err("Error opening collator\n");
+    return;
+  }
+  ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, 256);
 
   log_verbose("TestUCARules\n");
   if(ruleLen > 256) {
@@ -1987,6 +2008,14 @@ static void TestRedundantRules(void) {
     rlen = u_unescape(rules[i], rlz, 2048);
 
     credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL,&status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening collator\n");
+      return;
+    }
+
     rlen = u_unescape(expectedRules[i], rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL,&status);
 
@@ -2042,6 +2071,13 @@ static void TestExpansionSyntax(void) {
     rlen = u_unescape(rules[i], rlz, 2048);
 
     credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening collator\n");
+      return;
+    }
     rlen = u_unescape(expectedRules[i], rlz, 2048);
     cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, NULL,&status);
 
@@ -2214,6 +2250,13 @@ static void TestIncrementalNormalize(void) {
         strB = malloc((maxSLen+1) * sizeof(UChar));
 
         coll = ucol_open("en_US", &status);
+        if(status == U_FILE_ACCESS_ERROR) {
+          log_data_err("Is your data around?\n");
+          return;
+        } else if(U_FAILURE(status)) {
+          log_err("Error opening collator\n");
+          return;
+        }
         ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
 
         /*for (sLen = 257; sLen<maxSLen; sLen++) {*/
@@ -2461,6 +2504,13 @@ static void TestHangulTailoring(void) {
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
   UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
+  if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
+    return;
+  } else if(U_FAILURE(status)) {
+    log_err("Error opening collator\n");
+    return;
+  }
 
   log_verbose("Using start of korean rules\n");
 
@@ -3715,13 +3765,12 @@ static void Alexis(void) {
 #define CMSCOLL_ALEXIS2_BUFFER_SIZE 256
 static void Alexis2(void) {
   UErrorCode status = U_ZERO_ERROR;
-  UCollator *coll = ucol_open("", &status);
   UChar U16Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16Target[CMSCOLL_ALEXIS2_BUFFER_SIZE];
   char U16BESource[CMSCOLL_ALEXIS2_BUFFER_SIZE], U16BETarget[CMSCOLL_ALEXIS2_BUFFER_SIZE];
   char U8Source[CMSCOLL_ALEXIS2_BUFFER_SIZE], U8Target[CMSCOLL_ALEXIS2_BUFFER_SIZE]; 
   int32_t U16LenS = 0, U16LenT = 0, U16BELenS = 0, U16BELenT = 0, U8LenS = 0, U8LenT = 0;
 
-  UConverter *conv = ucnv_open("UTF16BE", &status);
+  UConverter *conv = NULL;
 
   UCharIterator U16BEItS, U16BEItT;
   UCharIterator U8ItS, U8ItT;
@@ -3745,8 +3794,16 @@ static void Alexis2(void) {
 
   int32_t i = 0;
 
+  UCollator *coll = ucol_open("", &status);
+  if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
+    return;
+  } else if(U_FAILURE(status)) {
+    log_err("Error opening collator\n");
+    return;
+  }
   ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-
+  conv = ucnv_open("UTF16BE", &status);
   for(i = 0; i < sizeof(pairs)/sizeof(pairs[0]); i++) {
     U16LenS = u_unescape(pairs[i][0], U16Source, CMSCOLL_ALEXIS2_BUFFER_SIZE);
     U16LenT = u_unescape(pairs[i][1], U16Target, CMSCOLL_ALEXIS2_BUFFER_SIZE);
@@ -3993,6 +4050,13 @@ static void TestEquals(void) {
   }
 
   source = ucol_openRules(sourceRules, sourceRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+  if(status == U_FILE_ACCESS_ERROR) {
+    log_data_err("Is your data around?\n");
+    return;
+  } else if(U_FAILURE(status)) {
+    log_err("Error opening collator\n");
+    return;
+  }
   target = ucol_openRules(targetRules, targetRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
   if(!ucol_equals(source, target)) {
     log_err("Equivalent collators not equal!\n");

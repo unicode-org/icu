@@ -55,6 +55,13 @@ static void open(void)
         int32_t    rulelength = 0;
 
         EN_US_ = ucol_open("en_US", &status);
+        if(status == U_FILE_ACCESS_ERROR) {
+          log_data_err("Is your data around?\n");
+          return;
+        } else if(U_FAILURE(status)) {
+          log_err("Error opening collator\n");
+          return;
+        }
         FR_FR_ = ucol_open("fr_FR", &status);
         DE_ = ucol_open("de_DE", &status);
         ES_ = ucol_open("es_ES", &status);
@@ -733,6 +740,13 @@ static void TestOverlap(void)
         u_unescape(search->pattern, pattern, 32);
         strsrch = usearch_openFromCollator(pattern, -1, text, -1, collator, 
                                            NULL, &status);
+        if(status == U_FILE_ACCESS_ERROR) {
+          log_data_err("Is your data around?\n");
+          return;
+        } else if(U_FAILURE(status)) {
+          log_err("Error opening searcher\n");
+          return;
+        }
         usearch_setAttribute(strsrch, USEARCH_OVERLAP, USEARCH_ON, &status);
         if (U_FAILURE(status) ||
             usearch_getAttribute(strsrch, USEARCH_OVERLAP) != USEARCH_ON) {
@@ -778,6 +792,13 @@ static void TestCollator(void)
     pattern[0] = 0x62;
     pattern[1] = 0x63;
     strsrch  = usearch_open(pattern, 2, text, 5, "en_US",  NULL,  &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening searcher\n");
+      return;
+    }
     tailored = usearch_getCollator(strsrch);
     if (usearch_next(strsrch, &status) != -1) {
         log_err("Error: Found case insensitive match, when we shouldn't\n");
@@ -864,6 +885,13 @@ static void TestPattern(void)
     ucol_setStrength(EN_US_, PATTERN[0].strength);
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
                                        NULL, &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening searcher\n");
+      return;
+    }
 
     status = U_ZERO_ERROR;
     usearch_setPattern(strsrch, NULL, 3, &status);
@@ -1450,8 +1478,12 @@ static void TestContraction(void)
     u_unescape(CONTRACTIONRULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
                               UCOL_TERTIARY, NULL, &status); 
-    if (U_FAILURE(status)) {
-        log_err("Error opening collator %s\n", u_errorName(status));
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening collator %s\n", u_errorName(status));
+      return;
     }
     strsrch = usearch_openFromCollator(pattern, 1, text, 1, collator, NULL, 
                                        &status);
@@ -1490,8 +1522,12 @@ static void TestIgnorable(void)
     u_unescape(IGNORABLERULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
                               IGNORABLE[count].strength, NULL, &status); 
-    if (U_FAILURE(status)) {
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
         log_err("Error opening collator %s\n", u_errorName(status));
+        return;
     }
     strsrch = usearch_openFromCollator(pattern, 1, text, 1, collator, NULL, 
                                        &status);
@@ -1580,6 +1616,13 @@ static void TestBreakIteratorCanonical(void) {
         
         strsrch = usearch_openFromCollator(pattern, -1, text, -1, collator, 
                                            breaker, &status);
+        if(status == U_FILE_ACCESS_ERROR) {
+          log_data_err("Is your data around?\n");
+          return;
+        } else if(U_FAILURE(status)) {
+          log_err("Error opening searcher\n");
+          return;
+        }
         usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                              &status);
         if (U_FAILURE(status) || 
@@ -1681,6 +1724,13 @@ static void TestOverlapCanonical(void)
         u_unescape(search->pattern, pattern, 32);
         strsrch = usearch_openFromCollator(pattern, -1, text, -1, collator, 
                                            NULL, &status);
+        if(status == U_FILE_ACCESS_ERROR) {
+          log_data_err("Is your data around?\n");
+          return;
+        } else if(U_FAILURE(status)) {
+          log_err("Error opening searcher\n");
+          return;
+        }
         usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                              &status);
         usearch_setAttribute(strsrch, USEARCH_OVERLAP, USEARCH_ON, &status);
@@ -1726,6 +1776,13 @@ static void TestCollatorCanonical(void)
 
     strsrch = usearch_openFromCollator(pattern, -1, text, -1, EN_US_, 
                                        NULL, &status);
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening searcher\n");
+      return;
+    }
     usearch_setAttribute(strsrch, USEARCH_CANONICAL_MATCH, USEARCH_ON, 
                          &status);
     if (U_FAILURE(status)) {
@@ -2035,8 +2092,12 @@ static void TestContractionCanonical(void)
     u_unescape(CONTRACTIONRULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON,
                               UCOL_TERTIARY, NULL, &status); 
-    if (U_FAILURE(status)) {
-        log_err("Error opening collator %s\n", u_errorName(status));
+    if(status == U_FILE_ACCESS_ERROR) {
+      log_data_err("Is your data around?\n");
+      return;
+    } else if(U_FAILURE(status)) {
+      log_err("Error opening collator %s\n", u_errorName(status));
+      return;
     }
     strsrch = usearch_openFromCollator(pattern, 1, text, 1, collator, NULL, 
                                        &status);
