@@ -48,6 +48,7 @@ U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp8 (UNewDataMemory *pData, const Compa
 }
 
 /* internal constants*/
+#if 0
 
 static const int32_t UCMP16_kMaxUnicode = UCMP16_kMaxUnicode_int;
 static const int32_t UCMP16_kUnicodeCount = UCMP16_kUnicodeCount_int;
@@ -155,7 +156,7 @@ U_CAPI  uint32_t U_EXPORT2 udata_write_ucmp32 (UNewDataMemory *pData, const Comp
   return size;
 }
 
-
+#endif
 
 
 
