@@ -128,7 +128,7 @@ DigitList::formatBase10(int32_t number, char *outputStr, int32_t outputLen)
     bufferLen = outputLen;
 
     if (number < 0) {   // Negative numbers are slightly larger than a postive
-        buffer[bufferLen--] = -(number % 10) + '0';
+        buffer[bufferLen--] = (char)(-(number % 10) + '0');
         number /= -10;
         *(outputStr++) = '-';
     }
@@ -136,7 +136,7 @@ DigitList::formatBase10(int32_t number, char *outputStr, int32_t outputLen)
         *(outputStr++) = '+';    // allow +0
     }
     while (bufferLen >= 0 && number) {      // Output the number
-        buffer[bufferLen--] = number % 10 + '0';
+        buffer[bufferLen--] = (char)(number % 10 + '0');
         number /= 10;
     }
 
