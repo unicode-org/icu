@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/02/28 23:42:04 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/08 01:58:23 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Internal class used for Unicode character property database.</p>
@@ -51,7 +52,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Unicode version
     */
-    public String m_unicodeVersion_;
+    public VersionInfo m_unicodeVersion_;
     /**
      * Exception indicator for uppercase type
      */

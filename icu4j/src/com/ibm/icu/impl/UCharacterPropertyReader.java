@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/02/28 23:42:04 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/08 01:58:23 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.util.Arrays;
 import java.io.IOException;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Internal reader class for ICU data file uprops.dat containing 
@@ -100,7 +101,9 @@ final class UCharacterPropertyReader
             ucharppty.m_case_[i] = m_dataInputStream_.readChar();
         }
         m_dataInputStream_.close();
-        ucharppty.m_unicodeVersion_ = UNICODE_VERSION_STRING_;
+        ucharppty.m_unicodeVersion_ = VersionInfo.getInstance(
+                         (int)UNICODE_VERSION_[0], (int)UNICODE_VERSION_[1],
+                         (int)UNICODE_VERSION_[2], (int)UNICODE_VERSION_[3]);
     }
     
     // private variables -------------------------------------------------
@@ -133,5 +136,4 @@ final class UCharacterPropertyReader
                                                         (byte)0x5, (byte)0x2};
     private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
                                                     (byte)0x1, (byte)0x0};  
-    private static final String UNICODE_VERSION_STRING_ = "3.1.1.0";
 }
