@@ -1892,7 +1892,8 @@ u_getVersion(UVersionInfo versionArray) {
 static const char *
 _uErrorInfoName[U_ERROR_INFO_LIMIT-U_ERROR_INFO_START]={
     "U_USING_FALLBACK_ERROR",
-    "U_USING_DEFAULT_ERROR"
+    "U_USING_DEFAULT_ERROR",
+    "U_SAFECLONE_ALLOCATED_ERROR"
 };
 
 static const char *
