@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/03/20 05:11:16 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -380,7 +380,7 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * Overrides DateFormat
+     * Overrides DateFormat.
      * <p>Formats a date or time, which is the standard millis
      * since January 1, 1970, 00:00:00 GMT.
      * <p>Example: using the US locale:

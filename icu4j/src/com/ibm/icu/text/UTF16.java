@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/03/20 01:44:49 $ 
-* $Revision: 1.17 $
+* $Date: 2002/03/20 05:11:16 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -1512,8 +1512,8 @@ public final class UTF16
       
     /**
     * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument codepoint. ie, the smallest 
-    * index i such that: UTF16.charAt(source, i) == char32 is true. 
+    * the first occurrence of the argument codepoint. I.e., the smallest 
+    * index <code>i</code> such that <code>UTF16.charAt(source, i) == char32</code> is true. 
     * <p>If no such character occurs in this string, then -1 is returned.</p> 
     * <p>
     * Examples:<br>
@@ -1618,7 +1618,7 @@ public final class UTF16
     
     /**
     * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument codepoint. ie, the smallest 
+    * the first occurrence of the argument codepoint. I.e., the smallest 
     * index i such that: <br>
     * (UTF16.charAt(source, i) == char32 && i >= fromIndex) is true. 
     * <p>If no such character occurs in this string, then -1 is returned.</p> 
@@ -1728,7 +1728,7 @@ public final class UTF16
     
     /**
     * Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument codepoint. ie, the index returned 
+    * the last occurrence of the argument codepoint. I.e., the index returned 
     * is the largest value i such that: UTF16.charAt(source, i) == char32
     * is true. 
     * <p>
@@ -1834,7 +1834,7 @@ public final class UTF16
     /**
     * Returns the index within the argument UTF16 format Unicode string of 
     * the last occurrence of the argument codepoint, that occurred before or  
-    * at the index fromIndex. ie, the index returned 
+    * at the index fromIndex. I.e., the index returned 
     * is the largest value i such that: <br>
     * (UTF16.charAt(source, i) == char32 && (i <= fromIndex)) is true. 
     * <p>source is searched backwards starting at the last character starting 

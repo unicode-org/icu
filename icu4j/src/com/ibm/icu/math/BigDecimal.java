@@ -296,52 +296,52 @@ public class BigDecimal extends java.lang.Number implements java.io.Serializable
  // the rounding modes (copied here for upwards compatibility)
  /**
   * Rounding mode to round to a more positive number.
-  * See {@Link MathContext#ROUND_CEILING}.
+  * @see MathContext#ROUND_CEILING
   */
  public static final int ROUND_CEILING=com.ibm.icu.math.MathContext.ROUND_CEILING;
  
  /**
   * Rounding mode to round towards zero.
-  * See {@Link MathContext#ROUND_DOWN}.
+  * @see MathContext#ROUND_DOWN
   */
  public static final int ROUND_DOWN=com.ibm.icu.math.MathContext.ROUND_DOWN;
  
  /**
   * Rounding mode to round to a more negative number.
-  * See {@Link MathContext#ROUND_FLOOR}.
+  * @see MathContext#ROUND_FLOOR
   */
  public static final int ROUND_FLOOR=com.ibm.icu.math.MathContext.ROUND_FLOOR;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded down.
-  * See {@Link MathContext#ROUND_HALF_DOWN}.
+  * @see MathContext#ROUND_HALF_DOWN
   */
  public static final int ROUND_HALF_DOWN=com.ibm.icu.math.MathContext.ROUND_HALF_DOWN;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded to the nearest even neighbor.
-  * See {@Link MathContext#ROUND_HALF_EVEN}.
+  * @see MathContext#ROUND_HALF_EVEN
   */
  public static final int ROUND_HALF_EVEN=com.ibm.icu.math.MathContext.ROUND_HALF_EVEN;
  
  /**
   * Rounding mode to round to nearest neighbor, where an equidistant
   * value is rounded up.
-  * See {@Link MathContext#ROUND_HALF_UP}.
+  * @see MathContext#ROUND_HALF_UP
   */
  public static final int ROUND_HALF_UP=com.ibm.icu.math.MathContext.ROUND_HALF_UP;
  
  /**
   * Rounding mode to assert that no rounding is necessary.
-  * See {@Link MathContext#ROUND_UNNECESSARY}.
+  * @see MathContext#ROUND_UNNECESSARY
   */
  public static final int ROUND_UNNECESSARY=com.ibm.icu.math.MathContext.ROUND_UNNECESSARY;
  
  /**
   * Rounding mode to round away from zero.
-  * See {@Link MathContext#ROUND_UP}.
+  * @see MathContext#ROUND_UP
   */
  public static final int ROUND_UP=com.ibm.icu.math.MathContext.ROUND_UP;
  

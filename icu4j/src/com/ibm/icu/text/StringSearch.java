@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/20 05:11:16 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -97,8 +97,7 @@ public final class StringSearch extends SearchIterator
 
     /**
      * Construct a <code>StringSearch</code> object using the collator and
-     * character boundary detection rules for a given locale
-     * <p>
+     * character boundary detection rules for a given locale.
      * @param pattern   The text for which this object will search.
      *
      * @param target    The text in which to search for the pattern.
@@ -117,8 +116,7 @@ public final class StringSearch extends SearchIterator
 
     /**
      * Construct a <code>StringSearch</code> object using the collator for the default
-     * locale
-     * <p>
+     * locale.
      * @param pattern   The text for which this object will search.
      *
      * @param target    The text in which to search for the pattern.

@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/03/01 02:37:47 $
- * $Revision: 1.18 $
+ * $Date: 2002/03/20 05:11:15 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
 
 
-//ibm.597
 /*
  * @(#)RuleBasedBreakIterator.java	1.3 99/04/07
  *
@@ -241,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.18 $ $Date: 2002/03/01 02:37:47 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.19 $ $Date: 2002/03/20 05:11:15 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -733,7 +732,7 @@ throws IOException {
     /**
      * Sets the iterator to refer to the first boundary position following
      * the specified position.
-     * @offset The position from which to begin searching for a break position.
+     * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
      */
     public int following(int offset) {
@@ -770,7 +769,7 @@ throws IOException {
     /**
      * Sets the iterator to refer to the last boundary position before the
      * specified position.
-     * @offset The position to begin searching for a break from.
+     * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
      */
     public int preceding(int offset) {

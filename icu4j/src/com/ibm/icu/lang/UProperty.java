@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/03/13 17:51:20 $ 
-* $Revision: 1.1 $
+* $Date: 2002/03/20 05:11:15 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -52,10 +52,10 @@ public interface UProperty
      */ 
     public static final int BINARY_START = ALPHABETIC;
     /** 
-     * Binary property ASCII_Hex_Digit. 0-9 A-F a-f.
+     * Binary property ASCII_Hex_Digit (0-9 A-F a-f).
      * @draft ICU 2.1 
      */ 
-   	public static final int ASCII_HEX_DIGIT = 1; 
+    public static final int ASCII_HEX_DIGIT = 1; 
     /** 
      * <p>Binary property Bidi_Control.</p>
      * <p>Format controls which have specific functions in the Bidi Algorithm.

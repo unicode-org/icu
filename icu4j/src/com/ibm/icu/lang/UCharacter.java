@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/15 23:47:10 $ 
-* $Revision: 1.34 $
+* $Date: 2002/03/20 05:11:15 $ 
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -91,7 +91,7 @@ public final class UCharacter
 
     /**
     * The highest Unicode code point value (scalar value) according to the 
-    * Unicode Standard.<br> 
+    * Unicode Standard. 
     * This is a 21-bit value (21 bits, rounded up).<br>
     * Up-to-date Unicode implementation of java.lang.Character.MIN_VALUE
     */
@@ -225,7 +225,7 @@ public final class UCharacter
     }
   
     /**
-    * Returns a value indicating a code point's Unicode category.<br>
+    * Returns a value indicating a code point's Unicode category.
     * Up-to-date Unicode implementation of java.lang.Character.getType() except 
     * for the above mentioned code points that had their category changed.<br>
     * Return results are constants from the interface 
@@ -240,7 +240,7 @@ public final class UCharacter
        
     /**
     * Determines if a code point has a defined meaning in the up-to-date Unicode
-    * standard.<br>
+    * standard.
     * E.g. supplementary code points though allocated space are not defined in 
     * Unicode yet.<br>
     * Up-to-date Unicode implementation of java.lang.Character.isDefined()
@@ -269,7 +269,7 @@ public final class UCharacter
     }
 
     /**
-    * Determines if the specified code point is an ISO control character.<br>
+    * Determines if the specified code point is an ISO control character.
     * A code point is considered to be an ISO control character if it is in the 
     * range &#92u0000 through &#92u001F or in the range &#92u007F through 
     * &#92u009F.<br>
@@ -284,7 +284,7 @@ public final class UCharacter
     }
                                     
     /**
-    * Determines if the specified code point is a letter.<br>
+    * Determines if the specified code point is a letter.
     * Up-to-date Unicode implementation of java.lang.Character.isLetter()
     * @param ch code point to determine if it is a letter
     * @return true if code point is a letter
@@ -301,7 +301,7 @@ public final class UCharacter
     }
                 
     /**
-    * Determines if the specified code point is a letter or digit.<br>
+    * Determines if the specified code point is a letter or digit.
     * Note this method, unlike java.lang.Character does not regard the ascii 
     * characters 'A' - 'Z' and 'a' - 'z' as digits.
     * @param ch code point to determine if it is a letter or a digit
@@ -313,7 +313,7 @@ public final class UCharacter
     }
         
     /**
-    * Determines if the specified code point is a lowercase character.<br>
+    * Determines if the specified code point is a lowercase character.
     * UnicodeData only contains case mappings for code points where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br> For more information about Unicode case mapping please 
@@ -330,7 +330,7 @@ public final class UCharacter
     }
        
     /**
-    * Determines if the specified code point is a white space character.<br>
+    * Determines if the specified code point is a white space character.
     * A code point is considered to be an whitespace character if and only
     * if it satisfies one of the following criteria:
     * <ul>
@@ -362,7 +362,7 @@ public final class UCharacter
        
     /**
     * Determines if the specified code point is a Unicode specified space 
-    * character, ie if code point is in the category Zs, Zl and Zp.<br>
+    * character, i.e. if code point is in the category Zs, Zl and Zp.
     * Up-to-date Unicode implementation of java.lang.Character.isSpaceChar().
     * @param ch code point to determine if it is a space
     * @return true if the specified code point is a space character
@@ -381,7 +381,7 @@ public final class UCharacter
     }
                                     
     /**
-    * Determines if the specified code point is a titlecase character.<br>
+    * Determines if the specified code point is a titlecase character.
     * UnicodeData only contains case mappings for code points where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br>
@@ -401,7 +401,7 @@ public final class UCharacter
        
     /**
     * Determines if the specified code point may be any part of a Unicode 
-    * identifier other than the starting character.<br> 
+    * identifier other than the starting character.
     * A code point may be part of a Unicode identifier if and only if it is one 
     * of the following: 
     * <ul>
@@ -444,7 +444,7 @@ public final class UCharacter
                        
     /**
     * Determines if the specified code point is permissible as the first 
-    * character in a Unicode identifier.<br> 
+    * character in a Unicode identifier.
     * A code point may start a Unicode identifier if it is of type either 
     * <ul> 
     * <li> Lu Uppercase letter
@@ -475,7 +475,7 @@ public final class UCharacter
 
     /**
     * Determines if the specified code point should be regarded as an ignorable
-    * character in a Unicode identifier.<br>
+    * character in a Unicode identifier.
     * A character is ignorable in the Unicode standard if it is of the type Cf, 
     * Formatting code.<br>
     * Up-to-date Unicode implementation of 
@@ -495,7 +495,7 @@ public final class UCharacter
     }
                       
     /**
-    * Determines if the specified code point is an uppercase character.<br>
+    * Determines if the specified code point is an uppercase character.
     * UnicodeData only contains case mappings for code point where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br> 
@@ -519,7 +519,7 @@ public final class UCharacter
                        
     /**
     * The given code point is mapped to its lowercase equivalent; if the code 
-    * point has no lowercase equivalent, the code point itself is returned.<br>
+    * point has no lowercase equivalent, the code point itself is returned.
     * UnicodeData only contains case mappings for code point where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br> 
@@ -559,7 +559,7 @@ public final class UCharacter
 
     /**
     * Converts argument code point and returns a String object representing the 
-    * code point's value in UTF16 format.<br>
+    * code point's value in UTF16 format.
     * The result is a string whose length is 1 for non-supplementary code points, 
     * 2 otherwise.<br>
     * com.ibm.ibm.icu.UTF16 can be used to parse Strings generated by this 
@@ -586,7 +586,7 @@ public final class UCharacter
     }
                                     
     /**
-    * Converts the code point argument to titlecase.<br>
+    * Converts the code point argument to titlecase.
     * UnicodeData only contains case mappings for code points where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br> 
@@ -632,7 +632,7 @@ public final class UCharacter
     }
        
     /**
-    * Converts the character argument to uppercase.<br>
+    * Converts the character argument to uppercase.
     * UnicodeData only contains case mappings for characters where they are 
     * one-to-one mappings; it also omits information about context-sensitive 
     * case mappings.<br> 
@@ -670,7 +670,7 @@ public final class UCharacter
     // extra methods not in java.lang.Character --------------------------
        
     /**
-    * Determines if the code point is a supplementary character.<br>
+    * Determines if the code point is a supplementary character.
     * A code point is a supplementary character if and only if it is greater than
     * <a href=#SUPPLEMENTARY_MIN_VALUE>SUPPLEMENTARY_MIN_VALUE</a>
     * @param ch code point to be determined if it is in the supplementary plane
@@ -683,7 +683,7 @@ public final class UCharacter
     }
       
     /**
-    * Determines if the code point is in the BMP plane.<br>
+    * Determines if the code point is in the BMP plane.
     * @param ch code point to be determined if it is not a supplementary 
     *        character
     * @return true if code point is not a supplementary character
@@ -712,7 +712,7 @@ public final class UCharacter
     }
 
     /**
-    * Determines whether the specified code point is of base form.<br>
+    * Determines whether the specified code point is of base form.
     * A code point of base form does not graphically combine with preceding 
     * characters, and is neither a control nor a format character.
     * @param ch code point to be determined if it is of base form
@@ -736,7 +736,7 @@ public final class UCharacter
     }
 
     /**
-    * Returns the Bidirection property of a code point.<br>
+    * Returns the Bidirection property of a code point.
     * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
     * property.<br>
     * Result returned belongs to the interface 
@@ -756,7 +756,7 @@ public final class UCharacter
     }
 
     /**
-    * Determines whether the code point has the "mirrored" property.<br>
+    * Determines whether the code point has the "mirrored" property.
     * This property is set for characters that are commonly used in
     * Right-To-Left contexts and need to be displayed with a "mirrored"
     * glyph.
@@ -771,7 +771,7 @@ public final class UCharacter
     }
 
     /**
-    * Maps the specified code point to a "mirror-image" code point.<br>
+    * Maps the specified code point to a "mirror-image" code point.
     * For code points with the "mirrored" property, implementations sometimes 
     * need a "poor man's" mapping to another code point such that the default 
     * glyph may serve as the mirror-image of the default glyph of the specified
@@ -993,7 +993,7 @@ public final class UCharacter
     }
       
     /**
-    * Returns a code pointcorresponding to the two UTF16 characters.<br>
+    * Returns a code pointcorresponding to the two UTF16 characters.
     * If the argument lead is not a high surrogate character or trail is not a 
     * low surrogate character, UCharacter.REPLACEMENT_CHAR is returned.
     * @param lead the lead char
@@ -1013,7 +1013,7 @@ public final class UCharacter
     }
       
     /**
-    * Returns the code point corresponding to the UTF16 character.<br>
+    * Returns the code point corresponding to the UTF16 character.
     * If argument char16 is a surrogate character, UCharacter.REPLACEMENT_CHAR 
     * is returned
     * @param char16 the UTF16 character
@@ -1451,7 +1451,7 @@ public final class UCharacter
      * <p>Get the "age" of the code point.</p>
      * <p>The "age" is the Unicode version when the code point was first
      * designated (as a non-character or for Private Use) or assigned a 
-     * character.</p>
+     * character.
      * <p>This can be useful to avoid emitting code points to receiving 
      * processes that do not accept newer characters.</p>
      * <p>The data is from the UCD file DerivedAge.txt.</p>

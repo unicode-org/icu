@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:43 $
+ * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.4 $ $Date: 2002/03/20 05:11:17 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -153,7 +153,7 @@ public abstract class MFormatter {
 * @param viewRect the Rectangle in which the text will be displayed.  This is needed for
 * returning the "damaged" area - the area of the screen in which the text must be redrawn.
 * @param origin the top-left corner of the text, in the display's coordinate system
-* @returns a <tt>Rectangle</tt> which specifies the area in which text must be
+* @return a <tt>Rectangle</tt> which specifies the area in which text must be
 * redrawn to reflect the change to the text.
 */
     public abstract Rectangle updateFormat(int afStart,
@@ -236,7 +236,7 @@ public abstract class MFormatter {
 * @param origin the top-left corner of the text, in the display's coordinate system
 * @param tight if equal to TIGHT, the bounds is as small as possible.  If LOOSE, the width
 * of the bounds is allowed to be wider than necesary.  Loose bounds are easier to compute.
-* @returns a <tt>Rectangle</tt>, relative to <tt>origin</tt>, which encloses the lines containing the offsets
+* @return a <tt>Rectangle</tt>, relative to <tt>origin</tt>, which encloses the lines containing the offsets
 */
     public abstract Rectangle getBoundingRect(TextOffset offset1,
                                               TextOffset offset2, 
@@ -254,7 +254,7 @@ public abstract class MFormatter {
 * For arrow keys.
 * @param previousOffset the insertion offset prior to the arrow key press
 * @param direction the direction of the arrow key (eUp, eDown, eLeft, or eRight)
-* @returns new offset based on direction and previous offset.
+* @return new offset based on direction and previous offset.
 */
     public abstract TextOffset findInsertionOffset(TextOffset result,
                                           TextOffset previousOffset,
@@ -267,7 +267,7 @@ public abstract class MFormatter {
 * @param initialOffset The offset at which an up-down arrow key sequence began.
 * @param previousOffset The insertion offset prior to the arrow key press.
 * @param direction The direction of the arrow key (eUp, eDown, eLeft, or eRight)
-* @returns new offset based on direction and previous offset(s).
+* @return new offset based on direction and previous offset(s).
 */
     public abstract TextOffset findNewInsertionOffset(TextOffset result,
                                              TextOffset initialOffset,

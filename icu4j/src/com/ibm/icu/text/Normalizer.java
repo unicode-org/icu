@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/03/20 05:11:15 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -121,7 +121,7 @@ public final class Normalizer {
 
     /**
      * This class represents the mode of a {@link Normalizer}
-     * object, <i>i.e.</i> the Unicode Normalization Form of the
+     * object, i.e. the Unicode Normalization Form of the
      * text that the <tt>Normalizer</tt> produces.  <tt>Mode</tt> objects
      * are used as arguments to the {@link Normalizer#Normalizer constructors}
      * and {@link Normalizer#setMode setMode} method of <tt>Normalizer</tt>.

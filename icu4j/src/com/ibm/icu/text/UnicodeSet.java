@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/15 20:09:00 $
- * $Revision: 1.65 $
+ * $Date: 2002/03/20 05:11:16 $
+ * $Revision: 1.66 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.65 $ $Date: 2002/03/15 20:09:00 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.66 $ $Date: 2002/03/20 05:11:16 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -360,7 +360,7 @@ public class UnicodeSet extends UnicodeFilter {
      * an empty range.
      *
      * @param start first character in the set, inclusive
-     * @rparam end last character in the set, inclusive
+     * @param end last character in the set, inclusive
      */
     public UnicodeSet set(int start, int end) {
         clear();
@@ -907,7 +907,7 @@ public class UnicodeSet extends UnicodeFilter {
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -963,7 +963,7 @@ public class UnicodeSet extends UnicodeFilter {
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1002,7 +1002,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1018,7 +1018,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Retains EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1029,7 +1029,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Complement EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1040,7 +1040,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Remove EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1051,7 +1051,7 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1062,7 +1062,7 @@ public class UnicodeSet extends UnicodeFilter {
     
     /**
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1107,7 +1107,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Retain the specified string in this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1161,7 +1161,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Removes the specified string from this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1232,7 +1232,7 @@ public class UnicodeSet extends UnicodeFilter {
      * The set will not contain the specified character once the call
      * returns.
 	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
-     * @parameter the source string
+     * @param the source string
      * @return the modified set, for chaining
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1272,7 +1272,7 @@ public class UnicodeSet extends UnicodeFilter {
     
     /**
      * Tests if every character in the string is in this set.
-     * @parameter the source string
+     * @param the source string
      * @return true if contained
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1336,7 +1336,7 @@ public class UnicodeSet extends UnicodeFilter {
     
     /**
      * Tests whether none of the characters are contained.
-     * @parameter the source string
+     * @param the source string
      * @return true if the condition is met
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1352,7 +1352,7 @@ public class UnicodeSet extends UnicodeFilter {
         
     /**
      * Tests whether some of the characters are contained.
-     * @parameter the source string
+     * @param the source string
      * @return true if the condition is met
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1363,7 +1363,7 @@ public class UnicodeSet extends UnicodeFilter {
         
     /**
      * Tests whether some of the characters are contained.
-     * @parameter the source string
+     * @param the source string
      * @return true if the condition is met
      * @internal -- this API is not for general use, and may change at any time.
      */
@@ -1374,7 +1374,7 @@ public class UnicodeSet extends UnicodeFilter {
         
     /**
      * Tests whether some of the characters are contained.
-     * @parameter the source string
+     * @param the source string
      * @return true if the condition is met
      * @internal -- this API is not for general use, and may change at any time.
      */
