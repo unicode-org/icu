@@ -122,6 +122,14 @@ conversion {
       Cases {
         // extensions
         {
+          "ibm-1390",
+          "\u025a\u025a\u0300\u025a\u0301\u025a\u0302\uffe8\U0002a0f9",
+          :bin{ 0ed896eccaeccbd896ea530f3f0eb7c20f },
+          :intvector{ 0, 0, 0, 1, 1, 3, 3, 5, 5, 6, 6, 7, 7, 8, 8, 8, 8 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
           "*test3",
           "\xc4\xc4\xc4\U00101234\xc4\xc4\U00101234\x05",
           :bin{ ffffff070501020c },
