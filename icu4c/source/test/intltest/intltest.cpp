@@ -51,9 +51,9 @@ UnicodeString
 operator+(const UnicodeString& left, 
       const UnicodeString& right)
 {
-  UnicodeString str(left);
-  str += right;
-  return str;
+    UnicodeString str(left);
+    str += right;
+    return str;
 }
 
 // [rtg] Just to get things working
@@ -61,26 +61,26 @@ UnicodeString
 operator+(const UnicodeString& left, 
       long num)
 {
-  char buffer[64];    // nos changed from 10 to 64
-  char danger = 'p';  // guard against overrunning the buffer (rtg)
-  
-  sprintf(buffer, "%d", num);
-  assert(danger == 'p');
-  
-  return left + buffer;
+    char buffer[64];    // nos changed from 10 to 64
+    char danger = 'p';  // guard against overrunning the buffer (rtg)
+
+    sprintf(buffer, "%d", num);
+    assert(danger == 'p');
+
+    return left + buffer;
 }
 
 UnicodeString 
 operator+(const UnicodeString& left, 
       unsigned long num)
 {
-  char buffer[64];    // nos changed from 10 to 64
-  char danger = 'p';  // guard against overrunning the buffer (rtg)
-  
-  sprintf(buffer, "%u", num);
-  assert(danger == 'p');
-  
-  return left + buffer;
+    char buffer[64];    // nos changed from 10 to 64
+    char danger = 'p';  // guard against overrunning the buffer (rtg)
+
+    sprintf(buffer, "%u", num);
+    assert(danger == 'p');
+
+    return left + buffer;
 }
 
 // [LIU] Just to get things working
@@ -88,13 +88,13 @@ UnicodeString
 operator+(const UnicodeString& left, 
       double num)
 {
-  char buffer[64];   // was 32, made it arbitrarily bigger (rtg)
-  char danger = 'p'; // guard against overrunning the buffer (rtg)
-  
-  sprintf(buffer, "%.30g", num); // nos changed from 99 to 30
-  assert(danger == 'p');
-  
-  return left + buffer;
+    char buffer[64];   // was 32, made it arbitrarily bigger (rtg)
+    char danger = 'p'; // guard against overrunning the buffer (rtg)
+
+    sprintf(buffer, "%.30g", num); // nos changed from 99 to 30
+    assert(danger == 'p');
+
+    return left + buffer;
 }
 
 /**
@@ -245,66 +245,57 @@ IntlTest::appendHex(uint32_t number,
             int8_t digits, 
             UnicodeString& target)
 {
-  static const UnicodeString digitString("0123456789ABCDEF");
+    static const UnicodeString digitString("0123456789ABCDEF");
 
-  switch (digits)
+    switch (digits)
     {
     case 8:
-      target += digitString[(number >> 28) & 0xF];
-
+        target += digitString[(number >> 28) & 0xF];
     case 7:
-      target += digitString[(number >> 24) & 0xF];
-
+        target += digitString[(number >> 24) & 0xF];
     case 6:
-      target += digitString[(number >> 20) & 0xF];
-
+        target += digitString[(number >> 20) & 0xF];
     case 5:
-      target += digitString[(number >> 16) & 0xF];
-
+        target += digitString[(number >> 16) & 0xF];
     case 4:
-      target += digitString[(number >> 12) & 0xF];
-
+        target += digitString[(number >> 12) & 0xF];
     case 3:
-      target += digitString[(number >>  8) & 0xF];
-
+        target += digitString[(number >>  8) & 0xF];
     case 2:
-      target += digitString[(number >>  4) & 0xF];
-
+        target += digitString[(number >>  4) & 0xF];
     case 1:
-      target += digitString[(number >>  0) & 0xF];
-      break;
-    
+        target += digitString[(number >>  0) & 0xF];
+        break;
     default:
-      target += "**";
+        target += "**";
     }
-
-  return target;
+    return target;
 }
 
 UnicodeString& 
 IntlTest::appendCompareResult(Collator::EComparisonResult result, 
                   UnicodeString& target)
 {
-  if (result == Collator::LESS)
+    if (result == Collator::LESS)
     {
-      target += "LESS";
+        target += "LESS";
     }
-  else if (result == Collator::EQUAL)
+    else if (result == Collator::EQUAL)
     {
-      target += "EQUAL";
+        target += "EQUAL";
     }
-  else if (result == Collator::GREATER)
+    else if (result == Collator::GREATER)
     {
-      target += "GREATER";
+        target += "GREATER";
     }
-  else
+    else
     {
-      UnicodeString huh = "?";
+        UnicodeString huh = "?";
 
-      target += (huh + (int32_t)result);
+        target += (huh + (int32_t)result);
     }
 
-  return target;
+    return target;
 }
 
 // Replace nonprintable characters with unicode escapes
@@ -312,59 +303,60 @@ UnicodeString&
 IntlTest::prettify(const UnicodeString &source, 
            UnicodeString &target)
 {
-  int32_t i;
-  
-  target.remove();
-  target += "\"";
-  
-  for (i = 0; i < source.length(); i += 1)
-    {
-      UChar ch = source[i];
+    int32_t i;
 
-      if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+    target.remove();
+    target += "\"";
+
+    for (i = 0; i < source.length(); i += 1)
     {
-      target += "\\u";
-      appendHex(ch, 4, target);
+        UChar ch = source[i];
+
+        if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+        {
+            target += "\\u";
+            appendHex(ch, 4, target);
         }
-      else
-    {
-      target += ch;
+        else
+        {
+            target += ch;
         }
     }
 
-  target += "\"";
+    target += "\"";
 
-  return target;
+    return target;
 }
+
 // Replace nonprintable characters with unicode escapes
 UnicodeString 
 IntlTest::prettify(const UnicodeString &source) 
-           
 {
-  int32_t i;
-  UnicodeString target;
-  target.remove();
-  target += "\"";
-  
-  for (i = 0; i < source.length(); i += 1)
-    {
-      UChar ch = source[i];
+    int32_t i;
+    UnicodeString target;
+    target.remove();
+    target += "\"";
 
-      if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+    for (i = 0; i < source.length(); i += 1)
     {
-      target += "\\u";
-      appendHex(ch, 4, target);
+        UChar ch = source[i];
+
+        if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
+        {
+            target += "\\u";
+            appendHex(ch, 4, target);
         }
-      else
-    {
-      target += ch;
+        else
+        {
+            target += ch;
         }
     }
 
-  target += "\"";
+    target += "\"";
 
-  return target;
+    return target;
 }
+
 // Produce a printable representation of a CollationKey
 UnicodeString &IntlTest::prettify(const CollationKey &source, UnicodeString &target)
 {
@@ -385,6 +377,12 @@ UnicodeString &IntlTest::prettify(const CollationKey &source, UnicodeString &tar
     return target;
 }
 
+#if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
+#define PREV_DIR ".."
+#else
+#define PREV_DIR "/../"
+#endif
+
 void
 IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) //nosmac
 {
@@ -404,44 +402,41 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     sepChar = U_FILE_SEP_CHAR;
     char sepString[] = U_FILE_SEP_STRING;
 
-    #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-        char mainDirBuffer[200];
-        if(mainDir!=NULL) {
-            strcpy(mainDirBuffer, mainDir);
-            strcat(mainDirBuffer, "..");
-        } else {
-            mainDirBuffer[0]='\0';
-        }
-        mainDir=mainDirBuffer;
-    #elif defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
-        char mainDirBuffer[200];
-        strcpy(mainDirBuffer, u_getDataDirectory());
-        strcat(mainDirBuffer, "/../");
-        mainDir = mainDirBuffer;
-    #elif defined(XP_MAC)
-        Str255 volName;
-        int16_t volNum;
-        OSErr err = GetVol( volName, &volNum );
-        if (err != noErr) volName[0] = 0;
-        mainDir = (char*) &(volName[1]);
-        mainDir[volName[0]] = 0;
-    #else
-        mainDir = "";
-    #endif
+#if defined(XP_MAC)
+    Str255 volName;
+    int16_t volNum;
+    OSErr err = GetVol( volName, &volNum );
+    if (err != noErr)
+        volName[0] = 0;
+    mainDir = (char*) &(volName[1]);
+    mainDir[volName[0]] = 0;
+#else
+    char mainDirBuffer[255];
+    if(mainDir!=NULL) {
+        strcpy(mainDirBuffer, mainDir);
+        strcat(mainDirBuffer, PREV_DIR);
+    } else {
+        mainDirBuffer[0]='\0';
+    }
+    mainDir=mainDirBuffer;
+#endif
     
-    if (relPath[0] == '|') relPath++;
-    int32_t lenMainDir = strlen( mainDir );
-    int32_t lenRelPath = strlen( relPath );
-    if (maxsize < lenMainDir + lenRelPath + 2) { fullname[0] = 0; return; }
-    strcpy( fullname, mainDir );
-    strcat( fullname, sepString );
-    strcat( fullname, relPath );
-    char* tmp = strchr( fullname, inpSepChar );
+    if (relPath[0] == '|')
+        relPath++;
+    int32_t lenMainDir = strlen(mainDir);
+    int32_t lenRelPath = strlen(relPath);
+    if (maxsize < lenMainDir + lenRelPath + 2) {
+        fullname[0] = 0;
+        return;
+    }
+    strcpy(fullname, mainDir);
+    strcat(fullname, sepString);
+    strcat(fullname, relPath);
+    char* tmp = strchr(fullname, inpSepChar);
     while (tmp) {
         *tmp = sepChar;
-        tmp = strchr( tmp+1, inpSepChar );
+        tmp = strchr(tmp+1, inpSepChar);
     }
-
 }
 
 /**
@@ -480,27 +475,32 @@ static int32_t execCount = 0;
 
 void it_log( UnicodeString message )
 {
-    if (IntlTest::gTest) IntlTest::gTest->log( message );
+    if (IntlTest::gTest)
+        IntlTest::gTest->log( message );
 }
     
 void it_logln( UnicodeString message )
 {
-    if (IntlTest::gTest) IntlTest::gTest->logln( message );
+    if (IntlTest::gTest)
+        IntlTest::gTest->logln( message );
 }
     
 void it_logln( void )
 {
-    if (IntlTest::gTest) IntlTest::gTest->logln();
+    if (IntlTest::gTest)
+        IntlTest::gTest->logln();
 }
     
 void it_err()
 {
-    if (IntlTest::gTest) IntlTest::gTest->err();
+    if (IntlTest::gTest)
+        IntlTest::gTest->err();
 }
         
 void it_err( UnicodeString message )
 {
-    if (IntlTest::gTest) IntlTest::gTest->err( message );
+    if (IntlTest::gTest)
+        IntlTest::gTest->err( message );
 }
     
 void it_errln( UnicodeString message )
@@ -510,21 +510,24 @@ void it_errln( UnicodeString message )
 
 IntlTest& operator<<(IntlTest& test, const UnicodeString&   string)
 {
-    if (&test == NULL) return *((IntlTest*) NULL);
+    if (&test == NULL)
+        return *((IntlTest*) NULL);
     test.log( string );
     return test;
 }
 
 IntlTest& operator<<(IntlTest& test, const char*    string)
 {
-    if (&test == NULL) return *((IntlTest*) NULL);
+    if (&test == NULL)
+        return *((IntlTest*) NULL);
     test.log( string );
     return test;
 }
 
 IntlTest& operator<<(IntlTest& test, const int32_t num)
 {
-    if (&test == NULL) return *((IntlTest*) NULL);
+    if (&test == NULL)
+        return *((IntlTest*) NULL);
     char convert[20];
     sprintf( convert, "%li", num );
     test.log( convert );
@@ -620,7 +623,8 @@ UBool IntlTest::runTest( char* name, char* par )
     UBool rval;
     char* pos = NULL;
 
-    if (name) pos = strchr( name, delim ); // check if name contains path (by looking for '/')
+    if (name)
+        pos = strchr( name, delim ); // check if name contains path (by looking for '/')
     if (pos) {
         path = pos+1;   // store subpath for calling subtest
         *pos = 0;       // split into two strings
@@ -639,7 +643,8 @@ UBool IntlTest::runTest( char* name, char* par )
         rval = runTestLoop( name, par );
     }
 
-    if (pos) *pos = delim;  // restore original value at pos
+    if (pos)
+        *pos = delim;  // restore original value at pos
     return rval;
 }
 
