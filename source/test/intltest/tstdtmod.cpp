@@ -153,7 +153,8 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
 {
   if(U_SUCCESS(status)) {
     UResourceBundle *testBundle = NULL;
-    const char* icu_data = (char*)loadTestData(status);
+    //const char* icu_data = (char*)loadTestData(status);
+    const char* icu_data = IntlTest::loadTestData(status);
     if (testBundle == NULL) {
         testBundle = ures_openDirect(icu_data, bundleName, &status);
         if (status != U_ZERO_ERROR) {
@@ -165,55 +166,5 @@ RBTestDataModule::getTestBundle(const char* bundleName, UErrorCode &status)
   } else {
     return NULL;
   }
-}
-
-const char* 
-RBTestDataModule::loadTestData(UErrorCode& err){
-    const char*      directory=NULL;
-    UResourceBundle* test =NULL;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-    if( tdpath == NULL){
-        directory= u_getDataDirectory();
-    
-        tdpath = (char*) uprv_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
-
-
-        /* u_getDataDirectory shoul return \source\data ... set the
-         * directory to ..\source\data\..\test\testdata\out\testdata
-         *
-         * Fallback: When Memory mapped file is built
-         * ..\source\data\out\..\..\test\testdata\out\testdata
-         */
-        strcpy(tdpath, directory);
-        strcat(tdpath, tdrelativepath);
-        strcat(tdpath,"testdata");
-
-    
-        test=ures_open(tdpath, "testtypes", &err);
-    
-        /* we could not find the data in tdpath 
-         * try tdpathFallback
-         */
-        if(U_FAILURE(err))
-        {
-            strcpy(tdpath,directory);
-            strcat(tdpath,".."U_FILE_SEP_STRING);
-            strcat(tdpath, tdrelativepath);
-            strcat(tdpath,"testdata");
-            err =U_ZERO_ERROR;
-            test=ures_open(tdpath, "ja_data", &err);
-            /* Fall back did not succeed either so return */
-            if(U_FAILURE(err)){
-                err = U_FILE_ACCESS_ERROR;
-                log.errln("construction of NULL did not succeed  :  %s \n", u_errorName(err));
-                return "";
-            }
-            ures_close(test);
-            return tdpath;
-        }
-        ures_close(test);
-        return tdpath;
-    }
-    return tdpath;
 }
 
