@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.1 $
+# conversion sample code $Revision: 1.2 $
 
 
 # Usage:
@@ -35,6 +35,10 @@ OBJECTS=convsamp.o flagcb.o
 CLEANFILES=*~ $(TARGET).out
 
 DEPS=$(OBJECTS:.o=.d)
+
+# turn on super warnings
+CPPFLAGS += -Wall
+
 
 all: $(TARGET)
 
