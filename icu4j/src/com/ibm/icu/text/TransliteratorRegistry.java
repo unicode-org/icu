@@ -363,18 +363,18 @@ class TransliteratorRegistry {
      * CaseInsensitiveStrings to an enumeration over Strings.
      */
     private static class IDEnumeration implements Enumeration {
-        Enumeration enum;
+        Enumeration en;
 
         public IDEnumeration(Enumeration e) {
-            enum = e;
+            en = e;
         }
 
         public boolean hasMoreElements() {
-            return enum != null && enum.hasMoreElements();
+            return en != null && en.hasMoreElements();
         }
 
         public Object nextElement() {
-            return ((CaseInsensitiveString) enum.nextElement()).getString();
+            return ((CaseInsensitiveString) en.nextElement()).getString();
         }
     }
 

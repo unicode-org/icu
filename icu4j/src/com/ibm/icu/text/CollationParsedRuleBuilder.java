@@ -3695,9 +3695,9 @@ final class CollationParsedRuleBuilder
         }
     
         if (t.m_prefixLookup_ != null) {
-            Enumeration enum = t.m_prefixLookup_.elements();
-            while (enum.hasMoreElements()) {
-                Elements e = (Elements)enum.nextElement();
+            Enumeration els = t.m_prefixLookup_.elements();
+            while (els.hasMoreElements()) {
+                Elements e = (Elements)els.nextElement();
                 // codepoints here are in the NFD form. We need to add the
                 // first code point of the NFC form to unsafe, because 
                 // strcoll needs to backup over them.
