@@ -21,6 +21,23 @@
 // LOW <= all valid values. ZERO for codepoints
 #define UNICODESET_LOW 0x000000
 
+// initial storage. Must be >= 0
+#define START_EXTRA 16
+
+// extra amount for growth. Must be >= 0
+#define GROW_EXTRA START_EXTRA
+
+// Define UChar constants using hex for EBCDIC compatibility
+// Used #define to reduce private static exports and memory access time.
+#define SET_OPEN        ((UChar)0x005B) /*[*/
+#define SET_CLOSE       ((UChar)0x005D) /*]*/
+#define HYPHEN          ((UChar)0x002D) /*-*/
+#define COMPLEMENT      ((UChar)0x005E) /*^*/
+#define COLON           ((UChar)0x003A) /*:*/
+#define BACKSLASH       ((UChar)0x005C) /*\*/
+#define INTERSECTION    ((UChar)0x0026) /*&*/
+#define UPPER_U         ((UChar)0x0055) /*U*/
+#define LOWER_U         ((UChar)0x0075) /*u*/
 
 /**
  * Minimum value that can be stored in a UnicodeSet.
@@ -32,14 +49,11 @@ const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
  */
 const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
-const int32_t UnicodeSet::START_EXTRA = 16; // initial storage. Must be >= 0
-const int32_t UnicodeSet::GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
-
 // N.B.: This mapping is different in ICU and Java
 //const UnicodeString UnicodeSet::CATEGORY_NAMES(
 //    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
 
-const UChar UnicodeSet::CATEGORY_NAMES[] = {
+static const UChar CATEGORY_NAMES[] = {
     0x43, 0x6E, /* "Cn" */
     0x4C, 0x75, /* "Lu" */
     0x4C, 0x6C, /* "Ll" */
@@ -85,17 +99,8 @@ UnicodeSet* UnicodeSet::CATEGORY_CACHE = _CATEGORY_CACHE;
  * Delimiter string used in patterns to close a category reference:
  * ":]".  Example: "[:Lu:]".
  */
-const UChar UnicodeSet::CATEGORY_CLOSE[] = {0x003A, 0x005D, 0x0000}; /* :] */
+static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
-// Define UChar constants using hex for EBCDIC compatibility
-const UChar UnicodeSet::SET_OPEN     = 0x005B; /*[*/
-const UChar UnicodeSet::SET_CLOSE    = 0x005D; /*]*/
-const UChar UnicodeSet::HYPHEN       = 0x002D; /*-*/
-const UChar UnicodeSet::COMPLEMENT   = 0x005E; /*^*/
-const UChar UnicodeSet::COLON        = 0x003A; /*:*/
-const UChar UnicodeSet::BACKSLASH    = 0x005C; /*\*/
-const UChar UnicodeSet::INTERSECTION = 0x0026; /*&*/
-const UChar UnicodeSet::UPPER_U      = 0x0055; /*U*/
 
 //----------------------------------------------------------------
 // Constructors &c
@@ -331,8 +336,8 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     buf.append((UChar) c);
 }
 
-const UChar UnicodeSet::HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
-                                   56,57,65,66,67,68,69,70}; // 8-9 A-F
+static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
+                              56,57,65,66,67,68,69,70}; // 8-9 A-F
 
 /**
  * Return true if the character is NOT printable ASCII.
@@ -363,7 +368,7 @@ UBool UnicodeSet::_escapeUnprintable(UnicodeString& result, UChar32 c) {
             result.append(HEX[0xF&(c>>20)]);
             result.append(HEX[0xF&(c>>16)]);
         } else {
-            result.append((UChar) 0x0075 /*u*/);
+            result.append(LOWER_U);
         }
         result.append(HEX[0xF&(c>>12)]);
         result.append(HEX[0xF&(c>>8)]);
@@ -882,7 +887,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // - an intersection or subtraction operator
     // - an anchor (trailing '$', indicating RBT ether)
     UBool rebuildPattern = FALSE;
-    rebuiltPat.append((UChar) '[');
+    rebuiltPat.append(SET_OPEN);
 
     UBool invert = FALSE;
     clear();
@@ -1140,7 +1145,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             }
             if (anchor == 2) {
                 rebuildPattern = TRUE;
-                rebuiltPat.append((UChar) '$');
+                rebuiltPat.append((UChar)SymbolTable::SYMBOL_REF);
                 add(TransliterationRule::ETHER);
             }
             break;
@@ -1218,7 +1223,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     if (rebuildPattern) {
         //rebuiltPat.setCharAt(0, (UChar) 1);
     }
-    rebuiltPat.append((UChar) ']');
+    rebuiltPat.append(SET_CLOSE);
 }
 
 //----------------------------------------------------------------
