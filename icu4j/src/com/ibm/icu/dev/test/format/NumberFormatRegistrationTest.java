@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTest.java,v $
- * $Date: 2003/06/04 20:24:14 $
- * $Revision: 1.3 $
+ * $Date: 2003/06/05 21:15:20 $
+ * $Revision: 1.4 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -63,9 +63,12 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
 	    catch (Exception e) {
 	    }
 
-	    if (NumberFormat.unregister("")) {
+            try {
+                NumberFormat.unregister("");
 		errln("unregister of empty string key succeeded");
 	    }
+            catch (Exception e) {
+            }
 	}
 
 	Locale fu_FU = new Locale("fu", "FU");
