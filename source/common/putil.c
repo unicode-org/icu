@@ -909,7 +909,7 @@ static int
 getSystemPath(char *path, int size) {
 #if defined(XP_MAC)
     int32_t dirID;
-    OSErr err
+    OSErr err;
     int16_t volNum;
 
     path[0]=0;
