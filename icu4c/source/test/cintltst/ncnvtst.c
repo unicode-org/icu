@@ -1697,7 +1697,6 @@ TestTruncated() {
         uint8_t bytes[8]; /* partial input bytes resulting in no output */
         int32_t length;
     } testCases[]={
-#if 0
         { "IMAP-mailbox-name",  { 0x26 }, 1 }, /* & */
         { "IMAP-mailbox-name",  { 0x26, 0x42 }, 2 }, /* &B */
         { "IMAP-mailbox-name",  { 0x26, 0x42, 0x42 }, 3 }, /* &BB */
@@ -1705,7 +1704,7 @@ TestTruncated() {
 
         { "UTF-7",      { 0x2b, 0x42 }, 2 }, /* +B */
         { "UTF-8",      { 0xd1 }, 1 },
-#endif
+
         { "UTF-16BE",   { 0x4e }, 1 },
         { "UTF-16LE",   { 0x4e }, 1 },
         { "UTF-16",     { 0x4e }, 1 },
