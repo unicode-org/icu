@@ -130,6 +130,17 @@ private:
     RBBIDataWrapper &operator=(const RBBIDataWrapper &other); // forbid copying of this class
 };
 
+
+/**
+ * Swap RBBI data. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ubrk_swap(const UDataSwapper *ds,
+           const void *inData, int32_t length, void *outData,
+           UErrorCode *pErrorCode);
+
+
 U_NAMESPACE_END
 
 #endif
