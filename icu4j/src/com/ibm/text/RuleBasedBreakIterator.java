@@ -251,7 +251,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:51 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.2 $ $Date: 2000/02/26 02:22:15 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1090,10 +1090,15 @@ visitedChars = 0;
          * just vectors different parts of the job off to other functions.
          */
         public void buildBreakIterator() {
+            System.err.println("*1");
             Vector tempRuleList = buildRuleList(description);
+            System.err.println("*2");
             buildCharCategories(tempRuleList);
+            System.err.println("*3");
             buildStateTable(tempRuleList);
+            System.err.println("*4");
             buildBackwardsStateTable(tempRuleList);
+            System.err.println("*5");
         }
 
         /**
@@ -1480,8 +1485,9 @@ visitedChars = 0;
 
                         // for an isolated single character, add it to the expression list
                         default:
-                            expressions.put(line.substring(p, p + 1), new UnicodeSet(line.
-                                            substring(p, p + 1)));
+                            UnicodeSet s = new UnicodeSet();
+                            s.add(line.charAt(p));
+                            expressions.put(line.substring(p, p + 1), s);
 //Test.debugPrintln("2. Adding expression: " + line.substring(p, p + 1));
                             break;
                     }
@@ -1649,9 +1655,11 @@ visitedChars = 0;
 
             // call parseRule() for every rule in the rule list (except those which
             // start with !, which are actually backwards-iteration rules)
+            int n = tempRuleList.size();
             for (int i = 0; i < tempRuleList.size(); i++) {
                 String rule = (String)tempRuleList.elementAt(i);
                 if (rule.charAt(0) != '!') {
+                    System.err.println("**" + (i+1) + " of " + n);
                     parseRule(rule, true);
                 }
             }
