@@ -61,7 +61,7 @@ and exit.
 Print help about usage and exit.
 .TP
 .BR \-v\fP, \fB\-\-verbose
-Print the command's version number and exit.
+Display extra informative messages during execution.
 .TP
 .BI "\-e\fP, \fB\-\-encoding" " encoding"
 Set the encoding used to read input files to

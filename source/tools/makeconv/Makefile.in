@@ -3,6 +3,15 @@
 
 ## Shell to use
 SHELL = @SHELL@
+VERSION = @VERSION@
+
+SECTION = 8
+
+MANX_FILES = $(TARGET).$(SECTION)
+
+GENERATED_MAN_FILES = $(TARGET).$(SECTION)
+
+ALL_MAN_FILES = $(MANX_FILES)
 
 ## Install directory information
 srcdir = @srcdir@
@@ -49,7 +58,7 @@ top_builddir = ../..
 subdir = tools/makeconv
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
+CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
 
 ## Target information
 TARGET = makeconv
@@ -87,9 +96,9 @@ TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(top_srcdir)/test/testdata/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(top_builddir)/data/%.cnv)
 
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local dist dist-local check	\
-check-local
+.PHONY : all all-local install install-local install-man clean clean-local \
+    distclean distclean-local dist dist-local check \
+    check-local
 
 ## Clear suffix list
 .SUFFIXES :
@@ -102,10 +111,9 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(CNV_FILES) $(TEST_CNV_FILES)
+all-local: $(TARGET) $(CNV_FILES) $(TEST_CNV_FILES) $(ALL_MAN_FILES)
 
-
-install-local: all-local
+install-local: all-local install-man
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 #	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
@@ -129,12 +137,24 @@ distclean-local: clean-local
 
 check-local: all-local
 
+invokation:
+	$(INVOKE) $(COMMAND)
+
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET): $(OBJECTS)
 	$(LINK) -o $@ $^ $(LIBS)
+
+install-man: install-manx
+install-manx: $(MANX_FILES)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # Rule to build a compiled cnv file
 $(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm $(TARGET)

@@ -4,6 +4,8 @@
 .\"
 .\" Copyright (C) 2000 IBM, Inc. and others.
 .\"
+.\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\"
 .TH CONVRTRS.TXT 5 "29 September 2000" "ICU @VERSION@"
 .SH NAME
 .B convrtrs.txt
