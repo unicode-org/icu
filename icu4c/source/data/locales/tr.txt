@@ -10,15 +10,15 @@ tr {
     // According to Nurdan Mete from IBM Turkey, the following would be the correct
     // sorting order for Turkish
     collations {
-      standard { 
-        Version { "2" }
-        Sequence { "& C < c\u0327 <<< C\u0327" 
-                   "& G < g\u0306 <<< G\u0306"
-                   "& H < \u0131 <<< I < i <<< \u0130" 
-                   "& O < o\u0308 <<< O\u0308"
-                   "& S < s\u0327 <<< S\u0327" 
-                   "& U < u\u0308 <<< U\u0308" }
-      }
+        standard { 
+            Version { "2" }
+            Sequence { "& C < c\u0327 <<< C\u0327" 
+                       "& G < g\u0306 <<< G\u0306"
+                       "& H < \u0131 <<< I < i <<< \u0130" 
+                       "& O < o\u0308 <<< O\u0308"
+                       "& S < s\u0327 <<< S\u0327" 
+                       "& U < u\u0308 <<< U\u0308" }
+        }
     }
     Countries { 
         Fallback{ "en"}
@@ -295,37 +295,153 @@ tr {
         "Cuma",
         "Cumartesi",
     }
-    Languages { 
+    Eras { 
+        "M\u00D6",
+        "MS",
+    }
+    Languages {
+        aa { "Afar" }
+        ab { "Abazca" }
+        af { "Afrikaan Dili" }
+        am { "Amharik" }
         ar { "Arap\u00E7a" }
+        //as { "Assamese" }
+        ay { "Aymara" }
+        az { "Azerice" }
+        ba { "Ba\u015Fk\u0131rt Dili" }
+        be { "Beyaz Rus\u00E7a" }
         bg { "Bulgarca" }
+        bh { "Bihari" }
+        bi { "Bislama" }
+        bn { "Bengal Dili" }
+        bo { "Tibet\u00E7e" }
+        br { "Breton Dili" }
+        ca { "Katalan Dili" }
+        co { "Korsika Dili" }
         cs { "\u00C7ek\u00E7e" }
+        cy { "Gal Dili" }
         da { "Danca" }
         de { "Almanca" }
+        dz { "Bhutan Dili" }
         el { "Yunanca" }
         en { "\u0130ngilizce" }
+        eo { "Esperanto" }
         es { "\u0130spanyolca" }
         et { "Estonya Dili" }
+        eu { "Bask Dili" }
+        fa { "Fars\u00E7a" }
         fi { "Fince" }
+        fj { "Fiji Dili" }
+        fo { "Faroe Dili" }
         fr { "Frans\u0131zca" }
+        fy { "Frizye Dili" }
+        ga { "\u0130rlanda Dili" }
+        gd { "\u0130sko\u00E7 Gal Dili" }
+        gl { "Gali\u00E7ya Dili" }
+        gn { "Guarani" }
+        gu { "Gujarati" }
+        ha { "Hausa" }
         he { "\u0130branice" }
+        hi { "Hint Dili" }
         hr { "H\u0131rvat\u00E7a" }
         hu { "Macarca" }
+        hy { "Ermenice" }
+        ia { "Interlingua" }
+        id { "Endonezya Dili" }
+        ie { "Interlingue" }
+        ik { "Inupiak" }
+        in { "Endonezya Dili" }
+        is { "\u0130zlandaca" }
         it { "\u0130talyanca" }
+        iu { "Inuktitut" }
+        iw { "\u0130branice" }
         ja { "Japonca" }
+        ji { "Yiddi\u015F" }
+        jw { "Java Dili" }
+        ka { "G\u00FCrc\u00FCce" }
+        kk { "Kazak Dili" }
+        kl { "Gr\u00F6nland Dili" }
+        km { "Kambo\u00E7ya Dili" }
+        kn { "Kannada" }
         ko { "Korece" }
+        ks { "Ke\u015Fmirce" }
+        ku { "K\u00FCrt\u00E7e" }
+        ky { "K\u0131rg\u0131zca" }
+        la { "Latince" }
+        ln { "Lingala" }
+        lo { "Laos Dili" }
         lt { "Litvanya Dili" }
         lv { "Letonya Dili" }
-        nl { "Felemenk\u00E7e" }
+        mg { "Malaga Dili" }
+        mi { "Maori" }
+        mk { "Makedonca" }
+        ml { "Malayalam" }
+        mn { "Mo\u011Fol Dili" }
+        mo { "Moldavya Dili" }
+        mr { "Marathi" }
+        ms { "Malay" }
+        mt { "Malta Dili" }
+        my { "Birmanya Dili" }
+        na { "Nauru" }
+        ne { "Nepal Dili" }
+        nl { "Hollanda Dili" }
         no { "Norve\u00E7\u00E7e" }
-        pl { "Leh\u00E7e" }
+        oc { "Occitan" }
+        om { "Oromo (Afan)" }
+        or { "Oriya" }
+        pa { "Pencap Dili" }
+        pl { "Polonya Dili" }
+        ps { "Pe\u015Ftun Dili" }
         pt { "Portekizce" }
+        qu { "Quechua" }
+        rm { "Rhaeto-Roman Dili" }
+        rn { "Kirundi" }
         ro { "Romence" }
         ru { "Rus\u00E7a" }
+        rw { "Kinyarwanda" }
+        sa { "Sanskrit\u00E7e" }
+        sd { "Sindhi" }
+        sg { "Sangho" }
+        sh { "S\u0131rp-H\u0131rvat Dili" }
+        si { "Sinhal Dili" }
         sk { "Slovak\u00E7a" }
         sl { "Slovence" }
-        sv { "\u0130sve\u00E7ce" }
+        sm { "Samoa Dili" }
+        sn { "Shona" }
+        so { "Somali Dili" }
+        sq { "Arnavut\u00E7a" }
+        sr { "S\u0131rp\u00E7a" }
+        ss { "Siswati" }
+        st { "Sesotho" }
+        su { "Sudan Dili" }
+        sv { "\u0130sve\u00E7\u00E7e" }
+        sw { "Swahili" }
+        ta { "Tamil" }
+        te { "Telugu" }
+        tg { "Tacik Dili" }
+        th { "Tay Dili" }
+        ti { "Tigrinya" }
+        tk { "T\u00FCrkmence" }
+        tl { "Tagalog" }
+        tn { "Setswana" }
+        to { "Tonga" }
         tr { "T\u00FCrk\u00E7e" }
+        ts { "Tsonga" }
+        tt { "Tatarca" }
+        tw { "Twi" }
+        ug { "Uygurca" }
+        uk { "Ukraynaca" }
+        ur { "Urduca" }
+        uz { "\u00D6zbek\u00E7e" }
+        vi { "Vietnam Dili" }
+        vo { "Volapuk" }
+        wo { "Wolof" }
+        xh { "Xhosa" }
+        yi { "Yiddi\u015F" }
+        yo { "Yoruba" }
+        za { "Zhuang" }
         zh { "\u00C7ince" }
+        zu { "Zulu" }
         //zh_cn { "\u00C7ince (Basitle\u015Ftirilmi\u015F)" }
         //zh_tw { "\u00C7ince (Geleneksel)" }
     }
