@@ -85,6 +85,8 @@
  * performing matches, there are no APIs here for setting and getting the 
  * attributes. These attributes can be set by getting the collator
  * from <tt>usearch_getCollator</tt> and using the APIs in <tt>ucol.h</tt>.
+ * Lastly to update String Search to the new collator attributes, 
+ * usearch_reset() has to be called.
  * <p> 
  * Restriction: <br>
  * Currently there are no composite characters that consists of a

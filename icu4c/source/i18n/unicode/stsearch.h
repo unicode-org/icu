@@ -88,6 +88,8 @@ U_NAMESPACE_BEGIN
  * performing matches, there are no APIs here for setting and getting the 
  * attributes. These attributes can be set by getting the collator
  * from <tt>getCollator</tt> and using the APIs in <tt>coll.h</tt>.
+ * Lastly to update StringSearch to the new collator attributes, 
+ * reset() has to be called.
  * <p> 
  * Restriction: <br>
  * Currently there are no composite characters that consists of a
