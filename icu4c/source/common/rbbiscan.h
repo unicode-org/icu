@@ -145,6 +145,9 @@ private:
 
     int32_t                        fRuleNum;         // Counts each rule as it is scanned.
 
+    int32_t                        fOptionStart;     // Input index of start of a !!option
+                                                     //   keyword, while being scanned.
+
     UnicodeSet *gRuleSet_rule_char;
     UnicodeSet *gRuleSet_white_space;
     UnicodeSet *gRuleSet_name_char;

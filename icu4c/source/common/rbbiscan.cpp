@@ -459,6 +459,21 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         break;
 
 
+    case doOptionStart:
+        // Scanning a !!option.   At the start of string.
+        fOptionStart = fScanIndex;
+        break;
+
+    case doOptionEnd:
+        {
+            UnicodeString opt(fRB->fRules, fOptionStart, fScanIndex-fOptionStart);
+            if (opt == "chain") {
+                fRB->fChainRules = TRUE;
+            } else {
+                error(U_BRK_UNRECOGNIZED_OPTION);
+            }
+        }
+        break;
 
     case doReverseDir:
         fReverseRule = TRUE;

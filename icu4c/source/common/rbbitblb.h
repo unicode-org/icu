@@ -49,6 +49,7 @@ private:
     void     calcFirstPos(RBBINode *n);
     void     calcLastPos(RBBINode  *n);
     void     calcFollowPos(RBBINode *n);
+    void     calcChainedFollowPos(RBBINode *n);
     void     buildStateTable();
     void     flagAcceptingStates();
     void     flagLookAheadStates();
