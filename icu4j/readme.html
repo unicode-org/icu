@@ -207,55 +207,23 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 
 <table BORDER="1" CELLPADDING="3" WIDTH="623">
   <tr>
-    <td>$Root/richeditDist/</td>
-    <td>Documentation and stubs used to build the RichEdit demo jar file in package com.ibm.richtext.demo.</td>
+    <td>$Root/src/com/ibm/icu/dev</td>
+    <td>Package that is used for internal developements. Demos, tests and tools are located here. For information about running the tests, see $Root/src/com/ibm/icu/dev/test/TestAll.java.</td>
   </tr>
   <tr>
-    <td>$Root/src/data/</td>
-    <td>Various data files used to generate ICU4J classes.&nbsp; Most of the files contain Unicode information that is available from <a href="http://www.unicode.org">http://www.unicode.org</a>. Used only by tools and tests in package com.ibm.tools and com.ibm.test.</td>
+    <td>$Root/src/com/ibm/icu/impl</td>
+    <td>This package is for internal use. Classes used by different ICU4J packages but not intended for public use are located here.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/data</td>
-    <td>Data files used by the BreakIterator tests and demos in package com.ibm.demo.rbbi and com.ibm.test.rbbi.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/demo</td>
-    <td>Demonstration applications and applets for calendar, holidays, rule-based breakiterators, rule-based number formatters, and transliterators. This package is gradually being deprecated, the contents will be shifted to com.ibm.icu.demo.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/icu/demo</td>
-    <td>New location of demonstration applications and applets. The classes in com.ibm.demo will eventually be moved here.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/icu/internal</td>
-    <td>Contains the class com.ibm.icu.UInfo which is used in the normalization builder, com.ibm.tools.normalizer.NormalizerBuilder.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/icu/test</td>
-    <td>New folder for tests. The classes in package com.ibm.test will eventually be shifted here.</td>
+    <td>$Root/src/com/ibm/icu/lang</td>
+    <td>Character properties package.</td>
   </tr>
   <tr>
     <td>$Root/src/com/ibm/icu/math</td>
     <td>Mathematic manipulation.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/richtext</td> <td>Styled text editing
-    package. This includes demos, tests, and GUIs for editing and
-    displaying styled text.  The richtext package provides a
-    scrollable display, typing, arrow-key support, tabs, alignment and
-    justification, word- and sentence-selection (by double-clicking
-    and triple-clicking, respectively), text styles, clipboard
-    operations (cut, copy and paste) and a log of changes for
-    undo-redo.  Richtext uses Java's TextLayout and complex
-    text support (provided to Sun by the ICU4J team).</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/test</td>
-    <td>Tests for various ICU4J components.&nbsp; For information about running the
-    tests, see $Root/src/com/ibm/test/TestAll.java. The package will gradually be deprecated, and the classes moved to com.ibm.icu.test.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/text</td>
+    <td>$Root/src/com/ibm/icu/text</td>
     <td>Main package, containing the following components:
       <ul>
       <li>Arabic shaping
@@ -267,29 +235,24 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
       <li>String manipulation
       <li>String search
       <li>Unicode compression
-      <li>Unicode character properties
       <li>Unicode sets
     </ul>
     </td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/textlayout</td>
-    <td>Text layout, used by the styled text editing package.</td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/tools</td>
-    <td>Various tools used to generate ICU4J classes and data for the following modules:
-    <ul>
-    <li>Unicode compression
-    <li>Normalization
-    <li>Rule-based iterators
-    <li>Transliteration
-    </ul>
-    </td>
-  </tr>
-  <tr>
-    <td>$Root/src/com/ibm/util</td>
+    <td>$Root/src/com/ibm/icu/util</td>
     <td>Calendars, time zones and other utility classes</td>
+  </tr>
+  <tr>
+    <td>$Root/src/com/ibm/richtext</td> <td>Styled text editing
+    package. This includes demos, tests, and GUIs for editing and
+    displaying styled text.  The richtext package provides a
+    scrollable display, typing, arrow-key support, tabs, alignment and
+    justification, word- and sentence-selection (by double-clicking
+    and triple-clicking, respectively), text styles, clipboard
+    operations (cut, copy and paste) and a log of changes for
+    undo-redo.  Richtext uses Java's TextLayout and complex
+    text support (provided to Sun by the ICU4J team).</td>
   </tr>
 </table>
 
