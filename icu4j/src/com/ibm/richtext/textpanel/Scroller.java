@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.6 $ $Date: 2003/06/03 18:49:37 $
- *
  * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

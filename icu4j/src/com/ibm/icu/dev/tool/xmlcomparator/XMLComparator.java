@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source:   $
- * $Date:  Aug 12, 2003 $
- * $Revision: 1.1 $
- *
- *******************************************************************************
 */
 package com.ibm.icu.dev.tool.xmlcomparator;
 

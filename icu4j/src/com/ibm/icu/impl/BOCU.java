@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2003/06/11 19:55:18 $ 
-* $Revision: 1.7 $
-*
-*******************************************************************************
 */
 package com.ibm.icu.impl;
 

@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: AsyncFormatter.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:42 $
- *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

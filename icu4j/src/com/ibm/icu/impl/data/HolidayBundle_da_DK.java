@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/HolidayBundle_da_DK.java,v $ 
- * $Date: 2002/02/16 03:05:44 $ 
- * $Revision: 1.3 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.impl.data;

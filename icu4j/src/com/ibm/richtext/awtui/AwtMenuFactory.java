@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: AwtMenuFactory.java,v $ $Revision: 1.2 $ $Date: 2000/04/20 19:29:08 $
- *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

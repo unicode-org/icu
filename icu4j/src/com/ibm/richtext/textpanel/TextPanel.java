@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: TextPanel.java,v $ $Revision: 1.6 $ $Date: 2003/12/02 01:34:32 $
- *
  * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

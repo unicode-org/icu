@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/ResourceReader.java,v $
- * $Date: 2004/03/22 23:55:50 $
- * $Revision: 1.7 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.impl.data;
 

@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterNameReader.java,v $ 
-* $Date: 2003/06/09 23:15:00 $ 
-* $Revision: 1.5 $
-*
-*******************************************************************************
 */
 package com.ibm.icu.impl;
 

@@ -3,9 +3,6 @@
 * Copyright (C) 2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
-*
-* $Date: 2003/05/19 
-******************************************************************************
 */
 
 package com.ibm.icu.dev.tool.localeconverter;

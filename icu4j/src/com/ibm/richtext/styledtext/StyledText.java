@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: StyledText.java,v $ $Revision: 1.4 $ $Date: 2003/12/02 01:34:32 $
- *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

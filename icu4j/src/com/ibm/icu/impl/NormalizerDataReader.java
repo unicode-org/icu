@@ -3,11 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/11/15 21:04:19 $
- * $Revision: 1.9 $
- *******************************************************************************
  */
  
 package com.ibm.icu.impl;

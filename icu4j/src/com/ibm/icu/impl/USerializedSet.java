@@ -3,12 +3,6 @@
  *   Copyright (C) 2002-2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/USerializedSet.java,v $ 
- * $Date: 2004/01/09 03:07:12 $ 
- * $Revision: 1.6 $
- *
- *****************************************************************************************
 */
 
 package com.ibm.icu.impl;
