@@ -23,7 +23,7 @@ import java.util.List;
  * type and call the appropriate method on the listener.
  */
 public abstract class ICUNotifier {
-    private Object notifyLock = new Object();
+    private final Object notifyLock = new Object();
     private NotifyThread notifyThread;
     private List listeners;
 
@@ -43,12 +43,13 @@ public abstract class ICUNotifier {
 	    synchronized (notifyLock) {
 		if (listeners == null) {
 		    listeners = new ArrayList(5);
-		}
-		// identity equality check
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext()) {
-		    if (iter.next() == l) {
-			return;
+		} else {
+		    // identity equality check
+		    Iterator iter = listeners.iterator();
+		    while (iter.hasNext()) {
+			if (iter.next() == l) {
+			    return;
+			}
 		    }
 		}
 
@@ -95,7 +96,7 @@ public abstract class ICUNotifier {
 	    synchronized (notifyLock) {
 		if (listeners != null) {
 		    if (notifyThread == null) {
-			notifyThread = new NotifyThread();
+			notifyThread = new NotifyThread(this);
 			notifyThread.setDaemon(true);
 			notifyThread.start();
 		    }
@@ -108,8 +109,13 @@ public abstract class ICUNotifier {
     /**
      * The notification thread.
      */
-    private class NotifyThread extends Thread {
-	List queue = new LinkedList();
+    private static class NotifyThread extends Thread {
+	private final ICUNotifier notifier;
+	private final List queue = new LinkedList();
+
+	NotifyThread(ICUNotifier notifier) {
+	    this.notifier = notifier;
+	}
 
 	/**
 	 * Queue the notification on the thread.
@@ -137,7 +143,7 @@ public abstract class ICUNotifier {
 		    }
 
 		    for (int i = 0; i < list.length; ++i) {
-			notifyListener((EventListener)list[i]);
+			notifier.notifyListener((EventListener)list[i]);
 		    }
 		}
 		catch (InterruptedException e) {

@@ -27,37 +27,49 @@ public class ICULocaleService extends ICUService {
     /**
      * A subclass of Key that implements a locale fallback mechanism.
      * The first locale to search for is the locale provided by the
-     * client, and the fallback locale to search for is the default
+     * client, and the fallback locale to search for is the current default
      * locale.  This is instantiated by ICULocaleService.</p>
      *
      * <p>Canonicalization adjusts the locale string so that the
      * section before the first understore is in lower case, and the rest
-     * is in upper case, with no trailing underscores.
+     * is in upper case, with no trailing underscores.</p>
      */
     public static class LocaleKey extends ICUService.Key {
 	private String primaryID;
 	private String fallbackID;
 	private String currentID;
 
+	/**
+	 * Convenience method for createWithCanonical that canonicalizes both the
+	 * primary and fallback IDs first.
+	 */
 	public static LocaleKey create(String primaryID, String fallbackID) {
 	    String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
 	    String canonicalFallbackID = LocaleUtility.canonicalLocaleString(fallbackID);
 	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID);
 	}
 
+	/**
+	 * Convenience method for createWithCanonical that canonicalizes the
+	 * primary ID first, the fallback is assumed to already be canonical.
+	 */
 	public static LocaleKey createWithCanonicalFallback(String primaryID, String canonicalFallbackID) {
 	    String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
 	    return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID);
 	}
 
+	/**
+	 * Create a LocaleKey with canonical primary and fallback IDs.
+	 */
 	public static LocaleKey createWithCanonical(String canonicalPrimaryID, String canonicalFallbackID) {
 	    return new LocaleKey(canonicalPrimaryID, canonicalPrimaryID, canonicalFallbackID);
 	}
 	    
 	/**
-	 * PrimaryID is the user's requested locale string in
-	 * canonical form, fallbackID is the default locale's string
-	 * in canonical form.  
+	 * PrimaryID is the user's requested locale string,
+	 * canonicalPrimaryID is this string in canonical form,
+	 * fallbackID is the current default locale's string in
+	 * canonical form.
 	 */
         protected LocaleKey(String primaryID, String canonicalPrimaryID, String canonicalFallbackID) {
 	    super(primaryID);
@@ -135,10 +147,17 @@ public class ICULocaleService extends ICUService {
 	private SoftReference cacheref;
 	private boolean included;
 
+	/**
+	 * Convenience overload of MultipleKeyFactory(boolean) that defaults
+	 * visible to true.
+	 */
 	public MultipleKeyFactory() {
 	    this(true);
 	}
 
+	/**
+	 * Constructs a MultipleKeyFactory whose ids are visible iff visible is true.
+	 */
 	public MultipleKeyFactory(boolean visible) {
 	    this.visible = visible;
 	}
@@ -327,7 +346,6 @@ public class ICULocaleService extends ICUService {
 	 * inherited bundle);
 	 */
 	protected boolean acceptsLocale(Locale loc) {
-	  
 	    try {
 		ResourceBundle bundle = ICULocaleData.loadResourceBundle(name, loc); // single resource bundle lookup
 		if (requiredContents != null) {
@@ -339,9 +357,9 @@ public class ICULocaleService extends ICUService {
 		}
 		return true;
 	    }
-	  catch (Exception e) {
-	  }
-	  return false;
+	    catch (Exception e) {
+	    }
+	    return false;
 	}
 
 	/**
