@@ -226,7 +226,7 @@ u_charFromName(UCharNameChoice nameChoice,
     uint32_t i;
     UChar32 c;
     char c0;
-    UChar32 error = 0xffff; /* error = nameChoice == U_EXTENDED_CHAR_NAME ? 0xffffffff : 0xffff; */
+    UChar32 error = 0xffff;     /* Undefined, but use this for backwards compatibility. */
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return error;
@@ -342,8 +342,8 @@ u_enumCharNames(UChar32 start, UChar32 limit,
         return;
     }
 
-    if((uint32_t)limit>0x110000) {
-        limit=0x110000;
+    if((uint32_t) limit > UCHAR_MAX_VALUE + 1) {
+        limit = UCHAR_MAX_VALUE + 1;
     }
     if((uint32_t)start>=(uint32_t)limit) {
         return;
