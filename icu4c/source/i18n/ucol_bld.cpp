@@ -177,15 +177,20 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(const UColTokenParser *src,
 }
 
 U_CAPI uint32_t U_EXPORT2 ucol_getCEStrengthDifference(uint32_t CE, uint32_t contCE, 
-                                            uint32_t prevCE, uint32_t prevContCE) {
-    uint32_t strength = UCOL_TERTIARY;
-    while(((prevCE & strengthMask[strength]) != (CE & strengthMask[strength]) 
-        || (prevContCE & strengthMask[strength]) != (contCE & strengthMask[strength]))
-        && strength) {
-        strength--;
+                                            uint32_t prevCE, uint32_t prevContCE) 
+{
+    if(prevCE == CE && prevContCE == contCE) {
+      return UCOL_IDENTICAL;
     }
-    return strength;
-                                            
+    if((prevCE & strengthMask[UCOL_PRIMARY]) != (CE & strengthMask[UCOL_PRIMARY])
+      || (prevContCE & strengthMask[UCOL_PRIMARY]) != (contCE & strengthMask[UCOL_PRIMARY])) {
+      return UCOL_PRIMARY;
+    }
+    if((prevCE & strengthMask[UCOL_SECONDARY]) != (CE & strengthMask[UCOL_SECONDARY])
+      || (prevContCE & strengthMask[UCOL_SECONDARY]) != (contCE & strengthMask[UCOL_SECONDARY])) {
+      return UCOL_SECONDARY;
+    }
+    return UCOL_TERTIARY;                                            
 }
 
 
