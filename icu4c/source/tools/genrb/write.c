@@ -143,7 +143,6 @@ write_taglist(FileStream *rb,
 
   /* Write out each key/value pair */
   for(i = 0; i < list->fCount; ++i) {
-    printf("     ");
     write_ustring(rb, list->fData[i].fKey);
     write_ustring(rb, list->fData[i].fValue);
   }
