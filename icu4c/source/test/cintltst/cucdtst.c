@@ -1005,6 +1005,22 @@ static void TestStringFunctions()
         dataTable[i][j][0] = saveVal;   /* Put it back for the other tests */
     }
 
+    /*
+     * test that u_strchr32()
+     * does not find surrogate code points when they are part of matched pairs
+     * (= part of supplementary code points)
+     * Jitterbug 1542
+     */
+    {
+        UChar s[]={
+            /*   0       1       2       3       4       5       6       7       8  9 */
+            0x0061, 0xd841, 0xdc02, 0xd841, 0x0062, 0xdc02, 0xd841, 0xdc02, 0x0063, 0
+        };
+
+        if(u_strchr32(s, 0xd841)!=(s+3) || u_strchr32(s, 0xdc02)!=(s+5)) {
+            log_err("error: u_strchr32(surrogate) finds a partial supplementary code point\n");
+        }
+    }
 
     log_verbose("Testing u_austrcpy()");
     u_austrcpy(test,dataTable[0][0]);

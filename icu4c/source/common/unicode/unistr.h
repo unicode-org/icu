@@ -847,6 +847,20 @@ public:
   /**
    * Locate in this the first occurrence of the code point <TT>c</TT>, 
    * using bitwise comparison.
+   *
+   * This function finds code points, which differs for BMP code points
+   * from indexOf(UChar c, ...) only for surrogates:
+   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
+   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but indexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
@@ -867,6 +881,20 @@ public:
   /**
    * Locate in this the first occurrence of the code point <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
+   *
+   * This function finds code points, which differs for BMP code points
+   * from indexOf(UChar c, ...) only for surrogates:
+   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
+   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but indexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -893,6 +921,20 @@ public:
    * Locate in this the first occurrence of the code point <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
+   *
+   * This function finds code points, which differs for BMP code points
+   * from indexOf(UChar c, ...) only for surrogates:
+   * While indexOf(UChar c, ...) finds any surrogate code units in a string,
+   * indexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" indexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but indexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(indexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
@@ -1027,6 +1069,20 @@ public:
   /**
    * Locate in this the last occurrence of the code point <TT>c</TT>, 
    * using bitwise comparison.
+   *
+   * This function finds code points, which differs for BMP code points
+   * from lastIndexOf(UChar c, ...) only for surrogates:
+   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
+   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but lastIndexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
    * @stable
@@ -1047,6 +1103,20 @@ public:
   /**
    * Locate in this the last occurrence of the code point <TT>c</TT>
    * starting at offset <TT>start</TT>, using bitwise comparison.
+   *
+   * This function finds code points, which differs for BMP code points
+   * from lastIndexOf(UChar c, ...) only for surrogates:
+   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
+   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but lastIndexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @param start The offset at which searching will start.
    * @return The offset into this of <TT>c</TT>, or -1 if not found.
@@ -1073,6 +1143,20 @@ public:
    * Locate in this the last occurrence of the code point <TT>c</TT> 
    * in the range [<TT>start</TT>, <TT>start + length</TT>), 
    * using bitwise comparison.   
+   *
+   * This function finds code points, which differs for BMP code points
+   * from lastIndexOf(UChar c, ...) only for surrogates:
+   * While lastIndexOf(UChar c, ...) finds any surrogate code units in a string,
+   * lastIndexOf(UChar32 c, ...) finds only unmatched surrogate code points,
+   * i.e., only those that do not combine with an adjacent surrogate
+   * to form a supplementary code point.
+   * For example, in a string "\ud800\udc00" lastIndexOf(UChar c, ...)
+   * will find code units U+d800 at 0 and U+dc00 at 1,
+   * but lastIndexOf(UChar32 c, ...) will find neither because they
+   * combine to the code point U+10000.
+   * Either function will find U+d800 in "a\ud800b".
+   * This behavior ensures that char32At(lastIndexOf(UChar32 c))==c.
+   *
    * @param c The code point to search for.
    * @param start the offset into this at which to start matching
    * @param length the number of characters in this to search
@@ -2687,9 +2771,19 @@ private:
             UTextOffset start,
             int32_t length) const;
 
+  // only for c>=0xd800
+  UTextOffset doIndexOf(UChar32 c,
+                        UTextOffset start,
+                        int32_t length) const;
+
   UTextOffset doLastIndexOf(UChar c,
                 UTextOffset start,
                 int32_t length) const;
+
+  // only for c>=0xd800
+  UTextOffset doLastIndexOf(UChar32 c,
+                            UTextOffset start,
+                            int32_t length) const;
 
   void doExtract(UTextOffset start, 
          int32_t length, 
@@ -3161,14 +3255,7 @@ UnicodeString::indexOf(UChar c) const
 
 inline UTextOffset 
 UnicodeString::indexOf(UChar32 c) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
-    return doIndexOf((UChar)c, 0, fLength);
-  } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t length = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, length, c);
-    return indexOf(buffer, length, 0);
-  }
+  return indexOf(c, 0, fLength);
 }
 
 inline UTextOffset 
@@ -3179,14 +3266,7 @@ UnicodeString::indexOf(UChar c,
 inline UTextOffset 
 UnicodeString::indexOf(UChar32 c,
                UTextOffset start) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
-    return doIndexOf((UChar)c, start, fLength - start);
-  } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t length = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, length, c);
-    return indexOf(buffer, length, start);
-  }
+  return indexOf(c, start, fLength - start);
 }
 
 inline UTextOffset 
@@ -3199,13 +3279,10 @@ inline UTextOffset
 UnicodeString::indexOf(UChar32 c,
                UTextOffset start,
                int32_t length) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+  if((uint32_t)c<0xd800) {
     return doIndexOf((UChar)c, start, length);
   } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t cLength = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, cLength, c);
-    return indexOf(buffer, cLength, start, length);
+    return doIndexOf(c, start, length);
   }
 }
 
@@ -3259,14 +3336,7 @@ UnicodeString::lastIndexOf(UChar c) const
 
 inline UTextOffset 
 UnicodeString::lastIndexOf(UChar32 c) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
-    return doLastIndexOf((UChar)c, 0, fLength);
-  } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t count = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
-    return lastIndexOf(buffer, count, 0);
-  }
+  return lastIndexOf(c, 0, fLength);
 }
 
 inline UTextOffset 
@@ -3277,14 +3347,7 @@ UnicodeString::lastIndexOf(UChar c,
 inline UTextOffset 
 UnicodeString::lastIndexOf(UChar32 c,
                UTextOffset start) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
-    return doLastIndexOf((UChar)c, start, fLength - start);
-  } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t count = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
-    return lastIndexOf(buffer, count, start);
-  }
+  return lastIndexOf(c, start, fLength - start);
 }
 
 inline UTextOffset 
@@ -3297,13 +3360,10 @@ inline UTextOffset
 UnicodeString::lastIndexOf(UChar32 c,
                UTextOffset start,
                int32_t length) const {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+  if((uint32_t)c<0xd800) {
     return doLastIndexOf((UChar)c, start, length);
   } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
-    int32_t count = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, count, c);
-    return lastIndexOf(buffer, count, start, length);
+    return doLastIndexOf(c, start, length);
   }
 }
 
