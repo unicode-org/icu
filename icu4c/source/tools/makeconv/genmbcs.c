@@ -100,8 +100,8 @@ skipWhitespace(const char *s) {
  * range=number ['-' number]
  * nextstate=number
  *           (0..7f)
- * action='u' | 's' | 'p'
- *        (unassigned, state change only, surrogate pair)
+ * action='u' | 's' | 'p' | 'i'
+ *        (unassigned, state change only, surrogate pair, illegal)
  * number=(1- or 2-digit hexadecimal number)
  */
 static const char *
@@ -191,6 +191,9 @@ parseState(const char *s, int32_t state[256], uint32_t *pFlags) {
                     s=skipWhitespace(s+1);
                 } else if(*s=='s') {
                     value|=MBCS_STATE_CHANGE_ONLY<<27UL;
+                    s=skipWhitespace(s+1);
+                } else if(*s=='i') {
+                    value|=MBCS_STATE_ILLEGAL<<27UL;
                     s=skipWhitespace(s+1);
                 } else {
                     value|=MBCS_STATE_VALID_16<<27UL;
