@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/Attic/readme.txt,v $
-* $Date: 2003/04/23 19:00:04 $
-* $Revision: 1.10 $
+* $Date: 2003/04/25 01:27:27 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ can be used to:
 - build the Derived Unicode files in the UCD (Unicode Character Database),
 - build the transformed UCA (Unicode Collation Algorithm) files needed by ICU.
 - run consistency checks on beta releases of the UCD and the UCA.
+- build 4 chart folders on the unicode site
 
 
 WARNING!!
@@ -33,7 +34,9 @@ WARNING!!
 Instructions:
 
 0. You will need to get ICU4J on your system, using CVS.
-You need both the main ICU4J and a subproject called unicodetools. See:
+The rest of this will assume that you have set up CVS so that you load the ICU4J project into C:\ICU4J
+
+You need both the main icu4j and a subproject called unicodetools. See:
 
 http://oss.software.ibm.com/icu/develop/cvs.html
 
@@ -42,6 +45,30 @@ Inside unicodetools, look at com/ibm/text. The main directories of interest are 
 0a. If you are using Eclipse for your IDE, look at the instructions on
 
 http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm
+
+Set up Eclipse to build two projects: ICU4J and UnicodeTools:
+
+Project Name: ICU4J
+Directory: C:\ICU4J\icu4j
+Default output folder = ICU4J/classes
+
+Project Name: UnicodeTools
+Directory: C:\ICU4J\unicodetools
+Default Output Folder: UnicodeTools/classes
+
+After Eclipse is set up with these, exclude certain files from UnicodeTools:
+
+Right-Click UnicodeTools > Properties > Java Build Path > Exclusions
+com/ibm/rbm/
+com/ibm/text/utility/UnicodeMapInt.java
+com/ibm/text/utility/TestUtility.java
+com/ibm/text/UCD/GenerateThaiBreaks-old.java/
+com/ibm/text/UCD/ProcessUnihan.java/
+com/ibm/text/UCA/WriteHTMLCollation.java/
+
+UnicodeTools must also include the ICU4J project, with
+
+Right-Click UnicodeTools > Properties > Java Build Path > Projects
 
 1. In UCD, you must edit UCD_Types.java at the top, to set the directories for the build:
 
@@ -119,6 +146,12 @@ you can omit the "version X".
 
 4. Running UCD, you will use com.ibm.text.UCD.Main as your main class.
 
+The Working directory has to be C:\ICU4J\unicodetools\com\ibm\text\UCD
+
+The same for UCA:
+main: com.ibm.text.UCD.Main
+directory: C:\ICU4J\unicodetools\com\ibm\text\UCA
+
 4a. For each version, the tools build a set of binary data in BIN that contain
 the information for that release. This is done automatically, or you can manually do it
 with the options
@@ -164,3 +197,5 @@ Don't worry about any console messages except those that say FAIL.
 5a. To build all the UCA files used by ICU, use the option:
 
     java <UCA>Main ICU
+
+6. To build all the charts, use the UCA project, with options: normalizationChart caseChart scriptChart indexChart
