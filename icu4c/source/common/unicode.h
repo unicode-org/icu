@@ -28,7 +28,7 @@
 #define UNICODE_H
 
 #include "utypes.h"
-
+#include "uchar.h"
 
 /**
  * The Unicode class allows you to query the properties associated with individual 
@@ -641,6 +641,37 @@ public:
     static uint16_t         getCellWidth(UChar    ch);
 
     /**
+     * Retrieve the name of a Unicode character.
+     * Depending on <code>nameChoice</code>, the character name written
+     * into the buffer is the "modern" name or the name that was defined
+     * in Unicode version 1.0.
+     * The name contains only "invariant" characters
+     * like A-Z, 0-9, space, and '-'.
+     *
+     * @param code The character (code point) for which to get the name.
+     *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
+     * @param buffer Destination address for copying the name.
+     * @param bufferLength <code>==sizeof(buffer)</code>
+     * @param nameChoice Selector for which name to get.
+     *
+     * @see UCharNameChoice
+     *
+     * Example:
+     * <pre>
+     * &#32;   char buffer[100];
+     * &#32;   UTextOffset length=Unicode::getCharName(
+     * &#32;           0x284, buffer, sizeof(buffer));
+     * &#32;   
+     * &#32;   // use invariant-character conversion to Unicode
+     * &#32;   UnicodeString name(buffer, length, "");
+     * </pre>
+     */
+    static inline UTextOffset
+    getCharName(uint32_t code,
+                char *buffer, UTextOffset bufferLength,
+                UCharNameChoice nameChoice=U_UNICODE_CHAR_NAME);
+
+    /**
      * Retrives the decimal numeric value of a digit character.
      * @param ch the digit character for which to get the numeric value
      * @return the numeric value of ch in decimal radix.  This method returns
@@ -736,5 +767,13 @@ protected:
 
 };
 
+inline UTextOffset
+Unicode::getCharName(uint32_t code,
+                     char *buffer, UTextOffset bufferLength,
+                     UCharNameChoice nameChoice) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UTextOffset length=u_charName(code, nameChoice, buffer, bufferLength, &errorCode);
+    return U_SUCCESS(errorCode) ? length : 0;
+}
 
 #endif
