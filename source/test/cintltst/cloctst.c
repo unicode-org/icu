@@ -2067,6 +2067,10 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
         }
         pattern[2] = 0; 
     }
+    if (strcmp(locale, "uk") == 0 || strcmp(locale, "uk_UA") == 0) {
+        /* Special addition. Add the modifying apostrophe, which isn't in Cyrillic. */
+        uset_add(scripts[0], 0x2bc);
+    }
     if(U_SUCCESS(status)){
         UBool existsInScript = FALSE;
         /* iterate over the exemplarSet and ascertain if all
