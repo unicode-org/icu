@@ -37,6 +37,7 @@ The following names can be supplied as the argument for platform:
     SOLARISCC               Use Sun's CC compiler on Solaris 
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
+    TRU64V5.1/CXX           Use Copmaq's cxx compiler on Tru64 (OSF) 
 EOE
     fi
 
@@ -178,6 +179,12 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        ;;
+    TRU64V5.1/CXX)
+        THE_OS="OSF1"
+        THE_COMP="Compaq cxx"
+        CC=cxx; export CC
+        CXX=cxx; export CXX
         ;;
     LinuxRedHat*)
         THE_OS="Linux"
