@@ -8,14 +8,14 @@ This sample demonstrates
          
 Files:
     date.c                      Main source file
-    uprint.h                   codepage output convenience header
-    uprint.h                   codepage output convenience implementation
-    date.dsw                    Windows MSVC workspace.  Double-click this to get started.
-    date.dsp                    Windows MSVC project file
+    uprint.h                    codepage output convenience header
+    uprint.h                    codepage output convenience implementation
+    date.sln                    Windows MSVC workspace.  Double-click this to get started.
+    date.vcproj                 Windows MSVC project file
 
 To Build icudate on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\date\date.dsw
+    2.  In MSVC, open the workspace file icu\samples\date\date.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	

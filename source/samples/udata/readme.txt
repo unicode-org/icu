@@ -8,12 +8,12 @@ This sample demonstrates
 Files:
     writer.c       C source for Writer application, will generate data file to be read by Reader.
     reader.c       C source for Reader application, will read file created by Writer
-    udata.dsw      Windows MSVC workspace.  Double-click this to get started.
-    udata.dsp      Windows MSVC project file
+    udata.sln      Windows MSVC workspace.  Double-click this to get started.
+    udata.vcproj   Windows MSVC project file
 
 To Build udata on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\udata\udata.dsw
+    2.  In MSVC, open the workspace file icu\samples\udata\udata.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 

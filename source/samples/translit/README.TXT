@@ -28,7 +28,7 @@ Microsoft Visual C++ 6.0.  It should work on other ICU releases and
 other platforms as well.
 
  MSVC:
-   Open the file "translit.dsw" in Microsoft Visual C++.
+   Open the file "translit.sln" in Microsoft Visual C++.
 
  Unix:
    - Build and install ICU with a prefix, for example '--prefix=/home/srl/ICU'

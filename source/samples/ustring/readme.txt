@@ -7,12 +7,12 @@ This sample demonstrates
          
 Files:
     ustring.cpp      Main source file in C++
-    ustring.dsw      Windows MSVC workspace.  Double-click this to get started.
-    ustring.dsp      Windows MSVC project file
+    ustring.sln      Windows MSVC workspace.  Double-click this to get started.
+    ustring.vcproj   Windows MSVC project file
 
 To Build ustring on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\ustring\ustring.dsw
+    2.  In MSVC, open the workspace file icu\samples\ustring\ustring.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	
