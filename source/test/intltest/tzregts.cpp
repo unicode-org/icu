@@ -759,10 +759,11 @@ TimeZoneRegressionTest::Test4154650()
         UBool good = DATA[i] == GOOD;
         //IllegalArgumentException e = null;
         //try {
-            int32_t offset = tz->getOffset((uint8_t)DATA[i+1], DATA[i+2], DATA[i+3],
-                                      DATA[i+4], (uint8_t)DATA[i+5], DATA[i+6], status); 
-       //} catch (IllegalArgumentException ex) {
-         //   e = ex;
+            /*int32_t offset = */
+        tz->getOffset((uint8_t)DATA[i+1], DATA[i+2], DATA[i+3],
+                      DATA[i+4], (uint8_t)DATA[i+5], DATA[i+6], status); 
+        //} catch (IllegalArgumentException ex) {
+        //   e = ex;
         //}
         if(good != U_SUCCESS(status)) {
             errln(UnicodeString("Fail: getOffset(") +
@@ -963,7 +964,7 @@ TimeZoneRegressionTest::TestJDK12API()
         errln("FAILURE: Sunday Oct. 26 1997 2:00 has same offset for PST and CST");
 
     // verify error checking
-    int32_t offset3 = pst->getOffset(1,
+    pst->getOffset(1,
         1997, (Calendar::EDateFields)-1, 26, Calendar::SUNDAY, (2*60*60*1000), status);
     if(U_SUCCESS(status))
         errln("FAILURE: getOffset() succeeded with -1 for month");
