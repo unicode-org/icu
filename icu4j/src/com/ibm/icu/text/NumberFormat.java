@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/11/16 00:59:32 $ 
- * $Revision: 1.18 $
+ * $Date: 2002/11/22 22:45:19 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -22,20 +22,16 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.LocaleUtility;
 
@@ -163,7 +159,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.18 $
+ * @version      $Revision: 1.19 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -223,7 +219,7 @@ public abstract class NumberFormat extends Format{
 
    /**
      * Specialization of format.
-     * @see java.text.Format#format
+     * @see java.text.Format#format(Object)
      */
     public final String format (double number) {
         return format(number,new StringBuffer(),
@@ -232,7 +228,7 @@ public abstract class NumberFormat extends Format{
 
    /**
      * Specialization of format.
-     * @see java.text.Format#format
+     * @see java.text.Format#format(Object)
      */
     public final String format (long number) {
         return format(number,new StringBuffer(),
@@ -268,7 +264,7 @@ public abstract class NumberFormat extends Format{
 
    /**
      * Specialization of format.
-     * @see java.text.Format#format
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      */
     public abstract StringBuffer format(double number,
                                         StringBuffer toAppendTo,
@@ -276,7 +272,7 @@ public abstract class NumberFormat extends Format{
 
    /**
      * Specialization of format.
-     * @see java.text.Format#format
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      */
     public abstract StringBuffer format(long number,
                                         StringBuffer toAppendTo,
@@ -285,6 +281,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigInteger.
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      */
     public abstract StringBuffer format(BigInteger number,
                                         StringBuffer toAppendTo,
@@ -293,6 +290,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      */
     public abstract StringBuffer format(java.math.BigDecimal number,
                                         StringBuffer toAppendTo,
@@ -301,6 +299,7 @@ public abstract class NumberFormat extends Format{
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      */
     public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
@@ -315,7 +314,7 @@ public abstract class NumberFormat extends Format{
      * Does not throw an exception; if no object can be parsed, index is
      * unchanged!
      * @see #isParseIntegerOnly
-     * @see java.text.Format#parseObject
+     * @see java.text.Format#parseObject(String, ParsePosition)
      */
     public abstract Number parse(String text, ParsePosition parsePosition);
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/11/15 01:58:29 $
- * $Revision: 1.77 $
+ * $Date: 2002/11/22 22:45:19 $
+ * $Revision: 1.78 $
  *
  *****************************************************************************************
  */
@@ -250,7 +250,7 @@ import java.util.Iterator;
  * </blockquote>
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.77 $ $Date: 2002/11/15 01:58:29 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.78 $ $Date: 2002/11/22 22:45:19 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -492,9 +492,8 @@ public class UnicodeSet extends UnicodeFilter {
      * string to the given <code>StringBuffer</code>.
      */
     private static void _appendToPat(StringBuffer buf, String s, boolean useHexEscape) {
-        int cp;
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            _appendToPat(buf, cp = UTF16.charAt(s, i), useHexEscape);
+            _appendToPat(buf, UTF16.charAt(s, i), useHexEscape);
         }
     }
 
@@ -1815,7 +1814,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Returns the hash code value for this set.
      *
      * @return the hash code value for this set.
-     * @see Object#hashCode()
+     * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
         int result = len;
