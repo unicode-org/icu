@@ -30,7 +30,7 @@ ICUTOOLS=$(ICUP)\icu\source\tools
 !ENDIF
 
 LINK32 = link.exe
-LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999 International Business Machines Corporation and others.  All Rights Reserved. "
+LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999-2000 International Business Machines Corporation and others.  All Rights Reserved. "
 CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
 
 #Here we test if configuration is given
@@ -110,7 +110,7 @@ COL_FILES = $(GENCOL_SOURCE:.txt=.col)
 
 
 # This target should build all the data files
-ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat GOBACK
+ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll icudata.dat icudata.dll GOBACK
 	@echo All targets are up to date
 
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
@@ -120,12 +120,40 @@ CPP_SOURCES = $(C_CNV_FILES) uprops_dat.c unames_dat.c cnvalias_dat.c tz_dat.c $
 LINK32_OBJS = $(CPP_SOURCES:.c=.obj)
 
 # target for DLL
+
+# switch this condition to "a"=="a" or "a"=="b" in order to change the way the dll is built
+
+!IF "a"=="b"
+
+# old way of building data DLLs via .c sources for the data pieces
 icudata.dll : $(LINK32_OBJS) $(CNV_FILES)
-	@echo Creating DLL file
+	@echo Creating Data DLL file from intermediate .c files
 	@cd $(ICUDATA)
-	@$(LINK32) @<<
-$(LINK32_FLAGS) $(LINK32_OBJS)
+ 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -S -d $(ICUDATA) 0 <<
+$(ICUDATA)\uprops.dat
+$(ICUDATA)\unames.dat
+$(ICUDATA)\cnvalias.dat
+$(ICUDATA)\tz.dat
+$(BRK_FILES:.brk =.brk
+)
+$(CNV_FILES:.cnv =.cnv
+)
 <<
+    @$(CPP) $(CPP_FLAGS) icudata_dat.c
+	@$(LINK32) @<<
+$(LINK32_FLAGS) icudata_dat.obj $(LINK32_OBJS)
+<<
+
+!ELSE
+
+# new way of building data DLLs directly from the common map file
+icudata.dll: icudata.dat
+	@echo Creating Data DLL file from icudata.dat
+	@cd $(ICUDATA)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode -o $(ICUDATA)\$?
+	@$(LINK32) $(LINK32_FLAGS) icudata_dat.obj
+
+!ENDIF
 
 LINK32_TEST_FLAGS = /out:"$(ICUDATA)/test_dat.dll" /DLL /NOENTRY 
 LINK32_BASE_TEST_FLAGS = /out:"$(ICUDATA)/base_test_dat.dll" /DLL /NOENTRY 
@@ -199,20 +227,16 @@ $(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
     copy $(ICUDATA)\word_thLE.brk $(ICUDATA)\word_th.brk
 
 # target for memory mapped file
-icudata.dat : $(CNV_FILES) uprops.dat unames.dat cnvalias.dat tz.dat
+icudata.dat : $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat
 	@echo Creating memory-mapped file
 	@cd $(ICUDATA)
- 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -c 1000000 <<
+ 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -c -d $(ICUDATA) 1000000 <<
 $(ICUDATA)\uprops.dat
 $(ICUDATA)\unames.dat
 $(ICUDATA)\cnvalias.dat
 $(ICUDATA)\tz.dat
-$(ICUDATA)\sent.brk
-$(ICUDATA)\char.brk
-$(ICUDATA)\line.brk
-$(ICUDATA)\word.brk
-$(ICUDATA)\line_th.brk
-$(ICUDATA)\word_th.brk
+$(BRK_FILES:.brk =.brk
+)
 $(CNV_FILES:.cnv =.cnv
 )
 <<
