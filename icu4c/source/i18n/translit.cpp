@@ -1446,10 +1446,7 @@ void Transliterator::initializeRegistry(void) {
     Locale indexLoc("translit_index");
 
     UResourceBundle *bundle, *transIDs, *colBund;
-    // TODO call internal ures_openXYZ() that guarantees to not canonicalize
-    // (uloc_getName()) the ch resource bundle name, and that also
-    // will not try fallbacks
-    bundle = ures_open(0, "translit_index", &status);
+    bundle = ures_openDirect(0, "translit_index", &status);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
 
     int32_t row, maxRows;
