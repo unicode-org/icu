@@ -620,7 +620,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.29 $ $Date: 2002/08/08 01:45:21 $
+ * @version      $Revision: 1.30 $ $Date: 2002/08/21 18:39:56 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1685,12 +1685,26 @@ public abstract class Calendar implements Serializable, Cloneable {
 
         Calendar that = (Calendar) obj;
 
-        return
-            getTimeInMillis() == that.getTime().getTime() &&
-            isLenient() == that.isLenient() &&
-            getFirstDayOfWeek() == that.getFirstDayOfWeek() &&
-            getMinimalDaysInFirstWeek() == that.getMinimalDaysInFirstWeek() &&
-            getTimeZone().equals(that.getTimeZone());
+        return isEquivalentTo(that) &&
+            getTimeInMillis() == that.getTime().getTime();
+    }
+
+    /**
+     * Returns true if the given Calendar object is equivalent to this
+     * one.  An equivalent Calendar will behave exactly as this one
+     * does, but it may be set to a different time.  By contrast, for
+     * the equals() method to return true, the other Calendar must
+     * be set to the same time.
+     *
+     * @param other the Calendar to be compared with this Calendar   
+     * @since ICU 2.4
+     */
+    public boolean isEquivalentTo(Calendar other) {
+        return this.getClass() == other.getClass() &&
+            isLenient() == other.isLenient() &&
+            getFirstDayOfWeek() == other.getFirstDayOfWeek() &&
+            getMinimalDaysInFirstWeek() == other.getMinimalDaysInFirstWeek() &&
+            getTimeZone().equals(other.getTimeZone());
     }
 
     /**
