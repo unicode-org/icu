@@ -41,7 +41,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
 }
 
-// The locales we support
+/* The locales we support */
 
 static char * LOCALES[] = {"en_AU", "en_BE", "en_CA"};
 

@@ -2096,9 +2096,9 @@ static int TestJitterbug930(char* enc){
    int32_t* offsets = off;
    int numOffWritten=0;
    UBool flush = 0;
-   converter = ucnv_open(enc, &err); // "",&err);
+   converter = ucnv_open(enc, &err); /* "",&err);*/
 
-   in[0] = 0x41;     // 0x4E00;
+   in[0] = 0x41;     /* 0x4E00;*/
    in[1] = 0x4E01;
    in[2] = 0x4E02;
    in[3] = 0x4E03;
