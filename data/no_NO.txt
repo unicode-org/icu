@@ -6,17 +6,5 @@
 // *******************************************************************************
 
 no_NO {
-    CurrencyElements { 
-            "kr",
-            "NOK",
-            ",",
-    }
-    LocaleString { "no_NO_B" }
-    NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "\u00A4 #,##0.00;\u00A4 -#,##0.00",
-            "#,##0%",
-    }
-    ShortCountry { "NOR" }
-    LocaleID { "0414" }
+   "%%ALIAS" { "nb_NO" }
 }
