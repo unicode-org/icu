@@ -43,6 +43,7 @@ public:
     void TestCompatCompose(void);
     void TestTibetan(void);
     void TestCompositionExclusion(void);
+    void TestZeroIndex(void);
 
 private:
     static UnicodeString canonTests[][3];

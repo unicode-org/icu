@@ -34,6 +34,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(6,TestHangulCompose);
         CASE(7,TestTibetan);
         CASE(8,TestCompositionExclusion);
+        CASE(9,TestZeroIndex);
         default: name = ""; break;
     }
 }
@@ -314,6 +315,52 @@ void BasicNormalizerTest::TestCompositionExclusion(void) {
             logln("Ok: " + hex(a) + " x DECOMP_COMPAT => " +
                   hex(b) + " x COMPOSE => " +
                   hex(c));                
+        }
+    }
+}
+
+/**
+ * Test for a problem that showed up just before ICU 1.6 release
+ * having to do with combining characters with an index of zero.
+ * Such characters do not participate in any canonical
+ * decompositions.  However, having an index of zero means that
+ * they all share one typeMask[] entry, that is, they all have to
+ * map to the same canonical class, which is not the case, in
+ * reality.
+ */
+void BasicNormalizerTest::TestZeroIndex(void) {
+    const char* DATA[] = {
+        // Expect col1 x COMPOSE_COMPAT => col2
+        // Expect col2 x DECOMP => col3
+        "A\\u0316\\u0300", "\\u00C0\\u0316", "A\\u0316\\u0300",
+        "A\\u0300\\u0316", "\\u00C0\\u0316", "A\\u0316\\u0300",
+        "A\\u0327\\u0300", "\\u00C0\\u0327", "A\\u0327\\u0300",
+        "c\\u0321\\u0327", "c\\u0321\\u0327", "c\\u0321\\u0327",
+        "c\\u0327\\u0321", "\\u00E7\\u0321", "c\\u0327\\u0321",
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString a(DATA[i], "");
+        a = a.unescape();
+        UnicodeString b;
+        Normalizer::normalize(a, Normalizer::COMPOSE_COMPAT, 0, b, status);
+        UnicodeString exp(DATA[i+1], "");
+        exp = exp.unescape();
+        if (b == exp) {
+            logln((UnicodeString)"Ok: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b));
+        } else {
+            errln((UnicodeString)"FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
+                  ", expect " + hex(exp));
+        }
+        Normalizer::normalize(b, Normalizer::DECOMP, 0, a, status);
+        exp = UnicodeString(DATA[i+2], "").unescape();
+        if (a == exp) {
+            logln((UnicodeString)"Ok: " + hex(b) + " x DECOMP => " + hex(a));
+        } else {
+            errln((UnicodeString)"FAIL: " + hex(b) + " x DECOMP => " + hex(a) +
+                  ", expect " + hex(exp));
         }
     }
 }
