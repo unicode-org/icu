@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/02 19:28:48 $
-# $Revision: 1.8 $
+# $Date: 2001/11/03 05:45:51 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -28,6 +28,7 @@ $accent = [:M:] ;
 
 $macron = \u0304 ;
 $ddot = \u0308 ;
+$ddotmac = [$ddot$macron];
 
 $lcgvowel = [αεηιουω] ; 
 $ucgvowel = [ΑΕΗΙΟΥΩ] ; 
@@ -64,8 +65,10 @@ $beforeLetter = [\'[:M:]]* [:^L:] ;
 # IOTA: convert iota subscript to iota
 # first make previous alpha long!
 
-Α } [$accent$rough$smooth] * $iotasub > A $macron ;  
-α } [$accent$rough$smooth] * $iotasub > a $macron ; 
+$accent_minus = [[$accent]-[$iotasub$macron]];
+
+Α } $accent_minus * $iotasub > | Α $macron ;  
+α } $accent_minus * $iotasub > | α $macron ; 
 
 # now convert to uppercase if after uppercase, ow to lowercase
 
@@ -81,7 +84,7 @@ $iotasub > i ;
 
 # Make A ` x = > H a x
 
- Α $rough } $beforeLower > H | α ; 
+ Α ($macron?) $rough } $beforeLower > H | α $1; 
  Ε $rough } $beforeLower > H | ε; 
  Η $rough } $beforeLower > H | η ; 
  Ι ($ddot?) $rough } $beforeLower > H | ι  $1; 
@@ -91,7 +94,7 @@ $iotasub > i ;
 
 # Make A x ` = > H a x
 
-Α ($lower) $rough > H | α $1 ; 
+Α ($lower $macron?) $rough > H | α $1 ; 
 Ε ($lower) $rough > H | ε $1 ; 
 Η ($lower) $rough > H | η $1 ; 
 Ι ($lower $ddot?) $rough > H | ι $1 ; 
@@ -101,8 +104,8 @@ $iotasub > i ;
 
 #Otherwise, make x ` into h x and X ` into H X
 
-($lcgvowel + $ddot? ) $rough > h | $1 ; 
-($gvowel + $ddot? ) $rough > H | $1 ; 
+($lcgvowel + $ddotmac? ) $rough > h | $1 ; 
+($gvowel + $ddotmac? ) $rough > H | $1 ; 
 
 # Go backwards with H
 
@@ -144,6 +147,7 @@ $iotasub > i ;
 $smooth > ; 
 
 # insert in Greek
+# the assumption is that all Marks are on letters.
 
  | $1 $smooth < [^[:L:][:M:]] { ([rR]) } [^hH$smooth$rough] ;
  | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron? $evowel $macron?) } [^$smooth$rough] ;
@@ -153,6 +157,11 @@ $smooth > ;
 # on initial vowel sequence
 
 # need to have these up here so the rules don't mask
+
+# remove now superfluous macron when returning
+
+Α < A $macron ;  
+α < a $macron ; 
 
 η <> e $macron ;
 Η <> E $macron ;
