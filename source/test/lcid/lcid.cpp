@@ -29,7 +29,7 @@ testLCID(const char *localeName,
     char lcidStringC[1024];
     char cLocaleName[256] =  {'\0'};
     
-    u_UCharsToChars(posixName.getUChars(),cLocaleName,posixName.length());
+    u_UCharsToChars(posixName.getBuffer(),cLocaleName,posixName.length());
     ResourceBundle posixLocale((char *)0, Locale(cLocaleName), status);
     if(status != U_ZERO_ERROR) {
         if(U_SUCCESS(status)) {
