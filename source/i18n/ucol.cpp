@@ -27,6 +27,7 @@
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/unorm.h"
+#include "unicode/normlzr.h"
 #include "unicode/udata.h"
 
 #include "unormimp.h"
@@ -1826,25 +1827,27 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         // Contraction tables are used - so the whole process is not unlike contraction.
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
-        UChar tchar, *sourcePointer = source->pos;
+        UChar schar, tchar, *sourcePointer = source->pos;
+        Normalizer n(source->string, source->pos-source->string, UNORM_NFKC);
+        n.last();
         for(;;) {
         // This loop will run once per source string character, for as long as we
         //  are matching a potential contraction sequence                  
 
         // First we position ourselves at the begining of contraction sequence 
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-        if(sourcePointer != source->string) {
-          --sourcePointer;
-        } else {
-          // Ran off the beggining of the source string.
+        schar = (UChar)n.previous();
+
+        if(schar==Normalizer::DONE) {
           CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+          break;
         }
 
-        while(*(sourcePointer) > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
         }
 
-        if (*(sourcePointer) == tchar) {
+        if (schar == tchar) {
             // Found the source string char in the table.
             //  Pick up the corresponding CE from the table.
             CE = *(coll->contractionCEs +
