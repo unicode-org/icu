@@ -32,7 +32,7 @@ UNICODEDATADIR=$(top_srcdir)/../data/unidata
 UNICODEFILE=$(UNICODEDATADIR)/UnicodeData.txt
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = gennames
