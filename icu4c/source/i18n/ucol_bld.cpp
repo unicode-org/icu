@@ -33,15 +33,18 @@ isAcceptableInvUCA(void * /*context*/,
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==0x49 &&   /* dataFormat="InvC" */
-        pInfo->dataFormat[1]==0x6e &&
-        pInfo->dataFormat[2]==0x76 &&
-        pInfo->dataFormat[3]==0x43 &&
-        pInfo->formatVersion[0]==1 &&
-        pInfo->dataVersion[0]==3 &&
-        pInfo->dataVersion[1]==0 &&
-        pInfo->dataVersion[2]==0 &&
-        pInfo->dataVersion[3]==0) {
+        pInfo->dataFormat[0]==invUcaDataInfo.dataFormat[0] &&   /* dataFormat="InvC" */
+        pInfo->dataFormat[1]==invUcaDataInfo.dataFormat[1] &&
+        pInfo->dataFormat[2]==invUcaDataInfo.dataFormat[2] &&
+        pInfo->dataFormat[3]==invUcaDataInfo.dataFormat[3] &&
+        pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
+        pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
+        pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] &&
+        pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] &&
+        pInfo->dataVersion[0]==invUcaDataInfo.dataVersion[0] &&
+        pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
+        pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&
+        pInfo->dataVersion[3]==invUcaDataInfo.dataVersion[3]) {
         return TRUE;
     } else {
         return FALSE;

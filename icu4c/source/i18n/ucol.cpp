@@ -66,15 +66,18 @@ isAcceptableUCA(void * /*context*/,
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==0x55 &&   /* dataFormat="UCol" */
-        pInfo->dataFormat[1]==0x43 &&
-        pInfo->dataFormat[2]==0x6f &&
-        pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==1 &&
-        pInfo->dataVersion[0]==3 &&
-        pInfo->dataVersion[1]==0 &&
-        pInfo->dataVersion[2]==0 &&
-        pInfo->dataVersion[3]==0) {
+        pInfo->dataFormat[0]==ucaDataInfo.dataFormat[0] &&   /* dataFormat="UCol" */
+        pInfo->dataFormat[1]==ucaDataInfo.dataFormat[1] &&
+        pInfo->dataFormat[2]==ucaDataInfo.dataFormat[2] &&
+        pInfo->dataFormat[3]==ucaDataInfo.dataFormat[3] &&
+        pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
+        pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
+        pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] &&
+        pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] &&
+        pInfo->dataVersion[0]==ucaDataInfo.dataVersion[0] &&
+        pInfo->dataVersion[1]==ucaDataInfo.dataVersion[1] &&
+        pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
+        pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
         return TRUE;
     } else {
         return FALSE;
