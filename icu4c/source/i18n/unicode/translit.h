@@ -557,6 +557,7 @@ protected:
                                        UBool incremental) const;
 
     friend class CompoundTransliterator; // for filteredTransliterate()
+    friend class AnyTransliterator; // for filteredTransliterate()
 
 private:
 
