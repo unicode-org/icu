@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/11/15 22:40:16 $
-* $Revision: 1.55 $
+* $Date: 2002/12/02 05:45:46 $
+* $Revision: 1.56 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -261,6 +261,29 @@
         <zip zipfile="${zipSrc.file}"
             basedir="."
             excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+    </target>
+
+    <target name="check" depends="tests">
+	<java classname="com.ibm.icu.dev.test.TestAll">
+	    <classpath>
+                <pathelement path="${java.class.path}/"/>
+                <pathelement path="${build.dir}"/>
+            </classpath>
+	</java>
+    </target>
+
+
+    <target name="checktags" depends="tools">
+        <echo message="Execute with a JDK that provides access to com.sun.* packages"/>
+        <javadoc sourcepath="${src.dir}" 
+                 packagenames="com.ibm.icu.*"
+                 excludepackagenames="com.ibm.icu.dev.*,com.ibm.icu.impl.*"
+                 classpath="${build.dir}">
+            <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
+                    path="${build.dir}">
+                <param name="-brief"/>
+            </doclet>       
+        </javadoc>
     </target>
 
     <target name="clean" depends="init">

@@ -27,7 +27,7 @@ import com.sun.javadoc.*;
 public class CheckTags {
     RootDoc root;
     boolean log;
-    boolean brief = true;
+    boolean brief;
     DocStack stack = new DocStack();
 
     class DocNode {
@@ -41,6 +41,12 @@ public class CheckTags {
             this.printed = false;
             this.errorCount = 0;
             this.reportError = reportError;
+        }
+        public String toString() {
+            return header + 
+                " printed: " + printed +
+                " reportError: " + reportError +
+                " errorCount: " + errorCount;
         }
     }
 
@@ -62,6 +68,7 @@ public class CheckTags {
             if (stack[index] == null) {
                 stack[index] = new DocNode();
             }
+            //  System.out.println("reset [" + index + "] header: " + header + " report: " + reportError);
             stack[index++].reset(header, reportError);
         }
 
@@ -70,13 +77,23 @@ public class CheckTags {
                 throw new IndexOutOfBoundsException();
             }
             --index;
-            handleErrors();
+
+            int ec = stack[index].errorCount; // index already decremented
+            if (ec > 0 || index == 0) { // always report for outermost element
+                if (stack[index].reportError) {
+                    output("(" + ec + (ec == 1 ? " error" : " errors") + ")", false, true, index);
+                }
+
+                // propagate to parent
+                if (index > 0) {
+                    stack[index-1].errorCount += ec;
+                }
+            }
             if (index == 0) {
                 System.out.println(); // always since we always report number of errors
             }
         }
 
-        
         public void output(String msg, boolean error, boolean newline) {
             output(msg, error, newline, index-1);
         }
@@ -88,25 +105,28 @@ public class CheckTags {
             }
 
             boolean show = !brief || last.reportError;
+            boolean nomsg = show && brief && error;
+            //            System.out.println(">>> " + last + " error: " + error + " show: " + show + " nomsg: " + nomsg);
+
             if (show) {
                 if (brief && error) {
                     msg = null; // nuke error messages if we're brief, just report headers and totals
                 }
-                for (int i = 0; i < index;) {
+                for (int i = 0; i <= ix;) {
                     DocNode n = stack[i];
                     if (n.printed) {
                         if (msg != null || !last.printed) { // since index > 0 last is not null
                             if (this.newline && i == 0) {
                                 System.out.println();
+                                this.newline = false;
                             }
                             System.out.print("  ");
-                            this.newline = false;
                         }
                         ++i;
                     } else {
                         System.out.print(n.header);
-                        this.newline = true;
                         n.printed = true;
+                        this.newline = true;
                         i = 0;
                     }
                 }
@@ -123,21 +143,6 @@ public class CheckTags {
             }
 
             this.newline = newline;
-        }
-
-        void handleErrors() {
-            // index is already decremented
-            int ec = stack[index].errorCount;
-            if (ec > 0 || index == 0) { // always report for outermost element
-                if (stack[index].reportError) {
-                    output("(" + ec + (ec == 1 ? " error" : " errors") + ")", false, true, index);
-                }
-
-                // propagate to parent
-                if (index > 0) {
-                    stack[index-1].errorCount += ec;
-                }
-            }
         }
     }
 
@@ -231,7 +236,8 @@ public class CheckTags {
     }
 
     void tagErr(Tag tag) {
-        errln(tag.toString() + " [" + tag.position() + "]");
+        // errln(tag.toString() + " [" + tag.position() + "]");
+        errln(tag.toString()); // comment out since JDK 1.3.0 doesn't define tag.position()
     }
 
     void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
@@ -259,7 +265,6 @@ public class CheckTags {
             doTags(doc.tags());
             if (isClass) {
                 ClassDoc cdoc = (ClassDoc)doc;
-                doDocs(cdoc.innerClasses(), "Inner Classes", true);
                 doDocs(cdoc.fields(), "Fields", !brief);
                 doDocs(cdoc.constructors(), "Constructors", !brief);
                 doDocs(cdoc.methods(), "Methods", !brief);
