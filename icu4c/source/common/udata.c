@@ -966,7 +966,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     }
 
     /* try path+basename+"_"+entryName first */
-    if(inBasename!=path) {
+    if(*inBasename!=0) {
         suffix=strcpy_returnEnd(basename, inBasename);
         *suffix++='_';
         uprv_strcpy(suffix, tocEntryName);
