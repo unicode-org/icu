@@ -2966,7 +2966,7 @@ TestISCII(){
         0x095C,
         0x095D,
         0x095E,
-        0x0020, 0x094D, 0x0930
+        0x0020, 0x094D, 0x0930, 0x0000, 0x00A0
       };
     static const unsigned char byteArr[]={
 
@@ -3038,6 +3038,10 @@ TestISCII(){
         0xC9, 0xE9,
         /* INV halant RA    */
         0xD9, 0xE8, 0xCF,
+        0x00, 0x00A0, 
+        /* just consume unhandled codepoints */
+        0xEF, 0x30,
+
     };
     testConvertToU(byteArr,(sizeof(byteArr)),in,(sizeof(in)/U_SIZEOF_UCHAR),"x-iscii-de",NULL,TRUE);
     TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));    
