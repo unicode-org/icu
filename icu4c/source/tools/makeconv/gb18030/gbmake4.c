@@ -33,8 +33,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* in the printed standard, U+303e is mismapped; this sequence must be skipped */
-static const unsigned char skip303eBytes[4]={ 0x81, 0x39, 0xa6, 0x34 };
+/*
+ * In the printed standard, U+303e is mismapped; this sequence must be skipped.
+ * Also, GB+fe5e needs to be added to appendix E, mapping to U+2e97, which removes its sequence, too.
+ */
+static const unsigned char
+skip2e97Bytes[4]={ 0x81, 0x39, 0x81, 0x35 },
+skip303eBytes[4]={ 0x81, 0x39, 0xa6, 0x34 };
 
 /* array of flags for each Unicode BMP code point */
 static char
@@ -64,8 +69,10 @@ incFourGB18030(unsigned char bytes[4]) {
 static void
 incSkipFourGB18030(unsigned char bytes[4]) {
     incFourGB18030(bytes);
-    if(0==memcmp(bytes, skip303eBytes, 4) && flags[0x303e]==1) {
-        /* make sure to skip the mismapped sequence if the data correctly maps U+303e==GB+a989 */
+    if( 0==memcmp(bytes, skip2e97Bytes, 4) && flags[0x2e97]==1 ||
+        0==memcmp(bytes, skip303eBytes, 4) && flags[0x303e]==1
+    ) {
+        /* make sure to skip mismapped sequences if the two-byte data covers their Unicode code points */
         incFourGB18030(bytes);
     }
 }
@@ -107,6 +114,10 @@ readRanges() {
 
         /* set the flags for all code points in this range */
         while(c1<=c2) {
+            if(flags[c1]!=0) {
+                fprintf(stderr, "error: range covers already-assigned U+%04lx\n", c1);
+                return 1;
+            }
             flags[c1++]=2;
         }
     }
@@ -157,11 +168,15 @@ main(int argc, const char *argv[]) {
         }
 
         /* set the flag for the code point */
+        if(flags[c]!=0) {
+            fprintf(stderr, "error: duplicate assignment for U+%04lx\n", c);
+            return 1;
+        }
         flags[c]= b<=0xffff ? 1 : 2;
     }
 
     if(argc<=1) {
-        /* generate all four-byte sequences that are no already in the input */
+        /* generate all four-byte sequences that are not already in the input */
         for(c=0x81; c<=0xffff; ++c) {
             if(flags[c]==0) {
                 printf("%04lx:%02x%02x%02x%02x\n", c, bytes[0], bytes[1], bytes[2], bytes[3]);
