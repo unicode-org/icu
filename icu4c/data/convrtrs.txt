@@ -86,7 +86,7 @@ UTF-7 { IANA MIME }
 
 SCSU { IANA }
 LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
-US-ASCII { MIME }        ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
+US-ASCII { MIME }        ascii ascii-7 ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
 ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
 ISO_2022,locale=ja,version=1     ISO-2022-JP-1
@@ -220,7 +220,7 @@ ibm-21427              cp947           # PC     DBCS Big-5 (w/ euro     update)
 # EBCDIC codepages according to the CDRA
 
 # without Euro
-ibm-37                 IBM037 { IANA } ibm-037 cpibm37 ebcdic-cp-us     ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 cp37 ebcdic-cp-us cp037 # EBCDIC US
+ibm-37                 IBM037 { IANA } ibm-037 cpibm37 ebcdic-cp-us     ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl csIBM037 cp37 cp037 # EBCDIC US
 ibm-273                IBM273 { IANA } csIBM273 ebcdic-de cp273 cpibm273 # EBCDIC Germanay,     Austria...
 ibm-277                IBM277 { IANA } EBCDIC-CP-DK EBCDIC-CP-NO csIBM277 ebcdic-dk  cp277 cpibm277 # EBCDIC Denmark...
 ibm-278                IBM278 { IANA } ebcdic-cp-fi ebcdic-cp-se csIBM278 ebcdic-sv  cp278 cpibm278 # EBCDIC Sweden
