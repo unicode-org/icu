@@ -490,6 +490,18 @@ Locale::hashCode() const
     return uhash_hashChars(hashKey);
 }
 
+void 
+Locale::setToBogus() {
+  /* Free our current storage */
+  if(fullName != fullNameBuffer) {
+      uprv_free(fullName);
+      fullName = fullNameBuffer;
+  }
+  *fullNameBuffer = 0;
+  *language = 0;
+  *country = 0;
+  fIsBogus = TRUE;
+}
 
 const Locale&
 Locale::getDefault() 

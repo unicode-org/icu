@@ -627,11 +627,14 @@ public:
     int32_t         hashCode(void) const;
 
     /** 
-     * Sets the bogus state
-     * @param isBogus TRUE if bogus, FALSE if normal
+     * Sets the locale to bogus 
+     * A bogus locale represents a non-existing locale associated 
+     * with services that can be instantiated from non-locale data 
+     * in addition to locale (for example, collation can be 
+     * instantiated from a locale and from a rule set). 
      * @draft ICU 2.1
      */
-    void setBogus(UBool isBogus);
+    void setToBogus();
 
     /**
      * Gets the bogus state. Locale object can be bogus if it doesn't exist
@@ -739,12 +742,6 @@ Locale::getName() const
 {
     return fullName;
 }
-
-inline void 
-Locale::setBogus(UBool isBogus) {
-  fIsBogus = isBogus;
-}
-
 
 inline UBool 
 Locale::isBogus(void) const {
