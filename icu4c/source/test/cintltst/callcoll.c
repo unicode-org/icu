@@ -42,6 +42,7 @@
 #include "unicode/ustring.h"
 #include "cmemory.h"
 #include "unicode/ucoleitr.h"
+#include "ucol_imp.h"
 
 /* perform test with strength PRIMARY */
 static void TestPrimary(void);
@@ -234,15 +235,15 @@ void doTestVariant(UCollator* myCollation, const UChar source[], const UChar tar
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int temp=0, gSortklen1=0,gSortklen2=0;
-    UCollationResult compareResult, keyResult, incResult;
+    UCollationResult compareResult, keyResult, incResult = result;
     uint8_t *sortKey1, *sortKey2;
     uint32_t sLen = u_strlen(source);
     uint32_t tLen = u_strlen(target);
+    char buffer[256];
+    uint32_t len;
 
     
     compareResult = ucol_strcoll(myCollation, source, sLen, target, tLen);
-    compareResult = ucol_strcoll(myCollation, source, sLen, target, tLen);
-    incResult = ctst_strcollTestIncremental(myCollation, source, sLen, target, tLen);
     sortklen1=ucol_getSortKey(myCollation, source, sLen,  NULL, 0);
     sortklen2=ucol_getSortKey(myCollation, target, tLen,  NULL, 0);
 
@@ -261,9 +262,11 @@ void doTestVariant(UCollator* myCollation, const UChar source[], const UChar tar
     gSortklen2 = uprv_strlen((const char *)sortKey2)+1;
     if(sortklen1 != gSortklen1){
         log_err("SortKey length does not match Expected: %i Got: %i\n",sortklen1, gSortklen1);
+        log_verbose("Generated sortkey: %s\n", ucol_sortKeyToString(myCollation, sortKey1, buffer, &len));
     }
     if(sortklen2!= gSortklen2){
         log_err("SortKey length does not match Expected: %i Got: %i\n", sortklen2, gSortklen2);
+        log_verbose("Generated sortkey: %s\n", ucol_sortKeyToString(myCollation, sortKey2, buffer, &len));
     }
 
     if(temp < 0) {
@@ -386,7 +389,7 @@ static void TestIdentical()
     rules=(UChar*)malloc(sizeof(UChar*) * (len+1));
     u_uastrcpy(rules, str);
 
-    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    myCollation=ucol_openRules(rules, len, UCOL_NO_NORMALIZATION, UCOL_IDENTICAL, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
