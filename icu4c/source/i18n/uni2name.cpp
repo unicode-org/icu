@@ -12,6 +12,8 @@
 #include "unicode/uchar.h"
 #include "uni2name.h"
 #include "cstring.h"
+#include "cmemory.h"
+#include "uprops.h"
 
 U_NAMESPACE_BEGIN
 
@@ -19,25 +21,15 @@ const char UnicodeNameTransliterator::fgClassID=0;
 
 const char UnicodeNameTransliterator::_ID[] = "Any-Name";
 
+static const UChar OPEN_DELIM[] = {92,78,123,0}; // "\N{"
+static const UChar CLOSE_DELIM  = 125; // "}"
+#define OPEN_DELIM_LEN 3
+
 /**
  * Constructs a transliterator.
  */
-UnicodeNameTransliterator::UnicodeNameTransliterator(
-                                 UChar32 openDelim, UChar32 closeDelim,
-                                 UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter),
-    openDelimiter(openDelim),
-    closeDelimiter(closeDelim) {
-}
-
-/**
- * Constructs a transliterator with the default delimiters '{' and
- * '}'.
- */
 UnicodeNameTransliterator::UnicodeNameTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(_ID, adoptedFilter),
-    openDelimiter((UChar) 0x007B /*{*/),
-    closeDelimiter((UChar) 0x007D /*}*/) {
+    Transliterator(_ID, adoptedFilter) {
 }
 
 /**
@@ -49,9 +41,7 @@ UnicodeNameTransliterator::~UnicodeNameTransliterator() {}
  * Copy constructor.
  */
 UnicodeNameTransliterator::UnicodeNameTransliterator(const UnicodeNameTransliterator& o) :
-    Transliterator(o),
-    openDelimiter(o.openDelimiter),
-    closeDelimiter(o.closeDelimiter) {}
+    Transliterator(o) {}
 
 /**
  * Assignment operator.
@@ -59,8 +49,6 @@ UnicodeNameTransliterator::UnicodeNameTransliterator(const UnicodeNameTransliter
 UnicodeNameTransliterator& UnicodeNameTransliterator::operator=(
                              const UnicodeNameTransliterator& o) {
     Transliterator::operator=(o);
-    openDelimiter = o.openDelimiter;
-    closeDelimiter = o.closeDelimiter;
     return *this;
 }
 
@@ -78,15 +66,27 @@ Transliterator* UnicodeNameTransliterator::clone(void) const {
  */
 void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                     UBool /*isIncremental*/) const {
-    // As of Unicode 3.0.0, the longest name is 83 characters long.
-    // Adjust this buffer size as needed.
+    // The failure mode, here and below, is to behave like Any-Null,
+    // if either there is no name data (max len == 0) or there is no
+    // memory (malloc() => NULL).
 
-    char buf[128];
+    int32_t maxLen = uprv_getMaxCharNameLength();
+    if (maxLen == 0) {
+        offsets.start = offsets.limit;
+        return;
+    }
+
+    // Accomodate the longest possible name plus padding
+    char* buf = (char*) uprv_malloc(maxLen);
+    if (buf == NULL) {
+        offsets.start = offsets.limit;
+        return;
+    }
     
     int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
-    UnicodeString str(openDelimiter);
+    UnicodeString str(FALSE, OPEN_DELIM, OPEN_DELIM_LEN);
     UErrorCode status;
     int32_t len;
 
@@ -94,11 +94,11 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
         UChar32 c = text.char32At(cursor);
         int32_t clen = UTF_CHAR_LENGTH(c);
         status = U_ZERO_ERROR;
-        if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, sizeof(buf), &status)) >0 && !U_FAILURE(status)) {
-            str.truncate(1);
-            str.append(UnicodeString(buf, len, "")).append(closeDelimiter);
+        if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, maxLen, &status)) >0 && !U_FAILURE(status)) {
+            str.truncate(OPEN_DELIM_LEN);
+            str.append(UnicodeString(buf, len, "")).append(CLOSE_DELIM);
             text.handleReplaceBetween(cursor, cursor+clen, str);
-            len += 2; // adjust for delimiters
+            len += OPEN_DELIM_LEN + 1; // adjust for delimiters
             cursor += len; // advance cursor and adjust for new text
             limit += len-clen; // change in length
         } else {
@@ -109,6 +109,8 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     offsets.contextLimit += limit - offsets.limit;
     offsets.limit = limit;
     offsets.start = cursor;
+
+    uprv_free(buf);
 }
 
 U_NAMESPACE_END
