@@ -31,6 +31,7 @@
 #include "ucol_tok.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uassert.h"
 #include "unicode/parseerr.h"
 #include "unicode/ucnv.h"
 #include "uparse.h"
@@ -756,11 +757,15 @@ static void logFailure (const char *platform, const char *test,
 
   uint32_t i = 0;
 
-  char sEsc[256], s[256], tEsc[256], t[256], b[256], output[256], relation[256];
+  char sEsc[256], s[256], tEsc[256], t[256], b[256], output[512], relation[256];
+  static int maxOutputLength = 0;
+  int outputLength;
 
   *sEsc = *tEsc = *s = *t = 0;
   if(error == TRUE) {
     log_err("Difference between expected and generated order. Run test with -v for more info\n");
+  } else if(VERBOSITY == 0) {
+    return;
   }
   for(i = 0; i<sLen; i++) {
     sprintf(b, "%04X", source[i]);
@@ -822,6 +827,12 @@ static void logFailure (const char *platform, const char *test,
   strcat(output, sEsc);
   strcat(output, getRelationSymbol(realRes, realStrength, relation));
   strcat(output, tEsc);
+
+  outputLength = strlen(output);
+  if(outputLength > maxOutputLength) {
+    maxOutputLength = outputLength;
+    U_ASSERT(outputLength < sizeof(output));
+  }
 
   log_verbose("%s\n", output);
 
