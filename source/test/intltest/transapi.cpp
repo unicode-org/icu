@@ -377,7 +377,7 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          Transliterator* t=Transliterator::createInstance("Unicode-Hex");
 		 if(t == 0)
 			 errln("FAIL : construction");
-         Transliterator::Position index={19,20,20};
+         Transliterator::Position index(19,20,20);
          UnicodeString rs= "Transliterate this-''";
          UnicodeString insertion="abc";
          UnicodeString expected="Transliterate this-'\\u0061\\u0062\\u0063'";
@@ -391,10 +391,10 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
          logln("try calling transliterate with invalid index values");
          Transliterator::Position index1[]={
              //START, LIMIT, CURSOR
-             {10, 10, 12},   //invalid since CURSOR>LIMIT valid:-START <= CURSOR <= LIMIT
-             {17, 16, 17},   //invalid since START>LIMIT valid:-0<=START<=LIMIT
-             {-1, 16, 14},   //invalid since START<0
-             {3,  50, 2 }    //invalid since LIMIT>text.length()
+             Transliterator::Position(10, 10, 12),   //invalid since CURSOR>LIMIT valid:-START <= CURSOR <= LIMIT
+             Transliterator::Position(17, 16, 17),   //invalid since START>LIMIT valid:-0<=START<=LIMIT
+             Transliterator::Position(-1, 16, 14),   //invalid since START<0
+             Transliterator::Position(3,  50, 2 )    //invalid since LIMIT>text.length()
          };
          for(int i=0; i<sizeof(index1)/sizeof(index1[0]); i++){
            status=U_ZERO_ERROR;
@@ -424,7 +424,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         };
 		Transliterator* t=Transliterator::createInstance("Unicode-Hex");
         //keyboardAux(t, Data);
-		Transliterator::Position index = {0, 0, 0};
+		Transliterator::Position index(0, 0);
 	    UErrorCode status=U_ZERO_ERROR;
         UnicodeString s;
 	int i;
@@ -522,7 +522,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 	};
 	
 	UErrorCode status=U_ZERO_ERROR;
-	Transliterator::Position index={0, 0, 0};
+	Transliterator::Position index(0, 0);
 	logln("Testing transliterate(Replaceable, int32_t, UErrorCode)");
 	Transliterator *t=Transliterator::createInstance("Unicode-Hex");
 	if(t == 0)
@@ -655,7 +655,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
 
 
 void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[], UnicodeString& s, int32_t begin, int32_t end) {
-        Transliterator::Position index = {0, 0, 0};
+        Transliterator::Position index(0, 0);
 		UErrorCode status=U_ZERO_ERROR;
         for (int32_t i=begin; i<end; i=i+5) {
             UnicodeString log;
