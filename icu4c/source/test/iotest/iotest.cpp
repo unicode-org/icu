@@ -381,6 +381,7 @@ int main(int argc, char* argv[])
             if (remove(STANDARD_TEST_FILE) != 0) {
                 /* Maybe someone didn't close the file correctly. */
                 fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);
+                nerrors += 1;
             }
         }
     }
