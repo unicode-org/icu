@@ -30,7 +30,7 @@ extern UBool checkFCD(const UChar *, int32_t, UErrorCode *);
 static UCollator *myCollation;
 
 static void
-TestAPI();
+TestAPI(void);
 
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -340,7 +340,7 @@ void TestNull()
 
 }
 
-void TestQuickCheckResultNO() 
+static void TestQuickCheckResultNO() 
 {
   const UChar CPNFD[] = {0x00C5, 0x0407, 0x1E00, 0x1F57, 0x220C, 
                          0x30AE, 0xAC00, 0xD7A3, 0xFB36, 0xFB4E};
@@ -387,7 +387,7 @@ void TestQuickCheckResultNO()
 }
 
  
-void TestQuickCheckResultYES() 
+static void TestQuickCheckResultYES() 
 {
   const UChar CPNFD[] = {0x00C6, 0x017F, 0x0F74, 0x1000, 0x1E9A, 
                          0x2261, 0x3075, 0x4000, 0x5000, 0xF000};
@@ -459,7 +459,7 @@ void TestQuickCheckResultYES()
   }
 }
 
-void TestQuickCheckResultMAYBE() 
+static void TestQuickCheckResultMAYBE() 
 {
   const UChar CPNFC[] = {0x0306, 0x05B4, 0x0BBE, 0x102E, 0x1161, 
                          0x116A, 0x1173, 0x1175, 0x3099, 0x309A};
@@ -490,7 +490,7 @@ void TestQuickCheckResultMAYBE()
   }
 }
 
-void TestQuickCheckStringResult() 
+static void TestQuickCheckStringResult() 
 {
   int count;
   UChar *d = NULL;
