@@ -142,11 +142,17 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
 /**
  * Get the ordering priority of the previous collation element in the text.
  * A single character may contain more than one collation element.
+ * Note that internally a stack is used to store buffered collation elements. 
+ * It is very rare that the stack will overflow, however if such a case is 
+ * encountered, the problem can be solved by increasing the size 
+ * UCOL_EXPAND_CE_BUFFER_SIZE in ucol_imp.h.
  * @param elems The UCollationElements containing the text.
- * @param status A pointer to an UErrorCode to receive any errors.
+ * @param status A pointer to an UErrorCode to receive any errors. Noteably 
+ *               a U_BUFFER_OVERFLOW_ERROR is returned if the internal stack
+ *               buffer has been exhausted.
  * @return The previous collation elements ordering, otherwise returns 
  *         NULLORDER if an error has occured or if the start of string has 
- *         been reached
+ *         been reached.
  */
 U_CAPI int32_t
 ucol_previous(UCollationElements *elems, UErrorCode *status);
