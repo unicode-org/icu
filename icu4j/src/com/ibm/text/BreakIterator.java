@@ -556,8 +556,8 @@ public abstract class BreakIterator implements Cloneable
                                                      String rulesName,  //ibm.597
                                                      String dictionaryName) {   //ibm.597
 
-		System.out.println("rulesName: "+rulesName);
-		System.out.println("dictionaryName: "+dictionaryName);
+//		System.out.println("rulesName: "+rulesName);
+//		System.out.println("dictionaryName: "+dictionaryName);
         ResourceBundle bundle = ResourceBundle.getBundle(           //ibm.597
                         "com.ibm.text.resources.BreakIteratorRules", where);   //ibm.597
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");    //ibm.597
