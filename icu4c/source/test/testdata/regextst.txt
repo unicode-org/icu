@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2004 International Business Machines
+﻿# Copyright (c) 2001-2004 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #  file:  
@@ -498,6 +498,12 @@
 "(?m)^"                        2  "AA\u000d\u000a<0></0>BB\u000d\u000aCC\u000d\u000a"
 "(?m)^"                        3  "AA\u000d\u000aBB\u000d\u000a<0></0>CC\u000d\u000a"
 "(?m)^"                        4  "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+
+#
+# Bug 4059
+#
+"\w+"				  "<0>イチロー</0>"
+"\b....\b."                       "<0>イチロー?</0>"
 
 #
 #  Random debugging, Temporary
