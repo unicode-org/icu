@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Gujarati.txt,v $
-# $Date: 2002/08/14 00:40:58 $
-# $Revision: 1.9 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # InterIndic-Gujarati
@@ -115,17 +115,23 @@
 \ue06d>\u0aed; # DIGIT SEVEN
 \ue06e>\u0aee; # DIGIT EIGHT
 \ue06f>\u0aef; # DIGIT NINE
-\ue070 >  \u0ab0;  # FALLBACK RA 
-\ue071 >  \u0ab0;  # FALLBACK RA
-\ue072>;
-\ue073>;
-\ue074>;
-\ue075>;
-\ue076>;
-\ue077>;
-\ue078>;
-\ue079>;
-\ue07A>;
+\ue070>;       # ABBREVIATION SIGN
+\ue071>\u0ab0;     # LETTER RA WITH MIDDLE DIAGONAL
+\ue072>\u0ab0;     # LETTER RA WITH LOWER DIAGONAL
+\ue073>;           # RUPEE MARK
+\ue074>;           # RUPEE SIGN
+\ue075>;           # CURRENCY NUMERATOR ONE
+\ue076>;           # CURRENCY NUMERATOR TWO
+\ue077>;           # CURRENCY NUMERATOR THREE
+\ue078>;           # CURRENCY NUMERATOR FOUR
+\ue079>;           # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\ue07A>;           # CURRENCY DENOMINATOR SIXTEEN
+\ue07B>;           # ISSHAR
+\uE07C>;           # TIPPI
+\uE07D>;           # ADDAK
+\uE07E>;           # IRI
+\uE07F>;           # URA
+\uE080>;           # EK ONKAR
 0 > \u0ae6;       # FALLBACK FOR TAMIL
 1 > \u0ae7;
 

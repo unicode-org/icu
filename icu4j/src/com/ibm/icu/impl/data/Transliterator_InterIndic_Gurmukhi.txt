@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Gurmukhi.txt,v $
-# $Date: 2002/08/14 00:40:58 $
-# $Revision: 1.9 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # InterIndic-Gurmukhi
@@ -125,22 +125,24 @@ $consonant{\ue002>\u0a70; # SIGN TIPPI
 \ue06d>\u0a6d; # DIGIT SEVEN
 \ue06e>\u0a6e; # DIGIT EIGHT
 \ue06f>\u0a6f; # DIGIT NINE
-\ue070>; #  TIPPI
-\ue071>; #  ADDAK
-\ue072>; #  IRI
-\ue073>; #  URA
-\ue074>; #  EK ONKAR
-\ue075>;
-\ue076>;
-\ue077>;
-\ue078>;
-\ue079>;
-\ue07A>;
-\ue080>; # FALLBACK BLOW AWAY ISSHAR
-\ue081>; # FALLBACK BLOW AWAY LETTER E
-\ue082>; # FALLBACK BLOW AWAY LETTER O (\u0a02 = SIGN BINDI)
-\ue084>; # FALLBACK BLOW AWAY VOWEL SIGN E
-\ue085>; # FALLBACK BLOW AWAY VOWEL SIGN O (\u0a05 = LETTER A)
+\ue070>;       # ABBREVIATION SIGN
+\ue071>\u0a30;     # LETTER RA WITH MIDDLE DIAGONAL
+\ue072>\u0a30;     # LETTER RA WITH LOWER DIAGONAL
+\ue073>;           # RUPEE MARK
+\ue074>;           # RUPEE SIGN
+\ue075>;           # CURRENCY NUMERATOR ONE
+\ue076>;           # CURRENCY NUMERATOR TWO
+\ue077>;           # CURRENCY NUMERATOR THREE
+\ue078>;           # CURRENCY NUMERATOR FOUR
+\ue079>;           # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\ue07A>;           # CURRENCY DENOMINATOR SIXTEEN
+\ue07B>;           # ISSHAR
+\uE07C>\u0a70;     # TIPPI
+\uE07D>\u0a71;     # ADDAK
+\uE07E>\u0a72;     # IRI
+\uE07F>\u0a73;     # URA
+\uE080>\u0a74;     # EK ONKAR
+
 
 0 > \u0a66;       # FALLBACK FOR TAMIL
 1 > \u0a67;

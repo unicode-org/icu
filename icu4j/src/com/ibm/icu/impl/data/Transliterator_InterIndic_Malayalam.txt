@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Malayalam.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.8 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
 # InterIndic-Malayalam
@@ -108,7 +108,7 @@
 \ue062>; # FALLBACK BLOW AWAY VOWEL SIGN VOCALIC L
 \ue063>; # FALLBACK BLOW AWAY VOWEL SIGN VOCALIC LL
 \ue064>'.'   ; # FALLBACK FOR DANDA
-\ue065>'.'   ; # FALLBACK FOR DOUBLE DANDA	
+\ue065>'.'   ; # FALLBACK FOR DOUBLE DANDA      
 \ue066>\u0d66; # DIGIT ZERO
 \ue067>\u0d67; # DIGIT ONE
 \ue068>\u0d68; # DIGIT TWO
@@ -119,23 +119,26 @@
 \ue06d>\u0d6d; # DIGIT SEVEN
 \ue06e>\u0d6e; # DIGIT EIGHT
 \ue06f>\u0d6f; # DIGIT NINE
-\ue080>; # UNMAPPED InterIndic-Malayalam: ISSHAR
-\ue070>;
-\ue071>;
-\ue072>;
-\ue073>;
-\ue074>;
-\ue075>;
-\ue076>;
-\ue077>;
-\ue078>;
-\ue079>;
-\ue07A>;
+\ue070>;       # ABBREVIATION SIGN
+\ue071>\u0d30; # LETTER RA WITH MIDDLE DIAGONAL
+\ue072>\u0d30; # LETTER RA WITH LOWER DIAGONAL
+\ue073>;       # RUPEE MARK
+\ue074>;       # RUPEE SIGN
+\ue075>;       # CURRENCY NUMERATOR ONE
+\ue076>;       # CURRENCY NUMERATOR TWO
+\ue077>;       # CURRENCY NUMERATOR THREE
+\ue078>;       # CURRENCY NUMERATOR FOUR
+\ue079>;       # CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+\ue07A>;       # CURRENCY DENOMINATOR SIXTEEN
+\ue07B>;       # ISSHAR
+\uE07C>;       # TIPPI
+\uE07D>;       # ADDAK
+\uE07E>;       # IRI
+\uE07F>;       # URA
+\uE080>;       # EK ONKAR
+
 0 > \u0d66;       # FALLBACK FOR TAMIL
 1 > \u0d67;
-\ue0f0 >  \u0d30;  # FALLBACK RA 
-\ue0f1 >  \u0d30;  # FALLBACK RA
-
 
 #    :: NFC (NFD) ;
 # eof

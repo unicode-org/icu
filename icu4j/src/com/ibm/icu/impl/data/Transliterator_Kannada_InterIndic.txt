@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Kannada_InterIndic.txt,v $
-# $Date: 2002/03/02 00:27:27 $
-# $Revision: 1.5 $
+# $Date: 2002/09/19 18:11:23 $
+# $Revision: 1.6 $
 #--------------------------------------------------------------------
 
 # Kannada-InterIndic
@@ -77,7 +77,7 @@
 \u0CCD>\uE04D;              # SIGN VIRAMA
 \u0CD5>\uE055;              # LENGTH MARK
 \u0CD6>\uE056;              # AI LENGTH MARK
-\u0CDE>\uE05E;              # LETTER FA
+\u0CDE>\uE034;              # LETTER LLLA  
 \u0CE0>\uE060;              # LETTER VOCALIC RR
 \u0CE1>\uE061;              # LETTER VOCALIC LL
 \u0CE6>\uE066;              # DIGIT ZERO
