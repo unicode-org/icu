@@ -138,7 +138,7 @@ protected:
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
     static UnicodeString prettify(const UnicodeString &source, UBool parseBackslash=FALSE);
-    static UnicodeString &appendHex(uint32_t number, int8_t digits, UnicodeString &target);
+    static UnicodeString &appendHex(uint32_t number, int32_t digits, UnicodeString &target);
 
     /* complete a relative path to a full pathname, and convert to platform-specific syntax. */
     /* The character seperating directories for the relative path is '|'.                    */

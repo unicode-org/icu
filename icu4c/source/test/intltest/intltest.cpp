@@ -170,7 +170,7 @@ UnicodeString operator+(const UnicodeString& left, float num)
 // Append a hex string to the target
 UnicodeString&
 IntlTest::appendHex(uint32_t number,
-            int8_t digits,
+            int32_t digits,
             UnicodeString& target)
 {
     static const UChar digitString[] = {
