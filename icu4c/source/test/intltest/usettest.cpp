@@ -51,6 +51,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(12,TestStrings);
         CASE(13,TestStringPatterns);
         CASE(14,Testj2268);
+        CASE(15,TestCloseOver);
         default: name = ""; break;
     }
 }
@@ -826,6 +827,60 @@ void UnicodeSetTest::TestIndexOf() {
     int32_t j = set.indexOf((UChar32)0x71/*'q'*/);
     if (j != -1) {
         errln((UnicodeString)"FAIL: indexOf('q') = " + j);
+    }
+}
+
+/**
+ * Test closure API.
+ */
+void UnicodeSetTest::TestCloseOver() {
+    const char* CASE = "1";
+    const char* DATA[] = {
+        // selector, input, output
+        CASE,
+        "[aq\\u00DF{Bc}{bC}{Fi}]",
+        "[aAqQ\\u00DF\\uFB01{ss}{bc}{fi}]",
+
+        CASE,
+        "[\\u01F1]", // 'DZ'
+        "[\\u01F1\\u01F2\\u01F3]",
+
+        CASE,
+        "[\\u1FB4]",
+        "[\\u1FB4{\\u03AC\\u03B9}]",
+
+        CASE,
+        "[{F\\uFB01}]",
+        "[\\uFB03{ffi}]",            
+
+        CASE, // make sure binary search finds limits
+        "[a\\uFF3A]",
+        "[aA\\uFF3A\\uFF5A]",
+
+        NULL
+    };
+
+    UnicodeSet s;
+    UnicodeSet t;
+    for (int32_t i=0; DATA[i]!=NULL; i+=3) {
+        UErrorCode ec = U_ZERO_ERROR;
+        int32_t selector = DATA[i][0] - '0'; // UPDATE this as needed
+        UnicodeString pat(DATA[i+1]);
+        UnicodeString exp(DATA[i+2]);
+        s.applyPattern(pat, ec);
+        s.closeOver(selector);
+        t.applyPattern(exp, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: applyPattern failed");
+            continue;
+        }
+        if (s == t) {
+            logln((UnicodeString)"Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
+        } else {
+            UnicodeString buf;
+            errln((UnicodeString)"FAIL: " + pat + ".closeOver(" + selector + ") => " +
+                  s.toPattern(buf, TRUE) + ", expected " + exp);
+        }
     }
 }
 

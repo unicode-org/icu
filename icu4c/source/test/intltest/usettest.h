@@ -64,6 +64,8 @@ private:
 
     void TestExhaustive(void);
 
+    void TestCloseOver(void);
+
 private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);
