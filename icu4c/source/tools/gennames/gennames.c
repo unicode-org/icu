@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -146,9 +146,50 @@
 #define VERSION_STRING "unam"
 #define NAME_SEPARATOR_CHAR ';'
 
+/* Unicode versions --------------------------------------------------------- */
+
+enum {
+    UNI_1_0,
+    UNI_1_1,
+    UNI_2_0,
+    UNI_3_0,
+    UNI_3_1,
+    UNI_3_2,
+    UNI_4_0,
+    UNI_4_0_1,
+    UNI_4_1,
+    UNI_VER_COUNT
+};
+
 static const UVersionInfo
-unicode_3_0={ 3, 0, 0, 0 },
-unicode_3_1={ 3, 1, 0, 0 };
+unicodeVersions[]={
+    { 1, 0, 0, 0 },
+    { 1, 1, 0, 0 },
+    { 2, 0, 0, 0 },
+    { 3, 0, 0, 0 },
+    { 3, 1, 0, 0 },
+    { 3, 2, 0, 0 },
+    { 4, 0, 0, 0 },
+    { 4, 0, 1, 0 },
+    { 4, 1, 0, 0 }
+};
+
+static int32_t ucdVersion=UNI_4_1;
+
+static int32_t
+findUnicodeVersion(const UVersionInfo version) {
+    int32_t i;
+
+    for(i=0; /* while(version>unicodeVersions[i]) {} */
+        i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)>0;
+        ++i) {}
+    if(0<i && i<UNI_VER_COUNT && uprv_memcmp(version, unicodeVersions[i], 4)<0) {
+        --i; /* fix 4.0.2 to land before 4.1, for valid x>=ucdVersion comparisons */
+    }
+    return i; /* version>=unicodeVersions[i] && version<unicodeVersions[i+1]; possible: i==UNI_VER_COUNT */
+}
+
+/* generator data ----------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
@@ -301,7 +342,7 @@ main(int argc, char* argv[]) {
 
     /* preset then read command line options */
     options[5].value=u_getDataDirectory();
-    options[6].value="3.2";
+    options[6].value="4.1";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -348,6 +389,7 @@ main(int argc, char* argv[]) {
     /* set the Unicode version */
     u_versionFromString(version, options[6].value);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
+    ucdVersion=findUnicodeVersion(version);
 
     init();
     parseDB(argc>=2 ? argv[1] : "-", store10Names);
@@ -862,6 +904,42 @@ generateData(const char *dataDir) {
     }
 
     /*
+     * Required padding for data swapping:
+     * The token table undergoes a permutation during data swapping when the
+     * input and output charsets are different.
+     * The token table cannot grow during swapping, so we need to make sure that
+     * the table is long enough for successful in-place permutation.
+     *
+     * We simply round up tokenCount to the next multiple of 256 to account for
+     * all possible permutations.
+     *
+     * An optimization is possible if we only ever swap between ASCII and EBCDIC:
+     *
+     * If tokenCount>256, then a semicolon (NAME_SEPARATOR_CHAR) is used
+     * and will be swapped between ASCII and EBCDIC between
+     * positions 0x3b (ASCII semicolon) and 0x5e (EBCDIC semicolon).
+     * This should be the only -1 entry in tokens[256..511] on which the data
+     * swapper bases its trail byte permutation map (trailMap[]).
+     *
+     * It would be sufficient to increase tokenCount so that its lower 8 bits
+     * are at least 0x5e+1 to make room for swapping between the two semicolons.
+     * For values higher than 0x5e, the trail byte permutation map (trailMap[])
+     * should always be an identity map, where we do not need additional room.
+     */
+    i=tokenCount;
+    tokenCount=(tokenCount+0xff)&~0xff;
+    if(!beQuiet && i<tokenCount) {
+        printf("number of tokens[] padding entries for data swapping: %lu\n", (unsigned long)(tokenCount-i));
+    }
+    for(; i<tokenCount; ++i) {
+        if((i&0xff)==NAME_SEPARATOR_CHAR) {
+            tokens[i]=-1; /* do not use NAME_SEPARATOR_CHAR as a second token byte */
+        } else {
+            tokens[i]=0; /* unused token for padding */
+        }
+    }
+
+    /*
      * Calculate the total size in bytes of the data including:
      * - the offset to the token strings, uint32_t (4)
      * - the offset to the group table, uint32_t (4)
@@ -1009,11 +1087,16 @@ generateAlgorithmicData(UNewDataMemory *pData) {
 
     size=0;
 
+    if(ucdVersion>=UNI_4_1) {
+        /* Unicode 4.1 and up has a longer CJK Unihan range than before */
+        cjk.rangeEnd=0x9FBB;
+    }
+
     /* number of ranges of algorithmic names */
-    if(uprv_memcmp(dataInfo.dataVersion, unicode_3_1, sizeof(UVersionInfo))>=0) {
+    if(ucdVersion>=UNI_3_1) {
         /* Unicode 3.1 and up has 4 ranges including CJK Extension B */
         countAlgRanges=4;
-    } else if(uprv_memcmp(dataInfo.dataVersion, unicode_3_0, sizeof(UVersionInfo))>=0) {
+    } else if(ucdVersion>=UNI_3_0) {
         /* Unicode 3.0 has 3 ranges including CJK Extension A */
         countAlgRanges=3;
     } else {

@@ -585,7 +585,7 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 
 echo "$ac_t""release $VERSION, library $LIB_VERSION" 1>&6
 
-UNICODE_VERSION="4.0.1"
+UNICODE_VERSION="4.1"
 
 
 

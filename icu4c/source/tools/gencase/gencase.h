@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -23,6 +23,23 @@
 
 U_CDECL_BEGIN
 
+/* Unicode versions --------------------------------------------------------- */
+
+enum {
+    UNI_1_0,
+    UNI_1_1,
+    UNI_2_0,
+    UNI_3_0,
+    UNI_3_1,
+    UNI_3_2,
+    UNI_4_0,
+    UNI_4_0_1,
+    UNI_4_1,
+    UNI_VER_COUNT
+};
+
+extern int32_t ucdVersion;
+
 /* gencase ------------------------------------------------------------------ */
 
 #define UGENCASE_EXC_SHIFT     16
@@ -41,6 +58,11 @@ enum {
     UGENCASE_UNFOLD_CP_WIDTH=2,
     UGENCASE_UNFOLD_WIDTH=UGENCASE_UNFOLD_STRING_WIDTH+UGENCASE_UNFOLD_CP_WIDTH,
     UGENCASE_UNFOLD_MAX_ROWS=250
+};
+
+/* Values for additional data stored in pv column 1 */
+enum {
+    UGENCASE_IS_MID_LETTER_SHIFT        /* bit 0 */
 };
 
 /* special casing data */

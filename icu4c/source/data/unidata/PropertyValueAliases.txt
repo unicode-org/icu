@@ -1,8 +1,8 @@
-# PropertyValueAliases-4.0.1.txt
-# Date: 2004-03-02, 19:46:47 GMT [MD]
+# PropertyValueAliases-4.1.0.txt
+# Date: 2004-12-11, 05:46:23 GMT [MD]
 #
 # Unicode Character Database
-# Copyright (c) 1991-2004 Unicode, Inc.
+# Copyright (c) 1991-2005 Unicode, Inc.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
 # This file contains aliases for property values used in the UCD.
@@ -63,6 +63,7 @@ age; n/a       ; 3.0
 age; n/a       ; 3.1
 age; n/a       ; 3.2
 age; n/a       ; 4.0
+age; n/a       ; 4.1
 age; n/a       ; unassigned
 
 # Bidi_Class (bc)
@@ -91,9 +92,12 @@ bc ; WS        ; White_Space
 
 blk; n/a       ; Aegean_Numbers
 blk; n/a       ; Alphabetic_Presentation_Forms
+blk; n/a       ; Ancient_Greek_Musical_Notation
+blk; n/a       ; Ancient_Greek_Numbers
 blk; n/a       ; Arabic
 blk; n/a       ; Arabic_Presentation_Forms-A
 blk; n/a       ; Arabic_Presentation_Forms-B
+blk; n/a       ; Arabic_Supplement
 blk; n/a       ; Armenian
 blk; n/a       ; Arrows
 blk; n/a       ; Basic_Latin
@@ -103,9 +107,11 @@ blk; n/a       ; Bopomofo
 blk; n/a       ; Bopomofo_Extended
 blk; n/a       ; Box_Drawing
 blk; n/a       ; Braille_Patterns
+blk; n/a       ; Buginese
 blk; n/a       ; Buhid
 blk; n/a       ; Byzantine_Musical_Symbols
 blk; n/a       ; Cherokee
+blk; n/a       ; CJK_Basic_Strokes
 blk; n/a       ; CJK_Compatibility
 blk; n/a       ; CJK_Compatibility_Forms
 blk; n/a       ; CJK_Compatibility_Ideographs
@@ -117,8 +123,10 @@ blk; n/a       ; CJK_Unified_Ideographs_Extension_A
 blk; n/a       ; CJK_Unified_Ideographs_Extension_B
 blk; n/a       ; Combining_Diacritical_Marks
 blk; n/a       ; Combining_Diacritical_Marks_for_Symbols
+blk; n/a       ; Combining_Diacritical_Marks_Supplement
 blk; n/a       ; Combining_Half_Marks
 blk; n/a       ; Control_Pictures
+blk; n/a       ; Coptic
 blk; n/a       ; Currency_Symbols
 blk; n/a       ; Cypriot_Syllabary
 blk; n/a       ; Cyrillic
@@ -129,9 +137,13 @@ blk; n/a       ; Dingbats
 blk; n/a       ; Enclosed_Alphanumerics
 blk; n/a       ; Enclosed_CJK_Letters_and_Months
 blk; n/a       ; Ethiopic
+blk; n/a       ; Ethiopic_Extended
+blk; n/a       ; Ethiopic_Supplement
 blk; n/a       ; General_Punctuation
 blk; n/a       ; Geometric_Shapes
 blk; n/a       ; Georgian
+blk; n/a       ; Georgian_Supplement
+blk; n/a       ; Glagolitic
 blk; n/a       ; Gothic
 blk; n/a       ; Greek_and_Coptic
 blk; n/a       ; Greek_Extended
@@ -153,6 +165,7 @@ blk; n/a       ; Kangxi_Radicals
 blk; n/a       ; Kannada
 blk; n/a       ; Katakana
 blk; n/a       ; Katakana_Phonetic_Extensions
+blk; n/a       ; Kharoshthi
 blk; n/a       ; Khmer
 blk; n/a       ; Khmer_Symbols
 blk; n/a       ; Lao
@@ -173,17 +186,21 @@ blk; n/a       ; Miscellaneous_Mathematical_Symbols-B
 blk; n/a       ; Miscellaneous_Symbols
 blk; n/a       ; Miscellaneous_Symbols_and_Arrows
 blk; n/a       ; Miscellaneous_Technical
+blk; n/a       ; Modifier_Tone_Letters
 blk; n/a       ; Mongolian
 blk; n/a       ; Musical_Symbols
 blk; n/a       ; Myanmar
+blk; n/a       ; New_Tai_Lue
 blk; n/a       ; No_Block
 blk; n/a       ; Number_Forms
 blk; n/a       ; Ogham
 blk; n/a       ; Old_Italic
+blk; n/a       ; Old_Persian
 blk; n/a       ; Optical_Character_Recognition
 blk; n/a       ; Oriya
 blk; n/a       ; Osmanya
 blk; n/a       ; Phonetic_Extensions
+blk; n/a       ; Phonetic_Extensions_Supplement
 blk; n/a       ; Private_Use_Area
 blk; n/a       ; Runic
 blk; n/a       ; Shavian
@@ -195,8 +212,10 @@ blk; n/a       ; Superscripts_and_Subscripts
 blk; n/a       ; Supplemental_Arrows-A
 blk; n/a       ; Supplemental_Arrows-B
 blk; n/a       ; Supplemental_Mathematical_Operators
+blk; n/a       ; Supplemental_Punctuation
 blk; n/a       ; Supplementary_Private_Use_Area-A
 blk; n/a       ; Supplementary_Private_Use_Area-B
+blk; n/a       ; Syloti_Nagri
 blk; n/a       ; Syriac
 blk; n/a       ; Tagalog
 blk; n/a       ; Tagbanwa
@@ -208,10 +227,12 @@ blk; n/a       ; Telugu
 blk; n/a       ; Thaana
 blk; n/a       ; Thai
 blk; n/a       ; Tibetan
+blk; n/a       ; Tifinagh
 blk; n/a       ; Ugaritic
 blk; n/a       ; Unified_Canadian_Aboriginal_Syllabics
 blk; n/a       ; Variation_Selectors
 blk; n/a       ; Variation_Selectors_Supplement
+blk; n/a       ; Vertical_Forms
 blk; n/a       ; Yi_Radicals
 blk; n/a       ; Yi_Syllables
 blk; n/a       ; Yijing_Hexagram_Symbols
@@ -309,6 +330,19 @@ gc ; Zl        ; Line_Separator
 gc ; Zp        ; Paragraph_Separator
 gc ; Zs        ; Space_Separator
 
+# Grapheme_Cluster_Break (GCB)
+
+GCB; Control   ; Control
+GCB; CR        ; CR
+GCB; Extend    ; Extend
+GCB; L         ; L
+GCB; LF        ; LF
+GCB; LV        ; LV
+GCB; LVT       ; LVT
+GCB; Other     ; Other
+GCB; T         ; T
+GCB; V         ; V
+
 # Hangul_Syllable_Type (hst)
 
 hst; L         ; Leading_Jamo
@@ -398,10 +432,15 @@ lb ; CM        ; Combining_Mark
 lb ; CR        ; Carriage_Return
 lb ; EX        ; Exclamation
 lb ; GL        ; Glue
+lb ; H2        ; H2
+lb ; H3        ; H3
 lb ; HY        ; Hyphen
 lb ; ID        ; Ideographic
 lb ; IN        ; Inseparable                      ; Inseperable
 lb ; IS        ; Infix_Numeric
+lb ; JL        ; JL
+lb ; JT        ; JT
+lb ; JV        ; JV
 lb ; LF        ; Line_Feed
 lb ; NL        ; Next_Line
 lb ; NS        ; Nonstarter
@@ -454,15 +493,18 @@ sc ; Armn      ; Armenian
 sc ; Beng      ; Bengali
 sc ; Bopo      ; Bopomofo
 sc ; Brai      ; Braille
+sc ; Bugi      ; Buginese
 sc ; Buhd      ; Buhid
 sc ; Cans      ; Canadian_Aboriginal
 sc ; Cher      ; Cherokee
+sc ; Copt      ; Coptic
 sc ; Cprt      ; Cypriot
 sc ; Cyrl      ; Cyrillic
 sc ; Deva      ; Devanagari
 sc ; Dsrt      ; Deseret
 sc ; Ethi      ; Ethiopic
 sc ; Geor      ; Georgian
+sc ; Glag      ; Glagolitic
 sc ; Goth      ; Gothic
 sc ; Grek      ; Greek
 sc ; Gujr      ; Gujarati
@@ -475,6 +517,7 @@ sc ; Hira      ; Hiragana
 sc ; Hrkt      ; Katakana_Or_Hiragana
 sc ; Ital      ; Old_Italic
 sc ; Kana      ; Katakana
+sc ; Khar      ; Kharoshthi
 sc ; Khmr      ; Khmer
 sc ; Knda      ; Kannada
 sc ; Laoo      ; Lao
@@ -491,15 +534,43 @@ sc ; Qaai      ; Inherited
 sc ; Runr      ; Runic
 sc ; Shaw      ; Shavian
 sc ; Sinh      ; Sinhala
+sc ; Sylo      ; Syloti_Nagri
 sc ; Syrc      ; Syriac
 sc ; Tagb      ; Tagbanwa
 sc ; Tale      ; Tai_Le
+sc ; Talu      ; New_Tai_Lue
 sc ; Taml      ; Tamil
 sc ; Telu      ; Telugu
+sc ; Tfng      ; Tifinagh
 sc ; Tglg      ; Tagalog
 sc ; Thaa      ; Thaana
 sc ; Thai      ; Thai
 sc ; Tibt      ; Tibetan
 sc ; Ugar      ; Ugaritic
+sc ; Xpeo      ; Old_Persian
 sc ; Yiii      ; Yi
 sc ; Zyyy      ; Common
+
+# Sentence_Break (SB)
+
+SB ; ATerm     ; ATerm
+SB ; Close     ; Close
+SB ; Format    ; Format
+SB ; Lower     ; Lower
+SB ; Numeric   ; Numeric
+SB ; OLetter   ; OLetter
+SB ; Other     ; Other
+SB ; Sep       ; Sep
+SB ; Sp        ; Sp
+SB ; STerm     ; STerm
+SB ; Upper     ; Upper
+
+# Word_Break (WB)
+
+WB ; ALetter   ; ALetter
+WB ; Format    ; Format
+WB ; Katakana  ; Katakana
+WB ; MidLetter ; MidLetter
+WB ; MidNum    ; MidNum
+WB ; Numeric   ; Numeric
+WB ; Other     ; Other

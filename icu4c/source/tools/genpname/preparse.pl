@@ -1,7 +1,7 @@
 #!/bin/perl -w
 #*******************************************************************
 # COPYRIGHT:
-# Copyright (c) 2002-2004, International Business Machines Corporation and
+# Copyright (c) 2002-2005, International Business Machines Corporation and
 # others. All Rights Reserved.
 #*******************************************************************
 
@@ -844,7 +844,7 @@ sub read_PropertyValueAliases {
     # Script Qaac (Coptic) is a special case.  Handle it here.  See UTR#24:
     # http://www.unicode.org/unicode/reports/tr24/
     $hash->{'sc'}->{'Qaac'} = 'Coptic'
-        unless (exists $hash->{'sc'}->{'Qaac'});
+        unless (exists $hash->{'sc'}->{'Qaac'} || exists $hash->{'sc'}->{'Copt'});
 
     # Add T|True and F|False -- these are values we recognize for
     # binary properties (NOT from PropertyValueAliases.txt).  These
@@ -1129,6 +1129,24 @@ sub read_uchar {
         elsif ($mode eq 'UJoiningGroup') {
             if (/^\s*(U_JG_(\w+))/) {
                 addDatum($hash, 'jg', $1, $2) unless ($2 eq 'COUNT');
+            }
+        }
+
+        elsif ($mode eq 'UGraphemeClusterBreak') {
+            if (m|^\s*(U_GCB_\w+).+?/\*\[(.+?)\]\*/|) {
+                addDatum($hash, 'GCB', $1, $2);
+            }
+        }
+
+        elsif ($mode eq 'UWordBreakValues') {
+            if (m|^\s*(U_WB_\w+).+?/\*\[(.+?)\]\*/|) {
+                addDatum($hash, 'WB', $1, $2);
+            }
+        }
+
+        elsif ($mode eq 'USentenceBreak') {
+            if (m|^\s*(U_SB_\w+).+?/\*\[(.+?)\]\*/|) {
+                addDatum($hash, 'SB', $1, $2);
             }
         }
 
