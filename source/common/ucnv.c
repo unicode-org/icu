@@ -67,6 +67,15 @@ static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
                                                  UBool flush,
                                                  UErrorCode * err);
 
+extern const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS] =
+{
+    { 943, 0x00A5, 0x005C },
+    { 949, 0x20A9, 0x005C },
+    { 1361, 0x20A9, 0x005C },
+    { 942, 0x00A5, 0x005C },
+    { 1363, 0x20A9, 0x005C }
+};
+
 
 const char* ucnv_getDefaultName ()
 {
