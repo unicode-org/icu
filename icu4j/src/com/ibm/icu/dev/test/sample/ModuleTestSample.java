@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/sample/ModuleTestSample.java,v $
- * $Date: 2002/08/13 22:00:58 $
- * $Revision: 1.2 $
+ * $Date: 2003/07/15 22:50:45 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -111,6 +111,21 @@ public class ModuleTestSample extends ModuleTest {
 	}
     }
 
+    public void Test09() {
+        while (nextCase()) {
+            int radix = testcase.getInt("Radix");
+            int[] pow = testcase.getIntArray("Power");
+            int[] val = testcase.getIntArray("Value");
+            logln("radix: " + radix + " pow: " + printArray(pow) + " val: " + printArray(val));
+            for (int i = 0; i < pow.length; ++i) {
+                if (val[i] != (int)Math.pow(radix, pow[i])) {
+                    errln("radix: " + radix + " to power " + pow[i] + " != " + val[i]);
+                    break;
+                }
+            }
+        }
+    }
+                
     // utility print functions to display the data from the resource
     String printArray(String[] a) {
 	StringBuffer buf = new StringBuffer("String[] {");

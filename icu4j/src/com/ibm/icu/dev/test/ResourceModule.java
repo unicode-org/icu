@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ResourceModule.java,v $
- * $Date: 2002/08/31 04:55:10 $
- * $Revision: 1.4 $
+ * $Date: 2003/07/15 22:50:45 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -511,6 +511,11 @@ public class ResourceModule extends TestDataModule {
 
 	public char[] getCharArray(String key) { 
 	    try {
+                return (char[])na.getValue(key);
+            }
+            catch (ClassCastException e) {
+            }
+            try{ 
 		String temp = (String)na.getValue(key);
 		if (temp == null) {
 		    if (required) {
@@ -527,6 +532,11 @@ public class ResourceModule extends TestDataModule {
 	}
 
 	public int[] getIntArray(String key) {
+	    try {
+                return (int[])na.getValue(key);
+            }
+            catch (ClassCastException e) {
+            }
 	    String[] data = getStringArray(key);
 	    if (data != null) {
 		try {
@@ -544,6 +554,11 @@ public class ResourceModule extends TestDataModule {
 	}
 
 	public byte[] getByteArray(String key) { 
+	    try {
+                return (byte[])na.getValue(key);
+            }
+            catch (ClassCastException e) {
+            }
 	    String[] data = getStringArray(key);
 	    if (data != null) {
 		try {
@@ -561,6 +576,11 @@ public class ResourceModule extends TestDataModule {
 	}
 
 	public boolean[] getBooleanArray(String key) {
+	    try {
+                return (boolean[])na.getValue(key);
+            }
+            catch (ClassCastException e) {
+            }
 	    String[] data = getStringArray(key);
 	    if (data != null) {
 		boolean[] result = new boolean[data.length];
