@@ -25,30 +25,32 @@
 #include "ucol_tok.h"
 
 U_CDECL_BEGIN
-static U_CALLCONV
-int32_t uhash_hashTokens(const UHashTok k) {
-  int32_t hash = 0;
-  //uint32_t key = (uint32_t)k.integer;
-  UColToken *key = (UColToken *)k.pointer;
-  if (key != 0) {
-      //int32_t len = (key & 0xFF000000)>>24;
-      int32_t len = (key->source & 0xFF000000)>>24;
-      int32_t inc = ((len - 32) / 32) + 1;
+static int32_t U_CALLCONV
+uhash_hashTokens(const UHashTok k)
+{
+    int32_t hash = 0;
+    //uint32_t key = (uint32_t)k.integer;
+    UColToken *key = (UColToken *)k.pointer;
+    if (key != 0) {
+        //int32_t len = (key & 0xFF000000)>>24;
+        int32_t len = (key->source & 0xFF000000)>>24;
+        int32_t inc = ((len - 32) / 32) + 1;
+        
+        //const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
+        const UChar *p = (key->source & 0x00FFFFFF) + key->rulesToParse;
+        const UChar *limit = p + len;    
 
-      //const UChar *p = (key & 0x00FFFFFF) + rulesToParse;
-      const UChar *p = (key->source & 0x00FFFFFF) + key->rulesToParse;
-      const UChar *limit = p + len;    
-
-      while (p<limit) {
-          hash = (hash * 37) + *p;
-          p += inc;
-      }
-  }
-  return hash;
+        while (p<limit) {
+            hash = (hash * 37) + *p;
+            p += inc;
+        }
+    }
+    return hash;
 }
 
-static U_CALLCONV
-UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
+static UBool U_CALLCONV
+uhash_compareTokens(const UHashTok key1, const UHashTok key2)
+{
     //uint32_t p1 = (uint32_t) key1.integer;
     //uint32_t p2 = (uint32_t) key2.integer;
     UColToken *p1 = (UColToken *)key1.pointer;
