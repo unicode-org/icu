@@ -93,11 +93,11 @@ class gentz {
     int32_t* indexByName;
     OffsetIndex* indexByOffset;
     
-    int32_t maxPerOffset; // Maximum number of zones per offset
-    int32_t stdZoneSize;
-    int32_t dstZoneSize;
-    int32_t offsetIndexSize; // Total bytes in offset index table
-    int32_t nameTableSize; // Total bytes in name table
+    uint32_t maxPerOffset; // Maximum number of zones per offset
+    uint32_t stdZoneSize;
+    uint32_t dstZoneSize;
+    uint32_t offsetIndexSize; // Total bytes in offset index table
+    uint32_t nameTableSize; // Total bytes in name table
 
     UBool useCopyright;
 
@@ -301,14 +301,14 @@ int32_t* gentz::parseIndexTable(FileStream* in) {
                 die("Standard index entry out of range");
             }
             result[i] = header.standardDelta +
-                ((char*)&stdZones[index] - (char*)&stdZones[0]); 
+                sizeof(StandardZone)*index;
             break;
         case 'd':
             if (index >= header.dstCount) {
                 die("DST index entry out of range");
             } 
             result[i] = header.dstDelta +
-                ((char*)&dstZones[index] - (char*)&dstZones[0]);
+                sizeof(DSTZone)*index;
             break;
         default:
             die("Malformed index entry");
@@ -342,7 +342,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     // Don't try to compute the exact size in advance
     // (unless we want to avoid the use of sizeof(), which may
     // introduce padding that we won't actually employ).
-    int32_t maxPossibleSize = n * (sizeof(OffsetIndex) +
+    uint32_t maxPossibleSize = n * (sizeof(OffsetIndex) +
         (maxPerOffset-1) * sizeof(uint16_t));
 
     int8_t *result = new int8_t[maxPossibleSize];
@@ -423,7 +423,7 @@ StandardZone* gentz::parseStandardZones(FileStream* in) {
         parse1StandardZone(in, zones[i]);
     }
     readEndMarker(in);
-    stdZoneSize = (char*)&stdZones[header.standardCount] - (char*)&stdZones[0];
+    stdZoneSize = sizeof(StandardZone)*header.standardCount;
     fprintf(stdout, " Read %lu standard zones, in-memory size %ld bytes\n",
             header.standardCount, stdZoneSize);
     return zones;
@@ -447,7 +447,7 @@ DSTZone* gentz::parseDSTZones(FileStream* in) {
         parse1DSTZone(in, zones[i]);
     }
     readEndMarker(in);
-    dstZoneSize = (char*)&dstZones[header.dstCount] - (char*)&dstZones[0];
+    dstZoneSize = sizeof(DSTZone)*header.dstCount;
     fprintf(stdout, " Read %lu DST zones, in-memory size %ld bytes\n",
             header.dstCount, dstZoneSize);
     return zones;
