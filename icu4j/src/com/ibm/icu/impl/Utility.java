@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/06/11 19:55:18 $
- * $Revision: 1.42 $
+ * $Date: 2003/09/24 19:16:05 $
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -723,7 +723,7 @@ public final class Utility {
 
     /**
      * Convert an escape to a 32-bit code point value.  We attempt
-     * to parallel the icu4c unesacpeAt() function.
+     * to parallel the icu4c unescapeAt() function.
      * @param offset16 an array containing offset to the character
      * <em>after</em> the backslash.  Upon return offset16[0] will
      * be updated to point after the escape sequence.
@@ -824,6 +824,122 @@ public final class Utility {
         /* If no special forms are recognized, then consider
          * the backslash to generically escape the next character. */
         offset16[0] = offset;
+        return c;
+    }
+
+    /**
+     * Convert an escape sequence to a 32-bit code point value.  This
+     * parallels the icu4c unescapeAt() function.
+     * @param chars iterator over the characters to be parsed.  Upon
+     * entry it should point to the character immediately following
+     * the escape character (typically '\\').  Upon return it will be
+     * advanced to the first character after the parsed pattern, or
+     * the end of the iteration if all characters are parsed.  If the
+     * parse fails, the iterator will be unchanged upon return.
+     * During parsing, the iterator will be dereferenced with none of
+     * the RuleCharacterIterator options set, to allow backslash,
+     * SYMBOL_REF, and whitespace characters to be escaped.
+     * @return 32-bit code point value from 0 to 10FFFF, or -1 on
+     * error.
+     */
+    public static int unescapeAt(RuleCharacterIterator chars) {
+        int c;
+        int result = 0;
+        int n = 0;
+        int minDig = 0;
+        int maxDig = 0;
+        int bitsPerDigit = 4;
+        int dig;
+        int i;
+        boolean braces = false;
+        Object save = chars.getState();
+
+        /* Fetch first UChar after '\\' */
+        c = chars.current(0);
+
+        /* Convert hexadecimal and octal escapes */
+        switch (c) {
+        case 'u':
+            chars.next(0);
+            minDig = maxDig = 4;
+            break;
+        case 'U':
+            chars.next(0);
+            minDig = maxDig = 8;
+            break;
+        case 'x':
+            chars.next(0);
+            minDig = 1;
+            if (chars.current(0) == 0x7B /*{*/) {
+                chars.next(0);
+                braces = true;
+                maxDig = 8;
+            } else {
+                maxDig = 2;
+            }
+            break;
+        default:
+            dig = UCharacter.digit(c, 8);
+            if (dig >= 0) {
+                minDig = 1;
+                maxDig = 3;
+                n = 1; /* Already have first octal digit */
+                bitsPerDigit = 3;
+                result = dig;
+            }
+            break;
+        }
+        if (minDig != 0) {
+            while (n < maxDig && !chars.atEnd()) {
+                c = chars.current(0);
+                dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
+                if (dig < 0) {
+                    break;
+                }
+                result = (result << bitsPerDigit) | dig;
+                ++n;
+                chars.next(0);
+            }
+            if (n < minDig) {
+                chars.setState(save);
+                return -1;
+            }
+            if (braces) {
+                if (c != 0x7D /*}*/) {
+                    chars.setState(save);
+                    return -1;
+                }
+                chars.next(0);
+            }	    
+            if (result < 0 || result >= 0x110000) {
+                result = -1;
+            }           
+            return result;
+        }
+
+        chars.next(0);
+
+        /* Convert C-style escapes in table */
+        for (i=0; i<UNESCAPE_MAP.length; i+=2) {
+            if (c == UNESCAPE_MAP[i]) {
+                return UNESCAPE_MAP[i+1];
+            } else if (c < UNESCAPE_MAP[i]) {
+                break;
+            }
+        }
+
+        /* Map \cX to control-X: X & 0x1F */
+        if (c == 'c') {
+            if (chars.atEnd()) {
+                chars.setState(save);
+                return -1;
+            }
+            c = chars.next(0);
+            return 0x1F & c;
+        }
+
+        /* If no special forms are recognized, then consider
+         * the backslash to generically escape the next character. */
         return c;
     }
 
