@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -34,6 +34,42 @@
 
 #define COMMON_DATA_NAME U_ICUDATA_NAME
 #define DATA_TYPE "dat"
+
+/* ICU package data file format (.dat files) ------------------------------- ***
+
+Description of the data format after the usual ICU data file header
+(UDataInfo etc.).
+
+Format version 1
+
+A .dat package file contains a simple Table of Contents of item names,
+followed by the items themselves:
+
+1. ToC table
+
+uint32_t count; - number of items
+UDataOffsetTOCEntry entry[count]; - pair of uint32_t values per item:
+    uint32_t nameOffset; - offset of the item name
+    uint32_t dataOffset; - offset of the item data
+both are byte offsets from the beginning of the data
+
+2. item name strings
+
+All item names are stored as char * strings in one block between the ToC table
+and the data items.
+
+3. data items
+
+The data items are stored following the item names block.
+Each data item is 16-aligned.
+The data items are stored in the sorted order of their names.
+
+Therefore, the top of the name strings block is the offset of the first item,
+the length of the last item is the difference between its offset and
+the .dat file length, and the length of all previous items is the difference
+between its offset and the next one.
+
+----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo={
