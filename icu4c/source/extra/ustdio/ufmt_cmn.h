@@ -31,21 +31,21 @@
  */
 enum ufmt_type_info
 {
-  ufmt_empty = 0,
-  ufmt_simple_percent, /* %% do nothing */
-  ufmt_count,      /* special flag for count */
-  ufmt_int,        /* int */
-  ufmt_char,       /* int, cast to char */
-  ufmt_wchar,      /* wchar_t */
-  ufmt_string,     /* char* */
-  ufmt_wstring,    /* wchar_t* */
-  ufmt_pointer,    /* void* */
-  ufmt_float,      /* float */
-  ufmt_double,     /* double */
-  ufmt_date,       /* Date */
-  ufmt_uchar,      /* int, cast to UChar */
-  ufmt_ustring,    /* UChar* */
-  ufmt_last
+    ufmt_empty = 0,
+    ufmt_simple_percent, /* %% do nothing */
+    ufmt_count,      /* special flag for count */
+    ufmt_int,        /* int */
+    ufmt_char,       /* int, cast to char */
+    ufmt_string,     /* char* */
+    ufmt_pointer,    /* void* */
+    ufmt_float,      /* float */
+    ufmt_double,     /* double */
+    ufmt_uchar,      /* int, cast to UChar */
+    ufmt_ustring,    /* UChar* */
+    /*ufmt_wchar,*/      /* wchar_t */
+    /*ufmt_wstring,*/    /* wchar_t* */
+    /*ufmt_date,*/       /* Date */
+    ufmt_last
 };
 typedef enum ufmt_type_info ufmt_type_info;
 
@@ -53,12 +53,12 @@ typedef enum ufmt_type_info ufmt_type_info;
  * Union representing a uprintf/uscanf argument
  */
 union ufmt_args {
-  signed int    intValue;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
-  float         floatValue;    /* float */
-  double        doubleValue;   /* double */
-  void          *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
-  wchar_t       wcharValue;    /* wchar_t */    /* TODO: Should wchar_t be used? */
-  UDate         dateValue;     /* Date */
+    signed int    intValue;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
+    float         floatValue;    /* float */
+    double        doubleValue;   /* double */
+    void          *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
+    /*wchar_t       wcharValue;*/    /* wchar_t */    /* TODO: Should wchar_t be used? */
+    /*UDate         dateValue;*/     /* Date */
 };
 typedef union ufmt_args ufmt_args;
 

@@ -83,11 +83,11 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Uppercase float %%G: %G\n", myFloat);
 //    u_fprintf(myFile, "Pointer %%p: %p\n", myFile);
     u_fprintf(myFile, "Char %%c: %c\n", 'A');
-    u_fprintf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
+    u_fprintf(myFile, "UChar %%C: %C\n", L'A');
     u_fprintf(myFile, "String %%s: %s\n", "My-String");
     u_fprintf(myFile, "NULL String %%s: %s\n", NULL);
-    u_fprintf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
-    u_fprintf(myFile, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", NULL);
+    u_fprintf(myFile, "Unicode String %%S: %S\n", L"My-String");
+    u_fprintf(myFile, "NULL Unicode String %%S: %S\n", NULL);
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
     u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
 
@@ -185,7 +185,7 @@ static void TestFileFromICU(UFILE *myFile) {
     if (*myString != 'A') {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
-    u_fscanf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", myUString);
+    u_fscanf(myFile, "UChar %%C: %C\n", myUString);
     if (*myUString != L'A') {
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
@@ -197,12 +197,12 @@ static void TestFileFromICU(UFILE *myFile) {
     if (strcmp(myString, "(null)")) {
         log_err("%%s Got: %s, Expected: My String\n", myString);
     }
-    u_fscanf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
+    u_fscanf(myFile, "Unicode String %%S: %S\n", myUString);
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (strcmp(myString, "My-String")) {
         log_err("%%S Got: %S, Expected: My String\n", myUString);
     }
-    u_fscanf(myFile, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
+    u_fscanf(myFile, "NULL Unicode String %%S: %S\n", myUString);
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (strcmp(myString, "(null)")) {
         log_err("%%S Got: %S, Expected: My String\n", myUString);
@@ -1021,8 +1021,8 @@ static void TestString() {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K", L'A');
-    u_sscanf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K", myUString);
+    u_sprintf(uStringBuf, NULL, "UChar %%C: %C", L'A');
+    u_sscanf(uStringBuf, NULL, "UChar %%C: %C", myUString);
     if (*myUString != L'A') {
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
@@ -1041,18 +1041,18 @@ static void TestString() {
         log_err("%%s Got: %s, Expected: My-String\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", L"My-String");
-    u_sscanf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", myUString);
+    u_sprintf(uStringBuf, NULL, "Unicode String %%S: %S", L"My-String");
+    u_sscanf(uStringBuf, NULL, "Unicode String %%S: %S", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "My-String")) {
-        log_err("%%U Got: %s, Expected: My String\n", myString);
+        log_err("%%S Got: %s, Expected: My String\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", NULL);
-    u_sscanf(uStringBuf, NULL, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U", myUString);
+    u_sprintf(uStringBuf, NULL, "NULL Unicode String %%S: %S", NULL);
+    u_sscanf(uStringBuf, NULL, "NULL Unicode String %%S: %S", myUString);
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
     if (strcmp(myString, "(null)")) {
-        log_err("%%U Got: %s, Expected: (null)\n", myString);
+        log_err("%%S Got: %s, Expected: (null)\n", myString);
     }
 
     u_sprintf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P", myFloat);
@@ -1075,10 +1075,10 @@ static void TestString() {
         log_err("%%V Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
-    u_sprintf(myUString, NULL, "This is a long test123456789012345678901234567890123456789012345678901234567890");
+    u_sprintf(myUString, NULL, "This is a long test1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
     u_austrncpy(myString, myUString, sizeof(myString)/sizeof(*myString));
-    if (strcmp(myString, "This is a long test123456789012345678901234567890123456789012345678901234567890")) {
-        log_err("%%U Got: %s, Expected: My String\n", myString);
+    if (strcmp(myString, "This is a long test1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890")) {
+        log_err("%%S Got: %s, Expected: My String\n", myString);
     }
 
 
@@ -1405,11 +1405,11 @@ static void TestSScanf() {
     int32_t uNumScanned;
     int32_t cNumScanned;
 
-    TestSScanSetFormat("%[bc]U", abcUChars, abcChars);
-    TestSScanSetFormat("%[cb]U", abcUChars, abcChars);
+    TestSScanSetFormat("%[bc]S", abcUChars, abcChars);
+    TestSScanSetFormat("%[cb]S", abcUChars, abcChars);
 
-    TestSScanSetFormat("%[ab]U", abcUChars, abcChars);
-    TestSScanSetFormat("%[ba]U", abcUChars, abcChars);
+    TestSScanSetFormat("%[ab]S", abcUChars, abcChars);
+    TestSScanSetFormat("%[ba]S", abcUChars, abcChars);
 
     TestSScanSetFormat("%[ab]", abcUChars, abcChars);
     TestSScanSetFormat("%[ba]", abcUChars, abcChars);
@@ -1452,7 +1452,7 @@ static void TestSScanf() {
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
     memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
     \
-    u_fprintf(myFile, "%U", uValue);\
+    u_fprintf(myFile, "%S", uValue);\
     u_fclose(myFile);\
     myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
     uNumScanned = u_fscanf(myFile, format, uBuffer);\
@@ -1480,11 +1480,11 @@ static void TestFScanf() {
     int32_t uNumScanned;
     int32_t cNumScanned;
 
-    TestFScanSetFormat("%[bc]U", abcUChars, abcChars);
-    TestFScanSetFormat("%[cb]U", abcUChars, abcChars);
+    TestFScanSetFormat("%[bc]S", abcUChars, abcChars);
+    TestFScanSetFormat("%[cb]S", abcUChars, abcChars);
 
-    TestFScanSetFormat("%[ab]U", abcUChars, abcChars);
-    TestFScanSetFormat("%[ba]U", abcUChars, abcChars);
+    TestFScanSetFormat("%[ab]S", abcUChars, abcChars);
+    TestFScanSetFormat("%[ba]S", abcUChars, abcChars);
 
     TestFScanSetFormat("%[ab]", abcUChars, abcChars);
     TestFScanSetFormat("%[ba]", abcUChars, abcChars);
