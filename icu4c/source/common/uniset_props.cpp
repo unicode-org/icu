@@ -36,7 +36,7 @@
 #include "ucase.h"
 #include "uinvchar.h"
 #include "charstr.h"
-#include "ustrfmt.h"
+#include "cstring.h"
 #include "mutex.h"
 #include "uassert.h"
 #include "hash.h"
