@@ -2339,6 +2339,7 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fNumericSet;
     delete fFormatSet;
     delete fExtendSet;
+    delete fExtendNumLetSet;
     delete fOtherSet;
 
     delete fGCFMatcher;
