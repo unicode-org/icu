@@ -128,7 +128,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
             line, u_errorName(status));
         return FALSE;
     }
-    if (line==376) { REPattern->dump();}
+    if (line==376) { RegexPatternDump(REPattern);}
 
     UnicodeString inputString(inputText);
     UnicodeString unEscapedInput = inputString.unescape();
@@ -164,7 +164,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     }
 
     if (retVal == FALSE) {
-        REPattern->dump();
+        RegexPatternDump(REPattern);
     }
 
     delete REPattern;
@@ -249,7 +249,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     }
 
     if (flags.indexOf((UChar)'d') >= 0) {
-        callerPattern->dump();
+        RegexPatternDump(callerPattern);
     }
 
     //
@@ -601,6 +601,9 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(m1->input() == empty);
         REGEX_ASSERT(&m1->pattern() == pat2);
 
+        //
+        //  reset(pos, status) 
+        //
         m1->reset(inStr1);
         m1->reset(4, status);
         REGEX_CHECK_STATUS;
@@ -624,6 +627,39 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         status = U_ZERO_ERROR;
 
+        //
+        // match(pos, status)
+        //
+        m1->reset(instr2);
+        REGEX_ASSERT(m1->matches(4, status) == TRUE);
+        m1->reset();
+        REGEX_ASSERT(m1->matches(3, status) == FALSE);
+        m1->reset();
+        REGEX_ASSERT(m1->matches(5, status) == FALSE);
+        REGEX_ASSERT(m1->matches(4, status) == TRUE);
+        REGEX_ASSERT(m1->matches(-1, status) == FALSE);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
+        len = m1->input().length();
+        REGEX_ASSERT(m1->matches(len, status) == FALSE);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+       
+
+        //
+        // lookingAt(pos, status)
+        //
+        status = U_ZERO_ERROR;
+        m1->reset(instr2);  // "not abc"
+        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(5, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(3, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(-1, status) == FALSE);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
+        len = m1->input().length();
+        REGEX_ASSERT(m1->lookingAt(len, status) == FALSE);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         
         delete m1;
         delete pat2;
