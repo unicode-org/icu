@@ -111,7 +111,7 @@ typedef struct Run {
 } Run;
 
 /* in a Run, logicalStart will get this bit set if the run level is odd */
-#define INDEX_ODD_BIT (1L<<31)
+#define INDEX_ODD_BIT (1UL<<31)
 
 #define MAKE_INDEX_ODD_PAIR(index, level) (index|((int32_t)level<<31))
 #define ADD_ODD_BIT_FROM_LEVEL(x, level)  ((x)|=((int32_t)level<<31))
