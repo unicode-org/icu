@@ -449,6 +449,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             /* initialize the state variables */
             myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
             myConverterData->isLocaleSpecified=TRUE;
+            myConverterData->isShiftAppended=FALSE;
             
             /*set the substitution chars*/
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
