@@ -1,3 +1,5 @@
+# Copyright (c) 2001-2003 International Business Machines
+# Corporation and others. All Rights Reserved.
 # This is a stub file
 # for complete test file, go to:
 # http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/
