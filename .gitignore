@@ -102,6 +102,12 @@ icu4c/source/i18n/Makefile
 icu4c/source/i18n/Release
 icu4c/source/i18n/libicu*.*
 icu4c/source/icudefs.mk
+icu4c/source/layout/*.d
+icu4c/source/layout/*.pdb
+icu4c/source/layout/Debug
+icu4c/source/layout/Makefile
+icu4c/source/layout/Release
+icu4c/source/layout/tmp
 icu4c/source/samples/Makefile
 icu4c/source/samples/XMLConverter/*.d
 icu4c/source/samples/XMLConverter/*.pdb
@@ -222,6 +228,13 @@ icu4c/source/tools/gentz/Makefile
 icu4c/source/tools/gentz/Release
 icu4c/source/tools/gentz/gentz
 icu4c/source/tools/gentz/tmp
+icu4c/source/tools/genuca/*.d
+icu4c/source/tools/genuca/*.pdb
+icu4c/source/tools/genuca/Debug
+icu4c/source/tools/genuca/Makefile
+icu4c/source/tools/genuca/Release
+icu4c/source/tools/genuca/genuca
+icu4c/source/tools/genuca/tmp
 icu4c/source/tools/icupkg.inc
 icu4c/source/tools/makeconv/*.d
 icu4c/source/tools/makeconv/*.pdb
