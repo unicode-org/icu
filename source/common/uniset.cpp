@@ -2504,6 +2504,13 @@ static UBool generalCategoryMaskFilter(UChar32 ch, void* context) {
     return (U_GET_GC_MASK((UChar32) ch) & value) != 0;
 }
 
+static UBool versionFilter(UChar32 ch, void* context) {
+    UVersionInfo v;
+    UVersionInfo* version = (UVersionInfo*)context;
+    u_charAge(ch, v);
+    return uprv_memcmp(&v, version, sizeof(v)) == 0;
+}
+
 typedef struct {
     UProperty prop;
     int32_t value;
@@ -2681,6 +2688,18 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     } else {
                         FAIL(ec);
                     }
+                }
+                break;
+            case UCHAR_AGE:
+                {
+                    // Must munge name, since u_versionFromString() does not do
+                    // 'loose' matching.
+                    char buf[128];
+                    if (!mungeCharName(buf, vname, sizeof(buf))) FAIL(ec);
+                    UVersionInfo version;
+                    u_versionFromString(version, buf);
+                    applyFilter(versionFilter, &version, ec);
+                    return *this;
                 }
                 break;
             }
