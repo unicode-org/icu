@@ -369,15 +369,15 @@ typedef uint8_t UBiDiLevel;
 #define UBIDI_LEVEL_OVERRIDE 0x80
 
 /**
- * @memo <code>UBiDiDirection</code> values indicate the text direction.
+ * <code>UBiDiDirection</code> values indicate the text direction.
  * @stable ICU 2.0
  */
 enum UBiDiDirection {
-    /** @memo All left-to-right text. This is a 0 value. @stable ICU 2.0 */
+    /** All left-to-right text. This is a 0 value. @stable ICU 2.0 */
     UBIDI_LTR,
-    /** @memo All right-to-left text. This is a 1 value. @stable ICU 2.0 */
+    /** All right-to-left text. This is a 1 value. @stable ICU 2.0 */
     UBIDI_RTL,
-    /** @memo Mixed-directional text. @stable ICU 2.0 */
+    /** Mixed-directional text. @stable ICU 2.0 */
     UBIDI_MIXED
 };
 
