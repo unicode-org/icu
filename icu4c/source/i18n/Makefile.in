@@ -66,7 +66,7 @@ dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
-HEADERS= unicode/*.h
+HEADERS= $(srcdir)/unicode/*.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
@@ -94,9 +94,9 @@ install-library: all-local
 
 install-headers:
 	$(mkinstalldirs) $(includedir)/unicode
-	@list='$(HEADERS)'; for file in $$list; do \
-	 echo " $(INSTALL_DATA) $(srcdir)/$$file $(includedir)/$$file"; \
-	 $(INSTALL_DATA) $(srcdir)/$$file $(includedir)/$$file; \
+	@for file in $(HEADERS); do \
+	 echo " $(INSTALL_DATA) $$file $(includedir)/unicode"; \
+	 $(INSTALL_DATA) $$file $(includedir)/unicode; \
 	done
 
 dist-local:
