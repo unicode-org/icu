@@ -63,6 +63,10 @@
     iostream.  This new header file should also include operator<< and
     operator>> for UDate (not double) and UChar *.
  * fprintf/fscanf should use sprintf/sscanf in order to make testing easier.
+ * Testing should be done for reading and writing multi-byte encodings,
+    and make sure that a character that is contained across buffer boundries
+    works even for incomplete characters.
+ * Make sure that the last character is flushed when the file/string is closed.
 */
 
 
