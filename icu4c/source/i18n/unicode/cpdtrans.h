@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.2 $ $Date: 2000/01/14 21:15:13 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.3 $ $Date: 2000/01/18 18:27:27 $
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -113,18 +113,10 @@ public:
     virtual int32_t transliterate(Replaceable& text, int32_t start, int32_t limit) const;
 
     /**
-     * Implements {@link Transliterator#handleKeyboardTransliterate}.
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleKeyboardTransliterate(Replaceable& text,
-                                             int32_t index[3]) const;
-
-    /**
-     * Returns the length of the longest context required by this transliterator.
-     * This is <em>preceding</em> context.
-     * @return maximum number of preceding context characters this
-     * transliterator needs to examine
-     */
-    virtual int32_t getMaximumContextLength(void) const;
+    virtual void handleTransliterate(Replaceable& text,
+                                     int32_t index[3]) const;
 
 private:
 
@@ -144,5 +136,7 @@ private:
                          int32_t& count);
 
     void freeTransliterators(void);
+
+    void computeMaximumContextLength(void);
 };
 #endif

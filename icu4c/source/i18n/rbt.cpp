@@ -22,6 +22,8 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
         data = TransliterationRuleParser::parse(rules, direction);
         if (data == 0) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
+        } else {
+            setMaximumContextLength(data->ruleSet.getMaximumContextLength());
         }
     }
 }
@@ -31,7 +33,9 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& ID,
                                  UnicodeFilter* adoptedFilter) :
     Transliterator(ID, adoptedFilter),
     data((TransliterationRuleData*)theData), // cast away const
-    isDataOwned(FALSE) {}
+    isDataOwned(FALSE) {
+    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+}
 
 /**
  * Copy constructor.  Since the data object is immutable, we can share
@@ -41,6 +45,11 @@ RuleBasedTransliterator::RuleBasedTransliterator(
         const RuleBasedTransliterator& other) :
     Transliterator(other), data(other.data) {
     // TODO: Finish this -- implement with correct data ownership handling
+    if (other.isDataOwned) {
+        // TODO: At this point we need to make our own copy of the data.
+    } else {
+        isDataOwned = FALSE;
+    }
 }
 
 /**
@@ -181,11 +190,11 @@ int32_t RuleBasedTransliterator::transliterate(Replaceable& text,
 }
 
 /**
- * Implements {@link Transliterator#handleKeyboardTransliterate}.
+ * Implements {@link Transliterator#handleTransliterate}.
  */
 void
-RuleBasedTransliterator::handleKeyboardTransliterate(Replaceable& text,
-                                                     int32_t index[3]) const {
+RuleBasedTransliterator::handleTransliterate(Replaceable& text,
+                                             int32_t index[3]) const {
     int32_t start = index[START];
     int32_t limit = index[LIMIT];
     int32_t cursor = index[CURSOR];
@@ -221,14 +230,4 @@ RuleBasedTransliterator::handleKeyboardTransliterate(Replaceable& text,
 
     index[LIMIT] = limit;
     index[CURSOR] = cursor;
-}
-
-/**
- * Returns the length of the longest context required by this transliterator.
- * This is <em>preceding</em> context.
- * @return Maximum number of preceding context characters this
- * transliterator needs to examine
- */
-int32_t RuleBasedTransliterator::getMaximumContextLength(void) const {
-    return data->ruleSet.getMaximumContextLength();
 }

@@ -310,10 +310,10 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
             log = s + " + "
                 + DATA[i]
                 + " -> ";
-            t.keyboardTransliterate(s, index, DATA[i], status);
+            t.transliterate(s, index, DATA[i], status);
         } else {
             log = s + " => ";
-            t.finishKeyboardTransliteration(s, index);
+            t.finishTransliteration(s, index);
         }
         // Show the start index '{' and the cursor '|'
         UnicodeString a, b, c;
@@ -518,7 +518,7 @@ void TransliteratorTest::expect(const Transliterator& t,
         }
         log.append(source.charAt(i)).append(" -> ");
         UErrorCode status = U_ZERO_ERROR;
-        t.keyboardTransliterate(rsource, index, source.charAt(i), status);
+        t.transliterate(rsource, index, source.charAt(i), status);
         // Append the string buffer with a vertical bar '|' where
         // the committed index is.
         UnicodeString left, right;
@@ -530,7 +530,7 @@ void TransliteratorTest::expect(const Transliterator& t,
     // As a final step in keyboard transliteration, we must call
     // transliterate to finish off any pending partial matches that
     // were waiting for more input.
-    t.finishKeyboardTransliteration(rsource, index);
+    t.finishTransliteration(rsource, index);
     log.append(" => ").append(rsource);
 
     expectAux(t.getID() + ":Keyboard", log,
