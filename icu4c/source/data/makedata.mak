@@ -88,14 +88,17 @@ PATH = $(PATH);$(ICUP)\bin
 # the other is optional 'ucmlocal.mk'
 !IF EXISTS("$(ICUDATA)\ucmfiles.mk")
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
+!IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
+!INCLUDE "$(ICUDATA)\ucmebcdic.mk"
 !IF EXISTS("$(ICUDATA)\ucmlocal.mk")
 !INCLUDE "$(ICUDATA)\ucmlocal.mk"
-UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
 !ELSE
 #!MESSAGE Warning: cannot find "ucmlocal.mk"
 !ENDIF
 !ELSE
 !ERROR ERROR: cannot find "ucmfiles.mk"
+!ENDIF
 !ENDIF
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 
