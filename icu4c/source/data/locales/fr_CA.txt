@@ -13,7 +13,7 @@ fr_CA {
         ",",
     }
     DateTimePatterns { 
-        "H' h 'mm z",
+        "HH' h 'mm' min 'ss' s 'z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
@@ -32,13 +32,15 @@ fr_CA {
         "#E0",
     }
 //    ShortCountry { "CAN" }
-    zoneStrings { 
-        {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
-        }
-    }
+
+// Fall back to French
+//    zoneStrings { 
+//        {
+//            "Africa/Casablanca",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//        }
+//    }
 }

@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.9 $
+// $Revision: 1.10 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -20,10 +20,10 @@ te_IN {
         ".",
     }
     DateTimePatterns {
-        "hh:mm:ss a z",
-        "hh:mm:ss a z",
-        "hh:mm:ss a",
-        "hh:mm a",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
         "EEEE dd MMM yyyy",
         "EEEE dd MMM yyyy",
         "dd/MM/yyyy",

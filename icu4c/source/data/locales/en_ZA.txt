@@ -21,11 +21,11 @@ en_ZA {
         ".",
     }
     DateTimePatterns { 
-        "hh:mm:ss a",
-        "hh:mm:ss",
-        "hh:mm:ss",
-        "hh:mm",
-        "dd MMMM yyyy",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
         "yyyy/MM/dd",
         "yy/MM/dd",
@@ -39,7 +39,7 @@ en_ZA {
 //    LocaleString { "en_ZA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
-        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "\u00A4#,##0.00;\u00A4-#,##0.00",
         "#,##0%",
         "#E0",
     }

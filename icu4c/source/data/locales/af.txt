@@ -59,19 +59,19 @@ af {
         "Desember",
     }
 
-    NumberElements { 
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221e",
-        "\ufffd",
-    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
     LocaleID:int { 0x36 }
 //    LocaleScript{ 
 //                "Latn",  // ISO 15924 Name 

@@ -683,7 +683,7 @@ root {
     // abbreviation (ISO-639-2), the two letter abbreviation must be used.
     // Source: http://lcweb.loc.gov/standards/iso639-2/englangn.html 
     Languages {
-        root{"Neutral Language"}    // The only exception to ISO-639
+        root{"Root"}    // The only exception to ISO-639
 
         aa  { "Afar" }
         ab  { "Abkhazian" }

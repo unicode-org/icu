@@ -17,10 +17,10 @@ en_IN {
         ".",
     }
     DateTimePatterns { 
-        "HH:mm:ss 'o''clock' z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
+        "h:mm:ss 'o''clock' a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
         "dd MMMM yyyy",
         "dd MMMM yyyy",
         "dd-MMM-yy",

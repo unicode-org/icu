@@ -9,10 +9,10 @@ eu_ES {
     Version { "1.0" }
     // /* Discarding duplicate data for tag: AmPmMarkers */
     DateTimePatterns {
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "hh:mm:ss",
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "EEEE, YYYY'eko' MMMM'ren' dd'a'",
         "EEE, YYYY'eko' MMM'ren' dd'a'",
         "yy'-'MMM'-'dd",

@@ -14,10 +14,10 @@ ar_IN {
         ".",
     }
     DateTimePatterns {
-        "hh:mm:ss a z",
-        "hh:mm:ss a z",
-        "hh:mm:ss a",
-        "hh:mm a",
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
         "EEEE d MMMM yyyy",
         "d MMMM yyyy",
         "dd/MM/yyyy",

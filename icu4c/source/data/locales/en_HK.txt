@@ -13,7 +13,7 @@ en_HK {
 //    }
     CurrencyElements { 
         "HK$",
-        "HKD ",
+        "HKD",
         ".",
     }
     DateTimePatterns { 
