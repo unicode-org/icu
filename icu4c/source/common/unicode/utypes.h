@@ -629,6 +629,7 @@ typedef enum UErrorCode {
      U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval                        */
      U_REGEX_MAX_LT_MIN,                   /**< In {min,max}, max is less than min.                */
      U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
+     U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
     U_ERROR_LIMIT=U_REGEX_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
