@@ -1699,10 +1699,10 @@ static void TestCEValidity()
     /* en_US has no tailorings */
     UCollator  *coll        = ucol_open("en_US", &status);
     /* tailored locales */
-    char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
+    char        locale[][6] = {"fr_FR", "ko_KR", "sh_YU", "th_TH", "zh_CN"};
     FileStream *file = getFractionalUCA();
     char        line[1024];
-    UChar       codepoints[5];
+    UChar       codepoints[10];
     int         count = 0;
     UParseError parseError;
     if (U_FAILURE(status)) {
@@ -1786,10 +1786,10 @@ static void TestCEValidity()
               specs = src.parsedToken.flags;
 
                 startOfRules = FALSE;
-                uprv_memcpy(codepoints, rules + chOffset,
+                uprv_memcpy(codepoints, src.source + chOffset,
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
-                checkCEValidity(coll, codepoints, u_strlen(codepoints), 4, 85);
+                checkCEValidity(coll, codepoints, chLen, 4, 85);
             }
             uprv_free(rulesCopy);
         }
@@ -1881,7 +1881,7 @@ static void TestSortKeyValidity(void)
     char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
     FileStream *file = getFractionalUCA();
     char        line[1024];
-    UChar       codepoints[5];
+    UChar       codepoints[10];
     int         count = 0;
     UParseError parseError;
     if (U_FAILURE(status)) {
@@ -1966,10 +1966,10 @@ static void TestSortKeyValidity(void)
                 specs = src.parsedToken.flags;
 
                 startOfRules = FALSE;
-                uprv_memcpy(codepoints, rules + chOffset,
+                uprv_memcpy(codepoints, src.source + chOffset,
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
-                checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
+                checkSortKeyValidity(coll, codepoints, chLen);
             }
             uprv_free(rulesCopy);
         }
