@@ -808,7 +808,7 @@ uint32_t uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart, UChar32 rangeEnd
   return i; 
 }
 
-uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element, UErrorCode *status) {
+static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   uint32_t CE = UCOL_NOT_FOUND;
   if(element->cSize > 1) { /* we're adding a contraction */
     uint32_t i = 0;
