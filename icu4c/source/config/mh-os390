@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.51 2003/05/23 03:42:21 grhoten-oss Exp $
+## $Id: mh-os390,v 1.52 2003/05/23 17:53:09 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -46,7 +46,7 @@ CXXFLAGS        += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC
 LDFLAGS         += -Wl,dll,xplink -Wl,EDIT=NO
 endif
 
-# TODO: Consider using  -Wc,roc,rent for making the data readonly
+# TODO: Consider using  -Wc,roc,ros for making the data readonly
 CFLAGS          += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
