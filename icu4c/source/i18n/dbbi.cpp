@@ -13,6 +13,7 @@
 #include "dbbi_tbl.h"
 #include "uvector.h"
 #include "unicode/schriter.h"
+#include "cmemory.h"
 
 char DictionaryBasedBreakIterator::fgClassID = 0;
 
@@ -293,37 +294,37 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
         // code has changed - time to make a real CharacterIterator::CreateBufferClone()
     }
     if (BufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
-		BufferSize = bufferSizeNeeded;
-		return 0;
+        BufferSize = bufferSizeNeeded;
+        return 0;
     }
     if (BufferSize < bufferSizeNeeded || !stackBuffer)
     {
-		/* allocate one here...*/
-		localIterator = new DictionaryBasedBreakIterator(*this);
-		status = U_SAFECLONE_ALLOCATED_ERROR;
+        /* allocate one here...*/
+        localIterator = new DictionaryBasedBreakIterator(*this);
+        status = U_SAFECLONE_ALLOCATED_ERROR;
         return localIterator;
-	} 
+    }
     if (IterIsUChar) {
-		struct bufferCloneStructUChar * localClone 
+        struct bufferCloneStructUChar * localClone 
                 = (struct bufferCloneStructUChar  *)stackBuffer;
         localIterator = &localClone->bi;
-        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
-        memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
+        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+        uprv_memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
         localClone->text = *(UCharCharacterIterator*)text;
-	    localIterator->text = &localClone->text;
+        localIterator->text = &localClone->text;
     } else if (IterIsString) {
         struct bufferCloneStructString * localClone 
                 = (struct bufferCloneStructString  *)stackBuffer;
         localIterator = &localClone->bi;
-        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
-        memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
+        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+        uprv_memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
         localClone->text = *(StringCharacterIterator*)text;
-	    localIterator->text = &localClone->text;
+        localIterator->text = &localClone->text;
     } else {
         DictionaryBasedBreakIterator * localClone 
                 = (DictionaryBasedBreakIterator *)stackBuffer;
         localIterator = localClone;
-        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+        uprv_memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
     }
     // must not use the old cache if it exists - not threadsafe
     localIterator->fBufferClone = TRUE;
@@ -331,7 +332,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     localIterator->numCachedBreakPositions = 0;
     localIterator->positionInCache = 0;
 
-	return localIterator;    
+    return localIterator;    
 }
 
 

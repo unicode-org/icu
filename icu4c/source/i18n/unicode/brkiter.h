@@ -492,4 +492,4 @@ inline UBool BreakIterator::isBufferClone()
 
 #endif // _BRKITER
 //eof
- 
+
