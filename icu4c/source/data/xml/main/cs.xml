@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="cs"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="cs" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,21 +18,13 @@
 		<territories>
 			<territory type="CZ">Česká republika</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">leden</month>
@@ -168,27 +160,27 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>C</reset>
-			<p>č</p>
-			<t>Č</t>
-			<reset>H</reset>
-			<p>ch</p>
-			<t>cH</t>
-			<t>Ch</t>
-			<t>CH</t>
-			<reset>R</reset>
-			<p>ř</p>
-			<t>Ř</t>
-			<reset>S</reset>
-			<p>š</p>
-			<t>Š</t>
-			<reset>Z</reset>
-			<p>ž</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>C</reset>
+				<p>č</p>
+				<t>Č</t>
+				<reset>H</reset>
+				<p>ch</p>
+				<t>cH</t>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>R</reset>
+				<p>ř</p>
+				<t>Ř</t>
+				<reset>S</reset>
+				<p>š</p>
+				<t>Š</t>
+				<reset>Z</reset>
+				<p>ž</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

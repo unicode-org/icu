@@ -7,20 +7,13 @@
 >
 <ldml>
 	<identity>
-		<version number="x0.3">Various notes and changes in version x0.3</version>
-		<generation date="2003-06-25" />
-		<language type="syr"></language>
-		<territory type="SYR">SY</territory>
+		<version number="x0.3"/>
+		<generation date="2003-06-26" />
+		<language type="syr" /> 
+		<territory type="SY" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<week>
 					<minDays count="1"/>

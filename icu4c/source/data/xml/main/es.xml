@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="es"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="es" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -166,21 +166,13 @@
 			<territory type="VI">Islas Vírgenes de los Estados Unidos</territory>
 			<territory type="ZA">Sudáfrica</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ñ á é í ó ú ü]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">enero</month>
@@ -1020,33 +1012,64 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>N</reset>
-			<p>ñ</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-	<collation type="TRADITIONAL" >
-		<rules>
-			<reset>N</reset>
-			<p>ñ</p>
-			<t>Ñ</t>
-			<reset>C</reset>
-			<p>ch</p>
-			<t>Ch</t>
-			<t>CH</t>
-			<reset>l</reset>
-			<p>ll</p>
-			<t>Ll</t>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">-x: menos &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; punto &gt;&gt;;<cp hex="000A" />cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;<cp hex="000A" />diez; once; doce; trece; catorce; quince; dieciséis;<cp hex="000A" />    diecisiete; dieciocho; diecinueve;<cp hex="000A" />veinte; veintiuno; veintidós; veintitrés; veinticuatro;<cp hex="000A" />    veinticinco; veintiséis; veintisiete; veintiocho;<cp hex="000A" />    veintinueve;<cp hex="000A" />30: treinta[ y &gt;&gt;];<cp hex="000A" />40: cuarenta[ y &gt;&gt;];<cp hex="000A" />50: cincuenta[ y &gt;&gt;];<cp hex="000A" />60: sesenta[ y &gt;&gt;];<cp hex="000A" />70: setenta[ y &gt;&gt;];<cp hex="000A" />80: ochenta[ y &gt;&gt;];<cp hex="000A" />90: noventa[ y &gt;&gt;];<cp hex="000A" />100: cien;<cp hex="000A" />101: ciento &gt;&gt;;<cp hex="000A" />200: doscientos[ &gt;&gt;];<cp hex="000A" />300: trescientos[ &gt;&gt;];<cp hex="000A" />400: cuatrocientos[ &gt;&gt;];<cp hex="000A" />500: quinientos[ &gt;&gt;];<cp hex="000A" />600: seiscientos[ &gt;&gt;];<cp hex="000A" />700: setecientos[ &gt;&gt;];<cp hex="000A" />800: ochocientos[ &gt;&gt;];<cp hex="000A" />900: novecientos[ &gt;&gt;];<cp hex="000A" />1000: mil[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; mil[ &gt;&gt;];<cp hex="000A" />1,000,000: un millón[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; millón[ &gt;&gt;];<cp hex="000A" />1,000,000,000: =#,##0= (incomplete data);</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>N</reset>
+				<p>ñ</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+		<collation type="TRADITIONAL" >
+			<rules>
+				<reset>N</reset>
+				<p>ñ</p>
+				<t>Ñ</t>
+				<reset>C</reset>
+				<p>ch</p>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>l</reset>
+				<p>ll</p>
+				<t>Ll</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: menos &gt;&gt;;
+x.x: &lt;&lt; punto &gt;&gt;;
+cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;
+diez; once; doce; trece; catorce; quince; dieciséis;
+    diecisiete; dieciocho; diecinueve;
+veinte; veintiuno; veintidós; veintitrés; veinticuatro;
+    veinticinco; veintiséis; veintisiete; veintiocho;
+    veintinueve;
+30: treinta[ y &gt;&gt;];
+40: cuarenta[ y &gt;&gt;];
+50: cincuenta[ y &gt;&gt;];
+60: sesenta[ y &gt;&gt;];
+70: setenta[ y &gt;&gt;];
+80: ochenta[ y &gt;&gt;];
+90: noventa[ y &gt;&gt;];
+100: cien;
+101: ciento &gt;&gt;;
+200: doscientos[ &gt;&gt;];
+300: trescientos[ &gt;&gt;];
+400: cuatrocientos[ &gt;&gt;];
+500: quinientos[ &gt;&gt;];
+600: seiscientos[ &gt;&gt;];
+700: setecientos[ &gt;&gt;];
+800: ochocientos[ &gt;&gt;];
+900: novecientos[ &gt;&gt;];
+1000: mil[ &gt;&gt;];
+2000: &lt;&lt; mil[ &gt;&gt;];
+1,000,000: un millón[ &gt;&gt;];
+2,000,000: &lt;&lt; millón[ &gt;&gt;];
+1,000,000,000: =#,##0= (incomplete data);
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="el"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="el" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -91,14 +91,7 @@
 			<territory type="US">Ηνωμένες Πολιτείες Αμερικής</territory>
 			<territory type="ZA">Νότιος Αφρική</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[ά-ώ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -110,7 +103,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Ιανουάριος</month>
@@ -244,9 +236,9 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
 </ldml>

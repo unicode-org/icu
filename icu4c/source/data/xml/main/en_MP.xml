@@ -7,24 +7,11 @@
 >
 <ldml>
 	<identity>
-		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-06-25" />
-		<language type="en"></language>
-		<territory type="MNP">MP</territory>
+		<version number="x0.2"/>
+		<generation date="2003-06-26" />
+		<language type="en" /> 
+		<territory type="MP" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
-	<dates>
-		<calendars>
-			<default type="gregorian"/>
-			<calendar type="gregorian">
-			</calendar>
-		</calendars>
-	</dates>
 	<numbers>
 		<decimalFormats>
 			<decimalFormatLength >

@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="lv"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="lv" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,21 +18,13 @@
 		<territories>
 			<territory type="LV">Latvija</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ā ē ī ō ū ģ ķ ļ ņ ŗ č š ž]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">janvāris</month>
@@ -170,35 +162,35 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings caseFirst="upper" backwards="on"  />
-		<rules>
-			<reset>C</reset>
-			<p>č</p>
-			<t>Č</t>
-			<reset>G</reset>
-			<p>ģ</p>
-			<t>Ģ</t>
-			<reset>I</reset>
-			<p>y</p>
-			<t>Y</t>
-			<reset>K</reset>
-			<p>ķ</p>
-			<t>Ķ</t>
-			<reset>L</reset>
-			<p>ļ</p>
-			<t>Ļ</t>
-			<reset>N</reset>
-			<p>ņ</p>
-			<t>Ņ</t>
-			<reset>S</reset>
-			<p>š</p>
-			<t>Š</t>
-			<reset>Z</reset>
-			<p>ž</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<settings caseFirst="upper" backwards="on"  />
+			<rules>
+				<reset>C</reset>
+				<p>č</p>
+				<t>Č</t>
+				<reset>G</reset>
+				<p>ģ</p>
+				<t>Ģ</t>
+				<reset>I</reset>
+				<p>y</p>
+				<t>Y</t>
+				<reset>K</reset>
+				<p>ķ</p>
+				<t>Ķ</t>
+				<reset>L</reset>
+				<p>ļ</p>
+				<t>Ļ</t>
+				<reset>N</reset>
+				<p>ņ</p>
+				<t>Ņ</t>
+				<reset>S</reset>
+				<p>š</p>
+				<t>Š</t>
+				<reset>Z</reset>
+				<p>ž</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

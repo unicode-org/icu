@@ -7,10 +7,10 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="zh"></language>
-		<territory type="CHN">CN</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="zh" /> 
+		<territory type="CN" /> 
 	</identity>
 	<localeDisplayNames>
 		<territories>
@@ -18,14 +18,9 @@
 			<territory type="HK">香港</territory>
 			<territory type="TW">台湾</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<dateFormats>
 					<default type="medium"/>

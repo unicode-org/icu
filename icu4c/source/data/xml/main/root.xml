@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="4.0">Various notes and changes in version 4.0</version>
-		<generation date="2003-06-25" />
-		<language type="root"></language>
+		<version number="4.0"/>
+		<generation date="2003-06-26" />
+		<language type="" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -791,7 +791,6 @@
 	<dates>
 		<localizedPatternChars>GyMdkHmsSEDFwWahKzYe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">January</month>
@@ -1096,16 +1095,25 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="x0.0" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">=#,##0.######=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
-		<icu:ruleBasedNumberFormat type="ordinal">=#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
-		<icu:ruleBasedNumberFormat type="duration">=#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation  >
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="x0.0" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+=#,##0.######=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="ordinal">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
