@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Trie;
