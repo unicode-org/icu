@@ -40,7 +40,7 @@ public class Implicit implements UCD_Types {
             Implicit foo = new Implicit(0xE0, 0xE4);
             
             //int x = foo.getRawImplicit(0xF810);
-            foo.getFromRawImplicit(0xE20303E7);
+            foo.getRawFromImplicit(0xE20303E7);
 
             int gap4 = foo.getGap4();
             System.out.println("Gap4: " + gap4); 
@@ -50,16 +50,16 @@ public class Implicit implements UCD_Types {
             long last = 0;
             long current;
             for (int i = 0; i <= MAX_INPUT; ++i) {
-                current = foo.getRawImplicit(i) & fourBytes;
+                current = foo.getImplicitFromRaw(i) & fourBytes;
                 
                 // check that it round-trips AND that all intervening ones are illegal
-                int roundtrip = foo.getFromRawImplicit((int)current);
+                int roundtrip = foo.getRawFromImplicit((int)current);
                 if (roundtrip != i) {
                     foo.throwError("No roundtrip", i); 
                 }
                 if (last != 0) {
                     for (long j = last + 1; j < current; ++j) {
-                        roundtrip = foo.getFromRawImplicit((int)j);
+                        roundtrip = foo.getRawFromImplicit((int)j);
                         // raise an error if it *doesn't* find an error
                         if (roundtrip != -1) {
                             foo.throwError("Fails to recognize illegal", j);
@@ -119,7 +119,7 @@ public class Implicit implements UCD_Types {
     }
     
     private void throwError(String title, int cp) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp) + "\t" + Utility.hex(getRawImplicit(cp) & fourBytes));
+        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp) + "\t" + Utility.hex(getImplicitFromRaw(cp) & fourBytes));
     }
 
     private void throwError(String title, long ce) {
@@ -128,7 +128,7 @@ public class Implicit implements UCD_Types {
 
     private void show(int i) {
         if (i >= 0 && i <= MAX_INPUT) {
-            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getRawImplicit(i) & fourBytes));
+            System.out.println(Utility.hex(i) + "\t" + Utility.hex(getImplicitFromRaw(i) & fourBytes));
         } 
     }
     
@@ -246,11 +246,11 @@ public class Implicit implements UCD_Types {
         return 1 + (a-1)/b;
     }
     /**
-     * Converts implicit CE into raw integer ("code point")
+     * Converts implicit CE into raw integer
      * @param implicit
      * @return -1 if illegal format
      */
-    public int getFromRawImplicit(int implicit) {
+    public int getRawFromImplicit(int implicit) {
         int result;
         int b3 = implicit & 0xFF;
         implicit >>= 8;
@@ -292,11 +292,12 @@ public class Implicit implements UCD_Types {
     }
     
     /**
-     * Generate the implicit CE, left shifted to put the first byte at the top of an int.
+     * Generate the implicit CE, from raw integer.
+     * Left shifted to put the first byte at the top of an int.
      * @param cp code point
      * @return
      */
-    public int getRawImplicit(int cp) {
+    public int getImplicitFromRaw(int cp) {
         if (cp < 0 || cp > MAX_INPUT) {
             throw new IllegalArgumentException("Code point out of range " + Utility.hex(cp));
         }
@@ -339,17 +340,24 @@ public class Implicit implements UCD_Types {
             return (last3 << 24) + (last2 << 16) + (last1 << 8) + last0;
         }
     }
-    
+    /**
+     * Gets an Implicit from a code point. Internally, 
+     * swaps (which produces a raw value 0..220000, 
+     * then converts raw to implicit.
+     * @param cp
+     * @return
+     */
     public int getSwappedImplicit(int cp) {
         if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
         
-        // note, we add 1 so that the first value is always empty.
+        // Produce Raw value
+        // note, we add 1 so that the first value is always empty!!
         cp = Implicit.swapCJK(cp) + 1;
         // we now have a range of numbers from 0 to 220000.
             
         if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
             
-        return getRawImplicit(cp);
+        return getImplicitFromRaw(cp);
     }
 
     
