@@ -64,13 +64,14 @@ $LowerWordFollows  = $InteriorChars* $ATermEx $Close* $Sp* [^$OLetter $Upper $Lo
 # Rules 3, 9, 10, 11
 #                       Matches a simple sentence, or the trailing part of a complex sentence,
 #                       where a simple sentence contains no interior "."s.
-$EndSequence       = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq? |
-                     $InteriorChars* $SepSeq?;
+$TermEndSequence   = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq?;
+$EndSequence       = $InteriorChars* $SepSeq?;
 
 
 
 # Put them all together.  
-($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence;
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $TermEndSequence{0};   # status = UBRK_SENTENCE_TERM
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence{100};     # status = UBRK_SENTENCE_SEP
 
      
 #

@@ -262,6 +262,34 @@ typedef enum ULineBreakTag {
 } ULineBreakTag;
 
 
+
+/**
+ *  Enum constants for the sentence break tags returned by getRuleStatus().
+ *  A range of values is defined for each category of
+ *  sentence, to allow for further subdivisions of a category in future releases.
+ *  Applications should check for tag values falling within the range, rather
+ *  than for single individual values.
+ *  @draft ICU 2.8
+*/
+typedef enum USentenceBreakTag {
+    /** Tag value for for sentences  ending with a sentence terminator
+      * ('.', '?', '!', etc.) character, possibly followed by a
+      * hard separator (CR, LF, PS, etc.)
+      */
+    UBRK_SENTENCE_TERM       = 0,
+    /** Upper bound for tags for sentences ended by sentence terminators.    */
+    UBRK_SENTENCE_TERM_LIMIT = 100,
+    /** Tag value for for sentences that do not contain an ending
+      * sentence terminator ('.', '?', '!', etc.) character, but 
+      * are ended only by a hard separator (CR, LF, PS, etc.) or end of input.
+      */
+    UBRK_SENTENCE_SEP        = 100,
+    /** Upper bound for tags for sentences ended by a separator.              */
+    UBRK_SENTENCE_SEP_LIMIT  = 200,
+    /** Tag value for a hard, or mandatory line break  */
+} USentenceBreakTag;
+
+
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.
  * A UBreakIterator may be used for detecting character, line, word,
