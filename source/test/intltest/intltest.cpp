@@ -16,7 +16,6 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
-#include <stdlib.h>
 
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
@@ -509,9 +508,6 @@ IntlTest::setTestDirectory(const char* newDir)
  *                       ICU_DATA.  Common data isn't a problem, since it is
  *                       picked up via a static (build time) reference, but the
  *                       tests dynamically load some data.
- *
- *                       TODO:  The use of ICU_DATA can be eliminated once the proposed
- *                              udata_setApplicationData() API exists.
  */
 void IntlTest::setICU_DATA() {
     const char *original_ICU_DATA;
@@ -523,12 +519,13 @@ void IntlTest::setICU_DATA() {
     }
 
     /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst
-     *              to point to the right place, "wherever/icu/source/data"
+     *              to point to "wherever/icu/data"
+	 *              We can make a path from there to "wherever/icu/source/data"
      *   The value is complete with quotes, so it can be used as-is as a string constant.
      */
 #if defined (U_SRCDATADIR)
     {
-        static char env_string[] = "ICU_DATA=" U_SRCDATADIR;
+        static char env_string[] = "ICU_DATA=" U_SRCDATADIR "/../source/data";
         putenv(env_string);
         return;
     }

@@ -32,7 +32,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/data:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
@@ -82,7 +82,7 @@ distclean-local: clean-local
 -include Makefile.local
 
 check-local: all-local
-	 ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTESTOPTS)
+	 TZ=PST8PDT $(INVOKE) ./$(TARGET)  $(INTLTESTOPTS) || true
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
