@@ -1866,7 +1866,7 @@ static void TestConvertSafeClone()
 static void TestCCSID() {
     UConverter *cnv;
     UErrorCode errorCode;
-    int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 33722 };
+    int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 1392, 33722 };
     int32_t i, ccsid;
 
     for(i=0; i<(int32_t)(sizeof(ccsids)/sizeof(int32_t)); ++i) {
@@ -1883,7 +1883,8 @@ static void TestCCSID() {
             log_err("error: ucnv_getCCSID(ucnv_openCCSID(%ld))=%ld\n", ccsid, ucnv_getCCSID(cnv, &errorCode));
         }
 
-        if(UCNV_IBM!=ucnv_getPlatform(cnv, &errorCode)) {
+        /* skip gb18030(ccsid 1392) */
+        if(ccsid != 1392 && UCNV_IBM!=ucnv_getPlatform(cnv, &errorCode)) {
             log_err("error: ucnv_getPlatform(ucnv_openCCSID(%ld))=%ld!=UCNV_IBM\n", ccsid, ucnv_getPlatform(cnv, &errorCode));
         }
 

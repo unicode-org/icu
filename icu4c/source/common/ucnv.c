@@ -592,14 +592,24 @@ ucnv_getName (const UConverter * converter, UErrorCode * err)
     return converter->sharedData->staticData->name;
 }
 
-U_CAPI int32_t   U_EXPORT2
-ucnv_getCCSID (const UConverter * converter,
-                        UErrorCode * err)
+U_CAPI int32_t U_EXPORT2
+ucnv_getCCSID(const UConverter * converter,
+              UErrorCode * err)
 {
+    int32_t ccsid;
     if (U_FAILURE (*err))
         return -1;
 
-    return converter->sharedData->staticData->codepage;
+    ccsid = converter->sharedData->staticData->codepage;
+    if (ccsid == 0) {
+        /* Rare case. This is for cases like gb18030, which doesn't have an IBM cannonical */
+        const char *standardName = ucnv_getStandardName(ucnv_getName(converter, err), "IBM", err);
+        if (U_SUCCESS(*err) && standardName) {
+            const char *ccsidStr = uprv_strchr(standardName, '-') + 1;
+            ccsid = (int32_t)atof(ccsidStr);
+        }
+    }
+    return ccsid;
 }
 
 
