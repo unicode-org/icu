@@ -433,7 +433,7 @@ private:
  * Deleter for StringPairs
  */
 U_CAPI void U_EXPORT2
-deleteStringPair(void *obj);
+userv_deleteStringPair(void *obj);
 
 /**
  * Opaque type returned by registerInstance and registerFactory.
