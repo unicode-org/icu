@@ -30,7 +30,8 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& ID,
                                  const TransliterationRuleData* theData,
                                  UnicodeFilter* adoptedFilter) :
     Transliterator(ID, adoptedFilter),
-    data(theData), isDataOwned(FALSE) {}
+    data((TransliterationRuleData*)theData), // cast away const
+    isDataOwned(FALSE) {}
 
 /**
  * Copy constructor.  Since the data object is immutable, we can share
@@ -38,12 +39,18 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& ID,
  */
 RuleBasedTransliterator::RuleBasedTransliterator(
         const RuleBasedTransliterator& other) :
-    Transliterator(other), data(other.data) {}
+    Transliterator(other), data(other.data) {
+    // TODO: Finish this -- implement with correct data ownership handling
+}
 
 /**
  * Destructor.  We do NOT own the data object, so we do not delete it.
  */
-RuleBasedTransliterator::~RuleBasedTransliterator() {}
+RuleBasedTransliterator::~RuleBasedTransliterator() {
+    if (isDataOwned) {
+        delete data;
+    }
+}
 
 Transliterator* // Covariant return NOT ALLOWED (for portability)
 RuleBasedTransliterator::clone() const {
