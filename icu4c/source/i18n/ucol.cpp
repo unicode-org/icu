@@ -6095,7 +6095,8 @@ ucol_resizeLatinOneTable(UCollator *coll, int32_t size, UErrorCode *status) {
     return TRUE;
 }
 
-UBool ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
+static UBool
+ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
   UBool result = TRUE;
   if(coll->latinOneCEs == NULL) {
     coll->latinOneCEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*UCOL_LATINONETABLELEN*3);

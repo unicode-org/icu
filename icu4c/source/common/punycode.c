@@ -86,7 +86,7 @@ Disclaimer and license
  * range 0 to BASE-1. The lowercase form is used unless the uppercase flag is
  * nonzero, in which case the uppercase form is used.
  */
-U_INLINE char
+static U_INLINE char
 digitToBasic(int32_t digit, UBool uppercase) {
     /*  0..25 map to ASCII a..z or A..Z */
     /* 26..35 map to ASCII 0..9         */
@@ -133,7 +133,7 @@ basicToDigit[256]={
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 };
 
-U_INLINE char
+static U_INLINE char
 asciiCaseMap(char b, UBool uppercase) {
     if(uppercase) {
         if(_SMALL_A<=b && b<=_SMALL_Z) {

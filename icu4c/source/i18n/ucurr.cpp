@@ -210,7 +210,8 @@ CReg* CReg::gHead = 0;
 
 // -------------------------------------
 
-void idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec) {
+static void
+idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec) {
   // !!! this is internal only, assumes buffer is not null and capacity is sufficient
   // Extract the country name and variant name.  We only
   // recognize two variant names, EURO and PREEURO.
