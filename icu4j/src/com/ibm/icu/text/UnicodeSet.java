@@ -82,7 +82,7 @@ import java.util.Collection;
  *       point order</td>
  *     </tr>
  *     <tr>
- *       <td nowrap valign="top" align="left"><code>[\u005Cu4E01]</code></td>
+ *       <td nowrap valign="top" align="left"><code>[\\u4E01]</code></td>
  *       <td valign="top">The character U+4E01</td>
  *     </tr>
  *     <tr>
@@ -125,16 +125,16 @@ import java.util.Collection;
  * right character it is a syntax error.  If a '-' occurs as the first
  * character after the opening '[' or '[^', or if it occurs as the
  * last character before the closing ']', then it is taken as a
- * literal.  Thus "[a\u005C-b]", "[-ab]", and "[ab-]" all indicate the same
+ * literal.  Thus "[a\\-b]", "[-ab]", and "[ab-]" all indicate the same
  * set of three characters, 'a', 'b', and '-'.
  *
  * <p>Sets may be intersected using the '&' operator or the asymmetric
  * set difference may be taken using the '-' operator, for example,
- * "[[:L:]&[\u005Cu0000-\u005Cu0FFF]]" indicates the set of all Unicode letters
+ * "[[:L:]&[\\u0000-\\u0FFF]]" indicates the set of all Unicode letters
  * with values less than 4096.  Operators ('&' and '|') have equal
  * precedence and bind left-to-right.  Thus
- * "[[:L:]-[a-z]-[\u005Cu0100-\u005Cu01FF]]" is equivalent to
- * "[[[:L:]-[a-z]]-[\u005Cu0100-\u005Cu01FF]]".  This only really matters for
+ * "[[:L:]-[a-z]-[\\u0100-\\u01FF]]" is equivalent to
+ * "[[[:L:]-[a-z]]-[\\u0100-\\u01FF]]".  This only really matters for
  * difference; intersection is commutative.
  *
  * <table>
@@ -195,7 +195,7 @@ import java.util.Collection;
  *     <tr align="top">
  *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
  *       <td valign="top"><em>any character that is not</em><code> special<br>
- *       | ('\u005C' </code><em>any character</em><code>)<br>
+ *       | ('\\' </code><em>any character</em><code>)<br>
  *       | ('&#92;u' hex hex hex hex)<br>
  *       </code></td>
  *     </tr>
