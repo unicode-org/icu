@@ -1,15 +1,10 @@
 /*
- ********************************************************************************
- *                                                                              *
- * Copyright:                                                                   *
- *   (C) Copyright International Business Machines Corporation, 1998            *
- *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
- *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
- *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
- *                                                                              *
- ********************************************************************************
+ *******************************************************************************
  *
+ *   Copyright (C) 1998-1999, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
  *
+ *******************************************************************************
  *
  *  ucnv_err.c
  *  Implements error behaviour functions called by T_UConverter_{from,to}Unicode
