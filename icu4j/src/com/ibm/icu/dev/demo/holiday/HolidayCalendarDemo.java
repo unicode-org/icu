@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/holiday/HolidayCalendarDemo.java,v $ 
- * $Date: 2000/03/31 18:49:02 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/26 19:13:48 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -171,6 +171,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	// Make the locale popup menus
         	localeMenu= new Choice();
         	int selectMe = 0;
+        	
         	for (int i = 0; i < calendars.length; i++) {
             	if (i > 0 &&
                     	calendars[i].getCountry().equals(calendars[i-1].getCountry()) ||
@@ -182,14 +183,18 @@ public class HolidayCalendarDemo extends DemoApplet
             	} else {
                 	localeMenu.addItem( calendars[i].getDisplayCountry() );
             	}
+            	
             	if (calendars[i].equals(kFirstLocale)) {
                 	selectMe = i;
             	}
         	}
+        	
         	localeMenu.setBackground(DemoUtility.choiceColor);
         	localeMenu.select(selectMe);
 
         	displayMenu = new Choice();
+        	
+        	selectMe = 0;
         	for (int i = 0; i < locales.length; i++) {
             	if (i > 0 &&
                     	locales[i].getLanguage().equals(locales[i-1].getLanguage()) ||
@@ -200,9 +205,14 @@ public class HolidayCalendarDemo extends DemoApplet
             	} else {
                 	displayMenu.addItem( locales[i].getDisplayLanguage());
             	}
+            	
+            	if (locales[i].equals(kFirstLocale)) {
+            	    selectMe = i;
+            	}
         	}
+        	
         	displayMenu.setBackground(DemoUtility.choiceColor);
-        	displayMenu.select(kFirstLocale.getDisplayName());
+        	displayMenu.select(selectMe);
 
         	// Make all the next/previous/today buttons
         	prevYear = new Button("<<");
