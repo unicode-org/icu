@@ -1502,8 +1502,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected Calendar(TimeZone zone, Locale aLocale)
     {
         this.zone = zone;
-        setWeekCountData(aLocale);
-        setWeekendData(aLocale);
+        setWeekData(aLocale);
         initInternal();
     }
 
@@ -1810,7 +1809,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final void set(int field, int value)
     {
-        isTimeSet = false;
+            isTimeSet = false;
         fields[field] = value;
         stamp[field] = nextStamp++;
         areFieldsSet = false;
@@ -3586,23 +3585,6 @@ public abstract class Calendar implements Serializable, Cloneable {
         // (We can never reach this point.)
     }
 
-    /**
-     * Read the locale weekend data for the given locale.
-     *
-     * This is the initial placement and format of this data -- it may very
-     * well change in the future.  See the locale files themselves for
-     * details.
-     */
-    private void setWeekendData(Locale loc) {
-        ResourceBundle resource =
-            ICULocaleData.getResourceBundle("CalendarData", loc);
-        String[] data = resource.getStringArray("Weekend");
-        weekendOnset       = Integer.parseInt(data[0]);
-        weekendOnsetMillis = Integer.parseInt(data[1]);
-        weekendCease       = Integer.parseInt(data[2]);
-        weekendCeaseMillis = Integer.parseInt(data[3]);
-    }
-
     //-------------------------------------------------------------------------
     // End of weekend support
     //-------------------------------------------------------------------------
@@ -3672,36 +3654,58 @@ public abstract class Calendar implements Serializable, Cloneable {
     private static class WeekData {
         public int firstDayOfWeek;
         public int minimalDaysInFirstWeek;
+        public int weekendOnset;
+        public int weekendOnsetMillis;
+        public int weekendCease;
+        public int weekendCeaseMillis;
         public Locale actualLocale;
-        public WeekData(int fdow, int mdifw, Locale actualLoc) {
+        public WeekData(int fdow, int mdifw,
+                        int weekendOnset, int weekendOnsetMillis,
+                        int weekendCease, int weekendCeaseMillis,
+                        Locale actualLoc) {
             this.firstDayOfWeek = fdow;
             this.minimalDaysInFirstWeek = mdifw;
             this.actualLocale = actualLoc;
+            this.weekendOnset = weekendOnset;
+            this.weekendOnsetMillis = weekendOnsetMillis;
+            this.weekendCease = weekendCease;
+            this.weekendCeaseMillis = weekendCeaseMillis;
         }
     }
     
     /**
-     * Both firstDayOfWeek and minimalDaysInFirstWeek are locale-dependent.
-     * They are used to figure out the week count for a specific date for
-     * a given locale. These must be set when a Calendar is constructed.
-     * @param desiredLocale the given locale.
+     * Set this calendar to contain week and weekend data for the given
+     * locale.
+     * @param locale the locale
      */
-    private void setWeekCountData(Locale desiredLocale)
+    private void setWeekData(Locale locale)
     {
         /* try to get the Locale data from the cache */
-        WeekData data = (WeekData) cachedLocaleData.get(desiredLocale);
+        WeekData data = (WeekData) cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
-            ResourceBundle resource = ICULocaleData.getLocaleElements(desiredLocale);
-            String[] dateTimePatterns =  resource.getStringArray("DateTimeElements");
-            data = new WeekData(Integer.parseInt(dateTimePatterns[0]),
-                                Integer.parseInt(dateTimePatterns[1]),
-                                resource.getLocale());
+            ResourceBundle dateRes = ICULocaleData.getLocaleElements(locale);
+            String[] dateTimeElements =
+                dateRes.getStringArray("DateTimeElements");
+            String[] weekend =
+                ICULocaleData.getResourceBundle("CalendarData", locale).
+                getStringArray("Weekend");
+            data = new WeekData(Integer.parseInt(dateTimeElements[0]),
+                                Integer.parseInt(dateTimeElements[1]),
+                                Integer.parseInt(weekend[0]),
+                                Integer.parseInt(weekend[1]),
+                                Integer.parseInt(weekend[2]),
+                                Integer.parseInt(weekend[3]),
+                                dateRes.getLocale());
             /* cache update */
-            cachedLocaleData.put(desiredLocale, data);
+            cachedLocaleData.put(locale, data);
         }
         setFirstDayOfWeek(data.firstDayOfWeek);
         setMinimalDaysInFirstWeek(data.minimalDaysInFirstWeek);
+        weekendOnset       = data.weekendOnset;
+        weekendOnsetMillis = data.weekendOnsetMillis;
+        weekendCease       = data.weekendCease;
+        weekendCeaseMillis = data.weekendCeaseMillis;
 
         // TODO: determine the actual/valid locale
         ULocale uloc = new ULocale(data.actualLocale);
