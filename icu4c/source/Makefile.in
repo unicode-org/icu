@@ -22,17 +22,13 @@ docsubdir = $(PACKAGE)$(ICULIBDASHSUFFIX)/html
 ## Build directory information
 subdir = .
 
-AUTOCONF = @AUTOCONF@
+#AUTOCONF = @AUTOCONF@
 
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
-@EXTRAS_FALSE@EXTRA = 
 @LAYOUT_TRUE@LAYOUT = layout layoutex
-@LAYOUT_FALSE@LAYOUT = 
 @TESTS_TRUE@TEST = test
-@TESTS_FALSE@TEST = 
 @SAMPLES_TRUE@SAMPLE = samples
-@SAMPLES_FALSE@SAMPLE = 
 
 DOXYGEN = @DOXYGEN@
 

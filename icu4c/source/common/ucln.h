@@ -52,7 +52,7 @@ typedef enum ECleanupLibraryType {
     UCLN_CUSTOM,    /* Custom is for anyone else. */
     UCLN_LAYOUTEX,
     UCLN_LAYOUT,
-    UCLN_USTDIO,
+    UCLN_IO,
     UCLN_I18N,
     UCLN_COMMON /* This must be the last one to cleanup. */
 } ECleanupLibraryType;

@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.21 2004/03/31 22:33:46 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.22 2004/04/01 00:21:57 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -18,12 +18,16 @@ SHAREDLIBCPPFLAGS =
 
 ## Additional flags when building libraries and with threads
 LIBCPPFLAGS = 
+
+ifeq ($(ENABLE_DEBUG),1)
 # /MDd means 'compiles and links a debugable multithreaded program with DLL'
-#THREADSCFLAGS += /MDd
-#THREADSCXXFLAGS += /MDd
+THREADSCFLAGS += /MDd
+THREADSCXXFLAGS += /MDd
+else
 # /MD means 'compiles and links a multithreaded program with DLL'
 THREADSCFLAGS += /MD
 THREADSCXXFLAGS += /MD
+endif
 
 # /GF pools strings and places them into read-only memory
 # /GX enables exception handling
@@ -77,7 +81,7 @@ LIBICULE=	$(LIBDIR)/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBICULX=	$(LIBDIR)/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBUSTDIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 
 # Current full path directory.
 CURR_FULL_DIR=$(shell cygpath -wma .)
