@@ -117,8 +117,8 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
     UBool    lastStringWasQuoted;
     UChar32  c;
     UChar    target[3] = { '\0' };
-    UChar   *pTarget   = target;
-
+    UChar    *pTarget   = target;
+    int      len=0;
     /* We are guaranteed on entry that initialChar is not a whitespace
        character. If we are at the EOF, or have some other problem, it
        doesn't matter; we still want to validly return the initialChar
@@ -175,10 +175,10 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     }
                 }
 
-                U_APPEND_CHAR32(c, pTarget);
+                U_APPEND_CHAR32(c, pTarget,len);
                 pTarget = target;
-                ustr_uscat(token, pTarget, status);
-
+                ustr_uscat(token, pTarget,len, status);
+                len=0;
                 if (U_FAILURE(*status)) {
                     return TOK_ERROR;
                 }
@@ -204,9 +204,10 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                 }
             }
 
-            U_APPEND_CHAR32(c, pTarget);
+            U_APPEND_CHAR32(c, pTarget,len);
             pTarget = target;
-            ustr_uscat(token, pTarget, status);
+            ustr_uscat(token, pTarget,len, status);
+            len=0;
 
             if (U_FAILURE(*status)) {
                 return TOK_ERROR;
@@ -248,10 +249,10 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     }
                 }
 
-                U_APPEND_CHAR32(c, pTarget);
+                U_APPEND_CHAR32(c, pTarget,len);
                 pTarget = target;
-                ustr_uscat(token, pTarget, status);
-
+                ustr_uscat(token, pTarget,len, status);
+                len=0;
                 if (U_FAILURE(*status)) {
                     return TOK_ERROR;
                 }
