@@ -138,6 +138,8 @@ protected:
     UBool assertSuccess(const char* message, UErrorCode ec);
     UBool assertEquals(const char* message, const UnicodeString& expected,
                        const UnicodeString& actual);
+    UBool assertEquals(const char* message, const char* expected,
+                       const char* actual);
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual);
     UBool assertTrue(const UnicodeString& message, UBool condition);
@@ -145,6 +147,8 @@ protected:
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
     UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
                        const UnicodeString& actual);
+    UBool assertEquals(const UnicodeString& message, const char* expected,
+                       const char* actual);
     UBool assertEquals(const UnicodeString& message, const Formattable& expected,
                        const Formattable& actual);
 
