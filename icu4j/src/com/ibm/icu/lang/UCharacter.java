@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/12/01 23:39:13 $ 
-* $Revision: 1.84 $
+* $Date: 2004/01/07 20:06:24 $ 
+* $Revision: 1.85 $
 *
 *******************************************************************************
 */
@@ -2237,7 +2237,11 @@ public final class UCharacter
      * except for the above mentioned code points that had their category 
      * changed.<br>
      * Return results are constants from the interface 
-     * <a href=UCharacterCategory.html>UCharacterCategory</a>
+     * <a href=UCharacterCategory.html>UCharacterCategory</a><br>
+     * <em>NOTE:</em> the UCharacterCategory values are <em>not</em> compatible with
+     * those returned by java.lang.Character.getType.  UCharacterCategory values
+     * match the ones used in ICU4C, while java.lang.Character type
+     * values, though similar, skip the value 17.</p>
      * @param ch code point whose type is to be determined
      * @return category which is a value of UCharacterCategory
      * @stable ICU 2.1

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.13 $
+* $Date: 2004/01/07 20:06:24 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -18,8 +18,13 @@ package com.ibm.icu.lang;
  * Enumerated Unicode category types from the UnicodeData.txt file.
  * Used as return results from <a href=UCharacter.html>UCharacter</a>
  * Equivalent to icu's UCharCategory.
- * Refer to <a href=http://www.unicode.org/Public/UNIDATA/UnicodeData.html>
+ * Refer to <a href="http://www.unicode.org/Public/UNIDATA/UCD.html">
  * Unicode Consortium</a> for more information about UnicodeData.txt.
+ * <p>
+ * <em>NOTE:</em> the UCharacterCategory values are <em>not</em> compatible with
+ * those returned by java.lang.Character.getType.  UCharacterCategory values
+ * match the ones used in ICU4C, while java.lang.Character type
+ * values, though similar, skip the value 17.</p>
  * <p>
  * This class is not subclassable
  * </p>
@@ -185,14 +190,30 @@ public final class UCharacterCategory
    	public static final int OTHER_SYMBOL            = 27;
    	/**
      * Character type Pi
+     * @see #INITIAL_QUOTE_PUNCTUATION
      * @stable ICU 2.1
      */
     public static final int INITIAL_PUNCTUATION     = 28;
+   	/**
+     * Character type Pi
+     * This name is compatible with java.lang.Character's name for this type.
+     * @see #INITIAL_PUNCTUATION
+     * @draft ICU 2.8
+     */
+    public static final int INITIAL_QUOTE_PUNCTUATION     = 28;
     /**
      * Character type Pf
+     * @see #FINAL_QUOTE_PUNCTUATION
      * @stable ICU 2.1
      */
     public static final int FINAL_PUNCTUATION       = 29;
+    /**
+     * Character type Pf
+     * This name is compatible with java.lang.Character's name for this type.
+     * @see #FINAL_PUNCTUATION
+     * @draft ICU 2.8
+     */
+    public static final int FINAL_QUOTE_PUNCTUATION       = 29;
     	
     // start of 31 ------------
     
