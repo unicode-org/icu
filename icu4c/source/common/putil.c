@@ -1018,7 +1018,7 @@ u_getDataDirectory(void) {
             if(path==NULL || *path==0) {
                 HKEY key;
 
-                if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\IBM\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
+                if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\ICU\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
                     DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
 
                     if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, pathBuffer, &size) && size>1) {

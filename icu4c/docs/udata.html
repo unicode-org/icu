@@ -17,7 +17,7 @@ That directory is determined sequentially by
     <li><code>getenv("ICU_DATA")</code> -
         the contents of the ICU_DATA environment variable</li>
     <li>on Windows, by the value named <code>"Path"</code> of the registry key
-        <code>HKEY_LOCAL_MACHINE "SOFTWARE\\IBM\\Unicode\\Data"</code></li>
+        <code>HKEY_LOCAL_MACHINE "SOFTWARE\\ICU\\Unicode\\Data"</code></li>
     <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
         is loaded from: if it is loaded from <code>/some/path/lib/libicu-uc.so</code>, then
         the path will be <code>/some/path/lib/../share/icu/1.3.1/</code>
