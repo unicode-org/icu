@@ -20,6 +20,28 @@
 #include "uassert.h"
 #include <float.h> // DBL_MAX
 
+#ifdef U_DEBUG_TZ
+# include <stdio.h>
+# include "uresimp.h" // for debugging
+
+static void debug_tz_loc(const char *f, int32_t l)
+{
+  fprintf(stderr, "%s:%d: ", f, l);
+}
+
+static void debug_tz_msg(const char *pat, ...)
+{
+  va_list ap;
+  va_start(ap, pat);
+  vfprintf(stderr, pat, ap);
+  fflush(stderr);
+}
+// must use double parens, i.e.:  U_DEBUG_TZ_MSG(("four is: %d",4));
+#define U_DEBUG_TZ_MSG(x) {debug_tz_loc(__FILE__,__LINE__);debug_tz_msg x;}
+#else
+#define U_DEBUG_TZ_MSG(x)
+#endif
+
 U_NAMESPACE_BEGIN
 
 #define SECONDS_PER_DAY (24*60*60)
@@ -59,6 +81,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
                              UErrorCode& ec) :
     finalZone(0), finalYear(INT32_MAX), finalMillis(DBL_MAX) {
+    U_DEBUG_TZ_MSG(("OlsonTimeZone(%s)\n", ures_getKey((UResourceBundle*)res)));
     if ((top == NULL || res == NULL) && U_SUCCESS(ec)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     }
@@ -78,7 +101,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
             ec = U_INVALID_FORMAT_ERROR;
         }
 
-        // Transitions list may be emptry
+        // Transitions list may be empty
         int32_t i;
         UResourceBundle* r = ures_getByIndex(res, 0, NULL, &ec);
         transitionTimes = ures_getIntVector(r, &i, &ec);
@@ -106,11 +129,28 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
             ec = U_INVALID_FORMAT_ERROR;
         }
 
+#if defined (U_DEBUG_TZ)
+        U_DEBUG_TZ_MSG(("OlsonTimeZone(%s) - size = %d, typecount %d transitioncount %d - err %s\n", ures_getKey((UResourceBundle*)res), size, typeCount,  transitionCount, u_errorName(ec)));
+        if(U_SUCCESS(ec)) {
+          int32_t jj;
+          for(jj=0;jj<transitionCount;jj++) {
+            U_DEBUG_TZ_MSG(("   Transition %d:  time %d, typedata%d\n", jj, transitionTimes[jj], typeData[jj]));
+          }
+          for(jj=0;jj<transitionCount;jj++) {
+            U_DEBUG_TZ_MSG(("   Type %d:  offset%d\n", jj, typeOffsets[jj]));
+          }
+        }
+#endif
+
         // Process final rule and data, if any
         if (size >= 5) {
             UnicodeString ruleid = ures_getUnicodeStringByIndex(res, 3, &ec);
             r = ures_getByIndex(res, 4, NULL, &ec);
             const int32_t* data = ures_getIntVector(r, &len, &ec);
+#if defined U_DEBUG_TZ
+            const char *rKey = ures_getKey(r);
+            const char *zKey = ures_getKey((UResourceBundle*)res);
+#endif
             ures_close(r);
             if (U_SUCCESS(ec)) {
                 if (data != 0 && len == 2) {
@@ -125,14 +165,15 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                     // Also compute the millis for Jan 1, 0:00 GMT of the
                     // finalYear.  This reduces runtime computations.
                     finalMillis = Grego::fieldsToDay(data[1], 0, 1) * U_MILLIS_PER_DAY;
-                    char key[64];
-                    key[0] = '_';
-                    ruleid.extract(0, sizeof(key)-2, key+1, sizeof(key)-1, "");
-                    r = ures_getByKey(top, key, NULL, &ec);
+                    U_DEBUG_TZ_MSG(("zone%s|%s: {%d,%d}, finalYear%d, finalMillis%.1lf\n",
+                                    zKey,rKey, data[0], data[1], finalYear, finalMillis));
+                    r = TimeZone::loadRule(top, ruleid, NULL, ec);
                     if (U_SUCCESS(ec)) {
                         // 3, 1, -1, 7200, 0, 9, -31, -1, 7200, 0, 3600
                         data = ures_getIntVector(r, &len, &ec);
                         if (U_SUCCESS(ec) && len == 11) {
+                          U_DEBUG_TZ_MSG(("zone%s, rule%s: {%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d}", zKey, ures_getKey(r), 
+                                          data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10]));
                             finalZone = new SimpleTimeZone(rawOffset, "",
                                 (int8_t)data[0], (int8_t)data[1], (int8_t)data[2],
                                 data[3] * U_MILLIS_PER_SECOND,
