@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/12/03 02:14:20 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/12/04 23:02:26 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -215,7 +215,7 @@ public abstract class SearchIterator
 	 * @exception IllegalArgumentException thrown when text is null or has
 	 * 			  0 length
 	 * @see #getTarget
-	 * @draft ICU 2.0
+	 * @stable ICU 2.4
 	 */
 	public void setTarget(CharacterIterator text)
 	{
