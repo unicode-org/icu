@@ -552,17 +552,22 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     tableOffset += paddedsize(expansions->position*sizeof(uint32_t));
 
     /* contractions block */
-    /* copy contraction index */
-    /*myData->contractionIndex = (UChar *)(dataStart+tableOffset);*/
-    myData->contractionIndex = tableOffset;
-    memcpy(dataStart+tableOffset, contractions->codePoints, contractionsSize*sizeof(UChar));
-    tableOffset += paddedsize(contractionsSize*sizeof(UChar));
+    if(contractionsSize != 0) {
+      /* copy contraction index */
+      /*myData->contractionIndex = (UChar *)(dataStart+tableOffset);*/
+      myData->contractionIndex = tableOffset;
+      memcpy(dataStart+tableOffset, contractions->codePoints, contractionsSize*sizeof(UChar));
+      tableOffset += paddedsize(contractionsSize*sizeof(UChar));
 
-    /* copy contraction collation elements */
-    /*myData->contractionCEs = (uint32_t *)(dataStart+tableOffset);*/
-    myData->contractionCEs = tableOffset;
-    memcpy(dataStart+tableOffset, contractions->CEs, contractionsSize*sizeof(uint32_t));
-    tableOffset += paddedsize(contractionsSize*sizeof(uint32_t));
+      /* copy contraction collation elements */
+      /*myData->contractionCEs = (uint32_t *)(dataStart+tableOffset);*/
+      myData->contractionCEs = tableOffset;
+      memcpy(dataStart+tableOffset, contractions->CEs, contractionsSize*sizeof(uint32_t));
+      tableOffset += paddedsize(contractionsSize*sizeof(uint32_t));
+    } else {
+      myData->contractionIndex = 0;
+      myData->contractionIndex = 0;
+    }
 
     /* copy mapping table */
     /*myData->mappingPosition = dataStart+tableOffset;*/
