@@ -45,7 +45,6 @@
 #define T_FileStream_stderr T_FileStream_stderr_2_0
 #define T_FileStream_stdin T_FileStream_stdin_2_0
 #define T_FileStream_stdout T_FileStream_stdout_2_0
-#define T_FileStream_tmpfile T_FileStream_tmpfile_2_0
 #define T_FileStream_ungetc T_FileStream_ungetc_2_0
 #define T_FileStream_wopen T_FileStream_wopen_2_0
 #define T_FileStream_write T_FileStream_write_2_0
@@ -106,6 +105,7 @@
 #define _UTF32LEData _UTF32LEData_2_0
 #define _UTF7Data _UTF7Data_2_0
 #define _UTF8Data _UTF8Data_2_0
+#define dateFormatSymbols_cleanup dateFormatSymbols_cleanup_2_0
 #define init_collIterate init_collIterate_2_0
 #define isTailored isTailored_2_0
 #define locale_cleanup locale_cleanup_2_0
@@ -154,7 +154,6 @@
 #define u_getDefaultConverter u_getDefaultConverter_2_0
 #define u_getUnicodeVersion u_getUnicodeVersion_2_0
 #define u_getVersion u_getVersion_2_0
-#define u_growAnyBufferFromStatic u_growAnyBufferFromStatic_2_0
 #define u_growBufferFromStatic u_growBufferFromStatic_2_0
 #define u_internalFoldCase u_internalFoldCase_2_0
 #define u_internalGetCombiningClass u_internalGetCombiningClass_2_0
@@ -162,6 +161,7 @@
 #define u_internalStrToLower u_internalStrToLower_2_0
 #define u_internalStrToUpper u_internalStrToUpper_2_0
 #define u_internalStrcasecmp u_internalStrcasecmp_2_0
+#define u_internalTitleCase u_internalTitleCase_2_0
 #define u_isIDIgnorable u_isIDIgnorable_2_0
 #define u_isIDPart u_isIDPart_2_0
 #define u_isIDStart u_isIDStart_2_0
@@ -334,10 +334,12 @@
 #define ucmpe32_close ucmpe32_close_2_0
 #define ucmpe32_compact ucmpe32_compact_2_0
 #define ucmpe32_flattenMem ucmpe32_flattenMem_2_0
+#define ucmpe32_get32 ucmpe32_get32_2_0
 #define ucmpe32_getSurrogateEx ucmpe32_getSurrogateEx_2_0
 #define ucmpe32_open ucmpe32_open_2_0
 #define ucmpe32_openFromData ucmpe32_openFromData_2_0
 #define ucmpe32_set32 ucmpe32_set32_2_0
+#define ucmpe32_setRange32 ucmpe32_setRange32_2_0
 #define ucmpe32_setSurrogate ucmpe32_setSurrogate_2_0
 #define ucnv_cbFromUWriteBytes ucnv_cbFromUWriteBytes_2_0
 #define ucnv_cbFromUWriteSub ucnv_cbFromUWriteSub_2_0
@@ -466,7 +468,6 @@
 #define ucol_previous ucol_previous_2_0
 #define ucol_prv_getSpecialCE ucol_prv_getSpecialCE_2_0
 #define ucol_prv_getSpecialPrevCE ucol_prv_getSpecialPrevCE_2_0
-#define ucol_putOptionsToHeader ucol_putOptionsToHeader_2_0
 #define ucol_reset ucol_reset_2_0
 #define ucol_restoreVariableTop ucol_restoreVariableTop_2_0
 #define ucol_safeClone ucol_safeClone_2_0
@@ -620,6 +621,20 @@
 #define unum_setTextAttribute unum_setTextAttribute_2_0
 #define unum_toPattern unum_toPattern_2_0
 #define uprv_ceil uprv_ceil_2_0
+#define uprv_cnttab_addContraction uprv_cnttab_addContraction_2_0
+#define uprv_cnttab_changeContraction uprv_cnttab_changeContraction_2_0
+#define uprv_cnttab_changeLastCE uprv_cnttab_changeLastCE_2_0
+#define uprv_cnttab_clone uprv_cnttab_clone_2_0
+#define uprv_cnttab_close uprv_cnttab_close_2_0
+#define uprv_cnttab_constructTable uprv_cnttab_constructTable_2_0
+#define uprv_cnttab_findCE uprv_cnttab_findCE_2_0
+#define uprv_cnttab_findCP uprv_cnttab_findCP_2_0
+#define uprv_cnttab_getCE uprv_cnttab_getCE_2_0
+#define uprv_cnttab_insertContraction uprv_cnttab_insertContraction_2_0
+#define uprv_cnttab_isTailored uprv_cnttab_isTailored_2_0
+#define uprv_cnttab_open uprv_cnttab_open_2_0
+#define uprv_cnttab_setContraction uprv_cnttab_setContraction_2_0
+#define uprv_computeDirPath uprv_computeDirPath_2_0
 #define uprv_defaultCodePageForLocale uprv_defaultCodePageForLocale_2_0
 #define uprv_digitsAfterDecimal uprv_digitsAfterDecimal_2_0
 #define uprv_dtostr uprv_dtostr_2_0
@@ -680,8 +695,14 @@
 #define uprv_uca_cloneTempTable uprv_uca_cloneTempTable_2_0
 #define uprv_uca_closeTempTable uprv_uca_closeTempTable_2_0
 #define uprv_uca_initTempTable uprv_uca_initTempTable_2_0
-#define uprv_uca_setRange uprv_uca_setRange_2_0
 #define uprv_unmapFile uprv_unmapFile_2_0
+#define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_0
+#define uprv_growTable uprv_growTable_2_0
+#define uprv_uca_addContraction uprv_uca_addContraction_2_0
+#define uprv_uca_addPrefix uprv_uca_addPrefix_2_0
+#define uprv_uca_getMaxExpansionJamo uprv_uca_getMaxExpansionJamo_2_0
+#define uprv_uca_setMaxExpansion uprv_uca_setMaxExpansion_2_0
+#define uprv_uca_setMaxJamoExpansion uprv_uca_setMaxJamoExpansion_2_0
 #define ures_cleanup ures_cleanup_2_0
 #define ures_close ures_close_2_0
 #define ures_copyResb ures_copyResb_2_0
@@ -767,6 +788,13 @@
 #define utrans_transIncrementalUChars utrans_transIncrementalUChars_2_0
 #define utrans_transUChars utrans_transUChars_2_0
 #define utrans_unregister utrans_unregister_2_0
+#define addATableElement addATableElement_2_0
+#define locale_set_default_internal locale_set_default_internal_2_0
+#define util_equalRules util_equalRules_2_0
+#define _cnttab_findCP _cnttab_findCP_2_0
+#define _cnttab_getCE _cnttab_getCE_2_0
+#define _cnttab_getContractionTable _cnttab_getContractionTable_2_0
+
 
 /* C++ class names renaming defines */
 #ifdef XP_CPLUSPLUS
@@ -785,7 +813,6 @@
 #define ChainingContextualSubstitutionFormat3Subtable ChainingContextualSubstitutionFormat3Subtable_2_0
 #define ChainingContextualSubstitutionSubtable ChainingContextualSubstitutionSubtable_2_0
 #define CharShaper CharShaper_2_0
-#define CharString CharString_2_0
 #define CharSubstitutionFilter CharSubstitutionFilter_2_0
 #define CharacterIterator CharacterIterator_2_0
 #define ChoiceFormat ChoiceFormat_2_0
@@ -815,6 +842,7 @@
 #define DictionaryBasedBreakIteratorTables DictionaryBasedBreakIteratorTables_2_0
 #define DigitList DigitList_2_0
 #define Entry Entry_2_0
+#define EscapeTransliterator EscapeTransliterator_2_0
 #define FeatureListTable FeatureListTable_2_0
 #define Format Format_2_0
 #define Format1AnchorTable Format1AnchorTable_2_0
@@ -835,6 +863,7 @@
 #define GregorianCalendar GregorianCalendar_2_0
 #define HebrewShaping HebrewShaping_2_0
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_0
+#define ICU_Utility ICU_Utility_2_0
 #define IndicClassTable IndicClassTable_2_0
 #define IndicOpenTypeLayoutEngine IndicOpenTypeLayoutEngine_2_0
 #define IndicRearrangementProcessor IndicRearrangementProcessor_2_0
@@ -896,7 +925,6 @@
 #define SearchIterator SearchIterator_2_0
 #define SegmentArrayProcessor SegmentArrayProcessor_2_0
 #define SegmentSingleProcessor SegmentSingleProcessor_2_0
-#define Segments Segments_2_0
 #define Shaper Shaper_2_0
 #define SimpleArrayProcessor SimpleArrayProcessor_2_0
 #define SimpleDateFormat SimpleDateFormat_2_0
@@ -933,6 +961,7 @@
 #define UCharCharacterIterator UCharCharacterIterator_2_0
 #define UStack UStack_2_0
 #define UVector UVector_2_0
+#define UnescapeTransliterator UnescapeTransliterator_2_0
 #define Unicode Unicode_2_0
 #define UnicodeAndFilter UnicodeAndFilter_2_0
 #define UnicodeArabicOpenTypeLayoutEngine UnicodeArabicOpenTypeLayoutEngine_2_0
@@ -944,41 +973,12 @@
 #define UnicodeNotFilter UnicodeNotFilter_2_0
 #define UnicodeOrFilter UnicodeOrFilter_2_0
 #define UnicodePropertySet UnicodePropertySet_2_0
-#define UnicodeRange UnicodeRange_2_0
 #define UnicodeSet UnicodeSet_2_0
 #define UnicodeString UnicodeString_2_0
 #define UnicodeToHexTransliterator UnicodeToHexTransliterator_2_0
 #define UppercaseTransliterator UppercaseTransliterator_2_0
 #define ValueRecord ValueRecord_2_0
-#define _CharString _CharString_2_0
-#define _cnttab_findCP _cnttab_findCP_2_0
-#define _cnttab_getCE _cnttab_getCE_2_0
-#define _cnttab_getContractionTable _cnttab_getContractionTable_2_0
-#define addATableElement addATableElement_2_0
-#define indicClassTables indicClassTables_2_0
 #define llong llong_2_0
-#define locale_set_default_internal locale_set_default_internal_2_0
-#define uprv_cnttab_addContraction uprv_cnttab_addContraction_2_0
-#define uprv_cnttab_changeContraction uprv_cnttab_changeContraction_2_0
-#define uprv_cnttab_changeLastCE uprv_cnttab_changeLastCE_2_0
-#define uprv_cnttab_clone uprv_cnttab_clone_2_0
-#define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_0
-#define uprv_cnttab_close uprv_cnttab_close_2_0
-#define uprv_cnttab_constructTable uprv_cnttab_constructTable_2_0
-#define uprv_cnttab_findCE uprv_cnttab_findCE_2_0
-#define uprv_cnttab_findCP uprv_cnttab_findCP_2_0
-#define uprv_cnttab_getCE uprv_cnttab_getCE_2_0
-#define uprv_cnttab_insertContraction uprv_cnttab_insertContraction_2_0
-#define uprv_cnttab_isTailored uprv_cnttab_isTailored_2_0
-#define uprv_cnttab_open uprv_cnttab_open_2_0
-#define uprv_cnttab_setContraction uprv_cnttab_setContraction_2_0
-#define uprv_growTable uprv_growTable_2_0
-#define uprv_uca_addContraction uprv_uca_addContraction_2_0
-#define uprv_uca_addPrefix uprv_uca_addPrefix_2_0
-#define uprv_uca_getMaxExpansionJamo uprv_uca_getMaxExpansionJamo_2_0
-#define uprv_uca_setMaxExpansion uprv_uca_setMaxExpansion_2_0
-#define uprv_uca_setMaxJamoExpansion uprv_uca_setMaxJamoExpansion_2_0
-#define util_equalRules util_equalRules_2_0
 #endif
 #endif
 #endif
