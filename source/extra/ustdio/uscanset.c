@@ -56,7 +56,7 @@ u_scanf_scanset_init(u_scanf_scanset     *scanset,
   UChar        c;
   const UChar     *limit;
   int32_t     count;
-  UBool    result;
+  UBool    result = FALSE;
 
 
   /* set up parameters */

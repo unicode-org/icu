@@ -24,19 +24,211 @@
 #include "ufile.h"
 #include "unicode/ustring.h"
 #include "locbund.h"
-#include "umutex.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
-#include <float.h>
-#include <limits.h>
 
-static u_printf_handler     g_u_printf_handlers     [256];
-static u_printf_info       g_u_printf_infos     [256];
-static UBool            g_u_printf_inited    = FALSE;
+
+/* --- Prototypes ---------------------------- */
+
+int32_t
+u_printf_simple_percent_handler(UFILE                 *stream,
+                const u_printf_spec_info     *info,
+                const ufmt_args            *args);
+
+int32_t
+u_printf_string_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+int32_t
+u_printf_date_handler(UFILE             *stream,
+              const u_printf_spec_info     *info,
+              const ufmt_args         *args);
+
+int32_t
+u_printf_scientific_handler(UFILE             *stream,
+                const u_printf_spec_info     *info,
+                const ufmt_args            *args);
+
+int32_t
+u_printf_scidbl_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+int32_t
+u_printf_uchar_handler(UFILE                 *stream,
+               const u_printf_spec_info     *info,
+               const ufmt_args            *args);
+
+int32_t
+u_printf_currency_handler(UFILE             *stream,
+              const u_printf_spec_info     *info,
+              const ufmt_args            *args);
+
+int32_t
+u_printf_ustring_handler(UFILE                 *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args         *args);
+
+int32_t
+u_printf_percent_handler(UFILE                 *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args            *args);
+
+int32_t
+u_printf_time_handler(UFILE             *stream,
+              const u_printf_spec_info     *info,
+              const ufmt_args         *args);
+
+int32_t
+u_printf_spellout_handler(UFILE             *stream,
+              const u_printf_spec_info     *info,
+              const ufmt_args            *args);
+
+int32_t
+u_printf_hex_handler(UFILE             *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args            *args);
+
+int32_t
+u_printf_char_handler(UFILE                 *stream,
+              const u_printf_spec_info         *info,
+              const ufmt_args              *args);
+
+int32_t
+u_printf_integer_handler(UFILE                 *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args            *args);
+
+int32_t
+u_printf_uinteger_handler(UFILE                 *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args            *args);
+
+int32_t
+u_printf_double_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+int32_t
+u_printf_count_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+int32_t
+u_printf_octal_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+int32_t
+u_printf_pointer_handler(UFILE                 *stream,
+            const u_printf_spec_info     *info,
+            const ufmt_args            *args);
+
+/* ANSI style formatting */
+/* Use US-ASCII characters only for formatting */
+
+/* % */
+#define UFMT_SIMPLE_PERCENT {ufmt_simple_percent, u_printf_simple_percent_handler}
+/* s */
+#define UFMT_STRING         {ufmt_string, u_printf_string_handler}
+/* c */
+#define UFMT_CHAR           {ufmt_char, u_printf_char_handler}
+/* d, i */
+#define UFMT_INT            {ufmt_int, u_printf_integer_handler}
+/* u */
+#define UFMT_UINT           {ufmt_int, u_printf_uinteger_handler}
+/* o */
+#define UFMT_OCTAL          {ufmt_int, u_printf_octal_handler}
+/* x, X */
+#define UFMT_HEX            {ufmt_int, u_printf_hex_handler}
+/* f */
+#define UFMT_DOUBLE         {ufmt_double, u_printf_double_handler}
+/* e, E */
+#define UFMT_SCIENTIFIC     {ufmt_double, u_printf_scientific_handler}
+/* g, G */
+#define UFMT_SCIDBL         {ufmt_double, u_printf_scidbl_handler}
+/* n */
+#define UFMT_COUNT          {ufmt_count, u_printf_count_handler}
+
+/* non-ANSI extensions */
+/* Use US-ASCII characters only for formatting */
+
+/* p */
+#define UFMT_POINTER        {ufmt_pointer, u_printf_pointer_handler}
+/* D */
+#define UFMT_DATE           {ufmt_date, u_printf_date_handler}
+/* T */
+#define UFMT_TIME           {ufmt_date, u_printf_time_handler}
+/* V */
+#define UFMT_SPELLOUT       {ufmt_double, u_printf_spellout_handler}
+/* P */
+#define UFMT_PERCENT        {ufmt_double, u_printf_percent_handler}
+/* M */
+#define UFMT_CURRENCY       {ufmt_double, u_printf_currency_handler}
+/* K */
+#define UFMT_UCHAR          {ufmt_uchar, u_printf_uchar_handler}
+/* U */
+#define UFMT_USTRING        {ufmt_ustring, u_printf_ustring_handler}
+
+
+#define UFMT_EMPTY {ufmt_empty, NULL}
+
+struct u_printf_info {
+    enum ufmt_type_info info;
+    u_printf_handler handler;
+};
+typedef struct u_printf_info u_printf_info;
+
+/* Use US-ASCII characters only for formatting. Most codepages have
+ characters 20-7F from Unicode. Using any other codepage specific
+ characters will make it very difficult to format the string on
+ non-Unicode machines */
+static const u_printf_info g_u_printf_infos[108] = {
+/* 0x20 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x30 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x40 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
+    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x50 */
+    UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+
+/* 0x60 */
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_CHAR,
+    UFMT_INT,           UFMT_SCIENTIFIC,    UFMT_DOUBLE,        UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_INT,           UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_COUNT,         UFMT_OCTAL,
+
+/* 0x70 */
+    UFMT_POINTER,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_STRING,
+    UFMT_EMPTY,         UFMT_UINT,          UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
+};
+
+#define UPRINTF_NUM_FMT_HANDLERS sizeof(g_u_printf_infos)
+
+/* We do not use handlers for 0-0x1f */
+#define UPRINTF_BASE_FMT_HANDLERS 0x20
 
 /* buffer size for formatting */
 #define UFPRINTF_BUFFER_SIZE 1024
@@ -95,33 +287,7 @@ u_vfprintf(    UFILE        *f,
   return count;
 }
 
-int32_t
-u_printf_register_handler(UChar            spec, 
-              u_printf_info     info,
-              u_printf_handler     handler)
-{
-  /* lock the cache */
-  umtx_lock(0);
-
-  /* add to our list of function pointers */
-  g_u_printf_infos[ (unsigned char) spec ]     = info;
-  g_u_printf_handlers[ (unsigned char) spec ]     = handler;
-
-  /* unlock the cache */
-  umtx_unlock(0);
-  return 0;
-}
-
 /* handle a '%' */
-
-int32_t 
-u_printf_simple_percent_info(const u_printf_spec_info     *info,
-                 int32_t             *argtypes,
-                 int32_t             n)
-{
-  /* we don't need any arguments */
-  return 0;
-}
 
 int32_t
 u_printf_simple_percent_handler(UFILE                 *stream,
@@ -135,20 +301,6 @@ u_printf_simple_percent_handler(UFILE                 *stream,
 }
 
 /* handle 's' */
-
-int32_t 
-u_printf_string_info(const u_printf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type string */
-  argtypes[0] = ufmt_string;
-  return 1;
-}
 
 int32_t
 u_printf_string_handler(UFILE                 *stream,
@@ -181,13 +333,13 @@ u_printf_string_handler(UFILE                 *stream,
     if(info->fLeft) {
       written = u_file_write(s, len, stream);
       for(i = 0; i < info->fWidth - len; ++i)
-    written += u_file_write(&info->fPadChar, 1, stream);
+        written += u_file_write(&info->fPadChar, 1, stream);
     }
     /* right justify */
     else {
       written = 0;
       for(i = 0; i < info->fWidth - len; ++i)
-    written += u_file_write(&info->fPadChar, 1, stream);
+        written += u_file_write(&info->fPadChar, 1, stream);
       written += u_file_write(s, len, stream);
     }
   }
@@ -202,19 +354,6 @@ u_printf_string_handler(UFILE                 *stream,
   return written;
 }
 
-int32_t 
-u_printf_integer_info(const u_printf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
-  return 1;
-}
 /* HSYS */
 int32_t
 u_printf_integer_handler(UFILE                 *stream,
@@ -232,9 +371,9 @@ u_printf_integer_handler(UFILE                 *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    num &= SHRT_MAX;
+    num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    num &= INT_MAX;
+    num &= UINT32_MAX;
 
   /* get the formatter */
   format = u_locbund_getNumberFormat(stream->fBundle);
@@ -269,7 +408,7 @@ u_printf_integer_handler(UFILE                 *stream,
     }
 
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -303,20 +442,6 @@ u_printf_integer_handler(UFILE                 *stream,
   return written;
 }
 
-int32_t 
-u_printf_hex_info(const u_printf_spec_info     *info,
-          int32_t             *argtypes,
-          int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
-  return 1;
-}
-
 int32_t
 u_printf_hex_handler(UFILE             *stream,
              const u_printf_spec_info     *info,
@@ -331,9 +456,9 @@ u_printf_hex_handler(UFILE             *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    num &= SHRT_MAX;
+    num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    num &= INT_MAX;
+    num &= UINT32_MAX;
 
   /* format the number, preserving the minimum # of digits */
   ufmt_ltou(result, &len, num, 16,
@@ -372,20 +497,6 @@ u_printf_hex_handler(UFILE             *stream,
   return written;
 }
 
-int32_t 
-u_printf_octal_info(const u_printf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type int */
-  argtypes[0] = ufmt_int;
-  return 1;
-}
-
 int32_t
 u_printf_octal_handler(UFILE                 *stream,
                const u_printf_spec_info     *info,
@@ -400,9 +511,9 @@ u_printf_octal_handler(UFILE                 *stream,
 
   /* mask off any necessary bits */
   if(info->fIsShort)
-    num &= SHRT_MAX;
+    num &= UINT16_MAX;
   else if(! info->fIsLong || ! info->fIsLongLong)
-    num &= INT_MAX;
+    num &= UINT32_MAX;
 
   /* format the number, preserving the minimum # of digits */
   ufmt_ltou(result, &len, num, 8,
@@ -441,18 +552,24 @@ u_printf_octal_handler(UFILE                 *stream,
 }
 
 
-int32_t 
-u_printf_double_info(const u_printf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
+int32_t
+u_printf_uinteger_handler(UFILE                 *stream,
+             const u_printf_spec_info     *info,
+             const ufmt_args            *args)
 {
-  /* handle error */
-  if(n < 1)
-    return 0;
+    u_printf_spec_info uint_info;
+    ufmt_args uint_args;
 
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
+    memcpy(&uint_info, info, sizeof(u_printf_spec_info));
+    memcpy(&uint_args, args, sizeof(ufmt_args));
+
+    uint_info.fPrecision = 0;
+    uint_info.fAlt  = FALSE;
+
+    /* Get around int32_t limitations */
+    uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
+
+    return u_printf_double_handler(stream, &uint_info, &uint_args);
 }
 
 int32_t
@@ -516,7 +633,7 @@ u_printf_double_handler(UFILE                 *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -550,20 +667,6 @@ u_printf_double_handler(UFILE                 *stream,
   return written;
 }
 
-
-int32_t 
-u_printf_char_info(const u_printf_spec_info     *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type char */
-  argtypes[0] = ufmt_char;
-  return 1;
-}
 
 int32_t
 u_printf_char_handler(UFILE                 *stream,
@@ -618,20 +721,6 @@ u_printf_char_handler(UFILE                 *stream,
 }
 
 
-int32_t 
-u_printf_pointer_info(const u_printf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type void* */
-  argtypes[0] = ufmt_pointer;
-  return 1;
-}
-
 int32_t
 u_printf_pointer_handler(UFILE                 *stream,
              const u_printf_spec_info     *info,
@@ -670,20 +759,6 @@ u_printf_pointer_handler(UFILE                 *stream,
   return written;
 }
 
-
-int32_t 
-u_printf_scientific_info(const u_printf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-  
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
 
 int32_t
 u_printf_scientific_handler(UFILE             *stream,
@@ -747,7 +822,7 @@ u_printf_scientific_handler(UFILE             *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -779,20 +854,6 @@ u_printf_scientific_handler(UFILE             *stream,
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
   return written;
-}
-
-int32_t 
-u_printf_date_info(const u_printf_spec_info     *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-  
-  /* we need 1 argument of type Date */
-  argtypes[0] = ufmt_date;
-  return 1;
 }
 
 int32_t
@@ -843,20 +904,6 @@ u_printf_date_handler(UFILE             *stream,
   return written;
 }
 
-int32_t 
-u_printf_time_info(const u_printf_spec_info     *info,
-           int32_t             *argtypes,
-           int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-  
-  /* we need 1 argument of type date */
-  argtypes[0] = ufmt_date;
-  return 1;
-}
-
 int32_t
 u_printf_time_handler(UFILE             *stream,
               const u_printf_spec_info     *info,
@@ -905,20 +952,6 @@ u_printf_time_handler(UFILE             *stream,
   return written;
 }
 
-
-int32_t 
-u_printf_percent_info(const u_printf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
 
 int32_t
 u_printf_percent_handler(UFILE                 *stream,
@@ -982,7 +1015,7 @@ u_printf_percent_handler(UFILE                 *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -1016,20 +1049,6 @@ u_printf_percent_handler(UFILE                 *stream,
   return written;
 }
 
-
-int32_t 
-u_printf_currency_info(const u_printf_spec_info     *info,
-               int32_t                 *argtypes,
-               int32_t                 n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
 
 int32_t
 u_printf_currency_handler(UFILE             *stream,
@@ -1093,7 +1112,7 @@ u_printf_currency_handler(UFILE             *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -1125,20 +1144,6 @@ u_printf_currency_handler(UFILE             *stream,
   unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
 
   return written;
-}
-
-int32_t 
-u_printf_ustring_info(const u_printf_spec_info     *info,
-              int32_t             *argtypes,
-              int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type ustring */
-  argtypes[0] = ufmt_ustring;
-  return 1;
 }
 
 int32_t
@@ -1187,20 +1192,6 @@ u_printf_ustring_handler(UFILE                 *stream,
 
 
 
-int32_t 
-u_printf_uchar_info(const u_printf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type uchar */
-  argtypes[0] = ufmt_uchar;
-  return 1;
-}
-
 int32_t
 u_printf_uchar_handler(UFILE                 *stream,
                const u_printf_spec_info     *info,
@@ -1244,20 +1235,6 @@ u_printf_uchar_handler(UFILE                 *stream,
   return written;
 }
 
-int32_t 
-u_printf_scidbl_info(const u_printf_spec_info     *info,
-             int32_t             *argtypes,
-             int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
-
 int32_t
 u_printf_scidbl_handler(UFILE                 *stream,
             const u_printf_spec_info     *info,
@@ -1272,7 +1249,7 @@ u_printf_scidbl_handler(UFILE                 *stream,
 
   /* determine whether to use 'e' or 'f' */
   useE = (UBool)(num < 0.0001
-       || (info->fPrecision != -1 && num > pow(10.0, info->fPrecision)));
+       || (info->fPrecision != -1 && num > uprv_pow10(info->fPrecision)));
   
   /* use 'e' */
   if(useE) {
@@ -1291,20 +1268,6 @@ u_printf_scidbl_handler(UFILE                 *stream,
 }
 
 
-int32_t 
-u_printf_count_info(const u_printf_spec_info     *info,
-            int32_t             *argtypes,
-            int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type count */
-  argtypes[0] = ufmt_count;
-  return 1;
-}
-
 int32_t
 u_printf_count_handler(UFILE                 *stream,
                const u_printf_spec_info     *info,
@@ -1319,20 +1282,6 @@ u_printf_count_handler(UFILE                 *stream,
   return 0;
 }
 
-
-int32_t 
-u_printf_spellout_info(const u_printf_spec_info *info,
-               int32_t             *argtypes,
-               int32_t             n)
-{
-  /* handle error */
-  if(n < 1)
-    return 0;
-
-  /* we need 1 argument of type double */
-  argtypes[0] = ufmt_double;
-  return 1;
-}
 
 int32_t
 u_printf_spellout_handler(UFILE             *stream,
@@ -1396,7 +1345,7 @@ u_printf_spellout_handler(UFILE             *stream,
   /* set whether to show the sign */
   if(info->fShowSign) {
     /* set whether to show the sign*/
-    /* {sfb} TBD */
+    /* {sfb} TODO */
   }
 
   /* format the number */
@@ -1430,136 +1379,6 @@ u_printf_spellout_handler(UFILE             *stream,
   return written;
 }
 
-void
-u_printf_init(void)
-{
-  int32_t i;
-  /*Mutex *lock;*/
-
-  /* if we're already inited, do nothing */
-  if(g_u_printf_inited)
-    return;
-
-  /* lock the cache */
-  umtx_lock(0);
-
-  /* if we're already inited, do nothing */
-  if(g_u_printf_inited) {
-    umtx_unlock(0);
-    return;
-  }
-
-  /* initialize all handlers and infos to 0 */
-  for(i = 0; i < 256; ++i) {
-    g_u_printf_infos[i]         = 0;
-    g_u_printf_handlers[i]     = 0;
-  }
-
-  /* register the handlers for standard specifiers */
-  /* don't use u_printf_register_handler to avoid mutex creation */
-
-  /* handle '%' */
-  g_u_printf_infos[ 0x0025 ]     = u_printf_simple_percent_info;
-  g_u_printf_handlers[ 0x0025 ] = u_printf_simple_percent_handler;
-
-  /* handle 's' */
-  g_u_printf_infos[ 0x0073 ]     = u_printf_string_info;
-  g_u_printf_handlers[ 0x0073 ] = u_printf_string_handler;
-
-  /* handle 'd' */
-  g_u_printf_infos[ 0x0064 ]     = u_printf_integer_info;
-  g_u_printf_handlers[ 0x0064 ] = u_printf_integer_handler;
-
-  /* handle 'i' */
-  g_u_printf_infos[ 0x0069 ]     = u_printf_integer_info;
-  g_u_printf_handlers[ 0x0069 ] = u_printf_integer_handler;
-
-  /* handle 'o' */
-  g_u_printf_infos[ 0x006F ]     = u_printf_octal_info;
-  g_u_printf_handlers[ 0x006F ] = u_printf_octal_handler;
-
-  /* handle 'u' */
-  g_u_printf_infos[ 0x0075 ]     = u_printf_integer_info;
-  g_u_printf_handlers[ 0x0075 ] = u_printf_integer_handler;
-
-  /* handle 'x' */
-  g_u_printf_infos[ 0x0078 ]     = u_printf_hex_info;
-  g_u_printf_handlers[ 0x0078 ] = u_printf_hex_handler;
-
-  /* handle 'X' */
-  g_u_printf_infos[ 0x0058 ]     = u_printf_hex_info;
-  g_u_printf_handlers[ 0x0058 ] = u_printf_hex_handler;
-
-  /* handle 'f' */
-  g_u_printf_infos[ 0x0066 ]     = u_printf_double_info;
-  g_u_printf_handlers[ 0x0066 ] = u_printf_double_handler;
-
-  /* handle 'c' */
-  g_u_printf_infos[ 0x0063 ]     = u_printf_char_info;
-  g_u_printf_handlers[ 0x0063 ] = u_printf_char_handler;
-
-  /* handle 'p' */
-  g_u_printf_infos[ 0x0070 ]     = u_printf_pointer_info;
-  g_u_printf_handlers[ 0x0070 ] = u_printf_pointer_handler;
-
-  /* handle 'e' */
-  g_u_printf_infos[ 0x0065 ]     = u_printf_scientific_info;
-  g_u_printf_handlers[ 0x0065 ] = u_printf_scientific_handler;
-
-  /* handle 'E' */
-  g_u_printf_infos[ 0x0045 ]     = u_printf_scientific_info;
-  g_u_printf_handlers[ 0x0045 ] = u_printf_scientific_handler;
-
-  /* handle 'D' */
-  g_u_printf_infos[ 0x0044 ]     = u_printf_date_info;
-  g_u_printf_handlers[ 0x0044 ] = u_printf_date_handler;
-
-  /* handle 'P' */
-  g_u_printf_infos[ 0x0050 ]     = u_printf_percent_info;
-  g_u_printf_handlers[ 0x0050 ] = u_printf_percent_handler;
-
-  /* handle 'M' */
-  g_u_printf_infos[ 0x004D ]     = u_printf_currency_info;
-  g_u_printf_handlers[ 0x004D ] = u_printf_currency_handler;
-
-  /* handle 'T' */
-  g_u_printf_infos[ 0x0054 ]     = u_printf_time_info;
-  g_u_printf_handlers[ 0x0054 ] = u_printf_time_handler;
-
-  /* handle 'K' */
-  g_u_printf_infos[ 0x004B ]     = u_printf_uchar_info;
-  g_u_printf_handlers[ 0x004B ] = u_printf_uchar_handler;
-
-  /* handle 'U' */
-  g_u_printf_infos[ 0x0055 ]     = u_printf_ustring_info;
-  g_u_printf_handlers[ 0x0055 ] = u_printf_ustring_handler;
-
-  /* handle 'g' */
-  g_u_printf_infos[ 0x0067 ]     = u_printf_scidbl_info;
-  g_u_printf_handlers[ 0x0067 ] = u_printf_scidbl_handler;
-
-  /* handle 'G' */
-  g_u_printf_infos[ 0x0047 ]     = u_printf_scidbl_info;
-  g_u_printf_handlers[ 0x0047 ] = u_printf_scidbl_handler;
-
-  /* handle 'n' */
-  g_u_printf_infos[ 0x006E ]     = u_printf_count_info;
-  g_u_printf_handlers[ 0x006E ] = u_printf_count_handler;
-
-  /* handle 'V' */
-  g_u_printf_infos[ 0x0056 ]     = u_printf_spellout_info;
-  g_u_printf_handlers[ 0x0056 ] = u_printf_spellout_handler;
-
-
-  /* we're finished */
-  g_u_printf_inited = TRUE;
-
-  /* unlock the cache */
-  umtx_unlock(0);
-}
-
-
-#define U_PRINTF_MAX_ARGS 32
 #define UP_PERCENT 0x0025
 
 int32_t 
@@ -1570,20 +1389,12 @@ u_vfprintf_u(    UFILE        *f,
   u_printf_spec   spec;
   const UChar     *alias;
   int32_t         count, written;
+  uint16_t      handlerNum;
 
-  int32_t         num_args_wanted;
-  int32_t         ufmt_types     [U_PRINTF_MAX_ARGS];
-  ufmt_args       args[U_PRINTF_MAX_ARGS];  
+  ufmt_args       args;  
         
-  u_printf_info    info;
+  enum ufmt_type_info    info;
   u_printf_handler handler;
-
-  int32_t         cur_arg;
-
-
-  /* init our function tables */
-  if(! g_u_printf_inited)
-    u_printf_init();
 
   /* alias the pattern */
   alias = patternSpecification;
@@ -1646,83 +1457,71 @@ u_vfprintf_u(    UFILE        *f,
         spec.fInfo.fPrecision = 0;
     }
     
-    /* query the info function for argument information */
-    info = g_u_printf_infos[ (unsigned char) spec.fInfo.fSpec ];
-    if(info != 0) { 
-      num_args_wanted = (*info)(&spec.fInfo, 
-                ufmt_types,
-                U_PRINTF_MAX_ARGS);
+    handlerNum = (uint16_t)(spec.fInfo.fSpec - UPRINTF_BASE_FMT_HANDLERS);
+    if (handlerNum < UPRINTF_NUM_FMT_HANDLERS) {
+        /* query the info function for argument information */
+        info = g_u_printf_infos[ handlerNum ].info;
+        if(info > ufmt_simple_percent) { 
+          switch(info) {
+
+          case ufmt_count:
+            /* set the spec's width to the # of chars written */
+            spec.fInfo.fWidth = written;
+
+          case ufmt_char:
+          case ufmt_uchar:
+          case ufmt_int:
+            args.intValue = va_arg(ap, int);
+            break;
+
+          case ufmt_wchar:
+            args.wcharValue = va_arg(ap, wchar_t);
+            break;
+
+          case ufmt_string:
+            args.ptrValue = va_arg(ap, char*);
+            break;
+    
+          case ufmt_wstring:
+            args.ptrValue = va_arg(ap, wchar_t*);
+            break;
+    
+          case ufmt_ustring:
+            args.ptrValue = va_arg(ap, UChar*);
+            break;
+
+          case ufmt_pointer:
+            args.ptrValue = va_arg(ap, void*);
+            break;
+    
+          case ufmt_float:
+            args.floatValue = (float) va_arg(ap, double);
+            break;
+    
+          case ufmt_double:
+            args.doubleValue = va_arg(ap, double);
+            break;
+
+          case ufmt_date:
+            args.dateValue = va_arg(ap, UDate);
+            break;
+          }
+        }
+
+        /* call the handler function */
+        handler = g_u_printf_infos[ handlerNum ].handler;
+        if(handler != 0) {
+           written += (*handler)(f, &spec.fInfo, &args);
+        }
+        else {
+          /* just echo unknown tags */
+          written += u_file_write(alias, count, f);
+        }
     }
-    else
-      num_args_wanted = 0;
-
-    /* fill in the requested arguments */
-    for(cur_arg = 0; 
-    cur_arg < num_args_wanted && cur_arg < U_PRINTF_MAX_ARGS; 
-    ++cur_arg) {
-      
-      switch(ufmt_types[cur_arg]) {
-
-      case ufmt_count:
-        args[cur_arg].intValue = va_arg(ap, int);
-        /* set the spec's width to the # of chars written */
-        spec.fInfo.fWidth = written;
-        break;
-
-      case ufmt_int:
-        args[cur_arg].intValue = va_arg(ap, int);
-        break;
-
-      case ufmt_char:
-        args[cur_arg].intValue = va_arg(ap, int);
-        break;
-    
-      case ufmt_wchar:
-        args[cur_arg].wcharValue = va_arg(ap, wchar_t);
-        break;
-
-      case ufmt_string:
-        args[cur_arg].ptrValue = va_arg(ap, char*);
-        break;
-    
-      case ufmt_wstring:
-        args[cur_arg].ptrValue = va_arg(ap, wchar_t*);
-        break;
-    
-      case ufmt_pointer:
-        args[cur_arg].ptrValue = va_arg(ap, void*);
-        break;
-    
-      case ufmt_float:
-        args[cur_arg].floatValue = (float) va_arg(ap, double);
-        break;
-    
-      case ufmt_double:
-        args[cur_arg].doubleValue = va_arg(ap, double);
-        break;
-
-      case ufmt_date:
-        args[cur_arg].dateValue = va_arg(ap, UDate);
-        break;
-
-      case ufmt_ustring:
-        args[cur_arg].ptrValue = va_arg(ap, UChar*);
-        break;
-
-      case ufmt_uchar:
-        args[cur_arg].intValue = va_arg(ap, int);
-        break;
-      }
-    }
-    
-    /* call the handler function */
-    handler = g_u_printf_handlers[ (unsigned char) spec.fInfo.fSpec ];
-    if(handler != 0) {
-      written += (*handler)(f, &spec.fInfo, args);
-    }
-    /* just echo unknown tags */
-    else
+    else {
+      /* just echo unknown tags */
       written += u_file_write(alias, count, f);
+    }
     
     /* update the pointer in pattern and continue */
     alias += count;

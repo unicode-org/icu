@@ -25,8 +25,10 @@
 /** 
  * Enum representing the possible argument types for uprintf/uscanf
  */
-enum
+enum ufmt_type_info
 {
+  ufmt_empty = 0,
+  ufmt_simple_percent, /* %% do nothing */
   ufmt_count,      /* special flag for count */
   ufmt_int,        /* int */
   ufmt_char,       /* int, cast to char */
@@ -46,12 +48,12 @@ enum
  * Union representing a uprintf/uscanf argument
  */
 union ufmt_args {
-  int     intValue;      /* int, UChar */
-  float   floatValue;    /* float */
-  double  doubleValue;   /* double */
-  void    *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
-  wchar_t wcharValue;    /* wchar_t */
-  UDate   dateValue;     /* Date */
+  signed int    intValue;      /* int, UChar */     /* TODO: Should int32_t be used instead of int? */
+  float         floatValue;    /* float */
+  double        doubleValue;   /* double */
+  void          *ptrValue;     /* any pointer - void*, char*, wchar_t*, UChar* */
+  wchar_t       wcharValue;    /* wchar_t */    /* TODO: Should wchar_t be used? */
+  UDate         dateValue;     /* Date */
 };
 typedef union ufmt_args ufmt_args;
 
@@ -95,8 +97,8 @@ ufmt_isdigit(UChar     c,
 void 
 ufmt_ltou(UChar     *buffer, 
       int32_t     *len,
-      long         value, 
-      int32_t     radix,
+      uint32_t         value, 
+      uint32_t     radix,
       UBool    uselower,
       int32_t    minDigits);
 

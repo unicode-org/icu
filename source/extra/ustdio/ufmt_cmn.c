@@ -45,13 +45,13 @@ ufmt_isdigit(UChar     c,
 void 
 ufmt_ltou(UChar     *buffer, 
       int32_t     *len,
-      long         value, 
-      int32_t     radix,
+      uint32_t         value, 
+      uint32_t     radix,
       UBool    uselower,
       int32_t    minDigits)
 {
   int32_t     length     = 0;
-  long         q;
+  uint32_t         q;
   int8_t     digit;
   UChar    *left, *right, temp;
   
