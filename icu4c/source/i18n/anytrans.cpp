@@ -309,7 +309,7 @@ static UScriptCode scriptNameToCode(const UnicodeString& name) {
     UBool isInvariant = uprv_isInvariantUString(name.getBuffer(), nameLen);
     
     if (isInvariant) {
-        name.extract(0, nameLen, buf, sizeof(buf), US_INV);
+        name.extract(0, nameLen, buf, (int32_t)sizeof(buf), US_INV);
         buf[127] = 0;   // Make sure that we NULL terminate the string.
     }
     if (!isInvariant || uscript_getCode(buf, &code, 1, &ec) != 1 || U_FAILURE(ec))
