@@ -16,7 +16,7 @@
 // * of the month and day names.
 
 om_KE {
-    Version{ "1.0" }
+    Version{ "2.0" }
     AmPmMarkers {
         "WD",  // WD = Waaree Dura
         "WB",  // WD = Waaree Booda

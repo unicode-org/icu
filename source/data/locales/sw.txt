@@ -9,7 +9,7 @@
 
 
 sw {
-    Version { "1.0" }
+    Version { "2.0" }
 
 //    Countries {   // This does not need to be overridden
 //        KE { "Kenya" }

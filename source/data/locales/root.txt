@@ -12,7 +12,7 @@
 //      Instead, put translations in sub locales.
 
 root {
-    Version { "3.2" }
+    Version { "4.0" }
 
     // each variant name that occurs in locales should be listed with %% and a display string
     "%%PREEURO" { "Pre-Euro" }   // PREEURO variant display name

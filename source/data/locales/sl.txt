@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 sl {
-    Version{"1.1"}
+    Version{"2.0"}
     CollationElements { 
         Version { "1.0" }
         Sequence { "& C < c\u030C <<< C\u030C & S < s\u030C <<< S\u030C & Z < z\u030C <<< Z\u030C" }
