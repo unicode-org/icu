@@ -18,6 +18,7 @@
 *   04/02/97    aliu        Creation.
 *   04/07/99    srl         updated
 *   05/13/99    stephen     Changed to umutex (from cmutex).
+*   11/22/99    aliu        Make non-global mutex autoinitialize [j151]
 *******************************************************************************
 */
 
@@ -70,11 +71,11 @@ void umtx_lock( UMTX *mutex )
   if( mutex == NULL )
     {
       mutex = &gGlobalMutex;
+    }
 
-      if(*mutex == NULL)
-        {
-          umtx_init(NULL);
-        }
+  if(*mutex == NULL)
+    {
+      umtx_init(NULL);
     }
 
 #if defined(_WIN32)
