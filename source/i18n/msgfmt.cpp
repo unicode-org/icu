@@ -398,17 +398,17 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     int32_t formatNumber = 0;
     UBool inQuote = FALSE;
     int32_t braceStack = 0;
+    int32_t i = 0;
     fMaxOffset = -1;
     // Clear error struct
     parseError.offset = 0;
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
-    int i = 0;
-    for (; i < newPattern.length(); ++i) {
+    int32_t patLen = newPattern.length();
+    for (; i < patLen; ++i) {
         UChar ch = newPattern[i];
         if (part == 0) {
             if (ch == SINGLE_QUOTE) {
-                if (i + 1 < newPattern.length()
-                    && newPattern[i+1] == SINGLE_QUOTE) {
+                if (i + 1 < patLen && newPattern[i+1] == SINGLE_QUOTE) {
                     segments[part] += ch;  // handle doubles
                     ++i;
                 } else {
