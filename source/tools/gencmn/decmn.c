@@ -65,7 +65,7 @@ copyFile(FILE *in, int32_t offset, int32_t size, const char *dir, const char *na
     uprv_strcpy(path, dir);
     p = path + strlen(path);
     if (p[-1] != U_FILE_SEP_CHAR) {
-	*p++ = U_FILE_SEP_CHAR;
+        *p++ = U_FILE_SEP_CHAR;
     }
     uprv_strcpy(p, name);
  
@@ -121,13 +121,13 @@ main(int argc, char *argv[]) {
     pname = uprv_strchr(*argv, U_FILE_SEP_CHAR);
 #ifdef WIN32
     if (!pname) {
-	pname = uprv_strchr(*argv, '/');
+        pname = uprv_strchr(*argv, '/');
     }
 #endif
     if (pname) {
-	++pname;
+        ++pname;
     } else {
-	pname = argv[0];
+        pname = argv[0];
     }
 
     options[2].value = ".";
@@ -136,12 +136,12 @@ main(int argc, char *argv[]) {
     if ((ishelp = options[0].doesOccur || options[1].doesOccur) || argc != 2) {
         fprintf(stderr,
                 "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
-	if (ishelp) {
-	    fprintf(stderr, "\nOptions: -h, -?, --help    print this message and exit\n"
-		    "         -n                do not create files\n"
-		    "         -C, --comment     print the comment embedded in the file and exit\n"
-		    "         -d, --destdir destination    create files in destination\n");
-	}
+        if (ishelp) {
+            fprintf(stderr, "\nOptions: -h, -?, --help    print this message and exit\n"
+                    "         -n                do not create files\n"
+                    "         -C, --comment     print the comment embedded in the file and exit\n"
+                    "         -d, --destdir destination    create files in destination\n");
+        }
 
         return ishelp ? 0 : 1;
     }
@@ -198,7 +198,7 @@ main(int argc, char *argv[]) {
     /* do we want to show the comment, and is there a comment? */
     if (options[4].doesOccur && *(uint16_t *)buffer>4+info->size) {
         printf("%s\n", buffer+4+info->size);
-	return 0;
+        return 0;
     }
 
     /* output all filenames */
@@ -213,8 +213,8 @@ main(int argc, char *argv[]) {
     }
     /* puts("endfiles"); */
 
-    if (options[3].doesOccur) {	/* Do not extract. */
-	return 0;
+    if (options[3].doesOccur) { /* Do not extract. */
+        return 0;
     }
 
     /* sort all files by their offsets in the common file */
@@ -250,3 +250,12 @@ main(int argc, char *argv[]) {
     fclose(in);
     return 0;
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
