@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/CPPWriter.java,v $ 
- * $Date: 2000/07/12 16:41:26 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/08/11 17:31:41 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -171,20 +171,31 @@ class CPPWriter extends SourceWriter {
 
     public void write(String name, byte[] array) {
         header.println("");
-        header.println("    static const int8_t " + name + "[];");
+        header.println("    static const uint8_t " + name + "[];");
 
         source.println("");
-        source.println("const int8_t " + className + "::" + name + "[] = {");
+        source.println("const uint8_t " + className + "::" + name + "[] = {");
 
         source.print("    ");
         for (int i = 0; i < array.length; i++) {
             if (i > 0 && i % 8 == 0) {
                 source.print(Utility.LINE_SEPARATOR + "    ");
             }
-            int value = array[i];
-            if (value < 0) value += 256;
-            source.print("(int8_t)0x" + Integer.toString(value,16) + ", ");
+            source.print("0x" + hex2(array[i]) + ", ");
         }
         source.println("};");
+    }
+
+    private static StringBuffer __buf = new StringBuffer();
+
+    // This method not multithread safe!
+    private static final String hex2(int x) {
+        __buf.setLength(0);
+        __buf.append(hex1(x>>4)).append(hex1(x));
+        return __buf.toString();
+    }
+
+    private static final char hex1(int x) {
+        return "0123456789ABCDEF".charAt(x & 0xF);
     }
 }
