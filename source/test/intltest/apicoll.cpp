@@ -1816,6 +1816,7 @@ public:
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
 	virtual UBool operator!=(const TestCollator& other) const;
+	virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 };
 
 inline UBool TestCollator::operator!=(const TestCollator& other) const {
@@ -2011,6 +2012,12 @@ UnicodeSet * TestCollator::getTailoredSet(UErrorCode &status) const
 	return Collator::getTailoredSet(status);
 }
 
+void TestCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) 
+{
+	Collator::setLocales(requestedLocale, validLocale);
+}
+
+
 void CollationAPITest::TestSubclass()
 {
 	TestCollator col1;
@@ -2042,6 +2049,14 @@ void CollationAPITest::TestSubclass()
 		errln("Error: expected default tailoring to be 0 to 0x10ffff");
 	}
 	delete defaultset;
+
+	// use base class implementation
+	Locale loc1 = Locale::getGermany();
+	Locale loc2 = Locale::getFrance();
+	col1.setLocales(loc1, loc2); // default implementation has no effect
+
+	UnicodeString displayName;
+	col1.getDisplayName(loc1, loc2, displayName); // de_DE collator in fr_FR locale
 }
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
