@@ -622,6 +622,6 @@ th {
 
     // Currency display names
     Currencies {
-        THB { "\u0E3F", "THB" }
+        THB { "\u0E3F", "\u0E1A\u0E32\u0E17" }
     }
 }
