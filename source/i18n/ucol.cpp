@@ -34,9 +34,7 @@
 #include "umutex.h"
 #include "uhash.h"
 
-#ifdef UCOL_DEBUG
 #include <stdio.h>
-#endif
 #include <limits.h>
 
 /* added by synwee for trie manipulation*/
@@ -2565,7 +2563,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
 /* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
 /* anyway */
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, uint32_t newSize, UErrorCode *status) {
+#ifdef UCOLL_DEBUG
   fprintf(stderr, ".");
+#endif
   uint8_t *newStart = NULL;
 
   if(secStart==second) {
