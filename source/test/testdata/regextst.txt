@@ -1,5 +1,5 @@
 #
-#  file:  regextst.txt
+#  file:  
 #
 #   ICU regular expression test cases.
 #
@@ -22,7 +22,7 @@
 
 # Capturing parens
 ".(..)."                       "<0>a<1>bc</1>d</0>"
-".*\\A( +hello)"               "<0><1>      hello</1></0>"
+ ".*\A( +hello)"               "<0><1>      hello</1></0>"
 "(hello)|(goodbye)"            "<0><1>hello</1></0>"
 "(hello)|(goodbye)"            "<0><2>goodbye</2></0>"
 "abc( +(  inner(X?) +)  xyz)"  "leading cruft <0>abc<1>     <2>  inner<3></3>    </2>  xyz</1></0> cruft"
@@ -48,54 +48,50 @@
 "(ab)(ab)\?\?(ab)\?\?(ab)\?\?(ab)\?\?c"      "<0><1>ab</1><4>ab</4><5>ab</5>c</0>"
 
 # Unicode Properties as naked elements in a pattern
-"\\p{Lu}+"                     "here we go ... <0>ABC</0> and no more."
-"(\\p{L}+)(\\P{L}*?) (\\p{Zs}*)"   "7999<0><1>letters</1><2>4949%^&*(</2> <3>   </3></0>"
+"\p{Lu}+"                      "here we go ... <0>ABC</0> and no more."
+"(\p{L}+)(\P{L}*?) (\p{Zs}*)"  "7999<0><1>letters</1><2>4949%^&*(</2> <3>   </3></0>"
 
 # \w and \W
-"\\w+"                         "  $%^&*( <0>hello123</0>%^&*("
-"\\W+"                         "<0>  $%^&*( </0>hello123%^&*("
+"\w+"                          "  $%^&*( <0>hello123</0>%^&*("
+"\W+"                          "<0>  $%^&*( </0>hello123%^&*("
 
 # \A   match at beginning of input only.
- ".*\\Ahello"                  "<0>hello</0> hello"
+ ".*\Ahello"                   "<0>hello</0> hello"
  ".*hello"                     "<0>hello hello</0>"
-".*\\Ahello"                   "stuff\nhello"# don't match after embedded new-line.
+".*\Ahello"                    "stuff\nhello" # don't match after embedded new-line.
 
 # \b \B
-".*?\\b(.).*"                  "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>"
-"\\ba\\b"                      "-<0>a</0>"
-"\\by\\b"                      "xy"
+".*?\b(.).*"                   "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>"
+"\ba\b"                        "-<0>a</0>"
+"\by\b"                        "xy"
 
              # Finds first chars of up to 5 words
-"(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?"   "<0><1>T</1>the <2>q</2>ick <3>b</3>rown <4>f</4></0>ox"
-"H.*?((?:\\B.)+)"              "<0>H<1>ello</1></0> "
-".*?((?:\\B.)+).*?((?:\\B.)+).*?((?:\\B.)+)",
-    "<0>H<1>ello</1> <2>    </2>g<3>oodbye</3></0> "
+"(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?(?:.*?\b(\w))?"   "<0><1>T</1>the <2>q</2>ick <3>b</3>rown <4>f</4></0>ox"
+"H.*?((?:\B.)+)"              "<0>H<1>ello</1></0> "
+".*?((?:\B.)+).*?((?:\B.)+).*?((?:\B.)+)"    "<0>H<1>ello</1> <2>    </2>g<3>oodbye</3></0> "
 
-"(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?.*"   "<0>   \\u0301 \\u0301<1>A</1>\\u0302BC\\u0303\\u0304<2> </2>\\u0305 \\u0306<3>X</3>\\u0307Y\\u0308</0>"
+"(?:.*?\b(.))?(?:.*?\b(.))?(?:.*?\b(.))?(?:.*?\b(.))?(?:.*?\b(.))?.*"   "<0>   \u0301 \u0301<1>A</1>\u0302BC\u0303\u0304<2> </2>\u0305 \u0306<3>X</3>\u0307Y\u0308</0>"
 
 # . does not match new-lines
-"."                            "\\u000a\\u000d\\u0085\\u000c\\u2028\\u2029<0>X</0>\\u000aY"
-"A."                           "A\\u000a "# no match
+"."                            "\u000a\u000d\u0085\u000c\u2028\u2029<0>X</0>\u000aY"
+"A."                           "A\u000a "# no match
 
 # \d for decimal digits
-"\\d*"                         "<0>0123456789\\u0660\\u06F9\\u0969\\u0A66\\u1369"
-    "\\u17E2\\uFF10\\U0001D7CE\\U0001D7FF</0>non-digits"
-"\\D+"                         "<0>non digits</0>"
-"\\D*(\\d*)(\\D*)"             "<0>non-digits<1>3456666</1><2>more non digits</2></0>"
+"\d*"                          "<0>0123456789\u0660\u06F9\u0969\u0A66\u1369\u17E2\uFF10\U0001D7CE\U0001D7FF</0>non-digits"
+"\D+"                          "<0>non digits</0>"
+"\D*(\d*)(\D*)"                "<0>non-digits<1>3456666</1><2>more non digits</2></0>"
 
 # \Q...\E quote mode
-"hel\\Qlo, worl\\Ed"           "<0>hello, world</0>"
-"\\Q$*^^(*)?\\A\\E(a*)"        "<0>$*^^(*)?\\\\A<1>aaaaaaaaaaaaaaa</1></0>"
+"hel\Qlo, worl\Ed"             "<0>hello, world</0>"
+"\Q$*^^(*)?\A\E(a*)"           "<0>$*^^(*)?\A<1>aaaaaaaaaaaaaaa</1></0>"
 
 # \S and \s  space characters
-"\\s+"                         "not_space<0> \\t \\r \\n \\u3000 \\u2004 \\u2028 \\u2029</0>xyz"
-"(\\S+).*?(\\S+).*"            "<0><1>Not-spaces</1>   <2>more-non-spaces</2>  </0>"
+"\s+"                          "not_space<0> \t \r \n \u3000 \u2004 \u2028 \u2029</0>xyz"
+"(\S+).*?(\S+).*"              "<0><1>Not-spaces</1>   <2>more-non-spaces</2>  </0>"
 
 # \X  consume one combining char sequence.
-"(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-    "<0><1>A</1><2>B</2><3> </3><4>\\r\\n</4></0>"
-"(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-    "<0><1>A\\u0301</1><2>\n</2><3>\\u0305</3><4>a\\u0302\\u0303\\u0304</4></0>"
+"(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?"   "<0><1>A</1><2>B</2><3> </3><4>\r\n</4></0>"
+"(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?(\X)?"   "<0><1>A\u0301</1><2>\n</2><3>\u0305</3><4>a\u0302\u0303\u0304</4></0>"
 
 # ^ matches only at beginning of line
 ".*^(Hello)"                   "<0><1>Hello</1></0> Hello Hello Hello Goodbye"
@@ -107,31 +103,31 @@
 ".*?(Goodbye)"                 "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
 ".*?(Goodbye)$"                "Hello Goodbye> Goodbye Goodbye "# No Match
 
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n"
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n"
-".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n"
-".*?(Goodbye)$"                "Hello Goodbye Goodbye Goodbye\\n\\n"# No Match
+".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)$"                "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\r\n"
+".*?(Goodbye)$"                "Hello Goodbye Goodbye Goodbye\n\n"# No Match
 
 # \Z matches at end of input, like $ with default flags.
-".*?(Goodbye)\\Z"              "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
+".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
 ".*?(Goodbye)"                 "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye"
-".*?(Goodbye)\\Z"              "Hello Goodbye> Goodbye Goodbye "# No Match
-"here$"                        "here\\nthe end"# No Match
+".*?(Goodbye)\Z"               "Hello Goodbye> Goodbye Goodbye "# No Match
+"here$"                        "here\nthe end"# No Match
 
-".*?(Goodbye)\\Z"              "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n"
-".*?(Goodbye)\\Z"              "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n"
-".*?(Goodbye)\\Z"              "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n"
-".*?(Goodbye)\\Z"              "Hello Goodbye Goodbye Goodbye\\n\\n"# No Match
+".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\n"
+".*?(Goodbye)\Z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\r\n"
+".*?(Goodbye)\Z"               "Hello Goodbye Goodbye Goodbye\n\n"# No Match
 
 # \z matches only at the end of string.
 #    no special treatment of new lines.
 #    no dependencies on flag settings.
-".*?(Goodbye)\\z"              "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
-".*?(Goodbye)\\z"              "Hello Goodbye Goodbye Goodbye "# No Match
-"here$"                        "here\\nthe end"# No Match
+".*?(Goodbye)\z"               "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>"
+".*?(Goodbye)\z"               "Hello Goodbye Goodbye Goodbye "# No Match
+"here$"                        "here\nthe end"# No Match
 
-".*?(Goodbye)\\z"              "Hello Goodbye Goodbye Goodbye\\n"# No Match
-".*?(Goodbye)\\n\\z"           "<0>Hello Goodbye Goodbye <1>Goodbye</1>\\n</0>"
+".*?(Goodbye)\z"               "Hello Goodbye Goodbye Goodbye\n"# No Match
+".*?(Goodbye)\n\z"             "<0>Hello Goodbye Goodbye <1>Goodbye</1>\n</0>"
 
 # (?# comment) doesn't muck up pattern
 "Hello (?# this is a comment) world"  "  <0>Hello  world</0>..."
@@ -145,7 +141,7 @@
 "ABC+"                         "<0>ABCCCC</0>ABC"
 "(?:ABC)+"                     "<0>ABCABCABC</0>D"
 "(?:ABC)DEF+"                  "<0>ABCDEFFF</0>D"
-"AB\\.C\\eD\\u0666E"           "<0>AB.C\\u001BD\\u0666E</0>F"
+"AB\.C\eD\u0666E"              "<0>AB.C\u001BD\u0666E</0>F"
 
 
 # {min,max} iteration qualifier
@@ -188,8 +184,8 @@
 # Atomic Grouping
 "(?>.*)abc"                    "abcabcabc"  # no match.  .* consumed entire string.
 "(?>(abc{2,4}?))(c*)"          "<0><1>abcc</1><2>ccc</2></0>ddd"
-"(\\.\\d\\d(?>[1-9]?))\\d+"    "1.625"
-"(\\.\\d\\d(?>[1-9]?))\\d+"    "1<0><1>.625</1>0</0>"
+"(\.\d\d(?>[1-9]?))\d+"        "1.625"
+"(\.\d\d(?>[1-9]?))\d+"        "1<0><1>.625</1>0</0>"
 
 # Possessive *+
 "(abc)*+a"                     "abcabcabc"
@@ -202,8 +198,8 @@
 "c?cddd"                       "<0>cddd</0>"
 
 # Back Reference
-"(?:ab(..)cd\\1)*"             "<0>ab23cd23ab<1>ww</1>cdww</0>abxxcdyy"
-"ab(?:c|(d?))(\\1)"            "<0>ab<1><2></2></1></0>c"
-"ab(?:c|(d?))(\\1)"            "<0>ab<1>d</1><2>d</2></0>"
-"ab(?:c|(d?))(\\1)"            "<0>ab<1></1><2></2></0>e"
-"ab(?:c|(d?))(\\1)"            "<0>ab<1></1><2></2></0>"
+"(?:ab(..)cd\1)*"              "<0>ab23cd23ab<1>ww</1>cdww</0>abxxcdyy"
+"ab(?:c|(d?))(\1)"             "<0>ab<1><2></2></1></0>c"
+"ab(?:c|(d?))(\1)"             "<0>ab<1>d</1><2>d</2></0>"
+"ab(?:c|(d?))(\1)"             "<0>ab<1></1><2></2></0>e"
+"ab(?:c|(d?))(\1)"             "<0>ab<1></1><2></2></0>"

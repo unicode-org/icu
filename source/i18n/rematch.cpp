@@ -271,7 +271,7 @@ UBool RegexMatcher::find() {
 
     int32_t startPos = fMatchEnd;
     int32_t inputLen = fInput->length();
-    U_ASSERT(startPos >= 0 && startPos <= inputLen);
+    U_ASSERT(startPos >= 0);
     for (;;) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
