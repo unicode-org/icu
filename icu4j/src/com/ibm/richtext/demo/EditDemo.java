@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:43:09 $
+ * @(#)$RCSfile: EditDemo.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 03:30:52 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -80,7 +80,7 @@ public class EditDemo extends EditApplication {
         }
     }
     
-    private TextDocument getDocumentFromFile(File file) {
+    public static TextDocument getDocumentFromFile(File file) {
     
         Exception exception = null;
         
