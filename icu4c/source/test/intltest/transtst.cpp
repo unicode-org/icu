@@ -3061,7 +3061,7 @@ void TransliteratorTest::TestSpecialCases(void) {
 
         // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
         "Title", CharsToUnicodeString("ab'cD ffi\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
-                 CharsToUnicodeString("Ab'cd Ffi\\u0131ii \\u01C8\\u01C9\\u01C9 ") + DESERET_DEE + DESERET_dee, 
+                 CharsToUnicodeString("Ab'cd Ffi\\u0131ii\\u0307 \\u01C8\\u01C9\\u01C9 ") + DESERET_DEE + DESERET_dee, 
                  
         //TODO: enable this test once Titlecase works right
         /*
@@ -3071,7 +3071,7 @@ void TransliteratorTest::TestSpecialCases(void) {
         "Upper", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
                  CharsToUnicodeString("AB'CD FFIII\\u0130 \\u01C7\\u01C7\\u01C7 ") + DESERET_DEE + DESERET_DEE,
         "Lower", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
-                 CharsToUnicodeString("ab'cd \\uFB00i\\u0131ii \\u01C9\\u01C9\\u01C9 ") + DESERET_dee + DESERET_dee,
+                 CharsToUnicodeString("ab'cd \\uFB00i\\u0131ii\\u0307 \\u01C9\\u01C9\\u01C9 ") + DESERET_dee + DESERET_dee,
     
         "Upper", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, "",
         "Lower", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, "",
