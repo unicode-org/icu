@@ -8,6 +8,7 @@
 
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
+#include "unicode/ures.h"
 
 // import com.ibm.text.RuleBasedNumberFormat;
 // import com.ibm.test.TestFmwk;
@@ -39,10 +40,69 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
       TESTCASE(6, TestItalianSpellout);
       TESTCASE(7, TestGermanSpellout);
       TESTCASE(8, TestThaiSpellout);
+      TESTCASE(9, TestAPI);
     default:
       name = "";
       break;
     }
+}
+
+void 
+IntlTestRBNF::TestAPI() {
+  UErrorCode status = U_ZERO_ERROR;
+  RuleBasedNumberFormat* formatter
+      = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::US, status);
+  logln("RBNF API test starting");
+  // test clone
+  logln("Testing Clone");
+  RuleBasedNumberFormat* rbnfClone = (RuleBasedNumberFormat *)formatter->clone();
+  if(rbnfClone != NULL) {
+    if(!(*rbnfClone == *formatter)) {
+      errln("Clone should be semantically equivalent to the original!");
+    }
+    delete rbnfClone;
+  } else {
+    errln("Cloning failed!");
+  }
+
+  // test assignment
+  logln("Testing assignment operator");
+  RuleBasedNumberFormat assignResult(URBNF_SPELLOUT, Locale("es", "ES", ""), status);
+  assignResult = *formatter;
+  if(!(assignResult == *formatter)) {
+    errln("Assignment result should be semantically equivalent to the original!");
+  }
+
+  // test rule constructor
+  logln("Testing rule constructor");
+  UResourceBundle *en = ures_open(NULL, "en", &status);
+  if(U_FAILURE(status)) {
+    errln("Unable to access resource bundle with data!");
+  } else {
+    int32_t ruleLen = 0;
+    const UChar *spelloutRules = ures_getStringByKey(en, "SpelloutRules", &ruleLen, &status);
+    if(U_FAILURE(status) || ruleLen == 0 || spelloutRules == NULL) {
+      errln("Unable to access the rules string!");
+    } else {
+      UParseError perror;
+      RuleBasedNumberFormat ruleCtorResult(spelloutRules, Locale::US, perror, status);
+      if(!(ruleCtorResult == *formatter)) {
+        errln("Result of the copy constructor should be semantically equivalent to the original!");
+      }
+    }
+    ures_close(en);
+  }
+
+  // test copy constructor
+  logln("Testing copy constructor");
+  RuleBasedNumberFormat copyCtorResult(*formatter);
+  if(!(copyCtorResult == *formatter)) {
+    errln("Copy constructor result result should be semantically equivalent to the original!");
+  }
+
+  // clean up
+  logln("Cleaning up");
+  delete formatter;
 }
 
 void 
