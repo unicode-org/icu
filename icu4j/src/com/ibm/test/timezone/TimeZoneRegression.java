@@ -687,7 +687,6 @@ public class TimeZoneRegression extends TestFmwk {
         };
         
         String[] zone = new String[4];
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
         
         for (int j=0; j<DATA.length; j+=3) {
             TimeZone tz = (TimeZone)DATA[j];
@@ -697,6 +696,7 @@ public class TimeZoneRegression extends TestFmwk {
 
             // Must construct the Date object AFTER setting the default zone
             int[] p = (int[])DATA[j+1];
+            java.util.Calendar tempcal = java.util.Calendar.getInstance();
             tempcal.clear();
             tempcal.set(p[0] + 1900, p[1], p[2], p[3], p[4]);
             Date d = tempcal.getTime();
