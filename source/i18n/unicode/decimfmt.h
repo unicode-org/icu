@@ -1100,13 +1100,15 @@ DecimalFormat::format(const Formattable& obj,
 inline UnicodeString&
 DecimalFormat::format(double number,
                       UnicodeString& output) const {
-    return format(number, output, FieldPosition(0));
+    FieldPosition pos(0);
+    return format(number, output, pos);
 }
 
 inline UnicodeString&
 DecimalFormat::format(int32_t number,
                       UnicodeString& output) const {
-    return NumberFormat::format(number, output);
+    FieldPosition pos(0);
+    return format(number, output, pos);
 }
 
 inline UChar
