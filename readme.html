@@ -1223,6 +1223,10 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
       <li>Change your current directory to icu/source.</li>
 
+      <li>Run <tt>'export CFLAGS=-O4 CXXFLAGS=-O4'</tt> to optimize your
+      build of ICU. If the build fails, rerun these build steps without this
+      step before asking the icu4c-support mailing list for help.</li>
+
       <li>Run <tt>'cp ../as_is/os400/configure .'</tt></li>
 
       <li>Run <tt>'./configure --host=as400-os400'</tt></li>
