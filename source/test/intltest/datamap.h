@@ -11,6 +11,7 @@
 
 #include "hash.h"
 #include "unicode/ures.h"
+#include "unicode/resbund.h"
 
 /** Holder of test data and settings. Allows addressing of items by name.
  *  For test cases, names are defined in the "Headers" section. For settings
@@ -35,20 +36,55 @@ public:
   virtual const UnicodeString getString(const char* key, UErrorCode &status) const = 0;
 
   /** get the string from the DataMap. Addressed by name
+   *  parses a bundle string into an integer
    *  @param key name of the data field.
    *  @return an integer containing the data
    */
   virtual int32_t getInt(const char* key, UErrorCode &status) const = 0;
-  
+
+  /**
+   * Get a signed integer without runtime parsing.
+   * @param key name of the data field.
+   * @param status UErrorCode in/out parameter
+   * @return the integer
+   */
+  virtual int32_t getInt28(const char* key, UErrorCode &status) const = 0;
+
+  /**
+   * Get an unsigned integer without runtime parsing.
+   * @param key name of the data field.
+   * @param status UErrorCode in/out parameter
+   * @return the integer
+   */
+  virtual uint32_t getUInt28(const char* key, UErrorCode &status) const = 0;
+
+  /**
+   * Get a vector of integers without runtime parsing.
+   * @param length output parameter for the length of the vector
+   * @param key name of the data field.
+   * @param status UErrorCode in/out parameter
+   * @return the integer vector, do not delete
+   */
+  virtual const int32_t *getIntVector(int32_t &length, const char *key, UErrorCode &status) const = 0;
+
+  /**
+   * Get binary data without runtime parsing.
+   * @param length output parameter for the length of the data
+   * @param key name of the data field.
+   * @param status UErrorCode in/out parameter
+   * @return the binary data, do not delete
+   */
+  virtual const uint8_t *getBinary(int32_t &length, const char *key, UErrorCode &status) const = 0;
+
   /** get an array of strings from the DataMap. Addressed by name.
-   *  The user must dispose of it after usage.
+   *  The user must dispose of it after usage, using delete.
    *  @param key name of the data field.
    *  @return a string array containing the data
    */
   virtual const UnicodeString* getStringArray(int32_t& count, const char* key, UErrorCode &status) const = 0;
 
   /** get an array of integers from the DataMap. Addressed by name.
-   *  The user must dispose of it after usage.
+   *  The user must dispose of it after usage, using delete.
    *  @param key name of the data field.
    *  @return an integer array containing the data
    */
@@ -75,8 +111,15 @@ public:
 public:
   void init(UResourceBundle *data, UErrorCode &status);
   void init(UResourceBundle *headers, UResourceBundle *data, UErrorCode &status);
-  
+
+  virtual const ResourceBundle *getItem(const char* key, UErrorCode &status) const;
+
   virtual const UnicodeString getString(const char* key, UErrorCode &status) const;
+  virtual int32_t getInt28(const char* key, UErrorCode &status) const;
+  virtual uint32_t getUInt28(const char* key, UErrorCode &status) const;
+  virtual const int32_t *getIntVector(int32_t &length, const char *key, UErrorCode &status) const;
+  virtual const uint8_t *getBinary(int32_t &length, const char *key, UErrorCode &status) const;
+
   virtual int32_t getInt(const char* key, UErrorCode &status) const;
   
   virtual const UnicodeString* getStringArray(int32_t& count, const char* key, UErrorCode &status) const;
