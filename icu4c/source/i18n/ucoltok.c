@@ -116,43 +116,176 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
  * &#32;       return u_strcmp(ustringVar1, ustringVar2);
  * &#32;   }
  */
-#define UTOK_MAX_OPTION_LEN 20
+#define UTOK_OPTION_COUNT 12
 
 static didInit = FALSE;
+/* we can be strict, or we can be lenient */
+/* I'd surely be lenient with the option arguments */
+/* maybe even with options */
+ U_STRING_DECL(option_00, "undefined",      9);
+ U_STRING_DECL(option_01, "rearrange",      9);  
+ U_STRING_DECL(option_02, "alternate",      9);
+ U_STRING_DECL(option_03, "backwards",      9);  
+ U_STRING_DECL(option_04, "variable top",  12); 
+ U_STRING_DECL(option_05, "top",            3);  
+ U_STRING_DECL(option_06, "normalization", 13); 
+ U_STRING_DECL(option_07, "caseLevel",      9);  
+ U_STRING_DECL(option_08, "caseFirst",      9); 
+ U_STRING_DECL(option_09, "scriptOrder",   11);  
+ U_STRING_DECL(option_10, "charsetname",   11); 
+ U_STRING_DECL(option_11, "charset",        7);  
 
- U_STRING_DECL(option_01, "rearrange",    9);  U_STRING_DECL(option_02, "alternate",      9);
- U_STRING_DECL(option_03, "backwards",    9);  U_STRING_DECL(option_04, "variable top",  12); 
- U_STRING_DECL(option_05, "top",          3);  U_STRING_DECL(option_06, "normalization", 13); 
- U_STRING_DECL(option_07, "caseLevel",    9);  U_STRING_DECL(option_08, "caseFirst",      9); 
- U_STRING_DECL(option_09, "scriptOrder", 11);  U_STRING_DECL(option_10, "charsetname",   11); 
- U_STRING_DECL(option_11, "charset",      7);  U_STRING_DECL(option_12, "undefined",      9);
-
-const UChar *options[] = {
-     option_01,
-     option_02,
-     option_03,
-     option_04,
-     option_05,
-     option_06,
-     option_07,
-     option_08,
-     option_09,
-     option_10,
-     option_11,
-     option_12
+ struct {
+   const UChar *optionName;
+   int32_t optionLen;
+   UChar *argument;
+ } rulesOptions[UTOK_OPTION_COUNT] = {
+   {option_00,  9, NULL},
+   {option_01,  9, NULL},
+   {option_02,  9, NULL},
+   {option_03,  9, NULL},
+   {option_04, 12, NULL},
+   {option_05,  3, NULL},
+   {option_06, 13, NULL},
+   {option_07,  9, NULL},
+   {option_08,  9, NULL},
+   {option_09, 11, NULL},
+   {option_10, 11, NULL},
+   {option_11,  7, NULL}
  };
 
+/* -1 off, 1 on, 0 neither */
+int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff) {
+  if(onoff) {
+     if(u_tolower(*onoff) == 0x006F /*'o'*/) {
+       onoff++;
+       if(u_tolower(*onoff) == 0x006e /*'n'*/) {
+         return 1;
+       } else if(u_tolower(*onoff) == 0x0066 /*'f'*/) {
+         onoff++;
+         if(u_tolower(*onoff) == 0x0066 /*'f'*/) {
+           return -1;
+         }
+       }
+     }
+  }
+  return 0;
+}
 
 UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UErrorCode *status) {
+  uint32_t i = 0;
+  int32_t onOff = 0;
+  UBool foundOption = FALSE;
+  const UChar *optionArg = NULL;
   if(!didInit) {
-    U_STRING_INIT(option_01, "rearrange",    9);  U_STRING_INIT(option_02, "alternate",      9);
-    U_STRING_INIT(option_03, "backwards",    9);  U_STRING_INIT(option_04, "variable top",  12); 
-    U_STRING_INIT(option_05, "top",          3);  U_STRING_INIT(option_06, "normalization", 13); 
-    U_STRING_INIT(option_07, "caseLevel",    9);  U_STRING_INIT(option_08, "caseFirst",      9); 
-    U_STRING_INIT(option_09, "scriptOrder", 11);  U_STRING_INIT(option_10, "charsetname",   11); 
-    U_STRING_INIT(option_11, "charset",      7);  U_STRING_INIT(option_12, "undefined",      9);
+    U_STRING_INIT(option_00, "undefined",      9);
+    U_STRING_INIT(option_01, "rearrange",      9);  
+    U_STRING_INIT(option_02, "alternate",      9);
+    U_STRING_INIT(option_03, "backwards",      9);  
+    U_STRING_INIT(option_04, "variable top",  12); 
+    U_STRING_INIT(option_05, "top",            3);  
+    U_STRING_INIT(option_06, "normalization", 13); 
+    U_STRING_INIT(option_07, "caseLevel",      9);  
+    U_STRING_INIT(option_08, "caseFirst",      9); 
+    U_STRING_INIT(option_09, "scriptOrder",   11);  
+    U_STRING_INIT(option_10, "charsetname",   11); 
+    U_STRING_INIT(option_11, "charset",        7);  
   }
+  start++; /*skip opening '['*/
+  while(i < UTOK_OPTION_COUNT) {
+    if(u_strncmp(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
+      foundOption = TRUE;
+      if(end - start > rulesOptions[i].optionLen) {
+        optionArg = start+rulesOptions[i].optionLen+1; /* start of the options, skip space */
+        while(u_isWhitespace(*optionArg)) { /* eat whitespace */
+          optionArg++;
+        }
+      }     
+      break;
+    }
+    i++;
+  }
+
+  if(!foundOption) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return FALSE;
+  }
+
+  switch(i) {
+  case 2 /*"alternate"*/:
+    if(optionArg) {
+      if(u_tolower(*optionArg) == 0x006e) /*'n'*/ { /* non ignorable */
+        image->alternateHandling = UCOL_NON_IGNORABLE;
+        return TRUE;
+      } else if(u_tolower(*optionArg) == 0x0073 /*'s'*/) { /* shifted */
+        image->alternateHandling = UCOL_SHIFTED;
+        return TRUE;
+      } 
+    }
+    break;
+  case 3 /*"backwards"*/:
+    if(optionArg && *optionArg == 0x0032) {
+      image->frenchCollation = UCOL_ON;
+      return TRUE;
+    }
+    break;
+  case 4 /*"variable top"*/:
+    *variableTop = TRUE;
+    return TRUE;
+    break;
+  case 6 /*"normalization"*/:
+    if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == 1) {
+      image->normalizationMode = UCOL_ON;
+      return TRUE;
+    } else if(onOff == -1) {
+      image->normalizationMode = UCOL_OFF;
+      return TRUE;
+    }
+    break;
+  case 7 /*"caseLevel"*/:
+    if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == 1) {
+      image->caseLevel = UCOL_ON;
+      return TRUE;
+    } else if(onOff == -1) {
+      image->caseLevel = UCOL_OFF;
+      return TRUE;
+    }
+    break;
+  case 8 /*"caseFirst"*/:
+    if(optionArg) {
+      if((onOff = ucol_uprv_tok_isOnorOf(optionArg)) == -1) {
+        image->caseLevel = UCOL_OFF;
+        return TRUE;
+      } else if(u_tolower(*optionArg) == 0x0075 /*'u'*/) {
+        image->caseLevel = UCOL_UPPER_FIRST;
+        return TRUE;
+      } else if(u_tolower(*optionArg) == 0x006C /*'l'*/) {
+        image->caseLevel = UCOL_LOWER_FIRST;
+        return TRUE;
+      }
+    }
+    break;
+  case 5 /*"top"*/:
+    /* what's top??? */
+  case 1 /*"rearrange"*/:
+    /* read all the rearangees - should rewrite isthai to isrearanged and have a list of */
+    /* rearanged things - do later */
+  case 0 /*"undefined"*/:
+    /* post 1.8 */
+  case 9 /*"scriptOrder"*/:
+    /* post 1.8 */
+  case 10 /*"charsetname"*/:
+    /* post 1.8 */
+  case 11 /*"charset"*/:
+    /* post 1.8 */
+  default:
+    /* never going to happen */
+    break;
+  }
+
+  *status = U_ILLEGAL_ARGUMENT_ERROR;
   return FALSE;
+
 }
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
@@ -273,6 +406,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               /* options - read an option, analyze it */
               if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
                 ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, status);
+                if(U_FAILURE(*status)) {
+                  return 0;
+                }
                 src->current = optionEnd+1;
               }
               break;

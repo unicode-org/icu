@@ -1208,6 +1208,16 @@ ucol_openRules(    const    UChar                  *rules,
 
   listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status)) { 
+    /* if status is U_ILLEGAL_ARGUMENT_ERROR, src->current points at the offending option */
+    /* if status is U_INVALID_FORMAT_ERROR, src->current points after the problematic part of the rules */
+    /* so something might be done here... or on lower level */
+#ifdef UCOL_DEBUG
+    if(*status == U_ILLEGAL_ARGUMENT_ERROR) {
+      fprintf(stderr, "bad option starting at offset %i\n", src.current-src.source);
+    } else {
+      fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
+    }
+#endif
     uprv_free(src.image);
     ucol_tok_closeTokenList(&src);
     return NULL;
