@@ -468,7 +468,7 @@ nl {
             "Sa'na Hizjria"
     }
 
-    MonthNames_islamic {
+    MonthNames_islamic:array {
             "Moeharram",            // Muharram
             "Safar",                // Safar
             "Rabi'a al awal",      // Rabi' al-awwal
@@ -482,7 +482,7 @@ nl {
             "Doe al ka'aba",        // Dhu al-Qi'dah
             "Doe al hizja",         // Dhu al-Hijjah
      }   
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "nl/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations

@@ -428,7 +428,7 @@ he {
             "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2'\u05D4",                          // Dhu al-Hijjah
        }
 
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "he/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations

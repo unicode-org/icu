@@ -823,7 +823,7 @@ fr {
             "Dou-l-Qa'da",          // Dhu al-Qi'dah
             "Dou-l-Hidjja",         // Dhu al-Hijjah
     }
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "fr/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations

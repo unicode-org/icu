@@ -449,7 +449,7 @@ ar {
             "\u0630\u0648 \u0627\u0644\u0642\u0639\u062F\u0629",                    // Dhu'l-Qi'dah
             "\u0630\u0648 \u0627\u0644\u062D\u062C\u0629"                          // Dhu'l-Hijjah
      }
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "ar/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations

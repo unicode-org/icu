@@ -420,7 +420,7 @@ hu {
             "Ds\u00FCl kade",           // Dhu al-Qi'dah
             "Ds\u00FCl hedse",          // Dhu al-Hijjah
     }
-    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "hu/MonthNames_islamic"
     }   
     // Civil is identical other than in calculations
