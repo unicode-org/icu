@@ -35,7 +35,8 @@ uset_open(UChar32 start, UChar32 end) {
 
 U_CAPI USet* U_EXPORT2
 uset_openPattern(const UChar* pattern, int32_t patternLength,
-                 UErrorCode* ec) {
+                 UErrorCode* ec)
+{
     UnicodeString pat(patternLength==-1, pattern, patternLength);
     UnicodeSet* set = new UnicodeSet(pat, *ec);
     /* test for NULL */
@@ -50,6 +51,27 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
     }
     return (USet*) set;
 }
+
+U_CAPI USet* U_EXPORT2
+uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
+                 uint32_t options,
+                 UErrorCode* ec)
+{
+    UnicodeString pat(patternLength==-1, pattern, patternLength);
+    UnicodeSet* set = new UnicodeSet(pat, options, *ec);
+    /* test for NULL */
+    if(set == 0) {
+        *ec = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
+    
+    if (U_FAILURE(*ec)) {
+        delete set;
+        set = NULL;
+    }
+    return (USet*) set;
+}
+
 
 U_CAPI void U_EXPORT2
 uset_close(USet* set) {

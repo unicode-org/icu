@@ -14,6 +14,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
+#include "unicode/uset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -26,33 +27,6 @@ class TransliteratorParser;
 class UVector;
 class CaseEquivClass;
 
-/**
- * Bitmask values to be passed to the UnicodeSet constructor or
- * applyPattern() taking an option parameter.
- * @internal
- */
-enum {
-    /**
-     * Ignore white space within patterns unless quoted or escaped.
-     * @internal
-     */
-    USET_IGNORE_SPACE = 1,  
-
-    /**
-     * Enable case insensitive matching.  E.g., "[ab]" with this flag
-     * will match 'a', 'A', 'b', and 'B'.  "[^ab]" with this flag will
-     * match all except 'a', 'A', 'b', and 'B'.
-     * @internal
-     */
-    USET_CASE_INSENSITIVE = 2,  
-
-    /**
-     * Bitmask for UnicodeSet::closeOver() indicating letter case.
-     * This may be ORed together with other selectors.
-     * @internal
-     */
-    USET_CASE = 2
-};
     
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
