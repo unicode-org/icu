@@ -30,6 +30,8 @@
 # T: special case for uppercase I and dotted uppercase I
 #    - For non-Turkic languages, this mapping is normally not used.
 #    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.
+#      Note that the Turkic mappings do not maintain canonical equivalence without additional processing.
+#      See the discussions of case mapping in the Unicode Standard for more information.
 #
 # Usage:
 #  A. To do a simple case folding, use the mappings with status C + S.

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateStandardizedVariants.java,v $
-* $Date: 2003/02/26 00:35:09 $
-* $Revision: 1.1 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -20,13 +20,15 @@ import java.io.*;
 
 public final class GenerateStandardizedVariants implements UCD_Types {
     
-    static public String showVarGlyphs(String code0, String code1, String shape) {
-        System.out.println(code0 + ", " + code1 + ", [" + shape + "]");
+    static final boolean DEBUG = false;
+    
+    static public String showVarGlyphs(String code0, String code1, String shape, String description) {
+        if (DEBUG) System.out.println(code0 + ", " + code1 + ", [" + shape + "]");
         
         String abbShape = "";
         if (shape.length() != 0) {
             abbShape = '-' + shape.substring(0,4);
-            if (shape.endsWith("-feminine")) abbShape += "fem";
+            if (description.indexOf("feminine") >= 0) abbShape += "fem";
         }
         
         return "<img alt='U+" + code0 + "+U+" + code1 + "/" + shape 
@@ -76,12 +78,12 @@ public final class GenerateStandardizedVariants implements UCD_Types {
             
             table += "<td>";
             if (shape.length() == 0) {
-                table += showVarGlyphs(codes[0], codes[1], "");
+                table += showVarGlyphs(codes[0], codes[1], "", "");
             } else {
                 int shapeCount = Utility.split(shape, ' ', shapes);
                 for (int i = 0; i < shapeCount; ++i) {
                     if (i != 0) table += " ";
-                    table += showVarGlyphs(codes[0], codes[1], shapes[i]);
+                    table += showVarGlyphs(codes[0], codes[1], shapes[i], splits[1]);
                 }
             }
             table += "</td>\n";
@@ -95,13 +97,21 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         // now write out the results
         
         String directory = "DerivedData/";
-        String filename = directory + "StandardizedVariants.html";
+        String filename = directory + "StandardizedVariants" + GenerateData.getHTMLFileSuffix(true);
         PrintWriter out = Utility.openPrintWriter(filename, Utility.LATIN1_UNIX);
         String[] batName = {""};
         String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true), batName);
         
+        String version = Default.ucd.getVersion();
+        int lastDot = version.lastIndexOf('.');
+        String updateDirectory = version.substring(0,lastDot) + "-Update";
+        int updateV = version.charAt(version.length()-1) - '0';
+        if (updateV != 0) updateDirectory += (char)('1' + updateV);
+        if (DEBUG) System.out.println("updateDirectory: " + updateDirectory);
+        
         String[] replacementList = {
             "@revision@", Default.ucd.getVersion(),
+            "@updateDirectory@", updateDirectory,
             "@date@", Default.getDate(),
             "@table@", table};
                 

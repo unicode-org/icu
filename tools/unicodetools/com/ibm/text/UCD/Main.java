@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.26 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -29,7 +29,7 @@ public final class Main implements UCD_Types {
         "DerivedJoiningGroup",
         "DerivedJoiningType",
         "DerivedLineBreak",
-        "DerivedNormalizationProperties",
+        "DerivedNormalizationProps",
         "DerivedNumericType",
         "DerivedNumericValues",
         "NormalizationTest",
@@ -233,9 +233,9 @@ public final class Main implements UCD_Types {
             } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
                 GenerateData.generateDerived(DERIVED_CORE, true, GenerateData.HEADER_DERIVED, "DerivedData/", "DerivedCoreProperties");
                 
-            } else if (arg.equalsIgnoreCase("DerivedNormalizationProperties")) {
+            } else if (arg.equalsIgnoreCase("DerivedNormalizationProps")) {
                 GenerateData.generateDerived(DERIVED_NORMALIZATION, true, GenerateData.HEADER_DERIVED, "DerivedData/", 
-                    "DerivedNormalizationProperties" );
+                    "DerivedNormalizationProps" );
                     
             } else if (arg.equalsIgnoreCase("NormalizationTest")) {
                 GenerateData.writeNormalizerTestSuite("DerivedData/", "NormalizationTest");

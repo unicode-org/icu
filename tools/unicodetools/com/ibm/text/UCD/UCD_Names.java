@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.16 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -47,8 +47,8 @@ final class UCD_Names implements UCD_Types {
         "East Asian Width (listing EastAsianWidth.txt, field 1)",
         "Line Break (listing LineBreak.txt, field 1)",
         "Joining Type (listing ArabicShaping.txt, field 1).\r\n"
-            + "#\tType T is derived from Mn + Cf - ZWNJ - ZWJ\r\n"
-            + "#\tAll other code points have the type U",
+            + "#\tType T is derived, as described in ArabicShaping.txt\r\n"
+            + "#\tAll code points not listed here have the type U",
         "Joining Group (listing ArabicShaping.txt, field 2)",
         "BidiMirrored (listing UnicodeData.txt, field 9: see UnicodeData.html)",
         "Script",
@@ -124,7 +124,7 @@ final class UCD_Names implements UCD_Types {
         "Deprecated",
         "Soft_Dotted",
         "Logical_Order_Exception",
-        "ID_Start_Exceptions",
+        "Other_ID_Start",
     };
 
     static final String[] SHORT_BP = {
@@ -159,7 +159,7 @@ final class UCD_Names implements UCD_Types {
         "Dep",
         "SD",
         "LOE",
-        "IDSX",
+        "OIDS",
     };
 
     /*
@@ -218,7 +218,13 @@ final class UCD_Names implements UCD_Types {
         "XX", "OP", "CL", "QU", "GL", "NS", "EX", "SY",
         "IS", "PR", "PO", "NU", "AL", "ID", "IN", "HY",
         "CM", "BB", "BA", "SP", "BK", "CR", "LF", "CB",
-        "SA", "AI", "B2", "SG", "ZW"
+        "SA", "AI", "B2", "SG", "ZW",
+        "JL",
+        "JV",
+        "JT",
+        "NL",
+        "WJ",
+
     };
 
     static final String[] LONG_LB = {
@@ -228,7 +234,12 @@ final class UCD_Names implements UCD_Types {
         "Numeric", "Alphabetic", "Ideographic", "Inseperable", "Hyphen",
         "CombiningMark", "BreakBefore", "BreakAfter", "Space",
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
-        "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace"
+        "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace",
+        "Leading_Jamo",
+        "Vowel_Jamo",
+        "Trailing_Jamo",
+        "Next_Line",
+        "Word_Joiner"
     };
 
 	public static final String[] SCRIPT = {
@@ -285,6 +296,7 @@ final class UCD_Names implements UCD_Types {
     "SHAVIAN",
     "OSMANYA",
     "CYPRIOT", 
+    "BRAILLE", 
     
   };
 
@@ -335,6 +347,7 @@ final class UCD_Names implements UCD_Types {
     "Hano",
     "Buhd",
     "Tagb",
+    /*
     "LIMBU",
     "TAI_LE",
     "LINEAR_B",
@@ -342,6 +355,16 @@ final class UCD_Names implements UCD_Types {
     "SHAVIAN",
     "OSMANYA",
     "CYPRIOT", 
+    */
+    "Limb",
+    "Tale",
+    "Linb",
+    "Ugar",
+    "Shaw",
+    "Osma",
+    "Cprt",
+    "Brai",
+
   };
 
 
@@ -544,6 +567,9 @@ final class UCD_Names implements UCD_Types {
         "numeric",
         "digit",
         "decimal",
+        "Han_Primary",
+        "Han_Accounting",
+        "Han_Other"
     };
 
     static String[] SHORT_NT = {
@@ -551,6 +577,9 @@ final class UCD_Names implements UCD_Types {
         "nu",
         "di",
         "de",
+        "hp",
+        "ha",
+        "ho"
     };
 
     static {

@@ -5,26 +5,32 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyFloatLister.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.4 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import java.io.*;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 class MyFloatLister extends PropertyLister {
-    private float propMask;
-
-    public MyFloatLister(UCD ucd, float f, PrintWriter output) {
+    private double propMask;
+    NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+    
+    public MyFloatLister(UCD ucd, double f, PrintWriter output) {
         this.propMask = f;
         this.output = output;
         this.ucdData = ucd;
+        nf.setGroupingUsed(false);
+        nf.setMaximumFractionDigits(8);
+        nf.setMinimumFractionDigits(1);
     }
 
     public String valueName(int cp) {
-        return ""+ucdData.getNumericValue(cp);
+        return nf.format(ucdData.getNumericValue(cp));
     }
 
     public String optionalName(int cp) {
@@ -33,7 +39,7 @@ class MyFloatLister extends PropertyLister {
 
     public byte status(int cp) {
         //if ((cp & 0xFFF) == 0) System.out.println("# " + Utility.hex(cp));
-        if (!ucdData.isRepresented(cp)) {
+        if (false && !ucdData.isRepresented(cp)) {
             if (ucdData.mapToRepresentative(cp, false) != cp) return PropertyLister.CONTINUE;
             return PropertyLister.CONTINUE;
         }

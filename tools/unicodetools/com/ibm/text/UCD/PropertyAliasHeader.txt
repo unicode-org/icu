@@ -10,7 +10,7 @@
 #
 # Each line has two fields, separated by semicolons.
 #
-# First Field: The first field is an abbreviated name for the property
+# First Field: The first field is an abbreviated name for the property.
 #
 # Second Field: The second field is a long name
 #

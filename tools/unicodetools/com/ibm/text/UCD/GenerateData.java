@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.24 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -133,6 +133,12 @@ public class GenerateData implements UCD_Types {
         return "-" + Default.ucd.getVersion() 
             + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
             + ".txt";
+    }
+    
+    public static String getHTMLFileSuffix(boolean withDVersion) {
+        return "-" + Default.ucd.getVersion() 
+            + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
+            + ".html";
     }
     
     public static void generateDerived (byte type, boolean checkTypeAndStandard, int headerChoice, String directory, String fileName) throws IOException {
@@ -525,6 +531,8 @@ public class GenerateData implements UCD_Types {
             if (!value.equals(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, "General_Category=" + value);
         }
         
+        addLine(sorted, "AA", "URS", "Unicode_Radical_Stroke");
+        
         /*
         addLine(sorted, "xx; T         ; True");
         checkDuplicate(duplicates, accumulation, "T", "xx=True");
@@ -837,7 +845,7 @@ public class GenerateData implements UCD_Types {
        
         String lessRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Default.ucd.getVersion(), false, true);
         if (lessRecent != null && !mostRecent.equals(lessRecent)) {
-            generateBatAux(directory + "DIFF/Diff_" + fileRoot + suffix + "-OLDER",
+            generateBatAux(directory + "DIFF/OLDER-Diff_" + fileRoot + suffix,
                 lessRecent, directory + fileRoot + suffix);
         }
         return mostRecent;
@@ -917,15 +925,15 @@ public class GenerateData implements UCD_Types {
             System.out.println();
             System.out.println("@NUMERIC VALUES");
 
-            Set floatSet = new TreeSet();
+            Set numericValueSet = new TreeSet();
             for (int i = 0; i < 0x10FFFF; ++i) {
-                float nv = Default.ucd.getNumericValue(i);
-                if (Float.isNaN(nv)) continue;
-                floatSet.add(new Float(nv));
+                double nv = Default.ucd.getNumericValue(i);
+                if (Double.isNaN(nv)) continue;
+                numericValueSet.add(new Double(nv));
             }
-            Iterator it = floatSet.iterator();
+            Iterator it = numericValueSet.iterator();
             while(it.hasNext()) {
-                new MyFloatLister(Default.ucd, ((Float)it.next()).floatValue(), output).print();
+                new MyFloatLister(Default.ucd, ((Double)it.next()).doubleValue(), output).print();
                 output.println();
                 System.out.print(".");
             }
