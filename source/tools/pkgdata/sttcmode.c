@@ -96,8 +96,8 @@ void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCod
                "\n\n"
                "4. Now, you may access this data with a 'path' of \"%s\" as in the following example:\n"
                "\n"
-               "     ... ures_open( \"%s\", \"%s\", &err ); \n",
-               libName, o->shortName, o->shortName, uloc_getDefault());
+               "     ... ures_open( \"%s\", NULL /* Get the default locale */, &err ); \n",
+               libName, o->shortName, o->shortName);
   T_FileStream_writeLine(out, tmp);
 
   T_FileStream_close(out);
