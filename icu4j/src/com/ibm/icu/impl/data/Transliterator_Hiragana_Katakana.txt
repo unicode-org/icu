@@ -198,7 +198,7 @@ $xo = [ \
 お < $xo {ー};
 
 # Note: both of these don't work yet, causing different bugs
-# :: ([[:Katakana:]\u30FC\uFF70] NFKC);
+:: ([[:Katakana:]\u30FC\uFF70] NFKC);
 # :: (NFKC) ;
 
 # eof
