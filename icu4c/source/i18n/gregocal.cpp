@@ -286,17 +286,12 @@ GregorianCalendar::operator=(const GregorianCalendar &right)
 
 // -------------------------------------
 
-UBool
-GregorianCalendar::operator==(const Calendar& that) const
+UBool GregorianCalendar::isEquivalentTo(const Calendar& other) const
 {
-    GregorianCalendar* other = (GregorianCalendar*)&that;
-
-    return (this == &that) ||
-        (Calendar::operator==(that) &&
-         getDynamicClassID() == that.getDynamicClassID() &&
-         fGregorianCutover == other->fGregorianCutover);
+    // Calendar override.
+    return Calendar::isEquivalentTo(other) &&
+        fGregorianCutover == ((GregorianCalendar*)&other)->fGregorianCutover;
 }
-
 
 // -------------------------------------
 
