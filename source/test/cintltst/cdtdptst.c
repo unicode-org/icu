@@ -116,8 +116,8 @@ void TestPartialParse994()
         log_err("FAIL: ErrorCode received during test: %s\n", myErrorName(status));
         return;
     }
-    s=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("01/01/97 10:11:42 AM")+1) );
-    u_uastrcpy(s, "01/01/97 10:11:42 AM");
+    s=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("01/01/1997 10:11:42 AM")+1) );
+    u_uastrcpy(s, "01/01/1997 10:11:42 AM");
     pos=0;
     d = udat_parse(f, s, u_strlen(s), &pos, &status);
     log_verbose("%s\n", austrdup(myDateFormat(f, d)) );
@@ -154,13 +154,13 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
              log_err("FAIL: Expected: %s\n", austrdup(myDateFormat(format, expected)) );
         }
     else {
-            
         f=myDateFormat(format, date);
         log_verbose(" parse( %s ) -> %s\n", austrdup(str), austrdup(f));
-        if (expected == null || !(date == expected)) 
-            log_err("FAIL: Expected null");
-        if (u_strcmp(f, str) !=0) log_err("FAIL: Expected : %s\n", austrdup(str) );
-        }
+        if (expected == null || date != expected) 
+            log_err("FAIL: Expected null for \"%s\"\n", s);
+        if (u_strcmp(f, str) !=0)
+            log_err("FAIL: Expected : %s\n", austrdup(str) );
+    }
     
     uprv_free(str);
     uprv_free(pat);

@@ -654,7 +654,7 @@ root {
         "EEEE, MMMM d, yyyy",
         "MMMM d, yyyy",
         "MMM d, yyyy",
-        "M/d/yyyy",
+        "M/d/yy", // Changing this will break binary compatibility.
         "{1} {0}",
     }
     DayAbbreviations { 
