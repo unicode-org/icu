@@ -72,6 +72,10 @@ public:
                         UnicodeSet* adoptedSet,
                         UErrorCode& status);
 
+    void defineSet(UChar standIn,
+                   UnicodeSet* adoptedSet,
+                   UErrorCode& status);
+
     UChar lookupVariable(const UnicodeString& name,
                          UErrorCode& status) const;
     

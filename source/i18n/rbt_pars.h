@@ -11,6 +11,7 @@
 #include "unicode/rbt.h"
 
 class TransliterationRuleData;
+class UnicodeSet;
 
 class TransliterationRuleParser {
 
@@ -49,29 +50,21 @@ class TransliterationRuleParser {
     static const UChar VARIABLE_DEF_OP;
     static const UChar FORWARD_RULE_OP;
     static const UChar REVERSE_RULE_OP;
-    static const char* OPERATORS;
-
+    static const UChar FWDREV_RULE_OP; // internal rep of <> op
+    static const UnicodeString OPERATORS;
 
     // Other special characters
     static const UChar QUOTE;
+    static const UChar ESCAPE;
+    static const UChar END_OF_RULE;
+    static const UChar RULE_COMMENT_CHAR;
     static const UChar VARIABLE_REF_OPEN;
     static const UChar VARIABLE_REF_CLOSE;
     static const UChar CONTEXT_OPEN;
     static const UChar CONTEXT_CLOSE;
+    static const UChar SET_OPEN;
+    static const UChar SET_CLOSE;
     static const UChar CURSOR_POS;
-    static const UChar RULE_COMMENT_CHAR;
-
-
-    /**
-     * Specials must be quoted in rules to be used as literals.
-     * Specials may not occur in variable names.
-     */
-    static const char* SPECIALS;
-
-    /**
-     * Specials that must be quoted in variable definitions.
-     */
-    static const char* DEF_SPECIALS;
 
 public:
 
@@ -100,140 +93,38 @@ private:
     void parseRules(void);
 
     /**
-     * Parse the given substring as a rule, and append it to the rules currently
-     * represented in this object.
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= rules.length()</code>.
-     * @exception IllegalArgumentException if there is a syntax error in the
-     * rules
-     */
-    void applyRule(int32_t start, int32_t limit);
-
-    /**
-     * Add a variable definition.
-     * @param name the name of the variable.  It must not already be defined.
-     * @param pattern the value of the variable.  It may be a single character
-     * or a pattern describing a character set.
-     * @exception IllegalArgumentException if there is a syntax error
-     */
-    void applyVariableDef(const UnicodeString& name,
-                          const UnicodeString& pattern);
-
-    /**
-     * Given a rule, parses it into three pieces: The left side, the right side,
-     * and the operator.  Returns the operator.  Quotes and variable references
-     * are resolved; the otuput text in all <code>StringBuffer</code> parameters
-     * is literal text.  This method delegates to other parsing methods to
-     * handle the match pattern, output pattern, and other sub-patterns in the
-     * rule.
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= rules.length()</code>.
-     * @param left left side of rule is appended to this buffer
-     * with the quotes removed and variables resolved
-     * @param right right side of rule is appended to this buffer
-     * with the quotes removed and variables resolved
-     * @param anteContext the preceding context of the match pattern,
-     * if there is one, is appended to this buffer
-     * @param postContext the following context of the match pattern,
-     * if there is one, is appended to this buffer
-     * @param cursorPos if there is a cursor in the output pattern, its
-     * offset is stored in <code>cursorPos[0]</code>
-     * @return The operator character, one of the characters in OPERATORS.
-     */
-    UChar parseRule(int32_t start, int32_t limit,
-                    UnicodeString& left, UnicodeString& right,
-                    UnicodeString& anteContext,
-                    UnicodeString& postContext,
-                    int32_t& cursorPos);
-
-    /**
-     * Parses the match pattern of a forward or reverse rule.  Given the raw
-     * match pattern, return the match text and the context on both sides, if
-     * any.  Resolves all quotes and variables.
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= rules.length()</code>.
-     * @param text the key to be matched will be appended to this buffer
-     * @param anteContext the preceding context, if any, will be appended
-     * to this buffer.
-     * @param postContext the following context, if any, will be appended
-     * to this buffer.
-     */
-    void parseMatchPattern(int32_t start, int32_t limit,
-                           UnicodeString& text,
-                           UnicodeString& anteContext,
-                           UnicodeString& postContext);
-
-    void parseSubPattern(int32_t start, int32_t limit,
-                         UnicodeString& text);
-    
-    /**
-     * Parse a variable definition sub pattern.  This kind of sub
-     * pattern differs in the set of characters that are considered
-     * special.  In particular, the '[' and ']' characters are not
-     * special, since these are used in UnicodeSet patterns.
-     */
-    void parseDefPattern(int32_t start, int32_t limit,
-                         UnicodeString& text);
-    
-    /**
-     * Parses the output pattern of a forward or reverse rule.  Given the
-     * output pattern, return the output text and the position of the cursor,
-     * if any.  Resolves all quotes and variables.
-     * @param rules the string to be parsed
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= rules.length()</code>.
-     * @param text the output text will be appended to this buffer
-     * @param cursorPos if this parameter is not null, then cursorPos[0]
-     * will be set to the cursor position, or -1 if there is none.  If this
-     * parameter is null, then cursors will be disallowed.
-     */
-    void parseOutputPattern(int32_t start, int32_t limit,
-                            UnicodeString& text,
-                            int32_t& cursorPos);
-
-    /**
-     * Parses a sub-pattern of a rule.  Return the text and the position of the cursor,
-     * if any.  Resolves all quotes and variables.
-     * @param rules the string to be parsed
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= rules.length()</code>.
-     * @param text the output text will be appended to this buffer
-     * @param cursorPos if this parameter is not null, then cursorPos[0]
-     * will be set to the cursor position, or -1 if there is none.  If this
-     * parameter is null, then cursors will be disallowed.
-     * @param specials characters that must be quoted; typically either
-     * SPECIALS or DEF_SPECIALS.
-     */
-    void parseSubPattern(int32_t start, int32_t limit,
-                         UnicodeString& text,
-                         int32_t* cursorPos,
-                         const UnicodeString& specials);
-
-    void validateVariableName(const UnicodeString& name);
-
-    /**
-     * Returns the single character value of the given variable name.  Defined
-     * names are recognized.
+     * MAIN PARSER.  Parse the next rule in the given rule string, starting
+     * at pos.  Return the index after the last character parsed.  Do not
+     * parse characters at or after limit.
      *
-     * NO LONGER SUPPORTED:
-     * If a Unicode category name is given, a standard character variable
-     * in the range firstCategoryVariable to lastCategoryVariable is returned,
-     * with value firstCategoryVariable + n, where n is the category
-     * number.
-     * @exception IllegalArgumentException if the name is unknown.
+     * Important:  The character at pos must be a non-whitespace character
+     * that is not the comment character.
+     *
+     * This method handles quoting, escaping, and whitespace removal.  It
+     * parses the end-of-rule character.  It recognizes context and cursor
+     * indicators.  Once it does a lexical breakdown of the rule at pos, it
+     * creates a rule object and adds it to our rule list.
      */
-    //$ Character getVariableDef(const UnicodeString& name);
+    int32_t parseRule(int32_t pos, int32_t limit);
 
+    /**
+     * Called by main parser upon syntax error.  Search the rule string
+     * for the probable end of the rule.  Of course, if the error is that
+     * the end of rule marker is missing, then the rule end will not be found.
+     * In any case the rule start will be correctly reported.
+     * @param msg error description
+     * @param rule pattern string
+     * @param start position of first character of current rule
+     */
+    int32_t syntaxError(const char* msg, const UnicodeString&, int32_t start);
+
+    /**
+     * Allocate a private-use substitution character for the given set,
+     * register it in the setVariables hash, and return the substitution
+     * character.
+     */
+    UChar registerSet(UnicodeSet* adoptedSet);
+ 
     /**
      * Determines what part of the private use region of Unicode we can use for
      * variable stand-ins.  The correct way to do this is as follows: Parse each
@@ -263,38 +154,6 @@ private:
     static int32_t quotedIndexOf(const UnicodeString& text,
                                  int32_t start, int32_t limit,
                                  const UnicodeString& setOfChars);
-
-    /**
-     * Returns the index of the first character in a set.  Unlike
-     * String.indexOf(), this method searches not for a single character, but
-     * for any character of the string <code>setOfChars</code>.
-     * @param text text to be searched
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param setOfChars string with one or more distinct characters
-     * @return Offset of the first character in <code>setOfChars</code>
-     * found, or -1 if not found.
-     * @see #quotedIndexOf
-     */
-    static int32_t indexOf(const UnicodeString& text,
-                           int32_t start, int32_t limit,
-                           const UnicodeString& setOfChars);
-    
-    /**
-     * Returns the index of the first character in a set.  Unlike
-     * String.indexOf(), this method searches not for a single character, but
-     * for any character of the string <code>setOfChars</code>.
-     * @param text text to be searched
-     * @param setOfChars string with one or more distinct characters
-     * @return Offset of the first character in <code>setOfChars</code>
-     * found, or -1 if not found.
-     * @see #quotedIndexOf
-     */
-    static int32_t indexOf(const UnicodeString& text,
-                           const UnicodeString& setOfChars);
-    
 };
 
 #endif

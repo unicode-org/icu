@@ -25,6 +25,7 @@
  * after the <code>key</code>
  * @param cursorPos a position for the cursor after the <code>output</code>
  * is emitted.  If less than zero, then the cursor is placed after the
+
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
  * <code>output.length()</code> then an exception is thrown.
@@ -37,55 +38,93 @@ TransliterationRule::TransliterationRule(const UnicodeString& theKey,
                                          const UnicodeString& thePostContext,
                                          int32_t theCursorPos,
                                          UErrorCode &status) :
-    key(theKey), output(theOutput),
-    anteContext(theAnteContext),
-    postContext(thePostContext),
-    cursorPos(theCursorPos),
-    maskKey(0) {
-
+    output(theOutput),
+    cursorPos(theCursorPos)
+{
     if (U_FAILURE(status)) {
         return;
     }
-
+    anteContextLength = theAnteContext.length();
+    keyLength = theKey.length();
+    pattern = theAnteContext;
+    pattern.append(theKey).append(thePostContext);
     if (cursorPos < 0) {
         cursorPos = output.length();
     }
     if (cursorPos > output.length()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    /* The mask key is needed when we are adding individual rules to a rule
-     * set, for performance.  Here are the numbers: Without mask key, 13.0
-     * seconds.  With mask key, 6.2 seconds.  However, once the rules have
-     * been added to the set, then they can be discarded to free up space.
-     * This is what the freeze() method does.  After freeze() has been
-     * called, the method masks() must NOT be called.
-     */
-    maskKey = new UnicodeString(key);
-    if (maskKey == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        maskKey->append(postContext);
-    }
 }
 
-TransliterationRule::~TransliterationRule() {
-    delete maskKey;
+/**
+ * Construct a new rule with the given input, output text, and other
+ * attributes.  A cursor position may be specified for the output text.
+ * @param input input string, including key and optional ante and
+ * post context
+ * @param anteContextPos offset into input to end of ante context, or -1 if
+ * none.  Must be <= input.length() if not -1.
+ * @param postContextPos offset into input to start of post context, or -1
+ * if none.  Must be <= input.length() if not -1, and must be >=
+ * anteContextPos.
+ * @param output output string
+ * @param cursorPos offset into output at which cursor is located, or -1 if
+ * none.  If less than zero, then the cursor is placed after the
+ * <code>output</code>; that is, -1 is equivalent to
+ * <code>output.length()</code>.  If greater than
+ * <code>output.length()</code> then an exception is thrown.
+ */
+TransliterationRule::TransliterationRule(const UnicodeString& input,
+                                         int32_t anteContextPos, int32_t postContextPos,
+                                         const UnicodeString& output,
+                                         int32_t cursorPos,
+                                         UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    // Do range checks only when warranted to save time
+    if (anteContextPos < 0) {
+        anteContextLength = 0;
+    } else {
+        if (anteContextPos > input.length()) {
+            // throw new IllegalArgumentException("Invalid ante context");
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        anteContextLength = anteContextPos;
+    }
+    if (postContextPos < 0) {
+        keyLength = input.length() - anteContextLength;
+    } else {
+        if (postContextPos < anteContextLength ||
+            postContextPos > input.length()) {
+            // throw new IllegalArgumentException("Invalid post context");
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        keyLength = postContextPos - anteContextLength;
+    }
+    if (cursorPos < 0) {
+        this->cursorPos = output.length();
+    } else {
+        if (cursorPos > output.length()) {
+            // throw new IllegalArgumentException("Invalid cursor position");
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
+        this->cursorPos = cursorPos;
+    }
+    pattern = input;
+    this->output = output;
 }
+
+TransliterationRule::~TransliterationRule() {}
 
 /**
  * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
  * @return the length of the match key.
  */
 int32_t TransliterationRule::getKeyLength(void) const {
-    return key.length();
-}
-
-/**
- * Return the key.
- * @return the match key.
- */
-const UnicodeString& TransliterationRule::getKey(void) const {
-    return key;
+    return keyLength;
 }
 
 /**
@@ -110,7 +149,45 @@ int32_t TransliterationRule::getCursorPos(void) const {
  * <code>getMaximumContextLength()</code>.
  */
 int32_t TransliterationRule::getAnteContextLength(void) const {
-    return anteContext.length();
+    return anteContextLength;
+}
+
+/**
+ * Internal method.  Returns 8-bit index value for this rule.
+ * This is the low byte of the first character of the key,
+ * unless the first character of the key is a set.  If it's a
+ * set, or otherwise can match multiple keys, the index value is -1.
+ */
+int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) {
+    if (anteContextLength == pattern.length()) {
+        // A pattern with just ante context {such as foo)>bar} can
+        // match any key.
+        return -1;
+    }
+    UChar c = pattern.charAt(anteContextLength);
+    return data.lookupSet(c) == NULL ? (c & 0xFF) : -1;
+}
+
+/**
+ * Internal method.  Returns true if this rule matches the given
+ * index value.  The index value is an 8-bit integer, 0..255,
+ * representing the low byte of the first character of the key.
+ * It matches this rule if it matches the first character of the
+ * key, or if the first character of the key is a set, and the set
+ * contains any character with a low byte equal to the index
+ * value.  If the rule contains only ante context, as in foo)>bar,
+ * then it will match any key.
+ */
+bool_t TransliterationRule::matchesIndexValue(uint8_t v,
+                                   const TransliterationRuleData& data) {
+    if (anteContextLength == pattern.length()) {
+        // A pattern with just ante context {such as foo)>bar} can
+        // match any key.
+        return TRUE;
+    }
+    UChar c = pattern.charAt(anteContextLength);
+    UnicodeSet* set = data.lookupSet(c);
+    return set == NULL ? (uint8_t(c) == v) : set->containsIndexValue(v);
 }
 
 /**
@@ -118,43 +195,37 @@ int32_t TransliterationRule::getAnteContextLength(void) const {
  * r1 matches any input string that r2 matches.  If r1 masks r2 and r2 masks
  * r1 then r1 == r2.  Examples: "a>x" masks "ab>y".  "a>x" masks "a[b]>y".
  * "[c]a>x" masks "[dc]a>y".
- *
- * <p>This method must not be called after freeze() is called.
  */
 bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
-    /* There are three cases of masking.  In each instance, rule1
-     * masks rule2.
+    /* Rule r1 masks rule r2 if the string formed of the
+     * antecontext, key, and postcontext overlaps in the following
+     * way:
      *
-     * 1. KEY mask: len(key1) < len(key2), key2 starts with key1.
-     *
-     * 2. PREFIX mask: key1 == key2, len(prefix1) < len(prefix2),
-     * prefix2 ends with prefix1, suffix2 starts with suffix1.
-     *
-     * 3. SUFFIX mask: key1 == key2, len(suffix1) < len(suffix2),
-     * prefix2 ends with prefix1, suffix2 starts with suffix1.
+     * r1:      aakkkpppp
+     * r2:     aaakkkkkpppp
+     *            ^
+     * 
+     * The strings must be aligned at the first character of the
+     * key.  The length of r1 to the left of the alignment point
+     * must be <= the length of r2 to the left; ditto for the
+     * right.  The characters of r1 must equal (or be a superset
+     * of) the corresponding characters of r2.  The superset
+     * operation should be performed to check for UnicodeSet
+     * masking.
      */
 
     /* LIMITATION of the current mask algorithm: Some rule
      * maskings are currently not detected.  For example,
-     * "{Lu}]a>x" masks "A]a>y".  To detect these sorts of masking,
-     * we need a subset operator on UnicodeSet objects, which we
-     * currently do not have.  This can be added later.
+     * "{Lu}]a>x" masks "A]a>y".  This can be added later. TODO
      */
-    return ((maskKey->length() < r2.maskKey->length() &&
-             r2.maskKey->startsWith(*maskKey)) ||
-            (r2.anteContext.length() != 0 && *maskKey == *r2.maskKey &&
-             ((anteContext.length() == 0) ||
-              (anteContext.length() < r2.anteContext.length() &&
-               r2.anteContext.endsWith(anteContext)))));
-}
 
-/**
- * Free up space.  Once this method is called, masks() must NOT be called.
- * If it is called, an exception will be thrown.
- */
-void TransliterationRule::freeze(void) {
-    delete maskKey;
-    maskKey = 0;
+    int32_t len = pattern.length();
+    int32_t left = anteContextLength;
+    int32_t left2 = r2.anteContextLength;
+    int32_t right = len - left;
+    int32_t right2 = r2.pattern.length() - left2;
+    return left <= left2 && right <= right2 &&
+        0 == r2.pattern.compare(left2 - left, len, pattern);
 }
 
 /**
@@ -186,17 +257,10 @@ bool_t TransliterationRule::matches(const UnicodeString& text,
                                     int32_t cursor,
                                     const TransliterationRuleData& data,
                                     const UnicodeFilter* filter) const {
-    return
-        (anteContext.length() == 0
-         || regionMatches(text, start, limit, result,
-                          cursor - anteContext.length(),
-                          anteContext, data, filter)) &&
-        regionMatches(text, start, limit, result, cursor,
-                      key, data, filter) &&
-        (postContext.length() == 0
-         || regionMatches(text, start, limit, result,
-                          cursor + key.length(),
-                          postContext, data, filter));
+    // Match anteContext, key, and postContext
+    return regionMatches(text, start, limit, result,
+                         cursor - anteContextLength,
+                         pattern, data, filter);
 }
 
 /**
@@ -219,15 +283,10 @@ bool_t TransliterationRule::matches(const Replaceable& text,
                                     int32_t cursor,
                                     const TransliterationRuleData& data,
                                     const UnicodeFilter* filter) const {
-    return
-        (anteContext.length() == 0
-         || regionMatches(text, start, limit, cursor - anteContext.length(),
-                          anteContext, data, filter)) &&
-        regionMatches(text, start, limit, cursor,
-                      key, data, filter) &&
-        (postContext.length() == 0
-         || regionMatches(text, start, limit, cursor + key.length(),
-                          postContext, data, filter));
+    // Match anteContext, key, and postContext
+    return regionMatches(text, start, limit,
+                         cursor - anteContextLength,
+                         pattern, data, filter);
 }
 
 /**
@@ -260,28 +319,10 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
                                             int32_t cursor,
                                             const TransliterationRuleData& data,
                                             const UnicodeFilter* filter) const {
-    if (anteContext.length() != 0
-        && !regionMatches(text, start, limit, cursor - anteContext.length(),
-                          anteContext, data, filter)) {
-        return MISMATCH;
-    }
-    int32_t len = getRegionMatchLength(text, start, limit, cursor,
-                                       key, data, filter);
-    if (len < 0) {
-        return MISMATCH;
-    }
-    if (len < key.length()) {
-        return PARTIAL_MATCH;
-    }
-    if (postContext.length() == 0) {
-        return FULL_MATCH;
-    }
-    len = getRegionMatchLength(text, start, limit,
-                               cursor + key.length(),
-                               postContext, data, filter);
-    return (len < 0) ? MISMATCH
-                     : ((len == postContext.length()) ? FULL_MATCH
-                                                      : PARTIAL_MATCH);
+    int len = getRegionMatchLength(text, start, limit, cursor - anteContextLength,
+                                   pattern, data, filter);
+    return len < anteContextLength ? MISMATCH :
+        (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
 }
 
 /**
