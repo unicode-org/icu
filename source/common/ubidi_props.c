@@ -187,7 +187,7 @@ ubidi_closeProps(UBiDiProps *bdp) {
 
 /* UBiDiProps singleton ----------------------------------------------------- */
 
-static UBiDiProps *gBdp=NULL;
+static UBiDiProps *gBdp=NULL, *gBdpDummy=NULL;
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
 
@@ -197,6 +197,8 @@ ubidi_cleanup(void) {
     gBdp=NULL;
     gErrorCode=U_ZERO_ERROR;
     gHaveData=0;
+    uprv_free(gBdpDummy);
+    gBdpDummy=NULL;
     return TRUE;
 }
 
@@ -238,6 +240,59 @@ ubidi_getSingleton(UErrorCode *pErrorCode) {
 
         ubidi_closeProps(bdp);
         return gBdp;
+    }
+}
+
+U_CAPI UBiDiProps * U_EXPORT2
+ubidi_getDummy(UErrorCode *pErrorCode) {
+    UBiDiProps *bdp;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+
+    UMTX_CHECK(NULL, gBdpDummy, bdp);
+
+    if(bdp!=NULL) {
+        /* the dummy object was already created */
+        return bdp;
+    } else /* bdp==NULL */ {
+        /* create the dummy object */
+        UBiDiProps *bdp;
+        int32_t *indexes;
+        
+        bdp=(UBiDiProps *)uprv_malloc(sizeof(UBiDiProps)+UBIDI_IX_TOP*4+UTRIE_DUMMY_SIZE);
+        if(bdp==NULL) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        uprv_memset(bdp, 0, sizeof(UBiDiProps)+UBIDI_IX_TOP*4);
+
+        bdp->indexes=indexes=(int32_t *)(bdp+1);
+        indexes[UBIDI_IX_INDEX_TOP]=UBIDI_IX_TOP;
+
+        indexes[UBIDI_IX_TRIE_SIZE]=
+            utrie_unserializeDummy(&bdp->trie, indexes+UBIDI_IX_TOP, UTRIE_DUMMY_SIZE, 0, 0, TRUE, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            uprv_free(bdp);
+            return NULL;
+        }
+
+        bdp->formatVersion[0]=1;
+        bdp->formatVersion[2]=UTRIE_SHIFT;
+        bdp->formatVersion[3]=UTRIE_INDEX_SHIFT;
+
+        /* set the static variables */
+        umtx_lock(NULL);
+        if(gBdpDummy==NULL) {
+            gBdpDummy=bdp;
+            bdp=NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_UBIDI, ubidi_cleanup);
+        }
+        umtx_unlock(NULL);
+
+        uprv_free(bdp);
+        return gBdpDummy;
     }
 }
 

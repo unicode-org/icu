@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -889,8 +889,8 @@ defaultGetFoldingOffset(uint32_t data) {
 
 U_CAPI int32_t U_EXPORT2
 utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pErrorCode) {
-    UTrieHeader *header;
-    uint16_t *p16;
+    const UTrieHeader *header;
+    const uint16_t *p16;
     uint32_t options;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -904,7 +904,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
     }
 
     /* check the signature */
-    header=(UTrieHeader *)data;
+    header=(const UTrieHeader *)data;
     if(header->signature!=0x54726965) {
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return -1;
@@ -931,7 +931,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
         *pErrorCode=U_INVALID_FORMAT_ERROR;
         return -1;
     }
-    p16=(uint16_t *)(header+1);
+    p16=(const uint16_t *)(header+1);
     trie->index=p16;
     p16+=trie->indexLength;
     length-=2*trie->indexLength;
@@ -960,6 +960,121 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
     trie->getFoldingOffset=defaultGetFoldingOffset;
 
     return length;
+}
+
+U_CAPI int32_t U_EXPORT2
+utrie_unserializeDummy(UTrie *trie,
+                       void *data, int32_t length,
+                       uint32_t initialValue, uint32_t leadUnitValue,
+                       UBool make16BitTrie,
+                       UErrorCode *pErrorCode) {
+    uint16_t *p16;
+    int32_t actualLength, latin1Length, i, limit;
+    uint16_t block;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return -1;
+    }
+
+    /* calculate the actual size of the dummy trie data */
+
+    /* max(Latin-1, block 0) */
+    latin1Length= UTRIE_SHIFT<=8 ? 256 : UTRIE_DATA_BLOCK_LENGTH;
+
+    trie->indexLength=UTRIE_BMP_INDEX_LENGTH+UTRIE_SURROGATE_BLOCK_COUNT;
+    trie->dataLength=latin1Length;
+    if(leadUnitValue!=initialValue) {
+        trie->dataLength+=UTRIE_DATA_BLOCK_LENGTH;
+    }
+
+    actualLength=trie->indexLength*2;
+    if(make16BitTrie) {
+        actualLength+=trie->dataLength*2;
+    } else {
+        actualLength+=trie->dataLength*4;
+    }
+
+    /* enough space for the dummy trie? */
+    if(length<actualLength) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return actualLength;
+    }
+
+    trie->isLatin1Linear=TRUE;
+    trie->initialValue=initialValue;
+
+    /* fill the index and data arrays */
+    p16=(uint16_t *)data;
+    trie->index=p16;
+
+    if(make16BitTrie) {
+        /* indexes to block 0 */
+        block=(uint16_t)(trie->indexLength>>UTRIE_INDEX_SHIFT);
+        limit=trie->indexLength;
+        for(i=0; i<limit; ++i) {
+            p16[i]=block;
+        }
+
+        if(leadUnitValue!=initialValue) {
+            /* indexes for lead surrogate code units to the block after Latin-1 */
+            block+=(uint16_t)(latin1Length>>UTRIE_INDEX_SHIFT);
+            i=0xd800>>UTRIE_SHIFT;
+            limit=0xdc00>>UTRIE_SHIFT;
+            for(; i<limit; ++i) {
+                p16[i]=block;
+            }
+        }
+
+        trie->data32=NULL;
+
+        /* Latin-1 data */
+        p16+=trie->indexLength;
+        for(i=0; i<latin1Length; ++i) {
+            p16[i]=(uint16_t)initialValue;
+        }
+
+        /* data for lead surrogate code units */
+        if(leadUnitValue!=initialValue) {
+            limit=latin1Length+UTRIE_DATA_BLOCK_LENGTH;
+            for(/* i=latin1Length */; i<limit; ++i) {
+                p16[i]=(uint16_t)leadUnitValue;
+            }
+        }
+    } else {
+        uint32_t *p32;
+
+        /* indexes to block 0 */
+        uprv_memset(p16, 0, trie->indexLength*2);
+
+        if(leadUnitValue!=initialValue) {
+            /* indexes for lead surrogate code units to the block after Latin-1 */
+            block=(uint16_t)(latin1Length>>UTRIE_INDEX_SHIFT);
+            i=0xd800>>UTRIE_SHIFT;
+            limit=0xdc00>>UTRIE_SHIFT;
+            for(; i<limit; ++i) {
+                p16[i]=block;
+            }
+        }
+
+        trie->data32=p32=(uint32_t *)(p16+trie->indexLength);
+
+        /* Latin-1 data */
+        for(i=0; i<latin1Length; ++i) {
+            p32[i]=initialValue;
+        }
+
+        /* data for lead surrogate code units */
+        if(leadUnitValue!=initialValue) {
+            limit=latin1Length+UTRIE_DATA_BLOCK_LENGTH;
+            for(/* i=latin1Length */; i<limit; ++i) {
+                p32[i]=leadUnitValue;
+            }
+        }
+    }
+
+    trie->getFoldingOffset=defaultGetFoldingOffset;
+
+    return actualLength;
 }
 
 /* swapping ----------------------------------------------------------------- */

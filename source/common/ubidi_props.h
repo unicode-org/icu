@@ -44,6 +44,14 @@ ubidi_closeProps(UBiDiProps *bdp);
 U_CAPI UBiDiProps * U_EXPORT2
 ubidi_getSingleton(UErrorCode *pErrorCode);
 
+/**
+ * Get a singleton dummy object, one that works with no real data.
+ * This can be used when the real data is not available.
+ * Using the dummy can reduce checks for available data after an initial failure.
+ */
+U_CAPI UBiDiProps * U_EXPORT2
+ubidi_getDummy(UErrorCode *pErrorCode);
+
 
 U_CAPI int32_t U_EXPORT2
 ubidi_swap(const UDataSwapper *ds,
