@@ -20,6 +20,7 @@
 #include "ucmp8.h"
 #include "unicode/ucnv_bld.h"
 #include "unicode/ucnv_err.h"
+#include "ucnv_cnv.h"
 #include "ucnv_imp.h"
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
@@ -30,21 +31,29 @@
 
 #include <stdio.h>
 
-/*Array used to generate ALGORITHMIC_CONVERTERS_HASHTABLE
- *should ALWAYS BE EMPTY STRING TERMINATED.
- */
-static const char *algorithmicConverterNames[] = {
-  "LATIN_1",
-  "UTF8",
-  "UTF16_BigEndian",
-  "UTF16_LittleEndian",
-  "UTF16_PlatformEndian",
-  "UTF16_OppositeEndian",
-  "ISO_2022",
-  "JIS",
-  "EUC",
-  "GB",
-  ""
+static const UConverterSharedData *
+converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
+    &_SBCSData, &_DBCSData, &_MBCSData, &_Latin1Data,
+    &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_EBCDICStatefulData,
+    &_ISO2022Data
+};
+
+static struct {
+  const char *name;
+  UConverterType type;
+} cnvNameType[] = {
+  { "LATIN_1", UCNV_LATIN_1 },
+  { "UTF8", UCNV_UTF8 },
+  { "UTF16_BigEndian", UCNV_UTF16_BigEndian },
+  { "UTF16_LittleEndian", UCNV_UTF16_LittleEndian },
+#if U_IS_BIG_ENDIAN
+  { "UTF16_PlatformEndian", UCNV_UTF16_BigEndian },
+  { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
+#else
+  { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
+  { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
+#endif
+  { "ISO_2022", UCNV_ISO_2022 }
 };
 
 /*Takes an alias name gets an actual converter file name
@@ -52,7 +61,6 @@ static const char *algorithmicConverterNames[] = {
  *allocates the memory and returns a new UConverter object
  */
 static UConverter *createConverterFromFile (const char *converterName, UErrorCode * err);
-static UConverter *createConverterFromAlgorithmicType (const char *realName, UErrorCode * err);
 
 /*Given a file returns a newly allocated CompactByteArray based on the a serialized one */
 static CompactByteArray *createCompactByteArrayFromFile (FileStream * infile, UErrorCode * err);
@@ -70,7 +78,7 @@ static CompactShortArray *createCompactShortArrayFromFile (FileStream * infile, 
 static UConverterPlatform getPlatformFromName (char *name);
 static int32_t getCodepageNumberFromName (char *name);
 
-static UConverterType getAlgorithmicTypeFromName (const char *realName);
+static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
 
 
 /*these functions initialize the lightweight mutable part of the
@@ -84,10 +92,38 @@ static void initializeAlgorithmicConverter (UConverter * myConverter);
 
 static int32_t uhash_hashSharedData (void *sharedData);
 
+/*Defines the struct of a UConverterSharedData the immutable, shared part of
+ *UConverter -
+ * This is the definition from ICU 1.4, necessary to read converter data
+ * version 1 because the structure is directly embedded in the data.
+ * See udata.html for why this is bad (pointers, enums, padding...).
+ */
+typedef struct
+  {
+    uint32_t structSize;        /* Size of this structure */
+    void *dataMemory;
+    uint32_t referenceCounter;	/*used to count number of clients */
+    char name[UCNV_MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
+    UConverterPlatform platform;	/*platform of the converter (only IBM now) */
+    int32_t codepage;		/*codepage # (now IBM-$codepage) */
+    UConverterType conversionType;	/*conversion type */
+    int8_t minBytesPerChar;	/*Minimum # bytes per char in this codepage */
+    int8_t maxBytesPerChar;	/*Maximum # bytes per char in this codepage */
+    struct
+      {				/*initial values of some members of the mutable part of object */
+	uint32_t toUnicodeStatus;
+	int8_t subCharLen;
+	unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];
+      }
+    defaultConverterValues;
+    UConverterTable *table;	/*Pointer to conversion data */
+  }
+UConverterSharedData_1_4;
+
 /**
  * Un flatten shared data from a UDATA..
  */
-U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(const UConverterSharedData *data, UErrorCode *status);
+U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *data, UErrorCode *status);
 
 
 /*initializes some global variables */
@@ -328,7 +364,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
     }
 
   /* clone it. OK to drop the original sharedData */
-  myConverter->sharedData = ucnv_data_unFlattenClone(myConverter->sharedData, err);
+  myConverter->sharedData = ucnv_data_unFlattenClone((UConverterSharedData_1_4 *)myConverter->sharedData, err);
 
   myConverter->sharedData->dataMemory = (void*)data; /* for future use */
 
@@ -372,39 +408,16 @@ void
 
 /*returns a converter type from a string
  */
-UConverterType 
+const UConverterSharedData *
   getAlgorithmicTypeFromName (const char *realName)
 {
-  if (uprv_strcmp (realName, "UTF8") == 0)
-    return UCNV_UTF8;
-  else if (uprv_strcmp (realName, "UTF16_BigEndian") == 0)
-    return UCNV_UTF16_BigEndian;
-  else if (uprv_strcmp (realName, "UTF16_LittleEndian") == 0)
-    return UCNV_UTF16_LittleEndian;
-  else if (uprv_strcmp (realName, "LATIN_1") == 0)
-    return UCNV_LATIN_1;
-  else if (uprv_strcmp (realName, "JIS") == 0)
-    return UCNV_JIS;
-  else if (uprv_strcmp (realName, "EUC") == 0)
-    return UCNV_EUC;
-  else if (uprv_strcmp (realName, "GB") == 0)
-    return UCNV_GB;
-  else if (uprv_strcmp (realName, "ISO_2022") == 0)
-    return UCNV_ISO_2022;
-  else if (uprv_strcmp (realName, "UTF16_PlatformEndian") == 0)
-#  if U_IS_BIG_ENDIAN
-      return UCNV_UTF16_BigEndian;
-#  else
-      return UCNV_UTF16_LittleEndian;
-#  endif
-  else if (uprv_strcmp (realName, "UTF16_OppositeEndian") == 0)
-#  if U_IS_BIG_ENDIAN
-      return UCNV_UTF16_LittleEndian;
-#  else
-      return UCNV_UTF16_BigEndian;
-#  endif
-  else
-    return UCNV_UNSUPPORTED_CONVERTER;
+  int i;
+  for(i=0; i<sizeof(cnvNameType)/sizeof(cnvNameType[0]); ++i) {
+    if(uprv_strcmp(realName, cnvNameType[i].name)==0) {
+      return converterData[cnvNameType[i].type];
+    }
+  }
+  return NULL;
 }
 
 
@@ -460,6 +473,7 @@ void   shareConverterData (UConverterSharedData * data)
       
     }
   umtx_lock (NULL);
+  /* ### check to see if the element is not already there! */
   uhash_put(SHARED_DATA_HASHTABLE,
             data,
             &err);
@@ -482,6 +496,7 @@ UConverterSharedData *getSharedConverterData (const char *name)
 
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
+ * ### this cleanup would be cleaner in a function in UConverterImpl
  */
 bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 {
@@ -510,7 +525,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     {
         ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->mbcs.toUnicode);
-	uprv_free (deadSharedData->table);
+	    uprv_free (deadSharedData->table);
     };
     break;
 
@@ -519,7 +534,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     {
         ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->dbcs.toUnicode);
-	uprv_free (deadSharedData->table);
+	    uprv_free (deadSharedData->table);
     };
     break;
 
@@ -537,55 +552,6 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     return TRUE;
 }
 
-bool_t   isDataBasedConverter (const char *name)
-{
-  int32_t i = 0;
-  bool_t result = FALSE;
-  UErrorCode err = U_ZERO_ERROR;
-
-  /*Lazy evaluates the hashtable */
-  if (ALGORITHMIC_CONVERTERS_HASHTABLE == NULL)
-    {
-      UHashtable* myHT;
-      
-      {
-          myHT = uhash_open ((UHashFunction)uhash_hashIString, &err);
-          
-          if (U_FAILURE (err)) return FALSE;
-          while (algorithmicConverterNames[i][0] != '\0')
-            {
-              /*Stores in the hashtable a pointer to the statically init'ed array containing
-               *the names
-               */
-              
-              uhash_put (myHT,
-                         (void *) algorithmicConverterNames[i],
-                         &err);
-              i++;                      /*Some Compilers (Solaris WSpro and MSVC-Release Mode
-                                         *don't differentiate between i++ and ++i
-                                         *so we have to increment in a line by itself
-                                         */
-            }
-      }
-      
-      umtx_lock (NULL);
-      if (ALGORITHMIC_CONVERTERS_HASHTABLE == NULL) ALGORITHMIC_CONVERTERS_HASHTABLE = myHT;
-      else uhash_close(myHT);      
-      umtx_unlock (NULL);
-      
-      
-    }
-    
-  
-  if (uhash_get (ALGORITHMIC_CONVERTERS_HASHTABLE,
-                 uhash_hashIString (name)) == NULL)
-    {
-      result = TRUE;
-    }
-  
-
-  return result;
-}
 /*Logic determines if the converter is Algorithmic AND/OR cached
  *depending on that:
  * -we either go to get data from disk and cache it (Data=TRUE, Cached=False)
@@ -636,7 +602,8 @@ UConverter *
     }
   }
 
-  if (isDataBasedConverter (realName))
+  mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName (realName);
+  if (mySharedConverterData == NULL)
     {
       mySharedConverterData = getSharedConverterData (realName);
 
@@ -652,8 +619,6 @@ UConverter *
           else
             {
               /*shared it with other library clients */
-
-
               shareConverterData (myUConverter->sharedData);
               return myUConverter;
             }
@@ -668,6 +633,7 @@ UConverter *
               return NULL;
             }
 
+          /* ### this is unsafe: the shared data could have been deleted since sharing or getting it - these operations should increase the counter! */
           /*update the reference counter: one more client */
           umtx_lock (NULL);
           mySharedConverterData->referenceCounter++;
@@ -681,45 +647,24 @@ UConverter *
     }
   else
     {
-      /*with have an algorithmic converter */
-      mySharedConverterData = getSharedConverterData (realName);
-
-      /*Non cached */
-      if (mySharedConverterData == NULL)
+      /* ### we have an algorithmic converter, it does not need to be cached?! */
+      if (getSharedConverterData (realName) == NULL)
         {
-          myUConverter = createConverterFromAlgorithmicType (realName, err);
-          if (U_FAILURE (*err) || (myUConverter == NULL))
-            {
-              uprv_free (myUConverter);
-              return NULL;
-            }
-          else
-            {
-              /* put the shared object in shared table */
-              shareConverterData (myUConverter->sharedData);
-              return myUConverter;
-            }
-        }
-      else
-        {
-          myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
-          if (myUConverter == NULL)
-            {
-              *err = U_MEMORY_ALLOCATION_ERROR;
-              return NULL;
-            }
-
-          /*Increase the reference counter */
-          umtx_lock (NULL);
-          mySharedConverterData->referenceCounter++;
-          umtx_unlock (NULL);
-
-          /*initializes the converter */
-          myUConverter->sharedData = mySharedConverterData;
-          initializeAlgorithmicConverter (myUConverter);
-          return myUConverter;
+          /* put the shared object in shared table */
+          shareConverterData (mySharedConverterData);
         }
 
+      myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
+      if (myUConverter == NULL)
+        {
+          *err = U_MEMORY_ALLOCATION_ERROR;
+          return NULL;
+        }
+
+      /*initializes the converter */
+      uprv_memset(myUConverter, 0, sizeof(UConverter));
+      myUConverter->sharedData = mySharedConverterData;
+      initializeAlgorithmicConverter (myUConverter);
       return myUConverter;
     }
 
@@ -751,21 +696,11 @@ void   initializeDataConverter (UConverter * myUConverter)
 }
 
 /* This function initializes algorithmic converters
- * based on there type
+ * based on their type
  */
 void 
   initializeAlgorithmicConverter (UConverter * myConverter)
 {
-  char UTF8_subChar[] = {(char) 0xFF, (char) 0xFF, (char) 0xFF};
-  char UTF16BE_subChar[] = {(char) 0xFF, (char) 0xFD};
-  char UTF16LE_subChar[] = {(char) 0xFD, (char) 0xFF};
-  char EUC_subChar[] = {(char) 0xAF, (char) 0xFE};
-  char GB_subChar[] = {(char) 0xFF, (char) 0xFF};
-  char JIS_subChar[] = {(char) 0xFF, (char) 0xFF};
-  char LATIN1_subChar = 0x1A;
-
-
-
   myConverter->mode = UCNV_SI;
   myConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
   myConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
@@ -774,216 +709,79 @@ void
 
   myConverter->extraInfo = NULL;
 
+  myConverter->fromUnicodeStatus = 0;
+  myConverter->toUnicodeStatus = myConverter->sharedData->defaultConverterValues.toUnicodeStatus;
+  myConverter->subCharLen = myConverter->sharedData->defaultConverterValues.subCharLen;
+  uprv_memcpy (myConverter->subChar, myConverter->sharedData->defaultConverterValues.subChar, UCNV_MAX_SUBCHAR_LEN);
 
+  /* ### it would be cleaner to have the following in a function in UConverterImpl, with a UErrorCode */
   switch (myConverter->sharedData->conversionType)
     {
-    case UCNV_UTF8:
-      {
-        myConverter->sharedData->minBytesPerChar = 1;
-        myConverter->sharedData->maxBytesPerChar = 4;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 3;
-        myConverter->subCharLen = 3;
-        myConverter->toUnicodeStatus = 0;
-    myConverter->fromUnicodeStatus = 0; /* srl */ 
-        myConverter->sharedData->platform = UCNV_IBM;
-        myConverter->sharedData->codepage = 1208;
-        uprv_strcpy(myConverter->sharedData->name, "UTF8");
-        uprv_memcpy (myConverter->subChar, UTF8_subChar, 3);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF8_subChar, 3);
-
-        break;
-      }
-    case UCNV_LATIN_1:
-      {
-        myConverter->sharedData->minBytesPerChar = 1;
-        myConverter->sharedData->maxBytesPerChar = 1;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 1;
-        myConverter->subCharLen = 1;
-        myConverter->toUnicodeStatus = 0;
-        myConverter->sharedData->platform = UCNV_IBM;
-        myConverter->sharedData->codepage = 819;
-        uprv_strcpy(myConverter->sharedData->name, "LATIN_1");
-        *(myConverter->subChar) = LATIN1_subChar;
-        *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
-        break;
-      }
-
-    case UCNV_UTF16_BigEndian:
-      {
-        myConverter->sharedData->minBytesPerChar = 2;
-        myConverter->sharedData->maxBytesPerChar = 2;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-        myConverter->subCharLen = 2;
-        myConverter->toUnicodeStatus = 0;
-        myConverter->fromUnicodeStatus = 0; 
-        uprv_strcpy(myConverter->sharedData->name, "UTF_16BE");
-        myConverter->sharedData->platform = UCNV_IBM;
-        myConverter->sharedData->codepage = 1200;
-        uprv_memcpy (myConverter->subChar, UTF16BE_subChar, 2);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16BE_subChar, 2);
-
-        break;
-      }
-
-    case UCNV_UTF16_LittleEndian:
-      {
-        myConverter->sharedData->minBytesPerChar = 2;
-        myConverter->sharedData->maxBytesPerChar = 2;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-        myConverter->subCharLen = 2;
-        myConverter->toUnicodeStatus = 0;
-        myConverter->fromUnicodeStatus = 0; 
-        myConverter->sharedData->platform = UCNV_IBM;
-        myConverter->sharedData->codepage = 1200;
-        uprv_strcpy(myConverter->sharedData->name, "UTF_16LE");
-        uprv_memcpy (myConverter->subChar, UTF16LE_subChar, 2);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16LE_subChar, 2);
-        break;
-      }
-    case UCNV_EUC:
-      {
-        myConverter->sharedData->minBytesPerChar = 1;
-        myConverter->sharedData->maxBytesPerChar = 2;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-        myConverter->subCharLen = 2;
-        myConverter->toUnicodeStatus = 0;
-        uprv_memcpy (myConverter->subChar, EUC_subChar, 2);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, EUC_subChar, 2);
-        break;
-      }
     case UCNV_ISO_2022:
       {
         myConverter->charErrorBuffer[0] = 0x1b;
         myConverter->charErrorBuffer[1] = 0x25;
         myConverter->charErrorBuffer[2] = 0x42;
         myConverter->charErrorBufferLength = 3;
-        myConverter->sharedData->minBytesPerChar = 1;
-        myConverter->sharedData->maxBytesPerChar = 3;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 1;
-        myConverter->subCharLen = 1;
-        myConverter->toUnicodeStatus = 0;
-    myConverter->fromUnicodeStatus = 0; /* srl */ 
-        myConverter->sharedData->codepage = 2022;
-        uprv_strcpy(myConverter->sharedData->name, "ISO_2022");
-        *(myConverter->subChar) = LATIN1_subChar;
-        *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
         myConverter->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
+        /* ### check for extraInfo==NULL !! does this need to be allocated at all? */
         ((UConverterDataISO2022 *) myConverter->extraInfo)->currentConverter = NULL;
         ((UConverterDataISO2022 *) myConverter->extraInfo)->escSeq2022Length = 0;
-        break;
-      }
-    case UCNV_GB:
-      {
-        myConverter->sharedData->minBytesPerChar = 2;
-        myConverter->sharedData->maxBytesPerChar = 2;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-        myConverter->subCharLen = 2;
-        myConverter->toUnicodeStatus = 0;
-        uprv_memcpy (myConverter->subChar, GB_subChar, 2);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, GB_subChar, 2);
-        break;
-      }
-    case UCNV_JIS:
-      {
-        myConverter->sharedData->minBytesPerChar = 2;
-        myConverter->sharedData->maxBytesPerChar = 2;
-        myConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0;
-        myConverter->sharedData->defaultConverterValues.subCharLen = 2;
-        myConverter->subCharLen = 2;
-        myConverter->toUnicodeStatus = 0;
-        uprv_memcpy (myConverter->subChar, JIS_subChar, 2);
-        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, JIS_subChar, 2);
         break;
       }
     default:
       break;
     };
-
-  myConverter->toUnicodeStatus = myConverter->sharedData->defaultConverterValues.toUnicodeStatus;
 }
 
-
-/*This function creates an algorithmic converter
- *Note That even algorithmic converters are shared
- * (The UConverterSharedData->table == NULL since
- * there are no tables)
- *for uniformity of design and control flow
- */
-UConverter *
-  createConverterFromAlgorithmicType (const char *actualName, UErrorCode * err)
-{
-  int32_t i = 0;
-  UConverter *myConverter = NULL;
-  UConverterSharedData *mySharedData = NULL;
-  UConverterType myType = getAlgorithmicTypeFromName (actualName);
-
-  if (U_FAILURE (*err))
-    return NULL;
-
-  myConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
-  if (myConverter == NULL)
-    {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-
-  myConverter->sharedData = NULL;
-  mySharedData = (UConverterSharedData *) uprv_malloc (sizeof (UConverterSharedData));
-  if (mySharedData == NULL)
-    {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      uprv_free (myConverter);
-      return NULL;
-    }
-  mySharedData->structSize = sizeof(UConverterSharedData);
-  mySharedData->table = NULL;
-  mySharedData->dataMemory = NULL;
-  uprv_strcpy (mySharedData->name, actualName);
-  /*Initializes the referenceCounter to 1 */
-  mySharedData->referenceCounter = 1;
-  mySharedData->platform = UCNV_UNKNOWN;
-  mySharedData->codepage = 0;
-  mySharedData->conversionType = myType;
-  myConverter->sharedData = mySharedData;
-
-  initializeAlgorithmicConverter (myConverter);
-  return myConverter;
-}
-
-
-UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *source, UErrorCode *status)
+UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *source, UErrorCode *status)
 {
     const uint8_t *raw, *oldraw;
     UConverterSharedData *data = NULL;
-    
+    UConverterType type = source->conversionType;
+
     if(U_FAILURE(*status))
         return NULL;
 
-    if(source->structSize != sizeof(UConverterSharedData))
+    if( (uint16_t)type >= UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES ||
+        converterData[type]->referenceCounter != 1 ||
+        source->structSize != sizeof(UConverterSharedData_1_4))
     {
         *status = U_INVALID_TABLE_FORMAT;
         return NULL;
     }
 
-  data = (UConverterSharedData*) malloc(sizeof(UConverterSharedData));
-  raw = (uint8_t*)source;
-  uprv_memcpy(data,source,sizeof(UConverterSharedData));
-  
-  raw += data->structSize;
+    data = (UConverterSharedData *)uprv_malloc(sizeof(UConverterSharedData));
+    if(data == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
-  /*  data->table = (UConverterTable*)raw; */
-  
+    /* copy initial values from the static structure for this type */
+    uprv_memcpy(data, converterData[type], sizeof(UConverterSharedData));
+
+    /* ### it would be much more efficient if the table were a direct member, not a pointer */
+    data->table = (UConverterTable *)uprv_malloc(sizeof(UConverterTable));
+    if(data->table == NULL) {
+        uprv_free(data);
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    /* fill in fields from the loaded data */
+    data->name = source->name; /* ### this could/should come from the caller - should be the same as the canonical name?!! */
+    data->codepage = source->codepage;
+    data->platform = source->platform;
+    data->minBytesPerChar = source->minBytesPerChar;
+    data->maxBytesPerChar = source->maxBytesPerChar;
+    uprv_memcpy(&data->defaultConverterValues, &source->defaultConverterValues, sizeof(data->defaultConverterValues));
+
+    raw = (uint8_t*)source + source->structSize;
+
+    /* the checks above made sure that the type is valid for a data-based converter */
   switch (data->conversionType)
     {
     case UCNV_SBCS:
-      data->table = malloc(sizeof(UConverterSBCSTable));
       data->table->sbcs.toUnicode = (UChar*)raw;
       raw += sizeof(UChar)*256;
 
@@ -993,22 +791,20 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
 
     case UCNV_EBCDIC_STATEFUL:
     case UCNV_DBCS:
-      data->table = uprv_malloc(sizeof(UConverterDBCSTable));
-
       oldraw = raw;
 
       data->table->dbcs.toUnicode=ucmp16_cloneFromData(&raw, status);
 
-      while((raw-oldraw)%4) /* pad to 4 */
-          raw++;
+      /* pad to 4 */
+      if(((raw-oldraw)&3)!=0) {
+          raw+=4-((raw-oldraw)&3);
+      }
 
       data->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, status);
 
       break;
 
     case UCNV_MBCS:
-      data->table = uprv_malloc(sizeof(UConverterMBCSTable));
-
       data->table->mbcs.starters = (bool_t*)raw;
       raw += sizeof(bool_t)*256;
       
@@ -1016,24 +812,15 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
 
       data->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, status);
 
-      while((raw-oldraw)%4) /* pad to 4 */
-          raw++;
+      /* pad to 4 */
+      if(((raw-oldraw)&3)!=0) {
+          raw+=4-((raw-oldraw)&3);
+      }
 
       data->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, status);
 
       break;
-
-    default:
-      *status = U_INVALID_TABLE_FORMAT;
-      return NULL;
     }
   
   return data;
 }
-
-
-
-
-
-
-

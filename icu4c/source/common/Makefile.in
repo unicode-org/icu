@@ -74,7 +74,8 @@ mutex.o normlzr.o putil.o rbcache.o resbund.o schriter.o scsu.o		\
 uchar.o uchriter.o ucmp8.o ucmp16.o ucmp32.o ucnv.o ucnv_bld.o		\
 ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uloc.o unicode.o unistr.o	\
 ures.o ustring.o rbread.o rbdata.o ubidi.o ubidiln.o \
-bidi.o uvector.o udata.o unames.o utf_impl.o
+bidi.o uvector.o udata.o unames.o utf_impl.o \
+ucnv_2022.o ucnv_utf.o ucnv_sbcs.o ucnv_mbcs.o
 
 DEPS = $(OBJECTS:.o=.d)
 
