@@ -29,6 +29,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "ucln_cmn.h"
+#include "uprops.h"
 
 
 /* prototypes ------------------------------------------------------------- */
@@ -1489,6 +1490,73 @@ static uint16_t getExtName(uint32_t code, char *buffer, uint16_t bufferLength) {
     WRITE_CHAR(buffer, bufferLength, length, '>');
 
     return length;
+}
+
+/**
+ * This can be made more efficient by moving it into putil.c and having
+ * it directly access the ebcdic translation tables.
+ * TODO: Consider moving this into putil.c
+ */
+UChar
+u_charToUChar(char c) {
+    UChar uc;
+    u_charsToUChars(&c, &uc, 1);
+    return uc;
+}
+
+/**
+ * Fills us with characters that are used in Unicode character names.
+ * @param us USet to receive characters.  Existing contents are deleted.
+ */
+U_CAPI void U_EXPORT2
+uprv_getCharNameCharacters(USet* us) {
+    int16_t* tokens;
+    int16_t tokenCount;
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t i, count;
+
+    uset_clear(us);
+
+    if(!isDataLoaded(&ec)) {
+        return;
+    }
+
+    tokens=(int16_t *)uCharNames+8;
+    tokenCount=*tokens++;
+
+    count=tokenCount;
+    if (count>256) {
+        count=256;
+    }
+
+    for(i=0; i<count; ++i) {
+        switch (i) {
+        case (int32_t)(uint8_t)';':
+        case (int32_t)(uint8_t)'*':
+        case (int32_t)(uint8_t)',':
+            /* UnicodeData.txt uses ';' as a field separator, so no
+               field can contain ';' as part of its contents.  In
+               unames.dat, it is marked as token[';']==-1 only if the
+               semicolon is used in the data file - which is iff we
+               have Unicode 1.0 names or ISO comments.  So, it will be
+               token[';']==-1 if we store U1.0 names/ISO comments
+               although we know that it will never be part of a
+               name. [markus] */
+            /* Skip '*' and ',', which I determined by testing the
+               actual names to not be present. [alan] TODO - determine
+               why these are showing up here; they shouldn't be. */
+            break;
+        default:
+            if (tokens[i]==-1) {
+                uset_add(us, (UChar32)u_charToUChar((char)i));
+            }
+            break;
+        }
+    }
+
+    /* Fix up the results.  Add '<' and '>' for extended names. */
+    uset_add(us, (UChar32)u_charToUChar('<'));
+    uset_add(us, (UChar32)u_charToUChar('>'));
 }
 
 /*

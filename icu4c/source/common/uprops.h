@@ -20,6 +20,8 @@
 #ifndef __UPROPS_H__
 #define __UPROPS_H__
 
+#include "unicode/uset.h"
+
 /* indexes[] entries */
 enum {
     UPROPS_PROPS32_INDEX,
@@ -236,5 +238,12 @@ uprv_comparePropertyNames(const char *name1, const char *name2);
  */
 U_CAPI UBool U_EXPORT2
 uprv_isRuleWhiteSpace(UChar32 c);
+
+/**
+ * Fills us with characters that are used in Unicode character names.
+ * @param us USet to receive characters.  Existing contents are deleted.
+ */
+U_CAPI void U_EXPORT2
+uprv_getCharNameCharacters(USet* us);
 
 #endif
