@@ -33,7 +33,7 @@ for incorporation into a larger archive or library.
 .LP
 The file read by
 .B gentz
-are described in the
+is described in the
 .B FILES
 section.
 .SH OPTIONS
