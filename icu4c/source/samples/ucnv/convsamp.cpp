@@ -145,7 +145,7 @@ void printBytes(const char  *name = "?",
 
   printf("%5s:", "ch");
   for( i = 0; i <len; i++) {
-    if(isgraph(uch[i])) {
+    if(isgraph(0x00FF & (int)uch[i])) {
       printf(" '%c' ", (char)uch[i]);
     } else {
       printf("     ");

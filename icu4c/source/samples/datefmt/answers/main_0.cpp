@@ -7,6 +7,7 @@
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
+#include "unicode/uclean.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "util.h"
@@ -34,12 +35,8 @@ TimeZone* createZone(const UnicodeString& id) {
 
 int main(int argc, char **argv) {
 
-    Calendar *cal;
-    TimeZone *zone;
-    DateFormat *fmt;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
-    UDate date;
 
     // The languages in which we will display the date
     static char* LANGUAGE[] = {
@@ -56,41 +53,14 @@ int main(int argc, char **argv) {
     };
     static const int32_t N_TIMEZONE = sizeof(TIMEZONE)/sizeof(TIMEZONE[0]);
 
-    // Create a calendar
-    cal = Calendar::createInstance(status);
-    check(status, "Calendar::createInstance");
-    zone = createZone("GMT"); // Create a GMT zone
-    cal->adoptTimeZone(zone);
-    cal->clear();
-    cal->set(1999, Calendar::JUNE, 4);
-    date = cal->getTime(status);
-    check(status, "Calendar::getTime");
-
     for (int32_t i=0; i<N_LANGUAGE; ++i) {
         Locale loc(LANGUAGE[i]);
 
-        // Create a formatter for DATE and TIME
-        fmt = DateFormat::createDateTimeInstance(
-                                DateFormat::kFull, DateFormat::kFull, loc);
-
-        for (int32_t j=0; j<N_TIMEZONE; ++j) {
-
-            cal->adoptTimeZone(createZone(TIMEZONE[j]));
-            fmt->setCalendar(*cal);
-
-            // Format the date
-            str.remove();
-            fmt->format(date, str, status);
-            
-            // Display the formatted date string
-            printf("Date (%s, %s): ", LANGUAGE[i], TIMEZONE[j]);
-            uprintf(escape(str));
-            printf("\n\n");
-        }
-
-        delete fmt;
+        // Display the formatted date string
+        printf("Date (%s)\n", LANGUAGE[i]);
     }
 
     printf("Exiting successfully\n");
+    u_cleanup();
     return 0;
 }
