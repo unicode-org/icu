@@ -28,5 +28,12 @@ GDIFontMap::~GDIFontMap()
 
 const LEFontInstance *GDIFontMap::openFont(const char *fontName, le_int16 pointSize, LEErrorCode &status)
 {
-    return new GDIFontInstance(fSurface, fontName, pointSize, status);
+	LEFontInstance *result = new GDIFontInstance(fSurface, fontName, pointSize, status);
+
+	if (LE_FAILURE(status)) {
+		delete result;
+		result = NULL;
+	}
+
+    return NULL;
 }
