@@ -651,7 +651,7 @@ DecimalFormat::format(int64_t number,
     {
         digits.set(((double)number) * fMultiplier,
                    precision(FALSE),
-                   !fUseExponentialNotation && !isSignificantDigits());
+                   !fUseExponentialNotation && !areSignificantDigitsUsed());
     }
     else
     {
@@ -740,7 +740,7 @@ DecimalFormat::format(  double number,
 
     // This detects negativity too.
     digits.set(number, precision(FALSE),
-               !fUseExponentialNotation && !isSignificantDigits());
+               !fUseExponentialNotation && !areSignificantDigitsUsed());
 
     return subformat(appendTo, fieldPosition, digits, FALSE);
 }
@@ -833,7 +833,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     } else {
         decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
     }
-    UBool useSigDig = isSignificantDigits();
+    UBool useSigDig = areSignificantDigitsUsed();
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t minIntDig = getMinimumIntegerDigits();
 
@@ -2651,7 +2651,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     UnicodeString roundingDigits;
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
-    UBool useSigDig = isSignificantDigits();
+    UBool useSigDig = areSignificantDigitsUsed();
     if (useSigDig) {
         sigDigit = localized ? getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0) :
                                kPatternSignificantDigit;
@@ -3356,7 +3356,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             // zeroDigitCount.
             int32_t effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
             UBool isSigDig = (sigDigitCount > 0);
-            setSignificantDigits(isSigDig);
+            setSignificantDigitsUsed(isSigDig);
             if (isSigDig) {
                 setMinimumSignificantDigits(sigDigitCount);
                 setMaximumSignificantDigits(sigDigitCount + digitRightCount);
@@ -3566,11 +3566,11 @@ void DecimalFormat::setMaximumSignificantDigits(int32_t max) {
     fMaxSignificantDigits = max;
 }
 
-UBool DecimalFormat::isSignificantDigits() const {
+UBool DecimalFormat::areSignificantDigitsUsed() const {
     return fUseSignificantDigits;
 }
 
-void DecimalFormat::setSignificantDigits(UBool useSignificantDigits) {
+void DecimalFormat::setSignificantDigitsUsed(UBool useSignificantDigits) {
     fUseSignificantDigits = useSignificantDigits;
 }
 
@@ -3614,7 +3614,7 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
  */
 int32_t
 DecimalFormat::precision(UBool isIntegral) const {
-    if (isSignificantDigits()) {
+    if (areSignificantDigitsUsed()) {
         return getMaximumSignificantDigits();
     } else if (fUseExponentialNotation) {
         return getMinimumIntegerDigits() + getMaximumFractionDigits();
