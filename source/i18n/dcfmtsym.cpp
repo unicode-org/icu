@@ -160,7 +160,8 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                 // for backward compatibility; we don't use DecimalFormatSymbols
                 // for currency data anymore.
                 UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
-                const UChar* curriso = ucurr_forLocale(locStr, &internalStatus);
+                UChar curriso[4];
+                ucurr_forLocale(locStr, curriso, 4, &internalStatus);
 
                 // Reuse numberElements[0] as a temporary buffer
                 uprv_getStaticCurrencyName(curriso, locStr, numberElements[0], internalStatus);

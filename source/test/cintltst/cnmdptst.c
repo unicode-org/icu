@@ -805,7 +805,7 @@ static void TestCurrencyKeywords(void)
   int32_t noLocales = uloc_countAvailable();
   char locale[256];
   char currLoc[256];
-  const UChar *result = NULL;
+  UChar result[4];
   UChar currBuffer[256];
 
    
@@ -815,7 +815,7 @@ static void TestCurrencyKeywords(void)
       strcpy(locale, currLoc);
       strcat(locale, "@currency=");
       strcat(locale, currencies[j]);
-      result = ucurr_forLocale(locale, &status);
+      ucurr_forLocale(locale, result, 4, &status);
       u_charsToUChars(currencies[j], currBuffer, 3);
       currBuffer[3] = 0;
       if(u_strcmp(currBuffer, result) != 0) {
