@@ -27,6 +27,7 @@
 static char* _testDirectory=NULL;
 int main ( int argc, const char **argv )
 {
+    int nerrors;
     TestNode *root;
 
     /* initial check for the default converter */
@@ -73,11 +74,12 @@ int main ( int argc, const char **argv )
 
     root = NULL;
     addAllTests(&root);
-    processArgs(root, argc, argv);
+    nerrors = processArgs(root, argc, argv);
     cleanUpTestTree(root);
     cleanUpDataTable();
     ctst_freeAll();
-    return 0;
+
+    return nerrors ? 1 : 0;
 }
 
 void 

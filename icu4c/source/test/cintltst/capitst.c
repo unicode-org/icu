@@ -647,7 +647,7 @@ void TestGetAll()
         log_err("Error in countAvailable(), it returned %d\n", count);
     }
     else{
-        log_verbose("Pass: countAvailable() successful, it returned %d\n", count);
+        log_verbose("PASS: countAvailable() successful, it returned %d\n", count);
     }
     for(i=0;i<count;i++)
         log_verbose("%s\n", ucol_getAvailable(i));
