@@ -271,6 +271,10 @@ SOURCE=.\tfsmalls.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\thcoll.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\tmsgfmt.cpp
 # End Source File
 # Begin Source File
@@ -528,6 +532,10 @@ SOURCE=.\tchcfmt.h
 # Begin Source File
 
 SOURCE=.\tfsmalls.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\thcoll.h
 # End Source File
 # Begin Source File
 

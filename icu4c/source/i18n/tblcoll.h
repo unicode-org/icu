@@ -41,6 +41,8 @@
 *                          UnicodeString construction and special case for NO_OP.
 * 11/23/99     srl         More performance enhancements. Updates to NormalizerIterator
 *                          internal state management.
+* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+*                          to implementation file.
 *******************************************************************************
 */
 
@@ -61,6 +63,7 @@ class VectorOfPToExpandTable;
 class MergeCollation;
 class CollationElementIterator;
 class RuleBasedCollatorStreamer;
+class NormalizerIterator; // see tblcoll.cpp
 
 /**
  * The RuleBasedCollator class provides the simple implementation of Collator,
@@ -742,32 +745,12 @@ private:
                           const UnicodeString&    name,
                           const UnicodeString&    suffix);
 
-  /* Internal class for quick iteration over the text.
-     100% pure inline code
-   */
-  class NormalizerIterator { 
-  public:
-      Normalizer *cursor;
-      VectorOfInt *bufferAlias;
-      int32_t     swapOrder;
-      UChar*      text;
-      int32_t     expIndex;
-      int32_t     textLen;
-      UTextOffset  currentOffset;
-
-      NormalizerIterator(void);
-      NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode);
-      ~NormalizerIterator(void);
-      void setText(const UChar* source, int32_t length, UErrorCode& status);
-      void setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status);
-
-      UChar current(void) const;
-      UChar next(void);
-      void reset(void);
-  };
-
   int32_t getStrengthOrder(NormalizerIterator* cursor, 
                                     UErrorCode status) const;
+  VectorOfInt* makeReorderedBuffer(NormalizerIterator* cursor,
+                                   UChar colFirst,
+                                   int32_t lastValue,
+                                   VectorOfInt* lastExpansion) const;
   int32_t strengthOrder(int32_t value) const ;
   int32_t nextContractChar(NormalizerIterator *cursor, 
                            UChar ch,
@@ -823,151 +806,6 @@ private:
   bool_t              dataIsOwned;
   TableCollationData* data;
 };
-
-inline
-RuleBasedCollator::NormalizerIterator::NormalizerIterator() :
-    cursor(0),
-    bufferAlias(0),
-    swapOrder(0),
-    text(0),
-    textLen(0),
-    currentOffset(0),
-    expIndex(0)
-{
-}
-
-inline
-RuleBasedCollator::NormalizerIterator::NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode) :
-    cursor(0),
-    bufferAlias(0),
-    swapOrder(0),
-    text(0),
-    textLen(0),
-    currentOffset(0),
-    expIndex(0)
-{
-    if (mode == Normalizer::NO_OP) {
-        text = (UChar*)source;
-        textLen = length;
-        currentOffset = 0;
-    } else {
-        cursor = new Normalizer(source, length, mode);
-
-    }
-}
-
-inline
-RuleBasedCollator::NormalizerIterator::~NormalizerIterator() 
-{
-    if (cursor != 0) {
-        delete cursor;
-        cursor = 0;
-    }
-}
-
-inline
-void
-RuleBasedCollator::NormalizerIterator::setText(const UChar* source, int32_t length, UErrorCode& status)
-{
-    if (cursor == 0) {
-        text = (UChar*)source;
-        textLen = length;
-        currentOffset = 0;
-
-    } else {
-        text = 0;
-        cursor->setText(source, length, status);
-    }
-    bufferAlias = 0;
-    swapOrder = 0;
-    expIndex = 0;
-    currentOffset = 0;
-}
-
-/* You can only set mode after the comparision of two strings is completed.
-   Setting the mode in the middle of a comparison is not allowed.
-   */
-inline
-void
-
-RuleBasedCollator::NormalizerIterator::setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status)
-{
-    if(mode != Normalizer::NO_OP)
-    {
-        /* DO have a mode -  will need a normalizer object */
-        if(cursor != NULL)
-        {
-            /* Just modify the existing cursor */
-            cursor->setMode(mode);
-	    cursor->setText(source, length, status);
-        }
-        else
-	{
-	  cursor = new Normalizer(source, length, mode);
-	}
-
-        /* RESET the old data */
-        text = 0;
-        textLen = 0;
-    }
-    else 
-    {
-        /* NO_OP mode.. */
-        if(cursor != NULL)
-        { /* get rid of the old cursor */
-            delete cursor; 
-            cursor = 0;
-        }
-
-        text = (UChar*)source;
-        textLen = length;
-    }
-    currentOffset = 0; /* always */
-   
-    bufferAlias = 0;
-    swapOrder = 0;
-    expIndex = 0;
-}
-
-inline
-UChar
-RuleBasedCollator::NormalizerIterator::current(void) const
-{
-    if (text != 0) {
-      if(currentOffset >= textLen)
-	{
-	  return Normalizer::DONE;
-	}
-      else
-	{
-	  return text[currentOffset];
-	}
-    }
-
-    return cursor->current();
-}
-
-
-inline
-UChar
-RuleBasedCollator::NormalizerIterator::next(void)
-{
-    if (text != 0) {
-      return ((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
-    }
-    return cursor->next();
-}
-
-inline
-void
-RuleBasedCollator::NormalizerIterator::reset(void)
-{
-  currentOffset = 0;
-  if(cursor)
-    {
-      cursor->reset();
-    }
-}
 
 inline bool_t
 RuleBasedCollator::operator!=(const Collator& other) const
