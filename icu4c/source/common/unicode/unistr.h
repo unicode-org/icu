@@ -27,12 +27,14 @@
 #include "unicode/ucnv.h"
 #include "unicode/rep.h"
 
-// Size of stack buffer for small strings
-#define US_STACKBUF_SIZE 10
-
 class Locale;
 class UCharReference;
 class UnicodeStringStreamer;
+class UnicodeConverterCPP;
+
+// for unistrm.h
+class ostream;
+U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
 
 /**
  * Unicode String literals in C++.
@@ -59,9 +61,43 @@ class UnicodeStringStreamer;
 #endif
 
 /**
- * UnicodeString is a concrete implementation of the abstract class 
- * UnicodeText.  UnicodeString performs codeset conversion from char*
- * data based on the type of data specified.
+ * UnicodeString is a concrete implementation of the abstract class Replaceable.
+ * It is a string class that stores Unicode characters directly and provides
+ * similar functionality as the Java string class.
+ *
+ * UnicodeString uses four storage models:
+ * <ol>
+ * <li>Short strings are normally stored inside the UnicodeString object itself.
+ *     The object has fields for the "bookkeeping" and a small UChar array.
+ *     When the object is copied, then the internal characters are copied
+ *     into the destination object.</li>
+ * <li>Longer strings are normally stored in allocated memory.
+ *     The allocated UChar array is preceeded by a reference counter.
+ *     When the string object is copied, then the allocated buffer is shared by
+ *     incrementing the reference counter.</li>
+ * <li>A UnicodeString can be constructed or setTo() such that it aliases a read-only
+ *     buffer instead of copying the characters. In this case, the string object
+ *     uses this aliased buffer for as long as it is not modified, and it will never
+ *     attempt to modify or release the buffer. This has copy-on-write semantics:
+ *     When the string object is modified, then the buffer contents is first copied
+ *     into writeable memory (inside the object for short strings, or allocated
+ *     buffer for longer strings). When a UnicodeString with a read-only alias
+ *     is assigned to another UnicodeString, then both string objects will
+ *     share the same read-only alias.</li>
+ * <li>A UnicodeString can be constructed or setTo() such that it aliases a writeable
+ *     buffer instead of copying the characters. The difference from the above is that
+ *     the string object will write through to this aliased buffer for write
+ *     operations. Only when the capacity of the buffer is not sufficient is
+ *     a new buffer allocated and the contents copied.
+ *     An efficient way to get the string contents into the original buffer is
+ *     to use the extract(..., UChar *dst, ...) function: It will only copy the
+ *     string contents if the dst buffer is different from the buffer of the string
+ *     object itself. If a string grows and shrinks during a sequence of operations,
+ *     then it will not use the same buffer any more, but may fit into it again.
+ *     When a UnicodeString with a writeable alias is assigned to another UnicodeString,
+ *     then the contents is always copied. The destination string will not alias
+ *     to the buffer that the source string aliases.</li>
+ * </ol>
  */
 class U_COMMON_API UnicodeString : public Replaceable
 {
@@ -678,6 +714,9 @@ public:
    * Copy the characters in the range 
    * [<tt>start</tt>, <tt>start + length</tt>) into the array <tt>dst</tt>,
    * beginning at <tt>dstStart</tt>.
+   * If the string aliases to <code>dst</code> itself as an external buffer,
+   * then extract() will not copy the contents.
+   *
    * @param start offset of first character which will be copied into the array
    * @param length the number of characters to extract
    * @param dst array in which to copy characters.  The length of <tt>dst</tt>
@@ -843,23 +882,6 @@ public:
 
   /**
    * Set the characters in the UnicodeString object to the characters
-   * in <TT>srcChars</TT> in the range 
-   * [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>).
-   * <TT>srcChars</TT> is not modified.
-   * @param srcChars the source for the new characters
-   * @param srcStart the offset into <TT>srcChars</TT> where new characters 
-   * will be obtained
-   * @param srcLength the number of characters in <TT>srcChars</TT> in the 
-   * replace string
-   * @return a reference to this
-   * @stable
-   */
-  inline UnicodeString& setTo(const UChar *srcChars, 
-               UTextOffset srcStart, 
-               int32_t srcLength);
-
-  /**
-   * Set the characters in the UnicodeString object to the characters
    * in <TT>srcChars</TT>. <TT>srcChars</TT> is not modified.
    * @param srcChars the source for the new characters
    * @param srcLength the number of Unicode characters in srcChars.
@@ -878,6 +900,51 @@ public:
    * @draft
    */
   UnicodeString& setTo(UChar srcChar);
+
+  /**
+   * Aliasing setTo() function, analogous to the readonly-aliasing UChar* constructor.
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   * In an assignment to another UnicodeString, the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
+   *
+   * @param isTerminated specifies if <code>text</code> is <code>NUL</code>-terminated.
+   *                     This must be true if <code>textLength==-1</code>.
+   * @param text The characters to alias for the UnicodeString.
+   * @param textLength The number of Unicode characters in <code>text</code> to alias.
+   *                   If -1, then this constructor will determine the length
+   *                   by calling <code>u_strlen()</code>.
+   * @draft
+   */
+  UnicodeString &setTo(bool_t isTerminated,
+                       const UChar *text,
+                       int32_t textLength);
+
+  /**
+   * Aliasing setTo() function, analogous to the writeable-aliasing UChar* constructor.
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has write-through semantics:
+   * For as long as the capacity of the buffer is sufficient, write operations
+   * will directly affect the buffer. When more capacity is necessary, then
+   * a new buffer will be allocated and the contents copied as with regularly
+   * constructed strings.
+   * In an assignment to another UnicodeString, the buffer will be copied.
+   * The extract(UChar *dst) function detects whether the dst pointer is the same
+   * as the string buffer itself and will in this case not copy the contents.
+   *
+   * @param buffer The characters to alias for the UnicodeString.
+   * @param buffLength The number of Unicode characters in <code>buffer</code> to alias.
+   * @param buffCapacity The size of <code>buffer</code> in UChars.
+   * @draft
+   */
+  UnicodeString &setTo(UChar *buffer,
+                       int32_t buffLength,
+                       int32_t buffCapacity);
 
   /**
    * Set the character at the specified offset to the specified character.
@@ -1426,12 +1493,15 @@ public:
         int32_t textLength);
 
   /**
-   * Aliasing UChar* constructor.
-   * The text will be used for the new UnicodeString object, but
+   * Readonly-aliasing UChar* constructor.
+   * The text will be used for the UnicodeString object, but
    * it will not be released when the UnicodeString is destroyed.
-   * Be careful not to attempt to modify the contents of the UnicodeString
-   * if the text is read-only. Operations that allocate an entirely
-   * new buffer are harmless.
+   * This has copy-on-write semantics:
+   * When the string is modified, then the buffer is first copied into
+   * newly allocated memory.
+   * The aliased buffer is never modified.
+   * In an assignment to another UnicodeString, the text will be aliased again,
+   * so that both strings then alias the same readonly-text.
    *
    * @param isTerminated specifies if <code>text</code> is <code>NUL</code>-terminated.
    *                     This must be true if <code>textLength==-1</code>.
@@ -1444,6 +1514,26 @@ public:
   UnicodeString(bool_t isTerminated,
                 UChar *text,
                 int32_t textLength);
+
+  /**
+   * Writeable-aliasing UChar* constructor.
+   * The text will be used for the UnicodeString object, but
+   * it will not be released when the UnicodeString is destroyed.
+   * This has write-through semantics:
+   * For as long as the capacity of the buffer is sufficient, write operations
+   * will directly affect the buffer. When more capacity is necessary, then
+   * a new buffer will be allocated and the contents copied as with regularly
+   * constructed strings.
+   * In an assignment to another UnicodeString, the buffer will be copied.
+   * The extract(UChar *dst) function detects whether the dst pointer is the same
+   * as the string buffer itself and will in this case not copy the contents.
+   *
+   * @param buffer The characters to alias for the UnicodeString.
+   * @param buffLength The number of Unicode characters in <code>buffer</code> to alias.
+   * @param buffCapacity The size of <code>buffer</code> in UChars.
+   * @draft
+   */
+  UnicodeString(UChar *buffer, int32_t buffLength, int32_t buffCapacity);
 
   /**
    * char* constructor.
@@ -1480,7 +1570,7 @@ public:
    * @param that The UnicodeString object to copy.
    * @stable
    */
-  inline UnicodeString(const UnicodeString& that);
+  UnicodeString(const UnicodeString& that);
 
   /** Destructor. 
    * @stable
@@ -1518,24 +1608,6 @@ public:
 
 
   UCharReference operator[] (UTextOffset pos);
-
-  // {sfb} remove these later?
-  /* Hack to avoid circular dependencies */
-
-  /**
-   * Convert the characters in this to UPPER CASE following the conventions of
-   * the default locale.
-   * @retrurn A reference to this.
-   */
-  // UnicodeString& toUpper();
-
-  /**
-   * Convert the characters in this to lower case following the conventions of
-   * the default locale.
-   * @retrurn A reference to this.
-   */
-  // UnicodeString& toLower();
-
 
   //========================================
   // Implementation methods
@@ -1575,9 +1647,6 @@ private:
   
   inline UChar doCharAt(UTextOffset offset)  const;
 
-  UnicodeString& doSetCharAt(UTextOffset offset,
-                 UChar c);
-
   UnicodeString& doReplace(UTextOffset start, 
                int32_t length, 
                const UnicodeString& srcText, 
@@ -1603,6 +1672,15 @@ private:
   // get the "real" capacity of the array, adjusted for ref count
   inline int32_t getCapacity(void) const;
 
+  // allocate the array; result may be fStackBuffer
+  // sets refCount to 1 if appropriate
+  // sets fArray, fCapacity, and fFlags
+  // returns boolean for success or failure
+  bool_t allocate(int32_t capacity);
+
+  // release the array if owned
+  inline void releaseArray();
+
   // utility method to get around lack of exception handling
   void setToBogus(void);
 
@@ -1621,36 +1699,53 @@ private:
    * subset ("invariant characters") of the platform encoding. See utypes.h.
    */
   void doCodepageCreate(const char *codepageData,
-            int32_t dataLength,
-            const char *codepage);
+                        int32_t dataLength,
+                        const char *codepage);
 
-  // clones array if refCount > 1
-  void cloneArrayIfNeeded(void);
+  /*
+   * This function is called when write access to the array
+   * is necessary.
+   *
+   * We need to make a copy of the array if
+   * the buffer is read-only, or
+   * the buffer is refCounted (shared), and refCount>1, or
+   * the buffer is too small.
+   *
+   * Return FALSE if memory could not be allocated.
+   */
+  bool_t cloneArrayIfNeeded(int32_t newCapacity = -1,
+                            int32_t growCapacity = -1,
+                            bool_t doCopyArray = TRUE,
+                            int32_t **pBufferToDelete = 0);
 
   // ref counting
-  inline uint16_t addRef(void);
-  inline uint16_t removeRef(void);
-  inline uint16_t refCount(void) const;
-  inline uint16_t setRefCount(uint16_t count);
-
-  UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
-  UChar     *fArray;        // the Unicode data
-  int32_t   fLength;        // number characters in fArray
-  int32_t   fCapacity;      // sizeof fArray
-  int32_t   fHashCode;      // the hash code
-  bool_t    fRefCounted;    // indicates if we own storage
-  bool_t    fBogus;         // indicates if an operation failed
+  inline int32_t addRef(void);
+  inline int32_t removeRef(void);
+  inline int32_t refCount(void) const;
+  inline int32_t setRefCount(int32_t count);
 
   // constants
-  static const UChar fgInvalidUChar; // invalid UChar index
-  static const int32_t kGrowSize; // grow size for this buffer
-  static const int32_t kInvalidHashCode; // invalid hash code
-  static const int32_t kEmptyHashCode; // hash code for empty string
-  
+  enum {
+    US_STACKBUF_SIZE=9, // Size of stack buffer for small strings
+    kInvalidUChar=0xffff, // invalid UChar index
+    kGrowSize=128, // grow size for this buffer
+    kInvalidHashCode=0, // invalid hash code
+    kEmptyHashCode=1, // hash code for empty string
+
+    // bit flag values for fFlags
+    kIsBogus=1, // this string is bogus, i.e., not valid
+    kUsingStackBuffer=2, // fArray==fStackBuffer
+    kRefCounted=4, // there is a refCount field before the characters in fArray
+    kBufferIsReadonly=8, // do not write to this buffer
+
+    // combined values for convenience
+    kShortString=kUsingStackBuffer,
+    kLongString=kRefCounted,
+    kReadonlyAlias=kBufferIsReadonly,
+    kWriteableAlias=0
+  };
+
   // statics
-  inline static int32_t allocation(int32_t minSize); // allocation algorithm
-  inline static UChar* allocate(int32_t minSize, // allocate buffer >= minSize
-             int32_t& actualSize);
 
   // default converter cache
   static UConverter* getDefaultConverter(UErrorCode& status);
@@ -1659,6 +1754,27 @@ private:
   static UConverter *fgDefaultConverter;
 
   friend class UnicodeStringStreamer;
+  friend class UnicodeConverterCPP;
+  friend U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
+
+  /*
+   * The following are all the class fields that are stored
+   * in each UnicodeString object.
+   * Note that UnicodeString has virtual functions,
+   * therefore there is an implicit vtable pointer
+   * as the first real field.
+   * The fields should be aligned such that no padding is
+   * necessary, mostly by having larger types first.
+   * On 32-bit machines, the size should be 40 bytes,
+   * on 64-bit machines (8-byte pointers), it should be 48 bytes.
+   */
+  // (implicit) *vtable;
+  UChar     *fArray;        // the Unicode data
+  int32_t   fLength;        // number characters in fArray
+  int32_t   fCapacity;      // sizeof fArray
+  int32_t   fHashCode;      // the hash code
+  uint16_t  fFlags;         // bit flags: see constants above
+  UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 
 public:
 
@@ -1684,19 +1800,11 @@ public:
    /* @deprecated */
   inline void operator delete(void *location);
 
-
   //========================================
   // Non-public API - will be removed!
   //========================================
-   /* @deprecated */
-  UnicodeString(UChar *buff, int32_t bufLength, int32_t buffCapacity);
-   /* @deprecated */
-  const UChar* getUChars(void) const;
-   /* @deprecated */
-  inline const UChar* getUniChars(void) const;
-   /* @deprecated */
-  UChar* orphanStorage(void);
-
+  /* @deprecated */
+  const UChar* getUChars() const;
 };
 
 //========================================
@@ -1716,12 +1824,6 @@ uprv_arrayCopy(const UnicodeString *src, int32_t srcStart,
 //========================================
 // Inline members
 //========================================
-inline 
-UnicodeString::UnicodeString(const UnicodeString& that)
-  : fArray(fStackBuffer), fLength(0), fCapacity(US_STACKBUF_SIZE),
-    fRefCounted(FALSE), fHashCode(kEmptyHashCode), fBogus(FALSE)
-{ *this = that; }
-
 
 //========================================
 // Read-only alias methods
@@ -2089,10 +2191,10 @@ UnicodeString::extractBetween(UTextOffset start,
 inline UChar
 UnicodeString::doCharAt(UTextOffset offset) const
 {
-  if(offset < 0 || offset >= fLength) 
-    return fgInvalidUChar;
-  // in ref-counted implementation, first char is ref count
-  return fArray[ fRefCounted ? offset + 1 : offset ];
+  if(offset < 0 || offset >= fLength) {
+    return kInvalidUChar;
+  }
+  return fArray[ offset ];
 }
 
 inline UChar
@@ -2136,11 +2238,13 @@ inline UnicodeString&
 UnicodeString::setTo(const UnicodeString& srcText)
 { return doReplace(0, fLength, srcText, 0, srcText.fLength); }
 
+#if 0
 inline UnicodeString& 
 UnicodeString::setTo(const UChar *srcChars, 
              UTextOffset srcStart, 
              int32_t srcLength)
 { return doReplace(0, fLength, srcChars, srcStart, srcLength); }
+#endif
 
 inline UnicodeString& 
 UnicodeString::setTo(const UChar *srcChars,
@@ -2311,7 +2415,7 @@ UnicodeString::reverse(UTextOffset start,
 //========================================
 inline bool_t 
 UnicodeString::isBogus() const
-{ return fBogus; }
+{ return fFlags & kIsBogus; }
 
 
 //========================================
@@ -2320,41 +2424,44 @@ UnicodeString::isBogus() const
 
 inline UChar* 
 UnicodeString::getArrayStart()
-{ return (fRefCounted ? fArray + 1 : fArray); }
+{ return fArray; }
 
 inline const UChar* 
 UnicodeString::getArrayStart() const
-{ return (fRefCounted ? fArray + 1 : fArray); }
+{ return fArray; }
 
 inline int32_t 
 UnicodeString::getCapacity() const
-{ return (fRefCounted ? fCapacity - 1 : fCapacity); }
+{ return fCapacity; }
 
-inline uint16_t
+inline void
+UnicodeString::releaseArray() {
+  if((fFlags & kRefCounted) && removeRef() == 0) {
+    delete [] ((int32_t *)fArray - 1);
+  }
+}
+
+inline int32_t
 UnicodeString::addRef()
-{ return ++(fArray[0]); }
+{ return ++*((int32_t *)fArray - 1); }
 
-inline uint16_t
+inline int32_t
 UnicodeString::removeRef()
-{ return --(fArray[0]); }
+{ return --*((int32_t *)fArray - 1); }
 
-inline uint16_t
+inline int32_t
 UnicodeString::refCount() const
-{ return fArray[0]; }
+{ return *((int32_t *)fArray - 1); }
 
-inline uint16_t
-UnicodeString::setRefCount(uint16_t count)
-{ fRefCounted = TRUE; return (fArray[0] = count); }
+inline int32_t
+UnicodeString::setRefCount(int32_t count)
+{ return (*((int32_t *)fArray - 1) = count); }
 
 
 // deprecated API - remove later
 inline int32_t
 UnicodeString::size() const
 { return fLength; }
-
-inline const UChar*
-UnicodeString::getUniChars() const
-{ return getUChars(); }
 
 inline UnicodeString& 
 UnicodeString::findAndReplace(const UnicodeString& oldText,
@@ -2380,14 +2487,6 @@ UnicodeString::operator delete(void *location)
 //========================================
 // Static members
 //========================================
-inline int32_t
-UnicodeString::allocation(int32_t minSize)
-{ return minSize < kGrowSize ? kGrowSize 
-    : (minSize * 2 + kGrowSize) & ~(kGrowSize - 1); }
-
-inline UChar*
-UnicodeString::allocate(int32_t minSize, int32_t& actualSize)
-{ actualSize = allocation(minSize); return new UChar[ actualSize ]; }
 
 //========================================
 // class UCharReference
@@ -2442,6 +2541,3 @@ UCharReference::operator UChar()
 { return fString->charAt(fPos); }
 
 #endif
-
-
-
