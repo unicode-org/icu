@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
+ * $Date: 2000/03/10 04:07:19 $ 
+ * $Revision: 1.8 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 import com.ibm.util.Utility;
 import java.util.Enumeration;
@@ -23,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/02/10 07:36:25 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/03/10 04:07:19 $
  */
 public class CompoundTransliterator extends Transliterator {
 

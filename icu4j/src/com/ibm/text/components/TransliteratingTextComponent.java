@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
+ * $Date: 2000/03/10 04:07:26 $ 
+ * $Revision: 1.3 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text.components;
 
 import java.awt.*;
@@ -13,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.2 $ $Date: 2000/02/24 19:51:20 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.3 $ $Date: 2000/03/10 04:07:26 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 

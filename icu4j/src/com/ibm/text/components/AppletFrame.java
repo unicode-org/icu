@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/AppletFrame.java,v $ 
+ * $Date: 2000/03/10 04:07:26 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text.components;
 import java.applet.*;
 import java.net.URL;
@@ -22,7 +34,7 @@ import java.awt.event.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.2 $ $Date: 2000/03/10 04:07:26 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 

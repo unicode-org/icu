@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
+ * $Date: 2000/03/10 04:07:23 $ 
+ * $Revision: 1.17 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.text;
 
 import java.util.Hashtable;
@@ -197,9 +209,12 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.16 $ $Date: 2000/02/24 20:46:49 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.17 $ $Date: 2000/03/10 04:07:23 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.17  2000/03/10 04:07:23  johnf
+ * Copyright update
+ *
  * Revision 1.16  2000/02/24 20:46:49  liu
  * Add infinite loop check
  *

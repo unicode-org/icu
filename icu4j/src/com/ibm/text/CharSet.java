@@ -1,43 +1,14 @@
 /*
- * ===========================================================================
- * IBM Confidential
- * OCO Source Materials
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * IBM Java(tm)2 SDK, Standard Edition, v 1.2
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CharSet.java,v $ 
+ * $Date: 2000/03/10 04:07:18 $ 
+ * $Revision: 1.2 $
  *
- * (C) Copyright IBM Corp. 1999
- *
- * The source code for this program is not published or otherwise divested of
- * its trade secrets, irrespective of what has been deposited with the U.S.
- * Copyright office.
- * ===========================================================================
- * Change activity:
- *
- * Reason  Date   Origin  Description
- * ------  ----   ------  ----------------------------------------------------
- *         270799         New file.
- * ===========================================================================
- * Module Information:
- *
- * DESCRIPTION: Hindi, Thai, and Bidi enhancements.
- * ===========================================================================
- */
-
-//ibm.597
-/*
- * @(#)CharSet.java	1.1 99/02/18
- *
- * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
- *
- * The original version of this source code and documentation
- * is copyrighted and owned by Taligent, Inc., a wholly-owned
- * subsidiary of IBM. These materials are provided under terms
- * of a License Agreement between Taligent and Sun. This technology
- * is protected by multiple US and International patents.
- *
- * This notice and attribution to Taligent may not be removed.
- * Taligent is a registered trademark of Taligent, Inc.
+ *****************************************************************************************
  */
 package com.ibm.text;
 

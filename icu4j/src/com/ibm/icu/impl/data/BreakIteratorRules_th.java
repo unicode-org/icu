@@ -1,27 +1,14 @@
 /*
- * @(#)src/i18n/sov/java/text/resources/BreakIteratorRules_th.java, asdev, asdev, asdev-19991007 1.1
- * ===========================================================================
- * IBM Confidential
- * OCO Source Materials
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * IBM Java(tm)2 SDK, Standard Edition, v 1.2
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules_th.java,v $ 
+ * $Date: 2000/03/10 04:07:26 $ 
+ * $Revision: 1.2 $
  *
- * (C) Copyright IBM Corp. 1999
- *
- * The source code for this program is not published or otherwise divested of
- * its trade secrets, irrespective of what has been deposited with the U.S.
- * Copyright office.
- * ===========================================================================
- * Change activity:
- *
- * Reason  Date   Origin  Description
- * ------  ----   ------  ----------------------------------------------------
- *         270799         New file.
- * ===========================================================================
- * Module Information:
- *
- * DESCRIPTION: Hindi, Thai, and Bidi enhancements.
- * ===========================================================================
+ *****************************************************************************************
  */
 package com.ibm.text.resources;
 

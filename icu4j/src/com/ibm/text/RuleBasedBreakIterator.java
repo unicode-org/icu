@@ -1,27 +1,16 @@
 /*
- * ===========================================================================
- * IBM Confidential
- * OCO Source Materials
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
  *
- * IBM Java(tm)2 SDK, Standard Edition, v 1.2
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedBreakIterator.java,v $ 
+ * $Date: 2000/03/10 04:07:22 $ 
+ * $Revision: 1.5 $
  *
- * (C) Copyright IBM Corp. 1999
- *
- * The source code for this program is not published or otherwise divested of
- * its trade secrets, irrespective of what has been deposited with the U.S.
- * Copyright office.
- * ===========================================================================
- * Change activity:
- *
- * Reason  Date   Origin  Description
- * ------  ----   ------  ----------------------------------------------------
- *         270799         New file.
- * ===========================================================================
- * Module Information:
- *
- * DESCRIPTION: Hindi, Thai, and Bidi enhancements.
- * ===========================================================================
+ *****************************************************************************************
  */
+
 
 //ibm.597
 /*
@@ -251,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.4 $ $Date: 2000/03/08 23:56:21 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.5 $ $Date: 2000/03/10 04:07:22 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
