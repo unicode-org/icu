@@ -348,11 +348,7 @@ U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
-             1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
-             1UL<<U_NON_SPACING_MARK|1UL<<U_ENCLOSING_MARK|1UL<<U_COMBINING_SPACING_MARK)
-           )!=0);
+    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_N_MASK|U_GC_MC_MASK|U_GC_ME_MASK))!=0);
 }
 
 /* Checks if the Unicode character is a control character.*/
@@ -409,6 +405,7 @@ U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
+    /* ### TODO comparing ==0 returns FALSE for the categories mentioned */
     return (UBool)(
             ((1UL<<GET_CATEGORY(props))&
             ~(1UL<<U_UNASSIGNED|
