@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/10/06 23:06:53 $ 
- * $Revision: 1.26 $
+ * $Date: 2001/02/08 18:53:01 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -667,10 +667,15 @@ public class TransliteratorTest extends TestFmwk {
      * Test inter-Indic transliterators.  These are composed.
      */
     public void TestInterIndic() {
-        Transliterator dg = Transliterator.getInstance("Devanagari-Gujarati");
+        String ID = "Devanagari-Gujarati";
+        Transliterator dg = Transliterator.getInstance(ID);
         if (dg == null) {
-            errln("FAIL: getInstance(Devanagari-Gujarati) returned null");
+            errln("FAIL: getInstance(" + ID + ") returned null");
             return;
+        }
+        String id = dg.getID();
+        if (!id.equals(ID)) {
+            errln("FAIL: getInstance(" + ID + ").getID() => " + id);
         }
         String dev = "\u0901\u090B\u0925";
         String guj = "\u0A81\u0A8B\u0AA5";
