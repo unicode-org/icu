@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/07/17 21:13:23 $ 
-* $Revision: 1.32 $
+* $Date: 2003/07/22 20:21:32 $ 
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -1209,7 +1209,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public static boolean isRuleWhiteSpace(int c) 
     {
-        // "white space" in the sense of ICU rule parsers: Cf+White_Space
+        // "white space" in the sense of ICU rule parsers: White_Space + 
+        // left/right mark
         UCharacterProperty property = UCharacterProperty.getInstance();
         return property.hasBinaryProperty(c, UProperty.WHITE_SPACE) 
                || c == LEFT_RIGHT_MARK_ || c == RIGHT_LEFT_MARK_;
