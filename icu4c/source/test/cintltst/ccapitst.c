@@ -217,6 +217,12 @@ void TestConvert()
     log_verbose("\n---Testing ucnv_getAvailableName..");  /*need to check this out */
     
     available_conv = ucnv_getAvailableName(testLong1);
+       /*test ucnv_getAvailableName with err condition*/
+    log_verbose("\n---Testing ucnv_getAvailableName..with index < 0 ");
+    available_conv = ucnv_getAvailableName(-1);
+    if(available_conv != NULL){
+        log_err("ucnv_getAvailableName() with index < 0) should return NULL\n");
+    }
     
     /* Test ucnv_countAliases() etc. */
     count = ucnv_countAliases("utf-8", &err);
@@ -269,6 +275,91 @@ void TestConvert()
             }
         }
     }
+     /*Testing ucnv_openU()*/
+    {
+        UChar converterName[]={ 0x0069, 0x0062, 0x006d, 0x002d, 0x0039, 0x0034, 0x0033, 0x0000}; /*ibm-943*/
+        const char *illegalNameChars={ "ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943"};
+        UChar illegalName[100];
+        UConverter *converter=NULL;
+        err=U_ZERO_ERROR;
+        converter=ucnv_openU(converterName, &err);
+        if(U_FAILURE(err)){
+            log_err("FAILURE! ucnv_openU(ibm-943, err) failed. %s\n", myErrorName(err));
+        }
+        ucnv_close(converter);
+        err=U_ZERO_ERROR;
+        converter=ucnv_openU(NULL, &err);
+        if(U_FAILURE(err)){
+            log_err("FAILURE! ucnv_openU(NULL, err)  failed. %s\n", myErrorName(err));
+        }
+        ucnv_close(converter);
+        /*testing with error value*/
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        converter=ucnv_openU(converterName, &err);
+        if(!(converter == NULL)){
+            log_err("FAILURE! ucnv_openU(ibm-943, U_ILLEGAL_ARGUMENT_ERROR) is expected to fail\n");
+        }
+        ucnv_close(converter);
+        err=U_ZERO_ERROR;
+        u_uastrcpy(illegalName, "");
+        u_uastrcpy(illegalName, illegalNameChars);
+        ucnv_openU(illegalName, &err);
+        if(!(err==U_ILLEGAL_ARGUMENT_ERROR)){
+            log_err("FAILURE! ucnv_openU(illegalName, err) is expected to fail\n");
+        }
+        err=U_ZERO_ERROR;
+      
+    }
+      /*Testing ucnv_convert()*/
+    {
+        int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
+        const char source[]={ (char)0x00, (char)0x04, (char)0x05, (char)0x06, (char)0xa2, (char)0xb4, (char)0x00};
+        const char expectedTarget[]={ (char)0x00, (char)0x37, (char)0x2d, (char)0x2e, (char)0x0e, (char)0x49, (char)0x62, (char)0x0f, (char)0x00};
+        char *target;
+        sourceLimit=sizeof(source)/sizeof(source[0]);
+        err=U_ZERO_ERROR;
+        targetLimit=0;
+            
+        targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", NULL, targetLimit , source, sourceLimit, &err);
+        if(err = U_BUFFER_OVERFLOW_ERROR){
+            err=U_ZERO_ERROR;
+            targetLimit=targetCapacity+1;
+            target=(char*)malloc(sizeof(char) * targetLimit);
+            targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+            if(U_FAILURE(err)){
+                log_err("FAILURE! ucnv_convert(ibm-1363->ibm-1364) failed. %s\n", myErrorName(err));
+            }
+        }
+        for(i=0; i<targetCapacity; i++){
+            if(target[i] != expectedTarget[i]){
+                log_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
+            }
+        }
+        /*Test error conditions*/
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, 0, &err);
+        if(i !=0){
+            log_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
+        }
+        ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, -1, &err);
+        if(!(U_FAILURE(err) && err==U_ILLEGAL_ARGUMENT_ERROR)){
+            log_err("FAILURE! ucnv_convert() with sourceLimit=-1 is expected to fail\n");
+        }
+        sourceLimit=sizeof(source)/sizeof(source[0]);
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+        if(i !=0 ){
+            log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
+        }
+        err=U_ZERO_ERROR;
+        sourceLimit=sizeof(source)/sizeof(source[0]);
+        targetLimit=0;
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+        if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
+            log_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
+        }
+        err=U_ZERO_ERROR;
+        free(target);
+        ucnv_flushCache();
+    }
 
     /*Testing ucnv_open()*/
 
@@ -286,6 +377,9 @@ void TestConvert()
     
     someConverters[4] = ucnv_open("ibm-943", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err));}
+
+    
+
     
     /* Testing ucnv_flushCache() */
     log_verbose("\n---Testing ucnv_flushCache...\n");
@@ -311,6 +405,16 @@ void TestConvert()
     else 
         log_err("Flush Cache failed\n");
 
+    /*Testing ucnv_openCCSID and ucnv_open with error conditions*/
+    log_verbose("\n---Testing ucnv_open with err ! = U_ZERO_ERROR...\n");
+    err=U_ILLEGAL_ARGUMENT_ERROR;
+    if(ucnv_open(NULL, &err) != NULL){
+        log_err("ucnv_open with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    if(ucnv_openCCSID(1051, UCNV_IBM, &err) != NULL){
+        log_err("ucnv_open with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    err=U_ZERO_ERROR;
     
     /* Testing ucnv_openCCSID(), ucnv_open(), ucnv_getName() */
     log_verbose("\n---Testing ucnv_open default...\n");
@@ -321,7 +425,7 @@ void TestConvert()
     ucnv_close(ucnv_openCCSID(1051, UCNV_IBM, &err)); /* test for j350; ucnv_close(NULL) is safe */
     if (U_FAILURE(err)){ log_err("FAILURE! %s\n", myErrorName(err));}
     
-    /* Testing ucnv_getName()*/
+     /* Testing ucnv_getName()*/
     /*default code page */
     ucnv_getName(someConverters[0], &err);
     if(U_FAILURE(err)) {
@@ -337,23 +441,26 @@ void TestConvert()
     }
 
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
-    log_verbose("getDefaultName returned %s\n", ucnv_getDefaultName());
+    {
+        const char* defaultName=ucnv_getDefaultName();
+        log_verbose("getDefaultName returned %s\n", defaultName);
    
-    /*change the default name by setting it */
-    ucnv_setDefaultName("changed");
-    if(strcmp(ucnv_getDefaultName(), "changed")==0)
-      log_verbose("setDefaultName o.k");
-    else
-      log_err("setDefaultName failed");  
+        /*change the default name by setting it */
+        ucnv_setDefaultName("changed");
+        if(strcmp(ucnv_getDefaultName(), "changed")==0)
+            log_verbose("setDefaultName o.k");
+        else
+            log_err("setDefaultName failed");  
+        /*set the default name back*/
+        ucnv_setDefaultName(defaultName);
+    }
     
-    ucnv_close(someConverters[0]);
-     ucnv_close(someConverters[1]);
-    ucnv_close(someConverters[2]);
-    ucnv_close(someConverters[3]);   
+        ucnv_close(someConverters[0]);
+        ucnv_close(someConverters[1]);
+        ucnv_close(someConverters[2]);
+        ucnv_close(someConverters[3]);   
     
-    
-   
-    
+       
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; ++codepage_index)
     {
         i = 0;  
@@ -393,7 +500,18 @@ void TestConvert()
         log_err("getName failed\n");
     else 
         log_verbose("getName ok\n");
-    
+    /*Test getName with error condition*/
+    { 
+        const char* name=0;
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        log_verbose("Testing ucnv_getName with err != U_ZERO_ERROR");
+        name=ucnv_getName(myConverter, &err);
+        if(name != NULL){
+            log_err("ucnv_getName() with err != U_ZERO_ERROR is expected to fail");
+        }
+        err=U_ZERO_ERROR;
+    }
+
     
     /*Tests ucnv_getMaxCharSize() and ucnv_getMinCharSize()*/
     
@@ -435,15 +553,60 @@ void TestConvert()
     else 
         log_verbose("Saved substitution character ok\n");
     
-    
-    
-    
-    
+    /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars() with error conditions*/ 
+    log_verbose("\n---Testing ucnv_getSubstChars.. with len < minBytesPerChar\n");
+    ii=1;
+    ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+    if(err != U_INDEX_OUTOFBOUNDS_ERROR){
+        log_err("ucnv_getSubstChars() with len < minBytesPerChar should throw U_INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(err));
+    }
+    err=U_ZERO_ERROR;
+    ii=4;
+    ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+    log_verbose("\n---Testing ucnv_setSubstChars.. with len < minBytesPerChar\n");
+    ucnv_setSubstChars(myConverter, myptr, 0, &err);
+    if(err != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ucnv_setSubstChars() with len < minBytesPerChar should throw U_ILLEGAL_ARGUMENT_ERROR Got %s\n", myErrorName(err));
+    }
+    log_verbose("\n---Testing ucnv_setSubstChars.. with err != U_ZERO_ERROR \n");
+    strcpy(myptr, "abc");
+    ucnv_setSubstChars(myConverter, myptr, ii, &err);
+    err=U_ZERO_ERROR;
+    ucnv_getSubstChars(myConverter, save, &ii, &err);
+    if(strncmp(save, myptr, ii) == 0){
+        log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't set the SubstChars and just return\n");
+    }
+    log_verbose("\n---Testing ucnv_getSubstChars.. with err != U_ZERO_ERROR \n");
+    err=U_ZERO_ERROR;
+    strcpy(myptr, "abc");
+    ucnv_setSubstChars(myConverter, myptr, ii, &err);
+    err=U_ILLEGAL_ARGUMENT_ERROR;
+    ucnv_getSubstChars(myConverter, save, &ii, &err);
+    if(strncmp(save, myptr, ii) == 0){
+        log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't fill the SubstChars in the buffer, it just returns\n");
+    }
+    err=U_ZERO_ERROR;
+    /*------*/
     
     /*resetState  ucnv_reset()*/
     log_verbose("\n---Testing ucnv_reset()..\n");
     ucnv_reset(myConverter);
-    
+    {
+         UChar32 c;
+         const uint8_t in[]={  0x1b, 0x25, 0x42, 0x31, 0x32, 0x61, 0xc0, 0x80, 0xe0, 0x80, 0x80, 0xf0, 0x80, 0x80, 0x80};
+         const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+         UConverter *cnv=ucnv_open("iso-2022", &err);
+         if(U_FAILURE(err)) {
+            log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
+         }
+         c=ucnv_getNextUChar(cnv, &source, limit, &err);
+         if(U_FAILURE(err) || c != (UChar32)0x0031) {
+            log_err("ucnv_getNextUChar() failed: %s\n", u_errorName(err));
+         }
+         ucnv_reset(cnv);
+         ucnv_close(cnv);
+         
+    }
     
     /*getDisplayName*/
     log_verbose("\n---Testing ucnv_getDisplayName()...\n");
@@ -463,10 +626,16 @@ void TestConvert()
          else
            log_verbose(" getDisplayName o.k.\n");
       }
+     /*test ucnv_getDiaplayName with error condition*/
+     log_verbose("\n---Testing ucnv_getDisplayName()...\n");
+     err= U_ILLEGAL_ARGUMENT_ERROR;
+     len=ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);  
+     if( len !=0 ){
+           log_err("ucnv_getDisplayName() with err != U_ZERO_ERROR is supposed to return 0\n");
+     }
+     err=U_ZERO_ERROR;
     
-
-    
-    /* testing getMissingUnicodeAction and setMissingUnicodeAction */
+    /* testing ucnv_setFromUCallBack() and ucnv_getFromUCallBack()*/
     MIA1 = ucnv_getFromUCallBack(myConverter);
             
     log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
@@ -488,10 +657,18 @@ void TestConvert()
         log_err("get From UCallBack action failed\n");
     else 
         log_verbose("get From UCallBack action ok\n");
-
+    
+    /*testing ucnv_setToUCallBack with error conditions*/
+    err=U_ILLEGAL_ARGUMENT_ERROR;
+    log_verbose("\n---Testing setFromUCallBack. with err != U_ZERO_ERROR..\n");
+    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, &oldFromUAction, &oldFromUContext, &err);
+    if(ucnv_getFromUCallBack(myConverter) == otherUnicodeAction(MIA1)){
+        log_err("To setFromUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    err=U_ZERO_ERROR;
 
     
-    /*testin ucnv_setMissingCharAction() and ucnv_getMissingCharAction()*/
+    /*testing ucnv_setToUCallBack() and ucnv_getToUCallBack()*/
     MIA2 = ucnv_getToUCallBack(myConverter);
     
     log_verbose("\n---Testing setTo UCallBack...\n");
@@ -514,6 +691,15 @@ void TestConvert()
     else 
         log_verbose("To UCallBack ok\n");
 
+    /*testing ucnv_setToUCallBack with error conditions*/
+    err=U_ILLEGAL_ARGUMENT_ERROR;
+    log_verbose("\n---Testing setToUCallBack. with err != U_ZERO_ERROR..\n");
+    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, &oldToUAction, &oldToUContext, &err);
+    if (ucnv_getToUCallBack(myConverter) == otherCharAction(MIA2)){ 
+        log_err("To setToUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    err=U_ZERO_ERROR;
+
 
     /*getcodepageid testing ucnv_getCCSID() */
     log_verbose("\n----Testing getCCSID....\n");
@@ -527,7 +713,12 @@ void TestConvert()
     else 
         log_verbose("Codepage number test OK\n");
     
-
+    /*testing ucnv_getCCSID() with err != U_ZERO_ERROR*/
+    err=U_ILLEGAL_ARGUMENT_ERROR;
+    if( ucnv_getCCSID(myConverter,&err) != -1){
+        log_err("ucnv_getCCSID() with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    err=U_ZERO_ERROR;
     
     /*getCodepagePlatform testing ucnv_getPlatform()*/
     log_verbose("\n---Testing getCodepagePlatform ..\n");
@@ -540,8 +731,13 @@ void TestConvert()
     { 
         log_err("FAILURE! %s\n", myErrorName(err));
     }
-
-
+    /*testing ucnv_getPlatform() with err != U_ZERO_ERROR*/
+    err= U_ILLEGAL_ARGUMENT_ERROR;
+    if(ucnv_getPlatform(myConverter, &err) != UCNV_UNKNOWN){
+        log_err("ucnv)getPlatform with err != U_ZERO_ERROR is supposed to fail\n");
+    }
+    err=U_ZERO_ERROR;
+    
      
     /*Reads the BOM*/
         fread(&BOM, sizeof(UChar), 1, ucs_file_in);
@@ -623,7 +819,54 @@ void TestConvert()
     {
       log_err("ERR: calling toUChars: Didn't get U_BUFFER_OVERFLOW .. expected it.\n");
     }
-    
+     /*Testing ucnv_fromUChars and ucnv_toUChars wwith error conditions*/
+      err=U_ILLEGAL_ARGUMENT_ERROR;
+      log_verbose("\n---Testing ucnv_fromUChars() with err != U_ZERO_ERROR\n");
+      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
+      if (targetcapacity !=0) {
+            log_err("\nFAILURE: ucnv_fromUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
+      }
+      err=U_ZERO_ERROR;
+      log_verbose("\n---Testing ucnv_fromUChars() with converter=NULL\n");
+      targetcapacity = ucnv_fromUChars(NULL, output_cp_buffer, testLong1,  uchar1, -1, &err);
+      if (targetcapacity !=0 || err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("\nFAILURE: ucnv_fromUChars with converter=NULL is expected to fail\n");
+      }
+      err=U_ZERO_ERROR;
+      log_verbose("\n---Testing ucnv_fromUChars() with sourceLength = 0\n");
+      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, 0, &err);
+      if (targetcapacity !=0) {
+            log_err("\nFAILURE: ucnv_fromUChars with sourceLength is expected to fail and return 0\n");
+      }
+      log_verbose("\n---Testing ucnv_fromUChars() with targetLenth = 0\n");
+      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, 0,  uchar1, -1, &err);
+      if (err != U_BUFFER_OVERFLOW_ERROR) {
+            log_err("\nFAILURE: ucnv_fromUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
+      }
+      /*toUChars with error conditions*/
+      targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, strlen(output_cp_buffer), &err);
+      if(targetsize != 0){
+          log_err("\nFAILURE: ucnv_toUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
+      }
+      err=U_ZERO_ERROR;
+      targetsize = ucnv_toUChars(myConverter, uchar2, -1, output_cp_buffer, strlen(output_cp_buffer), &err);
+      if(targetsize != 0 || err != U_ILLEGAL_ARGUMENT_ERROR){
+          log_err("\nFAILURE: ucnv_toUChars with targetsize < 0 is expected to throw U_ILLEGAL_ARGUMENT_ERROR and return 0\n");
+      }
+      err=U_ZERO_ERROR;
+      targetsize = ucnv_toUChars(myConverter, uchar2, 0, output_cp_buffer, 0, &err);
+      if (targetsize !=0) {
+            log_err("\nFAILURE: ucnv_toUChars with sourceLength is expected to fail and return 0\n");
+      }
+      targetcapacity2=0; 
+      targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer,  strlen(output_cp_buffer), &err);
+      if (err != U_BUFFER_OVERFLOW_ERROR) {
+            log_err("\nFAILURE: ucnv_toUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
+      }
+      err=U_ZERO_ERROR;
+      /*-----*/
+
+
      /*testing for ucnv_fromUnicode() and ucnv_toUnicode() */
          /*Clean up re-usable vars*/
      j=0;
