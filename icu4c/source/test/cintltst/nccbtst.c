@@ -1370,12 +1370,12 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         const uint8_t to_iso_2022_cn[]={  
             0x0F,   0x41,   
             0x0f,   0x25, 0x55,   0x33,   0x37,   0x31,   0x32,   
-            0x0F,   0x42, 
+            0x42, 
         };
         int32_t from_iso_2022_cnOffs [] ={ 
             0,0,
             1,1,1,1,1,1,1,
-            2,2,
+            2,
         };
         UChar iso_2022_cn_inputText1[]={ 0x4e00, 0x3712, 0x4e01, };
         const uint8_t to_iso_2022_cn1[]={  
@@ -1420,7 +1420,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
                              0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
                              0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
-                             0x0f,   0x42, 
+                             0x42, 
                              };
         int32_t from_iso_2022_cnOffs4 [] ={ 
             0,0,0,0,0,0,0,
@@ -1429,7 +1429,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             3,3,3,3,3,3,3,
             4,4,4,4,4,4,4,
             4,4,4,4,4,4,
-            6, 6
+            6
 
         };
 
@@ -1621,7 +1621,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                              0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
                              0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
                              0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
-                             0x0f,   0x42, 
+                             0x42, 
                              };
             int32_t from_iso_2022_cnOffs4_v2 [] ={ 
                 0,0,0,0,0,0,0,
@@ -1630,7 +1630,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 3,3,3,3,3,3,3,
                 4,4,4,4,4,4,4,
                 4,4,4,4,4,4,
-                6, 6
+                6, 
 
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
@@ -1645,7 +1645,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                             0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,
                             0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36, 
-                            0x0f,   0x42 
+                            0x42 
                              };
 
 
@@ -1656,7 +1656,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 3,3,3,3,3,3,3,
                 4,4,4,4,4,4,4,4,4,4,4,
 
-                6,6
+                6
 
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
