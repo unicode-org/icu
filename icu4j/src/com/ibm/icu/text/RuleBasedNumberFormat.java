@@ -572,6 +572,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private Map ruleSetDisplayNames;
 
+    /**
+     * The public rule set names;
+     */
+    private String[] publicRuleSetNames;
+
     //-----------------------------------------------------------------------
     // constructors
     //-----------------------------------------------------------------------
@@ -591,16 +596,25 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default locale.
+     * passed in.  The formatter uses the default locale.  
+     * <p>
+     * The localizations data provides information about the public
+     * rule sets and their localized display names for different
+     * locales. The first element in the list is an array of the names
+     * of the public rule sets.  The first element in this array is
+     * the initial default ruleset.  The remaining elements in the
+     * list are arrays of localizations of the names of the public
+     * rule sets.  Each of these is one longer than the initial array,
+     * with the first String being the ULocale ID, and the remaining
+     * Strings being the localizations of the rule set names, in the
+     * same order as the initial array.
      * @param description A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
-     * @param localizations a list of localizations for the rule set names in the description.
-     * Each element is an array or strings.  The first string is the ulocale, the
-     * remainder are the localizations of the public rule set names, in reverse
-     * order from how they they appear in the description.
+     * @param localizations a list of localizations for the rule set
+     * names in the description.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.  
      */
     public RuleBasedNumberFormat(String description, String[][] localizations) {
         locale = Locale.getDefault();
@@ -630,13 +644,21 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * passed in.  The formatter uses the specified locale to determine the
      * characters to use when formatting in numerals, and to define equivalences
      * for lenient parsing.
+     * <p>
+     * The localizations data provides information about the public
+     * rule sets and their localized display names for different
+     * locales. The first element in the list is an array of the names
+     * of the public rule sets.  The first element in this array is
+     * the initial default ruleset.  The remaining elements in the
+     * list are arrays of localizations of the names of the public
+     * rule sets.  Each of these is one longer than the initial array,
+     * with the first String being the ULocale ID, and the remaining
+     * Strings being the localizations of the rule set names, in the
+     * same order as the initial array.
      * @param description A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
      * @param localizations a list of localizations for the rule set names in the description.
-     * Each element is an array or strings.  The first string is the ulocale, the
-     * remainder are the localizations of the public rule set names, in reverse
-     * order from how they appear in the description.
      * @param locale A locale, which governs which characters are used for
      * formatting values in numerals, and which characters are equivalent in
      * lenient parsing.
@@ -819,25 +841,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public String[] getRuleSetNames() {
-        // preflight the iteration, counting the number of public rule sets
-        // (public rule sets have names that begin with % instead of %%)
-        int count = 0;
-        for (int i = 0; i < ruleSets.length; i++) {
-            if (!ruleSets[i].getName().startsWith("%%")) {
-                ++count;
-            }
-        }
-
-        // then new up an array of the proper size and copy the names into it
-        String[] result = new String[count];
-        count = 0;
-        for (int i = ruleSets.length - 1; i >= 0; i--) {
-            if (!ruleSets[i].getName().startsWith("%%")) {
-                result[count++] = ruleSets[i].getName();
-            }
-        }
-
-        return result;
+        return (String[])publicRuleSetNames.clone();
     }
 
     /**
@@ -923,7 +927,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getRuleSetDisplayName(String ruleSetName, ULocale locale) {
-        String[] rsnames = getRuleSetNames();
+        String[] rsnames = publicRuleSetNames;
         for (int ix = 0; ix < rsnames.length; ++ix) {
             if (rsnames[ix].equals(ruleSetName)) {
                 String[] names = getNameListForLocale(locale);
@@ -1197,7 +1201,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     public void setDefaultRuleSet(String ruleSetName) {
         if (ruleSetName == null) {
-            initDefaultRuleSet();
+            if (publicRuleSetNames.length > 0) {
+                defaultRuleSet = findRuleSet(publicRuleSetNames[0]);
+            } else {
+                defaultRuleSet = ruleSets[ruleSets.length - 1];
+            }
         } else if (ruleSetName.startsWith("%%")) {
             throw new IllegalArgumentException("cannot use private rule set: " + ruleSetName);
         } else {
@@ -1393,7 +1401,17 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // rather than the first so that a user can create a new formatter
         // from an existing formatter and change its default bevhaior just
         // by appending more rule sets to the end)
-        initDefaultRuleSet();
+
+        // {dlf} Initialization of a fraction rule set requires the default rule
+        // set to be known.  For purposes of initialization, this is always the 
+        // last public rule set, no matter what the localization data says.
+        defaultRuleSet = ruleSets[ruleSets.length - 1];
+        for (int i = ruleSets.length - 1; i >= 0; --i) {
+            if (!ruleSets[i].getName().startsWith("%%")) {
+                defaultRuleSet = ruleSets[i];
+                break;
+            }
+        }
 
         // finally, we can go back through the temporary descriptions
         // list and finish seting up the substructure (and we throw
@@ -1401,6 +1419,45 @@ public class RuleBasedNumberFormat extends NumberFormat {
         for (int i = 0; i < ruleSets.length; i++) {
             ruleSets[i].parseRules(ruleSetDescriptions[i], this);
             ruleSetDescriptions[i] = null;
+        }
+
+        // Now that the rules are initialized, the 'real' default rule
+        // set can be adjusted by the localization data.
+
+        // count the number of public rule sets
+        // (public rule sets have names that begin with % instead of %%)
+        int publicRuleSetCount = 0;
+        for (int i = 0; i < ruleSets.length; i++) {
+            if (!ruleSets[i].getName().startsWith("%%")) {
+                ++publicRuleSetCount;
+            }
+        }
+
+        // prepare an array of the proper size and copy the names into it
+        String[] publicRuleSetTemp = new String[publicRuleSetCount];
+        publicRuleSetCount = 0;
+        for (int i = ruleSets.length - 1; i >= 0; i--) {
+            if (!ruleSets[i].getName().startsWith("%%")) {
+                publicRuleSetTemp[publicRuleSetCount++] = ruleSets[i].getName();
+            }
+        }
+
+        if (publicRuleSetNames != null) {
+            // confirm the names, if any aren't in the rules, that's an error
+            // it is ok if the rules contain public rule sets that are not in this list
+            loop: for (int i = 0; i < publicRuleSetNames.length; ++i) {
+                String name = publicRuleSetNames[i];
+                for (int j = 0; j < publicRuleSetTemp.length; ++j) {
+                    if (name.equals(publicRuleSetTemp[j])) {
+                        continue loop;
+                    }
+                }
+                throw new IllegalArgumentException("did not find public rule set: " + name);
+            }
+
+            defaultRuleSet = findRuleSet(publicRuleSetNames[0]); // might be different
+        } else {
+            publicRuleSetNames = publicRuleSetTemp;
         }
     }
 
@@ -1410,16 +1467,24 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private void initLocalizations(String[][] localizations) {
         if (localizations != null) {
+            publicRuleSetNames = (String[])localizations[0].clone();
+
             Map m = new HashMap();
-            for (int i = 0; i < localizations.length; ++i) {
+            for (int i = 1; i < localizations.length; ++i) {
                 String[] data = localizations[i];
                 String locale = data[0];
                 String[] names = new String[data.length-1];
+                if (names.length != publicRuleSetNames.length) {
+                    throw new IllegalArgumentException("public name length: " + publicRuleSetNames.length + 
+                                                       " != localized names[" + i + "] length: " + names.length);
+                }
                 System.arraycopy(data, 1, names, 0, names.length);
                 m.put(locale, names);
             }
 
-            ruleSetDisplayNames = m;
+            if (!m.isEmpty()) {
+                ruleSetDisplayNames = m;
+            }
         }
     }
 
