@@ -2016,7 +2016,7 @@ void DecimalFormat::setRoundingIncrement(double newValue) {
  * @see #getRoundingIncrement
  * @see #setRoundingMode
  */
-DecimalFormat::ERoundingMode DecimalFormat::getRoundingMode() {
+DecimalFormat::ERoundingMode DecimalFormat::getRoundingMode() const {
     return fRoundingMode;
 }
 
