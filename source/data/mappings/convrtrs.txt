@@ -645,8 +645,7 @@ ibm-930_P120-1999 { UTR22* }    # EBCDIC_STATEFUL Katakana-Kanji Host Mixed.
                         cpibm930
                         cp930
                         930
-ibm-933_P110-1995 { UTR22* }    ibm-933 { IBM* } cp933 cpibm933 933   # Korea EBCDIC MIXED 
-ibm-935_P110-1999 { UTR22* }    ibm-935 { IBM* } cp935 cpibm935 935   # China EBCDIC MIXED 
+ibm-933_P110-1995 { UTR22* }    ibm-933 { IBM* } cp933 cpibm933 933   # Korea EBCDIC MIXED
 ibm-937_P110-1999 { UTR22* }    ibm-937 { IBM* } cp937 cpibm937 937   # Taiwan EBCDIC MIXED
 ibm-939_P120-1999 { UTR22* }    # EBCDIC_STATEFUL Latin-Kanji Host Mixed.
                         ibm-939 { IBM* }
@@ -695,12 +694,13 @@ ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } cpibm16804 ebcdic-ar # EBCDIC
 
 
 # TODO: Consider removing the mappings in this section
+ibm-935_P110-1999 { UTR22* }    ibm-935 { IBM* } cp935 cpibm935 935   # China EBCDIC MIXED. Need to use Unicode, ibm-1388 or gb18030 instead because it is required by the government of China.
 ibm-1137_P100-1999 { UTR22* }   ibm-1137 { IBM* }   # Devanagari EBCDIC (based on Unicode character set)
-ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host
-ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }   # Host Roman Jis
-ibm-8482 { IBM* }                                   # host SBCS (Katakana)
-ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* }   # DBCS T-Ch Host (simlar to ibm-835) (Needed for testing DBCS)
-ibm-16684_P100-1999 { UTR22* }  ibm-16684 { IBM* }  # DBCS Jis + Roman Jis Host
+ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host. Euro update of ibm-28709. This is used in combination with another CCSID mapping.
+ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }   # Host Roman Jis. Euro update of ibm-1027
+ibm-8482 { IBM* }                                   # host SBCS (Katakana). Euro update of ibm-290
+ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* }   # DBCS T-Ch Host. Euro update of ibm-835. (Needed for testing DBCS)
+ibm-16684_P100-1999 { UTR22* }  ibm-16684 { IBM* }  # DBCS Jis + Roman Jis Host. This is the DBCS portion of ibm-1390 and ibm-1399
 
 
 # EBCDIC codepages for S/390, with LF and NL codes swapped
@@ -753,3 +753,4 @@ ebcdic-xml-us
 #ibm-17248_X110-1999 { UTR22* }  ibm-17248 { IBM* }          # PC Arabic (w/ euro update) Updated version of ibm-864
 
 #ibm-941                 jis-208 jisx-208    # Pure DBCS jisx-208 # ibm-941 is not JISX 208 code page
+#ibm-955                 jis-208 jisx-208    # Pure DBCS jisx-208
