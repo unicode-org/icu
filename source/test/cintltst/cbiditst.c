@@ -46,15 +46,18 @@ testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction);
 static void
 testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
 
+static void
+testWriteReverse(void);
+
+extern void
+doArabicShapingTest();
+
 /* helpers ------------------------------------------------------------------ */
 
 static char *levelString="...............................................................";
 
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
-
-extern void
-doArabicShapingTest();
 
 static void
 printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
@@ -421,6 +424,8 @@ doInverseBiDiTest() {
     ubidi_close(pBiDi);
 
     log_verbose("inverse BiDi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
+
+    testWriteReverse();
 }
 
 #define COUNT_REPEAT_SEGMENTS 6
@@ -524,6 +529,44 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         log_verbose(" * did not roundtrip\n");
         log_err("inverse BiDi: transformation visual->logical->visual did not roundtrip the text;\n"
                 "                 turn on verbose mode to see details\n");
+    }
+}
+
+static void
+testWriteReverse() {
+    /* U+064e and U+0650 are combining marks (Mn) */
+    static const UChar forward[]={
+        0x200f, 0x627, 0x64e, 0x650, 0x20, 0x28, 0x31, 0x29
+    }, reverseKeepCombining[]={
+        0x29, 0x31, 0x28, 0x20, 0x627, 0x64e, 0x650, 0x200f
+    }, reverseRemoveControlsKeepCombiningDoMirror[]={
+        0x28, 0x31, 0x29, 0x20, 0x627, 0x64e, 0x650
+    };
+    static UChar reverse[10];
+    UErrorCode errorCode;
+    int32_t length;
+
+    /* test ubidi_writeReverse() with "interesting" options */
+    errorCode=U_ZERO_ERROR;
+    length=ubidi_writeReverse(forward, LENGTHOF(forward),
+                              reverse, LENGTHOF(reverse),
+                              UBIDI_KEEP_BASE_COMBINING,
+                              &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseKeepCombining) || uprv_memcmp(reverse, reverseKeepCombining, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in ubidi_writeReverse(UBIDI_KEEP_BASE_COMBINING): length=%d (should be %d), error code %s\n",
+                length, LENGTHOF(reverseKeepCombining), u_errorName(errorCode));
+    }
+
+    uprv_memset(reverse, 0xa5, LENGTHOF(reverse)*U_SIZEOF_UCHAR);
+    errorCode=U_ZERO_ERROR;
+    length=ubidi_writeReverse(forward, LENGTHOF(forward),
+                              reverse, LENGTHOF(reverse),
+                              UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING|UBIDI_KEEP_BASE_COMBINING,
+                              &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(reverseRemoveControlsKeepCombiningDoMirror) || uprv_memcmp(reverse, reverseRemoveControlsKeepCombiningDoMirror, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in ubidi_writeReverse(UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_DO_MIRRORING|UBIDI_KEEP_BASE_COMBINING):\n"
+                "    length=%d (should be %d), error code %s\n",
+                length, LENGTHOF(reverseRemoveControlsKeepCombiningDoMirror), u_errorName(errorCode));
     }
 }
 
@@ -741,6 +784,8 @@ doArabicShapingTest() {
         log_err("u_shapeArabic(shape letters) does not return U_UNSUPPORTED_ERROR but %s\n", u_errorName(errorCode));
     }
 }
+
+/* helpers ------------------------------------------------------------------ */
 
 /* return a string with characters according to the desired directional properties */
 static UChar *
