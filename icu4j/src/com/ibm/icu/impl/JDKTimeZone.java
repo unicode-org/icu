@@ -92,15 +92,23 @@ public class JDKTimeZone extends TimeZone {
     public void getOffset(long date, boolean local, int[] offsets) {
         // The following code works on 1.4 or later.  Since we need to
         // be compatible with 1.3, we have to use reflection.
-	if (zone instanceof sun.util.calendar.ZoneInfo) {
-	    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-	    if (local) {
-		date -= offsets[0] + offsets[1];
+	try {
+	    if (zone instanceof sun.util.calendar.ZoneInfo) {
 		((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-	    }
-	} else {
-	    super.getOffset(date, local, offsets);
+		if (local) {
+		    date -= offsets[0] + offsets[1];
+		    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+		}
+		return;
+	    } 
 	}
+	catch (SecurityException ex) {
+	    // ok; fall through, we're running in a protected context
+	} 
+	catch (Throwable th) {
+	    System.out.println("caught: " + th);
+	}
+	super.getOffset(date, local, offsets);
 
 	// no longer require JDK 1.3 compatibility
 	if (false) {
