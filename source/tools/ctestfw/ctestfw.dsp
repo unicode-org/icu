@@ -111,7 +111,7 @@ SOURCE=.\ctest.h
 InputPath=.\ctest.h
 
 "..\..\..\include\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy          ctest.h         ..\..\..\include\ 
+	copy          ctest.h         ..\..\..\include 
 
 # End Custom Build
 

@@ -265,7 +265,7 @@ SOURCE=.\brkiter.h
 InputPath=.\brkiter.h
 
 "..\..\include\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               brkiter.h                ..\..\include\ 
+	copy               brkiter.h                ..\..\include 
 
 # End Custom Build
 
@@ -275,7 +275,7 @@ InputPath=.\brkiter.h
 InputPath=.\brkiter.h
 
 "..\..\include\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               brkiter.h                ..\..\include\ 
+	copy               brkiter.h                ..\..\include 
 
 # End Custom Build
 
@@ -292,7 +292,7 @@ SOURCE=.\calendar.h
 InputPath=.\calendar.h
 
 "..\..\include\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               calendar.h                ..\..\include\ 
+	copy               calendar.h                ..\..\include 
 
 # End Custom Build
 
@@ -302,7 +302,7 @@ InputPath=.\calendar.h
 InputPath=.\calendar.h
 
 "..\..\include\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               calendar.h                ..\..\include\ 
+	copy               calendar.h                ..\..\include 
 
 # End Custom Build
 
@@ -319,7 +319,7 @@ SOURCE=.\choicfmt.h
 InputPath=.\choicfmt.h
 
 "..\..\include\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               choicfmt.h                ..\..\include\ 
+	copy               choicfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -329,7 +329,7 @@ InputPath=.\choicfmt.h
 InputPath=.\choicfmt.h
 
 "..\..\include\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               choicfmt.h                ..\..\include\ 
+	copy               choicfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -350,7 +350,7 @@ SOURCE=.\coleitr.h
 InputPath=.\coleitr.h
 
 "..\..\include\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              coleitr.h                ..\..\include\ 
+	copy              coleitr.h                ..\..\include 
 
 # End Custom Build
 
@@ -360,7 +360,7 @@ InputPath=.\coleitr.h
 InputPath=.\coleitr.h
 
 "..\..\include\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              coleitr.h                ..\..\include\ 
+	copy              coleitr.h                ..\..\include 
 
 # End Custom Build
 
@@ -377,7 +377,7 @@ SOURCE=.\coll.h
 InputPath=.\coll.h
 
 "..\..\include\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              coll.h                ..\..\include\ 
+	copy              coll.h                ..\..\include 
 
 # End Custom Build
 
@@ -387,7 +387,7 @@ InputPath=.\coll.h
 InputPath=.\coll.h
 
 "..\..\include\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              coll.h                ..\..\include\ 
+	copy              coll.h                ..\..\include 
 
 # End Custom Build
 
@@ -408,7 +408,7 @@ SOURCE=.\datefmt.h
 InputPath=.\datefmt.h
 
 "..\..\include\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               datefmt.h                ..\..\include\ 
+	copy               datefmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -418,7 +418,7 @@ InputPath=.\datefmt.h
 InputPath=.\datefmt.h
 
 "..\..\include\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               datefmt.h                ..\..\include\ 
+	copy               datefmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -435,7 +435,7 @@ SOURCE=.\dcfmtsym.h
 InputPath=.\dcfmtsym.h
 
 "..\..\include\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               dcfmtsym.h                ..\..\include\ 
+	copy               dcfmtsym.h                ..\..\include 
 
 # End Custom Build
 
@@ -445,7 +445,7 @@ InputPath=.\dcfmtsym.h
 InputPath=.\dcfmtsym.h
 
 "..\..\include\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               dcfmtsym.h                ..\..\include\ 
+	copy               dcfmtsym.h                ..\..\include 
 
 # End Custom Build
 
@@ -462,7 +462,7 @@ SOURCE=.\decimfmt.h
 InputPath=.\decimfmt.h
 
 "..\..\include\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              decimfmt.h                ..\..\include\ 
+	copy              decimfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -472,7 +472,7 @@ InputPath=.\decimfmt.h
 InputPath=.\decimfmt.h
 
 "..\..\include\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              decimfmt.h                ..\..\include\ 
+	copy              decimfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -489,7 +489,7 @@ SOURCE=.\dtfmtsym.h
 InputPath=.\dtfmtsym.h
 
 "..\..\include\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               dtfmtsym.h                ..\..\include\ 
+	copy               dtfmtsym.h                ..\..\include 
 
 # End Custom Build
 
@@ -499,7 +499,7 @@ InputPath=.\dtfmtsym.h
 InputPath=.\dtfmtsym.h
 
 "..\..\include\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               dtfmtsym.h                ..\..\include\ 
+	copy               dtfmtsym.h                ..\..\include 
 
 # End Custom Build
 
@@ -516,7 +516,7 @@ SOURCE=.\fieldpos.h
 InputPath=.\fieldpos.h
 
 "..\..\include\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               fieldpos.h                ..\..\include\ 
+	copy               fieldpos.h                ..\..\include 
 
 # End Custom Build
 
@@ -526,7 +526,7 @@ InputPath=.\fieldpos.h
 InputPath=.\fieldpos.h
 
 "..\..\include\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               fieldpos.h                ..\..\include\ 
+	copy               fieldpos.h                ..\..\include 
 
 # End Custom Build
 
@@ -543,7 +543,7 @@ SOURCE=.\fmtable.h
 InputPath=.\fmtable.h
 
 "..\..\include\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              fmtable.h                ..\..\include\ 
+	copy              fmtable.h                ..\..\include 
 
 # End Custom Build
 
@@ -553,7 +553,7 @@ InputPath=.\fmtable.h
 InputPath=.\fmtable.h
 
 "..\..\include\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              fmtable.h                ..\..\include\ 
+	copy              fmtable.h                ..\..\include 
 
 # End Custom Build
 
@@ -570,7 +570,7 @@ SOURCE=.\format.h
 InputPath=.\format.h
 
 "..\..\include\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              format.h                ..\..\include\ 
+	copy              format.h                ..\..\include 
 
 # End Custom Build
 
@@ -580,7 +580,7 @@ InputPath=.\format.h
 InputPath=.\format.h
 
 "..\..\include\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              format.h                ..\..\include\ 
+	copy              format.h                ..\..\include 
 
 # End Custom Build
 
@@ -597,7 +597,7 @@ SOURCE=.\gregocal.h
 InputPath=.\gregocal.h
 
 "..\..\include\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               gregocal.h                ..\..\include\ 
+	copy               gregocal.h                ..\..\include 
 
 # End Custom Build
 
@@ -607,7 +607,7 @@ InputPath=.\gregocal.h
 InputPath=.\gregocal.h
 
 "..\..\include\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               gregocal.h                ..\..\include\ 
+	copy               gregocal.h                ..\..\include 
 
 # End Custom Build
 
@@ -628,7 +628,7 @@ SOURCE=.\msgfmt.h
 InputPath=.\msgfmt.h
 
 "..\..\include\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               msgfmt.h                ..\..\include\ 
+	copy               msgfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -638,7 +638,7 @@ InputPath=.\msgfmt.h
 InputPath=.\msgfmt.h
 
 "..\..\include\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               msgfmt.h                ..\..\include\ 
+	copy               msgfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -655,7 +655,7 @@ SOURCE=.\numfmt.h
 InputPath=.\numfmt.h
 
 "..\..\include\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               numfmt.h                ..\..\include\ 
+	copy               numfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -665,7 +665,7 @@ InputPath=.\numfmt.h
 InputPath=.\numfmt.h
 
 "..\..\include\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               numfmt.h                ..\..\include\ 
+	copy               numfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -682,7 +682,7 @@ SOURCE=.\parsepos.h
 InputPath=.\parsepos.h
 
 "..\..\include\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               parsepos.h                ..\..\include\ 
+	copy               parsepos.h                ..\..\include 
 
 # End Custom Build
 
@@ -692,7 +692,7 @@ InputPath=.\parsepos.h
 InputPath=.\parsepos.h
 
 "..\..\include\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               parsepos.h                ..\..\include\ 
+	copy               parsepos.h                ..\..\include 
 
 # End Custom Build
 
@@ -713,7 +713,7 @@ SOURCE=.\simpletz.h
 InputPath=.\simpletz.h
 
 "..\..\include\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               simpletz.h                ..\..\include\ 
+	copy               simpletz.h                ..\..\include 
 
 # End Custom Build
 
@@ -723,7 +723,7 @@ InputPath=.\simpletz.h
 InputPath=.\simpletz.h
 
 "..\..\include\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               simpletz.h                ..\..\include\ 
+	copy               simpletz.h                ..\..\include 
 
 # End Custom Build
 
@@ -744,7 +744,7 @@ SOURCE=.\smpdtfmt.h
 InputPath=.\smpdtfmt.h
 
 "..\..\include\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               smpdtfmt.h                ..\..\include\ 
+	copy               smpdtfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -754,7 +754,7 @@ InputPath=.\smpdtfmt.h
 InputPath=.\smpdtfmt.h
 
 "..\..\include\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               smpdtfmt.h                ..\..\include\ 
+	copy               smpdtfmt.h                ..\..\include 
 
 # End Custom Build
 
@@ -771,7 +771,7 @@ SOURCE=.\sortkey.h
 InputPath=.\sortkey.h
 
 "..\..\include\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              sortkey.h                ..\..\include\ 
+	copy              sortkey.h                ..\..\include 
 
 # End Custom Build
 
@@ -781,7 +781,7 @@ InputPath=.\sortkey.h
 InputPath=.\sortkey.h
 
 "..\..\include\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy              sortkey.h                ..\..\include\ 
+	copy              sortkey.h                ..\..\include 
 
 # End Custom Build
 
@@ -806,7 +806,7 @@ SOURCE=.\tblcoll.h
 InputPath=.\tblcoll.h
 
 "..\..\include\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               tblcoll.h                ..\..\include\ 
+	copy               tblcoll.h                ..\..\include 
 
 # End Custom Build
 
@@ -816,7 +816,7 @@ InputPath=.\tblcoll.h
 InputPath=.\tblcoll.h
 
 "..\..\include\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               tblcoll.h                ..\..\include\ 
+	copy               tblcoll.h                ..\..\include 
 
 # End Custom Build
 
@@ -837,7 +837,7 @@ SOURCE=.\timezone.h
 InputPath=.\timezone.h
 
 "..\..\include\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               timezone.h                ..\..\include\ 
+	copy               timezone.h                ..\..\include 
 
 # End Custom Build
 
@@ -847,7 +847,7 @@ InputPath=.\timezone.h
 InputPath=.\timezone.h
 
 "..\..\include\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               timezone.h                ..\..\include\ 
+	copy               timezone.h                ..\..\include 
 
 # End Custom Build
 
@@ -872,7 +872,7 @@ SOURCE=.\ubrk.h
 InputPath=.\ubrk.h
 
 "..\..\include\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ubrk.h                ..\..\include\ 
+	copy               ubrk.h                ..\..\include 
 
 # End Custom Build
 
@@ -882,7 +882,7 @@ InputPath=.\ubrk.h
 InputPath=.\ubrk.h
 
 "..\..\include\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ubrk.h                ..\..\include\ 
+	copy               ubrk.h                ..\..\include 
 
 # End Custom Build
 
@@ -899,7 +899,7 @@ SOURCE=.\ucal.h
 InputPath=.\ucal.h
 
 "..\..\include\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ucal.h                ..\..\include\ 
+	copy               ucal.h                ..\..\include 
 
 # End Custom Build
 
@@ -909,7 +909,7 @@ InputPath=.\ucal.h
 InputPath=.\ucal.h
 
 "..\..\include\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ucal.h                ..\..\include\ 
+	copy               ucal.h                ..\..\include 
 
 # End Custom Build
 
@@ -926,7 +926,7 @@ SOURCE=.\ucol.h
 InputPath=.\ucol.h
 
 "..\..\include\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ucol.h                ..\..\include\ 
+	copy               ucol.h                ..\..\include 
 
 # End Custom Build
 
@@ -936,7 +936,7 @@ InputPath=.\ucol.h
 InputPath=.\ucol.h
 
 "..\..\include\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               ucol.h                ..\..\include\ 
+	copy               ucol.h                ..\..\include 
 
 # End Custom Build
 
@@ -953,7 +953,7 @@ SOURCE=.\udat.h
 InputPath=.\udat.h
 
 "..\..\include\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               udat.h                ..\..\include\ 
+	copy               udat.h                ..\..\include 
 
 # End Custom Build
 
@@ -963,7 +963,7 @@ InputPath=.\udat.h
 InputPath=.\udat.h
 
 "..\..\include\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               udat.h                ..\..\include\ 
+	copy               udat.h                ..\..\include 
 
 # End Custom Build
 
@@ -980,7 +980,7 @@ SOURCE=.\umsg.h
 InputPath=.\umsg.h
 
 "..\..\include\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               umsg.h                ..\..\include\ 
+	copy               umsg.h                ..\..\include 
 
 # End Custom Build
 
@@ -990,7 +990,7 @@ InputPath=.\umsg.h
 InputPath=.\umsg.h
 
 "..\..\include\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               umsg.h                ..\..\include\ 
+	copy               umsg.h                ..\..\include 
 
 # End Custom Build
 
@@ -1011,7 +1011,7 @@ SOURCE=.\unum.h
 InputPath=.\unum.h
 
 "..\..\include\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               unum.h                ..\..\include\ 
+	copy               unum.h                ..\..\include 
 
 # End Custom Build
 
@@ -1021,7 +1021,7 @@ InputPath=.\unum.h
 InputPath=.\unum.h
 
 "..\..\include\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy               unum.h                ..\..\include\ 
+	copy               unum.h                ..\..\include 
 
 # End Custom Build
 
