@@ -1773,7 +1773,7 @@ static void TestCEValidity()
             rulesCopy = (UChar *)malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
-            src.source = src.current = rulesCopy;
+            src.current = src.source = rulesCopy;
             src.end = rulesCopy + ruleLen;
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
@@ -1953,7 +1953,7 @@ static void TestSortKeyValidity(void)
             rulesCopy = (UChar *)malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
-            src.source = src.current = rulesCopy;
+            src.current = src.source = rulesCopy;
             src.end = rulesCopy + ruleLen;
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
