@@ -36,7 +36,7 @@ public class LDMLComparator {
      * This application will compare different locale data xml files
      * conforming to localeElements.dtd and produces an xml file file
      * in the format
-     */ 
+     */
     private static final int OPT_SUN_JDK = 0x001; /*2exp0*/
     private static final int OPT_IBM_JDK = 0x002; /*2exp1*/
     private static final int OPT_WINDOWS = 0x004; /*2exp2*/
@@ -54,28 +54,28 @@ public class LDMLComparator {
     private static final int OPT_DIFF   = 0x4000; /*2exp15*/   //PN
     private static final int OPT_DIFF_REF_COMMON
                                         = 0x8000; /*2exp16*/  //PN
-    private static final int OPT_BULK 
+    private static final int OPT_BULK
                                     = 0x00010000;   //PN
-    private static final int OPT_CASE_SENSITIVE 
+    private static final int OPT_CASE_SENSITIVE
                                     = 0x00020000;   //PN
     private static final int OPT_VETTING
-                                    = 0x00040000;   
-    private static final int OPT_UNKNOWN 
-                                    = 0x00080000;   
-    
-    private static final String COMMON      = "common";     
-    private static final String ICU         = "icu";    
+                                    = 0x00040000;
+    private static final int OPT_UNKNOWN
+                                    = 0x00080000;
+
+    private static final String COMMON      = "common";
+    private static final String ICU         = "icu";
     private static final String IBM_TOR     = "ibm";
-    private static final String WINDOWS     = "windows";    
-    private static final String SUNJDK      = "sunjdk";    
-    private static final String IBMJDK      = "ibmjdk";    
-    private static final String HPUX        = "hp";      
-    private static final String APPLE       = "apple";      
-    private static final String SOLARIS     = "solaris";    
+    private static final String WINDOWS     = "windows";
+    private static final String SUNJDK      = "sunjdk";
+    private static final String IBMJDK      = "ibmjdk";
+    private static final String HPUX        = "hp";
+    private static final String APPLE       = "apple";
+    private static final String SOLARIS     = "solaris";
     private static final String OPEN_OFFICE = "open_office";
-    private static final String AIX         = "aix";        
-    private static final String LINUX       = "linux";    
-    
+    private static final String AIX         = "aix";
+    private static final String LINUX       = "linux";
+
     private static final String ALTERNATE   = "ALT";
     private static final String ALTERNATE_TITLE   = "(Original)";
     private static final String ALT_COLOR   = "#DDDDFD";
@@ -86,20 +86,20 @@ public class LDMLComparator {
     private static final String CASE_SENSITIVE = "case_sensitive";
     private static final String VETTING        = "vetting";
     private static final String[] PLATFORM_PRINT_ORDER ={
-        COMMON,     
+        COMMON,
         ICU,
         WINDOWS,
-        SUNJDK,     
-        IBMJDK,         
-        IBM_TOR,          
-        APPLE,      
-        SOLARIS,    
+        SUNJDK,
+        IBMJDK,
+        IBM_TOR,
+        APPLE,
+        SOLARIS,
         OPEN_OFFICE,
-        AIX,        
-        LINUX, 
-        HPUX,        
+        AIX,
+        LINUX,
+        HPUX,
     };
-    
+
     private static final String USER_OPTIONS[] = {
         "-"+COMMON,
         "-"+ICU,
@@ -112,31 +112,31 @@ public class LDMLComparator {
         "-"+SOLARIS,
         "-"+OPEN_OFFICE,
         "-"+AIX,
-        "-"+LINUX,        
-        "-s",              
-        "-d",              
+        "-"+LINUX,
+        "-s",
+        "-d",
         "-" + DIFF,   //PN added, indicates that only differing elements/attributes to be written to html
         "-" + DIFF_REF_COMMON,  //PN added, same as diff only common is excluded from diff but gets printed to html for reference purposes
         "-" + BULK,  //do a bulk comparison of folder contents
         "-" + CASE_SENSITIVE,  //do case sensitive matching (by default it's not case sensitive)
         "-" + VETTING // go into Vetting mode. (show draft, etc)
     };
-   
 
-    
+
+
     public static void main(String[] args){
         LDMLComparator comparator = new LDMLComparator();
-        comparator.processArgs(args);    
+        comparator.processArgs(args);
     }
-                        
+
     Hashtable optionTable = new Hashtable();
     private String sourceFolder = ".";
-    private String destFolder = ".";  
-    private String localeStr;    
+    private String destFolder = ".";
+    private String localeStr;
     private String ourCvsVersion = "";
     private Calendar cal = Calendar.getInstance();
     private Hashtable colorHash = new Hashtable();
-    private String goldFileName; 
+    private String goldFileName;
     private String goldKey;
     private int numPlatforms = 0;
     private int serialNumber =0;
@@ -147,7 +147,7 @@ public class LDMLComparator {
     private Hashtable deprecatedCountryCodes = new Hashtable();
     private TreeSet vettingSet = new TreeSet();
     private String  encoding   = "UTF-8"; // default encoding
-    
+
     //PN added
     private Vector m_PlatformVect = new Vector();  //holds names of platforms
     private Vector m_PlatformFolderVect = new Vector();  //holds names of folders containing locale data for each platform
@@ -158,10 +158,10 @@ public class LDMLComparator {
     private int m_iTotalNonConflictingElements = 0;
     private TreeMap m_LocaleSummaryDataMap = new TreeMap ();  //key = localename, data = summary info
     private boolean m_Vetting = false;
-    
+
     private int m_totalCount = 0;
     private String m_Messages = "";
-    
+
     private class CompareElement
     {
         String node;
@@ -171,7 +171,7 @@ public class LDMLComparator {
         Hashtable platformData = new Hashtable();
         String referenceUrl;
     }
-    			 
+
     //PN added
     //used for bulk comparisons
     //holds the locales where the element identified by node,index and parentNode conflict
@@ -187,14 +187,14 @@ public class LDMLComparator {
         Vector localeVectDiff = new Vector();  //holds loccales where a conflict in data was found
         Vector localeVectSame = new Vector();  //holds loccales where a no conflict in data was found
     }
-    
+
     private class SummaryData
     {
-        String m_szPlatforms ; 
+        String m_szPlatforms ;
         int m_iNumConflictingElements;
     }
-    
-   
+
+
     LDMLComparator(){
         //initialize the color hash
         colorHash.put( COMMON,      "#AD989D");
@@ -215,14 +215,14 @@ public class LDMLComparator {
         deprecatedLanguageCodes.put("in", "id");
         deprecatedLanguageCodes.put("ji", "yi");
         deprecatedLanguageCodes.put("jw", "jv"); // this does not even exist, JDK thinks jw is javanese!!
-        
+
         //country codes
         deprecatedCountryCodes.put("TP", "TL");
         deprecatedCountryCodes.put("ZR", "CD");
     }
-    
 
-    
+
+
      private void processArgs(String[] args)
     {
         m_iOptions = identifyOptions(args);
@@ -234,7 +234,7 @@ public class LDMLComparator {
         boolean warning[] = new boolean[1];
         warning[0] = false;
         Enumeration en = optionTable.keys();
-        
+
         try
         {
             //check for bulk operation
@@ -245,7 +245,7 @@ public class LDMLComparator {
             else
             {
                 localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.lastIndexOf('.'));
-                
+
                 String fileName = destFolder+File.separator+localeStr+".html";
                 m_totalCount = 0;
                 if((m_iOptions & OPT_VETTING) != 0)
@@ -292,15 +292,15 @@ public class LDMLComparator {
                         indexwriter.println("</tr>");
                         is.close();
                     }
-                    // TODO: handle vettingSet; 
+                    // TODO: handle vettingSet;
                 }
             }
         }catch(Exception e)
         {
             e.printStackTrace();
         }
-        
-    }    
+
+    }
     private void printUsage() {
         System.err.println("Usage: LDMLComparator [<option>:<gold>] filename1 [option] filename2 ... \n"+
                            " LDMLComparator [-common:<gold>] filename [-icu] filename" +
@@ -314,7 +314,7 @@ public class LDMLComparator {
                            );
         System.err.println("\nExample 1: \n " +
         "LDMLComparator -solaris:gold foldername1 -sunjdk foldername2 -common foldername3 -diff-ref-common -bulk\n" +
-        "\t\t will do a bulk comparison of the locales in folder1 and folder2 \n " + 
+        "\t\t will do a bulk comparison of the locales in folder1 and folder2 \n " +
         "\t\t and print the values of any differing elements plus the \n" +
         "\t\t corresponding element's value in folder3 to bulk.html \n" +
         "\t\t as well as a summary to bulk_summary.html \n");
@@ -324,7 +324,7 @@ public class LDMLComparator {
         "\t\t filename2 and print the values of any differing elements \n" +
         "\t\t to a file called filename1.html in the current directory \n");
     }
-   
+
    private int identifyOptions(String[] options)
     {
         int result = 0;
@@ -342,7 +342,7 @@ public class LDMLComparator {
                 boolean optionRecognized = false;
                 for (int i = 0; i < USER_OPTIONS.length; i++)
                 {
-                    
+
                     if (USER_OPTIONS[i].equals(option))
                     {
                         result |= (int)(1 << i); // calculate option bit value
@@ -356,19 +356,19 @@ public class LDMLComparator {
                         }
                         else if (USER_OPTIONS[i].equals("-" + DIFF))
                         {
-                            
+
                         }
                         else if (USER_OPTIONS[i].equals("-" + DIFF_REF_COMMON))
                         {
-                            
+
                         }
                         else if (USER_OPTIONS[i].equals("-" + BULK))
                         {
-                            
+
                         }
                         else if (USER_OPTIONS[i].equals("-" + VETTING))
                         {
-                         m_Vetting = true;   
+                         m_Vetting = true;
                         }
                         else if (USER_OPTIONS[i].equals("-" + CASE_SENSITIVE))
                         {}
@@ -377,7 +377,7 @@ public class LDMLComparator {
                             if(!isGold)
                             {
                                 optionTable.put(option.substring(1,option.length()),options[++j]);
-                                
+
                             }else
                             {
                                 goldFileName = options[++j];
@@ -400,11 +400,11 @@ public class LDMLComparator {
                 }
             }
         }
-        
+
         return result;
     }
- 
-  
+
+
     private void printTableHeader(PrintWriter writer){
 
         writer.print(  "            <tr>\n" +
@@ -412,11 +412,11 @@ public class LDMLComparator {
                        "                <th>ParentNode</th>\n"+
                        "                <th>Name</th>\n"+
                        "                <th>ID</th>\n");
-        
+
         for(int i=0; i< PLATFORM_PRINT_ORDER.length && PLATFORM_PRINT_ORDER[i]!=null; i++ ){
             String name = PLATFORM_PRINT_ORDER[i];
             String folder;
-            
+
             Object obj = requested.get(name);
             if(obj!=null && doesNotExist.get(name)==null ){
                 folder = name+"/main/";
@@ -442,9 +442,9 @@ public class LDMLComparator {
                 }
 
                 numPlatforms++;
-               
+
             }
-        }        
+        }
         if(m_Vetting) {
             writer.print("<th bgcolor=\"" + ALT_COLOR + "\">" + ALTERNATE_TITLE + "</th>");
         }
@@ -454,18 +454,18 @@ public class LDMLComparator {
     //PN added
     private void printTableHeaderForDifferences(PrintWriter writer)
     {
-        
+
         writer.print(  "            <tr>\n" +
         "                <th width=10%>N.</th>\n"+
         "                <th width=10%>ParentNode</th>\n"+
         "                <th width=10%>Name</th>\n"+
         "                <th width=10%>ID</th>\n");
-        
+
         for (int i=0; i < m_PlatformVect.size(); i++)
         {
             String name = (String)m_PlatformVect.elementAt(i);
             String folder;
-            
+
             //      Object obj = requested.get(name);
             //      if(obj!=null && doesNotExist.get(name)==null )
             //      {
@@ -476,7 +476,7 @@ public class LDMLComparator {
             " (<a href=\"../"+folder+localeStr+".xml\">xml</a>)"+
             "</th>\n");
             //not used          numPlatforms++;
-            
+
             //     }
         }
         if(m_Vetting) {
@@ -484,7 +484,7 @@ public class LDMLComparator {
         }
         writer.print("            </tr>\n");
     }
-    
+
     //PN added
     // method to print differing elements/attributes only to HTML
     //returns false if a difference found otherwise true
@@ -497,7 +497,7 @@ public class LDMLComparator {
         {
             return isEqual;
         }
-        
+
         String compareTo = null;
         boolean bFoundFirst = false;
         for (int i=0; i < m_PlatformVect.size(); i++)
@@ -536,7 +536,7 @@ public class LDMLComparator {
                 }
             }  //end if
         } //end while
-        
+
         //if any differences found then print all non null values
         if (isEqual == false)
         {
@@ -545,7 +545,7 @@ public class LDMLComparator {
             writer.print("                <td>"+mapToAbbr(element.parentNode)+"</td>\n");
             writer.print("                <td>"+mapToAbbr(element.node)+"</td>\n");
             writer.print("                <td>"+element.index+"</td>\n");
-            
+
             for (int i=0; i < m_PlatformVect.size(); i++)
             {
                 String val = (String)element.platformData.get(m_PlatformVect.elementAt(i));
@@ -558,13 +558,13 @@ public class LDMLComparator {
                     writer.print("                <td>&nbsp;</td>\n");
                 }
             } //end while
-            
+
             writer.print("            </tr>\n");
             serialNumber++;
         }  //endif
         return isEqual;
     }
-    
+
     //PN added
     // method to print differing elements/attributes only to HTML excluding Common from diff
     //only if the other platfroms differ amongst themselves will the Common data be printed
@@ -578,7 +578,7 @@ public class LDMLComparator {
         {
             return isEqual;
         }
-        
+
         String compareTo = null;
         boolean bFoundFirst = false;
         for (int i=0; i < m_PlatformVect.size(); i++)
@@ -587,7 +587,7 @@ public class LDMLComparator {
             String platform = (String) m_PlatformVect.elementAt(i);
             if (platform.compareTo(COMMON)==0)
                 continue;
-            
+
             String value = (String)element.platformData.get(platform);
             if (value == null)
                 continue;
@@ -632,7 +632,7 @@ public class LDMLComparator {
                 }
             }  //end if
         } //end while
-        
+
         //if any differences found then print all non null values
         if (isEqual == false)
         {
@@ -641,7 +641,7 @@ public class LDMLComparator {
             writer.print("                <td>"+mapToAbbr(element.parentNode)+"</td>\n");
             writer.print("                <td>"+mapToAbbr(element.node)+"</td>\n");
             writer.print("                <td>"+element.index+"</td>\n");
-            
+
             for (int i=0; i < m_PlatformVect.size(); i++)
             {
                 String val = (String)element.platformData.get(m_PlatformVect.elementAt(i));
@@ -654,23 +654,23 @@ public class LDMLComparator {
                     writer.print("                <td>&nbsp;</td>\n");
                 }
             } //end while
-            
+
             writer.print("            </tr>\n");
             serialNumber++;
         }  //endif
-        
+
         return isEqual;
     }
     private void printValue(CompareElement element, PrintWriter writer){
-        
-        
+
+
         writer.print("            <tr>\n");
         writer.print("                <td><a NAME=\""+serialNumber+"\" href=\"#"+serialNumber+"\">"+serialNumber+"</a></td>\n");
         writer.print("                <td>"+mapToAbbr(element.parentNode)+"</td>\n");
         writer.print("                <td>"+mapToAbbr(element.node)+"</td>\n");
         writer.print("                <td>"+element.index+"</td>\n");
         serialNumber++;
-        
+
         for(int i=0; i<PLATFORM_PRINT_ORDER.length; i++){
             String value = (String)element.platformData.get(PLATFORM_PRINT_ORDER[i]);
             String color = (String)colorHash.get(PLATFORM_PRINT_ORDER[i]);
@@ -729,7 +729,7 @@ public class LDMLComparator {
                         writer.print("<br><div align='right'><a href=\"" + element.referenceUrl + "\"><i>(Ref)</i></a></div>");
                     }
                     writer.print("</td>");
-                    if(altText!=null) { 
+                    if(altText!=null) {
                         writer.print("        <td bgcolor="+ALT_COLOR+">"+altText);
                         writer.print("</td>\n");
                     }
@@ -811,11 +811,11 @@ public class LDMLComparator {
                            "        <p><b>"+displayName+
                                     "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
                                     "<a href=\"./index.html\">Main and About</a>, "+
-                                    "</b></p>\n");                                    
+                                    "</b></p>\n");
                   if((ourCvsVersion!=null) && (ourCvsVersion.length()>0)) {
                     writer.println("<h3><tt>"+ LDMLUtilities.getCVSLink(localeStr) + localeStr + ".xml</a> version " +
                         LDMLUtilities.getCVSLink(localeStr,ourCvsVersion) + ourCvsVersion + "</a></tt></h3>");
-                  } 
+                  }
                   writer.print(         "        <table>\n");
         }
 
@@ -829,8 +829,8 @@ public class LDMLComparator {
         {
             printTableHeader(writer);
         }
-        
-		   
+
+
         // walk down the compare map and print the data
         Iterator iter = compareMap.keySet().iterator();
         while(iter.hasNext()){
@@ -862,8 +862,8 @@ public class LDMLComparator {
 
         }
         writer.print( "        </table>\n");
-        
-        if(m_Vetting) { 
+
+        if(m_Vetting) {
               if(m_Messages.length()>0) {
                 writer.print("<table bgcolor=\"#FFBBBB\" border=3><tr><th>Warnings (please see source LDML)</th></tr>" +
                     "<tr><td>" + m_Messages + "</td></tr></table><p/><p/>\n");
@@ -878,14 +878,14 @@ public class LDMLComparator {
 
         writer.flush();
     }
-    
+
      private Document getFullyResolvedLocale(String localeName,String fileName){
          // here we assume that "_" is the delimiter
          int index = fileName.lastIndexOf(File.separatorChar);
          String sourceDir = fileName.substring(0, index+1);
          String locale = fileName.substring(index+1, fileName.lastIndexOf("."));
          System.out.println("INFO: Creating fully resolved tree for : " + fileName);
-         
+
          Document doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale, true, true, true);
          /*
           * debugging code
@@ -903,7 +903,7 @@ public class LDMLComparator {
 
      private boolean addToCompareMap(String fileName, String key)
      {
-         // parse the test doc only if gold doc was parsed OK  
+         // parse the test doc only if gold doc was parsed OK
          Document testDoc = getFullyResolvedLocale(key,fileName);
          requested.put(key,"");
          if (null == testDoc)
@@ -913,7 +913,7 @@ public class LDMLComparator {
          }
          return extractMergeData(testDoc,key,false);
 
-     }				   
+     }
 
      private Document getParsedLocale(String localeName,String fileName){
          // here we assume that "_" is the delimiter
@@ -921,14 +921,14 @@ public class LDMLComparator {
          String sourceDir = fileName.substring(0, index+1);
          String locale = fileName.substring(index+1, fileName.lastIndexOf("."));
          System.out.println("INFO: Parsing " + fileName);
-         Document doc = LDMLUtilities.parse(fileName,true); // ?  
-         
+         Document doc = LDMLUtilities.parse(fileName,true); // ?
+
          return doc;
      }
-     
+
      private boolean addVettable(String fileName, String key)
      {
-         // parse the test doc only if gold doc was parsed OK  
+         // parse the test doc only if gold doc was parsed OK
          Document testDoc = getParsedLocale(key,fileName);
          requested.put(key,"");
          if (null == testDoc)
@@ -938,17 +938,17 @@ public class LDMLComparator {
          }
          return extractMergeData(testDoc,key,false);
 
-     }				   
+     }
 
      private boolean comparePatterns(String pat1,String pat2){
-        //TODO: just return for now .. this is useful only 
+        //TODO: just return for now .. this is useful only
         //when comparing data from toronto
         try{
             double args1  = 10000000000.00;
             double args2  = -10000000000.00;
-        
-            DecimalFormat fmt = new DecimalFormat(); 
-            
+
+            DecimalFormat fmt = new DecimalFormat();
+
             fmt.applyPattern(pat1);
             String s1 = fmt.format(args1);
             String s3 = fmt.format(args2);
@@ -962,7 +962,7 @@ public class LDMLComparator {
             //throw away the exception
         }
         return false;
-        
+
         //return true;
     }
     private String trim(String source){
@@ -979,17 +979,17 @@ public class LDMLComparator {
         }else{
             return new String();
         }
-      
+
     }
 
-    private final void addElement(String childNode, String parentNode, String id, String index, 
+    private final void addElement(String childNode, String parentNode, String id, String index,
                             String platformValue, String platformName){
         addElement(childNode,parentNode,id,index,platformValue,platformName,null);
     }
-    
-    private void addElement(String childNode, String parentNode, String id, String index, 
+
+    private void addElement(String childNode, String parentNode, String id, String index,
                             String platformValue, String platformName, String referenceUrl){
-        m_totalCount++;       
+        m_totalCount++;
         Object obj = compareMap.get(id);
         CompareElement element;
         if(obj==null){
@@ -1008,16 +1008,16 @@ public class LDMLComparator {
                 throw new RuntimeException("The object stored in the compareMap is not a CompareElement object!");
             }
         }
-        
+
         if((!element.index.equals(index)) ||
             (!element.node.equals(childNode)) ||
             (!element.parentNode.equals(parentNode))){
-              throw new RuntimeException("The retrieved object is not the same as the one trying to be saved");  
+              throw new RuntimeException("The retrieved object is not the same as the one trying to be saved");
         }
-        
+
         element.platformData.put(platformName, platformValue);
     }
-    
+
     private boolean childrenAreElements(Node node){
         NodeList list = node.getChildNodes();
         for(int i=0;i<list.getLength();i++){
@@ -1025,10 +1025,10 @@ public class LDMLComparator {
                 return true;
             }
         }
-        return false;  
+        return false;
     }
     private String getTag(String childNodeName, String index){
-        
+
         //for months make index a,b,c,d etc
         if(childNodeName.indexOf("month")>-1){
             int i = Integer.parseInt(index);
@@ -1056,7 +1056,7 @@ public class LDMLComparator {
         }
         return "";
     }
-    
+
     private boolean extractMergeData(Node node,String key, boolean parentDraft){
         Node childOfSource;
         for(childOfSource = node.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
@@ -1073,7 +1073,7 @@ public class LDMLComparator {
                 || childOfSourceName.indexOf(":")>-1){
                  continue;
             }
-             
+
             if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
                 if(!subDraft) {
                     subDraft = true;
@@ -1086,7 +1086,7 @@ public class LDMLComparator {
                     referenceUrl = null;
                 }
             }
-            
+
             if(m_Vetting) { /* Should this be always checked? */
                 String alt = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.ALT);
                 if(alt!=null) {
@@ -1109,7 +1109,7 @@ public class LDMLComparator {
                         if(type==null) {
                             type = "";
                         }
-                        m_Messages = m_Messages + " <br> UNKNOWN alt type '" + alt + "' for " + 
+                        m_Messages = m_Messages + " <br> UNKNOWN alt type '" + alt + "' for " +
                                 node.getNodeName() + "/" + childOfSourceName + "/" + type;
                         System.err.println("Warning: unknown alt type '" + alt + "'  - *IGNORING*. " + childOfSource.toString());
                         continue;
@@ -1137,7 +1137,7 @@ public class LDMLComparator {
                      if(!temp.equals("standard")){
                          index = temp;
                      }
-                     
+
                  }
                  if(m_Vetting) { // TODO: all?
                      Node keyNode = attr.getNamedItem("key");
@@ -1187,7 +1187,7 @@ public class LDMLComparator {
                              }
                          }
                      }
-                     
+
                  }
                  if(grandParentNodeName.equals("eras") ){
                      Node calendar = grandParentNode.getParentNode();
@@ -1212,10 +1212,10 @@ public class LDMLComparator {
                      }
                      parentNodeName = grandParentNodeName+ "\u200b_" + parentNodeName;
                  }
-                 if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext") || 
-                         grandParentNodeName.equals("dateFormatLength") || grandParentNodeName.equals("timeFormatLength") || 
+                 if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext") ||
+                         grandParentNodeName.equals("dateFormatLength") || grandParentNodeName.equals("timeFormatLength") ||
                          grandParentNodeName.equals("dateTimeFormatLength")){
-                    
+
                      Node calendar = grandParentNode.getParentNode().getParentNode();
                      NamedNodeMap ggpa = calendar.getAttributes();
                      Node ggptNode = ggpa.getNamedItem("type");
@@ -1240,9 +1240,9 @@ public class LDMLComparator {
                         String ptType = ptNode.getNodeValue();
                         if(!ptType.equals("standard")){
                             parentNodeName = parentNodeName+"\u200b_"+ptType;
-                        }    
+                        }
                     }
-                    
+
                  }
                  if(childNodeName.equals("pattern") ||grandParentNodeName.equals("zone") ){
                      if(parentNodeName.indexOf("date")==-1 && parentNodeName.indexOf("time")==-1){
@@ -1256,7 +1256,7 @@ public class LDMLComparator {
                                  }else{
                                      type = type+"\u200b_"+mytype;
                                  }
-                                 
+
                              }
                          }
                      }
@@ -1265,10 +1265,10 @@ public class LDMLComparator {
                     || grandParentNodeName.indexOf(":")>0){
                      continue;
                  }
-                 if(!nodeValue.equals("") && 
+                 if(!nodeValue.equals("") &&
                     !childOfSource.getNodeName().equals("version")){
-             
-                    
+
+
                      // for country codes and language codes
                      // replace the deprecated codes with the latest ones
                      if(childNodeName.equals("language")){
@@ -1286,20 +1286,20 @@ public class LDMLComparator {
                      if(!type.equals("")){
                          id = parentNodeName+"_"+childNodeName+"_"+type+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName;
                      }else{
-                         id = parentNodeName+"_"+childNodeName+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName; 
+                         id = parentNodeName+"_"+childNodeName+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName;
                      }
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){
-                            if(!m_Vetting || subDraft) {                         
+                            if(!m_Vetting || subDraft) {
                                 addElement(childNodeName, parentNodeName, id, index, nodeValue, key,referenceUrl);
                                 if(altText!=null) {
                                 addElement(childNodeName, parentNodeName, id, index, altText, "ALT",null /* altReferenceUrl */);
                                 }
                             }
-                         } 
+                         }
                      }else{
                          if(!type.equals(nodeValue) && !type.equals("Fallback")){
-                            if(!m_Vetting || subDraft) {                         
+                            if(!m_Vetting || subDraft) {
                                 addElement(childNodeName, parentNodeName, id, type, nodeValue, key,referenceUrl);
                                 if(altText!=null) {
                                     addElement(childNodeName, parentNodeName, id, index, altText, "ALT",null /* altReferenceUrl */);
@@ -1310,7 +1310,7 @@ public class LDMLComparator {
                  }
                  if(attr.getLength()>0 && typeNode==null){ //TODO: make this a fcn
                      // add an element for each attribute different for each attribute
-                     if(!m_Vetting || subDraft) {                         
+                     if(!m_Vetting || subDraft) {
                          for(int i=0; i<attr.getLength(); i++){
                              Node item = attr.item(i);
                              String attrName =item.getNodeName();
@@ -1325,13 +1325,13 @@ public class LDMLComparator {
                                  continue;
                              }
                              if(grandParentNodeName.equals("zone") ){
-                                parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
-                             } 
+                                parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;
+                             }
                              String id = grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName;
                              String subNodeValue = item.getNodeValue();
                              if(altForChild!=null) {
                                 subAltText="?";
-                                System.err.println(parentNodeName + "/" + childNodeName + " alt?? : " + altText); 
+                                System.err.println(parentNodeName + "/" + childNodeName + " alt?? : " + altText);
                                 throw new IllegalArgumentException("UNKNOWN ALT SUBTAG + " + parentNodeName + "/" + childNodeName + " alt?? : " + altText + " not " + subNodeValue);
                              }
                              if(!index.equals("")){
@@ -1352,8 +1352,8 @@ public class LDMLComparator {
              }
         }
         return true;
-    } 
-   
+    }
+
     //*****************************************************************************************************
     // method writes the differences between xml files all to one HTML file
     // added by PN
@@ -1365,19 +1365,19 @@ public class LDMLComparator {
         System.out.println("INFO: Creating file named: " + fileName);
         String fileName_summary = destFolder+ "/" + "Bulk_summary.html";
         System.out.println("INFO: Creating file named: " + fileName_summary);
-        
+
         try
         {
             OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
             OutputStreamWriter os_summary = new OutputStreamWriter(new FileOutputStream(fileName_summary),encoding);
-            
+
             //write the beginning of HTML page
             PrintWriter writer = new PrintWriter(os);
             PrintWriter writer_summary = new PrintWriter(os_summary);
             printHTMLStart(writer);
             printInfo(writer);
             printHTMLStart(writer_summary);
-            
+
             //not all platforms have files for all locales so first build a locale superset
             //loop thru locale files from each folder, each folder contains a certain number of locales
             //build a HashSet superset
@@ -1396,7 +1396,7 @@ public class LDMLComparator {
                         if ((fileList[j].compareTo("root.xml")==0)
                         || (fileList[j].compareTo("supplementalData.xml")==0))
                             continue;
-                        
+
                         //exclude common if -diff_ref_common option chosen by user
                         //as common will only be shown as a reference if there are differences between locales for other platforms
                         if ((m_iOptions & OPT_DIFF_REF_COMMON) != 0)
@@ -1405,29 +1405,29 @@ public class LDMLComparator {
                             if (platform.compareTo(COMMON)==0)
                                 continue;
                         }
-                        
+
                         //entries are only added to TreeSets if not already there
                         localeTreeSet.add(fileList[j]);
                         //     System.out.println (j + " adding " + fileList[j] + " to super set for platform " + (String) m_PlatformFolderVect.elementAt(i) );
                     }
                 }
             }
-            
+
             //      System.out.println(" size of locale set = " + localeTreeSet.size());
             //      System.out.println(" number of platforms = " + m_PlatformFolderVect.size() + "(" + m_PlatformVect.size() + ")");
-            
+
             //loop thru all locales
             Object[] localeArray = localeTreeSet.toArray();
             int i=0;
             for (i=0; i < localeArray.length; i++)
             {
                 String platforms_with_this_locale = "";
-                
+
                 String localeFile = (String)localeArray[i];  //locale file name without path
                 //class member localeStr used for writing to html
                 localeStr  = localeFile.substring(0, localeFile.indexOf('.'));
                 System.out.println("INFO: locale : " + localeStr);
-                
+
                 //add entry to CompareMap for any platforms having an xml file for the locale in question
                 for (int j = 0; j < m_PlatformFolderVect.size(); j++)
                 {
@@ -1441,7 +1441,7 @@ public class LDMLComparator {
                             String xmlFileName = localeDir + "/" + localeArray[i];
                             //       System.out.println(i + " " + j + " " + k + " adding " + xmlFileName + " to compareMap at key " + key);
                             addToCompareMap(xmlFileName, key);
-                            
+
                             if (!(((m_iOptions & OPT_DIFF_REF_COMMON) !=0)
                                 && (key.compareTo(COMMON)==0)))
                             {
@@ -1452,26 +1452,26 @@ public class LDMLComparator {
                     }
                 }
                 // System.out.println("size of compareMap " + compareMap.size());
-                
+
                 //print locale info and table header for this locale
                 printHTMLLocaleStart(writer, i, platforms_with_this_locale);
                 printTableHeaderForDifferences(writer);
-                
+
                 //now do the comparison for a specific locale
                 walkCompareMap(writer, localeStr, platforms_with_this_locale);
-                
+
                 //clear the compareMap before starting next locale
                 compareMap.clear();
-                
+
                 //finish html table
                 printHTMLLocaleEnd(writer);
-                
+
             }  //end outer for loop on locales
-            
+
             //print summary data to html summary file
             printLocaleSummaryToHTML (writer_summary);
             printAccumulatedResultsToHTML(writer_summary);
-            
+
             printHTMLEnd(writer, i);
             printHTMLEnd(writer_summary, i);
         }
@@ -1482,7 +1482,7 @@ public class LDMLComparator {
         System.out.println("INFO: Finished writing file named: " + fileName);
         System.out.println("INFO: Finished writing file named: " + fileName_summary);
     }
-    
+
     // added by PN
     private void printHTMLStart(PrintWriter writer)
     {
@@ -1502,10 +1502,10 @@ public class LDMLComparator {
         "     </style>"+
         "     <body bgcolor=\"#FFFFFF\"> \n" +
         "        <p><b>LOCALE DATA AUDIT</b></p>");
-        
+
         writer.print("        <p>Created on: " + cal.getTime() +"</p>\n");
     }
-    
+
     private void printInfo(PrintWriter writer)
     {
         if (((m_iOptions & OPT_DIFF_REF_COMMON) != 0)
@@ -1514,12 +1514,12 @@ public class LDMLComparator {
             writer.print("        <p>locale elements where there is a difference between at least two platforms are shown. \n" +
             "If a locale element is the same across all platforms it is not shown </p>");
         }
-        
+
         if ((m_iOptions & OPT_DIFF_REF_COMMON) != 0)
             writer.print("<p>   Common data is shown for reference purposes only and is not part of the comparison</p>\n");
-        
+
     }
-    
+
     // added by PN
     private void printHTMLEnd(PrintWriter writer, int iTotalNumLocales)
     {
@@ -1537,7 +1537,7 @@ public class LDMLComparator {
             platforms += m_PlatformVect.elementAt(i);
             platforms += ", ";
         }
-        
+
         writer.print("          <p><b>Platforms compared : "+ platforms + "</b></p>");
         writer.print("          <p><b>Total Number of locales audited : " +  iTotalNumLocales + "</b></p>" +
         "           <p><b>Total Number of conflicting locale data across all locales : " + serialNumber + "</b></p>" +
@@ -1546,7 +1546,7 @@ public class LDMLComparator {
         "    </body>\n"+
         "</html>\n");
         writer.flush();
-        
+
         writer.flush();
     }
 
@@ -1565,7 +1565,7 @@ public class LDMLComparator {
         {
             displayName += ") ";
         }
-        
+
         writer.print(
         "        <p><b>" + iLocaleCounter + "&nbsp;&nbsp;&nbsp;" +displayName+
         //   "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
@@ -1576,18 +1576,18 @@ public class LDMLComparator {
         "<b>&nbsp;&nbsp;&nbsp; platforms with this locale : " + platforms_with_this_locale + "</b></p>\n" +
         "        <table>\n");
     }
-    
+
     // added by PN
     private void printHTMLLocaleEnd(PrintWriter writer)
     {
         writer.print( "        </table>\n");
     }
-    
+
     // added by PN
     private void walkCompareMap(PrintWriter writer, String locale, String platforms)
     {
         SummaryData summData = new SummaryData ();
-        
+
         // walk down the compare map and print the data
         Iterator iter = compareMap.keySet().iterator();
         while(iter.hasNext())
@@ -1604,7 +1604,7 @@ public class LDMLComparator {
                 {
                     throw new RuntimeException("The object stored in the compare map is not an instance of CompareElement");
                 }
-                
+
                 boolean bIsEqual = true;
                 if ((m_iOptions & OPT_DIFF) !=0)
                 {
@@ -1620,10 +1620,10 @@ public class LDMLComparator {
                 {
                     printValue(element,writer);
                 }
-                
+
                 if (bIsEqual == false)
                     summData.m_iNumConflictingElements++;
-                
+
             }else
             {
                 throw new RuntimeException("No objects stored in the compare map!");
@@ -1631,21 +1631,21 @@ public class LDMLComparator {
         }
         summData.m_szPlatforms = platforms;
         m_LocaleSummaryDataMap.put(locale, summData);
-        
+
     }
-    
+
     //PN added
     private void AddToAccumulatedResultsMap(String id, CompareElement element, String locale, boolean bIsEqual)
     {
         if (element == null)
             return;
-        
+
         Object obj = m_AccumulatedResultsMap.get(id);
         AccumulatedResults ad;
         if(obj==null)
         {
             //  System.out.println("id = " + id);
-            
+
             //add a new entry, there's none there with this key
             ad = new AccumulatedResults();
             ad.index = element.index;
@@ -1684,10 +1684,10 @@ public class LDMLComparator {
             }
         }
     }
-    
+
     private void printAccumulatedResultsToHTML(PrintWriter writer)
     {
-        writer.print("<p>&nbsp;</p>");    
+        writer.print("<p>&nbsp;</p>");
         writer.print("<p>&nbsp;</p>");
         writer.print("<p><b>Table below shows the number of locales where conflicts did and didn't occur on a per locale element basis");
         writer.print("&nbsp;&nbsp; (For brevity, locale elements where no conflicts were detected for any locale are not shown) </b></p>");
@@ -1702,11 +1702,11 @@ public class LDMLComparator {
         "                <th width=10%># of conflicting locales</th>" +
         "                <th width=45%>Locales where conflicts were found</th>" +
         "            </tr>\n");
-        
+
         // walk down the cm_AccumulateDifferenceMap and print the data
         Iterator iter = m_AccumulatedResultsMap.keySet().iterator();
         //  System.out.println ("size = " +  m_AccumulateDifferenceMap.size());
-        
+
         int iCounter = 0;
         while(iter.hasNext())
         {
@@ -1722,7 +1722,7 @@ public class LDMLComparator {
                 {
                     throw new RuntimeException("The object stored in the AccumulateDifferencesMap is not an instance of AccumulateDifferences");
                 }
-                
+
                 //only print locale elements where differences occurred
                 if (ad.localeVectDiff.size() > 0)
                 {
@@ -1747,20 +1747,20 @@ public class LDMLComparator {
                 {
                     m_iTotalNonConflictingElements++;
                 }
-                
+
             }else
             {
                 throw new RuntimeException("No objects stored in the AccumulateDifferencesMap!");
             }
         }
-        
+
         writer.print("      </table>\n");
-        
+
     }
-  
+
     private void printLocaleSummaryToHTML(PrintWriter writer)
     {
-        writer.print("<p>&nbsp;</p>");    
+        writer.print("<p>&nbsp;</p>");
         writer.print("<p>&nbsp;</p>");
         writer.print("<p><b>Table below shows the number of conflicting elements on a per locale basis\n</b></p>");
         writer.print("<p></p>");
@@ -1771,7 +1771,7 @@ public class LDMLComparator {
         "                <th width=40%>Platforms With This Locale</th>\n"+
         "                <th width=35%># of elements where a conflict was found</th>\n"+
         "            </tr>\n");
-        
+
         // walk down the cm_AccumulateDifferenceMap and print the data
         Iterator iter = m_LocaleSummaryDataMap.keySet().iterator();
         int iCounter =0;
@@ -1789,7 +1789,7 @@ public class LDMLComparator {
                 {
                     throw new RuntimeException("The object stored in the AccumulateDifferencesMap is not an instance of AccumulateDifferences");
                 }
-                
+
                     writer.print("            <tr>\n");
                     writer.print("                <td>"+(iCounter++)+"</td>\n");
                     writer.print("                <td>"+(String)obj+"</td>\n");
@@ -1801,10 +1801,10 @@ public class LDMLComparator {
                 throw new RuntimeException("No objects stored in the AccumulateDifferencesMap!");
             }
         }
-        
-        writer.print("      </table>\n");   
-    }    
-    
+
+        writer.print("      </table>\n");
+    }
+
     private void getCVSVersion()
     {
         ourCvsVersion = LDMLUtilities.getCVSVersion(goldFileName);

@@ -58,7 +58,7 @@ public class TestFmwk extends AbstractTestLog {
         }
     }
 
-    // use this instead of new random so we get a consistent seed 
+    // use this instead of new random so we get a consistent seed
     // for our tests
     protected Random createRandom() {
     return new Random(params.seed);
@@ -110,7 +110,7 @@ public class TestFmwk extends AbstractTestLog {
 
         /**
          * Constructor that takes a list of class names and a description,
-         * and uses the package for this class as the default package.  
+         * and uses the package for this class as the default package.
          */
         protected TestGroup(String[] classnames, String description) {
             this(null, classnames, description);
@@ -132,7 +132,7 @@ public class TestFmwk extends AbstractTestLog {
             Target target = null;
             if (targetName != null) {
                 finishInit(); // hmmm, want to get subtest without initializing all tests
-        
+
                 try {
                     TestFmwk test = getSubtest(targetName);
                     if (test != null) {
@@ -254,7 +254,7 @@ public class TestFmwk extends AbstractTestLog {
         public Target getNext() {
             return next;
         }
-        
+
         public void run() {
             int f = filter();
             if (f == -1) {
@@ -272,7 +272,7 @@ public class TestFmwk extends AbstractTestLog {
                 }
             }
         }
-        
+
         protected int filter() {
             return params.filter(name);
         }
@@ -328,9 +328,9 @@ public class TestFmwk extends AbstractTestLog {
                 } catch( IllegalAccessException e ) {
                     errln("Can't access test method " + testMethod.getName());
                 } catch( InvocationTargetException e ) {
-                    
+
                     String msg = "Uncaught exception " + getStackTrace(e);
-                    
+
             if (params.nothrow) {
                         errln(msg);
                     } else {
@@ -350,7 +350,7 @@ public class TestFmwk extends AbstractTestLog {
 
     public class ClassTarget extends Target {
         String targetName;
-        
+
         public ClassTarget() {
             this(null);
         }
@@ -390,7 +390,7 @@ public class TestFmwk extends AbstractTestLog {
 
                 if (true) { // todo - add to params?
                     // different jvms return class methods in different orders,
-                    // so we sort them (always, and then randomize them, so that 
+                    // so we sort them (always, and then randomize them, so that
                     // forcing a seed will also work across jvms).
                     Arrays.sort(arr, new Comparator() {
                             public int compare(Object lhs, Object rhs) {
@@ -439,7 +439,7 @@ public class TestFmwk extends AbstractTestLog {
      * set, prompt and wait for input from stdin.  Finally, exit with
      * number of errors.
      *
-     * This method never returns, since it always exits with System.exit(); 
+     * This method never returns, since it always exits with System.exit();
      */
     public void run(String[] args) {
         TestParams params = new TestParams();
@@ -530,7 +530,7 @@ public class TestFmwk extends AbstractTestLog {
         if (usageError) {
             usage();
             System.exit(exitCode);
-        } 
+        }
 
         if (filter != null) {
             params.filter = filter.toLowerCase();
@@ -553,7 +553,7 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
         catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             System.out.println(e.getMessage());
             System.out.println("encountered exception, exiting");
         }
@@ -592,7 +592,7 @@ public class TestFmwk extends AbstractTestLog {
      * Resolve a path from this test to a target.  If this test has subtests, and the
      * path contains '/', the portion before the '/' is resolved to a
      * subtest, until the path is consumed or the test has no
-     * subtests.  Returns a ClassTarget created using the 
+     * subtests.  Returns a ClassTarget created using the
      * resolved test and remaining path (which ought to be null or a
      * method name).  Params is set on the target's test.
      */
@@ -732,7 +732,7 @@ public class TestFmwk extends AbstractTestLog {
     public void msg(String message, int level, boolean incCount, boolean newln) {
         params.msg(message, level, incCount, newln);
     }
-    
+
     protected int getErrorCount() {
         return params.errorCount;
     }
@@ -842,7 +842,7 @@ public class TestFmwk extends AbstractTestLog {
             }else{
                 result.append(ch);
             }
-            
+
         }
         return result.toString();
     }
@@ -955,7 +955,7 @@ public class TestFmwk extends AbstractTestLog {
         public String    filter;
         public long      seed;
         public String    tfilter; // for transliterator tests
-        
+
         private State    stack;
 
         private StringBuffer errorSummary;
@@ -980,7 +980,7 @@ public class TestFmwk extends AbstractTestLog {
             testCount = 0;
             random = seed == 0 ? null : new Random(seed);
         }
-        
+
         private class State {
             State link;
             String name;
@@ -1051,7 +1051,7 @@ public class TestFmwk extends AbstractTestLog {
                 stack = stack.link;
             }
         }
-            
+
         public boolean inDocMode() {
             return describe || listlevel != 0;
         }
@@ -1216,7 +1216,7 @@ public class TestFmwk extends AbstractTestLog {
                 }
                 needLineFeed = false;
             }
-                
+
             log.print(spaces.substring(0, distance * (idm ? 3 : 2)));
 
             if (idm) {
@@ -1239,7 +1239,7 @@ public class TestFmwk extends AbstractTestLog {
         try {
             Field f = testClass.getField("CLASS_TARGET_NAME");
             name = (String)f.get(null);
-        } 
+        }
         catch (IllegalAccessException e) {
             throw new InternalError("static field CLASS_TARGET_NAME must be accessible");
         }
@@ -1309,10 +1309,10 @@ public class TestFmwk extends AbstractTestLog {
                              Locale array[],
                              String expected[]) {
         String strs[] = new String[array.length];
-        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString(); 
+        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString();
         return checkArray(msg, strs, expected);
     }
-    
+
     /**
      * Check the given array to see that all the locales
      * in the expected array are present.
@@ -1325,10 +1325,10 @@ public class TestFmwk extends AbstractTestLog {
                              ULocale array[],
                              String expected[]) {
         String strs[] = new String[array.length];
-        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString(); 
+        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString();
         return checkArray(msg, strs, expected);
     }
-    
+
     /**
      * JUnit-like assertions.
      */

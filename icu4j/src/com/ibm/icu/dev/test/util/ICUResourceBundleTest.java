@@ -24,7 +24,7 @@ import com.ibm.icu.util.UResourceBundle;
 
 
 public final class ICUResourceBundleTest extends TestFmwk {
-    
+
     public static void main(String args[]) throws Exception {
         ICUResourceBundleTest test = new ICUResourceBundleTest();
         test.run(args);
@@ -32,17 +32,17 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestGetResources(){
         try{
-            ClassLoader loader = getClass().getClassLoader(); 
+            ClassLoader loader = getClass().getClassLoader();
             Enumeration enum = loader.getResources("META-INF");
             for(;enum.hasMoreElements();){
-            	//URL url = loader.getResource("LocaleElements_en.class");
-            	//File file = new File(url.getPath());
+                //URL url = loader.getResource("LocaleElements_en.class");
+                //File file = new File(url.getPath());
                 URL url = (URL)enum.nextElement();
                 File file = new File(url.getPath());
                 File[] files = file.listFiles();
                 if(files!=null){
                     for(int i=0; i<files.length; i++){
-                    	logln(files[i].getName());
+                        logln(files[i].getName());
                     }
                 }
             }
@@ -58,28 +58,28 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }else{
             errln("Did not get the expected output for Weekend data");
         }
-       
-        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());   
+
+        bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());
         if(bundle instanceof ICUResourceBundle && bundle.getULocale().equals("root")){
             logln("wrapper mechanism works for bogus locale");
         }else{
-            logln("wrapper mechanism failed for bogus locale");   
+            logln("wrapper mechanism failed for bogus locale");
         }
-         
+
         try{
             bundle = UResourceBundle.getBundleInstance("bogus", "bogus", this.getClass().getClassLoader());
             if(bundle!=null){
-              errln("Did not get the expected exception");   
+              errln("Did not get the expected exception");
             }
         }catch(MissingResourceException ex){
-            logln("got the expected exception");   
+            logln("got the expected exception");
         }
-        
-        
+
+
     }
     public void TestJB3879(){
-        // this tests tests loading of root bundle when a resource bundle 
-        // for the default locale is requested 
+        // this tests tests loading of root bundle when a resource bundle
+        // for the default locale is requested
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
         if(bundle==null){
             errln("could not create the resource bundle");
@@ -87,13 +87,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
     public void TestOpen(){
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en_US_POSIX", ICUData.class.getClassLoader());
-       
+
         if(bundle==null){
-            errln("could not create the resource bundle");   
+            errln("could not create the resource bundle");
         }
-        
+
         ICUResourceBundle obj =  bundle.get("NumberPatterns");
-        
+
         int size = obj.getSize();
         int type = obj.getType();
         if(type == ICUResourceBundle.ARRAY){
@@ -103,20 +103,20 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 String temp =sub.getString();
                 if(temp.length()==0){
                     errln("Failed to get the items from NumberPatterns array in bundle: "+
-                            bundle.getULocale().getBaseName());   
+                            bundle.getULocale().getBaseName());
                 }
                 //System.out.println("\""+prettify(temp)+"\"");
             }
-            
+
         }
         String[] strings = bundle.getStringArray("NumberPatterns");
         if(size!=strings.length){
             errln("Failed to get the items from NumberPatterns array in bundle: "+
-                    bundle.getULocale().getBaseName()); 
+                    bundle.getULocale().getBaseName());
         }
         {
             obj =  bundle.get("NumberElements");
-            
+
             size = obj.getSize();
             type = obj.getType();
             if(type == ICUResourceBundle.ARRAY){
@@ -126,28 +126,28 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     String temp =sub.getString();
                     if(temp.length()==0){
                         errln("Failed to get the items from NumberPatterns array in bundle: "+
-                                bundle.getULocale().getBaseName());   
+                                bundle.getULocale().getBaseName());
                     }
                    // System.out.println("\""+prettify(temp)+"\"");
                 }
-                
-            }   
+
+            }
         }
         if(bundle==null){
-            errln("could not create the resource bundle");   
-        }       
+            errln("could not create the resource bundle");
+        }
         bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "en_US_POSIX");
         if(bundle==null){
-            errln("could not load the stream");   
+            errln("could not load the stream");
         }
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "my_very_very_very_long_bogus_bundle");   
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "my_very_very_very_long_bogus_bundle");
         if(!bundle.getULocale().equals(ULocale.getDefault())){
-            errln("UResourceBundle did not load the default bundle when bundle was not found");   
+            errln("UResourceBundle did not load the default bundle when bundle was not found");
         }
-        
-        
+
+
     }
-    
+
     public void TestBasicTypes(){
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "testtypes");
         {
@@ -166,7 +166,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(!expected.equals(sub.getString())){
                 errln("Did not get the expected string for key emptystring in bundle testtypes");
             }
-        } 
+        }
         {
             int expected = 123;
             ICUResourceBundle sub = bundle.get("onehundredtwentythree");
@@ -205,7 +205,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(expected!=sub.getInt()){
                 errln("Did not get the expected int value for key minusone in bundle testtypes");
             }
-            
+
         }
         {
             int[] expected = new int[]{ 1, 2, 3, -3, 4, 5, 6, 7 }   ;
@@ -218,7 +218,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(!Utility.arrayEquals(expected,sub.getIntVector())){
                 errln("Did not get the expected int vector value for key emptyintv in bundle testtypes");
             }
-            
+
         }
         {
             ICUResourceBundle sub = bundle.get("binarytest");
@@ -229,7 +229,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             for(int i=0; i< got.remaining(); i++){
                 byte b = got.get();
                 if(b!=i){
-                    errln("Did not get the expected value for binary buffer at index: "+i);   
+                    errln("Did not get the expected value for binary buffer at index: "+i);
                 }
             }
             sub = bundle.get("emptybin");
@@ -237,53 +237,53 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(got.remaining()!=0){
                 errln("Did not get the expected length for the emptybin ByteBuffer");
             }
-            
+
         }
         {
             ICUResourceBundle sub = bundle.get("emptyarray");
             String key = sub.getKey();
             if(!key.equals("emptyarray")){
-                errln("Did not get the expected key for emptytable item");   
+                errln("Did not get the expected key for emptytable item");
             }
             if(sub.getSize()!=0){
-                errln("Did not get the expected length for emptytable item");   
+                errln("Did not get the expected length for emptytable item");
             }
         }
         {
             ICUResourceBundle sub = bundle.get("menu");
             String key = sub.getKey();
             if(!key.equals("menu")){
-                errln("Did not get the expected key for menu item");   
+                errln("Did not get the expected key for menu item");
             }
             ICUResourceBundle sub1 = sub.get("file");
             key = sub1.getKey();
             if(!key.equals("file")){
-                errln("Did not get the expected key for file item");   
+                errln("Did not get the expected key for file item");
             }
             ICUResourceBundle sub2 = sub1.get("open");
             key = sub2.getKey();
             if(!key.equals("open")){
-                errln("Did not get the expected key for file item");   
+                errln("Did not get the expected key for file item");
             }
             String value = sub2.getString();
             if(!value.equals("Open")){
-                errln("Did not get the expected value for key for oen item");    
+                errln("Did not get the expected value for key for oen item");
             }
-            
+
             sub = bundle.get("emptytable");
             key = sub.getKey();
             if(!key.equals("emptytable")){
-                errln("Did not get the expected key for emptytable item");   
+                errln("Did not get the expected key for emptytable item");
             }
             if(sub.getSize()!=0){
-                errln("Did not get the expected length for emptytable item");   
+                errln("Did not get the expected length for emptytable item");
             }
             sub = bundle.get("menu").get("file");
             int size = sub.getSize();
             String expected;
             for(int i=0; i<size; i++){
                 sub1 = sub.get(i);
-                
+
                 switch(i){
                     case 0:
                         expected = "exit";
@@ -301,11 +301,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 if(!expected.equals(got)){
                     errln("Did not get the expected key at index"+i+". Expected: "+expected+" Got: "+got);
                 }else{
-                    logln("Got the expected key at index: "+i);   
+                    logln("Got the expected key at index: "+i);
                 }
             }
         }
-        
+
     }
     private static final class TestCase{
         String key;
@@ -326,15 +326,15 @@ public final class ICUResourceBundleTest extends TestFmwk {
           new TestCase  ( "1oooooooooooooooo", 65536 ),
           new TestCase  ( "1ooooooo11o11ooo1", 65969 ),
           new TestCase  ( "1ooooooo11o11oo1o", 65970 ),
-          new TestCase  ( "1ooooooo111oo1111", 65999 )  
+          new TestCase  ( "1ooooooo111oo1111", 65999 )
         };
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testtable32");
         if(bundle.getType()!= ICUResourceBundle.TABLE){
-            errln("Could not get the correct type for bundle testtable32");   
+            errln("Could not get the correct type for bundle testtable32");
         }
         int size =bundle.getSize();
         if(size!=66000){
-            errln("Could not get the correct size for bundle testtable32");   
+            errln("Could not get the correct size for bundle testtable32");
         }
         for(int i =0; i<size; i++){
             ICUResourceBundle item = bundle.get(i);
@@ -351,13 +351,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
                     break;
                 default:
                     errln("Got unexpected resource type in testtable32");
-                      
+
             }
             if(number!=parsedNumber){
                 errln("Did not get expected value in testtypes32 for key"+
-                      key+". Expected: "+parsedNumber+" Got:"+number);   
+                      key+". Expected: "+parsedNumber+" Got:"+number);
             }
-            
+
         }
         for(int i=0;i<arr.length; i++){
             String expected = arr[i].key;
@@ -382,7 +382,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
             if(number!=parsedNumber){
                 errln("Did not get expected value in testtypes32 for key"+
-                      key+". Expected: "+parsedNumber+" Got:"+number);   
+                      key+". Expected: "+parsedNumber+" Got:"+number);
             }
         }
     }
@@ -400,10 +400,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         return number;
     }
-    
+
     public void TestAliases(){
        String simpleAlias   = "Open";
-                 
+
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
         ICUResourceBundle sub = rb.get("simplealias");
         String s1 = sub.getString("simplealias");
@@ -435,31 +435,31 @@ public final class ICUResourceBundleTest extends TestFmwk {
             rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
             sub = rb.get("BreakDictionaryData");
             if(sub.getType()!=ICUResourceBundle.BINARY){
-                errln("Did not get the expected type for BreakDictionaryData");   
+                errln("Did not get the expected type for BreakDictionaryData");
             }
             if(sub.getBinary().remaining()>0){
                 logln("Got the expected output for BreakDictionaryData");
             }else{
-                errln("Did not get the expected type for BreakDictionaryData"); 
+                errln("Did not get the expected type for BreakDictionaryData");
             }
-            
+
         }
         {
             ICUResourceBundle rb1 = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
             if(rb1!=rb){
-                errln("Caching of the resource bundle failed");   
+                errln("Caching of the resource bundle failed");
             }else{
-                logln("Caching of resource bundle passed");   
+                logln("Caching of resource bundle passed");
             }
             sub = rb1.get("testGetStringByKeyAliasing" );
-            
+
             s1 = sub.get("KeyAlias0PST").getString();
             if(s1.equals("America/Los_Angeles")){
                 logln("Alias mechanism works for KeyAlias0PST");
             }else{
                 errln("Did not get the expected output for KeyAlias0PST");
             }
-            
+
             s1 = sub.getString("KeyAlias1PacificStandardTime");
             if(s1.equals("Pacific Standard Time")){
                 logln("Alias mechanism works for KeyAlias1PacificStandardTime");
@@ -471,8 +471,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 logln("Alias mechanism works for KeyAlias2PDT");
             }else{
                 errln("Did not get the expected output for KeyAlias2PDT");
-            }            
-            
+            }
+
             s1 = sub.getString("KeyAlias3LosAngeles");
             if(s1.equals("Los Angeles")){
                 logln("Alias mechanism works for KeyAlias3LosAngeles. Got: "+s1);
@@ -499,8 +499,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 logln("Alias mechanism works for testGetStringByIndexAliasing/2");
             }else{
                 errln("Did not get the expected output for testGetStringByIndexAliasing/2");
-            }            
-            
+            }
+
             s1 = sub.getString(3);
             if(s1.equals("Los Angeles")){
                 logln("Alias mechanism works for testGetStringByIndexAliasing/3. Got: "+s1);
@@ -512,7 +512,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             sub = rb.get("BreakDictionaryData" );
             ByteBuffer buf = sub.getBinary();
             if(buf==null){
-                errln("Did not get the expected output for BreakDictionaryData");   
+                errln("Did not get the expected output for BreakDictionaryData");
             }
         }
         // should not get an exception
@@ -548,7 +548,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }else{
             errln("%%ALIAS mechanism failed for iw_IL");
-        }        
+        }
     }
     public void TestCircularAliases(){
         try{
@@ -556,13 +556,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
             ICUResourceBundle sub = rb.get("aaa");
             String s1 = sub.getString();
             if(s1!=null){
-                errln("Did not get the expected exception");   
+                errln("Did not get the expected exception");
             }
         }catch(IllegalArgumentException ex){
-            logln("got expected exception for circular references");   
+            logln("got expected exception for circular references");
         }
-    }    
-    
+    }
+
     public void TestGetWithFallback(){
         /*
         ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN");
@@ -580,7 +580,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         try{
             bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
             if(!bundle.getULocale().equals("de")){
-                errln("did not get the expected bundle");   
+                errln("did not get the expected bundle");
             }
             key = bundle.getStringWithFallback("collations/collation/default");
             if(!key.equals("phonebook")){
@@ -591,17 +591,17 @@ public final class ICUResourceBundleTest extends TestFmwk {
             logln("got the expected exception");
         }
 
-       
+
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
         key = bundle.getStringWithFallback("collations/default");
         if(!key.equals("standard")){
             errln("Did not get the expected result from getStringWithFallback method.");
-        }  
+        }
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"fr_FR");
         ICUResourceBundle b1 = bundle.getWithFallback("calendar");
         String defaultCal = b1.getStringWithFallback("default");
         if(!defaultCal.equals("gregorian")){
-            errln("Did not get the expected default calendar string: Expected: gregorian, Got: "+defaultCal);   
+            errln("Did not get the expected default calendar string: Expected: gregorian, Got: "+defaultCal);
         }
         ICUResourceBundle b2 = b1.getWithFallback(defaultCal);
         ICUResourceBundle b3 = b2.getWithFallback("monthNames");
@@ -610,22 +610,22 @@ public final class ICUResourceBundleTest extends TestFmwk {
         String defaultWidth  = b4.getStringWithFallback("default");
         ICUResourceBundle b5 = b4.getWithFallback(defaultWidth);
         if(b5.getSize()!=12){
-            errln("Did not get the expected size for the default monthNames");   
+            errln("Did not get the expected size for the default monthNames");
         }
-        
-        
+
+
     }
-    
+
     private static final String COLLATION_RESNAME = "collations";
     private static final String COLLATION_KEYWORD = "collation";
     private static final String DEFAULT_NAME = "default";
     private static final String STANDARD_NAME = "standard";
-    
+
     public void TestKeywordValues(){
         String kwVals[];
         boolean foundStandard = false;
         int n;
-        
+
         logln("Testing getting collation values:");
         kwVals = ICUResourceBundle.getKeywordValues(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME);
         for(n=0;n<kwVals.length;n++) {
@@ -641,7 +641,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 }
             }
         }
-        
+
         if(foundStandard == false) {
             errln("Error - 'standard' was not in the collation tree as a keyword.");
         } else {
@@ -654,17 +654,17 @@ public final class ICUResourceBundleTest extends TestFmwk {
         for (int i = 0; i < locales.length; ++i) {
             if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
                  errln("Could not get localized country for "+ locales[i]);
-            } 
+            }
             if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){
                 errln("Could not get localized language for "+ locales[i]);
-            } 
+            }
             if(!hasLocalizedCountryFor(locales[i], locales[i])){
                 errln("Could not get localized country for "+ locales[i]);
                 hasLocalizedCountryFor(locales[i], locales[i]);
-            } 
+            }
             if(!hasLocalizedLanguageFor(locales[i], locales[i])){
                 errln("Could not get localized language for "+ locales[i]);
-            } 
+            }
 
             logln(locales[i] + "\t" + locales[i].getDisplayName(ULocale.ENGLISH) + "\t" + locales[i].getDisplayName(locales[i]));
         }
@@ -675,17 +675,17 @@ public final class ICUResourceBundleTest extends TestFmwk {
         String localizedVersion = otherLocale.getDisplayLanguage(locale);
         return !lang.equals(localizedVersion);
     }
-    
+
     private static boolean hasLocalizedCountryFor(ULocale locale, ULocale otherLocale) {
         String country = otherLocale.getCountry();
         if (country.equals("")) return true;
         String localizedVersion = otherLocale.getDisplayCountry(locale);
         return !country.equals(localizedVersion);
     }
-    
-    public void TestFunctionalEquivalent(){ 
+
+    public void TestFunctionalEquivalent(){
        String[] testCases = {
-        //              avail   locale          equiv  
+        //              avail   locale          equiv
         "f",    "de_US_CALIFORNIA",            "de",
         "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
         "f",    "de_CN@collation=pinyin",      "de",
@@ -711,32 +711,32 @@ public final class ICUResourceBundleTest extends TestFmwk {
         "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",   "hi"
            };
-    
+
        String F_STR = "f";
        String T_STR = "t";
        boolean isAvail[] = new boolean[1];
        int i;
-       
+
        logln("Testing functional equivalents...");
        for(i=0;i<testCases.length;i+=3) {
            boolean expectAvail = T_STR.equals(testCases[i+0]);
            ULocale inLocale = new ULocale(testCases[i+1]);
            ULocale expectLocale = new ULocale(testCases[i+2]);
- 
-           logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" + 
+
+           logln(new Integer(i/3).toString() + ": " + new Boolean(expectAvail).toString() + "\t\t" +
                    inLocale.toString() + "\t\t" + expectLocale.toString());
 
            ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME,COLLATION_RESNAME,
                    COLLATION_KEYWORD, inLocale, isAvail);
            boolean gotAvail = isAvail[0];
-           
+
            if((gotAvail!=expectAvail) || !equivLocale.equals(expectLocale)) {
-               errln(new Integer(i/3).toString() + ":  Error, expected  Equiv=" + new Boolean(expectAvail).toString() + "\t\t" + 
+               errln(new Integer(i/3).toString() + ":  Error, expected  Equiv=" + new Boolean(expectAvail).toString() + "\t\t" +
                        inLocale.toString() + "\t\t--> " + expectLocale.toString() + ",  but got " + new Boolean(gotAvail).toString() + " " +
                        equivLocale.toString());
            }
-       }      
-       
+       }
+
        logln("Testing error conditions:");
        try {
            ULocale equivLocale = ICUResourceBundle.getFunctionalEquivalent(ICUResourceBundle.ICU_COLLATION_BASE_NAME, "calendar",
@@ -746,19 +746,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
            logln("expected MissingResourceException caught (PASS): " + t.toString());
        }
     }
-    
+
     public void TestNorwegian(){
         try{
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "no_NO_NY");
             ICUResourceBundle sub = rb.get("Countries");
             String s1 = sub.getString("NO");
             if(s1.equals("Noreg")){
-                logln("got expected output ");   
+                logln("got expected output ");
             }else{
                 errln("did not get the expected result");
             }
         }catch(IllegalArgumentException ex){
-            errln("Caught an unexpected expected");   
+            errln("Caught an unexpected expected");
         }
     }
 }

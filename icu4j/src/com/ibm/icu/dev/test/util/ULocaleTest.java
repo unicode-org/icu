@@ -35,7 +35,7 @@ public class ULocaleTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new ULocaleTest().run(args);
     }
-    
+
     public void TestCalendar() {
         // TODO The CalendarFactory mechanism is not public,
         // so we can't test it yet.  If it becomes public,
@@ -106,7 +106,7 @@ public class ULocaleTest extends TestFmwk {
                     }
                     public boolean unregister(Object key) {
                         return BreakIterator.unregister(key);
-                    }            
+                    }
                 });
     }
 
@@ -121,7 +121,7 @@ public class ULocaleTest extends TestFmwk {
                     }
                     public boolean unregister(Object key) {
                         return Collator.unregister(key);
-                    }            
+                    }
                 });
     }
 
@@ -239,20 +239,20 @@ public class ULocaleTest extends TestFmwk {
         String actual = actualLoc.toString();
         int reqValid = loccmp(req, valid);
         int validActual = loccmp(valid, actual);
-	boolean reqOK = (expReqValid.equals("gt") && reqValid > 0) ||
-	    (expReqValid.equals("ge") && reqValid >= 0) ||
-	    (expReqValid.equals("eq") && reqValid == 0); 
-	boolean valOK = (expValidActual.equals("gt") && validActual > 0) ||
-	    (expValidActual.equals("ge") && validActual >= 0) ||
-	    (expValidActual.equals("eq") && validActual == 0);
+    boolean reqOK = (expReqValid.equals("gt") && reqValid > 0) ||
+        (expReqValid.equals("ge") && reqValid >= 0) ||
+        (expReqValid.equals("eq") && reqValid == 0);
+    boolean valOK = (expValidActual.equals("gt") && validActual > 0) ||
+        (expValidActual.equals("ge") && validActual >= 0) ||
+        (expValidActual.equals("eq") && validActual == 0);
         if (reqOK && valOK) {
             logln("Ok: " + label + "; req=" + req + ", valid=" + valid +
                   ", actual=" + actual);
         } else {
             errln("FAIL: " + label + "; req=" + req + ", valid=" + valid +
                   ", actual=" + actual +
-		  (reqOK ? "" : "\n  req !" + expReqValid + " valid") +
-		  (valOK ? "" : "\n  val !" + expValidActual + " actual"));
+          (reqOK ? "" : "\n  req !" + expReqValid + " valid") +
+          (valOK ? "" : "\n  val !" + expValidActual + " actual"));
         }
     }
 
@@ -300,12 +300,12 @@ public class ULocaleTest extends TestFmwk {
                       valid.toLocale(), actual.toLocale(),
                       expReqValid, expValidActual);
         }
-        
+
         // Make the following exceptions _specific_ -- do not
         // catch(Exception), since that will catch the exception
         // that errln throws.
         catch(NoSuchMethodException e1) {
-	    // no longer an error, Currency has no getLocale
+        // no longer an error, Currency has no getLocale
             // errln("FAIL: reflection failed: " + e1);
         } catch(SecurityException e2) {
             errln("FAIL: reflection failed: " + e2);
@@ -314,7 +314,7 @@ public class ULocaleTest extends TestFmwk {
         } catch(IllegalArgumentException e4) {
             errln("FAIL: reflection failed: " + e4);
         } catch(InvocationTargetException e5) {
-	    // no longer an error, Currency has no getLocale
+        // no longer an error, Currency has no getLocale
             // errln("FAIL: reflection failed: " + e5);
         }
     }
@@ -386,8 +386,8 @@ public class ULocaleTest extends TestFmwk {
         /* variant code */
         {   "",     "",     "",     "",     "NY",   "", "", "", ""      },
         /* full name */
-        {   "en_US",    "fr_FR",    "ca_ES",    
-            "el_GR",    "no_NO_NY", "zh_Hans_CN", 
+        {   "en_US",    "fr_FR",    "ca_ES",
+            "el_GR",    "no_NO_NY", "zh_Hans_CN",
             "de_DE@collation=phonebook", "es@collation=traditional",  "ja_JP@calendar=japanese" },
         /* ISO-3 language */
         {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho", "deu", "spa", "jpn"   },
@@ -405,8 +405,8 @@ public class ULocaleTest extends TestFmwk {
         /* display variant (English) */
         {   "",     "",     "",     "",     "NY",  "", "", "", ""       },
         /* display name (English) */
-        {   "English (United States)", "French (France)", "Catalan (Spain)", 
-            "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)", 
+        {   "English (United States)", "French (France)", "Catalan (Spain)",
+            "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)",
             "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japanese Calendar)" },
 
         /* display language (French) */
@@ -418,8 +418,8 @@ public class ULocaleTest extends TestFmwk {
         /* display variant (French) */
         {   "",     "",     "",     "",     "NY",   "", "", "", ""       },
         /* display name (French) */
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", 
-            "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (Hans, Chine)", 
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)",
+            "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (Hans, Chine)",
             "allemand (Allemagne, Ordonnancement=Ordre de l'annuaire)", "espagnol (Ordonnancement=Ordre traditionnel)", "japonais (Japon, Calendrier=Calendrier japonais)" },
 
         /* display language (Catalan) */
@@ -431,8 +431,8 @@ public class ULocaleTest extends TestFmwk {
         /* display variant (Catalan) */
         {   "", "", "",                    "", "NY",    "", "", "", ""    },
         /* display name (Catalan) */
-        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", 
-            "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)", 
+        {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)",
+            "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)",
             "alemany (Alemanya, COLLATION=PHONEBOOK)", "espanyol (COLLATION=TRADITIONAL)", "japon\\u00E8s (Jap\\u00F3, CALENDAR=JAPANESE)" },
 
         /* display language (Greek) */
@@ -442,10 +442,10 @@ public class ULocaleTest extends TestFmwk {
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
             "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac",
-            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC", 
-            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
-            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC", 
-            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC"   
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC",
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC",
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC",
+            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC"
         },
         /* display script code (Greek) */
         {   "",     "",     "",     "",     "",     "Hans", "", "", ""         },
@@ -456,10 +456,10 @@ public class ULocaleTest extends TestFmwk {
             "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1",
             "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1",
-            "\\u039A\\u03AF\\u03BD\\u03B1", 
-            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1", 
-            "", 
-            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1"   
+            "\\u039A\\u03AF\\u03BD\\u03B1",
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1",
+            "",
+            "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1"
         },
         /* display variant (Greek) */
         {   "", "", "", "", "NY", "", "", "", ""    }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
@@ -470,9 +470,9 @@ public class ULocaleTest extends TestFmwk {
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
             "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
             "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
-            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)", 
-            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, COLLATION=PHONEBOOK)", 
-            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (COLLATION=TRADITIONAL)", 
+            "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)",
+            "\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (\\u0393\\u03B5\\u03C1\\u03BC\\u03B1\\u03BD\\u03AF\\u03B1, COLLATION=PHONEBOOK)",
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (COLLATION=TRADITIONAL)",
             "\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03B9\\u03BA\\u03AC (\\u0399\\u03B1\\u03C0\\u03C9\\u03BD\\u03AF\\u03B1, CALENDAR=JAPANESE)"
         }
     };
@@ -516,7 +516,7 @@ public class ULocaleTest extends TestFmwk {
         for (i = 0; i < LOCALE_SIZE; i++) {
             String testLocale=(rawData2[NAME][i]);
             logln("Testing "+ testLocale+".....\n");
-            
+
             String lang =ULocale.getLanguage(testLocale);
             if (0 !=lang.compareTo(rawData2[LANG][i]))    {
                 errln("  Language code mismatch: "+lang+" versus "+  rawData2[LANG][i]);
@@ -550,7 +550,7 @@ public class ULocaleTest extends TestFmwk {
             {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN", null},
             {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", null},
             {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", null},
-        
+
             {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
             {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
             {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
@@ -566,32 +566,32 @@ public class ULocaleTest extends TestFmwk {
             {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
             {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
             {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
-    
+
             // odd cases
             {"", "", "", "", "@FOO=bar", "@foo=bar", null},
             {"", "", "", "", "_@FOO=bar", "@foo=bar", null},
             {"", "", "", "", "__@FOO=bar", "@foo=bar", null},
             {"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
         };
-        
+
         String loc, buf,buf1;
-        final String [] testTitles = { 
-            "ULocale.getLanguage()", 
-            "ULocale.getScript()", 
-            "ULocale.getCountry()", 
-            "ULocale.getVariant()", 
-            "name", 
-            "ULocale.getName()", 
+        final String [] testTitles = {
+            "ULocale.getLanguage()",
+            "ULocale.getScript()",
+            "ULocale.getCountry()",
+            "ULocale.getVariant()",
+            "name",
+            "ULocale.getName()",
             "canonicalize()",
         };
         ULocale uloc;
-        
+
         for(int row=0;row<testData.length;row++) {
             loc = testData[row][NAME];
             logln("Test #"+row+": "+loc);
 
-            uloc = new ULocale(loc);    
-            
+            uloc = new ULocale(loc);
+
             for(int n=0;n<=(NAME+2);n++) {
                 if(n==NAME) continue;
 
@@ -600,22 +600,22 @@ public class ULocaleTest extends TestFmwk {
                     buf  = ULocale.getLanguage(loc);
                     buf1 = uloc.getLanguage();
                     break;
-                    
+
                 case SCRIPT:
                     buf  = ULocale.getScript(loc);
                     buf1 = uloc.getScript();
                     break;
-                    
+
                 case CTRY:
                     buf  = ULocale.getCountry(loc);
                     buf1 = uloc.getCountry();
                     break;
-                    
+
                 case VAR:
                     buf  = ULocale.getVariant(loc);
                     buf1 = buf;
                     break;
-                    
+
                 case NAME+1:
                     buf  = ULocale.getName(loc);
                     buf1 = uloc.getName();
@@ -630,17 +630,17 @@ public class ULocaleTest extends TestFmwk {
                     buf = "**??";
                     buf1 = buf;
                 }
-                
+
                 logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
-                
+
                 String expected = testData[row][n];
                 if (expected == null && n == (NAME+2)) {
                     expected = testData[row][NAME+1];
                 }
 
                 // ignore POSIX failures in getName, we don't spec behavior in this case
-                if (n == NAME+1 && 
-                    (expected.indexOf('.') != -1 || 
+                if (n == NAME+1 &&
+                    (expected.indexOf('.') != -1 ||
                      expected.indexOf('@') != -1)) {
                     continue;
                 }
@@ -657,7 +657,7 @@ public class ULocaleTest extends TestFmwk {
 
     public void TestObsoleteNames(){
         final String[][] tests = new String[][]{
-            /* locale, language3, language2, Country3, country2 */  
+            /* locale, language3, language2, Country3, country2 */
             { "eng_USA", "eng", "en", "USA", "US" },
             { "kok",  "kok", "kok", "", "" },
             { "in",  "ind", "in", "", "" },
@@ -681,13 +681,13 @@ public class ULocaleTest extends TestFmwk {
             { "sh", "srp", "sh", "", "" },
             { "", "", "", "", "" }
         };
-        
+
         for(int i=0;i<tests.length;i++){
             String locale = tests[i][0];
             logln("** Testing : "+ locale);
             String buff, buff1;
             ULocale uloc  = new ULocale(locale);
-            
+
             buff = ULocale.getISO3Language(locale);
             if(buff.compareTo(tests[i][1])!=0){
                 errln("FAIL: ULocale.getISO3Language("+locale+")=="+
@@ -695,7 +695,7 @@ public class ULocaleTest extends TestFmwk {
             }else{
                 logln("   ULocale.getISO3Language("+locale+")=="+buff);
             }
-            
+
             buff1 = uloc.getISO3Language();
             if(buff1.compareTo(tests[i][1])!=0){
                 errln("FAIL: ULocale.getISO3Language("+locale+")=="+
@@ -703,7 +703,7 @@ public class ULocaleTest extends TestFmwk {
             }else{
                 logln("   ULocale.getISO3Language("+locale+")=="+buff);
             }
-            
+
             buff = ULocale.getLanguage(locale);
             if(buff.compareTo(tests[i][2])!=0){
                 errln("FAIL: ULocale.getLanguage("+locale+")=="+
@@ -711,7 +711,7 @@ public class ULocaleTest extends TestFmwk {
             }else{
                 logln("   ULocale.getLanguage("+locale+")=="+buff);
             }
-            
+
             buff = ULocale.getISO3Country(locale);
             if(buff.compareTo(tests[i][3])!=0){
                 errln("FAIL: ULocale.getISO3Country("+locale+")=="+
@@ -743,10 +743,10 @@ public class ULocaleTest extends TestFmwk {
 
         String buff = ULocale.getLanguage("kok_IN");
         if(buff.compareTo("kok")!=0){
-            errln("ULocale.getLanguage(\"kok\") failed. Expected: kok Got: "+buff);   
+            errln("ULocale.getLanguage(\"kok\") failed. Expected: kok Got: "+buff);
         }
     }
-    public void TestCanonicalization(){      
+    public void TestCanonicalization(){
         final String[][]testCases = new String[][]{
             { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
             { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
@@ -779,8 +779,8 @@ public class ULocaleTest extends TestFmwk {
             { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
             { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
             { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
-            { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
-            { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
+            { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" },
+            { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" },
             { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
             { "no@ny", null, "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
             { "no-no.utf32@B", null, "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
@@ -838,7 +838,7 @@ public class ULocaleTest extends TestFmwk {
             if (level1Expected != null) { // null means we have no expectations for how this case is handled
                 String level1 = ULocale.getName(source);
                 if (!level1.equals(level1Expected)) {
-                    errln("ULocale.getName error for: '" + source + 
+                    errln("ULocale.getName error for: '" + source +
                           "' expected: '" + level1Expected + "' but got: '" + level1 + "'");
                 } else {
                     logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
@@ -850,7 +850,7 @@ public class ULocaleTest extends TestFmwk {
             if (level2Expected != null) {
                 String level2 = ULocale.canonicalize(source);
                 if(!level2.equals(level2Expected)){
-                    errln("ULocale.getName error for: '" + source + 
+                    errln("ULocale.getName error for: '" + source +
                           "' expected: '" + level2Expected + "' but got: '" + level2 + "'");
                 } else {
                     logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
@@ -867,7 +867,7 @@ public class ULocaleTest extends TestFmwk {
             errln("Did not get the correct result from getAvailableLocales");
         }
         if(!locales[locales.length-1].equals("zh_Hant_TW")){
-            errln("Did not get the expected result");   
+            errln("Did not get the expected result");
         }
     }
 
@@ -879,8 +879,8 @@ public class ULocaleTest extends TestFmwk {
                 ULocale l = locales[i];
                 String name = l.getDisplayName();
 
-                logln(l + " --> " + name + 
-                      ", " + l.getDisplayName(ULocale.GERMAN) + 
+                logln(l + " --> " + name +
+                      ", " + l.getDisplayName(ULocale.GERMAN) +
                       ", " + l.getDisplayName(ULocale.FRANCE));
 
                 String language = l.getDisplayLanguage();
@@ -953,8 +953,8 @@ public class ULocaleTest extends TestFmwk {
             for (i = 0; i < LOCALE_SIZE; i++) {
                 //localeID String
                 String testLocale=(rawData2[NAME][i]);
-                
-                logln("Testing "+ testLocale+".....");        
+
+                logln("Testing "+ testLocale+".....");
                 name = ULocale.getDisplayName(localeID, testLocale);
                 language = ULocale.getDisplayLanguage(localeID, testLocale);
                 script = ULocale.getDisplayScript(localeID, testLocale);
@@ -963,15 +963,15 @@ public class ULocaleTest extends TestFmwk {
 
                 if (!checkName(name, language, script, country, variant)) {
                     break;
-                } 
+                }
             }
-            
+
             logln("Covering APIs with signature displayXXX(String, ULocale)\n");
             for (j = 0; j < LOCALE_SIZE; j++) {
                 String testLocale=(rawData2[NAME][j]);
                 ULocale loc = new ULocale(testLocale);
-                
-                logln("Testing "+ testLocale+".....");        
+
+                logln("Testing "+ testLocale+".....");
                 name = ULocale.getDisplayName(localeID, loc);
                 language = ULocale.getDisplayLanguage(localeID, loc);
                 script = ULocale.getDisplayScript(localeID, loc);
@@ -980,11 +980,11 @@ public class ULocaleTest extends TestFmwk {
 
                 if (!checkName(name, language, script, country, variant)) {
                     break;
-                } 
-            }            
-        }   
+                }
+            }
+        }
     }
-    
+
     public void TestBamBm() {
         // "bam" shouldn't be there since the official code is 'bm'
         String[] isoLanguages = ULocale.getISOLanguages();
@@ -997,26 +997,26 @@ public class ULocaleTest extends TestFmwk {
             }
         }
     }
-        
+
     public void TestDisplayKeyword() {
         //prepare testing data
         initHashtable();
-        String[] data = {"en_US@collation=direct;calendar=islamic-civil", 
-			 "zh_Hans@collation=pinyin;calendar=chinese", 
-			 "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
-        
+        String[] data = {"en_US@collation=direct;calendar=islamic-civil",
+             "zh_Hans@collation=pinyin;calendar=chinese",
+             "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
+
         for (int i = 0; i < data.length; i++) {
             String localeID = data[i];
             logln("");
             logln("Testing locale " + localeID + " ...");
             ULocale loc = new ULocale(localeID);
-            
+
             Iterator it = loc.getKeywords();
             Iterator it2 = ULocale.getKeywords(localeID);
             //it and it2 are not equal here. No way to verify their equivalence yet.
             while(it.hasNext()) {
                 String key = (String)it.next();
-                
+
                 //To verify display of Keyword
                 // display the above key in English
                 String s0 = ULocale.getDisplayKeyword(key); //display in default locale
@@ -1026,12 +1026,12 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: one of the getDisplayKeyword methods failed.");
                 }
                 if (!s1.equals(h[0].get(key))) {
-                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
+                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key +
                           " in English expected \"" + h[0].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
                 }
-                
+
                 // display the key in S-Chinese
                 s1 = ULocale.getDisplayKeyword(key, ULocale.CHINA);
                 s2 = ULocale.getDisplayKeyword(key, "zh_Hans");
@@ -1039,12 +1039,12 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: one of the getDisplayKeyword methods failed.");
                 }
                 if (!s1.equals(h[1].get(key))) {
-                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key + 
+                    errln("FAIL: Locale " + localeID + " getDisplayKeyword for key: " + key +
                           " in Chinese expected \"" + h[1].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
                 }
-                
+
                 //To verify display of Keyword values
                 String type = loc.getKeywordValue(key);
                 // display type in English
@@ -1056,12 +1056,12 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: one of the getDisplayKeywordValue methods failed.");
                 }
                 if (!ss1.equals(h[0].get(type))) {
-                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
+                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key +
                           " in English expected \"" + h[0].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);                    
+                    logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);
                 }
-                
+
                 // display type in Chinese
                 ss0 = loc.getDisplayKeywordValue(key);
                 ss1 = loc.getDisplayKeywordValue(key, ULocale.CHINA);
@@ -1071,18 +1071,18 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: one of the getDisplayKeywordValue methods failed.");
                 }
                 if (!ss1.equals(h[1].get(type))) {
-                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key + 
+                    errln("FAIL: Locale " + localeID + " getDisplayKeywordValue for key: " + key +
                           " in Chinese expected \"" + h[1].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
-                    logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);                    
-                }                   
+                    logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);
+                }
             }
         }
     }
     private void initHashtable() {
         h[0] = new Hashtable();
         h[1] = new Hashtable();
-        
+
         //display in English
         h[0].put("collation", "Collation");
         h[0].put("calendar", "Calendar");
@@ -1099,7 +1099,7 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("hebrew", "Hebrew Calendar");
         h[0].put("chinese", "Chinese Calendar");
         h[0].put("gregorian", "Gregorian Calendar" );
-        
+
         //display in S-Chinese
         h[1].put("collation", "\u5BF9\u7167");
         h[1].put("calendar", "\u65E5\u5386");
@@ -1115,9 +1115,9 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u5386");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
         h[1].put("chinese", "\u519C\u5386");
-        h[1].put("gregorian", "\u516C\u5386"); 
+        h[1].put("gregorian", "\u516C\u5386");
     }
-    
+
     //Hashtables for storing expected display of keys/types of locale in English and Chinese
     private static Hashtable[] h = new Hashtable[2];
 }

@@ -72,7 +72,7 @@ public class UOption {
     public static UOption QUIET()              { return create("quiet", 'q', NO_ARG); }
     public static UOption VERSION()            { return create("version", 'V', NO_ARG); }
     public static UOption COPYRIGHT()          { return create("copyright", 'c', NO_ARG); }
-    
+
     public static UOption DESTDIR()            { return create("destdir", 'd', REQUIRES_ARG); }
     public static UOption SOURCEDIR()          { return create("sourcedir", 's', REQUIRES_ARG); }
     public static UOption ENCODING()           { return create("encoding", 'e', REQUIRES_ARG); }
@@ -244,10 +244,10 @@ public class UOption {
      * @param s
      * @return this
      */public UOption setDefault(String s) {
-    	value = s;
+        value = s;
         return this;
     }
-     
+
     /**
      * Convenient method.
      */

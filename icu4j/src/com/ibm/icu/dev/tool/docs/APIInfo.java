@@ -45,7 +45,7 @@ class APIInfo {
     private String cls  = "";  // enclosing class
     private String name = ""; // name
     private String sig  = "";  // signature, class: inheritance, method: signature, field: type, const: signature
-    private String exc  = "";  // throws 
+    private String exc  = "";  // throws
 
     public int hashCode() {
         return (((pack.hashCode() << 3) ^ cls.hashCode()) << 3) ^ name.hashCode();
@@ -241,7 +241,7 @@ class APIInfo {
 
     /**
      * Read one token from input, which should have been written by
-     * APIInfo.  Throws IOException if EOF is encountered before the 
+     * APIInfo.  Throws IOException if EOF is encountered before the
      * token is complete (i.e. before the separator character is
      * encountered) or if the token exceeds the maximum length of
      * 255 chars.
@@ -261,7 +261,7 @@ class APIInfo {
         if (i == buf.length) {
             throw new IOException("unterminated token" + new String(buf));
         }
-            
+
         return new String(buf, 0, i);
     }
 
@@ -297,10 +297,10 @@ class APIInfo {
 
     /**
      * This compares two APIInfos by package, class/name, category, name, and then if
-     * the APIInfo does not represent a class, by signature.  The difference between 
+     * the APIInfo does not represent a class, by signature.  The difference between
      * this and the default comparator is that APIInfos representing classes are considered
      * equal regardless of their signatures (which represent inheritance for classes).
-     */ 
+     */
     public static Comparator changedComparator() {
         final Comparator c = new Comparator() {
                 public int compare(Object lhs, Object rhs) {
@@ -400,17 +400,17 @@ class APIInfo {
             } else {
                 buf.append("class ");
             }
-	    if (html) {
-		buf.append("<i>");
-	    }
+        if (html) {
+        buf.append("<i>");
+        }
             if (cls.length() > 0) {
                 buf.append(cls);
                 buf.append('.');
             }
             buf.append(name);
-	    if (html) {
-		buf.append("</i>");
-	    }
+        if (html) {
+        buf.append("</i>");
+        }
             if (detail) {
                 buf.append(' ');
                 buf.append(sig);
@@ -432,11 +432,11 @@ class APIInfo {
             } else {
                 n = 0;
             }
-	    if (html) {
-		buf.append("<i>" + name + "</i>");
-	    } else {
-		buf.append(name);
-	    }
+        if (html) {
+        buf.append("<i>" + name + "</i>");
+        } else {
+        buf.append(name);
+        }
             buf.append(xsig.substring(n));
             break;
         }
@@ -450,7 +450,7 @@ class APIInfo {
     }
 
     private static final String[] typeNames = {
-        "status", "visibility", "static", "final", "synchronized", 
+        "status", "visibility", "static", "final", "synchronized",
         "abstract", "category", "package", "class", "name", "signature"
     };
 

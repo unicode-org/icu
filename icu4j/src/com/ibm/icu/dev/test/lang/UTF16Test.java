@@ -19,18 +19,18 @@ import com.ibm.icu.impl.Utility;
 * @since feb 09 2001
 */
 public final class UTF16Test extends TestFmwk
-{ 
+{
     // constructor ===================================================
-  
+
     /**
      * Constructor
      */
     public UTF16Test()
     {
     }
-  
+
     // public methods ================================================
-  
+
     /**
      * Testing UTF16 class methods append
      */
@@ -40,31 +40,31 @@ public final class UTF16Test extends TestFmwk
           char array[] = new char[UCharacter.MAX_VALUE >> 2];
           int strsize = strbuff.length();
           int arraysize = strsize;
-        
+
           Utility.getChars(strbuff, 0, strsize, array, 0);
-          for (int i = 1; i < UCharacter.MAX_VALUE; i += 100) { 
+          for (int i = 1; i < UCharacter.MAX_VALUE; i += 100) {
         UTF16.append(strbuff, i);
         arraysize = UTF16.append(array, arraysize, i);
-          
+
         String arraystr = new String(array, 0, arraysize);
         if (!arraystr.equals(strbuff.toString())) {
         errln("FAIL Comparing char array append and string append " +
               "with 0x" + Integer.toHexString(i));
         }
-          
-        // this is to cater for the combination of 0xDBXX 0xDC50 which 
+
+        // this is to cater for the combination of 0xDBXX 0xDC50 which
         // forms a supplementary character
         if (i == 0xDC51) {
         strsize --;
         }
-            
+
         if (UTF16.countCodePoint(strbuff) != strsize + (i / 100) + 1) {
-        errln("FAIL Counting code points in string appended with " + 
+        errln("FAIL Counting code points in string appended with " +
               " 0x" + Integer.toHexString(i));
         break;
-        }  
+        }
     }
-    
+
     // coverage for new 1.5 - cover only so no real test
     strbuff = new StringBuffer();
     UTF16.appendCodePoint(strbuff, 0x10000);
@@ -72,18 +72,18 @@ public final class UTF16Test extends TestFmwk
         errln("fail appendCodePoint");
     }
     }
-  
+
     /**
      * Testing UTF16 class methods bounds
      */
     public void TestBounds()
     {
-          StringBuffer strbuff = 
+          StringBuffer strbuff =
                         //0     12345     6     7     8     9
         new StringBuffer("\udc000123\ud800\udc00\ud801\udc01\ud802");
           String str = strbuff.toString();
           char array[] = str.toCharArray();
-          int boundtype[] = {UTF16.SINGLE_CHAR_BOUNDARY, 
+          int boundtype[] = {UTF16.SINGLE_CHAR_BOUNDARY,
                UTF16.SINGLE_CHAR_BOUNDARY,
                UTF16.SINGLE_CHAR_BOUNDARY,
                UTF16.SINGLE_CHAR_BOUNDARY,
@@ -120,28 +120,28 @@ public final class UTF16Test extends TestFmwk
         // getting rid of warnings
         System.out.print("");
           }
-      
+
           for (int i = 0; i < limit - start; i ++) {
         if (UTF16.bounds(array, start, limit, i) != subboundtype1[i]) {
-                  errln("FAILED Subarray bounds in [" + start + ", " + limit + 
+                  errln("FAILED Subarray bounds in [" + start + ", " + limit +
               "] expected " + subboundtype1[i] + " at offset " + i);
         }
           }
-      
+
           // starts from the mid of a supplementary character
           int subboundtype2[] = {UTF16.SINGLE_CHAR_BOUNDARY,
                    UTF16.LEAD_SURROGATE_BOUNDARY,
                    UTF16.TRAIL_SURROGATE_BOUNDARY};
-      
+
           start = 6;
           limit = 9;
           for (int i = 0; i < limit - start; i ++) {
         if (UTF16.bounds(array, start, limit, i) != subboundtype2[i]) {
-                  errln("FAILED Subarray bounds in [" + start + ", " + limit + 
+                  errln("FAILED Subarray bounds in [" + start + ", " + limit +
               "] expected " + subboundtype2[i] + " at offset " + i);
         }
           }
-      
+
           // ends in the mid of a supplementary character
           int subboundtype3[] = {UTF16.LEAD_SURROGATE_BOUNDARY,
                    UTF16.TRAIL_SURROGATE_BOUNDARY,
@@ -150,42 +150,42 @@ public final class UTF16Test extends TestFmwk
           limit = 8;
           for (int i = 0; i < limit - start; i ++) {
         if (UTF16.bounds(array, start, limit, i) != subboundtype3[i]) {
-                  errln("FAILED Subarray bounds in [" + start + ", " + limit + 
+                  errln("FAILED Subarray bounds in [" + start + ", " + limit +
               "] expected " + subboundtype3[i] + " at offset " + i);
         }
           }
     }
-  
+
     /**
-     * Testing UTF16 class methods charAt and charAtCodePoint 
+     * Testing UTF16 class methods charAt and charAtCodePoint
      */
     public void TestCharAt()
     {
-          StringBuffer strbuff = 
+          StringBuffer strbuff =
         new StringBuffer("12345\ud800\udc0167890\ud800\udc02");
-          if (UTF16.charAt(strbuff, 0) != '1' || UTF16.charAt(strbuff, 2) != '3' 
-              || UTF16.charAt(strbuff, 5) != 0x10001 || 
-        UTF16.charAt(strbuff, 6) != 0x10001 || 
-        UTF16.charAt(strbuff, 12) != 0x10002 || 
+          if (UTF16.charAt(strbuff, 0) != '1' || UTF16.charAt(strbuff, 2) != '3'
+              || UTF16.charAt(strbuff, 5) != 0x10001 ||
+        UTF16.charAt(strbuff, 6) != 0x10001 ||
+        UTF16.charAt(strbuff, 12) != 0x10002 ||
         UTF16.charAt(strbuff, 13) != 0x10002) {
         errln("FAIL Getting character from string buffer error" );
           }
           String str = strbuff.toString();
-          if (UTF16.charAt(str, 0) != '1' || UTF16.charAt(str, 2) != '3' || 
-        UTF16.charAt(str, 5) != 0x10001 || UTF16.charAt(str, 6) != 0x10001 
-        || UTF16.charAt(str, 12) != 0x10002 || 
-        UTF16.charAt(str, 13) != 0x10002) 
+          if (UTF16.charAt(str, 0) != '1' || UTF16.charAt(str, 2) != '3' ||
+        UTF16.charAt(str, 5) != 0x10001 || UTF16.charAt(str, 6) != 0x10001
+        || UTF16.charAt(str, 12) != 0x10002 ||
+        UTF16.charAt(str, 13) != 0x10002)
         {
               errln("FAIL Getting character from string error" );
         }
           char array[] = str.toCharArray();
           int start = 0;
           int limit = str.length();
-          if (UTF16.charAt(array, start, limit, 0) != '1' || 
-        UTF16.charAt(array, start, limit, 2) != '3' || 
-        UTF16.charAt(array, start, limit, 5) != 0x10001 || 
-        UTF16.charAt(array, start, limit, 6) != 0x10001 || 
-        UTF16.charAt(array, start, limit, 12) != 0x10002 || 
+          if (UTF16.charAt(array, start, limit, 0) != '1' ||
+        UTF16.charAt(array, start, limit, 2) != '3' ||
+        UTF16.charAt(array, start, limit, 5) != 0x10001 ||
+        UTF16.charAt(array, start, limit, 6) != 0x10001 ||
+        UTF16.charAt(array, start, limit, 12) != 0x10002 ||
         UTF16.charAt(array, start, limit, 13) != 0x10002) {
         errln("FAIL Getting character from array error" );
           }
@@ -210,17 +210,17 @@ public final class UTF16Test extends TestFmwk
           if (UTF16.charAt(array, start, limit, 6) != 0xd800) {
         errln("FAIL Expected result in subarray 0xd800");
           }
-          ReplaceableString replaceable = new ReplaceableString(str); 
-          if (UTF16.charAt(replaceable, 0) != '1' || 
-              UTF16.charAt(replaceable, 2) != '3' || 
-        UTF16.charAt(replaceable, 5) != 0x10001 || 
-        UTF16.charAt(replaceable, 6) != 0x10001 || 
-        UTF16.charAt(replaceable, 12) != 0x10002 || 
+          ReplaceableString replaceable = new ReplaceableString(str);
+          if (UTF16.charAt(replaceable, 0) != '1' ||
+              UTF16.charAt(replaceable, 2) != '3' ||
+        UTF16.charAt(replaceable, 5) != 0x10001 ||
+        UTF16.charAt(replaceable, 6) != 0x10001 ||
+        UTF16.charAt(replaceable, 12) != 0x10002 ||
         UTF16.charAt(replaceable, 13) != 0x10002) {
         errln("FAIL Getting character from replaceable error" );
           }
     }
-  
+
     /**
      * Testing UTF16 class methods countCodePoint
      */
@@ -233,22 +233,22 @@ public final class UTF16Test extends TestFmwk
         UTF16.countCodePoint(array,0 ,0) != 0) {
         errln("FAIL Counting code points for empty strings");
         }
-    
+
         strbuff = new StringBuffer("this is a string ");
         String str = strbuff.toString();
         array = str.toCharArray();
         int size = str.length();
-    
+
         if (UTF16.countCodePoint(array, 0, 0) != 0) {
         errln("FAIL Counting code points for 0 offset array");
         }
-    
+
         if (UTF16.countCodePoint(str) != size ||
         UTF16.countCodePoint(strbuff) != size ||
         UTF16.countCodePoint(array, 0, size) != size) {
         errln("FAIL Counting code points");
-        }     
-    
+        }
+
         UTF16.append(strbuff, 0x10000);
         str = strbuff.toString();
         array = str.toCharArray();
@@ -269,7 +269,7 @@ public final class UTF16Test extends TestFmwk
         errln("FAIL Counting code points");
         }
     }
-  
+
     /**
      * Testing UTF16 class methods delete
      */
@@ -278,7 +278,7 @@ public final class UTF16Test extends TestFmwk
         StringBuffer strbuff = new StringBuffer("these are strings");
         int size = strbuff.length();
         char array[] = strbuff.toString().toCharArray();
-    
+
         UTF16.delete(strbuff, 3);
         UTF16.delete(strbuff, 3);
         UTF16.delete(strbuff, 3);
@@ -296,7 +296,7 @@ public final class UTF16Test extends TestFmwk
         errln("FAIL expected result after deleting characters is " +
           "\"the string\"");
         }
-    
+
         size = UTF16.delete(array, size, 3);
         size = UTF16.delete(array, size, 3);
         size = UTF16.delete(array, size, 3);
@@ -319,7 +319,7 @@ public final class UTF16Test extends TestFmwk
         strbuff = new StringBuffer("string: \ud800\udc00 \ud801\udc01 \ud801\udc01");
         size = strbuff.length();
         array = strbuff.toString().toCharArray();
-    
+
         UTF16.delete(strbuff, 8);
         UTF16.delete(strbuff, 8);
         UTF16.delete(strbuff, 9);
@@ -330,7 +330,7 @@ public final class UTF16Test extends TestFmwk
         if (!strbuff.toString().equals("string")) {
         errln("FAIL expected result after deleting characters is \"string\"");
         }
-    
+
         size = UTF16.delete(array, size, 8);
         size = UTF16.delete(array, size, 8);
         size = UTF16.delete(array, size, 9);
@@ -343,7 +343,7 @@ public final class UTF16Test extends TestFmwk
         errln("FAIL expected result after deleting characters is \"string\"");
         }
     }
-  
+
     /**
      * Testing findOffsetFromCodePoint and findCodePointOffset
      */
@@ -390,7 +390,7 @@ public final class UTF16Test extends TestFmwk
         errln("FAIL Getting the last codepoint offset to a string with " +
           "supplementary characters");
         }
-        if (UTF16.findCodePointOffset(str, 4) != 3 || 
+        if (UTF16.findCodePointOffset(str, 4) != 3 ||
         UTF16.findCodePointOffset(strbuff, 4) != 3 ||
         UTF16.findCodePointOffset(array, 0, limit, 4) != 3) {
         errln("FAIL Getting the length offset to a string with " +
@@ -414,7 +414,7 @@ public final class UTF16Test extends TestFmwk
         }
         try {
         UTF16.findCodePointOffset(strbuff, 5);
-        errln("FAIL Getting the a non-existence codepoint to a string " + 
+        errln("FAIL Getting the a non-existence codepoint to a string " +
           "with supplementary characters");
         } catch (Exception e) {
         // this is a success
@@ -430,7 +430,7 @@ public final class UTF16Test extends TestFmwk
         }
         try {
         UTF16.findCodePointOffset(array, 0, limit, 5);
-        errln("FAIL Getting the a non-existence codepoint to a string " + 
+        errln("FAIL Getting the a non-existence codepoint to a string " +
           "with supplementary characters");
         } catch (Exception e) {
         // this is a success
@@ -444,7 +444,7 @@ public final class UTF16Test extends TestFmwk
         // this is a success
         logln("Passed out of bounds codepoint offset");
         }
-    
+
         if (UTF16.findCodePointOffset(array, 1, 3, 0) != 0 ||
         UTF16.findOffsetFromCodePoint(array, 1, 3, 0) != 0 ||
         UTF16.findCodePointOffset(array, 1, 3, 1) != 0 ||
@@ -453,7 +453,7 @@ public final class UTF16Test extends TestFmwk
         errln("FAIL Getting valid codepoint offset in sub array");
         }
     }
-  
+
     /**
      * Testing UTF16 class methods getCharCount, *Surrogate
      */
@@ -475,13 +475,13 @@ public final class UTF16Test extends TestFmwk
         UTF16.isTrailSurrogate((char)0xdc00) != true) {
         errln("FAIL *Surrogate result failure");
         }
-    
-        if (UTF16.isSurrogate((char)0x61) || !UTF16.isSurrogate((char)0xd800) 
+
+        if (UTF16.isSurrogate((char)0x61) || !UTF16.isSurrogate((char)0xd800)
             || !UTF16.isSurrogate((char)0xdc00)) {
         errln("FAIL isSurrogate result failure");
         }
     }
-  
+
     /**
      * Testing UTF16 class method insert
      */
@@ -521,7 +521,7 @@ public final class UTF16Test extends TestFmwk
              "\ud800\udc0001234test\ud800\udc0056789\ud800\udc00"))) {
         errln("FAIL inserting supplementary characters");
         }
-    
+
         try {
         UTF16.insert(strbuff, -1, 0);
         errln("FAIL invalid insertion offset");
@@ -554,15 +554,15 @@ public final class UTF16Test extends TestFmwk
         System.out.print("");
         }
     }
-  
-    /* 
+
+    /*
      * Testing moveCodePointOffset APIs
      */
-    
+
     //
     //   checkMoveCodePointOffset
     //      Run a single test case through each of the moveCodePointOffset() functions.
-    //          Parameters - 
+    //          Parameters -
     //              s               The string to work in.
     //              startIdx        The starting position within the string.
     //              amount          The number of code points to move.
@@ -570,20 +570,20 @@ public final class UTF16Test extends TestFmwk
     //                              function should throw an exception.
     private void checkMoveCodePointOffset(String s, int startIdx, int amount, int expectedResult) {
         // Test with the String flavor of moveCodePointOffset
-    	try {
-    		int result = UTF16.moveCodePointOffset(s, startIdx, amount);
-    		if (result != expectedResult) {
-    			errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
-    					" returned "  + result + ", expected result was " + 
+        try {
+            int result = UTF16.moveCodePointOffset(s, startIdx, amount);
+            if (result != expectedResult) {
+                errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
+                        " returned "  + result + ", expected result was " +
                         (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
-    		}
-    	}
-    	catch (IndexOutOfBoundsException e) {
-    		if (expectedResult != -1) {
-    			errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
-    					" returned exception" + ", expected result was " + expectedResult);
-    		}
-    	}
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            if (expectedResult != -1) {
+                errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
+                        " returned exception" + ", expected result was " + expectedResult);
+            }
+        }
 
         // Test with the StringBuffer flavor of moveCodePointOffset
         StringBuffer sb = new StringBuffer(s);
@@ -591,7 +591,7 @@ public final class UTF16Test extends TestFmwk
             int result = UTF16.moveCodePointOffset(sb, startIdx, amount);
             if (result != expectedResult) {
                 errln("FAIL: UTF16.moveCodePointOffset(StringBuffer \"" + s + "\", " + startIdx + ", " + amount + ")" +
-                        " returned "  + result + ", expected result was " + 
+                        " returned "  + result + ", expected result was " +
                         (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
             }
         }
@@ -601,7 +601,7 @@ public final class UTF16Test extends TestFmwk
                         " returned exception" + ", expected result was " + expectedResult);
             }
         }
-    
+
         // Test with the char[] flavor of moveCodePointOffset
         char ca[] = s.toCharArray();
         try {
@@ -609,7 +609,7 @@ public final class UTF16Test extends TestFmwk
             if (result != expectedResult) {
                 errln("FAIL: UTF16.moveCodePointOffset(char[] \"" + s + "\", 0, " + s.length()
                         + ", " + startIdx + ", " + amount + ")" +
-                        " returned "  + result + ", expected result was " + 
+                        " returned "  + result + ", expected result was " +
                         (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
             }
         }
@@ -620,7 +620,7 @@ public final class UTF16Test extends TestFmwk
                         " returned exception" + ", expected result was " + expectedResult);
             }
         }
-        
+
         // Put the test string into the interior of a char array,
         //   run test on the subsection of the array.
         char ca2[] = new char[s.length()+2];
@@ -632,7 +632,7 @@ public final class UTF16Test extends TestFmwk
             if (result != expectedResult) {
                 errln("UTF16.moveCodePointOffset(char[] \"" + "." + s + ".\", 1, " + (s.length()+1)
                         + ", " + startIdx + ", " + amount + ")" +
-                         " returned "  + result + ", expected result was " + 
+                         " returned "  + result + ", expected result was " +
                         (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
             }
         }
@@ -643,14 +643,14 @@ public final class UTF16Test extends TestFmwk
                         " returned exception" + ", expected result was " + expectedResult);
             }
         }
-    
+
     }
-    
-        
+
+
     public void TestMoveCodePointOffset()
     {
         // checkMoveCodePointOffset(String, startIndex, amount, expected );  expected=-1 for exception.
-        
+
         // No Supplementary chars
         checkMoveCodePointOffset("abc", 1,  1, 2);
         checkMoveCodePointOffset("abc", 1, -1, 0);
@@ -658,33 +658,33 @@ public final class UTF16Test extends TestFmwk
         checkMoveCodePointOffset("abc", 1,  2, 3);
         checkMoveCodePointOffset("abc", 1,  3, -1);
         checkMoveCodePointOffset("abc", 1,  0, 1);
-        
+
         checkMoveCodePointOffset("abc", 3, 0, 3);
         checkMoveCodePointOffset("abc", 4, 0, -1);
         checkMoveCodePointOffset("abc", 0, 0, 0);
         checkMoveCodePointOffset("abc", -1, 0, -1);
-        
+
         checkMoveCodePointOffset("", 0, 0, 0);
         checkMoveCodePointOffset("", 0, -1, -1);
         checkMoveCodePointOffset("", 0, 1, -1);
-        
+
         checkMoveCodePointOffset("a", 0, 0, 0);
         checkMoveCodePointOffset("a", 1, 0, 1);
         checkMoveCodePointOffset("a", 0, 1, 1);
         checkMoveCodePointOffset("a", 1, -1, 0);
-        
-   
+
+
         // Supplementary in middle of string
         checkMoveCodePointOffset("a\ud800\udc00b", 0, 1, 1);
         checkMoveCodePointOffset("a\ud800\udc00b", 0, 2, 3);
         checkMoveCodePointOffset("a\ud800\udc00b", 0, 3, 4);
         checkMoveCodePointOffset("a\ud800\udc00b", 0, 4, -1);
-        
+
         checkMoveCodePointOffset("a\ud800\udc00b", 4, -1, 3);
         checkMoveCodePointOffset("a\ud800\udc00b", 4, -2, 1);
         checkMoveCodePointOffset("a\ud800\udc00b", 4, -3, 0);
         checkMoveCodePointOffset("a\ud800\udc00b", 4, -4, -1);
-        
+
         // Supplementary at start of string
         checkMoveCodePointOffset("\ud800\udc00ab", 0, 1, 2);
         checkMoveCodePointOffset("\ud800\udc00ab", 1, 1, 2);
@@ -692,29 +692,29 @@ public final class UTF16Test extends TestFmwk
         checkMoveCodePointOffset("\ud800\udc00ab", 2, -1, 0);
         checkMoveCodePointOffset("\ud800\udc00ab", 1, -1, 0);
         checkMoveCodePointOffset("\ud800\udc00ab", 0, -1, -1);
-        
-        
+
+
         // Supplementary at end of string
         checkMoveCodePointOffset("ab\ud800\udc00", 1, 1, 2);
         checkMoveCodePointOffset("ab\ud800\udc00", 2, 1, 4);
         checkMoveCodePointOffset("ab\ud800\udc00", 3, 1, 4);
         checkMoveCodePointOffset("ab\ud800\udc00", 4, 1, -1);
-        
+
         checkMoveCodePointOffset("ab\ud800\udc00", 5, -2, -1);
         checkMoveCodePointOffset("ab\ud800\udc00", 4, -1, 2);
         checkMoveCodePointOffset("ab\ud800\udc00", 3, -1, 2);
         checkMoveCodePointOffset("ab\ud800\udc00", 2, -1, 1);
         checkMoveCodePointOffset("ab\ud800\udc00", 1, -1, 0);
-        
+
         // Unpaired surrogate in middle
         checkMoveCodePointOffset("a\ud800b", 0, 1, 1);
         checkMoveCodePointOffset("a\ud800b", 1, 1, 2);
         checkMoveCodePointOffset("a\ud800b", 2, 1, 3);
-        
+
         checkMoveCodePointOffset("a\udc00b", 0, 1, 1);
         checkMoveCodePointOffset("a\udc00b", 1, 1, 2);
         checkMoveCodePointOffset("a\udc00b", 2, 1, 3);
-        
+
         checkMoveCodePointOffset("a\udc00\ud800b", 0, 1, 1);
         checkMoveCodePointOffset("a\udc00\ud800b", 1, 1, 2);
         checkMoveCodePointOffset("a\udc00\ud800b", 2, 1, 3);
@@ -723,11 +723,11 @@ public final class UTF16Test extends TestFmwk
         checkMoveCodePointOffset("a\ud800b", 1, -1, 0);
         checkMoveCodePointOffset("a\ud800b", 2, -1, 1);
         checkMoveCodePointOffset("a\ud800b", 3, -1, 2);
-        
+
         checkMoveCodePointOffset("a\udc00b", 1, -1, 0);
         checkMoveCodePointOffset("a\udc00b", 2, -1, 1);
         checkMoveCodePointOffset("a\udc00b", 3, -1, 2);
-        
+
         checkMoveCodePointOffset("a\udc00\ud800b", 1, -1, 0);
         checkMoveCodePointOffset("a\udc00\ud800b", 2, -1, 1);
         checkMoveCodePointOffset("a\udc00\ud800b", 3, -1, 2);
@@ -738,57 +738,57 @@ public final class UTF16Test extends TestFmwk
         checkMoveCodePointOffset("\ud800ab", 0, 2, 2);
         checkMoveCodePointOffset("\ud800\ud800ab", 0, 3, 3);
         checkMoveCodePointOffset("\udc00\udc00ab", 0, 4, 4);
-        
+
         checkMoveCodePointOffset("\udc00ab", 2, -1, 1);
         checkMoveCodePointOffset("\ud800ab", 1, -1, 0);
         checkMoveCodePointOffset("\ud800ab", 1, -2, -1);
         checkMoveCodePointOffset("\ud800\ud800ab", 2, -1, 1);
         checkMoveCodePointOffset("\udc00\udc00ab", 2, -2, 0);
         checkMoveCodePointOffset("\udc00\udc00ab", 2, -3, -1);
-        
+
         // Unpaired surrogate at end
         checkMoveCodePointOffset("ab\udc00\udc00ab", 3, 1, 4);
         checkMoveCodePointOffset("ab\udc00\udc00ab", 2, 1, 3);
         checkMoveCodePointOffset("ab\udc00\udc00ab", 1, 1, 2);
-        
+
         checkMoveCodePointOffset("ab\udc00\udc00ab", 4, -1, 3);
         checkMoveCodePointOffset("ab\udc00\udc00ab", 3, -1, 2);
         checkMoveCodePointOffset("ab\udc00\udc00ab", 2, -1, 1);
-        
-        
-    	                       //01234567890     1     2     3     45678901234
-    	String str = new String("0123456789\ud800\udc00\ud801\udc010123456789");
-    	int move1[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 
+
+
+                               //01234567890     1     2     3     45678901234
+        String str = new String("0123456789\ud800\udc00\ud801\udc010123456789");
+        int move1[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10,
                        12, 12, 14, 14, 15, 16, 17, 18, 19, 20,
                        21, 22, 23, 24};
-    	int move2[] = { 2,  3,  4,  5,  6,  7,  8,  9, 10, 12,
+        int move2[] = { 2,  3,  4,  5,  6,  7,  8,  9, 10, 12,
                        14, 14, 15, 15, 16, 17, 18, 19, 20, 21,
                        22, 23, 24, -1};
-    	int move3[] = { 3,  4,  5,  6,  7,  8,  9, 10, 12, 14,
+        int move3[] = { 3,  4,  5,  6,  7,  8,  9, 10, 12, 14,
                        15, 15, 16, 16, 17, 18, 19, 20, 21, 22,
                        23, 24, -1, -1};
-    	int size = str.length();
-    	for (int i = 0; i < size; i ++) {
+        int size = str.length();
+        for (int i = 0; i < size; i ++) {
             checkMoveCodePointOffset(str, i, 1, move1[i]);
             checkMoveCodePointOffset(str, i, 2, move2[i]);
             checkMoveCodePointOffset(str, i, 3, move3[i]);
-    	}
+        }
 
         char strarray[] = str.toCharArray();
-    	if (UTF16.moveCodePointOffset(strarray, 9, 13, 0, 2) != 3) {
-    		errln("FAIL: Moving offset 0 by 2 codepoint in subarray [9, 13] " +
-    		"expected result 3");
-    	}
-    	if (UTF16.moveCodePointOffset(strarray, 9, 13, 1, 2) != 4) {
-    		errln("FAIL: Moving offset 1 by 2 codepoint in subarray [9, 13] " +
-    		"expected result 4");
-    	}
-    	if (UTF16.moveCodePointOffset(strarray, 11, 14, 0, 2) != 3) {
-    		errln("FAIL: Moving offset 0 by 2 codepoint in subarray [11, 14] " 
-    				+ "expected result 3");
-    	}
+        if (UTF16.moveCodePointOffset(strarray, 9, 13, 0, 2) != 3) {
+            errln("FAIL: Moving offset 0 by 2 codepoint in subarray [9, 13] " +
+            "expected result 3");
+        }
+        if (UTF16.moveCodePointOffset(strarray, 9, 13, 1, 2) != 4) {
+            errln("FAIL: Moving offset 1 by 2 codepoint in subarray [9, 13] " +
+            "expected result 4");
+        }
+        if (UTF16.moveCodePointOffset(strarray, 11, 14, 0, 2) != 3) {
+            errln("FAIL: Moving offset 0 by 2 codepoint in subarray [11, 14] "
+                    + "expected result 3");
+        }
     }
-  
+
     /**
      * Testing UTF16 class methods setCharAt
      */
@@ -873,7 +873,7 @@ public final class UTF16Test extends TestFmwk
      */
     public void TestValueOf()
     {
-        if (!UTF16.valueOf(0x61).equals("a") || 
+        if (!UTF16.valueOf(0x61).equals("a") ||
         !UTF16.valueOf(0x10000).equals("\ud800\udc00")) {
         errln("FAIL: valueof(char32)");
         }
@@ -881,8 +881,8 @@ public final class UTF16Test extends TestFmwk
         StringBuffer strbuff = new StringBuffer(str);
         char array[] = str.toCharArray();
         int length = str.length();
-    
-        String expected[] = {"0", "1", "2", "3", "4", "\ud800\udc00", 
+
+        String expected[] = {"0", "1", "2", "3", "4", "\ud800\udc00",
                  "\ud800\udc00", "5", "6", "7", "8", "9"};
         for (int i = 0; i < length; i ++) {
         if (!UTF16.valueOf(str, i).equals(expected[i]) ||
@@ -944,7 +944,7 @@ public final class UTF16Test extends TestFmwk
         System.out.print("");
         }
     }
-  
+
     public void TestIndexOf()
     {
     //012345678901234567890123456789012345
@@ -959,43 +959,43 @@ public final class UTF16Test extends TestFmwk
 
         if (UTF16.indexOf(test1, test2) != 0 ||
             UTF16.indexOf(test1, test2, 0) != 0) {
-            errln("indexOf failed: expected to find '" + test2 + 
+            errln("indexOf failed: expected to find '" + test2 +
                   "' at position 0 in text '" + test1 + "'");
         }
         if (UTF16.indexOf(test1, testChar1) != 0 ||
             UTF16.indexOf(test1, testChar1, 0) != 0) {
-            errln("indexOf failed: expected to find 0x" + 
-                  Integer.toHexString(testChar1) + 
+            errln("indexOf failed: expected to find 0x" +
+                  Integer.toHexString(testChar1) +
                   " at position 0 in text '" + test1 + "'");
         }
         if (UTF16.indexOf(test3, testChar2) != 0 ||
             UTF16.indexOf(test3, testChar2, 0) != 0) {
-            errln("indexOf failed: expected to find 0x" + 
-                  Integer.toHexString(testChar2) + 
+            errln("indexOf failed: expected to find 0x" +
+                  Integer.toHexString(testChar2) +
                   " at position 0 in text '" + Utility.hex(test3) + "'");
         }
         String test5 = "\ud841\ud841\udc02";
         if (UTF16.indexOf(test5, testChar2) != 1 ||
             UTF16.indexOf(test5, testChar2, 0) != 1) {
-            errln("indexOf failed: expected to find 0x" + 
-                  Integer.toHexString(testChar2) + 
+            errln("indexOf failed: expected to find 0x" +
+                  Integer.toHexString(testChar2) +
                   " at position 0 in text '" + Utility.hex(test3) + "'");
         }
         if (UTF16.lastIndexOf(test1, test2) != 29 ||
             UTF16.lastIndexOf(test1, test2, test1.length()) != 29) {
-            errln("lastIndexOf failed: expected to find '" + test2 + 
+            errln("lastIndexOf failed: expected to find '" + test2 +
                   "' at position 29 in text '" + test1 + "'");
         }
         if (UTF16.lastIndexOf(test1, testChar1) != 35 ||
             UTF16.lastIndexOf(test1, testChar1, test1.length()) != 35) {
-            errln("lastIndexOf failed: expected to find 0x" + 
-                  Integer.toHexString(testChar1) + 
+            errln("lastIndexOf failed: expected to find 0x" +
+                  Integer.toHexString(testChar1) +
                   " at position 35 in text '" + test1 + "'");
         }
         if (UTF16.lastIndexOf(test3, testChar2) != 13 ||
             UTF16.lastIndexOf(test3, testChar2, test3.length()) != 13) {
-            errln("indexOf failed: expected to find 0x" + 
-                  Integer.toHexString(testChar2) + 
+            errln("indexOf failed: expected to find 0x" +
+                  Integer.toHexString(testChar2) +
                   " at position 13 in text '" + Utility.hex(test3) + "'");
         }
         int occurrences = 0;
@@ -1008,10 +1008,10 @@ public final class UTF16Test extends TestFmwk
         }
         }
         if (occurrences != 6) {
-            errln("indexOf failed: expected to find 6 occurrences, found " 
+            errln("indexOf failed: expected to find 6 occurrences, found "
                   + occurrences);
         }
-    
+
         occurrences = 0;
         for (int startPos = 10; startPos != -1 && startPos < test1.length();)
         {
@@ -1022,10 +1022,10 @@ public final class UTF16Test extends TestFmwk
         }
         }
         if (occurrences != 4) {
-            errln("indexOf with starting offset failed: expected to find 4 occurrences, found " 
+            errln("indexOf with starting offset failed: expected to find 4 occurrences, found "
                   + occurrences);
         }
-        
+
         occurrences = 0;
         for (int startPos = 0;
          startPos != -1 && startPos < test3.length();) {
@@ -1036,7 +1036,7 @@ public final class UTF16Test extends TestFmwk
             }
         }
         if (occurrences != 4) {
-            errln("indexOf failed: expected to find 4 occurrences, found " 
+            errln("indexOf failed: expected to find 4 occurrences, found "
           + occurrences);
         }
 
@@ -1045,26 +1045,26 @@ public final class UTF16Test extends TestFmwk
              startPos != -1 && startPos < test3.length();) {
             startPos = UTF16.indexOf(test3, test4, startPos);
             if (startPos != -1) {
-                ++ occurrences; 
+                ++ occurrences;
                 startPos += 2;
             }
         }
         if (occurrences != 2) {
-            errln("indexOf failed: expected to find 2 occurrences, found " 
+            errln("indexOf failed: expected to find 2 occurrences, found "
                   + occurrences);
         }
-        
+
         occurrences = 0;
         for (int startPos = 0;
          startPos != -1 && startPos < test1.length();) {
             startPos = UTF16.indexOf(test1, testChar1, startPos);
-            if (startPos != -1) { 
-                ++ occurrences; 
+            if (startPos != -1) {
+                ++ occurrences;
                 startPos += 1;
             }
         }
         if (occurrences != 16) {
-            errln("indexOf with character failed: expected to find 16 occurrences, found " 
+            errln("indexOf with character failed: expected to find 16 occurrences, found "
                   + occurrences);
         }
 
@@ -1072,13 +1072,13 @@ public final class UTF16Test extends TestFmwk
         for (int startPos = 10;
          startPos != -1 && startPos < test1.length();) {
             startPos = UTF16.indexOf(test1, testChar1, startPos);
-            if (startPos != -1) { 
-                ++ occurrences; 
+            if (startPos != -1) {
+                ++ occurrences;
                 startPos += 1;
             }
         }
         if (occurrences != 12) {
-            errln("indexOf with character & start offset failed: expected to find 12 occurrences, found " 
+            errln("indexOf with character & start offset failed: expected to find 12 occurrences, found "
           + occurrences);
         }
 
@@ -1087,25 +1087,25 @@ public final class UTF16Test extends TestFmwk
          startPos != -1 && startPos < test3.length();) {
             startPos = UTF16.indexOf(test3, testChar2, startPos);
             if (startPos != -1) {
-                ++ occurrences; 
+                ++ occurrences;
                 startPos += 1;
             }
         }
         if (occurrences != 4) {
-            errln("indexOf failed: expected to find 4 occurrences, found " 
+            errln("indexOf failed: expected to find 4 occurrences, found "
                   + occurrences);
         }
-     
+
         occurrences = 0;
         for (int startPos = 5; startPos != -1 && startPos < test3.length();) {
             startPos = UTF16.indexOf(test3, testChar2, startPos);
             if (startPos != -1) {
-                ++ occurrences; 
+                ++ occurrences;
                 startPos += 1;
             }
         }
         if (occurrences != 3) {
-            errln("indexOf with character & start & end offsets failed: expected to find 2 occurrences, found " 
+            errln("indexOf with character & start & end offsets failed: expected to find 2 occurrences, found "
           + occurrences);
         }
         occurrences = 0;
@@ -1117,19 +1117,19 @@ public final class UTF16Test extends TestFmwk
             }
         }
         if (occurrences != 6) {
-            errln("lastIndexOf with starting and ending offsets failed: expected to find 4 occurrences, found " 
+            errln("lastIndexOf with starting and ending offsets failed: expected to find 4 occurrences, found "
                   + occurrences);
         }
         occurrences = 0;
         for (int startPos = 32; startPos != -1;) {
             startPos = UTF16.lastIndexOf(test1, testChar1, startPos);
-            if (startPos != -1) { 
+            if (startPos != -1) {
                 ++ occurrences;
                 startPos -= 5;
             }
         }
         if (occurrences != 7) {
-            errln("lastIndexOf with character & start & end offsets failed: expected to find 11 occurrences, found " 
+            errln("lastIndexOf with character & start & end offsets failed: expected to find 11 occurrences, found "
           + occurrences);
         }
 
@@ -1137,15 +1137,15 @@ public final class UTF16Test extends TestFmwk
         occurrences = 0;
         for (int startPos = test3.length(); startPos != -1;) {
             startPos = UTF16.lastIndexOf(test3, testChar2, startPos - 5);
-            if (startPos != -1) { 
+            if (startPos != -1) {
                 ++ occurrences;
             }
         }
         if (occurrences != 3) {
-            errln("lastIndexOf with character & start & end offsets failed: expected to find 3 occurrences, found " 
+            errln("lastIndexOf with character & start & end offsets failed: expected to find 3 occurrences, found "
           + occurrences);
         }
-        
+
         // testing supplementary
         for (int i = 0; i < INDEXOF_SUPPLEMENTARY_CHAR_.length; i ++) {
         int ch = INDEXOF_SUPPLEMENTARY_CHAR_[i];
@@ -1158,51 +1158,51 @@ public final class UTF16Test extends TestFmwk
         }
         if (UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_, ch, index) !=
             expected ||
-            UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
+            UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_,
                   UCharacter.toString(ch), index) !=
             expected) {
-            errln("Failed finding index for supplementary 0x" + 
+            errln("Failed finding index for supplementary 0x" +
               Integer.toHexString(ch));
         }
         index = INDEXOF_SUPPLEMENTARY_STRING_.length();
         if (j < INDEXOF_SUPPLEMENTARY_CHAR_INDEX_[i].length - 1) {
             index = INDEXOF_SUPPLEMENTARY_CHAR_INDEX_[i][j + 1] - 1;
         }
-        if (UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, ch, 
+        if (UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, ch,
                       index) != expected ||
-            UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
-                      UCharacter.toString(ch), index) 
-            != expected) 
+            UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_,
+                      UCharacter.toString(ch), index)
+            != expected)
             {
-            errln("Failed finding last index for supplementary 0x" + 
+            errln("Failed finding last index for supplementary 0x" +
                   Integer.toHexString(ch));
             }
         }
         }
-        
+
         for (int i = 0; i < INDEXOF_SUPPLEMENTARY_STR_INDEX_.length; i ++) {
         int index = 0;
         int expected = INDEXOF_SUPPLEMENTARY_STR_INDEX_[i];
         if  (i > 0) {
         index = INDEXOF_SUPPLEMENTARY_STR_INDEX_[i - 1] + 1;
         }
-        if (UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
+        if (UTF16.indexOf(INDEXOF_SUPPLEMENTARY_STRING_,
                   INDEXOF_SUPPLEMENTARY_STR_, index) != expected) {
-        errln("Failed finding index for supplementary string " + 
+        errln("Failed finding index for supplementary string " +
               hex(INDEXOF_SUPPLEMENTARY_STRING_));
         }
         index = INDEXOF_SUPPLEMENTARY_STRING_.length();
         if (i < INDEXOF_SUPPLEMENTARY_STR_INDEX_.length - 1) {
         index = INDEXOF_SUPPLEMENTARY_STR_INDEX_[i + 1] - 1;
         }
-        if (UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_, 
+        if (UTF16.lastIndexOf(INDEXOF_SUPPLEMENTARY_STRING_,
                               INDEXOF_SUPPLEMENTARY_STR_, index) != expected) {
-        errln("Failed finding last index for supplementary string " + 
+        errln("Failed finding last index for supplementary string " +
               hex(INDEXOF_SUPPLEMENTARY_STRING_));
         }
         }
     }
-    
+
     public void TestReplace()
     {
         String test1 = "One potato, two potato, three potato, four\n";
@@ -1210,63 +1210,63 @@ public final class UTF16Test extends TestFmwk
         String test3 = "MISSISSIPPI";
 
         String result = UTF16.replace(test1, test2, test3);
-        String expectedValue = 
+        String expectedValue =
             "One MISSISSIPPI, two MISSISSIPPI, three MISSISSIPPI, four\n";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
         result = UTF16.replace(test1, test3, test2);
         expectedValue = test1;
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         result = UTF16.replace(test1, ',', 'e');
         expectedValue = "One potatoe two potatoe three potatoe four\n";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         result = UTF16.replace(test1, ',', 0x10000);
         expectedValue = "One potato\ud800\udc00 two potato\ud800\udc00 three potato\ud800\udc00 four\n";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         result = UTF16.replace(test1, "potato", "\ud800\udc00\ud801\udc01");
         expectedValue = "One \ud800\udc00\ud801\udc01, two \ud800\udc00\ud801\udc01, three \ud800\udc00\ud801\udc01, four\n";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         String test4 = "\ud800\ud800\udc00\ud800\udc00\udc00\ud800\ud800\udc00\ud800\udc00\udc00";
         result = UTF16.replace(test4, 0xd800, 'A');
         expectedValue = "A\ud800\udc00\ud800\udc00\udc00A\ud800\udc00\ud800\udc00\udc00";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         result = UTF16.replace(test4, 0xdC00, 'A');
         expectedValue = "\ud800\ud800\udc00\ud800\udc00A\ud800\ud800\udc00\ud800\udc00A";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
-        
+
         result = UTF16.replace(test4, 0x10000, 'A');
         expectedValue = "\ud800AA\udc00\ud800AA\udc00";
         if (!result.equals(expectedValue)) {
-            errln("findAndReplace failed: expected \"" + expectedValue + 
+            errln("findAndReplace failed: expected \"" + expectedValue +
                   "\", got \"" + test1 + "\".");
         }
     }
-    
+
     public void TestReverse()
     {
         StringBuffer test = new StringBuffer(
@@ -1283,18 +1283,18 @@ public final class UTF16Test extends TestFmwk
         UTF16.append(testbuffer, 0x00c4);
         UTF16.append(testbuffer, 0x1ed0);
         result = UTF16.reverse(testbuffer);
-        if (result.charAt(0) != 0x1ed0 || 
-            result.charAt(1) != 0xc4 || 
-            UTF16.charAt(result, 2) != 0x1d15f || 
+        if (result.charAt(0) != 0x1ed0 ||
+            result.charAt(1) != 0xc4 ||
+            UTF16.charAt(result, 2) != 0x1d15f ||
             UTF16.charAt(result, 4)!=0x2f999) {
             errln("reverse() failed with supplementary characters");
         }
     }
-    
+
     /**
      * Testing the setter and getter apis for StringComparator
      */
-    public void TestStringComparator() 
+    public void TestStringComparator()
     {
         UTF16.StringComparator compare = new UTF16.StringComparator();
         if (compare.getCodePointCompare() != false) {
@@ -1303,79 +1303,79 @@ public final class UTF16Test extends TestFmwk
         if (compare.getIgnoreCase() != false) {
             errln("Default string comparator should be case sensitive compare");
         }
-        if (compare.getIgnoreCaseOption() 
+        if (compare.getIgnoreCaseOption()
             != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
             errln("Default string comparator should have fold case default compare");
         }
         compare.setCodePointCompare(true);
         if (compare.getCodePointCompare() != true) {
             errln("Error setting code point compare");
-        }       
+        }
         compare.setCodePointCompare(false);
         if (compare.getCodePointCompare() != false) {
             errln("Error setting code point compare");
-        }   
+        }
         compare.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
         if (compare.getIgnoreCase() != true
-            || compare.getIgnoreCaseOption() 
+            || compare.getIgnoreCaseOption()
         != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
             errln("Error setting ignore case and options");
-        }   
+        }
         compare.setIgnoreCase(false, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
         if (compare.getIgnoreCase() != false
-            || compare.getIgnoreCaseOption() 
+            || compare.getIgnoreCaseOption()
         != UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I) {
             errln("Error setting ignore case and options");
         }
         compare.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
         if (compare.getIgnoreCase() != true
-            || compare.getIgnoreCaseOption() 
+            || compare.getIgnoreCaseOption()
         != UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I) {
             errln("Error setting ignore case and options");
-        }  
+        }
         compare.setIgnoreCase(false, UTF16.StringComparator.FOLD_CASE_DEFAULT);
         if (compare.getIgnoreCase() != false
-            || compare.getIgnoreCaseOption() 
+            || compare.getIgnoreCaseOption()
         != UTF16.StringComparator.FOLD_CASE_DEFAULT) {
             errln("Error setting ignore case and options");
-        }    
+        }
     }
-    
+
     public void TestCodePointCompare()
     {
         // these strings are in ascending order
-        String str[] = {"\u0061", "\u20ac\ud801", "\u20ac\ud800\udc00",  
-                        "\ud800", "\ud800\uff61", "\udfff", 
+        String str[] = {"\u0061", "\u20ac\ud801", "\u20ac\ud800\udc00",
+                        "\ud800", "\ud800\uff61", "\udfff",
                         "\uff61\udfff", "\uff61\ud800\udc02", "\ud800\udc02",
                         "\ud84d\udc56"};
-        UTF16.StringComparator cpcompare 
-            = new UTF16.StringComparator(true, false, 
+        UTF16.StringComparator cpcompare
+            = new UTF16.StringComparator(true, false,
                      UTF16.StringComparator.FOLD_CASE_DEFAULT);
-        UTF16.StringComparator cucompare 
+        UTF16.StringComparator cucompare
             = new UTF16.StringComparator();
         for (int i = 0; i < str.length - 1; ++ i) {
             if (cpcompare.compare(str[i], str[i + 1]) >= 0) {
                 errln("error: compare() in code point order fails for string "
-                      + Utility.hex(str[i]) + " and " 
+                      + Utility.hex(str[i]) + " and "
                       + Utility.hex(str[i + 1]));
             }
             // test code unit compare
-            if (cucompare.compare(str[i], str[i + 1]) 
+            if (cucompare.compare(str[i], str[i + 1])
                 != str[i].compareTo(str[i + 1])) {
                 errln("error: compare() in code unit order fails for string "
-                      + Utility.hex(str[i]) + " and " 
+                      + Utility.hex(str[i]) + " and "
                       + Utility.hex(str[i + 1]));
             }
         }
     }
-    
-    public void TestCaseCompare() 
+
+    public void TestCaseCompare()
     {
         String mixed = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff";
         String otherDefault = "\u0041\u0062\u0131\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udfff";
         String otherExcludeSpecialI = "\u0041\u0062\u0131\u03c3\u0053\u0073\u0066\u0046\u0069\ud93f\udfff";
         String different = "\u0041\u0062\u0131\u03c3\u0073\u0053\u0046\u0066\u0049\ud93f\udffd";
-    
+
         UTF16.StringComparator compare = new UTF16.StringComparator();
         compare.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
         // test u_strcasecmp()
@@ -1384,41 +1384,41 @@ public final class UTF16Test extends TestFmwk
             errln("error: default compare(mixed, other) = " + result
                   + " instead of 0");
         }
-    
-        // test u_strcasecmp() - exclude special i 
-        compare.setIgnoreCase(true, 
+
+        // test u_strcasecmp() - exclude special i
+        compare.setIgnoreCase(true,
                   UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
         result = compare.compare(mixed, otherExcludeSpecialI);
         if (result != 0) {
-            errln("error: exclude_i compare(mixed, other) = " + result 
+            errln("error: exclude_i compare(mixed, other) = " + result
                   + " instead of 0");
         }
-    
+
         // test u_strcasecmp()
-        compare.setIgnoreCase(true, 
+        compare.setIgnoreCase(true,
                               UTF16.StringComparator.FOLD_CASE_DEFAULT);
         result = compare.compare(mixed, different);
         if (result <= 0) {
             errln("error: default compare(mixed, different) = " + result
                   + " instead of positive");
         }
-        
+
         // test substrings - stop before the sharp s (U+00df)
-        compare.setIgnoreCase(true, 
+        compare.setIgnoreCase(true,
                               UTF16.StringComparator.FOLD_CASE_DEFAULT);
-        result = compare.compare(mixed.substring(0, 4), 
+        result = compare.compare(mixed.substring(0, 4),
                                  different.substring(0, 4));
         if (result != 0) {
-            errln("error: default compare(mixed substring, different substring) = " 
+            errln("error: default compare(mixed substring, different substring) = "
           + result + " instead of 0");
         }
-        // test substrings - stop in the middle of the sharp s (U+00df) 
-        compare.setIgnoreCase(true, 
+        // test substrings - stop in the middle of the sharp s (U+00df)
+        compare.setIgnoreCase(true,
                               UTF16.StringComparator.FOLD_CASE_DEFAULT);
-        result = compare.compare(mixed.substring(0, 5), 
+        result = compare.compare(mixed.substring(0, 5),
                                  different.substring(0, 5));
         if (result <= 0) {
-            errln("error: default compare(mixed substring, different substring) = " 
+            errln("error: default compare(mixed substring, different substring) = "
           + result + " instead of positive");
         }
     }
@@ -1434,28 +1434,28 @@ public final class UTF16Test extends TestFmwk
                 for (int number = -1; number <= ((length - i) + 2); ++ number) {
                     boolean flag = UTF16.hasMoreCodePointsThan(s, number);
                     if (flag != (UTF16.countCodePoint(s) > number)) {
-                        errln("hasMoreCodePointsThan(" + Utility.hex(s) 
+                        errln("hasMoreCodePointsThan(" + Utility.hex(s)
                               + ", " + number + ") = " + flag + " is wrong");
                     }
                 }
             }
             -- length;
         }
-        
-        // testing for null bad input 
+
+        // testing for null bad input
         for(length = -1; length <= 1; ++ length) {
             for (int i = 0; i <= length; ++ i) {
                 for (int number = -2; number <= 2; ++ number) {
-                    boolean flag = UTF16.hasMoreCodePointsThan((String)null, 
+                    boolean flag = UTF16.hasMoreCodePointsThan((String)null,
                                                                number);
                     if (flag != (UTF16.countCodePoint((String)null) > number)) {
-                        errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                        errln("hasMoreCodePointsThan(null, " + number + ") = "
                   + flag + " is wrong");
                     }
                 }
             }
         }
-        
+
         length = str.length();
         while (length >= 0) {
             for (int i = 0; i <= length; ++ i) {
@@ -1463,43 +1463,43 @@ public final class UTF16Test extends TestFmwk
                 for (int number = -1; number <= ((length - i) + 2); ++ number) {
                     boolean flag = UTF16.hasMoreCodePointsThan(s, number);
                     if (flag != (UTF16.countCodePoint(s) > number)) {
-                        errln("hasMoreCodePointsThan(" + Utility.hex(s) 
+                        errln("hasMoreCodePointsThan(" + Utility.hex(s)
                               + ", " + number + ") = " + flag + " is wrong");
                     }
                 }
             }
             -- length;
         }
-        
-        // testing for null bad input 
+
+        // testing for null bad input
         for (length = -1; length <= 1; ++ length) {
             for (int i = 0; i <= length; ++ i) {
                 for (int number = -2; number <= 2; ++ number) {
                     boolean flag = UTF16.hasMoreCodePointsThan(
                                    (StringBuffer)null, number);
-                    if (flag 
-                        != (UTF16.countCodePoint((StringBuffer)null) > number)) 
+                    if (flag
+                        != (UTF16.countCodePoint((StringBuffer)null) > number))
             {
-                errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                errln("hasMoreCodePointsThan(null, " + number + ") = "
                   + flag + " is wrong");
             }
                 }
             }
         }
-        
+
         char strarray[] = str.toCharArray();
         while (length >= 0) {
             for (int limit = 0; limit <= length; ++ limit) {
                 for (int start = 0; start <= limit; ++ start) {
-                    for (int number = -1; number <= ((limit - start) + 2); 
+                    for (int number = -1; number <= ((limit - start) + 2);
                          ++ number) {
-                        boolean flag = UTF16.hasMoreCodePointsThan(strarray, 
+                        boolean flag = UTF16.hasMoreCodePointsThan(strarray,
                                    start, limit, number);
-                        if (flag != (UTF16.countCodePoint(strarray, start, 
+                        if (flag != (UTF16.countCodePoint(strarray, start,
                                                           limit) > number)) {
-                            errln("hasMoreCodePointsThan(" 
-                                  + Utility.hex(str.substring(start, limit)) 
-                                  + ", " + start + ", " + limit + ", " + number 
+                            errln("hasMoreCodePointsThan("
+                                  + Utility.hex(str.substring(start, limit))
+                                  + ", " + start + ", " + limit + ", " + number
                                   + ") = " + flag + " is wrong");
                         }
                     }
@@ -1507,23 +1507,23 @@ public final class UTF16Test extends TestFmwk
             }
             -- length;
         }
-        
-        // testing for null bad input 
+
+        // testing for null bad input
         for (length = -1; length <= 1; ++ length) {
             for (int i = 0; i <= length; ++ i) {
                 for (int number = -2; number <= 2; ++ number) {
                     boolean flag = UTF16.hasMoreCodePointsThan(
                                    (StringBuffer)null, number);
-                    if (flag 
-                        != (UTF16.countCodePoint((StringBuffer)null) > number)) 
+                    if (flag
+                        != (UTF16.countCodePoint((StringBuffer)null) > number))
             {
-                errln("hasMoreCodePointsThan(null, " + number + ") = " 
+                errln("hasMoreCodePointsThan(null, " + number + ") = "
                   + flag + " is wrong");
             }
                 }
             }
         }
-        
+
         // bad input
         try {
             UTF16.hasMoreCodePointsThan(strarray, -2, -1, 5);
@@ -1540,9 +1540,9 @@ public final class UTF16Test extends TestFmwk
                 errln("hasMoreCodePointsThan(chararray) with negative start indexes can't return true");
             }
         } catch (Exception e) {
-        }   
+        }
     }
-    
+
     public void TestNewString() {
     final int[] codePoints = {
         UCharacter.toCodePoint(UCharacter.MIN_HIGH_SURROGATE, UCharacter.MAX_LOW_SURROGATE),
@@ -1579,7 +1579,7 @@ public final class UTF16Test extends TestFmwk
         int rs = t[2];
         int rc = t[3];
 
-        Exception e = null;        
+        Exception e = null;
         try {
         String str = UTF16.newString(codePoints, s, c);
         if (rc == -1 || !str.equals(cpString.substring(rs, rs+rc))) {
@@ -1615,24 +1615,24 @@ public final class UTF16Test extends TestFmwk
 
 
     // private data members ----------------------------------------------
-    
+
     private final static String INDEXOF_SUPPLEMENTARY_STRING_ =
         "\ud841\udc02\u0071\udc02\ud841\u0071\ud841\udc02\u0071\u0072" +
         "\ud841\udc02\u0071\ud841\udc02\u0071\udc02\ud841\u0073";
-    private final static int INDEXOF_SUPPLEMENTARY_CHAR_[] = 
-    {0x71, 0xd841, 0xdc02, 
-     UCharacter.getCodePoint((char)0xd841, 
+    private final static int INDEXOF_SUPPLEMENTARY_CHAR_[] =
+    {0x71, 0xd841, 0xdc02,
+     UCharacter.getCodePoint((char)0xd841,
                  (char)0xdc02)};
-    private final static int INDEXOF_SUPPLEMENTARY_CHAR_INDEX_[][] = 
+    private final static int INDEXOF_SUPPLEMENTARY_CHAR_INDEX_[][] =
     {{2, 5, 8, 12, 15},
      {4, 17},
      {3, 16},
-     {0, 6, 10, 13}                  
+     {0, 6, 10, 13}
     };
     private final static String INDEXOF_SUPPLEMENTARY_STR_ = "\udc02\ud841";
-    private final static int INDEXOF_SUPPLEMENTARY_STR_INDEX_[] = 
-    {3, 16};                                                
-                                                    
+    private final static int INDEXOF_SUPPLEMENTARY_STR_INDEX_[] =
+    {3, 16};
+
     // private methods ---------------------------------------------------
 }
 

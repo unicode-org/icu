@@ -50,8 +50,8 @@ import com.ibm.icu.dev.tool.UOption;
  */
 public class GeneratePOSIX {
     // http://www.opengroup.org/onlinepubs/009695399/basedefs/xbd_chap07.html
-    
-    private static final int 
+
+    private static final int
         HELP1 = 0,
         HELP2 = 1,
         SOURCEDIR = 2,
@@ -75,7 +75,7 @@ public class GeneratePOSIX {
         //testSortedBag();
         // TODO change to walk through available locales
         String locale = options[MATCH].value;
-    	GeneratePOSIX gp = new GeneratePOSIX(new ULocale(locale),
+        GeneratePOSIX gp = new GeneratePOSIX(new ULocale(locale),
 //                    new UnicodeSet("[\u0000-\u00FF]")
               new UnicodeSet(options[UNICODESET].value),
               Charset.forName(options[CHARSET].value)
@@ -84,34 +84,34 @@ public class GeneratePOSIX {
         gp.write(out);
         out.close();
     }
-    
 
-    
+
+
     /**
-	 * 
-	 */
-	private static void testSortedBag() {
-		SortedBag foo = new SortedBag(Collator.getInstance());
+     *
+     */
+    private static void testSortedBag() {
+        SortedBag foo = new SortedBag(Collator.getInstance());
         foo.add("\u0001");
         foo.add("\u0002");
         for (Iterator it = foo.iterator(); it.hasNext();) {
-        	System.out.println(Utility.hex(((String)it.next()).charAt(0),4));
+            System.out.println(Utility.hex(((String)it.next()).charAt(0),4));
         }
-	}
+    }
 
-	SortedBag allItems;
+    SortedBag allItems;
     SortedBag contractions;
     //PrintWriter out;
     //Map definedID = new HashMap();
     RuleBasedCollator col;
     UnicodeSet chars;
     Charset cs;
-    
+
     public GeneratePOSIX(ULocale locale, UnicodeSet chars, Charset cs) {
         this.cs = cs;
         if (cs != null) {
             UnicodeSet csset = new SimpleConverter(cs).getCharset();
-        	chars = new UnicodeSet(chars).retainAll(csset);
+            chars = new UnicodeSet(chars).retainAll(csset);
         }
         this.chars = chars;
         System.out.println("Generating: " + locale.getDisplayName());
@@ -129,13 +129,13 @@ public class GeneratePOSIX {
         getFilteredSet(chars, tailored);
         getFilteredSet(uca_contractions, tailored);
     }
-    
+
     /**
-	 * @param chars
-	 * @param tailored
-	 */
-	private void getFilteredSet(UnicodeSet chars, UnicodeSet tailored) {
-		for (UnicodeSetIterator it = new UnicodeSetIterator(tailored); it.next();) {
+     * @param chars
+     * @param tailored
+     */
+    private void getFilteredSet(UnicodeSet chars, UnicodeSet tailored) {
+        for (UnicodeSetIterator it = new UnicodeSetIterator(tailored); it.next();) {
             if (it.codepoint != it.IS_STRING) continue;
             String s = it.getString();
             s = Normalizer.compose(s,false);    // normalize to make sure
@@ -145,9 +145,9 @@ public class GeneratePOSIX {
             contractions.add(s);
             allItems.add(s);
         }
-	}
+    }
 
-	public void write(PrintWriter out) {
+    public void write(PrintWriter out) {
         out.println("######################");
         out.println("# POSIX locale");
         out.println("# Generated automatically from the Unicode Character Database and Common Locale Data Repository");
@@ -156,22 +156,22 @@ public class GeneratePOSIX {
         out.println("# characters:\t" + chars.toPattern(true));
         out.println("######################");
         out.println();
-        doCtype(out);       
+        doCtype(out);
         out.println("######################");
         out.println();
         doCollate(out);
         out.println("######################");
     }
-    
+
     /**
-	 * @param out
-	 */
-	private void doCollate(PrintWriter out) {
-		out.println("LC_COLLATE");
+     * @param out
+     */
+    private void doCollate(PrintWriter out) {
+        out.println("LC_COLLATE");
         out.println();
         writeDefinitions(out);
         out.println();
-        out.println("order_start forward;" + 
+        out.println("order_start forward;" +
                 (col.isFrenchCollation() ? "backward" : "forward")
                 + ";forward");
         out.println();
@@ -188,34 +188,34 @@ public class GeneratePOSIX {
         out.println();
         out.println("order_end");
         out.println("END LC_COLLATE");
-	}
+    }
 
-	/**
-	 * @param out
-	 */
-	private void doCtype(PrintWriter out) {
-		out.println("LC_CTYPE");
+    /**
+     * @param out
+     */
+    private void doCtype(PrintWriter out) {
+        out.println("LC_CTYPE");
 //      digit        <zero>;\
 //      ..           <eight>;\
 //                   <nine>
         String[][] types = { { "alpha", "[:Alphabetic:]" },
                 { "upper", "[:Uppercase:]" },
-				{ "lower", "[:Lowercase:]" }, 
+                { "lower", "[:Lowercase:]" },
                 { "space", "[:Whitespace:]" },
-				{ "cntrl", "[:Control:]" }, 
+                { "cntrl", "[:Control:]" },
                 { "graph", "[^[:Whitespace:][:Control:][:Format:][:Surrogate:][:Unassigned:]]" },
-				{ "print", "[[:Whitespace:]-[[:Control:][:Format:][:Surrogate:][:Unassigned:]]]" }, 
+                { "print", "[[:Whitespace:]-[[:Control:][:Format:][:Surrogate:][:Unassigned:]]]" },
                 { "punct", "[:Punctuation:]" },
-				{ "digit", "[:Decimal_Number:]" }, 
+                { "digit", "[:Decimal_Number:]" },
                 { "xdigit", "[[:Decimal_Number:]a-f, A-F, �?-ｆ, Ａ-Ｆ]" },
-				{ "blank", "[[:Whitespace:]-[\\u000A-\\u000D \\u0085 [:Line_Separator:][:Paragraph_Separator:]]]" } };
+                { "blank", "[[:Whitespace:]-[\\u000A-\\u000D \\u0085 [:Line_Separator:][:Paragraph_Separator:]]]" } };
         // print character types, restricted to the charset
         int item, last;
         for (int i = 0; i < types.length; ++i) {
             UnicodeSet us = new UnicodeSet(types[i][1]).retainAll(chars);
             item = 0;
             last = us.size() - 1;
-        	for (UnicodeSetIterator it = new UnicodeSetIterator(us); it.next(); ++item) {
+            for (UnicodeSetIterator it = new UnicodeSetIterator(us); it.next(); ++item) {
                 if (item == 0) out.print(types[i][0]);
                 out.print("\t" + getID('U',it.codepoint));
                 if (item != last) out.print(";\\");
@@ -223,7 +223,7 @@ public class GeneratePOSIX {
             }
             out.println();
         }
-/*      
+/*
 toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
         (<f>,<F>);(<g>,<G>);(<h>,<H>);(<i>,<I>);(<j>,<J>);\
         (<k>,<K>);(<l>,<L>);(<m>,<M>);(<n>,<N>);(<o>,<O>);\
@@ -235,22 +235,22 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
 */
         UnicodeSet us = new UnicodeSet();
         for (UnicodeSetIterator it = new UnicodeSetIterator(chars); it.next();) {
-        	int low = UCharacter.toUpperCase(it.codepoint);
+            int low = UCharacter.toUpperCase(it.codepoint);
             if (low != it.codepoint) us.add(it.codepoint);
         }
         item = 0;
         last = chars.size() - 1;
         for (UnicodeSetIterator it = new UnicodeSetIterator(us); it.next(); ++item) {
             if (item == 0) out.print("toupper");
-        	out.print("\t(<" + getID('U',it.codepoint) + ">,<" + 
+            out.print("\t(<" + getID('U',it.codepoint) + ">,<" +
                     getID('U',UCharacter.toUpperCase(it.codepoint)) + ">)");
             if (item != last) out.print(";\\");
-            out.println(" \t# " + getName(it.getString()));           
+            out.println(" \t# " + getName(it.getString()));
         }
         out.println();
-	}
+    }
 
-	private void writeDefinitions(PrintWriter out) {
+    private void writeDefinitions(PrintWriter out) {
         //collating-element <A-A> from "<U0041><U0041>"
         StringBuffer buffer = new StringBuffer();
         for (Iterator it = contractions.iterator(); it.hasNext();) {
@@ -258,14 +258,14 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
             String s = (String) it.next();
             buffer.append("collating-element ")
             .append(getID(s, true))
-			.append(" from ")
+            .append(" from ")
             .append(getID(s, false));
             out.println(buffer.toString());
-        }        
+        }
     }
-    
+
     private class IntList {
-    	private BitSet stuff = new BitSet();
+        private BitSet stuff = new BitSet();
         private int leastItem = Integer.MAX_VALUE;
         void add(int item) {
             stuff.set(item);
@@ -274,10 +274,10 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
         void remove(int item) {
             stuff.clear(item);
             if (item == leastItem) {
-            	// search for new least
+                // search for new least
                 for (int i = item+1; i < stuff.size(); ++i) {
-                	if (stuff.get(i)) {
-                		leastItem = i;
+                    if (stuff.get(i)) {
+                        leastItem = i;
                         return;
                     }
                 }
@@ -285,7 +285,7 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
             }
         }
         int getLeast() {
-        	return leastItem;
+            return leastItem;
         }
     }
 
@@ -310,17 +310,17 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
             stringToWeights.put(string, w);
         }
         for (int i = 0; i < needToWrite.size(); ++i) {
-        	if (needToWrite.get(i)) out.println(getID('X', i));
+            if (needToWrite.get(i)) out.println(getID('X', i));
         }
     }
 
-	/**
-	 * @param col
-	 * @param string
-	 */
-	private String showLine(RuleBasedCollator col, String string) {
+    /**
+     * @param col
+     * @param string
+     */
+    private String showLine(RuleBasedCollator col, String string) {
         String prefix = "";
-		StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer();
         result.append(getID(string, true));
         result.append(" \t");
         // gather data
@@ -336,23 +336,23 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
                 : getID('X', 1))
         .append(" \t# ")
         .append(getName(string));
-        
+
 
         if (prefix.length() != 0) result.insert(0,prefix);
-		return result.toString();
-	}
-    
-    /* primaries.size() == 0 
-                    && secondaries.size() == 0 
-                    && tertiaries.size() == 0 
-                ? "IGNORE" 
+        return result.toString();
+    }
+
+    /* primaries.size() == 0
+                    && secondaries.size() == 0
+                    && tertiaries.size() == 0
+                ? "IGNORE"
                         : */
-    
-	/**
-	 * @param string
-	 * @return
-	 */
-	private Object getName(String s) {
+
+    /**
+     * @param string
+     * @return
+     */
+    private Object getName(String s) {
         int cp;
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
@@ -362,26 +362,26 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
             result.append(n);
         }
         return result.toString();
-	}
+    }
 
-	/**
-	 * @param leadChar TODO
-	 * @param i
-	 * @param intList
-	 * @return
-	 */
-	private static String getID(char leadChar, int i) {
-		return "<" + leadChar + Utility.hex(i,4)+ ">";
-	}
+    /**
+     * @param leadChar TODO
+     * @param i
+     * @param intList
+     * @return
+     */
+    private static String getID(char leadChar, int i) {
+        return "<" + leadChar + Utility.hex(i,4)+ ">";
+    }
 
-	/**
-	 * @param i
-	 * @param intList
-	 */
-	private class Weights {
-		WeightList primaries = new WeightList();
-		WeightList secondaries = new WeightList();
-		WeightList tertiaries = new WeightList();
+    /**
+     * @param i
+     * @param intList
+     */
+    private class Weights {
+        WeightList primaries = new WeightList();
+        WeightList secondaries = new WeightList();
+        WeightList tertiaries = new WeightList();
         public Weights(CollationElementIterator it) {
             while (true) {
                 int ce = it.next();
@@ -399,13 +399,13 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
                 && tertiaries.equals(that.tertiaries);
         }
         public int hashCode() {
-        	return (primaries.hashCode()*37
+            return (primaries.hashCode()*37
                 + secondaries.hashCode())*37
                 + tertiaries.hashCode();
         }
     }
 
-	private class WeightList {
+    private class WeightList {
         char[] weights = new char[5];
         // TODO lengthen on demand
         int count = 0;
@@ -418,7 +418,7 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
             }
         }
         public void setBits(BitSet s) {
-            for (int j = 0; j < count; ++j) s.set(weights[j]);   
+            for (int j = 0; j < count; ++j) s.set(weights[j]);
         }
 
         public String toString() {
@@ -433,25 +433,25 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
         public boolean equals(Object other) {
             WeightList that = (WeightList)other;
             for (int j = 0; j < count; ++j) {
-            	if (weights[j] != that.weights[j]) return false;
+                if (weights[j] != that.weights[j]) return false;
             }
             return true;
         }
         public int hashCode() {
             int result = count;
-            for (int j = 0; j < count; ++j) result = result*37 + weights[j];  
+            for (int j = 0; j < count; ++j) result = result*37 + weights[j];
             return result;
         }
     }
-    
+
     private String getID(String s, boolean isSingleID) {
         //Object defined = definedID.get(s);
         //if (defined != null) return (String) defined;
         //if (defined != null) return (String) defined;
-        
+
         StringBuffer result = new StringBuffer();
         if (!UTF16.hasMoreCodePointsThan(s, 1)) {
-        	// single code point
+            // single code point
             appendID(UTF16.charAt(s,0), result, false);
         } else if (isSingleID) {
             result.append('<');
@@ -461,7 +461,7 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
                 if (i != 0) result.append('-');
                 appendID(cp, result, true);
             }
-            result.append('>');            
+            result.append('>');
         } else {
             result.append('"');
             int cp;
@@ -474,12 +474,12 @@ toupper (<a>,<A>);(<b>,<B>);(<c>,<C>);(<d>,<D>);(<e>,<E>);\
         return result.toString();
     }
 
-	private StringBuffer appendID(int cp, StringBuffer result, boolean nakedID) {
+    private StringBuffer appendID(int cp, StringBuffer result, boolean nakedID) {
         if (!nakedID) result.append('<');
-		result.append('U').append(Utility.hex(cp,4));
+        result.append('U').append(Utility.hex(cp,4));
         if (!nakedID) result.append('>');
         return result;
-	}
-    
+    }
+
     UnicodeSet uca_contractions = new UnicodeSet("[{\u0406\u0308}{\u0410\u0306}{\u0410\u0308}{\u0413\u0301}{\u0413\u0341}{\u0415\u0306}{\u0416\u0308}{\u0417\u0308}{\u0418\u0306}{\u0418\u0308}{\u041A\u0301}{\u041A\u0341}{\u041E\u0308}{\u0423\u0306}{\u0423\u0308}{\u0423\u030B}{\u0427\u0308}{\u042B\u0308}{\u042D\u0308}{\u0430\u0306}{\u0430\u0308}{\u0433\u0301}{\u0433\u0341}{\u0435\u0306}{\u0436\u0308}{\u0437\u0308}{\u0438\u0306}{\u0438\u0308}{\u043A\u0301}{\u043A\u0341}{\u043E\u0308}{\u0443\u0306}{\u0443\u0308}{\u0443\u030B}{\u0447\u0308}{\u044B\u0308}{\u044D\u0308}{\u0456\u0308}{\u0474\u030F}{\u0475\u030F}{\u04D8\u0308}{\u04D9\u0308}{\u04E8\u0308}{\u04E9\u0308}{\u0627\u0653}{\u0627\u0654}{\u0627\u0655}{\u0648\u0654}{\u064A\u0654}{\u09C7\u09BE}{\u09C7\u09D7}{\u0B47\u0B3E}{\u0B47\u0B56}{\u0B47\u0B57}{\u0B92\u0BD7}{\u0BC6\u0BBE}{\u0BC6\u0BD7}{\u0BC7\u0BBE}{\u0C46\u0C56}{\u0CBF\u0CD5}{\u0CC6\u0CC2}{\u0CC6\u0CC2\u0CD5}{\u0CC6\u0CD5}{\u0CC6\u0CD6}{\u0CCA\u0CD5}{\u0D46\u0D3E}{\u0D46\u0D57}{\u0D47\u0D3E}{\u0DD9\u0DCA}{\u0DD9\u0DCF}{\u0DD9\u0DCF\u0DCA}{\u0DD9\u0DDF}{\u0DDC\u0DCA}{\u0E4D\u0E32}{\u0ECD\u0EB2}{\u0F71\u0F72}{\u0F71\u0F74}{\u0F71\u0F80}{\u0FB2\u0F71}{\u0FB2\u0F71\u0F80}{\u0FB2\u0F80}{\u0FB2\u0F81}{\u0FB3\u0F71}{\u0FB3\u0F71\u0F80}{\u0FB3\u0F80}{\u0FB3\u0F81}{\u1025\u102E}]");
 }

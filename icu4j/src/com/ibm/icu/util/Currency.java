@@ -56,7 +56,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public static final int LONG_NAME = 1;
 
-    // begin registry stuff 
+    // begin registry stuff
 
     // shim for service code
     /* package */ static abstract class ServiceShim {
@@ -66,7 +66,7 @@ public class Currency extends MeasureUnit implements Serializable {
         abstract Object registerInstance(Currency c, ULocale l);
         abstract boolean unregister(Object f);
     }
-    
+
     private static ServiceShim shim;
     private static ServiceShim getShim() {
         // Note: this instantiation is safe on loose-memory-model configurations
@@ -89,7 +89,7 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Returns a currency object for the default currency in the given
      * locale.
-     * @param locale the locale 
+     * @param locale the locale
      * @return the currency object for this locale
      * @stable ICU 2.2
      */
@@ -104,10 +104,10 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Currency getInstance(ULocale locale) {
-	String currency = locale.getKeywordValue("currency");
-	if (currency != null) {
-	    return getInstance(currency);
-	}
+    String currency = locale.getKeywordValue("currency");
+    if (currency != null) {
+        return getInstance(currency);
+    }
 
         if (shim == null) {
             return createCurrency(locale);
@@ -133,13 +133,13 @@ public class Currency extends MeasureUnit implements Serializable {
         String curriso = null;
         try{
             curriso = cm.getString(country);
-	    if (curriso != null) {
-		return new Currency(curriso);
-	    }
-        }catch(MissingResourceException ex){
-         //do nothing   
+        if (curriso != null) {
+        return new Currency(curriso);
         }
-	return null;
+        }catch(MissingResourceException ex){
+         //do nothing
+        }
+    return null;
         /*
         for (int i=0; i<cm.length; ++i) {
             if (country.equals((String) cm[i][0])) {
@@ -150,7 +150,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
         Currency curr = null;
         if (curriso != null) {
-	    
+
             curr = new Currency(curriso);
 
             // TODO: Determine valid and actual locale correctly.
@@ -241,7 +241,7 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     /**
-     * Return true if rhs is a Currency instance, 
+     * Return true if rhs is a Currency instance,
      * is non-null, and has the same currency code.
      * @stable ICU 2.2
      */
@@ -284,7 +284,7 @@ public class Currency extends MeasureUnit implements Serializable {
     public String getName(Locale locale,
                           int nameStyle,
                           boolean[] isChoiceFormat) {
-	return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
+    return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
     }
 
     /**
@@ -310,7 +310,7 @@ public class Currency extends MeasureUnit implements Serializable {
         // Look up the Currencies resource for the given locale.  The
         // Currencies locale data looks like this:
         //|en {
-        //|  Currencies { 
+        //|  Currencies {
         //|    USD { "US$", "US Dollar" }
         //|    CHF { "Sw F", "Swiss Franc" }
         //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
@@ -321,7 +321,7 @@ public class Currency extends MeasureUnit implements Serializable {
         if (nameStyle < 0 || nameStyle > 1) {
             throw new IllegalArgumentException();
         }
-    
+
         // In the future, resource bundles may implement multi-level
         // fallback.  That is, if a currency is not found in the en_US
         // Currencies data, then the en Currencies data will be searched.
@@ -349,7 +349,7 @@ public class Currency extends MeasureUnit implements Serializable {
                         break;
                     }
                 } c
-                */               
+                */
             }
             catch (MissingResourceException e) {}
 
@@ -381,7 +381,7 @@ public class Currency extends MeasureUnit implements Serializable {
         }
 
         // If we fail to find a match, use the ISO 4217 code
-        return isoCode;        
+        return isoCode;
     }
 
     /**
@@ -422,7 +422,7 @@ public class Currency extends MeasureUnit implements Serializable {
         // Look up the Currencies resource for the given locale.  The
         // Currencies locale data looks like this:
         //|en {
-        //|  Currencies { 
+        //|  Currencies {
         //|    USD { "US$", "US Dollar" }
         //|    CHF { "Sw F", "Swiss Franc" }
         //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
@@ -440,17 +440,17 @@ public class Currency extends MeasureUnit implements Serializable {
         // it manually.
 
         // Multi-level resource inheritance fallback loop
-        
+
         while (locale != null) {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
-           
+
             try {
                 ICUResourceBundle currencies = rb.get("Currencies");
                 // Do a linear search
                 for (int i=0; i<currencies.getSize(); ++i) {
                     //String name = ((String[]) currencies[i][1])[0];
-                    ICUResourceBundle item = currencies.get(i); 
+                    ICUResourceBundle item = currencies.get(i);
                     String name = item.getString(0);
                     if (name.length() < 1) {
                         // Ignore zero-length names -- later, change this
@@ -460,7 +460,7 @@ public class Currency extends MeasureUnit implements Serializable {
                         name = name.substring(1);
                         if (name.length() > 0 && name.charAt(0) != '=') {
                             ChoiceFormat choice = new ChoiceFormat(name);
-                            // Number n = 
+                            // Number n =
                             choice.parse(text, pos);
                             int len = pos.getIndex() - start;
                             if (len > max) {
@@ -481,8 +481,8 @@ public class Currency extends MeasureUnit implements Serializable {
 
             locale = locale.getFallback();
         }
-        
-        /*  
+
+        /*
         1. Look at the Currencies array from the locale
             1a. Iterate through it, and check each row to see if row[1] matches
                 1a1. If row[1] is a pattern, use ChoiceFormat to attempt a parse
@@ -490,7 +490,7 @@ public class Currency extends MeasureUnit implements Serializable {
         2. If there is no match, fall back to "en" and try again
         3. If there is no match, fall back to root and try again
         4. If still no match, parse 3-letter ISO {this code is probably unchanged}.
-        
+
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
         ICUResourceBundle currencies = rb.get("Currencies");
         */
@@ -513,7 +513,7 @@ public class Currency extends MeasureUnit implements Serializable {
                 max = 3;
             }
         }
-        
+
         pos.setIndex(start + max);
         return iso;
     }
@@ -592,7 +592,7 @@ public class Currency extends MeasureUnit implements Serializable {
             //Integer[] i = null;
             //int defaultPos = -1;
             int[] i = currencyMeta.get(isoCode).getIntVector();
-            
+
             // Do a linear search for isoCode.  At the same time,
             // record the position of the DEFAULT meta data.  If the
             // meta data becomes large, make this faster.
@@ -663,7 +663,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
-	return ULocale.ROOT;
+    return ULocale.ROOT;
     }
 
     /**

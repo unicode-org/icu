@@ -22,7 +22,7 @@
  * flags names of classes and their members that have no tags or incorrect syntax.
  *
  * Requires JDK 1.4 or later
- * 
+ *
  * Use build.xml 'checktags' ant target, or
  * run from directory containing CheckTags.class as follows:
  * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
@@ -52,7 +52,7 @@ public class CheckTags {
             this.reportError = reportError;
         }
         public String toString() {
-            return header + 
+            return header +
                 " printed: " + printed +
                 " reportError: " + reportError +
                 " errorCount: " + errorCount;
@@ -270,7 +270,7 @@ public class CheckTags {
         if (doc != null && (doc.isPublic() || doc.isProtected())
             && !(doc instanceof ConstructorDoc && ((ConstructorDoc)doc).isSynthetic())) {
 
-            // unfortunately, in JDK 1.4.1 MemberDoc.isSynthetic is not properly implemented for 
+            // unfortunately, in JDK 1.4.1 MemberDoc.isSynthetic is not properly implemented for
             // synthetic constructors.  So you'll have to live with spurious errors or 'implement'
             // the synthetic constructors...
 
@@ -308,11 +308,11 @@ public class CheckTags {
         boolean foundRequiredTag = false;
         boolean foundDraftTag = false;
         boolean foundDeprecatedTag = false;
-	boolean foundObsoleteTag = false;
+    boolean foundObsoleteTag = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
-                
+
             String kind = tag.kind();
             int ix = tagKindIndex(kind);
 
@@ -320,7 +320,7 @@ public class CheckTags {
             case UNKNOWN:
                 errln("unknown kind: " + kind);
                 break;
-                   
+
             case INTERNAL:
                 foundRequiredTag = true;
                 break;
@@ -353,7 +353,7 @@ public class CheckTags {
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
                 }
-		foundObsoleteTag = true;
+        foundObsoleteTag = true;
                 foundRequiredTag = true;
                 break;
 

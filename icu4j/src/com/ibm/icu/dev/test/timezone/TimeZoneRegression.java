@@ -124,13 +124,13 @@ public class TimeZoneRegression extends TestFmwk {
 
                 ByteArrayOutputStream baos;
                 ObjectOutputStream ostream =
-                    new ObjectOutputStream(baos = new 
+                    new ObjectOutputStream(baos = new
                                            ByteArrayOutputStream());
                 ostream.writeObject(zone);
                 ostream.close();
                 baos.close();
                 ObjectInputStream istream =
-                    new ObjectInputStream(new 
+                    new ObjectInputStream(new
                                           ByteArrayInputStream(baos.toByteArray()));
                 TimeZone frankenZone = (TimeZone) istream.readObject();
                 //logln("Zone:        " + zone);
@@ -154,7 +154,7 @@ public class TimeZoneRegression extends TestFmwk {
     }
 
     public void Test4109314() {
-        GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance(); 
+        GregorianCalendar testCal = (GregorianCalendar)Calendar.getInstance();
         TimeZone PST = TimeZone.getTimeZone("PST");
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
@@ -175,23 +175,23 @@ public class TimeZoneRegression extends TestFmwk {
             testCal.setTimeZone((TimeZone) testData[i]);
             long t = ((Date)testData[i+1]).getTime();
             Date end = (Date) testData[i+2];
-            while (t < end.getTime()) { 
+            while (t < end.getTime()) {
                 testCal.setTime(new Date(t));
                 if (!checkCalendar314(testCal, (TimeZone) testData[i]))
                     pass = false;
                 t += 60*60*1000L;
-            } 
+            }
         }
         if (!pass) errln("Fail: TZ API inconsistent");
-    } 
+    }
 
-    boolean checkCalendar314(GregorianCalendar testCal, TimeZone testTZ) { 
-        // GregorianCalendar testCal = (GregorianCalendar)aCal.clone(); 
+    boolean checkCalendar314(GregorianCalendar testCal, TimeZone testTZ) {
+        // GregorianCalendar testCal = (GregorianCalendar)aCal.clone();
 
         final int ONE_DAY = 24*60*60*1000;
 
-        int tzOffset, tzRawOffset; 
-        Float tzOffsetFloat,tzRawOffsetFloat; 
+        int tzOffset, tzRawOffset;
+        Float tzOffsetFloat,tzRawOffsetFloat;
         // Here is where the user made an error.  They were passing in the value of
         // the MILLSECOND field; you need to pass in the millis in the day in STANDARD
         // time.
@@ -219,50 +219,50 @@ public class TimeZoneRegression extends TestFmwk {
             dow = Calendar.SUNDAY + ((dow - Calendar.SUNDAY + 1) % 7);
         }
 
-        tzOffset = testTZ.getOffset(testCal.get(Calendar.ERA), 
-                                    testCal.get(Calendar.YEAR), 
-                                    testCal.get(Calendar.MONTH), 
-                                    date, 
-                                    dow, 
-                                    millis); 
-        tzRawOffset = testTZ.getRawOffset(); 
-        tzOffsetFloat = new Float((float)tzOffset/(float)3600000); 
-        tzRawOffsetFloat = new Float((float)tzRawOffset/(float)3600000); 
+        tzOffset = testTZ.getOffset(testCal.get(Calendar.ERA),
+                                    testCal.get(Calendar.YEAR),
+                                    testCal.get(Calendar.MONTH),
+                                    date,
+                                    dow,
+                                    millis);
+        tzRawOffset = testTZ.getRawOffset();
+        tzOffsetFloat = new Float((float)tzOffset/(float)3600000);
+        tzRawOffsetFloat = new Float((float)tzRawOffset/(float)3600000);
 
-        Date testDate = testCal.getTime(); 
+        Date testDate = testCal.getTime();
 
-        boolean inDaylightTime = testTZ.inDaylightTime(testDate); 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm"); 
-        sdf.setCalendar(testCal); 
-        String inDaylightTimeString; 
+        boolean inDaylightTime = testTZ.inDaylightTime(testDate);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        sdf.setCalendar(testCal);
+        String inDaylightTimeString;
 
-        boolean passed; 
+        boolean passed;
 
-        if (inDaylightTime) 
-        { 
-            inDaylightTimeString = " DST "; 
+        if (inDaylightTime)
+        {
+            inDaylightTimeString = " DST ";
             passed = (tzOffset == (tzRawOffset + 3600000));
-        } 
-        else 
-        { 
-            inDaylightTimeString = "     "; 
+        }
+        else
+        {
+            inDaylightTimeString = "     ";
             passed = (tzOffset == tzRawOffset);
-        } 
+        }
 
         String output = testTZ.getID() + " " + sdf.format(testDate) +
             " Offset(" + tzOffsetFloat + ")" +
-            " RawOffset(" + tzRawOffsetFloat + ")" + 
+            " RawOffset(" + tzRawOffsetFloat + ")" +
             " " + millis/(float)3600000 + " " +
-            inDaylightTimeString; 
+            inDaylightTimeString;
 
-        if (passed) 
-            output += "     "; 
-        else 
-            output += "ERROR"; 
+        if (passed)
+            output += "     ";
+        else
+            output += "ERROR";
 
         if (passed) logln(output); else errln(output);
         return passed;
-    } 
+    }
 
     /**
      * CANNOT REPRODUDE
@@ -313,7 +313,7 @@ public class TimeZoneRegression extends TestFmwk {
     // doesn't affect the others.
     TimeZone.setDefault(initialZone);
     }
-    
+
     /**
      * TimeZone.getAvailableIDs(int) throws exception for certain values,
      * due to a faulty constant in TimeZone.java.
@@ -395,7 +395,7 @@ public class TimeZoneRegression extends TestFmwk {
                         errln("Fail: DST savings of " + savings + " to " + method + " gave " + e);
                     } else {
                         logln("Pass: DST savings of " + savings + " to " + method + " gave " + e);
-                    }               
+                    }
                 }
             }
         }
@@ -509,7 +509,7 @@ public class TimeZoneRegression extends TestFmwk {
                       ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                       (shouldBeGood ? (", <end>) should work but throws " + ex)
                        : ", <end>) should fail but doesn't"));
-            }            
+            }
 
             ex = null;
             try {
@@ -525,7 +525,7 @@ public class TimeZoneRegression extends TestFmwk {
                       ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                       (shouldBeGood ? (") should work but throws " + ex)
                        : ") should fail but doesn't"));
-            }            
+            }
         }
     }
 
@@ -548,7 +548,7 @@ public class TimeZoneRegression extends TestFmwk {
             GOOD, GOOD_ERA, GOOD_YEAR, Calendar.DECEMBER, GOOD_DAY, GOOD_DOW, GOOD_TIME,
             BAD,  GOOD_ERA, GOOD_YEAR, Calendar.JANUARY-1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
             BAD,  GOOD_ERA, GOOD_YEAR, Calendar.DECEMBER+1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
-            
+
             GOOD, GOOD_ERA, GOOD_YEAR, Calendar.JANUARY, 1, GOOD_DOW, GOOD_TIME,
             GOOD, GOOD_ERA, GOOD_YEAR, Calendar.JANUARY, 31, GOOD_DOW, GOOD_TIME,
             BAD,  GOOD_ERA, GOOD_YEAR, Calendar.JANUARY, 0, GOOD_DOW, GOOD_TIME,
@@ -571,7 +571,7 @@ public class TimeZoneRegression extends TestFmwk {
             IllegalArgumentException e = null;
             try {
                 /*int offset =*/ tz.getOffset(DATA[i+1], DATA[i+2], DATA[i+3],
-                                          DATA[i+4], DATA[i+5], DATA[i+6]); 
+                                          DATA[i+4], DATA[i+5], DATA[i+6]);
                 //offset = 0;
            } catch (IllegalArgumentException ex) {
                 e = ex;
@@ -601,15 +601,15 @@ public class TimeZoneRegression extends TestFmwk {
         }
         z = TimeZone.getTimeZone("GMT");
         try {
-	    // {dlf} requiring cast for disambiguation is ok for compatibility since null
-	    // is not a valid argument to this API
+        // {dlf} requiring cast for disambiguation is ok for compatibility since null
+        // is not a valid argument to this API
             z.getDisplayName(false, TimeZone.SHORT, (ULocale)null);
             errln("FAIL: Null allowed in getDisplayName(3)");
         } catch (NullPointerException e) {
             System.out.print("");
         }
         try {
-	    // {dlf} see above
+        // {dlf} see above
             z.getDisplayName((ULocale)null);
             errln("FAIL: Null allowed in getDisplayName(1)");
         } catch (NullPointerException e) {
@@ -678,7 +678,7 @@ public class TimeZoneRegression extends TestFmwk {
         final int ONE_HOUR = 60*60*1000;
         final float H = (float) ONE_HOUR;
     TimeZone initialZone = TimeZone.getDefault();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z"); 
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z");
 
         SimpleTimeZone asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,
             Calendar.OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR,
@@ -703,9 +703,9 @@ public class TimeZoneRegression extends TestFmwk {
             new int[] {2000, Calendar.FEBRUARY, 29, 22, 0},
             Boolean.TRUE,
         };
-        
+
         String[] zone = new String[4];
-        
+
         for (int j=0; j<DATA.length; j+=3) {
             TimeZone tz = (TimeZone)DATA[j];
             TimeZone.setDefault(tz);
@@ -924,14 +924,14 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4208960 () {
     TimeZone tz = TimeZone.getTimeZone("PST");
     try {
-        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
+        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29,
                       Calendar.THURSDAY, 0);
         //offset = 0;
     } catch (IllegalArgumentException e) {
         errln("FAILED: to get TimeZone.getOffset(2/29/96)");
     }
     try {
-        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
+        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29,
                       Calendar.THURSDAY, 0);
         //offset = 0;
         errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");

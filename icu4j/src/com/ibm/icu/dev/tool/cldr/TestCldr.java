@@ -46,19 +46,19 @@ import com.ibm.icu.text.Transliterator;
  */
 public class TestCldr {
     static final boolean DEBUG = false;
-    
+
     //ULocale uLocale = ULocale.ENGLISH;
     //Locale oLocale = Locale.ENGLISH; // TODO Drop once ICU4J has ULocale everywhere
-    static PrintWriter log; 
+    static PrintWriter log;
     SAXParser SAX;
 
-    private static final int 
+    private static final int
         HELP1 = 0,
         HELP2 = 1,
         SOURCEDIR = 2,
         LOGDIR = 3,
-		MATCH = 4;
-    
+        MATCH = 4;
+
     private static final UOption[] options = {
             UOption.HELP_H(),
             UOption.HELP_QUESTION_MARK(),
@@ -71,54 +71,54 @@ public class TestCldr {
         UOption.parseArgs(args, options);
         log = BagFormatter.openUTF8Writer(options[LOGDIR].value, "log.txt");
         try {
-        	TestCldr x = new TestCldr();
+            TestCldr x = new TestCldr();
             x.test();
                  } finally {
-                 	log.close();
-                 	System.out.println("Done");
+                    log.close();
+                    System.out.println("Done");
                  }
     }
-    
+
     public void test() throws Exception {
-    	Set s = GenerateCldrTests.getMatchingXMLFiles(options[SOURCEDIR].value, options[MATCH].value);
-    	for (Iterator it = s.iterator(); it.hasNext();) {
+        Set s = GenerateCldrTests.getMatchingXMLFiles(options[SOURCEDIR].value, options[MATCH].value);
+        for (Iterator it = s.iterator(); it.hasNext();) {
             test((String) it.next());
         }
-    	/*
+        /*
 //        test("hu");
         File[] list = new File(options[SOURCEDIR].value).listFiles();
         for (int i = 0; i < list.length; ++i) {
-        	String name = list[i].getName();
+            String name = list[i].getName();
             if (!name.endsWith(".xml")) continue;
             test(name.substring(0,name.length()-4));
         }
         */
     }
-    
+
     public void test(String localeName) throws Exception {
         //uLocale = new ULocale(localeName);
         //oLocale = uLocale.toLocale();
-        
+
         File f = new File(options[SOURCEDIR].value + localeName + ".xml");
         System.out.println("Testing " + f.getCanonicalPath());
         log.println("Testing " + f.getCanonicalPath());
         SAX.parse(f, DEFAULT_HANDLER);
     }
-    
+
     static Transliterator toUnicode = Transliterator.getInstance("any-hex");
     static public String showString(String in) {
-    	return "\u00AB" + in + "\u00BB (" + toUnicode.transliterate(in) + ")";
+        return "\u00AB" + in + "\u00BB (" + toUnicode.transliterate(in) + ")";
     }
-    // ============ SAX Handler Infrastructure ============ 
+    // ============ SAX Handler Infrastructure ============
 
     abstract public class Handler {
         Map settings = new TreeMap();
         String name;
         List currentLocales = new ArrayList();
         int failures = 0;
-        
+
         void setName(String name) {
-        	this.name = name;
+            this.name = name;
         }
         void set(String attributeName, String attributeValue) {
             //if (DEBUG) System.out.println(attributeName + " => " + attributeValue);
@@ -126,15 +126,15 @@ public class TestCldr {
         }
         void checkResult(String value) {
             try {
-            	for (int i = 0; i < currentLocales.size(); ++i) {
-            		ULocale ul = (ULocale)currentLocales.get(i);
-            		log.println("  Checking " + ul + "(" + ul.getDisplayName(ULocale.ENGLISH) + ")" + " for " + name);
-            		handleResult(ul, value);
-            		if (failures != 0) {
-            			System.out.println("\tTotal Failures: " + failures + "\t" + ul + "(" + ul.getDisplayName(ULocale.ENGLISH) + ")");
-            			failures = 0;
-            		}
-            	}
+                for (int i = 0; i < currentLocales.size(); ++i) {
+                    ULocale ul = (ULocale)currentLocales.get(i);
+                    log.println("  Checking " + ul + "(" + ul.getDisplayName(ULocale.ENGLISH) + ")" + " for " + name);
+                    handleResult(ul, value);
+                    if (failures != 0) {
+                        System.out.println("\tTotal Failures: " + failures + "\t" + ul + "(" + ul.getDisplayName(ULocale.ENGLISH) + ")");
+                        failures = 0;
+                    }
+                }
             } catch (Exception e) {
                 logln("Exception with result: <" + value + ">");
                 e.printStackTrace(log);
@@ -157,39 +157,39 @@ public class TestCldr {
             return -1;
         }
         abstract void handleResult(ULocale currentLocale, String value) throws Exception;
-		/**
-		 * @param attributes
-		 */
-		public void setAttributes(Attributes attributes) {
-			String localeList = attributes.getValue("locales");
-			String[] currentLocaleString = new String[50];
-			Utility.split(localeList, ' ', currentLocaleString);
-			currentLocales.clear();
-			for (int i = 0; i < currentLocaleString.length; ++i) {
-				if (currentLocaleString[i].length() == 0) continue;
-				currentLocales.add(new ULocale(currentLocaleString[i]));
-				
-			}
-		}
+        /**
+         * @param attributes
+         */
+        public void setAttributes(Attributes attributes) {
+            String localeList = attributes.getValue("locales");
+            String[] currentLocaleString = new String[50];
+            Utility.split(localeList, ' ', currentLocaleString);
+            currentLocales.clear();
+            for (int i = 0; i < currentLocaleString.length; ++i) {
+                if (currentLocaleString[i].length() == 0) continue;
+                currentLocales.add(new ULocale(currentLocaleString[i]));
+
+            }
+        }
     }
-       
+
     public Handler getHandler(String name, Attributes attributes) {
         if (DEBUG) System.out.println("Creating Handler: " + name);
         Handler result = (Handler) RegisteredHandlers.get(name);
         if (result == null) System.out.println("Unexpected test type: " + name);
         else {
-        	result.setAttributes(attributes);
+            result.setAttributes(attributes);
         }
         return result;
     }
-    
+
     public void addHandler(String name, Handler handler) {
-    	handler.setName(name);
+        handler.setName(name);
         RegisteredHandlers.put(name, handler);
     }
     Map RegisteredHandlers = new HashMap();
-    
-    // ============ Statics for Date/Number Support ============ 
+
+    // ============ Statics for Date/Number Support ============
 
     static TimeZone utc = TimeZone.getTimeZone("GMT");
     static DateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -198,40 +198,40 @@ public class TestCldr {
     }
     static int[] DateFormatValues = {-1, DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL};
     static String[] DateFormatNames = {"none", "short", "medium", "long", "full"};
-    
+
     static String[] NumberNames = {"standard", "integer", "decimal", "percent", "scientific"};
 
-    // ============ Handler for Collation ============ 
+    // ============ Handler for Collation ============
     {
-		addHandler("collation", new Handler() {
-			public void handleResult(ULocale currentLocale, String value) {
-				Collator col = Collator.getInstance(currentLocale);
-				String lastLine = "";
-				int count = 0;
-				for (int pos = 0; pos < value.length();) {
-					int nextPos = value.indexOf('\n', pos);
-					if (nextPos < 0)
-						nextPos = value.length();
-					String line = value.substring(pos, nextPos).trim(); // HACK for SAX
+        addHandler("collation", new Handler() {
+            public void handleResult(ULocale currentLocale, String value) {
+                Collator col = Collator.getInstance(currentLocale);
+                String lastLine = "";
+                int count = 0;
+                for (int pos = 0; pos < value.length();) {
+                    int nextPos = value.indexOf('\n', pos);
+                    if (nextPos < 0)
+                        nextPos = value.length();
+                    String line = value.substring(pos, nextPos).trim(); // HACK for SAX
                     if (line.length() != 0) {  // HACK for SAX
-    					int comp = col.compare(lastLine, line);
-    					if (comp > 0) {
-    						failures++;
-    						logln("\tLine " + (count + 1) + "\tFailure: " + showString(lastLine) + " should be leq " + showString(line));
-    					} else if (DEBUG) {
-    						System.out.println("OK: " + line);
-    					}
+                        int comp = col.compare(lastLine, line);
+                        if (comp > 0) {
+                            failures++;
+                            logln("\tLine " + (count + 1) + "\tFailure: " + showString(lastLine) + " should be leq " + showString(line));
+                        } else if (DEBUG) {
+                            System.out.println("OK: " + line);
+                        }
                     }
-					pos = nextPos + 1;
-					lastLine = line;
-					count++;
-				}
-			}
-		});
-        
-        // ============ Handler for Numbers ============ 
-		addHandler("number", new Handler() {
-			public void handleResult(ULocale locale, String result) {
+                    pos = nextPos + 1;
+                    lastLine = line;
+                    count++;
+                }
+            }
+        });
+
+        // ============ Handler for Numbers ============
+        addHandler("number", new Handler() {
+            public void handleResult(ULocale locale, String result) {
                 NumberFormat nf = null;
                 double v = Double.NaN;
                 for (Iterator it = settings.keySet().iterator(); it.hasNext();) {
@@ -256,49 +256,49 @@ public class TestCldr {
                     if (!temp.equals(result)) {
                         logln("Mismatched Number: CLDR: <" + result + ">, Host: <" + temp + ">");
                     }
-                        
-                }
-			}
-		});
-        
-        // ============ Handler for Dates ============ 
-		addHandler("date", new Handler() {
-			public void handleResult(ULocale locale, String result) throws ParseException {
-				int dateFormat = DateFormat.DEFAULT;
-				int timeFormat = DateFormat.DEFAULT;
-				Date date = new Date();
-				for (Iterator it = settings.keySet().iterator(); it.hasNext();) {
-					String attributeName = (String) it.next();
-					String attributeValue = (String) settings
-							.get(attributeName);
-					if (attributeName.equals("input")) {
-						date = iso.parse(attributeValue);
-						continue;
-					}
-					// must be either dateType or timeType at this point
-					int index = lookupValue(attributeValue, DateFormatNames);
-					int value = DateFormatValues[index];
-					if (attributeName.equals("dateType"))
-						dateFormat = value;
-					else
-						timeFormat = value;
 
-				}
-				DateFormat dt = dateFormat == -1 ? DateFormat.getTimeInstance(timeFormat, locale)
-                        : timeFormat == -1 ? DateFormat.getDateInstance(dateFormat, locale) 
+                }
+            }
+        });
+
+        // ============ Handler for Dates ============
+        addHandler("date", new Handler() {
+            public void handleResult(ULocale locale, String result) throws ParseException {
+                int dateFormat = DateFormat.DEFAULT;
+                int timeFormat = DateFormat.DEFAULT;
+                Date date = new Date();
+                for (Iterator it = settings.keySet().iterator(); it.hasNext();) {
+                    String attributeName = (String) it.next();
+                    String attributeValue = (String) settings
+                            .get(attributeName);
+                    if (attributeName.equals("input")) {
+                        date = iso.parse(attributeValue);
+                        continue;
+                    }
+                    // must be either dateType or timeType at this point
+                    int index = lookupValue(attributeValue, DateFormatNames);
+                    int value = DateFormatValues[index];
+                    if (attributeName.equals("dateType"))
+                        dateFormat = value;
+                    else
+                        timeFormat = value;
+
+                }
+                DateFormat dt = dateFormat == -1 ? DateFormat.getTimeInstance(timeFormat, locale)
+                        : timeFormat == -1 ? DateFormat.getDateInstance(dateFormat, locale)
                         : DateFormat.getDateTimeInstance(dateFormat, timeFormat, locale);
                 dt.setTimeZone(utc);
-				String temp = dt.format(date).trim();
+                String temp = dt.format(date).trim();
                 result = result.trim(); // HACK because of SAX
-				if (!temp.equals(result)) {
-					logln("Mismatched DateTime: CLDR: <" + result + ">, Host: <" + temp + ">");
-				}
-			}
-		});
-        
-	}
-    
-    // ============ Gorp for SAX ============ 
+                if (!temp.equals(result)) {
+                    logln("Mismatched DateTime: CLDR: <" + result + ">, Host: <" + temp + ">");
+                }
+            }
+        });
+
+    }
+
+    // ============ Gorp for SAX ============
 
     {
         try {
@@ -315,7 +315,7 @@ public class TestCldr {
         StringBuffer lastChars = new StringBuffer();
         boolean justPopped = false;
         Handler handler;
-        
+
         public void startElement(
             String uri,
             String localName,
@@ -326,13 +326,13 @@ public class TestCldr {
                 //lastChars = "";
                 try {
                     if (qName.equals("cldrTest")) {
-                     // skip   
+                     // skip
                     } else if (qName.equals("result")) {
-                    	for (int i = 0; i < attributes.getLength(); ++i) {
-                    		handler.set(attributes.getQName(i), attributes.getValue(i));
+                        for (int i = 0; i < attributes.getLength(); ++i) {
+                            handler.set(attributes.getQName(i), attributes.getValue(i));
                         }
                     } else {
-                    	handler = getHandler(qName, attributes);
+                        handler = getHandler(qName, attributes);
                         //handler.set("locale", uLocale.toString());
                     }
                     //if (DEBUG) System.out.println("startElement:\t" + contextStack);
@@ -348,9 +348,9 @@ public class TestCldr {
                     //if (DEBUG) System.out.println("endElement:\t" + contextStack);
                     if (qName.equals("result")) handler.checkResult(lastChars.toString());
                     else if (qName.length() != 0) {
-                    	//logln("Unexpected contents of: " + qName + ", <" + lastChars + ">");
+                        //logln("Unexpected contents of: " + qName + ", <" + lastChars + ">");
                     }
-                    lastChars.setLength(0);                    
+                    lastChars.setLength(0);
                     justPopped = true;
                 } catch (RuntimeException e) {
                     e.printStackTrace();
@@ -358,7 +358,7 @@ public class TestCldr {
                 }
             }
         // Have to hack around the fact that the character data might be in pieces
-        public void characters(char[] ch, int start, int length)        
+        public void characters(char[] ch, int start, int length)
             throws SAXException {
                 try {
                     String value = new String(ch,start,length);
@@ -372,7 +372,7 @@ public class TestCldr {
             }
 
         // just for debugging
-        
+
         public void notationDecl (String name, String publicId, String systemId)
         throws SAXException {
             System.out.println("notationDecl: " + name
@@ -385,7 +385,7 @@ public class TestCldr {
         throws SAXException {
             System.out.println("processingInstruction: " + target + ", " + data);
         }
-        
+
         public void skippedEntity (String name)
         throws SAXException
         {
