@@ -756,7 +756,7 @@ Currently ICU4J can be divided into the following modules:
 * com.ibm. should be prepended to the package names listed.
 <br>&#x2020; A bold class name core service APIs.  Only APIs 
 in these classes are fully supported.
-<br>&#x2021; Sizes are of the compressed jar file containing only this module.  Full size is 2,726&nbsp;K.
+<br>&#x2021; Sizes are of the compressed jar file containing only this module.  Full size is 2,727&nbsp;K.
 </font>
 </b>
 </p>
@@ -794,7 +794,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Collator</th>
         <td align="left" valign="baseline">collator, collatorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.collator</td>
-        <td align="right" valign="baseline">2,118&nbsp;KB</td>
+        <td align="right" valign="baseline">1,412&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -829,7 +829,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Calendar</th>
         <td align="left" valign="baseline">calendar, calendarTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.calendar</td>
-        <td align="right" valign="baseline">2,135&nbsp;KB</td>
+        <td align="right" valign="baseline">1,338&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -872,7 +872,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">BreakIterator</th>
         <td align="left" valign="baseline">breakIterator, breakIteratorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.breakiterator</td>
-        <td align="right" valign="baseline">1,997&nbsp;KB</td>
+        <td align="right" valign="baseline">1,290&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -903,7 +903,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Basic Properties</th>
         <td align="left" valign="baseline">propertiesBasic, propertiesTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-        <td align="left" valign="baseline">428&nbsp;KB</td>
+        <td align="right" valign="baseline">500&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -934,7 +934,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Full Properties</th>
         <td align="left" valign="baseline">propertiesFull, propertiesTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-        <td align="right" valign="baseline">2,001&nbsp;KB</td>
+        <td align="right" valign="baseline">1,240&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -966,7 +966,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Formatting</th>
         <td align="left" valign="baseline">format, formatTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.format</td>
-        <td align="right" valign="baseline">2,253&nbsp;KB</td>
+        <td align="right" valign="baseline">2,208&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -1007,7 +1007,7 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Transforms</th>
         <td align="left" valign="baseline">transliterator, transliteratorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.translit</td>
-        <td align="right" valign="baseline">2,243&nbsp;KB</td>
+        <td align="right" valign="baseline">1,482&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
@@ -1048,23 +1048,23 @@ in these classes are fully supported.
 </table>
 </p>
 
-<p>Building any of these modules is as easy as specifying a build target to the Ant build system,e.g:
+<p>Building any of these modules is as easy as specifying a build target to the Ant build system, e.g:
 <br>To build a module that contains only the Normalizer API:
     <ol>
         <li> Build the module. <br> <code> ant normalizer </code> </li>
-        <li> Build the tests for the module. <br> <code> ant normalizerTests </code> </li>
-        <br><b><font size=2>Note:</font></b> You could omit the step 1 and proceed to step 2, for all modules except full character properties, and let the dependecy analysis compile the requisite module.
-        <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath $icu4j_root/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
         <li> Build the jar containing the module. <br> <code>ant moduleJar </code>
+        <li> Build the tests for the module. <br> <code> ant normalizerTests </code> </li>
+        <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath $icu4j_root/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
      </ol>
 
 If more than one module is required, the module build targets can be concatenated, e.g:
     <ol>
         <li> Build the modules. <br> <code> ant normalizer collator </code> </li>
+        <li> Build the jar containing the modules. <br> <code>ant moduleJar </code>
         <li> Build the tests for the module. <br> <code> ant normalizerTests collatorTests </code> </li>
-        <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath $icu4j_root/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
-        <li> Build the jar containing the module. <br> <code>ant moduleJar </code>
+        <li> Run the tests and verify that they pass. <br> <code> java -classpath $icu4j_root/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
      </ol>
+The jar should be built before the tests, since for some targets building the tests will cause additional classes to be compiled that are not strictly necessary for the module itself.
 </p>
 <h5> Notes: </h5>
 <ul>
@@ -1073,10 +1073,6 @@ If more than one module is required, the module build targets can be concatenate
     <li>The target moduleJar does not depend on any other target. It just creates a jar of all class files under
         $icu4j_root/classes/com/ibm/icu/, excluding the classs files in $icu4j_root/classes/com/ibm/icu/dev folder</li>
     <li>The list of module build targets can be obtained by running the command : <code> ant -projecthelp </code> </li>
-    <li>To verify that the jar file built using the module target works, please delete all directories under $icu4j_root/classes/com/ibm/icu/,
-        except $icu4j_root/classes/com/ibm/icu/dev, and run the tests against the jar file.
-        <br><code> java -classpath $icu4j_root/icu4j.jar com.ibm.icu.dev.test.TestAll -nothrow -w </code>
-     </li>
 </ul>
 
 <h3 class="doc"><a name="tryingout"></a>Trying Out ICU4J</h3>
@@ -1130,63 +1126,82 @@ one of the following:
 Starting with release 2.1, ICU4J includes its own
 resource information
 which is completely independent of the JDK resource information.  The
-new ICU4J information is equivalent to the information in ICU4C and
-ultimately derives from the same source.  This allows ICU4J 2.1 and above
-to be
-built on, and run on, JDK 1.4.
+new ICU4J information is equivalent to the information in ICU4C and many
+resources are, in fact, the same binary files that ICU4C uses.
 </p>
 <p>
-By default the ICU4J distribution includes all of the new resource
-information.  It is located in the package com.ibm.icu.impl.data, as a
-set of class files named "LocaleElements" followed by the names of
-locales in the form _xx_YY_ZZZZ, where 'xx' is the two-letter language
-code, 'YY' is the country code, and 'ZZ' (which can be any length) is
-a variant.  Many of these fields can be omitted.  Locale naming is
-documented the Locale class, java.util.Locale, and the use of these
+By default the ICU4J distribution includes all of the standard resource
+information.  It is located under the directory com/ibm/icu/impl/data.  
+Depending on the service, the data is in different locations and in
+different formats. <strong>Note:</strong> This will continue to change 
+from release to release, so clients should not depend on the exact organization
+of the data in ICU4J.</p>
+
+<ul>
+<li>The primary <b>locale data</b> is under the directory
+<tt>icudt30b</tt>, as a set of <tt>".res"</tt> files whose names are
+the locale identifiers. Locale naming is documented the
+<code>com.ibm.icu.util.ULocale</code> class, and the use of these
 names in searching for resources is documented in
-java.util.ResourceBundle.
+<code>java.util.ResourceBundle</code>.  
+<li>The <b>collation data</b> is under the directory
+<tt>icudt30b/coll</tt>, also as a set of <tt>".res"</tt> files named
+by locale identifiers.  
+<li>The <b>rule-based transliterator data</b> is directly under the
+<tt>data</tt> directory, as a set of <tt>".txt"</tt> files whose names
+start with the string <tt>"Transliterator_"</tt> followed by the
+source and target transliterator IDs.  
+<li>The <b>break iterator data</b> is also directly under the data
+directory, as a set of <tt>".brk"</tt> files, variously named.  The
+default break iterator class resource bundles are also here.  
+<li>The <b>holiday data</b> is under the <tt>data</tt> directory, as a
+set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
+followed by the locale ID.  
+<li>The <b>character property data</b> as well as assorted
+<b>normalization data</b> and default <b>unicode collation algorithm
+(UCA) data</b> is found under the <tt>data</tt> directory as a set of
+<tt>".icu"</tt> files, variously named.
+</ul>
+</p>
+
+<p>
+Some of the data files alias or otherwise reference data from other
+data files. One reason for this is because some locale names have
+changed. For example, <tt>he_IL</tt> used to be <tt>iw_IL</tt>.  In
+order to support both names but not duplicate the data, one of the
+resource files refers to the other file's data.  In other cases, a
+file may alias a portion of another file's data in order to save
+space.  Currently ICU4J provides no tool for revealing these
+dependencies.</p> <blockquote><strong>Note:</strong> Java's
+<code>Locale</code> class silently converts the language code
+<tt>"he"</tt> to <tt>"iw"</tt> when you construct the Locale.  Thus
+Java cannot be used to locate resources that use the <tt>"he"</tt>
+language code.  ICU, on the other hand, does not perform this
+conversion in ULocale, and instead uses aliasing in the locale data to
+represent the same set of data under different locale
+ids.</blockquote>
 </p>
 <p>
-Some of these files require separate binary data.  The names of the
-binary data files start with "CollationElements", then the
-corresponding Locale string, and end with '.res'.  Another data file
-(only one at the moment) starts with the name "BreakDictionaryData",
-the corresponding Locale string, and ends with '.ucs'.
+Resource files that use locale ids form a hierarchy, with up to four
+levels: a root, language, region (country), and variant.  Searches for
+locale data attempt to match as far down the hierarchy as possible,
+for example, <tt>"he_IL"</tt> will match <tt>he_IL</tt>, but
+<tt>"he_US"</tt> will match <tt>he</tt> (since there is no <tt>US</tt>
+variant for </tt>he</tt>, and <tt>"xx_YY</tt> will match root (the
+default fallback locale) since there is no <tt>xx</tt> language code
+in the locale hierarchy.  Again, see
+<code>java.util.ResourceBundle</code> for more information.
 </p>
 <p>
-Some of the LocaleElements files share data with other LocaleElements
-files, because some Locale names have changed. For example, he_IL used
-to be iw_IL.  In order to support both names but not duplicate the
-data, one of the class files refers to the other class file's data.
-</p>
-<p>
-The list of supported resources is found in a file called
-LocaleElements_index.class.  This contains the names of all the
-LocaleElements resources and is the source of the information returned
-by API such as Calendar.getAvailableLocales. (Note: for ease of
-customization this probably should be a text file).
-</p>
-<p>
-LocaleElements files form a hierarchy, with up to four levels: a root,
-language, region (country), and variant.  Searches for locale data
-attempt to match as far down the hierarchy as possible, for example,
-'he_IL' will match LocaleElements_he_IL, but 'he_US' will match
-LocaleElements_he (since there is no 'US' variant for 'he', and
-'xx_YY' will match LocaleElements (since there is no 'xx' language
-code in the LocaleElements hierarchy).  Again, see
-java.util.ResourceBundle for more information.
-</p>
-<p>
-With this in mind, the way to remove LocaleData is to make sure to
-remove all dependencies on that data as well.  For example, if you
-remove LocaleElements_he.class, you need to remove
-LocaleElements_he_IL.class, since it is lower in the hierarchy, and
-you must remove LocaleElements_iw.class, since it references
-LocaleElements_he, and LocaleELements_iw_IL.class, since it depends on
-it (and also references LocaleElements_he_IL).  For another example,
-if you remove CollationElements_zh__PINYIN.res, you must also remove
-LocaleElements_zh__PINYIN.class, since it depends on the
-CollationElements_zh__PINYIN.res.
+<strong>Currently ICU4J provides no tool for revealing these
+dependencies</strong> between data files, so trimming the data
+directly in the ICU4J project is a hit-or-miss affair.  The key point
+when you remove data is to make sure to remove all dependencies on
+that data as well.  For example, if you remove <tt>he.res</tt>, you
+need to remove <tt>he_IL.res</tt>, since it is lower in the hierarchy,
+and you must remove iw.res, since it references <tt>he.res</tt>, and
+<tt>iw_IL.res</tt>, since it depends on it (and also references
+<tt>he_IL.res</tt>).
 </p>
 
 <p>
@@ -1208,131 +1223,49 @@ develop their own resources for use with ICU4J should be prepared to
 regenerate them when they move to new releases of ICU4J.</td></tr></table></blockquote>
 
 <p>
-ICU4J 2.1 and above uses the standard class lookup mechanism.  This means
-any appropriately named resource on the CLASSPATH will be located, in the
-order listed in the classpath.
+ICU4J 3.0's resource mechanism is new for this release and we are still
+developing it.  Currently it is not possible to mix icu's new binary <tt>.res</tt> resources
+with traditional java-style <tt>.class</tt> or <tt>.txt</tt> resources.  We might
+allow for this in a future release, but since the resource data and format is not formally
+supported, you run the risk of incompatibilities with future releases of ICU4J.
 </p>
 <p>
-If you create a resource file
-com.ibm.icu.impl.data.LocaleElements_xx_YY.class, and list it on the
-CLASSPATH before icu4j.jar, your resource will be used in place of any
-existing LocaleElements_xx_YY resource in icu4j.  This is a good way
-to try out changes to resources.  You can, for example, include the
-resource in your application's jar file and list it ahead of
-icu4j.jar.
+Resource data in ICU4J is checked in to the repository as a jar file
+containing the resource binaries, <tt>icudata.jar</tt>.  This
+means that inspecting the contents of these resources is difficult.
+They currently are compiled from ICU4C <tt>.txt</tt> file data.  You
+can view the contents of the ICU4C text resource files to understand
+the contents of the ICU4J resources.
 </p>
 <p>
-In order to create new resources, you first must thoroughly understand
-the various elements contained in the resource files, their syntax and
-dependencies.  You cannot simply 'patch' existing resource files with
-a single change because the new file completely replaces the old file
-in the resource hierarchy.  In general, the new resource file should
-contain all the different data that the old one did, plus your
-changes.
-</p>
-<p>
-Adding a new 'leaf' resource is easiest.  Elements defined in that
-resource will override corresponding ones in the resources further up
-the hierarchy.  Thus you can, for example, try out new localized names
-of days of the week, as they are all contained in one element.  The
-variant mechanism can be used to temporarily try out new versions of
-existing resource elements (though we don't recommend shipping this
-way).  Note though that some resources have detailed dependencies on
-each other, so that you cannot simply assume that a new element with
-the same structure and number of contents will 'just work.'
-</p>
-<p>
-Patching an 'internal' resource (say, one corresponding to an existing
-language resource that has children) requires careful analysis of the
-contents of the resources.
-</p>
-
-<p>
-LocaleElements resource data in ICU4J is checked in to the
-repository as precompiled class files.  This means that inspecting the
-contents of these resources is difficult.  They are compiled from java
-files that in turn are machine-generated from ICU4C binary data, using
-the genrb tool in ICU4C.  You can view the contents of the ICU4C text
-resource files to understand the contents of the ICU4J resources, as
-they are the same.
-</p>
-
-<h4>Developing ICU4J resource files</h4>
-
-<p>
-Currently only the LocaleElements resource data is shared, other ICU
-resources (calendar, transliterator, etc.) are still checked in
-directly to ICU4J as source files.  This means that development and
-maintenance of these resources continues as before, only
-LocaleElements resource data has been changed in ICU4J 2.1.  This
-probably will change in the future once we work out a reasonable
-mechanism for storing and generating the resource data.
-</p>
-<p>
-One goal of using the same resource data as ICU4C is to avoid keeping
-redundant copies of the resource data.  Currently there is no separate
-repository of the 'master' resource data, it is checked in to ICU4C,
-and the tools for converting it to .java files are ICU4C tools.  This
-is inconvenient for working in Java, but since maintenance of ICU4J
-and ICU4C is supposed to go on 'in parallel,' as a practical matter
-people will have to be familiar with development in both C and Java,
-and with the conventions and structure of each project.  Additionally,
-sharing of data means that modifications to data immediately impact
-both projects (as it should) and thus both projects need to be tested
-when such changes are made.  The bulk of the tools are currently on
-the ICU4C side, and will likely stay that way, so this seems like a
-reasonable initial approach to sharing the data.
-</p>
-
-<p>
-While prototyping of LocaleElements data can occur in either Java or
-C, the final version should be checked in to ICU4C in text format.
-Genrb is then run to generate the .java and .res files.  They are then
-compiled and jar'd into the file ICULocaleData.jar.  The resulting jar
-file is then checked in to ICU4J as
-src/com/ibm/icu/dev/data/ICULocaleData.jar.  (This is not great but it
-allows ICU4J to be downloaded and built as one project, instead of
-two, one for locale data and one for ICU4J proper.  Given the 2.4
-schedule it wasn't possible to work out the larger data sharing
-problem in time, so we tried to limit the impact to just what was
-needed to get JDK 1.4 support up and running.)
-</p>
-
-<p>
-The files in ICULocaleData.jar get extracted to com/ibm/icu/impl/data in
+The files in <tt>icudata.jar</tt> get extracted to <tt>com/ibm/icu/impl/data</tt> in
 the build directory when the 'core' target is built.  Thereafter, as
-long as the file LocaleElements_index.class file is untouched, they will
-not be extracted again.  Building the 'resource' target will force the
+long as the file <tt>res_index.res</tt> file is untouched, they will
+not be extracted again.  Building the <tt>'resources'</tt> target will force the
 resources to once again be extracted.  Extraction will
-overwrite any corresponding .class files already in that directory.
+overwrite any corresponding resource files already in that directory.
 </p>
+
 <h4>Building ICU4J Resources from ICU4C</h4>
-   <h5>Requirements</h5>
-   	  <ol>
-   	  	<li>Compilers and tools required for building <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">ICU</a>.</li>
-   	  	<li>Java SDK version 1.4.0 or above.</li>
-   	  	<li>Perl version 5 or above.</li>
-   	  </ol>
-   <h5> Procedure</h5>
-	  <ol>
-	    <li> Download and build ICU on a Windows machine. For instructions on downloading and building ICU, please click <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">here</a>.</li>
-	    <li> Change directory to <i>$icu_root</i>/source/tools/genrb  </li>
-	    <li> Launch gendtjar.pl from that directory itself with the command
-	        <br>
-				gendtjar.pl --icu-root=<i>$icu_root</i> --jar=<i>$jdk_home/bin</i> --icu4j-root=<i>$icu4j_root</i> --version=<i>$icu_version</i>			
-	        <br>
-	         e.g: gendtjar.pl --icu-root=\work\icu --jar=\jdk1.4.1\bin --icu4j-root=\work\icu4j --version=3.0
-	         <br>
-	         Execution of gendtjar.pl script will create the required jar files in the $icu_root\source\tools\genrb\temp directory.
-	    </li>
-	    <li> Move icudata.jar to <i>$icu4j_root</i>/src/com/ibm/icu/impl/data directory.</li>
-	  	<li> Move testdata.jar to <i>$icu4j_root</i>/src/com/ibm/dev/data directory.</li>
-	    <li> Build resources target of ant to unpack the jar files with the following command.
-	    	 <br>
-	    	 	<i>$ant_home</i>/bin/ant resources
-	    	 </br>
-	    </li>
-	  </ol>
+<h5>Requirements</h5>
+<ul>
+    <li>Compilers and tools required for building <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">ICU</a>.</li>
+    <li>Java SDK version 1.4.0 or above.</li>
+    <li>Perl version 5 or above.</li>
+</ul>
+<h5> Procedure</h5>
+<ol>
+    <li> Download and build ICU on a Windows machine. For instructions on downloading and building ICU, please click <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">here</a>.</li>
+    <li> Change directory to <i>$icu_root</i>/source/tools/genrb  </li>
+    <li> Launch gendtjar.pl from that directory itself with the command
+    <br>gendtjar.pl --icu-root=<i>$icu_root</i> --jar=<i>$jdk_home/bin</i> --icu4j-root=<i>$icu4j_root</i> --version=<i>$icu_version</i>                        
+    <br>e.g: gendtjar.pl --icu-root=\work\icu --jar=\jdk1.4.1\bin --icu4j-root=\work\icu4j --version=3.0
+    <br>Execution of gendtjar.pl script will create the required jar files in the $icu_root\source\tools\genrb\temp directory.</li>
+    <li> Move icudata.jar to <i>$icu4j_root</i>/src/com/ibm/icu/impl/data directory.</li>
+    <li> Move testdata.jar to <i>$icu4j_root</i>/src/com/ibm/dev/data directory.</li>
+    <li> Build resources target of ant to unpack the jar files with the following command.
+    <br><i>$ant_home</i>/bin/ant resources</li>
+</ol>
  
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More Information</h3>
 
