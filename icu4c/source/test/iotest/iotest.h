@@ -26,6 +26,7 @@ addFileTest(TestNode** root);
 
 U_CDECL_BEGIN
 extern const UChar NEW_LINE[];
+extern const char C_NEW_LINE[];
 extern const char STANDARD_TEST_FILE[];
 U_CDECL_END
 
