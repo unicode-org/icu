@@ -1,14 +1,13 @@
-// Place holder
-#include "chnsecal.h"
-void placeHolder() {
-  ;
-}
 /*
- *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
+ ******************************************************************************
+ * Copyright (C) 2003-2004, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
  *
  *
- *****************************************************************************************
+ ******************************************************************************
  */
+#include "chnsecal.h"
+
+// Placeholder for now until the implementation can be finished.
+
