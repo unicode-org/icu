@@ -336,7 +336,7 @@ static int32_t hex2num(char hex) {
     }
 }
 
-UCAElements *readAnElement(FILE *data, UErrorCode *status) {
+UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UErrorCode *status) {
     char buffer[2048], primary[100], secondary[100], tertiary[100];
     UBool detectedContraction;
     int32_t i = 0;
@@ -366,21 +366,37 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
     UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
 
+    // Directives.
     if(buffer[0] == '[') {
-        const char *vt = "[variable top = ";
-        uint32_t vtLen = (uint32_t)uprv_strlen(vt);
-        if(uprv_strncmp(buffer, vt, vtLen) == 0) {
+      uint32_t cnt = 0;
+      struct {
+        char name[256];
+        uint32_t *what;
+      } vt[3] = { {"[variable top = ", &t->options->variableTopValue},
+                  {"[FIRST_IMPLICIT= ", &consts->UCA_PRIMARY_IMPLICIT_MIN},
+                  {"[LAST_IMPLICIT= ", &consts->UCA_PRIMARY_IMPLICIT_MAX}
+      };
+      for (cnt = 0; cnt<sizeof(vt)/sizeof(vt[0]); cnt++) {
+        uint32_t vtLen = (uint32_t)uprv_strlen(vt[cnt].name);
+        if(uprv_strncmp(buffer, vt[cnt].name, vtLen) == 0) {
             element->variableTop = TRUE;
             if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
             {
                 fprintf(stderr, " scanf(hex) failed!\n ");
             }
-            element->cPoints[0] = (UChar)theValue;
-            return element; // just a comment, skip whole line
-        } else {
-            *status = U_INVALID_FORMAT_ERROR;
+            *(vt[cnt].what) = (UChar)theValue;
+            if(cnt == 1) { // first implicit
+              // we need to set the value for top next
+              //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
+              consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
+            }
+            //element->cPoints[0] = (UChar)theValue;
+            //return element; 
             return NULL;
         }
+      }
+      *status = U_INVALID_FORMAT_ERROR;
+      return NULL;
     }
     element->variableTop = FALSE;
 
@@ -509,6 +525,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
 
 void writeOutData(UCATableHeader *data,
+                  UCAConstants *consts,
                   UChar contractions[][3],
                   uint32_t noOfcontractions,
                   const char *outputDir,
@@ -528,8 +545,9 @@ void writeOutData(UCATableHeader *data,
       noOfcontractions++;
 
 
-      data->contractionUCACombos = size;
-      data->size += paddedsize((noOfcontractions*3*sizeof(UChar)));
+      data->UCAConsts = size;
+      //data->contractionUCACombos = size;
+      data->size += paddedsize(sizeof(UCAConstants)+(noOfcontractions*3*sizeof(UChar)));
     }
 
     UNewDataMemory *pData;
@@ -552,6 +570,9 @@ void writeOutData(UCATableHeader *data,
                                                         UCA_DATA_TYPE);
     }
     udata_writeBlock(pData, data, size);
+
+    // output the constants here
+    udata_writeBlock(pData, consts, sizeof(UCAConstants));
 
     if(noOfcontractions != 0) {
       udata_writeBlock(pData, contractions, noOfcontractions*3*sizeof(UChar));
@@ -580,6 +601,37 @@ write_uca_table(const char *filename,
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
     UChar contractionCEs[256][3];
     uint32_t noOfContractions = 0;
+    UCAConstants consts = {
+      UCOL_RESET_TOP_VALUE,
+/*
+      UCOL_FIRST_PRIMARY_IGNORABLE,
+      UCOL_LAST_PRIMARY_IGNORABLE,
+      UCOL_LAST_PRIMARY_IGNORABLE_CONT,
+      UCOL_FIRST_SECONDARY_IGNORABLE,
+      UCOL_LAST_SECONDARY_IGNORABLE,
+      UCOL_FIRST_TERTIARY_IGNORABLE,
+      UCOL_LAST_TERTIARY_IGNORABLE,
+      UCOL_FIRST_VARIABLE,
+      UCOL_LAST_VARIABLE,
+      UCOL_FIRST_NON_VARIABLE,
+      UCOL_LAST_NON_VARIABLE,
+*/
+
+      UCOL_NEXT_TOP_VALUE,
+/*
+      UCOL_NEXT_FIRST_PRIMARY_IGNORABLE,
+      UCOL_NEXT_LAST_PRIMARY_IGNORABLE,
+      UCOL_NEXT_FIRST_SECONDARY_IGNORABLE,
+      UCOL_NEXT_LAST_SECONDARY_IGNORABLE,
+      UCOL_NEXT_FIRST_TERTIARY_IGNORABLE,
+      UCOL_NEXT_LAST_TERTIARY_IGNORABLE,
+      UCOL_NEXT_FIRST_VARIABLE,
+      UCOL_NEXT_LAST_VARIABLE,
+*/
+
+      PRIMARY_IMPLICIT_MIN,
+      PRIMARY_IMPLICIT_MAX
+    };
 
 
     if(data == NULL) {
@@ -634,9 +686,10 @@ struct {
       {0xAC00, 0xD7B0, UCOL_SPECIAL_FLAG | (HANGUL_SYLLABLE_TAG << 24) },  //0 HANGUL_SYLLABLE_TAG,/* AC00-D7AF*/
       {0xD800, 0xDC00, UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG << 24)  },  //1 LEAD_SURROGATE_TAG,  /* D800-DBFF*/
       {0xDC00, 0xE000, UCOL_SPECIAL_FLAG | (TRAIL_SURROGATE_TAG << 24) },  //2 TRAIL_SURROGATE DC00-DFFF
-      {0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
-      {0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
-      {0xF900, 0xFA2E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
+      // Now directly handled in the collation code by the swapCJK function. 
+      //{0x3400, 0x4DB6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //3 CJK_IMPLICIT_TAG,   /* 0x3400-0x4DB5*/
+      //{0x4E00, 0x9FA6, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //4 CJK_IMPLICIT_TAG,   /* 0x4E00-0x9FA5*/
+      //{0xF900, 0xFA2E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)    },  //5 CJK_IMPLICIT_TAG,   /* 0xF900-0xFA2D*/
       //{0x20000, 0x2A6D7, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //6 CJK_IMPLICIT_TAG,   /* 0x20000-0x2A6D6*/
       //{0x2F800, 0x2FA1E, UCOL_SPECIAL_FLAG | (CJK_IMPLICIT_TAG << 24)  },  //7 CJK_IMPLICIT_TAG,   /* 0x2F800-0x2FA1D*/
     };
@@ -656,13 +709,15 @@ struct {
             exit(*status);
         }
 
-        element = readAnElement(data, status);
+        element = readAnElement(data, t, &consts, status);
         line++;
         if(element != NULL) {
             // we have read the line, now do something sensible with the read data!
-            if(element->variableTop == TRUE && variableTopValue == 0) {
-                t->options->variableTopValue = element->cPoints[0];
-            }
+
+            // Below stuff was taken care of in readAnElement
+            //if(element->variableTop == TRUE && variableTopValue == 0) {
+            //    t->options->variableTopValue = element->cPoints[0];
+            //}
 
             // if element is a contraction, we want to add it to contractions
             if(element->cSize > 1) { // this is a contraction
@@ -698,6 +753,13 @@ struct {
         fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
     }
 
+
+    /* produce canonical closure for table */
+    /* first set up constants for implicit calculation */
+    uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN);
+    /* do the closure */
+    uprv_uca_canonicalClosure(t, status);
+
     /* test */
     UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
 
@@ -709,7 +771,7 @@ struct {
         fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
     }
 
-    writeOutData(myData, contractionCEs, noOfContractions, outputDir, copyright, status);
+    writeOutData(myData, &consts, contractionCEs, noOfContractions, outputDir, copyright, status);
 
     InverseTableHeader *inverse = assembleInverseTable(status);
     writeOutInverseData(inverse, outputDir, copyright, status);
