@@ -95,7 +95,7 @@ void UVector::assign(const UVector& other, UTokenAssigner *assign, UErrorCode &e
             if (elements[i].pointer != 0 && deleter != 0) {
                 (*deleter)(elements[i].pointer);
             }
-            (*assign)(elements[i], other.elements[i]);
+            (*assign)(&elements[i], &other.elements[i]);
         }
     }
 }

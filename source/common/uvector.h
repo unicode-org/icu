@@ -34,8 +34,8 @@ typedef int8_t U_CALLCONV USortComparator(UHashTok tok1,
  * @param dst The token to be assigned to
  * @param src The token to assign from
  */
-typedef void U_CALLCONV UTokenAssigner(UHashTok dst,
-                                       UHashTok src);
+typedef void U_CALLCONV UTokenAssigner(UHashTok *dst,
+                                       UHashTok *src);
 
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
