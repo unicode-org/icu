@@ -12,7 +12,10 @@
 #include "unicode/unifltlg.h"
 #include "uvector.h"
 
-static const UChar NEWLINE = 10;
+// keep in sync with Transliterator
+static const UChar ID_SEP   = 0x002D; /*-*/
+static const UChar ID_DELIM = 0x003B; /*;*/
+static const UChar NEWLINE  = 10;
 
 /**
  * Constructs a new compound transliterator given an array of

@@ -13,7 +13,6 @@
 
 class Replaceable;
 class TransliterationRuleData;
-class UnicodeFilter;
 
 /**
  * A transliteration rule used by
@@ -274,15 +273,10 @@ public:
      * @param cursor position at which to translate next, representing offset
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      */
     virtual UBool matches(const Replaceable& text,
                           const UTransPosition& pos,
-                          const TransliterationRuleData& data,
-                          const UnicodeFilter* filter) const;
+                          const TransliterationRuleData& data) const;
 
     /**
      * Return the degree of match between this rule and the given text.  The
@@ -299,10 +293,6 @@ public:
      * @param cursor position at which to translate next, representing offset
      * into text.  This value must be between <code>start</code> and
      * <code>limit</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
      * <code>FULL_MATCH</code>.
      * @see #MISMATCH
@@ -311,8 +301,7 @@ public:
      */
     virtual int32_t getMatchDegree(const Replaceable& text,
                                    const UTransPosition& pos,
-                                   const TransliterationRuleData& data,
-                                   const UnicodeFilter* filter) const;
+                                   const TransliterationRuleData& data) const;
 
     /**
      * Return the number of characters of the text that match this rule.  If
@@ -328,18 +317,13 @@ public:
      * <code>limit</code>.
      * @param data a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      * @return -1 if there is a mismatch, 0 if the text is not long enough to
      * match any characters, otherwise the number of characters of text that
      * match this rule.
      */
     virtual int32_t getRegionMatchLength(const Replaceable& text,
                                          const UTransPosition& pos,
-                                         const TransliterationRuleData& data,
-                                         const UnicodeFilter* filter) const;
+                                         const TransliterationRuleData& data) const;
 
     /**
      * Return true if the given key matches the given text.  This method
@@ -350,16 +334,11 @@ public:
      * @param textChar a character in the text being transliterated
      * @param data a dictionary of variables mapping <code>Character</code>
      * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      */
     virtual UBool charMatches(UChar keyChar, const Replaceable& textChar,
                               int32_t index,
                               const UTransPosition& pos,
-                              const TransliterationRuleData& data,
-                              const UnicodeFilter* filter) const;
+                              const TransliterationRuleData& data) const;
 
     /**
      * Create a rule string that represents this rule object.  Append

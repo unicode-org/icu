@@ -113,16 +113,12 @@ public:
      * <code>limit</code>.
      * @param data a dictionary mapping variables to the sets they
      * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found.
      */
     virtual TransliterationRule* findMatch(const Replaceable& text,
                                            const UTransPosition& pos,
-                                           const TransliterationRuleData& data,
-                                           const UnicodeFilter* filter) const;
+                                           const TransliterationRuleData& data) const;
 
     /**
      * Attempt to find a matching rule at the specified point in the text.
@@ -154,8 +150,7 @@ public:
     virtual TransliterationRule* findIncrementalMatch(const Replaceable& text,
                                               const UTransPosition& pos,
                                               const TransliterationRuleData& data,
-                                              UBool& isPartial,
-                                              const UnicodeFilter* filter) const;
+                                              UBool& isPartial) const;
 
     /**
      * Create rule strings that represents this rule set.
