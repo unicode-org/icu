@@ -19,8 +19,9 @@
 
 class LotusCollationKoreanTest: public IntlTest {
 public:
-    // static constants
-    enum EToken_Len { MAX_TOKEN_LEN = 128 };
+    // If this is too small for the test data, just increase it.
+    // Just don't make it too large, otherwise the executable will get too big
+    enum EToken_Len { MAX_TOKEN_LEN = 16 };
 
     LotusCollationKoreanTest();
     virtual ~LotusCollationKoreanTest();
