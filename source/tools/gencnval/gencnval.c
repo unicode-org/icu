@@ -798,6 +798,7 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
 
     resolveAliasToConverter(knownAliases[0], &oldTagNum, &currConvNum);
     uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
+    oldConvNum = currConvNum;
     uniqueAliasArr[uniqueAliasIdx] = knownAliases[0] + aliasOffset;
     uniqueAliasIdx++;
     lastName = GET_ALIAS_STR(knownAliases[0]);
