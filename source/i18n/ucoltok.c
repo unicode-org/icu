@@ -1,5 +1,5 @@
 #include "unicode/ustring.h"
-
+ 
 #include "cmemory.h"
 #include "ucoltok.h"
 #include "uhash.h"
@@ -13,7 +13,7 @@ static const UChar *rulesToParse = 0;
 
 /* will use a small structure, tokHash */
 
-U_CAPI int32_t
+int32_t
 uhash_hashTokens(const void *k) {
   int32_t hash = 0;
   if (k != NULL) {
@@ -41,8 +41,7 @@ uhash_hashTokens(const void *k) {
   return hash;
 }
 
-U_CAPI UBool
-uhash_compareTokens(const void *key1, const void *key2) {
+UBool uhash_compareTokens(const void *key1, const void *key2) {
     const UColToken *p1 = (const UColToken*) key1;
     const UColToken *p2 = (const UColToken*) key2;
     const UChar *s1 = (p1->source & 0x00FFFFFF) + rulesToParse;
@@ -88,8 +87,8 @@ uhash_compareTokens(const void *key1, const void *key2) {
     }
 }
 
-void deleteElement(void *element) {
 /*
+void deleteElement(void *element) {
     UCAElements *el = (UCAElements *)element;
 
     int32_t i = 0;
@@ -99,8 +98,8 @@ void deleteElement(void *element) {
         free(el->tertiary[i]);
     }
     free(el);
-*/
 }
+*/
 
 void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   if(U_FAILURE(*status)) {
@@ -108,15 +107,11 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   }
   rulesToParse = src->source;
   uchars2tokens = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
-  uhash_setValueDeleter(uchars2tokens, deleteElement);
+  /*uhash_setValueDeleter(uchars2tokens, deleteElement);*/
 }
 
-void ucol_tok_closeTokenList() {
+void ucol_tok_closeTokenList(void) {
     uhash_close(uchars2tokens);
-}
-
-UColToken *ucol_tok_open() {
-  return NULL;
 }
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
@@ -174,7 +169,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           /* Sets the strength for this entry */
           switch (ch) {
             case 0x003D/*'='*/ : 
-              if (newStrength != -1) {
+              if (newStrength != UCOL_TOK_UNSET) {
                 goto EndOfLoop;
               }
 
@@ -285,7 +280,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
         }
 
      EndOfLoop:
-      if (newStrength == -1) {
+      if (newStrength == UCOL_TOK_UNSET) {
         return 0;
       }
 
@@ -517,3 +512,4 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   ucol_tok_closeTokenList();
   return res;
 }
+

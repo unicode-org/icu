@@ -176,8 +176,6 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
 }
 
 uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UBool forward, UErrorCode *status) {
-    int32_t i = 0;
-    UBool gotContractionOffset = FALSE;
     int32_t firstContractionOffset = 0;
     int32_t contractionOffset = 0;
     uint32_t contractionElement = UCOL_NOT_FOUND;
@@ -198,7 +196,7 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     /* this means we are constructing a new contraction sequence */
     if(existingCE == UCOL_NOT_FOUND || !isContraction(existingCE)) { 
       /* if it wasn't contraction, we wouldn't end up here*/
-      firstContractionOffset = uprv_cnttab_addContraction(contractions, -1, 0, existingCE, forward, status);
+      firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, existingCE, forward, status);
       if(forward == FALSE) {
           uprv_cnttab_addContraction(contractions, firstContractionOffset, 0, existingCE, TRUE, status);
           uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, existingCE, TRUE, status);
@@ -329,7 +327,7 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
 
 
     /* This should happen upon ressurection */
-    const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;
+    /*const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;*/
     uprv_mstrm_close(ms);
     return myData;
 }

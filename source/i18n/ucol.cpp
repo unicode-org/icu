@@ -51,7 +51,7 @@ static UBool
 isAcceptableUCA(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
-
+  /* context, type & name are intentionally not used */
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -74,7 +74,7 @@ static UBool
 isAcceptableInvUCA(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
-
+  /* context, type & name are intentionally not used */
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -95,7 +95,7 @@ isAcceptableInvUCA(void *context,
 
 int32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE) {
   uint32_t bottom = 0, top = invUCA->tableSize;
-  uint32_t i;
+  uint32_t i = 0;
   uint32_t first = 0, second = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
 
@@ -129,12 +129,6 @@ static uint32_t strengthMask[UCOL_CE_STRENGTH_LIMIT] = {
   0xFFFF0000,
   0xFFFFFF00,
   0xFFFFFFFF
-};
-
-static uint32_t strengthShift[UCOL_CE_STRENGTH_LIMIT] = {
-  16,
-  8,
-  0
 };
 
 int32_t ucol_inv_getPrevious(UColTokListHeader *lh, uint32_t strength) {
@@ -305,7 +299,7 @@ ucol_open(    const    char         *loc,
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
-    if(len > sizeof(UCATableHeader)) {
+    if((uint32_t)len > sizeof(UCATableHeader)) {
       result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
       result->hasRealData = TRUE;
     } else {
@@ -366,9 +360,9 @@ U_CFUNC uint32_t ucol_getNextGenerated(ucolCEGenerator *g) {
   return g->current;
 }
 
-U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t high, int32_t count) {
+U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t high, uint32_t count) {
 
-  uint32_t lobytes = 0, hibytes = 0, samebytes = 0;
+  uint32_t lobytes = 0, hibytes = 0;
 
   ucol_countBytes(low, lobytes);
   ucol_countBytes(high, hibytes);
@@ -897,8 +891,8 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
 
 }
 
-UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resLen, UErrorCode *status) {
-  int32_t i = 0;
+UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
+  uint32_t i = 0;
 /*
 2.	Eliminate the negative lists by doing the following for each non-null negative list: 
     o	if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
@@ -963,7 +957,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
   UCATableHeader *myData = NULL;
   {
     UChar decomp[256];
-    uint32_t noOfDec = 0, i = 0, j = 0, CE = UCOL_NOT_FOUND;
+    uint32_t noOfDec = 0, i = 0, CE = UCOL_NOT_FOUND;
     uint32_t u = 0;
     collIterate colIt;
     UCAElements el;
@@ -1042,7 +1036,6 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  uint32_t resLen = 0;
   uint32_t listLen = 0;
   UColTokenParser src;
 
@@ -1097,7 +1090,7 @@ ucol_openRules(    const    UChar                  *rules,
   UCATableHeader *table = NULL;
 
   if(src.lh != NULL) { /* we have a set of rules, let's make something of it */
-    table = ucol_assembleTailoringTable(&src, &resLen, status);
+    table = ucol_assembleTailoringTable(&src, status);
     result = ucol_initCollator(table,0,status);
     result->hasRealData = TRUE;
   } else { /* no rules, but no error either */
@@ -1122,6 +1115,8 @@ ucol_openRules(    const    UChar                  *rules,
 
   uprv_free(src.image);
 
+  ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
+
   return result;
 }
 
@@ -1145,6 +1140,9 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 }
 
 void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return;
+  }
     result->caseFirst = image->caseFirst;
     result->caseLevel = image->caseLevel;
     result->frenchCollation = image->frenchCollation;
@@ -1162,6 +1160,9 @@ void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, 
 }
 
 void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return;
+  }
     image->caseFirst = result->caseFirst;
     image->caseLevel = result->caseLevel;
     image->frenchCollation = result->frenchCollation;
@@ -1355,27 +1356,27 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
       /* and make a bigger CE */
       UChar nextChar;
-      const int 
+      const uint32_t 
         SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
         LCount = 19, VCount = 21, TCount = 28,
         NCount = VCount * TCount,   // 588
-        SCount = LCount * NCount,   // 11172
-        LLimit = LBase + LCount,    // 1113
-        VLimit = VBase + VCount,    // 1176
-        TLimit = TBase + TCount,    // 11C3
-        SLimit = SBase + SCount;    // D7A4
+        SCount = LCount * NCount;   // 11172
+        //LLimit = LBase + LCount,    // 1113
+        //VLimit = VBase + VCount,    // 1176
+        //TLimit = TBase + TCount,    // 11C3
+        //SLimit = SBase + SCount;    // D7A4
 
         // once we have failed to find a match for codepoint cp, and are in the implicit code.
  
-        unsigned int L = ch - SBase;
+        uint32_t L = ch - SBase;
         //if (ch < SLimit) { // since it is unsigned, catchs zero case too
         if (L < SCount) { // since it is unsigned, catchs zero case too
 
           // divide into pieces
 
-          int T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
+          uint32_t T = L % TCount; // we do it in this order since some compilers can do % and / in one operation
           L /= TCount;
-          int V = L % VCount;
+          uint32_t V = L % VCount;
           L /= VCount;
 
           // offset them
@@ -1464,22 +1465,22 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
     take the next code unit and make a bigger CE 
     */
     UChar prevChar;
-    const int 
+    uint32_t
       SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
       LCount = 19, VCount = 21, TCount = 28,
       NCount = VCount * TCount,   // 588
-      SCount = LCount * NCount,   // 11172
-      LLimit = LBase + LCount,    // 1113
-      VLimit = VBase + VCount,    // 1176
-      TLimit = TBase + TCount,    // 11C3
-      SLimit = SBase + SCount;    // D7A4
+      SCount = LCount * NCount;   // 11172
+      //LLimit = LBase + LCount,    // 1113
+      //VLimit = VBase + VCount,    // 1176
+      //TLimit = TBase + TCount,    // 11C3
+      //SLimit = SBase + SCount;    // D7A4
 
     /* 
     once we have failed to find a match for codepoint cp, and are in the 
     implicit code.
     */
  
-    unsigned int L = ch - SBase;
+    uint32_t L = ch - SBase;
     if (L < SCount) 
     { /* since it is unsigned, catchs zero case too */
 
@@ -1488,9 +1489,9 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       we do it in this order since some compilers can do % and / in one 
       operation
       */
-      int T = L % TCount; 
+      uint32_t T = L % TCount; 
       L /= TCount;
-      int V = L % VCount;
+      uint32_t V = L % VCount;
       L /= VCount;
 
       /* offset them */
@@ -1575,7 +1576,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
-  int32_t i = 0; /* general counter */
+  uint32_t i = 0; /* general counter */
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -1770,7 +1771,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         constart = UCharOffset = (UChar *)coll->image + getContractOffset(CE);
         strend = source->len;
 
-        if (strend - source->pos == length) 
+        if ((uint32_t)(strend - source->pos) == length) 
         { /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 
@@ -1840,7 +1841,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
 /* This should really be a macro        */
 /* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
 /* anyway */
-uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, int32_t *secSize, UErrorCode *status) {
+uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, UErrorCode *status) {
   uint8_t *newStart = NULL;
 
   if(secStart==second) {
@@ -1938,7 +1939,6 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t UCOL_BOT_COUNT4 = 0xFF - UCOL_COMMON_BOT4;
 
     int32_t order = UCOL_NO_MORE_CES;
-    uint16_t primary = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
     uint32_t ce = 0;
@@ -2088,7 +2088,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
-        int32_t        resultLength,
+        uint32_t        resultLength,
         UBool allocatePrimary,
         UErrorCode *status)
 {
@@ -2109,10 +2109,10 @@ ucol_calcSortKey(const    UCollator    *coll,
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
-    int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
+    uint32_t secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
       caseSize = UCOL_MAX_BUFFER, quadSize = UCOL_MAX_BUFFER;
 
-    int32_t sortKeySize = 1; /* it is always \0 terminated */
+    uint32_t sortKeySize = 1; /* it is always \0 terminated */
 
     UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
     UChar *normSource = normBuffer;
@@ -2172,7 +2172,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
     }
 
-    int32_t minBufferSize = UCOL_MAX_BUFFER;
+    uint32_t minBufferSize = UCOL_MAX_BUFFER;
 
     uint8_t *primStart = primaries;
     uint8_t *secStart = secondaries;
@@ -2183,7 +2183,6 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint32_t order = 0;
     uint32_t ce = 0;
 
-    uint8_t carry = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
     uint8_t secondary = 0;
@@ -2195,9 +2194,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool wasShifted = FALSE;
     UBool notIsContinuation = FALSE;
 
-    int32_t prevBuffSize = 0;
-
-    int32_t compressedSecs = 0;
+    uint32_t prevBuffSize = 0;
 
     uint32_t count2 = 0, count3 = 0, count4 = 0;
 
@@ -2566,7 +2563,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     }
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
-    int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
+    uint32_t secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
 
     int32_t sortKeySize = 3; /* it is always \0 terminated plus separators for secondary and tertiary */
 
@@ -2576,8 +2573,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
-    uint8_t variableMax1 = coll->variableMax1;
-    uint8_t variableMax2 = coll->variableMax2;
 
     collIterate s;
     init_collIterate((UChar *)source, len, &s, FALSE);
@@ -2609,7 +2604,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
     }
 
-    int32_t minBufferSize = UCOL_MAX_BUFFER;
+    uint32_t minBufferSize = UCOL_MAX_BUFFER;
 
     uint8_t *primStart = primaries;
     uint8_t *secStart = secondaries;
@@ -2623,7 +2618,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
 
-    int32_t prevBuffSize = 0;
+    uint32_t prevBuffSize = 0;
 
     UBool finished = FALSE;
     UBool resultOverflow = FALSE;
@@ -3092,7 +3087,20 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
 
 U_CAPI int32_t 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
-	return 0;
+  int32_t len = 0;
+  int32_t UCAlen = 0;
+  const UChar *rules = ucol_getRules(coll, &len);
+  *buffer=0;
+  if(delta == UCOL_FULL_RULES) {
+    /* take the UCA rules and append real rules at the end */
+    /* UCA rules will be probably coming from the root RB */
+  }
+  if(bufferLen >= len + UCAlen) {
+    u_strcat(buffer, rules);
+  } else {
+    u_strncat(buffer, rules, (bufferLen-UCAlen)*sizeof(UChar));
+  }
+  return len+UCAlen;
 }
 
 U_CAPI const UChar*
@@ -3121,14 +3129,11 @@ ucol_getDisplayName(    const    char        *objLoc,
             UErrorCode        *status)
 {
   if(U_FAILURE(*status)) return -1;
-/*
   UnicodeString dst(result, resultLength, resultLength);
   Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
   int32_t actLen;
   T_fillOutputParams(&dst, result, resultLength, &actLen, status);
   return actLen;
-*/
-  return 0;
 }
 
 U_CAPI const char*
@@ -3147,7 +3152,6 @@ U_CAPI void
 ucol_getVersion(const UCollator* coll, 
                 UVersionInfo versionInfo) 
 {
-    UErrorCode status =U_ZERO_ERROR;
     /* RunTime version  */
     uint8_t rtVersion = UCOL_RUNTIME_VERSION;
     /* Builder version*/
@@ -3270,7 +3274,6 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
     UColAttributeValue strength = coll->strength;
-    UBool gets = TRUE, gett = TRUE;
     UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
 
     UBool checkSecTer = initialCheckSecTer;
@@ -3524,7 +3527,7 @@ ucol_strcoll(    const    UCollator    *coll,
     sCEend = sCEs;
     tCEend = tCEs;
 
-
+    /* This is the secondary level of comparison */
     if(checkSecTer) {
       if(!isFrenchSec) { /* normal */
         sCEs = sCEsArray;
@@ -3629,9 +3632,17 @@ ucol_strcoll(    const    UCollator    *coll,
         }
 
         if((secS & 0x40) < (secT & 0x40)) {
-          return UCOL_LESS;
+          if(upperFirst) {
+            return UCOL_GREATER;
+          } else {
+            return UCOL_LESS;
+          }
         } else if((secS & 0x40) > (secT & 0x40)) {
-          return UCOL_GREATER;
+          if(upperFirst) {
+            return UCOL_LESS;
+          } else {
+            return UCOL_GREATER;
+          }
         } 
         if((secS & 0x3F) == (secT & 0x3F)) {
           if((secS & 0x3F) == 0x01) {
@@ -3641,23 +3652,29 @@ ucol_strcoll(    const    UCollator    *coll,
       }
     }
 
-
+    /* Tertiary level */
     if(checkTertiary) {
       secS = 0; 
       secT = 0;
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        while(secS == 0 && secS != 1) {
-          secS = *(sCEs++) & 0x3F;
+        while((secS & 0x3F) == 0 && (secS & 0x3F) != 1) {
+          secS = *(sCEs++) & 0x7F;
+        }
+        if(upperFirst) {
+          secS ^= 0x40;
         }
 
-        while(secT == 0 && secT != 1) {
-            secT = *(tCEs++) & 0x3F;
+        while((secT & 0x3F)  == 0 && (secT & 0x3F) != 1) {
+            secT = *(tCEs++) & 0x7F;
+        }
+        if(upperFirst) {
+          secT ^= 0x40;
         }
 
         if(secS == secT) {
-          if(secS == 1) {
+          if((secS & 0x3F) == 1) {
             break;
           } else {
             secS = 0; secT = 0; 
@@ -3728,7 +3745,8 @@ ucol_strcoll(    const    UCollator    *coll,
     /*  as a tiebreaker if all else is equal */
     /*  NOTE: The java code compares result with 0, and  */
     /*  puts the result of the string comparison directly into result */
-    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
+    /*    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL) */
+    if(checkIdent)
     {
         UnicodeString sourceDecomp, targetDecomp;
 
@@ -3807,9 +3825,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     UBool checkSecTer = initialCheckSecTer;
     UBool checkTertiary = (strength  >= UCOL_TERTIARY);
     UBool checkQuad = (strength  >= UCOL_QUATERNARY);
-    UBool checkIdent = (strength == UCOL_IDENTICAL);
+    //UBool checkIdent = (strength == UCOL_IDENTICAL);
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
-    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
+    //UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST);
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
 
     if(!isFrenchSec) {
@@ -4437,8 +4455,9 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
 
 
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status) {
+  if(U_FAILURE(*status)) return -1;
   return 0;
-
+  /* Still needs to be implemented */
 #if 0  
   int32_t i = 0; /* general counter */
   uint32_t CE = *source->CEpos;
