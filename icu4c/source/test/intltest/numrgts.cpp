@@ -106,38 +106,9 @@ NumberFormatRegressionTest::failure(UErrorCode status, const UnicodeString& msg)
 /**
  * Convert Java-style strings with \u Unicode escapes into UnicodeString objects
  */
-static UnicodeString str(const char *input)
+inline UnicodeString str(const char *input)
 {
-  static const UnicodeString digitString1("0123456789ABCDEF");
-  static const UnicodeString digitString2("0123456789abcdef");
-  
-  UnicodeString result(input);
-  int index = 0;
-  
-  while ((index = result.indexOf("\\u")) != -1)
-    {
-      if (index + 6 <= result.length())
-    {
-      UChar c = 0;
-      for (int i = index + 2; i < index + 6; i++) {
-        UTextOffset value = digitString1.indexOf(result[i]);
-        
-        if (value == -1) {
-          value = digitString2.indexOf(result[i]);
-        }
-        c = (UChar)(c * 16 + value);
-      }
-      UnicodeString replace;
-      replace += c;
-      result.replace(index, 6, replace);
-    }
-      index += 1;
-    }
-
-  //cout << "Converted |" << input << "| to ";
-  //print(result,"");
-
-  return result;
+  return CharsToUnicodeString(input);
 }
 
 /* @bug 4075713
@@ -2012,12 +1983,12 @@ void NumberFormatRegressionTest::Test4212072(void) {
     sym.setMinusSign(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
-    if (fmt.format((int32_t)-1, s, pos) != UnicodeString("^1")) {
+    if (fmt.format((int32_t)-1, s, pos) != UNICODE_STRING("^1", 2)) {
         errln(UnicodeString("FAIL: -1 x (minus=^) -> ") + s +
               ", exp ^1");
     }
     s.remove();
-    if (fmt.getNegativePrefix(s) != UnicodeString("^")) {
+    if (fmt.getNegativePrefix(s) != UnicodeString((UChar)0x5e)) {
         errln(UnicodeString("FAIL: (minus=^).getNegativePrefix -> ") +
               s + ", exp ^");
     }
@@ -2028,12 +1999,12 @@ void NumberFormatRegressionTest::Test4212072(void) {
     sym.setPercent(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
-    if (fmt.format(0.25, s, pos) != UnicodeString("25^")) {
+    if (fmt.format(0.25, s, pos) != UNICODE_STRING("25^", 3)) {
         errln(UnicodeString("FAIL: 0.25 x (percent=^) -> ") + s +
               ", exp 25^");
     }
     s.remove();
-    if (fmt.getPositiveSuffix(s) != UnicodeString("^")) {
+    if (fmt.getPositiveSuffix(s) != UnicodeString((UChar)0x5e)) {
         errln(UnicodeString("FAIL: (percent=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }
@@ -2044,12 +2015,12 @@ void NumberFormatRegressionTest::Test4212072(void) {
     sym.setPerMill(0x5e);
     fmt.setDecimalFormatSymbols(sym);
     s.remove();
-    if (fmt.format(0.25, s, pos) != UnicodeString("250^")) {
+    if (fmt.format(0.25, s, pos) != UNICODE_STRING("250^", 4)) {
         errln(UnicodeString("FAIL: 0.25 x (permill=^) -> ") + s +
               ", exp 250^");
     }
     s.remove();
-    if (fmt.getPositiveSuffix(s) != UnicodeString("^")) {
+    if (fmt.getPositiveSuffix(s) != UnicodeString((UChar)0x5e)) {
         errln(UnicodeString("FAIL: (permill=^).getPositiveSuffix -> ") +
               s + ", exp ^");
     }

@@ -826,22 +826,22 @@ void MessageFormatRegressionTest::Test4120552()
  */
 void MessageFormatRegressionTest::Test4142938() 
 {
-    UnicodeString pat( (UnicodeString)"''Vous'' {0,choice,0#n''|1#}avez sélectionné " + 
-        "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} " + 
+    UnicodeString pat = CharsToUnicodeString("''Vous'' {0,choice,0#n''|1#}avez s\\u00E9lectionn\\u00E9 "
+        "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} "
         "personnel{0,choice,0#s|1#|2#s}.");
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat(pat, status);
     failure(status, "new MessageFormat");
 
     UnicodeString PREFIX [] = {
-        (UnicodeString) "'Vous' n'avez sélectionné aucun clients personnels.",
-        (UnicodeString) "'Vous' avez sélectionné ",
-        (UnicodeString) "'Vous' avez sélectionné "
+        CharsToUnicodeString("'Vous' n'avez s\\u00E9lectionn\\u00E9 aucun clients personnels."),
+        CharsToUnicodeString("'Vous' avez s\\u00E9lectionn\\u00E9 "),
+        CharsToUnicodeString("'Vous' avez s\\u00E9lectionn\\u00E9 ")
     };  
     UnicodeString SUFFIX [] = {
-        (UnicodeString) "",
-        (UnicodeString) " client personnel.",
-        (UnicodeString) " clients personnels."
+        UnicodeString(),
+        UNICODE_STRING(" client personnel.", 18),
+        UNICODE_STRING(" clients personnels.", 20)
     };
 
     for (int i=0; i<3; i++) {
