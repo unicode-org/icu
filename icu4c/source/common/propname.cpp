@@ -313,7 +313,7 @@ struct CompareContext {
     PropNameCompareFn *propCompare;
 };
 
-static int32_t
+static int32_t U_CALLCONV
 upname_compareRows(const void *context, const void *left, const void *right) {
     CompareContext *cmp=(CompareContext *)context;
     return cmp->propCompare(cmp->chars+((const NameAndIndex *)left)->name,
