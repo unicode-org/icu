@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2003, International Business Machines
+*   Copyright (C) 1996-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -23,6 +23,7 @@
 #include "unicode/ustring.h"
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
+#include "uassert.h"
 #include "cpputils.h"
 
 
@@ -156,10 +157,11 @@ unum_clone(const UNumberFormat *fmt,
         return 0;
     
     Format *res = 0;
-    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-        res = ((DecimalFormat*)fmt)->clone();
+    if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+        res = ((const DecimalFormat*)fmt)->clone();
     } else {
-        res = ((RuleBasedNumberFormat*)fmt)->clone();
+        U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
+        res = ((const RuleBasedNumberFormat*)fmt)->clone();
     }
 
     if(res == 0) {
@@ -329,59 +331,67 @@ U_CAPI int32_t U_EXPORT2
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-  if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+  if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    const DecimalFormat* df = (const DecimalFormat*) fmt;
     switch(attr) {
     case UNUM_PARSE_INT_ONLY:
-        return ((NumberFormat*)fmt)->isParseIntegerOnly();
+        return df->isParseIntegerOnly();
         
     case UNUM_GROUPING_USED:
-        return ((NumberFormat*)fmt)->isGroupingUsed();
+        return df->isGroupingUsed();
         
     case UNUM_DECIMAL_ALWAYS_SHOWN:
-        return ((DecimalFormat*)fmt)->isDecimalSeparatorAlwaysShown();    
+        return df->isDecimalSeparatorAlwaysShown();    
         
     case UNUM_MAX_INTEGER_DIGITS:
-        return ((NumberFormat*)fmt)->getMaximumIntegerDigits();
+        return df->getMaximumIntegerDigits();
         
     case UNUM_MIN_INTEGER_DIGITS:
-        return ((NumberFormat*)fmt)->getMinimumIntegerDigits();
+        return df->getMinimumIntegerDigits();
         
     case UNUM_INTEGER_DIGITS:
         // TBD: what should this return?
-        return ((NumberFormat*)fmt)->getMinimumIntegerDigits();
+        return df->getMinimumIntegerDigits();
         
     case UNUM_MAX_FRACTION_DIGITS:
-        return ((NumberFormat*)fmt)->getMaximumFractionDigits();
+        return df->getMaximumFractionDigits();
         
     case UNUM_MIN_FRACTION_DIGITS:
-        return ((NumberFormat*)fmt)->getMinimumFractionDigits();
+        return df->getMinimumFractionDigits();
         
     case UNUM_FRACTION_DIGITS:
         // TBD: what should this return?
-        return ((NumberFormat*)fmt)->getMinimumFractionDigits();
+        return df->getMinimumFractionDigits();
+        
+    case UNUM_MAX_SIGNIFICANT_DIGITS:
+        return df->getMaximumSignificantDigits();
+        
+    case UNUM_MIN_SIGNIFICANT_DIGITS:
+        return df->getMinimumSignificantDigits();
         
     case UNUM_MULTIPLIER:
-        return ((DecimalFormat*)fmt)->getMultiplier();    
+        return df->getMultiplier();    
         
     case UNUM_GROUPING_SIZE:
-        return ((DecimalFormat*)fmt)->getGroupingSize();    
+        return df->getGroupingSize();    
         
     case UNUM_ROUNDING_MODE:
-        return ((DecimalFormat*)fmt)->getRoundingMode();
+        return ((DecimalFormat*)df)->getRoundingMode(); // TODO remove cast!
         
     case UNUM_FORMAT_WIDTH:
-        return ((DecimalFormat*)fmt)->getFormatWidth();
+        return ((DecimalFormat*)df)->getFormatWidth(); // TODO remove cast!
         
         /** The position at which padding will take place. */
     case UNUM_PADDING_POSITION:
-        return ((DecimalFormat*)fmt)->getPadPosition();
+        return ((DecimalFormat*)df)->getPadPosition(); // TODO remove cast!
         
     default:
         break;
     }
   } else {
+    U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
     if (attr == UNUM_LENIENT_PARSE) {
-      return ((RuleBasedNumberFormat*)fmt)->isLenient();
+      return ((const RuleBasedNumberFormat*)fmt)->isLenient();
     }
   }
 
@@ -394,68 +404,77 @@ unum_setAttribute(    UNumberFormat*          fmt,
             int32_t                 newValue)
 {
   if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    DecimalFormat* df = (DecimalFormat*) fmt;
     switch(attr) {
     case UNUM_PARSE_INT_ONLY:
-        ((NumberFormat*)fmt)->setParseIntegerOnly((UBool)newValue);
+        df->setParseIntegerOnly((UBool)newValue);
         break;
         
     case UNUM_GROUPING_USED:
-        ((NumberFormat*)fmt)->setGroupingUsed((UBool)newValue);
+        df->setGroupingUsed((UBool)newValue);
         break;
         
     case UNUM_DECIMAL_ALWAYS_SHOWN:
-        ((DecimalFormat*)fmt)->setDecimalSeparatorAlwaysShown((UBool)newValue);
+        df->setDecimalSeparatorAlwaysShown((UBool)newValue);
         break;
         
     case UNUM_MAX_INTEGER_DIGITS:
-        ((NumberFormat*)fmt)->setMaximumIntegerDigits(newValue);
+        df->setMaximumIntegerDigits(newValue);
         break;
         
     case UNUM_MIN_INTEGER_DIGITS:
-        ((NumberFormat*)fmt)->setMinimumIntegerDigits(newValue);
+        df->setMinimumIntegerDigits(newValue);
         break;
         
     case UNUM_INTEGER_DIGITS:
-        ((NumberFormat*)fmt)->setMinimumIntegerDigits(newValue);
-        ((NumberFormat*)fmt)->setMaximumIntegerDigits(newValue);
+        df->setMinimumIntegerDigits(newValue);
+        df->setMaximumIntegerDigits(newValue);
         break;
         
     case UNUM_MAX_FRACTION_DIGITS:
-        ((NumberFormat*)fmt)->setMaximumFractionDigits(newValue);
+        df->setMaximumFractionDigits(newValue);
         break;
         
     case UNUM_MIN_FRACTION_DIGITS:
-        ((NumberFormat*)fmt)->setMinimumFractionDigits(newValue);
+        df->setMinimumFractionDigits(newValue);
         break;
         
     case UNUM_FRACTION_DIGITS:
-        ((NumberFormat*)fmt)->setMinimumFractionDigits(newValue);
-        ((NumberFormat*)fmt)->setMaximumFractionDigits(newValue);
+        df->setMinimumFractionDigits(newValue);
+        df->setMaximumFractionDigits(newValue);
+        break;
+        
+    case UNUM_MAX_SIGNIFICANT_DIGITS:
+        df->setMaximumSignificantDigits(newValue);
+        break;
+        
+    case UNUM_MIN_SIGNIFICANT_DIGITS:
+        df->setMinimumSignificantDigits(newValue);
         break;
         
     case UNUM_MULTIPLIER:
-        ((DecimalFormat*)fmt)->setMultiplier(newValue);    
+        df->setMultiplier(newValue);    
         break;
         
     case UNUM_GROUPING_SIZE:
-        ((DecimalFormat*)fmt)->setGroupingSize(newValue);    
+        df->setGroupingSize(newValue);    
         break;
         
     case UNUM_ROUNDING_MODE:
-        ((DecimalFormat*)fmt)->setRoundingMode((DecimalFormat::ERoundingMode)newValue);
+        df->setRoundingMode((DecimalFormat::ERoundingMode)newValue);
         break;
         
     case UNUM_FORMAT_WIDTH:
-        ((DecimalFormat*)fmt)->setFormatWidth(newValue);
+        df->setFormatWidth(newValue);
         break;
         
-        /** The position at which padding will take place. */
     case UNUM_PADDING_POSITION:
-        ((DecimalFormat*)fmt)->setPadPosition((DecimalFormat::EPadPosition)newValue);
+        /** The position at which padding will take place. */
+        df->setPadPosition((DecimalFormat::EPadPosition)newValue);
         break;
         
     case UNUM_SECONDARY_GROUPING_SIZE:
-        ((DecimalFormat*)fmt)->setSecondaryGroupingSize(newValue);
+        df->setSecondaryGroupingSize(newValue);
         break;
         
     default:
@@ -463,6 +482,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
         break;
     }
   } else {
+    U_ASSERT(((NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
     if (attr == UNUM_LENIENT_PARSE) {
       ((RuleBasedNumberFormat*)fmt)->setLenient((UBool)newValue);
     }
@@ -473,9 +493,9 @@ U_CAPI double U_EXPORT2
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
+    if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
 	attr == UNUM_ROUNDING_INCREMENT) {
-        return ((DecimalFormat*)fmt)->getRoundingIncrement();
+        return ((DecimalFormat*)fmt)->getRoundingIncrement(); // TODO: cast to const DecimalFormat*!
     } else {
         return -1.0;
     }
@@ -509,30 +529,31 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
         res.setTo(result, 0, resultLength);
     }
     
-    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      const DecimalFormat* df = (const DecimalFormat*) fmt;
       switch(tag) {
       case UNUM_POSITIVE_PREFIX:
-        ((DecimalFormat*)fmt)->getPositivePrefix(res);
+        df->getPositivePrefix(res);
         break;
         
       case UNUM_POSITIVE_SUFFIX:
-        ((DecimalFormat*)fmt)->getPositiveSuffix(res);
+        df->getPositiveSuffix(res);
         break;
         
       case UNUM_NEGATIVE_PREFIX:
-        ((DecimalFormat*)fmt)->getNegativePrefix(res);
+        df->getNegativePrefix(res);
         break;
         
       case UNUM_NEGATIVE_SUFFIX:
-        ((DecimalFormat*)fmt)->getNegativeSuffix(res);
+        df->getNegativeSuffix(res);
         break;
         
       case UNUM_PADDING_CHARACTER:
-        res = ((DecimalFormat*)fmt)->getPadCharacterString();
+        res = ((DecimalFormat*) df)->getPadCharacterString(); // TODO: remove cast!
         break;
         
       case UNUM_CURRENCY_CODE:
-        res = UnicodeString(((DecimalFormat*)fmt)->getCurrency());
+        res = UnicodeString(df->getCurrency());
         break;
         
       default:
@@ -540,9 +561,10 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
         return -1;
       }
     } else {
-      RuleBasedNumberFormat* rbnf = (RuleBasedNumberFormat*)fmt;
+      U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
+      const RuleBasedNumberFormat* rbnf = (const RuleBasedNumberFormat*)fmt;
       if (tag == UNUM_DEFAULT_RULESET) {
-	res = rbnf->getDefaultRuleSetName();
+	res = ((RuleBasedNumberFormat*)rbnf)->getDefaultRuleSetName(); // TODO: remove cast!
       } else if (tag == UNUM_PUBLIC_RULESETS) {
 	int32_t count = rbnf->getNumberOfRuleSetNames();
 	for (int i = 0; i < count; ++i) {
@@ -572,29 +594,30 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
     const UnicodeString val((UChar*)newValue, len, len);
     
     if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      DecimalFormat* df = (DecimalFormat*) fmt;
       switch(tag) {
       case UNUM_POSITIVE_PREFIX:
-        ((DecimalFormat*)fmt)->setPositivePrefix(val);
+        df->setPositivePrefix(val);
         break;
         
       case UNUM_POSITIVE_SUFFIX:
-        ((DecimalFormat*)fmt)->setPositiveSuffix(val);
+        df->setPositiveSuffix(val);
         break;
         
       case UNUM_NEGATIVE_PREFIX:
-        ((DecimalFormat*)fmt)->setNegativePrefix(val);
+        df->setNegativePrefix(val);
         break;
         
       case UNUM_NEGATIVE_SUFFIX:
-        ((DecimalFormat*)fmt)->setNegativeSuffix(val);
+        df->setNegativeSuffix(val);
         break;
         
       case UNUM_PADDING_CHARACTER:
-        ((DecimalFormat*)fmt)->setPadCharacter(*newValue);
+        df->setPadCharacter(*newValue);
         break;
         
       case UNUM_CURRENCY_CODE:
-        ((DecimalFormat*)fmt)->setCurrency(newValue, *status);
+        df->setCurrency(newValue, *status);
         break;
         
       default:
@@ -602,6 +625,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
         break;
       }
     } else {
+      U_ASSERT(((NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
       if (tag == UNUM_DEFAULT_RULESET) {
 	((RuleBasedNumberFormat*)fmt)->setDefaultRuleSet(newValue, *status);
       } else {
@@ -627,17 +651,20 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         pat.setTo(result, 0, resultLength);
     }
 
-    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+    if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      const DecimalFormat* df = (const DecimalFormat*) fmt;
       if(isPatternLocalized)
-        ((DecimalFormat*)fmt)->toLocalizedPattern(pat);
+        df->toLocalizedPattern(pat);
       else
-        ((DecimalFormat*)fmt)->toPattern(pat);
+        df->toPattern(pat);
     } else {
-      pat = ((RuleBasedNumberFormat*)fmt)->getRules();
+      U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
+      pat = ((const RuleBasedNumberFormat*)fmt)->getRules();
     }
     return pat.extract(result, resultLength, *status);
 }
 
+// TODO: first parameter should be const!
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
@@ -654,7 +681,7 @@ unum_getSymbol(UNumberFormat *fmt,
         return 0;
     }
 
-    if (((NumberFormat*)fmt)->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+    if (((const NumberFormat*)fmt)->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
       *status = U_UNSUPPORTED_ERROR;
       return 0;
     }
@@ -738,7 +765,7 @@ unum_getLocaleByType(const UNumberFormat *fmt,
         }
         return NULL;
     }
-    return ((Format*)fmt)->getLocaleID(type, *status);
+    return ((const Format*)fmt)->getLocaleID(type, *status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -81,6 +81,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
 
 // Constants for characters used in programmatic (unlocalized) patterns.
 #define kPatternZeroDigit            ((UChar)0x0030) /*'0'*/
+#define kPatternSignificantDigit     ((UChar)0x0040) /*'@'*/
 #define kPatternGroupingSeparator    ((UChar)0x002C) /*','*/
 #define kPatternDecimalSeparator     ((UChar)0x002E) /*'.'*/
 #define kPatternPerMill              ((UChar)0x2030)
@@ -112,6 +113,9 @@ const int32_t DecimalFormat::kMaxScientificIntegerDigits = 8;
  * with a locale.
  */
 const char DecimalFormat::fgNumberPatterns[]="NumberPatterns";
+
+inline int32_t _min(int32_t a, int32_t b) { return (a<b) ? a : b; }
+inline int32_t _max(int32_t a, int32_t b) { return (a<b) ? b : a; }
 
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance in the default locale.
@@ -622,8 +626,8 @@ DecimalFormat::format(int64_t number,
                               || number < (U_INT64_MIN / fMultiplier))))
     {
         digits.set(((double)number) * fMultiplier,
-			precision(FALSE),
-                   !fUseExponentialNotation);
+                   precision(FALSE),
+                   !fUseExponentialNotation && !useSignificantDigits());
     }
     else
     {
@@ -712,7 +716,7 @@ DecimalFormat::format(  double number,
 
     // This detects negativity too.
     digits.set(number, precision(FALSE),
-                             !fUseExponentialNotation);
+               !fUseExponentialNotation && !useSignificantDigits());
 
     return subformat(appendTo, fieldPosition, digits, FALSE);
 }
@@ -805,17 +809,9 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     } else {
         decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
     }
+    UBool useSigDig = useSignificantDigits();
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t minIntDig = getMinimumIntegerDigits();
-    if (fUseExponentialNotation && maxIntDig > kMaxScientificIntegerDigits) {
-        maxIntDig = 1;
-	    if (maxIntDig < minIntDig) {
-		    maxIntDig = minIntDig;
-	    }
-    }
-    if (fUseExponentialNotation && maxIntDig > minIntDig) {
-        minIntDig = 1;
-    }
 
     /* Per bug 4147706, DecimalFormat must respect the sign of numbers which
      * format as zero.  This allows sensible computations and preserves
@@ -845,6 +841,23 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             fieldPosition.setBeginIndex(-1);
         }
 
+        int32_t minFracDig = 0;
+        if (useSigDig) {
+            maxIntDig = minIntDig = 1;
+            minFracDig = getMinimumSignificantDigits() - 1;
+        } else {
+            minFracDig = getMinimumFractionDigits();
+            if (maxIntDig > kMaxScientificIntegerDigits) {
+                maxIntDig = 1;
+                if (maxIntDig < minIntDig) {
+                    maxIntDig = minIntDig;
+                }
+            }
+            if (maxIntDig > minIntDig) {
+                minIntDig = 1;
+            }
+        }
+
         // Minimum integer digits are handled in exponential format by
         // adjusting the exponent.  For example, 0.01234 with 3 minimum
         // integer digits is "123.4E-4".
@@ -865,7 +878,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         } else {
             // No exponent increment is defined; use minimum integer digits.
             // If none is specified, as in "#E0", generate 1 integer digit.
-            exponent -= (minIntDig > 0 || getMinimumFractionDigits() > 0)
+            exponent -= (minIntDig > 0 || minFracDig > 0)
                         ? minIntDig : 1;
         }
 
@@ -873,7 +886,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         // are more digits, up to the maximum number of digits.  We
         // place the decimal point after the "integer" digits, which
         // are the first (decimalAt - exponent) digits.
-        int32_t minimumDigits =  minIntDig + getMinimumFractionDigits();
+        int32_t minimumDigits =  minIntDig + minFracDig;
         // The number of integer digits is handled specially if the number
         // is zero, since then there may be no digits.
         int32_t integerDigits = digits.isZero() ? minIntDig :
@@ -961,22 +974,30 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setBeginIndex(appendTo.length());
 
+        int32_t sigCount = 0;
+        int32_t minSigDig = getMinimumSignificantDigits();
+        int32_t maxSigDig = getMaximumSignificantDigits();
+        if (!useSigDig) {
+            maxSigDig = INT32_MAX;
+        }
+
         // Output the integer portion.  Here 'count' is the total
         // number of integer digits we will display, including both
         // leading zeros required to satisfy getMinimumIntegerDigits,
         // and actual digits present in the number.
-        int32_t count = minIntDig;
-        int32_t digitIndex = 0; // Index into digits.fDigits[]
-        if (digits.fDecimalAt > 0 && count < digits.fDecimalAt)
+        int32_t count = useSigDig ?
+            _max(1, digits.fDecimalAt) : minIntDig;
+        if (digits.fDecimalAt > 0 && count < digits.fDecimalAt) {
             count = digits.fDecimalAt;
+        }
 
         // Handle the case where getMaximumIntegerDigits() is smaller
         // than the real number of integer digits.  If this is so, we
         // output the least significant max integer digits.  For example,
         // the value 1997 printed with 2 max integer digits is just "97".
 
-        if (count > maxIntDig)
-        {
+        int32_t digitIndex = 0; // Index into digitList.fDigits[]
+        if (count > maxIntDig && maxIntDig >= 0) {
             count = maxIntDig;
             digitIndex = digits.fDecimalAt - count;
         }
@@ -986,15 +1007,19 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         int32_t i;
         for (i=count-1; i>=0; --i)
         {
-            if (i < digits.fDecimalAt && digitIndex < digits.fCount)
-            {
+            if (i < digits.fDecimalAt && digitIndex < digits.fCount &&
+                sigCount < maxSigDig) {
                 // Output a real digit
                 appendTo += ((UChar32)(digits.fDigits[digitIndex++] + zeroDelta));
+                ++sigCount;
             }
             else
             {
-                // Output a leading zero
+                // Output a zero (leading or trailing)
                 appendTo += (zero);
+                if (sigCount > 0) {
+                    ++sigCount;
+                }
             }
 
             // Output grouping separator if necessary.
@@ -1010,7 +1035,8 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         // Determine whether or not there are any printable fractional
         // digits.  If we've used up the digits we know there aren't.
         UBool fractionPresent = (getMinimumFractionDigits() > 0) ||
-            (!isInteger && digitIndex < digits.fCount);
+            (!isInteger && digitIndex < digits.fCount) ||
+            sigCount < minSigDig;
 
         // If there is no fraction present, and we haven't printed any
         // integer digits, then print a zero.  Otherwise we won't print
@@ -1026,37 +1052,50 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         if (fieldPosition.getField() == NumberFormat::kFractionField)
             fieldPosition.setBeginIndex(appendTo.length());
 
-        int32_t maxFracDigits = getMaximumFractionDigits();
-        int32_t negDecimalAt = -digits.fDecimalAt;
-        for (i=0; i < maxFracDigits; ++i)
-        {
-            if (!isInteger && digitIndex < digits.fCount)
-            {
-                if (i >= negDecimalAt)
-                {
-                    // Output a digit
-                    appendTo += ((UChar32)(digits.fDigits[digitIndex++] + zeroDelta));
-                }
-                else
-                {
-                    // Output leading fractional zeros.  These are zeros that come after
-                    // the decimal but before any significant digits.  These are only
-                    // output if abs(number being formatted) < 1.0.
-                    appendTo += zero;
-                }
-            }
-            else
-            {
-                // Here is where we escape from the loop.  We escape if we've output
-                // the maximum fraction digits (specified in the for expression above).
-                // We also stop when we've output the minimum digits and either:
-                // we have an integer, so there is no fractional stuff to display,
-                // or we're out of significant digits.
-                if (i >= getMinimumFractionDigits())
-                    break;
+        count = useSigDig ? INT32_MAX : getMaximumFractionDigits();
+        if (useSigDig && (sigCount == maxSigDig ||
+                          (sigCount >= minSigDig && digitIndex == digits.fCount))) {
+            count = 0;
+        }
 
-                // No precision is left.
+        for (i=0; i < count; ++i) {
+            // Here is where we escape from the loop.  We escape
+            // if we've output the maximum fraction digits
+            // (specified in the for expression above).  We also
+            // stop when we've output the minimum digits and
+            // either: we have an integer, so there is no
+            // fractional stuff to display, or we're out of
+            // significant digits.
+            if (!useSigDig && i >= getMinimumFractionDigits() &&
+                (isInteger || digitIndex >= digits.fCount)) {
+                break;
+            }
+
+            // Output leading fractional zeros.  These are zeros
+            // that come after the decimal but before any
+            // significant digits.  These are only output if
+            // abs(number being formatted) < 1.0.
+            if (-1-i > (digits.fDecimalAt-1)) {
                 appendTo += zero;
+                continue;
+            }
+
+            // Output a digit, if we have any precision left, or a
+            // zero if we don't.  We don't want to output noise digits.
+            if (!isInteger && digitIndex < digits.fCount) {
+                appendTo += ((UChar32)(digits.fDigits[digitIndex++] + zeroDelta));
+            } else {
+                appendTo += zero;
+            }
+
+            // If we reach the maximum number of significant
+            // digits, or if we output all the real digits and
+            // reach the minimum, then we are done.
+            ++sigCount;
+            if (useSigDig &&
+                (sigCount == maxSigDig ||
+                 (digitIndex == digits.fCount && sigCount >= minSigDig))) {
+                break;
             }
         }
 
@@ -2580,13 +2619,18 @@ UnicodeString&
 DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {
     result.remove();
-    UChar32 zero;
+    UChar32 zero, sigDigit;
     UnicodeString digit, group;
     int32_t i;
     int32_t roundingDecimalPos = 0; // Pos of decimal in roundingDigits
     UnicodeString roundingDigits;
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
+    UBool useSigDig = useSignificantDigits();
+    if (useSigDig) {
+        sigDigit = localized ? getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0) :
+                               kPatternSignificantDigit;
+    }
 
     if (localized) {
         digit.append(getConstSymbol(DecimalFormatSymbols::kDigitSymbol));
@@ -2625,63 +2669,85 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
             result.append(padSpec);
         }
         int32_t sub0Start = result.length();
-        int32_t g = isGroupingUsed() ? uprv_max(0, fGroupingSize) : 0;
+        int32_t g = isGroupingUsed() ? _max(0, fGroupingSize) : 0;
         if (g > 0 && fGroupingSize2 > 0 && fGroupingSize2 != fGroupingSize) {
             g += fGroupingSize2;
         }
-        int maxIntDig = getMaximumIntegerDigits();
-        if (fUseExponentialNotation) {
-            if (maxIntDig > kMaxScientificIntegerDigits) {
-                maxIntDig = 1;
-            }
+        int32_t maxDig = 0, minDig = 0, maxSigDig = 0;
+        if (useSigDig) {
+            minDig = getMinimumSignificantDigits();
+            maxDig = maxSigDig = getMaximumSignificantDigits();
         } else {
-            maxIntDig = uprv_max(uprv_max(g, getMinimumIntegerDigits()),
-                      roundingDecimalPos) + 1;
+            minDig = getMinimumIntegerDigits();
+            maxDig = getMaximumIntegerDigits();
         }
-        for (i = maxIntDig; i > 0; --i) {
-            if (!fUseExponentialNotation && i<maxIntDig &&
+        if (fUseExponentialNotation) {
+            if (maxDig > kMaxScientificIntegerDigits) {
+                maxDig = 1;
+            }
+        } else if (useSigDig) {
+            maxDig = _max(maxDig, g+1);
+        } else {
+            maxDig = _max(_max(g, getMinimumIntegerDigits()),
+                          roundingDecimalPos) + 1;
+        }
+        for (i = maxDig; i > 0; --i) {
+            if (!fUseExponentialNotation && i<maxDig &&
                 isGroupingPosition(i)) {
                 result.append(group);
             }
-            if (! roundingDigits.isEmpty()) {
-                int32_t pos = roundingDecimalPos - i;
-                if (pos >= 0 && pos < roundingDigits.length()) {
-                    result.append((UChar) (roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
-                    continue;
+            if (useSigDig) {
+                //  #@,@###   (maxSigDig == 5, minSigDig == 2)
+                //  65 4321   (1-based pos, count from the right)
+                // Use # if pos > maxSigDig or 1 <= pos <= (maxSigDig - minSigDig)
+                // Use @ if (maxSigDig - minSigDig) < pos <= maxSigDig
+                if (maxSigDig >= i && i > (maxSigDig - minDig)) {
+                    result.append(sigDigit);
+                } else {
+                    result.append(digit);
+                }
+            } else {
+                if (! roundingDigits.isEmpty()) {
+                    int32_t pos = roundingDecimalPos - i;
+                    if (pos >= 0 && pos < roundingDigits.length()) {
+                        result.append((UChar) (roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
+                        continue;
+                    }
+                }
+                if (i<=minDig) {
+                    result.append(zero);
+                } else {
+                    result.append(digit);
                 }
             }
-            if (i<=getMinimumIntegerDigits()) {
-                result.append(zero);
-            }
-            else {
-                result.append(digit);
-            }
         }
-        if (getMaximumFractionDigits() > 0 || fDecimalSeparatorAlwaysShown) {
-            if (localized) {
-                result += getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+        if (!useSigDig) {
+            if (getMaximumFractionDigits() > 0 || fDecimalSeparatorAlwaysShown) {
+                if (localized) {
+                    result += getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+                }
+                else {
+                    result.append((UChar)kPatternDecimalSeparator);
+                }
             }
-            else {
-                result.append((UChar)kPatternDecimalSeparator);
-            }
-        }
-        int32_t pos = roundingDecimalPos;
-        for (i = 0; i < getMaximumFractionDigits(); ++i) {
-            if (! roundingDigits.isEmpty() && pos < roundingDigits.length()) {
-                if (pos < 0) {
+            int32_t pos = roundingDecimalPos;
+            for (i = 0; i < getMaximumFractionDigits(); ++i) {
+                if (! roundingDigits.isEmpty() && pos < roundingDigits.length()) {
+                    if (pos < 0) {
+                        result.append(zero);
+                    }
+                    else {
+                        result.append((UChar)(roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
+                    }
+                    ++pos;
+                    continue;
+                }
+                if (i<getMinimumFractionDigits()) {
                     result.append(zero);
                 }
                 else {
-                    result.append((UChar)(roundingDigits.char32At(pos) - kPatternZeroDigit + zero));
+                    result.append(digit);
                 }
-                ++pos;
-                continue;
-            }
-            if (i<getMinimumFractionDigits()) {
-                result.append(zero);
-            }
-            else {
-                result.append(digit);
             }
         }
         if (fUseExponentialNotation) {
@@ -2710,12 +2776,12 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                    : fNegativePrefix.length() + fNegativeSuffix.length());
             while (add > 0) {
                 result.insert(sub0Start, digit);
-                ++maxIntDig;
+                ++maxDig;
                 --add;
                 // Only add a grouping separator if we have at least
                 // 2 additional characters to be added, so we don't
                 // end up with ",###".
-                if (add>1 && isGroupingPosition(maxIntDig)) {
+                if (add>1 && isGroupingPosition(maxDig)) {
                     result.insert(sub0Start, group);
                     --add;                        
                 }
@@ -2827,12 +2893,13 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
 
     // Set the significant pattern symbols
-    UChar32 zeroDigit               = kPatternZeroDigit;
+    UChar32 zeroDigit               = kPatternZeroDigit; // '0'
+    UChar32 sigDigit                = kPatternSignificantDigit; // '@'
     UnicodeString groupingSeparator ((UChar)kPatternGroupingSeparator);
     UnicodeString decimalSeparator  ((UChar)kPatternDecimalSeparator);
     UnicodeString percent           ((UChar)kPatternPercent);
     UnicodeString perMill           ((UChar)kPatternPerMill);
-    UnicodeString digit             ((UChar)kPatternDigit);
+    UnicodeString digit             ((UChar)kPatternDigit); // '#'
     UnicodeString separator         ((UChar)kPatternSeparator);
     UnicodeString exponent          ((UChar)kPatternExponent);
     UnicodeString plus              ((UChar)kPatternPlus);
@@ -2841,6 +2908,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
     // Substitute with the localized symbols if necessary
     if (localized) {
         zeroDigit = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+        sigDigit = getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0);
         groupingSeparator.  remove().append(getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
         decimalSeparator.   remove().append(getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
         percent.            remove().append(getConstSymbol(DecimalFormatSymbols::kPercentSymbol));
@@ -2879,7 +2947,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         UnicodeString suffix;
         int32_t decimalPos = -1;
         int32_t multiplier = 1;
-        int32_t digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0;
+        int32_t digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0, sigDigitCount = 0;
         int8_t groupingCount = -1;
         int8_t groupingCount2 = -1;
         int32_t padPos = -1;
@@ -2897,7 +2965,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         UBool isPartDone = FALSE;
         UChar32 ch;
 
-        for (; !isPartDone && pos < patLen; pos += UTF_NEED_MULTIPLE_UCHAR(ch)) {
+        for (; !isPartDone && pos < patLen; ) {
             // Todo: account for surrogate pairs
             ch = pattern.char32At(pos);
             switch (subpart) {
@@ -2912,7 +2980,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 // if any (should be in the zero digits).  If there is no
                 // decimal point, then there should be no right digits.
                 if (pattern.compare(pos, digitLen, digit) == 0) {
-                    if (zeroDigitCount > 0) {
+                    if (zeroDigitCount > 0 || sigDigitCount > 0) {
                         ++digitRightCount;
                     } else {
                         ++digitLeftCount;
@@ -2921,7 +2989,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         ++groupingCount;
                     }
                     pos += digitLen;
-                } else if (ch >= zeroDigit && ch <= nineDigit) {
+                } else if ((ch >= zeroDigit && ch <= nineDigit) ||
+                           ch == sigDigit) {
                     if (digitRightCount > 0) {
                         // Unexpected '0'
                         debug("Unexpected '0'")
@@ -2929,17 +2998,21 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         syntaxError(pattern,pos,parseError);
                         return;
                     }
-                    ++zeroDigitCount;
+                    if (ch == sigDigit) {
+                        ++sigDigitCount;
+                    } else {
+                        ++zeroDigitCount;
+                        if (ch != zeroDigit && roundingPos < 0) {
+                            roundingPos = digitLeftCount + zeroDigitCount;
+                        }
+                        if (roundingPos >= 0) {
+                            roundingInc.append((char)(ch - zeroDigit + '0'));
+                        }
+                    }
                     if (groupingCount >= 0 && decimalPos < 0) {
                         ++groupingCount;
                     }
-                    if (ch != zeroDigit && roundingPos < 0) {
-                        roundingPos = digitLeftCount + zeroDigitCount;
-                    }
-                    if (roundingPos >= 0) {
-                        roundingInc.append((char)(ch - zeroDigit + '0'));
-                    }
-                    pos++;
+                    pos += U16_LENGTH(ch);
                 } else if (pattern.compare(pos, groupSepLen, groupingSeparator) == 0) {
                     if (decimalPos >= 0) {
                         // Grouping separator after decimal
@@ -2980,24 +3053,28 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             syntaxError(pattern,pos,parseError);
                             return;
                         }
+                        pos += exponent.length();
                         // Check for positive prefix
-                        if ((pos+1) < patLen
-                            && pattern.compare((int32_t) (pos+1), plus.length(), plus) == 0)
-                        {
+                        if (pos < patLen
+                            && pattern.compare(pos, plus.length(), plus) == 0) {
                             expSignAlways = TRUE;
                             pos += plus.length();
                         }
                         // Use lookahead to parse out the exponential part of the
                         // pattern, then jump into suffix subpart.
                         expDigits = 0;
-                        pos += exponent.length() - 1;
-                        while (++pos < patLen &&
-                               pattern[(int32_t) pos] == zeroDigit)
-                        {
+                        while (pos < patLen &&
+                               pattern.char32At(pos) == zeroDigit) {
                             ++expDigits;
+                            pos += U16_LENGTH(zeroDigit);
                         }
 
-                        if ((digitLeftCount + zeroDigitCount) < 1 ||
+                        // 1. Require at least one mantissa pattern digit
+                        // 2. Disallow "#+ @" in mantissa
+                        // 3. Require at least one exponent pattern digit
+                        if (((digitLeftCount + zeroDigitCount) < 1 &&
+                             (sigDigitCount + digitRightCount) < 1) ||
+                            (sigDigitCount > 0 && digitLeftCount > 0) ||
                             expDigits < 1) {
                             // Malformed exponential pattern
                             debug("Malformed exponential pattern")
@@ -3025,7 +3102,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 if (!pattern.compare(pos, digitLen, digit) ||
                     !pattern.compare(pos, groupSepLen, groupingSeparator) ||
                     !pattern.compare(pos, decimalSepLen, decimalSeparator) ||
-                    (ch >= zeroDigit && ch <= nineDigit)) {
+                    (ch >= zeroDigit && ch <= nineDigit) ||
+                    ch == sigDigit) {
                     if (subpart == 1) { // prefix subpart
                         subpart = 0; // pattern proper subpart
                         sub0Start = pos; // Reprocess this character
@@ -3036,12 +3114,11 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         return;
                     }
                 } else if (ch == kCurrencySign) {
+                    affix->append(kQuote); // Encode currency
                     // Use lookahead to determine if the currency sign is
                     // doubled or not.
-                    pos++;
-                    affix->append(kQuote); // Encode currency
-                    if (pos < pattern.length() && pattern[pos] == kCurrencySign)
-                    {
+                    U_ASSERT(U16_LENGTH(kCurrencySign) == 1);
+                    if ((pos+1) < pattern.length() && pattern[pos+1] == kCurrencySign) {
                         affix->append(kCurrencySign);
                         ++pos; // Skip over the doubled character
                     }
@@ -3051,10 +3128,10 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     // A quote outside quotes indicates either the opening
                     // quote or two quotes, which is a quote literal.  That is,
                     // we have the first quote in 'do' or o''clock.
+                    U_ASSERT(U16_LENGTH(kQuote) == 1);
                     ++pos;
                     if (pos < pattern.length() && pattern[pos] == kQuote) {
                         affix->append(kQuote); // Encode quote
-                        ++pos;
                         // Fall through to append(ch)
                     } else {
                         subpart += 2; // open quote
@@ -3084,10 +3161,10 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         return;
                     }
                     affix->append(kQuote); // Encode percent/perMill
+                    affix->append(kPatternPercent); // Use unlocalized pattern char
                     multiplier = 100;
-                    ch = kPatternPercent; // Use unlocalized pattern char
                     pos += percent.length();
-                    // Fall through to append(ch)
+                    break;
                 } else if (pattern.compare(pos, perMill.length(), perMill) == 0) {
                     // Next handle characters which are appended directly.
                     if (multiplier != 1) {
@@ -3098,10 +3175,10 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         return;
                     }
                     affix->append(kQuote); // Encode percent/perMill
+                    affix->append(kPatternPerMill); // Use unlocalized pattern char
                     multiplier = 1000;
-                    ch = kPatternPerMill; // Use unlocalized pattern char
                     pos += perMill.length();
-                    // Fall through to append(ch)
+                    break;
                 } else if (pattern.compare(pos, padEscape.length(), padEscape) == 0) {
                     if (padPos >= 0 ||               // Multiple pad specifiers
                         (pos+1) == pattern.length()) { // Nothing after padEscape
@@ -3114,34 +3191,32 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     pos += padEscape.length();
                     padChar = pattern.char32At(pos);
                     pos += U16_LENGTH(padChar);
-                    continue;
+                    break;
                 } else if (pattern.compare(pos, minus.length(), minus) == 0) {
                     affix->append(kQuote); // Encode minus
-                    ch = kPatternMinus;
+                    affix->append(kPatternMinus);
                     pos += minus.length();
-                    // Fall through to append(ch)
+                    break;
                 } else if (pattern.compare(pos, plus.length(), plus) == 0) {
                     affix->append(kQuote); // Encode plus
-                    ch = kPatternPlus;
+                    affix->append(kPatternPlus);
                     pos += plus.length();
-                    // Fall through to append(ch)
-                } else {
-                    pos++;
+                    break;
                 }
                 // Unquoted, non-special characters fall through to here, as
                 // well as other code which needs to append something to the
                 // affix.
                 affix->append(ch);
+                pos += U16_LENGTH(ch);
                 break;
             case 3: // Prefix subpart, in quote
             case 4: // Suffix subpart, in quote
                 // A quote within quotes indicates either the closing
                 // quote or two quotes, which is a quote literal.  That is,
                 // we have the second quote in 'do' or 'don''t'.
-                pos++;
                 if (ch == kQuote) {
+                    ++pos;
                     if (pos < pattern.length() && pattern[pos] == kQuote) {
-                        ++pos;
                         affix->append(kQuote); // Encode quote
                         // Fall through to append(ch)
                     } else {
@@ -3150,6 +3225,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     }
                 }
                 affix->append(ch);
+                pos += U16_LENGTH(ch);
                 break;
             }
         }
@@ -3175,7 +3251,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
          * "#" to become "#0" when toPattern() is called (even though that's
          * what it really is, semantically).
          */
-        if (zeroDigitCount == 0 && digitLeftCount > 0 && decimalPos >= 0) {
+        if (zeroDigitCount == 0 && sigDigitCount == 0 &&
+            digitLeftCount > 0 && decimalPos >= 0) {
             // Handle "###.###" and "###." and ".###"
             int n = decimalPos;
             if (n == 0)
@@ -3186,11 +3263,13 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         }
 
         // Do syntax checking on the digits, decimal points, and quotes.
-        if ((decimalPos < 0 && digitRightCount > 0) ||
+        if ((decimalPos < 0 && digitRightCount > 0 && sigDigitCount == 0) ||
             (decimalPos >= 0 &&
-             (decimalPos < digitLeftCount ||
+             (sigDigitCount > 0 ||
+              decimalPos < digitLeftCount ||
               decimalPos > (digitLeftCount + zeroDigitCount))) ||
             groupingCount == 0 || groupingCount2 == 0 ||
+            (sigDigitCount > 0 && zeroDigitCount > 0) ||
             subpart > 2)
         { // subpart > 2 == unmatched quote
             debug("Syntax error")
@@ -3251,14 +3330,20 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             // decimalPos<0, then digitTotalCount == digitLeftCount +
             // zeroDigitCount.
             int effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
-            setMinimumIntegerDigits(effectiveDecimalPos - digitLeftCount);
-            setMaximumIntegerDigits(fUseExponentialNotation
+            if (sigDigitCount > 0) {
+                setMinimumSignificantDigits(sigDigitCount);
+                setMaximumSignificantDigits(sigDigitCount + digitRightCount);
+            } else {
+                int32_t minInt = effectiveDecimalPos - digitLeftCount;
+                setMinimumIntegerDigits(minInt);
+                setMaximumIntegerDigits(fUseExponentialNotation
                     ? digitLeftCount + getMinimumIntegerDigits()
                     : kDoubleIntegerDigits);
-            setMaximumFractionDigits(decimalPos >= 0
+                setMaximumFractionDigits(decimalPos >= 0
                     ? (digitTotalCount - decimalPos) : 0);
-            setMinimumFractionDigits(decimalPos >= 0
+                setMinimumFractionDigits(decimalPos >= 0
                     ? (digitLeftCount + zeroDigitCount - decimalPos) : 0);
+            }
             setGroupingUsed(groupingCount > 0);
             fGroupingSize = (groupingCount > 0) ? groupingCount : 0;
             fGroupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
@@ -3395,7 +3480,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
  * @see NumberFormat#setMaximumIntegerDigits
  */
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
-    NumberFormat::setMaximumIntegerDigits(uprv_min(newValue, kDoubleIntegerDigits));
+    NumberFormat::setMaximumIntegerDigits(_min(newValue, kDoubleIntegerDigits));
 }
 
 /**
@@ -3404,7 +3489,7 @@ void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
  * @see NumberFormat#setMinimumIntegerDigits
  */
 void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
-    NumberFormat::setMinimumIntegerDigits(uprv_min(newValue, kDoubleIntegerDigits));
+    NumberFormat::setMinimumIntegerDigits(_min(newValue, kDoubleIntegerDigits));
 }
 
 /**
@@ -3413,7 +3498,7 @@ void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
  * @see NumberFormat#setMaximumFractionDigits
  */
 void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
-    NumberFormat::setMaximumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
+    NumberFormat::setMaximumFractionDigits(_min(newValue, kDoubleFractionDigits));
 }
 
 /**
@@ -3422,7 +3507,39 @@ void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
  * @see NumberFormat#setMinimumFractionDigits
  */
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
-    NumberFormat::setMinimumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
+    NumberFormat::setMinimumFractionDigits(_min(newValue, kDoubleFractionDigits));
+}
+
+int32_t DecimalFormat::getMinimumSignificantDigits() const {
+    return -getMinimumIntegerDigits();
+}
+
+int32_t DecimalFormat::getMaximumSignificantDigits() const {
+    return -getMaximumIntegerDigits();
+}
+
+void DecimalFormat::setMinimumSignificantDigits(int32_t min) {
+    if (min < 1) {
+        min = 1;   
+    }
+    // pin max sig dig to >= min; if unset, use min
+    int32_t max = _max(getMaximumSignificantDigits(), min);
+    internalSetMinimumIntegerDigits(-min);
+    internalSetMaximumIntegerDigits(-max);
+}
+
+void DecimalFormat::setMaximumSignificantDigits(int32_t max) {
+    if (max < 1) {
+        max = 1;
+    }
+    // pin min sig dig to 1..max; if unset, use 1
+    int32_t min = _min(_max(getMinimumSignificantDigits(), 1), max);
+    internalSetMinimumIntegerDigits(-min);
+    internalSetMaximumIntegerDigits(-max);
+}
+
+UBool DecimalFormat::useSignificantDigits() const {
+    return getMinimumIntegerDigits() < 0;
 }
 
 void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
@@ -3458,11 +3575,20 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
     }
 }
 
+/**
+ * Return the number of fraction digits to display, or the total
+ * number of digits for significant digit formats and exponential
+ * formats.
+ */
 int32_t
 DecimalFormat::precision(UBool isIntegral) const {
-	return fUseExponentialNotation 
-	    ? getMinimumIntegerDigits() + getMaximumFractionDigits() 
-	    : (isIntegral ? 0 : getMaximumFractionDigits());
+    if (useSignificantDigits()) {
+        return getMaximumSignificantDigits();
+    } else if (fUseExponentialNotation) {
+        return getMinimumIntegerDigits() + getMaximumFractionDigits();
+    } else {
+        return isIntegral ? 0 : getMaximumFractionDigits();
+    }
 }
 
 U_NAMESPACE_END

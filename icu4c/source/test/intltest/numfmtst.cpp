@@ -17,9 +17,12 @@
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/ustring.h"
+#include "digitlst.h"
+#include "textfile.h"
+#include "tokiter.h"
+#include "charstr.h"
 #include <float.h>
 #include <string.h>
-#include "digitlst.h"
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
  
@@ -67,6 +70,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
         CASE(25,TestPerMill);
         CASE(26,TestIllegalPatterns);
+        CASE(27,TestCases);
 
         default: name = ""; break;
     }
@@ -1520,6 +1524,196 @@ void NumberFormatTest::TestIllegalPatterns() {
         }
     }
 }
+
+//----------------------------------------------------------------------
+
+static const char* KEYWORDS[] = {
+    /*0*/ "ref=", // <reference pattern to parse numbers>
+    /*1*/ "loc=", // <locale for formats>
+    /*2*/ "f:",   // <pattern or '-'> <number> <exp. string>
+    /*3*/ "fp:",  // <pattern or '-'> <number> <exp. string> <exp. number>
+    /*4*/ "rt:",  // <pattern or '-'> <(exp.) number> <(exp.) string>
+    /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
+    /*6*/ "perr:",   // <pattern or '-'> <invalid string>
+    /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
+    0
+};
+
+/**
+ * Return an integer representing the next token from this
+ * iterator.  The integer will be an index into the given list, or
+ * -1 if there are no more tokens, or -2 if the token is not on
+ * the list.
+ */
+static int32_t keywordIndex(const UnicodeString& tok) {
+    for (int32_t i=0; KEYWORDS[i]!=0; ++i) {
+        if (tok==KEYWORDS[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void NumberFormatTest::TestCases() {
+    UErrorCode ec = U_ZERO_ERROR;
+    TextFile reader("NumberFormatTestCases.txt", "UTF8", ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Couldn't open NumberFormatTestCases.txt");
+        return;
+    }
+    TokenIterator tokens(&reader);
+
+    Locale loc("en", "US", "");
+    DecimalFormat *ref = 0, *fmt = 0;
+    UnicodeString pat, tok, str, out, where;
+
+    for (;;) {
+        ec = U_ZERO_ERROR;
+        if (!tokens.next(tok, ec)) {
+            break;
+        }
+        where = UnicodeString("(") + tokens.getLineNumber() + ") ";
+        int32_t cmd = keywordIndex(tok);
+        switch (cmd) {
+        case 0:
+            // ref= <reference pattern>
+            if (!tokens.next(tok, ec)) goto error;
+            delete ref;
+            ref = new DecimalFormat(tok,
+                      new DecimalFormatSymbols(Locale::getUS(), ec), ec);
+            break;
+        case 1:
+            // loc= <locale>
+            if (!tokens.next(tok, ec)) goto error;
+            loc = Locale::createFromName(CharString(tok));
+            break;
+        case 2: // f:
+        case 3: // fp:
+        case 4: // rt:
+        case 5: // p:
+            if (!tokens.next(tok, ec)) goto error;
+            if (tok != "-") {
+                pat = tok;
+                delete fmt;
+                fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc, ec), ec);
+                if (U_FAILURE(ec)) {
+                    errln("FAIL: " + where + "Pattern \"" + pat + "\"");
+                    ec = U_ZERO_ERROR;
+                    if (!tokens.next(tok, ec)) goto error;
+                    if (!tokens.next(tok, ec)) goto error;
+                    if (cmd == 3) {
+                        if (!tokens.next(tok, ec)) goto error;
+                    }
+                    continue;
+                }
+            }
+            if (cmd == 2 || cmd == 3 || cmd == 4) {
+                // f: <pattern or '-'> <number> <exp. string>
+                // fp: <pattern or '-'> <number> <exp. string> <exp. number>
+                // rt: <pattern or '-'> <number> <string>
+                UnicodeString num;
+                if (!tokens.next(num, ec)) goto error;
+                if (!tokens.next(str, ec)) goto error;
+                Formattable n;
+                ref->parse(num, n, ec);
+                assertSuccess("parse", ec);
+                assertEquals(where + "\"" + pat + "\".format(" + num + ")",
+                             str, fmt->format(n, out.remove(), ec));
+                assertSuccess("format", ec);
+                if (cmd == 3) { // fp:
+                    if (!tokens.next(num, ec)) goto error;
+                    ref->parse(num, n, ec);
+                    assertSuccess("parse", ec);
+                }
+                if (cmd != 2) { // != f:
+                    Formattable m;
+                    fmt->parse(str, m, ec);
+                    assertSuccess("parse", ec);
+                    assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
+                                 n, m);
+                } 
+            }
+            // p: <pattern or '-'> <string to parse> <exp. number>
+            else {
+                UnicodeString expstr;
+                if (!tokens.next(str, ec)) goto error;
+                if (!tokens.next(expstr, ec)) goto error;
+                Formattable exp, n;
+                ref->parse(expstr, exp, ec);
+                assertSuccess("parse", ec);
+                fmt->parse(str, n, ec);
+                assertSuccess("parse", ec);
+                assertEquals(where + "\"" + pat + "\".parse(\"" + str + "\")",
+                             exp, n);
+            }
+            break;
+        case 6:
+            // perr: <pattern or '-'> <invalid string>
+            errln("FAIL: Under construction");
+            goto done;
+        case 7: {
+            // pat: <pattern> <exp. toPattern, or '-' or 'err'>
+            UnicodeString testpat;
+            UnicodeString exppat;
+            if (!tokens.next(testpat, ec)) goto error;
+            if (!tokens.next(exppat, ec)) goto error;
+            UBool err = exppat == "err";
+            UBool existingPat = FALSE;
+            if (testpat == "-") {
+                if (err) {
+                    errln("FAIL: " + where + "Invalid command \"pat: - err\"");
+                    continue;
+                }
+                existingPat = TRUE;
+                testpat = pat;
+            }
+            if (exppat == "-") exppat = testpat;
+            DecimalFormat* f = 0;
+            UErrorCode ec2 = U_ZERO_ERROR;
+            if (existingPat) {
+                f = fmt;
+            } else {
+                f = new DecimalFormat(testpat, ec2);
+            }
+            if (U_SUCCESS(ec2)) {
+                if (err) {
+                    errln("FAIL: " + where + "Invalid pattern \"" + testpat +
+                          "\" was accepted");
+                } else {
+                    UnicodeString pat2;
+                    assertEquals(where + "\"" + testpat + "\".toPattern()",
+                                 exppat, f->toPattern(pat2));
+                }
+            } else {
+                if (err) {
+                    logln("Ok: " + where + "Invalid pattern \"" + testpat +
+                          "\" failed: " + u_errorName(ec2));
+                } else {
+                    errln("FAIL: " + where + "Valid pattern \"" + testpat +
+                          "\" failed: " + u_errorName(ec2));
+                }
+            }
+            if (!existingPat) delete f;
+            } break;
+        case -1:
+            errln("FAIL: " + where + "Unknown command \"" + tok + "\"");
+            goto done;
+        }
+    }
+    goto done;
+
+ error:
+    if (U_SUCCESS(ec)) {
+        errln("FAIL: Unexpected EOF");
+    } else {
+        errln("FAIL: " + where + "Unexpected " + u_errorName(ec));
+    }
+
+ done:
+    delete fmt;
+    delete ref;
+}
+
 
 //----------------------------------------------------------------------
 // Support methods

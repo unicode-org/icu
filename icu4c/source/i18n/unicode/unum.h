@@ -494,6 +494,12 @@ typedef enum UNumberFormatAttribute {
   UNUM_PADDING_POSITION,
   /** Secondary grouping size */
   UNUM_SECONDARY_GROUPING_SIZE,
+  /** Minimum significant digits
+   * @draft ICU 3.0 */
+  UNUM_MIN_SIGNIFICANT_DIGITS,
+  /** Maximum significant digits
+   * @draft ICU 3.0 */
+  UNUM_MAX_SIGNIFICANT_DIGITS,
   /** Lenient parse mode used by rule-based formats.
    * @draft ICU 3.0
    */
@@ -721,6 +727,9 @@ typedef enum UNumberFormatSymbol {
   UNUM_INFINITY_SYMBOL,
   /** Nan symbol */
   UNUM_NAN_SYMBOL,
+  /** Significant digit symbol
+   * @draft ICU 3.0 */
+  UNUM_SIGNIFICANT_DIGIT_SYMBOL,
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT
 } UNumberFormatSymbol;
