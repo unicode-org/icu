@@ -23,6 +23,7 @@
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "ccolltst.h"
+#include "cstring.h"
 
 #include "unicode/ures.h"
 #ifdef WIN32

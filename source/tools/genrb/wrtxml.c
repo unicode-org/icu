@@ -101,7 +101,6 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
 	int32_t i=0;
 	char* dest=NULL;
 	char* temp=NULL;
-	int32_t len=0;
 	int32_t destLen=0;
 	
 	if(status==NULL || U_FAILURE(*status) || pDest==NULL  || srcLen==0 || src == NULL){
@@ -383,7 +382,7 @@ bin_write_xml( struct SResource *res, UErrorCode *status) {
                                                     (res->u.fBinaryValue.fFileName !=NULL ? 
 													uprv_strlen(res->u.fBinaryValue.fFileName) :0)));
     char* buffer = NULL;
-    char* ext = NULL;
+    const char* ext = NULL;
     fn[0]=0;
 
     if(res->u.fBinaryValue.fLength>100){
@@ -454,7 +453,6 @@ bin_write_xml( struct SResource *res, UErrorCode *status) {
 }
 
 
-static UBool start = TRUE;
 
 static void 
 table_write_xml(struct SResource *res, UErrorCode *status) {

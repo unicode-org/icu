@@ -44,7 +44,6 @@ addUSetTest(TestNode** root) {
 static void Testj2269() {
   UErrorCode status = U_ZERO_ERROR;
   UChar a[4] = { 0x61, 0x62, 0x63, 0 };
-  UChar b[4] = { 0x61, 0x62, 0x63, 0 };
   USet *s = uset_open(1, 0);
   uset_addString(s, a, 3);
   a[0] = 0x63; a[1] = 0x63;
