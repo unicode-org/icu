@@ -25,7 +25,6 @@
 #include "unicode/ustring.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
-#include "unicode/uloc.h"
 #include "sscanf.h"
 #include "uscanf_p.h"
 #include "uscanset.h"
@@ -1073,11 +1072,6 @@ u_vsscanf_u(const UChar *buffer,
 
     /* haven't converted anything yet */
     converted = 0;
-
-    /* if locale is 0, use the default */
-    if(locale == 0) {
-        locale = uloc_getDefault();
-    }
 
     if(u_locbund_init(&inStr.fBundle, locale) == 0) {
         return 0;
