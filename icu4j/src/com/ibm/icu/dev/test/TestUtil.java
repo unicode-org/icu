@@ -5,17 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestUtil.java,v $
- * $Date: 2003/11/19 19:51:56 $
- * $Revision: 1.9 $
+ * $Date: 2003/11/24 22:13:51 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
