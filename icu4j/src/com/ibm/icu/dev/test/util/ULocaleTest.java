@@ -831,4 +831,76 @@ public class ULocaleTest extends TestFmwk {
             errln("Did not get the expected result");   
         }
     }
+
+    public void TestDisplayNames() {
+	// consistency check, also check that all data is available
+	{
+	    ULocale[] locales = ULocale.getAvailableLocales();
+	    for (int i = 0; i < locales.length; ++i) {
+		ULocale l = locales[i];
+		String name = l.getDisplayName();
+
+		logln(l + " --> " + name + 
+		      ", " + l.getDisplayName(ULocale.GERMAN) + 
+		      ", " + l.getDisplayName(ULocale.FRANCE));
+
+		String language = l.getDisplayLanguage();
+		String script = l.getDisplayScript();
+		String country = l.getDisplayCountry();
+		String variant = l.getDisplayVariant();
+
+		checkName(name, language, script, country, variant);
+
+		for (int j = 0; j < locales.length; ++j) {
+		    ULocale dl = locales[j];
+
+		    name = l.getDisplayName(dl);
+		    language = l.getDisplayLanguage(dl);
+		    script = l.getDisplayScript(dl);
+		    country = l.getDisplayCountry(dl);
+		    variant = l.getDisplayVariant(dl);
+
+		    if (!checkName(name, language, script, country, variant)) {
+			break;
+		    }
+		}
+	    }
+	}
+	// spot check
+	{
+	    ULocale[] locales = {
+		ULocale.US, ULocale.GERMANY, ULocale.FRANCE
+	    };
+	    String[] names = {
+		"Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
+	    };
+	    ULocale locale = new ULocale("zh_CN");
+	    for (int i = 0; i < locales.length; ++i) {
+		String name = locale.getDisplayName(locales[i]);
+		if (!names[i].equals(name)) {
+		    errln("expected '" + names[i] + "' but got '" + name + "'");
+		}
+	    }
+	}
+    }
+
+    private boolean checkName(String name, String language, String script, String country, String variant) {
+	if (language.length() > 0 && name.indexOf(language) == -1) {
+	    errln("name '" + name + "' does not contain language '" + language + "'");
+	    return false;
+	}
+	if (script.length() > 0 && name.indexOf(script) == -1) {
+	    errln("name '" + name + "' does not contain script '" + script + "'");
+	    return false;
+	}
+	if (country.length() > 0 && name.indexOf(country) == -1) {
+	    errln("name '" + name + "' does not contain country '" + country + "'");
+	    return false;
+	}
+	if (variant.length() > 0 && name.indexOf(variant) == -1) {
+	    errln("name '" + name + "' does not contain variant '" + variant + "'");
+	    return false;
+	}
+	return true;
+    }
 }

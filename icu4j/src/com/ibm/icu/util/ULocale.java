@@ -1968,6 +1968,10 @@ public final class ULocale implements Serializable {
      * Utility to fetch locale display data from resource bundle tables.
      */
     private static String getTableString(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
+//  	System.out.println("gts table: " + tableName + 
+//  			   " subtable: " + subtableName +
+//  			   " item: " + item +
+//  			   " bundle: " + bundle.getULocale());
         try {
             for (;;) {
                 // special case currency
@@ -1981,15 +1985,22 @@ public final class ULocale implements Serializable {
                         if (subtableName != null) {
                             table = bundle.getWithFallback(subtableName);
                         }
-                        table = table.getWithFallback(item);
+                        table = table.get(item); // no fallback?
                         return table.getString();
                     }
                     catch (MissingResourceException e) {
                         String fallbackLocale = table.getWithFallback("Fallback").getString();
+			if (fallbackLocale.length() == 0) {
+			    fallbackLocale = "root";
+			}
+//  			System.out.println("bundle: " + bundle.getULocale() + " fallback: " + fallbackLocale);
                         if(fallbackLocale.equals(table.getULocale().localeID)){
                         	return item;
                         }
-                        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(table.getString()));
+                        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, 
+										      fallbackLocale);
+//  			System.out.println("fallback from " + table.getULocale() + " to " + fallbackLocale + 
+//  					   ", got bundle " + bundle.getULocale());
                     }
                 }
             }
