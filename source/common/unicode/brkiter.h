@@ -45,17 +45,8 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
-/**
- * Used in registration of break iterators.
- */
-typedef enum {
-  BREAK_CHARACTER,
-  BREAK_WORD,
-  BREAK_LINE,
-  BREAK_SENTENCE,
-  BREAK_TITLE
-} UBreakType;
-  
+typedef const void* UBreakRegistryKey;
+
 /**
  * The BreakIterator class implements methods for finding the location
  * of boundaries in text. BreakIterator is an abstract base class.
@@ -532,14 +523,14 @@ public:
      * if a request for a break iterator of the given kind matches or falls back to
      * this locale.
      */
-    static const UObject* registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status);
+    static UBreakRegistryKey registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status);
 
     /**
      * Unregister a previously-registered BreakIterator using the key returned from the
      * register call.  Key becomes invalid after this call and should not be used again.
      * Returns TRUE if the iterator for the key was successfully unregistered.
      */
-    static UBool unregisterBreak(const UObject* key, UErrorCode& status);
+    static UBool unregisterBreak(UBreakRegistryKey key, UErrorCode& status);
 
     /**
      * Return a StringEnumeration over the available locales, including registered locales.
@@ -553,7 +544,7 @@ public:
     static BreakIterator* makeSentenceInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeTitleInstance(const Locale& loc, UErrorCode& status);
 
-    static BreakIterator* createInstance(const Locale& loc, UBreakType kind, UErrorCode& status);
+    static BreakIterator* createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status);
     static BreakIterator* makeInstance(const Locale& loc, int32_t kind, UErrorCode& status);
 
     friend class ICUBreakIteratorFactory;

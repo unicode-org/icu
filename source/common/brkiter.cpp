@@ -47,7 +47,7 @@ const int32_t BreakIterator::DONE = (int32_t)-1;
 BreakIterator*
 BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 {
-  return createInstance(key, BREAK_WORD, status);
+  return createInstance(key, UBRK_WORD, status);
 }
 
 BreakIterator*
@@ -98,7 +98,7 @@ BreakIterator::makeWordInstance(const Locale& key, UErrorCode& status)
 BreakIterator*
 BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 {
-  return createInstance(key, BREAK_LINE, status);
+  return createInstance(key, UBRK_LINE, status);
 }
 
 BreakIterator*
@@ -148,7 +148,7 @@ BreakIterator::makeLineInstance(const Locale& key, UErrorCode& status)
 BreakIterator*
 BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 {
-  return createInstance(key, BREAK_CHARACTER, status);
+  return createInstance(key, UBRK_CHARACTER, status);
 }
 
 BreakIterator*
@@ -186,7 +186,7 @@ BreakIterator::makeCharacterInstance(const Locale& /* key */, UErrorCode& status
 BreakIterator*
 BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 {
-  return createInstance(key, BREAK_SENTENCE, status);
+  return createInstance(key, UBRK_SENTENCE, status);
 }
 
 BreakIterator*
@@ -225,7 +225,7 @@ BreakIterator::makeSentenceInstance(const Locale& /*key */, UErrorCode& status)
 BreakIterator*
 BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 {
-  return createInstance(key, BREAK_TITLE, status);
+  return createInstance(key, UBRK_TITLE, status);
 }
 
 BreakIterator*
@@ -365,7 +365,7 @@ getService(void)
 // -------------------------------------
 
 BreakIterator*
-BreakIterator::createInstance(const Locale& loc, UBreakType kind, UErrorCode& status)
+BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status)
 {
   if (gService != NULL) {
     return (BreakIterator*)gService->get(loc, kind, status);
@@ -376,16 +376,16 @@ BreakIterator::createInstance(const Locale& loc, UBreakType kind, UErrorCode& st
 
 // -------------------------------------
 
-const UObject* 
-BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status) 
+UBreakRegistryKey
+BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
 {
-  return getService()->registerObject(toAdopt, locale, kind, status);
+  return (UBreakRegistryKey)getService()->registerObject(toAdopt, locale, kind, status);
 }
 
 // -------------------------------------
 
 UBool 
-BreakIterator::unregisterBreak(const UObject* key, UErrorCode& status) 
+BreakIterator::unregisterBreak(UBreakRegistryKey key, UErrorCode& status) 
 {
   if (gService != NULL) {
     return gService->unregisterFactory((Factory*)key, status);
@@ -407,11 +407,11 @@ BreakIterator*
 BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 {
     switch (kind) {
-    case BREAK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
-    case BREAK_WORD: return BreakIterator::makeWordInstance(loc, status);
-    case BREAK_LINE: return BreakIterator::makeLineInstance(loc, status);
-    case BREAK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
-    case BREAK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
+    case UBRK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
+    case UBRK_WORD: return BreakIterator::makeWordInstance(loc, status);
+    case UBRK_LINE: return BreakIterator::makeLineInstance(loc, status);
+    case UBRK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
+    case UBRK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
     default:
       status = U_ILLEGAL_ARGUMENT_ERROR;
       return NULL;

@@ -738,7 +738,7 @@ void RBBIAPITest::TestRegistration() {
   UErrorCode status = U_ZERO_ERROR;
   BreakIterator* thai_word = BreakIterator::createWordInstance("th_TH", status);
   BreakIterator* root_word = BreakIterator::createWordInstance("", status);
-  const UObject* key = BreakIterator::registerBreak(thai_word, "xx", BREAK_WORD, status);
+  UBreakRegistryKey key = BreakIterator::registerBreak(thai_word, "xx", UBRK_WORD, status);
 
   {
 	  if (*thai_word == *root_word) {
