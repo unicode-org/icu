@@ -20,6 +20,7 @@
 #include "ucol_imp.h"
 #include "ucol_tok.h"
 #include "ucol_elm.h"
+#include "bocsu.h"
 
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
@@ -2878,11 +2879,13 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     }
 
     if(compareIdent) {
+      currentSize += u_lengthOfIdenticalLevelRun(s->string, len);
+/*
       UChar *ident = s->string;
       int32_t i = 0;
       int32_t c, prev=0x50;
       int32_t diff;
-      // while(i<len) {
+
       for (;;) {
           if (len >=0 && i>=len) {
               break;
@@ -2899,6 +2902,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           }
           prev=c;
       }
+*/
     }
     return currentSize;
 
@@ -2949,45 +2953,6 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
  * calculation.
  */
 
-/*
- * encode one difference value -0x10ffff..+0x10ffff in 1..3 bytes,
- * preserving lexical order
- */
-static uint8_t *
-writeDiff(int32_t diff, uint8_t *p) {
-    if(diff>=SLOPE_REACH_NEG_1) {
-        if(diff<=SLOPE_REACH_POS_1) {
-            *p++=(uint8_t)(SLOPE_MIDDLE+diff);
-        } else {
-            if(diff<=SLOPE_REACH_POS_2) {
-                *p++=(uint8_t)(SLOPE_START_POS_2+(diff/SLOPE_TAIL_COUNT));
-                *p++=(uint8_t)(SLOPE_MIN+diff%SLOPE_TAIL_COUNT);
-            } else {
-                p[2]=(uint8_t)(SLOPE_MIN+diff%SLOPE_TAIL_COUNT);
-                diff/=SLOPE_TAIL_COUNT;
-                p[1]=(uint8_t)(SLOPE_MIN+diff%SLOPE_TAIL_COUNT);
-                *p=(uint8_t)(SLOPE_START_POS_3+(diff/SLOPE_TAIL_COUNT));
-                p+=3;
-            }
-        }
-    } else {
-        int32_t m;
-
-        if(diff>=SLOPE_REACH_NEG_2) {
-            NEGDIVMOD(diff, SLOPE_TAIL_COUNT, m);
-            *p++=(uint8_t)(SLOPE_START_NEG_2+diff);
-            *p++=(uint8_t)(SLOPE_MIN+m);
-        } else {
-            NEGDIVMOD(diff, SLOPE_TAIL_COUNT, m);
-            p[2]=(uint8_t)(SLOPE_MIN+m);
-            NEGDIVMOD(diff, SLOPE_TAIL_COUNT, m);
-            p[1]=(uint8_t)(SLOPE_MIN+m);
-            *p=(uint8_t)(SLOPE_START_NEG_3+diff);
-            p+=3;
-        }
-    }
-    return p;
-}
 inline void doCaseShift(uint8_t **cases, uint32_t &caseShift) {
   if (caseShift  == 0) {
     *(*cases)++ = UCOL_CASE_BYTE_START;
@@ -3541,7 +3506,7 @@ ucol_calcSortKey(const    UCollator    *coll,
           while(i<len) {
               p0=primaries;
               UTF_NEXT_CHAR(ident, i, len, c);
-              primaries = writeDiff(c-prev, primaries);
+              primaries = u_writeDiff(c-prev, primaries);
               prev=c;
               if(primaries > primarySafeEnd) {
                 if(allocatePrimary == TRUE) {
