@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ByteArrayWrapper.java,v $ 
- * $Date: 2003/09/22 06:24:18 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/09/23 04:16:45 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -76,8 +76,6 @@ public class ByteArrayWrapper
         append(src, start, limit);
     }
     
-    // private methods ---------------------------------------------------
-
     /**
      * Appends the internal byte array from offset size with the 
      * contents of src from offset start to limit. This increases the size of
@@ -85,8 +83,9 @@ public class ByteArrayWrapper
      * @param src source byte array to copy from
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
+     * @draft ICU 2.8
      */
-    private final void append(byte[] src, int start, int limit) 
+    public final void append(byte[] src, int start, int limit) 
     {
         int len = limit - start;
         ensureCapacity(len);
@@ -95,6 +94,22 @@ public class ByteArrayWrapper
     }
 
     /**
+     * Releases the internal byte array to the caller, resets the internal
+     * byte array to null and its size to 0.
+     * @return internal byte array.
+     * @draft ICU 2.8
+     */
+    public final byte[] releaseBytes()
+    {
+        byte result[] = bytes;
+        bytes = null;
+        size = 0;
+        return result;
+    }   
+    
+    // private methods -----------------------------------------------------
+    
+    /**
      * Copies the contents of src byte array from offset srcoff to the 
      * target of tgt byte array at the offset tgtoff.
      * @param src source byte array to copy from
@@ -102,15 +117,17 @@ public class ByteArrayWrapper
      * @param tgt target byte array to copy to
      * @param tgtoff start offset of tgt to copy to
      * @param length size of contents to copy
+     * @draft ICU 2.8
      */
     private static final void copyBytes(byte[] src, int srcoff, byte[] tgt, 
-                                        int tgtoff, int length) {
+                                       int tgtoff, int length) {
         if (length < 64) {
             for (int i = srcoff, n = tgtoff; -- length >= 0; ++ i, ++ n) {
                 tgt[n] = src[i];
             }
-        } else {
+        } 
+        else {
             System.arraycopy(src, srcoff, tgt, tgtoff, length);
         }
-    }            
+    }      
 }

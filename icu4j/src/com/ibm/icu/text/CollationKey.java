@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/09/22 06:24:19 $ 
-* $Revision: 1.18 $
+* $Date: 2003/09/23 04:16:46 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ package com.ibm.icu.text;
  * <code>Collator</code>s might differ.  Hence comparing
  * <code>CollationKey</code>s generated from different
  * <code>Collator</code>s can give incorrect results.</p>
- *
+ 
  * <p>Both the method
  * <code>CollationKey.compareTo(CollationKey)</code> and the method
  * <code>Collator.compare(String, String)</code> compare two strings
@@ -149,6 +149,25 @@ public final class CollationKey implements Comparable
     {
         m_source_ = source;
         m_key_ = key;
+        m_hashCode_ = 0;
+        m_length_ = -1;
+    }
+    
+    /**
+     * CollationKey constructor that forces key to release its internal byte 
+     * array for adoption. key will have a null byte array after this 
+     * construction.
+     * @param source string this CollationKey is to represent
+     * @param key RawCollationKey object that represents the collation order of 
+     *            argument source. 
+     * @see Collator
+     * @see RawCollationKey
+     * @draft ICU 2.8 
+     */
+    public CollationKey(String source, RawCollationKey key)
+    {
+        m_source_ = source;
+        m_key_ = key.releaseBytes();
         m_hashCode_ = 0;
         m_length_ = -1;
     }
@@ -366,17 +385,22 @@ public final class CollationKey implements Comparable
     public int hashCode() 
     {
     	if (m_hashCode_ == 0) {
-    	    int size = m_key_.length >> 1;
-    	    StringBuffer key = new StringBuffer(size);
-    	    int i = 0;
-    	    while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
-        		key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
-        		i += 2;
-    	    }
-    	    if (m_key_[i] != 0) {
-        		key.append((char)(m_key_[i] << 8));
-    	    }
-    	    m_hashCode_ = key.toString().hashCode();
+            if (m_key_ == null) {
+                m_hashCode_ = 1;
+            }
+            else {
+                int size = m_key_.length >> 1;
+        	    StringBuffer key = new StringBuffer(size);
+        	    int i = 0;
+        	    while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
+            		key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
+            		i += 2;
+        	    }
+        	    if (m_key_[i] != 0) {
+            		key.append((char)(m_key_[i] << 8));
+        	    }
+        	    m_hashCode_ = key.toString().hashCode();
+            }
     	}
         return m_hashCode_;
     }
@@ -597,33 +621,6 @@ public final class CollationKey implements Comparable
     
         // trust that neither sort key contained illegally embedded zero bytes
         return new CollationKey(null, result);
-    }
-    
-    // package private constructor ------------------------------------------
-    
-    /**
-     * CollationKey constructor.
-     * @param source string this CollationKey is to represent
-     * @param key RawCollationKey object that represents the collation order of 
-     *            argument source
-     * @see Collator
-     * @see RawCollationKey
-     */
-    CollationKey(String source, RawCollationKey key)
-    {
-        m_source_ = source;
-        m_key_ = new byte[key.size];
-        byte src[] = key.bytes;
-        if (key.size < 64) { // arraycopy slower for elements size < 64
-            for (int i = key.size - 1; i >= 0; i --) {
-                m_key_[i] = src[i];
-            }
-        } 
-        else {
-            System.arraycopy(src, 0, m_key_, 0, key.size);
-        }
-        m_hashCode_ = 0;
-        m_length_ = -1;
     }
 
     // private data members -------------------------------------------------

@@ -173,6 +173,45 @@ public class CollationAPITest extends TestFmwk {
         logln("testing sortkey ends...");
     }
     
+    public void TestRawCollationKey()
+    {
+        // testing constructors
+        RawCollationKey key = new RawCollationKey();
+        if (key.bytes != null || key.size != 0) {
+            errln("Empty default constructor expected to leave the bytes null "
+                  + "and size 0"); 
+        }
+        byte array[] = new byte[128];
+        key = new RawCollationKey(array);
+        if (key.bytes != array || key.size != 0) {
+            errln("Constructor taking an array expected to adopt it and "
+                  + "retaining its size 0"); 
+        }
+        try {
+            key = new RawCollationKey(array, 129);
+            errln("Constructor taking an array and a size > array.length "
+                  + "expected to throw an exception"); 
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        try {
+            key = new RawCollationKey(array, -1);
+            errln("Constructor taking an array and a size < 0 "
+                  + "expected to throw an exception"); 
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        key = new RawCollationKey(array, array.length >> 1);
+        if (key.bytes != array || key.size != (array.length >> 1)) {
+            errln("Constructor taking an array and a size, "
+                  + "expected to adopt it and take the size specified"); 
+        }
+        key = new RawCollationKey(10);
+        if (key.bytes == null || key.bytes.length != 10 || key.size != 0) {
+            errln("Constructor taking a specified capacity expected to "
+                  + "create a new internal byte array with length 10 and "
+                  + "retain size 0"); 
+        }
+    }
+    
     void doAssert(boolean conditions, String message) {
         if (!conditions) {
             errln("Error: " + message);
@@ -761,11 +800,23 @@ public class CollationAPITest extends TestFmwk {
             }
             
             public CollationKey getCollationKey(String source)
-            {   byte temp1[] = source.getBytes();
+            {   return new CollationKey(source, 
+                          getRawCollationKey(source, new RawCollationKey()));
+            }
+            
+            public RawCollationKey getRawCollationKey(String source, 
+                                                      RawCollationKey key)
+            {
+                byte temp1[] = source.getBytes();
                 byte temp2[] = new byte[temp1.length + 1];
                 System.arraycopy(temp1, 0, temp2, 0, temp1.length);
                 temp2[temp1.length] = 0;
-                return new CollationKey(source, temp2);
+                if (key == null) {
+                    key = new RawCollationKey();
+                }
+                key.bytes = temp2; 
+                key.size = temp2.length;
+                return key;
             }
             
             public void setVariableTop(int ce)
