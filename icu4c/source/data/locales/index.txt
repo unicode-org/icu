@@ -117,6 +117,8 @@ index {
         lv_LV,
         mk,
         mk_MK,
+	mt,
+	mt_MT,
         nl,
         nl_BE,
         nl_BE_EURO,
