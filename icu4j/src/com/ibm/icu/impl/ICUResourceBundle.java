@@ -72,7 +72,16 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * The class loader constant to be used with getBundleInstance API
      * @draft ICU 3.0
      */
-    public static final ClassLoader ICU_DATA_CLASS_LOADER = ICUData.class.getClassLoader();
+    public static final ClassLoader ICU_DATA_CLASS_LOADER;
+    static { 
+	ClassLoader loader = ICUData.class.getClassLoader();
+	if (loader == null) { // boot class loader
+	    // security check not performed if our class loader is null,
+	    // which it should be if ICUData's class loader was null
+	    loader = ClassLoader.getSystemClassLoader();
+	}
+	ICU_DATA_CLASS_LOADER = loader;
+    }
 
     /**
      * The name of the resource containing the installed locales
