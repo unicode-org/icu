@@ -281,8 +281,8 @@ NumberFormat::format(int64_t number,
                      UnicodeString& appendTo,
                      FieldPosition& pos) const
 {
-	// default so we don't introduce a new abstract method
-	return format((int32_t)number, appendTo, pos);
+    // default so we don't introduce a new abstract method
+    return format((int32_t)number, appendTo, pos);
 }
 
 // -------------------------------------

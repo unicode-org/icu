@@ -90,12 +90,12 @@ encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length
 }
 
 #define APPEND( buffer, bufLimit, value, num, status){  \
-    if(buffer<bufLimit){					\
-        *buffer++=(value);					\
-    }else{									\
-        *status = U_BUFFER_OVERFLOW_ERROR;	\
-    }										\
-    num++;									\
+    if(buffer<bufLimit){                    \
+        *buffer++=(value);                  \
+    }else{                                  \
+        *status = U_BUFFER_OVERFLOW_ERROR;  \
+    }                                       \
+    num++;                                  \
 }
 
 /**

@@ -28,10 +28,10 @@
     }                                                           \
     else                                                        \
     {                                                           \
-        target[0] = U16_LEAD(c);								\
-        target[1] = U16_TRAIL(c);							    \
+        target[0] = U16_LEAD(c);                                \
+        target[1] = U16_TRAIL(c);                               \
         len=2;                                                  \
-		target +=2;												\
+        target +=2;                                             \
     }                                                           \
 }
 

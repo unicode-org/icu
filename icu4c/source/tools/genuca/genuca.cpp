@@ -782,20 +782,20 @@ write_uca_table(const char *filename,
     UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     /* test for NULL */
-	if(myD == NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		fclose(data);
-		return 0;
-	}
+    if(myD == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        fclose(data);
+        return 0;
+    }
     uprv_memset(myD, 0, sizeof(UCATableHeader));
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
     /* test for NULL */
-	if(opts == NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		uprv_free(myD);
-		fclose(data);
-		return 0;
-	}
+    if(opts == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(myD);
+        fclose(data);
+        return 0;
+    }
     uprv_memset(opts, 0, sizeof(UColOptionSet));
     UChar contractionCEs[256][3];
     uprv_memset(contractionCEs, 0, 256*3*sizeof(UChar));

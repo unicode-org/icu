@@ -405,9 +405,9 @@ BreakIterator*
 BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 {
 
-	if (U_FAILURE(status)) {
-		return NULL;
-	}
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
 
     BreakIterator *result = NULL;
     switch (kind) {
@@ -430,9 +430,9 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
-	if (U_FAILURE(status)) {
-		return NULL;
-	}
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
 
     return result;
 }

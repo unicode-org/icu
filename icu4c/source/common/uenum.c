@@ -118,9 +118,9 @@ uenum_nextDefault(UEnumeration* en,
     if (en->uNext != NULL) {
         char *tempCharVal;
         const UChar *tempUCharVal = en->uNext(en, resultLength, status);
-		if (tempUCharVal == NULL) {
-		    return NULL;
-		}
+        if (tempUCharVal == NULL) {
+            return NULL;
+        }
         tempCharVal = (char*)
             _getBuffer(en, (*resultLength+1) * sizeof(char));
         if (!tempCharVal) {

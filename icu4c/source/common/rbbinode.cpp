@@ -54,7 +54,7 @@ RBBINode::RBBINode(NodeType t) : UMemory() {
     fNullable     = FALSE;
     fLookAheadEnd = FALSE;
     fVal          = 0;
-	fPrecedence   = precZero;
+    fPrecedence   = precZero;
 
     UErrorCode     status = U_ZERO_ERROR;
     fFirstPosSet  = new UVector(status);  // TODO - get a real status from somewhere

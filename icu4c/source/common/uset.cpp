@@ -41,7 +41,7 @@ uset_close(USet* set) {
 
 U_CAPI void U_EXPORT2
 uset_set(USet* set,
-	 UChar32 start, UChar32 end) {
+     UChar32 start, UChar32 end) {
     ((UnicodeSet*) set)->set(start, end);
 }
 

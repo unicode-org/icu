@@ -223,9 +223,9 @@ void CharIterTest::TestConstructionAndEquality() {
     if (test1->hashCode() != test5->hashCode())
         errln("hashCode() failed:  identical objects have different hash codes");
 
-	if(test1->getLength() != testText.length()){
-		errln("getLength of CharacterIterator failed");
-	}
+    if(test1->getLength() != testText.length()){
+        errln("getLength of CharacterIterator failed");
+    }
     test1->getText(result1);
     test1b->getText(result2);
     test1c->getText(result3);

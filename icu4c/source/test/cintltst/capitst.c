@@ -30,7 +30,7 @@
 #include "putilimp.h"
 
 static void TestAttribute(void);
-        int TestBufferSize();	/* defined in "colutil.c" */
+        int TestBufferSize();    /* defined in "colutil.c" */
 
 
     
@@ -517,10 +517,10 @@ void TestRuleBasedColl()
         /* testing with en since thai has its own tailoring */
         uint32_t ce = ucol_next(iter1, &status);
         uint32_t ce2 = ucol_next(iter2, &status);
-    	if(U_FAILURE(status)) {
+        if(U_FAILURE(status)) {
             log_err("ERROR: CollationElement iterator creation failed.: %s\n", myErrorName(status));
             return;
-    	}
+        }
         if (ce2 != ce) {
              log_err("! modifier test failed");
         }

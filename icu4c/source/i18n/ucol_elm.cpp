@@ -1017,7 +1017,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
 
   if(element->noOfCEs == 1) {
     if(element->isThai == FALSE) {
-		  element->mapCE = element->CEs[0];      
+          element->mapCE = element->CEs[0];      
     } else { /* add thai - totally bad here */
       expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
         | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4) 
@@ -1051,10 +1051,10 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
         | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
         | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
     } else {
-	  expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-		| ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
-		& 0xFFFFF0);
-		
+      expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+        | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
+        & 0xFFFFF0);
+        
       for(i = 1; i<element->noOfCEs; i++) {
         uprv_uca_addExpansion(expansions, element->CEs[i], status);
       }
@@ -1084,9 +1084,9 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
   UChar32 uniChar = 0;
   //printElement(element);
   if ((element->cSize == 2) && U16_IS_LEAD(element->uchars[0])){
-	  uniChar = U16_GET_SUPPLEMENTARY(element->uchars[0], element->uchars[1]);	  
+      uniChar = U16_GET_SUPPLEMENTARY(element->uchars[0], element->uchars[1]);
   } else if (element->cSize == 1){
-	  uniChar = element->uchars[0];
+      uniChar = element->uchars[0];
   }
 
   // Here, we either have one normal CE OR mapCE is set. Therefore, we stuff only
@@ -1096,17 +1096,17 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
   // a special, further processing will occur. If it's a simple CE, we'll return due
   // to how the loop is constructed.
   if (uniChar != 0 && u_isdigit(uniChar)){
-	  expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (DIGIT_TAG<<UCOL_TAG_SHIFT) | 1); // prepare the element
+      expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (DIGIT_TAG<<UCOL_TAG_SHIFT) | 1); // prepare the element
       if(element->mapCE) { // if there is an expansion, we'll pick it here
         expansion |= ((uprv_uca_addExpansion(expansions, element->mapCE, status)+(headersize>>2))<<4);
       } else {
-	    expansion |= ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4);
+        expansion |= ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4);
       }
-	  element->mapCE = expansion;
-	  
-	  // Need to go back to the beginning of the digit string if in the middle!
+      element->mapCE = expansion;
+      
+      // Need to go back to the beginning of the digit string if in the middle!
       if(uniChar <= 0xFFFF) { // supplementaries are always unsafe. API takes UChars
-	    unsafeCPSet(t->unsafeCP, (UChar)uniChar);
+        unsafeCPSet(t->unsafeCP, (UChar)uniChar);
       }
   }
 

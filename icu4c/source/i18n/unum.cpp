@@ -565,7 +565,7 @@ unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
     if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
-	attr == UNUM_ROUNDING_INCREMENT) {
+    attr == UNUM_ROUNDING_INCREMENT) {
         return ((const DecimalFormat*)fmt)->getRoundingIncrement();
     } else {
         return -1.0;
@@ -578,7 +578,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             double                 newValue)
 {
     if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
-	attr == UNUM_ROUNDING_INCREMENT) {   
+    attr == UNUM_ROUNDING_INCREMENT) {   
         ((DecimalFormat*)fmt)->setRoundingIncrement(newValue);
     }
 }
@@ -635,16 +635,16 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
       U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
       const RuleBasedNumberFormat* rbnf = (const RuleBasedNumberFormat*)fmt;
       if (tag == UNUM_DEFAULT_RULESET) {
-	res = rbnf->getDefaultRuleSetName();
+    res = rbnf->getDefaultRuleSetName();
       } else if (tag == UNUM_PUBLIC_RULESETS) {
-	int32_t count = rbnf->getNumberOfRuleSetNames();
-	for (int i = 0; i < count; ++i) {
-	  res += rbnf->getRuleSetName(i);
-	  res += (UChar)0x003b; // semicolon
-	}
+    int32_t count = rbnf->getNumberOfRuleSetNames();
+    for (int i = 0; i < count; ++i) {
+      res += rbnf->getRuleSetName(i);
+      res += (UChar)0x003b; // semicolon
+    }
       } else {
-	*status = U_UNSUPPORTED_ERROR;
-	return -1;
+    *status = U_UNSUPPORTED_ERROR;
+    return -1;
       }
     }
     
@@ -698,9 +698,9 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
     } else {
       U_ASSERT(((NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
       if (tag == UNUM_DEFAULT_RULESET) {
-	((RuleBasedNumberFormat*)fmt)->setDefaultRuleSet(newValue, *status);
+    ((RuleBasedNumberFormat*)fmt)->setDefaultRuleSet(newValue, *status);
       } else {
-	*status = U_UNSUPPORTED_ERROR;
+    *status = U_UNSUPPORTED_ERROR;
       }
     }
 }

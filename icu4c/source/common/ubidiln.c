@@ -608,16 +608,16 @@ ubidi_getRuns(UBiDi *pBiDi) {
                 ADD_ODD_BIT_FROM_LEVEL(runs[0].logicalStart, levels[runs[0].logicalStart]);
                 limit=runs[0].visualLimit;
 
-				/* this loop will also handle the trailing WS run */
+                /* this loop will also handle the trailing WS run */
                 for(i=1; i<runCount; ++i) {
                     ADD_ODD_BIT_FROM_LEVEL(runs[i].logicalStart, levels[runs[i].logicalStart]);
                     limit=runs[i].visualLimit+=limit;
                 }
 
                 /* Set the "odd" bit for the trailing WS run. */
-				/* For a RTL paragraph, it will be the *first* run in visual order. */
+                /* For a RTL paragraph, it will be the *first* run in visual order. */
                 if(runIndex<runCount) {
-					int32_t trailingRun = ((pBiDi->paraLevel & 1) != 0)? 0 : runIndex;
+                    int32_t trailingRun = ((pBiDi->paraLevel & 1) != 0)? 0 : runIndex;
 
                     ADD_ODD_BIT_FROM_LEVEL(runs[trailingRun].logicalStart, pBiDi->paraLevel);
                 }

@@ -18,8 +18,8 @@
  *                 Two formats for the table of contents are supported, which is
  *                 why there is an abstract inteface involved.
  *
- */               
- 
+ */
+
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
 #include "cstring.h"
@@ -91,7 +91,7 @@ static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     const UDataOffsetTOC *toc = (UDataOffsetTOC *)pData->toc;
     if (toc != NULL) {
         retVal = toc->count;
-    } 
+    }
     return retVal;
 }
 
@@ -125,8 +125,8 @@ offsetTOCLookupFn(const UDataMemory *pData,
         }
         for (;;) {
             number = (start+limit)/2;
-            if (lastNumber == number) {	/* Have we moved? */
-                break;	/* We haven't moved, and it wasn't found. */
+            if (lastNumber == number) { /* Have we moved? */
+                break;  /* We haven't moved, and it wasn't found. */
             }
             lastNumber = number;
             strResult = uprv_strcmp(tocEntryName, base+entry[number].nameOffset);
@@ -191,7 +191,7 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
 
         /* perform a binary search for the data in the common data's table of contents */
         start=0;
-        limit=toc->count;   
+        limit=toc->count;
         lastNumber=limit;
 
         if (limit == 0) {       /* Stub common data library used during build is empty. */
@@ -200,8 +200,8 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
 
         for (;;) {
             number = (start+limit)/2;
-            if (lastNumber == number) {	/* Have we moved? */
-                break;	/* We haven't moved, and it wasn't found. */
+            if (lastNumber == number) { /* Have we moved? */
+                break;  /* We haven't moved, and it wasn't found. */
             }
             lastNumber = number;
             strResult = uprv_strcmp(name, toc->entry[number].entryName);

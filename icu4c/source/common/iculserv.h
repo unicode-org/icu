@@ -261,7 +261,7 @@ protected:
      * Return true if this id is one the factory supports (visible or 
      * otherwise).
      */
- 	virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
+     virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
 
    /**
      * Return the set of ids that this factory supports (visible or 
@@ -328,10 +328,10 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
     void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
 
  protected:
-	/**
+    /**
      * Return true if this id is equal to the locale name.
      */
- 	virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
+    virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
 
 
 public:

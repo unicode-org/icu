@@ -658,8 +658,8 @@ typedef enum {
                              /* It fits in a single 32 bit CE and is used instead of expansion to save */
                              /* space without affecting the performance (hopefully) */
                              
-	DIGIT_TAG = 13,			/* COllate Digits As Numbers (CODAN) implementation */
-	
+    DIGIT_TAG = 13,          /* COllate Digits As Numbers (CODAN) implementation */
+    
     CE_TAGS_COUNT
 } UColCETags;
 

@@ -123,7 +123,7 @@ doBiDiTest() {
         pLine=ubidi_open();
         if(pLine!=NULL) {
             doTests(pBiDi, pLine, FALSE);
-			doTests(pBiDi, pLine, TRUE);
+            doTests(pBiDi, pLine, TRUE);
         } else {
             log_err("ubidi_open() returned NULL, out of memory\n");
         }
@@ -463,18 +463,18 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBoo
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDiLevel level, level2;
 
-	if (countRunsFirst) {
-		log_verbose("Calling ubidi_countRuns() first.\n");
+    if (countRunsFirst) {
+        log_verbose("Calling ubidi_countRuns() first.\n");
 
-		runCount = ubidi_countRuns(pBiDi, &errorCode);
+        runCount = ubidi_countRuns(pBiDi, &errorCode);
 
-		if(U_FAILURE(errorCode)) {
-			log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
-			return;
-		}
-	} else {
-		log_verbose("Calling ubidi_getLogicalMap() first.\n");
-	}
+        if(U_FAILURE(errorCode)) {
+            log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
+            return;
+        }
+    } else {
+        log_verbose("Calling ubidi_getLogicalMap() first.\n");
+    }
 
     testReordering(pBiDi, testNumber);
 
@@ -529,13 +529,13 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, int32_t lineStart, UBoo
         }
     }
 
-	if (! countRunsFirst) {
-		runCount=ubidi_countRuns(pBiDi, &errorCode);
-		if(U_FAILURE(errorCode)) {
-			log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
-			return;
-		}
-	}
+    if (! countRunsFirst) {
+        runCount=ubidi_countRuns(pBiDi, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
+            return;
+        }
+    }
 
     for(logicalIndex=0; logicalIndex<len;) {
         level=ubidi_getLevelAt(pBiDi, logicalIndex);

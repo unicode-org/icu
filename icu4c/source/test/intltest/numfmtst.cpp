@@ -67,9 +67,9 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(20,TestSymbolsWithBadLocale);
         CASE(21,TestAdoptDecimalFormatSymbols);
 
-		CASE(22,TestScientific2);
-		CASE(23,TestScientificGrouping);
-		CASE(24,TestInt64);
+        CASE(22,TestScientific2);
+        CASE(23,TestScientificGrouping);
+        CASE(24,TestInt64);
 
         CASE(25,TestPerMill);
         CASE(26,TestIllegalPatterns);
@@ -351,134 +351,134 @@ NumberFormatTest::TestExponential(void)
 
 void
 NumberFormatTest::TestScientific2() {
-	// jb 2552
+    // jb 2552
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat* fmt = (DecimalFormat*)NumberFormat::createCurrencyInstance("en_US", status);
-	if (U_SUCCESS(status)) {
-		double num = 12.34;
-		expect(*fmt, num, "$12.34");
-		fmt->setScientificNotation(TRUE);
-		expect(*fmt, num, "$1.23E1");
-		fmt->setScientificNotation(FALSE);
-		expect(*fmt, num, "$12.34");
-	}
-	delete fmt;
+    if (U_SUCCESS(status)) {
+        double num = 12.34;
+        expect(*fmt, num, "$12.34");
+        fmt->setScientificNotation(TRUE);
+        expect(*fmt, num, "$1.23E1");
+        fmt->setScientificNotation(FALSE);
+        expect(*fmt, num, "$12.34");
+    }
+    delete fmt;
 }
 
 void 
 NumberFormatTest::TestScientificGrouping() {
-	// jb 2552
+    // jb 2552
     UErrorCode status = U_ZERO_ERROR;
-	DecimalFormat fmt("##0.00E0",status);
-	if (U_SUCCESS(status)) {
-		expect(fmt, .01234, "12.3E-3");
-		expect(fmt, .1234, "123E-3");
-		expect(fmt, 1.234, "1.23E0");
-		expect(fmt, 12.34, "12.3E0");
-		expect(fmt, 123.4, "123E0");
-		expect(fmt, 1234., "1.23E3");
-	}
+    DecimalFormat fmt("##0.00E0",status);
+    if (U_SUCCESS(status)) {
+        expect(fmt, .01234, "12.3E-3");
+        expect(fmt, .1234, "123E-3");
+        expect(fmt, 1.234, "1.23E0");
+        expect(fmt, 12.34, "12.3E0");
+        expect(fmt, 123.4, "123E0");
+        expect(fmt, 1234., "1.23E3");
+    }
 }
 
 static void setFromString(DigitList& dl, const char* str) {
-	char c;
-	UBool decimalSet = FALSE;
-	dl.clear();
-	while ((c = *str++)) {
-		if (c == '-') {
-			dl.fIsPositive = FALSE;
-		} else if (c == '+') {
-			dl.fIsPositive = TRUE;
-		} else if (c == '.') {
-			dl.fDecimalAt = dl.fCount;
-			decimalSet = TRUE;
-		} else {
-			dl.append(c);
-		}
-	}
-	if (!decimalSet) {
-		dl.fDecimalAt = dl.fCount;
-	}
+    char c;
+    UBool decimalSet = FALSE;
+    dl.clear();
+    while ((c = *str++)) {
+        if (c == '-') {
+            dl.fIsPositive = FALSE;
+        } else if (c == '+') {
+            dl.fIsPositive = TRUE;
+        } else if (c == '.') {
+            dl.fDecimalAt = dl.fCount;
+            decimalSet = TRUE;
+        } else {
+            dl.append(c);
+        }
+    }
+    if (!decimalSet) {
+        dl.fDecimalAt = dl.fCount;
+    }
 }
 
 void
 NumberFormatTest::TestInt64() {
     UErrorCode status = U_ZERO_ERROR;
-	DecimalFormat fmt("#.#E0",status);
-	fmt.setMaximumFractionDigits(20);
-	if (U_SUCCESS(status)) {
-		expect(fmt, (Formattable)(int64_t)0, "0E0");
-		expect(fmt, (Formattable)(int64_t)-1, "-1E0");
-		expect(fmt, (Formattable)(int64_t)1, "1E0");
-		expect(fmt, (Formattable)(int64_t)2147483647, "2.147483647E9");
-		expect(fmt, (Formattable)((int64_t)-2147483647-1), "-2.147483648E9");
-		expect(fmt, (Formattable)(int64_t)U_INT64_MAX, "9.223372036854775807E18");
-		expect(fmt, (Formattable)(int64_t)U_INT64_MIN, "-9.223372036854775808E18");
-	}
+    DecimalFormat fmt("#.#E0",status);
+    fmt.setMaximumFractionDigits(20);
+    if (U_SUCCESS(status)) {
+        expect(fmt, (Formattable)(int64_t)0, "0E0");
+        expect(fmt, (Formattable)(int64_t)-1, "-1E0");
+        expect(fmt, (Formattable)(int64_t)1, "1E0");
+        expect(fmt, (Formattable)(int64_t)2147483647, "2.147483647E9");
+        expect(fmt, (Formattable)((int64_t)-2147483647-1), "-2.147483648E9");
+        expect(fmt, (Formattable)(int64_t)U_INT64_MAX, "9.223372036854775807E18");
+        expect(fmt, (Formattable)(int64_t)U_INT64_MIN, "-9.223372036854775808E18");
+    }
 
-	// also test digitlist
-	int64_t int64max = U_INT64_MAX;
-	int64_t int64min = U_INT64_MIN;
-	const char* int64maxstr = "9223372036854775807";
-	const char* int64minstr = "-9223372036854775808";
-	UnicodeString fail("fail: ");
+    // also test digitlist
+    int64_t int64max = U_INT64_MAX;
+    int64_t int64min = U_INT64_MIN;
+    const char* int64maxstr = "9223372036854775807";
+    const char* int64minstr = "-9223372036854775808";
+    UnicodeString fail("fail: ");
 
-	// test max int64 value
-	DigitList dl;
-	setFromString(dl, int64maxstr);
-	{
-		if (!dl.fitsIntoInt64(FALSE)) {
-			errln(fail + int64maxstr + " didn't fit");
-		}
-		int64_t int64Value = dl.getInt64();
-		if (int64Value != int64max) {
-			errln(fail + int64maxstr);
-		}
-		dl.set(int64Value);
-		int64Value = dl.getInt64();
-		if (int64Value != int64max) {
-			errln(fail + int64maxstr);
-		}
-	}
-	// test negative of max int64 value (1 shy of min int64 value)
-	dl.fIsPositive = FALSE;
-	{
-		if (!dl.fitsIntoInt64(FALSE)) {
-			errln(fail + "-" + int64maxstr + " didn't fit");
-		}
-		int64_t int64Value = dl.getInt64();
-		if (int64Value != -int64max) {
-			errln(fail + "-" + int64maxstr);
-		}
-		dl.set(int64Value);
-		int64Value = dl.getInt64();
-		if (int64Value != -int64max) {
-			errln(fail + "-" + int64maxstr);
-		}
-	}
-	// test min int64 value
-	setFromString(dl, int64minstr);
-	{
-		if (!dl.fitsIntoInt64(FALSE)) {
-			errln(fail + "-" + int64minstr + " didn't fit");
-		}
-		int64_t int64Value = dl.getInt64();
-		if (int64Value != int64min) {
-			errln(fail + int64minstr);
-		}
-		dl.set(int64Value);
-		int64Value = dl.getInt64();
-		if (int64Value != int64min) {
-			errln(fail + int64minstr);
-		}
-	}
-	// test negative of min int 64 value (1 more than max int64 value)
-	dl.fIsPositive = TRUE; // won't fit
-	{
-		if (dl.fitsIntoInt64(FALSE)) {
-			errln(fail + "-(" + int64minstr + ") didn't fit");
-		}
-	}
+    // test max int64 value
+    DigitList dl;
+    setFromString(dl, int64maxstr);
+    {
+        if (!dl.fitsIntoInt64(FALSE)) {
+            errln(fail + int64maxstr + " didn't fit");
+        }
+        int64_t int64Value = dl.getInt64();
+        if (int64Value != int64max) {
+            errln(fail + int64maxstr);
+        }
+        dl.set(int64Value);
+        int64Value = dl.getInt64();
+        if (int64Value != int64max) {
+            errln(fail + int64maxstr);
+        }
+    }
+    // test negative of max int64 value (1 shy of min int64 value)
+    dl.fIsPositive = FALSE;
+    {
+        if (!dl.fitsIntoInt64(FALSE)) {
+            errln(fail + "-" + int64maxstr + " didn't fit");
+        }
+        int64_t int64Value = dl.getInt64();
+        if (int64Value != -int64max) {
+            errln(fail + "-" + int64maxstr);
+        }
+        dl.set(int64Value);
+        int64Value = dl.getInt64();
+        if (int64Value != -int64max) {
+            errln(fail + "-" + int64maxstr);
+        }
+    }
+    // test min int64 value
+    setFromString(dl, int64minstr);
+    {
+        if (!dl.fitsIntoInt64(FALSE)) {
+            errln(fail + "-" + int64minstr + " didn't fit");
+        }
+        int64_t int64Value = dl.getInt64();
+        if (int64Value != int64min) {
+            errln(fail + int64minstr);
+        }
+        dl.set(int64Value);
+        int64Value = dl.getInt64();
+        if (int64Value != int64min) {
+            errln(fail + int64minstr);
+        }
+    }
+    // test negative of min int 64 value (1 more than max int64 value)
+    dl.fIsPositive = TRUE; // won't fit
+    {
+        if (dl.fitsIntoInt64(FALSE)) {
+            errln(fail + "-(" + int64minstr + ") didn't fit");
+        }
+    }
 }
 
 // -------------------------------------

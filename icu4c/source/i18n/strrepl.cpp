@@ -295,13 +295,13 @@ UnicodeString& StringReplacer::toReplacerPattern(UnicodeString& rule,
 void StringReplacer::addReplacementSetTo(UnicodeSet& toUnionTo) const {
     UChar32 ch;
     for (int32_t i=0; i<output.length(); i+=UTF_CHAR_LENGTH(ch)) {
-	ch = output.char32At(i);
-	UnicodeReplacer* r = data->lookupReplacer(ch);
-	if (r == NULL) {
-	    toUnionTo.add(ch);
-	} else {
-	    r->addReplacementSetTo(toUnionTo);
-	}
+    ch = output.char32At(i);
+    UnicodeReplacer* r = data->lookupReplacer(ch);
+    if (r == NULL) {
+        toUnionTo.add(ch);
+    } else {
+        r->addReplacementSetTo(toUnionTo);
+    }
     }
 }
 
