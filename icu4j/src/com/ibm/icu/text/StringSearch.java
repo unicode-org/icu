@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2000/03/10 04:07:24 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/12 00:22:19 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -283,7 +283,7 @@ public final class StringSearch extends SearchIterator
             int patIndex = normLen;
             int tval = 0, pval = 0;
             boolean getP = true;
-
+            
             iter.setOffset(index);
             matchEnd = index;
             
@@ -326,7 +326,7 @@ public final class StringSearch extends SearchIterator
             if (DEBUG) debug(" end of inner loop: patIndex=" + patIndex + " iter=" + iter.getOffset());
             if (DEBUG) debug("   getP=" + getP);
             
-            if (iter.getOffset() <= start) {
+            if (index == matchEnd) {
                 // We hit the beginning of the text being searched, which is
                 // possible if it contains lots of ignorable characters.
                 // Advance one character and try again.
@@ -559,13 +559,15 @@ public final class StringSearch extends SearchIterator
     private int getShift( int curValue, int curIndex ) {
         int shiftAmt = shiftTable[hash(curValue)];
 
-        if (minLen != maxLen) {
+        // if (minLen != maxLen) {
             int adjust = normLen - curIndex;
-            if (shiftAmt > adjust + 1) {
+            // if (shiftAmt > adjust + 1) {
+            if (adjust > 1 && shiftAmt >= adjust) {
                 if (DEBUG) debug("getShift: adjusting by " + adjust);
-                shiftAmt -= adjust;
+                // shiftAmt -= adjust;
+                shiftAmt -= adjust - 1;
             }
-        }
+        // }
         return shiftAmt;
     }
 
@@ -580,13 +582,19 @@ public final class StringSearch extends SearchIterator
     private int getBackShift( int curValue, int curIndex ) {
         int shiftAmt = backShiftTable[hash(curValue)];
 
-        if (minLen != maxLen) {
-            int adjust = normLen - (minLen - curIndex);
+        // if (minLen != maxLen) {
+            int adjust = curIndex;
+            // int adjust = normLen - (minLen - curIndex);
+            if (adjust > 1 && shiftAmt > adjust) {
+                shiftAmt -= adjust - 1;
+            }
+            /*
             if (shiftAmt > adjust + 1) {
                 if (DEBUG) debug("getBackShift: adjusting by " + adjust);
                 shiftAmt -= adjust;
             }
-        }
+            */
+        // }
         return shiftAmt;
     }
 
