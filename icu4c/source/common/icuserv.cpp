@@ -425,7 +425,7 @@ const char ServiceListener::fgClassID = '\0';
 
  // Record the actual id for this service in the cache, so we can return it
  // even if we succeed later with a different id.
-class CacheEntry {
+class CacheEntry : public UMemory {
 private:
   int32_t refcount;
 
@@ -500,7 +500,7 @@ deleteUObject(void *obj) {
  ******************************************************************
  */
 
-class DNCache {
+class DNCache : public UMemory {
 public:
   Hashtable cache;
   const Locale locale;
