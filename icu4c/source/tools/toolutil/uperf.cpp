@@ -57,7 +57,7 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     sourceDir = ".";
     lines = NULL;
     numLines = 0;
-    line_mode = FALSE;
+    line_mode = TRUE;
     buffer = NULL;
     bufferLen = 0;
     verbose = FALSE;
@@ -151,6 +151,7 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
 
 ULine* UPerfTest::getLines(UErrorCode& status){
     lines     = new ULine[MAXLINES];
+    int maxLines = MAXLINES;
     numLines=0;
     const UChar* line=NULL;
     int32_t len =0;
@@ -165,9 +166,19 @@ ULine* UPerfTest::getLines(UErrorCode& status){
             
             numLines++;
             len = 0;
-            if (numLines >= MAXLINES) {
-                fprintf(stderr, "File too big.  Max number of lines is %d\n", MAXLINES);
-                status= U_ILLEGAL_ARGUMENT_ERROR;
+            if (numLines >= maxLines) {
+                maxLines += MAXLINES;
+                ULine *newLines = new ULine[maxLines];
+                if(newLines == NULL) {
+                    fprintf(stderr, "Out of memory reading line %d.\n", numLines);
+                    status= U_MEMORY_ALLOCATION_ERROR;
+                    delete lines;
+                    return NULL;
+                }
+
+                memcpy(newLines, lines, numLines*sizeof(ULine));
+                delete lines;
+                lines = newLines;
             }
     }
     if(status==U_EOF){
