@@ -946,9 +946,9 @@ void UnicodeSetTest::TestPosixClasses() {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(s1==s2);
     }
-    UVersionInfo ICU_33 = {3, 3, 0, 0};  // Time Bomb for bug 4199
+    UVersionInfo ICU_34 = {3, 4, 0, 0};  // Time Bomb for bug 4199
     {
-        if (isICUVersionAtLeast(ICU_33)) {  // Time Bomb Test
+        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
             UErrorCode status = U_ZERO_ERROR;
             UnicodeSet s1("[:alnum:]", status);
             UnicodeSet s2("[\\p{Alphabetic}\\p{DecimalNumber}]", status);
@@ -957,7 +957,7 @@ void UnicodeSetTest::TestPosixClasses() {
         }
     }
     {
-        if (isICUVersionAtLeast(ICU_33)) {  // Time Bomb Test
+        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
             UErrorCode status = U_ZERO_ERROR;
             UnicodeSet s1("[:space:]", status);
             UnicodeSet s2("\\p{Whitespace}", status);
@@ -974,7 +974,7 @@ void UnicodeSetTest::TestPosixClasses() {
         TEST_ASSERT(s1==s2);
     }
     {
-        if (isICUVersionAtLeast(ICU_33)) {  // Time Bomb Test
+        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
             UErrorCode status = U_ZERO_ERROR;
             UnicodeSet s1("[:cntrl:]", status);
             TEST_ASSERT_SUCCESS(status);
@@ -984,19 +984,16 @@ void UnicodeSetTest::TestPosixClasses() {
         }
     }
     {
-        if (isICUVersionAtLeast(ICU_33)) {  // Time Bomb Test
-
-            UErrorCode status = U_ZERO_ERROR;
-            UnicodeSet s1("[:graph:]", status);
-            TEST_ASSERT_SUCCESS(status);
-            UnicodeSet s2("[^\\p{Whitespace}\\p{Control}\\p{Format}"
-                "\\p{Surrogate}\\p{Unassigned}]", status);
-            TEST_ASSERT_SUCCESS(status);
-            TEST_ASSERT(s1==s2);
-        }
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeSet s1("[:graph:]", status);
+        TEST_ASSERT_SUCCESS(status);
+        UnicodeSet s2("[^\\p{Whitespace}\\p{Control}\\p{Format}"
+            "\\p{Surrogate}\\p{Unassigned}]", status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT(s1==s2);
     }
     {
-        if (isICUVersionAtLeast(ICU_33)) {  // Time Bomb Test
+        if (isICUVersionAtLeast(ICU_34)) {  // Time Bomb Test
             UErrorCode status = U_ZERO_ERROR;
             UnicodeSet s1("[:print:]", status);
             TEST_ASSERT_SUCCESS(status);

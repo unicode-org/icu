@@ -99,6 +99,7 @@ static const struct C99_Map {
     //{ "upper", u_isupper, UPROPS_SRC_CASE },
 
     // MUST be in SORTED order
+    { "alnum", u_isalnum, UPROPS_SRC_CHAR },
     { "blank", u_isblank, UPROPS_SRC_PROPSVEC },
     { "cntrl", u_iscntrl, UPROPS_SRC_CHAR },
     { "digit", u_isdigit, UPROPS_SRC_CHAR },
@@ -109,7 +110,7 @@ static const struct C99_Map {
     { "title", u_istitle, UPROPS_SRC_CHAR },
     { "xdigit", u_isxdigit, UPROPS_SRC_CHAR }
 };
-#define C99_COUNT (9)
+#define C99_COUNT (10)
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
