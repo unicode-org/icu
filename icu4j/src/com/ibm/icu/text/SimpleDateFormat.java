@@ -10,6 +10,7 @@ package com.ibm.icu.text;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -321,13 +322,13 @@ public class SimpleDateFormat extends DateFormat {
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
-            ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, loc);
-            
+            CalendarData calData = new CalendarData(new ULocale(loc), null); // TODO: type?
+             
             // TODO: get correct actual/valid locale here
-            ULocale uloc = r.getULocale();
+            ULocale uloc = calData.getULocale();
             setLocale(uloc, uloc);
             
-            dateTimePatterns = r.getStringArray("DateTimePatterns");
+            dateTimePatterns = calData.getStringArray("DateTimePatterns");
             /* update cache */
             cachedLocaleData.put(loc, dateTimePatterns);
         }

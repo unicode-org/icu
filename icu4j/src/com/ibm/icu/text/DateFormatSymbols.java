@@ -9,6 +9,7 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
@@ -85,9 +86,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols()
     {
-        initializeData(Locale.getDefault());
+        initializeData(ULocale.getDefault(), ""); // TODO: type?
     }
 
+    
     /**
      * Construct a DateFormatSymbols object by loading format data from
      * resources for the given locale.
@@ -99,7 +101,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     public DateFormatSymbols(Locale locale)
     {
-        initializeData(locale);
+        initializeData(new ULocale(locale), ""); // TODO: type?
     }
 
     /**
@@ -408,29 +410,35 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     static final int millisPerHour = 60*60*1000;
 
 
-    private void initializeData(Locale desiredLocale)
+    protected void initializeData(ULocale desiredLocale, String type)
     {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,desiredLocale);
-
+        CalendarData calData = new CalendarData(desiredLocale, type);
+        initializeData(desiredLocale, calData);
+    }
+    
+    protected void initializeData(ULocale desiredLocale, CalendarData calData)
+    {
         // FIXME: cache only ResourceBundle. Hence every time, will do
         // getObject(). This won't be necessary if the Resource itself
         // is cached.
-        eras = rb.getStringArray("Eras");
-        months = rb.getStringArray("MonthNames");
-        shortMonths = rb.getStringArray("MonthAbbreviations");
+        eras = calData.getStringArray("eras");
+        months = calData.getStringArray("monthNames", "wide");
+        shortMonths = calData.getStringArray("monthNames", "abbreviated");
 
-        String[] lWeekdays = rb.getStringArray("DayNames");
+        String[] lWeekdays = calData.getStringArray("dayNames", "wide");
         weekdays = new String[8];
         weekdays[0] = "";  // 1-based
         System.arraycopy(lWeekdays, 0, weekdays, 1, lWeekdays.length);
 
-        String[] sWeekdays = rb.getStringArray("DayAbbreviations");
+        String[] sWeekdays = calData.getStringArray("dayNames", "abbreviated");
         shortWeekdays = new String[8];
         shortWeekdays[0] = "";  // 1-based
         System.arraycopy(sWeekdays, 0, shortWeekdays, 1, sWeekdays.length);
 
-        ampms = rb.getStringArray("AmPmMarkers");
+        ampms = calData.getStringArray("AmPmMarkers");
 
+        // These really do use rb and not calData
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,desiredLocale);
         // hack around class cast problem
         // zoneStrings = (String[][])rb.getObject("zoneStrings");
         ICUResourceBundle zoneObject = rb.get("zoneStrings");
@@ -609,7 +617,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public DateFormatSymbols(Calendar cal, Locale locale) {
-        this(cal==null?null:cal.getClass(), locale);
+        initializeData(new ULocale(locale), cal.getType());
     }
 
     /**
@@ -619,24 +627,12 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.2
      */
     public DateFormatSymbols(Class calendarClass, Locale locale) {
-        this(locale); // old-style construction
-        if (calendarClass != null) {
-            ResourceBundle bundle = null;
-            try {
-                bundle = getDateFormatBundle(calendarClass, locale);
-            } catch (MissingResourceException e) {
-            	///CLOVER:OFF
-            	// coverage requires test without data, so skip
-                //if (!(cal instanceof GregorianCalendar)) {
-                if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
-                    // Ok for symbols to be missing for a Gregorian calendar, but
-                    // not for any other type.
-                    throw e;
-                }
-                ///CLOVER:ON
-            }
-            constructCalendarSpecific(bundle);
-        }
+        String fullName = calendarClass.getName();
+        int lastDot = fullName.lastIndexOf('.');
+        String className = fullName.substring(lastDot+1);
+        String calType = className.replaceAll("Calendar","").toLowerCase();
+        
+        initializeData(new ULocale(locale), calType);
     }
 
     /**
@@ -647,60 +643,10 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
-        // Get the default symbols for the locale, since most
-        // calendars will only need to override month names and will
-        // want everything else the same
-        this(locale); // old-style construction
-        constructCalendarSpecific(bundle);
+        initializeData(new ULocale(locale), 
+                    new CalendarData((ICUResourceBundle)bundle, null));
     }
 
-    /**
-     * Given a resource bundle specific to the given Calendar class,
-     * initialize this object.  Member variables will have already been
-     * initialized using the default mechanism, so only those that differ
-     * from or supplement the standard resource data need be handled here.
-     * If subclasses override this method, they should call
-     * <code>super.constructCalendarSpecific(bundle)</code> as needed to
-     * handle the "DayNames", "DayAbbreviations", "MonthNames",
-     * "MonthAbbreviations", and "Eras" resource data.
-     * @stable ICU 2.0
-     */
-    protected void constructCalendarSpecific(ResourceBundle bundle) {
-
-        // Fetch the day names from the resource bundle.  If they're not found,
-        // it's ok; we'll just use the default ones.
-        // Allow a null ResourceBundle just for the sake of completeness;
-        // this is useful for calendars that don't have any overridden symbols
-
-        if (bundle != null) {
-            try {
-                String[] temp = bundle.getStringArray("DayNames");
-                setWeekdays(temp);
-                setShortWeekdays(temp);
-
-                temp = bundle.getStringArray("DayAbbreviations");
-                setShortWeekdays( temp );
-            } catch (MissingResourceException e) {}
-
-            try {
-                String[] temp = bundle.getStringArray("MonthNames");
-                setMonths( temp );
-                setShortMonths( temp );
-
-                temp = bundle.getStringArray("MonthAbbreviations");
-                setShortMonths( temp );
-            } catch (MissingResourceException e) {}
-
-            try {
-                String[] temp = bundle.getStringArray("Eras");
-                setEras( temp );
-            } catch (MissingResourceException e) {}
-
-            // TODO: obtain correct actual/valid locale later
-            ULocale uloc = new ULocale(bundle.getLocale());
-            setLocale(uloc, uloc);
-        }
-    }
 
     /**
      * Find the ResourceBundle containing the date format information for
@@ -715,7 +661,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     static public ResourceBundle getDateFormatBundle(Class calendarClass, Locale locale)
         throws MissingResourceException {
-
+        
         // Find the calendar's class name, which we're going to use to construct the
         // resource bundle name.
         String fullName = calendarClass.getName();
