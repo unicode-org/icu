@@ -273,6 +273,14 @@ uhash_geti(const UHashtable *hash,
     return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.integer;
 }
 
+U_CAPI int32_t U_EXPORT2
+uhash_igeti(const UHashtable *hash,
+           int32_t key) {
+    UHashTok keyholder;
+    keyholder.integer = key;
+    return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.integer;
+}
+
 U_CAPI void* U_EXPORT2
 uhash_put(UHashtable *hash,
           void* key,
@@ -309,6 +317,20 @@ uhash_puti(UHashtable *hash,
     valueholder.integer = value;
     return _uhash_put(hash, keyholder, valueholder,
                       HINT_KEY_POINTER,
+                      status).integer;
+}
+
+
+U_CAPI int32_t U_EXPORT2
+uhash_iputi(UHashtable *hash,
+           int32_t key,
+           int32_t value,
+           UErrorCode *status) {
+    UHashTok keyholder, valueholder;
+    keyholder.integer = key;
+    valueholder.integer = value;
+    return _uhash_put(hash, keyholder, valueholder,
+                      0, /* neither is a ptr */
                       status).integer;
 }
 
