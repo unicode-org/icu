@@ -15,6 +15,35 @@ void addTestEuroRegression(TestNode** root)
     addTest(root, &TestEuroRegression, "tsconv/eurocreg/TestEuroRegression");
 }
 
+/*
+ * The table below lists codepages that are supposed to have roundtrip mappings for
+ * the U+20AC Euro sign.
+ *
+ * Changes made 2000nov28 and marked as such are due to the following:
+ *
+ * After updating all ibm-*.ucm files with precise fallback indicators (|0, |1, |3),
+ * some of these codepages failed the Euro regression test.
+ * This means that the actuall mappings changed when only the preciseness of fallback
+ * mappings should have changed.
+ * My (Markus) suspicion is that some files got Euro sign mappings added manually,
+ * changing their contents compared to the NLTC (IBM Toronto codepage database) definition.
+ * Such changes are highly undesirable because they effectively define new codepages.
+ * Codepage mapping files with "ibm-*.ucm" should always exactly match the files
+ * from the IBM codepage database.
+ * (If there are several mappings with the same number, then we choose the
+ * default mappings with Private-Use Area assignments.)
+ *
+ * Also, in the past, some aliases were set such that e.g. cp850 became an alias for ibm-858.
+ * This followed the practice of OS/2 that uses the old codepage number 850 for the new
+ * codepage 858, with the main difference being the additional Euro sign.
+ * However, we have documented that the "cp" prefix should be used for Microsoft-compatible
+ * codepages, and Microsoft Windows 2000's codepage 850 does not contain a Euro sign mapping.
+ * Therefore, cp850 must not support the Euro sign.
+ * In these cases, I have changed the codepage name here to point to a newer codepage with the
+ * Euro sign, using its new name.
+ * I could not find such "updates" for codepages 1362 and 1363 - we might want to supply them later.
+ */
+
 char convertersToCheck[][15] = { 
   "cp1250",
   "cp1251",
@@ -36,16 +65,16 @@ char convertersToCheck[][15] = {
   "ibm1153",
   "ibm12712",
   "ibm16804",
-  "cp850",
-  "cp850",
+  "ibm-858", /* was "cp850" changed 2000nov28 */
+  /* duplicate "cp850" removed 2000nov28 */
   "cp1026",
   "cp857",
   "cp1025",
   "cp1123",
   "cp1122",
   "cp1112",
-  "cp424",
-  "cp803",
+  "ibm-12712", /* was "cp424" changed 2000nov28 */
+  "ibm-4899", /* was "cp803" changed 2000nov28 */
   "cp862",
   "cp9030",
   "cp1130",
@@ -73,8 +102,8 @@ char convertersToCheck[][15] = {
   "cp300",
   /*  "cp4930",
       "cp1364",*/
-  "cp1362",
-  "cp1363",
+  /* "cp1362" removed 2000nov28
+     "cp1363" removed 2000nov28 */
   "cp1114",
   "cp947",
   "cp28709",
