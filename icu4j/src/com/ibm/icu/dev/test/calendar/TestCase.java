@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/TestCase.java,v $ 
- * $Date: 2002/02/16 03:05:07 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/01/21 18:13:40 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -63,7 +63,7 @@ public class TestCase {
      * Return a String representation of this test case's time.
      */
     public String toString() {
-        return dowToString(get(Calendar.DAY_OF_WEEK)) +
+        return dowToString(get(Calendar.DAY_OF_WEEK)) + " " +
             get(Calendar.YEAR) + "/" + (get(Calendar.MONTH)+1) + "/" +
             get(Calendar.DATE);
     }
