@@ -20,10 +20,9 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
-#include "unicode/unicode.h"
 
-void
-printPropsC(UChar32 codePoint) {
+static void
+printProps(UChar32 codePoint) {
     char buffer[100];
     UErrorCode errorCode;
 
@@ -45,26 +44,7 @@ printPropsC(UChar32 codePoint) {
     printf("  BiDi directional category (numeric enum value): %u\n", u_charDirection(codePoint));
 }
 
-void
-printPropsCPP(UChar32 codePoint) {
-    char buffer[100];
-
-    /* get the character name */
-    Unicode::getCharName(codePoint, buffer, sizeof(buffer), U_UNICODE_CHAR_NAME);
-
-    /* print the character name */
-    printf("C++\t%s\n", buffer);
-
-    /* print some properties */
-    printf("  general category (numeric enum value): %u\n", Unicode::getType(codePoint));
-
-    /* note: these APIs do not provide the data from SpecialCasing.txt */
-    printf("  is lowercase: %d  uppercase: U+%04lx\n", Unicode::isLowerCase(codePoint), Unicode::toUpperCase(codePoint));
-
-    printf("  is digit: %d  decimal digit value: %d\n", Unicode::isDigit(codePoint), Unicode::digitValue(codePoint));
-
-    printf("  BiDi directional category (numeric enum value): %u\n", Unicode::characterDirection(codePoint));
-}
+/* Note: In ICU 2.0, the Unicode class is deprecated - it is a pure wrapper around the C APIs above. */
 
 extern int
 main(int argc, const char *argv[]) {
@@ -75,8 +55,7 @@ main(int argc, const char *argv[]) {
     int i;
 
     for(i=0; i<sizeof(codePoints)/sizeof(codePoints[0]); ++i) {
-        printPropsC(codePoints[i]);
-        printPropsCPP(codePoints[i]);
+        printProps(codePoints[i]);
         puts("");
     }
     return 0;
