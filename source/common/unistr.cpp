@@ -25,6 +25,8 @@
 #include "unicode/ustring.h"
 #include "mutex.h"
 #include "unicode/unistr.h"
+#include "unicode/unicode.h"
+#include "unicode/ucnv.h"
 #include "uhash.h"
 
 #if U_IOSTREAM_SOURCE >= 199711

@@ -18,6 +18,7 @@
 #include "symtable.h"
 #include "unicode/parseerr.h"
 #include "hash.h"
+#include "unicode/unicode.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
