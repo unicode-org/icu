@@ -15,7 +15,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char SegmentArrayProcessor::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SegmentArrayProcessor)
 
 SegmentArrayProcessor::SegmentArrayProcessor()
 {

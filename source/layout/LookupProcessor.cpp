@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
 const LETag LookupProcessor::notSelected    = 0x00000000;
 const LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
-const LETag emptyTag = 0x00000000;
+static const LETag emptyTag = 0x00000000;
 
 
 le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator,

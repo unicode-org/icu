@@ -14,7 +14,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char GXLayoutEngine::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(GXLayoutEngine)
 
 GXLayoutEngine::GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable) 
     : LayoutEngine(fontInstance, scriptCode, languageCode), fMorphTable(morphTable)

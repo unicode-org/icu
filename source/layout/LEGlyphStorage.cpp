@@ -11,7 +11,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char LEGlyphStorage::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LEGlyphStorage)
 
 LEGlyphStorage::LEGlyphStorage()
     : fGlyphCount(0), fGlyphs(NULL), fCharIndices(NULL), fPositions(NULL),
