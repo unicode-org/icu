@@ -87,7 +87,7 @@ void
 NumberFormatTest::TestPatterns(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols sym(Locale::US, status);
+    DecimalFormatSymbols sym(Locale::getUS(), status);
     if (U_FAILURE(status)) { errln("FAIL: Could not construct DecimalFormatSymbols"); return; }
 
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
@@ -121,7 +121,7 @@ void
 NumberFormatTest::TestExponential(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols sym(Locale::US, status);
+    DecimalFormatSymbols sym(Locale::getUS(), status);
     if (U_FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormatSymbols ct"); return; }
     const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
     int32_t pat_length = (int32_t)(sizeof(pat) / sizeof(pat[0]));
@@ -301,7 +301,7 @@ NumberFormatTest::TestQuotes(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString *pat;
-    DecimalFormatSymbols *sym = new DecimalFormatSymbols(Locale::US, status);
+    DecimalFormatSymbols *sym = new DecimalFormatSymbols(Locale::getUS(), status);
     pat = new UnicodeString("a'fo''o'b#");
     DecimalFormat *fmt = new DecimalFormat(*pat, *sym, status);
     UnicodeString s; 
@@ -334,7 +334,7 @@ void
 NumberFormatTest::TestCurrencySign(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale::US, status);
+    DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale::getUS(), status);
     UnicodeString pat;
     UChar currency = 0x00A4;
     // "\xA4#,##0.00;-\xA4#,##0.00"
@@ -405,24 +405,28 @@ void
 NumberFormatTest::TestCurrency(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(Locale::CANADA_FRENCH, status);
+    NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(Locale::getCanadaFrench(), status);
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
-    if (!(s=="1,50 $")) errln((UnicodeString)"FAIL: Expected 1,50 $");
+    if (!(s=="1,50 $"))
+        errln((UnicodeString)"FAIL: Expected 1,50 $");
     delete currencyFmt;
     s.truncate(0);
     currencyFmt = NumberFormat::createCurrencyInstance(Locale("de_DE_PREEURO"),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
-    if (!(s=="1,50 DM")) errln((UnicodeString)"FAIL: Expected 1,50 DM");
+    if (!(s=="1,50 DM"))
+        errln((UnicodeString)"FAIL: Expected 1,50 DM");
     delete currencyFmt;
     s.truncate(0);
     currencyFmt = NumberFormat::createCurrencyInstance(Locale("fr_FR_PREEURO"), status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en France a....." + s);
-    if (!(s=="1,50 F")) errln((UnicodeString)"FAIL: Expected 1,50 F");
+    if (!(s=="1,50 F"))
+        errln((UnicodeString)"FAIL: Expected 1,50 F");
     delete currencyFmt;
-    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    if (U_FAILURE(status))
+        errln((UnicodeString)"FAIL: Status " + (int32_t)status);
 }
  
 // -------------------------------------
@@ -475,7 +479,7 @@ NumberFormatTest::TestRounding487(void)
  */
 void NumberFormatTest::TestSecondaryGrouping(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols US(Locale::US, status);
+    DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols ct");
 
     DecimalFormat f("#,##,###", US, status);
@@ -601,7 +605,7 @@ void NumberFormatTest::expect(NumberFormat* fmt, const Formattable& n,
  */
 void NumberFormatTest::TestExponent(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols US(Locale::US, status);
+    DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
     DecimalFormat fmt1(UnicodeString("0.###E0"), US, status);
     CHECK(status, "DecimalFormat(0.###E0)");
@@ -621,7 +625,7 @@ void NumberFormatTest::TestExponent(void) {
  */
 void NumberFormatTest::TestScientific(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols US(Locale::US, status);
+    DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
 
     // Test pattern round-trip
@@ -675,7 +679,7 @@ void NumberFormatTest::TestScientific(void) {
     // guarantee that the default locale has the same 
     // scientific format.
     Locale def = Locale::getDefault();
-    Locale::setDefault(Locale::US, status);
+    Locale::setDefault(Locale::getUS(), status);
     expect(NumberFormat::createScientificInstance(status),
            12345.678901,
            "1.2345678901E4", status);
@@ -687,7 +691,7 @@ void NumberFormatTest::TestScientific(void) {
     expect(new DecimalFormat("0E0", US, status),
            12345.0,
            "1E4", status);
-    expect(NumberFormat::createScientificInstance(Locale::US, status),
+    expect(NumberFormat::createScientificInstance(Locale::getUS(), status),
            12345.678901,
            "1.2345678901E4", status);
     expect(new DecimalFormat("##0.###E0", US, status),
@@ -699,7 +703,7 @@ void NumberFormatTest::TestScientific(void) {
     expect(new DecimalFormat("##0.####E0", US, status),
            (int32_t) 12345,
            "12.345E3", status);
-    expect(NumberFormat::createScientificInstance(Locale::FRANCE, status),
+    expect(NumberFormat::createScientificInstance(Locale::getFrance(), status),
            12345.678901,
            "1,2345678901E4", status);
     expect(new DecimalFormat("##0.####E0", US, status),
@@ -801,7 +805,7 @@ void NumberFormatTest::TestScientific(void) {
  */
 void NumberFormatTest::TestPad(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols US(Locale::US, status);
+    DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
 
     expect(new DecimalFormat("*^##.##", US, status),
@@ -917,7 +921,7 @@ void NumberFormatTest::TestPad(void) {
  */
 void NumberFormatTest::TestPatterns2(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols US(Locale::US, status);
+    DecimalFormatSymbols US(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
 
     DecimalFormat fmt("#", US, status);
@@ -1022,7 +1026,7 @@ void NumberFormatTest::expectPat(DecimalFormat& fmt, const UnicodeString& exp) {
 
 void NumberFormatTest::TestSurrogateSupport(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols custom(Locale::US, status);
+    DecimalFormatSymbols custom(Locale::getUS(), status);
     CHECK(status, "DecimalFormatSymbols constructor");
 
     custom.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, "decimal");

@@ -96,7 +96,7 @@ void IntlTestDateFormatAPI::testAPI(/* char* par */)
     DateFormat *def = DateFormat::createInstance();
     DateFormat *fr = DateFormat::createTimeInstance(DateFormat::FULL, Locale::FRENCH);
     DateFormat *it = DateFormat::createDateInstance(DateFormat::MEDIUM, Locale::ITALIAN);
-    DateFormat *de = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG, Locale::GERMAN);
+    DateFormat *de = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG, Locale::getGerman());
 
 // ======= Test equality
 

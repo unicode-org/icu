@@ -1071,7 +1071,7 @@ IntlTestRBNF::TestFrenchSpellout()
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat* formatter
-        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::FRANCE, status);
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::getFrance(), status);
     
     if (U_FAILURE(status)) {
         errln("FAIL: could not construct formatter");

@@ -627,14 +627,14 @@ void TestMessageFormat::testSetLocale()
         errln("***  MSG format err.");
     }
 
-    msg.setLocale(Locale::ENGLISH);
+    msg.setLocale(Locale::getEnglish());
     UBool getLocale_ok = TRUE;
     if (msg.getLocale() != Locale::ENGLISH) {
         errln("*** MSG getLocal err.");
         getLocale_ok = FALSE;
     }
 
-    msg.setLocale(Locale::GERMAN);
+    msg.setLocale(Locale::getGerman());
 
     if (msg.getLocale() != Locale::GERMAN) {
         errln("*** MSG getLocal err.");

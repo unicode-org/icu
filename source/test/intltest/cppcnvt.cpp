@@ -127,7 +127,7 @@ void ConvertTest::TestConvert()
 
     const Locale CodePagesLocale[NUM_CODEPAGE] =
     {
-        Locale::KOREAN
+        Locale::getKorean()
     };
 
     UConverterFromUCallback fromUAction = NULL;

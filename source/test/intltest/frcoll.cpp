@@ -23,7 +23,7 @@ CollationFrenchTest::CollationFrenchTest()
 : myCollation(0)
 {
     UErrorCode status = U_ZERO_ERROR;
-    myCollation = Collator::createInstance(Locale::FRANCE, status);
+    myCollation = Collator::createInstance(Locale::getFrance(), status);
     if(!myCollation || U_FAILURE(status)) {
         errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
