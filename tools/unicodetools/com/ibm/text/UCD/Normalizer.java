@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -208,12 +208,27 @@ public final class Normalizer implements UCD_Types {
     * pair is firstChar << 16 | secondChar.
     * Will need to be fixed for surrogates.
     */
-    /*
-    public IntHashtable.IntEnumeration getComposition() {
-        return data.getComposition();
-    }
 
-    */
+    public void getCompositionStatus(BitSet leading, BitSet trailing, BitSet resulting) {
+        Iterator it = data.compTable.keySet().iterator();
+        while (it.hasNext()) {
+            Long key = (Long)it.next();
+            Integer result = (Integer)data.compTable.get(key);
+            long keyLong = key.longValue();
+            if (leading != null) leading.set((int)(keyLong >>> 32));
+            if (trailing != null) trailing.set((int)keyLong);
+            if (resulting != null) resulting.set(result.intValue());
+        }
+        for (int i = UCD.LBase; i < UCD.TLimit; ++i) {
+            if (leading != null && UCD.isLeadingJamo(i)) leading.set(i); // set all initial Jamo (that form syllables)
+            if (trailing != null && UCD.isTrailingJamo(i)) trailing.set(i); // set all final Jamo (that form syllables)
+        }
+        if (leading != null) {
+            for (int i = UCD.SBase; i < UCD.SLimit; ++i) {
+                if (UCD.isDoubleHangul(i)) leading.set(i); // set all two-Jamo syllables
+            }
+        }
+    }
 
     public boolean isTrailing(int cp) {
         return this.composition ? data.isTrailing(cp) : false;

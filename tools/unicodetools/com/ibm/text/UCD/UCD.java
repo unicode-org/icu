@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -296,24 +296,38 @@ public final class UCD implements UCD_Types {
         }
         throw new IllegalArgumentException("getCase: " + caseType + ", " + simpleVsFull);
     }
-
+    
+    static final char SHY = '\u00AD';
+    
+    static final char APOSTROPHE = '\u2019';
+    
     public String getCase(String s, byte simpleVsFull, byte caseType, String condition) {
         if (UTF32.length32(s) == 1) return getCase(UTF32.char32At(s, 0), simpleVsFull, caseType);
         StringBuffer result = new StringBuffer();
         int cp;
         byte currentCaseType = caseType;
+        DerivedProperty dp = new DerivedProperty(this);
+        
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
             String mappedVersion = getCase(cp, simpleVsFull, currentCaseType, condition);
             result.append(mappedVersion);
-            if (caseType == TITLE) {
-                // if letter is cased, change to lowercase, otherwise change to TITLE
+            if (caseType == TITLE) {    // set the case type for the next character
+            
+                // certain characters are ignored
+                if (cp == '-' || cp == SHY || cp == '\'' || cp == APOSTROPHE) continue;
                 byte cat = getCategory(cp);
-                if (cat == Mn || cat == Me || cat == Mc) {
-                    // ignore!
-                } else if (cat == Lu || cat == Ll || cat == Lt
-                  || getBinaryProperty(cp, Other_Lowercase)
-                  || getBinaryProperty(cp, Other_Uppercase)) {
+                if (cat == Mn || cat == Me || cat == Cf || cat == Lm) continue;
+                if (dp.hasProperty(cp, DerivedProperty.DefaultIgnorable)) continue;
+                // if DefaultIgnorable is not supported, then 
+                // check for (Cf + Cc + Cs) - White_Space
+                // if (cat == Cs && cp != 0x85 && (cp < 9 || cp > 0xD)) continue;                
+                
+                // if letter is cased, change next to lowercase, otherwise revert to TITLE
+                if (cat == Lu || cat == Ll || cat == Lt
+                  || getBinaryProperty(cp, Other_Lowercase) // skip if not supported
+                  || getBinaryProperty(cp, Other_Uppercase) // skip if not supported
+                ) {
                     currentCaseType = LOWER;
                 } else {
                     currentCaseType = TITLE;
@@ -528,6 +542,43 @@ public final class UCD implements UCD_Types {
     public static String getCategoryID_fromIndex(byte prop) {
         return UCD_Names.GC[prop];
     }
+    
+    public String getCombiningID(int codePoint, byte style) {
+        return getCombiningID_fromIndex(getCombiningClass(codePoint), style);
+    }
+    
+    static String getCombiningID_fromIndex (short index, byte style) {
+        String s = "Fixed";
+        switch (index) {
+            case 0: s = style < LONG ? "NR" : "NotReordered"; break;
+            case 1: s = style < LONG ? "OV" :  "Overlay"; break;
+            case 7: s = style < LONG ? "NK" :  "Nukta"; break;
+            case 8: s = style < LONG ? "KV" :  "KanaVoicing"; break;
+            case 9: s = style < LONG ? "VR" :  "Virama"; break;
+            case 202: s = style < LONG ? "ATBL" :  "AttachedBelowLeft"; break;
+            case 204: s = style < LONG ? "ATB" :  "AttachedBelow"; break;
+            case 206: s = style < LONG ? "ATBR" :  "AttachedBelowRight"; break;
+            case 208: s = style < LONG ? "ATL" :  "AttachedLeft"; break;
+            case 210: s = style < LONG ? "ATR" :  "AttachedRight"; break;
+            case 212: s = style < LONG ? "ATAL" :  "AttachedAboveLeft"; break;
+            case 214: s = style < LONG ? "ATA" :  "AttachedAbove"; break;
+            case 216: s = style < LONG ? "ATAR" :   "AttachedAboveRight"; break;
+            case 218: s = style < LONG ? "BL" :   "BelowLeft"; break;
+            case 220: s = style < LONG ? "B" :   "Below"; break;
+            case 222: s = style < LONG ? "BR" :   "BelowRight"; break;
+            case 224: s = style < LONG ? "L" :   "Left"; break;
+            case 226: s = style < LONG ? "R" :   "Right"; break;
+            case 228: s = style < LONG ? "AL" :   "AboveLeft"; break;
+            case 230: s = style < LONG ? "A" :   "Above"; break;
+            case 232: s = style < LONG ? "AR" :   "AboveRight"; break;
+            case 233: s = style < LONG ? "DB" :   "DoubleBelow"; break;
+            case 234: s = style < LONG ? "DB" :   "DoubleAbove"; break;
+            case 240: s = style < LONG ? "IS" :   "IotaSubscript"; break;
+            default: s += "_" + index;
+        }
+        return s;
+    }
+    
 
     public String getBidiClassID(int codePoint) {
         return getBidiClassID_fromIndex(getBidiClass(codePoint));
@@ -868,7 +919,7 @@ to guarantee identifier closure.
 
     // Hangul constants
 
-    static final int
+    public static final int
         SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
         LCount = 19, VCount = 21, TCount = 28,
         NCount = VCount * TCount,   // 588
@@ -891,6 +942,14 @@ to guarantee identifier closure.
     }
 
     private static final char[] pair = new char[2];
+    
+    static boolean isDoubleHangul(int s) {
+        int SIndex = s - SBase;
+        if (0 > SIndex || SIndex >= SCount) {
+            throw new IllegalArgumentException("Not a Hangul Syllable: " + s);
+        }
+        return (SIndex % TCount) == 0;
+    }
 
     static String getHangulDecompositionPair(int ch) {
         int SIndex = ch - SBase;
@@ -921,6 +980,10 @@ to guarantee identifier closure.
 
     static boolean isTrailingJamo(int cp) {
         return (VBase <= cp && cp < VLimit) || (TBase <= cp && cp < TLimit);
+    }
+
+    static boolean isLeadingJamo(int cp) {
+        return (LBase <= cp && cp < LLimit);
     }
 
     private void fillFromFile(String version) {

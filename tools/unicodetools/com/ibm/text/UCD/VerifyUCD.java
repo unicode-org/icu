@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/09/19 23:33:15 $
-* $Revision: 1.5 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -82,6 +82,16 @@ public class VerifyUCD implements UCD_Types {
         Utility.fixDot();
         System.out.println("checkCase");
         ucd = UCD.make(Main.ucdVersion);
+        
+        String test = "The qui'ck br\u2019own 'fox jum\u00ADped ov\u200Ber th\u200Ce lazy dog.";
+        
+        String ttest = ucd.getCase(test, FULL, TITLE);
+        
+        PrintWriter titleTest = Utility.openPrintWriter("TestTitle.txt");
+        titleTest.println(test);
+        titleTest.println(ttest);
+        titleTest.close();
+        
         initNormalizers();
         System.out.println(ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
         String fileName = "CaseDifferences.txt";

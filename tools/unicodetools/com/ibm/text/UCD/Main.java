@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -37,6 +37,7 @@ public final class Main {
             } else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
+            else if (arg.equalsIgnoreCase("generateHanTransliterator")) GenerateHanTransliterator.main();
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
@@ -49,8 +50,9 @@ public final class Main {
             //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
             else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
             else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();
-            else if (arg.equalsIgnoreCase("GenerateData")) GenerateData.main(ucdVersion, Utility.split(args[++i],','));
+            else if (arg.equalsIgnoreCase("Generate")) GenerateData.main(ucdVersion, Utility.split(args[++i],','));
             else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
+            else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
             else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
             else {

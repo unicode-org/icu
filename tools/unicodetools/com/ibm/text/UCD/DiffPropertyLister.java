@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ class DiffPropertyLister extends PropertyLister {
     }
 
     public String propertyName(int cp) {
-        return ucdData.getVersion();
+        return major_minor_only(ucdData.getVersion());
     }
 
     /*
@@ -49,9 +49,10 @@ class DiffPropertyLister extends PropertyLister {
     
     public String headerString() {
         if (oldUCD != null) {
-            return "# Differences between " + ucdData.getVersion() + " and " + oldUCD.getVersion();
+            return "# Differences between " + major_minor_only(ucdData.getVersion()) 
+                + " and " + major_minor_only(oldUCD.getVersion());
         } else {
-            return "# Allocated as of " + ucdData.getVersion();
+            return "# Designated as of " + major_minor_only(ucdData.getVersion());
         }
     }
     
@@ -80,6 +81,10 @@ class DiffPropertyLister extends PropertyLister {
         return count;
     }
     */
+    
+    private String major_minor_only(String s) {
+        return s.substring(0, s.lastIndexOf('.'));
+    }
 
 }
 
