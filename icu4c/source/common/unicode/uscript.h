@@ -120,7 +120,7 @@ uscript_getShortName(UScriptCode scriptCode);
  * Returns USCRIPT_MALAYALAM given 0x0D02 
  * @param codepoint UChar32 codepoint
  * @param err the error status code.
- * @return The UScriptCode 
+ * @return The UScriptCode, or 0 if codepoint is invalid 
  * @draft ICU 2.0
  */
 U_CAPI UScriptCode  U_EXPORT2 

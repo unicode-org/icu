@@ -87,11 +87,11 @@ u_charAge(UChar32 c, UVersionInfo versionArray) {
 U_CAPI UScriptCode U_EXPORT2
 uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return USCRIPT_INVALID_CODE;
+        return 0;
     }
     if((uint32_t)c>0x10ffff) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return USCRIPT_INVALID_CODE;
+        return 0;
     }
 
     return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
@@ -348,8 +348,6 @@ u_getIntPropertyMinValue(UProperty which) {
     switch(which) {
     case UCHAR_BLOCK:
         return UBLOCK_INVALID_CODE;
-    case UCHAR_SCRIPT:
-        return USCRIPT_INVALID_CODE;
     default:
         return 0; /* undefined; and: all other properties have a minimum value of 0 */
     }
@@ -360,11 +358,11 @@ u_getIntPropertyMaxValue(UProperty which) {
     int32_t max;
 
     if(which<UCHAR_BINARY_START) {
-        return 0; /* undefined */
+        return -1; /* undefined */
     } else if(which<UCHAR_BINARY_LIMIT) {
         return 1; /* maximum TRUE for all binary properties */
     } else if(which<UCHAR_INT_START) {
-        return 0; /* undefined */
+        return -1; /* undefined */
     } else if(which<UCHAR_INT_LIMIT) {
         switch(which) {
         case UCHAR_BIDI_CLASS:
@@ -398,10 +396,10 @@ u_getIntPropertyMaxValue(UProperty which) {
             }
             return max;
         default:
-            return 0; /* undefined */
+            return -1; /* undefined */
         }
     } else {
-        return 0; /* undefined */
+        return -1; /* undefined */
     }
 }
 
