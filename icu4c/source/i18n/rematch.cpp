@@ -287,8 +287,6 @@ UBool RegexMatcher::find() {
     U_ASSERT(startPos >= 0);
 
     switch (fPattern->fStartType) {
-    case START_LINE:
-    case START_STRING:
     case START_NO_INFO:
         // No optimization was found. 
         //  Try a match at each input position.
@@ -346,6 +344,7 @@ UBool RegexMatcher::find() {
         }
         U_ASSERT(FALSE);
 
+    case START_STRING:
     case START_CHAR:
         {
             // Match starts on exactly one char.
@@ -369,9 +368,47 @@ UBool RegexMatcher::find() {
             }
         }
         U_ASSERT(FALSE);
+
+    case START_LINE:
+        {
+            UChar32  c;
+            if (startPos == 0) {
+                MatchAt(startPos, status);
+                if (U_FAILURE(status)) {
+                    return FALSE;
+                }
+                if (fMatch) {
+                    return TRUE;
+                }
+                U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
+            }
+
+            for (;;) {
+                UChar32 c = inputBuf[startPos-1];
+                if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
+                    (c == 0x0a ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 || 
+                    c == 0x0d && startPos+1 < inputLen && inputBuf[startPos+1] != 0x0a)) {
+                    MatchAt(startPos, status);
+                    if (U_FAILURE(status)) {
+                        return FALSE;
+                    }
+                    if (fMatch) {
+                        return TRUE;
+                    }
+                }
+                if (startPos >= testLen) {
+                    return FALSE;
+                }
+                U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
+                // Note that it's perfectly OK for a pattern to have a zero-length
+                //   match at the end of a string, so we must make sure that the loop
+                //   runs with startPos == testLen the last time through.
+            }
+        }
+
+    default:
+        U_ASSERT(FALSE);
     }
-
-
 
     U_ASSERT(FALSE);
     return FALSE;
@@ -1168,6 +1205,11 @@ GC_Done:
             isMatch = FALSE;
             goto breakFromLoop;
 
+        case URX_JMP_SAV:
+            fp = StateSave(fp, fp->fPatIdx, frameSize, status);  // State save to loc following current
+            fp->fPatIdx = opValue;                               // Then JMP.
+            break;
+
         case URX_CTR_INIT:
             {
                 U_ASSERT(opValue >= 0 && opValue < frameSize-2);
@@ -1542,6 +1584,7 @@ GC_Done:
                 int32_t minML       = pat[fp->fPatIdx++];
                 int32_t maxML       = pat[fp->fPatIdx++];
                 int32_t continueLoc = pat[fp->fPatIdx++];
+                        continueLoc = URX_VAL(continueLoc);
                 U_ASSERT(minML <= maxML);
                 U_ASSERT(minML >= 0);
                 U_ASSERT(continueLoc > fp->fPatIdx);

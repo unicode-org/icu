@@ -525,6 +525,9 @@ void    RegexCompile::compile(
     //  
     matchStartType();
 
+    // Optimization: strip out uneeded NOPs from the compiled pattern.
+    stripNOPs();
+
 
     //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
@@ -934,19 +937,23 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //     2.   state-save  4
         //     3.   jmp 1
         //     4.   ...
+        //  Normal '+'  compiles to
+        //     1.   stuff to be repeated  (already built)
+        //     2.   jmp-sav 1
+        //     3.   ...
         {
             int32_t   topLoc = blockTopLoc(FALSE);        // location of item #1
 
             // Locate the position in the compiled pattern where the match will continue
             //   after completing the +   (4 in the comment above)
-            int32_t continueLoc = fRXPat->fCompiledPat->size()+2;
+            //int32_t continueLoc = fRXPat->fCompiledPat->size()+2;
 
             // Emit the STATE_SAVE
-            int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
-            fRXPat->fCompiledPat->addElement(saveStateOp, *fStatus);
+            //int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
+            //fRXPat->fCompiledPat->addElement(saveStateOp, *fStatus);
 
             // Emit the JMP
-            int32_t jmpOp = URX_BUILD(URX_JMP, topLoc);
+            int32_t jmpOp = URX_BUILD(URX_JMP_SAV, topLoc);
             fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
         }
         break;
@@ -1692,6 +1699,7 @@ void   RegexCompile::insertOp(int32_t where) {
             opType == URX_CTR_LOOP     ||
             opType == URX_CTR_LOOP_NG  ||
             opType == URX_CTR_LOOP_P   ||
+            opType == URX_JMP_SAV      ||
             opType == URX_RELOC_OPRND)    && opValue > where) {
             // Target location for this opcode is after the insertion point and
             //   needs to be incremented to adjust for the insertion.
@@ -1933,12 +1941,13 @@ void  RegexCompile::handleCloseParen() {
 
             // Insert the min and max match len bounds into the URX_LB_CONT op that
             //  appears at the top of the look-behind block, at location fMatchOpenParen+1
-            fRXPat->fCompiledPat->setElementAt(minML,  fMatchOpenParen-2);
-            fRXPat->fCompiledPat->setElementAt(maxML,  fMatchOpenParen-1);
+            fRXPat->fCompiledPat->setElementAt(minML,  fMatchOpenParen-3);
+            fRXPat->fCompiledPat->setElementAt(maxML,  fMatchOpenParen-2);
 
             // Insert the pattern location to continue at after a successful match
             //  as the last operand of the URX_LBN_CONT
-            fRXPat->fCompiledPat->setElementAt(fRXPat->fCompiledPat->size(),  fMatchOpenParen-1);
+            op = URX_BUILD(URX_RELOC_OPRND, fRXPat->fCompiledPat->size());
+            fRXPat->fCompiledPat->setElementAt(op,  fMatchOpenParen-1);
         }
         break;
 
@@ -2254,6 +2263,7 @@ void   RegexCompile::matchStartType() {
                 //   of a match.  Any character can begin the match.
                 fRXPat->fInitialChars->clear();
                 fRXPat->fInitialChars->complement();
+                numInitialStrings += 2;
             }
             currentLen++;
             atStart = FALSE;
@@ -2278,6 +2288,12 @@ void   RegexCompile::matchStartType() {
                     }
                 }
             }
+            atStart = FALSE;
+            break;
+
+        case URX_JMP_SAV:
+            // Combo of state save to the next loc, + jmp backwards.
+            //   Net effect on min. length computation is nothing.
             atStart = FALSE;
             break;
 
@@ -2463,7 +2479,8 @@ void   RegexCompile::matchStartType() {
         // Match beginning only with a literal string.
         UChar32  c = fRXPat->fLiteralText.char32At(fRXPat->fInitialStringIdx);
         U_ASSERT(fRXPat->fInitialChars->contains(c));
-        fRXPat->fStartType = START_STRING;
+        fRXPat->fStartType   = START_STRING;
+        fRXPat->fInitialChar = c;
     } else if (fRXPat->fStartType == START_LINE) {
         // Match at start of line in Mulit-Line mode.
         // Nothing to do here; everything is already set.
@@ -2566,6 +2583,8 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
 
         case URX_STO_SP:          // Setup for atomic or possessive blocks.  Doesn't change what can match.
         case URX_LD_SP:
+
+        case URX_JMP_SAV:
             break;
             
 
@@ -2835,6 +2854,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             //
         case URX_JMP:
         case URX_JMPX:
+        case URX_JMP_SAV:
             {
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest < loc) {
@@ -2951,6 +2971,79 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
     return currentLen;
     
 }
+
+
+//----------------------------------------------------------------------------------------
+//
+//   stripNOPs    Remove any NOP operations from the compiled pattern code.
+//                Extra NOPs are inserted for some constructs during the initial
+//                code generation to provide locations that may be patched later.
+//                Many end up unneeded, and are removed by this function.
+//
+//----------------------------------------------------------------------------------------
+void RegexCompile::stripNOPs() {
+
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
+
+    int32_t    end = fRXPat->fCompiledPat->size();
+    UVector32  deltas(end, *fStatus);
+
+    // Make a first pass over the code, computing the amount that things
+    //   will be offset at each location in the original code.
+    int32_t   loc;
+    int32_t   d = 0;
+    for (loc=0; loc<end; loc++) {
+        deltas.addElement(d, *fStatus);
+        int32_t op = fRXPat->fCompiledPat->elementAti(loc);
+        if (URX_TYPE(op) == URX_NOP) {
+            d++;
+        }
+    }
+
+    // Make a second pass over the code, removing the NOPs by moving following
+    //  code up, and patching operands that refer to code locations that
+    //  are being moved.  The array of offsets from the first step is used
+    //  to compute the new operand values.
+    int32_t src;
+    int32_t dst = 0;
+    for (src=0; src<end; src++) {
+        int32_t op = fRXPat->fCompiledPat->elementAti(src);
+        int32_t opType = URX_TYPE(op);
+        switch (opType) {
+        case URX_NOP:
+            break;
+
+        case URX_STATE_SAVE:
+        case URX_JMP:
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_CTR_LOOP_P:
+        case URX_RELOC_OPRND:
+        case URX_JMPX:
+        case URX_JMP_SAV:
+            // These are instructions with operands that refer to code locations.
+            {
+                int32_t  operandAddress = URX_VAL(op);
+                U_ASSERT(operandAddress>=0 && operandAddress<deltas.size());
+                int32_t fixedOperandAddress = operandAddress - deltas.elementAti(operandAddress);
+                op = URX_BUILD(opType, fixedOperandAddress);
+                fRXPat->fCompiledPat->setElementAt(op, dst);
+                dst++;
+                break;
+            }
+
+        default:
+            // The remaining instructions are unaltered by the relocation.
+            fRXPat->fCompiledPat->setElementAt(op, dst);
+            dst++;
+            break;
+        }
+    }
+
+}
+
 
 
 //----------------------------------------------------------------------------------------

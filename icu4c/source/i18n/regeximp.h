@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
 //
 //  debugging support.  Enable one or more of the #defines immediately following
 //
-#ifdef DEBUG
+#ifdef _DEBUG
 //#define REGEX_SCAN_DEBUG
 #define REGEX_DUMP_DEBUG
 #define REGEX_RUN_DEBUG
@@ -70,7 +70,7 @@ enum {
                                                     //   the pattern.
      URX_FAIL          = 14,   // Stop match operation,  No match.
 
-     URX_UNUSED        = 15,   
+     URX_JMP_SAV       = 15,   // Operand:  JMP destination location
      URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
      URX_BACKSLASH_G   = 17, 
      URX_UNUSED_1      = 18,   // Value field:  0:  \w    1:  \W
@@ -168,7 +168,7 @@ enum {
         "DOTANY",              \
         "JMP",                 \
         "FAIL",                \
-        "URX_UNUSED",          \
+        "URX_JMP_SAV",         \
         "URX_BACKSLASH_B",     \
         "URX_BACKSLASH_G",     \
         "URX_UNUSED_1",        \
