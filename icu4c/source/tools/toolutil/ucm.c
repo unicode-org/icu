@@ -631,8 +631,8 @@ ucm_mergeTables(UCMTable *fromUTable, UCMTable *toUTable,
              * fallback Unicode->codepage
              */
             if( (fromUMapping->bLen==subcharLength &&
-                 0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength) ||
-                (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1))
+                 0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength)) ||
+                (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1)
             ) {
                 fromUMapping->f=2; /* SUB mapping */
             } else {
@@ -665,8 +665,8 @@ ucm_mergeTables(UCMTable *fromUTable, UCMTable *toUTable,
     while(fromUIndex<fromUTop) {
         /* leftover fromU mappings are fallbacks */
         if( (fromUMapping->bLen==subcharLength &&
-             0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength) ||
-            (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1))
+             0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength)) ||
+            (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1)
         ) {
             fromUMapping->f=2; /* SUB mapping */
         } else {

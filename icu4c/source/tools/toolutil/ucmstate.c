@@ -1025,7 +1025,7 @@ ucm_countChars(UCMStates *states,
     }
 
     if(offset!=0) {
-        fprintf(stderr, "ucm error: byte sequence too short, ends in non-final state %hu: 0x%02lx\n", state);
+        fprintf(stderr, "ucm error: byte sequence too short, ends in non-final state %hu\n", state);
         return -1;
     }
 

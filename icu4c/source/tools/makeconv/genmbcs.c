@@ -543,7 +543,7 @@ MBCSAddFromUnicode(MBCSData *mbcsData,
     }
 
     if(flag==1 && length==1 && *bytes==0) {
-        fprintf(stderr, "error: unable to encode a |1 fallback to 0x%02x\n",
+        fprintf(stderr, "error: unable to encode a |1 fallback from U+%04x to 0x%02x\n",
             c, *bytes);
         return FALSE;
     }
@@ -1012,7 +1012,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     uint32_t top;
     int32_t i, stage1Top;
 
-    _MBCSHeader header={ 0 };
+    _MBCSHeader header={ { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0 };
 
     /* adjust stage 1 entries to include the size of stage 1 in the offsets to stage 2 */
     if(mbcsData->ucm->states.maxCharLength==1) {
