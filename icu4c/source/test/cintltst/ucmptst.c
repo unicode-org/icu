@@ -62,8 +62,8 @@ static void TestUCMP16API(){
     uint16_t *values;
    
     CompactShortArray* ucmp16Array=NULL;
-    CompactShortArray* ucmp16Array1=NULL;
-    CompactShortArray* ucmp16Array2=NULL;
+    CompactShortArray ucmp16Array1;
+    CompactShortArray ucmp16Array2;
     int32_t count=0, i=0;
     int16_t const TEST_DEFAULT_VALUE = 0xff;
 
@@ -78,32 +78,29 @@ static void TestUCMP16API(){
         log_err("ERROR: ucmp16_open failed\n");
     }
 
-    ucmp16Array1=ucmp16_open(0x0000);
-    ucmp16Array2=ucmp16_open(0x0000);
-
     /*ucmp16_init*/
     log_verbose("Testing ucmp16_init()\n");
-    ucmp16_init(ucmp16Array1, TEST_DEFAULT_VALUE);
-    if(ucmp16_getDefaultValue(ucmp16Array1) == 0x0000 ||
-        (int32_t)ucmp16_getCount(ucmp16Array1) != (int32_t)ucmp16_getkUnicodeCount() || 
-        ucmp16_getIndex(ucmp16Array1) == NULL ||
-        ucmp16_getArray(ucmp16Array1) == NULL || 
+    ucmp16_init(&ucmp16Array1, TEST_DEFAULT_VALUE);
+    if(ucmp16_getDefaultValue(&ucmp16Array1) == 0x0000 ||
+        (int32_t)ucmp16_getCount(&ucmp16Array1) != (int32_t)ucmp16_getkUnicodeCount() || 
+        ucmp16_getIndex(&ucmp16Array1) == NULL ||
+        ucmp16_getArray(&ucmp16Array1) == NULL || 
         ucmp16Array->fBogus != FALSE){
         log_err("Error: ucmp16_init() failed\n");
     }
     /*ucmp16_initBogus*/
     log_verbose("Testing ucmp16_initBogus()\n");
-    ucmp16_initBogus(ucmp16Array2);
-    if(ucmp16_getDefaultValue(ucmp16Array2) != 0x0000 ||
-        (int32_t)ucmp16_getCount(ucmp16Array2) != ucmp16Array2->fCount ||
-        ucmp16_getIndex(ucmp16Array2) != NULL ||
-        ucmp16_getArray(ucmp16Array2) != NULL || 
-        ucmp16Array2->fBogus != TRUE){
+    ucmp16_initBogus(&ucmp16Array2);
+    if(ucmp16_getDefaultValue(&ucmp16Array2) != 0x0000 ||
+        (int32_t)ucmp16_getCount(&ucmp16Array2) != ucmp16Array2.fCount ||
+        ucmp16_getIndex(&ucmp16Array2) != NULL ||
+        ucmp16_getArray(&ucmp16Array2) != NULL || 
+        ucmp16Array2.fBogus != TRUE){
         log_err("Error: ucmp16_initBogus() failed\n");
     }
     /*ucmp16_getDefaultValue*/
-    if(ucmp16_getDefaultValue(ucmp16Array) != ucmp16_getDefaultValue(ucmp16Array1) ||
-        ucmp16_getDefaultValue(ucmp16Array) == ucmp16_getDefaultValue(ucmp16Array2) ){
+    if(ucmp16_getDefaultValue(ucmp16Array) != ucmp16_getDefaultValue(&ucmp16Array1) ||
+        ucmp16_getDefaultValue(ucmp16Array) == ucmp16_getDefaultValue(&ucmp16Array2) ){
         log_err("Error in ucmp16_getDefaultValue()\n");
     }
      /*ucmp16_getkBlockCount*/
@@ -113,8 +110,8 @@ static void TestUCMP16API(){
 
 
     ucmp16_close(ucmp16Array);
-    ucmp16_close(ucmp16Array1);
-    ucmp16_close(ucmp16Array2);
+    ucmp16_close(&ucmp16Array1);
+    ucmp16_close(&ucmp16Array2);
 
     /*ucmp_compact, ucmp16_set*/
     log_verbose("Testing ucmp16_set\n");
@@ -170,23 +167,23 @@ static void TestUCMP16API(){
     /*ucmp16_openAlias*/
     log_verbose("Testing ucmp16_openAlias()\n");
     count=sizeof(newValues)/sizeof(newValues[0]);
-    ucmp16Array1=ucmp16_openAlias(indexArray, newValues, count, 0xFE);
-    if(ucmp16_getDefaultValue(ucmp16Array1) != 0x00fe ||
-        (int32_t)ucmp16_getCount(ucmp16Array1) != count ||
-        ucmp16Array1->fAlias != TRUE ||
-        memcmp(ucmp16_getArray(ucmp16Array1), newValues, count) != 0  ||
-        memcmp(ucmp16_getIndex(ucmp16Array1), indexArray, count) != 0 ) {
+    ucmp16Array=ucmp16_openAlias(indexArray, newValues, count, 0xFE);
+    if(ucmp16_getDefaultValue(ucmp16Array) != 0x00fe ||
+        (int32_t)ucmp16_getCount(ucmp16Array) != count ||
+        ucmp16Array->fAlias != TRUE ||
+        memcmp(ucmp16_getArray(ucmp16Array), newValues, count) != 0  ||
+        memcmp(ucmp16_getIndex(ucmp16Array), indexArray, count) != 0 ) {
          log_err("Error: ucmp16_openAlias() failed\n");
     }
-    ucmp16_close(ucmp16Array1);
+    ucmp16_close(ucmp16Array);
 
 
 }
 
 static void TestUCMP8API(){
     CompactByteArray* ucmp8Array=NULL;
-    CompactByteArray* ucmp8Array1=NULL;
-    CompactByteArray* ucmp8Array2=NULL;
+    CompactByteArray ucmp8Array1;
+    CompactByteArray ucmp8Array2;
     int32_t i=0;
     uint8_t *values;
     uint8_t *valuesSet;
@@ -203,68 +200,65 @@ static void TestUCMP8API(){
         log_err("ERROR: ucmp8_open failed\n");
     }
 
-    ucmp8Array1=ucmp8_open(0x0000);
-    ucmp8Array2=ucmp8_open(0x0000);
-
     /*ucmp8_init*/
     log_verbose("Testing ucmp8_init()\n");
-    ucmp8_init(ucmp8Array1, TEST_DEFAULT_VALUE);
-    if( (int32_t)ucmp8_getCount(ucmp8Array1) != (int32_t)ucmp8_getkUnicodeCount() || 
-        ucmp8_getIndex(ucmp8Array1) == NULL ||
-        ucmp8_getArray(ucmp8Array1) == NULL || 
-        ucmp8Array1->fBogus != FALSE){
+    ucmp8_init(&ucmp8Array1, TEST_DEFAULT_VALUE);
+    if( (int32_t)ucmp8_getCount(&ucmp8Array1) != (int32_t)ucmp8_getkUnicodeCount() || 
+        ucmp8_getIndex(&ucmp8Array1) == NULL ||
+        ucmp8_getArray(&ucmp8Array1) == NULL || 
+        ucmp8Array1.fBogus != FALSE){
         log_err("Error: ucmp8_init() failed\n");
     }
     /*ucmp8_initBogus*/
     log_verbose("Testing ucmp8_initBogus()\n");
-    ucmp8_initBogus(ucmp8Array2);
-    if((int32_t)ucmp8_getCount(ucmp8Array2) != ucmp8Array2->fCount ||
-        ucmp8_getIndex(ucmp8Array2) != NULL ||
-        ucmp8_getArray(ucmp8Array2) != NULL || 
-        ucmp8Array2->fBogus != TRUE){
+    ucmp8_initBogus(&ucmp8Array2);
+    if((int32_t)ucmp8_getCount(&ucmp8Array2) != ucmp8Array2.fCount ||
+        ucmp8_getIndex(&ucmp8Array2) != NULL ||
+        ucmp8_getArray(&ucmp8Array2) != NULL || 
+        ucmp8Array2.fBogus != TRUE){
         log_err("Error: ucmp8_initBogus() failed\n");
     }
     /*ucmp8_getkBlockCount*/
     if(ucmp8_getkBlockCount() != 128 ){
         log_err("Error in ucmp8_getkBlockCount()\n");
     } 
-    values=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    values=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
     if(values[0] !=TEST_DEFAULT_VALUE){
         log_err("Error: getArray() or init failed\n");
     }
     
     /*ucmp8_compact*/
-    if(ucmp8Array1->fCompact == TRUE){
+    if(ucmp8Array1.fCompact == TRUE){
         log_err("Error: ucmp8_open failed Got compact for expanded data\n");
     } 
-    ucmp8_compact(ucmp8Array1, 1);
-    if(ucmp8Array1->fCompact != TRUE){
+    ucmp8_compact(&ucmp8Array1, 1);
+    if(ucmp8Array1.fCompact != TRUE){
         log_err("Error: ucmp8_compact failed\n");
     } 
     /*ucmp8_set*/
-    ucmp8_set(ucmp8Array1, 0, (uint8_t)0xFE);
-    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    ucmp8_set(&ucmp8Array1, 0, (uint8_t)0xFE);
+    valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
     if(valuesSet[0] != (uint8_t)0xFE ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
-    if(ucmp8Array1->fCompact == TRUE){
+    if(ucmp8Array1.fCompact == TRUE){
         log_err("Error: ucmp8_set didn't expand the compact data \n");
     } 
 
     /*ucmp8_set*/
-    ucmp8_compact(ucmp8Array1, 1);
-    ucmp8_set(ucmp8Array1, 0, (uint8_t)0xFD);
-    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    ucmp8_compact(&ucmp8Array1, 1);
+    ucmp8_set(&ucmp8Array1, 0, (uint8_t)0xFD);
+    valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
     if(valuesSet[0] != (uint8_t)0xFD ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
-    if(ucmp8Array1->fCompact == TRUE){
+    if(ucmp8Array1.fCompact == TRUE){
         log_err("Error: ucmp8_set didn't expand the compact data \n");
     }
     /*ucmp8_setRange*/
-    ucmp8_compact(ucmp8Array1, 1);
-    ucmp8_setRange(ucmp8Array1, 0,  10, (uint8_t)0xFD);
-    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    ucmp8_compact(&ucmp8Array1, 1);
+    ucmp8_setRange(&ucmp8Array1, 0,  10, (uint8_t)0xFD);
+    valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
     for(i =0 ; i< 10; i++ ){
         if(valuesSet[0] != (uint8_t)0xFD ){
              log_err("ERROR: ucmp8_set() failed\n");
@@ -273,8 +267,8 @@ static void TestUCMP8API(){
     }
 
     ucmp8_close(ucmp8Array);
-    ucmp8_close(ucmp8Array1);
-    ucmp8_close(ucmp8Array2);
+    ucmp8_close(&ucmp8Array1);
+    ucmp8_close(&ucmp8Array2);
 }
 
 static void TestUCMP32API(){
