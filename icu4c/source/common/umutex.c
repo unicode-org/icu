@@ -317,7 +317,7 @@ umtx_atomic_dec(int32_t *p) {
 #endif   /* Platform selection for atomic_inc and dec. */
 
 
-#elif  /* (ICU_USE_THREADS == 1) */
+#else  /* (ICU_USE_THREADS == 1) */
 
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p) {
