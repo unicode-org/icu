@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/04/22 01:29:14 $ 
- * $Revision: 1.17 $
+ * $Date: 2000/04/25 01:43:23 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -445,6 +445,39 @@ public class TransliteratorTest extends TestFmwk {
 
             "prealphapost prebetapost",
             "prbetaxyz preBETApost",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            logln("Pattern: " + Utility.escape(DATA[i]));
+            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
+
+    /**
+     * Test zero length and > 1 char length variable values.  Test
+     * use of variable refs in UnicodeSets.
+     */
+    public void TestArbitraryVariableValues() {
+        // Array of 3n items
+        // Each item is <rules>, <input>, <expected output>
+        String[] DATA = {
+            "$abe = ab;" +
+            "$pat = x[yY]z;" +
+            "$ll  = 'a-z';" +
+            "$llZ = [$ll];" +
+            "$llY = [$ll$pat];" +
+            "$emp = ;" +
+
+            "$abe > ABE;" +
+            "$pat > END;" +
+            "$llZ > 1;" +
+            "$llY > 2;" +
+            "7$emp 8 > 9;" +
+            "",
+
+            "ab xYzxyz stY78",
+            "ABE ENDEND 1129",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
