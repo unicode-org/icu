@@ -201,7 +201,7 @@ udat_format(    const    UDateFormat*    format,
     position->endIndex = fp.getEndIndex();
   }
   
-  return uprv_fillOutputString(res, result, resultLength, status);
+  return res.extract(result, resultLength, *status);
 }
 
 U_CAPI UDate
@@ -319,7 +319,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
   else
     ((SimpleDateFormat*)fmt)->toPattern(res);
 
-  return uprv_fillOutputString(res, result, resultLength, status);
+  return res.extract(result, resultLength, *status);
 }
 
 // TBD: should this take an UErrorCode?
@@ -358,42 +358,42 @@ udat_getSymbols(const   UDateFormat             *fmt,
   case UDAT_ERAS:
     res = syms->getEras(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
   case UDAT_MONTHS:
     res = syms->getMonths(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
   case UDAT_SHORT_MONTHS:
     res = syms->getShortMonths(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
   case UDAT_WEEKDAYS:
     res = syms->getWeekdays(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
   case UDAT_SHORT_WEEKDAYS:
     res = syms->getShortWeekdays(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
   case UDAT_AM_PMS:
     res = syms->getAmPmStrings(count);
     if(index < count) {
-      return uprv_fillOutputString(res[index], result, resultLength, status);
+      return res[index].extract(result, resultLength, *status);
     }
     break;
 
@@ -401,7 +401,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
     {
       UnicodeString res1(result, 0, resultLength);
       syms->getLocalPatternChars(res1);
-      return uprv_fillOutputString(res1, result, resultLength, status);
+      return res1.extract(result, resultLength, *status);
     }
   }
   

@@ -222,7 +222,7 @@ unum_format(    const    UNumberFormat*    fmt,
     pos->endIndex = fp.getEndIndex();
   }
   
-  return uprv_fillOutputString(res, result, resultLength, status);
+  return res.extract(result, resultLength, *status);
 }
 
 U_CAPI int32_t
@@ -248,7 +248,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
     pos->endIndex = fp.getEndIndex();
   }
   
-  return uprv_fillOutputString(res, result, resultLength, status);
+  return res.extract(result, resultLength, *status);
 }
 
 U_CAPI int32_t
@@ -522,7 +522,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
     return -1;
   }
 
-  return uprv_fillOutputString(res, result, resultLength, status);
+  return res.extract(result, resultLength, *status);
 }
 
 U_CAPI void
@@ -580,7 +580,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
   else
     ((DecimalFormat*)fmt)->toPattern(pat);
 
-  return uprv_fillOutputString(pat, result, resultLength, status);
+  return pat.extract(result, resultLength, *status);
 }
 
 U_CAPI void

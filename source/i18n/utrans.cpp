@@ -404,7 +404,7 @@ utrans_transUChars(const UTransliterator* trans,
 
     // Copy the string buffer back to text (only if necessary)
     // and fill in *neededCapacity (if neededCapacity != NULL).
-    textLen = uprv_fillOutputString(str, text, textCapacity, status);
+    textLen = str.extract(text, textCapacity, *status);
     if(textLength != NULL) {
         *textLength = textLen;
     }
@@ -434,7 +434,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
 
     // Copy the string buffer back to text (only if necessary)
     // and fill in *neededCapacity (if neededCapacity != NULL).
-    textLen = uprv_fillOutputString(str, text, textCapacity, status);
+    textLen = str.extract(text, textCapacity, *status);
     if(textLength != NULL) {
         *textLength = textLen;
     }

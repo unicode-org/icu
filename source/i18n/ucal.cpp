@@ -153,7 +153,7 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
     break;
   }
 
-  return uprv_fillOutputString(id, result, resultLength, status);
+  return id.extract(result, resultLength, *status);
 }
 
 U_CAPI UBool 
