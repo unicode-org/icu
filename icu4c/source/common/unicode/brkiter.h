@@ -270,7 +270,11 @@ public:
      * boundaries have been returned.
      * @stable ICU 2.0
      */
+#ifdef U_CYGWIN
     U_COMMON_API static const int32_t DONE;
+#else
+    static const int32_t DONE;
+#endif
 
     /**
      * Return the index of the first character in the text being scanned.
