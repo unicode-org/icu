@@ -443,7 +443,7 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action,
     case doStartTagValue:
         // Scanned a '{', the opening delimiter for a tag value within a rule.
         n = pushNewNode(RBBINode::tag);
-        n->fVal   = 0;
+        n->fVal      = 0;
         n->fFirstPos = fScanIndex;
         n->fLastPos  = fNextIndex;
         break;
@@ -451,13 +451,15 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action,
     case doTagDigit:
         // Just scanned a decimal digit that's part of a tag value
         {
+            n = fNodeStack[fNodeStackPtr];
             uint32_t v = u_charDigitValue(fC.fChar);
             assert(v >= 0);
-            n->fVal *= v;
+            n->fVal = n->fVal*10 + v;
             break;
         }
 
     case doTagValue:
+        n = fNodeStack[fNodeStackPtr];
         n->fLastPos = fNextIndex;
         fRB->fRules.extractBetween(n->fFirstPos, n->fLastPos, n->fText);
         break;
@@ -951,6 +953,19 @@ void RBBIRuleScanner::parse() {
         }
 
     }
+
+    //
+    // If there were NO user specified reverse rules, set up the equivalent of ".*;"
+    //
+    if (fRB->fReverseTree == NULL) {
+        fRB->fReverseTree  = pushNewNode(RBBINode::opStar);
+        RBBINode  *operand = pushNewNode(RBBINode::setRef);
+        findSetFor(kAny, operand);
+        fRB->fReverseTree->fLeftChild = operand;
+        operand->fParent              = fRB->fReverseTree;
+        fNodeStackPtr -= 2;
+    }
+
 
     //
     // Parsing of the input RBBI rules is complete.

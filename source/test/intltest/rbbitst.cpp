@@ -348,7 +348,7 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
 //    delete rbbi;
 }
 //--------------------------------------------------------------------
-//tests default rules based word iteration
+//tests default rules based sentence iteration
 //--------------------------------------------------------------------
 static const UChar kParagraphSeparator[] = {0x2029, 0};
 static const UChar kLineSeparator[]      = {0x2028, 0};
@@ -766,6 +766,53 @@ void RBBITest::TestTitleBreak()
     delete titleData;
 }
 
+
+//-----------------------------------------------------------------------------------
+//
+//   Test for status {tag} return value from break rules.
+//        TODO:  a more thorough test.
+//
+//-----------------------------------------------------------------------------------
+void RBBITest::TestStatusReturn() {
+     UnicodeString rulesString1 = "$Letters = [:L:];\n"
+                                  "$Numbers = [:N:];\n"
+                                  "$Letters+{1};\n"
+                                  "$Numbers+{2};\n"
+                                  "Help\\ {4}/me\\!;\n"
+                                  "[^$Letters $Numbers];\n"
+                                  "!.*;\n";
+     UnicodeString testString1  = "abc123..abc Help me Help me!";
+                                // 01234567890123456789012345678
+     int32_t bounds1[]   = {0, 3, 6, 7, 8, 11, 12, 16, 17, 19, 20, 25, 27, 28, -1};
+     int32_t brkStatus[] = {0, 1, 2, 0, 0,  1,  0,  1,  0,  1,  0,  4,  1,  0, -1};
+
+     UErrorCode status=U_ZERO_ERROR;
+     UParseError    parseError;
+     
+     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
+     if(U_FAILURE(status)) {
+         errln("FAIL : in construction");
+     } else {
+         int32_t  pos;
+         int32_t  i = 0;
+         bi->setText(testString1);
+         for (pos=bi->first(); pos!= BreakIterator::DONE; pos=bi->next()) {
+             if (pos != bounds1[i]) {
+                 errln("FAIL:  expected break at %d, got %d\n", bounds1[i], pos);
+                 break;
+             }
+
+             int tag = bi->getRuleStatus();
+             if (tag != brkStatus[i]) {
+                 errln("FAIL:  break at %d, expected tag %d, got tag %d\n", pos, brkStatus[i], tag);
+                 break;
+             }
+             i++;
+         }
+     }
+     delete bi;
+}
+
 /*
 //Bug: if there is no word break before and after danda when it is followed by a space
 void RBBITest::TestDanda()
@@ -1039,6 +1086,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestHindiWordBreak();                     break;
         case 6: name = "TestTitleBreak";
             if(exec) TestTitleBreak();                         break;
+        case 7: name = "TestStatusReturn";
+            if(exec) TestStatusReturn();                       break;
 
 //      case 6: name = "TestDanda()";
 //           if(exec) TestDanda();                             break;

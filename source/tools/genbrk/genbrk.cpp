@@ -191,7 +191,7 @@ int  main(int argc, char **argv) {
     //
     uint32_t        outDataSize;
     const uint8_t  *outData;
-    outData = bi->getFlattenedData(&outDataSize);
+    outData = bi->getBinaryRules(outDataSize);
 
 
     //

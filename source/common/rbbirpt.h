@@ -101,7 +101,7 @@ struct RBBIRuleTableEl gRuleParseStateTable[] = {
     , {doExprCatOperator, 36 /*$*/, 12,0,  FALSE}     //  30 
     , {doExprCatOperator, 46 /*.*/, 12,0,  FALSE}     //  31 
     , {doExprCatOperator, 47 /*/*/, 37,0,  FALSE}     //  32 
-    , {doExprCatOperator, 123 /*{*/, 49,0,  FALSE}     //  33 
+    , {doExprCatOperator, 123 /*{*/, 49,0,  TRUE}     //  33 
     , {doExprOrOperator, 124 /*|*/, 12,0,  TRUE}     //  34 
     , {doExprRParen, 41 /*)*/, 255,0,  TRUE}     //  35 
     , {doExprFinished, 255, 255,0,  FALSE}     //  36 

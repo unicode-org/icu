@@ -155,7 +155,7 @@ void RuleBasedBreakIterator::init() {
     fText                = NULL;
     fData                = NULL;
     fCharMappings        = NULL;
-    fLastBreakStatus     = 0;
+    fLastBreakTag        = 0;
     fDictionaryCharCount = 0;   
 
     if (debugInitDone == FALSE) {
@@ -489,11 +489,14 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     int32_t lookaheadResult = 0;
     
     // begin in state 1
-    int32_t            state    = START_STATE;
+    int32_t            state           = START_STATE;
     int16_t            category;
-    UChar32            c        = fText->current32();  
+    UChar32            c               = fText->current32();  
     RBBIStateTableRow *row;
     int32_t            lookaheadStatus = 0;
+    int32_t            lookaheadTag    = 0;
+
+    fLastBreakTag = 0;
 
     row = (RBBIStateTableRow *)
         (fData->fForwardTable->fTableData + (fData->fForwardTable->fRowLen * state));
@@ -550,10 +553,13 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
             goto continueOn;
         }
         
-        if (row->fAccepting != 0 && row->fLookAhead == 0) {
+        if (row->fAccepting == -1) {
             // Match found, common case, no lookahead involved.
-            result = fText->getIndex();
-            lookaheadStatus = 0;     // clear out any pending look-ahead matches.
+            //    (It's possible that some lookahead rule matched here also,
+            //     but since there's an unconditional match, we'll favor that.)
+            result          = fText->getIndex();
+            lookaheadStatus = 0;           // clear out any pending look-ahead matches.
+            fLastBreakTag   = row->fTag;   // Remember the break status (tag) value.
             goto continueOn;
         }
         
@@ -566,6 +572,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
             if (r > result) {
                 lookaheadResult = r;
                 lookaheadStatus = row->fLookAhead;
+                lookaheadTag   = row->fTag;
             }
             goto continueOn;
         }
@@ -576,7 +583,8 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
             if (lookaheadResult > result) {
                 assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
                 //    of overlapping lookahead matches.
-                result = lookaheadResult;
+                result          = lookaheadResult;
+                fLastBreakTag   = lookaheadTag;
                 lookaheadStatus = 0;
             }
             goto continueOn;
@@ -631,6 +639,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
     int32_t            result          = fText->getIndex();
     int32_t            lookaheadStatus = 0;
     int32_t            lookaheadResult = 0;
+    int32_t            lookaheadTag    = 0;
     UChar32            c               = fText->current32();
     RBBIStateTableRow *row;
 
@@ -685,7 +694,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             goto continueOn;
         }
         
-        if (row->fAccepting != 0 && row->fLookAhead == 0) {
+        if (row->fAccepting == -1) {
             // Match found, common case, no lookahead involved.
             result = fText->getIndex();
             lookaheadStatus = 0;     // clear out any pending look-ahead matches.
@@ -694,13 +703,14 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
         
         if (row->fAccepting == 0 && row->fLookAhead != 0) {
             // Lookahead match point.  Remember it, but only if no other rule
-            //   has unconditinally matched to this point.
+            //                         has unconditionally matched to this point.
             // TODO:  handle case where there's a pending match from a different rule
             //        where lookaheadStatus != 0  && lookaheadStatus != row->fLookAhead.
             int32_t  r = fText->getIndex();
             if (r > result) {
                 lookaheadResult = r;
                 lookaheadStatus = row->fLookAhead;
+                lookaheadTag    = row->fTag;
             }
             goto continueOn;
         }
@@ -711,7 +721,8 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             if (lookaheadResult > result) {
                 assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
                 //    of overlapping lookahead matches.
-                result = lookaheadResult;
+                result          = lookaheadResult;
+                fLastBreakTag   = lookaheadTag;
                 lookaheadStatus = 0;
             }
             goto continueOn;
@@ -752,8 +763,8 @@ RuleBasedBreakIterator::reset()
 //   getRuleStatus()
 //
 //-------------------------------------------------------------------------------
-int16_t  RuleBasedBreakIterator::getRuleStatus() const {
-    return fLastBreakStatus;
+int32_t  RuleBasedBreakIterator::getRuleStatus() const {
+    return fLastBreakTag;
 }
 
 
@@ -764,13 +775,13 @@ int16_t  RuleBasedBreakIterator::getRuleStatus() const {
 //                         for standard iterator types.
 //
 //-------------------------------------------------------------------------------
-const uint8_t  *RuleBasedBreakIterator::getFlattenedData(uint32_t *length) {
+const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
     const uint8_t  *retPtr = NULL;
-    *length = 0;
+    length = 0;
 
     if (fData != NULL) {
         retPtr = (const uint8_t *)fData->fHeader;
-         *length = fData->fHeader->fLength;
+         length = fData->fHeader->fLength;
     }
     return retPtr;
 }
