@@ -519,13 +519,13 @@ static void TestParseMessageWithValist()
     double value;
     UChar str[10];
     UChar res[10];
-        
+
     log_verbose("\nTesting a sample for parse Message test#9\n");
-    
+
     u_uastrcpy(source, "You deposited an amount of $500.00");
     u_uastrcpy(pattern, "You {0} an amount of {1,number,currency}");
     u_uastrcpy(res,"deposited");
-        
+
     CallParseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, str, &value);
     if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#9: %s\n", myErrorName(status));
@@ -535,14 +535,13 @@ static void TestParseMessageWithValist()
     else
         log_err("FAIL: Error in parseMessage on test#9 \n");
 
-    
-    
+
     log_verbose("\nTesting a sample for parse Message test#10\n");
-    
+
     u_uastrcpy(source, "There are 123 files on MyDisk created");
     u_uastrcpy(pattern, "There are {0,number,integer} files on {1} created");
     u_uastrcpy(res,"MyDisk");
-        
+
     CallParseMessage( "en_US", pattern, u_strlen(pattern), source, u_strlen(source), &status, &value, str);
     if(U_FAILURE(status)){
         log_err("ERROR: failure in parse Message on test#10: %s\n", myErrorName(status));
@@ -556,7 +555,7 @@ static void TestParseMessageWithValist()
 /**
  * Regression test for ICU4C Jitterbug 904
  */
-void TestJ904(void) {
+static void TestJ904(void) {
     UChar pattern[256];
     UChar result[256];
     UChar string[16];
