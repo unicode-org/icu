@@ -765,7 +765,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
     resB->fKey = key;
-    resB->fParent = parent;
+    resB->fParentRes = parent;
+    resB->fTopLevelData = parent->fTopLevelData;
     if(parent->fResPath) {
       ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
     }
@@ -1262,6 +1263,61 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
   return result;
 }
 
+U_CAPI UResourceBundle* U_EXPORT2 
+ures_getByKeyWithFallback(const UResourceBundle *resB, 
+                          const char* inKey, 
+                          UResourceBundle *fillIn, 
+                          UErrorCode *status) {
+    Resource res = RES_BOGUS;
+    UResourceDataEntry *realData = NULL;
+    const char *key = inKey;
+
+    if (status==NULL || U_FAILURE(*status)) {
+        return fillIn;
+    }
+    if(resB == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return fillIn;
+    }
+
+    if(RES_GET_TYPE(resB->fRes) == URES_TABLE || RES_GET_TYPE(resB->fRes) == URES_TABLE32) {
+        int32_t t;
+        res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
+        if(res == RES_BOGUS) {
+            int32_t i = 0;
+            UResourceDataEntry *dataEntry = resB->fData;
+            char path[256];
+            char* myPath = path;
+            uprv_strncpy(path, resB->fResPath, resB->fResPathLen);
+            /*path[resB->fResPathLen] = '/';*/
+            uprv_strcpy(path+resB->fResPathLen, inKey);
+
+            key = inKey;
+            while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
+                dataEntry = dataEntry->fParent;
+                if(dataEntry->fBogus == U_ZERO_ERROR) {
+                    i++;
+                    res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key); 
+                    /*res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);*/
+                }
+            }
+            /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
+            if(res != RES_BOGUS) {
+              /* check if resB->fResPath gives the right name here */
+                return init_resb_result(&(dataEntry->fData), res, key, -1, dataEntry, resB, 0, fillIn, status);
+            } else {
+                *status = U_MISSING_RESOURCE_ERROR;
+            }
+        } else {
+            return init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+        }
+    } 
+    else {
+        *status = U_RESOURCE_TYPE_MISMATCH;
+    }
+    return fillIn;
+}
+
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
     Resource res = RES_BOGUS;
@@ -1438,16 +1494,12 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         return resourceBundle->fData->fName;
         break;
       case ULOC_VALID_LOCALE:
-        parent = resourceBundle;
-        while(parent->fParent) {
-          parent = parent->fParent;
-        }
-        return parent->fData->fName;
+        return resourceBundle->fTopLevelData->fName;
         break;
       case ULOC_REQUESTED_LOCALE:
         parent = resourceBundle;
-        while(parent->fParent) {
-          parent = parent->fParent;
+        while(parent->fParentRes) {
+          parent = parent->fParentRes;
         }
         return parent->fRequestedLocale;
         break;
@@ -1565,7 +1617,8 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
         /*r->fParent = RES_BOGUS;*/
         /*r->fResPath = NULL;*/
-        r->fParent = NULL;
+        r->fParentRes = NULL;
+        r->fTopLevelData = r->fData;
 
         ures_freeResPath(r);
         ures_freeRequestedLocale(r);
@@ -1617,7 +1670,8 @@ ures_open(const char* path,
         uprv_free(r);
         return NULL;
     }
-    r->fParent = NULL;
+    r->fParentRes = NULL;
+    r->fTopLevelData = r->fData;
 
     hasData = r->fData;
     while(hasData->fBogus != U_ZERO_ERROR) {
@@ -1746,7 +1800,8 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
-    r->fParent = NULL;
+    r->fParentRes = NULL;
+    r->fTopLevelData = r->fData;
 
     if(uprv_strlen(localeID) >= RES_BUFSIZE) {
       r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
