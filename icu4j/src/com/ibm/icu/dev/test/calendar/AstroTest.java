@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2003/09/04 00:57:10 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/09/18 21:00:34 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -116,10 +116,10 @@ public class AstroTest extends TestFmwk {
 	    logln("   moon phase: " + astro.getMoonPhase());
 	    logln("   moonrise: " + new Date(astro.getMoonRiseSet(true)));
 	    logln("   moonset: " + new Date(astro.getMoonRiseSet(false)));
-	    logln("   prev summer solstice: " + new Date(astro.getSunTime(astro.SUMMER_SOLSTICE, false)));
-	    logln("   next summer solstice: " + new Date(astro.getSunTime(astro.SUMMER_SOLSTICE, true)));
-	    logln("   prev full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, false)));
-	    logln("   next full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, true)));
+	    logln("   prev summer solstice: " + new Date(astro.getSunTime(CalendarAstronomer.SUMMER_SOLSTICE, false)));
+	    logln("   next summer solstice: " + new Date(astro.getSunTime(CalendarAstronomer.SUMMER_SOLSTICE, true)));
+	    logln("   prev full moon: " + new Date(astro.getMoonTime(CalendarAstronomer.FULL_MOON, false)));
+	    logln("   next full moon: " + new Date(astro.getMoonTime(CalendarAstronomer.FULL_MOON, true)));
 	}
     }
 
@@ -257,9 +257,9 @@ public class AstroTest extends TestFmwk {
         GregorianCalendar cal3 = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US);
         DateFormat d3 = DateFormat.getDateTimeInstance(cal3, DateFormat.MEDIUM,DateFormat.MEDIUM,Locale.US);
         cal3.clear();
-        cal3.set(cal3.YEAR, 1980);
-        cal3.set(cal3.MONTH, Calendar.JULY);
-        cal3.set(cal3.DATE, 27);
+        cal3.set(Calendar.YEAR, 1980);
+        cal3.set(Calendar.MONTH, Calendar.JULY);
+        cal3.set(Calendar.DATE, 27);
         astro.setDate(cal3.getTime());
         double jd = astro.getJulianDay() - 2447891.5;
         double exp = -3444;

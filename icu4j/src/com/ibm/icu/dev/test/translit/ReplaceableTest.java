@@ -5,20 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2002/12/11 02:09:08 $
- * $Revision: 1.16 $
+ * $Date: 2003/09/18 20:59:46 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
 import java.io.*;
-import java.util.BitSet;
-import java.util.HashMap;
 import java.text.ParseException;
 
 /**
