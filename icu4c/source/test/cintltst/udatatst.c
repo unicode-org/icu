@@ -297,7 +297,7 @@ static void TestUDataSetAppData(){
         goto cleanupAndReturn;
     }
 
-    fileBuf = (char *)malloc(fileSize);
+    fileBuf = (char *)ctst_malloc(fileSize);
     if (fileBuf == 0) {
         log_err("FAIL: TestUDataSetAppData() can not malloc(%d) for file \"%s\".\n", fileSize, filePath);
         goto cleanupAndReturn;
