@@ -478,14 +478,14 @@ class U_COMMON_API ICULocaleService : public ICUService
    * registerObject(Object, Locale, int32_t kind, int coverage)
    * passing KIND_ANY for the kind, and VISIBLE for the coverage.
    */
-  URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, UErrorCode& status);
+  virtual URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This calls
    * registerObject(Object, Locale, int kind, int coverage)
    * passing VISIBLE for the coverage.
    */
-  URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status);
+  virtual URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, UErrorCode& status);
 
   /**
    * Convenience function for callers using locales.  This  instantiates
@@ -493,28 +493,15 @@ class U_COMMON_API ICULocaleService : public ICUService
    */
   virtual URegistryKey registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status);
 
-#if 0
-  // Since both UnicodeString and Locale have constructors that take const char*, adding a public
-  // method that takes UnicodeString causes ambiguity at call sites that use const char*.
-  // We really need a flag that is understood by all compilers that will suppress the warning about
-  // hidden overrides.
 
   /**
    * (Stop compiler from complaining about hidden overrides.)
+   * Since both UnicodeString and Locale have constructors that take const char*, adding a public
+   * method that takes UnicodeString causes ambiguity at call sites that use const char*.
+   * We really need a flag that is understood by all compilers that will suppress the warning about
+   * hidden overrides.
    */
-  URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, UErrorCode& status);
-
-  /**
-   * (Stop compiler from complaining about hidden overrides.)
-   */
-  URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, UBool visible, UErrorCode& status);
-
-  /**
-   * Since the factory ultimately needs a UnicodeString, and we needed to add other overrides that take a
-   * UnicodeString as well, we'll vector all the overrides through this call.
-   */
-  virtual URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, int32_t kind, int32_t coverage, UErrorCode& status);
-#endif
+  virtual URegistryKey registerInstance(UObject* objToAdopt, const UnicodeString& locale, UBool visible, UErrorCode& status);
 
   /**
    * Convenience method for callers using locales.  This returns the standard
