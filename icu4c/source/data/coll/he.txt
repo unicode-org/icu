@@ -16,8 +16,5 @@ he{
             Sequence{" [normalization on ]"}
             Version{"3.0"}
         }
-        validSubLocales{
-            he_IL{""}
-        }
     }
 }

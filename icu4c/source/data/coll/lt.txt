@@ -22,8 +22,5 @@ lt{
             }
             Version{"2.0"}
         }
-        validSubLocales{
-            lt_LT{""}
-        }
     }
 }

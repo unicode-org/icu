@@ -16,8 +16,5 @@ sl{
             Sequence{"&C<č<<<Č<ć<<<Ć&S<š<<<Š&Z<ž<<<Ž"}
             Version{"1.0"}
         }
-        validSubLocales{
-            sl_SI{""}
-        }
     }
 }

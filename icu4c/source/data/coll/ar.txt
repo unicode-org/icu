@@ -16,25 +16,5 @@ ar{
             Sequence{"&ة=ت"}
             Version{"3.0"}
         }
-        validSubLocales{
-            ar_AE{""}
-            ar_BH{""}
-            ar_DZ{""}
-            ar_EG{""}
-            ar_IN{""}
-            ar_IQ{""}
-            ar_JO{""}
-            ar_KW{""}
-            ar_LB{""}
-            ar_LY{""}
-            ar_MA{""}
-            ar_OM{""}
-            ar_QA{""}
-            ar_SA{""}
-            ar_SD{""}
-            ar_SY{""}
-            ar_TN{""}
-            ar_YE{""}
-        }
     }
 }

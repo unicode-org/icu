@@ -25,8 +25,5 @@ pl{
             }
             Version{"2"}
         }
-        validSubLocales{
-            pl_PL{""}
-        }
     }
 }

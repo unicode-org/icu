@@ -25,8 +25,5 @@ hi{
             Sequence{" [normalization on ]&[before 1]0<ॐ<।<॥<॰&ह<़<ँ<ं<ः<॑<॒<॓<॔&ऽ<्"}
             Version{"2.0"}
         }
-        validSubLocales{
-            hi_IN{""}
-        }
     }
 }

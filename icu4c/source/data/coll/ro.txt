@@ -16,8 +16,5 @@ ro{
             Sequence{"&A<ă<<<Ă<â<<<Â&D<đ<<<Đ&I<î<<<Î&S<ş=ș<<<Ş=Ș&T<ţ=ț<<<Ţ=Ț&Z<ż<<<Ż"}
             Version{"1.0"}
         }
-        validSubLocales{
-            ro_RO{""}
-        }
     }
 }

@@ -16,23 +16,5 @@ en{
             Sequence{"&ae<<æ<<<Æ"}
             Version{"1.0"}
         }
-        validSubLocales{
-            en_AU{""}
-            en_BW{""}
-            en_CA{""}
-            en_GB{""}
-            en_HK{""}
-            en_IE{""}
-            en_IN{""}
-            en_MT{""}
-            en_NZ{""}
-            en_PH{""}
-            en_SG{""}
-            en_US{""}
-            en_US_POSIX{""}
-            en_VI{""}
-            en_ZA{""}
-            en_ZW{""}
-        }
     }
 }

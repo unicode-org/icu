@@ -22,8 +22,5 @@ kl{
             }
             Version{"1.0"}
         }
-        validSubLocales{
-            kl_GL{""}
-        }
     }
 }

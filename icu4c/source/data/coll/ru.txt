@@ -16,9 +16,5 @@ ru{
             Sequence{"[suppressContractions [Ѐ-џ] ]"}
             Version{"1.1"}
         }
-        validSubLocales{
-            ru_RU{""}
-            ru_UA{""}
-        }
     }
 }

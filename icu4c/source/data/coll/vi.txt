@@ -24,8 +24,5 @@ vi{
             }
             Version{"3.1"}
         }
-        validSubLocales{
-            vi_VN{""}
-        }
     }
 }

@@ -16,8 +16,5 @@ kn{
             Sequence{" [normalization on ]"}
             Version{"1.0"}
         }
-        validSubLocales{
-            kn_IN{""}
-        }
     }
 }

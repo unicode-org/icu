@@ -16,8 +16,5 @@ ml{
             Sequence{" [normalization on ]&ല<വ&ഴ<റ&ഹ<ഃ<ം"}
             Version{"1.0"}
         }
-        validSubLocales{
-            ml_IN{""}
-        }
     }
 }
