@@ -31,7 +31,7 @@ public class ICULocaleData {
     /**
      * The base name (bundle name) for ICU locale data.
      */
-    private static final String LOCALE_ELEMENTS = "LocaleElements";
+    static final String LOCALE_ELEMENTS = "LocaleElements";
 
     /**
      * Return a list of the locales supported by a collection of resource bundles.
