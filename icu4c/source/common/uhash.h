@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ******************************************************************************
 *   Date        Name        Description
@@ -431,6 +431,16 @@ uhash_iremove(UHashtable *hash,
 U_CAPI int32_t U_EXPORT2 
 uhash_removei(UHashtable *hash,
               const void* key);
+
+/**
+ * Remove an item from a UHashtable stored by uhash_iputi().
+ * @param hash The target UHashtable.
+ * @param key An integer key stored in a hashtable
+ * @return The item removed, or 0 if not found.
+ */
+U_CAPI int32_t U_EXPORT2 
+uhash_iremovei(UHashtable *hash,
+               int32_t key);
 
 /**
  * Remove all items from a UHashtable.

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   Date        Name        Description
@@ -173,24 +173,24 @@ static void TestOtherAPI(void){
     }
     log_verbose("Ok: uhash_open returned 0x%08X\n", hash);
 
-    uhash_put(hash, (void*)one, (void*)1, &status);
+    uhash_puti(hash, (void*)one, 1, &status);
     if(uhash_count(hash) != 1){
          log_err("FAIL: uhas_count() failed. Expected: 1, Got: %d\n", uhash_count(hash));
      }
-    uhash_put(hash, (void*)two, (void*)2, &status);
-    uhash_put(hash, (void*)three, (void*)3, &status);
-    uhash_put(hash, (void*)four, (void*)4, &status);
-    uhash_put(hash, (void*)five, (void*)5, &status);
+    uhash_puti(hash, (void*)two, 2, &status);
+    uhash_puti(hash, (void*)three, 3, &status);
+    uhash_puti(hash, (void*)four, 4, &status);
+    uhash_puti(hash, (void*)five, 5, &status);
     
     if(uhash_count(hash) != 5){
         log_err("FAIL: uhas_count() failed. Expected: 5, Got: %d\n", uhash_count(hash));
     }
     
-    if((int32_t)uhash_get(hash, (void*)two2) != 2){
-        log_err("FAIL: uhash_get failed\n");
+    if(uhash_geti(hash, (void*)two2) != 2){
+        log_err("FAIL: uhash_geti failed\n");
     }
     
-    if((int32_t)uhash_remove(hash, (void*)five2) != 5){
+    if(uhash_removei(hash, (void*)five2) != 5){
         log_err("FAIL: uhash_remove() failed\n");
     }
     if(uhash_count(hash) != 4){
@@ -202,13 +202,13 @@ static void TestOtherAPI(void){
         log_err("FAIL: uhash_put() with value=NULL didn't remove the key value pair\n");
     }
     status=U_ILLEGAL_ARGUMENT_ERROR;
-    uhash_put(hash, (void*)one, (void*)1, &status);
+    uhash_puti(hash, (void*)one, 1, &status);
     if(uhash_count(hash) != 3){
         log_err("FAIL: uhash_put() with value!=NULL should fail when status != U_ZERO_ERROR \n");
     }
     
     status=U_ZERO_ERROR;
-    uhash_put(hash, (void*)one, (void*)1, &status);
+    uhash_puti(hash, (void*)one, 1, &status);
     if(uhash_count(hash) != 4){
         log_err("FAIL: uhash_put() with value!=NULL didn't replace the key value pair\n");
     }
@@ -227,9 +227,9 @@ static void TestOtherAPI(void){
 
     uhash_setKeyComparator(hash, uhash_compareLong);
     uhash_setKeyHasher(hash, uhash_hashLong);
-    uhash_iput(hash, 1001, (void*)1, &status);
-    uhash_iput(hash, 1002, (void*)2, &status);
-    uhash_iput(hash, 1003, (void*)3, &status);
+    uhash_iputi(hash, 1001, 1, &status);
+    uhash_iputi(hash, 1002, 2, &status);
+    uhash_iputi(hash, 1003, 3, &status);
     if(_compareLong(1001, 1002) == TRUE ||
         _compareLong(1001, 1001) != TRUE ||
         _compareLong(1001, 0) == TRUE  )  {
@@ -238,16 +238,16 @@ static void TestOtherAPI(void){
     /*set the resize policy to just GROW and SHRINK*/
          /*how to test this??*/
     uhash_setResizePolicy(hash, U_GROW_AND_SHRINK);
-    uhash_iput(hash, 1004, (void*)4, &status);
-    uhash_iput(hash, 1005, (void*)5, &status);
-    uhash_iput(hash, 1006, (void*)6, &status);
+    uhash_iputi(hash, 1004, 4, &status);
+    uhash_iputi(hash, 1005, 5, &status);
+    uhash_iputi(hash, 1006, 6, &status);
     if(uhash_count(hash) != 6){
         log_err("FAIL: uhash_count() failed. Expected: 6, Got: %d\n", uhash_count(hash));
     }
-    if((int32_t)uhash_iremove(hash, 1004) != 4){
+    if(uhash_iremovei(hash, 1004) != 4){
         log_err("FAIL: uhash_remove failed\n");
     }
-    if((int32_t)uhash_iremove(hash, 1004) != 0){
+    if(uhash_iremovei(hash, 1004) != 0){
         log_err("FAIL: uhash_remove failed\n");
     }
     uhash_close(hash);
@@ -280,8 +280,8 @@ static void _put(UHashtable* hash,
           int32_t value,
           int32_t expectedOldValue) {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t oldValue = (int32_t)
-        uhash_put(hash, (void*) key, (void*) value, &status);
+    int32_t oldValue =
+        uhash_puti(hash, (void*) key, value, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: uhash_put(%s) failed with %s and returned %ld\n",
                 key, u_errorName(status), oldValue);
@@ -298,7 +298,7 @@ static void _get(UHashtable* hash,
           const char* key,
           int32_t expectedValue) {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t value = (int32_t) uhash_get(hash, key);
+    int32_t value = uhash_geti(hash, key);
     if (U_FAILURE(status)) {
         log_err("FAIL: uhash_get(%s) failed with %s and returned %ld\n",
                 key, u_errorName(status), value);
@@ -314,7 +314,7 @@ static void _get(UHashtable* hash,
 static void _remove(UHashtable* hash,
              const char* key,
              int32_t expectedValue) {
-    int32_t value = (int32_t) uhash_remove(hash, key);
+    int32_t value = uhash_removei(hash, key);
     if (value != expectedValue) {
         log_err("FAIL: uhash_remove(%s) returned %ld; expected %ld\n",
                 key, value, expectedValue);
