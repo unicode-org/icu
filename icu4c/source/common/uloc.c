@@ -2146,7 +2146,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
                     UChar *dest, int32_t destCapacity,
                     UErrorCode *pErrorCode) {
     const UChar *s = NULL;
-    int32_t length;
+    int32_t length = 0;
 
     if(itemKey==NULL) {
         /* top-level item: normal resource bundle access */

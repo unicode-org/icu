@@ -203,7 +203,7 @@ public:
   */
 
  /**
-  * <p>ICUServiceFactories generate the service objects maintained by the
+  * <p>An implementing ICUServiceFactory generates the service objects maintained by the
   * service.  A factory generates a service object from a key,
   * updates id->factory mappings, and returns the display name for
   * a supported id.</p>
@@ -310,7 +310,7 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
    * @param status the error code status.
    * @return the service object, or NULL if the factory does not support the key.
    */
-  UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
+  virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 
   /**
    * <p>This implementation adds a mapping from ID -> this to result if visible is TRUE, 
@@ -319,7 +319,7 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
    * @param result the mapping table to update.
    * @param status the error code status.
    */
-  void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
+  virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
 
   /**
    * <p>This implementation returns the factory ID if it equals id and visible is TRUE,
@@ -331,9 +331,9 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
    * @param result output parameter to hold the display name.
    * @return result.
    */
-  UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const;
+  virtual UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const;
 
- public:
+public:
  /**
   * UObject RTTI boilerplate.
   */

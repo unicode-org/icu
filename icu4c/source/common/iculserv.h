@@ -243,12 +243,12 @@ public:
      * Override of superclass method.  This adjusts the result based
      * on the coverage rule for this factory.
      */
-    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
+    virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
 
     /**
      * Return a localized name for the locale represented by id.
      */
-    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const;
+    virtual UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const;
 
 protected:
     /**
@@ -261,7 +261,7 @@ protected:
      * Return true if this id is one the factory supports (visible or 
      * otherwise).
      */
-     virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
+    virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
 
    /**
      * Return the set of ids that this factory supports (visible or 
@@ -319,13 +319,13 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
     /**
      * Override of superclass method.  Returns the service object if kind/locale match.  Service is not used.
      */
-    UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 
     /**
      * Override of superclass method.  This adjusts the result based
      * on the coverage rule for this factory.
      */
-    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
+    virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const;
 
  protected:
     /**
