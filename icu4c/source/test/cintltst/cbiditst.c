@@ -187,10 +187,10 @@ static void TestReorder(){
             "DEL(\\u0644\\u0644)ADD(\\u0644.\\u0644.\\u0029\\u0644)\\u0644.\\u200F",
             "DEL(\\u0631\\u064A)ADD(\\u0631.\\u064A.) \\u0631.\\u064A.\\u200F",
             "DAY  2  \\u0646  \\u0627\\u0644\\u0627\\u062B\\u0646\\u064A\\u0646 DAYABBR",
-            "DAY  3  \\u062B  \\u0627\\u0644\\u062B\\u0644\\u0627\\u062B\\u0627\\u0621 DAYABBR",     
-            "DAY  4   \\u0631  \\u0627\\u0644\\u0623\\u0631\\u0628\\u0639\\u0627\\u0621 DAYABBR",   
-            "DAY  5  \\u062E  \\u0627\\u0644\\u062E\\u0645\\u064A\\u0633  DAYABBR",   
-            "DAY  6   \\u062C  \\u0627\\u0644\\u062C\\u0645\\u0639\\u0629    DAYABBR", 
+            "DAY  3  \\u062B  \\u0627\\u0644\\u062B\\u0644\\u0627\\u062B\\u0627\\u0621 DAYABBR",
+            "DAY  4   \\u0631  \\u0627\\u0644\\u0623\\u0631\\u0628\\u0639\\u0627\\u0621 DAYABBR",
+            "DAY  5  \\u062E  \\u0627\\u0644\\u062E\\u0645\\u064A\\u0633  DAYABBR",
+            "DAY  6   \\u062C  \\u0627\\u0644\\u062C\\u0645\\u0639\\u0629    DAYABBR",
             "DAY  7  \\u0633  \\u0627\\u0644\\u0633\\u0628\\u062A  DAYABBR",
             "HELLO\\u0627\\u0644\\u0633\\u0628\\u062A",
     };
@@ -204,20 +204,20 @@ static void TestReorder(){
              */
             "DEL(\\u064A\\u0631)ADD(\\u200F.\\u064A.\\u0631 (.\\u064A.\\u0631",
             "DAY  2  \\u0646\\u064A\\u0646\\u062B\\u0627\\u0644\\u0627  \\u0646 DAYABBR",
-            "DAY  3  \\u0621\\u0627\\u062B\\u0627\\u0644\\u062B\\u0644\\u0627  \\u062B DAYABBR",     
-            "DAY  4   \\u0621\\u0627\\u0639\\u0628\\u0631\\u0623\\u0644\\u0627  \\u0631 DAYABBR",   
-            "DAY  5  \\u0633\\u064A\\u0645\\u062E\\u0644\\u0627  \\u062E  DAYABBR",   
-            "DAY  6   \\u0629\\u0639\\u0645\\u062C\\u0644\\u0627  \\u062C    DAYABBR", 
+            "DAY  3  \\u0621\\u0627\\u062B\\u0627\\u0644\\u062B\\u0644\\u0627  \\u062B DAYABBR",
+            "DAY  4   \\u0621\\u0627\\u0639\\u0628\\u0631\\u0623\\u0644\\u0627  \\u0631 DAYABBR",
+            "DAY  5  \\u0633\\u064A\\u0645\\u062E\\u0644\\u0627  \\u062E  DAYABBR",
+            "DAY  6   \\u0629\\u0639\\u0645\\u062C\\u0644\\u0627  \\u062C    DAYABBR",
             "DAY  7  \\u062A\\u0628\\u0633\\u0644\\u0627  \\u0633  DAYABBR",
             "HELLO\\u062A\\u0628\\u0633\\u0644\\u0627",
     };
     static const char* const visualOrder1[]={
             ")\\u062F.\\u0625.\\u200F(DDA)\\u062F\\u0625(LED",
             ")\\u0623\\u064A\\u0627\\u0631(DDA )\\u0645\\u0627\\u064A\\u0648(LED",
-            "\\u0644.\\u0644.(\\u0644(\\u0644.\\u200F(DDA)\\u0644\\u0644(LED", 
+            "\\u0644.\\u0644.(\\u0644(\\u0644.\\u200F(DDA)\\u0644\\u0644(LED",
             "\\u0631.\\u064A.( \\u0631.\\u064A.\\u200F(DDA)\\u0631\\u064A(LED",
             "RBBAYAD \\u0646  \\u0627\\u0644\\u0627\\u062B\\u0646\\u064A\\u0646  2  YAD",
-            "RBBAYAD \\u062B  \\u0627\\u0644\\u062B\\u0644\\u0627\\u062B\\u0627\\u0621  3  YAD", 
+            "RBBAYAD \\u062B  \\u0627\\u0644\\u062B\\u0644\\u0627\\u062B\\u0627\\u0621  3  YAD",
             "RBBAYAD \\u0631  \\u0627\\u0644\\u0623\\u0631\\u0628\\u0639\\u0627\\u0621   4  YAD",
             "RBBAYAD  \\u062E  \\u0627\\u0644\\u062E\\u0645\\u064A\\u0633  5  YAD",
             "RBBAYAD    \\u062C  \\u0627\\u0644\\u062C\\u0645\\u0639\\u0629   6  YAD",
@@ -297,12 +297,12 @@ static void TestReorder(){
         }else if(uprv_strncmp(visualOrder[i],chars,destSize)!=0){
             log_err("ubidi_writeReordered() did not give expected results. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
 
-            
+
         }
         free(src);
         free(dest);
     }
-    
+
     for(i=0;i<(sizeof(logicalOrder)/sizeof(logicalOrder[0]));i++){
         int32_t srcSize = (int32_t)uprv_strlen(logicalOrder[i]);
         int32_t destSize = srcSize*2;
@@ -331,11 +331,11 @@ static void TestReorder(){
         if(destSize!=srcSize){
             log_err("ubidi_writeReordered() destSize and srcSize do not match\n");
         }else if(uprv_strncmp(visualOrder1[i],chars,destSize)!=0){
-            log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder1[i],chars,i);
 
-            
+
         }
-        
+
         free(src);
         free(dest);
     }
@@ -370,11 +370,11 @@ static void TestReorder(){
             log_err("ubidi_writeReordered() destSize and srcSize do not match. Dest Size = %d Source Size = %d\n",destSize,srcSize );
         }else*/
             if(uprv_strncmp(visualOrder2[i],chars,destSize)!=0){
-            log_err("ubidi_writeReordered() did not give expected results for UBIDI_INSERT_LRM_FOR_NUMERIC+UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_INSERT_LRM_FOR_NUMERIC+UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder2[i],chars,i);
 
-            
+
         }
-        
+
         free(src);
         free(dest);
     }
@@ -409,11 +409,11 @@ static void TestReorder(){
         if(destSize!=srcSize){
             log_err("ubidi_writeReordered() destSize and srcSize do not match. Dest Size = %d Source Size = %d\n",destSize,srcSize );
         }else if(uprv_strncmp(visualOrder3[i],chars,destSize)!=0){
-            log_err("ubidi_writeReordered() did not give expected results for UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_OUTPUT_REVERSE. Expected: %s Got: %s At Index: %d\n",visualOrder3[i],chars,i);
 
-            
+
         }
-        
+
         free(src);
         free(dest);
     }
@@ -432,7 +432,7 @@ static void TestReorder(){
             log_err("ubidi_setPara(tests[%d], paraLevel %d) failed with errorCode %s\n",
                     i, UBIDI_MAX_EXPLICIT_LEVEL, u_errorName(ec));
         }
-        
+
         /* try pre-flighting */
         destSize = ubidi_writeReordered(bidi,dest,0,UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS,&ec);
         if(ec!=U_BUFFER_OVERFLOW_ERROR){
@@ -448,9 +448,9 @@ static void TestReorder(){
         /*if(destSize!=srcSize){
             log_err("ubidi_writeReordered() destSize and srcSize do not match. Dest Size = %d Source Size = %d\n",destSize,srcSize );
         }else*/ if(uprv_strncmp(visualOrder4[i],chars,destSize)!=0){
-            log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS. Expected: %s Got: %s At Index: %d\n",visualOrder[i],chars,i);
+            log_err("ubidi_writeReordered() did not give expected results for UBIDI_DO_MIRRORING+UBIDI_REMOVE_BIDI_CONTROLS. Expected: %s Got: %s At Index: %d\n",visualOrder4[i],chars,i);
         }
-        
+
         free(src);
         free(dest);
     }
