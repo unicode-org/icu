@@ -21,6 +21,7 @@ CFG=Debug
 ICUDATA=$(ICUP)\icu\data
 DATA_PATH=$(ICUP)\icu\data^\
 TRANS=translit^\
+TEST=..\source\test\testdata^\
 ICUTOOLS=$(ICUP)\icu\source\tools
 !ENDIF
 
@@ -29,7 +30,7 @@ LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /c
 CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
 
 #Here we test if configuration is given 
-!IF "$(CFG)" != "Release" && "$(CFG)" != "Debug"
+!IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
@@ -142,16 +143,20 @@ GOBACK :
 
 # This is to remove all the data files
 CLEAN :
-	-@erase "$(ICUDATA)\*.cnv"
-	-@erase "$(ICUDATA)\*.res"
-	-@erase "$(ICUDATA)\$(TRANS)*.res"
-	-@erase "$(ICUDATA)\*.col"
-	-@erase "$(ICUDATA)\unames*.*"
-	-@erase "$(ICUDATA)\cnvalias*.*"
-	-@erase "$(ICUDATA)\tz*.*"
-	-@erase "$(ICUDATA)\ibm*_cnv.c"
-	-@erase "$(ICUDATA)\icudata.*"
-	-@erase "$(ICUDATA)\*.obj"
+	@cd $(ICUDATA)
+	-@erase "*.cnv"
+	-@erase "*.res"
+	-@erase "$(TRANS)*.res"
+	-@erase "*.col"
+	-@erase "unames*.*"
+	-@erase "cnvalias*.*"
+	-@erase "tz*.*"
+	-@erase "ibm*_cnv.c"
+	-@erase "icudata.*"
+	-@erase "*.obj"
+	@cd $(TEST)
+	-@erase "*.res"
+	@cd $(ICUTOOLS)
 
 # Inference rule for creating resource bundles
 .txt.res::
