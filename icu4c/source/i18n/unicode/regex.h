@@ -45,6 +45,8 @@
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
 
+#include "unicode/uregex.h"
+
 U_NAMESPACE_BEGIN
 
 
@@ -58,42 +60,6 @@ class UnicodeSet;
 struct REStackFrame;
 struct Regex8BitSet;
 class  RuleBasedBreakIterator;
-
-
-
-/**
- * Constants for Regular Expression Match Modes.
- * @draft ICU 2.4
- */
-enum {
-    /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
-    UREGEX_CANON_EQ         = 128,
-
-    /**  Enable case insensitive matching.  @draft ICU 2.4 */
-    UREGEX_CASE_INSENSITIVE = 2,
-
-    /**  Allow white space and comments within patterns  @draft ICU 2.4 */
-    UREGEX_COMMENTS         = 4,
-
-    /**  If set, '.' matches line terminators,  otherwise '.' matching stops at line end.
-      *  @draft ICU 2.4 */
-    UREGEX_DOTALL           = 32,
-
-    /**   Control behavior of "$" and "^"
-      *    If set, recognize line terminators within string,
-      *    otherwise, match only at start and end of input string.
-      *   @draft ICU 2.4 */
-    UREGEX_MULTILINE        = 8,
-
-    /**  Unicode word boundaries.
-      *     If set, \b uses the Unicode TR 29 definition of word boundaries.
-      *     Warning: Unicode word boundaries are quite different from
-      *     traditional regular expression word boundaries.  See
-      *     http://unicode.org/reports/tr29/#Word_Boundaries
-      *     @draft ICU 2.8
-      */
-    UREGEX_UWORD            = 256
-};
 
 
 
@@ -758,7 +724,7 @@ public:
     *   operations, see replaceFirst() or replaceAll().</p>
     *
     *   @param   dest        A UnicodeString to which the results of the find-and-replace are appended.
-    *   @param   replacement A UnicodeString that provides the text to be substitured for
+    *   @param   replacement A UnicodeString that provides the text to be substituted for
     *                        the input text that matched the regexp pattern.  The replacement
     *                        text may contain references to captured text from the
     *                        input.
