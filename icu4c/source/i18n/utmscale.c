@@ -83,7 +83,7 @@ U_CAPI int64_t U_EXPORT2
 utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *status)
 {
     const InternalTimeScaleData *data;
-    double fromMin, fromMax;
+    volatile double fromMin, fromMax;
 
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
