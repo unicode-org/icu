@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/10/30 05:43:33 $ 
-* $Revision: 1.10 $
+* $Date: 2002/11/22 01:32:57 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -393,7 +393,6 @@ final class CollationParsedRuleBuilder
     }
     
     private void copyRangeFromUCA(BuildTable t, int start, int end) {
-        StringBuffer str = new StringBuffer();
         int u = 0;
         for (u = start; u <= end; u ++) {
             // if ((CE = ucmpe32_get(t.m_mapping, u)) == UCOL_NOT_FOUND
@@ -405,10 +404,8 @@ final class CollationParsedRuleBuilder
                 // closure elements
                 || (isContractionTableElement(CE) 
                    && getCE(t.m_contractions_, CE, 0) == CE_NOT_FOUND_)) {
-                str.delete(0, str.length());
-                UTF16.append(str, u);
-                //str.append(u);
-                m_utilElement_.m_uchars_ = str.toString();
+                //m_utilElement_.m_uchars_ = str.toString();
+                m_utilElement_.m_uchars_ = UCharacter.toString(u);
                 m_utilElement_.m_cPoints_ = m_utilElement_.m_uchars_;
                 m_utilElement_.m_prefix_ = 0;
                 m_utilElement_.m_CELength_ = 0;
