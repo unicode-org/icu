@@ -438,20 +438,20 @@ uprv_IEEEremainder(double x, double p)
      * is zero.  This is probably not an issue on non-IEEE
      * platforms. - aliu
      */
-    if (p == 0.0) { // zero divisor
-        return x;
-    }
-    double a = x / p;
-    double aint = uprv_floor(a);
-    double afrac = a - aint;
-    if (afrac > 0.5) {
-        aint += 1.0;
-    } else if (!(afrac < 0.5)) { // avoid == comparison
-        if (uprv_modf(aint / 2.0, &a) > 0.0) {
+    if (p != 0.0) { /* exclude zero divisor */
+        double a = x / p;
+        double aint = uprv_floor(a);
+        double afrac = a - aint;
+        if (afrac > 0.5) {
             aint += 1.0;
+        } else if (!(afrac < 0.5)) { /* avoid == comparison */
+            if (uprv_modf(aint / 2.0, &a) > 0.0) {
+                aint += 1.0;
+            }
         }
+        x -= (p * aint);
     }
-    return x - (p * aint);
+    return x;
 #endif
 }
 
