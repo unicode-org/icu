@@ -338,23 +338,24 @@ DateFormatMiscTests::test4117335()
 
     int32_t rowCount, colCount;
     const UnicodeString **zones = symbols->getZoneStrings(rowCount, colCount);
-    logln(UnicodeString("Long zone name = ") + zones[rowCount-3][1]);
-    if (zones[rowCount-3][1] != jstLong) {
+    int pos = 6;
+    logln(UnicodeString("Long zone name = ") + zones[pos][1]);
+    if (zones[pos][1] != jstLong) {
         errln("*** Should have been " + prettify(jstLong));
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("Short zone name = ") + zones[rowCount-3][2]);
-    if (zones[rowCount-3][2] != jstShort) {
-        errln("*** Should have been " + jstShort);
+    logln(UnicodeString("Short zone name = ") + zones[pos][2]);
+    if (zones[pos][2] != jstShort) {
+        errln("*** Should have been " + jstShort + " but it is: " + prettify(zones[pos][2]));
         //throw new Exception("Error in short TZ name");
     }
-    logln(UnicodeString("Long zone name = ") + zones[rowCount-3][3]);
-    if (zones[rowCount-3][3] != jstLong) {
+    logln(UnicodeString("Long zone name = ") + zones[pos][3]);
+    if (zones[pos][3] != jstLong) {
         errln("*** Should have been " + jstLong);
         //throw new Exception("Error in long TZ name");
     }
-    logln(UnicodeString("SHORT zone name = ") + zones[rowCount-3][4]);
-    if (zones[rowCount-3][4] != jstShort) {
+    logln(UnicodeString("SHORT zone name = ") + zones[pos][4]);
+    if (zones[pos][4] != jstShort) {
         errln("*** Should have been " + jstShort);
         //throw new Exception("Error in short TZ name");
     }
