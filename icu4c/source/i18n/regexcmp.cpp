@@ -934,26 +934,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doPlus:
         //  Normal '+'  compiles to
         //     1.   stuff to be repeated  (already built)
-        //     2.   state-save  4
-        //     3.   jmp 1
-        //     4.   ...
-        //  Normal '+'  compiles to
-        //     1.   stuff to be repeated  (already built)
         //     2.   jmp-sav 1
         //     3.   ...
         {
-            int32_t   topLoc = blockTopLoc(FALSE);        // location of item #1
-
-            // Locate the position in the compiled pattern where the match will continue
-            //   after completing the +   (4 in the comment above)
-            //int32_t continueLoc = fRXPat->fCompiledPat->size()+2;
-
-            // Emit the STATE_SAVE
-            //int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
-            //fRXPat->fCompiledPat->addElement(saveStateOp, *fStatus);
-
-            // Emit the JMP
-            int32_t jmpOp = URX_BUILD(URX_JMP_SAV, topLoc);
+            int32_t  topLoc = blockTopLoc(FALSE);        // location of item #1
+            int32_t  jmpOp  = URX_BUILD(URX_JMP_SAV, topLoc);
             fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
         }
         break;
@@ -1016,12 +1001,12 @@ UBool RegexCompile::doParseActions(EParseAction action)
         // Compiles to
         //       1.   STATE_SAVE   4
         //       2.      body of stuff being iterated over
-        //       3.   JMP  1
+        //       3.   JMP_SAV      2
         //       4.   ...
         //
         // Or, if the body can match a zero-length string, to inhibit infinite loops,
         //       1.   STATE_SAVE   6
-        //       2.   POS_SAVE     data-loc
+        //       2.   STO_INP_LOC  data-loc
         //       3.      body of stuff
         //       4.   JMPX    1
         //       5            data-loc   (extra operand of JMPX)
@@ -1041,20 +1026,19 @@ UBool RegexCompile::doParseActions(EParseAction action)
             }
                 
             // Locate the position in the compiled pattern where the match will continue
-            //   after completing the *.   (4 in the comment above)
+            //   after completing the *.   (4 or 6 in the comment above)
             int32_t continueLoc = fRXPat->fCompiledPat->size()+1;
             if (dataLoc != -1) {
-                continueLoc++;
+                continueLoc++;  // second code sequence.
             }
 
             // Put together the save state op store it into the compiled code.
             int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
             fRXPat->fCompiledPat->setElementAt(saveStateOp, saveStateLoc);
 
-            // Append the URX_JMP or URX_JMPX operation to the compiled pattern.  Its target
-            // is the locaton of the state-save, above.
+            // Append the URX_JMP_SAV or URX_JMPX operation to the compiled pattern.
             if (dataLoc == -1) {
-                int32_t jmpOp = URX_BUILD(URX_JMP, saveStateLoc);
+                int32_t jmpOp = URX_BUILD(URX_JMP_SAV, saveStateLoc+1);
                 fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
             } else {
                 int32_t op = URX_BUILD(URX_JMPX, saveStateLoc);
@@ -1062,7 +1046,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
                 op = URX_BUILD(URX_RESERVED_OP, dataLoc);
                 fRXPat->fCompiledPat->addElement(op, *fStatus);
             }
-
         }
         break;
 
