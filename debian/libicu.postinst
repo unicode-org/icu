@@ -37,6 +37,7 @@ case "$1" in
 	if test x"$icucurrent" != x
 	then
 	    ln -s "$icucurrent" current
+	    ln -sf current/Makefile.inc .
 	fi
 
 	fi
