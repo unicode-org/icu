@@ -10,7 +10,7 @@
 #ifndef TOUPPTRN_H
 #define TOUPPTRN_H
 
-#include "xformtrn.h"
+#include "unicode/translit.h"
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
