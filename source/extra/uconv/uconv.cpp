@@ -355,7 +355,7 @@ static int printTransliterators(const char *pname, int canon)
 /* Return the offset of a byte in its source, given the from and to offsets
    vectors and the byte offset itself. */
 
-static U_INLINE int32_t dataOffset(const int32_t * fromoffsets,
+static inline int32_t dataOffset(const int32_t * fromoffsets,
     int32_t whereto, const int32_t * tooffsets) {
     return fromoffsets[tooffsets[whereto]];
 }
