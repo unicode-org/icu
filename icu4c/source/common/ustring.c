@@ -319,9 +319,12 @@ u_strcmp(const UChar *s1,
     const UChar *s2) 
 {
     int32_t rc;
+    UChar  c1, c2;
     for(;;) {
-        rc = (int32_t)*s1 - (int32_t)*s2;
-        if(rc != 0 || *s1 == 0) {
+        c1=*s1;
+        c2=*s2;
+        rc = (int32_t)c1 - (int32_t)c2;
+        if(rc != 0 || c1 == 0) {
             return rc;
         }
         ++s1;
@@ -329,11 +332,14 @@ u_strcmp(const UChar *s1,
     }
 }
 
-static const UChar utf16Fixup[32]={
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0x2000, 0xf800, 0xf800, 0xf800, 0xf800
-};
+#define UTF16FIXUP(c) {                  \
+if ((c) >= 0xE000) {                     \
+    (c) -= 0x800;                        \
+} else if ((c) >= 0xD800) {              \
+    (c) += 0x2000;                       \
+    }                                    \
+}
+
 
 /* String compare in code point order - u_strcmp() compares in code unit order. */
 U_CAPI int32_t U_EXPORT2
@@ -355,9 +361,11 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
         }
     }
 
-    /* c1!=c2, fix up each one and compare them */
-    c1+=utf16Fixup[c1>>11];
-    c2+=utf16Fixup[c2>>11];
+   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
+   if (c1 >= 0xD800 && c2 >= 0xD800) {
+        UTF16FIXUP(c1);
+        UTF16FIXUP(c2);
+    }
 
     /* now c1 and c2 are in UTF-32-compatible order */
     return (int32_t)c1-(int32_t)c2;
@@ -406,9 +414,11 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n) {
         }
     }
 
-    /* c1!=c2, fix up each one and compare them */
-    c1+=utf16Fixup[c1>>11];
-    c2+=utf16Fixup[c2>>11];
+   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
+   if (c1 >= 0xD800 && c2 >= 0xD800) {
+        UTF16FIXUP(c1);
+        UTF16FIXUP(c2);
+    }
 
     /* now c1 and c2 are in UTF-32-compatible order */
     return (int32_t)c1-(int32_t)c2;
@@ -513,9 +523,11 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
         ++s2;
     } while(s1<limit);
 
-    /* c1!=c2, fix up each one and compare them */
-    c1+=utf16Fixup[c1>>11];
-    c2+=utf16Fixup[c2>>11];
+   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
+   if (c1 >= 0xD800 && c2 >= 0xD800) {
+        UTF16FIXUP(c1);
+        UTF16FIXUP(c2);
+    }
 
     /* now c1 and c2 are in UTF-32-compatible order */
     return (int32_t)c1-(int32_t)c2;
