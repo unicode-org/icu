@@ -60,13 +60,32 @@ utrace_getLevel();
 
 /* Trace function pointers types  ----------------------------- */
 
+/**
+  *  Type signature for the trace function to be called when entering a function.
+  *  @param context value supplied at the time the trace functions are set.
+  *  @param fnNumber Enum value indicating the ICU function being entered.
+  *  @draft ICU 2.8
+  */
 typedef void U_CALLCONV
 UTraceEntry(const void *context, int32_t fnNumber);
 
+/**
+  *  Type signature for the trace function to be called when exiting from a function.
+  *  @param context value supplied at the time the trace functions are set.
+  *  @param fnNumber Enum value indicating the ICU function being exited.
+  *  @draft ICU 2.8
+  */
 typedef void U_CALLCONV
 UTraceExit(const void *context, int32_t fnNumber, 
            int32_t retType, va_list args);
 
+/**
+  *  Type signature for the trace function to be called from within an ICU function
+  *  to display data or messages.
+  *  @param context value supplied at the time the trace functions are set.
+  *  @param fnNumber Enum value indicating the ICU function being exited.
+  *  @draft ICU 2.8
+  */
 typedef void U_CALLCONV
 UTraceData(const void *context, int32_t fnNumber, int32_t level,
            const char *fmt, va_list args);
@@ -95,7 +114,9 @@ utrace_setFunctions(const void *context,
                     UTraceEntry *e, UTraceExit *x, UTraceData *d);
 
 /**
-  * Get the currently installed ICU tracing functions. 
+  * Get the currently installed ICU tracing functions.   Note that a null function
+  *   pointer will be returned if no trace function has been set.
+  *
   * @param context  The currently installed tracing context.
   * @param e        The currently installed UTraceEntry function.
   * @param x        The currently installed UTraceExit function.
@@ -146,8 +167,8 @@ utrace_getFunctions(const void **context,
  *
  * Type characters:
  * - c A char character in the default codepage.
- * - s A NULL-terminated char * string in the default codepage.
- * - S A UChar * string.  Requires two params, (ptr, length).  Length=-1 for null term.
+ * - s A NUL-terminated char * string in the default codepage.
+ * - S A UChar * string.  Requires two params, (ptr, length).  Length=-1 for nul term.
  * - b A byte (8-bit integer).
  * - h A 16-bit integer.  Also a 16 bit Unicode code unit.
  * - d A 32-bit integer.  Also a 20 bit Unicode code point value. 
@@ -162,10 +183,10 @@ utrace_getFunctions(const void **context,
  * If the 'v' (for "vector") is specified, then a vector of items of the
  * specified type is passed in, via a pointer to the first item
  * and an int32_t value for the length of the vector.
- * Length==-1 means zero or NULL termination.  Works for vectors of all types.
+ * Length==-1 means zero or NUL termination.  Works for vectors of all types.
  *
  * Note:  %vS is a vector of (UChar *) strings.  The strings must
- *        be null terminated as there is no way to provide a
+ *        be nul terminated as there is no way to provide a
  *        separate length parameter for each string.  The length
  *        parameter (required for all vectors) is the number of
  *        strings, not the length of the strings.
@@ -213,14 +234,14 @@ utrace_getFunctions(const void **context,
   *                 in the raw form it was received (more compact), leaving
   *                 formatting for a later trace analyis tool.
   *  @param outBuf  pointer to a buffer to receive the formatted output.  Output
-  *                 will be null terminated if there is space in the buffer -
+  *                 will be nul terminated if there is space in the buffer -
   *                 if the length of the requested output < the output buffer size.
   *  @param capacity  Length of the output buffer.
   *  @param indent  Number of spaces to indent the output.  Intended to allow
   *                 data displayed from nested functions to be indented for readability.
   *  @param fmt     Format specification for the data to output
   *  @param args    Data to be formatted.
-  *  @return        Length of formatted output, including the terminating NULL.
+  *  @return        Length of formatted output, including the terminating NUL.
   *                 If buffer capacity is insufficient, the required capacity is returned. 
   *  @draft ICU 2.8
   */
@@ -254,15 +275,17 @@ typedef enum UTraceExitVal UTraceExitVal;
   *  and a UErrorCode status value.
   *
   *  @param outBuf   pointer to a buffer to receive the formatted output.Output
-  *                 will be null terminated if there is space in the buffer -
+  *                 will be nul terminated if there is space in the buffer -
   *                 if the length of the requested output < the output buffer size.
   *  @param capacity  Length of the output buffer.
   *  @param indent  Number of spaces to indent the output.  Intended to allow
   *                 data displayed from nested functions to be indented for readability.
   *  @param fnNumber  An index specifying the function that is exiting.
   *  @param argType Flags specifying the number and types of data values.
-  *  @param args    Data to be formatted.
-  *  @return        Length of formatted output, including the terminating NULL.
+  *  @param args    Data to be formatted.  If argType parameter indicates that a function
+  *                 return value exists, it will be the first varargs param.  The
+  *                 function's UErrorCode status will be next, when applicable.
+  *  @return        Length of formatted output, including the terminating NUL.
   *                 If buffer capacity is insufficient, the required capacity is returned. 
   *  @draft ICU 2.8
   */
