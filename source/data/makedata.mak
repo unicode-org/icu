@@ -374,7 +374,6 @@ CLEAN : GODATA
 	-@erase "*.txt"
     @cd "$(ICUBLD)\$(ICUTRNS)"
 	-@erase "*.res"
-	-@erase "*.txt"
 	@cd "$(ICUOUT)"
 	-@erase "*.dat"
 	@cd "$(ICUTMP)"
