@@ -408,7 +408,7 @@ isFCDCheckAcceptable(void *context,
     }
 }
 
-static UBool
+static UBool 
 loadFCDCheckData(UErrorCode *error) {
     /* load fcdcheck data from file if necessary */
     if (!isFCDCheckLoaded && U_SUCCESS(*error)) {
@@ -447,6 +447,45 @@ loadFCDCheckData(UErrorCode *error) {
     }
 
     return isFCDCheckLoaded;
+}
+
+/**
+* Gets the stage 1 data for checkFCD.
+* @param error status 
+* @return checkFCD data stage 1, null if data can not be loaded
+*/
+U_CAPI const uint16_t * getFCHK_STAGE_1_(UErrorCode *error)
+{
+    if (loadFCDCheckData(error)) {
+        return FCHK_STAGE_1_;
+    }
+    return NULL;
+}
+
+/**
+* Gets the stage 2 data for checkFCD.
+* @param error status 
+* @return checkFCD data stage 2, null if data can not be loaded
+*/
+U_CAPI const uint16_t * getFCHK_STAGE_2_(UErrorCode *error)
+{
+    if (loadFCDCheckData(error)) {
+        return FCHK_STAGE_2_;
+    }
+    return NULL;
+}
+
+/**
+* Gets the stage 3 data for checkFCD.
+* @param error status 
+* @return checkFCD data stage 3, null if data can not be loaded
+*/
+U_CAPI const uint16_t * getFCHK_STAGE_3_(UErrorCode *error)
+{
+    if (loadFCDCheckData(error)) {
+        return FCHK_STAGE_3_;
+    }
+    return NULL;
 }
 
 /**
