@@ -116,6 +116,13 @@
 \ue06d>\u0aed; # DIGIT SEVEN
 \ue06e>\u0aee; # DIGIT EIGHT
 \ue06f>\u0aef; # DIGIT NINE
+\ue072>;
+\ue073>;
+\ue074>;
+0 > \u0ae6;       # FALLBACK FOR TAMIL
+1 > \u0ae7;
+\ue0f0 >  \u0ab0;  # FALLBACK RA 
+\ue0f1 >  \u0ab0;  # FALLBACK RA
 #\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
 #    :: NFC (NFD) ;
 # eof

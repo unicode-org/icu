@@ -118,10 +118,14 @@
 \ue06d>\u0d6d; # DIGIT SEVEN
 \ue06e>\u0d6e; # DIGIT EIGHT
 \ue06f>\u0d6f; # DIGIT NINE
-# \ue080>; # UNMAPPED InterIndic-Malayalam: ISSHAR
-
-
-
+\ue080>; # UNMAPPED InterIndic-Malayalam: ISSHAR
+\ue072>;
+\ue073>;
+\ue074>;
+0 > \u0d66;       # FALLBACK FOR TAMIL
+1 > \u0d67;
+\ue0f0 >  \u0d30;  # FALLBACK RA 
+\ue0f1 >  \u0d30;  # FALLBACK RA
 
 
 #    :: NFC (NFD) ;

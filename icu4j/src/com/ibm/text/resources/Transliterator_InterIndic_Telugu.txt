@@ -120,5 +120,12 @@
 \ue031>\u0c31; # LETTER RRA
 \ue046>\u0c46; # VOWEL SIGN E
 \ue04a>\u0c4a; # VOWEL SIGN O
+\ue072>;
+\ue073>;
+\ue074>;
+0 > \u0966;       # FALLBACK FOR TAMIL
+1 > \u0967;
+\ue0f0 >  \u0c30;  # FALLBACK RA 
+\ue0f1 >  \u0c30;  # FALLBACK RA
 #    :: NFC (NFD) ;
 # eof
