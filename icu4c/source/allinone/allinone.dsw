@@ -561,21 +561,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "sortwin32"=..\test\sortwin32\sortwin32.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name makedata
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "testmap"=..\TEST\TESTMAP\testmap.dsp - Package Owner=<4>
 
 Package=<5>
