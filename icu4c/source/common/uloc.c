@@ -477,7 +477,6 @@ int32_t uloc_getName(const char* localeID,
   int cntSze = 0; /* How big the country is */
 
   UErrorCode int_err = U_ZERO_ERROR;
-  int remainingCapacity;
 
   if (U_FAILURE(*err)) return 0;
 
