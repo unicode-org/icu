@@ -110,7 +110,7 @@ char convertersToCheck[][15] = {
   "cp28709",
   ""};
 
-UBool isEuroAware(const UConverter*);
+UBool isEuroAware(UConverter*);
 
 void TestEuroRegression()
 {
@@ -133,10 +133,10 @@ void TestEuroRegression()
     } while (convertersToCheck[++i][0]);
 }
 
-UBool isEuroAware(const UConverter* myConv)
+UBool isEuroAware(UConverter* myConv)
 {
     static const UChar euroString[2] = { 0x20AC, 0x0000 };
-    char target[2];
+    char target[20];
     UChar euroBack[2];
     int32_t targetSize, euroBackSize;
     UErrorCode err = U_ZERO_ERROR;
@@ -144,7 +144,7 @@ UBool isEuroAware(const UConverter* myConv)
 
     targetSize = ucnv_fromUChars(myConv,
             target,
-            2,
+            sizeof(target),
             euroString,
             -1,
             &err);

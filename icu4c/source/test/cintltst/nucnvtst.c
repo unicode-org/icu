@@ -1245,7 +1245,7 @@ static void TestAmbiguous()
         0x5c, 0x69, 0x63, 0x75, 0x74, 0x65, 0x73, 0x74, 0x2e, 0x74, 0x78, 0x74,
         0
     };
-    UChar *asciiResult = 0, *sjisResult = 0;
+    UChar asciiResult[200], sjisResult[200];
     int32_t asciiLength = 0, sjisLength = 0, i;
     const char *name;
 
@@ -1276,10 +1276,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from SJIS to Unicode */
-    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, 0, target, strlen(target), &status);
-    status = U_ZERO_ERROR;
-    sjisResult = (UChar*)malloc(sizeof(UChar)* sjisLength);
-    ucnv_toUChars(sjis_cnv, sjisResult, sjisLength, target, strlen(target), &status);
+    sjisLength = ucnv_toUChars(sjis_cnv, sjisResult, sizeof(sjisResult)/U_SIZEOF_UCHAR, target, strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the SJIS string.\n");
@@ -1288,10 +1285,7 @@ static void TestAmbiguous()
         return;
     }
     /* convert target from Latin-1 to Unicode */
-    asciiLength = ucnv_toUChars(ascii_cnv, asciiResult, 0, target, strlen(target), &status);
-    status = U_ZERO_ERROR;
-    asciiResult = (UChar*)malloc(sizeof(UChar)* asciiLength);
-    ucnv_toUChars(ascii_cnv, asciiResult, asciiLength, target, strlen(target), &status);
+    asciiLength = ucnv_toUChars(ascii_cnv, asciiResult, sizeof(asciiResult)/U_SIZEOF_UCHAR, target, strlen(target), &status);
     if (U_FAILURE(status))
     {
         log_err("Failed to convert the Latin-1 string.\n");
@@ -1318,8 +1312,6 @@ static void TestAmbiguous()
     {
         log_err("Fixing file separator for SJIS failed.\n");
     }
-    free(sjisResult);
-    free(asciiResult);
     ucnv_close(sjis_cnv);
     ucnv_close(ascii_cnv);
 }
@@ -2070,7 +2062,7 @@ static void TestToAndFromUChars(const uint16_t* source, const UChar* sourceLimit
     test =uBuf;
     ucnv_toUChars(cnv,uTarget,(uTargetLimit-uTarget),cSource,numCharsInTarget,&errorCode);
     if(U_FAILURE(errorCode)){
-        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        log_err("ucnv_toUChars conversion failed, reason %s\n", u_errorName(errorCode));
         return;
     }
     uSource = source;
