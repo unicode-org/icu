@@ -264,13 +264,13 @@ lt {
         "HH:mm",
         "yyyy 'm.' MMMM d 'd.',EEEE",
         "yyyy 'm.' MMMM d 'd.'",
-        "yyyy.M.d",
-        "yyyy.M.d",
+        "yyyy.MM.dd",
+        "yyyy.MM.dd",
         "{1} {0}",
     }
     DateTimeElements:intvector {
         2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
+        4, // "Minimal Days in First Week"   Lithuania follows ISO 8601 
     }
     DayAbbreviations { 
         "sk",
@@ -372,15 +372,7 @@ lt {
         "+",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
