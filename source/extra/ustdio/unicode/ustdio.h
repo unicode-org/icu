@@ -81,6 +81,8 @@
  * u_file_read and u_file_write are used for writing strings. u_fgets and
     u_fputs or u_fread and u_fwrite should be used to do this.
  * u_fgetcx may not be needed anymore. Maybe u_fgetc should return a UChar32.
+ * u_fgetc() should use UChar32 instead of UChar. Maybe u_fgetcx is good enough
+    for now.
  * We should consider using a UnicodeSet for scanset.
  * scanset has a buffer overflow and underflow bug for both string and file
     APIs.
@@ -88,8 +90,8 @@
     better testing. This prevents buffer overflows.
  * The skip '*' parameter for all scanf formats, including scanset, needs
     better testing. This prevents writing to bad memory.
- * u_fgetc() and u_fungetc() should use UChar32 instead of UChar, or at
-    least 32-bit versions should be available.
+ * Figure out what is suppose to happen when a codepage is changed midstream.
+    Maybe a flush or a rewind are good enough.
  * More testing is needed.
 */
 
@@ -177,6 +179,14 @@ U_CAPI void U_EXPORT2
 u_fflush(UFILE *file);
 
 /**
+ * Rewind the file pointer to the beginning of the file.
+ * @param file The UFILE to rewind.
+ * @draft
+ */
+U_CAPI void
+u_frewind(UFILE *file);
+
+/**
  * Get the FILE* associated with a UFILE.
  * @param f The UFILE
  * @return A FILE*, owned by the UFILE.  The FILE <EM>must not</EM> be closed.
@@ -227,13 +237,16 @@ u_fgetcodepage(UFILE *file);
 /**
  * Set the codepage in which data will be written to and read from the UFILE.
  * All Unicode data written to the UFILE will be converted to this codepage
- * before it is written to the underlying FILE*.
+ * before it is written to the underlying FILE*. It it generally a bad idea to
+ * mix codepages within a file. This should only be called right
+ * after opening the <TT>UFile</TT>, or after calling <TT>u_frewind</TT>.
  * @param codepage The codepage in which data will be written to 
  * and read from the file. For example <TT>"latin-1"</TT> or <TT>"ibm-943</TT>.
  * A value of NULL means the default codepage for the UFILE's current 
  * locale will be used.
  * @param file The UFILE to set.
- * @return NULL if successful, otherwise a negative number.
+ * @return 0 if successful, otherwise a negative number.
+ * @see u_frewind
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
@@ -339,14 +352,15 @@ u_fputc(UChar   uc,
  * Write Unicode to a UFILE.
  * The ustring passed in will be converted to the UFILE's underlying
  * codepage before it is written.
- * @param chars A pointer to the Unicode data to write.
+ * @param ustring A pointer to the Unicode data to write.
  * @param count The number of Unicode characters to write
  * @param f The UFILE to which to write.
  * @return The number of Unicode characters written.
+ * @see u_fputs
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_file_write(const UChar    *chars, 
+u_file_write(const UChar    *ustring, 
              int32_t        count, 
              UFILE          *f);
 
@@ -472,7 +486,7 @@ u_fungetc(UChar32   c,
 /**
  * Read Unicode from a UFILE.
  * Bytes will be converted from the UFILE's underlying codepage, with
- * subsequent conversion to Unicode.
+ * subsequent conversion to Unicode. The data will not be NULL terminated.
  * @param chars A pointer to receive the Unicode data.
  * @param count The number of Unicode characters to read.
  * @param f The UFILE from which to read.

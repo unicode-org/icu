@@ -305,14 +305,19 @@ u_file_write_flush(    const UChar     *chars,
                    UBool         flush)
 {
     /* Set up conversion parameters */
-    UErrorCode         status        = U_ZERO_ERROR;
-    const UChar        *mySource       = chars;
-    const UChar        *sourceAlias       = chars;
-    const UChar        *mySourceEnd     = chars + count;
-    char            *myTarget     = f->fCharBuffer;
-    int32_t        bufferSize    = UFILE_CHARBUFFER_SIZE;
-    int32_t        written        = 0;
-    int32_t        numConverted   = 0;
+    UErrorCode         status       = U_ZERO_ERROR;
+    const UChar        *mySource    = chars;
+    const UChar        *sourceAlias = chars;
+    const UChar        *mySourceEnd;
+    char            *myTarget   = f->fCharBuffer;
+    int32_t        bufferSize   = UFILE_CHARBUFFER_SIZE;
+    int32_t        written      = 0;
+    int32_t        numConverted = 0;
+
+    if (count < 0) {
+        count = u_strlen(chars);
+    }
+    mySourceEnd     = chars + count;
 
 #if !UCONFIG_NO_TRANSLITERATION
     if((f->fTranslit) && (f->fTranslit->translit))
