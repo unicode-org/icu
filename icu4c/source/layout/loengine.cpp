@@ -9,102 +9,58 @@
 #include "layout/LEScripts.h"
 
 //
-// This table maps ICU's EUnicodeScript values,
-// which are really Unicode blocks and not scripts,
+// This table maps ICU's UScriptCode values
 // into the LayoutEngines script codes, as defined
 // in LEScripts.h.
 //
 // NOTE: it's important to keep this list in synch
-// both with EUnicodeScripts and LEScripts...
+// both with UScriptCode and LEScripts...
+//
+// NOTE: REALLY, LEScripts.h should be adjusted to
+// match UScriptCode, so this isn't even necessary...
 //
 int32_t ICULayoutEngine::le_scriptCodes[] = {
-        zyyyScriptCode,    // (no EUnicodeScript w/ vaule 0)
-        latnScriptCode,    // kBasicLatin
-        latnScriptCode,    // kLatin1Supplement
-        latnScriptCode,    // kLatinExtendedA
-        latnScriptCode,    // kLatinExtendedB
-        latnScriptCode,    // kIPAExtension
-        qaaiScriptCode,    // kSpacingModifier
-        qaaiScriptCode,    // kCombiningDiacritical
-        grekScriptCode,    // kGreek
-        cyrlScriptCode,    // kCyrillic
-        armnScriptCode,    // kArmenian
-        hebrScriptCode,    // kHebrew
-        arabScriptCode,    // kArabic
-        syrcScriptCode,    // kSyriac
-        thaaScriptCode,    // kThaana
-        devaScriptCode,    // kDevanagari
-        bengScriptCode,    // kBengali
-        guruScriptCode,    // kGurmukhi
-        gujrScriptCode,    // kGujarati
-        oryaScriptCode,    // kOriya
-        tamlScriptCode,    // kTamil
-        teluScriptCode,    // kTelugu
-        kndaScriptCode,    // kKannada
-        mlymScriptCode,    // kMalayalam
-        sinhScriptCode,    // kSinhala
-        thaiScriptCode,    // kThai
-        laooScriptCode,    // kLao
-        tibtScriptCode,    // kTibetan
-        mymrScriptCode,    // kMyanmar
-        georScriptCode,    // kGeorgian
-        hangScriptCode,    // kHangulJamo
-        ethiScriptCode,    // kEthiopic
-        cherScriptCode,    // kCherokee
-        cansScriptCode,    // kUnifiedCanadianAboriginalSyllabics
-        ogamScriptCode,    // kogham
-        runrScriptCode,    // kRunic
-        khmrScriptCode,    // kKhmer
-        mongScriptCode,    // kMongolian
-        latnScriptCode,    // kLatinExtendedAdditional
-        grekScriptCode,    // kGreekExtended
-        qaaiScriptCode,    // kGeneralPunctuation
-        qaaiScriptCode,    // kSuperSubScript
-        qaaiScriptCode,    // kCurrencySymbolScript
-        qaaiScriptCode,    // kSymbolCombiningMark
-        qaaiScriptCode,    // kLetterlikeSymbol
-        qaaiScriptCode,    // kNumberForm
-        qaaiScriptCode,    // kArrow
-        qaaiScriptCode,    // kMathOperator
-        qaaiScriptCode,    // kMiscTechnical
-        qaaiScriptCode,    // kControlPicture
-        qaaiScriptCode,    // kOpticalCharacter
-        qaaiScriptCode,    // kEnclosedAlphanumeric
-        qaaiScriptCode,    // kBoxDrawing
-        qaaiScriptCode,    // kBlockElement
-        qaaiScriptCode,    // kGeometricShape
-        qaaiScriptCode,    // kMiscSymbol
-        qaaiScriptCode,    // kDingbat
-        zyyyScriptCode,    // kBraillePatterns
-        haniScriptCode,    // kCJKRadicalsSupplement
-        haniScriptCode,    // kKangxiRadicals
-        zyyyScriptCode,    // kIdeographicDescriptionCharacters
-        haniScriptCode,    // kCJKSymbolPunctuation
-        hiraScriptCode,    // kHiragana
-        kataScriptCode,    // kKatakana
-        bopoScriptCode,    // kBopomofo
-        hangScriptCode,    // kHangulCompatibilityJamo
-        zyyyScriptCode,    // kKanbun
-        bopoScriptCode,    // kBopomofoExtended
-        haniScriptCode,    // kEnclosedCJKLetterMonth
-        haniScriptCode,    // kCJKCompatibility
-        haniScriptCode,    // kCJKUnifiedIdeographExtensionA
-        haniScriptCode,    // kCJKUnifiedIdeograph
-        yiiiScriptCode,    // kYiSyllables
-        yiiiScriptCode,    // kYiRadicals
-        hangScriptCode,    // kHangulSyllable
-        zyyyScriptCode,    // kHighSurrogate
-        zyyyScriptCode,    // kHighPrivateUseSurrogate
-        zyyyScriptCode,    // kLowSurrogate
-        zyyyScriptCode,    // kPrivateUse
-        haniScriptCode,    // kCJKCompatibilityIdeograph
-        qaaiScriptCode,    // kAlphabeticPresentation
-        arabScriptCode,    // kArabicPresentationA
-        qaaiScriptCode,    // kCombiningHalfMark
-        haniScriptCode,    // kCJKCompatibilityForm
-        qaaiScriptCode,    // kSmallFormVariant
-        arabScriptCode,    // kArabicPresentationB
-        qaaiScriptCode,    // kNoScript
-        qaaiScriptCode     // kHalfwidthFullwidthForm **** FIXME: should be ASCII, CJK, KANA, HANGUL ****
+      qaaiScriptCode,   // USCRIPT_COMMON (zyyyScriptCode is -1!)
+      qaaiScriptCode,   // USCRIPT_INHERITED
+      arabScriptCode,   // USCRIPT_ARABIC
+      armnScriptCode,   // USCRIPT_ARMENIAN
+      bengScriptCode,   // USCRIPT_BENGALI
+      bopoScriptCode,   // USCRIPT_BOPOMOFO
+      cherScriptCode,   // USCRIPT_CHEROKEE
+      qaaiScriptCode,   // USCRIPT_COPTIC (no qaacScriptCode)
+      cyrlScriptCode,   // USCRIPT_CYRILLIC
+      dsrtScriptCode,   // USCRIPT_DESERET
+      devaScriptCode,   // USCRIPT_DEVANAGARI
+      ethiScriptCode,   // USCRIPT_ETHIOPIC
+      georScriptCode,   // USCRIPT_GEORGIAN
+      gothScriptCode,   // USCRIPT_GOTHIC
+      grekScriptCode,   // USCRIPT_GREEK
+      gujrScriptCode,   // USCRIPT_GUJARATI
+      guruScriptCode,   // USCRIPT_GURMUKHI
+      haniScriptCode,   // USCRIPT_HAN
+      hangScriptCode,   // USCRIPT_HANGUL
+      hebrScriptCode,   // USCRIPT_HEBREW
+      hiraScriptCode,   // USCRIPT_HIRAGANA
+      kndaScriptCode,   // USCRIPT_KANNADA
+      kataScriptCode,   // USCRIPT_KATAKANA
+      khmrScriptCode,   // USCRIPT_KHMER
+      laooScriptCode,   // USCRIPT_LAO
+      latnScriptCode,   // USCRIPT_LATIN
+      mlymScriptCode,   // USCRIPT_MALAYALAM
+      mongScriptCode,   // USCRIPT_MONGOLIAN
+      mymrScriptCode,   // USCRIPT_MYANMAR
+      ogamScriptCode,   // USCRIPT_OGHAM
+      italScriptCode,   // USCRIPT_OLD_ITALIC
+      oryaScriptCode,   // USCRIPT_ORIYA
+      runrScriptCode,   // USCRIPT_RUNIC
+      sinhScriptCode,   // USCRIPT_SINHALA
+      syrcScriptCode,   // USCRIPT_SYRIAC
+      tamlScriptCode,   // USCRIPT_TAMIL
+      teluScriptCode,   // USCRIPT_TELUGU
+      thaaScriptCode,   // USCRIPT_THAANA
+      thaiScriptCode,   // USCRIPT_THAI
+      tibtScriptCode,   // USCRIPT_TIBETAN
+      cansScriptCode,   // USCRIPT_UCAS
+      yiiiScriptCode    // USCRIPT_YI
 };
 
