@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml draft="true">
+	<identity>
+		<version number="x0.2"/>
+		<generation date="2004-09-01" />
+		<language type="syr" /> 
+	</identity>
+	<characters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Syrc</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<collations>
+		<collation type="standard" >
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations>
+</ldml>
