@@ -580,24 +580,15 @@ class TZEnumeration : public StringEnumeration {
     int32_t* map;
     int32_t  len;
     int32_t  pos;
-    void*    _bufp;
-    int32_t  _buflen;
-    UnicodeString id;
 
 public:
-    TZEnumeration() {
-        map = NULL;
-        _bufp = NULL;
-        len = pos = _buflen = 0;
+    TZEnumeration() : map(NULL), len(0), pos(0) {
         if (getOlsonMeta()) {
             len = OLSON_ZONE_COUNT;
         }
     }
 
-    TZEnumeration(int32_t rawOffset) {
-        map = NULL;
-        _bufp = NULL;
-        len = pos = _buflen = 0;
+    TZEnumeration(int32_t rawOffset) : map(NULL), len(0), pos(0) {
         if (!getOlsonMeta()) {
             return;
         }
@@ -615,10 +606,10 @@ public:
         for (int32_t i=0; i<OLSON_ZONE_COUNT; ++i) {
             if (getID(i)) {
                 // This is VERY inefficient.
-                TimeZone* z = TimeZone::createTimeZone(id);
+                TimeZone* z = TimeZone::createTimeZone(unistr);
                 // Make sure we get back the ID we wanted (if the ID is
                 // invalid we get back GMT).
-                if (z != 0 && z->getID(s) == id &&
+                if (z != 0 && z->getID(s) == unistr &&
                     z->getRawOffset() == rawOffset) {
                     map[len++] = i;
                 }
@@ -627,10 +618,7 @@ public:
         }
     }
 
-    TZEnumeration(const char* country) {
-        map = NULL;
-        _bufp = NULL;
-        len = pos = _buflen = 0;
+    TZEnumeration(const char* country) : map(NULL), len(0), pos(0) {
         if (!getOlsonMeta()) {
             return;
         }
@@ -662,49 +650,39 @@ public:
         ures_close(top);
     }
 
+    TZEnumeration(const TZEnumeration &other) : map(NULL), len(0), pos(0) {
+        if(other.len > 0) {
+            if(other.map != NULL) {
+                map = (int32_t *)uprv_malloc(other.len * sizeof(int32_t));
+                if(map != NULL) {
+                    len = other.len;
+                    uprv_memcpy(map, other.map, len * sizeof(int32_t));
+                    pos = other.pos;
+                }
+            } else {
+                len = other.len;
+                pos = other.pos;
+            }
+        }
+    }
+
     virtual ~TZEnumeration() {
         uprv_free(map);
-        uprv_free(_bufp);
+    }
+
+    virtual StringEnumeration *clone() const {
+        return new TZEnumeration(*this);
     }
 
     int32_t count(UErrorCode& status) const {
         return U_FAILURE(status) ? 0 : len;
     }
 
-    const char* next(int32_t* resultLength, UErrorCode& status) {
-        // TODO: Later a subclass of StringEnumeration will be available
-        // that implements next() and unext() in terms of snext().
-        // Inherit from that class when available and remove this method
-        // (and its declaration).
-        const UnicodeString* us = snext(status);
-        int32_t newlen;
-        if (us != NULL && ensureCapacity((newlen=us->length()) + 1)) {
-            us->extract(0, INT32_MAX, (char*) _bufp, "");
-            if (resultLength) {
-                resultLength[0] = newlen;
-            }
-            return (const char*)_bufp;
-        }
-        return NULL;
-    }
-
-    const UChar* unext(int32_t* resultLength, UErrorCode& status) {
-        const UnicodeString* us = snext(status);
-        if (us != NULL) {
-          if (resultLength) {
-            resultLength[0] = us->length();
-          }
-          U_ASSERT(us == &id); // A little ugly...
-          return id.getTerminatedBuffer(); // ...but works
-        }
-        return NULL;
-    }
-
     const UnicodeString* snext(UErrorCode& status) {
         if (U_SUCCESS(status) && pos < len) {
             getID((map == 0) ? pos : map[pos]);
             ++pos;
-            return &id;
+            return &unistr;
         }
         return 0;
     }
@@ -723,9 +701,9 @@ private:
         ures_getByIndex(top, OLSON_ZONE_START + i, &res, &ec);
         if (U_SUCCESS(ec)) {
             const char* key = ures_getKey(&res);
-            id = UnicodeString(key, "");
+            unistr = UnicodeString(key, "");
         } else {
-            id.truncate(0);
+            unistr.truncate(0);
         }
         ures_close(&res);
         ures_close(top);
@@ -737,21 +715,6 @@ private:
 public:
     static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
-private:
-    /**
-     * Guarantee that _bufp is allocated to include _buflen characters
-     * where _buflen >= minlen.  Return TRUE if successful, FALSE
-     * otherwise.
-     */
-    UBool ensureCapacity(int32_t minlen) {
-        if (_bufp != NULL && _buflen >= minlen) {
-            return TRUE;
-        }
-        _buflen = minlen + 8; // add 8 to prevent thrashing
-        _bufp = (_bufp == NULL) ? uprv_malloc(_buflen)
-                                : uprv_realloc(_bufp, _buflen);
-        return _bufp != NULL;
-    }
 };
 
 const char TZEnumeration::fgClassID = '\0';

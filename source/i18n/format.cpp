@@ -47,7 +47,13 @@ uprv_icuin_lib_dummy(int32_t i) {
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FieldPosition)
+
 FieldPosition::~FieldPosition() {}
+
+FieldPosition *
+FieldPosition::clone() const {
+    return new FieldPosition(*this);
+}
 
 // -------------------------------------
 // default constructor

@@ -225,6 +225,11 @@ void Formattable::dispose()
     }
 }
 
+Formattable *
+Formattable::clone() const {
+    return new Formattable(*this);
+}
+
 // -------------------------------------
 // Gets the data type of this Formattable object. 
 Formattable::Type

@@ -261,6 +261,19 @@ public:
     */
     virtual ~StringSearch(void);
 
+    /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    StringSearch *clone() const;
+
     // operator overloading ---------------------------------------------
 
     /**

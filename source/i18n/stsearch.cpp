@@ -212,6 +212,11 @@ StringSearch::~StringSearch()
     }
 }
 
+StringSearch *
+StringSearch::clone() const {
+    return new StringSearch(*this);
+}
+
 // operator overloading ---------------------------------------------
 StringSearch & StringSearch::operator=(const StringSearch &that)
 {
