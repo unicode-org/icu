@@ -447,10 +447,10 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* and this is a Fallback, to fr */
-    junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
+    junk = ures_getStringByKey(fr_FR, "Countries", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get Countries from fr_FR, got %s\n", 
             u_errorName(status));
     }
 

@@ -1974,10 +1974,10 @@ static void TestFallback()
     ures_close(subResource);
 
     /* and this is a Fallback, to fr */
-    junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
+    junk = ures_getStringByKey(fr_FR, "Countries", &resultLen, &status);
     if(status != U_USING_FALLBACK_WARNING)
     {
-        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %d\n", 
+        log_data_err("Expected U_USING_FALLBACK_ERROR when trying to get Countries from fr_FR, got %d\n", 
             status);
     }
     
@@ -2000,9 +2000,9 @@ static void TestFallback()
         if(u_strcmp(ures_getString(resLocID, &resultLen, &err), versionStr) != 0){
             log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value\n");
         }
-        tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
+        tResB = ures_getByKey(myResB, "calendar", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
-            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for DayNames err=%s\n",u_errorName(err));
+            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for calendar err=%s\n",u_errorName(err));
         }
         ures_close(resLocID);
         ures_close(myResB);
