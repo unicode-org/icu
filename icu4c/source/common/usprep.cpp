@@ -33,6 +33,7 @@
 #include "udataswp.h"
 #include "ucln_cmn.h"
 #include "unormimp.h"
+#include "ubidi_props.h"
 
 U_CDECL_BEGIN
 
@@ -371,6 +372,19 @@ usprep_getProfile(const char* path,
         /* get the options */
         profile->doNFKC            = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
         profile->checkBiDi         = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
+
+        if(profile->checkBiDi) {
+            profile->bdp = ubidi_getSingleton(status);
+            if(U_FAILURE(*status)) {
+                usprep_unload(profile);
+                uprv_free(key->path);
+                uprv_free(key);
+                uprv_free(profile);
+                return NULL;
+            }
+        } else {
+            profile->bdp = NULL;
+        }
         
         umtx_lock(&usprepMutex);
         /* add the data object to the cache */
@@ -752,17 +766,19 @@ usprep_prepare(   const UStringPrepProfile* profile,
             goto CLEANUP;
         }
 
-        direction = u_charDirection(ch);
-        if(firstCharDir == U_CHAR_DIRECTION_COUNT){
-            firstCharDir = direction;
-        }
-        if(direction == U_LEFT_TO_RIGHT){
-            leftToRight = TRUE;
-            ltrPos = b2Index-1;
-        }
-        if(direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC){
-            rightToLeft = TRUE;
-            rtlPos = b2Index-1;
+        if(profile->checkBiDi) {
+            direction = ubidi_getClass(profile->bdp, ch);
+            if(firstCharDir == U_CHAR_DIRECTION_COUNT){
+                firstCharDir = direction;
+            }
+            if(direction == U_LEFT_TO_RIGHT){
+                leftToRight = TRUE;
+                ltrPos = b2Index-1;
+            }
+            if(direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC){
+                rightToLeft = TRUE;
+                rtlPos = b2Index-1;
+            }
         }
     }           
     if(profile->checkBiDi == TRUE){
