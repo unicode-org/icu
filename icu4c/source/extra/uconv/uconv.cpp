@@ -39,10 +39,14 @@
 #endif
 
 #ifdef UCONVMSG_STATIC
-# include "uconvmsg.h"
+/* below from the README */
+#include "unicode/utypes.h"
+#include "unicode/udata.h"
+U_CFUNC char uconvmsg_dat[];
 #endif
 
 #define DEFAULT_BUFSZ   4096
+#define UCONVMSG "uconvmsg"
 
 static UResourceBundle *gBundle = 0;    /* Bundle containing messages. */
 
@@ -63,7 +67,7 @@ static void initMsg(const char *pname) {
 
         /* Set up our static data - if any */
 #ifdef UCONVMSG_STATIC
-        udata_install_uconvmsg(&err);
+        udata_setAppData( "uconvmsg", (const void*) uconvmsg_dat, &err);
         if (U_FAILURE(err)) {
           fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
                   pname, u_errorName(err));
@@ -73,15 +77,20 @@ static void initMsg(const char *pname) {
 
 
         /* Get messages. */
-
-        strcpy(dataPath, u_getDataDirectory());
-        strcat(dataPath, "uconvmsg");
-
-        gBundle = u_wmsg_setPath(dataPath, &err);
+        gBundle = u_wmsg_setPath(UCONVMSG, &err);
         if (U_FAILURE(err)) {
-            fprintf(stderr,
-                "%s: warning: couldn't open resource bundle %s: %s\n",
-                pname, dataPath, u_errorName(err));
+            fprintf(stderr, "%s: warning err %s on first open\n", pname, u_errorName(err));
+            err = U_ZERO_ERROR;
+            /* that was try #1, try again with a path */
+            strcpy(dataPath, u_getDataDirectory());
+            strcat(dataPath, UCONVMSG);
+
+            gBundle = u_wmsg_setPath(dataPath, &err);
+            if (U_FAILURE(err)) {
+                fprintf(stderr,
+                    "%s: warning: couldn't open resource bundle %s: %s\n",
+                    pname, dataPath, u_errorName(err));
+            }
         }
     }
 }
