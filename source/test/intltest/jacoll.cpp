@@ -101,21 +101,6 @@ const UChar CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOK
   /*5*/ {0x30AD, 0x30A4, 0x30A2, 0x0000},
 };
 
-void CollationKanaTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
-{
-    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
-    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (U_FAILURE(key1status) || U_FAILURE(key2status)) {
-        errln("SortKey generation Failed.\n");
-        return;
-    }
-    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
-}
-
 void CollationKanaTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
@@ -126,7 +111,7 @@ void CollationKanaTest::TestTertiary(/* char* par */)
     myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     myCollation->setAttribute(UCOL_CASE_LEVEL, UCOL_ON, status);
     for (i = 0; i < 6; i++) {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 
@@ -136,7 +121,7 @@ void CollationKanaTest::TestBase()
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
     for (i = 0; i < 3 ; i++)
-        doTest(testBaseCases[i], testBaseCases[i + 1], Collator::LESS);
+        doTest(myCollation, testBaseCases[i], testBaseCases[i + 1], Collator::LESS);
 }
 
 /* Testing plain, Daku-ten, Handaku-ten letters */
@@ -145,7 +130,7 @@ void CollationKanaTest::TestPlainDakutenHandakuten(void)
     int32_t i;
     myCollation->setStrength(Collator::SECONDARY);
     for (i = 0; i < 3 ; i++)
-        doTest(testPlainDakutenHandakutenCases[i], testPlainDakutenHandakutenCases[i + 1], 
+        doTest(myCollation, testPlainDakutenHandakutenCases[i], testPlainDakutenHandakutenCases[i + 1], 
         Collator::LESS);
 }
 
@@ -159,7 +144,7 @@ void CollationKanaTest::TestSmallLarge(void)
   myCollation->setStrength(Collator::TERTIARY);
   myCollation->setAttribute(UCOL_CASE_LEVEL, UCOL_ON, status);
   for (i = 0; i < 3 ; i++)
-    doTest(testSmallLargeCases[i], testSmallLargeCases[i + 1], Collator::LESS);
+    doTest(myCollation, testSmallLargeCases[i], testSmallLargeCases[i + 1], Collator::LESS);
 }
 
 /*
@@ -172,7 +157,7 @@ void CollationKanaTest::TestKatakanaHiragana(void)
   myCollation->setStrength(Collator::QUATERNARY);
   myCollation->setAttribute(UCOL_CASE_LEVEL, UCOL_ON, status);
   for (i = 0; i < 3 ; i++) {
-    doTest(testKatakanaHiraganaCases[i], testKatakanaHiraganaCases[i + 1], 
+    doTest(myCollation, testKatakanaHiraganaCases[i], testKatakanaHiraganaCases[i + 1], 
       Collator::LESS);
   }
 }
@@ -187,7 +172,7 @@ void CollationKanaTest::TestChooonKigoo(void)
   myCollation->setStrength(Collator::QUATERNARY);
   myCollation->setAttribute(UCOL_CASE_LEVEL, UCOL_ON, status);
   for (i = 0; i < 7 ; i++) {
-    doTest(testChooonKigooCases[i], testChooonKigooCases[i + 1], Collator::LESS);
+    doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1], Collator::LESS);
   }
 }
 

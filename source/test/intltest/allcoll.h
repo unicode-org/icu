@@ -30,10 +30,6 @@ public:
     virtual ~CollationDummyTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par = NULL */);
 
-    // main test method called with different strengths,
-    // tests comparison of custum collation with different strengths
-    void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
-
     // perform test with strength PRIMARY
     void TestPrimary(/* char* par */);
 
@@ -54,8 +50,6 @@ private:
     static const Collator::EComparisonResult results[];
 
     RuleBasedCollator *myCollation;
-
-    void doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result);
 };
 
 #endif /* #if !UCONFIG_NO_COLLATION */

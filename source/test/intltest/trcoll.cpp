@@ -85,27 +85,12 @@ const Collator::EComparisonResult CollationTurkishTest::results[] = {
     Collator::GREATER
 };
 
-void CollationTurkishTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
-{
-    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
-    CollationKey sortKey1, sortKey2;
-    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
-    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
-    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (U_FAILURE(key1status) || U_FAILURE(key2status)) {
-        errln("SortKey generation Failed.\n");
-        return;
-    }
-    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, compareResult, result );
-}
-
 void CollationTurkishTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
     for (i = 0; i < 8 ; i++) {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 void CollationTurkishTest::TestPrimary(/* char* par */)
@@ -113,7 +98,7 @@ void CollationTurkishTest::TestPrimary(/* char* par */)
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
     for (i = 8; i < 11; i++) {
-        doTest(testSourceCases[i], testTargetCases[i], results[i]);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
 
