@@ -41,10 +41,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio31.dll"
+				OutputFile="..\..\bin\icuio32.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icuio31.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio32.pdb"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuio.lib"/>
 			<Tool
@@ -108,11 +108,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icuio31d.dll"
+				OutputFile="..\..\bin\icuio32d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icuio31d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icuio32d.pdb"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\lib\icuiod.lib"/>
 			<Tool
