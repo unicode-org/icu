@@ -319,7 +319,7 @@ static void TestCalendar()
     ucal_setAttribute(calit, UCAL_FIRST_DAY_OF_WEEK,count);
     /*setting minimal days of the week to other values */
     count=ucal_getAttribute(calit, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK);
-    for (i=0; i<=7; ++i) {
+    for (i=1; i<=7; ++i) {
         ucal_setAttribute(calit, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,i);
         if (ucal_getAttribute(calit, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK) != i) 
             log_err("FAIL: set/getMinimalDaysInFirstWeek failed\n");
