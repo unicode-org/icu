@@ -662,7 +662,11 @@ int32_t UnicodeSet::indexOf(UChar32 c) const {
  */
 UChar32 UnicodeSet::charAt(int32_t index) const {
     if (index >= 0) {
-        for (int32_t i=0; i < len;) {
+        // len2 is the largest even integer <= len, that is, it is len
+        // for even values and len-1 for odd values.  With odd values
+        // the last entry is UNICODESET_HIGH.
+        int32_t len2 = len & ~1;
+        for (int32_t i=0; i < len2;) {
             UChar32 start = list[i++];
             int32_t count = list[i++] - start;
             if (index < count) {
