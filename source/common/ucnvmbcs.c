@@ -3242,10 +3242,10 @@ fromUCallback(UConverter *cnv,
                 linear+=((uint32_t)codePoint-range[0]);
 
                 /* turn this into a four-byte sequence */
-                bytes[3]=(const char)(0x30+linear%10); linear/=10;
-                bytes[2]=(const char)(0x81+linear%126); linear/=126;
-                bytes[1]=(const char)(0x30+linear%10); linear/=10;
-                bytes[0]=(const char)(0x81+linear);
+                bytes[3]=(char)(0x30+linear%10); linear/=10;
+                bytes[2]=(char)(0x81+linear%126); linear/=126;
+                bytes[1]=(char)(0x30+linear%10); linear/=10;
+                bytes[0]=(char)(0x81+linear);
 
                 /* output this sequence */
                 ucnv_cbFromUWriteBytes(pArgs, bytes, 4, 0, pErrorCode);
