@@ -31,7 +31,7 @@ $(FILES_class) : $(CLASS_DEST_DIR)%.class: $(SRCDIR)/$(PKGPATH)%.java
 	@rm -f .classes.list
 
 ifdef FILES_dict
-SRC_FILES_dict= $(FILES_dict:classes=src)
+SRC_FILES_dict= $(subst classes,src,$(FILES_dict))
 endif
 
 classes: $(CLASS_DEST_DIR) delete.classlist $(FILES_class) $(FILES_dics) .compile.classlist
