@@ -125,6 +125,25 @@ class BreakIterator;        // unicode/brkiter.h
  * UnicodeString::getChar32Start() and UnicodeString::getChar32Limit()
  * (or, in C, the equivalent macros U16_SET_CP_START() and U16_SET_CP_LIMIT(), see utf.h).</p>
  *
+ * UnicodeString methods are more lenient with regard to input parameter values
+ * than other ICU APIs. In particular:
+ * - If indexes are out of bounds for a UnicodeString object
+ *   (<0 or >length()) then they are "pinned" to the nearest boundary.
+ * - If primitive string pointer values (e.g., const UChar * or char *)
+ *   for input strings are NULL, then those input string parameters are treated
+ *   as if they pointed to an empty string.
+ * - Most UnicodeString methods do not take a UErrorCode parameter because
+ *   there are usually very few opportunities for failure other than a shortage
+ *   of memory, error codes in low-level C++ string methods would be inconvenient,
+ *   and the error code as the last parameter (ICU convention) would prevent
+ *   the use of default parameter values.
+ *   Instead, such methods set the UnicodeString into a "bogus" state
+ *   (see isBogus()) if an error occurs.
+ *
+ * In string comparisons, two UnicodeString objects that are both "bogus"
+ * compare equal (to be transitive and prevent endless loops in sorting),
+ * and a "bogus" string compares less than any non-"bogus" one.
+ *
  * <p>UnicodeString uses several storage methods.
  * String contents can be stored inside the UnicodeString object itself,
  * in an allocated and shared buffer, or in an outside buffer that is "aliased".
@@ -3176,19 +3195,17 @@ UnicodeString::getBuffer() const {
 //========================================
 inline int8_t
 UnicodeString::doCompare(int32_t start,
-              int32_t _length,
+              int32_t length,
               const UnicodeString& srcText,
               int32_t srcStart,
               int32_t srcLength) const
 {
-  const UChar *srcChars;
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    srcChars=srcText.getArrayStart();
+  if(srcText.isBogus()) {
+    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
-    srcChars=0;
+    srcText.pinIndices(srcStart, srcLength);
+    return doCompare(start, length, srcText.fArray, srcStart, srcLength);
   }
-  return doCompare(start, _length, srcChars, srcStart, srcLength);
 }
 
 inline UBool
@@ -3272,19 +3289,17 @@ UnicodeString::compareBetween(int32_t start,
 
 inline int8_t
 UnicodeString::doCompareCodePointOrder(int32_t start,
-                                       int32_t _length,
+                                       int32_t length,
                                        const UnicodeString& srcText,
                                        int32_t srcStart,
                                        int32_t srcLength) const
 {
-  const UChar *srcChars;
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    srcChars=srcText.getArrayStart();
+  if(srcText.isBogus()) {
+    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
-    srcChars=0;
+    srcText.pinIndices(srcStart, srcLength);
+    return doCompareCodePointOrder(start, length, srcText.fArray, srcStart, srcLength);
   }
-  return doCompareCodePointOrder(start, _length, srcChars, srcStart, srcLength);
 }
 
 inline int8_t 
@@ -3335,20 +3350,18 @@ UnicodeString::compareCodePointOrderBetween(int32_t start,
 
 inline int8_t
 UnicodeString::doCaseCompare(int32_t start,
-                             int32_t _length,
+                             int32_t length,
                              const UnicodeString &srcText,
                              int32_t srcStart,
                              int32_t srcLength,
                              uint32_t options) const
 {
-  const UChar *srcChars;
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    srcChars=srcText.getArrayStart();
+  if(srcText.isBogus()) {
+    return (int8_t)!isBogus(); // 0 if both are bogus, 1 otherwise
   } else {
-    srcChars=0;
+    srcText.pinIndices(srcStart, srcLength);
+    return doCaseCompare(start, length, srcText.fArray, srcStart, srcLength, options);
   }
-  return doCaseCompare(start, _length, srcChars, srcStart, srcLength, options);
 }
 
 inline int8_t 

@@ -218,7 +218,7 @@ UnicodeString::UnicodeString(const UChar *text)
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
-  doReplace(0, 0, text, 0, u_strlen(text));
+  doReplace(0, 0, text, 0, -1);
 }
 
 UnicodeString::UnicodeString(const UChar *text,
@@ -239,9 +239,15 @@ UnicodeString::UnicodeString(UBool isTerminated,
     fArray((UChar *)text),
     fFlags(kReadonlyAlias)
 {
-  if( text == 0 || textLength < -1 ||
-      (textLength == -1 && !isTerminated) ||
-      (textLength >= 0 && isTerminated && text[textLength] != 0)
+  if(text == NULL) {
+    // treat as an empty string, do not alias
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fArray = fStackBuffer;
+    fFlags = kShortString;
+  } else if(textLength < -1 ||
+            (textLength == -1 && !isTerminated) ||
+            (textLength >= 0 && isTerminated && text[textLength] != 0)
   ) {
     setToBogus();
   } else if(textLength == -1) {
@@ -259,10 +265,15 @@ UnicodeString::UnicodeString(UChar *buff,
     fArray(buff),
     fFlags(kWritableAlias)
 {
-  if(buff == 0 || buffLength < -1 || buffLength > buffCapacity) {
+  if(buff == NULL) {
+    // treat as an empty string, do not alias
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fArray = fStackBuffer;
+    fFlags = kShortString;
+  } else if(buff == 0 || buffLength < -1 || buffLength > buffCapacity) {
     setToBogus();
-  }
-  if(buffLength == -1) {
+  } else if(buffLength == -1) {
     // fLength = u_strlen(buff); but do not look beyond buffCapacity
     const UChar *p = buff, *limit = buff + buffCapacity;
     while(p != limit && *p != 0) {
@@ -308,7 +319,9 @@ UnicodeString::UnicodeString(const char *src, int32_t srcLength,
 {
   if(U_SUCCESS(errorCode)) {
     // check arguments
-    if(srcLength<-1 || (srcLength!=0 && src==0)) {
+    if(src==NULL) {
+      // treat as an empty string, do nothing more
+    } else if(srcLength<-1) {
       errorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
       // get input length
@@ -579,18 +592,17 @@ UnicodeString::doCompare( int32_t start,
               int32_t srcLength) const
 {
   // compare illegal string values
+  // treat const UChar *srcChars==NULL as an empty string
   if(isBogus()) {
-    if(srcChars==0) {
-      return 0;
-    } else {
-      return -1;
-    }
-  } else if(srcChars==0) {
-    return 1;
+    return -1;
   }
-
+  
   // pin indices to legal values
   pinIndices(start, length);
+
+  if(srcChars == NULL) {
+    srcStart = srcLength = 0;
+  }
 
   // get the correct pointer
   const UChar *chars = getArrayStart();
@@ -659,18 +671,17 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
                                        int32_t srcLength) const
 {
   // compare illegal string values
+  // treat const UChar *srcChars==NULL as an empty string
   if(isBogus()) {
-    if(srcChars==0) {
-      return 0;
-    } else {
-      return -1;
-    }
-  } else if(srcChars==0) {
-    return 1;
+    return -1;
   }
 
   // pin indices to legal values
   pinIndices(start, length);
+
+  if(srcChars == NULL) {
+    srcStart = srcLength = 0;
+  }
 
   int32_t diff = uprv_strCompare(fArray + start, length, srcChars + srcStart, srcLength, FALSE, TRUE);
   /* translate the 32-bit result into an 8-bit one */
@@ -690,18 +701,17 @@ UnicodeString::doCaseCompare(int32_t start,
                              uint32_t options) const
 {
   // compare illegal string values
+  // treat const UChar *srcChars==NULL as an empty string
   if(isBogus()) {
-    if(srcChars==0) {
-      return 0;
-    } else {
-      return -1;
-    }
-  } else if(srcChars==0) {
-    return 1;
+    return -1;
   }
 
   // pin indices to legal values
   pinIndices(start, length);
+
+  if(srcChars == NULL) {
+    srcStart = srcLength = 0;
+  }
 
   // get the correct pointer
   const UChar *chars = getArrayStart();
@@ -1008,7 +1018,17 @@ UnicodeString::setTo(UBool isTerminated,
     return *this;
   }
 
-  if( text == 0 || textLength < -1 ||
+  if(text == NULL) {
+    // treat as an empty string, do not alias
+    releaseArray();
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fArray = fStackBuffer;
+    fFlags = kShortString;
+    return *this;
+  }
+
+  if( textLength < -1 ||
       (textLength == -1 && !isTerminated) ||
       (textLength >= 0 && isTerminated && text[textLength] != 0)
   ) {
@@ -1042,7 +1062,17 @@ UnicodeString::setTo(UChar *buffer,
     return *this;
   }
 
-  if(buffer == 0 || buffLength < 0 || buffLength > buffCapacity) {
+  if(buffer == NULL) {
+    // treat as an empty string, do not alias
+    releaseArray();
+    fLength = 0;
+    fCapacity = US_STACKBUF_SIZE;
+    fArray = fStackBuffer;
+    fFlags = kShortString;
+    return *this;
+  }
+
+  if(buffLength < 0 || buffLength > buffCapacity) {
     setToBogus();
     return *this;
   }
