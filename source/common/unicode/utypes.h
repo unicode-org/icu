@@ -38,6 +38,7 @@
 #include <wchar.h>
 #include <stdlib.h>
 
+#include "unicode\uversion.h"
 /*===========================================================================*/
 /* Include platform-dependent definitions                                    */
 /* which are contained in the platform-specific file platform.h              */
@@ -143,30 +144,6 @@ typedef uint16_t UChar;
 
 /* U_SIZEOF_UCHAR==sizeof(UChar) */
 #define U_SIZEOF_UCHAR 2
-
-/*===========================================================================*/
-/* ICU version number                                                        */
-/*===========================================================================*/
-
-/*
- * This version number is incremented if and only if the code has changed
- * in a binary incompatible way.  For example, if the algorithm for generating
- * sort keys has changed, this code version must be incremented.
- *
- * This is for internal use only.  Clients should use
- * ResourceBundle::getVersionNumber().
- *
- * ResourceBundle::getVersionNumber() returns a full version number
- * for a resource, which consists of this code version number concatenated
- * with the ResourceBundle data file version number.
- */
-
-/**
- * ICU package code version number.
- * For internal use only. Please use ResourceBundle::getVersionNumber()
- */
-#define ICU_VERSION "3"
-
 
 /*===========================================================================*/
 /* For C wrappers, we use the symbol U_CAPI.                                   */

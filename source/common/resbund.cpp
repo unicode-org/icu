@@ -914,7 +914,7 @@ ResourceBundle::getVersionNumber()  const
     // the length of the major part + the length of the separator
     // (==1) + the length of the minor part (+ 1 for the zero byte at
     // the end).
-    int32_t len = uprv_strlen(ICU_VERSION);
+    int32_t len = uprv_strlen(U_ICU_VERSION);
     int32_t minor_len = 0;
     if(U_SUCCESS(status) && minor_version.length() > 0) 
       minor_len = minor_version.length();
@@ -925,7 +925,7 @@ ResourceBundle::getVersionNumber()  const
     // + 1 for zero byte
     ((ResourceBundle*)this)->fVersionID = new char[1 + len]; 
     
-    uprv_strcpy(fVersionID, ICU_VERSION);
+    uprv_strcpy(fVersionID, U_ICU_VERSION);
     uprv_strcat(fVersionID, kVersionSeparator);
     if(minor_len > 0) {
       minor_version.extract(0, minor_len, fVersionID + len - minor_len);

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -16,6 +16,7 @@
 *   8/19/1999   srl         Upgraded scripts to Unicode 3.0
 *   8/27/1999   schererm    UCharDirection constants: U_...
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
+*   01/11/2000  helena      Renamed u_getVersion to u_getUnicodeVersion().
 ********************************************************************************
 */
 
@@ -830,12 +831,14 @@ U_CAPI UChar U_EXPORT2
 u_totitle(UChar c);
 
 /**
- * The function is used to get the Unicode standard Version that is used.
- *
- * @return the Unicode stabdard Version number
+ * Gets the Unicode version information.  The version array stores the version information
+ * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
+ * is then represented as 0x01031F02.
+ * @param versionArray the version # 
+ * @return the size of the version array 
  */
-U_CAPI const char* U_EXPORT2
-u_getVersion(void);
+U_CAPI int32_t U_EXPORT2
+u_getUnicodeVersion(uint8_t* versionArray);
 
 #endif /*_UCHAR*/
 /*eof*/
