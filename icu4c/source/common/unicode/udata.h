@@ -23,11 +23,24 @@ U_CDECL_BEGIN
 
 /**
  * \file
- * \brief  C API: Data memory
+ * \brief C API: Data loading interface
  *
- * <h2>Information about data memory. </h2>
- * This structure may grow in the future, indicated by the
- * <code>size</code> field.
+ * <h2>Information about data loading interface</h2>
+ *
+ * This API is used to find and efficiently load data for ICU and applications
+ * using ICU. It provides an abstract interface that specifies a data type and
+ * name to find and load the data. Normally this API is used by other ICU APIs
+ * to load required data out of the ICU data library, but it can be used to
+ * load data out of other places.
+ *
+ */
+
+/**
+ * UDataInfo contains the properties about the requested data.
+ * This is meta data.
+ *
+ * <p>This structure may grow in the future, indicated by the
+ * <code>size</code> field.</p>
  *
  * <p>The platform data property fields help determine if a data
  * file can be efficiently used on a given machine.
