@@ -189,11 +189,9 @@ int main(int argc, const char* const argv[])
         fprintf(stderr,
             "#### WARNING!\n"
             "  The global mutex was not initialized during C++ static initialization.\n"
-            "  You must use an ICU API in a single thread, like ucnv_open() or\n"
-            "  uloc_countAvailable(), before using ICU in multiple threads.\n"
-            "  Most ICU API functions will initialize the global mutex for you.\n"
-            "  If you are using ICU in a single threaded application, please ignore this\n"
-            "  warning.\n"
+            "  You must explicitly initialize ICU by calling u_init() before using ICU in multiple threads.\n"
+            "  If you are using ICU in a single threaded application, use of u_init() is recommended,\n"
+            "  but is not required.\n"
             "#### WARNING!\n"
             );
     }
