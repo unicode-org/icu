@@ -106,7 +106,7 @@ RB_FILES = $(GENRB_SOURCE:.txt=.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll "$(TESTDATAOUT)\testdata.dll" "$(DLL_OUTPUT)\icudata.dll" GOBACK #icudata.dat
+ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll "$(TESTDATAOUT)\testdata.dll" "$(DLL_OUTPUT)\icudata.dll" test1.cnv test3.cnv test4.cnv GOBACK #icudata.dat
 	@echo All targets are up to date
 
 BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
@@ -232,6 +232,22 @@ CLEAN :
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(ICUDATA)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
+
+# Targets for test converter data
+test1.cnv: "$(TESTDATA)\test1.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(ICUDATA)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+test3.cnv: "$(TESTDATA)\test3.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(ICUDATA)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+test4.cnv: "$(TESTDATA)\test4.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(ICUDATA)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Targets for uprops.dat
 uprops.dat : unidata\UnicodeData.txt unidata\Mirror.txt "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
