@@ -10,6 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uniset.h"
+#include "unicode/uiter.h"
 #include "nortrans.h"
 #include "unormimp.h"
 #include "mutex.h"
@@ -28,97 +29,6 @@ static UMTX MUTEX = 0;
 static UnicodeSet* SKIPPABLES = NULL;
 
 static const int32_t D = 0, C = 1, KD= 2, KC = 3;
-
-U_CDECL_BEGIN
-
-/*
- * This is an implementation of a code unit (UChar) iterator
- * based on a Replaceable object.
- * It is used with the internal API for incremental normalization.
- *
- * The UCharIterator.context field holds a pointer to the Replaceable.
- * UCharIterator.length and UCharIterator.index hold Replaceable.length()
- * and the iteration index.
- */
-
-static int32_t U_CALLCONV
-replaceableIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
-    int32_t pos;
-
-    switch(origin) {
-    case UITERATOR_START:
-        pos=iter->start+delta;
-        break;
-    case UITERATOR_CURRENT:
-        pos=iter->index+delta;
-        break;
-    case UITERATOR_END:
-        pos=iter->limit+delta;
-        break;
-    default:
-        /* not a valid origin, no move */
-        /* Should never get here! */
-        pos = iter->start;
-        break;
-    }
-
-    if(pos<iter->start) {
-        pos=iter->start;
-    } else if(pos>iter->limit) {
-        pos=iter->limit;
-    }
-
-    return iter->index=pos;
-}
-
-static UBool U_CALLCONV
-replaceableIteratorHasNext(UCharIterator *iter) {
-    return iter->index<iter->limit;
-}
-
-static UBool U_CALLCONV
-replaceableIteratorHasPrevious(UCharIterator *iter) {
-    return iter->index>iter->start;
-}
-
-static UChar U_CALLCONV
-replaceableIteratorCurrent(UCharIterator *iter) {
-    if(iter->index<iter->limit) {
-        return ((Replaceable *)(iter->context))->charAt(iter->index);
-    } else {
-        return 0xffff;
-    }
-}
-
-static UChar U_CALLCONV
-replaceableIteratorNext(UCharIterator *iter) {
-    if(iter->index<iter->limit) {
-        return ((Replaceable *)(iter->context))->charAt(iter->index++);
-    } else {
-        return 0xffff;
-    }
-}
-
-static UChar U_CALLCONV
-replaceableIteratorPrevious(UCharIterator *iter) {
-    if(iter->index>iter->start) {
-        return ((Replaceable *)(iter->context))->charAt(--iter->index);
-    } else {
-        return 0xffff;
-    }
-}
-
-static const UCharIterator replaceableIterator={
-    0, 0, 0, 0, 0,
-    replaceableIteratorMove,
-    replaceableIteratorHasNext,
-    replaceableIteratorHasPrevious,
-    replaceableIteratorCurrent,
-    replaceableIteratorNext,
-    replaceableIteratorPrevious
-};
-
-U_CDECL_END
 
 /**
  * System registration hook.
@@ -227,9 +137,8 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
     }
 
     // a C code unit iterator, implemented around the Replaceable
-    UCharIterator iter = replaceableIterator;
-    iter.context = &text;
-    // iter.length = text.length(); is not used
+    UCharIterator iter;
+    uiter_setReplaceable(&iter, &text);
 
     // the output string and buffer pointer
     UnicodeString output;
