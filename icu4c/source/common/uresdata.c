@@ -12,6 +12,10 @@
 *
 *   created on: 1999dec08
 *   created by: Markus W. Scherer
+* Modification History:
+*
+*   Date        Name        Description
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 */
 
 #include "unicode/utypes.h"
@@ -435,7 +439,7 @@ U_CFUNC const char *
 res_getVersion(const ResourceData *pResData) {
     UDataInfo *info;
 
-    info = uprv_malloc(sizeof(UDataInfo));
+    info = (UDataInfo *)uprv_malloc(sizeof(UDataInfo));
     uprv_memset(info, 0, sizeof(UDataInfo));
 
     if(info == NULL) {

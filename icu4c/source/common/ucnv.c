@@ -16,6 +16,7 @@
 *   Date        Name        Description
 *   04/04/99    helena      Fixed internal header inclusion.
 *   05/09/00    helena      Added implementation to handle fallback mappings.
+*   06/20/2000  helena      OS/400 port changes; mostly typecast.
 */
 #include "umutex.h"
 #include "unicode/ures.h"
@@ -380,7 +381,7 @@ UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
   if (U_FAILURE (*err))
     return UCNV_UNKNOWN;
   
-  return converter->sharedData->staticData->platform;
+  return (UConverterPlatform)converter->sharedData->staticData->platform;
 }
 
 UConverterToUCallback  ucnv_getToUCallBack (const UConverter * converter)
@@ -1045,7 +1046,7 @@ int32_t  ucnv_convert(const char *toConverterName,
 
 UConverterType ucnv_getType(const UConverter* converter)
 {
-  return converter->sharedData->staticData->conversionType;
+  return (UConverterType)converter->sharedData->staticData->conversionType;
 }
 
 void ucnv_getStarters(const UConverter* converter, 
