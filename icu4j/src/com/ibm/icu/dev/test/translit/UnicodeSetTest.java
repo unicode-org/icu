@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/27 18:35:54 $ 
- * $Revision: 1.47 $
+ * $Date: 2003/05/09 21:25:25 $ 
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -836,6 +836,24 @@ public class UnicodeSetTest extends TestFmwk {
             "[:Case Sensitive:]",
             "A\u1FFC\\U00010410",
             ";\u00B4\\U00010500",
+
+
+            // Regex compatibility test
+            "[-b]", // leading '-' is literal
+            "-b",
+            "ac",
+            
+            "[^-b]", // leading '-' is literal
+            "ac",
+            "-b",
+            
+            "[b-]", // trailing '-' is literal
+            "-b",
+            "ac",
+            
+            "[^b-]", // trailing '-' is literal
+            "ac",
+            "-b",
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
