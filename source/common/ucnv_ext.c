@@ -20,17 +20,11 @@
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
 
+#include "unicode/uset.h"
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 #include "ucnv_ext.h"
 #include "cmemory.h"
-
-/*
- * ### TODO
- *
- * implement getUnicodeSet for the extension table
- * implement data swapping for it
- */
 
 /*
  * ### TODO: probably need pointer to baseTableSharedData
@@ -935,26 +929,139 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
     }
 }
 
-/*
- * ### TODO
- *
- * - test toU() functions
- *
- * - EBCDIC_STATEFUL: support extensions, but the charset string must be
- *   either one single-byte character or a sequence of double-byte ones,
- *   to avoid state transitions inside the mapping and to avoid having to
- *   store character boundaries.
- *   The extension functions will need an additional EBCDIC state in/out
- *   parameter and will have to be able to insert an SI or SO before writing
- *   the mapping result.
- * - EBCDIC_STATEFUL: toU() may need to check if in DB mode, do nothing if in SB
- * - EBCDIC_STATEFUL: fix prefix checking to keep SBCS & DBCS separate
- * - make dbcsonly work with extensions
- *
- * - test |2 to <subchar1> for regular code point, prefix code point,
- *   multiple code points
- * - test fallback from non-zero to 00
- * - try a smaller U_CNV_SAFECLONE_BUFFERSIZE and try ccapitst/TestConvertSafeClone()
- */
+static void
+ucnv_extGetUnicodeSetString(const UConverter *cnv,
+                            const int32_t *cx,
+                            USet *set,
+                            UConverterUnicodeSet which,
+                            UChar32 c,
+                            UChar s[UCNV_EXT_MAX_UCHARS], int32_t length,
+                            int32_t sectionIndex,
+                            UErrorCode *pErrorCode) {
+    const UChar *fromUSectionUChars;
+    const uint32_t *fromUSectionValues;
+
+    uint32_t value;
+    int32_t i, count;
+
+    fromUSectionUChars=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_UCHARS_INDEX, UChar)+sectionIndex;
+    fromUSectionValues=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_VALUES_INDEX, uint32_t)+sectionIndex;
+
+    /* read first pair of the section */
+    count=*fromUSectionUChars++;
+    value=*fromUSectionValues++;
+
+    if( value!=0 &&
+        UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) &&
+        UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+    ) {
+        if(c>=0) {
+            /* add the initial code point */
+            uset_add(set, c);
+        } else {
+            /* add the string so far */
+            uset_addString(set, s, length);
+        }
+    }
+
+    for(i=0; i<count; ++i) {
+        /* append this code unit and recurse or add the string */
+        s[length]=fromUSectionUChars[i];
+        value=fromUSectionValues[i];
+
+        if(value==0) {
+            /* no mapping, do nothing */
+        } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
+            ucnv_extGetUnicodeSetString(
+                cnv, cx, set, which,
+                U_SENTINEL, s, length+1,
+                (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
+                pErrorCode);
+        } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
+                           UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
+                  UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+        ) {
+            uset_addString(set, s, length+1);
+        }
+    }
+}
+
+U_CFUNC void
+ucnv_extGetUnicodeSet(const UConverter *cnv,
+                      USet *set,
+                      UConverterUnicodeSet which,
+                      UErrorCode *pErrorCode) {
+    const int32_t *cx;
+    const uint16_t *stage12, *stage3, *ps2, *ps3;
+    const uint32_t *stage3b;
+
+    uint32_t value;
+    int32_t st1, stage1Length, st2, st3;
+
+    UChar s[UCNV_EXT_MAX_UCHARS];
+    UChar32 c;
+    int32_t length;
+
+    cx=cnv->sharedData->table->mbcs.extIndexes;
+    if(cx==NULL) {
+        return;
+    }
+
+    stage12=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_12_INDEX, uint16_t);
+    stage3=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_3_INDEX, uint16_t);
+    stage3b=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_STAGE_3B_INDEX, uint32_t);
+
+    stage1Length=cx[UCNV_EXT_FROM_U_STAGE_1_LENGTH];
+
+    /* enumerate the from-Unicode trie table */
+    c=0; /* keep track of the current code point while enumerating */
+
+    /*
+     * the trie enumeration is almost the same as
+     * in _MBCSGetUnicodeSet() for MBCS_OUTPUT_1
+     */
+    for(st1=0; st1<stage1Length; ++st1) {
+        st2=stage12[st1];
+        if(st2>stage1Length) {
+            ps2=stage12+st2;
+            for(st2=0; st2<64; ++st2) {
+                if((st3=(int32_t)ps2[st2]<<UCNV_EXT_STAGE_2_LEFT_SHIFT)!=0) {
+                    /* read the stage 3 block */
+                    ps3=stage3+st3;
+
+                    /*
+                     * Add code points for which the roundtrip flag is set.
+                     * Do not add <subchar1> entries or other (future?) pseudo-entries
+                     * with an output length of 0, or entries with reserved bits set.
+                     * Recurse for partial results.
+                     */
+                    do {
+                        value=stage3b[*ps3++];
+                        if(value==0) {
+                            /* no mapping, do nothing */
+                        } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
+                            length=0;
+                            U16_APPEND_UNSAFE(s, length, c);
+                            ucnv_extGetUnicodeSetString(
+                                cnv, cx, set, which,
+                                c, s, length,
+                                (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
+                                pErrorCode);
+                        } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
+                                           UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
+                                  UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+                        ) {
+                            uset_add(set, c);
+                        }
+                    } while((++c&0xf)!=0);
+                } else {
+                    c+=16; /* empty stage 3 block */
+                }
+            }
+        } else {
+            c+=1024; /* empty stage 2 block */
+        }
+    }
+}
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */

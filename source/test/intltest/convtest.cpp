@@ -19,6 +19,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
+#include "unicode/parsepos.h"
+#include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "convtest.h"
@@ -44,6 +46,7 @@ ConversionTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     switch (index) {
         case 0: name="TestToUnicode"; if (exec) TestToUnicode(); break;
         case 1: name="TestFromUnicode"; if (exec) TestFromUnicode(); break;
+        case 2: name="TestGetUnicodeSet"; if (exec) TestGetUnicodeSet(); break;
         default: name=""; break; //needed to end loop
     }
 }
@@ -283,6 +286,120 @@ ConversionTest::TestFromUnicode() {
                     errorCode=U_ZERO_ERROR;
                 } else {
                     FromUnicodeCase(cc, callback, option);
+                }
+            }
+            delete testData;
+        }
+        delete dataModule;
+    }
+    else {
+        errln("Failed: could not load test conversion data");
+    }
+}
+
+void
+ConversionTest::TestGetUnicodeSet() {
+    char charset[100];
+    UnicodeString s, map, mapnot;
+    int32_t which;
+
+    ParsePosition pos;
+    UnicodeSet cnvSet, mapSet, mapnotSet, diffSet;
+    UConverter *cnv;
+
+    TestLog testLog;
+    TestDataModule *dataModule;
+    TestData *testData;
+    const DataMap *testCase;
+    UErrorCode errorCode;
+    int32_t i;
+
+    errorCode=U_ZERO_ERROR;
+    dataModule=TestDataModule::getTestDataModule("conversion", testLog, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        testData=dataModule->createTestData("getUnicodeSet", errorCode);
+        if(U_SUCCESS(errorCode)) {
+            for(i=0; testData->nextCase(testCase, errorCode); ++i) {
+                if(U_FAILURE(errorCode)) {
+                    errln("error retrieving conversion/getUnicodeSet test case %d - %s",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                s=testCase->getString("charset", errorCode);
+                s.extract(0, 0x7fffffff, charset, sizeof(charset), "");
+
+                map=testCase->getString("map", errorCode);
+                mapnot=testCase->getString("mapnot", errorCode);
+
+                which=testCase->getInt28("which", errorCode);
+
+                if(U_FAILURE(errorCode)) {
+                    errln("error parsing conversion/getUnicodeSet test case %d - %s",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                // test this test case
+                mapSet.clear();
+                mapnotSet.clear();
+
+                pos.setIndex(0);
+                mapSet.applyPattern(map, pos, 0, NULL, errorCode);
+                if(U_FAILURE(errorCode) || pos.getIndex()!=map.length()) {
+                    errln("error creating the map set for conversion/getUnicodeSet test case %d - %s\n"
+                          "    error index %d  index %d  U+%04x",
+                            i, u_errorName(errorCode), pos.getErrorIndex(), pos.getIndex(), map.char32At(pos.getIndex()));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                pos.setIndex(0);
+                mapnotSet.applyPattern(mapnot, pos, 0, NULL, errorCode);
+                if(U_FAILURE(errorCode) || pos.getIndex()!=mapnot.length()) {
+                    errln("error creating the mapnot set for conversion/getUnicodeSet test case %d - %s\n"
+                          "    error index %d  index %d  U+%04x",
+                            i, u_errorName(errorCode), pos.getErrorIndex(), pos.getIndex(), mapnot.char32At(pos.getIndex()));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                cnv=cnv_open(charset, errorCode);
+                if(U_FAILURE(errorCode)) {
+                    errln("error opening \"%s\" for conversion/getUnicodeSet test case %d - %s",
+                            charset, i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                ucnv_getUnicodeSet(cnv, (USet *)&cnvSet, (UConverterUnicodeSet)which, &errorCode);
+                ucnv_close(cnv);
+
+                if(U_FAILURE(errorCode)) {
+                    errln("error in ucnv_getUnicodeSet(\"%s\") for conversion/getUnicodeSet test case %d - %s",
+                            charset, i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+
+                // are there items that must be in cnvSet but are not?
+                (diffSet=mapSet).removeAll(cnvSet);
+                if(!diffSet.isEmpty()) {
+                    diffSet.toPattern(s, TRUE);
+                    errln("error: ucnv_getUnicodeSet(\"%s\") is missing items - conversion/getUnicodeSet test case %d",
+                            charset, i);
+                    errln(s);
+                }
+
+                // are there items that must not be in cnvSet but are?
+                (diffSet=mapnotSet).retainAll(cnvSet);
+                if(!diffSet.isEmpty()) {
+                    diffSet.toPattern(s, TRUE);
+                    errln("error: ucnv_getUnicodeSet(\"%s\") contains unexpected items - conversion/getUnicodeSet test case %d",
+                            charset, i);
+                    errln(s);
                 }
             }
             delete testData;

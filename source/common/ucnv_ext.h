@@ -350,6 +350,12 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
                            UConverterFromUnicodeArgs *pArgs, int32_t srcIndex,
                            UErrorCode *pErrorCode);
 
+U_CFUNC void
+ucnv_extGetUnicodeSet(const UConverter *cnv,
+                      USet *set,
+                      UConverterUnicodeSet which,
+                      UErrorCode *pErrorCode);
+
 /* toUnicode helpers -------------------------------------------------------- */
 
 #define UCNV_EXT_TO_U_BYTE_SHIFT 24
