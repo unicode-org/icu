@@ -13,6 +13,7 @@
 #include "unicode/rbt.h"
 #include "unicode/unifilt.h"
 #include "unicode/cpdtrans.h"
+#include "unicode/dtfmtsym.h"
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
@@ -21,24 +22,25 @@
                               logln((UnicodeString)""); \
                               test();                   \
                           }                             \
-                          break;
+                          break
 
 void
 TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
                                    char* &name, char* par) {
     switch (index) {
-        CASE(0,TestInstantiation)
-        CASE(1,TestSimpleRules)
-        CASE(2,TestRuleBasedInverse)
-        CASE(3,TestKeyboard)
-        CASE(4,TestKeyboard2)
-        CASE(5,TestKeyboard3)
-        CASE(6,TestArabic)
-        CASE(7,TestCompoundKana)
-        CASE(8,TestCompoundHex)
-        CASE(9,TestFiltering)
-        CASE(10,TestInlineSet)
-        CASE(11,TestPatternQuoting)
+        CASE(0,TestInstantiation);
+        CASE(1,TestSimpleRules);
+        CASE(2,TestRuleBasedInverse);
+        CASE(3,TestKeyboard);
+        CASE(4,TestKeyboard2);
+        CASE(5,TestKeyboard3);
+        CASE(6,TestArabic);
+        CASE(7,TestCompoundKana);
+        CASE(8,TestCompoundHex);
+        CASE(9,TestFiltering);
+        CASE(10,TestInlineSet);
+        CASE(11,TestPatternQuoting);
+        CASE(12,TestJ277);
         default: name = ""; break;
     }
 }
@@ -466,6 +468,79 @@ void TransliteratorTest::TestPatternQuoting(void) {
             expect(t, DATA[i+1], DATA[i+2]);
         }
     }
+}
+
+/**
+ * Regression test for bugs found in Greek transliteration.
+ */
+void TransliteratorTest::TestJ277(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator *gl = Transliterator::createInstance("Greek-Latin");
+
+    UChar sigma = 0x3C3;
+    UChar upsilon = 0x3C5;
+    UChar nu = 0x3BD;
+    UChar PHI = 0x3A6;
+    UChar alpha = 0x3B1;
+    UChar omega = 0x3C9;
+    UChar omicron = 0x3BF;
+    UChar epsilon = 0x3B5;
+
+    // sigma upsilon nu -> syn
+    UnicodeString syn;
+    syn.append(sigma).append(upsilon).append(nu);
+    expect(*gl, syn, "syn");
+
+    // sigma alpha upsilon nu -> saun
+    UnicodeString sayn;
+    sayn.append(sigma).append(alpha).append(upsilon).append(nu);
+    expect(*gl, sayn, "saun");
+
+    // Again, using a smaller rule set
+    UnicodeString rules(
+                "alpha   = \\u03B1;"
+                "nu      = \\u03BD;"
+                "sigma   = \\u03C3;"
+                "ypsilon = \\u03C5;"
+                "vowel   = [aeiouAEIOU{alpha}{ypsilon}];"
+                "s <>           {sigma};"
+                "a <>           {alpha};"
+                "u <> ({vowel}) {ypsilon};"
+                "y <>           {ypsilon};"
+                "n <>           {nu};"
+                );
+    RuleBasedTransliterator mini("mini", rules, Transliterator::REVERSE, status);
+    if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
+    expect(mini, syn, "syn");
+    expect(mini, sayn, "saun");
+
+    // Transliterate the Greek locale data
+    Locale el("el");
+    DateFormatSymbols syms(el, status);
+    if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
+    int32_t i, count;
+    const UnicodeString* data = syms.getMonths(count);
+    for (i=0; i<count; ++i) {
+        if (data[i].length() == 0) {
+            continue;
+        }
+        UnicodeString out(data[i]);
+        gl->transliterate(out);
+        bool_t ok = TRUE;
+        if (data[i].length() >= 2 && out.length() >= 2 &&
+            u_isupper(data[i].charAt(0)) && u_islower(data[i].charAt(1))) {
+            if (!(u_isupper(out.charAt(0)) && u_islower(out.charAt(1)))) {
+                ok = FALSE;
+            }
+        }
+        if (ok) {
+            logln(escape(data[i] + " -> " + out));
+        } else {
+            errln(UnicodeString("FAIL: ") + escape(data[i] + " -> " + out));
+        }
+    }
+
+    delete gl;
 }
 
 //======================================================================

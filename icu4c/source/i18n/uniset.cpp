@@ -594,7 +594,6 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
             } else {
                 scratch.truncate(0);
                 pattern.extractBetween(i, j, scratch);
-                ++j;
                 symbols->lookup(scratch, c, set, status);
             }
             if (U_FAILURE(status)) {
@@ -607,6 +606,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
             if (set != NULL) {
                 nestedPairs = &set->pairs;
             }
+            i = j; // Make i point to '}'
         }
 
         /* An opening bracket indicates the first bracket of a nested
@@ -630,7 +630,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 if (U_FAILURE(status)) {
                     return pairsBuf;
                 }
-                i = j+1; // Make i point to ']'
+                i = j+1; // Make i point to ']' in ":]"
                 if (mode == 3) {
                     // Entire pattern is a category; leave parse loop
                     pairsBuf.append(*nestedPairs);

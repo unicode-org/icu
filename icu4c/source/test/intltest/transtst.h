@@ -81,6 +81,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestFiltering(void);
 
+    /**
+     * Regression test for bugs found in Greek transliteration.
+     */
+    void TestJ277(void);
+
     //======================================================================
     // Support methods
     //======================================================================
