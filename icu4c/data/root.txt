@@ -1183,10 +1183,7 @@ root {
 
 
     LocaleScript{
-        "Latin",
         "Latn",
-        "Latf",
-        "Latg"
     }
 
     //------------------------------------------------------------
@@ -1396,5 +1393,49 @@ root {
             "%%lenient-parse:\n"
             "    & ':' = '.' = ' ' = '-';\n" 
     }
+    Scripts { 
+        ARAB { "Arabic" }
+        ARMN { "Armenian" }
+        BENG { "Bengali" }
+        BOPO { "Bopomofo" }
+        CANS { "Unified Canadian Aboriginal Symbols" }
+        CHER { "Cherokee" }
+        CYRL { "Cyrillic" }
+        DEVA { "Devanagari" }
+        DSRT { "Deseret" }
+        ETHI { "Ethiopic" }
+        GEOR { "Georgian" }
+        GOTH { "Gothic" }
+        GREK { "Greek" }
+        GUJR { "Gujarati" }
+        GURU { "Gurmukhi" }
+        HANG { "Hangul" }
+        HANI { "Han" }
+        HEBR { "Hebrew" }
+        HIRA { "Hiragana" }
+        ITAL { "Old_italic" }
+        KANA { "Katakana" }
+        KHMR { "Khmer" }
+        KNDA { "Kannada" }
+        LAO  { "Lao" }
+        LATN { "Latin" }
+        MLYM { "Malayalam" }
+        MONG { "Mongolian" }
+        MYMR { "Myanmar" }
+        OGAM { "Ogham" }
+        ORYA { "Oriya" }
+        QAAC { "Coptic" }
+        QAAI { "Inherited" }
+        RUNR { "Runic" }
+        SINH { "Sinhala" }
+        SYRC { "Syriac" }
+        TAML { "Tamil" }
+        TELU { "Telugu" }
+        THAA { "Thana" }
+        THAI { "Thai" }
+        TIBT { "Tibetan" }
+        YIII { "Yi" }
+        ZYYY { "Common" }  
+   }
 }
 
