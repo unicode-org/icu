@@ -92,11 +92,13 @@ dv {
         "THAA"
     }
     ExemplarCharacters { "[[:Thaa:]\u200c\u200d\u200f\u200e]" }
-    CollationElements {	    
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
              "[normalization on]"
         }
+      }
     }
     Currencies {
         MVR { "\u0783.", "MVR" }
