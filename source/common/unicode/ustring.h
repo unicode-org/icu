@@ -71,7 +71,11 @@ u_strchr(const UChar     *s,
 
 /**
  * Find the first occurrence of a substring in a string.
- * ### TBD
+ *
+ * @param s The string to search.
+ * @return A pointer to the first occurrence of <TT>substring</TT> in 
+ * <TT>s</TT>, or a null pointer if <TT>substring</TT>
+ * is not in <TT>s</TT>.
  */
 U_CAPI UChar * U_EXPORT2
 u_strstr(const UChar *s, const UChar *substring);
@@ -81,9 +85,9 @@ u_strstr(const UChar *s, const UChar *substring);
  *
  * @param s The string to search.
  * @param c The code point (0..0x10ffff) to find.
- * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>,
- * or a <code>NULL</code> pointer if there is no such character.
- * If <code>c</code> is represented with several UChars, then the returned
+ * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
+ * or a null pointer if there is no such character.
+ * If <TT>c</TT> is represented with several UChars, then the returned
  * pointer will point to the first of them.
  * @draft
  */
