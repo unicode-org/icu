@@ -271,7 +271,7 @@ static void initGlobalMutex() {
         /* Note that the headers from Microsoft's WIndows SDK define InterlockedCompareExchangePointer
          * for all platforms, but the old headers included with MSVC 6 do not.
          */
-        t = (void *)InterlockedCompareExchange(&gGlobalMutex, (long)ourCritSec, NULL);
+        t = (void *)InterlockedCompareExchange(&gGlobalMutex, ourCritSec, NULL);
 #endif
         if (t != NULL) {
             /* Some other thread stored into gGlobalMutex first.  Discard the critical
