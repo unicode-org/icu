@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
         
         // Format the date in default locale
         str.remove();
-        defFmt->format(cal->getTime(status), str, status);
+        defFmt->format((Formattable)cal->getTime(status), str, status);
         check(status, "DateFormat::format");
         printf("Date: ");
         uprintf(escape(str));
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
         
         // Format the date for Greece
         str.remove();
-        fmt->format(cal->getTime(status), str, status);
+        fmt->format((Formattable)cal->getTime(status), str, status);
         check(status, "DateFormat::format");
         printf("Greek formatted date: ");
         uprintf(escape(str));
