@@ -80,13 +80,19 @@ does automatically detect UTF-8, UTF-16BE, and UTF-16LE if a byte order mark
 Set the source directory to
 .IR source .
 The default source directory is specified by the environment variable
-.BR ICU_DATA .
+.BR ICU_DATA
+or is the location set when ICU was built if 
+.B ICU_DATA
+is not set.
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
-.BR ICU_DATA .
+.BR ICU_DATA
+or is the location set when ICU was built if 
+.B ICU_DATA
+is not set.
 .TP
 .BI "\-i\fP, \fB\-\-icudatadir" " ICU data directory"
 Set the directory used to locate any necessary ICU data files to
@@ -113,6 +119,6 @@ is set.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000 IBM, Inc. and others.
+Copyright (C) 2000-2001 IBM, Inc. and others.
 .SH SEE ALSO
 .BR pkgdata (8)
