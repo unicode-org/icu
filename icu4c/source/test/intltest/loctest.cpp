@@ -183,6 +183,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         CASE(21, Test4147552)
         CASE(22, TestVariantParsing)
         CASE(23, Test4105828)
+        CASE(24, TestSetIsBogus)
 
         default: name = ""; break; //needed to end loop
     }
@@ -1534,4 +1535,19 @@ LocaleTest::Test4105828()
         }
         delete fmt;
     }
+}
+
+// Tests setBogus and isBogus APIs for Locale
+// Jitterbug 1735
+void
+LocaleTest::TestSetIsBogus() {
+  Locale l("en_US");
+  l.setBogus(TRUE);
+  if(l.isBogus() != TRUE) {
+    errln("After setting bogus, didn't return TRUE");
+  }
+  l.setBogus(FALSE);
+  if(l.isBogus() != FALSE) {
+    errln("After resetting bogus, didn't return FALSE");
+  }
 }
