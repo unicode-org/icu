@@ -151,7 +151,8 @@ public class LDMLUtilities {
        if(ignoreIfNoneAvailable==true && isAvailable==false){
            return null ;
        }
-       
+       /*
+        * debugging code 
        try {
             OutputStreamWriter writer = new OutputStreamWriter(
                     new FileOutputStream("./" + File.separator + locale
@@ -161,6 +162,7 @@ public class LDMLUtilities {
         } catch (IOException e) {
             //throw the exceptionaway .. this is for debugging
         }
+        */
        return full;
     }
 
