@@ -178,6 +178,31 @@ u_formatMessage(    const    char        *locale,
                 ...);
  
 /**
+* Format a message for a locale.
+* This function may perform re-ordering of the arguments depending on the
+* locale. For all numeric arguments, double is assumed unless the type is
+* explicitly integer.  All choice format arguments must be of type double.
+* @param locale The locale for which the message will be formatted
+* @param pattern The pattern specifying the message's format
+* @param patternLength The length of pattern
+* @param result A pointer to a buffer to receive the formatted message.
+* @param resultLength The maximum size of result.
+* @param ap A variable-length argument list containing the arguments specified
+* @param status A pointer to an UErrorCode to receive any errors
+* in pattern.
+* @return The total buffer size needed; if greater than resultLength, the 
+* output was truncated.
+* @see u_parseMessage
+*/
+U_CAPI int32_t
+u_vformatMessage(    const    char        *locale,
+            const    UChar        *pattern,
+                int32_t        patternLength,
+                UChar        *result,
+                int32_t        resultLength,
+                va_list       ap,
+                UErrorCode    *status);
+/**
 * Parse a message.
 * For numeric arguments, this function will always use doubles.  Integer types
 * should not be passed.  
@@ -200,5 +225,29 @@ u_parseMessage(    const    char        *locale,
             int32_t        sourceLength,
             UErrorCode    *status,
             ...);
+
+/**
+* Parse a message.
+* For numeric arguments, this function will always use doubles.  Integer types
+* should not be passed.  
+* This function is not able to parse all output from \Ref{u_formatMessage}.
+* @param locale The locale for which the message is formatted
+* @param pattern The pattern specifying the message's format
+* @param patternLength The length of pattern
+* @param source The text to parse.
+* @param sourceLength The length of source, or -1 if null-terminated.
+* @param ap A variable-length argument list containing the arguments
+* @param status A pointer to an UErrorCode to receive any errors
+* specified in pattern.
+* @see u_formatMessage
+*/
+U_CAPI void 
+u_vparseMessage(    const    char        *locale,
+        const    UChar        *pattern,
+            int32_t        patternLength,
+        const    UChar        *source,
+            int32_t        sourceLength,
+            va_list       ap,
+            UErrorCode    *status);
 
 #endif
