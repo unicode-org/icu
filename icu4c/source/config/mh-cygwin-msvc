@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.12 2003/09/13 09:06:09 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.13 2003/09/15 22:31:59 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -24,9 +24,8 @@ THREADSCFLAGS += /MD
 THREADSCXXFLAGS += /MD
 
 # /GF pools strings and places them into read-only memory
-# TODO: Fix /MD so that multithreading is disabled when requested
-CFLAGS += /MD /GF
-CXXFLAGS += /MD /GF
+CFLAGS += /GF
+CXXFLAGS += /GF
 CPPFLAGS+=/nologo
 DEFS+=/D"WIN32"
 LDFLAGS+=/nologo
@@ -113,7 +112,7 @@ LIBUSTDIO=	$(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VE
 	@rc.exe /fo$@ $<
 
 ## Versioned target for a shared library.
-FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
+FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 MIDDLE_SO_TARGET=$(SO_TARGET)
 
 ## Versioned import library names.
