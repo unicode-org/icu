@@ -24,7 +24,7 @@ using namespace std;
 
 #endif
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)((sizeof(array)/sizeof((array)[0])))
 
 UnicodeStringTest::~UnicodeStringTest() {}
 
@@ -1540,7 +1540,7 @@ class TestEnumeration : public StringEnumeration {
 public:
     TestEnumeration() : i(0) {}
 
-    virtual int32_t count(UErrorCode& status) const {
+    virtual int32_t count(UErrorCode& /*status*/) const {
         return LENGTHOF(testEnumStrings);
     }
 
@@ -1553,7 +1553,7 @@ public:
         return NULL;
     }
 
-    virtual void reset(UErrorCode &status) {
+    virtual void reset(UErrorCode& /*status*/) {
         i=0;
     }
 
