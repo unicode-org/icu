@@ -216,7 +216,7 @@ ibm-849                cp1131          # PC     Belarus (w/ euro update)
 ibm-848                cp1125          # PC     Ukraine (w/ euro update)
 ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC     Arabic Extended (w/     euro update)
-ibm-1363_P100-2000     ibm-1363 ibm-1363_VASCII_VSUB_VPUA ibm-1362# Korean KSC Korean Windows MBCS 
+ibm-1363_P110-2000     ibm-1363 ibm-1363_VASCII_VSUB_VPUA ibm-1362# Korean KSC Korean Windows MBCS 
 ibm-1363_P11B-2000     ibm-1363_VSUB_VPUA windows-949 cp949 cp1363 ksc korean 
 ibm-5210               cp1114          # PC     SBCS Big-5 (w/ euro     update)
 ibm-21427              cp947           # PC     DBCS Big-5 (w/ euro     update)
