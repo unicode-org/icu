@@ -15,7 +15,8 @@ ja {
     CollationElements {
         Version { "4.0" }
         Sequence {
-            "[strength 4][hiraganaQ on]"
+            "[strength 3]" // if you want complete JIS 4061X support use strength I or 4
+            "[hiraganaQ on]"
 
             "&\u30FD = \u30FD = \u309D" // KATAKANA ITERATION MARK
 
