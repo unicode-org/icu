@@ -2371,7 +2371,7 @@ typedef enum  {
     ASCII_1=0,
         GB2312_1=1,
         ISO_IR_165=2,
-        CNS_11643=3,
+        CNS_11643=3
 } StateEnumCN;
 
 static Cnv2022Type myConverterTypeCN[4]={
