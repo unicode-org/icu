@@ -824,18 +824,6 @@ uloc_getLCID(const char* localeID)
     return result;
 }
 
-static UBool
-_startsWith(const char *s, const char *possiblePrefix) {
-    while(*possiblePrefix!=0) {
-        if(*possiblePrefix!=*s) {
-            return FALSE;
-        }
-        ++s;
-        ++possiblePrefix;
-    }
-    return TRUE;
-}
-
 /*
  * Lookup a resource bundle table item with fallback on the table level.
  * Regular resource bundle lookups perform fallback to parent locale bundles
