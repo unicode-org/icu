@@ -247,22 +247,14 @@ public:
      *
      * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-private:
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    static UClassID getStaticClassID();
 };
 
 inline ICULayoutEngine::ICULayoutEngine()
