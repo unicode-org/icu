@@ -179,7 +179,7 @@ public:
     
     VArray(Fn_Deleter del) : buf(NULL), cap(0), size(0), deleter(del) {}
     
-    ~VArray() { 
+    ~VArray() {
         if (deleter) {
             for (int i = 0; i < size; ++i) {
                 (*deleter)(buf[i]);
@@ -898,18 +898,25 @@ RuleBasedNumberFormat::getNumberOfRuleSetDisplayNameLocales(void) const {
 
 Locale 
 RuleBasedNumberFormat::getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return Locale();
+    }
     if (localizations && index >= 0 && index < localizations->getNumberOfDisplayLocales()) {
         UnicodeString name(TRUE, localizations->getLocaleName(index), -1);
         char buffer[64];
         int32_t cap = name.length() + 1;
         char* bp = buffer;
         if (cap > 64) {
-            bp = new char[cap];
+            bp = (char *)uprv_malloc(cap);
+            if (bp == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return Locale();
+            }
         }
         name.extract(0, name.length(), bp, cap, UnicodeString::kInvariant);
         Locale retLocale(bp);
         if (bp != buffer) {
-            delete[] bp;
+            uprv_free(bp);
         }
         return retLocale;
     }
