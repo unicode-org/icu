@@ -26,8 +26,6 @@
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
-extern UBool checkFCD(const UChar *, int32_t, UErrorCode *);
-
 static UCollator *myCollation;
 
 static void
@@ -566,7 +564,7 @@ void TestCheckFCD()
     {0x0061, 0x030A, 0x00E2, 0x0323, 0},
     {0x0061, 0x0323, 0x00E2, 0x0323, 0},
     {0x0061, 0x0323, 0x1E05, 0x0302, 0} };
-  const UBool result[] = {TRUE, FALSE, FALSE, TRUE};
+  const UBool result[] = {UNORM_YES, UNORM_NO, UNORM_NO, UNORM_YES};
 
   const UChar datachar[] = {0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 
                             0x6a,
@@ -581,26 +579,26 @@ void TestCheckFCD()
 
   int count = 0;
   
-  if (checkFCD(FAST_, 10, &status) != TRUE)
-    log_err("checkFCD failed: expected value for fast checkFCD is TRUE\n");
-  if (checkFCD(FALSE_, 10, &status) != FALSE)
-    log_err("checkFCD failed: expected value for error checkFCD is FALSE\n");
-  if (checkFCD(TRUE_, 10, &status) != TRUE)
-    log_err("checkFCD failed: expected value for correct checkFCD is TRUE\n");
+  if (unorm_quickCheck(FAST_, 10, UNORM_FCD, &status) != UNORM_YES)
+    log_err("unorm_quickCheck(FCD) failed: expected value for fast unorm_quickCheck is UNORM_YES\n");
+  if (unorm_quickCheck(FALSE_, 10, UNORM_FCD, &status) != UNORM_NO)
+    log_err("unorm_quickCheck(FCD) failed: expected value for error unorm_quickCheck is UNORM_NO\n");
+  if (unorm_quickCheck(TRUE_, 10, UNORM_FCD, &status) != UNORM_YES)
+    log_err("unorm_quickCheck(FCD) failed: expected value for correct unorm_quickCheck is UNORM_YES\n");
 
   if (U_FAILURE(status))
-    log_err("checkFCD failed: %s\n", u_errorName(status));
+    log_err("unorm_quickCheck(FCD) failed: %s\n", u_errorName(status));
 
   while (count < 4)
   {
-    UBool fcdresult = checkFCD(datastr[count], 4, &status);
+    UBool fcdresult = unorm_quickCheck(datastr[count], 4, UNORM_FCD, &status);
     if (U_FAILURE(status)) {
-      log_err("checkFCD failed: exception occured at data set %d\n", count);
+      log_err("unorm_quickCheck(FCD) failed: exception occured at data set %d\n", count);
       break;
     }
     else {
       if (result[count] != fcdresult) {
-        log_err("checkFCD failed: Data set %d expected value %d\n", count, 
+        log_err("unorm_quickCheck(FCD) failed: Data set %d expected value %d\n", count, 
                  result[count]);
       }
     }
@@ -614,7 +612,7 @@ void TestCheckFCD()
   for (count = 0; count < 50; count ++)
   {
     int size = 0;
-    UBool testresult = TRUE;
+    UBool testresult = UNORM_YES;
     UChar data[20];
     UChar norm[100];
     UChar nfd[100];
@@ -627,7 +625,7 @@ void TestCheckFCD()
       normsize += unorm_normalize(data + size, 1, UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, 
                                   norm + normsize, 100 - normsize, &status);       
       if (U_FAILURE(status)) {
-        log_err("checkFCD failed: exception occured at data generation\n");
+        log_err("unorm_quickCheck(FCD) failed: exception occured at data generation\n");
         break;
       }
       size ++;
@@ -637,21 +635,21 @@ void TestCheckFCD()
     nfdsize = unorm_normalize(data, size, UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, 
                               nfd, 100, &status);       
     if (U_FAILURE(status)) {
-      log_err("checkFCD failed: exception occured at normalized data generation\n");
+      log_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation\n");
     }
 
     if (nfdsize != normsize || u_memcmp(nfd, norm, nfdsize) != 0) {
-      testresult = FALSE;
+      testresult = UNORM_NO;
     }
-    if (testresult == TRUE) {
-      log_verbose("result TRUE\n");
+    if (testresult == UNORM_YES) {
+      log_verbose("result UNORM_YES\n");
     }
     else {
-      log_verbose("result FALSE\n");
+      log_verbose("result UNORM_NO\n");
     }
 
-    if (checkFCD(data, size, &status) != testresult || U_FAILURE(status)) {
-      log_err("checkFCD failed: expected %d for random data\n", testresult);
+    if (unorm_quickCheck(data, size, UNORM_FCD, &status) != testresult || U_FAILURE(status)) {
+      log_err("unorm_quickCheck(FCD) failed: expected %d for random data\n", testresult);
     }
   }
 }

@@ -146,7 +146,7 @@ U_CFUNC int32_t
 unorm_internalNormalize(UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
                         UNormalizationMode mode, UBool ignoreHangul,
-                        GrowBuffer *growBuffer, void *context,
+                        UGrowBuffer *growBuffer, void *context,
                         UErrorCode *pErrorCode);
 
 /**
@@ -157,7 +157,7 @@ U_CFUNC int32_t
 unorm_decompose(UChar *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
                 UBool compat, UBool ignoreHangul,
-                GrowBuffer *growBuffer, void *context,
+                UGrowBuffer *growBuffer, void *context,
                 UErrorCode *pErrorCode);
 
 /**
@@ -168,21 +168,72 @@ U_CFUNC int32_t
 unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               UBool compat, UBool ignoreHangul,
-              GrowBuffer *growBuffer, void *context,
+              UGrowBuffer *growBuffer, void *context,
               UErrorCode *pErrorCode);
 
 /**
- * internal API, but used by tests
+ * internal API, used by collation code
+ * Get access to the internal FCD trie table to be able to perform
+ * incremental, per-code unit, FCD checks in collation.
+ * One pointer is sufficient because the trie index values are offset
+ * by the index size, so that the same pointer is used to access the trie data.
  * @internal
  */
-U_CAPI void U_EXPORT2
-unorm_setNewImplementation(UBool useNew);
+U_CAPI const uint16_t * U_EXPORT2
+unorm_getFCDTrie(UErrorCode *pErrorCode);
+
+#ifdef XP_CPLUSPLUS
 
 /**
- * internal API, but used by tests
+ * internal API, used by collation code
+ * Get the FCD value for a code unit, with
+ * bits 15..8   lead combining class
+ * bits  7..0   trail combining class
+ *
+ * If c is a lead surrogate and the value is not 0,
+ * then instead of combining classes the value
+ * is used in unorm_getFCD16FromSurrogatePair() to get the real value
+ * of the supplementary code point.
+ *
  * @internal
  */
-U_CAPI UBool U_EXPORT2
-unorm_usesNewImplementation();
+inline uint16_t
+unorm_getFCD16(const uint16_t *fcdTrieIndex, UChar c) {
+    return
+        fcdTrieIndex[
+            fcdTrieIndex[
+                c>>_NORM_TRIE_SHIFT
+            ]+
+            (c&_NORM_STAGE_2_MASK)
+        ];
+}
+
+/**
+ * internal API, used by collation code
+ * Get the FCD value for a supplementary code point, with
+ * bits 15..8   lead combining class
+ * bits  7..0   trail combining class
+ *
+ * @param fcd16  The FCD value for the lead surrogate, not 0.
+ * @param c2     The trail surrogate code unit.
+ *
+ * @internal
+ */
+inline uint16_t
+unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UChar c2) {
+    /* the surrogate index in fcd16 is an absolute offset over the start of stage 1 */
+    uint32_t c=
+        ((uint32_t)fcd16<<10)|
+        (c2&0x3ff);
+    return
+        fcdTrieIndex[
+            fcdTrieIndex[
+                c>>_NORM_TRIE_SHIFT
+            ]+
+            (c&_NORM_STAGE_2_MASK)
+        ];
+}
+
+#endif
 
 #endif
