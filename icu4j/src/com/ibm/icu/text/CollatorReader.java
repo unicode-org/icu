@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2003/05/14 22:37:36 $ 
-* $Revision: 1.11 $
+* $Date: 2003/05/28 22:56:21 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -51,7 +51,7 @@ final class CollatorReader
         // binary files
         VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
         if(UnicodeVersion[0] != UCDVersion.getMajor() 
-        || UnicodeVersion[1] < UCDVersion.getMinor()) {
+        || UnicodeVersion[1] != UCDVersion.getMinor()) {
             throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
         }
         m_dataInputStream_ = new DataInputStream(inputStream);
@@ -74,7 +74,7 @@ final class CollatorReader
             // binary files
             VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
             if(UnicodeVersion[0] != UCDVersion.getMajor() 
-            || UnicodeVersion[1] < UCDVersion.getMinor()) {
+            || UnicodeVersion[1] != UCDVersion.getMinor()) {
                 throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
             }
     	}
@@ -368,7 +368,7 @@ final class CollatorReader
         // binary files
         VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
         if(UnicodeVersion[0] != UCDVersion.getMajor() 
-        || UnicodeVersion[1] < UCDVersion.getMinor()) {
+        || UnicodeVersion[1] != UCDVersion.getMinor()) {
             throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
         }
                               
