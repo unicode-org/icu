@@ -24,14 +24,15 @@
  * The TestDictionary test expects a file of this name, with this
  * encoding, to be present in the directory $ICU/source/test/testdata.
  */
-#define TEST_FILE           "th18057.txt"
+//#define TEST_FILE           "th18057.txt"
+#define TEST_FILE           "riwords.txt"
 #define TEST_FILE_ENCODING  "UTF8"
 
 /**
  * This is the most failures we show in TestDictionary.  If this number
  * is < 0, we show all failures.
  */
-#define MAX_FAILURES_TO_SHOW 8
+#define MAX_FAILURES_TO_SHOW -1
 
 #define CASE(id,test)                 \
     case id:                          \
@@ -47,7 +48,7 @@ CollationThaiTest::CollationThaiTest() {
     UErrorCode status = U_ZERO_ERROR;
     coll = Collator::createInstance(Locale("th", "TH", ""), status);
     if (coll && U_SUCCESS(status)) {
-        coll->setStrength(Collator::TERTIARY);
+        //coll->setStrength(Collator::TERTIARY);
     } else {
         delete coll;
         coll = 0;
@@ -87,7 +88,7 @@ static UBool readLine(FileStream *in, UnicodeString& line, const char* encoding)
     if (T_FileStream_eof(in)) {
         return FALSE;
     }
-    char buffer[128];
+    char buffer[1024];
     char* p = buffer;
     char* limit = p + sizeof(buffer) - 1; // Leave space for 0
     while (p<limit) {
@@ -204,7 +205,7 @@ void CollationThaiTest::TestDictionary(void) {
 
     FileStream *in = T_FileStream_open(buffer, "rb");
     if (in == 0) {
-        errln((UnicodeString)"Error: could not open test file " + buffer);
+        infoln((UnicodeString)"INFO: could not open test file " + buffer + ". Aborting test.");
         return;        
     }
 
@@ -488,7 +489,7 @@ void CollationThaiTest::TestInvalidThai(void) {
 void CollationThaiTest::TestReordering(void) {
   const char *tests[] = { 
                           "\\u0E41c\\u0301",       "=", "\\u0E41\\u0107", // composition
-                          "\\u0E41\\uD834\\uDC00", "<", "\\u0E41\\uD834\\uDC01", // supplementaries
+                          "\\u0E41\\uD835\\uDFCE", "<", "\\u0E41\\uD835\\uDFCF", // supplementaries
                           "\\u0E41\\uD834\\uDD5F", "=", "\\u0E41\\uD834\\uDD58\\uD834\\uDD65", // supplementary composition decomps to supplementary
                           "\\u0E41\\uD87E\\uDC02", "=", "\\u0E41\\u4E41", // supplementary composition decomps to BMP
                           "\\u0E41\\u0301",        "=", "\\u0E41\\u0301", // unsafe (just checking backwards iteration)
@@ -525,12 +526,11 @@ void CollationThaiTest::TestReordering(void) {
   parseChars(rules, rule);
   RuleBasedCollator *rcoll = new RuleBasedCollator(rules, status);
   if(U_SUCCESS(status)) {
-    //compareArray(*rcoll, testcontraction, 3);
+    compareArray(*rcoll, testcontraction, 3);
     delete rcoll;
   } else {
     errln("Couldn't instantiate collator from rules");
   }
-  //genericRulesStarter(rule, test10, 2);
 
 }
 
