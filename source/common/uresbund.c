@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2001, International Business Machines Corporation and   *
+* Copyright (C) 1997-2002, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -15,6 +15,7 @@
 *   11/09/99    weiv            Added ures_getLocale()
 *   March 2000  weiv        Total overhaul - using data in DLLs
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
+*   06/24/02    weiv        Added support for resource sharing
 ******************************************************************************
 */
 
@@ -498,78 +499,124 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
 static void entryClose(UResourceDataEntry *resB);
 /* INTERNAL: */
 static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
-                                         const char *key, UResourceDataEntry *realData, 
-                                         UResourceBundle *resB, UErrorCode *status) {
+                                         const char *key, int32_t index, UResourceDataEntry *realData, 
+                                         const UResourceBundle *parent, int32_t noAlias,
+                                         UResourceBundle *resB, UErrorCode *status) 
+{
     if(status == NULL || U_FAILURE(*status)) {
         return resB;
     }
     if(RES_GET_TYPE(r) == RES_ALIAS) { /* This is an alias, need to exchange with real data */
-      int32_t len = 0;
-      const UChar *alias = res_getAlias(rdata, r, &len);   
-      if(len > 0) {
-        /* we have an alias, now let's cut it up */
-        int32_t i = 0;
-        char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
-        int32_t pathLen = 0, localeLen = 0, keyPathLen = 0;
-        chAlias = (char *)uprv_malloc((len+1)*sizeof(char));
-        u_UCharsToChars(alias, chAlias, len);
-        chAlias[len] = 0;
+      if(noAlias < URES_MAX_ALIAS_LEVEL) { 
+        int32_t len = 0;
+        const UChar *alias = res_getAlias(rdata, r, &len);   
+        if(len > 0) {
+          /* we have an alias, now let's cut it up */
+          int32_t i = 0;
+          char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
+          int32_t pathLen = 0, localeLen = 0, keyPathLen = 0;
+          chAlias = (char *)uprv_malloc((len+1)*sizeof(char));
+          u_UCharsToChars(alias, chAlias, len);
+          chAlias[len] = 0;
 
-        locale = uprv_strchr(chAlias, '|');
-        if(locale == NULL) {
-          locale = chAlias;
-        } else {
-          *locale = 0;
-          locale++;
-          path = chAlias;
-        }
-        if(path != NULL && uprv_strlen(path) == 0) {
-          path = realData->fPath;
-        }
-
-        keyPath = uprv_strchr(locale, '/');
-        if(keyPath == NULL) {
-          *status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else {
-          *keyPath = 0;
-          keyPath++;
-        }
-
-        {
-          char *kp = NULL;
-          /* got almost everything, let's try to open */
-          UResourceBundle *main = ures_open(path, locale, status); 
-          UResourceBundle *res = main;
-          UResourceBundle *res2 = resB;
-          while((kp=uprv_strchr(keyPath, '/')) && U_SUCCESS(*status)) {
-            *kp = 0;
-            res2 = ures_getByKey(res, keyPath, res2, status);
-            /*ures_close(res);*/
-            res = res2;
-            keyPath = kp+1;
+          if(*chAlias == RES_PATH_SEPARATOR) {
+            /* there is a path included */
+            locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
+            *locale = 0;
+            locale++;
+            path = chAlias+1;
+            if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
+              path = NULL;
+            }
+          } else {
+            /* no path, start with a locale */
+            locale = chAlias;
+            path = realData->fPath;
           }
-          res2 = ures_getByKey(res, keyPath, res2, status);
-          ures_close(main);
-          /*res = res2;*/
+          keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
+          if(keyPath) {
+            *keyPath = 0;
+            keyPath++;
+          }
+          {
+            /* got almost everything, let's try to open */
+            /* first, open the bundle with real data */
+            UResourceBundle *main = ures_openDirect(path, locale, status); 
+            UResourceBundle *result = NULL;
 
-          /* here we have the wanted resource */
-          /*
-          rdata = &(res->fResData);
-          r = res->fRes;
-          realData = res->fData;
-          */
-          uprv_free(chAlias);
-          return res2;
+            if(keyPath == NULL) {
+              /* no key path. This means that we are going to 
+               * to use the corresponding resource from
+               * another bundle
+               */
+              /* first, we are going to get a corresponding parent 
+               * resource to the one we are searching.
+               */
+              const char* aKey = parent->fResPath;
+              if(aKey) {
+                r = res_findResource(&(main->fResData), main->fRes, &aKey);
+              } else {
+                r = main->fRes;
+              }
+              if(key) {
+              /* we need to make keyPath from parents fResPath and 
+               * current key, if there is a key associated
+               */
+                aKey = key;
+                r = res_findResource(&(main->fResData), r, &aKey);
+              } else if(index != -1) {
+              /* if there is no key, but there is an index, try to get by the index */
+              /* here we have either a table or an array, so get the element */
+                if(RES_GET_TYPE(r) == RES_TABLE) {
+                  r = res_getTableItemByIndex(&(main->fResData), r, index, &aKey);
+                } else { /* array */
+                  r = res_getArrayItem(&(main->fResData), r, index);
+                }
+              }
+              if(r != RES_BOGUS) {
+                result = init_resb_result(&(main->fResData), r, key, -1, main->fData, parent, noAlias+1, resB, status);
+              } else {
+                *status = U_MISSING_RESOURCE_ERROR;
+                result = resB;
+              }
+            } else {
+              /* this one is a bit trickier. 
+               * we start finding keys, but after we resolve one alias, the path might continue.
+               * Consider: 
+               *     aliastest:alias { "testtypes/anotheralias/Sequence" }
+               *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
+               * aliastest resource should finally have the sequence, not collation elements.
+               */
+              result = main;
+              while(*keyPath) {
+                r = res_findResource(&(result->fResData), result->fRes, &keyPath);
+                if(r == RES_BOGUS) {
+                  *status = U_MISSING_RESOURCE_ERROR;
+                  result = resB;
+                  break;
+                }
+                resB = init_resb_result(&(result->fResData), r, key, -1, result->fData, parent, noAlias+1, resB, status);
+                result = resB;
+              }
+          }
+            uprv_free(chAlias);
+            ures_close(main);
+            return result;
+          }
+        } else {
+          /* bad alias, should be an error */ 
+          *status = U_ILLEGAL_ARGUMENT_ERROR;
+          return resB;
         }
       } else {
-        /* bad alias, should be an error */ 
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        *status = U_TOO_MANY_ALIASES_ERROR;
         return resB;
       }
     }
     if(resB == NULL) {
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         ures_setIsStackObject(resB, FALSE);
+        resB->fResPath = NULL;
     } else {
         if(resB->fData != NULL) {
             entryClose(resB->fData);
@@ -587,8 +634,23 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
     resB->fKey = key;
+    ures_freeResPath(resB);
+    if(parent->fResPath) {
+      ures_appendResPath(resB, parent->fResPath);
+    }
+    if(key != NULL) {
+      ures_appendResPath(resB, key);
+      ures_appendResPath(resB, RES_PATH_SEPARATOR_S);
+    } else {
+      char buf[256];
+      T_CString_integerToString(buf, index, 10);
+      ures_appendResPath(resB, buf);
+      ures_appendResPath(resB, RES_PATH_SEPARATOR_S);
+    }
+
     resB->fVersion = NULL;
     resB->fRes = r;
+    /*resB->fParent = parent->fRes;*/
     resB->fResData.data = rdata->data;
     resB->fResData.pRoot = rdata->pRoot;
     resB->fResData.rootRes = rdata->rootRes;
@@ -616,6 +678,10 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             }
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
+        r->fResPath = NULL;
+        if(original->fResPath) {
+          ures_appendResPath(r, original->fResPath);
+        }
         ures_setIsStackObject(r, isStackObject);
         if(r->fData != NULL) {
           entryIncrease(r->fData);
@@ -844,13 +910,13 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
+            return init_resb_result(&(resB->fResData), r, key, resB->fIndex, resB->fData, resB, 0, fillIn, status);
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
+            return init_resb_result(&(resB->fResData), r, key, resB->fIndex, resB->fData, resB, 0, fillIn, status);
         case RES_INT_VECTOR:
         default:
             /*return NULL;*/
@@ -886,13 +952,13 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
+            return init_resb_result(&(resB->fResData), r, key, indexR, resB->fData, resB, 0, fillIn, status);
         case RES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexR);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fData, fillIn, status);
+            return init_resb_result(&(resB->fResData), r, key, indexR, resB->fData, resB, 0, fillIn, status);
         case RES_INT_VECTOR:
         default:
             /*return NULL;*/
@@ -945,6 +1011,80 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     return NULL;
 }
 
+U_CAPI const char *ures_getResPath(UResourceBundle *resB) {
+  return resB->fResPath;
+}
+
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status) 
+{
+  UResourceBundle *first = NULL; 
+  UResourceBundle *result = fillIn;
+  char *packageName = NULL;
+  char *pathToResource = NULL;
+  char *locale = NULL, *localeEnd = NULL;
+  if(status == NULL || U_FAILURE(*status)) {
+    return result;
+  }
+  pathToResource = (char *)uprv_malloc((uprv_strlen(path)+1)*sizeof(char));
+  uprv_strcpy(pathToResource, path);
+  locale = pathToResource;
+  if(*pathToResource == RES_PATH_SEPARATOR) { /* there is a path specification */
+    pathToResource++;
+    packageName = pathToResource;
+    pathToResource = uprv_strchr(pathToResource, RES_PATH_SEPARATOR);
+    if(pathToResource == NULL) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+    } else {
+      *pathToResource = 0;
+      locale = pathToResource+1;
+    }
+  }
+
+  localeEnd = strchr(locale, RES_PATH_SEPARATOR);
+  if(localeEnd != NULL) {
+    *localeEnd = 0;
+  }
+
+  first = ures_open(packageName, locale, status);
+
+  if(U_SUCCESS(*status)) {
+    if(localeEnd) {
+      result = ures_findSubResource(first, localeEnd+1, fillIn, status);
+    } else {
+      result = ures_copyResb(fillIn, first, status);
+    }
+    ures_close(first);
+  }
+  uprv_free(pathToResource);
+  return result;
+}
+
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findSubResource(const UResourceBundle *resB, const char* path, UResourceBundle *fillIn, UErrorCode *status) 
+{
+  Resource res = RES_BOGUS;
+  UResourceBundle *result = fillIn;
+  const char *pathToResource = path;
+
+  if(status == NULL || U_FAILURE(*status)) {
+    return result;
+  }
+
+  /* here we do looping and circular alias checking */
+
+  res = res_findResource(&(resB->fResData), resB->fRes, &pathToResource); 
+
+  if(res != RES_BOGUS) {
+    result = init_resb_result(&(resB->fResData), res, path, -1, resB->fData, resB, 0, fillIn, status);
+  } else {
+    *status = U_MISSING_RESOURCE_ERROR;
+  }
+
+  return result;
+}
+
+
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
     Resource res = RES_BOGUS;
     UResourceDataEntry *realData = NULL;
@@ -966,7 +1106,8 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
             if(resB->fHasFallback == TRUE) {
                 const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
                 if(U_SUCCESS(*status)) {
-                    return init_resb_result(rd, res, key, realData, fillIn, status);
+                  /* check if resB->fResPath gives the right name here */
+                    return init_resb_result(rd, res, key, -1, realData, resB, 0, fillIn, status);
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
                 }
@@ -974,7 +1115,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
                 *status = U_MISSING_RESOURCE_ERROR;
             }
         } else {
-            return init_resb_result(&(resB->fResData), res, key, resB->fData, fillIn, status);
+            return init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
         }
     } 
 #if 0
@@ -984,7 +1125,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         /* here should go a first attempt to locate the key using index table */
         const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
         if(U_SUCCESS(*status)) {
-            return init_resb_result(rd, res, key, realData, fillIn, status);
+            return init_resb_result(rd, res, key, realData, resB, fillIn, status);
         } else {
             *status = U_MISSING_RESOURCE_ERROR;
         }
@@ -1122,7 +1263,48 @@ static void entryClose(UResourceDataEntry *resB) {
   entryCloseInt(resB);
   umtx_unlock(&resbMutex);
 }
+/*
+U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
+  if(resB->fResPath == NULL) {
+    resB->fResPath = resB->fResBuf;
+    *(resB->fResPath) = 0;
+  } 
+  resB->fResPathLen = uprv_strlen(toAdd);
+  if(RES_BUFSIZE <= resB->fResPathLen+1) {
+    if(resB->fResPath == resB->fResBuf) {
+      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+    } else {
+      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+    }
+  }
+  uprv_strcpy(resB->fResPath, toAdd);
+}
+*/
+U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd) {
+  if(resB->fResPath == NULL) {
+    resB->fResPath = resB->fResBuf;
+    *(resB->fResPath) = 0;
+    resB->fResPathLen = 0;
+  } 
+  resB->fResPathLen += uprv_strlen(toAdd);
+  if(RES_BUFSIZE <= resB->fResPathLen+1) {
+    if(resB->fResPath == resB->fResBuf) {
+      resB->fResPath = (char *)uprv_malloc((resB->fResPathLen+1)*sizeof(char));
+      uprv_strcpy(resB->fResPath, resB->fResBuf);
+    } else {
+      resB->fResPath = (char *)uprv_realloc(resB->fResPath, (resB->fResPathLen+1)*sizeof(char));
+    }
+  }
+  uprv_strcat(resB->fResPath, toAdd);
+}
 
+U_CFUNC void ures_freeResPath(UResourceBundle *resB) {
+  if(resB->fResPath != resB->fResBuf) {
+    uprv_free(resB->fResPath);
+  }
+  resB->fResPath = NULL;
+  resB->fResPathLen = 0;
+}
 
 U_CFUNC const char* ures_getName(const UResourceBundle* resB) {
   if(resB == NULL) {
@@ -1176,6 +1358,18 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fResData.rootRes = firstData->fData.rootRes;
         r->fRes = r->fResData.rootRes;
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
+        /*r->fParent = RES_BOGUS;*/
+        /*r->fResPath = NULL;*/
+        ures_freeResPath(r);
+        /*
+        if(r->fData->fPath != NULL) {
+          ures_setResPath(r, r->fData->fPath);
+          ures_appendResPath(r, RES_PATH_PACKAGE_S);
+          ures_appendResPath(r, r->fData->fName);
+        } else {
+          ures_setResPath(r, r->fData->fName);
+        }
+        */
     }
 }
 U_CAPI UResourceBundle*  U_EXPORT2
@@ -1234,7 +1428,19 @@ ures_open(const char* path,
     r->fResData.pRoot = hasData->fData.pRoot;
     r->fResData.rootRes = hasData->fData.rootRes;
     r->fRes = r->fResData.rootRes;
+    /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
+    r->fResPath = NULL;
+    /*
+    if(r->fData->fPath != NULL) {
+      ures_setResPath(r, r->fData->fPath);
+      ures_appendResPath(r, RES_PATH_PACKAGE_S);
+      ures_appendResPath(r, r->fData->fName);
+    } else {
+      ures_setResPath(r, r->fData->fName);
+    }
+    */
+
 
     return r;
 }
@@ -1325,7 +1531,18 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     r->fResData.pRoot = r->fData->fData.pRoot;
     r->fResData.rootRes = r->fData->fData.rootRes;
     r->fRes = r->fResData.rootRes;
+    /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
+    r->fResPath = NULL;
+    /*
+    if(r->fData->fPath != NULL) {
+      ures_setResPath(r, r->fData->fPath);
+      ures_appendResPath(r, RES_PATH_PACKAGE_S);
+      ures_appendResPath(r, r->fData->fName);
+    } else {
+      ures_setResPath(r, r->fData->fName);
+    }
+    */
     return r;
 }
 
@@ -1390,6 +1607,7 @@ ures_close(UResourceBundle*    resB)
         if(resB->fVersion != NULL) {
             uprv_free(resB->fVersion);
         }
+        ures_freeResPath(resB);
 
         if(ures_isStackObject(resB) == FALSE) {
             uprv_free(resB);

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *                                                                             *
-* Copyright (C) 1999-2001, International Business Machines Corporation        *
+* Copyright (C) 1999-2002, International Business Machines Corporation        *
 *               and others. All Rights Reserved.                              *
 *                                                                             *
 *******************************************************************************
@@ -16,6 +16,7 @@
 *
 *   Date        Name        Description
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
+*   06/24/02    weiv        Added support for resource sharing
 */
 
 #include "unicode/utypes.h"
@@ -106,6 +107,37 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key) {
 
     /* did we really find it? */
     if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
+        limit=*(p-1);   /* itemCount */
+        return ((Resource *)(p+limit+(~limit&1)))[start];
+    } else {
+        return RES_BOGUS;   /* not found */
+    }
+}
+
+static Resource
+_res_findTableItemN(const Resource *pRoot, const Resource res, const char *key, int32_t keyLen) {
+    uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
+    uint16_t i, start, limit;
+
+    limit=*p++; /* number of entries */
+
+    if(limit == 0) { /* this table is empty */
+      return RES_BOGUS;
+    }
+
+    /* do a binary search for the key */
+    start=0;
+    while(start<limit-1) {
+        i=(uint16_t)((start+limit)/2);
+        if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[i]), keyLen)<0) { 
+            limit=i;
+        } else {
+            start=i;
+        }
+    }
+
+    /* did we really find it? */
+    if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[start]), keyLen)==0) {
         limit=*(p-1);   /* itemCount */
         return ((Resource *)(p+limit+(~limit&1)))[start];
     } else {
@@ -280,12 +312,65 @@ res_getResource(const ResourceData *pResData, const char *key) {
 }
 
 U_CFUNC Resource 
-res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexR) {
+res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t indexR) {
     return _res_getArrayItem(pResData->pRoot, array, indexR);
 }
 
+U_CFUNC Resource
+res_findResource(const ResourceData *pResData, Resource r, const char** path) {
+  /* we pass in a path. CollationElements/Sequence or zoneStrings/3/2 etc. 
+   * iterates over a path and stops when a scalar resource is found. This  
+   * CAN be an alias. Path gets set to the part that has not yet been processed. 
+   */
+
+  const char *pathP = *path, *nextSepP = *path;
+  char *closeIndex = NULL;
+  Resource t1 = r;
+  Resource t2;
+  int32_t indexR = 0, keyLen = 0;
+  UResType type = RES_GET_TYPE(t1);
+  
+  while(*pathP && nextSepP && t1 != RES_BOGUS && type >= RES_TABLE) { 
+    /* Iteration stops if: the path has been consumed, we found a non-existing
+     * resource (t1 == RES_BOGUS) or we found a scalar resource (including alias)
+     */
+    nextSepP = uprv_strchr(pathP, RES_PATH_SEPARATOR);
+    /* if there are more separators, terminate string 
+     * and set path to the remaining part of the string
+     */
+    if(nextSepP != NULL) {
+      keyLen = nextSepP-pathP;
+      *path = nextSepP+1;
+    } else {
+      keyLen = uprv_strlen(pathP);
+      *path += keyLen;
+    }
+
+    /* try the key based access */
+    t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen);
+    if(t2 == RES_BOGUS) { 
+      /* if we fail to get the resource by key, maybe we got an index */
+      indexR = uprv_strtol(pathP, &closeIndex, 10);
+      if(closeIndex != pathP) {
+        if(type == RES_TABLE) {
+          /* if we indeed have an index, try to get the item by index */
+          t2 = _res_getTableItem(pResData->pRoot, t1, (uint16_t)indexR);
+        } else { /* if(type == RES_ARRAY) { */
+          t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+        } 
+      }
+    }
+    t1 = t2;
+    type = RES_GET_TYPE(t1);
+    /* position pathP to next resource key/index */
+    pathP += keyLen+1;
+  }
+
+  return t1;
+}
+
 U_CFUNC Resource 
-res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t* indexR, const char* *  key) {
+res_getTableItemByKey(const ResourceData *pResData, Resource table, int32_t* indexR, const char* *  key) {
     uint16_t tempIndex;
     if(key != NULL) {
         tempIndex  = _res_findTableIndex(pResData->pRoot, table, *key);
@@ -302,7 +387,7 @@ res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_
 }
 
 U_CFUNC Resource 
-res_getTableItemByIndex(const ResourceData *pResData, const Resource table, int32_t indexR, const char * * key) {
+res_getTableItemByIndex(const ResourceData *pResData, Resource table, int32_t indexR, const char * * key) {
     if(indexR>-1) {
         if(key != NULL) {
             *key = _res_getTableKey(pResData->pRoot, table, (uint16_t)indexR);
