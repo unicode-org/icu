@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/14 18:23:37 $
- * $Revision: 1.89 $
+ * $Date: 2003/02/14 22:27:00 $
+ * $Revision: 1.90 $
  *
  *****************************************************************************************
  */
@@ -114,8 +114,8 @@ import java.util.Collections;
  * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://oss.software.ibm.com/icu/userguide/unicodeset.html">
- * http://oss.software.ibm.com/icu/userguide/unicodeset.html</a>.
+ * <a href="http://oss.software.ibm.com/icu/userguide/unicodeSet.html">
+ * http://oss.software.ibm.com/icu/userguide/unicodeSet.html</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *
