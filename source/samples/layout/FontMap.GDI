@@ -1,0 +1,8 @@
+# This is a sample FontMap file for Windows.
+# Fonts are specified by font name, as shown
+# in the "Fonts" folder.
+
+     LATIN: Times New Roman
+DEVANAGARI: Devanagari MT for IBM
+    ARABIC: Times New Roman
+      THAI: Thonburi
