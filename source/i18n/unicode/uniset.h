@@ -669,6 +669,7 @@ private:
     // RuleBasedTransliterator support
     //----------------------------------------------------------------
 
+    friend class Transliterator;
     friend class TransliterationRuleParser;
     friend class TransliterationRule;
 
