@@ -233,7 +233,7 @@ void IntlCalendarTest::TestBuddhist() {
 
   // Test simple parse/format with adopt
   
-  const UDate aDate = 999932400000;
+  UDate aDate = 999932400000.0; 
   SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("MMMM d, yyyy G"), Locale("en_US"), status);
   CHECK(status, "creating date format instance");
   if(!fmt) { 
