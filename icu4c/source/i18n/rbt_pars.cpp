@@ -449,10 +449,12 @@ int32_t* RuleHalf::createSegments() const {
     if (segments == NULL) {
         return NULL;
     }
-    int32_t* result = new int32_t[segments->size()];
-    for (int32_t i=0; i<segments->size(); ++i) {
+    int32_t len = segments->size();
+    int32_t* result = new int32_t[len + 1];
+    for (int32_t i=0; i<len; ++i) {
         result[i] = (int32_t) segments->elementAt(i);
     }
+    result[len] = -1; // end marker
     return result;
 }
 

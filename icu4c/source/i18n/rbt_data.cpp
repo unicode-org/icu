@@ -26,7 +26,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
 }
 
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
-    ruleSet(other.ruleSet, other),
+    ruleSet(other.ruleSet),
     setVariablesBase(other.setVariablesBase),
     setVariablesLength(other.setVariablesLength),
     segmentBase(other.segmentBase) {

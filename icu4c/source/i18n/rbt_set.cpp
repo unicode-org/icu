@@ -39,8 +39,7 @@ TransliterationRuleSet::TransliterationRuleSet() {
  * Copy constructor.  We assume that the ruleset being copied
  * has already been frozen.
  */
-TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other,
-                                               const TransliterationRuleData& data) :
+TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other) :
     ruleVector(0),
     maxContextLength(other.maxContextLength) {
 
@@ -48,7 +47,7 @@ TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& oth
     int32_t len = index[256]; // see freeze()
     rules = new TransliterationRule*[len];
     for (int32_t i=0; i<len; ++i) {
-        rules[i] = new TransliterationRule(*other.rules[i], data);
+        rules[i] = new TransliterationRule(*other.rules[i]);
     }
 }
 
