@@ -369,6 +369,7 @@ LocaleKeyFactory::getSupportedIDs(UErrorCode& status) const {
   return NULL;
 }
 
+#ifdef SERVICE_DEBUG
 UnicodeString& 
 LocaleKeyFactory::debug(UnicodeString& result) const 
 {
@@ -385,6 +386,7 @@ LocaleKeyFactory::debugClass(UnicodeString& result) const
 {
   return result.append("LocaleKeyFactory");
 }
+#endif
 
 const char LocaleKeyFactory::fgClassID = 0;
 
@@ -393,24 +395,12 @@ const char LocaleKeyFactory::fgClassID = 0;
  */
 
 SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt, 
-                                               const Locale& locale, 
+                                               const UnicodeString& locale, 
                                                int32_t kind, 
                                                int32_t coverage)
   : LocaleKeyFactory(coverage)
   , _obj(objToAdopt)
-  , _id(locale.getName())
-  , _kind(kind)
-{
-}
-
-SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt, 
-                                               const Locale& locale, 
-                                               int32_t kind, 
-                                               int32_t coverage, 
-                                               const UnicodeString& name) 
-  : LocaleKeyFactory(coverage, name)
-  , _obj(objToAdopt)
-  , _id(locale.getName())
+  , _id(locale)
   , _kind(kind)
 {
 }
@@ -443,7 +433,8 @@ SimpleLocaleKeyFactory::updateVisibleIDs(Hashtable& result, UErrorCode& status) 
   }
 }
 
-UnicodeString& 
+#ifdef SERVICE_DEBUG
+UnicodeString&
 SimpleLocaleKeyFactory::debug(UnicodeString& result) const 
 {
   LocaleKeyFactory::debug(result);
@@ -459,6 +450,7 @@ SimpleLocaleKeyFactory::debugClass(UnicodeString& result) const
 {
   return result.append("SimpleLocaleKeyFactory");
 }
+#endif
 
 const char SimpleLocaleKeyFactory::fgClassID = 0;
 
@@ -496,6 +488,7 @@ ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t kind, const IC
   return NULL;
 }
 
+#ifdef SERVICE_DEBUG
 UnicodeString& 
 ICUResourceBundleFactory::debug(UnicodeString& result) const
 {
@@ -509,6 +502,7 @@ ICUResourceBundleFactory::debugClass(UnicodeString& result) const
 {
   return result.append("ICUResourceBundleFactory");
 }
+#endif
 
 const char ICUResourceBundleFactory::fgClassID = '\0';
 
@@ -598,6 +592,32 @@ ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, in
 URegistryKey 
 ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status) 
 {
+  ICUServiceFactory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale.getName(), kind, coverage);
+  if (factory != NULL) {
+    return registerFactory(factory, status);
+  }
+  delete objToAdopt;
+  return NULL;
+}
+
+#if 0
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& locale, UErrorCode& status)
+{
+  return registerInstance(objToAdopt, locale, LocaleKey::KIND_ANY, LocaleKeyFactory::VISIBLE, status);
+}
+
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& locale, UBool visible, UErrorCode& status)
+{
+  return registerInstance(objToAdopt, locale, LocaleKey::KIND_ANY, 
+                          visible ? LocaleKeyFactory::VISIBLE : LocaleKeyFactory::INVISIBLE,
+                          status);
+}
+
+URegistryKey 
+ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& locale, int32_t kind, int32_t coverage, UErrorCode& status) 
+{
   ICUServiceFactory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale, kind, coverage);
   if (factory != NULL) {
     return registerFactory(factory, status);
@@ -605,6 +625,7 @@ ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, in
   delete objToAdopt;
   return NULL;
 }
+#endif
 
 class ServiceEnumeration : public StringEnumeration {
 private:
@@ -646,7 +667,7 @@ public:
     return upToDate(status) ? _ids.size() : 0;
   }
 
-  const char* next(UErrorCode& status) {
+  const char* next(int32_t* resultLength, UErrorCode& status) {
     const UnicodeString* us = snext(status);
     if (us) {
       while (TRUE) {
@@ -656,6 +677,9 @@ public:
 		  status = U_ZERO_ERROR;
         } else if (U_SUCCESS(status)) {
           ((char*)_bufp)[newlen] = 0;
+          if (resultLength) {
+            resultLength[0] = newlen;
+          }
           return (const char*)_bufp;
         } else {
           break;
@@ -665,7 +689,7 @@ public:
     return NULL;
   }
 
-  const UChar* unext(UErrorCode& status) {
+  const UChar* unext(int32_t* resultLength, UErrorCode& status) {
     const UnicodeString* us = snext(status);
     if (us) {
       while (TRUE) {
@@ -674,6 +698,9 @@ public:
           resizeBuffer((newlen + 1) * sizeof(UChar));
         } else if (U_SUCCESS(status)) {
           ((UChar*)_bufp)[newlen] = 0;
+          if (resultLength) {
+            resultLength[0] = newlen;
+          }
           return (const UChar*)_bufp;
         } else {
           break;
