@@ -755,9 +755,10 @@ private:
 
   // The input text and our position in it
   CharacterIterator*  text;
-  // The next index (if >= 0) to set in text for next(), which is
-  // necessary to make current() and setIndex() work reasonably.
-  UTextOffset         nextIndex;
+
+  // The normalization buffer is the result of normalization
+  // of the source in [currentIndex..nextIndex[ .
+  UTextOffset         currentIndex, nextIndex;
 
   // A buffer for holding intermediate results
   UnicodeString       buffer;
