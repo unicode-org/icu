@@ -27,8 +27,8 @@
 #include "unewdata.h"
 #include "uoptions.h"
 
-#ifndef WIN32
-#include <unistd.h> /* for popen */
+#if U_HAVE_POPEN
+# include <unistd.h>
 #endif
 
 U_CDECL_BEGIN
@@ -39,9 +39,8 @@ U_CDECL_END
 static int executeMakefile(const UPKGOptions *o);
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
-#ifndef WIN32
+/* always have this fcn, just might not do anything */
 static void fillInMakefileFromICUConfig(UOption *option);
-#endif
 
 /* This sets the modes that are available */
 static struct
@@ -150,12 +149,10 @@ main(int argc, char* argv[]) {
             return 1;
         }
 
-#ifndef WIN32
         if(!options[1].doesOccur) {
           /* Try to fill in from icu-config or equivalent */
           fillInMakefileFromICUConfig(&options[1]);
         }
-#endif
         
         if(!options[1].doesOccur) {
           fprintf(stderr, " required parameter is missing: -O is required \n");
@@ -490,11 +487,10 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     }
 }
 
-
-#ifndef WIN32
 /* Try calling icu-config directly to get information */
 void fillInMakefileFromICUConfig(UOption *option)
 {
+#if U_HAVE_POPEN
   FILE *p;
   size_t n;
   static char buf[512] = "";
@@ -542,5 +538,11 @@ void fillInMakefileFromICUConfig(UOption *option)
   }
   option->value = buf;
   option->doesOccur = TRUE;
+#else  /* ! U_HAVE_POPEN */
+
+  /* no popen available */
+  /* Put other OS specific ways to search for the Makefile.inc type 
+     information or else fail.. */
+
+#endif
 }
-#endif /* WIN32 */
