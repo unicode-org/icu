@@ -1494,7 +1494,6 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                     } else if(loc==LOC_LITHUANIAN && c==0x307 && isAfter_i(src, srcIndex-1)) {
                         /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
                         continue; /* remove the dot (continue without output) */
-                        i=1;
                     } else {
                         /* no known conditional special case mapping, use a normal mapping */
                         pe=GET_EXCEPTIONS(props); /* restore the initial exception pointer */
