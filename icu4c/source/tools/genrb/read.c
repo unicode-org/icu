@@ -31,6 +31,7 @@
 #define COLON        0x003A
 #define BADBOM       0xFFFE
 
+/*
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
 U_STRING_DECL(k_start_table, "table", 5);
@@ -40,6 +41,7 @@ U_STRING_DECL(k_start_intvector, "intvector", 9);
 U_STRING_DECL(k_start_reserved, "reserved", 8);
 
 static UBool didInit=FALSE;
+*/
 
 extern int32_t lineCount;
 
