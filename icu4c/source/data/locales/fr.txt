@@ -14,7 +14,7 @@ fr {
 
     Keys{
 	Collation{ "Ordonnancement" }
-	Calendar { "calendrier" }
+	Calendar { "Calendrier" }
     } 
     Countries { 
         Fallback{ "en"}
