@@ -248,19 +248,24 @@ class TransliteratorRegistry {
         private String idBlock;
         private int idSplitPoint;
         private RuleBasedTransliterator.Data data;
+        private UnicodeSet compoundFilter;
 
         public CompoundRBTEntry(String theID, String theIDBlock,
                                 int theIDSplitPoint,
-                                RuleBasedTransliterator.Data theData) {
+                                RuleBasedTransliterator.Data theData,
+                                UnicodeSet theCompoundFilter) {
             ID = theID;
             idBlock = theIDBlock;
             idSplitPoint = theIDSplitPoint;
             data = theData;
+            compoundFilter = theCompoundFilter;
         }
 
         public Transliterator getInstance() {
             Transliterator t = new RuleBasedTransliterator("_", data, null);
-            return new CompoundTransliterator(ID, idBlock, idSplitPoint, t);
+            t = new CompoundTransliterator(ID, idBlock, idSplitPoint, t);
+            t.setFilter(compoundFilter);
+            return t;
         }
     }
 
@@ -841,36 +846,33 @@ class TransliteratorRegistry {
                 throw new RuntimeException(e.getMessage());
             }
 
-            StringBuffer idBlockBuf = new StringBuffer();
-            int[] idSplitPointArg = new int[] { -1 };
-            RuleBasedTransliterator.Data data =
-                RuleBasedTransliterator.parse(r, re.direction,
-                                              idBlockBuf, idSplitPointArg);
+            TransliteratorParser parser = new TransliteratorParser();
+            parser.parse(r, re.direction);
 
             // Reset entry to something that we process at the
             // top of the loop, then loop back to the top.  As long as we
             // do this, we only loop through twice at most.
             // NOTE: The logic here matches that in
             // Transliterator.createFromRules().
-            if (idBlockBuf.length() == 0) {
-                if (data == null) {
+            if (parser.idBlock.length() == 0) {
+                if (parser.data == null) {
                     // No idBlock, no data -- this is just an
                     // alias for Null
                     entryWrapper[0] = new AliasEntry(NullTransliterator._ID);
                 } else {
                     // No idBlock, data != 0 -- this is an
                     // ordinary RBT_DATA
-                    entryWrapper[0] = data;
+                    entryWrapper[0] = parser.data;
                 }
             } else {
-                if (data == null) {
+                if (parser.data == null) {
                     // idBlock, no data -- this is an alias
-                    entryWrapper[0] = new AliasEntry(idBlockBuf.toString());
+                    entryWrapper[0] = new AliasEntry(parser.idBlock);
                 } else {
                     // idBlock and data -- this is a compound
                     // RBT
                     entryWrapper[0] = new CompoundRBTEntry(
-                        ID, idBlockBuf.toString(), idSplitPointArg[0], data);
+                        ID, parser.idBlock, parser.idSplitPoint, parser.data, parser.compoundFilter);
                 }
             }
         }

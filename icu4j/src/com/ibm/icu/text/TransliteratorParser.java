@@ -8,29 +8,129 @@ import java.text.ParsePosition;
 
 class TransliteratorParser {
 
-    // Indicator for ID blocks
-    private static final String ID_TOKEN = "::";
-    private static final int ID_TOKEN_LEN = 2;
+    //----------------------------------------------------------------------
+    // Data members
+    //----------------------------------------------------------------------
 
-    private int direction;
+    /**
+     * PUBLIC data member containing the parsed data object, or null if
+     * there were no rules.
+     */
+    public RuleBasedTransliterator.Data data;
 
-    private RuleBasedTransliterator.Data data;
+    /**
+     * PUBLIC data member.
+     * The block of ::IDs, both at the top and at the bottom.
+     * Inserted into these may be additional rules at the
+     * idSplitPoint.
+     */
+    public String idBlock;
 
-    // In a compound RBT, the index at which the RBT rules are
-    // inserted into the ID block.  Index 0 means before any IDs
-    // in the block.  Index idBlock.length() means after all IDs
-    // in the block.  Index is a string index.
-    int idSplitPoint;
+    /**
+     * PUBLIC data member.
+     * In a compound RBT, the index at which the RBT rules are
+     * inserted into the ID block.  Index 0 means before any IDs
+     * in the block.  Index idBlock.length() means after all IDs
+     * in the block.  Index is a string index.
+     */
+    public int idSplitPoint;
 
-    // The block of ::IDs, both at the top and at the bottom.
-    // Inserted into these may be additional rules at the
-    // idSplitPoint.
-    String idBlock;
+    /**
+     * PUBLIC data member containing the parsed compound filter, if any.
+     */
+    public UnicodeSet compoundFilter;
+
 
     // The number of rules parsed.  This tells us if there were
     // any actual transliterator rules, or if there were just ::ID
     // block IDs.
-    int ruleCount;
+    private int ruleCount;
+
+    private int direction;
+
+    /**
+     * Temporary symbol table used during parsing.
+     */
+    private ParseData parseData;
+
+    /**
+     * Temporary vector of set variables.  When parsing is complete, this
+     * is copied into the array data.variables.  As with data.variables,
+     * element 0 corresponds to character data.variablesBase.
+     */
+    private Vector variablesVector;
+
+    /**
+     * The next available stand-in for variables.  This starts at some point in
+     * the private use area (discovered dynamically) and increments up toward
+     * <code>variableLimit</code>.  At any point during parsing, available
+     * variables are <code>variableNext..variableLimit-1</code>.
+     */
+    private char variableNext;
+
+    /**
+     * The last available stand-in for variables.  This is discovered
+     * dynamically.  At any point during parsing, available variables are
+     * <code>variableNext..variableLimit-1</code>.  During variable definition
+     * we use the special value variableLimit-1 as a placeholder.
+     */
+    private char variableLimit;
+
+    /**
+     * When we encounter an undefined variable, we do not immediately signal
+     * an error, in case we are defining this variable, e.g., "$a = [a-z];".
+     * Instead, we save the name of the undefined variable, and substitute
+     * in the placeholder char variableLimit - 1, and decrement
+     * variableLimit.
+     */
+    private String undefinedVariableName;
+
+    //----------------------------------------------------------------------
+    // Constants
+    //----------------------------------------------------------------------
+
+    // Indicator for ID blocks
+    private static final String ID_TOKEN = "::";
+    private static final int ID_TOKEN_LEN = 2;
+
+    // Operators
+    private static final char VARIABLE_DEF_OP   = '=';
+    private static final char FORWARD_RULE_OP   = '>';
+    private static final char REVERSE_RULE_OP   = '<';
+    private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
+
+    private static final String OPERATORS = "=><";
+
+    // Other special characters
+    private static final char QUOTE               = '\'';
+    private static final char ESCAPE              = '\\';
+    private static final char END_OF_RULE         = ';';
+    private static final char RULE_COMMENT_CHAR   = '#';
+
+    private static final char CONTEXT_ANTE        = '{'; // ante{key
+    private static final char CONTEXT_POST        = '}'; // key}post
+    private static final char SET_OPEN            = '[';
+    private static final char SET_CLOSE           = ']';
+    private static final char CURSOR_POS          = '|';
+    private static final char CURSOR_OFFSET       = '@';
+    private static final char ANCHOR_START        = '^';
+
+    private static final char KLEENE_STAR         = '*';
+    private static final char ONE_OR_MORE         = '+';
+    private static final char ZERO_OR_ONE         = '?';
+
+    // By definition, the ANCHOR_END special character is a
+    // trailing SymbolTable.SYMBOL_REF character.
+    // private static final char ANCHOR_END       = '$';
+
+    // Segments of the input string are delimited by "(" and ")".  In the
+    // output string these segments are referenced as "$1" through "$9".
+    private static final char SEGMENT_OPEN        = '(';
+    private static final char SEGMENT_CLOSE       = ')';
+
+    //----------------------------------------------------------------------
+    // class ParseData
+    //----------------------------------------------------------------------
 
     /**
      * This class implements the SymbolTable interface.  It is used
@@ -83,77 +183,9 @@ class TransliteratorParser {
         }
     }
 
-    /**
-     * Temporary symbol table used during parsing.
-     */
-    private ParseData parseData;
-
-    /**
-     * Temporary vector of set variables.  When parsing is complete, this
-     * is copied into the array data.variables.  As with data.variables,
-     * element 0 corresponds to character data.variablesBase.
-     */
-    private Vector variablesVector;
-
-    /**
-     * The next available stand-in for variables.  This starts at some point in
-     * the private use area (discovered dynamically) and increments up toward
-     * <code>variableLimit</code>.  At any point during parsing, available
-     * variables are <code>variableNext..variableLimit-1</code>.
-     */
-    private char variableNext;
-
-    /**
-     * The last available stand-in for variables.  This is discovered
-     * dynamically.  At any point during parsing, available variables are
-     * <code>variableNext..variableLimit-1</code>.  During variable definition
-     * we use the special value variableLimit-1 as a placeholder.
-     */
-    private char variableLimit;
-
-    /**
-     * When we encounter an undefined variable, we do not immediately signal
-     * an error, in case we are defining this variable, e.g., "$a = [a-z];".
-     * Instead, we save the name of the undefined variable, and substitute
-     * in the placeholder char variableLimit - 1, and decrement
-     * variableLimit.
-     */
-    private String undefinedVariableName;
-
-    // Operators
-    private static final char VARIABLE_DEF_OP   = '=';
-    private static final char FORWARD_RULE_OP   = '>';
-    private static final char REVERSE_RULE_OP   = '<';
-    private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
-
-    private static final String OPERATORS = "=><";
-
-    // Other special characters
-    private static final char QUOTE               = '\'';
-    private static final char ESCAPE              = '\\';
-    private static final char END_OF_RULE         = ';';
-    private static final char RULE_COMMENT_CHAR   = '#';
-
-    private static final char CONTEXT_ANTE        = '{'; // ante{key
-    private static final char CONTEXT_POST        = '}'; // key}post
-    private static final char SET_OPEN            = '[';
-    private static final char SET_CLOSE           = ']';
-    private static final char CURSOR_POS          = '|';
-    private static final char CURSOR_OFFSET       = '@';
-    private static final char ANCHOR_START        = '^';
-
-    private static final char KLEENE_STAR         = '*';
-    private static final char ONE_OR_MORE         = '+';
-    private static final char ZERO_OR_ONE         = '?';
-
-    // By definition, the ANCHOR_END special character is a
-    // trailing SymbolTable.SYMBOL_REF character.
-    // private static final char ANCHOR_END       = '$';
-
-    // Segments of the input string are delimited by "(" and ")".  In the
-    // output string these segments are referenced as "$1" through "$9".
-    private static final char SEGMENT_OPEN        = '(';
-    private static final char SEGMENT_CLOSE       = ')';
+    //----------------------------------------------------------------------
+    // classes RuleBody, RuleArray, and RuleReader
+    //----------------------------------------------------------------------
 
     /**
      * A private abstract class representing the interface to rule
@@ -162,7 +194,7 @@ class TransliteratorParser {
      * is limited; it does not account for comments, quotes, or
      * escapes, so its use to be limited.
      */
-    private abstract class RuleBody {
+    private static abstract class RuleBody {
 
         /**
          * Retrieve the next line of the source, or return null if
@@ -206,7 +238,7 @@ class TransliteratorParser {
     /**
      * RuleBody subclass for a String[] array.
      */
-    private class RuleArray extends RuleBody {
+    private static class RuleArray extends RuleBody {
         String[] array;
         int i;
         public RuleArray(String[] array) { this.array = array; i = 0; }
@@ -221,7 +253,7 @@ class TransliteratorParser {
     /**
      * RuleBody subclass for a ResourceReader.
      */
-    private class RuleReader extends RuleBody {
+    private static class RuleReader extends RuleBody {
         ResourceReader reader;
         public RuleReader(ResourceReader reader) { this.reader = reader; }
         public String handleNextLine() {
@@ -235,179 +267,8 @@ class TransliteratorParser {
         }
     };
 
-    /**
-     * @param rules list of rules, separated by semicolon characters
-     * @exception IllegalArgumentException if there is a syntax error in the
-     * rules
-     */
-    public TransliteratorParser(String[] ruleArray, int direction) {
-        this.direction = direction;
-        data = new RuleBasedTransliterator.Data();
-        parseRules(new RuleArray(ruleArray));
-    }
-
-    /**
-     * @param rules resource reader for the rules
-     */
-    public TransliteratorParser(ResourceReader rules, int direction) {
-        this.direction = direction;
-        data = new RuleBasedTransliterator.Data();
-        parseRules(new RuleReader(rules));
-    }
-
-    public RuleBasedTransliterator.Data getData() {
-        return data;
-    }
-
-    /**
-     * Parse an array of zero or more rules.  The strings in the array are
-     * treated as if they were concatenated together, with rule terminators
-     * inserted between array elements if not present already.
-     *
-     * Any previous rules are discarded.  Typically this method is called exactly
-     * once, during construction.
-     * @exception IllegalArgumentException if there is a syntax error in the
-     * rules
-     */
-    private void parseRules(RuleBody ruleArray) {
-        ruleCount = 0;
-
-        determineVariableRange(ruleArray);
-        variablesVector = new Vector();
-        parseData = new ParseData();
-
-        StringBuffer errors = null;
-        int errorCount = 0;
-
-        ruleArray.reset();
-
-        StringBuffer idBlockResult = new StringBuffer();
-        idSplitPoint = -1;
-        // The mode marks whether we are in the header ::id block, the
-        // rule block, or the footer ::id block.
-        // mode == 0: start: rule->1, ::id->0
-        // mode == 1: in rules: rule->1, ::id->2
-        // mode == 2: in footer rule block: rule->ERROR, ::id->2
-        int mode = 0;
-
-    main:
-        for (;;) {
-            String rule = ruleArray.nextLine();
-            if (rule == null) {
-                break;
-            }
-            int pos = 0;
-            int limit = rule.length();
-            while (pos < limit) {
-                char c = rule.charAt(pos++);
-                if (Character.isWhitespace(c)) {
-                    // Ignore leading whitespace.  Note that this is not
-                    // Unicode spaces, but Java spaces -- a subset,
-                    // representing whitespace likely to be seen in code.
-                    continue;
-                }
-                // Skip lines starting with the comment character
-                if (c == RULE_COMMENT_CHAR) {
-                    pos = rule.indexOf("\n", pos) + 1;
-                    if (pos == 0) {
-                        break; // No "\n" found; rest of rule is a commnet
-                    }
-                    continue; // Either fall out or restart with next line
-                }
-                // Often a rule file contains multiple errors.  It's
-                // convenient to the rule author if these are all reported
-                // at once.  We keep parsing rules even after a failure, up
-                // to a specified limit, and report all errors at once.
-                try {
-                    // We've found the start of a rule or ID.  c is its first
-                    // character, and pos points past c.
-                    --pos;
-                    // Look for an ID token.  Must have at least ID_TOKEN_LEN + 1
-                    // chars left.
-                    if ((pos + ID_TOKEN_LEN + 1) <= limit &&
-                        rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
-                        pos += ID_TOKEN_LEN;
-                        c = rule.charAt(pos);
-                        while (UCharacter.isWhitespace(c) && pos < limit) {
-                            ++pos;
-                            c = rule.charAt(pos);
-                        }
-                        int[] p = new int[] { pos };
-                        boolean[] sawDelim = new boolean[1];
-                        StringBuffer regenID = new StringBuffer();
-                        Transliterator.parseID(rule, regenID, p, sawDelim, direction, false);
-                        if (p[0] == pos || !sawDelim[0]) {
-                            // Invalid ::id
-                            int i1 = pos + 2;
-                            while (i1 < rule.length() && rule.charAt(i1) != ';') {
-                                ++i1;
-                            }
-                            throw new IllegalArgumentException("Invalid ::ID " +
-                                                               rule.substring(pos, i1));
-                        } else {
-                            if (mode == 1) {
-                                mode = 2;
-                                idSplitPoint = idBlockResult.length();
-                            }
-                            String str = rule.substring(pos, p[0]);
-                            idBlockResult.append(str);
-                            if (!sawDelim[0]) {
-                                idBlockResult.append(';');
-                            }
-                            pos = p[0];
-                        }
-                    } else {
-                        // Parse a rule
-                        pos = parseRule(rule, pos, limit);
-                        ++ruleCount;
-                        if (mode == 2) {
-                            // ::id in illegal position (because a rule
-                            // occurred after the ::id footer block)
-                            throw new IllegalArgumentException("::ID in illegal position");
-                        }
-                        mode = 1;
-                    }
-                } catch (IllegalArgumentException e) {
-                    if (errorCount == 30) {
-                        errors.append("\nMore than 30 errors; further messages squelched");
-                        break main;
-                    }
-                    if (errors == null) {
-                        errors = new StringBuffer(e.getMessage());
-                    } else {
-                        errors.append("\n" + e.getMessage());
-                    }
-                    ++errorCount;
-                    pos = ruleEnd(rule, pos, limit) + 1; // +1 advances past ';'
-                }
-            }
-        }
-
-        idBlock = idBlockResult.toString();
-
-        // Convert the set vector to an array
-        data.variables = new UnicodeMatcher[variablesVector.size()];
-        variablesVector.copyInto(data.variables);
-        variablesVector = null;
-
-        // Index the rules
-        try {
-            data.ruleSet.freeze();
-        } catch (IllegalArgumentException e) {
-            if (errors == null) {
-                errors = new StringBuffer(e.getMessage());
-            } else {
-                errors.append("\n").append(e.getMessage());
-            }
-        }
-
-        if (errors != null) {
-            throw new IllegalArgumentException(errors.toString());
-        }
-    }
-
     //----------------------------------------------------------------------
-    // Segments
+    // class Segments
     //----------------------------------------------------------------------
 
     /**
@@ -475,7 +336,7 @@ class TransliteratorParser {
      *
      * See also rbt_rule.h/cpp.
      */
-    static class Segments {
+    private static class Segments {
 
         private Vector offsets; // holds Integer objects
 
@@ -610,7 +471,7 @@ class TransliteratorParser {
     }
 
     //----------------------------------------------------------------------
-    // BEGIN RuleHalf
+    // class RuleHalf
     //----------------------------------------------------------------------
 
     /**
@@ -618,7 +479,7 @@ class TransliteratorParser {
      * parse half of a rule.  It is tightly coupled to the method
      * TransliteratorParser.parseRule().
      */
-    static class RuleHalf {
+    private static class RuleHalf {
 
         public String text;
 
@@ -964,8 +825,329 @@ class TransliteratorParser {
     }
 
     //----------------------------------------------------------------------
-    // END RuleHalf
+    // class Range
     //----------------------------------------------------------------------
+
+    /**
+     * A range of Unicode characters.  Support the operations of testing for
+     * inclusion (does this range contain this character?) and splitting.
+     * Splitting involves breaking a range into two smaller ranges around a
+     * character inside the original range.  The split character is not included
+     * in either range.  If the split character is at either extreme end of the
+     * range, one of the split products is an empty range.
+     *
+     * This class is used internally to determine the largest available private
+     * use character range for variable stand-ins.
+     */
+    private static class Range implements Cloneable {
+        char start;
+        int length;
+
+        Range(char start, int length) {
+            this.start = start;
+            this.length = length;
+        }
+
+        public Object clone() {
+            return new Range(start, length);
+        }
+
+        boolean contains(char c) {
+            return c >= start && (c - start) < length;
+        }
+
+        /**
+         * Assume that contains(c) is true.  Split this range into two new
+         * ranges around the character c.  Make this range one of the new ranges
+         * (modify it in place) and return the other new range.  The character
+         * itself is not included in either range.  If the split results in an
+         * empty range (that is, if c == start or c == start + length - 1) then
+         * return null.
+         */
+        Range split(char c) {
+            if (c == start) {
+                ++start;
+                --length;
+                return null;
+            } else if (c - start == length - 1) {
+                --length;
+                return null;
+            } else {
+                ++c;
+                Range r = new Range(c, start + length - c);
+                length = --c - start;
+                return r;
+            }
+        }
+
+        /**
+         * Finds the largest unused subrange by the given string.  A
+         * subrange is unused by a string if the string contains no
+         * characters in that range.  If the given string contains no
+         * characters in this range, then this range itself is
+         * returned.
+         */
+        Range largestUnusedSubrange(RuleBody strings) {
+            Vector v = new Vector(1);
+            v.addElement(clone());
+
+            strings.reset();
+            for (;;) {
+                String str = strings.nextLine();
+                if (str == null) {
+                    break;
+                }
+                int n = str.length();
+                for (int i=0; i<n; ++i) {
+                    char c = str.charAt(i);
+                    if (contains(c)) {
+                        for (int j=0; j<v.size(); ++j) {
+                            Range r = (Range) v.elementAt(j);
+                            if (r.contains(c)) {
+                                r = r.split(c);
+                                if (r != null) {
+                                    v.addElement(r);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Range bestRange = null;
+            for (int j=0; j<v.size(); ++j) {
+                Range r = (Range) v.elementAt(j);
+                if (bestRange == null || r.length > bestRange.length) {
+                    bestRange = r;
+                }
+            }
+
+            return bestRange;
+        }
+    }
+
+    //----------------------------------------------------------------------
+    // PUBLIC methods
+    //----------------------------------------------------------------------
+
+    /**
+     * Constructor.
+     */
+    public TransliteratorParser() {
+    }
+
+    /**
+     * Parse a set of rules.  After the parse completes, examine the public
+     * data members for results.
+     */
+    public void parse(String rules, int direction) {
+        parseRules(new RuleArray(new String[] { rules }), direction);
+    }
+   
+    /**
+     * Parse a set of rules.  After the parse completes, examine the public
+     * data members for results.
+     */
+    public void parse(ResourceReader rules, int direction) {
+        parseRules(new RuleReader(rules), direction);
+    }
+
+    //----------------------------------------------------------------------
+    // PRIVATE methods
+    //----------------------------------------------------------------------
+
+    /**
+     * Parse an array of zero or more rules.  The strings in the array are
+     * treated as if they were concatenated together, with rule terminators
+     * inserted between array elements if not present already.
+     *
+     * Any previous rules are discarded.  Typically this method is called exactly
+     * once, during construction.
+     *
+     * The member this.data will be set to null if there are no rules.
+     *
+     * @exception IllegalArgumentException if there is a syntax error in the
+     * rules
+     */
+    void parseRules(RuleBody ruleArray, int dir) {
+        data = new RuleBasedTransliterator.Data();
+        direction = dir;
+        ruleCount = 0;
+        compoundFilter = null;
+
+        determineVariableRange(ruleArray);
+        variablesVector = new Vector();
+        parseData = new ParseData();
+
+        StringBuffer errors = null;
+        int errorCount = 0;
+
+        ruleArray.reset();
+
+        StringBuffer idBlockResult = new StringBuffer();
+        idSplitPoint = -1;
+        // The mode marks whether we are in the header ::id block, the
+        // rule block, or the footer ::id block.
+        // mode == 0: start: rule->1, ::id->0
+        // mode == 1: in rules: rule->1, ::id->2
+        // mode == 2: in footer rule block: rule->ERROR, ::id->2
+        int mode = 0;
+
+        // The compound filter offset is an index into idBlockResult.
+        // If it is 0, then the compound filter occurred at the start,
+        // and it is the offset to the _start_ of the compound filter
+        // pattern.  Otherwise it is the offset to the _limit_ of the
+        // compound filter pattern within idBlockResult.
+        this.compoundFilter = null;
+        int compoundFilterOffset = -1;
+
+    main:
+        for (;;) {
+            String rule = ruleArray.nextLine();
+            if (rule == null) {
+                break;
+            }
+            int pos = 0;
+            int limit = rule.length();
+            while (pos < limit) {
+                char c = rule.charAt(pos++);
+                if (Character.isWhitespace(c)) {
+                    // Ignore leading whitespace.  Note that this is not
+                    // Unicode spaces, but Java spaces -- a subset,
+                    // representing whitespace likely to be seen in code.
+                    continue;
+                }
+                // Skip lines starting with the comment character
+                if (c == RULE_COMMENT_CHAR) {
+                    pos = rule.indexOf("\n", pos) + 1;
+                    if (pos == 0) {
+                        break; // No "\n" found; rest of rule is a commnet
+                    }
+                    continue; // Either fall out or restart with next line
+                }
+                // Often a rule file contains multiple errors.  It's
+                // convenient to the rule author if these are all reported
+                // at once.  We keep parsing rules even after a failure, up
+                // to a specified limit, and report all errors at once.
+                try {
+                    // We've found the start of a rule or ID.  c is its first
+                    // character, and pos points past c.
+                    --pos;
+                    // Look for an ID token.  Must have at least ID_TOKEN_LEN + 1
+                    // chars left.
+                    if ((pos + ID_TOKEN_LEN + 1) <= limit &&
+                        rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
+                        pos += ID_TOKEN_LEN;
+                        c = rule.charAt(pos);
+                        while (UCharacter.isWhitespace(c) && pos < limit) {
+                            ++pos;
+                            c = rule.charAt(pos);
+                        }
+                        int[] p = new int[] { pos };
+                        boolean[] sawDelim = new boolean[1];
+                        StringBuffer regenID = new StringBuffer();
+                        UnicodeSet[] cpdFilter = new UnicodeSet[1];
+                        Transliterator.parseID(rule, regenID, p, sawDelim, cpdFilter, direction, false);
+                        if (p[0] == pos || !sawDelim[0]) {
+                            // Invalid ::id
+                            int i1 = pos + 2;
+                            while (i1 < rule.length() && rule.charAt(i1) != ';') {
+                                ++i1;
+                            }
+                            throw new IllegalArgumentException("Invalid ::ID " +
+                                                               rule.substring(pos, i1));
+                        } else {
+                            if (mode == 1) {
+                                mode = 2;
+                                idSplitPoint = idBlockResult.length();
+                            }
+                            if (cpdFilter[0] != null) {
+                                if (compoundFilter != null) {
+                                    // Multiple compound filters
+                                    throw new IllegalArgumentException("Multiple compound filters");
+                                }
+                                compoundFilter = cpdFilter[0];
+                                if (idBlockResult.length() == 0) {
+                                    compoundFilterOffset = 0;
+                                }
+                            }
+                            String str = rule.substring(pos, p[0]);
+                            idBlockResult.append(str);
+                            if (!sawDelim[0]) {
+                                idBlockResult.append(';');
+                            }
+                            if (cpdFilter[0] != null && compoundFilterOffset < 0) {
+                                compoundFilterOffset = idBlockResult.length();
+                            }
+                            pos = p[0];
+                        }
+                    } else {
+                        // Parse a rule
+                        pos = parseRule(rule, pos, limit);
+                        ++ruleCount;
+                        if (mode == 2) {
+                            // ::id in illegal position (because a rule
+                            // occurred after the ::id footer block)
+                            throw new IllegalArgumentException("::ID in illegal position");
+                        }
+                        mode = 1;
+                    }
+                } catch (IllegalArgumentException e) {
+                    if (errorCount == 30) {
+                        errors.append("\nMore than 30 errors; further messages squelched");
+                        break main;
+                    }
+                    if (errors == null) {
+                        errors = new StringBuffer(e.getMessage());
+                    } else {
+                        errors.append("\n" + e.getMessage());
+                    }
+                    ++errorCount;
+                    pos = ruleEnd(rule, pos, limit) + 1; // +1 advances past ';'
+                }
+            }
+        }
+
+        idBlock = idBlockResult.toString();
+
+        // Convert the set vector to an array
+        data.variables = new UnicodeMatcher[variablesVector.size()];
+        variablesVector.copyInto(data.variables);
+        variablesVector = null;
+
+        // Do more syntax checking and index the rules
+        try {
+            if (compoundFilter != null) {
+                if ((direction == Transliterator.FORWARD &&
+                     compoundFilterOffset != 0) ||
+                    (direction == Transliterator.REVERSE &&
+                     compoundFilterOffset != idBlock.length())) {
+                    throw new IllegalArgumentException("Compound filters misplaced");
+                }
+            }
+
+            data.ruleSet.freeze();
+
+            if (idSplitPoint < 0) {
+                idSplitPoint = idBlock.length();
+            }
+
+            if (ruleCount == 0) {
+                data = null;
+            }
+        } catch (IllegalArgumentException e) {
+            if (errors == null) {
+                errors = new StringBuffer(e.getMessage());
+            } else {
+                errors.append("\n").append(e.getMessage());
+            }
+        }
+
+        if (errors != null) {
+            throw new IllegalArgumentException(errors.toString());
+        }
+    }
 
     /**
      * MAIN PARSER.  Parse the next rule in the given rule string, starting
@@ -1278,107 +1460,6 @@ class TransliteratorParser {
             }
         }
         return -1;
-    }
-
-
-
-    /**
-     * A range of Unicode characters.  Support the operations of testing for
-     * inclusion (does this range contain this character?) and splitting.
-     * Splitting involves breaking a range into two smaller ranges around a
-     * character inside the original range.  The split character is not included
-     * in either range.  If the split character is at either extreme end of the
-     * range, one of the split products is an empty range.
-     *
-     * This class is used internally to determine the largest available private
-     * use character range for variable stand-ins.
-     */
-    private static class Range implements Cloneable {
-        char start;
-        int length;
-
-        Range(char start, int length) {
-            this.start = start;
-            this.length = length;
-        }
-
-        public Object clone() {
-            return new Range(start, length);
-        }
-
-        boolean contains(char c) {
-            return c >= start && (c - start) < length;
-        }
-
-        /**
-         * Assume that contains(c) is true.  Split this range into two new
-         * ranges around the character c.  Make this range one of the new ranges
-         * (modify it in place) and return the other new range.  The character
-         * itself is not included in either range.  If the split results in an
-         * empty range (that is, if c == start or c == start + length - 1) then
-         * return null.
-         */
-        Range split(char c) {
-            if (c == start) {
-                ++start;
-                --length;
-                return null;
-            } else if (c - start == length - 1) {
-                --length;
-                return null;
-            } else {
-                ++c;
-                Range r = new Range(c, start + length - c);
-                length = --c - start;
-                return r;
-            }
-        }
-
-        /**
-         * Finds the largest unused subrange by the given string.  A
-         * subrange is unused by a string if the string contains no
-         * characters in that range.  If the given string contains no
-         * characters in this range, then this range itself is
-         * returned.
-         */
-        Range largestUnusedSubrange(RuleBody strings) {
-            Vector v = new Vector(1);
-            v.addElement(clone());
-
-            strings.reset();
-            for (;;) {
-                String str = strings.nextLine();
-                if (str == null) {
-                    break;
-                }
-                int n = str.length();
-                for (int i=0; i<n; ++i) {
-                    char c = str.charAt(i);
-                    if (contains(c)) {
-                        for (int j=0; j<v.size(); ++j) {
-                            Range r = (Range) v.elementAt(j);
-                            if (r.contains(c)) {
-                                r = r.split(c);
-                                if (r != null) {
-                                    v.addElement(r);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            Range bestRange = null;
-            for (int j=0; j<v.size(); ++j) {
-                Range r = (Range) v.elementAt(j);
-                if (bestRange == null || r.length > bestRange.length) {
-                    bestRange = r;
-                }
-            }
-
-            return bestRange;
-        }
     }
 }
 
