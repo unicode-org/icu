@@ -54,9 +54,6 @@ Package=<4>
     Project_Dep_Name gentest
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name gentz
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name genuca
     End Project Dependency
     Begin Project Dependency
@@ -393,24 +390,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "gentz"=..\tools\gentz\gentz.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name toolutil
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "genuca"=..\TOOLS\genuca\genuca.dsp - Package Owner=<4>
 
 Package=<5>
@@ -595,9 +574,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name gentest
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gentz
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name genuca
