@@ -354,6 +354,12 @@ void AstroTest::TestSunriseTimes(void) {
   //		a.setDate(cal.getTime());
   //		long r = a.getSunRiseSet2(true);	
   delete astro3;
+  delete tz;
+  delete cal;
+  delete cal2;
+  delete df_t;
+  delete df_d;
+  delete df_dt;
   closeAstro(status);
   ASSERT_OK(status);
 }
@@ -409,6 +415,8 @@ void AstroTest::TestBasics(void) {
   //        astro.setDate(cal3.getTime());
   //        astro.foo();
   
+  delete cal3;
+  delete d3;
   ASSERT_OK(status);
   closeAstro(status);
   ASSERT_OK(status);
