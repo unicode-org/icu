@@ -219,8 +219,6 @@ SimpleTimeZone::operator=(const SimpleTimeZone &right)
 UBool
 SimpleTimeZone::operator==(const TimeZone& that) const
 {
-    SimpleTimeZone* other = (SimpleTimeZone*)&that;
-
     return ((this == &that) ||
             (getDynamicClassID() == that.getDynamicClassID() &&
             TimeZone::operator==(that) &&

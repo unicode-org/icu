@@ -376,139 +376,142 @@ u_charType(UChar32 c) {
 /* Checks if ch is a lower case letter.*/
 U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c) {
-    return GET_CATEGORY(GET_PROPS(c))==U_LOWERCASE_LETTER;
+    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_LOWERCASE_LETTER);
 }
 
 /* Checks if ch is an upper case letter.*/
 U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c) {
-    return GET_CATEGORY(GET_PROPS(c))==U_UPPERCASE_LETTER;
+    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_UPPERCASE_LETTER);
 }
 
 /* Checks if ch is a title case letter; usually upper case letters.*/
 U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c) {
-    return GET_CATEGORY(GET_PROPS(c))==U_TITLECASE_LETTER;
+    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_TITLECASE_LETTER);
 }
 
 /* Checks if ch is a decimal digit. */
 U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character is a letter.*/
 U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if ch is a letter or a decimal digit */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
 U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c) {
-    return GET_PROPS(c)!=0;
+    return (UBool)(GET_PROPS(c)!=0);
 }
 
 /* Checks if the Unicode character is a base form character that can take a diacritic.*/
 U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_NON_SPACING_MARK|1UL<<U_ENCLOSING_MARK|1UL<<U_COMBINING_SPACING_MARK)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character is a control character.*/
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character is a space character.*/
 UBool
 u_isspace(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character is a whitespace character.*/
 U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0 &&
-           c!=0xa0 && c!=0x202f && c!=0xfeff; /* exclude no-break spaces */
+           c!=0xa0 && c!=0x202f && c!=0xfeff); /* exclude no-break spaces */
 }
 
 /* Checks if the Unicode character is printable.*/
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {    
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(
+            ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_NON_SPACING_MARK|1UL<<U_ENCLOSING_MARK|1UL<<U_COMBINING_SPACING_MARK|
              1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR|
              1UL<<U_DASH_PUNCTUATION|1UL<<U_START_PUNCTUATION|1UL<<U_END_PUNCTUATION|1UL<<U_CONNECTOR_PUNCTUATION|1UL<<U_OTHER_PUNCTUATION|
              1UL<<U_MATH_SYMBOL|1UL<<U_CURRENCY_SYMBOL|1UL<<U_MODIFIER_SYMBOL|1UL<<U_OTHER_SYMBOL)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c) {
     /* same as u_isalpha() */
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
-           )!=0;
+           )!=0);
 }
 
 /* Checks if the Unicode character can be a Unicode identifier part other than starting the
  identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(
+           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CONNECTOR_PUNCTUATION|1UL<<U_COMBINING_SPACING_MARK|1UL<<U_NON_SPACING_MARK)
            )!=0 ||
-           u_isIDIgnorable(c);
+           u_isIDIgnorable(c));
 }
 
 /*Checks if the Unicode character can be ignorable in a Java or Unicode identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c) {
-    return (uint32_t)c<=8 ||
+    return (UBool)((uint32_t)c<=8 ||
            (uint32_t)(c-0xe)<=(0x1b-0xe) ||
            (uint32_t)(c-0x7f)<=(0x9f-0x7f) ||
            (uint32_t)(c-0x200a)<=(0x200f-0x200a) ||
            (uint32_t)(c-0x206a)<=(0x206f-0x206a) ||
-           c==0xfeff;
+           c==0xfeff);
 }
 
 /*Checks if the Unicode character can start a Java identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(
+           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION)
-           )!=0;
+           )!=0);
 }
 
 /*Checks if the Unicode character can be a Java identifier part other than starting the
@@ -516,13 +519,14 @@ u_isJavaIDStart(UChar32 c) {
  */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c) {
-    return ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(
+           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION|
              1UL<<U_COMBINING_SPACING_MARK|1UL<<U_NON_SPACING_MARK)
            )!=0 ||
-           u_isIDIgnorable(c);
+           u_isIDIgnorable(c));
 }
 
 /* Transforms the Unicode character to its lower case equivalent.*/
@@ -646,7 +650,7 @@ u_charDirection(UChar32 c) {
 
 U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c) {
-    return GET_PROPS(c)&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE;
+    return (UBool)(GET_PROPS(c)&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE);
 }
 
 U_CAPI UChar32 U_EXPORT2

@@ -1833,8 +1833,6 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
         return;
     }
 
-    Collator::ECollationStrength aStrength = Collator::IDENTICAL;
-    UBool isSource = TRUE;
     int32_t i = 0;
     UnicodeString lastGroupChars;
     UnicodeString expChars;

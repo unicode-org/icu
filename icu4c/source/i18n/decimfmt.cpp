@@ -2023,7 +2023,6 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
       roundingDecimalPos = fRoundingIncrement->fDecimalAt;
     }
     for (int32_t part=0; part<2; ++part) {
-        int32_t partStart = result.length();
         if (padPos == kPadBeforePrefix) {
             result.append(padSpec);
         }

@@ -1070,7 +1070,6 @@ SimpleDateFormat::subParseLong(const UnicodeString& text, ParsePosition& pos, in
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                            UBool obeyCount, UBool ambiguousYear[]) const
 {
-    UErrorCode status = U_ZERO_ERROR;
     Formattable number;
     int32_t value = 0;
     int32_t i;
