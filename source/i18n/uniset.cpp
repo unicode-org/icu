@@ -114,6 +114,47 @@ const char UnicodeMatcher::fgClassID = 0;
 const char UnicodeSet::fgClassID = 0;
 
 //----------------------------------------------------------------
+// Debugging
+//----------------------------------------------------------------
+
+// DO NOT DELETE THIS CODE.  This code is used to debug memory leaks.
+// To enable the debugging, define the symbol DEBUG_MEM in the line
+// below.  This will result in text being sent to stdout that looks
+// like this:
+//   DEBUG UnicodeSet: ct 0x00A39B20; 397 [\u0A81-\u0A83\u0A85-
+//   DEBUG UnicodeSet: dt 0x00A39B20; 396 [\u0A81-\u0A83\u0A85-
+// Each line lists a construction (ct) or destruction (dt) event, the
+// object address, the number of outstanding objects after the even,
+// and the pattern of the object in question.
+
+// #define DEBUG_MEM
+
+#ifdef DEBUG_MEM
+#include <stdio.h>
+static int32_t _dbgCount = 0;
+#endif
+
+static inline _dbgct(UnicodeSet* set) {
+#ifdef DEBUG_MEM
+    UnicodeString str;
+    set->toPattern(str, TRUE);
+    char buf[40];
+    str.extract(0, 39, buf, "");
+    printf("DEBUG UnicodeSet: ct 0x%08X; %d %s\n", set, ++_dbgCount, buf);
+#endif
+}
+
+static inline _dbgdt(UnicodeSet* set) {
+#ifdef DEBUG_MEM
+    UnicodeString str;
+    set->toPattern(str, TRUE);
+    char buf[40];
+    str.extract(0, 39, buf, "");
+    printf("DEBUG UnicodeSet: dt 0x%08X; %d %s\n", set, --_dbgCount, buf);
+#endif
+}
+
+//----------------------------------------------------------------
 // Constructors &c
 //----------------------------------------------------------------
 
@@ -126,6 +167,7 @@ UnicodeSet::UnicodeSet() :
 {
     list = new UChar32[capacity];
     list[0] = UNICODESET_HIGH;
+    _dbgct(this);
 }
 
 /**
@@ -142,6 +184,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     list = new UChar32[capacity];
     list[0] = UNICODESET_HIGH;
     complement(start, end);
+    _dbgct(this);
 }
 
 /**
@@ -157,6 +200,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
 {
     list = new UChar32[capacity];
     applyPattern(pattern, status);
+    _dbgct(this);
 }
 
 // For internal use by RuleBasedTransliterator
@@ -168,6 +212,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
 {
     list = new UChar32[capacity];
     applyPattern(pattern, pos, &symbols, status);
+    _dbgct(this);
 }
 
 /**
@@ -193,6 +238,7 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
             applyPattern(pattern, status);
         }
     }
+    _dbgct(this);
 }
 
 /**
@@ -205,12 +251,14 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
 {
     list = new UChar32[capacity];
     *this = o;
+    _dbgct(this);
 }
 
 /**
  * Destructs the set.
  */
 UnicodeSet::~UnicodeSet() {
+    _dbgdt(this); // first!
     delete[] list;
     delete[] buffer;
 }
