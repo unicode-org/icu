@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/06/06 22:20:29 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  **/
@@ -971,7 +971,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             String[] numPatterns = (String[])rb.getObject("NumberPatterns");
             String pattern = numPatterns[1];
             
-            if (pattern.indexOf("\u00A4") == -1 ) {
+            if (pattern.indexOf('\u00A4') == -1 ) { // 'x' not "x" -- workaround bug in IBM JDK 1.4.1
                 errln("Currency format for " + locales[i] +
                         " does not contain generic currency symbol:" +
                         pattern );
