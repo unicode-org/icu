@@ -13,6 +13,10 @@
 #ifndef _TRCOLL
 #define _TRCOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "tscoll.h"
 
 class CollationTurkishTest: public IntlTestCollator {
@@ -42,4 +46,7 @@ private:
 
     Collator *myCollation;
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

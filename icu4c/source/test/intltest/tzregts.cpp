@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 #include "tzregts.h"
@@ -986,3 +990,5 @@ TimeZoneRegressionTest::TestJDK12API()
     delete pst;
     delete cst;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -9,6 +9,9 @@
 ************************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
@@ -238,4 +241,4 @@ void UnicodeFilterLogicTest::expectAux(const UnicodeString& tag,
     }
 }
 
-
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/unum.h"
@@ -178,3 +181,5 @@ void IntlTestDecimalFormatSymbols::Verify(double value, const UnicodeString& pat
     }
     delete df;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

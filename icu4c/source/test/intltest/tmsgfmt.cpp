@@ -14,6 +14,11 @@
 *   08/04/97    jfitz       Updated to intltest
 ********************************************************************************
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "tmsgfmt.h"
 
 #include "unicode/format.h"
@@ -1080,3 +1085,5 @@ void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &
         default: name = ""; break; //needed to end loop
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/decimfmt.h"
 #include "tsnmfmt.h"
 #include <float.h>
@@ -412,3 +415,5 @@ void IntlTestNumberFormat::monsterTest(/* char* par */)
 
     logln(SEP);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -7,6 +7,9 @@
 #ifndef _INTLTESTDATEFORMATSYMBOLS
 #define _INTLTESTDATEFORMATSYMBOLS
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 
@@ -26,5 +29,7 @@ private:
      */
     void TestGetMonths(void);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

@@ -173,20 +173,33 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
         CASE(11, TestSimpleDisplayNames)
         CASE(12, TestUninstalledISO3Names)
         CASE(13, TestAtypicalLocales)
+#if !UCONFIG_NO_FORMATTING
         CASE(14, TestThaiCurrencyFormat)
         CASE(15, TestEuroSupport)
+#endif
         CASE(16, TestToString)
+#if !UCONFIG_NO_FORMATTING
         CASE(17, Test4139940)
         CASE(18, Test4143951)
+#endif
         CASE(19, Test4147315)
         CASE(20, Test4147317)
         CASE(21, Test4147552)
         CASE(22, TestVariantParsing)
+#if !UCONFIG_NO_FORMATTING
         CASE(23, Test4105828)
+#endif
         CASE(24, TestSetIsBogus)
         CASE(25, TestParallelAPIValues)
+        // keep the last index in sync with the condition in default:
 
-        default: name = ""; break; //needed to end loop
+        default:
+            if(index <= 25) { // keep this in sync with the last index!
+                name = "switched off"; // UCONFIG_NO_FORMATTING
+            } else {
+                name = "";
+            }
+            break; //needed to end loop
     }
 }
 
@@ -1230,6 +1243,8 @@ LocaleTest::TestNullDefault()
 */
 }
 
+#if !UCONFIG_NO_FORMATTING
+
 /**
  * @bug 4135752
  * This would be better tested by the LocaleDataTest.  Will move it when I
@@ -1327,6 +1342,8 @@ LocaleTest::TestEuroSupport()
     }
 }
 
+#endif
+
 /**
  * @bug 4139504
  * toString() doesn't work with language_VARIANT.
@@ -1365,6 +1382,8 @@ LocaleTest::TestToString() {
             logln("Pass: Locale.getName(), got:" + UnicodeString(name) );
     }
 }
+
+#if !UCONFIG_NO_FORMATTING
 
 /**
  * @bug 4139940
@@ -1431,6 +1450,8 @@ LocaleTest::Test4143951()
     }
     delete cal;
 }
+
+#endif
 
 /**
  * @bug 4147315
@@ -1580,6 +1601,8 @@ LocaleTest::TestVariantParsing()
     }
 }
 
+#if !UCONFIG_NO_FORMATTING
+
 /**
  * @bug 4105828
  * Currency symbol in zh is wrong.  We will test this at the NumberFormat
@@ -1607,6 +1630,8 @@ LocaleTest::Test4105828()
         delete fmt;
     }
 }
+
+#endif
 
 // Tests setBogus and isBogus APIs for Locale
 // Jitterbug 1735

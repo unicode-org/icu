@@ -53,12 +53,14 @@ nameTrans(NULL), hexTrans(NULL)
 
 CanonicalIteratorTest::~CanonicalIteratorTest()
 {
+#if !UCONFIG_NO_TRANSLITERATION
   if(nameTrans != NULL) {
     delete(nameTrans);
   }
   if(hexTrans != NULL) {
     delete(hexTrans);
   }
+#endif
 }
 
 void CanonicalIteratorTest::TestExhaustive() {
@@ -194,6 +196,7 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
   UnicodeString result = "[";
     if (s.length() == 0) return "";
     // set up for readable display
+#if !UCONFIG_NO_TRANSLITERATION
     if(verbose) {
       if (nameTrans == NULL)
           nameTrans = Transliterator::createInstance("[^\\ -\\u007F] name", UTRANS_FORWARD, status);
@@ -204,8 +207,11 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
     }
     if (hexTrans == NULL)
         hexTrans = Transliterator::createInstance("[^\\ -\\u007F] hex", UTRANS_FORWARD, status);
+#endif
     UnicodeString sHex = s;
+#if !UCONFIG_NO_TRANSLITERATION
     hexTrans->transliterate(sHex);
+#endif
     result += sHex;
     result += "]";
     return result;

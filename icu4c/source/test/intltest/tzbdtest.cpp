@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "tzbdtest.h"
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
@@ -407,3 +411,5 @@ TimeZoneBoundaryTest::TestStepwise()
     findBoundariesStepwise(1997, ONE_DAY, zone, 2);
     delete zone;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

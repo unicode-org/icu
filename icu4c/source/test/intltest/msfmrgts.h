@@ -7,6 +7,10 @@
 #ifndef _MESSAGEFORMATREGRESSIONTEST_
 #define _MESSAGEFORMATREGRESSIONTEST_
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "intltest.h"
 
 /** 
@@ -44,6 +48,8 @@ protected:
     UBool failure(UErrorCode status, const char* msg);
 
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _MESSAGEFORMATREGRESSIONTEST_
 //eof

@@ -7,6 +7,10 @@
 #ifndef _DATEFORMATREGRESSIONTEST_
 #define _DATEFORMATREGRESSIONTEST_
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/smpdtfmt.h" 
 #include "caltztst.h"
@@ -46,6 +50,8 @@ public:
     void Test4210209(void);
     void Test714(void);
  };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _DATEFORMATREGRESSIONTEST_
 //eof

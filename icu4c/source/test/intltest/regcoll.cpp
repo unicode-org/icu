@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/unistr.h"
@@ -1197,3 +1201,4 @@ void CollationRegressionTest::runIndexedTest(int32_t index, UBool exec, const ch
     }
 }
 
+#endif /* #if !UCONFIG_NO_COLLATION */

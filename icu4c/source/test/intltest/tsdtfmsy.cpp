@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "tsdtfmsy.h"
 
 #include "unicode/dtfmtsym.h"
@@ -148,3 +151,5 @@ void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
         errln("ERROR: Copy Constructor or Assignment failed");
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

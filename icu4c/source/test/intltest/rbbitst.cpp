@@ -9,6 +9,9 @@
 *   01/12/2000  Madhu        Updated for changed API and added new tests
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "intltest.h"
 #include "unicode/utypes.h"
@@ -2589,3 +2592,4 @@ void RBBITest::TestLineBreakData() {
             
 }
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

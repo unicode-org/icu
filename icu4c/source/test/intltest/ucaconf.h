@@ -13,6 +13,10 @@
 #ifndef _UCACONF_TST
 #define _UCACONF_TST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "unicode/ustring.h"
 #include "tscoll.h"
@@ -45,5 +49,7 @@ private:
   UErrorCode status;
   char testDataPath[1024];
 };
-#endif
 
+#endif /* #if !UCONFIG_NO_COLLATION */
+
+#endif

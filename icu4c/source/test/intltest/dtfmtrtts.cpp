@@ -4,7 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
 
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
@@ -364,5 +366,7 @@ UDate DateFormatRoundTripTest::generateDate()
     //return new Date((long)a);
     return a;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

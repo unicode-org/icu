@@ -11,6 +11,10 @@
 #ifndef HEXTOUNITRTST_H
 #define HEXTOUNITRTST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
 
@@ -63,6 +67,6 @@ public:
 
 };
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
 #endif
-
-

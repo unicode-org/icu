@@ -8,6 +8,10 @@
 **********************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "thcoll.h"
 #include "unicode/utypes.h"
 #include "unicode/coll.h"
@@ -329,3 +333,5 @@ UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
                                              const char* chars) {
     return result = CharsToUnicodeString(chars);
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

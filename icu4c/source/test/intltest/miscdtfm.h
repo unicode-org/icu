@@ -7,6 +7,10 @@
 #ifndef _DATEFORMATMISCTEST_
 #define _DATEFORMATMISCTEST_
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "intltest.h"
 
 /** 
@@ -26,6 +30,8 @@ protected:
     UBool failure(UErrorCode status, const char* msg);
 
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _DATEFORMATMISCTEST_
 //eof

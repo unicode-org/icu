@@ -13,6 +13,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "ittrans.h"
 #include "transtst.h"
 #include "transapi.h"
@@ -54,3 +57,5 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         default: name=""; break;
     }
 }
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -10,6 +10,10 @@
 #ifndef TRANSTST_H
 #define TRANSTST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "unicode/translit.h"
 #include "intltest.h"
 
@@ -380,5 +384,7 @@ private:
     const UnicodeString DESERET_dee;
 
 };
+
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
 
 #endif

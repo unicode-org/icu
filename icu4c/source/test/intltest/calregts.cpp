@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "calregts.h"
 
 #include "unicode/gregocal.h"
@@ -2102,3 +2106,5 @@ CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
 
     return result;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

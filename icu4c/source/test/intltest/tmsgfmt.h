@@ -8,6 +8,10 @@
 #ifndef _TESTMESSAGEFORMAT
 #define _TESTMESSAGEFORMAT
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 #include "intltest.h"
@@ -73,5 +77,6 @@ public:
 private:
 };
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

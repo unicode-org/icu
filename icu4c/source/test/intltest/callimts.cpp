@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "callimts.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
@@ -114,6 +118,6 @@ CalendarLimitTest::TestCalendarLimit()
     delete fmt;
 }
 
-// -------------------------------------
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 // eof
