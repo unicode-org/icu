@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uscript.h"
 #include "uprops.h"
 
 U_CAPI void U_EXPORT2
@@ -29,4 +30,17 @@ u_charAge(UChar32 c, UVersionInfo versionArray) {
         versionArray[1]=(uint8_t)(version&0xf);
         versionArray[2]=versionArray[3]=0;
     }
+}
+
+U_CAPI UScriptCode U_EXPORT2
+uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return USCRIPT_INVALID_CODE;
+    }
+    if((uint32_t)c>0x10ffff) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return USCRIPT_INVALID_CODE;
+    }
+
+    return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
 }
