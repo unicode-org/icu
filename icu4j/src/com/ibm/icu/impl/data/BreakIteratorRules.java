@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules.java,v $
- * $Date: 2001/08/24 17:36:24 $
- * $Revision: 1.6 $
+ * $Date: 2001/10/17 23:31:56 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -103,16 +103,20 @@ public class BreakIteratorRules extends ListResourceBundle {
               "$surr_lo=[\udc00-\udfff];"
             + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
             + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
-            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
+			+ "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
+            + "$surr_hi_pua=[\udb80-\udbff];"              // Hi Surrogates for Private Use.
+
+            // Private Use Area.  Treat like ideographs.
+			+ "$pua=[\ue000-\uf8ff$surr_hi_pua];"
 
             // ignore non-spacing marks, enclosing marks, and format characters,
             // all of which should not influence the algorithm
-            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_tag];"
 
             // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
             // other letters, and digits
             + "$danda=[\u0964\u0965];"
-            + "$kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d$surr_hi_ideo];"
+            + "$kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d$surr_hi_ideo$pua];"
             + "$kata=[\u3099-\u309c\u30a1-\u30fe];"
             + "$hira=[\u3041-\u309e\u30fc];"
             + "$let=[[[:L:][:Mc:]$surr_hi_let]-[$kanji$kata$hira]];"
@@ -188,10 +192,14 @@ public class BreakIteratorRules extends ListResourceBundle {
               "$surr_lo=[\udc00-\udfff];"
             + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
             + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
-            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
+			+ "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
+            + "$surr_hi_pua=[\udb80-\udbff];"              // Hi Surrogates for Private Use.
+
+            // Private Use Area.  Treat like ideographs.
+ 			+ "$pua=[\ue000-\uf8ff$surr_hi_pua];"
 
             // ignore non-spacing marks, enclosing marks, and format characters
-            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_tag];"
 
             // Hindi phrase separators
             + "$danda=[\u0964\u0965];"
@@ -226,7 +234,7 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // Kanji: actually includes both Kanji and Kana, except for small Kana and
             // CJK diacritics
-            + "$kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa$surr_hi_ideo]-[$post_word$_ignore_]];"
+            + "$kanji=[[$surr_hi_ideo$pua\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[$post_word$_ignore_]];"
 
             // digits
             + "$digit=[[:Nd:][:No:]];"
@@ -270,12 +278,9 @@ public class BreakIteratorRules extends ListResourceBundle {
             // Surrogates.  Until better support is available, ignore low surrogates
             //              and classify high surrogates according to the characters within the block.
               "$surr_lo=[\udc00-\udfff];"
-            + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
-            + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
-            + "$surr_hi_misc=[\udb40-\udbff];"             // Hi Surrogates for Tags, Private Use.
 
             // ignore non-spacing marks, enclosing marks, and format characters
-            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_misc];"
+            + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo];"
 
             // lowercase letters
             + "$lc=[:Ll:];"
@@ -305,7 +310,7 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // characters that may occur at the beginning of a sentence: basically anything
             // not mentioned above (lowercase letters and digits are specifically excluded)
-            + "$sent_start=[^$lc$ucLatin$space$start$end$digit$term$period\u2029$surr_hi_let$_ignore_];"
+            + "$sent_start=[^$lc$ucLatin$space$start$end$digit$term$period\u2029$_ignore_];"
 
             // Hindi phrase separator
             + "$danda=[\u0964\u0965];"
