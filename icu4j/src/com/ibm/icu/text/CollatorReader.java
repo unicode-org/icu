@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2003/06/03 18:49:34 $ 
-* $Revision: 1.13 $
+* $Date: 2003/08/27 22:28:45 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -91,8 +91,8 @@ final class CollatorReader
     */
     protected void readHeader(RuleBasedCollator rbc) throws IOException
     {
-    	int size = m_dataInputStream_.readInt();
-    	// all the offsets are in bytes
+        int size = m_dataInputStream_.readInt();
+        // all the offsets are in bytes
       	// to get the address add to the header address and cast properly 
       	// Default options int options
         m_dataInputStream_.skip(4); // options
@@ -166,7 +166,7 @@ final class CollatorReader
      */
     protected void readOptions(RuleBasedCollator rbc) throws IOException
     {
-    	rbc.m_defaultVariableTopValue_ = m_dataInputStream_.readInt();
+        rbc.m_defaultVariableTopValue_ = m_dataInputStream_.readInt();
     	rbc.m_defaultIsFrenchCollation_ = (m_dataInputStream_.readInt()
     	                                == RuleBasedCollator.AttributeValue.ON_);
         rbc.m_defaultIsAlternateHandlingShifted_ 
@@ -186,6 +186,8 @@ final class CollatorReader
     	rbc.m_defaultStrength_ = m_dataInputStream_.readInt();
     	rbc.m_defaultIsHiragana4_ = (m_dataInputStream_.readInt() 
     	                             == RuleBasedCollator.AttributeValue.ON_);
+        rbc.m_defaultIsNumericCollation_ = (m_dataInputStream_.readInt() 
+                                      == RuleBasedCollator.AttributeValue.ON_);
         m_dataInputStream_.skip(64); // reserved for future use
     }
     
@@ -206,7 +208,7 @@ final class CollatorReader
     {
     	readHeader(rbc);
     	readOptions(rbc);
-    	m_expansionSize_ >>= 2;
+        m_expansionSize_ >>= 2;
     	rbc.m_expansion_ = new int[m_expansionSize_];
     	for (int i = 0; i < m_expansionSize_; i ++) {
     		rbc.m_expansion_[i] = m_dataInputStream_.readInt();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/08/20 00:20:37 $ 
-* $Revision: 1.23 $
+* $Date: 2003/08/27 22:28:45 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,7 @@ import com.ibm.icu.impl.TrieBuilder;
 import com.ibm.icu.impl.IntTrieBuilder;
 import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.impl.NormalizerImpl;
@@ -1865,6 +1866,7 @@ final class CollationParsedRuleBuilder
     private int addAnElement(BuildTable t, Elements element) 
     {
   		Vector expansions = t.m_expansions_;
+        element.m_mapCE_ = 0;
         if (element.m_CELength_ == 1) {
 	    	if (element.m_isThai_ == false) {
 	            element.m_mapCE_ = element.m_CEs_[0];
@@ -1941,6 +1943,41 @@ final class CollationParsedRuleBuilder
 			    }
 		    }
 	    }
+        
+        // We treat digits differently - they are "uber special" and should be
+        // processed differently if numeric collation is on. 
+        int uniChar = 0;
+        if ((element.m_uchars_.length() == 2) 
+            && UTF16.isLeadSurrogate(element.m_uchars_.charAt(0))) {
+            uniChar = UCharacterProperty.getRawSupplementary(
+                                                element.m_uchars_.charAt(0), 
+                                                element.m_uchars_.charAt(1));      
+        } 
+        else if (element.m_uchars_.length() == 1) {
+            uniChar = element.m_uchars_.charAt(0);
+        }
+        
+        // Here, we either have one normal CE OR mapCE is set. Therefore, we 
+        // stuff only one element to the expansion buffer. When we encounter a 
+        // digit and we don't do numeric collation, we will just pick the CE 
+        // we have and break out of case (see ucol.cpp ucol_prv_getSpecialCE 
+        // && ucol_prv_getSpecialPrevCE). If we picked a special, further 
+        // processing will occur. If it's a simple CE, we'll return due
+        // to how the loop is constructed.
+        if (uniChar != 0 && UCharacter.isDigit(uniChar)) {
+            // prepare the element
+            int expansion = RuleBasedCollator.CE_SPECIAL_FLAG_ 
+                            | (CollationElementIterator.CE_DIGIT_TAG_
+                               << RuleBasedCollator.CE_TAG_SHIFT_) | 1; 
+            if (element.m_mapCE_ != 0) { 
+                // if there is an expansion, we'll pick it here
+                expansion |= (addExpansion(expansions, element.m_mapCE_) << 4);
+            } 
+            else {
+                expansion |= (addExpansion(expansions, element.m_CEs_[0]) << 4);
+            }
+            element.m_mapCE_ = expansion;
+        }
 	
 	    // here we want to add the prefix structure.
 	    // I will try to process it as a reverse contraction, if possible.

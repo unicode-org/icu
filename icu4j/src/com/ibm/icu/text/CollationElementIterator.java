@@ -652,6 +652,13 @@ public final class CollationElementIterator
      * will cause this value to be reset to 0.
      */
     int m_CEBufferSize_;
+    static final int CE_NOT_FOUND_ = 0xF0000000;
+    static final int CE_EXPANSION_TAG_ = 1;
+    static final int CE_CONTRACTION_TAG_ = 2;
+    /** 
+     * Collate Digits As Numbers (CODAN) implementation
+     */
+    static final int CE_DIGIT_TAG_ = 13;
 
     // package private methods ----------------------------------------------
 
@@ -862,7 +869,7 @@ public final class CollationElementIterator
     private static final int SECOND_LAST_BYTE_SHIFT_ = 8;
 
     // special ce values and tags -------------------------------------------
-    /*private*/ static final int CE_NOT_FOUND_ = 0xF0000000;
+    
     private static final int CE_EXPANSION_ = 0xF1000000;
     private static final int CE_CONTRACTION_ = 0xF2000000;
     private static final int CE_THAI_ = 0xF3000000;
@@ -876,8 +883,6 @@ public final class CollationElementIterator
     private static final int CE_NO_MORE_CES_TERTIARY_ = 0x00000001;
 
     private static final int CE_NOT_FOUND_TAG_ = 0;
-    /*private*/ static final int CE_EXPANSION_TAG_ = 1;
-    /*private*/ static final int CE_CONTRACTION_TAG_ = 2;
     private static final int CE_THAI_TAG_ = 3;
     /**
      * Charset processing, not yet implemented
@@ -907,7 +912,8 @@ public final class CollationElementIterator
      * space without affecting the performance (hopefully).
      */
     private static final int CE_LONG_PRIMARY_TAG_ = 12;
-    private static final int CE_CE_TAGS_COUNT = 13;
+                        
+    private static final int CE_CE_TAGS_COUNT = 14;
     private static final int CE_BYTE_COMMON_ = 0x05;
 
     // end special ce values and tags ---------------------------------------
@@ -2005,6 +2011,193 @@ public final class CollationElementIterator
         }
         return m_CEBuffer_[0];
     }
+    
+    /**
+     * Gets the next digit ce
+     * @param collator current collator
+     * @param ce current collation element
+     * @param cp current codepoint
+     * @return next digit ce
+     */
+    private int nextDigit(RuleBasedCollator collator, int ce, int cp)
+    {
+        // We do a check to see if we want to collate digits as numbers; 
+        // if so we generate a custom collation key. Otherwise we pull out 
+        // the value stored in the expansion table.
+
+        if (collator.m_isNumericCollation_){
+            int collateVal = 0;
+            int trailingZeroIndex = 0;
+            boolean nonZeroValReached = false;
+
+            // I just need a temporary place to store my generated CEs.
+            // icu4c uses a unsigned byte array, i'll use a stringbuffer here
+            // to avoid dealing with the sign problems and array allocation
+            // clear and set initial string buffer length
+            m_utilStringBuffer_.setLength(3);
+        
+            // We parse the source string until we hit a char that's NOT a 
+            // digit.
+            // Use this u_charDigitValue. This might be slow because we have 
+            // to handle surrogates...
+            int digVal = UCharacter.digit(cp); 
+            // if we have arrived here, we have already processed possible 
+            // supplementaries that trigered the digit tag -
+            // all supplementaries are marked in the UCA.
+            // We  pad a zero in front of the first element anyways. 
+            // This takes care of the (probably) most common case where 
+            // people are sorting things followed by a single digit
+            int digIndx = 1;
+            for (;;) {
+                // Make sure we have enough space.
+                if (digIndx >= ((m_utilStringBuffer_.length() - 2) << 1)) {
+                    m_utilStringBuffer_.setLength(m_utilStringBuffer_.length() 
+                                                  << 1);
+                }
+                // Skipping over leading zeroes.        
+                if (digVal != 0 || nonZeroValReached) {
+                    if (digVal != 0 && !nonZeroValReached) {
+                        nonZeroValReached = true;
+                    }    
+                    // We parse the digit string into base 100 numbers 
+                    // (this fits into a byte).
+                    // We only add to the buffer in twos, thus if we are 
+                    // parsing an odd character, that serves as the 
+                    // 'tens' digit while the if we are parsing an even 
+                    // one, that is the 'ones' digit. We dumped the 
+                    // parsed base 100 value (collateVal) into a buffer. 
+                    // We multiply each collateVal by 2 (to give us room) 
+                    // and add 5 (to avoid overlapping magic CE byte 
+                    // values). The last byte we subtract 1 to ensure it is 
+                    // less than all the other bytes.
+                    if (digIndx % 2 == 1) {
+                        collateVal += digVal;  
+                        // This removes trailing zeroes.
+                        if (collateVal == 0 && trailingZeroIndex == 0) {
+                            trailingZeroIndex = ((digIndx - 1) >>> 1) + 2;
+                        }
+                        else if (trailingZeroIndex != 0) {
+                            trailingZeroIndex = 0;
+                        }
+                        m_utilStringBuffer_.setCharAt(
+                                            ((digIndx - 1) >>> 1) + 2,
+                                            (char)((collateVal << 1) + 6));
+                        collateVal = 0;
+                    }
+                    else {
+                        // We drop the collation value into the buffer so if 
+                        // we need to do a "front patch" we don't have to 
+                        // check to see if we're hitting the last element.
+                        collateVal = digVal * 10;
+                        m_utilStringBuffer_.setCharAt((digIndx >>> 1) + 2, 
+                                                (char)((collateVal << 1) + 6));
+                    }
+                    digIndx ++;
+                }
+            
+                // Get next character.
+                if (!isEnd()){
+                    backupInternalState(m_utilSpecialBackUp_);
+                    char ch = nextChar();
+                    int char32 = ch;
+                    if (UTF16.isLeadSurrogate(ch)){
+                        if (!isEnd()) {
+                            char trail = nextChar();
+                            if (UTF16.isTrailSurrogate(trail)) {
+                               char32 = UCharacterProperty.getRawSupplementary(
+                                                                   ch, trail);
+                            } 
+                            else {
+                                goBackOne();
+                            }
+                        }
+                    }
+                    
+                    digVal = UCharacter.digit(char32);
+                    if (digVal == -1) {
+                        // Resetting position to point to the next unprocessed 
+                        // char. We overshot it when doing our test/set for 
+                        // numbers.
+                        updateInternalState(m_utilSpecialBackUp_);
+                        break;
+                    }
+                } 
+                else {
+                    break;
+                }
+            }
+        
+            if (nonZeroValReached == false){
+                digIndx = 2;
+                m_utilStringBuffer_.setCharAt(2, (char)6);
+            }
+        
+            int endIndex = trailingZeroIndex != 0 ? trailingZeroIndex 
+                                             : (digIndx >>> 1) + 2;              
+            if (digIndx % 2 != 0){
+                // We missed a value. Since digIndx isn't even, stuck too many 
+                // values into the buffer (this is what we get for padding the 
+                // first byte with a zero). "Front-patch" now by pushing all 
+                // nybbles forward.
+                // Doing it this way ensures that at least 50% of the time 
+                // (statistically speaking) we'll only be doing a single pass 
+                // and optimizes for strings with single digits. I'm just 
+                // assuming that's the more common case.
+                for (int i = 2; i < endIndex; i ++){
+                    m_utilStringBuffer_.setCharAt(i, 
+                        (char)((((((m_utilStringBuffer_.charAt(i) - 6) >>> 1) 
+                                  % 10) * 10) 
+                                 + (((m_utilStringBuffer_.charAt(i + 1) - 6) 
+                                      >>> 1) / 10) << 1) + 6));
+                }
+                -- digIndx;
+            }
+        
+            // Subtract one off of the last byte. 
+            m_utilStringBuffer_.setCharAt(endIndex - 1, 
+                         (char)(m_utilStringBuffer_.charAt(endIndex - 1) - 1));            
+                
+            // We want to skip over the first two slots in the buffer. 
+            // The first slot is reserved for the header byte 0x1B. 
+            // The second slot is for the sign/exponent byte: 
+            // 0x80 + (decimalPos/2) & 7f.
+            m_utilStringBuffer_.setCharAt(0, (char)0x1B);
+            m_utilStringBuffer_.setCharAt(1, 
+                                     (char)(0x80 + ((digIndx >>> 1) & 0x7F)));
+        
+            // Now transfer the collation key to our collIterate struct.
+            // The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
+            ce = (((m_utilStringBuffer_.charAt(0) << 8)
+                       // Primary weight 
+                       | m_utilStringBuffer_.charAt(1)) 
+                                    << RuleBasedCollator.CE_PRIMARY_SHIFT_)
+                       //  Secondary weight 
+                       | (RuleBasedCollator.BYTE_COMMON_ 
+                          << RuleBasedCollator.CE_SECONDARY_SHIFT_) 
+                       | RuleBasedCollator.BYTE_COMMON_; // Tertiary weight.
+            int i = 2; // Reset the index into the buffer.
+            
+            m_CEBuffer_[0] = ce;
+            m_CEBufferSize_ = 1;
+            m_CEBufferOffset_ = 1;
+            while (i < endIndex)
+            {
+                int primWeight = m_utilStringBuffer_.charAt(i ++) << 8;
+                if (i < endIndex) {
+                    primWeight |= m_utilStringBuffer_.charAt(i ++);
+                }
+                m_CEBuffer_[m_CEBufferSize_ ++] 
+                    = (primWeight << RuleBasedCollator.CE_PRIMARY_SHIFT_) 
+                      | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+            }
+            return ce;
+        } 
+        
+        // no numeric mode, we'll just switch to whatever we stashed and 
+        // continue
+        // find the offset to expansion table
+        return collator.m_expansion_[getExpansionOffset(collator, ce)];
+    }
 
     /**
      * Gets the next implicit ce for codepoints
@@ -2157,6 +2350,9 @@ public final class CollationElementIterator
                     return nextLongPrimary(ce);
                 case CE_EXPANSION_TAG_:
                     return nextExpansion(collator, ce);
+                case CE_DIGIT_TAG_:
+                    ce = nextDigit(collator, ce, codepoint);
+                    break;
                     // various implicits optimization
                 case CE_CJK_IMPLICIT_TAG_:
                     // 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D
@@ -2180,7 +2376,8 @@ public final class CollationElementIterator
                     break;
                 }
             }
-        } finally {
+        } 
+        finally {
             m_utilSpecialEntryBackUp_ = entrybackup;
         }
         return ce;
@@ -2469,6 +2666,185 @@ public final class CollationElementIterator
         m_CEBufferOffset_ = m_CEBufferSize_ - 1;
         return m_CEBuffer_[m_CEBufferOffset_];
     }
+    
+    /**
+     * Getting the digit collation elements
+     * @param collator
+     * @param ce current collation element
+     * @param ch current code point
+     * @return digit collation element
+     */
+    private int previousDigit(RuleBasedCollator collator, int ce, char ch)
+    {
+        // We do a check to see if we want to collate digits as numbers; if so we generate
+        //  a custom collation key. Otherwise we pull out the value stored in the expansion table.
+        if (collator.m_isNumericCollation_){
+            int leadingZeroIndex = 0;
+            int collateVal = 0;
+            boolean nonZeroValReached = false;
+
+            // clear and set initial string buffer length
+            m_utilStringBuffer_.setLength(3);
+        
+            // We parse the source string until we hit a char that's NOT a digit
+            // Use this u_charDigitValue. This might be slow because we have to 
+            // handle surrogates...
+            int char32 = ch;
+            if (UTF16.isTrailSurrogate(ch)) {
+                if (!isBackwardsStart()){
+                    char lead = previousChar();
+                    if (UTF16.isLeadSurrogate(lead)) {
+                        char32 = UCharacterProperty.getRawSupplementary(lead,
+                                                                        ch);
+                    } 
+                    else {
+                        goForwardOne();
+                    }
+                }
+            } 
+            int digVal = UCharacter.digit(char32);
+            int digIndx = 0;
+            for (;;) {
+                // Make sure we have enough space.
+                if (digIndx >= ((m_utilStringBuffer_.length() - 2) << 1)) {
+                    m_utilStringBuffer_.setLength(m_utilStringBuffer_.length() 
+                                                  << 1);
+                }
+                // Skipping over "trailing" zeroes but we still add to digIndx.
+                if (digVal != 0 || nonZeroValReached) {
+                    if (digVal != 0 && !nonZeroValReached) {
+                        nonZeroValReached = true;
+                    }
+                
+                    // We parse the digit string into base 100 numbers (this 
+                    // fits into a byte).
+                    // We only add to the buffer in twos, thus if we are 
+                    // parsing an odd character, that serves as the 'tens' 
+                    // digit while the if we are parsing an even one, that is 
+                    // the 'ones' digit. We dumped the parsed base 100 value 
+                    // (collateVal) into a buffer. We multiply each collateVal 
+                    // by 2 (to give us room) and add 5 (to avoid overlapping 
+                    // magic CE byte values). The last byte we subtract 1 to 
+                    // ensure it is less than all the other bytes. 
+                    // Since we're doing in this reverse we want to put the 
+                    // first digit encountered into the ones place and the 
+                    // second digit encountered into the tens place.
+                
+                    if (digIndx % 2 == 1){
+                        collateVal += digVal * 10;
+                    
+                        // This removes leading zeroes.
+                        if (collateVal == 0 && leadingZeroIndex == 0) {
+                           leadingZeroIndex = ((digIndx - 1) >>> 1) + 2;
+                        }
+                        else if (leadingZeroIndex != 0) {
+                            leadingZeroIndex = 0;
+                        }
+                                            
+                        m_utilStringBuffer_.setCharAt(((digIndx - 1) >>> 1) + 2, 
+                                                (char)((collateVal << 1) + 6));
+                        collateVal = 0;
+                    }
+                    else {
+                        collateVal = digVal;    
+                    }
+                }
+                digIndx ++;
+            
+                if (!isBackwardsStart()){
+                    backupInternalState(m_utilSpecialBackUp_);
+                    ch = previousChar();
+                    char32 = ch;
+                    if (UTF16.isTrailSurrogate(ch)){
+                        if (!isBackwardsStart()) {
+                            char lead = previousChar();
+                            if (UTF16.isLeadSurrogate(lead)) {
+                                char32 
+                                    = UCharacterProperty.getRawSupplementary(
+                                                                    lead, ch);
+                            } 
+                            else {
+                                updateInternalState(m_utilSpecialBackUp_);
+                            }
+                        }
+                    }
+                    
+                    digVal = UCharacter.digit(char32);
+                    if (digVal == -1) {
+                        updateInternalState(m_utilSpecialBackUp_);
+                        break;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+
+            if (nonZeroValReached == false) {
+                digIndx = 2;
+                m_utilStringBuffer_.setCharAt(2, (char)6);
+            }
+            
+            if (digIndx % 2 != 0) {
+                if (collateVal == 0 && leadingZeroIndex == 0) {
+                    // This removes the leading 0 in a odd number sequence of 
+                    // numbers e.g. avery001
+                    leadingZeroIndex = ((digIndx - 1) >>> 1) + 2;
+                }
+                else {
+                    // this is not a leading 0, we add it in
+                    m_utilStringBuffer_.setCharAt((digIndx >>> 1) + 2,
+                                                (char)((collateVal << 1) + 6));
+                    digIndx ++; 
+                }               
+            }
+                     
+            int endIndex = leadingZeroIndex != 0 ? leadingZeroIndex 
+                                               : ((digIndx >>> 1) + 2) ;  
+            digIndx = ((endIndex - 2) << 1) + 1; // removing initial zeros         
+            // Subtract one off of the last byte. 
+            // Really the first byte here, but it's reversed...
+            m_utilStringBuffer_.setCharAt(2, 
+                                    (char)(m_utilStringBuffer_.charAt(2) - 1));          
+            // We want to skip over the first two slots in the buffer. 
+            // The first slot is reserved for the header byte 0x1B. 
+            // The second slot is for the sign/exponent byte: 
+            // 0x80 + (decimalPos/2) & 7f.
+            m_utilStringBuffer_.setCharAt(0, (char)0x1B);
+            m_utilStringBuffer_.setCharAt(1, 
+                                    (char)(0x80 + ((digIndx >>> 1) & 0x7F)));
+        
+            // Now transfer the collation key to our collIterate struct.
+            // The total size for our collation key is endIndx bumped up to the 
+            // next largest even value divided by two.
+            m_CEBufferSize_ = 0;
+            m_CEBuffer_[m_CEBufferSize_ ++] 
+                        = (((m_utilStringBuffer_.charAt(0) << 8)
+                            // Primary weight 
+                            | m_utilStringBuffer_.charAt(1)) 
+                              << RuleBasedCollator.CE_PRIMARY_SHIFT_)
+                            // Secondary weight 
+                            | (RuleBasedCollator.BYTE_COMMON_ 
+                               << RuleBasedCollator.CE_SECONDARY_SHIFT_)
+                            // Tertiary weight. 
+                            | RuleBasedCollator.BYTE_COMMON_; 
+             int i = endIndex - 1; // Reset the index into the buffer.
+             while (i >= 2) {
+                int primWeight = m_utilStringBuffer_.charAt(i --) << 8;
+                if (i >= 2) {
+                    primWeight |= m_utilStringBuffer_.charAt(i --);
+                }
+                m_CEBuffer_[m_CEBufferSize_ ++] 
+                    = (primWeight << RuleBasedCollator.CE_PRIMARY_SHIFT_) 
+                      | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+             }
+             m_CEBufferOffset_ = m_CEBufferSize_ - 1;
+             return m_CEBuffer_[m_CEBufferOffset_];
+         }
+         else {
+             return collator.m_expansion_[getExpansionOffset(collator, ce)];
+         }
+    } 
 
     /**
      * Returns previous hangul ces
@@ -2600,6 +2976,9 @@ public final class CollationElementIterator
                 return previousLongPrimary(ce);
             case CE_EXPANSION_TAG_: // always returns
                 return previousExpansion(collator, ce);
+            case CE_DIGIT_TAG_:
+                ce = previousDigit(collator, ce, ch);
+                break;
             case CE_HANGUL_SYLLABLE_TAG_: // AC00-D7AF
                 return previousHangul(collator, ch);
             case CE_LEAD_SURROGATE_TAG_:  // D800-DBFF
@@ -2726,6 +3105,47 @@ public final class CollationElementIterator
         } 
         else {
             return m_source_.current();
+        }
+    }
+    
+    /**
+     * Moves back 1 position in the source string. This is slightly less 
+     * complicated than previousChar in that it doesn't normalize while 
+     * moving back. Boundary checks are not performed.
+     * This method is to be used with caution, with the assumption that 
+     * moving back one position will not exceed the source limits.
+     * Use only with nextChar() and never call this API twice in a row without
+     * nextChar() in the middle.
+     */
+    private void goBackOne() 
+    {
+        if (m_bufferOffset_ >= 0) {
+            m_bufferOffset_ --;
+        }
+        else {
+            m_source_.setIndex(m_source_.getIndex() - 1);
+        }
+    }
+    
+    /**
+     * Moves forward 1 position in the source string. This is slightly less 
+     * complicated than nextChar in that it doesn't normalize while 
+     * moving back. Boundary checks are not performed.
+     * This method is to be used with caution, with the assumption that 
+     * moving back one position will not exceed the source limits.
+     * Use only with previousChar() and never call this API twice in a row 
+     * without previousChar() in the middle.
+     */
+    private void goForwardOne() 
+    {
+        if (m_bufferOffset_ < 0) {
+            // we're working on the source and not normalizing. fast path.
+            // note Thai pre-vowel reordering uses buffer too
+            m_source_.setIndex(m_source_.getIndex() + 1);
+        }
+        else {
+            // we are in the buffer, buffer offset will never be 0 here
+            m_bufferOffset_ ++;
         }
     }
 }
