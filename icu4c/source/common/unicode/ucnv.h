@@ -277,7 +277,7 @@ U_CAPI void U_EXPORT2
  * last failing conversion.
  *
  * @param converter: the Unicode converter
- * @param errUChars: the bytes in error
+ * @param errUChars: the UChars in error
  * @param len: on input the capacity of errUChars, on output the number of UChars copied to it
  * @param  err: the outgoing error status code.
  * If the substitution character array is too small, an
@@ -287,7 +287,7 @@ U_CAPI void U_EXPORT2
 
 U_CAPI void U_EXPORT2
     ucnv_getInvalidUChars (const UConverter * converter,
-			   char *errUChars,
+			   UChar *errUChars,
 			   int8_t * len,
 			   UErrorCode * err);
 
