@@ -330,13 +330,19 @@ CLEAN : GODATA
 	-@erase "*.exp"
 	-@erase "*.icu"
 	-@erase "*.lib"
-	-@erase "*.mak"
 	-@erase "*.res"
 	-@erase "*.spp"
+	-@erase "*.txt"
 	@cd "$(ICUBLD)\$(ICUCOL)"
 	-@erase "*.res"
+	-@erase "*.txt"
 	@cd "$(ICUOUT)"
 	-@erase "*.dat"
+	@cd "$(ICUTMP)"
+	-@erase "*.txt"
+	-@erase "*.mak"
+	-@erase "*.obj"
+	-@erase "*.res"
 	@cd "$(TESTDATABLD)"
 	-@erase "*.cnv"
 	-@erase "*.icu"
@@ -347,11 +353,6 @@ CLEAN : GODATA
 	@cd "$(TESTDATAOUT)"
 	-@erase "*.dat"
 	-@erase "*.typ"
-	@cd "$(ICUTMP)"
-	-@erase "*.lst"
-	-@erase "*.mak"
-	-@erase "*.obj"
-	-@erase "*.res"
 	@cd "$(ICUBLD)"
 
 
@@ -383,9 +384,9 @@ CLEAN : GODATA
 	@echo Making Locale Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" $<
 
-{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUCOL)}.txt{$(ICUCOL)}.res:
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUCOL)}.txt{$(ICUCOL)}.res::
 	@echo Making Collation files
-	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD)" -d"$(ICUBLD)\$(ICUCOL)" $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD)" -d"$(ICUBLD)\$(ICUCOL)" $<
 
 $(INDEX_COL_FILES):
 	@echo Generating <<$(ICUCOL)\res_index.txt
