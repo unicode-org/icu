@@ -9,10 +9,15 @@ $Cased           = [[:Upper_Case:][:Lower_Case:][:Lt:]  - $CaseIgnorable];
 $NotCased        = [^ $Cased];
 
 #
-#  If the iterator starts on a cased item, advance through all adjacent cased items plus
-#    any non-cased stuff, to reach the start of the next (cased) word.
+#  If the iterator was not stopped on a cased character, advance it to the first cased char
 #
-($Cased | $CaseIgnorable)* $NotCased*;
+($NotCased | $CaseIgnorable)*;
+
+#
+#  If the iterator starts on a cased item, advance through all adjacent cased items plus
+#    any non-cased stuff, to reach the start of the next word.
+#
+$Cased ($Cased | $CaseIgnorable)* $NotCased*;
 
 #
 #  Reverse Rules
