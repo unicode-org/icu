@@ -960,7 +960,12 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
 U_CFUNC const char *
 ucnv_io_getDefaultConverterName() {
     /* local variable to be thread-safe */
-    const char *name=gDefaultConverterName;
+    const char *name;
+
+    umtx_lock(NULL);
+    name=gDefaultConverterName;
+    umtx_unlock(NULL);
+
     if(name==NULL) {
         UErrorCode errorCode = U_ZERO_ERROR;
         UConverter *cnv = NULL;
@@ -976,10 +981,6 @@ ucnv_io_getDefaultConverterName() {
             }
         }
 
-        if (name != NULL) {
-            length=(int32_t)(uprv_strlen(name));
-        }
-
         if(name == NULL || name[0] == 0
             || U_FAILURE(errorCode) || cnv == NULL
             || length>=sizeof(gDefaultConverterNameBuffer))
@@ -993,19 +994,20 @@ ucnv_io_getDefaultConverterName() {
 #else
             name = "ibm-37_P100-1995";
 #endif
-            length=(int32_t)(uprv_strlen(name));
         }
+
+        length=(int32_t)(uprv_strlen(name));
 
         /* Copy the name before we close the converter. */
         umtx_lock(NULL);
         uprv_memcpy(gDefaultConverterNameBuffer, name, length);
         gDefaultConverterNameBuffer[length]=0;
         gDefaultConverterName = gDefaultConverterNameBuffer;
+        name = gDefaultConverterName;
         umtx_unlock(NULL);
 
         /* The close may make the current name go away. */
         ucnv_close(cnv);
-        name = gDefaultConverterName;
     }
 
     return name;
@@ -1019,6 +1021,9 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
         const char *name=ucnv_io_getConverterName(converterName, &errorCode);
+
+        umtx_lock(NULL);
+
         if(U_SUCCESS(errorCode) && name!=NULL) {
             gDefaultConverterName=name;
         } else {
@@ -1026,21 +1031,13 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
             int32_t length=(int32_t)(uprv_strlen(converterName));
             if(length<sizeof(gDefaultConverterNameBuffer)) {
                 /* it was not found as an alias, so copy it - accept an empty name */
-                UBool didLock;
-                if(gDefaultConverterName==gDefaultConverterNameBuffer) {
-                    umtx_lock(NULL);
-                    didLock=TRUE;
-                } else {
-                    didLock=FALSE;
-                }
                 uprv_memcpy(gDefaultConverterNameBuffer, converterName, length);
                 gDefaultConverterNameBuffer[length]=0;
                 gDefaultConverterName=gDefaultConverterNameBuffer;
-                if(didLock) {
-                    umtx_unlock(NULL);
-                }
             }
         }
+
+        umtx_unlock(NULL);
     }
 }
 
