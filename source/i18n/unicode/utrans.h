@@ -84,6 +84,8 @@ typedef enum _UTransDirection {
  * <p>After a transliteration operation, some of the indices in this
  * structure will be modified.  See the field descriptions for
  * details.
+ *
+ * <p>contextStart <= start <= limit <= contextLimit
  * @draft
  */
 typedef struct _UTransPosition {
