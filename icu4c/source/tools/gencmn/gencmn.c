@@ -101,6 +101,8 @@ main(int argc, char* argv[]) {
     UBool sourceTOC, verbose;
     const char *entrypointName = NULL;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
     options[6].value=COMMON_DATA_NAME;
@@ -111,12 +113,12 @@ main(int argc, char* argv[]) {
     /* if it is ICU data.. no prefix. */
     if(!uprv_strcmp(options[6].value, COMMON_DATA_NAME))
     {
-      symPrefix[0] = 0;
+        symPrefix[0] = 0;
     }
     else
     {
-      uprv_strcpy(symPrefix, options[6].value);
-      uprv_strcat(symPrefix, "_");
+        uprv_strcpy(symPrefix, options[6].value);
+        uprv_strcat(symPrefix, "_");
     }
 #else
     symPrefix[0] = 0;
