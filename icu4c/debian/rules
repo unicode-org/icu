@@ -50,7 +50,7 @@ ifeq ($(shell uname -m),s390)
 CXXFLAGS = -O1 # -Wall
 else
 CXXFLAGS = -O2 # -Wall
-else
+endif
 
 INSTALL_PROGRAM = /usr/bin/install
 
