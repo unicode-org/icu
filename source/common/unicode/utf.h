@@ -156,7 +156,7 @@
 
 /* UChar and UChar32 definitions -------------------------------------------- */
 
-/** Number of bytes in a UChar. @stable */
+/** Number of bytes in a UChar. @stable ICU 2.0 */
 #define U_SIZEOF_UCHAR 2
 
 /*!

@@ -175,7 +175,7 @@ public:
       operator=(const ResourceBundle& other);
 
     /** Destructor. 
-     * @stable 
+     * @stable ICU 2.0
      */
     ~ResourceBundle();
 

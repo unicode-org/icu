@@ -313,7 +313,7 @@ public:
    *         or a collator with the requested version is not available.
    *
    * @see getVersion
-   * @stable 2.2
+   * @stable ICU 2.2
    */
   static Collator *createInstance(const Locale &loc, UVersionInfo version, UErrorCode &err);
 
@@ -554,7 +554,7 @@ public:
   * @param value attribute value
   * @param status to indicate whether the operation went on smoothly or 
   *        there were errors
-  * @stable 2.2
+  * @stable ICU 2.2
   */
   virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
                             UErrorCode &status) = 0;
@@ -565,7 +565,7 @@ public:
   * @param status to indicate whether the operation went on smoothly or 
   *        there were errors
   * @return attribute value
-  * @stable 2.2
+  * @stable ICU 2.2
   */
   virtual UColAttributeValue getAttribute(UColAttribute attr, 
                                           UErrorCode &status) = 0;
@@ -625,7 +625,7 @@ public:
   /**
   * Thread safe cloning operation
   * @return pointer to the new clone, user should remove it.
-  * @stable 2.2
+  * @stable ICU 2.2
   */
   virtual Collator* safeClone(void) = 0;
 
@@ -639,7 +639,7 @@ public:
   * @param resultLength length of the result buffer. If if not enough the 
   *        buffer will be filled to capacity. 
   * @return Number of bytes needed for storing the sort key
-  * @stable 2.2
+  * @stable ICU 2.2
   */
   virtual int32_t getSortKey(const UnicodeString& source,
                             uint8_t* result,
@@ -658,7 +658,7 @@ public:
   * @param resultLength length of the result buffer. If if not enough the 
   *        buffer will be filled to capacity. 
   * @return Number of bytes needed for storing the sort key
-  * @stable 2.2
+  * @stable ICU 2.2
   */
   virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const = 0;

@@ -58,7 +58,7 @@ public:
      * Creates a Formattable object with a UDate instance.
      * @param d the UDate instance.
      * @param ISDATE the flag to indicate this is a date.
-     * @stable   
+     * @stable ICU 2.0  
      */
                     Formattable(UDate d, ISDATE);
     /**

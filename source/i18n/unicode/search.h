@@ -398,7 +398,7 @@ protected:
 
     /**
     * C search data struct
-	* @stable.
+    * @stable ICU 2.0
     */
     USearch *m_search_;
 
@@ -408,13 +408,13 @@ protected:
     * another in C. Hence we keep the original around and do the verification
     * at the end of the match. The user is responsible for deleting this
     * break iterator.
-	* @stable.
+    * @stable ICU 2.0
     */
     BreakIterator *m_breakiterator_;
     
     /**
     * Unicode string version of the search text
-	* @stable.
+    * @stable ICU 2.0
     */
     UnicodeString  m_text_;
 
@@ -423,7 +423,7 @@ protected:
     /**
     * Default constructor.
     * Initializes data to the default values.
-	* @stable ICU 2.0
+    * @stable ICU 2.0
     */
     SearchIterator();
 
@@ -440,7 +440,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.  
      * @see #handleNext
      * @see #handlePrev
-	 * @stable.
+	 * @stable ICU 2.0
      */
     SearchIterator(const UnicodeString &text, 
                          BreakIterator *breakiter = NULL);
@@ -462,7 +462,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable.
+	 * @stable ICU 2.0
      */
     SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
 
@@ -472,7 +472,7 @@ protected:
      * Assignment operator. Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
-	 * @stable.
+	 * @stable ICU 2.0
      */
     SearchIterator & operator=(const SearchIterator &that);
 
@@ -493,7 +493,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @stable.
+	 * @stable ICU 2.0
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -515,7 +515,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @stable.
+	 * @stable ICU 2.0
      */
      virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -528,7 +528,7 @@ protected:
      * @param length length of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable.
+	 * @stable ICU 2.0
      */
     virtual void setMatchLength(int32_t length);
 
@@ -540,13 +540,13 @@ protected:
      * @param position start offset of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @stable.
+	 * @stable ICU 2.0
      */
     virtual void setMatchStart(int32_t position);
 
     /**
     * sets match not found 
-	* @stable.
+    * @stable ICU 2.0
     */
     void setMatchNotFound();
 };
