@@ -1130,21 +1130,25 @@ void TestGetLocale() {
   {
     UCollator *defaultColl = ucol_open(NULL, &status);
     coll = ucol_open("blahaha", &status);
-    if(strcmp(ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status), "blahaha")) {
-      log_err("Nonexisting locale didn't preserve the requested locale\n");
+    if(U_SUCCESS(status)) {
+      if(strcmp(ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status), "blahaha")) {
+        log_err("Nonexisting locale didn't preserve the requested locale\n");
+      }
+      if(strcmp(ucol_getLocale(coll, ULOC_VALID_LOCALE, &status), 
+        ucol_getLocale(defaultColl, ULOC_VALID_LOCALE, &status))) {
+        log_err("Valid locale for nonexisting locale locale collator differs "
+          "from valid locale for default collator\n");
+      }
+      if(strcmp(ucol_getLocale(coll, ULOC_ACTUAL_LOCALE, &status), 
+        ucol_getLocale(defaultColl, ULOC_ACTUAL_LOCALE, &status))) {
+        log_err("Actual locale for nonexisting locale locale collator differs "
+          "from actual locale for default collator\n");
+      }
+      ucol_close(coll);
+      ucol_close(defaultColl);
+    } else {
+      log_data_err("Couldn't open collators\n");
     }
-    if(strcmp(ucol_getLocale(coll, ULOC_VALID_LOCALE, &status), 
-      ucol_getLocale(defaultColl, ULOC_VALID_LOCALE, &status))) {
-      log_err("Valid locale for nonexisting locale locale collator differs "
-        "from valid locale for default collator\n");
-    }
-    if(strcmp(ucol_getLocale(coll, ULOC_ACTUAL_LOCALE, &status), 
-      ucol_getLocale(defaultColl, ULOC_ACTUAL_LOCALE, &status))) {
-      log_err("Actual locale for nonexisting locale locale collator differs "
-        "from actual locale for default collator\n");
-    }
-    ucol_close(coll);
-    ucol_close(defaultColl);
   }
 
     
@@ -1280,27 +1284,28 @@ void TestBounds() {
   int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
   int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
 
-  for(i = 0; i<arraySize; i++) {
-    buffSize = u_unescape(tests[i].original, buffer, 512);
-    skSize = ucol_getSortKey(coll, buffer, buffSize, tests[i].key, 512);
-  }
+  if(U_SUCCESS(status) && coll) {
+    for(i = 0; i<arraySize; i++) {
+      buffSize = u_unescape(tests[i].original, buffer, 512);
+      skSize = ucol_getSortKey(coll, buffer, buffSize, tests[i].key, 512);
+    }
 
-  qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
+    qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
 
-  for(i = 0; i < arraySize-1; i++) {
-    for(j = i+1; j < arraySize; j++) {
-      lowerSize = ucol_getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, &status);
-      upperSize = ucol_getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, &status);
-      for(k = i; k <= j; k++) {
-        if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
-          log_err("Problem with lower! j = %i (%s vs %s)\n", k, tests[k].original, tests[i].original);
-        }
-        if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
-          log_err("Problem with upper! j = %i (%s vs %s)\n", k, tests[k].original, tests[j].original);
+    for(i = 0; i < arraySize-1; i++) {
+      for(j = i+1; j < arraySize; j++) {
+        lowerSize = ucol_getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+        upperSize = ucol_getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, &status);
+        for(k = i; k <= j; k++) {
+          if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
+            log_err("Problem with lower! j = %i (%s vs %s)\n", k, tests[k].original, tests[i].original);
+          }
+          if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
+            log_err("Problem with upper! j = %i (%s vs %s)\n", k, tests[k].original, tests[j].original);
+          }
         }
       }
     }
-  }
 
 
 #if 0
@@ -1326,23 +1331,27 @@ void TestBounds() {
 
 
 
-  for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
-    buffSize = u_unescape(test[i], buffer, 512);
-    skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
-    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
-    for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
-      buffSize = u_unescape(test[j], buffer, 512);
+    for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
+      buffSize = u_unescape(test[i], buffer, 512);
       skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
-      if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
-        log_err("Problem with lower! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
-      }
-      if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
-        log_err("Problem with upper! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+      lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+      upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
+      for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
+        buffSize = u_unescape(test[j], buffer, 512);
+        skSize = ucol_getSortKey(coll, buffer, buffSize, sortkey, 512);
+        if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
+          log_err("Problem with lower! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+        }
+        if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
+          log_err("Problem with upper! i = %i, j = %i (%s vs %s)\n", i, j, test[i], test[j]);
+        }
       }
     }
+    ucol_close(coll);
+  } else {
+    log_data_err("Couldn't open collator\n");
   }
-  ucol_close(coll);
+
 }
 
 static void doOverrunTest(UCollator *coll, const UChar *uString, int32_t strLen) {
@@ -1562,122 +1571,126 @@ static const char * strengthsC[] = {
  
 void TestMergeSortKeys(void) {
    UErrorCode status = U_ZERO_ERROR;
- 
-   const char* cases[] = {
-     "abc",
-       "abcd",
-       "abcde"
-   };
-   uint32_t casesSize = sizeof(cases)/sizeof(cases[0]);
-   const char* prefix = "foo";
-   const char* suffix = "egg";
-   char outBuff1[256], outBuff2[256];
-   
-   uint8_t **sortkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-   uint8_t **mergedPrefixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-   uint8_t **mergedSuffixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
-   uint32_t *sortKeysLen = (uint32_t *)malloc(casesSize*sizeof(uint32_t));
-   uint8_t prefixKey[256], suffixKey[256];
-   uint32_t prefixKeyLen = 0, suffixKeyLen = 0, i = 0;
-   UChar buffer[256];
-   uint32_t unescapedLen = 0, l1 = 0, l2 = 0;
-   UColAttributeValue strength;
- 
    UCollator *coll = ucol_open("en", &status);
-   log_verbose("ucol_mergeSortkeys test\n");
-   log_verbose("Testing order of the test cases\n");
-   genericLocaleStarter("en", cases, casesSize);
+   if(U_SUCCESS(status)) {
  
-   for(i = 0; i<casesSize; i++) {
-     sortkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-     mergedPrefixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-     mergedSuffixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
-   }
+     const char* cases[] = {
+       "abc",
+         "abcd",
+         "abcde"
+     };
+     uint32_t casesSize = sizeof(cases)/sizeof(cases[0]);
+     const char* prefix = "foo";
+     const char* suffix = "egg";
+     char outBuff1[256], outBuff2[256];
+   
+     uint8_t **sortkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+     uint8_t **mergedPrefixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+     uint8_t **mergedSuffixkeys = (uint8_t **)malloc(casesSize*sizeof(uint8_t *));
+     uint32_t *sortKeysLen = (uint32_t *)malloc(casesSize*sizeof(uint32_t));
+     uint8_t prefixKey[256], suffixKey[256];
+     uint32_t prefixKeyLen = 0, suffixKeyLen = 0, i = 0;
+     UChar buffer[256];
+     uint32_t unescapedLen = 0, l1 = 0, l2 = 0;
+     UColAttributeValue strength;
  
-   unescapedLen = u_unescape(prefix, buffer, 256);
-   prefixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, prefixKey, 256);
+     log_verbose("ucol_mergeSortkeys test\n");
+     log_verbose("Testing order of the test cases\n");
+     genericLocaleStarter("en", cases, casesSize);
  
-   unescapedLen = u_unescape(suffix, buffer, 256);
-   suffixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, suffixKey, 256);
- 
-   log_verbose("Massaging data with prefixes and different strengths\n");
-   strength = UCOL_PRIMARY;
-   while(strength <= UCOL_IDENTICAL) {
-     log_verbose("Strength %s\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-     ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
      for(i = 0; i<casesSize; i++) {
-       unescapedLen = u_unescape(cases[i], buffer, 256);
-       sortKeysLen[i] = ucol_getSortKey(coll, buffer, unescapedLen, sortkeys[i], 256);
-       ucol_mergeSortkeys(prefixKey, prefixKeyLen, sortkeys[i], sortKeysLen[i], mergedPrefixkeys[i], 256);
-       ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
-       if(i>0) {
-         if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) >= 0) {
-           log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-           log_err("%s\n%s\n", 
-                       ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
-                       ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
-         }
-         if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) >= 0) {
-           log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
-           log_err("%s\n%s\n", 
-                       ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
-                       ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, &l2));
+       sortkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
+       mergedPrefixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
+       mergedSuffixkeys[i] = (uint8_t *)malloc(256*sizeof(uint8_t));
+     }
+ 
+     unescapedLen = u_unescape(prefix, buffer, 256);
+     prefixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, prefixKey, 256);
+ 
+     unescapedLen = u_unescape(suffix, buffer, 256);
+     suffixKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, suffixKey, 256);
+ 
+     log_verbose("Massaging data with prefixes and different strengths\n");
+     strength = UCOL_PRIMARY;
+     while(strength <= UCOL_IDENTICAL) {
+       log_verbose("Strength %s\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
+       ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
+       for(i = 0; i<casesSize; i++) {
+         unescapedLen = u_unescape(cases[i], buffer, 256);
+         sortKeysLen[i] = ucol_getSortKey(coll, buffer, unescapedLen, sortkeys[i], 256);
+         ucol_mergeSortkeys(prefixKey, prefixKeyLen, sortkeys[i], sortKeysLen[i], mergedPrefixkeys[i], 256);
+         ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
+         if(i>0) {
+           if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) >= 0) {
+             log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
+             log_err("%s\n%s\n", 
+                         ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
+                         ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
+           }
+           if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) >= 0) {
+             log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
+             log_err("%s\n%s\n", 
+                         ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
+                         ucol_sortKeyToString(coll, mergedSuffixkeys[i], outBuff2, &l2));
+           }
          }
        }
+       if(strength == UCOL_QUATERNARY) {
+         strength = UCOL_IDENTICAL;
+       } else {
+         strength++;
+       }
      }
-     if(strength == UCOL_QUATERNARY) {
-       strength = UCOL_IDENTICAL;
-     } else {
-       strength++;
-     }
-   }
  
-   {
-     uint8_t smallBuf[3];
-     uint32_t reqLen = 0;
-     log_verbose("testing buffer overflow\n");
-     reqLen = ucol_mergeSortkeys(prefixKey, prefixKeyLen, suffixKey, suffixKeyLen, smallBuf, 3);
-     if(reqLen != (prefixKeyLen+suffixKeyLen-1)) {
-       log_err("Wrong preflight size for merged sortkey\n");
+     {
+       uint8_t smallBuf[3];
+       uint32_t reqLen = 0;
+       log_verbose("testing buffer overflow\n");
+       reqLen = ucol_mergeSortkeys(prefixKey, prefixKeyLen, suffixKey, suffixKeyLen, smallBuf, 3);
+       if(reqLen != (prefixKeyLen+suffixKeyLen-1)) {
+         log_err("Wrong preflight size for merged sortkey\n");
+       }
      }
-   }
  
-   {
-     UChar empty = 0;
-     uint8_t emptyKey[20], abcKey[50], mergedKey[100];
-     int32_t emptyKeyLen = 0, abcKeyLen = 0, mergedKeyLen = 0;
+     {
+       UChar empty = 0;
+       uint8_t emptyKey[20], abcKey[50], mergedKey[100];
+       int32_t emptyKeyLen = 0, abcKeyLen = 0, mergedKeyLen = 0;
  
-     log_verbose("testing merging with sortkeys generated for empty strings\n");
-     emptyKeyLen = ucol_getSortKey(coll, &empty, 0, emptyKey, 20);
-     unescapedLen = u_unescape(cases[0], buffer, 256);
-     abcKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, abcKey, 50);
-     mergedKeyLen = ucol_mergeSortkeys(emptyKey, emptyKeyLen, abcKey, abcKeyLen, mergedKey, 100);
-     if(mergedKey[0] != 2) {
-       log_err("Empty sortkey didn't produce a level separator\n");
-     }
-     /* try with zeros */
-     mergedKeyLen = ucol_mergeSortkeys(emptyKey, 0, abcKey, abcKeyLen, mergedKey, 100);
-     if(mergedKeyLen != 0 || mergedKey[0] != 0) {
-       log_err("Empty key didn't produce null mergedKey\n");
-     }
-     mergedKeyLen = ucol_mergeSortkeys(abcKey, abcKeyLen, emptyKey, 0, mergedKey, 100);
-     if(mergedKeyLen != 0 || mergedKey[0] != 0) {
-       log_err("Empty key didn't produce null mergedKey\n");
-     }
+       log_verbose("testing merging with sortkeys generated for empty strings\n");
+       emptyKeyLen = ucol_getSortKey(coll, &empty, 0, emptyKey, 20);
+       unescapedLen = u_unescape(cases[0], buffer, 256);
+       abcKeyLen = ucol_getSortKey(coll, buffer, unescapedLen, abcKey, 50);
+       mergedKeyLen = ucol_mergeSortkeys(emptyKey, emptyKeyLen, abcKey, abcKeyLen, mergedKey, 100);
+       if(mergedKey[0] != 2) {
+         log_err("Empty sortkey didn't produce a level separator\n");
+       }
+       /* try with zeros */
+       mergedKeyLen = ucol_mergeSortkeys(emptyKey, 0, abcKey, abcKeyLen, mergedKey, 100);
+       if(mergedKeyLen != 0 || mergedKey[0] != 0) {
+         log_err("Empty key didn't produce null mergedKey\n");
+       }
+       mergedKeyLen = ucol_mergeSortkeys(abcKey, abcKeyLen, emptyKey, 0, mergedKey, 100);
+       if(mergedKeyLen != 0 || mergedKey[0] != 0) {
+         log_err("Empty key didn't produce null mergedKey\n");
+       }
   
-   }
+     }
  
-   for(i = 0; i<casesSize; i++) {
-     free(sortkeys[i]);
-     free(mergedPrefixkeys[i]);
-     free(mergedSuffixkeys[i]);
+     for(i = 0; i<casesSize; i++) {
+       free(sortkeys[i]);
+       free(mergedPrefixkeys[i]);
+       free(mergedSuffixkeys[i]);
+     }
+     free(sortkeys);
+     free(mergedPrefixkeys);
+     free(mergedSuffixkeys);
+     free(sortKeysLen);
+     ucol_close(coll);
+     /* need to finish this up */
+   } else {
+     log_data_err("Couldn't open collator");
    }
-   free(sortkeys);
-   free(mergedPrefixkeys);
-   free(mergedSuffixkeys);
-   free(sortKeysLen);
-   ucol_close(coll);
-   /* need to finish this up */
 }
  
 #endif /* #if !UCONFIG_NO_COLLATION */

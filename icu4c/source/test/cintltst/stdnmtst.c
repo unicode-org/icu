@@ -62,14 +62,11 @@ static void TestStandardName()
     UErrorCode err;
 
     /* Iterate over all standards. */
-    log_verbose(".");
     for (i = 0, count = ucnv_countStandards(); i < count-1; ++i) {
         const char *standard;
 
-    log_verbose("+");
         err = U_ZERO_ERROR;
         standard = ucnv_getStandard(i, &err);
-    log_verbose(".");
         if (U_FAILURE(err)) {
             log_err("FAIL: ucnv_getStandard(%d), error=%s\n", i, u_errorName(err));
             res = 0;
@@ -81,7 +78,9 @@ static void TestStandardName()
     }
     err = U_ZERO_ERROR;
     /* "" must be last */
-    if (*ucnv_getStandard((uint16_t)(count-1), &err) != 0) {
+    if(!count) {
+      log_data_err("No standards. You probably have no data.\n");
+    } else if (*ucnv_getStandard((uint16_t)(count-1), &err) != 0) {
         log_err("FAIL: ucnv_getStandard(%d) should return ""\n", count-1);
         res = 0;
     }

@@ -839,112 +839,116 @@ static void TestMaxExpansion()
     u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
         UCOL_DEFAULT_STRENGTH,NULL, &status);
-    iter = ucol_openElements(coll, &ch, 1, &status);
+    if(U_SUCCESS(status) && coll) {
+      iter = ucol_openElements(coll, &ch, 1, &status);
 
-    while (ch < 0xFFFF && U_SUCCESS(status)) {
-        int      count = 1;
-        uint32_t order;
-        int32_t  size = 0;
+      while (ch < 0xFFFF && U_SUCCESS(status)) {
+          int      count = 1;
+          uint32_t order;
+          int32_t  size = 0;
 
-        ch ++;
+          ch ++;
 
-        ucol_setText(iter, &ch, 1, &status);
-        order = ucol_previous(iter, &status);
+          ucol_setText(iter, &ch, 1, &status);
+          order = ucol_previous(iter, &status);
 
-        /* thai management */
-        if (order == 0)
-            order = ucol_previous(iter, &status);
+          /* thai management */
+          if (order == 0)
+              order = ucol_previous(iter, &status);
 
-        while (U_SUCCESS(status) &&
-            ucol_previous(iter, &status) != UCOL_NULLORDER) {
-            count ++;
-        }
+          while (U_SUCCESS(status) &&
+              ucol_previous(iter, &status) != UCOL_NULLORDER) {
+              count ++;
+          }
 
-        size = ucol_getMaxExpansion(iter, order);
-        if (U_FAILURE(status) || size < count) {
-            log_err("Failure at codepoint %d, maximum expansion count < %d\n",
-                ch, count);
-        }
+          size = ucol_getMaxExpansion(iter, order);
+          if (U_FAILURE(status) || size < count) {
+              log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                  ch, count);
+          }
+      }
+
+      /* testing for exact max expansion */
+      ch = 0;
+      while (ch < 0x61) {
+          uint32_t order;
+          int32_t  size;
+          ucol_setText(iter, &ch, 1, &status);
+          order = ucol_previous(iter, &status);
+          size  = ucol_getMaxExpansion(iter, order);
+          if (U_FAILURE(status) || size != 1) {
+              log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                  ch, 1);
+          }
+          ch ++;
+      }
+
+      ch = 0x63;
+      ucol_setText(iter, &ch, 1, &status);
+      temporder = ucol_previous(iter, &status);
+
+      if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 3) {
+          log_err("Failure at codepoint %d, maximum expansion count != %d\n",
+                  ch, 3);
+      }
+
+      ch = 0x64;
+      ucol_setText(iter, &ch, 1, &status);
+      temporder = ucol_previous(iter, &status);
+
+      if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 1) {
+          log_err("Failure at codepoint %d, maximum expansion count != %d\n",
+                  ch, 3);
+      }
+
+      ucol_setText(iter, supplementary, 2, &status);
+      sorder = ucol_previous(iter, &status);
+
+      if (U_FAILURE(status) || ucol_getMaxExpansion(iter, sorder) != 2) {
+          log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                  ch, 2);
+      }
+
+      /* testing jamo */
+      ch = 0x1165;
+
+      ucol_setText(iter, &ch, 1, &status);
+      temporder = ucol_previous(iter, &status);
+      if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) > 3) {
+          log_err("Failure at codepoint %d, maximum expansion count > %d\n",
+                  ch, 3);
+      }
+
+      ucol_closeElements(iter);
+      ucol_close(coll);
+
+      /* testing special jamo &a<\u1160 */
+      rule[0] = 0x26;
+      rule[1] = 0x71;
+      rule[2] = 0x3c;
+      rule[3] = 0x1165;
+      rule[4] = 0x2f;
+      rule[5] = 0x71;
+      rule[6] = 0x71;
+      rule[7] = 0x71;
+      rule[8] = 0x71;
+      rule[9] = 0;
+
+      coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
+          UCOL_DEFAULT_STRENGTH,NULL, &status);
+      iter = ucol_openElements(coll, &ch, 1, &status);
+
+      temporder = ucol_previous(iter, &status);
+      if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 6) {
+          log_err("Failure at codepoint %d, maximum expansion count > %d\n",
+                  ch, 5);
+      }
+
+      ucol_closeElements(iter);
+      ucol_close(coll);
+    } else {
+      log_data_err("Couldn't open collator\n");
     }
-
-    /* testing for exact max expansion */
-    ch = 0;
-    while (ch < 0x61) {
-        uint32_t order;
-        int32_t  size;
-        ucol_setText(iter, &ch, 1, &status);
-        order = ucol_previous(iter, &status);
-        size  = ucol_getMaxExpansion(iter, order);
-        if (U_FAILURE(status) || size != 1) {
-            log_err("Failure at codepoint %d, maximum expansion count < %d\n",
-                ch, 1);
-        }
-        ch ++;
-    }
-
-    ch = 0x63;
-    ucol_setText(iter, &ch, 1, &status);
-    temporder = ucol_previous(iter, &status);
-
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 3) {
-        log_err("Failure at codepoint %d, maximum expansion count != %d\n",
-                ch, 3);
-    }
-
-    ch = 0x64;
-    ucol_setText(iter, &ch, 1, &status);
-    temporder = ucol_previous(iter, &status);
-
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 1) {
-        log_err("Failure at codepoint %d, maximum expansion count != %d\n",
-                ch, 3);
-    }
-
-    ucol_setText(iter, supplementary, 2, &status);
-    sorder = ucol_previous(iter, &status);
-
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, sorder) != 2) {
-        log_err("Failure at codepoint %d, maximum expansion count < %d\n",
-                ch, 2);
-    }
-
-    /* testing jamo */
-    ch = 0x1165;
-
-    ucol_setText(iter, &ch, 1, &status);
-    temporder = ucol_previous(iter, &status);
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) > 3) {
-        log_err("Failure at codepoint %d, maximum expansion count > %d\n",
-                ch, 3);
-    }
-
-    ucol_closeElements(iter);
-    ucol_close(coll);
-
-    /* testing special jamo &a<\u1160 */
-    rule[0] = 0x26;
-    rule[1] = 0x71;
-    rule[2] = 0x3c;
-    rule[3] = 0x1165;
-    rule[4] = 0x2f;
-    rule[5] = 0x71;
-    rule[6] = 0x71;
-    rule[7] = 0x71;
-    rule[8] = 0x71;
-    rule[9] = 0;
-
-    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
-        UCOL_DEFAULT_STRENGTH,NULL, &status);
-    iter = ucol_openElements(coll, &ch, 1, &status);
-
-    temporder = ucol_previous(iter, &status);
-    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 6) {
-        log_err("Failure at codepoint %d, maximum expansion count > %d\n",
-                ch, 5);
-    }
-
-    ucol_closeElements(iter);
-    ucol_close(coll);
 
 }
 
@@ -1051,49 +1055,53 @@ static void TestSmallBuffer()
     }
 
     coll = ucol_open("th_TH", &status);
-    testiter = ucol_openElements(coll, teststr, 500, &status);
-    iter = ucol_openElements(coll, str, 2, &status);
+    if(U_SUCCESS(status) && coll) {
+      testiter = ucol_openElements(coll, teststr, 500, &status);
+      iter = ucol_openElements(coll, str, 2, &status);
 
-    orders     = getOrders(iter, &count);
-    if (count != 2) {
-        log_err("Error collation elements size is not 2 for \\u0300\\u031A\n");
+      orders     = getOrders(iter, &count);
+      if (count != 2) {
+          log_err("Error collation elements size is not 2 for \\u0300\\u031A\n");
+      }
+
+      /*
+      this will rearrange the string data to 250 characters of 0x300 first then
+      250 characters of 0x031A
+      */
+      testorders = getOrders(testiter, &count);
+
+      if (count != 500) {
+          log_err("Error decomposition does not give the right sized collation elements\n");
+      }
+
+      while (count != 0) {
+          /* UCA collation element for 0x0F76 */
+          if ((count > 250 && testorders[-- count] != orders[1]) ||
+              (count <= 250 && testorders[-- count] != orders[0])) {
+              log_err("Error decomposition does not give the right collation element at %d count\n", count);
+              break;
+          }
+      }
+
+      free(testorders);
+      free(orders);
+
+      ucol_reset(testiter);
+      /* ensures that the writable buffer was cleared */
+      if (testiter->iteratordata_.writableBuffer !=
+          testiter->iteratordata_.stackWritableBuffer) {
+          log_err("Error Writable buffer in collation element iterator not reset\n");
+      }
+
+      /* ensures closing of elements done properly to clear writable buffer */
+      ucol_next(testiter, &status);
+      ucol_next(testiter, &status);
+      ucol_closeElements(testiter);
+      ucol_closeElements(iter);
+      ucol_close(coll);
+    } else {
+      log_data_err("Couldn't open collator\n");
     }
-
-    /*
-    this will rearrange the string data to 250 characters of 0x300 first then
-    250 characters of 0x031A
-    */
-    testorders = getOrders(testiter, &count);
-
-    if (count != 500) {
-        log_err("Error decomposition does not give the right sized collation elements\n");
-    }
-
-    while (count != 0) {
-        /* UCA collation element for 0x0F76 */
-        if ((count > 250 && testorders[-- count] != orders[1]) ||
-            (count <= 250 && testorders[-- count] != orders[0])) {
-            log_err("Error decomposition does not give the right collation element at %d count\n", count);
-            break;
-        }
-    }
-
-    free(testorders);
-    free(orders);
-
-    ucol_reset(testiter);
-    /* ensures that the writable buffer was cleared */
-    if (testiter->iteratordata_.writableBuffer !=
-        testiter->iteratordata_.stackWritableBuffer) {
-        log_err("Error Writable buffer in collation element iterator not reset\n");
-    }
-
-    /* ensures closing of elements done properly to clear writable buffer */
-    ucol_next(testiter, &status);
-    ucol_next(testiter, &status);
-    ucol_closeElements(testiter);
-    ucol_closeElements(iter);
-    ucol_close(coll);
 }
 
 /**
@@ -1538,6 +1546,7 @@ static void TestCEBufferOverflow()
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("Rule based collator not created for testing ce buffer overflow\n");
+        return;
     }
 
     /* 0xDCDC is a trail surrogate hence deemed unsafe by the heuristic
