@@ -13,79 +13,81 @@
 #include "unicode/decimfmt.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
-
+#include "unicode/calendar.h"
+#include "unicode/datefmt.h"
 
 // *****************************************************************************
 // class NumberFormatRegressionTest
 // *****************************************************************************
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
+#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
 void 
 NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
-        CASE(0,Test4075713)
-        CASE(1,Test4074620)
-        CASE(2,Test4088161)
-        CASE(3,Test4087245)
-        CASE(4,Test4087535)
-        CASE(5,Test4088503)
-        CASE(6,Test4066646)
-        CASE(7,Test4059870)
-        CASE(8,Test4083018)
-        CASE(9,Test4071492)
-        CASE(10,Test4086575)
-        CASE(11,Test4068693)
-        CASE(12,Test4069754)
-        CASE(13,Test4087251)
-        CASE(14,Test4090489)
-        CASE(15,Test4090504)
-        CASE(16,Test4095713)
-        CASE(17,Test4092561)
-        CASE(18,Test4092480)
-        CASE(19,Test4087244)
-        CASE(20,Test4070798)
-        CASE(21,Test4071005)
-        CASE(22,Test4071014)
-        CASE(23,Test4071859)
-        CASE(24,Test4093610)
-        CASE(25,Test4098741)
-        CASE(26,Test4074454)
-        CASE(27,Test4099404)
-        CASE(28,Test4101481)
-        CASE(29,Test4052223)
-        CASE(30,Test4061302)
-        CASE(31,Test4062486)
-        CASE(32,Test4108738)
-        CASE(33,Test4106658)
-        CASE(34,Test4106662)
-        CASE(35,Test4114639)
-        CASE(36,Test4106664)
-        CASE(37,Test4106667)
-        CASE(38,Test4110936)
-        CASE(39,Test4122840)
-        CASE(40,Test4125885)
-        CASE(41,Test4134034)
-        CASE(42,Test4134300)
-        CASE(43,Test4140009)
-        CASE(44,Test4141750)
-        CASE(45,Test4145457)
-        CASE(46,Test4147295)
-        CASE(47,Test4147706)
-        CASE(48,Test4162198)
-        CASE(49,Test4162852)
-        CASE(50,Test4167494)
-        CASE(51,Test4170798)
-        CASE(52,Test4176114)
-        CASE(53,Test4179818)
-        CASE(54,Test4212072)
-        CASE(55,Test4216742)
-        CASE(56,Test4217661)
-        CASE(57,Test4161100)
-        CASE(58,Test4243011)
-        CASE(59,Test4243108)
+        CASE(0,Test4075713);
+        CASE(1,Test4074620);
+        CASE(2,Test4088161);
+        CASE(3,Test4087245);
+        CASE(4,Test4087535);
+        CASE(5,Test4088503);
+        CASE(6,Test4066646);
+        CASE(7,Test4059870);
+        CASE(8,Test4083018);
+        CASE(9,Test4071492);
+        CASE(10,Test4086575);
+        CASE(11,Test4068693);
+        CASE(12,Test4069754);
+        CASE(13,Test4087251);
+        CASE(14,Test4090489);
+        CASE(15,Test4090504);
+        CASE(16,Test4095713);
+        CASE(17,Test4092561);
+        CASE(18,Test4092480);
+        CASE(19,Test4087244);
+        CASE(20,Test4070798);
+        CASE(21,Test4071005);
+        CASE(22,Test4071014);
+        CASE(23,Test4071859);
+        CASE(24,Test4093610);
+        CASE(25,Test4098741);
+        CASE(26,Test4074454);
+        CASE(27,Test4099404);
+        CASE(28,Test4101481);
+        CASE(29,Test4052223);
+        CASE(30,Test4061302);
+        CASE(31,Test4062486);
+        CASE(32,Test4108738);
+        CASE(33,Test4106658);
+        CASE(34,Test4106662);
+        CASE(35,Test4114639);
+        CASE(36,Test4106664);
+        CASE(37,Test4106667);
+        CASE(38,Test4110936);
+        CASE(39,Test4122840);
+        CASE(40,Test4125885);
+        CASE(41,Test4134034);
+        CASE(42,Test4134300);
+        CASE(43,Test4140009);
+        CASE(44,Test4141750);
+        CASE(45,Test4145457);
+        CASE(46,Test4147295);
+        CASE(47,Test4147706);
+        CASE(48,Test4162198);
+        CASE(49,Test4162852);
+        CASE(50,Test4167494);
+        CASE(51,Test4170798);
+        CASE(52,Test4176114);
+        CASE(53,Test4179818);
+        CASE(54,Test4212072);
+        CASE(55,Test4216742);
+        CASE(56,Test4217661);
+        CASE(57,Test4161100);
+        CASE(58,Test4243011);
+        CASE(59,Test4243108);
+        CASE(60,TestJ691);
 
         default: name = ""; break;
     }
@@ -2297,3 +2299,46 @@ void NumberFormatRegressionTest::Test4243108(void) {
               ", want " + exp);
     }
 }
+
+
+/**
+ * DateFormat should call setIntegerParseOnly(TRUE) on adopted
+ * NumberFormat objects.
+ */
+void NumberFormatRegressionTest::TestJ691(void) {
+    UErrorCode status;
+	Locale loc("fr", "CH");
+	
+	// set up the input date string & expected output
+	UnicodeString udt("11.10.2000", "");
+    UnicodeString exp("11.10.00", "");
+
+	// create a Calendar for this locale
+	Calendar *cal = Calendar::createInstance(loc, status);
+
+	// create a NumberFormat for this locale
+	NumberFormat *nf = NumberFormat::createInstance(loc, status);
+
+    // *** Here's the key: We don't want to have to do THIS:
+    // nf->setParseIntegerOnly(TRUE);
+	
+	// create the DateFormat
+	DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
+	df->adoptCalendar(cal);
+	df->adoptNumberFormat(nf);
+
+	// set parsing to lenient & parse
+	df->setLenient(true);
+	UDate ulocdat = df->parse(udt, status);
+	
+	// format back to a string
+	UnicodeString outString;
+	df->format(ulocdat, outString);
+
+    if (outString != exp) {
+        errln("FAIL: " + udt + " => " + outString);
+    }
+
+    delete df;
+}
+
