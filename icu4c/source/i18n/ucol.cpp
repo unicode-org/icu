@@ -7844,7 +7844,8 @@ ucol_strcollIter( const UCollator    *coll,
   while((sChar = sColl.iterator->next(sColl.iterator)) ==  
     (tChar = tColl.iterator->next(tColl.iterator))) {
     if(sChar == U_SENTINEL) {
-      return UCOL_EQUAL;
+      result = UCOL_EQUAL;
+      goto end_compare;
     }
   }
 
@@ -7877,6 +7878,7 @@ ucol_strcollIter( const UCollator    *coll,
     result = ucol_strcollRegular(&sColl, &tColl, status);
   }
 
+end_compare:
   if(sNormIter || tNormIter) {
     unorm_closeIter(sNormIter);
     unorm_closeIter(tNormIter);
