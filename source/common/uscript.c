@@ -518,7 +518,12 @@ uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode)
 
     uscript_setRunText(result, src, length, pErrorCode);
 
-    /* FIXME: should we free result if setRunText fails? */
+    /* Release the UScriptRun if uscript_setRunText() returns an error */
+    if (U_FAILURE(*pErrorCode)) {
+        uprv_free(result);
+        result = NULL;
+    }
+
     return result;
 }
 
