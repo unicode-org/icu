@@ -38,8 +38,8 @@ static const char* copyRight =   "/* \n"
                                  " *\n"
                                  " *******************************************************************************\n"
                                  " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/16 03:39:10 $ \n"
-                                 " * $Revision: 1.1 $ \n"
+                                 " * $Date: 2002/03/16 04:17:12 $ \n"
+                                 " * $Revision: 1.2 $ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -507,13 +507,13 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
 #if DEBUG
                     {
                         /***************** Test Roundtripping *********************/
-                        int32_t myTargetLen = RLEStringToUCharArray(target,tgtLen,NULL,0,status);
+                        int32_t myTargetLen = rleStringToUCharArray(target,tgtLen,NULL,0,status);
                         uint16_t* myTarget = (uint16_t*) malloc(sizeof(uint16_t) * myTargetLen);
                         int i=0;
                         int32_t retVal=0;
                         uint16_t* saveSrc = (uint16_t*)res->u.fBinaryValue.fData;
                         *status = U_ZERO_ERROR;
-                        retVal=RLEStringToUCharArray(target,tgtLen,myTarget,myTargetLen,status);
+                        retVal=rleStringToUCharArray(target,tgtLen,myTarget,myTargetLen,status);
                         if(U_SUCCESS(*status)){
 
                             for(i=0; i< srcLen;i++){
@@ -546,13 +546,13 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
 #if DEBUG
                     /***************** Test Roundtripping *********************/
                     {
-                        int32_t myTargetLen = RLEStringToByteArray(target,tgtLen,NULL,0,status);
+                        int32_t myTargetLen = rleStringToByteArray(target,tgtLen,NULL,0,status);
                         uint8_t* myTarget = (uint8_t*) malloc(sizeof(uint8_t) * myTargetLen);
                         int i=0;
                         int32_t retVal=0;
 
                         *status = U_ZERO_ERROR;
-                        retVal=RLEStringToByteArray(target,tgtLen,myTarget,myTargetLen,status);
+                        retVal=rleStringToByteArray(target,tgtLen,myTarget,myTargetLen,status);
                         if(U_SUCCESS(*status)){
 
                             for(i=0; i< srcLen;i++){
