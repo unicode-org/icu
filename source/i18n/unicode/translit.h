@@ -10,6 +10,7 @@
 
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
+#include "unicode/utrans.h" // UTransPosition, UTransDirection
 
 class Replaceable;
 class UnicodeFilter;
@@ -222,65 +223,6 @@ class CompoundTransliterator;
  * @draft
  */
 class U_I18N_API Transliterator {
-
-public:
-
-    /**
-     * Direction constant indicating the direction in a transliterator, e.g.,
-     * the forward or reverse rules of a RuleBasedTransliterator.  An "A-B"
-     * transliterator transliterates A to B when operating in the forward
-     * direction, and B to A when operating in the reverse direction.
-     * @draft
-     */
-    enum Direction {
-        FORWARD,
-        REVERSE
-    };
-    /**
-     * @draft
-     */
-    class Position {
-    public:
-        /**
-         * In <code>transliterate()</code>, the beginning index, inclusive
-         */
-        int32_t start;
-
-        /**
-         * In <code>transliterate()</code>, the ending index, exclusive
-         */
-        int32_t limit;
-
-        /**
-         * In <code>transliterate()</code>, the next character to be
-         * considered for transliteration
-         */
-        int32_t cursor;
-
-        /**
-         * In <code>transliterate()</code>, the limit character to be
-         * considered for transliteration
-         */
-        int32_t end;
-
-        /**
-         * Constructor from start, limit.  Sets cursor to start and
-         * end to limit.
-         */
-        Position(int32_t start, int32_t limit);
-
-        /**
-         * Constructor from start, limit, cursor.  Sets
-         * end to limit.
-         */
-        Position(int32_t start, int32_t limit, int32_t cursor);
-
-        /**
-         * Constructor from start, limit, cursor, end.
-         */
-        Position(int32_t start, int32_t limit,
-                 int32_t cursor, int32_t end);
-    };
 
 private:
 
@@ -540,7 +482,7 @@ public:
      * is invalid
      * @draft
      */
-    virtual void transliterate(Replaceable& text, Position& index,
+    virtual void transliterate(Replaceable& text, UTransPosition& index,
                                const UnicodeString& insertion,
                                UErrorCode& status) const;
 
@@ -560,7 +502,7 @@ public:
      * @see #transliterate(Replaceable, int[], String)
      * @draft
      */
-    virtual void transliterate(Replaceable& text, Position& index,
+    virtual void transliterate(Replaceable& text, UTransPosition& index,
                                UChar insertion,
                                UErrorCode& status) const;
     
@@ -576,7 +518,7 @@ public:
      * @see #transliterate(Replaceable, int[], String)
      * @draft
      */
-    virtual void transliterate(Replaceable& text, Position& index,
+    virtual void transliterate(Replaceable& text, UTransPosition& index,
                                UErrorCode& status) const;
 
     /**
@@ -591,7 +533,7 @@ public:
      * @draft
      */
     virtual void finishTransliteration(Replaceable& text,
-                                       Position& index) const;
+                                       UTransPosition& index) const;
 
 private:
 
@@ -603,7 +545,7 @@ private:
      * work.
      */
     void _transliterate(Replaceable& text,
-                        Position& index,
+                        UTransPosition& index,
                         const UnicodeString* insertion,
                         UErrorCode &status) const;
 
@@ -633,7 +575,7 @@ protected:
      * @see #transliterate
      */
     virtual void handleTransliterate(Replaceable& text,
-                                     Position& index,
+                                     UTransPosition& index,
                                      UBool incremental) const = 0;
 
     // C++ requires this friend declaration so CompoundTransliterator
@@ -774,8 +716,8 @@ public:
      * @draft
      */
     static Transliterator* createInstance(const UnicodeString& ID,
-                                          Direction dir = FORWARD,
-                                          ParseError* parseError = 0);
+                                          UTransDirection dir = UTRANS_FORWARD,
+                                          UParseError* parseError = 0);
 
 private:
 
@@ -805,7 +747,7 @@ private:
      * this method returns null if it cannot make use of the given ID.
      */
     static Transliterator* _createInstance(const UnicodeString& ID,
-                                           ParseError* parseError = 0);
+                                           UParseError* parseError = 0);
 
 public:
 
@@ -936,16 +878,5 @@ inline int32_t Transliterator::getMaximumContextLength(void) const {
 inline void Transliterator::setID(const UnicodeString& id) {
     ID = id;
 }
-
-inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit) :
-    start(aStart), limit(aLimit), cursor(aStart), end(aLimit) {}
-
-inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit,
-                                          int32_t aCursor) :
-    start(aStart), limit(aLimit), cursor(aCursor), end(aLimit) {}
-
-inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit,
-                                          int32_t aCursor, int32_t anEnd) :
-    start(aStart), limit(aLimit), cursor(aCursor), end(anEnd) {}
 
 #endif

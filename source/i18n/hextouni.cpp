@@ -237,7 +237,7 @@ const UnicodeString& HexToUnicodeTransliterator::toPattern(void) const {
     return pattern;
 }
 
-void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                      UBool isIncremental) const {
     int32_t cursor = offsets.cursor;
     int32_t limit = offsets.limit;

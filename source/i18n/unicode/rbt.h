@@ -276,9 +276,9 @@ public:
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
-                            ParseError& parseError,
+                            UParseError& parseError,
                             UErrorCode& status);
 
     /**
@@ -290,7 +290,7 @@ public:
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status);
 
@@ -300,7 +300,7 @@ public:
      */
     RuleBasedTransliterator(const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UErrorCode& status);
 
     /**
@@ -346,7 +346,7 @@ public:
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
-    virtual void handleTransliterate(Replaceable& text, Position& offsets,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
 
     /**
@@ -379,9 +379,9 @@ public:
 private:
 
     void _construct(const UnicodeString& rules,
-                    Direction direction,
+                    UTransDirection direction,
                     UErrorCode& status,
-                    ParseError* parseError = 0);
+                    UParseError* parseError = 0);
 };
 
 /**
@@ -394,9 +394,9 @@ private:
 inline RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
-                            ParseError& parseError,
+                            UParseError& parseError,
                             UErrorCode& status) :
     Transliterator(ID, adoptedFilter) {
     _construct(rules, direction, status, &parseError);
@@ -412,7 +412,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
 inline RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
     Transliterator(ID, adoptedFilter) {
@@ -425,7 +425,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
 inline RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& ID,
                             const UnicodeString& rules,
-                            Direction direction,
+                            UTransDirection direction,
                             UErrorCode& status) :
     Transliterator(ID, 0) {
     _construct(rules, direction, status);
@@ -439,7 +439,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& rules,
                             UErrorCode& status) :
     Transliterator(ID, 0) {
-    _construct(rules, FORWARD, status);
+    _construct(rules, UTRANS_FORWARD, status);
 }
 
 /**
@@ -451,7 +451,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
     Transliterator(ID, adoptedFilter) {
-    _construct(rules, FORWARD, status);
+    _construct(rules, UTRANS_FORWARD, status);
 }
 
 #endif

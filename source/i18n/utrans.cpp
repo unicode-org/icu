@@ -104,20 +104,6 @@ void ReplaceableGlue::copy(int32_t start, int32_t limit, int32_t dest) {
  ********************************************************************/
 
 /**
- * Copy a ParseError into a UParseError.
- */
-static void
-_utrans_copyParseError(const ParseError& err, UParseError* parseErr) {
-    parseErr->code = err.code;
-    parseErr->line = err.line;
-    parseErr->offset = err.offset;
-    int32_t len = uprv_min(err.context.length(),
-                           U_PARSE_ERROR_CONTEXT_LEN-1);
-    err.context.extractBetween(0, len, parseErr->context);
-    parseErr->context[len] = 0;
-}
-
-/**
  * Extract a UnicodeString to a char* buffer using the invariant
  * converter and return the actual length.
  */
@@ -154,8 +140,7 @@ utrans_open(const char* id,
     UnicodeString ID(id, ""); // use invariant converter
     Transliterator *trans = NULL;
 
-    trans = Transliterator::createInstance(ID,
-                (Transliterator::Direction) dir, NULL);
+    trans = Transliterator::createInstance(ID, dir, NULL);
 
     if (trans == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -188,13 +173,11 @@ utrans_openRules(const char* id,
     // Use if() to avoid construction of ParseError object on stack
     // unless it is called for by user.
     if (parseErr != NULL) {
-        ParseError err;
-        trans = new RuleBasedTransliterator(ID, ruleStr,
-                        (Transliterator::Direction) dir, NULL, err, *status);
-        _utrans_copyParseError(err, parseErr);
+        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
+                                            NULL, *parseErr, *status);
     } else {
-        trans = new RuleBasedTransliterator(ID, ruleStr,
-                        (Transliterator::Direction) dir, NULL, *status);
+        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
+                                            NULL, *status);
     }
 
     if (trans == NULL) {
@@ -340,9 +323,7 @@ utrans_transIncremental(const UTransliterator* trans,
 
     ReplaceableGlue r(rep, repFunc);
 
-    Transliterator::Position p(pos->start, pos->limit, pos->cursor, pos->end);
-
-    ((Transliterator*) trans)->transliterate(r, p, *status);
+    ((Transliterator*) trans)->transliterate(r, *pos, *status);
 }
 
 U_CAPI void
@@ -393,9 +374,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
     // writeable alias: for this ct, len CANNOT be -1 (why?)
     UnicodeString str(text, textLen, textCapacity);
 
-    Transliterator::Position p(pos->start, pos->limit, pos->cursor, pos->end);
-
-    ((Transliterator*) trans)->transliterate(str, p, *status);
+    ((Transliterator*) trans)->transliterate(str, *pos, *status);
 
     // Copy the string buffer back to text (only if necessary)
     // and fill in *neededCapacity (if neededCapacity != NULL).

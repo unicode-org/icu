@@ -158,7 +158,7 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
 
-    Position offsets(start, limit);
+    UTransPosition offsets = { start, limit, start, limit };
     handleTransliterate(text, offsets, FALSE);
     return offsets.limit;
 }
@@ -236,7 +236,7 @@ void Transliterator::transliterate(Replaceable& text) const {
  * is invalid
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   Position& index,
+                                   UTransPosition& index,
                                    const UnicodeString& insertion,
                                    UErrorCode &status) const {
     _transliterate(text, index, &insertion, status);
@@ -258,7 +258,7 @@ void Transliterator::transliterate(Replaceable& text,
  * @see #transliterate(Replaceable, int[], String)
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   Position& index,
+                                   UTransPosition& index,
                                    UChar insertion,
                                    UErrorCode& status) const {
     UnicodeString str(insertion);
@@ -277,7 +277,7 @@ void Transliterator::transliterate(Replaceable& text,
  * @see #transliterate(Replaceable, int[], String)
  */
 void Transliterator::transliterate(Replaceable& text,
-                                   Position& index,
+                                   UTransPosition& index,
                                    UErrorCode& status) const {
     _transliterate(text, index, 0, status);
 }
@@ -293,7 +293,7 @@ void Transliterator::transliterate(Replaceable& text,
  * #transliterate}
  */
 void Transliterator::finishTransliteration(Replaceable& text,
-                                           Position& index) const {
+                                           UTransPosition& index) const {
     transliterate(text, index.start, index.limit);
 }
 
@@ -305,7 +305,7 @@ void Transliterator::finishTransliteration(Replaceable& text,
  * work.
  */
 void Transliterator::_transliterate(Replaceable& text,
-                                    Position& index,
+                                    UTransPosition& index,
                                     const UnicodeString* insertion,
                                     UErrorCode &status) const {
     if (U_FAILURE(status)) {
@@ -528,7 +528,7 @@ void Transliterator::adoptFilter(UnicodeFilter* filterToAdopt) {
  * @see #registerInstance
  */
 Transliterator* Transliterator::createInverse(void) const {
-    return Transliterator::createInstance(ID, REVERSE);
+    return Transliterator::createInstance(ID, UTRANS_REVERSE);
 }
 
 /**
@@ -543,8 +543,8 @@ Transliterator* Transliterator::createInverse(void) const {
  * @see #getID
  */
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               Transliterator::Direction dir,
-                                               ParseError* parseError) {
+                                               UTransDirection dir,
+                                               UParseError* parseError) {
     Transliterator* t = 0;
     if (ID.indexOf(ID_DELIM) >= 0) {
         UErrorCode status = U_ZERO_ERROR;
@@ -554,7 +554,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             t = 0;
         }
     } else {
-        if (dir == REVERSE) {
+        if (dir == UTRANS_REVERSE) {
             int32_t i = ID.indexOf(ID_SEP);
             if (i >= 0) {
                 UnicodeString inverseID, right;
@@ -624,7 +624,7 @@ const char* Transliterator::getDataDirectory(void) {
  * this method returns null if it cannot make use of the given ID.
  */
 Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
-                                                ParseError* parseError) {
+                                                UParseError* parseError) {
     UErrorCode status = U_ZERO_ERROR;
 
     if (!cacheInitialized) {
@@ -689,8 +689,8 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         if (rules.length() != 0 && U_SUCCESS(status)) {
 
             data = TransliterationRuleParser::parse(rules, isReverse
-                                    ? RuleBasedTransliterator::REVERSE
-                                    : RuleBasedTransliterator::FORWARD,
+                                    ? UTRANS_REVERSE
+                                    : UTRANS_FORWARD,
                                     parseError);
 
             // Double check to see if someone has modified the entry

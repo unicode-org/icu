@@ -45,12 +45,14 @@
 typedef void* UTransliterator;
 
 /**
- * Direction of transliteration, specified when a transliterator is
- * opened.  Related to the C++ enum Transliterator::Direction.
+ * Direction constant indicating the direction in a transliterator,
+ * e.g., the forward or reverse rules of a RuleBasedTransliterator.
+ * Specified when a transliterator is opened.  An "A-B" transliterator
+ * transliterates A to B when operating in the forward direction, and
+ * B to A when operating in the reverse direction.
  * @draft
  */
 typedef enum _UTransDirection {
-    /* IMPORTANT: MUST MATCH Transliterator::Direction */
 
     /**
      * UTRANS_FORWARD means from <source> to <target> for a
@@ -67,6 +69,7 @@ typedef enum _UTransDirection {
      * "A < B".
      */
     UTRANS_REVERSE
+
 } UTransDirection;
 
 /**
@@ -76,8 +79,6 @@ typedef enum _UTransDirection {
  * text.  There are two sets of indices to accomodate users that wish
  * to transliterate a substring but make surrounding text available as
  * context.
- *
- * Related to the C++ class Transliterator::Position.
 
  * TODO FIX:
  * doc that this is input/output

@@ -219,7 +219,7 @@ void UnicodeToHexTransliterator::setUppercase(UBool outputUppercase) {
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
-void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                      UBool isIncremental) const {
     /**
      * Performs transliteration changing all characters to

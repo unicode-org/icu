@@ -20,7 +20,7 @@ int32_t NullTransliterator::transliterate(Replaceable&, int32_t,
     return limit;
 }
 
-void NullTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
+void NullTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                              UBool isIncremental) const {
     offsets.cursor = offsets.limit;
 }
