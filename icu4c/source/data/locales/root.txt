@@ -591,7 +591,7 @@ root {
         ace { "Achinese" }
         ach { "Acoli" } 
         ada { "Adangme" }      
-        ae { "Avestan" }  
+        ae  { "Avestan" }  
         af  { "Afrikaans" }
         afa { "Afro-Asiatic (Other)" }
         afh { "Afrihili" }               
@@ -630,7 +630,7 @@ root {
         bg  { "Bulgarian" }               
         bh  { "Bihari" }   
         bho { "Bhojpuri" }
-        bi { "Bislama" }
+        bi  { "Bislama" }
         bik { "Bikol" }
         bin { "Bini" }
         bla { "Siksika" }
@@ -639,7 +639,7 @@ root {
         bo  { "Tibetan" }
         br  { "Brenton" }
         bra { "Braj" }
-        bs { "Bosnian"}
+        bs  { "Bosnian"}
         btk { "Batak" }
         bua { "Buriat" }                     
         bug { "Buginese" }
@@ -648,10 +648,10 @@ root {
         cai { "Central American Indian (Other)" }
         car { "Carib" }
         cau { "Caucasian (Other) " }              
-        ce { "Chechen" }
+        ce  { "Chechen" }
         ceb { "Cebuano" }
-        cel  { "Celtic (Other)" } 
-        ch { "Chamorro" }
+        cel { "Celtic (Other)" } 
+        ch  { "Chamorro" }
         chb { "Chibcha" }   
         chg { "Chagatai" }
         chk { "Chuukese" }
@@ -665,13 +665,13 @@ root {
         co  { "Corsican" }
         cop { "Coptic" }
         cpe { "Creoles and Pidgins, English-based (Other)" }
-        cpf  { "Creoles and Pidgins, French-based (Other)" }           
+        cpf { "Creoles and Pidgins, French-based (Other)" }           
         cre { "Cree" }
-        crp  { "Creoles and Pidgins (Other)" }
+        crp { "Creoles and Pidgins (Other)" }
         cs  { "Czech" }
-        cu { "Church Slavic" }
+        cu  { "Church Slavic" }
         cus { "Cushitic (Other)" }           
-        cv { "Chuvash" }
+        cv  { "Chuvash" }
         cy  { "Welsh" }              
         da  { "Danish" } 
         dak { "Dakota" }              
@@ -690,11 +690,11 @@ root {
         dz  { "Bhutani" } 
         dzo { "Dzongkha" }
         efi { "Efik" }
-        egy  { "Egyptian (Ancient)" }
+        egy { "Egyptian (Ancient)" }
         eka { "Ekajuk" }
-        el { "Greek" } //  Modern (1453-)
+        el  { "Greek" } //  Modern (1453-)
         elx { "Elamite" }
-        en { "English" }
+        en  { "English" }
         enm { "English, Middle( 1100 -1500)" }
         eo  { "Esperanto" }          
         es  { "Spanish" }            
@@ -723,8 +723,7 @@ root {
         gd  { "Scots Gaelic" }  
         gem { "Germanic (Other)" }
         gil { "Gilbertese" }
-//        gl  { "Gallegan" }  // DUP FIXME
-        gl { "Galician" }
+		gl  { "Gallegan" } 
         gla { "Gaelic (Scots)" }  
         gmh { "German, Middle High (ca.1050-1500)" }
         gn  { "Guarani" }            
@@ -735,7 +734,7 @@ root {
         grb { "Gerbo" }
         grc { "Greek, Ancient (to 1453)" }
         gu  { "Gujarati" }
-        gv   { "Manx" }           
+        gv  { "Manx" }           
         gwi { "Gwich'in" }
         hai { "Haida" }
         hau { "Hausa" }
@@ -745,12 +744,12 @@ root {
         him { "Himachali" }             
         hit { "Hittite" }
         hmn { "Hmong" }             
-        ho { "Hiri Motu" }
+        ho  { "Hiri Motu" }
         hr  { "Croatian" }
         hu  { "Hungarian" }
         hup { "Hupa" }
         hy  { "Armenian" }
-        hz { "Herero" }
+        hz  { "Herero" }
         ia  { "Interlingua" }        
         iba { "Iban" }          
         ibo { "Igbo" }
@@ -760,13 +759,13 @@ root {
         ik  { "Inupiak" }
         ilo { "Iloko" }
         inc { "Indic (Other)" }
-        ine  { "Indo-European" }          
+        ine { "Indo-European" }          
         ira { "Iranian " }            
         iro { "Iroguoian  Languages" }              
         is  { "Icelandic" }
         it  { "Italian" }            
         iu  { "Inukitut" }           
-        iw { "Hebrew" }             
+        iw  { "Hebrew" }             
         ja  { "Japanese" }           
         jpr { "Judeo-Persian" }
         jrb { "Judeo-Arabic" }
@@ -782,12 +781,10 @@ root {
         kha { "Khasi" }
         khi { "Khoisan" }
         kho { "Khotanese" }
-        ki { "Kikuyu" }   
+        ki  { "Kikuyu" }   
         kk  { "Kazakh" }
-        kl  { "Greenlandic" }        
-//        kl { "Kalaallisut" } // DUP FIXME
-        km  { "Cambodian" }          
-//        km { "Khmer" }  // DUP FIXME
+        kl  { "Kalaallisut" }   
+        km  { "Khmer" }  
         kmb { "Kimbundu" }         
         kn  { "Kannada" }
         ko  { "Korean" }   
@@ -801,19 +798,19 @@ root {
         ku  { "Kurdish" }
         kum { "Kumyk" }      
         kut { "Kutenai" }
-        kv { "Komi" }
-        kw { "Cornish" }            
+        kv  { "Komi" }
+        kw  { "Cornish" }            
         ky  { "Kirghiz" }
         la  { "Latin" }              
         lad { "Ladino" }
         lah { "Lahnda" }
         lam { "Lamba" }
         lb  { "Letzeburgesch" } 
-        lez  { "Lezghian" }
+        lez { "Lezghian" }
         lin { "Lingala" }
         lit { "Lithuanian" }
         ln  { "Lingala" }            
-        lo { "Lao" }
+        lo  { "Lao" }
         lol { "Mongo" }          
         loz { "Lozi" }
         lt  { "Lithuanian" }         
@@ -824,7 +821,7 @@ root {
         lun { "Lunda" }
         luo { "Lua" }
         lus { "Lushai" }
-        lv { "Latvian (Lettish)" }
+        lv  { "Latvian (Lettish)" }
         mad { "Madurese" }
         mag { "Magahi" }
         mai { "Maithili" }
@@ -864,12 +861,11 @@ root {
         nah { "Nahuatl" }
         nai { "North American Indian (Ohter)" }
         nb  { "Norwegian Bokm\u00e5l" }    
-        nd { "Ndebele, North" }   
-        nds { "Los Saxon; Low German" }
-//        nds { "Low German; Low Saxon" } // DUP FIXME
+        nd  { "Ndebele, North" }   
+        nds { "Low German; Low Saxon" } 
         ne  { "Nepali" }  
         new { "Newari" }    
-        ng { "Ndonga" }   
+        ng  { "Ndonga" }   
         nia { "Nias" }
         nic { "Niger - Kordofanian" }
         niu { "Niuean" }
@@ -883,11 +879,9 @@ root {
         nv  {"Navajo"}
         ny  { " Chichewa; Nyanja" }           
         nym { "Nyamwezi" }
-        nyo { "Nyankole" }
-//        nyo { "Nyoro" } // DUP FIXME
+        nyo { "Nyoro" } 
         nzi { "Nzima" }
-        oc  { "Occitan" } 
-//        oc { " Provençal; Occitan (post 1500) "} // DUP FIXME 
+        oc  { "Proven\u00E7al; Occitan (post 1500)"}
         oji { "Ojibwa" }          
         om  { "Oromo (Afan)" }
         or  { "Oriya" }              
@@ -917,14 +911,13 @@ root {
         rap { "Rapanui" }
         rar { "Rarotongan" }
         rm  { "Rhaeto-Romance" }
-        rn  { "Kirundi" }            
-//        rn { "Rundi" }         // DUP FIXME
+        rn  { "Rundi" }        
         ro  { "Romanian" }   
         roa { "Romance (Other)" }
         rom { "Romany" }    
         ru  { "Russian" }     
         rw  { "Kinyarwanda" }        
-        sa { "Sanskrit" }
+        sa  { "Sanskrit" }
         sad { "Sandawe" }   
         sah { "Yakut" }
         sai { "South American Indian (Ohter)" }           
@@ -934,8 +927,10 @@ root {
         sat { "Santali" }
         sc  { "Sardinian" }  
         sco { "Scots" }
-        sd { "Sindhi" }
+        sd  { "Sindhi" }
         se  { "Northern Sami" }
+// http://lcweb.loc.gov/standards/iso639-2/englangn.html 
+// should provide the correct language code soon 
 //        se { "Sami Languages" }        // DUP FIXME
         sel { "Selkup" }
         sem { "Semitic" }         
@@ -944,10 +939,10 @@ root {
         sgn { "Sign Languages" }
         sh  { "Serbo-Croatian" }     
         shn { "Shan" }   
-        si { "Sinhalese" }
+        si  { "Sinhalese" }
         sid { "Sidamo" }
         sio { "Siouan Languages" }
-        sit  { "Sino-Tibetan (Other)" }
+        sit { "Sino-Tibetan (Other)" }
         sk  { "Slovak" }             
         sl  { "Slovenian" }   
         sm  { "Samoan" }          
@@ -958,12 +953,10 @@ root {
         son { "Songhai" }
         sq  { "Albanian" }
         sr  { "Serbian" }   
-        srr  { "Serer" }
-        ss  { "Siswati" }            
-//        ss { "Swati" }   // DUP FIXME
-        ssa { "Nilo-Saharam" }      
-        st  { "Sesotho" }            
-//        st  { "Sotho, Southern" } // DUP FIXME
+        srr { "Serer" }     
+        ss  { "Swati" }   
+        ssa { "Nilo-Saharam" }               
+        st  { "Sotho, Southern" }
         su  { "Sundanese" }
         suk { "Sukuma" }
         sus { "Susu" }          
@@ -986,10 +979,9 @@ root {
         tl  { "Tagalog" }
         tli { "Tlingit" }          
         tmh { "Tamashek" }      
-        tn  { "Setswana" }                 
-//        tn { "Tswana" } // DUP FIXME
-        tog  { "Tonga (Nyasa)" }
-        ton  { "Tongan (Tonga Islands)" }
+        tn  { "Tswana" }
+        tog { "Tonga (Nyasa)" }
+        ton { "Tongan (Tonga Islands)" }
         tr  { "Turkish" }            
         ts  { "Tsonga" }    
         tsi { "Tsimshian" }           
@@ -1072,7 +1064,6 @@ root {
             "%",
             "0",
             "#",
-//          "+",
             "-",
             "E",
             "\u2030",
