@@ -28,8 +28,7 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
 ## Target information
 TARGET = genccode
 
-CPPFLAGS += $(BIR_CPPFLAGS)
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M) $(LIBICUTOOLUTIL)
 
 OBJECTS = genccode.o

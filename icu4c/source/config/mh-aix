@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.30 2002/05/07 03:10:13 srl Exp $
+## $Id: mh-aix,v 1.31 2002/05/13 23:50:12 grhoten-oss Exp $
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
@@ -12,17 +12,17 @@
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
-## Commands to compile
-COMPILE.c=	$(CC) -qroconst $(CPPFLAGS) $(CFLAGS) $(DEFS) -c
-COMPILE.cc=	$(CXX) -qroconst $(CPPFLAGS) $(CXXFLAGS) $(DEFS) -c
+# Make the strings readonly. This helps in the common data library
+CFLAGS += -qroconst
+CXXFLAGS += -qroconst
 
 LDFLAGS += -brtl
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-LINK.c=		$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 SHLIB.c=	$(AIX_SHLIB) -p 5000 $(LDFLAGS)

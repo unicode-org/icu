@@ -39,8 +39,7 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-CPPFLAGS += $(LIBCPPFLAGS)
-DEFS += -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
+CPPFLAGS += -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = ucln_in.o \

@@ -45,12 +45,11 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-CPPFLAGS += $(LIBCPPFLAGS)
-
 # Data packaging options are set at configure time with --with-data-packaging.
-DEFS += -I. -I$(srcdir) -DICU_DATA_DIR=\"$(ICUDATA_DIR)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\" @DATA_PACKAGING_CPPFLAGS@
+CPPFLAGS += -I. -I$(srcdir) $(LIBCPPFLAGS) @DATA_PACKAGING_CPPFLAGS@
+DEFS += -DICU_DATA_DIR=\"$(ICUDATA_DIR)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
 
-# todo:  need t make $(LIBICUDT) conditional on using dll-based data.
+# $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)
 
 OBJECTS = putil.o locmap.o mutex.o umutex.o \

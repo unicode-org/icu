@@ -25,7 +25,7 @@ CLEANFILES = *~ $(TARGET).$(SECTION) $(DEPS)
 ## Target information
 TARGET = genuca
 
-DEFS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = genuca.o 
