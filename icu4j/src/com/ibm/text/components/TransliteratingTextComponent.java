@@ -13,7 +13,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.2 $ $Date: 2000/02/24 19:51:20 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -22,7 +22,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
     private Transliterator translit = null;
 
     // Index into getText() where the start of transliteration is.
-    // As we commit text during keyboardTransliteration, we advance
+    // As we commit text during transliteration, we advance
     // this.
     private int start = 0;
 
@@ -92,44 +92,43 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         buf.getStringBuffer().append(getText().substring(start,
                                                          getSelectionStart()));
 
-        int[] index = new int[] { 0, getSelectionStart() - start,
-                                  cursor - start};
+        Transliterator.Position index =
+            new Transliterator.Position(0, getSelectionStart() - start,
+                                        cursor - start);
 
         StringBuffer log = null;
         if (DEBUG) {
             log = new StringBuffer();
             log.append("start " + start + ", cursor " + cursor);
             log.append(", sel " + getSelectionStart());
-            log.append(", {" + index[0] + ", " + index[1] + ", " + index[2] + "}, ");
+            log.append(", {" + index.start + ", " + index.limit + ", " + index.cursor + "}, ");
             log.append('"' + buf.toString() + "\" + '" + ch + "' -> \"");
         }
 
-        translit.keyboardTransliterate(buf, index, ch);
+        translit.transliterate(buf, index, ch);
         replaceRange(buf.toString(), start, getSelectionEnd());
         // At this point start has been changed by the callback to
         // resetTransliteratorStart() via replaceRange() -- so use our
         // local copy, saveStart.
 
-        // The START index is zero-based.  On entry to keyboardTransliterate(),
+        // The START index is zero-based.  On entry to transliterate(),
         // it was zero.  We can therefore just add it to our original
         // getText()-based index value of start (in saveStart) to get
         // the new getText()-based start.
-        start = saveStart + index[Transliterator.START];
+        start = saveStart + index.start;
 
         // Make the cursor getText()-based.  The CURSOR index is zero-based.
-        cursor = start + index[Transliterator.CURSOR]
-            - index[Transliterator.START];
+        cursor = start + index.cursor - index.start;
 
         if (DEBUG) {
             String out = buf.toString();
-            log.append(out.substring(0, index[Transliterator.START])).
+            log.append(out.substring(0, index.start)).
                 append('{').
-                append(out.substring(index[Transliterator.START],
-                                     index[Transliterator.CURSOR])).
+                append(out.substring(index.start, index.cursor)).
                 append('|').
-                append(out.substring(index[Transliterator.CURSOR])).
+                append(out.substring(index.cursor)).
                 append('"');
-            log.append(", {" + index[0] + ", " + index[1] + ", " + index[2] + "}, ");
+            log.append(", {" + index.start + ", " + index.limit + ", " + index.cursor + "}, ");
             log.append("start " + start + ", cursor " + cursor);
             log.append(", sel " + getSelectionStart());
             System.out.println(escape(log.toString()));
