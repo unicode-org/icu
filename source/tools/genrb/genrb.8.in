@@ -4,6 +4,8 @@
 .\"
 .\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
+.\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\"
 .TH GENRB 8 "19 March 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genrb
