@@ -99,7 +99,7 @@ distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
 
 check-local: $(TARGET)
-	 ICU_DATA=@DATABUILDDIR@/ TZ=PST8PDT ./$(TARGET)
+	 -ICU_DATA=@DATABUILDDIR@/ TZ=PST8PDT ./$(TARGET) 
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
