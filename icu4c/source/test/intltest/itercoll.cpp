@@ -17,8 +17,8 @@
 
 static UErrorCode status = U_ZERO_ERROR;
 
-const UnicodeString CollationIteratorTest::test1 = "What subset of all possible test cases?";
-const UnicodeString CollationIteratorTest::test2 = "has the highest probability of detecting";
+const UnicodeString CollationIteratorTest::test1("What subset of all possible test cases?", "");
+const UnicodeString CollationIteratorTest::test2("has the highest probability of detecting", "");
 
 CollationIteratorTest::CollationIteratorTest()
 {
