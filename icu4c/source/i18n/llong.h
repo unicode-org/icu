@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
 // machine dependent value, need to move
 //#define __u_IntBits 32
 
-static class llong {
+class llong {
 private:
     uint32_t lo;
     int32_t hi;
