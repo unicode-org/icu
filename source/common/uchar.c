@@ -1207,6 +1207,8 @@ isFollowedByDotAbove(const UChar *src, UTextOffset srcIndex, int32_t srcLength) 
     return FALSE; /* no dot above following */
 }
 
+/* lowercasing -------------------------------------------------------------- */
+
 U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
@@ -1421,6 +1423,8 @@ notSpecial:
     return destIndex;
 }
 
+/* uppercasing -------------------------------------------------------------- */
+
 U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
@@ -1583,6 +1587,108 @@ notSpecial:
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
     return destIndex;
+}
+
+/* titlecasing -------------------------------------------------------------- */
+
+/* internal */
+U_CAPI int32_t U_EXPORT2
+u_internalTitleCase(UChar32 c, UChar *dest, int32_t destCapacity, const char *locale) {
+    uint32_t props=GET_PROPS(c);
+    UChar32 title;
+    int32_t i, length;
+
+    title=c;
+    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
+        if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
+            /* here, titlecase is same as uppercase */
+            title=c-GET_SIGNED_VALUE(props);
+        }
+    } else if(HAVE_DATA) {
+        const UChar *u;
+        uint32_t *pe=GET_EXCEPTIONS(props);
+        uint32_t firstExceptionValue=*pe, specialCasing;
+        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_SPECIAL_CASING)) {
+            i=EXC_SPECIAL_CASING;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            specialCasing=*pe;
+            /* fill u and length with the case mapping result string */
+            if(specialCasing&0x80000000) {
+                /* use hardcoded conditions and mappings */
+                int32_t loc=getCaseLocale(locale);
+
+                if(loc==LOC_TURKISH && c==0x69) {
+                    /* turkish: i maps to dotted I */
+                    title=0x130;
+                    goto single;
+#if 0
+                /*
+                 * ### TODO post ICU 2.0:
+                 * This internal API currently does not have context input,
+                 * therefore can not handle context-sensitive mappings.
+                 *
+                 * Since this is used in transliteration, where the source text
+                 * is in a Replaceable, we probably need to pass in the source text
+                 * as a UCharIterator.
+                 *
+                 * In order to generalize this, we might need to provide functions
+                 * for all case mappings (lower/upper/title/case) with
+                 * UCharIterator input.
+                 * All condition-checking functions like isAfter_i would then
+                 * take a UCharIterator as input.
+                 */
+                } else if(loc==LOC_LITHUANIAN && c==0x307 && isAfter_i(src, srcIndex-1)) {
+                    /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
+                    return 0; /* remove the dot (continue without output) */
+#endif
+                } else {
+                    /* no known conditional special case mapping, use a normal mapping */
+                    pe=GET_EXCEPTIONS(props); /* restore the initial exception pointer */
+                    firstExceptionValue=*pe;
+                    goto notSpecial;
+                }
+            } else {
+                /* get the special case mapping string from the data file */
+                u=ucharsTable+(specialCasing&0xffff);
+                length=(int32_t)*u++;
+
+                /* skip the lowercase and uppercase result strings */
+                u+=(length&0x1f)+((length>>5)&0x1f);
+                length=(length>>10)&0x1f;
+            }
+
+            /* copy the result string */
+            i=0;
+            while(i<length && i<destCapacity) {
+                dest[i++]=*u++;
+            }
+            return length;
+        }
+
+notSpecial:
+        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_TITLECASE)) {
+            i=EXC_TITLECASE;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            title=(UChar32)*pe;
+        } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
+            /* here, titlecase is same as uppercase */
+            i=EXC_UPPERCASE;
+            ++pe;
+            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+            title=(UChar32)*pe;
+        }
+    }
+
+single:
+    length=UTF_CHAR_LENGTH(title);
+    if(length<=destCapacity) {
+        /* write title to dest */
+        i=0;
+        UTF_APPEND_CHAR_UNSAFE(dest, i, title);
+    }
+    return (title==c) ? -length : length;
 }
 
 /* case folding ------------------------------------------------------------- */
