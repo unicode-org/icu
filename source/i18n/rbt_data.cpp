@@ -9,6 +9,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "umutex.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
 
@@ -22,7 +23,7 @@ U_NAMESPACE_BEGIN
 
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
  : UMemory(), ruleSet(status),
-    variableNames(0), variables(0)
+    variableNames(0), variables(0), fLock(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -43,7 +44,8 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
     UMemory(other), ruleSet(other.ruleSet),
     variablesBase(other.variablesBase),
-    variablesLength(other.variablesLength)
+    variablesLength(other.variablesLength),
+    fLock(NULL)     /* The mutex must NOT be copied from the source data */
 {
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);
@@ -83,6 +85,7 @@ TransliterationRuleData::~TransliterationRuleData() {
         }
         uprv_free(variables);
     }
+    umtx_destroy(&fLock);
 }
 
 UnicodeFunctor*
@@ -102,6 +105,18 @@ TransliterationRuleData::lookupReplacer(UChar32 standIn) const {
     UnicodeFunctor *f = lookup(standIn);
     return (f != 0) ? f->toReplacer() : 0;
 }
+
+void
+TransliterationRuleData::lock() {
+    umtx_lock(&fLock);
+}
+
+void
+TransliterationRuleData::unlock() {
+    umtx_unlock(&fLock);
+}
+
+
 
 U_NAMESPACE_END
 

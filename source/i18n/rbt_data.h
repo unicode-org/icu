@@ -9,6 +9,7 @@
 #define RBT_DATA_H
 
 #include "unicode/utypes.h"
+#include "unicode/uclean.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
 
@@ -129,8 +130,19 @@ public:
      */
     UnicodeReplacer* lookupReplacer(UChar32 standIn) const;
 
+    /**
+     *  Acquire the mutex lock for this data.
+     */
+    void lock();
+
+    /**
+     *  Release the mutex lock for this data
+     */
+    void unlock();
+
 private:
     TransliterationRuleData &operator=(const TransliterationRuleData &other); // forbid copying of this class
+    UMTX    fLock;
 };
 
 U_NAMESPACE_END
