@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/13 21:25:51 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/07/18 18:19:28 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -33,15 +33,44 @@ public final class NormalizerBuilder
 
     private UInfo uinfo;
 
+    /**
+     * Map char->String.  Each entry maps a character with a
+     * decomposition (either canonical or compatibility) to that
+     * decomposition.  The decomposition is in canonical order.
+     */
     private DecompMap decomps = new DecompMap();
 
+    /**
+     * Map of characters whose full canonical decomposition is
+     * identical to their full compatibility decomposition.
+     */
     private DecompMap explodeCompat = new DecompMap();
+
+    /**
+     * Map of characters with a decomposition that are neither
+     * in explodeCompat nor in permutedCompositions.
+     */
     private DecompMap explodeOnly   = new DecompMap();
 
+    /**
+     * Map of String->char of permutations that compose to a
+     * character.  This does not include singletons or other
+     * composition exclusions.  It is an inverse list, with valid
+     * permutations, for canonical decomposition.
+     */
     private CompMap permutedCompositions = new CompMap();
     private CompMap binaryCompositions = new CompMap();
 
+    /**
+     * A set of characters that form the base of a combining
+     * sequence.
+     */
     private CharSet bases = new CharSet();
+
+    /**
+     * A set of characters that form the combining character of
+     * a combining sequence.
+     */
     private CharSet combining = new CharSet();
 
     private Map pairExplosions = new HashMap();
@@ -55,8 +84,10 @@ public final class NormalizerBuilder
     private String fOutDir = null; // output directory for either Java or C++
 
     /**
-     * The highest Unicode character that has a canonical decomposition.
-     * (i.e. largest char that can result from a primary canonical composition.)
+     * The highest Unicode character that has a canonical
+     * decomposition.  (i.e. largest char that can result from a
+     * primary canonical composition.)  This is the largest char in
+     * permutedCompositions.
      */
     char largestChar = 0;
 
@@ -71,7 +102,7 @@ public final class NormalizerBuilder
             else if (args[i].equals("-write")) {
                 fWriteData = true;
             }
-            else if (args[i].equals("-verbose")) {
+            else if (args[i].equals("-verbose") || args[i]. equals("-v")) {
                 fVerbose = true;
             }
             else if (args[i].equals("-size")) {
@@ -103,13 +134,16 @@ public final class NormalizerBuilder
 
         boolean canonicalOnly = true;
 
+        // Build decomps, a char->String mapping of characters to their
+        // decompositions, either canonical or compatibility.
         createDecompositions();
 
         outv("\nGenerating permuted compositions...");
 
-        // Form the list of all the permuted sequences that are canonically
-        // equivalent to the canonical decompositions.
-        // As a by-product, find out which are not combining character sequences,
+        // Form the list of all the permuted sequences that are
+        // canonically equivalent to the canonical decompositions.  As
+        // a by-product, find out which are not combining character
+        // sequences.
 
         for (char ch = 0; ch < 0xFFFF; ch++) {
             String decomp = decomps.get(ch);
@@ -123,13 +157,22 @@ public final class NormalizerBuilder
                     explodeCompat.put(ch, uinfo.getFullDecomposition(ch, false));
                     done = true;
                 }
+                // It's always a combining base sequence, so removed last check - liu
                 if (uinfo.hasCanonicalDecomposition(ch) && decomp.length() > 1
-                    && !uinfo.isExcludedComposition(ch) && uinfo.isCBS(decomp))
+                    && !uinfo.isExcludedComposition(ch) /*&& uinfo.isCBS(decomp)*/)
                 {
                     if (decomp.length() <= 2) {
                         permutedCompositions.put(decomp, ch);
                     }
                     else {
+                        /* Create a comprehensive list of
+                         * permutations.  Assume the first char is a
+                         * base char, so don't permute it into the
+                         * middle of the string -- just concatenate it
+                         * onto the front.  However, there may be
+                         * embedded base characters, so we do a
+                         * further check for canonical decomposition
+                         * equivalence below. */
                         List alternatives = concat(decomp.charAt(0),
                             jumble(decomp.substring(1, decomp.length())));
 
@@ -348,10 +391,10 @@ public final class NormalizerBuilder
 
 
     /**
-     * Generate a Map of all decompositions in Unicode.
-     * The keys in the map are MutableChar objects, one for each character that has a decomposition.
-     * The values are String objects containing the full decomposition for the character,
-     * in canonical order.
+     * Generate a Map of all decompositions in Unicode.  The keys in
+     * the map are MutableChar objects, one for each character that
+     * has a decomposition.  The values are String objects containing
+     * the full decomposition for the character, in canonical order.
      */
     private void createDecompositions()
     {
@@ -381,13 +424,17 @@ public final class NormalizerBuilder
                 String decomp = uinfo.getFullDecomposition(ch, canon);
                 temp.setLength(0);
                 temp.append(decomp);
-                uinfo.fixCanonical(temp);
+                uinfo.fixCanonical(temp); // put into canonical order
 
                 decomps.put(ch, temp.toString() );
             }
         }
     }
 
+    /**
+     * Modify a list in place by prepending the given character to all
+     * of its elements, which are assumed to be strings.
+     */
     static List concat(char ch, List a) {
         for (int i = 0; i < a.size(); ++i) {
             a.set(i, ch + (String)a.get(i));
@@ -694,8 +741,31 @@ public final class NormalizerBuilder
                 // However, if the character has an explosion we *don't* need it, because
                 // we'll never see it, only the results of its explosion.
                 //
-                addChar(lookup, ch, COMBINING, 0);
-                nccCount++;
+
+                // Normalizer is showing two bugs.  These are:
+                //        0041 0316 0300  =>  0041 0316 0300  ;  expect 00C0 0316
+                //   class:  0  220  230
+                //
+                //        0063 0321 0327  =>  0063 0327 0321  ;  expect 0063 0321 0327
+                //   class:  0  202  202
+                // 
+                // To fix these, I'm eliminating from the table all combining
+                // characters with index zero, since these seem to be the
+                // problem.  I'm instead treating these as ordinary combining
+                // charactes.  This may result in larger tables and failure to
+                // short-circuit certain operations, but it appears to create
+                // correct data.  This should be revisited by a normalization
+                // expert at some point. - Liu
+
+                // ORIGINAL CODE =>
+                // addChar(lookup, ch, COMBINING, 0);
+                // nccCount++;
+                // <= ORIGINAL CODE
+
+                // EXPERIMENTAL =>
+                classMap[cclass] = 1;       // Mark this combining class as being used
+                addChar(lookup, ch, COMBINING, combineCount++);
+                // <= EXPERIMENTAL
             }
         }
 
@@ -775,6 +845,10 @@ public final class NormalizerBuilder
             if (type == COMBINING) {
                 int ind = value >>> INDEX_SHIFT;
                 int cclass = uinfo.getCanonicalClass(ch);
+                if (typeMask[ind] != 0 && typeMask[ind] != classMap[cclass]) {
+                    err("Overwriting typeMask[" + ind + "], was " +
+                        typeMask[ind] + ", changing to " + classMap[cclass] + " for class " + cclass);
+                }
                 typeMask[ind] = classMap[cclass];
             }
         }
@@ -935,22 +1009,6 @@ public final class NormalizerBuilder
     //--------------------------------------------------------------------------------
     // Source file headers
     //
-
-    static final String kCHeader =
-         "/*\n"
-        +" * (C) Copyright IBM Corp. 1997-1998 - All Rights Reserved\n"
-        +" *\n"
-        +" * The program is provided 'as is' without any warranty express or\n"
-        +" * implied, including the warranty of non-infringement and the implied\n"
-        +" * warranties of merchantibility and fitness for a particular purpose.\n"
-        +" * IBM will not be liable for any damages suffered by you as a result\n"
-        +" * of using the Program. In no event will IBM be liable for any\n"
-        +" * special, indirect or consequential damages or lost profits even if\n"
-        +" * IBM has been advised of the possibility of their occurrence. IBM\n"
-        +" * will not be liable for any third party claims against you.\n"
-        +" */\n"
-        + "// This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.\n"
-        +"\n";
 
     void out(String str) {
         System.out.println(str);
