@@ -158,7 +158,7 @@ protected:
     /*The function to get the Test Directory*/
     static const char* getTestDirectory(void);
 public:
-    static void IntlTest::setICU_DATA();       // Set up ICU_DATA if necessary.
+    static void setICU_DATA();       // Set up ICU_DATA if necessary.
 
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks

@@ -262,6 +262,32 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
 U_CAPI void U_EXPORT2
 udata_setCommonData(const void *data, UErrorCode *err);
 
+
+/**
+ * This function bypasses the normal ICU data loading process for application-specific
+ * data and allows you to force the it to come out of a user-specified
+ * pointer.
+ * 
+ * The format of this data is that of the icu common data file, 'icudata.dat'
+ * Read in or memory map the whole file and then pass the address to the start of the
+ * data to this function.
+ *
+ * Warning:  setAppData will fail with a U_USING_DEFAULT_ERROR error if
+ *           data with the specifed path that has already been opened, or
+ *           if setAppData with the same path has already been called.
+ *           Any such calls to setAppData will have no effect.
+ *
+ *
+ * @draft
+ * @param path pointer to the path name by which the application will refer
+ *             to (open) this data.
+ * @param data pointer to the data
+ * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
+ *
+ */
+U_CAPI void U_EXPORT2
+udata_setAppData(const char *path, const void *data, UErrorCode *err);
+
 U_CDECL_END
 
 #endif

@@ -27,7 +27,7 @@ SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADI
 OBJDATADIR=.
 
 # relative lib links from pkgdata are the same as for tmp
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR)
 TOOLDIR=$(top_builddir)/tools
 
 ## List of phony targets

@@ -117,17 +117,21 @@
 #   if U_IS_BIG_ENDIAN
    /* EBCDIC - should always be BE */
 #     define U_ICUDATA_TYPE_LETTER "e"
+#     define U_ICUDATA_TYPE_LITLETTER e
 #   else
 #     error "Don't know what to do with little endian EBCDIC!"
 #     define U_ICUDATA_TYPE_LETTER "x"
+#     define U_ICUDATA_TYPE_LITLETTER x
 #   endif
 #else
 #   if U_IS_BIG_ENDIAN
       /* Big-endian ASCII */
 #     define U_ICUDATA_TYPE_LETTER "b"
+#     define U_ICUDATA_TYPE_LITLETTER b
 #   else
       /* Little-endian ASCII */
 #     define U_ICUDATA_TYPE_LETTER "l"
+#     define U_ICUDATA_TYPE_LITLETTER l
 #   endif
 #endif
 
@@ -145,10 +149,18 @@
  *                              the literal text U_ICU_VERSION_MAJOR_NUM into the name.
  *                              The net result will be something of the form
  *                                  #define U_ICU_ENTRY_POINT icudt19_dat
+ *                              Note & TODO:  On Unixes, the name includes the endianness letter
+ *                                  e.g. icudt19l_dat.  It should be removed, which will
+ *                                  involve doing something in the area of the data build.
  */
-#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
-#define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
-#define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
+#ifdef WIN32
+#pragma warning( disable : 4003 )  /* Disable 'not enough actual parameters for macro' warning  */
+#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM) 
+#else
+#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICUDATA_TYPE_LITLETTER)
+#endif
+#define U_DEF2_ICUDATA_ENTRY_POINT(major, minor, letter) U_DEF_ICUDATA_ENTRY_POINT(major, minor, letter)
+#define U_DEF_ICUDATA_ENTRY_POINT(major, minor, letter) icudt##major##minor##letter##_dat
 
 #if 0
 #define FOO(X) STRINGIZE(X)

@@ -21,6 +21,7 @@
 #include "cstring.h"
 #include "unicode/udata.h"
 #include "unicode/uversion.h"
+#include "uhash.h"
 
 #ifdef OS390
 #include <stdlib.h>
@@ -236,8 +237,8 @@ static UBool s390dll = TRUE;
    therefore they are defined later
  */
 
-#define MAP_WIN32 1
-#define MAP_POSIX 2
+#define MAP_WIN32       1
+#define MAP_POSIX       2
 #define MAP_FILE_STREAM 3
 
 #ifdef WIN32
@@ -283,34 +284,37 @@ static UBool s390dll = TRUE;
 
 /* constants for UDataMemory flags: type of data memory */
 enum {
-    NO_DATA_MEMORY,
-    FLAT_DATA_MEMORY,
-    DLL_DATA_MEMORY
+    NO_DATA_MEMORY   = 0,
+    FLAT_DATA_MEMORY = 1,
+    DLL_DATA_MEMORY  = 2
 };
+#define DATA_MEMORY_TYPE_MASK    0xf
 
 /* constants for UDataMemory flags: type of TOC */
 enum {
-    NO_TOC,
-    OFFSET_TOC,
-    POINTER_TOC,
-    DLL_INTRINSIC_TOC
+    NO_TOC              =0x00,
+    OFFSET_TOC          =0x10,
+    POINTER_TOC         =0x20,
+    DLL_INTRINSIC_TOC   =0x30
 };
+#define TOC_TYPE_MASK            0xf0
 
 /* constants for UDataMemory flags: type of TOC */
-#define DATA_MEMORY_TYPE_MASK 0xf
-#define TOC_TYPE_SHIFT 4
-#define TOC_TYPE_MASK 0xf
-#define SET_DATA_POINTER_SHIFT 30
-#define DYNAMIC_DATA_MEMORY_SHIFT 31
+#define SET_DATA_POINTER_FLAG     0x40000000
+#define DYNAMIC_DATA_MEMORY_FLAG  0x80000000
 
-typedef struct {
-    uint16_t headerSize;
-    uint8_t magic1, magic2;
+#define IS_DATA_MEMORY_LOADED(pData) ((pData)->flags!=0)
+
+
+typedef struct  {
+    uint16_t    headerSize;
+    uint8_t     magic1;
+    uint8_t     magic2;
 } MappedData;
 
-typedef struct {
-    MappedData dataHeader;
-    UDataInfo info;
+typedef struct  {
+    MappedData  dataHeader;
+    UDataInfo   info;
 } DataHeader;
 
 typedef const DataHeader *
@@ -319,67 +323,90 @@ LookupFn(const UDataMemory *pData,
          const char *dllEntryName,
          UErrorCode *pErrorCode);
 
-struct UDataMemory {
-    UDataMemory *parent;
-    Library lib;
-    MemoryMap map;
-    LookupFn *lookupFn;
-    const void *toc;
-    const DataHeader *pHeader;
-    uint32_t flags;
-    int32_t refCount;
-};
+/*----------------------------------------------------------------------------------*
+ *                                                                                  *
+ *  UDataMemory     Very Important Struct.  Pointers to these are returned          *
+ *                  to callers from the various data open functions.                *
+ *                  These keep track of everything about the memeory                *
+ *                                                                                  *
+ *----------------------------------------------------------------------------------*/
+typedef struct UDataMemory {
+    UDataMemory      *parent;      /*  Set if we're suballocated from some common     */
+    Library           lib;         /* OS dependent handle for DLLs, .so, etc          */
+    MemoryMap         map;         /* Handle, or whatever.  OS dependent.             */
+    LookupFn         *lookupFn;
+    const void       *toc;         /* For common memory, to find pieces within.       */
+    const DataHeader *pHeader;     /* Header.  For common data, header is at top of file */
+    uint32_t          flags;       /* Memory format, TOC type, Allocation type, etc.  */
+    int32_t           refCount;    /* Not used just yet...                            */
+} UDataMemory;
 
-#define IS_DATA_MEMORY_LOADED(pData) ((pData)->flags!=0)
 
+static void UDataMemory_init(UDataMemory *This) {  
+    uprv_memset(This, 0, sizeof(UDataMemory));
+}
+
+
+static void UDataMemory_copy(UDataMemory *dest, UDataMemory *source) {
+    uprv_memcpy(dest, source, sizeof(UDataMemory));
+}
+
+static UDataMemory *UDataMemory_createNewInstance() {
+    UDataMemory *This;
+    This = uprv_malloc(sizeof(UDataMemory));
+    UDataMemory_init(This);
+    return This;
+}
+
+/*----------------------------------------------------------------------------------*
+ *                                                                                  *
+ *  Pointer TOCs.   This form of table-of-contents should be removed because        *
+ *                  DLLs must be relocated on loading to correct the pointer values *
+ *                  and this operation makes shared memory mapping of the data      *
+ *                  much less likely to work.                                       *
+ *                                                                                  *
+ *----------------------------------------------------------------------------------*/
 typedef struct {
     const char *entryName;
     const DataHeader *pHeader;
 } PointerTOCEntry;
 
-/* memory-mapping base functions -------------------------------------------- */
 
+/*----------------------------------------------------------------------------------*
+ *                                                                                  *
+ *   Memory Mapped File support.  Platform dependent implementation of functions    *
+ *                                used by the rest of the implementation.           *
+ *                                                                                  *
+ *----------------------------------------------------------------------------------*/
 #if MAP_IMPLEMENTATION==MAP_WIN32
     static UBool
-    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
-        char buffer[200];
+    uprv_mapFile(
+         UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
+                                /*   Output only; any original contents are cleared.  */
+         const char *path       /* File path to be opened/mapped                      */
+         ) 
+    {
         HANDLE map;
-        char *p;
+        HANDLE file;
+        
+        UDataMemory_init(pData); /* Clear the output struct.        */
 
-        /* set up the mapping name and the filename */
-        uprv_strcpy(buffer, "icu" U_ICU_VERSION " ");
-        uprv_strcat(buffer, path);
-
-        /* replace in buffer \ with /   */
-        for(p=buffer; *p; p++) {
-            if (*p == '\\') {
-                *p = '/';
-            }
+        /* open the input file */
+        file=CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL|FILE_FLAG_RANDOM_ACCESS, NULL);
+        if(file==INVALID_HANDLE_VALUE) {
+            return FALSE;
         }
-
-        /* open the mapping */
-        map=OpenFileMapping(FILE_MAP_READ, FALSE, buffer);
+        
+        /* create an unnamed Windows file-mapping object for the specified file */
+        map=CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL);
+        CloseHandle(file);
         if(map==NULL) {
-            /* the mapping has not been created */
-            HANDLE file;
-
-            /* open the input file */
-            file=CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
-                            OPEN_EXISTING,
-                            FILE_ATTRIBUTE_NORMAL|FILE_FLAG_RANDOM_ACCESS, NULL);
-            if(file==INVALID_HANDLE_VALUE) {
-                return FALSE;
-            }
-
-            /* create the mapping */
-            map=CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, buffer);
-            CloseHandle(file);
-            if(map==NULL) {
-                return FALSE;
-            }
+            return FALSE;
         }
-
-        /* get a view of the mapping */
+        
+        /* map a view of the file into our address space */
         pData->pHeader=(const DataHeader *)MapViewOfFile(map, FILE_MAP_READ, 0, 0, 0);
         if(pData->pHeader==NULL) {
             CloseHandle(map);
@@ -389,6 +416,7 @@ typedef struct {
         pData->flags=FLAT_DATA_MEMORY;
         return TRUE;
     }
+
 
     static void
     uprv_unmapFile(UDataMemory *pData) {
@@ -402,11 +430,13 @@ typedef struct {
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
     static UBool
-    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
+    uprv_mapFile(UDataMemory *pData, const char *path) {
         int fd;
         int length;
         struct stat mystat;
         const void *data;
+
+        UDataMemory_init(pData); /* Clear the output struct.        */
 
         /* determine the length of the file */
         if(stat(path, &mystat)!=0 || mystat.st_size<=0) {
@@ -462,11 +492,12 @@ typedef struct {
 
 #elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
     static UBool
-    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
+    uprv_mapFile(UDataMemory *pData, const char *path) {
         FileStream *file;
         int32_t fileLength;
         void *p;
 
+        UDataMemory_init(pData); /* Clear the output struct.        */
         /* open the input file */
         file=T_FileStream_open(path, "rb");
         if(file==NULL) {
@@ -513,8 +544,13 @@ typedef struct {
 #   error MAP_IMPLEMENTATION is set incorrectly
 #endif
 
-/* entry point lookup implementations --------------------------------------- */
 
+    
+/*----------------------------------------------------------------------------------*
+ *                                                                                  *
+ *    entry point lookup implementations                                            *
+ *                                                                                  *
+ *----------------------------------------------------------------------------------*/
 static const DataHeader *
 normalizeDataPointer(const DataHeader *p) {
     /* allow the data to be optionally prepended with an alignment-forcing double value */
@@ -658,7 +694,7 @@ setCommonICUData(UDataMemory *pData) {
     umtx_lock(NULL);
     if(!IS_DATA_MEMORY_LOADED(&commonICUData)) {
         uprv_memcpy(&commonICUData, pData, sizeof(UDataMemory));
-        commonICUData.flags&=~(1UL<<DYNAMIC_DATA_MEMORY_SHIFT);
+        commonICUData.flags&=~DYNAMIC_DATA_MEMORY_FLAG;
         uprv_memset(pData, 0, sizeof(UDataMemory));
         setThisLib=TRUE;
     }
@@ -679,10 +715,19 @@ strcpy_returnEnd(char *dest, const char *src) {
     return dest;
 }
 
+/*------------------------------------------------------------------------------*
+ *                                                                              *
+ *  setPathGetBasename   given a (possibly partial) path of an item             *
+ *                       to be opened, compute a full directory path and leave  *
+ *                       it in pathBuffer.  Returns a pointer to the null at    *
+ *                       the end of the computed path.                          *
+ *                       If a non-empty path buffer is passed in, assume that   *
+ *                       it already contains the right result, and don't        *
+ *                       bother to figure it all out again.                     *
+ *                                                                              *
+ *------------------------------------------------------------------------------*/
 static char *
 setPathGetBasename(const char *path, char *pathBuffer) {
-    /* set up the path in the pathBuffer and return a pointer behind its end,
-       to where the basename will go */
     if(*pathBuffer!=0) {
         /* the pathBuffer is already filled,
            we just need to find the basename position;
@@ -731,6 +776,96 @@ findBasename(const char *path) {
 }
 
 
+/*----------------------------------------------------------------------*
+ *                                                                      *
+ *   Cache for common data                                              *
+ *      Functions for looking up or adding entries to a cache of        *
+ *      data that has been previously opened.  Avoids a potentially     *
+ *      expensive operation of re-opening the data for subsequent       *
+ *      uses.                                                           *
+ *                                                                      *
+ *      Data remains cached for the duration of the process.            *
+ *                                                                      *
+ *----------------------------------------------------------------------*/
+
+typedef struct DataCacheElement {
+    char          *path;
+    UDataMemory    item;
+} DataCacheElement;
+ 
+ /*   udata_getCacheHashTable()
+ *     Get the hash table used to store the data cache entries.
+ *     Lazy create it if it doesn't yet exist.
+ */  
+static UHashtable *udata_getHashTable() {
+    static UHashtable *gHashTable;
+    UErrorCode err = U_ZERO_ERROR;
+
+    if (gHashTable != NULL) {
+        return gHashTable;
+    }
+    umtx_lock(NULL); 
+    if (gHashTable == NULL) {
+        gHashTable = uhash_open(uhash_hashChars, uhash_compareChars, &err);
+    }
+    umtx_unlock(NULL);
+
+    if U_FAILURE(err) {
+        return NULL;
+    }
+    return gHashTable;
+}
+
+
+
+static UDataMemory *udata_findCachedData(const char *path)
+{
+    UHashtable   *htable;
+    UDataMemory  *retVal;
+
+    umtx_lock(NULL); 
+    htable = udata_getHashTable();
+    umtx_unlock(NULL);
+    retVal = (UDataMemory *)uhash_get(htable, path);
+    return retVal;
+}
+
+
+static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item) {
+    DataCacheElement *newElement;
+    int               pathLen;
+    UErrorCode        err = U_ZERO_ERROR;
+
+    /* Create a new DataCacheElement - the thingy we store in the hash table -
+     * and copy the supplied path and UDataMemoryItems into it.
+     */
+    newElement = uprv_malloc(sizeof(DataCacheElement));
+    UDataMemory_copy(&newElement->item, item);
+    newElement->item.flags &= ~DYNAMIC_DATA_MEMORY_FLAG;
+    pathLen = uprv_strlen(path);
+    newElement->path = uprv_malloc(pathLen+1);
+    uprv_strcpy(newElement->path, path);
+
+    /* Stick the new DataCacheElement into the hash table.
+    */
+    umtx_lock(NULL); 
+    uhash_put(udata_getHashTable(), 
+        newElement->path,               /* Key   */
+        &newElement->item,              /* Value */
+        &err);
+    umtx_unlock(NULL);
+              /*  Just ignore any error returned.
+               *  1.  Failure to add to the cache is not, by itself, fatal.
+               *  2.  The only reason the hash table would fail is if memory
+               *      allocation fails, which means complete death is just
+               *      around the corner anyway...
+               */
+
+    return &newElement->item;
+}
+
+
+
 /*                                                                     */
 /*  Add a static reference to the common data from a library if the    */
 /*      build options are set to request it.                           */
@@ -740,24 +875,51 @@ findBasename(const char *path) {
 extern  const DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
 #endif
 
+
+/*----------------------------------------------------------------------*
+ *                                                                      *
+ *   openCommonData   Attempt to open a common format (.dat) file       *
+ *                    Map it into memory (if it's not there already)    *
+ *                    and return a UDataMemory object for it.           *
+ *                    The UDataMemory object will either be heap or     *
+ *                    global - in either case, it is permanent and can  *
+ *                    be safely passed back the chain of callers.       *
+ *                                                                      *
+ *----------------------------------------------------------------------*/
 static UDataMemory *
-openCommonData(UDataMemory *pData,
-               const char *path, UBool isICUData,
-               char *pathBuffer,
-               UErrorCode *pErrorCode) {
+openCommonData(
+               const char *path,          /*  Path from OpenCHoice?          */
+               UBool isICUData,           /*  ICU Data true if path == NULL  */
+               UErrorCode *pErrorCode)
+ {
     const char *inBasename;
     char *basename, *suffix;
     const DataHeader *pHeader;
+    char pathBuffer[1024];
+    UDataMemory   tData;
+
+    UDataMemory_init(&tData);
+
 
     /* "mini-cache" for common ICU data */
     if(isICUData && IS_DATA_MEMORY_LOADED(&commonICUData)) {
         return &commonICUData;
     }
 
-    /* ### we should have a real cache with a UHashTable and the path as the key */
 
-#if defined(UDATA_STATIC_LIB) || defined(UDATA_DLL)
+    /* Is this data cached?  Meaning, have we seen this before  */
+    if (!isICUData) {
+        UDataMemory  *dataToReturn = udata_findCachedData(path);
+        if (dataToReturn != NULL) {
+            return dataToReturn;
+        }
+    }
+
+
     if (isICUData) {
+        /* ICU common data is already in our address space, thanks to a static reference */
+        /*   to a symbol from the data library.  Just follow that pointer to set up      */
+        /*   our ICU data.                                                               */
         pHeader = &U_ICUDATA_ENTRY_POINT;
         if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
             pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
@@ -775,10 +937,10 @@ openCommonData(UDataMemory *pData,
             pHeader->info.formatVersion[0]==1
             ) {
             /* dataFormat="CmnD" */
-            pData->lib=NULL;
-            pData->lookupFn=offsetTOCLookupFn;
-            pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-            pData->flags=DLL_DATA_MEMORY|OFFSET_TOC<<TOC_TYPE_SHIFT;
+            tData.lib=NULL;
+            tData.lookupFn=offsetTOCLookupFn;
+            tData.toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
+            tData.flags= DLL_DATA_MEMORY | OFFSET_TOC;
         } else if(pHeader->info.dataFormat[0]==0x54 &&
             pHeader->info.dataFormat[1]==0x6f &&
             pHeader->info.dataFormat[2]==0x43 &&
@@ -786,10 +948,10 @@ openCommonData(UDataMemory *pData,
             pHeader->info.formatVersion[0]==1
             ) {
             /* dataFormat="ToCP" */
-            pData->lib=NULL;
-            pData->lookupFn=pointerTOCLookupFn;
-            pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-            pData->flags=DLL_DATA_MEMORY|POINTER_TOC<<TOC_TYPE_SHIFT;
+            tData.lib=NULL;
+            tData.lookupFn=pointerTOCLookupFn;
+            tData.toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
+            tData.flags=DLL_DATA_MEMORY|POINTER_TOC;
         } else {
             /* dataFormat not recognized */
             *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -797,23 +959,16 @@ openCommonData(UDataMemory *pData,
         }
 
         /* we have common data from a DLL */
-        setCommonICUData(pData);
+        setCommonICUData(&tData);
         return &commonICUData;
     }
 
 
-#endif     /*UDATA_STATIC_LIB*/
-
-
 
     /* set up path and basename */
+    pathBuffer[0] = 0;
     basename=setPathGetBasename(path, pathBuffer);
     if(isICUData) {
-#ifdef OS390
-      if (s390dll)
-        inBasename=COMMON_DATA1_NAME;
-      else
-#endif
         inBasename=COMMON_DATA_NAME;
     } else {
         inBasename=findBasename(path);
@@ -825,134 +980,21 @@ openCommonData(UDataMemory *pData,
     }
 
 
-    /*                                                      */
-    /*  Deprecated code to dynamically load a DLL.          */
-    /*                                                      */
-
-    /* try to load a common data DLL */
-#   if !UDATA_NO_DLL
-    {
-        Library lib;
-        /* set up the library name */
-#       ifndef LIB_PREFIX
-        suffix=strcpy_returnEnd(basename, inBasename);
-#       else
-        uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
-        suffix=strcpy_returnEnd(basename+LIB_PREFIX_LENGTH, inBasename);
-#       endif
-        uprv_strcpy(suffix, LIB_SUFFIX);
-
-        /* try path/basename first */
-#       ifdef OS390BATCH
-        /* ### hack: we still need to get u_getDataDirectory() fixed
-        for OS/390 (batch mode - always return "//"? )
-        and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
-        This is probably due to the strange file system on OS/390.  It's more like
-        a database with short entry names than a typical file system. */
-        if (s390dll) {
-            lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
-        }
-        else {
-            /* U_ICUDATA_NAME should always have the correct name */
-            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
-            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
-            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-            lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
-        }
-#       else
-        lib=LOAD_LIBRARY(pathBuffer, basename);
-#       endif
-        if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
-            /* try basename only next */
-            lib=LOAD_LIBRARY(basename, basename);
-        }
-
-        if(IS_LIBRARY(lib)) {
-            /* we have a data DLL - what kind of lookup do we need here? */
-            char entryName[100];
-            *basename=0;
-
-            /* try to find the Table of Contents */
-#if 0
-            if(uprv_strcmp(inBasename, U_ICUDATA_NAME) == 0) {
-                uprv_strcpy(entryName, "icudata");
-            } else {
-                uprv_strcpy(entryName, inBasename);
-            }
-#endif
-            uprv_strcpy(entryName, inBasename);
-
-            uprv_strcat(entryName, "_" DATA_TYPE);
-            pHeader=normalizeDataPointer((const DataHeader *)GET_LIBRARY_ENTRY(lib, entryName));
-            if(pHeader==NULL) {
-                /* no TOC: assume DLL-intrinsic lookup */
-                pData->lib=lib;
-                pData->lookupFn=dllTOCLookupFn;
-                pData->flags=DLL_DATA_MEMORY|DLL_INTRINSIC_TOC<<TOC_TYPE_SHIFT;
-            } else if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
-                pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
-                pHeader->info.charsetFamily==U_CHARSET_FAMILY)
-                ) {
-                /* header not valid */
-                UNLOAD_LIBRARY(lib);
-                *pErrorCode=U_INVALID_FORMAT_ERROR;
-                return NULL;
-
-                /* which TOC type? */
-            } else if(pHeader->info.dataFormat[0]==0x43 &&
-                pHeader->info.dataFormat[1]==0x6d &&
-                pHeader->info.dataFormat[2]==0x6e &&
-                pHeader->info.dataFormat[3]==0x44 &&
-                pHeader->info.formatVersion[0]==1
-                ) {
-                /* dataFormat="CmnD" */
-                pData->lib=lib;
-                pData->lookupFn=offsetTOCLookupFn;
-                pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-                pData->flags=DLL_DATA_MEMORY|OFFSET_TOC<<TOC_TYPE_SHIFT;
-            } else if(pHeader->info.dataFormat[0]==0x54 &&
-                pHeader->info.dataFormat[1]==0x6f &&
-                pHeader->info.dataFormat[2]==0x43 &&
-                pHeader->info.dataFormat[3]==0x50 &&
-                pHeader->info.formatVersion[0]==1
-                ) {
-                /* dataFormat="ToCP" */
-                pData->lib=lib;
-                pData->lookupFn=pointerTOCLookupFn;
-                pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-                pData->flags=DLL_DATA_MEMORY|POINTER_TOC<<TOC_TYPE_SHIFT;
-            } else {
-                /* dataFormat not recognized */
-                UNLOAD_LIBRARY(lib);
-                *pErrorCode=U_INVALID_FORMAT_ERROR;
-                return NULL;
-            }
-
-            /* we have common data from a DLL */
-            if(isICUData) {
-                setCommonICUData(pData);
-                return &commonICUData;
-            } else {
-                return pData;
-            }
-        }
-    }
-#endif    /* !UDATA_NO_DLL */
 
     /* try to map a common data file */
 
     /* set up the file name */
     suffix=strcpy_returnEnd(basename, inBasename);
-    uprv_strcpy(suffix, "." DATA_TYPE);
+    uprv_strcpy(suffix, "." DATA_TYPE);      /*  DATA_TYPE is ".dat" */
 
     /* try path/basename first, then basename only */
-    if( uprv_mapFile(pData, pathBuffer, basename) ||
-        (basename!=pathBuffer && uprv_mapFile(pData, basename, basename))
+    if( uprv_mapFile(&tData, pathBuffer) ||
+        (basename!=pathBuffer && uprv_mapFile(&tData, basename))
         ) {
         *basename=0;
 
         /* we have mapped a file, check its header */
-        pHeader=pData->pHeader;
+        pHeader=tData.pHeader;
         if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
             pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
             pHeader->info.charsetFamily==U_CHARSET_FAMILY &&
@@ -962,21 +1004,24 @@ openCommonData(UDataMemory *pData,
             pHeader->info.dataFormat[3]==0x44 &&
             pHeader->info.formatVersion[0]==1)
             ) {
-            uprv_unmapFile(pData);
-            pData->flags=0;
+            uprv_unmapFile(&tData);
+            tData.flags=0;
             *pErrorCode=U_INVALID_FORMAT_ERROR;
             return NULL;
         }
 
         /* we have common data from a mapped file */
-        pData->lookupFn=offsetTOCLookupFn;
-        pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-        pData->flags|=OFFSET_TOC<<TOC_TYPE_SHIFT;
+        tData.lookupFn=offsetTOCLookupFn;
+        tData.toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
+        tData.flags|=OFFSET_TOC;
         if(isICUData) {
-            setCommonICUData(pData);
+            setCommonICUData(&tData);
             return &commonICUData;
         } else {
-            return pData;
+            // Cache the UDataMemory struct for this .dat file,
+            //   so we won't need to hunt it down and open it again next time
+            //   something is needed from it.
+            return udata_cacheDataItem(path, &tData);
         }
     }
 
@@ -1025,7 +1070,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
             /* dataFormat="CmnD" */
             dataMemory.lookupFn=offsetTOCLookupFn;
             dataMemory.toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-            dataMemory.flags=DLL_DATA_MEMORY|OFFSET_TOC<<TOC_TYPE_SHIFT;
+            dataMemory.flags=DLL_DATA_MEMORY|OFFSET_TOC;
         } else if(pHeader->info.dataFormat[0]==0x54 &&
                   pHeader->info.dataFormat[1]==0x6f &&
                   pHeader->info.dataFormat[2]==0x43 &&
@@ -1035,7 +1080,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
             /* dataFormat="ToCP" */
             dataMemory.lookupFn=pointerTOCLookupFn;
             dataMemory.toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
-            dataMemory.flags=DLL_DATA_MEMORY|POINTER_TOC<<TOC_TYPE_SHIFT;
+            dataMemory.flags=DLL_DATA_MEMORY|POINTER_TOC;
         } else {
             /* dataFormat not recognized */
             *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -1043,7 +1088,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
         }
 
         /* we have common data */
-        dataMemory.flags|=1UL<<SET_DATA_POINTER_SHIFT;
+        dataMemory.flags|=SET_DATA_POINTER_FLAG;
         setCommonICUData(&dataMemory);
         if(dataMemory.flags!=0) {
             /* some thread passed us */
@@ -1051,6 +1096,21 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
         }
     }
 }
+
+
+
+
+/*---------------------------------------------------------------------------
+ *
+ *  udata_setAppData
+ *
+ *---------------------------------------------------------------------------- */
+
+U_CAPI void U_EXPORT2 
+udata_setAppData(const char *path, const void *data, UErrorCode *err)
+{
+};
+
 
 /* main data loading function ----------------------------------------------- */
 
@@ -1097,67 +1157,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* set up the ToC names for DLL and offset-ToC lookups */
     setEntryNames(type, name, tocEntryName, dllEntryName);
 
-#ifdef OS390
-    if(s390dll == TRUE)
-    {
-        /* try to get high frequency S390 common data first */
-        uprv_memset(&dataMemory, 0, sizeof(UDataMemory));
-        pathBuffer[0]=0;
-        pCommonData=openCommonData(&dataMemory, path, isICUData, pathBuffer, &errorCode);
-        if(U_SUCCESS(errorCode)) {
-            /* look up the data piece in the common data */
-            pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
-            if(pHeader!=NULL) {
-                /* data found in the common data, test it */
-                if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
-                   pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
-                   (isAcceptable==NULL || isAcceptable(context, type, name, &pHeader->info))
-                ) {
-                    /* acceptable - allocate parent, too, if necessary */
-                    if(pCommonData==&dataMemory) {
-                        /* trick: do one malloc for both the common and the entry */
-                        pEntryData=(UDataMemory *)uprv_malloc(2*sizeof(UDataMemory));
-                        if(pEntryData!=NULL) {
-                            pCommonData=pEntryData+1;
-                            uprv_memcpy(pCommonData, &dataMemory, sizeof(UDataMemory));
-                        }
-                    } else {
-                        pEntryData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
-                    }
-                    if(pEntryData==NULL) {
-                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                        return NULL;
-                    }
-                    uprv_memset(pEntryData, 0, sizeof(UDataMemory));
-                    pEntryData->parent=pCommonData;
-                    pEntryData->pHeader=pHeader;
-                    pEntryData->flags=pCommonData->flags&DATA_MEMORY_TYPE_MASK|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
-                    return pEntryData;
-                } else {
-                    /* the data is not acceptable, look further */
-                    errorCode=U_INVALID_FORMAT_ERROR;
-                }
-            }
-
-            /* the data is not in the common data, close that and look further */
-            s390dll=FALSE;
-            if(pCommonData==&dataMemory) {
-              udata_close(&dataMemory);
-           /* commonICUData = { NULL }; */
-              (&commonICUData)->flags = 0;
-    /* clear out the 'mini cache' used in openCommonData */
-                /* This is not thread safe!!!!!!! */
-            }
-        }
-        s390dll=FALSE;
-        (&commonICUData)->flags = 0 ;
-    }
-#endif
 
     /* try to get common data */
-    uprv_memset(&dataMemory, 0, sizeof(UDataMemory));
     pathBuffer[0]=0;
-    pCommonData=openCommonData(&dataMemory, path, isICUData, pathBuffer, &errorCode);
+    pCommonData=openCommonData(path, isICUData, &errorCode);
 #ifdef UDATA_DEBUG
     fprintf(stderr, "commonData;%p\n", pCommonData);
     fflush(stderr);
@@ -1172,45 +1175,31 @@ doOpenChoice(const char *path, const char *type, const char *name,
         if(pHeader!=NULL) {
             /* data found in the common data, test it */
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
-               pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
-               (isAcceptable==NULL || isAcceptable(context, type, name, &pHeader->info))
-            ) {
-                /* acceptable - allocate parent, too, if necessary */
-                if(pCommonData==&dataMemory) {
-                    /* trick: do one malloc for both the common and the entry */
-                    pEntryData=(UDataMemory *)uprv_malloc(2*sizeof(UDataMemory));
-                    if(pEntryData!=NULL) {
-                        pCommonData=pEntryData+1;
-                        uprv_memcpy(pCommonData, &dataMemory, sizeof(UDataMemory));
-                    }
-                } else {
-                    pEntryData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
-                }
+                pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
+                (isAcceptable==NULL || isAcceptable(context, type, name, &pHeader->info))
+                ) {
+                pEntryData=UDataMemory_createNewInstance();
                 if(pEntryData==NULL) {
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return NULL;
                 }
-                uprv_memset(pEntryData, 0, sizeof(UDataMemory));
-                pEntryData->parent=pCommonData;
-                pEntryData->pHeader=pHeader;
-                pEntryData->flags=(pCommonData->flags&DATA_MEMORY_TYPE_MASK)|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+                UDataMemory_init(pEntryData);
+                pEntryData->parent  = pCommonData;
+                pEntryData->pHeader = pHeader;
+                pEntryData->flags   = (pCommonData->flags&DATA_MEMORY_TYPE_MASK)|DYNAMIC_DATA_MEMORY_FLAG;
 #ifdef UDATA_DEBUG
-        fprintf(stderr, " made data @%p\n", pEntryData);
+                fprintf(stderr, " made data @%p\n", pEntryData);
 #endif
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
-#ifdef UDATA_DEBUG
-            fprintf(stderr, "Not acceptable\n");
-#endif
+                /* If we eventually find something good, this errorcode will be */
+                /*    cleared out.                                              */
                 errorCode=U_INVALID_FORMAT_ERROR;
             }
         }
 
-        /* the data is not in the common data, close that and look further */
-        if(pCommonData==&dataMemory) {
-            udata_close(&dataMemory);
-        }
+        /* the data was not found in the common data,  look further */
     }
 
     /* try to get an individual data file */
@@ -1231,8 +1220,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
         *suffix++='_';
         uprv_strcpy(suffix, tocEntryName);
 
-        if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
-            (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename))
+        if( uprv_mapFile(&dataMemory, pathBuffer) ||
+            (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename))
         ) {
             pHeader=dataMemory.pHeader;
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
@@ -1246,7 +1235,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return NULL;
                 }
-                dataMemory.flags|=1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+                dataMemory.flags |= DYNAMIC_DATA_MEMORY_FLAG;
                 uprv_memcpy(pEntryData, &dataMemory, sizeof(UDataMemory));
                 return pEntryData;
             } else {
@@ -1259,8 +1248,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* try path+entryName next */
     uprv_strcpy(basename, tocEntryName);
-    if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
-        (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename))
+    if( uprv_mapFile(&dataMemory, pathBuffer) ||
+        (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename))
     ) {
         pHeader=dataMemory.pHeader;
         if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
@@ -1274,7 +1263,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
-            dataMemory.flags|=1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+            dataMemory.flags |= DYNAMIC_DATA_MEMORY_FLAG;
             uprv_memcpy(pEntryData, &dataMemory, sizeof(UDataMemory));
             return pEntryData;
         } else {
@@ -1299,7 +1288,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
 static void
 unloadDataMemory(UDataMemory *pData) {
-    if(!(pData->flags&(1UL<<SET_DATA_POINTER_SHIFT))) {
+    if ((pData->flags & SET_DATA_POINTER_FLAG) == 0) {
         switch(pData->flags&DATA_MEMORY_TYPE_MASK) {
         case FLAT_DATA_MEMORY:
             if(IS_MAP(pData->map)) {
@@ -1361,13 +1350,12 @@ udata_close(UDataMemory *pData) {
   fprintf(stderr, "udata_close()\n");fflush(stderr);
 #endif
 
-    if(pData!=NULL && IS_DATA_MEMORY_LOADED(pData)) {
+    if(pData!=NULL &&
+        IS_DATA_MEMORY_LOADED(pData)) {
+        // TODO:  maybe reference count cached data, rather than just
+        //        permanently keeping it around?
         unloadDataMemory(pData);
-        if(pData->flags&(1UL<<DYNAMIC_DATA_MEMORY_SHIFT)) {
-            if(pData->parent==pData+1) {
-                /* this data entry was allocated together with its parent */
-                unloadDataMemory(pData+1);
-            }
+        if(pData->flags & DYNAMIC_DATA_MEMORY_FLAG ) {
             uprv_free(pData);
         } else {
             pData->flags=0;
