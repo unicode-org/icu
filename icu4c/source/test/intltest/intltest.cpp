@@ -16,6 +16,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
