@@ -132,6 +132,23 @@ public class RoundTripTest extends TestFmwk {
           .test("[a-zA-Z\u0110\u0111]", "[\u0400-\u045F]", null, this, new Legal());
     }
     
+    static final String ARABIC = "[\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
+
+    public void TestArabic() throws IOException, ParseException {
+        new Test("Latin-Arabic")
+          .test("[a-zA-Z\u02BE\u02BF\u207F]", ARABIC, null, this, new Legal());
+    }
+    
+    public void TestHebrew() throws IOException, ParseException {
+        new Test("Latin-Hebrew")
+          .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
+    }
+    
+    public void TestThai() throws IOException, ParseException {
+        new Test("Latin-Thai")
+          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[:thai:]", null, this, new LegalThai());
+    }
+    
     //----------------------------------
     // Inter-Indic Tests
     //----------------------------------
@@ -615,6 +632,38 @@ public class RoundTripTest extends TestFmwk {
         }
     }
     
+    // anything is legal except word ending with Logical-order-exception
+    public static class LegalThai extends Legal {
+        public boolean is(String sourceString) {
+            if (sourceString.length() == 0) return true;
+            char ch = sourceString.charAt(sourceString.length() - 1); // don't worry about surrogates.
+            if (UCharacter.hasBinaryProperty(ch, UProperty.LOGICAL_ORDER_EXCEPTION)) return false;
+            return true;
+        }
+    }
+    
+    // anything is legal except that Final letters can't be followed by letter; NonFinal must be
+    public static class LegalHebrew extends Legal {
+        static UnicodeSet FINAL = new UnicodeSet("[\u05DA\u05DD\u05DF\u05E3\u05E5]");
+        static UnicodeSet NON_FINAL = new UnicodeSet("[\u05DB\u05DE\u05E0\u05E4\u05E6]");
+        static UnicodeSet LETTER = new UnicodeSet("[:letter:]");
+        public boolean is(String sourceString) {
+            if (sourceString.length() == 0) return true;
+            // don't worry about surrogates.
+            for (int i = 0; i < sourceString.length(); ++i) {
+                char ch = sourceString.charAt(i);
+                char next = i+1 == sourceString.length() ? '\u0000' : sourceString.charAt(i);
+                if (FINAL.contains(ch)) {
+                    if (LETTER.contains(next)) return false;
+                } else if (NON_FINAL.contains(ch)) {
+                    if (!LETTER.contains(next)) return false;
+                }   
+            }
+            return true;
+        }
+    }
+    
+    
     public static class LegalGreek extends Legal {
         
         boolean full;
@@ -867,7 +916,7 @@ public class RoundTripTest extends TestFmwk {
             String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
                 
             if (!checkIrrelevants(sourceToTarget, irrelevants)) {
-                logFails("Source-Target, irrelevants");
+                logFails("Source-Target, Must not NFC everything");
             }
             if (!checkIrrelevants(targetToSource, irrelevants)) {
                 logFails("Target-Source, irrelevants");
@@ -1130,10 +1179,10 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail " + label + ": " +
-                        from + " (" +
-                        TestUtility.hex(from) + ") => " +
-                        to + " (" +
+            out.println("<br>Fail " + label + ": \u200E" +
+                        from + "\u200E (" +
+                        TestUtility.hex(from) + ") => \u200E" +
+                        to + "\u200E (" +
                         TestUtility.hex(to) + ")"
                         );
         }
@@ -1142,15 +1191,15 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv)" + label + ": " +
-                        from + " (" +
-                        TestUtility.hex(from) + ") => " +
-                        to + " (" +
+            out.println("<br>Fail (can.equiv) " + label + ": \u200E" +
+                        from + "\u200E (" +
+                        TestUtility.hex(from) + ") => \u200E" +
+                        to + "\u200E (" +
                         TestUtility.hex(to) + ")" +
-                        " -- " +
-                        fromCan + " (" +
-                        TestUtility.hex(fromCan) + ") => " +
-                        toCan + " (" +
+                        " -- \u200E" +
+                        fromCan + "\u200E (" +
+                        TestUtility.hex(fromCan) + ") => \u200E" +
+                        toCan + "\u200E (" +
                         TestUtility.hex(toCan) + ")"
                         );
         }
@@ -1166,12 +1215,12 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv)" + label + ": " +
-                        from + " (" +
-                        TestUtility.hex(from) + ") => " +
-                        to + " (" +
-                        TestUtility.hex(to) + ")" +
-                        toCan + " (" +
+            out.println("<br>Fail (can.equiv) " + label + ": \u200E" +
+                        from + "\u200E (" +
+                        TestUtility.hex(from) + ") => \u200E" +
+                        to + "\u200E (" +
+                        TestUtility.hex(to) + ")\u200E" +
+                        toCan + "\u200E (" +
                         TestUtility.hex(toCan) + ")"
                         );
         }
@@ -1182,12 +1231,12 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail Roundtrip: " + 
-                        from + " (" +
-                        TestUtility.hex(from) + ") "+toID+"=> " +
-                        to + " (" +
-                        TestUtility.hex(to) + ") " + backID+"=> " +
-                        back + " (" +
+            out.println("<br>Fail Roundtrip: \u200E" + 
+                        from + "\u200E (" +
+                        TestUtility.hex(from) + ") "+toID+"=> \u200E" +
+                        to + "\u200E (" +
+                        TestUtility.hex(to) + ") " + backID+"=> \u200E" +
+                        back + "\u200E (" +
                         TestUtility.hex(back) + ")" 
                         );
         }
