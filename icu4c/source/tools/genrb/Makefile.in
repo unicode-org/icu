@@ -89,7 +89,7 @@ $(DERB) : $(DERB_OBJ)
 # man page
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
 # This line is needed to serialize builds when the gmake -j option is used.
 $(DERB:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
