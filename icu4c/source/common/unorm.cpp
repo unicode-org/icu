@@ -440,7 +440,7 @@ internalGetDXCJKCompat(UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
 
     if(dxCache[UNORM_DX_CJK_COMPAT]==NULL) {
-        /* build a set from [CJK Ideographs]-[has canonical decomposition] */
+        /* build a set from [CJK Ideographs]&[has canonical decomposition] */
         UnicodeSet *set, *hasDecomp;
 
         set=new UnicodeSet(UNICODE_STRING("[:Ideographic:]", 15), errorCode);
@@ -478,16 +478,16 @@ internalGetDXCJKCompat(UErrorCode &errorCode) {
             }
         }
 
-        /* compute set difference */
-        set->removeAll(*hasDecomp);
+        /* hasDecomp now contains all ideographs that decompose canonically */
 
         umtx_lock(NULL);
         if(dxCache[UNORM_DX_CJK_COMPAT]==NULL) {
-            dxCache[UNORM_DX_CJK_COMPAT]=set;
-            set=NULL;
+            dxCache[UNORM_DX_CJK_COMPAT]=hasDecomp;
+            hasDecomp=NULL;
         }
         umtx_unlock(NULL);
 
+        delete hasDecomp;
         delete set;
     }
 
