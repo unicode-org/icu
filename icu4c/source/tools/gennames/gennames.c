@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -369,6 +369,22 @@ init() {
 
 /* parsing ------------------------------------------------------------------ */
 
+/* get a name, strip leading and trailing whitespace */
+static int16_t
+getName(char **pStart, char *limit) {
+    /* strip leading whitespace */
+    char *start=(char *)u_skipWhitespace(*pStart);
+
+    /* strip trailing whitespace */
+    while(start<limit && (*(limit-1)==' ' || *(limit-1)=='\t')) {
+        --limit;
+    }
+
+    /* return results */
+    *pStart=start;
+    return (int16_t)(limit-start);
+}
+
 static void U_CALLCONV
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
@@ -386,9 +402,8 @@ lineFn(void *context,
 
     /* get the character name */
     names[0]=fields[1][0];
-    if(fields[1][0][0]!='<') {
-        lengths[0]=(int16_t)(fields[1][1]-names[0]);
-    } else {
+    lengths[0]=getName(names+0, fields[1][1]);
+    if(names[0][0]=='<') {
         /* do not store pseudo-names in <> brackets */
         lengths[0]=0;
     }
@@ -397,15 +412,16 @@ lineFn(void *context,
     /* get the second character name, the one from Unicode 1.0 */
     /* do not store pseudo-names in <> brackets */
     names[1]=fields[10][0];
-    if(*(UBool *)context && fields[10][0][0]!='<') {
-        lengths[1]=(int16_t)(fields[10][1]-names[1]);
+    lengths[1]=getName(names+1, fields[10][1]);
+    if(*(UBool *)context && names[1][0]!='<') {
+        /* keep the name */
     } else {
         lengths[1]=0;
     }
 
     /* get the ISO 10646 comment */
     names[2]=fields[11][0];
-    lengths[2]=(int16_t)(fields[11][1]-names[2]);
+    lengths[2]=getName(names+2, fields[11][1]);
 
     if(lengths[0]+lengths[1]+lengths[2]==0) {
         return;
