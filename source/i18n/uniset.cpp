@@ -125,8 +125,9 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
  * returned by <code>Unicode::getType()</code>.
  */
 UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
-    len(0), capacity(START_EXTRA), list(0), bufferCapacity(0),
-    buffer(0) {
+    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
+    buffer(0)
+{
 
     if (U_SUCCESS(status)) {
         if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
@@ -142,8 +143,9 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
  * Constructs a set that is identical to the given UnicodeSet.
  */
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
-    list(0), capacity(o.len + GROW_EXTRA), bufferCapacity(0),
-    buffer(0) {
+    capacity(o.len + GROW_EXTRA), bufferCapacity(0),
+    buffer(0)
+{
 
     list = new UChar32[capacity];
     *this = o;
@@ -518,7 +520,7 @@ void UnicodeSet::complement(UChar32 c) {
  *
  * @param c set to be checked for containment in this set.
  * @return <tt>true</tt> if this set contains all of the elements of the
- * 	       specified set.
+ *         specified set.
  */
 UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
     // The specified set is a subset if all of its pairs are contained in
@@ -1011,7 +1013,7 @@ void UnicodeSet::applyCategory(const UnicodeString& catName,
         return;
     }
 
-	UnicodeString cat(catName);
+    UnicodeString cat(catName);
     UBool invert = (catName.length() > 1 &&
                      catName.charAt(0) == COMPLEMENT);
     if (invert) {

@@ -18,21 +18,21 @@
 *   02/22/99    stephen     Removed character literals for EBCDIC safety
 ********************************************************************************
 */
- 
+
 #include "unicode/msgfmt.h"
 #include "unicode/decimfmt.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/choicfmt.h"
 #include "mutex.h"
- 
+
 // *****************************************************************************
 // class MessageFormat
 // *****************************************************************************
- 
+
 // -------------------------------------
 char MessageFormat::fgClassID = 0; // Value is irrelevant
- 
+
 // This global NumberFormat instance is shared by all MessageFormat to 
 // convert a number to(format)/from(parse) a string.
 NumberFormat* MessageFormat::fgNumberFormat = 0;
@@ -90,16 +90,14 @@ MessageFormat::~MessageFormat()
 // copy constructor
 
 MessageFormat::MessageFormat(const MessageFormat& that)
-    : Format(that),
-      fOffsets(NULL),
-      fCount(that.fCount),
-      fLocale(that.fLocale),
-      fMaxOffset(that.fMaxOffset),
-      fArgumentNumbers(NULL),
-      fPattern(that.fPattern)
+: Format(that),
+  fLocale(that.fLocale),
+  fPattern(that.fPattern),
+  fOffsets(new int32_t[that.fCount]),
+  fCount(that.fCount),
+  fArgumentNumbers(new int32_t[that.fCount]),
+  fMaxOffset(that.fMaxOffset)
 {
-    fOffsets = new int32_t[fCount];
-    fArgumentNumbers = new int32_t[fCount];
     // Sets up the format instance array, offsets and argument numbers.
     for (int32_t i = 0; i < fCount; i++) {
         fFormats[i] = NULL; // init since delete may be called

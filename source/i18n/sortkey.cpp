@@ -66,8 +66,8 @@ CollationKey::CollationKey(const UnicodeString& value)
 }
 
 CollationKey::CollationKey(const CollationKey& other)
-    : fCount(other.fCount), fCapacity(other.fCapacity), fBogus(FALSE),
-      fHashCode(other.fHashCode), fBytes(NULL)
+: fBogus(FALSE), fCount(other.fCount), fCapacity(other.fCapacity),
+  fHashCode(other.fHashCode), fBytes(NULL)
 {
     if (other.fBogus)
     {

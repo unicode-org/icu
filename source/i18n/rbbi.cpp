@@ -46,8 +46,8 @@ RuleBasedBreakIterator::fgClassID = 0;
  * tables object that is passed in as a parameter.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tables)
-: tables(tables),
-  text(NULL)
+: text(NULL),
+  tables(tables)
 {
 }
 
@@ -55,8 +55,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tab
 // internal tables live in a memory-mapped file.  "image" is a pointer to the
 // beginning of that file.
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* image)
-: tables(image != NULL ? new RuleBasedBreakIteratorTables(image) : NULL),
-  text(NULL)
+: text(NULL),
+  tables(image != NULL ? new RuleBasedBreakIteratorTables(image) : NULL)
 {
     if (tables != NULL)
         tables->addReference();
@@ -67,8 +67,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* image)
  * and which iterates over the same text, as the one passed in.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& that)
-: tables(that.tables),
-  text(that.text->clone())
+: text(that.text->clone()),
+  tables(that.tables)
 {
     tables->addReference();
 }
@@ -207,7 +207,7 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     }
     else {
         delete text;
-		text = new StringCharacterIterator(newText);
+        text = new StringCharacterIterator(newText);
         text->first();
     }
 }
