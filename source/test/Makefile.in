@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -16,7 +16,7 @@ subdir = test
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = testdata intltest cintltst ieeetest
+SUBDIRS = testdata intltest cintltst
 
 ## List of phony targets
 .PHONY : everything all all-local all-recursive install install-local		\
