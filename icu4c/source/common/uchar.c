@@ -175,7 +175,6 @@ uprv_loadPropsData(UErrorCode *errorCode) {
             uprv_memcpy(&propsTrie, &trie, sizeof(trie));
             uprv_memcpy(&propsVectorsTrie, &trie2, sizeof(trie2));
         }
-        umtx_unlock(NULL);
 
         /* initialize some variables */
         uprv_memcpy(indexes, pData32, sizeof(indexes));
@@ -191,6 +190,7 @@ uprv_loadPropsData(UErrorCode *errorCode) {
         }
 
         havePropsData=1;
+        umtx_unlock(NULL);
 
         /* if a different thread set it first, then close the extra data */
         if(data!=NULL) {

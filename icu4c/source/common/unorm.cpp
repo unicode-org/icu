@@ -325,7 +325,6 @@ loadNormData(UErrorCode &errorCode) {
         } else {
             p=(const int32_t *)udata_getMemory(normData);
         }
-        umtx_unlock(NULL);
 
         /* initialize some variables */
         extraData=(uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+indexes[_NORM_INDEX_TRIE_SIZE]);
@@ -338,6 +337,7 @@ loadNormData(UErrorCode &errorCode) {
                 (indexes[_NORM_INDEX_FCD_TRIE_SIZE]+indexes[_NORM_INDEX_AUX_TRIE_SIZE])/2;
         }
         haveNormData=1;
+        umtx_unlock(NULL);
 
         /* if a different thread set it first, then close the extra data */
         if(data!=NULL) {
