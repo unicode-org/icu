@@ -18,18 +18,22 @@ class GlyphPositionAdjustment
 public:
 
     GlyphPositionAdjustment();
-    GlyphPositionAdjustment(float xPlace, float yPlace, float xAdv, float yAdv);
+    GlyphPositionAdjustment(float xPlace, float yPlace, float xAdv, float yAdv, le_int32 baseOff = -1);
     ~GlyphPositionAdjustment();
 
-    float   getXPlacement();
-    float   getYPlacement();
-    float   getXAdvance();
-    float   getYAdvance();
+    float    getXPlacement();
+    float    getYPlacement();
+    float    getXAdvance();
+    float    getYAdvance();
 
-    void    setXPlacement(float newXPlacement);
-    void    setYPlacement(float newYPlacement);
-    void    setXAdvance(float newXAdvance);
-    void    setYAdvance(float newYAdvance);
+    le_int32 getBaseOffset();
+
+    void     setXPlacement(float newXPlacement);
+    void     setYPlacement(float newYPlacement);
+    void     setXAdvance(float newXAdvance);
+    void     setYAdvance(float newYAdvance);
+
+    void     setBaseOffset(le_int32 newBaseOffset);
 
     void    adjustXPlacement(float xAdjustment);
     void    adjustYPlacement(float yAdjustment);
@@ -41,16 +45,18 @@ private:
     float yPlacement;
     float xAdvance;
     float yAdvance;
+
+    le_int32 baseOffset;
 };
 
 inline GlyphPositionAdjustment::GlyphPositionAdjustment()
-  : xPlacement(0), yPlacement(0), xAdvance(0), yAdvance(0)
+  : xPlacement(0), yPlacement(0), xAdvance(0), yAdvance(0), baseOffset(-1)
 {
     // nothing else to do!
 }
 
-inline GlyphPositionAdjustment::GlyphPositionAdjustment(float xPlace, float yPlace, float xAdv, float yAdv)
-  : xPlacement(xPlace), yPlacement(yPlace), xAdvance(xAdv), yAdvance(yAdv)
+inline GlyphPositionAdjustment::GlyphPositionAdjustment(float xPlace, float yPlace, float xAdv, float yAdv, le_int32 baseOff)
+  : xPlacement(xPlace), yPlacement(yPlace), xAdvance(xAdv), yAdvance(yAdv), baseOffset(baseOff)
 {
     // nothing else to do!
 }
@@ -80,6 +86,11 @@ inline float GlyphPositionAdjustment::getYAdvance()
     return yAdvance;
 }
 
+inline le_int32 GlyphPositionAdjustment::getBaseOffset()
+{
+    return baseOffset;
+}
+
 inline void GlyphPositionAdjustment::setXPlacement(float newXPlacement)
 {
     xPlacement = newXPlacement;
@@ -98,6 +109,11 @@ inline void GlyphPositionAdjustment::setXAdvance(float newXAdvance)
 inline void GlyphPositionAdjustment::setYAdvance(float newYAdvance)
 {
     yAdvance = newYAdvance;
+}
+
+inline void GlyphPositionAdjustment::setBaseOffset(le_int32 newBaseOffset)
+{
+    baseOffset = newBaseOffset;
 }
 
 inline void GlyphPositionAdjustment::adjustXPlacement(float xAdjustment)

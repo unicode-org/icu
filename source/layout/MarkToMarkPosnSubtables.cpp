@@ -75,20 +75,17 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
     float anchorDiffX = mark2Anchor.fX - markAnchor.fX;
     float anchorDiffY = mark2Anchor.fY - markAnchor.fY;
 
-    if (glyphIterator->isRightToLeft()) {
-        float adjustX = markAdvance.fX + anchorDiffX;
+    glyphIterator->setCurrGlyphBaseOffset(mark2Iterator.getCurrStreamPosition());
 
-        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX, -anchorDiffY, -adjustX, anchorDiffY);
+    if (glyphIterator->isRightToLeft()) {
+        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX, anchorDiffY, -markAdvance.fX, -markAdvance.fY);
     } else {
         LEPoint mark2Advance;
 
         fontInstance->getGlyphAdvance(mark2Glyph, pixels);
         fontInstance->pixelsToUnits(pixels, mark2Advance);
 
-        float adjustX = mark2Advance.fX - anchorDiffX;
-        float advAdjustX = adjustX - markAdvance.fX;
-
-        glyphIterator->adjustCurrGlyphPositionAdjustment(-adjustX, -anchorDiffY, advAdjustX, anchorDiffY);
+        glyphIterator->adjustCurrGlyphPositionAdjustment(anchorDiffX - mark2Advance.fX, -anchorDiffY - mark2Advance.fY, -markAdvance.fX, -markAdvance.fY);
     }
 
     return 1;
