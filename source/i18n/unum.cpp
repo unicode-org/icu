@@ -100,7 +100,7 @@ unum_open(  UNumberFormatStyle    style,
   { 
       return 0;
   }
-  if(style!=0){
+  if(style!=UNUM_IGNORE){
        UNumberFormat *retVal = 0;
   
       switch(style) {
