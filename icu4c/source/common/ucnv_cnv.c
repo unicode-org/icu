@@ -22,84 +22,6 @@
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 
-/**
- * This function is useful for implementations of getNextUChar().
- * After a call to a callback function or to toUnicode(), an output buffer
- * begins with a Unicode code point that needs to be returned as UChar32,
- * and all following code units must be prepended to the - potentially
- * prefilled - overflow buffer in the UConverter.
- * The buffer should be at least of capacity UTF_MAX_CHAR_LENGTH so that a
- * complete UChar32's UChars fit into it.
- *
- * @param cnv    The converter that will get remaining UChars copied to its overflow area.
- * @param buffer An array of UChars that was passed into a callback function
- *               or a toUnicode() function.
- * @param length The number of code units (UChars) that are actually in the buffer.
- *               This must be >0.
- * @return The code point from the first UChars in the buffer.
- */
-U_CFUNC UChar32
-ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length) {
-    UChar32 c;
-    int32_t i;
-
-    if(length<=0) {
-        return 0xffff;
-    }
-
-    /* get the first code point in the buffer */
-    i=0;
-    UTF_NEXT_CHAR(buffer, i, length, c);
-    if(i<length) {
-        /* there are UChars left in the buffer that need to go into the overflow buffer */
-        UChar *overflow=cnv->UCharErrorBuffer;
-        int32_t j=cnv->UCharErrorBufferLength;
-
-        if(j>0) {
-            /* move the overflow buffer contents to make room for the extra UChars */
-            int32_t k;
-
-            cnv->UCharErrorBufferLength=(int8_t)(k=(length-i)+j);
-            do {
-                overflow[--k]=overflow[--j];
-            } while(j>0);
-        } else {
-            cnv->UCharErrorBufferLength=(int8_t)(length-i);
-        }
-
-        /* copy the remaining UChars to the beginning of the overflow buffer */
-        do {
-            overflow[j++]=buffer[i++];
-        } while(i<length);
-    }
-    return c;
-}
-
-/* update target offsets after a callback call */
-U_CFUNC int32_t *
-ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex) {
-    if(offsets!=NULL) {
-        if(sourceIndex>=0) {
-            /* add the sourceIndex to the relative offsets that the callback wrote */
-            while(length>0) {
-                *offsets+=sourceIndex;
-                ++offsets;
-                --length;
-            }
-        } else {
-            /* sourceIndex==-1, set -1 offsets */
-            while(length>0) {
-                *offsets=-1;
-                ++offsets;
-                --length;
-            }
-        }
-        return offsets;
-    } else {
-        return NULL;
-    }
-}
-
 U_CFUNC void
 ucnv_getCompleteUnicodeSet(const UConverter *cnv,
                    USet *set,
@@ -152,6 +74,54 @@ ucnv_fromUWriteBytes(UConverter *cnv,
             do {
                 *t++=(uint8_t)*bytes++;
             } while(--length>0);
+        }
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+}
+
+U_CFUNC void
+ucnv_toUWriteCodePoint(UConverter *cnv,
+                       UChar32 c,
+                       UChar **target, const UChar *targetLimit,
+                       int32_t **offsets,
+                       int32_t sourceIndex,
+                       UErrorCode *pErrorCode) {
+    UChar *t;
+    int32_t *o;
+
+    t=*target;
+
+    if(t<targetLimit) {
+        if(c<=0xffff) {
+            *t++=(UChar)c;
+            c=U_SENTINEL;
+        } else /* c is a supplementary code point */ {
+            *t++=U16_LEAD(c);
+            c=U16_TRAIL(c);
+            if(t<targetLimit) {
+                *t++=(UChar)c;
+                c=U_SENTINEL;
+            }
+        }
+
+        /* write offsets */
+        if(offsets!=NULL && (o=*offsets)!=NULL) {
+            *o++=sourceIndex;
+            if((*target+1)<t) {
+                *o++=sourceIndex;
+            }
+            *offsets=o;
+        }
+    }
+
+    *target=t;
+
+    /* write overflow from c */
+    if(c>=0) {
+        if(cnv!=NULL) {
+            int8_t i=0;
+            U16_APPEND_UNSAFE(cnv->UCharErrorBuffer, i, c);
+            cnv->UCharErrorBufferLength=i;
         }
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
