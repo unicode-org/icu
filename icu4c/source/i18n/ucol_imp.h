@@ -203,32 +203,6 @@ struct UCollationElements
 
 
 
-/* a macro that gets a simple CE */
-/* for more complicated CEs it resorts to getComplicatedCE (what else) */
-#define UCOL_GETNEXTCE(order, coll, collationSource, status) {                        \
-    if ((collationSource).CEpos > (collationSource).toReturn) {                       \
-      (order) = *((collationSource).toReturn++);                                      \
-      if((collationSource).CEpos == (collationSource).toReturn) {                     \
-        (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
-      }                                                                               \
-    } else if((collationSource).pos < (collationSource).endp) {                       \
-      UChar ch = *(collationSource).pos++;                                            \
-      if(ch <= 0xFF) {                                                                \
-      (order) = (coll)->latinOneMapping[ch];                                          \
-      } else {                                                                        \
-      (order) = ucmpe32_get((coll)->mapping, ch);                                      \
-      }                                                                               \
-      if((order) >= UCOL_NOT_FOUND) {                                                 \
-        (order) = getSpecialCE((coll), (order), &(collationSource), (status));        \
-        if((order) == UCOL_NOT_FOUND) {                                               \
-          (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
-        }                                                                             \
-      }                                                                               \
-    } else {                                                                          \
-      (order) = UCOL_NO_MORE_CES;                                                     \
-    }                                                                                 \
-}
-
 /*
 * Macro to get the maximum size of an expansion ending with the argument ce.
 * Used in the Boyer Moore algorithm.
@@ -268,16 +242,13 @@ struct UCollationElements
             }                                                                \
 }
 
-uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
-uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
+uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status);
+uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
 U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
                                          collIterate *collationSource,
                                          UErrorCode *status);
-uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
-uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
-
 /* function used by C++ getCollationKey to prevent restarting the calculation */
 U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
         const    UChar        *source,
@@ -449,13 +420,25 @@ enum {
 
 typedef enum {
     NOT_FOUND_TAG = 0,
-    EXPANSION_TAG = 1,
-    CONTRACTION_TAG = 2,
-    THAI_TAG = 3,
-    CHARSET_TAG = 4,
-    SURROGATE_TAG = 5,
+    EXPANSION_TAG = 1,       /* This code point results in an expansion */
+    CONTRACTION_TAG = 2,     /* Start of a contraction */
+    THAI_TAG = 3,            /* Thai character - do the reordering */
+    CHARSET_TAG = 4,         /* Charset processing, not yet implemented */
+    SURROGATE_TAG = 5,       /* Lead surrogate that is tailored and doesn't start a contraction */
+    HANGUL_SYLLABLE_TAG = 6, /* AC00-D7AF*/
+    LEAD_SURROGATE_TAG = 7,  /* D800-DBFF*/
+    TRAIL_SURROGATE_TAG = 8,     /* DC00-DFFF*/
+    CJK_IMPLICIT_TAG = 9,    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
+    IMPLICIT_TAG = 10,
     CE_TAGS_COUNT
 } UColCETags;
+
+/*
+ *****************************************************************************************
+ * set to zero
+ * NON_CHARACTER FDD0 - FDEF, FFFE, FFFF, 1FFFE, 1FFFF, 2FFFE, 2FFFF,...e.g. **FFFE, **FFFF
+ ******************************************************************************************
+ */
 
 typedef struct {
       uint32_t variableTopValue;
