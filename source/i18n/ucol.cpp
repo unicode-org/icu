@@ -7002,6 +7002,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     } else {
       switch (getCETag(CE)) {
       case EXPANSION_TAG:
+      case DIGIT_TAG:
         ucol_setText(it, &ch, 1, status);
         while((int32_t)(CE = ucol_next(it, status)) != UCOL_NULLORDER) {
           if(primShift < 0 || secShift < 0 || terShift < 0) {
@@ -7140,7 +7141,7 @@ void ucol_updateInternalState(UCollator *coll, UErrorCode *status) {
         } else {
           coll->sortKeyGen = ucol_calcSortKey;
         }
-        if(coll->caseLevel == UCOL_OFF && coll->strength <= UCOL_TERTIARY
+        if(coll->caseLevel == UCOL_OFF && coll->strength <= UCOL_TERTIARY && coll->numericCollation == UCOL_OFF
           && coll->alternateHandling == UCOL_NON_IGNORABLE && !coll->latinOneFailed) {
           if(coll->latinOneCEs == NULL || coll->latinOneRegenTable) {
             if(ucol_setUpLatinOne(coll, status)) { // if we succeed in building latin1 table, we'll use it
