@@ -41,26 +41,31 @@ DataDrivenCollatorTest::~DataDrivenCollatorTest()
 
 void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
-  if (exec)
-  {
-      logln("TestSuite Collator: ");
-  }
-  UErrorCode status = U_ZERO_ERROR;
-  const DataMap *info = NULL;
-  TestData *testData = driver->createTestData(index, status);
-  if(U_SUCCESS(status)) {
-    name = testData->getName();
-    if(testData->getInfo(info, status)) {
-      log(info->getString("Description", status));
+  if(driver != NULL) {
+    if (exec)
+    {
+        logln("TestSuite Collator: ");
     }
-    if(exec) {
-      log(name);
-        logln("---");
-        logln("");
-        processTest(testData, status);
+    UErrorCode status = U_ZERO_ERROR;
+    const DataMap *info = NULL;
+    TestData *testData = driver->createTestData(index, status);
+    if(U_SUCCESS(status)) {
+      name = testData->getName();
+      if(testData->getInfo(info, status)) {
+        log(info->getString("Description", status));
+      }
+      if(exec) {
+        log(name);
+          logln("---");
+          logln("");
+          processTest(testData, status);
+      }
+      delete testData;
+    } else {
+      name = "";
     }
-    delete testData;
   } else {
+    errln("collate/DataDrivenTest data not initialized!");
     name = "";
   }
 
