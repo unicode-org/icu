@@ -10,6 +10,7 @@
 
 #include "uperf.h"
 #include "unicode/ucnv.h"
+#include "unicode/uclean.h"
 #include "unicode/ustring.h"
 #include <mlang.h>
 #include <objbase.h>
@@ -107,6 +108,38 @@ public:
     ~ICUFromUnicodePerfFunction(){
         uprv_free(target);
         ucnv_close(conv);
+    }
+};
+
+class ICUOpenAllConvertersFunction : public UPerfFunction{
+private:
+    UBool cleanup;
+    int32_t availableConverters;
+    const char **convNames;
+public:
+    ICUOpenAllConvertersFunction(UBool callCleanup, UErrorCode& status){
+        int32_t idx;
+        cleanup = callCleanup;
+        availableConverters = ucnv_countAvailable();
+        convNames = new const char *[availableConverters];
+        for (idx = 0; idx < availableConverters; idx++) {
+            convNames[idx] = ucnv_getAvailableName(idx);
+        }
+    }
+    virtual void call(UErrorCode* status){
+        int32_t idx;
+        if (cleanup) {
+            u_cleanup();
+        }
+        for (idx = 0; idx < availableConverters; idx++) {
+            ucnv_close(ucnv_open(convNames[idx], status));
+        }
+    }
+    virtual long getOperationsPerIteration(void){
+        return availableConverters;
+    }
+    ~ICUOpenAllConvertersFunction(){
+        delete []convNames;
     }
 };
 
@@ -459,13 +492,15 @@ public:
     ~ConverterPerformanceTest();
     virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = NULL);    
     
+    UPerfFunction* TestICU_CleanOpenAllConverters();
+    UPerfFunction* TestICU_OpenAllConverters();
+
     UPerfFunction* TestICU_UTF8_ToUnicode();
     UPerfFunction* TestICU_UTF8_FromUnicode();
     UPerfFunction* TestWinANSI_UTF8_ToUnicode();
     UPerfFunction* TestWinANSI_UTF8_FromUnicode();
     UPerfFunction* TestWinIML2_UTF8_ToUnicode();
     UPerfFunction* TestWinIML2_UTF8_FromUnicode();
-
         
     UPerfFunction* TestICU_Latin1_ToUnicode();
     UPerfFunction* TestICU_Latin1_FromUnicode();
