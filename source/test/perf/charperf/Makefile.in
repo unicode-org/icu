@@ -1,4 +1,4 @@
-## Makefile.in for ICU - test/ucharperf
+## Makefile.in for ICU - test/charperf
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -6,7 +6,7 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-top_builddir = ../..
+top_builddir = ../../..
 
 include $(top_builddir)/icudefs.mk
 
@@ -14,16 +14,16 @@ include $(top_builddir)/icudefs.mk
 include @platform_make_fragment@
 
 ## Build directory information
-subdir = test/ucharperf
+subdir = test/charperf
 
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = ucharperf
+TARGET = charperf
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common 
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/tools/toolutil 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -31,9 +31,9 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUUC) @LIBS@ @LIB_M@
+LIBS = $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
-OBJECTS = ucharperf.o
+OBJECTS = charperf.o
 
 DEPS = $(OBJECTS:.o=.d)
 

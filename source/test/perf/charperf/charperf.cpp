@@ -68,8 +68,15 @@ CharPerformanceTest::CharPerformanceTest(int32_t argc, const char *argv[],
 			        (int32_t)(sizeof(options)/sizeof(options[0])), options);
 	}
 	MIN_ = 0;
-    MAX_ = 0xffff;
-
+    if (sizeof(wchar_t) > 2)  {
+        // for stdlibs like glibc that supports 32 bits wchar
+        // we test for the whole unicode character set by default
+        MAX_ = 0x10ffff;
+    }
+    else {
+        MAX_ = 0xffff;
+    }
+    printf("MAX_ size will be 0x%x\n", MAX_);
 	if (options[MIN_OPTION_].doesOccur) {
 		MIN_ = atoi(options[MIN_OPTION_].value);
 	}

@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <wchar.h>
+#include <wctype.h>
 
 typedef void (*CharPerfFn)(UChar32 ch);
 typedef void (*StdLibCharPerfFn)(wchar_t ch);
