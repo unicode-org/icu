@@ -1347,6 +1347,14 @@ InputPath=.\unicode\ucnv_err.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnv_ext.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnv_ext.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnv_imp.h
 # End Source File
 # Begin Source File

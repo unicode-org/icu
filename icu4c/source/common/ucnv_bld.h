@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "ucnv_ext.h"
 #include "udataswp.h"
 
 /* size of the overflow buffers in UConverter, enough for escaping callbacks */
@@ -168,12 +169,22 @@ struct UConverter {
     int8_t UCharErrorBufferLength;      /* number of valid UChars in charErrorBuffer */
 
     uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
+    UBool useSubChar1;
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
     char invalidCharBuffer[UCNV_MAX_CHAR_LEN];          /* bytes from last error/callback situation */
     uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
 
     UChar invalidUCharBuffer[U16_MAX_LENGTH];           /* UChars from last error/callback situation */
     UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */
+
+    /* fields for conversion extension */
+
+    /* store previous UChars/chars to continue partial matches */
+    UChar32 preFromUFirstCP;                /* >=0: partial match */
+    UChar preFromU[UCNV_EXT_MAX_UCHARS];
+    char preToU[UCNV_EXT_MAX_BYTES];
+    int8_t preFromULength, preToULength;    /* negative: replay */
+    int8_t preToUFirstLength;               /* length of first character */
 };
 
 U_CDECL_END /* end of UConverter */

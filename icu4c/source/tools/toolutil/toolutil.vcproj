@@ -137,7 +137,13 @@
 				RelativePath=".\ucbuf.c">
 			</File>
 			<File
+				RelativePath=".\ucm.c">
+			</File>
+			<File
 				RelativePath=".\ucmpwrit.c">
+			</File>
+			<File
+				RelativePath=".\ucmstate.c">
 			</File>
 			<File
 				RelativePath=".\unewdata.c">
@@ -160,6 +166,9 @@
 			</File>
 			<File
 				RelativePath=".\ucbuf.h">
+			</File>
+			<File
+				RelativePath=".\ucm.h">
 			</File>
 			<File
 				RelativePath=".\ucmpwrit.h">

@@ -608,11 +608,14 @@ static void _reset(UConverter *converter, UConverterResetChoice choice,
         converter->mode = 0;
         converter->toULength = 0;
         converter->invalidCharLength = converter->UCharErrorBufferLength = 0;
+        converter->preToULength = 0;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         converter->fromUnicodeStatus = 0;
         converter->fromUChar32 = 0;
         converter->invalidUCharLength = converter->charErrorBufferLength = 0;
+        converter->preFromUFirstCP = U_SENTINEL;
+        converter->preFromULength = 0;
     }
 
     if (converter->sharedData->impl->reset != NULL) {
@@ -811,6 +814,28 @@ _updateOffsets(int32_t *offsets, int32_t length,
 
 /* ucnv_fromUnicode --------------------------------------------------------- */
 
+/*
+ * Implementation note for m:n conversions
+ *
+ * While collecting source units to find the longest match for m:n conversion,
+ * some source units may need to be stored for a partial match.
+ * When a second buffer does not yield a match on all of the previously stored
+ * source units, then they must be "replayed", i.e., fed back into the converter.
+ *
+ * The code relies on the fact that replaying will not nest -
+ * converting a replay buffer will not result in a replay.
+ * This is because a replay is necessary only after the _continuation_ of a
+ * partial match failed, but a replay buffer is converted as a whole.
+ * It may result in some of its units being stored again for a partial match,
+ * but there will not be a continuation _during_ the replay which could fail.
+ *
+ * It is conceivable that a callback function could call the converter
+ * recursively in a way that causes another replay to be stored, but that
+ * would be an error in the callback function.
+ * Such violations will cause assertion failures in a debug build,
+ * and wrong output, but they will not cause a crash.
+ */
+
 static void
 _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     UConverterFromUnicode fromUnicode;
@@ -821,6 +846,12 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     int32_t sourceIndex;
     int32_t errorInputLength;
     UBool converterSawEndOfInput, calledCallback;
+
+    /* variables for m:n conversion */
+    UChar replay[UCNV_EXT_MAX_UCHARS];
+    const UChar *realSource, *realSourceLimit;
+    int32_t realSourceIndex;
+    UBool realFlush;
 
     cnv=pArgs->converter;
     s=pArgs->source;
@@ -839,6 +870,29 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
             /* we will write -1 for each offset */
             sourceIndex=-1;
         }
+    }
+
+    if(cnv->preFromULength>=0) {
+        /* normal mode */
+        realSource=NULL;
+    } else {
+        /*
+         * Previous m:n conversion stored source units from a partial match
+         * and failed to consume all of them.
+         * We need to "replay" them from a temporary buffer and convert them first.
+         */
+        realSource=pArgs->source;
+        realSourceLimit=pArgs->sourceLimit;
+        realFlush=pArgs->flush;
+        realSourceIndex=sourceIndex;
+
+        uprv_memcpy(replay, cnv->preFromU, -cnv->preFromULength*U_SIZEOF_UCHAR);
+        pArgs->source=replay;
+        pArgs->sourceLimit=replay-cnv->preFromULength;
+        pArgs->flush=FALSE;
+        sourceIndex=-1;
+
+        cnv->preFromULength=0;
     }
 
     /*
@@ -897,7 +951,36 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                     pArgs->offsets=offsets+=length;
                 }
 
-                sourceIndex+=(int32_t)(pArgs->source-s);
+                if(sourceIndex>=0) {
+                    sourceIndex+=(int32_t)(pArgs->source-s);
+                }
+            }
+
+            if(cnv->preFromULength<0) {
+                /*
+                 * switch the source to new replay units (cannot occur while replaying)
+                 * after offset handling and before end-of-input and callback handling
+                 */
+                if(realSource==NULL) {
+                    realSource=pArgs->source;
+                    realSourceLimit=pArgs->sourceLimit;
+                    realFlush=pArgs->flush;
+                    realSourceIndex=sourceIndex;
+
+                    uprv_memcpy(replay, cnv->preFromU, -cnv->preFromULength*U_SIZEOF_UCHAR);
+                    pArgs->source=replay;
+                    pArgs->sourceLimit=replay-cnv->preFromULength;
+                    pArgs->flush=FALSE;
+                    if((sourceIndex+=cnv->preFromULength)<0) {
+                        sourceIndex=-1;
+                    }
+
+                    cnv->preFromULength=0;
+                } else {
+                    /* see implementation note before _fromUnicodeWithCallback() */
+                    U_ASSERT(realSource==NULL);
+                    *err=U_INTERNAL_PROGRAM_ERROR;
+                }
             }
 
             /* update pointers */
@@ -910,6 +993,15 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                      * continue with the conversion loop while there is still input left
                      * (continue converting by breaking out of only the inner loop)
                      */
+                    break;
+                } else if(realSource!=NULL) {
+                    /* switch back from replaying to the real source and continue */
+                    pArgs->source=realSource;
+                    pArgs->sourceLimit=realSourceLimit;
+                    pArgs->flush=realFlush;
+                    sourceIndex=realSourceIndex;
+
+                    realSource=NULL;
                     break;
                 } else if(pArgs->flush && cnv->fromUChar32!=0) {
                     /*
@@ -960,7 +1052,27 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                      * the check for buffer overflow is redundant but it is
                      * a high-runner case and hopefully documents the intent
                      * well
+                     *
+                     * if we were replaying, then the replay buffer must be
+                     * copied back into the UConverter
+                     * and the real arguments must be restored
                      */
+                    if(realSource!=NULL) {
+                        int32_t length;
+
+                        U_ASSERT(cnv->preFromULength==0);
+
+                        length=(int32_t)(pArgs->sourceLimit-pArgs->source);
+                        if(length>0) {
+                            uprv_memcpy(cnv->preFromU, pArgs->source, length*U_SIZEOF_UCHAR);
+                            cnv->preFromULength=(int8_t)-length;
+                        }
+
+                        pArgs->source=realSource;
+                        pArgs->sourceLimit=realSourceLimit;
+                        pArgs->flush=realFlush;
+                    }
+
                     return;
                 }
             }
@@ -1079,7 +1191,7 @@ ucnv_fromUnicode(UConverter *cnv,
         cnv->charErrorBufferLength=0;
     }
 
-    if(!flush && s==sourceLimit) {
+    if(!flush && s==sourceLimit && cnv->preFromULength>=0) {
         /* the overflow buffer is emptied and there is no new input: we are done */
         *target=t;
         return;
@@ -1122,6 +1234,12 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     int32_t errorInputLength;
     UBool converterSawEndOfInput, calledCallback;
 
+    /* variables for m:n conversion */
+    char replay[UCNV_EXT_MAX_BYTES];
+    const char *realSource, *realSourceLimit;
+    int32_t realSourceIndex;
+    UBool realFlush;
+
     cnv=pArgs->converter;
     s=pArgs->source;
     t=pArgs->target;
@@ -1139,6 +1257,29 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
             /* we will write -1 for each offset */
             sourceIndex=-1;
         }
+    }
+
+    if(cnv->preToULength>=0) {
+        /* normal mode */
+        realSource=NULL;
+    } else {
+        /*
+         * Previous m:n conversion stored source units from a partial match
+         * and failed to consume all of them.
+         * We need to "replay" them from a temporary buffer and convert them first.
+         */
+        realSource=pArgs->source;
+        realSourceLimit=pArgs->sourceLimit;
+        realFlush=pArgs->flush;
+        realSourceIndex=sourceIndex;
+
+        uprv_memcpy(replay, cnv->preToU, -cnv->preToULength);
+        pArgs->source=replay;
+        pArgs->sourceLimit=replay-cnv->preToULength;
+        pArgs->flush=FALSE;
+        sourceIndex=-1;
+
+        cnv->preToULength=0;
     }
 
     /*
@@ -1202,7 +1343,36 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                     pArgs->offsets=offsets+=length;
                 }
 
-                sourceIndex+=(int32_t)(pArgs->source-s);
+                if(sourceIndex>=0) {
+                    sourceIndex+=(int32_t)(pArgs->source-s);
+                }
+            }
+
+            if(cnv->preToULength<0) {
+                /*
+                 * switch the source to new replay units (cannot occur while replaying)
+                 * after offset handling and before end-of-input and callback handling
+                 */
+                if(realSource==NULL) {
+                    realSource=pArgs->source;
+                    realSourceLimit=pArgs->sourceLimit;
+                    realFlush=pArgs->flush;
+                    realSourceIndex=sourceIndex;
+
+                    uprv_memcpy(replay, cnv->preToU, -cnv->preToULength);
+                    pArgs->source=replay;
+                    pArgs->sourceLimit=replay-cnv->preToULength;
+                    pArgs->flush=FALSE;
+                    if((sourceIndex+=cnv->preToULength)<0) {
+                        sourceIndex=-1;
+                    }
+
+                    cnv->preToULength=0;
+                } else {
+                    /* see implementation note before _fromUnicodeWithCallback() */
+                    U_ASSERT(realSource==NULL);
+                    *err=U_INTERNAL_PROGRAM_ERROR;
+                }
             }
 
             /* update pointers */
@@ -1215,6 +1385,15 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                      * continue with the conversion loop while there is still input left
                      * (continue converting by breaking out of only the inner loop)
                      */
+                    break;
+                } else if(realSource!=NULL) {
+                    /* switch back from replaying to the real source and continue */
+                    pArgs->source=realSource;
+                    pArgs->sourceLimit=realSourceLimit;
+                    pArgs->flush=realFlush;
+                    sourceIndex=realSourceIndex;
+
+                    realSource=NULL;
                     break;
                 } else if(pArgs->flush && cnv->toULength>0) {
                     /*
@@ -1265,7 +1444,27 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                      * the check for buffer overflow is redundant but it is
                      * a high-runner case and hopefully documents the intent
                      * well
+                     *
+                     * if we were replaying, then the replay buffer must be
+                     * copied back into the UConverter
+                     * and the real arguments must be restored
                      */
+                    if(realSource!=NULL) {
+                        int32_t length;
+
+                        U_ASSERT(cnv->preToULength==0);
+
+                        length=(int32_t)(pArgs->sourceLimit-pArgs->source);
+                        if(length>0) {
+                            uprv_memcpy(cnv->preToU, pArgs->source, length);
+                            cnv->preToULength=(int8_t)-length;
+                        }
+
+                        pArgs->source=realSource;
+                        pArgs->sourceLimit=realSourceLimit;
+                        pArgs->flush=realFlush;
+                    }
+
                     return;
                 }
             }
@@ -1379,7 +1578,7 @@ ucnv_toUnicode(UConverter *cnv,
         cnv->UCharErrorBufferLength=0;
     }
 
-    if(!flush && s==sourceLimit) {
+    if(!flush && s==sourceLimit && cnv->preToULength>=0) {
         /* the overflow buffer is emptied and there is no new input: we are done */
         *target=t;
         return;

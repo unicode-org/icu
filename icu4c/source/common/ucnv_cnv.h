@@ -251,6 +251,13 @@ ucnv_fromUWriteBytes(UConverter *cnv,
                      int32_t **offsets,
                      int32_t sourceIndex,
                      UErrorCode *pErrorCode);
+U_CFUNC void
+ucnv_toUWriteUChars(UConverter *cnv,
+                    const UChar *uchars, int32_t length,
+                    UChar **target, const UChar *targetLimit,
+                    int32_t **offsets,
+                    int32_t sourceIndex,
+                    UErrorCode *pErrorCode);
 
 U_CFUNC void
 ucnv_toUWriteCodePoint(UConverter *cnv,

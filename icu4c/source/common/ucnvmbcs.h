@@ -37,7 +37,11 @@
  * At the moment, there are only variations of MBCS converters. They all have
  * the same toUnicode structures, while the fromUnicode structures for SBCS
  * differ from those for other MBCS-style converters.
- * 
+ *
+ * _MBCSHeader.version 4.2 adds an optional conversion extension data structure.
+ * If it is present, then an ICU version reading header versions 4.0 or 4.1
+ * will be able to use the base table and ignore the extension.
+ *
  * MBCS-style data structure following the static data.
  * Offsets are counted in bytes from the beginning of the MBCS header structure.
  * Details about usage in comments in ucnvmbcs.c.
@@ -45,60 +49,78 @@
  * struct _MBCSHeader (see the definition in this header file below)
  * contains 32-bit fields as follows:
  * 8 values:
- *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.1.0.0)
+ *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.2.0.0)
  *  1   uint32_t    countStates
  *  2   uint32_t    countToUFallbacks
  *  3   uint32_t    offsetToUCodeUnits
  *  4   uint32_t    offsetFromUTable
  *  5   uint32_t    offsetFromUBytes
  *  6   uint32_t    flags, bits:
- *                      31.. 8 reserved
+ *                      31.. 8 offsetExtension -- _MBCSHeader.version 4.2 (ICU 2.8) and higher
+ *                                                0 for older versions and if
+ *                                                there is not extension structure
  *                       7.. 0 outputType
  *  7   uint32_t    fromUBytesLength -- _MBCSHeader.version 4.1 (ICU 2.4) and higher
  *                  counts bytes in fromUBytes[]
  *
- * int32_t stateTable[countStates][256];
+ * if(outputType==MBCS_OUTPUT_EXT_ONLY) {
+ *     -- base table name for extension-only table
+ *     char baseTableName[variable]; -- with NUL plus padding for 4-alignment
  *
- * struct _MBCSToUFallback { (fallbacks are sorted by offset)
- *     uint32_t offset;
- *     UChar32 codePoint;
- * } toUFallbacks[countToUFallbacks];
- *
- * uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2];
- *              (padded to an even number of units)
- *
- * -- stage 1 tables
- * if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
- *     -- stage 1 table for all of Unicode
- *     uint16_t fromUTable[0x440]; (32-bit-aligned)
+ *     -- all _MBCSHeader fields except for version and flags are 0
  * } else {
- *     -- BMP-only tables have a smaller stage 1 table
- *     uint16_t fromUTable[0x40]; (32-bit-aligned)
+ *     -- normal base table with optional extension
+ *
+ *     int32_t stateTable[countStates][256];
+ *    
+ *     struct _MBCSToUFallback { (fallbacks are sorted by offset)
+ *         uint32_t offset;
+ *         UChar32 codePoint;
+ *     } toUFallbacks[countToUFallbacks];
+ *    
+ *     uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2];
+ *                  (padded to an even number of units)
+ *    
+ *     -- stage 1 tables
+ *     if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+ *         -- stage 1 table for all of Unicode
+ *         uint16_t fromUTable[0x440]; (32-bit-aligned)
+ *     } else {
+ *         -- BMP-only tables have a smaller stage 1 table
+ *         uint16_t fromUTable[0x40]; (32-bit-aligned)
+ *     }
+ *    
+ *     -- stage 2 tables
+ *        length determined by top of stage 1 and bottom of stage 3 tables
+ *     if(outputType==MBCS_OUTPUT_1) {
+ *         -- SBCS: pure indexes
+ *         uint16_t stage 2 indexes[?];
+ *     } else {
+ *         -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
+ *         uint32_t stage 2 flags and indexes[?];
+ *     }
+ *    
+ *     -- stage 3 tables with byte results
+ *     if(outputType==MBCS_OUTPUT_1) {
+ *         -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
+ *         uint16_t fromUBytes[fromUBytesLength/2];
+ *     } else {
+ *         -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result, see ucnvmbcs.c
+ *         uint8_t fromUBytes[fromUBytesLength]; or
+ *         uint16_t fromUBytes[fromUBytesLength/2]; or
+ *         uint32_t fromUBytes[fromUBytesLength/4];
+ *     }
  * }
  *
- * -- stage 2 tables
- *    length determined by top of stage 1 and bottom of stage 3 tables
- * if(outputType==MBCS_OUTPUT_1) {
- *     -- SBCS: pure indexes
- *     uint16_t stage 2 indexes[?];
- * } else {
- *     -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
- *     uint32_t stage 2 flags and indexes[?];
- * }
- *
- * -- stage 3 tables with byte results
- * if(outputType==MBCS_OUTPUT_1) {
- *     -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
- *     uint16_t fromUBytes[fromUBytesLength/2];
- * } else {
- *     -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result, see ucnvmbcs.c
- *     uint8_t fromUBytes[fromUBytesLength]; or
- *     uint16_t fromUBytes[fromUBytesLength/2]; or
- *     uint32_t fromUBytes[fromUBytesLength/4];
- * }
+ * -- extension table, details see ucnv_ext.h
+ * int32_t indexes[>=32]; ...
  */
 
 /* MBCS converter data and state -------------------------------------------- */
+
+enum {
+    MBCS_MAX_STATE_COUNT=128
+};
 
 /**
  * MBCS action codes for conversions to Unicode.
@@ -175,7 +197,11 @@ enum {
     MBCS_OUTPUT_4_EUC,      /* 9 */
 
     MBCS_OUTPUT_2_SISO=12,  /* c */
-    MBCS_OUTPUT_2_HZ        /* d */
+    MBCS_OUTPUT_2_HZ,       /* d */
+
+    MBCS_OUTPUT_EXT_ONLY,   /* e */
+
+    MBCS_OUTPUT_COUNT
 };
 
 /**
@@ -210,6 +236,9 @@ typedef struct UConverterMBCSTable {
 
     /* converter name for swaplfnl */
     char *swapLFNLName;
+
+    /* extension data */
+    const int32_t *extIndexes;
 } UConverterMBCSTable;
 
 /**

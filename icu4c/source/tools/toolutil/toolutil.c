@@ -26,6 +26,7 @@
 #   define NOMCX
 #   include <windows.h>
 #endif
+#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
@@ -72,4 +73,118 @@ findBasename(const char *filename) {
 #endif
         return filename;
     }
+}
+
+/* tool memory helper ------------------------------------------------------- */
+
+typedef struct UToolMemory {
+    char name[64];
+    int32_t capacity, maxCapacity, size, index;
+    void *array;
+    UAlignedMemory staticArray[1];
+} UToolMemory;
+
+U_CAPI UToolMemory * U_EXPORT2
+utm_open(const char *name, int32_t initialCapacity, int32_t maxCapacity, int32_t size) {
+    UToolMemory *mem;
+
+    if(maxCapacity<initialCapacity) {
+        maxCapacity=initialCapacity;
+    }
+
+    mem=(UToolMemory *)uprv_malloc(sizeof(UToolMemory)+initialCapacity*size);
+    if(mem==NULL) {
+        fprintf(stderr, "error: %s - out of memory\n", name);
+        exit(U_MEMORY_ALLOCATION_ERROR);
+    }
+    mem->array=mem->staticArray;
+
+    uprv_strcpy(mem->name, name);
+    mem->capacity=initialCapacity;
+    mem->maxCapacity=maxCapacity;
+    mem->size=size;
+    mem->index=0;
+    return mem;
+}
+
+U_CAPI void U_EXPORT2
+utm_close(UToolMemory *mem) {
+    if(mem!=NULL) {
+        if(mem->array!=mem->staticArray) {
+            uprv_free(mem->array);
+        }
+        uprv_free(mem);
+    }
+}
+
+
+U_CAPI void * U_EXPORT2
+utm_getStart(UToolMemory *mem) {
+    return (char *)mem->array;
+}
+
+U_CAPI int32_t U_EXPORT2
+utm_countItems(UToolMemory *mem) {
+    return mem->index;
+}
+
+
+static UBool
+utm_hasCapacity(UToolMemory *mem, int32_t capacity) {
+    if(mem->capacity<capacity) {
+        int32_t newCapacity;
+
+        if(mem->maxCapacity<capacity) {
+            fprintf(stderr, "error: %s - trying to use more than maxCapacity=%ld units\n",
+                    mem->name, (long)mem->maxCapacity);
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        }
+
+        /* try to allocate a larger array */
+        if(capacity>=2*mem->capacity) {
+            newCapacity=capacity;
+        } else if(mem->capacity<=mem->maxCapacity/3) {
+            newCapacity=2*mem->capacity;
+        } else {
+            newCapacity=mem->maxCapacity;
+        }
+
+        if(mem->array==mem->staticArray) {
+            mem->array=uprv_malloc(newCapacity*mem->size);
+            if(mem->array!=NULL) {
+                uprv_memcpy(mem->array, mem->staticArray, mem->index*mem->size);
+            }
+        } else {
+            mem->array=uprv_realloc(mem->array, newCapacity*mem->size);
+        }
+
+        if(mem->array==NULL) {
+            fprintf(stderr, "error: %s - out of memory\n", mem->name);
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        }
+    }
+
+    return TRUE;
+}
+
+U_CAPI void * U_EXPORT2
+utm_alloc(UToolMemory *mem) {
+    char *p=(char *)mem->array+mem->index*mem->size;
+    int32_t newIndex=mem->index+1;
+    if(utm_hasCapacity(mem, newIndex)) {
+        mem->index=newIndex;
+        uprv_memset(p, 0, mem->size);
+    }
+    return p;
+}
+
+U_CAPI void * U_EXPORT2
+utm_allocN(UToolMemory *mem, int32_t n) {
+    char *p=(char *)mem->array+mem->index*mem->size;
+    int32_t newIndex=mem->index+n;
+    if(utm_hasCapacity(mem, newIndex)) {
+        mem->index=newIndex;
+        uprv_memset(p, 0, n*mem->size);
+    }
+    return p;
 }
