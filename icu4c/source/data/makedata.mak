@@ -73,7 +73,7 @@ ICUCOL=coll
 #
 ICURBNF=rbnf
 
-#  ICUTRANSLIT
+#  ICUTRNS
 #       The directory that contains trfiles.mk files along with *.txt transliterator files
 #
 ICUTRNS=translit
@@ -248,7 +248,10 @@ TRANLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
 !MESSAGE Warning: cannot find "trnsfiles.mk"
 !ENDIF
 
-TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
+TRANSLIT_FILES = $(ICUTRNS)\root.txt $(TRANSLIT_ALIAS_SOURCE) $(TRANSLIT_SOURCE)
+TRANSLIT_RES_FILES = $(TRANSLIT_FILES:.txt =.res translit\)
+TRANSLIT_RES_FILES = $(TRANSLIT_RES_FILES:.txt=.res)
+TRANSLIT_RES_FILES = $(TRANSLIT_RES_FILES:translit\ =translit\)
 
 # Read list of miscellaneous resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICUMISC2)\miscfiles.mk")
@@ -268,6 +271,7 @@ MISC_FILES = $(MISC_SOURCE:.txt=.res)
 INDEX_RES_FILES = res_index.res
 INDEX_COL_FILES = $(ICUCOL)\res_index.res
 INDEX_RBNF_FILES = $(ICURBNF)\res_index.res
+#INDEX_TRANSLIT_FILES = $(ICUTRNS)\res_index.res
 
 #
 #  Break iterator data files.
@@ -276,7 +280,7 @@ BRK_SOURCE_FILES = sent.txt char.txt line.txt word.txt title.txt line_th.txt wor
 BRK_FILES=$(BRK_SOURCE_FILES:.txt=.brk)
 
 # don't include COL_FILES
-ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(TRANSLIT_FILES) $(MISC_FILES)
+ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(MISC_FILES)
 
 #############################################################################
 #
@@ -293,7 +297,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat
 #
-"$(TESTDATAOUT)\testdata.dat": "$(ICUBLD)\ucadata.icu" $(TRANSLIT_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
+"$(TESTDATAOUT)\testdata.dat": "$(ICUBLD)\ucadata.icu" $(TRANSLIT_RES_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mak" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" ICUP="$(ICUP)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)" TESTDATABLD="$(TESTDATABLD)"
@@ -303,7 +307,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu" "$(ICUBLD)\cnvalias.icu" "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\invuca.icu" "$(ICUBLD)\uidna.spp" $(BRK_FILES) $(INDEX_COL_FILES) $(COL_COL_FILES) $(INDEX_RBNF_FILES) $(RBNF_RES_FILES) $(ALL_RES) "$(ICUTMP)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu" "$(ICUBLD)\cnvalias.icu" "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\invuca.icu" "$(ICUBLD)\uidna.spp" $(BRK_FILES) $(INDEX_COL_FILES) $(COL_COL_FILES) $(INDEX_RBNF_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) "$(ICUTMP)\icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	cd "$(ICUBLD)"
 	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD)" -s . <<"$(ICUTMP)\pkgdatain.txt"
@@ -325,6 +329,8 @@ $(ICUCOL)\res_index.res
 $(RBNF_RES_FILES:.res =.res
 )
 $(ICURBNF)\res_index.res
+$(TRANSLIT_RES_FILES:.res =.res
+)
 $(BRK_FILES:.brk =.brk
 )
 <<KEEP
@@ -342,6 +348,7 @@ GODATA :
 	@if not exist "$(ICUBLD)\$(NULL)" mkdir "$(ICUBLD)"
 	@if not exist "$(ICUBLD)\$(ICUCOL)\$(NULL)" mkdir "$(ICUBLD)\$(ICUCOL)"
 	@if not exist "$(ICUBLD)\$(ICURBNF)\$(NULL)" mkdir "$(ICUBLD)\$(ICURBNF)"
+	@if not exist "$(ICUBLD)\$(ICUTRNS)\$(NULL)" mkdir "$(ICUBLD)\$(ICUTRNS)"
 	@if not exist "$(TESTDATAOUT)\$(NULL)" mkdir "$(TESTDATAOUT)"
 	@if not exist "$(TESTDATABLD)\$(NULL)" mkdir "$(TESTDATABLD)"
 	@cd "$(ICUBLD)"
@@ -362,6 +369,9 @@ CLEAN : GODATA
 	-@erase "*.res"
 	-@erase "*.txt"
 	@cd "$(ICUBLD)\$(ICURBNF)"
+	-@erase "*.res"
+	-@erase "*.txt"
+    @cd "$(ICUBLD)\$(ICUTRNS)"
 	-@erase "*.res"
 	-@erase "*.txt"
 	@cd "$(ICUOUT)"
@@ -393,11 +403,6 @@ CLEAN : GODATA
 	@echo Generating converters
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -d"$(ICUBLD)" $<
 
-# Batch inference rule for creating transliterator resource files
-{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt.res::
-	@echo Making Transliterator Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" $<
-
 # Batch inference rule for creating miscellaneous resource files
 # TODO: -q option is specified to squelch the 120+ warnings about
 #       empty intvectors and binary elements.  Unfortunately, this may
@@ -412,6 +417,18 @@ CLEAN : GODATA
 	@echo Making Locale Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" $<
 
+$(INDEX_RES_FILES):
+	@echo Generating <<res_index.txt
+// Warning this file is automatically generated
+res_index {
+    InstalledLocales {
+        $(GENRB_SOURCE:.txt= {""}
+       )
+    }
+}
+<<KEEP
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" .\res_index.txt
+	
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUCOL)}.txt{$(ICUCOL)}.res::
 	@echo Making Collation files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD)" -d"$(ICUBLD)\$(ICUCOL)" $<
@@ -444,18 +461,10 @@ res_index {
 <<KEEP
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)\$(ICURBNF)" .\$(ICURBNF)\res_index.txt
 
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUTRNS)}.txt{$(ICUTRNS)}.res::
+	@echo Making Transliterator files
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD)" -d"$(ICUBLD)\$(ICUTRNS)" $<
 
-$(INDEX_RES_FILES):
-	@echo Generating <<res_index.txt
-// Warning this file is automatically generated
-res_index {
-    InstalledLocales {
-        $(GENRB_SOURCE:.txt= {""}
-       )
-    }
-}
-<<KEEP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)" .\res_index.txt
 
 # DLL version information
 # If you modify this, modify winmode.c in pkgdata.
@@ -477,7 +486,7 @@ res_index {
 # Targets for uprops.icu
 "$(ICUBLD)\uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(ICUBLD)\pnames.icu"
 	@echo Creating data file for Unicode Character Properties
-	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -i "$(ICUBLD)" -d "$(ICUBLD)" -s "$(ICUUNIDATA)"
+	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -i "$(ICUBLD)" -s "$(ICUUNIDATA)" -d "$(ICUBLD)"
 
 # Targets for unorm.icu
 "$(ICUBLD)\unorm.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
@@ -502,6 +511,6 @@ res_index {
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-$(TRANSLIT_SOURCE) $(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unorm.icu"
+$(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unorm.icu"
 
 $(BRK_SOURCE_FILES) : "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu"

@@ -17,6 +17,9 @@
 #include "unicode/translit.h"
 #include "unicode/utypes.h"
 #include "unicode/parseerr.h"
+#include "unicode/udata.h"
+
+#define U_ICUDATA_TRANSLIT U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "translit"
 
 U_NAMESPACE_BEGIN
 

@@ -26,6 +26,9 @@
 #include "unicode/rep.h"
 #include "unicode/locid.h"
 #include "unicode/uniset.h"
+
+static const UVersionInfo ICU_31 = {3,1,0,0};
+
 int32_t getInt(UnicodeString str)
 {
     char buffer[20];
@@ -84,6 +87,9 @@ void TransliteratorAPITest::TestgetID() {
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
         status = U_ZERO_ERROR;
         ID = (UnicodeString) Transliterator::getAvailableID(i);
+        if(ID.indexOf("Thai")>-1 && isICUVersionAtLeast(ICU_31)){
+            continue;
+        }   
         t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
         if(t == 0){
             errln("FAIL: " + ID);

@@ -725,7 +725,7 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& id,
                                               UnicodeString& result) {
     UErrorCode status = U_ZERO_ERROR;
 
-    ResourceBundle bundle(u_getDataDirectory(), inLocale, status);
+    ResourceBundle bundle(U_ICUDATA_TRANSLIT, inLocale, status);
 
     // Suspend checking status until later...
 
@@ -1411,13 +1411,23 @@ UBool Transliterator::initializeRegistry() {
     }
 
     /* The following code parses the index table located in
-     * icu/data/translit_index.txt.  The index is an n x 4 table
+     * icu/data/translit/root.txt.  The index is an n x 4 table
      * that follows this format:
-     *
-     *   <id>:file:<resource>:<direction>
-     *   <id>:internal:<resource>:<direction>
-     *   <id>:alias:<getInstanceArg>:
-     *  
+     *  <id>{
+     *      file{
+     *          resource{"<resource>"}
+     *          direction{"<direction>"}
+     *      }
+     *  }
+     *  <id>{
+     *      internal{
+     *          resource{"<resource>"}
+     *          direction{"<direction"}
+     *       }
+     *  }
+     *  <id>{
+     *      alias{"<getInstanceArg"}
+     *  }
      * <id> is the ID of the system transliterator being defined.  These
      * are public IDs enumerated by Transliterator.getAvailableIDs(),
      * unless the second field is "internal".
@@ -1434,10 +1444,10 @@ UBool Transliterator::initializeRegistry() {
      *
      * The extra blank field on "alias" lines is to make the array square.
      */
-    static const char translit_index[] = "translit_index";
+    //static const char translit_index[] = "translit_index";
 
     UResourceBundle *bundle, *transIDs, *colBund;
-    bundle = ures_openDirect(0, translit_index, &status);
+    bundle = ures_open(U_ICUDATA_TRANSLIT, NULL/*open root bundle*/, &status);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
 
     int32_t row, maxRows;
@@ -1445,11 +1455,11 @@ UBool Transliterator::initializeRegistry() {
         maxRows = ures_getSize(transIDs);
         for (row = 0; row < maxRows; row++) {
             colBund = ures_getByIndex(transIDs, row, 0, &status);
-
-            if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
-                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
-                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
-                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+            if (U_SUCCESS(status)) {
+                UnicodeString id = ures_getKey(colBund);
+                UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
+                const char* typeStr = ures_getKey(res);
+                UChar type = (UChar)*typeStr;
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
@@ -1458,9 +1468,11 @@ UBool Transliterator::initializeRegistry() {
                         // 'file' or 'internal';
                         // row[2]=resource, row[3]=direction
                         {
+                            
+                            UnicodeString resString = ures_getUnicodeStringByKey(res, "resource", &status);
                             UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir = 
-                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+                                (ures_getUnicodeStringByKey(res, "direction", &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             registry->put(id, resString, dir, visible);
@@ -1468,12 +1480,13 @@ UBool Transliterator::initializeRegistry() {
                         break;
                     case 0x61: // 'a'
                         // 'alias'; row[2]=createInstance argument
+                        UnicodeString resString = ures_getUnicodeString(res, &status);
                         registry->put(id, resString, TRUE);
                         break;
                     }
                 }
+                ures_close(res);
             }
-
             ures_close(colBund);
         }
     }

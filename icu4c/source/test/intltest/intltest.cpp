@@ -31,6 +31,7 @@
 #include "cstring.h"
 #include "umutex.h"
 #include "uassert.h"
+#include "cmemory.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -1490,6 +1491,16 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              const char* expected,
                              const char* actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+//--------------------------------------------------------------------
+// Time bomb - allows temporary behavior that expires at a given
+//             release
+//--------------------------------------------------------------------
+
+UBool IntlTest::isICUVersionAtLeast(const UVersionInfo x) {
+    UVersionInfo v;
+    u_getVersion(v);
+    return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
 }
 
 #if !UCONFIG_NO_FORMATTING

@@ -202,7 +202,7 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     UErrorCode status = U_ZERO_ERROR;
     CharString topch(top);
     Locale toploc(topch);
-    res = new ResourceBundle(u_getDataDirectory(), toploc, status);
+    res = new ResourceBundle(U_ICUDATA_TRANSLIT, toploc, status);
     /* test for NULL */
     if (res == 0) {
         return;
@@ -1208,10 +1208,10 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             // 2-d array at static init time, as a locale language.  We're
             // just using the locale mechanism to map through to a file
             // name; this in no way represents an actual locale.
-            CharString ch(entry->stringArg);
-            UResourceBundle *bundle = ures_openDirect(0, ch, &status);
-            UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
-            ures_close(bundle);
+            //CharString ch(entry->stringArg);
+            //UResourceBundle *bundle = ures_openDirect(0, ch, &status);
+            UnicodeString rules = entry->stringArg;
+            //ures_close(bundle);
             
             if (U_FAILURE(status)) {
                 // We have a failure of some kind.  Remove the ID from the
