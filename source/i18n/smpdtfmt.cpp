@@ -417,7 +417,7 @@ SimpleDateFormat::format(UDate date, UnicodeString& toAppendTo, FieldPosition& p
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
             if ((i+1) < fPattern.length() && fPattern[i+1] == 0x0027 /*'\''*/) {
-                toAppendTo += 0x0027 /*'\''*/;
+                toAppendTo += (UChar)0x0027 /*'\''*/;
                 ++i;
             } else {
                 inQuote = ! inQuote;
@@ -617,7 +617,7 @@ SimpleDateFormat::subFormat(UnicodeString& result,
                 zoneString += fgGmtPlus;
             
             zoneString += zeroPaddingNumber(str, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
-            zoneString += 0x003A /*':'*/;
+            zoneString += (UChar)0x003A /*':'*/;
             zoneString += zeroPaddingNumber(str, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
             
             result = zoneString;

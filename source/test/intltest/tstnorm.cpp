@@ -261,7 +261,7 @@ UnicodeString BasicNormalizerTest::hex(UChar ch) {
 UnicodeString BasicNormalizerTest::hex(const UnicodeString& s) {
     UnicodeString result;
     for (int i = 0; i < s.length(); ++i) {
-        if (i != 0) result += ',';
+        if (i != 0) result += (UChar)0x2c/*,*/;
         appendHex(s[i], 4, result);
     }
     return result;

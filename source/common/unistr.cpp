@@ -145,9 +145,9 @@ UnicodeString::UnicodeString(const UChar *text,
 }
 
 UnicodeString::UnicodeString(bool_t isTerminated,
-                             UChar *text,
+                             const UChar *text,
                              int32_t textLength)
-  : fArray(text),
+  : fArray((UChar *)text),
     fLength(textLength),
     fCapacity(isTerminated ? textLength + 1 : textLength),
     fHashCode(kInvalidHashCode),
@@ -677,7 +677,7 @@ UnicodeString::setTo(bool_t isTerminated,
     fCapacity = fLength + 1;
   }
 
-  fCapacity = isTerminated ? textLength + 1 : textLength;
+  fCapacity = isTerminated ? fLength + 1 : fLength;
   fHashCode = kInvalidHashCode;
   fFlags = kReadonlyAlias;
   return *this;
@@ -728,23 +728,46 @@ UnicodeString&
 UnicodeString::toLower()
 { return toLower(Locale::getDefault()); }
 
+/*
+ * The following toUpper() and toLower() implementations are designed
+ * for UTF-16 and UTF-32, not for UTF-8.
+ * In UTF-16 and UTF-32, the number of code units per code point is fixed,
+ * and a case mapping is assumed to always stay within the same plane
+ * (64k code range) with the original code point. This allows to write
+ * the mapping into the same space as the source character without
+ * expansions or contractions except in the special cases.
+ *
+ * For UTF-8, where a source code point may take up a variable number
+ * of code units, it is more efficient to get the mapping and write
+ * the result only if it is a different code point from the original.
+ * Also, a sharp s and the "SS" string typically both take up 2 bytes in UTF-8,
+ * while the turkish i's typically result in expansions and contractions.
+ * Therefore, for UTF-8, these functions should be reimplemented.
+ * One single implementation for all UTF's would be either clumsy
+ * or inefficient.
+ */
+#if UTF_SIZE==8
+# error reimplement toUpper() and toLower() for UTF-8, see comment above
+#endif
+
 UnicodeString&
 UnicodeString::toUpper(const Locale& locale)
 {
-  UTextOffset start = 0;
-  UTextOffset limit = fLength;
-  UChar c;
-  UnicodeString lang;
-  char langChars[16];
-
   if(!cloneArrayIfNeeded()) {
     return *this;
   }
+
+  UnicodeString lang;
+  char langChars[16];
 
   // get char * locale language
   locale.getLanguage(lang);
   lang.extract(0, lang.length(), langChars, "");
   langChars[lang.length()] = 0;
+
+  UTextOffset start = 0, next = 0;
+  UTextOffset limit = fLength;
+  UChar32 c;
 
   // The German sharp S character (U+00DF)'s uppercase equivalent is
   // "SS", making it the only character that expands to two characters
@@ -756,22 +779,22 @@ UnicodeString::toUpper(const Locale& locale)
   // room for the extra capital Ses if we find any.  [For performance,
   // we only do this extra work if the language is actually German]
   if(uprv_strcmp(langChars, "de") == 0) {
-    UChar SS [] = { 0x0053, 0x0053 };
+    static UChar SS [] = { 0x0053, 0x0053 };
     while(start < limit) {
-      c = getArrayStart()[start];
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
 
       // A sharp s needs to be replaced with two capital S's.
       if(c == 0x00DF) {
         doReplace(start, 1, SS, 0, 2);
-        start++;
-        limit++;
+        start += 2;
+        ++next; // the string expanded by one
+        ++limit;
       } else {
-        // Otherwise, the case conversion can be handled by the Unicode unit.
-        fArray[start] = Unicode::toUpperCase(c);
+        // Otherwise, the case conversion can be handled by the Unicode code point.
+        c = Unicode::toUpperCase(c);
+        UTF_APPEND_CHAR(fArray, start, limit, c);
       }
-
-      // If no conversion is necessary, do nothing
-      ++start;
     }
   } else if(uprv_strcmp(langChars, "tr") == 0) {
     // If the specfied language is Turkish, then we have to special-case
@@ -779,23 +802,23 @@ UnicodeString::toUpper(const Locale& locale)
     // maps to the capital I with a dot (U+0130), and the lowercase i
     // without the dot (U+0131) maps to the regular capital I
     while(start < limit) {
-      c = getArrayStart()[start];
-
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
       if(c == 0x0069/*'i'*/) {
-        fArray[start] = 0x0130;
+        fArray[start++] = 0x0130;
       } else if(c == 0x0131) {
-        fArray[start] = 0x0049/*'I'*/;
+        fArray[start++] = 0x0049/*'I'*/;
       } else {
-        fArray[start] = Unicode::toUpperCase(c);
+        c = Unicode::toUpperCase(c);
+        UTF_APPEND_CHAR(fArray, start, limit, c);
       }
-      ++start;
     }
   } else {
-    UChar *array = getArrayStart();
-
     while(start < limit) {
-      array[start] = Unicode::toUpperCase(array[start]);
-      ++start;
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
+      c = Unicode::toUpperCase(c);
+      UTF_APPEND_CHAR(fArray, start, limit, c);
     }
   }
 
@@ -807,20 +830,21 @@ UnicodeString::toUpper(const Locale& locale)
 UnicodeString&
 UnicodeString::toLower(const Locale& locale)
 {
-  UTextOffset start = 0;
-  UTextOffset limit = fLength;
-  UChar c;
-  UnicodeString lang;
-  char langChars[16];
-
   if(!cloneArrayIfNeeded()) {
     return *this;
   }
+
+  UnicodeString lang;
+  char langChars[16];
 
   // get char * locale language
   locale.getLanguage(lang);
   lang.extract(0, lang.length(), langChars, "");
   langChars[lang.length()] = 0;
+
+  UTextOffset start = 0, next = 0;
+  UTextOffset limit = fLength;
+  UChar32 c;
 
   // if the specfied language is Turkish, then we have to special-case
   // for the Turkish dotted and dotless Is.  The capital I with a dot
@@ -828,15 +852,16 @@ UnicodeString::toLower(const Locale& locale)
   // I maps to the lowercase i without the dot (U+0131)
   if(uprv_strcmp(langChars, "tr") == 0) {
     while(start < limit) {
-      c = getArrayStart()[start];
-      if(c == 0x0049) // 'I'
-        fArray[start] = 0x0131;
-      else if(c == 0x0130)
-        fArray[start] = 0x0069; // 'i'
-      else {
-        fArray[start] = Unicode::toLowerCase(c);
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
+      if(c == 0x0049) { // 'I'
+        fArray[start++] = 0x0131;
+      } else if(c == 0x0130) {
+        fArray[start++] = 0x0069; // 'i'
+      } else {
+        c = Unicode::toLowerCase(c);
+        UTF_APPEND_CHAR(fArray, start, limit, c);
       }
-      ++start;
     }
   } else if(uprv_strcmp(langChars, "el") == 0) {
     // if the specfied language is Greek, then we have to special-case
@@ -845,27 +870,35 @@ UnicodeString::toLower(const Locale& locale)
     // we use the medial form (U+3C3); otherwise, we use the final form
     // (U+3C2).
     while(start < limit) {
-      c = getArrayStart()[start];
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
       if(c == 0x3a3) {
-        if(start + 1 < limit && Unicode::isLetter(getArrayStart()[start + 1])) {
-          fArray[start] = 0x3C3;
+        if(next < limit) {
+          UTextOffset next2 = next;
+          UChar32 c2;
+          UTF_NEXT_CHAR(fArray, next2, limit, c2);
+          if(Unicode::isLetter(c2)) {
+            fArray[start++] = 0x3C3;
+          } else {
+            fArray[start++] = 0x3C2;
+          }
         } else {
-          fArray[start] = 0x3C2;
+          fArray[start++] = 0x3C2;
         }
       } else {
-        fArray[start] = Unicode::toLowerCase(c);
+        c = Unicode::toLowerCase(c);
+        UTF_APPEND_CHAR(fArray, start, limit, c);
       }
-      ++start;
     }
   } else {
     // if the specified language is anything other than Turkish or
     // Greek, we rely on the Unicode class to do all our case mapping--
     // there are no other special cases
-    UChar *array = getArrayStart();
-
     while(start < limit) {
-      array[start] = Unicode::toLowerCase(array[start]);
-      ++start;
+      // start == next here by design
+      UTF_NEXT_CHAR(fArray, next, limit, c);
+      c = Unicode::toLowerCase(c);
+      UTF_APPEND_CHAR(fArray, start, limit, c);
     }
   }
 

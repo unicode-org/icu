@@ -301,7 +301,7 @@ UnicodeSetTest::expectPairs(const UnicodeSet& set, const UnicodeString& expected
     }
 }
 
-static UChar toHexString(int32_t i) { return i + (i < 10 ? '0' : ('A' - 10)); }
+static UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
 
 UnicodeString
 UnicodeSetTest::escape(const UnicodeString& s) {
@@ -312,7 +312,7 @@ UnicodeSetTest::escape(const UnicodeString& s) {
         if (' ' <= c && c <= (UChar)0x7F) {
             buf += c;
         } else {
-            buf += '\\'; buf += 'u';
+            buf += (UChar)0x5c; buf += (UChar)0x55;
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);
