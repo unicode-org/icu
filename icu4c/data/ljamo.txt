@@ -5,11 +5,11 @@
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: /icu4j/src/com/ibm/text/resources/Transliterator_Latin_Jamo.utf8.txt
-// Date: Wed Feb 28 14:45:49 2001
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Latin_Jamo.utf8.txt
+// Date: Thu Mar  8 12:27:24 2001
 //--------------------------------------------------------------------
 
-// Latin-Jamo
+// Latin_Jamo
 
 ljamo {
   Rule {
@@ -209,20 +209,23 @@ ljamo {
 // "a" by itself and "e" by itself are vowels, then we want to map A E
 // to "a-e" so as not to round trip to AE.  However, in the text Ki EO
 // IEUNG E we don't need to map to "keo-e".  "keoe" suffices.  For
-// vowels of the form "aei", in theory both "ae" + "i" and "a" + "ei"
-// must be tested, but in practice only the former occurs.
+// vowels of the form "aei", both "ae" + "i" and "a" + "ei" must be
+// tested.  NOTE: These rules used to have a left context of
+// $latinInitial instead of [^$latinMedial].  The problem with this is
+// sequences where an initial IEUNG is transliterated away:
+//   (IEUNG)(A)(IEUNG)(EO) => aeo => (IEUNG)(AE)(IEUNG)(O)
 
-  "'-' < $latinInitial [y w] e {} [$O $OE];"
-  "'-' < $latinInitial e {} [$O $OE $U];"
-  "'-' < $latinInitial [o a] {} [$E $EO $EU];"
-  "'-' < $latinInitial [w y] a {} [$E $EO $EU];"
+  "'-' < [^$latinMedial] [y w] e {} [$O $OE];"
+  "'-' < [^$latinMedial] e {} [$O $OE $U];"
+  "'-' < [^$latinMedial] [o a] {} [$E $EO $EU];"
+  "'-' < [^$latinMedial] [w y] a {} [$E $EO $EU];"
 
 // Similar to the above, but with an intervening $IEUNG.
 
-  "'-' < $latinInitial [y w] e {} $IEUNG [$O $OE];"
-  "'-' < $latinInitial e {} $IEUNG [$O $OE $U];"
-  "'-' < $latinInitial [o a] {} $IEUNG [$E $EO $EU];"
-  "'-' < $latinInitial [w y] a {} $IEUNG [$E $EO $EU];"
+  "'-' < [^$latinMedial] [y w] e {} $IEUNG [$O $OE];"
+  "'-' < [^$latinMedial] e {} $IEUNG [$O $OE $U];"
+  "'-' < [^$latinMedial] [o a] {} $IEUNG [$E $EO $EU];"
+  "'-' < [^$latinMedial] [w y] a {} $IEUNG [$E $EO $EU];"
 
 // Single finals followed by IEUNG.  The jamo sequence A Xf IEUNG E,
 // where Xi also exists, must be transliterated as "ax-e" to prevent
