@@ -523,7 +523,7 @@ protected:
     virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
                                                    UBool useMonth) const;
 
-    virtual int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)  ;
+    virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField)  ;
 
 
     /**
@@ -623,7 +623,7 @@ protected:
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
 
-    virtual int32_t GregorianCalendar::handleGetExtendedYear();
+    virtual int32_t handleGetExtendedYear();
 
     /** 
      * Subclasses may override this to convert from week fields 
@@ -683,7 +683,7 @@ protected:
     /**
      * Julian day number of the Gregorian cutover
      */
-    uint32_t             fCutoverJulianDay;
+    int32_t             fCutoverJulianDay;
 
     /**
      * Midnight, local time (using this Calendar's TimeZone) at or before the
