@@ -1632,6 +1632,10 @@ InputPath=.\unicode\ucurr.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucurrimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\udat.cpp
 # End Source File
 # Begin Source File
