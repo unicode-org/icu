@@ -275,6 +275,49 @@ Checks LetterLike Symbols which were previously a source of confusion
 	}
 }
 
+/* compare two sets, which is not easy with the current (ICU 2.4) C API... */
+
+static UBool
+showAMinusB(const USet *a, const USet *b, const char *a_name, const char *b_name) {
+    int32_t i, start, end, length;
+    UBool equal;
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    equal=TRUE;
+    i=0;
+    for(;;) {
+        length=uset_getItem(a, i, &start, &end, NULL, 0, &errorCode);
+        if(errorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+            return equal; /* done */
+        }
+        if(U_FAILURE(errorCode)) {
+            log_err("error comparing %s with %s at item %d: %s\n",
+                a_name, b_name, i, u_errorName(errorCode));
+            return FALSE;
+        }
+        if(length!=0) {
+            return equal; /* done with code points, got a string or -1 */
+        }
+
+        if(!uset_containsRange(b, start, end)) {
+            equal=FALSE;
+            while(start<=end) {
+                if(!uset_contains(b, start)) {
+                    log_err("error: %s contains U+%04x but %s does not\n", a_name, start, b_name);
+                }
+                ++start;
+            }
+        }
+
+        ++i;
+    }
+}
+
+static UBool
+compareUSets(const USet *a, const USet *b, const char *a_name, const char *b_name) {
+    return showAMinusB(a, b, a_name, b_name) && showAMinusB(b, a, b_name, a_name);
+}
 
 /* test isLetter(u_isapha()) and isDigit(u_isdigit()) */
 static void TestLetterNumber()
@@ -317,6 +360,55 @@ static void TestLetterNumber()
         }
     }
 
+    {
+        /*
+         * The following checks work only starting from Unicode 4.0.
+         * Check the version number here.
+         */
+        UVersionInfo version;
+        u_getUnicodeVersion(version);
+        if(version[0]<4) {
+            return;
+        }
+    }
+
+    {
+        /*
+         * Sanity check:
+         * Verify that exactly the digit characters have decimal digit values.
+         * This assumption is used in the implementation of u_digit()
+         * (which checks nt=de)
+         * compared with the parallel java.lang.Character.digit()
+         * (which checks Nd).
+         *
+         * This was not true in Unicode 3.2 and earlier.
+         * The following characters had decimal digit values but were No not Nd.
+         * (from DerivedNumericType-3.2.0.txt)
+00B2..00B3    ; decimal # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
+00B9          ; decimal # No       SUPERSCRIPT ONE
+2070          ; decimal # No       SUPERSCRIPT ZERO
+2074..2079    ; decimal # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
+2080..2089    ; decimal # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
+         */
+        U_STRING_DECL(digitsPattern, "[:Nd:]", 6);
+        U_STRING_DECL(decimalValuesPattern, "[:Numeric_Type=Decimal:]", 24);
+
+        USet *digits, *decimalValues;
+        UErrorCode errorCode;
+
+        U_STRING_INIT(digitsPattern, "[:Nd:]", 6);
+        U_STRING_INIT(decimalValuesPattern, "[:Numeric_Type=Decimal:]", 24);
+        errorCode=U_ZERO_ERROR;
+        digits=uset_openPattern(digitsPattern, 6, &errorCode);
+        decimalValues=uset_openPattern(decimalValuesPattern, 24, &errorCode);
+
+        if(U_SUCCESS(errorCode)) {
+            compareUSets(digits, decimalValues, "[:Nd:]", "[:Numeric_Type=Decimal:]");
+        }
+
+        uset_close(digits);
+        uset_close(decimalValues);
+    }
 }
 
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue(),u_CharCellWidth() */
