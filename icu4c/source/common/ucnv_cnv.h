@@ -41,7 +41,18 @@ typedef struct UConverterSharedData UConverterSharedData;
 
 /* function types for UConverterImpl ---------------------------------------- */
 
-typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
+/* struct with arguments for UConverterLoad and ucnv_load() */
+typedef struct {
+    int32_t size;               /* sizeof(UConverterLoadArgs) */
+    int32_t nestedLoads;        /* count nested ucnv_load() calls */
+    int32_t reserved;           /* reserved - for good alignment of the pointers */
+    uint32_t options;
+    const char *pkg, *name;
+} UConverterLoadArgs;
+
+typedef void (*UConverterLoad) (UConverterSharedData *sharedData,
+                                UConverterLoadArgs *pArgs,
+                                const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
 
 typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *pErrorCode);
