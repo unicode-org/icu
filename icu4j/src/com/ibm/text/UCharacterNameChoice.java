@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterNameChoiceEnum.java $ 
-* $Date: 2001/03/23 19:51:38 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/15 02:53:35 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -30,5 +30,6 @@ interface UCharacterNameChoice
   
   static final int U_UNICODE_CHAR_NAME = 0;
   static final int U_UNICODE_10_CHAR_NAME = 1;
-  static final int U_CHAR_NAME_CHOICE_COUNT = 2;
+  static final int U_EXTENDED_CHAR_NAME = 2;
+  static final int U_CHAR_NAME_CHOICE_COUNT = 3;
 }
