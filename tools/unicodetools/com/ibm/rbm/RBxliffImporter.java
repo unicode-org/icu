@@ -271,6 +271,9 @@ public class RBxliffImporter extends RBImporter {
 			            	if (propertyType.equals("creator")) {
 				            	item.setCreator(value);
 			            	}
+			            	else if (propertyType.equals("created")) {
+				            	item.setCreatedDate(value);
+			            	}
 			            	else if (propertyType.equals("modifier")) {
 				            	item.setModifier(value);
 			            	}

@@ -7,11 +7,15 @@
 package com.ibm.rbm;
 
 import java.io.*;
-import javax.swing.*;
 import java.util.*;
+import java.text.*;
 
-import org.apache.xerces.dom.*;
-import org.apache.xml.serialize.*;
+import javax.swing.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+
 import org.w3c.dom.*;
 
 /**
@@ -24,6 +28,9 @@ import org.w3c.dom.*;
  */
 public class RBxliffExporter extends RBExporter {
     private static final String VERSION = "0.7";
+    private static final String XLIFF_DTD = "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd";
+    private static final String XLIFF_PUBLIC_NAME = "-//XLIFF//DTD XLIFF//EN";
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
     /**
      * Default constructor for the XLIFF exporter.
@@ -53,21 +60,8 @@ public class RBxliffExporter extends RBExporter {
     }
 	
     private String convertToISO(GregorianCalendar gc) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(String.valueOf(gc.get(Calendar.YEAR)));
-        int month = gc.get(Calendar.MONTH)+1;
-        buffer.append(((month < 10) ? "0" : "") + String.valueOf(month));
-        int day = gc.get(Calendar.DAY_OF_MONTH);
-        buffer.append(((day < 10) ? "0" : "") + String.valueOf(day));
-        buffer.append("T");
-        int hour = gc.get(Calendar.HOUR_OF_DAY);
-        buffer.append(((hour < 10) ? "0" : "") + String.valueOf(hour));
-        int minute = gc.get(Calendar.MINUTE);
-        buffer.append(((minute < 10) ? "0" : "") + String.valueOf(minute));
-        int second = gc.get(Calendar.SECOND);
-        buffer.append(((second < 10) ? "0" : "") + String.valueOf(second));
-        buffer.append("Z");
-        return buffer.toString();
+    	dateFormat.setCalendar(gc);
+        return dateFormat.format(gc.getTime());
     }
 	
     private String getLocale(Bundle item) {
@@ -108,7 +102,7 @@ public class RBxliffExporter extends RBExporter {
     	return locale;
     }
 	
-    private void addTransUnit(DocumentImpl xml, Element groupElem, BundleItem item, BundleItem parent_item) {
+    private void addTransUnit(Document xml, Element groupElem, BundleItem item, BundleItem parent_item) {
         Element transUnit = xml.createElement("trans-unit");
         //tuv.setAttribute("lang", convertEncoding(item));
         //tuv.setAttribute("creationdate",convertToISO(item.getCreatedDate()));
@@ -153,6 +147,13 @@ public class RBxliffExporter extends RBExporter {
 	            creator_prop.setAttribute("prop-type","creator");
 	            creator_prop.appendChild(xml.createTextNode(item.getCreator()));
 		        transUnit_prop_group_elem.appendChild(creator_prop);
+            }
+	        
+            if (item.getCreator() != null && item.getCreator().length() > 1) {
+	            Element created_prop = xml.createElement("prop");
+	            created_prop.setAttribute("prop-type","created");
+	            created_prop.appendChild(xml.createTextNode(convertToISO(item.getCreatedDate())));
+		        transUnit_prop_group_elem.appendChild(created_prop);
             }
 	        
         	if (item.getModifier() != null && item.getModifier().length() > 1) {
@@ -209,11 +210,25 @@ public class RBxliffExporter extends RBExporter {
 	            parent_bundle_name = getParentLocale(parent_bundle_name);
 	        } while (!parent_bundle_name.equals(""));
         }
+
         
-        DocumentImpl xml = new DocumentImpl();
-        Element root = xml.createElement("xliff");
+        // Find the implementation
+        DocumentBuilder builder;
+        try {
+        	builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        }
+        catch (ParserConfigurationException pce) {
+        	throw new IOException(pce.getMessage());
+        }
+        
+        // Create the document
+        Document xml = builder.getDOMImplementation().createDocument(null, "xliff", null);
+         
+        // Fill the document
+        Element root = xml.getDocumentElement();
         root.setAttribute("version", "1.1");
-        xml.appendChild(root);
+        //root.appendChild(root);
+        
         Element file_elem = xml.createElement("file");
         String mainLocale = getLocale(main_bundle);
         Bundle parentBundle = null;
@@ -307,12 +322,22 @@ public class RBxliffExporter extends RBExporter {
         }
         suffix = String.valueOf(array);
         
+        // serialize document
         OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(new File(directory,base_name + suffix + ".xlf")), "UTF-8");
-        OutputFormat of = new OutputFormat(xml);
-        of.setIndenting(true);
-        of.setEncoding("UTF-8");
-        XMLSerializer serializer = new XMLSerializer(osw, of);
-        serializer.serialize(xml);
+        try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+			transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, XLIFF_DTD);
+			transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, XLIFF_PUBLIC_NAME);
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+			transformer.transform(new DOMSource(xml), new StreamResult(osw));
+        }
+        catch (TransformerException te) {
+        	throw new IOException(te.getMessage());
+        }
+        
         osw.close();
     }
 }
