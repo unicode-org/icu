@@ -514,9 +514,13 @@ public class ULocaleTest extends TestFmwk {
         {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
         {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
         {"no", "", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
-        {"no", "", "NO", "",  "no-no.utf32@B", "no_NO_B" },
+// ULocale canonicalizes, so this does have a variant
+//      {"no", "", "NO", "",  "no-no.utf32@B", "no_NO_B" },
+        {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
         {"no", "", "",   "NY", "no__ny", "no__NY" },
-        {"no", "", "",   "", "no@ny", "no__NY" },
+// ULocale canonicalizes, so this does have a variant
+//      {"no", "", "",   "", "no@ny", "no__NY" },
+        {"no", "", "",   "NY", "no@ny", "no__NY" },
         {"el", "Latn", "", "", "el-latn", "el_Latn" },
         {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU" },
         {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE" },
