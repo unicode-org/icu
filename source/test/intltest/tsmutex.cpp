@@ -68,15 +68,13 @@ UBool MutexTest::gMutexInitialized = FALSE;
 void MutexTest::TestMutex() {
     /* This is tested in intltest.cpp before anything starts. */
     if (!gMutexInitialized) {
-        errln("*** Failure! The global mutex was not initialized.\n"
+        logln("*** Failure! The global mutex was not initialized.\n"
                 "*** Make sure the right linker was used.\n");
     }
 }
 
 
 void MutexTest::TestLock() {
-  }
-
-
+}
 
 

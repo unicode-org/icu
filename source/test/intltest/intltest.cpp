@@ -1073,6 +1073,18 @@ main(int argc, char* argv[])
 
     fprintf(stdout, "--------------------------------------\n");
 
+    if (!MutexTest::gMutexInitialized) {
+        fprintf(stderr,
+            "#### WARNING!\n"
+            "  The global mutex was not initialized during C++ static initialization.\n"
+            "  You must use an ICU API in a single thread, like ucnv_open() or\n"
+            "  uloc_countAvailable(), before using ICU in multiple threads.\n"
+            "  Most ICU API functions will initialize the global mutex for you.\n"
+            "  If you are using ICU in a single threaded application, please ignore this\n"
+            "  warning.\n"
+            "#### WARNING!\n"
+            );
+    }
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
