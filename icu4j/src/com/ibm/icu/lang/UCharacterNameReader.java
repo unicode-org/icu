@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/03/08 02:04:00 $ 
-* $Revision: 1.5 $
+* $Date: 2002/03/10 20:41:23 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -92,7 +92,6 @@ final class UCharacterNameReader
         
         size = m_algnamesindex_ - m_groupstringindex_;
         byte groupstring[] = new byte[size];
-        System.out.println("size " + size);
         m_dataInputStream_.readFully(groupstring);
         for (int i = 0; i < size; i ++) {
         	if (groupstring[i] == 0x14 &&
