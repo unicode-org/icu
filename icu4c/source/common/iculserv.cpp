@@ -126,6 +126,8 @@ const UChar LocaleUtility::UNDERSCORE_CHAR = 0x005f;
 
 UMTX LocaleUtility::lock = 0;
 
+/// !!! dlf need to destroy this lock in a cleanup function
+
 /*
  ******************************************************************
  */
@@ -527,6 +529,7 @@ ICULocaleService::ICULocaleService(const UnicodeString& name)
 
 ICULocaleService::~ICULocaleService() 
 {
+  umtx_destroy(&llock);
 }
 
 UObject* 

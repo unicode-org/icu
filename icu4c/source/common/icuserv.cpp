@@ -10,6 +10,7 @@
 #if !UCONFIG_NO_SERVICE
 
 #include "icuserv.h"
+#include "umutex.h"
 
 #undef SERVICE_REFCOUNT
 
@@ -23,6 +24,7 @@ U_NAMESPACE_BEGIN
 #ifdef SERVICE_REFCOUNT
 
 #include "unicode/strenum.h"
+
 
 /*
  ******************************************************************
@@ -573,10 +575,13 @@ ICUService::ICUService(const UnicodeString& name)
 
 ICUService::~ICUService()
  {
-  Mutex mutex(&lock);
-  clearCaches();
-  delete factories;
-  factories = NULL;
+   {
+     Mutex mutex(&lock);
+     clearCaches();
+     delete factories;
+     factories = NULL;
+   }
+   umtx_destroy(&lock);
 }
 
 UObject* 
@@ -633,13 +638,17 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
     // The cache has to stay in synch with the factory list.
     // ICU doesn't have monitors so we can't use rw locks, so 
     // we single-thread everything using this service, for now.
-
-    Mutex mutex(&ncthis->lock);
+	
+	// if factory is not null, we're calling from within the mutex,
+	// and since some unix machines don't have reentrant mutexes we
+	// need to make sure not to try to lock it again.
+	if (!factory) umtx_lock(&ncthis->lock);
 
     if (serviceCache == NULL) {
       ncthis->serviceCache = new Hashtable(FALSE, status);
       if (U_FAILURE(status)) {
         delete serviceCache;
+		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
       serviceCache->setValueDeleter(cacheDeleter);
@@ -667,6 +676,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (startIndex == 0) {
         // throw new InternalError("Factory " + factory + "not registered with service: " + this);
         status = U_ILLEGAL_ARGUMENT_ERROR;
+		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
       cacheResult = FALSE;
@@ -705,6 +715,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
         UObject* service = f->create(key, this, status);
         if (U_FAILURE(status)) {
           delete cacheDescriptorList;
+  		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
         if (service != NULL) {
@@ -713,6 +724,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
             delete service;
             delete cacheDescriptorList;
             status = U_MEMORY_ALLOCATION_ERROR;
+		    if (!factory) umtx_unlock(&ncthis->lock);
             return NULL;
           }
 
@@ -735,6 +747,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (cacheDescriptorList == NULL) {
         cacheDescriptorList = new UVector(uhash_deleteUnicodeString, NULL, 5, status);
         if (U_FAILURE(status)) {
+		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
       }
@@ -742,12 +755,14 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       if (idToCache == NULL || idToCache->isBogus()) {
         delete cacheDescriptorList;
         status = U_MEMORY_ALLOCATION_ERROR;
+		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
 
       cacheDescriptorList->addElement(idToCache, status);
       if (U_FAILURE(status)) {
         delete cacheDescriptorList;
+		if (!factory) umtx_unlock(&ncthis->lock);
         return NULL;
       }
     } while (key.fallback());
@@ -759,7 +774,8 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
         if (U_FAILURE(status)) {
           delete result;
           delete cacheDescriptorList;
-          return NULL;
+		  if (!factory) umtx_unlock(&ncthis->lock);
+		  return NULL;
         }
 
         if (cacheDescriptorList != NULL) {
@@ -772,6 +788,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
             if (U_FAILURE(status)) {
               delete result;
               delete cacheDescriptorList;
+		      if (!factory) umtx_unlock(&ncthis->lock);
               return NULL;
             }
 
@@ -797,6 +814,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
 
         if (actualReturn->isBogus()) {
           status = U_MEMORY_ALLOCATION_ERROR;
+		  if (!factory) umtx_unlock(&ncthis->lock);
           return NULL;
         }
       }
@@ -807,7 +825,8 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       return cloneInstance(result->service);
     }
   }
- 
+  if (!factory) umtx_unlock(&ncthis->lock);
+
 #ifdef DEBUG_SERVICE
   fprintf(stderr, "not found in service: " + name);
 #endif
