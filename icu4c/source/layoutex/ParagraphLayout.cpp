@@ -590,10 +590,10 @@ void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
     for (run = 0; run < styleRunCount; run += 1) {
         const LEFontInstance *runFont = fontRuns->getFont(si[0]);
         le_int32 script = fScriptRuns->getValue(si[1]);
-        le_int32 count;
+        LEErrorCode success = LE_NO_ERROR;
 
-        while ((count = styleRunLimits[run] - offset) > 0) {
-            const LEFontInstance *subFont = runFont->getSubFont(fChars, &offset, count, script);
+        while (offset < styleRunLimits[run]) {
+            const LEFontInstance *subFont = runFont->getSubFont(fChars, &offset, styleRunLimits[run], script, success);
 
             subFontRuns->add(subFont, offset);
         }
