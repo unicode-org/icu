@@ -8,23 +8,21 @@
 
 #include "strmatch.h"
 #include "rbt_data.h"
+#include "rbt_rule.h"
 
 StringMatcher::StringMatcher(const UnicodeString& theString,
                              int32_t start,
                              int32_t limit,
+                             UBool isSeg,
                              const TransliterationRuleData& theData) :
-    data(theData) {
+    data(theData),
+    isSegment(isSeg) {
     theString.extractBetween(start, limit, pattern);
-}
-
-StringMatcher::StringMatcher(const UnicodeString& theString,
-                             const TransliterationRuleData& theData) :
-    pattern(theString),
-    data(theData) {
 }
 
 StringMatcher::StringMatcher(const StringMatcher& o) :
     pattern(o.pattern),
+    isSegment(o.isSegment),
     data(o.data) {
 }
 
@@ -107,9 +105,26 @@ UMatchDegree StringMatcher::matches(const Replaceable& text,
  */
 UnicodeString& StringMatcher::toPattern(UnicodeString& result,
                                         UBool escapeUnprintable) const {
-    for (int32_t i=0; i<pattern.length(); ++i) {
-        // TODO finish this
+    UnicodeString str, quoteBuf;
+    if (isSegment) {
+        result.append((UChar)40); /*(*/
     }
+    for (int32_t i=0; i<pattern.length(); ++i) {
+        UChar keyChar = pattern.charAt(i);
+        const UnicodeMatcher* m = data.lookup(keyChar);
+        if (m == 0) {
+            TransliterationRule::appendToRule(result, keyChar, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            TransliterationRule::appendToRule(result, m->toPattern(str, escapeUnprintable),
+                         TRUE, escapeUnprintable, quoteBuf);
+        }
+    }
+    if (isSegment) {
+        result.append((UChar)41); /*)*/
+    }
+    // Flush quoteBuf out to result
+    TransliterationRule::appendToRule(result, (UChar32)(isSegment?41/*)*/:-1),
+                                          TRUE, escapeUnprintable, quoteBuf);
     return result;
 }
 
