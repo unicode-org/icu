@@ -1,5 +1,5 @@
 /*
-* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright © {1999-2001}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.

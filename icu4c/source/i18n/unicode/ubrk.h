@@ -1,5 +1,5 @@
 /*
-* Copyright © {1996-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright © {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
 

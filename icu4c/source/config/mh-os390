@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## 390-specific setup 
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.22 2001/02/21 01:11:00 grhoten Exp $
+## $Id: mh-os390,v 1.23 2001/03/21 20:31:13 weiv Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
