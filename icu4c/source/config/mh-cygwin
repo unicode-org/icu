@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.3 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.4 2002/01/03 22:35:03 weiv-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -30,9 +30,9 @@ LD_RPATH_PRE=	-Wl,-rpath,
 LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
 
 ## Shared object suffix
-SO = so
+SO = dll
 ## Non-shared intermediate object suffix
-STATIC_O = ao
+STATIC_O = lib
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
@@ -64,9 +64,9 @@ STATIC_O = ao
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && cp $< $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && cp $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ##  Bind internal references
 
@@ -79,5 +79,11 @@ BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
 # Dependencies [i.e. map files] for the final library
 BIR_DEPS=
 
-## End Linux-specific setup
+# Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = PATH
+
+# Invoke, set library path for all ICU libraries.
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$$$(LDLIBRARYPATH_ENVVAR):$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data:$(top_builddir)/stubdata/
+
+## End Cygwin-specific setup
 

@@ -5,6 +5,7 @@
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
+EXEEXT=@EXEEXT@
 
 top_builddir = ../..
 
@@ -136,37 +137,37 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst ja_data.bin
 # DAT FILES
 
 # uprops.dat
-uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops
+uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT)
 	@echo Creating uprops.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
 # unorm.dat
-unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm
+unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
 	@echo Creating unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
 # ucadata.dat
-ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca
+ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT)
 	@echo Creating ucadata.dat and invuca.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d .
 
 # unames.dat
-unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames
+unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
 	@echo Creating unames.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennames/gennames -d . $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
 # cnvalias.dat
-cnvalias.dat: $(SRCDATADIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval
+cnvalias.dat: $(SRCDATADIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
 	@echo Creating $@
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gencnval/gencnval -d . $(SRCDATADIR)/convrtrs.txt
 
 # tz.dat
-tz.dat: $(SRCDATADIR)/timezone.txt $(TOOLDIR)/gentz/gentz
+tz.dat: $(SRCDATADIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(EXEEXT)
 	@echo Creating $@
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentz/gentz -d . $(SRCDATADIR)/timezone.txt
 
 # test.dat
-$(TESTOBJDATADIR)/test.dat: $(TOOLDIR)/gentest/gentest
+$(TESTOBJDATADIR)/test.dat: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	@echo Creating $@
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTOBJDATADIR) 
 
@@ -189,24 +190,24 @@ endif
 
 ####################################################    CNV
 # CNV FILES
-%.cnv: $(SRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv
+%.cnv: $(SRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(SRCDATADIR)/$(<F)
 
-%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv
+%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/makeconv/makeconv -c -d . $(TESTSRCDATADIR)/$(<F)
 
 ####################################################    RES
 # RES FILES
-$(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
+$(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-ja_data.bin:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb
+ja_data.bin:  $(TESTSRCDATADIR)/ja_data.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
 	echo  Creating $@
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
 
 
 
-%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat unorm.dat
+%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) ucadata.dat uprops.dat unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(SRCDATADIR) -d . $(<F)
 
 ###################################################################

@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.144 2001/12/21 17:45:53 yves-oss Exp $
+dnl $Id: configure.in,v 1.145 2002/01/03 22:35:02 weiv-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -79,6 +79,7 @@ AC_CHECK_STRICT_COMPILE
 
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
+AC_EXEEXT
 
 dnl Check if we can build and use 64-bit libraries
 OLD_CPPFLAGS="${CPPFLAGS}"
@@ -557,12 +558,18 @@ AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
 #include <stddef.h>
 #endif
 #if HAVE_WCHAR_H
+#include <string.h>
 #include <wchar.h>
 #endif])
 dnl We could set ac_cv_sizeof_wchar_t to the default if the check returned
 dnl 0 (unknown) but we'd rather do it in the headers, so we know we had no
 dnl clue at configure time.
 U_SIZEOF_WCHAR_T=$ac_cv_sizeof_wchar_t
+if test $U_SIZEOF_WCHAR_T = 0; then
+	if test $U_HAVE_WCHAR_H=1; then
+	   AC_MSG_ERROR(There is wchar.h but the size of wchar_t is 0)
+	fi
+fi
 AC_SUBST(U_SIZEOF_WCHAR_T)
 
 dnl Checks for typedefs
@@ -780,6 +787,7 @@ case "${host}" in
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
+	*-*-cygwin*)	platform=U_CYGWIN ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 AC_SUBST(ICUDATA_CHAR)
