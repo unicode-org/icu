@@ -143,6 +143,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name stubdata
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -578,6 +581,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name toolutil
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "stubdata"=..\STUBDATA\stubdata.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/udata.h"
+#include "unicode/uversion.h"
 
 #ifdef OS390
 #include <stdlib.h>
@@ -30,7 +31,7 @@
 #if !defined(HAVE_DLOPEN)
 # define HAVE_DLOPEN 0
 #endif
- 
+
 #if !defined(UDATA_DLL) && !defined(UDATA_MAP) &&!defined(UDATA_FILES)
 #   define UDATA_DLL
 #endif
@@ -99,7 +100,7 @@ static UBool s390dll = TRUE;
 #           define  RTLD_GLOBAL 0
 
             void *dlopen(const char *filename, int flag) {
-                dllhandle *handle; 
+                dllhandle *handle;
 
 #               ifdef UDATA_DEBUG
                     fprintf(stderr, "dllload: %s ", filename);
@@ -162,8 +163,8 @@ static UBool s390dll = TRUE;
 #               endif
                 return shl_unload((shl_t)handle);
 #  else
-            /* "shl_unload .. always unloads the library.. no refcount is kept on PA32"  
-               -- HPUX man pages [v. 11] 
+            /* "shl_unload .. always unloads the library.. no refcount is kept on PA32"
+               -- HPUX man pages [v. 11]
 
                Fine, we'll leak! [for now.. Jitterbug 414 has been filed ]
             */
@@ -439,7 +440,7 @@ typedef struct {
             fprintf(stderr, "mmap of %s [%d bytes] succeeded, -> 0x%X\n", path, length, data);
             fflush(stderr);
 #       endif
-    
+
         pData->map=length;
         pData->pHeader=(const DataHeader *)data;
         pData->flags=FLAT_DATA_MEMORY;
@@ -597,6 +598,10 @@ pointerTOCLookupFn(const UDataMemory *pData,
         fflush(stderr);
 #endif
 
+        if (limit == 0) {         /* Stub common data library used during build is empty. */
+            return NULL;
+        }
+
         while(start<limit-1) {
             number=(start+limit)/2;
             if(uprv_strcmp(tocEntryName, toc[number].entryName)<0) {
@@ -609,7 +614,7 @@ pointerTOCLookupFn(const UDataMemory *pData,
         if(uprv_strcmp(tocEntryName, toc[start].entryName)==0) {
             /* found it */
 #ifdef UDATA_DEBUG
-            fprintf(stderr, "FOUND: %p\n", 
+            fprintf(stderr, "FOUND: %p\n",
                 normalizeDataPointer(toc[start].pHeader));
 #endif
 
@@ -725,16 +730,24 @@ findBasename(const char *path) {
     }
 }
 
+
+/*                                                                     */
+/*  Add a static reference to the common data from a library if the    */
+/*      build options are set to request it.                           */
+/*   Unless overridden by an explicit u_setCommonData, this will be    */
+/*      our common data.                                               */
+#ifdef UDATA_STATIC_LIB
+extern  DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
+#endif
+
 static UDataMemory *
 openCommonData(UDataMemory *pData,
                const char *path, UBool isICUData,
                char *pathBuffer,
                UErrorCode *pErrorCode) {
-#   if !UDATA_NO_DLL
-        Library lib;
-#   endif
     const char *inBasename;
     char *basename, *suffix;
+    const DataHeader *pHeader;
 
     /* "mini-cache" for common ICU data */
     if(isICUData && IS_DATA_MEMORY_LOADED(&commonICUData)) {
@@ -743,12 +756,62 @@ openCommonData(UDataMemory *pData,
 
     /* ### we should have a real cache with a UHashTable and the path as the key */
 
+#ifdef UDATA_STATIC_LIB
+    if (isICUData) {
+        pHeader = &U_ICUDATA_ENTRY_POINT;
+        if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
+            pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
+            pHeader->info.charsetFamily==U_CHARSET_FAMILY)
+            ) {
+            /* header not valid */
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
+
+        if(pHeader->info.dataFormat[0]==0x43 &&
+            pHeader->info.dataFormat[1]==0x6d &&
+            pHeader->info.dataFormat[2]==0x6e &&
+            pHeader->info.dataFormat[3]==0x44 &&
+            pHeader->info.formatVersion[0]==1
+            ) {
+            /* dataFormat="CmnD" */
+            pData->lib=NULL;
+            pData->lookupFn=offsetTOCLookupFn;
+            pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
+            pData->flags=DLL_DATA_MEMORY|OFFSET_TOC<<TOC_TYPE_SHIFT;
+        } else if(pHeader->info.dataFormat[0]==0x54 &&
+            pHeader->info.dataFormat[1]==0x6f &&
+            pHeader->info.dataFormat[2]==0x43 &&
+            pHeader->info.dataFormat[3]==0x50 &&
+            pHeader->info.formatVersion[0]==1
+            ) {
+            /* dataFormat="ToCP" */
+            pData->lib=NULL;
+            pData->lookupFn=pointerTOCLookupFn;
+            pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
+            pData->flags=DLL_DATA_MEMORY|POINTER_TOC<<TOC_TYPE_SHIFT;
+        } else {
+            /* dataFormat not recognized */
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
+
+        /* we have common data from a DLL */
+        setCommonICUData(pData);
+        return &commonICUData;
+    }
+
+
+#endif     /*UDATA_STATIC_LIB*/
+
+
+
     /* set up path and basename */
     basename=setPathGetBasename(path, pathBuffer);
     if(isICUData) {
 #ifdef OS390
       if (s390dll)
-        inBasename=COMMON_DATA1_NAME; 
+        inBasename=COMMON_DATA1_NAME;
       else
 #endif
         inBasename=COMMON_DATA_NAME;
@@ -761,36 +824,43 @@ openCommonData(UDataMemory *pData,
         }
     }
 
+
+    /*                                                      */
+    /*  Deprecated code to dynamically load a DLL.          */
+    /*                                                      */
+
     /* try to load a common data DLL */
 #   if !UDATA_NO_DLL
+    {
+        Library lib;
         /* set up the library name */
 #       ifndef LIB_PREFIX
-            suffix=strcpy_returnEnd(basename, inBasename);
+        suffix=strcpy_returnEnd(basename, inBasename);
 #       else
-            uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
-            suffix=strcpy_returnEnd(basename+LIB_PREFIX_LENGTH, inBasename);
+        uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
+        suffix=strcpy_returnEnd(basename+LIB_PREFIX_LENGTH, inBasename);
 #       endif
         uprv_strcpy(suffix, LIB_SUFFIX);
 
         /* try path/basename first */
 #       ifdef OS390BATCH
-            /* ### hack: we still need to get u_getDataDirectory() fixed
-               for OS/390 (batch mode - always return "//"? )
-               and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
-               This is probably due to the strange file system on OS/390.  It's more like
-               a database with short entry names than a typical file system. */
-            if (s390dll) {
-                lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
-            }
-            else {
-                /* U_ICUDATA_NAME should always have the correct name */
-                /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
-                /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
-                /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-                lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
-            }
+        /* ### hack: we still need to get u_getDataDirectory() fixed
+        for OS/390 (batch mode - always return "//"? )
+        and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
+        This is probably due to the strange file system on OS/390.  It's more like
+        a database with short entry names than a typical file system. */
+        if (s390dll) {
+            lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
+        }
+        else {
+            /* U_ICUDATA_NAME should always have the correct name */
+            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
+            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
+            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
+            lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
+        }
 #       else
-            lib=LOAD_LIBRARY(pathBuffer, basename);
+        lib=LOAD_LIBRARY(pathBuffer, basename);
 #       endif
         if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
             /* try basename only next */
@@ -800,7 +870,6 @@ openCommonData(UDataMemory *pData,
         if(IS_LIBRARY(lib)) {
             /* we have a data DLL - what kind of lookup do we need here? */
             char entryName[100];
-            const DataHeader *pHeader;
             *basename=0;
 
             /* try to find the Table of Contents */
@@ -821,9 +890,9 @@ openCommonData(UDataMemory *pData,
                 pData->lookupFn=dllTOCLookupFn;
                 pData->flags=DLL_DATA_MEMORY|DLL_INTRINSIC_TOC<<TOC_TYPE_SHIFT;
             } else if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
-                        pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
-                        pHeader->info.charsetFamily==U_CHARSET_FAMILY)
-            ) {
+                pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
+                pHeader->info.charsetFamily==U_CHARSET_FAMILY)
+                ) {
                 /* header not valid */
                 UNLOAD_LIBRARY(lib);
                 *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -831,22 +900,22 @@ openCommonData(UDataMemory *pData,
 
                 /* which TOC type? */
             } else if(pHeader->info.dataFormat[0]==0x43 &&
-                      pHeader->info.dataFormat[1]==0x6d &&
-                      pHeader->info.dataFormat[2]==0x6e &&
-                      pHeader->info.dataFormat[3]==0x44 &&
-                      pHeader->info.formatVersion[0]==1
-            ) {
+                pHeader->info.dataFormat[1]==0x6d &&
+                pHeader->info.dataFormat[2]==0x6e &&
+                pHeader->info.dataFormat[3]==0x44 &&
+                pHeader->info.formatVersion[0]==1
+                ) {
                 /* dataFormat="CmnD" */
                 pData->lib=lib;
                 pData->lookupFn=offsetTOCLookupFn;
                 pData->toc=(const char *)pHeader+pHeader->dataHeader.headerSize;
                 pData->flags=DLL_DATA_MEMORY|OFFSET_TOC<<TOC_TYPE_SHIFT;
             } else if(pHeader->info.dataFormat[0]==0x54 &&
-                      pHeader->info.dataFormat[1]==0x6f &&
-                      pHeader->info.dataFormat[2]==0x43 &&
-                      pHeader->info.dataFormat[3]==0x50 &&
-                      pHeader->info.formatVersion[0]==1
-            ) {
+                pHeader->info.dataFormat[1]==0x6f &&
+                pHeader->info.dataFormat[2]==0x43 &&
+                pHeader->info.dataFormat[3]==0x50 &&
+                pHeader->info.formatVersion[0]==1
+                ) {
                 /* dataFormat="ToCP" */
                 pData->lib=lib;
                 pData->lookupFn=pointerTOCLookupFn;
@@ -867,7 +936,8 @@ openCommonData(UDataMemory *pData,
                 return pData;
             }
         }
-#   endif
+    }
+#endif    /* !UDATA_NO_DLL */
 
     /* try to map a common data file */
 
@@ -878,21 +948,20 @@ openCommonData(UDataMemory *pData,
     /* try path/basename first, then basename only */
     if( uprv_mapFile(pData, pathBuffer, basename) ||
         (basename!=pathBuffer && uprv_mapFile(pData, basename, basename))
-    ) {
-        const DataHeader *pHeader;
+        ) {
         *basename=0;
 
         /* we have mapped a file, check its header */
         pHeader=pData->pHeader;
         if(!(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
-             pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
-             pHeader->info.charsetFamily==U_CHARSET_FAMILY &&
-             pHeader->info.dataFormat[0]==0x43 &&
-             pHeader->info.dataFormat[1]==0x6d &&
-             pHeader->info.dataFormat[2]==0x6e &&
-             pHeader->info.dataFormat[3]==0x44 &&
-             pHeader->info.formatVersion[0]==1)
-        ) {
+            pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
+            pHeader->info.charsetFamily==U_CHARSET_FAMILY &&
+            pHeader->info.dataFormat[0]==0x43 &&
+            pHeader->info.dataFormat[1]==0x6d &&
+            pHeader->info.dataFormat[2]==0x6e &&
+            pHeader->info.dataFormat[3]==0x44 &&
+            pHeader->info.formatVersion[0]==1)
+            ) {
             uprv_unmapFile(pData);
             pData->flags=0;
             *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -1071,11 +1140,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
             }
 
             /* the data is not in the common data, close that and look further */
-            s390dll=FALSE; 
+            s390dll=FALSE;
             if(pCommonData==&dataMemory) {
-              udata_close(&dataMemory); 
+              udata_close(&dataMemory);
            /* commonICUData = { NULL }; */
-              (&commonICUData)->flags = 0; 
+              (&commonICUData)->flags = 0;
     /* clear out the 'mini cache' used in openCommonData */
                 /* This is not thread safe!!!!!!! */
             }

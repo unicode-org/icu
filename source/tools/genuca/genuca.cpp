@@ -606,7 +606,8 @@ write_uca_table(const char *filename,
 
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
-            fprintf(stderr, "Something returned an error %i while processing line: %i\nExiting...", *status, line);
+            fprintf(stderr, "Something returned an error %i (%s) while processing line: %i\nExiting...",
+                *status, u_errorName(*status), line);
             exit(*status);
         }
 
