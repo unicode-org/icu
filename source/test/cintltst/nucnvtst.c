@@ -1202,6 +1202,25 @@ static TestUTF8() {
         4, 0x10401
     };
 
+    /* error test input */
+    static const uint8_t in2[]={
+        0x61,
+        0xc0, 0xc0,                     /* illegal trail byte */
+        0xf4, 0x90, 0x80, 0x80,         /* 0x110000 out of range */
+        0xf8, 0x80, 0x80, 0x80, 0x80,   /* too long */
+        0x62
+    };
+
+    /* expected error test results */
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        1, 0x61,
+        12, 0x62
+    };
+
+    UConverterToUCallback cb;
+    void *p;
+
     const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv=ucnv_open("UTF-8", &errorCode);
@@ -1212,6 +1231,13 @@ static TestUTF8() {
     TestNextUChar(cnv, source, limit, results, "UTF-8");
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+
+    /* test error behavior with a skip callback */
+    ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
+    source=in2;
+    limit=in2+sizeof(in2);
+    TestNextUChar(cnv, source, limit, results2, "UTF-8");
+
     ucnv_close(cnv);
 }
 
@@ -1316,7 +1342,6 @@ TestUTF32BE() {
         0x00, 0x00, 0xff, 0xfd,
         0x00, 0x10, 0xab, 0xcd
     };
-    /* ### should also test error conditions (>0x10ffff) */
 
     /* expected test results */
     static const uint32_t results[]={
@@ -1327,6 +1352,23 @@ TestUTF32BE() {
         4, 0xfffd,
         4, 0x10abcd
     };
+
+    /* error test input */
+    static const uint8_t in2[]={
+        0x00, 0x00, 0x00, 0x61,
+        0x00, 0x11, 0x00, 0x00,         /* 0x110000 out of range */
+        0x00, 0x00, 0x00, 0x62
+    };
+
+    /* expected error test results */
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        4, 0x61,
+        8, 0x62
+    };
+
+    UConverterToUCallback cb;
+    void *p;
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1339,6 +1381,13 @@ TestUTF32BE() {
 
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+
+    /* test error behavior with a skip callback */
+    ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
+    source=in2;
+    limit=in2+sizeof(in2);
+    TestNextUChar(cnv, source, limit, results2, "UTF-32BE");
+
     ucnv_close(cnv);
 }
 
@@ -1352,7 +1401,6 @@ TestUTF32LE() {
         0xfd, 0xff, 0x00, 0x00,
         0xcd, 0xab, 0x10, 0x00
     };
-    /* ### should also test error conditions (>0x10ffff) */
 
     /* expected test results */
     static const uint32_t results[]={
@@ -1363,6 +1411,23 @@ TestUTF32LE() {
         4, 0xfffd,
         4, 0x10abcd
     };
+
+    /* error test input */
+    static const uint8_t in2[]={
+        0x61, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x11, 0x00,         /* 0x110000 out of range */
+        0x62, 0x00, 0x00, 0x00
+    };
+
+    /* expected error test results */
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        4, 0x61,
+        8, 0x62
+    };
+
+    UConverterToUCallback cb;
+    void *p;
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1375,6 +1440,13 @@ TestUTF32LE() {
 
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+
+    /* test error behavior with a skip callback */
+    ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
+    source=in2;
+    limit=in2+sizeof(in2);
+    TestNextUChar(cnv, source, limit, results2, "UTF-32LE");
+
     ucnv_close(cnv);
 }
 
