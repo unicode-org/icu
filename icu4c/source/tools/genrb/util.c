@@ -24,7 +24,7 @@
 
 
 /* Platform-specific directory separator */
-#ifdef WIN32
+#if defined(WIN32) ||  defined(_WIN32) || defined(OS2) || defined(__OS2__)
 # define DIR_SEP '\\'
 # define CUR_DIR ".\\"
 #else
@@ -37,29 +37,14 @@ void
 get_dirname(char *dirname,
 	    const char *filename)
 {
-  const char *slash;
-  const char *lastSlash;
+  const char *lastSlash = icu_strrchr(filename, DIR_SEP) + 1;
 
-  /* if the first character isn't DIR_SEP or '.', return CUR_DIR */
-  if(*filename != DIR_SEP && *filename != '.') {
-    icu_strcpy(dirname, CUR_DIR);
-    return;
+  if(lastSlash>filename) {
+    icu_strncpy(dirname, filename, (lastSlash - filename));
+    *(dirname + (lastSlash - filename)) = '\0';
+  } else {
+    *dirname = '\0';
   }
-
-  /* strip off and copy any leading directory portions */
-  slash = lastSlash = filename;
-  for(;;) {
-    slash = icu_strchr(slash, DIR_SEP);
-    if(slash == 0) {
-      slash = lastSlash;
-      break;
-    }
-    ++slash;
-    lastSlash = slash;
-  }
-  
-  *dirname = '\0';
-  icu_strncat(dirname, filename, (lastSlash - filename));
 }
 
 /* go from "/usr/local/include/curses.h" to "curses" */
@@ -67,36 +52,20 @@ void
 get_basename(char *basename,
 	     const char *filename)
 {
-  const char *slash;
-  const char *lastSlash;
-  char *dot;
+  /* strip off any leading directory portions */
+  const char *lastSlash = icu_strrchr(filename, DIR_SEP) + 1;
   char *lastDot;
 
-  /* strip off any leading directory portions */
-  slash = lastSlash = filename;
-  for(;;) {
-    slash = icu_strchr(slash, DIR_SEP);
-    if(slash == 0) {
-      slash = lastSlash;
-      break;
-    }
-    ++slash;
-    lastSlash = slash;
+  if(lastSlash>filename) {
+    icu_strcpy(basename, lastSlash);
+  } else {
+    icu_strcpy(basename, filename);
   }
-  
-  icu_strcpy(basename, slash);
 
   /* strip off any suffix */
-  dot = basename;
-  lastDot = 0;
-  for(;;) {
-    dot = icu_strchr(dot, '.');
-    if(dot == 0) {
-      if(lastDot != 0)
-	*lastDot = '\0';
-      break;
-    }
-    lastDot = dot;
-    ++dot;
+  lastDot = icu_strrchr(basename, '.');
+
+  if(lastDot != NULL) {
+    *lastDot = '\0';
   }
 }

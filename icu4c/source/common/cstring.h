@@ -36,12 +36,14 @@
 
 #define icu_strcpy(dst, src) strcpy(dst, src)
 #define icu_strcpyWithSize(dst, src, size) strncpy(dst, src, size)
+#define icu_strncpy(dst, src, size) strncpy(dst, src, size)
 #define icu_strlen(str) strlen(str)
 #define icu_strcmp(s1, s2) strcmp(s1, s2)
 #define icu_strncmp(s1, s2, n) strncmp(s1, s2, n)
 #define icu_strcat(dst, src) strcat(dst, src)
 #define icu_strncat(dst, src, n) strncat(dst, src, n)
 #define icu_strchr(s, c) strchr(s, c)
+#define icu_strrchr(s, c) strrchr(s, c)
 #define icu_toupper(c) toupper(c)
 #define icu_tolower(c) tolower(c)
 
