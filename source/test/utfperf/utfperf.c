@@ -1,3 +1,21 @@
+/*  
+**********************************************************************
+*   Copyright (C) 2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   file name:  utfperf.c
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2002apr17
+*   created by: Markus W. Scherer
+*
+*   Performance test program for Unicode converters
+*   (converters that support all Unicode code points).
+*   Takes a UTF-8 file as input.
+*/
+
 #include <stdio.h>
 #include <string.h>
 
