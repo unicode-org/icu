@@ -263,7 +263,7 @@ void RegexTest::regex_find(char *pat, char *input, UErrorCode expectedStatus, in
     // matcher->groupCount does not include group 0, the entire match, hence the +1.
     if (isMatch == FALSE && groupStarts.size() != 0) {
         errln("Error at line %d:  Match expected, but none found.\n", line);
-        failed = true;
+        failed = TRUE;
         goto cleanupAndReturn;
     }
     int i;
@@ -1087,7 +1087,7 @@ void RegexTest::Extended() {
 
     // \X  consume one combining char sequence.
     REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-        "<0><1>A</1><2>B</2><3> </3>");
+        "<0><1>A</1><2>B</2><3> </3></0>");
 }
 
 
