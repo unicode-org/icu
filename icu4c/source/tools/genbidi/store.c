@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -55,27 +55,32 @@ The file contains the following structures:
     i2 trieSize; -- size in bytes of the case mapping properties trie
     i3 mirrorLength; -- length in uint32_t of the bidi mirroring array
 
-    i4..i14 reservedIndexes; -- reserved values; 0 for now
+    i4 jgStart; -- first code point with Joining_Group data
+    i5 jgLimit; -- limit code point for Joining_Group data
+
+    i6..i14 reservedIndexes; -- reserved values; 0 for now
 
     i15 maxValues; -- maximum code values for enumerated properties
+                      bits 23..16 contain the max value for Joining_Group,
+                      otherwise the bits are used like enum fields in the trie word
 
     Serialized trie, see utrie.h;
 
     const uint32_t mirrors[mirrorLength];
 
+    const uint8_t jgArray[i5-i4]; -- (i5-i4) is always a multiple of 4
 
 Trie data word:
 Bits
-31..29  signed delta to bidi mirroring code point
+15..13  signed delta to bidi mirroring code point
         (add delta to input code point)
         0 no such code point (source maps to itself)
         -3..-1, 1..3 delta
         -4 look in mirrors table
-    28  is mirrored
-    27  Bidi_Control
-    26  Join_Control
-25..14  reserved (0)
-13.. 8  Joining_Group
+    12  is mirrored
+    11  Bidi_Control
+    10  Join_Control
+ 9.. 8  reserved (set to 0)
  7.. 5  Joining_Type
  4.. 0  BiDi category
 
@@ -102,6 +107,19 @@ Bits
 20.. 0  source code point
 
 The table is sorted by source code points.
+
+
+Joining_Group array:
+The Joining_Group values do not fit into the 16-bit trie, but the data is also
+limited to a small range of code points (Arabic and Syriac) and not
+well compressible.
+
+The start and limit code points for the range are stored in the indexes[]
+array, and the jgArray[] stores a byte for each of these code points,
+containing the Joining_Group value.
+
+All code points outside of this range have No_Joining_Group (0).
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -271,9 +289,10 @@ generateData(const char *dataDir) {
         UBIDI_IX_TOP
     };
     static uint8_t trieBlock[40000];
+    static uint8_t jgArray[0x300]; /* at most for U+0600..U+08FF */
 
     const uint32_t *row;
-    UChar32 start, limit;
+    UChar32 start, limit, prev, jgStart;
     int32_t i;
 
     UNewDataMemory *pData;
@@ -290,14 +309,47 @@ generateData(const char *dataDir) {
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
+    prev=jgStart=0;
     for(i=0; (row=upvec_getRow(pv, i, &start, &limit))!=NULL; ++i) {
+        /* store most values from vector column 0 in the trie */
         if(!utrie_setRange32(pTrie, start, limit, *row, TRUE)) {
             fprintf(stderr, "genbidi error: unable to set trie value (overflow)\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
+
+        /* store Joining_Group values from vector column 1 in a simple byte array */
+        if(row[1]!=0) {
+            if(start<0x600 || 0x900<=limit) {
+                fprintf(stderr, "genbidi error: Joining_Group for out-of-range code points U+%04lx..U+%04lx\n",
+                        (long)start, (long)limit);
+                exit(U_ILLEGAL_ARGUMENT_ERROR);
+            }
+
+            if(prev==0) {
+                /* first code point with any value */
+                prev=jgStart=start;
+            } else {
+                /* add No_Joining_Group for code points between prev and start */
+                while(prev<start) {
+                    jgArray[prev++ -jgStart]=0;
+                }
+            }
+
+            /* set Joining_Group value for start..limit */
+            while(prev<limit) {
+                jgArray[prev++ -jgStart]=(uint8_t)row[1];
+            }
+        }
     }
 
-    trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), NULL, FALSE, &errorCode);
+    /* finish jgArray, pad to multiple of 4 */
+    while((prev-jgStart)&3) {
+        jgArray[prev++ -jgStart]=0;
+    }
+    indexes[UBIDI_IX_JG_START]=jgStart;
+    indexes[UBIDI_IX_JG_LIMIT]=prev;
+
+    trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genbidi error: utrie_serialize failed: %s (length %ld)\n", u_errorName(errorCode), (long)trieSize);
         exit(errorCode);
@@ -305,18 +357,23 @@ generateData(const char *dataDir) {
 
     indexes[UBIDI_IX_TRIE_SIZE]=trieSize;
     indexes[UBIDI_IX_MIRROR_LENGTH]=mirrorTop;
-    indexes[UBIDI_IX_LENGTH]=(int32_t)sizeof(indexes)+trieSize+4*mirrorTop;
+    indexes[UBIDI_IX_LENGTH]=
+        (int32_t)sizeof(indexes)+
+        trieSize+
+        4*mirrorTop+
+        (prev-jgStart);
 
     if(beVerbose) {
         printf("trie size in bytes:                    %5d\n", (int)trieSize);
-        printf("size in bytes of mirroring table:      %5d\n", 4*mirrorTop);
+        printf("size in bytes of mirroring table:      %5d\n", (int)(4*mirrorTop));
+        printf("length of Joining_Group array:         %5d (U+%04x..U+%04x)\n", (int)(prev-jgStart), (int)jgStart, (int)(prev-1));
         printf("data size:                             %5d\n", (int)indexes[UBIDI_IX_LENGTH]);
     }
 
     indexes[UBIDI_MAX_VALUES_INDEX]=
         ((int32_t)U_CHAR_DIRECTION_COUNT-1)|
         (((int32_t)U_JT_COUNT-1)<<UBIDI_JT_SHIFT)|
-        (((int32_t)U_JG_COUNT-1)<<UBIDI_JG_SHIFT);
+        (((int32_t)U_JG_COUNT-1)<<UBIDI_MAX_JG_SHIFT);
 
     /* write the data */
     pData=udata_create(dataDir, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &dataInfo,
@@ -329,6 +386,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, trieBlock, trieSize);
     udata_writeBlock(pData, mirrors, 4*mirrorTop);
+    udata_writeBlock(pData, jgArray, prev-jgStart);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -344,6 +402,7 @@ generateData(const char *dataDir) {
     }
 
     utrie_close(pTrie);
+    upvec_close(pv);
 }
 
 /*

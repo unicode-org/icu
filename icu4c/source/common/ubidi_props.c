@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -32,6 +32,7 @@ struct UBiDiProps {
     UDataMemory *mem;
     const int32_t *indexes;
     const uint32_t *mirrors;
+    const uint8_t *jgArray;
 
     UTrie trie;
     uint8_t formatVersion[4];
@@ -101,6 +102,11 @@ ubidi_openData(UBiDiProps *bdpProto,
     /* get mirrors[] */
     size=4*bdpProto->indexes[UBIDI_IX_MIRROR_LENGTH];
     bdpProto->mirrors=(const uint32_t *)bin;
+    bin+=size;
+
+    /* get jgArray[] */
+    size=bdpProto->indexes[UBIDI_IX_JG_LIMIT]-bdpProto->indexes[UBIDI_IX_JG_START];
+    bdpProto->jgArray=bin;
     bin+=size;
 
     /* allocate, copy, and return the new UBiDiProps */
@@ -330,6 +336,10 @@ ubidi_swap(const UDataSwapper *ds,
         ds->swapArray32(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
         offset+=count;
 
+        /* just skip the uint8_t jgArray[] */
+        count=indexes[UBIDI_IX_JG_LIMIT]-indexes[UBIDI_IX_JG_START];
+        offset+=count;
+
         U_ASSERT(offset==size);
     }
 
@@ -372,9 +382,9 @@ ubidi_addPropertyStarts(const UBiDiProps *bdp, const USetAdder *sa, UErrorCode *
 
 /* data access primitives --------------------------------------------------- */
 
-/* UTRIE_GET32() itself validates c */
+/* UTRIE_GET16() itself validates c */
 #define GET_PROPS(bdp, c, result) \
-    UTRIE_GET32(&(bdp)->trie, c, result);
+    UTRIE_GET16(&(bdp)->trie, c, result);
 
 /* property access functions ------------------------------------------------ */
 
@@ -391,7 +401,7 @@ ubidi_getMaxValue(const UBiDiProps *bdp, UProperty which) {
     case UCHAR_BIDI_CLASS:
         return (max&UBIDI_CLASS_MASK);
     case UCHAR_JOINING_GROUP:
-        return (max&UBIDI_JG_MASK)>>UBIDI_JG_SHIFT;
+        return (max&UBIDI_MAX_JG_MASK)>>UBIDI_MAX_JG_SHIFT;
     case UCHAR_JOINING_TYPE:
         return (max&UBIDI_JT_MASK)>>UBIDI_JT_SHIFT;
     default:
@@ -419,7 +429,7 @@ ubidi_getMirror(const UBiDiProps *bdp, UChar32 c) {
     int32_t delta;
 
     GET_PROPS(bdp, c, props);
-    delta=((int32_t)props)>>UBIDI_MIRROR_DELTA_SHIFT;
+    delta=((int16_t)props)>>UBIDI_MIRROR_DELTA_SHIFT;
     if(delta!=UBIDI_ESC_MIRROR_DELTA) {
         return c+delta;
     } else {
@@ -472,9 +482,15 @@ ubidi_getJoiningType(const UBiDiProps *bdp, UChar32 c) {
 
 U_CAPI UJoiningGroup U_EXPORT2
 ubidi_getJoiningGroup(const UBiDiProps *bdp, UChar32 c) {
-    uint32_t props;
-    GET_PROPS(bdp, c, props);
-    return (UJoiningGroup)((props&UBIDI_JG_MASK)>>UBIDI_JG_SHIFT);
+    UChar32 start, limit;
+
+    start=bdp->indexes[UBIDI_IX_JG_START];
+    limit=bdp->indexes[UBIDI_IX_JG_LIMIT];
+    if(start<=c && c<limit) {
+        return (UJoiningGroup)bdp->jgArray[c-start];
+    } else {
+        return U_JG_NO_JOINING_GROUP;
+    }
 }
 
 /* public API (see uchar.h) ------------------------------------------------- */
