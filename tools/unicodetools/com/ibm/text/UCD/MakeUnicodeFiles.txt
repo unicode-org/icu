@@ -1,8 +1,15 @@
-Generate: DerivedCoreProperties
-DeltaVersion: 11
+Generate:
+DeltaVersion: 13
 
 File:	Blocks
 Property: Block
+# Note:   When comparing block names, casing, whitespace, hyphens,
+#         and underbars are ignored.
+#         For example, "Latin Extended-A" and "latin extended a" are equivalent.
+#         For more information on the comparison of property values, 
+#            see UCD.html.
+#
+# Code points not explicitly listed in this file are given the value No_Block.
 Format:	valueList
 
 File:	CaseFolding
@@ -102,8 +109,7 @@ Property:	XID_Continue
 
 Property:	Default_Ignorable_Code_Point
 # Derived Property: Default_Ignorable_Code_Point
-#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space
-
+#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs + Noncharacters - White_Space - Annotation_characters
 
 Property:	Grapheme_Extend
 # Derived Property: Grapheme_Extend
