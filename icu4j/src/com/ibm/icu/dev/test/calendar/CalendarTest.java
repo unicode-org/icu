@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2003/09/04 00:57:11 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/10/02 20:50:58 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Hashtable;
 import java.util.Enumeration;
-import java.util.SimpleTimeZone;
 
 import com.ibm.icu.util.*;
 

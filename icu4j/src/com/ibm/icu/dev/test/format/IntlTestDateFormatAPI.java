@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPI.java,v $ 
- * $Date: 2003/09/04 00:58:16 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/10/02 20:50:58 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  **/
@@ -28,7 +28,6 @@ import com.ibm.icu.util.*;
 import com.ibm.icu.text.*;
 import java.util.Locale;
 import java.util.Date;
-import java.util.TimeZone;
 import java.text.ParsePosition;
 import java.text.FieldPosition;
 import java.text.ParseException;

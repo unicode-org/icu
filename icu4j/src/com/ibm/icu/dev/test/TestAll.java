@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $
- * $Date: 2003/09/04 00:55:44 $
- * $Revision: 1.52 $
+ * $Date: 2003/10/02 20:50:57 $
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -34,6 +34,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.collator.TestAll",
                   "com.ibm.icu.dev.test.shaping.ArabicShapingRegTest",
                   "com.ibm.icu.dev.test.calendar.TestAll",
+                  "com.ibm.icu.dev.test.timezone.TestAll",
                   "com.ibm.icu.dev.test.lang.TestAll",
                   "com.ibm.icu.dev.test.normalizer.TestAll",
                   "com.ibm.icu.dev.test.util.TestAll",

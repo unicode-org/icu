@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/JapaneseTest.java,v $
- * $Date: 2003/09/04 00:57:14 $
- * $Revision: 1.4 $
+ * $Date: 2003/10/02 20:50:58 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -14,12 +14,12 @@ package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Tests for the <code>IslamicCalendar</code> class.

@@ -5,13 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/10/01 21:33:22 $
- * $Revision: 1.50 $
+ * $Date: 2003/10/02 20:50:57 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test;
-
+import com.ibm.icu.util.TimeZone;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Random;
-import java.util.TimeZone;
 
 
 /**
@@ -783,6 +782,18 @@ public class TestFmwk extends AbstractTestLog {
         params.log.print(spaces.substring(0, distance * 2));
     }
     */
+
+    protected TimeZone safeGetTimeZone(String id) {
+        TimeZone tz = TimeZone.getTimeZone(id);
+        if (tz == null) {
+            // should never happen
+            errln("FAIL: TimeZone.getTimeZone(" + id + ") => null");
+        }
+        if (!tz.getID().equals(id)) {
+            errln("FAIL: TimeZone.getTimeZone(" + id + ") => " + tz.getID());
+        }
+        return tz;
+    }
 
     /**
      * Print a usage message for this test class.

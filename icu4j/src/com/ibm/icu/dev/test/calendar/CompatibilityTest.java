@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2003/09/04 00:57:12 $
- * $Revision: 1.12 $
+ * $Date: 2003/10/02 20:50:58 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -15,8 +15,6 @@ import com.ibm.icu.util.*;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 import java.io.*;
 
 public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {

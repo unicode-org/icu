@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2003/09/04 01:00:29 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/10/02 20:50:25 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.util;
 
+import com.ibm.icu.util.TimeZone;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.Locale;
 
 /**

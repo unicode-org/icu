@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.TimeZone;
 
 /**
  * This class, not to be instantiated, implements the meta-data
@@ -169,7 +168,7 @@ public final class ZoneMeta {
         // to the current underlying core JDK.  We have to do this
         // at runtime since we don't know what we're running on.
         Set valid = new TreeSet();
-        valid.addAll(Arrays.asList(TimeZone.getAvailableIDs()));
+        valid.addAll(Arrays.asList(java.util.TimeZone.getAvailableIDs()));
         return valid;
     }
 

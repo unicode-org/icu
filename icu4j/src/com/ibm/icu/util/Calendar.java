@@ -13,6 +13,7 @@ import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.TimeZone;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TimeZone;
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
