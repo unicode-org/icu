@@ -157,12 +157,12 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     /**
      * UObject boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
+    static inline UClassID getStaticClassID() { 
+        return (UClassID)&fgClassID;
     }
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
 #ifdef SERVICE_DEBUG
@@ -278,12 +278,12 @@ protected:
     /**
      * UObject boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
+    static inline UClassID getStaticClassID() { 
+        return (UClassID)&fgClassID;
     }
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
 #ifdef SERVICE_DEBUG
@@ -348,12 +348,12 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
     /**
      * UObject boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
+    static inline UClassID getStaticClassID() { 
+        return (UClassID)&fgClassID;
     }
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
     }
 
 #ifdef SERVICE_DEBUG

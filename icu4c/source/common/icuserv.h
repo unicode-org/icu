@@ -187,15 +187,15 @@ class U_COMMON_API ICUServiceKey : public UObject {
   /**
    * UObject RTTI boilerplate.
    */
-  virtual UClassID getDynamicClassID() const {
-    return getStaticClassID();
+  static inline UClassID getStaticClassID() { 
+    return (UClassID)&fgClassID;
   }
 
   /**
    * UObject RTTI boilerplate.
    */
-  static UClassID getStaticClassID() { 
-    return (UClassID)&fgClassID;
+  virtual UClassID getDynamicClassID() const {
+    return getStaticClassID();
   }
 
 #ifdef SERVICE_DEBUG
@@ -347,15 +347,15 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
  /**
   * UObject RTTI boilerplate.
   */
-  virtual UClassID getDynamicClassID() const {
-	  return getStaticClassID();
+  static inline UClassID getStaticClassID() { 
+	  return (UClassID)&fgClassID;
   }
 
  /**
   * UObject RTTI boilerplate.
   */
-  static UClassID getStaticClassID() { 
-	  return (UClassID)&fgClassID;
+  virtual UClassID getDynamicClassID() const {
+	  return getStaticClassID();
   }
 
 #ifdef SERVICE_DEBUG
@@ -380,33 +380,33 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
  * acceptsListener and notifyListener as appropriate.</p>
  */
 class U_COMMON_API ServiceListener : public EventListener {
- public:
-  /**
-   * <p>This method is called when the service changes. At the time of the
-   * call this listener is registered with the service.  It must
-   * not modify the notifier in the context of this call.</p>
-   * 
-   * @param service the service that changed.
-   */
-  virtual void serviceChanged(const ICUService& service) const = 0;
-
- public:
- /**
-  * UObject RTTI boilerplate.
-  */
-  virtual UClassID getDynamicClassID() const {
-    return getStaticClassID();
-  }
-
- /**
-  * UObject RTTI boilerplate.
-  */
-  static UClassID getStaticClassID() {
-    return (UClassID)&fgClassID;
-  }
-
- private:
-  static const char fgClassID;
+public:
+    /**
+     * <p>This method is called when the service changes. At the time of the
+     * call this listener is registered with the service.  It must
+     * not modify the notifier in the context of this call.</p>
+     * 
+     * @param service the service that changed.
+     */
+    virtual void serviceChanged(const ICUService& service) const = 0;
+    
+public:
+    /**
+     * UObject RTTI boilerplate.
+     */
+    static inline UClassID getStaticClassID() {
+        return (UClassID)&fgClassID;
+    }
+    
+    /**
+     * UObject RTTI boilerplate.
+     */
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
+    }
+    
+private:
+    static const char fgClassID;
 };
 
 /*
