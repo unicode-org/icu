@@ -71,15 +71,13 @@ unorm_normalize(const UChar*            source,
     return -1;
 
   int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
-  const UnicodeString src((UChar*)source, len, len);
+  const UnicodeString src(sourceLength == -1, source, len);
   UnicodeString dst(result, 0, resultLength);
   /* synwee : note quickcheck is added in C ++ normalize method */
   if ((option & UNORM_IGNORE_HANGUL) != 0)
     option = Normalizer::IGNORE_HANGUL;
   Normalizer::normalize(src, normMode, option, dst, *status);
-  int32_t actualLen;
-  T_fillOutputParams(&dst, result, resultLength, &actualLen, status);
-  return actualLen;
+  return uprv_fillOutputString(dst, result, resultLength, status);
 }
 
 /**
