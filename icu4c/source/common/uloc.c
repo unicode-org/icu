@@ -429,8 +429,12 @@ int32_t uloc_getVariant(const char* localeID,
     int i=0;
     const char *p = localeID;
     
-    if (U_FAILURE(*err)) return 0;
-    if (localeID == NULL)    localeID = uloc_getDefault();
+    if (U_FAILURE(*err))
+        return 0;
+    if (localeID == NULL)
+    {
+        localeID = uloc_getDefault();
+    }
     
     /* skip over i- or x- */
     if(_isIDPrefix(localeID))
@@ -462,12 +466,12 @@ int32_t uloc_getVariant(const char* localeID,
     **IFF** no variant was otherwise found, take one from @...
     */
     if ( (i == 0) &&  /* Found nothing (zero chars copied) */
-        (localeID = uprv_strrchr(p, '@')))
+        (localeID = uprv_strrchr(p, '@')) != NULL)
     {
         localeID++; /* point after the @ */
                     /* Note that we will stop at a period if the user accidentally
-        put a period after the @ sign */
-        
+                       put a period after the @ sign */
+
         /* repeat above copying loop */
         while (!_isTerminator(*localeID))
         {
@@ -477,13 +481,12 @@ int32_t uloc_getVariant(const char* localeID,
             localeID++;
         }
     }
-    
+
     if (i >= variantCapacity )
     {
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
-    
-    
+
     if (variantCapacity>0) {
         variant[uprv_min(i,variantCapacity-1)] = '\0';
     }
