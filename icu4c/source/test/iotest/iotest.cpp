@@ -528,6 +528,75 @@ static void TestfgetsLineCount() {
     u_fclose(myFile);
 }
 
+static void TestfgetsNewLineHandling() {
+    UChar buffer[256];
+    static const UChar testUStr[][16] = {
+        {0x000D, 0},
+        {0x000D, 0x000A, 0},
+        {0x000D, 0},
+        {0x000D, 0},
+        {0x0085, 0},
+        {0x000A, 0},
+        {0x000D, 0},
+        {0x000B, 0},
+        {0x000C, 0},
+        {0x000C, 0},
+        {0x2028, 0},
+        {0x0085, 0},
+        {0x2029, 0},
+        {0x0085, 0},
+
+        {0x008B, 0x000D, 0},
+        {0x00A0, 0x000D, 0x000A, 0},
+        {0x3000, 0x000D, 0},
+        {0xd800, 0xdfff, 0x000D, 0},
+        {0x00AB, 0x0085, 0},
+        {0x00AC, 0x000A, 0},
+        {0x00AD, 0x000D, 0},
+        {0x00BA, 0x000B, 0},
+        {0x00AB, 0x000C, 0},
+        {0x00B1, 0x000C, 0},
+        {0x30BB, 0x2028, 0},
+        {0x00A5, 0x0085, 0},
+        {0x0080, 0x2029, 0},
+        {0x00AF, 0x0085, 0}
+
+    };
+    UFILE *myFile = NULL;
+    int32_t lineIdx;
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
+    for (lineIdx = 0; lineIdx < (int32_t)(sizeof(testUStr)/sizeof(testUStr[0])); lineIdx++) {
+        u_file_write(testUStr[lineIdx], u_strlen(testUStr[lineIdx]), myFile);
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+
+    for (lineIdx = 0; lineIdx < (int32_t)(sizeof(testUStr)/sizeof(testUStr[0])); lineIdx++) {
+        u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+        UChar *returnedUCharBuffer = u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer);
+
+        if (!returnedUCharBuffer) {
+            /* Returned NULL. stop. */
+            break;
+        }
+        if (u_strcmp(buffer, testUStr[lineIdx]) != 0) {
+            log_err("buffers are different at index = %d\n", lineIdx);
+        }
+        if (buffer[u_strlen(buffer)+1] != 0xDEAD) {
+            log_err("u_fgets wrote too much\n");
+        }
+    }
+    if (lineIdx != (int32_t)(sizeof(testUStr)/sizeof(testUStr[0]))) {
+        log_err("u_fgets read too much\n");
+    }
+    if (u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer) != NULL) {
+        log_err("u_file_write wrote too much\n");
+    }
+    u_fclose(myFile);
+}
+
 static void TestFilePrintCompatibility() {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", NULL);
     FILE *myCFile;
@@ -1668,6 +1737,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
+    addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
     addTest(root, &TestFScanf, "file/TestFScanf");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
