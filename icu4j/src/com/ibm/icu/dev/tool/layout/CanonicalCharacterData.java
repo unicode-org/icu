@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -51,11 +51,7 @@ public class CanonicalCharacterData
                     dumpEquivalents(character, equivs);
                 }
                 
-                for (int e = 0; e < nEquivalents; e += 1) {
-                    equivalents[e] = (String) equivs.elementAt(e);
-                }
-                
-                sortEquivalents(equivalents);
+                sortEquivalents(equivalents, equivs);
             }
         }
         
@@ -194,24 +190,26 @@ public class CanonicalCharacterData
     //
     // Straight insertion sort from Knuth vol. III, pg. 81
     //
-    private static void sortEquivalents(String[] table)
+    private static void sortEquivalents(String[] equivalents, Vector unsorted)
     {
-        for (int j = 1; j < table.length; j += 1) {
+        int nEquivalents = equivalents.length;
+        
+        for (int e = 0; e < nEquivalents; e += 1) {
+            String v = (String) unsorted.elementAt(e);
             int i;
-            String v = table[j];
-
-            for (i = j - 1; i >= 0; i -= 1) {
-                if (compareEquivalents(v, table[i]) >= 0) {
+            
+            for (i = e - 1; i >= 0; i -= 1) {
+                if (compareEquivalents(v, equivalents[i]) >= 0) {
                   break;
                 }
 
-                table[i + 1] = table[i];
+                equivalents[i + 1] = equivalents[i];
             }
 
-            table[i + 1] = v;
-        }
+            equivalents[i + 1] = v;
+       }
     }
-        
+            
     private Vector recordVectors[] = new Vector[UScript.CODE_LIMIT];
     private int maxEquivalents[] = new int[UScript.CODE_LIMIT];
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -14,6 +14,9 @@ package com.ibm.icu.dev.tool.layout;
 import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
+
+import com.ibm.icu.text.MessageFormat;
 
 public class ModuleWriter
 {
@@ -37,8 +40,12 @@ public class ModuleWriter
         System.out.println("Writing module " + outputFileName + "...");
     }
 
-    public void writeHeader(String define, String[] includeFiles) {
-        output.print(moduleHeader);
+    public void writeHeader(String define, String[] includeFiles)
+    {
+        MessageFormat format = new MessageFormat(moduleHeader);
+        Object args[] = {new Date(System.currentTimeMillis())};
+
+        output.print(format.format(args));
         
         if (define != null) {
             wroteDefine = true;
@@ -82,14 +89,17 @@ public class ModuleWriter
     
     protected PrintStream output;
 
-    protected static final String moduleHeader = "/*\n" +
-            " *\n" +
-            " * (C) Copyright IBM Corp. 1998-2004. All Rights Reserved.\n" +
-            " *\n" +
-            " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
-            " * YOU REALLY KNOW WHAT YOU'RE DOING.\n" +
-            " */\n" +
-            "\n";
+    protected static final String moduleHeader =
+        "/*\n" +
+        " *\n" +
+        " * (C) Copyright IBM Corp. 1998-{0,date,yyyy}. All Rights Reserved.\n" +
+        " *\n" +
+        " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
+        " * YOU REALLY KNOW WHAT YOU''RE DOING.\n" +
+        " *\n" +
+        " * Generated on: {0,date,MM/dd/yyyy hh:mm:ss a z}\n" +
+        " */\n" +
+        "\n";
 
     protected static final String moduleBegin = "U_NAMESPACE_BEGIN\n\n";
 

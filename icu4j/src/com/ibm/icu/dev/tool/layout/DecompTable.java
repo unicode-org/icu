@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -70,11 +70,11 @@ public class DecompTable implements LookupSubtable
         //
         // Straight insertion sort from Knuth vol. III, pg. 81
         //
-        public static void sort(DecompEntry[] table)
+        public static void sort(DecompEntry[] table, Vector decompVector)
         {
-            for (int j = 1; j < table.length; j += 1) {
+            for (int j = 0; j < table.length; j += 1) {
                 int i;
-                DecompEntry v = table[j];
+                DecompEntry v = (DecompEntry) decompVector.elementAt(j);
 
                 for (i = j - 1; i >= 0; i -= 1) {
                     if (v.compareTo(table[i]) >= 0) {
@@ -134,14 +134,8 @@ public class DecompTable implements LookupSubtable
     {
         if (snapshotSize != decompVector.size()) {
             snapshotSize = decompVector.size();
-        
             decompEntries = new DecompEntry[snapshotSize];
-        
-            for (int i = 0; i < snapshotSize; i += 1) {
-                decompEntries[i] = (DecompEntry) decompVector.elementAt(i);
-            }
-            
-            DecompEntry.sort(decompEntries);
+            DecompEntry.sort(decompEntries, decompVector);
         }
     }
 

@@ -353,6 +353,77 @@ public class CanonGSUBBuilder
         }
     }
     
+    /*
+     * Best guess Hebrew mark order: dagesh < sin_and_shin_dots < points_5B0_5BB < meteg_and_rafe < others
+     * Best guess Arabic mark order: hamza < combining_alef < madda < sukun < shadda < vowel_marks < qur'anic_marks
+     */
+    public static ClassTable buildCombiningClassTable()
+    {
+        UnicodeSet markSet = new UnicodeSet("[\\P{CanonicalCombiningClass=0}]");
+        ClassTable exceptions = new ClassTable();
+        ClassTable combiningClasses = new ClassTable();
+        int markCount = markSet.size();
+        
+        exceptions.addMapping(0x05BC, 10); // HEBREW POINT DAGESH OR MAPIQ
+
+        exceptions.addMapping(0x05C1, 11); // HEBREW POINT SHIN DOT
+        exceptions.addMapping(0x05C2, 11); // HEBREW POINT SIN DOT
+
+        exceptions.addMapping(0x05B0, 12); // HEBREW POINT SHEVA
+        exceptions.addMapping(0x05B1, 12); // HEBREW POINT HATAF SEGOL
+        exceptions.addMapping(0x05B2, 12); // HEBREW POINT HATAF PATAH
+        exceptions.addMapping(0x05B3, 12); // HEBREW POINT HATAF QAMATS
+        exceptions.addMapping(0x05B4, 12); // HEBREW POINT HIRIQ
+        exceptions.addMapping(0x05B5, 12); // HEBREW POINT TSERE
+        exceptions.addMapping(0x05B6, 12); // HEBREW POINT SEGOL
+        exceptions.addMapping(0x05B7, 12); // HEBREW POINT PATAH
+        exceptions.addMapping(0x05B8, 12); // HEBREW POINT QAMATS
+        exceptions.addMapping(0x05B9, 12); // HEBREW POINT HOLAM
+        exceptions.addMapping(0x05BB, 12); // HEBREW POINT QUBUTS
+
+        exceptions.addMapping(0x05BD, 13); // HEBREW POINT METEG
+        exceptions.addMapping(0x05BF, 13); // HEBREW POINT RAFE
+
+        exceptions.addMapping(0x0655, 27); // ARABIC HAMZA BELOW
+        exceptions.addMapping(0x0654, 27); // ARABIC HAMZA ABOVE
+
+        exceptions.addMapping(0x0656, 28); // ARABIC SUBSCRIPT ALEF
+        exceptions.addMapping(0x0670, 28); // ARABIC LETTER SUPERSCRIPT ALEF
+
+        exceptions.addMapping(0x0653, 29); // ARABIC MADDAH ABOVE
+
+        exceptions.addMapping(0x0652, 30); // ARABIC SUKUN
+        exceptions.addMapping(0x06E1, 30); // ARABIC SMALL HIGH DOTLESS HEAD OF KHAH
+
+        exceptions.addMapping(0x0651, 31); // ARABIC SHADDA
+
+        exceptions.addMapping(0x064D, 32); // ARABIC KASRATAN
+        exceptions.addMapping(0x0650, 32); // ARABIC KASRA
+
+        exceptions.addMapping(0x064B, 33); // ARABIC FATHATAN
+        exceptions.addMapping(0x064C, 33); // ARABIC DAMMATAN
+        exceptions.addMapping(0x064E, 33); // ARABIC FATHA
+        exceptions.addMapping(0x064F, 33); // ARABIC DAMMA
+        exceptions.addMapping(0x0657, 33); // ARABIC INVERTED DAMMA
+        exceptions.addMapping(0x0658, 33); // ARABIC MARK NOON GHUNNA
+        
+        exceptions.snapshot();
+        
+        for (int i = 0; i < markCount; i += 1) {
+            int mark = markSet.charAt(i);
+            int markClass = exceptions.getGlyphClassID(mark);
+            
+            if (markClass == 0) {
+                markClass = UCharacter.getCombiningClass(mark);
+            }
+            
+            combiningClasses.addMapping(mark, markClass);
+        }
+        
+        combiningClasses.snapshot();
+        return combiningClasses;
+    }
+    
     public static void buildDecompTables(String fileName)
     {
         UnicodeSet decompSet = new UnicodeSet("[[\\P{Hangul}] & [\\p{DecompositionType=Canonical}]]");
@@ -397,8 +468,10 @@ public class CanonGSUBBuilder
         
         featureList.finalizeFeatureList();
         
+        ClassTable markClassTable = buildCombiningClassTable();
+        
         GSUBWriter gsubWriter = new GSUBWriter("Canon", scriptList, featureList, lookupList);
-        GDEFWriter gdefWriter = new GDEFWriter("Canon", classTable);
+        GDEFWriter gdefWriter = new GDEFWriter("Canon", classTable, markClassTable);
         String[] includeFiles = {"LETypes.h", "CanonShaping.h"};        
         
         LigatureModuleWriter writer = new LigatureModuleWriter();

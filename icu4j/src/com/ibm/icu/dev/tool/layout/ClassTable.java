@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -45,13 +45,13 @@ public class ClassTable implements LookupSubtable
         //
         // Straight insertion sort from Knuth vol. III, pg. 81
         //
-        public static void sort(ClassEntry[] table)
+        public static void sort(ClassEntry[] table, Vector unsorted)
         {
-            for (int j = 1; j < table.length; j += 1) {
+            for (int e = 0; e < table.length; e += 1) {
                 int i;
-                ClassEntry v = table[j];
+                ClassEntry v = (ClassEntry) unsorted.elementAt(e);
 
-                for (i = j - 1; i >= 0; i -= 1) {
+                for (i = e - 1; i >= 0; i -= 1) {
                     if (v.compareTo(table[i]) >= 0) {
                       break;
                     }
@@ -161,11 +161,7 @@ public class ClassTable implements LookupSubtable
             snapshotSize = classMap.size();
             classTable = new ClassEntry[snapshotSize];
 
-            for (int i = 0; i < snapshotSize; i += 1) {
-                classTable[i] = (ClassEntry) classMap.elementAt(i);
-            }
-            
-            ClassEntry.sort(classTable);
+            ClassEntry.sort(classTable, classMap);
         }
     }
     
