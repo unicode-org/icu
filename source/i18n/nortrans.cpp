@@ -24,34 +24,40 @@ void NormalizationTransliterator::registerIDs() {
  * Factory methods
  */
 Transliterator* NormalizationTransliterator::_createNFC() {
-    return new NormalizationTransliterator(UnicodeString("NFC", ""),
-                                           Normalizer::COMPOSE, 0);
+    return new NormalizationTransliterator(UNICODE_STRING("NFC", 3),
+                                           UNORM_NFC, 0);
 }
 Transliterator* NormalizationTransliterator::_createNFKC() {
-    return new NormalizationTransliterator(UnicodeString("NFKC", ""),
-                                           Normalizer::COMPOSE_COMPAT, 0);
+    return new NormalizationTransliterator(UNICODE_STRING("NFKC", 4),
+                                           UNORM_NFKC, 0);
 }
 Transliterator* NormalizationTransliterator::_createNFD() {
-    return new NormalizationTransliterator(UnicodeString("NFD", ""),
-                                           Normalizer::DECOMP, 0);
+    return new NormalizationTransliterator(UNICODE_STRING("NFD", 3),
+                                           UNORM_NFD, 0);
 }
 Transliterator* NormalizationTransliterator::_createNFKD() {
-    return new NormalizationTransliterator(UnicodeString("NFKD", ""),
-                                           Normalizer::DECOMP_COMPAT, 0);
+    return new NormalizationTransliterator(UNICODE_STRING("NFKD", 4),
+                                           UNORM_NFKD, 0);
 }
 
 /**
  * Factory method.
  */
 NormalizationTransliterator*
-NormalizationTransliterator::createInstance(Normalizer::EMode m,
+NormalizationTransliterator::createInstance(UNormalizationMode mode,
                                             int32_t opt) {
-    UnicodeString id("NF", "");
-    if ((m & Normalizer::COMPAT_BIT) != 0) {
-        id.append((UChar)0x004B /*K*/);
+    switch(mode) {
+    case UNORM_NFC:
+        return (NormalizationTransliterator *)_createNFC();
+    case UNORM_NFKC:
+        return (NormalizationTransliterator *)_createNFKC();
+    case UNORM_NFD:
+        return (NormalizationTransliterator *)_createNFD();
+    case UNORM_NFKD:
+        return (NormalizationTransliterator *)_createNFKD();
+    default:
+        return 0;
     }
-    id.append((UChar) (((m & Normalizer::COMPOSE_BIT) != 0) ? 0x0043 : 0x0044));
-    return new NormalizationTransliterator(id, m, opt);
 }
 
 /**
@@ -59,9 +65,9 @@ NormalizationTransliterator::createInstance(Normalizer::EMode m,
  */
 NormalizationTransliterator::NormalizationTransliterator(
                                  const UnicodeString& id,
-                                 Normalizer::EMode m, int32_t opt) :
+                                 UNormalizationMode mode, int32_t opt) :
     Transliterator(id, 0) {
-    mode = m;
+    fMode = mode;
     options = opt;
 }
 
@@ -76,7 +82,7 @@ NormalizationTransliterator::~NormalizationTransliterator() {
  */
 NormalizationTransliterator::NormalizationTransliterator(const NormalizationTransliterator& o) :
 Transliterator(o) {
-    mode = o.mode;
+    fMode = o.fMode;
     options = o.options;
 }
 
@@ -85,7 +91,7 @@ Transliterator(o) {
  */
 NormalizationTransliterator& NormalizationTransliterator::operator=(const NormalizationTransliterator& o) {
     Transliterator::operator=(o);
-    mode = o.mode;
+    fMode = o.fMode;
     options = o.options;
     return *this;
 }
@@ -152,7 +158,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
         UnicodeString input(FALSE, chars, limit-start); // readonly alias
         UnicodeString output;
         UErrorCode status = U_ZERO_ERROR;
-        Normalizer::normalize(input, mode, options, output, status);
+        Normalizer::normalize(input, fMode, options, output, status);
 
         if (chars != staticChars) {
             delete[] chars;
