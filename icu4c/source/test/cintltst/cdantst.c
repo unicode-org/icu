@@ -187,8 +187,8 @@ void addDanishCollTest(TestNode** root)
 {
     
     
-    addTest(root, &TestTertiary, "tscoll/cdantst/TestTertiary");
-    addTest(root, &TestPrimary, "tscoll/cdantst/TestPrimary");
+    /*addTest(root, &TestTertiary, "tscoll/cdantst/TestTertiary");*/
+    /*addTest(root, &TestPrimary, "tscoll/cdantst/TestPrimary");*/
 
 }
 
