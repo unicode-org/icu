@@ -499,6 +499,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
 
     if (maxSize > size)
     {
+        if (size == 0) size = 1;
         temp = (int32_t*)malloc(sizeof(int32_t) * size);
 
         memcpy(temp, orders, size * sizeof(int32_t));

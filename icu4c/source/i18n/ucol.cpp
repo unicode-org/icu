@@ -35,6 +35,7 @@
 #include "uhash.h"
 
 #include <stdio.h>
+#include <limits.h>
 
 
 
@@ -73,6 +74,31 @@ isAcceptableUCA(void *context,
         return FALSE;
     }
 }
+
+
+inline  void IInit_collIterate(const UCollator *collator, const UChar *sourceString,
+                              int32_t sourceLen, collIterate *s) { 
+    (s)->start = (s)->string = (s)->pos = (UChar *)(sourceString); 
+    (s)->flags = 0;
+    (s)->endp = (UChar *)sourceString+sourceLen;
+    if (sourceLen >= 0) {
+        s->flags |= UCOL_ITER_HASLEN;
+    }
+    (s)->CEpos = (s)->toReturn = (s)->CEs; 
+    (s)->writableBuffer = (s)->stackWritableBuffer; 
+    (s)->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE; 
+    (s)->coll = (collator); 
+    (s)->fcdPosition = 0; 
+    if(collator->normalizationMode == UCOL_ON)
+        (s)->flags |= UCOL_ITER_NORM;
+}
+
+U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString,
+                             int32_t sourceLen, collIterate *s){
+    // Out-of-line version for use from other files.
+    IInit_collIterate(collator, sourceString, sourceLen, s);
+}
+
 /****************************************************************************/
 /* Following are the open/close functions                                   */
 /*                                                                          */
@@ -476,15 +502,96 @@ void ucol_initUCA(UErrorCode *status) {
 /* This is the first function that tries to fetch a collation element  */
 /* If it's not succesfull or it encounters a more difficult situation  */
 /* some more sofisticated and slower functions are invoked             */
-uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
+inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
       order = *(collationSource->toReturn++);                         /* if so, return them */
       if(collationSource->CEpos == collationSource->toReturn) {
         collationSource->CEpos = collationSource->toReturn = collationSource->CEs; 
       }
-    } else if(collationSource->pos < collationSource->len) {          /* This is the real business now */
-      UChar ch = *collationSource->pos++;
+      return order;
+    }
+
+    UChar ch;
+
+    for (;;)                           // Loop handles case when incremental normalize switches
+    {                                  //   to or from the side buffer / original string, and we
+        //   need to start again to get the next character.
+        
+        if ((collationSource->flags & (UCOL_ITER_HASLEN | UCOL_ITER_INNORMBUF | UCOL_ITER_NORM )) == 0)
+        {  
+            // The source string is null terminated and we're not working from the side buffer,
+            //   and we're not normalizing.  This is the fast path.
+            ch = *collationSource->pos++;
+            if (ch != 0) 
+                break;
+            else
+                return UCOL_NO_MORE_CES;
+        }
+
+        if (collationSource->flags & UCOL_ITER_HASLEN) {
+            // Normal path for strings when length is specified.
+            //   (We can't be in side buffer because it is always null terminated.)
+            if (collationSource->pos >= collationSource->endp) {
+                // Ran off of the end of the main source string.  We're done.
+                return UCOL_NO_MORE_CES;
+            }
+            ch = *collationSource->pos++;
+        }
+        else
+        {
+            // Null terminated string, and we are in the side buffer.
+            ch = *collationSource->pos++;
+            if (ch != 0)
+                break;   // Side buffer is always normalized; we can skip further tests.
+            
+            // Ran off the end of the normalize side buffer.  Revert to the main string and 
+            //   loop back to top to try again to get a character.
+            collationSource->pos   = collationSource->fcdPosition;
+            collationSource->flags = collationSource->origFlags;
+            continue;
+        }
+        
+        // We've got a character.  See if there's any fcd and/or normalization stuff to do.
+        if ((collationSource->flags & UCOL_ITER_NORM) == 0)
+            break;
+        
+        if (collationSource->fcdPosition >= collationSource->pos) {
+            // An earlier FCD check has already covered the current character.
+            // We can go ahead and process this char.
+            break;
+        }
+        
+        if (ch < 0xC0 ) {
+            // Fast fcd safe path.  Trailing combining class == 0.  This char is OK.
+            break;
+        }
+        
+        if (ch < NFC_ZERO_CC_BLOCK_LIMIT_) {
+            // We need to peek at the next character in order to tell if we are FCD
+            if ((collationSource->flags & UCOL_ITER_HASLEN) && collationSource->pos >= collationSource->endp)
+                // We are at the last char of source string.
+                //  It is always OK for FCD check.
+                break;
+            
+            // Not at last char of source string (or we'll check against terminating null).  Do the FCD fast test
+            if (*collationSource->pos < NFC_ZERO_CC_BLOCK_LIMIT_)
+                break;
+        }
+        
+        // Need a more complete FCD check and possible normalization.
+        collIterFCD(collationSource);
+        if ((collationSource->flags & UCOL_ITER_INNORMBUF) == 0) {
+            //  No normalization was needed.  Go ahead and process the char we already had.
+            break;
+        }
+        
+        // Some normalization happened.  Next loop iteration will pick up a char
+        //   from the normalization buffer.
+        
+    }   // end for (;;)        
+    
+    
       if(ch <= 0xFF) {                                                 /* if it's Latin One, we'll try to fast track it */
         order = coll->latinOneMapping[ch];                            /* by looking in up in an array */
       } else {                                                        /* otherwise, */
@@ -497,24 +604,504 @@ uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UEr
           order = ucol_getNextUCA(ch, collationSource, status);
         }
       } 
-      //collationSource->pos++; /* we're advancing to the next codepoint */
-    } else {
-      order = UCOL_NO_MORE_CES;                                       /* if so, we won't play any more        */
-    } 
     /* This means that contraction should spit back the last codepoint eaten! */
     return order; /* return the CE */
 }
+
+
+
+
+/* added by synwee for trie manipulation*/
+#define STAGE_1_SHIFT_            10
+#define STAGE_2_SHIFT_            4
+#define STAGE_2_MASK_AFTER_SHIFT_ 0x3F
+#define STAGE_3_MASK_             0xF
+#define LAST_BYTE_MASK_           0xFF
+#define SECOND_LAST_BYTE_SHIFT_   8
+
+/*  Temporary                                                 */
+/*!!! DODO:  Put these tables somewhere better.               */
+/*     Syn Wee will be moving them into the main data file.   */
+/**
+* Trie data for FCD.
+* Each index corresponds to each code point. Trie value is the combining class 
+* of the last character of the NFD of the codepoint.
+* Generated data!! Change at your own risk.
+* Situated here temporary.
+* size uint16_t for the first 2 stages instead of uint32_t to reduce size.
+*/
+
+static const uint16_t FCD_STAGE_1_[] = 
+{
+  0x0, 0x40, 0x75, 0xb2, 0xef, 0xf3, 0x131, 0x151, 0x191, 0x1c0, 
+0x1c0, 0x1c0, 0x1fe, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x20e, 0x243, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 
+0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0, 0x1c0
+};
+
+static const uint16_t FCD_STAGE_2_[] = 
+{
+  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x10, 0x20, 0x10, 0x2f, 0x3e, 0x4e, 0x5c, 0x6c, 
+0x7b, 0x89, 0x95, 0xa3, 0x0, 0x0, 0xb3, 0xc2, 0x3, 0xd2, 
+0xe0, 0xef, 0xf7, 0xff, 0x10f, 0x11b, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x12b, 0x136, 
+0x145, 0x151, 0x15e, 0x0, 0x16e, 0x0, 0x179, 0x188, 0x6, 0x188, 
+0x18e, 0x19d, 0x0, 0x0, 0x1ad, 0x1bc, 0x0, 0x1bc, 0x0, 0x1ad, 
+0x0, 0x1c6, 0x1d3, 0x0, 0x0, 0x0, 0x186, 0x1e3, 0x1eb, 0x1f5, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x204, 
+0x212, 0x222, 0x232, 0x0, 0x0, 0x0, 0x0, 0x0, 0x240, 0x0, 
+0x247, 0x257, 0x0, 0x267, 0x0, 0x0, 0x0, 0x0, 0x277, 0x284, 
+0x293, 0x0, 0x0, 0x2a2, 0x0, 0x2b2, 0x2c1, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x2cc, 0x2db, 0x2e8, 0x2f7, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x307, 0x2e8, 0x314, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x324, 0x2e8, 0x331, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x307, 0x2e8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x307, 0x2e8, 
+0x340, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2e8, 0x0, 0x0, 
+0x0, 0x0, 0x34e, 0x35c, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x2e8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2e8, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x363, 0x36e, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x37c, 0x387, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x393, 0x39d, 0x0, 0x0, 0x0, 0x0, 0x3a9, 0x0, 0x3b4, 
+0x0, 0x0, 0x0, 0x3c3, 0x3d3, 0x0, 0x0, 0x0, 0x3dd, 0x0, 
+0x0, 0x0, 0x3e6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x3f4, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x3fb, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x40b, 
+0x41b, 0x427, 0x435, 0x443, 0x44f, 0x45b, 0x467, 0x477, 0x485, 0x495, 
+0x477, 0x49b, 0xf7, 0x4a3, 0x4b3, 0xf7, 0x1ed, 0xf7, 0xf7, 0x1ed, 
+0x4c3, 0xf7, 0x4d2, 0x4e2, 0x4e2, 0x4e2, 0x4f2, 0x501, 0x50e, 0x51b, 
+0x52a, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x53a, 0x549, 0x0, 0x0, 0x0, 0x54e, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x55a, 0x566, 0x0, 0x575, 
+0x0, 0x0, 0x0, 0x585, 0x0, 0x592, 0x0, 0x5a1, 0x0, 0x5a8, 
+0x5b6, 0x5b6, 0x0, 0x5c0, 0x0, 0x0, 0x0, 0x5cc, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x5da, 0x0, 0x5ea, 0x5f6, 0x602, 0x612, 0x0, 0x620, 
+0x5ea, 0x5f6, 0x602, 0x612, 0x0, 0x62f, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x63e, 0x64e, 0x65e, 0x66e, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x67e, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0
+};
+static const uint16_t FCD_STAGE_3_[] =
+{
+  0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0x0, 0xca, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 
+0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 0x0, 0x0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0x0, 
+0x0, 0x0, 0xe6, 0xe6, 0xca, 0xca, 0x0, 0xe6, 0xe6, 0xca, 
+0xca, 0xe6, 0xe6, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0xca, 0xca, 
+0xe6, 0xe6, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 
+0x0, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xca, 0xca, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0xd8, 
+0xd8, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0xd8, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xca, 0xca, 0xe6, 0xe6, 0xe6, 0xe6, 
+0x0, 0x0, 0x0, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xdc, 0xdc, 0x0, 0x0, 0xe6, 
+0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0xca, 
+0xca, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6e6, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe8e8, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 
+0xe8e8, 0xd8d8, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 0xcaca, 0xcaca, 0xdcdc, 0xdcdc, 
+0xdcdc, 0xdcdc, 0xcaca, 0xcaca, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 
+0xdcdc, 0x101, 0x101, 0x101, 0x101, 0x101, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xf0f0, 0xe6e6, 0xdcdc, 0xdcdc, 0xdcdc, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xdcdc, 0xdcdc, 0x0, 0xeaea, 0xeaea, 0xe9e9, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0xe6, 0xe6, 0x0, 0xe6, 0xe6, 0xe6, 0x0, 0xe6, 
+0x0, 0xe6, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0x0, 0x0, 0x0, 0xe6, 0xe6, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 
+0xe6, 0x0, 0xe6, 0x0, 0x0, 0x0, 0xe6, 0x0, 0x0, 0x0, 
+0x0, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0xe6, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 
+0xe6, 0x0, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 
+0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 0xe6, 
+0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xdcdc, 0xe6e6, 0xe6e6, 
+0xe6e6, 0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0xe6e6, 0xdede, 0xdcdc, 0xe6e6, 0xe6e6, 
+0xe6e6, 0xe6e6, 0x0, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 0xdcdc, 0xe6e6, 0xe6e6, 
+0xdcdc, 0xe6e6, 0xe6e6, 0xdede, 0xe4e4, 0xe6e6, 0xa0a, 0xb0b, 0xc0c, 0xd0d, 
+0xe0e, 0xf0f, 0x1010, 0x1111, 0x1212, 0x1313, 0x0, 0x1414, 0x1515, 0x1616, 
+0x0, 0x1717, 0x0, 0x1818, 0x1919, 0x0, 0xe6e6, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0xe6, 
+0xe6, 0xdc, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x1b1b, 0x1c1c, 0x1d1d, 0x1e1e, 0x1f1f, 0x2020, 
+0x2121, 0x2222, 0xe6e6, 0xe6e6, 0xdcdc, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x2323, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0xe6, 0x0, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 0x0, 0x0, 
+0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0x0, 0x0, 0xe6e6, 
+0xe6e6, 0xe6e6, 0xdcdc, 0xe6e6, 0x0, 0x0, 0xe6e6, 0xe6e6, 0x0, 0xdcdc, 
+0xe6e6, 0xe6e6, 0xdcdc, 0x0, 0x0, 0x2424, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0xdcdc, 0xdcdc, 0xdcdc, 
+0xe6e6, 0xdcdc, 0xdcdc, 0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0xdcdc, 0xe6e6, 0xdcdc, 
+0xe6e6, 0xdcdc, 0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x7, 0x0, 0x0, 0x7, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x707, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x909, 0x0, 0x0, 
+0xe6e6, 0xdcdc, 0xe6e6, 0xe6e6, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 
+0x7, 0x7, 0x7, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x707, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x7, 0x7, 0x0, 0x7, 0x0, 0x0, 0x0, 0x7, 0x0, 0x0, 
+0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x707, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7, 0x7, 0x7, 0x0, 
+0x0, 0x7, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x7, 0x7, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x5b, 0x0, 0x0, 0x0, 0x0, 0x909, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x5454, 0x5b5b, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x909, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x9, 0x0, 
+0x0, 0x9, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x6767, 0x6767, 0x909, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x6b6b, 0x6b6b, 0x6b6b, 0x6b6b, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x7676, 0x7676, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x7a7a, 0x7a7a, 0x7a7a, 0x7a7a, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0xdcdc, 0xdcdc, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0xdcdc, 0x0, 0xdcdc, 0x0, 0xd8d8, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x8181, 0x8282, 0x8182, 0x8484, 0x8184, 0x82, 
+0x0, 0x82, 0x0, 0x8282, 0x8282, 0x8282, 0x8282, 0x0, 0x0, 0x8282, 
+0x8182, 0xe6e6, 0xe6e6, 0x909, 0x0, 0xe6e6, 0xe6e6, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0xdcdc, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x707, 0x0, 0x909, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x909, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe4e4, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xdc, 
+0xdc, 0xca, 0xca, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 
+0xe6, 0xca, 0xca, 0xdc, 0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 0xdc, 0xdc, 
+0xdc, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 0xdc, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0x0, 0xe6, 0x0, 
+0x0, 0x0, 0x0, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xdc, 
+0xdc, 0xdc, 0xdc, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 0xe6, 0xdc, 0xdc, 0xe6, 
+0xe6, 0xe6, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0xe6, 0x0, 
+0xe6, 0x0, 0xe6, 0x0, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 
+0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 
+0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xf0, 0xe6, 0xe6, 0xf0, 0xf0, 
+0xf0, 0x0, 0xe6, 0xf0, 0xe6, 0xe6, 0xe6, 0xe6, 0xf0, 0x0, 
+0x0, 0x0, 0xe6, 0xf0, 0xf0, 0xf0, 0x0, 0xe6, 0xf0, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xf0, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0x0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0x0, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 0xe6, 
+0xe6, 0xe6, 0x0, 0x0, 0xf0, 0xf0, 0xf0, 0x0, 0xe6, 0xf0, 
+0xe6, 0xe6, 0xe6, 0xe6, 0xf0, 0x0, 0x0, 0x0, 0xe6e6, 0xe6e6, 
+0x101, 0x101, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0x101, 0x101, 0x101, 0xe6e6, 
+0xe6e6, 0x0, 0x0, 0x0, 0xe6e6, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xe6, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x1, 0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 
+0x0, 0x0, 0x1, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 
+0x1, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x1, 0x0, 0x0, 0x1, 0x0, 0x0, 0x1, 0x0, 
+0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x1, 0x1, 0x1, 0x0, 0x0, 0x1, 0x1, 0x0, 0x0, 
+0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x1, 0x1, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x1, 0x1, 0x1, 0x1, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xdada, 0xe4e4, 
+0xe8e8, 0xdede, 0xe0e0, 0xe0e0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x8, 0x0, 0x8, 0x0, 
+0x8, 0x0, 0x8, 0x0, 0x8, 0x0, 0x8, 0x0, 0x8, 0x0, 
+0x8, 0x0, 0x0, 0x8, 0x0, 0x8, 0x0, 0x8, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x8, 0x8, 0x0, 0x8, 0x8, 0x0, 
+0x8, 0x8, 0x0, 0x8, 0x8, 0x0, 0x8, 0x8, 0x0, 0x0, 
+0x0, 0x0, 0x8, 0x0, 0x0, 0x0, 0x0, 0x808, 0x808, 0x0, 
+0x0, 0x0, 0x8, 0x0, 0x0, 0x0, 0x0, 0x8, 0x0, 0x0, 
+0x8, 0x8, 0x8, 0x8, 0x0, 0x0, 0x0, 0x8, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0xe, 0x1a1a, 0x11, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x18, 0x19, 0x18, 0x19, 0x11, 0x12, 
+0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x0, 0x15, 0x15, 
+0x15, 0x15, 0x15, 0x0, 0x15, 0x0, 0x15, 0x15, 0x0, 0x15, 
+0x15, 0x0, 0x15, 0x15, 0x15, 0x15, 0x15, 0x13, 0x17, 0x17, 
+0x17, 0x0, 0xe6e6, 0xe6e6, 0xe6e6, 0xe6e6, 0x0, 0x0, 0x0, 0x0, 
+0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
+};
+
+
+
+
+/*    collIterNormalize     Incremental Normalization happens here.                       */
+/*                          pick up the range of chars identifed by FCD,                  */
+/*                          normalize it into the collIterate's writable buffer,          */
+/*                          switch the collIterate's state to use the writable buffer.    */
+/*                                                                                        */
+void  collIterNormalize(collIterate *collationSource)
+ {
+     UErrorCode  status = U_ZERO_ERROR;
+     UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
+     UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
+     uint32_t    normLen;
+
+     normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                              collationSource->writableBufSize, &status);
+     if (U_FAILURE(status)) { /* This would be buffer overflow */
+         if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+             uprv_free( collationSource->writableBuffer);
+         }
+         collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+         collationSource->writableBufSize = normLen;
+         unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                         collationSource->writableBufSize, &status);
+     }
+     collationSource->pos        = collationSource->writableBuffer;
+     collationSource->origFlags  = collationSource->flags;
+     collationSource->flags     |= UCOL_ITER_INNORMBUF;
+     collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+ };
+
+
+
+
+
+/* Incremental FCD check and normalize                                                    */
+/*   Called from getNextCE when normalization state is suspect.                           */
+/*   When entering, the state is known to be this:                                        */                                   
+/*      o   We are working in the main buffer of the collIterate, not the side            */
+/*          writable buffer.  When in the side buffer, normalization mode is always off,  */
+/*          so we won't get here.                                                         */
+/*      o   The leading combining class from the current character is 0 or                */
+/*          the trailing combining class of the previous char was zero.                   */
+/*          True because the previous call to this function will have always exited       */
+/*          that way, and we get called for every char where cc might be non-zero.        */
+inline void collIterFCD(collIterate *collationSource) {
+    UChar32     codepoint;
+    UChar       *srcP;
+    int         length;
+    int         count = 0;
+    uint8_t     leadingCC;
+    uint8_t     prevTrailingCC = 0;
+    uint16_t    fcd;
+    UBool       needNormalize = FALSE;
+    
+    srcP = collationSource->pos-1;
+
+    // If the source string is null terminated, use a fake too-long string length
+    //    (needed for UTF_NEXT_CHAR).  null will stop everything OK.)
+    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT_MAX;
+    
+    // Get the trailing combining class of the current character.  If it's zero,
+    //   we are OK.
+    UTF_NEXT_CHAR(srcP, count, length, codepoint);
+    /* trie access */
+    fcd = FCD_STAGE_3_[
+        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+        (codepoint & STAGE_3_MASK_)];
+    prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+
+    if (prevTrailingCC != 0) {
+        // The current char has a non-zero trailing CC.  Scan forward until we find
+        //   a char with a leading cc of zero.
+        for (;;)
+        {
+            if (count >= length)
+                break;
+            UTF_NEXT_CHAR(srcP, count, length, codepoint);
+            
+            /* trie access */
+            fcd = FCD_STAGE_3_[
+                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+                (codepoint & STAGE_3_MASK_)];
+            leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
+            if (leadingCC == 0)
+                break;
+            
+            if (leadingCC < prevTrailingCC)
+                needNormalize = TRUE;
+            
+            prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+        }
+    }
+    
+    collationSource->fcdPosition = srcP + count;
+    if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
+        // We checked the string's trailing null, which would advance fcdPosition past the null.
+        //   back it up to point to the null.
+        collationSource->fcdPosition--;
+    }
+
+    if (needNormalize)
+        collIterNormalize(collationSource);
+}
+
+
+
 
 /* this should be connected to special Jamo handling */
 uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   collIterate colIt;
   uint32_t order;
-  init_collIterate(coll, &u, 1, &colIt, FALSE);
-#ifdef _DEBUG
+  IInit_collIterate(coll, &u, 1, &colIt);
   order = ucol_getNextCE(coll, &colIt, status);
-#else 
-  UCOL_GETNEXTCE(order, coll, colIt, status);
-#endif
+  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
   return order;
 }
 
@@ -633,9 +1220,9 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
             jamoString[1] = (UChar)V;
             if (T != TBase) {
               jamoString[2] = (UChar)T;
-              init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+              IInit_collIterate(collator, jamoString, 3, &jamos);
             } else {
-              init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+              IInit_collIterate(collator, jamoString, 2, &jamos);
             }
 
             CE = ucol_getNextCE(collator, &jamos, status);
@@ -674,7 +1261,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       }
 
       if(UTF_IS_FIRST_SURROGATE(ch)) {
-        if( (collationSource->pos<collationSource->len) &&
+        if( (((collationSource->flags & UCOL_ITER_HASLEN) == 0 ) || (collationSource->pos<collationSource->endp)) &&
           UTF_IS_SECOND_SURROGATE((nextChar=*collationSource->pos))) {
           uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
           collationSource->pos++;
@@ -786,9 +1373,9 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         jamoString[1] = (UChar)V;
         if (T != TBase) {
           jamoString[2] = (UChar)T;
-          init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+          IInit_collIterate(collator, jamoString, 3, &jamos);
         } else {
-          init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+          IInit_collIterate(collator, jamoString, 2, &jamos);
         }
 
         CE = ucol_getNextCE(collator, &jamos, status);
@@ -898,46 +1485,42 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
       return UCOL_NOT_FOUND;
     case THAI_TAG:
       /* Thai/Lao reordering */
-      if(source->isThai == TRUE) { /* if we encountered Thai prevowel & the string is not yet touched */
-        source->isThai = FALSE;    /* We will touch the string */
-        --source->pos;
-        if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
-            /* Problematic part - if the stack buffer is too small, we need to allocate */
-            /* However, somebody needs to keep track of that allocated space */
-            /* And context structure is not good for that */
-            /* allocate a new buffer - This is unfortunate and should be way smarter */
-            /*source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));*/
-        } 
-        UChar *sourceCopy = source->pos;
-        UChar *targetCopy = source->writableBuffer;
-        while(sourceCopy < source->len) {
-            if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) &&      /* This is the combination that needs to be swapped */
-                UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
-                *(targetCopy) = *(sourceCopy+1);
-                *(targetCopy+1) = *(sourceCopy);
-                targetCopy+=2;
-                sourceCopy+=2;
-            } else {
-                *(targetCopy++) = *(sourceCopy++);
-            }
+        if  (((source->flags) & UCOL_ITER_INNORMBUF) ||     /* Already Swapped     ||                 */
+            source->endp == source->pos              ||     /* At end of string.  No swap possible || */
+            UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0)  /* next char not Thai base cons.          */
+        {
+            // Treat Thai as a length one expansion */
+            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+            CE = *CEOffset++;
         }
+        else
+        {
+            // Move the prevowel and the following base Consonant into the normalization buffer
+            //   with their order swapped
+            source->writableBuffer[0] = *source->pos;
+            source->writableBuffer[1] = *(source->pos - 1);
+            source->writableBuffer[2] = 0;
+            
+            source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
+                                                         //   after exhausting the writableBuffer
         source->pos   = source->writableBuffer;
-        source->start = source->writableBuffer;
-        source->len   = targetCopy;
-        source->CEpos = source->toReturn = source->CEs;
+            source->origFlags         = source->flags;
+            source->flags            |= UCOL_ITER_INNORMBUF;
+            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+            
         CE = UCOL_IGNORABLE;
-      } else { /* we have already played with the string, so treat Thai as a length one expansion */
-        CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-        CE = *CEOffset++;
       }
       break;
+
     case CONTRACTION_TAG:
       /* This should handle contractions */
       for (;;) {
         /* First we position ourselves at the begining of contraction sequence */
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
-        if (source->pos>=source->len) { /* this is the end of string */
+        if ((source->flags & UCOL_ITER_HASLEN) && source->pos>=source->endp) { 
+                                           /* this is the end of string.  (Null terminated handled later,
+                                            when the null doesn't match the contraction sequence.)     */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND) {
@@ -1045,6 +1628,12 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       /* pending surrogate discussion with Markus and Mark */
       return UCOL_NOT_FOUND;
     case THAI_TAG:
+            // ToDo - Fix Thai for reverse iterator.   Stubbed out for now.
+            // Treat Thai as a length one expansion */
+            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+            CE = *CEOffset++;
+           break;
+#if 0
       if (source->isThai == TRUE) 
       { /* if we encountered Thai prevowel & the string is not yet touched */
         source->isThai = FALSE;
@@ -1079,7 +1668,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         }
         source->pos   = targetCopy;
         source->start = source->writableBuffer;
-        source->len   = targetCopy;
+        source->endp  = targetCopy;
         source->CEpos = source->toReturn = source->CEs;
         CE = UCOL_IGNORABLE;
       } 
@@ -1094,6 +1683,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         CE = *CEOffset ++;
       }
       break;
+#endif
+
     case CONTRACTION_TAG:
       /* This should handle contractions */
       for(;;)
@@ -1102,7 +1693,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         First we position ourselves at the begining of contraction sequence 
         */
         constart = UCharOffset = (UChar *)coll->image + getContractOffset(CE);
-        strend = source->len;
+        strend = source->endp;
 
         if (firstCE == UCOL_NOT_FOUND) {
           firstCE = *(coll->contractionCEs + 
@@ -1312,11 +1903,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     
 
     for(;;) {
-#ifdef _DEBUG
           order = ucol_getNextCE(coll, s, &status);
-#else
-          UCOL_GETNEXTCE(order, coll, *s, &status);
-#endif
+          //UCOL_GETNEXTCE(order, coll, *s, &status);
           
           if(order == UCOL_NO_MORE_CES) {
               break;
@@ -1436,7 +2024,17 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     if(compareIdent) {
         currentSize += len*sizeof(UChar);
         UChar *ident = s->string;
-        while(ident<s->len) {
+        for (;;) {
+            if (s->flags & UCOL_ITER_HASLEN) {
+                if (ident >= s->endp)
+                    break;
+            }
+            else
+            {
+                if (*ident == 0)
+                    break;
+            }
+
             if((*(ident) >> 8) + utf16fixup[*(ident) >> 11]<0x02) {
 
                 currentSize++;
@@ -1515,7 +2113,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (qShifted?1:0)/*(compareQuad?0:1)*/ + (compareIdent?1:0));
 
     collIterate s;
-    init_collIterate(coll, (UChar *)source, len, &s, FALSE);
+    IInit_collIterate(coll, (UChar *)source, len, &s);
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
@@ -1528,9 +2126,9 @@ ucol_calcSortKey(const    UCollator    *coll,
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
         normSource[normSourceLen] = 0;
-        s.string = normSource;
-        s.pos = normSource;
-        s.len = normSource+normSourceLen;
+        IInit_collIterate(coll, normSource, -1, &s);
+        s.flags &= ~UCOL_ITER_NORM;
+        len = normSourceLen;
       }
     } else if((normMode != UCOL_OFF)
       /* changed by synwee */
@@ -1543,12 +2141,11 @@ ucol_calcSortKey(const    UCollator    *coll,
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
         normSource[normSourceLen] = 0;
-        s.string = normSource;
-        s.pos = normSource;
-        s.len = normSource+normSourceLen;
-    }
+        IInit_collIterate(coll, normSource, -1, &s);
+        s.flags &= ~UCOL_ITER_NORM;
+        len = normSourceLen;
 
-    len = s.len-s.pos;
+    }
 
     if(resultLength == 0 || primaries == NULL) {
         return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
@@ -1586,11 +2183,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-#ifdef _DEBUG
             order = ucol_getNextCE(coll, &s, status);
-#else
-            UCOL_GETNEXTCE(order, coll, s, status);
-#endif
+            // UCOL_GETNEXTCE(order, coll, s, status);
 
             if(order == UCOL_NO_MORE_CES) {
                 finished = TRUE;
@@ -1905,7 +2499,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             sortKeySize += len * sizeof(UChar);
             *(primaries++) = UCOL_LEVELTERMINATOR;
             if(sortKeySize <= resultLength) {
-                while(ident < s.len) {
+                while(ident < s.string+len) {
                     idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                     if(idByte < 0x02) {
                         if(sortKeySize < resultLength) {
@@ -1933,7 +2527,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 if(allocatePrimary == TRUE) { 
                   primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
                   *result = primStart;
-                  while(ident < s.len) {
+                  while(ident < s.string+len) {
                     idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                     if(idByte < 0x02) {
                       *(primaries++) = 0x01;
@@ -1953,7 +2547,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     ident++;
                   }
                 } else {
-                  while(ident < s.len) {
+                  while(ident < s.string+len) {
                       idByte = (uint8_t)((*(ident) >> 8) + utf16fixup[*(ident) >> 11]);
                       if(idByte < 0x02) {
                           sortKeySize++;
@@ -2032,7 +2626,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 
     collIterate s;
-    init_collIterate(coll, (UChar *)source, len, &s, FALSE);
+    IInit_collIterate(coll, (UChar *)source, len, &s);
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
@@ -2050,12 +2644,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
         normSource[normSourceLen] = 0;
-        s.string = normSource;
-        s.pos = normSource;
-        s.len = normSource+normSourceLen;
+        IInit_collIterate(coll, normSource, -1, &s);
+        s.flags &= ~(UCOL_ITER_NORM);
+        len = normSourceLen;
     }
 
-    len = s.len-s.pos;
 
     if(resultLength == 0 || primaries == NULL) {
         return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
@@ -2090,11 +2683,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-#ifdef _DEBUG
             order = ucol_getNextCE(coll, &s, status);
-#else
-            UCOL_GETNEXTCE(order, coll, s, status);
-#endif
+            // UCOL_GETNEXTCE(order, coll, s, status);
 
             if(isCEIgnorable(order)) {
               continue;
@@ -2347,50 +2937,6 @@ U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t
   return buffer;
 
         
-}
-
-/* This is a trick string compare function that goes in and uses sortkeys to compare */
-/* It is used when compare gets in trouble and needs to bail out                     */
-UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength)
-{
-    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
-    uint8_t *sourceKeyP = sourceKey;
-    uint8_t *targetKeyP = targetKey;
-    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
-
-    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    if(sourceKeyLen > UCOL_MAX_BUFFER) {
-        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
-        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    }
-
-    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    if(targetKeyLen > UCOL_MAX_BUFFER) {
-        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
-        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    }
-
-    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
-
-    if(sourceKeyP != sourceKey) {
-        uprv_free(sourceKeyP);
-    }
-
-    if(targetKeyP != targetKey) {
-        uprv_free(targetKeyP);
-    }
-
-    if(result<0) {
-        return UCOL_LESS;
-    } else if(result>0) {
-        return UCOL_GREATER;
-    } else {
-        return UCOL_EQUAL;
-    }
 }
 
 
@@ -2801,7 +3347,123 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
 /*                                                                          */
 /****************************************************************************/
 
-/* compare two strings... Can get interesting */
+
+/*  ucol_checkIdent    internal function.  Does byte level string compare.   */
+/*                     Used by strcoll if strength == identical and strings  */
+/*                     are otherwise equal.  Moved out-of-line because this  */
+/*                     is a rare case.                                       */
+/*                                                                           */
+/*                     Comparison must be done on NFD normalized strings.    */
+/*                     FCD is not good enough.                               */
+/*                                                                           */
+/*      TODO:  make an incremental NFD Comparison function, which could      */
+/*             be of general use                                             */
+
+UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBool normalize)
+{
+    int8_t            comparison;
+    uint32_t          sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
+    UChar            *sBuf        = sColl->string;
+    
+    uint32_t          tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
+    UChar            *tBuf        = tColl->string;
+    uint32_t          compLen     = 0;
+    uint32_t          normLength;
+    UErrorCode        status      = U_ZERO_ERROR;
+    UCollationResult  result;
+    UBool             sAlloc      = FALSE;
+    UBool             tAlloc      = FALSE;
+    
+    if (normalize) {
+        if (unorm_quickCheck(sColl->string, sLen, UNORM_NFD, &status) != UNORM_YES) {
+            sBuf = sColl->writableBuffer;
+            normLength = unorm_normalize(sColl->string, sLen, UNORM_NFD, 0,
+                sBuf, UCOL_WRITABLE_BUFFER_SIZE, &status);
+            if (U_FAILURE(status)) {  /*this would be buffer overflow  */
+                sBuf = (UChar *)uprv_malloc((normLength+1)*sizeof(UChar));
+                sAlloc = TRUE;
+                status = U_ZERO_ERROR;
+                normLength = unorm_normalize(sColl->string, sLen, UNORM_NFD, 0, sBuf, normLength+1, &status);
+            }
+            sLen = normLength;
+        }
+        
+        status = U_ZERO_ERROR;
+        if (unorm_quickCheck(tColl->string, tLen, UNORM_NFD, &status) != UNORM_YES) {
+            tBuf = tColl->writableBuffer;
+            normLength = unorm_normalize(tColl->string, tLen, UNORM_NFD, 0,
+                tBuf, UCOL_WRITABLE_BUFFER_SIZE, &status);
+            if (U_FAILURE(status)) {  /*this would be buffer overflow  */
+                tBuf = (UChar *)uprv_malloc((normLength+1)*sizeof(UChar));
+                tAlloc = TRUE;
+                status = U_ZERO_ERROR;
+                normLength = unorm_normalize(tColl->string, tLen, UNORM_NFD, 0, tBuf, normLength+1, &status);
+            }
+            tLen = normLength;
+        }
+        
+    }
+    
+    if (sLen == -1 && tLen == -1) {
+        comparison = u_strcmp(sBuf, tBuf);
+    }
+    else 
+    {       
+        if (sLen == -1)
+            sLen = u_strlen(sBuf);
+        if (tLen == -1)
+            tLen = u_strlen(tBuf);
+        comparison = u_strncmp(sBuf, tBuf, uprv_min(sLen, tLen));
+    }
+    
+    result = UCOL_LESS;
+    if (comparison > 0) {
+        result = UCOL_GREATER;
+    }
+    else if (comparison == 0) {
+        if(sLen > tLen) {
+            result = UCOL_GREATER;
+        } else if (sLen == tLen){
+            result = UCOL_EQUAL;
+        }
+    }
+
+    if (sAlloc)
+        delete sBuf;
+    if (tAlloc)
+        delete tBuf;
+
+    return result;
+}
+
+
+/*                                                                       */
+/* ucol_CEBuf_Expand     Make an expanded CE Buffer on the heap.  Called */
+/*                       when the original stack based buffer overflows  */
+/*                       CEBuffers are used in ucol_strcoll to hold      */
+/*                       the CEs for the strings being compared.         */
+/*                                                                       */
+void ucol_CEBuf_Expand(ucol_CEBuf *b) {
+    uint32_t  oldSize;
+    uint32_t  newSize;
+    uint32_t  *newBuf;
+
+    oldSize = b->pos - b->buf;
+    newSize = oldSize * 2;
+    newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
+    uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
+    if (b->buf != b->localArray)
+        delete b->buf;
+    b->buf = newBuf;
+    b->endp = b->buf + newSize;
+    b->pos  = b->buf + oldSize;
+}
+
+
+
+/*                                                                      */
+/* ucol_strcoll     Main public API string comparison function          */
+/*                                                                      */
 U_CAPI UCollationResult
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
@@ -2809,25 +3471,15 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength)
 {
-    /* check if source and target are valid strings */
+    /* check if source and target are same strings */
     if (source==target  && sourceLength==targetLength)
     {
         return UCOL_EQUAL;
     }
 
-    /*
-    sourceLength = sourceLength == -1 ? u_strlen(source) : sourceLength;
-    targetLength = targetLength == -1 ? u_strlen(target) : targetLength;
-
-    if(sourceLength == targetLength && uprv_memcmp(source, target, sizeof(UChar)*sourceLength) == 0) {
-      return UCOL_EQUAL;
-    }
-    */
-    
     /* Scan the strings.  Find:                                                             */
-    /*    their length, if not given by caller                                              */
     /*    The length of any leading portion that is equal                                   */
-    /*    Whether they are exactly equal.  (in which case we just return                    */
+    /*    Whether they are exactly equal.  (in which case we just return)                   */
     const UChar    *pSrc    = source;
     const UChar    *pTarg   = target;
     
@@ -2837,6 +3489,12 @@ ucol_strcoll(    const    UCollator    *coll,
     int32_t        equalLength;
     
     // Scan while the strings are bitwise ==, or until one is exhausted.
+#if 0
+    /* TODO:  this really does speed thing up significantly on MSVC builds on P6 processors.  */
+    /*        What's the best way to ifdef it in?                                             */                                              
+    __asm         align 16
+#endif
+
     for (;;) {
         if (pSrc == pSrcEnd || pTarg == pTargEnd)
             break;
@@ -2854,24 +3512,7 @@ ucol_strcoll(    const    UCollator    *coll,
         (pTarg==pTargEnd || (pTargEnd<pTarg && *pTarg==0)))     /* and also at end of dest string                  */
         return UCOL_EQUAL;
     
-    // If we don't know the length of the src string, continue scanning it to get the length..
-    if (sourceLength == -1) {
-        while (*pSrc != 0 ) {
-            pSrc++;
-        }
-        sourceLength = pSrc - source;
-    }
-    
-    // If we don't know the length of the targ string, continue scanning it to get the length..
-    if (targetLength == -1) {
-        while (*pTarg != 0 ) {
-            pTarg++;
-        }
-        targetLength = pTarg - target;
-    }
-    
-    
-    if (equalLength > 2) {
+    if (equalLength > 1) {
         /* There is an identical portion at the beginning of the two strings.        */
         /*   If the identical portion ends within a contraction or a comibining      */
         /*   character sequence, back up to the start of that sequence.              */
@@ -2893,7 +3534,9 @@ ucol_strcoll(    const    UCollator    *coll,
         
         source += equalLength;
         target += equalLength;
+        if (sourceLength > 0)
         sourceLength -= equalLength;
+        if (targetLength > 0)
         targetLength -= equalLength;
     }
     
@@ -2914,122 +3557,23 @@ ucol_strcoll(    const    UCollator    *coll,
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
-    UChar normSource[UCOL_MAX_BUFFER], normTarget[UCOL_MAX_BUFFER];
-    UChar *normSourceP = normSource;
-    UChar *normTargetP = normTarget;
-    uint32_t normSourceLength = UCOL_MAX_BUFFER, normTargetLength = UCOL_MAX_BUFFER;
-
     collIterate sColl, tColl;
 
     
-    init_collIterate(coll, source, sourceLength, &sColl, FALSE);
-    if(checkIdent) {
-      if(unorm_quickCheck(sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES) {
-        normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
-        /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
-        /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
-        /* would be hard to track all the exit points.                                                            */
-        if(U_FAILURE(status)) { /* This would be buffer overflow */
-            UColAttributeValue mode = coll->normalizationMode;
-            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
-            status = U_ZERO_ERROR;
-            normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
-            normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
-            if(U_FAILURE(status)) { /* This would be buffer overflow */
-                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-                status = U_ZERO_ERROR;
-                normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
-            }
-            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
-            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-            ((UCollator *)coll)->normalizationMode = mode;
-            uprv_free(normSourceP);
-            if(normTargetP != normTarget) {
-                uprv_free(normTargetP);
-            }
-            return result;
-        }
-        init_collIterate(coll, normSource, normSourceLength, &sColl, TRUE);
-      }
-    } else if((coll->normalizationMode == UCOL_ON)
-      /* && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UNORM_YES)
-      && (unorm_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UNORM_YES)) */
-      /* changed by synwee */
-      && !checkFCD(sColl.string, sColl.len - sColl.string, &status))
-    {
-        normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
-        /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
-        /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
-        /* would be hard to track all the exit points.                                                            */
-        if(U_FAILURE(status)) { /* This would be buffer overflow */
-            UColAttributeValue mode = coll->normalizationMode;
-            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
-            status = U_ZERO_ERROR;
-            normSourceLength = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
-            normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
-            if(U_FAILURE(status)) { /* This would be buffer overflow */
-                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-                status = U_ZERO_ERROR;
-                normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
-            }
-            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
-            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-            ((UCollator *)coll)->normalizationMode = mode;
-            uprv_free(normSourceP);
-            if(normTargetP != normTarget) {
-                uprv_free(normTargetP);
-            }
-            return result;
-        }
-        init_collIterate(coll, normSource, normSourceLength, &sColl, TRUE);
-    }
+    IInit_collIterate(coll, source, sourceLength, &sColl);
+    IInit_collIterate(coll, target, targetLength, &tColl);
 
-    init_collIterate(coll, target, targetLength, &tColl, FALSE);
-    if(checkIdent) {
-      if(unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES) {
-      normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
-      if(U_FAILURE(status)) { /* This would be buffer overflow */
-          UColAttributeValue mode = coll->normalizationMode;
-          normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-          status = U_ZERO_ERROR;
-          normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
-          ((UCollator *)coll)->normalizationMode = UCOL_OFF;
-          UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-          ((UCollator *)coll)->normalizationMode = mode;
-          uprv_free(normTargetP);
-          return result;
-      }
-      init_collIterate(coll, normTarget, normTargetLength, &tColl, TRUE);
-      }
-    } else if((coll->normalizationMode == UCOL_ON)
-      /* && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UNORM_YES)
-      && (unorm_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UNORM_YES)) */
-      /* changed by synwee */
-      && !checkFCD(tColl.string, tColl.len - tColl.string, &status))
-    {
-      normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
-      if(U_FAILURE(status)) { /* This would be buffer overflow */
-          UColAttributeValue mode = coll->normalizationMode;
-          normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-          status = U_ZERO_ERROR;
-          normTargetLength = unorm_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
-          ((UCollator *)coll)->normalizationMode = UCOL_OFF;
-          UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-          ((UCollator *)coll)->normalizationMode = mode;
-          uprv_free(normTargetP);
-          return result;
-      }
-      init_collIterate(coll, normTarget, normTargetLength, &tColl, TRUE);
-    }
-
-    if (U_FAILURE(status))
-    {
-        return UCOL_EQUAL;
-    }
-
+/*
     uint32_t sCEsArray[512], tCEsArray[512];
     uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
     uint32_t *sCEend = sCEs+512, *tCEend = tCEs+512;
+    */
+
+    ucol_CEBuf   sCEs;
+    ucol_CEBuf   tCEs;
+    UCOL_INIT_CEBUF(&sCEs);
+    UCOL_INIT_CEBUF(&tCEs);
+
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
 
@@ -3040,31 +3584,24 @@ ucol_strcoll(    const    UCollator    *coll,
     uint32_t sOrder=0, tOrder=0;
     if(!shifted) {
       for(;;) {
-        if(sCEs == sCEend || tCEs == tCEend) {
-          return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-        }
 
         /* Get the next collation element in each of the strings, unless */
         /* we've been requested to skip it. */
         while(sOrder == 0) {
-#ifdef _DEBUG
+          // UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
           sOrder = ucol_getNextCE(coll, &sColl, &status);
-#else
-          UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
-#endif
           sOrder ^= caseSwitch;
-          *(sCEs++) = sOrder;
+          // *(sCEs++) = sOrder;
+          UCOL_CEBUF_PUT(&sCEs, sOrder);
           sOrder &= 0xFFFF0000;
         }
 
         while(tOrder == 0) {
-#ifdef _DEBUG
+          // UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
           tOrder = ucol_getNextCE(coll, &tColl, &status);
-#else
-          UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
-#endif
           tOrder ^= caseSwitch;
-          *(tCEs++) = tOrder;
+          UCOL_CEBUF_PUT(&tCEs, tOrder);
+          // *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
         } 
 
@@ -3076,10 +3613,9 @@ ucol_strcoll(    const    UCollator    *coll,
               sOrder = 0; tOrder = 0;
               continue;
             }
-        } else if(sOrder < tOrder) {
-          return UCOL_LESS;
         } else {
-          return UCOL_GREATER;
+            result = (sOrder < tOrder) ?  UCOL_LESS: UCOL_GREATER;
+            goto commonReturn;
         } 
       } /* no primary difference... do the rest from the buffers */
     } else { /* shifted - do a slightly more complicated processing */
@@ -3087,19 +3623,12 @@ ucol_strcoll(    const    UCollator    *coll,
         UBool sInShifted = FALSE;
         UBool tInShifted = FALSE;
 
-        if(sCEs == sCEend || tCEs == tCEend) {
-          return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-        }
-
 /* This is where abridged version for shifted should go */
         for(;;) {
-#ifdef _DEBUG
+          // UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
           sOrder = ucol_getNextCE(coll, &sColl, &status);
-#else
-          UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
-#endif
           if(sOrder == UCOL_NO_MORE_CES) {
-            *(sCEs++) = sOrder;
+            UCOL_CEBUF_PUT(&sCEs, sOrder);
             break;
           } else if((sOrder & 0xFFFFFFBF) == 0) {
             continue;
@@ -3107,11 +3636,13 @@ ucol_strcoll(    const    UCollator    *coll,
             if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
               if(sInShifted) {
                 sOrder &= 0xFFFF0000;
-                *(sCEs++) = sOrder;
+                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                //  *(sCEs++) = sOrder;
                 continue;
               } else {
                 sOrder ^= caseSwitch;
-                *(sCEs++) = sOrder;
+                // *(sCEs++) = sOrder;
+                UCOL_CEBUF_PUT(&sCEs, sOrder);
                 break;
               }
             } else { /* Just lower level values */
@@ -3119,23 +3650,27 @@ ucol_strcoll(    const    UCollator    *coll,
                 continue;
               } else {
                 sOrder ^= caseSwitch;
-                *(sCEs++) = sOrder;
+                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                // *(sCEs++) = sOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(sOrder > LVT) {
-              *(sCEs++) = sOrder;
+              UCOL_CEBUF_PUT(&sCEs, sOrder);
+              // *(sCEs++) = sOrder;
               break;
             } else {
               if((sOrder & 0xFFFF0000) > 0) {
                 sInShifted = TRUE;
                 sOrder &= 0xFFFF0000;
-                *(sCEs++) = sOrder;
+                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                // *(sCEs++) = sOrder;
                 continue;
               } else {
                 sOrder ^= caseSwitch;
-                *(sCEs++) = sOrder;
+                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                // *(sCEs++) = sOrder;
                 continue;
               }
             }
@@ -3145,13 +3680,11 @@ ucol_strcoll(    const    UCollator    *coll,
         sInShifted = FALSE;
 
         for(;;) {
-#ifdef _DEBUG
+          // UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
           tOrder = ucol_getNextCE(coll, &tColl, &status);
-#else
-          UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
-#endif
           if(tOrder == UCOL_NO_MORE_CES) {
-            *(tCEs++) = tOrder;
+            UCOL_CEBUF_PUT(&tCEs, tOrder);
+            // *(tCEs++) = tOrder;
             break;
           } else if((tOrder & 0xFFFFFFBF) == 0) {
             continue;
@@ -3159,11 +3692,13 @@ ucol_strcoll(    const    UCollator    *coll,
             if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
               if(tInShifted) {
                 tOrder &= 0xFFFF0000;
-                *(tCEs++) = tOrder;
+                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                // *(tCEs++) = tOrder;
                 continue;
               } else {
                 tOrder ^= caseSwitch;
-                *(tCEs++) = tOrder;
+                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                // *(tCEs++) = tOrder;
                 break;
               }
             } else { /* Just lower level values */
@@ -3171,23 +3706,27 @@ ucol_strcoll(    const    UCollator    *coll,
                 continue;
               } else {
                 tOrder ^= caseSwitch;
-                *(tCEs++) = tOrder;
+                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                // *(tCEs++) = tOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(tOrder > LVT) {
-              *(tCEs++) = tOrder;
+              UCOL_CEBUF_PUT(&tCEs, tOrder);
+              // *(tCEs++) = tOrder;
               break;
             } else {
               if((tOrder & 0xFFFF0000) > 0) {
                 tInShifted = TRUE;
                 tOrder &= 0xFFFF0000;
-                *(tCEs++) = tOrder;
+                // *(tCEs++) = tOrder;
+                UCOL_CEBUF_PUT(&tCEs, tOrder);
                 continue;
               } else {
                 tOrder ^= caseSwitch;
-                *(tCEs++) = tOrder;
+                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                // *(tCEs++) = tOrder;
                 continue;
               }
             }
@@ -3203,30 +3742,31 @@ ucol_strcoll(    const    UCollator    *coll,
               sOrder = 0; tOrder = 0;
               continue;
             }
-        } else if(sOrder < tOrder) {
-          return UCOL_LESS;
         } else {
-          return UCOL_GREATER;
+            result = (sOrder < tOrder) ? UCOL_LESS : UCOL_GREATER;
+            goto commonReturn;
         } 
       } /* no primary difference... do the rest from the buffers */
     }
 
     /* now, we're gonna reexamine collected CEs */
-    sCEend = sCEs;
-    tCEend = tCEs;
+    uint32_t    *sCE;
+    uint32_t    *tCE;
+    //sCEend = sCEs;
+    //tCEend = tCEs;
 
     /* This is the secondary level of comparison */
     if(checkSecTer) {
       if(!isFrenchSec) { /* normal */
-        sCEs = sCEsArray;
-        tCEs = tCEsArray;
+        sCE = sCEs.buf;
+        tCE = tCEs.buf;
         for(;;) {
           while (secS == 0) {
-            secS = *(sCEs++) & 0xFF00;
+            secS = *(sCE++) & 0xFF00;
           }
 
           while(secT == 0) {
-              secT = *(tCEs++) & 0xFF00;
+              secT = *(tCE++) & 0xFF00;
           }
 
           if(secS == secT) {
@@ -3236,32 +3776,31 @@ ucol_strcoll(    const    UCollator    *coll,
               secS = 0; secT = 0; 
               continue;
             }
-          } else if(secS < secT) {
-            return UCOL_LESS;
           } else {
-            return UCOL_GREATER;
+               result = (secS < secT) ? UCOL_LESS : UCOL_GREATER;
+               goto commonReturn;
           } 
         }
       } else { /* do the French */
         uint32_t *sCESave = NULL;
         uint32_t *tCESave = NULL;
-        sCEs = sCEend-2; /* this could also be sCEs-- if needs to be optimized */
-        tCEs = tCEend-2;
+        sCE = sCEs.pos-2; /* this could also be sCEs-- if needs to be optimized */
+        tCE = tCEs.pos-2;
         for(;;) {
-          while (secS == 0 && sCEs >= sCEsArray) {
+          while (secS == 0 && sCE >= sCEs.buf) {
             if(sCESave == 0) {
-              secS = *(sCEs--) & 0xFF80;
+              secS = *(sCE--) & 0xFF80;
               if(isContinuation(secS)) {
-                while(isContinuation(secS = *(sCEs--) & 0xFF80));
+                while(isContinuation(secS = *(sCE--) & 0xFF80));
                 /* after this, secS has the start of continuation, and sCEs points before that */
-                sCESave = sCEs; /* we save it, so that we know where to come back AND that we need to go forward */
-                sCEs+=2;  /* need to point to the first continuation CP */
+                sCESave = sCE; /* we save it, so that we know where to come back AND that we need to go forward */
+                sCE+=2;  /* need to point to the first continuation CP */
                 /* However, now you can just continue doing stuff */
               }
             } else {
-              secS = *(sCEs++) & 0xFF80;
+              secS = *(sCE++) & 0xFF80;
               if(!isContinuation(secS)) { /* This means we have finished with this cont */
-                sCEs = sCESave;          /* reset the pointer to before continuation */
+                sCE = sCESave;            /* reset the pointer to before continuation */
                 sCESave = 0;
                 continue;
               }
@@ -3269,20 +3808,20 @@ ucol_strcoll(    const    UCollator    *coll,
             secS &= 0xFF00; /* remove the continuation bit */
           }
 
-          while(secT == 0 && tCEs >= tCEsArray) {
+          while(secT == 0 && tCE >= tCEs.buf) {
             if(tCESave == 0) {
-              secT = *(tCEs--) & 0xFF80;
+              secT = *(tCE--) & 0xFF80;
               if(isContinuation(secT)) {
-                while(isContinuation(secT = *(tCEs--) & 0xFF80));
+                while(isContinuation(secT = *(tCE--) & 0xFF80));
                 /* after this, secS has the start of continuation, and sCEs points before that */
-                tCESave = tCEs; /* we save it, so that we know where to come back AND that we need to go forward */
-                tCEs+=2;  /* need to point to the first continuation CP */
+                tCESave = tCE; /* we save it, so that we know where to come back AND that we need to go forward */
+                tCE+=2;  /* need to point to the first continuation CP */
                 /* However, now you can just continue doing stuff */
               }
             } else {
-              secT = *(tCEs++) & 0xFF80;
+              secT = *(tCE++) & 0xFF80;
               if(!isContinuation(secT)) { /* This means we have finished with this cont */
-                tCEs = tCESave;          /* reset the pointer to before continuation */
+                tCE = tCESave;          /* reset the pointer to before continuation */
                 tCESave = 0;
                 continue;
               }
@@ -3291,16 +3830,15 @@ ucol_strcoll(    const    UCollator    *coll,
           }
 
           if(secS == secT) {
-            if(secS == 0x0100 || (sCEs < sCEsArray && tCEs < tCEsArray)) {
+            if(secS == 0x0100 || (sCE < sCEs.buf && tCE < tCEs.buf)) {
               break;
             } else {
               secS = 0; secT = 0; 
               continue;
             }
-          } else if(secS < secT) {
-            return UCOL_LESS;
           } else {
-            return UCOL_GREATER;
+              result = (secS < secT) ? UCOL_LESS : UCOL_GREATER;
+              goto commonReturn;
           } 
         }
       }
@@ -3308,25 +3846,27 @@ ucol_strcoll(    const    UCollator    *coll,
 
     /* doing the case bit */
     if(checkCase) {
-      sCEs = sCEsArray;
-      tCEs = tCEsArray;
+      sCE = sCEs.buf;
+      tCE = tCEs.buf;
       for(;;) {
         while((secS & UCOL_REMOVE_CASE) == 0) {
-          if(!isContinuation(*sCEs++)) {
-            secS =*(sCEs-1) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*sCE++)) {
+            secS =*(sCE-1) & UCOL_TERT_CASE_MASK;
           } 
         }
 
         while((secT & UCOL_REMOVE_CASE) == 0) {
-          if(!isContinuation(*tCEs++)) {
-            secT = *(tCEs-1) & UCOL_TERT_CASE_MASK;
+          if(!isContinuation(*tCE++)) {
+            secT = *(tCE-1) & UCOL_TERT_CASE_MASK;
           }
         }
 
         if((secS & UCOL_CASE_BIT_MASK) < (secT & UCOL_CASE_BIT_MASK)) {
-          return UCOL_LESS;
+          result = UCOL_LESS;
+          goto commonReturn;
         } else if((secS & UCOL_CASE_BIT_MASK) > (secT & UCOL_CASE_BIT_MASK)) {
-          return UCOL_GREATER;
+          result = UCOL_GREATER;
+          goto commonReturn;
         } 
 
         if((secS & UCOL_REMOVE_CASE) == 0x01 || (secT & UCOL_REMOVE_CASE) == 0x01 ) {
@@ -3342,15 +3882,15 @@ ucol_strcoll(    const    UCollator    *coll,
     if(checkTertiary) {
       secS = 0; 
       secT = 0;
-      sCEs = sCEsArray;
-      tCEs = tCEsArray;
+      sCE = sCEs.buf;
+      tCE = tCEs.buf;
       for(;;) {
         while((secS & UCOL_REMOVE_CASE) == 0) {
-          secS = *(sCEs++) & tertiaryMask;
+          secS = *(sCE++) & tertiaryMask;
         }
 
         while((secT & UCOL_REMOVE_CASE)  == 0) {
-            secT = *(tCEs++) & tertiaryMask;
+            secT = *(tCE++) & tertiaryMask;
         }
 
         if(secS == secT) {
@@ -3360,10 +3900,9 @@ ucol_strcoll(    const    UCollator    *coll,
             secS = 0; secT = 0; 
             continue;
           }
-        } else if(secS < secT) {
-          return UCOL_LESS;
         } else {
-          return UCOL_GREATER;
+            result = (secS < secT) ? UCOL_LESS : UCOL_GREATER;
+            goto commonReturn;
         } 
       }
     }
@@ -3374,11 +3913,11 @@ ucol_strcoll(    const    UCollator    *coll,
       UBool tInShifted = TRUE;
       secS = 0; 
       secT = 0;
-      sCEs = sCEsArray;
-      tCEs = tCEsArray;
+      sCE = sCEs.buf;
+      tCE = tCEs.buf;
       for(;;) {
         while(secS == 0 && secS != 0x00010101 || (isContinuation(secS) && !sInShifted)) {
-          secS = *(sCEs++);
+          secS = *(sCE++);
           if(isContinuation(secS) && !sInShifted) {
             continue;
           }
@@ -3393,7 +3932,7 @@ ucol_strcoll(    const    UCollator    *coll,
 
 
         while(secT == 0 && secT != 0x00010101 || (isContinuation(secT) && !tInShifted)) {
-          secT = *(tCEs++);
+          secT = *(tCE++);
           if(isContinuation(secT) && !tInShifted) {
             continue;
           }
@@ -3413,53 +3952,32 @@ ucol_strcoll(    const    UCollator    *coll,
             secS = 0; secT = 0;
             continue;
           }
-        } else if(secS < secT) {
-          return UCOL_LESS;
         } else {
-          return UCOL_GREATER;
+            result = (secS < secT) ? UCOL_LESS : UCOL_GREATER;
+            goto commonReturn;
         } 
       }
     }
 
     /*  For IDENTICAL comparisons, we use a bitwise character comparison */
-    /*  as a tiebreaker if all else is equal */
-    /*  NOTE: The java code compares result with 0, and  */
-    /*  puts the result of the string comparison directly into result */
-    /*    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL) */
+    /*  as a tiebreaker if all else is equal.                                */
+    /*  Getting here  should be quite rare - strings are not identical -     */
+    /*     that is checked first, but compared == through all other checks.  */
     if(checkIdent)
     {
-        int32_t comparison;
-        uint32_t sLen = sColl.len-sColl.string;
-        uint32_t tLen = tColl.len-tColl.string;
-        uint32_t compLen = 0;
-
-        if(sLen > tLen) {
-          compLen = tLen;
-        } else {
-          compLen = sLen;
-        }
-
-        comparison = u_strncmp(sColl.string, tColl.string, compLen);
-
-        if (comparison < 0)
-        {
-            result = UCOL_LESS;
-        }
-        else if (comparison == 0)
-        {
-          if(sLen > tLen) {
-            result = UCOL_GREATER;
-          } else if(sLen < tLen) {
-            result = UCOL_LESS;
-          } else {
-            result = UCOL_EQUAL;
-          }
-        }
-        else
-        {
-            result = UCOL_GREATER;
-        }
+        result = ucol_checkIdent(&sColl, &tColl, coll->normalizationMode == UCOL_ON);
     }
+
+commonReturn:
+    if (sColl.writableBuffer != sColl.stackWritableBuffer)
+        uprv_free(sColl.writableBuffer);
+    if (tColl.writableBuffer != tColl.stackWritableBuffer)
+        uprv_free(tColl.writableBuffer);
+
+    if (sCEs.buf != sCEs.localArray )
+        uprv_free(sCEs.buf);
+    if (tCEs.buf != tCEs.localArray )
+        uprv_free(tCEs.buf);
 
     return result;
 }
@@ -4150,9 +4668,9 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
             jamoString[1] = (UChar)V;
             if (T != TBase) {
               jamoString[2] = (UChar)T;
-              init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+              IInit_collIterate(collator, jamoString, 3, &jamos);
             } else {
-              init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+              IInit_collIterate(collator, jamoString, 2, &jamos);
             }
 
             CE = ucol_getNextCE(collator, &jamos, status);
