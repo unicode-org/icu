@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="gencase"
+	ProjectGUID="{DB312A49-12A9-4E07-9E96-451DC2D8FF61}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
