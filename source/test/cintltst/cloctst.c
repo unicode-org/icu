@@ -2453,8 +2453,8 @@ static void TestDisplayKeywords(void)
         const char* keyword =NULL;
         int32_t keywordLen = 0;
         int32_t keywordCount = 0;
-        UChar *displayKeyword=NULL, *displayKeywordValue = NULL;
-        int32_t displayKeywordLen = 0, displayKeywordValueLen = 0;
+        UChar *displayKeyword=NULL;
+        int32_t displayKeywordLen = 0;
         UEnumeration* keywordEnum = uloc_openKeywords(testCases[i].localeID, &status);
         for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
               if(U_FAILURE(status)){
