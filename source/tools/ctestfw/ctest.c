@@ -594,6 +594,9 @@ int processArgs(const TestNode* root,
         else if (strcmp( argv[i], "-t_verbose") == 0) {
             ICU_TRACE = UTRACE_VERBOSE;
         }
+        else if (strcmp( argv[i], "-t_oc") == 0) {
+            ICU_TRACE = UTRACE_OPEN_CLOSE;
+        }
         else if (strcmp( argv[i], "-h" )==0 || strcmp( argv[i], "--help" )==0)
         {
             help( argv[0] );
@@ -634,7 +637,7 @@ int processArgs(const TestNode* root,
 static void help ( const char *argv0 )
 {
     printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] [ -no_err_msg]\n"
-           "                [ -h ] [-t_info | -t_error | -t_warn | -t_verbose]"
+           "                [ -h ] [-t_info | -t_error | -t_warn | -t_oc | -t_verbose]"
            " [ /path/to/test ]\n",
             argv0);
     printf("    -l  To get a list of test names\n");
@@ -645,7 +648,7 @@ static void help ( const char *argv0 )
     printf("    -n  To turn OFF printing error messages\n");
     printf("    -w  Don't fail on data-loading errs, just warn. Useful if\n"
            "        user has reduced/changed the common set of ICU data \n");
-    printf("    -t_info | -t_error | -t_warn | -t_verbose  Enable ICU tracing\n");
+    printf("    -t_info | -t_error | -t_warn | -t_oc | -t_verbose  Enable ICU tracing\n");
     printf("    -no_err_msg (same as -n) \n");
     printf("    -r  repeat tests after calling u_cleanup \n");
     printf("    -[/subtest]  To run a subtest \n");

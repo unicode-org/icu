@@ -158,7 +158,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     UTRACE_ENTRY_OC(UTRACE_UCNV_CLONE);
 
     if (status == NULL || U_FAILURE(*status)){
-        UTRACE_EXIT_STATUS(*status);
+        UTRACE_EXIT_STATUS(status? *status: U_ILLEGAL_ARGUMENT_ERROR);
         return 0;
     }
 
