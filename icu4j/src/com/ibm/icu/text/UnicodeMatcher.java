@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $ 
- * $Date: 2001/10/25 22:33:19 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/29 22:31:18 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -115,6 +115,14 @@ public interface UnicodeMatcher {
      * signedness (bytes convert to ints in the range -128..127).
      */
     public abstract boolean matchesIndexValue(int v);
+
+    /**
+     * Union the set of all characters that may be matched by this object
+     * into the given set.
+     * @param toUnionTo the set into which to union the source characters
+     * @return a reference to toUnionTo
+     */
+    public abstract UnicodeSet getMatchSet(UnicodeSet toUnionTo);
 }
 
 //eof

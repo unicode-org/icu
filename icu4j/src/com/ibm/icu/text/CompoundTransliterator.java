@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/29 17:40:43 $ 
- * $Revision: 1.24 $
+ * $Date: 2001/11/29 22:31:17 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.24 $ $Date: 2001/11/29 17:40:43 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.25 $ $Date: 2001/11/29 22:31:17 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -304,6 +304,18 @@ public class CompoundTransliterator extends Transliterator {
             _smartAppend(rulesSource, ID_DELIM);
         }
         return rulesSource.toString();
+    }
+
+    /**
+     * Return the set of all characters that may be modified by this
+     * Transliterator, ignoring the effect of filters.
+     */
+    UnicodeSet getSourceSet() {
+        UnicodeSet set = new UnicodeSet();
+        for (int i=0; i<trans.length; ++i) {
+            set.addAll(trans[i].getSourceSet());
+        }
+        return set;
     }
 
     /**

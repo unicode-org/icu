@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $
- * $Date: 2001/11/27 22:07:33 $
- * $Revision: 1.50 $
+ * $Date: 2001/11/29 22:31:18 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.50 $ $Date: 2001/11/27 22:07:33 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.51 $ $Date: 2001/11/29 22:31:18 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -465,10 +465,21 @@ public class RuleBasedTransliterator extends Transliterator {
     public String toRules(boolean escapeUnprintable) {
         return data.ruleSet.toRules(escapeUnprintable);
     }
+
+    /**
+     * Return the set of all characters that may be modified by this
+     * Transliterator, ignoring the effect of filters.
+     */
+    UnicodeSet getSourceSet() {
+        return data.ruleSet.getSourceSet();
+    }
 }
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.51  2001/11/29 22:31:18  alan
+ * jitterbug 1560: add source-set methods and TransliteratorUtility class
+ *
  * Revision 1.50  2001/11/27 22:07:33  alan
  * jitterbug 1389: incorporate Mark's review comments - comments only
  *

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2001/11/29 16:11:46 $
- * $Revision: 1.19 $
+ * $Date: 2001/11/29 22:31:18 $
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.19 $ $Date: 2001/11/29 16:11:46 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.20 $ $Date: 2001/11/29 22:31:18 $
  */
 class TransliterationRuleSet {
     /**
@@ -242,12 +242,29 @@ class TransliterationRuleSet {
         }
         return ruleSource.toString();
     }
+
+    /**
+     * Return the set of all characters that may be modified by this set.
+     */
+    UnicodeSet getSourceSet() {
+        UnicodeSet set = new UnicodeSet();
+        int count = ruleVector.size();
+        for (int i=0; i<count; ++i) {
+            TransliterationRule r =
+                (TransliterationRule) ruleVector.elementAt(i);
+            r.getSourceSet(set);
+        }
+        return set;
+    }
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.19  2001/11/29 16:11:46  alan
- * jitterbug 1560: add debugging code; fix handling of runs; detect incomplete non-incremental processing
+ * Revision 1.20  2001/11/29 22:31:18  alan
+ * jitterbug 1560: add source-set methods and TransliteratorUtility class
  *
+/* Revision 1.19  2001/11/29 16:11:46  alan
+/* jitterbug 1560: add debugging code; fix handling of runs; detect incomplete non-incremental processing
+/*
 /* Revision 1.18  2001/11/27 21:57:05  alan
 /* jitterbug 1389: incorporate Mark's review comments - comments only
 /*
