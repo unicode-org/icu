@@ -151,16 +151,8 @@ import com.ibm.icu.util.UResourceBundle;
         
     OrderedMap data = new OrderedMap();
     MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
-    XMLReader xmlReader;
-    {
-        try { 
-        	xmlReader = XMLReaderFactory.createXMLReader();
+    XMLReader xmlReader = createXMLReader();
 
-         } catch (SAXException e) {
-         	System.err.println(e.getMessage());
-         	throw new IllegalArgumentException("can't start XML Reader");
-         }
-    }
     /*SAXParser SAX;
     {
         try {
@@ -589,6 +581,11 @@ import com.ibm.icu.util.UResourceBundle;
                 out.append(((Element)contexts.get(csize-1)).toString(Element.END_VALUE, false));
             }
             out.append("\r\n");
+            if (comment != null) {
+                out.append("\r\n<!-- ");
+                out.append(comment);
+                out.append("\r\n-->");
+            }
         }
 
         /**
@@ -1006,6 +1003,7 @@ import com.ibm.icu.util.UResourceBundle;
 		}
 		public void startDocument() throws SAXException {
             if (DEBUG2) System.out.println("startDocument");
+            commentStack = 0; // initialize
 		}
 		public void endDocument() throws SAXException {
             if (DEBUG2) System.out.println("endDocument");
@@ -1044,11 +1042,47 @@ import com.ibm.icu.util.UResourceBundle;
             if (DEBUG2) System.out.println("endCDATA");
 		}
 		public void comment(char[] ch, int start, int length) throws SAXException {
-            if (commentStack == 0) return;
+            if (commentStack != 0) return;
             String comment = new String(ch, start,length);
             addComment(comment);
             if (DEBUG2) System.out.println("comment: " + comment);
 		}
     };
+    
+    XMLReader createXMLReader() {
+		try { // Xerces
+			return XMLReaderFactory
+					.createXMLReader("org.apache.xerces.parsers.SAXParser");
+		} catch (SAXException e1) {
+			try { // Crimson
+				return XMLReaderFactory
+						.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+			} catch (SAXException e2) {
+				try { // Ælfred
+					return XMLReaderFactory
+							.createXMLReader("gnu.xml.aelfred2.XmlReader");
+				} catch (SAXException e3) {
+					try { // Piccolo
+						return XMLReaderFactory
+								.createXMLReader("com.bluecast.xml.Piccolo");
+					} catch (SAXException e4) {
+						try { // Oracle
+							return XMLReaderFactory
+									.createXMLReader("oracle.xml.parser.v2.SAXParser");
+						} catch (SAXException e5) {
+							try { // default
+								return XMLReaderFactory.createXMLReader();
+							} catch (SAXException e6) {
+								throw new NoClassDefFoundError(
+										"No SAX parser is available");
+								// or whatever exception your method is  
+								// declared to throw
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
  
