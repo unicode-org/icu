@@ -36,9 +36,9 @@ public final class ICUBinaryTest extends TestFmwk
     {
         ICUBinaryTest test = new ICUBinaryTest();
         try {
-	        test.run(arg);
+            test.run(arg);
         } catch (Exception e) {
-        	test.errln("Error testing icubinarytest");
+            test.errln("Error testing icubinarytest");
         }
     }
     
@@ -48,7 +48,7 @@ public final class ICUBinaryTest extends TestFmwk
     public void TestReadHeader() 
     {
         byte formatid[] = {1, 2, 3, 4};
-    	byte array[] = {
+        byte array[] = {
             // header size
             0, 0x18, 
             // magic numbers
@@ -89,14 +89,14 @@ public final class ICUBinaryTest extends TestFmwk
         // no restriction to the data version
         try {
             inputstream.reset();
-        	ICUBinary.readHeader(inputstream, formatid, null);
+            ICUBinary.readHeader(inputstream, formatid, null);
         } catch (IOException e) {
             errln("Failed: Null authenticate object should pass ICUBinary.readHeader");
         }
         // lenient data version
         try {
             inputstream.reset();
-        	ICUBinary.readHeader(inputstream, formatid, authenticate);
+            ICUBinary.readHeader(inputstream, formatid, authenticate);
         } catch (IOException e) {
             errln("Failed: Lenient authenticate object should pass ICUBinary.readHeader");
         }

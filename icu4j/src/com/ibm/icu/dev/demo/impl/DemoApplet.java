@@ -13,11 +13,11 @@ import java.awt.event.*;
 public abstract class DemoApplet extends java.applet.Applet {
     private Button   demoButton;
     private Frame    demoFrame;
-	private static int demoFrameCount = 0;
+    private static int demoFrameCount = 0;
 
     protected abstract Frame createDemoFrame(DemoApplet applet);
     protected Dimension getDefaultFrameSize(DemoApplet applet, Frame f) {
-    	return new Dimension(700, 550);
+        return new Dimension(700, 550);
     }
 
     //Create a button that will display the demo
@@ -46,27 +46,27 @@ public abstract class DemoApplet extends java.applet.Applet {
 
     public void showDemo()
     {
-    	demoFrame = createDemoFrame(this);
+        demoFrame = createDemoFrame(this);
         demoFrame.doLayout();
         Dimension d = getDefaultFrameSize(this, demoFrame);
         demoFrame.setSize(d.width, d.height);
         demoFrame.show();
-		demoFrameOpened();
+        demoFrameOpened();
     }
 
     public void demoClosed()
     {
         demoFrame = null;
-		demoFrameClosed();
+        demoFrameClosed();
     }
 
-	protected static void demoFrameOpened() {
-		demoFrameCount++;
+    protected static void demoFrameOpened() {
+        demoFrameCount++;
     }
-	protected static void demoFrameClosed() {
-		if (--demoFrameCount == 0) {
-			System.exit(0);
-		}
+    protected static void demoFrameClosed() {
+        if (--demoFrameCount == 0) {
+            System.exit(0);
+        }
     }
 }
 

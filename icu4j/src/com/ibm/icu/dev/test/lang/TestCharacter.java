@@ -23,7 +23,7 @@ public class TestCharacter extends TestGroup {
                   "UCharacterDirectionTest", 
                   "UPropertyAliasesTest",
                   "UTF16Test",
-		  "UCharacterSurrogateTest"
+          "UCharacterSurrogateTest"
               },
               "Character Property and UTF16 Tests");
     }

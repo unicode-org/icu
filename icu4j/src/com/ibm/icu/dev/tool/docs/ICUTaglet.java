@@ -34,7 +34,7 @@ public abstract class ICUTaglet implements Taglet {
         ICUStableTaglet.register(taglets);
         ICUDeprecatedTaglet.register(taglets);
         ICUObsoleteTaglet.register(taglets);
-	ICUIgnoreTaglet.register(taglets);
+    ICUIgnoreTaglet.register(taglets);
     }
 
     protected ICUTaglet(String name, int mask) {
@@ -201,23 +201,23 @@ public abstract class ICUTaglet implements Taglet {
     }
 
     public static class ICUIgnoreTaglet extends ICUTaglet {
-	private static ICUTaglet singleton;
+    private static ICUTaglet singleton;
 
-	public static void register(Map taglets) {
-	    if (singleton == null) {
-		singleton = new ICUIgnoreTaglet();
-	    }
-	    taglets.put("bug", singleton);
-	    taglets.put("test", singleton);
-	    taglets.put("summary", singleton);
-	}
+    public static void register(Map taglets) {
+        if (singleton == null) {
+        singleton = new ICUIgnoreTaglet();
+        }
+        taglets.put("bug", singleton);
+        taglets.put("test", singleton);
+        taglets.put("summary", singleton);
+    }
 
-	private ICUIgnoreTaglet() {
-	    super("bug", MASK_DEFAULT);
-	}
+    private ICUIgnoreTaglet() {
+        super("bug", MASK_DEFAULT);
+    }
 
-	public String toString(Tag tag) {
-	    return null;
-	}
+    public String toString(Tag tag) {
+        return null;
+    }
     }
 }

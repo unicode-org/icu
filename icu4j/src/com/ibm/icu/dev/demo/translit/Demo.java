@@ -64,7 +64,7 @@ public class Demo extends Frame {
         f.setVisible(true);
     }
 
-	public Demo(int width, int height) {
+    public Demo(int width, int height) {
         super("Transliteration Demo");
 
         initMenus();
@@ -203,13 +203,13 @@ public class Demo extends Frame {
             new MenuShortcut(KeyEvent.VK_S)));
         swapSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	Transliterator inv;
-            	try {
-                	inv = translit.getInverse();
+                Transliterator inv;
+                try {
+                    inv = translit.getInverse();
                 } catch (Exception x) {
-                	inv = Transliterator.getInstance("null");
+                    inv = Transliterator.getInstance("null");
                 }
-            	setTransliterator(inv.getID(), null);
+                setTransliterator(inv.getID(), null);
             }
         });
         
@@ -300,7 +300,7 @@ public class Demo extends Frame {
         rulesDialog = new InfoDialog(this, "Rule-Based Transliterator", "",
            "([A-Z]) > &Hex($1) &Name($1);\r\n" 
             + "&Hex-Any($1) < ('\\' [uU] [a-fA-F0-9]*);\r\n" 
-			+ "&Name-Any($1) < ('{' [^\\}]* '}');"
+            + "&Name-Any($1) < ('{' [^\\}]* '}');"
         );
         button = new Button("Set");
         button.addActionListener(new ActionListener() {
@@ -493,24 +493,24 @@ public class Demo extends Frame {
     static void printBreaks(int num, String testSource, BreakIterator bi) {
         String result = "";
         int lastPos = 0;
-    	while (true) {
-    	    int pos = bi.next();
-    	    if (pos == BreakIterator.DONE) break;
-    	    result += testSource.substring(lastPos, pos) + "&";
-    	    lastPos = pos;
-    	    System.out.println(pos);
-    	}
-    	System.out.println("Test" + num + ": " + result);
+        while (true) {
+            int pos = bi.next();
+            if (pos == BreakIterator.DONE) break;
+            result += testSource.substring(lastPos, pos) + "&";
+            lastPos = pos;
+            System.out.println(pos);
+        }
+        System.out.println("Test" + num + ": " + result);
     }
     
     static void printIteration(int num, String testSource, CharacterIterator ci) {
         String result = "";
-    	while (true) {
-    	    char ch = ci.next();
-    	    if (ch == CharacterIterator.DONE) break;
-    	    result += ch + "(" + ci.getIndex() + ")";
-    	}
-    	System.out.println("Test" + num + ": " + result);
+        while (true) {
+            char ch = ci.next();
+            if (ch == CharacterIterator.DONE) break;
+            result += ch + "(" + ci.getIndex() + ")";
+        }
+        System.out.println("Test" + num + ": " + result);
     }
     
     static void printSources() {
@@ -1037,9 +1037,9 @@ public class Demo extends Frame {
         /*  
         BreakTransliterator.register();
         
-    	BreakTransliterator testTrans = new BreakTransliterator("Any-XXX", null, null, "$");
-    	String testSource = "The Quick:   Brown fox--jumped.";
-    	BreakIterator bi = testTrans.getBreakIterator();
+        BreakTransliterator testTrans = new BreakTransliterator("Any-XXX", null, null, "$");
+        String testSource = "The Quick:   Brown fox--jumped.";
+        BreakIterator bi = testTrans.getBreakIterator();
         bi.setText(new StringCharacterIterator(testSource));
         printBreaks(0, testSource, bi);
         //bi.setText(UCharacterIterator.getInstance(testSource));
@@ -1048,37 +1048,37 @@ public class Demo extends Frame {
         printIteration(2, testSource, new StringCharacterIterator(testSource));
         //printIteration(3, testSource, UCharacterIterator.getInstance(testSource));
         
-    	
-    	
-    	String test = testTrans.transliterate(testSource);
-    	System.out.println("Test3: " + test);
-    	DummyFactory.add(testTrans.getID(), testTrans);
-    	*/
-    	
-    	// AnyTransliterator.ScriptRunIterator.registerAnyToScript();
-    	
-    	AnyTransliterator at = new AnyTransliterator("Greek", null);
-    	at.transliterate("(cat,\u03b1,\u0915)");
-    	DummyFactory.add(at.getID(), at);
-    	
-    	at = new AnyTransliterator("Devanagari", null);
-    	at.transliterate("(cat,\u03b1,\u0915)");
-    	DummyFactory.add(at.getID(), at);
-    	
-    	at = new AnyTransliterator("Latin", null);
-    	at.transliterate("(cat,\u03b1,\u0915)");
-    	DummyFactory.add(at.getID(), at);
-    	
-        DummyFactory.add("Any-gif", Transliterator.createFromRules("gif", "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';", Transliterator.FORWARD));    	
-        DummyFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));    	
+        
+        
+        String test = testTrans.transliterate(testSource);
+        System.out.println("Test3: " + test);
+        DummyFactory.add(testTrans.getID(), testTrans);
+        */
+        
+        // AnyTransliterator.ScriptRunIterator.registerAnyToScript();
+        
+        AnyTransliterator at = new AnyTransliterator("Greek", null);
+        at.transliterate("(cat,\u03b1,\u0915)");
+        DummyFactory.add(at.getID(), at);
+        
+        at = new AnyTransliterator("Devanagari", null);
+        at.transliterate("(cat,\u03b1,\u0915)");
+        DummyFactory.add(at.getID(), at);
+        
+        at = new AnyTransliterator("Latin", null);
+        at.transliterate("(cat,\u03b1,\u0915)");
+        DummyFactory.add(at.getID(), at);
+        
+        DummyFactory.add("Any-gif", Transliterator.createFromRules("gif", "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';", Transliterator.FORWARD));        
+        DummyFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));        
 
-        DummyFactory.add("Any-RemoveCurly", Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ;", Transliterator.FORWARD));    	
+        DummyFactory.add("Any-RemoveCurly", Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ;", Transliterator.FORWARD));        
         DummyFactory.add("RemoveCurly-Any", Transliterator.getInstance("Any-Null"));
         
         System.out.println("Trying &hex");
         Transliterator t = Transliterator.createFromRules("hex2", "(.) > &hex($1);", Transliterator.FORWARD);
         System.out.println("Registering");
-        DummyFactory.add("Any-hex2", t);    	
+        DummyFactory.add("Any-hex2", t);        
         
         System.out.println("Trying &gif");
         t = Transliterator.createFromRules("gif2", "(.) > &any-gif($1);", Transliterator.FORWARD);
@@ -1091,49 +1091,49 @@ public class Demo extends Frame {
     void setTransliterator(String name, String id) {
         if (DEBUG) System.out.println("Got: " + name);
         if (id == null) {
-        	translit = Transliterator.getInstance(name);
+            translit = Transliterator.getInstance(name);
         } else {
             String reverseId = "";
             int pos = id.indexOf('-');
             if (pos < 0) {
-            	reverseId = id + "-Any";
-            	id = "Any-" + id;
+                reverseId = id + "-Any";
+                id = "Any-" + id;
             } else {
                 int pos2 = id.indexOf("/", pos);
                 if (pos2 < 0) {
-            	    reverseId = id.substring(pos+1) + "-" + id.substring(0,pos);
-            	} else {
-            	    reverseId = id.substring(pos+1, pos2) + "-" + id.substring(0,pos) + id.substring(pos2);
-            	}
+                    reverseId = id.substring(pos+1) + "-" + id.substring(0,pos);
+                } else {
+                    reverseId = id.substring(pos+1, pos2) + "-" + id.substring(0,pos) + id.substring(pos2);
+                }
             }
             
-        	
-        	translit = Transliterator.createFromRules(id, name, Transliterator.FORWARD);
-        	if (DEBUG) {
-        	    System.out.println("***Forward Rules");
-        	    System.out.println(translit.toRules(true));
-        	    System.out.println("***Source Set");
-        	    System.out.println(translit.getSourceSet().toPattern(true));
-        	}
-        	    System.out.println("***Target Set");
-        	    UnicodeSet target = translit.getTargetSet();
-        	    System.out.println(target.toPattern(true));
-        	    UnicodeSet rest = new UnicodeSet("[a-z]").removeAll(target);
-        	    System.out.println("***ASCII - Target Set");
-        	    System.out.println(rest.toPattern(true));
-        	    
+            
+            translit = Transliterator.createFromRules(id, name, Transliterator.FORWARD);
+            if (DEBUG) {
+                System.out.println("***Forward Rules");
+                System.out.println(translit.toRules(true));
+                System.out.println("***Source Set");
+                System.out.println(translit.getSourceSet().toPattern(true));
+            }
+                System.out.println("***Target Set");
+                UnicodeSet target = translit.getTargetSet();
+                System.out.println(target.toPattern(true));
+                UnicodeSet rest = new UnicodeSet("[a-z]").removeAll(target);
+                System.out.println("***ASCII - Target Set");
+                System.out.println(rest.toPattern(true));
+                
             DummyFactory.add(id, translit);
             
-        	Transliterator translit2 = Transliterator.createFromRules(reverseId, name, Transliterator.REVERSE);
-        	if (DEBUG) {
-        	    System.out.println("***Backward Rules");
-        	    System.out.println(translit2.toRules(true));
-        	}
+            Transliterator translit2 = Transliterator.createFromRules(reverseId, name, Transliterator.REVERSE);
+            if (DEBUG) {
+                System.out.println("***Backward Rules");
+                System.out.println(translit2.toRules(true));
+            }
             DummyFactory.add(reverseId, translit2);
             
             Transliterator rev = translit.getInverse();
-        	if (DEBUG) System.out.println("***Inverse Rules");
-        	if (DEBUG) System.out.println(rev.toRules(true));
+            if (DEBUG) System.out.println("***Inverse Rules");
+            if (DEBUG) System.out.println(rev.toRules(true));
             
         }
         text.flush();
@@ -1144,9 +1144,9 @@ public class Demo extends Frame {
         
         Transliterator inv;
         try {
-        	inv = translit.getInverse();
+            inv = translit.getInverse();
         } catch (Exception ex) {
-        	inv = null;
+            inv = null;
         }
         if (inv != null) {
             addHistory(inv);

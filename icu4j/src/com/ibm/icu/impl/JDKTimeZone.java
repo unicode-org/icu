@@ -92,53 +92,53 @@ public class JDKTimeZone extends TimeZone {
     public void getOffset(long date, boolean local, int[] offsets) {
         // The following code works on 1.4 or later.  Since we need to
         // be compatible with 1.3, we have to use reflection.
-	try {
-	    if (zone instanceof sun.util.calendar.ZoneInfo) {
-		((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-		if (local) {
-		    date -= offsets[0] + offsets[1];
-		    ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
-		}
-		return;
-	    } 
-	}
-	catch (SecurityException ex) {
-	    // ok; fall through, we're running in a protected context
-	} 
-	catch (Throwable th) {
-	    System.out.println("caught: " + th);
-	}
-	super.getOffset(date, local, offsets);
+    try {
+        if (zone instanceof sun.util.calendar.ZoneInfo) {
+        ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+        if (local) {
+            date -= offsets[0] + offsets[1];
+            ((sun.util.calendar.ZoneInfo) zone).getOffsets(date, offsets);
+        }
+        return;
+        } 
+    }
+    catch (SecurityException ex) {
+        // ok; fall through, we're running in a protected context
+    } 
+    catch (Throwable th) {
+        System.out.println("caught: " + th);
+    }
+    super.getOffset(date, local, offsets);
 
-	// no longer require JDK 1.3 compatibility
-	if (false) {
-	    try {
-		Class zoneInfo = Class.forName("sun.util.calendar.ZoneInfo");
-		if (zoneInfo.isInstance(zone)) {
-		    Method getOffsets = zoneInfo.getMethod("getOffsets",
-							   new Class[] { Long.TYPE, Class.forName("[I") });
-		    Object[] args = new Object[] { new Long(date), offsets };
-		    getOffsets.invoke(zone, args);
-		    if (local) {
-			date -= offsets[0] + offsets[1];
-			args[0] = new Long(date);
-			getOffsets.invoke(zone, args);
-		    }
-		    return;
-		}
-	    } catch (ClassNotFoundException e1) {
-		// ok; fall through
-	    } catch (SecurityException ex) {
-		// ok; fall through, we're running in a protected context
-	    } catch (NoSuchMethodException e2) {
-		throw new RuntimeException(); // should not occur
-	    } catch (IllegalAccessException e3) {
-		throw new RuntimeException(); // should not occur
-	    } catch (InvocationTargetException e4) {
-		throw new RuntimeException(); // should not occur
-	    }
-	    super.getOffset(date, local, offsets);
-	}
+    // no longer require JDK 1.3 compatibility
+    if (false) {
+        try {
+        Class zoneInfo = Class.forName("sun.util.calendar.ZoneInfo");
+        if (zoneInfo.isInstance(zone)) {
+            Method getOffsets = zoneInfo.getMethod("getOffsets",
+                               new Class[] { Long.TYPE, Class.forName("[I") });
+            Object[] args = new Object[] { new Long(date), offsets };
+            getOffsets.invoke(zone, args);
+            if (local) {
+            date -= offsets[0] + offsets[1];
+            args[0] = new Long(date);
+            getOffsets.invoke(zone, args);
+            }
+            return;
+        }
+        } catch (ClassNotFoundException e1) {
+        // ok; fall through
+        } catch (SecurityException ex) {
+        // ok; fall through, we're running in a protected context
+        } catch (NoSuchMethodException e2) {
+        throw new RuntimeException(); // should not occur
+        } catch (IllegalAccessException e3) {
+        throw new RuntimeException(); // should not occur
+        } catch (InvocationTargetException e4) {
+        throw new RuntimeException(); // should not occur
+        }
+        super.getOffset(date, local, offsets);
+    }
     }
  
     /**
@@ -204,34 +204,34 @@ public class JDKTimeZone extends TimeZone {
      * @stable ICU 2.0
      */
     public int getDSTSavings() {
-	if (useDaylightTime()) {
-	    try {   
-		// This is only to make a 1.3 compiler happy.  JDKTimeZone
-		// is only used in JDK 1.4, where TimeZone has the getDSTSavings
-		// API on it, so a straight call to getDSTSavings would actually
-		// work if we could compile it.  Since on 1.4 the time zone is
-		// not a SimpleTimeZone, we can't downcast in order to make
-		// the direct call that a 1.3 compiler would like, because at
-		// runtime the downcast would fail.
-		// todo: remove when we no longer support compiling under 1.3
+    if (useDaylightTime()) {
+        try {   
+        // This is only to make a 1.3 compiler happy.  JDKTimeZone
+        // is only used in JDK 1.4, where TimeZone has the getDSTSavings
+        // API on it, so a straight call to getDSTSavings would actually
+        // work if we could compile it.  Since on 1.4 the time zone is
+        // not a SimpleTimeZone, we can't downcast in order to make
+        // the direct call that a 1.3 compiler would like, because at
+        // runtime the downcast would fail.
+        // todo: remove when we no longer support compiling under 1.3
 
-		// The following works if getDSTSavings is declared in   
-		// TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
-		final Object[] args = new Object[0];
-		final Class[] argtypes = new Class[0];
-		Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
-		return ((Integer) m.invoke(zone, args)).intValue();   
-	    } catch (Exception e) {
-	    	// if zone is in the sun.foo class hierarchy and we
-	    	// are in a protection domain, we'll get a security
-	    	// exception.  And if we claim to support DST, but 
-	    	// return a value of 0, later java.util.SimpleTimeZone will
-	    	// throw an illegalargument exception.  so... fake
-	    	// the dstoffset;
-	    	return 3600000;
-	    }   
-  	}
-	return 0;
+        // The following works if getDSTSavings is declared in   
+        // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
+        final Object[] args = new Object[0];
+        final Class[] argtypes = new Class[0];
+        Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
+        return ((Integer) m.invoke(zone, args)).intValue();   
+        } catch (Exception e) {
+            // if zone is in the sun.foo class hierarchy and we
+            // are in a protection domain, we'll get a security
+            // exception.  And if we claim to support DST, but 
+            // return a value of 0, later java.util.SimpleTimeZone will
+            // throw an illegalargument exception.  so... fake
+            // the dstoffset;
+            return 3600000;
+        }   
+      }
+    return 0;
     }
 
     /**
@@ -255,12 +255,12 @@ public class JDKTimeZone extends TimeZone {
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-	out.writeObject(zone.getID());
+    out.writeObject(zone.getID());
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-	String id = (String)in.readObject();
-	zone = java.util.TimeZone.getTimeZone(id);
+    String id = (String)in.readObject();
+    zone = java.util.TimeZone.getTimeZone(id);
     }
 }
 

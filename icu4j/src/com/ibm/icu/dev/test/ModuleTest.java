@@ -120,7 +120,7 @@ public class ModuleTest extends TestFmwk {
      * if there are different or additional data required.
      */
     protected boolean validateMethod(String methodName) {
-	return openTestData(methodName);
+    return openTestData(methodName);
     }
 
     /**
@@ -128,11 +128,11 @@ public class ModuleTest extends TestFmwk {
      * from the DESCRIPTION field of the module info.  
      */
     protected String getDescription() {
-	DataMap info = moduleInfo();
-	if (info != null) {
-	    return info.getString(TestDataModule.DESCRIPTION);
-	}
-	return null;
+    DataMap info = moduleInfo();
+    if (info != null) {
+        return info.getString(TestDataModule.DESCRIPTION);
+    }
+    return null;
     }
 
     /**
@@ -140,13 +140,13 @@ public class ModuleTest extends TestFmwk {
      * from the DESCRIPTION field of the test info.  
      */
     protected String getMethodDescription(String methodName) {
-	if (openTestData(methodName)) {
-	    DataMap info = testInfo();
-	    if (info != null) {
-		return info.getString(TestDataModule.DESCRIPTION);
-	    }
-	}
-	return null;
+    if (openTestData(methodName)) {
+        DataMap info = testInfo();
+        if (info != null) {
+        return info.getString(TestDataModule.DESCRIPTION);
+        }
+    }
+    return null;
     }
 
     /**
@@ -154,9 +154,9 @@ public class ModuleTest extends TestFmwk {
      * All contents are reset.
      */
     protected boolean openModule(String name) {
-	t = null;
-	m = TestDataModule.open(name, this);
-	return m != null;
+    t = null;
+    m = TestDataModule.open(name, this);
+    return m != null;
     }
 
     /**
@@ -164,8 +164,8 @@ public class ModuleTest extends TestFmwk {
      * true if success.  The current test is reset.
      */
     protected boolean openTestData(String name) {
-	t = m == null ? null : m.createTestData(name);
-	return t != null;
+    t = m == null ? null : m.createTestData(name);
+    return t != null;
     }
 
     /**
@@ -209,7 +209,7 @@ public class ModuleTest extends TestFmwk {
      * open or no info for the module.
      */
     protected DataMap moduleInfo() {
-	return m == null ? null : m.getInfo();
+    return m == null ? null : m.getInfo();
     }
 
     /**
@@ -217,7 +217,7 @@ public class ModuleTest extends TestFmwk {
      * open or no test open or not info for this test.
      */
     protected DataMap testInfo() {
-	return t == null ? null : t.getInfo();
+    return t == null ? null : t.getInfo();
     }
 
     /**
@@ -226,8 +226,8 @@ public class ModuleTest extends TestFmwk {
      * 'settings' holds the new settings data.
      */
     protected boolean nextSettings() {
-	settings = t == null ? null : t.nextSettings();
-	return settings != null;
+    settings = t == null ? null : t.nextSettings();
+    return settings != null;
     }
 
     /**
@@ -236,8 +236,8 @@ public class ModuleTest extends TestFmwk {
      * 'testcase' holds the new case data.
      */
     protected boolean nextCase() {
-	testcase = t == null ? null : t.nextCase();
-	return testcase != null;
+    testcase = t == null ? null : t.nextCase();
+    return testcase != null;
     }
 
     public void msg(String message, int level, boolean incCount, boolean newln) {
@@ -250,19 +250,19 @@ public class ModuleTest extends TestFmwk {
     /**
      * Report an error, and stop iteration of the current test.
     public void err(String message) {
-	if (t != null) {
-	    t.stopIteration();
-	}
-	super.err(message);
+    if (t != null) {
+        t.stopIteration();
+    }
+    super.err(message);
     }
 
     /**
      * Report an error, and stop iteration of the current test.
     public void errln(String message) {
-	if (t != null) {
-	    t.stopIteration();
-	}
-	super.errln(message);
+    if (t != null) {
+        t.stopIteration();
+    }
+    super.errln(message);
     }
      */
 }

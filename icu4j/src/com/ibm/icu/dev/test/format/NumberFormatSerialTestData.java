@@ -10,7 +10,7 @@ package com.ibm.icu.dev.test.format;
 public class NumberFormatSerialTestData {
     //get Content
     public static byte[][] getContent() {
-	        return content;
+            return content;
     }
 
     //NumberFormat.getInstance(Locale.US)

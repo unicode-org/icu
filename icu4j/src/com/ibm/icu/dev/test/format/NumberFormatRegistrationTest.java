@@ -26,13 +26,13 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             NumberFormat currencyStyle;
 
             TestFactory() {
-		this(SRC_LOC, SWAP_LOC);
+        this(SRC_LOC, SWAP_LOC);
             }
 
-	    TestFactory(Locale srcLoc, Locale swapLoc) {
-		super(srcLoc);
-		currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
-	    }
+        TestFactory(Locale srcLoc, Locale swapLoc) {
+        super(srcLoc);
+        currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
+        }
 
             public NumberFormat createFormat(Locale loc, int formatType) {
                 if (formatType == FORMAT_CURRENCY) {
@@ -42,22 +42,22 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             }
         }
 
-	{
-	    // coverage before registration
+    {
+        // coverage before registration
 
-	    try {
-		NumberFormat.unregister(null);
-		errln("did not throw exception on null unregister");
-	    }
-	    catch (Exception e) {
-	    }
+        try {
+        NumberFormat.unregister(null);
+        errln("did not throw exception on null unregister");
+        }
+        catch (Exception e) {
+        }
 
-	    try {
-		NumberFormat.registerFactory(null);
-		errln("did not throw exception on null register");
-	    }
-	    catch (Exception e) {
-	    }
+        try {
+        NumberFormat.registerFactory(null);
+        errln("did not throw exception on null register");
+        }
+        catch (Exception e) {
+        }
 
             try {
                 // if no NF has been registered yet, shim is null, so this silently
@@ -67,26 +67,26 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 if (NumberFormat.unregister("")) {
                     errln("unregister of empty string key succeeded");
                 }
-	    }
+        }
             catch (Exception e) {
             }
-	}
+    }
 
-	Locale fu_FU = new Locale("fu", "FU");
+    Locale fu_FU = new Locale("fu", "FU");
         NumberFormat f0 = NumberFormat.getIntegerInstance(SWAP_LOC);
         NumberFormat f1 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat f2 = NumberFormat.getCurrencyInstance(SRC_LOC);
         Object key = NumberFormat.registerFactory(new TestFactory());
-	Object key2 = NumberFormat.registerFactory(new TestFactory(fu_FU, Locale.GERMANY));
-	if (!Arrays.asList(NumberFormat.getAvailableLocales()).contains(fu_FU)) {
-	    errln("did not list fu_FU");
-	}
+    Object key2 = NumberFormat.registerFactory(new TestFactory(fu_FU, Locale.GERMANY));
+    if (!Arrays.asList(NumberFormat.getAvailableLocales()).contains(fu_FU)) {
+        errln("did not list fu_FU");
+    }
         NumberFormat f3 = NumberFormat.getCurrencyInstance(SRC_LOC);
         NumberFormat f4 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat.unregister(key); // restore for other tests
         NumberFormat f5 = NumberFormat.getCurrencyInstance(SRC_LOC);
 
-	NumberFormat.unregister(key2);
+    NumberFormat.unregister(key2);
 
         float n = 1234.567f;
         logln("f0 swap int: " + f0.format(n));
@@ -106,7 +106,7 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             errln("unregistered service did not match original");
         }
 
-	// coverage
-	NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
+    // coverage
+    NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
     }
 }

@@ -23,7 +23,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 final class CollatorServiceShim extends Collator.ServiceShim {
 
     Collator getInstance(ULocale locale) {
-	// use service cache, it's faster than instantiation
+    // use service cache, it's faster than instantiation
 //          if (service.isDefault()) {
 //              return new RuleBasedCollator(locale);
 //          }
@@ -36,9 +36,9 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             return coll;
         }
         catch (CloneNotSupportedException e) {
-	    ///CLOVER:OFF
+        ///CLOVER:OFF
             throw new InternalError(e.getMessage());
-	    ///CLOVER:ON
+        ///CLOVER:ON
         }
     }
 

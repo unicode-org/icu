@@ -187,7 +187,7 @@ public class CollationTest extends ModuleTest
             try {
                 col = new RuleBasedCollator(rules);
             }catch (MissingResourceException e){
-		warnln("Could not load the locale data: " + e.getMessage());
+        warnln("Could not load the locale data: " + e.getMessage());
             } catch (Exception e) {
                 errln("Error creating collator for rules " + rules);
             }

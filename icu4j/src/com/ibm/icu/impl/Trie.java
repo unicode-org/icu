@@ -77,7 +77,7 @@ public abstract class Trie
      */
     public final boolean isLatin1Linear()
     {
-    	return m_isLatin1Linear_;
+        return m_isLatin1Linear_;
     }
     
     /**

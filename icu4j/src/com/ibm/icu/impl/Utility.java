@@ -832,7 +832,7 @@ public final class Utility {
                 }
                 if (UTF16.isTrailSurrogate((char) c)) {
                     offset = ahead;
-	            result = UCharacterProperty.getRawSupplementary(
+                result = UCharacterProperty.getRawSupplementary(
                                   (char) result, (char) c);
                 }
             }
@@ -981,23 +981,23 @@ public final class Utility {
      * Supplies a zero-padded hex representation of an integer (without 0x)
      */
     static public String hex(long i, int places) {
-    	if (i == Long.MIN_VALUE) return "-8000000000000000";
-    	boolean negative = i < 0;
-    	if (negative) {
-    		i = -i;
-    	}
-    	String result = Long.toString(i, 16).toUpperCase();
-    	if (result.length() < places) {
-    		result = "0000000000000000".substring(result.length(),places) + result;
-    	}
-    	if (negative) {
-    		return '-' + result;
-    	}
-    	return result;
+        if (i == Long.MIN_VALUE) return "-8000000000000000";
+        boolean negative = i < 0;
+        if (negative) {
+            i = -i;
+        }
+        String result = Long.toString(i, 16).toUpperCase();
+        if (result.length() < places) {
+            result = "0000000000000000".substring(result.length(),places) + result;
+        }
+        if (negative) {
+            return '-' + result;
+        }
+        return result;
     }
     
     public static String hex(long ch) {
-    	return hex(ch,4);
+        return hex(ch,4);
     }
     
     /**
@@ -1773,7 +1773,7 @@ public final class Utility {
      * a string representation with code units. 
      */
     public static String valueOf(int[]source){
-	// TODO: Investigate why this method is not on UTF16 class
+    // TODO: Investigate why this method is not on UTF16 class
         StringBuffer result = new StringBuffer(source.length);
         for(int i=0; i<source.length; i++){
             UTF16.append(result,source[i]);

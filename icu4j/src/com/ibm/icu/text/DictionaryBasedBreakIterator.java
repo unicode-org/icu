@@ -528,7 +528,7 @@ switch (categoryFlags.length % 4) {
 
         /**
          * No special initialization
-	 * @internal
+     * @internal
          */
         public Builder() {
         }
@@ -538,7 +538,7 @@ switch (categoryFlags.length % 4) {
          * the $dictionary tag.  If we see a substitution named DICTIONARY_VAR,
          * parse the substitution expression and store the result in
          * dictionaryChars.
-	 * @internal
+     * @internal
          */
         protected void handleSpecialSubstitution(String replace, String replaceWith,
                                                  int startPos, String description) {
@@ -558,7 +558,7 @@ switch (categoryFlags.length % 4) {
          * After the inherited builder has derived the real character categories, we
          * set up the categoryFlags array in the iterator.  This array contains "true"
          * for every character category that includes a dictionary character.
-	 * @internal
+     * @internal
          */
         protected void buildCharCategories(Vector tempRuleList) {
             super.buildCharCategories(tempRuleList);
@@ -578,9 +578,9 @@ switch (categoryFlags.length % 4) {
         // which is called by the function above.  This gives us a way to create a separate
         // character category for the dictionary characters even when RuleBasedBreakIterator
         // isn't making a distinction
-	/**
-	 * @internal
-	 */
+    /**
+     * @internal
+     */
         protected void mungeExpressionList(Hashtable expressions) {
             expressions.put(dictionaryExpression, dictionaryChars);
         }

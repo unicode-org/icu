@@ -463,8 +463,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ClassNotFoundException e) {
             errln("Fail: " + e);
         } catch (Exception e) {
-	    System.out.println(e);
-	    //	    System.out.println(e.getCause());
+        System.out.println(e);
+        //        System.out.println(e.getCause());
             errln("Fail: " + e);
         }
     
@@ -643,8 +643,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     // {sfb} what to do with this one ?? 
     public void Test4108407() {
         /*
-	// TODO user.timezone is a protected system property, catch securityexception and warn
-	// if this is reenabled
+    // TODO user.timezone is a protected system property, catch securityexception and warn
+    // if this is reenabled
         long l = System.currentTimeMillis(); 
         logln("user.timezone = " + System.getProperty("user.timezone", "?"));
         logln("Time Zone :" + 

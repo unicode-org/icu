@@ -693,7 +693,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
 
         // construct the formatter based on the description
-	// TODO: amend this so we can add the localizations
+    // TODO: amend this so we can add the localizations
         init(description, null);
     }
 
@@ -848,17 +848,17 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
-	if (ruleSetDisplayNames != null) {
-	    Set s = ruleSetDisplayNames.keySet();
-	    String[] locales = (String[])s.toArray(new String[s.size()]);
-	    Arrays.sort(locales, String.CASE_INSENSITIVE_ORDER);
-	    ULocale[] result = new ULocale[locales.length];
-	    for (int i = 0; i < locales.length; ++i) {
-		result[i] = new ULocale(locales[i]);
-	    }
-	    return result;
-	}
-	return null;
+    if (ruleSetDisplayNames != null) {
+        Set s = ruleSetDisplayNames.keySet();
+        String[] locales = (String[])s.toArray(new String[s.size()]);
+        Arrays.sort(locales, String.CASE_INSENSITIVE_ORDER);
+        ULocale[] result = new ULocale[locales.length];
+        for (int i = 0; i < locales.length; ++i) {
+        result[i] = new ULocale(locales[i]);
+        }
+        return result;
+    }
+    return null;
     }
 
   
@@ -874,25 +874,25 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getRuleSetDisplayNames(ULocale locale) {
-	String[] names = null;
-	if (locale != null && ruleSetDisplayNames != null) {
-	    String[] localeNames = { locale.getBaseName(), ULocale.getDefault().getBaseName() };
-	    for (int i = 0; i < localeNames.length; ++i) {
-		String lname = localeNames[i];
-		while (lname.length() > 0) {
-		    names = (String[])ruleSetDisplayNames.get(lname);
-		    if (names != null) {
-			return (String[])names.clone();
-		    }
-		    lname = ULocale.getFallback(lname);
-		}
-	    }
-	}
-	names = getRuleSetNames();
-	for (int i = 0; i < names.length; ++i) {
-	    names[i] = names[i].substring(1);
-	}
-	return names;
+    String[] names = null;
+    if (locale != null && ruleSetDisplayNames != null) {
+        String[] localeNames = { locale.getBaseName(), ULocale.getDefault().getBaseName() };
+        for (int i = 0; i < localeNames.length; ++i) {
+        String lname = localeNames[i];
+        while (lname.length() > 0) {
+            names = (String[])ruleSetDisplayNames.get(lname);
+            if (names != null) {
+            return (String[])names.clone();
+            }
+            lname = ULocale.getFallback(lname);
+        }
+        }
+    }
+    names = getRuleSetNames();
+    for (int i = 0; i < names.length; ++i) {
+        names[i] = names[i].substring(1);
+    }
+    return names;
     }
 
     /**
@@ -1287,7 +1287,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      */
     private void init(String description, String[][] localizations) {
 
-	initLocalizations(localizations);
+    initLocalizations(localizations);
 
         // start by stripping the trailing whitespace from all the rules
         // (this is all the whitespace follwing each semicolon in the
@@ -1358,18 +1358,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the localization arrays.
      */
     private void initLocalizations(String[][] localizations) {
-	if (localizations != null) {
-	    Map m = new HashMap();
-	    for (int i = 0; i < localizations.length; ++i) {
-		String[] data = localizations[i];
-		String locale = data[0];
-		String[] names = new String[data.length-1];
-		System.arraycopy(data, 1, names, 0, names.length);
-		m.put(locale, names);
-	    }
+    if (localizations != null) {
+        Map m = new HashMap();
+        for (int i = 0; i < localizations.length; ++i) {
+        String[] data = localizations[i];
+        String locale = data[0];
+        String[] names = new String[data.length-1];
+        System.arraycopy(data, 1, names, 0, names.length);
+        m.put(locale, names);
+        }
 
-	    ruleSetDisplayNames = m;
-	}
+        ruleSetDisplayNames = m;
+    }
     }
 
     /**

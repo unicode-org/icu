@@ -26,11 +26,11 @@ public class RbnfDemo extends DemoApplet {
      * code to run the demo as an application
      */
     public static void main(String[] argv) {
-    	new RbnfDemo().showDemo();
+        new RbnfDemo().showDemo();
     }
 
     protected Dimension getDefaultFrameSize(DemoApplet applet, Frame f) {
-    	return new Dimension(430,270);
+        return new Dimension(430,270);
     }
 
     protected Frame createDemoFrame(DemoApplet applet) {

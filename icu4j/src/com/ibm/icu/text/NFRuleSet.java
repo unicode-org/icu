@@ -72,10 +72,10 @@ final class NFRuleSet {
      */
     private int recursionCount = 0;
 
-	/**
- 	 * Limit of recursion.
- 	 */
-	private static final int RECURSION_LIMIT = 50;
+    /**
+      * Limit of recursion.
+      */
+    private static final int RECURSION_LIMIT = 50;
 
     //-----------------------------------------------------------------------
     // construction
@@ -92,9 +92,9 @@ final class NFRuleSet {
     public NFRuleSet(String[] descriptions, int index) throws IllegalArgumentException {
         String description = descriptions[index];
 
-	if (description.length() == 0) {
-	  throw new IllegalArgumentException("Empty rule set description");
-	}
+    if (description.length() == 0) {
+      throw new IllegalArgumentException("Empty rule set description");
+    }
 
         // if the description begins with a rule set name (the rule set
         // name can be omitted in formatter descriptions that consist
@@ -252,7 +252,7 @@ final class NFRuleSet {
                 default:
                     if (rule.getBaseValue() < defaultBaseValue) {
                         throw new IllegalArgumentException("Rules are not in order, base: " + 
-							   rule.getBaseValue() + " < " + defaultBaseValue);
+                               rule.getBaseValue() + " < " + defaultBaseValue);
                     }
                     defaultBaseValue = rule.getBaseValue();
                     if (!isFractionRuleSet) {
@@ -299,11 +299,11 @@ final class NFRuleSet {
             NFRuleSet that2 = (NFRuleSet)that;
 
             if (!name.equals(that2.name)
-		|| !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
-		|| !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
-		|| !Utility.objectEquals(fractionRules[1], that2.fractionRules[1])
-		|| !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
-		|| rules.length != that2.rules.length
+        || !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
+        || !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
+        || !Utility.objectEquals(fractionRules[1], that2.fractionRules[1])
+        || !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
+        || rules.length != that2.rules.length
                 || isFractionRuleSet != that2.isFractionRuleSet) {
 
                 return false;
@@ -381,7 +381,7 @@ final class NFRuleSet {
      * @return true if the rule set is public
      */
     public boolean isPublic() {
-	return !name.startsWith("%%");
+    return !name.startsWith("%%");
     }
 
     //-----------------------------------------------------------------------
@@ -399,10 +399,10 @@ final class NFRuleSet {
     public void format(long number, StringBuffer toInsertInto, int pos) {
         NFRule applicableRule = findNormalRule(number);
 
-	    if (++recursionCount >= RECURSION_LIMIT) {
-	    	recursionCount = 0;
-	    	throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
-	    }
+        if (++recursionCount >= RECURSION_LIMIT) {
+            recursionCount = 0;
+            throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
+        }
         applicableRule.doFormat(number, toInsertInto, pos);
         --recursionCount;
     }
@@ -418,12 +418,12 @@ final class NFRuleSet {
     public void format(double number, StringBuffer toInsertInto, int pos) {
         NFRule applicableRule = findRule(number);
 
-		if (++recursionCount >= RECURSION_LIMIT) {
-			recursionCount = 0;
-			throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
-		}
+        if (++recursionCount >= RECURSION_LIMIT) {
+            recursionCount = 0;
+            throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
+        }
         applicableRule.doFormat(number, toInsertInto, pos);
-		--recursionCount;
+        --recursionCount;
     }
 
     /**
@@ -521,40 +521,40 @@ final class NFRuleSet {
         // the next rule's base value)
         int lo = 0;
         int hi = rules.length;
-	if (hi > 0) {
-	    while (lo < hi) {
-		int mid = (lo + hi) / 2;
-		if (rules[mid].getBaseValue() == number) {
-		    return rules[mid];
-		}
-		else if (rules[mid].getBaseValue() > number) {
-		    hi = mid;
-		}
-		else {
-		    lo = mid + 1;
-		}
-	    }
-	    if (hi == 0) { // bad rule set
-		throw new IllegalStateException("The rule set " + name + " cannot format the value " + number);
-	    }
-	    NFRule result = rules[hi - 1];
+    if (hi > 0) {
+        while (lo < hi) {
+        int mid = (lo + hi) / 2;
+        if (rules[mid].getBaseValue() == number) {
+            return rules[mid];
+        }
+        else if (rules[mid].getBaseValue() > number) {
+            hi = mid;
+        }
+        else {
+            lo = mid + 1;
+        }
+        }
+        if (hi == 0) { // bad rule set
+        throw new IllegalStateException("The rule set " + name + " cannot format the value " + number);
+        }
+        NFRule result = rules[hi - 1];
 
-	    // use shouldRollBack() to see whether we need to invoke the
-	    // rollback rule (see shouldRollBack()'s documentation for
-	    // an explanation of the rollback rule).  If we do, roll back
-	    // one rule and return that one instead of the one we'd normally
-	    // return
-	    if (result.shouldRollBack(number)) {
-		if (hi == 1) { // bad rule set
-		    throw new IllegalStateException("The rule set " + name + " cannot roll back from the rule '" +
-						    result + "'");
-		}
-		result = rules[hi - 2];
-	    }
-	    return result;
-	}
-	// else use the master rule
-	return fractionRules[2];
+        // use shouldRollBack() to see whether we need to invoke the
+        // rollback rule (see shouldRollBack()'s documentation for
+        // an explanation of the rollback rule).  If we do, roll back
+        // one rule and return that one instead of the one we'd normally
+        // return
+        if (result.shouldRollBack(number)) {
+        if (hi == 1) { // bad rule set
+            throw new IllegalStateException("The rule set " + name + " cannot roll back from the rule '" +
+                            result + "'");
+        }
+        result = rules[hi - 2];
+        }
+        return result;
+    }
+    // else use the master rule
+    return fractionRules[2];
     }
 
     /**

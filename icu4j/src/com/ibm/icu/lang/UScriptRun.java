@@ -311,13 +311,13 @@ public final class UScriptRun
      * @internal
      */
     public final boolean next()
-	{
-		// if we've fallen off the end of the text, we're done
-		if (scriptLimit >= textLimit) {
-			return false;
-		}
+    {
+        // if we've fallen off the end of the text, we're done
+        if (scriptLimit >= textLimit) {
+            return false;
+        }
     
-		scriptCode  = UScript.COMMON;
+        scriptCode  = UScript.COMMON;
         scriptStart = scriptLimit;
         
         syncFixup();
@@ -325,55 +325,55 @@ public final class UScriptRun
         int ch;
         
         while ((ch = text.nextCodePoint()) != UForwardCharacterIterator.DONE) {
-			int sc = UScript.getScript(ch);
-			int pairIndex = getPairIndex(ch);
+            int sc = UScript.getScript(ch);
+            int pairIndex = getPairIndex(ch);
 
-			// Paired character handling:
-			//
-			// if it's an open character, push it onto the stack.
-			// if it's a close character, find the matching open on the
-			// stack, and use that script code. Any non-matching open
-			// characters above it on the stack will be poped.
-			if (pairIndex >= 0) {
-				if ((pairIndex & 1) == 0) {
+            // Paired character handling:
+            //
+            // if it's an open character, push it onto the stack.
+            // if it's a close character, find the matching open on the
+            // stack, and use that script code. Any non-matching open
+            // characters above it on the stack will be poped.
+            if (pairIndex >= 0) {
+                if ((pairIndex & 1) == 0) {
                     push(pairIndex, scriptCode);
-				} else {
-					int pi = pairIndex & ~1;
+                } else {
+                    int pi = pairIndex & ~1;
 
-					while (stackIsNotEmpty() && top().pairIndex != pi) {
-						pop();
-					}
+                    while (stackIsNotEmpty() && top().pairIndex != pi) {
+                        pop();
+                    }
 
-					if (stackIsNotEmpty()) {
-						sc = top().scriptCode;
-					}
-				}
-			}
+                    if (stackIsNotEmpty()) {
+                        sc = top().scriptCode;
+                    }
+                }
+            }
 
-			if (sameScript(scriptCode, sc)) {
-				if (scriptCode <= UScript.INHERITED && sc > UScript.INHERITED) {
-					scriptCode = sc;
+            if (sameScript(scriptCode, sc)) {
+                if (scriptCode <= UScript.INHERITED && sc > UScript.INHERITED) {
+                    scriptCode = sc;
 
-					fixup(scriptCode);
-				}
+                    fixup(scriptCode);
+                }
 
-				// if this character is a close paired character,
-				// pop the matching open character from the stack
-				if (pairIndex >= 0 && (pairIndex & 1) != 0) {
+                // if this character is a close paired character,
+                // pop the matching open character from the stack
+                if (pairIndex >= 0 && (pairIndex & 1) != 0) {
                     pop();
-				}
-			} else {
-			    // We've just seen the first character of
-			    // the next run. Back over it so we'll see
-			    // it again the next time.
-			    text.previousCodePoint();
-			    break;
-			}
-		}
+                }
+            } else {
+                // We've just seen the first character of
+                // the next run. Back over it so we'll see
+                // it again the next time.
+                text.previousCodePoint();
+                break;
+            }
+        }
 
         scriptLimit = textStart + text.getIndex();
-		return true;
-	}
+        return true;
+    }
 
     /**
      * Compare two script codes to see if they are in the same script. If one script is
@@ -385,23 +385,23 @@ public final class UScriptRun
      * @see com.ibm.icu.lang.UScript
      */
     private static boolean sameScript(int scriptOne, int scriptTwo)
-	{
-		return scriptOne <= UScript.INHERITED || scriptTwo <= UScript.INHERITED || scriptOne == scriptTwo;
-	}
+    {
+        return scriptOne <= UScript.INHERITED || scriptTwo <= UScript.INHERITED || scriptOne == scriptTwo;
+    }
 
     /*
      * An internal class which holds entries on the paren stack.
      */
-	private static final class ParenStackEntry
-	{
-		int pairIndex;
-		int scriptCode;
-		
-		public ParenStackEntry(int thePairIndex, int theScriptCode)
-		{
-		    pairIndex  = thePairIndex;
-		    scriptCode = theScriptCode;
-		}
+    private static final class ParenStackEntry
+    {
+        int pairIndex;
+        int scriptCode;
+        
+        public ParenStackEntry(int thePairIndex, int theScriptCode)
+        {
+            pairIndex  = thePairIndex;
+            scriptCode = theScriptCode;
+        }
     }
     
     private static final int mod(int sp)
@@ -567,48 +567,48 @@ public final class UScriptRun
      * @return the index of the character in the table, or -1 if it's not there.
      */
     private static int getPairIndex(int ch)
-	{
-		int probe = pairedCharPower;
-		int index = 0;
+    {
+        int probe = pairedCharPower;
+        int index = 0;
 
-		if (ch >= pairedChars[pairedCharExtra]) {
-			index = pairedCharExtra;
-		}
+        if (ch >= pairedChars[pairedCharExtra]) {
+            index = pairedCharExtra;
+        }
 
-		while (probe > (1 << 0)) {
-			probe >>= 1;
+        while (probe > (1 << 0)) {
+            probe >>= 1;
 
-			if (ch >= pairedChars[index + probe]) {
-				index += probe;
-			}
-		}
+            if (ch >= pairedChars[index + probe]) {
+                index += probe;
+            }
+        }
 
-		if (pairedChars[index] != ch) {
-			index = -1;
-		}
+        if (pairedChars[index] != ch) {
+            index = -1;
+        }
 
-		return index;
-	}
+        return index;
+    }
 
     private static int pairedChars[] = {
-		0x0028, 0x0029, // ascii paired punctuation
-		0x003c, 0x003e,
-		0x005b, 0x005d,
-		0x007b, 0x007d,
-		0x00ab, 0x00bb, // guillemets
-		0x2018, 0x2019, // general punctuation
-		0x201c, 0x201d,
-		0x2039, 0x203a,
-		0x3008, 0x3009, // chinese paired punctuation
-		0x300a, 0x300b,
-		0x300c, 0x300d,
-		0x300e, 0x300f,
-		0x3010, 0x3011,
-		0x3014, 0x3015,
-		0x3016, 0x3017,
-		0x3018, 0x3019,
-		0x301a, 0x301b
-	};
+        0x0028, 0x0029, // ascii paired punctuation
+        0x003c, 0x003e,
+        0x005b, 0x005d,
+        0x007b, 0x007d,
+        0x00ab, 0x00bb, // guillemets
+        0x2018, 0x2019, // general punctuation
+        0x201c, 0x201d,
+        0x2039, 0x203a,
+        0x3008, 0x3009, // chinese paired punctuation
+        0x300a, 0x300b,
+        0x300c, 0x300d,
+        0x300e, 0x300f,
+        0x3010, 0x3011,
+        0x3014, 0x3015,
+        0x3016, 0x3017,
+        0x3018, 0x3019,
+        0x301a, 0x301b
+    };
 
     private static int pairedCharPower = 1 << highBit(pairedChars.length);
     private static int pairedCharExtra = pairedChars.length - pairedCharPower;

@@ -59,7 +59,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
      * <code>Transliterator</code>, if one is set, and inserts the
      * transliterated text into the buffer.
      */
-	protected void handleKeyTyped(KeyEvent e) {
+    protected void handleKeyTyped(KeyEvent e) {
         char ch = e.getKeyChar();
         
         if (translit == null) {

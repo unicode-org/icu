@@ -195,9 +195,9 @@ public class IntlTestDateFormat extends com.ibm.icu.dev.test.TestFmwk {
 
     // Return a random double from 0.01 to 1, inclusive
     private double randDouble() {
-	if (random == null) {
-	    random = createRandom();
-	}
+    if (random == null) {
+        random = createRandom();
+    }
         // Assume 8-bit (or larger) rand values.  Also assume
         // that the system rand() function is very poor, which it always is.
         //        double d;

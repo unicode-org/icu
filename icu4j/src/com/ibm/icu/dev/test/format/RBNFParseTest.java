@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class RBNFParseTest extends TestFmwk {
     public static void main(String[] args) {
-	new RBNFParseTest().run(args);
+    new RBNFParseTest().run(args);
     }
 
   public void TestParse() {
@@ -75,26 +75,26 @@ public class RBNFParseTest extends TestFmwk {
       String[] tests = allrules[j];
       boolean except = tests == exceptrules;
       for (int i = 0; i < tests.length; ++i) {
-	logln("----------");
-	logln("rules: '" + tests[i] + "'");
-	boolean caughtException = false;
-	try {
-	  RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(tests[i], Locale.US);
-	  logln("1.23: " + fmt.format(20));
-	  logln("-123: " + fmt.format(-123));
-	  logln(".123: " + fmt.format(.123));
-	  logln(" 123: " + fmt.format(123));
-	}
-	catch (Exception e) {
-	  if (!except) {
-	    errln("Unexpected exception: " + e.getMessage());
-	  } else {
-	    caughtException = true;
-	  }
-	}
-	if (except && !caughtException) {
-	  errln("expected exception but didn't get one!");
-	}
+    logln("----------");
+    logln("rules: '" + tests[i] + "'");
+    boolean caughtException = false;
+    try {
+      RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(tests[i], Locale.US);
+      logln("1.23: " + fmt.format(20));
+      logln("-123: " + fmt.format(-123));
+      logln(".123: " + fmt.format(.123));
+      logln(" 123: " + fmt.format(123));
+    }
+    catch (Exception e) {
+      if (!except) {
+        errln("Unexpected exception: " + e.getMessage());
+      } else {
+        caughtException = true;
+      }
+    }
+    if (except && !caughtException) {
+      errln("expected exception but didn't get one!");
+    }
       }
     }
   }

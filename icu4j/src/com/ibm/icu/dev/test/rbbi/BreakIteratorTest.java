@@ -386,91 +386,91 @@ public class BreakIteratorTest extends TestFmwk
     //=========================================================================
 
     public void TestWordBreak() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
-    		Vector wordSelectionData = new Vector();
-    		
-    		wordSelectionData.addElement("12,34");
-    		
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("\u00A2"); //cent sign
-    		wordSelectionData.addElement("\u00A3"); //pound sign
-    		wordSelectionData.addElement("\u00A4"); //currency sign
-    		wordSelectionData.addElement("\u00A5"); //yen sign
-    		wordSelectionData.addElement("alpha-beta-gamma");
-    		wordSelectionData.addElement(".");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("Badges");
-    		wordSelectionData.addElement("?");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("BADGES");
-    		wordSelectionData.addElement("!");
-    		wordSelectionData.addElement("?");
-    		wordSelectionData.addElement("!");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("We");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("don't");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("need");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("no");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("STINKING");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("BADGES");
-    		wordSelectionData.addElement("!");
-    		wordSelectionData.addElement("!");
-    		wordSelectionData.addElement("!");
-    		
-    		wordSelectionData.addElement("012.566,5");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("123.3434,900");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("1000,233,456.000");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("1,23.322%");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("123.1222");
-    		
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("\u0024123,000.20");
-    		
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("179.01\u0025");
-    		
-    		wordSelectionData.addElement("Hello");
-    		wordSelectionData.addElement(",");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("how");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("are");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("you");
-    		wordSelectionData.addElement(" ");
-    		wordSelectionData.addElement("X");
-    		wordSelectionData.addElement(" ");
-    		
-    		wordSelectionData.addElement("Now");
-    		wordSelectionData.addElement("\r");
-    		wordSelectionData.addElement("is");
-    		wordSelectionData.addElement("\n");
-    		wordSelectionData.addElement("the");
-    		wordSelectionData.addElement("\r\n");
-    		wordSelectionData.addElement("time");
-    		wordSelectionData.addElement("\n");
-    		wordSelectionData.addElement("\r");
-    		wordSelectionData.addElement("for");
-    		wordSelectionData.addElement("\r");
-    		wordSelectionData.addElement("\r");
-    		wordSelectionData.addElement("all");
-    		wordSelectionData.addElement(" ");
-    		
-    		generalIteratorTest(wordBreak, wordSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
+            Vector wordSelectionData = new Vector();
+            
+            wordSelectionData.addElement("12,34");
+            
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("\u00A2"); //cent sign
+            wordSelectionData.addElement("\u00A3"); //pound sign
+            wordSelectionData.addElement("\u00A4"); //currency sign
+            wordSelectionData.addElement("\u00A5"); //yen sign
+            wordSelectionData.addElement("alpha-beta-gamma");
+            wordSelectionData.addElement(".");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("Badges");
+            wordSelectionData.addElement("?");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("BADGES");
+            wordSelectionData.addElement("!");
+            wordSelectionData.addElement("?");
+            wordSelectionData.addElement("!");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("We");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("don't");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("need");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("no");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("STINKING");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("BADGES");
+            wordSelectionData.addElement("!");
+            wordSelectionData.addElement("!");
+            wordSelectionData.addElement("!");
+            
+            wordSelectionData.addElement("012.566,5");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("123.3434,900");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("1000,233,456.000");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("1,23.322%");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("123.1222");
+            
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("\u0024123,000.20");
+            
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("179.01\u0025");
+            
+            wordSelectionData.addElement("Hello");
+            wordSelectionData.addElement(",");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("how");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("are");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("you");
+            wordSelectionData.addElement(" ");
+            wordSelectionData.addElement("X");
+            wordSelectionData.addElement(" ");
+            
+            wordSelectionData.addElement("Now");
+            wordSelectionData.addElement("\r");
+            wordSelectionData.addElement("is");
+            wordSelectionData.addElement("\n");
+            wordSelectionData.addElement("the");
+            wordSelectionData.addElement("\r\n");
+            wordSelectionData.addElement("time");
+            wordSelectionData.addElement("\n");
+            wordSelectionData.addElement("\r");
+            wordSelectionData.addElement("for");
+            wordSelectionData.addElement("\r");
+            wordSelectionData.addElement("\r");
+            wordSelectionData.addElement("all");
+            wordSelectionData.addElement(" ");
+            
+            generalIteratorTest(wordBreak, wordSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     /**
@@ -521,81 +521,81 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4117554
      */
     public void TestBug4117554Words() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
-    		Vector wordSelectionData = new Vector();
-    		
-    		// this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
-    		// count as a Kanji character for the purposes of word breaking
-    		wordSelectionData.addElement("abc");
-    		wordSelectionData.addElement("\u4e01\u4e02\u3005\u4e03\u4e03");
-    		wordSelectionData.addElement("abc");
-    		
-    		generalIteratorTest(wordBreak, wordSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
+            Vector wordSelectionData = new Vector();
+            
+            // this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
+            // count as a Kanji character for the purposes of word breaking
+            wordSelectionData.addElement("abc");
+            wordSelectionData.addElement("\u4e01\u4e02\u3005\u4e03\u4e03");
+            wordSelectionData.addElement("abc");
+            
+            generalIteratorTest(wordBreak, wordSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     public void TestSentenceBreak() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
-    		Vector sentenceSelectionData = new Vector();
-    		
-    		sentenceSelectionData.addElement("This is a simple sample sentence. ");
-    		sentenceSelectionData.addElement("(This is it.) ");
-    		sentenceSelectionData.addElement("This is a simple sample sentence. ");
-    		sentenceSelectionData.addElement("\"This isn\'t it.\" ");
-    		sentenceSelectionData.addElement("Hi! ");
-    		sentenceSelectionData.addElement("This is a simple sample sentence. ");
-    		sentenceSelectionData.addElement("It does not have to make any sense as you can see. ");
-    		sentenceSelectionData.addElement("Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. ");
-    		sentenceSelectionData.addElement("Che la dritta via aveo smarrita. ");
-    		sentenceSelectionData.addElement("He said, that I said, that you said!! ");
-    		
-    		sentenceSelectionData.addElement("Don't rock the boat.\u2029");
-    		
-    		sentenceSelectionData.addElement("Because I am the daddy, that is why. ");
-    		sentenceSelectionData.addElement("Not on my time (el timo.)! ");
-    		
-    		sentenceSelectionData.addElement("So what!!\u2029");
-    		
-    		sentenceSelectionData.addElement("\"But now,\" he said, \"I know!\" ");
-    		sentenceSelectionData.addElement("Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ");
-    		sentenceSelectionData.addElement("One species, B. anthracis, is highly virulent.\n");
-    		sentenceSelectionData.addElement("Wolf said about Sounder:\"Beautifully thought-out and directed.\" ");
-    		sentenceSelectionData.addElement("Have you ever said, \"This is where \tI shall live\"? ");
-    		sentenceSelectionData.addElement("He answered, \"You may not!\" ");
-    		sentenceSelectionData.addElement("Another popular saying is: \"How do you do?\". ");
-    		sentenceSelectionData.addElement("Yet another popular saying is: \'I\'m fine thanks.\' ");
-    		sentenceSelectionData.addElement("What is the proper use of the abbreviation pp.? ");
-    		sentenceSelectionData.addElement("Yes, I am definatelly 12\" tall!!");
-    		
-    		generalIteratorTest(sentenceBreak, sentenceSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
+            Vector sentenceSelectionData = new Vector();
+            
+            sentenceSelectionData.addElement("This is a simple sample sentence. ");
+            sentenceSelectionData.addElement("(This is it.) ");
+            sentenceSelectionData.addElement("This is a simple sample sentence. ");
+            sentenceSelectionData.addElement("\"This isn\'t it.\" ");
+            sentenceSelectionData.addElement("Hi! ");
+            sentenceSelectionData.addElement("This is a simple sample sentence. ");
+            sentenceSelectionData.addElement("It does not have to make any sense as you can see. ");
+            sentenceSelectionData.addElement("Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura. ");
+            sentenceSelectionData.addElement("Che la dritta via aveo smarrita. ");
+            sentenceSelectionData.addElement("He said, that I said, that you said!! ");
+            
+            sentenceSelectionData.addElement("Don't rock the boat.\u2029");
+            
+            sentenceSelectionData.addElement("Because I am the daddy, that is why. ");
+            sentenceSelectionData.addElement("Not on my time (el timo.)! ");
+            
+            sentenceSelectionData.addElement("So what!!\u2029");
+            
+            sentenceSelectionData.addElement("\"But now,\" he said, \"I know!\" ");
+            sentenceSelectionData.addElement("Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ");
+            sentenceSelectionData.addElement("One species, B. anthracis, is highly virulent.\n");
+            sentenceSelectionData.addElement("Wolf said about Sounder:\"Beautifully thought-out and directed.\" ");
+            sentenceSelectionData.addElement("Have you ever said, \"This is where \tI shall live\"? ");
+            sentenceSelectionData.addElement("He answered, \"You may not!\" ");
+            sentenceSelectionData.addElement("Another popular saying is: \"How do you do?\". ");
+            sentenceSelectionData.addElement("Yet another popular saying is: \'I\'m fine thanks.\' ");
+            sentenceSelectionData.addElement("What is the proper use of the abbreviation pp.? ");
+            sentenceSelectionData.addElement("Yes, I am definatelly 12\" tall!!");
+            
+            generalIteratorTest(sentenceBreak, sentenceSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
 }
 
     /**
      * @bug 4113835
      */
     public void TestBug4113835() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
-    		
-    		Vector sentenceSelectionData = new Vector();
-    		
-    		// test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-    		sentenceSelectionData.addElement("Now\ris\nthe\r\ntime\n\rfor\r\rall\u2029");
-    		
-    		generalIteratorTest(sentenceBreak, sentenceSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
+            
+            Vector sentenceSelectionData = new Vector();
+            
+            // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
+            sentenceSelectionData.addElement("Now\ris\nthe\r\ntime\n\rfor\r\rall\u2029");
+            
+            generalIteratorTest(sentenceBreak, sentenceSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     /**
@@ -624,57 +624,57 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4117554
      */
     public void TestBug4117554Sentences() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
-    		Vector sentenceSelectionData = new Vector();
-    		
-    		// Treat fullwidth variants of .!? the same as their
-    		// normal counterparts
-    		sentenceSelectionData.addElement("I know I'm right\uff0e ");
-    		sentenceSelectionData.addElement("Right\uff1f ");
-    		sentenceSelectionData.addElement("Right\uff01 ");
-    		
-    		// Don't break sentences at boundary between CJK and digits
-    		sentenceSelectionData.addElement("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8"
-    				+ "\u97e48888\u821c\u8165\u7fc8\u51ce\u306d\ue30b\u2494\u56d8\u4ec0"
-					+ "\u60b1\u8560\u51ba\u611d\u57b6\u2510\u5d46\u97e5\u7751\u2029");
-    		
-    		// Break sentence between a sentence terminator and
-    		// opening punctuation
-    		sentenceSelectionData.addElement("no?");
-    		sentenceSelectionData.addElement("(yes)");
-    		
-    		generalIteratorTest(sentenceBreak, sentenceSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}  
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
+            Vector sentenceSelectionData = new Vector();
+            
+            // Treat fullwidth variants of .!? the same as their
+            // normal counterparts
+            sentenceSelectionData.addElement("I know I'm right\uff0e ");
+            sentenceSelectionData.addElement("Right\uff1f ");
+            sentenceSelectionData.addElement("Right\uff01 ");
+            
+            // Don't break sentences at boundary between CJK and digits
+            sentenceSelectionData.addElement("\u5487\u67ff\ue591\u5017\u61b3\u60a1\u9510\u8165\u9de8"
+                    + "\u97e48888\u821c\u8165\u7fc8\u51ce\u306d\ue30b\u2494\u56d8\u4ec0"
+                    + "\u60b1\u8560\u51ba\u611d\u57b6\u2510\u5d46\u97e5\u7751\u2029");
+            
+            // Break sentence between a sentence terminator and
+            // opening punctuation
+            sentenceSelectionData.addElement("no?");
+            sentenceSelectionData.addElement("(yes)");
+            
+            generalIteratorTest(sentenceBreak, sentenceSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }  
     }
 
     /**
      * @bug 4158381
      */
     public void TestBug4158381() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
-    		Vector sentenceSelectionData = new Vector();
-    		
-    		// Don't break sentence after period if it isn't followed by a space
-    		sentenceSelectionData.addElement("Test <code>Flags.Flag</code> class.  ");
-    		sentenceSelectionData.addElement("Another test.\u2029");
-    		
-    		// No breaks when there are no terminators around
-    		sentenceSelectionData.addElement("<P>Provides a set of "
-    				+ "&quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM"
-					+ "</SUP></FONT> language) components that, "
-					+ "to the maximum degree possible, work the same on all platforms.  ");
-    		sentenceSelectionData.addElement("Another test.\u2029");
-    		
-    		generalIteratorTest(sentenceBreak, sentenceSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)sentenceBreak;
+            Vector sentenceSelectionData = new Vector();
+            
+            // Don't break sentence after period if it isn't followed by a space
+            sentenceSelectionData.addElement("Test <code>Flags.Flag</code> class.  ");
+            sentenceSelectionData.addElement("Another test.\u2029");
+            
+            // No breaks when there are no terminators around
+            sentenceSelectionData.addElement("<P>Provides a set of "
+                    + "&quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM"
+                    + "</SUP></FONT> language) components that, "
+                    + "to the maximum degree possible, work the same on all platforms.  ");
+            sentenceSelectionData.addElement("Another test.\u2029");
+            
+            generalIteratorTest(sentenceBreak, sentenceSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
 }
 
     /**
@@ -810,52 +810,52 @@ public class BreakIteratorTest extends TestFmwk
      * @bug 4035266
      */
     public void TestBug4035266() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
-    		Vector lineSelectionData = new Vector();
-    		
-    		lineSelectionData.addElement("The ");
-    		lineSelectionData.addElement("balance ");
-    		lineSelectionData.addElement("is ");
-    		lineSelectionData.addElement("$-23,456.78, ");
-    		lineSelectionData.addElement("not ");
-    		lineSelectionData.addElement("-$32,456.78!\n");
-    		
-    		generalIteratorTest(lineBreak, lineSelectionData);
-    	}
-    	catch (ClassCastException e) {
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
+            Vector lineSelectionData = new Vector();
+            
+            lineSelectionData.addElement("The ");
+            lineSelectionData.addElement("balance ");
+            lineSelectionData.addElement("is ");
+            lineSelectionData.addElement("$-23,456.78, ");
+            lineSelectionData.addElement("not ");
+            lineSelectionData.addElement("-$32,456.78!\n");
+            
+            generalIteratorTest(lineBreak, lineSelectionData);
+        }
+        catch (ClassCastException e) {
             logln("New Break Iterator, skipping old test");
-    	}   
+        }   
 }
 
     /**
      * @bug 4098467
      */
     public void TestBug4098467Lines() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
-    		Vector lineSelectionData = new Vector();
-    		
-    		// What follows is a string of Korean characters (I found it in the Yellow Pages
-    		// ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
-    		// it correctly), first as precomposed syllables, and then as conjoining jamo.
-    		// Both sequences should be semantically identical and break the same way.
-    		// precomposed syllables...
-    		lineSelectionData.addElement("\uc0c1\ud56d ");
-    		lineSelectionData.addElement("\ud55c\uc778 ");
-    		lineSelectionData.addElement("\uc5f0\ud569 ");
-    		lineSelectionData.addElement("\uc7a5\ub85c\uad50\ud68c ");
-    		// conjoining jamo...
-    		lineSelectionData.addElement("\u1109\u1161\u11bc\u1112\u1161\u11bc ");
-    		lineSelectionData.addElement("\u1112\u1161\u11ab\u110b\u1175\u11ab ");
-    		lineSelectionData.addElement("\u110b\u1167\u11ab\u1112\u1161\u11b8 ");
-    		lineSelectionData.addElement("\u110c\u1161\u11bc\u1105\u1169\u1100\u116d\u1112\u116c");
-    		
-    		generalIteratorTest(lineBreak, lineSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
+            Vector lineSelectionData = new Vector();
+            
+            // What follows is a string of Korean characters (I found it in the Yellow Pages
+            // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
+            // it correctly), first as precomposed syllables, and then as conjoining jamo.
+            // Both sequences should be semantically identical and break the same way.
+            // precomposed syllables...
+            lineSelectionData.addElement("\uc0c1\ud56d ");
+            lineSelectionData.addElement("\ud55c\uc778 ");
+            lineSelectionData.addElement("\uc5f0\ud569 ");
+            lineSelectionData.addElement("\uc7a5\ub85c\uad50\ud68c ");
+            // conjoining jamo...
+            lineSelectionData.addElement("\u1109\u1161\u11bc\u1112\u1161\u11bc ");
+            lineSelectionData.addElement("\u1112\u1161\u11ab\u110b\u1175\u11ab ");
+            lineSelectionData.addElement("\u110b\u1167\u11ab\u1112\u1161\u11b8 ");
+            lineSelectionData.addElement("\u110c\u1161\u11bc\u1105\u1169\u1100\u116d\u1112\u116c");
+            
+            generalIteratorTest(lineBreak, lineSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     public void TestThaiLineBreak() {
@@ -997,27 +997,27 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
      * @bug 4217703
      */
     public void TestBug4217703() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
-    		Vector lineSelectionData = new Vector();
-    		
-    		// There shouldn't be a line break between sentence-ending punctuation
-    		// and a closing quote
-    		lineSelectionData.addElement("He ");
-    		lineSelectionData.addElement("said ");
-    		lineSelectionData.addElement("\"Go!\"  ");
-    		lineSelectionData.addElement("I ");
-    		lineSelectionData.addElement("went.  ");
-    		
-    		lineSelectionData.addElement("Hashtable$Enumeration ");
-    		lineSelectionData.addElement("getText().");
-    		lineSelectionData.addElement("getIndex()");
-    		
-    		generalIteratorTest(lineBreak, lineSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
+            Vector lineSelectionData = new Vector();
+            
+            // There shouldn't be a line break between sentence-ending punctuation
+            // and a closing quote
+            lineSelectionData.addElement("He ");
+            lineSelectionData.addElement("said ");
+            lineSelectionData.addElement("\"Go!\"  ");
+            lineSelectionData.addElement("I ");
+            lineSelectionData.addElement("went.  ");
+            
+            lineSelectionData.addElement("Hashtable$Enumeration ");
+            lineSelectionData.addElement("getText().");
+            lineSelectionData.addElement("getIndex()");
+            
+            generalIteratorTest(lineBreak, lineSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
 }
 
     private static final String graveS = "S\u0300";
@@ -1145,24 +1145,24 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
     }
 
     public void TestBug4146175Sentences() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
-    		Vector sentenceSelectionData = new Vector();
-    		
-    		// break between periods and opening punctuation even when there's no
-    		// intervening space
-    		sentenceSelectionData.addElement("end.");
-    		sentenceSelectionData.addElement("(This is\u2029");
-    		
-    		// treat the fullwidth period as an unambiguous sentence terminator
-    		sentenceSelectionData.addElement("\u7d42\u308f\u308a\uff0e");
-    		sentenceSelectionData.addElement("\u300c\u3053\u308c\u306f");
-    		
-    		generalIteratorTest(sentenceBreak, sentenceSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)lineBreak;
+            Vector sentenceSelectionData = new Vector();
+            
+            // break between periods and opening punctuation even when there's no
+            // intervening space
+            sentenceSelectionData.addElement("end.");
+            sentenceSelectionData.addElement("(This is\u2029");
+            
+            // treat the fullwidth period as an unambiguous sentence terminator
+            sentenceSelectionData.addElement("\u7d42\u308f\u308a\uff0e");
+            sentenceSelectionData.addElement("\u300c\u3053\u308c\u306f");
+            
+            generalIteratorTest(sentenceBreak, sentenceSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     public void TestBug4146175Lines() {
@@ -1176,20 +1176,20 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
     }
 
     public void TestBug4214367() {
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
-    		Vector wordSelectionData = new Vector();
-    		
-    		// the hiragana and katakana iteration marks and the long vowel mark
-    		// are not being treated correctly by the word-break iterator
-    		wordSelectionData.addElement("\u3042\u3044\u309d\u3042\u309e\u3042\u30fc\u3042");
-    		wordSelectionData.addElement("\u30a2\u30a4\u30fd\u30a2\u30fe\u30a2\u30fc\u30a2");
-    		
-    		generalIteratorTest(wordBreak, wordSelectionData);
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)wordBreak;
+            Vector wordSelectionData = new Vector();
+            
+            // the hiragana and katakana iteration marks and the long vowel mark
+            // are not being treated correctly by the word-break iterator
+            wordSelectionData.addElement("\u3042\u3044\u309d\u3042\u309e\u3042\u30fc\u3042");
+            wordSelectionData.addElement("\u30a2\u30a4\u30fd\u30a2\u30fe\u30a2\u30fc\u30a2");
+            
+            generalIteratorTest(wordBreak, wordSelectionData);
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     private static final String cannedTestChars
@@ -1208,117 +1208,117 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
 
     public void TestWordInvariants()
     {
-    	BreakIterator e = BreakIterator.getWordInstance();
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
-    		doBreakInvariantTest(e, cannedTestChars + "\',.\u3041\u3042\u3043\u309b\u309c\u30a1\u30a2"
-    				+ "\u30a3\u4e00\u4e01\u4e02");
-    		doOtherInvariantTest(e, cannedTestChars + "\',.\u3041\u3042\u3043\u309b\u309c\u30a1\u30a2"
-    				+ "\u30a3\u4e00\u4e01\u4e02");
-    	}
-    	catch (ClassCastException ex) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        BreakIterator e = BreakIterator.getWordInstance();
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
+            doBreakInvariantTest(e, cannedTestChars + "\',.\u3041\u3042\u3043\u309b\u309c\u30a1\u30a2"
+                    + "\u30a3\u4e00\u4e01\u4e02");
+            doOtherInvariantTest(e, cannedTestChars + "\',.\u3041\u3042\u3043\u309b\u309c\u30a1\u30a2"
+                    + "\u30a3\u4e00\u4e01\u4e02");
+        }
+        catch (ClassCastException ex) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     public void TestLineInvariants()
     {
-    	BreakIterator e = BreakIterator.getLineInstance();
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
-    		String testChars = cannedTestChars + ".,;:\u3001\u3002\u3041\u3042\u3043\u3044\u3045"
-			+ "\u30a3\u4e00\u4e01\u4e02";
-    		doBreakInvariantTest(e, testChars);
-    		doOtherInvariantTest(e, testChars);
-    		
-    		int errorCount = 0;
-    		
-    		// in addition to the other invariants, a line-break iterator should make sure that:
-    		// it doesn't break around the non-breaking characters
-    		String noBreak = "\u00a0\u2007\u2011\ufeff";
-    		StringBuffer work = new StringBuffer("aaa");
-    		for (int i = 0; i < testChars.length(); i++) {
-    			char c = testChars.charAt(i);
-    			if (c == '\r' || c == '\n' || c == '\u2029' || c == '\u2028' || c == '\u0003')
-    				continue;
-    			work.setCharAt(0, c);
-    			for (int j = 0; j < noBreak.length(); j++) {
-    				work.setCharAt(1, noBreak.charAt(j));
-    				for (int k = 0; k < testChars.length(); k++) {
-    					work.setCharAt(2, testChars.charAt(k));
-    					e.setText(work.toString());
-    					for (int l = e.first(); l != BreakIterator.DONE; l = e.next())
-    						if (l == 1 || l == 2) {
-    							errln("Got break between U+" + Integer.toHexString((int)
-    									(work.charAt(l - 1))) + " and U+" + Integer.toHexString(
-    											(int)(work.charAt(l))));
-    							errorCount++;
-    							if (errorCount >= 75)
-    								return;
-    						}
-    				}
-    			}
-    		}
-    		
-    		// it does break after dashes (unless they're followed by a digit, a non-spacing mark,
-    		// a currency symbol, a space, a format-control character, a regular control character,
-    		// a line or paragraph separator, or another dash)
-    		String dashes = "-\u00ad\u2010\u2012\u2013\u2014";
-    		for (int i = 0; i < testChars.length(); i++) {
-    			work.setCharAt(0, testChars.charAt(i));
-    			for (int j = 0; j < dashes.length(); j++) {
-    				work.setCharAt(1, dashes.charAt(j));
-    				for (int k = 0; k < testChars.length(); k++) {
-    					char c = testChars.charAt(k);
-    					if (Character.getType(c) == Character.DECIMAL_DIGIT_NUMBER ||
-    							Character.getType(c) == Character.OTHER_NUMBER ||
-								Character.getType(c) == Character.NON_SPACING_MARK ||
-								Character.getType(c) == Character.ENCLOSING_MARK ||
-								Character.getType(c) == Character.CURRENCY_SYMBOL ||
-								Character.getType(c) == Character.DASH_PUNCTUATION ||
-								Character.getType(c) == Character.SPACE_SEPARATOR ||
-								Character.getType(c) == Character.FORMAT ||
-								Character.getType(c) == Character.CONTROL ||
-								c == '\n' || c == '\r' || c == '\u2028' || c == '\u2029' ||
-								c == '\u0003' || c == '\u2007' || c == '\u2011' ||
-								c == '\ufeff')
-    						continue;
-    					work.setCharAt(2, c);
-    					e.setText(work.toString());
-    					boolean saw2 = false;
-    					for (int l = e.first(); l != BreakIterator.DONE; l = e.next())
-    						if (l == 2)
-    							saw2 = true;
-    					if (!saw2) {
-    						errln("Didn't get break between U+" + Integer.toHexString((int)
-    								(work.charAt(1))) + " and U+" + Integer.toHexString(
-    										(int)(work.charAt(2))));
-    						errorCount++;
-    						if (errorCount >= 75)
-    							return;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	catch (ClassCastException ex) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        BreakIterator e = BreakIterator.getLineInstance();
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
+            String testChars = cannedTestChars + ".,;:\u3001\u3002\u3041\u3042\u3043\u3044\u3045"
+            + "\u30a3\u4e00\u4e01\u4e02";
+            doBreakInvariantTest(e, testChars);
+            doOtherInvariantTest(e, testChars);
+            
+            int errorCount = 0;
+            
+            // in addition to the other invariants, a line-break iterator should make sure that:
+            // it doesn't break around the non-breaking characters
+            String noBreak = "\u00a0\u2007\u2011\ufeff";
+            StringBuffer work = new StringBuffer("aaa");
+            for (int i = 0; i < testChars.length(); i++) {
+                char c = testChars.charAt(i);
+                if (c == '\r' || c == '\n' || c == '\u2029' || c == '\u2028' || c == '\u0003')
+                    continue;
+                work.setCharAt(0, c);
+                for (int j = 0; j < noBreak.length(); j++) {
+                    work.setCharAt(1, noBreak.charAt(j));
+                    for (int k = 0; k < testChars.length(); k++) {
+                        work.setCharAt(2, testChars.charAt(k));
+                        e.setText(work.toString());
+                        for (int l = e.first(); l != BreakIterator.DONE; l = e.next())
+                            if (l == 1 || l == 2) {
+                                errln("Got break between U+" + Integer.toHexString((int)
+                                        (work.charAt(l - 1))) + " and U+" + Integer.toHexString(
+                                                (int)(work.charAt(l))));
+                                errorCount++;
+                                if (errorCount >= 75)
+                                    return;
+                            }
+                    }
+                }
+            }
+            
+            // it does break after dashes (unless they're followed by a digit, a non-spacing mark,
+            // a currency symbol, a space, a format-control character, a regular control character,
+            // a line or paragraph separator, or another dash)
+            String dashes = "-\u00ad\u2010\u2012\u2013\u2014";
+            for (int i = 0; i < testChars.length(); i++) {
+                work.setCharAt(0, testChars.charAt(i));
+                for (int j = 0; j < dashes.length(); j++) {
+                    work.setCharAt(1, dashes.charAt(j));
+                    for (int k = 0; k < testChars.length(); k++) {
+                        char c = testChars.charAt(k);
+                        if (Character.getType(c) == Character.DECIMAL_DIGIT_NUMBER ||
+                                Character.getType(c) == Character.OTHER_NUMBER ||
+                                Character.getType(c) == Character.NON_SPACING_MARK ||
+                                Character.getType(c) == Character.ENCLOSING_MARK ||
+                                Character.getType(c) == Character.CURRENCY_SYMBOL ||
+                                Character.getType(c) == Character.DASH_PUNCTUATION ||
+                                Character.getType(c) == Character.SPACE_SEPARATOR ||
+                                Character.getType(c) == Character.FORMAT ||
+                                Character.getType(c) == Character.CONTROL ||
+                                c == '\n' || c == '\r' || c == '\u2028' || c == '\u2029' ||
+                                c == '\u0003' || c == '\u2007' || c == '\u2011' ||
+                                c == '\ufeff')
+                            continue;
+                        work.setCharAt(2, c);
+                        e.setText(work.toString());
+                        boolean saw2 = false;
+                        for (int l = e.first(); l != BreakIterator.DONE; l = e.next())
+                            if (l == 2)
+                                saw2 = true;
+                        if (!saw2) {
+                            errln("Didn't get break between U+" + Integer.toHexString((int)
+                                    (work.charAt(1))) + " and U+" + Integer.toHexString(
+                                            (int)(work.charAt(2))));
+                            errorCount++;
+                            if (errorCount >= 75)
+                                return;
+                        }
+                    }
+                }
+            }
+        }
+        catch (ClassCastException ex) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     public void TestCharacterInvariants()
         {
-        	BreakIterator e = BreakIterator.getCharacterInstance();
-        	try {
-        		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
-        		doBreakInvariantTest(e, cannedTestChars + "\u1100\u1101\u1102\u1160\u1161\u1162\u11a8"
-        				+ "\u11a9\u11aa");
-        		doOtherInvariantTest(e, cannedTestChars + "\u1100\u1101\u1102\u1160\u1161\u1162\u11a8"
-        				+ "\u11a9\u11aa");
-        	}
-        	catch (ClassCastException ex) {
-        		logln("New Break Iterator, skipping old test");
-        	}   
+            BreakIterator e = BreakIterator.getCharacterInstance();
+            try {
+                RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)e;
+                doBreakInvariantTest(e, cannedTestChars + "\u1100\u1101\u1102\u1160\u1161\u1162\u11a8"
+                        + "\u11a9\u11aa");
+                doOtherInvariantTest(e, cannedTestChars + "\u1100\u1101\u1102\u1160\u1161\u1162\u11a8"
+                        + "\u11a9\u11aa");
+            }
+            catch (ClassCastException ex) {
+                logln("New Break Iterator, skipping old test");
+            }   
         }
 
     public void TestEmptyString()
@@ -1344,143 +1344,143 @@ lineSelectionData.addElement("(\u0e1b\u0e23\u0e30\u0e40\u0e17\u0e28\u0e44\u0e17\
      */
     public void TestJapaneseLineBreak()
     {
-    	StringBuffer testString = new StringBuffer("\u4e00x\u4e8c");
-    	String precedingChars = "([{\u00ab$\u00a5\u00a3\u00a4\u2018\u201a\u201c\u201e\u201b\u201f";
-    	String followingChars = ")]}\u00bb!%,.\u3001\u3002\u3063\u3083\u3085\u3087\u30c3\u30e3\u30e5\u30e7\u30fc:;\u309b\u309c\u3005\u309d\u309e\u30fd\u30fe\u2019\u201d\u00b0\u2032\u2033\u2034\u2030\u2031\u2103\u2109\u00a2\u0300\u0301\u0302";
-    	BreakIterator iter = BreakIterator.getLineInstance(Locale.JAPAN);
-    	try {
-    		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)iter;
-    		
-    		for (int i = 0; i < precedingChars.length(); i++) {
-    			testString.setCharAt(1, precedingChars.charAt(i));
-    			iter.setText(testString.toString());
-    			int j = iter.first();
-    			if (j != 0)
-    				errln("ja line break failure: failed to start at 0");
-    			j = iter.next();
-    			if (j != 1)
-    				errln("ja line break failure: failed to stop before '" + precedingChars.charAt(i)
-    						+ "' (" + ((int)(precedingChars.charAt(i))) + ")");
-    			j = iter.next();
-    			if (j != 3)
-    				errln("ja line break failure: failed to skip position after '" + precedingChars.charAt(i)
-    						+ "' (" + ((int)(precedingChars.charAt(i))) + ")");
-    		}
-    		
-    		for (int i = 0; i < followingChars.length(); i++) {
-    			testString.setCharAt(1, followingChars.charAt(i));
-    			iter.setText(testString.toString());
-    			int j = iter.first();
-    			if (j != 0)
-    				errln("ja line break failure: failed to start at 0");
-    			j = iter.next();
-    			if (j != 2)
-    				errln("ja line break failure: failed to skip position before '" + followingChars.charAt(i)
-    						+ "' (" + ((int)(followingChars.charAt(i))) + ")");
-    			j = iter.next();
-    			if (j != 3)
-    				errln("ja line break failure: failed to stop after '" + followingChars.charAt(i)
-    						+ "' (" + ((int)(followingChars.charAt(i))) + ")");
-    		}
-    	}
-    	catch (ClassCastException e) {
-    		logln("New Break Iterator, skipping old test");
-    	}   
+        StringBuffer testString = new StringBuffer("\u4e00x\u4e8c");
+        String precedingChars = "([{\u00ab$\u00a5\u00a3\u00a4\u2018\u201a\u201c\u201e\u201b\u201f";
+        String followingChars = ")]}\u00bb!%,.\u3001\u3002\u3063\u3083\u3085\u3087\u30c3\u30e3\u30e5\u30e7\u30fc:;\u309b\u309c\u3005\u309d\u309e\u30fd\u30fe\u2019\u201d\u00b0\u2032\u2033\u2034\u2030\u2031\u2103\u2109\u00a2\u0300\u0301\u0302";
+        BreakIterator iter = BreakIterator.getLineInstance(Locale.JAPAN);
+        try {
+            RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)iter;
+            
+            for (int i = 0; i < precedingChars.length(); i++) {
+                testString.setCharAt(1, precedingChars.charAt(i));
+                iter.setText(testString.toString());
+                int j = iter.first();
+                if (j != 0)
+                    errln("ja line break failure: failed to start at 0");
+                j = iter.next();
+                if (j != 1)
+                    errln("ja line break failure: failed to stop before '" + precedingChars.charAt(i)
+                            + "' (" + ((int)(precedingChars.charAt(i))) + ")");
+                j = iter.next();
+                if (j != 3)
+                    errln("ja line break failure: failed to skip position after '" + precedingChars.charAt(i)
+                            + "' (" + ((int)(precedingChars.charAt(i))) + ")");
+            }
+            
+            for (int i = 0; i < followingChars.length(); i++) {
+                testString.setCharAt(1, followingChars.charAt(i));
+                iter.setText(testString.toString());
+                int j = iter.first();
+                if (j != 0)
+                    errln("ja line break failure: failed to start at 0");
+                j = iter.next();
+                if (j != 2)
+                    errln("ja line break failure: failed to skip position before '" + followingChars.charAt(i)
+                            + "' (" + ((int)(followingChars.charAt(i))) + ")");
+                j = iter.next();
+                if (j != 3)
+                    errln("ja line break failure: failed to stop after '" + followingChars.charAt(i)
+                            + "' (" + ((int)(followingChars.charAt(i))) + ")");
+            }
+        }
+        catch (ClassCastException e) {
+            logln("New Break Iterator, skipping old test");
+        }   
     }
 
     /**
      * Bug 4638433
      */
         public void TestLineBreakBasedOnUnicode3_0_0() {
-        	BreakIterator iter;
-        	int i;
-        	
-        	/* Latin Extend-B characters
-        	 * 0x0218-0x0233 which have been added since Unicode 3.0.0.
-        	 */
-        	iter = BreakIterator.getWordInstance(Locale.US);
-        	try {
-        		RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)iter;
-        		iter.setText("\u0216\u0217\u0218\u0219\u021A");
-        		i = iter.first();
-        		i = iter.next();
-        		if (i != 5) {   
-        			errln("Word break failure: failed to stop at 5 and bounded at " + i);
-        		}
-        		
-        		
-        		iter = BreakIterator.getLineInstance(Locale.US);
-        		
-        		/* <Three(Nd)><Two(Nd)><Low Double Prime Quotation Mark(Pe)><One(Nd)>
-        		 * \u301f has changed its category from Ps to Pe since Unicode 2.1.
-        		 */
-        		iter.setText("32\u301f1");
-        		i = iter.first();
-        		i = iter.next();
-        		if (i != 3) {   
-        			errln("Line break failure: failed to skip before \\u301F(Pe) at 3 and bounded at " + i);
-        		}
-        		
-        		/* Mongolian <Letter A(Lo)><Todo Soft Hyphen(Pd)><Letter E(Lo)>
-        		 * which have been added since Unicode 3.0.0.
-        		 */
-        		iter.setText("\u1820\u1806\u1821");
-        		i = iter.first();
-        		i = iter.next();
-        		if (i != 2) {   
-        			errln("Mongolian line break failure: failed to skip position before \\u1806(Pd) at 2 and bounded at " + i);
-        		}
-        		
-        		/* Khmer <ZERO(Nd)><Currency Symbol(Sc)><ONE(Nd)> which have
-        		 * been added since Unicode 3.0.0.
-        		 */
-        		/*
-        		 * Richard: fail to pass, refer to #3550
-        		 iter.setText("\u17E0\u17DB\u17E1");
-        		 i = iter.first();
-        		 i = iter.next();
-        		 if (i != 1) {   
-        		 errln("Khmer line break failure: failed to stop before \\u17DB(Sc) at 1 and bounded at " + i);
-        		 }
-        		 i = iter.next();
-        		 if (i != 3) {   
-        		 errln("Khmer line break failure: failed to skip position after \\u17DB(Sc) at 3 and bounded at " + i);
-        		 }*/
-        		
-        		/* Ogham <Letter UR(Lo)><Space Mark(Zs)><Letter OR(Lo)> which have
-        		 * been added since Unicode 3.0.0.
-        		 */
-        		iter.setText("\u1692\u1680\u1696");
-        		i = iter.first();
-        		i = iter.next();
-        		if (i != 2) {   
-        			errln("Ogham line break failure: failed to skip postion before \\u1680(Zs) at 2 and bounded at " + i);
-        		}
-        		
-        		
-        		// Confirm changes in BreakIteratorRules_th.java have been reflected.
-        		iter = BreakIterator.getLineInstance(new Locale("th", ""));
-        		
-        		/* Thai <Seven(Nd)>
-        		 *      <Left Double Quotation Mark(Pi)>
-        		 *      <Five(Nd)>
-        		 *      <Right Double Quotation Mark(Pf)>
-        		 *      <Three(Nd)>
-        		 */
-        		iter.setText("\u0E57\u201C\u0E55\u201D\u0E53");
-        		i = iter.first();
-        		i = iter.next();
-        		if (i != 1) {   
-        			errln("Thai line break failure: failed to stop before \\u201C(Pi) at 1 and bounded at " + i);
-        		}
-        		i = iter.next();
-        		if (i != 4) {   
-        			errln("Thai line break failure: failed to stop after \\u201D(Pf) at 4 and bounded at " + i);
-        		}
-        	}
-        	catch (ClassCastException e) {
-        		logln("New Break Iterator, skipping old test");
-        	}   
+            BreakIterator iter;
+            int i;
+            
+            /* Latin Extend-B characters
+             * 0x0218-0x0233 which have been added since Unicode 3.0.0.
+             */
+            iter = BreakIterator.getWordInstance(Locale.US);
+            try {
+                RuleBasedBreakIterator_Old olb = (RuleBasedBreakIterator_Old)iter;
+                iter.setText("\u0216\u0217\u0218\u0219\u021A");
+                i = iter.first();
+                i = iter.next();
+                if (i != 5) {   
+                    errln("Word break failure: failed to stop at 5 and bounded at " + i);
+                }
+                
+                
+                iter = BreakIterator.getLineInstance(Locale.US);
+                
+                /* <Three(Nd)><Two(Nd)><Low Double Prime Quotation Mark(Pe)><One(Nd)>
+                 * \u301f has changed its category from Ps to Pe since Unicode 2.1.
+                 */
+                iter.setText("32\u301f1");
+                i = iter.first();
+                i = iter.next();
+                if (i != 3) {   
+                    errln("Line break failure: failed to skip before \\u301F(Pe) at 3 and bounded at " + i);
+                }
+                
+                /* Mongolian <Letter A(Lo)><Todo Soft Hyphen(Pd)><Letter E(Lo)>
+                 * which have been added since Unicode 3.0.0.
+                 */
+                iter.setText("\u1820\u1806\u1821");
+                i = iter.first();
+                i = iter.next();
+                if (i != 2) {   
+                    errln("Mongolian line break failure: failed to skip position before \\u1806(Pd) at 2 and bounded at " + i);
+                }
+                
+                /* Khmer <ZERO(Nd)><Currency Symbol(Sc)><ONE(Nd)> which have
+                 * been added since Unicode 3.0.0.
+                 */
+                /*
+                 * Richard: fail to pass, refer to #3550
+                 iter.setText("\u17E0\u17DB\u17E1");
+                 i = iter.first();
+                 i = iter.next();
+                 if (i != 1) {   
+                 errln("Khmer line break failure: failed to stop before \\u17DB(Sc) at 1 and bounded at " + i);
+                 }
+                 i = iter.next();
+                 if (i != 3) {   
+                 errln("Khmer line break failure: failed to skip position after \\u17DB(Sc) at 3 and bounded at " + i);
+                 }*/
+                
+                /* Ogham <Letter UR(Lo)><Space Mark(Zs)><Letter OR(Lo)> which have
+                 * been added since Unicode 3.0.0.
+                 */
+                iter.setText("\u1692\u1680\u1696");
+                i = iter.first();
+                i = iter.next();
+                if (i != 2) {   
+                    errln("Ogham line break failure: failed to skip postion before \\u1680(Zs) at 2 and bounded at " + i);
+                }
+                
+                
+                // Confirm changes in BreakIteratorRules_th.java have been reflected.
+                iter = BreakIterator.getLineInstance(new Locale("th", ""));
+                
+                /* Thai <Seven(Nd)>
+                 *      <Left Double Quotation Mark(Pi)>
+                 *      <Five(Nd)>
+                 *      <Right Double Quotation Mark(Pf)>
+                 *      <Three(Nd)>
+                 */
+                iter.setText("\u0E57\u201C\u0E55\u201D\u0E53");
+                i = iter.first();
+                i = iter.next();
+                if (i != 1) {   
+                    errln("Thai line break failure: failed to stop before \\u201C(Pi) at 1 and bounded at " + i);
+                }
+                i = iter.next();
+                if (i != 4) {   
+                    errln("Thai line break failure: failed to stop after \\u201D(Pf) at 4 and bounded at " + i);
+                }
+            }
+            catch (ClassCastException e) {
+                logln("New Break Iterator, skipping old test");
+            }   
         }
     
     /**

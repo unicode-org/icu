@@ -132,9 +132,9 @@ public final class TabRulerImpl implements MouseListener, MouseMotionListener
             Image image = fImage;
             if (image == null || image.getWidth(fComponent) < width
                               || image.getHeight(fComponent) < height) {
-		if (!fComponent.isVisible()) { // fix race condition if component not fully initialized
-		    return null;
-		}
+        if (!fComponent.isVisible()) { // fix race condition if component not fully initialized
+            return null;
+        }
                 image = fComponent.createImage(width, height);
             }
             Graphics g = image.getGraphics();

@@ -1,5 +1,5 @@
 /*
- * @(#)TimeZone.java	1.51 00/01/19
+ * @(#)TimeZone.java    1.51 00/01/19
  *
  *
  *   Copyright (C) 1996-2003, International Business Machines
@@ -134,9 +134,9 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getOffset(long date) {
-	int[] result = new int[2];
-	getOffset(date, false, result);
-	return result[0]+result[1];
+    int[] result = new int[2];
+    getOffset(date, false, result);
+    return result[0]+result[1];
     }
 
     /**
@@ -480,10 +480,10 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getDSTSavings() {
-	if (useDaylightTime()) {
-	    return 3600000;
-	}
-	return 0;
+    if (useDaylightTime()) {
+        return 3600000;
+    }
+    return 0;
     }
 
     /**

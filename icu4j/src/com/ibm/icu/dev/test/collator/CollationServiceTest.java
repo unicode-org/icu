@@ -30,7 +30,7 @@ public class CollationServiceTest extends TestFmwk {
         // register a singleton
         Collator frcol = Collator.getInstance(Locale.FRANCE);
         Collator uscol = Collator.getInstance(Locale.US);
-        	
+            
         { // try override en_US collator
             Object key = Collator.registerInstance(frcol, Locale.US);
             Collator ncol = Collator.getInstance(Locale.US);
@@ -38,8 +38,8 @@ public class CollationServiceTest extends TestFmwk {
                 errln("register of french collator for en_US failed");
             }
 
-    	    // coverage
-    	    Collator test = Collator.getInstance(Locale.GERMANY); // CollatorFactory.handleCreate
+            // coverage
+            Collator test = Collator.getInstance(Locale.GERMANY); // CollatorFactory.handleCreate
 
             if (!Collator.unregister(key)) {
                 errln("failed to unregister french collator");
@@ -91,12 +91,12 @@ public class CollationServiceTest extends TestFmwk {
             }
         }
 
-    	{
-    	    // coverage after return to default 
-    	    Locale[] locales = Collator.getAvailableLocales();
+        {
+            // coverage after return to default 
+            Locale[] locales = Collator.getAvailableLocales();
     
-    	    Collator ncol = Collator.getInstance(Locale.US);
-    	}
+            Collator ncol = Collator.getInstance(Locale.US);
+        }
     }
 
     public void TestRegisterFactory() {
@@ -166,24 +166,24 @@ public class CollationServiceTest extends TestFmwk {
                 return ids;
             }
         }
-	
-    	class TestFactoryWrapper extends CollatorFactory {
-    	    CollatorFactory delegate;
     
-    	    TestFactoryWrapper(CollatorFactory delegate) {
-    		this.delegate = delegate;
-    	    }
+        class TestFactoryWrapper extends CollatorFactory {
+            CollatorFactory delegate;
+    
+            TestFactoryWrapper(CollatorFactory delegate) {
+            this.delegate = delegate;
+            }
     
                 public Collator createCollator(Locale loc) {
-    		return delegate.createCollator(loc);
-    	    }
+            return delegate.createCollator(loc);
+            }
     
-    	    // use CollatorFactory getDisplayName(Locale, Locale) for coverage
+            // use CollatorFactory getDisplayName(Locale, Locale) for coverage
     
                 public Set getSupportedLocaleIDs() {
-    		return delegate.getSupportedLocaleIDs();
-    	    }
-    	}
+            return delegate.getSupportedLocaleIDs();
+            }
+        }
 
         Locale fu_FU = new Locale("fu", "FU", "");
         Locale fu_FU_FOO = new Locale("fu", "FU", "FOO");
@@ -207,16 +207,16 @@ public class CollationServiceTest extends TestFmwk {
 
         TestFactory factory = new TestFactory(info);
 
-    	// coverage
-    	{
-    	    TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
-    	    Object key = Collator.registerFactory(wrapper);
-    	    String name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
-    	    logln("*** default name: " + name);
-    	    Collator.unregister(key);
+        // coverage
+        {
+            TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
+            Object key = Collator.registerFactory(wrapper);
+            String name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
+            logln("*** default name: " + name);
+            Collator.unregister(key);
     
-    	    Collator col = Collator.getInstance(new Locale("bar", "BAR"));
-    	}
+            Collator col = Collator.getInstance(new Locale("bar", "BAR"));
+        }
 
         int n1 = checkAvailable("before registerFactory");
         

@@ -19,16 +19,16 @@ import com.ibm.icu.text.UnicodeSet;
 */
 public final class StringTokenizerTest extends TestFmwk
 { 
-  	// constructor ===================================================
+      // constructor ===================================================
   
-  	/**
-  	* Constructor
-  	*/
-  	public StringTokenizerTest()
-  	{
-  	}
+      /**
+      * Constructor
+      */
+      public StringTokenizerTest()
+      {
+      }
   
-  	// public methods --------------------------------------------------------
+      // public methods --------------------------------------------------------
     
     /**
      * Testing constructors
@@ -205,11 +205,11 @@ public final class StringTokenizerTest extends TestFmwk
         }
     }
   
-  	/**
-  	* Testing next api
-  	*/
-  	public void TestNextNonDelimiterToken()
-  	{
+      /**
+      * Testing next api
+      */
+      public void TestNextNonDelimiterToken()
+      {
         String str = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
         String expected[] = {",", "1", "2", "3", "AHHHHH!", "5.5", "6", "7", 
                              ",", "8\n"};
@@ -411,7 +411,7 @@ public final class StringTokenizerTest extends TestFmwk
     
     public static void main(String[] arg)
     {
-    	try
+        try
         {
             StringTokenizerTest test = new StringTokenizerTest();
             test.run(arg);

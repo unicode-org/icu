@@ -98,11 +98,11 @@ public class BreakIteratorRules extends ListResourceBundle {
               "$surr_lo=[\udc00-\udfff];"
             + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
             + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
-			+ "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
+            + "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
             + "$surr_hi_pua=[\udb80-\udbff];"              // Hi Surrogates for Private Use.
 
             // Private Use Area.  Treat like ideographs.
-			+ "$pua=[\ue000-\uf8ff$surr_hi_pua];"
+            + "$pua=[\ue000-\uf8ff$surr_hi_pua];"
 
             // ignore non-spacing marks, enclosing marks, and format characters,
             // all of which should not influence the algorithm
@@ -187,11 +187,11 @@ public class BreakIteratorRules extends ListResourceBundle {
               "$surr_lo=[\udc00-\udfff];"
             + "$surr_hi_let=[\ud800\ud801\ud834\ud835];"   // Hi Surrogates for Old Italic, Gothic, Deseret, Music, Math
             + "$surr_hi_ideo=[\ud840-\ud880];"             // Hi Surrogates for CJK
-			+ "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
+            + "$surr_hi_tag=[\udb40];"                     // Hi Surrogates for Tags
             + "$surr_hi_pua=[\udb80-\udbff];"              // Hi Surrogates for Private Use.
 
             // Private Use Area.  Treat like ideographs.
- 			+ "$pua=[\ue000-\uf8ff$surr_hi_pua];"
+             + "$pua=[\ue000-\uf8ff$surr_hi_pua];"
 
             // ignore non-spacing marks, enclosing marks, and format characters
             + "$_ignore_=[[:Mn:][:Me:][:Cf:]$surr_lo$surr_hi_tag];"
@@ -357,9 +357,9 @@ public class BreakIteratorRules extends ListResourceBundle {
             + "![$sent_start$lc$digit]$start*$space*$end*$term;"
         },
 
-		// default rules for finding Title Case boundaries.
-		//   See  Unicode Technical Report #21 more information about these rules.
-		{ "TitleBreakRules",
+        // default rules for finding Title Case boundaries.
+        //   See  Unicode Technical Report #21 more information about these rules.
+        { "TitleBreakRules",
                "$case_ignorable=[[:Mn:][:Me:][:Cf:][:Lm:][:Sk:]\\u0027\u00AD\u2019];"
              + "$cased=[[[:Lu:][:Lt:][:Ll:]"
              +     "\u2160-\u216f"                       // Other Uppercase
@@ -372,14 +372,14 @@ public class BreakIteratorRules extends ListResourceBundle {
              +     "\u24d0-\u24e9]"
              +     "-$case_ignorable];"                  // Remove anything that is case_ignorable
                                                          //   from $cased.
-		     + "$not_cased=[^$cased$case_ignorable];"
+             + "$not_cased=[^$cased$case_ignorable];"
              // First time only, eat through any leading non-word-like stuff.
-		     + "[$not_cased$case_ignorable]*;"
+             + "[$not_cased$case_ignorable]*;"
              //  Match a word (a cased item), plus any following spaces or other non-cased junk,
              //    up to the start of the next cased item.
              + "$cased[$cased$case_ignorable]*[$not_cased]*;"
              + "!$not_cased*[$cased$case_ignorable]*$not_cased*;"   // Backwards rule.
-	    }
+        }
 
     };
 }

@@ -10,58 +10,58 @@ import com.ibm.icu.text.*;
 
 public final class TestUtility {
 
-	public static String hex(char ch) {
-		String foo = Integer.toString(ch,16).toUpperCase();
-		return "0000".substring(0,4-foo.length()) + foo;
-	}
+    public static String hex(char ch) {
+        String foo = Integer.toString(ch,16).toUpperCase();
+        return "0000".substring(0,4-foo.length()) + foo;
+    }
     
-	public static String hex(int ch) {
-		String foo = Integer.toString(ch,16).toUpperCase();
-		return "00000000".substring(0,4-foo.length()) + foo;
-	}
+    public static String hex(int ch) {
+        String foo = Integer.toString(ch,16).toUpperCase();
+        return "00000000".substring(0,4-foo.length()) + foo;
+    }
     
-	public static String hex(String s) {
-	  return hex(s,",");
-	}
-	
-	public static String hex(String s, String sep) {
-	  if (s.length() == 0) return "";
-	  String result = hex(s.charAt(0));
-	  for (int i = 1; i < s.length(); ++i) {
-	    result += sep;
-	    result += hex(s.charAt(i));
-	  }
-	  return result;
-	}
-	
-	public static String replace(String source, String toBeReplaced, String replacement) {
-	    StringBuffer results = new StringBuffer();
-	    int len = toBeReplaced.length();
-	    for (int i = 0; i < source.length(); ++i) {
-	        if (source.regionMatches(false, i, toBeReplaced, 0, len)) {
-	            results.append(replacement);
-	            i += len - 1; // minus one, since we will increment
-	        } else {
-	            results.append(source.charAt(i));
-	        }
-	    }
-	    return results.toString();
-	}
-	
-	public static String replaceAll(String source, UnicodeSet set, String replacement) {
-	    StringBuffer results = new StringBuffer();
-	    int cp;
-	    for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
-	        cp = UTF16.charAt(source,i);
-	        if (set.contains(cp)) {
-	            results.append(replacement);
-	        } else {
-	            UTF16.append(results, cp);
-	        }
-	    }
-	    return results.toString();
-	}
-	
+    public static String hex(String s) {
+      return hex(s,",");
+    }
+    
+    public static String hex(String s, String sep) {
+      if (s.length() == 0) return "";
+      String result = hex(s.charAt(0));
+      for (int i = 1; i < s.length(); ++i) {
+        result += sep;
+        result += hex(s.charAt(i));
+      }
+      return result;
+    }
+    
+    public static String replace(String source, String toBeReplaced, String replacement) {
+        StringBuffer results = new StringBuffer();
+        int len = toBeReplaced.length();
+        for (int i = 0; i < source.length(); ++i) {
+            if (source.regionMatches(false, i, toBeReplaced, 0, len)) {
+                results.append(replacement);
+                i += len - 1; // minus one, since we will increment
+            } else {
+                results.append(source.charAt(i));
+            }
+        }
+        return results.toString();
+    }
+    
+    public static String replaceAll(String source, UnicodeSet set, String replacement) {
+        StringBuffer results = new StringBuffer();
+        int cp;
+        for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(source,i);
+            if (set.contains(cp)) {
+                results.append(replacement);
+            } else {
+                UTF16.append(results, cp);
+            }
+        }
+        return results.toString();
+    }
+    
     // COMMENTED OUT ALL THE OLD SCRIPT STUFF
     /*
     public static byte getScript(char c) {
@@ -138,7 +138,7 @@ public final class TestUtility {
     }
   }
       
-	
+    
     
     public static final byte // SCRIPT CODE
         COMMON_SCRIPT = 0,

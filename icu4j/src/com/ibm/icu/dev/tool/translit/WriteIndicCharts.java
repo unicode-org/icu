@@ -26,28 +26,28 @@ public class WriteIndicCharts {
     }
    
     
-	static String header =  "<html>\n" +
-			                "    <head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"+
+    static String header =  "<html>\n" +
+                            "    <head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"+
                             "           Inter-Indic Transliteration Comparison chart"+
                             "    </head>\n"+
-			                "    <body bgcolor=#FFFFFF>\n"+
-			                "         <table border=1 width=100% >\n"+
-			                "            <tr>\n"+
+                            "    <body bgcolor=#FFFFFF>\n"+
+                            "         <table border=1 width=100% >\n"+
+                            "            <tr>\n"+
                             "            <th width=9%>Inter-Indic</th>\n"+
                             "            <th width=9%>Latin</th>\n"+
-			                "            <th width=9%>Devanagari</th>\n"+
-			                "            <th width=9%>Bengali</th>\n"+
-			                "            <th width=9%>Gurmukhi</th>\n"+
-			                "            <th width=9%>Gujarati</th>\n"+
-			                "            <th width=9%>Oriya</th>\n"+
-			                "            <th width=9%>Tamil</th>\n"+
-			                "            <th width=9%>Telugu</th>\n"+
-			                "            <th width=9%>Kannada</th>\n"+
-			                "            <th width=9%>Malayalam</th>\n"+
-			                "            </tr>\n";
+                            "            <th width=9%>Devanagari</th>\n"+
+                            "            <th width=9%>Bengali</th>\n"+
+                            "            <th width=9%>Gurmukhi</th>\n"+
+                            "            <th width=9%>Gujarati</th>\n"+
+                            "            <th width=9%>Oriya</th>\n"+
+                            "            <th width=9%>Tamil</th>\n"+
+                            "            <th width=9%>Telugu</th>\n"+
+                            "            <th width=9%>Kannada</th>\n"+
+                            "            <th width=9%>Malayalam</th>\n"+
+                            "            </tr>\n";
     static String footer =  "          </table>\n"+
-		                    "    </body>\n" +
-		                    "</html>\n";
+                            "    </body>\n" +
+                            "</html>\n";
                    
     static UnicodeSet deva = new UnicodeSet("[:deva:]"); 
     static UnicodeSet beng = new UnicodeSet("[:beng:]");
@@ -186,36 +186,36 @@ public class WriteIndicCharts {
     }
     public static void writeCharts(){
         try{
-	        Transliterator t1 = Transliterator.getInstance("InterIndic-Bengali");    
-	        Transliterator t2 = Transliterator.getInstance("InterIndic-Gurmukhi");
-	        Transliterator t3 = Transliterator.getInstance("InterIndic-Gujarati");
-	        Transliterator t4 = Transliterator.getInstance("InterIndic-Oriya");
-	        Transliterator t5 = Transliterator.getInstance("InterIndic-Tamil");
-	        Transliterator t6 = Transliterator.getInstance("InterIndic-Telugu");
-	        Transliterator t7 = Transliterator.getInstance("InterIndic-Kannada");
-	        Transliterator t8 = Transliterator.getInstance("InterIndic-Malayalam");
-	        Transliterator t9 = Transliterator.getInstance("InterIndic-Devanagari");
+            Transliterator t1 = Transliterator.getInstance("InterIndic-Bengali");    
+            Transliterator t2 = Transliterator.getInstance("InterIndic-Gurmukhi");
+            Transliterator t3 = Transliterator.getInstance("InterIndic-Gujarati");
+            Transliterator t4 = Transliterator.getInstance("InterIndic-Oriya");
+            Transliterator t5 = Transliterator.getInstance("InterIndic-Tamil");
+            Transliterator t6 = Transliterator.getInstance("InterIndic-Telugu");
+            Transliterator t7 = Transliterator.getInstance("InterIndic-Kannada");
+            Transliterator t8 = Transliterator.getInstance("InterIndic-Malayalam");
+            Transliterator t9 = Transliterator.getInstance("InterIndic-Devanagari");
             
-	        //UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
-	        
-	        for(int i=0x0900;i<=0x097F;i++){
-	           String[] arr =  new String[10];
-	           arr[0]=UTF16.valueOf((i&0xFF) + 0xE000);
-	           table.put(UTF16.valueOf(i),arr);
-	        }
+            //UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
             
-	        OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream("comparison-chart.html"),"UTF-8");
+            for(int i=0x0900;i<=0x097F;i++){
+               String[] arr =  new String[10];
+               arr[0]=UTF16.valueOf((i&0xFF) + 0xE000);
+               table.put(UTF16.valueOf(i),arr);
+            }
+            
+            OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream("comparison-chart.html"),"UTF-8");
             
             os.write(header);
-	        /*
-	        writeCharts(t1,beng,1);        
-	        writeCharts(t2,guru,2); 
-	        writeCharts(t3,gujr,3); 
-	        writeCharts(t4,orya,4); 
-	        writeCharts(t5,taml,5); 
-	        writeCharts(t6,telu,6); 
-	        writeCharts(t7,knda,7); 
-	        writeCharts(t8,mlym,8); 
+            /*
+            writeCharts(t1,beng,1);        
+            writeCharts(t2,guru,2); 
+            writeCharts(t3,gujr,3); 
+            writeCharts(t4,orya,4); 
+            writeCharts(t5,taml,5); 
+            writeCharts(t6,telu,6); 
+            writeCharts(t7,knda,7); 
+            writeCharts(t8,mlym,8); 
             */
             /*
             writeCharts(t9,0x0900,1);
@@ -237,8 +237,8 @@ public class WriteIndicCharts {
             writeIICharts(t6,0x0c00,7); 
             writeIICharts(t7,0x0C80,8); 
             writeIICharts(t8,0x0D00,9); 
-	        for(int i=0x0900;i<=0x097F;i++){
-	            String[] temp = (String[])table.get(UTF16.valueOf(i));
+            for(int i=0x0900;i<=0x097F;i++){
+                String[] temp = (String[])table.get(UTF16.valueOf(i));
                 boolean write = false;
                 for(int k=1;k<temp.length;k++){
                     if(UCharacter.getExtendedName(UTF16.charAt(temp[k],0)).indexOf("unassigned")<0){
@@ -246,38 +246,38 @@ public class WriteIndicCharts {
                     }
                 }
                 if(write){
-		            os.write("        <tr>\n");
-		            for(int j=0; j<temp.length;j++){
-		                if(temp[j]!=null){
-	                        boolean fallback=false;
-	                        String str = temp[j];
-	                        
-			                if(temp[j].indexOf(":FALLBACK")>=0){
-	                            str = temp[j].substring(0,temp[j].indexOf(":"));
-	                            fallback=true;
-			                   // os.write("            <td bgcolor=#FFFF00 align=center title=\""++"\">"+str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
-			                }
-	                        String name = UCharacter.getExtendedName(UTF16.charAt(str,0));
-	                        if(fallback){
-	                            os.write("            <td bgcolor=#BBBBFF align=center title=\""+name+"\">"+ str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
-	                        }else if(name.indexOf("unassigned")!=-1){
-	                            os.write("            <td bgcolor=#CCCCCC align=center title=\""+name+"\">"+"&nbsp<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
-	                        }else if(name.indexOf("private")!=-1){
+                    os.write("        <tr>\n");
+                    for(int j=0; j<temp.length;j++){
+                        if(temp[j]!=null){
+                            boolean fallback=false;
+                            String str = temp[j];
+                            
+                            if(temp[j].indexOf(":FALLBACK")>=0){
+                                str = temp[j].substring(0,temp[j].indexOf(":"));
+                                fallback=true;
+                               // os.write("            <td bgcolor=#FFFF00 align=center title=\""++"\">"+str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
+                            }
+                            String name = UCharacter.getExtendedName(UTF16.charAt(str,0));
+                            if(fallback){
+                                os.write("            <td bgcolor=#BBBBFF align=center title=\""+name+"\">"+ str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
+                            }else if(name.indexOf("unassigned")!=-1){
+                                os.write("            <td bgcolor=#CCCCCC align=center title=\""+name+"\">"+"&nbsp<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
+                            }else if(name.indexOf("private")!=-1){
 
                                 
-	                            os.write("            <td bgcolor=#FFBBBB align=center title=\""+name+"\">"+"&nbsp<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
+                                os.write("            <td bgcolor=#FFBBBB align=center title=\""+name+"\">"+"&nbsp<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
 
                             }else{
-	                           os.write("            <td align=center title=\""+name+"\">"+ str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
-	                        } 
-		                }else{
-		                     os.write("           <td>&nbsp</td>\n");
-		                }
-		            }
-		            os.write("        </tr>\n");
-		        }
+                               os.write("            <td align=center title=\""+name+"\">"+ str+"<br><tt>"+Utility.hex(str)+"</tt>"+"</td>\n");
+                            } 
+                        }else{
+                             os.write("           <td>&nbsp</td>\n");
+                        }
+                    }
+                    os.write("        </tr>\n");
+                }
             }
-	        os.write(footer);
+            os.write(footer);
             os.close();
         }catch( Exception e){
             e.printStackTrace();

@@ -130,8 +130,8 @@ public final class VersionInfo
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final VersionInfo UCOL_TAILORINGS_VERSION; 
-	
-	
+    
+    
     // public methods ------------------------------------------------------
         
     /**
@@ -387,7 +387,7 @@ public final class VersionInfo
         ICU_VERSION = getInstance(3, 0, 0, 0);
         UCOL_RUNTIME_VERSION = getInstance(5);
         UCOL_BUILDER_VERSION = getInstance(6);
-		UCOL_TAILORINGS_VERSION = getInstance(1);
+        UCOL_TAILORINGS_VERSION = getInstance(1);
     }
     
     // private constructor -----------------------------------------------

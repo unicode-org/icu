@@ -37,32 +37,32 @@ abstract class OpenTypeTableWriter
         {
             short value = table[index];
             
-			line.append("0x");
-			line.append(Utility.hex((value >> 8) & 0xFF, 2));
-			line.append(", ");
+            line.append("0x");
+            line.append(Utility.hex((value >> 8) & 0xFF, 2));
+            line.append(", ");
 
-			line.append("0x");
-			line.append(Utility.hex(value & 0xFF, 2));
+            line.append("0x");
+            line.append(Utility.hex(value & 0xFF, 2));
         }
 
         void dumpTable(PrintStream output, int valuesPerLine) {
-        	StringBuffer line = new StringBuffer("    "); // four spaces
-        	int maxIndex = length();
+            StringBuffer line = new StringBuffer("    "); // four spaces
+            int maxIndex = length();
         
-        	for (int i = 0; i < maxIndex; i += 1) {
-        	    
-        		if (i > 0 && i % valuesPerLine == 0) {
-        			output.println(line.toString());
-        			line.setLength(4);
-        		}
+            for (int i = 0; i < maxIndex; i += 1) {
+                
+                if (i > 0 && i % valuesPerLine == 0) {
+                    output.println(line.toString());
+                    line.setLength(4);
+                }
         
-        		appendValue(line, i);
-        		line.append(", ");
-        	}
+                appendValue(line, i);
+                line.append(", ");
+            }
         
-        	line.setLength(line.length() - 2);
+            line.setLength(line.length() - 2);
         
-        	output.println(line.toString());
+            output.println(line.toString());
         }
     }
             
@@ -117,12 +117,12 @@ abstract class OpenTypeTableWriter
         data[offset] = (short) ((outputIndex - base) * 2);
     }
     
-	public void dumpTable(PrintStream output, int valuesPerLine)
-	{
-	    OpenTypeTableDumper dumper = new OpenTypeTableDumper(data, outputIndex);
-	    
-	    dumper.dumpTable(output, valuesPerLine);
-	}
+    public void dumpTable(PrintStream output, int valuesPerLine)
+    {
+        OpenTypeTableDumper dumper = new OpenTypeTableDumper(data, outputIndex);
+        
+        dumper.dumpTable(output, valuesPerLine);
+    }
     
     abstract public void writeTable(PrintStream output);
 }

@@ -34,13 +34,13 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
         
     }
     // more interesting conformance test cases, not in the unicode.org NormalizationTest.txt
-	static  String[] moreCases ={
-	    // Markus 2001aug30
-	    "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
-	
-	    // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
-	    "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
-	};
+    static  String[] moreCases ={
+        // Markus 2001aug30
+        "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
+    
+        // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
+        "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
+    };
 
     /**
      * Test the conformance of NewNormalizer to
@@ -62,12 +62,12 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
                 line = input.readLine();
                 if (line == null) {
                     //read the extra test cases
-	                if(count > moreCases.length) {
-		                count = 0;
-		            } else if(count == moreCases.length) {
-		                // all done
-		                break;
-		            }
+                    if(count > moreCases.length) {
+                        count = 0;
+                    } else if(count == moreCases.length) {
+                        // all done
+                        break;
+                    }
                     line = moreCases[count++];
                 }
                 if (line.length() == 0) continue;
@@ -82,17 +82,17 @@ public class UnicodeNormalizerConformanceTest extends TestFmwk {
                 hexsplit(line, ';', fields, buf);
                 
                 // Remove a single code point from the "other" UnicodeSet
-		        if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
-		            c=UTF16.charAt(fields[0],0); 
-		            if(0xac20<=c && c<=0xd73f) {
-		                // not an exhaustive test run: skip most Hangul syllables
-		                if(c==0xac20) {
-		                    other.remove(0xac20, 0xd73f);
-		                }
-		                continue;
-		            }
-		            other.remove(c);
-		        }
+                if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
+                    c=UTF16.charAt(fields[0],0); 
+                    if(0xac20<=c && c<=0xd73f) {
+                        // not an exhaustive test run: skip most Hangul syllables
+                        if(c==0xac20) {
+                            other.remove(0xac20, 0xd73f);
+                        }
+                        continue;
+                    }
+                    other.remove(c);
+                }
                 if (checkConformance(fields, line)) {
                     ++passCount;
                 } else {

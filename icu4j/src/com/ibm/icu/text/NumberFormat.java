@@ -572,35 +572,35 @@ public abstract class NumberFormat extends UFormat {
         /**
          * Value passed to format requesting a default number format.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
 
         /**
          * Value passed to format requesting a currency format.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
 
         /**
          * Value passed to format requesting a percent format.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
 
         /**
          * Value passed to format requesting a scientific format.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_SCIENTIFIC = SCIENTIFICSTYLE;
 
         /**
          * Value passed to format requesting an integer format.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
@@ -610,7 +610,7 @@ public abstract class NumberFormat extends UFormat {
          * be listed by getAvailableLocales.  This value must not change.
          * @return true if the factory is visible.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         ///CLOVER:OFF
         public boolean visible() {
@@ -623,7 +623,7 @@ public abstract class NumberFormat extends UFormat {
          * supported by this factory.
          * @return the supported locale names.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
          public abstract Set getSupportedLocaleNames();
 
@@ -636,13 +636,13 @@ public abstract class NumberFormat extends UFormat {
          * @param formatType the type of format
          * @return the NumberFormat, or null.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public abstract NumberFormat createFormat(Locale loc, int formatType);
 
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         protected NumberFormatFactory() {
         }
@@ -659,7 +659,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public SimpleNumberFormatFactory(Locale locale) {
             this(locale, true);
@@ -667,7 +667,7 @@ public abstract class NumberFormat extends UFormat {
         
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public SimpleNumberFormatFactory(Locale locale, boolean visible) {
             localeNames = Collections.singleton(LocaleUtility.canonicalLocaleString(locale));
@@ -676,7 +676,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public final boolean visible() {
             return visible;
@@ -684,7 +684,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public final Set getSupportedLocaleNames() {
             return localeNames;

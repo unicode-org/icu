@@ -34,7 +34,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
     public int current() {
         int c = iterator.current();
         if(c==CharacterIterator.DONE){
-		  return DONE;
+          return DONE;
         }
         return c;
     }
@@ -43,7 +43,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#getLength()
      */
     public int getLength() {
-	    return (iterator.getEndIndex() - iterator.getBeginIndex());
+        return (iterator.getEndIndex() - iterator.getBeginIndex());
     }
 
     /**
@@ -60,7 +60,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
         int i = iterator.current();
         iterator.next();
         if(i==CharacterIterator.DONE){  
-		  return DONE;
+          return DONE;
         }
         return i;
     }
@@ -91,23 +91,23 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#setToLimit()
      */
     public void setToLimit() {
-		iterator.setIndex(iterator.getEndIndex());
+        iterator.setIndex(iterator.getEndIndex());
     }
 
     /**
      * @see UCharacterIterator#getText(char[])
      */
     public int getText(char[] fillIn, int offset){
-    	int length =iterator.getEndIndex() - iterator.getBeginIndex(); 
+        int length =iterator.getEndIndex() - iterator.getBeginIndex(); 
         int currentIndex = iterator.getIndex();
         if(offset < 0 || offset + length > fillIn.length){
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }
-	
+    
         for (char ch = iterator.first(); ch != CharacterIterator.DONE; ch = iterator.next()) {
-	        fillIn[offset++] = ch;
-	    }
-	    iterator.setIndex(currentIndex);
+            fillIn[offset++] = ch;
+        }
+        iterator.setIndex(currentIndex);
 
         return length;
     }
@@ -117,25 +117,25 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
      * @see UCharacterIterator#clone()
      */
     public Object clone(){
-		try {
-		    CharacterIteratorWrapper result = (CharacterIteratorWrapper) super.clone();
-		    result.iterator = (CharacterIterator)this.iterator.clone();
-		    return result;
-		} catch (CloneNotSupportedException e) {      
+        try {
+            CharacterIteratorWrapper result = (CharacterIteratorWrapper) super.clone();
+            result.iterator = (CharacterIterator)this.iterator.clone();
+            return result;
+        } catch (CloneNotSupportedException e) {      
             return null; // only invoked if bad underlying character iterator
-		}
+        }
     }
     
 
     public int moveIndex(int delta){
-    	int length = iterator.getEndIndex() - iterator.getBeginIndex(); 
+        int length = iterator.getEndIndex() - iterator.getBeginIndex(); 
         int idx = iterator.getIndex()+delta;
         
         if(idx < 0) {
-	        idx = 0;
-		} else if(idx > length) {
-		    idx = length;
-		}
+            idx = 0;
+        } else if(idx > length) {
+            idx = length;
+        }
         return iterator.setIndex(idx);
     }
     

@@ -247,10 +247,10 @@ abstract class NFSubstitution {
             NFSubstitution that2 = (NFSubstitution)that;
 
              return pos == that2.pos
-		 && (ruleSet == null ? that2.ruleSet == null : true) // can't compare tree structure, no .equals or recurse
-		 && (numberFormat == null ? (that2.numberFormat == null) : numberFormat.equals(that2.numberFormat));
+         && (ruleSet == null ? that2.ruleSet == null : true) // can't compare tree structure, no .equals or recurse
+         && (numberFormat == null ? (that2.numberFormat == null) : numberFormat.equals(that2.numberFormat));
         }
-	return false;
+    return false;
     }
 
     /**
@@ -681,10 +681,10 @@ class MultiplierSubstitution extends NFSubstitution {
         // rule, we keep a copy of the divisor
         this.divisor = divisor;
 
-	if (divisor == 0) { // this will cause recursion
-	    throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") " + description.substring(0, pos) + 
-				     " | " + description.substring(pos));
-	}
+    if (divisor == 0) { // this will cause recursion
+        throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") " + description.substring(0, pos) + 
+                     " | " + description.substring(pos));
+    }
     }
 
     /**
@@ -695,9 +695,9 @@ class MultiplierSubstitution extends NFSubstitution {
     public void setDivisor(int radix, int exponent) {
         divisor = Math.pow(radix, exponent);
 
-	if (divisor == 0) {
-	    throw new IllegalStateException("Substitution with divisor 0");
-	}
+    if (divisor == 0) {
+        throw new IllegalStateException("Substitution with divisor 0");
+    }
     }
 
     //-----------------------------------------------------------------------
@@ -853,10 +853,10 @@ class ModulusSubstitution extends NFSubstitution {
         // we keep a copy of the divisor
         this.divisor = divisor;
 
-	if (divisor == 0) { // this will cause recursion
-	    throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") "+ description.substring(0, pos) + 
-				     " | " + description.substring(pos));
-	}
+    if (divisor == 0) { // this will cause recursion
+        throw new IllegalStateException("Substitution with bad divisor (" + divisor + ") "+ description.substring(0, pos) + 
+                     " | " + description.substring(pos));
+    }
 
         // the >>> token doesn't alter how this substituion calculates the
         // values it uses for formatting and parsing, but it changes
@@ -879,9 +879,9 @@ class ModulusSubstitution extends NFSubstitution {
     public void setDivisor(int radix, int exponent) {
         divisor = Math.pow(radix, exponent);
 
-	if (divisor == 0) { // this will cause recursion
-	    throw new IllegalStateException("Substitution with bad divisor");
-	}
+    if (divisor == 0) { // this will cause recursion
+        throw new IllegalStateException("Substitution with bad divisor");
+    }
     }
 
     //-----------------------------------------------------------------------
@@ -1216,7 +1216,7 @@ class FractionalPartSubstitution extends NFSubstitution {
                                RuleBasedNumberFormat formatter,
                                String description) {
         super(pos, ruleSet, formatter, description);
-//	boolean chevron = description.startsWith(">>") || ruleSet == this.ruleSet;
+//    boolean chevron = description.startsWith(">>") || ruleSet == this.ruleSet;
 //      if (chevron || ruleSet == this.ruleSet) {
 
         if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
@@ -1258,22 +1258,22 @@ class FractionalPartSubstitution extends NFSubstitution {
         } else {
 //              int numberToFormat = (int)Math.round(transformNumber(number) * Math.pow(
 //                              10, MAXDECIMALDIGITS));
-//	    long numberToFormat = (long)Math.round(transformNumber(number) * Math.pow(10, MAXDECIMALDIGITS));
+//        long numberToFormat = (long)Math.round(transformNumber(number) * Math.pow(10, MAXDECIMALDIGITS));
 
-	    // just print to string and then use that
-	    DigitList dl = new DigitList();
-	    dl.set(number, 20, true);
+        // just print to string and then use that
+        DigitList dl = new DigitList();
+        dl.set(number, 20, true);
 
             // this flag keeps us from formatting trailing zeros.  It starts
             // out false because we're pulling from the right, and switches
             // to true the first time we encounter a non-zero digit
 //              boolean doZeros = false;
-//  	    System.out.println("class: " + getClass().getName());
-//  	    System.out.println("number: " + number + " transformed: " + transformNumber(number));
-//  	    System.out.println("formatting " + numberToFormat);
+//          System.out.println("class: " + getClass().getName());
+//          System.out.println("number: " + number + " transformed: " + transformNumber(number));
+//          System.out.println("formatting " + numberToFormat);
 //              for (int i = 0; i < MAXDECIMALDIGITS; i++) {
 //                  int digit = (int)(numberToFormat % 10);
-//  		System.out.println("   #: '" + numberToFormat + "'" + " digit '" + digit + "'");
+//          System.out.println("   #: '" + numberToFormat + "'" + " digit '" + digit + "'");
 //                  if (digit != 0 || doZeros) {
 //                      if (doZeros && useSpaces) {
 //                          toInsertInto.insert(pos + this.pos, ' ');
@@ -1284,25 +1284,25 @@ class FractionalPartSubstitution extends NFSubstitution {
 //                  numberToFormat /= 10;
 //              }
 
-	    boolean pad = false;
-	    while (dl.count > Math.max(0, dl.decimalAt)) {
-		if (pad && useSpaces) {
-		    toInsertInto.insert(pos + this.pos, ' ');
-		} else {
-		    pad = true;
-		}
-		ruleSet.format(dl.digits[--dl.count] - '0', toInsertInto, pos + this.pos);
-	    }
-	    while (dl.decimalAt < 0) {
-		if (pad && useSpaces) {
-		    toInsertInto.insert(pos + this.pos, ' ');
-		} else {
-		    pad = true;
-		}
-		ruleSet.format(0, toInsertInto, pos + this.pos);
-		++dl.decimalAt;
-	    }
-	}
+        boolean pad = false;
+        while (dl.count > Math.max(0, dl.decimalAt)) {
+        if (pad && useSpaces) {
+            toInsertInto.insert(pos + this.pos, ' ');
+        } else {
+            pad = true;
+        }
+        ruleSet.format(dl.digits[--dl.count] - '0', toInsertInto, pos + this.pos);
+        }
+        while (dl.decimalAt < 0) {
+        if (pad && useSpaces) {
+            toInsertInto.insert(pos + this.pos, ' ');
+        } else {
+            pad = true;
+        }
+        ruleSet.format(0, toInsertInto, pos + this.pos);
+        ++dl.decimalAt;
+        }
+    }
     }
 
     /**
@@ -1359,7 +1359,7 @@ class FractionalPartSubstitution extends NFSubstitution {
             String workText = new String(text);
             ParsePosition workPos = new ParsePosition(1);
             double result = 0;
-	    int digit;
+        int digit;
 //              double p10 = 0.1;
 
 //              while (workText.length() > 0 && workPos.getIndex() != 0) {
@@ -1382,7 +1382,7 @@ class FractionalPartSubstitution extends NFSubstitution {
 //              }
 
 
-	    DigitList dl = new DigitList();
+        DigitList dl = new DigitList();
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
                 digit = ruleSet.parse(workText, workPos, 10).intValue();
@@ -1391,7 +1391,7 @@ class FractionalPartSubstitution extends NFSubstitution {
                 }
 
                 if (workPos.getIndex() != 0) {
-		    dl.append('0'+digit);
+            dl.append('0'+digit);
 
                     parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
                     workText = workText.substring(workPos.getIndex());
@@ -1401,7 +1401,7 @@ class FractionalPartSubstitution extends NFSubstitution {
                     }
                 }
             }
-	    result = dl.count == 0 ? 0 : dl.getDouble();
+        result = dl.count == 0 ? 0 : dl.getDouble();
 
             result = composeRuleValue(result, baseValue);
             return new Double(result);

@@ -316,10 +316,10 @@ final class UCharacterPropertyReader implements ICUBinary.Authenticate
         count --;
         m_additionalOffset_        = m_dataInputStream_.readInt();
         count --;
-    	m_additionalVectorsOffset_ = m_dataInputStream_.readInt();
-    	count --;
-    	m_additionalColumnsCount_  = m_dataInputStream_.readInt();
-    	count --;
+        m_additionalVectorsOffset_ = m_dataInputStream_.readInt();
+        count --;
+        m_additionalColumnsCount_  = m_dataInputStream_.readInt();
+        count --;
         m_reservedOffset_          = m_dataInputStream_.readInt();
         count --;
         m_dataInputStream_.skipBytes(3 << 2);

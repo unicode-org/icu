@@ -195,6 +195,6 @@ public class ReplaceableString implements Replaceable {
      * @stable ICU 2.0
      */
     public boolean hasMetaData() {
-    	return false;
+        return false;
     }
 }

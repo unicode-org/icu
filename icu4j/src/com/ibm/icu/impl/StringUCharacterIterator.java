@@ -52,11 +52,11 @@ public final class StringUCharacterIterator extends UCharacterIterator
     ///CLOVER:OFF
     public Object clone()
     {
-		try {
-		    return super.clone();
-		} catch (CloneNotSupportedException e) {
-		    return null; // never invoked
-		}
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null; // never invoked
+        }
     }
     ///CLOVER:ON
     /**
@@ -180,7 +180,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
     ///CLOVER:OFF
     public int getText(char[] fillIn, int offset)
     {
-    	int length = m_text_.length();
+        int length = m_text_.length();
         if (offset < 0 || offset + length > fillIn.length) {
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }

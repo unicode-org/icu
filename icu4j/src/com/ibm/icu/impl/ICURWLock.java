@@ -43,141 +43,141 @@ public class ICURWLock {
      * Internal class used to gather statistics on the RWLock.
      */
     public final static class Stats {
-	/**
-	 * Number of times read access granted (read count).
-	 */
-	public int _rc;
+    /**
+     * Number of times read access granted (read count).
+     */
+    public int _rc;
 
-	/**
-	 * Number of times concurrent read access granted (multiple read count).
-	 */
-	public int _mrc;
+    /**
+     * Number of times concurrent read access granted (multiple read count).
+     */
+    public int _mrc;
 
-	/**
-	 * Number of times blocked for read (waiting reader count).
-	 */
-	public int _wrc; // wait for read
+    /**
+     * Number of times blocked for read (waiting reader count).
+     */
+    public int _wrc; // wait for read
 
-	/**
-	 * Number of times write access granted (writer count).
-	 */
-	public int _wc;
+    /**
+     * Number of times write access granted (writer count).
+     */
+    public int _wc;
 
-	/**
-	 * Number of times blocked for write (waiting writer count).
-	 */
-	public int _wwc;
+    /**
+     * Number of times blocked for write (waiting writer count).
+     */
+    public int _wwc;
 
-	private Stats() {
-	}
+    private Stats() {
+    }
 
-	private Stats(int rc, int mrc, int wrc, int wc, int wwc) {
-	    this._rc = rc;
-	    this._mrc = mrc;
-	    this._wrc = wrc;
-	    this._wc = wc;
-	    this._wwc = wwc;
-	}
+    private Stats(int rc, int mrc, int wrc, int wc, int wwc) {
+        this._rc = rc;
+        this._mrc = mrc;
+        this._wrc = wrc;
+        this._wc = wc;
+        this._wwc = wwc;
+    }
 
-	private Stats(Stats rhs) {
-	    this(rhs._rc, rhs._mrc, rhs._wrc, rhs._wc, rhs._wwc);
-	}
+    private Stats(Stats rhs) {
+        this(rhs._rc, rhs._mrc, rhs._wrc, rhs._wc, rhs._wwc);
+    }
 
-	/**
-	 * Return a string listing all the stats.
-	 */
-	public String toString() {
-	    return " rc: " + _rc +
-		" mrc: " + _mrc + 
-		" wrc: " + _wrc +
-		" wc: " + _wc +
-		" wwc: " + _wwc;
-	}
+    /**
+     * Return a string listing all the stats.
+     */
+    public String toString() {
+        return " rc: " + _rc +
+        " mrc: " + _mrc + 
+        " wrc: " + _wrc +
+        " wc: " + _wc +
+        " wwc: " + _wwc;
+    }
     }
 
     /**
      * Reset the stats.  Returns existing stats, if any.
      */
     public synchronized Stats resetStats() {
-	Stats result = stats;
-	stats = new Stats();
-	return result;
+    Stats result = stats;
+    stats = new Stats();
+    return result;
     }
 
     /**
      * Clear the stats (stop collecting stats).  Returns existing stats, if any.
      */
     public synchronized Stats clearStats() {
-	Stats result = stats;
-	stats = null;
-	return result;
+    Stats result = stats;
+    stats = null;
+    return result;
     }
     
     /**
      * Return a snapshot of the current stats.  This does not reset the stats.
      */
     public synchronized Stats getStats() {
-	return stats == null ? null : new Stats(stats);
+    return stats == null ? null : new Stats(stats);
     }
 
     // utilities
 
     private synchronized boolean gotRead() {
-	++rc;
-	if (stats != null) {
-	    ++stats._rc;
-	    if (rc > 1) ++stats._mrc;
-	}
-	return true;
+    ++rc;
+    if (stats != null) {
+        ++stats._rc;
+        if (rc > 1) ++stats._mrc;
+    }
+    return true;
     }
 
     private synchronized boolean getRead() {
-	if (rc >= 0 && wwc == 0) {
-	    return gotRead();
-	}
-	++wrc;
-	return false;
+    if (rc >= 0 && wwc == 0) {
+        return gotRead();
+    }
+    ++wrc;
+    return false;
     }
 
     private synchronized boolean retryRead() {
-	if (stats != null) ++stats._wrc;
-	if (rc >= 0 && wwc == 0) {
-	    --wrc;
-	    return gotRead();
-	}
-	return false;
+    if (stats != null) ++stats._wrc;
+    if (rc >= 0 && wwc == 0) {
+        --wrc;
+        return gotRead();
+    }
+    return false;
     }
 
     private synchronized boolean finishRead() {
-	if (rc > 0) {
-	    return (0 == --rc && wwc > 0);
-	}
-	throw new InternalError("no current reader to release");
+    if (rc > 0) {
+        return (0 == --rc && wwc > 0);
     }
-	
+    throw new InternalError("no current reader to release");
+    }
+    
     private synchronized boolean gotWrite() {
-	rc = -1;
-	if (stats != null) {
-	    ++stats._wc;
-	}
-	return true;
+    rc = -1;
+    if (stats != null) {
+        ++stats._wc;
+    }
+    return true;
     }
 
     private synchronized boolean getWrite() {
-	if (rc == 0) {
-	    return gotWrite();
-	}
-	++wwc;
-	return false;
+    if (rc == 0) {
+        return gotWrite();
+    }
+    ++wwc;
+    return false;
     }
 
     private synchronized boolean retryWrite() {
-	if (stats != null) ++stats._wwc;
-	if (rc == 0) {
-	    --wwc;
-	    return gotWrite();
-	}
-	return false;
+    if (stats != null) ++stats._wwc;
+    if (rc == 0) {
+        --wwc;
+        return gotWrite();
+    }
+    return false;
     }
 
     private static final int NOTIFY_NONE = 0;
@@ -185,19 +185,19 @@ public class ICURWLock {
     private static final int NOTIFY_READERS = 2;
 
     private synchronized int finishWrite() {
-	if (rc < 0) {
-	    rc = 0;
-	    if (wwc > 0) {
-		return NOTIFY_WRITERS;
-	    } else if (wrc > 0) {
-		return NOTIFY_READERS;
-	    } else {
-		return NOTIFY_NONE;
-	    }
-	}
-	throw new InternalError("no current writer to release");
+    if (rc < 0) {
+        rc = 0;
+        if (wwc > 0) {
+        return NOTIFY_WRITERS;
+        } else if (wrc > 0) {
+        return NOTIFY_READERS;
+        } else {
+        return NOTIFY_NONE;
+        }
     }
-	
+    throw new InternalError("no current writer to release");
+    }
+    
     /**
      * <p>Acquire a read lock, blocking until a read lock is
      * available.  Multiple readers can concurrently hold the read
@@ -209,20 +209,20 @@ public class ICURWLock {
      * releaseRead when done (for example, in a finally block).</p> 
      */
     public void acquireRead() {
-	if (!getRead()) {
-	    for (;;) {
-		try {
-		    synchronized (readLock) {
-			readLock.wait();
-		    }
-		    if (retryRead()) {
-			return;
-		    }
-		}
-		catch (InterruptedException e) {
-		}
-	    }
-	}
+    if (!getRead()) {
+        for (;;) {
+        try {
+            synchronized (readLock) {
+            readLock.wait();
+            }
+            if (retryRead()) {
+            return;
+            }
+        }
+        catch (InterruptedException e) {
+        }
+        }
+    }
     }
 
     /**
@@ -234,11 +234,11 @@ public class ICURWLock {
      * controlled by acquireRead.</p>
      */
     public void releaseRead() {
-	if (finishRead()) {
-	    synchronized (writeLock) {
-		writeLock.notify();
-	    }
-	}
+    if (finishRead()) {
+        synchronized (writeLock) {
+        writeLock.notify();
+        }
+    }
     }
 
     /**
@@ -253,20 +253,20 @@ public class ICURWLock {
      * block).<p> 
      */
     public void acquireWrite() {
-	if (!getWrite()) {
-	    for (;;) {
-		try {
-		    synchronized (writeLock) {
-			writeLock.wait();
-		    }
-		    if (retryWrite()) {
-			return;
-		    }
-		}
-		catch (InterruptedException e) {
-		}
-	    }
-	}
+    if (!getWrite()) {
+        for (;;) {
+        try {
+            synchronized (writeLock) {
+            writeLock.wait();
+            }
+            if (retryWrite()) {
+            return;
+            }
+        }
+        catch (InterruptedException e) {
+        }
+        }
+    }
     }
 
     /**
@@ -279,19 +279,19 @@ public class ICURWLock {
      * acquireWrite.</p> 
      */
     public void releaseWrite() {
-	switch (finishWrite()) {
-	case NOTIFY_WRITERS:
-	    synchronized (writeLock) {
-		writeLock.notify();
-	    }
-	    break;
-	case NOTIFY_READERS:
-	    synchronized (readLock) {
-		readLock.notifyAll();
-	    }
-	    break;
-	case NOTIFY_NONE:
-	    break;
-	}
+    switch (finishWrite()) {
+    case NOTIFY_WRITERS:
+        synchronized (writeLock) {
+        writeLock.notify();
+        }
+        break;
+    case NOTIFY_READERS:
+        synchronized (readLock) {
+        readLock.notifyAll();
+        }
+        break;
+    case NOTIFY_NONE:
+        break;
+    }
     }
 }

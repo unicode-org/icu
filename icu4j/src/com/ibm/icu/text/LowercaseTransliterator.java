@@ -66,7 +66,7 @@ class LowercaseTransliterator extends Transliterator{
         int oldLen;
         
         while (textPos < limit) {
-        	original.setIndex(textPos);
+            original.setIndex(textPos);
             cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             int newLen = m_charppty_.toLowerCase(loc, cp, original, buffer);
@@ -89,5 +89,5 @@ class LowercaseTransliterator extends Transliterator{
      * Character properties data base
      */
     private static final UCharacterProperty m_charppty_ = 
-    							            UCharacterProperty.getInstance(); 
+                                            UCharacterProperty.getInstance(); 
 }

@@ -331,7 +331,7 @@ public abstract class Collator implements Comparator, Cloneable
          *
          * @return true if this factory is visible
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public boolean visible() {
             return true;
@@ -343,8 +343,8 @@ public abstract class Collator implements Comparator, Cloneable
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
         public abstract Collator createCollator(Locale loc);
 
         /**
@@ -354,7 +354,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public String getDisplayName(Locale objectLocale, Locale displayLocale) {
             if (visible()) {
@@ -373,14 +373,14 @@ public abstract class Collator implements Comparator, Cloneable
          *
          * @return the set of supported locale IDs.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public abstract Set getSupportedLocaleIDs();
 
         /**
          * Empty default constructor.
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         protected CollatorFactory() {
         }

@@ -5242,13 +5242,13 @@ public class DiagBigDecimal extends TestFmwk{
     new DiagBigDecimal().run(args);
  }
  public void TestBigDecimal(){
-	  boolean $continue;
-	  int fails;
-	  $continue=false;
-	  fails=diagrun($continue); // and run the tests
-	  if(fails!=0) {
+      boolean $continue;
+      int fails;
+      $continue=false;
+      fails=diagrun($continue); // and run the tests
+      if(fails!=0) {
          errln("Diagnostic Tests for math failed. Number of errors: " +fails);
-	  }
+      }
   }
 
 /* ------------------------------------------------------------------ */

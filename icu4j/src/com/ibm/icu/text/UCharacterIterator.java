@@ -272,7 +272,7 @@ public abstract class UCharacterIterator
      * @stable ICU 2.4
      */
     public void setToLimit() {
-	    setIndex(getLength());
+        setIndex(getLength());
     }
     
     /**
@@ -280,7 +280,7 @@ public abstract class UCharacterIterator
      * @stable ICU 2.4
      */
     public void setToStart() {
-	    setIndex(0);
+        setIndex(0);
     }
 
     /**
@@ -331,7 +331,7 @@ public abstract class UCharacterIterator
      * @stable ICU 2.4  
      */
     public final int getText(char[] fillIn) {
-		return getText(fillIn, 0);
+        return getText(fillIn, 0);
     }
          
     /**
@@ -340,9 +340,9 @@ public abstract class UCharacterIterator
      * @stable ICU 2.4
      */
     public String getText() {
-		char[] text = new char[getLength()];
-		getText(text);
-		return new String(text);
+        char[] text = new char[getLength()];
+        getText(text);
+        return new String(text);
     }
        
     /**
@@ -362,9 +362,9 @@ public abstract class UCharacterIterator
      * 
      */
     public int moveIndex(int delta) {
-		int x = Math.max(0, Math.min(getIndex() + delta, getLength()));
-		setIndex(x);
-		return x;
+        int x = Math.max(0, Math.min(getIndex() + delta, getLength()));
+        setIndex(x);
+        return x;
     }
 
     /**
@@ -386,7 +386,7 @@ public abstract class UCharacterIterator
         if(delta>0){
             while(delta>0 && nextCodePoint() != DONE){delta--;}
         }else{
-	        while(delta<0 && previousCodePoint() != DONE){delta++;}
+            while(delta<0 && previousCodePoint() != DONE){delta++;}
         }
         if(delta!=0){
             throw new IndexOutOfBoundsException();
@@ -402,7 +402,7 @@ public abstract class UCharacterIterator
      * @stable ICU 2.4
      */
     public Object clone() throws CloneNotSupportedException{
-	    return super.clone();
+        return super.clone();
     }   
     
 }

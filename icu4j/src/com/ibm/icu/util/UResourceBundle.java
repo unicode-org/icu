@@ -269,86 +269,86 @@ public abstract class UResourceBundle extends ResourceBundle{
 
 
     /**
-	 * Key used for cached resource bundles.  The key checks
-	 * the resource name, the class root, and the default
-	 * locale to determine if the resource is a match to the
-	 * requested one. The root may be null, but the
-	 * searchName and the default locale must have a non-null value.
-	 * Note that the default locale may change over time, and
-	 * lookup should always be based on the current default
-	 * locale (if at all).
-	 */
-	private static final class ResourceCacheKey implements Cloneable {
-		private SoftReference loaderRef;
-		private String searchName;
-		private ULocale defaultLocale;
-		private int hashCodeCache;
-		public boolean equals(Object other) {
-			if (this == other) {
-				return true;
-			}
-			try {
-				final ResourceCacheKey otherEntry = (ResourceCacheKey) other;
-				//quick check to see if they are not equal
-				if (hashCodeCache != otherEntry.hashCodeCache) {
-					return false;
-				}
-				//are the names the same?
-				if (!searchName.equals(otherEntry.searchName)) {
-					return false;
-				}
-				// are the default locales the same?
-				if (defaultLocale == null) {
-					if (otherEntry.defaultLocale != null) {
-						return false;
-					}
-				} else {
-					if (!defaultLocale.equals(otherEntry.defaultLocale)) {
-						return false;
-					}
-				}
-				//are refs (both non-null) or (both null)?
-				if (loaderRef == null) {
-					return otherEntry.loaderRef == null;
-				} else {
-					return (otherEntry.loaderRef != null)
-							&& (loaderRef.get() == otherEntry.loaderRef.get());
-				}
-			} catch (NullPointerException e) {
-				return false;
-			} catch (ClassCastException e) {
-				return false;
-			}
-		}
-		public int hashCode() {
-			return hashCodeCache;
-		}
-		public Object clone() {
-			try {
-				return super.clone();
-			} catch (CloneNotSupportedException e) {
-				//this should never happen
-				throw new InternalError();
-			}
-		}
-		public void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
-			this.searchName = searchName;
-			hashCodeCache = searchName.hashCode();
-			this.defaultLocale = defaultLocale;
-			if (defaultLocale != null) {
-				hashCodeCache ^= defaultLocale.hashCode();
-			}
-			if (root == null) {
-				this.loaderRef = null;
-			} else {
-				loaderRef = new SoftReference(root);
-				hashCodeCache ^= root.hashCode();
-			}
-		}
-		public void clear() {
-			setKeyValues(null, "", null);
-		}
-	}
+     * Key used for cached resource bundles.  The key checks
+     * the resource name, the class root, and the default
+     * locale to determine if the resource is a match to the
+     * requested one. The root may be null, but the
+     * searchName and the default locale must have a non-null value.
+     * Note that the default locale may change over time, and
+     * lookup should always be based on the current default
+     * locale (if at all).
+     */
+    private static final class ResourceCacheKey implements Cloneable {
+        private SoftReference loaderRef;
+        private String searchName;
+        private ULocale defaultLocale;
+        private int hashCodeCache;
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            try {
+                final ResourceCacheKey otherEntry = (ResourceCacheKey) other;
+                //quick check to see if they are not equal
+                if (hashCodeCache != otherEntry.hashCodeCache) {
+                    return false;
+                }
+                //are the names the same?
+                if (!searchName.equals(otherEntry.searchName)) {
+                    return false;
+                }
+                // are the default locales the same?
+                if (defaultLocale == null) {
+                    if (otherEntry.defaultLocale != null) {
+                        return false;
+                    }
+                } else {
+                    if (!defaultLocale.equals(otherEntry.defaultLocale)) {
+                        return false;
+                    }
+                }
+                //are refs (both non-null) or (both null)?
+                if (loaderRef == null) {
+                    return otherEntry.loaderRef == null;
+                } else {
+                    return (otherEntry.loaderRef != null)
+                            && (loaderRef.get() == otherEntry.loaderRef.get());
+                }
+            } catch (NullPointerException e) {
+                return false;
+            } catch (ClassCastException e) {
+                return false;
+            }
+        }
+        public int hashCode() {
+            return hashCodeCache;
+        }
+        public Object clone() {
+            try {
+                return super.clone();
+            } catch (CloneNotSupportedException e) {
+                //this should never happen
+                throw new InternalError();
+            }
+        }
+        public void setKeyValues(ClassLoader root, String searchName, ULocale defaultLocale) {
+            this.searchName = searchName;
+            hashCodeCache = searchName.hashCode();
+            this.defaultLocale = defaultLocale;
+            if (defaultLocale != null) {
+                hashCodeCache ^= defaultLocale.hashCode();
+            }
+            if (root == null) {
+                this.loaderRef = null;
+            } else {
+                loaderRef = new SoftReference(root);
+                hashCodeCache ^= root.hashCode();
+            }
+        }
+        public void clear() {
+            setKeyValues(null, "", null);
+        }
+    }
     
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
     /**
@@ -432,7 +432,7 @@ public abstract class UResourceBundle extends ResourceBundle{
                     if(defaultID.indexOf(localeName)==-1){
                         b = instantiateICUResource(baseName, defaultID, root);   
                     }else if(rootLocale.length()!=0){
-                    	b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
                     }
                 }
             }else{

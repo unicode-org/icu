@@ -527,12 +527,12 @@ public class ULocaleTest extends TestFmwk {
         {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
         {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
         {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
-	
-	// odd cases
-	{"", "", "", "", "@FOO=bar", "@foo=bar", null},
-	{"", "", "", "", "_@FOO=bar", "@foo=bar", null},
-	{"", "", "", "", "__@FOO=bar", "@foo=bar", null},
-	{"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
+    
+    // odd cases
+    {"", "", "", "", "@FOO=bar", "@foo=bar", null},
+    {"", "", "", "", "_@FOO=bar", "@foo=bar", null},
+    {"", "", "", "", "__@FOO=bar", "@foo=bar", null},
+    {"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
     };
         
     String loc, buf,buf1;
@@ -554,64 +554,64 @@ public class ULocaleTest extends TestFmwk {
       uloc = new ULocale(loc);    
             
       for(int n=0;n<=(NAME+2);n++) {
-	if(n==NAME) continue;
+    if(n==NAME) continue;
 
-	switch(n) {
-	case LANG:
-	  buf  = ULocale.getLanguage(loc);
-	  buf1 = uloc.getLanguage();
-	  break;
+    switch(n) {
+    case LANG:
+      buf  = ULocale.getLanguage(loc);
+      buf1 = uloc.getLanguage();
+      break;
                     
-	case SCRIPT:
-	  buf  = ULocale.getScript(loc);
-	  buf1 = uloc.getScript();
-	  break;
+    case SCRIPT:
+      buf  = ULocale.getScript(loc);
+      buf1 = uloc.getScript();
+      break;
                     
-	case CTRY:
-	  buf  = ULocale.getCountry(loc);
-	  buf1 = uloc.getCountry();
-	  break;
+    case CTRY:
+      buf  = ULocale.getCountry(loc);
+      buf1 = uloc.getCountry();
+      break;
                     
-	case VAR:
-	  buf  = ULocale.getVariant(loc);
-	  buf1 = buf;
-	  break;
+    case VAR:
+      buf  = ULocale.getVariant(loc);
+      buf1 = buf;
+      break;
                     
-	case NAME+1:
-	  buf  = ULocale.getName(loc);
-	  buf1 = uloc.getName();
-	  break;
+    case NAME+1:
+      buf  = ULocale.getName(loc);
+      buf1 = uloc.getName();
+      break;
 
-	case NAME+2:
-	    buf = ULocale.canonicalize(loc);
-	    buf1 = ULocale.createCanonical(loc).getName();
-	    break;
+    case NAME+2:
+        buf = ULocale.canonicalize(loc);
+        buf1 = ULocale.createCanonical(loc).getName();
+        break;
 
-	default:
-	  buf = "**??";
-	  buf1 = buf;
-	}
+    default:
+      buf = "**??";
+      buf1 = buf;
+    }
                 
-	logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
+    logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
                 
-	String expected = testData[row][n];
-	if (expected == null && n == (NAME+2)) {
-	    expected = testData[row][NAME+1];
-	}
+    String expected = testData[row][n];
+    if (expected == null && n == (NAME+2)) {
+        expected = testData[row][NAME+1];
+    }
 
-	// ignore POSIX failures in getName, we don't spec behavior in this case
-	if (n == NAME+1 && 
-	    (expected.indexOf('.') != -1 || 
-	     expected.indexOf('@') != -1)) {
-	    continue;
-	}
+    // ignore POSIX failures in getName, we don't spec behavior in this case
+    if (n == NAME+1 && 
+        (expected.indexOf('.') != -1 || 
+         expected.indexOf('@') != -1)) {
+        continue;
+    }
 
-	if(buf.compareTo(expected)!=0) {
-	  errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+expected+"'!)");
-	}
-	if(buf1.compareTo(expected)!=0) {
-	  errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+expected+"'!)");
-	}
+    if(buf.compareTo(expected)!=0) {
+      errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+expected+"'!)");
+    }
+    if(buf1.compareTo(expected)!=0) {
+      errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+expected+"'!)");
+    }
       }
     }
   }
@@ -770,55 +770,55 @@ public class ULocaleTest extends TestFmwk {
         /* already-canonical ids are not changed */
         { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
         /* PRE_EURO and EURO conversions don't affect other keywords */
-	/* not in spec
+    /* not in spec
         { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
         { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
-	*/
+    */
         /* currency keyword overrides PRE_EURO and EURO currency */
-	/* not in spec
+    /* not in spec
         { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
         { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
-	*/
+    */
         /* norwegian is just too weird, if we handle things in their full generality */
-	/* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
+    /* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
         { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
         /* test cases reflecting internal resource bundle usage */
-	/* root is just a language */
+    /* root is just a language */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
-	/* level 2 canonicalization should not touch basename when there are keywords and it is null */
+    /* level 2 canonicalization should not touch basename when there are keywords and it is null */
         { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
       };
 
         for(int i = 0; i< testCases.length;i++){
-	  String[] testCase = testCases[i];
-	  String source = testCase[0];
-	  String level1Expected = testCase[1];
-	  String level2Expected = testCase[2];
+      String[] testCase = testCases[i];
+      String source = testCase[0];
+      String level1Expected = testCase[1];
+      String level2Expected = testCase[2];
 
-	  if (level1Expected != null) { // null means we have no expectations for how this case is handled
-	    String level1 = ULocale.getName(source);
-	    if (!level1.equals(level1Expected)) {
-	      errln("ULocale.getName error for: '" + source + 
-		    "' expected: '" + level1Expected + "' but got: '" + level1 + "'");
-	    } else {
-	      logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
-	    }
-	  } else {
-	    logln("ULocale.getName skipped: '" + source + "'");
-	  }
+      if (level1Expected != null) { // null means we have no expectations for how this case is handled
+        String level1 = ULocale.getName(source);
+        if (!level1.equals(level1Expected)) {
+          errln("ULocale.getName error for: '" + source + 
+            "' expected: '" + level1Expected + "' but got: '" + level1 + "'");
+        } else {
+          logln("Ulocale.getName for: '" + source + "' returned: '" + level1 + "'");
+        }
+      } else {
+        logln("ULocale.getName skipped: '" + source + "'");
+      }
 
-	  if (level2Expected != null) {
+      if (level2Expected != null) {
             String level2 = ULocale.canonicalize(source);
             if(!level2.equals(level2Expected)){
-	      errln("ULocale.getName error for: '" + source + 
-		    "' expected: '" + level2Expected + "' but got: '" + level2 + "'");
-	    } else {
-	      logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
-	    }
-	  } else {
-	    logln("ULocale.canonicalize skipped: '" + source + "'");
-	  }
+          errln("ULocale.getName error for: '" + source + 
+            "' expected: '" + level2Expected + "' but got: '" + level2 + "'");
+        } else {
+          logln("Ulocale.canonicalize for: '" + source + "' returned: '" + level2 + "'");
+        }
+      } else {
+        logln("ULocale.canonicalize skipped: '" + source + "'");
+      }
         }
     }
 
@@ -833,74 +833,74 @@ public class ULocaleTest extends TestFmwk {
     }
 
     public void TestDisplayNames() {
-	// consistency check, also check that all data is available
-	{
-	    ULocale[] locales = ULocale.getAvailableLocales();
-	    for (int i = 0; i < locales.length; ++i) {
-		ULocale l = locales[i];
-		String name = l.getDisplayName();
+    // consistency check, also check that all data is available
+    {
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (int i = 0; i < locales.length; ++i) {
+        ULocale l = locales[i];
+        String name = l.getDisplayName();
 
-		logln(l + " --> " + name + 
-		      ", " + l.getDisplayName(ULocale.GERMAN) + 
-		      ", " + l.getDisplayName(ULocale.FRANCE));
+        logln(l + " --> " + name + 
+              ", " + l.getDisplayName(ULocale.GERMAN) + 
+              ", " + l.getDisplayName(ULocale.FRANCE));
 
-		String language = l.getDisplayLanguage();
-		String script = l.getDisplayScript();
-		String country = l.getDisplayCountry();
-		String variant = l.getDisplayVariant();
+        String language = l.getDisplayLanguage();
+        String script = l.getDisplayScript();
+        String country = l.getDisplayCountry();
+        String variant = l.getDisplayVariant();
 
-		checkName(name, language, script, country, variant);
+        checkName(name, language, script, country, variant);
 
-		for (int j = 0; j < locales.length; ++j) {
-		    ULocale dl = locales[j];
+        for (int j = 0; j < locales.length; ++j) {
+            ULocale dl = locales[j];
 
-		    name = l.getDisplayName(dl);
-		    language = l.getDisplayLanguage(dl);
-		    script = l.getDisplayScript(dl);
-		    country = l.getDisplayCountry(dl);
-		    variant = l.getDisplayVariant(dl);
+            name = l.getDisplayName(dl);
+            language = l.getDisplayLanguage(dl);
+            script = l.getDisplayScript(dl);
+            country = l.getDisplayCountry(dl);
+            variant = l.getDisplayVariant(dl);
 
-		    if (!checkName(name, language, script, country, variant)) {
-			break;
-		    }
-		}
-	    }
-	}
-	// spot check
-	{
-	    ULocale[] locales = {
-		ULocale.US, ULocale.GERMANY, ULocale.FRANCE
-	    };
-	    String[] names = {
-		"Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
-	    };
-	    ULocale locale = new ULocale("zh_CN");
-	    for (int i = 0; i < locales.length; ++i) {
-		String name = locale.getDisplayName(locales[i]);
-		if (!names[i].equals(name)) {
-		    errln("expected '" + names[i] + "' but got '" + name + "'");
-		}
-	    }
-	}
+            if (!checkName(name, language, script, country, variant)) {
+            break;
+            }
+        }
+        }
+    }
+    // spot check
+    {
+        ULocale[] locales = {
+        ULocale.US, ULocale.GERMANY, ULocale.FRANCE
+        };
+        String[] names = {
+        "Chinese (China)", "Chinesisch (China)", "chinois (Chine)"
+        };
+        ULocale locale = new ULocale("zh_CN");
+        for (int i = 0; i < locales.length; ++i) {
+        String name = locale.getDisplayName(locales[i]);
+        if (!names[i].equals(name)) {
+            errln("expected '" + names[i] + "' but got '" + name + "'");
+        }
+        }
+    }
     }
 
     private boolean checkName(String name, String language, String script, String country, String variant) {
-	if (language.length() > 0 && name.indexOf(language) == -1) {
-	    errln("name '" + name + "' does not contain language '" + language + "'");
-	    return false;
-	}
-	if (script.length() > 0 && name.indexOf(script) == -1) {
-	    errln("name '" + name + "' does not contain script '" + script + "'");
-	    return false;
-	}
-	if (country.length() > 0 && name.indexOf(country) == -1) {
-	    errln("name '" + name + "' does not contain country '" + country + "'");
-	    return false;
-	}
-	if (variant.length() > 0 && name.indexOf(variant) == -1) {
-	    errln("name '" + name + "' does not contain variant '" + variant + "'");
-	    return false;
-	}
-	return true;
+    if (language.length() > 0 && name.indexOf(language) == -1) {
+        errln("name '" + name + "' does not contain language '" + language + "'");
+        return false;
+    }
+    if (script.length() > 0 && name.indexOf(script) == -1) {
+        errln("name '" + name + "' does not contain script '" + script + "'");
+        return false;
+    }
+    if (country.length() > 0 && name.indexOf(country) == -1) {
+        errln("name '" + name + "' does not contain country '" + country + "'");
+        return false;
+    }
+    if (variant.length() > 0 && name.indexOf(variant) == -1) {
+        errln("name '" + name + "' does not contain variant '" + variant + "'");
+        return false;
+    }
+    return true;
     }
 }

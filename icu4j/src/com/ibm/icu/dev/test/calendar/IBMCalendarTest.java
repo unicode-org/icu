@@ -196,80 +196,80 @@ public class IBMCalendarTest extends CalendarTest {
     }
 
     public void TestBuddhistCoverage() {
-	{
-	    // new BuddhistCalendar(TimeZone)
-	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
+    {
+        // new BuddhistCalendar(TimeZone)
+        BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
         if(cal == null){
             errln("could not create BuddhistCalendar with TimeZone");
         }
     }
-	
-	{
-	    // new BuddhistCalendar(Locale)
-	    BuddhistCalendar cal = new BuddhistCalendar(Locale.getDefault());
+    
+    {
+        // new BuddhistCalendar(Locale)
+        BuddhistCalendar cal = new BuddhistCalendar(Locale.getDefault());
         if(cal == null){
             errln("could not create BuddhistCalendar with Locale");
         }
     }
 
-	{
-	    // new BuddhistCalendar(TimeZone, Locale)
-	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(), Locale.getDefault());
+    {
+        // new BuddhistCalendar(TimeZone, Locale)
+        BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(), Locale.getDefault());
         if(cal == null){
             errln("could not create BuddhistCalendar with TimeZone and Locale");
         }
     }
 
-	{
-	    // new BuddhistCalendar(Date)
-	    BuddhistCalendar cal = new BuddhistCalendar(new Date());
+    {
+        // new BuddhistCalendar(Date)
+        BuddhistCalendar cal = new BuddhistCalendar(new Date());
         if(cal == null){
             errln("could not create BuddhistCalendar with Date");
         }
-	}
+    }
 
-	{
-	    // new BuddhistCalendar(int year, int month, int date)
-	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
+    {
+        // new BuddhistCalendar(int year, int month, int date)
+        BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
         if(cal == null){
             errln("could not create BuddhistCalendar with year,month,data");
         }
     }
 
-	{
-	    // new BuddhistCalendar(int year, int month, int date, int hour, int minute, int second)
-	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22, 1, 1, 1);
+    {
+        // new BuddhistCalendar(int year, int month, int date, int hour, int minute, int second)
+        BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22, 1, 1, 1);
         if(cal == null){
             errln("could not create BuddhistCalendar with year,month,date,hour,minute,second");
         }
     }
 
-	{
-	    // data
-	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
-	    Date time = cal.getTime();
+    {
+        // data
+        BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
+        Date time = cal.getTime();
 
-	    String[] calendarLocales = {
-		"th_TH"
-	    };
+        String[] calendarLocales = {
+        "th_TH"
+        };
 
-	    String[] formatLocales = {
-		"en", "ar", "hu", "th"
-	    };
+        String[] formatLocales = {
+        "en", "ar", "hu", "th"
+        };
 
-	    for (int i = 0; i < calendarLocales.length; ++i) {
-		String calLocName = calendarLocales[i];
-		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-		cal = new BuddhistCalendar(calLocale);
+        for (int i = 0; i < calendarLocales.length; ++i) {
+        String calLocName = calendarLocales[i];
+        Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+        cal = new BuddhistCalendar(calLocale);
 
-		for (int j = 0; j < formatLocales.length; ++j) {
-		    String locName = formatLocales[j];
-		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-		    logln(calLocName + "/" + locName + " --> " + format.format(time));
-		}
-	    }
-	}
+        for (int j = 0; j < formatLocales.length; ++j) {
+            String locName = formatLocales[j];
+            Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+            DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+            logln(calLocName + "/" + locName + " --> " + format.format(time));
+        }
+        }
+    }
     }
 
     /**

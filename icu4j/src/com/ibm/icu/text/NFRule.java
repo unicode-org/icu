@@ -328,7 +328,7 @@ final class NFRule {
                     radix = Integer.parseInt(tempValue.toString());
                     if (radix == 0) {
                         throw new IllegalArgumentException("Rule can't have radix of 0");
-		    }
+            }
                     exponent = expectedExponent();
                 }
 
@@ -534,7 +534,7 @@ final class NFRule {
      * @return True if the two rules are functionally equivalent
      */
     public boolean equals(Object that) {
-	if (that instanceof NFRule) {
+    if (that instanceof NFRule) {
             NFRule that2 = (NFRule)that;
 
             return baseValue == that2.baseValue
@@ -543,8 +543,8 @@ final class NFRule {
                    && ruleText.equals(that2.ruleText)
                    && sub1.equals(that2.sub1)
                    && sub2.equals(that2.sub2);
-	}
-	return false;
+    }
+    return false;
     }
 
     /**

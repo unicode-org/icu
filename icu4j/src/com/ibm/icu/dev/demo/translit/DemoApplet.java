@@ -31,12 +31,12 @@ public class DemoApplet extends Applet {
         new AppletFrame("Transliteration Demo", applet, 640, 480);
     }
 
-	public void init() {
+    public void init() {
 
-		Button button = new Button("Transliteration Demo");
-		button.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        if (frame == null) {
+        Button button = new Button("Transliteration Demo");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (frame == null) {
                     frame = new Demo(600, 200);
                     frame.addWindowListener(new WindowAdapter() {
                         public void windowClosing(WindowEvent we) {
@@ -46,18 +46,18 @@ public class DemoApplet extends Applet {
                 }
                 frame.setVisible(true);
                 frame.toFront();
-		    }
-		});
+            }
+        });
 
-		add(button);
+        add(button);
 
         Dimension size = button.getPreferredSize();
         size.width += 10;
         size.height += 10;
 
-		resize(size);
-	}
-	
+        resize(size);
+    }
+    
     public void stop() {
         if (frame != null) {
             frame.dispose();

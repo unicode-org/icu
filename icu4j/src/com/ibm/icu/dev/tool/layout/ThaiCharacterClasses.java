@@ -15,25 +15,25 @@ import java.io.PrintStream;
 
 public class ThaiCharacterClasses
 {
-    public static final int NON	=  0;
-    public static final int CON	=  1;
-    public static final int COA	=  2;
-    public static final int COD	=  3;
+    public static final int NON    =  0;
+    public static final int CON    =  1;
+    public static final int COA    =  2;
+    public static final int COD    =  3;
     public static final int LVO =  4;
-    public static final int FV1	=  5;
-    public static final int FV2	=  6;
-    public static final int FV3	=  7;
-    public static final int BV1	=  8;
-    public static final int BV2	=  9;
+    public static final int FV1    =  5;
+    public static final int FV2    =  6;
+    public static final int FV3    =  7;
+    public static final int BV1    =  8;
+    public static final int BV2    =  9;
     public static final int BDI = 10;
-    public static final int TON	= 11;
-    public static final int AD1	= 12;
-    public static final int AD2	= 13;
-    public static final int AD3	= 14;
-    public static final int NIK	= 15;
-    public static final int AV1	= 16;
-    public static final int AV2	= 17;
-    public static final int AV3	= 18;
+    public static final int TON    = 11;
+    public static final int AD1    = 12;
+    public static final int AD2    = 13;
+    public static final int AD3    = 14;
+    public static final int NIK    = 15;
+    public static final int AV1    = 16;
+    public static final int AV2    = 17;
+    public static final int AV3    = 18;
     public static final int cCount = 19;
 
     // Indexed by unicode - '\u0E00'
@@ -41,14 +41,14 @@ public class ThaiCharacterClasses
     // FIXME: MS Fonts - 0E47 (MAITAIKHU) and 0E4D (NIKHAHIT) only have vowel forms
     // FIXME: MS Fonts - 0E4E (YAMAKKAN) only has one form
     private static final int classTable[] = {
-	//       0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
-	//       -------------------------------------------------------------------------------
-	/*0E00*/ NON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, COD, COD, COD, 
-	/*0E10*/ COD, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, COA, CON, COA, CON, COA, 
-	/*0E20*/ CON, CON, CON, CON, FV3, CON, FV3, CON, CON, CON, CON, CON, CON, CON, CON, NON, 
-	/*0E30*/ FV1, AV2, FV1, FV1, AV1, AV3, AV2, AV3, BV1, BV2, BDI, NON, NON, NON, NON, NON, 
-	/*0E40*/ LVO, LVO, LVO, LVO, LVO, FV2, NON, AD2, TON, TON, TON, TON, AD1, NIK, AD3, NON, 
-	/*0E50*/ NON, NON, NON, NON, NON, NON, NON, NON, NON, NON, NON, NON
+    //       0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
+    //       -------------------------------------------------------------------------------
+    /*0E00*/ NON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, COD, COD, COD, 
+    /*0E10*/ COD, CON, CON, CON, CON, CON, CON, CON, CON, CON, CON, COA, CON, COA, CON, COA, 
+    /*0E20*/ CON, CON, CON, CON, FV3, CON, FV3, CON, CON, CON, CON, CON, CON, CON, CON, NON, 
+    /*0E30*/ FV1, AV2, FV1, FV1, AV1, AV3, AV2, AV3, BV1, BV2, BDI, NON, NON, NON, NON, NON, 
+    /*0E40*/ LVO, LVO, LVO, LVO, LVO, FV2, NON, AD2, TON, TON, TON, TON, AD1, NIK, AD3, NON, 
+    /*0E50*/ NON, NON, NON, NON, NON, NON, NON, NON, NON, NON, NON, NON
     };
 
     private static String[] classNames =

@@ -109,12 +109,12 @@ public class ArabicShapingRegTest extends TestFmwk {
 
     private static final String lamAlefSpecialVLTR =
         "\u0020\u0646\u0622\u0644\u0627\u0020" +
-     	"\u0646\u0623\u064E\u0644\u0627\u0020" +
-     	"\u0646\u0627\u0670\u0644\u0627\u0020" +
-     	"\u0646\u0622\u0653\u0644\u0627\u0020" +
-     	"\u0646\u0625\u0655\u0644\u0627\u0020" +
-     	"\u0646\u0622\u0654\u0644\u0627\u0020" +
-     	"\uFEFC\u0639";
+         "\u0646\u0623\u064E\u0644\u0627\u0020" +
+         "\u0646\u0627\u0670\u0644\u0627\u0020" +
+         "\u0646\u0622\u0653\u0644\u0627\u0020" +
+         "\u0646\u0625\u0655\u0644\u0627\u0020" +
+         "\u0646\u0622\u0654\u0644\u0627\u0020" +
+         "\uFEFC\u0639";
 
     private static final String tashkeelSpecialVLTR = 
         "\u064A\u0628\u0631\u0639\u0020" +

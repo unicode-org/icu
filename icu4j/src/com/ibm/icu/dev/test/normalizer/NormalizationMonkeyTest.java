@@ -79,9 +79,9 @@ public class NormalizationMonkeyTest extends TestFmwk {
     }
     
     String getTestSource() {
-	if (random == null) {
-	    random = createRandom(); // use test framework's random seed
-	}
+    if (random == null) {
+        random = createRandom(); // use test framework's random seed
+    }
         String source = "";
         int i = 0;
         while (i < (random.nextInt(maxCharCount) + 1)) {

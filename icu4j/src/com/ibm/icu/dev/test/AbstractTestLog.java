@@ -10,15 +10,15 @@ import com.ibm.icu.util.VersionInfo;
 
 public abstract class AbstractTestLog implements TestLog {
 
-	public static boolean dontSkipForVersion = false;
-	public boolean skipIfBeforeICU(int major, int minor) {
-		if (dontSkipForVersion || VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor)) > 0) {
-			return false;
-		} 
-		logln("Test skipped before ICU release " + major + "." + minor);
-		return true;
-	}
-	
+    public static boolean dontSkipForVersion = false;
+    public boolean skipIfBeforeICU(int major, int minor) {
+        if (dontSkipForVersion || VersionInfo.ICU_VERSION.compareTo(VersionInfo.getInstance(major, minor)) > 0) {
+            return false;
+        } 
+        logln("Test skipped before ICU release " + major + "." + minor);
+        return true;
+    }
+    
     /**
      * Add a message.
      */

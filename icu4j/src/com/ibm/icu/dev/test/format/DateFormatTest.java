@@ -773,7 +773,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String out = dfFrench.format(testDate);
         logln("Date Formated with French Locale " + out);
         //fix the jdk resources differences between jdk 1.2 and jdk 1.3
-		/* our own data only has GMT-xxxx information here
+        /* our own data only has GMT-xxxx information here
         String javaVersion = System.getProperty("java.version");
         if (javaVersion.startsWith("1.2")) {
             if (!out.equals(expectedFRENCH_JDK12))
@@ -782,9 +782,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             if (!out.equals(expectedFRENCH))
                 errln("FAIL: Expected " + expectedFRENCH);
         }
-		*/
-		if (!out.equals(expectedFRENCH_JDK12))
-			errln("FAIL: Expected " + expectedFRENCH_JDK12);
+        */
+        if (!out.equals(expectedFRENCH_JDK12))
+            errln("FAIL: Expected " + expectedFRENCH_JDK12);
         out = dfUS.format(testDate);
         logln("Date Formated with US Locale " + out);
         if (!out.equals(expectedUS))
@@ -949,45 +949,45 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-	public void testErrorChecking() {
-		try {
-			DateFormat sdf = DateFormat.getDateTimeInstance(-1, -1, Locale.US);
-			errln("Expected exception for getDateTimeInstance(-1, -1, Locale)");
-		}
-		catch(IllegalArgumentException e) {
-			logln("one ok");
-		}
-		catch(Exception e) {
-			errln("Expected IllegalArgumentException, got: " + e);
-		}
-		
-		try {
-			DateFormat df = new SimpleDateFormat("aabbccc");
-			df.format(new Date());
-			errln("Expected exception for format with bad pattern");
-		}
-		catch(IllegalArgumentException ex) {
-			logln("two ok");
-		}
-		catch(Exception e) {
-			errln("Expected IllegalArgumentException, got: " + e);
-		}
-		
-		{
-			SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yy"); // opposite of text
-			fmt.set2DigitYearStart(getDate(2003, Calendar.DECEMBER, 25));
-			String text = "12/25/03";
-			Calendar xcal = new GregorianCalendar();
-			xcal.setLenient(false);
-			ParsePosition pp = new ParsePosition(0);
-			fmt.parse(text, xcal, pp); // should get parse error on second field, not lenient
-			if (pp.getErrorIndex() == -1) {
-				errln("Expected parse error");
-			} else {
-				logln("three ok");
-			}
-		}
-	}
+    public void testErrorChecking() {
+        try {
+            DateFormat sdf = DateFormat.getDateTimeInstance(-1, -1, Locale.US);
+            errln("Expected exception for getDateTimeInstance(-1, -1, Locale)");
+        }
+        catch(IllegalArgumentException e) {
+            logln("one ok");
+        }
+        catch(Exception e) {
+            errln("Expected IllegalArgumentException, got: " + e);
+        }
+        
+        try {
+            DateFormat df = new SimpleDateFormat("aabbccc");
+            df.format(new Date());
+            errln("Expected exception for format with bad pattern");
+        }
+        catch(IllegalArgumentException ex) {
+            logln("two ok");
+        }
+        catch(Exception e) {
+            errln("Expected IllegalArgumentException, got: " + e);
+        }
+        
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yy"); // opposite of text
+            fmt.set2DigitYearStart(getDate(2003, Calendar.DECEMBER, 25));
+            String text = "12/25/03";
+            Calendar xcal = new GregorianCalendar();
+            xcal.setLenient(false);
+            ParsePosition pp = new ParsePosition(0);
+            fmt.parse(text, xcal, pp); // should get parse error on second field, not lenient
+            if (pp.getErrorIndex() == -1) {
+                errln("Expected parse error");
+            } else {
+                logln("three ok");
+            }
+        }
+    }
 
     public void TestCoverage() {
         Date now = new Date();
@@ -1006,8 +1006,8 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         f = DateFormat.getTimeInstance(cal, DateFormat.FULL);
         logln("time yet again: " + f.format(now));
 
-		f = DateFormat.getDateInstance();
-		logln("time yet again: " + f.format(now));
+        f = DateFormat.getDateInstance();
+        logln("time yet again: " + f.format(now));
 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"de_DE");
         DateFormatSymbols sym = new DateFormatSymbols(rb, Locale.GERMANY);
@@ -1019,7 +1019,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("fail, date format symbols not equal");
         }
         
-		Locale foo = new Locale("fu", "FU", "BAR");
+        Locale foo = new Locale("fu", "FU", "BAR");
         rb = null;
         sym = new DateFormatSymbols(GregorianCalendar.class, foo);
         sym.equals(null);
@@ -1034,10 +1034,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         f.format((Object)now, buf, pos);
         f.format((Object)new Long(now.getTime()), buf, pos);
         try {
-			f.format((Object)"Howdy", buf, pos);
-	    }
-	    catch (Exception e) {
-	    }
+            f.format((Object)"Howdy", buf, pos);
+        }
+        catch (Exception e) {
+        }
 
         NumberFormat nf = f.getNumberFormat();
         f.setNumberFormat(nf);
@@ -1054,263 +1054,263 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         eq = f.equals(new SimpleDateFormat());
         
         {
-        	ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
-        	try {
-        		Date d = fmt.parse("2"); // fewer symbols than required 2
-        		errln("whoops");
-        	}
-        	catch (ParseException e) {
-        		logln("ok");
-        	}
+            ChineseDateFormat fmt = new ChineseDateFormat("yymm", Locale.US);
+            try {
+                Date d = fmt.parse("2"); // fewer symbols than required 2
+                errln("whoops");
+            }
+            catch (ParseException e) {
+                logln("ok");
+            }
 
-			try {
-				Date d = fmt.parse("2255"); // should succeed with obeycount
-				logln("ok");
-			}
-			catch (ParseException e) {
-				logln("whoops");
-			}
+            try {
+                Date d = fmt.parse("2255"); // should succeed with obeycount
+                logln("ok");
+            }
+            catch (ParseException e) {
+                logln("whoops");
+            }
 
-			try {
-				Date d = fmt.parse("ni hao"); // not a number, should fail
-				errln("whoops ni hao");
-			}
-			catch (ParseException e) {
-				logln("ok ni hao");
-			}
+            try {
+                Date d = fmt.parse("ni hao"); // not a number, should fail
+                errln("whoops ni hao");
+            }
+            catch (ParseException e) {
+                logln("ok ni hao");
+            }
         }
         {
-        	Calendar xcal = new GregorianCalendar();
-        	xcal.set(Calendar.HOUR_OF_DAY, 0);
-        	DateFormat fmt = new SimpleDateFormat("k");
-        	StringBuffer xbuf = new StringBuffer();
-        	FieldPosition fpos = new FieldPosition(Calendar.HOUR_OF_DAY);
-        	fmt.format(xcal, xbuf, fpos);
-        	try {
-				Date d = fmt.parse(xbuf.toString());
-				logln("ok");
-				
-				xbuf.setLength(0);
-				xcal.set(Calendar.HOUR_OF_DAY, 25);
-				fmt.format(xcal, xbuf, fpos);
-				Date d2 = fmt.parse(xbuf.toString());
-				logln("ok again");
-        	}
-        	catch (ParseException e) {
-        		errln("whoops");
-        	}
+            Calendar xcal = new GregorianCalendar();
+            xcal.set(Calendar.HOUR_OF_DAY, 0);
+            DateFormat fmt = new SimpleDateFormat("k");
+            StringBuffer xbuf = new StringBuffer();
+            FieldPosition fpos = new FieldPosition(Calendar.HOUR_OF_DAY);
+            fmt.format(xcal, xbuf, fpos);
+            try {
+                Date d = fmt.parse(xbuf.toString());
+                logln("ok");
+                
+                xbuf.setLength(0);
+                xcal.set(Calendar.HOUR_OF_DAY, 25);
+                fmt.format(xcal, xbuf, fpos);
+                Date d2 = fmt.parse(xbuf.toString());
+                logln("ok again");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
         }
         
         {
-        	// cover gmt+hh:mm
-        	DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
-        	try {
-				Date d = fmt.parse("07/10/53 GMT+10:00");
-				logln("ok");
-        	}
-        	catch (ParseException e) {
-        		errln("whoops");
-        	}
-        	
-        	// cover invalid separator after GMT
-			try {
-				Date d = fmt.parse("07/10/53 GMT=10:00");
-				logln("whoops");
-			}
-			catch (ParseException e) {
-				errln("ok");
-			}
-        	
-			// cover bad text after GMT+.
-			try {
-				Date d = fmt.parse("07/10/53 GMT+blecch");
-				errln("whoops GMT+blecch");
-			}
-			catch (ParseException e) {
-				logln("ok GMT+blecch");
-			}
-			
-			// cover bad text after GMT+hh:.
-			try {
-				Date d = fmt.parse("07/10/53 GMT+07:blecch");
-				errln("whoops GMT+xx:blecch");
-			}
-			catch (ParseException e) {
-				logln("ok GMT+xx:blecch");
-			}
-			
-			// cover no ':' GMT+#, # < 24 (hh)
-			try {
-				Date d = fmt.parse("07/10/53 GMT+07");
-				logln("ok");
-			}
-			catch (ParseException e) {
-				errln("whoops");
-			}
-			
-			// cover no ':' GMT+#, # > 24 (hhmm)
-			try {
-				Date d = fmt.parse("07/10/53 GMT+0730");
-				logln("ok");
-			}
-			catch (ParseException e) {
-				errln("whoops");
-			}
-			
-			// cover no ':' GMT+#, # > 2400 (this should fail, i suspect, but doesn't)
-			try {
-				Date d = fmt.parse("07/10/53 GMT+07300");
-				logln("should GMT+9999 fail?");
-			}
-			catch (ParseException e) {
-				logln("ok, I guess");
-			}
-			
-			// cover raw digits with no leading sign (bad RFC822) 
-			try {
-				Date d = fmt.parse("07/10/53 07");
-				errln("whoops");
-			}
-			catch (ParseException e) {
-				logln("ok");
-			}
-			
-			// cover raw digits (RFC822) 
-			try {
-				Date d = fmt.parse("07/10/53 +07");
-				logln("ok");
-			}
-			catch (ParseException e) {
-				errln("whoops");
-			}
-			
-			// cover raw digits (RFC822) 
-			try {
-				Date d = fmt.parse("07/10/53 -0730");
-				logln("ok");
-			}
-			catch (ParseException e) {
-				errln("whoops");
-			}
-			
-			// cover raw digits (RFC822) in DST
-			try {
-				fmt.setTimeZone(TimeZone.getTimeZone("PDT"));
-				Date d = fmt.parse("07/10/53 -0730");
-				logln("ok");
-			}
-			catch (ParseException e) {
-				errln("whoops");
-			}
+            // cover gmt+hh:mm
+            DateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
+            try {
+                Date d = fmt.parse("07/10/53 GMT+10:00");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
+            
+            // cover invalid separator after GMT
+            try {
+                Date d = fmt.parse("07/10/53 GMT=10:00");
+                logln("whoops");
+            }
+            catch (ParseException e) {
+                errln("ok");
+            }
+            
+            // cover bad text after GMT+.
+            try {
+                Date d = fmt.parse("07/10/53 GMT+blecch");
+                errln("whoops GMT+blecch");
+            }
+            catch (ParseException e) {
+                logln("ok GMT+blecch");
+            }
+            
+            // cover bad text after GMT+hh:.
+            try {
+                Date d = fmt.parse("07/10/53 GMT+07:blecch");
+                errln("whoops GMT+xx:blecch");
+            }
+            catch (ParseException e) {
+                logln("ok GMT+xx:blecch");
+            }
+            
+            // cover no ':' GMT+#, # < 24 (hh)
+            try {
+                Date d = fmt.parse("07/10/53 GMT+07");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
+            
+            // cover no ':' GMT+#, # > 24 (hhmm)
+            try {
+                Date d = fmt.parse("07/10/53 GMT+0730");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
+            
+            // cover no ':' GMT+#, # > 2400 (this should fail, i suspect, but doesn't)
+            try {
+                Date d = fmt.parse("07/10/53 GMT+07300");
+                logln("should GMT+9999 fail?");
+            }
+            catch (ParseException e) {
+                logln("ok, I guess");
+            }
+            
+            // cover raw digits with no leading sign (bad RFC822) 
+            try {
+                Date d = fmt.parse("07/10/53 07");
+                errln("whoops");
+            }
+            catch (ParseException e) {
+                logln("ok");
+            }
+            
+            // cover raw digits (RFC822) 
+            try {
+                Date d = fmt.parse("07/10/53 +07");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
+            
+            // cover raw digits (RFC822) 
+            try {
+                Date d = fmt.parse("07/10/53 -0730");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
+            
+            // cover raw digits (RFC822) in DST
+            try {
+                fmt.setTimeZone(TimeZone.getTimeZone("PDT"));
+                Date d = fmt.parse("07/10/53 -0730");
+                logln("ok");
+            }
+            catch (ParseException e) {
+                errln("whoops");
+            }
         }
         
         {
-        	SimpleDateFormat fmt = new SimpleDateFormat("aabbcc");
-        	try {
-        		String pat = fmt.toLocalizedPattern();
-        		errln("whoops, shouldn't have been able to localize aabbcc");
-        	}
-        	catch (IllegalArgumentException e) {
-        		logln("aabbcc localize ok");
-        	}
+            SimpleDateFormat fmt = new SimpleDateFormat("aabbcc");
+            try {
+                String pat = fmt.toLocalizedPattern();
+                errln("whoops, shouldn't have been able to localize aabbcc");
+            }
+            catch (IllegalArgumentException e) {
+                logln("aabbcc localize ok");
+            }
         }
 
-		{
-			SimpleDateFormat fmt = new SimpleDateFormat("'aabbcc");
-			try {
-				String pat = fmt.toLocalizedPattern();
-				errln("whoops, localize unclosed quote");
-			}
-			catch (IllegalArgumentException e) {
-				logln("localize unclosed quote ok");
-			}
-		}
         {
-        	SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
-        	String text = "08/15/58 DBDY"; // bogus time zone
-        	try {
-        		fmt.parse(text);
-        		errln("recognized bogus time zone DBDY");
-        	}
-        	catch (ParseException e) {
-        		logln("time zone ex ok");
-        	}
+            SimpleDateFormat fmt = new SimpleDateFormat("'aabbcc");
+            try {
+                String pat = fmt.toLocalizedPattern();
+                errln("whoops, localize unclosed quote");
+            }
+            catch (IllegalArgumentException e) {
+                logln("localize unclosed quote ok");
+            }
+        }
+        {
+            SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
+            String text = "08/15/58 DBDY"; // bogus time zone
+            try {
+                fmt.parse(text);
+                errln("recognized bogus time zone DBDY");
+            }
+            catch (ParseException e) {
+                logln("time zone ex ok");
+            }
         }
         
         {
-        	// force fallback to default timezone when fmt timezone 
-        	// is not named
-        	SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
-        	// force fallback to default time zone, still fails
-        	fmt.setTimeZone(TimeZone.getTimeZone("GMT+0147")); // not in equivalency group
-			String text = "08/15/58 DBDY";
-			try {
-				fmt.parse(text);
-				errln("whoops");
-			}
-			catch (ParseException e) {
-				logln("time zone ex2 ok");
-			}
-			
-			// force success on fallback
-			text = "08/15/58 " + TimeZone.getDefault().getID();
-			try {
-				fmt.parse(text);
-				logln("found default tz");
-			}
-			catch (ParseException e) {
-				errln("whoops, got parse exception");
-			}
+            // force fallback to default timezone when fmt timezone 
+            // is not named
+            SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
+            // force fallback to default time zone, still fails
+            fmt.setTimeZone(TimeZone.getTimeZone("GMT+0147")); // not in equivalency group
+            String text = "08/15/58 DBDY";
+            try {
+                fmt.parse(text);
+                errln("whoops");
+            }
+            catch (ParseException e) {
+                logln("time zone ex2 ok");
+            }
+            
+            // force success on fallback
+            text = "08/15/58 " + TimeZone.getDefault().getID();
+            try {
+                fmt.parse(text);
+                logln("found default tz");
+            }
+            catch (ParseException e) {
+                errln("whoops, got parse exception");
+            }
         }
         
-		{
-			// force fallback to symbols list of timezones when neither 
-			// fmt and default timezone is named
-			SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
-			TimeZone oldtz = TimeZone.getDefault();
-			TimeZone newtz = TimeZone.getTimeZone("GMT+0137"); // nonstandard tz
-			fmt.setTimeZone(newtz);
-			TimeZone.setDefault(newtz); // todo: fix security issue
+        {
+            // force fallback to symbols list of timezones when neither 
+            // fmt and default timezone is named
+            SimpleDateFormat fmt = new SimpleDateFormat("MM/dd/yy z");
+            TimeZone oldtz = TimeZone.getDefault();
+            TimeZone newtz = TimeZone.getTimeZone("GMT+0137"); // nonstandard tz
+            fmt.setTimeZone(newtz);
+            TimeZone.setDefault(newtz); // todo: fix security issue
 
-			// fallback to symbol list, but fail
-			String text = "08/15/58 DBDY"; // try to parse the bogus time zone
-			try {
-				fmt.parse(text);
-				errln("whoops again");
-			}
-			catch (ParseException e) {
-				logln("time zone ex3 ok");
-			}
-			catch (Exception e) {
-				// hmmm... this shouldn't happen.  don't want to exit this
-				// fn with timezone improperly set, so just in case
-				TimeZone.setDefault(oldtz);
-				throw new InternalError(e.getMessage());
-			}
+            // fallback to symbol list, but fail
+            String text = "08/15/58 DBDY"; // try to parse the bogus time zone
+            try {
+                fmt.parse(text);
+                errln("whoops again");
+            }
+            catch (ParseException e) {
+                logln("time zone ex3 ok");
+            }
+            catch (Exception e) {
+                // hmmm... this shouldn't happen.  don't want to exit this
+                // fn with timezone improperly set, so just in case
+                TimeZone.setDefault(oldtz);
+                throw new InternalError(e.getMessage());
+            }
 
-			// create DFS that recognizes our bogus time zone, sortof
-			DateFormatSymbols xsym = new DateFormatSymbols();
-			String[][] tzids = xsym.getZoneStrings();
-			for (int i = 0; i < tzids.length; ++i) {
-				if (tzids[i][0].equals("GMT")) {
-					tzids[i][1] = "DBDY"; // change a local name
-					break;
-				}
-			}
-			xsym.setZoneStrings(tzids);
-			fmt.setDateFormatSymbols(xsym);
+            // create DFS that recognizes our bogus time zone, sortof
+            DateFormatSymbols xsym = new DateFormatSymbols();
+            String[][] tzids = xsym.getZoneStrings();
+            for (int i = 0; i < tzids.length; ++i) {
+                if (tzids[i][0].equals("GMT")) {
+                    tzids[i][1] = "DBDY"; // change a local name
+                    break;
+                }
+            }
+            xsym.setZoneStrings(tzids);
+            fmt.setDateFormatSymbols(xsym);
 
-			try {
-				fmt.parse(text);
-				logln("we parsed DBDY (as GMT, but still...)");
-			}
-			catch (ParseException e) {
-				errln("hey, still didn't recognize DBDY");
-			}
-			finally {
-				TimeZone.setDefault(oldtz);
-			}
-		}
+            try {
+                fmt.parse(text);
+                logln("we parsed DBDY (as GMT, but still...)");
+            }
+            catch (ParseException e) {
+                errln("hey, still didn't recognize DBDY");
+            }
+            finally {
+                TimeZone.setDefault(oldtz);
+            }
+        }
 
     }
 

@@ -100,14 +100,14 @@ public final class CollationKey implements Comparable
         /** 
          * Lower bound
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int LOWER = 0;
 
         /** 
          * Upper bound that will match strings of exact size
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int UPPER = 1;
 
@@ -115,14 +115,14 @@ public final class CollationKey implements Comparable
          * Upper bound that will match all the strings that have the same 
          * initial substring as the given string
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int UPPER_LONG = 2;
 
         /**
          * Number of bound mode
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int COUNT = 3;
         
@@ -176,7 +176,7 @@ public final class CollationKey implements Comparable
     }
     
     // public getters -------------------------------------------------------
-	
+    
     /**
      * Return the source string that this CollationKey represents.
      * @return source string that this CollationKey represents
@@ -199,7 +199,7 @@ public final class CollationKey implements Comparable
      * int key, targetkey;
      * int i = 0;
      * do {
-     *	   key = key1[i] & 0xFF;
+     *       key = key1[i] & 0xFF;
      *     targetkey = key2[i] & 0xFF;
      *     if (key &lt; targetkey) {
      *         System.out.println("String 1 is less than string 2");
@@ -220,21 +220,21 @@ public final class CollationKey implements Comparable
      */
     public byte[] toByteArray() 
     {
-    	int length = 0;
-    	while (true) {
-    	    if (m_key_[length] == 0) {
-    		  break;
-    	    }
-    	    length ++;
-    	}
-    	length ++;
-    	byte result[] = new byte[length];
-    	System.arraycopy(m_key_, 0, result, 0, length);
+        int length = 0;
+        while (true) {
+            if (m_key_[length] == 0) {
+              break;
+            }
+            length ++;
+        }
+        length ++;
+        byte result[] = new byte[length];
+        System.arraycopy(m_key_, 0, result, 0, length);
         return result;
     }
 
-    // public other methods -------------------------------------------------	
- 	
+    // public other methods -------------------------------------------------    
+     
     /**
      * <p>Compare this CollationKey to another CollationKey.  The
      * collation rules of the Collator that created this key are
@@ -255,17 +255,17 @@ public final class CollationKey implements Comparable
      */
     public int compareTo(CollationKey target)
     {
-	for (int i = 0;; ++i) {
-	    int l = m_key_[i]&0xff;
-	    int r = target.m_key_[i]&0xff;
-	    if (l < r) {
-		return -1;
-	    } else if (l > r) {
-		return 1;
-	    } else if (l == 0) {
-		return 0;
-	    }
-	}
+    for (int i = 0;; ++i) {
+        int l = m_key_[i]&0xff;
+        int r = target.m_key_[i]&0xff;
+        if (l < r) {
+        return -1;
+        } else if (l > r) {
+        return 1;
+        } else if (l == 0) {
+        return 0;
+        }
+    }
     }
 
     /**
@@ -288,7 +288,7 @@ public final class CollationKey implements Comparable
      */
     public int compareTo(Object obj) 
     {
-	   return compareTo((CollationKey)obj);
+       return compareTo((CollationKey)obj);
     }
 
     /**
@@ -334,7 +334,7 @@ public final class CollationKey implements Comparable
     public boolean equals(CollationKey target) 
     {
         if (this == target) {
-	        return true;
+            return true;
         }
         if (target == null) {
             return false;
@@ -342,13 +342,13 @@ public final class CollationKey implements Comparable
         CollationKey other = (CollationKey)target;
         int i = 0;
         while (true) {
-    	    if (m_key_[i] != other.m_key_[i]) {
-        		return false;
-    	    }
-    	    if (m_key_[i] == 0) {
-    		  break;
-    	    }
-    	    i ++;
+            if (m_key_[i] != other.m_key_[i]) {
+                return false;
+            }
+            if (m_key_[i] == 0) {
+              break;
+            }
+            i ++;
         }
         return true;
     }
@@ -365,24 +365,24 @@ public final class CollationKey implements Comparable
      */
     public int hashCode() 
     {
-    	if (m_hashCode_ == 0) {
+        if (m_hashCode_ == 0) {
             if (m_key_ == null) {
                 m_hashCode_ = 1;
             }
             else {
                 int size = m_key_.length >> 1;
-        	    StringBuffer key = new StringBuffer(size);
-        	    int i = 0;
-        	    while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
-            		key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
-            		i += 2;
-        	    }
-        	    if (m_key_[i] != 0) {
-            		key.append((char)(m_key_[i] << 8));
-        	    }
-        	    m_hashCode_ = key.toString().hashCode();
+                StringBuffer key = new StringBuffer(size);
+                int i = 0;
+                while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
+                    key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
+                    i += 2;
+                }
+                if (m_key_[i] != 0) {
+                    key.append((char)(m_key_[i] << 8));
+                }
+                m_hashCode_ = key.toString().hashCode();
             }
-    	}
+        }
         return m_hashCode_;
     }
     
@@ -615,7 +615,7 @@ public final class CollationKey implements Comparable
     
     /**
      * Source string this CollationKey represents
-     */	
+     */    
     private String m_source_;
 
     /**

@@ -112,7 +112,7 @@ class TitlecaseTransliterator extends Transliterator {
         int newLen;
         
         while (textPos < limit) {
-        	original.setIndex(textPos);
+            original.setIndex(textPos);
             cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             
