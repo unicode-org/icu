@@ -27,7 +27,7 @@ static char *make_res_filename(const char *filename, const char *outputDir,
 #define RES_SUFFIX ".res"
 #define COL_SUFFIX ".col"
 
-static char theCurrentFileName[4096];
+static char theCurrentFileName[2048];
 const char *gCurrentFileName = theCurrentFileName;
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
