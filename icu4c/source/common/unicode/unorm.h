@@ -84,19 +84,31 @@
  * <p>
  * <tt>unorm_normalize</tt> adds one optional behavior, {@link #UCOL_IGNORE_HANGUL},
  * that differs from
- * the standard Unicode Normalization Forms. 
- **/
-
-  /**
-    * UCOL_NO_NORMALIZATION : Accented characters will not be decomposed for sorting.  
-    * UCOL_DECOM_CAN          : Characters that are canonical variants according 
-    * to Unicode 2.0 will be decomposed for sorting. 
-    * UCOL_DECOMP_COMPAT    : Characters that are compatibility variants will be
-    * decomposed for sorting. This is the default normalization mode used.
-    * UCOL_DECOMP_CAN_COMP_COMPAT : Canonical decomposition followed by canonical composition 
-    * UCOL_DECOMP_COMPAT_COMP_CAN : Compatibility decomposition followed by canonical composition
-    *
-    **/
+ * the standard Unicode Normalization Forms.
+ * This was used internally for collation and is deprecated.
+ * It will be removed without replacement after 2002-mar-31.
+ *
+ * Form FCD, "Fast C or D", is also designed for collation.
+ * It allows to work on strings that are not necessarily normalized
+ * with an algorithm (like in collation) that works under "canonical closure", i.e., it treats precomposed
+ * characters and their decomposed equivalents the same.
+ *
+ * It is not a normalization form because it does not provide for uniqueness of representation. Multiple strings
+ * may be canonically equivalent (their NFDs are identical) and may all conform to FCD without being identical
+ * themselves.
+ *
+ * The form is defined such that the "raw decomposition", the recursive canonical decomposition of each character,
+ * results in a string that is canonically ordered. This means that precomposed characters are allowed for as long
+ * as their decompositions do not need canonical reordering.
+ *
+ * Its advantage for a process like collation is that all NFD and most NFC texts - and many unnormalized texts -
+ * already conform to FCD and do not need to be normalized (NFD) for such a process. The FCD quick check will
+ * return UNORM_YES for most strings in practice.
+ *
+ * unorm_normalize(UNORM_FCD) may be implemented with UNORM_NFD.
+ *
+ * For more details on FCD see the collation design document: http://oss.software.ibm.com/icu/develop/collation/
+ */
 
 typedef enum {
   /** No decomposition/composition */
@@ -123,6 +135,8 @@ typedef enum {
   UNORM_DEFAULT = UNORM_NFC, 
   /** Compatibility decomposition followed by canonical composition */
   UNORM_NFKC =5,
+  /** "Fast C or D" form */
+  UNORM_FCD = 6,
 
   UNORM_MODE_COUNT,
 
