@@ -19,7 +19,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_IDNA
+#if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 
 #include "sprpimpl.h"
 #include "intltest.h"
@@ -64,7 +64,6 @@ public:
     void TestRefIDNA();
     void TestIDNAMonkeyTest();
     void TestConformance();
-
     static NamePrepTransform* getInstance(UErrorCode& status);
     static NamePrepTransform* prep;
 private:
