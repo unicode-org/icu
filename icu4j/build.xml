@@ -475,7 +475,7 @@
     </target>
 
     <target name="check" depends="tests" description="run standard icu4j test suite">
-    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
+    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
         <jvmarg value="-ea"/>  <!-- enable assertion checks -->
         <arg value="-w"/>
         <arg value="-n"/>
@@ -537,7 +537,7 @@
     </target>
 
     <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
-        <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}">
+        <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}" failonerror="true">
             <arg value="-old:"/>
             <arg value="${api.dir}/icu4j30.api.gz"/>
             <arg value="-new:"/>
