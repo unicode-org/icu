@@ -493,9 +493,10 @@ de {
         ZW { "Simbabwe" }
 
         // some entries that are not in the official list:
-        //EH { "West Sahara" }
+        EH { "Westsahara" }
         //HK { "Hong Kong S.A.R., China" }
         SP { "Serbien" }
+        TL { "Osttimor" }
     }
     DateTimeElements:intvector { 
         2,
@@ -537,28 +538,33 @@ de {
 
     // For the languages, I am trying to use the adjective list in the
     // official list of country names.
-    // Sometimes I am guessing, many entries have a question mark for
-    // further checking.
+    // Sometimes I am guessing.
     //   Markus Scherer, 2000jun01
+
+    // I just found http://suchfix.uni-muenster.de/vifanie/NedGuideDt/help/languagecode.html
+    // (which is not entirely reliable, contains some English names).
+    // Generally cross-checking with google.de (search for the language name + "Sprache")
+    // and with other CLDR data.
+    // Markus 2003-dec-12
     Languages {
-        //Fallback{ "en"}
-        // ? aa { "Afar" }
+        // Fallback{ "en" } -- commented out because it's too unreliable
+        aa { "Afar" }
         ab { "Abchasisch" }
         af { "Afrikaans" }
-        am { "Amharisch" } // ?
+        am { "Amharisch" }
         ar { "Arabisch" }
         as { "Assamesisch" }
-        ay { "Aimara" }
+        ay { "Aymara" }
         az { "Aserbaidschanisch" }
         ba { "Baschkirisch" }
         be { "Wei\u00dfrussisch" }
         bg { "Bulgarisch" }
         bh { "Biharisch" }
-        // bi { "Bislama" }
-        bn { "Bengalisch" } // ?
+        bi { "Bislama" }
+        bn { "Bengalisch" }
         bo { "Tibetisch" }
         br { "Bretonisch" }
-        ca { "Katalanisch" } // Katalonisch?
+        ca { "Katalanisch" }
         co { "Korsisch" }
         cs { "Tschechisch" }
         cy { "Walisisch" }
@@ -567,7 +573,7 @@ de {
         dz { "Bhutanisch" }
         el { "Griechisch" }
         en { "Englisch" }
-        // eo { "Esperanto" }
+        eo { "Esperanto" }
         es { "Spanisch" }
         et { "Estnisch" }
         eu { "Baskisch" }
@@ -579,52 +585,52 @@ de {
         fy { "Friesisch" }
         ga { "Irisch" }
         gd { "Schottisch-G\u00e4lisch" }
-        gl { "Galizisch" } // Galizianisch??
-        // ? gn { "Guarani" }
-        // ? gu { "Gujarati" }
-        // gv { "Manx" }
-        // ? ha { "Hausa" }
+        gl { "Galizisch" }
+        gn { "Guarani" }
+        gu { "Gujarati" }
+        gv { "Manx" }
+        ha { "Hausa" }
         haw { "Hawaiianisch" }
         he { "Hebr\u00e4isch" }
-        // hi { "Hindi" }
+        hi { "Hindi" }
         hr { "Kroatisch" }
         hu { "Ungarisch" }
         hy { "Armenisch" }
-        // ia { "Interlingua" }
+        ia { "Interlingua" }
         id { "Indonesisch" }
-        // ie { "Interlingue" }
-        // ? ik { "Inupiak" }
+        ie { "Interlingue" }
+        ik { "Inupiak" }
         //in { "Indonesisch" }  // Use "id" instead
         is { "Isl\u00e4ndisch" }
         it { "Italienisch" }
-        // ? iu { "Inukitut" }
+        iu { "Inukitut" }
         // iw { "Hebr\u00e4isch" }// Use he instead
         ja { "Japanisch" }
         // ji { "Jiddisch" }  // Use "yi" instead
-        //jw { "Javanesisch" } // Use jv instead
-        jv { "Javanesisch" } // ?
+        //jw { "Javanisch" } // Use jv instead
+        jv { "Javanisch" } // more google.de hits than Javanesisch
         ka { "Georgisch" }
         kk { "Kasachisch" }
         kl { "Gr\u00f6nl\u00e4ndisch" }
         km { "Kambodschanisch" }
-        // kn { "Kannada" }
+        kn { "Kannada" }
         ko { "Koreanisch" }
-        ks { "Kaschmirisch" } // ?
+        ks { "Kaschmirisch" }
         ku { "Kurdisch" }
         ky { "Kirgisisch" }
         la { "Latein" } // Lateinisch doesn't seem correct
-        // ? ln { "Lingala" }
+        ln { "Lingala" }
         lo { "Laotisch" }
         lt { "Litauisch" }
         lv { "Lettisch" }
         mg { "Madagassisch" }
-        // mi { "Maori" }
+        mi { "Maori" }
         mk { "Mazedonisch" }
-        // ml { "Malayalam" }
+        ml { "Malayalam" } // do not confuse with ms Malaiisch
         mn { "Mongolisch" }
         mo { "Moldauisch" }
-        // mr { "Marathi" }
-        ms { "Malaiisch" }
+        mr { "Marathi" }
+        ms { "Malaiisch" } // less often: Malaysisch, Malayisch
         mt { "Maltesisch" }
         my { "Burmesisch" }
         na { "Nauruisch" }
@@ -635,27 +641,27 @@ de {
         no { "Norwegisch" }
         oc { "Okzitanisch" }
         or { "Orija" }
-        // ? om { "Oromo (Afan)" }
+        om { "Oromo" } // also mentioned: Afan, Oromiffa
         pa { "Pandschabisch" }
         pl { "Polnisch" }
         ps { "Afghanisch (Paschtu)" }
         pt { "Portugiesisch" }
-        // qu { "Quechua" }
+        qu { "Quechua" }
         rm { "R\u00e4toromanisch" }
-        // ? rn { "Kirundi" }
+        rn { "Kirundi" }
         ro { "Rum\u00e4nisch" }
         ru { "Russisch" }
         rw { "Ruandisch" } // Kinyarwanda?
-        // sa { "Sanskrit" }
-        // sd { "Sindhi" }
+        sa { "Sanskrit" }
+        sd { "Sindhi" } // less often Zinti
         sg { "Sango" }
         sh { "Serbo-Kroatisch" }
         si { "Singhalesisch" }
         sk { "Slowakisch" }
         sl { "Slowenisch" }
         sm { "Samoanisch" }
-        // sn { "Shona" }
-        // so { "Somali" } // "Somalisch" is incorrect
+        sn { "Shona" } // looks like Shona is a language in Zimbabwe while Schonisch is a Danish dialect
+        so { "Somali" } // "Somalisch" is the adjectiv in the country list but less frequent on google.de
         sq { "Albanisch" }
         sr { "Serbisch" }
         ss { "Swazi" }
@@ -664,31 +670,32 @@ de {
         sw { "Suaheli" }
         sv { "Schwedisch" }
         ta { "Tamilisch" }
-        // ? te { "Telugu" }
+        te { "Telugu" }
         tg { "Tadschikisch" }
-        // th { "Thai" }
+        th { "Thai" }
         ti { "Tigrinja" }
         tk { "Turkmenisch" } // "T\u00fcrkmenisch" is a typo
-        // ? tl { "Tagalog" }
-        tn { "Tsuana" }
+        tl { "Tagalog" }
+        tn { "Setswana" } // language of Botswana, also Tswana, very rarely Tsuana; Sezuan is in China
         to { "Tongaisch" }
         tr { "T\u00fcrkisch" }
-        // ts { "Tsonga" }
+        ts { "Tsonga" }
         tt { "Tatarisch" }
-        // tw { "Twi" }
-        // ug { "Uighur" }
+        tw { "Twi" } // spoken in Ghana
+        ug { "Uigur" }
         uk { "Ukrainisch" }
-        // ? ur { "Urdu" }
+        ur { "Urdu" }
         uz { "Usbekisch" }
         vi { "Vietnamesisch" }
-        //vo { "Volap\u00fck" }
-        // ? wo { "Wolof" }
-        // ? xh { "Xhosa" }
+        vo { "Volap\u00fck" }
+        wo { "Wolof" } // in Senegal
+        xh { "Xhosa" } // in South Africa
         yi { "Jiddisch" }
         yo { "Joruba" }
-        za { "Zapotekisch" }
+        za { "Zhuang" } // in China
+        zap { "Zapotekisch" } // in Mexico
         zh { "Chinesisch" }
-        // zu { "Zulu" }
+        zu { "Zulu" }
     }
 
     MonthAbbreviations { 
@@ -870,7 +877,7 @@ de {
         collation{
             phonebook  { "Telefonbuch-Sortierregeln" }
             traditional{ "Traditionelle Sortierregeln" }
-            direct     { "Direkt Sortierregeln" }
+            direct     { "Direkte Sortierregeln" }
         }
         calendar{
             japanese  { "Japanischer Kalender" }
