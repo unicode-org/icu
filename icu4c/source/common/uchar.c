@@ -77,7 +77,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x50 &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6f &&
-        pInfo->formatVersion[0]==2 &&
+        pInfo->formatVersion[0]==3 &&
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
@@ -134,8 +134,7 @@ loadPropsData() {
         trie.getFoldingOffset=getFoldingPropsOffset;
 
         /* unserialize the properties vectors trie, if any */
-        if( (formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1)) &&
-            p[UPROPS_ADDITIONAL_TRIE_INDEX]!=0 &&
+        if( p[UPROPS_ADDITIONAL_TRIE_INDEX]!=0 &&
             p[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0
         ) {
             length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
@@ -188,21 +187,12 @@ enum {
     EXC_UPPERCASE,
     EXC_LOWERCASE,
     EXC_TITLECASE,
-    EXC_DIGIT_VALUE,
+    EXC_UNUSED,
     EXC_NUMERIC_VALUE,
     EXC_DENOMINATOR_VALUE,
     EXC_MIRROR_MAPPING,
     EXC_SPECIAL_CASING,
     EXC_CASE_FOLDING
-};
-
-enum {
-    EXCEPTION_SHIFT=5,
-    BIDI_SHIFT,
-    MIRROR_SHIFT=BIDI_SHIFT+5,
-    VALUE_SHIFT=20,
-
-    VALUE_BITS=32-VALUE_SHIFT
 };
 
 /* getting a uint32_t properties word from the data */
@@ -217,10 +207,12 @@ enum {
     } else { \
         (result)=0; \
     }
-#define PROPS_VALUE_IS_EXCEPTION(props) ((props)&(1UL<<EXCEPTION_SHIFT))
+#define PROPS_VALUE_IS_EXCEPTION(props) ((props)&UPROPS_EXCEPTION_BIT)
 #define GET_CATEGORY(props) ((props)&0x1f)
-#define GET_UNSIGNED_VALUE(props) ((props)>>VALUE_SHIFT)
-#define GET_SIGNED_VALUE(props) ((int32_t)(props)>>VALUE_SHIFT)
+#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
+/* ### TODO: 2 or 3 bits for numericType?! */
+#define GET_UNSIGNED_VALUE(props) ((props)>>UPROPS_VALUE_SHIFT)
+#define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
 #define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
 
 /* finding an exception value */
@@ -336,6 +328,7 @@ u_isdigit(UChar32 c) {
     return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER)
            )!=0);
+    /* ### TODO: should this not check only U_DECIMAL_DIGIT_NUMBER?! */
 }
 
 /* Checks if the Unicode character is a letter.*/
@@ -570,26 +563,32 @@ u_totitle(UChar32 c) {
 
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c) {
-    uint32_t props;
+    uint32_t props, numericType;
     GET_PROPS(c, props);
-    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if(GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER) {
+    numericType=GET_NUMERIC_TYPE(props);
+#if 0
+    /* ### TODO: new numericType==4 for Han numbers?! */
+    if(numericType==0) {
+        return -1;
+    }
+#endif
+
+    if(numericType==1) {
+        if(!PROPS_VALUE_IS_EXCEPTION(props)) {
             return GET_SIGNED_VALUE(props);
-        }
-    } else {
-        const uint32_t *pe=GET_EXCEPTIONS(props);
-        uint32_t firstExceptionValue=*pe;
-        if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_DIGIT_VALUE)) {
-            int32_t value;
-            int i=EXC_DIGIT_VALUE;
-            ++pe;
-            ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
-            value=(int32_t)(int16_t)*pe; /* the digit value is in bits 15..0 */
-            if(value!=-1) {
-                return value;
+        } else {
+            const uint32_t *pe=GET_EXCEPTIONS(props);
+            uint32_t firstExceptionValue=*pe;
+            if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_NUMERIC_VALUE)) {
+                int i=EXC_NUMERIC_VALUE;
+                ++pe;
+                ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
+                return (int32_t)*pe;
             }
         }
     }
+
+    /* ### TODO: new numericType==4 for Han numbers?! */
 
     /* if there is no value in the properties table, then check for some special characters */
     switch(c) {
@@ -613,7 +612,7 @@ u_charDirection(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     if(props!=0) {
-        return (UCharDirection)((props>>BIDI_SHIFT)&0x1f);
+        return (UCharDirection)((props>>UPROPS_BIDI_SHIFT)&0x1f);
     } else {
         return U_BOUNDARY_NEUTRAL;
     }
@@ -623,14 +622,14 @@ U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(props&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE);
+    return (UBool)(props&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
 }
 
 U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    if((props&(1UL<<MIRROR_SHIFT))==0) {
+    if((props&(1UL<<UPROPS_MIRROR_SHIFT))==0) {
         /* not mirrored - the value is not a mirror offset */
         return c;
     } else if(!PROPS_VALUE_IS_EXCEPTION(props)) {
@@ -649,37 +648,7 @@ u_charMirror(UChar32 c) {
     }
 }
 
-U_CFUNC uint8_t
-u_internalGetCombiningClass(UChar32 c) {
-    uint32_t props;
-    GET_PROPS(c, props);
-    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if(GET_CATEGORY(props)==U_NON_SPACING_MARK) {
-            return (uint8_t)GET_UNSIGNED_VALUE(props);
-        } else {
-            return 0;
-        }
-    } else {
-        /* the combining class is in bits 23..16 of the first exception value */
-        return (uint8_t)(*GET_EXCEPTIONS(props)>>16);
-    }
-}
-
-U_CAPI uint8_t U_EXPORT2
-u_getCombiningClass(UChar32 c) {
-    uint32_t props;
-    GET_PROPS(c, props);
-    if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if(GET_CATEGORY(props)==U_NON_SPACING_MARK) {
-            return (uint8_t)GET_UNSIGNED_VALUE(props);
-        } else {
-            return 0;
-        }
-    } else {
-        /* the combining class is in bits 23..16 of the first exception value */
-        return (uint8_t)(*GET_EXCEPTIONS(props)>>16);
-    }
-}
+/* ICU 2.1: u_getCombiningClass() moved to unorm.cpp */
 
 U_CAPI int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix) {
@@ -950,7 +919,7 @@ isAfter_i(UCharIterator *iter, int32_t index) {
             return TRUE; /* preceded by TYPE_i */
         }
 
-        cc=u_internalGetCombiningClass(c);
+        cc=u_getCombiningClass(c);
         if(cc==0 || cc==230) {
             return FALSE; /* preceded by different base character (not TYPE_i), or intervening cc==230 */
         }
@@ -979,7 +948,7 @@ isAfter_I(UCharIterator *iter, int32_t index) {
             return TRUE; /* preceded by I */
         }
 
-        cc=u_internalGetCombiningClass(c);
+        cc=u_getCombiningClass(c);
         if(cc==0 || cc==230) {
             return FALSE; /* preceded by different base character (not I), or intervening cc==230 */
         }
@@ -1004,7 +973,7 @@ isFollowedByMoreAbove(UCharIterator *iter, int32_t index) {
         if(c<0) {
             break;
         }
-        cc=u_internalGetCombiningClass(c);
+        cc=u_getCombiningClass(c);
         if(cc==230) {
             return TRUE; /* at least one cc==230 following */
         }
@@ -1035,7 +1004,7 @@ isFollowedByDotAbove(UCharIterator *iter, int32_t index) {
         if(c==0x307) {
             return TRUE;
         }
-        cc=u_internalGetCombiningClass(c);
+        cc=u_getCombiningClass(c);
         if(cc==0 || cc==230) {
             return FALSE; /* next base character or cc==230 in between */
         }
