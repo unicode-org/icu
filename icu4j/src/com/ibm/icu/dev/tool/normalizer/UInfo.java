@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/UInfo.java,v $ 
- * $Date: 2002/03/30 03:07:01 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/03/30 03:10:05 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -439,8 +439,8 @@ public final class UInfo {
 
     public UInfo() {
          this(
-        	System.getProperty("ICUDataPath")==null ?  "src/com/ibm/icu/dev/data/unicode/UnicodeData-3.0.0.txt" : System.getProperty("ICUDataPath") +  "unicode/UnicodeData-3.0.0.txt",
-            System.getProperty("ICUDataPath")==null ? "src/com/ibm/icu/dev/data/unicode/CompositionExclusions-1.txt" : System.getProperty("ICUDataPath") +  "unicode/CompositionExclusions-1.txt" 
+        	System.getProperty("ICUDataPath")==null ?  "src/com/ibm/icu/dev/data/unicode/UnicodeData-3.0.0.txt" : System.getProperty("ICUDataPath") +  "/unicode/UnicodeData-3.0.0.txt",
+            System.getProperty("ICUDataPath")==null ? "src/com/ibm/icu/dev/data/unicode/CompositionExclusions-1.txt" : System.getProperty("ICUDataPath") +  "/unicode/CompositionExclusions-1.txt" 
             );
     }
 
