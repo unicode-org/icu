@@ -166,13 +166,15 @@ class U_I18N_API OlsonTimeZone: public TimeZone {
     /**
      * The last year for which the transitions data are to be used
      * rather than the finalZone.  If there is no finalZone, then this
-     * is set to INT32_MAX.
+     * is set to INT32_MAX.  NOTE: This corresponds to the year _before_
+     * the one indicated by finalMillis.
      */
     int32_t finalYear;
 
     /**
      * The millis for the start of the first year for which finalZone
-     * is to be used, or DBL_MAX if finalZone is 0.
+     * is to be used, or DBL_MAX if finalZone is 0.  NOTE: This is
+     * 0:00 GMT Jan 1, <finalYear + 1> (not <finalMilils>).
      */
     double finalMillis;
 
