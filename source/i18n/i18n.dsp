@@ -1215,6 +1215,18 @@ InputPath=.\unicode\timezone.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\titletrn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\tolowtrn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\toupptrn.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\translit.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1239,6 +1251,10 @@ InputPath=.\unicode\translit.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\tzdat.h
 # End Source File
 # Begin Source File
 
@@ -1618,6 +1634,10 @@ InputPath=.\unicode\utrans.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\xformtrn.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
