@@ -311,8 +311,8 @@ int  main(int argc, char **argv) {
 
     fclose(file);
     delete bi;
-    delete ruleSourceU;
-    delete ruleBufferC;
+    delete[] ruleSourceU;
+    delete[] ruleBufferC;
     u_cleanup();
 
 
