@@ -531,7 +531,7 @@ protected:
     TimeZone& operator=(const TimeZone& right);
 
 private:
-    static char fgClassID;
+    static const char fgClassID;
 
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 

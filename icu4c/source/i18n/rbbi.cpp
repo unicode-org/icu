@@ -17,25 +17,25 @@
 /**
  * A token used as a character-category value to identify ignore characters
  */
-int8_t
+const int8_t
 RuleBasedBreakIterator::IGNORE = -1;
 
 /**
  * The state number of the starting state
  */
-int16_t
+const int16_t
 RuleBasedBreakIterator::START_STATE = 1;
 
 /**
  * The state-transition value indicating "stop"
  */
-int16_t
+const int16_t
 RuleBasedBreakIterator::STOP_STATE = 0;
 
 /**
  * Class ID.  (value is irrelevant; address is important)
  */
-char
+const char
 RuleBasedBreakIterator::fgClassID = 0;
 
 //=======================================================================

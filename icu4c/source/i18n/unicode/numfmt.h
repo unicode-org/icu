@@ -522,7 +522,7 @@ protected:
     static const int32_t fgMinIntegerDigits;
 
 private:
-    static char fgClassID;
+    static const char fgClassID;
 
     enum EStyles {
         kNumberStyle,
@@ -535,7 +535,7 @@ private:
     static NumberFormat* createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
     static const int32_t    fgNumberPatternsCount;
-    static const UChar*     fgLastResortNumberPatterns[];
+    static const UChar* const fgLastResortNumberPatterns[];
 
     UBool      fGroupingUsed;
     int32_t     fMaxIntegerDigits;

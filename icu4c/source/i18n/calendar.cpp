@@ -30,7 +30,7 @@
 #include "unicode/calendar.h"
 
 // Resource bundle tags read by this class
-const char* Calendar::kDateTimeElements = "DateTimeElements";
+const char Calendar::kDateTimeElements[] = "DateTimeElements";
 
 // Data flow in Calendar
 // ---------------------

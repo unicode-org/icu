@@ -558,7 +558,7 @@ private:
     void decodeStartRule(UErrorCode& status);
     void decodeEndRule(UErrorCode& status);
 
-    static char     fgClassID;
+    static const char     fgClassID;
 
     int8_t startMonth, startDay, startDayOfWeek;   // the month, day, DOW, and time DST starts
     int32_t startTime;
