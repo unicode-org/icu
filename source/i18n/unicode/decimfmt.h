@@ -1007,7 +1007,7 @@ public:
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-    virtual double getRoundingIncrement(void);
+    virtual double getRoundingIncrement(void) const;
 
     /**
      * Set the rounding increment.  This method also controls whether
@@ -1053,7 +1053,7 @@ public:
      * @see #setPadPosition
      * @stable ICU 2.0
      */
-    virtual int32_t getFormatWidth(void);
+    virtual int32_t getFormatWidth(void) const;
 
     /**
      * Set the width to which the output of format() is padded.
@@ -1083,7 +1083,7 @@ public:
      * @see #setPadPosition
      * @stable ICU 2.0
      */
-    virtual UnicodeString getPadCharacterString();
+    virtual UnicodeString getPadCharacterString() const;
 
     /**
      * Set the character used to pad to the format width.  If padding
@@ -1119,7 +1119,7 @@ public:
      * @see #kPadAfterSuffix
      * @stable ICU 2.0
      */
-    virtual EPadPosition getPadPosition(void);
+    virtual EPadPosition getPadPosition(void) const;
 
     /**
      * Set the position at which padding will take place.  This is the location
@@ -1181,7 +1181,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable ICU 2.0
      */
-    virtual int8_t getMinimumExponentDigits(void);
+    virtual int8_t getMinimumExponentDigits(void) const;
 
     /**
      * Set the minimum exponent digits that will be shown.  This has no
