@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.20 2000/10/19 20:29:42 yves Exp $
+## $Id: mh-hpux-acc,v 1.21 2000/10/19 22:58:07 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -32,7 +32,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,+h -Wl,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION)
@@ -88,6 +88,6 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.$(SO_TARGET_VERSION_MAJOR): %.$(SO_TARGET_VERSION)
 	$(RM) $@ && ln -s $< $@
 %.$(SO): %.$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION) $@
 
 ## End HP/UX-specific setup
