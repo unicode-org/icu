@@ -20,13 +20,12 @@
 #include "unicode/utf16.h"
 #include "unicode/ucnv.h"
 #include "unicode/schriter.h"
-#include "unicode/regex.h"
 #include "intltest.h"
 #include "rbbitst.h"
 #include <string.h>
 #include "uvector.h"
 #include "uvectr32.h"
-#include "charstr.h"
+#include <string.h>
 #include <stdio.h>
 
 
@@ -2235,13 +2234,26 @@ void RBBITest::TestExtended() {
     //  Open and read the test data file.
     //
     const char *testDataDirectory = loadTestData(status);
-    UnicodeString tdd(testDataDirectory);
-    // TODO: Remove regexp dependency
-    tdd = RegexMatcher("([/\\\\])out[/\\\\]testdata", tdd, 0, status).
-        replaceFirst("$1rbbitst.txt", status);
-
+    char testFileName[1000];
+    if (strlen(testDataDirectory) >= sizeof(testFileName)) {
+        errln("Can't open test data.  Path too long.");
+        return;
+    }
+    strcpy(testFileName, testDataDirectory);
+    char *p = strstr(testFileName, "/out/testdata");
+    if (p == NULL) {
+        p = strstr(testFileName, "\\out\\testdata");
+        if (p == NULL) {
+            errln("Can't open test data.  Bad test data directory path..");
+            return;
+        }
+    }
+    strcpy(p+1, "rbbitst.txt");
+    
     int    len;
-    UChar *testFile = ReadAndConvertFile((const char *)CharString(tdd), len, status);
+    UChar *testFile = ReadAndConvertFile(testFileName, len, status);
+
+
 
     //
     //  Put the test data into a UnicodeString
