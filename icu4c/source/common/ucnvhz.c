@@ -72,7 +72,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,UErrorCode 
 U_CFUNC void 
 UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs *args,UErrorCode *err);
 
-static UConverterImpl _HZImpl={
+static const UConverterImpl _HZImpl={
 
     UCNV_HZ,
     

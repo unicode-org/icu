@@ -125,7 +125,7 @@ typedef enum{
     ZERO     =0x00
 }MaskEnum;
 
-static UConverterImpl _ISCIIImpl={
+static const UConverterImpl _ISCIIImpl={
 
     UCNV_ISCII,
     
