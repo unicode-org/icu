@@ -348,69 +348,67 @@ public final class CollationElementIterator
             result = previousSpecial(m_collator_, CE_CONTRACTION_, ch);
         }
         else {
-            if (ch <= 0xFF) {
+            if (m_bufferOffset_ < 0 && m_source_.getIndex() != 0
+                && isThaiPreVowel(peekCharacter(-1))) {
+                // we now rearrange unconditionally
+                backupInternalState(m_utilSpecialBackUp_);
+                // we have to check if the previous character is also Thai
+                // if not, we can just set the result
+                // we have already determined that the normalization
+                // buffer is empty
+                m_source_.previous();
+                if (m_source_.getIndex() == 0 
+                    || !isThaiPreVowel(peekCharacter(-1))) {
+                    result = CE_THAI_;
+                }
+                else {        
+                    // previous is also reordered
+                    // we need to go back as long as they are being 
+                    // reordered
+                    // count over the range of reorderable characters 
+                    // and see 
+                    // if there is an even or odd number of them
+                    // if even, we should not reorder. 
+                    // If odd we should reorder.
+                    int noReordered = 1; // the one we already detected
+                    while (m_source_.getIndex() != 0  
+                           && isThaiPreVowel(m_source_.previous())) {
+                         noReordered ++;
+                    }
+                    if ((noReordered & 1) != 0) { 
+                        // odd number of reorderables
+                        result = CE_THAI_;
+                    } else {
+                        result = m_collator_.m_trie_.getLeadValue(ch);
+                    }
+                }
+                updateInternalState(m_utilSpecialBackUp_);
+            }
+            else if (ch <= 0xFF) {
                 result = m_collator_.m_trie_.getLatin1LinearValue(ch);
                 if (RuleBasedCollator.isSpecial(result)) {
                     result = previousSpecial(m_collator_, result, ch);
                 }
             }
             else {
-                if (m_bufferOffset_ < 0 && m_source_.getIndex() != 0
-                    && isThaiPreVowel(peekCharacter(-1))) {
-                    // we now rearrange unconditionally
-                    backupInternalState(m_utilSpecialBackUp_);
-                    // we have to check if the previous character is also Thai
-                    // if not, we can just set the result
-                    // we have already determined that the normalization
-                    // buffer is empty
-                    m_source_.previous();
-                    if (m_source_.getIndex() == 0 
-                        || !isThaiPreVowel(peekCharacter(-1))) {
-                        result = CE_THAI_;
-                    }
-                    else {        
-                        // previous is also reordered
-                        // we need to go back as long as they are being 
-                        // reordered
-                        // count over the range of reorderable characters 
-                        // and see 
-                        // if there is an even or odd number of them
-                        // if even, we should not reorder. 
-                        // If odd we should reorder.
-                        int noReordered = 1; // the one we already detected
-                        while (m_source_.getIndex() != 0  
-                               && isThaiPreVowel(m_source_.previous())) {
-                             noReordered ++;
-                        }
-                        if ((noReordered & 1) != 0) { 
-                            // odd number of reorderables
-                            result = CE_THAI_;
-                        } else {
-                            result = m_collator_.m_trie_.getLeadValue(ch);
-                        }
-                    }
-                    updateInternalState(m_utilSpecialBackUp_);
+                result = m_collator_.m_trie_.getLeadValue(ch);
+            }
+            if (RuleBasedCollator.isSpecial(result)) {
+                result = previousSpecial(m_collator_, result, ch);
+            }
+            if (result == CE_NOT_FOUND_) {
+                if (!isBackwardsStart()
+                    && m_collator_.isContractionEnd(ch)) {
+                    result = CE_CONTRACTION_;
                 }
                 else {
-                    result = m_collator_.m_trie_.getLeadValue(ch);
+                    result
+                         = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
                 }
-                if (RuleBasedCollator.isSpecial(result)) {
-                    result = previousSpecial(m_collator_, result, ch);
-                }
-                if (result == CE_NOT_FOUND_) {
-                    if (!isBackwardsStart()
-                        && m_collator_.isContractionEnd(ch)) {
-                        result = CE_CONTRACTION_;
-                    }
-                    else {
-                        result
-                             = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
-                    }
 
-                    if (RuleBasedCollator.isSpecial(result)) {
-                        result = previousSpecial(RuleBasedCollator.UCA_,
-                                                 result, ch);
-                    }
+                if (RuleBasedCollator.isSpecial(result)) {
+                    result = previousSpecial(RuleBasedCollator.UCA_,
+                                             result, ch);
                 }
             }
         }
@@ -1397,14 +1395,125 @@ public final class CollationElementIterator
             return collator.m_expansion_[getExpansionOffset(collator, ce)];
         }
         else {
-            if(!isEnd()) {
+            if (!isEnd()) {
                 // swap the prevowel and the following char into the
                 // buffer with their order swapped
                 // buffer is always clean when we are in the source string
-                m_buffer_.append(nextChar());
-                m_buffer_.append(ch);
-                m_FCDLimit_ = m_source_.getIndex();
-                m_FCDStart_ = m_FCDLimit_ - 2;
+                // Note: this operation might activate the normalization buffer. We have to check for 
+                // that and act accordingly.
+                m_FCDStart_ = m_source_.getIndex() - 1;
+                char thCh = nextChar(); 
+                int cp = thCh;
+                if (UTF16.isLeadSurrogate(thCh)) {
+                    if (!isEnd()) {
+                        backupInternalState(m_utilSpecialBackUp_);
+                        char trailCh = nextChar(); 
+                        if (UTF16.isTrailSurrogate(trailCh)) {
+                            cp = UCharacterProperty.getRawSupplementary(
+                                                                thCh, trailCh);                  
+                        } 
+                        else {
+                            updateInternalState(m_utilSpecialBackUp_);
+                        }
+                    }
+                } 
+                // Now we have the character that needs to be decomposed
+                // if the normalizing buffer was not used, we can just use our 
+                // structure and be happy.
+                if (m_bufferOffset_ < 0) {
+                    // decompose into writable buffer
+                    m_buffer_.replace(0, m_buffer_.length(), 
+                                      Normalizer.decompose(UTF16.toString(cp), 
+                                                           false));
+                    // reorder Thai and the character after it
+                    if (m_buffer_.length() >= 2 
+                        && UTF16.isLeadSurrogate(m_buffer_.charAt(0)) 
+                        && UTF16.isTrailSurrogate(m_buffer_.charAt(1))) {
+                        m_buffer_.insert(2, ch);
+                    } 
+                    else {
+                        m_buffer_.insert(1, ch);
+                    }
+                    m_FCDLimit_ = m_source_.getIndex();
+                }
+                else { 
+                    // stuff is already normalized... what to do here???
+                    
+                    // if we are in the normalization buffer, thCh must be in
+                    // it. 
+                    // prove by contradiction
+                    // if thCh is is not in the normalization buffer,
+                    // that means that trailCh is in the normalization buffer. 
+                    // that means that trailCh is a trail
+                    // surrogate by the above bounding if block. this is a 
+                    // contradiction because there are no characters at the 
+                    // moment that decomposes to an unmatched surrogate. qed.
+                    if (UCharacter.isSupplementary(cp)) {
+                        m_buffer_.insert(2, ch);
+                    } 
+                    else {
+                        m_buffer_.insert(1, ch);
+                    }
+                    /*
+                    m_utilStringBuffer_.replace(0, m_utilStringBuffer_.length(),
+                              Normalizer.decompose(UTF16.toString(cp), false));
+                    if (m_utilStringBuffer_.length() >= 2 
+                        && UTF16.isLeadSurrogate(m_utilStringBuffer_.charAt(0)) 
+                        && UTF16.isLeadSurrogate(m_utilStringBuffer_.charAt(1))) 
+                    {
+                        m_utilStringBuffer_.insert(2, ch);
+                    } 
+                    else {
+                        m_utilStringBuffer_.insert(1, ch);
+                    }
+                    // we will construct a new iterator and suck out CEs.
+                    // Here is the string initialization. We have decomposed 
+                    // character (decompLen) + 1 Thai + trailing zero
+                    String temp = m_utilStringBuffer_.toString();
+                    if (m_utilColEIter_ == null) {
+                        m_utilColEIter_ = new CollationElementIterator(
+                                                                temp, collator);
+                    }
+                    else {
+                        m_utilColEIter_.m_collator_ = collator;
+                        m_utilColEIter_.setText(temp);
+                    }
+                    
+                    // We need the trailing zero so that we can tell the 
+                    // iterate function that it is in the normalized and 
+                    // reordered buffer. This buffer is always zero terminated.
+                    m_utilColEIter_.m_buffer_.replace(0, 
+                                     m_utilColEIter_.m_buffer_.length(), temp); 
+                    m_utilColEIter_.m_bufferOffset_ = 0;
+                    // This is where to return after iteration is done. 
+                    // We point at the end of the string
+                    m_utilColEIter_.m_FCDStart_ = 0;
+                    m_utilColEIter_.m_FCDLimit_ = temp.length();
+    
+                    ce = m_utilColEIter_.next();
+                    m_CEBufferSize_ = 0;
+                    while (ce != NULLORDER) {
+                        if (m_CEBufferSize_ == m_CEBuffer_.length) {
+                            try {
+                                // increasing cebuffer size
+                                int tempbuffer[] = new int[m_CEBuffer_.length + 50];
+                                System.arraycopy(m_CEBuffer_, 0, tempbuffer, 0,
+                                                 m_CEBuffer_.length);
+                                m_CEBuffer_ = tempbuffer;
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                                return NULLORDER;
+                            }
+                        }
+                        m_CEBuffer_[m_CEBufferSize_ ++] = ce;
+                        ce = m_utilColEIter_.next();
+                    }
+                    m_CEBufferOffset_ = 1;
+                    // return the first of CEs so that we save a call
+                    return m_CEBuffer_[0];
+                    */
+                }
                 m_bufferOffset_ = 0;
                 return IGNORABLE;
             } else {
@@ -2090,6 +2199,13 @@ public final class CollationElementIterator
             // Treat Thai as a length one expansion
             return collator.m_expansion_[getExpansionOffset(collator, ce)];
         }
+        
+        // since the icu4j iterator does correct iteration when iteration
+        // changes direction in the runs, we have to do alittle different
+        // handling from c here.
+        
+        // check that ch is from the normalization buffer or not
+        boolean innorm = m_bufferOffset_ >= 0;
         char prevch = previousChar();
         if (!isThaiPreVowel(prevch)) {
             // we now rearrange unconditionally do not check for base consonant
@@ -2103,19 +2219,40 @@ public final class CollationElementIterator
         // Move the prevowel and the following base Consonant into the
         // normalization buffer with their order swapped
         // buffer is always clean when we are in the source string
-        m_buffer_.append(ch);
-        m_buffer_.append(prevch);
-        m_bufferOffset_ = 2;
-
-        if (m_source_.getIndex() == 0) {
-            m_FCDStart_ = 0;
-            m_FCDLimit_ = 2;
+        
+        boolean reorder = true;
+        m_FCDStart_ = m_source_.getIndex();
+        if (innorm) {
+            // ch is part of the normalization buffer, we simply check and 
+            // insert prevch
+            if (m_collator_.isContractionEnd(ch)) {
+                reorder = false;
+            }
+            m_bufferOffset_ = 2;
+            // we don't have to set the FCD limit here since we are already
+            // in the normalization buffer
         }
         else {
-            m_FCDStart_ = m_source_.getIndex();
+            String decomp = Normalizer.decompose(UTF16.toString(ch), false);
+            // we need to check if we will hit a contraction trigger because of 
+            // decomposition
+            for (int i = decomp.length() - 1; i >= 0; i --) {
+                if (m_collator_.isContractionEnd(decomp.charAt(i))) {
+                    reorder = false;
+                    break;
+                }
+            }
+            
+            m_buffer_.replace(0, m_buffer_.length(), decomp);
+            m_bufferOffset_ = m_buffer_.length() + 1;
             m_FCDLimit_ = m_FCDStart_ + 2;
         }
-
+        if (reorder) {
+            m_buffer_.insert(1, prevch);
+        } 
+        else {
+            m_buffer_.insert(0, prevch);
+        }
         return IGNORABLE;
     }
 
@@ -2177,8 +2314,8 @@ public final class CollationElementIterator
                             if (RuleBasedCollator.getTag(isZeroCE)
                                 == RuleBasedCollator.CE_SURROGATE_TAG_) {
                                 int finalCE = collator.m_trie_.getTrailValue(
-                                                           isZeroCE & 0xFFFFFF,
-                                                           prevch);
+                                                                      isZeroCE,
+                                                                      prevch);
                                 if (finalCE == 0) {
                                     // this is a real, assigned completely
                                     // ignorable code point
@@ -2227,12 +2364,22 @@ public final class CollationElementIterator
     private int previousContraction(RuleBasedCollator collator, int ce, char ch)
     {
         m_utilStringBuffer_.setLength(0);
-        while (collator.isUnsafe(ch) || isThaiBaseConsonant(ch)) {
+        // since we might encounter normalized characters (from the thai
+        // processing) we can't use peekCharacter() here.
+        char prevch = previousChar();
+        boolean atStart = false;
+        while (collator.isUnsafe(ch) || isThaiPreVowel(prevch)) {
             m_utilStringBuffer_.insert(0, ch);
-            ch = previousChar();
+            ch = prevch;
             if (isBackwardsStart()) {
+                atStart = true;
                 break;
             }
+            prevch = previousChar();
+        }
+        if (!atStart) {
+            // undo the previousChar() if we didn't reach the beginning 
+            nextChar();
         }
         // adds the initial base character to the string
         m_utilStringBuffer_.insert(0, ch);
@@ -2560,9 +2707,10 @@ public final class CollationElementIterator
     }
     
     /** 
-     * Gets a character from the source string at a given offset
+     * Gets a character from the source string at a given offset.
      * Handles both normal and iterative cases.
-     * No error checking - caller beware!
+     * No error checking and does not access the normalization buffer 
+     * - caller beware!
      * @param offset offset from current position which character is to be 
      *               retrieved
      * @return character at current position + offset
