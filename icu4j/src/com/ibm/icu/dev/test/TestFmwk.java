@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/11/14 18:07:05 $ 
- * $Revision: 1.19 $
+ * $Date: 2001/11/16 21:36:48 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -120,6 +120,8 @@ public class TestFmwk implements TestLog {
                 params.prompt = true;
             } else if (args[i].equals("-nothrow")) {
                 params.nothrow = true;
+            } else if (args[i].equals("-e")) {
+                params.quick = false;
             } else {
                 Object m = testMethods.get(args[i]);
                 if (m != null) {
@@ -162,6 +164,10 @@ public class TestFmwk implements TestLog {
 
     protected boolean isVerbose() {
         return params.verbose;
+    }
+
+    public boolean isQuick() {
+        return params.quick;
     }
 
     /**
@@ -342,6 +348,7 @@ public class TestFmwk implements TestLog {
     	public boolean   prompt = false;
     	public boolean   nothrow = false;
     	public boolean   verbose = false;
+    	public boolean   quick = true;
 
     	public PrintWriter log = new ASCIIWriter(System.out, true);
     	public int         indentLevel = 0;
