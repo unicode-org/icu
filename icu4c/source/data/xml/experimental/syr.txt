@@ -8,6 +8,9 @@
 syr{
     Version{ "x0.2" }
     LocaleID:int { 0x5A }
+    Languages {
+        syr { "\u0723\u0718\u072A\u071D\u071D\u0710" }
+    }
     AmPmMarkers{
         "\u0729.\u071B",
         "\u0712.\u071B"

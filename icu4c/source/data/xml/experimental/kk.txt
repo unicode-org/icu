@@ -8,6 +8,9 @@
 kk{
     Version{ "x0.2" }
     LocaleID:int { 0x3f }
+    Languages {
+        kk { "\u049A\u0430\u0437\u0430\u049B" }
+    }
     DateTimePatterns { 
         "HH:mm:ss z",
         "HH:mm:ss z",

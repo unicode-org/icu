@@ -8,6 +8,9 @@
 mn{
     Version{ "x0.3" }
     LocaleID:int { 0x50 }
+    Languages {
+        mn { "\u041C\u043E\u043D\u0433\u043E\u043B \u0445\u044D\u043B" }
+    }
 // ShortLanguage{
 //  "MON"
 // }

@@ -8,6 +8,9 @@
 uz{
     Version{ "x0.2" }
     LocaleID:int { 0x43 }
+    Languages {
+        uz { "\u040E\u0437\u0431\u0435\u043A" }
+    }
 //    ShortLanguage{
 //        "UZB"
 //    }
