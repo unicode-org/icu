@@ -131,6 +131,19 @@ public:
 
     UBool ensureCapacity(int32_t minimumCapacity, UErrorCode &status);
 
+    /**
+     * Change the size of this vector as follows: If newSize is
+     * smaller, then truncate the array, possibly deleting held
+     * elements for i >= newSize.  If newSize is larger, grow the
+     * array, filling in new slows with NULL.
+     */
+    void setSize(int32_t newSize);
+
+    /**
+     * Fill in the given array with all elements of this vector.
+     */
+    void** toArray(void** result) const;
+
     //------------------------------------------------------------
     // New API
     //------------------------------------------------------------

@@ -145,6 +145,9 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
         return TRUE;
     } else {
         int32_t newCap = capacity * 2;
+        if (newCap < minimumCapacity) {
+            newCap = minimumCapacity;
+        }
         UHashTok* newElems = new UHashTok[newCap];
         if (newElems == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -156,6 +159,48 @@ UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
         capacity = newCap;
         return TRUE;
     }
+}
+
+/**
+ * Change the size of this vector as follows: If newSize is smaller,
+ * then truncate the array, possibly deleting held elements for i >=
+ * newSize.  If newSize is larger, grow the array, filling in new
+ * slows with NULL.
+ */
+void UVector::setSize(int32_t newSize) {
+    int32_t i;
+    if (newSize < 0) {
+        return;
+    }
+    if (newSize > count) {
+        UErrorCode ec = U_ZERO_ERROR;
+        if (!ensureCapacity(newSize, ec)) {
+            return;
+        }
+        UHashTok empty;
+        empty.pointer = NULL;
+        empty.integer = 0;
+        for (i=count; i<newSize; ++i) {
+            elements[i] = empty;
+        }
+    } else {
+        /* Most efficient to count down */
+        for (i=count-1; i>=newSize; --i) {
+            removeElementAt(i);
+        }
+    }
+    count = newSize;
+}
+
+/**
+ * Fill in the given array with all elements of this vector.
+ */
+void** UVector::toArray(void** result) const {
+    void** a = result;
+    for (int i=0; i<count; ++i) {
+        *a++ = elements[i].pointer;
+    }
+    return result;
 }
 
 UObjectDeleter UVector::setDeleter(UObjectDeleter d) {
