@@ -748,7 +748,31 @@ void RegexTest::API_Match() {
         delete matcher;
         delete pat;
     }
-        
+
+    //
+    // Matchers with no input string behave as if they had an empty input string.
+    //
+
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        RegexMatcher  m(".?", 0, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m.find());
+        REGEX_ASSERT(m.start(status) == 0);
+        REGEX_ASSERT(m.input() == "");
+    }
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        RegexPattern  *p = RegexPattern::compile(".", 0, status);
+        RegexMatcher  *m = p->matcher(status);
+        REGEX_CHECK_STATUS;
+            
+        REGEX_ASSERT(m->find() == FALSE);
+        REGEX_ASSERT(m->input() == "");
+        delete m;
+        delete p;
+    }
+
 }
 
 
