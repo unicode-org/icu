@@ -34,7 +34,6 @@ void CollationServiceTest::TestRegister()
 #if !UCONFIG_NO_SERVICE
     // register a singleton
     const Locale& FR = Locale::getFrance();
-    const Locale& FRENCH = Locale::getFrench();
     const Locale& US = Locale::getUS();
     const Locale US_FOO("en", "US", "FOO");
     
