@@ -33,6 +33,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/udata.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
 #include "ucnv_cnv.h"
@@ -173,6 +174,10 @@ U_CFUNC void
 _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode);
 
+U_CFUNC void
+_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode);
+
 U_CFUNC UChar32
 _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode);
@@ -184,6 +189,10 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
 U_CFUNC void
 _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                   UErrorCode *pErrorCode);
+
+U_CFUNC void
+_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                              UErrorCode *pErrorCode);
 
 static void
 fromUCallback(UConverter *cnv,
@@ -238,6 +247,7 @@ U_CFUNC void
 _MBCSLoad(UConverterSharedData *sharedData,
           const uint8_t *raw,
           UErrorCode *pErrorCode) {
+    UDataInfo info;
     UConverterMBCSTable *mbcsTable=&sharedData->table->mbcs;
     _MBCSHeader *header=(_MBCSHeader *)raw;
 
@@ -255,6 +265,20 @@ _MBCSLoad(UConverterSharedData *sharedData,
     mbcsTable->fromUnicodeTable=(const uint16_t *)(raw+header->offsetFromUTable);
     mbcsTable->fromUnicodeBytes=(const uint8_t *)(raw+header->offsetFromUBytes);
     mbcsTable->outputType=(uint8_t)header->flags;
+
+    /*
+     * converter versions 6.1 and up contain a unicodeMask that is
+     * used here to select the most efficient function implementations
+     */
+    info.size=sizeof(UDataInfo);
+    udata_getInfo((UDataMemory *)sharedData->dataMemory, &info);
+    if(info.formatVersion[0]>6 || info.formatVersion[0]==6 && info.formatVersion[1]>=1) {
+        /* mask off possible future extensions to be safe */
+        mbcsTable->unicodeMask=sharedData->staticData->unicodeMask&3;
+    } else {
+        /* for older versions, assume worst case: contains anything possible (prevent over-optimizations) */
+        mbcsTable->unicodeMask=UCNV_HAS_SUPPLEMENTARY|UCNV_HAS_SURROGATES;
+    }
 }
 
 U_CFUNC void
@@ -338,7 +362,11 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     /* use optimized function if possible */
     cnv=pArgs->converter;
     if(cnv->sharedData->table->mbcs.countStates==1) {
-        _MBCSSingleToUnicodeWithOffsets(pArgs, pErrorCode);
+        if(!(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+            _MBCSSingleToBMPWithOffsets(pArgs, pErrorCode);
+        } else {
+            _MBCSSingleToUnicodeWithOffsets(pArgs, pErrorCode);
+        }
         return;
     }
 
@@ -669,15 +697,15 @@ callback:
                  */
                 if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                     break;
-                } else if(cnv->UCharErrorBufferLength>0) {
-                    /* target is full */
-                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                    break;
                 } else if(U_FAILURE(*pErrorCode)) {
                     /* break on error */
                     offset=0;
                     state=0;
                     byteIndex=0;
+                    break;
+                } else if(cnv->UCharErrorBufferLength>0) {
+                    /* target is full */
+                    *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                     break;
                 }
 
@@ -717,7 +745,7 @@ endloop:
     pArgs->offsets=offsets;
 }
 
-/* This version of _MBCSToUnicode() is optimized for single-byte, single-state codepages. */
+/* This version of _MBCSToUnicodeWithOffsets() is optimized for single-byte, single-state codepages. */
 U_CFUNC void
 _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                                 UErrorCode *pErrorCode) {
@@ -875,12 +903,12 @@ callback:
              */
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
+                break;
             } else if(cnv->UCharErrorBufferLength>0) {
                 /* target is full */
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
-            } else if(U_FAILURE(*pErrorCode)) {
-                /* break on error */
                 break;
             }
 
@@ -896,6 +924,175 @@ callback:
         }
     }
 endloop:
+
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+}
+
+/*
+ * This version of _MBCSSingleToUnicodeWithOffsets() is optimized for single-byte, single-state codepages
+ * that only map to and from the BMP.
+ * In addition to single-byte optimizations, the offset calculations
+ * become much easier.
+ */
+U_CFUNC void
+_MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const uint8_t *source, *sourceLimit, *lastSource;
+    UChar *target;
+    int32_t targetCapacity, length;
+    int32_t *offsets;
+
+    const int32_t (*stateTable)[256];
+
+    int32_t sourceIndex;
+
+    int32_t entry;
+    uint8_t b;
+    UConverterCallbackReason reason;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=(const uint8_t *)pArgs->source;
+    sourceLimit=(const uint8_t *)pArgs->sourceLimit;
+    target=pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+
+    stateTable=cnv->sharedData->table->mbcs.stateTable;
+
+    /* sourceIndex=-1 if the current character began in the previous buffer */
+    sourceIndex=0;
+    lastSource=source;
+
+    /*
+     * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
+     * for the minimum of the sourceLength and targetCapacity
+     */
+    length=sourceLimit-source;
+    if(length<targetCapacity) {
+        targetCapacity=length;
+    }
+
+    /* conversion loop */
+    while(targetCapacity>0) {
+        b=*source++;
+        entry=stateTable[0][b];
+        /* entry<0 */
+        /*
+         * bit 31 is set, bits:
+         * 30..27 action code
+         *        (do not mask out bit 31 for speed, include it in action values)
+         * 26..7  depend on the action code
+         *  6..0  next state
+         */
+
+        /* switch per action code */
+        switch((uint32_t)entry>>27U) {
+        case 16|MBCS_STATE_ILLEGAL:
+            /* bits 26..7 are not used, 0 */
+            /* callback(illegal) */
+            reason=UCNV_ILLEGAL;
+            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            break;
+        case 16|MBCS_STATE_UNASSIGNED:
+            /* bits 26..7 are not used, 0 */
+            /* callback(unassigned) */
+            reason=UCNV_UNASSIGNED;
+            *pErrorCode=U_INVALID_CHAR_FOUND;
+            break;
+        case 16|MBCS_STATE_FALLBACK_DIRECT_16:
+            /* bits 26..23 are not used, 0 */
+            /* bits 22..7 contain the Unicode BMP code point */
+            if(!UCNV_TO_U_USE_FALLBACK(cnv)) {
+                /* callback(unassigned) */
+                reason=UCNV_UNASSIGNED;
+                *pErrorCode=U_INVALID_CHAR_FOUND;
+                break;
+            }
+            /* fall through to the MBCS_STATE_VALID_DIRECT_16 branch */
+        case 16|MBCS_STATE_VALID_DIRECT_16:
+            /* bits 26..23 are not used, 0 */
+            /* bits 22..7 contain the Unicode BMP code point */
+            /* output BMP code point */
+            *target++=(UChar)(entry>>7);
+            --targetCapacity;
+            continue;
+        default:
+            /* reserved, must never occur */
+            /* bits 26..7 are not used, 0 */
+            continue;
+        }
+
+        /* call the callback function with all the preparations and post-processing */
+        /* set offsets since the start or the last callback */
+        if(offsets!=NULL) {
+            int32_t count=(int32_t)(source-lastSource);
+
+            /* predecrement: do not set the offset for the callback-causing character */
+            while(--count>0) {
+                *offsets++=sourceIndex++;
+            }
+            /* offset and sourceIndex are now set for the current character */
+        }
+
+        /* update the arguments structure */
+        pArgs->source=(const char *)source;
+        pArgs->target=target;
+        pArgs->offsets=offsets;
+
+        /* copy the current bytes to invalidCharBuffer */
+        cnv->invalidCharBuffer[0]=b;
+        cnv->invalidCharLength=1;
+
+        /* call the callback function */
+        toUCallback(cnv, cnv->toUContext, pArgs, (const char *)&b, 1, reason, pErrorCode);
+
+        /* update target and deal with offsets if necessary */
+        offsets=ucnv_updateCallbackOffsets(offsets, pArgs->target-target, sourceIndex);
+        target=pArgs->target;
+
+        /* update the source pointer and index */
+        sourceIndex+=1+((const uint8_t *)pArgs->source-source);
+        source=lastSource=(const uint8_t *)pArgs->source;
+        targetCapacity=pArgs->targetLimit-target;
+        length=sourceLimit-source;
+        if(length<targetCapacity) {
+            targetCapacity=length;
+        }
+
+        /*
+         * If the callback overflowed the target, then we need to
+         * stop here with an overflow indication.
+         */
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            break;
+        } else if(U_FAILURE(*pErrorCode)) {
+            /* break on error */
+            break;
+        } else if(cnv->UCharErrorBufferLength>0) {
+            /* target is full */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
+    }
+
+    if(U_SUCCESS(*pErrorCode) && source<sourceLimit && target>=pArgs->targetLimit) {
+        /* target is full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    /* set offsets since the start or the last callback */
+    if(offsets!=NULL) {
+        size_t count=source-lastSource;
+        while(count>0) {
+            *offsets++=sourceIndex++;
+            --count;
+        }
+    }
 
     /* write back the updated pointers */
     pArgs->source=(const char *)source;
@@ -1521,7 +1718,11 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     cnv=pArgs->converter;
     outputType=cnv->sharedData->table->mbcs.outputType;
     if(outputType==MBCS_OUTPUT_1) {
-        _MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
+        if(!(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+            _MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
+        } else {
+            _MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
+        }
         return;
     }
 
@@ -1917,13 +2118,13 @@ callback:
              */
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 break;
-            } else if(cnv->charErrorBufferLength>0) {
-                /* target is full */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
             } else if(U_FAILURE(*pErrorCode)) {
                 /* break on error */
                 c=0;
+                break;
+            } else if(cnv->charErrorBufferLength>0) {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
 
@@ -1942,7 +2143,7 @@ callback:
     if(pArgs->flush && source>=sourceLimit) {
         /* reset the state for the next conversion */
         if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
+            /* a Unicode code point remains incomplete (only a first surrogate) */
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
         cnv->fromUSurrogateLead=0;
@@ -1969,7 +2170,6 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     const uint16_t *table;
     const uint8_t *bytes;
-    uint8_t outputType;
 
     UChar32 c;
 
@@ -1977,7 +2177,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     UConverterCallbackReason reason;
     uint32_t i;
-    uint32_t value;
+    uint8_t value;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -1989,7 +2189,6 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     table=cnv->sharedData->table->mbcs.fromUnicodeTable;
     bytes=cnv->sharedData->table->mbcs.fromUnicodeBytes;
-    outputType=cnv->sharedData->table->mbcs.outputType;
 
     /* get the converter state from UConverter */
     c=cnv->fromUSurrogateLead;
@@ -2064,7 +2263,21 @@ getTrail:
                 value=*p;
 
                 /* is the codepage value really an "unassigned" indicator? */
-                if(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0) {
+                if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
+                    /* assigned, write the output character bytes from value and length */
+                    /* length==1 */
+                    /* this is easy because we know that there is enough space */
+                    *target++=value;
+                    if(offsets!=NULL) {
+                        *offsets++=sourceIndex;
+                    }
+                    --targetCapacity;
+
+                    /* normal end of conversion: prepare for a new character */
+                    c=0;
+                    sourceIndex=nextSourceIndex;
+                    continue;
+                } else { /* unassigned */
                     /*
                      * We allow a 0 byte output if the Unicode code point is
                      * U+0000 and also if the "assigned" bit is set for this entry.
@@ -2074,28 +2287,12 @@ getTrail:
                     /* callback(unassigned) */
                     reason=UCNV_UNASSIGNED;
                     *pErrorCode=U_INVALID_CHAR_FOUND;
-                    goto callback;
                 }
             } else {
                 /* callback(unassigned) */
                 reason=UCNV_UNASSIGNED;
                 *pErrorCode=U_INVALID_CHAR_FOUND;
-                goto callback;
             }
-
-            /* write the output character bytes from value and length */
-            /* length==1 */
-            /* this is easy because we know that there is enough space */
-            *target++=(uint8_t)value;
-            if(offsets!=NULL) {
-                *offsets++=sourceIndex;
-            }
-            --targetCapacity;
-
-            /* normal end of conversion: prepare for a new character */
-            c=0;
-            sourceIndex=nextSourceIndex;
-            continue;
 
 callback:
             /* call the callback function with all the preparations and post-processing */
@@ -2133,13 +2330,13 @@ callback:
              */
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 break;
-            } else if(cnv->charErrorBufferLength>0) {
-                /* target is full */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
             } else if(U_FAILURE(*pErrorCode)) {
                 /* break on error */
                 c=0;
+                break;
+            } else if(cnv->charErrorBufferLength>0) {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
 
@@ -2158,7 +2355,242 @@ callback:
     if(pArgs->flush && source>=sourceLimit) {
         /* reset the state for the next conversion */
         if(c!=0 && U_SUCCESS(*pErrorCode)) {
-            /* a character byte sequence remains incomplete */
+            /* a Unicode code point remains incomplete (only a first surrogate) */
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        }
+        cnv->fromUSurrogateLead=0;
+    } else {
+        /* set the converter state back into UConverter */
+        cnv->fromUSurrogateLead=(UChar)c;
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=source;
+    pArgs->target=(char *)target;
+    pArgs->offsets=offsets;
+}
+
+/*
+ * This version of _MBCSFromUnicode() is optimized for single-byte codepages
+ * that map only to and from the BMP.
+ * In addition to single-byte/state optimizations, the offset calculations
+ * become much easier.
+ */
+U_CFUNC void
+_MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                              UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const UChar *source, *sourceLimit, *lastSource;
+    uint8_t *target;
+    int32_t targetCapacity, length;
+    int32_t *offsets;
+
+    const uint16_t *table;
+    const uint8_t *bytes;
+
+    UChar32 c;
+
+    int32_t sourceIndex;
+
+    UConverterCallbackReason reason;
+    uint32_t i;
+    uint8_t value;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=pArgs->source;
+    sourceLimit=pArgs->sourceLimit;
+    target=(uint8_t *)pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+
+    table=cnv->sharedData->table->mbcs.fromUnicodeTable;
+    bytes=cnv->sharedData->table->mbcs.fromUnicodeBytes;
+
+    /* get the converter state from UConverter */
+    c=cnv->fromUSurrogateLead;
+
+    /* sourceIndex=-1 if the current character began in the previous buffer */
+    sourceIndex= c==0 ? 0 : -1;
+    lastSource=source;
+
+    /*
+     * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
+     * for the minimum of the sourceLength and targetCapacity
+     */
+    length=sourceLimit-source;
+    if(length<targetCapacity) {
+        targetCapacity=length;
+    }
+
+    /* conversion loop */
+    if(c!=0 && targetCapacity>0) {
+        goto getTrail;
+    }
+
+    while(targetCapacity>0) {
+        /*
+         * Get a correct Unicode code point:
+         * a single UChar for a BMP code point or
+         * a matched surrogate pair for a "surrogate code point".
+         */
+        c=*source++;
+        if(!UTF_IS_SURROGATE(c)) {
+            /* convert the Unicode code point in c into codepage bytes */
+            i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+
+            /* is this code point assigned, or do we use fallbacks? */
+            if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
+                const uint8_t *p=bytes;
+
+                /* MBCS_OUTPUT_1 */
+                p+=(16*(uint32_t)table[i]+(c&0xf));
+                value=*p;
+
+                /* is the codepage value really an "unassigned" indicator? */
+                if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
+                    /* assigned, write the output character bytes from value and length */
+                    /* length==1 */
+                    /* this is easy because we know that there is enough space */
+                    *target++=value;
+                    --targetCapacity;
+
+                    /* normal end of conversion: prepare for a new character */
+                    c=0;
+                    continue;
+                } else { /* unassigned */
+                    /*
+                     * We allow a 0 byte output if the Unicode code point is
+                     * U+0000 and also if the "assigned" bit is set for this entry.
+                     * There is no way with this data structure for fallback output
+                     * for other than U+0000 to be a zero byte.
+                     */
+                    /* callback(unassigned) */
+                    reason=UCNV_UNASSIGNED;
+                    *pErrorCode=U_INVALID_CHAR_FOUND;
+                }
+            } else {
+                /* callback(unassigned) */
+                reason=UCNV_UNASSIGNED;
+                *pErrorCode=U_INVALID_CHAR_FOUND;
+            }
+        } else {
+            if(UTF_IS_SURROGATE_FIRST(c)) {
+getTrail:
+                if(source<sourceLimit) {
+                    /* test the following code unit */
+                    UChar trail=*source;
+                    if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        ++source;
+                        c=UTF16_GET_PAIR_VALUE(c, trail);
+                        /* this codepage does not map supplementary code points */
+                        /* callback(unassigned) */
+                        reason=UCNV_UNASSIGNED;
+                        *pErrorCode=U_INVALID_CHAR_FOUND;
+                    } else {
+                        /* this is an unmatched lead code unit (1st surrogate) */
+                        /* callback(illegal) */
+                        reason=UCNV_ILLEGAL;
+                        *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    }
+                } else {
+                    /* no more input */
+                    break;
+                }
+            } else {
+                /* this is an unmatched trail code unit (2nd surrogate) */
+                /* callback(illegal) */
+                reason=UCNV_ILLEGAL;
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            }
+        }
+
+        /* call the callback function with all the preparations and post-processing */
+        /* get the number of code units for c to correctly advance sourceIndex after the callback call */
+        length=UTF_CHAR_LENGTH(c);
+
+        /* set offsets since the start or the last callback */
+        if(offsets!=NULL) {
+            int32_t count=(int32_t)(source-lastSource);
+
+            /* do not set the offset for the callback-causing character */
+            count-=length;
+
+            while(count>0) {
+                *offsets++=sourceIndex++;
+                --count;
+            }
+            /* offset and sourceIndex are now set for the current character */
+        }
+
+        /* update the arguments structure */
+        pArgs->source=source;
+        pArgs->target=(char *)target;
+        pArgs->offsets=offsets;
+
+        /* set the converter state in UConverter to deal with the next character */
+        cnv->fromUSurrogateLead=0;
+
+        /* write the code point as code units */
+        i=0;
+        UTF_APPEND_CHAR_UNSAFE(cnv->invalidUCharBuffer, i, c);
+        cnv->invalidUCharLength=(int8_t)i;
+        /* i==length */
+
+        /* call the callback function */
+        fromUCallback(cnv, cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, reason, pErrorCode);
+
+        /* get the converter state from UConverter */
+        c=cnv->fromUSurrogateLead;
+
+        /* update target and deal with offsets if necessary */
+        offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
+        target=(uint8_t *)pArgs->target;
+
+        /* update the source pointer and index */
+        sourceIndex+=length+(pArgs->source-source);
+        source=lastSource=pArgs->source;
+        targetCapacity=(uint8_t *)pArgs->targetLimit-target;
+        length=sourceLimit-source;
+        if(length<targetCapacity) {
+            targetCapacity=length;
+        }
+
+        /*
+         * If the callback overflowed the target, then we need to
+         * stop here with an overflow indication.
+         */
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            break;
+        } else if(U_FAILURE(*pErrorCode)) {
+            /* break on error */
+            c=0;
+            break;
+        } else if(cnv->charErrorBufferLength>0) {
+            /* target is full */
+            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
+    }
+
+    if(U_SUCCESS(*pErrorCode) && source<sourceLimit && target>=(uint8_t *)pArgs->targetLimit) {
+        /* target is full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    /* set offsets since the start or the last callback */
+    if(offsets!=NULL) {
+        size_t count=source-lastSource;
+        while(count>0) {
+            *offsets++=sourceIndex++;
+            --count;
+        }
+    }
+
+    if(pArgs->flush && source>=sourceLimit) {
+        /* reset the state for the next conversion */
+        if(c!=0 && U_SUCCESS(*pErrorCode)) {
+            /* a Unicode code point remains incomplete (only a first surrogate) */
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
         cnv->fromUSurrogateLead=0;
@@ -2295,21 +2727,54 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
         }
 
         /* is the codepage value really an "unassigned" indicator? */
-        if(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0) {
-            /*
-             * We allow a 0 byte output if the Unicode code point is
-             * U+0000 and also if the "assigned" bit is set for this entry.
-             * There is no way with this data structure for fallback output
-             * for other than U+0000 to be a zero byte.
-             */
-            return 0;
-        } else {
+        /*
+         * We allow a 0 byte output if the Unicode code point is
+         * U+0000 and also if the "assigned" bit is set for this entry.
+         * There is no way with this data structure for fallback output
+         * for other than U+0000 to be a zero byte.
+         */
+        if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
+            /* assigned */
             *pValue=value;
             return length;
         }
-    } else {
-        return 0;
     }
+    return 0;
+}
+
+U_CFUNC int32_t
+_MBCSSingleFromUChar32(UConverterSharedData *sharedData,
+                       UChar32 c,
+                       UBool useFallback) {
+    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
+    uint32_t i;
+    int32_t value;
+
+    /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
+    i=0x440+2*((uint32_t)table[c>>10]+((c>>4)&0x3f));
+
+    /* is this code point assigned, or do we use fallbacks? */
+    if((table[i++]&(1<<(c&0xf)))!=0 || FROM_U_USE_FALLBACK(useFallback, c)) {
+        const uint8_t *p=sharedData->table->mbcs.fromUnicodeBytes;
+
+        /* get the byte for the output */
+        /* MBCS_OUTPUT_1 */
+        p+=(16*(uint32_t)table[i]+(c&0xf));
+        value=*p;
+
+        /* is the codepage value really an "unassigned" indicator? */
+        /*
+         * We allow a 0 byte output if the Unicode code point is
+         * U+0000 and also if the "assigned" bit is set for this entry.
+         * There is no way with this data structure for fallback output
+         * for other than U+0000 to be a zero byte.
+         */
+        if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
+            /* assigned */
+            return value;
+        }
+    }
+    return -1;
 }
 
 /* miscellaneous ------------------------------------------------------------ */
@@ -2368,8 +2833,6 @@ const UConverterSharedData _MBCSData={
 };
 
 /* GB 18030 special handling ------------------------------------------------ */
-
-/* ### IMPORTANT: THIS IS ALPHA-VERSION SUPPORT CODE FOR GB 18030 AND MAY CHANGE WITHOUT NOTICE */
 
 /* definition of LINEAR macros and gb18030Ranges see near the beginning of the file */
 

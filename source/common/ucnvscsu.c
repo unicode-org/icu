@@ -1328,11 +1328,12 @@ static const UConverterStaticData _SCSUStaticData={
     1, 3, /* one UChar generates at least 1 byte and at most 3 bytes */
     { 0x0e, 0xff, 0xfd, 0 }, 3, /* ### the subchar really must be written by an SCSU function! */
     FALSE, FALSE,
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _SCSUData={
-    sizeof(UConverterSharedData), 1,
+    sizeof(UConverterSharedData), ~((uint32_t)0),
     NULL, NULL, &_SCSUStaticData, FALSE, &_SCSUImpl,
     0
 };

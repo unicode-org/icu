@@ -64,6 +64,10 @@ typedef union UConverterTable UConverterTable;
 struct UConverterImpl;
 typedef struct UConverterImpl UConverterImpl;
 
+/** values for the unicodeMask */
+#define UCNV_HAS_SUPPLEMENTARY 1
+#define UCNV_HAS_SURROGATES    2
+
 typedef struct UConverterStaticData {   /* +offset: size */
     uint32_t structSize;                /* +0: 4 Size of this structure */
     
@@ -83,7 +87,8 @@ typedef struct UConverterStaticData {   /* +offset: size */
     
     uint8_t hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
     uint8_t hasFromUnicodeFallback; /* +78: 1 */
-    uint8_t reserved[21];           /* +79: 21 to round out the structure */
+    uint8_t unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
+    uint8_t reserved[20];           /* +80: 20 to round out the structure */
                                     /* total size: 100 */
 } UConverterStaticData;
 

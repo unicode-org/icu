@@ -376,7 +376,8 @@ const UConverterStaticData _ISO2022StaticData={
     1, 
     FALSE, 
     FALSE,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
             
             
