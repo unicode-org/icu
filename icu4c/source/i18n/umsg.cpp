@@ -365,7 +365,11 @@ umsg_vformat(   UMessageFormat *fmt,
         case Formattable::kString:
             // For some reason, a temporary is needed
             stringVal = va_arg(ap, UChar*);
-            args[i].setString(stringVal);
+            if(stringVal){
+                args[i].setString(stringVal);
+            }else{
+                *status=U_ILLEGAL_ARGUMENT_ERROR;
+            }
             break;
             
         case Formattable::kArray:
@@ -432,6 +436,7 @@ umsg_vparse(UMessageFormat *fmt,
     UDate *aDate;
     double *aDouble;
     UChar *aString;
+    int32_t* aInt;
     UnicodeString temp;
     int len =0;
     // assign formattables to varargs
@@ -440,26 +445,42 @@ umsg_vparse(UMessageFormat *fmt,
 
         case Formattable::kDate:
             aDate = va_arg(ap, UDate*);
-            *aDate = args[i].getDate();
+            if(aDate){
+                *aDate = args[i].getDate();
+            }else{
+                *status=U_ILLEGAL_ARGUMENT_ERROR;
+            }
             break;
 
         case Formattable::kDouble:
             aDouble = va_arg(ap, double*);
-            *aDouble = args[i].getDouble();
+            if(aDouble){
+                *aDouble = args[i].getDouble();
+            }else{
+                *status=U_ILLEGAL_ARGUMENT_ERROR;
+            }
             break;
 
         case Formattable::kLong:
-            // always assume doubles for parsing
-            aDouble = va_arg(ap, double*);
-            *aDouble = (double) args[i].getLong();
+            
+            aInt = va_arg(ap, int32_t*);
+            if(aInt){
+                *aInt = (int32_t) args[i].getLong();
+            }else{
+                *status=U_ILLEGAL_ARGUMENT_ERROR;
+            }
             break;
 
         case Formattable::kString:
             aString = va_arg(ap, UChar*);
-            args[i].getString(temp);
-            len = temp.length();
-            temp.extract(0,len,aString);
-            aString[len]=0;
+            if(aString){
+                args[i].getString(temp);
+                len = temp.length();
+                temp.extract(0,len,aString);
+                aString[len]=0;
+            }else{
+                *status= U_ILLEGAL_ARGUMENT_ERROR;
+            }
             break;
 
         // better not happen!
