@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/09/01 01:11:13 $
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:29:48 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
+import com.ibm.text.*;
 
 public class DerivedProperty implements UCD_Types {
   
@@ -130,33 +131,61 @@ public class DerivedProperty implements UCD_Types {
         }
         boolean hasProperty(int cp) {
             if (ucdData.getDecompositionType(cp) == NONE) return false;
-            String cps = UTF32.valueOf32(cp);
-            if (UTF32.length32(nfx.normalize(cps)) == UTF32.length32(cps)) return true;
+            String norm = nfx.normalize(cp);
+            if (UTF16.countCodePoint(norm) != 1) return true;
             return false;
         }
     };
     
     class GenDProp extends DProp {
         Normalizer nfx;
+        Normalizer nfComp = null;
+        
         GenDProp (int i) {
             nfx = nf[i-GenNFD];
             name = NAME[i-GenNFD];
+            String compName = "the character itself";
+            
+            if (i == GenNFKC || i == GenNFD) {
+                name += "-NFC";
+                nfComp = nfc;
+                compName = "NFC for the character";
+            } else if (i == GenNFKD) {
+                name += "-NFD";
+                nfComp = nfd;
+                compName = "NFD for the character";
+            }
             header = "# Derived Property: " + name              
-                + "\r\n#   Normalized forms, where different from the characters themselves."
+                + "\r\n#   Normalized form " + NAME[i-GenNFD] + ", where DIFFERENT from " + compName + "."
                 + "\r\n#   HANGUL SYLLABLES are algorithmically decomposed, and not listed explicitly."
                 + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
                 + "\r\n#            It is NOT sufficient to replace characters one-by-one with these results!";
         }
         public boolean propertyVaries() {return true;} // default
-        public String getProperty(int cp) { 
-            if (ucdData.getDecompositionType(cp) == NONE) return "";
-            String cps = UTF32.valueOf32(cp);
-            if (cps.equals(nfx.normalize(cps))) {
-                return "";
+        
+        int cacheCp = 0;
+        String cacheStr = "";
+        
+        public String getProperty(int cp) {
+            if (cacheCp == cp) return cacheStr;
+            cacheCp = cp;
+            cacheStr = "";
+            
+            if (ucdData.getDecompositionType(cp) != NONE) {
+                String cps = UTF32.valueOf32(cp);
+                String comp = cps;
+                if (nfComp != null) {
+                    comp = nfComp.normalize(comp);
+                }
+                String normal = nfx.normalize(cps);
+                if (!comp.equals(normal)) {
+                    String norm = Utility.hex(normal);
+                    String pad = Utility.repeat(" ", 14-norm.length());
+                    cacheStr = name + "; " + norm + pad;
+                }
             }
-            String norm = Utility.hex(nfx.normalize(cp));
-            String pad = Utility.repeat(" ", 14-norm.length());
-            return name + "; " + norm + pad;
+            
+            return cacheStr;
             //if (cp >= 0xAC00 && cp <= 0xD7A3) return true;
             //System.out.println(Utility.hex(cps) + " => " + Utility.hex(nf[i-4].normalize(cps)));
         } // default

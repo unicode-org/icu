@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/09/01 00:06:15 $
-* $Revision: 1.3 $
+* $Date: 2001/09/06 01:29:48 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -1027,5 +1027,56 @@ E0020-E007F; [TAGGING CHARACTERS]
             }
         }
   }
+  
+  static void checkSpeed() {
+    int count = 1000000;
+    int sum = 0;
+    long start, end;
+    
+    start = System.currentTimeMillis();
+    for (int i = count; i >= 0; --i) {
+        sum += dummy2(i).length();
+    }
+    end = System.currentTimeMillis();
+    System.out.println("synchronized: " + (end - start));
+
+    start = System.currentTimeMillis();
+    for (int i = count; i >= 0; --i) {
+        sum += dummy1(i).length();
+    }
+    end = System.currentTimeMillis();
+    System.out.println("char[] each time: " + (end - start));
+    
+    start = System.currentTimeMillis();
+    for (int i = count; i >= 0; --i) {
+        sum += dummy3(i).length();
+    }
+    end = System.currentTimeMillis();
+    System.out.println("String +: " + (end - start));
+    
+    System.out.println(sum);
+  }
+  
+  static String dummy1(int a) {
+    char[] temp = new char[2];
+    temp[0] = (char)(a >>> 16);
+    temp[1] = (char)a;
+    return new String(temp);
+  }
+  
+  static char[] temp2 = new char[2];
+  
+  static String dummy2(int a) {
+    synchronized (temp2) {
+        temp2[0] = (char)(a >>> 16);
+        temp2[1] = (char)a;
+        return new String(temp2);
+    }
+  }
+  
+  static String dummy3(int a) {
+    return String.valueOf((char)(a >>> 16)) + (char)a;
+  }
+  
 
 }

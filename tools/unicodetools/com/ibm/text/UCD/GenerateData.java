@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/09/01 01:11:13 $
-* $Revision: 1.4 $
+* $Date: 2001/09/06 01:29:48 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -53,6 +53,10 @@ public class GenerateData implements UCD_Types {
                 mask = Utility.setBits(0, DerivedProperty.FC_NFKC_Closure, DerivedProperty.ExpandsOnNFKC);
                 mask = Utility.clearBit(mask, DerivedProperty.FullCompInclusion);
                 generateDerived(mask, HEADER_DERIVED, "DerivedNormalizationProperties-" + version );
+                
+            } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
+                mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);
+                generateDerived(mask, HEADER_DERIVED, "DerivedFullNormalization-" + version );
                 
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,

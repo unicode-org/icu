@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:29:03 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -408,6 +408,7 @@ public final class Utility {    // COMMON UTILITIES
 
     private static final String[] searchPath = {
         "EXTRAS",
+        "3.1.2",
         "3.1.1",
         "3.1.0",
         "3.0.1",
@@ -451,6 +452,15 @@ public final class Utility {    // COMMON UTILITIES
         return null;
     }
 
-
-
+    public static void writeHtmlHeader(PrintWriter log, String title) {
+        log.println("<html><head>");
+        log.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        log.println("<title>" + title + "</title>");
+        log.println("<style><!--");
+        log.println("table        { border-collapse: collapse; border: 1 solid blue }");
+        log.println("td           { border: 1 solid blue; padding: 2 }");
+        log.println("th           { border: 1 solid blue; padding: 2 }");
+        log.println("--></style>");
+        log.println("</head><body>");
+    }
 }

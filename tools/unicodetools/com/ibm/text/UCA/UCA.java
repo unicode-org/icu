@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/08/31 00:20:40 $ 
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:30:31 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -426,6 +426,32 @@ final public class UCA {
         }
         return outpos;
     }
+    
+    /**
+     * Returns a CEList for a unicode character at a position.
+     * @param sourceString string to make a sort key for.
+     * @param offset position in string
+     * @param decomposition true for UCA, false where the text is guaranteed to be
+     * normalization form C with no combining marks of class 0.
+     * @param output array for output. Must be large enough on entry. When done, is terminated with TERMINATOR.
+     * @return count of CEs
+     */
+    
+    public CEList getCEList(String sourceString, boolean decomposition) {
+        int len;
+        while (true) {
+            try {
+                len = getCEs(sourceString, decomposition, ceListBuffer);
+                break;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                ceListBuffer = new int[ceListBuffer.length * 2];
+            }
+        }
+        return new CEList(ceListBuffer, 0, len);
+    }
+    
+    int[] ceListBuffer = new int[30]; // temporary storage, to avoid multiple creation
+    
     
     /**
      * Get Usage

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/08/31 00:20:39 $ 
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:30:30 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -64,6 +64,7 @@ public class WriteCollationData implements UCD_Types {
             String arg = args[i];
             if      (arg.equalsIgnoreCase("WriteRulesWithNames")) writeRules(WITH_NAMES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(collator);
+            else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(collator);
             
             else if (arg.equalsIgnoreCase("WriteRules")) writeRules(WITHOUT_NAMES);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2001/08/31 00:20:40 $ 
-* $Revision: 1.2 $
+* $Date: 2001/09/06 01:30:31 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,7 @@ import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
 import com.ibm.text.UTF16;
 
-public class GenOverlap {
+public class GenOverlap implements UCD_Types {
   
     static Map completes = new TreeMap();
     static Map back = new HashMap();
@@ -146,15 +146,8 @@ public class GenOverlap {
         String [] matchChars = new String[1];
         
         // CEList show = getCEList("\u2034");
-        log.println("<html><head>");
-        log.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-        log.println("<title>New Page 1</title>");
-        log.println("<style><!--");
-        log.println("table        { border-style: solid; border-width: 1 }");
-        log.println("td           { border-style: solid; border-width: 1 }");
-        log.println("--></style>");
-        log.println("</head><body><table>");
-
+        Utility.writeHtmlHeader(log, "Overlaps");
+        log.print("<table>");
             
         while (it.hasNext()) {
             Utility.dot(counter++);
@@ -499,5 +492,169 @@ public class GenOverlap {
             log.println("\t" + pair.first);
         }
         log.flush();
+    }
+    
+    public static void checkHash(UCA collatorIn) throws Exception {
+        collator = collatorIn;
+            
+        System.out.println("# Check Hash");
+        System.out.println("# Generated " + new Date());
+            
+        ucd = UCD.make();
+
+        //nfd = new Normalizer(Normalizer.NFD);
+        //nfkd = new Normalizer(Normalizer.NFKD);
+            
+        UCA.CollationContents cc = collator.getCollationContents(UCA.FIXED_CE, nfd);
+        nfd = new Normalizer(Normalizer.NFD);
+        nfkd = new Normalizer(Normalizer.NFKD);
+            
+        
+        int tableLength = 257;
+        /*
+257 263 269 271 277 281 283 293 307 311 313 317 
+331 337 347 349 353 359 367 373 379 383 389 397 
+401 409 419 421 431 433 439 443 449 457 461 463 
+467 479 487 491 499 503 509 521 523 541 547 557 
+563 569 571 577 587 593 599 601 607 613 617 619 
+631 641 643 647 653 659 661 673 677 683 691 701 
+709 719 727 733 739 743 751 757 761 769 773 787 
+797 809 811 821 823 827 829 839 853 857 859 863 
+877 881 883 887 907 911 919 929 937 941 947 953 
+967 971 977 983 991 997 
+
+        */
+        int [][] collisions = new int[LIMIT_SCRIPT][];
+        BitSet[] repeats = new BitSet[LIMIT_SCRIPT];
+        for (int i = 0; i < collisions.length; ++i) {
+            collisions[i] = new int[tableLength];
+            repeats[i] = new BitSet();
+        }
+        
+        int counter = 0;
+            
+        int[] lenArray = new int[1];
+        
+        if (false) while (true) {
+                
+            Utility.dot(counter++);
+            String s = cc.next(ces, lenArray);
+            if (s == null) break;
+            
+            if (UTF16.countCodePoint(s) != 1) continue; // skip ligatures
+            int cp = UTF16.charAt(s, 0);
+            if (nfkd.normalizationDiffers(cp)) continue;
+            
+            int script = ucd.getScript(cp);
+            int len = lenArray[0];
+            for (int i = 0; i < len; ++i) {
+                int prim = UCA.getPrimary(ces[i]);
+                int hash = prim % tableLength;
+                if (!repeats[script].get(prim)) {
+                    ++collisions[script][hash];
+                    repeats[script].set(prim);
+                } else {
+                    System.out.println("Skipping: " + prim + " in " + ucd.getCodeAndName(cp));
+                }
+                if (!repeats[UNUSED_SCRIPT].get(prim)) {
+                    ++collisions[UNUSED_SCRIPT][hash];
+                    repeats[UNUSED_SCRIPT].set(prim);
+                }
+            }
+        }
+        
+        String [] latin = new String[tableLength];
+        for (int i = 0; i < latin.length; ++i) {
+            latin[i] = "";
+        }
+        
+        for (int cp = 0; cp < 0x10FFFF; ++cp) {
+                
+            Utility.dot(counter++);
+            if (!ucd.isAllocated(cp)) continue;
+            if (nfkd.normalizationDiffers(cp)) continue;
+            if (ucd.getCategory(cp) == Lu) continue; // don't count case
+            
+            String scp = UTF16.valueOf(cp);
+            int len = collator.getCEs(scp, true, ces);
+            int script = ucd.getScript(cp);
+            
+            for (int i = 0; i < len; ++i) {
+                int prim = UCA.getPrimary(ces[i]);
+                int hash = prim % tableLength;
+                if (!repeats[script].get(prim)) {
+                    ++collisions[script][hash];
+                    repeats[script].set(prim);
+                    if (script == LATIN_SCRIPT) latin[hash] += scp;
+                }
+                if (!repeats[UNUSED_SCRIPT].get(prim)) {
+                    ++collisions[UNUSED_SCRIPT][hash];
+                    repeats[UNUSED_SCRIPT].set(prim);
+                }
+            }
+        }
+        
+        System.out.println("Data Gathered");
+
+        PrintWriter log = Utility.openPrintWriter("checkstringsearchhash.html");
+        Utility.writeHtmlHeader(log, "Check Hash");
+        log.println("<h1>Collisions</h1>");
+        log.println("<p>Shows collisions among primary values when hashed to table size = " + tableLength + ".");
+        log.println("Note: All duplicate primarys are removed: all non-colliding values are removed.</p>");
+        log.println("<table><tr><th>Script</th><th>Sum</th><th>Average</th><th>Std Dev.</th></tr>");
+        
+        for (byte i = 0; i < collisions.length; ++i) {
+            if (i == UNUSED_SCRIPT) continue;
+            showCollisions(log, ucd.getScriptID_fromIndex(i), collisions[i]);
+        }
+        showCollisions(log, "All", collisions[UNUSED_SCRIPT]);
+        log.println("</table>");
+        
+        log.println("<p>Details of collisions for Latin</p>");
+        
+        for (int i = 0; i < latin.length; ++i) {
+            if (latin[i].length() < 2) continue;
+            //if (UTF16.countCodePoint(latin[i]) < 2) continue;
+            int cp2;
+            log.println("<table>");
+            for (int j = 0; j < latin[i].length(); j += UTF16.getCharCount(cp2)) {
+                cp2 = UTF16.charAt(latin[i], j);
+                String scp2 = UTF16.valueOf(cp2);
+                CEList clist = collator.getCEList(scp2, true);
+                log.println("<tr><td>" + scp2 + "</td><td>" + clist + "</td><td>" + ucd.getCodeAndName(cp2) + "</td></tr>");
+            }
+            log.println("</table><br>");
+        }
+
+        log.close();
+    }
+    
+    static java.text.NumberFormat nf = new java.text.DecimalFormat("#,##0.00");
+    static java.text.NumberFormat nf0 = new java.text.DecimalFormat("#,##0");
+    
+    static void showCollisions(PrintWriter log, String title, int[] curr) {
+            
+        double sum = 0;
+        int count = 0;
+        for (int j = 0; j < curr.length; ++j) {
+            if (curr[j] == 0) continue;
+            sum += curr[j];
+            ++count;
+        }
+        double average = sum / count;
+            
+        double sd = 0;
+        for (int j = 0; j < curr.length; ++j) {
+            if (curr[j] == 0) continue;
+            double deviation = curr[j] - average;
+            sd += deviation * deviation;
+        }
+        sd = Math.sqrt(sd / count);
+            
+        log.println("<tr><td>" + title
+            + "</td><td align='right'>" + nf0.format(sum)
+            + "</td><td align='right'>" + nf.format(average)
+            + "</td><td align='right'>" + nf.format(sd)
+            + "</td></tr>");            
     }
 }
