@@ -85,11 +85,13 @@
 
 #include "unicode/utypes.h"
 
-/** From unicode/ucnv.h @stable ICU 2.0 */
-typedef struct UConverter UConverter;
-
-
 #if !UCONFIG_NO_CONVERSION
+
+/** Forward declaring the UConverter structure. @stable ICU 2.0 */
+struct UConverter;
+
+/** @stable ICU 2.0 */
+typedef struct UConverter UConverter;
 
 /**
  * FROM_U, TO_U context options for sub callback
