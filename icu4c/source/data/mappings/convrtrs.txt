@@ -1,30 +1,48 @@
-# *******************************************************************************
+# ******************************************************************************
 # *
-# *   Copyright (C) 1995-2003, International Business Machines
+# *   Copyright (C) 1995-2004, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
-# *******************************************************************************
+# ******************************************************************************
+
+# If this converter alias table looks very confusing, a much easier to
+# understand view can be found at this demo:
+# http://oss.software.ibm.com/cgi-bin/icu/convexp
 
 # IMPORTANT NOTE
 #
 # This file is not read directly by ICU. If you change it, you need to
-# run gencnval, and eventually pkgdata to update the representation that
-# ICU uses for aliases.
+# run gencnval, and eventually run pkgdata to update the representation that
+# ICU uses for aliases. The gencnval tool will normally compile this file into
+# cnvalias.icu. The gencnval -v verbose option will help you when you edit
+# this file.
 
 # Please be friendly to the rest of us that edit this table by
 # keeping this table free of tabs.
 
-# If this table looks very confusing, a much easier to understand view can
-# be found at this demo: http://oss.software.ibm.com/cgi-bin/icu/convexp
-
 # This is an alias file used by the character set converter.
+# A lot of converter information can be found in unicode/ucnv.h, but here
+# is more information about this file.
 #
-# Format:
+# Here is the file format using BNF-like syntax:
 #
-#     Actual file name || Algorithm name     alias1 alias2 ...
+# converterTable ::= tags { converterLine* }
+# converterLine ::= converterName [ tags ] { taggedAlias* }'\n'
+# taggedAlias ::= alias [ tags ]
+# tags ::= '{' { tag+ } '}'
+# tag ::= standard['*']
+# converterName ::= [0-9a-zA-Z:_'-']+
+# alias ::= converterName
 #
-# except for column 1 (file names) case insensitive. Names are separated
-# by whitespace.
+# Except for the converter name, aliases are case insensitive.
+# Names are separated by whitespace.
+# Line continuation and comment sytax are similar to the GNU make syntax.
+# Any lines beginning with whitespace (e.g. U+0020 SPACE or U+0009 HORIZONTAL
+# TABULATION) are presumed to be a continuation of the previous line.
+# The # symbol starts a comment and the comment continues till the end of
+# the line.
+#
+# The converter
 #
 # All names can be tagged by including a space-separated list of tags in
 # curly braces, as in ISO_8859-1:1987{IANA*} iso-8859-1 { MIME* } or
@@ -33,57 +51,67 @@
 #
 # The tags can be used to get standard names using ucnv_getStandardName().
 #
-# Here is a list of tags used in this file:
-#
-# IANA          The IANA charset name, as documented in RFC 1700.
-# MIME          The MIME charset name, used for content type tagging. 
+# The complete list of recognized tags used in this file is defined in
+# the affinity list near the beginning of the file.
 #
 # The * after the standard tag denotes that the previous alias is the
 # preferred (default) charset name for that standard. There can only
 # be one of these default charset names per converter.
 
+
+
 # The world is getting more complicated...
 # Supporting XML parsers, HTML, MIME, and similar applications
-# that mark encodings with unique charset names, we are forced to
-# make this table much more static than before.
+# that mark encodings with a charset name can be difficult.
+# Many of these applications and operating systems will update
+# their codepages over time.
 
-# It means that a new encoding, one that differs from an
+# It means that a new codepage, one that differs from an
 # old one by changing a code point, e.g., to the Euro sign,
 # must not get an old alias, because it would mean that
 # old files with this alias would be interpreted differently.
 
-# If an encoding gets updated by assigning characters to previously
+# If an codepage gets updated by assigning characters to previously
 # unassigned code points, then a new name is not necessary.
 # Also, some codepages map unassigned codepage byte values
 # to the same numbers in Unicode for roundtripping. It may be
 # industry practice to keep the encoding name in such a case, too
 # (example: Windows codepages).
 
-# Especially, the aliases listed in the list of character sets
+# The aliases listed in the list of character sets
 # that is maintained by the IANA (http://www.iana.org/) must
 # not be changed to mean encodings different from what this
-# list shows.
-# Currently, the IANA list is at
+# list shows. Currently, the IANA list is at
 # http://www.iana.org/assignments/character-sets
+# It should also be mentioned that the exact mapping table used for each
+# IANA names usually isn't specified. This means that some other applications
+# and operating systems are left to interpret the exact mappings for the
+# underspecified aliases. For instance, Shift-JIS on a Solaris platform
+# may be different from Shift-JIS on a Windows platform. This is why
+# some of the aliases can be tagged to differentiate different mapping
+# tables with the same alias. If an alias is given to more than one converter,
+# it is considered to be an ambiguous alias, and the affinity list will
+# choose the converter to use when a standard isn't specified with the alias.
 
 # Name matching is case-insensitive. Also, dashes '-', underscores '_'
-# and spaces ' ' are ignored in names (thus cs-iso-latin-1 and csisolatin1
-# are the same).
+# and spaces ' ' are ignored in names (thus cs-iso_latin-1, csisolatin1
+# and "cs iso latin 1" are the same).
 # However, the names in the left column are directly file names
 # or names of algorithmic converters, and their case must not
 # be changed - or else code and/or file names must also be changed.
+# For example, the converter ibm-921 is expected to be the file ibm-921.cnv.
 
 
 
 # The immediately following list is the affinity list of supported standard tags.
 # When multiple converters have the same alias under different standards,
 # the standard nearest to the top of this list with that alias will
-# be the first converter that will be opened. The ordering of the aliases after this
-# affinity list does not affect the preferred alias, but it may affect the order of
-# the returned list of aliases for a given converter.
+# be the first converter that will be opened. The ordering of the aliases
+# after this affinity list does not affect the preferred alias, but it may
+# affect the order of the returned list of aliases for a given converter.
 #
 # The general ordering is from specific and frequently used to more general
-# or rarely used.
+# or rarely used at the bottom.
 {   UTR22           # Name format specified by http://www.unicode.org/unicode/reports/tr22/
     # ICU             # Can also use ICU_FEATURE
     IBM             # The IBM CCSID number is specified by ibm-*
@@ -147,8 +175,8 @@ UTF32_OppositeEndian
 # On UTF-7:
 # RFC 2152 (http://www.imc.org/rfc2152) allows to encode some US-ASCII
 # characters directly or in base64. Especially, the characters in set O
-# as defined in the RFC (!"#$%&*;<=>@[]^_`{|}) may be encoded directly but are not
-# allowed in, e.g., email headers.
+# as defined in the RFC (!"#$%&*;<=>@[]^_`{|}) may be encoded directly
+# but are not allowed in, e.g., email headers.
 # By default, the ICU UTF-7 converter encodes set O directly.
 # By choosing the option "version=1", set O will be escaped instead.
 # For example:
@@ -866,3 +894,5 @@ ebcdic-xml-us
 
 #ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host. Euro update of ibm-28709. This is used in combination with another CCSID mapping.
 #ibm-9027_P100-1999 { UTR22* }   ibm-9027 { IBM* }   # DBCS T-Ch Host. Euro update of ibm-835. DBCS portion of ibm-1371.
+
+
