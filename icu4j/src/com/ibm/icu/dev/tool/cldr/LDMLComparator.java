@@ -267,10 +267,10 @@ public class LDMLComparator {
                     }
                 }
                 if((m_totalCount == 0) && m_Vetting) { // only  optional for vetting.
-                    System.out.println("INFO:  no file created (nothing to write..) " + fileName);
+                    //System.out.println("INFO:  no file created (nothing to write..) " + fileName);
                 } else {
                     OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
-                    System.out.println("INFO: Creating file named: " + fileName);
+                    System.out.println("INFO: Writing: " + fileName + "\t(" + m_totalCount + " items)");
                     
                     PrintWriter writer = new PrintWriter(os);
                     printHTML(writer, localeStr);
@@ -724,7 +724,7 @@ public class LDMLComparator {
     }
 
     private void   printHTML(PrintWriter writer, String localeStr){
-        System.out.println("INFO: Creating the comparison chart ");
+      //  System.out.println("INFO: Creating the comparison chart ");
         ULocale locale = new ULocale(localeStr);
         String displayLang = locale.getDisplayLanguage();
         String dispCountry = locale.getDisplayCountry();
@@ -878,7 +878,7 @@ public class LDMLComparator {
          int index = fileName.lastIndexOf(File.separatorChar);
          String sourceDir = fileName.substring(0, index+1);
          String locale = fileName.substring(index+1, fileName.lastIndexOf("."));
-         System.out.println("INFO: getting parsed data for : " + fileName);
+         System.out.println("INFO: Parsing " + fileName);
          Document doc = LDMLUtilities.parse(fileName,true); // ?  
          
          return doc;
@@ -1413,7 +1413,7 @@ public class LDMLComparator {
     // added by PN
     private void printHTMLStart(PrintWriter writer)
     {
-        System.out.println("INFO: Creating the comparison chart ");
+       // System.out.println("INFO: Creating the comparison chart ");
 
         writer.print("<html>\n"+
         "    <head>\n"+
