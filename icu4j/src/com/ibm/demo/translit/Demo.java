@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/translit/Attic/Demo.java,v $ 
- * $Date: 2001/11/29 01:21:12 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/11/29 17:28:38 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -27,11 +27,11 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.10 $ $Date: 2001/11/29 01:21:12 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.11 $ $Date: 2001/11/29 17:28:38 $
  */
 public class Demo extends Frame {
 
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
 
     Transliterator translit = null;
     String fontName = "Arial Unicode MS";
