@@ -12,7 +12,7 @@
 #include "SubtableProcessor.h"
 #include "IndicRearrangementProcessor.h"
 #include "ContextualGlyphSubstProc.h"
-#include "LigatureSubstitutionProcessor.h"
+#include "LigatureSubstProc.h"
 #include "NonContextualGlyphSubstProc.h"
 //#include "ContextualGlyphInsertionProcessor.h"
 #include "LESwaps.h"

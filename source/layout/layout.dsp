@@ -608,11 +608,11 @@ SOURCE=.\LigatureSubstitution.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LigatureSubstitutionProcessor.h
+SOURCE=.\LigatureSubstProc.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\LigatureSubstitutionSubtables.h
+SOURCE=.\LigatureSubstSubtables.h
 # End Source File
 # Begin Source File
 
@@ -679,7 +679,7 @@ SOURCE=.\MorphTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MultipleSubstitutionSubtables.h
+SOURCE=.\MultipleSubstSubtables.h
 # End Source File
 # Begin Source File
 
