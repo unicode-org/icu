@@ -25,6 +25,7 @@
 #include "unicode/ustring.h"
 #include "mutex.h"
 #include "unicode/unistr.h"
+#include "uhash.h"
 
 #if 0
 //DEBUGGING
@@ -992,40 +993,13 @@ UnicodeString::doReverse(UTextOffset start,
 int32_t
 UnicodeString::doHashCode()
 {
-  const UChar *key     = getArrayStart();
-  int32_t len          = fLength;
-  int32_t hash         = kInvalidHashCode;
-  const UChar *limit   = key + len;
-
-  /*
-    We compute the hash by iterating sparsely over 64 (at most)
-    characters spaced evenly through the string.  For each character,
-    we multiply the previous hash value by a prime number and add the
-    new character in, in the manner of an additive linear congruential
-    random number generator, thus producing a pseudorandom
-    deterministic value which should be well distributed over the
-    output range. [LIU] */
-
-  if(len <= 64) {
-    while(key < limit) {
-      hash = (hash * 37) + *key++;
+    /* Delegate hash computation to uhash.  This makes UnicodeString
+     * hashing consistent with UChar* hashing.  */
+    fHashCode = uhash_hashUCharsN(getArrayStart(), fLength);
+    if (fHashCode == kInvalidHashCode) {
+        fHashCode = kEmptyHashCode;
     }
-  } else {
-    int32_t inc = (len+63)/64;
-
-    while(key < limit) {
-      hash = (hash * 37) + *key;
-      key += inc;
-    }
-  }
-
-  hash &= 0x7fffffff;
-  if(hash == kInvalidHashCode) {
-    hash = kEmptyHashCode;
-  }
-
-  fHashCode = hash;
-  return fHashCode;
+    return fHashCode;
 }
 
 //========================================
