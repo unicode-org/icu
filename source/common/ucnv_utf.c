@@ -775,6 +775,7 @@ static const UConverterImpl _UTF8Impl={
     T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC,
     T_UConverter_getNextUChar_UTF8,
 
+    NULL,
     NULL
 };
 
@@ -954,6 +955,7 @@ static const UConverterImpl _UTF16BEImpl={
     NULL,
     T_UConverter_getNextUChar_UTF16_BE,
 
+    NULL,
     NULL
 };
 
@@ -1142,6 +1144,7 @@ static const UConverterImpl _UTF16LEImpl={
     NULL,
     T_UConverter_getNextUChar_UTF16_LE,
 
+    NULL,
     NULL
 };
 
@@ -1368,6 +1371,7 @@ static const UConverterImpl _UTF32BEImpl = {
 /*    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC, */
     T_UConverter_getNextUChar_UTF32_BE,
 
+    NULL,
     NULL
 };
 
@@ -1594,6 +1598,7 @@ static const UConverterImpl _UTF32LEImpl = {
 /*    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC, */
     T_UConverter_getNextUChar_UTF32_LE,
 
+    NULL,
     NULL
 };
 

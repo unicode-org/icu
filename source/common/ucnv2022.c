@@ -343,7 +343,7 @@ UCNV_TableStates_2022 getKey_2022(char source,
 static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t* version, UErrorCode *errorCode);
 static void _ISO2022Close(UConverter *converter);
 static void _ISO2022Reset(UConverter *converter);
-static const char* _ISO2022getName(UConverter* cnv);
+static const char* _ISO2022getName(const UConverter* cnv);
 
 /************ protos of functions for setting the initial state *********************/
 static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
@@ -680,7 +680,7 @@ _ISO2022Reset(UConverter *converter) {
     }
 
 }
-static const char* _ISO2022getName(UConverter* cnv){
+static const char* _ISO2022getName(const UConverter* cnv){
     if(cnv->extraInfo){
         UConverterDataISO2022* myData= (UConverterDataISO2022*)cnv->extraInfo;
         return myData->name;
