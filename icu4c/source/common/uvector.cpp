@@ -32,6 +32,10 @@ UVector::UVector(int32_t initialCapacity, UErrorCode &status) :
     deleter(0),
     comparer(0)
 {
+    // Fix bogus initialCapacity values; avoid malloc(0)
+    if (initialCapacity < 1) {
+        initialCapacity = 1;
+    }
     _init(initialCapacity, status);
 }
 

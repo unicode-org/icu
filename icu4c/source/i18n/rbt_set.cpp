@@ -276,8 +276,9 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
     }
 
     /* Precompute the index values.  This saves a LOT of time.
+     * Be careful not to call malloc(0).
      */
-    int16_t* indexValue = (int16_t*) uprv_malloc( sizeof(int16_t) * n );
+    int16_t* indexValue = (int16_t*) uprv_malloc( sizeof(int16_t) * (n > 0 ? n : 1) );
     for (j=0; j<n; ++j) {
         TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
         indexValue[j] = r->getIndexValue();
