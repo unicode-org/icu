@@ -842,7 +842,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
      *
      * Markus Scherer 2000-jul-19
      */
-    if(c!=0) {
+    if(c!=0 && targetCapacity>0) {
         goto getTrail;
     }
 
@@ -865,11 +865,10 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
             ++nextSourceIndex;
             if(UTF_IS_SURROGATE(c)) {
                 if(UTF_IS_SURROGATE_FIRST(c)) {
-                    if(source<sourceLimit) {
-                        UChar trail;
 getTrail:
+                    if(source<sourceLimit) {
                         /* test the following code unit */
-                        trail=*source;
+                        UChar trail=*source;
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             ++source;
                             ++nextSourceIndex;
