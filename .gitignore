@@ -117,6 +117,7 @@ icu4c/source/layout/*.pdb
 icu4c/source/layout/Debug
 icu4c/source/layout/Makefile
 icu4c/source/layout/Release
+icu4c/source/layout/libicule.so.20.0
 icu4c/source/layout/tmp
 icu4c/source/samples/Makefile
 icu4c/source/samples/XMLConverter/*.d
@@ -188,6 +189,7 @@ icu4c/source/tools/ctestfw/*.pdb
 icu4c/source/tools/ctestfw/Debug
 icu4c/source/tools/ctestfw/Makefile
 icu4c/source/tools/ctestfw/Release
+icu4c/source/tools/ctestfw/libicuctestfw.so.20.0
 icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/ctestfw/tmp
 icu4c/source/tools/dumpce/Makefile
@@ -220,6 +222,8 @@ icu4c/source/tools/gencnval/gencnval
 icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/tmp
 icu4c/source/tools/genfchk/Makefile
+icu4c/source/tools/genfchk/genfchk
+icu4c/source/tools/genfchk/genfchk.d
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.pdb
 icu4c/source/tools/gennames/Debug
@@ -243,6 +247,8 @@ icu4c/source/tools/genprops/Release
 icu4c/source/tools/genprops/genprops
 icu4c/source/tools/genprops/tmp
 icu4c/source/tools/genqchk/Makefile
+icu4c/source/tools/genqchk/genqchk
+icu4c/source/tools/genqchk/genqchk.d
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.pdb
 icu4c/source/tools/genrb/Debug
