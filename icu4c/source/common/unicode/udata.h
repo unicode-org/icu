@@ -22,7 +22,10 @@
 U_CDECL_BEGIN
 
 /**
- * Information about data memory.
+ * \file
+ * \brief Descripton of data memory in C API
+ *
+ * <h2>Information about data memory. </h2>
  * This structure may grow in the future, indicated by the
  * <code>size</code> field.
  *

@@ -60,22 +60,23 @@
  * </ul>
  *
  * Example:
- * <pre>
- * &#32; void function1(ForwardCharacterIterator &it) {
- * &#32;     UChar32 c;
- * &#32;     while(it.hasNext()) {
- * &#32;         c=it.next32PostInc();
- * &#32;         // use c
- * &#32;     }
- * &#32; }
+ * \code 
+ * void function1(ForwardCharacterIterator &it) {
+ *     UChar32 c;
+ *     while(it.hasNext()) {
+ *         c=it.next32PostInc();
+ *         // use c
+ *     }
+ * }
  *
- * &#32; void function1(ForwardCharacterIterator &it) {
- * &#32;     UChar c;
- * &#32;     while((c=it.nextPostInc())!=ForwardCharacterIterator::DONE) {
- * &#32;         // use c
- * &#32;     }
- * &#32; }
- * </pre></p>
+ * void function1(ForwardCharacterIterator &it) {
+ *     UChar c;
+ *     while((c=it.nextPostInc())!=ForwardCharacterIterator::DONE) {
+ *         // use c
+ *      }
+ *  }
+ * \endcode
+ * </p>
  */
 class U_COMMON_API ForwardCharacterIterator {
 public:
@@ -182,123 +183,140 @@ protected:
  * <p>Examples for some of the new functions:</p>
  *
  * Forward iteration with hasNext():
- * &#32; void forward1(CharacterIterator &it) {
- * &#32;     UChar32 c;
- * &#32;     for(it.setToStart(); it.hasNext();) {
- * &#32;         c=it.next32PostInc();
- * &#32;         // use c
- * &#32;     }
- * &#32; }
- *
+ * \code
+ * void forward1(CharacterIterator &it) {
+ *     UChar32 c;
+ *     for(it.setToStart(); it.hasNext();) {
+ *         c=it.next32PostInc();
+ *         // use c
+ *     }
+ *  }
+ * \endcode
  * Forward iteration more similar to loops with the old forward iteration,
  * showing a way to convert simple for() loops:
- * &#32; void forward2(CharacterIterator &it) {
- * &#32;     UChar c;
- * &#32;     for(c=it.firstPostInc(); c!=CharacterIterator::DONE; c=it.nextPostInc()) {
- * &#32;         // use c
- * &#32;     }
- * &#32; }
- *
+ * \code
+ * void forward2(CharacterIterator &it) {
+ *     UChar c;
+ *     for(c=it.firstPostInc(); c!=CharacterIterator::DONE; c=it.nextPostInc()) {
+ *          // use c
+ *      }
+ * }
+ * \endcode
  * Backward iteration with setToEnd() and hasPrevious():
- * &#32; void backward1(CharacterIterator &it) {
- * &#32;     UChar32 c;
- * &#32;     for(it.setToEnd(); it.hasPrevious();) {
- * &#32;         c=it.previous32();
- * &#32;         // use c
- * &#32;     }
- * &#32; }
- *
+ * \code
+ *  void backward1(CharacterIterator &it) {
+ *      UChar32 c;
+ *      for(it.setToEnd(); it.hasPrevious();) {
+ *         c=it.previous32();
+ *          // use c
+ *      }
+ *  }
+ * \endcode
  * Backward iteration with a more traditional for() loop:
- * &#32; void backward2(CharacterIterator &it) {
- * &#32;     UChar c;
- * &#32;     for(c=it.last(); c!=CharacterIterator::DONE; c=it.previous()) {
- * &#32;         // use c
- * &#32;     }
- * &#32; }
+ * \code
+ * void backward2(CharacterIterator &it) {
+ *     UChar c;
+ *     for(c=it.last(); c!=CharacterIterator::DONE; c=it.previous()) {
+ *         // use c
+ *      }
+ *  }
+ * \endcode
  *
  * Example for random access:
- * &#32; void random(CharacterIterator &it) {
- * &#32;     // set to the third code point from the beginning
- * &#32;     it.move32(3, CharacterIterator::kStart);
- * &#32;     // get a code point from here without moving the position
- * &#32;     UChar32 c=it.current32();
- * &#32;     // get the position
- * &#32;     int32_t pos=it.getIndex();
- * &#32;     // get the previous code unit
- * &#32;     UChar u=it.previous();
- * &#32;     // move back one more code unit
- * &#32;     it.move(-1, CharacterIterator::kCurrent);
- * &#32;     // set the position back to where it was
- * &#32;     // and read the same code point c and move beyond it
- * &#32;     it.setIndex(pos);
- * &#32;     if(c!=it.next32PostInc()) {
- * &#32;         exit(1); // CharacterIterator inconsistent
- * &#32;     }
- * &#32; }
+ * \code
+ *  void random(CharacterIterator &it) {
+ *      // set to the third code point from the beginning
+ *      it.move32(3, CharacterIterator::kStart);
+ *      // get a code point from here without moving the position
+ *      UChar32 c=it.current32();
+ *      // get the position
+ *      int32_t pos=it.getIndex();
+ *      // get the previous code unit
+ *      UChar u=it.previous();
+ *      // move back one more code unit
+ *      it.move(-1, CharacterIterator::kCurrent);
+ *      // set the position back to where it was
+ *      // and read the same code point c and move beyond it
+ *      it.setIndex(pos);
+ *      if(c!=it.next32PostInc()) {
+ *          exit(1); // CharacterIterator inconsistent
+ *      }
+ *  }
+ * \endcode
  *
  * <p>Examples, especially for the old API:</p>
  *
  * Function processing characters, in this example simple output
  * <pre>
- * &#32; void processChar( UChar c )
- * &#32; {
- * &#32;     cout &lt;&lt; " " &lt;&lt; c;
- * &#32; }
+ * \code
+ *  void processChar( UChar c )
+ *  {
+ *      cout &lt;&lt; " " &lt;&lt; c;
+ *  }
+ * \endcode
  * </pre>
  * Traverse the text from start to finish
  * <pre> 
- * &#32; void traverseForward(CharacterIterator& iter)
- * &#32; {
- * &#32;     for(UChar c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
- * &#32;         processChar(c);
- * &#32;     }
- * &#32; }
+ * \code
+ *  void traverseForward(CharacterIterator& iter)
+ *  {
+ *      for(UChar c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
+ *          processChar(c);
+ *      }
+ *  }
+ * \endcode
  * </pre>
  * Traverse the text backwards, from end to start
  * <pre>
- * &#32; void traverseBackward(CharacterIterator& iter)
- * &#32; {
- * &#32;     for(UChar c = iter.last(); c != CharacterIterator.DONE; c = iter.previous()) {
- * &#32;         processChar(c);
- * &#32;     }
- * &#32; }
+ * \code
+ *  void traverseBackward(CharacterIterator& iter)
+ *  {
+ *      for(UChar c = iter.last(); c != CharacterIterator.DONE; c = iter.previous()) {
+ *          processChar(c);
+ *      }
+ *  }
+ * \endcode
  * </pre>
  * Traverse both forward and backward from a given position in the text. 
  * Calls to notBoundary() in this example represents some additional stopping criteria.
  * <pre>
- * &#32; void traverseOut(CharacterIterator& iter, UTextOffset pos)
- * &#32; {
- * &#32;     UChar c;
- * &#32;     for (c = iter.setIndex(pos);
- * &#32;     c != CharacterIterator.DONE && (Unicode::isLetter(c) || Unicode::isDigit(c));
- * &#32;         c = iter.next()) {}
- * &#32;     UTextOffset end = iter.getIndex();
- * &#32;     for (c = iter.setIndex(pos);
- * &#32;         c != CharacterIterator.DONE && (Unicode::isLetter(c) || Unicode::isDigit(c));
- * &#32;         c = iter.previous()) {}
- * &#32;     UTextOffset start = iter.getIndex() + 1;
- * &#32; 
- * &#32;     cout &lt;&lt; "start: " &lt;&lt; start &lt;&lt; " end: " &lt;&lt; end &lt;&lt; endl;
- * &#32;     for (c = iter.setIndex(start); iter.getIndex() &lt; end; c = iter.next() ) {
- * &#32;         processChar(c);
- * &#32;     }
- * &#32;  }
+ * \code
+ * void traverseOut(CharacterIterator& iter, UTextOffset pos)
+ * {
+ *      UChar c;
+ *      for (c = iter.setIndex(pos);
+ *      c != CharacterIterator.DONE && (Unicode::isLetter(c) || Unicode::isDigit(c));
+ *          c = iter.next()) {}
+ *      UTextOffset end = iter.getIndex();
+ *      for (c = iter.setIndex(pos);
+ *          c != CharacterIterator.DONE && (Unicode::isLetter(c) || Unicode::isDigit(c));
+ *          c = iter.previous()) {}
+ *      UTextOffset start = iter.getIndex() + 1;
+ *  
+ *      cout &lt;&lt; "start: " &lt;&lt; start &lt;&lt; " end: " &lt;&lt; end &lt;&lt; endl;
+ *      for (c = iter.setIndex(start); iter.getIndex() &lt; end; c = iter.next() ) {
+ *          processChar(c);
+ *     }
+ *  }
+ * \endcode
  * </pre>
  * Creating a StringCharacterIterator and calling the test functions
  * <pre>
- * &#32;  void CharacterIterator_Example( void )
- * &#32;  {
- * &#32;      cout &lt;&lt; endl &lt;&lt; "===== CharacterIterator_Example: =====" &lt;&lt; endl;
- * &#32;      UnicodeString text("Ein kleiner Satz.");
- * &#32;      StringCharacterIterator iterator(text);
- * &#32;      cout &lt;&lt; "----- traverseForward: -----------" &lt;&lt; endl;
- * &#32;      traverseForward( iterator );
- * &#32;      cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseBackward: ----------" &lt;&lt; endl;
- * &#32;      traverseBackward( iterator );
- * &#32;      cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseOut: ---------------" &lt;&lt; endl;
- * &#32;      traverseOut( iterator, 7 );
- * &#32;      cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "-----" &lt;&lt; endl;
- * &#32;  }
+ * \code
+ *  void CharacterIterator_Example( void )
+ *   {
+ *       cout &lt;&lt; endl &lt;&lt; "===== CharacterIterator_Example: =====" &lt;&lt; endl;
+ *       UnicodeString text("Ein kleiner Satz.");
+ *       StringCharacterIterator iterator(text);
+ *       cout &lt;&lt; "----- traverseForward: -----------" &lt;&lt; endl;
+ *       traverseForward( iterator );
+ *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseBackward: ----------" &lt;&lt; endl;
+ *       traverseBackward( iterator );
+ *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseOut: ---------------" &lt;&lt; endl;
+ *       traverseOut( iterator, 7 );
+ *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "-----" &lt;&lt; endl;
+ *   }
+ * \endcode
  * </pre>
  */
 class U_COMMON_API CharacterIterator : public ForwardCharacterIterator {

@@ -23,6 +23,18 @@
 #ifndef __UMACHINE_H__
 #define __UMACHINE_H__
 
+/**
+ * \file
+ * \brief Description of basic types and constants for UTF C API
+ * 
+ * <h2> Basic types and constants for UTF </h2>
+ *   This file defines basic types and constants for utf.h to be
+ *   platform-independent. umachine.h and utf.h are included into
+ *   utypes.h to provide all the general definitions for ICU.
+ *   All of these definitions used to be in utypes.h before
+ *   the UTF-handling macros made this unmaintainable.
+ * 
+ */
 /*===========================================================================*/
 /* Include platform-dependent definitions                                    */
 /* which are contained in the platform-specific file platform.h              */

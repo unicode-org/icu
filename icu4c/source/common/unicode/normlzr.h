@@ -28,11 +28,15 @@ class ComposedCharIter;
  * (A-acute).   In Unicode, this can be encoded as a single character (the
  * "composed" form):
  * <pre>
+ * \code
  *      00C1    LATIN CAPITAL LETTER A WITH ACUTE</pre>
+ * \endcode
  * or as two separate characters (the "decomposed" form):
  * <pre>
+ * \code
  *      0041    LATIN CAPITAL LETTER A
  *      0301    COMBINING ACUTE ACCENT</pre>
+ * \endcode
  * <p>
  * To a user of your program, however, both of these sequences should be
  * treated as the same "user-level" character "Á".  When you are searching or
@@ -44,12 +48,16 @@ class ComposedCharIter;
  * <p>
  * Similarly, the string "ffi" can be encoded as three separate letters:
  * <pre>
+ * \code
  *      0066    LATIN SMALL LETTER F
  *      0066    LATIN SMALL LETTER F
  *      0069    LATIN SMALL LETTER I</pre>
+ * \endcode
  * or as the single character
  * <pre>
+ * \code
  *      FB03    LATIN SMALL LIGATURE FFI</pre>
+ * \endcode
  * <p>
  * The ffi ligature is not a distinct semantic character, and strictly speaking
  * it shouldn't be in Unicode at all, but it was included for compatibility

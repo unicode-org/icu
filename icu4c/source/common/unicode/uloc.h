@@ -24,7 +24,10 @@
 #include "unicode/utypes.h"
 
 /**    
+ * \file
+ * \brief Description of Locale C API
  *
+ * <h2> ULoc C API for Locale </h2>
  * A <code>Locale</code> represents a specific geographical, political,
  * or cultural region. An operation that requires a <code>Locale</code> to perform
  * its task is called <em>locale-sensitive</em> and uses the <code>Locale</code>
@@ -38,11 +41,13 @@
  * Each of the component is separated by '_' in the locale string.
  * <blockquote>
  * <pre>
- * .      newLanguage
- * .
- * .      newLanguage + newCountry
- * .
- * .      newLanguage + newCountry + newVariant
+ * \code
+ *       newLanguage
+ * 
+ *       newLanguage + newCountry
+ * 
+ *       newLanguage + newCountry + newVariant
+ * \endcode
  * </pre>
  * </blockquote>
  * The first option is a valid <STRONG>ISO
@@ -89,7 +94,9 @@
  * for the United States:
  * <blockquote>
  * <pre>
- * .      ULOC_US
+ * \code
+ *       ULOC_US
+ * \endcode
  * </pre>
  * </blockquote>
  *
@@ -113,29 +120,33 @@
  * </P>
  * <blockquote>
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    UNumberFormat *nf;
- * .    const char* myLocale = "fr_FR";
- * .
- * .    nf = unum_open( UNUM_DEFAULT, NULL, success );          
- * .    unum_close(nf);
- * .    nf = unum_open( UNUM_CURRENCY, NULL, success );
- * .    unum_close(nf);
- * .    nf = unum_open( UNUM_PERCENT, NULL, success );   
- * .    unum_close(nf);
+ * \code
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     UNumberFormat *nf;
+ *     const char* myLocale = "fr_FR";
+ * 
+ *     nf = unum_open( UNUM_DEFAULT, NULL, success );          
+ *     unum_close(nf);
+ *     nf = unum_open( UNUM_CURRENCY, NULL, success );
+ *     unum_close(nf);
+ *     nf = unum_open( UNUM_PERCENT, NULL, success );   
+ *     unum_close(nf);
+ * \endcode
  * </pre>
  * </blockquote>
  * Each of these methods has two variants; one with an explicit locale
  * and one without; the latter using the default locale.
  * <blockquote>
  * <pre>
- * .
- * .    nf = unum_open( UNUM_DEFAULT, myLocale, success );          
- * .    unum_close(nf);
- * .    nf = unum_open( UNUM_CURRENCY, myLocale, success );
- * .    unum_close(nf);
- * .    nf = unum_open( UNUM_PERCENT, myLocale, success );   
- * .    unum_close(nf);
+ * \code 
+ * 
+ *     nf = unum_open( UNUM_DEFAULT, myLocale, success );          
+ *     unum_close(nf);
+ *     nf = unum_open( UNUM_CURRENCY, myLocale, success );
+ *     unum_close(nf);
+ *     nf = unum_open( UNUM_PERCENT, myLocale, success );   
+ *     unum_close(nf);
+ * \endcode
  * </pre>
  * </blockquote>
  * A <code>Locale</code> is the mechanism for identifying the kind of services
@@ -153,15 +164,17 @@
  * three class methods:
  * <blockquote>
  * <pre>
- * .      const char* uloc_getAvailable(int32_t index);
- * .      int32_t uloc_countAvailable();
- * .      int32_t
- * .      uloc_getDisplayName(const char* localeID,
- * .                const char* inLocaleID, 
- * .                UChar* result,
- * .                int32_t maxResultSize,
- * .                 UErrorCode* err);
- * .
+ * \code
+ *       const char* uloc_getAvailable(int32_t index);
+ *       int32_t uloc_countAvailable();
+ *       int32_t
+ *       uloc_getDisplayName(const char* localeID,
+ *                 const char* inLocaleID, 
+ *                 UChar* result,
+ *                 int32_t maxResultSize,
+ *                  UErrorCode* err);
+ * 
+ * \endcode
  * </pre>
  * </blockquote>
  */
