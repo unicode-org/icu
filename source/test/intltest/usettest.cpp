@@ -775,6 +775,23 @@ void UnicodeSetTest::TestPropertySet() {
         "[:Case Sensitive:]",
         "A\\u1FFC\\U00010410",
         ";\\u00B4\\U00010500",
+
+        // JB#2832: C99-compatibility props
+        "[:blank:]",
+        " \\u0009",
+        "1-9A-Z",
+
+        "[:graph:]",
+        "19AZ",
+        " \\u0003\\u0007\\u0009\\u000A\\u000D",
+
+        "[:punct:]",
+        "!@#%&*()[]{}-_\\/;:,.?'\"",
+        "09azAZ",
+
+        "[:xdigit:]",
+        "09afAF",
+        "gG!",
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
