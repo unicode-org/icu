@@ -180,6 +180,11 @@ public:
      */
     void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
 
+    /**
+     * Returns the locale for which this object was constructed.
+     */
+    inline Locale getLocale() const;
+
 #ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
     /**
      * character used for zero. Different for Arabic, etc.
@@ -483,7 +488,11 @@ private:
      */
     void initialize();
 
+    void setCurrencyForSymbols();
+
     UnicodeString fSymbols[kFormatSymbolCount];
+
+    Locale locale;
 
     static const char fgNumberElements[];
     static const char fgCurrencyElements[];
@@ -509,6 +518,13 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value)
     if(symbol<kFormatSymbolCount) {
         fSymbols[symbol]=value;
     }
+}
+
+// -------------------------------------
+
+inline Locale
+DecimalFormatSymbols::getLocale() const {
+    return locale;
 }
 
 #ifdef ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES
