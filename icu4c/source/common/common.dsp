@@ -330,6 +330,10 @@ SOURCE=.\ucnv_utf.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnvebdc.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnvlat1.c
 # End Source File
 # Begin Source File
