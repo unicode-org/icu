@@ -812,9 +812,8 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
     const char* start = "<group restype = \"intvector\" xml:space = \"preserve\" id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
-    const char* endKey  = "\">\n";
 
-    const char* intStart = "<trans-unit restype = \"int\" xml:space = \"preserve\" id = \"";
+    const char* intStart = "<trans-unit restype = \"int\" xml:space = \"preserve\" translate=\"no\" id = \"";
     const char* valIntStart = "<source>";
     const char* valIntEnd = "</source>\n";
     const char* intEnd = "</trans-unit>\n";
@@ -846,7 +845,7 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
     
         T_FileStream_write(out, startKey, (int32_t)uprv_strlen(startKey));
         T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
-        T_FileStream_write(out, endKey, uprv_strlen(endKey));    
+        T_FileStream_write(out, "\"", 1);    
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
             printComments(res->fComment, sid, FALSE, status);
             printNoteElements(res->fComment, status);

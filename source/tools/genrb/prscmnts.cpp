@@ -29,7 +29,10 @@ const char *patternStrings[UPC_LIMIT]={
 };
 
 U_CFUNC int32_t 
-removeText(UChar *source, int32_t srcLen, UnicodeString patString,uint32_t options,  UErrorCode *status){
+removeText(UChar *source, int32_t srcLen, 
+           UnicodeString patString,uint32_t options,  
+           UnicodeString replaceText, UErrorCode *status){
+
     if(status == NULL || U_FAILURE(*status)){
         return 0;
     }
@@ -43,7 +46,7 @@ removeText(UChar *source, int32_t srcLen, UnicodeString patString,uint32_t optio
     UnicodeString dest;
 
 
-    dest = myMatcher.replaceAll("",*status);
+    dest = myMatcher.replaceAll(replaceText,*status);
     
     
     return dest.extract(source, srcLen, *status);
@@ -51,9 +54,9 @@ removeText(UChar *source, int32_t srcLen, UnicodeString patString,uint32_t optio
 }
 U_CFUNC int32_t
 trim(UChar *src, int32_t srcLen, UErrorCode *status){
-     srcLen = removeText(src, srcLen, "^[ \\r\\n]+ ", 0,  status); // remove leading new lines
-     srcLen = removeText(src, srcLen, "^\\s+", 0, status); // remove leading spaces
-     srcLen = removeText(src, srcLen, "\\s+$", 0,  status); // remvoe trailing spcaes
+     srcLen = removeText(src, srcLen, "^[ \\r\\n]+ ", 0, "", status); // remove leading new lines
+     srcLen = removeText(src, srcLen, "^\\s+", 0, "", status); // remove leading spaces
+     srcLen = removeText(src, srcLen, "\\s+$", 0, "", status); // remvoe trailing spcaes
      return srcLen;
 }
 
@@ -61,7 +64,8 @@ U_CFUNC int32_t
 removeCmtText(UChar* source, int32_t srcLen, UErrorCode* status){
     srcLen = trim(source, srcLen, status);
     UnicodeString     patString = "^\\s*?\\*\\s*?";     // remove pattern like " * " at the begining of the line
-    return removeText(source, srcLen, patString, UREGEX_MULTILINE, status);
+    srcLen = removeText(source, srcLen, patString, UREGEX_MULTILINE, "", status);
+    return removeText(source, srcLen, "[ \\r\\n]+", 0, " ", status);// remove new lines;
 }
 
 U_CFUNC int32_t 
