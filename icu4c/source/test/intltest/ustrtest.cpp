@@ -8,6 +8,8 @@
 #include "unicode/unistr.h"
 #include "unicode/unicode.h"
 #include "unicode/locid.h"
+
+#if 0
 #include "unicode/ustream.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
@@ -15,6 +17,8 @@
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
+#endif
+
 #endif
 
 UnicodeStringTest::UnicodeStringTest()
@@ -825,10 +829,12 @@ UnicodeStringTest::TestMiscellaneous()
             errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
     }
 
+/*
 #if U_IOSTREAM_SOURCE
     logln("Testing the operator \"<<\" \n");
     cout<<"Testing the \"<<\" operator---test1="<<test1<<". "<<test3<<endl;
 #endif
+*/
 }
 
 void
