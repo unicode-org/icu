@@ -223,7 +223,7 @@ CLEAN :
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(@D)" -d"$(@D)" $(?F)
+	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(@D) -d$(@D) $(?F)
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
