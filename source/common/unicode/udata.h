@@ -102,7 +102,7 @@ typedef struct UDataMemory UDataMemory;
 typedef bool_t
 UDataMemoryIsAcceptable(void *context,
                         const char *type, const char *name,
-                        UDataInfo *pInfo);
+                        const UDataInfo *pInfo);
 
 
 /**
@@ -216,6 +216,48 @@ udata_getMemory(UDataMemory *pData);
  */
 U_CAPI void U_EXPORT2
 udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
+
+/**
+ * This function bypasses the normal ICU data loading process
+ * and allows you to force the data to come out of a user-specified
+ * pointer.
+ * 
+ * The format of this data is that of the icu common data file, 'icudata.dat'
+ * or that of a DLL (shared library) with a table of contents as generated
+ * by "gencmn -s".
+ * You can read in that whole file and pass the address to the start of the
+ * data, or (with the appropriate link options) pass in the pointer to
+ * a 'genccode'-generated library, or pass the pointer to the entry point
+ * of the table of contents file that gencmn -s generated, as follows:
+ *
+ *       extern const uint8_t U_IMPORT icudata_dat[];
+ * 
+ *       UErrorCode  status = U_ZERO_ERROR;
+ *       udata_setCommonData((const void*)icudata_dat, &status);
+ * 
+ *   ( link with icudata.dll / libicudata.so/a/sl .. see the release notes
+ *     for how to build the 'common mapped dll'. )
+ *
+ * This function will automatically skip over the 'double' padding
+ * present in genccode symbols, if present.
+ *
+ * Warning: ICU must NOT have even attempted to load its data yet
+ * when this call is made, or U_USING_DEFAULT_ERROR [non-failing] will
+ * be returned. Be careful of UnicodeStrings in static initialization which 
+ * may attempt to load a converter (use the UNICODE_STRING(x) macro instead).
+ *
+ * This function has no effect on application (non ICU) data, and will
+ * return U_UNSUPPORTED_ERROR if mapped data support is not available on
+ * the currently compiled ICU.
+ *
+ * @draft
+ * @param data pointer to ICU common data
+ * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
+ *
+ */
+
+U_CAPI void U_EXPORT2
+udata_setCommonData(const void *data, UErrorCode *err);
 
 U_CDECL_END
 
