@@ -2554,7 +2554,7 @@ static void TestCanonicalization(void)
             const char* expected = (j==0) ? testCases[i].getNameID : testCases[i].canonicalID;
             *buffer = 0;
             status = U_ZERO_ERROR;
-            //log_verbose("testing %s -> %s\n", testCases[i], testCases[i].canonicalID);
+            /* log_verbose("testing %s -> %s\n", testCases[i], testCases[i].canonicalID); */
             origResultLen = _canonicalize(j, testCases[i].localeID, NULL, 0, &status);
             if (status != U_BUFFER_OVERFLOW_ERROR) {
                 log_err("FAIL: uloc_%s(%s) => %s, expected U_BUFFER_OVERFLOW_ERROR\n",
