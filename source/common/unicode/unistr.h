@@ -1813,7 +1813,7 @@ private:
                int32_t length);
 
   // calculate hash code
-  int32_t doHashCode(void);
+  int32_t doHashCode(void) const;
   
   // get pointer to start of array
   inline UChar* getArrayStart(void);
@@ -1876,7 +1876,13 @@ private:
 
   // constants
   enum {
-    US_STACKBUF_SIZE=9, // Size of stack buffer for small strings
+#if UTF_SIZE==8
+    US_STACKBUF_SIZE=14, // Size of stack buffer for small strings
+#elif UTF_SIZE==16
+    US_STACKBUF_SIZE=7, // Size of stack buffer for small strings
+#else // UTF_SIZE==32
+    US_STACKBUF_SIZE=3, // Size of stack buffer for small strings
+#endif
     kInvalidUChar=0xffff, // invalid UChar index
     kGrowSize=128, // grow size for this buffer
     kInvalidHashCode=0, // invalid hash code
@@ -1916,15 +1922,17 @@ private:
    * as the first real field.
    * The fields should be aligned such that no padding is
    * necessary, mostly by having larger types first.
-   * On 32-bit machines, the size should be 40 bytes,
-   * on 64-bit machines (8-byte pointers), it should be 48 bytes.
+   * On 32-bit machines, the size should be 32 bytes,
+   * on 64-bit machines (8-byte pointers), it should be 40 bytes.
    */
   // (implicit) *vtable;
   UChar     *fArray;        // the Unicode data
   int32_t   fLength;        // number characters in fArray
   int32_t   fCapacity;      // sizeof fArray
-  int32_t   fHashCode;      // the hash code
   uint16_t  fFlags;         // bit flags: see constants above
+#if UTF_SIZE==32
+  uint16_t  fPadding;       // padding to align the fStackBuffer for UTF-32
+#endif
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 
 public:
@@ -2480,8 +2488,7 @@ UnicodeString::length() const
 
 inline int32_t 
 UnicodeString::hashCode() const
-{ return (fHashCode == kInvalidHashCode 
-    ? ((UnicodeString*)this)->doHashCode() : fHashCode); }
+{ return doHashCode(); }
 
 //========================================
 // Write alias methods

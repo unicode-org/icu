@@ -87,7 +87,6 @@ UnicodeString::UnicodeString()
   : fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {}
 
@@ -95,7 +94,6 @@ UnicodeString::UnicodeString(int32_t capacity)
   : fArray(0),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(0)
 {
   allocate(capacity);
@@ -105,7 +103,6 @@ UnicodeString::UnicodeString(UChar ch)
   : fArray(fStackBuffer),
     fLength(1),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kInvalidHashCode),
     fFlags(kShortString)
 {
   fStackBuffer[0] = ch;
@@ -115,7 +112,6 @@ UnicodeString::UnicodeString(UChar32 ch, ESignature)
   : fArray(fStackBuffer),
     fLength(1),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kInvalidHashCode),
     fFlags(kShortString)
 {
   UTextOffset i = 0;
@@ -127,7 +123,6 @@ UnicodeString::UnicodeString(const UChar *text)
   : fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {
   doReplace(0, 0, text, 0, u_strlen(text));
@@ -138,7 +133,6 @@ UnicodeString::UnicodeString(const UChar *text,
   : fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {
   doReplace(0, 0, text, 0, textLength);
@@ -150,7 +144,6 @@ UnicodeString::UnicodeString(bool_t isTerminated,
   : fArray((UChar *)text),
     fLength(textLength),
     fCapacity(isTerminated ? textLength + 1 : textLength),
-    fHashCode(kInvalidHashCode),
     fFlags(kReadonlyAlias)
 {
   if(text == 0 || textLength < -1 || textLength == -1 && !isTerminated) {
@@ -168,7 +161,6 @@ UnicodeString::UnicodeString(UChar *buff,
   : fArray(buff),
     fLength(bufLength),
     fCapacity(buffCapacity),
-    fHashCode(kInvalidHashCode),
     fFlags(kWriteableAlias)
 {
   if(buff == 0 || bufLength < 0 || bufLength > buffCapacity) {
@@ -181,7 +173,6 @@ UnicodeString::UnicodeString(const char *codepageData,
   : fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {
   if(codepageData != 0) {
@@ -196,7 +187,6 @@ UnicodeString::UnicodeString(const char *codepageData,
   : fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {
   if(codepageData != 0) {
@@ -209,7 +199,6 @@ UnicodeString::UnicodeString(const UnicodeString& that)
     fArray(fStackBuffer),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
-    fHashCode(kEmptyHashCode),
     fFlags(kShortString)
 {
   *this = that;
@@ -242,7 +231,6 @@ UnicodeString::allocate(int32_t capacity) {
     } else {
       fArray = 0;
       fCapacity = 0;
-      fHashCode = kInvalidHashCode; // for constructor(capacity) to be correctly bogus
       fFlags = kIsBogus;
       return FALSE;
     }
@@ -280,7 +268,6 @@ UnicodeString::operator= (const UnicodeString& src)
 
   // we always copy the length and the hash code
   fLength = src.fLength;
-  fHashCode = src.fHashCode;
 
   switch(src.fFlags) {
   case kShortString:
@@ -318,7 +305,6 @@ UnicodeString::operator= (const UnicodeString& src)
     fArray = 0;
     fLength = 0;
     fCapacity = 0;
-    fHashCode = kInvalidHashCode;
     fFlags = kIsBogus;
     break;
   }
@@ -651,7 +637,6 @@ UnicodeString::setToBogus()
 
   fArray = 0;
   fCapacity = fLength = 0;
-  fHashCode = kInvalidHashCode;
   fFlags = kIsBogus;
 }
 
@@ -678,7 +663,6 @@ UnicodeString::setTo(bool_t isTerminated,
   }
 
   fCapacity = isTerminated ? fLength + 1 : fLength;
-  fHashCode = kInvalidHashCode;
   fFlags = kReadonlyAlias;
   return *this;
 }
@@ -698,7 +682,6 @@ UnicodeString::setTo(UChar *buffer,
   fArray = buffer;
   fLength = buffLength;
   fCapacity = buffCapacity;
-  fHashCode = kInvalidHashCode;
   fFlags = kWriteableAlias;
   return *this;
 }
@@ -715,7 +698,6 @@ UnicodeString::setCharAt(UTextOffset offset,
     }
 
     fArray[offset] = c;
-    fHashCode = kInvalidHashCode;
   }
   return *this;
 }
@@ -822,8 +804,6 @@ UnicodeString::toUpper(const Locale& locale)
     }
   }
 
-  fHashCode = kInvalidHashCode;
-
   return *this;
 }
 
@@ -902,8 +882,6 @@ UnicodeString::toLower(const Locale& locale)
     }
   }
 
-  fHashCode = kInvalidHashCode;
-
   return *this;
 }
 
@@ -939,7 +917,6 @@ UnicodeString::doReplace(UTextOffset start,
     fArray = fStackBuffer;
     fLength = 0;
     fCapacity = US_STACKBUF_SIZE;
-    fHashCode = kEmptyHashCode;
     fFlags = kShortString;
   }
 
@@ -986,7 +963,6 @@ UnicodeString::doReplace(UTextOffset start,
   us_arrayCopy(srcChars, srcStart, getArrayStart(), start, srcLength);
 
   fLength = newSize;
-  fHashCode = kInvalidHashCode;
 
   // delayed delete in case srcChars == fArray when we started, and
   // to keep oldArray alive for the above operations
@@ -1026,8 +1002,6 @@ UnicodeString::doReverse(UTextOffset start,
     *left++ = *right;
     *right = swap;
   }
-
-  fHashCode = kInvalidHashCode;
 
   return *this;
 }
@@ -1120,15 +1094,15 @@ UnicodeString::trim()
 // Hashing
 //========================================
 int32_t
-UnicodeString::doHashCode()
+UnicodeString::doHashCode() const
 {
     /* Delegate hash computation to uhash.  This makes UnicodeString
      * hashing consistent with UChar* hashing.  */
-    fHashCode = uhash_hashUCharsN(getArrayStart(), fLength);
-    if (fHashCode == kInvalidHashCode) {
-        fHashCode = kEmptyHashCode;
+    int32_t hashCode = uhash_hashUCharsN(getArrayStart(), fLength);
+    if (hashCode == kInvalidHashCode) {
+        hashCode = kEmptyHashCode;
     }
-    return fHashCode;
+    return hashCode;
 }
 
 //========================================
@@ -1243,8 +1217,6 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     setToBogus();
     return;
   }
-
-  fHashCode = kInvalidHashCode;
 
   // perform the conversion
   if(converter == 0) {
