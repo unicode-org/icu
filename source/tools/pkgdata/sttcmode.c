@@ -165,6 +165,13 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     uprv_strcat(tmp, "\n\n");
     T_FileStream_writeLine(makefile, tmp);
 
+#ifdef OS400
+    /* New for iSeries: All packaged data in one .c */
+    sprintf(tmp, "# Create a file which contains all .c data files/structures\n"
+                 "$(TEMP_DIR)/$(NAME)all.c: $(CMNLIST)\n\n");
+    T_FileStream_writeLine(makefile, tmp);
+#endif
+
     /* Write compile rules */
     pkg_mak_writeObjRules(o, makefile, &objects, ".$(STATIC_O)"); /* use special .o suffix */
 
@@ -205,12 +212,29 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);
+
+#ifdef OS400
+    /* New for iSeries: All packaged data in one .c */
+    sprintf(tmp,"$(TEMP_PATH)$(NAME)all.$(STATIC_O) : $(TEMP_PATH)$(NAME)all.c\n"
+        "\t$(COMPILE.c) -o $@ $<\n\n");
+    T_FileStream_writeLine(makefile, tmp);
+
+    T_FileStream_writeLine(makefile, "# 'ALLDATAOBJ' contains all .c data structures\n");
+
+    sprintf(tmp, "ALLDATAOBJ= $(NAME)all%s \n\n", OBJ_SUFFIX);
+    T_FileStream_writeLine(makefile, tmp);
+#endif
+
     sprintf(tmp, "TOCSYM= $(ENTRYPOINT)_dat \n\n"); /* entrypoint not always shortname! */
     T_FileStream_writeLine(makefile, tmp);
 
     T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
+#ifdef OS400
+    T_FileStream_writeLine(makefile, "$(ALLDATAOBJ) ");
+#else
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
+#endif
     pkg_mak_writeAssemblyFooter(makefile, o);
 
     T_FileStream_writeLine(makefile, "\n\n");
