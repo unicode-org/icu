@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarFrame.java,v $ 
- * $Date: 2000/03/10 03:47:42 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/03/31 18:49:02 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -26,11 +26,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
-import java.text.DateFormat;
+//import java.text.DateFormat;
+import  com.ibm.text.DateFormat;
 import java.text.MessageFormat;
-import java.util.Calendar;
+//import java.util.Calendar;
+import com.ibm.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+//import java.util.GregorianCalendar;
+import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -240,10 +243,11 @@ class CalendarFrame extends Frame
                             com.ibm.text.SimpleDateFormat f1 = (com.ibm.text.SimpleDateFormat) f;
                             f1.applyPattern("MMMM, yyyy G");
                             f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
-                        } else if (f instanceof java.text.SimpleDateFormat) {
-                            java.text.SimpleDateFormat f1 = (java.text.SimpleDateFormat) f;
-                            f1.applyPattern("MMMM, yyyy G");
-                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
+//hey {al} -
+//                        } else if (f instanceof java.text.SimpleDateFormat) {
+//                            java.text.SimpleDateFormat f1 = (java.text.SimpleDateFormat) f;
+//                            f1.applyPattern("MMMM, yyyy G");
+//                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
                         }
                         monthFormat[i] = f;
                     }
@@ -392,13 +396,13 @@ class CalendarFrame extends Frame
     }
 
     class CalendarRec {
-        public CalendarRec(String nameStr, java.util.Calendar cal)
+        public CalendarRec(String nameStr, Calendar cal)
         {
             name = nameStr;
             calendar = cal;
         }
 
-        java.util.Calendar  calendar;
+        Calendar  calendar;
         String              name;
     };
 

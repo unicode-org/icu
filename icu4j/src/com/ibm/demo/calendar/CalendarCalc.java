@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarCalc.java,v $ 
- * $Date: 2000/03/10 03:47:42 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/03/31 18:49:02 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -20,11 +20,14 @@ import java.util.Date;
 import java.awt.*;
 import java.awt.event.*;
 
-import java.text.DateFormat;
+//import java.text.DateFormat;
+import com.ibm.text.DateFormat;
 import java.text.ParsePosition;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+//import java.util.Calendar;
+import com.ibm.util.Calendar;
+//import java.util.GregorianCalendar;
+import com.ibm.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.Locale;
 
@@ -485,7 +488,7 @@ class CalendarCalcFrame extends Frame
 
 
     class CalendarRec {
-        public CalendarRec(String nameStr, java.util.Calendar cal)
+        public CalendarRec(String nameStr, Calendar cal)
         {
             name = nameStr;
             calendar = cal;
@@ -510,22 +513,24 @@ class CalendarCalcFrame extends Frame
         public void applyPattern(String pattern) {
             if (format instanceof SimpleDateFormat) {
                 ((SimpleDateFormat)format).applyPattern(pattern);
-            } else if (format instanceof java.text.SimpleDateFormat) {
-                ((java.text.SimpleDateFormat)format).applyPattern(pattern);
+//hey {al} - 
+//            } else if (format instanceof java.text.SimpleDateFormat) {
+//                ((java.text.SimpleDateFormat)format).applyPattern(pattern);
             }
         }
         
         private String toPattern() {
             if (format instanceof SimpleDateFormat) {
                 return ((SimpleDateFormat)format).toPattern();
-            } else if (format instanceof java.text.SimpleDateFormat) {
-                return ((java.text.SimpleDateFormat)format).toPattern();
+//hey {al} - 
+//            } else if (format instanceof java.text.SimpleDateFormat) {
+//                return ((java.text.SimpleDateFormat)format).toPattern();
             } else {
                 return "";
             }
         }
 
-        java.util.Calendar  calendar;
+        Calendar  calendar;
         DateFormat          format;
         String              name;
         JTextField           text;

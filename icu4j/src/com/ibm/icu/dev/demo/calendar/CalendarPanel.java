@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarPanel.java,v $ 
- * $Date: 2000/03/10 03:47:43 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/03/31 18:49:02 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -22,9 +22,12 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 
-import java.text.DateFormat;
+//import java.text.DateFormat;
+import com.ibm.text.DateFormat;
 import java.util.SimpleTimeZone;
-import java.util.*;
+//import java.util.*;
+import java.util.Date;
+import java.util.Locale;
 
 import com.ibm.util.*;
 import com.ibm.text.*;
