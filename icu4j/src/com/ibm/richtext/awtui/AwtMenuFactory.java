@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: AwtMenuFactory.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:41:49 $
+ * @(#)$RCSfile: AwtMenuFactory.java,v $ $Revision: 1.2 $ $Date: 2000/04/20 19:29:08 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -49,7 +49,7 @@ final class AwtMenuFactory implements ItemFactory {
             }
             catch(ClassCastException e) {
                 item.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
+                    public void actionPerformed(ActionEvent evt) {
                         handleSelected();
                     }
                 });
