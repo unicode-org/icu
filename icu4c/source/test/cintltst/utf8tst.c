@@ -124,7 +124,7 @@ static void TestGetChar()
         0x9a,
         0xc9
     };
-    static const uint32_t result[]={
+    static const UChar32 result[]={
      /*codepoint-unsafe,  codepoint-safe(not strict)  codepoint-safe(strict)*/
         0x61,             0x61,                       0x61, 
         0x7f,             0x7f,                       0x7f, 
@@ -168,7 +168,7 @@ static void TestGetChar()
 
 static void TestNextPrevChar(){
     static const uint8_t input[]={0x61, 0xf0, 0x90, 0x90, 0x81, 0xc0, 0x80, 0xfd, 0xbe, 0xc2, 0x61, 0x81, 0x90, 0x90, 0xf0, 0x00};
-    static const uint32_t result[]={
+    static const UChar32 result[]={
     /*next_unsafe    next_safe_ns        next_safe_s          prev_unsafe   prev_safe_ns         prev_safe_s*/
         0x0061,        0x0061,             0x0061,              0x0000,       0x0000,             0x0000,
         0x10401,       0x10401,            0x10401,             0xf0,         UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_1,
