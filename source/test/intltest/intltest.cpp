@@ -376,6 +376,14 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     char  sepChar;
     const char inpSepChar = '|';
 
+    // So what's going on is that ICU_DATA during tests points to:
+    //              ICU | source | data 
+    //and we want   ICU | source | 
+    // 
+    // We'll add                 | test | testdata
+    //
+    // So, just add a .. here - back up one level
+
     mainDir = u_getDataDirectory();
     sepChar = U_FILE_SEP_CHAR;
     char sepString[] = U_FILE_SEP_STRING;
@@ -384,7 +392,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
         char mainDirBuffer[200];
         if(mainDir!=NULL) {
             strcpy(mainDirBuffer, mainDir);
-            strcat(mainDirBuffer, "..\\..");
+            strcat(mainDirBuffer, "..");
         } else {
             mainDirBuffer[0]='\0';
         }
@@ -404,33 +412,6 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     #else
         mainDir = "";
     #endif
-/*
-    #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-        char mainDirBuffer[200];
-        if(mainDir!=NULL) {
-            strcpy(mainDirBuffer, mainDir);
-            strcat(mainDirBuffer, "..\\..");
-        } else {
-            mainDirBuffer[0]='\0';
-        }
-        mainDir=mainDirBuffer;
-        sepChar = '\\';
-    #elif defined(_AIX) || defined(SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(OS390)
-        mainDir = getenv("HOME");
-        sepChar = '/';
-    #elif defined(XP_MAC)
-        Str255 volName;
-        int16_t volNum;
-        OSErr err = GetVol( volName, &volNum );
-        if (err != noErr) volName[0] = 0;
-        mainDir = (char*) &(volName[1]);
-        mainDir[volName[0]] = 0;
-        sepChar = ':';
-    #else
-        mainDir = "";
-        sepChar = '\\';
-    #endif
-*/
     
     if (relPath[0] == '|') relPath++;
     int32_t lenMainDir = strlen( mainDir );
@@ -456,11 +437,7 @@ IntlTest::getTestDirectory()
 {
     if (_testDirectory == NULL) 
     {
-#if defined(_AIX) || defined(U_SOLARIS) || defined(U_LINUX) || defined(HPUX) || defined(POSIX) || defined(OS390)
       setTestDirectory("test|testdata|");
-#else
-      setTestDirectory("icu|source|test|testdata|");
-#endif
     }
     return _testDirectory;
 }
