@@ -1344,20 +1344,20 @@ RegexTest::getPath(char buffer[2048], const char *filename) {
 
 void RegexTest::Extended() {
     char tdd[2048];
-    const char *path;
+    const char *srcPath;
     UErrorCode  status  = U_ZERO_ERROR;
     int32_t     lineNum = 0;
 
     //
     //  Open and read the test data file.
     //
-    path=getPath(tdd, "regextst.txt");
-    if(path==NULL) {
+    srcPath=getPath(tdd, "regextst.txt");
+    if(srcPath==NULL) {
         return; /* something went wrong, error already output */
     }
 
     int    len;
-    UChar *testData = ReadAndConvertFile(path, len, status);
+    UChar *testData = ReadAndConvertFile(srcPath, len, status);
 
     //
     //  Put the test data into a UnicodeString
@@ -1663,20 +1663,20 @@ cleanUpAndReturn:
 //-------------------------------------------------------------------------------
 void RegexTest::PerlTests() {
     char tdd[2048];
-    const char *path;
+    const char *srcPath;
     UErrorCode  status = U_ZERO_ERROR;
     UParseError pe;
 
     //
     //  Open and read the test data file.
     //
-    path=getPath(tdd, "re_tests.txt");
-    if(path==NULL) {
+    srcPath=getPath(tdd, "re_tests.txt");
+    if(srcPath==NULL) {
         return; /* something went wrong, error already output */
     }
 
     int    len;
-    UChar *testData = ReadAndConvertFile(path, len, status);
+    UChar *testData = ReadAndConvertFile(srcPath, len, status);
 
     //
     //  Put the test data into a UnicodeString
