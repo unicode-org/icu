@@ -642,7 +642,7 @@ de {
         FIM { "FIM", "Finnische Mark" }
         FJD { "FJD", "Fidschi Dollar" }
         FKP { "FKP", "Falkland Pfund" }
-        FRF { "FF",  "FF, Franz\u00F6sischer Franc" }
+        FRF { "FF",  "Franz\u00F6sischer Franc" }
         GBP { "GBP", "Pfund Sterling" }
         GEL { "GEL", "Georgischer Lari" }
         GHC { "GHC", "Cedi" }
