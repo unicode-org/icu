@@ -39,6 +39,18 @@ class UnicodeString;
  * in the string: <code>length()</code>, <code>charAt()</code>, and
  * <code>extractBetween()</code>.
  *
+ * <p>If a subclass supports styles, then typically the behavior is the following:
+ * <ul>
+ *   <li>Set the styles to the style of the first character replaced</li>
+ *   <li>If no characters are replaced, use the style of the previous
+ * character</li>
+ *   <li>If there is no previous character (i.e. start == 0), use the following
+ *     character</li>
+ *   <li>If there is no following character (i.e. the replaceable was empty), a
+ *     default style.<br>
+ *   </li>
+ * </ul>
+ * If this is not the behavior, the subclass should document any differences.
  * @author Alan Liu
  * @stable
  */
@@ -109,6 +121,13 @@ public:
      * characters being replaced have attributes, the new characters
      * that replace them should be given the same attributes.
      *
+     * <p>Subclasses must ensure that if the text between start and
+     * limit is equal to the replacement text, that replace has no
+     * effect. That is, any out-of-band information such as styles
+     * should be unaffected. In addition, subclasses are encourage to
+     * check for initial and trailing identical characters, and make a
+     * smaller replacement if possible. This will preserve as much
+     * style information as possible.
      * @param start the beginning index, inclusive; <code>0 <= start
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
@@ -135,7 +154,8 @@ public:
      * information.  This method is used to duplicate or reorder substrings.
      * The destination index must not overlap the source range.
      * Implementations that do not care about maintaining out-of-band
-     * information during copying may use the naive implementation:
+     * information or performance during copying may use the naive
+     * implementation:
      *
      * <pre> char[] text = new char[limit - start];
      * getChars(start, limit, text, 0);
@@ -149,8 +169,7 @@ public:
      * <code>start..limit-1</code> will be copied to <code>dest</code>.
      * Implementations of this method may assume that <code>dest <= start ||
      * dest >= limit</code>.
-     * @stable
-     */
+     * @stable */
     virtual void copy(int32_t start, int32_t limit, int32_t dest) = 0;
 
 protected:
