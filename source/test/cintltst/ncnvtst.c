@@ -302,7 +302,6 @@ void TestErrorBehaviour(){
         if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
                 expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
-
     }
 
 

@@ -264,7 +264,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     else{
         logln("OK: adoptTranslterator() passed");
     }
-//  delete ct1;
+    delete transarray;
  
 }
 /**

@@ -279,6 +279,7 @@ void TestDemo1()
 
     ucol_close(myCollation); 
     ucol_close(col);
+    free(temp);
     free(newRules);
 }
 void TestDemo2()
@@ -322,6 +323,7 @@ void TestDemo2()
     }
     ucol_close(myCollation); 
     ucol_close(col);
+    free(temp);
     free(newRules);
     
 }

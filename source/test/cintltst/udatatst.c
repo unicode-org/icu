@@ -558,7 +558,8 @@ void TestErrorConditions(){
    } else {
 		log_verbose("calling udat_open with non-existing file returned null as expected\n");
    }
-   
+    free(path);
+    free(testPath);
       
 }
 
