@@ -759,7 +759,7 @@ RuleBasedCollator::constructFromFile(const char* fileName,
 }
 
 const char *
-RuleBasedCollator::constructFromBundle(const char* name,
+RuleBasedCollator::constructFromBundle(const Locale & name,
                                   UErrorCode& status)
 {
   // This method tries to locate binary collation data which has been 
@@ -873,7 +873,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   // however, in a very unprobable situation that no resource bundle
   // data exists, step 5 is repeated with hardcoded default rules.
 
-  const char *locName = constructFromBundle(desiredLocale.getName(), status);  /*!*/
+  const char *locName = constructFromBundle(desiredLocale, status);  /*!*/
   data->desiredLocale = desiredLocale;
   
   if (U_SUCCESS(status)) {
