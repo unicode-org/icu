@@ -406,21 +406,6 @@ hu {
 
     }
 
-    MonthAbbreviations_islamic { // Copied from MonthNames
-            "Moharrem",                 // Muharram
-            "Safar",                    // Safar
-            "R\u00E9bi el avvel",       // Rabi' al-awwal
-            "R\u00E9bi el accher",      // Rabi' al-thani
-            "Dsem\u00E1di el avvel",    // Jumada al-awwal
-            "Dsem\u00E1di el accher",   // Jumada al-thani
-            "Redseb",                   // Rajab
-            "Sab\u00E1n",               // Sha'ban
-            "Ramad\u00E1n",             // Ramadan
-            "Sevv\u00E1l",              // Shawwal
-            "Ds\u00FCl kade",           // Dhu al-Qi'dah
-            "Ds\u00FCl hedse",          // Dhu al-Hijjah
-    }
-
     MonthNames_islamic {
             "Moharrem",                 // Muharram
             "Safar",                    // Safar
@@ -435,4 +420,18 @@ hu {
             "Ds\u00FCl kade",           // Dhu al-Qi'dah
             "Ds\u00FCl hedse",          // Dhu al-Hijjah
     }
+    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+        "hu/MonthNames_islamic"
+    }   
+    // Civil is identical other than in calculations
+    Eras_islamic-civil:alias {
+        "hu/Eras_islamic"
+    }
+    MonthNames_islamic-civil:alias {
+        "hu/MonthNames_islamic"
+    }
+    MonthAbbreviations_islamic-civil:alias {
+        "hu/MonthAbbreviations_islamic"
+    }
+
 }
