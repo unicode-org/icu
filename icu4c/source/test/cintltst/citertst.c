@@ -49,7 +49,7 @@ void addCollIterTest(TestNode** root)
  * @bug 4108758 - Make sure it works with contracting characters
  * 
  */
-void TestPrevious()
+static void TestPrevious()
 {
     UChar rule[50];
     UChar *source;
@@ -144,7 +144,7 @@ void TestPrevious()
 /**
  * Test for getOffset() and setOffset()
  */
-void TestOffset()
+static void TestOffset()
 {    
     UErrorCode status= U_ZERO_ERROR;
     UCollationElements *iter, *pristine;
@@ -205,7 +205,7 @@ void TestOffset()
 /**
  * Test for setText()
  */
-void TestSetText()
+static void TestSetText()
 {
     int32_t c,i;
     UErrorCode status = U_ZERO_ERROR;
@@ -259,14 +259,14 @@ void TestSetText()
     
     ucol_closeElements(iter2);
     ucol_closeElements(iter1);
-ucol_close(en_us);
+    ucol_close(en_us);
     free(test1);
     free(test2);
 }
 
 
 
-void backAndForth(UCollationElements *iter)
+static void backAndForth(UCollationElements *iter)
 {
     /* Run through the iterator forwards and stick it into an array */
     int32_t index, o;
@@ -315,7 +315,7 @@ void backAndForth(UCollationElements *iter)
 /** @bug 4108762
  * Test for getMaxExpansion()
  */
-void TestMaxExpansion()
+static void TestMaxExpansion()
 {
   /* Try a simple one first: */
   /* The only expansion ends with 'e' and has length 2 */
@@ -352,6 +352,7 @@ void TestMaxExpansion()
     u_uastrcpy(rule1, "< a & ae = a1 & aeef = z < b < e < f");
     verifyExpansion(rule1, test2, ARRAY_LENGTH(test2));
 }
+
 /**
  * Verify that getMaxExpansion works on a given set of collation rules
  *
@@ -363,7 +364,7 @@ void TestMaxExpansion()
  * and getMaxExpansion is called for that character.  If its value is
  * not equal to the specified number, an error results.
  */
-void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCount)
+static void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCount)
 {
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
@@ -422,7 +423,7 @@ void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCou
  * Return an integer array containing all of the collation orders
  * returned by calls to next on the specified iterator
  */
-int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
+static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
 {
     UErrorCode status;
     int32_t order;
@@ -469,7 +470,7 @@ int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
 }
 
 
-void assertEqual(UCollationElements *i1, UCollationElements *i2)
+static void assertEqual(UCollationElements *i1, UCollationElements *i2)
 {
     int32_t c1, c2;
     int32_t count = 0;

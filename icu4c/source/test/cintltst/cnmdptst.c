@@ -41,8 +41,9 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
 
 }
+
 /*Test Various format patterns*/
-void TestPatterns(void)
+static void TestPatterns(void)
 {
   int32_t pat_length, i, lneed;
   UNumberFormat *fmt;
@@ -103,8 +104,9 @@ void TestPatterns(void)
       unum_close(fmt);
     }
 }
+
 /* Test the handling of quotes*/
-void TestQuotes(void)
+static void TestQuotes(void)
 {
   int32_t lneed;
   UErrorCode status;
@@ -170,7 +172,7 @@ void TestQuotes(void)
 }
 
 /* Test exponential pattern*/
-void TestExponential(void)
+static void TestExponential(void)
 {
   int32_t pat_length, val_length, lval_length;
   int32_t ival, ilval, p, v, lneed;
@@ -319,7 +321,7 @@ void TestExponential(void)
 /**
  * Test the handling of the currency symbol in patterns.
  */
-void TestCurrencySign(void)
+static void TestCurrencySign(void)
 {
   int32_t lneed;
   UNumberFormat *fmt;
@@ -382,10 +384,11 @@ void TestCurrencySign(void)
   unum_close(fmt);  
   free(pattern);
 }
+
 /**
  * Test localized currency patterns.
  */
-void TestCurrency(void)
+static void TestCurrency(void)
 {
   UNumberFormat *currencyFmt;
   UChar *str=NULL, *res=NULL;
@@ -423,7 +426,7 @@ void TestCurrency(void)
 /**
  * Test proper rounding by the format method.
  */
-void TestRounding487(void)
+static void TestRounding487(void)
 {
   UNumberFormat *nnf;
   UErrorCode status = U_ZERO_ERROR;
@@ -446,7 +449,7 @@ void TestRounding487(void)
  
 /*-------------------------------------*/
  
-void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const char* expected)
+static void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const char* expected)
 {
   UChar *out = NULL;
   UChar *res;
@@ -475,10 +478,11 @@ void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const 
     free(out);
   }
 }
+
 /*
  * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute() 
  */
-void TestDoubleAttribute(void)
+static void TestDoubleAttribute(void)
 {
     double mydata[] = { 1.11, 22.22, 333.33, 4444.44, 55555.55, 666666.66, 7777777.77, 88888888.88, 999999999.99};
     double dvalue;
@@ -506,7 +510,7 @@ void TestDoubleAttribute(void)
 /**
  * Test the functioning of the secondary grouping value.
  */
-void TestSecondaryGrouping(void) {
+static void TestSecondaryGrouping(void) {
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat *f = NULL, *g= NULL;
     UNumberFormat *us = unum_open(UNUM_DECIMAL, "en_US", &status);

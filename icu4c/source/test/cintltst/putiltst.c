@@ -21,8 +21,8 @@
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
 
-void TestPUtilAPI();
-void testIEEEremainder();
+static void TestPUtilAPI();
+static void testIEEEremainder();
 static void remainderTest(double x, double y, double exp);
 static void doAssert(double expect, double got, const char *message);
 static UBool compareWithNAN(double x, double y);
@@ -37,7 +37,7 @@ addPUtilTest(TestNode** root)
 
 }
 
-void TestPUtilAPI(){
+static void TestPUtilAPI(){
 
     double  n1=0.0, y1=0.0, expn1, expy1;
     int     result=0;
@@ -298,7 +298,8 @@ void TestPUtilAPI(){
    
 
 }
-void testIEEEremainder()
+
+static void testIEEEremainder()
 {
     double    pinf        = uprv_getInfinity();
     double    ninf        = -uprv_getInfinity();
@@ -347,7 +348,7 @@ static UBool compareWithNAN(double x, double y)
   return TRUE;
 }
 
-void remainderTest(double x, double y, double exp)
+static void remainderTest(double x, double y, double exp)
 {
     double result = uprv_IEEEremainder(x,y);
 
@@ -363,7 +364,8 @@ void remainderTest(double x, double y, double exp)
     }
 
 }
-void doAssert(double got, double expect, const char *message)
+
+static void doAssert(double got, double expect, const char *message)
 {
   if(! compareWithNAN(expect, got) ) {
     log_err("ERROR :  %s. Expected : %lf, Got: %lf\n", message, expect, got);

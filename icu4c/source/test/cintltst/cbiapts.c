@@ -33,7 +33,7 @@ void addBrkIterAPITest(TestNode** root)
 
 }
 
-void TestBreakIteratorCAPI()
+static void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *word, *sentence, *line, *character, *b, *bogus;
@@ -104,17 +104,17 @@ void TestBreakIteratorCAPI()
         log_verbose("PASS: ubrk_countAvialable() successful returned %d\n", count);
     }
     for(i=0;i<count;i++)
-	{
+    {
         log_verbose("%s\n", ubrk_getAvailable(i)); 
-		if (ubrk_getAvailable(i) == 0)
-			log_err("No locale for which breakiterator is applicable\n");
-		else 
-			log_verbose("A locale %s for which breakiterator is applicable\n",ubrk_getAvailable(i));
-	}
+        if (ubrk_getAvailable(i) == 0)
+            log_err("No locale for which breakiterator is applicable\n");
+        else 
+            log_verbose("A locale %s for which breakiterator is applicable\n",ubrk_getAvailable(i));
+    }
 
 /*========Test ubrk_first(), ubrk_last()...... and other functions*/
-  
-   log_verbose("\nTesting the functions for word\n");
+
+    log_verbose("\nTesting the functions for word\n");
     start = ubrk_first(word);
     if(start!=0)
         log_err("error ubrk_start(word) did not return 0\n");

@@ -66,7 +66,8 @@ void addFinnishCollTest(TestNode** root)
 
 
 }
-void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+
+static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int32_t temp;
@@ -97,7 +98,7 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     free(sortKey2);
 }
 
-void TestTertiary( )
+static void TestTertiary( )
 {
     
     int32_t i;
@@ -115,7 +116,7 @@ void TestTertiary( )
     ucol_close(myCollation);
 }
 
-void TestPrimary()
+static void TestPrimary()
 {
     
     int32_t i;

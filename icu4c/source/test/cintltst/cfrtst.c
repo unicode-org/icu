@@ -136,7 +136,7 @@ void addFrenchCollTest(TestNode** root)
 
 }
 
-void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int32_t temp;
@@ -159,15 +159,18 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
 
 
     temp= memcmp(sortKey1, sortKey2, sortklenmin);
-    if(temp < 0) keyResult=UCOL_LESS;
-    else if(temp > 0) keyResult= UCOL_GREATER;
-    else keyResult = UCOL_EQUAL;
+    if(temp < 0)
+        keyResult=UCOL_LESS;
+    else if(temp > 0)
+        keyResult= UCOL_GREATER;
+    else
+        keyResult = UCOL_EQUAL;
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
     free(sortKey1);
     free(sortKey2);
 }
 
-void TestTertiary( )
+static void TestTertiary( )
 {
 
     int32_t i;
@@ -182,10 +185,10 @@ void TestTertiary( )
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-  ucol_close(myCollation);
+    ucol_close(myCollation);
 }
 
-void TestSecondary()
+static void TestSecondary()
 {
     int32_t i,j, testAcuteSize;
     UCollationResult expected=UCOL_EQUAL;
@@ -207,10 +210,10 @@ void TestSecondary()
             doTest(myCollation, testAcute[i], testAcute[j], expected );
         }
     }
-ucol_close(myCollation);
+    ucol_close(myCollation);
 }
 
-void TestExtra()
+static void TestExtra()
 {
     int32_t i, j;
     UErrorCode status = U_ZERO_ERROR;
@@ -227,5 +230,5 @@ void TestExtra()
             doTest(myCollation, testBugs[i], testBugs[j], UCOL_LESS);
         }
     }
-ucol_close(myCollation);
+    ucol_close(myCollation);
 }

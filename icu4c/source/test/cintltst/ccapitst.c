@@ -31,12 +31,12 @@
 #define UCS_FILE_NAME_SIZE 100
 
 /*writes and entire UChar* (string) along with a BOM to a file*/
-void WriteToFile(const UChar *a, FILE *myfile); 
+static void WriteToFile(const UChar *a, FILE *myfile); 
 /*Case insensitive compare*/
-int32_t strCaseIcmp(const char* a1,const char * a2); 
+static int32_t strCaseIcmp(const char* a1,const char * a2); 
 /*returns an action other than the one provided*/
-UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
-UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
+static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
+static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
 
 void addTestConvert(TestNode** root)
@@ -45,7 +45,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
 }
 
-void TestConvert() 
+static void TestConvert() 
 {
     char                myptr[4];
     char                save[4];
@@ -177,31 +177,31 @@ void TestConvert()
     void* oldFromUContext = NULL;
     void* oldToUContext = NULL;
 
-	/* Allocate memory */
-	mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
-	output_cp_buffer = (char*) malloc(MAX_FILE_LEN * sizeof(output_cp_buffer[0]));
-	ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(ucs_file_buffer[0]));
-	my_ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(my_ucs_file_buffer[0]));
+    /* Allocate memory */
+    mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
+    output_cp_buffer = (char*) malloc(MAX_FILE_LEN * sizeof(output_cp_buffer[0]));
+    ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(ucs_file_buffer[0]));
+    my_ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(my_ucs_file_buffer[0]));
 
-	ucs_file_buffer_use = ucs_file_buffer;
-	mytarget_1=mytarget;
-	mytarget_use        = mytarget;
-	my_ucs_file_buffer_1=my_ucs_file_buffer;
+    ucs_file_buffer_use = ucs_file_buffer;
+    mytarget_1=mytarget;
+    mytarget_use        = mytarget;
+    my_ucs_file_buffer_1=my_ucs_file_buffer;
 
     /* flush the converter cache to get a consistent state before the flushing is tested */
     flushCount = ucnv_flushCache();
 
     /*Calling all the UnicodeConverterCPP API and checking functionality*/
-  
-        /*Tests ucnv_getAvailableName(), getAvialableCount()*/
-        
+
+    /*Tests ucnv_getAvailableName(), getAvialableCount()*/
+
     log_verbose("Testing ucnv_countAvailable()...");
-    
+
     testLong1=ucnv_countAvailable();
     log_verbose("Number of available Codepages:    %d\n", testLong1);
-    
+
     log_verbose("\n---Testing ucnv_getAvailableName..");  /*need to check this out */
-    
+
     available_conv = ucnv_getAvailableName(testLong1);
        /*test ucnv_getAvailableName with err condition*/
     log_verbose("\n---Testing ucnv_getAvailableName..with index < 0 ");
@@ -209,7 +209,7 @@ void TestConvert()
     if(available_conv != NULL){
         log_err("ucnv_getAvailableName() with index < 0) should return NULL\n");
     }
-    
+
     /* Test ucnv_countAliases() etc. */
     count = ucnv_countAliases("utf-8", &err);
     if(U_FAILURE(err)) {
@@ -366,24 +366,34 @@ void TestConvert()
        highly unlikely to be chosen as system default codepages */
 
     someConverters[0] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
+    if (U_FAILURE(err)) {
+        log_err("FAILURE! %s\n", myErrorName(err));
+    }
 
     someConverters[1] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
+    if (U_FAILURE(err)) {
+        log_err("FAILURE! %s\n", myErrorName(err));
+    }
 
     someConverters[2] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
+    if (U_FAILURE(err)) {
+        log_err("FAILURE! %s\n", myErrorName(err));
+    }
 
     someConverters[3] = ucnv_open("ibm-834", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
+    if (U_FAILURE(err)) {
+        log_err("FAILURE! %s\n", myErrorName(err));
+    }
 
     someConverters[4] = ucnv_open("ibm-941", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err));}
+    if (U_FAILURE(err)) {
+        log_err("FAILURE! %s\n", myErrorName(err));
+    }
 
 
     /* Testing ucnv_flushCache() */
     log_verbose("\n---Testing ucnv_flushCache...\n");
-        if ((flushCount=ucnv_flushCache())==0)
+    if ((flushCount=ucnv_flushCache())==0)
         log_verbose("Flush cache ok\n");
     else 
         log_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
@@ -457,31 +467,31 @@ void TestConvert()
         ucnv_setDefaultName(defaultName);
     }
 
-        ucnv_close(someConverters[0]);
-        ucnv_close(someConverters[1]);
-        ucnv_close(someConverters[2]);
-        ucnv_close(someConverters[3]);   
+    ucnv_close(someConverters[0]);
+    ucnv_close(someConverters[1]);
+    ucnv_close(someConverters[2]);
+    ucnv_close(someConverters[3]);
     
        
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; ++codepage_index)
     {
         i = 0;  
     
-    strcpy(ucs_file_name, ctest_getTestDirectory());
-    strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
+        strcpy(ucs_file_name, ctest_getTestDirectory());
+        strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
 
-    ucs_file_in = fopen(ucs_file_name,"rb");
+        ucs_file_in = fopen(ucs_file_name,"rb");
         if (!ucs_file_in) 
         {
             log_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
             return;
         }
 
-     /*Creates a converter and testing ucnv_openCCSID(u_int code_page, platform, errstatus*/
+        /*Creates a converter and testing ucnv_openCCSID(u_int code_page, platform, errstatus*/
 
-    /*     myConverter =ucnv_openCCSID(CodePageNumberToTest[codepage_index],UCNV_IBM, &err); */
-    /*  ucnv_flushCache(); */
-    myConverter =ucnv_open( "ibm-949", &err);
+        /*  myConverter =ucnv_openCCSID(CodePageNumberToTest[codepage_index],UCNV_IBM, &err); */
+        /*  ucnv_flushCache(); */
+        myConverter =ucnv_open( "ibm-949", &err);
         if (!myConverter || U_FAILURE(err))   
         {
             log_err("Error creating the convertor \n");
@@ -489,462 +499,474 @@ void TestConvert()
             return;
         }
 
-    /*testing for ucnv_getName()  */
-    log_verbose("Testing ucnv_getName()...\n");
-    ucnv_getName(myConverter, &err);
-    if(U_FAILURE(err))
-        log_err("Error in getName\n");
-    else
-    {
-        log_verbose("getName o.k. %s\n", ucnv_getName(myConverter, &err));
-    }
-    if (strCaseIcmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
-        log_err("getName failed\n");
-    else 
-        log_verbose("getName ok\n");
-    /*Test getName with error condition*/
-    { 
-        const char* name=0;
-        err=U_ILLEGAL_ARGUMENT_ERROR;
-        log_verbose("Testing ucnv_getName with err != U_ZERO_ERROR");
-        name=ucnv_getName(myConverter, &err);
-        if(name != NULL){
-            log_err("ucnv_getName() with err != U_ZERO_ERROR is expected to fail");
+        /*testing for ucnv_getName()  */
+        log_verbose("Testing ucnv_getName()...\n");
+        ucnv_getName(myConverter, &err);
+        if(U_FAILURE(err))
+            log_err("Error in getName\n");
+        else
+        {
+            log_verbose("getName o.k. %s\n", ucnv_getName(myConverter, &err));
         }
-        err=U_ZERO_ERROR;
-    }
+        if (strCaseIcmp(ucnv_getName(myConverter, &err), CodePagesToTest[codepage_index]))
+            log_err("getName failed\n");
+        else 
+            log_verbose("getName ok\n");
+        /*Test getName with error condition*/
+        { 
+            const char* name=0;
+            err=U_ILLEGAL_ARGUMENT_ERROR;
+            log_verbose("Testing ucnv_getName with err != U_ZERO_ERROR");
+            name=ucnv_getName(myConverter, &err);
+            if(name != NULL){
+                log_err("ucnv_getName() with err != U_ZERO_ERROR is expected to fail");
+            }
+            err=U_ZERO_ERROR;
+        }
 
 
-    /*Tests ucnv_getMaxCharSize() and ucnv_getMinCharSize()*/
+        /*Tests ucnv_getMaxCharSize() and ucnv_getMinCharSize()*/
 
-    log_verbose("Testing ucnv_getMaxCharSize()...\n");
+        log_verbose("Testing ucnv_getMaxCharSize()...\n");
         if (ucnv_getMaxCharSize(myConverter)==CodePagesMaxChars[codepage_index])  
             log_verbose("Max byte per character OK\n");
         else 
             log_err("Max byte per character failed\n");
     
-    log_verbose("\n---Testing ucnv_getMinCharSize()...\n");
+        log_verbose("\n---Testing ucnv_getMinCharSize()...\n");
         if (ucnv_getMinCharSize(myConverter)==CodePagesMinChars[codepage_index])  
             log_verbose("Min byte per character OK\n");
         else 
             log_err("Min byte per character failed\n");
 
 
-    /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars()*/
-    log_verbose("\n---Testing ucnv_getSubstChars...\n");
-    ii=4;
-    ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+        /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars()*/
+        log_verbose("\n---Testing ucnv_getSubstChars...\n");
+        ii=4;
+        ucnv_getSubstChars(myConverter, myptr, &ii, &err);
 
-    for(x=0;x<ii;x++) 
-        rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
-    if (rest==CodePagesSubstitutionChars[codepage_index])  
-        log_verbose("Substitution character ok\n");
-    else 
-        log_err("Substitution character failed.\n");
+        for(x=0;x<ii;x++) 
+            rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
+        if (rest==CodePagesSubstitutionChars[codepage_index])  
+            log_verbose("Substitution character ok\n");
+        else 
+            log_err("Substitution character failed.\n");
 
-    log_verbose("\n---Testing ucnv_setSubstChars RoundTrip Test ...\n");
-    ucnv_setSubstChars(myConverter, myptr, ii, &err);
-    if (U_FAILURE(err)) 
-    { log_err("FAILURE! %s\n", myErrorName(err)); }
-    ucnv_getSubstChars(myConverter,save, &ii, &err);
-    if (U_FAILURE(err)) 
-    { log_err("FAILURE! %s\n", myErrorName(err)); }
+        log_verbose("\n---Testing ucnv_setSubstChars RoundTrip Test ...\n");
+        ucnv_setSubstChars(myConverter, myptr, ii, &err);
+        if (U_FAILURE(err)) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
+        ucnv_getSubstChars(myConverter,save, &ii, &err);
+        if (U_FAILURE(err)) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
 
-    if (strncmp(save, myptr, ii)) 
-        log_err("Saved substitution character failed\n");
-    else 
-        log_verbose("Saved substitution character ok\n");
+        if (strncmp(save, myptr, ii)) 
+            log_err("Saved substitution character failed\n");
+        else 
+            log_verbose("Saved substitution character ok\n");
 
-    /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars() with error conditions*/ 
-    log_verbose("\n---Testing ucnv_getSubstChars.. with len < minBytesPerChar\n");
-    ii=1;
-    ucnv_getSubstChars(myConverter, myptr, &ii, &err);
-    if(err != U_INDEX_OUTOFBOUNDS_ERROR){
-        log_err("ucnv_getSubstChars() with len < minBytesPerChar should throw U_INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(err));
-    }
-    err=U_ZERO_ERROR;
-    ii=4;
-    ucnv_getSubstChars(myConverter, myptr, &ii, &err);
-    log_verbose("\n---Testing ucnv_setSubstChars.. with len < minBytesPerChar\n");
-    ucnv_setSubstChars(myConverter, myptr, 0, &err);
-    if(err != U_ILLEGAL_ARGUMENT_ERROR){
-        log_err("ucnv_setSubstChars() with len < minBytesPerChar should throw U_ILLEGAL_ARGUMENT_ERROR Got %s\n", myErrorName(err));
-    }
-    log_verbose("\n---Testing ucnv_setSubstChars.. with err != U_ZERO_ERROR \n");
-    strcpy(myptr, "abc");
-    ucnv_setSubstChars(myConverter, myptr, ii, &err);
-    err=U_ZERO_ERROR;
-    ucnv_getSubstChars(myConverter, save, &ii, &err);
-    if(strncmp(save, myptr, ii) == 0){
-        log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't set the SubstChars and just return\n");
-    }
-    log_verbose("\n---Testing ucnv_getSubstChars.. with err != U_ZERO_ERROR \n");
-    err=U_ZERO_ERROR;
-    strcpy(myptr, "abc");
-    ucnv_setSubstChars(myConverter, myptr, ii, &err);
-    err=U_ILLEGAL_ARGUMENT_ERROR;
-    ucnv_getSubstChars(myConverter, save, &ii, &err);
-    if(strncmp(save, myptr, ii) == 0){
-        log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't fill the SubstChars in the buffer, it just returns\n");
-    }
-    err=U_ZERO_ERROR;
-    /*------*/
+        /*Testing for ucnv_getSubstChars() and ucnv_setSubstChars() with error conditions*/ 
+        log_verbose("\n---Testing ucnv_getSubstChars.. with len < minBytesPerChar\n");
+        ii=1;
+        ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+        if(err != U_INDEX_OUTOFBOUNDS_ERROR){
+            log_err("ucnv_getSubstChars() with len < minBytesPerChar should throw U_INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(err));
+        }
+        err=U_ZERO_ERROR;
+        ii=4;
+        ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+        log_verbose("\n---Testing ucnv_setSubstChars.. with len < minBytesPerChar\n");
+        ucnv_setSubstChars(myConverter, myptr, 0, &err);
+        if(err != U_ILLEGAL_ARGUMENT_ERROR){
+            log_err("ucnv_setSubstChars() with len < minBytesPerChar should throw U_ILLEGAL_ARGUMENT_ERROR Got %s\n", myErrorName(err));
+        }
+        log_verbose("\n---Testing ucnv_setSubstChars.. with err != U_ZERO_ERROR \n");
+        strcpy(myptr, "abc");
+        ucnv_setSubstChars(myConverter, myptr, ii, &err);
+        err=U_ZERO_ERROR;
+        ucnv_getSubstChars(myConverter, save, &ii, &err);
+        if(strncmp(save, myptr, ii) == 0){
+            log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't set the SubstChars and just return\n");
+        }
+        log_verbose("\n---Testing ucnv_getSubstChars.. with err != U_ZERO_ERROR \n");
+        err=U_ZERO_ERROR;
+        strcpy(myptr, "abc");
+        ucnv_setSubstChars(myConverter, myptr, ii, &err);
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        ucnv_getSubstChars(myConverter, save, &ii, &err);
+        if(strncmp(save, myptr, ii) == 0){
+            log_err("uncv_setSubstChars() with err != U_ZERO_ERROR shouldn't fill the SubstChars in the buffer, it just returns\n");
+        }
+        err=U_ZERO_ERROR;
+        /*------*/
 
-    /*resetState  ucnv_reset()*/
-    log_verbose("\n---Testing ucnv_reset()..\n");
-    ucnv_reset(myConverter);
-    {
-         UChar32 c;
-         const uint8_t in[]={  0x1b, 0x25, 0x42, 0x31, 0x32, 0x61, 0xc0, 0x80, 0xe0, 0x80, 0x80, 0xf0, 0x80, 0x80, 0x80};
-         const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
-         UConverter *cnv=ucnv_open("ISO_2022", &err);
-         if(U_FAILURE(err)) {
-            log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
-         }
-         c=ucnv_getNextUChar(cnv, &source, limit, &err);
-         if((U_FAILURE(err) || c != (UChar32)0x0031)) {
-            log_err("ucnv_getNextUChar() failed: %s\n", u_errorName(err));
-         }
-         ucnv_reset(cnv);
-         ucnv_close(cnv);
+        /*resetState  ucnv_reset()*/
+        log_verbose("\n---Testing ucnv_reset()..\n");
+        ucnv_reset(myConverter);
+        {
+             UChar32 c;
+             const uint8_t in[]={  0x1b, 0x25, 0x42, 0x31, 0x32, 0x61, 0xc0, 0x80, 0xe0, 0x80, 0x80, 0xf0, 0x80, 0x80, 0x80};
+             const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
+             UConverter *cnv=ucnv_open("ISO_2022", &err);
+             if(U_FAILURE(err)) {
+                log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
+             }
+             c=ucnv_getNextUChar(cnv, &source, limit, &err);
+             if((U_FAILURE(err) || c != (UChar32)0x0031)) {
+                log_err("ucnv_getNextUChar() failed: %s\n", u_errorName(err));
+             }
+             ucnv_reset(cnv);
+             ucnv_close(cnv);
          
-    }
+        }
     
-    /*getDisplayName*/
-    log_verbose("\n---Testing ucnv_getDisplayName()...\n");
-    locale=CodePagesLocale[codepage_index];
-    displayname=(UChar*)malloc(1 * sizeof(UChar));
-    len=0;
-    disnamelen = ucnv_getDisplayName(myConverter,locale,displayname, len, &err); 
-    if(err==U_BUFFER_OVERFLOW_ERROR)
-      {    
-         err=U_ZERO_ERROR;
-         displayname=(UChar*)realloc(displayname, (disnamelen+1) * sizeof(UChar));
-         ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
-         if(U_FAILURE(err))
-         {
-           log_err("getDisplayName failed the error is  %s\n", myErrorName(err));
-         }
-         else
-           log_verbose(" getDisplayName o.k.\n");
-      }
-     /*test ucnv_getDiaplayName with error condition*/
-     log_verbose("\n---Testing ucnv_getDisplayName()...\n");
-     err= U_ILLEGAL_ARGUMENT_ERROR;
-     len=ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);  
-     if( len !=0 ){
-           log_err("ucnv_getDisplayName() with err != U_ZERO_ERROR is supposed to return 0\n");
-     }
-     err=U_ZERO_ERROR;
-    
-    /* testing ucnv_setFromUCallBack() and ucnv_getFromUCallBack()*/
-    ucnv_getFromUCallBack(myConverter, &MIA1, &MIA1Context);
+        /*getDisplayName*/
+        log_verbose("\n---Testing ucnv_getDisplayName()...\n");
+        locale=CodePagesLocale[codepage_index];
+        displayname=(UChar*)malloc(1 * sizeof(UChar));
+        len=0;
+        disnamelen = ucnv_getDisplayName(myConverter,locale,displayname, len, &err); 
+        if(err==U_BUFFER_OVERFLOW_ERROR)
+        {    
+            err=U_ZERO_ERROR;
+            displayname=(UChar*)realloc(displayname, (disnamelen+1) * sizeof(UChar));
+            ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
+            if(U_FAILURE(err))
+            {
+                log_err("getDisplayName failed the error is  %s\n", myErrorName(err));
+            }
+            else
+                log_verbose(" getDisplayName o.k.\n");
+        }
+        /*test ucnv_getDiaplayName with error condition*/
+        log_verbose("\n---Testing ucnv_getDisplayName()...\n");
+        err= U_ILLEGAL_ARGUMENT_ERROR;
+        len=ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);  
+        if( len !=0 ){
+            log_err("ucnv_getDisplayName() with err != U_ZERO_ERROR is supposed to return 0\n");
+        }
+        err=U_ZERO_ERROR;
+
+        /* testing ucnv_setFromUCallBack() and ucnv_getFromUCallBack()*/
+        ucnv_getFromUCallBack(myConverter, &MIA1, &MIA1Context);
             
-    log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
-    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
-    if (U_FAILURE(err) || oldFromUAction != MIA1 || oldFromUContext != MIA1Context) 
-    { log_err("FAILURE! %s\n", myErrorName(err)); }
+        log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
+        ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
+        if (U_FAILURE(err) || oldFromUAction != MIA1 || oldFromUContext != MIA1Context) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
 
-    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
-    if (MIA1_2 != otherUnicodeAction(MIA1) || MIA1Context2 != &BOM) 
-        log_err("get From UCallBack failed\n");
-    else 
-        log_verbose("get From UCallBack ok\n");
+        ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+        if (MIA1_2 != otherUnicodeAction(MIA1) || MIA1Context2 != &BOM) 
+            log_err("get From UCallBack failed\n");
+        else 
+            log_verbose("get From UCallBack ok\n");
 
-    log_verbose("\n---Testing getFromUCallBack Roundtrip...\n");
-    ucnv_setFromUCallBack(myConverter,MIA1, MIA1Context, &oldFromUAction, &oldFromUContext, &err);
-    if (U_FAILURE(err) || oldFromUAction != otherUnicodeAction(MIA1) || oldFromUContext != &BOM) 
-    { log_err("FAILURE! %s\n", myErrorName(err));  }
-    
-    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
-    if (MIA1_2 != MIA1 || MIA1Context2 != MIA1Context) 
-        log_err("get From UCallBack action failed\n");
-    else 
-        log_verbose("get From UCallBack action ok\n");
-    
-    /*testing ucnv_setToUCallBack with error conditions*/
-    err=U_ILLEGAL_ARGUMENT_ERROR;
-    log_verbose("\n---Testing setFromUCallBack. with err != U_ZERO_ERROR..\n");
-    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
-    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
-    if(MIA1_2 == otherUnicodeAction(MIA1) || MIA1Context2 == &BOM){
-        log_err("To setFromUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
-    }
-    err=U_ZERO_ERROR;
+        log_verbose("\n---Testing getFromUCallBack Roundtrip...\n");
+        ucnv_setFromUCallBack(myConverter,MIA1, MIA1Context, &oldFromUAction, &oldFromUContext, &err);
+        if (U_FAILURE(err) || oldFromUAction != otherUnicodeAction(MIA1) || oldFromUContext != &BOM) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
 
-    
-    /*testing ucnv_setToUCallBack() and ucnv_getToUCallBack()*/
-    ucnv_getToUCallBack(myConverter, &MIA2, &MIA2Context);
-    
-    log_verbose("\n---Testing setTo UCallBack...\n");
-    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), &BOM, &oldToUAction, &oldToUContext, &err);
-    if (U_FAILURE(err) || oldToUAction != MIA2 || oldToUContext != MIA2Context) 
-    { log_err("FAILURE! %s\n", myErrorName(err));}
+        ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+        if (MIA1_2 != MIA1 || MIA1Context2 != MIA1Context) 
+            log_err("get From UCallBack action failed\n");
+        else 
+            log_verbose("get From UCallBack action ok\n");
 
-    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
-    if (MIA2_2 != otherCharAction(MIA2) || MIA2Context2 != &BOM) 
-        log_err("To UCallBack failed\n");
-    else 
-        log_verbose("To UCallBack ok\n");
-    
-    log_verbose("\n---Testing setTo UCallBack Roundtrip...\n");
-    ucnv_setToUCallBack(myConverter,MIA2, MIA2Context, &oldToUAction, &oldToUContext, &err);
-    if (U_FAILURE(err) || oldToUAction != otherCharAction(MIA2) || oldToUContext != &BOM) 
-    { log_err("FAILURE! %s\n", myErrorName(err));  }
-    
-    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
-    if (MIA2_2 != MIA2 || MIA2Context2 != MIA2Context)
-        log_err("To UCallBack failed\n");
-    else 
-        log_verbose("To UCallBack ok\n");
-
-    /*testing ucnv_setToUCallBack with error conditions*/
-    err=U_ILLEGAL_ARGUMENT_ERROR;
-    log_verbose("\n---Testing setToUCallBack. with err != U_ZERO_ERROR..\n");
-    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, &oldToUAction, &oldToUContext, &err);
-    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
-    if (MIA2_2 == otherCharAction(MIA2) || MIA2Context2 == &BOM){ 
-        log_err("To setToUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
-    }
-    err=U_ZERO_ERROR;
+        /*testing ucnv_setToUCallBack with error conditions*/
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        log_verbose("\n---Testing setFromUCallBack. with err != U_ZERO_ERROR..\n");
+        ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
+        ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+        if(MIA1_2 == otherUnicodeAction(MIA1) || MIA1Context2 == &BOM){
+            log_err("To setFromUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
+        }
+        err=U_ZERO_ERROR;
 
 
-    /*getcodepageid testing ucnv_getCCSID() */
-    log_verbose("\n----Testing getCCSID....\n");
-    cp =    ucnv_getCCSID(myConverter,&err);
-    if (U_FAILURE(err)) 
-    {
-        log_err("FAILURE!..... %s\n", myErrorName(err));
-    }
-    if (cp != CodePageNumberToTest[codepage_index]) 
-        log_err("Codepage number test failed\n");
-    else 
-        log_verbose("Codepage number test OK\n");
-    
-    /*testing ucnv_getCCSID() with err != U_ZERO_ERROR*/
-    err=U_ILLEGAL_ARGUMENT_ERROR;
-    if( ucnv_getCCSID(myConverter,&err) != -1){
-        log_err("ucnv_getCCSID() with err != U_ZERO_ERROR is supposed to fail\n");
-    }
-    err=U_ZERO_ERROR;
-    
-    /*getCodepagePlatform testing ucnv_getPlatform()*/
-    log_verbose("\n---Testing getCodepagePlatform ..\n");
-    if (CodePagesPlatform[codepage_index]!=ucnv_getPlatform(myConverter, &err))
-        log_err("Platform codepage test failed\n");
-    else 
-        log_verbose("Platform codepage test ok\n");
-    
-    if (U_FAILURE(err)) 
-    { 
-        log_err("FAILURE! %s\n", myErrorName(err));
-    }
-    /*testing ucnv_getPlatform() with err != U_ZERO_ERROR*/
-    err= U_ILLEGAL_ARGUMENT_ERROR;
-    if(ucnv_getPlatform(myConverter, &err) != UCNV_UNKNOWN){
-        log_err("ucnv)getPlatform with err != U_ZERO_ERROR is supposed to fail\n");
-    }
-    err=U_ZERO_ERROR;
-    
-     
-    /*Reads the BOM*/
+        /*testing ucnv_setToUCallBack() and ucnv_getToUCallBack()*/
+        ucnv_getToUCallBack(myConverter, &MIA2, &MIA2Context);
+
+        log_verbose("\n---Testing setTo UCallBack...\n");
+        ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), &BOM, &oldToUAction, &oldToUContext, &err);
+        if (U_FAILURE(err) || oldToUAction != MIA2 || oldToUContext != MIA2Context) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
+
+        ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+        if (MIA2_2 != otherCharAction(MIA2) || MIA2Context2 != &BOM) 
+            log_err("To UCallBack failed\n");
+        else 
+            log_verbose("To UCallBack ok\n");
+
+        log_verbose("\n---Testing setTo UCallBack Roundtrip...\n");
+        ucnv_setToUCallBack(myConverter,MIA2, MIA2Context, &oldToUAction, &oldToUContext, &err);
+        if (U_FAILURE(err) || oldToUAction != otherCharAction(MIA2) || oldToUContext != &BOM) 
+        { log_err("FAILURE! %s\n", myErrorName(err));  }
+
+        ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+        if (MIA2_2 != MIA2 || MIA2Context2 != MIA2Context)
+            log_err("To UCallBack failed\n");
+        else 
+            log_verbose("To UCallBack ok\n");
+
+        /*testing ucnv_setToUCallBack with error conditions*/
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        log_verbose("\n---Testing setToUCallBack. with err != U_ZERO_ERROR..\n");
+        ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, &oldToUAction, &oldToUContext, &err);
+        ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+        if (MIA2_2 == otherCharAction(MIA2) || MIA2Context2 == &BOM){ 
+            log_err("To setToUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
+        }
+        err=U_ZERO_ERROR;
+
+
+        /*getcodepageid testing ucnv_getCCSID() */
+        log_verbose("\n----Testing getCCSID....\n");
+        cp =    ucnv_getCCSID(myConverter,&err);
+        if (U_FAILURE(err)) 
+        {
+            log_err("FAILURE!..... %s\n", myErrorName(err));
+        }
+        if (cp != CodePageNumberToTest[codepage_index]) 
+            log_err("Codepage number test failed\n");
+        else 
+            log_verbose("Codepage number test OK\n");
+
+        /*testing ucnv_getCCSID() with err != U_ZERO_ERROR*/
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        if( ucnv_getCCSID(myConverter,&err) != -1){
+            log_err("ucnv_getCCSID() with err != U_ZERO_ERROR is supposed to fail\n");
+        }
+        err=U_ZERO_ERROR;
+
+        /*getCodepagePlatform testing ucnv_getPlatform()*/
+        log_verbose("\n---Testing getCodepagePlatform ..\n");
+        if (CodePagesPlatform[codepage_index]!=ucnv_getPlatform(myConverter, &err))
+            log_err("Platform codepage test failed\n");
+        else 
+            log_verbose("Platform codepage test ok\n");
+
+        if (U_FAILURE(err)) 
+        { 
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
+        /*testing ucnv_getPlatform() with err != U_ZERO_ERROR*/
+        err= U_ILLEGAL_ARGUMENT_ERROR;
+        if(ucnv_getPlatform(myConverter, &err) != UCNV_UNKNOWN){
+            log_err("ucnv)getPlatform with err != U_ZERO_ERROR is supposed to fail\n");
+        }
+        err=U_ZERO_ERROR;
+
+
+        /*Reads the BOM*/
         fread(&BOM, sizeof(UChar), 1, ucs_file_in);
         if (BOM!=0xFEFF && BOM!=0xFFFE) 
-          {
+        {
             log_err("File Missing BOM...Bailing!\n");
             return;
-          }
+        }
 
-        
-     /*Reads in the file*/
-     while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
+
+        /*Reads in the file*/
+        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
         {
             myUChar = ucs_file_buffer[i-1];
             
             ucs_file_buffer[i-1] = (UChar)((BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8))); /*adjust if BIG_ENDIAN*/
         }
 
-      myUChar = ucs_file_buffer[i-1];
-      ucs_file_buffer[i-1] = (UChar)((BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8))); /*adjust if BIG_ENDIAN Corner Case*/
+        myUChar = ucs_file_buffer[i-1];
+        ucs_file_buffer[i-1] = (UChar)((BOM==0xFEFF)?myUChar:((myUChar >> 8) | (myUChar << 8))); /*adjust if BIG_ENDIAN Corner Case*/
 
 
-     /*testing ucnv_fromUChars() and ucnv_toUChars() */
-     /*uchar1---fromUChar--->output_cp_buffer --toUChar--->uchar2*/
+        /*testing ucnv_fromUChars() and ucnv_toUChars() */
+        /*uchar1---fromUChar--->output_cp_buffer --toUChar--->uchar2*/
 
-      uchar1=(UChar*)malloc(sizeof(UChar) * (u_strlen(ucs_file_buffer)+1));
-      u_uastrcpy(uchar1,"");
-      u_strncpy(uchar1,ucs_file_buffer,i);
+        uchar1=(UChar*)malloc(sizeof(UChar) * (u_strlen(ucs_file_buffer)+1));
+        u_uastrcpy(uchar1,"");
+        u_strncpy(uchar1,ucs_file_buffer,i);
 
-      uchar3=(UChar*)malloc(sizeof(UChar)*(u_strlen(ucs_file_buffer)+1));
-      u_uastrcpy(uchar3,"");
-      u_strncpy(uchar3,ucs_file_buffer,i);
-            
-      /*Calls the Conversion Routine */
-      testLong1 = MAX_FILE_LEN;
-      log_verbose("\n---Testing ucnv_fromUChars()\n");
-           targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
-      if (U_FAILURE(err))  
-      {
+        uchar3=(UChar*)malloc(sizeof(UChar)*(u_strlen(ucs_file_buffer)+1));
+        u_uastrcpy(uchar3,"");
+        u_strncpy(uchar3,ucs_file_buffer,i);
+
+        /*Calls the Conversion Routine */
+        testLong1 = MAX_FILE_LEN;
+        log_verbose("\n---Testing ucnv_fromUChars()\n");
+        targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
+        if (U_FAILURE(err))  
+        {
             log_err("\nFAILURE...%s\n", myErrorName(err));
-      }
-      else
-          log_verbose(" ucnv_fromUChars() o.k.\n");
-      /*the codepage intermediate buffer should be null terminated */
-      output_cp_buffer[targetcapacity]='\0';
-      
-      /*test the conversion routine */
-      log_verbose("\n---Testing ucnv_toUChars()\n");
-      /*call it first time for trapping the targetcapacity and size needed to allocate memory for the buffer uchar2 */
-      targetcapacity2=0; 
-      targetsize = ucnv_toUChars(myConverter,
-                 NULL,
-                 targetcapacity2,
-                 output_cp_buffer,
-                 strlen(output_cp_buffer),
-                 &err);
-      /*if there is an buffer overflow then trap the values and pass them and make the actual call*/
+        }
+        else
+            log_verbose(" ucnv_fromUChars() o.k.\n");
+        /*the codepage intermediate buffer should be null terminated */
+        output_cp_buffer[targetcapacity]='\0';
 
-      if(err==U_BUFFER_OVERFLOW_ERROR)
-      {    
-         err=U_ZERO_ERROR;
-         uchar2=(UChar*)malloc((targetsize) * sizeof(UChar));
-              targetsize = ucnv_toUChars(myConverter, 
+        /*test the conversion routine */
+        log_verbose("\n---Testing ucnv_toUChars()\n");
+        /*call it first time for trapping the targetcapacity and size needed to allocate memory for the buffer uchar2 */
+        targetcapacity2=0; 
+        targetsize = ucnv_toUChars(myConverter,
+                     NULL,
+                     targetcapacity2,
+                     output_cp_buffer,
+                     strlen(output_cp_buffer),
+                     &err);
+        /*if there is an buffer overflow then trap the values and pass them and make the actual call*/
+
+        if(err==U_BUFFER_OVERFLOW_ERROR)
+        {
+            err=U_ZERO_ERROR;
+            uchar2=(UChar*)malloc((targetsize) * sizeof(UChar));
+            targetsize = ucnv_toUChars(myConverter, 
                    uchar2,
                    targetsize, 
                    output_cp_buffer,
                    strlen(output_cp_buffer),
                    &err);
-         
-         if(U_FAILURE(err))
-           log_err("ucnv_toUChars() FAILED %s\n", myErrorName(err));
-         else
-           log_verbose(" ucnv_toUChars() o.k.\n");
 
-    if(u_strcmp(uchar1,uchar2)!=0) 
-      log_err("equality test failed with convertion routine\n");         
-      }
-      else
-    {
-      log_err("ERR: calling toUChars: Didn't get U_BUFFER_OVERFLOW .. expected it.\n");
-    }
-     /*Testing ucnv_fromUChars and ucnv_toUChars with error conditions*/
-      err=U_ILLEGAL_ARGUMENT_ERROR;
-      log_verbose("\n---Testing ucnv_fromUChars() with err != U_ZERO_ERROR\n");
-      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
-      if (targetcapacity !=0) {
+            if(U_FAILURE(err))
+                log_err("ucnv_toUChars() FAILED %s\n", myErrorName(err));
+            else
+                log_verbose(" ucnv_toUChars() o.k.\n");
+
+            if(u_strcmp(uchar1,uchar2)!=0) 
+                log_err("equality test failed with convertion routine\n");
+        }
+        else
+        {
+            log_err("ERR: calling toUChars: Didn't get U_BUFFER_OVERFLOW .. expected it.\n");
+        }
+        /*Testing ucnv_fromUChars and ucnv_toUChars with error conditions*/
+        err=U_ILLEGAL_ARGUMENT_ERROR;
+        log_verbose("\n---Testing ucnv_fromUChars() with err != U_ZERO_ERROR\n");
+        targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
+        if (targetcapacity !=0) {
             log_err("\nFAILURE: ucnv_fromUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
-      }
-      err=U_ZERO_ERROR;
-      log_verbose("\n---Testing ucnv_fromUChars() with converter=NULL\n");
-      targetcapacity = ucnv_fromUChars(NULL, output_cp_buffer, testLong1,  uchar1, -1, &err);
-      if (targetcapacity !=0 || err != U_ILLEGAL_ARGUMENT_ERROR) {
+        }
+        err=U_ZERO_ERROR;
+        log_verbose("\n---Testing ucnv_fromUChars() with converter=NULL\n");
+        targetcapacity = ucnv_fromUChars(NULL, output_cp_buffer, testLong1,  uchar1, -1, &err);
+        if (targetcapacity !=0 || err != U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("\nFAILURE: ucnv_fromUChars with converter=NULL is expected to fail\n");
-      }
-      err=U_ZERO_ERROR;
-      log_verbose("\n---Testing ucnv_fromUChars() with sourceLength = 0\n");
-      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, 0, &err);
-      if (targetcapacity !=0) {
+        }
+        err=U_ZERO_ERROR;
+        log_verbose("\n---Testing ucnv_fromUChars() with sourceLength = 0\n");
+        targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, 0, &err);
+        if (targetcapacity !=0) {
             log_err("\nFAILURE: ucnv_fromUChars with sourceLength is expected to fail and return 0\n");
-      }
-      log_verbose("\n---Testing ucnv_fromUChars() with targetLenth = 0\n");
-      targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, 0,  uchar1, -1, &err);
-      if (err != U_BUFFER_OVERFLOW_ERROR) {
+        }
+        log_verbose("\n---Testing ucnv_fromUChars() with targetLenth = 0\n");
+        targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, 0,  uchar1, -1, &err);
+        if (err != U_BUFFER_OVERFLOW_ERROR) {
             log_err("\nFAILURE: ucnv_fromUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
-      }
-      /*toUChars with error conditions*/
-      targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, strlen(output_cp_buffer), &err);
-      if(targetsize != 0){
-          log_err("\nFAILURE: ucnv_toUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
-      }
-      err=U_ZERO_ERROR;
-      targetsize = ucnv_toUChars(myConverter, uchar2, -1, output_cp_buffer, strlen(output_cp_buffer), &err);
-      if(targetsize != 0 || err != U_ILLEGAL_ARGUMENT_ERROR){
-          log_err("\nFAILURE: ucnv_toUChars with targetsize < 0 is expected to throw U_ILLEGAL_ARGUMENT_ERROR and return 0\n");
-      }
-      err=U_ZERO_ERROR;
-      targetsize = ucnv_toUChars(myConverter, uchar2, 0, output_cp_buffer, 0, &err);
-      if (targetsize !=0) {
+        }
+        /*toUChars with error conditions*/
+        targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, strlen(output_cp_buffer), &err);
+        if(targetsize != 0){
+            log_err("\nFAILURE: ucnv_toUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
+        }
+        err=U_ZERO_ERROR;
+        targetsize = ucnv_toUChars(myConverter, uchar2, -1, output_cp_buffer, strlen(output_cp_buffer), &err);
+        if(targetsize != 0 || err != U_ILLEGAL_ARGUMENT_ERROR){
+            log_err("\nFAILURE: ucnv_toUChars with targetsize < 0 is expected to throw U_ILLEGAL_ARGUMENT_ERROR and return 0\n");
+        }
+        err=U_ZERO_ERROR;
+        targetsize = ucnv_toUChars(myConverter, uchar2, 0, output_cp_buffer, 0, &err);
+        if (targetsize !=0) {
             log_err("\nFAILURE: ucnv_toUChars with sourceLength is expected to fail and return 0\n");
-      }
-      targetcapacity2=0; 
-      targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer,  strlen(output_cp_buffer), &err);
-      if (err != U_BUFFER_OVERFLOW_ERROR) {
+        }
+        targetcapacity2=0; 
+        targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer,  strlen(output_cp_buffer), &err);
+        if (err != U_BUFFER_OVERFLOW_ERROR) {
             log_err("\nFAILURE: ucnv_toUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
-      }
-      err=U_ZERO_ERROR;
-      /*-----*/
+        }
+        err=U_ZERO_ERROR;
+        /*-----*/
 
 
-     /*testing for ucnv_fromUnicode() and ucnv_toUnicode() */
-         /*Clean up re-usable vars*/
-     j=0;
-     log_verbose("Testing ucnv_fromUnicode().....\n");
-     tmp_ucs_buf=ucs_file_buffer_use; 
-     ucnv_fromUnicode(myConverter, &mytarget_1,
+        /*testing for ucnv_fromUnicode() and ucnv_toUnicode() */
+        /*Clean up re-usable vars*/
+        j=0;
+        log_verbose("Testing ucnv_fromUnicode().....\n");
+        tmp_ucs_buf=ucs_file_buffer_use; 
+        ucnv_fromUnicode(myConverter, &mytarget_1,
                  mytarget + MAX_FILE_LEN,
                  &tmp_ucs_buf,
                  ucs_file_buffer_use+i,
                  NULL,
                  TRUE,
                  &err);
-     consumedUni = (UChar*)tmp_consumedUni;
-    
-     if (U_FAILURE(err)) 
-      { 
-         log_err("FAILURE! %s\n", myErrorName(err));
-     }
-     else
-         log_verbose("ucnv_fromUnicode()   o.k.\n");
+        consumedUni = (UChar*)tmp_consumedUni;
 
-    /*Uni1 ----ToUnicode----> Cp2 ----FromUnicode---->Uni3 */
-      log_verbose("Testing ucnv_toUnicode().....\n");
-      tmp_mytarget_use=mytarget_use;
-      tmp_consumed = consumed;
-     ucnv_toUnicode(myConverter, &my_ucs_file_buffer_1,
-               my_ucs_file_buffer + MAX_FILE_LEN,
-               &tmp_mytarget_use,
-               mytarget_use+strlen((char*)mytarget_use),
-               NULL,
-               FALSE,
-               &err);
-      consumed = (char*)tmp_consumed;
-     if (U_FAILURE(err)) 
-     { log_err("FAILURE! %s\n", myErrorName(err)); }
-     else
-         log_verbose("ucnv_toUnicode()  o.k.\n");
-    
-  
-    log_verbose("\n---Testing   RoundTrip ...\n");
-    
-    
-    u_strncpy(uchar3, my_ucs_file_buffer,i);
-    
-    if(u_strcmp(uchar1,uchar3)==0)
-        log_verbose("Equality test o.k.\n");
-    else 
-        log_err("Equality test failed\n");
+        if (U_FAILURE(err)) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
+        else
+            log_verbose("ucnv_fromUnicode()   o.k.\n");
 
-    /*sanity compare */
-    if(uchar2 == NULL)
-      {
-    log_err("uchar2 was NULL (ccapitst.c line %d), couldn't do sanity check\n", __LINE__);
-      }
-    else
-      {
-    if(u_strcmp(uchar2, uchar3)==0)
-      log_verbose("Equality test o.k.\n");
-    else
-      log_err("Equality test failed\n");
-      }
+        /*Uni1 ----ToUnicode----> Cp2 ----FromUnicode---->Uni3 */
+        log_verbose("Testing ucnv_toUnicode().....\n");
+        tmp_mytarget_use=mytarget_use;
+        tmp_consumed = consumed;
+        ucnv_toUnicode(myConverter, &my_ucs_file_buffer_1,
+                my_ucs_file_buffer + MAX_FILE_LEN,
+                &tmp_mytarget_use,
+                mytarget_use+strlen((char*)mytarget_use),
+                NULL,
+                FALSE,
+                &err);
+        consumed = (char*)tmp_consumed;
+        if (U_FAILURE(err)) 
+        {
+            log_err("FAILURE! %s\n", myErrorName(err));
+        }
+        else
+            log_verbose("ucnv_toUnicode()  o.k.\n");
 
-    fclose(ucs_file_in);    
-    ucnv_close(myConverter);
-    free(displayname); 
-    if (uchar1 != 0) free(uchar1);
-    if (uchar2 != 0) free(uchar2);
-    if (uchar3 != 0) free(uchar3);    
+
+        log_verbose("\n---Testing   RoundTrip ...\n");
+
+
+        u_strncpy(uchar3, my_ucs_file_buffer,i);
+
+        if(u_strcmp(uchar1,uchar3)==0)
+            log_verbose("Equality test o.k.\n");
+        else 
+            log_err("Equality test failed\n");
+
+        /*sanity compare */
+        if(uchar2 == NULL)
+        {
+            log_err("uchar2 was NULL (ccapitst.c line %d), couldn't do sanity check\n", __LINE__);
+        }
+        else
+        {
+            if(u_strcmp(uchar2, uchar3)==0)
+                log_verbose("Equality test o.k.\n");
+            else
+                log_err("Equality test failed\n");
+        }
+
+        fclose(ucs_file_in);
+        ucnv_close(myConverter);
+        free(displayname);
+        if (uchar1 != 0) free(uchar1);
+        if (uchar2 != 0) free(uchar2);
+        if (uchar3 != 0) free(uchar3);
     }
-    
+
     free((void*)mytarget);
     free((void*)output_cp_buffer);
     free((void*)ucs_file_buffer);
@@ -953,26 +975,24 @@ void TestConvert()
 
 void WriteToFile(const UChar *a, FILE *myfile)
 {
-      uint32_t  size    =  u_strlen(a);
-      uint16_t  i       =   0;
-      UChar   b       =   0xFEFF;
+    uint32_t  size    = u_strlen(a);
+    uint16_t  i       = 0;
+    UChar     b       = 0xFEFF;
 
-     /*Writes the BOM*/
-     fwrite(&b, sizeof(UChar), 1, myfile);
-     for (i=0; i< size; i++)
-     {
-         b = a[i];
-         fwrite(&b, sizeof(UChar), 1, myfile);
-     }
-     return;
+    /*Writes the BOM*/
+    fwrite(&b, sizeof(UChar), 1, myfile);
+    for (i=0; i< size; i++)
+    {
+        b = a[i];
+        fwrite(&b, sizeof(UChar), 1, myfile);
+    }
 }
 
-     
 int32_t strCaseIcmp(const char* a1, const char * a2)
 {
     int32_t i=0, ret=0;
     while(a1[i]&&a2[i]) 
-    { 
+    {
         ret += tolower(a1[i])-tolower(a2[i]); 
         i++;
     }
@@ -986,7 +1006,6 @@ UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
 
 
 UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
-
 {
     return (MIA==(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP)?(UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE:(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP;
 }
@@ -998,7 +1017,7 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
  * aliases map back to itself.  Check some hard-coded UTF8 and
  * ISO_2022 aliases to make sure they work.
  */
-void TestAlias() {
+static void TestAlias() {
     int32_t i, ncnv;
     UErrorCode status = U_ZERO_ERROR;
 

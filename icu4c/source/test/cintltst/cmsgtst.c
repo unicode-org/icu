@@ -65,8 +65,9 @@ static void InitStrings( void )
         u_uastrcpy(testResultStrings[i], txt_testResultStrings[i] );
     }
 }
+
 /* Test u_formatMessage() with various test patterns() */
-void MessageFormatTest( void ) 
+static void MessageFormatTest( void ) 
 {
 
     UChar *str;
@@ -110,7 +111,7 @@ void MessageFormatTest( void )
 
 
 /*test u_formatMessage() with sample patterns */
-void TestSampleMessageFormat()
+static void TestSampleMessageFormat()
 {
   UChar *str;
   UChar *result;
@@ -204,10 +205,10 @@ void TestSampleMessageFormat()
   free(str);
     
 
-    
 }
+
 /* Test u_formatMessage() and u_parseMessage() , format and parse sequence and round trip */
-void TestSampleFormatAndParse()
+static void TestSampleFormatAndParse()
 {
 
     UChar *result, *tzID, *str;
@@ -294,8 +295,9 @@ void TestSampleFormatAndParse()
     free(tzID);
     
 }
+
 /* test message format with a choice option */
-void TestMsgFormatChoice()
+static void TestMsgFormatChoice()
 {
     UChar* str;
     UErrorCode status = U_ZERO_ERROR;
@@ -380,8 +382,9 @@ void TestMsgFormatChoice()
     free(str);
 
 }
+
 /*test u_parseMessage() with various test patterns */
-void TestParseMessage()
+static void TestParseMessage()
 {
     UChar pattern[100];
     UChar source[100];
@@ -426,7 +429,7 @@ void TestParseMessage()
     
 }
 
-int32_t CallFormatMessage(const char* locale, UChar* testCasePattern, int32_t patternLength, 
+static int32_t CallFormatMessage(const char* locale, UChar* testCasePattern, int32_t patternLength, 
                        UChar* result, int32_t resultLength, UErrorCode *status, ...)
 {
     int32_t len = 0;
@@ -438,7 +441,7 @@ int32_t CallFormatMessage(const char* locale, UChar* testCasePattern, int32_t pa
 }
 
 /* Test u_vformatMessage() with various test patterns. */
-void TestMessageFormatWithValist( void ) 
+static void TestMessageFormatWithValist( void ) 
 {
 
     UChar *str;
@@ -480,7 +483,7 @@ void TestMessageFormatWithValist( void )
     free(str);
 }
 
-void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength, 
+static void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength, 
                        UChar* source, int32_t sourceLength, UErrorCode *status, ...)
 {
     va_list ap;
@@ -488,8 +491,9 @@ void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength,
     u_vparseMessage(locale, pattern, patternLength, source, sourceLength, ap, status);
     va_end(ap);
 }
+
 /*test u_vparseMessage() with various test patterns */
-void TestParseMessageWithValist()
+static void TestParseMessageWithValist()
 {
     UChar pattern[100];
     UChar source[100];
@@ -530,6 +534,7 @@ void TestParseMessageWithValist()
     else
         log_err("FAIL: Error in parseMessage on test#10 \n");    
 }
+
 void addMsgForTest(TestNode** root)
 {
     addTest(root, &MessageFormatTest, "tsformat/cmsgtst/MessageFormatTest");

@@ -31,13 +31,13 @@
     /**
      * test subroutines used by TestSymbols
      **/
-    void VerifygetSymbols(UDateFormat*, UDateFormatSymbolType, int32_t, const char*);
-    void VerifysetSymbols(UDateFormat*, UDateFormatSymbolType, int32_t, const char*);
-    void VerifygetsetSymbols(UDateFormat*, UDateFormat*, UDateFormatSymbolType, int32_t);
+    static void VerifygetSymbols(UDateFormat*, UDateFormatSymbolType, int32_t, const char*);
+    static void VerifysetSymbols(UDateFormat*, UDateFormatSymbolType, int32_t, const char*);
+    static void VerifygetsetSymbols(UDateFormat*, UDateFormat*, UDateFormatSymbolType, int32_t);
     
     /**
      * test subroutine used by the testing functions
      **/
-    UChar* myNumformat(const UNumberFormat* numfor, double d);
+    static UChar* myNumformat(const UNumberFormat* numfor, double d);
 
 #endif

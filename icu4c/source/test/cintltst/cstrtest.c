@@ -26,7 +26,7 @@ void addCStringTest(TestNode** root) {
   
 }
 
-void TestAPI(void)
+static void TestAPI(void)
 {
 
     int32_t intValue=0;
