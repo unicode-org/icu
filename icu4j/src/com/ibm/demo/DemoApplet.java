@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DemoApplet.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:47 $
+ * $RCSfile: DemoApplet.java,v $ $Revision: 1.2 $ $Date: 2000/02/24 19:53:00 $
  *
  * (C) Copyright Taligent, Inc. 1996 - 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
