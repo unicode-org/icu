@@ -1,3 +1,4 @@
+<html>
 <!DOCTYPE html public "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -67,6 +68,10 @@ U_CAPI int32_t U_EXPORT2
 u_formatMessage(...);
 </pre>
    </li>
+   <li>Always use <code>static</code> for variables, functions, and constants
+     that are not exported explicitely by a header file. Some platforms are
+     confused if non-static symbols are not explictely declared extern, and
+     will not be able to build ICU and link against it. </li>
    <li>Error codes: The ICU API functions for both C and C++ are using a 
      pointer or a reference to UErrorCode whereever we expect things to possibly 
      go wrong. 
@@ -162,7 +167,7 @@ ubidi_close(UBiDi *pBiDi);
  <h3>C++ Guidelines</h3>
  <ul>
    <li>Classes and their members do not need a "U" or any other prefix.</li>
-   <li>class APIs need to be declared like <code>class U_I18N_API SimpleDateFormat</code> 
+   <li>Class APIs need to be declared like <code>class U_I18N_API SimpleDateFormat</code> 
      or like <code>class U_COMMON_API UCharCharacterIterator</code>.</li>
    <li>Class member functions should be only declared, not inline-implemented, 
      in the class declaration. Inline implementations may follow after the 
@@ -226,6 +231,11 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode) {
    <li>For memory allocation in C++ implementation files for ICU, the standard 
      <code>new</code> and <code>delete</code> operators (or the C functions/macros 
      in <code>cmemory.h</code>) must be used. </li>
+   <li>Iterations through <code>for()</code> loops should not use declarations
+     in the first part of the loop. The scoping of such declarations
+     has gone through two revisions about this, and some compilers do not
+     comply to the latest scoping. Declarations of loop variables should be
+     outside these loops. </li>
  </ul>
  <a name="addfiles"></a> 
  <h2 align="center">Adding files to ICU</h2>
