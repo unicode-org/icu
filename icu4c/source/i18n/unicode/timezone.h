@@ -125,7 +125,7 @@ public:
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
      * @return the GMT time zone.
-     * @since ICU 2.0
+     * @draft ICU 2.0
      */
     static const TimeZone* getGMT(void);
 
