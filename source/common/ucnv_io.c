@@ -638,10 +638,10 @@ static const UEnumeration gEnumAliases = {
     ucnv_io_resetStandardAliases
 };
 
-U_CAPI UEnumeration *
+U_CAPI UEnumeration * U_EXPORT2
 ucnv_openStandardNames(const char *convName,
-                            const char *standard,
-                            UErrorCode *pErrorCode)
+                       const char *standard,
+                       UErrorCode *pErrorCode)
 {
     UEnumeration *myEnum = NULL;
     if (haveAliasData(pErrorCode) && isAlias(convName, pErrorCode)) {
