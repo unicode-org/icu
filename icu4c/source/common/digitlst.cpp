@@ -79,6 +79,7 @@ DigitList::operator=(const DigitList& other)
     {
         fDecimalAt = other.fDecimalAt;
         fCount = other.fCount;
+        fIsPositive = other.fIsPositive;
         strncpy(fDigits, other.fDigits, MAX_DIGITS);
     }
     return *this;
@@ -92,7 +93,8 @@ DigitList::operator==(const DigitList& that) const
     return ((this == &that) ||
             (fDecimalAt == that.fDecimalAt &&
              fCount == that.fCount &&
-             0 == strncmp(fDigits, that.fDigits, fCount)));
+             fIsPositive == that.fIsPositive &&
+             strncmp(fDigits, that.fDigits, fCount) == 0));
 }
 
 // -------------------------------------
