@@ -35,17 +35,42 @@ static const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
 static const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
 static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
 
-static const LETag defaultFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
+static const LETag dligFeatureTag = 0x646C6967; // 'dlig' not used at the moment
+static const LETag paltFeatureTag = 0x70616C74; // 'palt'
+
+// default has no ligatures, that's what java does.  this is the minimal set.
+static const LETag minimalFeatures[] = {ccmpFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
+
+// kerning (kern, palt following adobe recommendation for cjk 'kerning') but no ligatures.
+static const LETag kernFeatures[] = {ccmpFeatureTag, kernFeatureTag, paltFeatureTag, 
+				     markFeatureTag, mkmkFeatureTag, emptyTag};
+
+// ligatures (liga, clig) but no kerning.  omit dlig for now.
+static const LETag ligaFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, markFeatureTag, 
+				     mkmkFeatureTag, emptyTag};
+
+// kerning and ligatures.
+static const LETag kernAndLigaFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, 
+					    kernFeatureTag, paltFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
 
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                        const GlyphSubstitutionTableHeader *gsubTable)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureList(defaultFeatures), fFeatureOrder(NULL),
+                        le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
+    : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fFeatureList(minimalFeatures), fFeatureOrder(NULL),
       fGSUBTable(gsubTable), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
     static const le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
     static const le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
     const GlyphPositioningTableHeader *gposTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
+
+    // todo: switch to more flags and bitfield rather than list of feature tags?
+    switch (typoFlags) {
+    case 0: break; // default
+    case 1: fFeatureList = kernFeatures; break;
+    case 2: fFeatureList = ligaFeatures; break;
+    case 3: fFeatureList = kernAndLigaFeatures; break;
+    default: break;
+    }
 
     setScriptAndLanguageTags();
 
@@ -65,8 +90,9 @@ void OpenTypeLayoutEngine::reset()
     LayoutEngine::reset();
 }
 
-OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureOrder(NULL),
+OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+					   le_int32 typoFlags)
+    : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags), fFeatureOrder(NULL),
       fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
     setScriptAndLanguageTags();

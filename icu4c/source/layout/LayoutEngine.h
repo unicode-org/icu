@@ -96,6 +96,13 @@ protected:
     le_int32 fLanguageCode;
 
     /**
+     * The typographic control flags
+     *
+     * @internal
+     */
+    le_int32 fTypoFlags;
+
+    /**
      * This constructs an instance for a given font, script and language. Subclass constructors
      * must call this constructor.
      *
@@ -108,7 +115,7 @@ protected:
      *
      * @internal
      */
-    LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags);
 
     /**
      * This overrides the default no argument constructor to make it
@@ -437,6 +444,12 @@ public:
      * @stable ICU 2.8
      */
     static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success);
+
+    /**
+     * Override of existing call that provides flags to control typography.
+     * @draft ICU 3.4
+     */
+    static LayoutEngine *layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typo_flags, LEErrorCode &success);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
