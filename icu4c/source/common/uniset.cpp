@@ -3513,7 +3513,7 @@ void UnicodeSet::caseCloseOne(UChar folded) {
     int32_t x;
     do {
         x = (low + high) >> 1;
-        UChar ch = CASE_PAIRS[x << 1];
+        UChar ch = CASE_PAIRS[(uint32_t)(x << 1)];
         if (folded < ch) {
             high = x - 1;
         } else if (folded > ch) {
