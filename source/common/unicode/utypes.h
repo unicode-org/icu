@@ -395,8 +395,12 @@ typedef void* UClassID;
  *
  * The following implements d).
  * The operator implementations crash; this is intentional and used for library debugging.
+ *
+ * Note: This is currently only done on Windows because
+ * some Linux/Unix compilers have problems with defining global new/delete.
+ * On Windows, WIN32 is defined, and it is _MSC_Ver>=1200 for MSVC 6.0 and higher.
  */
-#if defined(XP_CPLUSPLUS) && (defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_USTDIO_IMPLEMENTATION))
+#if defined(XP_CPLUSPLUS) && defined(WIN32) && (_MSC_Ver>=1200) && (defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_USTDIO_IMPLEMENTATION))
 
 /**
  * Global operator new, defined only inside ICU4C, must not be used.
@@ -404,7 +408,7 @@ typedef void* UClassID;
  * @internal
  */
 inline void *
-operator new(size_t size) {
+operator new(size_t /*size*/) {
     char *q=NULL;
     *q=5; /* break it */
     return q;
@@ -416,7 +420,7 @@ operator new(size_t size) {
  * @internal
  */
 inline void *
-operator new[](size_t size) {
+operator new[](size_t /*size*/) {
     char *q=NULL;
     *q=5; /* break it */
     return q;
@@ -428,7 +432,7 @@ operator new[](size_t size) {
  * @internal
  */
 inline void
-operator delete(void *p) {
+operator delete(void * /*p*/) {
     char *q=NULL;
     *q=5; /* break it */
 }
@@ -439,7 +443,7 @@ operator delete(void *p) {
  * @internal
  */
 inline void
-operator delete[](void *p) {
+operator delete[](void * /*p*/) {
     char *q=NULL;
     *q=5; /* break it */
 }
