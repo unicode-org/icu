@@ -1411,17 +1411,15 @@ U_CFUNC void
 addFileTest(TestNode** root) {
 #if !UCONFIG_NO_FORMATTING
     addTest(root, &TestFile, "file/TestFile");
-    addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
 #endif
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
-#if !UCONFIG_NO_FORMATTING
-    addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
-    addTest(root, &TestFScanset, "file/TestFScanset");
-#endif
     addTest(root, &TestCodepage, "file/TestCodepage");
 #if !UCONFIG_NO_FORMATTING
+    addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
+    addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
+    addTest(root, &TestFScanset, "file/TestFScanset");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
     addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
     addTest(root, &TestVargs, "file/TestVargs");
