@@ -41,8 +41,7 @@
 
 #include "unicode/unistr.h"
 
-/**    
- *
+/**
  * A <code>Locale</code> object represents a specific geographical, political,
  * or cultural region. An operation that requires a <code>Locale</code> to perform
  * its task is called <em>locale-sensitive</em> and uses the <code>Locale</code>
@@ -104,7 +103,7 @@
  * for the United States:
  * <blockquote>
  * <pre>
- * .      Locale::US
+ *       Locale::getUS()
  * </pre>
  * </blockquote>
  *
@@ -131,22 +130,22 @@
  * for creating a default <code>NumberFormat</code> object:
  * <blockquote>
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    Locale myLocale;
- * .    NumberFormat *nf;
- * .
- * .    nf = NumberFormat::createInstance( success );          delete nf;
- * .    nf = NumberFormat::createCurrencyInstance( success );  delete nf;
- * .    nf = NumberFormat::createPercentInstance( success );   delete nf;
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     Locale myLocale;
+ *     NumberFormat *nf;
+ * 
+ *     nf = NumberFormat::createInstance( success );          delete nf;
+ *     nf = NumberFormat::createCurrencyInstance( success );  delete nf;
+ *     nf = NumberFormat::createPercentInstance( success );   delete nf;
  * </pre>
  * </blockquote>
  * Each of these methods has two variants; one with an explicit locale
  * and one without; the latter using the default locale.
  * <blockquote>
  * <pre>
- * .    nf = NumberFormat::createInstance( myLocale, success );          delete nf;
- * .    nf = NumberFormat::createCurrencyInstance( myLocale, success );  delete nf;
- * .    nf = NumberFormat::createPercentInstance( myLocale, success );   delete nf;
+ *     nf = NumberFormat::createInstance( myLocale, success );          delete nf;
+ *     nf = NumberFormat::createCurrencyInstance( myLocale, success );  delete nf;
+ *     nf = NumberFormat::createPercentInstance( myLocale, success );   delete nf;
  * </pre>
  * </blockquote>
  * A <code>Locale</code> is the mechanism for identifying the kind of object
@@ -164,12 +163,12 @@
  * three class methods:
  * <blockquote>
  * <pre>
- * .      static Locale* getAvailableLocales(int32_t& numLocales)
- * .      static UnicodeString& getDisplayName(const Locale&  objectLocale,
- * .                                           const Locale&  displayLocale,
- * .                                           UnicodeString& displayName)
- * .      static UnicodeString& getDisplayName(const Locale&  objectLocale,
- * .                                           UnicodeString& displayName)
+ *       static Locale* getAvailableLocales(int32_t& numLocales)
+ *       static UnicodeString& getDisplayName(const Locale&  objectLocale,
+ *                                            const Locale&  displayLocale,
+ *                                            UnicodeString& displayName)
+ *       static UnicodeString& getDisplayName(const Locale&  objectLocale,
+ *                                            UnicodeString& displayName)
  * </pre>
  * </blockquote>
  */
@@ -372,7 +371,7 @@ public:
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
-     * @draft
+     * @stable
      */
     Locale( const   char * language,
             const   char * country  = 0, 
@@ -455,30 +454,30 @@ public:
      * @param name The name to create from.  If name is null,
      *  the default Locale is used.
      * @return new locale object
-     * @draft
+     * @stable
      * @see uloc_getName
      */
     static Locale createFromName(const char *name);
 
     
     /**
-     * Returns the locale's two-letter ISO-639 language code.
+     * Returns the locale's ISO-639 language code.
      * @return      An alias to the code
-     * @draft
+     * @stable
      */
     inline const char *  getLanguage( ) const;
 
     /**
-     * Returns the locale's two-letter ISO-3166 country code.
+     * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
-     * @draft
+     * @stable
      */
     inline const char *  getCountry( ) const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
-     * @draft
+     * @stable
      */
     inline const char *  getVariant( ) const;
 
@@ -488,6 +487,7 @@ public:
      * to two leading underbars will occur. Example: "en", "de_DE", "en_US_WIN",
      * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
      * @return      A pointer to "name".
+     * @stable
      */
     inline const char * getName() const;
 
@@ -495,14 +495,14 @@ public:
      * returns the locale's three-letter language code, as specified
      * in ISO draft standard ISO-639-2..
      * @return      An alias to the code, or NULL
-     * @draft
+     * @stable
      */
     const char * getISO3Language() const;
 
     /**
      * Fills in "name" with the locale's three-letter ISO-3166 country code.
      * @return      An alias to the code, or NULL
-     * @draft
+     * @stable
      */
     const char * getISO3Country() const;
 
@@ -532,8 +532,8 @@ public:
      * language code is "en" and inLocale's language code is "fr", this function would set
      * dispLang to "Anglais".
      * @param inLocale  Specifies the locale to be used to display the name.  In other words,
-     *                  if the locale's language code is "en", passing Locale::FRENCH for
-     *                  inLocale would result in "Anglais", while passing Locale::GERMAN
+     *                  if the locale's language code is "en", passing Locale::getFrench() for
+     *                  inLocale would result in "Anglais", while passing Locale::getGerman()
      *                  for inLocale would result in "Englisch".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
@@ -560,8 +560,8 @@ public:
      * dispCountry to "Etats-Unis".
      * @param inLocale      Specifies the locale to be used to display the name.  In other
      *                      words, if the locale's country code is "US", passing
-     *                      Locale::FRENCH for inLocale would result in "États-Unis", while
-     *                      passing Locale::GERMAN for inLocale would result in
+     *                      Locale::getFrench() for inLocale would result in "États-Unis", while
+     *                      passing Locale::getGerman() for inLocale would result in
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
@@ -640,7 +640,7 @@ public:
      * owned by ICU-- do not delete them, and do not write through them.  The array is
      * terminated with a null pointer.
      * @return a list of all available country codes
-     * @draft
+     * @stable
      */
     static const char* const* getISOCountries();
 
@@ -650,7 +650,7 @@ public:
      * by ICU-- do not delete them, and do not write through them.  The array is
      * terminated with a null pointer.
      * @return a list of all available language codes
-     * @draft
+     * @stable
      */
     static const char* const*  getISOLanguages();
 
