@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/06/21 23:17:38 $ 
-* $Revision: 1.10 $
+* $Date: 2001/06/26 22:44:11 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -601,6 +601,29 @@ public final class UCharacterTest extends TestFmwk
               " retrieval of name and vice versa" );
         break;
       }
+    }
+  }
+  
+  /**
+  * Testing the for illegal characters
+  */
+  public void TestIsLegal() 
+  {
+    int illegal[] = {0xFFFE, 0xFFFF, 0x5FFFE, 0x5FFFF, 0x10FFFE, 0x10FFFF,
+                     0x110000, 0xFDD0, 0xFDDF, 0xFDE0, 0xFDEF};
+    int legal[] = {0x61, 0xFFFD, 0x10000, 0x5FFFD, 0x60000, 0x10FFFD,
+                   0xFDCF, 0xFDF0};
+    for (int count = 0; count < illegal.length; count ++) {
+        if (UCharacter.isLegal(illegal[count])) {
+            errln("FAIL \\u" + hex(illegal[count]) + 
+                    " is not a legal character");
+        }
+    }
+    
+    for (int count = 0; count < legal.length; count ++) {
+        if (!UCharacter.isLegal(legal[count])) {
+            errln("FAIL \\u" + hex(legal[count]) + " is a legal character");
+        }
     }
   }
   
