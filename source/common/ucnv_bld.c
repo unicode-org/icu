@@ -78,7 +78,7 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
 #endif
 
     &_ASCIIData,
-    &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data
+    &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data, &_IMAPData
 };
 
 /* Please keep this in binary sorted order for getAlgorithmicTypeFromName.
@@ -93,6 +93,7 @@ static struct {
   { "cesu8", UCNV_CESU8 },
 #if !UCONFIG_NO_LEGACY_CONVERSION
   { "hz",UCNV_HZ },
+  { "imapmailboxname", UCNV_IMAP_MAILBOX },
   { "iscii", UCNV_ISCII },
   { "iso2022", UCNV_ISO_2022 },
 #endif

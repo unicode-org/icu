@@ -148,6 +148,14 @@ UTF32_OppositeEndian
 # For details about email headers see RFC 2047.
 UTF-7 { IANA* MIME* }           cp65000
 
+# IMAP-mailbox-name is an ICU-specific name for the encoding of IMAP mailbox names.
+# It is a substantially modified UTF-7 encoding. See the specification in:
+#
+# RFC 2060: INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1
+# (http://www.ietf.org/rfc/rfc2060.txt)
+# Section 5.1.3.  Mailbox International Naming Convention
+IMAP-mailbox-name
+
 SCSU { IANA* }
 BOCU-1 { IANA* } csBOCU-1 { IANA }
 

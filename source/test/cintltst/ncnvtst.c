@@ -1772,11 +1772,16 @@ doTestTruncated(const char *cnvName, const uint8_t *bytes, int32_t length) {
 
 static void
 TestTruncated() {
-    struct {
+    static const struct {
         const char *cnvName;
         uint8_t bytes[8]; /* partial input bytes resulting in no output */
         int32_t length;
     } testCases[]={
+        { "IMAP-mailbox-name",  { 0x26 }, 1 }, /* & */
+        { "IMAP-mailbox-name",  { 0x26, 0x42 }, 2 }, /* &B */
+        { "IMAP-mailbox-name",  { 0x26, 0x42, 0x42 }, 3 }, /* &BB */
+        { "IMAP-mailbox-name",  { 0x26, 0x41, 0x41 }, 3 }, /* &AA */
+
         { "UTF-7",      { 0x2b, 0x42 }, 2 }, /* +B */
         { "UTF-8",      { 0xd1 }, 1 },
 
