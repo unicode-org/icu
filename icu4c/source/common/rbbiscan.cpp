@@ -716,7 +716,7 @@ UnicodeString RBBIRuleScanner::stripRules(const UnicodeString &rules) {
                 ch = rules[idx++];
             }
         }
-        if (!u_isWhitespace(ch)) {
+        if (!u_isISOControl(ch)) {
             strippedRules.append(ch);
         }
     }
