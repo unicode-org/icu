@@ -31,7 +31,7 @@
 static UErrorCode status = U_ZERO_ERROR;
 
 const UnicodeString CollationRegressionTest::test1 = "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?";
-const UnicodeString CollationRegressionTest::test2 = "Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
+const UnicodeString CollationRegressionTest::test2 = "Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
 const UChar chars3[] = {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0x20, 0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0x20, 0x4c, 0x00FC, 0x62, 0x63, 0x6b, 0};
 const UnicodeString CollationRegressionTest::test3(chars3);
 
@@ -242,7 +242,7 @@ void CollationRegressionTest::Test4058613(/* char* par */)
 
     Collator *c = NULL;
     
-    c = Collator::createInstance(status);
+    c = Collator::createInstance("en_US", status);
 
     if (c == NULL || U_FAILURE(status))
     {

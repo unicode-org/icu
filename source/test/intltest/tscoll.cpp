@@ -130,12 +130,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationKanatest---");
-            logln("Temporary removed");
-
-            /*
+            
             CollationKanaTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -207,12 +204,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         if (exec)
         {
             logln("CollationRegressionTest---");
-            logln("Temporary removed");
-
-            /*
+            
             CollationRegressionTest test;
             callTest( test, par );
-            */
         }
         break;
 
@@ -236,10 +230,8 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         {
             logln("CollationIteratorTest---");
             
-            /*
             CollationIteratorTest test;
             callTest( test, par );
-            */
         }
         break;
 
