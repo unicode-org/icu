@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/11/13 22:14:18 $ 
-* $Revision: 1.82 $
+* $Date: 2003/11/24 22:23:39 $ 
+* $Revision: 1.83 $
 *
 *******************************************************************************
 */
@@ -1956,7 +1956,7 @@ public final class UCharacter
     /**
 	 * Hangul Syllable Type constants.
 	 *
-	 * @see UCHAR_HANGUL_SYLLABLE_TYPE
+	 * @see HANGUL_SYLLABLE_TYPE
 	 * @draft ICU 2.6
 	 */
 	public static interface HangulSyllableType 

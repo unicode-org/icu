@@ -6,6 +6,7 @@
 package com.ibm.icu.util;
 import com.ibm.icu.impl.JDKTimeZone;
 
+///CLOVER:USECLASS
 /**
  * <code>SimpleTimeZone</code> is a concrete subclass of <code>TimeZone</code>
  * that represents a time zone for use with a Gregorian calendar. This
