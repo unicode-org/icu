@@ -1157,6 +1157,17 @@ const char* getEndOfBuffer_2022(const char* source,
 			int32_t key = 0;
 			int32_t offset;
 			UCNV_TableStates_2022 value = VALID_NON_TERMINAL_2022;
+            /* check for SS2*/
+            if(*mySource+1 == 0x4E){
+                if(mySource == source){
+				    source++;
+                    source++;
+				    return getEndOfBuffer_2022(source,sourceLimit,flush);
+			    }
+			    else{
+				    return mySource;
+			    }
+            }
   
 			for (i=0; 
 					(mySource+i < sourceLimit)&&(value == VALID_NON_TERMINAL_2022);
