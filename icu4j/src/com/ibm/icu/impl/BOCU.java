@@ -5,14 +5,14 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2002/07/12 21:59:21 $ 
-* $Revision: 1.1 $
+* $Date: 2002/10/12 00:10:57 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.UnicodeCharacterIterator;
+import com.ibm.icu.impl.UCharacterIterator;
 
 /**
  * <p>Binary Ordered Compression for Unicode</p>
@@ -104,9 +104,9 @@ public class BOCU
     public static int compress(String source, byte buffer[], int offset) 
     {
         int prev = 0;
-        UnicodeCharacterIterator iterator = new UnicodeCharacterIterator(source);
+        UCharacterIterator iterator = UCharacterIterator.getInstance(source);
         int codepoint = iterator.nextCodePoint();
-        while (codepoint != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (codepoint != UCharacterIterator.DONE) {
             if (prev < 0x4e00 || prev >= 0xa000) {
                 prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
             } 
@@ -133,9 +133,9 @@ public class BOCU
     {
         int prev = 0;
         int result = 0;
-        UnicodeCharacterIterator iterator = new UnicodeCharacterIterator(source);
+        UCharacterIterator iterator =  UCharacterIterator.getInstance(source);
         int codepoint = iterator.nextCodePoint();
-        while (codepoint != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (codepoint != UCharacterIterator.DONE) {
             if (prev < 0x4e00 || prev >= 0xa000) {
                 prev = (prev & ~0x7f) - SLOPE_REACH_NEG_1_;
             } 
