@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/21 00:00:55 $
- * $Revision: 1.64 $
+ * $Date: 2001/11/21 22:21:45 $
+ * $Revision: 1.65 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.64 $ $Date: 2001/11/21 00:00:55 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.65 $ $Date: 2001/11/21 22:21:45 $
  */
 public abstract class Transliterator {
     /**
@@ -1102,7 +1102,7 @@ public abstract class Transliterator {
             String id = getID();
             for (int i=0; i<id.length();) {
                 int c = UTF16.charAt(id, i);
-                if (!UnicodeSet._escapeUnprintable(rulesSource, c)) {
+                if (!Utility.escapeUnprintable(rulesSource, c)) {
                     UTF16.append(rulesSource, c);
                 }
                 i += UTF16.getCharCount(c);
