@@ -561,12 +561,11 @@ unorm_openIter(void *stackMem, int32_t stackMemSize, UErrorCode *pErrorCode) {
         if(align==0) {
             /* already aligned */
             uni=(UNormIterator *)stackMem;
-        } else if((stackMemSize-=align)>=sizeof(UNormIterator)) {
+        } else if((stackMemSize-=(int32_t)align)>=(int32_t)sizeof(UNormIterator)) {
             /* needs alignment */
             uni=(UNormIterator *)((char *)stackMem+align);
-        } else {
-            /* does not fit */
         }
+        /* else does not fit */
     }
 
     if(uni!=NULL) {
