@@ -10,7 +10,7 @@ eu_ES {
     Version { "x0.0" }
     CurrencyElements {
             "Pts",
-            "ESP ",
+            "ESP",
             ",",
     }
     DateTimePatterns {
