@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2000/03/10 04:07:24 $ 
- * $Revision: 1.14 $
+ * $Date: 2000/04/14 01:37:27 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.14 $ $Date: 2000/03/10 04:07:24 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.15 $ $Date: 2000/04/14 01:37:27 $
  */
 public abstract class Transliterator {
     /**
@@ -494,22 +494,8 @@ public abstract class Transliterator {
      * method has been made.
      * 
      * @param text the buffer holding transliterated and untransliterated text
-     * @param index an array of three integers.
-     *
-     * <ul><li><code>index.start</code>: the beginning index,
-     * inclusive; <code>0 <= index.start <= index.limit</code>.
-     *
-     * <li><code>index.limit</code>: the ending index, exclusive;
-     * <code>index.start <= index.limit <= text.length()</code>.
-     * <code>insertion</code> is inserted at
-     * <code>index.limit</code>.
-     *
-     * <li><code>index.cursor</code>: the next character to be
-     * considered for transliteration; <code>index.start <=
-     * index.cursor <= index.limit</code>.  Characters before
-     * <code>index.cursor</code> will not be changed by future calls
-     * to this method.</ul>
-     *
+     * @param index the start and limit of the text, the position
+     * of the cursor, and the start and limit of transliteration.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index.limit</code>.  If <code>null</code> then no text
@@ -543,16 +529,16 @@ public abstract class Transliterator {
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly after a new character has been
      * inserted, typically as a result of a keyboard event.  This is a
-     * convenience method; see {@link
-     * #transliterate(Replaceable, Position, String)} for details.
+     * convenience method; see {@link #transliterate(Replaceable,
+     * Transliterator.Position, String)} for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, Position, String)}.
+     * @param index the start and limit of the text, the position
+     * of the cursor, and the start and limit of transliteration.
      * @param insertion text to be inserted and possibly
      * transliterated into the translation buffer at
      * <code>index.limit</code>.
-     * @see #transliterate(Replaceable, Position, String)
+     * @see #transliterate(Replaceable, Transliterator.Position, String)
      */
     public final void transliterate(Replaceable text, Position index,
                                     char insertion) {
@@ -562,13 +548,13 @@ public abstract class Transliterator {
     /**
      * Transliterates the portion of the text buffer that can be
      * transliterated unambiguosly.  This is a convenience method; see
-     * {@link #transliterate(Replaceable, Position, String)} for
-     * details.
+     * {@link #transliterate(Replaceable, Transliterator.Position,
+     * String)} for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, Position, String)}.
-     * @see #transliterate(Replaceable, Position, String)
+     * @param index the start and limit of the text, the position
+     * of the cursor, and the start and limit of transliteration.
+     * @see #transliterate(Replaceable, Transliterator.Position, String)
      */
     public final void transliterate(Replaceable text, Position index) {
         transliterate(text, index, null);
@@ -620,8 +606,10 @@ public abstract class Transliterator {
      *
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable, Position, String)}.
+     * @param pos the start and limit of the text, the position
+     * of the cursor, and the start and limit of transliteration.
+     * @param incremental if true, assume more text may be coming after
+     * pos.limit.  Otherwise, assume the text is complete.
      * @see #transliterate
      */
     protected abstract void handleTransliterate(Replaceable text,
@@ -638,7 +626,7 @@ public abstract class Transliterator {
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    final int getMaximumContextLength() {
+    protected final int getMaximumContextLength() {
         return maximumContextLength;
     }
 
