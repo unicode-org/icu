@@ -38,7 +38,7 @@
       <icu:grapheme icu:class="RuleBased" icu:import="char"/>
       <icu:word icu:class="RuleBased" icu:import="word"/>
       <icu:line icu:class="RuleBased" icu:import="line" />
-      <icu:sentence icu:class="RuleBased" icu:import="sentence"/>
+      <icu:sentence icu:class="RuleBased" icu:import="sent"/>
       <icu:title icu:class="RuleBased" icu:import="title"/>
     </icu:boundaries>
   </special>
