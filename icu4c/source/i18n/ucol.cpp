@@ -51,6 +51,110 @@ isAcceptable(void *context,
     }
 }
 
+/****************************************************************************/
+/* Following are the open/close functions                                   */
+/*                                                                          */
+/****************************************************************************/
+
+U_CAPI UCollator*
+ucol_open(    const    char         *loc,
+        UErrorCode      *status)
+{
+  /* New version */
+  if(U_FAILURE(*status)) return 0;
+
+  ucol_initUCA(status);
+
+  UCollator *result = NULL;
+  UResourceBundle *b = ures_open(NULL, loc, status);
+  UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
+
+  if(*status = U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
+    result = UCA;
+    *status = U_USING_DEFAULT_ERROR;
+  } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
+    int32_t len = 0;
+    const uint8_t *inData = ures_getBinary(binary, &len, status);
+    result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
+    result->rb = b;
+  }
+
+  ures_close(binary);
+
+  return result;
+}
+
+U_CAPI void
+ucol_close(UCollator *coll)
+{
+  /* Here, it would be advisable to close: */
+  /* - UData for UCA (unless we stuff it in the root resb */
+  /* Again, do we need additional housekeeping... HMMM! */
+  if(coll->rules != NULL) {
+    uprv_free(coll->rules);
+  }
+  if(coll->rb != NULL) {
+    ures_close(coll->rb);
+  }
+  if(coll->freeOnClose == TRUE) {
+    uprv_free(coll);
+  }
+}
+
+U_CAPI UCollator*
+ucol_openRules(    const    UChar                  *rules,
+        int32_t                 rulesLength,
+        UNormalizationMode      mode,
+        UCollationStrength      strength,
+        UErrorCode              *status)
+{
+  if(U_FAILURE(*status)) return 0;
+
+  Normalizer::EMode normMode;
+  switch(mode) {
+  case UCOL_NO_NORMALIZATION:
+    normMode = Normalizer::NO_OP;
+    break;
+  case UCOL_DECOMP_CAN:
+    normMode = Normalizer::DECOMP;
+    break;
+  case UCOL_DECOMP_COMPAT:
+    normMode = Normalizer::DECOMP_COMPAT;
+    break;
+  case UCOL_DECOMP_CAN_COMP_COMPAT:
+    normMode = Normalizer::COMPOSE;
+    break;
+  case UCOL_DECOMP_COMPAT_COMP_CAN:
+    normMode = Normalizer::COMPOSE_COMPAT;
+    break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+
+  ucol_initUCA(status);
+
+  UCollator *result = ucol_initCollator(UCA->image,0,status);
+
+  result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
+  u_strcpy(result->rules, rules);
+
+  result->rb = 0;
+
+
+  return result;
+
+}
+
+/* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
+/* you should be able to get the binary chunk to write out...  Doesn't look very full now */
+U_CAPI uint8_t *
+ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
+{
+  *length = 0;
+  return NULL;
+}
+
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
     UCollator *result = fillIn;
     if(U_FAILURE(*status)) {
@@ -103,6 +207,9 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     uint32_t variableMaxCE = ucmp32_get(result->mapping, result->variableTopValue);
     result->variableMax = (variableMaxCE & 0xFF000000) >> 24;
 
+    result->zero = 0;
+    result->rules = NULL;
+
     return result;
 }
 
@@ -136,92 +243,16 @@ void ucol_initUCA(UErrorCode *status) {
 }
 
 
-U_CAPI UCollator*
-ucol_open(    const    char         *loc,
-        UErrorCode      *status)
-{
-  /* New version */
-  if(U_FAILURE(*status)) return 0;
 
-  ucol_initUCA(status);
+/****************************************************************************/
+/* Following are the CE retrieval functions                                 */
+/*                                                                          */
+/****************************************************************************/
 
-  UCollator *result = NULL;
-  UResourceBundle *b = ures_open(NULL, loc, status);
-  UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
-
-  if(*status = U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
-    result = UCA;
-    *status = U_USING_DEFAULT_ERROR;
-  } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
-    int32_t len = 0;
-    const uint8_t *inData = ures_getBinary(binary, &len, status);
-    result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
-    result->rb = b;
-  }
-
-  ures_close(binary);
-
-  return result;
-}
-
-U_CAPI UCollator*
-ucol_openRules(    const    UChar                  *rules,
-        int32_t                 rulesLength,
-        UNormalizationMode      mode,
-        UCollationStrength      strength,
-        UErrorCode              *status)
-{
-  if(U_FAILURE(*status)) return 0;
-
-  Normalizer::EMode normMode;
-  switch(mode) {
-  case UCOL_NO_NORMALIZATION:
-    normMode = Normalizer::NO_OP;
-    break;
-  case UCOL_DECOMP_CAN:
-    normMode = Normalizer::DECOMP;
-    break;
-  case UCOL_DECOMP_COMPAT:
-    normMode = Normalizer::DECOMP_COMPAT;
-    break;
-  case UCOL_DECOMP_CAN_COMP_COMPAT:
-    normMode = Normalizer::COMPOSE;
-    break;
-  case UCOL_DECOMP_COMPAT_COMP_CAN:
-    normMode = Normalizer::COMPOSE_COMPAT;
-    break;
-  default:
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
-  }
-
-  return NULL;
-
-}
-
-/* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
-/* you should be able to get the binary chunk to write out...  Doesn't look very full now */
-U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
-{
-  *length = 0;
-  return NULL;
-}
-
-U_CAPI void
-ucol_close(UCollator *coll)
-{
-  /* Here, it would be advisable to close: */
-  /* - UData for UCA (unless we stuff it in the root resb */
-  /* Again, do we need additional housekeeping... HMMM! */
-  if(coll->rb != NULL) {
-    ures_close(coll->rb);
-  }
-  if(coll->freeOnClose == TRUE) {
-    uprv_free(coll);
-  }
-}
-
+/* there should be a macro version of this function in the header file */
+/* This is the first function that tries to fetch a collation element  */
+/* If it's not succesfull or it encounters a more difficult situation  */
+/* some more sofisticated and slower functions are invoked             */
 uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if (U_FAILURE(*status) || (collationSource->pos>=collationSource->len
@@ -251,6 +282,9 @@ uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UEr
     return order; /* return the CE */
 }
 
+/* This function tries to get a CE from UCA, which should be always around  */
+/* UChar is passed in in order to speed things up                           */
+/* here is also the generation of implicit CEs                              */
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
@@ -284,6 +318,8 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
     return order; /* return the CE */
 }
 
+/* This function handles the special CEs like contractions, expansions, surrogates, Thai */
+/* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
   int32_t i = 0; /* general counter */
   uint32_t CE = *source->CEpos;
@@ -399,6 +435,9 @@ uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *st
   return CE;
 }
 
+/* This should really be a macro        */
+/* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
+/* anyway */
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, int32_t *secSize, UErrorCode *status) {
   uint8_t *newStart = NULL;
 
@@ -422,6 +461,10 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
 }
 
 
+/* This should really be a macro                                                                      */
+/* This function is used to reverse parts of a buffer. We need this operation when doing continuation */
+/* secondaries in French                                                                              */
+/*
 void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
   uint8_t temp;
   while(start<end) {
@@ -430,44 +473,39 @@ void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
     *end-- = temp;
   }
 }
+*/
 
-U_CAPI UBool
-ucol_greater(    const    UCollator        *coll,
-        const    UChar            *source,
-        int32_t            sourceLength,
-        const    UChar            *target,
-        int32_t            targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      == UCOL_GREATER);
-}
+#define uprv_ucol_reverse_buffer(TYPE, start, end) { \
+  TYPE tempA; \
+while((start)<(end)) { \
+    tempA = *(start); \
+    *(start)++ = *(end); \
+    *(end)-- = tempA; \
+} \
+} 
 
-U_CAPI UBool
-ucol_greaterOrEqual(    const    UCollator    *coll,
-            const    UChar        *source,
-            int32_t        sourceLength,
-            const    UChar        *target,
-            int32_t        targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      != UCOL_LESS);
-}
-
-U_CAPI UBool
-ucol_equal(        const    UCollator        *coll,
-            const    UChar            *source,
-            int32_t            sourceLength,
-            const    UChar            *target,
-            int32_t            targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      == UCOL_EQUAL);
-}
+/****************************************************************************/
+/* Following are the sortkey generation functions                           */
+/*                                                                          */
+/****************************************************************************/
 
 #define MIN_VALUE 0x02
 #define UCOL_VARIABLE_MAX 0x20
 #define UCOL_NEW_IGNORABLE 0
 
+/* sortkey API */
+U_CAPI int32_t
+ucol_getSortKey(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        *result,
+        int32_t        resultLength)
+{
+  UErrorCode status = U_ZERO_ERROR;
+    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+}
+
+/* this function is called by the C++ API for sortkey generation */
 U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll, 
         const    UChar        *source,
         int32_t            sourceLength,
@@ -478,6 +516,9 @@ U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
     return result;
 }
 
+
+/* This function tries to get the size of a sortkey. It will be invoked if the size of resulting buffer is 0  */
+/* or if we run out of space while making a sortkey and want to return ASAP                                   */
 int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
     UErrorCode status = U_ZERO_ERROR;
     uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
@@ -546,11 +587,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
             if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
               /* This thing should also contain the compression logic, as in: */
-              /*
-                if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
-                    ++secondary[-1]; // simply increment!!
-                else *secondary++ = ws;
-              */
+              /*  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2) */
+              /*      ++secondary[-1]; */ /* simply increment!! */
+              /*  else *secondary++ = ws;             */
 
               currentSize++;
             }
@@ -565,11 +604,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
             if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
               /* This thing should also contain the compression logic, as in: */
-              /*
-                if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
-                    ++secondary[-1]; // simply increment!!
-                else *secondary++ = ws;
-              */
+              /* if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)   */
+              /*      ++secondary[-1];  */ /* simply increment!! */
+              /*  else *secondary++ = ws;  */
               currentSize++;
             }
 
@@ -599,6 +636,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     
 }
     
+/* This is the sortkey work horse function */
 int32_t
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
@@ -627,7 +665,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
       caseSize = UCOL_MAX_BUFFER, quadSize = UCOL_MAX_BUFFER;
 
-    int32_t sortKeySize = 1; // it is always \0 terminated
+    int32_t sortKeySize = 1; /* it is always \0 terminated */
 
     UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
     UChar *normSource = normBuffer;
@@ -644,9 +682,9 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t compareQuad  = (strength >= UCOL_QUATERNARY)?0:0xFF;
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
-    UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST);
-    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
-    UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON);
+    UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
+    UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && (compareTer == 0);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
 
     /* support for special features like caselevel and funky secondaries */
     uint8_t *frenchStartPtr = NULL;
@@ -658,7 +696,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     collIterate s;
     init_collIterate((UChar *)source, len, &s, FALSE);
 
-    // If we need to normalize, we'll do it all at once at the beggining!
+    /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if(normMode != UCOL_OFF) {
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
@@ -796,7 +834,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                       frenchEndPtr = secondaries-1;
                     } else if (frenchStartPtr != NULL) {
                         /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
-                      uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
+                      uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
                       frenchStartPtr = NULL;
                     }
                   }
@@ -824,9 +862,9 @@ ucol_calcSortKey(const    UCollator    *coll,
 
               if(shifted && primary1 > compareQuad) {
                 /* Some compression should go here also */
-                //if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) {
-                //    ++*(tertiaries-1); /* simply increment!! */
-                //} else {
+                /*if (tertiary == UCOL_COMMON3 && UCOL_COMMON3 <= *(tertiaries-1) && *(tertiaries-1) < UCOL_COMMON_MAX3) { */
+                /*    ++*(tertiaries-1); */ /* simply increment!! */
+                /*} else { */
                 *quads++ = 0xFF;
                 sortKeySize++;
               }
@@ -874,7 +912,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         if(isFrenchSec) { /* do the reverse copy */
           /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
           if(frenchStartPtr != NULL) { 
-            uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
+            uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
           }           
           for(i = 1; i<secsize; i++) {
               *(primaries++) = *(secondaries-i-1);
@@ -969,18 +1007,57 @@ ucol_calcSortKey(const    UCollator    *coll,
     return sortKeySize;
 }
 
-
-U_CAPI int32_t
-ucol_getSortKey(const    UCollator    *coll,
+/* This is a trick string compare function that goes in and uses sortkeys to compare */
+/* It is used when compare gets in trouble and needs to bail out                     */
+UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
         const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        *result,
-        int32_t        resultLength)
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
 {
-  UErrorCode status = U_ZERO_ERROR;
-    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
+    uint8_t *sourceKeyP = sourceKey;
+    uint8_t *targetKeyP = targetKey;
+    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
+
+    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    if(sourceKeyLen > UCOL_MAX_BUFFER) {
+        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
+        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    }
+
+    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    if(targetKeyLen > UCOL_MAX_BUFFER) {
+        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
+        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    }
+
+    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
+
+    if(sourceKeyP != sourceKey) {
+        uprv_free(sourceKeyP);
+    }
+
+    if(targetKeyP != targetKey) {
+        uprv_free(targetKeyP);
+    }
+
+    if(result<0) {
+        return UCOL_LESS;
+    } else if(result>0) {
+        return UCOL_GREATER;
+    } else {
+        return UCOL_EQUAL;
+    }
 }
 
+
+/****************************************************************************/
+/* Following are the functions that deal with the properties of a collator  */
+/* there are new APIs and some compatibility APIs                           */
+/****************************************************************************/
+
+/* Attribute setter API */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
@@ -1126,7 +1203,6 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
 	return UCOL_DEFAULT;
 }
 
-
 U_CAPI void
 ucol_setNormalization(  UCollator            *coll,
             UNormalizationMode    mode)
@@ -1148,13 +1224,711 @@ ucol_setNormalization(  UCollator            *coll,
   }
 }
 
+U_CAPI UNormalizationMode
+ucol_getNormalization(const UCollator* coll)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, &status) == UCOL_ON) {
+    return UCOL_DECOMP_CAN;
+  } else {
+    return UCOL_NO_NORMALIZATION;
+  }
+}
+
+U_CAPI void
+ucol_setStrength(    UCollator                *coll,
+            UCollationStrength        strength)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
+}
+
+U_CAPI UCollationStrength
+ucol_getStrength(const UCollator *coll)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
+}
+
+/****************************************************************************/
+/* Following are misc functions                                             */
+/* there are new APIs and some compatibility APIs                           */
+/****************************************************************************/
+
+U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
+	/*return (UCollatorOld *)(((RuleBasedCollator *)coll)->safeClone());*/
+  return 0;
+}
+
+U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+	return 0;
+}
+
+U_CAPI const UChar*
+ucol_getRules(    const    UCollator       *coll, 
+        int32_t            *length)
+{
+/*
+  const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
+  *length = rules.length();
+  return rules.getUChars();
+*/
+  if(coll->rules != NULL) {
+    *length = u_strlen(coll->rules);
+    return coll->rules;
+  } else {
+    *length = 0;
+    return &coll->zero;
+  }
+}
+
+U_CAPI int32_t
+ucol_getDisplayName(    const    char        *objLoc,
+            const    char        *dispLoc,
+            UChar             *result,
+            int32_t         resultLength,
+            UErrorCode        *status)
+{
+  if(U_FAILURE(*status)) return -1;
+/*
+  UnicodeString dst(result, resultLength, resultLength);
+  Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
+  int32_t actLen;
+  T_fillOutputParams(&dst, result, resultLength, &actLen, status);
+  return actLen;
+*/
+  return 0;
+}
+
+U_CAPI const char*
+ucol_getAvailable(int32_t index)
+{
+  return uloc_getAvailable(index);
+}
+
+U_CAPI int32_t
+ucol_countAvailable()
+{
+  return uloc_countAvailable();
+}
+
+U_CAPI void 
+ucol_getVersion(const UCollator* coll, 
+                UVersionInfo versionInfo) 
+{
+    /*((Collator*)coll)->getVersion(versionInfo);*/
+}
+
+/****************************************************************************/
+/* Following are the string compare functions                               */
+/*                                                                          */
+/****************************************************************************/
+
+/* compare two strings... Can get interesting */
+U_CAPI UCollationResult
+ucol_strcoll(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+    /* check if source and target are valid strings */
+    if (((source == 0) && (target == 0)) ||
+        ((sourceLength == 0) && (targetLength == 0)))
+    {
+        return UCOL_EQUAL;
+    }
+
+    UCollationResult result = UCOL_EQUAL;
+    UErrorCode status = U_ZERO_ERROR;
+
+    UChar normSource[UCOL_MAX_BUFFER], normTarget[UCOL_MAX_BUFFER];
+    UChar *normSourceP = normSource;
+    UChar *normTargetP = normTarget;
+    uint32_t normSourceLength = UCOL_MAX_BUFFER, normTargetLength = UCOL_MAX_BUFFER;
+
+    collIterate sColl, tColl;
+
+    if(coll->normalizationMode == UCOL_OFF) {
+        init_collIterate(source, sourceLength == -1 ? u_strlen(source) : sourceLength, &sColl, FALSE);
+        init_collIterate(target, targetLength == -1 ? u_strlen(target) : targetLength, &tColl, FALSE);
+    } else { /* TODO: This is bad behaved if we're working with small buffers */
+             /* We really need the normalization quick check here*/
+	    UNormalizationMode normMode = ucol_getNormalization(coll);
+        normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLength, &status);
+        /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
+        /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
+        /* would be hard to track all the exit points.                                                            */
+        if(U_FAILURE(status)) { /* This would be buffer overflow */
+            UColAttributeValue mode = coll->normalizationMode;
+            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
+            status = U_ZERO_ERROR;
+            normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSourceP, normSourceLength+1, &status);
+            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength, &status);
+            if(U_FAILURE(status)) { /* This would be buffer overflow */
+                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+                status = U_ZERO_ERROR;
+                normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+            }
+            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
+            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+            ((UCollator *)coll)->normalizationMode = mode;
+            uprv_free(normSourceP);
+            if(normTargetP != normTarget) {
+                uprv_free(normTargetP);
+            }
+            return result;
+        }
+        normTargetLength = u_normalize(target, targetLength, normMode, 0, normTarget, normTargetLength, &status);
+        if(U_FAILURE(status)) { /* This would be buffer overflow */
+            UColAttributeValue mode = coll->normalizationMode;
+            normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
+            status = U_ZERO_ERROR;
+            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+            ((UCollator *)coll)->normalizationMode = UCOL_OFF;
+            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
+            ((UCollator *)coll)->normalizationMode = mode;
+            uprv_free(normTargetP);
+            return result;
+        }
+        init_collIterate(normSource, normSourceLength, &sColl, TRUE);
+        init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
+	}
+
+    if (U_FAILURE(status))
+    {
+        return UCOL_EQUAL;
+    }
+
+    UColAttributeValue strength = coll->strength;
+    uint32_t sOrder=UCOL_NULLORDER, tOrder=UCOL_NULLORDER;
+    uint32_t pSOrder, pTOrder;
+    UBool gets = TRUE, gett = TRUE;
+    UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
+
+    uint8_t variableMax = coll->variableMax;
+    UBool checkSecTer = initialCheckSecTer;
+    UBool checkTertiary = (strength  >= UCOL_TERTIARY);
+    UBool checkQuad = (strength  >= UCOL_QUATERNARY);
+    UBool checkIdent = (strength == UCOL_IDENTICAL);
+    UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
+    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
+    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
+
+    if(!isFrenchSec) {
+        for(;;)
+        {
+            /* Get the next collation element in each of the strings, unless */
+            /* we've been requested to skip it. */
+            if (gets)
+            {
+                /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+                sOrder = ucol_getNextCE(coll, &sColl, &status);
+            }
+            gets = TRUE;
+
+            if (gett)
+            {
+                /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
+                tOrder = ucol_getNextCE(coll, &tColl, &status);
+            }       
+            gett = TRUE;
+
+            /* If we've hit the end of one of the strings, jump out of the loop */
+            if ((sOrder == UCOL_NULLORDER)||
+                (tOrder == UCOL_NULLORDER)) {
+                break;
+            }
+
+            /* If there's no difference at this position, we can skip to the */
+            /* next one. */
+            if (sOrder == tOrder)
+            {
+                continue;
+            }
+
+            /* Compare primary differences first. */
+            pSOrder = UCOL_PRIMARYORDER(sOrder);
+            pTOrder = UCOL_PRIMARYORDER(tOrder);
+            if (pSOrder != pTOrder)
+            {
+              /* we need to get the shifted thing in here also */
+                if (sOrder == UCOL_IGNORABLE)
+                {
+                    /* The entire source element is ignorable. */
+                    /* Skip to the next source element, but don't fetch another target element. */
+                    gett = FALSE;
+                    continue;
+                }
+
+                if (tOrder == UCOL_IGNORABLE)
+                {
+                    gets = FALSE;
+                    continue;
+                }
+
+                /* The source and target elements aren't ignorable, but it's still possible  */
+                /* for the primary component of one of the elements to be ignorable....      */
+                if (pSOrder == UCOL_PRIMIGNORABLE  || (shifted && pSOrder < variableMax) )  /* primary order in source is ignorable */
+                {
+                    /* The source's primary is ignorable, but the target's isn't.  We treat ignorables */
+                    /* as a secondary difference, so remember that we found one.                       */
+                    if (checkSecTer)
+                    {
+                        result = UCOL_GREATER;  /* (strength is SECONDARY) - still need to check for tertiary or quad */
+                        checkSecTer = FALSE;
+                    }
+                    /* Skip to the next source element, but don't fetch another target element. */
+                    gett = FALSE;
+                }
+                else if (pTOrder == UCOL_PRIMIGNORABLE || (shifted && pSOrder < variableMax))
+                {
+                    /* record differences - see the comment above. */
+                    if (checkSecTer)
+                    {
+                        result = UCOL_LESS;  /* (strength is SECONDARY) - still need to check for tertiary or quad */
+                        checkSecTer = FALSE;
+                    }
+                    /* Skip to the next target element, but don't fetch another source element. */
+                    gets = FALSE;
+                }
+                else
+                {
+                    /* Neither of the orders is ignorable, and we already know that the primary */
+                    /* orders are different because of the (pSOrder != pTOrder) test above. */
+                    /* Record the difference and stop the comparison. */
+                    if (pSOrder < pTOrder)
+                    {
+                        return UCOL_LESS;  /* (strength is PRIMARY) */
+                    }
+
+                    return UCOL_GREATER;  /* (strength is PRIMARY) */
+                }
+            } else { /* else of if ( pSOrder != pTOrder )*/
+                /* primary order is the same, but complete order is different. So there*/
+                /* are no base elements at this point, only ignorables (Since the strings are*/
+                /*  normalized) */
+
+                if (checkSecTer) {
+                    /*  a secondary or tertiary difference may still matter */
+                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
+                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
+
+                    if (secSOrder != secTOrder) {
+                        /*  there is a secondary difference */
+                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                                /*  (strength is SECONDARY) */
+                        checkSecTer = FALSE;
+                    } else {
+                        if (checkTertiary) {
+                            /*  a tertiary difference may still matter */
+                            uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
+                            uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
+
+                            if (terSOrder != terTOrder) {
+                                /*  there is a tertiary difference */
+                                result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                                /*  (strength is TERTIARY) */
+                                checkTertiary = FALSE;
+                            } else if(checkQuad && shifted) { /*  try shifted & stuff */
+                              uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
+                              uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
+                              if(quadSOrder != quadTOrder) {
+                                result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                checkQuad = FALSE;
+                              }
+                            }
+                        }
+                    }
+                } /*  if (checkSecTer) */
+
+            }  /*  if ( pSOrder != pTOrder ) */
+        } /*  while() */
+
+        if (sOrder != UCOL_NULLORDER)
+        {
+            /*  (tOrder must be CollationElementIterator::NULLORDER, */
+            /*   since this point is only reached when sOrder or tOrder is NULLORDER.) */
+            /*  The source string has more elements, but the target string hasn't. */
+            do
+            {
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
+                {
+                    /*  We found an additional non-ignorable base character in the source string. */
+                    /*  This is a primary difference, so the source is greater */
+                    return UCOL_GREATER; /*  (strength is PRIMARY) */
+                }
+
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
+                {
+                    /*  Additional secondary elements mean the source string is greater */
+                    if (checkSecTer)
+                    {
+                        result = UCOL_GREATER;  /*  (strength is SECONDARY) */
+                        checkSecTer = FALSE;
+                    }
+                } 
+                /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+                sOrder = ucol_getNextCE(coll, &sColl, &status);
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while (sOrder != UCOL_NULLORDER);
+        } else if (tOrder != UCOL_NULLORDER) {
+            /*  The target string has more elements, but the source string hasn't. */
+            do
+            {
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
+                {
+                    /*  We found an additional non-ignorable base character in the target string. */
+                    /*  This is a primary difference, so the source is less */
+                    return UCOL_LESS; /*  (strength is PRIMARY) */
+                }
+
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
+                {
+                    /*  Additional secondary elements in the target mean the source string is less */
+                    if (checkSecTer)
+                    {
+                        result = UCOL_LESS;  /*  (strength is SECONDARY) */
+                        checkSecTer = FALSE;
+                    }
+                } 
+                /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
+                tOrder = ucol_getNextCE(coll, &tColl, &status);
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            }
+            while ( tOrder != UCOL_NULLORDER);
+        }
+    } else { /* French */
+
+        /*  there is a bad situation with French when there is a different number of secondaries...  */
+        /*  If that situation arises (when one primary is ignorable with nonignorable secondary and the other primary is not */
+        /*  ignorable */
+        /*  TODO: if the buffer is not big enough, we should use sortkeys */
+        UBool bufferFrenchSec = FALSE;
+        uint32_t sourceFrenchSec[UCOL_MAX_BUFFER], targetFrenchSec[UCOL_MAX_BUFFER];
+        uint32_t *sFSBEnd = sourceFrenchSec+UCOL_MAX_BUFFER;
+        uint32_t *tFSBEnd = targetFrenchSec+UCOL_MAX_BUFFER;
+        uint32_t *sFrenchStartPtr = NULL, *sFrenchEndPtr = NULL;
+        uint32_t *tFrenchStartPtr = NULL, *tFrenchEndPtr = NULL;
+
+
+        for(;;)
+        {
+            /*  Get the next collation element in each of the strings, unless */
+            /*  we've been requested to skip it. */
+            if (gets)
+            {
+                /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+                sOrder = ucol_getNextCE(coll, &sColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(sOrder)) {
+                  if (sFrenchStartPtr == NULL) {
+                    sFrenchStartPtr = sFSBEnd;
+                  }
+                  sFrenchEndPtr = sFSBEnd-1;
+                } else if (sFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, sFrenchEndPtr, sFrenchStartPtr);
+                  sFrenchStartPtr = NULL;
+                }
+                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
+            }
+
+            gets = TRUE;
+
+            if (gett)
+            {
+                /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
+                tOrder = ucol_getNextCE(coll, &tColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(tOrder)) {
+                  if (tFrenchStartPtr == NULL) {
+                    tFrenchStartPtr = tFSBEnd;
+                  }
+                  tFrenchEndPtr = tFSBEnd-1;
+                } else if (tFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, tFrenchEndPtr, tFrenchStartPtr);
+                  tFrenchStartPtr = NULL;
+                }
+                *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
+            }
+        
+            gett = TRUE;
+
+            /*  If we've hit the end of one of the strings, jump out of the loop */
+            if ((sOrder == UCOL_NULLORDER)||
+                (tOrder == UCOL_NULLORDER)) {
+                break;
+            }
+
+            /*  If there's no difference at this position, we can skip to the */
+            /*  next one. */
+            if (sOrder == tOrder)
+            {
+                continue;
+            }
+
+            /*  Compare primary differences first. */
+            pSOrder = UCOL_PRIMARYORDER(sOrder);
+            pTOrder = UCOL_PRIMARYORDER(tOrder);
+            if (pSOrder != pTOrder)
+            {
+                if (sOrder == UCOL_IGNORABLE)
+                {
+                    /*  The entire source element is ignorable. */
+                    /*  Skip to the next source element, but don't fetch another target element. */
+                    gett = FALSE;
+                    continue;
+                }
+
+                if (tOrder == UCOL_IGNORABLE)
+                {
+                    gets = FALSE;
+                    continue;
+                }
+
+                /*  The source and target elements aren't ignorable, but it's still possible */
+                /*  for the primary component of one of the elements to be ignorable.... */
+                if (pSOrder == UCOL_PRIMIGNORABLE  || (shifted && pSOrder < variableMax) )  /*  primary order in source is ignorable */
+                {
+                    /*  The source's primary is ignorable, but the target's isn't.  We treat ignorables */
+                    /*  as a secondary difference, so remember that we found one. */
+                    if (checkSecTer)
+                    {
+                            bufferFrenchSec = TRUE;
+                    }
+                    /*  Skip to the next source element, but don't fetch another target element. */
+                    gett = FALSE;
+                }
+                else if (pTOrder == UCOL_PRIMIGNORABLE || (shifted && pSOrder < variableMax))
+                {
+                    /*  record differences - see the comment above. */
+                    if (checkSecTer)
+                    {
+                            bufferFrenchSec = TRUE;
+                    }
+                    /*  Skip to the next target element, but don't fetch another source element. */
+                    gets = FALSE;
+                }
+                else
+                {
+                    /*  Neither of the orders is ignorable, and we already know that the primary */
+                    /*  orders are different because of the (pSOrder != pTOrder) test above. */
+                    /*  Record the difference and stop the comparison. */
+                    if (pSOrder < pTOrder)
+                    {
+                        return UCOL_LESS;  /*  (strength is PRIMARY) */
+                    }
+
+                    return UCOL_GREATER;  /*  (strength is PRIMARY) */
+                }
+            }
+            else
+            { /*  else of if ( pSOrder != pTOrder ) */
+                /*  primary order is the same, but complete order is different. So there */
+                /*  are no base elements at this point, only ignorables (Since the strings are */
+                /*  normalized) */
+
+                if (checkSecTer)
+                {
+                    /*  a secondary or tertiary difference may still matter */
+                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
+                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
+
+                    if (secSOrder != secTOrder)
+                    {
+                        /*  there is a secondary difference */
+                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                                /*  (strength is SECONDARY) */
+                        checkSecTer = isFrenchSec; /*  We still want to track the French secondaries */
+                        /* checkSecTer = FALSE; */
+                    } else {
+                        if (checkTertiary) {
+                            /*  a tertiary difference may still matter */
+                            uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
+                            uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
+
+                            if (terSOrder != terTOrder) {
+                                /*  there is a tertiary difference */
+                                result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                                /*  (strength is TERTIARY) */
+                                checkTertiary = FALSE;
+                            } else if(checkQuad && shifted) { /*  try shifted & stuff */
+                              uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
+                              uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
+                              if(quadSOrder != quadTOrder) {
+                                result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                checkQuad = FALSE;
+                              }
+                            }
+                        }
+                    }
+                } /*  if (checkSecTer) */
+
+            }  /*  if ( pSOrder != pTOrder ) */
+        } /*  while() */
+
+        if (sOrder != UCOL_NULLORDER)
+        {
+            /*  (tOrder must be CollationElementIterator::NULLORDER, */
+            /*   since this point is only reached when sOrder or tOrder is NULLORDER.) */
+            /*  The source string has more elements, but the target string hasn't. */
+            do
+            {
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
+                {
+                    /*  We found an additional non-ignorable base character in the source string. */
+                    /*  This is a primary difference, so the source is greater */
+                    return UCOL_GREATER; /*  (strength is PRIMARY) */
+                }
+
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
+                {
+                    /*  Additional secondary elements mean the source string is greater */
+                    if (checkSecTer)
+                    {
+                            bufferFrenchSec = TRUE;
+                    }
+                } 
+                /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+                sOrder = ucol_getNextCE(coll, &sColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(sOrder)) {
+                  if (sFrenchStartPtr == NULL) {
+                    sFrenchStartPtr = sFSBEnd;
+                  }
+                  sFrenchEndPtr = sFSBEnd-1;
+                } else if (sFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, sFrenchEndPtr, sFrenchStartPtr);
+                  sFrenchStartPtr = NULL;
+                }
+                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
+                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while (sOrder != UCOL_NULLORDER);
+        }
+        else if (tOrder != UCOL_NULLORDER)
+        {
+            /*  The target string has more elements, but the source string hasn't. */
+            do
+            {
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
+                {
+                    /*  We found an additional non-ignorable base character in the target string. */
+                    /*  This is a primary difference, so the source is less */
+                    return UCOL_LESS; /*  (strength is PRIMARY) */
+                }
+
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
+                {
+                    /*  Additional secondary elements in the target mean the source string is less */
+                    if (checkSecTer)
+                    {
+                            bufferFrenchSec = TRUE;
+                    }
+                } 
+                /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
+                tOrder = ucol_getNextCE(coll, &tColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(tOrder)) {
+                  if (tFrenchStartPtr == NULL) {
+                    tFrenchStartPtr = tFSBEnd;
+                  }
+                  tFrenchEndPtr = tFSBEnd-1;
+                } else if (tFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, tFrenchEndPtr, tFrenchStartPtr);
+                  tFrenchStartPtr = NULL;
+                }
+                *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
+                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
+                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
+                }
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while ( tOrder != UCOL_NULLORDER);
+        }
+
+        if(bufferFrenchSec) {
+            while(sFSBEnd < sourceFrenchSec+UCOL_MAX_BUFFER && tFSBEnd < targetFrenchSec+UCOL_MAX_BUFFER) {
+                /*WEIVTODO: do the continuation bit here - do the last reversal*/
+                if(*sFSBEnd == *tFSBEnd) {
+                    sFSBEnd++;
+                    tFSBEnd++;
+                } else if(*sFSBEnd < *tFSBEnd) {
+                    result = UCOL_LESS;
+                    break;
+                } else {
+                    result = UCOL_GREATER;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /*  For IDENTICAL comparisons, we use a bitwise character comparison */
+    /*  as a tiebreaker if all else is equal */
+    /*  NOTE: The java code compares result with 0, and  */
+    /*  puts the result of the string comparison directly into result */
+    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
+    {
+        UnicodeString sourceDecomp, targetDecomp;
+
+        int8_t comparison;
+        
+        Normalizer::normalize(UnicodeString(source, sourceLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
+                      0, sourceDecomp,  status);
+
+        Normalizer::normalize(UnicodeString(target, targetLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
+                      0, targetDecomp,  status);
+        
+        comparison = sourceDecomp.compare(targetDecomp);
+
+        if (comparison < 0)
+        {
+            result = UCOL_LESS;
+        }
+        else if (comparison == 0)
+        {
+            result = UCOL_EQUAL;
+        }
+        else
+        {
+            result = UCOL_GREATER;
+        }
+    }
+
+    return result;
+}
+
+
+void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
+    s->len = s->stringP = s->stackString ;
+    s->capacity = s->stackString+UCOL_MAX_BUFFER;
+    s->CEpos = s->toReturn = s->CEs;
+    s->source = source;
+    s->sourceContext = sourceContext;
+    s->currentChar = 0xFFFF;
+    s->lastChar = 0xFFFF;
+    s->panic = FALSE;
+}
+
 /* This is the new function */
 /* This is the incremental function */
 U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
 								 UCharForwardIterator *source, void *sourceContext,
 								 UCharForwardIterator *target, void *targetContext)
 {
-	Collator *cppColl = (Collator*)coll;
 
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
@@ -1164,7 +1938,10 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     init_incrementalContext(source, sourceContext, &sColl);
     init_incrementalContext(target, targetContext, &tColl);
 
-    if(cppColl->getDecomposition() != Normalizer::NO_OP) { // run away screaming!!!!
+    /* WEIVTODO: this should not be here :) */    
+    return alternateIncrementalProcessing(coll, &sColl, &tColl);
+
+    if(coll->normalizationMode != UCOL_OFF) { /*  run away screaming!!!! */
         return alternateIncrementalProcessing(coll, &sColl, &tColl);
     }
 
@@ -1173,21 +1950,26 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         return UCOL_EQUAL;
     }
 
-    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
+    UColAttributeValue strength = coll->strength;
     uint32_t sOrder=UCOL_NULLORDER, tOrder=UCOL_NULLORDER;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
+    UBool initialCheckSecTer = (strength  >= UCOL_SECONDARY);
+
+    uint8_t variableMax = coll->variableMax;
     UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = strength  >= UCOL_TERTIARY;
-    UBool checkQuad = strength  >= UCOL_QUATERNARY;
-    UBool isFrenchSec = (cppColl->getAttribute(UCOL_FRENCH_COLLATION, status) == UCOL_ON) && checkSecTer;
+    UBool checkTertiary = (strength  >= UCOL_TERTIARY);
+    UBool checkQuad = (strength  >= UCOL_QUATERNARY);
+    UBool checkIdent = (strength == UCOL_IDENTICAL);
+    UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
+    UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
+    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
 
     if(!isFrenchSec) {
         for(;;)
         {
-            // Get the next collation element in each of the strings, unless
-            // we've been requested to skip it.
+            /*  Get the next collation element in each of the strings, unless */
+            /*  we've been requested to skip it. */
             if (gets)
             {
                 sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
@@ -1200,7 +1982,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             }       
             gett = TRUE;
 
-            // If we've hit the end of one of the strings, jump out of the loop
+            /*  If we've hit the end of one of the strings, jump out of the loop */
             if ((sOrder == UCOL_NULLORDER)||
                 (tOrder == UCOL_NULLORDER)) {
                 if(sColl.panic == TRUE || tColl.panic == TRUE) {
@@ -1209,22 +1991,22 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 break;
             }
 
-            // If there's no difference at this position, we can skip to the
-            // next one.
+            /*  If there's no difference at this position, we can skip to the */
+            /*  next one. */
             if (sOrder == tOrder)
             {
                 continue;
             }
 
-            // Compare primary differences first.
+            /*  Compare primary differences first. */
             pSOrder = UCOL_PRIMARYORDER(sOrder);
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
                 if (sOrder == UCOL_IGNORABLE)
                 {
-                    // The entire source element is ignorable.
-                    // Skip to the next source element, but don't fetch another target element.
+                    /*  The entire source element is ignorable. */
+                    /*  Skip to the next source element, but don't fetch another target element. */
                     gett = FALSE;
                     continue;
                 }
@@ -1235,163 +2017,172 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     continue;
                 }
 
-                // The source and target elements aren't ignorable, but it's still possible
-                // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
+                /*  The source and target elements aren't ignorable, but it's still possible */
+                /*  for the primary component of one of the elements to be ignorable.... */
+                if (pSOrder == UCOL_PRIMIGNORABLE  || (shifted && pSOrder < variableMax) )  /*  primary order in source is ignorable */
                 {
-                    // The source's primary is ignorable, but the target's isn't.  We treat ignorables
-                    // as a secondary difference, so remember that we found one.
+                    /*  The source's primary is ignorable, but the target's isn't.  We treat ignorables */
+                    /*  as a secondary difference, so remember that we found one. */
                     if (checkSecTer)
                     {
-                        result = UCOL_GREATER;  // (strength is SECONDARY) - still need to check for tertiary or quad
+                        result = UCOL_GREATER;  /*  (strength is SECONDARY) - still need to check for tertiary or quad */
                         checkSecTer = FALSE;
                     }
-                    // Skip to the next source element, but don't fetch another target element.
+                    /*  Skip to the next source element, but don't fetch another target element. */
                     gett = FALSE;
                 }
-                else if (pTOrder == UCOL_PRIMIGNORABLE)
+                else if (pTOrder == UCOL_PRIMIGNORABLE || (shifted && pSOrder < variableMax))
                 {
-                    // record differences - see the comment above.
+                    /*  record differences - see the comment above. */
                     if (checkSecTer)
                     {
-                        result = UCOL_LESS;  // (strength is SECONDARY) - still need to check for tertiary or quad
+                        result = UCOL_LESS;  /*  (strength is SECONDARY) - still need to check for tertiary or quad */
                         checkSecTer = FALSE;
                     }
-                    // Skip to the next target element, but don't fetch another source element.
+                    /*  Skip to the next target element, but don't fetch another source element. */
                     gets = FALSE;
                 }
                 else
                 {
-                    // Neither of the orders is ignorable, and we already know that the primary
-                    // orders are different because of the (pSOrder != pTOrder) test above.
-                    // Record the difference and stop the comparison.
+                    /*  Neither of the orders is ignorable, and we already know that the primary */
+                    /*  orders are different because of the (pSOrder != pTOrder) test above. */
+                    /*  Record the difference and stop the comparison. */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
                     if (pSOrder < pTOrder)
                     {
-                        return UCOL_LESS;  // (strength is PRIMARY)
+                        return UCOL_LESS;  /*  (strength is PRIMARY) */
                     }
 
-                    return UCOL_GREATER;  // (strength is PRIMARY)
+                    return UCOL_GREATER;  /*  (strength is PRIMARY) */
                 }
-            }
-            else
-            { // else of if ( pSOrder != pTOrder )
-                // primary order is the same, but complete order is different. So there
-                // are no base elements at this point, only ignorables (Since the strings are
-                // normalized)
+            } else { /*  else of if ( pSOrder != pTOrder ) */
+                /*  primary order is the same, but complete order is different. So there */
+                /*  are no base elements at this point, only ignorables (Since the strings are */
+                /*  normalized) */
 
-                if (checkSecTer)
-                {
-                    // a secondary or tertiary difference may still matter
+                if (checkSecTer) {
+                    /*  a secondary or tertiary difference may still matter */
                     uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
                     uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
 
-                    if (secSOrder != secTOrder)
-                    {
-                        // there is a secondary difference
+                    if (secSOrder != secTOrder) {
+                        /*  there is a secondary difference */
                         result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is SECONDARY)
+                                                /*  (strength is SECONDARY) */
                         checkSecTer = FALSE;
-                    }
-                    else
-                    {
-                        if (checkTertiary)
-                        {
-                            // a tertiary difference may still matter
+                    } else {
+                        if (checkTertiary) {
+                            /*  a tertiary difference may still matter */
                             uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
                             uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
 
-                            if (terSOrder != terTOrder)
-                            {
-                                // there is a tertiary difference
+                            if (terSOrder != terTOrder) {
+                                /*  there is a tertiary difference */
                                 result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is TERTIARY)
+                                                /*  (strength is TERTIARY) */
                                 checkTertiary = FALSE;
+                            } else if(checkQuad && shifted) { /*  try shifted & stuff */
+                              uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
+                              uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
+                              if(quadSOrder != quadTOrder) {
+                                result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                checkQuad = FALSE;
+                              }
                             }
                         }
                     }
-                } // if (checkSecTer)
+                } /*  if (checkSecTer) */
 
-            }  // if ( pSOrder != pTOrder )
-        } // while()
+            }  /*  if ( pSOrder != pTOrder ) */
+        } /*  while() */
 
         if (sOrder != UCOL_NULLORDER)
         {
-            // (tOrder must be CollationElementIterator::NULLORDER,
-            //  since this point is only reached when sOrder or tOrder is NULLORDER.)
-            // The source string has more elements, but the target string hasn't.
+            /*  (tOrder must be CollationElementIterator::NULLORDER, */
+            /*   since this point is only reached when sOrder or tOrder is NULLORDER.) */
+            /*  The source string has more elements, but the target string hasn't. */
             do
             {
                 if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
-                    // We found an additional non-ignorable base character in the source string.
-                    // This is a primary difference, so the source is greater
+                    /*  We found an additional non-ignorable base character in the source string. */
+                    /*  This is a primary difference, so the source is greater */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
-                    return UCOL_GREATER; // (strength is PRIMARY)
+                    return UCOL_GREATER; /*  (strength is PRIMARY) */
                 }
 
                 if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
-                    // Additional secondary elements mean the source string is greater
+                    /*  Additional secondary elements mean the source string is greater */
                     if (checkSecTer)
                     {
-                        result = UCOL_GREATER;  // (strength is SECONDARY)
+                        result = UCOL_GREATER;  /*  (strength is SECONDARY) */
                         checkSecTer = FALSE;
                     }
                 } 
-             sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
-            }
-            //while ((sOrder = ucol_getIncrementalCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
-            while (sOrder != UCOL_NULLORDER);
-        }
-        else if (tOrder != UCOL_NULLORDER)
-        {
-            // The target string has more elements, but the source string hasn't.
+                sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while (sOrder != UCOL_NULLORDER);
+        } else if (tOrder != UCOL_NULLORDER) {
+            /*  The target string has more elements, but the source string hasn't. */
             do
             {
                 if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
-                    // We found an additional non-ignorable base character in the target string.
-                    // This is a primary difference, so the source is less
+                    /*  We found an additional non-ignorable base character in the target string. */
+                    /*  This is a primary difference, so the source is less */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
-                    return UCOL_LESS; // (strength is PRIMARY)
+                    return UCOL_LESS; /*  (strength is PRIMARY) */
                 }
 
                 if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
-                    // Additional secondary elements in the target mean the source string is less
+                    /*  Additional secondary elements in the target mean the source string is less */
                     if (checkSecTer)
                     {
-                        result = UCOL_LESS;  // (strength is SECONDARY)
+                        result = UCOL_LESS;  /*  (strength is SECONDARY) */
                         checkSecTer = FALSE;
                     }
                 } 
                 tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
             }
             while ( tOrder != UCOL_NULLORDER);
-            //while ((tOrder = ucol_getIncrementalCE(coll, &tColl, &status)) != CollationElementIterator::NULLORDER);
+            /* while ((tOrder = ucol_getIncrementalCE(coll, &tColl, &status)) != CollationElementIterator::NULLORDER); */
         }
-    } else { //French
+    } else { /* French */
 
-        // there is a bad situation with French when there is a different number of secondaries... 
-        // If that situation arises (when one primary is ignorable with nonignorable secondary and the other primary is not
-        // ignorable
-        // TODO: if the buffer is not big enough, we should use sortkeys
+        /*  there is a bad situation with French when there is a different number of secondaries...  */
+        /*  If that situation arises (when one primary is ignorable with nonignorable secondary and the other primary is not */
+        /*  ignorable */
+        /*  TODO: if the buffer is not big enough, we should use sortkeys */
         UBool bufferFrenchSec = FALSE;
         uint32_t sourceFrenchSec[UCOL_MAX_BUFFER], targetFrenchSec[UCOL_MAX_BUFFER];
         uint32_t *sFSBEnd = sourceFrenchSec+UCOL_MAX_BUFFER;
         uint32_t *tFSBEnd = targetFrenchSec+UCOL_MAX_BUFFER;
+        uint32_t *sFrenchStartPtr = NULL, *sFrenchEndPtr = NULL;
+        uint32_t *tFrenchStartPtr = NULL, *tFrenchEndPtr = NULL;
 
         for(;;)
         {
-            // Get the next collation element in each of the strings, unless
-            // we've been requested to skip it.
+            /*  Get the next collation element in each of the strings, unless */
+            /*  we've been requested to skip it. */
             if (gets)
             {
                 sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(sOrder)) {
+                  if (sFrenchStartPtr == NULL) {
+                    sFrenchStartPtr = sFSBEnd;
+                  }
+                  sFrenchEndPtr = sFSBEnd-1;
+                } else if (sFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, sFrenchEndPtr, sFrenchStartPtr);
+                  sFrenchStartPtr = NULL;
+                }
                 *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
                 if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
                     return alternateIncrementalProcessing(coll, &sColl, &tColl);
@@ -1403,6 +2194,17 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             if (gett)
             {
                 tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(tOrder)) {
+                  if (tFrenchStartPtr == NULL) {
+                    tFrenchStartPtr = tFSBEnd;
+                  }
+                  tFrenchEndPtr = tFSBEnd-1;
+                } else if (tFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, tFrenchEndPtr, tFrenchStartPtr);
+                  tFrenchStartPtr = NULL;
+                }
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
                 if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
                     return alternateIncrementalProcessing(coll, &sColl, &tColl);
@@ -1411,28 +2213,28 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         
             gett = TRUE;
 
-            // If we've hit the end of one of the strings, jump out of the loop
+            /*  If we've hit the end of one of the strings, jump out of the loop */
             if ((sOrder == UCOL_NULLORDER)||
                 (tOrder == UCOL_NULLORDER)) {
                 break;
             }
 
-            // If there's no difference at this position, we can skip to the
-            // next one.
+            /*  If there's no difference at this position, we can skip to the */
+            /*  next one. */
             if (sOrder == tOrder)
             {
                 continue;
             }
 
-            // Compare primary differences first.
+            /*  Compare primary differences first. */
             pSOrder = UCOL_PRIMARYORDER(sOrder);
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
                 if (sOrder == UCOL_IGNORABLE)
                 {
-                    // The entire source element is ignorable.
-                    // Skip to the next source element, but don't fetch another target element.
+                    /*  The entire source element is ignorable. */
+                    /*  Skip to the next source element, but don't fetch another target element. */
                     gett = FALSE;
                     continue;
                 }
@@ -1443,148 +2245,176 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     continue;
                 }
 
-                // The source and target elements aren't ignorable, but it's still possible
-                // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
+                /*  The source and target elements aren't ignorable, but it's still possible */
+                /*  for the primary component of one of the elements to be ignorable.... */
+                if (pSOrder == UCOL_PRIMIGNORABLE)  /*  primary order in source is ignorable */
                 {
-                    // The source's primary is ignorable, but the target's isn't.  We treat ignorables
-                    // as a secondary difference, so remember that we found one.
+                    /*  The source's primary is ignorable, but the target's isn't.  We treat ignorables */
+                    /*  as a secondary difference, so remember that we found one. */
                     if (checkSecTer)
                     {
                             bufferFrenchSec = TRUE;
                     }
-                    // Skip to the next source element, but don't fetch another target element.
+                    /*  Skip to the next source element, but don't fetch another target element. */
                     gett = FALSE;
                 }
                 else if (pTOrder == UCOL_PRIMIGNORABLE)
                 {
-                    // record differences - see the comment above.
+                    /*  record differences - see the comment above. */
                     if (checkSecTer)
                     {
                             bufferFrenchSec = TRUE;
                     }
-                    // Skip to the next target element, but don't fetch another source element.
+                    /*  Skip to the next target element, but don't fetch another source element. */
                     gets = FALSE;
                 }
                 else
                 {
-                    // Neither of the orders is ignorable, and we already know that the primary
-                    // orders are different because of the (pSOrder != pTOrder) test above.
-                    // Record the difference and stop the comparison.
+                    /*  Neither of the orders is ignorable, and we already know that the primary */
+                    /*  orders are different because of the (pSOrder != pTOrder) test above. */
+                    /*  Record the difference and stop the comparison. */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
                     if (pSOrder < pTOrder)
                     {
-                        return UCOL_LESS;  // (strength is PRIMARY)
+                        return UCOL_LESS;  /*  (strength is PRIMARY) */
                     }
 
-                    return UCOL_GREATER;  // (strength is PRIMARY)
+                    return UCOL_GREATER;  /*  (strength is PRIMARY) */
                 }
             }
             else
-            { // else of if ( pSOrder != pTOrder )
-                // primary order is the same, but complete order is different. So there
-                // are no base elements at this point, only ignorables (Since the strings are
-                // normalized)
+            { /*  else of if ( pSOrder != pTOrder ) */
+                /*  primary order is the same, but complete order is different. So there */
+                /*  are no base elements at this point, only ignorables (Since the strings are */
+                /*  normalized) */
 
                 if (checkSecTer)
                 {
-                    // a secondary or tertiary difference may still matter
+                    /*  a secondary or tertiary difference may still matter */
                     uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
                     uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
 
                     if (secSOrder != secTOrder)
                     {
-                        // there is a secondary difference
+                        /*  there is a secondary difference */
                         result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is SECONDARY)
-                        checkSecTer = isFrenchSec; // We still want to track the French secondaries
-                        //checkSecTer = FALSE;
+                                                /*  (strength is SECONDARY) */
+                        checkSecTer = isFrenchSec; /*  We still want to track the French secondaries */
+                        /* checkSecTer = FALSE; */
                     }
                     else
                     {
                         if (checkTertiary)
                         {
-                            // a tertiary difference may still matter
+                            /*  a tertiary difference may still matter */
                             uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
                             uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
 
                             if (terSOrder != terTOrder)
                             {
-                                // there is a tertiary difference
+                                /*  there is a tertiary difference */
                                 result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is TERTIARY)
+                                                /*  (strength is TERTIARY) */
                                 checkTertiary = FALSE;
+                            } else if(checkQuad && shifted) { /*  try shifted & stuff */
+                              uint32_t quadSOrder = (pSOrder < variableMax)?pSOrder:0xFFFF;
+                              uint32_t quadTOrder = (pTOrder < variableMax)?pTOrder:0xFFFF;
+                              if(quadSOrder != quadTOrder) {
+                                result = (quadSOrder < quadTOrder) ? UCOL_LESS : UCOL_GREATER;
+                                checkQuad = FALSE;
+                              }
                             }
                         }
                     }
-                } // if (checkSecTer)
+                } /*  if (checkSecTer) */
 
-            }  // if ( pSOrder != pTOrder )
-        } // while()
+            }  /*  if ( pSOrder != pTOrder ) */
+        } /*  while() */
 
         if (sOrder != UCOL_NULLORDER)
         {
-            // (tOrder must be CollationElementIterator::NULLORDER,
-            //  since this point is only reached when sOrder or tOrder is NULLORDER.)
-            // The source string has more elements, but the target string hasn't.
+            /*  (tOrder must be CollationElementIterator::NULLORDER, */
+            /*   since this point is only reached when sOrder or tOrder is NULLORDER.) */
+            /*  The source string has more elements, but the target string hasn't. */
             do
             {
                 if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
-                    // We found an additional non-ignorable base character in the source string.
-                    // This is a primary difference, so the source is greater
+                    /*  We found an additional non-ignorable base character in the source string. */
+                    /*  This is a primary difference, so the source is greater */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
-                    return UCOL_GREATER; // (strength is PRIMARY)
+                    return UCOL_GREATER; /*  (strength is PRIMARY) */
                 }
 
                 if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
-                    // Additional secondary elements mean the source string is greater
+                    /*  Additional secondary elements mean the source string is greater */
                     if (checkSecTer)
                     {
                             bufferFrenchSec = TRUE;
                     }
                 } 
                 sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(sOrder)) {
+                  if (sFrenchStartPtr == NULL) {
+                    sFrenchStartPtr = sFSBEnd;
+                  }
+                  sFrenchEndPtr = sFSBEnd-1;
+                } else if (sFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, sFrenchEndPtr, sFrenchStartPtr);
+                  sFrenchStartPtr = NULL;
+                }
                 *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
                 if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
                     return alternateIncrementalProcessing(coll, &sColl, &tColl);
                 }
-            }
-            //while ((sOrder = ucol_getIncrementalCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
-            while (sOrder != UCOL_NULLORDER);
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while (sOrder != UCOL_NULLORDER);
         }
         else if (tOrder != UCOL_NULLORDER)
         {
-            // The target string has more elements, but the source string hasn't.
+            /*  The target string has more elements, but the source string hasn't. */
             do
             {
                 if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
-                    // We found an additional non-ignorable base character in the target string.
-                    // This is a primary difference, so the source is less
+                    /*  We found an additional non-ignorable base character in the target string. */
+                    /*  This is a primary difference, so the source is less */
                     incctx_cleanUpContext(&sColl);
                     incctx_cleanUpContext(&tColl);
-                    return UCOL_LESS; // (strength is PRIMARY)
+                    return UCOL_LESS; /*  (strength is PRIMARY) */
                 }
 
                 if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
-                    // Additional secondary elements in the target mean the source string is less
+                    /*  Additional secondary elements in the target mean the source string is less */
                     if (checkSecTer)
                     {
                             bufferFrenchSec = TRUE;
                     }
                 } 
                 tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
+                /*WEIVTODO: do the continuation bit here */
+                if(isContinuation(tOrder)) {
+                  if (tFrenchStartPtr == NULL) {
+                    tFrenchStartPtr = tFSBEnd;
+                  }
+                  tFrenchEndPtr = tFSBEnd-1;
+                } else if (tFrenchStartPtr != NULL) {
+                    /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                  uprv_ucol_reverse_buffer(uint32_t, tFrenchEndPtr, tFrenchStartPtr);
+                  tFrenchStartPtr = NULL;
+                }
                 *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
                 if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
                     return alternateIncrementalProcessing(coll, &sColl, &tColl);
                 }
-            }
-            while ( tOrder != UCOL_NULLORDER);
+                /*WEIVTODO: What about tertiaries and quads??? recheck */
+            } while ( tOrder != UCOL_NULLORDER);
         }
 
         if(bufferFrenchSec) {
@@ -1604,10 +2434,10 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     }
 
  
-    // For IDENTICAL comparisons, we use a bitwise character comparison
-    // as a tiebreaker if all else is equal
-    // NOTE: The java code compares result with 0, and 
-    // puts the result of the string comparison directly into result
+    /*  For IDENTICAL comparisons, we use a bitwise character comparison */
+    /*  as a tiebreaker if all else is equal */
+    /*  NOTE: The java code compares result with 0, and  */
+    /*  puts the result of the string comparison directly into result */
     if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
     {
         UnicodeString sourceDecomp, targetDecomp;
@@ -1641,549 +2471,44 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     return result;
 }
 
-/* This is the new function */
-U_CAPI UCollationResult
-ucol_strcoll(    const    UCollator    *coll,
-        const    UChar        *source,
+/* convenience function for comparing strings */
+U_CAPI UBool
+ucol_greater(    const    UCollator        *coll,
+        const    UChar            *source,
         int32_t            sourceLength,
-        const    UChar        *target,
+        const    UChar            *target,
         int32_t            targetLength)
 {
-#if 0
-	Collator *cppColl = (Collator*)coll;
-
-    // check if source and target are valid strings
-    if (((source == 0) && (target == 0)) ||
-        ((sourceLength == 0) && (targetLength == 0)))
-    {
-        return UCOL_EQUAL;
-    }
-
-    UCollationResult result = UCOL_EQUAL;
-    UErrorCode status = U_ZERO_ERROR;
-
-    UChar normSource[UCOL_MAX_BUFFER], normTarget[UCOL_MAX_BUFFER];
-    UChar *normSourceP = normSource;
-    UChar *normTargetP = normTarget;
-    uint32_t normSourceLength = UCOL_MAX_BUFFER, normTargetLength = UCOL_MAX_BUFFER;
-
-    collIterate sColl, tColl;
-
-    if(cppColl->getDecomposition() == Normalizer::NO_OP) {
-        init_collIterate(source, sourceLength == -1 ? u_strlen(source) : sourceLength, &sColl, FALSE);
-        init_collIterate(target, targetLength == -1 ? u_strlen(target) : targetLength, &tColl, FALSE);
-    } else { /* TODO: This is bad behaved if we're working with small buffers */
-             /* We really need the normalization quick check here*/
-	    UNormalizationMode normMode = ucol_getNormalization(coll);
-        normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLength, &status);
-        if(U_FAILURE(status)) { /* This would be buffer overflow */
-            normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
-            status = U_ZERO_ERROR;
-            normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSourceP, normSourceLength+1, &status);
-            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength, &status);
-            if(U_FAILURE(status)) { /* This would be buffer overflow */
-                normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-                status = U_ZERO_ERROR;
-                normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
-            }
-            Normalizer::EMode mode = cppColl->getDecomposition();
-            cppColl->setDecomposition(Normalizer::NO_OP);
-            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-            cppColl->setDecomposition(mode);
-            uprv_free(normSourceP);
-            if(normTargetP != normTarget) {
-                uprv_free(normTargetP);
-            }
-            return result;
-        }
-        normTargetLength = u_normalize(target, targetLength, normMode, 0, normTarget, normTargetLength, &status);
-        if(U_FAILURE(status)) { /* This would be buffer overflow */
-            normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
-            status = U_ZERO_ERROR;
-            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
-            Normalizer::EMode mode = cppColl->getDecomposition();
-            cppColl->setDecomposition(Normalizer::NO_OP);
-            UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
-            cppColl->setDecomposition(mode);
-            uprv_free(normTargetP);
-            return result;
-        }
-        init_collIterate(normSource, normSourceLength, &sColl, TRUE);
-        init_collIterate(normTarget, normTargetLength, &tColl, TRUE);
-	}
-
-    if (U_FAILURE(status))
-    {
-        return UCOL_EQUAL;
-    }
-
-    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
-    uint32_t sOrder=UCOL_NULLORDER, tOrder=UCOL_NULLORDER;
-    uint32_t pSOrder, pTOrder;
-    UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
-    UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = strength  >= UCOL_TERTIARY;
-    UBool checkQuad = strength  >= UCOL_QUATERNARY;
-    UBool isFrenchSec = (cppColl->getAttribute(UCOL_FRENCH_COLLATION, status) == UCOL_ON) && checkSecTer;
-
-    if(!isFrenchSec) {
-        for(;;)
-        {
-            // Get the next collation element in each of the strings, unless
-            // we've been requested to skip it.
-            if (gets)
-            {
-                UCOL_GETNEXTCE(sOrder, coll, sColl, status);
-            }
-            gets = TRUE;
-
-            if (gett)
-            {
-                UCOL_GETNEXTCE(tOrder, coll, tColl, status);
-            }       
-            gett = TRUE;
-
-            // If we've hit the end of one of the strings, jump out of the loop
-            if ((sOrder == UCOL_NULLORDER)||
-                (tOrder == UCOL_NULLORDER)) {
-                break;
-            }
-
-            // If there's no difference at this position, we can skip to the
-            // next one.
-            if (sOrder == tOrder)
-            {
-                continue;
-            }
-
-            // Compare primary differences first.
-            pSOrder = UCOL_PRIMARYORDER(sOrder);
-            pTOrder = UCOL_PRIMARYORDER(tOrder);
-            if (pSOrder != pTOrder)
-            {
-                if (sOrder == UCOL_IGNORABLE)
-                {
-                    // The entire source element is ignorable.
-                    // Skip to the next source element, but don't fetch another target element.
-                    gett = FALSE;
-                    continue;
-                }
-
-                if (tOrder == UCOL_IGNORABLE)
-                {
-                    gets = FALSE;
-                    continue;
-                }
-
-                // The source and target elements aren't ignorable, but it's still possible
-                // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
-                {
-                    // The source's primary is ignorable, but the target's isn't.  We treat ignorables
-                    // as a secondary difference, so remember that we found one.
-                    if (checkSecTer)
-                    {
-                        result = UCOL_GREATER;  // (strength is SECONDARY) - still need to check for tertiary or quad
-                        checkSecTer = FALSE;
-                    }
-                    // Skip to the next source element, but don't fetch another target element.
-                    gett = FALSE;
-                }
-                else if (pTOrder == UCOL_PRIMIGNORABLE)
-                {
-                    // record differences - see the comment above.
-                    if (checkSecTer)
-                    {
-                        result = UCOL_LESS;  // (strength is SECONDARY) - still need to check for tertiary or quad
-                        checkSecTer = FALSE;
-                    }
-                    // Skip to the next target element, but don't fetch another source element.
-                    gets = FALSE;
-                }
-                else
-                {
-                    // Neither of the orders is ignorable, and we already know that the primary
-                    // orders are different because of the (pSOrder != pTOrder) test above.
-                    // Record the difference and stop the comparison.
-                    if (pSOrder < pTOrder)
-                    {
-                        return UCOL_LESS;  // (strength is PRIMARY)
-                    }
-
-                    return UCOL_GREATER;  // (strength is PRIMARY)
-                }
-            }
-            else
-            { // else of if ( pSOrder != pTOrder )
-                // primary order is the same, but complete order is different. So there
-                // are no base elements at this point, only ignorables (Since the strings are
-                // normalized)
-
-                if (checkSecTer)
-                {
-                    // a secondary or tertiary difference may still matter
-                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
-                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
-
-                    if (secSOrder != secTOrder)
-                    {
-                        // there is a secondary difference
-                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is SECONDARY)
-                        checkSecTer = FALSE;
-                    }
-                    else
-                    {
-                        if (checkTertiary)
-                        {
-                            // a tertiary difference may still matter
-                            uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                            uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-
-                            if (terSOrder != terTOrder)
-                            {
-                                // there is a tertiary difference
-                                result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is TERTIARY)
-                                checkTertiary = FALSE;
-                            }
-                        }
-                    }
-                } // if (checkSecTer)
-
-            }  // if ( pSOrder != pTOrder )
-        } // while()
-
-        if (sOrder != UCOL_NULLORDER)
-        {
-            // (tOrder must be CollationElementIterator::NULLORDER,
-            //  since this point is only reached when sOrder or tOrder is NULLORDER.)
-            // The source string has more elements, but the target string hasn't.
-            do
-            {
-                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
-                {
-                    // We found an additional non-ignorable base character in the source string.
-                    // This is a primary difference, so the source is greater
-                    return UCOL_GREATER; // (strength is PRIMARY)
-                }
-
-                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
-                {
-                    // Additional secondary elements mean the source string is greater
-                    if (checkSecTer)
-                    {
-                        result = UCOL_GREATER;  // (strength is SECONDARY)
-                        checkSecTer = FALSE;
-                    }
-                } 
-             UCOL_GETNEXTCE(sOrder, coll, sColl, status);
-            }
-            //while ((sOrder = ucol_getNextCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
-            while (sOrder != UCOL_NULLORDER);
-        }
-        else if (tOrder != UCOL_NULLORDER)
-        {
-            // The target string has more elements, but the source string hasn't.
-            do
-            {
-                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
-                {
-                    // We found an additional non-ignorable base character in the target string.
-                    // This is a primary difference, so the source is less
-                    return UCOL_LESS; // (strength is PRIMARY)
-                }
-
-                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
-                {
-                    // Additional secondary elements in the target mean the source string is less
-                    if (checkSecTer)
-                    {
-                        result = UCOL_LESS;  // (strength is SECONDARY)
-                        checkSecTer = FALSE;
-                    }
-                } 
-                UCOL_GETNEXTCE(tOrder, coll, tColl, status);
-            }
-            while ( tOrder != UCOL_NULLORDER);
-            //while ((tOrder = ucol_getNextCE(coll, &tColl, &status)) != CollationElementIterator::NULLORDER);
-        }
-    } else { //French
-
-        // there is a bad situation with French when there is a different number of secondaries... 
-        // If that situation arises (when one primary is ignorable with nonignorable secondary and the other primary is not
-        // ignorable
-        // TODO: if the buffer is not big enough, we should use sortkeys
-        UBool bufferFrenchSec = FALSE;
-        uint32_t sourceFrenchSec[UCOL_MAX_BUFFER], targetFrenchSec[UCOL_MAX_BUFFER];
-        uint32_t *sFSBEnd = sourceFrenchSec+UCOL_MAX_BUFFER;
-        uint32_t *tFSBEnd = targetFrenchSec+UCOL_MAX_BUFFER;
-
-        for(;;)
-        {
-            // Get the next collation element in each of the strings, unless
-            // we've been requested to skip it.
-            if (gets)
-            {
-                UCOL_GETNEXTCE(sOrder, coll, sColl, status);
-                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
-                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
-                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-                }
-            }
-
-            gets = TRUE;
-
-            if (gett)
-            {
-                UCOL_GETNEXTCE(tOrder, coll, tColl, status);
-                *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
-                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
-                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-                }
-            }
-        
-            gett = TRUE;
-
-            // If we've hit the end of one of the strings, jump out of the loop
-            if ((sOrder == UCOL_NULLORDER)||
-                (tOrder == UCOL_NULLORDER)) {
-                break;
-            }
-
-            // If there's no difference at this position, we can skip to the
-            // next one.
-            if (sOrder == tOrder)
-            {
-                continue;
-            }
-
-            // Compare primary differences first.
-            pSOrder = UCOL_PRIMARYORDER(sOrder);
-            pTOrder = UCOL_PRIMARYORDER(tOrder);
-            if (pSOrder != pTOrder)
-            {
-                if (sOrder == UCOL_IGNORABLE)
-                {
-                    // The entire source element is ignorable.
-                    // Skip to the next source element, but don't fetch another target element.
-                    gett = FALSE;
-                    continue;
-                }
-
-                if (tOrder == UCOL_IGNORABLE)
-                {
-                    gets = FALSE;
-                    continue;
-                }
-
-                // The source and target elements aren't ignorable, but it's still possible
-                // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
-                {
-                    // The source's primary is ignorable, but the target's isn't.  We treat ignorables
-                    // as a secondary difference, so remember that we found one.
-                    if (checkSecTer)
-                    {
-                            bufferFrenchSec = TRUE;
-                    }
-                    // Skip to the next source element, but don't fetch another target element.
-                    gett = FALSE;
-                }
-                else if (pTOrder == UCOL_PRIMIGNORABLE)
-                {
-                    // record differences - see the comment above.
-                    if (checkSecTer)
-                    {
-                            bufferFrenchSec = TRUE;
-                    }
-                    // Skip to the next target element, but don't fetch another source element.
-                    gets = FALSE;
-                }
-                else
-                {
-                    // Neither of the orders is ignorable, and we already know that the primary
-                    // orders are different because of the (pSOrder != pTOrder) test above.
-                    // Record the difference and stop the comparison.
-                    if (pSOrder < pTOrder)
-                    {
-                        return UCOL_LESS;  // (strength is PRIMARY)
-                    }
-
-                    return UCOL_GREATER;  // (strength is PRIMARY)
-                }
-            }
-            else
-            { // else of if ( pSOrder != pTOrder )
-                // primary order is the same, but complete order is different. So there
-                // are no base elements at this point, only ignorables (Since the strings are
-                // normalized)
-
-                if (checkSecTer)
-                {
-                    // a secondary or tertiary difference may still matter
-                    uint32_t secSOrder = UCOL_SECONDARYORDER(sOrder);
-                    uint32_t secTOrder = UCOL_SECONDARYORDER(tOrder);
-
-                    if (secSOrder != secTOrder)
-                    {
-                        // there is a secondary difference
-                        result = (secSOrder < secTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is SECONDARY)
-                        checkSecTer = isFrenchSec; // We still want to track the French secondaries
-                        //checkSecTer = FALSE;
-                    }
-                    else
-                    {
-                        if (checkTertiary)
-                        {
-                            // a tertiary difference may still matter
-                            uint32_t terSOrder = UCOL_TERTIARYORDER(sOrder);
-                            uint32_t terTOrder = UCOL_TERTIARYORDER(tOrder);
-
-                            if (terSOrder != terTOrder)
-                            {
-                                // there is a tertiary difference
-                                result = (terSOrder < terTOrder) ? UCOL_LESS : UCOL_GREATER;
-                                                // (strength is TERTIARY)
-                                checkTertiary = FALSE;
-                            }
-                        }
-                    }
-                } // if (checkSecTer)
-
-            }  // if ( pSOrder != pTOrder )
-        } // while()
-
-        if (sOrder != UCOL_NULLORDER)
-        {
-            // (tOrder must be CollationElementIterator::NULLORDER,
-            //  since this point is only reached when sOrder or tOrder is NULLORDER.)
-            // The source string has more elements, but the target string hasn't.
-            do
-            {
-                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
-                {
-                    // We found an additional non-ignorable base character in the source string.
-                    // This is a primary difference, so the source is greater
-                    return UCOL_GREATER; // (strength is PRIMARY)
-                }
-
-                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
-                {
-                    // Additional secondary elements mean the source string is greater
-                    if (checkSecTer)
-                    {
-                            bufferFrenchSec = TRUE;
-                    }
-                } 
-                UCOL_GETNEXTCE(sOrder, coll, sColl, status);
-                *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
-                if(sFSBEnd == sourceFrenchSec) { /* overflowing the buffer, bail out */
-                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-                }
-            }
-            //while ((sOrder = ucol_getNextCE(coll, &sColl, &status)) != CollationElementIterator::NULLORDER);
-            while (sOrder != UCOL_NULLORDER);
-        }
-        else if (tOrder != UCOL_NULLORDER)
-        {
-            // The target string has more elements, but the source string hasn't.
-            do
-            {
-                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
-                {
-                    // We found an additional non-ignorable base character in the target string.
-                    // This is a primary difference, so the source is less
-                    return UCOL_LESS; // (strength is PRIMARY)
-                }
-
-                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
-                {
-                    // Additional secondary elements in the target mean the source string is less
-                    if (checkSecTer)
-                    {
-                            bufferFrenchSec = TRUE;
-                    }
-                } 
-                UCOL_GETNEXTCE(tOrder, coll, tColl, status);
-                *(--tFSBEnd) = UCOL_SECONDARYORDER(tOrder);
-                if(tFSBEnd == targetFrenchSec) { /* overflowing the buffer, bail out */
-                    return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
-                }
-            }
-            while ( tOrder != UCOL_NULLORDER);
-        }
-
-        if(bufferFrenchSec) {
-            while(sFSBEnd < sourceFrenchSec+UCOL_MAX_BUFFER && tFSBEnd < targetFrenchSec+UCOL_MAX_BUFFER) {
-                if(*sFSBEnd == *tFSBEnd) {
-                    sFSBEnd++;
-                    tFSBEnd++;
-                } else if(*sFSBEnd < *tFSBEnd) {
-                    result = UCOL_LESS;
-                    break;
-                } else {
-                    result = UCOL_GREATER;
-                    break;
-                }
-            }
-        }
-    }
-
-
-    // For IDENTICAL comparisons, we use a bitwise character comparison
-    // as a tiebreaker if all else is equal
-    // NOTE: The java code compares result with 0, and 
-    // puts the result of the string comparison directly into result
-    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
-    {
-        UnicodeString sourceDecomp, targetDecomp;
-
-        int8_t comparison;
-        
-        Normalizer::normalize(UnicodeString(source, sourceLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, sourceDecomp,  status);
-
-        Normalizer::normalize(UnicodeString(target, targetLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
-                      0, targetDecomp,  status);
-        
-        comparison = sourceDecomp.compare(targetDecomp);
-
-        if (comparison < 0)
-        {
-            result = UCOL_LESS;
-        }
-        else if (comparison == 0)
-        {
-            result = UCOL_EQUAL;
-        }
-        else
-        {
-            result = UCOL_GREATER;
-        }
-    }
-
-    return result;
-#endif
-    return UCOL_EQUAL;
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      == UCOL_GREATER);
 }
 
-
-void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
-    s->len = s->stringP = s->stackString ;
-    s->capacity = s->stackString+UCOL_MAX_BUFFER;
-    s->CEpos = s->toReturn = s->CEs;
-    s->source = source;
-    s->sourceContext = sourceContext;
-    s->currentChar = 0xFFFF;
-    s->lastChar = 0xFFFF;
-    s->panic = FALSE;
+/* convenience function for comparing strings */
+U_CAPI UBool
+ucol_greaterOrEqual(    const    UCollator    *coll,
+            const    UChar        *source,
+            int32_t        sourceLength,
+            const    UChar        *target,
+            int32_t        targetLength)
+{
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      != UCOL_LESS);
 }
+
+/* convenience function for comparing strings */
+U_CAPI UBool
+ucol_equal(        const    UCollator        *coll,
+            const    UChar            *source,
+            int32_t            sourceLength,
+            const    UChar            *target,
+            int32_t            targetLength)
+{
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      == UCOL_EQUAL);
+}
+
 
 int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status) {
-#if 0
   uint32_t order;
 
   if (U_FAILURE(*status) /*|| (ctx->CEpos <= ctx->toReturn)*/) {
@@ -2196,10 +2521,11 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
  
   ctx->CEpos = ctx->toReturn = ctx->CEs;
 
+  /* Hmmm, I forgot what this was for :) */
+  /* but it looks like ctx->currentChar is used around */
   if(ctx->lastChar == 0xFFFF) {
       ctx->currentChar = ctx->source(ctx->sourceContext);
       incctx_appendChar(ctx, ctx->currentChar);
-      //*(ctx->len++) = ctx->currentChar;
       if(ctx->currentChar == 0xFFFF) {
           return UCOL_NULLORDER;
       }
@@ -2207,41 +2533,208 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
       ctx->currentChar = ctx->lastChar;
       ctx->lastChar = 0xFFFF;
   }
- 
-  order  = ucmp32_get(((RuleBasedCollator *)coll)->data->mapping, ctx->currentChar);
 
-  // this should benefit from reordering of the clauses, so that the cleanest case is returned the first.
-
-  if(order < UCOL_EXPANDCHARINDEX && !(UCOL_ISTHAIPREVOWEL(ctx->currentChar))) {     
-    return (order);
+  UChar ch = ctx->currentChar;
+  if(ch < 0xFF) {                                                 /* if it's Latin One, we'll try to fast track it */
+    order = coll->latinOneMapping[ch];                            /* by looking in up in an array */
+  } else {                                                        /* otherwise, */
+    order = ucmp32_get(coll->mapping, ch);                        /* we'll go for slightly slower trie */
   }
+ 
+  if(order > UCOL_NOT_FOUND) { /* do special processing */
+    *(ctx->CEpos) = order;
+    order = ucol_getIncrementalSpecialCE(coll, ctx, status);
+  } else if(order == UCOL_NOT_FOUND) { /* do the UCA processing */
+    order = ucol_getIncrementalUCA(ch, ctx, status);
+  }
+  return(order);
+}
+
+/* This function tries to get a CE from UCA, which should be always around  */
+/* UChar is passed in in order to speed things up                           */
+/* here is also the generation of implicit CEs                              */
+uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status) {
+    uint32_t order;
+    if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
+      order = UCA->latinOneMapping[ch];
+    } else {
+      order = ucmp32_get(UCA->mapping, ch);
+    }
+    if(order >= UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
+      order = ucol_getIncrementalSpecialCE(UCA, collationSource, status); 
+    } 
+    if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
+      /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
+      /* and make a bigger CE */
+#if 0
+      UChar nextChar;
+      if(UTF_IS_FIRST_SURROGATE(ch) && (collationSource->pos<collationSource->len) &&
+          UTF_IS_SECOND_SURROGATE((nextChar=*(collationSource->pos+1)))) {
+        uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
+        collationSource->pos++;
+        /* This is a code point minus 0x10000, that's what algorithm requires */
+        order = 0xE0800303 | (cp & 0xF0000) << 8 | (cp & 0xFE00) << 7;
+        *(collationSource->CEpos++) = 0xF0040000 | (cp & 0x1FF) << 19;
+      } else {
+#endif
+        /* otherwise */
+        /* Make up an artifical CE from code point as per UCA */
+        order = 0xD08004F1;
+        /*order = 0xD01004F1;*/
+        order |= ((uint32_t)ch & 0xF000)<<12;
+        order |= ((uint32_t)ch & 0x0FFF)<<11;
+//      }
+    }
+    return order; /* return the CE */
+}
+
+
+int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status) {
+  return 0;
+
+#if 0  
+  int32_t i = 0; /* general counter */
+  uint32_t CE = *source->CEpos;
+  while (TRUE) {
+    const uint32_t *CEOffset = NULL;
+    const UChar *UCharOffset = NULL;
+    UChar schar, tchar;
+    uint32_t size = 0;
+    switch(getCETag(CE)) {
+    case NOT_FOUND_TAG:
+      /* This one is not found, and we'll let somebody else bother about it... no more games */
+      return CE;
+      break;
+    case SURROGATE_TAG:
+      /* pending surrogate discussion with Markus and Mark */
+      return UCOL_NOT_FOUND;
+      break;
+    case THAI_TAG:
+      /* Thai/Lao reordering */
+      if(source->isThai == TRUE) { /* if we encountered Thai prevowel & the string is not yet touched */
+        source->isThai = FALSE;    /* We will touch the string */
+        if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
+            /* Problematic part - if the stack buffer is too small, we need to allocate */
+            /* However, somebody needs to keep track of that allocated space */
+            /* And context structure is not good for that */
+	        /* allocate a new buffer - This is unfortunate and should be way smarter */
+            /*source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));*/
+        } 
+        UChar *sourceCopy = source->pos;
+        UChar *targetCopy = source->writableBuffer;
+        while(sourceCopy < source->len) {
+	        if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) &&      /* This is the combination that needs to be swapped */
+		        UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
+		        *(targetCopy) = *(sourceCopy+1);
+		        *(targetCopy+1) = *(sourceCopy);
+		        targetCopy+=2;
+		        sourceCopy+=2;
+	        } else {
+		        *(targetCopy++) = *(sourceCopy++);
+	        }
+        }
+        source->pos = source->writableBuffer;
+        source->len = targetCopy;
+        source->CEpos = source->toReturn = source->CEs;
+        CE = UCOL_IGNORABLE;
+      } else { /* we have already played with the string, so treat Thai as a length one expansion */
+        CEOffset = coll->expansion+getExpansionOffset(CE); /* find the offset to expansion table */
+        CE = *CEOffset++;
+      }
+      break;
+    case CONTRACTION_TAG:
+      /* This should handle contractions */
+      for(;;) {
+        /* First we position ourselves at the begining of contraction sequence */
+        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+
+        /* we need to convey the notion of having a backward search - most probably through the context object */
+        /* if (backwardsSearch) offset += contractionUChars[(int16_t)offset]; else UCharOffset++;  */
+        UCharOffset++; /* skip the backward offset, see above */
+        if (source->pos>=source->len) { /* this is the end of string */
+          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
+          source->pos--; /* I think, since we'll advance in the getCE */         
+          break;
+        }
+        schar = *(++source->pos);
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          UCharOffset++;
+        }
+        if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
+          if(tchar != 0xFFFF) {
+            UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
+          }
+          source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
+        } 
+        CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+        if(!isContraction(CE)) {
+          /* Maybe not */
+          /*source->pos--;*/ /* I think, since we'll advance in the getCE */
+          break;  
+        }
+      }
+      break;
+    case EXPANSION_TAG:
+      /* This should handle expansion. */
+      /* NOTE: we can encounter both continuations and expansions in an expansion! */
+      /* I have to decide where continuations are going to be dealt with */
+      CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
+      size = getExpansionCount(CE);
+      CE = *CEOffset++;
+      if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+        for(i = 1; i<size; i++) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      } else { /* else, we do */
+        while(*CEOffset != 0) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      }
+      /*source->toReturn++;*/
+      return CE;
+      break;
+    case CHARSET_TAG:
+      /* probably after 1.8 */
+      return UCOL_NOT_FOUND;
+      break;
+    default:
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      CE=0;
+      break;
+    }
+    if (CE <= UCOL_NOT_FOUND) break;
+  }
+  return CE;
+#endif
+
+#if 0
   if (order == UCOL_UNMAPPED) {
-      // Returned an "unmapped" flag and save the character so it can be 
-        // returned next time this method is called.
-        if (ctx->currentChar == 0x0000) return ctx->currentChar; // \u0000 is not valid in C++'s UnicodeString
-    	//*(ctx->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
+      /*  Returned an "unmapped" flag and save the character so it can be  */
+        /*  returned next time this method is called. */
+        if (ctx->currentChar == 0x0000) return ctx->currentChar; /*  \u0000 is not valid in C++'s UnicodeString */
+    	/* *(ctx->CEpos++) = UCOL_UNMAPPEDCHARVALUE; */
         order = UCOL_UNMAPPEDCHARVALUE;
 	    *(ctx->CEpos++) = ctx->currentChar<<16;
     } else {
-        // Contraction sequence start...
+        /*  Contraction sequence start... */
         if (order >= UCOL_CONTRACTCHARINDEX) {
 			UChar key[1024];
 			uint32_t posKey = 0;
 
             VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(order-UCOL_CONTRACTCHARINDEX);
-            // The upper line obtained a list of contracting sequences.
+            /*  The upper line obtained a list of contracting sequences. */
             if (list != NULL) {
-				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
-				order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
+				EntryPair *pair = (EntryPair *)list->at(0); /*  Taking out the first one. */
+				order = pair->value; /*  This got us mapping for just the first element - the one that signalled a contraction. */
 
 				key[posKey++] = ctx->currentChar;
-				// This tries to find the longes common match for the data in contraction table...
-				// and needs to be rewritten, especially the test down there!
+				/*  This tries to find the longes common match for the data in contraction table... */
+				/*  and needs to be rewritten, especially the test down there! */
 				int32_t i;
                 int32_t listSize = list->size();
 				UBool foundSmaller = TRUE;
                 UBool endOfString = FALSE;
-                //*(ctx->len++) = ctx->lastChar;
+                /* *(ctx->len++) = ctx->lastChar; */
                 incctx_appendChar(ctx, ctx->lastChar);
 				while(!endOfString && foundSmaller) {
                     endOfString = ((ctx->lastChar = ctx->source(ctx->sourceContext)) == 0xFFFF);
@@ -2253,7 +2746,7 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 						pair = list->at(i);
 						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
 							order = pair->value;
-                            //*(ctx->len++) = ctx->lastChar;
+                            /* *(ctx->len++) = ctx->lastChar; */
                             incctx_appendChar(ctx, ctx->lastChar);
 							foundSmaller = TRUE;
 						}
@@ -2263,21 +2756,21 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 				}
 			}
     }
-	// Expansion sequence start...
+	/*  Expansion sequence start... */
         if (order >= UCOL_EXPANDCHARINDEX) {
             VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(order-UCOL_EXPANDCHARINDEX);
             if(v != NULL) {
                 int32_t expandindex=0;
                 int32_t vSize = v->size();
-                order = v->at(expandindex++); // first character....
+                order = v->at(expandindex++); /*  first character.... */
                 while(expandindex < vSize) {
                     *(ctx->CEpos++) = v->at(expandindex++);
                 }
             }
         }
 
-     // Thai/Lao reordering
-        // This is gonna be way too goofy - so we're gonna bail out and let others do the work...
+     /*  Thai/Lao reordering */
+        /*  This is gonna be way too goofy - so we're gonna bail out and let others do the work... */
         if (UCOL_ISTHAIPREVOWEL(ctx->currentChar)) {
                 ctx->panic = TRUE;
                 return UCOL_NULLORDER;
@@ -2285,7 +2778,6 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
     }
     return order;
 #endif
-    return 0;
 }
 
 void incctx_cleanUpContext(incrementalContext *ctx) {
@@ -2332,153 +2824,34 @@ UCollationResult alternateIncrementalProcessing(const UCollator *coll, increment
     return result;
 }
 
-
-U_CAPI void 
-ucol_getVersion(const UCollator* coll, 
-                UVersionInfo versionInfo) 
-{
-    ((Collator*)coll)->getVersion(versionInfo);
-}
-
-U_CAPI UCollationStrength
-ucol_getStrength(const UCollator *coll)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
-}
-
-
-U_CAPI void
-ucol_setStrength(    UCollator                *coll,
-            UCollationStrength        strength)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
-}
-
-U_CAPI const UChar*
-ucol_getRules(    const    UCollator       *coll, 
-        int32_t            *length)
-{
-  *length = 0;
-  return NULL;
-/*
-  const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
-  *length = rules.length();
-  return rules.getUChars();
-*/
-}
-
-U_CAPI int32_t
-ucol_getDisplayName(    const    char        *objLoc,
-            const    char        *dispLoc,
-            UChar             *result,
-            int32_t         resultLength,
-            UErrorCode        *status)
-{
-  if(U_FAILURE(*status)) return -1;
-
-  UnicodeString dst(result, resultLength, resultLength);
-  Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
-  int32_t actLen;
-  T_fillOutputParams(&dst, result, resultLength, &actLen, status);
-  return actLen;
-}
-
-U_CAPI const char*
-ucol_getAvailable(int32_t index)
-{
-  return uloc_getAvailable(index);
-}
-
-U_CAPI int32_t
-ucol_countAvailable()
-{
-  return uloc_countAvailable();
-}
-
-U_CAPI UNormalizationMode
-ucol_getNormalization(const UCollator* coll)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, &status) == UCOL_ON) {
-    return UCOL_DECOMP_CAN;
-  } else {
-    return UCOL_NO_NORMALIZATION;
-  }
-}
-
 #if 0
 /* This is the old implementation, which should be removed... */
-
 inline void *ucol_getABuffer(const UCollatorOld *coll, uint32_t size) {
     return ((RuleBasedCollator *)coll)->getSomeMemory(size);
 }
 
-UCollationResult ucol_compareUsingSortKeys(const    UCollatorOld    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength)
-{
-    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
-    uint8_t *sourceKeyP = sourceKey;
-    uint8_t *targetKeyP = targetKey;
-    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
-
-    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    if(sourceKeyLen > UCOL_MAX_BUFFER) {
-        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
-        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    }
-
-    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    if(targetKeyLen > UCOL_MAX_BUFFER) {
-        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
-        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    }
-
-    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
-
-    if(sourceKeyP != sourceKey) {
-        uprv_free(sourceKeyP);
-    }
-
-    if(targetKeyP != targetKey) {
-        uprv_free(targetKeyP);
-    }
-
-    if(result<0) {
-        return UCOL_LESS;
-    } else if(result>0) {
-        return UCOL_GREATER;
-    } else {
-        return UCOL_EQUAL;
-    }
-}
-
 int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCode *status) {
   if (*(source->CEpos) == UCOL_UNMAPPED) {
-      // Returned an "unmapped" flag and save the character so it can be 
-        // returned next time this method is called.
-        if (*(source->pos) == 0x0000) return *(source->pos++); // \u0000 is not valid in C++'s UnicodeString
+      /*  Returned an "unmapped" flag and save the character so it can be  */
+        /*  returned next time this method is called. */
+        if (*(source->pos) == 0x0000) return *(source->pos++); /*  \u0000 is not valid in C++'s UnicodeString */
     	*(source->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
 	    *(source->CEpos++) = *(source->pos)<<16;
     } else {
-        // Contraction sequence start...
+        /*  Contraction sequence start... */
         if (*(source->CEpos) >= UCOL_CONTRACTCHARINDEX) {
 			UChar key[1024];
 			uint32_t posKey = 0;
 
             VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(*(source->CEpos)-UCOL_CONTRACTCHARINDEX);
-            // The upper line obtained a list of contracting sequences.
+            /*  The upper line obtained a list of contracting sequences. */
             if (list != NULL) {
-				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
-				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
+				EntryPair *pair = (EntryPair *)list->at(0); /*  Taking out the first one. */
+				int32_t order = pair->value; /*  This got us mapping for just the first element - the one that signalled a contraction. */
 
 				key[posKey++] = *(source->pos++);
-				// This tries to find the longes common match for the data in contraction table...
-				// and needs to be rewritten, especially the test down there!
+				/*  This tries to find the longes common match for the data in contraction table... */
+				/*  and needs to be rewritten, especially the test down there! */
 				int32_t i;
                 int32_t listSize = list->size();
 				UBool foundSmaller = TRUE;
@@ -2503,7 +2876,7 @@ int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCo
 				*(source->CEpos) = order;
 			}
     }
-	// Expansion sequence start...
+	/*  Expansion sequence start... */
         if (*(source->CEpos) >= UCOL_EXPANDCHARINDEX) {
             VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(*(source->CEpos)-UCOL_EXPANDCHARINDEX);
             if(v != NULL) {
@@ -2515,13 +2888,13 @@ int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCo
             }
         }
 
-     // Thai/Lao reordering
+     /*  Thai/Lao reordering */
         if (UCOL_ISTHAIPREVOWEL(*(source->pos)) && 
 			UCOL_ISTHAIBASECONSONANT(*(source->pos+1))) {
 			if(source->isThai == TRUE) {
 				source->isThai = FALSE;
 				if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
-					// allocate a new buffer
+					/*  allocate a new buffer */
                     source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));
 				} 
 				UChar *sourceCopy = source->pos;
@@ -2548,11 +2921,5 @@ int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCo
     return (*(source->toReturn++));
 }
 
-U_CAPI UCollatorOld *ucol_safeClone(const UCollatorOld *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
-	return (UCollatorOld *)(((RuleBasedCollator *)coll)->safeClone());
-}
-
-U_CAPI int32_t ucol_getRulesEx(const UCollatorOld *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
-	return 0;
-}
 #endif
+
