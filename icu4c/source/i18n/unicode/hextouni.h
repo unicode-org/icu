@@ -24,8 +24,8 @@ U_NAMESPACE_BEGIN
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.12 $ $Date: 2001/11/14 00:16:29 $
- * @stable
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.13 $ $Date: 2001/11/16 23:50:17 $
+ * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -69,13 +69,14 @@ public:
      * Constructs a transliterator that recognizes the standard
      * prefixes "&#92;u", "&#92;U", "u+", and "U+", each with no
      * suffix.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
      */
     HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Constructs a custom transliterator with the given pattern.
      * @see #applyPattern
+     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UErrorCode& status);
@@ -84,6 +85,7 @@ public:
      * Constructs a custom transliterator with the given pattern
      * and filter.
      * @see #applyPattern
+     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UnicodeFilter* adoptedFilter,
@@ -91,25 +93,25 @@ public:
 
     /**
      * Destructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30, use Transliterator dtor directly.
      */
     virtual ~HexToUnicodeTransliterator();
 
     /**
      * Copy constructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method
      */
     HexToUnicodeTransliterator(const HexToUnicodeTransliterator&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     HexToUnicodeTransliterator& operator=(const HexToUnicodeTransliterator&);
 
     /**
      * Transliterator API.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     Transliterator* clone(void) const;
 
@@ -138,17 +140,19 @@ public:
      * suffix-char := [^special-char] | '\\' special-char
      * special-char := ';' | '0' | '#' | '\\'
      * </pre>
+     * @deprecated To be removed after 2002-sep-30.
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
+     * @deprecated To be removed after 2002-sep-30.
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
