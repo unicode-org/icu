@@ -89,13 +89,9 @@ struct collIterate {
 struct UCollationElements
 {
   /**
-  * Locale specific collator for generating the collation elements
-  */
-  const UCollator          *collator_;
-  /**
   * Normalization mode, not exactly the same as the data in collator_.
-  * If collation strength requested is UCOL_IDENTICAL, this modes will be 
-  * UNORM_NONE other it follows collator_.
+  * If collation strength requested is UCOL_IDENTICAL, this mode will be 
+  * UNORM_NONE otherwise it follows collator_.
   */
         UNormalizationMode normalization_;
   /**
