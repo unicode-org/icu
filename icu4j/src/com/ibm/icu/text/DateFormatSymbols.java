@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2002/12/18 21:20:52 $
- * $Revision: 1.15 $
+ * $Date: 2003/03/07 01:05:48 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -75,6 +75,11 @@ import java.util.Vector;
  * @stable ICU 2.0
  */
 public class DateFormatSymbols implements Serializable, Cloneable {
+
+    // TODO make sure local pattern char string is 18 characters long,
+    // that is, that it encompasses the new 'u' char for
+    // EXTENDED_YEAR.  Two options: 1. Make sure resource data is
+    // correct; 2. Make code add in 'u' at end if len == 17.
 
     /**
      * Construct a DateFormatSymbols object by loading format data from
@@ -185,7 +190,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Unlocalized date-time pattern characters. For example: 'y', 'd', etc.
      * All locales use the same these unlocalized pattern characters.
      */
-    static final String  patternChars = "GyMdkHmsSEDFwWahKz";
+    static final String  patternChars = "GyMdkHmsSEDFwWahKzu";
 
     /**
      * Localized date-time pattern characters. For example, a locale may
