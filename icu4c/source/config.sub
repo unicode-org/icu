@@ -244,7 +244,7 @@ case $basic_machine in
 	| pdp10 | pdp11 | pj | pjl \
 	| powerpc | powerpc64 | powerpc64le | powerpcle | ppcbe \
 	| pyramid \
-	| s390 | s390x \
+	| s390 | s390x | as400 \
 	| sh | sh[34] | sh[34]eb | shbe | shle \
 	| sparc | sparc64 | sparclet | sparclite | sparcv9 | sparcv9b \
 	| stormy16 | strongarm \
@@ -302,7 +302,7 @@ case $basic_machine in
 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
 	| pyramid-* \
 	| romp-* | rs6000-* \
-	| s390-* | s390x-* \
+	| s390-* | s390x-* | os400-* \
 	| sh-* | sh[34]-* | sh[34]eb-* | shbe-* | shle-* \
 	| sparc-* | sparc64-* | sparc86x-* | sparclite-* \
 	| sparcv9-* | sparcv9b-* | stormy16-* | strongarm-* | sv1-* \
@@ -936,6 +936,10 @@ case $basic_machine in
 		basic_machine=z8k-unknown
 		os=-sim
 		;;
+	as400)
+		basic_machine=as400
+		os=-os400
+		;;
 	none)
 		basic_machine=none-none
 		os=-none
@@ -1002,6 +1006,10 @@ case $basic_machine in
 	c4x*)
 		basic_machine=c4x-none
 		os=-coff
+		;;
+	as400*)
+		basic_machine=as400
+		os=-os400
 		;;
 	*-unknown)
 		# Make sure to match an already-canonicalized machine name.
@@ -1110,6 +1118,9 @@ case $os in
 		;;
 	-osf*)
 		os=-osf
+		;;
+	-os400*)
+		os=-os400
 		;;
 	-utek*)
 		os=-bsd
