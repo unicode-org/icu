@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -359,14 +359,14 @@ getDirProps(UBiDi *pBiDi) {
         if((dirProp==B)&&(i<length)) {  /* B not last char in text */
             if(!((uchar==CR) && (text[i]==LF))) {
                 pBiDi->paraCount++;
-            }
-            if(isDefaultLevel) {
-                state=LOOKING_FOR_STRONG;
-                paraStart=i;            /* i is index to next character */
-                paraDir=paraDirDefault;
-                /* keep the paraLevel of the first paragraph even if it
-                   defaulted (no strong char was found)                 */
-                paraLevelStillDefault=FALSE;
+                if(isDefaultLevel) {
+                    state=LOOKING_FOR_STRONG;
+                    paraStart=i;        /* i is index to next character */
+                    paraDir=paraDirDefault;
+                    /* keep the paraLevel of the first paragraph even if it
+                       defaulted (no strong char was found)                 */
+                    paraLevelStillDefault=FALSE;
+                }
             }
         }
     }
@@ -374,7 +374,7 @@ getDirProps(UBiDi *pBiDi) {
        needed for absolute paraLevel.                               */
     flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
 
-    if(pBiDi->isOrderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
+    if(pBiDi->orderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
         flags|=DIRPROP_FLAG(L);
     }
 
@@ -490,7 +490,6 @@ resolveExplicitLevels(UBiDi *pBiDi) {
         /* recalculate the flags */
         flags=0;
 
-        /* since we assume that this is a single paragraph, we ignore (X8) */
         for(i=0; i<length; ++i) {
             dirProp=NO_CONTEXT_RTL(dirProps[i]);
             switch(dirProp) {
@@ -594,7 +593,7 @@ resolveExplicitLevels(UBiDi *pBiDi) {
         if(flags&MASK_EMBEDDING) {
             flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
         }
-        if(pBiDi->isOrderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
+        if(pBiDi->orderParagraphsLTR && (flags&DIRPROP_FLAG(B))) {
             flags|=DIRPROP_FLAG(L);
         }
 
@@ -1054,14 +1053,14 @@ adjustWSLevels(UBiDi *pBiDi) {
     int32_t i;
 
     if(pBiDi->flags&MASK_WS) {
-        UBool isOrderParagraphsLTR=pBiDi->isOrderParagraphsLTR;
+        UBool orderParagraphsLTR=pBiDi->orderParagraphsLTR;
         Flags flag;
 
         i=pBiDi->trailingWSStart;
         while(i>0) {
             /* reset a sequence of WS/BN before eop and B/S to the paragraph paraLevel */
             while(i>0 && (flag=DIRPROP_FLAG_NC(dirProps[--i]))&MASK_WS) {
-                if(isOrderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
+                if(orderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
                     levels[i]=0;
                 } else {
                     levels[i]=GET_PARALEVEL(pBiDi, i);
@@ -1074,7 +1073,7 @@ adjustWSLevels(UBiDi *pBiDi) {
                 flag=DIRPROP_FLAG_NC(dirProps[--i]);
                 if(flag&MASK_BN_EXPLICIT) {
                     levels[i]=levels[i+1];
-                } else if(isOrderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
+                } else if(orderParagraphsLTR&&(flag&DIRPROP_FLAG(B))) {
                     levels[i]=0;
                     break;
                 } else if(flag&MASK_B_S) {
@@ -1312,16 +1311,16 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 }
 
 U_CAPI void U_EXPORT2
-ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool isOrderParagraphsLTR) {
+ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool orderParagraphsLTR) {
     if(pBiDi!=NULL) {
-        pBiDi->isOrderParagraphsLTR=isOrderParagraphsLTR;
+        pBiDi->orderParagraphsLTR=orderParagraphsLTR;
     }
 }
 
 U_CAPI UBool U_EXPORT2
 ubidi_isOrderParagraphsLTR(UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
-        return pBiDi->isOrderParagraphsLTR;
+        return pBiDi->orderParagraphsLTR;
     } else {
         return FALSE;
     }

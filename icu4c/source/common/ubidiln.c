@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -103,7 +103,7 @@ setTrailingWSStart(UBiDi *pBiDi) {
        are already set to paragraph level.
        Setting trailingWSStart to pBidi->length will avoid changing the
        level of B chars from 0 to paraLevel in ubidi_getLevels when
-       isOrderParagraphsLTR==TRUE.
+       orderParagraphsLTR==TRUE.
      */
     if(NO_CONTEXT_RTL(dirProps[start-1])==B) {
         pBiDi->trailingWSStart=start;   /* currently == pBiDi->length */

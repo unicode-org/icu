@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -739,15 +739,18 @@ static void TestMultipleParagraphs(void) {
                                                   0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0,
                                                   22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
                                                   23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23};
+    static const char* const text2 = "\\u05d0 1-2\\u001c\\u0630 1-2\\u001c1-2";
+    static const UBiDiLevel levels2[] = {1,1,2,2,2,0, 1,1,2,1,2,0, 2,2,2};
     UBiDiLevel gotLevel;
     const UBiDiLevel* gotLevels;
-    UBool isOrderParagraphsLTR;
+    UBool orderParagraphsLTR;
     UChar src[MAXLEN];
     UErrorCode errorCode=U_ZERO_ERROR;
     UBiDi* pBidi=ubidi_open();
     UBiDi* pLine;
     int32_t srcSize, count, paraStart, paraLimit, paraIndex, length;
-    int i, k;
+    int i, j, k;
+
     u_unescape(text, src, MAXLEN);
     srcSize=u_strlen(src);
     ubidi_setPara(pBidi, src, srcSize, UBIDI_LTR, NULL, &errorCode);
@@ -840,7 +843,7 @@ static void TestMultipleParagraphs(void) {
                 i, k, u_errorName(errorCode));
         errorCode=U_ZERO_ERROR;
     }
-    /* check level of block separator at end of paragraph when isOrderParagraphsLTR==FALSE */
+    /* check level of block separator at end of paragraph when orderParagraphsLTR==FALSE */
     ubidi_setPara(pBidi, src, srcSize, UBIDI_RTL, NULL, &errorCode);
     /* get levels through para Bidi block */
     gotLevels=ubidi_getLevels(pBidi, &errorCode);
@@ -881,16 +884,16 @@ static void TestMultipleParagraphs(void) {
                 "level of separator=%d expected=%d\n",
                 paraIndex, paraStart, paraLimit, gotLevel, UBIDI_RTL, gotLevels[length-1], UBIDI_RTL);
     }
-    isOrderParagraphsLTR=ubidi_isOrderParagraphsLTR(pBidi);
-    if (isOrderParagraphsLTR) {
-        log_err("Found isOrderParagraphsLTR=%d expected=%d\n", isOrderParagraphsLTR, FALSE);
+    orderParagraphsLTR=ubidi_isOrderParagraphsLTR(pBidi);
+    if (orderParagraphsLTR) {
+        log_err("Found orderParagraphsLTR=%d expected=%d\n", orderParagraphsLTR, FALSE);
     }
     ubidi_orderParagraphsLTR(pBidi, TRUE);
-    isOrderParagraphsLTR=ubidi_isOrderParagraphsLTR(pBidi);
-    if (!isOrderParagraphsLTR) {
-        log_err("Found isOrderParagraphsLTR=%d expected=%d\n", isOrderParagraphsLTR, TRUE);
+    orderParagraphsLTR=ubidi_isOrderParagraphsLTR(pBidi);
+    if (!orderParagraphsLTR) {
+        log_err("Found orderParagraphsLTR=%d expected=%d\n", orderParagraphsLTR, TRUE);
     }
-    /* check level of block separator at end of paragraph when isOrderParagraphsLTR==TRUE */
+    /* check level of block separator at end of paragraph when orderParagraphsLTR==TRUE */
     ubidi_setPara(pBidi, src, srcSize, UBIDI_RTL, NULL, &errorCode);
     /* get levels through para Bidi block */
     gotLevels=ubidi_getLevels(pBidi, &errorCode);
@@ -918,6 +921,71 @@ static void TestMultipleParagraphs(void) {
         }
         log_verbose("\n");
     }
+
+    /* test that the concatenation of separate invocations of the bidi code
+     * on each individual paragraph in order matches the levels array that
+     * results from invoking bidi once over the entire multiparagraph tests
+     * (with orderParagraphsLTR false, of course)
+     */
+    u_unescape(text, src, MAXLEN);      /* restore original content */
+    srcSize=u_strlen(src);
+    ubidi_orderParagraphsLTR(pBidi, FALSE);
+    ubidi_setPara(pBidi, src, srcSize, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+    gotLevels=ubidi_getLevels(pBidi, &errorCode);
+    for (i=0; i<paraCount; i++) {
+        /* use pLine for individual paragraphs */
+        paraStart = paraBounds[i];
+        length = paraBounds[i+1] - paraStart;
+        ubidi_setPara(pLine, src+paraStart, length, UBIDI_DEFAULT_RTL, NULL, &errorCode);
+        for (j=0; j<length; j++) {
+            if ((k=ubidi_getLevelAt(pLine, j)) != (gotLevel=gotLevels[paraStart+j])) {
+                log_err("Checking paragraph concatenation: for paragraph=%d, "
+                        "char=%d(%04x), level=%d, expected=%d\n",
+                        i, j, src[paraStart+j], k, gotLevel);
+            }
+        }
+    }
+
+    /* ensure that leading numerics in a paragraph are not treated as arabic
+       numerals because of arabic text in a preceding paragraph
+     */
+    u_unescape(text2, src, MAXLEN);
+    srcSize=u_strlen(src);
+    ubidi_orderParagraphsLTR(pBidi, TRUE);
+    ubidi_setPara(pBidi, src, srcSize, UBIDI_RTL, NULL, &errorCode);
+    gotLevels=ubidi_getLevels(pBidi, &errorCode);
+    for (i=0; i<srcSize; i++) {
+        if (gotLevels[i]!=levels2[i]) {
+            log_err("Checking leading numerics: for char %d(%04x), level=%d, expected=%d\n",
+                    i, src[i], gotLevels[i], levels2[i]);
+        }
+    }
+
+    /* check handling of whitespace before end of paragraph separator when
+     * orderParagraphsLTR==TRUE, when last paragraph has, and lacks, a terminating B
+     */
+    memset(src, ' ', MAXLEN);
+    srcSize = 5;
+    ubidi_orderParagraphsLTR(pBidi, TRUE);
+    for (i=0x001c; i<=0x0020; i+=(0x0020-0x001c)) {
+        src[4]=i;                       /* with and without terminating B */
+        for (j=0x0041; j<=0x05d0; j+=(0x05d0-0x0041)) {
+            src[0]=j;                   /* leading 'A' or Alef */
+            for (gotLevel=4; gotLevel<=5; gotLevel++) {
+                /* test even and odd paraLevel */
+                ubidi_setPara(pBidi, src, srcSize, gotLevel, NULL, &errorCode);
+                gotLevels=ubidi_getLevels(pBidi, &errorCode);
+                for (k=1; k<=3; k++) {
+                    if (gotLevels[k]!=gotLevel) {
+                        log_err("Checking trailing spaces: for leading_char=%04x, "
+                                "last_char=%04x, index=%d, level=%d, expected=%d\n",
+                                src[0], src[4], k, gotLevels[k], gotLevel);
+                    }
+                }
+            }
+        }
+    }
+
     ubidi_close(pLine);
     ubidi_close(pBidi);
 }
