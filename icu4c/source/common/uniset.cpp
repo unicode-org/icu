@@ -266,7 +266,7 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
 
 /**
  * Returns the number of elements in this set (its cardinality),
- * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 65536</code>.
+ * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 0x110000/code>.
  *
  * @return the number of elements in this set (its cardinality).
  */
