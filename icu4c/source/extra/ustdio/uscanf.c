@@ -175,10 +175,6 @@ u_scanf_scanset_handler(UFILE             *stream,
             const UChar        *fmt,
             int32_t            *consumed);
 
-int32_t
-u_scanf_skip_leading_ws(UFILE     *stream,
-            UChar     pad);
-
 /* ANSI style formatting */
 /* Use US-ASCII characters only for formatting */
 
@@ -337,7 +333,7 @@ u_vfscanf(    UFILE        *f,
   return converted;
 }
 
-int32_t
+static int32_t
 u_scanf_skip_leading_ws(UFILE     *stream,
             UChar     pad)
 {
