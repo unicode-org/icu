@@ -413,7 +413,7 @@ const TestNode* getTest(const TestNode* root, const char* name)
     }
 }
 
-void vlog_err(const char *prefix, const char *pattern, va_list ap)
+static void vlog_err(const char *prefix, const char *pattern, va_list ap)
 {
     if( ERR_MSG == FALSE){
         return;
@@ -427,7 +427,7 @@ void vlog_err(const char *prefix, const char *pattern, va_list ap)
     va_end(ap);
 }
 
-void vlog_info(const char *prefix, const char *pattern, va_list ap)
+static void vlog_info(const char *prefix, const char *pattern, va_list ap)
 {
     fprintf(stdout, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
@@ -438,7 +438,7 @@ void vlog_info(const char *prefix, const char *pattern, va_list ap)
     va_end(ap);
 }
 
-void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
+static void vlog_verbose(const char *prefix, const char *pattern, va_list ap)
 {
     if ( VERBOSITY == FALSE )
         return;
