@@ -205,7 +205,7 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
                 UNormalizationMode mode, int32_t options,
                 UChar *result, int32_t resultLength,
                 UErrorCode *status);
-
+#endif
 /**
  * Result values for unorm_quickCheck().
  * For details see Unicode Technical Report 15.
@@ -226,7 +226,7 @@ typedef enum UNormalizationCheckResult {
    */
   UNORM_MAYBE
 } UNormalizationCheckResult;
-
+#if !UCONFIG_NO_NORMALIZATION
 /**
  * Performing quick check on a string, to quickly determine if the string is 
  * in a particular normalization format.
