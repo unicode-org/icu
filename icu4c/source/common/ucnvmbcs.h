@@ -70,6 +70,18 @@ enum {
 #define MBCS_ENTRY_FINAL_VALUE(entry) ((entry)&0xfffff)
 #define MBCS_ENTRY_FINAL_VALUE_16(entry) (uint16_t)(entry)
 
+/* single-byte fromUnicode: get the 16-bit result word */
+#define MBCS_SINGLE_RESULT_FROM_U(table, results, c) (results)[ (table)[ (table)[(c)>>10] +(((c)>>4)&0x3f) ] +((c)&0xf) ]
+
+/* multi-byte fromUnicode: get the 32-bit stage 2 entry */
+#define MBCS_STAGE_2_FROM_U(table, c) ((uint32_t *)(table))[ (table)[(c)>>10] +(((c)>>4)&0x3f) ]
+
+#define MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c) ((uint16_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
+#define MBCS_VALUE_4_FROM_STAGE_2(bytes, stage2Entry, c) ((uint32_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
+
+#define MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c) ((bytes)+(16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf))*3)
+
+
 /**
  * MBCS output types for conversions from Unicode.
  * These per-converter types determine the storage method in stage 3 of the lookup table,
