@@ -4,11 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/test/intltest/canittst.h,v $ 
- * $Date: 2002/03/29 19:56:29 $ 
- * $Revision: 1.2 $
- *
- *****************************************************************************************
  * @author Mark E. Davis
  * @author Vladimir Weinstein
  */
