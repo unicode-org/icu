@@ -1234,8 +1234,8 @@ static TestUTF8() {
 
     /* test error behavior with a skip callback */
     ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
-    source=in2;
-    limit=in2+sizeof(in2);
+    source=(const char *)in2;
+    limit=(const char *)(in2+sizeof(in2));
     TestNextUChar(cnv, source, limit, results2, "UTF-8");
 
     ucnv_close(cnv);
@@ -1384,8 +1384,8 @@ TestUTF32BE() {
 
     /* test error behavior with a skip callback */
     ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
-    source=in2;
-    limit=in2+sizeof(in2);
+    source=(const char *)in2;
+    limit=(const char *)(in2+sizeof(in2));
     TestNextUChar(cnv, source, limit, results2, "UTF-32BE");
 
     ucnv_close(cnv);
@@ -1443,8 +1443,8 @@ TestUTF32LE() {
 
     /* test error behavior with a skip callback */
     ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_SKIP, NULL, &cb, &p, &errorCode);
-    source=in2;
-    limit=in2+sizeof(in2);
+    source=(const char *)in2;
+    limit=(const char *)(in2+sizeof(in2));
     TestNextUChar(cnv, source, limit, results2, "UTF-32LE");
 
     ucnv_close(cnv);
