@@ -2287,7 +2287,38 @@ static void TestDirectAccess(void) {
         log_err("Second resource does not exist. How did it get here?\n");
     }
     status = U_ZERO_ERROR;
-    
+
+    ures_close(t2);
+    t2 = ures_open(NULL, "he", &status);
+    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
+    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
+    t = ures_getByKeyWithFallback(t2, "DateTimePatterns", t, &status);
+    if(U_SUCCESS(status)) {
+        log_err("This resource does not exist. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
+
+    ures_close(t2);
+    t2 = ures_open(NULL, "he", &status);
+    /* George's fix */
+    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
+    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
+    t = ures_getByKeyWithFallback(t2, "eras", t, &status);
+    if(U_FAILURE(status)) {
+        log_err("Didn't get Eras. I know they are there!\n");
+    }
+    status = U_ZERO_ERROR;
+
+    ures_close(t2);
+    t2 = ures_open(NULL, "root", &status);
+    t = ures_getByKeyWithFallback(t2, "calendar", t, &status);
+    t2 = ures_getByKeyWithFallback(t, "islamic-civil", t2, &status);
+    t = ures_getByKeyWithFallback(t2, "DateTimePatterns", t, &status);
+    if(U_SUCCESS(status)) {
+        log_err("This resource does not exist. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
+
     ures_close(t);
     ures_close(t2);
 }
