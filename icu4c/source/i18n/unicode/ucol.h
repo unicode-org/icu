@@ -527,13 +527,29 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
 /**
  * Thread safe cloning operation
  * @param coll collator to be cloned
- * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated
- * @param bufferSize size of allocated space. If not enough new memory will be allocated.
+ * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+	If buffer is not lareg enough, new memory will be allocated.
+	Clients can use the U_COL_SAFECLONE_BUFFERSIZE. 
+	This will probably be enough to avoid memory allocations.
+ * @param pBufferSize pointer to size of allocated space. 
+	If *pBufferSize == 0, a sufficient size for use in cloning will 
+	be returned ('pre-flighting')
+	If *pBufferSize is not enough for a stack-based safe clone, 
+	new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
+    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
- * @draft API 1.7 freeze
+ * @draft API 1.8 freeze
  */
-U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status);
+
+
+U_CAPI UCollator * ucol_safeClone(
+          const UCollator     *coll,
+          void                *stackBuffer,
+          int32_t        *pBufferSize,
+          UErrorCode          *status);
+
+#define U_COL_SAFECLONE_BUFFERSIZE 256
 
 /* declaration for forward iterating function */
 typedef UChar UCharForwardIterator(void *context);
