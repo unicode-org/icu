@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/08/07 18:45:03 $ 
-* $Revision: 1.14 $
+* $Date: 2002/08/07 20:54:56 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -215,9 +215,24 @@ public final class RuleBasedCollator extends Collator
 		builder.setRules(this);
         m_rules_ = rules;
         init();
+        initUtilIterators();
     }
     
 	// public methods --------------------------------------------------------
+    
+    /**
+     * Clones the RuleBasedCollator
+     * @return a new instance of this RuleBasedCollator object
+     */
+    public Object clone() throws CloneNotSupportedException
+    {
+        RuleBasedCollator result = (RuleBasedCollator)super.clone();
+        // since all collation data in the RuleBasedCollator do not change
+        // we can safely assign the result.fields to this collator
+        result.initUtilIterators(); // let the new clone have their own util
+                                    // iterators
+        return result;
+    }
     
     /**
      * Return a CollationElementIterator for the given String.
@@ -1331,6 +1346,7 @@ public final class RuleBasedCollator extends Collator
     */
     RuleBasedCollator() 
     {
+        initUtilIterators();
     }
     
     // package private methods -----------------------------------------------
@@ -1489,8 +1505,8 @@ public final class RuleBasedCollator extends Collator
      */
     RuleBasedCollator(Locale locale) // throws Exception
     {
-	    ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-	 
+        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+	    initUtilIterators();
 	    if (rb != null) {
             try {
                 Object elements = rb.getObject("CollationElements");
@@ -1679,6 +1695,14 @@ public final class RuleBasedCollator extends Collator
 	 * CE buffer size
 	 */
 	private static final int CE_BUFFER_SIZE_ = 512;
+    
+    /**
+     * Bunch of utility iterators
+     */
+    private StringCharacterIterator m_srcUtilIter_;
+    private CollationElementIterator m_srcUtilColEIter_;   
+    private StringCharacterIterator m_tgtUtilIter_;
+    private CollationElementIterator m_tgtUtilColEIter_;
     
     // private methods -------------------------------------------------------
     
@@ -2531,18 +2555,12 @@ public final class RuleBasedCollator extends Collator
 									   	
 	{
 		// Preparing the context objects for iterating over strings
-	    StringCharacterIterator siter = new StringCharacterIterator(source, 
-	    													textoffset, 
-	    													source.length(), 
-	    													textoffset);
-	    CollationElementIterator scoleiter = new CollationElementIterator(
-	    														siter, this);
-	    StringCharacterIterator titer = new StringCharacterIterator(target, 
-	    												    textoffset, 
-	    													target.length(),
-	    													textoffset);
-	    CollationElementIterator tcoleiter = new CollationElementIterator(
-	    														titer, this);
+        m_srcUtilIter_.setText(source);
+        m_srcUtilColEIter_.setText(m_srcUtilIter_);
+        m_srcUtilColEIter_.setExactOffset(textoffset);
+        m_tgtUtilIter_.setText(target);
+        m_tgtUtilColEIter_.setText(m_tgtUtilIter_);
+        m_tgtUtilColEIter_.setExactOffset(textoffset);
 		
 		// Non shifted primary processing is quite simple
 	    if (!m_isAlternateHandlingShifted_) {
@@ -2551,14 +2569,14 @@ public final class RuleBasedCollator extends Collator
 	      		int sorder = 0;
 				// We fetch CEs until we hit a non ignorable primary or end.
 	        	do {
-	          		sorder = scoleiter.next();
+	          		sorder = m_srcUtilColEIter_.next();
 	          		append(cebuffer, cebuffersize, 0, sorder);
 	          		sorder &= CE_PRIMARY_MASK_;
 	        	} while (sorder == CollationElementIterator.IGNORABLE);
 	
 				int torder = 0;
 	        	do {
-	          		torder = tcoleiter.next();
+	          		torder = m_tgtUtilColEIter_.next();
 	          		append(cebuffer, cebuffersize, 1, torder);
 	          		torder &= CE_PRIMARY_MASK_;
 	        	} while (torder == CollationElementIterator.IGNORABLE);
@@ -2571,9 +2589,9 @@ public final class RuleBasedCollator extends Collator
 	              		break;
 	            	}
 	            	if (doHiragana4 && hiraganaresult == 0 
-	            		&& scoleiter.m_isCodePointHiragana_ !=
-	              						tcoleiter.m_isCodePointHiragana_) {
-	              		if (scoleiter.m_isCodePointHiragana_) {
+	            		&& m_srcUtilColEIter_.m_isCodePointHiragana_ !=
+	              						m_tgtUtilColEIter_.m_isCodePointHiragana_) {
+	              		if (m_srcUtilColEIter_.m_isCodePointHiragana_) {
 	                		hiraganaresult = -1;
 	              		}
 	              		else {
@@ -2592,9 +2610,11 @@ public final class RuleBasedCollator extends Collator
 	    } 
 	    else { // shifted - do a slightly more complicated processing :)
 	      	while (true) {
-	        	int sorder = getPrimaryShiftedCompareCE(scoleiter, lowestpvalue, 
+	        	int sorder = getPrimaryShiftedCompareCE(m_srcUtilColEIter_, 
+                                                    lowestpvalue, 
 	        										cebuffer, cebuffersize, 0);
-				int torder = getPrimaryShiftedCompareCE(tcoleiter, lowestpvalue, 
+				int torder = getPrimaryShiftedCompareCE(m_tgtUtilColEIter_, 
+                                                    lowestpvalue, 
 													cebuffer, cebuffersize, 1);
 	        	if (sorder == torder) {
 	            	if (cebuffer[0][cebuffersize[0] - 1] 
@@ -3255,5 +3275,15 @@ public final class RuleBasedCollator extends Collator
     	m_caseFirst_ = m_defaultCaseFirst_;
     	m_isHiragana4_ = m_defaultIsHiragana4_;
     	updateInternalState();
+    }
+    
+    /** 
+     *  Initializes utility iterators used by compare
+     */
+    private final void initUtilIterators() {
+       m_srcUtilIter_ = new StringCharacterIterator(new String(""));
+       m_srcUtilColEIter_ = new CollationElementIterator(m_srcUtilIter_, this);
+       m_tgtUtilIter_ = new StringCharacterIterator(new String(""));
+       m_tgtUtilColEIter_ = new CollationElementIterator(m_tgtUtilIter_, this);
     }
 }
