@@ -14,7 +14,8 @@
     <title>ReadMe for ICU</title>
 <style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
-      h2 {margin-top: 3em; text-decoration: underline}
+      h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
+      h2.TOC {page-break-before: auto}
       h3 {margin-top: 2em; text-decoration: underline}
       h4 {text-decoration: underline}
       h5 {text-decoration: underline}
@@ -33,7 +34,7 @@
     and others. All Rights Reserved.</p>
     <hr>
 
-    <h2>Table of Contents</h2>
+    <h2 class="TOC">Table of Contents</h2>
 
     <ul class="TOC">
       <li><a href="#Introduction">Introduction</a></li>
@@ -1128,7 +1129,8 @@ Data set name type  : PDS
              To change your QUTCOFFSET:<br>
 
             <div class="indent">
-              CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0700')
+              CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800') <i>or -0700 for
+              daylight savings.</i>
             </div>
             <br>
           </li>
