@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/05/23 19:06:28 $
- * $Revision: 1.20 $
+ * $Date: 2003/05/23 23:44:20 $
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -524,7 +524,9 @@ public abstract class BreakIterator implements Cloneable
     /**
      * Returns a new instance of BreakIterator that locates title boundaries.
      * This function assumes the text being analyzed is in the default locale's
-     * language.
+     * language. The iterator returned locates title boundaries as described for 
+     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+     * please use Word Boundary iterator.{@link getWordInstance}
      * @return A new instance of BreakIterator that locates title boundaries.
      * @stable ICU 2.0
      */
@@ -535,6 +537,9 @@ public abstract class BreakIterator implements Cloneable
 
     /**
      * Returns a new instance of BreakIterator that locates title boundaries.
+     * The iterator returned locates title boundaries as described for 
+     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+     * please use Word Boundary iterator.{@link getWordInstance}
      * @param where A Locale specifying the language of the text being analyzed.
      * @return A new instance of BreakIterator that locates title boundaries.
      * @stable ICU 2.0
