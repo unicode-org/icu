@@ -34,10 +34,22 @@ to 35.</font></font>
 
 <h2>
 How do I build scrptrun and srtest?</h2>
-To use ScriptRun in your application, copy scrptrun.h and scrptrun.cpp
-to your source directory, and use them just as if they were part of your
-application. ScriptRun is so small that it's not worth making it into a
-separate library.
+To use the ScriptRun class in a Windows application, just include scrptrun.h
+and scrptrun.cpp right out of the &lt;icu>\source\extra\scrptrun directory
+into your project. You'll also need to add the &lt;icu>\source]extra\scrptrun
+directory to the "Additional include directories" section of the "Preprocessor"
+category on the "C/C++" tab in the project settings.
+<p>On UNIX systems the simplest thing to do is to just copy scrptrun.h
+and scrptrun.cpp into your source directory. If you want to use them from
+&lt;icu>/source/extra/scrpturn, it's a bit trickier: the default dependency
+rules don't work on source files in a different directory. You need to
+add separate dependency rules for scrptrun.o and scrptrun.d. See &lt;icu>/source/samples/layout/Makefile.in
+for an example of how to do this. You'll also have to add -I$(top_srcdir)/extra/scrptrun
+to your compiler flags so that the compiler can find scrptrun.h. If your
+application has to build on multiple UNIX platforms, it might be difficult
+to wirte dependency rules that will work correctly on all platforms. In
+that case, you're probably better off copying the scrpturn files to your
+source directory.
 <p>Building srtest is easy, on Windows build the srtest workspace in &lt;icu>\source\extra\scrptrun.
 On UNIX, connect to &lt;top-build-dir>/extra/scrptrun and do "make all"
 <h2>
@@ -47,12 +59,8 @@ Notes</h2>
 <li>
 ScriptRun is based on <a href="http://www.unicode.org/unicode/reports/tr24/">Unicode
 Technical Report #24</a> but the implementation is not complete. In particular
-it doesn't handle paired punctuation correctly. A complete implemetation
+the support for paired punctuation is only a prototype. A complete implementation
 will be added to ICU in the future.</li>
-
-<li>
-Because ScriptRun is designed to be used with the LayoutEngine, it uses
-the LayoutEngine's coding conventions instead of ICU's coding conventions.</li>
 </ul>
 
 </body>
