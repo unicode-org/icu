@@ -89,21 +89,6 @@ enum {
     _NORM_OPTIONS_UNICODE_SHIFT=5
 };
 
-/* Korean Hangul and Jamo constants */
-enum {
-    JAMO_L_BASE=0x1100,     /* "lead" jamo */
-    JAMO_V_BASE=0x1161,     /* "vowel" jamo */
-    JAMO_T_BASE=0x11a7,     /* "trail" jamo */
-
-    HANGUL_BASE=0xac00,
-
-    JAMO_L_COUNT=19,
-    JAMO_V_COUNT=21,
-    JAMO_T_COUNT=28,
-
-    HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT
-};
-
 static inline UBool
 isHangulWithoutJamoT(UChar c) {
     c-=HANGUL_BASE;
