@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testaliases.java,v $
-* $Date: 2003/11/21 19:46:24 $
-* $Revision: 1.8 $
+* $Date: 2003/11/21 22:20:36 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -35,7 +35,7 @@ public class TestDataElements_testaliases extends ICUListResourceBundle {
 //                },
                 {
                     "anotheralias",
-                    new ICUListResourceBundle.Alias("/ICUDATA/uk/collations"),
+                    new ICUListResourceBundle.Alias("/ICUDATA/uk/collations/standard"),
                 },
 // Moved to TestNonExisting
 //                {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/11/21 19:46:25 $
- * $Revision: 1.11 $
+ * $Date: 2003/11/21 22:20:36 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -160,7 +160,7 @@ public final class ICUListResourceBundleTest extends TestFmwk
     }
     public void TestAliases(){
         ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testaliases");
-        //rb.getObject("collations");
+        //rb.getObject("CollationElements");
         String s1 = rb.getString("simplealias");
         if(s1.equals(simpleAlias)){
             logln("Alias mechanism works for simplealias");
@@ -168,19 +168,22 @@ public final class ICUListResourceBundleTest extends TestFmwk
             errln("Did not get the expected output for simplealias");
         }
         {
+            Object o = null;
             // test aliasing through another alias
             s1 = rb.getString("referencingalias");
             ResourceBundle uk = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","uk");
-            Object o = uk.getObject("collations");
-            if(o instanceof Object[][]){
-                Object[][] val = (Object[][]) o;
-                if(s1.equals(val[1][1])){
-                    logln("Alias mechanism works for referencingalias");
+            if(uk instanceof ICUListResourceBundle){
+                o = ((ICUListResourceBundle)uk).getObjectWithFallback("collations/standard");
+                if(o instanceof Object[][]){
+                    Object[][] val = (Object[][]) o;
+                    if(s1.equals(val[1][1])){
+                        logln("Alias mechanism works for referencingalias");
+                    }else{
+                        errln("Did not get the expected result for referencingalias");
+                    }
                 }else{
-                    errln("Did not get the expected result for referencingalias");
+                    errln("Did not get the expected result for collations resource of uk bundle");
                 }
-            }else{
-                errln("Did not get the expected result for collations resource of uk bundle");
             }
             Object anotheralias = rb.getObject("anotheralias");
             if(anotheralias instanceof Object[][]&& o instanceof Object[][]){
@@ -193,10 +196,11 @@ public final class ICUListResourceBundleTest extends TestFmwk
             }else{
                 errln("Alias mechanism failed for anotheralias in TestAlias");
             }
+            o = ((ICUListResourceBundle)uk).getObject("collations");
             Object o1 = rb.getObject("collations");
             if(o1 instanceof Object[][]&& o instanceof Object[][]){
                 if(arrayEquals((Object[][])o, (Object[][])o1)){
-                    logln("Alias mechanism works for collations");
+                    logln("Alias mechanism works for CollationElements");
                 }else{
                     errln("Did not get the expected output for collations");
                 }
@@ -264,13 +268,13 @@ public final class ICUListResourceBundleTest extends TestFmwk
         o = rb.getObject("collations");
         if(o instanceof Object[][]){
             Object[][] arr = (Object[][])o;
-            if(((String)arr[0][0])== "%%CollationBin"){
+            if(((String)arr[0][0])== "default"){
                 logln("Alias mechanism works");
             }else{
-                errln("Alias mechanism failed for fr_BE SpelloutRules");
+                errln("Alias mechanism failed for zh_TW collations");
             }
         }else{
-            errln("Did not get the expected object for CollationElements");
+            errln("Did not get the expected object for collations");
         }
         
     }
@@ -333,8 +337,28 @@ public final class ICUListResourceBundleTest extends TestFmwk
         }else{
             errln("Did not get the expected bundle.");
         } 
-
-               
+        
+        bundle1 = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","es_ES");
+        if(bundle instanceof ICUListResourceBundle){
+            ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle1;
+            String key = (String) ilrb.getObjectWithFallback("collations/default");
+            if(!key.equals("standard")){
+                errln("Did not get the expected result from getObjectWithFallback method.");
+            }
+            String nkey = "collations/" + key;
+            Object o = ilrb.getObjectWithFallback(nkey);
+            if(o instanceof Object[][]){
+                if(!((String) ((Object[][])o)[0][0]).equals("%%CollationBin")){
+                    errln("Did not get the expected object for "+ nkey); 
+                }else{
+                    logln("Got the expected object for "+ nkey); 
+                }
+            }else{
+                errln("Did not get the expected object for "+ nkey); 
+            }
+        }else{
+            errln("Did not get the expected bundle.");
+        }        
     }
     
 }
