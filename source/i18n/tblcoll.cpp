@@ -279,6 +279,13 @@ void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
     uprv_free(rules);
 }
 
+void RuleBasedCollator::getVersion(UVersionInfo versionInfo) const
+{
+    if (versionInfo!=NULL){
+        ucol_getVersion(ucollator, versionInfo);
+    }
+}
+
 Collator::EComparisonResult RuleBasedCollator::compare(
                                                const UnicodeString& source,
                                                const UnicodeString& target,
