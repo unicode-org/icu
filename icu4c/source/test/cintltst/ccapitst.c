@@ -30,6 +30,18 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
+/* default codepage name for ucnv_getDefaultName() testing */
+#ifdef WIN32
+    /* this assumes a Western European Windows */
+#   define DEFAULT_CODEPAGE "IBM-1252"
+#elif defined(OS390)
+#   define DEFAULT_CODEPAGE "ibm-37-s390"
+#elif defined(OS400)
+#   define DEFAULT_CODEPAGE "ibm-37"
+#else
+#   define DEFAULT_CODEPAGE "LATIN_1"
+#endif
+
 /*writes and entire UChar* (string) along with a BOM to a file*/
 void WriteToFile(const UChar *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -44,7 +56,6 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
 
 }
-
 
 void TestConvert() 
 {
@@ -315,34 +326,19 @@ void TestConvert()
     
     /* Testing ucnv_getName()*/
 	/*default code page */
-#ifdef WIN32
-	if ((strcmp(ucnv_getName(someConverters[0], &err), "IBM-1252")==0)&&
-    (strcmp(ucnv_getName(someConverters[1], &err), "IBM-1252")==0))
+	if ((stricmp(ucnv_getName(someConverters[0], &err), DEFAULT_CODEPAGE)==0)&&
+    (stricmp(ucnv_getName(someConverters[1], &err), DEFAULT_CODEPAGE)==0))
       log_verbose("getName ok\n");
     else 
         log_err("getName failed\n");
-#else
-    if ((strcmp(ucnv_getName(someConverters[0], &err), "LATIN_1")==0)&&
-    (strcmp(ucnv_getName(someConverters[1], &err), "LATIN_1")==0))
-      log_verbose("getName ok\n");
-    else 
-        log_err("getName failed\n");
-#endif    
   
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
-#ifdef WIN32
-    if(strcmp(ucnv_getDefaultName(), "ibm-1252")==0)
+    if(stricmp(ucnv_getDefaultName(), DEFAULT_CODEPAGE)==0)
       log_verbose("getDefaultName o.k.\n");
     else
       log_err("getDefaultName failed \n");
-#else
-    if(strcmp(ucnv_getDefaultName(), "LATIN_1")==0)
-      log_verbose("getDefaultName o.k.\n");
-    else
-      log_err("getDefaultName failed\n");
-#endif
    
-	/*chnage the default name by setting it */
+	/*change the default name by setting it */
     ucnv_setDefaultName("changed");
     if(strcmp(ucnv_getDefaultName(), "changed")==0)
       log_verbose("setDefaultName o.k");
@@ -350,7 +346,7 @@ void TestConvert()
       log_err("setDefaultName failed");
     /*set it back to the original name */
     
-    ucnv_setDefaultName("LATIN_1");
+    ucnv_setDefaultName(DEFAULT_CODEPAGE);
     
         
 

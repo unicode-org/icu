@@ -176,7 +176,11 @@ void TestExponential()
   UChar uvalfor[20], ulvalfor[20];
   double a;
   UErrorCode status = U_ZERO_ERROR;
+#ifdef OS390
+  double val[] = { 0.01234, 123456789, 1.23e75, -3.141592653e-78 };
+#else
   double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
+#endif
   char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
   int32_t lval[] = { 0, -1, 1, 123456789 };
 	
@@ -196,17 +200,24 @@ void TestExponential()
   };
   double valParse[] =
   {
+#ifdef OS390
+    0.01234, 123460000, 1.23E75, -3.1416E-78,
+    0.01234, 123460000, 1.23E75, -3.1416E-78,
+    0.01234, 123456800, 1.23E75, -3.141593E-78,
+    0.01234, 123500000, 1.23E75, -3.142E-78
+#else
     0.01234, 123460000, 1.23E300, -3.1416E-271,
     0.01234, 123460000, 1.23E300, -3.1416E-271,
     0.01234, 123456800, 1.23E300, -3.141593E-271,
-    0.01234, 123500000, 1.23E300, -3.142E-271,
+    0.01234, 123500000, 1.23E300, -3.142E-271
+#endif
   };
   int32_t lvalParse[] =
   {
     0, -1, 1, 123460000,
     0, -1, 1, 123460000,
     0, -1, 1, 123456800,
-    0, -1, 1, 123500000,
+    0, -1, 1, 123500000
   };
 
 
@@ -311,8 +322,9 @@ void TestCurrencySign()
   UChar *res;
   UFieldPosition pos;
   UErrorCode status = U_ZERO_ERROR;
-  pattern=(UChar*)malloc(sizeof(UChar) * (strlen("\xA4#,##0.00;-\xA4#,##0.00") + 1) );
-  u_uastrcpy(pattern, "\xA4#,##0.00;-\xA4#,##0.00");
+  pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
+  u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
+  pattern[0]=pattern[11]=0xa4; /* insert latin-1 currency symbol */
   fmt = unum_openPattern(pattern, u_strlen(pattern), "en_US", &status);
   if(U_FAILURE(status)){
     log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");

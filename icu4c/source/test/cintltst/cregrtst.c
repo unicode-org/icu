@@ -15,6 +15,8 @@
 
 /* C FUNCTIONALITY AND REGRESSION TEST FOR BREAKITERATOR */
 
+#include <stdio.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
 #include "unicode/uchar.h"
@@ -23,9 +25,7 @@
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cregrtst.h"
-#include<stdio.h>
-#include<string.h>
-
+#include "ccolltst.h"
 
 /* -------------------------------------------------------------------------------------- */
 /**
@@ -87,45 +87,6 @@ UChar* elementAt(Vector *q, int32_t pos)
 }
 /* Just to make it easier to use with UChar array.*/
     
-UChar* CharsToUCharArray(const char* chars)
-{
-    int unicode;
-    int i;
-    UChar *buffer;
-    UChar *alias;
-    int len = strlen(chars);
-    int count = 0;
-
-    /* preflight */
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            ++count;
-            i += 6;
-        } else {
-            ++count;
-            i++;
-        }
-    }
-
-    buffer = (UChar*) malloc(sizeof(UChar) * (count + 1));
-    alias = buffer;
-    
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            
-            sscanf(&(chars[i+2]), "%4X", &unicode);
-            *alias = (UChar)unicode;
-            i += 6;
-            ++alias;
-        } else {
-            *alias = (UChar)chars[i];
-            ++alias;
-            ++i;
-           }
-    }
-    *alias = 0x0000;
-    return buffer;
-}
 UChar* UCharToUCharArray(const UChar uchar)
 {
     UChar *buffer;
@@ -277,7 +238,7 @@ void addTestWordData()
     addElement(wordSelectionData, " ");
 
   /* to test for bug #4097779 */
-   addElement2(wordSelectionData, CharsToUCharArray("aa\\u0300a"));
+   addElement2(wordSelectionData, CharsToUChars("aa\\u0300a"));
    addElement(wordSelectionData, " ");
 
    /* to test for bug #4098467
@@ -286,28 +247,28 @@ void addTestWordData()
      it correctly), first as precomposed syllables, and then as conjoining jamo.
      Both sequences should be semantically identical and break the same way.
      precomposed syllables... */
-    addElement2(wordSelectionData, CharsToUCharArray("\\uc0c1\\ud56d"));
+    addElement2(wordSelectionData, CharsToUChars("\\uc0c1\\ud56d"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\ud55c\\uc778"));
+    addElement2(wordSelectionData, CharsToUChars("\\ud55c\\uc778"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\uc5f0\\ud569"));
+    addElement2(wordSelectionData, CharsToUChars("\\uc5f0\\ud569"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\uc7a5\\ub85c\\uad50\\ud68c"));
+    addElement2(wordSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c"));
     addElement(wordSelectionData, " ");
     /* conjoining jamo... */
-    addElement2(wordSelectionData, CharsToUCharArray("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
+    addElement2(wordSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
+    addElement2(wordSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
+    addElement2(wordSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
     addElement(wordSelectionData, " ");
-    addElement2(wordSelectionData, CharsToUCharArray("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    addElement2(wordSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
     addElement(wordSelectionData, " ");
 
     /* this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
        count as a Kanji character for the purposes of word breaking */
     addElement(wordSelectionData, "abc"); 
-    addElement2(wordSelectionData, CharsToUCharArray("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
+    addElement2(wordSelectionData, CharsToUChars("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
     addElement(wordSelectionData, "abc");
 
     elems= Count(wordSelectionData);
@@ -373,42 +334,42 @@ void addTestSentenceData()
 
     /* test for bug #4117554: Treat fullwidth variants of .!? the same as their
        normal counterparts */
-    addElement2(sentenceSelectionData, CharsToUCharArray("I know I'm right\\uff0e "));
-    addElement2(sentenceSelectionData, CharsToUCharArray("Right\\uff1f "));
-    addElement2(sentenceSelectionData, CharsToUCharArray("Right\\uff01 "));
+    addElement2(sentenceSelectionData, CharsToUChars("I know I'm right\\uff0e "));
+    addElement2(sentenceSelectionData, CharsToUChars("Right\\uff1f "));
+    addElement2(sentenceSelectionData, CharsToUChars("Right\\uff01 "));
 
     /* test for bug #4117554: Break sentence between a sentence terminator and
        opening punctuation */
     addElement(sentenceSelectionData, "no?");
         u_uastrcpy(temp, "(yes)");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
 
     /* test for bug #4158381: Don't break sentence after period if it isn't
        followed by a space */
     addElement(sentenceSelectionData, "Test <code>Flags.Flag</code> class.  ");
      u_uastrcpy(temp, "Another test.");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4158381: No breaks when there are no terminators around  */
     addElement(sentenceSelectionData, "<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM</SUP></FONT> language) components that, to the maximum degree possible, work the same on all platforms.  ");
      u_uastrcpy(temp, "Another test.");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4143071: Make sure sentences that end with digits work right */
     addElement(sentenceSelectionData, "Today is the 27th of May, 1998.  ");
     addElement(sentenceSelectionData, "Tomorrow with be 28 May 1998.  ");
      u_uastrcpy(temp, "The day after will be the 30th.");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
     
     /* test for bug #4152416: Make sure sentences ending with a capital
        letter are treated correctly */
     addElement(sentenceSelectionData, "The type of all primitive <code>boolean</code> values accessed in the target VM.  ");
      u_uastrcpy(temp, "Calls to xxx will return an implementor of this interface.");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
 
 
@@ -417,7 +378,7 @@ void addTestSentenceData()
     addElement(sentenceSelectionData, "Constructs a randomly generated BigInteger, uniformly distributed over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ");
     addElement(sentenceSelectionData, "The uniformity of the distribution assumes that a fair source of random bits is provided in <tt>rnd</tt>.  ");
      u_uastrcpy(temp, "Note that this constructor always constructs a non-negative BigInteger.");
-     u_strcat(temp, CharsToUCharArray("\\u2029"));
+     u_strcat(temp, CharsToUChars("\\u2029"));
     addElement2(sentenceSelectionData, temp);
     
     elems = Count(sentenceSelectionData);
@@ -458,7 +419,7 @@ void addTestLineData()
     addElement(lineSelectionData, "are\r");
     
     
-    addElement2(lineSelectionData, CharsToUCharArray("you\\u2028")); /* lineSeperator */
+    addElement2(lineSelectionData, CharsToUChars("you\\u2028")); /* lineSeperator */
     
     addElement(lineSelectionData, "fine.\t");
     addElement(lineSelectionData, "good.  ");
@@ -473,22 +434,22 @@ void addTestLineData()
     addElement(lineSelectionData, "all ");
 
     /* to test for bug #4068133  */
-    addElement2(lineSelectionData, CharsToUCharArray("\\u96f6"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e00\\u3002"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e8c\\u3001"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e09\\u3002\\u3001"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u56db\\u3001\\u3002\\u3001"));
+    addElement2(lineSelectionData, CharsToUChars("\\u96f6"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e00\\u3002"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e8c\\u3001"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e09\\u3002\\u3001"));
+    addElement2(lineSelectionData, CharsToUChars("\\u56db\\u3001\\u3002\\u3001"));
        
     
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e94,"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e94,"));
     
-    addElement2(lineSelectionData, CharsToUCharArray("\\u516d."));
+    addElement2(lineSelectionData, CharsToUChars("\\u516d."));
 
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e03.\\u3001,\\u3002"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u516b"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e03.\\u3001,\\u3002"));
+    addElement2(lineSelectionData, CharsToUChars("\\u516b"));
 
     /* to test for bug #4086052 */
-    addElement2(lineSelectionData, CharsToUCharArray("foo\\u00a0bar "));
+    addElement2(lineSelectionData, CharsToUChars("foo\\u00a0bar "));
    
     /* to test for bug #4097920 */
     addElement(lineSelectionData, "dog,");
@@ -511,20 +472,20 @@ void addTestLineData()
        it correctly), first as precomposed syllables, and then as conjoining jamo.
        Both sequences should be semantically identical and break the same way.
        precomposed syllables... */
-    addElement2(lineSelectionData, CharsToUCharArray("\\uc0c1\\ud56d "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\ud55c\\uc778 "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\uc5f0\\ud569 "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\uc7a5\\ub85c\\uad50\\ud68c "));
+    addElement2(lineSelectionData, CharsToUChars("\\uc0c1\\ud56d "));
+    addElement2(lineSelectionData, CharsToUChars("\\ud55c\\uc778 "));
+    addElement2(lineSelectionData, CharsToUChars("\\uc5f0\\ud569 "));
+    addElement2(lineSelectionData, CharsToUChars("\\uc7a5\\ub85c\\uad50\\ud68c "));
     /* conjoining jamo... */
-    addElement2(lineSelectionData, CharsToUCharArray("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    addElement2(lineSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
+    addElement2(lineSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
+    addElement2(lineSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
+    addElement2(lineSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
 
     /* to test for bug #4117554: Fullwidth .!? should be treated as postJwrd */
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e01\\uff0e"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e02\\uff01"));
-    addElement2(lineSelectionData, CharsToUCharArray("\\u4e03\\uff1f"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e01\\uff0e"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e02\\uff01"));
+    addElement2(lineSelectionData, CharsToUChars("\\u4e03\\uff1f"));
 
     elems = Count(lineSelectionData);
     log_verbose("In line: the no: of lines are %d\n", elems);
@@ -607,34 +568,34 @@ void addTestCharacterData()
        it correctly), first as precomposed syllables, and then as conjoining jamo.
        Both sequences should be semantically identical and break the same way.
        precomposed syllables... */
-    addElement2(characterSelectionData, CharsToUCharArray("\\uc0c1"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\ud56d"));
+    addElement2(characterSelectionData, CharsToUChars("\\uc0c1"));
+    addElement2(characterSelectionData, CharsToUChars("\\ud56d"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\ud55c"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\uc778"));
+    addElement2(characterSelectionData, CharsToUChars("\\ud55c"));
+    addElement2(characterSelectionData, CharsToUChars("\\uc778"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\uc5f0"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\ud569"));
+    addElement2(characterSelectionData, CharsToUChars("\\uc5f0"));
+    addElement2(characterSelectionData, CharsToUChars("\\ud569"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\uc7a5"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\ub85c"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\uad50"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\ud68c"));
+    addElement2(characterSelectionData, CharsToUChars("\\uc7a5"));
+    addElement2(characterSelectionData, CharsToUChars("\\ub85c"));
+    addElement2(characterSelectionData, CharsToUChars("\\uad50"));
+    addElement2(characterSelectionData, CharsToUChars("\\ud68c"));
     addElement(characterSelectionData, " ");
     /* conjoining jamo... */
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1109\\u1161\\u11bc"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1112\\u1161\\u11bc"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1109\\u1161\\u11bc"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11bc"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1112\\u1161\\u11ab"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u110b\\u1175\\u11ab"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11ab"));
+    addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1175\\u11ab"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\u110b\\u1167\\u11ab"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1112\\u1161\\u11b8"));
+    addElement2(characterSelectionData, CharsToUChars("\\u110b\\u1167\\u11ab"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u1161\\u11b8"));
     addElement(characterSelectionData, " ");
-    addElement2(characterSelectionData, CharsToUCharArray("\\u110c\\u1161\\u11bc"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1105\\u1169"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1100\\u116d"));
-    addElement2(characterSelectionData, CharsToUCharArray("\\u1112\\u116c"));
+    addElement2(characterSelectionData, CharsToUChars("\\u110c\\u1161\\u11bc"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1105\\u1169"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1100\\u116d"));
+    addElement2(characterSelectionData, CharsToUChars("\\u1112\\u116c"));
 
     elems = Count(characterSelectionData);
     log_verbose("In character: the no: of characters are %d", elems);
@@ -769,7 +730,7 @@ AllocateTextBoundary();
    x=u_strlen(cannedTestChars);
    s=(UChar*)malloc(sizeof(UChar) * (x + 15));
    u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUCharArray(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff"));
+    u_strcat(s, CharsToUChars(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff"));
     log_verbose("Testing sentence Other invariants.....\n");
     doOtherInvariantTest(UBRK_SENTENCE, s);
     free(s);
@@ -885,11 +846,11 @@ AllocateTextBoundary();
    x=u_strlen(cannedTestChars);
    s=(UChar*)malloc(sizeof(UChar) * (x + 15));
    u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUCharArray("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
+    u_strcat(s, CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
     log_verbose("Testing word break invariant.....\n");
     doBreakInvariantTest(UBRK_WORD, s);
     u_strcpy(s, cannedTestChars);
-    u_strcat(s, CharsToUCharArray("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
+    u_strcat(s, CharsToUChars("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02"));
     doOtherInvariantTest(UBRK_WORD, s);
     free(s);
 FreeTextBoundary();    
@@ -1007,7 +968,7 @@ void TestLineInvariants()
 AllocateTextBoundary();   
    s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 20));
    u_strcpy(s, cannedTestChars);
-   u_strcat(s, CharsToUCharArray(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02"));
+   u_strcat(s, CharsToUChars(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02"));
     log_verbose("Testing line break Invariant.....\n");
    doBreakInvariantTest(UBRK_LINE, s);
    log_verbose("Testing line other Invariant....\n");
@@ -1020,7 +981,7 @@ AllocateTextBoundary();
     e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
     errorCount=0;
     status=U_ZERO_ERROR;
-    u_strcpy(noBreak, CharsToUCharArray("\\u00a0\\u2007\\u2011\\ufeff"));
+    u_strcpy(noBreak, CharsToUChars("\\u00a0\\u2007\\u2011\\ufeff"));
     u_uastrcpy(work, "aaa");
     for (i = 0; i < u_strlen(s); i++) {
          c = s[i];
@@ -1051,7 +1012,7 @@ AllocateTextBoundary();
     ubrk_close(e);
     /* it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
        a currency symbol, a non-breaking space, or a line or paragraph separator) */
-    u_strcpy(dashes, CharsToUCharArray("-\\u00ad\\u2010\\u2012\\u2013\\u2014"));
+    u_strcpy(dashes, CharsToUChars("-\\u00ad\\u2010\\u2012\\u2013\\u2014"));
     for (i = 0; i < u_strlen(s); i++) {
         work[0] = s[i];
         for (j = 0; j < u_strlen(dashes); j++) {
@@ -1201,11 +1162,11 @@ void TestCharacterInvariants()
 AllocateTextBoundary();
    s=(UChar*)malloc(sizeof(UChar) * (u_strlen(cannedTestChars) + 15));
    u_strcpy(s, cannedTestChars);    
-   u_strcat(s, CharsToUCharArray("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
+   u_strcat(s, CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
    log_verbose("Testing character break invariant.....\n");
    doBreakInvariantTest(UBRK_CHARACTER, s);
    u_strcpy(s, cannedTestChars);        
-   u_strcat(s, CharsToUCharArray("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
+   u_strcat(s, CharsToUChars("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa"));
    log_verbose("Testing character other invariant.....\n");
    doOtherInvariantTest(UBRK_CHARACTER, s);
    free(s);
@@ -1526,7 +1487,7 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
     log_verbose("doBreakInvariantTest text of length: %d\n", u_strlen(testChars));
     /* a break should always occur after CR (unless followed by LF), LF, PS, and LS */
       
-    u_strcpy(breaks, CharsToUCharArray("\r\n\\u2029\\u2028"));
+    u_strcpy(breaks, CharsToUChars("\r\n\\u2029\\u2028"));
     
     tb = ubrk_open(type, "en_US", work, u_strlen(work), &status);
     
