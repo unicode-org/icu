@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/03/30 23:24:30 $ 
- * $Revision: 1.28 $
+ * $Date: 2001/03/30 23:33:06 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.28 $ $Date: 2001/03/30 23:24:30 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.29 $ $Date: 2001/03/30 23:33:06 $
  */
 public abstract class Transliterator {
     /**
@@ -655,6 +655,14 @@ public abstract class Transliterator {
      */
     public final String getID() {
         return ID;
+    }
+
+    /**
+     * Set the programmatic identifier for this transliterator.  Only
+     * for use by subclasses.
+     */
+    protected final void setID(String id) {
+        ID = id;
     }
 
     /**

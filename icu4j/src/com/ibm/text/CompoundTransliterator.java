@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CompoundTransliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/03/30 23:33:06 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.11 $ $Date: 2000/06/28 20:49:54 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.12 $ $Date: 2001/03/30 23:33:06 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -104,6 +104,19 @@ public class CompoundTransliterator extends Transliterator {
             trans[i] = getInstance(list[direction==FORWARD ? i : (list.length-1-i)],
                                    direction);
         }
+        
+        // If the direction is REVERSE then we need to fix the ID.
+        if (direction == REVERSE) {
+            StringBuffer newID = new StringBuffer();
+            for (int i=0; i<list.length; ++i) {
+                if (i > 0) {
+                    newID.append(';');
+                }
+                newID.append(trans[i].getID());
+            }
+            setID(newID.toString());
+        }
+
         computeMaximumContextLength();
         if (filter != null) {
             setFilter(filter);
