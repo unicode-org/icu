@@ -39,6 +39,7 @@ DATABUILDDIR=$(OBJDATADIR)
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
 PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) 
+PKGDATA_VERSIONING = -V $(SO_TARGET_VERSION)
 
 ## Install program information
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -151,7 +152,7 @@ clean-local: clean-pkgdata
 	$(RMV) $(DATAFILES)
 	$(RMV) icupkg.inc
 	-@if [ -f $(TMPDATADIR)/$(ICUDATA_NAME)_dll.mak ]; then \
-		(cd pkgdata ; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m dll -p $(ICUDATA_NAME) -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/$(ICUDATA_NAME).lst -d $(DATABUILDDIR) --clean ) \
+		(cd pkgdata ; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m dll $(PKGDATA_VERSIONING) -p $(ICUDATA_NAME) -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/$(ICUDATA_NAME).lst -d $(DATABUILDDIR) --clean ) \
 	fi
 	-@if [ -f $(TMPDATADIR)/$(ICUDATA_NAME)_common.mak ]; then \
 		(cd pkgdata; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m common -p $(ICUDATA_NAME) -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/$(ICUDATA_NAME).lst -d $(DATABUILDDIR) --clean ) \
