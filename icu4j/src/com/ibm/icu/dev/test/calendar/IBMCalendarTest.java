@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/09/04 00:57:13 $ 
- * $Revision: 1.22 $
+ * $Date: 2003/09/04 23:07:33 $ 
+ * $Revision: 1.23 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import java.text.ParseException;
 
 import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.*;
@@ -608,6 +609,63 @@ public class IBMCalendarTest extends CalendarTest {
             errln(info);
         } else {
             logln(info);
+        }
+    }
+
+    /**
+     * Test the ZoneMeta API.
+     */
+    public void TestZoneMeta() {
+        // Test index by country API
+
+        // Format: {country, zone1, zone2, ..., zoneN}
+        String COUNTRY[][] = { {"", "GMT", "UTC"},
+                               {"US", "America/Los_Angeles", "PST"} };
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<COUNTRY.length; ++i) {
+            String[] a = ZoneMeta.getAvailableIDs(COUNTRY[i][0]);
+            buf.setLength(0);
+            buf.append("Country \"" + COUNTRY[i][0] + "\": [");
+            // Use bitmask to track which of the expected zones we see
+            int mask = 0;
+            for (int j=0; j<a.length; ++j) {
+                if (j!=0) buf.append(", ");
+                buf.append(a[j]);
+                for (int k=1; k<COUNTRY[i].length; ++k) {
+                    if ((mask & (1<<k)) == 0 &&
+                        a[j] == COUNTRY[i][k]) {
+                        mask |= (1<<k);
+                    }
+                }
+            }
+            buf.append("]");
+            mask >>= 1;
+            // Check bitmask to see if we saw all expected zones
+            if (mask == (1 << (COUNTRY[i].length-1))-1) {
+                logln(buf.toString());
+            } else {
+                errln(buf.toString());
+            }
+        }
+
+        // Test equivalent IDs API
+
+        int n = ZoneMeta.countEquivalentIDs("PST");
+        boolean ok = false;
+        buf.setLength(0);
+        buf.append("Equivalent to PST: ");
+        for (int i=0; i<n; ++i) {
+            String id = ZoneMeta.getEquivalentID("PST", i);
+            if (id == "America/Los_Angeles") {
+                ok = true;
+            }
+            if (i!=0) buf.append(", ");
+            buf.append(id);
+        }
+        if (ok) {
+            logln(buf.toString());
+        } else {
+            errln(buf.toString());
         }
     }
 
