@@ -443,7 +443,7 @@ public:
      * for user display in the default locale.  For example, if the locale's script code
      * is "LATN" and the default locale's language code is "en", this function would set
      * dispScript to "Latin".
-     * @param dispCountry   Receives the country's display name.
+     * @param dispScript    Receives the scripts's display name.
      * @return              A reference to "dispScript".
      * @draft ICU 2.8
      */
@@ -459,7 +459,7 @@ public:
      *                      Locale::getFrench() for displayLocale would result in "", while
      *                      passing Locale::getGerman() for displayLocale would result in
      *                      "".
-     * @param dispCountry   Receives the country's display name.
+     * @param dispScript    Receives the scripts's display name.
      * @return              A reference to "dispScript".
      * @draft ICU 2.8
      */
@@ -651,6 +651,10 @@ private:
 
     static const Locale &getLocale(int locid);
 
+    /**
+     * A friend to allow the default locale to be set by either the C or C++ API.
+     * @internal
+     */
     friend void locale_set_default_internal(const char *);
 };
 
@@ -698,3 +702,4 @@ Locale::isBogus(void) const {
 U_NAMESPACE_END
 
 #endif
+
