@@ -7,6 +7,7 @@
 #include "ustrtest.h"
 #include "unicode/unistr.h"
 #include "unicode/unicode.h"
+#include "unicode/ustring.h"
 #include "unicode/locid.h"
 #include "unicode/ucnv.h"
 #include "cmemory.h"
@@ -133,6 +134,37 @@ UnicodeStringTest::TestBasicManipulation()
             s.moveIndex32(6, 1)!=6
         ) {
             errln("UnicodeString::moveIndex32() failed");
+        }
+
+        // test countChar32()
+        // note that this also calls and tests u_countChar32(length>=0)
+        if(
+            s.countChar32()!=4 ||
+            s.countChar32(1)!=4 ||
+            s.countChar32(2)!=3 ||
+            s.countChar32(2, 3)!=2 ||
+            s.countChar32(2, 0)!=0
+        ) {
+            errln("UnicodeString::countChar32() failed");
+        }
+
+        // NUL-terminate the string buffer and test u_countChar32(length=-1)
+        const UChar *buffer=s.append((UChar)0).getBuffer();
+        if(
+            u_countChar32(buffer, -1)!=4 ||
+            u_countChar32(buffer+1, -1)!=4 ||
+            u_countChar32(buffer+2, -1)!=3 ||
+            u_countChar32(buffer+3, -1)!=3 ||
+            u_countChar32(buffer+4, -1)!=2 ||
+            u_countChar32(buffer+5, -1)!=1 ||
+            u_countChar32(buffer+6, -1)!=0
+        ) {
+            errln("u_countChar32(length=-1) failed");
+        }
+
+        // test u_countChar32() with bad input
+        if(u_countChar32(NULL, 5)!=0 || u_countChar32(buffer, -2)!=0) {
+            errln("u_countChar32(bad input) failed (returned non-zero counts)");
         }
     }
 }
