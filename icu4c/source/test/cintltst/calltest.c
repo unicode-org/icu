@@ -32,6 +32,7 @@ void addPUtilTest(TestNode** root);
 void addCompactArrayTest(TestNode** root);
 void addTestDeprecatedAPI(TestNode** root);
 void addUCharTransformTest(TestNode** root);
+void addUSetTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -50,6 +51,7 @@ void addAllTests(TestNode** root)
     addCollTest(root);
     addComplexTest(root);
     addUTransTest(root);
+    addUSetTest(root);
     addTestDeprecatedAPI(root);
 }
 
