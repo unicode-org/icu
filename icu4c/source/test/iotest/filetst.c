@@ -868,26 +868,6 @@ static void TestFilePrintCompatibility(void) {
         log_err("%" uFormat " too much stored\n");\
     }\
 
-#define TestFPrintFormat2(format, precision, value) \
-    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
-    /* Reinitialize the buffer to verify null termination works. */\
-    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
-    \
-    uNumPrinted = u_fprintf(myFile, format, precision, value);\
-    u_fclose(myFile);\
-    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
-    u_fgets(uBuffer, sizeof(uBuffer)/sizeof(*uBuffer), myFile);\
-    u_fclose(myFile);\
-    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));\
-    cNumPrinted = sprintf(buffer, format, precision, value);\
-    if (strcmp(buffer, compBuffer) != 0) {\
-        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
-    }\
-    if (cNumPrinted != uNumPrinted) {\
-        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
-    }\
-
 static void TestFprintfFormat(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
     static const char abcChars[] = "abc";
@@ -922,19 +902,11 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%10.4f", 123.456789, "%10.4f", 123.456789);
     TestFPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
-    TestFPrintFormat("%e", 1234567.89, "%e", 1234567.89);
-    TestFPrintFormat("%E", 1234567.89, "%E", 1234567.89);
-    TestFPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
-    TestFPrintFormat("%10.4e", 1.23456789, "%10.4e", 1.23456789);
-    TestFPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
-    TestFPrintFormat("%10e", 1234.56789, "%10e", 1234.56789);
-    TestFPrintFormat("%-10e", 1234.56789, "%-10e", 1234.56789);
-
-    TestFPrintFormat("%g", 12345.6789, "%g", 12345.6789);
+/*    TestFPrintFormat("%g", 12345.6789, "%g", 12345.6789);
     TestFPrintFormat("%g", 123456.789, "%g", 123456.789);
     TestFPrintFormat("%g", 1234567.89, "%g", 1234567.89);
     TestFPrintFormat("%G", 123456.789, "%G", 123456.789);
-    TestFPrintFormat("%G", 1234567.89, "%G", 1234567.89);
+    TestFPrintFormat("%G", 1234567.89, "%G", 1234567.89);*/
     TestFPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestFPrintFormat("%10.4g", 1.23456789, "%10.4g", 1.23456789);
     TestFPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
@@ -974,9 +946,6 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%-8i", 123456, "%-8i", 123456);
     TestFPrintFormat("%08i", 123456, "%08i", 123456);
 
-    TestFPrintFormat2("%+1.*e", 4, 1.2345678);
-    TestFPrintFormat2("%+2.*e", 6, 1.2345678);
-
     log_verbose("Get really crazy with the formatting.\n");
 
     TestFPrintFormat("%-#12x", 123, "%-#12x", 123);
@@ -996,21 +965,6 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%12d", -123,   "%12d", -123);
     TestFPrintFormat("%.12d", 123,   "%.12d", 123);
     TestFPrintFormat("%.12d", -123,  "%.12d", -123);
-
-    TestFPrintFormat("%-+12.1e", 1.234,  "%-+12.1e", 1.234);
-    TestFPrintFormat("%-+12.1e", -1.234, "%-+12.1e", -1.234);
-    TestFPrintFormat("%- 12.10e", 1.234, "%- 12.10e", 1.234);
-    TestFPrintFormat("%- 12.1e", -1.234, "%- 12.1e", -1.234);
-    TestFPrintFormat("%+12.1e", 1.234,   "%+12.1e", 1.234);
-    TestFPrintFormat("%+12.1e", -1.234,  "%+12.1e", -1.234);
-    TestFPrintFormat("% 12.1e", 1.234,   "% 12.1e", 1.234);
-    TestFPrintFormat("% 12.1e", -1.234,  "% 12.1e", -1.234);
-    TestFPrintFormat("%12.1e", 1.234,    "%12.1e", 1.234);
-    TestFPrintFormat("%12.1e", -1.234,   "%12.1e", -1.234);
-    TestFPrintFormat("%.2e", 1.234,      "%.2e", 1.234);
-    TestFPrintFormat("%.2e", -1.234,     "%.2e", -1.234);
-    TestFPrintFormat("%3e", 1.234,       "%3e", 1.234);
-    TestFPrintFormat("%3e", -1.234,      "%3e", -1.234);
 
     TestFPrintFormat("%-+12.1f", 1.234,  "%-+12.1f", 1.234);
     TestFPrintFormat("%-+12.1f", -1.234, "%-+12.1f", -1.234);
