@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/08/22 16:51:21 $ 
-* $Revision: 1.35 $
+* $Date: 2004/01/13 18:32:11 $ 
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -319,10 +319,10 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             }
         }
         
-        PrintWriter log = Utility.openPrintWriter(UCA_GEN_DIR, filename + (shortPrint ? "_SHORT" : "") + ".txt", Utility.UTF8_WINDOWS);
+        String fullFileName = filename + (shortPrint ? "_SHORT" : "") + ".txt";
+        PrintWriter log = Utility.openPrintWriter(UCA_GEN_DIR, fullFileName, Utility.UTF8_WINDOWS);
         //if (!shortPrint) log.write('\uFEFF');
-        log.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
-        log.println("# Generated:   " + getNormalDate());
+        writeVersionAndDate(log, fullFileName);
         
         System.out.println("Sorting");
         int counter = 0;
@@ -446,6 +446,14 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         log.close();
         sortedD.clear();
         System.out.println("Done");
+    }
+
+    private static void writeVersionAndDate(PrintWriter log, String filename) {
+        log.println("# File:        " + filename);
+        log.println("# UCA Version: " + collator.getDataVersion());
+        log.println("# UCD Version: " + collator.getDataVersion());
+        log.println("# Generated:   " + getNormalDate());
+        log.println();
     }
 
     static void addStringX(int x, byte option) {
@@ -703,7 +711,8 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     }*/
     
     static void testCompatibilityCharacters() throws IOException {
-        log = Utility.openPrintWriter(UCA_GEN_DIR, "UCA_CompatComparison.txt", Utility.UTF8_WINDOWS);
+        String fullFileName = "UCA_CompatComparison.txt";
+        log = Utility.openPrintWriter(UCA_GEN_DIR, fullFileName, Utility.UTF8_WINDOWS);
         
         int[] kenCes = new int[50];
         int[] markCes = new int[50];
@@ -750,8 +759,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         Iterator it = forLater.keySet().iterator();
         byte oldType = (byte)0xFF; // anything unique
         int caseCount = 0;
-        log.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
-        log.println("Generated: " + getNormalDate());
+        writeVersionAndDate(log, fullFileName);
+        //log.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
+        //log.println("Generated: " + getNormalDate());
         while (it.hasNext()) {
             String key = (String) it.next();
             byte type = (byte)key.charAt(0);
@@ -1197,7 +1207,8 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter(UCA_GEN_DIR, "UCA_Contractions.txt", Utility.UTF8_WINDOWS);
+        String fullFileName = "UCA_Contractions.txt";
+        PrintWriter diLog = Utility.openPrintWriter(UCA_GEN_DIR, fullFileName, Utility.UTF8_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1209,8 +1220,9 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         int[] lenArray = new int[1];
         
         diLog.println("# Contractions");
-        diLog.println("# Generated " + getNormalDate());
-        diLog.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
+        writeVersionAndDate(diLog, fullFileName);
+        //diLog.println("# Generated " + getNormalDate());
+        //diLog.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
         while (true) {
             String s = cc.next(ces, lenArray);
             if (s == null) break;
@@ -3195,8 +3207,8 @@ F900..FAFF; CJK Compatibility Ideographs
         
         if (firstTrailing.isUnset()) {
             System.out.println("No first/last trailing: resetting");
-            firstTrailing.setValue(IMPLICIT_LIMIT_BYTE+1, COMMON, COMMON, "");
-            lastTrailing.setValue(IMPLICIT_LIMIT_BYTE+1, COMMON, COMMON, "");
+            firstTrailing.setValue(IMPLICIT_MAX_BYTE+1, COMMON, COMMON, "");
+            lastTrailing.setValue(IMPLICIT_MAX_BYTE+1, COMMON, COMMON, "");
             System.out.println(firstTrailing.formatFCE());        
         }
         
@@ -3208,8 +3220,8 @@ F900..FAFF; CJK Compatibility Ideographs
         
         log.println("# superceded! [top "  + lastNonIgnorable.formatFCE() + "]");
         log.println("[fixed first implicit byte " + Utility.hex(IMPLICIT_BASE_BYTE,2) + "]");
-        log.println("[fixed last implicit byte " + Utility.hex(IMPLICIT_LIMIT_BYTE,2) + "]");
-        log.println("[fixed first trail byte " + Utility.hex(IMPLICIT_LIMIT_BYTE+1,2) + "]");
+        log.println("[fixed last implicit byte " + Utility.hex(IMPLICIT_MAX_BYTE,2) + "]");
+        log.println("[fixed first trail byte " + Utility.hex(IMPLICIT_MAX_BYTE+1,2) + "]");
         log.println("[fixed last trail byte " + Utility.hex(SPECIAL_BASE-1,2) + "]");
         log.println("[fixed first special byte " + Utility.hex(SPECIAL_BASE,2) + "]");
         log.println("[fixed last special byte " + Utility.hex(0xFF,2) + "]");
@@ -3509,7 +3521,7 @@ static int swapCJK(int i) {
         IMPLICIT_3BYTE_COUNT = 1,
         IMPLICIT_BASE_BYTE = 0xE0,
         
-        IMPLICIT_LIMIT_BYTE = IMPLICIT_BASE_BYTE + 4, // leave room for 1 3-byte and 2 4-byte forms
+        IMPLICIT_MAX_BYTE = IMPLICIT_BASE_BYTE + 4, // leave room for 1 3-byte and 2 4-byte forms
         
         IMPLICIT_4BYTE_BOUNDARY = IMPLICIT_3BYTE_COUNT * OTHER_COUNT * LAST_COUNT,
         LAST_MULTIPLIER = OTHER_COUNT / LAST_COUNT,
@@ -3534,51 +3546,12 @@ static int swapCJK(int i) {
         return getImplicitPrimaryFromSwapped(cp);
     }
         
-	static int getImplicitPrimaryFromSwapped(int cp) {
-        
-        // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-        // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-        // we shift so that HAN all has the same first primary, for compression.
-        // for the 4 byte case, we make the gap as large as we can fit.
-        // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-        // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-        
-        int last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
-        if (last0 < 0) {
-            int last1 = cp / LAST_COUNT;
-            last0 = cp % LAST_COUNT;
-            
-            int last2 = last1 / OTHER_COUNT;
-            last1 %= OTHER_COUNT;
-            
-            if (DEBUG || last2 > 0xFF-BYTES_TO_AVOID) System.out.println("3B: " + Utility.hex(cp) + " => "
-            	+ Utility.hex(last2) + ", "
-            	+ Utility.hex(last1) + ", "
-            	+ Utility.hex(last0) + ", "
-        	);
-            
-            return IMPLICIT_BASE_3BYTE + (last2 << 24) + (last1 << 16) + ((last0*LAST_MULTIPLIER) << 8);
-        } else {
-            int last1 = last0 / LAST_COUNT2;
-            last0 %= LAST_COUNT2;
-            
-            int last2 = last1 / OTHER_COUNT;
-            last1 %= OTHER_COUNT;
-            
-            int last3 = last2 / OTHER_COUNT;
-            last2 %= OTHER_COUNT;
-            
-            if (DEBUG || last3 > 0xFF-BYTES_TO_AVOID) System.out.println("4B: " + Utility.hex(cp) + " => "
-            	+ Utility.hex(last3) + ", "
-            	+ Utility.hex(last2) + ", "
-            	+ Utility.hex(last1) + ", "
-            	+ Utility.hex(last0 * LAST2_MULTIPLIER) + ", "
-        	);
-
-           return IMPLICIT_BASE_4BYTE + (last3 << 24) + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
-        }
-    }
+    static Implicit implicit = new Implicit(IMPLICIT_BASE_BYTE, IMPLICIT_MAX_BYTE);
     
+	static int getImplicitPrimaryFromSwapped(int cp) {
+        return implicit.getImplicit(cp);
+    }
+        
     
     static void showImplicit(String title, int cp) {
     	if (DEBUG) showImplicit2(title + "-1", cp-1);
@@ -3679,7 +3652,7 @@ static int swapCJK(int i) {
             	long b2 = (newPrimary >> 8) & 0xFF;
             	long b3 = newPrimary & 0xFF;
 	            
-            	if (b0 < IMPLICIT_BASE_BYTE || b0 >= IMPLICIT_LIMIT_BYTE  || b1 < 3 || b2 < 3 || b3 == 1 || b3 == 2) {
+            	if (b0 < IMPLICIT_BASE_BYTE || b0 > IMPLICIT_MAX_BYTE  || b1 < 3 || b2 < 3 || b3 == 1 || b3 == 2) {
                 	throw new IllegalArgumentException(Utility.hex(i) + ": illegal byte value: " + Utility.hex(newPrimary)
                     	+ ", " + Utility.hex(b1) + ", " + Utility.hex(b2) + ", " + Utility.hex(b3));
             	}
