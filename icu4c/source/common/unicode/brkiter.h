@@ -198,6 +198,10 @@ typedef const void* URegistryKey;
  */
 class U_COMMON_API BreakIterator : public UObject {
 public:
+    /**
+     *  destructor
+     *  @stable
+     */
     virtual ~BreakIterator();
 
     /**
@@ -564,8 +568,11 @@ public:
     friend class ICUBreakIteratorService;
 
 protected:
+    /** @internal */
     BreakIterator();
+    /** @internal */
     UBool fBufferClone;
+    /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
 private:
     /**
