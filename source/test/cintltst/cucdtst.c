@@ -28,24 +28,7 @@
 #include "cucdtst.h"
 #include "uparse.h"
 
-/* prototypes --------------------------------------------------------------- */
-
-static void
-TestCharNames();
-
-static void
-TestMirroring();
-
-static void
-TestUnescape();
-
-static void
-TestCaseMapping();
-
 /* test data ---------------------------------------------------------------- */
-#ifndef MIN
-#define MIN(a,b) (a < b ? a : b)
-#endif
 
 UChar*** dataTable = NULL;
 const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
@@ -321,7 +304,7 @@ static void TestMisc()
     /* Tests the ICU version #*/
     u_getVersion(realVersion);
     u_versionToString(realVersion, icuVersion);
-    if (strncmp(icuVersion, U_ICU_VERSION, MIN(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
+    if (strncmp(icuVersion, U_ICU_VERSION, uprv_min(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
     {
         log_err("ICU version test failed. Header says=%s, got=%s \n", U_ICU_VERSION, icuVersion);
     }
@@ -678,9 +661,9 @@ static void cleanUpDataTable()
 static void TestStringFunctions()
 {
     int32_t i,j,k;
-    UChar temp[40];
-    char test[40];
-    char tempOut[40];
+    UChar temp[512];
+    char test[512];
+    char tempOut[512];
 
     setUpDataTable();
 
@@ -773,17 +756,17 @@ static void TestStringFunctions()
 
     log_verbose("Testing u_strtok_r()");
     {
-        const char string[]  = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
+        const char tokString[]  = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
         const char *tokens[] = {",", "1", "2", "3", "AHHHHH!", "5.5", "6", "7", "8\n"};
         const char *delim1 = " ";
         const char *delim2 = " ,";
-        UChar delimBuf[sizeof(string)];
-        UChar currTokenBuf[sizeof(string)];
+        UChar delimBuf[sizeof(test)];
+        UChar currTokenBuf[sizeof(tokString)];
         UChar *state;
         uint32_t currToken = 0;
         UChar *ptr;
 
-        u_uastrcpy(temp, string);
+        u_uastrcpy(temp, tokString);
         u_uastrcpy(delimBuf, delim1);
 
         ptr = u_strtok_r(temp, delimBuf, &state);
