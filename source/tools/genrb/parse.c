@@ -28,6 +28,7 @@
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 
+
 #define U_ICU_UNIDATA "unidata"
 
 U_STRING_DECL(k_start_string, "string", 6);
@@ -516,7 +517,7 @@ parse(UCHARBUF* buf, const char *inputDir,
                 in = T_FileStream_open(fileName, "rb");
                 if(in){
                     const char* cp;
-                    UChar c=0;
+                    UChar32 c=0;
                     UCHARBUF* ucbuf;
                     int size = T_FileStream_size(in);
                     UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
@@ -526,9 +527,16 @@ parse(UCHARBUF* buf, const char *inputDir,
                     }
                     ucbuf= ucbuf_open(in,cp,status);
                     do{
-                        c = (UChar)ucbuf_getc(ucbuf,status);
-                        unescape(ucbuf,status);
-                        *(target++) = c;
+                        c = ucbuf_getc(ucbuf,status);
+                        ucbuf_ungetc(c,ucbuf);
+                        c = ucbuf_getc(ucbuf,status);
+                        if(c==0x005c){
+                            c = unescape(ucbuf,status);
+                            if(c==U_ERR){
+                                goto finish;
+                            }
+                        }
+                        U_APPEND_CHAR32(c,target);
                     }while(c!=U_EOF && (target<targetLimit));
                                     
                     /* Add it to bundle */
