@@ -194,6 +194,7 @@ DictionaryBasedBreakIterator::following(int32_t offset)
 int32_t
 DictionaryBasedBreakIterator::handleNext()
 {
+    UErrorCode status = U_ZERO_ERROR;
     // if there are no cached break positions, or if we've just moved
     // off the end of the range covered by the cache, we have to dump
     // and possibly regenerate the cache
@@ -210,7 +211,10 @@ DictionaryBasedBreakIterator::handleNext()
         // divideUpDictionaryRange() to regenerate the cached break positions
         // for the new range
         if (dictionaryCharCount > 1 && result - startPos > 1) {
-            divideUpDictionaryRange(startPos, result);
+            divideUpDictionaryRange(startPos, result, status);
+            if (U_FAILURE(status)) {
+                return -9999;   // SHOULD NEVER GET HERE!
+            }
         }
 
         // otherwise, the value we got back from the inherited fuction
@@ -344,7 +348,7 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
  * for each time we enter the range.
  */
 void
-DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t endPos)
+DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t endPos, UErrorCode &status)
 {
     // to avoid casts throughout the rest of this function
     DictionaryBasedBreakIteratorTables* dictionaryTables
@@ -378,9 +382,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // further, this saves us from having to follow each possible path
     // through the text all the way to the error (hopefully avoiding many
     // future recursive calls as well).
-    UStack currentBreakPositions;
-    UStack possibleBreakPositions;
-    UVector wrongBreakPositions;
+    UStack currentBreakPositions(status);
+    UStack possibleBreakPositions(status);
+    UVector wrongBreakPositions(status);
 
     // the dictionary is implemented as a trie, which is treated as a state
     // machine.  -1 represents the end of a legal word.  Every word in the
@@ -396,9 +400,12 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // farthest as real break positions, and then start over from scratch with
     // the character where the error occurred.
     int32_t farthestEndPoint = text->getIndex();
-    UStack bestBreakPositions;
+    UStack bestBreakPositions(status);
     UBool bestBreakPositionsInitialized = FALSE;
 
+    if (U_FAILURE(status)) {
+        return;
+    }
     // initialize (we always exit the loop with a break statement)
     c = text->current();
     for (;;) {
@@ -407,7 +414,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // on the last character of a legal word.  Push that position onto
         // the possible-break-positions stack
         if (dictionaryTables->dictionary.at(state, (int32_t)0) == -1) {
-            possibleBreakPositions.push((void*)text->getIndex());
+            possibleBreakPositions.push((void*)text->getIndex(), status);
         }
 
         // look up the new state to transition to in the dictionary
@@ -418,7 +425,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // and we've successfully traversed the whole range.  Drop out
         // of the loop.
         if (state == -1) {
-            currentBreakPositions.push((void*)text->getIndex());
+            currentBreakPositions.push((void*)text->getIndex(), status);
             break;
         }
 
@@ -435,7 +442,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 bestBreakPositions.removeAllElements();
                 bestBreakPositionsInitialized = TRUE;
                 for (int32_t i = 0; i < currentBreakPositions.size(); i++) {
-                    bestBreakPositions.push(currentBreakPositions.elementAt(i));
+                    bestBreakPositions.push(currentBreakPositions.elementAt(i), status);
                 }
             }
 
@@ -463,7 +470,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 if (bestBreakPositionsInitialized) {
                     currentBreakPositions.removeAllElements();
                     for (int32_t i = 0; i < bestBreakPositions.size(); i++) {
-                        currentBreakPositions.push(bestBreakPositions.elementAt(i));
+                        currentBreakPositions.push(bestBreakPositions.elementAt(i), status);
                     }
                     bestBreakPositions.removeAllElements();
                     if (farthestEndPoint < endPos) {
@@ -477,10 +484,10 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                     if ((currentBreakPositions.isEmpty()
                             || (int32_t)(unsigned long)currentBreakPositions.peek() != text->getIndex())
                             && text->getIndex() != startPos) {
-                        currentBreakPositions.push((void*)text->getIndex());
+                        currentBreakPositions.push((void*)text->getIndex(), status);
                     }
                     text->next();
-                    currentBreakPositions.push((void*)text->getIndex());
+                    currentBreakPositions.push((void*)text->getIndex(), status);
                 }
             }
 
@@ -495,9 +502,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 while (!currentBreakPositions.isEmpty() && temp <
                        (int32_t)(unsigned long)currentBreakPositions.peek()) {
                     temp2 = currentBreakPositions.pop();
-                    wrongBreakPositions.addElement(temp2);
+                    wrongBreakPositions.addElement(temp2, status);
                 }
-                currentBreakPositions.push((void*)temp);
+                currentBreakPositions.push((void*)temp, status);
                 text->setIndex((int32_t)(unsigned long)currentBreakPositions.peek());
             }
 
@@ -523,7 +530,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     if (!currentBreakPositions.isEmpty()) {
         currentBreakPositions.pop();
     }
-    currentBreakPositions.push((void*)endPos);
+    currentBreakPositions.push((void*)endPos, status);
 
     // create a regular array to hold the break positions and copy
     // the break positions from the stack to the array (in addition,

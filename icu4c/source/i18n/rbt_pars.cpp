@@ -212,12 +212,12 @@ class Segments {
     UVector offsets;
     UVector isOpenParen;
 public:
-    Segments();
+    Segments(UErrorCode &status);
     ~Segments();
-    void addParenthesisAt(int32_t offset, UBool isOpenParen);
+    void addParenthesisAt(int32_t offset, UBool isOpenParen, UErrorCode &status);
     int32_t getLastParenOffset(UBool& isOpenParen) const;
     UBool extractLastParenSubstring(int32_t& start, int32_t& limit);
-    int32_t* createArray() const;
+    int32_t* createArray(UErrorCode &status) const;
     UBool validate() const;
     int32_t count() const; // number of segments
 private:
@@ -239,12 +239,15 @@ int32_t Segments::size() const {
     return offsets.size();
 }
 
-Segments::Segments() {}
+Segments::Segments(UErrorCode &status)
+ : offsets(status),
+   isOpenParen(status)
+{}
 Segments::~Segments() {}
 
-void Segments::addParenthesisAt(int32_t offset, UBool isOpen) {
-    offsets.addElement(offset);
-    isOpenParen.addElement(isOpen ? 1 : 0);
+void Segments::addParenthesisAt(int32_t offset, UBool isOpen, UErrorCode &status) {
+    offsets.addElement(offset, status);
+    isOpenParen.addElement(isOpen ? 1 : 0, status);
 }
 
 int32_t Segments::getLastParenOffset(UBool& isOpenParen) const {
@@ -287,11 +290,16 @@ UBool Segments::extractLastParenSubstring(int32_t& start, int32_t& limit) {
 }
 
 // Assume caller has already gotten a TRUE validate().
-int32_t* Segments::createArray() const {
+int32_t* Segments::createArray(UErrorCode &status) const {
     int32_t c = count(); // number of segments
     int32_t arrayLen = 4*c + 4;
     int32_t *array = new int32_t[arrayLen];
     int32_t a2offset = 2*c + 3; // offset to array 2
+
+    if (array == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     array[0] = c;
     array[1] = a2offset;
     int32_t i;
@@ -303,9 +311,12 @@ int32_t* Segments::createArray() const {
     // Now walk through and match up segment numbers with parentheses.
     // Number segments from 0.  We're going to offset all entries by 2
     // to skip the first two elements, array[0] and array[1].
-    UStack stack;
+    UStack stack(status);
     int32_t nextOpen = 0; // seg # of next open, 0-based
-    int32_t j = a2offset; // index of start of array 2
+//    int32_t j = a2offset; // index of start of array 2
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     for (i=0; i<2*c; ++i) {
         UBool open = isOpen(i);
         // Let seg be the zero-based segment number.
@@ -313,7 +324,7 @@ int32_t* Segments::createArray() const {
         // Close parens are at 2*seg+1 in array 2.
         if (open) {
             array[a2offset + 2*nextOpen] = 2+i;
-            stack.push(nextOpen);
+            stack.push(nextOpen, status);
             ++nextOpen;
         } else {
             int32_t nextClose = stack.popi();
@@ -409,7 +420,7 @@ public:
     /**
      * Create and return an int[] array of segments.
      */
-    int32_t* createSegments() const;
+    int32_t* createSegments(UErrorCode& status) const;
 
     int syntaxError(UErrorCode code,
                     const UnicodeString& rule,
@@ -530,9 +541,9 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             // Handle segment definitions "(" and ")"
             // Parse "(", ")"
             if (segments == NULL) {
-                segments = new Segments();
+                segments = new Segments(parser.status);
             }
-            segments->addParenthesisAt(buf.length(), c == SEGMENT_OPEN);
+            segments->addParenthesisAt(buf.length(), c == SEGMENT_OPEN, parser.status);
             break;
         case END_OF_RULE:
             --pos; // Backup to point to END_OF_RULE
@@ -747,8 +758,8 @@ void RuleHalf::removeContext() {
 /**
  * Create and return an int32_t[] array of segments.
  */
-int32_t* RuleHalf::createSegments() const {
-    return (segments == 0) ? 0 : segments->createArray();
+int32_t* RuleHalf::createSegments(UErrorCode& status) const {
+    return (segments == 0) ? 0 : segments->createArray(status);
 }
 
 //----------------------------------------------------------------------
@@ -814,9 +825,14 @@ void TransliteratorParser::parse(const UnicodeString& rules,
 TransliteratorParser::TransliteratorParser(
                                      const UnicodeString& theRules,
                                      UTransDirection theDirection,
-                                     UParseError* theParseError) :
-    rules(theRules), direction(theDirection), data(0), parseError(theParseError) {
+                                     UParseError* theParseError)
+ :  
+    rules(theRules), direction(theDirection), variablesVector(status), data(0), parseError(theParseError)
+{
     parseData = new ParseData(0, &variablesVector);
+    if (parseData == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
 
 /**
@@ -1115,7 +1131,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     data->ruleSet.addRule(new TransliterationRule(
                                  left->text, left->ante, left->post,
                                  right->text, right->cursor, right->cursorOffset,
-                                 left->createSegments(),
+                                 left->createSegments(status),
                                  left->anchorStart, left->anchorEnd,
                                  *data,
                                  status), status);
@@ -1177,7 +1193,7 @@ UChar TransliteratorParser::generateStandInFor(UnicodeMatcher* adopted) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    variablesVector.addElement(adopted);
+    variablesVector.addElement(adopted, status);
     return variableNext++;
 }
 
@@ -1235,7 +1251,7 @@ UChar TransliteratorParser::getSegmentStandin(int32_t r) {
 void TransliteratorParser::determineVariableRange(void) {
     UnicodeRange privateUse(0xE000, 0x1900); // Private use area
 
-    UnicodeRange* r = privateUse.largestUnusedSubrange(rules);
+    UnicodeRange* r = privateUse.largestUnusedSubrange(rules, status);
 
     data->variablesBase = variableNext = variableLimit = (UChar) 0;
     

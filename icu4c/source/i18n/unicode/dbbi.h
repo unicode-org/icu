@@ -183,7 +183,7 @@ protected:
      */
     virtual void reset(void);
 
-	virtual BreakIterator *  createBufferClone(void *stackBuffer,
+    virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status);
 
@@ -197,7 +197,7 @@ private:
      * cachedBreakPositions so that we only have to do this work once
      * for each time we enter the range.
      */
-    void divideUpDictionaryRange(int32_t startPos, int32_t endPos);
+    void divideUpDictionaryRange(int32_t startPos, int32_t endPos, UErrorCode &status);
 
     /**
      * Used by the tables object to increment the count of dictionary characters

@@ -122,7 +122,7 @@ void CompoundTransliterator::init(const UnicodeString& id,
         return;
     }
 
-    UVector list;
+    UVector list(status);
     UnicodeString regenID;
     Transliterator::parseCompoundID(id, regenID, direction,
                                     idSplitPoint, adoptedSplitTrans,

@@ -11,32 +11,30 @@
 #include "uvector.h"
 #include "cmemory.h"
 
-UBool UVector::outOfMemory = FALSE;
-
-UVector::UVector(int32_t initialCapacity) :
+UVector::UVector(UErrorCode &status, int32_t initialCapacity) :
     count(0),
     capacity(0),
     elements(0),
     deleter(0),
     comparer(0) {
 
-    _init(initialCapacity);
+    _init(initialCapacity, status);
 }
 
-UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity) :
+UVector::UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity) :
     count(0),
     capacity(0),
     elements(0),
     deleter(d),
     comparer(c) {
    
-    _init(initialCapacity);
+    _init(initialCapacity, status);
 }
 
-void UVector::_init(int32_t initialCapacity) {
+void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
     elements = new UHashKey[initialCapacity];
     if (elements == 0) {
-        outOfMemory = TRUE;
+        status = U_MEMORY_ALLOCATION_ERROR;
     } else {
         capacity = initialCapacity;
     }
@@ -48,14 +46,14 @@ UVector::~UVector() {
     elements = 0;
 }
 
-void UVector::addElement(void* obj) {
-    if (ensureCapacity(count + 1)) {
+void UVector::addElement(void* obj, UErrorCode &status) {
+    if (ensureCapacity(count + 1, status)) {
         elements[count++].pointer = obj;
     }
 }
 
-void UVector::addElement(int32_t elem) {
-    if (ensureCapacity(count + 1)) {
+void UVector::addElement(int32_t elem, UErrorCode &status) {
+    if (ensureCapacity(count + 1, status)) {
         elements[count++].integer = elem;
     }
 }
@@ -80,9 +78,9 @@ void UVector::setElementAt(int32_t elem, int32_t index) {
     /* else index out of range */
 }
 
-void UVector::insertElementAt(void* obj, int32_t index) {
+void UVector::insertElementAt(void* obj, int32_t index, UErrorCode &status) {
     // must have 0 <= index <= count
-    if (0 <= index && index <= count && ensureCapacity(count + 1)) {
+    if (0 <= index && index <= count && ensureCapacity(count + 1, status)) {
         for (int32_t i=count; i>index; --i) {
             elements[i] = elements[i-1];
         }
@@ -139,14 +137,14 @@ int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     return -1;
 }
 
-UBool UVector::ensureCapacity(int32_t minimumCapacity) {
+UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
     if (capacity >= minimumCapacity) {
         return TRUE;
     } else {
         int32_t newCap = capacity * 2;
         UHashKey* newElems = new UHashKey[newCap];
         if (newElems == 0) {
-            outOfMemory = TRUE;
+            status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
         uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
@@ -167,10 +165,6 @@ UKeyComparator UVector::setComparer(UKeyComparator d) {
     UKeyComparator old = comparer;
     comparer = d;
     return old;
-}
-
-UBool UVector::isOutOfMemory(void) {
-    return outOfMemory;
 }
 
 /**
@@ -195,12 +189,12 @@ void* UVector::orphanElementAt(int32_t index) {
     return e;
 }
 
-UStack::UStack(int32_t initialCapacity) :
-    UVector(initialCapacity) {
+UStack::UStack(UErrorCode &status, int32_t initialCapacity) :
+    UVector(status, initialCapacity) {
 }
 
-UStack::UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity) :
-    UVector(d, c, initialCapacity) {
+UStack::UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity) :
+    UVector(d, c, status, initialCapacity) {
 }
 
 void* UStack::pop(void) {

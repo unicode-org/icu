@@ -1297,6 +1297,10 @@ InputPath=.\unicode\translit.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\transreg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\tzdat.h
 # End Source File
 # Begin Source File
