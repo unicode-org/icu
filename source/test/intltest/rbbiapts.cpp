@@ -20,6 +20,7 @@
 #include "rbbiapts.h"
 #include "rbbidata.h"
 #include "cstring.h"
+#include "unicode/ustring.h"
 
 /**
  * API Test the RuleBasedBreakIterator class
@@ -557,12 +558,13 @@ void RBBIAPITest::TestQuoteGrouping() {
 //      Test word break rule status constants.
 //
 void RBBIAPITest::TestRuleStatus() {
-
-     
-     UnicodeString testString1 =   //                  Ideographic    Katakana       Hiragana
-             CharsToUnicodeString("plain word 123.45 \\u9160\\u9161 \\u30a1\\u30a2 \\u3041\\u3094");
-                                // 012345678901234567  8      9    0  1      2    3  4      5    6
-     int32_t bounds1[] =     {     0,   5,6, 10,11, 17,18,  19,   20,21,         23,24,    25,  26};
+     UChar str[30]; 
+     u_unescape("plain word 123.45 \\u9160\\u9161 \\u30a1\\u30a2 \\u3041\\u3094",
+              // 012345678901234567  8      9    0  1      2    3  4      5    6
+              //                    Ideographic    Katakana       Hiragana
+                str, 30);
+     UnicodeString testString1(str);
+     int32_t bounds1[] = {0, 5, 6, 10, 11, 17, 18, 19, 20, 21, 23, 24, 25, 26};
      int32_t tag_lo[]  = {UBRK_WORD_NONE,     UBRK_WORD_LETTER, UBRK_WORD_NONE,    UBRK_WORD_LETTER,
                           UBRK_WORD_NONE,     UBRK_WORD_NUMBER, UBRK_WORD_NONE,
                           UBRK_WORD_IDEO,     UBRK_WORD_IDEO,   UBRK_WORD_NONE,
@@ -845,23 +847,6 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
-        case  4: name = "extra"; break;   /* Extra */
-        case  5: name = "TestBuilder"; if (exec) TestBuilder(); break;
-        case  6: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case  7: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
-        case  8: name = "TestBug2190"; if (exec) TestBug2190(); break;
-        case  9: name = "TestRegistration"; if (exec) TestRegistration(); break;
-        case 10: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
-
-        default: name = ""; break; /*needed to end loop*/
-    }
-    /*** TODO synwee
-    switch (index) {
-     //   case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
-        case  0: name = "TestCloneEquals"; if (exec) TestCloneEquals(); break;
-        case  1: name = "TestgetRules"; if (exec) TestgetRules(); break;
-        case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
-        case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
         case  4: name = "TestIteration"; if (exec) TestIteration(); break;
         case  5: name = "extra"; break;   // Extra
         case  6: name = "extra"; break;   // Extra
@@ -875,7 +860,6 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 
         default: name = ""; break; // needed to end loop
     }
-    ***/
 }
 
 //---------------------------------------------
