@@ -208,6 +208,7 @@ static void TestPUtilAPI(void){
 
     {
         const char* dataDirectory;
+        int32_t dataDirectoryLen;
         UChar *udataDir=0;
         UChar temp[100];
         char *charvalue=0;
@@ -218,8 +219,9 @@ static void TestPUtilAPI(void){
         /*dataDirectory=u_getDataDirectory();*/
 
         dataDirectory="directory1";  /*no backslashes*/
-        udataDir=(UChar*)malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
-        u_charsToUChars(dataDirectory, udataDir, (strlen(dataDirectory)+1));
+        dataDirectoryLen=(int32_t)strlen(dataDirectory);
+        udataDir=(UChar*)malloc(sizeof(UChar) * (dataDirectoryLen + 1));
+        u_charsToUChars(dataDirectory, udataDir, (dataDirectoryLen + 1));
         u_uastrcpy(temp, dataDirectory);
        
         if(u_strcmp(temp, udataDir) != 0){

@@ -326,7 +326,7 @@ void TestQuotePattern161()
     u_uastrcpy(exp, expStr);
     
     log_verbose("%s\n", austrdup(dateString) );
-    if(u_strncmp(dateString, exp, strlen(expStr)) !=0)
+    if(u_strncmp(dateString, exp, (int32_t)strlen(expStr)) !=0)
         log_err("Error in formatting a pattern with single quotes\n");
 
     udat_close(format);

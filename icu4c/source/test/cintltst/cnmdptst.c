@@ -432,7 +432,7 @@ static void TestCurrency(void)
         if(U_FAILURE(status)) {
             log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
         }
-        u_charsToUChars(result[i], res, strlen(result[i])+1);
+        u_charsToUChars(result[i], res, (int32_t)strlen(result[i])+1);
         if (u_strcmp(str, res) != 0){
             log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
         }
