@@ -80,7 +80,8 @@ typedef struct UConverterStaticData {   /* +offset: size */
     uint8_t hasToUnicodeFallback;   /* +77: 1 UBool needs to be changed to UBool to be consistent across platform */
     uint8_t hasFromUnicodeFallback; /* +78: 1 */
     uint8_t unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
-    uint8_t reserved[20];           /* +80: 20 to round out the structure */
+    uint8_t subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
+    uint8_t reserved[19];           /* +81: 19 to round out the structure */
                                     /* total size: 100 */
 } UConverterStaticData;
 
@@ -122,6 +123,7 @@ struct UConverter {
     int8_t charErrorBufferLength;       /* number of valid bytes in charErrorBuffer */
     int8_t UCharErrorBufferLength;      /* number of valid UChars in charErrorBuffer */
 
+    uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
     char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];       /* bytes from last error/callback situation */
     uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
