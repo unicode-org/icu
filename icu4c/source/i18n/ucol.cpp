@@ -87,7 +87,7 @@ isAcceptableUCA(void * /*context*/,
         UVersionInfo UCDVersion;
         u_getUnicodeVersion(UCDVersion);
         if(pInfo->dataVersion[0]==UCDVersion[0] &&
-          pInfo->dataVersion[1]>=UCDVersion[1]) { // &&
+          pInfo->dataVersion[1]==UCDVersion[1]) { // &&
         //pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
         //pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
           return TRUE;
