@@ -405,8 +405,8 @@ int32_t RuleBasedBreakIterator::previous(void) {
         return BreakIterator::DONE;
     }
 
-    if (fData->fSafeRevTable != NULL) {
-        return handleNewPrevious();
+    if (fData->fSafeRevTable != NULL || fData->fSafeFwdTable != NULL) {
+        return handlePrevious(fData->fReverseTable);
     }
 
     // old rule syntax
@@ -486,27 +486,56 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     if (fData->fSafeRevTable != NULL) {
         // new rule syntax
         /// todo synwee 
-        /// fText->setIndex(offset);
-        fText->setIndex(fText->startIndex());
-
-        result = fText->startIndex();
-    }
-    else {
-        // otherwise, we have to sync up first.  Use handlePrevious() to back
-        // us up to a known break position before the specified position (if
-        // we can determine that the specified position is a break position,
-        // we don't back up at all).  This may or may not be the last break
-        // position at or before our starting position.  Advance forward
-        // from here until we've passed the starting position.  The position
-        // we stop on will be the first break position after the specified one.
-        // old rule syntax
-
         fText->setIndex(offset);
-        if (offset == fText->startIndex()) {
-            return handleNext();
+        // move forward one codepoint to prepare for moving back to a
+        // safe point.
+        // this handles offset being between a supplementary character
+        fText->next32();
+        // handlePrevious will move most of the time to < 1 boundary away
+        handlePrevious(fData->fSafeRevTable);
+        int32_t result = next();
+        while (result <= offset) {
+            result = next();
         }
-        result = previous();
+        return result;
     }
+    if (fData->fSafeFwdTable != NULL) {
+        // backup plan if forward safe table is not available
+        fText->setIndex(offset);
+        fText->previous32();
+        // handle next will give result >= offset
+        handleNext(fData->fSafeFwdTable);
+        // previous will give result 0 or 1 boundary away from offset, 
+        // most of the time
+        // we have to 
+        int32_t oldresult = previous();
+        while (oldresult > offset) {
+            int32_t result = previous();
+            if (result <= offset) {
+                return oldresult;
+            }
+            oldresult = result;
+        }
+        int32_t result = next();
+        if (result <= offset) {
+            return next();
+        }
+        return result;
+    }
+    // otherwise, we have to sync up first.  Use handlePrevious() to back
+    // us up to a known break position before the specified position (if
+    // we can determine that the specified position is a break position,
+    // we don't back up at all).  This may or may not be the last break
+    // position at or before our starting position.  Advance forward
+    // from here until we've passed the starting position.  The position
+    // we stop on will be the first break position after the specified one.
+    // old rule syntax
+
+    fText->setIndex(offset);
+    if (offset == fText->startIndex()) {
+        return handleNext();
+    }
+    result = previous();
 
     while (result != BreakIterator::DONE && result <= offset) {
         result = next();
@@ -537,15 +566,43 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     // position specified by the caller, we can just use previous()
     // to carry out this operation
 
-    if (fData->fSafeRevTable != NULL) {
+    if (fData->fSafeFwdTable != NULL) {
         /// todo synwee
         // new rule syntax
-        int32_t result = fText->endIndex();
-        fText->setIndex(result);
-        while (result != BreakIterator::DONE && result >= offset) {
+        fText->setIndex(offset);
+        // move backwards one codepoint to prepare for moving forwards to a
+        // safe point.
+        // this handles offset being between a supplementary character
+        fText->previous32();
+        handleNext(fData->fSafeFwdTable);
+        int32_t result = previous();
+        while (result >= offset) {
             result = previous();
         }
+        return result;
+    }
+    if (fData->fSafeRevTable != NULL) {
+        // backup plan if forward safe table is not available
+        fText->setIndex(offset);
+        fText->next32();
+        // handle previous will give result <= offset
+        handlePrevious(fData->fSafeRevTable);
 
+        // next will give result 0 or 1 boundary away from offset, 
+        // most of the time
+        // we have to 
+        int32_t oldresult = next();
+        while (oldresult < offset) {
+            int32_t result = next();
+            if (result >= offset) {
+                return oldresult;
+            }
+            oldresult = result;
+        }
+        int32_t result = previous();
+        if (result >= offset) {
+            return previous();
+        }
         return result;
     }
 
@@ -565,6 +622,11 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // the beginning index of the iterator is always a boundary position by definition
     if (fText == NULL || offset == fText->startIndex()) {
         first();       // For side effects on current position, tag values.
+        return TRUE;
+    }
+
+    if (offset == fText->endIndex()) {
+        last();       // For side effects on current position, tag values.
         return TRUE;
     }
 
@@ -608,7 +670,11 @@ int32_t RuleBasedBreakIterator::current(void) const {
 //     value every time the state machine passes through an accepting state.
 //
 //-----------------------------------------------------------------------------------
-int32_t RuleBasedBreakIterator::handleNext(void) {
+int32_t RuleBasedBreakIterator::handleNext() {
+    return handleNext(fData->fForwardTable);
+}
+
+int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
     if (fTrace) {
         RBBIDebugPrintf("Handle Next   pos   char  state category  \n");
     }
@@ -637,7 +703,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
     fLastBreakTag = 0;
 
     row = (RBBIStateTableRow *)    // Point to starting row of state table.
-        (fData->fForwardTable->fTableData + (fData->fForwardTable->fRowLen * state));
+        (statetable->fTableData + (statetable->fRowLen * state));
 
     // Character Category fetch for starting character.
     //    See comments on character category code within loop, below.
@@ -700,7 +766,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
         // look up a state transition in the state table
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
-            (fData->fForwardTable->fTableData + (fData->fForwardTable->fRowLen * state));
+            (statetable->fTableData + (statetable->fRowLen * state));
 
         // Get the next character.  Doing it here positions the iterator
         //    to the correct position for recording matches in the code that
@@ -913,14 +979,14 @@ continueOn:
 //      The logic of this function is very similar to handleNext(), above.
 //
 //-----------------------------------------------------------------------------------
-int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
-    if (fText == NULL || fData == NULL) {
+int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable) {
+    if (fText == NULL || statetable == NULL) {
         return 0;
     }
     // break tag is no longer valid after icu switched to exact backwards
     // positioning.
     fLastBreakTagValid = FALSE;
-    if (fData->fReverseTable == NULL) {
+    if (statetable == NULL) {
         return fText->setToStart();
     }
 
@@ -938,7 +1004,7 @@ int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
     RBBIStateTableRow *row;
 
     row = (RBBIStateTableRow *)
-        (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
+        (statetable->fTableData + (state * statetable->fRowLen));
     UTRIE_GET16(&fData->fTrie, c, category);
     if ((category & 0x4000) != 0)  {
         fDictionaryCharCount++;
@@ -954,8 +1020,7 @@ int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
         // if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
         if (hasPassedStartText) { 
             // if we have already considered the start of the text
-            if (fData->fLookAheadHardBreak == TRUE 
-                && row->fLookAhead != 0) {
+            if (row->fLookAhead != 0 && lookaheadResult == 0) {
                 result = 0;
             }
             break;
@@ -987,7 +1052,7 @@ int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
         // look up a state transition in the backwards state table
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
-            (this->fData->fReverseTable->fTableData + (state * fData->fReverseTable->fRowLen));
+            (statetable->fTableData + (state * statetable->fRowLen));
     
         if (row->fAccepting == -1) {
             // Match found, common case, could have lookahead so we move on to check it

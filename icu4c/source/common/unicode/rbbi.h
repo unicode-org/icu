@@ -30,6 +30,7 @@ struct RBBIDataHeader;
 class  RuleBasedBreakIteratorTables;
 class  BreakIterator;
 class  RBBIDataWrapper;
+struct RBBIStateTable;
 
 
 
@@ -480,9 +481,21 @@ private:
      * The various calling methods then iterate forward from this safe position to
      * the appropriate position to return.  (For more information, see the description
      * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
+     * @param statetable state table used of moving backwards
      * @internal
      */
-    int32_t handleNewPrevious(void);
+    int32_t handlePrevious(const RBBIStateTable *statetable);
+
+    /**
+     * This method is the actual implementation of the next() method.  All iteration
+     * vectors through here.  This method initializes the state machine to state 1
+     * and advances through the text character by character until we reach the end
+     * of the text or the state machine transitions to state 0.  We update our return
+     * value every time the state machine passes through a possible end state.
+     * @param statetable state table used of moving forwards
+     * @internal
+     */
+    int32_t handleNext(const RBBIStateTable *statetable);
 };
 
 //------------------------------------------------------------------------------

@@ -9,7 +9,6 @@
 #      These rules are based on TR 29 version 4.0.0
 #
     
-!!chain;
 
 #
 # Character categories as defined in TR 29
@@ -31,85 +30,79 @@ $Term  = [\u0021 \u003F \u0589 \u061F \u06D4 \u0700 \u0701 \u0702 \u0964 \u1362
 $Close   = [[:Open_Punctuation:] [:Close_Punctuation:] [:Linebreak = Quotation:] -
            [[:name = HEBREW PUNCTUATION GERESH:] $ATerm $Term]];
            
-$Extend  = [[:Grapheme_Extend = TRUE:]]; 
+           
 
-$ATermEx = $ATerm $Extend*;
-$NumericEx = $Numeric $Extend*;
-$UpperEx = $Upper $Extend*;
-$CloseEx = $Close $Extend*;
-$SpEx = $Sp $Extend*;
-$LowerEx = $Lower $Extend*;
-$TermEx = $Term $Extend*;
+# Define extended forms of the character classes,
+#   incorporate grapheme cluster + format chars.
 
-# rule 6
+$Extend     = [[:Grapheme_Extend = TRUE:]]; 
+$ATermEx    = $ATerm   $Extend* $Format*;
+$NumericEx  = $Numeric $Extend* $Format*;
+$UpperEx    = $Upper   $Extend* $Format*;
+$TermEx     = $Term    $Extend* $Format*;
 
-$ATermEx $Format* $NumericEx;         
+#
+#  $SepSeq keeps together CRLF as a separator.  (CRLF is a grapheme cluster)
+#
+$SepSeq  = $Sep | \u000d\u000a;
 
-# rule 7
+# $InteriorChars are those that never trigger a following break.
+$InteriorChars = [^$Term $ATerm $Sep];   #Note:  includes Extend and Format chars
 
-$UpperEx $ATermEx $Format* $UpperEx;
+## -------------------------------------------------
 
-# rule 8
+!!forward;
 
-$ATermEx $Format* $CloseEx* $Format* $SpEx $Format* 
-    [^$OLetter $Upper $Lower $Sep]* $Extend* $Format* $LowerEx;
-
-# rule 9 forced to exit by / [^$Close $Sp]
-
-($TermEx | $ATermEx) $Format* ($CloseEx $Format*)* $Sep;
-($TermEx | $ATermEx) $Format* ($CloseEx $Format*)* ($CloseEx | $SpEx) / [^$Close $Sp];
-
-# rule 10 forced to exit by / [^$Sp];
+# Rule 6.  Match an ATerm (.) that does not cause a break because a number immediately follows it.
+$NumberFollows = $InteriorChars* $ATermEx $NumericEx;
 
 
-($TermEx | $ATermEx) $Format* ($CloseEx $Format*)* ($SpEx $Format*)* $Sep;
-($TermEx | $ATermEx) $Format* ($CloseEx $Format*)* ($SpEx $Format*)* $SpEx / [^$Sp];
+# Rule 7.  $UppersSurround   Match a no-break sentence fragment containing a . surrounded by Uppers
+$UppersSurround = $InteriorChars* $UpperEx $ATermEx $UpperEx;
 
+# Rule 8   Matches a sentence fragment containing "." that should not cause a sentence break,
+#          because a lower case word follows the period.
+$LowerWordFollows  = $InteriorChars* $ATermEx $Close* $Sp* [^$OLetter $Upper $Lower $Sep]* $Lower;
 
-# rule 11 partly included in rule 9 and 10
-$TermEx;
-$ATermEx;
+# Rules 3, 9, 10, 11
+#                       Matches a simple sentence, or the trailing part of a complex sentence,
+#                       where a simple sentence contains no interior "."s.
+$TermEndSequence   = $InteriorChars* ($TermEx | $ATermEx) $Close* $Sp* $SepSeq?;
+$EndSequence       = $InteriorChars* $SepSeq?;
 
-# rule 12
+# Put them all together.  
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $TermEndSequence{0};   # status = UBRK_SENTENCE_TERM
+($NumberFollows | $UppersSurround |  $LowerWordFollows)*  $EndSequence{100};     # status = UBRK_SENTENCE_SEP
+    
+## -------------------------------------------------
 
-([^$Term $ATerm $Sep] $Extend*)+;
-([^$Term $ATerm $Sep] $Extend* $Format*)+ ($Term | $ATerm | $Sep);
-
+!!reverse;
+ 
 #
 #  Reverse Rules
 #
+$EndGorp                  = ($Term | $ATerm | $Sep | $Close | $Extend | $Format | $Sp);
+$RevEndSequence           = $EndGorp* $InteriorChars* $EndGorp* | $Sep [^$ATerm $Term]*;
+$ReverseLowerWordFollows  = $Lower [^$OLetter $Upper $Lower $Sep]* $ATerm $InteriorChars*;
+$ReverseUpperSurround     = $Upper $Format* $Extend* $ATerm $Format* $Extend* $Upper $InteriorChars*;
+$ReverseNumberFollows     = $Numeric $Format* $Extend* $ATerm $InteriorChars*;
 
-$BackATermEx = $Extend* $ATerm;
-$BackNumericEx = $Extend* $Numeric;
-$BackUpperEx = $Extend* $Upper;
-$BackCloseEx = $Extend* $Close;
-$BackSpEx = $Extend* $Sp;
-$BackLowerEx = $Extend* $Lower;
-$BackTermEx = $Extend* $Term;
+$RevEndSequence ($ReverseLowerWordFollows | $ReverseUpperSurround | $ReverseNumberFollows)* .?;
 
-# rule 3 
+## -------------------------------------------------
 
-! $Sep .;
-
-# rule 6
-
-! $BackNumericEx $Format* $BackATermEx;         
-
+## !!safe_reverse;
+ 
 # rule 7
+## $Extend* $ATerm $Format* $Extend* $Upper;
 
-! $BackUpperEx $Format* $BackATermEx $BackUpperEx;
+# rule 11
+## ($Extend* $Sp $Format*)* ($Extend* $Close $Format*)* $Extend* ($Term | $ATerm);
+
+## -------------------------------------------------
+
+!!safe_forward;
 
 # rule 8
 
-! $BackLowerEx $Format* $Extend* [^$OLetter $Upper $Lower $Sep]* $Format* 
-    $BackSpEx $Format* $BackCloseEx* $Format* $BackATermEx;
-
-# rules 9, 10, 11, 12
-
-$Any = [^$Term $ATerm $Sep];
-$Safe = [^$Term $ATerm $Sep $Sp $Close];
-$BackEnd = ($BackSpEx $Format*)* ($BackCloseEx $Format*)* ($BackTermEx | $BackATermEx);
-! $BackEnd;
-! $BackEnd? $Any* $Safe;
-! $BackEnd? $Any* $Close / ($BackSpEx $Format*)+ ($BackTermEx | $BackATermEx);
-! $BackEnd? $Any* $Sp / $Sep; 
+## $Lower .;

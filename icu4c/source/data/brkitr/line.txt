@@ -341,7 +341,7 @@ $CM* $ALPlus $CM+ / $LB5Breaks;
 !!safe_reverse;
 
 # LB 7
-$CM* [^$CM $BK $CR $LF $NL $ZW $SP];
+$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
 $CM+ $SP / .;
 
 # LB 9
@@ -362,17 +362,17 @@ $CL $CM* ($NU | $IS);
 !!safe_forward;
 
 # LB 7
-[^$BK $CR $LF $NL $ZW $SP] $CM*;
-$SP $CM+ / .;
+[^$BK $CR $LF $NL $ZW $SP] $CM+;
+$SP $CM+ / [^$CM];
 
 # LB 9
-$OP $CM* $SP*;
+$OP $CM* $SP+;
 
 # LB 10
-$QU $CM* $SP*;
+$QU $CM* $SP+;
 
 # LB 11
-$CL $CM* $SP*;
+$CL $CM* $SP+;
 
 # LB 18
 $HY $CM* $NU; 
