@@ -9,7 +9,6 @@ package com.ibm.rbm;
 
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.*;
 import java.util.*;
 
 import org.apache.xerces.dom.*;

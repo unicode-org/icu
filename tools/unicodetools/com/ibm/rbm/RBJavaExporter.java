@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBJavaExporter.java,v $ 
- * $Date: 2004/06/29 18:45:42 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/06/29 20:39:59 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************
  */
@@ -17,7 +17,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.filechooser.*;
 import java.util.*;
 
 /**

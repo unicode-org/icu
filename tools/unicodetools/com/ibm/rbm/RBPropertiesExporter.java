@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/RBPropertiesExporter.java,v $ 
- * $Date: 2004/06/29 18:45:43 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/06/29 20:39:59 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************
  */
@@ -14,7 +14,6 @@ package com.ibm.rbm;
 
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.*;
 import java.util.*;
 
 /**
