@@ -124,11 +124,6 @@ typedef enum {
   /** upper case sorts before lower case */
   UCOL_UPPER_FIRST = 25,
 
-  /** Valid for UCOL_NORMALIZATION_MODE 
-      UCOL_ON & UCOL_OFF are also allowed 
-      for this attribute */
-  UCOL_ON_WITHOUT_HANGUL = 28,
-
   UCOL_ATTRIBUTE_VALUE_COUNT
 
 } UColAttributeValue;
