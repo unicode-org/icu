@@ -290,11 +290,23 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
     // number of tags should match number of groups from find operation.
     // matcher->groupCount does not include group 0, the entire match, hence the +1.
+    //   G option in test means that capture group data is not available in the
+    //     expected results, so the check needs to be suppressed.
     if (isMatch == FALSE && groupStarts.size() != 0) {
         errln("Error at line %d:  Match expected, but none found.\n", line);
         failed = TRUE;
         goto cleanupAndReturn;
     }
+
+    if (flags.indexOf((UChar)'G') >= 0) {
+        // Only check for match / no match.  Don't check capture groups.
+        if (isMatch && groupStarts.size() == 0) {
+            errln("Error at line %d:  No match expected, but one found.\n", line);
+            failed = TRUE;
+        }
+        goto cleanupAndReturn;   
+    }
+    
     int i;
     for (i=0; i<=matcher->groupCount(); i++) {
         int32_t  expectedStart = (i >= groupStarts.size()? -1 : groupStarts.elementAti(i));
@@ -316,9 +328,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     if ( matcher->groupCount()+1 < groupStarts.size()) {
         errln("Error at line %d: Expected %d capture groups, found %d.", 
             line, groupStarts.size()-1, matcher->groupCount());
-            failed = TRUE;
-    }
-
+        failed = TRUE;
+        }
+        
 cleanupAndReturn:
     if (failed) {
         errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern),
@@ -1117,7 +1129,7 @@ void RegexTest::Extended() {
 
     RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.+?)\\1", 0, status);
     RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status); 
-    RegexMatcher    flagsMat      ("\\s*([ixsmdt]*)([:letter:]*)", 0, status);
+    RegexMatcher    flagsMat      ("\\s*([ixsmdtG]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
