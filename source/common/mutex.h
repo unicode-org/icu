@@ -56,33 +56,16 @@ U_NAMESPACE_BEGIN
 //        compiler!!
 //
 
-class U_COMMON_API Mutex : public UObject {
+class U_COMMON_API Mutex : public UMemory {
 public:
   inline Mutex(UMTX *mutex = NULL);
   inline ~Mutex();
 
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   *
-   * @draft ICU 2.2
-   */
-  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for this class.
-   *
-   * @draft ICU 2.2
-   */
-  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
   UMTX   *fMutex;
 
-  /**
-   * The address of this static class variable serves as this class's ID
-   * for ICU "poor man's RTTI".
-   */
-  static const char fgClassID;
+  Mutex(const Mutex &other); // forbid copying of this class
+  Mutex &operator=(const Mutex &other); // forbid copying of this class
 };
 
 inline Mutex::Mutex(UMTX *mutex)

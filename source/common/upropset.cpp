@@ -232,8 +232,6 @@ U_CFUNC UBool upropset_cleanup(void) {
 
 U_NAMESPACE_BEGIN
 
-const char CharString::fgClassID=0;
-
 //----------------------------------------------------------------
 // Public API
 //----------------------------------------------------------------
