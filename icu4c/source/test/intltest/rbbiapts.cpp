@@ -149,6 +149,9 @@ void RBBIAPITest::TestBoilerPlate()
     if(*c==*a){
         errln("Failed: boilerplate method opertator== does not return correct results");
     }
+    delete a;
+    delete b;
+    delete c;
 }
 
 void RBBIAPITest::TestgetRules()
