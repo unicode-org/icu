@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2000, International Business Machines Corporation 
+#* Copyright (C) 1999-2000, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -35,6 +35,7 @@ CFG=Debug
 !IF "$(ICUP)"==""
 !ERROR Can't find path!
 !ENDIF
+!MESSAGE icu path is $(ICUP)
 ICUDATA=$(ICUP)\data
 TESTDATA=$(ICUP)\source\test\testdata
 
@@ -101,19 +102,19 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ELSE
 !ERROR ERROR: cannot find "genrbfiles.mk"
 !ENDIF
-RB_FILES = $(GENRB_SOURCE:.txt=.res) 
+RB_FILES = $(GENRB_SOURCE:.txt=.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll $(TESTDATAOUT)\testdata.dll $(DLL_OUTPUT)\icudata.dll GOBACK #icudata.dat 
+ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll "$(TESTDATAOUT)\testdata.dll" "$(DLL_OUTPUT)\icudata.dll" GOBACK #icudata.dat
 	@echo All targets are up to date
 
-BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
+BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
 
 #invoke pkgdata
-$(DLL_OUTPUT)\icudata.dll :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
+"$(DLL_OUTPUT)\icudata.dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
 	@echo Building icu data
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p icudata -O $(PKGOPT) -d $(DLL_OUTPUT) -s $(ICUDATA) <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p icudata -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(ICUDATA)" <<pkgdatain.txt
 uprops.dat
 unames.dat
 cnvalias.dat
@@ -124,78 +125,78 @@ $(RB_FILES:.res =.res
 )
 $(TRANSLIT_FILES:.res =.res
 )
-$(BRK_FILES:.brk =.brk
+$(BRK_FILES:.brk" =.brk"
 )
-<<
+<<KEEP
 
-$(TESTDATAOUT)\testdata.dll :  $(TESTDATA)\root.res $(TESTDATA)\te.res $(TESTDATA)\te_IN.res $(TESTDATA)\testtypes.res
+"$(TESTDATAOUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res"
 	@echo Building test data
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p testdata -O $(PKGOPT) -d $(TESTDATAOUT) -s $(TESTDATA) <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
 root.res
 te.res
 te_IN.res
 testtypes.res
-<<      
+<<
 
 test_dat.dll :  test.dat
 	@echo Building test_dat.dll
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p test_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p test_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
 test.dat
 <<
 
 base_test_dat.dll : test.dat
 	@echo Building base_test_dat.dll
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p base_test_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p base_test_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
 test.dat
 <<
 
 base_dat.dll : test.dat
 	@echo Building base_dat.dll
- 	@$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata -v -m dll -c -p base_dat -O $(PKGOPT) -d $(ICUDATA) -s $(ICUDATA) <<
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p base_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
 test.dat
 <<
 
-# Targets for test.dat 
-test.dat : 
-	@echo Creating data file for test
+# Targets for test.dat
+test.dat :
+	@echo Creating data file for test: $(ICUDATA) $(ICUP)
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gentest\$(CFG)\gentest 
+	@"$(ICUTOOLS)\gentest\$(CFG)\gentest"
 
 #Targets for base_test.dat
 base_test.dat :
 	@echo Creating base data file test
 	@set ICU_DATA=$(ICUDATA)
-	@copy $(ICUDATA)\test.dat $(ICUDATA)\base_test.dat 
+	@copy "$(ICUDATA)\test.dat" "$(ICUDATA)\base_test.dat"
 
-$(ICUDATA)\sent.brk : $(ICUDATA)\sentLE.brk
-    copy $(ICUDATA)\sentLE.brk $(ICUDATA)\sent.brk
+"$(ICUDATA)\sent.brk" : "$(ICUDATA)\sentLE.brk"
+    copy "$(ICUDATA)\sentLE.brk" "$(ICUDATA)\sent.brk"
 
-$(ICUDATA)\char.brk : $(ICUDATA)\charLE.brk
-    copy $(ICUDATA)\charLE.brk $(ICUDATA)\char.brk
+"$(ICUDATA)\char.brk" : "$(ICUDATA)\charLE.brk"
+    copy "$(ICUDATA)\charLE.brk" "$(ICUDATA)\char.brk"
 
-$(ICUDATA)\line.brk : $(ICUDATA)\lineLE.brk
-    copy $(ICUDATA)\lineLE.brk $(ICUDATA)\line.brk
+"$(ICUDATA)\line.brk" : "$(ICUDATA)\lineLE.brk"
+    copy "$(ICUDATA)\lineLE.brk" "$(ICUDATA)\line.brk"
 
-$(ICUDATA)\word.brk : $(ICUDATA)\wordLE.brk
-    copy $(ICUDATA)\wordLE.brk $(ICUDATA)\word.brk
+"$(ICUDATA)\word.brk" : "$(ICUDATA)\wordLE.brk"
+    copy "$(ICUDATA)\wordLE.brk" "$(ICUDATA)\word.brk"
 
-$(ICUDATA)\line_th.brk : $(ICUDATA)\line_thLE.brk
-    copy $(ICUDATA)\line_thLE.brk $(ICUDATA)\line_th.brk
+"$(ICUDATA)\line_th.brk" : "$(ICUDATA)\line_thLE.brk"
+    copy "$(ICUDATA)\line_thLE.brk" "$(ICUDATA)\line_th.brk"
 
-$(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
-    copy $(ICUDATA)\word_thLE.brk $(ICUDATA)\word_th.brk
+"$(ICUDATA)\word_th.brk" : "$(ICUDATA)\word_thLE.brk"
+    copy "$(ICUDATA)\word_thLE.brk" "$(ICUDATA)\word_th.brk"
 
 # utility to send us to the right dir
 GODATA :
-	@cd $(ICUDATA)
+	@cd "$(ICUDATA)"
 
 # utility to get us back to the right dir
 GOBACK :
-	@cd $(ICUTOOLS)
+	@cd "$(ICUTOOLS)"
 
 # This is to remove all the data files
 CLEAN :
-	@cd $(ICUDATA)
+	@cd "$(ICUDATA)"
 	-@erase "*.cnv"
 	-@erase "*.res"
 	-@erase "$(TRANS)*.res"
@@ -217,55 +218,55 @@ CLEAN :
 	-@erase "base*.*"
 	@cd $(TEST)
 	-@erase "*.res"
-	@cd $(ICUTOOLS)
+	@cd "$(ICUTOOLS)"
 
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	$(ICUTOOLS)\genrb\$(CFG)\genrb -s$(@D) -d$(@D) $(?F)
+	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s"$(@D)" -d"$(@D)" $(?F)
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
 .ucm.cnv::
 	@echo Generating converters and c source files
-	@cd $(ICUDATA)
+	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Targets for uprops.dat
-uprops.dat : unidata\UnicodeData.txt unidata\Mirror.txt $(ICUTOOLS)\genprops\$(CFG)\genprops.exe
+uprops.dat : unidata\UnicodeData.txt unidata\Mirror.txt "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\genprops\$(CFG)\genprops -s $(ICUDATA)\unidata
+	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -s "$(ICUDATA)\unidata"
 
 # Targets for unames.dat
-unames.dat : unidata\UnicodeData.txt $(ICUTOOLS)\gennames\$(CFG)\gennames.exe
+unames.dat : unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gennames\$(CFG)\gennames unidata\UnicodeData.txt
+	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" unidata\UnicodeData.txt
 
 # Targets for converters
-cnvalias.dat : convrtrs.txt $(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe
+cnvalias.dat : convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval
+	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval"
 
 # Targets for tz
-tz.dat : {$(ICUTOOLS)\gentz}tz.txt {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
+tz.dat : {"$(ICUTOOLS)\gentz"}tz.txt {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 	@echo Creating data file for Timezones
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gentz\$(CFG)\gentz $(ICUTOOLS)\gentz\tz.txt
+	@"$(ICUTOOLS)\gentz\$(CFG)\gentz" "$(ICUTOOLS)\gentz\tz.txt"
 
 # Dependencies on the tools
-convrtrs.txt : {$(ICUTOOLS)\gencnval\$(CFG)}gencnval.exe
+convrtrs.txt : {"$(ICUTOOLS)\gencnval\$(CFG)"}gencnval.exe
 
-tz.txt : {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
+tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 
-uprops.dat unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
+uprops.dat unames.dat cnvalias.dat tz.dat : {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
-$(GENRB_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
+$(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 
-$(UCM_SOURCE) : {$(ICUTOOLS)\makeconv\$(CFG)}makeconv.exe {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
+$(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
-test.dat : {$(ICUTOOLS)\gentest\$(CFG)}gentest.exe
+test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 

@@ -40,15 +40,22 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 
   infiles = o->filePaths;
 
-  sprintf(tmp, "$(TARGETDIR)\\$(CMNTARGET) : $(DATAFILEPATHS)\n\t@$(GENCMN) -C \"%s\" -d %s -n %s 1000000 <<\n", 
+  sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n\t@\"$(GENCMN)\" -C \"%s\" -d \"%s\" -n \"%s\" 1000000 <<\n", 
 	  o->comment, o->targetDir, o->shortName);
     T_FileStream_writeLine(makefile, tmp);
 
-  for(;infiles;infiles = infiles->next) {
-	  sprintf(tmp, "%s\n", infiles->str);
+	pkg_writeCharList(makefile, infiles, "\n", -1);
+/*
+	for(;infiles;infiles = infiles->next) {
+	  if(infiles->str[0] != '"' && infiles->str[uprv_strlen(infiles->str)-1] != '"') {
+		sprintf(tmp, "\"%s\"\n", infiles->str);
+	  } else {
+		sprintf(tmp, "%s\n", infiles->str);
+	  }
 	  T_FileStream_writeLine(makefile, tmp);
   }
-  sprintf(tmp, "<<\n");
+*/
+  sprintf(tmp, "\n<<\n");
   T_FileStream_writeLine(makefile, tmp);
 }
 
@@ -133,30 +140,30 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
 
   if(isDll) {
-      sprintf(tmp, "all: $(TARGETDIR)\\$(DLLTARGET)\n\n");
+      sprintf(tmp, "all: \"$(TARGETDIR)\\$(DLLTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
-      sprintf(tmp, "$(TARGETDIR)\\$(DLLTARGET): $(TARGETDIR)\\$(CMNOBJTARGET)\n"
-				    "\t@$(LINK32) $(LINK32_FLAGS) $(TARGETDIR)\\$(CMNOBJTARGET)\n\n");
+      sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
+				    "\t@$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
-      sprintf(tmp, "$(TARGETDIR)\\$(CMNOBJTARGET): $(TARGETDIR)\\$(CMNTARGET)\n"
-				    "\t@$(GENCCODE) $(GENCOPTIONS) -o -d $(TARGETDIR) $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      sprintf(tmp, "\"$(TARGETDIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
+				    "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp2, 
           "clean:\n"
-          "\t-@erase $(TARGETDIR)\\$(DLLTARGET)\n"
-          "\t-@erase $(TARGETDIR)\\$(CMNOBJTARGET)\n"
-          "\t-@erase $(TARGETDIR)\\$(CMNTARGET)\n\n");
+          "\t-@erase \"$(TARGETDIR)\\$(DLLTARGET)\"\n"
+          "\t-@erase \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
+          "\t-@erase \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp2);
   } else {
 
-      sprintf(tmp, "all: $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      sprintf(tmp, "all: \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp2, 
           "clean:\n"
-          "\t-@erase $(TARGETDIR)\\$(CMNTARGET)\n\n");
+          "\t-@erase \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp2);
   }
 
