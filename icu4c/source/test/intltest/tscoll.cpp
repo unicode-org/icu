@@ -320,6 +320,7 @@ IntlTestCollator::doTestVariant(Collator* col, UnicodeString &source, UnicodeStr
   Collator::EComparisonResult keyResult = srckey.compareTo(tgtkey);
 
   reportCResult(source, target, srckey, tgtkey, compareResult, keyResult, result, result);
+
 /*
   if (compareResult != result) {
     errln("String comparison failed in variant test\n");
@@ -339,6 +340,14 @@ IntlTestCollator::doTest(Collator* col, UnicodeString source, UnicodeString targ
   } else if (result == Collator::GREATER) {
     doTestVariant(col, target, source, Collator::LESS);
   }
+
+  UErrorCode status = U_ZERO_ERROR;
+  CollationElementIterator* c = ((RuleBasedCollator *)col)->createCollationElementIterator( source );
+  logln("Testing iterating source: "+source);
+  backAndForth(*c);
+  c->setText(target, status);
+  logln("Testing iterating target: "+target);
+  backAndForth(*c);
 }
 
 
@@ -459,5 +468,118 @@ UnicodeString &IntlTestCollator::prettify(const CollationKey &source, UnicodeStr
     target += "]";
 
     return target;
+}
+
+void IntlTestCollator::backAndForth(CollationElementIterator &iter)
+{
+    // Run through the iterator forwards and stick it into an array
+    int32_t orderLength = 0;
+    int32_t *orders = getOrders(iter, orderLength);
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Now go through it backwards and make sure we get the same values
+    int32_t index = orderLength;
+    int32_t o;
+
+    // reset the iterator
+    iter.reset();
+
+    while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
+    {
+        if (o != orders[--index])
+        {
+            if (o == 0)
+                index ++;
+            else
+            {
+                while (index > 0 && orders[--index] == 0)
+                {
+                }
+                if (o != orders[index])
+                {
+                    errln("Mismatch at index %d: 0x%X vs 0x%X", index,
+                        orders[index], o);
+                    break;
+                }
+            }
+        }
+    }
+
+    while (index != 0 && orders[index - 1] == 0)
+    {
+      index --;
+    }
+
+    if (index != 0)
+    {
+        UnicodeString msg("Didn't get back to beginning - index is ");
+        errln(msg + index);
+
+        iter.reset();
+        err("next: ");
+        while ((o = iter.next(status)) != CollationElementIterator::NULLORDER)
+        {
+            UnicodeString hexString("0x");
+
+            appendHex(o, 8, hexString);
+            hexString += " ";
+            err(hexString);
+        }
+        errln("");
+
+        err("prev: ");
+        while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
+        {
+            UnicodeString hexString("0x");
+
+            appendHex(o, 8, hexString);
+            hexString += " ";
+             err(hexString);
+        }
+        errln("");
+    }
+
+    delete[] orders;
+}
+
+
+/**
+ * Return an integer array containing all of the collation orders
+ * returned by calls to next on the specified iterator
+ */
+int32_t *IntlTestCollator::getOrders(CollationElementIterator &iter, int32_t &orderLength)
+{
+    int32_t maxSize = 100;
+    int32_t size = 0;
+    int32_t *orders = new int32_t[maxSize];
+    UErrorCode status = U_ZERO_ERROR;
+
+    int32_t order;
+    while ((order = iter.next(status)) != CollationElementIterator::NULLORDER)
+    {
+        if (size == maxSize)
+        {
+            maxSize *= 2;
+            int32_t *temp = new int32_t[maxSize];
+
+            uprv_memcpy(temp, orders, size * sizeof(int32_t));
+            delete[] orders;
+            orders = temp;
+        }
+
+        orders[size++] = order;
+    }
+
+    if (maxSize > size)
+    {
+        int32_t *temp = new int32_t[size];
+
+        uprv_memcpy(temp, orders, size * sizeof(int32_t));
+        delete[] orders;
+        orders = temp;
+    }
+
+    orderLength = size;
+    return orders;
 }
 
