@@ -1237,6 +1237,15 @@ const char *IntlTest::getSourceTestData(UErrorCode& err) {
     srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
 #else
     srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+    FILE *f = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"rbbitst.txt", "r");
+    if (f) {
+        /* We're in icu/source/test/intltest/ */
+        fclose(f);
+    }
+    else {
+        /* We're in icu/source/test/intltest/(Debug|Release) */
+        srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+    }
 #endif
     return srcDataDir;
 }
