@@ -386,6 +386,12 @@ DateFormat::isLenient() const
     return fCalendar->isLenient();
 }
 
+Locale 
+DateFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
+{
+  return Locale("");
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

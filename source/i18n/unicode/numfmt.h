@@ -616,6 +616,14 @@ public:
      */
     const UChar* getCurrency() const;
 
+    /** Get the locale for this numeric format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
 public:
 
     /**
