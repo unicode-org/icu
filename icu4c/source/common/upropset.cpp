@@ -15,6 +15,7 @@
 #include "mutex.h"
 #include "ucln.h"
 #include "charstr.h"
+#include "uprops.h"
 
 
 static UMTX PROPSET_MUTEX = NULL;
@@ -547,7 +548,7 @@ UnicodeString UnicodePropertySet::munge(const UnicodeString& str,
     for (int32_t i=start; i<limit; ) {
         UChar32 c = str.char32At(i);
         i += UTF_CHAR_LENGTH(c);
-        if (c != 95/*_*/ && c != 45/*-*/ && !u_isspace(c)) {
+        if (c != 95/*_*/ && c != 45/*-*/ && !uprv_isRuleWhiteSpace(c)) {
             buf.append(c);
         }
     }
@@ -563,7 +564,7 @@ int32_t UnicodePropertySet::skipWhitespace(const UnicodeString& str,
                                            int32_t pos) {
     while (pos < str.length()) {
         UChar32 c = str.char32At(pos);
-        if (!u_isspace(c)) {
+        if (!uprv_isRuleWhiteSpace(c)) {
             break;
         }
         pos += UTF_CHAR_LENGTH(c);
