@@ -7,8 +7,8 @@
 
 en_BE_EURO {
     CurrencyElements { 
-            "\u20ac",
-            "EUR ",
+            "\u20AC",
+            "EUR",
             ",",
     }
 
