@@ -937,6 +937,18 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
+    public void TestGreekMay() {
+        Date date = new Date(-9896080848000L);
+        SimpleDateFormat fmt = new SimpleDateFormat("EEEE, dd MMMM yyyy h:mm:ss a",
+                             new Locale("el", "", ""));
+        String str = fmt.format(date);
+        ParsePosition pos = new ParsePosition(0);
+        Date d2 = fmt.parse(str, pos);
+        if (!date.equals(d2)) {
+            errln("FAIL: unable to parse strings where case-folding changes length");
+        }
+    }
+
 	public void testErrorChecking() {
 		try {
 			DateFormat sdf = DateFormat.getDateTimeInstance(-1, -1, Locale.US);
