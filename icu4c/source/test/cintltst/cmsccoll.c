@@ -2928,29 +2928,30 @@ static void TestSurrogates() {
 
 /* This is a test for prefix implementation, used by JIS X 4061 collation rules */
 static void TestPrefix() {
-  static const char *rules = 		
-      "&z <<< z|a";
-  /* this should yield in zz<<< za */
-  static const char *testaz[] = {  
-    "zz", "za"
+  uint32_t i;
+
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+    { "&z <<< z|a", 
+      {"zz", "za"}, 2 },
+    { "[strength I]"
+      "&a=\\ud900\\udc25"
+      "&z<<<\\ud900\\udc25|a", 
+      {"aa", "az", "\\ud900\\udc25z", "\\ud900\\udc25a", "zz"}, 4 },
   };
-  genericRulesStarter(rules, testaz, 2);
+
+
+  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
 }
 
 /* This test uses data suplied by Masashiko Maedera to test the implementation */
 /* JIS X 4061 collation order implementation                                   */
 static void TestNewJapanese() {
-
-  UErrorCode status = U_ZERO_ERROR;
-  /*UParseError parseError;*/
-  UCollator *coll = NULL;  
-  UChar string[256] = {0};
-  uint32_t uStringLen = 0;
-
-
-        /*UCollator *coll = ucol_open("ja_JP_JIS", &status);  */
-  /*"&\u304b\u3099<<<\u304c|\u309d=\u304b|\u309d\u3099=\u304c|\u309d\u3099"*/
-
 
   static const char *test[] = {
       "\\u30b7\\u30e3\\u30fc\\u30ec",
@@ -3036,7 +3037,6 @@ static void TestNewJapanese() {
 /* it gets the collation elements for elements and prints them   */
 /* This is useful when trying to see whether the problem is      */
 /* 
-/*
   uint32_t i = 0;
   UCollationElements *it = NULL;
   uint32_t CE;
@@ -3063,6 +3063,7 @@ static void TestNewJapanese() {
 
 void addMiscCollTest(TestNode** root)
 {
+    addTest(root, &TestPrefix, "tscoll/cmsccoll/TestPrefix");
     addTest(root, &TestNewJapanese, "tscoll/cmsccoll/TestNewJapanese"); 
     /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
     addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
