@@ -155,12 +155,10 @@
 #       endif /* HPUX shl_load */
 #   else /* not ICU_USE_SHL_LOAD */
         /* 'de facto standard' dlopen etc. */
-#ifdef PTX
+#       include <dlfcn.h>
 #ifndef RTLD_GLOBAL
 #define RTLD_GLOBAL 0
 #endif
-#endif
-#       include <dlfcn.h>
 #   endif
 
     typedef void *Library;
