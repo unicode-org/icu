@@ -54,8 +54,8 @@ parseTable(const char *filename, UBool isUnassigned, UErrorCode *pErrorCode);
 static void
 parseNormalizationCorrections(const char *filename, UErrorCode *pErrorCode);
 
-static void 
-setLDHValues(UErrorCode* pErrorCode);
+/*static void 
+setLDHValues(UErrorCode* pErrorCode);*/
 
 static void
 setLabelSeperators(UErrorCode* pErrorCode);
@@ -448,7 +448,6 @@ unicodeDataLineFn(void *context,
 static void
 parseTable(const char *filename,UBool isUnassigned, UErrorCode *pErrorCode) {
     char *fields[1][2];
-    int32_t len=0;
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
