@@ -5,7 +5,7 @@
  *******************************************************************************
  */
 
-package com.ibm.icu.dev.tool.translitime;
+package com.ibm.icu.dev.tool.ime.translit;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
@@ -51,69 +51,84 @@ import com.ibm.icu.impl.Utility;
 
 public class TransliteratorInputMethod implements InputMethod {
 
-    // windows - shared by all instances of this input method
+    private static boolean usesAttachedIME() {
+	// we're in the ext directory so permissions are not an issue
+	String os = System.getProperty("os.name");
+	if (os != null) {
+	    return os.indexOf("Windows") == -1;
+	}
+	return false;
+    }
+
+    // true if Solaris style; false if PC style, assume Apple uses PC style for now
+    private static final boolean attachedStatusWindow = usesAttachedIME();
+
+    // the shared status window
     private static Window statusWindow;
 
-    // current or last statusWindow owner instance
+    // current or last owner
     private static TransliteratorInputMethod statusWindowOwner;
 
-    // true if Solaris style; false if PC style
-    private static boolean attachedStatusWindow = false;
+    // cache location limits for attached
+    private static Rectangle attachedLimits;
 
-    // remember the statusWindow location per instance
-    private Rectangle clientWindowLocation;
+    // convenience of access, to reflect the current state
+    private static JComboBox choices;
 
-    // status window location in PC style
-    private static Point globalStatusWindowLocation;
-
-    // keep live input method instances (synchronized using statusWindow)
-    private static HashSet inputMethodInstances = new HashSet(5);
-    
+    //
     // per-instance state
+    //
+
+    // if we're attached, the status window follows the client window
+    private Point attachedLocation;
+
+    private static int gid;
+
+    private int id = gid++;
+
     InputMethodContext imc;
     private boolean enabled = true;
-    private boolean active;
-    private boolean disposed;
 
+    private int selectedIndex = -1; // index in JComboBox corresponding to our transliterator
     private Transliterator transliterator;
     private int desiredContext;
     private StringBuffer buffer;
-    private Transliterator.Position index;
     private ReplaceableString replaceableText;
-    private ResourceBundle rb;
+    private Transliterator.Position index;
 
-    // we will treat index as follows:
-    // contextStart is always 0
-    // start is always 0 except just after the transliterator has processed the initial text,
-    //   we will always immediately call update and reset this to 0
-    // limit we'll ignore
-    // contextLimit is the cursor position
-    
+    // debugging
     private static boolean TRACE_EVENT = false;
-    private static boolean TRACE_BUFFER = true;
+    private static boolean TRACE_MESSAGES = false;
+    private static boolean TRACE_BUFFER = false;
 
     public TransliteratorInputMethod() {
+	if (TRACE_MESSAGES) dumpStatus("<constructor>");
+
         buffer = new StringBuffer();
         replaceableText = new ReplaceableString(buffer);
 	index = new Transliterator.Position();
-
-        try {
-            rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.translitime.Transliterator");
-        }
-        catch(MissingResourceException m) {
-            System.out.println("Transliterator resources missing: " + m);
-        }
     }
-    
-    public void setInputMethodContext(InputMethodContext context) {
-        imc = context;
-        String title = null;
 
+    public void dumpStatus(String msg) {
+	System.out.println("(" + this + ") " + msg);
+    }
+
+    public void setInputMethodContext(InputMethodContext context) {
+	initStatusWindow(context);
+
+	imc = context;
+	imc.enableClientWindowNotification(this, attachedStatusWindow);
+    }
+
+    private static void initStatusWindow(InputMethodContext context) {
 	if (statusWindow == null) {
+	    String title;
             try {
+		ResourceBundle rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.ime.translit.Transliterator");
                 title = rb.getString("title");
             }
             catch (MissingResourceException m) {
+		System.out.println("Transliterator resources missing: " + m);
                 title = "Transliterator Input Method";
             }
 
@@ -133,63 +148,126 @@ public class TransliteratorInputMethod implements InputMethod {
 
 	    // add the transliterators to the combo box
 
-	    JComboBox choices = new JComboBox(types.toArray());
+	    choices = new JComboBox(types.toArray());
        
 	    choices.setEditable(false);
+	    choices.setSelectedIndex(0);
 	    choices.setRenderer(new NameRenderer());
 	    choices.setActionCommand("transliterator");
+	    
+	    choices.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+			if (statusWindowOwner != null) {
+			    statusWindowOwner.statusWindowAction(e);
+			}
+		    }
+		});
 
-	    synchronized (this.getClass()) {
+	    sw.add(choices);
+	    sw.pack();
+
+	    Dimension sd = Toolkit.getDefaultToolkit().getScreenSize();
+	    Dimension wd = sw.getSize();
+	    if (attachedStatusWindow) {
+		attachedLimits = new Rectangle(0, 0, sd.width - wd.width, sd.height - wd.height);
+	    } else {
+		sw.setLocation(sd.width - wd.width,
+			       sd.height - wd.height - 25);
+	    }
+	    
+	    synchronized (TransliteratorInputMethod.class) {
 		if (statusWindow == null) {
 		    statusWindow = sw;
-		    statusWindow.addComponentListener(new ComponentListener() {
-			    public void componentResized(ComponentEvent e) {}
-			    public void componentMoved(ComponentEvent e) {
-				synchronized (statusWindow) {
-				    if (!attachedStatusWindow) {
-					Component comp = e.getComponent();
-					if (comp.isVisible()) {
-					    globalStatusWindowLocation = comp.getLocation();
-					}
-				    }
-				}
-			    }
-			    public void componentShown(ComponentEvent e) {}
-			    public void componentHidden(ComponentEvent e) {}
-			});
-
-		    // setup the listener, to handle selection of a transliterator
-		    choices.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent e) {
-				JComboBox cb = (JComboBox)e.getSource();
-				JLabel item = (JLabel)cb.getSelectedItem();
-
-				// construct the actual transliterator
-				// commit any text that may be present first
-				commitAll();
-
-				transliterator = Transliterator.getInstance(item.getName());
-				desiredContext = transliterator.getMaximumContextLength();
-
-				reset();
-			    }
-			});
-
-		    statusWindow.add(choices);
-		    statusWindowOwner = this;
-		    updateStatusWindow();
-		    statusWindow.pack();
-
-		    choices.setSelectedIndex(0);
 		}
 	    }
 	}
+    }
 
-	imc.enableClientWindowNotification(this, attachedStatusWindow);
+    private void statusWindowAction(ActionEvent e) {
+	if (TRACE_MESSAGES) dumpStatus(">>status window action");
+	JComboBox cb = (JComboBox)e.getSource();
+	int si = cb.getSelectedIndex();
+	if (si != selectedIndex) { // otherwise, we don't need to change
+	    if (TRACE_MESSAGES) dumpStatus("status window action oldIndex: " + selectedIndex + " newIndex: " + si);
+	    
+	    selectedIndex = si;
 
-	synchronized (statusWindow) {
-	    inputMethodInstances.add(this);
+	    JLabel item = (JLabel)cb.getSelectedItem();
+		    
+	    // construct the actual transliterator
+	    // commit any text that may be present first
+	    commitAll();
+
+	    transliterator = Transliterator.getInstance(item.getName());
+	    desiredContext = transliterator.getMaximumContextLength();
+
+	    reset();
 	}
+	if (TRACE_MESSAGES) dumpStatus("<<status window action");
+    }
+
+    // java has no pin to rectangle function?
+    private static void pin(Point p, Rectangle r) {
+	if (p.x < r.x) { p.x = r.x; } else if (p.x > r.x + r.width) { p.x = r.x + r.width; }
+	if (p.y < r.y) { p.y = r.y; } else if (p.y > r.y + r.height) { p.y = r.y + r.height; }
+    }
+
+    public void notifyClientWindowChange(Rectangle location) {
+	if (TRACE_MESSAGES) dumpStatus(">>notify client window change: " + location);
+	synchronized (TransliteratorInputMethod.class) {
+	    if (statusWindowOwner == this) {
+		if (location == null) {
+		    statusWindow.setVisible(false);
+		} else {
+		    attachedLocation = new Point(location.x, location.y + location.height);
+		    pin(attachedLocation, attachedLimits);
+		    statusWindow.setLocation(attachedLocation);
+		    statusWindow.setVisible(true);
+		}
+	    }
+	}
+	if (TRACE_MESSAGES) dumpStatus("<<notify client window change: " + location);
+    }
+
+    public void activate() {
+	if (TRACE_MESSAGES) dumpStatus(">>activate");
+
+        synchronized (TransliteratorInputMethod.class) {
+	    if (statusWindowOwner != this) {
+		if (TRACE_MESSAGES) dumpStatus("setStatusWindowOwner from: " + statusWindowOwner + " to: " + this);
+
+		statusWindowOwner = this;
+		if (attachedStatusWindow && attachedLocation != null) { // will be null before first change notification
+		    statusWindow.setLocation(attachedLocation);
+		}
+		choices.setSelectedIndex(selectedIndex == -1 ? choices.getSelectedIndex() : selectedIndex);
+	    }
+
+	    choices.setForeground(Color.BLACK);
+	    statusWindow.setVisible(true);
+	}
+	if (TRACE_MESSAGES) dumpStatus("<<activate");
+    }
+    
+    public void deactivate(boolean isTemporary) {
+	if (TRACE_MESSAGES) dumpStatus(">>deactivate" + (isTemporary ? " (temporary)" : ""));
+	if (!isTemporary) {
+	    synchronized(TransliteratorInputMethod.class) {
+		choices.setForeground(Color.LIGHT_GRAY);
+	    }
+	}
+	if (TRACE_MESSAGES) dumpStatus("<<deactivate" + (isTemporary ? " (temporary)" : ""));
+    }
+    
+    public void hideWindows() {
+	if (TRACE_MESSAGES) dumpStatus(">>hideWindows");
+	synchronized (TransliteratorInputMethod.class) {
+	    if (statusWindowOwner == this) {
+		if (TRACE_MESSAGES) dumpStatus("hiding");
+		statusWindow.setVisible(false);
+	    }
+	}
+	if (TRACE_MESSAGES) dumpStatus("<<hideWindows");
     }
     
     public boolean setLocale(Locale locale) {
@@ -200,66 +278,38 @@ public class TransliteratorInputMethod implements InputMethod {
         return Locale.getDefault();
     }
     
-    void updateStatusWindow() {
-	synchronized (statusWindow) {
-	    statusWindow.pack();
-	    if (attachedStatusWindow) {
-		if (clientWindowLocation != null) {
-		    statusWindow.setLocation(clientWindowLocation.x,
-					     clientWindowLocation.y + clientWindowLocation.height);
-		}
-	    } else {
-		setPCStyleStatusWindow();
-	    }
-	}
-    }
-
-    private void setPCStyleStatusWindow() {
-	synchronized (statusWindow) {
-	    if (globalStatusWindowLocation == null) {
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		globalStatusWindowLocation = new Point(d.width - statusWindow.getWidth(),
-						       d.height - statusWindow.getHeight() - 25);
-	    }
-	    statusWindow.setLocation(globalStatusWindowLocation.x, globalStatusWindowLocation.y);
-	}
-    }
-
-    private void setStatusWindowForeground(Color fg) {
-	synchronized (statusWindow) {
-	    if (statusWindowOwner != this) {
-		return;
-	    }
-	    statusWindow.setForeground(fg);
-	    statusWindow.repaint();
-	}
-    }
-
-    private void toggleStatusWindowStyle() {
-	synchronized (statusWindow) {
-	    if (attachedStatusWindow) {
-		attachedStatusWindow = false;
-		setPCStyleStatusWindow();
-	    } else {
-		attachedStatusWindow = true;
-	    }
-	    Iterator itr = inputMethodInstances.iterator();
-	    while (itr.hasNext()) {
-		TransliteratorInputMethod im = (TransliteratorInputMethod)itr.next();
-		im.imc.enableClientWindowNotification(im, attachedStatusWindow);
-	    }
-	}
-    }	    
-
     public void setCharacterSubsets(Character.Subset[] subsets) {
-        // ignore
     }
 
     public void reconvert() {
-	// not supported yet
 	throw new UnsupportedOperationException();
     }
 
+    public void removeNotify() {
+	if (TRACE_MESSAGES) dumpStatus("**removeNotify");
+    }
+    
+    public void endComposition() {
+	commitAll();
+    }
+
+    public void dispose() {
+	if (TRACE_MESSAGES) dumpStatus("**dispose");
+    }
+    
+    public Object getControlObject() {
+        return null;
+    }
+    
+    public void setCompositionEnabled(boolean enable) {
+	enabled = enable;
+    }
+
+    public boolean isCompositionEnabled() {
+	return enabled;
+    }
+
+    // debugging
     private String eventInfo(AWTEvent event) {
 	String info = event.toString();
 	StringBuffer buf = new StringBuffer();
@@ -327,83 +377,6 @@ public class TransliteratorInputMethod implements InputMethod {
 	default:
 	    break;
 	}
-    }
-
-    public void activate() {
-        active = true;
-	synchronized (statusWindow) {
-	    statusWindowOwner = this; 
-	    updateStatusWindow();
-	    if (!statusWindow.isVisible()) {
-		statusWindow.setVisible(true);
-	    }
-	    setStatusWindowForeground(Color.black);
-	}
-    }
-    
-    public void deactivate(boolean isTemporary) {
-	setStatusWindowForeground(Color.lightGray);
-        active = false;
-    }
-    
-    public void hideWindows() {
-	synchronized (statusWindow) {
-	    if (statusWindowOwner == this) {
-		statusWindow.setVisible(false);
-	    }
-	}
-    }
-    
-    public void removeNotify() {
-    }
-    
-    public void endComposition() {
-	// in jdk.5, this allows scrolling, but it also allows clicking within the
-	// uncommitted text and then dragging outside of it.
-	System.out.println("about to end composition");
-	commitAll();
-	System.out.println("ended composition");
-    }
-
-    public void notifyClientWindowChange(Rectangle location) {
-	clientWindowLocation = location;
-	synchronized (statusWindow) {
-	    if (!attachedStatusWindow || statusWindowOwner != this) {
-		return;
-	    }
-	    if (location != null) {
-		statusWindow.setLocation(location.x, location.y+location.height);
-		if (!statusWindow.isVisible()) {
-		    if (active) {
-			setStatusWindowForeground(Color.black);
-		    } else {
-			setStatusWindowForeground(Color.lightGray);
-		    }
-		    statusWindow.setVisible(true);
-		}
-	    } else {
-		statusWindow.setVisible(false);
-	    }
-	}
-    }
-
-    public void dispose() {
-	synchronized (statusWindow) {
-	    inputMethodInstances.remove(this);
-	}
-        disposed = true;
-    }
-    
-    public Object getControlObject() {
-        return null;
-    }
-    
-    public void setCompositionEnabled(boolean enable) {
-	enabled = enable;
-    }
-
-    public boolean isCompositionEnabled() {
-	return enabled;
     }
 
     /** Wipe clean */
@@ -663,6 +636,18 @@ public class TransliteratorInputMethod implements InputMethod {
 	    }
 	}
 	return false;
+    }
+
+    public String toString() {
+	final String[] names = { 
+	    "alice", "bill", "carrie", "doug", "elena", "frank", "gertie", "howie", "ingrid", "john" 
+	};
+
+	if (id < names.length) {
+	    return names[id];
+	} else {
+	    return names[id] + "-" + (id/names.length);
+	}
     }
 }
 

@@ -5,7 +5,7 @@
  *******************************************************************************
  */
 
-package com.ibm.icu.dev.tool.translitime;
+package com.ibm.icu.dev.tool.ime.translit;
 
 import java.awt.Image;
 import java.awt.im.spi.InputMethod;
@@ -68,7 +68,7 @@ public class TransliteratorInputMethodDescriptor implements InputMethodDescripto
         String name = null;
 
         try {
-            rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.translitime.Transliterator", displayLanguage);
+            rb = ResourceBundle.getBundle("com.ibm.icu.dev.tool.ime.translit.Transliterator", displayLanguage);
             name = rb.getString("name");
         }
         catch (MissingResourceException m) {

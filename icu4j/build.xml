@@ -81,9 +81,8 @@
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
         <property name="icu4j.tests.manifest" value="${src.dir}/com/ibm/icu/dev/test/manifest.test.stub"/>
-        <property name="ime.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/manifest.stub"/>
-        <property name="ime.jar.file" value="icutransime.jar"/>
-        <property name="ime.dir" value="tmp${DSTAMP}"/>
+        <property name="ime.translit.manifest" value="${src.dir}/com/ibm/icu/dev/tool/ime/translit/manifest.stub"/>
+        <property name="ime.translit.jar.file" value="icutransime.jar"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
 
@@ -269,42 +268,46 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="imeJar" depends="collator, transliterator">
-        <javac includes="com/ibm/icu/dev/tool/ime/*.java"
+    <target name="translitimeJar" depends="collator, transliterator">
+        <javac includes="com/ibm/icu/dev/tool/ime/translit/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-        <jar jarfile="${ime.jar.file}"
+        <copy file="${src.dir}/com/ibm/icu/dev/tool/ime/translit/Transliterator.properties"
+              todir="${build.dir}/com/ibm/icu/dev/tool/ime/translit"/>
+        <jar jarfile="${ime.translit.jar.file}"
             compress="true"
 	    basedir="${build.dir}"
-            includes="com/ibm/icu/dev/tool/ime/**/*"
-            manifest="${ime.manifest}">
+            includes="com/ibm/icu/dev/tool/ime/translit/**/*"
+            manifest="${ime.translit.manifest}">
 
-	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime" includes="services/*"/>
+	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
 	</jar>
     </target>
 
-    <target name="imeStandaloneJar" depends="collator, transliterator">
-        <javac includes="com/ibm/icu/dev/tool/ime/*.java"
+<!--
+    <target name="translitimeStandaloneJar" depends="collator, transliterator">
+        <javac includes="com/ibm/icu/dev/tool/ime/translit/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-	<copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime">
-	      <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime" includes="*.properties"/>
+	<copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
+	      <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
 	</copy>	      
         <jar jarfile="${ime.jar.file}"
             compress="true"
 	    basedir="${build.dir}"
-            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/dev/tool/ime/**/*"
-            manifest="${ime.manifest}">
+            includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*,com/ibm/icu/dev/tool/ime/translit/**/*"
+            manifest="${ime.translit.manifest}">
 
-	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime" includes="services/*"/>
+	    <metainf dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="services/*"/>
 	</jar>
     </target>
+-->
 
     <!-- jars up richedit but without tests -->
     <target name="richeditJar" depends="richedit">
