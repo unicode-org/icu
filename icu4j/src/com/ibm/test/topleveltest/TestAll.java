@@ -43,11 +43,11 @@ public class TestAll extends TestFmwk {
 	}
 
 	public void TestRuleBasedBreakIteartor1() throws Exception {
-		run(new com.ibm.test.RuleBasedBreakIterator.SimpleBITest());
+		run(new com.ibm.test.rbbi.SimpleBITest());
 	}
 
 	public void TestRuleBasedBreakIteartor2() throws Exception {
-		run(new com.ibm.test.RuleBasedBreakIterator.BreakIteratorTest());
+		run(new com.ibm.test.rbbi.BreakIteratorTest());
 	}
 
 	public void TestTranslit1() throws Exception {
