@@ -366,6 +366,14 @@ SOURCE=.\ucaconf.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\uvectest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\uvectest.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\v32test.cpp
 # End Source File
 # Begin Source File
