@@ -1346,6 +1346,7 @@ static TestUTF7() {
         7, 0x10401
     };
 
+    const char *cnvName;
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv=ucnv_open("UTF-7", &errorCode);
@@ -1356,6 +1357,10 @@ static TestUTF7() {
     TestNextUChar(cnv, source, limit, results, "UTF-7");
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+    cnvName = ucnv_getName(cnv, &errorCode);
+    if (U_FAILURE(errorCode) || uprv_strcmp(cnvName, "UTF-7") != 0) {
+        log_err("UTF-7 converter is called %s: %s\n", cnvName, u_errorName(errorCode));
+    }
     ucnv_close(cnv);
 }
 
