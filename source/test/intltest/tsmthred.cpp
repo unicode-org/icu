@@ -12,7 +12,7 @@
 
 #include <unicode/umachine.h>
 
-#if !defined(WIN32) && !defined(XP_MAC) && !defined(U_DARWIN)
+#if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
 #define POSIX 1
 #endif
 
