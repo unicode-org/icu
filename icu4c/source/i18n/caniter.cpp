@@ -103,7 +103,7 @@ void CanonicalIterator::cleanPieces() {
         delete[] pieces[i];
       }
     }
-    delete[] pieces;
+    uprv_free(pieces);
     pieces = NULL;
     if(pieces_lengths != NULL) {
       uprv_free(pieces_lengths);
@@ -180,18 +180,19 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     // catch degenerate case
     if (newSource.length() == 0) {
         pieces_length = 1;
-        pieces = new UnicodeString*[1];
+        pieces = (UnicodeString **)uprv_malloc(sizeof(UnicodeString *));
         /* test for NULL */
-        if (pieces == 0) {
+        if (pieces == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
         current_length = 1;
         current = (int32_t*)uprv_malloc(1 * sizeof(int32_t));
         /* test for NULL */
-        if (current == 0) {
+        if (current == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            delete pieces;
+            uprv_free(pieces);
+            pieces = NULL;
             return;
         }
         current[0] = 0;
@@ -199,8 +200,9 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         /* test for NULL */
         if (pieces[0] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            delete pieces;
-            delete current;
+            uprv_free(pieces);
+            pieces = NULL;
+            uprv_free(current);
             return;
         }
         pieces[0][0] = UnicodeString("");
@@ -208,8 +210,9 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         /* test for NULL */
         if (pieces_lengths == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            delete[] pieces;
-            delete current;
+            uprv_free(pieces);
+            pieces = NULL;
+            uprv_free(current);
             return;
         }
         pieces_lengths[0] = 1;
@@ -247,9 +250,9 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 
 
     // allocate the arrays, and find the strings that are CE to each segment
-    pieces = new UnicodeString*[list_length];
+    pieces = (UnicodeString **)uprv_malloc(list_length * sizeof(UnicodeString *));
     /* test for NULL */
-    if (pieces == 0) {
+    if (pieces == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete[] list;
         return;
@@ -260,7 +263,8 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     if (pieces_lengths == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete[] list;
-        delete[] pieces;
+        uprv_free(pieces);
+        pieces = NULL;
         return;
     }
 
@@ -270,7 +274,8 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     if (current == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete[] list;
-        delete[] pieces;
+        uprv_free(pieces);
+        pieces = NULL;
         delete pieces_lengths;
         return;
     }
