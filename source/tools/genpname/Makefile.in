@@ -16,11 +16,8 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools/genpname
 
-ICUDATADIR=$(top_builddir)/data
-UNICODEDATADIR=$(top_srcdir)/../data/unidata
-
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS) $(OBJECTS) $(TARGET)
 
 ## Target information
 TARGET = genpname$(EXEEXT)
