@@ -1197,7 +1197,7 @@ UnicodeString::doReverse(UTextOffset start,
              int32_t length)
 {
   // if we're bogus, do nothing
-  if(isBogus() || !cloneArrayIfNeeded()) {
+  if(isBogus() || !cloneArrayIfNeeded() || length <= 1) {
     return *this;
   }
 
@@ -1207,11 +1207,28 @@ UnicodeString::doReverse(UTextOffset start,
   UChar *left = getArrayStart() + start;
   UChar *right = getArrayStart() + start + length;
   UChar swap;
+  UBool hasSupplementary = FALSE;
 
   while(left < --right) {
-    swap = *left;
-    *left++ = *right;
+    hasSupplementary |= (UBool)UTF_IS_LEAD(swap = *left);
+    hasSupplementary |= (UBool)UTF_IS_LEAD(*left++ = *right);
     *right = swap;
+  }
+
+  /* if there are supplementary code points in the reversed range, then re-swap their surrogates */
+  if(hasSupplementary) {
+    UChar swap2;
+
+    left = getArrayStart() + start;
+    right = getArrayStart() + start + length - 1; // -1 so that we can look at *(left+1) if left<right
+    while(left < right) {
+      if(UTF_IS_TRAIL(swap = *left) && UTF_IS_LEAD(swap2 = *(left + 1))) {
+        *left++ = swap2;
+        *left++ = swap;
+      } else {
+        ++left;
+      }
+    }
   }
 
   return *this;
@@ -1549,7 +1566,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     // perform the conversion
     myTarget = fArray + fLength;
     ucnv_toUnicode(converter, &myTarget,  fArray + fCapacity,
-           &mySource, mySourceEnd, 0, FALSE, &status);
+           &mySource, mySourceEnd, 0, TRUE, &status);
 
     // update the conversion parameters
     fLength = myTarget - fArray;
