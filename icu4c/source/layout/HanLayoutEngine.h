@@ -2,7 +2,7 @@
 /*
  * HanLayoutEngine.h: OpenType processing for Han fonts.
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved.
  */
 
 #ifndef __HANLAYOUTENGINE_H
@@ -16,6 +16,8 @@
 #include "GlyphSubstitutionTables.h"
 
 U_NAMESPACE_BEGIN
+
+class LEGlyphStorage;
 
 /**
  * This class implements OpenType layout for Han fonts. It overrides
@@ -80,7 +82,8 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the characters are in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the characters are in a right to left directional run
+     * @param glyphStorage - the object holding the glyph storage. The char index and auxillary data arrays will be set.
      *
      * Output parameters:
      * @param outChars - the output character arrayt
@@ -93,7 +96,7 @@ protected:
      * @internal
      */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success);
+            LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
 
 private:
