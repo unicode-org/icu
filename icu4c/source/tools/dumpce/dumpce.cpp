@@ -87,6 +87,7 @@ static const EnumNameValuePair ATTRIBUTE_NAME_[] = {
     {UCOL_NORMALIZATION_MODE, 
         "UCOL_NORMALIZATION_MODE|UCOL_DECOMPOSITION_MODE"},
     {UCOL_STRENGTH, "UCOL_STRENGTH"},
+	{UCOL_HIRAGANA_QUATERNARY_MODE, "UCOL_HIRAGANA_QUATERNARY_MODE"},
     NULL
 };
      
@@ -271,12 +272,8 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
         
-    while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
-                                              &chLen, &exOffset, &exLen,
-                                              &prefixOffset, &prefixLen,
-                                              &specs, rstart, &parseError,
-                                              &error)) 
-                                              != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, rstart, &parseError,
+                                              &error)) != NULL) {
         // contractions handled here
         if (!contractiononly || chLen > 1) {
             ucol_setText(iter, rule + chOffset, chLen, &error);
@@ -1041,12 +1038,15 @@ int getScriptElements(UScriptCode script[], int scriptcount,
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     src.opts         = &opts;
         
-    while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
+	/*
+	ucol_tok_parseNextToken(&src, &strength, &chOffset, 
                                               &chLen, &exOffset, &exLen,
                                               &prefixOffset, &prefixLen,
                                               &specs, rstart, &parseError,
-                                              &error)) 
-                                              != NULL) {
+                                              &error)
+    */
+    while ((current = ucol_tok_parseNextToken(&src, rstart, &parseError,
+                                              &error)) != NULL) {
         // contractions handled here
         if (chLen > 1) {
             u_strncpy(scriptelem[count].ch, rule + chOffset, chLen);
@@ -1144,12 +1144,8 @@ void markTailored(UScriptCode script[], int scriptcount,
 
     UErrorCode    error = U_ZERO_ERROR;
         
-    while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
-                                              &chLen, &exOffset, &exLen,
-                                              &prefixOffset, &prefixLen,
-                                              &specs, rstart, &parseError,
-                                              &error)) 
-                                              != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, rstart, &parseError,
+                                              &error)) != NULL) {
         if (chLen >= 1 && strength != UCOL_TOK_RESET) {
             // skipping the reset characters and non useful stuff.
             ScriptElement se;
@@ -1285,7 +1281,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "<base target=\"main\">\n");
     fprintf(OUTPUT_, "</head>\n");
 
-    fprintf(OUTPUT_, "<body>\n");
+    fprintf(OUTPUT_, "<body bgcolor=#FFFFFF>\n");
     fprintf(OUTPUT_, "<!--\n");
     fprintf(OUTPUT_, "This file contains sorted characters in ascending order according to the locale stated\n");
     fprintf(OUTPUT_, "If the character is in red, it is tailored in the collation rules.\n");
@@ -1386,10 +1382,10 @@ void outputListHTMLHeader(FILE *file)
     fprintf(file, "<title>Collation Charts</title>\n");
     fprintf(file, "<base target=\"main\">\n");
     fprintf(file, "</head>\n");
-    fprintf(file, "<body>\n");
+    fprintf(file, "<body bgcolor=#FFFFFF>\n");
     fprintf(file, "<h2 align=center>Collation Charts</h2>\n");
     fprintf(file, "<p align=center>\n");
-    fprintf(file, "<a href=http://www.unicode.org/charts/uca/ target=new>UCA Charts</a> | ");
+    fprintf(file, "<a href=http://www.unicode.org/charts/collation/ target=new>UCA Charts</a> | ");
 }
 
 /**
@@ -1521,9 +1517,10 @@ int main(int argc, char *argv[]) {
                         "--scripts\n" 
                         "    Codepoints from all scripts are sorted and serialized.\n"
                         "--reducehan\n" 
-                        "    Only 200 Han script characters will be displayed with the use of --scripts.\n");
+                        "    Only 200 Han script characters will be displayed with the use of --scripts.\n\n");
 
-        fprintf(stdout, "Example: dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
+        fprintf(stdout, "Example to generate *.txt files : dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
+        fprintf(stdout, "Example to generate *.html files for oss web display: dumpce --scripts --serialize --locale all --destdir /temp --reducehan\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
