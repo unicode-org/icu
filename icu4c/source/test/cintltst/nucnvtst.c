@@ -1521,6 +1521,10 @@ TestISO_2022_CN() {
 		if(*test!=*uSource){
 			log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
 		}
+                else
+                {
+			log_verbose("      Got: \\u%04X\n",(int)*test) ;
+                }
 		*uSource++;
 		*test++;
 	}
