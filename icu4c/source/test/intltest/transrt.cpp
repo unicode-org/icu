@@ -681,17 +681,15 @@ void RTTest::test2(UBool quickRt) {
     for (;;) {
         if (!usi.next()) break;
         
-        UnicodeString* cs;
         if(usi.isString()){
-            cs = (UnicodeString*)&(usi.getString());
+            cs = usi.getString();
         }else{
-            UnicodeString temp(usi.getCodepoint());
-            cs = &temp;
+            cs = (UnicodeString)usi.getCodepoint();
         }
 
-        UChar32 c = cs->char32At(0);
+        UChar32 c = cs.char32At(0);
         
-        targ = *cs;
+        targ = cs;
         targetToSource->transliterate(targ);
         reverse = targ;
         sourceToTarget->transliterate(reverse);
@@ -706,16 +704,16 @@ void RTTest::test2(UBool quickRt) {
             }
             if (toSource.containsAll(targD) == FALSE || 
                 badCharacters.containsSome(targD) == TRUE) {
-                logWrongScript("Target-Source", *cs, targ);
-                failTargSource.add((UChar32)c);
+                logWrongScript("Target-Source", cs, targ);
+                failTargSource.add(c);
                 continue;
             }
         }
-        if (isSame(*cs, reverse) == FALSE && 
+        if (isSame(cs, reverse) == FALSE && 
             roundtripExclusionsSet.contains(c) == FALSE
-            && roundtripExclusionsSet.contains(*cs)==FALSE) {
-            logRoundTripFailure(*cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
-            failRound.add((UChar32)c);
+            && roundtripExclusionsSet.contains(cs)==FALSE) {
+            logRoundTripFailure(cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
+            failRound.add(c);
             continue;
         } 
         
@@ -740,6 +738,9 @@ void RTTest::test2(UBool quickRt) {
     targetRangeMinusFailures.removeAll(failRound);
 
     usi.reset(targetRangeMinusFailures, quickRt);
+    UnicodeString targ2;
+    UnicodeString reverse2;
+    UnicodeString targD;
     for (;;) {
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
@@ -752,11 +753,12 @@ void RTTest::test2(UBool quickRt) {
 
         usi2.reset(targetRangeMinusFailures, quickRt);
         for (;;) {
-            if (!usi2.next() || usi2.isString()) break;
+            if (!usi2.next() || usi2.isString())
+                break;
             UChar32 d = usi2.getCodepoint();
-            UnicodeString cs;
-            cs += (UChar32)c;
-            cs += (UChar32)d;
+            cs.truncate(0);  // empty the variable without construction/destruction
+            cs += c;
+            cs += d;
 
             targ = cs;
             targetToSource->transliterate(targ);
@@ -766,7 +768,7 @@ void RTTest::test2(UBool quickRt) {
             if (toSource.containsAll(targ) == FALSE || 
                 badCharacters.containsSome(targ) == TRUE) 
             {
-                UnicodeString targD;
+                targD.truncate(0);  // empty the variable without construction/destruction
                 Normalizer::decompose(targ, FALSE, 0, targD, status);
                 if (U_FAILURE(status)) {
                     parent->errln("FAIL: Internal error during decomposition%s\n", 
@@ -774,7 +776,8 @@ void RTTest::test2(UBool quickRt) {
                     return;
                 }
                 if (toSource.containsAll(targD) == FALSE 
-                    || badCharacters.containsSome(targD) == TRUE) {
+                    || badCharacters.containsSome(targD) == TRUE)
+                {
                     logWrongScript("Target-Source", cs, targ);
                     continue;
                 }
@@ -782,18 +785,19 @@ void RTTest::test2(UBool quickRt) {
             if (isSame(cs, reverse) == FALSE && 
                 roundtripExclusionsSet.contains(c) == FALSE&&
                 roundtripExclusionsSet.contains(d) == FALSE &&
-                roundtripExclusionsSet.contains(cs)== FALSE) {
+                roundtripExclusionsSet.contains(cs)== FALSE)
+            {
                 logRoundTripFailure(cs,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
                 continue;
             } 
         
-            UnicodeString targ2;
+            targ2.truncate(0);  // empty the variable without construction/destruction
             Normalizer::decompose(targ, FALSE, 0, targ2, status);
             if (U_FAILURE(status)) {
                 parent->errln("FAIL: Internal error during decomposition%s\n", u_errorName(status));
                 return;
             }
-            UnicodeString reverse2 = targ2;
+            reverse2 = targ2;
             sourceToTarget->transliterate(reverse2);
             if (reverse != reverse2) {
                 logNotCanonical("Target-Source", targ,reverse, targ2, reverse2);
