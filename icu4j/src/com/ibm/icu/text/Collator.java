@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/02/18 22:02:46 $
-* $Revision: 1.22 $
+* $Date: 2003/02/27 23:43:16 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -535,7 +535,6 @@ public abstract class Collator implements Comparator, Cloneable
      *            Collation order or when the PRIMARY strength collation 
      *            element for the variable top has more than two bytes
      * @see #getVariableTop
-     * @see #resetVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @draft ICU 2.6
      */
@@ -546,7 +545,6 @@ public abstract class Collator implements Comparator, Cloneable
      * Lower 16 bits are undefined and should be ignored.
      * @return the variable top value of a Collator.
      * @see #setVariableTop
-     * @see #resetVariableTop
      * @draft ICU 2.6
      */
     public abstract int getVariableTop();

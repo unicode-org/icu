@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/02/27 20:59:29 $
-* $Revision: 1.34 $
+* $Date: 2003/02/27 23:43:17 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -571,7 +571,6 @@ public final class RuleBasedCollator extends Collator
      *            <li>when the varTop argument is null or zero in length.
      *            </ul>
      * @see #getVariableTop
-     * @see #resetVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @draft ICU 2.6
      */
@@ -631,7 +630,7 @@ public final class RuleBasedCollator extends Collator
      * Gets the collation rules for this RuleBasedCollator.
      * Equivalent to String getRules(RuleOption.FULL_RULES).
      * @return returns the collation rules
-     * @see #getRules(false)
+     * @see #getRules(boolean)
      * @draft ICU 2.2
      */
     public String getRules()
@@ -856,7 +855,6 @@ public final class RuleBasedCollator extends Collator
      * Lower 16 bits are undefined and should be ignored.
      * @return the variable top value of a Collator.
      * @see #setVariableTop
-     * @see #resetVariableTop
      * @draft ICU 2.6
      */
     public int getVariableTop()

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/02/18 22:02:46 $ 
-* $Revision: 1.13 $
+* $Date: 2003/02/27 23:43:16 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -419,11 +419,11 @@ public final class CollationKey implements Comparable
      *            Exception. The user can then call getBound() again with the 
      *            appropriate strength.
      * @see CollationKey
-     * @see #BoundMode
+     * @see CollationKey.BoundMode
      * @see Collator#PRIMARY
      * @see Collator#SECONDARY
      * @see Collator#TERTIARY
-     * @see Collator#QUARTENARY
+     * @see Collator#QUATERNARY
      * @see Collator#IDENTICAL
      * @draft ICU 2.6
      */
