@@ -93,6 +93,8 @@ public:
 
 protected:
     UBool failure(UErrorCode status, const UnicodeString& msg);
+    UBool failure(UErrorCode status, const UnicodeString& msg, const char *l);
+    UBool failure(UErrorCode status, const UnicodeString& msg, const Locale& l);
 };
 
 class MyNumberFormatTest : public NumberFormat 

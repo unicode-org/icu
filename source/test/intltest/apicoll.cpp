@@ -356,7 +356,7 @@ CollationAPITest::TestRules()
 
     coll->getRules(UCOL_TAILORING_ONLY, rules);
     if (rules.length() != 0x0e) {
-        errln("English tailored rules failed");
+      errln("English tailored rules failed - length is 0x%x expected 0x%x", rules.length(), 0x0e);
     }
 
     coll->getRules(UCOL_FULL_RULES, rules);
@@ -381,17 +381,17 @@ CollationAPITest::TestDecomposition() {
   /* there is no reason to have canonical decomposition in en_US OR default locale */
   if (vi_VN->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_ON)
   {
-    errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+    errln("ERROR: vi_VN collation did not have canonical decomposition for normalization!\n");
   }
 
   if (el_GR->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_ON)
   {
-    errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+    errln("ERROR: el_GR collation did not have canonical decomposition for normalization!\n");
   }
 
   if (en_US->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_OFF)
   {
-    errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+    errln("ERROR: en_US collation had canonical decomposition for normalization!\n");
   }
 
   delete en_US;
