@@ -50,7 +50,6 @@ public class IntTrieBuilder extends TrieBuilder
      * @param maxdatalength maximum data length allowed in table
      * @param initialvalue inital data value
      * @param latin1linear is latin 1 to be linear
-     * @return updated table
      */
     public IntTrieBuilder(int aliasdata[], int maxdatalength, 
                           int initialvalue, int leadunitvalue, 

@@ -242,7 +242,7 @@ public abstract class UnicodePropertySource implements Cloneable {
          * @param valueAlias null if unused.
          * @param valueEnum -1 if unused
          * @param nameChoice
-         * @return
+         * @return the alias
          */
         private String getFixedValueAlias(String valueAlias, int valueEnum, int nameChoice) {
             if (propEnum >= UProperty.STRING_START) {
@@ -294,7 +294,6 @@ public abstract class UnicodePropertySource implements Cloneable {
     }
 
     /**
-     * @return
      */
     static public void addAll(UnicodeSetIterator source, UnicodeSet result) {
         while (source.nextRange()) {

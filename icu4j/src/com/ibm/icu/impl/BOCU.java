@@ -23,7 +23,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * 2.</p>
  * 
  * <p>One example of a use of BOCU is in {@link 
- * Collator#getCollationKey(String)} for a RuleBasedCollator object with 
+ * com.ibm.icu.text.Collator#getCollationKey(String)} for a RuleBasedCollator object with 
  * collation strength IDENTICAL. The result CollationKey will consist of the 
  * collation order of the source string followed by the BOCU result of the 
  * source string. 
@@ -75,7 +75,8 @@ import com.ibm.icu.text.UCharacterIterator;
  *
  * @author Syn Wee Quek
  * @since release 2.2, May 3rd 2002
- * @draft 2.2 */
+ * @draft 2.2 
+ */
 public class BOCU 
 {      
     // public constructors --------------------------------------------------

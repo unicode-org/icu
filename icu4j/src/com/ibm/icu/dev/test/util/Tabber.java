@@ -18,7 +18,6 @@ public abstract class Tabber {
      * Repeats a string n times
      * @param source
      * @param times
-     * @return
      */
     // TODO - optimize repeats using doubling?
     public static String repeat(String source, int times) {
@@ -79,8 +78,6 @@ public abstract class Tabber {
     
         /**
          * Adds relative tab stop and how to align the text UP TO that stop
-         * @param tabPos
-         * @param type
          */
         public MonoTabber add(int fieldWidth, byte type) {
             int last = getStop(stops.size()-1);
@@ -172,14 +169,12 @@ public abstract class Tabber {
         }
     }
     /**
-     * @return
      */
     public String getPostfix() {
         return postfix;
     }
 
     /**
-     * @return
      */
     public String getPrefix() {
         return prefix;

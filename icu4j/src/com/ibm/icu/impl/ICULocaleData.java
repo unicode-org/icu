@@ -95,7 +95,7 @@ public class ICULocaleData {
     /**
      * Creates a resource bundle for the given package, base name, and
      * locale.
-     * @param package a package name, e.g., "com.ibm.icu.impl.data".
+     * @param packageName a package name, e.g., "com.ibm.icu.impl.data".
      * @param bundleName the base name of the bundle to retrieve,
      * e.g. "LocaleElements".
      * @param localeName the string name of the locale of the bundle

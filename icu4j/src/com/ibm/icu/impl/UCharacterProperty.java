@@ -167,7 +167,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
     * data the index array offset of the indexes for that lead surrogate.
-    * @param property data value for a surrogate from the trie, including the
+    * @param value data value for a surrogate from the trie, including the
     *        folding offset
     * @return data offset or 0 if there is no data for the lead surrogate
     */
@@ -283,7 +283,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * Different from getException, this function tests if the type data is 
     * available.
     * @param props property value
-    * @param exception data type
+    * @param etype exception type
     * @return exception data type value at index
     */
     ///CLOVER:OFF
@@ -309,7 +309,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * available. Result is undefined if data is not available. Use 
     * hasExceptionValue() to determine data's availability.
     * @param index 
-    * @param exception data type
+    * @param etype exception data type
     * @return exception data type value at index
     */
     public int getException(int index, int etype)
@@ -375,7 +375,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * Gets the folded case value at the index
     * @param index of the case value to be retrieved
     * @param count number of characters to retrieve
-    * @param buffer string buffer to add result to
+    * @param str string buffer to which to append the result
     */
     public void getFoldCase(int index, int count, StringBuffer str) 
     {
@@ -477,7 +477,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * processes that do not accept newer characters.</p>
      * <p>The data is from the UCD file DerivedAge.txt.</p>
      * <p>This API does not check the validity of the codepoint.</p>
-     * @param ch The code point.
+     * @param codepoint The code point.
      * @return the Unicode version number
      * @draft ICU 2.1
      */
@@ -622,7 +622,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     
     /**
     * Loads the property data and initialize the UCharacterProperty instance. 
-    * @Exception thrown when data is missing or data has been corrupted.
+    * @throws RuntimeException when data is missing or data has been corrupted
     */    
     public static UCharacterProperty getInstance() throws RuntimeException
     {
@@ -849,7 +849,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param locale locale which the lowercase is looked for
      * @param ch codepoint whose lower case is to be matched
      * @param uchariter text iterator positioned at the codepoint ch
-     * @param result array of char to store the result
+     * @param buffer array in which to store the result
      * @return size oflowercased codepoint in UTF16 format
      */
     public int toLowerCase(Locale locale, int ch, 

@@ -195,10 +195,6 @@ public final class ICUResourceBundleReader implements ICUBinary.Authenticate{
     }
     /**
      * Gets the full name of the resource with suffix.
-     * If the 
-     * @param baseName
-     * @param localeName
-     * @return
      */
     public static String getFullName(String baseName, String localeName){
         if(baseName.indexOf('.')==-1){

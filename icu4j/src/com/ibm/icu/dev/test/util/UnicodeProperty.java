@@ -452,7 +452,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         /**
          * Must be able to handle null
          * @param value
-         * @return
+         * @return true if the value matches
          */
         public boolean matches(String value);
         public Matcher set(String pattern);
@@ -851,7 +851,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
      * generating new string.
      * @param codepoint
      * @param other
-     * @return
+     * @return true if the codepoint equals the string
      */
     public static final boolean equals(int codepoint, String other) {
         if (other.length() == 1) {
@@ -908,7 +908,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     
 
     /**
-     * @return
+     * @return the unicode map
      */
     protected UnicodeMap getUnicodeMap() {
         if (unicodeMap == null) unicodeMap = _getUnicodeMap();

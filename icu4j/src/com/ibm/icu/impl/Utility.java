@@ -1771,11 +1771,9 @@ public final class Utility {
     /**
      * Utility method to take a int[] containing codepoints and return
      * a string representation with code units. 
-     * TODO: Investigate why this method is not on UTF16 class
-     * @param source
-     * @return
      */
     public static String valueOf(int[]source){
+	// TODO: Investigate why this method is not on UTF16 class
         StringBuffer result = new StringBuffer(source.length);
         for(int i=0; i<source.length; i++){
             UTF16.append(result,source[i]);

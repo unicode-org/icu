@@ -69,7 +69,7 @@ public class XMLValidator {
 	 * name as-is (the assumption is that it's already a URL)
 	 * Otherwise we attempt (cheaply) to convert to a file:/// URL.
 	 * 
-	 * @param String local path\filename of a file
+	 * @param filename a local path/filename of a file
 	 * @return a file:/// URL, the same string if it appears to 
 	 * already be a URL, or null if error
 	 */

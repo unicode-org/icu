@@ -276,7 +276,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
      * NOTE: the unnecessary "getTime()'s" below are a work-around for a
      * bug in jdk 1.1.3 (and probably earlier versions also)
      * <p>
-     * @param date The date to start from
+     * @param d The date to start from
      */
     public static Date getAssociatedDate(Date d) {
         GregorianCalendar cal = new GregorianCalendar();

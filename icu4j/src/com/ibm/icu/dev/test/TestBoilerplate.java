@@ -85,9 +85,6 @@ public abstract class TestBoilerplate extends TestFmwk {
 
     /**
      * Must be overridden to check whether a and be behave the same
-     * @param a
-     * @param b
-     * @return
      */
     protected abstract boolean _hasSameBehavior(Object a, Object b);
 
@@ -100,21 +97,18 @@ public abstract class TestBoilerplate extends TestFmwk {
      * to run this test on. The running time grows with the square of the
      * count.
      * NOTE: this method will only be called if the objects test as equal.
-     * @return
      */
     protected abstract boolean _addTestObject(List c);
     /**
      * Override if the tested objects are mutable.
      * <br>Since Java doesn't tell us, we need a function to tell if so.
      * The default is true, so must be overridden if not.
-     * @return
      */
     protected boolean _isMutable(Object a) {
         return true;
     }
     /**
      * Override if the tested objects can be cloned.
-     * @return
      */
     protected boolean _canClone(Object a) {
         return true;

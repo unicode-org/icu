@@ -35,8 +35,8 @@ import java.util.*;
  * <p>
  * <strong>WARNING:</strong> This class is very early in its development, and
  * it is highly likely that its API will change to some degree in the future.
- * At the moment, it basically does just enough to support {@link IslamicCalendar}
- * and {@link ChineseCalendar}.
+ * At the moment, it basically does just enough to support {@link com.ibm.icu.util.IslamicCalendar}
+ * and {@link com.ibm.icu.util.ChineseCalendar}.
  *
  * @author Laura Werner
  * @author Alan Liu

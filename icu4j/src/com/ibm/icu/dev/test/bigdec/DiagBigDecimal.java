@@ -907,7 +907,7 @@ public class DiagBigDecimal extends TestFmwk{
  // are correctly passed to the methods, except that we check that
  // each method checks for lostDigits.
  
- /** Test the {@link BigDecimal#abs} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#abs} method. */
  
  public void diagabs(){
   boolean flag=false;
@@ -960,7 +960,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#add} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#add} method. */
  
  public void diagadd(){
   boolean flag=false;
@@ -1233,7 +1233,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 
  /* ----------------------------------------------------------------- */
- /** Test the {@link BigDecimal#compareTo(BigDecimal)} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#compareTo(BigDecimal)} method. */
  
  public void diagcompareto(){
   boolean flag=false;
@@ -1288,7 +1288,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#divide} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#divide} method. */
  
  public void diagdivide(){
   boolean flag=false;
@@ -1611,7 +1611,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#divideInteger} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#divideInteger} method. */
  
  public void diagdivideInteger(){
   boolean flag=false;
@@ -1692,7 +1692,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#max} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#max} method. */
  
  public void diagmax(){
   boolean flag=false;
@@ -1744,7 +1744,7 @@ public class DiagBigDecimal extends TestFmwk{
   summary("max");
   return;}
 
- /** Test the {@link BigDecimal#min} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#min} method. */
  
  public void diagmin(){
   boolean flag=false;
@@ -1801,7 +1801,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#multiply} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#multiply} method. */
  
  public void diagmultiply(){
   boolean flag=false;
@@ -2049,7 +2049,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#negate} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#negate} method. */
  
  public void diagnegate(){
   boolean flag=false;
@@ -2098,7 +2098,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#plus} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#plus} method. */
  
  public void diagplus(){
   boolean flag=false;
@@ -2177,7 +2177,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#pow} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#pow} method. */
  
  public void diagpow(){
   boolean flag;
@@ -2417,7 +2417,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /*--------------------------------------------------------------------*/
  
- /** Test the {@link BigDecimal#remainder} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#remainder} method. */
  
  public void diagremainder(){
   boolean flag=false;
@@ -2582,7 +2582,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /*--------------------------------------------------------------------*/
  
- /** Test the {@link BigDecimal#subtract} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#subtract} method. */
  
  public void diagsubtract(){
   boolean flag=false;
@@ -2956,7 +2956,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#compareTo(java.lang.Object)} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#compareTo(java.lang.Object)} method. */
  
  public void diagcomparetoObj(){
   boolean flag=false;
@@ -2993,7 +2993,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#doubleValue} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#doubleValue} method. */
  
  public void diagdoublevalue(){
   java.lang.String val;
@@ -3016,7 +3016,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#equals} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#equals} method. */
  
  public void diagequals(){
   com.ibm.icu.math.BigDecimal d;
@@ -3031,7 +3031,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#floatValue} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#floatValue} method. */
  
  public void diagfloatvalue(){
   java.lang.String val;
@@ -3059,7 +3059,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#format} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#format} method. */
  
  public void diagformat(){
   boolean flag=false;
@@ -3301,7 +3301,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#hashCode} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#hashCode} method. */
  
  public void diaghashcode(){
   java.lang.String hs;
@@ -3319,7 +3319,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#intValue} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#intValue} method. */
  
  public void diagintvalue(){
   boolean flag=false;
@@ -3528,7 +3528,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#longValue} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#longValue} method. */
  
  public void diaglongvalue(){
   boolean flag=false;
@@ -3681,7 +3681,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#movePointLeft} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#movePointLeft} method. */
  
  public void diagmovepointleft(){
   (new Test("mpl001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointLeft(-10).toString()).equals("-10000000000");
@@ -3720,7 +3720,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#movePointRight} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#movePointRight} method. */
  
  public void diagmovepointright(){
   (new Test("mpr001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).movePointRight(+10).toString()).equals("-10000000000");
@@ -3759,7 +3759,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#scale} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#scale} method. */
  
  public void diagscale(){
   (new Test("sca001")).ok=((new com.ibm.icu.math.BigDecimal("-1")).scale())==0;
@@ -3784,7 +3784,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#setScale} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#setScale} method. */
  
  public void diagsetscale(){
   boolean flag=false;
@@ -3983,7 +3983,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#signum} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#signum} method. */
  
  public void diagsignum(){
   // necessarily checks some obscure constructions, too
@@ -4009,7 +4009,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#toBigDecimal} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#toBigDecimal} method. */
  
  public void diagtobigdecimal(){
   (new Test("tbd001")).ok=((new com.ibm.icu.math.BigDecimal("0")).toBigDecimal().toString()).equals("0");
@@ -4026,7 +4026,7 @@ public class DiagBigDecimal extends TestFmwk{
   return;}
 /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#toBigInteger} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#toBigInteger} method. */
  
  public void diagtobiginteger(){
   boolean flag=false;
@@ -4129,7 +4129,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#toCharArray} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#toCharArray} method. */
  
  public void diagtochararray(){
   java.lang.String str;
@@ -4151,7 +4151,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#toString} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#toString} method. */
  
  public void diagtostring(){
   java.lang.String str;
@@ -4177,7 +4177,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#unscaledValue} method. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#unscaledValue} method. */
  
  public void diagunscaledvalue(){
   // just like toBigInteger, but scaly bits are preserved [without dots]
@@ -4214,7 +4214,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link BigDecimal#valueOf} method [long and double]. */
+ /** Test the {@link com.ibm.icu.math.BigDecimal#valueOf} method [long and double]. */
  
  public void diagvalueof(){
   boolean flag=false;
@@ -4335,7 +4335,7 @@ public class DiagBigDecimal extends TestFmwk{
 
  /* ----------------------------------------------------------------- */
  
- /** Test the {@link MathContext} class. */
+ /** Test the {@link com.ibm.icu.math.MathContext} class. */
  
  public void diagmathcontext(){
   com.ibm.icu.math.MathContext mccon1;
@@ -5268,7 +5268,7 @@ public class DiagBigDecimal extends TestFmwk{
  * Its <code>ok</flag> is assigned directly to record whether the
  * test succeeded (1) or failed (0).
  *
- * @see     com.ibm.icu.math.DiagBigDecimal
+ * @see     com.ibm.icu.math.BigDecimal
  * @version 1.00 2000.03.27
  * @author  Mike Cowlishaw
  */
@@ -5311,7 +5311,7 @@ public class DiagBigDecimal extends TestFmwk{
   * The <code>DiagException</code> class is used to signal the failure
   * of a test group.  It records the number of failures in the group.
   *
-  * @see     com.ibm.icu.math.DiagBigDecimal
+  * @see     com.ibm.icu.math.BigDecimal
   * @version 1.00 2000.03.27
   * @author  Mike Cowlishaw
   */

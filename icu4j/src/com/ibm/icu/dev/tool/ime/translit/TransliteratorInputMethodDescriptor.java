@@ -58,10 +58,9 @@ public class TransliteratorInputMethodDescriptor implements InputMethodDescripto
     /**
     * Obtain the localized name of the Transliterator IME
     *
-    * @param inputLocale.
-    * @param displayLanguge The requested translation of the Transliterator IME.
-    *
-    * @return String The localized name for the Transliterator IME.
+    * @param inputLocale the requested input method locale
+    * @param displayLanguage The requested translation of the Transliterator IME
+    * @return the localized name for the Transliterator IME
     */
     public String getInputMethodDisplayName(Locale inputLocale,
                                             Locale displayLanguage) {
