@@ -377,6 +377,7 @@ void MultithreadTest::TestThreads()
     while(patience--)
     {
         int32_t count = 0;
+        umtx_lock(NULL);
         for(i=0;i<THREADTEST_NRTHREADS;i++)
         {
             if(threadTestChars[i] == '*')
@@ -384,6 +385,7 @@ void MultithreadTest::TestThreads()
                 count++;
             }
         }
+        umtx_unlock(NULL);
         
         if(count == THREADTEST_NRTHREADS)
         {
@@ -476,6 +478,8 @@ void MultithreadTest::TestMutex()
 
     for(int32_t patience = 12; patience > 0;patience--)
     {
+        // TODO:  Possible memory coherence issue in looking at fDone values
+        //        that are set in another thread without the mutex here.
         if(thread1.fDone && verbose)
             printf("Thread1 done\n");
 
@@ -695,6 +699,7 @@ public:
 
         if(U_FAILURE(status))
         {
+            Mutex m;
             error("Error on NumberFormat::createInstance()");
             return;
         }
@@ -703,7 +708,10 @@ public:
 
         if(U_FAILURE(status))
         {
-            error("Error on NumberFormat::createPercentInstance()");
+            {
+                Mutex m;
+                error("Error on NumberFormat::createPercentInstance()");
+            }
             delete formatter;
             return;
         }
@@ -718,6 +726,7 @@ public:
 
             if(0 != output.compare(kNumberFormatTestData[whichLine].string))
             {
+                Mutex m;
                 error("format().. expected " + kNumberFormatTestData[whichLine].string + " got " + output);
                 continue; // will break
             }
@@ -730,13 +739,14 @@ public:
 
             if(0 != output.compare(kPercentFormatTestData[whichLine].string))
             {
+                Mutex m;
                 error("percent format().. \n" + showDifference(kPercentFormatTestData[whichLine].string,output));
                 continue;
             }
 
             // Test message error 
 #define kNumberOfMessageTests 3
-            UErrorCode       statusToCheck;
+            UErrorCode      statusToCheck;
             UnicodeString   patternToCheck;
             Locale          messageLocale;
             Locale          countryToCheck;
@@ -780,12 +790,14 @@ public:
             {
                UnicodeString tmp;
                errorToString(status,tmp);
+               Mutex m;
                error("Failure on message format, pattern=" + patternToCheck +", error = " + tmp);
                continue;
             }
 
             if(result != expected)
             {
+                Mutex m;
                 error("PatternFormat: \n" + showDifference(expected,result));
                 continue;
             }
@@ -793,6 +805,7 @@ public:
 
         delete formatter;
         delete percentFormatter;
+        Mutex m;
         done();
     }
 
@@ -819,14 +832,16 @@ void MultithreadTest::TestThreadedIntl()
         int32_t terrs = 0;
         int32_t completed =0;
 
-        for(i=0;i<kFormatThreadThreads;i++)
-        {
-            if(tests[i].getDone())
+        for(i=0;i<kFormatThreadThreads;i++) {
+            umtx_lock(NULL);
+            UBool threadIsDone = tests[i].getDone();
+            umtx_unlock(NULL);
+            if(threadIsDone)
             {
                 completed++;
-
+                
                 logln(UnicodeString("Test #") + i + " is complete.. ");
-
+                
                 UnicodeString theErr;
                 if(tests[i].getError(theErr))
                 {
@@ -836,7 +851,7 @@ void MultithreadTest::TestThreadedIntl()
                 // print out the error, too, if any.
             }
         }
-
+        
         if(completed == kFormatThreadThreads)
         {
             logln("Done!");
@@ -934,6 +949,7 @@ public:
     newSk = (newSk == sk1)?sk2:sk1;
   }
 
+    Mutex m;
     done();
   }
 };
@@ -1072,7 +1088,10 @@ void MultithreadTest::TestCollators()
 
         for(i=0;i<kCollatorThreadThreads;i++)
         {
-            if(tests[i].getDone())
+            umtx_lock(NULL);
+            UBool threadIsDone = tests[i].getDone();
+            umtx_unlock(NULL);
+            if(threadIsDone)
             {
                 completed++;
 
