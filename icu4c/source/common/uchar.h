@@ -21,6 +21,7 @@
 *   5/20/99     Madhu       Added the function u_getVersion()
 *   8/19/1999   srl         Upgraded scripts to Unicode 3.0
 *   8/27/1999   schererm    UCharDirection constants: U_...
+*   11/11/1999  weiv        added u_isalnum(), cleaned comments
 ********************************************************************************
 */
 
@@ -397,9 +398,9 @@ typedef enum UCellWidth UCellWidth;
  * @param ch    the character to be tested
  * @return  true if the character is lowercase; false otherwise.
  * @see UNICODE_VERSION
- * @see uisupper()
- * @see uistitle()
- * @see uislower()
+ * @see u_isupper()
+ * @see u_istitle()
+ * @see u_islower()
  */
 U_CAPI bool_t U_EXPORT2
 u_islower(UChar c);
@@ -410,9 +411,9 @@ u_islower(UChar c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is uppercase; false otherwise.
- * @see uislower()
- * @see uistitle
- * @see utolower()
+ * @see u_islower()
+ * @see u_istitle
+ * @see u_tolower()
  */
 U_CAPI bool_t U_EXPORT2
 u_isupper(UChar c);
@@ -423,9 +424,9 @@ u_isupper(UChar c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is titlecase; false otherwise.
- * @see uisupper()
- * @see uislower()
- * @see utotitle()
+ * @see u_isupper()
+ * @see u_islower()
+ * @see u_totitle()
  */
 U_CAPI bool_t U_EXPORT2
 u_istitle(UChar c);
@@ -441,18 +442,28 @@ U_CAPI bool_t U_EXPORT2
 u_isdigit(UChar c);
 
 /**
+ * Determines whether the specified character is an alphanumeric character
+ * (letter or digit)according to Unicode 2.1.2.
+ *
+ * @param ch    the character to be tested
+ * @return  true if the character is a letter or a digit; false otherwise.
+ */
+U_CAPI bool_t U_EXPORT2
+u_isalnum(UChar c);
+
+/**
  * Determines whether the specified numeric value is actually a defined character
  * according to Unicode 2.1.2.
  *
  * @param ch    the character to be tested
  * @return  true if the character has a defined Unicode meaning; false otherwise.
  *
- * @see uisdigit()
- * @see uisalpha()
- * @see uisalnum()
- * @see uisupper()
- * @see uislower()
- * @see uistitle()
+ * @see u_isdigit()
+ * @see u_isalpha()
+ * @see u_isalnum()
+ * @see u_isupper()
+ * @see u_islower()
+ * @see u_istitle()
  */
 U_CAPI bool_t U_EXPORT2
 u_isdefined(UChar c);
@@ -464,8 +475,8 @@ u_isdefined(UChar c);
  * @param ch    the character to be tested
  * @return  true if the character is a letter; false otherwise.
  *
- * @see uisdigit()
- * @see uisalnum()
+ * @see u_isdigit()
+ * @see u_isalnum()
  */
 U_CAPI bool_t U_EXPORT2
 u_isalpha(UChar c);
@@ -485,7 +496,7 @@ u_isspace(UChar c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a control character; false otherwise.
  *
- * @see uisprint()
+ * @see u_isprint()
  */
 U_CAPI bool_t U_EXPORT2
 u_iscntrl(UChar c);
@@ -498,7 +509,7 @@ u_iscntrl(UChar c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a printable character; false otherwise.
  *
- * @see uiscntrl()
+ * @see u_iscntrl()
  */
 U_CAPI bool_t U_EXPORT2
 u_isprint(UChar c);
@@ -510,8 +521,8 @@ u_isprint(UChar c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is of the base form; false otherwise.
  *
- * @see uisalpha()
- * @see uisdigit()
+ * @see u_isalpha()
+ * @see u_isdigit()
  */
 U_CAPI bool_t U_EXPORT2
 u_isbase(UChar c);
@@ -738,7 +749,7 @@ u_isJavaIDPart(UChar c);
  * A character has a lowercase equivalent if and only if a lowercase mapping
  * is specified for the character in the Unicode 2.1.2 attribute table.
  * <P>
- * utolower() only deals with the general letter case conversion.
+ * u_tolower() only deals with the general letter case conversion.
  * For language specific case conversion behavior, use ustrToUpper().
  * For example, the case conversion for dot-less i and dotted I in Turkish,
  * or for final sigma in Greek.
@@ -755,7 +766,7 @@ u_tolower(UChar c);
  * 2.1.2; if the character has no uppercase equivalent, the character itself is 
  * returned.
  * <P>
- * utoupper() only deals with the general letter case conversion.
+ * u_toupper() only deals with the general letter case conversion.
  * For language specific case conversion behavior, use ustrToUpper().
  * For example, the case conversion for dot-less i and dotted I in Turkish,
  * or ess-zed (i.e., "sharp S") in German.
