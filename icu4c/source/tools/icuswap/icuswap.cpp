@@ -95,7 +95,7 @@ udata_swap(const UDataSwapper *ds,
 /**
  * Swap an ICU .dat package, including swapping of enclosed items.
  */
-U_CAPI int32_t U_EXPORT2
+U_CFUNC int32_t U_CALLCONV
 udata_swapPackage(const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode);
@@ -452,7 +452,7 @@ compareToCEntries(const void *context, const void *left, const void *right) {
 }
 U_CDECL_END
 
-U_CAPI int32_t U_EXPORT2
+U_CFUNC int32_t U_CALLCONV
 udata_swapPackage(const UDataSwapper *ds,
                   const void *inData, int32_t length, void *outData,
                   UErrorCode *pErrorCode) {

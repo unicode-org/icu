@@ -738,7 +738,7 @@ compareProps(const void *l, const void *r) {
 /* generate output data ----------------------------------------------------- */
 
 /* folding value: just store the offset (16 bits) if there is any non-0 entry */
-U_CAPI uint32_t U_EXPORT2
+U_CFUNC uint32_t U_EXPORT2
 getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     uint32_t value;
     UChar32 limit;

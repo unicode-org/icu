@@ -216,7 +216,7 @@ public:
 };
 
 // Sort function for NameToEnumEntry (sort by name)
-U_CAPI int32_t
+U_CFUNC int32_t
 compareNameToEnumEntry(const void * /*context*/, const void* e1, const void* e2) {
     return
         STRING_TABLE[((NameToEnumEntry*)e1)->nameIndex].
@@ -249,7 +249,7 @@ public:
 };
 
 // Sort function for EnumToNameGroupEntry (sort by name index)
-U_CAPI int32_t
+U_CFUNC int32_t
 compareEnumToNameGroupEntry(const void * /*context*/, const void* e1, const void* e2) {
     return ((EnumToNameGroupEntry*)e1)->enumValue - ((EnumToNameGroupEntry*)e2)->enumValue;
 }
@@ -281,7 +281,7 @@ public:
 };
 
 // Sort function for EnumToValueEntry (sort by enum)
-U_CAPI int32_t
+U_CFUNC int32_t
 compareEnumToValueEntry(const void * /*context*/, const void* e1, const void* e2) {
     return ((EnumToValueEntry*)e1)->enumValue - ((EnumToValueEntry*)e2)->enumValue;
 }

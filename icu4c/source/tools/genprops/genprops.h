@@ -89,7 +89,7 @@ getProps(uint32_t c);
 extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
-U_CAPI uint32_t U_EXPORT2
+U_CFUNC uint32_t U_EXPORT2
 getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset);
 
 extern void
