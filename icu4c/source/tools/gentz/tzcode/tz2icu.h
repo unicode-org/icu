@@ -1,3 +1,14 @@
+/*
+**********************************************************************
+* Copyright (c) 2003, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+* Author: Alan Liu
+* Created: July 10 2003
+* Since: ICU 2.8
+**********************************************************************
+*/
+
 #ifndef _TZ2ICU_H_
 #define _TZ2ICU_H_
 
