@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/10/24 05:42:13 $
-* $Revision: 1.3 $
+* $Date: 2001/11/07 19:58:40 $
+* $Revision: 1.4 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -15,6 +15,7 @@
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
 #include "hash.h"
+#include "mutex.h"
 
 U_NAMESPACE_BEGIN
 
@@ -39,6 +40,43 @@ static UnicodeSet* SCRIPT_CACHE = NULL;
 // Special value codes
 static const int32_t ANY = -1; // general category: all code points
 
+// >From UnicodeData:
+// 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+// 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+// 4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+// 9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+// AC00;<Hangul Syllable, First>;Lo;0;L;;;;;N;;;;;
+// D7A3;<Hangul Syllable, Last>;Lo;0;L;;;;;N;;;;;
+// D800;<Non Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+// DB7F;<Non Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+// DB80;<Private Use High Surrogate, First>;Cs;0;L;;;;;N;;;;;
+// DBFF;<Private Use High Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+// DC00;<Low Surrogate, First>;Cs;0;L;;;;;N;;;;;
+// DFFF;<Low Surrogate, Last>;Cs;0;L;;;;;N;;;;;
+// E000;<Private Use, First>;Co;0;L;;;;;N;;;;;
+// F8FF;<Private Use, Last>;Co;0;L;;;;;N;;;;;
+// 20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+// 2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+// F0000;<Plane 15 Private Use, First>;Co;0;L;;;;;N;;;;;
+// FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
+// 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
+// 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
+// 
+// >Large Blocks of Unassigned: (from DerivedGeneralCategory)
+// 1044E..1CFFF  ; Cn # [52146]
+// 1D800..1FFFF  ; Cn # [10240]
+// 2A6D7..2F7FF  ; Cn # [20777]
+// 2FA1E..E0000  ; Cn # [722403]
+// E0080..EFFFF  ; Cn # [65408]
+
+/**
+ * A set of all characters _except_ the first characters of
+ * certain ranges.  These ranges are ranges of characters whose
+ * properties are all exactly alike, e.g. CJK Ideographs from
+ * U+4E00 to U+9FA5.
+ */
+static UnicodeSet* INCLUSIONS = NULL;
+
 //----------------------------------------------------------------
 // Unicode string and character constants
 //----------------------------------------------------------------
@@ -53,6 +91,25 @@ static const UChar HAT        = 0x005E; /*^*/
 static const UChar UPPER_P    = 0x0050; /*P*/
 static const UChar LEFT_BRACE = 0x007B; /*{*/
 static const UChar EQUALS     = 0x003D; /*=*/
+
+// See INCLUSIONS above
+static const UChar INCLUSIONS_PATTERN[] =
+{91,94,92,117,51,52,48,49,45,92,117,52,68,66,53,32,
+92,117,52,69,48,49,45,92,117,57,70,65,53,32,
+92,117,65,67,48,49,45,92,117,68,55,65,51,32,
+92,117,68,56,48,49,45,92,117,68,66,55,70,32,
+92,117,68,66,56,49,45,92,117,68,66,70,70,32,
+92,117,68,67,48,49,45,92,117,68,70,70,70,32,
+92,117,69,48,48,49,45,92,117,70,56,70,70,32,
+92,85,48,48,48,49,48,52,52,70,45,92,85,48,48,48,49,67,70,70,70,32,
+92,85,48,48,48,49,68,56,48,49,45,92,85,48,48,48,49,70,70,70,70,32,
+92,85,48,48,48,50,48,48,48,49,45,92,85,48,48,48,50,65,54,68,54,32,
+92,85,48,48,48,50,65,54,68,56,45,92,85,48,48,48,50,70,55,70,70,32,
+92,85,48,48,48,50,70,65,49,70,45,92,85,48,48,48,69,48,48,48,48,32,
+92,85,48,48,48,69,48,48,56,49,45,92,85,48,48,48,69,70,70,70,70,32,
+92,85,48,48,48,70,48,48,48,49,45,92,85,48,48,48,70,70,70,70,68,32,
+92,85,48,48,49,48,48,48,48,49,45,92,85,48,48,49,48,70,70,70,68,93,0};
+// "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]"
 
 //----------------------------------------------------------------------
 // class _CharString
@@ -379,30 +436,51 @@ void UnicodePropertySet::initSetFromFilter(UnicodeSet& set, Filter filter,
     // Walk through all Unicode characters, noting the start
     // and end of each range for which filter.contain(c) is
     // true.  Add each range to a set.
+    //
+    // To improve performance, use the INCLUSIONS set, which
+    // encodes information about character ranges that are known
+    // to have identical properties, such as the CJK Ideographs
+    // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
+    // except the first characters of such ranges.
+    //
+    // TODO Where possible, instead of scanning over code points,
+    // use internal property data to initialize UnicodeSets for
+    // those properties.  Scanning code points is slow.
+
+    if (INCLUSIONS == NULL) {
+        Mutex lock;
+        if (INCLUSIONS == NULL) {
+            UErrorCode ec = U_ZERO_ERROR;
+            INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, ec);
+        }
+    }
+
     set.clear();
 
-    int32_t start = -1;
-    int32_t end = -2;
+    int32_t startHasProperty = -1;
+    int limitRange = INCLUSIONS->getRangeCount();
     
-    // TODO Extend this up to UnicodeSet.MAX_VALUE when we have
-    // better performance; i.e., when this code can get moved into
-    // the UCharacter class and not have to iterate over code
-    // points.  Right now it's way too slow to iterate to 10FFFF.
-    
-    for (int32_t i=UnicodeSet::MIN_VALUE; i<=0xFFFF/*TEMPORARY*/; ++i) {
-        if ((*filter)((UChar32) i, context)) {
-            if ((end+1) == i) {
-                end = i;
-            } else {
-                if (start >= 0) {
-                    set.add((UChar32)start, (UChar32)end);
+    for (int j=0; j<limitRange; ++j) {
+        // get current range
+        UChar32 start = INCLUSIONS->getRangeStart(j);
+        UChar32 end = INCLUSIONS->getRangeEnd(j);
+        
+        // for all the code points in the range, process
+        for (UChar32 ch = start; ch <= end; ++ch) {
+            // only add to the unicodeset on inflection points --
+            // where the hasProperty value changes to false
+            if ((*filter)((UChar32) ch, context)) {
+                if (startHasProperty < 0) {
+                    startHasProperty = ch;
                 }
-                start = end = i;
+            } else if (startHasProperty >= 0) {
+                set.add((UChar32)startHasProperty, (UChar32)ch-1);
+                startHasProperty = -1;
             }
         }
     }
-    if (start >= 0) {
-        set.add((UChar32)start, (UChar32)end);
+    if (startHasProperty >= 0) {
+        set.add((UChar32)startHasProperty, (UChar32)0x10FFFF);
     }
 }
 
