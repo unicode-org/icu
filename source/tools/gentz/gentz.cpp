@@ -356,12 +356,20 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         char* p = buffer;
         index->gmtOffset = 1000 * // Convert s -> ms
             parseInteger(p, SEP, -MAX_GMT_OFFSET, MAX_GMT_OFFSET);
+        index->defaultZone = (uint16_t)parseInteger(p, SEP, 0, header.count-1);
         index->count = (uint16_t)parseInteger(p, SEP, 1, maxPerOffset);
         uint16_t* zoneNumberArray = &(index->zoneNumber);
+        bool_t sawOffset = FALSE; // Sanity check - make sure offset is in zone list
         for (uint16_t j=0; j<index->count; ++j) {
             zoneNumberArray[j] = (uint16_t)
                 parseInteger(p, (j==(index->count-1))?NUL:SEP,
                              0, header.count-1);
+            if (zoneNumberArray[j] == index->defaultZone) {
+                sawOffset = TRUE;
+            }
+        }
+        if (!sawOffset) {
+            die("Error: bad offset index entry; default not in zone list");
         }
         int8_t* nextIndex = (int8_t*)&(zoneNumberArray[index->count]);
         index->nextEntryDelta = (i==(n-1)) ? 0 : (nextIndex - (int8_t*)index);
