@@ -429,7 +429,7 @@ void record_fail()
  * are set correctly
  */
 
-void TestFallback()
+static void TestFallback()
 {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *fr_FR = NULL;

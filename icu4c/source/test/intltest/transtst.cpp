@@ -2700,7 +2700,7 @@ void TransliteratorTest::TestInvalidPostContext() {
  * Test ID form variants
  */
 void TransliteratorTest::TestIDForms() {
-    char* DATA[] = {
+    const char* DATA[] = {
         "NFC", "NFD",
         "nfd", "NFC", // make sure case is ignored
         "Any-NFKD", "Any-NFKC",
