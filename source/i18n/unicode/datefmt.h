@@ -58,7 +58,7 @@ class TimeZone;
  *     UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
  *     for (int32_t i = 0; i < 3; ++i) {
  *         myString.remove();
- *         cout &lt;&lt; df->format( myDateArr[i], myString ) &lt;&lt; endl;
+ *         cout << df->format( myDateArr[i], myString ) << endl;
  *     }
  * \endcode
  * </pre>

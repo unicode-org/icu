@@ -126,7 +126,7 @@ class DateFormat;
  *     FieldPosition fp(0);
  *     UnicodeString dateString;
  *     formatter->format( currentTime_1, dateString, fp );
- *     cout &lt;&lt; "result: " &lt;&lt; dateString &lt;&lt; endl;
+ *     cout << "result: " << dateString << endl;
  *     
  *     // Parse the previous string back into a Date.
  *     ParsePosition pp(0);
