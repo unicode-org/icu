@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/29 23:01:51 $
- * $Revision: 1.87 $
+ * $Date: 2001/11/30 01:04:10 $
+ * $Revision: 1.88 $
  *
  *****************************************************************************************
  */
@@ -2311,14 +2311,13 @@ public class TransliteratorTest extends TestFmwk {
         if (pos.start == 0) {
             errln("No Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
             gotError = true;
+        } else {
+            logln("PASS Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
         }
         t.finishTransliteration(test, pos);
         if (pos.start != pos.limit) {
             errln("Incomplete, " + t.getID() + ":  " + Utility.formatInput(test, pos));
             gotError = true;
-        }
-        if (!gotError) {
-            logln("PASSED " + t.getID());
         }
         return test.toString();
     }
