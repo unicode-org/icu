@@ -398,7 +398,7 @@ struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *
     res->fNext = NULL;
     res->fSize = sizeof(int32_t);
     res->u.fIntVector.fCount = 0;
-    res->u.fIntVector.fArray = (uint32_t *)uprv_malloc(sizeof(uint32_t) * MAX_INT_VECTOR);
+    res->u.fIntVector.fArray = (uint32_t *)uprv_malloc(sizeof(uint32_t) * RESLIST_MAX_INT_VECTOR);
     if(res->u.fIntVector.fArray == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(res);

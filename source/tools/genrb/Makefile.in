@@ -120,7 +120,7 @@ $(TARGET) : $(OBJECTS)
 
 @DATABUILDDIR@/../source/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	@ICU_DATA=@DATABUILDDIR@ ./genrb -d@DATABUILDDIR@/../source/test/testdata/ $<
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -s@DATABUILDDIR@/../source/test/testdata/ -d@DATABUILDDIR@/../source/test/testdata/ $(<F)
 
 #@DATABUILDDIR@/translit/%.res : $(top_srcdir)/../data/translit/%.txt
 #	@echo "Creating translit resource file for $<"
@@ -128,7 +128,7 @@ $(TARGET) : $(OBJECTS)
 
 @DATABUILDDIR@/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
-	@ICU_DATA=@DATABUILDDIR@ ./genrb -d@DATABUILDDIR@/ $<
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -s@DATABUILDDIR@/ -d@DATABUILDDIR@/ $(<F)
 
 
 # the 'mv' will always fail if you are building in the source dir
