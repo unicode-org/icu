@@ -921,6 +921,11 @@ UnicodeString::setTo(UBool isTerminated,
                      const UChar *text,
                      int32_t textLength)
 {
+  if(fFlags & kOpenGetBuffer) {
+    // do not modify a string that has an "open" getBuffer(minCapacity)
+    return *this;
+  }
+
   if(text == 0 || textLength < -1 || textLength == -1 && !isTerminated) {
     setToBogus();
     return *this;
@@ -947,6 +952,11 @@ UnicodeString &
 UnicodeString::setTo(UChar *buffer,
                      int32_t buffLength,
                      int32_t buffCapacity) {
+  if(fFlags & kOpenGetBuffer) {
+    // do not modify a string that has an "open" getBuffer(minCapacity)
+    return *this;
+  }
+
   if(buffer == 0 || buffLength < 0 || buffLength > buffCapacity) {
     setToBogus();
     return *this;
