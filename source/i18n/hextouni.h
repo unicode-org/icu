@@ -1,7 +1,5 @@
 /*
-**********************************************************************
-*   Copyright (C) 1999, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -22,7 +20,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.1 $ $Date: 1999/11/20 00:36:43 $
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.2 $ $Date: 1999/11/22 21:47:26 $
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
