@@ -288,11 +288,11 @@ en {
         ALX { "ALX", "Albanian Dollar Foreign Exchange Certificates" } // 1953-1965
         AMD { "dram","Armenian Dram"        } // 11/22/1993-
         ANG { "NA f.","Netherlands Antillan Guilder" } // 05/10/1940-
-        AOA { "AOA", "Angolan Kwanza"        } // 09/1926-12/31/1958
+        AOA { "AOA", "Angolan Kwanza"       } // 09/1926-12/31/1958
         AOK { "AOK", "Angolan Kwanza (1977-1990)" } // 01/08/1977-09/25/1990
         AON { "AON", "Angolan New Kwanza (1990-2000)" } // 09/25/1990-07/01/1995
         AOR { "AOR", "Angolan Kwanza Reajustado (1995-1999)" } // 07/01/1995-12/13/1999
-        AOS { "AOS", "Angolan Escudo"        } // 12/31/1958-11/11/1976
+        AOS { "AOS", "Angolan Escudo"       } // 12/31/1958-11/11/1976
         ARA { "ARA", "Argentine Austral"    } // 06/14/1985-01/01/1992
         ARM { "ARM", "Argentine Peso Moneda Nacional" } // 1899-01/01/1970
         ARP { "ARP", "Argentine Peso (1983-1985)" } // 06/01/1983-06/14/1985
@@ -317,30 +317,30 @@ en {
         BGX { "BGX", "Bulgarian Lev Foreign Exchange Certificates" } // 1965-1986
         BHD { "BD",  "Bahraini Dinar"       } // 10/1965-
         BIF { "Fbu", "Burundi Franc"        } // 05/19/1964-
-        BMD { "Ber$","Bermudan Dollar"       } // 02/06/1970-
-        BMP { "BMP", "Bermudan Pound"        } // 1914-02/06/1970
+        BMD { "Ber$","Bermudan Dollar"      } // 02/06/1970-
+        BMP { "BMP", "Bermudan Pound"       } // 1914-02/06/1970
         BND { "BND", "Brunei Dollar"        } // 06/12/1967-
         BOB { "Bs",  "Boliviano"            } // 1986-
         BOL { "BOL", "Boliviano (1863-1962)" } // 06/23/1863-12/31/1962
         BOP { "BOP", "Bolivian Peso"        } // 01/01/1963-1986
         BOV { "BOV", "Bolivian Mvdol"       }
         BRB { "BRB", "Brazilian Cruzeiro Novo (1967-1986)" } // 02/13/1967-02/28/1986
-        BRC { "BRC", "Brazilian Cruzado"       } // 02/28/1986-01/15/1989
+        BRC { "BRC", "Brazilian Cruzado"    } // 02/28/1986-01/15/1989
         BRE { "BRE", "Brazilian Cruzeiro (1990-1993)" } // 03/16/1990-08/01/1993
-        BRL { "R$",  "Brazilian Real"          } // 07/01/1994-
-        BRN { "BRN", "Brazilian Cruzado Novo"  } // 01/15/1989-03/16/1990
-        BRR { "BRR", "Brazilian Cruzeiro"      } // 08/01/1993-07/01/1994
+        BRL { "R$",  "Brazilian Real"       } // 07/01/1994-
+        BRN { "BRN", "Brazilian Cruzado Novo" } // 01/15/1989-03/16/1990
+        BRR { "BRR", "Brazilian Cruzeiro"   } // 08/01/1993-07/01/1994
         BRZ { "BRZ", "Brazilian Cruzeiro (1942-1967)" } // 1942-1967
-        BSD { "BSD", "Bahamian Dollar"       } // 5/25/1966-
-        BSP { "BSP", "Bahamian Pound"        } // 1869-5/25/1966
+        BSD { "BSD", "Bahamian Dollar"      } // 5/25/1966-
+        BSP { "BSP", "Bahamian Pound"       } // 1869-5/25/1966
         BTN { "Nu",  "Bhutan Ngultrum"      } // 1974-
         BTR { "BTR", "Bhutan Rupee"         } // 1928-1974
         BUK { "BUK", "Burmese Kyat"         } // 01/04/1948-06/18/1989
         BUR { "BUR", "Burmese Rupee"        } // 04/01/1937-07/01/1952
-        BWP { "BWP", "Botswanan Pula"        } // 1976-
+        BWP { "BWP", "Botswanan Pula"       } // 1976-
         BYB { "BYB", "Belarussian New Ruble (1994-1999)" } // 08/1994-01/01/2000
         BYL { "BYL", "Belarussian Ruble (1992-1994)" } // 09/25/1992-08/1994
-        BYR { "Rbl", "Belarussian Ruble"        } // 01/01/2000-
+        BYR { "Rbl", "Belarussian Ruble"    } // 01/01/2000-
         BZD { "BZ$", "Belize Dollar"        } // 1973-
         BZH { "BZH", "British Honduras Dollar" } // 1855-1972
         CAD { "Can$","Canadian Dollar"      } // 1858-
@@ -366,9 +366,9 @@ en {
         CSK { "CSK", "Czechoslovak Hard Koruna" } // 06/01/1953-12/31/1992
         CUP { "CUP", "Cuban Peso"           } // 1881-
         CUX { "CUX", "Cuban Foreign Exchange Certificates" } // 1985-
-        CVE { "CVEsc","Cape Verde Escudo"    } // 05/22/1911-
+        CVE { "CVEsc","Cape Verde Escudo"   } // 05/22/1911-
         CWG { "CWG", "Curacao Guilder"      } // 1848-1960
-        CYP { "\u00A3C","Cyprus Pound"         } // 9/5/1917-
+        CYP { "\u00A3C","Cyprus Pound"      } // 9/5/1917-
         CZK { "CZK", "Czech Republic Koruna" } // 01/01/1993-
         DDM { "DDM", "East German Ostmark"  } // 07/20/1948-10/02/1990
         DEM { "DEM", "Deutsche Mark"        } // 6/20/1948-2002
@@ -383,11 +383,11 @@ en {
         ECV { "ECV", "Ecuador Unidad de Valor Constante (UVC)" } // 1980-
         EEK { "EEK", "Estonian Kroon"        } // 06/21/1992-
         EGP { "EGP", "Egyptian Pound"       } // 11/14/1885-
-        ERN { "ERN", "Eritrean Nakfa"        } // 1997-
-        ESP { "ESP","Spanish Peseta"       } // 01/01/1859-02/28/2002
+        ERN { "ERN", "Eritrean Nakfa"       } // 1997-
+        ESP { "ESP", "Spanish Peseta"       } // 01/01/1859-02/28/2002
         ETB { "Br",  "Ethiopian Birr"       } // 09/15/1976-
         ETD { "ETD", "Ethiopian Dollar"     } // 07/23/1945-09/15/1976
-        EUR { "\u20AC","Euro"                 } // 01/01/1999-
+        EUR { "\u20AC","Euro"               } // 01/01/1999-
         FIM { "FIM", "Finnish Markka"       } // 1/1/1963-2002
         FIN { "FIN", "Finnish Markka (1860-1962)" } // 4/4/1860-12/31/1962
         FJD { "F$",  "Fiji Dollar"          } // 01/13/1969-
@@ -427,47 +427,47 @@ en {
         HNL { "L",   "Hoduras Lempira"      } // 04/03/1926-
         HRD { "HRD", "Croatian Dinar"       }
         HRK { "HRK", "Croatian Kuna"        } // 05/30/1994-
-        HTG { "HTG", "Haitian Gourde"         } // 08/26/1872-
+        HTG { "HTG", "Haitian Gourde"       } // 08/26/1872-
         HUF { "Ft",  "Hungarian Forint"     } // 07/23/1946-
         IBP { "IBP", "Northern Irish Pound" } // 07/27/1694-
         IDG { "IDG", "Indonesian Nica Guilder" } // 09/1945-05/13/1950
         IDJ { "IDJ", "Indonesian Java Rupiah" } // 10/17/1945-03/13/1950
         IDN { "IDN", "Indonesian New Rupiah" } // 11/02/1949-12/13/1965
-        IDR { "Rp",  "Indonesian Rupiah"     } // 12/13/1965-
+        IDR { "Rp",  "Indonesian Rupiah"    } // 12/13/1965-
         IEP { "IR\u00A3","Irish Pound"      } // 1922-2001
         ILL { "ILL", "Israeli Sheqel"       } // 02/22/1980-09/04/1985
         ILP { "ILP", "Israeli Pound"        } // 08/16/1948-02/22/1980
-        ILS { "ILS","Israeli New Sheqel"   } // 09/04/1985-
+        ILS { "ILS", "Israeli New Sheqel"   } // 09/04/1985-
         IMP { "IMP", "Isle of Man Pound Sterling" } // 1865-
         INR { "=0#Rs.|1#Re.|1<Rs.", "Indian Rupee" } // 08/17/1835-
         IQD { "ID",  "Iraqi Dinar"          } // 04/19/1931-
         IRR { "RI",  "Iranian Rial"         } // 05/13/1932-
-        ISK { "ISK", "Icelandic Krona"        } // 12/1/1918-
-        ITL { "\u20A4", "Italian Lira"         } // 11/10/1859-
+        ISK { "ISK", "Icelandic Krona"      } // 12/1/1918-
+        ITL { "\u20A4","Italian Lira"       } // 11/10/1859-
         JEP { "JEP", "Jersey Pound Sterling" } // 1840-
         JMD { "J$",  "Jamaican Dollar"      } // 09/08/1969-
         JMP { "JMP", "Jamaican Pound"       } // 1900-09/08/1969
         JOD { "JD",  "Jordanian Dinar"      } // 07/01/1950-
-        JPY { "\u00A5","Japanese Yen"         } // 06/1871
+        JPY { "\u00A5","Japanese Yen"       } // 06/1871
         KES { "K Sh","Kenyan Shilling"      } // 09/14/1966-
         KGS { "som", "Kyrgystan Som"        } // 05/10/1993-
-        KHO { "KHO", "Cambodian Old Riel"    } // 01/01/1955-1975
-        KHR { "CR",  "Cambodian Riel"        } // 03/20/1980-
+        KHO { "KHO", "Cambodian Old Riel"   } // 01/01/1955-1975
+        KHR { "CR",  "Cambodian Riel"       } // 03/20/1980-
         KID { "KID", "Kiribati Dollar"      } // 07/12/1979-
         KMF { "CF",  "Comoro Franc"         } // 07/06/1975-
         KPP { "KPP", "North Korean People's Won" } // 1947-02/1959
         KPW { "KPW", "North Korean Won"     } // 02/1959-
         KRH { "KRH", "South Korean Hwan"    } // 02/15/1953-06/10/1962
         KRO { "KRO", "South Korean Old Won" } // 1947-02/15/1953
-        KRW { "KRW","South Korean Won"     } // 06/10/1962-
+        KRW { "KRW", "South Korean Won"     } // 06/10/1962-
         KWD { "KD",  "Kuwaiti Dinar"        } // 04/01/1961-
         KYD { "KYD", "Cayman Islands Dollar" } // 1971-
         KZR { "KZR", "Kazakhstan Ruble"     } // 08/1993-11/05/1993
         KZT { "T",   "Kazakhstan Tenge"     } // 11/05/1993-
-        LAK { "LAK","Laotian Kip"          } // 05/05/1955-
+        LAK { "LAK", "Laotian Kip"          } // 05/05/1955-
         LBP { "LL",  "Lebanese Pound"       } // 01/01/1948-
         LIF { "LIF", "Liechtenstein Franc"  } // 03/17/1799-
-        LKR { "SL Re","Sri Lanka Rupee"      } // 05/22/1978-
+        LKR { "SL Re","Sri Lanka Rupee"     } // 05/22/1978-
         LNR { "LNR", "Ceylon Rupee"         } // 12/16/1949-05/22/1978
         LRD { "LRD", "Liberian Dollar"      } // 01/01/1944-
         LSL { "M",   "Lesotho Loti"         } // 01/22/1980-
@@ -494,7 +494,7 @@ en {
         MLF { "MLF", "Mali Franc"           } // 07/02/1962-1984
         MMK { "MMK", "Myanmar Kyat"         } // 06/18/1989-
         MMX { "MMX", "Myanmar Dollar Foreign Exchange Certificates" }
-        MNT { "Tug", "Mongolian Tugrik"      } // 03/13/1921-
+        MNT { "Tug", "Mongolian Tugrik"     } // 03/13/1921-
         MOP { "MOP", "Macao Pataca"         } // 1895-
         MQF { "MQF", "Martinique Franc"     } // 07/11/1851-1959
         MRO { "UM",  "Mauritania Ouguiya"   } // 06/29/1973-
@@ -541,7 +541,7 @@ en {
         PLZ { "PLZ", "Polish Zloty (1950-1995)" } // 10/28/1950-12/31/1994
         PSP { "PSP", "Palestine Pound"      } // 11/01/1927-07/01/1950
         PTC { "PTC", "Portuguese Conto"     } // 06/09/1931-2002
-        PTE { "PTE", "Portuguese Escudo"     } // 05/22/1911-2002
+        PTE { "PTE", "Portuguese Escudo"    } // 05/22/1911-2002
         PYG { "PYG", "Paraguay Guarani"     } // 11/1943-
         QAR { "QR",  "Qatari Rial"          } // 05/19/1973-
         REF { "REF", "Reunion Franc"        } // 07/11/1851-12/31/1959
@@ -549,7 +549,7 @@ en {
         RON { "RON", "Romanian New Leu"     } // 08/15/1947-01/28/1952
         RUB { "RUB", "Russian Ruble"        } // 01/01/1999-
         RUR { "RUR", "Russian Ruble (1991-1998)" } // 12/25/1991-12/31/1998
-        RWF { "RWF", "Rwandan Franc"         } // 05/19/1964-
+        RWF { "RWF", "Rwandan Franc"        } // 05/19/1964-
         SAR { "SRl", "Saudi Riyal"          } // 10/22/1952-
         SAS { "SAS", "Saudi Sovereign Riyal" } // 01/01/1936-10/22/1952
         SBD { "SI$", "Solomon Islands Dollar" } // 10/24/1977-
@@ -564,7 +564,7 @@ en {
         SKK { "Sk",  "Slovak Koruna"        } // 01/31/1992-
         SLL { "SLL", "Sierra Leone Leone"   } // 08/04/1964-
         SML { "SML", "San Marino Lira"      } // 12/23/1865-
-        SOS { "So. Sh.","Somali Shilling"      } // 07/01/1960-05/24/1991
+        SOS { "So. Sh.","Somali Shilling"   } // 07/01/1960-05/24/1991
         SQS { "SQS", "Somaliland Shilling"  } // 05/24/1991-
         SRG { "Sf",  "Suriname Guilder"     } // 12/25/1975-
         SSP { "SSP", "Scotland Pound"       } // 1707-
@@ -595,8 +595,8 @@ en {
         UAH { "UAH", "Ukrainian Hryvnia"    } // 09/02/1996-
         UAK { "UAK", "Ukrainian Karbovanetz" } // 11/13/1992-10/17/1993
         UGS { "UGS", "Ugandan Shilling (1966-1987)" } // 08/15/1966-05/15/1987
-        UGX { "U Sh","Ugandan Shilling"      } // 05/15/1987-
-        USD { "US$",   "US Dollar"            } // 04/04/1792-
+        UGX { "U Sh","Ugandan Shilling"     } // 05/15/1987-
+        USD { "US$", "US Dollar"            } // 04/04/1792-
         USN { "USN", "US Dollar (Next day)" }
         USS { "USS", "US Dollar (Same day)" }
         UYF { "UYF", "Uruguay Peso Fuerte"  } // 06/23/1862-07/01/1975
@@ -650,7 +650,7 @@ en {
         YUN { "YUN", "Yugoslavian Convertible Dinar" } // 1990-07/1992
         YUO { "YUO", "Yugoslavian October Dinar" } // 10/1993-12/1993
         YUR { "YUR", "Yugoslavian Reformed Dinar" } // 07/1992-10/1993
-        ZAL { "ZAL", "South African Rand (financial)"     }
+        ZAL { "ZAL", "South African Rand (financial)" }
         ZAP { "ZAP", "South African Pound"  } // 1920-02/14/1961
         ZAR { "R",   "South African Rand"   } // 02/14/1961-
         ZMK { "ZMK", "Zambian Kwacha"       } // 01/16/1968-
@@ -1207,7 +1207,7 @@ en {
         "#E0",
     }
     // TODO: This list may be incomplete. Finish it once a formal list appears.
-    // http://www.evertype.com/standards/iso15924/
+    // http://www.unicode.org/iso15924/
     Scripts {
         Arab { "Arabic" }
         Armn { "Armenian" }
