@@ -809,11 +809,6 @@ struct FormatThreadTestData
 } ;
 
 
-void errorToString(UErrorCode theStatus, UnicodeString &string)
-{
-    string=u_errorName(theStatus);
-}
-
 // "Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3 number,currency}."
 
 void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, const Locale& theLocale,
@@ -823,8 +818,7 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     if(U_FAILURE(realStatus))
         return; // you messed up
 
-    UnicodeString errString1;
-    errorToString(inStatus0, errString1);
+    UnicodeString errString1(u_errorName(inStatus0));
 
     UnicodeString countryName2;
     inCountry2.getDisplayCountry(theLocale,countryName2);
@@ -1055,8 +1049,7 @@ public:
                                 countryToCheck,currencyToCheck,result);
             if(U_FAILURE(status))
             {
-                UnicodeString tmp;
-                errorToString(status,tmp);
+                UnicodeString tmp(u_errorName(status));
                 error("Failure on message format, pattern=" + patternToCheck +
                         ", error = " + tmp);
                 goto cleanupAndReturn;
