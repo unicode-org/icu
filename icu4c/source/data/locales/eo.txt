@@ -1,13 +1,9 @@
 // ***************************************************************************
-// *                                                                         *
-// * COPYRIGHT:                                                              *
-// *   Copyright (C) 1997-2002, International Business Machines              *
-// * Licensed Material - Program-Property of IBM - All Rights Reserved.      *
-// * US Government Users Restricted Rights - Use, duplication, or disclosure *
-// * restricted by GSA ADP Schedule Contract with IBM Corp.                  *
-// *                                                                         *
+// *
+// *   Copyright (C) 1999-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
 // ***************************************************************************
-// Feedback to: markus.scherer@us.ibm.com
 //              or better http://www.jtcsv.com/cgibin/icu-bugs
 
 eo {

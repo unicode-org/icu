@@ -6,7 +6,7 @@
 
 /**
  * G7CollationTest is a third level test class.  This test performs the examples 
- * mentioned on the Taligent international demos web site.  
+ * mentioned on the IBM Java international demos web site.  
  * Sample Rules: & Z < p , P 
  * Effect :  Making P sort after Z.
  *
