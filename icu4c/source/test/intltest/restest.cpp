@@ -24,14 +24,16 @@
 
 //***************************************************************************************
 
-const UnicodeString kERROR = "ERROR";
-const int32_t kERROR_COUNT = -1234567;
+static const UnicodeString kERROR = UNICODE_STRING("ERROR", 5);
+static const UChar kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
+static const kErrorLength = 5;
+static const int32_t kERROR_COUNT = -1234567;
 
 //***************************************************************************************
 
 enum E_Where
 {
-    e_Default,
+    e_Root,
     e_te,
     e_te_IN,
     e_Where_count
@@ -104,12 +106,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "default",       0,      U_ZERO_ERROR,             e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+    { "root",       0,      U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
     { "te",            0,      U_ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
     { "te_IN",         0,      U_ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
     { "te_NE",         0,      U_USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
     { "te_IN_NE",      0,      U_USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "ne",            0,      U_USING_DEFAULT_ERROR,    e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+    { "ne",            0,      U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -159,7 +161,7 @@ ResourceBundleTest::ResourceBundleTest()
   fail(0),
   OUT(it_out)
 {
-    param[0].locale = new Locale("default");
+    param[0].locale = new Locale("root");
     param[1].locale = new Locale("te");
     param[2].locale = new Locale("te", "IN");
     param[3].locale = new Locale("te", "NE");
@@ -206,12 +208,12 @@ ResourceBundleTest::TestResourceBundles()
 #endif
 #endif
 
-    testTag("only_in_Default", TRUE, FALSE, FALSE);
+    testTag("only_in_Root", TRUE, FALSE, FALSE);
     testTag("only_in_te", FALSE, TRUE, FALSE);
     testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_Default_te", TRUE, TRUE, FALSE);
-    testTag("in_Default_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Default_te_IN", TRUE, FALSE, TRUE);
+    testTag("in_Root_te", TRUE, TRUE, FALSE);
+    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
+    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
     testTag("in_te_te_IN", FALSE, TRUE, TRUE);
     testTag("nonexistent", FALSE, FALSE, FALSE);
     OUT << "Passed: " << pass << "\nFailed: " << fail << endl;
@@ -241,28 +243,33 @@ ResourceBundleTest::TestConstruction()
     {
         UErrorCode   err = U_ZERO_ERROR;
         const char   *directory;
+        char testdatapath[256];
         Locale       locale("te", "IN");
 
         directory=IntlTest::getTestDirectory();
+        uprv_strcpy(testdatapath, directory);
+        uprv_strcat(testdatapath, "testdata");
 
-        ResourceBundle  test1(directory, err);
-        ResourceBundle  test2(directory, locale, err);
+        ResourceBundle  test1(testdatapath, err);
+        ResourceBundle  test2(testdatapath, locale, err);
+        //ResourceBundle  test1("c:\\icu\\icu\\source\\test\\testdata\\testdata", err);
+        //ResourceBundle  test2("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, err);
 
         UnicodeString   result1;
         UnicodeString   result2;
 
-        test1.getString("string_in_Default_te_te_IN", result1, err);
-        test2.getString("string_in_Default_te_te_IN", result2, err);
+        result1 = *test1.getString("string_in_Root_te_te_IN", err);
+        result2 = *test2.getString("string_in_Root_te_te_IN", err);
 
         if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
             return;
         }
 
-        logln("for string_in_Default_te_te_IN, default.txt had " + result1);
-        logln("for string_in_Default_te_te_IN, te_IN.txt had " + result2);
+        logln("for string_in_Root_te_te_IN, default.txt had " + result1);
+        logln("for string_in_Root_te_te_IN, te_IN.txt had " + result2);
 
-        if (result1 != "DEFAULT" || result2 != "TE_IN")
+        if (result1 != "ROOT" || result2 != "TE_IN")
             errln("Construction test failed; run verbose for more information");
 
         const char* version1;
@@ -289,26 +296,30 @@ ResourceBundleTest::TestConstruction()
     {
         UErrorCode   err = U_ZERO_ERROR;
         const char   *directory;
+        char testdatapath[256];
         Locale       locale("te", "IN");
 
         directory=IntlTest::getTestDirectory();
+        uprv_strcpy(testdatapath, directory);
+        uprv_strcat(testdatapath, "testdata");
 
 
         wchar_t* wideDirectory = new wchar_t[256];
-        mbstowcs(wideDirectory, directory, 256);
+        mbstowcs(wideDirectory, testdatapath, 256);
+        //mbstowcs(wideDirectory, "c:\\icu\\icu\\source\\test\\testdata\\testdata", 256);
 
         ResourceBundle  test2(wideDirectory, locale, err);
 
         UnicodeString   result2;
 
-        test2.getString("string_in_Default_te_te_IN", result2, err);
+        result2 = *test2.getString("string_in_Root_te_te_IN", err);
 
         if (U_FAILURE(err)) {
             errln("Something threw an error in TestConstruction()");
             return;
         }
 
-        logln("for string_in_Default_te_te_IN, te_IN.txt had " + result2);
+        logln("for string_in_Root_te_te_IN, te_IN.txt had " + result2);
 
         if (result2 != "TE_IN")
             errln("Construction test failed; run verbose for more information");
@@ -319,7 +330,7 @@ ResourceBundleTest::TestConstruction()
 
 bool_t
 ResourceBundleTest::testTag(const char* frag,
-                            bool_t in_Default,
+                            bool_t in_Root,
                             bool_t in_te,
                             bool_t in_te_IN)
 {
@@ -327,9 +338,9 @@ ResourceBundleTest::testTag(const char* frag,
 
     // Make array from input params
 
-    bool_t is_in[] = { in_Default, in_te, in_te_IN };
+    bool_t is_in[] = { in_Root, in_te, in_te_IN };
 
-    const char* NAME[] = { "DEFAULT", "TE", "TE_IN" };
+    const char* NAME[] = { "ROOT", "TE", "TE_IN" };
 
     // Now try to load the desired items
 
@@ -339,8 +350,11 @@ ResourceBundleTest::testTag(const char* frag,
     int32_t i,j,row,col, actual_bundle;
     int32_t index;
     const char *directory;
+    char testdatapath[256];
 
     directory=IntlTest::getTestDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
 
         for (i=0; i<bundles_count; ++i)
     {
@@ -348,7 +362,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += param[i].name;
 
         UErrorCode status = U_ZERO_ERROR;
-        ResourceBundle theBundle( directory, *param[i].locale, status);
+        ResourceBundle theBundle( testdatapath, *param[i].locale, status);
+        //ResourceBundle theBundle( "c:\\icu\\icu\\source\\test\\testdata\\testdata", *param[i].locale, status);
         CONFIRM_UErrorCode(status,param[i].expected_constructor_status);
 
         if(i == 5)
@@ -362,7 +377,7 @@ ResourceBundleTest::testTag(const char* frag,
 
 
         UErrorCode expected_resource_status = U_MISSING_RESOURCE_ERROR;
-        for (j=e_te_IN; j>=e_Default; --j)
+        for (j=e_te_IN; j>=e_Root; --j)
         {
             if (is_in[j] && param[i].inherits[j])
               {
@@ -392,17 +407,29 @@ ResourceBundleTest::testTag(const char* frag,
         //--------------------------------------------------------------------------
         // string
 
+        uprv_strcpy(tag, "string_");
+        uprv_strcat(tag, frag);
+
         action = param[i].name;
         action += ".getString(";
         action += tag;
         action += ")";
 
-        uprv_strcpy(tag, "string_");
-        uprv_strcat(tag, frag);
+
+        status = U_ZERO_ERROR;
 
         UnicodeString string(kERROR);
-        status = U_ZERO_ERROR;
-        theBundle.getString(tag, string, status);
+
+        const UnicodeString *t = theBundle.getString(tag, status);
+        if(t != NULL) {
+            string = *t;
+        }
+
+        //UnicodeString string = theBundle.getStringEx(tag, status);
+
+        if(U_FAILURE(status)) {
+            string.setTo(TRUE, kErrorUChars, kErrorLength);
+        }
 
         CONFIRM_UErrorCode(status, expected_resource_status);
 
@@ -414,13 +441,13 @@ ResourceBundleTest::testTag(const char* frag,
         //--------------------------------------------------------------------------
         // array
 
+        uprv_strcpy(tag, "array_");
+        uprv_strcat(tag, frag);
+
         action = param[i].name;
         action += ".getStringArray(";
         action += tag;
         action += ")";
-
-        uprv_strcpy(tag, "array_");
-        uprv_strcat(tag, frag);
 
         int32_t count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -460,7 +487,10 @@ ResourceBundleTest::testTag(const char* frag,
             index = count ? (randi(count * 3) - count) : (randi(200) - 100);
             status = U_ZERO_ERROR;
             string = kERROR;
-            theBundle.getArrayItem(tag, index, string, status);
+            const UnicodeString *t = theBundle.getArrayItem(tag, index, status);
+            if(t!=NULL) {
+                string = *t;
+            }
             expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
 
@@ -480,13 +510,14 @@ ResourceBundleTest::testTag(const char* frag,
         //--------------------------------------------------------------------------
         // 2dArray
 
+        uprv_strcpy(tag, "array_2d_");
+        uprv_strcat(tag, frag);
+
         action = param[i].name;
         action += ".get2dArray(";
         action += tag;
         action += ")";
 
-        uprv_strcpy(tag, "array_2d_");
-        uprv_strcat(tag, frag);
 
         int32_t row_count = kERROR_COUNT, column_count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -533,7 +564,10 @@ ResourceBundleTest::testTag(const char* frag,
             col = column_count ? (randi(column_count * 3) - column_count) : (randi(200) - 100);
             status = U_ZERO_ERROR;
             string = kERROR;
-            theBundle.get2dArrayItem(tag, row, col, string, status);
+            const UnicodeString *t = theBundle.get2dArrayItem(tag, row, col, status);
+            if(t!=NULL) {
+                string = *t;
+            }
             expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
               expected_resource_status: U_MISSING_RESOURCE_ERROR;
             CONFIRM_UErrorCode(status,expected_status);
@@ -607,7 +641,10 @@ ResourceBundleTest::testTag(const char* frag,
 
             status = U_ZERO_ERROR;
             string = kERROR;
-            theBundle.getTaggedArrayItem(tag,item_tag,string,status);
+            const UnicodeString *t = theBundle.getTaggedArrayItem(tag,item_tag,status);
+            if(t!=NULL) {
+                string = *t;
+            }
             if (index < 0)
             {
                 CONFIRM_UErrorCode(status,U_MISSING_RESOURCE_ERROR);

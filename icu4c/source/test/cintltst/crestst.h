@@ -32,12 +32,14 @@
     void TestConstruction1(void);
 
     void TestConstruction2(void);
+
+    void TestAliasConflict(void);
     /**
      * extensive subtests called by TestResourceBundles
      **/
      
     void setUpDataTable(void);
-    bool_t testTag(const char* frag, bool_t in_Default, bool_t in_te, bool_t in_te_IN);
+    bool_t testTag(const char* frag, bool_t in_Root, bool_t in_te, bool_t in_te_IN);
 
     void record_pass(void);
     void record_fail(void);
