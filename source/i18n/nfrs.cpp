@@ -377,35 +377,42 @@ NFRuleSet::findNormalRule(llong number) const
     // master rule in this function is also how we avoid infinite
     // recursion)
     
+	// {dlf} unfortunately this fails if there are no rules except
+	// special rules.  If there are no rules, use the master rule.
+
     // binary-search the rule list for the applicable rule
     // (a rule is used for all values from its base value to
     // the next rule's base value)
-    int32_t lo = 0;
     int32_t hi = rules.size();
-    while (lo < hi) {
-        int32_t mid = (lo + hi) / 2;
-        if (rules[mid]->getBaseValue() == number) {
-            return rules[mid];
-        }
-        else if (rules[mid]->getBaseValue() > number) {
-            hi = mid;
-        }
-        else {
-            lo = mid + 1;
-        }
-    }
-    NFRule *result = rules[hi - 1];
+	if (hi > 0) {
+		int32_t lo = 0;
+		
+		while (lo < hi) {
+			int32_t mid = (lo + hi) / 2;
+			if (rules[mid]->getBaseValue() == number) {
+				return rules[mid];
+			}
+			else if (rules[mid]->getBaseValue() > number) {
+				hi = mid;
+			}
+			else {
+				lo = mid + 1;
+			}
+		}
+		NFRule *result = rules[hi - 1];
     
-    // use shouldRollBack() to see whether we need to invoke the
-    // rollback rule (see shouldRollBack()'s documentation for
-    // an explanation of the rollback rule).  If we do, roll back
-    // one rule and return that one instead of the one we'd normally
-    // return
-    if (result->shouldRollBack(number.asDouble())) {
-        result = rules[hi - 2];
-    }
-    
-    return result;
+		// use shouldRollBack() to see whether we need to invoke the
+		// rollback rule (see shouldRollBack()'s documentation for
+		// an explanation of the rollback rule).  If we do, roll back
+		// one rule and return that one instead of the one we'd normally
+		// return
+		if (result->shouldRollBack(number.asDouble())) {
+			result = rules[hi - 2];
+		}
+	     return result;
+	}
+	// else use the master rule
+	return fractionRules[2];  
 }
 
 /**

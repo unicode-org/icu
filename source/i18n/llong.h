@@ -88,8 +88,12 @@ public:
     inline llong& operator<<=(int32_t shift) {
         shift &= 63; // like java spec
         if (shift < 32) {
-            hi = (int32_t)(hi << shift | lo >> (32 - shift)); // no sign extension on lo since unsigned
-            lo <<= shift;
+			// akkk! msvc 6 compiler bug generates shr/shl which only uses low 5 bits of shift
+			// so e.g. lo >> 32 -> lo is unchanged!
+			if (shift > 0) {
+				hi = (int32_t)(hi << shift | lo >> (32 - shift)); // no sign extension on lo since unsigned
+				lo <<= shift;
+			}
         } else {
             hi = (int32_t)(lo << (shift - 32));
             lo = 0;
@@ -102,9 +106,11 @@ public:
     inline llong& operator>>=(int32_t shift) {
         shift &= 63; // like java spec
         if (shift < 32) {
-            lo >>= shift; 
-            lo |= (hi << (32 - shift)); 
-            hi = hi >> shift; // note sign extension
+			if (shift > 0) {
+				lo >>= shift; 
+				lo |= (hi << (32 - shift)); 
+				hi = hi >> shift; // note sign extension
+			}
         } else {
             lo = (uint32_t)(hi >> (shift - 32)); // note sign extension
             hi = hi < 0 ? -1 : 0;
