@@ -113,6 +113,7 @@ public final class UScript {
 	   new NameCodePair( "KANNADA",             KANNADA     ),
 	   new NameCodePair( "KATAKANA",            KATAKANA    ),
 	   new NameCodePair( "KHMER",               KHMER       ),
+       new NameCodePair( "LAO",                 LAO         ),
 	   new NameCodePair( "LATIN",               LATIN       ),
 	   new NameCodePair( "MALAYALAM",           MALAYALAM   ),
 	   new NameCodePair( "MONGOLIAN",           MONGOLIAN   ),
