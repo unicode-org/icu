@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.6 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -53,6 +53,7 @@ final class MyPropertyLister extends PropertyLister {
     }
 
     public String valueName(int cp) {
+        if (up.getValueType() == BINARY) return up.getName();
         return up.getValue(cp);
     }
 

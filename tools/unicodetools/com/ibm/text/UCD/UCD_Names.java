@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.10 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -119,6 +119,8 @@ final class UCD_Names implements UCD_Types {
         "Unified_Ideograph",
         "Other_Default_Ignorable_Code_Point",
         "Deprecated",
+        "Soft_Dotted",
+        "Logical_Order_Exception",
     };
 
     static final String[] SHORT_BP = {
@@ -151,6 +153,8 @@ final class UCD_Names implements UCD_Types {
         "UIdeo",
         "ODI",
         "Dep",
+        "SD",
+        "LOE",
     };
 
     /*

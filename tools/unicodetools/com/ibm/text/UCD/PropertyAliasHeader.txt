@@ -26,13 +26,12 @@
 #
 # NOTE: The property value names are NOT unique across properties, especially
 # with loose matches. For example,
+#
 # AL means Arabic Letter for the Bidi_Class property, and
 # AL means Alpha_Left for the Combining_Class property, and
 # AL means Alphabetic for the Line_Break property.
 #
-# In addition, some property names may be the same as some property value names:
-# cc means Combining_Class property, and
-# cc means the General_Category property value Control (cc)
+# In addition, some property names may be the same as some property value names.
 #
 # The combination of property value and property name is, however, unique.
 # For more information, see UTR #24: Regular Expression Guidelines

@@ -22,6 +22,9 @@
 #
 # Third Field: The third field is a long name.
 #
+# In the case of ccc, their are 4 fields. The second field is numeric, third
+# is abbreviated, and fourth is long.
+#
 # With loose matching of property names, the case distinctions, whitespace,
 # and '_' are ignored.
 #

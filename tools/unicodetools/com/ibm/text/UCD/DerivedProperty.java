@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.9 $
+* $Date: 2001/12/13 23:35:54 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -87,8 +87,6 @@ public final class DerivedProperty implements UCD_Types {
     }
     */
     private UnicodeProperty[] dprops = new UnicodeProperty[50];
-    private Normalizer[] nf = new Normalizer[4];
-    private Normalizer nfd, nfc, nfkd, nfkc;
 
     static final String[] CaseNames = {
                 "Uppercase", 
@@ -99,7 +97,7 @@ public final class DerivedProperty implements UCD_Types {
         Normalizer nfx;
         ExDProp(int i) {
             type = DERIVED_NORMALIZATION;
-            nfx = nf[i];
+            nfx = Main.nf[i];
             name = "Expands_On_" + nfx.getName();
             shortName = "XO_" + nfx.getName();
             header = "# Derived Property: " + name
@@ -123,7 +121,7 @@ public final class DerivedProperty implements UCD_Types {
         NF_UnsafeStartProp(int i) {
             isStandard = false;
             type = DERIVED_NORMALIZATION;
-            nfx = nf[i];
+            nfx = Main.nf[i];
             name = nfx.getName() + "_UnsafeStart";
             shortName = nfx.getName() + "_SS";
             header = "# Derived Property: " + name
@@ -159,7 +157,7 @@ public final class DerivedProperty implements UCD_Types {
                 case NFC_TrailingNonZero: bitsets[1] = bitset = new BitSet(); break;
             }
             filter = bitsets[1] != null;
-            nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
+            Main.nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
             
             name = Names[i-NFC_Leading];
             shortName = SNames[i-NFC_Leading];
@@ -193,19 +191,19 @@ public final class DerivedProperty implements UCD_Types {
         
         GenDProp (int i) {
             isStandard = false;
-            valueVaries = true;
+            setValueType(NON_ENUMERATED);
             type = DERIVED_NORMALIZATION;
-            nfx = nf[i];
+            nfx = Main.nf[i];
             name = nfx.getName();
             String compName = "the character itself";
             
             if (i == NFKC || i == NFD) {
                 name += "-NFC";
-                nfComp = nfc;
+                nfComp = Main.nfc;
                 compName = "NFC for the character";
             } else if (i == NFKD) {
                 name += "-NFD";
-                nfComp = nfd;
+                nfComp = Main.nfd;
                 compName = "NFD for the character";
             }
             header = "# Derived Property: " + name              
@@ -269,9 +267,9 @@ public final class DerivedProperty implements UCD_Types {
         String MAYBE;
         Normalizer nfx;
         QuickDProp (int i) {
-            valueVaries = true;
+            setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
             type = DERIVED_NORMALIZATION;
-            nfx = nf[i];
+            nfx = Main.nf[i];
             NO = nfx.getName() + "_NO";
             MAYBE = nfx.getName() + "_MAYBE";
             name = nfx.getName() + "_QuickCheck";
@@ -291,11 +289,6 @@ public final class DerivedProperty implements UCD_Types {
     };
 
     {
-        nfd = nf[0] = new Normalizer(Normalizer.NFD);
-        nfc = nf[1] = new Normalizer(Normalizer.NFC);
-        nfkd = nf[2] = new Normalizer(Normalizer.NFKD);
-        nfkc = nf[3] = new Normalizer(Normalizer.NFKC);
-
         for (int i = ExpandsOnNFD; i <= ExpandsOnNFKC; ++i) {
             dprops[i] = new ExDProp(i-ExpandsOnNFD);
         }
@@ -493,7 +486,7 @@ of characters, the first of which has a non-zero combining class.
         dprops[FC_NFKC_Closure] = new UnicodeProperty() {
             {
                 type = DERIVED_NORMALIZATION;
-                valueVaries = true;
+                setValueType(NON_ENUMERATED);
                 name = "FC_NFKC_Closure";
                 shortName = "FC_NFKC";
                 header = "# Derived Property: " + name
@@ -503,8 +496,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = nfkc.normalize(fold(cp));
-                String c = nfkc.normalize(fold(b));
+                String b = Main.nfkc.normalize(fold(cp));
+                String c = Main.nfkc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FNC; " + Utility.hex(c);
             } // default
@@ -516,7 +509,7 @@ of characters, the first of which has a non-zero combining class.
                 type = DERIVED_NORMALIZATION;
                 isStandard = false;
                 name = "FC_NFC_Closure";
-                valueVaries = true;
+                setValueType(NON_ENUMERATED);
                 shortName = "FC_NFC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFC(Fold(a)); c = NFC(Fold(b));"
@@ -525,8 +518,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = nfc.normalize(fold(cp));
-                String c = nfc.normalize(fold(b));
+                String b = Main.nfc.normalize(fold(cp));
+                String c = Main.nfc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FN; " + Utility.hex(c);
             } // default
@@ -603,8 +596,9 @@ of characters, the first of which has a non-zero combining class.
         dprops[Type_i] = new UnicodeProperty() {
             {
                 type = DERIVED_CORE;
-                name = "Soft_Dotted";
-                shortName = "SDot";
+                isStandard = false;
+                name = "DSoft_Dotted";
+                shortName = "DSDot";
                 header = header = "# Derived Property: " + name
                     + "\r\n#  Generated from: all characters whose canonical decompositions end with a combining character sequence that"
                     + "\r\n# - starts with i or j"
@@ -613,20 +607,23 @@ of characters, the first of which has a non-zero combining class.
                 ;
             }
             boolean hasValue(int cp) {
-                if (cp == 'i' || cp == 'j') return true;
-                if (!nfkd.hasDecomposition(cp)) return false;
-                String decomp = nfd.normalize(cp);
+                if (hasSoftDot(cp)) return true;
+                if (!Main.nfkd.hasDecomposition(cp)) return false;
+                String decomp = Main.nfd.normalize(cp);
                 boolean ok = false;
                 for (int i = decomp.length()-1; i >= 0; --i) {
-                    char ch = decomp.charAt(i);
+                    int ch = UTF16.charAt(decomp, i);
                     int cc = ucdData.getCombiningClass(ch);
                     if (cc == 230) return false;
                     if (cc == 0) {
-                        if (ch == 'i' || ch == 'j') ok = true;
-                        else return false;
+                        if (!hasSoftDot(ch)) return false;
+                        ok = true;
                     }
                 }
                 return ok;
+            }
+            boolean hasSoftDot(int ch) {
+                return ch == 'i' || ch == 'j' || ch == 0x0268 || ch == 0x0456 || ch == 0x0458;
             }
         };
         
@@ -666,7 +663,7 @@ of characters, the first of which has a non-zero combining class.
         for (int i = 0; i < dprops.length; ++i) {
             UnicodeProperty up = dprops[i];
             if (up == null) continue;
-            if (up.valueVaries()) continue;
+            if (up.getValueType() != BINARY) continue;
             up.setValue(NUMBER, "1");
             up.setValue(SHORT, "Y");
             up.setValue(LONG, "YES");
@@ -681,11 +678,11 @@ of characters, the first of which has a non-zero combining class.
             || ucdData.getBinaryProperty(cp, Other_Lowercase)) return Ll;
         if (cat == Lt || cat == Lo || cat == Lm || cat == Nl) return cat;
         
-       // if (true) throw new IllegalArgumentException("FIX nf[2]");
+       // if (true) throw new IllegalArgumentException("FIX Main.nf[2]");
         
-        if (!nf[NFKD].normalizationDiffers(cp)) return Lo;
+        if (!Main.nf[NFKD].normalizationDiffers(cp)) return Lo;
 
-        String norm = nf[NFKD].normalize(cp);
+        String norm = Main.nf[NFKD].normalize(cp);
         int cp2;
         boolean gotUpper = false;
         boolean gotLower = false;
@@ -723,8 +720,8 @@ of characters, the first of which has a non-zero combining class.
     }
     
     public static void test() {
-        UCD ucd = UCD.make();
-        DerivedProperty dprop = new DerivedProperty(ucd);
+        Main.setUCD();
+        DerivedProperty dprop = new DerivedProperty(Main.ucd);
         /*
         for (int j = 0; j < LIMIT; ++j) {
             System.out.println();
@@ -735,9 +732,9 @@ of characters, the first of which has a non-zero combining class.
         
         for (int cp = 0xA0; cp < 0xFF; ++cp) {
             System.out.println();
-            System.out.println(ucd.getCodeAndName(cp));
+            System.out.println(Main.ucd.getCodeAndName(cp));
             for (int j = 0; j < DERIVED_PROPERTY_LIMIT; ++j) {
-                String prop = make(j, ucd).getValue(cp);
+                String prop = make(j, Main.ucd).getValue(cp);
                 if (prop.length() != 0) System.out.println("\t" + prop);
             }
         }

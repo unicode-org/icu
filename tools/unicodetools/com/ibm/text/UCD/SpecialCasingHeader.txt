@@ -1,0 +1,60 @@
+# SpecialCasing-6.txt
+#
+# Special Casing Properties
+#
+# This file is a supplement to the UnicodeData file.
+# It contains additional information about the casing of Unicode characters.
+# (For compatibility, the UnicodeData.txt file only contains case mappings for
+# characters where they are 1-1, and does not have locale-specific mappings.)
+# For more information, see
+# UTR #21 Case Mappings, at http://www.unicode.org/unicode/reports/tr21/
+#
+# ================================================================================
+# Format
+# ================================================================================
+# The entries in this file are in the following machine-readable format:
+#
+# <code>; <lower> ; <title> ; <upper> ; (<condition_list> ;)? # <comment>
+#
+# <code>, <lower>, <title>, and <upper> provide character values in hex. If there is more than
+# one character, they are separated by spaces.
+#
+# The <condition_list> is optional. Where present, it consists of one or more locales or contexts,
+# separated by spaces. In these conditions:
+# - A condition list overrides the normal behavior if all of the listed conditions are true.
+# - Case distinctions in the condition list are not significant.
+# - Conditions preceded by "NOT_" represent the negation of the condition.
+# - A cased letter is any character with general category = Ll or Lo or Lt
+# - An ignorable sequence is a sequence of *zero* or more characters from
+#    the set {HYPHEN, SOFT HYPHEN, general category = Mn}.
+#
+# A locale is defined as:
+# <locale> := <ISO_639_code> ( "_" <ISO_3166_code> ( "_" <variant> )? )?
+# <ISO_3166_code> := 2-letter ISO country code,
+# <ISO_639_code> :=  2-letter ISO language code
+#
+# A context is a locale or one of the following choices:
+#   CFINAL:      The character is not followed by a sequence consisting of
+#                an ignorable sequence and then a cased letter.
+#   CINITIAL:    The character is not preceded by a sequence consisting of
+#                a cased letter and an ignorable sequence.
+#   FINAL_SIGMA: CFINAL and NOT_CINITIAL
+#   TYPE_i:      The character is "i" (0069), "j" (006A),
+#                or has a canonical decomposition that begins with an "i" or "j"
+#                but has no combining characters above (i.e., i-ogonek (012F),
+#                i-tilde-below (1E2D), or i-dot-below (1ECB)).
+#   AFTER_i:     The last preceding base character was TYPE_i, and
+#                no combining character class 230 (above) has intervened.
+#   MORE_ABOVE:  The character is followed by one or more characters of
+#                combining class 230 (ABOVE) in the combining character sequence
+#
+# Other than as used to separate elements, spaces are to be ignored.
+#
+# Parsers of this file must be prepared to deal future additions to this format:
+#  * Additional contexts
+#  * Additional fields
+# ================================================================================
+
+# ================================================================================
+# Unconditional mappings
+# ================================================================================

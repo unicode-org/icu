@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/12/13 23:35:54 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -26,12 +26,9 @@ public class BuildNames implements UCD_Types {
 
     static final boolean DEBUG = true;
 
-    static UCD ucd;
-
     public static void main(String[] args) throws IOException {
 
-        ucd = UCD.make();
-
+        Main.setUCD();
         collectWords();
     }
 
@@ -85,8 +82,8 @@ public class BuildNames implements UCD_Types {
         int used = 0;
         int sum = 0;
         for (int i = 0; i < 0x10FFFF; ++i) {
-            if (ucd.hasComputableName(i)) continue;
-            String name = transform(ucd.getName(i));
+            if (Main.ucd.hasComputableName(i)) continue;
+            String name = transform(Main.ucd.getName(i));
 
 
             sum += name.length();

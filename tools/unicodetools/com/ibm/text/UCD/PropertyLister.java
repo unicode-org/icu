@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.6 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -168,13 +168,20 @@ abstract public class PropertyLister implements UCD_Types {
         return lastSpace;
     }
     
+    private static final byte FAKERC = 63; // fake category for comparison
     private static final byte FAKELC = 63; // fake category for comparison
     private static final byte FAKENC = 64; // fake category for comparison
     
     private byte getModCat(int cp) {
         byte cat = ucdData.getCategory(cp);
-        if (cat == Lt || cat == Ll || cat == Lu) cat = FAKELC;
-        if (cat == Cn && ucdData.isNoncharacter(cp)) cat = FAKENC;
+        if (cat == UNASSIGNED && ucdData.isNoncharacter(cp)) cat = FAKENC;
+        else if (breakByCategory) {
+            if (cat == Lt || cat == Ll || cat == Lu) cat = FAKELC;
+        } else {
+            // MASH almost everything together
+            if (cat != CONTROL && cat != FORMAT && cat != SURROGATE 
+                && cat != PRIVATE_USE && cat != UNASSIGNED) cat = FAKERC;
+        }
         return cat;
     }
 
@@ -196,7 +203,7 @@ abstract public class PropertyLister implements UCD_Types {
             byte s = status(cp);
             if (alwaysBreaks && s == INCLUDE) s = BREAK;
             if (s == INCLUDE && firstRealCp != -1) {
-                if (breakByCategory && getModCat(cp) != firstRealCpCat) s = BREAK;
+                if (getModCat(cp) != firstRealCpCat) s = BREAK;
             }
 
             switch(s) {

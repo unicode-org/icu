@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestNormalization.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -25,12 +25,6 @@ public final class TestNormalization {
     static PrintWriter out = null;
     static BufferedReader in = null;
 
-    static Normalizer nfc;
-    static Normalizer nfd;
-    static Normalizer nfkc;
-    static Normalizer nfkd;
-    static UCD ucd;
-
     static BitSet charsListed = new BitSet(0x110000);
     static int errorCount = 0;
     static int lineErrorCount = 0;
@@ -39,18 +33,14 @@ public final class TestNormalization {
 
     public static void main(String[] args)  throws java.io.IOException {
         System.out.println("Creating Normalizers");
-        ucd = UCD.make("");
+        Main.setUCD();
 
-        nfc = new Normalizer(Normalizer.NFC);
-        nfd = new Normalizer(Normalizer.NFD);
-        nfkc = new Normalizer(Normalizer.NFKC);
-        nfkd = new Normalizer(Normalizer.NFKD);
 
             String x = UTF32.valueOf32(0x10000);
-            check("NFC", nfc, x);
-            check("NFD", nfd, x);
-            check("NFKC", nfkc, x);
-            check("NFKD", nfkd, x);
+            check("NFC", Main.nfc, x);
+            check("NFD", Main.nfd, x);
+            check("NFKC", Main.nfkc, x);
+            check("NFKD", Main.nfkd, x);
 
 
         out = new PrintWriter(
@@ -97,36 +87,36 @@ public final class TestNormalization {
                 }
 
                 // c2 == NFC(c1) == NFC(c2) == NFC(c3)
-                errorCount += check("NFCa", nfc, parts[1], parts[0]);
-                errorCount += check("NFCb", nfc, parts[1], parts[1]);
-                errorCount += check("NFCc", nfc, parts[1], parts[2]);
+                errorCount += check("NFCa", Main.nfc, parts[1], parts[0]);
+                errorCount += check("NFCb", Main.nfc, parts[1], parts[1]);
+                errorCount += check("NFCc", Main.nfc, parts[1], parts[2]);
 
                 // c4 == NFC(c4) == NFC(c5)
-                errorCount += check("NFCd", nfc, parts[3], parts[3]);
-                errorCount += check("NFCe", nfc, parts[3], parts[4]);
+                errorCount += check("NFCd", Main.nfc, parts[3], parts[3]);
+                errorCount += check("NFCe", Main.nfc, parts[3], parts[4]);
 
                 // c3 == NFD(c1) == NFD(c2) == NFD(c3)
-                errorCount += check("NFDa", nfd, parts[2], parts[0]);
-                errorCount += check("NFDb", nfd, parts[2], parts[1]);
-                errorCount += check("NFDc", nfd, parts[2], parts[2]);
+                errorCount += check("NFDa", Main.nfd, parts[2], parts[0]);
+                errorCount += check("NFDb", Main.nfd, parts[2], parts[1]);
+                errorCount += check("NFDc", Main.nfd, parts[2], parts[2]);
 
                 // c5 == NFD(c4) == NFD(c5)
-                errorCount += check("NFDd", nfd, parts[4], parts[3]);
-                errorCount += check("NFDe", nfd, parts[4], parts[4]);
+                errorCount += check("NFDd", Main.nfd, parts[4], parts[3]);
+                errorCount += check("NFDe", Main.nfd, parts[4], parts[4]);
 
                 // c4 == NFKC(c1) == NFKC(c2) == NFKC(c3) == NFKC(c4) == NFKC(c5)
-                errorCount += check("NFKCa", nfkc, parts[3], parts[0]);
-                errorCount += check("NFKCb", nfkc, parts[3], parts[1]);
-                errorCount += check("NFKCc", nfkc, parts[3], parts[2]);
-                errorCount += check("NFKCd", nfkc, parts[3], parts[3]);
-                errorCount += check("NFKCe", nfkc, parts[3], parts[4]);
+                errorCount += check("NFKCa", Main.nfkc, parts[3], parts[0]);
+                errorCount += check("NFKCb", Main.nfkc, parts[3], parts[1]);
+                errorCount += check("NFKCc", Main.nfkc, parts[3], parts[2]);
+                errorCount += check("NFKCd", Main.nfkc, parts[3], parts[3]);
+                errorCount += check("NFKCe", Main.nfkc, parts[3], parts[4]);
 
                 // c5 == NFKD(c1) == NFKD(c2) == NFKD(c3) == NFKD(c4) == NFKD(c5)
-                errorCount += check("NFKDa", nfkd, parts[4], parts[0]);
-                errorCount += check("NFKDb", nfkd, parts[4], parts[1]);
-                errorCount += check("NFKDc", nfkd, parts[4], parts[2]);
-                errorCount += check("NFKDd", nfkd, parts[4], parts[3]);
-                errorCount += check("NFKDe", nfkd, parts[4], parts[4]);
+                errorCount += check("NFKDa", Main.nfkd, parts[4], parts[0]);
+                errorCount += check("NFKDb", Main.nfkd, parts[4], parts[1]);
+                errorCount += check("NFKDc", Main.nfkd, parts[4], parts[2]);
+                errorCount += check("NFKDd", Main.nfkd, parts[4], parts[3]);
+                errorCount += check("NFKDe", Main.nfkd, parts[4], parts[4]);
             }
             System.out.println("Total errors in file: " + errorCount
                 + ", lines: " + lineErrorCount);
@@ -160,21 +150,21 @@ public final class TestNormalization {
                 }
                 String otherList = "";
                 if (!base.equals(other)) {
-                    otherList = "(" + ucd.getCodeAndName(other) + ")";
+                    otherList = "(" + Main.ucd.getCodeAndName(other) + ")";
                 }
                 out.println("DIFF " + type + ": "
-                    + ucd.getCodeAndName(base) + " != "
+                    + Main.ucd.getCodeAndName(base) + " != "
                     + type
                     + otherList
-                    + " == " + ucd.getCodeAndName(trans)
+                    + " == " + Main.ucd.getCodeAndName(trans)
                     + temp
                 );
                 return 1;
             }
         } catch (Exception e) {
             throw new ChainException("DIFF " + type + ": "
-                + ucd.getCodeAndName(base) + " != "
-                + type + "(" + ucd.getCodeAndName(other) + ")", new Object[]{}, e);
+                + Main.ucd.getCodeAndName(base) + " != "
+                + type + "(" + Main.ucd.getCodeAndName(other) + ")", new Object[]{}, e);
         }
         return 0;
     }
@@ -188,10 +178,10 @@ public final class TestNormalization {
             if ((missing & 0xFFF) == 0) System.out.println("# " + Utility.hex(missing));
             if (charsListed.get(missing)) continue;
             String x = UTF32.valueOf32(missing);
-            errorCount += check("NFC", nfc, x);
-            errorCount += check("NFD", nfd, x);
-            errorCount += check("NFKC", nfkc, x);
-            errorCount += check("NFKD", nfkd, x);
+            errorCount += check("NFC", Main.nfc, x);
+            errorCount += check("NFD", Main.nfd, x);
+            errorCount += check("NFKC", Main.nfkc, x);
+            errorCount += check("NFKD", Main.nfkd, x);
         }
     }
 
