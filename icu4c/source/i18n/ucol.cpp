@@ -4481,7 +4481,7 @@ ucol_strcoll( const UCollator    *coll,
           } else if(isContinuation(sOrder)) {
             if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(sInShifted) {
-                sOrder &= UCOL_PRIMARYMASK;
+                sOrder = (sOrder & UCOL_PRIMARYMASK) | 0xC0; /* preserve interesting continuation */
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 continue;
               } else {
@@ -4527,7 +4527,7 @@ ucol_strcoll( const UCollator    *coll,
           } else if(isContinuation(tOrder)) {
             if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(tInShifted) {
-                tOrder &= UCOL_PRIMARYMASK;
+                tOrder = (tOrder & UCOL_PRIMARYMASK) | 0xC0; /* preserve interesting continuation */
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 continue;
               } else {
@@ -4760,10 +4760,11 @@ ucol_strcoll( const UCollator    *coll,
       for(;;) {
         while(secS == 0 && secS != UCOL_NO_MORE_CES || (isContinuation(secS) && !sInShifted)) {
           secS = *(sCE++);
-          if(isContinuation(secS) && !sInShifted) {
-            continue;
-          }
-          if(secS > LVT || (secS & UCOL_PRIMARYMASK) == 0) {
+          if(isContinuation(secS)) {
+            if(!sInShifted) {
+              continue;
+            }
+          } else if(secS > LVT || (secS & UCOL_PRIMARYMASK) == 0) { /* non continuation */
             secS = UCOL_PRIMARYMASK;
             sInShifted = FALSE;
           } else {
@@ -4775,10 +4776,11 @@ ucol_strcoll( const UCollator    *coll,
 
         while(secT == 0 && secT != UCOL_NO_MORE_CES || (isContinuation(secT) && !tInShifted)) {
           secT = *(tCE++);
-          if(isContinuation(secT) && !tInShifted) {
-            continue;
-          }
-          if(secT > LVT || (secT & UCOL_PRIMARYMASK) == 0) {
+          if(isContinuation(secT)) {
+            if(!tInShifted) {
+              continue;
+            }
+          } else if(secT > LVT || (secT & UCOL_PRIMARYMASK) == 0) {
             secT = UCOL_PRIMARYMASK;
             tInShifted = FALSE;
           } else {
