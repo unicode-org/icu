@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/11/13 02:31:55 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -41,7 +41,8 @@ public final class Main {
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
-            else if (arg.equalsIgnoreCase("checkCase2")) VerifyUCD.checkCase2();
+            else if (arg.equalsIgnoreCase("checkCaseLong")) VerifyUCD.checkCase2(true);
+            else if (arg.equalsIgnoreCase("checkCaseShort")) VerifyUCD.checkCase2(false);
             else if (arg.equalsIgnoreCase("checkCanonicalProperties")) VerifyUCD.checkCanonicalProperties();
             else if (arg.equalsIgnoreCase("CheckCaseFold")) VerifyUCD.CheckCaseFold();
             else if (arg.equalsIgnoreCase("idn")) VerifyUCD.VerifyIDN();

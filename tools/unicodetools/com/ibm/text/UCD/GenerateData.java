@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/10/31 00:02:27 $
-* $Revision: 1.9 $
+* $Date: 2001/11/13 02:31:55 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -424,6 +424,7 @@ public class GenerateData implements UCD_Types {
         Set accumulation = new TreeSet(java.text.Collator.getInstance());
         String spacing;
         
+        /*
         BufferedReader blocks = Utility.openUnicodeFile("Blocks", ucd.getVersion());
         String[] parts = new String[10];
         while (true) {
@@ -442,6 +443,7 @@ public class GenerateData implements UCD_Types {
             checkDuplicate(duplicates, accumulation, value, "Block=" + value);
         }
         blocks.close();
+        */
         
         for (int k = 0; k < UCD_Names.NON_ENUMERATED.length; ++k) {
             propAbb = fixGaps(UCD_Names.NON_ENUMERATED[k][0], false);
@@ -456,15 +458,19 @@ public class GenerateData implements UCD_Types {
             valueAbb = fixGaps(UCD_Names.SUPER_CATEGORIES[k][0], false);
             value = fixGaps(UCD_Names.SUPER_CATEGORIES[k][1], true);
             spacing = Utility.repeat(" ", 10-valueAbb.length());
-            sorted.add("gc; " + valueAbb + spacing + "; " + value);
+            String baseLine = "gc; " + valueAbb + spacing + "; " + value;
+            spacing = Utility.repeat(" ", 50-baseLine.length());
+            sorted.add(baseLine + spacing + "# " + UCD_Names.SUPER_CATEGORIES[k][2]);
             checkDuplicate(duplicates, accumulation, value, "General_Category=" + value);
             if (!value.equals(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, "General_Category=" + value);
         }
         
+        /*
         sorted.add("xx; T         ; True");
         checkDuplicate(duplicates, accumulation, "T", "xx=True");
         sorted.add("xx; F         ; False");
         checkDuplicate(duplicates, accumulation, "F", "xx=False");
+        */
         sorted.add("qc; Y         ; Yes");
         checkDuplicate(duplicates, accumulation, "Y", "qc=Yes");
         sorted.add("qc; N         ; No");
@@ -507,6 +513,10 @@ public class GenerateData implements UCD_Types {
                 if (value.startsWith("Fixed_")) { continue; }
             }
             
+            if (type == JOINING_GROUP) {
+                valueAbb = "n/a";
+            }
+            
             /*
             String elide = "";
             if (type == CATEGORY || type == SCRIPT || type == BINARY_PROPERTIES) elide = "\\p{"
@@ -546,7 +556,18 @@ public class GenerateData implements UCD_Types {
         log.println("# Generated: " + new Date() + ", MD");
         log.println(HORIZONTAL_LINE);
         log.println();
-        Utility.print(log, sorted, "\r\n", new MyBreaker());
+        Utility.print(log, sorted, "\r\n", new MyBreaker(true));
+        log.close();
+        
+        log = Utility.openPrintWriter("PropertyValueAliases-" + ucd.getVersion() + "dX.txt");
+        Utility.appendFile("PropertyValueAliasHeader.txt", false, log);
+        log.println("# Generated: " + new Date() + ", MD");
+        log.println(HORIZONTAL_LINE);
+        log.println();
+        Utility.print(log, sorted, "\r\n", new MyBreaker(false));
+        log.close();
+        
+        log = Utility.openPrintWriter("PropertyAliasSummary-" + ucd.getVersion() + "dX.txt");
         log.println();
         log.println(HORIZONTAL_LINE);
         log.println();
@@ -555,20 +576,43 @@ public class GenerateData implements UCD_Types {
         log.println("# Note: no two property names can be the same,");
         log.println("# nor can two property value names for the same property be the same.");
         log.println();
-        Utility.print(log, accumulation, "\r\n", new MyBreaker());
+        Utility.print(log, accumulation, "\r\n", new MyBreaker(false));
         log.println();
         log.close();
     }
     
     static class MyBreaker implements Utility.Breaker {
+        boolean status;
+        
+        public MyBreaker(boolean status) {
+            this.status = status;
+        }
+        
+        public boolean filter(Object current) {
+            String c = current.toString();
+            if (c.startsWith("AA") || c.startsWith("BB") || c.startsWith("ZZ")) return status;
+            return !status;
+        }
+        
         public String get(Object current, Object old) {
-            if (old == null) return "";
+            if (old == null) {
+                old = "  ";
+            }
             String c = current.toString();
             String o = old.toString();
-            if (c.length() >= 2 && o.length() >= 0 && !c.substring(0,2).equals(o.substring(0,2))) {
-                return "\r\n";
+            String sep = "";
+            if (!c.substring(0,2).equals(o.substring(0,2))) {
+                sep = "\r\n";
+                if (status) {
+                    if (c.startsWith("AA")) sep = sep + HORIZONTAL_LINE + sep + "# Non-enumerated Properties" + sep + HORIZONTAL_LINE + sep;
+                    if (c.startsWith("BB")) sep = sep + HORIZONTAL_LINE + sep + "# Enumerated Non-Binary Properties" + sep + HORIZONTAL_LINE + sep;
+                    if (c.startsWith("ZZ")) sep = sep + HORIZONTAL_LINE + sep + "# Binary Properties" + sep + HORIZONTAL_LINE + sep;
+                }
             }
-            return "";
+            if (status) {
+                c = c.substring(4);
+            }
+            return sep + c;
         }
     }
     

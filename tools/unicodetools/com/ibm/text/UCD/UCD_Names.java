@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/10/31 00:02:27 $
-* $Revision: 1.6 $
+* $Date: 2001/11/13 02:31:55 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -32,7 +32,10 @@ final class UCD_Names implements UCD_Types {
         {"stc", "Simple_Titlecase_Mapping"},
         {"sfc", "Simple_Case_Folding"},
         {"scc", "Special_Case_Condition"},
-        {"blk", "Block"}
+        {"blk", "Block"},
+        {"na1", "Unicode_1_Name"},
+        {"isc", "ISO_Comment"},
+        {"age", "Age"},
     };
 
     static final String[] UNIFIED_PROPERTIES = {
@@ -406,13 +409,14 @@ final class UCD_Names implements UCD_Types {
     };
 
     static final String[][] SUPER_CATEGORIES = {
-        {"L", "Letter"},
-        {"M", "Mark"},
-        {"N", "Number"},
-        {"Z", "Separator"},
-        {"C", "Other"},
-        {"S", "Symbol"},
-        {"P", "Punctuation"},
+        {"L", "Letter", "Ll | Lm | Lo | Lt | Lu"},
+        {"M", "Mark", "Mc | Me | Mn"},
+        {"N", "Number", "Nd | Nl | No"},
+        {"Z", "Separator", "Zl | Zp | Zs"},
+        {"C", "Other", "Cc | Cf | Cn | Co | Cs"},
+        {"S", "Symbol", "Sc | Sk | Sm | So"},
+        {"P", "Punctuation", "Pc | Pd | Pe | Pf | Pi | Po | Ps"},
+        {"Lc", "Cased Letter", "Ll | Lt | Lu"},
     };
 
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/10/31 00:02:54 $
-* $Revision: 1.7 $
+* $Date: 2001/11/13 02:31:34 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -30,9 +30,11 @@ public final class Utility {    // COMMON UTILITIES
     }
 
     private static boolean needCRLF = false;
+    
+    public static int DOTMASK = 0x7FF;
 
     public static void dot(int i) {
-        if ((i % 0x7FF) == 0) {
+        if ((i % DOTMASK) == 0) {
             needCRLF = true;
             System.out.print('.');
         }
@@ -458,6 +460,7 @@ public final class Utility {    // COMMON UTILITIES
     
     public interface Breaker {
         public String get(Object current, Object old);
+        public boolean filter(Object current); // true is keep
     }
     
     public static void print(PrintWriter pw, Collection c, String separator, Breaker b) {
@@ -466,14 +469,17 @@ public final class Utility {    // COMMON UTILITIES
         Object last = null;
         while (it.hasNext()) {
             Object obj = it.next();
+            if (b != null && !b.filter(obj)) continue;
             if (first) {
                 first = false;
+            } else {
+                pw.print(separator);
             }
-            else pw.print(separator);
             if (b != null) {
                 pw.print(b.get(obj, last));
+            } else {
+                pw.print(obj);
             }
-            pw.print(obj);
             last = obj;
         }
     }
