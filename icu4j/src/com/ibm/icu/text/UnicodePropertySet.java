@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/11/21 21:29:37 $
-* $Revision: 1.7 $
+* $Date: 2001/11/21 21:43:40 $
+* $Revision: 1.8 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,29 +52,27 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.7 $ $Date: 2001/11/21 21:29:37 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.8 $ $Date: 2001/11/21 21:43:40 $
  */
 class UnicodePropertySet {
 
-    private static final Hashtable NAME_MAP = new Hashtable();
+    private static Hashtable NAME_MAP = null;
 
-    private static final Hashtable CATEGORY_MAP = new Hashtable();
+    private static Hashtable CATEGORY_MAP = null;
 
     /**
      * A cache mapping character category integers, as returned by
      * UCharacter.getType(), to sets.  Entries are initially
      * null and are created on demand.
      */
-    private static final UnicodeSet[] CATEGORY_CACHE =
-        new UnicodeSet[UCharacterCategory.CHAR_CATEGORY_COUNT];
+    private static UnicodeSet[] CATEGORY_CACHE = null;
 
     /**
      * A cache mapping script integers, as defined by
      * UScript, to sets.  Entries are initially
      * null and are created on demand.
      */
-    private static final UnicodeSet[] SCRIPT_CACHE =
-        new UnicodeSet[UScript.CODE_LIMIT];
+    private static UnicodeSet[] SCRIPT_CACHE = null;
 
     // Special value codes
     private static final int ANY = -1; // general category: all code points
@@ -160,6 +158,7 @@ class UnicodePropertySet {
      * failure.
      */
     public static UnicodeSet createFromPattern(String pattern, ParsePosition ppos) {
+        init();
 
         UnicodeSet set = null;
 
@@ -368,7 +367,7 @@ class UnicodePropertySet {
         for (int i=start; i<limit; ) {
             int c = UTF16.charAt(str, i);
             i += UTF16.getCharCount(c);
-            if (!UCharacter.isWhitespace(c)) {
+            if (c != '_' && !UCharacter.isWhitespace(c)) {
                 UTF16.append(buf, UCharacter.toUpperCase(c));
             }
         }
@@ -445,7 +444,7 @@ class UnicodePropertySet {
     private static void addType(String shortName, String longName,
                                 SetFactory factory) {
         // DEBUGGING CODE: DISABLE FOR PRODUCTION BUILD
-        if (true) {
+        if (false) {
             if (NAME_MAP.get(shortName) != null) {
                 throw new InternalError("Duplicate name " + shortName);
             }
@@ -481,7 +480,16 @@ class UnicodePropertySet {
         }
     }
 
-    static {
+    static void init() {
+        if (NAME_MAP != null) {
+            return;
+        }
+        
+        NAME_MAP = new Hashtable();
+        CATEGORY_MAP = new Hashtable();
+        CATEGORY_CACHE = new UnicodeSet[UCharacterCategory.CHAR_CATEGORY_COUNT];
+        SCRIPT_CACHE = new UnicodeSet[UScript.CODE_LIMIT];
+
         // NOTE:  We munge all search keys to have no whitespace
         // and upper case.  As such, all stored keys should have
         // this format.
