@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/17 19:17:06 $
- * $Revision: 1.40 $
+ * $Date: 2001/10/18 04:21:05 $
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -220,7 +220,7 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.40 $ $Date: 2001/10/17 19:17:06 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.41 $ $Date: 2001/10/18 04:21:05 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -357,6 +357,7 @@ public class UnicodeSet extends UnicodeFilter {
         applyPattern(pattern, pos, symbols, true);
     }
 
+    // Delete the following when the category constructor is removed
     private static final String CATEGORY_NAMES =
         //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
         //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6   8 9 0 1 2 3 4 5 6 7 8
@@ -370,14 +371,15 @@ public class UnicodeSet extends UnicodeFilter {
      * codes.
      * @exception java.lang.IllegalArgumentException if the given
      * category is invalid.
-     * @deprecated this will be removed Dec-31-2001
+     * @deprecated this will be removed Dec-31-2002
      */
     public UnicodeSet(int category) {
         if (category < 0 || category > java.lang.Character.OTHER_SYMBOL ||
             category == 17) {
             throw new IllegalArgumentException("Invalid category");
         }
-        applyPattern(CATEGORY_NAMES.substring(2*category, 2*category+2), false);
+        String pat = "[:" + CATEGORY_NAMES.substring(2*category, 2*category+2) + ":]";
+        applyPattern(pat, false);
     }
 
     /**
