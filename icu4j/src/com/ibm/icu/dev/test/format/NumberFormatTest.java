@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/05/14 19:03:16 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/23 01:04:48 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -297,7 +297,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                        1234.56, "\u20AC1,234.56"); // Euro
 
         expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                       1234.56, "\uFFE51,235"); // Yen
+                       1234.56, "\u00A51,235"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
                        1234.56, "SwF1,234.55"); // 0.05 rounding
@@ -310,13 +310,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expectCurrency(fmt, null, 1234.56, "1 234,56 \u20AC");
 
         expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                       1234.56, "1 235 \uFFE5"); // Yen
+                       1234.56, "1 235 \u00A5"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
                        1234.56, "1 234,55 sFr."); // 0.25 rounding
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
-                       1234.56, "1 234,56 USD");
+                       1234.56, "1 234,56 $");
 
         expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
                        1234.56, "1 234,56 \u20AC"); // Euro
@@ -794,12 +794,12 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Locale loc = new Locale("en", "IN", "");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
 
-        expect2(fmt, 1.0, "Re1.00");
-        expect(fmt, 1.001, "Re1.00"); // tricky
-        expect2(fmt, 12345678.0, "Rs1,23,45,678.00");
-        expect2(fmt, 0.5, "Rs0.50");
-        expect2(fmt, -1.0, "-Re1.00");
-        expect2(fmt, -10.0, "-Rs10.00");
+        expect2(fmt, 1.0, "Re.1.00");
+        expect(fmt, 1.001, "Re.1.00"); // tricky
+        expect2(fmt, 12345678.0, "Rs.1,23,45,678.00");
+        expect2(fmt, 0.5, "Rs.0.50");
+        expect2(fmt, -1.0, "-Re.1.00");
+        expect2(fmt, -10.0, "-Rs.10.00");
     }
     
     //------------------------------------------------------------------
