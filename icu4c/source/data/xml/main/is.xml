@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="is"></language>
 	</identity>
 	<localeDisplayNames>
@@ -76,18 +76,26 @@
 				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>d. MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d. MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -112,6 +120,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<settings backwards="2"/>

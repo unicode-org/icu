@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="tr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -81,18 +81,26 @@
 				</week>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>dd MMMM yyyy EEEE</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>dd MMMM yyyy EEEE</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd.MMM.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>dd MMMM yyyy EEEE</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy EEEE</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd.MMM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -117,6 +125,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<rules>

@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.1">Various notes and changes in version 1.1</version>
+		<generation date="2003-04-08" />
 		<language type="ru"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">Итальянский</language>
 			<language type="iu">Инактитут</language>
 			<language type="ja">Японский</language>
-			<language type="jw">Яванский</language>
+			<language type="jv">Яванский</language>
 			<language type="ka">Грузинский</language>
 			<language type="kk">Казахский</language>
 			<language type="kl">Гренландский</language>
@@ -265,23 +265,33 @@
 					<firstDay day="mon"/>
 				</week>
 				<eras>
-					<era type="1">до н.э.</era>
-					<era type="2">н.э.</era>
+					<eraAbbr>
+						<era type="1">до н.э.</era>
+						<era type="2">н.э.</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>d MMMM yyyy 'г.'</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy 'г.'</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd.MM.yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>d MMMM yyyy 'г.'</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy 'г.'</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd.MM.yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -313,7 +323,7 @@
 	</special>
 	<collations>
 		<collation  >
-			<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+			<suppress_contractions>[0400-045f]</suppress_contractions>
 			<special owner="http://oss.software.ibm.com/icu/" version="1.1" />
 		</collation  >
 	</collations>

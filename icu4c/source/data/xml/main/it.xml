@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="it"></language>
 	</identity>
 	<localeDisplayNames>
@@ -80,25 +80,35 @@
 					<firstDay day="thu"/>
 				</week>
 				<eras>
-					<era type="1">aC</era>
-					<era type="2">dC</era>
+					<eraAbbr>
+						<era type="1">aC</era>
+						<era type="2">dC</era>
+					</eraAbbr>
 				</eras>
 				<am>m.</am>
 				<pm>p.</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>dd MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd/MMM/yy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd/MM/yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd/MMM/yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -136,6 +146,22 @@
 			</zone>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 	<special owner="http://oss.software.ibm.com/icu/"  >
 		<ruleBasedNumberFormats>
 			<ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: meno &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgola &gt;&gt;;<cp hex="000A" />    zero; uno; due; tre; quattro; cinque; sei; sette; otto;<cp hex="000A" />        nove;<cp hex="000A" />    dieci; undici; dodici; tredici; quattordici; quindici; sedici;<cp hex="000A" />        diciasette; diciotto; diciannove;<cp hex="000A" />    20: venti; vent&gt;%%with-i&gt;;<cp hex="000A" />    30: trenta; trent&gt;%%with-i&gt;;<cp hex="000A" />    40: quaranta; quarant&gt;%%with-a&gt;;<cp hex="000A" />    50: cinquanta; cinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: sessanta; sessant&gt;%%with-a&gt;;<cp hex="000A" />    70: settanta; settant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: novanta; novant&gt;%%with-a&gt;;<cp hex="000A" />    100: cento; cent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;&lt;cento; &lt;&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: mille; mill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;&lt;mila; &lt;&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt;mila[ &gt;&gt;];<cp hex="000A" />    1,000,000: =#,##0= (incomplete data);<cp hex="000A" />%%with-a:<cp hex="000A" />    azero; uno; adue; atre; aquattro; acinque; asei; asette; otto;<cp hex="000A" />        anove;<cp hex="000A" />    adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;<cp hex="000A" />        adiciasette; adiciotto; adiciannove;<cp hex="000A" />    20: aventi; avent&gt;%%with-i&gt;;<cp hex="000A" />    30: atrenta; atrent&gt;%%with-i&gt;;<cp hex="000A" />    40: aquaranta; aquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: acinquanta; acinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: asessanta; asessant&gt;%%with-a&gt;;<cp hex="000A" />    70: asettanta; asettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: anovanta; anovant&gt;%%with-a&gt;;<cp hex="000A" />    100: acento; acent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-a&lt;cento; &lt;%%with-a&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: amille; amill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-a&lt;mila; &lt;%%with-a&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-i:<cp hex="000A" />    izero; uno; idue; itre; iquattro; icinque; isei; isette; otto;<cp hex="000A" />        inove;<cp hex="000A" />    idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;<cp hex="000A" />        idiciasette; idiciotto; idiciannove;<cp hex="000A" />    20: iventi; ivent&gt;%%with-i&gt;;<cp hex="000A" />    30: itrenta; itrent&gt;%%with-i&gt;;<cp hex="000A" />    40: iquaranta; iquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: icinquanta; icinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: isessanta; isessant&gt;%%with-a&gt;;<cp hex="000A" />    70: isettanta; isettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: inovanta; inovant&gt;%%with-a&gt;;<cp hex="000A" />    100: icento; icent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-i&lt;cento; &lt;%%with-i&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: imille; imill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-i&lt;mila; &lt;%%with-i&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-o:<cp hex="000A" />    ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto;<cp hex="000A" />        onove;<cp hex="000A" />    odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;<cp hex="000A" />        odiciasette; odiciotto; odiciannove;<cp hex="000A" />    20: oventi; ovent&gt;%%with-i&gt;;<cp hex="000A" />    30: otrenta; otrent&gt;%%with-i&gt;;<cp hex="000A" />    40: oquaranta; oquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: ocinquanta; ocinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: osessanta; osessant&gt;%%with-a&gt;;<cp hex="000A" />    70: osettanta; osettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: onovanta; onovant&gt;%%with-a&gt;;<cp hex="000A" />    100: ocento; ocent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-o&lt;cento; &lt;%%with-o&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: omille; omill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-o&lt;mila; &lt;%%with-o&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" /></ruleBasedNumberFormat>

@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.1">Various notes and changes in version 1.1</version>
+		<generation date="2003-04-08" />
 		<language type="hu"></language>
 	</identity>
 	<localeDisplayNames>
@@ -80,25 +80,35 @@
 					<firstDay day="mon"/>
 				</week>
 				<eras>
-					<era type="1">i.e.</era>
-					<era type="2">i.u.</era>
+					<eraAbbr>
+						<era type="1">i.e.</era>
+						<era type="2">i.u.</era>
+					</eraAbbr>
 				</eras>
 				<am>DE</am>
 				<pm>DU</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>yyyy. MMMM d.</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>yyyy. MMMM d.</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy.MM.dd.</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yyyy.MM.dd.</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>yyyy. MMMM d.</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>yyyy. MMMM d.</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy.MM.dd.</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yyyy.MM.dd.</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -123,6 +133,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<rules>

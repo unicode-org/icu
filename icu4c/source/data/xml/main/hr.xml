@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="hr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -77,18 +77,26 @@
 				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>yyyy. MMMM dd</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>yyyy. MMMM dd</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy.MM.dd</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yyyy.MM.dd</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>yyyy. MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>yyyy. MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy.MM.dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yyyy.MM.dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -113,6 +121,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<rules>

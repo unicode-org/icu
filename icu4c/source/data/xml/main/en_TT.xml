@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="x0.1">Various notes and changes in version x0.1</version>
+		<generation date="2003-04-08" />
 		<language type="en"></language>
 		<territory type="TTO">TT</territory>
 	</identity>

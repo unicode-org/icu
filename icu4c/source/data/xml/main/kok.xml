@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="kok"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">इटालियन</language>
 			<language type="iu">इन्युकट्ट</language>
 			<language type="ja">जापनीस्</language>
-			<language type="jw">जावनीस्</language>
+			<language type="jv">जावनीस्</language>
 			<language type="ka">जार्जियन्</language>
 			<language type="kk">कज़ख्</language>
 			<language type="kl">ग्रीनलान्डिक</language>
@@ -149,6 +149,9 @@
 			<language type="zh">चीनीस्</language>
 			<language type="zu">जुलू</language>
 		</languages>
+		<territories>
+			<territory type="IN">भारत</territory>
+		</territories>
 		<keys>
 			<key type="collation">collation</key>
 			<key type="calendar">calendar</key>
@@ -211,8 +214,10 @@
 					<day type="sat">शनि</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">क्रिस्तपूर्व</era>
-					<era type="2">क्रिस्तशखा</era>
+					<eraAbbr>
+						<era type="1">क्रिस्तपूर्व</era>
+						<era type="2">क्रिस्तशखा</era>
+					</eraAbbr>
 				</eras>
 				<am>म.पू.</am>
 				<pm>म.नं.</pm>

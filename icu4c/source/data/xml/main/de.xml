@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="de"></language>
 	</identity>
 	<localeDisplayNames>
@@ -46,7 +46,7 @@
 			<language type="is">Isländisch</language>
 			<language type="it">Italienisch</language>
 			<language type="ja">Japanisch</language>
-			<language type="jw">Javanesisch</language>
+			<language type="jv">Javanesisch</language>
 			<language type="ka">Georgisch</language>
 			<language type="kk">Kasachisch</language>
 			<language type="kl">Grönländisch</language>
@@ -88,7 +88,6 @@
 			<language type="uk">Ukrainisch</language>
 			<language type="uz">Usbekisch</language>
 			<language type="vi">Vietnamesisch</language>
-			<language type="vo">Volapük</language>
 			<language type="yi">Jiddisch</language>
 			<language type="zh">Chinesisch</language>
 		</languages>
@@ -309,25 +308,35 @@
 					<firstDay day="thu"/>
 				</week>
 				<eras>
-					<era type="1">v. Chr.</era>
-					<era type="2">n. Chr.</era>
+					<eraAbbr>
+						<era type="1">v. Chr.</era>
+						<era type="2">n. Chr.</era>
+					</eraAbbr>
 				</eras>
 				<am>vorm.</am>
 				<pm>nachm.</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE, d. MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d. MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd.MM.yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE, d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd.MM.yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -365,6 +374,22 @@
 			</zone>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 	<special owner="http://oss.software.ibm.com/icu/"  >
 		<ruleBasedNumberFormats>
 			<ruleBasedNumberFormat type="spellout">%alt-ones:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />    null; eins; =%%main=;<cp hex="000A" />%%main:<cp hex="000A" />    null; ein; zwei; drei; vier; fünf; sechs; sieben; acht; neun;<cp hex="000A" />    zehn; elf; zwölf; &gt;&gt;zehn;<cp hex="000A" />    20: [&gt;&gt;und]zwanzig;<cp hex="000A" />    30: [&gt;&gt;und]dreißig;<cp hex="000A" />    40: [&gt;&gt;und]vierzig;<cp hex="000A" />    50: [&gt;&gt;und]fünfzig;<cp hex="000A" />    60: [&gt;&gt;und]sechzig;<cp hex="000A" />    70: [&gt;&gt;und]siebzig;<cp hex="000A" />    80: [&gt;&gt;und]achtzig;<cp hex="000A" />    90: [&gt;&gt;und]neunzig;<cp hex="000A" />    100: hundert[&gt;%alt-ones&gt;];<cp hex="000A" />    200: &lt;&lt;hundert[&gt;%alt-ones&gt;];<cp hex="000A" />    1000: tausend[&gt;%alt-ones&gt;];<cp hex="000A" />    2000: &lt;&lt;tausend[&gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000: eine Million[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000: &lt;&lt; Millionen[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000: eine Milliarde[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000,000: &lt;&lt; Milliarden[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000,000: eine Billion[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000,000,000: &lt;&lt; Billionen[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;%%lenient-parse:<cp hex="000A" />    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; '-'<cp hex="000A" />    &amp; ae , ä &amp; ae , Ä<cp hex="000A" />    &amp; oe , ö &amp; oe , Ö<cp hex="000A" />    &amp; ue , ü &amp; ue , Ü<cp hex="000A" /></ruleBasedNumberFormat>

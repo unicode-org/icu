@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="ro"></language>
 	</identity>
 	<localeDisplayNames>
@@ -76,23 +76,33 @@
 					<day type="sat">S</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">d.C.</era>
-					<era type="2">î.d.C.</era>
+					<eraAbbr>
+						<era type="1">d.C.</era>
+						<era type="2">î.d.C.</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -117,6 +127,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<rules>

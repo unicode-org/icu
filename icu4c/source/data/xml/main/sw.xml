@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="sw"></language>
 	</identity>
 	<localeDisplayNames>
@@ -73,8 +73,10 @@
 						<firstDay day="mon"/>
 					</week>
 					<eras>
-						<era type="1">KK</era>
-						<era type="2">BK</era>
+						<eraAbbr>
+							<era type="1">KK</era>
+							<era type="2">BK</era>
+						</eraAbbr>
 					</eras>
 				</calendar>
 			</calendars>
