@@ -27,12 +27,46 @@
 #include "cnumtst.h"
 #include "cmemory.h"
 
+#define LENGTH(arr) (sizeof(arr)/sizeof(arr[0]))
+
 void addNumForTest(TestNode** root);
 
 void addNumForTest(TestNode** root)
 {
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
     addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
+}
+
+/** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
+static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_t dstLength) {
+	static const char hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+	char *p = dst;
+	const char *e = p + dstLength;
+	if (srcLength < 0) {
+		const UChar* s = src;
+		while (*s) ++s;
+		srcLength = s - src;
+	}
+	while (p < e && --srcLength >= 0) {
+		UChar c = *src++;
+		if (c == 0xd || c == 0xa || c == 0x9 || (c>= 0x20 && c <= 0x7e)) {
+			*p++ = (char) c & 0x7f;
+		} else if (e - p >= 6) {
+			*p++ = '\\';
+			*p++ = 'u';
+			*p++ = hex[(c >> 12) & 0xf];
+			*p++ = hex[(c >> 8) & 0xf];
+			*p++ = hex[(c >> 4) & 0xf];
+			*p++ = hex[c & 0xf];
+		} else {
+			break;
+		}
+	}
+	if (p < e) {
+		*p = 0;
+	}
+	return p - dst;
 }
 
 /* test Number Format API */
@@ -66,7 +100,8 @@ static void TestNumberFormat()
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
     UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr,
-                  *cur_frpattern, *myclone;
+                  *cur_frpattern, *myclone, *spellout_def;
+
     /* Testing unum_open() with various Numberformat styles and locales*/
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
@@ -104,13 +139,12 @@ static void TestNumberFormat()
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(percent, french, &status): %s\n", myErrorName(status));
 
-    /*
     log_verbose("\nTesting unum_open(spellout, NULL, status)");
     style=UNUM_SPELLOUT;
-    spellout_def=unum_open(style, NULL, &status);
+    spellout_def=unum_open(style, NULL, 0, NULL, NULL, &status);
     if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(spellout, NULL, &status): %s\n", myErrorName(status));
-    */
+
     /* Testing unum_clone(..) */
     log_verbose("\nTesting unum_clone(fmt, status)");
     status = U_ZERO_ERROR;
@@ -589,6 +623,35 @@ uprv_free(result);
             log_verbose("Pass: attributes set and retrieved successfully\n");
     }
 
+	/*testing spellout format to make sure we can use it successfully.*/
+	log_verbose("\nTesting spellout format\n");
+	{
+	int i;
+	int32_t values[] = { 0, -5, 105, 1005, 105050 };
+	for (i = 0; i < LENGTH(values); ++i) {
+		UChar buffer[128];
+		int32_t len;
+		int32_t value = values[i];
+		status = U_ZERO_ERROR;
+		len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
+		if(U_FAILURE(status)) {
+			log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+		} else {
+			int32_t pp = 0;
+			int32_t result;
+			char logbuf[256];
+			ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
+			log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
+
+			result = unum_parse(spellout_def, buffer, len, &pp, &status);
+			if (U_FAILURE(status)) {
+				log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+			} else if (result != value) {
+				log_err("unum_format result %d != value %d\n", result, value);
+			}
+		}
+	}
+	}
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
     unum_close(def);
@@ -597,7 +660,7 @@ uprv_free(result);
     unum_close(cur_fr);
     unum_close(per_def);
     unum_close(per_fr);
-    /*unum_close(spellout_def);*/
+    unum_close(spellout_def);
     unum_close(pattern);
     unum_close(cur_frpattern);
     unum_close(myclone);
