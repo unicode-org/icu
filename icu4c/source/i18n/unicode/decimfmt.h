@@ -547,8 +547,8 @@ public:
     virtual void setFormatWidth(int32_t width);
 
     /**
-     * Get the character used to pad to the format width.  The default is ' '.
-     * @return the pad character
+     * Get the first code unit of the string used to pad to the format width.  The default is ' '.
+     * @return the first code unit of the pad string
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -561,6 +561,8 @@ public:
     /**
      * Get the grapheme string (a character, possibly with modifier letters)
      * used to pad to the format width.  The default is " ".
+     * Note: The current implementation only stores the first code unit of the
+     * pad string.
      * @return the pad grapheme string
      * @see #setFormatWidth
      * @see #getFormatWidth
@@ -572,9 +574,9 @@ public:
     virtual UnicodeString getPadCharacterString();
 
     /**
-     * Set the character used to pad to the format width.  This has no effect
+     * Set a one-code unit string used to pad to the format width.  This has no effect
      * unless padding is enabled.
-     * @param padChar the pad character
+     * @param padChar the pad character that is used to construct the pad string
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #getPadCharacter
@@ -588,6 +590,8 @@ public:
      * Set the grapheme string (a character, possibly with modifier letters)
      * used to pad to the format width.  This has no effect
      * unless padding is enabled.
+     * Note: The current implementation only stores the first code unit of the
+     * pad string.
      * @param padChar the pad grapheme
      * @see #setFormatWidth
      * @see #getFormatWidth
