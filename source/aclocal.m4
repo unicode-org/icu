@@ -37,10 +37,14 @@ alpha*-*-linux-gnu)
 	fi ;;
 *-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *-*-hpux*)
-	case "$CXX" in 
-	*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
-	*CC)     icu_cv_host_frag=mh-hpux-cc ;;
-	esac;;
+	if test "$ac_cv_prog_gcc" = yes; then
+		icu_cv_host_frag=mh-hpux-gcc
+	else
+		case "$CXX" in
+		*aCC)    icu_cv_host_frag=mh-hpux-acc ;;
+		*CC)     icu_cv_host_frag=mh-hpux-cc ;;
+		esac
+	fi ;;
 *-*ibm-openedition*|*-*-os390*)	icu_cv_host_frag=mh-os390 ;;
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
