@@ -41,9 +41,8 @@ T_FileStream_open(const char* filename, const char* mode)
 U_CAPI FileStream*
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 {
-  /* TBD: is _wfopen MS-specific?  If so, change _WIN32 to WIN32 */
-/*#ifdef _WIN32*/
-#if defined(_WIN32) && !defined(__WINDOWS__)
+  /* TBD: _wfopen is believed to be MS-specific? */
+#if defined(WIN32) && !defined(__WINDOWS__)
     FILE* result = _wfopen(filename, mode);
     return (FileStream*)result;
 #else
