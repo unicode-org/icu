@@ -13,7 +13,7 @@ ru{
     Version{"1.2"}
     collations{
         standard{
-            Sequence{"[suppressContractions[Ѐ-џ]]"}
+            Sequence{"[suppressContractions [Ѐ-џ] ]"}
             Version{"1.1"}
         }
         validSubLocales{
