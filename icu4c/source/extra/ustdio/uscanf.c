@@ -286,7 +286,7 @@ u_scanf_double_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
@@ -334,7 +334,7 @@ u_scanf_scientific_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getScientificFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_SCIENTIFIC);
 
     /* handle error */
     if(format == 0)
@@ -391,8 +391,8 @@ u_scanf_scidbl_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatters */
-    scientificFormat = u_locbund_getScientificFormat(stream->fBundle);
-    genericFormat = u_locbund_getNumberFormat(stream->fBundle);
+    scientificFormat = u_locbund_getNumberFormat(&stream->fBundle, UNUM_SCIENTIFIC);
+    genericFormat = u_locbund_getNumberFormat(&stream->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(scientificFormat == 0 || genericFormat == 0)
@@ -457,7 +457,7 @@ u_scanf_integer_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
@@ -527,7 +527,7 @@ u_scanf_currency_handler(UFILE                 *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getCurrencyFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_CURRENCY);
 
     /* handle error */
     if(format == 0)
@@ -575,7 +575,7 @@ u_scanf_percent_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getPercentFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_PERCENT);
 
     /* handle error */
     if(format == 0)
@@ -623,7 +623,7 @@ u_scanf_date_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getDateFormat(stream->fBundle);
+    format = u_locbund_getDateFormat(&stream->fBundle);
 
     /* handle error */
     if(format == 0)
@@ -667,7 +667,7 @@ u_scanf_time_handler(UFILE             *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getTimeFormat(stream->fBundle);
+    format = u_locbund_getTimeFormat(&stream->fBundle);
 
     /* handle error */
     if(format == 0)
@@ -768,7 +768,7 @@ u_scanf_spellout_handler(UFILE                 *stream,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getSpelloutFormat(stream->fBundle);
+    format = u_locbund_getNumberFormat(&stream->fBundle, UNUM_SPELLOUT);
 
     /* handle error */
     if(format == 0)

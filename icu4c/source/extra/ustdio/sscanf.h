@@ -32,8 +32,7 @@ struct u_localized_string {
   int32_t   pos;    /* Number of codeunits available to write to */
   int32_t   len;    /* Maximum number of code units that can be written to output */
 
-  ULocaleBundle  *fBundle;     /* formatters */
-  UBool        fOwnBundle;     /* TRUE if fBundle should be deleted */
+  ULocaleBundle  fBundle;     /* formatters */
 };
 typedef struct u_localized_string u_localized_string;
 

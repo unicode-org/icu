@@ -25,11 +25,12 @@
 
 #include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
+#include "locbund.h"
 
 /**
  * Struct encapsulating a single uprintf format specification.
  */
-struct u_printf_spec_info {
+typedef struct u_printf_spec_info {
   UChar     fSpec;            /* Conversion specification */
 
   int32_t    fPrecision;        /* Precision  */
@@ -47,9 +48,25 @@ struct u_printf_spec_info {
   UBool     fIsShort;        /* h flag  */
   UBool     fIsLong;        /* l flag  */
   UBool     fIsLongLong;        /* ll flag  */
-};
-typedef struct u_printf_spec_info u_printf_spec_info;
+} u_printf_spec_info;
 
+typedef struct u_printf_stream_handler u_printf_stream_handler;
+
+typedef int32_t U_EXPORT2
+u_printf_write_stream(void          *context,
+                      const UChar   *str,
+                      int32_t       count);
+
+typedef int32_t U_EXPORT2
+u_printf_pad_and_justify_stream(void                        *context,
+                                const u_printf_spec_info    *info,
+                                const UChar                 *result,
+                                int32_t                     resultLen);
+
+typedef struct u_printf_stream_handler {
+    u_printf_write_stream *write;
+    u_printf_pad_and_justify_stream *pad_and_justify;
+} u_printf_stream_handler;
 
 /**
  * A u_printf handler function.  
@@ -61,9 +78,12 @@ typedef struct u_printf_spec_info u_printf_spec_info;
  * @param args A pointer to the argument data
  * @return The number of Unicode characters written to <TT>stream</TT>.
  */
-typedef int32_t (*u_printf_handler) (UFILE             *stream,
-                     const u_printf_spec_info     *info,
-                     const ufmt_args            *args);
+typedef int32_t U_EXPORT2
+u_printf_handler(const u_printf_stream_handler  *handler,
+                 void                           *context,
+                 ULocaleBundle                  *formatBundle,
+                 const u_printf_spec_info       *info,
+                 const ufmt_args                *args);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
