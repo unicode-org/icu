@@ -9,6 +9,8 @@ package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.LocaleData;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.Utility;
 import java.io.*;
@@ -151,6 +153,46 @@ public class RoundTripTest extends TestFmwk {
         if (getInclusion() < 10) t.setPairLimit(1000);
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
         showElapsed(start, "TestHangul");
+    }
+    
+    public void TestHan() throws UnsupportedEncodingException, FileNotFoundException {
+        UnicodeSet exemplars = LocaleData.getExemplarSet(new ULocale("zh"),0);
+        // create string with all chars
+        StringBuffer b = new StringBuffer();
+        for (UnicodeSetIterator it = new UnicodeSetIterator(exemplars); it.next();) {
+            UTF16.append(b,it.codepoint);
+        }
+        String source = b.toString();
+        // transform with Han translit
+        Transliterator han = Transliterator.getInstance("Han-Latin");
+        String target = han.transliterate(source);
+        // now verify that there are no Han characters left
+        UnicodeSet allHan = new UnicodeSet("[:han:]");
+        assertFalse("No Han must be left after Han-Latin transliteration",allHan.containsSome(target));
+        // check the pinyin translit
+        Transliterator pn = Transliterator.getInstance("Latin-NumericPinyin");
+        String target2 = pn.transliterate(target);
+        // verify that there are no marks
+        Transliterator nfc = Transliterator.getInstance("nfc");
+        String nfced = nfc.transliterate(target2);
+        UnicodeSet allMarks = new UnicodeSet("[:mark:]");
+        assertFalse("NumericPinyin must contain no marks", allMarks.containsSome(nfced));
+        // verify roundtrip
+        Transliterator np = pn.getInverse();
+        String target3 = np.transliterate(target);
+        boolean roundtripOK = target3.equals(target);
+        assertTrue("NumericPinyin must roundtrip", roundtripOK);
+        if (!roundtripOK) {
+            String filename = "numeric-pinyin.log.txt";
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter(
+                    new OutputStreamWriter(
+                        new FileOutputStream(filename), "UTF8"), 4*1024));
+            errln("Creating log file " + new File(filename).getAbsoluteFile());
+            out.println("Pinyin:                " + target);
+            out.println("Pinyin-Numeric-Pinyin: " + target2);
+            out.close();
+        }
     }
 
     public void TestSingle() {
