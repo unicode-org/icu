@@ -74,5 +74,6 @@ bn {
     // Currency display names
     Currencies {
         INR { "\u099F\u09BE\u0995\u09BE", "INR" }
+        BDT { "\u09F3", "BDT" } // Bangladesh Taka
     }
 }
