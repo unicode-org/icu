@@ -30,6 +30,16 @@
  */
 TransliterationRuleSet::TransliterationRuleSet() {
     maxContextLength = 0;
+    ruleVector = new UVector();
+    rules = NULL;
+}
+
+/**
+ * Destructor.
+ */
+TransliterationRuleSet::~TransliterationRuleSet() {
+    delete ruleVector;
+    delete[] rules;
 }
 
 /**
@@ -45,31 +55,22 @@ int32_t TransliterationRuleSet::getMaximumContextLength(void) const {
  * significant.
  *
  * <p>Once freeze() is called, this method must not be called.
- * @param rule the rule to add
+ * @param adoptedRule the rule to add
  */
 void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
                                      UErrorCode& status) {
-    
-    // Build time, no checking  : 3562 ms
-    // Build time, with checking: 6234 ms
-
     if (U_FAILURE(status)) {
         delete adoptedRule;
         return;
     }
-
-    for (int32_t i=0; i<rules.size(); ++i) {
-        TransliterationRule* r = (TransliterationRule*) rules.elementAt(i);
-        if (r->masks(*adoptedRule)) {
-            //throw new IllegalArgumentException("Rule " + rule +
-            //                                   " must precede " + r);
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            delete adoptedRule;
-            return;
-        }
+    if (ruleVector == NULL) {
+        // throw new IllegalArgumentException("Cannot add rules after freezing");
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        delete adoptedRule;
+        return;
     }
+    ruleVector->addElement(adoptedRule);
 
-    rules.addElement(adoptedRule);
     int32_t len;
     if ((len = adoptedRule->getAnteContextLength()) > maxContextLength) {
         maxContextLength = len;
@@ -77,13 +78,109 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
 }
 
 /**
- * Free up space.  Once this method is called, addRule() must NOT
- * be called again.
+ * Close this rule set to further additions, check it for masked rules,
+ * and index it to optimize performance.  Once this method is called,
+ * addRule() can no longer be called.
+ * @exception IllegalArgumentException if some rules are masked
  */
-void TransliterationRuleSet::freeze(void) {
-    for (int32_t i=0; i<rules.size(); ++i) {
-        ((TransliterationRule*) rules.elementAt(i))->freeze();
+void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
+                                    UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
     }
+
+    /* Construct the rule array and index table.  We reorder the
+     * rules by sorting them into 256 bins.  Each bin contains all
+     * rules matching the index value for that bin.  A rule
+     * matches an index value if string whose first key character
+     * has a low byte equal to the index value can match the rule.
+     *
+     * Each bin contains zero or more rules, in the same order
+     * they were found originally.  However, the total rules in
+     * the bins may exceed the number in the original vector,
+     * since rules that have a variable as their first key
+     * character will generally fall into more than one bin.
+     *
+     * That is, each bin contains all rules that either have that
+     * first index value as their first key character, or have
+     * a set containing the index value as their first character.
+     */
+    int32_t n = ruleVector->size();
+    int32_t j;
+    int16_t x;
+    UVector v(2*n); // heuristic; adjust as needed
+
+    /* Precompute the index values.  This saves a LOT of time.
+     */
+    int16_t* indexValue = new int16_t[n];
+    for (j=0; j<n; ++j) {
+        TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
+        indexValue[j] = r->getIndexValue(data);
+    }
+    for (x=0; x<256; ++x) {
+        index[x] = v.size();
+        for (j=0; j<n; ++j) {
+            if (indexValue[j] >= 0) {
+                if (indexValue[j] == x) {
+                    v.addElement(ruleVector->elementAt(j));
+                }
+            } else {
+                // If the indexValue is < 0, then the first key character is
+                // a set, and we must use the more time-consuming
+                // matchesIndexValue check.  In practice this happens
+                // rarely, so we seldom tread this code path.
+                TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
+                if (r->matchesIndexValue((uint8_t)x, data)) {
+                    v.addElement(r);
+                }
+            }
+        }
+    }
+    delete[] indexValue;
+    index[256] = v.size();
+
+    /* Freeze things into an array.
+     */
+    rules = new TransliterationRule*[v.size()];
+    for (j=0; j<v.size(); ++j) {
+        rules[j] = (TransliterationRule*) v.elementAt(j);
+    }
+    delete ruleVector;
+    ruleVector = NULL;
+
+    // TODO Add error reporting that indicates the rules that
+    //      are being masked.
+    //UnicodeString errors;
+
+    /* Check for masking.  This is MUCH faster than our old check,
+     * which was each rule against each following rule, since we
+     * only have to check for masking within each bin now.  It's
+     * 256*O(n2^2) instead of O(n1^2), where n1 is the total rule
+     * count, and n2 is the per-bin rule count.  But n2<<n1, so
+     * it's a big win.
+     */
+    for (x=0; x<256; ++x) {
+        for (j=index[x]; j<index[x+1]-1; ++j) {
+            TransliterationRule* r1 = rules[j];
+            for (int32_t k=j+1; k<index[x+1]; ++k) {
+                TransliterationRule* r2 = rules[k];
+                if (r1->masks(*r2)) {
+//|                 if (errors == null) {
+//|                     errors = new StringBuffer();
+//|                 } else {
+//|                     errors.append("\n");
+//|                 }
+//|                 errors.append("Rule " + r1 + " masks " + r2);
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+            }
+        }
+    }
+
+    //if (errors != null) {
+    //    throw new IllegalArgumentException(errors.toString());
+    //}
 }
 
 /**
@@ -119,15 +216,18 @@ TransliterationRuleSet::findMatch(const UnicodeString& text,
                                   int32_t cursor,
                                   const TransliterationRuleData& data,
                                   const UnicodeFilter* filter) const {
-    for (int32_t i=0; i<rules.size(); ++i) {
-        TransliterationRule* rule =
-            (TransliterationRule*) rules.elementAt(i);
-        if (rule->matches(text, start, limit, result,
-                          cursor, data, filter)) {
-            return rule;
+    /* We only need to check our indexed bin of the rule table,
+     * based on the low byte of the first key character.
+     */
+    int32_t rlen = result.length();
+    int16_t x = 0xFF & (cursor < rlen ? result.charAt(cursor)
+                        : text.charAt(cursor - rlen + start));
+    for (int32_t i=index[x]; i<index[x+1]; ++i) {
+        if (rules[i]->matches(text, start, limit, result, cursor, data, filter)) {
+            return rules[i];
         }
     }
-    return 0;
+    return NULL;
 }
 
 /**
@@ -154,15 +254,16 @@ TransliterationRuleSet::findMatch(const Replaceable& text,
                                   int32_t cursor,
                                   const TransliterationRuleData& data,
                                   const UnicodeFilter* filter) const {
-    for (int32_t i=0; i<rules.size(); ++i) {
-        TransliterationRule* rule =
-            (TransliterationRule*) rules.elementAt(i);
-        if (rule->matches(text, start, limit, cursor,
-                          data, filter)) {
-            return rule;
+    /* We only need to check our indexed bin of the rule table,
+     * based on the low byte of the first key character.
+     */
+    int16_t x = text.charAt(cursor) & 0xFF;
+    for (int32_t i=index[x]; i<index[x+1]; ++i) {
+        if (rules[i]->matches(text, start, limit, cursor, data, filter)) {
+            return rules[i];
         }
     }
-    return 0;
+    return NULL;
 }
 
 /**
@@ -199,19 +300,22 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
                                              const TransliterationRuleData& data,
                                              bool_t& isPartial,
                                              const UnicodeFilter* filter) const {
+
+    /* We only need to check our indexed bin of the rule table,
+     * based on the low byte of the first key character.
+     */
     isPartial = FALSE;
-    for (int32_t i=0; i<rules.size(); ++i) {
-        TransliterationRule* rule =
-            (TransliterationRule*) rules.elementAt(i);
-        int32_t match = rule->getMatchDegree(text, start, limit, cursor,
-                                             data, filter);
+    int16_t x = text.charAt(cursor) & 0xFF;
+    for (int32_t i=index[x]; i<index[x+1]; ++i) {
+        int32_t match = rules[i]->getMatchDegree(text, start, limit, cursor,
+                                                 data, filter);
         switch (match) {
         case TransliterationRule::FULL_MATCH:
-            return rule;
+            return rules[i];
         case TransliterationRule::PARTIAL_MATCH:
             isPartial = TRUE;
-            return 0;
+            return NULL;
         }
     }
-    return 0;
+    return NULL;
 }

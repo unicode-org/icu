@@ -72,9 +72,13 @@ public:
 private:
 
     /**
-     * The string that must be matched.
+     * The string that must be matched, consisting of the anteContext, key,
+     * and postContext, concatenated together, in that order.  Some components
+     * may be empty (zero length).
+     * @see anteContextLength
+     * @see keyLength
      */
-    UnicodeString key;
+    UnicodeString pattern;
 
     /**
      * The string that is emitted if the key, anteContext, and postContext
@@ -83,16 +87,18 @@ private:
     UnicodeString output;
 
     /**
-     * The string that must match before the key.  If empty, then
-     * there is no matching requirement before the key.
+     * The length of the string that must match before the key.  If
+     * zero, then there is no matching requirement before the key.
+     * Substring [0,anteContextLength) of pattern is the anteContext.
      */
-    UnicodeString anteContext;
+    int32_t anteContextLength;
 
     /**
-     * The string that must match after the key.  If empty, then there
-     * is no matching requirement after the key.
+     * The length of the key.  Substring [anteContextLength,
+     * anteContextLength + keyLength) is the key.
+
      */
-    UnicodeString postContext;
+    int32_t keyLength;
 
     /**
      * The position of the cursor after emitting the output string, from 0 to
@@ -100,12 +106,6 @@ private:
      * the cursorPos is output.length().
      */
     int32_t cursorPos;
-
-    /**
-     * A string used to implement masks().
-     * @see #freeze
-     */
-    UnicodeString* maskKey;
 
 public:
 
@@ -135,6 +135,29 @@ public:
                         UErrorCode &status);
 
     /**
+     * Construct a new rule with the given input, output text, and other
+     * attributes.  A cursor position may be specified for the output text.
+     * @param input input string, including key and optional ante and
+     * post context
+     * @param anteContextPos offset into input to end of ante context, or -1 if
+     * none.  Must be <= input.length() if not -1.
+     * @param postContextPos offset into input to start of post context, or -1
+     * if none.  Must be <= input.length() if not -1, and must be >=
+     * anteContextPos.
+     * @param output output string
+     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * none.  If less than zero, then the cursor is placed after the
+     * <code>output</code>; that is, -1 is equivalent to
+     * <code>output.length()</code>.  If greater than
+     * <code>output.length()</code> then an exception is thrown.
+     */
+    TransliterationRule(const UnicodeString& input,
+                        int32_t anteContextPos, int32_t postContextPos,
+                        const UnicodeString& output,
+                        int32_t cursorPos,
+                        UErrorCode& status);
+
+    /**
      * Destructor.
      */
     virtual ~TransliterationRule();
@@ -144,12 +167,6 @@ public:
      * @return the length of the match key.
      */
     virtual int32_t getKeyLength(void) const;
-
-    /**
-     * Return the key.
-     * @return the match key.
-     */
-    virtual const UnicodeString& getKey(void) const;
 
     /**
      * Return the output string.
@@ -170,21 +187,38 @@ public:
      */
     virtual int32_t getAnteContextLength(void) const;
 
+private:
+    friend class TransliterationRuleSet;
+
+    /**
+     * Internal method.  Returns 8-bit index value for this rule.
+     * This is the low byte of the first character of the key,
+     * unless the first character of the key is a set.  If it's a
+     * set, or otherwise can match multiple keys, the index value is -1.
+     */
+    int16_t getIndexValue(const TransliterationRuleData& data);
+
+    /**
+     * Internal method.  Returns true if this rule matches the given
+     * index value.  The index value is an 8-bit integer, 0..255,
+     * representing the low byte of the first character of the key.
+     * It matches this rule if it matches the first character of the
+     * key, or if the first character of the key is a set, and the set
+     * contains any character with a low byte equal to the index
+     * value.  If the rule contains only ante context, as in foo)>bar,
+     * then it will match any key.
+     */
+    bool_t matchesIndexValue(uint8_t v,
+                             const TransliterationRuleData& data);
+
+public:
     /**
      * Return true if this rule masks another rule.  If r1 masks r2 then
      * r1 matches any input string that r2 matches.  If r1 masks r2 and r2 masks
      * r1 then r1 == r2.  Examples: "a>x" masks "ab>y".  "a>x" masks "a[b]>y".
      * "[c]a>x" masks "[dc]a>y".
-     *
-     * <p>This method must not be called after freeze() is called.
      */
     virtual bool_t masks(const TransliterationRule& r2) const;
-
-    /**
-     * Free up space.  Once this method is called, masks() must NOT be called.
-     * If it is called, an exception will be thrown.
-     */
-    virtual void freeze(void);
 
     /**
      * Return true if this rule matches the given text.  The text being matched

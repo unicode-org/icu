@@ -14,7 +14,7 @@
 
 // N.B.: This mapping is different in ICU and Java
 const UnicodeString UnicodeSet::CATEGORY_NAMES(
-    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf");
+    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
 
 /**
  * A cache mapping character category integers, as returned by
@@ -28,7 +28,7 @@ UnicodeString* UnicodeSet::CATEGORY_PAIRS_CACHE =
  * Delimiter string used in patterns to close a category reference:
  * ":]".  Example: "[:Lu:]".
  */
-const UnicodeString UnicodeSet::CATEGORY_CLOSE(":]", "");
+const UnicodeString UnicodeSet::CATEGORY_CLOSE = UNICODE_STRING(":]", 2);
 
 /**
  * Delimiter char beginning a variable reference:
@@ -69,21 +69,18 @@ UnicodeSet::UnicodeSet() : pairs() {}
  * white space.  See the class description for the syntax of the
  * pattern language.
  * @param pattern a string specifying what characters are in the set
- * @param ignoreSpaces if <code>true</code>, all spaces in the
- * pattern are ignored, except those preceded by '\\'.  Spaces are
- * those characters for which <code>Character.isSpaceChar()</code>
- * is <code>true</code>.
  * @exception <code>IllegalArgumentException</code> if the pattern
  * contains a syntax error.
  */
-UnicodeSet::UnicodeSet(const UnicodeString& pattern, bool_t ignoreSpaces,
-                       UErrorCode& status) : pairs() {
-    applyPattern(pattern, ignoreSpaces, status);
-}
-
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) : pairs() {
     applyPattern(pattern, status);
+}
+
+UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
+                       const TransliterationRuleData* data,
+                       UErrorCode& status) {
+    parse(pairs, pattern, pos, data, status);
 }
 
 /**
@@ -164,50 +161,24 @@ int32_t UnicodeSet::hashCode(void) const {
  * contains a syntax error.
  */
 void UnicodeSet::applyPattern(const UnicodeString& pattern,
-                              bool_t ignoreSpaces,
                               UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
 
     ParsePosition pos(0);
-	UnicodeString* pat = (UnicodeString*) &pattern;
+    parse(pairs, pattern, pos, NULL, status);
 
-    // To ignore spaces, create a new pattern without spaces.  We
-    // have to process all '\' escapes.  If '\' is encountered,
-    // insert it and the following character (if any -- let parse
-    // deal with any syntax errors) in the pattern.  This allows
-    // escaped spaces.
-    if (ignoreSpaces) {
-		pat = new UnicodeString();
-        for (int32_t i=0; i<pattern.length(); ++i) {
-            UChar c = pattern.charAt(i);
-            if (Unicode::isSpaceChar(c)) {
-                continue;
-            }
-            if (c == '\\' && (i+1) < pattern.length()) {
-                pat->append(c);
-                c = pattern.charAt(++i);
-                // Fall through and append the following char
-            }
-            pat->append(c);
-        }
+    // Skip over trailing whitespace
+    int32_t i = pos.getIndex();
+    int32_t n = pattern.length();
+    while (i<n && Unicode::isWhitespace(pattern.charAt(i))) {
+        ++i;
     }
 
-    parse(pairs, *pat, pos, NULL, status);
-
-    // Skip over trailing whitespace -- clean up later
-    while (pos.getIndex() < pat->length() &&
-           Unicode::isWhitespace(pat->charAt(pos.getIndex()))) {
-        pos.setIndex(pos.getIndex() + 1);
-    }
-
-    if (pos.getIndex() != pat->length()) {
+    if (i != n) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-	if (pat != &pattern) {
-		delete pat;
-	}
 }
 
 /**
@@ -277,6 +248,34 @@ bool_t UnicodeSet::contains(UChar first, UChar last) const {
  */
 bool_t UnicodeSet::contains(UChar c) const {
     return contains(c, c);
+}
+
+/**
+ * Returns <tt>true</tt> if this set contains any character whose low byte
+ * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
+ * indexing.
+ */
+bool_t UnicodeSet::containsIndexValue(uint8_t v) const {
+    /* The index value v, in the range [0,255], is contained in this set if
+     * it is contained in any pair of this set.  Pairs either have the high
+     * bytes equal, or unequal.  If the high bytes are equal, then we have
+     * aaxx..aayy, where aa is the high byte.  Then v is contained if xx <=
+     * v <= yy.  If the high bytes are unequal we have aaxx..bbyy, bb>aa.
+     * Then v is contained if xx <= v || v <= yy.  (This is identical to the
+     * time zone month containment logic.)
+     */
+    for (int32_t i=0; i<pairs.length(); i+=2) {
+        UChar low = pairs.charAt(i);
+        UChar high = pairs.charAt(i+1);
+        if ((low & 0xFF00) == (high & 0xFF00)) {
+            if (uint8_t(low) <= v && v <= uint8_t(high)) {
+                return TRUE;
+            }
+        } else if (uint8_t(low) <= v || v <= uint8_t(high)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 /**
