@@ -829,7 +829,9 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
             int32_t lengthBefore = idBlock.length();
             if (mode == 1) {
                 mode = 2;
-                idSplitPoint = lengthBefore;
+                // In the forward direction parseID adds elements at the end.
+                // In the reverse direction parseID adds elements at the start.
+                idSplitPoint = (direction == UTRANS_REVERSE) ? 0 : lengthBefore;
             }
             int32_t p = pos;
             UBool sawDelim;
@@ -840,6 +842,10 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
                 delete cpdFilter;
                 syntaxError(U_ILLEGAL_ARGUMENT_ERROR, rules, pos);
             } else {
+                if (direction == UTRANS_REVERSE && idSplitPoint >= 0) {
+                    // In the reverse direction parseID adds elements at the start.
+                    idSplitPoint += idBlock.length() - lengthBefore;
+                }
                 if (cpdFilter != NULL) {
                     if (compoundFilter != NULL) {
                         syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rules, pos);

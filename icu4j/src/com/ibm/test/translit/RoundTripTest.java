@@ -25,10 +25,6 @@ public class RoundTripTest extends TestFmwk {
     }
     */
     
-    public void TestToRules() throws IOException, ParseException {
-        new Test2Rules().test(this);
-    }
-
     public void TestHiragana() throws IOException, ParseException {
         new Test("Latin-Hiragana")
           .test("[a-zA-Z]", "[[:hiragana:]\u3040-\u3094]", "[\u309D\u309E]", this, new Legal());
@@ -1168,69 +1164,4 @@ public class RoundTripTest extends TestFmwk {
 //          return super.isSource(c);
 //      }
 //  }
-    static class Test2Rules {
-        TestLog log;
-        
-        void checkDiff(String label, Transliterator t2, String source, String target) {
-            String st = t2.transliterate(source);
-            if (!target.equals(st)) {
-                log.errln(label
-                    + ": " + TestUtility.hex(source) 
-                    + " => " + TestUtility.hex(st)
-                    + ", instead of " + TestUtility.hex(target));
-            }
-        }
-        
-        void checkRules(String label, Transliterator t2, String testRulesForward) {
-            String rules2 = t2.toRules(true);
-            //rules2 = TestUtility.replaceAll(rules2, new UnicodeSet("[' '\n\r]"), "");
-            rules2 = TestUtility.replace(rules2, " ", "");
-            rules2 = TestUtility.replace(rules2, "\n", "");
-            rules2 = TestUtility.replace(rules2, "\r", "");
-            testRulesForward = TestUtility.replace(testRulesForward, " ", "");
-            
-            if (!rules2.equals(testRulesForward)) {
-                log.errln(label);
-                System.out.println();
-                System.out.println("GENERATED RULES:\t" + rules2);
-                System.out.println("SHOULD BE:\t" + testRulesForward);
-            }
-        }
-            
-        
-        public void test(TestLog log) {
-            this.log = log;
-            
-            String testRules = 
-                "::[[:Latin:][:Mark:]];"
-                + "::NFKD (NFC);"
-                + "a <> \\u03B1;" // alpha
-                + "::NFKC (NFD);"
-                + "::([[:Greek:][:Mark:]]);"
-                ;
-            String testRulesForward = 
-                "::[[:Latin:][:Mark:]];"
-                + "::NFKD();"
-                + "a > \\u03B1;"
-                + "::NFKC();"
-                ;
-            String testRulesBackward = 
-                "::[[:Greek:][:Mark:]];"
-                + "::NFD();"
-                + "\\u03B1 > a;"
-                + "::NFC();"
-                ;
-            String source = "\u00E1"; // a-acute
-            String target = "\u03AC"; // alpha-acute
-            
-            Transliterator t2 = Transliterator.createFromRules("temp1", testRules, Transliterator.FORWARD);
-            Transliterator t3 = Transliterator.createFromRules("temp1", testRules, Transliterator.REVERSE);
-            
-            checkDiff("Failed source-target", t2, source, target);
-            checkDiff("Failed target-source", t3, target, source);
-            
-            checkRules("Failed toRules FORWARD", t2, testRulesForward);
-            checkRules("Failed toRules BACKWARD", t3, testRulesBackward);
-        }
-    }
 }

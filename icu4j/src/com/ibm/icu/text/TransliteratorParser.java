@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2001/11/14 19:16:41 $
-* $Revision: 1.11 $
+* $Date: 2001/11/17 06:43:17 $
+* $Revision: 1.12 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -866,7 +866,9 @@ class TransliteratorParser {
                         int lengthBefore = idBlockResult.length();
                         if (mode == 1) {
                             mode = 2;
-                            idSplitPoint = lengthBefore;
+                            // In the forward direction parseID adds elements at the end.
+                            // In the reverse direction parseID adds elements at the start.
+                            idSplitPoint = (direction == Transliterator.REVERSE) ? 0 : lengthBefore;
                         }
                         int[] p = new int[] { pos };
                         boolean[] sawDelim = new boolean[1];
@@ -880,6 +882,10 @@ class TransliteratorParser {
                             }
                             throw new IllegalArgumentException("Invalid ::ID " +
                                                                rule.substring(pos, i1));
+                        }
+                        if (direction == Transliterator.REVERSE && idSplitPoint >= 0) {
+                            // In the reverse direction parseID adds elements at the start.
+                            idSplitPoint += idBlockResult.length() - lengthBefore;
                         }
                         if (cpdFilter[0] != null) {
                             if (compoundFilter != null) {

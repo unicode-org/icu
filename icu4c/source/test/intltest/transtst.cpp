@@ -139,6 +139,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(57,TestVariableRange);
         TESTCASE(58,TestInvalidPostContext);
         TESTCASE(59,TestIDForms);
+        TESTCASE(60,TestToRulesMark);
         default: name = ""; break;
     }
 }
@@ -2753,6 +2754,84 @@ void TransliteratorTest::TestIDForms() {
         delete t;
         delete u;
     }
+}
+
+static const UChar SPACE[]   = {32,0};
+static const UChar NEWLINE[] = {10,0};
+static const UChar RETURN[]  = {13,0};
+static const UChar EMPTY[]   = {0};
+
+void TransliteratorTest::checkRules(const UnicodeString& label, Transliterator& t2,
+                                    const UnicodeString& testRulesForward) {
+    UnicodeString rules2; t2.toRules(rules2, TRUE);
+    //rules2 = TestUtility.replaceAll(rules2, new UnicodeSet("[' '\n\r]"), "");
+    rules2.findAndReplace(SPACE, EMPTY);
+    rules2.findAndReplace(NEWLINE, EMPTY);
+    rules2.findAndReplace(RETURN, EMPTY);
+
+    UnicodeString testRules(testRulesForward); testRules.findAndReplace(SPACE, EMPTY);
+    
+    if (rules2 != testRules) {
+        errln(label);
+        logln((UnicodeString)"GENERATED RULES: " + rules2);
+        logln((UnicodeString)"SHOULD BE:       " + testRulesForward);
+    }
+}
+
+/**
+ * Mark's toRules test.
+ */
+void TransliteratorTest::TestToRulesMark() {
+    const char* testRules = 
+        "::[[:Latin:][:Mark:]];"
+        "::NFKD (NFC);"
+        "::Lower (Lower);"
+        "a <> \\u03B1;" // alpha
+        "::NFKC (NFD);"
+        "::Upper (Lower);"
+        "::Lower ();"
+        "::([[:Greek:][:Mark:]]);"
+        ;
+    const char* testRulesForward = 
+        "::[[:Latin:][:Mark:]];"
+        "::NFKD(NFC);"
+        "::Lower(Lower);"
+        "a > \\u03B1;"
+        "::NFKC(NFD);"
+        "::Upper (Lower);"
+        "::Lower ();"
+        ;
+    const char* testRulesBackward = 
+        "::[[:Greek:][:Mark:]];"
+        "::Lower (Upper);"
+        "::NFD(NFKC);"
+        "\\u03B1 > a;"
+        "::Lower(Lower);"
+        "::NFC(NFKD);"
+        ;
+    UnicodeString source = CharsToUnicodeString("\\u00E1"); // a-acute
+    UnicodeString target = CharsToUnicodeString("\\u03AC"); // alpha-acute
+    
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t2 = Transliterator::createFromRules("source-target", testRules, UTRANS_FORWARD, pe, ec);
+    Transliterator *t3 = Transliterator::createFromRules("target-source", testRules, UTRANS_REVERSE, pe, ec);
+
+    if (U_FAILURE(ec)) {
+        delete t2;
+        delete t3;
+        errln((UnicodeString)"FAIL: createFromRules => " + u_errorName(ec));
+        return;
+    }
+    
+    expect(*t2, source, target);
+    expect(*t3, target, source);
+    
+    checkRules("Failed toRules FORWARD", *t2, testRulesForward);
+    checkRules("Failed toRules BACKWARD", *t3, testRulesBackward);
+
+    delete t2;
+    delete t3;
 }
 
 //======================================================================

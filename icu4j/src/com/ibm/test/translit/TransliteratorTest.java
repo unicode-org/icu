@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/16 21:50:40 $
- * $Revision: 1.72 $
+ * $Date: 2001/11/17 06:44:50 $
+ * $Revision: 1.73 $
  *
  *****************************************************************************************
  */
@@ -2053,6 +2053,66 @@ public class TransliteratorTest extends TestFmwk {
                 }
             }
         }
+    }
+
+    void checkRules(String label, Transliterator t2, String testRulesForward) {
+        String rules2 = t2.toRules(true);
+        //rules2 = TestUtility.replaceAll(rules2, new UnicodeSet("[' '\n\r]"), "");
+        rules2 = TestUtility.replace(rules2, " ", "");
+        rules2 = TestUtility.replace(rules2, "\n", "");
+        rules2 = TestUtility.replace(rules2, "\r", "");
+        testRulesForward = TestUtility.replace(testRulesForward, " ", "");
+        
+        if (!rules2.equals(testRulesForward)) {
+            errln(label);
+            logln("GENERATED RULES: " + rules2);
+            logln("SHOULD BE:       " + testRulesForward);
+        }
+    }
+            
+    /**
+     * Mark's toRules test.
+     */
+    public void TestToRulesMark() {
+            
+        String testRules = 
+            "::[[:Latin:][:Mark:]];"
+            + "::NFKD (NFC);"
+            + "::Lower (Lower);"
+            + "a <> \\u03B1;" // alpha
+            + "::NFKC (NFD);"
+            + "::Upper (Lower);"
+            + "::Lower ();"
+            + "::([[:Greek:][:Mark:]]);"
+            ;
+        String testRulesForward = 
+            "::[[:Latin:][:Mark:]];"
+            + "::NFKD(NFC);"
+            + "::Lower(Lower);"
+            + "a > \\u03B1;"
+            + "::NFKC(NFD);"
+            + "::Upper (Lower);"
+            + "::Lower ();"
+            ;
+        String testRulesBackward = 
+            "::[[:Greek:][:Mark:]];"
+            + "::Lower (Upper);"
+            + "::NFD(NFKC);"
+            + "\\u03B1 > a;"
+            + "::Lower(Lower);"
+            + "::NFC(NFKD);"
+            ;
+        String source = "\u00E1"; // a-acute
+        String target = "\u03AC"; // alpha-acute
+        
+        Transliterator t2 = Transliterator.createFromRules("source-target", testRules, Transliterator.FORWARD);
+        Transliterator t3 = Transliterator.createFromRules("target-source", testRules, Transliterator.REVERSE);
+        
+        expect(t2, source, target);
+        expect(t3, target, source);
+        
+        checkRules("Failed toRules FORWARD", t2, testRulesForward);
+        checkRules("Failed toRules BACKWARD", t3, testRulesBackward);
     }
 
     //======================================================================

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/10/26 22:46:35 $ 
- * $Revision: 1.18 $
+ * $Date: 2001/11/17 06:43:17 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.18 $ $Date: 2001/10/26 22:46:35 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.19 $ $Date: 2001/11/17 06:43:17 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -256,6 +256,16 @@ public class CompoundTransliterator extends Transliterator {
         return trans[index];
     }
 
+    /**
+     * Append c to buf, unless buf is empty or buf already ends in c.
+     */
+    private static void _smartAppend(StringBuffer buf, char c) {
+        if (buf.length() != 0 &&
+            buf.charAt(buf.length() - 1) != c) {
+            buf.append(c);
+        }
+    }
+
     public String toRules(boolean escapeUnprintable) {
         // We do NOT call toRules() on our component transliterators, in
         // general.  If we have several rule-based transliterators, this
@@ -264,6 +274,11 @@ public class CompoundTransliterator extends Transliterator {
         // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
         // we do call toRules() recursively.
         StringBuffer rulesSource = new StringBuffer();
+        if (compoundRBTIndex >= 0 && getFilter() != null) {
+            // If we are a compound RBT and if we have a global
+            // filter, then emit it at the top.
+            rulesSource.append("::").append(getFilter().toPattern(escapeUnprintable)).append(ID_DELIM);
+        }
         for (int i=0; i<trans.length; ++i) {
             String rule;
             if (i == compoundRBTIndex) {
@@ -271,15 +286,9 @@ public class CompoundTransliterator extends Transliterator {
             } else {
                 rule = trans[i].baseToRules(escapeUnprintable);
             }
-            if (rulesSource.length() != 0 &&
-                rulesSource.charAt(rulesSource.length() - 1) != '\n') {
-                rulesSource.append('\n');
-            }
+            _smartAppend(rulesSource, '\n');
             rulesSource.append(rule);
-            if (rulesSource.length() != 0 &&
-                rulesSource.charAt(rulesSource.length() - 1) != ID_DELIM) {
-                rulesSource.append(ID_DELIM);
-            }
+            _smartAppend(rulesSource, ID_DELIM);
         }
         return rulesSource.toString();
     }
