@@ -128,6 +128,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     Context *context;
     static le_int32 windowCount = 0;
     static GDIFontMap *fontMap = NULL;
+    static GDISurface *surface = NULL;
     static GDIGUISupport *guiSupport = new GDIGUISupport();
 
     switch (message) {
@@ -136,36 +137,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         RFIErrorCode fontStatus = RFI_NO_ERROR;
 
         hdc = GetDC(hwnd);
+        surface = new GDISurface(hdc);
 
-        fontMap = new GDIFontMap(hdc, "FontMap.GDI", 24, guiSupport, fontStatus);
+        fontMap = new GDIFontMap(surface, "FontMap.GDI", 24, guiSupport, fontStatus);
 
         if (LE_FAILURE(fontStatus)) {
             ReleaseDC(hwnd, hdc);
             return 0;
         }
 
-    context = new Context();
+        context = new Context();
 
-    context->width  = 600;
-    context->height = 400;
+        context->width  = 600;
+        context->height = 400;
 
-        context->paragraph = Paragraph::paragraphFactory("Sample.txt", fontMap, guiSupport, hdc);
+        context->paragraph = Paragraph::paragraphFactory("Sample.txt", fontMap, guiSupport);
         SetWindowLong(hwnd, 0, (LONG) context);
 
         windowCount += 1;
         ReleaseDC(hwnd, hdc);
 
-    PrettyTitle(hwnd, "Sample.txt");
+        PrettyTitle(hwnd, "Sample.txt");
         return 0;
     }
 
     case WM_SIZE:
     {
         context = (Context *) GetWindowLong(hwnd, 0);
-    context->width  = LOWORD(lParam);
-    context->height = HIWORD(lParam);
+        context->width  = LOWORD(lParam);
+        context->height = HIWORD(lParam);
 
-    InitParagraph(hwnd, context);
+        InitParagraph(hwnd, context);
         return 0;
     }
 
@@ -246,12 +248,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         context = (Context *) GetWindowLong(hwnd, 0);
 
         if (context->paragraph != NULL) {
+            surface->setHDC(hdc);
+
             // NOTE: si.nPos + si.nPage may include a partial line at the bottom
             // of the window. We need this because scrolling assumes that the
             // partial line has been painted.
             lastLine  = min (si.nPos + (le_int32) si.nPage, context->paragraph->getLineCount() - 1);
 
-            context->paragraph->draw(hdc, firstLine, lastLine);
+            context->paragraph->draw(surface, firstLine, lastLine);
         }
 
         EndPaint(hwnd, &ps);
@@ -290,10 +294,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             szFileName[0] = '\0';
 
-            hdc = GetDC(hwnd);
-
             if (GetOpenFileNameA(&ofn)) {
-                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, fontMap, guiSupport, hdc);
+                hdc = GetDC(hwnd);
+                surface->setHDC(hdc);
+
+                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, fontMap, guiSupport);
 
                 if (newParagraph != NULL) {
                     context = (Context *) GetWindowLong(hwnd, 0);
@@ -310,7 +315,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
                 }
             }
 
-            ReleaseDC(hwnd, hdc);
+            //ReleaseDC(hwnd, hdc);
 
             return 0;
         }
@@ -343,6 +348,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (--windowCount <= 0) {
             delete fontMap;
+            delete surface;
 
             PostQuitMessage(0);
         }

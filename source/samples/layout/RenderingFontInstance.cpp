@@ -20,7 +20,16 @@
 
 #include <string.h>
 
-RenderingFontInstance::RenderingFontInstance(void *surface, le_int16 pointSize)
+#define TABLE_CACHE_INIT 5
+#define TABLE_CACHE_GROW 5
+
+struct TableCacheEntry
+{
+    LETag tag;
+    void *table;
+};
+
+RenderingFontInstance::RenderingFontInstance(RenderingSurface *surface, le_int16 pointSize)
   : fSurface(surface), fPointSize(pointSize), fUnitsPerEM(0), fAscent(0), fDescent(), fLeading(0),
     fDeviceScaleX(1), fDeviceScaleY(1), fTableCache(NULL), fTableCacheCurr(0), fTableCacheSize(0), fMapper(NULL)
 {

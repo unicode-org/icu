@@ -88,7 +88,7 @@ void openOK(GtkObject *object, gpointer data)
 
   gtk_widget_destroy(GTK_WIDGET(fileselection));
 
-  newPara = Paragraph::paragraphFactory(fileName, fontMap, guiSupport, NULL);
+  newPara = Paragraph::paragraphFactory(fileName, fontMap, guiSupport);
 
   if (newPara != NULL) {
     gchar *title = prettyTitle(fileName);
@@ -216,8 +216,9 @@ gint eventExpose(GtkWidget *widget, GdkEvent *event, Context *context)
   if (context->paragraph != NULL) {
     gint maxLines = context->paragraph->getLineCount() - 1;
     gint firstLine = 0, lastLine = context->height / context->paragraph->getLineHeight();
+    GnomeSurface surface(widget);
 
-    context->paragraph->draw(widget, firstLine, (maxLines < lastLine)? maxLines : lastLine);
+    context->paragraph->draw(&surface, firstLine, (maxLines < lastLine)? maxLines : lastLine);
   }
 
   return TRUE;
@@ -232,7 +233,7 @@ GtkWidget *newSample(const gchar *fileName)
 
   context->width  = 600;
   context->height = 400;
-  context->paragraph = Paragraph::paragraphFactory(fileName, fontMap, guiSupport, NULL);
+  context->paragraph = Paragraph::paragraphFactory(fileName, fontMap, guiSupport);
 
   if (context->paragraph != NULL) {
     GtkStyle *style;
@@ -256,7 +257,7 @@ GtkWidget *newSample(const gchar *fileName)
     style = gtk_style_copy(gtk_widget_get_style(area));
 
     for (int i = 0; i < 5; i += 1) {
-      style->fg[i] =style->white;
+      style->fg[i] = style->white;
     }
     
     gtk_widget_set_style(area, style);

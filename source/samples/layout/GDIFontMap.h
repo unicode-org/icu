@@ -17,13 +17,14 @@
 #include "FontMap.h"
 #include "GUISupport.h"
 #include "RenderingFontInstance.h"
+#include "GDIFontInstance.h"
 
 #define BUFFER_SIZE 128
 
 class GDIFontMap : public FontMap
 {
 public:
-    GDIFontMap(HDC hdc, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status);
+    GDIFontMap(GDISurface *surface, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status);
 
     virtual ~GDIFontMap();
 
@@ -31,7 +32,7 @@ protected:
     virtual const RenderingFontInstance *openFont(const char *fontName, le_int16 pointSize, RFIErrorCode &status);
 
 private:
-    HDC fHdc;
+    GDISurface *fSurface;
 };
 
 #endif
