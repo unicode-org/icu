@@ -172,6 +172,7 @@ public class RbnfTest extends TestFmwk {
             errln("sdrf %%foo didn't fail");
         }
         catch (Exception e) {
+            logln("Got the expected exception");
         }
 
         try {
@@ -179,6 +180,7 @@ public class RbnfTest extends TestFmwk {
             errln("sdrf %bogus didn't fail");
         }
         catch (Exception e) {
+            logln("Got the expected exception");
         }
 
         try {
@@ -188,6 +190,7 @@ public class RbnfTest extends TestFmwk {
             errln("format double %%foo didn't fail");
         }
         catch (Exception e) {
+            logln("Got the expected exception");
         }
 
         try {
@@ -197,6 +200,7 @@ public class RbnfTest extends TestFmwk {
             errln("format double %%foo didn't fail");
         }
         catch (Exception e) {
+            logln("Got the expected exception");
         }
 
         RuleBasedNumberFormat fmt4 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
