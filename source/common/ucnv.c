@@ -670,7 +670,6 @@ ucnv_getPlatform (const UConverter * converter,
     return (UConverterPlatform)converter->sharedData->staticData->platform;
 }
 
-/** ### TODO @draft ICU 2.6 */
 U_CAPI void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
                    USet *set,
