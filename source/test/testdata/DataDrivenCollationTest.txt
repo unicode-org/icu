@@ -1,18 +1,35 @@
 ﻿DataDrivenCollationTest {
     Info {
         Headers { "sequence" }
-        Description { "This is locale based collation test for Danish" }
+        Description { "These are the data driven tests" }
         LongDescription {     "The following entries are separate tests containing test data for various locales."
                       "Each entry has the following fields: "
-                      "TestLocale - the locale that we should instantiate collator with."
-                      "ArgumentStrength - strength of collator"
-                      "TestData - set of test cases, which are sequences of strings that will be parsed"
+                      "Info/Description - short descrioption of the test"
+                      "Settings - settings for the test."
+                      "Settings/TestLocale - locale for the collator OR"
+                      "Settings/Rules - rules for the collator (can't have both)"
+                      "Settings/Arguments - arguments to be passed to the collator before testing. Use rule syntax."
+                      "Cases - set of test cases, which are sequences of strings that will be parsed"
                       "Sequences must not change the sign of relation, i.e. we can only have < and = or"
                       "> and = in single sequence. Cannot mix < and > in the same sequence. Whitespace is"
                       "is ignored unless quoted."
                      }
     }
     TestData {
+        TestJavaStyleRule {
+            Info {
+                Description { "java.text allows rules to start as '<<<x<<<y...' "
+                              "we emulate this by assuming a &[first tertiary ignorable] "
+                              "in this case."
+                }
+            }
+            Settings {
+                {
+                    Rules { "=equal<<<z<<x<<<w<y &[first tertiary ignorable]=a &[first primary ignorable]=b" }
+                }
+            }
+            Cases { "a = equal < z < x < w < b < y" }
+        }
         TestShiftedIgnorable {
             Info {
                 Description { "New UCA states that primary ignorables should be completely "
