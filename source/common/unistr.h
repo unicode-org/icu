@@ -1684,6 +1684,23 @@ UnicodeString::compareBetween(UTextOffset start,
 { return doCompare(start, limit - start, 
            srcText, srcStart, srcLimit - srcStart); }
 
+inline int8_t
+UnicodeString::doCompare(UTextOffset start,
+              int32_t length,
+              const UnicodeString& srcText,
+              UTextOffset srcStart,
+              int32_t srcLength) const
+{
+  const UChar *srcChars;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    srcChars=srcText.getArrayStart();
+  } else {
+    srcChars=0;
+  }
+  return doCompare(start, length, srcChars, srcStart, srcLength);
+}
+
 inline UTextOffset 
 UnicodeString::indexOf(const UnicodeString& text) const
 { return indexOf(text, 0, text.fLength, 0, fLength); }

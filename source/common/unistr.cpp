@@ -68,12 +68,6 @@ print(const UChar *s,
 
 // Local function definitions for now
 
-// move u_arrayCompare to utypes.h ??
-inline int8_t
-u_arrayCompare(const UChar *src, int32_t srcStart,
-         const UChar *dst, int32_t dstStart, int32_t count)
-{return icu_memcmp(src+srcStart, dst+dstStart, (size_t)(count*sizeof(*src)));}
-
 // need to copy areas that may overlap
 inline void
 us_arrayCopy(const UChar *src, int32_t srcStart,
@@ -302,62 +296,76 @@ UnicodeString::operator[] (UTextOffset pos)
 int8_t
 UnicodeString::doCompare( UTextOffset start,
               int32_t length,
-              const UnicodeString& src,
-              UTextOffset srcStart,
-              int32_t srcLength) const
-{
-  // pin indices to legal values
-  pinIndices(start, length);
-
-  // get the correct pointer
-  const UChar *chars = getArrayStart();
-
-  // compare the characters
-  return (src.compare(srcStart, srcLength, chars, start, length) * -1);
-}
-
-int8_t
-UnicodeString::doCompare( UTextOffset start,
-              int32_t length,
               const UChar *srcChars,
               UTextOffset srcStart,
               int32_t srcLength) const
 {
+  // compare illegal string values
+  if(isBogus()) {
+    if(srcChars==0) {
+      return 0;
+    } else {
+      return -1;
+    }
+  } else if(srcChars==0) {
+    return 1;
+  }
+
   // pin indices to legal values
   pinIndices(start, length);
 
   // get the correct pointer
   const UChar *chars = getArrayStart();
 
-  // we're comparing different lengths
+  UTextOffset minLength;
+  int8_t lengthResult;
+
+  // are we comparing different lengths?
   if(length != srcLength) {
-
-    // compare the minimum # of characters
-    int32_t minLength     = (length < srcLength ? length : srcLength);
-    const UChar *minLimit = chars + minLength;
-    const UChar *limit    = chars + length;
-    int8_t result;
-
-    // adjust for starting offsets
-    chars += start;
-    srcChars += srcStart;
-
-    while(chars < minLimit) {
-      result = (*chars - *srcChars);
-
-      if(result != 0)
-    return result;
-
-      ++chars;
-      ++srcChars;
+    if(length < srcLength) {
+      minLength = length;
+      lengthResult = -1;
+    } else {
+      minLength = srcLength;
+      lengthResult = 1;
     }
-
-    // if we got here, the leading portions are identical
-    return (chars < limit ? 1 : -1);
+  } else {
+    minLength = length;
+    lengthResult = 0;
   }
-  // compare two identical lengths, use u_arrayCompare
-  else
-    return u_arrayCompare(chars, start, srcChars, srcStart, length);
+
+  /*
+   * note that icu_memcmp() returns an int but we return an int8_t;
+   * we need to take care not to truncate the result -
+   * one way to do this is to right-shift the value to
+   * move the sign bit into the lower 8 bits and making sure that this
+   * does not become 0 itself
+   */
+
+  if(minLength > 0) {
+    int32_t result;
+
+    if(U_IS_BIG_ENDIAN) {
+      // big-endian: byte comparison works
+      result = icu_memcmp(chars + start, srcChars + srcStart, minLength * sizeof(UChar));
+      if(result != 0) {
+        return (int8_t)(result >> 15 | 1);
+      }
+    } else {
+      // little-endian: compare UChar units
+      chars += start;
+      srcChars += srcStart;
+      do {
+        result = ((int32_t)*chars - (int32_t)*srcChars);
+        if(result != 0) {
+          return (int8_t)(result >> 15 | 1);
+        }
+        ++chars;
+        ++srcChars;
+      } while(--minLength > 0);
+    }
+  }
+  return lengthResult;
 }
 
 void
