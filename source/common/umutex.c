@@ -288,7 +288,7 @@ static void initGlobalMutex() {
     }
     #elif defined( POSIX )
         /*  No Action Required.  Global mutex set up with C static initialization. */
-        U_ASSERT(gGlobalMutex = &gGlobalPosixMutex);
+        U_ASSERT(gGlobalMutex == &gGlobalPosixMutex);
     #endif /* cascade of platforms */
 #else  /* ICU_USE_THREADS */
         gGlobalMutex = &gGlobalMutex;  /* With no threads, we must still set the mutex to
