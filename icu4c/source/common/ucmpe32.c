@@ -28,8 +28,12 @@ CompactEIntArray*
 ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, int32_t leadSurrogateValue, UErrorCode *status)
 {
   int32_t *bla;
-  CompactEIntArray* this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
-  if (U_FAILURE(*status) || this_obj == NULL) { 
+  CompactEIntArray* this_obj = NULL;
+  if (status == NULL || U_FAILURE(*status)) { 
+    return NULL;
+  }
+  this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
+  if (this_obj == NULL) { 
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
   }
@@ -125,11 +129,7 @@ ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32
 
 }
 
-/*
- * get or create a Norm unit;
- * get or create the intermediate trie entries for it as well
- */
-/********* THIS IS THE ADD FUNCTION ********************/
+
 int32_t 
 ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
   int16_t stage1 = (this_obj->stage1[(code >> _UCMPE32_TRIE_SHIFT)]); 
@@ -140,7 +140,7 @@ ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
 
 }
 
-/*#include <stdio.h>*/
+/********* THIS IS THE ADD FUNCTION ********************/
 void  
 ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 {
@@ -158,21 +158,9 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 
         i=code>>_UCMPE32_TRIE_SHIFT;
         j=this_obj->stage1[i];
-        /*
-    if(code > 0xFFFF) {
-      fprintf(stdout, 
-              "Cp %05X (%04X %04X): Stage1 offset %04X, value %04X, ", 
-              code, UTF16_LEAD(code), UTF16_TRAIL(code), i, j);
-    }
-        */
         if(j<=this_obj->stage2DefaultTop) {
             /* allocate a stage 2 block */
             int32_t *p=NULL, bla=0;           
-            /*
-    if(code > 0xFFFF) {
-      fprintf(stdout, "S2 bef: %04X ", this_obj->stage2Top);
-    }
-            */
             if(this_obj->stage2Size < (this_obj->stage2Top + _UCMPE32_STAGE_2_BLOCK_COUNT)) {
               this_obj->stage2 = (int32_t *)uprv_realloc(this_obj->stage2, 2*this_obj->stage2Size);
               if(this_obj->stage2 == NULL) {
@@ -187,17 +175,8 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
             this_obj->stage2Top += _UCMPE32_STAGE_2_BLOCK_COUNT;
             
             this_obj->stage1[i]=j=(uint16_t)(p-this_obj->stage2);
-            /*
-            if(code > 0xFFFF) {
- fprintf(stdout, "aft: %04X\n", this_obj->stage2Top);
-   }
-            */
-                        } 
-        /*
-else if(code>0xFFFF) {
-                          fprintf(stdout, "\n");
-                        }
-        */
+
+	} 
         stage2Block=j;
     }
 
@@ -370,7 +349,11 @@ ucmpe32_compact(CompactEIntArray* this_obj) {
 CompactEIntArray* 
 ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
 {
-  CompactEIntArray* this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
+  CompactEIntArray* this_obj = NULL;
+  if (status == NULL || U_FAILURE(*status)) { 
+    return NULL;
+  }
+  this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
   if(orig == NULL || orig->fBogus == TRUE || this_obj == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
@@ -417,11 +400,15 @@ ucmpe32_openFromData(      const uint8_t **source,
                                            UErrorCode *status)
 {
   uint32_t i;
-/*  const uint8_t *oldSource = *source;*/
+  CompactEIntArray* this_obj = NULL;
 
-  CompactEIntArray* this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
+  if (status == NULL || U_FAILURE(*status)) { 
+    return NULL;
+  }
 
-  if(U_FAILURE(*status) || *source == NULL || this_obj == NULL) {
+  this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
+
+  if(*source == NULL || this_obj == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return NULL;
   }
