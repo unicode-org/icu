@@ -435,6 +435,13 @@
 "^"                               "<0></0>"
 "^"                           2   ""
 
+"\Z"				  "<0></0>"
+"\Z"                          2   ""
+"\Z"                          2   "\u000a<0></0>"
+"\Z"                              "<0></0>\u000d\u000a"
+"\Z"                          2   "\u000d\u000a<0></0>"
+
+
 # No matching ^ at interior new-lines if not in multi-line mode.
 "^"                               "<0></0>AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
 "^"                           2   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
