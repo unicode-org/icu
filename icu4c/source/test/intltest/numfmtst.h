@@ -100,6 +100,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
      */
     void TestRegCurrency(void);
 
+    void TestCurrencyNames(void);
+
     void TestSymbolsWithBadLocale(void);
 
     void TestAdoptDecimalFormatSymbols(void);
