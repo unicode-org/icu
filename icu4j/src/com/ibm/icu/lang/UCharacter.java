@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/06/12 18:26:59 $ 
-* $Revision: 1.80 $
+* $Date: 2003/09/29 15:22:15 $ 
+* $Revision: 1.81 $
 *
 *******************************************************************************
 */
@@ -2953,6 +2953,27 @@ public final class UCharacter
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
+    }
+    
+    /**
+     * Gets the names for each of the characters in a string
+     * @param s string to format
+     * @param separator string to go between names
+     * @return string of names
+     * @internal
+     */
+    public static String getName(String s, String separator) {
+        if (s.length() == 1) { // handle common case
+            return getName(s.charAt(0));
+        }
+        int cp;
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s,i);
+            if (i != 0) sb.append(separator);
+            sb.append(UCharacter.getName(cp));
+        }
+        return sb.toString();
     }
       
     /**
