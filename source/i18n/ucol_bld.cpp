@@ -59,7 +59,7 @@ UBool uhash_compareStrReps(const void *key1, const void *key2) {
   if (p1 == p2) {
       return TRUE;
   }
-  if (p1 == NULL || p2 == NULL) {
+  if (p1 == 0 || p2 == 0) {
       return FALSE;
   }
   if(s1L != s2L) {
