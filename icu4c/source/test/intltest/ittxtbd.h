@@ -22,7 +22,7 @@ class Enumeration;
 class IntlTestTextBoundary: public IntlTest {
 public:
     IntlTestTextBoundary();
-    ~IntlTestTextBoundary();
+    virtual ~IntlTestTextBoundary();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     /**

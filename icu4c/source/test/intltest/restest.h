@@ -12,7 +12,7 @@
 class ResourceBundleTest: public IntlTest {
 public:
     ResourceBundleTest();
-    ~ResourceBundleTest();
+    virtual ~ResourceBundleTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 

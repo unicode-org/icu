@@ -13,7 +13,7 @@
 class LocaleTest: public IntlTest {
 public:
     LocaleTest();
-    ~LocaleTest();
+    virtual ~LocaleTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 

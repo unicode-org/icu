@@ -19,7 +19,7 @@
 class MutexTest: public IntlTest {
 public:
     MutexTest();
-    ~MutexTest();
+    virtual ~MutexTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
