@@ -750,7 +750,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
     struct UString    *tokenValue;
     struct UString     comment;
     enum   ETokenType  token;
-    char               subtag[1024];
+    char               subtag[1024], typeKeyword[1024];
     uint32_t           line;
 
     result = table_open(bundle, tag, NULL, status);
@@ -812,11 +812,33 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
           table_add(result, member, line, status);
         }
         else
-        {
-          token = getToken(&tokenValue, &comment, &line, status);
+        {        
+          token = peekToken(0, &tokenValue, &line, &comment, status);
+          /* this probably needs to be refactored or recursively use the parser */
+          /* first we assume that our collation table won't have the explicit type */
+          /* then, we cannot handle aliases */
           if(token == TOK_OPEN_BRACE) {
+            token = getToken(&tokenValue, &comment, &line, status);
             collationRes = table_open(bundle, subtag, NULL, status);
             table_add(result, addCollation(collationRes, startline, status), startline, status);
+          } else if(token == TOK_COLON) { /* right now, we'll just try to see if we have aliases */
+            /* we could have a table too */
+            token = peekToken(1, &tokenValue, &line, &comment, status);
+            u_UCharsToChars(tokenValue->fChars, typeKeyword, u_strlen(tokenValue->fChars) + 1);
+            if(uprv_strcmp(typeKeyword, "alias") == 0) {
+              member = parseResource(subtag, NULL, status);
+
+              if (U_FAILURE(*status))
+              {
+                  table_close(result, status);
+                  return NULL;
+              }
+
+              table_add(result, member, line, status);
+            } else {
+              *status = U_INVALID_FORMAT_ERROR;
+              return NULL;
+            }
           } else {
             *status = U_INVALID_FORMAT_ERROR;
             return NULL;
