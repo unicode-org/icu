@@ -21,23 +21,22 @@ import com.ibm.icu.impl.CharTrie;
 * <p>Internal class used for Rule Based Break Iterators</p>
 * <p>This class provides access to the compiled break rule data, as
 * it is stored in a .brk file.  
+* @internal
 * 
 */
-
-
-public class RBBIDataWrapper {
+class RBBIDataWrapper {
     //
     // These fields are the ready-to-use compiled rule data, as
     //   read from the file.
     //
-    public RBBIDataHeader fHeader;
-    public short          fFTable[];
-    public short          fRTable[];
-    public short          fSFTable[];
-    public short          fSRTable[];
-    public CharTrie       fTrie;
-    public String         fRuleSource;
-    public int            fStatusTable[];
+    RBBIDataHeader fHeader;
+    short          fFTable[];
+    short          fRTable[];
+    short          fSFTable[];
+    short          fSRTable[];
+    CharTrie       fTrie;
+    String         fRuleSource;
+    int            fStatusTable[];
     
     // Index offsets to the fields in a state table row.
     //    Corresponds to struct RBBIStateTableRow in the C version.
@@ -148,7 +147,7 @@ public class RBBIDataWrapper {
         RBBIDataWrapper This = new RBBIDataWrapper();
         
         // Seek past the ICU data header.
-        //   TODO:  verify that it looks good.
+        //   TODO:  verify that the header looks good.
         dis.skip(0x80);
         
         // Read in the RBBI data header...
@@ -295,7 +294,9 @@ public class RBBIDataWrapper {
     
     
     
-    /** Debug function to display the break iterator data.  */
+    /** Debug function to display the break iterator data.  
+     *  @internal
+     */
     void dump() {
         System.out.println("RBBI Data Wrapper dump ...");
         System.out.println();
@@ -314,7 +315,6 @@ public class RBBIDataWrapper {
     }
     
     /** Fixed width int-to-string conversion.   
-     *  TODO:  there must be an easy built-in way to do this  
      *  @internal
      * 
      */
@@ -328,7 +328,6 @@ public class RBBIDataWrapper {
     }
     
     /** Fixed width int-to-string conversion.   
-     *  TODO:  there must be an easy built-in way to do this  
      *  @internal
      * 
      */

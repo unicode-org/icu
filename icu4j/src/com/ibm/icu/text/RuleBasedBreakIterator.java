@@ -13,6 +13,7 @@ import java.io.IOException;
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
+ * @stable ICU 2.0
  */
 
 public class RuleBasedBreakIterator extends BreakIterator {
@@ -57,10 +58,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * produced by the ICU4C tool "genbrk".
      * @return A RuleBasedBreakIterator based on the supplied break rules.
      * @throws IOException
+     * @draft ICU 3.0
      */
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
-     // TODO:
-        return null;      
+        return RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);      
     }
     
     
@@ -114,24 +115,33 @@ public class RuleBasedBreakIterator extends BreakIterator {
         /** Tag value for "words" that do not fit into any of other categories. 
          *  Includes spaces and most punctuation. */
         public static final int WORD_NONE           = 0;
-        /** Upper bound for tags for uncategorized words. */
+        /** Upper bound for tags for uncategorized words. 
+         *  @draft ICU 3.0 */
         public static final int WORD_NONE_LIMIT     = 100;
-        /** Tag value for words that appear to be numbers, lower limit. */
+        /** Tag value for words that appear to be numbers, lower limit. 
+        *  @draft ICU 3.0 */
         public static final int WORD_NUMBER         = 100;
-        /** Tag value for words that appear to be numbers, upper limit. */
+        /** Tag value for words that appear to be numbers, upper limit.
+        *  @draft ICU 3.0 */
         public static final int WORD_NUMBER_LIMIT   = 200;
         /** Tag value for words that contain letters, excluding
-         *  hiragana, katakana or ideographic characters, lower limit. */
+         *  hiragana, katakana or ideographic characters, lower limit. 
+        *  @draft ICU 3.0 */
         public static final int WORD_LETTER         = 200;
-        /** Tag value for words containing letters, upper limit  */
+        /** Tag value for words containing letters, upper limit 
+        *  @draft ICU 3.0 */
         public static final int WORD_LETTER_LIMIT   = 300;
-        /** Tag value for words containing kana characters, lower limit */
+        /** Tag value for words containing kana characters, lower limit
+        *  @draft ICU 3.0 */
         public static final int WORD_KANA           = 300;
-        /** Tag value for words containing kana characters, upper limit */
+        /** Tag value for words containing kana characters, upper limit
+        *  @draft ICU 3.0 */
         public static final int WORD_KANA_LIMIT     = 400;
-        /** Tag value for words containing ideographic characters, lower limit */
+        /** Tag value for words containing ideographic characters, lower limit
+        *  @draft ICU 3.0 */
         public static final int WORD_IDEO           = 400;
-        /** Tag value for words containing ideographic characters, upper limit */
+        /** Tag value for words containing ideographic characters, upper limit
+        *  @draft ICU 3.0 */
         public static final int WORD_IDEO_LIMIT     = 500;
 
     //=======================================================================

@@ -13,6 +13,7 @@ import java.io.InputStream;
 
 /**
  * Rule Based Break Iterator implementation.
+ * @internal
  */
 public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     
@@ -133,6 +134,11 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     //=======================================================================
     // Constructors & Factories
     //=======================================================================
+    
+    /**
+     * Create a break iterator from a precompiled set of rules.
+     * @internal
+     */
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
         RuleBasedBreakIterator_New  This = new RuleBasedBreakIterator_New();
         This.fRData = RBBIDataWrapper.get(is);
@@ -506,28 +512,6 @@ public int current() {
 
 
 
-/**
- * Return the status tag from the break rule that determined the most recently
- * returned break position.  The values appear in the rule source
- * within brackets, {123}, for example.  For rules that do not specify a
- * status, a default value of 0 is returned.  If more than one rule applies,
- * the numerically largest of the possible status values is returned.
- * <p>
- * Of the standard types of ICU break iterators, only the word break
- * iterator provides status values.  The values are defined in
- * <code>enum UWordBreak</code>, and allow distinguishing between words
- * that contain alphabetic letters, "words" that appear to be numbers,
- * punctuation and spaces, words containing ideographic characters, and
- * more.  Call <code>getRuleStatus</code> after obtaining a boundary
- * position from <code>next()<code>, <code>previous()</code>, or 
- * any other break iterator functions that returns a boundary position.
- * <p>
- * @return the status from the break rule that determined the most recently
- * returned break position.
- *
- * @draft ICU 3.0
- */
-
 private void makeRuleStatusValid() {
     if (fLastStatusIndexValid == false) {
         //  No cached status is available.
@@ -552,6 +536,28 @@ private void makeRuleStatusValid() {
 }
 
 
+
+/**
+ * Return the status tag from the break rule that determined the most recently
+ * returned break position.  The values appear in the rule source
+ * within brackets, {123}, for example.  For rules that do not specify a
+ * status, a default value of 0 is returned.  If more than one rule applies,
+ * the numerically largest of the possible status values is returned.
+ * <p>
+ * Of the standard types of ICU break iterators, only the word break
+ * iterator provides status values.  The values are defined in
+ * <code>enum UWordBreak</code>, and allow distinguishing between words
+ * that contain alphabetic letters, "words" that appear to be numbers,
+ * punctuation and spaces, words containing ideographic characters, and
+ * more.  Call <code>getRuleStatus</code> after obtaining a boundary
+ * position from <code>next()<code>, <code>previous()</code>, or 
+ * any other break iterator functions that returns a boundary position.
+ * <p>
+ * @return the status from the break rule that determined the most recently
+ * returned break position.
+ *
+ * @draft ICU 3.0
+ */
 
 public int  getRuleStatus() {
     makeRuleStatusValid();
@@ -943,7 +949,7 @@ public int getRuleStatusVec(int[] fillInArray) {
                         if (stateTable[row + RBBIDataWrapper.ACCEPTING] != lookaheadStatus) {  
                             // TODO:  handle this case of overlapping lookahead matches.
                             //        With correctly written rules, we won't get here.
-                            System.out.println("Trouble in handlePrevious()");  // comment out 
+                            // System.out.println("Trouble in handlePrevious()"); 
                         }
                         result               = lookaheadResult;
                         fLastRuleStatusIndex = lookaheadTagIdx;
