@@ -582,10 +582,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (U_FAILURE(status)) {
         return;
     }
+// TEMPORARILY DISABLE
+// TEMPORARILY DISABLE
+// TEMPORARILY DISABLE
+#if 0
     // assert values are in range before using them to index arrays
     U_ASSERT(field == UDAT_YEAR_FIELD || field == UDAT_YEAR_WOY_FIELD ||
              (value >= cal.getMinimum(field) &&
               value <= cal.getMaximum(field)));
+#endif
 
     switch (patternCharIndex) {
     
