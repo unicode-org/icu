@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.26 $
+* $Date: 2003/07/07 15:58:56 $
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -35,7 +35,7 @@ public final class UCD implements UCD_Types {
     /**
      * Used for the default version.
      */
-    public static final String latestVersion = "4.0.0";
+    public static final String latestVersion = "4.0.1";
 
     /**
      * Create singleton instance for default (latest) version

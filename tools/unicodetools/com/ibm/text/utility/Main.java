@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Main.java,v $
-* $Date: 2002/06/22 21:01:25 $
-* $Revision: 1.1 $
+* $Date: 2003/07/07 15:58:56 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -48,6 +48,12 @@ public class Main {
     }
     
     static public void main (String[] args) {
+		for (int i = 0; i < args.length; ++i) {
+ 			String arg = args[i];
+ 			if (arg.equalsIgnoreCase("probe")) Probe.test("da");
+		}
+		if (true) return;
+
         for (CollatorStyle i = CollatorStyle.ZEROED; i != null; i = i.next()) {
             System.out.println(i);
         }
