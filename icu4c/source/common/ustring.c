@@ -763,7 +763,7 @@ static int32_t u_astrnlen(const char *s1, int32_t n)
 
     if (s1)
     {
-        while (*(s1++) && n--)
+        while (n-- && *(s1++))
         {
             len++;
         }
