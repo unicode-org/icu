@@ -115,7 +115,7 @@ public:
 
     UVector(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
 
-    ~UVector();
+    virtual ~UVector();
 
     /**
      * Assign this object to another (make this a copy of 'other').
@@ -300,6 +300,8 @@ public:
     UStack(UObjectDeleter *d, UKeyComparator *c, UErrorCode &status);
 
     UStack(UObjectDeleter *d, UKeyComparator *c, int32_t initialCapacity, UErrorCode &status);
+
+    virtual ~UStack();
 
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.

@@ -186,6 +186,8 @@ LocaleKey::LocaleKey(const UnicodeString& primaryID,
     _currentID = _primaryID;
 }
 
+LocaleKey::~LocaleKey() {}
+
 UnicodeString&
 LocaleKey::prefix(UnicodeString& result) const {
     if (_kind != KIND_ANY) {
@@ -517,6 +519,8 @@ ICUResourceBundleFactory::ICUResourceBundleFactory(const UnicodeString& bundleNa
   , _bundleName(bundleName)
 {
 }
+
+ICUResourceBundleFactory::~ICUResourceBundleFactory() {}
 
 const Hashtable*
 ICUResourceBundleFactory::getSupportedIDs(UErrorCode& status) const

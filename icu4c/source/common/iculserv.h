@@ -75,16 +75,16 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
      */
     static LocaleKey* createWithCanonicalFallback(const UnicodeString* primaryID, 
                                                   const UnicodeString* canonicalFallbackID,
-												  UErrorCode& status);
-	    
+                                                  UErrorCode& status);
+
     /**
      * Create a LocaleKey with canonical primary and fallback IDs.
      */
     static LocaleKey* createWithCanonicalFallback(const UnicodeString* primaryID, 
                                                   const UnicodeString* canonicalFallbackID, 
                                                   int32_t kind,
-												  UErrorCode& status);
-	    
+                                                  UErrorCode& status);
+
   protected:
     /**
      * PrimaryID is the user's requested locale string,
@@ -157,6 +157,11 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     static UClassID getStaticClassID();
 
     virtual UClassID getDynamicClassID() const;
+
+    /**
+     * Destructor.
+     */
+    virtual ~LocaleKey();
 
 #ifdef SERVICE_DEBUG
  public:
@@ -372,6 +377,11 @@ class U_COMMON_API ICUResourceBundleFactory : public LocaleKeyFactory
      * with the given name.
      */
     ICUResourceBundleFactory(const UnicodeString& bundleName);
+
+    /**
+     * Destructor
+     */
+    virtual ~ICUResourceBundleFactory();
 
 protected:
     /**

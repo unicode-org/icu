@@ -786,6 +786,11 @@ public:
     }
 
     /**
+     * @draft ICU 3.0
+     */
+    ~SimpleNumberFormatFactory();
+
+    /**
      * @draft ICU 2.6
      */
     virtual UBool visible(void) const {

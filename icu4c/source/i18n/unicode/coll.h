@@ -920,11 +920,17 @@ class U_I18N_API CollatorFactory : public UObject {
 public:
 
     /**
+     * Destructor
+     * @draft ICU 3.0
+     */
+    virtual ~CollatorFactory();
+
+    /**
      * Return true if this factory is visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
      * @return true if the factory is visible.
-     @draft ICU 2.6
+     * @draft ICU 2.6
      */
     virtual UBool visible(void) const;
 
