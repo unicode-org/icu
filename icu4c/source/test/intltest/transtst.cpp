@@ -3068,6 +3068,17 @@ void TransliteratorTest::TestSpecialCases(void) {
                         CharsToUnicodeString("s ss s\\u0331s\\u0331") ,
         "Latin-Greek",  CharsToUnicodeString("s ss s\\u0331s\\u0331"), 
                         CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"),
+        // Tatiana bug
+        // Upper: TAT\\u02B9\\u00C2NA
+        // Lower: tat\\u02B9\\u00E2na
+        // Title: Tat\\u02B9\\u00E2na
+        "Upper", CharsToUnicodeString("tat\\u02B9\\u00E2na"),
+                 CharsToUnicodeString("TAT\\u02B9\\u00C2NA"),
+        "Lower", CharsToUnicodeString("TAT\\u02B9\\u00C2NA"),
+                 CharsToUnicodeString("tat\\u02B9\\u00E2na"),
+        "Title", CharsToUnicodeString("tat\\u02B9\\u00E2na"),
+                 CharsToUnicodeString("Tat\\u02B9\\u00E2na"),
+
         "" // END MARKER
     };
 

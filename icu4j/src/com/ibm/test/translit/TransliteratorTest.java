@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/12/04 05:25:39 $
- * $Revision: 1.93 $
+ * $Date: 2001/12/11 00:00:27 $
+ * $Revision: 1.94 $
  *
  *****************************************************************************************
  */
@@ -2272,6 +2272,14 @@ public class TransliteratorTest extends TestFmwk {
         {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
         {"Greek-Latin", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
         {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
+
+        // Tatiana bug
+        // Upper: TAT\u02B9\u00C2NA
+        // Lower: tat\u02B9\u00E2na
+        // Title: Tat\u02B9\u00E2na
+        {"Upper", "tat\u02B9\u00E2na", "TAT\u02B9\u00C2NA"},
+        {"Lower", "TAT\u02B9\u00C2NA", "tat\u02B9\u00E2na"},
+        {"Title", "tat\u02B9\u00E2na", "Tat\u02B9\u00E2na"},
     };
 
     public void TestSpecialCases() {
