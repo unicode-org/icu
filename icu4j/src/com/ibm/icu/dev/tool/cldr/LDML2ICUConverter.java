@@ -99,7 +99,7 @@ public class LDML2ICUConverter {
         try{
             remainingArgc = UOption.parseArgs(args, options);
         }catch (Exception e){
-            System.err.println("ERROR: "+ e.toString());
+            System.err.println("ERROR: (parsing args): "+ e.toString());
             e.printStackTrace();
             usage();
         }
@@ -156,7 +156,7 @@ public class LDML2ICUConverter {
                 }
                 
             }catch (Throwable se) {
-                System.err.println(fileName + ": ERROR: " + se.toString());
+                System.err.println(fileName + ": ERROR: (parsing supplemental) " + se.toString());
                 se.printStackTrace();
                 System.exit(1);
             }    
@@ -187,9 +187,11 @@ public class LDML2ICUConverter {
                     locName = args[i];
                     System.out.println("INFO: Parsing LDML document for: " + specialsDir+File.separator+ args[i]);
                     specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
-                    int index = locName.indexOf(".xml");
-                    if(index > -1){
-                        locName = locName.substring(0,index);
+                    if(specialsDoc != null) {
+                        int index = locName.indexOf(".xml");
+                        if(index > -1){
+                            locName = locName.substring(0,index);
+                        }
                     }
                     /*
                     try{ 
@@ -263,7 +265,7 @@ public class LDML2ICUConverter {
              writeAliasedResource();
           }
          catch (Throwable se) {
-             System.err.println(xmlfileName + ": ERROR: " + se.toString());
+             System.err.println(xmlfileName + ": ERROR: (parsing and writing) " + se.toString());
              se.printStackTrace();
              System.exit(1);
          }    
@@ -618,16 +620,24 @@ public class LDML2ICUConverter {
         }
         // now fetch the specials and append to the real bundle
         if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
-            ICUResourceWriter.Resource res = parseSpecials(specialsDoc);
-            if(res!=null){
-                if(current == null){
-                    table.first = res;
-                    current = findLast(res);
-                }else{
-                    current.next = res;
-                    current = findLast(res);
+            if(specialsDoc == null) {
+                System.err.println("Could not open special bundle - no specials written.");
+            } else {
+                if(table.comment == null) {
+                    table.comment = "";
                 }
-                res = null;
+                ICUResourceWriter.Resource res = parseSpecials(specialsDoc);
+                table.comment = table.comment + " ICU <specials> source: " + specialsDir + File.separator + locName + ".xml";
+                if(res!=null){
+                    if(current == null){
+                        table.first = res;
+                        current = findLast(res);
+                    }else{
+                        current.next = res;
+                        current = findLast(res);
+                    }
+                    res = null;
+                }
             }
         }
         return table;
@@ -690,6 +700,9 @@ public class LDML2ICUConverter {
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
                 str.val = LDMLUtilities.getAttributeValue(node, LDMLConstants.NUMBER);
                 str.name = (String)keyNameMap.get(LDMLConstants.VERSION);
+                if(LDMLUtilities.isNodeDraft(root)) { // x for experimental
+                    str.val = "x" + str.val;
+                }
                 res = str;
             }else if(name.equals(LDMLConstants.LANGUAGE)|| 
                     name.equals(LDMLConstants.SCRIPT) ||
@@ -2861,7 +2874,7 @@ public class LDML2ICUConverter {
             System.err.println(sourceFileName + ": INFO: Creating ICU ResourceBundle: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
-            
+
             ICUResourceWriter.Resource current = set;
             while(current!=null){
                 current.sort();
@@ -2877,8 +2890,10 @@ public class LDML2ICUConverter {
             writer.flush();
             writer.close();
         } catch (Exception ie) {
-            System.err.println(sourceFileName + ": ERROR :" + ie.toString());
-            return;
+            System.err.println(sourceFileName + ": ERROR (writing resource) :" + ie.toString());
+            ie.printStackTrace();
+            System.exit(1);
+            return; // NOTREACHED
         }
     }
     

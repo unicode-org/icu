@@ -49,6 +49,10 @@ public class ICUResourceWriter {
         Resource next;
         public StringBuffer escapeSyntaxChars(String val){
             // escape the embedded quotes
+            if(val==null) {
+                System.err.println("Resource.escapeSyntaxChars: warning, resource '" + name + "': string value is NULL - assuming 'empty'");
+                return new StringBuffer("");
+            }
             char[] str = val.toCharArray();
             StringBuffer result = new StringBuffer();
             for(int i=0; i<str.length; i++){
