@@ -544,7 +544,7 @@ void CalendarRegressionTest::dowTest(UBool lenient)
     if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
         errln("FAIL: actual minimum (UCAL_DAY_OF_WEEK, status) differs from minimum");
     }
-    // Does not exist!
+// NOTE: This function does not exist!  jitterbug #3016
 //    if(((Calendar*)cal)->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
 //        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
 //    }
@@ -2158,11 +2158,24 @@ void CalendarRegressionTest::TestJ438(void) {
             int32_t dd = cal.fieldDifference(date2, UCAL_DATE, ec);
             if (failure(ec, "fieldDifference"))
                 break;
-            int32_t dd_x=cal.fieldDifference(date2, Calendar::DATE,ec);
-            if (failure(ec, "fieldDifference(date, Calendar::DATE, ec)"))
-                break;
-            if(dd_x != dd){
-                errln("fieldDifference(UCAL_DATE) and fieldDifference(Calendar::DATE) give different results.\n");
+
+            { 
+                Calendar *cal2 = cal.clone();
+                UErrorCode ec2 = U_ZERO_ERROR;
+
+                cal2->setTime(date1, ec2);                
+
+                int32_t dy2 = cal2->fieldDifference(date2, Calendar::YEAR, ec2);
+                int32_t dm2 = cal2->fieldDifference(date2, Calendar::MONTH, ec2);
+                int32_t dd2 = cal2->fieldDifference(date2, Calendar::DATE, ec2);
+                if (failure(ec2, "fieldDifference(date, Calendar::DATE, ec)"))
+                    break;
+                if( (dd2 != dd) ||
+                    (dm2 != dm) ||
+                    (dy2 != dy)){
+                    errln("fieldDifference(UCAL_...) and fieldDifference(Calendar::...) give different results!\n");
+                }
+                delete cal2;
             }
 
 
@@ -2472,7 +2485,17 @@ void CalendarRegressionTest::TestDeprecates(void)
     if(U_FAILURE(status)) {
         errln("Error code when trying to roll");
     } else if(*c1 != *c2) {
-        errln("roll(EDateField) had different effect than roll(UCalendarField)");
+        errln("roll(EDateField, int32_t) had different effect than roll(UCalendarField, int32_t)");
+    }
+
+    c1->setTime(c2->getTime(status),status);
+    c1->roll(Calendar::HOUR,(UBool)FALSE,status);
+    c2->roll(UCAL_HOUR,(UBool)FALSE,status);
+
+    if(U_FAILURE(status)) {
+        errln("Error code when trying to roll(UBool)");
+    } else if(*c1 != *c2) {
+        errln("roll(EDateField, UBool) had different effect than roll(UCalendarField, UBool)");
     }
 
     delete c1;
