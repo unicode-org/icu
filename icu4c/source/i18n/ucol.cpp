@@ -485,7 +485,8 @@ ucol_openRules( const UChar        *rules,
   UCollator *result = NULL;
   UCATableHeader *table = NULL;
 
-  if(src.resultLen > 0) { /* we have a set of rules, let's make something of it */
+  if(src.resultLen > 0 || src.removeSet != NULL) { /* we have a set of rules, let's make something of it */
+    /* also, if we wanted to remove some contractions, we should make a tailoring */
     table = ucol_assembleTailoringTable(&src, status);
     if(U_SUCCESS(*status)) {
       result = ucol_initCollator(table,0,status);
@@ -2448,7 +2449,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         // CJKs handled in the getImplicit function. No need for fixup
         if((cp >= 0x20000 && cp <= 0x2a6d6) || 
            (cp >= 0x2F800 && cp <= 0x2FA1D)) { // this might be a CJK supplementary cp
-          return getImplicit(cp, source, 0x04000000);
+          return getImplicit(cp, source, 0x04000000); 
         } else { // or a regular one
           return getImplicit(cp, source, 0);
         }

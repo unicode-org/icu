@@ -22,6 +22,7 @@
 #define UCOL_TOKENS_H
 
 #include "unicode/utypes.h"
+#include "unicode/uset.h"
 
 #if !UCONFIG_NO_COLLATION
 
@@ -106,7 +107,7 @@ typedef struct {
   UColParsedToken parsedToken;
   UChar *source;
   UChar *end;
-  UChar *current;
+  const UChar *current;
   UChar *sourceCurrent;
   UChar *extraCurrent;
   UChar *extraEnd;
@@ -118,6 +119,8 @@ typedef struct {
   uint32_t listCapacity;
   UColTokListHeader *lh;
   UColToken *varTop;
+  USet *copySet;
+  USet *removeSet;
 } UColTokenParser;
 
 typedef struct {
