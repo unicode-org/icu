@@ -82,7 +82,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 clean-recursive-with-twist:
 	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out $(CLEAN_FIRST_SUBDIRS),$(LOCAL_SUBDIRS))'
 
-all-local: $(srcdir)/configure $(srcdir)/icudefs.mk
+all-local: $(srcdir)/configure icudefs.mk
 
 install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/$(VERSION)/%)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/$(VERSION)/config
