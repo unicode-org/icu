@@ -67,7 +67,7 @@ static void TestUDataOpen(){
     UErrorCode status=U_ZERO_ERROR;
     const char* memMap[][2]={
         {"tz", "dat"},
-        {"cnvalias", "dat"},
+        {"cnvalias", "icu"},
         {"unames",   "dat"},
         {"ibm-1141", "cnv"}
     };
@@ -388,7 +388,7 @@ isAcceptable1(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==2 )
+        pInfo->formatVersion[0]==3 )
     {
         log_verbose("The data from \"%s.%s\" IS acceptable using the verifing function isAcceptable1()\n", name, type);
         return TRUE;
@@ -473,7 +473,7 @@ static void TestUDataOpenChoiceDemo1() {
 
     strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
-    result=udata_openChoice(NULL, type, name[0], isAcceptable1, NULL, &status);
+    result=udata_openChoice(NULL, "icu", name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: udata_openChoice() failed name=%s, type=%s, \n errorcode=%s\n", name[0], type, myErrorName(status));
     } else {
@@ -624,7 +624,7 @@ static void TestUDataGetInfo() {
 
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
-    result=udata_open(NULL, type, name, &status);
+    result=udata_open(NULL, "icu", name, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: udata_open() failed for path = NULL, name=%s, type=%s, \n errorcode=%s\n", path, name, type, myErrorName(status));
         return;
@@ -677,32 +677,34 @@ static void TestUDataGetInfo() {
 static void TestUDataGetMemory() {
 
     UDataMemory *result;
-    const uint16_t *table=NULL;
+    const int32_t *table=NULL;
     uint16_t* intValue=0;
     UErrorCode status=U_ZERO_ERROR;
     const char* name="cnvalias";
-    const char* type="dat";
+    const char* type;
 
     const char* name2="test";
 
-   char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
+    char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 ) );
 
-   strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
+    strcat(strcpy(testPath, u_getDataDirectory()), "testdata");
 
+    type="icu";
     log_verbose("Testing udata_getMemory for \"cnvalias.dat()\"\n");
     result=udata_openChoice(NULL, type, name, isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: udata_openChoice() failed for name=%s, type=%s, \n errorcode=%s\n", name, type, myErrorName(status));
         return;
     }
-    table=(const uint16_t *)udata_getMemory(result);
+    table=(const uint32_t *)udata_getMemory(result);
 
     /* The alias table may list more converters than what's actually available now. [grhoten] */
-    if(ucnv_countAvailable() > table[1+2*(*table)])      /*???*/
+    if(ucnv_countAvailable() > table[1])      /*???*/
         log_err("FAIL: udata_getMemory() failed ucnv_countAvailable returned = %d, expected = %d\n", ucnv_countAvailable(), table[1+2*(*table)]);
 
     udata_close(result);
 
+    type="dat";
     log_verbose("Testing udata_getMemory for \"test.dat\"()\n");
     result=udata_openChoice(testPath, type, name2, isAcceptable3, NULL, &status);
     if(U_FAILURE(status)){

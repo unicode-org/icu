@@ -240,6 +240,8 @@ static void TestConvert()
      /*Testing ucnv_openU()*/
     {
         UChar converterName[]={ 0x0069, 0x0062, 0x006d, 0x002d, 0x0039, 0x0034, 0x0033, 0x0000}; /*ibm-943*/
+        UChar firstSortedName[]={ 0x0021, 0x0000}; /* ! */
+        UChar lastSortedName[]={ 0x007E, 0x0000}; /* ~ */
         const char *illegalNameChars={ "ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943 ibm-943"};
         UChar illegalName[100];
         UConverter *converter=NULL;
@@ -269,8 +271,20 @@ static void TestConvert()
         if(!(err==U_ILLEGAL_ARGUMENT_ERROR)){
             log_err("FAILURE! ucnv_openU(illegalName, err) is expected to fail\n");
         }
+
         err=U_ZERO_ERROR;
-      
+        ucnv_openU(firstSortedName, &err);
+        if(err!=U_FILE_ACCESS_ERROR){
+            log_err("FAILURE! ucnv_openU(firstSortedName, err) is expected to fail\n");
+        }
+
+        err=U_ZERO_ERROR;
+        ucnv_openU(lastSortedName, &err);
+        if(err!=U_FILE_ACCESS_ERROR){
+            log_err("FAILURE! ucnv_openU(lastSortedName, err) is expected to fail\n");
+        }
+
+        err=U_ZERO_ERROR;
     }
     log_verbose("Testing ucnv_open() with converter name greater than 7 characters\n");
     {
@@ -455,6 +469,11 @@ static void TestConvert()
         char* index = NULL;
         strcpy(ucs_file_name, loadTestData(&err));
         
+        if(U_FAILURE(err)){
+            log_err("Couldn't get the test data directory... Exiting...Error:%s\n", u_errorName(err));
+            return;
+        }
+
         index=strrchr(ucs_file_name,(char)U_FILE_SEP_CHAR);
 
         if((unsigned int)(index-ucs_file_name) != (strlen(ucs_file_name)-1)){
@@ -462,11 +481,6 @@ static void TestConvert()
         }
         
         strcat(ucs_file_name,".."U_FILE_SEP_STRING);
-        
-        if(U_FAILURE(err)){
-            log_err("Couldn't get the test data directory... Exiting...Error:%s\n", u_errorName(err));
-            return;
-        }
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
 
         ucs_file_in = fopen(ucs_file_name,"rb");
