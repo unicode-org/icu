@@ -119,7 +119,7 @@
  * \def UCONFIG_NO_REGULAR_EXPRESSIONS
  * This switch turns off regular expressions.
  *
- * @draft ICU 2.6
+ * @draft ICU 2.4
  */
 #ifndef UCONFIG_NO_REGULAR_EXPRESSIONS
 #   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
