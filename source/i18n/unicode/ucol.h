@@ -112,6 +112,9 @@ typedef struct collIterate collIterate;
 struct incrementalContext;
 typedef struct incrementalContext incrementalContext;
 
+struct UCollatorNew;
+typedef struct UCollatorNew UCollatorNew;
+
  /** A collator.
  *  For usage in C programs.
  */
@@ -291,6 +294,14 @@ ucol_strcoll(    const    UCollator    *coll,
  */
 U_CAPI UCollationResult
 ucol_strcollEx(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength);
+
+/* new version */
+U_CAPI UCollationResult
+ucol_strcollNew(    const    UCollatorNew    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
         const    UChar        *target,
@@ -505,6 +516,14 @@ ucol_getSortKey(const    UCollator    *coll,
  */
 U_CAPI int32_t
 ucol_getSortKeyEx(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        *result,
+        int32_t        resultLength);
+
+/* New version */
+U_CAPI int32_t
+ucol_getSortKeyNew(const    UCollatorNew    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        *result,
@@ -731,6 +750,8 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
+U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
+
 /**
  * Universal attribute getter
  * @param coll collator which attributes are to be changed
@@ -740,6 +761,8 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
  * @draft API 1.7 freeze
  */
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
+
+U_CAPI UColAttributeValue ucol_getAttributeNew(const UCollatorNew *coll, UColAttribute attr, UErrorCode *status);
 
 /**
  * Thread safe cloning operation
