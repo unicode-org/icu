@@ -531,6 +531,7 @@ DigitList::isZero() const
  * We represent LONG_MIN internally as LONG_MAX + 1.  This is actually an impossible
  * value, for positive long integers, so we are safe in doing so.
  */
+/* // This code is unused.
 UBool
 DigitList::isLONG_MIN() const
 {
@@ -547,6 +548,7 @@ DigitList::isLONG_MIN() const
 
     return TRUE;
 }
+*/
 
 // Initialize the LONG_MIN representation buffer.  Note that LONG_MIN
 // is stored as LONG_MAX+1 (LONG_MIN without the negative sign).
