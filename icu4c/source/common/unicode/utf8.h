@@ -16,7 +16,7 @@
 
 /**
 * \file 
-* \brief Description of UTF-8 macros
+* \brief C API: UTF-8 macros
 * 
 *   This file defines macros to deal with UTF-8 code units and code points.
 *   Signatures and semantics are the same as for the similarly named macros
