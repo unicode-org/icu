@@ -38,26 +38,25 @@ int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
-{
-    if (exec) logln((UnicodeString)"TestSuite Transliterator API ");
+void
+TransliteratorAPITest::runIndexedTest(int32_t index, UBool exec,
+                                      const char* &name, char* /*par*/) {
     switch (index) {
-     
-        case 0: name = "TestgetInverse"; if (exec) TestgetInverse(); break;
-        case 1: name = "TestgetID"; if (exec) TestgetID(); break;
-        case 2: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
-        case 3: name = "TestTransliterate1"; if (exec) TestTransliterate1(); break;
-        case 4: name = "TestTransliterate2"; if (exec) TestTransliterate2(); break;
-        case 5: name = "TestTransliterate3"; if (exec) TestTransliterate3(); break;
-        case 6: name = "TestSimpleKeyboardTransliterator"; if (exec) TestSimpleKeyboardTransliterator(); break;
-        case 7: name = "TestKeyboardTransliterator1"; if (exec) TestKeyboardTransliterator1(); break;
-        case 8: name = "TestKeyboardTransliterator2"; if (exec) TestKeyboardTransliterator2(); break;
-        case 9: name = "TestKeyboardTransliterator3"; if (exec) TestKeyboardTransliterator3(); break;
-        case 10: name = "TestGetAdoptFilter"; if (exec) TestGetAdoptFilter(); break;
-        case 11: name = "TestClone"; if (exec) TestClone(); break;
-        case 12: name = "TestNullTransliterator"; if (exec) TestNullTransliterator(); break;
-        case 13: name = "TestRegisterUnregister"; if(exec) TestRegisterUnregister(); break;
-        default: name = ""; break; /*needed to end loop*/
+        TESTCASE(0,TestgetInverse);
+        TESTCASE(1,TestgetID);
+        TESTCASE(2,TestGetDisplayName);
+        TESTCASE(3,TestTransliterate1);
+        TESTCASE(4,TestTransliterate2);
+        TESTCASE(5,TestTransliterate3);
+        TESTCASE(6,TestSimpleKeyboardTransliterator);
+        TESTCASE(7,TestKeyboardTransliterator1);
+        TESTCASE(8,TestKeyboardTransliterator2);
+        TESTCASE(9,TestKeyboardTransliterator3);
+        TESTCASE(10,TestGetAdoptFilter);
+        TESTCASE(11,TestClone);
+        TESTCASE(12,TestNullTransliterator);
+        TESTCASE(13,TestRegisterUnregister);
+        default: name = ""; break;
     }
 }
 
@@ -69,7 +68,7 @@ void TransliteratorAPITest::TestgetID() {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator* t= Transliterator::createInstance(trans, UTRANS_FORWARD, parseError, status);
     if(t==0 || U_FAILURE(status)){
-        errln("FAIL: construction");
+        errln("FAIL: construction of Latin-Greek");
         return;
     }else{
         ID= t->getID();
@@ -95,7 +94,7 @@ void TransliteratorAPITest::TestgetID() {
     }
 
     Transliterator* t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
-    Transliterator* t2=Transliterator::createInstance("Latin-Hebrew", UTRANS_FORWARD, parseError, status);
+    Transliterator* t2=Transliterator::createInstance("Latin-Greek", UTRANS_FORWARD, parseError, status);
     if(t1 ==0 || t2 == 0){
         errln("FAIL: construction");
         return;
@@ -126,8 +125,8 @@ void TransliteratorAPITest::TestgetID() {
 void TransliteratorAPITest::TestgetInverse() {
      UErrorCode status = U_ZERO_ERROR;
      UParseError parseError;
-     Transliterator* t1    = Transliterator::createInstance("Kana-Latin", UTRANS_FORWARD, parseError, status);
-     Transliterator* invt1 = Transliterator::createInstance("Latin-Kana", UTRANS_FORWARD, parseError, status);
+     Transliterator* t1    = Transliterator::createInstance("Katakana-Latin", UTRANS_FORWARD, parseError, status);
+     Transliterator* invt1 = Transliterator::createInstance("Latin-Katakana", UTRANS_FORWARD, parseError, status);
      Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
      Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin", UTRANS_FORWARD, parseError, status);
      if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
@@ -146,12 +145,12 @@ void TransliteratorAPITest::TestgetInverse() {
        "Fullwidth-Halfwidth",
        "Greek-Latin" ,
        "Latin-Greek", 
-       "Arabic-Latin",
-       "Latin-Arabic",
-       "Kana-Latin",
-       "Latin-Kana",
-       "Hebrew-Latin",
-       "Latin-Hebrew",
+       //"Arabic-Latin", // removed in 2.0
+       //"Latin-Arabic",
+       "Katakana-Latin",
+       "Latin-Katakana",
+       //"Hebrew-Latin", // removed in 2.0
+       //"Latin-Hebrew",
        "Cyrillic-Latin", 
        "Latin-Cyrillic", 
        "Devanagari-Latin", 
@@ -185,7 +184,7 @@ void TransliteratorAPITest::TestClone(){
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     t1=Transliterator::createInstance("Latin-Devanagari", UTRANS_FORWARD, parseError, status);
-    t2=Transliterator::createInstance("Latin-Hebrew", UTRANS_FORWARD, parseError, status);
+    t2=Transliterator::createInstance("Latin-Greek", UTRANS_FORWARD, parseError, status);
     if(t1 == 0 || t2 == 0){
         errln("FAIL: construction");
         return;
@@ -208,19 +207,19 @@ void TransliteratorAPITest::TestClone(){
 void TransliteratorAPITest::TestGetDisplayName() {
     UnicodeString dispNames[]= { 
          //ID, displayName
-          "CurlyQuotes-StraightQuotes" ,"CurlyQuotes to StraightQuotes",
+        //"CurlyQuotes-StraightQuotes" ,"CurlyQuotes to StraightQuotes",
           "Any-Hex"                ,"Any to Hex Escape",
           "Halfwidth-Fullwidth"        ,"Halfwidth to Fullwidth" ,
-          "Latin-Arabic"               ,"Latin to Arabic"      ,
+          //"Latin-Arabic"               ,"Latin to Arabic"      ,
           "Latin-Devanagari"           ,"Latin to Devanagari"  ,
           "Greek-Latin"                ,"Greek to Latin"       ,
-          "Arabic-Latin"               ,"Arabic to Latin"      ,
+          //"Arabic-Latin"               ,"Arabic to Latin"      ,
           "Hex-Any"                ,"Hex Escape to Any",
           "Cyrillic-Latin"             ,"Cyrillic to Latin"    ,
           "Latin-Greek"                ,"Latin to Greek"       ,
-          "Latin-Kana"                 ,"Latin to Kana"        ,
-          "Latin-Hebrew"               ,"Latin to Hebrew"      ,
-          "Kana-Latin"                 ,"Kana to Latin"        
+          "Latin-Katakana"                 ,"Latin to Katakana"        ,
+          //"Latin-Hebrew"               ,"Latin to Hebrew"      ,
+          "Katakana-Latin"                 ,"Katakana to Latin"        
       };
     UnicodeString name="";
     Transliterator* t;
@@ -264,8 +263,8 @@ void TransliteratorAPITest::TestTransliterate1(){
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        UnicodeString("bh\\u0101rata"),
      //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
      //  "Expanded-Contracted", CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042"), CharsToUnicodeString("\\u00C0\\u00C1\\u0042") ,
-         "Latin-Arabic",        "aap",                                 CharsToUnicodeString("\\u0627\\u06A4")     ,
-         "Arabic-Latin",        CharsToUnicodeString("\\u0627\\u06A4"),                      "aap" 
+         //"Latin-Arabic",        "aap",                                 CharsToUnicodeString("\\u0627\\u06A4")     ,
+         //"Arabic-Latin",        CharsToUnicodeString("\\u0627\\u06A4"),                      "aap" 
     };
 
     UnicodeString gotResult;

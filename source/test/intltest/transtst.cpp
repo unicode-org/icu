@@ -462,35 +462,36 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
 }
 
 void TransliteratorTest::TestArabic(void) {
-    /*
-    const char* DATA[] = {
-        "Arabic", "\u062a\u062a\u0645\u062a\u0639\u0020"+
-                  "\u0627\u0644\u0644\u063a\u0629\u0020"+
-                  "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629\u0020"+
-                  "\u0628\u0628\u0646\u0638\u0645\u0020"+
-                  "\u0643\u062a\u0627\u0628\u0628\u064a\u0629\u0020"+
-                  "\u062c\u0645\u064a\u0644\u0629",
-    };
-    */
-
-    UChar ar_raw[] = {
-        0x062a, 0x062a, 0x0645, 0x062a, 0x0639, 0x0020, 0x0627,
-        0x0644, 0x0644, 0x063a, 0x0629, 0x0020, 0x0627, 0x0644,
-        0x0639, 0x0631, 0x0628, 0x0628, 0x064a, 0x0629, 0x0020,
-        0x0628, 0x0628, 0x0646, 0x0638, 0x0645, 0x0020, 0x0643,
-        0x062a, 0x0627, 0x0628, 0x0628, 0x064a, 0x0629, 0x0020,
-        0x062c, 0x0645, 0x064a, 0x0644, 0x0629, 0
-    };
-    UnicodeString ar(ar_raw);
-    UErrorCode status=U_ZERO_ERROR;
-    UParseError parseError;
-    Transliterator *t = Transliterator::createInstance("Latin-Arabic", UTRANS_FORWARD, parseError, status);
-    if (t == 0) {
-        errln("FAIL: createInstance failed");
-        return;
-    }
-    expect(*t, "Arabic", ar);
-    delete t;
+// Test disabled for 2.0 until new Arabic transliterator can be written.
+//    /*
+//    const char* DATA[] = {
+//        "Arabic", "\u062a\u062a\u0645\u062a\u0639\u0020"+
+//                  "\u0627\u0644\u0644\u063a\u0629\u0020"+
+//                  "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629\u0020"+
+//                  "\u0628\u0628\u0646\u0638\u0645\u0020"+
+//                  "\u0643\u062a\u0627\u0628\u0628\u064a\u0629\u0020"+
+//                  "\u062c\u0645\u064a\u0644\u0629",
+//    };
+//    */
+//
+//    UChar ar_raw[] = {
+//        0x062a, 0x062a, 0x0645, 0x062a, 0x0639, 0x0020, 0x0627,
+//        0x0644, 0x0644, 0x063a, 0x0629, 0x0020, 0x0627, 0x0644,
+//        0x0639, 0x0631, 0x0628, 0x0628, 0x064a, 0x0629, 0x0020,
+//        0x0628, 0x0628, 0x0646, 0x0638, 0x0645, 0x0020, 0x0643,
+//        0x062a, 0x0627, 0x0628, 0x0628, 0x064a, 0x0629, 0x0020,
+//        0x062c, 0x0645, 0x064a, 0x0644, 0x0629, 0
+//    };
+//    UnicodeString ar(ar_raw);
+//    UErrorCode status=U_ZERO_ERROR;
+//    UParseError parseError;
+//    Transliterator *t = Transliterator::createInstance("Latin-Arabic", UTRANS_FORWARD, parseError, status);
+//    if (t == 0) {
+//        errln("FAIL: createInstance failed");
+//        return;
+//    }
+//    expect(*t, "Arabic", ar);
+//    delete t;
 }
 
 /**
@@ -500,9 +501,9 @@ void TransliteratorTest::TestArabic(void) {
 void TransliteratorTest::TestCompoundKana(void) {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
-    Transliterator* t = Transliterator::createInstance("Latin-Kana;Kana-Latin", UTRANS_FORWARD, parseError, status);
+    Transliterator* t = Transliterator::createInstance("Latin-Hiragana;Hiragana-Latin", UTRANS_FORWARD, parseError, status);
     if (t == 0) {
-        errln("FAIL: construction of Latin-Kana;Kana-Latin failed");
+        errln("FAIL: construction of Latin-Hiragana;Hiragana-Latin failed");
     } else {
         expect(*t, "aaaaa", "aaaaa");
         delete t;
@@ -1150,10 +1151,10 @@ void TransliteratorTest::TestLiberalizedID(void) {
     // getID() return canonical case yet.  It will all get rewritten
     // with the move to Source-Target/Variant IDs anyway. [aliu]
     const char* DATA[] = {
-        "latin-arabic", NULL /*"Latin-Arabic"*/, "case insensitivity",
+        "latin-greek", NULL /*"Latin-Greek"*/, "case insensitivity",
         "  Null  ", "Null", "whitespace",
-        " Latin[a-z]-Arabic  ", "Latin[a-z]-Arabic", "inline filter",
-        "  null  ; latin-arabic  ", NULL /*"Null;Latin-Arabic"*/, "compound whitespace",
+        " Latin[a-z]-Greek  ", "Latin[a-z]-Greek", "inline filter",
+        "  null  ; latin-greek  ", NULL /*"Null;Latin-Greek"*/, "compound whitespace",
     };
     const int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
     UParseError parseError;
@@ -1433,7 +1434,7 @@ void TransliteratorTest::TestCompoundFilter(void) {
     UParseError parseError;
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = Transliterator::createInstance
-        ("Greek-Latin; Latin-Cyrillic; Lower", UTRANS_FORWARD, parseError, status);
+        ("Greek-Latin; Latin-Greek; Lower", UTRANS_FORWARD, parseError, status);
     if (t == 0) {
         errln("FAIL: createInstance failed");
         return;
@@ -1447,8 +1448,8 @@ void TransliteratorTest::TestCompoundFilter(void) {
     
     // Only the 'A' at index 1 should remain unchanged
     expect(*t,
-           CharsToUnicodeString("CA\\u039A\\u0391"),
-           CharsToUnicodeString("\\u043AA\\u043A\\u0430"));
+           CharsToUnicodeString("BA\\u039A\\u0391"),
+           CharsToUnicodeString("\\u03b2A\\u03ba\\u03b1"));
     delete t;
 }
 
@@ -2260,7 +2261,7 @@ void TransliteratorTest::TestDevanagariLatinRT(){
         "\\u0922\\u094D\\u092F",          /* d\\u0323hya */
      // "hma",                         /* hma         */
         "\\u0939\\u094D\\u092F",          /* hya         */
-        "\\u0936\\u0943\\u0905",          /* s\\u0301r\\u0325a  */
+        "\\u0936\\u0943",                 /* s\\u0301r\\u0325a  */
         "\\u0936\\u094D\\u091A",          /* s\\u0301ca  */
         "\\u090d",                        /* e\\u0306    */
         "\\u0938\\u0902\\u091C\\u0940\\u092C\\u094D \\u0938\\u0947\\u0928\\u0917\\u0941\\u092A\\u094D\\u0924",
@@ -2347,13 +2348,13 @@ void TransliteratorTest::TestSanskritLatinRT(){
         "vi\\u1E63\\u0101da",
         "y\\u014Dga",
         "dhr\\u0325tar\\u0101\\u1E63\\u1E6Dra",
-        "uv\\u0101cr\\u0325",
+        "uv\\u0101cr\\u0325a",
         "dharmak\\u1E63\\u0113tr\\u0113",
         "kuruk\\u1E63\\u0113tr\\u0113",
         "samav\\u0113t\\u0101",
         "yuyutsava-\\u1E25",
         "m\\u0101mak\\u0101-\\u1E25",
-     // "p\\u0101\\u1E47\\u1E0Dav\\u0101\\u015Bcaiva",
+    // "p\\u0101\\u1E47\\u1E0Dav\\u0101\\u015Bcaiva",
         "kimakurvata",
         "san\\u0304java",
     };
@@ -2372,7 +2373,7 @@ void TransliteratorTest::TestSanskritLatinRT(){
         "\\u0938\\u092e\\u0935\\u0947\\u0924\\u093e",
         "\\u092f\\u0941\\u092f\\u0941\\u0924\\u094d\\u0938\\u0935\\u0903",
         "\\u092e\\u093e\\u092e\\u0915\\u093e\\u0903",
-      //"\\u092a\\u093e\\u0923\\u094d\\u0921\\u0935\\u093e\\u0936\\u094d\\u091a\\u0948\\u0935",
+    //"\\u092a\\u093e\\u0923\\u094d\\u0921\\u0935\\u093e\\u0936\\u094d\\u091a\\u0948\\u0935",
         "\\u0915\\u093f\\u092e\\u0915\\u0941\\u0930\\u094d\\u0935\\u0924",
         "\\u0938\\u0902\\u091c\\u0935",
     };
@@ -2407,7 +2408,7 @@ void TransliteratorTest::TestCompoundLatinRT(){
         "vi\\u1E63\\u0101da",
         "y\\u014Dga",
         "dhr\\u0325tar\\u0101\\u1E63\\u1E6Dra",
-        "uv\\u0101cr\\u0325",
+        "uv\\u0101cr\\u0325a",
         "dharmak\\u1E63\\u0113tr\\u0113",
         "kuruk\\u1E63\\u0113tr\\u0113",
         "samav\\u0113t\\u0101",
