@@ -779,8 +779,8 @@ LocaleTest::TestGetLangsAndCountries()
     for(testCount = 0;test[testCount];testCount++)
       ;
 
-    if (testCount != 142)
-        errln("Expected getISOLanguages() to return 142 languages; it returned %d", testCount);
+    if (testCount != 437)
+        errln("Expected getISOLanguages() to return 437 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -796,8 +796,8 @@ LocaleTest::TestGetLangsAndCountries()
         UnicodeString lc(test[i],"");
         if (testee != lc.toLower())
             errln(lc + " is not all lower case.");
-        if (testee.length() != 2)
-            errln(testee + " is not two characters long.");
+        if ( (testee.length() != 2) && (testee.length() != 3))
+            errln(testee + " is not two or three characters long.");
         if (i > 0 && testee.compare(test[i - 1]) <= 0)
             errln(testee + " appears in an out-of-order position in the list.");
     }
@@ -869,7 +869,7 @@ LocaleTest::Test4126880()
         errln((UnicodeString)"There is an error in getISOCountries " + testCount);
     }
     test=Locale::getISOLanguages(testCount);
-    if(testCount != 142){
+    if(testCount != 437){
         errln((UnicodeString)"There is an error in getISOLanguages " + testCount);
     }
 /*----------*/
