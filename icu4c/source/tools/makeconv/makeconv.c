@@ -44,6 +44,7 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
  * Global - verbosity
  */
 UBool VERBOSE = FALSE;
+UBool TOUCHFILE = FALSE;
 
 /*Reads the header of the table file and fills in basic knowledge about the converter
  *in "converter"
@@ -247,7 +248,9 @@ static UOption options[]={
     UOPTION_COPYRIGHT,           /* 2 */
     UOPTION_VERSION,             /* 3 */
     UOPTION_DESTDIR,             /* 4 */
-    UOPTION_VERBOSE              /* 5 */
+    UOPTION_VERBOSE,             /* 5 */
+    UOPTION_PACKAGE_NAME,        /* 6 */
+	UOPTION_DEF( "touchfile", 't', UOPT_NO_ARG) /* 7 */
 };
 
 int main(int argc, char* argv[])
@@ -255,10 +258,13 @@ int main(int argc, char* argv[])
     UConverterSharedData* mySharedData = NULL;
     UErrorCode err = U_ZERO_ERROR;
     char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+    char touchFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     const char* destdir, *arg;
+    const char *pkgName = NULL;
     size_t destdirlen;
     char* dot = NULL, *outBasename;
     char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+    char cnvNameWithPkg[UCNV_MAX_FULL_FILE_NAME_LENGTH];
     UVersionInfo icuVersion;
 
     U_MAIN_INIT_ARGS(argc, argv);
@@ -289,6 +295,9 @@ int main(int argc, char* argv[])
             "\t-c or --copyright   include a copyright notice\n"
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-v or --verbose     Turn on verbose output\n",
+            "\t-p or --pkgname     sets the 'package' name for output files.  If ICUDATA, then the default\n"
+                "\t                    icu package name will be used.\n"
+			"\t-t or --touchfile   Generate additional small file without packagename, for nmake\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -299,6 +308,34 @@ int main(int argc, char* argv[])
       fprintf(stderr, "Copyright (C) 1998-2000, International Business Machines\n");
       fprintf(stderr,"Corporation and others.  All Rights Reserved.\n");
         exit(0);
+    }
+
+   TOUCHFILE = options[7].doesOccur;
+
+   if(!options[6].doesOccur)
+    {
+        fprintf(stderr, "%s :  option -p (package name) is required.\n", 
+                argv[0]);
+        exit(1);
+    }
+    else
+    {
+        pkgName =options[6].value;
+        if(!strcmp(pkgName, "ICUDATA"))
+        {
+            pkgName = U_ICUDATA_NAME;
+        }
+        if(pkgName[0] == 0)
+        {
+            pkgName = NULL;
+
+			if(TOUCHFILE)
+			{
+				fprintf(stderr, "%s: Don't use touchfile option with an empty packagename.\n",
+							argv[0]);
+				exit(1);
+			}
+        }
     }
 
     /* get the options values */
@@ -366,6 +403,21 @@ int main(int argc, char* argv[])
       /* the basename without extension is the converter name */
       uprv_strcpy(cnvName, outBasename);
 
+      if(TOUCHFILE)
+	  {
+		  uprv_strcpy(touchFileName, outBasename);
+		  uprv_strcat(touchFileName, ".cnv");
+	  }
+
+      if(pkgName != NULL)
+      {
+          /* changes both baename and filename */
+          uprv_strcpy(outBasename, pkgName);
+          uprv_strcat(outBasename, "_");
+          uprv_strcat(outBasename, cnvName);
+      }
+                      
+
       /*Adds the target extension*/
       uprv_strcat(outBasename, CONVERTER_FILE_EXTENSION);
 
@@ -378,7 +430,7 @@ int main(int argc, char* argv[])
       if (U_FAILURE(err) || (mySharedData == NULL))
         {
           /* if an error is found, print out an error msg and keep going */
-          fprintf(stderr, "Error creating \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
+          fprintf(stderr, "Error creating converter for \"%s\" file for \"%s\" (error code %d - %s)\n", outFileName, arg, err,
                         u_errorName(err));
           err = U_ZERO_ERROR;
         }
@@ -395,8 +447,42 @@ int main(int argc, char* argv[])
 
           uprv_strcpy((char*)mySharedData->staticData->name, cnvName);
 
-          writeConverterData(mySharedData, cnvName, destdir, &err);
+          if(pkgName == NULL)
+          {
+              uprv_strcpy(cnvNameWithPkg, cnvName);
+          }
+          else
+          {
+              uprv_strcpy(cnvNameWithPkg, pkgName);
+              uprv_strcat(cnvNameWithPkg, "_");
+              uprv_strcat(cnvNameWithPkg, cnvName);
+          }
+
+          writeConverterData(mySharedData, cnvNameWithPkg, destdir, &err);
           ((NewConverter *)mySharedData->table)->close((NewConverter *)mySharedData->table);
+		  if(TOUCHFILE)
+		  {
+			  FileStream *q;
+			  char msg[1024];
+			  
+			  sprintf(msg, "This empty file tells nmake that %s in package %s has been updated.\n",
+					cnvName, pkgName);
+
+			  q = T_FileStream_open(touchFileName, "w");
+			  if(q == NULL)
+			  {
+				  fprintf(stderr, "Error writing touchfile \"%s\"\n", touchFileName);
+				  err = U_FILE_ACCESS_ERROR;
+			  }
+
+			  else
+			  {
+				  T_FileStream_write(q, msg, uprv_strlen(msg));
+				  T_FileStream_close(q);
+			  }
+		  }
+
+    /* write the information data */
           uprv_free((UConverterStaticData *)mySharedData->staticData);
           uprv_free(mySharedData);
 
@@ -828,7 +914,8 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   uprv_memset(myStaticData, 0, sizeof(UConverterStaticData));
   mySharedData->staticData = myStaticData;
   myStaticData->structSize = sizeof(UConverterStaticData);
-  mySharedData->staticDataOwned = TRUE;
+/*  mySharedData->staticDataOwned = FALSE; */ /* not owned if in udata */
+  mySharedData->sharedDataCached = FALSE;
 
   mySharedData->dataMemory = NULL; /* for init */
 

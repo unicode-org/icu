@@ -92,7 +92,7 @@ main(int argc, char* argv[]) {
             "Usage: %s [-options] [suffix]\n"
             "\n"
             "Read the UnicodeData.txt file and other Unicode properties files and\n"
-            "create a binary file " DATA_NAME "." DATA_TYPE " with the normalization data\n"
+            "create a binary file " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " with the normalization data\n"
             "\n",
             argv[0]);
         fprintf(stderr,

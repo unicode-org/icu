@@ -1534,7 +1534,7 @@ generateData(const char *dataDir) {
         printf("  number of sets                        %5d\n", canonSetsCount);
         printf("  size of BMP search table              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]);
         printf("  size of supplementary search table    %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]);
-        printf("size of " DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
+        printf("size of " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
     }
 
     indexes[_NORM_INDEX_TRIE_SIZE]=normTrieSize;
@@ -1552,7 +1552,7 @@ generateData(const char *dataDir) {
     indexes[_NORM_INDEX_CANON_SET_COUNT]=canonStartSetsTop;
 
     /* write the data */
-    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
+    pData=udata_create(dataDir, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennorm: unable to create the output file, error %d\n", errorCode);

@@ -307,7 +307,7 @@ main(int argc, char* argv[]) {
             "Usage: %s [-1[+|-]] [-v[+|-]] [-c[+|-]] filename\n"
             "\n"
             "Read the UnicodeData.txt file and \n"
-            "create a binary file " DATA_NAME "." DATA_TYPE " with the character names\n"
+            "create a binary file " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " with the character names\n"
             "\n"
             "\tfilename  absolute path/filename for the Unicode database text file\n"
             "\t\t(default: standard input)\n"
@@ -810,7 +810,7 @@ generateData(const char *dataDir) {
     long dataLength;
     int16_t token;
 
-    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
+    pData=udata_create(dataDir, DATA_TYPE,U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennames: unable to create data memory, error %d\n", errorCode);

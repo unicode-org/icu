@@ -178,6 +178,8 @@ int  main(int argc, char **argv) {
     //     This will compile the rules.
     //
     UParseError parseError;
+	parseError.line = 0;
+	parseError.offset = 0;
     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(ruleSourceS, parseError, status);
     if (U_FAILURE(status)) {
         fprintf(stderr, "createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",

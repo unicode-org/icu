@@ -299,7 +299,7 @@ static void writeOutInverseData(InverseTableHeader *data,
     
     long dataLength;
 
-    pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invUcaDataInfo,
+    pData=udata_create(outputDir, INVC_DATA_TYPE, U_ICUDATA_NAME "_" INVC_DATA_NAME, &invUcaDataInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -310,7 +310,7 @@ static void writeOutInverseData(InverseTableHeader *data,
     /* write the data to the file */
     if (VERBOSE) {
         fprintf(stdout, "Writing out inverse UCA table: %s%c%s.%s\n", outputDir, U_FILE_SEP_CHAR,
-                                                                INVC_DATA_NAME,
+                                                                U_ICUDATA_NAME "_" INVC_DATA_NAME,
                                                                 INVC_DATA_TYPE);
     }
     udata_writeBlock(pData, data, data->byteSize);
@@ -627,7 +627,7 @@ void writeOutData(UCATableHeader *data,
     
     long dataLength;
 
-    pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &ucaDataInfo,
+    pData=udata_create(outputDir, UCA_DATA_TYPE, U_ICUDATA_NAME "_" UCA_DATA_NAME, &ucaDataInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -639,7 +639,7 @@ void writeOutData(UCATableHeader *data,
     if (VERBOSE) {
         fprintf(stdout, "Writing out UCA table: %s%c%s.%s\n", outputDir,
                                                         U_FILE_SEP_CHAR,
-                                                        UCA_DATA_NAME,
+                                                        U_ICUDATA_NAME "_" UCA_DATA_NAME,
                                                         UCA_DATA_TYPE);
     }
     udata_writeBlock(pData, data, size);
@@ -743,6 +743,11 @@ write_uca_table(const char *filename,
     myD->jamoSpecial = FALSE;
 
     tempUCATable *t = uprv_uca_initTempTable(myD, opts, NULL, IMPLICIT_TAG, status);
+    if(U_FAILURE(*status))
+    {
+        fprintf(stderr, "Failed to init UCA temp table: %s\n", u_errorName(*status));
+        return -1;
+    }
 
 #if 0
     IMPLICIT_TAG = 9,
@@ -971,6 +976,13 @@ int main(int argc, char* argv[]) {
       uprv_strcpy(basename, getLongPathname(*argv));
     }
 
+#if 0
+    if(u_getCombiningClass(0x0053) == 0)
+    {
+        fprintf(stderr, "SEVERE ERROR: Normalization data is not functioning! Bailing out.  Was not able to load unorm.dat.\n");
+        exit(1);
+    }
+#endif 
     return write_uca_table(filename, destdir, copyright, &status);
 }
 

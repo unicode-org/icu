@@ -175,12 +175,50 @@ int main(int argc, const char* const argv[])
     return nerrors ? 1 : 0;
 }
 
+void ctest_appendToDataDirectory(const char *toAppend)
+{
+    const char *oldPath ="";
+    char newBuf [1024];
+    char *newPath = newBuf;
+    int32_t oldLen;
+    int32_t newLen;
+
+    if((toAppend == NULL) || (*toAppend == 0)) {
+        return;
+    }
+
+    oldPath = u_getDataDirectory();
+    if( (oldPath==NULL) || (*oldPath == 0)) {
+        u_setDataDirectory(toAppend);
+    } else {
+        oldLen = strlen(oldPath);
+        newLen = strlen(toAppend)+1+oldLen;
+        
+        if(newLen > 1022)
+        {
+            newPath = malloc(newLen);
+        }
+
+        strcpy(newPath, oldPath);
+        strcpy(newPath+oldLen, U_PATH_SEP_STRING);
+        strcpy(newPath+oldLen+1, toAppend);
+        
+        u_setDataDirectory(newPath);
+        
+        if(newPath != newBuf)
+        {
+            free(newPath);
+        }
+    }
+}
+    
+
 void
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
 {
     char mainDirBuffer[1024];
     char* mainDir = NULL;
-    const char *dataDirectory = u_getDataDirectory();
+    const char *dataDirectory = ctest_dataOutDir();
     const char inpSepChar = '|';
     char* tmp;
     int32_t lenMainDir;
@@ -228,22 +266,13 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
     }
 }
 
+/* returns the path to icu/source/data/out */
+const char *ctest_dataOutDir()
+{
+    static char *dataOutDir = NULL;
 
-/*  ctest_setICU_DATA  - if the ICU_DATA environment variable is not already
- *                       set, try to deduce the directory in which ICU was built,
- *                       and set ICU_DATA to "icu/source/data" in that location.
- *                       The intent is to allow the tests to have a good chance
- *                       of running without requiring that the user manually set
- *                       ICU_DATA.  Common data isn't a problem, since it is
- *                       picked up via a static (build time) reference, but the
- *                       tests dynamically load some data.
- */
-void ctest_setICU_DATA() {
-    const char *original_ICU_DATA = getenv("ICU_DATA");
-
-    if (original_ICU_DATA != NULL && *original_ICU_DATA != 0) {
-        /*  If the user set ICU_DATA, don't second-guess the person. */
-        return;
+    if(dataOutDir) {
+        return dataOutDir;
     }
 
     /* U_TOPBUILDDIR is set by the makefiles on UNIXes when building cintltst and intltst
@@ -256,9 +285,7 @@ void ctest_setICU_DATA() {
     */
 #if defined (U_TOPBUILDDIR)
     {
-        static char env_string[] = U_TOPBUILDDIR  U_FILE_SEP_STRING "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
-        u_setDataDirectory(env_string);
-        return;
+        dataOutDir = U_TOPBUILDDIR  U_FILE_SEP_STRING "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     }
 #else
 
@@ -267,7 +294,7 @@ void ctest_setICU_DATA() {
      *             Change to    "wherever\icu\source\data"
      */
     {
-        char p[sizeof(__FILE__) + 10];
+        static char p[sizeof(__FILE__) + 10];
         char *pBackSlash;
         int i;
 
@@ -286,11 +313,26 @@ void ctest_setICU_DATA() {
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING);
-            u_setDataDirectory(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
-            return;
+            dataOutDir = p;
         }
     }
 #endif
+
+    return dataOutDir;
+
+}
+
+/*  ctest_setICU_DATA  - if the ICU_DATA environment variable is not already
+ *                       set, try to deduce the directory in which ICU was built,
+ *                       and set ICU_DATA to "icu/source/data" in that location.
+ *                       The intent is to allow the tests to have a good chance
+ *                       of running without requiring that the user manually set
+ *                       ICU_DATA.  Common data isn't a problem, since it is
+ *                       picked up via a static (build time) reference, but the
+ *                       tests dynamically load some data.
+ */
+void ctest_setICU_DATA() {
+
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
@@ -349,10 +391,10 @@ const char* loadTestData(UErrorCode* err){
     const char*      directory=NULL;
     UResourceBundle* test =NULL;
     char* tdpath=NULL;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     if( _testDataPath == NULL){
-        directory= u_getDataDirectory();
-    
+        directory= ctest_dataOutDir();
+
         tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
 
 
@@ -369,41 +411,11 @@ const char* loadTestData(UErrorCode* err){
     
         test=ures_open(tdpath, "testtypes", err);
     
-        /* we could not find the data in tdpath 
-         * try tdpathFallback
-         */
-        if(U_FAILURE(*err))
-        {
-            strcpy(tdpath,directory);
-            strcat(tdpath,".."U_FILE_SEP_STRING);
-            strcat(tdpath, tdrelativepath);
-            strcat(tdpath,"testdata");
-            *err =U_ZERO_ERROR;
-            test=ures_open(tdpath, "testtypes", err);
-            /* we could not find the data in tdpath 
-             * try one more tdpathFallback
-             */
-            if(U_FAILURE(*err)){
-                strcpy(tdpath,directory);
-                strcat(tdpath,".."U_FILE_SEP_STRING);
-                strcat(tdpath,".."U_FILE_SEP_STRING);
-                strcat(tdpath, tdrelativepath);
-                strcat(tdpath,"testdata");
-                *err =U_ZERO_ERROR;
-                test=ures_open(tdpath, "testtypes", err);
-                /* Fall back did not succeed either so return */
-                if(U_FAILURE(*err)){
-                    *err = U_FILE_ACCESS_ERROR;
-                    log_err("construction of NULL did not succeed  :  %s \n", u_errorName(*err));
-                    return "";
-                }
-                ures_close(test);
-                _testDataPath = tdpath;
-                return _testDataPath;
-            }
-            ures_close(test);
-            _testDataPath = tdpath;
-            return _testDataPath;
+        /* Fall back did not succeed either so return */
+        if(U_FAILURE(*err)){
+            *err = U_FILE_ACCESS_ERROR;
+            log_err("Could not load testtypes.res in testdata bundle with path %s - %as\n", tdpath, u_errorName(*err));
+            return "";
         }
         ures_close(test);
         _testDataPath = tdpath;
