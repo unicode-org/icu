@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/11/22 22:45:19 $
- * $Revision: 1.78 $
+ * $Date: 2002/12/02 17:03:18 $
+ * $Revision: 1.79 $
  *
  *****************************************************************************************
  */
@@ -197,7 +197,7 @@ import java.util.Iterator;
  *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
  *       <td valign="top"><em>any character that is not</em><code> special<br>
  *       | ('\u005C' </code><em>any character</em><code>)<br>
- *       | ('\u005Cu' hex hex hex hex)<br>
+ *       | ('&#92;u' hex hex hex hex)<br>
  *       </code></td>
  *     </tr>
  *     <tr align="top">
@@ -250,7 +250,7 @@ import java.util.Iterator;
  * </blockquote>
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.78 $ $Date: 2002/11/22 22:45:19 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.79 $ $Date: 2002/12/02 17:03:18 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
