@@ -420,7 +420,7 @@ inline int32_t CollationElementIterator::tertiaryOrder(int32_t order)
 
 inline int32_t CollationElementIterator::getMaxExpansion(int32_t order) const
 {
-  return ucol_getMaxExpansion(m_data_, order);
+  return ucol_getMaxExpansion(m_data_, (uint32_t)order);
 }
 
 inline UBool CollationElementIterator::isIgnorable(int32_t order)
