@@ -270,10 +270,10 @@ void TestExponential(void)
           a=unum_parseDouble(fmt, str, u_strlen(str), &ppos, &status);
           if (ppos== u_strlen(str)) {
              if (a != valParse[v+ival])
-              printf("FAIL: Expected : %e\n", valParse[v+ival]);
+              log_err("FAIL: Expected: %e, Got: %g\n", valParse[v+ival], a);
           }
           else
-            printf(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
+            log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
 
           free(str);
         }
@@ -301,10 +301,10 @@ void TestExponential(void)
           if (ppos== u_strlen(str)) {
             /*printf(" Parse -> %e\n",  a);*/
             if (a != lvalParse[v+ilval])
-              printf("FAIL: Expected : %e\n", valParse[v+ival]);
+              log_err("FAIL: Expected : %e\n", valParse[v+ival]);
           }
           else
-            printf(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
+            log_err(" FAIL: Partial parse (  %d  chars ) ->  %e\n",  ppos, a);
 
           free(str);
 
