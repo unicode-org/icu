@@ -22,10 +22,10 @@ uenum_close(UEnumeration* en)
 {
     if (en) {
         if (en->close != NULL) {
-            en->close(en);
             if (en->baseContext) {
                 uprv_free(en->baseContext);
             }
+            en->close(en);
         } else { /* this seems dangerous, but we better kill the object */
             uprv_free(en);
         }
