@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-linux,v 1.27 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-linux,v 1.28 2001/10/03 21:54:10 emader-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -63,6 +63,7 @@ INSTALL-L = $(INSTALL_DATA)
 LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
 LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT) -Wl,-rpath-link $(top_builddir)/data
 LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
+LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)layout$(ICULIBSSUFFIX)
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)
 LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)
