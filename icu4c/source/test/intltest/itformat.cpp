@@ -36,7 +36,6 @@
 #include "pptest.h"         // ParsePositionTest
 #include "calregts.h"       // CalendarRegressionTest
 #include "tzregts.h"        // TimeZoneRegressionTest
-#include "usettest.h"       // UnicodeSetTest
 
 void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
@@ -290,14 +289,6 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, char* &name, cha
             }
             break;
 
-        case 26:
-            name = "UnicodeSetTest";
-            if (exec) {
-                logln("UnicodeSetTest---"); logln();
-                UnicodeSetTest test;
-                callTest(test, par);
-            }
-            break;
         /*
         case 28: 
             name = "DateFormatSymbolsCAPI"; 
