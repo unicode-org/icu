@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/09/24 19:16:32 $ 
- * $Revision: 1.52 $
+ * $Date: 2003/09/29 23:20:36 $ 
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -602,6 +602,12 @@ public class UnicodeSetTest extends TestFmwk {
         s.applyPattern("[a-z {\u4E01\u4E02}{\\n\\r}]");
         expectToPattern(s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]",
                         new String[] {"\u4E01\u4E02", "\n\r"});
+
+        s.clear();
+        s.add("abc");
+        s.add("abc");
+        expectToPattern(s, "[{abc}]",
+                        new String[] {"abc", NOT, "ab"});
     }
 
     static final Integer 
@@ -892,6 +898,10 @@ public class UnicodeSetTest extends TestFmwk {
             "[[a-q]&[p-z]-]", // trailing '-' is literal
             "pq-",
             "or=",
+
+            "[\\s|\\)|:|$|\\>]", // from regex tests
+            "s|):$>",
+            "\\abc"
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
