@@ -162,7 +162,7 @@ PortableFontInstance::~PortableFontInstance()
 
         LE_DELETE_ARRAY(fDirectory);
     }
-};
+}
 
 void PortableFontInstance::deleteTable(const void *table) const
 {
