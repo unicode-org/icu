@@ -27,8 +27,8 @@ ko_KR {
         //CA { "\uCE90\uB098\uB2E4" }
 //    }
     DateTimePatterns {
-        "a h'\uC2DC' mm'\uBD84' ss'\uCD08' z",
-        "a h'\uC2DC' mm'\uBD84' ss'\uCD08'",
+        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
         "a h:mm:ss",
         "a h:mm",
         "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
