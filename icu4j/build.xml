@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/09/22 18:49:24 $ 
-* $Revision: 1.20 $
+* $Date: 2000/11/20 19:08:48 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -79,7 +79,7 @@
   
   <target name="docs" depends="core">
     <mkdir dir="${doc.dir}"/>
-    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
+    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print,com.ibm.test"
               sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
