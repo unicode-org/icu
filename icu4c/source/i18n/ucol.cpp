@@ -68,6 +68,11 @@ static UCollator* _staticUCA = NULL;
 // used for cleanup in ucol_cleanup
 static UDataMemory* UCA_DATA_MEM = NULL;
 
+// this is static pointer to the normalizer fcdTrieIndex
+// it is always the same between calls to u_cleanup
+// and therefore writing to it is not synchronized.
+// It is cleaned in ucol_cleanup
+static const uint16_t *fcdTrieIndex=NULL;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
@@ -801,8 +806,6 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
 }
 #endif
 
-static const uint16_t *fcdTrieIndex=NULL;
-
 
 /**
 * Approximate determination if a character is at a contraction end.
@@ -952,9 +955,6 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     result->expansionCESize = (uint8_t*)result->image +
                                                result->image->expansionCESize;
 
-    if (fcdTrieIndex == NULL) {
-        fcdTrieIndex = unorm_getFCDTrie(status);
-    }
 
     //result->errorCode = *status;
 
@@ -981,6 +981,7 @@ ucol_cleanup(void)
         ucol_close(_staticUCA);
         _staticUCA = NULL;
     }
+    fcdTrieIndex = NULL;
     return TRUE;
 }
 
@@ -1358,6 +1359,10 @@ ucol_initUCA(UErrorCode *status) {
                     UCA_DATA_MEM = result;
                     result = NULL;
                     newUCA = NULL;
+                }
+                if (fcdTrieIndex == NULL) {
+                    fcdTrieIndex = unorm_getFCDTrie(status);
+                    ucln_i18n_registerCleanup();
                 }
                 umtx_unlock(NULL);
 
