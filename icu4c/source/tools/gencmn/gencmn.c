@@ -86,7 +86,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, char *argv[]) {
+main(int argc, const char *argv[]) {
     static uint8_t buffer[4096];
     char line[512];
     const char *destdir = 0;

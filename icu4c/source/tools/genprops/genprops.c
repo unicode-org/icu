@@ -33,7 +33,7 @@
 #include "uparse.h"
 #include "genprops.h"
 
-extern bool_t beVerbose=FALSE, haveCopyright=TRUE;
+bool_t beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -206,7 +206,7 @@ parseMirror(const char *filename, UErrorCode *pErrorCode) {
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
 /* general categories */
-extern const char *const
+const char *const
 genCategoryNames[U_CHAR_CATEGORY_COUNT]={
     NULL,
     "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
@@ -219,7 +219,7 @@ genCategoryNames[U_CHAR_CATEGORY_COUNT]={
     "Cn"
 };
 
-extern const char *const
+const char *const
 bidiNames[U_CHAR_DIRECTION_COUNT]={
     "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
     "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
