@@ -635,6 +635,9 @@ typedef enum {
     LONG_PRIMARY_TAG = 12,   /* This is a three byte primary with starting secondaries and tertiaries */
                              /* It fits in a single 32 bit CE and is used instead of expansion to save */
                              /* space without affecting the performance (hopefully) */
+                             
+	DIGIT_TAG = 13,			/* COllate Digits As Numbers (CODAN) implementation */
+	
     CE_TAGS_COUNT
 } UColCETags;
 
@@ -653,7 +656,8 @@ typedef struct {
       /*UColAttributeValue*/ int32_t caseLevel;         /* do we have an extra case level */
       /*UColAttributeValue*/ int32_t normalizationMode; /* attribute for normalization */
       /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
-      /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribuge for special Hiragana */
+      /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribute for special Hiragana */
+      /*UColAttributeValue*/ int32_t numericCollation;
       uint8_t reserved[64];                 /* for future use */
 } UColOptionSet;
 
@@ -862,6 +866,7 @@ struct UCollator {
     UColAttributeValue normalizationMode; /* attribute for normalization */
     UColAttributeValue strength;          /* attribute for strength */
     UColAttributeValue hiraganaQ;         /* attribute for Hiragana */
+    UColAttributeValue numericCollation;
     UBool variableTopValueisDefault;
     UBool frenchCollationisDefault;
     UBool alternateHandlingisDefault; /* attribute for handling variable elements*/
@@ -870,6 +875,7 @@ struct UCollator {
     UBool normalizationModeisDefault; /* attribute for normalization */
     UBool strengthisDefault;          /* attribute for strength */
     UBool hiraganaQisDefault;         /* attribute for Hiragana */
+    UBool numericCollationisDefault;
     UBool hasRealData;                /* some collators have only options, like French, no rules */
                                       /* to speed up things, we use the UCA image, but we don't want it */
                                       /* to run around */
@@ -980,4 +986,3 @@ static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
-
