@@ -162,7 +162,7 @@ u_parseCodePoints(const char *s,
 
         /* read one code point */
         value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
+        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';' && *end!=0) || value>=0x110000) {
             *pErrorCode=U_PARSE_ERROR;
             return 0;
         }
