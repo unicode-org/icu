@@ -1004,12 +1004,14 @@ static void TestGetSetOffset(void)
         SearchData  search      = BASIC[index ++];
         int32_t matchindex  = search.offset[count];
         int32_t     textlength;
-    
+        
         u_unescape(search.text, text, 128);
         u_unescape(search.pattern, pattern, 32);
         status = U_ZERO_ERROR;
         usearch_setText(strsrch, text, -1, &status);
         usearch_setPattern(strsrch, pattern, -1, &status);
+        ucol_setStrength(usearch_getCollator(strsrch), search.strength);
+        usearch_reset(strsrch);
         while (U_SUCCESS(status) && matchindex >= 0) {
             uint32_t matchlength = search.size[count];
             usearch_next(strsrch, &status);
@@ -1065,6 +1067,7 @@ static void TestGetSetOffset(void)
             return;
         }
     }
+    ucol_setStrength(usearch_getCollator(strsrch), UCOL_TERTIARY);
     usearch_close(strsrch);
     close();
 }
