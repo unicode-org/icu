@@ -16,7 +16,6 @@
 #include "transreg.h"
 #include "ucln_in.h"
 #include "unicode/cpdtrans.h"
-#include "unicode/hextouni.h"
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "name2uni.h"
@@ -35,8 +34,9 @@
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
-#include "unicode/unitohex.h"
 #include "unicode/uscript.h"
+#include "esctrn.h"
+#include "unesctrn.h"
 
 
 // keep in sync with CompoundTransliterator
@@ -1690,8 +1690,6 @@ void Transliterator::initializeRegistry(void) {
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
 
-    registry->put(new HexToUnicodeTransliterator(), TRUE);
-    registry->put(new UnicodeToHexTransliterator(), TRUE);
     registry->put(new NullTransliterator(), TRUE);
     registry->put(new RemoveTransliterator(), TRUE);
     registry->put(new LowercaseTransliterator(), TRUE);
@@ -1701,6 +1699,8 @@ void Transliterator::initializeRegistry(void) {
     _registerSpecialInverse("Title", "Lower", FALSE);
     registry->put(new UnicodeNameTransliterator(), TRUE);
     registry->put(new NameUnicodeTransliterator(), TRUE);
+    EscapeTransliterator::registerIDs();
+    UnescapeTransliterator::registerIDs();
     NormalizationTransliterator::registerIDs();
     ucln_i18n_registerCleanup();
 }
