@@ -13,6 +13,13 @@ import java.io.InputStream;
 
 /**
  * Rule Based Break Iterator implementation.
+ * This is a port of the C++ class RuleBasedBreakIterator from ICU4C.
+ * 
+ *   A note on future plans:  Once a new DictionaryBasedBreakIterator implementation
+ *                            is completed, the archaic implementation class
+ *                            RuleBasedBreakIterator_Old can be completely removed,
+ *                            and this class can be renamed to be simply
+ *                            RuleBasedBreakIterator.
  * @internal
  */
 public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
@@ -451,8 +458,6 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
 
     /**
      * Throw IllegalArgumentException unless begin <= offset < end.
-     * TODO:  subclassing interface from old RBBI is not really usable.
-     *        What to do with old protected functions tagged as stable?
      * @stable ICU 2.0
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
@@ -524,17 +529,12 @@ private void makeRuleStatusValid() {
             int pa = current();
             previous();
             int pb = next();
-            if (pa != pb) {
-                // TODO:  comment this out.
-                System.out.println("RuleBasedBreakIterator::makeRuleStatusValid internal error");
-            }
+            assert pa == pb;
         }
     }
-    //U_ASSERT(fLastStatusIndexValid == TRUE);
-    //U_ASSERT(fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fData->fStatusMaxIdx);
-
+    assert fLastStatusIndexValid == true;
+    assert fLastRuleStatusIndex >= 0  &&  fLastRuleStatusIndex < fRData.fStatusTable.length;
 }
-
 
 
 /**
@@ -636,7 +636,6 @@ public int getRuleStatusVec(int[] fillInArray) {
     
     
     private static int CINext32(CharacterIterator ci) {
-        //  TODO:  pre-increment is a pain.  Redo all to use post-increment.
         int retVal;
         int curChar = CICurrent32(ci);
         ci.next();

@@ -121,26 +121,16 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             iter = new RuleBasedBreakIterator_Old(rules);
         }
         else if (classNames[kind].equals("RuleBasedBreakIterator_New")) {
+        	// Class for new RBBI engine.
+        	// Open a stream to the .brk file.  Path to the brk files has this form:
+        	//      data/icudt30b/line.brk      (30 is version number)
         	try {
-        		// Class for new RBBI engine.
-        		// Open a stream to the .brk file.  Path to the brk files has this form:
-        		//      data/icudt30b/line.brk      (30 is version number)
         		String rulesFileName = UResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
-        		InputStream is = ICUData.getStream(rulesFileName);
-        		if (is == null) {
-        			// Temporary!!! Try again with break files named data/icudt28b_char.brk
-        			//              (or word, line, etc.)   This was a temporary location
-        			//              used during development, this code can be removed once
-        			//              the data is in the data directory, above.  TODO:  remove 
-        			//              the following code, make this catch turn around and throw.
-        			rulesFileName = UResourceBundle.ICU_BUNDLE + "/" + 
-						KIND_NAMES_2[kind] + ".brk";
-        			is = ICUData.getRequiredStream(rulesFileName);
-        		}
-        		iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);   
+        		InputStream is = ICUData.getRequiredStream(rulesFileName);
+        		iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);
         	}
         	catch (IOException e) {
-        		throw    new IllegalArgumentException(e.toString());
+        		throw new IllegalArgumentException(e.toString());   
         	}
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
@@ -156,10 +146,10 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                 iter = new DictionaryBasedBreakIterator(rules, dictionary);
             }
             catch(IOException e) {
-            	System.out.println(e); // debug
+            	assert false : e;
             }
             catch(MissingResourceException e) {
-            	System.out.println(e); // debug
+            	assert false : e;
             }
 	    // TODO: we don't have 'bad' resource data, so this should never happen
 	    // in our current tests.
@@ -183,4 +173,5 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         iter.setLocale(uloc, uloc);
         return iter;
     }
+
 }
