@@ -355,12 +355,12 @@ void TestUnicodeData()
 
     strcpy(expectString, "Unicode Version ");
     strcat(expectString, expectVersion);
-    u_getUnicodeVersion(&versionArray);
+    u_getUnicodeVersion(versionArray);
 
-    if(memcmp(versionArray.versions, expectVersionArray, U_MAX_VERSION_LEN) != 0)
+    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LEN) != 0)
       {
 	log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
-        versionArray.versions[0], versionArray.versions[1], versionArray.versions[2], versionArray.versions[3]);
+        versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
       }
 
 #if defined(ICU_UNICODE_VERSION)

@@ -803,9 +803,9 @@ public:
 
 	/**
 	 * Retrieves the Unicode Standard Version number that is used
-	 * @return the Unicode Standard Version Number.
+     * @param info the version # information, the result will be filled in
 	 */
-	static void   getUnicodeVersion(UVersionInfo *info);
+	static void   getUnicodeVersion(UVersionInfo info);
 
 protected:
     // These constructors, destructor, and assignment operator must

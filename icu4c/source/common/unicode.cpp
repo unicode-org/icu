@@ -350,7 +350,7 @@ Unicode::forDigit(int32_t digit, int8_t radix) {
 }
 
 void
-Unicode::getUnicodeVersion(UVersionInfo* versionArray)
+Unicode::getUnicodeVersion(UVersionInfo versionArray)
 {
 	u_getUnicodeVersion(versionArray);
 }
