@@ -19,7 +19,7 @@ import com.ibm.util.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.1 $ $Date: 2001/11/20 17:55:24 $
+ * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.2 $ $Date: 2001/11/21 07:08:46 $
  */
 class UnescapeTransliterator extends Transliterator {
 
@@ -136,9 +136,9 @@ class UnescapeTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       Position offsets, boolean isIncremental) {
-        int start = offsets.start;
-        int limit = offsets.limit;
+                                       Position pos, boolean isIncremental) {
+        int start = pos.start;
+        int limit = pos.limit;
         int i, j, ipat;
 
       loop:
@@ -241,12 +241,12 @@ class UnescapeTransliterator extends Transliterator {
             }
 
             if (start < limit) {
-                start += UTF16.getCharCount(UTF16.charAt(text, start));;
+                start += UTF16.getCharCount(UTF16.charAt(text, start));
             }
         }
 
-        offsets.contextLimit += limit - offsets.limit;
-        offsets.limit = limit;
-        offsets.start = start;
+        pos.contextLimit += limit - pos.limit;
+        pos.limit = limit;
+        pos.start = start;
     }
 }
