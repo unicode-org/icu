@@ -166,22 +166,14 @@ SOURCE=.\Utilities.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\ParagraphLayout.h
+SOURCE=.\layout\ParagraphLayout.h
 
 !IF  "$(CFG)" == "layoutex - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\ParagraphLayout.h
-
-"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "layoutex - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\ParagraphLayout.h
+InputPath=.\layout\ParagraphLayout.h
 
 "..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy  $(InputPath)  ..\..\include\layout
@@ -190,45 +182,21 @@ InputPath=.\ParagraphLayout.h
 
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Release"
 
-# Begin Custom Build
-InputPath=.\ParagraphLayout.h
-
-"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
-
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\ParagraphLayout.h
-
-"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\RunArrays.h
+SOURCE=.\layout\RunArrays.h
 
 !IF  "$(CFG)" == "layoutex - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\RunArrays.h
-
-"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "layoutex - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\RunArrays.h
+InputPath=.\layout\RunArrays.h
 
 "..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy  $(InputPath)  ..\..\include\layout
@@ -237,23 +205,7 @@ InputPath=.\RunArrays.h
 
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Release"
 
-# Begin Custom Build
-InputPath=.\RunArrays.h
-
-"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
-
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\RunArrays.h
-
-"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
-
-# End Custom Build
 
 !ENDIF 
 
