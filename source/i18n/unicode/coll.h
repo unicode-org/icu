@@ -58,6 +58,7 @@ U_NAMESPACE_BEGIN
 
 class StringEnumeration;
 
+#if !UCONFIG_NO_SERVICE
 /**
  * @draft ICU 2.6
  */
@@ -67,6 +68,7 @@ typedef const void* URegistryKey;
  * @draft ICU 2.6
  */
 class CollatorFactory;
+#endif
 
 /**
 * @stable ICU 2.0
@@ -602,6 +604,7 @@ public:
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
+#if !UCONFIG_NO_SERVICE
     /**
      * Return a StringEnumeration over the locales available at the time of the call, 
      * including registered locales.  If a severe error occurs (such as out of memory
@@ -611,6 +614,7 @@ public:
      * @draft ICU 2.6
      */
     static StringEnumeration* getAvailableLocales(void);
+#endif
 
     /**
      * Create a string enumerator of all possible keywords that are relevant to
@@ -666,6 +670,7 @@ public:
     static Locale getFunctionalEquivalent(const char* keyword, const Locale& locale,
                                           UBool& isAvailable, UErrorCode& status);
 
+#if !UCONFIG_NO_SERVICE
     /**
      * Register a new Collator.  The collator will be adopted.
      * @param toAdopt the Collator instance to be adopted
@@ -696,6 +701,7 @@ public:
      * @draft ICU 2.6 
      */
     static UBool unregister(URegistryKey key, UErrorCode& status);
+#endif /* UCONFIG_NO_SERVICE */
 
     /**
      * Gets the version information for a Collator. 
@@ -923,12 +929,13 @@ protected:
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 
 public:
+#if !UCONFIG_NO_SERVICE
     /**
      * used only by ucol_open, not for public use
      * @internal
      */
     static UCollator* createUCollator(const char* loc, UErrorCode* status);
-
+#endif
 private:
     /**
      * Assignment operator. Private for now.
@@ -954,6 +961,7 @@ private:
 /*  static const UVersionInfo fVersion;*/
 };
 
+#if !UCONFIG_NO_SERVICE
 /**
  * A factory, used with registerFactory, the creates multiple collators and provides
  * display names for them.  A factory supports some number of locales-- these are the
@@ -1022,21 +1030,10 @@ public:
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
+#endif /* UCONFIG_NO_SERVICE */
 
 // Collator inline methods -----------------------------------------------
 
-/*
-synwee : removed since there's no attribute to be retrieved here
-inline UCollationStrength Collator::getStrength() const
-{
-  return strength;
-}
-
-inline Normalizer::EMode Collator::getDecomposition() const
-{
-  return decmp;
-}
-*/
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -537,6 +537,7 @@ ucol_getAvailable(int32_t index);
 U_STABLE int32_t U_EXPORT2 
 ucol_countAvailable(void);
 
+#if !UCONFIG_NO_SERVICE
 /**
  * Create a string enumerator of all locales for which a valid
  * collator may be opened.
@@ -547,6 +548,7 @@ ucol_countAvailable(void);
  */
 U_DRAFT UEnumeration* U_EXPORT2
 ucol_openAvailableLocales(UErrorCode *status);
+#endif
 
 /**
  * Create a string enumerator of all possible keywords that are relevant to
