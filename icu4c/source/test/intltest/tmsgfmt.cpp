@@ -51,6 +51,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(15,testAdopt);
         TESTCASE(16,testCopyConstructor2);
         TESTCASE(17,TestUnlimitedArgsAndSubformats);
+	TESTCASE(18,TestRBNF);
         default: name = ""; break;
     }
 }
@@ -1113,6 +1114,61 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
     } else {
         errln((UnicodeString)"FAIL: Got " + result +
               ", expected " + expected);
+    }
+}
+
+// test RBNF extensions to message format
+void TestMessageFormat::TestRBNF(void) {
+    // WARNING: this depends on the RBNF formats for en_US
+    Locale locale("en", "US", "");
+
+    UErrorCode ec = U_ZERO_ERROR;
+
+    UnicodeString values[] = {
+        // decimal values do not format completely for ordinal or duration, and 
+        // do not always parse, so do not include them
+        "0", "1", "12", "100", "123", "1001", "123,456", "-17",
+    };
+    int32_t values_count = sizeof(values)/sizeof(values[0]);
+
+    UnicodeString formats[] = {
+        "There are {0,spellout} files to search.",
+        "There are {0,spellout,%simplified} files to search.",
+        "The bogus spellout {0,spellout,%BOGUS} files behaves like the default.",
+        "This is the {0,ordinal} file to search.", // TODO fix bug, ordinal does not parse
+        "Searching this file will take {0,duration} to complete.",
+        "Searching this file will take {0,duration,%with-words} to complete.",
+    };
+    int32_t formats_count = sizeof(formats)/sizeof(formats[0]);
+
+    Formattable args[1];
+
+    NumberFormat* numFmt = NumberFormat::createInstance(locale, ec);
+    for (int i = 0; i < formats_count; ++i) {
+        MessageFormat* fmt = new MessageFormat(formats[i], locale, ec);
+        logln((UnicodeString)"Testing format pattern: '" + formats[i] + "'");
+        for (int j = 0; j < values_count; ++j) {
+            ec = U_ZERO_ERROR;
+            numFmt->parse(values[j], args[0], ec);
+            if (U_FAILURE(ec)) {
+                errln((UnicodeString)"Failed to parse test argument " + values[j]);
+            } else {
+                FieldPosition fp(0);
+                UnicodeString result;
+                fmt->format(args, 1, result, fp, ec);
+                logln((UnicodeString)"value: " + toString(args[0]) + " --> " + result + " ec: " + ec);
+               
+                if (i != 3) { // TODO: fix this, for now skip ordinal parsing (format string at index 3)
+                    int32_t count = 0;
+                    Formattable* parseResult = fmt->parse(result, count, ec);
+                    if (count != 1) {
+                        errln((UnicodeString)"parse returned " + count + " args");
+                    } else if (parseResult[0] != args[0]) {
+                        errln((UnicodeString)"parsed argument " + toString(parseResult[0]) + " != " + toString(args[0]));
+                    }
+                }
+            }
+        }
     }
 }
 
