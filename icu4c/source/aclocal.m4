@@ -30,6 +30,7 @@ alpha*-*-linux-gnu)
 		icu_cv_host_frag=mh-alpha-linux-cc
 	fi ;;
 *-*-linux*) 	icu_cv_host_frag=mh-linux ;;
+*-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
 *-*-freebsd*|*-*-netbsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*) 	
 	case "$CXX" in
