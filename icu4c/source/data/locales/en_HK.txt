@@ -26,6 +26,9 @@ en_HK {
             }
         }
     }
+    Currencies{
+        HKD { "$",  "Hong Kong Dollar" }
+    }
 //    NumberElements {
 //        ".",
 //        ",",
@@ -44,9 +47,5 @@ en_HK {
         "\u00A4#,##0.00;(\u00A4#,##0.00)",
         "#,##0%",
         "#E0",
-    }
-    Currencies{
-        HKD { "$",  "Hong Kong Dollar"     } 
-        USD { "US$",     "USD" } // US Dollar
     }
 }

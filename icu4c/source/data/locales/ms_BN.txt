@@ -7,21 +7,6 @@
 
 ms_BN{
     Version{ "1.0" }
-    NumberElements { 
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-        ",",
-        "+",
-    }
     calendar{
         gregorian{
             DateTimePatterns{
@@ -39,6 +24,20 @@ ms_BN{
     }
     Currencies {
         BND { "$", "BND" }
-        USD { "US$", "USD" }
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
     }
 }
