@@ -35,6 +35,57 @@ public class UtilityTest extends TestFmwk {
         }
     }
     
+    public void TestFormat()
+    {
+        String data[] = {
+            "the quick brown fox jumps over the lazy dog",
+            // result of this conversion will exceed the original length and
+            // cause a newline to be inserted
+            "testing space , quotations \"",
+            "testing weird supplementary characters \ud800\udc00",
+            "testing control characters \u0001 and line breaking \n are we done yet?"
+        };
+        String result[] = {
+            "        \"the quick brown fox jumps over the lazy dog\"",
+            "        \"testing space , quotations \\042\"",
+            "        \"testing weird supplementary characters \\uD800\\uDC00\"",
+            "        \"testing control characters \\001 and line breaking \\012 are we done ye\"+"
+                     + Utility.LINE_SEPARATOR + "        \"t?\""
+        };
+        String result1[] = {
+            "\"the quick brown fox jumps over the lazy dog\"",
+            "\"testing space , quotations \\042\"",
+            "\"testing weird supplementary characters \\uD800\\uDC00\"",
+            "\"testing control characters \\001 and line breaking \\012 are we done yet?\""
+        };
+        
+        for (int i = 0; i < data.length; i ++) {
+            if (!result[i].equals(Utility.formatForSource(data[i]))) {
+                errln("Fail: Utility.formatForSource(\""
+                      + Utility.unescape(data[i]) + "expected to be " + result[i]);
+            }
+        }
+        for (int i = 0; i < data.length; i ++) {
+            if (!result1[i].equals(Utility.format1ForSource (data[i]))) {
+                errln("Fail: Utility.formatForSource(\""
+                      + Utility.unescape(data[i]) + "expected to be " + result1[i]);
+            }
+        }
+    }
+    
+    public void TestHighBit()
+    {
+        int data[] = {-1, -1276, 0, 0xFFFF, 0x1234};
+        byte result[] = {-1, -1, -1, 15, 12};
+        for (int i = 0; i < data.length; i ++) {
+            if (Utility.highBit(data[i]) != result[i]) {
+                errln("Fail: Highest bit of \\u" 
+                      + Integer.toHexString(data[i]) + " should be "
+                      + result[i]);
+            }
+        }
+    }
+    
     public void TestCompareUnsigned()
     {
         int data[] = {0, 1, 0x8fffffff, -1, Integer.MAX_VALUE, 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2003/06/03 18:49:32 $ 
-* $Revision: 1.6 $
+* $Date: 2003/06/11 19:55:18 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -244,9 +244,11 @@ public class BOCU
     /**
      * Constructor private to prevent initialization
      */
+    ///CLOVER:OFF
     private BOCU()
     {
-    }                                                                                                   
+    }            
+    ///CLOVER:ON                                                                                       
     
     // private methods -------------------------------------------------------
     

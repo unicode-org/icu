@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/06/09 23:15:00 $
- * $Revision: 1.41 $
+ * $Date: 2003/06/11 19:55:18 $
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -468,6 +468,7 @@ public final class Utility {
     /**
      * Construct an array of shorts from a run-length encoded string.
      */
+    ///CLOVER:OFF
     static public final short[] RLEStringToShortArray(String s) {
         int length = (((int) s.charAt(0)) << 16) | ((int) s.charAt(1));
         short[] array = new short[length];
@@ -494,6 +495,7 @@ public final class Utility {
 
         return array;
     }
+    ///CLOVER:ON
 
     /**
      * Construct an array of shorts from a run-length encoded string.
@@ -855,6 +857,7 @@ public final class Utility {
      * Convert all escapes in a given string using unescapeAt().
      * Leave invalid escape sequences unchanged.
      */
+    ///CLOVER:OFF
     public static String unescapeLeniently(String s) {
         StringBuffer buf = new StringBuffer();
         int[] pos = new int[1];
@@ -875,40 +878,49 @@ public final class Utility {
         }
         return buf.toString();
     }
+    ///CLOVER:ON
 
     /**
      * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
      * "0041".
      */
+    ///CLOVER:OFF
     public static String hex(char ch) {
         StringBuffer temp = new StringBuffer();
         return hex(ch, temp).toString();
     }
+    ///CLOVER:ON
 
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".
      */
+    ///CLOVER:OFF
     public static String hex(String s) {
         StringBuffer temp = new StringBuffer();
         return hex(s, temp).toString();
     }
+    ///CLOVER:ON
 
     /**
      * Convert a string to comma-separated groups of 4 hex uppercase
      * digits.  E.g., hex('ab') => "0041,0042".
      */
+    ///CLOVER:OFF
     public static String hex(StringBuffer s) {
         return hex(s.toString());
     }
+    ///CLOVER:ON
 
     /**
      * Convert a char to 4 hex uppercase digits.  E.g., hex('a') =>
      * "0041".  Append the output to the given StringBuffer.
      */
+    ///CLOVER:OFF
     public static StringBuffer hex(char ch, StringBuffer output) {
         return appendNumber(output, ch, 16, 4);
     }
+    ///CLOVER:ON
 
     /**
      * Convert a integer to size width hex uppercase digits.
@@ -935,6 +947,7 @@ public final class Utility {
      * digits.  E.g., hex('ab') => "0041,0042".  Append the output
      * to the given StringBuffer.
      */
+    ///CLOVER:OFF
     public static StringBuffer hex(String s, StringBuffer result) {
         for (int i = 0; i < s.length(); ++i) {
             if (i != 0) result.append(',');
@@ -942,6 +955,7 @@ public final class Utility {
         }
         return result;
     }
+    ///CLOVER:ON
 
     /**
      * Split a string into pieces based on the given divider character
@@ -954,6 +968,7 @@ public final class Utility {
      * character will place empty strings into output.  Before
      * returning, output is padded out with empty strings.
      */
+    ///CLOVER:OFF
     public static void split(String s, char divider, String[] output) {
         int last = 0;
         int current = 0;
@@ -969,6 +984,7 @@ public final class Utility {
             output[current++] = "";
         }
     }
+    ///CLOVER:ON
 
     /**
      * Look up a given string in a string array.  Returns the index at
@@ -980,12 +996,14 @@ public final class Utility {
      * @return the index of target at which source first occurs, or -1
      * if not found
      */
+    ///CLOVER:OFF
     public static int lookup(String source, String[] target) {
         for (int i = 0; i < target.length; ++i) {
             if (source.equals(target[i])) return i;
         }
         return -1;
     }
+    ///CLOVER:ON
 
     /**
      * Skip over a sequence of zero or more white space characters
@@ -1270,6 +1288,7 @@ public final class Utility {
     /**
      * Trim whitespace from ends of a StringBuffer.
      */
+    ///CLOVER:OFF
     public static StringBuffer trim(StringBuffer b) {
         // TODO update to handle surrogates
         int i;
@@ -1278,6 +1297,7 @@ public final class Utility {
         for (i=b.length()-1; i>=0 && Character.isWhitespace(b.charAt(i)); --i) {}
         return b.delete(i+1, b.length());
     }
+    ///CLOVER:ON
 
     static final char DIGITS[] = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -1290,9 +1310,11 @@ public final class Utility {
      * Append a number to the given StringBuffer in the radix 10
      * generating at least one digit.
      */
+    ///CLOVER:OFF
     public static StringBuffer appendNumber(StringBuffer result, int n) {
         return appendNumber(result, n, 10, 1);
     }
+    ///CLOVER:ON
 
     /**
      * Append the digits of a positive integer to the given
