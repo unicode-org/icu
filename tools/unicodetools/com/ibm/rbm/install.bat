@@ -28,7 +28,6 @@ echo * Copying Files
 
 echo ** Copying Batch Files and Properties
 
-copy RBManager.bat zip
 copy RBManager.jar zip
 copy RBReporter.bat zip
 copy rbmanager_scanner.xml zip
