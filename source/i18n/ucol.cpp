@@ -77,13 +77,14 @@ isAcceptableUCA(void * /*context*/,
         pInfo->dataFormat[2]==ucaDataInfo.dataFormat[2] &&
         pInfo->dataFormat[3]==ucaDataInfo.dataFormat[3] &&
         pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
-        pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
-        pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] &&
-        pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] &&
+        pInfo->formatVersion[1]>=ucaDataInfo.formatVersion[1] &&
+        //pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
+        //pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] && // Too harsh
+        //pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] && // Too harsh
         pInfo->dataVersion[0]==ucaDataInfo.dataVersion[0] &&
-        pInfo->dataVersion[1]==ucaDataInfo.dataVersion[1] &&
-        pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
-        pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
+        pInfo->dataVersion[1]>=ucaDataInfo.dataVersion[1]) { // &&
+        //pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
+        //pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
         return TRUE;
     } else {
         return FALSE;
