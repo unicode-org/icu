@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/30 03:11:15 $
-# $Revision: 1.16 $
+# $Date: 2001/11/30 21:25:12 $
+# $Revision: 1.17 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -32,7 +32,7 @@ $accent = [:M:] ;
 
 # NOTE: restrict to just the Greek & Latin accents that we care about
 # TODO: broaden out once interation is fixed
-$accentMinus = [ [\u0300-\u0345] & [:M:] - [\u0338]]
+$accentMinus = [ [\u0300-\u0345] & [:M:] - [\u0338]] ;
 
 $macron = \u0304 ;
 $ddot = \u0308 ;
