@@ -148,6 +148,8 @@ public:
         VisualRun **fRuns;
 
         Line();
+		Line(const Line &other);
+		Line &operator=(const Line &other) { return *this; };
 
         void computeMetrics();
 
@@ -221,7 +223,7 @@ public:
         /**
          * Get the (x, y) positions of the glyphs in the visual run. To simplify storage
          * management, the x and y positions are stored in a single array with the x positions
-         * at even offsets in the array and the corresponding y position in the following even offset.
+         * at even offsets in the array and the corresponding y position in the following odd offset.
          * There is an extra (x, y) pair at the end of the array which represents the advance of
          * the final glyph in the run.
          *
@@ -309,6 +311,8 @@ public:
         friend class Line;
 
         VisualRun();
+		VisualRun(const VisualRun &other);
+		VisualRun &operator=(const VisualRun &other) { return *this; };
 
         VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
                   const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
@@ -454,13 +458,14 @@ public:
      *              rest of the paragraph will be returned.
      *
      * @return a <code>ParagraphLayout::Line</code> object which represents the line. The caller
-     *         is responsible for deleting the object.
+     *         is responsible for deleting the object. Returns <code>NULL</code> if there are no
+	 *         more lines in the paragraph.
      *
      * @see ParagraphLayout::Line
      *
      * @draft ICU 2.6
      */
-    const Line *nextLine(float width);
+    Line *nextLine(float width);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -501,10 +506,12 @@ private:
     };
 
     ParagraphLayout() {};
+	ParagraphLayout(const ParagraphLayout &other) {};
+	ParagraphLayout &operator=(const ParagraphLayout &other) { return *this; };
 
     void computeLevels(UBiDiLevel paragraphLevel);
 
-    const Line *computeVisualRuns();
+    Line *computeVisualRuns();
     void appendRun(Line *line, le_int32 run, le_int32 firstChar, le_int32 lastChar);
 
     void computeScripts();
@@ -587,6 +594,12 @@ inline ParagraphLayout::Line::Line()
     // nothing else to do
 }
 
+inline ParagraphLayout::Line::Line(const Line &other)
+    : fAscent(0), fDescent(0), fLeading(0), fRunCount(0), fRunCapacity(0), fRuns(NULL)
+{
+    // nothing else to do
+}
+
 inline le_int32 ParagraphLayout::Line::countRuns() const
 {
     return fRunCount;
@@ -638,6 +651,12 @@ inline le_int32 ParagraphLayout::VisualRun::getLeading() const
 }
 
 inline ParagraphLayout::VisualRun::VisualRun()
+    : fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
+{
+    // nothing
+}
+
+inline ParagraphLayout::VisualRun::VisualRun(const VisualRun &other)
     : fFont(NULL), fDirection(UBIDI_LTR), fGlyphCount(0), fGlyphs(NULL), fPositions(NULL), fGlyphToCharMap(NULL)
 {
     // nothing

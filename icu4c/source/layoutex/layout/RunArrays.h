@@ -192,10 +192,26 @@ private:
 
     le_int32 ensureCapacity();
 
+	RunArray();
+	RunArray(const RunArray &other);
+	RunArray &operator=(const RunArray &other) { return *this; };
+
     const le_int32 *fLimits;
           le_int32  fCount;
           le_int32  fCapacity;
 };
+
+inline RunArray::RunArray()
+	: fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+{
+	// nothing else to do...
+}
+
+inline RunArray::RunArray(const RunArray &other)
+	: fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+{
+	// nothing else to do...
+}
 
 inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
     : fClientArrays(true), fLimits(limits), fCount(count), fCapacity(count)
@@ -339,6 +355,11 @@ protected:
     virtual void grow(le_int32 capacity);
 
 private:
+
+	FontRuns();
+	FontRuns(const FontRuns &other);
+	FontRuns &operator=(const FontRuns &other) { return *this; };
+
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
@@ -348,6 +369,17 @@ private:
     const LEFontInstance **fFonts;
 };
 
+inline FontRuns::FontRuns()
+	: RunArray(0), fFonts(NULL)
+{
+	// nothing else to do...
+}
+
+inline FontRuns::FontRuns(const FontRuns &other)
+	: RunArray(0), fFonts(NULL)
+{
+	// nothing else to do...
+}
 
 inline FontRuns::FontRuns(const LEFontInstance **fonts, const le_int32 *limits, le_int32 count)
     : RunArray(limits, count), fFonts(fonts)
@@ -472,6 +504,11 @@ protected:
     virtual void grow(le_int32 capacity);
 
 private:
+
+	LocaleRuns();
+	LocaleRuns(const LocaleRuns &other);
+	LocaleRuns &operator=(const LocaleRuns &other) { return *this; };
+
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
@@ -481,6 +518,17 @@ private:
     const Locale **fLocales;
 };
 
+inline LocaleRuns::LocaleRuns()
+	: RunArray(0), fLocales(NULL)
+{
+	// nothing else to do...
+}
+
+inline LocaleRuns::LocaleRuns(const LocaleRuns &other)
+	: RunArray(0), fLocales(NULL)
+{
+	// nothing else to do...
+}
 
 inline LocaleRuns::LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count)
     : RunArray(limits, count), fLocales(locales)
@@ -604,6 +652,11 @@ protected:
     virtual void grow(le_int32 capacity);
 
 private:
+
+	ValueRuns();
+	ValueRuns(const ValueRuns &other);
+	ValueRuns &operator=(const ValueRuns &other) { return *this; };
+
     /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
@@ -613,6 +666,17 @@ private:
     const le_int32 *fValues;
 };
 
+inline ValueRuns::ValueRuns()
+	: RunArray(0), fValues(NULL)
+{
+	// nothing else to do...
+}
+
+inline ValueRuns::ValueRuns(const ValueRuns &other)
+	: RunArray(0), fValues(NULL)
+{
+	// nothing else to do...
+}
 
 inline ValueRuns::ValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count)
     : RunArray(limits, count), fValues(values)
