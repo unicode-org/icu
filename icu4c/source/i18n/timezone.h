@@ -18,6 +18,7 @@
 *    09/15/98    stephen        Added getStaticClassID
 *  12/03/99     aliu        Moved data out of static table into icudata.dll.
 *                           Hashtable replaced by new static data structures.
+*  12/14/99     aliu        Made GMT public.
 ********************************************************************************
 */
 
@@ -111,6 +112,12 @@ struct OffsetIndex;
 class U_I18N_API TimeZone {
 public:
     virtual ~TimeZone();
+
+    /**
+     * The GMT zone has a raw offset of zero and does not use daylight
+     * savings time.
+     */
+    static const TimeZone* GMT;
 
     /**
      * Creates a <code>TimeZone</code> for the given ID.
@@ -436,8 +443,6 @@ private:
     static const UnicodeString      GMT_ID;
     static const int32_t            GMT_ID_LENGTH;
     static const UnicodeString      CUSTOM_ID;
-
-    static const TimeZone          *GMT;
 
     ////////////////////////////////////////////////////////////////
     // Pointers into memory-mapped icudata.  Writing to this memory
