@@ -967,7 +967,7 @@ fi
 dnl output the Makefiles
 AC_OUTPUT([icudefs.mk \
 		Makefile \
-		data/icupkg.inc test/testdata/pkgdata.inc \
+		data/icupkg.inc \
 		config/Makefile.inc \
 		data/Makefile \
 		stubdata/Makefile \
@@ -998,6 +998,7 @@ AC_OUTPUT([icudefs.mk \
 		tools/dumpce/Makefile \
 		test/Makefile \
 		test/testdata/Makefile \
+		test/testdata/pkgdata.inc \
 		test/hdrtst/Makefile \
 		test/intltest/Makefile \
 		test/cintltst/Makefile \
