@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.121 2001/10/03 23:52:15 emader-oss Exp $
+dnl $Id: configure.in,v 1.122 2001/10/09 17:52:43 hshih Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -199,7 +199,6 @@ case "$ac_cv_c_inline" in
 	  no )       U_INLINE= ;;
 	    *)       U_INLINE=$ac_cv_c_inline ;;
 esac
-AC_MSG_RESULT($U_INLINE);
 AC_SUBST(U_INLINE)
 
 threads=true
@@ -402,6 +401,23 @@ if test $U_HAVE_NL_LANGINFO -eq 1; then
 fi
 AC_SUBST(U_HAVE_NL_LANGINFO_CODESET)
 AC_SUBST(U_NL_LANGINFO_CODESET)
+
+dnl Namespace support checks
+AC_LANG_CPLUSPLUS
+U_HAVE_NAMESPACE=0
+AC_MSG_CHECKING([for namespace support])
+            AC_CACHE_VAL(ac_cv_namespace_ok,
+AC_TRY_LINK([namespace x {void f(){}}], [x::f()], ac_cv_namespace_ok=yes,
+            ac_cv_namespace_ok=no) )
+AC_MSG_RESULT($ac_cv_namespace_ok)
+U_HAVE_NAMESPACE=1
+if test $ac_cv_namespace_ok = no
+then
+    U_HAVE_NAMESPACE=0
+fi
+AC_SUBST(U_HAVE_NAMESPACE)
+
+AC_LANG_C
 AC_CHECK_FUNC(tzset)
 if test x$ac_cv_func_tzset = xyes
 then
