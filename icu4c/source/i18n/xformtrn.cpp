@@ -23,9 +23,11 @@ TransformTransliterator::TransformTransliterator(const UnicodeString& id,
 
 /**
  * Implements {@link Transliterator#handleTransliterate}.
+ * Ignore isIncremental since we don't need the context, and
+ * we work on codepoints.
  */
 void TransformTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
-                                                  UBool isIncremental) const {
+                                                  UBool /*isIncremental*/) const {
     
     int32_t start;
     for (start = offsets.start; start < offsets.limit; ++start) {
