@@ -3383,6 +3383,8 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.COLLATIONS)){
                 //collations are resolved in parseCollation
                 continue;
+            }else if(name.equals(LDMLConstants.DATES)){
+                res = parseDates(node, xpath);
             }else if(name.indexOf("icu:")>-1|| name.indexOf("openOffice:")>-1){
                 //TODO: these are specials .. ignore for now ... figure out
                 // what to do later
