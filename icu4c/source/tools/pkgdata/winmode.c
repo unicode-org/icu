@@ -34,9 +34,7 @@
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
   char tmp[1024];
-  CharList *oTail = NULL;
   CharList *infiles;
-  CharList *parents = NULL, *commands = NULL;
 
   infiles = o->filePaths;
 
@@ -64,10 +62,9 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) {
   char tmp[1024];
   char tmp2[1024];
-  CharList *tail = NULL;
   CharList *objects = NULL;
   const char *separator = o->icuroot[uprv_strlen(o->icuroot)-1]=='\\'?"":"\\";
-  UBool isDll = (uprv_strcmp(o->mode, "dll") == 0);
+  UBool isDll = (UBool)(uprv_strcmp(o->mode, "dll") == 0);
 
   if(U_FAILURE(*status)) { 
     return;
