@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2002/05/14 16:48:49 $ 
-* $Revision: 1.4 $
+* $Date: 2002/05/16 20:04:49 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -216,13 +216,13 @@ public final class CollationKey implements Comparable
     		StringBuffer key = new StringBuffer(size);
     		int i = 0;
     		while (m_key_[i] != 0 && m_key_[i + 1] != 0) {
-    			key.append((m_key_[i] << 8) | m_key_[i + 1]);
+    			key.append((char)((m_key_[i] << 8) | m_key_[i + 1]));
     			i += 2;
     		}
     		if (m_key_[i] != 0) {
-    			key.append(m_key_[i] << 8);
+    			key.append((char)(m_key_[i] << 8));
     		}
-    		m_hashCode_ = key.hashCode();
+    		m_hashCode_ = key.toString().hashCode();
     	}
         return m_hashCode_;
     }

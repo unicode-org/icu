@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/05/14 16:48:49 $ 
-* $Revision: 1.4 $
+* $Date: 2002/05/16 20:04:49 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -201,12 +201,13 @@ public abstract class Collator
      * @see #PRIMARY
      * @see #SECONDARY
      * @see #TERTIARY
+     * @see #QUATERNARY
      * @see #IDENTICAL
-     * @exception  IllegalArgumentException If the new strength value is not one of
-     * PRIMARY, SECONDARY, TERTIARY or IDENTICAL.
+     * @exception IllegalArgumentException If the new strength value is not one 
+     * 				of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
      * @draft 2.2
      */
-    public synchronized void setStrength(int newStrength) {
+    public void setStrength(int newStrength) {
         if ((newStrength != PRIMARY) &&
             (newStrength != SECONDARY) &&
             (newStrength != TERTIARY) &&
@@ -229,18 +230,13 @@ public abstract class Collator
      * mode.
      * @draft 2.2
      */
-    public synchronized void setDecomposition(int decomposition) {
+    public void setDecomposition(int decomposition) {
         if ((decomposition != NO_DECOMPOSITION) &&
             (decomposition != CANONICAL_DECOMPOSITION) &&
             (decomposition != FULL_DECOMPOSITION)) {
             throw new IllegalArgumentException("Wrong decomposition mode.");
         }
-        if (decomposition != NO_DECOMPOSITION) {
-        	m_decomposition_ = decomposition;
-        }
-        else {
-        	m_decomposition_ = CANONICAL_DECOMPOSITION;
-        }
+        m_decomposition_ = CANONICAL_DECOMPOSITION;
     }
     
     // public getters --------------------------------------------------------

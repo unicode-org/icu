@@ -100,6 +100,12 @@ public final class CollationElementIterator
      */
     public int getOffset()
     {
+    	if (m_bufferOffset_ != -1) {
+    		if (m_isForwards_) {
+    			return m_FCDLimit_;
+    		}
+    		return m_FCDStart_;
+    	}
         return m_source_.getIndex();
     }
 
@@ -237,7 +243,8 @@ public final class CollationElementIterator
      * while iterating (i.e., call next() and then call previous(), or call 
      * previous() and then call next()), you'll get back the same element 
      * twice.</p>
-     * @return the previous collation element
+     * @return the previous collation element, or NULLORDER when the start of 
+     * 			the iteration has been reached.
      * @draft 2.2
      */
     public synchronized int previous()
@@ -415,13 +422,28 @@ public final class CollationElementIterator
 		m_source_.setIndex(0);
 		updateInternalState();
     }
-
+    
+    // public miscellaneous methods -----------------------------------------
+    
 	// protected data members -----------------------------------------------
 	
 	/**
   	 * true if current codepoint was Hiragana
   	 */
   	protected boolean m_isCodePointHiragana_;
+  	/**
+  	 * Position in the original string that starts with a non-FCD sequence
+  	 */
+  	protected int m_FCDStart_;
+  	/** 
+	 * This is the CE from CEs buffer that should be returned. 
+	 * Initial value is 0.
+	 * Forwards iteration will end with m_CEBufferOffset_ == m_CEBufferSize_,
+	 * backwards will end with m_CEBufferOffset_ == 0.
+	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
+	 * will cause this value to be reset to 0.
+	 */
+  	protected int m_CEBufferOffset_;
   	
 	// protected constructors -----------------------------------------------
 	
@@ -462,6 +484,31 @@ public final class CollationElementIterator
     	m_buffer_ = new StringBuffer();
     	m_backup_ = new Backup();
     	updateInternalState();
+    }
+    
+    // protected methods ----------------------------------------------------
+    
+    /**
+     * Checks if iterator is in the buffer zone
+     * @return true if iterator is in buffer zone, false otherwise
+     */
+    protected boolean isInBuffer()
+    {
+    	return m_bufferOffset_ != -1;
+    }
+    
+    /**
+     * Checks if the are anymore buffered CEs to be returned.
+     * @return true if there are more buffered CEs to be returned.
+     */
+    protected boolean hasBufferedCE()
+    {
+    	if (m_isForwards_) {
+    		// m_CEBufferOffset_ is never negative
+    		// if there is no expansion, m_CEBufferSize_ = 0
+    		return m_CEBufferOffset_ < m_CEBufferSize_;
+    	}
+    	return m_CEBufferOffset_ > 0;
     }
     
     // private data members -------------------------------------------------
@@ -523,13 +570,12 @@ public final class CollationElementIterator
     /** 
      * This is position to the m_buffer_, -1 if iterator is not in m_buffer_
      */
-    private int m_bufferOffset_; 
-	/** 
-	 * This is the CE from CEs buffer that should be returned 
-	 */
-  	private int m_CEBufferOffset_;
+    private int m_bufferOffset_;
   	/** 
-  	 * This is the position to which we have stored processed CEs 
+  	 * This is the position to which we have stored processed CEs.
+  	 * Initial value is 0.
+  	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
+	 * will cause this value to be reset to 0.
   	 */
   	private int m_CEBufferSize_; 
   	/**
@@ -541,10 +587,6 @@ public final class CollationElementIterator
   	 * Position in the original string to continue forward FCD check from. 
   	 */
   	private int m_FCDLimit_; 
-  	/**
-  	 * Position in the original string that starts with a non-FCD sequence
-  	 */
-  	private int m_FCDStart_;
   	/**
   	 * The collator this iterator is based on
   	 */ 
