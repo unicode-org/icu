@@ -1116,6 +1116,33 @@ SOURCE=.\unistrm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\urep.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\urep.h
+
+"..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\urep.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\urep.h
+
+"..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\urep.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\ures.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
