@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/21 19:37:25 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/03/21 22:09:03 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -307,7 +307,9 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     // TODO: optimize by not permuting any class zero.
 
     Hashtable *permutations = new Hashtable(FALSE, status);
-    permutations->setValueDeleter(uhash_deleteUnicodeString);
+    if (U_SUCCESS(status)) {
+        permutations->setValueDeleter(uhash_deleteUnicodeString);
+    }
 
     const UHashElement *ne = NULL;
     int32_t el = -1;
@@ -370,7 +372,9 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
 //Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status) {
 
     Hashtable *result = new Hashtable(FALSE, status);
-    result->setValueDeleter(uhash_deleteUnicodeString);
+    if (U_SUCCESS(status)) {
+        result->setValueDeleter(uhash_deleteUnicodeString);
+    }
 
     //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(segment)));
 
