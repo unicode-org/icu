@@ -268,7 +268,7 @@ uprv_isNaN(double number)
 #if USE_64BIT_DOUBLE_OPTIMIZATION
     /* gcc 3.2 has an optimization bug */
     /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
-    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) > gInf64);
+    return (UBool)(((*((int64_t *)&number)) & U_INT64_MAX) > gInf64);
 
 #else
     /* This should work in theory, but it doesn't, so we resort to the more*/
@@ -318,7 +318,7 @@ uprv_isInfinite(double number)
 #if IEEE_754
 #if USE_64BIT_DOUBLE_OPTIMIZATION
     /* gcc 3.2 has an optimization bug */
-    return (UBool)(((*((int64_t *)&number)) & INT64_MAX) == gInf64);
+    return (UBool)(((*((int64_t *)&number)) & U_INT64_MAX) == gInf64);
 #else
 
     /* We know the top bit is the sign bit, so we mask that off in a copy of */

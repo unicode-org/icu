@@ -281,12 +281,12 @@ Formattable::getInt64(UErrorCode* status) const
     case Formattable::kInt64: 
         return fValue.fInt64;
     case Formattable::kDouble:
-        if (fValue.fDouble > INT64_MAX) {
+        if (fValue.fDouble > U_INT64_MAX) {
             *status = U_INVALID_FORMAT_ERROR;
-            return INT64_MAX;
-        } else if (fValue.fDouble < INT64_MIN) {
+            return U_INT64_MAX;
+        } else if (fValue.fDouble < U_INT64_MIN) {
             *status = U_INVALID_FORMAT_ERROR;
-            return INT64_MIN;
+            return U_INT64_MIN;
         } else {
             return (int64_t)fValue.fDouble;
         }
