@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/09/26 18:00:06 $ 
- * $Revision: 1.46 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $
+ * $Date: 2001/10/03 00:14:22 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -27,18 +27,18 @@ import com.ibm.text.resources.ResourceReader;
  * Whitespace, as defined by <code>Character.isWhitespace()</code>,
  * is ignored. If the first non-blank character on a line is '#',
  * the entire line is ignored as a comment. </p>
- * 
+ *
  * <p>Each set of rules consists of two groups, one forward, and one
  * reverse. This is a convention that is not enforced; rules for one
  * direction may be omitted, with the result that translations in
  * that direction will not modify the source text. In addition,
  * bidirectional forward-reverse rules may be specified for
  * symmetrical transformations.</p>
- * 
+ *
  * <p><b>Rule syntax</b> </p>
- * 
+ *
  * <p>Rule statements take one of the following forms: </p>
- * 
+ *
  * <dl>
  *     <dt><code>$alefmadda=\u0622;</code></dt>
  *     <dd><strong>Variable definition.</strong> The name on the
@@ -66,7 +66,7 @@ import com.ibm.text.resources.ResourceReader;
  *         the string on the left when performing reverse
  *         transliteration.</dd>
  * </dl>
- * 
+ *
  * <dl>
  *     <dt><code>ai&lt;&gt;$alefmadda;</code></dt>
  *     <dd><strong>Bidirectional translation rule.</strong> This
@@ -75,7 +75,7 @@ import com.ibm.text.resources.ResourceReader;
  *         transliteration, and vice versa when performing reverse
  *         transliteration.</dd>
  * </dl>
- * 
+ *
  * <p>Translation rules consist of a <em>match pattern</em> and an <em>output
  * string</em>. The match pattern consists of literal characters,
  * optionally preceded by context, and optionally followed by
@@ -92,7 +92,7 @@ import com.ibm.text.resources.ResourceReader;
  * (or &quot;<code>123}456</code>&quot;) in which the literal
  * pattern &quot;<code>123</code>&quot; must be followed by &quot;<code>456</code>&quot;.
  * </p>
- * 
+ *
  * <p>The output string of a forward or reverse rule consists of
  * characters to replace the literal pattern characters. If the
  * output string contains the character '<code>|</code>', this is
@@ -102,59 +102,59 @@ import com.ibm.text.resources.ResourceReader;
  * placed within the replacement text; however, it can actually be
  * placed into the precending or following context by using the
  * special character '<code>@</code>'. Examples:</p>
- * 
+ *
  * <blockquote>
  *     <p><code>a {foo} z &gt; | @ bar; # foo -&gt; bar, move cursor
  *     before a<br>
  *     {foo} xyz &gt; bar @@|; #&nbsp;foo -&gt; bar, cursor between
  *     y and z</code></p>
  * </blockquote>
- * 
+ *
  * <p><b>UnicodeSet</b></p>
- * 
+ *
  * <p><code>UnicodeSet</code> patterns may appear anywhere that
  * makes sense. They may appear in variable definitions.
  * Contrariwise, <code>UnicodeSet</code> patterns may themselves
  * contain variable references, such as &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;,
  * or &quot;<code>$range=a-z;$ll=[$range]</code>&quot;.</p>
- * 
+ *
  * <p><code>UnicodeSet</code> patterns may also be embedded directly
  * into rule strings. Thus, the following two rules are equivalent:</p>
- * 
+ *
  * <blockquote>
  *     <p><code>$vowel=[aeiou]; $vowel&gt;'*'; # One way to do this<br>
  *     [aeiou]&gt;'*';
  *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
  *     Another way</code></p>
  * </blockquote>
- * 
+ *
  * <p>See {@link UnicodeSet} for more documentation and examples.</p>
- * 
+ *
  * <p><b>Segments</b></p>
- * 
+ *
  * <p>Segments of the input string can be matched and copied to the
  * output string. This makes certain sets of rules simpler and more
  * general, and makes reordering possible. For example:</p>
- * 
+ *
  * <blockquote>
  *     <p><code>([a-z]) &gt; $1 $1;
  *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
  *     double lowercase letters<br>
  *     ([:Lu:]) ([:Ll:]) &gt; $2 $1; # reverse order of Lu-Ll pairs</code></p>
  * </blockquote>
- * 
+ *
  * <p>The segment of the input string to be copied is delimited by
  * &quot;<code>(</code>&quot; and &quot;<code>)</code>&quot;. Up to
  * nine segments may be defined. Segments may not overlap. In the
  * output string, &quot;<code>$1</code>&quot; through &quot;<code>$9</code>&quot;
  * represent the input string segments, in left-to-right order of
  * definition.</p>
- * 
+ *
  * <p><b>Anchors</b></p>
- * 
+ *
  * <p>Patterns can be anchored to the beginning or the end of the text. This is done with the
  * special characters '<code>^</code>' and '<code>$</code>'. For example:</p>
- * 
+ *
  * <blockquote>
  *   <p><code>^ a&nbsp;&nbsp; &gt; 'BEG_A'; &nbsp;&nbsp;# match 'a' at start of text<br>
  *   &nbsp; a&nbsp;&nbsp; &gt; 'A';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # match other instances
@@ -163,24 +163,24 @@ import com.ibm.text.resources.ResourceReader;
  *   &nbsp; z&nbsp;&nbsp; &gt; 'Z';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # match other instances
  *   of 'z'</code></p>
  * </blockquote>
- * 
+ *
  * <p>It is also possible to match the beginning or the end of the text using a <code>UnicodeSet</code>.
  * This is done by including a virtual anchor character '<code>$</code>' at the end of the
  * set pattern. Although this is usually the match chafacter for the end anchor, the set will
  * match either the beginning or the end of the text, depending on its placement. For
  * example:</p>
- * 
+ *
  * <blockquote>
  *   <p><code>$x = [a-z$]; &nbsp;&nbsp;# match 'a' through 'z' OR anchor<br>
  *   $x 1&nbsp;&nbsp;&nbsp; &gt; 2;&nbsp;&nbsp; # match '1' after a-z or at the start<br>
  *   &nbsp;&nbsp; 3 $x &gt; 4; &nbsp;&nbsp;# match '3' before a-z or at the end</code></p>
  * </blockquote>
- * 
+ *
  * <p><b>Example</b> </p>
- * 
+ *
  * <p>The following example rules illustrate many of the features of
  * the rule language. </p>
- * 
+ *
  * <table border="0" cellpadding="4">
  *     <tr>
  *         <td valign="top">Rule 1.</td>
@@ -195,10 +195,10 @@ import com.ibm.text.resources.ResourceReader;
  *         <td valign="top" nowrap><code>yz&gt;q</code></td>
  *     </tr>
  * </table>
- * 
+ *
  * <p>Applying these rules to the string &quot;<code>adefabcdefz</code>&quot;
  * yields the following results: </p>
- * 
+ *
  * <table border="0" cellpadding="4">
  *     <tr>
  *         <td valign="top" nowrap><code>|adefabcdefz</code></td>
@@ -251,23 +251,23 @@ import com.ibm.text.resources.ResourceReader;
  *         transliteration is complete.</td>
  *     </tr>
  * </table>
- * 
+ *
  * <p>The order of rules is significant. If multiple rules may match
  * at some point, the first matching rule is applied. </p>
- * 
+ *
  * <p>Forward and reverse rules may have an empty output string.
  * Otherwise, an empty left or right hand side of any statement is a
  * syntax error. </p>
- * 
+ *
  * <p>Single quotes are used to quote any character other than a
  * digit or letter. To specify a single quote itself, inside or
  * outside of quotes, use two single quotes in a row. For example,
  * the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot; changes the
  * string &quot;<code>&gt;</code>&quot; to the string &quot;<code>o'clock</code>&quot;.
  * </p>
- * 
+ *
  * <p><b>Notes</b> </p>
- * 
+ *
  * <p>While a RuleBasedTransliterator is being built, it checks that
  * the rules are added in proper order. For example, if the rule
  * &quot;a&gt;x&quot; is followed by the rule &quot;ab&gt;y&quot;,
@@ -275,11 +275,11 @@ import com.ibm.text.resources.ResourceReader;
  * the second rule can never be triggered, since the first rule
  * always matches anything it matches. In other words, the first
  * rule <em>masks</em> the second rule. </p>
- * 
+ *
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
- * 
+ *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.46 $ $Date: 2001/09/26 18:00:06 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.47 $ $Date: 2001/10/03 00:14:22 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -433,7 +433,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * stored in the rule text to represent the set of characters.
          * variables[i] represents character (variablesBase + i).
          */
-        UnicodeSet[] variables;
+        UnicodeMatcher[] variables;
 
         /**
          * The character that represents variables[0].  Characters
@@ -498,6 +498,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.47  2001/10/03 00:14:22  alan
+ * jitterbug 73: finish quantifier and supplemental char support
+ *
  * Revision 1.46  2001/09/26 18:00:06  alan
  * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
  *

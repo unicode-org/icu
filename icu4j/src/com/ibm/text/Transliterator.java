@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/09/28 20:37:09 $
- * $Revision: 1.43 $
+ * $Date: 2001/10/03 00:14:23 $
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.43 $ $Date: 2001/09/28 20:37:09 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.44 $ $Date: 2001/10/03 00:14:23 $
  */
 public abstract class Transliterator {
     /**
@@ -551,6 +551,15 @@ public abstract class Transliterator {
             text.replace(index.limit, index.limit, insertion);
             index.limit += insertion.length();
             index.contextLimit += insertion.length();
+        }
+
+        char last = (text.length() > 0) ?
+            text.charAt(text.length() - 1) : 0;
+        if (UTF16.isLeadSurrogate(last)) {
+            // Oops, the caller passed us a single lead surrogate at the
+            // end of the insertion.  Don't transliterate until more text
+            // comes in.
+            return;
         }
 
         filteredTransliterate(text, index, true);

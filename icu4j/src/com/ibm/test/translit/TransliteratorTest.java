@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/09/28 05:47:30 $
- * $Revision: 1.47 $
+ * $Date: 2001/10/03 00:18:23 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -77,14 +77,6 @@ public class TransliteratorTest extends TestFmwk {
         logln("Elapsed time: " + ms + " ms");
     }
 
-    public void TestDisplayName() {
-        String ID;
-        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
-            ID = (String) e.nextElement();
-            logln(ID + " -> " + Transliterator.getDisplayName(ID));
-        }
-    }
-
     public void TestSimpleRules() {
         /* Example: rules 1. ab>x|y
          *                2. yc>z
@@ -129,29 +121,6 @@ public class TransliteratorTest extends TestFmwk {
                                                        "$lu > '*';" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
-    }
-
-    /**
-     * Test undefined variable.
-     */
-    public void TestUndefinedVariable() {
-        String rule = "$initial } a <> \u1161;";
-        try {
-            Transliterator t = new RuleBasedTransliterator("<ID>", rule);
-            t = null;
-        } catch (IllegalArgumentException e) {
-            logln("OK: Got exception for " + rule + ", as expected: " +
-                  e.getMessage());
-            return;
-        }
-        errln("Fail: bogus rule " + rule + " compiled without error");
-    }
-
-    /**
-     * Test empty context.
-     */
-    public void TestEmptyContext() {
-        expect(" { a } > b;", "xay a ", "xby b ");
     }
 
     /**
@@ -524,6 +493,9 @@ public class TransliteratorTest extends TestFmwk {
         expect(hex3, "012", "&#x30;&#x31;&#x32;");
     }
 
+    public void TestJ329_TODO() {
+    }
+
     /**
      * Test segments and segment references.
      */
@@ -681,6 +653,9 @@ public class TransliteratorTest extends TestFmwk {
 
     }
 
+    public void TestCopyJ476_TODO() {
+    }
+
     /**
      * Test inter-Indic transliterators.  These are composed.
      */
@@ -698,47 +673,6 @@ public class TransliteratorTest extends TestFmwk {
         String dev = "\u0901\u090B\u0925";
         String guj = "\u0A81\u0A8B\u0AA5";
         expect(dg, dev, guj);
-    }
-
-    /**
-     * Test IDs of inverses of compound transliterators. (J20)
-     */
-    public void TestCompoundInverseID() {
-        String ID = "Latin-Jamo;NFC(NFD)";
-        Transliterator t = Transliterator.getInstance(ID);
-        Transliterator u = t.getInverse();
-        String exp = "NFD(NFC);Jamo-Latin";
-        String got = u.getID();
-        if (!got.equals(exp)) {
-            errln("FAIL: Inverse of " + ID + " is " + got +
-                  ", expected " + exp);
-        }
-    }
-
-    /**
-     * Inverse of "Null" should be "Null". (J21)
-     */
-    public void TestNullInverse() {
-        Transliterator t = Transliterator.getInstance("Null");
-        Transliterator u = t.getInverse();
-        if (!u.getID().equals("Null")) {
-            errln("FAIL: Inverse of Null should be Null");
-        }
-    }
-
-    /**
-     * Check ID of inverse of alias. (J22)
-     */
-    public void TestAliasInverseID() {
-        String ID = "Latin-Hangul"; // This should be any alias ID with an inverse
-        Transliterator t = Transliterator.getInstance(ID);
-        Transliterator u = t.getInverse();
-        String exp = "Hangul-Latin";
-        String got = u.getID();
-        if (!got.equals(exp)) {
-            errln("FAIL: Inverse of " + ID + " is " + got +
-                  ", expected " + exp);
-        }
     }
 
     /**
@@ -781,118 +715,6 @@ public class TransliteratorTest extends TestFmwk {
             } else if (!u.getID().equals(uID)) {
                 errln("FAIL: " + ID + ".getInverse().getID() => " +
                       u.getID() + ", expected " + uID);
-            }
-        }
-    }
-
-    /**
-     * Test the "Remove" transliterator.
-     */
-    public void TestRemove() {
-        Transliterator t = Transliterator.getInstance("Remove[aeiou]");
-        expect(t, "The quick brown fox.",
-               "Th qck brwn fx.");
-    }
-
-    public void TestToRules() {
-        String RBT = "rbt";
-        String SET = "set";
-        String[] DATA = {
-            RBT,
-            "$a=\\u4E61; [$a] > A;",
-            "[\\u4E61] > A;",
-
-            RBT,
-            "$white=[[:Zs:][:Zl:]]; $white{a} > A;",
-            "[[:Zs:][:Zl:]]{a} > A;",
-
-            SET,
-            "[[:Zs:][:Zl:]]",
-            "[[:Zs:][:Zl:]]",
-
-            SET,
-            "[:Ps:]",
-            "[:Ps:]",
-
-            SET,
-            "[:L:]",
-            "[:L:]",
-
-            SET,
-            "[[:L:]-[A]]",
-            "[[:L:]-[A]]",
-
-            SET,
-            "[~[:Lu:][:Ll:]]",
-            "[~[:Lu:][:Ll:]]",
-
-            SET,
-            "[~[a-z]]",
-            "[~[a-z]]",
-
-            RBT,
-            "$white=[:Zs:]; $black=[^$white]; $black{a} > A;",
-            "[^[:Zs:]]{a} > A;",
-
-            RBT,
-            "$a=[:Zs:]; $b=[[a-z]-$a]; $b{a} > A;",
-            "[[a-z]-[:Zs:]]{a} > A;",
-
-            RBT,
-            "$a=[:Zs:]; $b=[$a&[a-z]]; $b{a} > A;",
-            "[[:Zs:]&[a-z]]{a} > A;",
-
-            RBT,
-            "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
-            "[x[:Zs:]]{a} > A;",
-        };
-
-        for (int d=0; d < DATA.length; d+=3) {
-            if (DATA[d] == RBT) {
-                // Transliterator test
-                Transliterator t = Transliterator.createFromRules("ID",
-                                       DATA[d+1], Transliterator.FORWARD);
-                if (t == null) {
-                    errln("FAIL: createFromRules failed");
-                    return;
-                }
-                String rules, escapedRules;
-                rules = t.toRules(false);
-                escapedRules = t.toRules(true);
-                String expRules = Utility.unescape(DATA[d+2]);
-                String expEscapedRules = DATA[d+2];
-                if (rules.equals(expRules)) {
-                    logln("Ok: " + DATA[d+1] +
-                          " => " + Utility.escape(rules));
-                } else {
-                    errln("FAIL: " + DATA[d+1] +
-                          " => " + Utility.escape(rules + ", exp " + expRules));
-                }
-                if (escapedRules.equals(expEscapedRules)) {
-                    logln("Ok: " + DATA[d+1] +
-                          " => " + escapedRules);
-                } else {
-                    errln("FAIL: " + DATA[d+1] +
-                          " => " + escapedRules + ", exp " + expEscapedRules);
-                }
-
-            } else {
-                // UnicodeSet test
-                String pat = DATA[d+1];
-                String expToPat = DATA[d+2];
-                UnicodeSet set = new UnicodeSet(pat);
-
-                // Adjust spacing etc. as necessary.
-                String toPat;
-                toPat = set.toPattern(true);
-                if (expToPat.equals(toPat)) {
-                    logln("Ok: " + pat +
-                          " => " + toPat);
-                } else {
-                    errln("FAIL: " + pat +
-                          " => " + Utility.escape(toPat) +
-                          ", exp " + Utility.escape(pat));
-                }
             }
         }
     }
@@ -964,6 +786,9 @@ public class TransliteratorTest extends TestFmwk {
                       " create ID \"" + DATA[i] + "\"");
             }
         }
+    }
+
+    public void TestCreateInstance_TODO() {
     }
 
     /**
@@ -1139,6 +964,249 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
+    public void TestCompoundFilter_TODO() {
+    }
+
+    /**
+     * Test the "Remove" transliterator.
+     */
+    public void TestRemove() {
+        Transliterator t = Transliterator.getInstance("Remove[aeiou]");
+        expect(t, "The quick brown fox.",
+               "Th qck brwn fx.");
+    }
+
+    public void TestToRules() {
+        String RBT = "rbt";
+        String SET = "set";
+        String[] DATA = {
+            RBT,
+            "$a=\\u4E61; [$a] > A;",
+            "[\\u4E61] > A;",
+
+            RBT,
+            "$white=[[:Zs:][:Zl:]]; $white{a} > A;",
+            "[[:Zs:][:Zl:]]{a} > A;",
+
+            SET,
+            "[[:Zs:][:Zl:]]",
+            "[[:Zs:][:Zl:]]",
+
+            SET,
+            "[:Ps:]",
+            "[:Ps:]",
+
+            SET,
+            "[:L:]",
+            "[:L:]",
+
+            SET,
+            "[[:L:]-[A]]",
+            "[[:L:]-[A]]",
+
+            SET,
+            "[~[:Lu:][:Ll:]]",
+            "[~[:Lu:][:Ll:]]",
+
+            SET,
+            "[~[a-z]]",
+            "[~[a-z]]",
+
+            RBT,
+            "$white=[:Zs:]; $black=[^$white]; $black{a} > A;",
+            "[^[:Zs:]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[[a-z]-$a]; $b{a} > A;",
+            "[[a-z]-[:Zs:]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[$a&[a-z]]; $b{a} > A;",
+            "[[:Zs:]&[a-z]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
+            "[x[:Zs:]]{a} > A;",
+        };
+
+        for (int d=0; d < DATA.length; d+=3) {
+            if (DATA[d] == RBT) {
+                // Transliterator test
+                Transliterator t = Transliterator.createFromRules("ID",
+                                       DATA[d+1], Transliterator.FORWARD);
+                if (t == null) {
+                    errln("FAIL: createFromRules failed");
+                    return;
+                }
+                String rules, escapedRules;
+                rules = t.toRules(false);
+                escapedRules = t.toRules(true);
+                String expRules = Utility.unescape(DATA[d+2]);
+                String expEscapedRules = DATA[d+2];
+                if (rules.equals(expRules)) {
+                    logln("Ok: " + DATA[d+1] +
+                          " => " + Utility.escape(rules));
+                } else {
+                    errln("FAIL: " + DATA[d+1] +
+                          " => " + Utility.escape(rules + ", exp " + expRules));
+                }
+                if (escapedRules.equals(expEscapedRules)) {
+                    logln("Ok: " + DATA[d+1] +
+                          " => " + escapedRules);
+                } else {
+                    errln("FAIL: " + DATA[d+1] +
+                          " => " + escapedRules + ", exp " + expEscapedRules);
+                }
+
+            } else {
+                // UnicodeSet test
+                String pat = DATA[d+1];
+                String expToPat = DATA[d+2];
+                UnicodeSet set = new UnicodeSet(pat);
+
+                // Adjust spacing etc. as necessary.
+                String toPat;
+                toPat = set.toPattern(true);
+                if (expToPat.equals(toPat)) {
+                    logln("Ok: " + pat +
+                          " => " + toPat);
+                } else {
+                    errln("FAIL: " + pat +
+                          " => " + Utility.escape(toPat) +
+                          ", exp " + Utility.escape(pat));
+                }
+            }
+        }
+    }
+
+    public void TestContext() {
+        Transliterator.Position pos = new Transliterator.Position(0, 2, 0, 1); // cs cl s l
+
+        expect("de > x; {d}e > y;",
+               "de",
+               "ye",
+               pos);
+
+        expect("ab{c} > z;",
+               "xadabdabcy",
+               "xadabdabzy");
+    }
+
+    static final String CharsToUnicodeString(String s) {
+        return Utility.unescape(s);
+    }
+
+    public void TestSupplemental() {
+
+        expect(CharsToUnicodeString("$a=\\U00010300; $s=[\\U00010300-\\U00010323];" +
+                                    "a > $a; $s > i;"),
+               CharsToUnicodeString("ab\\U0001030Fx"),
+               CharsToUnicodeString("\\U00010300bix"));
+
+        expect(CharsToUnicodeString("$a=[a-z\\U00010300-\\U00010323];" +
+                                    "$b=[A-Z\\U00010400-\\U0001044D];" +
+                                    "($a)($b) > $2 $1;"),
+               CharsToUnicodeString("aB\\U00010300\\U00010400c\\U00010401\\U00010301D"),
+               CharsToUnicodeString("Ba\\U00010400\\U00010300\\U00010401cD\\U00010301"));
+
+        // k|ax\\U00010300xm
+
+        // k|a\\U00010400\\U00010300xm
+        // ky|\\U00010400\\U00010300xm
+        // ky\\U00010400|\\U00010300xm
+
+        // ky\\U00010400|\\U00010300\\U00010400m
+        // ky\\U00010400y|\\U00010400m
+        expect(CharsToUnicodeString("$a=[a\\U00010300-\\U00010323];" +
+                                    "$a {x} > | @ \\U00010400;" +
+                                    "{$a} [^\\u0000-\\uFFFF] > y;"),
+               CharsToUnicodeString("kax\\U00010300xm"),
+               CharsToUnicodeString("ky\\U00010400y\\U00010400m"));
+    }
+
+    public void TestQuantifier() {
+
+        // Make sure @ in a quantified anteContext works
+        expect("a+ {b} > | @@ c; A > a; (a+ c) > '(' $1 ')';",
+               "AAAAAb",
+               "aaa(aac)");
+
+        // Make sure @ in a quantified postContext works
+        expect("{b} a+ > c @@ |; (a+) > '(' $1 ')';",
+               "baaaaa",
+               "caa(aaa)");
+
+        // Make sure @ in a quantified postContext with seg ref works
+        expect("{(b)} a+ > $1 @@ |; (a+) > '(' $1 ')';",
+               "baaaaa",
+               "baa(aaa)");
+
+        // Make sure @ past ante context doesn't enter ante context
+        Transliterator.Position pos = new Transliterator.Position(0, 5, 3, 5);
+        expect("a+ {b} > | @@ c; x > y; (a+ c) > '(' $1 ')';",
+               "xxxab",
+               "xxx(ac)",
+               pos);
+
+        // Make sure @ past post context doesn't pass limit
+        Transliterator.Position pos2 = new Transliterator.Position(0, 4, 0, 2);
+        expect("{b} a+ > c @@ |; x > y; a > A;",
+               "baxx",
+               "caxx",
+               pos2);
+
+        // Make sure @ past post context doesn't enter post context
+        expect("{b} a+ > c @@ |; x > y; a > A;",
+               "baxx",
+               "cayy");
+
+        expect("(ab)? c > d;",
+               "c abc ababc",
+               "d d abd");
+
+        expect("(ab)+ {x} > '(' $1 ')';",
+               "x abx ababxy",
+               "x ab(ab) abab(abab)y");
+
+        expect("b+ > x;",
+               "ac abc abbc abbbc",
+               "ac axc axc axc");
+
+        expect("[abc]+ > x;",
+               "qac abrc abbcs abtbbc",
+               "qx xrx xs xtx");
+
+        expect("q{(ab)+} > x;",
+               "qa qab qaba qababc qaba",
+               "qa qx qxa qxc qxa");
+
+        expect("q(ab)* > x;",
+               "qa qab qaba qababc",
+               "xa x xa xc");
+
+        // Oddity -- "(foo)* > $1" causes $1 to match the run of "foo"s
+        // In perl, it only matches the first occurrence, so the output
+        // is "()a (ab) (ab)a (ab)c".
+        expect("q(ab)* > '(' $1 ')';",
+               "qa qab qaba qababc",
+               "()a (ab) (ab)a (abab)c");
+
+        // 'foo'+ and 'foo'* -- the quantifier should apply to the entire
+        // quoted string
+        expect("'ab'+ > x;",
+               "bb ab ababb",
+               "bb x xb");
+
+        // $foo+ and $foo* -- the quantifier should apply to the entire
+        // variable reference
+        expect("$var = ab; $var+ > x;",
+               "bb ab ababb",
+               "bb x xb");
+    }
+
+    public void TestSTV_TODO() {
+    }
+
     /**
      * Test inverse of Greek-Latin; Title()
      */
@@ -1160,8 +1228,91 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     //======================================================================
+    // icu4j only
+    //======================================================================
+
+    /**
+     * Inverse of "Null" should be "Null". (J21)
+     */
+    public void TestNullInverse() {
+        Transliterator t = Transliterator.getInstance("Null");
+        Transliterator u = t.getInverse();
+        if (!u.getID().equals("Null")) {
+            errln("FAIL: Inverse of Null should be Null");
+        }
+    }
+
+    /**
+     * Check ID of inverse of alias. (J22)
+     */
+    public void TestAliasInverseID() {
+        String ID = "Latin-Hangul"; // This should be any alias ID with an inverse
+        Transliterator t = Transliterator.getInstance(ID);
+        Transliterator u = t.getInverse();
+        String exp = "Hangul-Latin";
+        String got = u.getID();
+        if (!got.equals(exp)) {
+            errln("FAIL: Inverse of " + ID + " is " + got +
+                  ", expected " + exp);
+        }
+    }
+
+    /**
+     * Test IDs of inverses of compound transliterators. (J20)
+     */
+    public void TestCompoundInverseID() {
+        String ID = "Latin-Jamo;NFC(NFD)";
+        Transliterator t = Transliterator.getInstance(ID);
+        Transliterator u = t.getInverse();
+        String exp = "NFD(NFC);Jamo-Latin";
+        String got = u.getID();
+        if (!got.equals(exp)) {
+            errln("FAIL: Inverse of " + ID + " is " + got +
+                  ", expected " + exp);
+        }
+    }
+
+    /**
+     * Test undefined variable.
+     */
+    public void TestUndefinedVariable() {
+        String rule = "$initial } a <> \u1161;";
+        try {
+            Transliterator t = new RuleBasedTransliterator("<ID>", rule);
+            t = null;
+        } catch (IllegalArgumentException e) {
+            logln("OK: Got exception for " + rule + ", as expected: " +
+                  e.getMessage());
+            return;
+        }
+        errln("Fail: bogus rule " + rule + " compiled without error");
+    }
+
+    /**
+     * Test empty context.
+     */
+    public void TestEmptyContext() {
+        expect(" { a } > b;", "xay a ", "xby b ");
+    }
+
+    public void TestDisplayName() {
+        String ID;
+        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
+            ID = (String) e.nextElement();
+            logln(ID + " -> " + Transliterator.getDisplayName(ID));
+        }
+    }
+
+    //======================================================================
     // Support methods
     //======================================================================
+    void expect(String rules,
+                String source,
+                String expectedResult,
+                Transliterator.Position pos) {
+        Transliterator t = new RuleBasedTransliterator("<ID>", rules);
+        expect(t, source, expectedResult, pos);
+    }
 
     void expect(String rules, String source, String expectedResult) {
         expect(new RuleBasedTransliterator("<ID>", rules), source, expectedResult);
@@ -1176,33 +1327,53 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     void expect(Transliterator t, String source, String expectedResult) {
-        String result = t.transliterate(source);
-        expectAux(t.getID() + ":String", source, result, expectedResult);
+        expect(t, source, expectedResult, (Transliterator.Position) null);
+    }
+
+    void expect(Transliterator t, String source, String expectedResult,
+                Transliterator.Position pos) {
+        if (pos == null) {
+            String result = t.transliterate(source);
+            expectAux(t.getID() + ":String", source, result, expectedResult);
+        }
+
+        Transliterator.Position index = null;
+        if (pos == null) {
+            index = new Transliterator.Position();
+        } else {
+            index = new Transliterator.Position(pos.contextStart, pos.contextLimit,
+                                                pos.start, pos.limit);
+        }
 
         ReplaceableString rsource = new ReplaceableString(source);
-        t.transliterate(rsource);
-        result = rsource.toString();
+        if (pos == null) {
+            t.transliterate(rsource);
+        } else {
+            // Do it all at once -- below we do it incrementally
+            t.finishTransliteration(rsource, pos);
+        }
+        String result = rsource.toString();
         expectAux(t.getID() + ":Replaceable", source, result, expectedResult);
 
         // Test keyboard (incremental) transliteration -- this result
         // must be the same after we finalize (see below).
-        rsource.replace(0, rsource.length(), "");
-        Transliterator.Position index = new Transliterator.Position();
         StringBuffer log = new StringBuffer();
-
-        for (int i=0; i<source.length(); ++i) {
-            if (i != 0) {
-                log.append(" + ");
+        rsource.replace(0, rsource.length(), "");
+        if (pos != null) {
+            rsource.replace(0, 0, source);
+            formatInput(log, rsource, index);
+            log.append(" -> ");
+            t.transliterate(rsource, index);
+            formatInput(log, rsource, index);
+        } else {
+            for (int i=0; i<source.length(); ++i) {
+                if (i != 0) {
+                    log.append(" + ");
+                }
+                log.append(source.charAt(i)).append(" -> ");
+                t.transliterate(rsource, index, source.charAt(i));
+                formatInput(log, rsource, index);
             }
-            log.append(source.charAt(i)).append(" -> ");
-            t.transliterate(rsource, index,
-                            String.valueOf(source.charAt(i)));
-            // Append the string buffer with a vertical bar '|' where
-            // the committed index is.
-            String s = rsource.toString();
-            log.append(s.substring(0, index.start)).
-                append('|').
-                append(s.substring(index.start));
         }
 
         // As a final step in keyboard transliteration, we must call
@@ -1215,6 +1386,41 @@ public class TransliteratorTest extends TestFmwk {
         expectAux(t.getID() + ":Keyboard", log.toString(),
                   result.equals(expectedResult),
                   expectedResult);
+    }
+
+    /**
+     * @param appendTo result is appended to this param.
+     * @param input the string being transliterated
+     * @param pos the index struct
+     */
+    StringBuffer formatInput(StringBuffer appendTo,
+                             final ReplaceableString input,
+                             final Transliterator.Position pos) {
+        // Output a string of the form aaa{bbb|ccc|ddd}eee, where
+        // the {} indicate the context start and limit, and the ||
+        // indicate the start and limit.
+        if (0 <= pos.contextStart &&
+            pos.contextStart <= pos.start &&
+            pos.start <= pos.limit &&
+            pos.limit <= pos.contextLimit &&
+            pos.contextLimit <= input.length()) {
+
+            String a, b, c, d, e;
+            a = input.substring(0, pos.contextStart);
+            b = input.substring(pos.contextStart, pos.start);
+            c = input.substring(pos.start, pos.limit);
+            d = input.substring(pos.limit, pos.contextLimit);
+            e = input.substring(pos.contextLimit, input.length());
+            appendTo.append(a).append('{').append(b).
+                append('|').append(c).append('|').append(d).
+                append('}').append(e);
+        } else {
+            appendTo.append("INVALID Transliterator.Position {cs=" +
+                            pos.contextStart + ", s=" + pos.start + ", l=" +
+                            pos.limit + ", cl=" + pos.contextLimit + "} on " +
+                            input);
+        }
+        return appendTo;
     }
 
     void expectAux(String tag, String source,

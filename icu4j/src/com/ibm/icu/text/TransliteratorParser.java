@@ -142,6 +142,10 @@ class TransliteratorParser {
     private static final char CURSOR_OFFSET       = '@';
     private static final char ANCHOR_START        = '^';
 
+    private static final char KLEENE_STAR         = '*';
+    private static final char ONE_OR_MORE         = '+';
+    private static final char ZERO_OR_ONE         = '?';
+
     // By definition, the ANCHOR_END special character is a
     // trailing SymbolTable.SYMBOL_REF character.
     // private static final char ANCHOR_END       = '$';
@@ -382,7 +386,7 @@ class TransliteratorParser {
         idBlock = idBlockResult.toString();
 
         // Convert the set vector to an array
-        data.variables = new UnicodeSet[variablesVector.size()];
+        data.variables = new UnicodeMatcher[variablesVector.size()];
         variablesVector.copyInto(data.variables);
         variablesVector = null;
 
@@ -658,7 +662,7 @@ class TransliteratorParser {
             int varStart = -1; // Most recent $variableReference
             int varLimit = -1;
             int[] iref = new int[1];
-            
+
         main:
             while (pos < limit && !done) {
                 char c = rule.charAt(pos++);
@@ -853,56 +857,71 @@ class TransliteratorParser {
                         }
                     }
                     break;
-
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-                    // TODO Add quantifier parsing
-
+                case KLEENE_STAR:
+                case ONE_OR_MORE:
+                case ZERO_OR_ONE:
+                    // Quantifiers.  We handle single characters, quoted strings,
+                    // variable references, and segments.
+                    //  a+      matches  aaa
+                    //  'foo'+  matches  foofoofoo
+                    //  $v+     matches  xyxyxy if $v == xy
+                    //  (seg)+  matches  segsegseg
+                    {
+                        int qstart, qlimit;
+                        boolean[] isOpenParen = new boolean[1];
+                        boolean isSegment = false;
+                        if (segments != null &&
+                            segments.getLastParenOffset(isOpenParen) == buf.length()) {
+                            // The */+ immediately follows a segment
+                            if (isOpenParen[0]) {
+                                syntaxError("Misplaced quantifier", rule, start);
+                            }
+                            int[] startparam = new int[1];
+                            int[] limitparam = new int[1];
+                            if (!segments.extractLastParenSubstring(startparam, limitparam)) {
+                                syntaxError("Mismatched segment delimiters", rule, start);
+                            }
+                            qstart = startparam[0];
+                            qlimit = limitparam[0];
+                            isSegment = true;
+                        } else {
+                            // The */+ follows an isolated character or quote
+                            // or variable reference
+                            if (buf.length() == quoteLimit) {
+                                // The */+ follows a 'quoted string'
+                                qstart = quoteStart;
+                                qlimit = quoteLimit;
+                            } else if (buf.length() == varLimit) {
+                                // The */+ follows a $variableReference
+                                qstart = varStart;
+                                qlimit = varLimit;
+                            } else {
+                                // The */+ follows a single character
+                                qstart = buf.length() - 1;
+                                qlimit = qstart + 1;
+                            }
+                        }
+                        UnicodeMatcher m =
+                            new StringMatcher(buf.toString(), qstart, qlimit,
+                                              isSegment, parser.data);
+                        int min = 0;
+                        int max = Quantifier.MAX;
+                        switch (c) {
+                        case ONE_OR_MORE:
+                            min = 1;
+                            break;
+                        case ZERO_OR_ONE:
+                            min = 0;
+                            max = 1;
+                            break;
+                            // case KLEENE_STAR:
+                            //    do nothing -- min, max already set
+                        }
+                        m = new Quantifier(m, min, max);
+                        buf.setLength(qstart);
+                        buf.append(parser.generateStandInFor(m));
+                    }
+                    break;
                 // case SET_CLOSE:
                 default:
                     // Disallow unquoted characters other than [0-9A-Za-z]
@@ -947,7 +966,7 @@ class TransliteratorParser {
     //----------------------------------------------------------------------
     // END RuleHalf
     //----------------------------------------------------------------------
-    
+
     /**
      * MAIN PARSER.  Parse the next rule in the given rule string, starting
      * at pos.  Return the index after the last character parsed.  Do not
