@@ -53,7 +53,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * id appropriate to the country of the locale (for PREEURO) or EUR (for EURO).
  * </ul>
  * All ULocale constructors automatically normalize the locale id.  To handle
- * POSIX ids, the <code>canonicalize</code> can be called to convert the id
+ * POSIX ids, <code>canonicalize</code> can be called to convert the id
  * to canonical form, or the <code>canonicalInstance</code> factory method
  * can be called.</p>
  *
@@ -137,73 +137,73 @@ public final class ULocale implements Serializable {
     public static final ULocale TRADITIONAL_CHINESE = new ULocale("zh_Hant", Locale.CHINESE);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale FRANCE = new ULocale("fr_FR", Locale.FRANCE);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale GERMANY = new ULocale("de_DE", Locale.GERMANY);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale ITALY = new ULocale("it_IT", Locale.ITALY);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale JAPAN = new ULocale("ja_JP", Locale.JAPAN);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale KOREA = new ULocale("ko_KR", Locale.KOREA);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale CHINA = new ULocale("zh_Hans_CN", Locale.CHINA);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale PRC = CHINA;
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale TAIWAN = new ULocale("zh_Hant_TW", Locale.TAIWAN);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale UK = new ULocale("en_GB", Locale.UK);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale US = new ULocale("en_US", Locale.US);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale CANADA = new ULocale("en_CA", Locale.CANADA);
 
     /** 
-     * Useful constant for language.
+     * Useful constant for country/region.
      * @draft ICU 3.0
      */
     public static final ULocale CANADA_FRENCH = new ULocale("fr_CA", Locale.CANADA_FRENCH);
@@ -244,378 +244,431 @@ public final class ULocale implements Serializable {
        3 character codes are duplicates.  This avoids bad searches
        going from 3 to 2 character codes.*/
     /* The range qaa-qtz is reserved for local use. */
-    
-    /* This list MUST be in sorted order, and MUST contain the two-letter codes
-       if one exists otherwise use the three letter code */
-    private static final String[] languages = {
-        "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",
-        "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",
-        "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
-        "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
-        "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",
-        "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
-        "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
-        "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
-        "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
-        "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",
-        "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",
-        "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",
-        "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
-        "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
-        "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
-        "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",
-        "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",
-        "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",
-        "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",
-        "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
-        "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
-        "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
-        "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
-        "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
-        "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",
-        "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",
-        "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",
-        "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",
-        "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",
-        "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",
-        "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",
-        "mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",
-        "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
-        "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",
-        "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
-        "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
-        "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
-        "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
-        "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
-        "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
-        "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
-        "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",
-        "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
-        "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",
-        "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",
-        "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
-        "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",
-        "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
-        "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
-        "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
-        "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
-        "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
-        "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
-        "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
-        "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
-        "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
-        "zu",  "zun", 
-    };
 
-    private static final String[] replacementLanguages = {
-        "id", "he", "yi", "jv", "sr", "nb",/* replacement language codes */
-    };
+    private static String[] _languages;
+    private static String[] _replacementLanguages;
+    private static String[] _obsoleteLanguages;
+    private static String[] _languages3;
+    private static String[] _obsoleteLanguages3;
 
-    private static final String[] obsoleteLanguages = {
-        "in",  "iw",  "ji",  "jw",  "sh", "no",    /* obsolete language codes */         
-    };
-    
-    /* This list MUST contain a three-letter code for every two-letter code in the
-       list above, and they MUST ne in the same order (i.e., the same language must
-       be in the same place in both lists)! */
-    private static final String[] languages3 = {
-        /*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
-        "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
-        /*  "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
-        "afh", "aka", "akk", "ale", "alg", "amh", "arg", "ang", "apa",
-        /*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
-        "ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
-        /*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
-        "ath", "aus", "ava", "awa", "aym", "aze", "bak", "bad",
-        /*  "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",    */
-        "bai", "bal", "bam", "ban", "bas", "bat", "bel", "bej",
-        /*  "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
-        "bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
-        /*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
-        "bla", "bm",  "ben", "bnt", "bod", "bre", "bra", "bos",
-        /*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
-        "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
-        /*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
-        "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
-        /*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
-        "chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
-        /*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
-        "cpe", "cpf", "cpp", "cre", "crh", "crp", "ces", "csb", "chu", "cus",
-        /*  "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
-        "chv", "cym", "dan", "dak", "dar", "day", "deu", "del", "den",
-        /*  "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
-        "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "div", "dyu",
-        /*  "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
-        "dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
-        /*  "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
-        "enm", "epo", "spa", "est", "eus", "ewo", "fas",
-        /*  "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
-        "fan", "fat", "ful", "fin", "fiu", "fij", "fao", "fon",
-        /*  "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
-        "fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
-        /*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
-        "gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
-        /*  "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",     */
-        "goh", "gon", "gor", "got", "grb", "grc", "guj", "glv",
-        /*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
-        "gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
-        /*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
-        "hit", "hmn", "hmo", "hrv", "hsb", "hat", "hun", "hup", "hye", "her",
-        /*  "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",     */
-        "ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
-        /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
-        "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
-        /*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
-        "iku", "jpn", "jbo", "jpr", "jrb", "jaw", "kat", "kaa", "kab",
-        /*  "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
-        "kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
-        /*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
-        "kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
-        /*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",     */
-        "kor", "kok", "kos", "kpe", "kau", "krc", "kro", "kru", "kas",
-        /*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
-        "kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad",
-        /*  "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
-        "lah", "lam", "ltz", "lez", "lug", "lim", "lin", "lao", "lol",
-        /*  "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",    */
-        "loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus",
-        /*  "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
-        "lav", "mad", "mag", "mai", "mak", "man", "map", "mas",
-        /*  "mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
-        "mdf", "mdr", "men", "mlg", "mga", "mah", "mri", "mic", "min",
-        /*  "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
-        "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
-        /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
-        "mol", "moh", "mos", "mar", "msa", "mlt", "mul", "mun",
-        /*  "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
-        "mus", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
-        /*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
-        "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
-        /*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
-        "niu", "nld", "nno", "nor", "nog", "non", "nbl", "nso", "nub",
-        /*  "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
-        "nav", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
-        /*  "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
-        "orm", "ori", "oss", "osa", "ota", "oto", "pan", "paa",
-        /*  "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",    */
-        "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
-        /*  "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",     */
-        "pli", "pol", "pon", "pra", "pro", "pus", "por", "que",
-        /*  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
-        "raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
-        /*  "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
-        "rus", "kin", "san", "sad", "sah", "sai", "sal", "sam",
-        /*  "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
-        "sas", "sat", "srd", "sco", "snd", "sme", "sel", "sem",
-        /*  "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
-        "sag", "sga", "sgn", "shn", "sin", "sid", "sio", "sit",
-        /*  "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
-        "slk", "slv", "sla", "smo", "sma", "smi", "smj", "smn",
-        /*  "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
-        "sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
-        /*  "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
-        "srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
-        /*  "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
-        "swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
-        /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
-        "tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
-        /*  "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
-        "tgl", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
-        /*  "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
-        "tso", "tsi", "tat", "tum", "tup", "tut", "tvl", "twi",
-        /*  "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
-        "tah", "tyv", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
-        /*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",    */
-        "uzb", "vai", "ven", "vie", "vol", "vot", "wln", "wak",
-        /*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
-        "wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
-        /*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
-        "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
-        /*  "zu",  "zun",                                              */
-        "zul", "zun",  
-    };
-    
-    private static final String[] obsoleteLanguages3 = {
-        /* "in",  "iw",  "ji",  "jw",  "sh", */
-         "ind", "heb", "yid", "jaw", "srp", 
-    };
-    
-    /* ZR(ZAR) is now CD(COD) and FX(FXX) is PS(PSE) as per
-       http://www.evertype.com/standards/iso3166/iso3166-1-en.html 
-       added new codes keeping the old ones for compatibility
-       updated to include 1999/12/03 revisions *CWB*/
-    
-    /* RO(ROM) is now RO(ROU) according to 
-       http://www.iso.org/iso/en/prods-services/iso3166ma/03updates-on-iso-3166/nlv3e-rou.html
-    */
-    
-    /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
-    private static final String[] countries = {
-        "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
-        "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
-        "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
-        "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
-        "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
-        "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
-        "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
-        "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
-        "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
-        "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
-        "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
-        "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
-        "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
-        "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
-        "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
-        "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
-        "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
-        "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
-        "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
-        "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
-        "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
-        "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
-        "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
-        "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
-        "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
-        "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
-        "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
-        "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
-        "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
-        "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
-    };
-    
-    private static final String[] obsoleteCountries = {
-        "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
-    };
-    
-    /* This list MUST contain a three-letter code for every two-letter code in
-       the above list, and they MUST be listed in the same order! */
-    private static final String[] countries3 = {
-        /*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
-        "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
-        /*  "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
-        "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
-        /*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
-        "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
-        /*  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
-        "BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
-        /*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
-        "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
-        /*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
-        "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
-        /*  "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
-        "CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
-        /*  "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
-        "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
-        /*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
-        "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-        /*  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
-        "GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
-        /*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
-        "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
-        /*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
-        "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-        /*  "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
-        "IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
-        /*  "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
-        "ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
-        /*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
-        "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
-        /*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
-        "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
-        /*  "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
-        "LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
-        /*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
-        "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
-        /*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
-        "MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
-        /*  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
-        "NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
-        /*  "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
-        "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
-        /*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
-        "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
-        /*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
-        "PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
-        /*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
-        "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
-        /*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
-        "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
-        /*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
-        "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
-        /*  "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
-        "TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
-        /*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
-        "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
-        /*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
-        "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-        /*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
-        "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
-    };
-    
-    private static final String[] obsoleteCountries3 = {
-        /*  "FX",  "RO",  "TP",  "ZR",   */
-        "FXX", "ROM", "TMP", "ZAR",    
-    };
+    // Avoid initializing languages tables unless we have to.
+    private static void initLanguageTables() {
+	if (_languages == null) {
 
-    /**
-     * This table lists pairs of locale ids for canonicalization.  The
-     * The first item is the normalized id, the second item is the
-     * canonicalized id.
-     */
-    private static final String[][] variantsToKeywords = {
-//        { EMPTY_STRING,     "en_US_POSIX", null, null }, /* .NET name */
-        { "C",              "en_US_POSIX", null, null }, /* POSIX name */
-        { "art_LOJBAN",     "jbo", null, null }, /* registered name */
-        { "az_AZ_CYRL",     "az_Cyrl_AZ", null, null }, /* .NET name */
-        { "az_AZ_LATN",     "az_Latn_AZ", null, null }, /* .NET name */
-        { "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
-        { "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
-        { "de_1901",        "de__1901", null, null }, /* registered name */
-        { "de_1906",        "de__1906", null, null }, /* registered name */
-        { "de__PHONEBOOK",  "de", "collation", "phonebook" },
-        { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
-        { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
-        { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
-        { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
-        { "en_BOONT",       "en__BOONT", null, null }, /* registered name */
-        { "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
-        { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
-        { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
-        { "es__TRADITIONAL", "es", "collation", "traditional" },
-        { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
-        { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
-        { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
-        { "fr_BE_PREEURO",  "fr_BE", "currency", "BEF" },
-        { "fr_FR_PREEURO",  "fr_FR", "currency", "FRF" },
-        { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
-        { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
-        { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
-        { "hi__DIRECT",     "hi", "collation", "direct" },
-        { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
-        { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
-//      { "nb_NO_NY",       "nn_NO", null, null },
-        { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
-        { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
-        { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
-        { "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
-        { "sr_SP_CYRL",     "sr_Cyrl_SP", null, null }, /* .NET name */
-        { "sr_SP_LATN",     "sr_Latn_SP", null, null }, /* .NET name */
-        { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
-        { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
-        { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
-        { "zh_CHT",         "zh_TW", null, null }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
-        { "zh_GAN",         "zh__GAN", null, null }, /* registered name */
-        { "zh_GUOYU",       "zh", null, null }, /* registered name */
-        { "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */
-        { "zh_MIN",         "zh__MIN", null, null }, /* registered name */
-        { "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
-        { "zh_WUU",         "zh__WUU", null, null }, /* registered name */
-        { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
-        { "zh_YUE",         "zh__YUE", null, null }, /* registered name */
-        { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
-        { "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
-        { "zh__PINYIN",     "zh", "collation", "pinyin" }
-    };
+	    /* This list MUST be in sorted order, and MUST contain the two-letter codes
+	       if one exists otherwise use the three letter code */
+	    String[] tempLanguages = {
+		"aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",
+		"afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",
+		"ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",
+		"ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",
+		"bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",
+		"bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
+		"bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
+		"btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
+		"ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
+		"chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",
+		"cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",
+		"cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",
+		"dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
+		"dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
+		"enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
+		"fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",
+		"fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",
+		"gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",
+		"goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",
+		"gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",
+		"hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",
+		"ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
+		"ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
+		"iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
+		"kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",
+		"kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",
+		"ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",
+		"ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",
+		"lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",
+		"loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",
+		"lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",
+		"mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",
+		"mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
+		"mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",
+		"mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
+		"nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
+		"niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
+		"nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
+		"om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
+		"pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
+		"pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
+		"raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",
+		"ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",
+		"sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",
+		"sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",
+		"sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",
+		"sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",
+		"srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
+		"sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
+		"tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
+		"tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
+		"ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
+		"ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
+		"uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
+		"wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
+		"yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
+		"zu",  "zun", 
+	    };
+
+	    String[] tempReplacementLanguages = {
+		"id", "he", "yi", "jv", "sr", "nb",/* replacement language codes */
+	    };
+
+	    String[] tempObsoleteLanguages = {
+		"in",  "iw",  "ji",  "jw",  "sh", "no",    /* obsolete language codes */         
+	    };
+
+	    /* This list MUST contain a three-letter code for every two-letter code in the
+	       list above, and they MUST ne in the same order (i.e., the same language must
+	       be in the same place in both lists)! */
+	    String[] tempLanguages3 = {
+		/*  "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  "afa",    */
+		"aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", "afa",
+		/*  "afh", "ak",  "akk", "ale", "alg", "am",  "an",  "ang", "apa",    */
+		"afh", "aka", "akk", "ale", "alg", "amh", "arg", "ang", "apa",
+		/*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ast",    */
+		"ara", "arc", "arn", "arp", "art", "arw", "asm", "ast",
+		/*  "ath", "aus", "av",  "awa", "ay",  "az",  "ba",  "bad",    */
+		"ath", "aus", "ava", "awa", "aym", "aze", "bak", "bad",
+		/*  "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",    */
+		"bai", "bal", "bam", "ban", "bas", "bat", "bel", "bej",
+		/*  "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",    */
+		"bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
+		/*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
+		"bla", "bm",  "ben", "bnt", "bod", "bre", "bra", "bos",
+		/*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
+		"btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
+		/*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
+		"che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
+		/*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
+		"chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
+		/*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
+		"cpe", "cpf", "cpp", "cre", "crh", "crp", "ces", "csb", "chu", "cus",
+		/*  "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
+		"chv", "cym", "dan", "dak", "dar", "day", "deu", "del", "den",
+		/*  "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
+		"dgr", "din", "doi", "dra", "dsb", "dua", "dum", "div", "dyu",
+		/*  "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",     */
+		"dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
+		/*  "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
+		"enm", "epo", "spa", "est", "eus", "ewo", "fas",
+		/*  "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
+		"fan", "fat", "ful", "fin", "fiu", "fij", "fao", "fon",
+		/*  "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
+		"fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
+		/*  "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
+		"gba", "gla", "gem", "gez", "gil", "glg", "gmh", "grn",
+		/*  "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",     */
+		"goh", "gon", "gor", "got", "grb", "grc", "guj", "glv",
+		/*  "gwi", "ha",  "hai", "haw", "he",  "hi",  "hil", "him",    */
+		"gwi", "hau", "hai", "haw", "heb", "hin", "hil", "him",
+		/*  "hit", "hmn", "ho",  "hr",  "hsb", "ht",  "hu",  "hup", "hy",  "hz",     */
+		"hit", "hmn", "hmo", "hrv", "hsb", "hat", "hun", "hup", "hye", "her",
+		/*  "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",     */
+		"ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
+		/*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
+		"ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
+		/*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
+		"iku", "jpn", "jbo", "jpr", "jrb", "jaw", "kat", "kaa", "kab",
+		/*  "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
+		"kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
+		/*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
+		"kho", "kik", "kua", "kaz", "kal", "khm", "kmb", "kan",
+		/*  "ko",  "kok", "kos", "kpe", "kr",  "krc", "kro", "kru", "ks",     */
+		"kor", "kok", "kos", "kpe", "kau", "krc", "kro", "kru", "kas",
+		/*  "ku",  "kum", "kut", "kv",  "kw",  "ky",  "la",  "lad",    */
+		"kur", "kum", "kut", "kom", "cor", "kir", "lat", "lad",
+		/*  "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",    */
+		"lah", "lam", "ltz", "lez", "lug", "lim", "lin", "lao", "lol",
+		/*  "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus",    */
+		"loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus",
+		/*  "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
+		"lav", "mad", "mag", "mai", "mak", "man", "map", "mas",
+		/*  "mdf", "mdr", "men", "mg",  "mga", "mh",  "mi",  "mic", "min",    */
+		"mdf", "mdr", "men", "mlg", "mga", "mah", "mri", "mic", "min",
+		/*  "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
+		"mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
+		/*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mul", "mun",    */
+		"mol", "moh", "mos", "mar", "msa", "mlt", "mul", "mun",
+		/*  "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",    */
+		"mus", "mwr", "mya", "myn", "myv", "nau", "nah", "nai", "nap",
+		/*  "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",    */
+		"nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
+		/*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
+		"niu", "nld", "nno", "nor", "nog", "non", "nbl", "nso", "nub",
+		/*  "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
+		"nav", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
+		/*  "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
+		"orm", "ori", "oss", "osa", "ota", "oto", "pan", "paa",
+		/*  "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",    */
+		"pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
+		/*  "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",     */
+		"pli", "pol", "pon", "pra", "pro", "pus", "por", "que",
+		/*  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa", "rom",    */
+		"raj", "rap", "rar", "roh", "run", "ron", "roa", "rom",
+		/*  "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal", "sam",    */
+		"rus", "kin", "san", "sad", "sah", "sai", "sal", "sam",
+		/*  "sas", "sat", "sc",  "sco", "sd",  "se",  "sel", "sem",    */
+		"sas", "sat", "srd", "sco", "snd", "sme", "sel", "sem",
+		/*  "sg",  "sga", "sgn", "shn", "si",  "sid", "sio", "sit",    */
+		"sag", "sga", "sgn", "shn", "sin", "sid", "sio", "sit",
+		/*  "sk",  "sl",  "sla", "sm",  "sma", "smi", "smj", "smn",    */
+		"slk", "slv", "sla", "smo", "sma", "smi", "smj", "smn",
+		/*  "sms", "sn",  "snk", "so",  "sog", "son", "sq",  "sr",     */
+		"sms", "sna", "snk", "som", "sog", "son", "sqi", "srp",
+		/*  "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",    */
+		"srr", "ssw", "ssa", "sot", "sun", "suk", "sus", "sux",
+		/*  "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",    */
+		"swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
+		/*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
+		"tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
+		/*  "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
+		"tgl", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
+		/*  "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
+		"tso", "tsi", "tat", "tum", "tup", "tut", "tvl", "twi",
+		/*  "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
+		"tah", "tyv", "udm", "uig", "uga", "ukr", "umb", "und", "urd",
+		/*  "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",    */
+		"uzb", "vai", "ven", "vie", "vol", "vot", "wln", "wak",
+		/*  "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",    */
+		"wal", "war", "was", "wen", "wol", "xal", "xho", "yao", "yap",
+		/*  "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",    */
+		"yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
+		/*  "zu",  "zun",                                              */
+		"zul", "zun",  
+	    };
+    
+	    String[] tempObsoleteLanguages3 = {
+		/* "in",  "iw",  "ji",  "jw",  "sh", */
+		"ind", "heb", "yid", "jaw", "srp", 
+	    };
+
+	    synchronized (ULocale.class) {
+		if (_languages == null) {
+		    _languages = tempLanguages;
+		    _replacementLanguages = tempReplacementLanguages;
+		    _obsoleteLanguages = tempObsoleteLanguages;
+		    _languages3 = tempLanguages3;
+		    _obsoleteLanguages3 = tempObsoleteLanguages3;
+		}
+	    }
+	}
+    }
+
+    private static String[] _countries;
+    private static String[] _obsoleteCountries;
+    private static String[] _countries3;
+    private static String[] _obsoleteCountries3;
+
+    // Avoid initializing country tables unless we have to.
+    private static void initCountryTables() {    
+	if (_countries == null) {
+	    /* ZR(ZAR) is now CD(COD) and FX(FXX) is PS(PSE) as per
+	       http://www.evertype.com/standards/iso3166/iso3166-1-en.html 
+	       added new codes keeping the old ones for compatibility
+	       updated to include 1999/12/03 revisions *CWB*/
+    
+	    /* RO(ROM) is now RO(ROU) according to 
+	       http://www.iso.org/iso/en/prods-services/iso3166ma/03updates-on-iso-3166/nlv3e-rou.html
+	    */
+    
+	    /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
+	    String[] tempCountries = {
+		"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
+		"AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
+		"BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
+		"BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
+		"BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
+		"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
+		"CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
+		"DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
+		"ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
+		"GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
+		"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
+		"GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
+		"ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
+		"IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
+		"KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
+		"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
+		"LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
+		"ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
+		"MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
+		"NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
+		"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
+		"PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
+		"PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
+		"SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
+		"SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
+		"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
+		"TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",
+		"TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
+		"VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
+		"WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
+	    };
+    
+	    String[] tempObsoleteCountries = {
+		"FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
+	    };
+    
+	    /* This list MUST contain a three-letter code for every two-letter code in
+	       the above list, and they MUST be listed in the same order! */
+	    String[] tempCountries3 = {
+		/*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
+		"AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
+		/*  "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
+		"AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
+		/*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
+		"BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
+		/*  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
+		"BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
+		/*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
+		"BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
+		/*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
+		"CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
+		/*  "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
+		"CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
+		/*  "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
+		"DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
+		/*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
+		"ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
+		/*  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
+		"GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
+		/*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
+		"GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
+		/*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
+		"GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
+		/*  "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
+		"IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
+		/*  "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
+		"ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
+		/*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
+		"COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
+		/*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
+		"LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
+		/*  "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
+		"LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
+		/*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
+		"MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
+		/*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
+		"MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
+		/*  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
+		"NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
+		/*  "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
+		"NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
+		/*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
+		"PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
+		/*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
+		"PLW", "PRY", "QAT", "REU", "ROU", "RUS", "RWA", "SAU",
+		/*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
+		"SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
+		/*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
+		"SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
+		/*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
+		"SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
+		/*  "TK",  "TL",  "TM",  "TN",  "TO",  "TR",  "TT",  "TV",     */
+		"TKL", "TLS", "TKM", "TUN", "TON", "TUR", "TTO", "TUV",
+		/*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
+		"TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
+		/*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
+		"VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
+		/*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
+		"WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
+	    };
+    
+	    String[] tempObsoleteCountries3 = {
+		/*  "FX",  "RO",  "TP",  "ZR",   */
+		"FXX", "ROM", "TMP", "ZAR",    
+	    };
+
+	    synchronized (ULocale.class) {
+		if (_countries == null) {
+		    _countries = tempCountries;
+		    _obsoleteCountries = tempObsoleteCountries;
+		    _countries3 = tempCountries3;
+		    _obsoleteCountries3 = tempObsoleteCountries3;
+		}
+	    }
+	}
+    }
+
+    private static String[][] _variantsToKeywords;
+
+    private static void initVariantsTable() {
+	if (_variantsToKeywords == null) {
+	    /**
+	     * This table lists pairs of locale ids for canonicalization.  The
+	     * The first item is the normalized id, the second item is the
+	     * canonicalized id.
+	     */
+	    String[][] tempVariantsToKeywords = {
+//              { EMPTY_STRING,     "en_US_POSIX", null, null }, /* .NET name */
+		{ "C",              "en_US_POSIX", null, null }, /* POSIX name */
+		{ "art_LOJBAN",     "jbo", null, null }, /* registered name */
+		{ "az_AZ_CYRL",     "az_Cyrl_AZ", null, null }, /* .NET name */
+		{ "az_AZ_LATN",     "az_Latn_AZ", null, null }, /* .NET name */
+		{ "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
+		{ "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
+		{ "de_1901",        "de__1901", null, null }, /* registered name */
+		{ "de_1906",        "de__1906", null, null }, /* registered name */
+		{ "de__PHONEBOOK",  "de", "collation", "phonebook" },
+		{ "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
+		{ "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
+		{ "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
+		{ "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
+		{ "en_BOONT",       "en__BOONT", null, null }, /* registered name */
+		{ "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
+		{ "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
+		{ "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
+		{ "es__TRADITIONAL", "es", "collation", "traditional" },
+		{ "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
+		{ "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
+		{ "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
+		{ "fr_BE_PREEURO",  "fr_BE", "currency", "BEF" },
+		{ "fr_FR_PREEURO",  "fr_FR", "currency", "FRF" },
+		{ "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
+		{ "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
+		{ "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
+		{ "hi__DIRECT",     "hi", "collation", "direct" },
+		{ "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
+		{ "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
+		//      { "nb_NO_NY",       "nn_NO", null, null },
+		{ "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
+		{ "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
+		{ "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
+		{ "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
+		{ "sr_SP_CYRL",     "sr_Cyrl_SP", null, null }, /* .NET name */
+		{ "sr_SP_LATN",     "sr_Latn_SP", null, null }, /* .NET name */
+		{ "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
+		{ "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
+		{ "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
+		{ "zh_CHT",         "zh_TW", null, null }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
+		{ "zh_GAN",         "zh__GAN", null, null }, /* registered name */
+		{ "zh_GUOYU",       "zh", null, null }, /* registered name */
+		{ "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */
+		{ "zh_MIN",         "zh__MIN", null, null }, /* registered name */
+		{ "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
+		{ "zh_WUU",         "zh__WUU", null, null }, /* registered name */
+		{ "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
+		{ "zh_YUE",         "zh__YUE", null, null }, /* registered name */
+		{ "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
+		{ "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
+		{ "zh__PINYIN",     "zh", "collation", "pinyin" }
+	    };
+	
+	    synchronized (ULocale.class) {
+		if (_variantsToKeywords == null) {
+		    _variantsToKeywords = tempVariantsToKeywords;
+		}
+	    }
+	}
+    }
 
     /**
      * Private constructor used by static initializers.
@@ -636,12 +689,19 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Construct a ULocale from a string of the form "sv_FI_ALAND".
-     * By default this constructor will not normalize the localeID. 
+     * Construct a ULocale from a RFC 3066 locale ID. The locale ID consists
+     * of optional language, script, country, and variant fields in that order, 
+     * separated by underscores, followed by an optional keyword list.  The
+     * script, if present, is four characters long-- this distinguishes it
+     * from a country code, which is two characters long.  Other fields
+     * are distinguished by position as indicated by the underscores.  The
+     * start of the keyword list is indicated by '@', and consists of one
+     * or more keyword/value pairs separated by commas.
+     * <p>
+     * This constructor not canonicalize the localeID.
      * 
      * @param localeID string representation of the locale, e.g:
-     * "en_US", "sy-Cyrl-YU"
-     * @param localeID The locale identifier as a string
+     * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR,collation=traditional"
      * @draft ICU 2.8
      */ 
     public ULocale(String localeID) {
@@ -649,33 +709,34 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Construct a ULocale from a string of the form "sv_FI_ALAND".
-     * @param lang
-     * @param script
-     * @param country
-     * @draft ICU 3.0
+     * Construct a ULocale from a localeID constructed from the three 'fields' a, b, and c.  These
+     * fields are concatenated using underscores to form a localeID of
+     * the form a_b_c, which is then handled like the localeID passed
+     * to <code>ULocale(String localeID)</code>.  
+     *
+     * <p>Java locale strings consisting of language, country, and
+     * variant will be handled by this form, since the country code
+     * (being shorter than four letters long) will not be interpreted
+     * as a script code.  If a script code is present, the final
+     * argument ('c') will be interpreted as the country code.  It is
+     * recommended that this constructor only be used to ease porting,
+     * and that clients instead use the single-argument constructor
+     * when constructing a ULocale from a localeID.
+     * @param a first component of the locale id
+     * @param b second component of the locale id
+     * @param c third component of the locale id
+     * @see #ULocale(String)
+     * @draft ICU 3.0 
      */
-    public ULocale(String lang, String script, String country) {
-        this(lang,script,country, EMPTY_STRING);
-    }
-
-    /**
-     * Construct a ULocale from a string of the form "sv_FI_ALAND".
-     * @param lang
-     * @param script
-     * @param country
-     * @param variant
-     * @draft ICU 3.0
-     */
-    public ULocale(String lang, String script, String country, String variant) {
-        localeID = getName(lscvToID(lang, script, country, variant));
+    public ULocale(String a, String b, String c) {
+	localeID = getName(lscvToID(a, b, c, EMPTY_STRING));
     }
 
     /**
      * Create a ULocale from the id by first canonicalizing the id.
      * @param nonCanonicalID the locale id to canonicalize
      * @return the locale created from the canonical version of the ID.
-     * @draft IDU 3.0
+     * @draft ICU 3.0
      */
     public static ULocale createCanonical(String nonCanonicalID) {
         return new ULocale(canonicalize(nonCanonicalID), null);
@@ -725,7 +786,7 @@ public final class ULocale implements Serializable {
     private static ULocale defaultULocale;
 
     /**
-     * Return the current default ULocale.
+     * Returns the current default ULocale.
      * @draft ICU 2.8
      */ 
     public static ULocale getDefault() {
@@ -758,7 +819,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * This is for compatibility with Locale.  In actuality, since ULocale is
+     * This is for compatibility with Locale-- in actuality, since ULocale is
      * immutable, there is no reason to clone it, so this API returns 'this'.
      * @draft ICU 3.0
      */
@@ -767,9 +828,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Override hashCode.
-     * Since Locales are often used in hashtables, caches the value
-     * for speed.
+     * Returns the hashCode.
      * @draft ICU 3.0
      */
     public int hashCode() {
@@ -778,7 +837,7 @@ public final class ULocale implements Serializable {
     
     /**
      * Returns true if the other object is another ULocale with the
-     * same full name, or is a String that matches the full name.
+     * same full name, or is a String localeID that matches the full name.
      * Note that since names are not canonicalized, two ULocales that
      * function identically might not compare equal.
      *
@@ -812,7 +871,8 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String[] getISOCountries() {
-        return (String[])countries.clone();
+	initCountryTables();
+        return (String[])_countries.clone();
     }
 
     /**
@@ -824,7 +884,8 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String[] getISOLanguages() {
-        return (String[])languages.clone();
+	initLanguageTables();
+        return (String[])_languages.clone();
     }
 
     /**
@@ -838,7 +899,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Returns the language code for the locale ID specified,
+     * Returns the language code for the locale ID,
      * which will either be the empty string
      * or a lowercase ISO 639 code.
      * @see #getDisplayLanguage
@@ -849,7 +910,7 @@ public final class ULocale implements Serializable {
     }
      
     /**
-     * Returns the script code for the specified locale.
+     * Returns the script code for this locale, which might be the empty string.
      * @see #getDisplayScript
      * @draft ICU 3.0
      */
@@ -858,7 +919,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Returns the script code for the specified locale.
+     * Returns the script code for the specified locale, which might be the empty string.
      * @see #getDisplayScript
      * @draft ICU 3.0
      */
@@ -888,7 +949,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Returns the variant code for this locale.
+     * Returns the variant code for this locale, which might be the empty string.
      * @see #getDisplayVariant
      * @draft ICU 3.0
      */
@@ -897,7 +958,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Returns the variant code for this locale.
+     * Returns the variant code for the specified locale, which might be the empty string.
      * @see #getDisplayVariant
      * @draft ICU 3.0
      */
@@ -906,7 +967,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets the (normalized) base name for this locale.
+     * Returns the (normalized) base name for this locale.
      * @return the base name as a String.
      * @draft ICU 3.0
      */
@@ -915,7 +976,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Gets the (normalized) base name for the specified locale.
+     * Returns the (normalized) base name for the specified locale.
      * @param localeID the locale ID as a string
      * @return the base name as a String.
      * @draft ICU 3.0
@@ -925,7 +986,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets the (normalized) full name for the this locale.
+     * Returns the (normalized) full name for this locale.
      *
      * @return String the full name of the localeID
      * @draft ICU 3.0
@@ -935,9 +996,9 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets the (normalized) full name for the specified locale.
+     * Returns the (normalized) full name for the specified locale.
      *
-     * @param localeID the locale to get the full name with
+     * @param localeID the localeID as a string
      * @return String the full name of the localeID
      * @draft ICU 3.0
      */
@@ -946,7 +1007,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Return a string representation of this object.
+     * Returns a string representation of this object.
      * @draft ICU 3.0
      */
     public String toString() {
@@ -954,7 +1015,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets an iterator over keywords for the specified locale.  If there 
+     * Returns an iterator over keywords for this locale.  If there 
      * are no keywords, returns null.
      * @return iterator over keywords, or null if there are no keywords.
      * @draft ICU 3.0
@@ -964,7 +1025,7 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets an iterator over keywords for the specified locale.  If there 
+     * Returns an iterator over keywords for the specified locale.  If there 
      * are no keywords, returns null.
      * @return an iterator over the keywords in the specified locale, or null
      * if there are no keywords.
@@ -975,8 +1036,8 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Get the value for a keyword. If the keyword is not defined, null is returned.
-     * @param keywordName name of the keyword for which we want the value. Case insensitive.
+     * Returns the value for a keyword in this locale. If the keyword is not defined, returns null.
+     * @param keywordName name of the keyword whose value is desired. Case insensitive.
      * @return the value of the keyword, or null.
      * @draft ICU 3.0
      */
@@ -985,8 +1046,9 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Get the value for a keyword. Locale name does not need to be normalized.
-     * @param keywordName name of the keyword for which we want the value. Case insensitive.
+     * Returns the value for a keyword in the specified locale. If the keyword is not defined, returns null. 
+     * The locale name does not need to be normalized.
+     * @param keywordName name of the keyword whose value is desired. Case insensitive.
      * @return String the value of the keyword as a string
      * @draft ICU 3.0
      */
@@ -1063,7 +1125,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the text in the buffer from start to blen as a String.
+         * Returns the text in the buffer from start to blen as a String.
          */
         private String getString(int start) {
             if (start == blen) {
@@ -1097,7 +1159,7 @@ public final class ULocale implements Serializable {
         private static final char DONE = '\uffff';
 
         /**
-         * Return the character at index in the id, and advance index.  The returned character
+         * Returns the character at index in the id, and advance index.  The returned character
          * is DONE if index was at the limit of the buffer.  The index is advanced regardless
          * so that decrementing the index will always 'unget' the last character returned.
          */
@@ -1119,21 +1181,21 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return true if the character at index in the id is a terminator.
+         * Returns true if the character at index in the id is a terminator.
          */
         private boolean atTerminator() {
             return index >= id.length || isTerminator(id[index]);
         }
 
         /**
-         * Return true if the character is an id separator (underscore or hyphen).
+         * Returns true if the character is an id separator (underscore or hyphen).
          */
         private boolean isIDSeparator(char c) {
             return c == UNDERSCORE || c == HYPHEN;
         }
 
         /**
-         * Return true if the character is a terminator (keyword separator, dot, or DONE).
+         * Returns true if the character is a terminator (keyword separator, dot, or DONE).
          * Dot is a terminator because of the POSIX form, where dot precedes the codepage.
          */
         private boolean isTerminator(char c) {
@@ -1142,7 +1204,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return true if the character is a terminator or id separator.
+         * Returns true if the character is a terminator or id separator.
          */
         private boolean isTerminatorOrIDSeparator(char c) {
             return c == KEYWORD_SEPARATOR || c == UNDERSCORE || c == HYPHEN || 
@@ -1150,7 +1212,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return true if the start of the buffer has an experimental or private language 
+         * Returns true if the start of the buffer has an experimental or private language 
          * prefix, the pattern '[ixIX][-_].' shows the syntax checked.
          */
         private boolean haveExperimentalLanguagePrefix() {
@@ -1165,7 +1227,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return true if a value separator occurs at or after index.
+         * Returns true if a value separator occurs at or after index.
          */
         private boolean haveKeywordAssign() {
             // assume it is safe to start from index
@@ -1196,15 +1258,17 @@ public final class ULocale implements Serializable {
             --index; // unget
 
             if (blen == 3) {
+		initLanguageTables();
+
                 /* convert 3 character code to 2 character code if possible *CWB*/
                 String lang = getString(0);
-                int offset = findIndex(languages3, lang);
+                int offset = findIndex(_languages3, lang);
                 if (offset >= 0) {
-                    set(0, languages[offset]);
+                    set(0, _languages[offset]);
                 } else {
-                    offset = findIndex(obsoleteLanguages3, lang);
+                    offset = findIndex(_obsoleteLanguages3, lang);
                     if (offset >= 0) {
-                        set(0, obsoleteLanguages[offset]);
+                        set(0, _obsoleteLanguages[offset]);
                     }
                 }
             }
@@ -1303,14 +1367,16 @@ public final class ULocale implements Serializable {
                 --index; // unget
 
                 if (blen - oldBlen == 3) {
+		    initCountryTables();
+
                     /* convert 3 character code to 2 character code if possible *CWB*/
-                    int offset = findIndex(countries3, getString(oldBlen));
+                    int offset = findIndex(_countries3, getString(oldBlen));
                     if (offset >= 0) {
-                        set(oldBlen, countries[offset]);
+                        set(oldBlen, _countries[offset]);
                     } else {
-                        offset = findIndex(obsoleteCountries3, getString(oldBlen));
+                        offset = findIndex(_obsoleteCountries3, getString(oldBlen));
                         if (offset >= 0) {
-                            set(oldBlen, obsoleteCountries[offset]);
+                            set(oldBlen, _obsoleteCountries[offset]);
                         }
                     }
                 }
@@ -1406,7 +1472,7 @@ public final class ULocale implements Serializable {
         // the keyword separator
 
         /**
-         * Return the normalized language id, or the empty string.
+         * Returns the normalized language id, or the empty string.
          */
         public String getLanguage() {
             reset();
@@ -1414,7 +1480,7 @@ public final class ULocale implements Serializable {
         }
    
         /**
-         * Return the normalized script id, or the empty string.
+         * Returns the normalized script id, or the empty string.
          */
         public String getScript() {
             reset();
@@ -1433,7 +1499,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the normalized variant id, or the empty string.
+         * Returns the normalized variant id, or the empty string.
          */
         public String getVariant() {
             reset();
@@ -1444,7 +1510,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the language, script, country, and variant as separate strings.
+         * Returns the language, script, country, and variant as separate strings.
          */
         public String[] getLanguageScriptCountryVariant() {
             reset();
@@ -1478,7 +1544,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the normalized base form of the locale id.  The base
+         * Returns the normalized base form of the locale id.  The base
          * form does not include keywords.
          */
         public String getBaseName() {
@@ -1490,7 +1556,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the normalized full form of the locale id.  The full
+         * Returns the normalized full form of the locale id.  The full
          * form includes keywords if they are present.
          */
         public String getName() {
@@ -1559,7 +1625,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return a map of the keywords and values, or null if there are none.
+         * Returns a map of the keywords and values, or null if there are none.
          */
         private Map getKeywordMap() {
             if (keywords == null) {
@@ -1625,7 +1691,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return an iterator over the keywords, or null if we have an empty map.
+         * Returns an iterator over the keywords, or null if we have an empty map.
          */
         public Iterator getKeywords() {
             Map m = getKeywordMap();
@@ -1633,7 +1699,7 @@ public final class ULocale implements Serializable {
         }
 
         /**
-         * Return the value for the named keyword, or null if the keyword is not
+         * Returns the value for the named keyword, or null if the keyword is not
          * present.
          */
         public String getKeywordValue(String keywordName) {
@@ -1717,7 +1783,7 @@ public final class ULocale implements Serializable {
     }    
 
     /**
-     * Gets the canonical name for the specified locale.  This is used to convert POSIX
+     * Returns the canonical name for the specified locale ID.  This is used to convert POSIX
      * and other grandfathered IDs to standard ICU form.
      * @param localeID the locale id
      * @return the canonicalized id
@@ -1737,12 +1803,14 @@ public final class ULocale implements Serializable {
 
         // we have an ID in the form xx_Yyyy_ZZ_KKKKK
 
+	initVariantsTable();
+
         /* See if this is an already known locale */
-        for (int i = 0; i < variantsToKeywords.length; i++) {
-            if (variantsToKeywords[i][0].equals(baseName)) {
+        for (int i = 0; i < _variantsToKeywords.length; i++) {
+            if (_variantsToKeywords[i][0].equals(baseName)) {
                 foundVariant = true;
 
-                String[] vals = variantsToKeywords[i];
+                String[] vals = _variantsToKeywords[i];
                 parser.setBaseName(vals[1]);
                 if (vals[2] != null) {
                     parser.defaultKeywordValue(vals[2], vals[3]);
@@ -1806,8 +1874,8 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns a three-letter abbreviation for this locale's language.  If the locale
-     * doesn't specify a language, this will be the empty string.  Otherwise, this will
-     * be a lowercase ISO 639-2/T language code.
+     * doesn't specify a language, returns the empty string.  Otherwise, returns
+     * a lowercase ISO 639-2/T language code.
      * The ISO 639-2 language codes can be found on-line at
      *   <a href="ftp://dkuug.dk/i18n/iso-639-2.txt"><code>ftp://dkuug.dk/i18n/iso-639-2.txt</code></a>
      * @exception MissingResourceException Throws MissingResourceException if the
@@ -1820,8 +1888,8 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns a three-letter abbreviation for this locale's language.  If the locale
-     * doesn't specify a language, this will be the empty string.  Otherwise, this will
-     * be a lowercase ISO 639-2/T language code.
+     * doesn't specify a language, returns the empty string.  Otherwise, returns
+     * a lowercase ISO 639-2/T language code.
      * The ISO 639-2 language codes can be found on-line at
      *   <a href="ftp://dkuug.dk/i18n/iso-639-2.txt"><code>ftp://dkuug.dk/i18n/iso-639-2.txt</code></a>
      * @exception MissingResourceException Throws MissingResourceException if the
@@ -1829,23 +1897,25 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getISO3Language(String localeID){
+	initLanguageTables();
+
         String language = getLanguage(localeID);
-        int offset = findIndex(languages, language);
+        int offset = findIndex(_languages, language);
         if(offset>=0){
-            return languages3[offset];
+            return _languages3[offset];
         } else {
-            offset = findIndex(obsoleteLanguages, language);
+            offset = findIndex(_obsoleteLanguages, language);
             if (offset >= 0) {
-                return obsoleteLanguages3[offset];
+                return _obsoleteLanguages3[offset];
             }
         }
         return EMPTY_STRING;
     }
     
     /**
-     * Returns a three-letter abbreviation for this locale's country.  If the locale
-     * doesn't specify a country, this will be tbe the empty string.  Otherwise, this will
-     * be an uppercase ISO 3166 3-letter country code.
+     * Returns a three-letter abbreviation for this locale's country/region.  If the locale
+     * doesn't specify a country, returns the empty string.  Otherwise, returns
+     * an uppercase ISO 3166 3-letter country code.
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter country abbreviation is not available for this locale.
      * @draft ICU 3.0
@@ -1854,22 +1924,24 @@ public final class ULocale implements Serializable {
         return getISO3Country(localeID);
     }
     /**
-     * Returns a three-letter abbreviation for this locale's country.  If the locale
-     * doesn't specify a country, this will be the the empty string.  Otherwise, this will
-     * be an uppercase ISO 3166 3-letter country code.
+     * Returns a three-letter abbreviation for this locale's country/region.  If the locale
+     * doesn't specify a country, returns the empty string.  Otherwise, returns
+     * an uppercase ISO 3166 3-letter country code.
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter country abbreviation is not available for this locale.
      * @draft ICU 3.0
      */
     public static String getISO3Country(String localeID){
+	initCountryTables();
+
         String country = getCountry(localeID);
-        int offset = findIndex(countries, country);
+        int offset = findIndex(_countries, country);
         if(offset>=0){
-            return countries3[offset];
+            return _countries3[offset];
         }else{
-            offset = findIndex(obsoleteCountries, country);
+            offset = findIndex(_obsoleteCountries, country);
             if(offset>=0){
-                return obsoleteCountries3[offset];   
+                return _obsoleteCountries3[offset];   
             }
         }
         return EMPTY_STRING;
@@ -1880,10 +1952,10 @@ public final class ULocale implements Serializable {
     /**
      * Utility to fetch locale display data from resource bundle tables.
      */
-    private static String getTableString(String tableName, String subtableName, String item, ULocale displayLocale) {
+    private static String getTableString(String tableName, String subtableName, String item, String displayLocaleID) {
         if (item.length() > 0) {
             try {
-                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
+                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocaleID);
                 return getTableString(tableName, subtableName, item, bundle);
             } catch (Exception e) {
 //              System.out.println("gtsu: " + e.getMessage());
@@ -1926,26 +1998,26 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Return this locale's language localized for display in the default locale.
+     * Returns this locale's language localized for display in the default locale.
      * @return the localized language name.
      * @draft ICU 3.0
      */
     public String getDisplayLanguage() {
-        return getDisplayLanguage(getDefault());
+        return getDisplayLanguageInternal(localeID, getDefault().localeID);
     }
 
     /**
-     * Return this locale's language localized for display in the provided locale.
+     * Returns this locale's language localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
      * @draft ICU 3.0
      */
     public String getDisplayLanguage(ULocale displayLocale) {
-        return getDisplayLanguage(localeID, displayLocale);
+        return getDisplayLanguageInternal(localeID, displayLocale.localeID);
     }
     
     /**
-     * Return a locale's language localized for display in the provided locale.
+     * Returns a locale's language localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose language will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1953,11 +2025,11 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayLanguage(String localeID, String displayLocaleID) {
-        return getDisplayLanguage(localeID, new ULocale(displayLocaleID));
+        return getDisplayLanguageInternal(localeID, getName(displayLocaleID));
     }
 
     /**
-     * Return a locale's language localized for display in the provided locale.
+     * Returns a locale's language localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose language will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -1965,30 +2037,35 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
-        return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocale);
+	return getDisplayLanguageInternal(localeID, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayLanguageInternal(String localeID, String displayLocaleID) {
+        return getTableString("Languages", null, new IDParser(localeID).getLanguage(), displayLocaleID);
     }
     
     /**
-     * Return this locale's script localized for display in the default locale.
+     * Returns this locale's script localized for display in the default locale.
      * @return the localized script name.
      * @draft ICU 3.0
      */
     public String getDisplayScript() {
-        return getDisplayScript(getDefault());
+        return getDisplayScriptInternal(localeID, getDefault().localeID);
     }
 
     /**
-     * Return this locale's script localized for display in the provided locale.
+     * Returns this locale's script localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
      * @draft ICU 3.0
      */
     public String getDisplayScript(ULocale displayLocale) {
-        return getDisplayScript(localeID, displayLocale.localeID);
+        return getDisplayScriptInternal(localeID, displayLocale.localeID);
     }
     
     /**
-     * Return a locale's script localized for display in the provided locale.
+     * Returns a locale's script localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose script will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -1996,41 +2073,46 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayScript(String localeID, String displayLocaleID) {
-        return getDisplayScript(localeID, new ULocale(displayLocaleID));
+        return getDisplayScriptInternal(localeID, getName(displayLocaleID));
     }
-    
+
     /**
-     * Return a locale's script localized for display in the provided locale.
+     * Returns a locale's script localized for display in the provided locale.
      * @param localeID the id of the locale whose script will be displayed.
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
      * @draft ICU 3.0
      */
     public static String getDisplayScript(String localeID, ULocale displayLocale) {
-        return getTableString("Scripts", null, new IDParser(localeID).getScript(), displayLocale);
+	return getDisplayScriptInternal(localeID, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayScriptInternal(String localeID, String displayLocaleID) {
+        return getTableString("Scripts", null, new IDParser(localeID).getScript(), displayLocaleID);
     }
 
     /**
-     * Return this locale's country localized for display in the default locale.
+     * Returns this locale's country localized for display in the default locale.
      * @return the localized country name.
      * @draft ICU 3.0
      */
     public String getDisplayCountry() {
-        return getDisplayCountry(getDefault());
+        return getDisplayCountryInternal(localeID, getDefault().localeID);
     }
     
     /**
-     * Return this locale's country localized for display in the provided locale.
+     * Returns this locale's country localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized country name.
      * @draft ICU 3.0
      */
     public String getDisplayCountry(ULocale displayLocale){
-        return getDisplayCountry(localeID, displayLocale);   
+        return getDisplayCountryInternal(localeID, displayLocale.localeID);   
     }
     
     /**
-     * Return a locale's country localized for display in the provided locale.
+     * Returns a locale's country localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -2038,11 +2120,11 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayCountry(String localeID, String displayLocaleID) {
-        return getDisplayCountry(localeID, new ULocale(displayLocaleID));
+        return getDisplayCountryInternal(localeID, getName(displayLocaleID));
     }
 
     /**
-     * Return a locale's country localized for display in the provided locale.
+     * Returns a locale's country localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose country will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -2050,30 +2132,35 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayCountry(String localeID, ULocale displayLocale) {
-        return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocale);
+	return getDisplayCountryInternal(localeID, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayCountryInternal(String localeID, String displayLocaleID) {
+        return getTableString("Countries", null, new IDParser(localeID).getCountry(), displayLocaleID);
     }
     
     /**
-     * Return this locale's variant localized for display in the default locale.
+     * Returns this locale's variant localized for display in the default locale.
      * @return the localized variant name.
      * @draft ICU 3.0
      */
     public String getDisplayVariant() {
-        return getDisplayVariant(getDefault());   
+        return getDisplayVariantInternal(localeID, getDefault().localeID);   
     }
 
     /**
-     * Return this locale's variant localized for display in the provided locale.
+     * Returns this locale's variant localized for display in the provided locale.
      * @param displayLocale the locale in which to display the name.
      * @return the localized variant name.
      * @draft ICU 3.0
      */
-    public String getDisplayVariant(ULocale displayLocale){
-        return getDisplayVariant(localeID, displayLocale);   
+    public String getDisplayVariant(ULocale displayLocale) {
+        return getDisplayVariantInternal(localeID, displayLocale.localeID);   
     }
     
     /**
-     * Return a locale's variant localized for display in the provided locale.
+     * Returns a locale's variant localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose variant will be displayed
      * @param displayLocaleID the id of the locale in which to display the name.
@@ -2081,11 +2168,11 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayVariant(String localeID, String displayLocaleID){
-        return getDisplayVariant(localeID, new ULocale(displayLocaleID));
+        return getDisplayVariantInternal(localeID, getName(displayLocaleID));
     }
     
     /**
-     * Return a locale's variant localized for display in the provided locale.
+     * Returns a locale's variant localized for display in the provided locale.
      * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose variant will be displayed.
      * @param displayLocale the locale in which to display the name.
@@ -2093,22 +2180,27 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayVariant(String localeID, ULocale displayLocale) {
-        return getTableString("Variants", null, new IDParser(localeID).getVariant(), displayLocale);
+	return getDisplayVariantInternal(localeID, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayVariantInternal(String localeID, String displayLocaleID) {
+        return getTableString("Variants", null, new IDParser(localeID).getVariant(), displayLocaleID);
     }
 
     /**
-     * Return a keyword localized for display in the default locale.
+     * Returns a keyword localized for display in the default locale.
      * @param keyword the keyword to be displayed.
      * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword) {
-        return getDisplayKeyword(keyword, getDefault());   
+        return getDisplayKeywordInternal(keyword, getDefault().localeID);   
     }
     
     /**
-     * Return a keyword localized for display in the specified locale.
+     * Returns a keyword localized for display in the specified locale.
      * @param keyword the keyword to be displayed.
      * @param displayLocaleID the id of the locale in which to display the keyword.
      * @return the localized keyword name.
@@ -2116,11 +2208,11 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, String displayLocaleID) {
-        return getDisplayKeyword(keyword, new ULocale(displayLocaleID));   
+        return getDisplayKeywordInternal(keyword, getName(displayLocaleID));   
     }
 
     /**
-     * Return a keyword localized for display in the specified locale.
+     * Returns a keyword localized for display in the specified locale.
      * @param keyword the keyword to be displayed.
      * @param displayLocale the locale in which to display the keyword.
      * @return the localized keyword name.
@@ -2128,44 +2220,51 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeyword(String keyword, ULocale displayLocale) {
-        return getTableString("Keys", null, keyword.trim().toLowerCase(), displayLocale);
+	return getDisplayKeywordInternal(keyword, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayKeywordInternal(String keyword, String displayLocaleID) {
+        return getTableString("Keys", null, keyword.trim().toLowerCase(), displayLocaleID);
     }
 
     /**
-     * Return a keyword value localized for display in the default locale.
+     * Returns a keyword value localized for display in the default locale.
      * @param keyword the keyword whose value is to be displayed.
      * @return the localized value name.
      * @draft ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword) {
-        return getDisplayKeywordValue(keyword, getDefault());   
+        return getDisplayKeywordValueInternal(localeID, keyword, getDefault().localeID);
     }
     
     /**
-     * Return a keyword value localized for display in the specified locale.
+     * Returns a keyword value localized for display in the specified locale.
      * @param keyword the keyword whose value is to be displayed.
      * @param displayLocale the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
      */
     public String getDisplayKeywordValue(String keyword, ULocale displayLocale) {
-        return getDisplayKeywordValue(localeID, keyword, displayLocale);   
+        return getDisplayKeywordValueInternal(localeID, keyword, displayLocale.localeID);   
     }
 
     /**
-     * Return a keyword value localized for display in the specified locale.
+     * Returns a keyword value localized for display in the specified locale.
+     * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose keyword value is to be displayed.
      * @param keyword the keyword whose value is to be displayed.
      * @param displayLocaleID the id of the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
      */
-    public String getDisplayKeywordValue(String localeID, String keyword, String displayLocaleID) {
-        return getDisplayKeywordValue(localeID, keyword, new ULocale(displayLocaleID));
+    public static String getDisplayKeywordValue(String localeID, String keyword, String displayLocaleID) {
+        return getDisplayKeywordValueInternal(localeID, keyword, getName(displayLocaleID));
     }
 
     /**
-     * Return a keyword value localized for display in the specified locale.
+     * Returns a keyword value localized for display in the specified locale.
+     * This is a cover for the ICU4C API.
      * @param localeID the id of the locale whose keyword value is to be displayed.
      * @param keyword the keyword whose value is to be displayed.
      * @param displayLocale the id of the locale in which to display the value.
@@ -2173,56 +2272,68 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String getDisplayKeywordValue(String localeID, String keyword, ULocale displayLocale) {
+	return getDisplayKeywordValueInternal(localeID, keyword, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayKeywordValueInternal(String localeID, String keyword, String displayLocaleID) {
         keyword = keyword.trim().toLowerCase();
         String value = new IDParser(localeID).getKeywordValue(keyword);
-        return getTableString("Types", keyword, value, displayLocale);
+        return getTableString("Types", keyword, value, displayLocaleID);
     }
     
     /**
-     * Return this locale name localized for display in the default locale.
+     * Returns this locale name localized for display in the default locale.
      * @return the localized locale name.
      * @draft ICU 3.0
      */
     public String getDisplayName() {
-        return getDisplayName(getDefault());
+        return getDisplayNameInternal(localeID, getDefault().localeID);
     }
     
     /**
-     * Return this locale name localized for display in the provided locale.
+     * Returns this locale name localized for display in the provided locale.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
      */
     public String getDisplayName(ULocale displayLocale) {
-        return getDisplayName(localeID, displayLocale);
+        return getDisplayNameInternal(localeID, displayLocale.localeID);
     }
     
     /**
-     * Return the locale ID localized for display in the provided locale.
+     * Returns the locale ID localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocaleID the id of the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
      */
     public static String getDisplayName(String localeID, String displayLocaleID) {
-        return getDisplayName(localeID, new ULocale(displayLocaleID));
+        return getDisplayNameInternal(localeID, getName(displayLocaleID));
     }
 
     /**
-     * Return the locale ID localized for display in the provided locale.
+     * Returns the locale ID localized for display in the provided locale.
+     * This is a cover for the ICU4C API.
      * @param localeID the locale whose name is to be displayed.
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
      */
     public static String getDisplayName(String localeID, ULocale displayLocale) {
+	return getDisplayNameInternal(localeID, displayLocale.localeID);
+    }
+
+    // displayLocaleID is canonical, localeID need not be since parsing will fix this.
+    private static String getDisplayNameInternal(String localeID, String displayLocaleID) {
         // lang
         // lang (script, country, variant, keyword=value, ...)
         // script, country, variant, keyword=value, ...
 
         final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocaleID);
 
         StringBuffer buf = new StringBuffer();
 
