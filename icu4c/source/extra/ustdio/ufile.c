@@ -186,7 +186,11 @@ u_finit(FILE        *f,
   if(result == 0)
     return 0;
 
+#ifdef WIN32
+  result->fFile = &_iob[_fileno(f)];
+#else
   result->fFile = f;
+#endif
   result->fOwnFile = FALSE;
 
   /* if locale is 0, use the default */
