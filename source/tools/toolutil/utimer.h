@@ -161,18 +161,18 @@ typedef void FuntionToBeTimed(void* param);
         LARGE_INTEGER placeHolder;
     };      
         
-    U_INLINE int uprv_initFrequency(UTimer* timer)
+    int uprv_initFrequency(UTimer* timer)
     {
         return QueryPerformanceFrequency(&timer->placeHolder);
     }
-    U_INLINE void uprv_start(UTimer* timer)
+    void uprv_start(UTimer* timer)
     {
         QueryPerformanceCounter(&timer->start);
     }
-    U_INLINE double uprv_delta(UTimer* timer1, UTimer* timer2){
+    double uprv_delta(UTimer* timer1, UTimer* timer2){
         return ((double)(timer2->start.QuadPart - timer1->start.QuadPart))/((double)timer1->placeHolder.QuadPart);
     }
-    U_INLINE UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
+    UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
         return (timer1->placeHolder.QuadPart == timer2->placeHolder.QuadPart);
     }
 
@@ -183,22 +183,22 @@ typedef void FuntionToBeTimed(void* param);
         struct timeval placeHolder;
     };
     
-    U_INLINE int32_t uprv_initFrequency(UTimer* timer)
+    int32_t uprv_initFrequency(UTimer* timer)
     {
         return 0;
     }
-    U_INLINE void uprv_start(UTimer* timer)
+    void uprv_start(UTimer* timer)
     {
         gettimeofday(&timer->start, 0);
     }
-    U_INLINE double uprv_delta(UTimer* timer1, UTimer* timer2){
+    double uprv_delta(UTimer* timer1, UTimer* timer2){
         double t1, t2;
 
         t1 =  (double)timer1->start.tv_sec + (double)timer1->start.tv_usec/(1000*1000);
         t2 =  (double)timer2->start.tv_sec + (double)timer2->start.tv_usec/(1000*1000);
         return (t2-t1);
     }
-    U_INLINE UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
+    UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
         return TRUE;
     }
 
@@ -208,7 +208,7 @@ typedef void FuntionToBeTimed(void* param);
  *
  * @param timer A pointer to UTimer struct to recieve the current time
  */
-U_CAPI U_INLINE void U_EXPORT2
+U_CAPI void U_EXPORT2
 utimer_getTime(UTimer* timer){
     uprv_initFrequency(timer);
     uprv_start(timer);
@@ -222,7 +222,7 @@ utimer_getTime(UTimer* timer){
  * @param timer2 A pointer to UTimer struct to be used as end time
  * @return Time in seconds
  */
-U_CAPI U_INLINE double U_EXPORT2
+U_CAPI double U_EXPORT2
 utimer_getDeltaSeconds(UTimer* timer1, UTimer* timer2){
     if(uprv_compareFrequency(timer1,timer2)){
         return uprv_delta(timer1,timer2);
@@ -237,7 +237,7 @@ utimer_getDeltaSeconds(UTimer* timer1, UTimer* timer2){
  * @param timer A pointer to UTimer struct to be used as starting time
  * @return Time elapsed in seconds
  */
-U_CAPI U_INLINE double U_EXPORT2
+U_CAPI double U_EXPORT2
 utimer_getElapsedSeconds(UTimer* timer){
     UTimer temp;
     utimer_getTime(&temp);
@@ -253,7 +253,7 @@ utimer_getElapsedSeconds(UTimer* timer){
  * @param param Parameters to be passed to the fn
  * @return the time elapsed in seconds
  */
-U_CAPI U_INLINE double U_EXPORT2
+U_CAPI double U_EXPORT2
 utimer_loopUntilDone(double thresholdTimeVal,
                      int32_t* loopCount, 
                      FuntionToBeTimed fn, 
