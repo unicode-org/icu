@@ -895,7 +895,7 @@ InputPath=.\unicode\umisc.h
 InputName=umisc
 
 "..\..\include\unicode\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy unicode\$(InputName).h ..\..\include\unicode
+	copy unicode\$(InputName).h ..\..\include\unicode 
 	echo $(InputName) 
 	
 # End Custom Build
@@ -1053,6 +1053,33 @@ InputPath=.\unicode\utypes.h
 # Begin Source File
 
 SOURCE=.\uvector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uversion.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\uversion.h
+
+"..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                              unicode\uversion.h                            ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uversion.h
+
+"..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                              unicode\uversion.h                            ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -1,13 +1,7 @@
 /*
 ********************************************************************************
-*                                                                              *
-* COPYRIGHT:                                                                   *
-*   (C) Copyright Taligent, Inc.,  1997                                        *
-*   (C) Copyright International Business Machines Corporation,  1997-1998      *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure    *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
-*                                                                              *
+*   Copyright (C) 1996-2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
 * File UCHAR.CPP
@@ -17,10 +11,11 @@
 *   Date        Name        Description
 *   04/02/97    aliu        Creation.
 *
-*   4/15/99     Madhu        Updated all the function definitions for C Implementation
+*   4/15/99     Madhu       Updated all the function definitions for C Implementation
 *   5/20/99     Madhu		Added the function u_getVersion()
-*   8/19/1999   srl            Upgraded scripts to Unicode3.0 
+*   8/19/1999   srl         Upgraded scripts to Unicode3.0 
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
+*   01/11/2000  helena      Renamed u_getVersion to u_getUnicodeVersion.
 ********************************************************************************************
 */
 #include "unicode/utypes.h"
@@ -29,9 +24,7 @@
 #include "umutex.h"
 #include "unicode/uchar.h"
 #include "cmemory.h"
-#include <string.h>
-
-#include <stdio.h>
+#include "cstring.h"
 
 struct UCharDigitPair{
     uint16_t fUnicode;
@@ -5260,13 +5253,27 @@ createDirTables()
 #endif
 }
 
-const char* u_getVersion()
+int32_t u_getUnicodeVersion(uint8_t* versionArray)
 {
-	int32_t len=strlen(UNICODE_VERSION) + strlen("Unicode Version ");
-	_ucdVersion=(char*)uprv_realloc(_ucdVersion, len + 1 );
-	strcpy(_ucdVersion, "Unicode Version ");
-	strcat(_ucdVersion, UNICODE_VERSION);
-	return _ucdVersion;
+    int32_t len = uprv_strlen(U_UNICODE_VERSION), i = 0, part = 0;
+    char verString[U_MAX_VERSION_STRING], *begin;
+    
+    if (versionArray == 0) 
+    {
+        return U_MAX_VERSION_LEN;
+    }
+    begin = &(verString[0]);
+    uprv_strcpy(verString, U_UNICODE_VERSION);
+    uprv_memset(versionArray, 0, U_MAX_VERSION_LEN); 
+    do {
+        if (verString[i] == U_VERSION_DELIMITER)
+        {
+            verString[i] = 0;
+            versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+            begin = &(verString[i+1]);
+        }
+    }
+    while (i++ < len);
+    versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+    return U_MAX_VERSION_LEN;
 }
-	
-

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -17,6 +17,7 @@
 *   03/02/99    stephen     Removed openFile().  Added AS400 support.
 *   04/15/99    stephen     Converted to C
 *   11/15/99    helena      Integrated S/390 changes for IEEE support.
+*   01/11/00    helena      Added u_getVersion.
 *******************************************************************************
 */
 
@@ -211,5 +212,15 @@ u_charsToUChars(const char *cs, UChar *us, UTextOffset length);
  */
 U_CAPI void U_EXPORT2
 u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
+
+/**
+ * Gets the ICU release version.  The version array stores the version information
+ * for ICU.  For example, release "1.3.31.2" is then represented as 0x01031F02.
+ * @param versionArray the version # 
+ * @return the size of the version array 
+ */
+
+U_CAPI int32_t U_EXPORT2
+u_getVersion(uint8_t* versionArray);
 
 #endif
