@@ -41,6 +41,7 @@ static void TestDuplicateAlias(void);
 static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
+static void TestLMBCSMaxChar(void);
 static void TestConvertSafeCloneCallback(void);
 static void TestEBCDICSwapLFNL(void);
 
@@ -58,6 +59,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
+    addTest(root, &TestLMBCSMaxChar,   "tsconv/ccapitst/TestLMBCSMaxChar");
     addTest(root, &TestEBCDICSwapLFNL,   "tsconv/ccapitst/TestEBCDICSwapLFNL");
 }
 
@@ -512,7 +514,9 @@ static void TestConvert()
 
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
     {
-        const char* defaultName=ucnv_getDefaultName();
+        static char defaultName[UCNV_MAX_CONVERTER_NAME_LENGTH + 1];
+        strcpy(defaultName, ucnv_getDefaultName());
+
         log_verbose("getDefaultName returned %s\n", defaultName);
 
         /*change the default name by setting it */
@@ -1915,6 +1919,41 @@ static void bug3()
         log_data_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
     }
 }
+
+static void TestLMBCSMaxChar(void) {
+    static const struct {
+        int8_t maxSize;
+        char *name;
+    } converter[] = {
+        { 2, "LMBCS-1"},
+        { 2, "LMBCS-2"},
+        { 2, "LMBCS-3"},
+        { 2, "LMBCS-4"},
+        { 2, "LMBCS-5"},
+        { 2, "LMBCS-6"},
+        { 2, "LMBCS-8"},
+        { 2, "LMBCS-11"},
+        { 2, "LMBCS-16"},
+        { 2, "LMBCS-17"},
+        { 2, "LMBCS-18"},
+        { 2, "LMBCS-19"}
+    };
+    int32_t idx;
+
+    for (idx = 0; idx < LENGTHOF(converter); idx++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UConverter *cnv = ucnv_open(converter[idx].name, &status);
+        if (U_FAILURE(status)) {
+            continue;
+        }
+        if (converter[idx].maxSize != ucnv_getMaxCharSize(cnv)) {
+            log_data_err("error: for %s expected %d, got %d\n",
+                converter[idx].name, converter[idx].maxSize, ucnv_getMaxCharSize(cnv));
+        }
+        ucnv_close(cnv);
+    }
+}
+
 
 static void TestJ1968(void) {
     UErrorCode err = U_ZERO_ERROR;
