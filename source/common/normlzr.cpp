@@ -1162,7 +1162,7 @@ void Normalizer::jamoToHangul(UnicodeString& buffer, UTextOffset start) {
     UTextOffset limit = buffer.length() - 1;
 
     UTextOffset in;
-    uint16_t l, v, t;
+    int16_t l, v, t;
 
     for (in = start; in < limit; in++) {
         UChar ch = buffer[in];
