@@ -33,6 +33,7 @@
 #include "cstring.h"
 #include "unicode/parseerr.h"
 #include "unicode/ucnv.h"
+#include "uparse.h"
 
 #define MAX_TOKEN_LEN 16
 #define RULE_BUFFER_LEN 8192
@@ -2186,7 +2187,8 @@ static void TestIncrementalNormalize(void) {
         0x300 is combining grave accent, cc=230
     */
 
-    int          maxSLen   = 2000;
+    /*int          maxSLen   = 2000;*/
+    int          maxSLen   = 64000;
     int          sLen;
     int          i;
 
@@ -2216,7 +2218,7 @@ static void TestIncrementalNormalize(void) {
         /*for (sLen = 4; sLen<maxSLen; sLen++) {*/
         /*for (sLen = 1000; sLen<1001; sLen++) {*/
         for (sLen = 500; sLen<501; sLen++) {
-          log_info("%i ", sLen);
+        /*for (sLen = 40000; sLen<65000; sLen+=1000) {*/
             strA[0] = baseA;
             strB[0] = baseA;
             for (i=1; i<=sLen-1; i++) {
@@ -3817,10 +3819,18 @@ static void Alexis2(void) {
   UCollationResult resU16, resU16BE, resU8;
 
   const char* pairs[][2] = {
-    /*{ "\\ud800\\u0021", "\\uFFFC\\u0062"},*/
+    { "\\ud800\\u0021", "\\uFFFC\\u0062"},
     { "\\u0435\\u0308\\u0334", "\\u0415\\u0334\\u0340" },
     { "\\u0E40\\u0021", "\\u00A1\\u0021"},
     { "\\u0E40\\u0021", "\\uFE57\\u0062"},
+    { "\\u5F20", "\\u5F20\\u4E00\\u8E3F"},
+    { "\\u0000\\u0020", "\\u0000\\u0020\\u0000"},
+    { "\\u0020", "\\u0020\\u0000"}
+/*
+5F20 (my result here)
+5F204E008E3F
+5F20 (your result here)
+*/
   };
 
   int32_t i = 0;
@@ -3833,13 +3843,18 @@ static void Alexis2(void) {
 
     resU16 = ucol_strcoll(coll, U16Source, U16LenS, U16Target, U16LenT);
 
+    log_verbose("Result of strcoll is %i\n", resU16);
+
     U16BELenS = ucnv_fromUChars(conv, U16BESource, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Source, U16LenS, &status);
     U16BELenT = ucnv_fromUChars(conv, U16BETarget, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Target, U16LenT, &status);
 
-    uiter_setUTF16BE(&U16BEItS, U16BESource, U16BELenS);
-    uiter_setUTF16BE(&U16BEItT, U16BETarget, U16BELenT);
+    /* use the original sizes, as the result from converter is in bytes */
+    uiter_setUTF16BE(&U16BEItS, U16BESource, U16LenS);
+    uiter_setUTF16BE(&U16BEItT, U16BETarget, U16LenT);
 
     resU16BE = ucol_strcollIter(coll, &U16BEItS, &U16BEItT, &status);
+
+    log_verbose("Result of U16BE is %i\n", resU16BE);
 
     if(resU16 != resU16BE) {
       log_verbose("Different results between UTF16 and UTF16BE for %s & %s\n", pairs[i][0], pairs[i][1]);
@@ -3863,6 +3878,110 @@ static void Alexis2(void) {
   ucnv_close(conv);
 }
 
+static void TestHebrewUCA(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  const char *first[] = {
+    "d790d6b8d79cd795d6bcd7a9",
+    "d790d79cd79ed7a7d799d799d7a1",
+    "d790d6b4d79ed795d6bcd7a9",
+  };
+
+  char utf8String[3][256];
+  UChar utf16String[3][256];
+
+  int32_t i = 0, j = 0;
+  int32_t sizeUTF8[3];
+  int32_t sizeUTF16[3];
+
+  UCollator *coll = ucol_open("", &status);
+  /*ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);*/
+
+  for(i = 0; i < sizeof(first)/sizeof(first[0]); i++) {
+    sizeUTF8[i] = u_parseUTF8(first[i], -1, utf8String[i], 256, &status);
+    u_strFromUTF8(utf16String[i], 256, &sizeUTF16[i], utf8String[i], sizeUTF8[i], &status);
+    log_verbose("%i: ");
+    for(j = 0; j < sizeUTF16[i]; j++) {
+      /*log_verbose("\\u%04X", utf16String[i][j]);*/
+      log_verbose("%04X", utf16String[i][j]);
+    }
+    log_verbose("\n");
+  }
+  for(i = 0; i < sizeof(first)/sizeof(first[0])-1; i++) {
+    for(j = i + 1; j < sizeof(first)/sizeof(first[0]); j++) {
+      doTest(coll, utf16String[i], utf16String[j], UCOL_LESS);
+    }
+  }
+
+  ucol_close(coll);
+
+}
+
+static void TestPartialSortKeyTermination(void) {
+  const char* cases[] = {
+    "\\u1234\\u1234\\udc00",
+    "\\udc00\\ud800\\ud800" 
+  };
+
+  int32_t i = sizeof(UCollator);
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  UCollator *coll = ucol_open("", &status);
+
+  UCharIterator iter;
+
+  UChar currCase[256];
+  int32_t length = 0;
+  int32_t pKeyLen = 0;
+
+  uint8_t key[256];
+
+  for(i = 0; i < sizeof(cases)/sizeof(cases[0]); i++) {
+    uint32_t state[2] = {0, 0};
+    length = u_unescape(cases[i], currCase, 256);
+    uiter_setString(&iter, currCase, length);
+    pKeyLen = ucol_nextSortKeyPart(coll, &iter, state, key, 256, &status);
+
+    log_verbose("Done\n");
+
+  }
+  ucol_close(coll);
+}
+
+static void TestSettings(void) {
+  const char* cases[] = {
+    "apple",
+      "Apple"
+  };
+
+  const char* locales[] = {
+    "",
+      "en"
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0, j = 0;
+
+  UChar source[256], target[256];
+  int32_t sLen = 0, tLen = 0;
+
+  UCollator *collateObject = NULL;
+  for(i = 0; i < sizeof(locales)/sizeof(locales[0]); i++) {
+    collateObject = ucol_open(locales[i], &status);
+    ucol_setStrength(collateObject, UCOL_PRIMARY);
+    ucol_setAttribute(collateObject, UCOL_CASE_LEVEL , UCOL_OFF, &status);
+    for(j = 1; j < sizeof(cases)/sizeof(cases[0]); j++) {
+      sLen = u_unescape(cases[j-1], source, 256);
+      source[sLen] = 0;
+      tLen = u_unescape(cases[j], target, 256);
+      source[tLen] = 0;
+      doTest(collateObject, source, target, UCOL_EQUAL);
+    }
+    ucol_close(collateObject);
+  }
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -3879,7 +3998,6 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestNonChars, "tscoll/cmsccoll/TestNonChars");
     addTest(root, &TestExtremeCompression, "tscoll/cmsccoll/TestExtremeCompression");
     addTest(root, &TestSurrogates, "tscoll/cmsccoll/TestSurrogates");
-    /* TODO: Something is very wrong with this one. FIX IT! */
     addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
     addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
@@ -3913,6 +4031,9 @@ void addMiscCollTest(TestNode** root)
     TEST(TestOptimize);
     TEST(TestSuppressContractions);
     TEST(Alexis2);
+    TEST(TestHebrewUCA);
+    TEST(TestPartialSortKeyTermination);
+    TEST(TestSettings);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
