@@ -242,7 +242,8 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
         hex = prefix;
         UBool showRest = FALSE;
         for (int32_t i=3; i>=0; --i) {
-            int32_t d = (c >> (i*4)) & 0xF;
+            /* Get each nibble from left to right */
+            int32_t d = (c >> (i<<2)) & 0xF;
             if (showRest || (d != 0) || minDigits > i) {
                 hex.append(HEX_DIGITS[uppercase ? (d|16) : d]);
                 showRest = TRUE;
