@@ -166,15 +166,8 @@ void ReplaceableTest::Check(const UnicodeString& transliteratorName,
     t->transliterate(*tr);
     UnicodeString newStyles = tr->getStyles();
     if (newStyles != expectedStyles) {
-        log("FAIL Styles: ");
-        log(transliteratorName);
-        log("{");
-        log(original);
-        log(" => ");
-        log(tr->toString());
-        log("; should be {");
-        log(expectedStyles);
-        errln("}!");
+        errln("FAIL Styles: " + transliteratorName + "{" + original + "} => "
+            + tr->toString() + "; should be {" + expectedStyles + "}!");
     } else {
         log("OK: ");
         log(transliteratorName);
