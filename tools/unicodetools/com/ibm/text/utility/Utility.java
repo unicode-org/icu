@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/06/22 01:21:11 $
-* $Revision: 1.19 $
+* $Date: 2002/06/24 15:25:10 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -430,12 +430,12 @@ public final class Utility {    // COMMON UTILITIES
              // fix noncharacters, since XML can't handle
             case 0xFFFE: case 0xFFFF:
 
-                return "#" + hex(c,1);
+                return "<codepoint hex=\"" + hex(c,1) + "\"/>";
         }
 
         // fix surrogates, since XML can't handle
         if (UTF32.isSurrogate(c)) {
-            return "#" + hex(c,1);
+            return "<codepoint hex=\"" + hex(c,1) + "\"/>";
         }
 
         if (c <= 0x7E || UTF8) {
