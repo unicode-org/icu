@@ -63,6 +63,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(27,TestCreateInstance);
         TESTCASE(28,TestNormalizationTransliterator);
         TESTCASE(29,TestCompoundRBT);
+        TESTCASE(30,TestCompoundFilter);
         default: name = ""; break;
     }
 }
@@ -1264,6 +1265,44 @@ void TransliteratorTest::TestCompoundRBT(void) {
     }
     delete t;
     delete u;
+}
+
+/**
+ * Compound filter semantics were orginially not implemented
+ * correctly.  Originally, each component filter f(i) is replaced by
+ * f'(i) = f(i) && g, where g is the filter for the compound
+ * transliterator.
+ * 
+ * From Mark:
+ *
+ * Suppose and I have a transliterator X. Internally X is
+ * "Greek-Latin; Latin-Cyrillic; Any-Lower". I use a filter [^A].
+ * 
+ * The compound should convert all greek characters (through latin) to
+ * cyrillic, then lowercase the result. The filter should say "don't
+ * touch 'A' in the original". But because an intermediate result
+ * happens to go through "A", the Greek Alpha gets hung up.
+ */
+void TransliteratorTest::TestCompoundFilter(void) {
+    Transliterator *t = Transliterator::createInstance
+        ("Greek-Latin; Latin-Cyrillic; Lower");
+    if (t == 0) {
+        errln("FAIL: createInstance failed");
+        return;
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    t->adoptFilter(new UnicodeSet("[^A]", status));
+    if (U_FAILURE(status)) {
+        errln("FAIL: UnicodeSet ct failed");
+        delete t;
+        return;
+    }
+    
+    // Only the 'A' at index 1 should remain unchanged
+    expect(*t,
+           CharsToUnicodeString("CA\\u039A\\u0391"),
+           CharsToUnicodeString("\\u043AA\\u043A\\u0430"));
+    delete t;                                       
 }
 
 //======================================================================

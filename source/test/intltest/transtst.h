@@ -161,6 +161,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestCompoundRBT(void);
 
+    void TestCompoundFilter(void);
+
     //======================================================================
     // Support methods
     //======================================================================
