@@ -42,11 +42,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="icuiod.lib icuind.lib icuucd.lib ctestfwd.lib"
 				OutputFile=".\Debug/iotest.exe"
 				LinkIncremental="0"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/iotest.pdb"
 				SubSystem="1"
@@ -106,11 +104,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="icuio.lib icuin.lib icuuc.lib ctestfw.lib"
 				OutputFile=".\Release/iotest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib\"
 				ProgramDatabaseFile=".\Release/iotest.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
