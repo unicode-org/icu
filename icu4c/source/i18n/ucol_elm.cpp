@@ -28,6 +28,7 @@
 
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
+U_CDECL_BEGIN
 static int32_t prefixLookupHash(const UHashTok e) {
   UCAElements *element = (UCAElements *)e.pointer;
   UChar buf[256];
@@ -67,6 +68,7 @@ static int8_t prefixLookupComp(const UHashTok e1, const UHashTok e2) {
 static void prefixLookupDeleter(void *element) {
   uprv_free(element);
 }
+U_CDECL_END
 
 static void uprv_uca_reverseElement(UCAElements *el) {
     uint32_t i = 0;
