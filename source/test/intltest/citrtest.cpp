@@ -7,11 +7,15 @@
  *   Date          Name        Description
  *   05/22/2000    Madhu       Added tests for testing new API for utf16 support and more
  **********************************************************************/
-#include "citrtest.h"
+
+#include <string.h>
+#include "unicode/chariter.h"
+#include "unicode/ustring.h"
+#include "unicode/unistr.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
-#include "unicode/ustring.h"
-#include <string.h>
+#include "unicode/uiter.h"
+#include "citrtest.h"
 
 CharIterTest::CharIterTest()
 {
@@ -25,7 +29,7 @@ void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         case 1: name = "TestConstructionAndEqualityUChariter"; if (exec) TestConstructionAndEqualityUChariter(); break;
         case 2: name = "TestIteration"; if (exec) TestIteration(); break;
         case 3: name = "TestIterationUChar32"; if (exec) TestIterationUChar32(); break;
-
+        case 4: name = "TestUCharIterator"; if (exec) TestUCharIterator(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -610,4 +614,106 @@ void CharIterTest::TestIterationUChar32() {
 
                 
     }
+}
+
+void CharIterTest::TestUCharIterator(UCharIterator *iter, CharacterIterator &ci,
+                                     const char *moves, const char *which) {
+    int32_t m;
+    UChar32 c, c2;
+    UBool h, h2;
+
+    for(m=0;; ++m) {
+        // move both iter and s[index]
+        switch(moves[m]) {
+        case '0':
+            h=iter->hasNext(iter);
+            h2=ci.hasNext();
+            c=iter->current(iter);
+            c2=ci.current();
+            break;
+        case '|':
+            h=iter->hasNext(iter);
+            h2=ci.hasNext();
+            c=uiter_current32(iter);
+            c2=ci.current32();
+            break;
+
+        case '+':
+            h=iter->hasNext(iter);
+            h2=ci.hasNext();
+            c=iter->next(iter);
+            c2=ci.nextPostInc();
+            break;
+        case '>':
+            h=iter->hasNext(iter);
+            h2=ci.hasNext();
+            c=uiter_next32(iter);
+            c2=ci.next32PostInc();
+            break;
+
+        case '-':
+            h=iter->hasPrevious(iter);
+            h2=ci.hasPrevious();
+            c=iter->previous(iter);
+            c2=ci.previous();
+            break;
+        case '<':
+            h=iter->hasPrevious(iter);
+            h2=ci.hasPrevious();
+            c=uiter_previous32(iter);
+            c2=ci.previous32();
+            break;
+
+        case '2':
+            h=h2=FALSE;
+            c=(UChar32)iter->move(iter, 2, UITER_CURRENT);
+            c2=(UChar32)ci.move(2, CharacterIterator::kCurrent);
+            break;
+
+        case '8':
+            h=h2=FALSE;
+            c=(UChar32)iter->move(iter, -2, UITER_CURRENT);
+            c2=(UChar32)ci.move(-2, CharacterIterator::kCurrent);
+            break;
+
+        case 0:
+            return;
+        default:
+            errln("error: unexpected move character '%c' in \"%s\"", moves[m], moves);
+            return;
+        }
+
+        // compare results
+        if(c2==0xffff) {
+            c2=(UChar32)-1;
+        }
+        if(c!=c2 || h!=h2 || ci.getIndex()!=iter->move(iter, 0, UITER_CURRENT)) {
+            errln("error: UCharIterator(%s) misbehaving at \"%s\"[%d]='%c'", which, moves, m, moves[m]);
+        }
+    }
+}
+
+void CharIterTest::TestUCharIterator() {
+    // test string of length 8
+    UnicodeString s=UnicodeString("a \\U00010001b\\U0010fffd z", "").unescape();
+    const char *const moves=
+        "0+++++++++" // 10 moves per line
+        "----0-----"
+        ">>|>>>>>>>"
+        "<<|<<<<<<<"
+        "22+>8>-8+2";
+
+    StringCharacterIterator sci(s), compareCI(s);
+
+    UCharIterator sIter, cIter, rIter;
+
+    uiter_setString(&sIter, s.getBuffer(), s.length());
+    uiter_setCharacterIterator(&cIter, &sci);
+    uiter_setReplaceable(&rIter, &s);
+
+    TestUCharIterator(&sIter, compareCI, moves, "uiter_setString");
+    compareCI.setIndex(0);
+    TestUCharIterator(&cIter, compareCI, moves, "uiter_setCharacterIterator");
+    compareCI.setIndex(0);
+    TestUCharIterator(&rIter, compareCI, moves, "uiter_setReplaceable");
 }
