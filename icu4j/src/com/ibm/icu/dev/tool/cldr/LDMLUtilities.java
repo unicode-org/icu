@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.*;
 
 // DOM imports
 import org.apache.xpath.XPathAPI;
@@ -55,7 +56,7 @@ import org.xml.sax.SAXParseException;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class LDMLUtilities {
-    
+
     /**
      * Creates a fully resolved locale starting with root and 
      * @param sourceDir
@@ -94,14 +95,18 @@ public class LDMLUtilities {
         String[] constituents = locale.split("_");
         String loc=null;
         boolean isAvailable = false;
+        //String lastLoc = "root";
         for(int i=0; i<constituents.length; i++){
-        	if(loc==null){
-        		loc = constituents[i];
+            if(loc==null){
+                loc = constituents[i];
             }else{
             	loc = loc +"_"+ constituents[i];
             }
             Document doc = null;
             
+            // Try cache
+            //doc = readMergeCache(sourceDir, lastLoc, loc);
+            //if(doc == null) { .. 
             String fileName = sourceDir+File.separator+loc+".xml";
             File file = new File(fileName);
             if(file.exists()){
@@ -132,6 +137,9 @@ public class LDMLUtilities {
                     System.out.println("The chars are: "+ getNodeValue(ec));
                 }   
                 */
+
+                //writeMergeCache(sourceDir, lastLoc, loc, full);
+                //lastLoc = loc;
             }else{
                 if(!ignoreUnavailable){
                     throw new RuntimeException("Could not find: " +fileName);
@@ -146,7 +154,7 @@ public class LDMLUtilities {
        
        return full;
     }
-    
+
     public static Document revalidate(Document doc, String fileName){
         // what a waste!!
         // to revalidate an in-memory DOM tree we need to first
@@ -1289,4 +1297,90 @@ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") 
         }
         return ret.toString();
     }
+    
+    // Utility functions, HTML and such.
+    
+    public static final String getCVSLink(String locale)
+    {
+        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml\">";
+    }
+    
+    public static final String getCVSLink(String locale, String version)
+    {
+        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml?rev=" +
+            version + "&content-type=text/x-cvsweb-markup\">";
+    }
+    static public String getCVSVersion(String fileName)
+    {
+         int index = fileName.lastIndexOf(File.separatorChar);
+         if(index==-1) {
+            return null;
+         }
+         String sourceDir = fileName.substring(0, index);
+         return getCVSVersion(sourceDir, new File(fileName).getName());    
+    }
+    static public String getCVSVersion(String sourceDir, String fileName) {
+       String aVersion = null;
+       File entriesFile = new File(sourceDir + File.separatorChar + "CVS","Entries");
+       if(!entriesFile.exists() || !entriesFile.canRead()) {
+        System.out.println("Can't read, won't try to get CVS " + entriesFile.toString());
+        return null;
+       }
+      try{
+        BufferedReader r = new BufferedReader(new FileReader(entriesFile.getPath()));
+            String s;
+            while((s=r.readLine())!=null) {
+                String lookFor = "/"+fileName+"/";
+                if(s.startsWith(lookFor)) {
+                    String ver = s.substring(lookFor.length());
+                    ver = ver.substring(0,ver.indexOf('/'));
+                    aVersion = ver;
+                }
+            }
+            r.close();
+        } catch ( Throwable th ) {
+            System.err.println(th.toString() + " trying to read CVS Entries file " + entriesFile.getPath());
+            return null;
+        }
+        return aVersion;
+    }
+
+//     // Caching Resolution
+//     private static File getCacheName(String sourceDir, String last, String loc)
+//     {
+//     //File xCacheDir = new File((CachingEntityResolver.getCacheDir()!=null)?CachingEntityResolver.getCacheDir():"/tmp/cldrres");
+//         return new  File(sourceDir).getName() + "_" + last + "." + loc;
+//     }
+
+//     Document readMergeCache(String sourceDir, String last, String loc)
+//     {
+//         File cacheName = getCacheName(String sourceDir, last, loc);
+//         System.out.println(" M:  " + cacheName);
+//         File cacheFile = new File(xCacheDir, cacheName + ".xml");
+//         if(cacheFile.exists()) { // && is newer than last, loc
+//             doc = parse(cacheFile.getPath(),ignoreUnavailable);
+//         }
+//         if(doc!=null) {
+//             System.out.println("Cache hit for " + cacheName);
+//         }
+//         return doc;
+//     }
+
+//     void writeMergeCache(String sourceDir, String last, String loc, Document full)
+//     {
+//         try {
+//             OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(cacheFile),"UTF-8");
+//             PrintWriter pw = new PrintWriter(writer);
+//             printDOMTree(full,pw);
+//             long stop = System.currentTimeMillis();
+//             long total = (stop-start);
+//             double s = total/1000.;
+//             System.out.println(" " + cacheName + " parse time: " + s + "s");
+//             pw.println("<!-- " + cacheName + " parse time: " + s + "s -->");
+//             writer.close();
+//         } catch (Throwable t) {
+//             System.err.println(t.toString() + " while trying to write cache file " + cacheName);
+//         }
+//     }
+
 }

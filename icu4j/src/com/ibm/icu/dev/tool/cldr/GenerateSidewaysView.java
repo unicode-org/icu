@@ -687,9 +687,7 @@ import com.ibm.icu.util.UResourceBundle;
                 }
             }
             out.println("</table>");
-            out.println("</body>");
-            out.println("</html>");
-            out.close();
+            writeFooterAndClose(out);
         }
         
         Object[][] fixList = {
@@ -829,10 +827,11 @@ import com.ibm.icu.util.UResourceBundle;
                             Set s = new TreeSet((Collection)elementToAttribute.get(attribute));
                             s.removeAll(result);
                             if (s.size() != 0) {
-                            	System.out.println("Warning: Missing values for " + element + ", " + attribute);
+                            	System.out.print("Warning: Missing values for " + element + ", " + attribute + ": ");
                                 for (Iterator it = s.iterator(); it.hasNext(); ) {
-                                	System.out.println(it.next());
+                                	System.out.print(it.next() + " ");
                                 }
+                                System.out.println();
                             }
                             return result;
                         }
@@ -1430,8 +1429,8 @@ import com.ibm.icu.util.UResourceBundle;
                 String chainName = getChainName(stack);
                 if (!chainName.equals(lastChainName)) {
                     if (out != null) {
-                        out.println("</table></body></html>");
-                        out.close();
+                        out.println("</table>");
+                        writeFooterAndClose(out);
                     }
                     allTypes.add(chainName); // add to the list
                 	out = openAndDoHeader(chainName);
@@ -1481,7 +1480,8 @@ import com.ibm.icu.util.UResourceBundle;
             if(out==null) {
                 System.err.println("Out = null?");
             } else {
-                out.println("</table></body></html>");
+                out.println("</table>");
+                writeFooterAndClose(out);
                 out.close();
             }
             writeIndex();
@@ -1503,7 +1503,7 @@ import com.ibm.icu.util.UResourceBundle;
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
             out.println("<body>");
-            out.println("<ul><li><a href=\"index.html\">index</a></li></ul>");
+            out.println("<ul><li><a href=\"index.html\">Index</a></li></ul>");
             out.println("<table>");
 			return out;
 		}
@@ -1531,8 +1531,9 @@ import com.ibm.icu.util.UResourceBundle;
                 String f = (String)e.next();
                 out.println(" <li><a href=\"" + f + ".html" +  "\">" + f + "</a>");
             }
-            out.println("</ul></body></html>");
-            out.close();
+            out.println("</ul>");
+            out.println("<a href='http://www.jtcsv.com/cgibin/cldrwiki.pl?ByType'>About this chart</a> <br/>");
+            writeFooterAndClose(out);
         }
     }
     
@@ -1724,5 +1725,11 @@ import com.ibm.icu.util.UResourceBundle;
 		}
         return result;
 	}
+    private static void writeFooterAndClose(PrintWriter out)
+    {
+        out.println("Generated " + java.util.Calendar.getInstance().getTime());
+        out.println("</body></html>");
+        out.close();
+    }
 }
  
