@@ -204,7 +204,7 @@ uprv_mstrm_writeBlock(UMemoryStream *MS, const void *s, UTextOffset length) {
 
 U_CAPI void U_EXPORT2
 uprv_mstrm_writePadding(UMemoryStream *MS, UTextOffset length) {
-    static uint8_t padding[16]={
+    static const uint8_t padding[16]={
         0xaa, 0xaa, 0xaa, 0xaa,
         0xaa, 0xaa, 0xaa, 0xaa,
         0xaa, 0xaa, 0xaa, 0xaa,
