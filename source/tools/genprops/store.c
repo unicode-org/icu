@@ -635,7 +635,8 @@ repeatProps(void) {
         { 0xdb80, 0xdbff },     /* Private Use High Surrogates */
         { 0xdc00, 0xdfff },     /* Low Surrogates */
         { 0xe000, 0xf8ff },     /* Private Use */
-        { 0xf0000, 0x10ffff }   /* Private Use */
+        { 0xf0000, 0xffffd },   /* Private Use */
+        { 0xf0000, 0x10fffd }   /* Private Use */
     };
 
     /*
@@ -1079,7 +1080,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, stage1, sizeof(stage1));
     udata_writeBlock(pData, stage2, 2*stage2Top);
     udata_writeBlock(pData, stage3, 2*stage3Top);
-    udata_writePadding(pData, (stage2Top+stage3Top)&1);
+    udata_writePadding(pData, 2*((stage2Top+stage3Top)&1));
     udata_writeBlock(pData, props32, 4*propsTop);
     udata_writeBlock(pData, exceptions, 4*exceptionsTop);
 
