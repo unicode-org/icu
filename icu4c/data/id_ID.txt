@@ -8,9 +8,11 @@
 
 id_ID {
     
+   Version { "x0.0" }
+
     CurrencyElements { 
             "Rp",
-            "IDR ",
+            "IDR",
             ",",
     }
     DateTimePatterns { 

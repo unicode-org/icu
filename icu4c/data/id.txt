@@ -8,6 +8,8 @@
 
 id {
 
+   Version { "x0.0" }
+
     DayAbbreviations { 
             "Min",
             "Sen",
