@@ -1870,15 +1870,21 @@ void CalendarTest::TestJD()
 const char *CalendarTest::testLocaleID(int32_t i)
 {
   switch(i) {
-  case 0: return "nl_BE@currency=MTL;calendar=islamic";
-  case 1: return "th_TH_TRADITIONAL@calendar=gregorian";
-  case 2: return "ar_JO@calendar=islamic-civil";
-  case 3: return "fi_FI@calendar=islamic";
-  case 4: return "fr_CH@calendar=islamic-civil";
-  case 5: return "he_IL@calendar=islamic-civil";
-  case 6: return "hu_HU@calendar=buddhist";
-  case 7: return "hu_HU@calendar=islamic";
-  case 8: return "en_US@calendar=japanese";
+  case 0: return "he_IL@calendar=hebrew";
+  case 1: return "en_US@calendar=hebrew";
+  case 2: return "fr_FR@calendar=hebrew";
+  case 3: return "fi_FI@calendar=hebrew";
+  case 4: return "nl_NL@calendar=hebrew";
+  case 5: return "hu_HU@calendar=hebrew";
+  case 6: return "nl_BE@currency=MTL;calendar=islamic";
+  case 7: return "th_TH_TRADITIONAL@calendar=gregorian";
+  case 8: return "ar_JO@calendar=islamic-civil";
+  case 9: return "fi_FI@calendar=islamic";
+  case 10: return "fr_CH@calendar=islamic-civil";
+  case 11: return "he_IL@calendar=islamic-civil";
+  case 12: return "hu_HU@calendar=buddhist";
+  case 13: return "hu_HU@calendar=islamic";
+  case 14: return "en_US@calendar=japanese";
   default: return NULL;
   }
 }
