@@ -1878,10 +1878,10 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
 
             // check if french secondary needs to be turned on
             if ((groupChars.length() > 1) &&
-                (groupChars[groupChars.length()-(T_INT32(1))] == 0x0040))
+                (groupChars[groupChars.length()-1] == 0x0040))
             {
                 data->isFrenchSec = TRUE;
-                groupChars.remove(groupChars.length()-(T_INT32(1)));
+                groupChars.remove(groupChars.length()-1);
             }
 
             order = increment((Collator::ECollationStrength)entry->getStrength(), order);

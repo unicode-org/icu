@@ -262,10 +262,6 @@ inline UBool U_FAILURE(UErrorCode code) { return (UBool)(code>U_ZERO_ERROR); }
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
-/* Casting function for int32_t (backward compatibility version, here until
-   T_INT32 is replaced) */
-#define T_INT32(i) ((int32_t)i)
-
 #define U_COPYRIGHT_STRING \
   " Copyright (C) 2000, International Business Machines Corporation and others.  All Rights Reserved. "
 

@@ -149,7 +149,7 @@ TestChoiceFormat::TestComplexExample( void )
     pattform->setFormat( 2, *filenumform );
 
 
-    Formattable testArgs[] = {T_INT32(0), "Disk_A", T_INT32(0)};
+    Formattable testArgs[] = {(int32_t)0, "Disk_A", (int32_t)0};
     UnicodeString str;
     UnicodeString res1, res2;
     pattform->toPattern( res1 );
@@ -382,7 +382,7 @@ TestChoiceFormat::TestComplexExample( void )
     it_out << "ChoiceFormat format:" << res1 << endl;
     if (res1 != "third") it_errln("***  ChoiceFormat format (int32_t, ...) result!");
 
-    Formattable ft( T_INT32(3) );
+    Formattable ft( (int32_t)3 );
     str = "";
     fpos = 0;
     status = U_ZERO_ERROR;
@@ -396,7 +396,7 @@ TestChoiceFormat::TestComplexExample( void )
     it_out << "ChoiceFormat format:" << res1 << endl;
     if (res1 != "third") it_errln("***  ChoiceFormat format (Formattable, ...) result!");
 
-    Formattable fta[] = { T_INT32(3) };
+    Formattable fta[] = { (int32_t)3 };
     str = "";
     fpos = 0;
     status = U_ZERO_ERROR;
@@ -460,7 +460,7 @@ TestChoiceFormat::TestChoiceNextDouble()
     ChoiceFormat *cf = new ChoiceFormat(limit, formats, 3);
     FieldPosition status(0);
     UnicodeString toAppendTo;
-    cf->format(T_INT32(1.0), toAppendTo, status);
+    cf->format((int32_t)1, toAppendTo, status);
     if (toAppendTo != "0.0<=Arg<=1.0") {
         it_errln("ChoiceFormat cmp in testBug1");
     }
