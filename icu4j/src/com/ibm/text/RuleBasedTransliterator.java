@@ -197,9 +197,12 @@ import com.ibm.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.13 $ $Date: 2000/01/27 18:59:19 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.14 $ $Date: 2000/02/03 18:18:42 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.14  2000/02/03 18:18:42  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
  * Revision 1.13  2000/01/27 18:59:19  Alan
  * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
  *
@@ -316,9 +319,9 @@ public class RuleBasedTransliterator extends Transliterator {
         while (cursor < limit) {
             TransliterationRule r = incremental ?
                 data.ruleSet.findIncrementalMatch(text, start, limit, cursor,
-                                                  data.setVariables, partial, getFilter()) :
+                                                  data, partial, getFilter()) :
                 data.ruleSet.findMatch(text, start, limit,
-                                       cursor, data.setVariables, getFilter());
+                                       cursor, data, getFilter());
             /* If we match a rule then apply it by replacing the key
              * with the rule output and repositioning the cursor
              * appropriately.  If we get a partial match, then we
@@ -370,7 +373,6 @@ public class RuleBasedTransliterator extends Transliterator {
     static class Data {
         public Data() {
             variableNames = new Hashtable();
-            setVariables = new Hashtable();
             ruleSet = new TransliterationRuleSet();
         }
 
@@ -385,7 +387,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * case the character is stored in this hash.  It may also
          * correspond to a UnicodeSet, in which case a character is
          * again stored in this hash, but the character is a stand-in: it
-         * is a key for a secondary lookup in data.setVariables.  The stand-in
+         * is an index for a secondary lookup in data.setVariables.  The stand-in
          * also represents the UnicodeSet in the stored rules.
          */
         public Hashtable variableNames;
@@ -397,12 +399,25 @@ public class RuleBasedTransliterator extends Transliterator {
          * The stand-in then serves as a key in this hash to lookup the
          * actual UnicodeSet object.  In addition, the stand-in is
          * stored in the rule text to represent the set of characters.
+         * setVariables[i] represents character (setVariablesBase + i).
          */
-        public Hashtable setVariables;
+        public UnicodeSet[] setVariables;
+
+        /**
+         * The character represented by setVariables[0].
+         */
+        public char setVariablesBase;
+
+        /**
+         * Return the UnicodeSet associated with the given character, or
+         * null if none.
+         */
+        public UnicodeSet lookup(char c) {
+            int i = c - setVariablesBase;
+            return (i >= 0 && i < setVariables.length)
+                ? setVariables[i] : null;
+        }
     }
-
-
-
 
 
 
@@ -415,6 +430,42 @@ public class RuleBasedTransliterator extends Transliterator {
         private int direction;
 
         private Data data;
+
+        /**
+         * This class implements the SymbolTable interface.  It is used
+         * during parsing to give UnicodeSet access to variables that
+         * have been defined so far.  Note that it uses setVariablesVector,
+         * _not_ data.setVariables.
+         */
+        private class ParseData implements SymbolTable {
+            
+            /**
+             * Implement SymbolTable API.  Lookup a variable, returning
+             * either a Character, a UnicodeSet, or null.
+             */
+            public Object lookup(String name) {
+                Character ch = (Character) data.variableNames.get(name);
+                if (ch != null) {
+                    int i = ch.charValue() - data.setVariablesBase;
+                    if (i >= 0 && i < setVariablesVector.size()) {
+                        return setVariablesVector.elementAt(i);
+                    }
+                }
+                return ch;
+            }
+        }
+
+        /**
+         * Temporary symbol table used during parsing.
+         */
+        private ParseData parseData;
+
+        /**
+         * Temporary vector of set variables.  When parsing is complete, this
+         * is copied into the array data.setVariables.  As with data.setVariables,
+         * element 0 corresponds to character data.setVariablesBase.
+         */
+        private Vector setVariablesVector;
 
         /**
          * The next available stand-in for variables.  This starts at some point in
@@ -480,6 +531,8 @@ public class RuleBasedTransliterator extends Transliterator {
          */
         private void parseRules(String[] ruleArray) {
             determineVariableRange(ruleArray);
+            setVariablesVector = new Vector();
+            parseData = new ParseData();
 
             StringBuffer errors = null;
 
@@ -513,10 +566,15 @@ public class RuleBasedTransliterator extends Transliterator {
             } catch (IllegalArgumentException e) {
                 errors = new StringBuffer(e.getMessage());
             }
+
+            // Convert the set vector to an array
+            data.setVariables = new UnicodeSet[setVariablesVector.size()];
+            setVariablesVector.copyInto(data.setVariables);
+            setVariablesVector = null;
             
             // Index the rules
             try {
-                data.ruleSet.freeze(data.setVariables);
+                data.ruleSet.freeze(data);
             } catch (IllegalArgumentException e) {
                 if (errors == null) {
                     errors = new StringBuffer(e.getMessage());
@@ -668,8 +726,7 @@ public class RuleBasedTransliterator extends Transliterator {
                     break;
                 case SET_OPEN:
                     ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
-                    buf.append(registerSet(new UnicodeSet(rule, pp,
-                                   data.variableNames, data.setVariables)));
+                    buf.append(registerSet(new UnicodeSet(rule, pp, parseData)));
                     pos = pp.getIndex();
                     break;
                 case VARIABLE_REF_CLOSE:
@@ -788,9 +845,8 @@ public class RuleBasedTransliterator extends Transliterator {
             if (variableNext >= variableLimit) {
                 throw new RuntimeException("Private use variables exhausted");
             }
-            Character c = new Character(variableNext++);
-            data.setVariables.put(c, set);
-            return c.charValue();
+            setVariablesVector.addElement(set);
+            return variableNext++;
         }
 
         /**
@@ -828,7 +884,7 @@ public class RuleBasedTransliterator extends Transliterator {
                     "No private use characters available for variables");
             }
 
-            variableNext = r.start;
+            data.setVariablesBase = variableNext = r.start;
             variableLimit = (char) (r.start + r.length);
 
             if (variableNext >= variableLimit) {
