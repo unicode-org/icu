@@ -47,7 +47,7 @@ The following is a description of format version 1.0 .
 Data contents:
 
 The contents is a parsed, binary form of several Unicode character
-database files, mose prominently UnicodeData.txt.
+database files, most prominently UnicodeData.txt.
 
 Any Unicode code point from 0 to 0x10ffff can be looked up to get
 the properties, if any, for that code point. This means that the input
@@ -72,7 +72,7 @@ Formally, the file contains the following structures:
     A1 const uint16_t STAGE_3_BITS(=4);
       (STAGE_1_BITS(=11) not stored, implicitly=21-(STAGE_2_BITS+STAGE_3_BITS))
     A2 const uint16_t exceptionsIndex;  -- 32-bit unit index
-    A3 const uint16_t ucharsIndex;      -- 32-bit unit index
+    A3 const uint16_t reservedIndex;
     A4 const uint16_t reservedIndex;
     A5 const uint16_t reservedIndex;
     A6 const uint16_t reservedIndex;
@@ -84,10 +84,7 @@ Formally, the file contains the following structures:
        (possible 1*uint16_t for padding to 4-alignment)
 
     P  const uint32_t props32[variable size];
-    E  const uint16_t exceptions[variable size];
-       (possible 1*uint16_t for padding to 4-alignment)
-
-    U  const UChar uchars[variable size];
+    E  const uint32_t exceptions[variable size];
 
 3-stage lookup and properties:
 
@@ -124,8 +121,7 @@ arrive at an index into the props32[] table containing the character
 properties for c.
 For some characters, not all of the properties can be efficiently encoded
 using 32 bits. For them, the 32-bit word contains an index into the exceptions[]
-array. Some exception entries, in turn, may contain indexes into the uchars[]
-array of Unicode strings, especially for non-1:1 case mappings.
+array.
 
 The first stage consumes the 11 most significant bits of the 21-bit code point
 and results in an index into the second stage:
@@ -142,28 +138,27 @@ specific value, which itself is only an index into the props32[] table:
 
     uint16_t i=p16[i3+(c&0xf)];
 
+Note that the bit numbers and shifts actually depend on the STAGE_2/3_BITS
+in p16[0..1].
+
 There is finally the 32-bit encoded set of properties for c:
 
     uint32_t props=p32[i];
 
 For some characters, this contains an index into the exceptions array:
 
-    if(props&0x20) {
-        uint16_t e=(uint16_t)(props>>20);
+    if(props&EXCEPTION_BIT)) {
+        uint16_t e=(uint16_t)(props>>VALUE_SHIFT);
         ...
     }
 
-The exception values are a variable number of uint16_t starting at
+The exception values are a variable number of uint32_t starting at
 
-    const uint16_t *pe=p16+2*exceptionsIndex+e;
+    const uint32_t *pe=p32+exceptionsIndex+e;
 
-The first uint16_t there contains flags about what values actually follow it.
-Some of those may be indexes for case mappings or similar and point to strings
-(zero-terminated) in the uchars[] array:
-
-    ...
-    uint16_t u=pe[index depends on pe[0]];
-    const UChar *pu=(const UChar *)(p32+ucharsIndex)+u;
+The first uint32_t there contains flags about what values actually follow it.
+Some of the exception values are UChar32 code points for the case mappings,
+others are numeric values etc.
 
 32-bit properties sets:
 
@@ -171,9 +166,9 @@ Each 32-bit properties word contains:
 
  0.. 4  general category
  5      has exception values
- 6.. 9  BiDi category (the 5 explicit codes stored as one)
-10      is mirrored
-11..19  reserved
+ 6..10  BiDi category
+11      is mirrored
+12..19  reserved
 20..31  value according to bits 0..5:
         if(has exception) {
             exception index;
@@ -181,52 +176,82 @@ Each 32-bit properties word contains:
         case Ll: delta to uppercase; -- same as titlecase
         case Lu: delta to lowercase; -- titlecase is same as c
         case Lt: delta to lowercase; -- uppercase is same as c
-        case Mn: canonical category;
+        case Mn: combining class;
         case N*: numeric value;
-        default: *;
+        default:
+            if(is mirrored) {
+                delta to mirror
+            } else {
+                0
+            };
         }
 
 Exception values:
 
-The first uint16_t word of exception values for a code point contains flags
-that indicate which values follow:
+In the first uint32_t exception word for a code point,
+bits
+31..24  reserved
+23..16  combining class
+15..0   flags that indicate which values follow:
 
+bit
  0      has uppercase mapping
  1      has lowercase mapping
  2      has titlecase mapping
- 3      has canonical category
- 4      has numeric value (numerator)
- 5      has denominator value
+ 3      has numeric value (numerator)
+ 4      has denominator value
+ 5      has a mirror-image Unicode code point
 
-According to the flags in this word, one or more uint16_t words follow it
+According to the flags in this word, one or more uint32_t words follow it
 in the sequence of the bit flags in the flags word; if a flag is not set,
 then the value is missing or 0:
 
-For the case mappings, one uint16_t word each is an index into uchars[],
-pointing to a zero-terminated UChar string for the case mapping.
+For the case mappings and the mirror-image Unicode code point,
+one uint32_t or UChar32 each is the code point.
 
-For the canonical category, the lower 8 bits of a uint16_t word give the
-category value directly. The upper 8 bits are currently reserved.
-
-For the numeric/numerator value, a uint16_t word contains the value directly,
+For the numeric/numerator value, an int32_t word contains the value directly,
 except for when there is no numerator but a denominator, then the numerator
 is 1.
 
-For the denominator value, a uint16_t word contains the value directly.
+For the denominator value, a uint32_t word contains the value directly.
 
 Example:
 U+2160, ROMAN NUMERAL ONE, needs an exception because it has a lowercase
 mapping and a numeric value.
-Its exception values would be stored as 3 uint16_t words:
+Its exception values would be stored as 3 uint32_t words:
 
-- flags=0x12 (see above)
-- lowercase index into uchars[]
+- flags=0x0a (see above) with combining class 0
+- lowercase mapping 0x2170
 - numeric value=1
 
 ----------------------------------------------------------------------------- */
 
+/* ### finding an exception value */
+#define HAVE_EXCEPTION_VALUE(flags, index) ((flags)&(1<<(index)))
+
+/* number of bits in an integer value 0..31 */
+static uint8_t flagsOffset[32]={
+    0, 1, 1, 2, 1, 2, 2, 3,
+    1, 2, 2, 3, 2, 3, 3, 4,
+    1, 2, 2, 3, 2, 3, 3, 4,
+    2, 3, 3, 4, 3, 4, 4, 5
+};
+
+#define GET_EXCEPTION_OFFSET(flags, index, offset) { \
+    if((index)>=5) { \
+        (offset)+=flagsOffset[(flags)&0x1f]; \
+        (flags)>>=5; \
+        (index)-=5; \
+    } \
+    (offset)+=flagsOffset[(flags)&((1<<(index))-1)]; \
+}
+
+
+
+
+
 /* UDataInfo cf. udata.h */
-static const UDataInfo dataInfo={
+static UDataInfo dataInfo={
     sizeof(UDataInfo),
     0,
 
@@ -262,6 +287,19 @@ enum {
     MAX_STAGE_2_COUNT=MAX_PROPS_COUNT
 };
 
+/* definitions for the properties words */
+enum {
+    EXCEPTION_SHIFT=5,
+    BIDI_SHIFT,
+    MIRROR_SHIFT=BIDI_SHIFT+5,
+    VALUE_SHIFT=20,
+
+    EXCEPTION_BIT=1UL<<EXCEPTION_SHIFT,
+    VALUE_BITS=32-VALUE_SHIFT,
+    MAX_VALUE=(1UL<<(VALUE_BITS-1))-1,
+    MIN_VALUE=-(MAX_VALUE+1)
+};
+
 static uint16_t stage1[STAGE_1_BLOCK], stage2[MAX_STAGE_2_COUNT],
                 stage3[MAX_PROPS_COUNT], map[MAX_PROPS_COUNT];
 
@@ -273,16 +311,14 @@ static uint32_t props[MAX_PROPS_COUNT], props32[MAX_PROPS_COUNT];
 static uint16_t propsTop=STAGE_3_BLOCK; /* the first props[] are always empty */
 
 /* exceptions values */
-static uint16_t exceptions[MAX_EXCEPTIONS_COUNT+20];
+static uint32_t exceptions[MAX_EXCEPTIONS_COUNT+20];
 static uint16_t exceptionsTop=0;
 
 /* Unicode characters, e.g. for special casing or decomposition */
-
 static UChar uchars[MAX_UCHAR_COUNT+20];
 static uint16_t ucharsTop=0;
 
 /* statistics */
-
 static uint16_t exceptionsCount=0;
 
 /* prototypes --------------------------------------------------------------- */
@@ -320,6 +356,38 @@ addUChars(const UChar *s, uint16_t length);
 
 /* -------------------------------------------------------------------------- */
 
+/* ### this must become public in putil.c */
+static void
+__versionFromString(UVersionInfo versionArray, const char *versionString) {
+    char *end;
+    uint16_t part=0;
+
+    if(versionArray==NULL) {
+        return;
+    }
+
+    if(versionString!=NULL) {
+        for(;;) {
+            versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
+            if(*end!=U_VERSION_DELIMITER || ++part==U_MAX_VERSION_LENGTH) {
+                break;
+            }
+            versionString=end+1;
+        }
+    }
+
+    while(part<U_MAX_VERSION_LENGTH) {
+        versionArray[part++]=0;
+    }
+}
+
+extern void
+setUnicodeVersion(const char *v) {
+    UVersionInfo version;
+    __versionFromString(version, v);
+    uprv_memcpy(dataInfo.dataVersion, version, 4);
+}
+
 extern void
 initStore() {
     uprv_memset(stage1, 0, sizeof(stage1));
@@ -334,12 +402,6 @@ initStore() {
 
 extern void
 addProps(Props *p) {
-    /* map the explicit BiDi codes to one single value */
-    static const uint8_t bidiMap[U_CHAR_DIRECTION_COUNT]={
-	    0, 1, 2, 3, 4, 5, 6, 7, 8,
-        9, 10, 15, 15, 11, 15, 15, 15, 12, 13
-    };
-
     uint32_t x;
     int32_t value;
     uint16_t count;
@@ -394,7 +456,7 @@ addProps(Props *p) {
         if(!(isMn || isNumber)) {
             value=(int32_t)p->code-(int32_t)p->upperCase;
         } else {
-            x=1<<5;
+            x=EXCEPTION_BIT;
         }
         ++count;
     }
@@ -403,7 +465,7 @@ addProps(Props *p) {
         if(!(isMn || isNumber)) {
             value=(int32_t)p->lowerCase-(int32_t)p->code;
         } else {
-            x=1<<5;
+            x=EXCEPTION_BIT;
         }
         ++count;
     }
@@ -412,7 +474,7 @@ addProps(Props *p) {
         if(!(isMn || isNumber)) {
             value=(int32_t)p->code-(int32_t)p->titleCase;
         } else {
-            x=1<<5;
+            x=EXCEPTION_BIT;
         }
         ++count;
     }
@@ -421,7 +483,7 @@ addProps(Props *p) {
         if(isMn) {
             value=p->canonicalCombining;
         } else {
-            x=1<<5;
+            x=EXCEPTION_BIT;
         }
         ++count;
     }
@@ -430,7 +492,7 @@ addProps(Props *p) {
         if(isNumber) {
             value=p->numericValue;
         } else {
-            x=1<<5;
+            x=EXCEPTION_BIT;
         }
         ++count;
     }
@@ -439,9 +501,15 @@ addProps(Props *p) {
         value=p->denominator;
         ++count;
     }
+    if(p->isMirrored) {
+        if(p->mirrorMapping!=0) {
+            value=(int32_t)p->mirrorMapping-(int32_t)p->code;
+        }
+        ++count;
+    }
 
     /* handle exceptions */
-    if(count>1 || x!=0 || value<-2048 || 2047<value) {
+    if(count>1 || x!=0 || value<MIN_VALUE || MAX_VALUE<value) {
         /* this code point needs exception values */
         if(DO_DEBUG_OUT /* ### beVerbose */) {
             if(x!=0) {
@@ -454,18 +522,58 @@ addProps(Props *p) {
         }
 
         ++exceptionsCount;
-        x=1<<5;
+        x=EXCEPTION_BIT;
 
-        /* ### allocate and create exception values */
-        value=-exceptionsCount;
+        /* allocate and create exception values */
+        value=exceptionsTop;
+        if(value>=4096) {
+            fprintf(stderr, "genprops: out of exceptions memory\n");
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        } else {
+            uint32_t first=(uint32_t)p->canonicalCombining<<16;
+            uint16_t length=1;
+
+            if(p->upperCase!=0) {
+                first|=1;
+                exceptions[value+length++]=p->upperCase;
+            }
+            if(p->lowerCase!=0) {
+                first|=2;
+                exceptions[value+length++]=p->lowerCase;
+            }
+            if(p->upperCase!=p->titleCase) {
+                first|=4;
+                exceptions[value+length++]=p->titleCase;
+            }
+            if(p->denominator==0) {
+                if(p->numericValue!=0) {
+                    first|=8;
+                    exceptions[value+length++]=p->numericValue;
+                }
+            } else {
+                if(p->numericValue!=1) {
+                    first|=8;
+                    exceptions[value+length++]=p->numericValue;
+                }
+                first|=0x10;
+                exceptions[value+length++]=p->denominator;
+            }
+            if(p->isMirrored) {
+                first|=0x20;
+                exceptions[value+length++]=p->mirrorMapping;
+            }
+
+            exceptions[value]=first;
+            exceptionsTop+=length;
+        }
     }
 
     /* put together the 32-bit word of encoded properties */
     x|=
-        p->generalCategory |
-        bidiMap[p->bidi]<<6UL |
-        p->isMirrored<<10UL |
-        (uint32_t)value<<20;
+        (uint32_t)p->generalCategory |
+        (uint32_t)p->bidi<<BIDI_SHIFT |
+        (uint32_t)p->isMirrored<<MIRROR_SHIFT |
+        (uint32_t)value<<VALUE_SHIFT;
 
     setProps(p->code, x, &count, &count, &count);
 
@@ -911,17 +1019,15 @@ generateData(const char *dataDir) {
     }
 
     indexes[2]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
-    indexes[3]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
 
-    size=4*offset+ucharsTop*U_SIZEOF_UCHAR; /* total size of data */
+    size=4*(offset+exceptionsTop);          /* total size of data */
 
     if(beVerbose) {
         printf("number of stage 2 entries:              %5u\n", stage2Top);
         printf("number of stage 3 entries:              %5u\n", stage3Top);
         printf("number of unique properties values:     %5u\n", propsTop);
         printf("number of code points with exceptions:  %5u\n", exceptionsCount);
-        printf("size in bytes of exceptions:            %5u\n", 2*exceptionsTop);
-        printf("size in bytes of Uchars:                %5u\n", ucharsTop*U_SIZEOF_UCHAR);
+        printf("size in bytes of exceptions:            %5u\n", 4*exceptionsTop);
         printf("data size:                             %6lu\n", size);
     }
 
@@ -939,9 +1045,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, stage3, 2*stage3Top);
     udata_writePadding(pData, (stage2Top+stage3Top)&1);
     udata_writeBlock(pData, props32, 4*propsTop);
-    udata_writeBlock(pData, exceptions, 2*exceptionsTop);
-    udata_writePadding(pData, exceptionsTop&1);
-    udata_writeBlock(pData, uchars, ucharsTop*U_SIZEOF_UCHAR);
+    udata_writeBlock(pData, exceptions, 4*exceptionsTop);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);

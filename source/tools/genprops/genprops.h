@@ -25,8 +25,8 @@
 
 /* character properties */
 typedef struct {
-    uint32_t code, lowerCase, upperCase, titleCase;
-    uint32_t decomp[16];
+    uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
+    /* ### uint32_t decomp[16]; */
     uint32_t numericValue, denominator;
     uint8_t generalCategory, canonicalCombining, bidi, isMirrored;
 } Props;
@@ -42,6 +42,9 @@ extern const char *const
 genCategoryNames[];
 
 /* prototypes */
+extern void
+setUnicodeVersion(const char *v);
+
 extern void
 initStore(void);
 
