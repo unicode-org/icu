@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/NumberFormatRegressionTest.java,v $ 
- * $Date: 2001/10/19 12:14:05 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/26 06:29:50 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -22,6 +22,7 @@ import com.ibm.util.*;
 import java.util.Locale;
 import java.util.Date;
 import java.text.ParseException;
+import java.io.*;
 
 /** 
  * Performs regression test for MessageFormat
@@ -158,6 +159,28 @@ public class NumberFormatRegressionTest extends com.ibm.test.TestFmwk {
                         + ";result : " + n.toString()
                         + ";expected :" + Long.toString(expected[i]));
                 }
+            }
+        }
+    }
+    
+    //Test New serialized DecimalFormat(2.0) read old serialized forms of DecimalFormat(1.3.1.1)
+    public void TestSerialization() throws IOException, ClassNotFoundException{
+        byte[][] contents = NumberFormatSerialTestData.getContent();
+        double data = 1234.56;
+        String[] expected = {
+            "1,234.56", "$1,234.56", "123,456%", "1.23456E3"};
+        for (int i = 0; i < 4; ++i) {
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(contents[i]));
+            try {
+                NumberFormat format = (NumberFormat) ois.readObject();
+                String result = format.format(data);
+                if (result.equals(expected[i])) {
+                    logln("OK: Deserialized bogus NumberFormat(new version read old version)");
+                } else {
+                    errln("FAIL: the test data formats are not euqal");
+                }
+            } catch (Exception e) {
+                errln("FAIL: " + e.getMessage());
             }
         }
     }
