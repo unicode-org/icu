@@ -111,9 +111,13 @@ General scanf format:<br>
 <tr><td>%u</td><td>uint32_t</td><td>Decimal format</td></tr>
 <tr><td>%p</td><td>void *</td><td>Prints the pointer value</td></tr>
 <tr><td>%s</td><td>char *</td><td>Use default converter or specified converter from fopen</td></tr>
-<tr><td>%c</td><td>char</td><td>Use default converter or specified converter from fopen</td></tr>
+<tr><td>%c</td><td>char</td><td>Use default converter or specified converter from fopen<br>
+When width is specified, this acts like a non-NULL-terminated char * string.<br>
+By default, only one char is written.</td></tr>
 <tr><td>%S</td><td>UChar *</td><td>Null terminated UTF-16 string</td></tr>
-<tr><td>%C</td><td>UChar</td><td>16-bit Unicode code unit</td></tr>
+<tr><td>%C</td><td>UChar</td><td>16-bit Unicode code unit<br>
+When width is specified, this acts like a non-NULL-terminated UChar * string<br>
+By default, only one codepoint is written.</td></tr>
 <tr><td>%[]</td><td>UChar *</td><td>(scanf only) Null terminated UTF-16 string which contains the filtered set of characters specified by the UnicodeSet</td></tr>
 <tr><td>%%</td><td>N/A</td><td>Show a percent sign</td></tr>
 </table>
