@@ -111,7 +111,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
 RegexMatcher::~RegexMatcher() {
     delete fStack;
     if (fData != fSmallData) {
-        delete fData;
+        uprv_free(fData);
         fData = NULL;
     }
     if (fPatternOwned) {

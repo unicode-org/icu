@@ -35,6 +35,8 @@ private:
 
 public:
     CharSubstitutionFilter(const LEFontInstance *fontInstance);
+	~CharSubstitutionFilter();
+
     le_bool accept(LEGlyphID glyph) const;
 };
 
@@ -43,6 +45,12 @@ CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstanc
 {
     // nothing to do
 }
+
+CharSubstitutionFilter::~CharSubstitutionFilter()
+{
+	// nothing to do
+}
+
 
 le_bool CharSubstitutionFilter::accept(LEGlyphID glyph) const
 {
