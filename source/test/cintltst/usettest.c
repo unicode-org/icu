@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002, International Business Machines
+* Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
@@ -12,10 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define TEST(x) addTest(root, &x, "uset/" # x)
 
 static void TestAPI(void);
 static void Testj2269(void);
+static void TestSerialized(void);
 
 void addUSetTest(TestNode** root);
 
@@ -34,6 +37,7 @@ void
 addUSetTest(TestNode** root) {
     TEST(TestAPI);
     TEST(Testj2269);
+    TEST(TestSerialized);
 }
 
 /*------------------------------------------------------------------
@@ -360,6 +364,44 @@ static void expectItems(const USet* set,
         log_err("FAIL: %s size is %d, expected %d\n",
                 pat, uset_size(set), expectedSize);
     }
+}
+
+static void
+TestSerialized() {
+    uint16_t buffer[1000];
+    USerializedSet sset;
+    USet *set;
+    UErrorCode errorCode;
+    UChar32 c;
+    int32_t length;
+
+    /* use a pattern that generates both BMP and supplementary code points */
+    U_STRING_DECL(pattern, "[:Cf:]", 6);
+    U_STRING_INIT(pattern, "[:Cf:]", 6);
+
+    errorCode=U_ZERO_ERROR;
+    set=uset_openPattern(pattern, -1, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unable to uset_open([:Cf:]) - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    length=uset_serialize(set, buffer, LENGTHOF(buffer), &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("unable to uset_serialize([:Cf:]) - %s\n", u_errorName(errorCode));
+        uset_close(set);
+        return;
+    }
+
+    uset_getSerializedSet(&sset, buffer, length);
+    for(c=0; c<=0x10ffff; ++c) {
+        if(uset_contains(set, c)!=uset_serializedContains(&sset, c)) {
+            log_err("uset_contains(U+%04x)!=uset_serializedContains(U+%04x)\n", c);
+            break;
+        }
+    }
+
+    uset_close(set);
 }
 
 /*eof*/

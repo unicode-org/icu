@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -118,6 +118,9 @@ public:
     static inline void operator delete(void *, void *) {}
 #endif /* U_HAVE_PLACEMENT_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
+
+private:
+    UMemory &UMemory::operator=(const UMemory &); // not implemented
 };
 
 /**
@@ -190,6 +193,9 @@ protected:
     // see also UObject class documentation.
     // virtual UObject *clone() const;
 #endif
+
+private:
+    UObject &UObject::operator=(const UObject &); // not implemented
 };
 
 U_NAMESPACE_END
