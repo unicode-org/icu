@@ -36,7 +36,7 @@ public class ICUResourceWriter {
     private static final String IMPORT          = "import";
     private static final String ALIAS           = "alias";
     private static final String INTVECTOR       = "intvector";
-    private static final String ARRAYS          = "array";
+    //private static final String ARRAYS          = "array";
     private static final String LINESEP         = System.getProperty("line.separator");
     
     public static class Resource{
@@ -101,7 +101,7 @@ public class ICUResourceWriter {
             }          
         }
         public void sort(){
-            System.out.println("In sort");
+            //System.out.println("In sort");
             return;
         }
         public void swap(){
@@ -131,17 +131,33 @@ public class ICUResourceWriter {
         public void write(OutputStream writer, int numIndent, boolean bare){
             writeComments(writer, numIndent);
             writeIndent(writer, numIndent);
-            write(writer, name+COLON+ARRAYS+OPENBRACE+LINESEP);
+            if(name!=null){
+                write(writer, name+OPENBRACE+LINESEP);
+            }else{
+                write(writer, OPENBRACE+LINESEP);
+            }
             numIndent++;
             Resource current = first;
             while(current != null){
                 current.write(writer, numIndent, true);
-                write(writer, COMMA+LINESEP);
+                if(current instanceof ResourceTable ||
+                   current instanceof ResourceArray){
+                    
+                }else{
+                    write(writer, COMMA+LINESEP);
+                }
                 current = current.next;
             }
             numIndent--;
             writeIndent(writer, numIndent);
             write(writer, CLOSEBRACE+LINESEP);
+        }
+        public void sort(){
+            Resource current = first;
+            while(current!=null){
+                current.sort();
+                current = current.next;
+            }
         }
     }
     
@@ -308,10 +324,10 @@ public class ICUResourceWriter {
             Resource b =new Resource();
             Resource a = first;
             Resource t,u,x;
-            for(t = a.next; t!=null; t=u ){
+            for(t = a; t!=null; t=u ){
                 u=t.next;
                 for(x=b;x.next!=null; x=x.next){
-                    if(x.next.name.compareToIgnoreCase(t.name)>0){
+                    if(x.next.name.compareTo(t.name)>0){
                         break;
                     }
                 }
@@ -319,7 +335,16 @@ public class ICUResourceWriter {
                 x.next = t;
             }
            // System.out.println("Exiting sort of table");
-            first = b.next;
+            if(b.next!=null){
+                first = b.next;   
+            }
+            
+            Resource current = first;
+            while(current!=null){
+                current.sort();
+                current = current.next;
+            }
+            
         } // end sort()
     }
 }
