@@ -136,7 +136,7 @@ public class RoundTripTest extends TestFmwk {
 
     public void TestArabic() throws IOException, ParseException {
         new Test("Latin-Arabic")
-          .test("[a-zA-Z\u02BE\u02BF\u207F]", ARABIC, null, this, new Legal());
+          .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); // 
     }
     
     public void TestHebrew() throws IOException, ParseException {
@@ -632,13 +632,21 @@ public class RoundTripTest extends TestFmwk {
         }
     }
     
+    static BreakIterator thaiBreak = BreakIterator.getWordInstance(new Locale("th", "TH"));
     // anything is legal except word ending with Logical-order-exception
     public static class LegalThai extends Legal {
         public boolean is(String sourceString) {
             if (sourceString.length() == 0) return true;
             char ch = sourceString.charAt(sourceString.length() - 1); // don't worry about surrogates.
             if (UCharacter.hasBinaryProperty(ch, UProperty.LOGICAL_ORDER_EXCEPTION)) return false;
+            /*
+            if (UTF16.countCodePoint(sourceString) <= 1) return true;
+            
+            // disallow anything with a wordbreak between
+            thaiBreak.setText(sourceString);
+            
             return true;
+            */
         }
     }
     
@@ -827,8 +835,14 @@ public class RoundTripTest extends TestFmwk {
         static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
         static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
       
-        public void test(String sourceRange, String targetRange, String roundtripExclusions,
-                         RoundTripTest log, Legal legalSource) 
+        public void test(String sourceRange, String targetRange, 
+          String roundtripExclusions, RoundTripTest log, Legal legalSource) 
+          throws java.io.IOException, java.text.ParseException {
+            test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
+        }
+
+        public void test(String sourceRange, String targetRange, String backtoSourceRange,
+          String roundtripExclusions, RoundTripTest log, Legal legalSource) 
           throws java.io.IOException, java.text.ParseException {
             
             this.legalSource = legalSource;
@@ -838,7 +852,7 @@ public class RoundTripTest extends TestFmwk {
             this.targetRange = new UnicodeSet(targetRange);
             this.targetRange.removeAll(neverOk);
             
-            this.toSource = new UnicodeSet(sourceRange);
+            this.toSource = new UnicodeSet(backtoSourceRange);
             this.toSource.addAll(okAnyway);
             
             this.toTarget = new UnicodeSet(targetRange);
@@ -874,7 +888,8 @@ public class RoundTripTest extends TestFmwk {
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<HTML><HEAD>");
             out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
-            out.println("<BODY>");
+            out.println("<BODY bgcolor='#FFFFFF' style='font-family: Arial Unicode MS'>");
+
             try {
                 test2();
             } catch (TestTruncated e) {

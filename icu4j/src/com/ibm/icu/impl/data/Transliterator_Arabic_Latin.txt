@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Arabic_Latin.txt,v $
-# $Date: 2002/07/15 01:26:18 $
-# $Revision: 1.2 $
+# $Date: 2002/07/15 23:26:26 $
+# $Revision: 1.3 $
 #--------------------------------------------------------------------
 
 # Generally follows UNGEGN <http://www.eki.ee/wgrs/rom1_ar.pdf>
@@ -23,6 +23,8 @@
 $disambig =  ̱ ; 
 $disambig2 =  ̰ ;
 $under =  ̣ ;
+
+$notAbove = [[:^ccc=0:]&[:^ccc=230:]];
 
 # non-letters
 
@@ -75,8 +77,12 @@ $under =  ̣ ;
  غ <> g h $disambig ; # ARABIC LETTER GHAIN
 
 # WARNING: special case
-# These canonically rearrange, so we have to special-case the return
-ةٕ < ẗ̹ ; # LATIN SMALL LETTER T, COMBINING RIGHT HALF RING BELOW, COMBINING DIAERESIS
+# <t, umlaut, half-ring below> will be canonically ordered as <t, half-ring below, umlaut>
+# so on the return, we have to skip over (but preserve) the half-ring below (or others like it)
+# ةٕ < ẗ̹ ; # LATIN SMALL LETTER T, COMBINING RIGHT HALF RING BELOW, COMBINING DIAERESIS
+
+ ة <> t \u0308 ; # ARABIC LETTER TEH MARBUTA
+ ة | $1 < t ($notAbove+) \u0308 ; # ARABIC LETTER TEH MARBUTA
 
 # non-Arabic language
  ژ <> z h $disambig ; # ARABIC LETTER JEH
@@ -89,7 +95,6 @@ $under =  ̣ ;
  ء <> ʾ ; # ARABIC LETTER HAMZA
  ا <> a $under; # ARABIC LETTER ALEF
  ب <> b ; # ARABIC LETTER BEH
- ة <> t \u0308 ; # ARABIC LETTER TEH MARBUTA
  ت <> t ; # ARABIC LETTER TEH
  ج <> j ; # ARABIC LETTER JEEM
  ح <> h $under ; # ARABIC LETTER HAH

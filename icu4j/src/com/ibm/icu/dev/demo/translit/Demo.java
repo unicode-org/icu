@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/07/15 01:26:18 $ 
- * $Revision: 1.21 $
+ * $Date: 2002/07/15 23:26:27 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.21 $ $Date: 2002/07/15 01:26:18 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.22 $ $Date: 2002/07/15 23:26:27 $
  */
 public class Demo extends Frame {
 
@@ -698,7 +698,7 @@ public class Demo extends Frame {
             
             String decomp = Normalizer.normalize(cp, mode);
             if (source.containsAll(decomp)) {
-                System.out.println("Adding: " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
+                // System.out.println("Adding: " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
                 source.add(cp);
             }
         }
@@ -796,11 +796,27 @@ public class Demo extends Frame {
     
     
     static {
+
+        if (false) {
+        Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007E] hex");
         
-        printNames(new UnicodeSet("[\u0600-\u06FF]"), "Arabic-Latin.txt");
+        UnicodeSet x = new UnicodeSet("[[:^ccc=0:]&[:^ccc=230:]]");
+        x = x.complement();
+        x = x.complement();
+        System.out.println("Test: " + x.toPattern(true));
+        
+        Transliterator y = Transliterator.createFromRules("xxx", "$notAbove = [[:^ccc=0:]&[:^ccc=230:]]; u ($notAbove*) \u0308 > XXX | $1; ", Transliterator.FORWARD);
+        
+        String[] testList = {"u\u0308", "u\u0316\u0308", "u\u0308\u0316", "u\u0301\u0308", "u\u0308\u0301"};
+        for (int i = 0; i < testList.length; ++i) {
+            String yy = y.transliterate(testList[i]);
+            System.out.println(hex.transliterate(testList[i]) + " => " + hex.transliterate(yy));
+        }
+        
+        //printNames(new UnicodeSet("[\u0600-\u06FF]"), "Arabic-Latin.txt");
         
         
-    	if (false) {
+        /*  
         BreakTransliterator.register();
         
     	BreakTransliterator testTrans = new BreakTransliterator("Any-XXX", null, null, "$");
@@ -819,6 +835,7 @@ public class Demo extends Frame {
     	String test = testTrans.transliterate(testSource);
     	System.out.println("Test3: " + test);
     	DummyFactory.add(testTrans.getID(), testTrans);
+    	*/
     	
     	// AnyTransliterator.ScriptRunIterator.registerAnyToScript();
     	
