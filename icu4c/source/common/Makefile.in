@@ -15,7 +15,6 @@ top_builddir = ..
 
 ## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
--include Makefile.local
 
 ## Build directory information
 subdir = common
