@@ -75,6 +75,9 @@ public:
 
    /* Test getting keyword values */
    void TestKeywordVariantParsing(void);
+
+   /* Test getting the locale base name */
+   void TestGetBaseName(void);
     
 #if !UCONFIG_NO_FORMATTING
     void Test4105828(void) ;
