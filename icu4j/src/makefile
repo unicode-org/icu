@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile.nmk,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:39:32 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.6 $ $Date: 2000/02/23 00:35:28 $
 # 
 
 TOPDIR=		..
