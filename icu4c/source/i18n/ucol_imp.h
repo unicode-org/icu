@@ -453,6 +453,7 @@ typedef struct {
       UColAttributeValue caseLevel;         /* do we have an extra case level */
       UColAttributeValue normalizationMode; /* attribute for normalization */
       UColAttributeValue strength;          /* attribute for strength */
+      UColAttributeValue hiraganaQ;         /* attribuge for special Hiragana */
 } UColOptionSet;
 
 typedef struct {
@@ -601,6 +602,7 @@ struct UCollator {
     UColAttributeValue caseLevel;         /* do we have an extra case level */
     UColAttributeValue normalizationMode; /* attribute for normalization */
     UColAttributeValue strength;          /* attribute for strength */
+    UColAttributeValue hiraganaQ;         /* attribute for Hiragana */
     UBool variableTopValueisDefault;
     UBool frenchCollationisDefault;
     UBool alternateHandlingisDefault; /* attribute for handling variable elements*/
@@ -608,6 +610,7 @@ struct UCollator {
     UBool caseLevelisDefault;         /* do we have an extra case level */
     UBool normalizationModeisDefault; /* attribute for normalization */
     UBool strengthisDefault;          /* attribute for strength */
+    UBool hiraganaQisDefault;         /* attribute for Hiragana */
     UBool hasRealData;                /* some collators have only options, like French, no rules */
                                       /* to speed up things, we use the UCA image, but we don't want it */
                                       /* to run around */

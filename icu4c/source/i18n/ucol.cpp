@@ -504,6 +504,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->strength = opts->strength;
     result->variableTopValue = opts->variableTopValue;
     result->alternateHandling = opts->alternateHandling;
+    result->hiraganaQ = opts->hiraganaQ;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -511,6 +512,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->normalizationModeisDefault = TRUE;
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
+    result->hiraganaQisDefault = TRUE;
 
     ucol_updateInternalState(result);
 
@@ -528,6 +530,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
     opts->strength = result->strength;
     opts->variableTopValue = result->variableTopValue;
     opts->alternateHandling = result->alternateHandling;
+    opts->hiraganaQ = opts->hiraganaQ;
 }
 
 static const uint16_t *fcdTrieIndex=NULL;
@@ -622,6 +625,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->strength = result->options->strength;
     result->variableTopValue = result->options->variableTopValue;
     result->alternateHandling = result->options->alternateHandling;
+    result->hiraganaQ = result->options->hiraganaQ;
 
     result->caseFirstisDefault = TRUE;
     result->caseLevelisDefault = TRUE;
@@ -630,6 +634,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
     result->alternateHandlingisDefault = TRUE;
+    result->hiraganaQisDefault = TRUE;
 
     result->scriptOrder = NULL;
 
@@ -2901,6 +2906,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted  && (compareQuad == 0);
+    UBool  doHiragana = coll->hiraganaQ && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     uint8_t fSecsBuff[UCOL_FSEC_BUF_SIZE];
     uint8_t *fSecs = fSecsBuff;
@@ -2908,7 +2914,11 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t *frenchStartPtr = NULL, *frenchEndPtr = NULL;
 
     uint32_t variableTopValue = coll->variableTopValue;
-    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1); 
+    if(doHiragana) {
+      UCOL_COMMON_BOT4++;
+      /* allocate one more space for hiragana */
+    }
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     uint32_t order = UCOL_NO_MORE_CES;
@@ -3079,7 +3089,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
               }
             }
 
-            if(qShifted  && notIsContinuation) {
+            if(/*qShifted*/(compareQuad==0)  && notIsContinuation) {
               c4++;
             }
 
@@ -3225,10 +3235,6 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
-    uint32_t variableTopValue = coll->variableTopValue;
-    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
-    uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
-
     UColAttributeValue strength = coll->strength;
 
     uint8_t compareSec   = (uint8_t)((strength >= UCOL_SECONDARY)?0:0xFF);
@@ -3239,14 +3245,23 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted && (compareQuad == 0);
+    UBool  doHiragana = coll->hiraganaQ && (compareQuad == 0);
     const uint8_t *scriptOrder = coll->scriptOrder;
+
+    uint32_t variableTopValue = coll->variableTopValue;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
+    if(doHiragana) {
+      UCOL_COMMON_BOT4++;
+      /* allocate one more space for hiragana */
+    }
+    uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     /* support for special features like caselevel and funky secondaries */
     uint8_t *frenchStartPtr = NULL;
     uint8_t *frenchEndPtr = NULL;
     uint32_t caseShift = 0;
 
-    sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (qShifted?1:0)/*(compareQuad?0:1)*/ + (compareIdent?1:0));
+    sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + /*(qShifted?1:0)*/(compareQuad?0:1) + (compareIdent?1:0));
 
     /* If we need to normalize, we'll do it all at once at the beginning! */
     UNormalizationMode normMode;
@@ -3509,7 +3524,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }
 
-              if(qShifted && notIsContinuation) {
+              if(/*qShifted*/(compareQuad==0) && notIsContinuation) {
                 count4++;
               }
             }
@@ -3625,7 +3640,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         if(sortKeySize <= resultLength) {
           uprv_memcpy(primaries, terStart, tersize);
           primaries += tersize;
-          if(/*compareQuad == 0*/qShifted == TRUE) {
+          if(compareQuad == 0/*qShifted == TRUE*/) {
               if(count4 > 0) {
                 while (count4 > UCOL_BOT_COUNT4) {
                   *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
@@ -3668,8 +3683,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             if(allocatePrimary == TRUE) {
               primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, sortKeySize, status);
               *result = primStart;
-              u_writeIdenticalLevelRun(s.string, len, primaries);
-            } else {
+              u_writeIdenticalLevelRun(s.string, len, primaries);            } else {
               *status = U_MEMORY_ALLOCATION_ERROR;
             }
           }
@@ -4174,6 +4188,20 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
       return;
     }
     switch(attr) {
+    case UCOL_HIRAGANA_QUATERNARY_MODE: /* special quaternary values for Hiragana */
+      if(value == UCOL_ON) {
+        coll->hiraganaQ = UCOL_ON;
+        coll->hiraganaQisDefault = FALSE;
+      } else if (value == UCOL_OFF) {
+        coll->hiraganaQ = UCOL_OFF;
+        coll->hiraganaQisDefault = FALSE;
+      } else if (value == UCOL_DEFAULT) {
+        coll->hiraganaQisDefault = TRUE;
+        coll->hiraganaQ = coll->options->hiraganaQ;
+      } else {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+      }
+      break;
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
         if(value == UCOL_ON) {
             coll->frenchCollation = UCOL_ON;
@@ -4274,6 +4302,8 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
       return UCOL_DEFAULT;
     }
     switch(attr) {
+    case UCOL_HIRAGANA_QUATERNARY_MODE:
+      return coll->hiraganaQ;
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
         return coll->frenchCollation;
     case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
