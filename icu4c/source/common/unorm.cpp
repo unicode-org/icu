@@ -776,6 +776,10 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
     destIndex=0;
     prevCC=0;
 
+    /* avoid compiler warnings */
+    norm32=0;
+    c=0;
+
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
     canGrow=(UBool)(growBuffer!=NULL);
 
@@ -1180,6 +1184,10 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
     decompStart=src;
     destIndex=0;
     prevCC=0;
+
+    /* avoid compiler warnings */
+    c=0;
+    fcd16=0;
 
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
     canGrow=(UBool)(growBuffer!=NULL);
@@ -2019,6 +2027,10 @@ unorm_compose(UChar *dest, int32_t destCapacity,
     ccOrQCMask=_NORM_CC_MASK|qcMask;
     destIndex=0;
     prevCC=0;
+
+    /* avoid compiler warnings */
+    norm32=0;
+    c=0;
 
     /* do not attempt to grow if there is no growBuffer function or if it has failed before */
     canGrow=(UBool)(growBuffer!=NULL);
