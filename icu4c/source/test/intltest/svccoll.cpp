@@ -62,7 +62,7 @@ void CollationServiceTest::TestRegister()
           errln(UnicodeString("fr collator's requested locale changed to ") + loc.getName());
         }
         loc = frcol->getLocale(ULOC_VALID_LOCALE, status);
-        if (loc != FRENCH) {
+        if (loc != FR) {
           errln(UnicodeString("fr collator's valid locale changed to ") + loc.getName());
         }
         
@@ -567,8 +567,8 @@ void CollationServiceTest::TestSeparateTree() {
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
     assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.getName());
-    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==FALSE",
-               isAvailable == FALSE);
+    assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==TRUE",
+               isAvailable == TRUE);
 }
 
 #endif
