@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/07/25 22:49:51 $ 
-* $Revision: 1.3 $
+* $Date: 2002/08/01 16:24:37 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,7 @@ class CollationRuleParser
      */
     CollationRuleParser(String rules) throws ParseException
     {
-        m_source_ = new StringBuffer(Normalizer.decompose(rules, false));
+        m_source_ = new StringBuffer(Normalizer.decompose(rules, false).trim());
         m_rules_ = m_source_.toString();
         m_current_ = 0;
         m_extraCurrent_ = m_source_.length();
@@ -1098,9 +1098,7 @@ class CollationRuleParser
             else if (isescaped) {
 	            isescaped = false;
 	            if (newstrength == TOKEN_UNSET_) {
-	                // throwParseException(m_rules_, m_current_);
-                    // enble non-token rules a<b
-                    newstrength = TOKEN_RESET_;
+	                throwParseException(m_rules_, m_current_);
 	            }
 	            if (ch != 0 && m_current_ != limit) {
 	                if (inchars) {
@@ -1318,9 +1316,7 @@ class CollationRuleParser
 		            case 0x0027 : //'\''
 		                if (newstrength == TOKEN_UNSET_) { 
 		                    // quote is illegal until we have a strength
-		                    // throwParseException(m_rules_, m_current_);
-                            // enble non-token rules a<b
-                            newstrength = TOKEN_RESET_;
+		                    throwParseException(m_rules_, m_current_);
                         }
 		                inquote = true;
 		                if (inchars) { // we're doing characters 
@@ -1395,9 +1391,7 @@ class CollationRuleParser
                         break;
 	                default :
 	                    if (newstrength == TOKEN_UNSET_) {
-	                        // throwParseException(m_rules_, m_current_);
-                            // enble non-token rules a<b
-                            newstrength = TOKEN_RESET_;
+	                        throwParseException(m_rules_, m_current_);
 	                    }
 	                    if (isSpecialChar(ch) && (inquote == false)) {
 	                        throwParseException(m_rules_, m_current_);
