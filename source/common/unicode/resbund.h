@@ -189,6 +189,11 @@ public:
     ResourceBundle( const UnicodeString&    path,
                     UErrorCode&              err);
     ResourceBundle(UErrorCode &err);
+    /**
+     * Constructs a ResourceBundle
+     *
+     * @deprecated Remove after Aug  2002
+     */
     ResourceBundle( const wchar_t* path,
                     const Locale& locale,
                     UErrorCode& err);
@@ -419,6 +424,9 @@ public:
 private:
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
+    /**
+     *@deprecated Remove after Aug 2002
+     */
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
     Locale                      fRealLocale;
 };
