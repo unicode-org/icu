@@ -244,12 +244,13 @@ BRK_FILES = "$(ICUBLD)\$(ICUDT)sent.brk" "$(ICUBLD)\$(ICUDT)char.brk" "$(ICUBLD)
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
  	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
 $(ICUDT)uprops.icu
 $(ICUDT)unames.icu
+$(ICUDT)pnames.icu
 $(ICUDT)unorm.icu
 $(ICUDT)cnvalias.icu
 $(ICUDT)tz.icu
@@ -365,6 +366,13 @@ res_index {
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUUNIDATA)\UnicodeData.txt"
+
+# Targets for pnames.icu
+# >> Depends on the Unicode data as well as uchar.h and uscript.h <<
+"$(ICUBLD)\$(ICUDT)pnames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genpname\$(CFG)\genpname.exe" "$(ICUP)\source\common\unicode\uchar.h" "$(ICUP)\source\common\unicode\uscript.h"
+	@echo Creating data file for Unicode Property Names
+	@set ICU_DATA=$(ICUBLD)
+	@"$(ICUTOOLS)\genpname\$(CFG)\genpname" -d "$(ICUBLD)"
 
 # Targets for uprops.icu
 "$(ICUBLD)\$(ICUDT)uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
