@@ -113,6 +113,10 @@ SOURCE=.\toolutil.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmpwrit.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unewdata.h
 # End Source File
 # Begin Source File
