@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -798,7 +798,7 @@
 			<type type="hebrew" key="calendar">Hebrew Calendar</type>
 			<type type="islamic" key="calendar">Islamic Calendar</type>
 			<type type="islamic-civil" key="calendar">Islamic-Civil Calendar</type>
-			<type type="japanese" key="calendar">Japaneese Calendar</type>
+			<type type="japanese" key="calendar">Japanese Calendar</type>
 			<type type="traditional" key="calendar">Traditional Calendar</type>
 			<type type="direct" key="collation">Direct Order</type>
 			<type type="phonebook" key="collation">Phonebook Order</type>

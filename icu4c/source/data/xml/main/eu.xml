@@ -8,16 +8,19 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="eu" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="eu">euskara</language>
 		</languages>
+		<territories>
+			<territory type="ES">Espainia</territory>
+		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z ñ ç]</exemplarCharacters>
+		<exemplarCharacters>[a-zñç]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Latn</icu:script>

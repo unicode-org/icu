@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-17" />
+		<generation date="2003-12-18" />
 		<language type="hu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -63,14 +63,11 @@
 			<language type="id">indonéz</language>
 			<language type="ie">interlingue</language>
 			<language type="ik">inupiak</language>
-			<language type="in">indonéz</language>
 			<language type="is">izlandi</language>
 			<language type="it">olasz</language>
 			<language type="iu">inuktitut</language>
-			<language type="iw">héber</language>
 			<language type="ja">japán</language>
-			<language type="ji">zsidó</language>
-			<language type="jw">jávai</language>
+			<language type="jv">jávai</language>
 			<language type="ka">grúz</language>
 			<language type="kk">kazah</language>
 			<language type="kl">grönlandi</language>
@@ -401,7 +398,7 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z á é í ó ú ö ü ő ű {cs}{dz}{dzs}{gy}{ly}{ny}{sz}{ty}{zs}{ccs}{ddz}{ddzs}{ggy}{lly}{nny}{ssz}{tty}{zzs}]</exemplarCharacters>
+		<exemplarCharacters>[a-z á é í ó ú ö ü ő ű {cs} {dz} {dzs} {gy} {ly} {ny} {sz} {ty} {zs} {ccs} {ddz} {ddzs} {ggy} {lly} {nny} {ssz} {tty} {zzs}]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 			<icu:scripts>
 				<icu:script type="1">Latn</icu:script>
