@@ -6,12 +6,14 @@
 
 #include "loctest.h"
 #include <stdio.h>
-#include <string.h>
-#include <cstring.h>
-
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/dtfmtsym.h"
+#include "unicode/brkiter.h"
+#include "unicode/coll.h"
+#include "cstring.h"
+#include "uassert.h"
 
 const char* rawData[33][8] = {
 
@@ -187,52 +189,49 @@ LocaleTest::~LocaleTest()
     }
 }
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
-
 void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {
-        case 0: name = "TestBasicGetters"; if (exec) TestBasicGetters(); break;
-        case 1: name = "TestSimpleResourceInfo"; if (exec) TestSimpleResourceInfo(); break;
-        case 2: name = "TestDisplayNames"; if (exec) TestDisplayNames(); break;
-        case 3: name = "TestSimpleObjectStuff"; if (exec) TestSimpleObjectStuff(); break;
-        case 4: name = "TestPOSIXParsing"; if (exec) TestPOSIXParsing(); break;
-        case 5: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
-        case 6: name = "TestDataDirectory"; if (exec) TestDataDirectory(); break;
-
-        CASE(7, TestISO3Fallback)
-        CASE(8, TestGetLangsAndCountries)
-        CASE(9, TestSimpleDisplayNames)
-        CASE(10, TestUninstalledISO3Names)
-        CASE(11, TestAtypicalLocales)
+        TESTCASE(0, TestBasicGetters);
+        TESTCASE(1, TestSimpleResourceInfo);
+        TESTCASE(2, TestDisplayNames);
+        TESTCASE(3, TestSimpleObjectStuff);
+        TESTCASE(4, TestPOSIXParsing);
+        TESTCASE(5, TestGetAvailableLocales);
+        TESTCASE(6, TestDataDirectory);
+        TESTCASE(7, TestISO3Fallback);
+        TESTCASE(8, TestGetLangsAndCountries);
+        TESTCASE(9, TestSimpleDisplayNames);
+        TESTCASE(10, TestUninstalledISO3Names);
+        TESTCASE(11, TestAtypicalLocales);
 #if !UCONFIG_NO_FORMATTING
-        CASE(12, TestThaiCurrencyFormat)
-        CASE(13, TestEuroSupport)
+        TESTCASE(12, TestThaiCurrencyFormat);
+        TESTCASE(13, TestEuroSupport);
 #endif
-        CASE(14, TestToString)
+        TESTCASE(14, TestToString);
 #if !UCONFIG_NO_FORMATTING
-        CASE(15, Test4139940)
-        CASE(16, Test4143951)
+        TESTCASE(15, Test4139940);
+        TESTCASE(16, Test4143951);
 #endif
-        CASE(17, Test4147315)
-        CASE(18, Test4147317)
-        CASE(19, Test4147552)
-        CASE(20, TestVariantParsing)
+        TESTCASE(17, Test4147315);
+        TESTCASE(18, Test4147317);
+        TESTCASE(19, Test4147552);
+        TESTCASE(20, TestVariantParsing);
 #if !UCONFIG_NO_FORMATTING
-        CASE(21, Test4105828)
+        TESTCASE(21, Test4105828);
 #endif
-        CASE(22, TestSetIsBogus)
-        CASE(23, TestParallelAPIValues)
-        CASE(24, TestKeywordVariants)
-        CASE(25, TestKeywordVariantParsing)
-        CASE(26, TestGetBaseName)
+        TESTCASE(22, TestSetIsBogus);
+        TESTCASE(23, TestParallelAPIValues);
+        TESTCASE(24, TestKeywordVariants);
+        TESTCASE(25, TestKeywordVariantParsing);
+        TESTCASE(26, TestGetBaseName);
+        TESTCASE(27, TestGetLocale);
 
         // keep the last index in sync with the condition in default:
 
         default:
-            if(index <= 23) { // keep this in sync with the last index!
-                name = "switched off"; // UCONFIG_NO_FORMATTING
+            if (index <= 27) { // keep this in sync with the last index!
+                name = "(test omitted by !UCONFIG_NO_FORMATTING)";
             } else {
                 name = "";
             }
@@ -1681,3 +1680,250 @@ LocaleTest::TestGetBaseName(void) {
     }
 }
 
+/**
+ * Compare two locale IDs.  If they are equal, return 0.  If `string'
+ * starts with `prefix' plus an additional element, that is, string ==
+ * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
+ */
+static UBool _loccmp(const char* string, const char* prefix) {
+    int32_t slen = uprv_strlen(string),
+            plen = uprv_strlen(prefix);
+    int32_t c = uprv_strncmp(string, prefix, plen);
+    /* 'root' is "less than" everything */
+    if (uprv_strcmp(prefix, "root") == 0) {
+        return (uprv_strcmp(string, "root") == 0) ? 0 : 1;
+    }
+    if (c) return -1; /* mismatch */
+    if (slen == plen) return 0;
+    if (string[plen] == '_') return 1;
+    return -2; /* false match, e.g. "en_USX" cmp "en_US" */
+}
+
+/**
+ * Check the relationship between requested locales, and report problems.
+ * The caller specifies the expected relationships between requested
+ * and valid (expReqValid) and between valid and actual (expValidActual).
+ * Possible values are:
+ * "gt" strictly greater than, e.g., en_US > en
+ * "ge" greater or equal,      e.g., en >= en
+ * "eq" equal,                 e.g., en == en
+ */
+void LocaleTest::_checklocs(const char* label,
+                            const char* req,
+                            const Locale& validLoc,
+                            const Locale& actualLoc,
+                            const char* expReqValid,
+                            const char* expValidActual) {
+    const char* valid = validLoc.getName();
+    const char* actual = actualLoc.getName();
+    int32_t reqValid = _loccmp(req, valid);
+    int32_t validActual = _loccmp(valid, actual);
+    if (((0 == uprv_strcmp(expReqValid, "gt") && reqValid > 0) ||
+         (0 == uprv_strcmp(expReqValid, "ge") && reqValid >= 0) ||
+         (0 == uprv_strcmp(expReqValid, "eq") && reqValid == 0)) &&
+        ((0 == uprv_strcmp(expValidActual, "gt") && validActual > 0) ||
+         (0 == uprv_strcmp(expValidActual, "ge") && validActual >= 0) ||
+         (0 == uprv_strcmp(expValidActual, "eq") && validActual == 0))) {
+        logln("%s; req=%s, valid=%s, actual=%s",
+              label, req, valid, actual);
+    } else {
+        errln("FAIL: %s; req=%s, valid=%s, actual=%s",
+              label, req, valid, actual);
+    }
+}
+
+void LocaleTest::TestGetLocale() {
+    UErrorCode ec = U_ZERO_ERROR;
+    const char *req;
+    Locale valid, actual, reqLoc;
+    
+    // Calendar
+    req = "en_US_BROOKLYN";
+    Calendar* cal = Calendar::createInstance(Locale::createFromName(req), ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Calendar::createInstance failed");
+    } else {
+        valid = cal->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = cal->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: Calendar::getLocale() failed");
+        } else {
+            _checklocs("Calendar", req, valid, actual);
+        }
+    }
+    delete cal;
+
+    // DecimalFormat, DecimalFormatSymbols
+    req = "fr_FR_NICE";
+    DecimalFormat* dec = (DecimalFormat*)
+        NumberFormat::createInstance(Locale::createFromName(req), ec);
+    U_ASSERT(dec->getDynamicClassID() == DecimalFormat::getStaticClassID());
+    if (U_FAILURE(ec)) {
+        errln("FAIL: NumberFormat::createInstance failed");
+    } else {
+        valid = dec->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = dec->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: DecimalFormat::getLocale() failed");
+        } else {
+            _checklocs("DecimalFormat", req, valid, actual);
+        }
+
+        const DecimalFormatSymbols* sym = dec->getDecimalFormatSymbols();
+        U_ASSERT(sym != 0);
+        valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: DecimalFormatSymbols::getLocale() failed");
+        } else {
+            _checklocs("DecimalFormatSymbols", req, valid, actual);
+        }        
+    }
+    delete dec;
+
+    // DateFormat, DateFormatSymbols
+    req = "de_CH_LUCERNE";
+    SimpleDateFormat* dat = (SimpleDateFormat*)
+        DateFormat::createDateInstance(DateFormat::kDefault,
+                                       Locale::createFromName(req));
+    U_ASSERT(dat != 0);
+    U_ASSERT(dat->getDynamicClassID() == SimpleDateFormat::getStaticClassID());
+    valid = dat->getLocale(ULOC_VALID_LOCALE, ec);
+    actual = dat->getLocale(ULOC_ACTUAL_LOCALE, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: SimpleDateFormat::getLocale() failed");
+    } else {
+        _checklocs("SimpleDateFormat", req, valid, actual);
+    }
+    
+    const DateFormatSymbols* sym = dat->getDateFormatSymbols();
+    U_ASSERT(sym != 0);
+    valid = sym->getLocale(ULOC_VALID_LOCALE, ec);
+    actual = sym->getLocale(ULOC_ACTUAL_LOCALE, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: DateFormatSymbols::getLocale() failed");
+    } else {
+        _checklocs("DateFormatSymbols", req, valid, actual);
+    }        
+    delete dat;
+
+    // BreakIterator
+    req = "es_ES_BARCELONA";
+    reqLoc = Locale::createFromName(req);
+    BreakIterator* brk = BreakIterator::createWordInstance(reqLoc, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: BreakIterator::createWordInstance failed");
+    } else {
+        valid = brk->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = brk->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: BreakIterator::getLocale() failed");
+        } else {
+            _checklocs("BreakIterator", req, valid, actual);
+        }
+        
+        // After registering something, the behavior should be different
+        URegistryKey key = BreakIterator::registerInstance(brk, reqLoc, UBRK_WORD, ec);
+        brk = 0; // registerInstance adopts
+        if (U_FAILURE(ec)) {
+            errln("FAIL: BreakIterator::registerInstance() failed");
+        } else {
+            brk = BreakIterator::createWordInstance(reqLoc, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: BreakIterator::createWordInstance failed");
+            } else {
+                valid = brk->getLocale(ULOC_VALID_LOCALE, ec);
+                actual = brk->getLocale(ULOC_ACTUAL_LOCALE, ec);
+                if (U_FAILURE(ec)) {
+                    errln("FAIL: BreakIterator::getLocale() failed");
+                } else {
+                    // N.B.: now expect valid==actual==req
+                    _checklocs("BreakIterator(registered)",
+                               req, valid, actual, "eq", "eq");
+                }
+            }
+            // No matter what, unregister
+            BreakIterator::unregister(key, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: BreakIterator::unregister() failed");
+            }
+            delete brk;
+            brk = 0;
+        }
+
+        // After unregistering, should behave normally again
+        brk = BreakIterator::createWordInstance(reqLoc, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: BreakIterator::createWordInstance failed");
+        } else {
+            valid = brk->getLocale(ULOC_VALID_LOCALE, ec);
+            actual = brk->getLocale(ULOC_ACTUAL_LOCALE, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: BreakIterator::getLocale() failed");
+            } else {
+                _checklocs("BreakIterator(unregistered)", req, valid, actual);
+            }
+        }
+    }
+    delete brk;
+
+    // Collator
+    req = "hi_IN_BHOPAL";
+    reqLoc = Locale::createFromName(req);
+    Collator* coll = Collator::createInstance(reqLoc, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Collator::createInstance failed");
+    } else {
+        valid = coll->getLocale(ULOC_VALID_LOCALE, ec);
+        actual = coll->getLocale(ULOC_ACTUAL_LOCALE, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: Collator::getLocale() failed");
+        } else {
+            _checklocs("Collator", req, valid, actual);
+        }
+
+        // After registering something, the behavior should be different
+        URegistryKey key = Collator::registerInstance(coll, reqLoc, ec);
+        coll = 0; // registerInstance adopts
+        if (U_FAILURE(ec)) {
+            errln("FAIL: Collator::registerInstance() failed");
+        } else {
+            coll = Collator::createInstance(reqLoc, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: Collator::createWordInstance failed");
+            } else {
+                valid = coll->getLocale(ULOC_VALID_LOCALE, ec);
+                actual = coll->getLocale(ULOC_ACTUAL_LOCALE, ec);
+                if (U_FAILURE(ec)) {
+                    errln("FAIL: Collator::getLocale() failed");
+                } else {
+                    // N.B.: now expect valid==actual==req
+                    _checklocs("Collator(registered)",
+                               req, valid, actual, "eq", "eq");
+                }
+            }
+            // No matter what, unregister
+            Collator::unregister(key, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: Collator::unregister() failed");
+            }
+            delete coll;
+            coll = 0;
+        }
+
+        // After unregistering, should behave normally again
+        coll = Collator::createInstance(reqLoc, ec);
+        if (U_FAILURE(ec)) {
+            errln("FAIL: Collator::createInstance failed");
+        } else {
+            valid = coll->getLocale(ULOC_VALID_LOCALE, ec);
+            actual = coll->getLocale(ULOC_ACTUAL_LOCALE, ec);
+            if (U_FAILURE(ec)) {
+                errln("FAIL: Collator::getLocale() failed");
+            } else {
+                _checklocs("Collator(unregistered)", req, valid, actual);
+            }
+        }
+    }
+    delete coll;
+}
