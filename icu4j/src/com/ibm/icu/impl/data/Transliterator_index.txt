@@ -53,6 +53,15 @@ Hebrew-Latin:file:Transliterator_Hebrew_Latin.txt:UTF8:FORWARD
 Latin-Arabic:file:Transliterator_Arabic_Latin.txt:UTF8:REVERSE
 Arabic-Latin:file:Transliterator_Arabic_Latin.txt:UTF8:FORWARD
 
+Tone-Digit:internal:Transliterator_Tone_Digit.txt:UTF8:FORWARD
+Digit-Tone:internal:Transliterator_Tone_Digit.txt:UTF8:REVERSE
+
+Latin-NumericPinyin:file:Transliterator_Latin_NumericPinyin.txt:UTF8:FORWARD
+NumericPinyin-Latin:file:Transliterator_Latin_NumericPinyin.txt:UTF8:REVERSE
+
+Han-Spacedhan:internal:Transliterator_Han_Spacedhan.txt:UTF8:FORWARD
+Spacedhan-Han:alias:null
+
 Han-Latin:file:Transliterator_Han_Latin.txt:UTF8:FORWARD
 #Latin-Han:file:Transliterator_Han_Latin.txt:UTF8:REVERSE # no round trip!
 Latin-Han:alias:null
