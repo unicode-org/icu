@@ -203,6 +203,8 @@ protected:
      */
     Replaceable();
 
+    Replaceable &Replaceable::operator=(const Replaceable &); // not implemented
+
     /**
      * Virtual version of length().
      * @draft ICU 2.4
