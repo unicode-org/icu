@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/10/04 00:27:28 $
- * $Revision: 1.52 $
+ * $Date: 2003/10/09 20:02:22 $
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -331,12 +331,15 @@ public class TestFmwk extends AbstractTestLog {
                 } catch( IllegalAccessException e ) {
                     errln("Can't access test method " + testMethod.getName());
                 } catch( InvocationTargetException e ) {
-                    if (!params.nothrow) {
-                        e.getTargetException().printStackTrace(params.log);
+                    String msg = "Uncaught exception \"" + e
+                        +"\" thrown in test method " + testMethod.getName()
+                        +" accessed under name " + name;
+                    if (params.nothrow) {
+                        errln(msg);
+                    } else {
+                        e.getTargetException().printStackTrace(System.out);
+                        throw new RuntimeException(msg);
                     }
-                    errln("Uncaught exception \"" + e
-                          +"\" thrown in test method " + testMethod.getName()
-                          +" accessed under name " + name);
                 }
             }
         }
@@ -470,6 +473,7 @@ public class TestFmwk extends AbstractTestLog {
                     params.listlevel = 3;
                 } else if (arg.equals("-nothrow") || arg.equals("-n")) {
                     params.nothrow = true;
+                    params.errorSummary = new StringBuffer();
                 } else if (arg.equals("-describe") || arg.equals("-d")) {
                     params.describe = true;
                 } else if (arg.startsWith("-r")) {
@@ -505,6 +509,8 @@ public class TestFmwk extends AbstractTestLog {
                 } else if (arg.startsWith("-f:")) {
                     String temp = arg.substring(3).toLowerCase();
                     filter = filter == null ? temp : filter + "," + temp;
+                } else if (arg.startsWith("-s")) {
+                    params.log = new NullWriter();
                 } else {
                     System.out.println("*** Error: unrecognized argument: " + args[i]);
                     exitCode = 1;
@@ -518,38 +524,44 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
 
-        if (filter != null) {
-            params.filter = filter.toLowerCase();
-        }
-
         if (usageError) {
             usage();
             System.exit(exitCode);
         } 
 
-        try {
-        if (targets == null) {
-            params.init();
-            resolveTarget(params).run();
-        } else {
-            for (int i = 0; i < targets.size(); ++i) {
-                if (i > 0) {
-                    System.out.println();
-                }
+        if (filter != null) {
+            params.filter = filter.toLowerCase();
+        }
 
-                //String target = (String)targets.get(i);
+        try {
+            if (targets == null) {
                 params.init();
-                resolveTarget(params, (String)targets.get(i)).run();
+                resolveTarget(params).run();
+            } else {
+                for (int i = 0; i < targets.size(); ++i) {
+                    if (i > 0) {
+                        System.out.println();
+                    }
+
+                    //String target = (String)targets.get(i);
+                    params.init();
+                    resolveTarget(params, (String)targets.get(i)).run();
+                }
             }
         }
-        }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             System.out.println("encountered exception, exiting");
         }
 
         if (params.seed != 0) {
             System.out.println("-random:" + params.seed);
             System.out.flush();
+        }
+
+        if (params.errorSummary != null && params.errorSummary.length() > 0) {
+            System.out.println("\nError summary:");
+            System.out.println(params.errorSummary.toString());
         }
 
         if (prompt) {
@@ -748,10 +760,10 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -filter:<str> Only tests matching filter will be run or listed.\n"
                          + "       <str> is of the form ['^']text[','['^']text].\n"
                          + "       Each string delimited by ',' is a separate filter argument.\n"
-                         + "       If '^' is prepended to the argument, the matches are excluded.\n"
+                         + "       If '^' is prepended to an argument, its matches are excluded.\n"
                          + "       Filtering operates on test groups as well as tests, if a test\n"
-                         + "       group is included, all subtests that are not excluded will be\n"
-                         + "       run.  Examples:\n"
+                         + "       group is included, all its subtests that are not excluded will\n"
+                         + "       be run.  Examples:\n"
                          + "    -filter:A -- only tests matching A are run.  If A matches a group,\n"
                          + "       all subtests of this group are run.\n"
                          + "    -filter:^A -- all tests except those matching A are run.  If A matches\n"
@@ -768,6 +780,7 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present,\n" +
                            "       use it as the seed.  If random is not set, targets will\n" +
                            "       be in alphabetical order to ensure cross-platform consistency.");
+        System.out.println(" -s[ilent] No output except error summary or exceptions.\n");
         System.out.println(" -tfilter:<str> Transliterator Test filter of ids.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
@@ -832,6 +845,21 @@ public class TestFmwk extends AbstractTestLog {
     public static String prettify(StringBuffer s) {
         return prettify(s.toString());
     }
+
+    private static class NullWriter extends PrintWriter {
+        public NullWriter() {
+            super(System.out, false);
+        }
+        public void write(int c) {
+        }
+        public void write(char[] buf, int off, int len) {
+        }
+        public void write(String s, int off, int len) {
+        }
+        public void println() {
+        }
+    }
+
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
         private StringBuffer buffer = new StringBuffer();
@@ -903,8 +931,10 @@ public class TestFmwk extends AbstractTestLog {
         public String    filter;
         public long      seed;
         public String    tfilter; // for transliterator tests
-
+        
         private State    stack;
+
+        private StringBuffer errorSummary;
 
         private PrintWriter log = new ASCIIWriter(System.out, true);
         private int         indentLevel;
@@ -973,6 +1003,14 @@ public class TestFmwk extends AbstractTestLog {
 
                     needLineFeed = true;
                 }
+            }
+
+            void appendPath(StringBuffer buf) {
+                if (this.link != null) {
+                    this.link.appendPath(buf);
+                    buf.append('/');
+                }
+                buf.append(name);
             }
         }
 
@@ -1074,8 +1112,14 @@ public class TestFmwk extends AbstractTestLog {
                 log.flush();
             }
 
-            if (level == ERR && !nothrow) {
-                throw new RuntimeException(message);
+            if (level == ERR) {
+                if (!nothrow) {
+                    throw new RuntimeException(message);
+                }
+                if (!suppressIndent && errorSummary != null) {
+                    stack.appendPath(errorSummary);
+                    errorSummary.append("\n");
+                }
             }
 
             suppressIndent = !newln;
