@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2004/02/18 03:08:57 $
- * $Revision: 1.8 $
+ * $Date: 2004/02/24 21:46:21 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.*;
 
 import java.io.*;

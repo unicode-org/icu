@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckAPI.java,v $
-* $Date: 2004/02/13 17:52:50 $
-* $Revision: 1.2 $
+* $Date: 2004/02/24 21:46:38 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -40,7 +40,6 @@ package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 public class CheckAPI {
