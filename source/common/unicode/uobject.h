@@ -42,6 +42,12 @@ U_NAMESPACE_BEGIN
  * (which used to be base classes themselves before UObject was introduced)
  * to have pure virtual methods.
  *
+ * It is likely that a future ICU release will split UObject to
+ * separate out a new "more base" class for only the
+ * memory management customization, with UObject subclassing that new
+ * class and adding virtual methods for "boilerplate" functions.
+ * This will simplify the maintenance of ICU.
+ *
  * @draft ICU 2.2
  */
 class U_COMMON_API UObject {
