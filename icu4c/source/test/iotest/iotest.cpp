@@ -1735,7 +1735,7 @@ static void TestStream() {
     }
     ucnv_close(defConv);
 #else
-    log_err("U_IOSTREAM_SOURCE is disabled");
+    log_info("U_IOSTREAM_SOURCE is disabled\n");
 #endif
 }
 
