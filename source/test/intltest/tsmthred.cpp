@@ -1213,7 +1213,6 @@ void MultithreadTest::TestCollators()
     FILE *testFile = NULL;
     char testDataPath[1024];
     strcpy(testDataPath, IntlTest::getSourceTestData(status));
-    char* index = 0;
     if (U_FAILURE(status)) {
         errln("ERROR: could not open test data %s", u_errorName(status));
         return;
