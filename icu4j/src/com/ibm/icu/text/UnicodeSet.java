@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/09/19 22:37:09 $
- * $Revision: 1.72 $
+ * $Date: 2002/10/10 20:08:29 $
+ * $Revision: 1.73 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.72 $ $Date: 2002/09/19 22:37:09 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.73 $ $Date: 2002/10/10 20:08:29 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -881,24 +881,24 @@ public class UnicodeSet extends UnicodeFilter {
         return this;
     }
 
-//|    /**
-//|     * Format out the inversion list as a string, for debugging.  Uncomment when
-//|     * needed.
-//|     */
-//|    private String dump() {
-//|        StringBuffer buf = new StringBuffer("[");
-//|        for (int i=0; i<len; ++i) {
-//|            if (i != 0) buf.append(", ");
-//|            int c = list[i];
-//|            if (c <= 0xFF) {
-//|                buf.append((char) c);
-//|            } else {
-//|                buf.append("U+").append(Utility.hex(c, (c<0x10000)?4:6));
-//|            }
-//|        }
-//|        buf.append("]");
-//|        return buf.toString();
-//|    }
+//    /**
+//     * Format out the inversion list as a string, for debugging.  Uncomment when
+//     * needed.
+//     */
+//    public final String dump() {
+//        StringBuffer buf = new StringBuffer("[");
+//        for (int i=0; i<len; ++i) {
+//            if (i != 0) buf.append(", ");
+//            int c = list[i];
+//            //if (c <= 0x7F && c != '\n' && c != '\r' && c != '\t' && c != ' ') {
+//            //    buf.append((char) c);
+//            //} else {
+//                buf.append("U+").append(Utility.hex(c, (c<0x10000)?4:6));
+//            //}
+//        }
+//        buf.append("]");
+//        return buf.toString();
+//    }
 
     /**
      * Adds the specified character to this set if it is not already
@@ -1326,93 +1326,121 @@ public class UnicodeSet extends UnicodeFilter {
         }
     }
 
-    // Beginnings of an unrolled binary search implementation.  Problems
-    // to be solved:
-
-    // 1. Initial search in the POW2 array is slow.  To make this a
-    // win, do the POW2 search ONLY when len changes.  Find all
-    // locations where len changes and update POW2 there.
-
-    // 2. Array must be of size at least 2^n, where this is the
-    // smallest 2^n >= actual length.  This allows array indexing in
-    // the case statement.  Entries from len..2^n-1 must be HIGH so as
-    // to not trigger the if statements.  Modify all operations that
-    // manipulate the list so that they ensure these conditions.
-    // Alternatively, use exception handling and catch an array index
-    // out of bounds, and then decrement 'power' and restart the case
-    // statement.
-
-    // These two problems can be solved, but they are non-local
-    // changes throughout the file, so it will take some work to test
-    // them.  I would _guess_ that the overall class performance will
-    // be slower -- although it's possible that calls to contains() on
-    // an unchanging set object will end up being faster.  The only
-    // way to tell is to complete the implementation and measure it.
-
-//    // The maximum possible length is HIGH/2, e.g., [ace...], = 557056
-//    static final int POW2[] = {
-//        0x000001, // 2^0 = 1
-//        0x000002, // 2^1 = 2
-//        0x000004, // 2^2 = 4
-//        0x000008, // 2^3 = 8
-//        0x000010, // 2^4 = 16
-//        0x000020, // 2^5 = 32
-//        0x000040, // 2^6 = 64
-//        0x000080, // 2^7 = 128
-//        0x000100, // 2^8 = 256
-//        0x000200, // 2^9 = 512
-//        0x000400, // 2^10 = 1024
-//        0x000800, // 2^11 = 2048
-//        0x001000, // 2^12 = 4096
-//        0x002000, // 2^13 = 8192
-//        0x004000, // 2^14 = 16384
-//        0x008000, // 2^15 = 32768
-//        0x010000, // 2^16 = 65536
-//        0x020000, // 2^17 = 131072
-//        0x040000, // 2^18 = 262144
-//        0x080000, // 2^19 = 524288
-//        0x100000, // 2^20 = 1048576
-//    };
+//    //----------------------------------------------------------------
+//    // Unrolled binary search
+//    //----------------------------------------------------------------
 //
-//    private final int findCodePoint(int c) {
-//        // Return the smallest i such that c < list[i].  Assume
-//        // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
-//        if (c < list[0]) return 0;
-//        // High runner test.  c is often after the last range, so an
-//        // initial check for this condition pays off. 
-//        if (len >= 2 && c >= list[len-2]) return len-1;
+//    private int validLen = -1; // validated value of len
+//    private int topOfLow;
+//    private int topOfHigh;
+//    private int power;
+//    private int deltaStart;
 //
-//        // Find the least power of 2 greater than len
-//        // TODO: Check this logic...is this what we want?
-//        int power;
-//        for (power=POW2.length-1; power>0 && len<POW2[power]; --power) {}
-//
-//        switch (power) {
-//        case 19: if (c >= list[index+0x40000]) index += 0x40000;
-//        case 18: if (c >= list[index+0x20000]) index += 0x20000;
-//        case 17: if (c >= list[index+0x10000]) index += 0x10000;
-//        case 16: if (c >= list[index+0x08000]) index += 0x08000;
-//        case 15: if (c >= list[index+0x04000]) index += 0x04000;
-//        case 14: if (c >= list[index+0x02000]) index += 0x02000;
-//        case 13: if (c >= list[index+0x01000]) index += 0x01000;
-//        case 12: if (c >= list[index+0x00800]) index += 0x00800;
-//        case 11: if (c >= list[index+0x00400]) index += 0x00400;
-//        case 10: if (c >= list[index+0x00200]) index += 0x00200;
-//        case  9: if (c >= list[index+0x00100]) index += 0x00100;
-//        case  8: if (c >= list[index+0x00080]) index += 0x00080;
-//        case  7: if (c >= list[index+0x00040]) index += 0x00040;
-//        case  6: if (c >= list[index+0x00020]) index += 0x00020;
-//        case  5: if (c >= list[index+0x00010]) index += 0x00010;
-//        case  4: if (c >= list[index+0x00008]) index += 0x00008;
-//        case  3: if (c >= list[index+0x00004]) index += 0x00004;
-//        case  2: if (c >= list[index+0x00002]) index += 0x00002;
-//        case  1: if (c >= list[index+0x00001]) index++;
-//        case  0: if (c >= list[index])         index++;
+//    private void validate() {
+//        if (len <= 1) {
+//            throw new IllegalArgumentException("list.len==" + len + "; must be >1");
 //        }
 //
-//        // TODO: double check and finish
+//        // find greatest power of 2 less than or equal to len
+//        for (power = exp2.length-1; power > 0 && exp2[power] > len; power--) {}
+//
+//        // assert(exp2[power] <= len);
+//
+//        // determine the starting points
+//        topOfLow = exp2[power] - 1;
+//        topOfHigh = len - 1;
+//        deltaStart = exp2[power-1];
+//        validLen = len;
 //    }
-    
+//
+//    private static final int exp2[] = {
+//        0x1, 0x2, 0x4, 0x8,
+//        0x10, 0x20, 0x40, 0x80,
+//        0x100, 0x200, 0x400, 0x800,
+//        0x1000, 0x2000, 0x4000, 0x8000,
+//        0x10000, 0x20000, 0x40000, 0x80000,
+//        0x100000, 0x200000, 0x400000, 0x800000,
+//        0x1000000, 0x2000000, 0x4000000, 0x8000000,
+//        0x10000000, 0x20000000 // , 0x40000000 // no unsigned int in Java
+//    };
+//
+//    /**
+//     * Unrolled lowest index GT.
+//     */
+//    private final int leastIndexGT(int searchValue) {
+//
+//        if (len != validLen) {
+//            if (len == 1) return 0;
+//            validate();
+//        }
+//        int temp;
+//        
+//        // set up initial range to search. Each subrange is a power of two in length
+//        int high = searchValue < list[topOfLow] ? topOfLow : topOfHigh;
+//
+//        // Completely unrolled binary search, folhighing "Programming Pearls"
+//        // Each case deliberately falls through to the next
+//        // Logically, list[-1] < all_search_values && list[count] > all_search_values
+//        // although the values -1 and count are never actually touched.
+//        
+//        // The bounds at each point are low & high,
+//        // where low == high - delta*2
+//        // so high - delta is the midpoint
+//        
+//        // The invariant AFTER each line is that list[low] < searchValue <= list[high]
+//        
+//        switch (power) {
+//        //case 31: if (searchValue < list[temp = high-0x40000000]) high = temp; // no unsigned int in Java
+//        case 30: if (searchValue < list[temp = high-0x20000000]) high = temp;
+//        case 29: if (searchValue < list[temp = high-0x10000000]) high = temp;
+//        
+//        case 28: if (searchValue < list[temp = high- 0x8000000]) high = temp;
+//        case 27: if (searchValue < list[temp = high- 0x4000000]) high = temp;
+//        case 26: if (searchValue < list[temp = high- 0x2000000]) high = temp;
+//        case 25: if (searchValue < list[temp = high- 0x1000000]) high = temp;
+//        
+//        case 24: if (searchValue < list[temp = high-  0x800000]) high = temp;
+//        case 23: if (searchValue < list[temp = high-  0x400000]) high = temp;
+//        case 22: if (searchValue < list[temp = high-  0x200000]) high = temp;
+//        case 21: if (searchValue < list[temp = high-  0x100000]) high = temp;
+//        
+//        case 20: if (searchValue < list[temp = high-   0x80000]) high = temp;
+//        case 19: if (searchValue < list[temp = high-   0x40000]) high = temp;
+//        case 18: if (searchValue < list[temp = high-   0x20000]) high = temp;
+//        case 17: if (searchValue < list[temp = high-   0x10000]) high = temp;
+//        
+//        case 16: if (searchValue < list[temp = high-    0x8000]) high = temp;
+//        case 15: if (searchValue < list[temp = high-    0x4000]) high = temp;
+//        case 14: if (searchValue < list[temp = high-    0x2000]) high = temp;
+//        case 13: if (searchValue < list[temp = high-    0x1000]) high = temp;
+//        
+//        case 12: if (searchValue < list[temp = high-     0x800]) high = temp;
+//        case 11: if (searchValue < list[temp = high-     0x400]) high = temp;
+//        case 10: if (searchValue < list[temp = high-     0x200]) high = temp;
+//        case  9: if (searchValue < list[temp = high-     0x100]) high = temp;
+//        
+//        case  8: if (searchValue < list[temp = high-      0x80]) high = temp;
+//        case  7: if (searchValue < list[temp = high-      0x40]) high = temp;
+//        case  6: if (searchValue < list[temp = high-      0x20]) high = temp;
+//        case  5: if (searchValue < list[temp = high-      0x10]) high = temp;
+//        
+//        case  4: if (searchValue < list[temp = high-       0x8]) high = temp;
+//        case  3: if (searchValue < list[temp = high-       0x4]) high = temp;
+//        case  2: if (searchValue < list[temp = high-       0x2]) high = temp;
+//        case  1: if (searchValue < list[temp = high-       0x1]) high = temp;
+//        }
+//
+//        return high;
+//    }
+//
+//    // For debugging only
+//    public int len() {
+//        return len;
+//    }
+//
+//    //----------------------------------------------------------------
+//    //----------------------------------------------------------------
+
     /**
      * Returns true if this set contains every character
      * of the given range.
