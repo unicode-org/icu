@@ -37,6 +37,9 @@
 #define HAVE_UINT32_T @HAVE_UINT32_T@
 #define HAVE_BOOL_T @HAVE_BOOL_T@
 
+/* Determines the endianness of the platform */
+#define U_IS_BIG_ENDIAN @U_IS_BIG_ENDIAN@
+
 /*===========================================================================*/
 /* Platform/Language determination                                           */
 /*===========================================================================*/
