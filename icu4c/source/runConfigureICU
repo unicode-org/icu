@@ -57,22 +57,22 @@ release=1
 while test $# -ne 0
 do
     case "$1" in
-	-h|--help)
-	    usage 0
-	    ;;
-	--enable-debug)
-	    debug=1
-	    release=0
-	    ;;
-	--disable-release)
-	    debug=0
-	    release=0
-	    ;;
-	*)
-	    platform="$1"
-	    shift
-	    break
-	    ;;
+    -h|--help)
+        usage 0
+        ;;
+    --enable-debug)
+        debug=1
+        release=0
+        ;;
+    --disable-release)
+        debug=0
+        release=0
+        ;;
+    *)
+        platform="$1"
+        shift
+        break
+        ;;
     esac
     shift
 done
@@ -113,132 +113,132 @@ then
 fi
 
 case $platform in
-        AIX4.1.5xlC)
-		THE_OS=AIX
-		THE_COMP=xlC
-                CC=/usr/lpp/xlC/bin/xlc; export CC
-                CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
-		RELEASE_CFLAGS="-qignerrno"
-		RELEASE_CXXFLAGS="-qignerrno"
-                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
-                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-		;;
-        AIX4.3xlC)
-		THE_OS=AIX
-		THE_COMP=xlC
-                CC=/usr/ibmcxx/bin/xlc; export CC
-                CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-		RELEASE_CFLAGS="-qignerrno"
-		RELEASE_CXXFLAGS="-qignerrno"
-                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
-                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-		;;
-        AIX4.3VA)
-		THE_OS=AIX
-		THE_COMP=xlC
-                CC=/usr/vacpp/bin/xlc; export CC
-                CXX=/usr/vacpp/bin/xlC_r; export CXX
-		#RELEASE_CFLAGS=-O2
-		#RELEASE_CXXFLAGS=-O2
-                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
-                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ;;
-        SOL2.7CC)
-		THE_OS="SOLARIS 2.7"
-		THE_COMP="Sun's CC"
-                CC=/usr/local/SUNWspro/bin/cc; export CC
-                CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-		RELEASE_CFLAGS=-xO3
-		RELEASE_CXXFLAGS=-O3
-                ;;
-        SOLARISX86)
-		THE_OS="SOLARIS X86"
-		THE_COMP="Sun's CC"
-                CC=cc; export CC
-                CXX=CC; export CXX
-                CXX_FLAGS="-w -O";export CXX_FLAGS
-                C_FLAGS="-w -O";export C_FLAGS
-                LDFLAGS="-L -lCrun";export LDFLAGS
-		RELEASE_CFLAGS=-xO3
-		RELEASE_CXXFLAGS=-O3
-                ;;
-        SOLARISCC)
-		THE_OS=SOLARIS
-		THE_COMP="Sun's CC"
-                CC=/usr/local/SUNWspro/bin/cc; export CC
-                CXX=/usr/local/SUNWspro/bin/CC; export CXX
-		RELEASE_CFLAGS=-xO3
-		RELEASE_CXXFLAGS=-O3
-                ;;
-        SOLARISGCC)
-		THE_OS=SOLARIS
-		THE_COMP="the GNU C++"
-                CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
-		LDFLAGS=-R/usr/local/lib; export LDFLAGS
-                ;;
-        LinuxRedHat*)
-		THE_OS=Linux
-		THE_COMP="the GNU C++"
-                CXX=g++; export CXX 
-		CC=gcc; export CC
-		;;
-        HP/UX10.2CC)
-		THE_OS="HP-UX 10.2"
-		THE_COMP="HP's CC"
-		CC=cc; export CC
-		CXX=CC; export CXX
-		RELEASE_CFLAGS='+O2 +Ofltacc'
-		RELEASE_CXXFLAGS='+O2 +Ofltacc'
-		;;
-        HP/UX10.2ACC)
-		THE_OS="HP-UX 10.2"
-		THE_COMP="aCC"
-		CC=cc; export CC
-		CXX=aCC; export CXX
-		RELEASE_CFLAGS='+O2 +Ofltacc'
-		RELEASE_CXXFLAGS='+O2 +Ofltacc'
-		;;
-        HP/UX11CC)
-		THE_OS="HP-UX 11"
-		THE_COMP="HP's CC"
-                CC=cc; export CC
-		CXX=/opt/CC/bin/CC; export CXX
-		RELEASE_CFLAGS='+O2 +Ofltacc'
-		RELEASE_CXXFLAGS='+O2 +Ofltacc'
-                ;;
-        HP/UX11ACC)
-		THE_OS="HP-UX 11"
-		THE_COMP="aCC"
-                CC=cc; export CC
-		CXX=/opt/aCC/bin/aCC; export CXX
-		RELEASE_CFLAGS='+O2 +Ofltacc'
-		RELEASE_CXXFLAGS='+O2 +Ofltacc'
-		;;
-        PTX)
-		THE_OS="PTX"
-		THE_COMP="C++"
-                CC=cc; export CC
-		CXX=c++; export CXX
-		if test ${XMLINSTALL}o = "o"; then 
-		    XMLINSTALL=/usr/local; export XMLINSTALL
-		fi
-		configure="$configure --prefix=$XMLINSTALL"
-		;;
-	ALPHA/LINUXCCC)
-		THE_OS="Linux"
-		THE_COMP="Compaq's CC"
-		CC=ccc; export CC
-		CXX=cxx; export CXX
-		;;
-	ALPHA/LINUXGCC)
-		THE_OS="Linux"
-                THE_COMP="the GNU C++"
-                CXX=g++; export CXX
-                CC=gcc; export CC
-		;;
-        *)
-                >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
-                exit 1;;
+    AIX4.1.5xlC)
+        THE_OS=AIX
+        THE_COMP=xlC
+        CC=/usr/lpp/xlC/bin/xlc; export CC
+        CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
+        RELEASE_CFLAGS="-qignerrno"
+        RELEASE_CXXFLAGS="-qignerrno"
+        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        ;;
+    AIX4.3xlC)
+        THE_OS=AIX
+        THE_COMP=xlC
+        CC=/usr/ibmcxx/bin/xlc; export CC
+        CXX=/usr/ibmcxx/bin/xlC_r; export CXX
+        RELEASE_CFLAGS="-qignerrno"
+        RELEASE_CXXFLAGS="-qignerrno"
+        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        ;;
+    AIX4.3VA)
+        THE_OS=AIX
+        THE_COMP=xlC
+        CC=/usr/vacpp/bin/xlc; export CC
+        CXX=/usr/vacpp/bin/xlC_r; export CXX
+        #RELEASE_CFLAGS=-O2
+        #RELEASE_CXXFLAGS=-O2
+        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        ;;
+    SOL2.7CC)
+        THE_OS="SOLARIS 2.7"
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        RELEASE_CFLAGS=-xO3
+        RELEASE_CXXFLAGS=-O3
+        ;;
+    SOLARISX86)
+        THE_OS="SOLARIS X86"
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        CXX_FLAGS="-w";export CXX_FLAGS
+        C_FLAGS="-w";export C_FLAGS
+        LDFLAGS="-L -lCrun";export LDFLAGS
+        RELEASE_CFLAGS=-xO3
+        RELEASE_CXXFLAGS=-O3
+        ;;
+    SOLARISCC)
+        THE_OS=SOLARIS
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        RELEASE_CFLAGS=-xO3
+        RELEASE_CXXFLAGS=-O3
+        ;;
+    SOLARISGCC)
+        THE_OS=SOLARIS
+        THE_COMP="the GNU C++"
+        CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
+        LDFLAGS=-R/usr/local/lib; export LDFLAGS
+        ;;
+    HP/UX10.2CC)
+        THE_OS="HP-UX 10.2"
+        THE_COMP="HP's CC"
+        CC=cc; export CC
+        CXX=CC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    HP/UX10.2ACC)
+        THE_OS="HP-UX 10.2"
+        THE_COMP="aCC"
+        CC=cc; export CC
+        CXX=aCC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    HP/UX11CC)
+        THE_OS="HP-UX 11"
+        THE_COMP="HP's CC"
+        CC=cc; export CC
+        CXX=CC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    HP/UX11ACC)
+        THE_OS="HP-UX 11"
+        THE_COMP="aCC"
+        CC=cc; export CC
+        CXX=aCC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    PTX)
+        THE_OS="PTX"
+        THE_COMP="C++"
+        CC=cc; export CC
+        CXX=c++; export CXX
+        if test ${XMLINSTALL}o = "o"; then 
+            XMLINSTALL=/usr/local; export XMLINSTALL
+        fi
+        configure="$configure --prefix=$XMLINSTALL"
+        ;;
+    LinuxRedHat*)
+        THE_OS=Linux
+        THE_COMP="the GNU C++"
+        CXX=g++; export CXX 
+        CC=gcc; export CC
+        ;;
+    ALPHA/LINUXCCC)
+        THE_OS="Linux"
+        THE_COMP="Compaq's CC"
+        CC=ccc; export CC
+        CXX=cxx; export CXX
+        ;;
+    ALPHA/LINUXGCC)
+        THE_OS="Linux"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
+        ;;
+    *)
+        >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
+        exit 1;;
 esac
 
 
