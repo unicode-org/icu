@@ -175,6 +175,7 @@ udata_swapDataHeader(const UDataSwapper *ds,
         pHeader->dataHeader.magic2!=0x27 ||
         pHeader->info.sizeofUChar!=2
     ) {
+        udata_printError(ds, "udata_swapDataHeader(): initial bytes do not look like ICU data\n");
         *pErrorCode=U_UNSUPPORTED_ERROR;
         return 0;
     }
@@ -187,6 +188,8 @@ udata_swapDataHeader(const UDataSwapper *ds,
         headerSize<(sizeof(pHeader->dataHeader)+infoSize) ||
         (length>=0 && length<headerSize)
     ) {
+        udata_printError(ds, "udata_swapDataHeader(): header size mismatch - headerSize %d infoSize %d length %d\n",
+                         headerSize, infoSize, length);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
