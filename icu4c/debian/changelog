@@ -1,3 +1,9 @@
+icu (2.0-3) unstable; urgency=low
+
+  * Renamed doc-base to icu-doc.doc-base. Closes: 127487
+
+ -- Yves Arrouye <yves@debian.org>  Fri, 18 Jan 2002 22:33:53 -0800
+
 icu (2.0-2) unstable; urgency=low
 
   * Fixed a bug in uprv_uca_cloneTempTable().  Closes: 128484
