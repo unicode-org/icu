@@ -863,10 +863,11 @@ root {
     // isn't listed here.
     // @since ICU 2.2
     Currencies {
-        NGN { "\u20A6", "NGN" } // Naira: NIGERIA (NG)
-        KRW { "\u20A9", "KRW" } // Won: KOREA, REPUBLIC OF (KR)
         EUR { "\u20AC", "EUR" } // Euro
-        JPY { "\uFFE5", "JPY" } // Yen: JAPAN (JP)
+        GBP { "\u00A3", "GBP" } // British Pound Sterling
+        ITL { "\u20A4", "ITL" } // Italian Lira
+        JPY { "\u00A5", "JPY" } // Japanese Yen
+        USD { "$",      "USD" } // US Dollar
     }
 
     // Currency metadata.  Unlike the "Currencies" element, this is

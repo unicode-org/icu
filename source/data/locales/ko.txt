@@ -2243,6 +2243,12 @@ ko {
         ZW { "\uc9d0\ubc14\ube0c\uc6e8" }
 
     }
+
+    Currencies {
+        KRW { "\uFFE6", "KRW" } // Korean Won
+        JPY { "\uFFE5", "JPY" }
+    }
+
     DateTimePatterns {
         "a hh'\uC2DC'mm'\uBD84'ss'\uCD08' z",
         "a hh'\uC2DC'mm'\uBD84'ss'\uCD08'",

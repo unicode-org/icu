@@ -44,6 +44,7 @@ es_CL {
 
     // Currency display names
     Currencies {
-        CLP { "$", "CLP" }
+        CLP { "$", "Peso Chileno" }
+        USD { "US$", "D\u00F3lar Americano" }
     }
 }

@@ -244,18 +244,18 @@ it {
         EUR { "\u20AC", "Euro" } // Euro
         FIM { "FIM", "Markka Finlandese" } // Markka
         FRF { "FRF", "Franco Francese" } // French Franc
-        GBP { "GBP", "Sterlina Inglese" } // Pound Sterling
+        GBP { "\u00A3", "Sterlina Inglese" } // Pound Sterling
         GRD { "GRD", "Dracma Greca" } // Drachma
         HKD { "HKD", "Dollaro di Hong Kong" } // Hong Kong Dollar
         HUF { "HUF", "Fiorino Ungherese" } // Forint
         IDR { "IDR", "Rupia Indiana" } // Rupiah
         IEP { "IEP", "Lira Irlandese" } // Irish Pound
-        ITL { "L.", "Lira Italiana" } // Lira
+        ITL { "\u20A4", "Lira Italiana" } // Lira
         JOD { "JOD", "Dinaro Giordano" } // Jordanian Dinar
-        JPY { "\uFFE5", "Yen Giapponese" } // Yen
-        LTL { "LTL", "Lira Lituana" } // Lithuanian Litas
+        JPY { "\u00A5", "Yen Giapponese" } // Yen
+        LTL { "LTL", "Lita Lituana" } // Lithuanian Litas
         MAD { "MAD", "Dirham Marocchino" } // Moroccan Dirham
-        NGN { "\u20A6", "Naira Nigeriana" } // Naira
+        NGN { "NGN", "Naira Nigeriana" } // Naira
         NLG { "NLG", "Fiorino Olandese" } // Netherlands Guilder
         NOK { "NOK", "Corona Norvegese" } // Norwegian Krone
         PHP { "PHP", "Peso delle Filippine" } // Philippine Peso
@@ -270,7 +270,7 @@ it {
         THB { "THB", "Baht Tailandese" } // Baht
         TRL { "TRL", "Lira Turca" } // Turkish Lira
         UAH { "UAH", "Hrivna Ucraina" } // Hryvnia
-        USD { "USD", "Dollaro Statunitense" } // US Dollar
+        USD { "$", "Dollaro Statunitense" } // US Dollar
         YUD { "YUD", "Yud" } // New Yugoslavian
         ZAR { "ZAR", "Rand Sudafricano" } // Rand
     }

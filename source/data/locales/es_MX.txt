@@ -38,5 +38,6 @@ es_MX {
     // Currency display names
     Currencies {
         MXN { "$", "MXN" }
+        USD { "US$", "D\u00F3lar Americano" }
     }
 }

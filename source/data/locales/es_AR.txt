@@ -38,6 +38,7 @@ es_AR {
 
     // Currency display names
     Currencies {
-        ARS { "$", "ARS" }
+        ARS { "$", "Peso Argentino" }
+        USD { "US$", "D\u00F3lar Americano" }
     }
 }

@@ -38,5 +38,6 @@ en_AU {
     // Currency display names
     Currencies {
         AUD { "$", "Australian Dollar" }
+        USD { "US$", "US Dollar" }
     }
 }

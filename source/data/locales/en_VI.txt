@@ -16,9 +16,4 @@ en_VI {
     }
 //    ShortCountry { "VIR" }
     LocaleID:int { 0x2409 }
-
-    // Currency display names
-    Currencies {
-        USD { "$", "US Dollar" }
-    }
 }

@@ -16,9 +16,4 @@ en_US {
     }
 //    ShortCountry { "USA" }
     LocaleID:int { 0x0409 }
-
-    // Currency display names
-    Currencies {
-        USD { "$", "US Dollar" }
-    }
 }
