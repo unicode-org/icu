@@ -581,32 +581,32 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
                                    UErrorCode &status)
 {
     RuleBasedBreakIterator * localIterator;
-    int32_t bufferSizeNeeded; 
-    UBool IterIsUChar;
-    UBool IterIsString;
+    int32_t bufferSizeNeeded = 0; 
+    UBool IterIsUChar = FALSE;
+    UBool IterIsString = FALSE;
 
     if (U_FAILURE(status)){
         return 0;
     }
+/*  // Never check for NULL on the 'this' pointer.
+    // It should be a fatal error when 'this' is ever NULL. [grhoten]
     if (!this){
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+*/
     if (text == NULL)
     {
         bufferSizeNeeded = (int32_t) sizeof(RuleBasedBreakIterator);
-        IterIsString = IterIsUChar = FALSE;
     }
     else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
     {
         bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructString);
         IterIsString = TRUE;
-        IterIsUChar = FALSE;
     } 
     else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
     {
         bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructUChar);
-        IterIsString = FALSE;
         IterIsUChar = TRUE;
     }
     else
