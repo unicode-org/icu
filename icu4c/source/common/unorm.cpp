@@ -4597,13 +4597,17 @@ unorm_swap(const UDataSwapper *ds,
 
         /* swap the FCD UTrie */
         count=indexes[_NORM_INDEX_FCD_TRIE_SIZE];
-        utrie_swap(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
-        offset+=count;
+        if(count!=0) {
+            utrie_swap(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
+            offset+=count;
+        }
 
         /* swap the aux UTrie */
         count=indexes[_NORM_INDEX_AUX_TRIE_SIZE];
-        ds->swapArray32(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
-        offset+=count;
+        if(count!=0) {
+            utrie_swap(ds, inBytes+offset, count, outBytes+offset, pErrorCode);
+            offset+=count;
+        }
 
         /* swap the uint16_t combiningTable[] */
         count=indexes[_NORM_INDEX_CANON_SET_COUNT]*2;
