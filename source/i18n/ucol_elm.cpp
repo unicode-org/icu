@@ -1028,6 +1028,8 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       uprv_memcpy(element->cPoints, composed, element->cSize*sizeof(UChar));
       uprv_uca_finalizeAddition(t, element, status);
     }
+#else
+	CE = element->mapCE;
 #endif
   } else {
       CE = uprv_uca_finalizeAddition(t, element, status);  
