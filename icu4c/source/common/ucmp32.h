@@ -1,18 +1,7 @@
 /*
-********************************************************************
-* COPYRIGHT: 
-* (C) Copyright Taligent, Inc., 1996
-* (C) Copyright International Business Machines Corporation, 1999
-* Licensed Material - Program-Property of IBM - All Rights Reserved. 
-* US Government Users Restricted Rights - Use, duplication, or disclosure 
-* restricted by GSA ADP Schedule Contract with IBM Corp. 
-*
-********************************************************************
-*/
-
-/*
  * ==========================================================================
- * Copyright (c) 1995 Taligent, Inc. All Rights Reserved.
+ * Copyright (C) 1996-1999, International Business Machines Corporation
+ * and others. All Rights Reserved.
  * @version 1.0 23/10/96
  * @author  Helena Shih
  * Based on Taligent international support for java
@@ -22,6 +11,7 @@
  *  2/5/97      aliu        Added CompactIntArray streamIn and streamOut methods.
  * 05/07/97     helena      Added isBogus()
  * 04/26/99     Madhu       Ported to C for C Implementation
+ * 11/21/99     srl         macroized ucmp32_get()
  */
 
 #ifndef UCMP32_H
@@ -31,6 +21,14 @@
 #include "utypes.h"
 
 #include "filestrm.h"
+
+/* INTERNAL CONSTANTS */
+#define UCMP32_kBlockShift  7
+#define UCMP32_kBlockCount  (1<<UCMP32_kBlockShift)
+#define UCMP32_kIndexShift  16-UCMP32_kBlockShift
+#define UCMP32_kIndexCount  (1<<UCMP32_kIndexShift)
+#define UCMP32_kBlockMask   UCMP32_kBlockCount-1
+#define UCMP32_kUnicodeCount  65536
 
  /**
  * class CompactATypeArray : use only on primitive data types
@@ -75,7 +73,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.3 $ 8/25/98
+ * @version            $Revision: 1.4 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -132,8 +130,11 @@ U_CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
   * @param index the character to get the mapped value with
   * @return the mapped value of the given character
   */
-U_CAPI int32_t U_EXPORT2 ucmp32_get(CompactIntArray* array, uint16_t index); 
-U_CAPI uint32_t U_EXPORT2 ucmp32_getu(CompactIntArray* array, uint16_t index); 
+
+#define ucmp32_get(array, index) (array->fArray[(array->fIndex[(index >> UCMP32_kBlockShift)] )+ \
+                           (index & UCMP32_kBlockMask)])
+
+#define ucmp32_getu(array, index) (uint16_t)ucmp32_get(array, index)
 
 /**
   * Set a new value for a Unicode character.
@@ -196,9 +197,8 @@ U_CAPI void U_EXPORT2 ucmp32_streamIn( CompactIntArray* array, FileStream* is);
 U_CAPI void U_EXPORT2 ucmp32_streamOut(CompactIntArray* array, FileStream* os);
 
 
-
-
 #endif
+
 
 
 

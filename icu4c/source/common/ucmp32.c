@@ -1,16 +1,6 @@
-/*
-*****************************************************************************************
-*                                                                                       *
-* COPYRIGHT:                                                                            *
-*   (C) Copyright Taligent, Inc.,  1997                                                 *
-*   (C) Copyright International Business Machines Corporation,  1999               *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.                  *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure             *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                              *
-*                                                                                       *
-*****************************************************************************************
-*/
-/*===============================================================================
+/*============================================================================
+ * Copyright (C) 1997-1999, International Business Machines Corporation
+ * and others. All Rights Reserved.
  *
  * File cmpshrta.cpp
  *
@@ -22,6 +12,7 @@
  *                          based on performance data indicating that this_obj was slow.
  * 05/07/97     helena      Added isBogus()
  * 04/26/99     Madhu       Ported to C for C Implementation
+ * 11/12/99     srl         macroized ucmp32_get()
  *===============================================================================
  */
 #include "ucmp32.h"
@@ -35,24 +26,7 @@ static int32_t ucmp32_findOverlappingPosition(CompactIntArray* this_obj, uint32_
                                 const UChar *tempIndex, 
                                 int32_t tempIndexCount, 
                                 uint32_t cycle);
-     
-/* internal constants*/
-#define UCMP32_kUnicodeCount_int  65536
-#define UCMP32_kBlockShift_int  7
-#define UCMP32_kBlockCount_int  (1<<UCMP32_kBlockShift_int)
-#define UCMP32_kIndexShift_int  16-UCMP32_kBlockShift_int
-#define UCMP32_kIndexCount_int  (1<<UCMP32_kIndexShift_int)
-#define UCMP32_kBlockMask_int   UCMP32_kBlockCount_int-1
- 
-const int32_t UCMP32_kUnicodeCount = UCMP32_kUnicodeCount_int;
-const int32_t UCMP32_kBlockShift = UCMP32_kBlockShift_int;
-const int32_t UCMP32_kBlockCount = UCMP32_kBlockCount_int;
-const int32_t UCMP32_kIndexShift = UCMP32_kIndexShift_int;
-const int32_t UCMP32_kIndexCount = UCMP32_kIndexCount_int;
-const uint32_t UCMP32_kBlockMask = UCMP32_kBlockMask_int;
-
-
-
+      
 static  bool_t debugSmall = FALSE;
 static  uint32_t debugSmallLimit = 30000;
 
@@ -62,16 +36,6 @@ static  uint32_t debugSmallLimit = 30000;
 
 int32_t ucmp32_getkUnicodeCount() { return UCMP32_kUnicodeCount;}
 int32_t ucmp32_getkBlockCount() { return UCMP32_kBlockCount;}
-
-U_CAPI int32_t ucmp32_get(CompactIntArray* array, uint16_t index) 
-{
-    return (array->fArray[(array->fIndex[index >> UCMP32_kBlockShift]) +
-                                 (index & UCMP32_kBlockMask)]);
-}
-U_CAPI uint32_t ucmp32_getu(CompactIntArray* array, uint16_t index)
-{
-return (uint32_t)ucmp32_get(array, index);
-}
 
 U_CAPI void ucmp32_streamIn(CompactIntArray* this_obj, FileStream* is)
 {
@@ -105,7 +69,7 @@ char c;
                 this_obj->fIndex =(uint16_t*)icu_malloc(UCMP32_kIndexCount * sizeof(uint16_t));
             if (!this_obj->fIndex) {
                 this_obj->fBogus = TRUE;
-                icu_free(this_obj->fArray);
+                icu_free(this_obj->fArray); 
                 this_obj->fArray = 0;
                 return;
             }
@@ -188,7 +152,7 @@ CompactIntArray* ucmp32_open(int32_t defaultValue)
  * to data position number 8, which has elements "bced". In the compressed
  * version, index# 2 points to data position 1, which also has "bced"
  */
-    this_obj->fArray = (int32_t*)icu_malloc(UCMP32_kUnicodeCount * sizeof(int32_t));
+ this_obj->fArray = (int32_t*)icu_malloc(UCMP32_kUnicodeCount * sizeof(int32_t));
       if (this_obj->fArray == NULL)    {
       this_obj->fBogus = TRUE;
       return NULL;
@@ -196,7 +160,7 @@ CompactIntArray* ucmp32_open(int32_t defaultValue)
   
     this_obj->fIndex = (uint16_t*)icu_malloc(UCMP32_kIndexCount * sizeof(uint16_t));
     if (!this_obj->fIndex) {
-        icu_free(this_obj->fArray);
+        icu_free(this_obj->fArray); 
         this_obj->fArray = NULL;
         this_obj->fBogus = TRUE;
         return NULL;
@@ -232,7 +196,7 @@ CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray, int32_t *newValues, int3
  
 void ucmp32_close(    CompactIntArray* this_obj) 
 {
-    icu_free(this_obj->fArray);
+  icu_free(this_obj->fArray);
     this_obj->fArray = NULL;
     icu_free(this_obj->fIndex);
     this_obj->fIndex = NULL;
@@ -273,7 +237,7 @@ void ucmp32_expand(CompactIntArray* this_obj) {
         for (i = 0; i < UCMP32_kIndexCount; ++i) {
             this_obj->fIndex[i] = (uint16_t)(i<<UCMP32_kBlockShift);
         }
-        icu_free(this_obj->fArray);
+        icu_free(this_obj->fArray); 
         this_obj->fArray = tempArray;
         this_obj->fCompact = FALSE;
     }

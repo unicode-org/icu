@@ -1,13 +1,8 @@
-
 /*
 ********************************************************************
 * COPYRIGHT: 
-* (C) Copyright Taligent, Inc., 1997
-* (C) Copyright International Business Machines Corporation, 1997 - 1998
-* Licensed Material - Program-Property of IBM - All Rights Reserved. 
-* US Government Users Restricted Rights - Use, duplication, or disclosure 
-* restricted by GSA ADP Schedule Contract with IBM Corp. 
-*
+* Copyright (c) 1997-1999, International Business Machines Corporation and
+* others. All Rights Reserved.
 ********************************************************************
 */
 
@@ -31,33 +26,11 @@ static int32_t findOverlappingPosition(CompactByteArray* this_obj,
 
 /* internal constants*/
 
-#define kUnicodeCount_int 65536
-#define kBlockShift_int 7
-#define kBlockCount_int (1<<kBlockShift_int)
-#define kIndexShift_int (16-kBlockShift_int)
-#define kIndexCount_int (1<<kIndexShift_int)
-#define kBlockMask_int (kBlockCount_int-1)
-
-const int32_t UCMP8_kUnicodeCount = kUnicodeCount_int;
-const int32_t UCMP8_kBlockShift = kBlockShift_int;
-const int32_t UCMP8_kBlockCount = kBlockCount_int;
-const int32_t UCMP8_kIndexShift = kIndexShift_int;
-const int32_t UCMP8_kIndexCount = kIndexCount_int;
-const uint32_t UCMP8_kBlockMask = kBlockMask_int;
-
 
 int32_t ucmp8_getkUnicodeCount() { return UCMP8_kUnicodeCount;}
 int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
 /* debug flags*/
 /*=======================================================*/
-U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index) 
-{
-    return (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)]);
-}
-U_CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index)
-{
-    return (uint8_t)ucmp8_get(array,index);
-}
 
 CompactByteArray* ucmp8_open(int8_t defaultValue)
 {
