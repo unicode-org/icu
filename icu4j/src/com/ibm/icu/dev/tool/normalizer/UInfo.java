@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/UInfo.java,v $ 
- * $Date: 2001/08/23 00:57:21 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/08 01:13:38 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -396,7 +396,7 @@ public final class UInfo {
     }
 
     public UInfo(String fileName, String composeExcludeFileName) {
-        long startTime,endTime;
+        // not used long startTime,endTime;
 
         BufferedReader input = null;
         String line = null;
@@ -426,7 +426,9 @@ public final class UInfo {
         } catch (Exception ex) {
             try {
                 input.close();
-            } catch (Exception ex2) {}
+            } catch (Exception ex2) {
+                System.out.print("");
+            }
             ex.printStackTrace();
             throw new IllegalArgumentException("Couldn't read file "
               + ex.getClass().getName() + " " + ex.getMessage()

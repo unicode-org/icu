@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/ExhaustiveTest.java,v $ 
- * $Date: 2000/10/06 23:15:50 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/09/08 01:16:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -118,7 +118,7 @@ public class ExhaustiveTest extends TestFmwk {
         int totalBytesDecompressed  = 0;
         int totalCharsWritten = 0;
 
-        boolean err = false;
+        // not used boolean err = false;
 
 
         // perform the compression in a loop

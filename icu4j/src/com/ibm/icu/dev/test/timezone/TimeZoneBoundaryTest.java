@@ -81,7 +81,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         logln("Date Before: " + showDate(min));
         logln("Date After:  " + showDate(max));
         long mindelta = expectedBoundary - min;
-        long maxdelta = max - expectedBoundary;
+        // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL &&
             mindelta >= 0 && mindelta <= INTERVAL)
             logln("PASS: Expected boundary at " + expectedBoundary);
@@ -175,7 +175,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         logln(tz.getID() + " After:  " + showDate(max, tz));
 
         long mindelta = expectedBoundary - min;
-        long maxdelta = max - expectedBoundary; 
+        // not used long maxdelta = max - expectedBoundary; 
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
         fmt.setTimeZone(tz);
         if (mindelta >= 0 && mindelta <= INTERVAL &&
@@ -512,7 +512,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         logln("Binary Search After:  " + showDate(max));
 
         long mindelta = expectedBoundary - min;
-        long maxdelta = max - expectedBoundary;
+        // not used long maxdelta = max - expectedBoundary;
         if (mindelta >= 0 && mindelta <= INTERVAL &&
             mindelta >= 0 && mindelta <= INTERVAL)
             logln("PASS: Expected boundary at " + expectedBoundary);

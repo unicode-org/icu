@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/04/04 22:44:49 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/09/08 01:17:50 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -49,7 +49,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         // Make sure generation of L doesn't pollute cached Lu set
         // First generate L, then Lu
-        int TOP = 0x200; // Don't need to go over the whole range:
+        // not used int TOP = 0x200; // Don't need to go over the whole range:
         set = new UnicodeSet("[:L:]");
         for (int i=0; i<0x200; ++i) {
             boolean l = Character.isLetter((char)i);

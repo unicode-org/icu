@@ -221,7 +221,7 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
     }
 
     public void TestGenericAPI() {
-        String str;
+        // not used String str;
 
         Date when = new Date(90, Calendar.APRIL, 15);
 
@@ -543,7 +543,9 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
             verify765("1997 Tuesday in week 0 of year = ", c, 1996, Calendar.DECEMBER, 24);
             throw new Exception("Fail: WEEK_OF_YEAR 0 should be illegal");
         }
-        catch (IllegalArgumentException ex) {}
+        catch (IllegalArgumentException ex) {
+            System.out.print("");
+        }
     }
     void verify765(String msg, Calendar c, int year, int month, int day) {
         int cy = c.get(Calendar.YEAR); // NEWCAL

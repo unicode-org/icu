@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/holiday/Attic/HolidayCalendarDemo.java,v $ 
- * $Date: 2000/05/12 23:21:32 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/09/08 01:12:40 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -632,7 +632,7 @@ public class HolidayCalendarDemo extends DemoApplet
         	// Now loop through all of the days in the month, figure out where
         	// they go in the grid, and draw the day # for each one
         	Font numberFont = new Font("Helvetica",Font.PLAIN,12);
-        	Font holidayFont = DemoUtility.creditFont;
+        	// not used Font holidayFont = DemoUtility.creditFont;
 
         	Calendar c = (Calendar)fCalendar.clone();
         	c.setTime(fStartOfMonth);

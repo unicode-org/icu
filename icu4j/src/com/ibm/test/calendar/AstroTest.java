@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/AstroTest.java,v $ 
- * $Date: 2000/05/12 23:19:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/09/08 01:15:15 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -44,8 +44,9 @@ public class AstroTest extends TestFmwk {
             astro.setDate(gc.getTime());
             
             double longitude = astro.getSunLongitude();
-            
+            longitude = 0;
             Equatorial result = astro.getSunPosition();
+            result = null;
         }
     }
     
@@ -61,6 +62,7 @@ public class AstroTest extends TestFmwk {
             astro.setDate(gc.getTime());
             
             Equatorial result = astro.getMoonPosition();
+            result = null;
         }
 
     }

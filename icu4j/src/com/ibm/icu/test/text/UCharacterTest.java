@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/07/18 16:55:37 $ 
-* $Revision: 1.13 $
+* $Date: 2001/09/08 01:14:10 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -653,7 +653,7 @@ public final class UCharacterTest extends TestFmwk
 
     // test full string case folding with default option and separate buffers
     String mixed                 = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff",
-           foldedExcludeSpecialI = "\u0061\u0062\u0131\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
+           // not used foldedExcludeSpecialI = "\u0061\u0062\u0131\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
            foldedDefault         = "\u0061\u0062\u0069\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
     String foldedstr = UCharacter.foldCase(mixed, true);
     if (!foldedDefault.equals(foldedstr)) {

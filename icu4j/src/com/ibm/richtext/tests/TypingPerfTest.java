@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:08:46 $
+ * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.3 $ $Date: 2001/09/08 01:14:52 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -62,7 +62,7 @@ public class TypingPerfTest implements ActionListener {
 
     public static void main(String[] args) throws IOException {
 
-        OutputStream outStream = null;
+        // not used OutputStream outStream = null;
         PrintWriter writer = new PrintWriter(System.out);
 
         MConstText text = Declaration.fgDeclaration;

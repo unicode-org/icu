@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/CompoundTransliteratorTest.java,v $ 
- * $Date: 2000/10/06 21:42:22 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/09/08 01:17:50 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -63,6 +63,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
         for(int i=0; i<4; i++){
             try{
                 CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i]);
+                cpdtrans = null;
             }catch(IllegalArgumentException ex1) {
                 errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + IDs[i]);
                 throw ex1;
@@ -70,6 +71,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 
             try{
                 CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.FORWARD);
+                cpdtrans = null;
             }catch(IllegalArgumentException ex2) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD) failed for " + IDs[i]);
                 throw ex2;
@@ -77,6 +79,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 
             try{
                 CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.REVERSE);
+                cpdtrans = null;
             }catch(IllegalArgumentException ex3) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=REVERSE) failed for " + IDs[i]);
                 throw ex3;
@@ -84,6 +87,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
 
             try{
                 CompoundTransliterator cpdtrans=new CompoundTransliterator(IDs[i], Transliterator.FORWARD, null);
+                cpdtrans = null;
             }catch(IllegalArgumentException ex4) {
                 errln("FAIL: construction using CompoundTransliterator(String ID, int direction=FORWARD," +
                         "UnicodeFilter adoptedFilter=0) failed for " + IDs[i]);
@@ -93,6 +97,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
        
             try{
                 CompoundTransliterator cpdtrans2=new CompoundTransliterator(transarray[i], null);
+                cpdtrans2 = null;
             }catch(IllegalArgumentException ex5) {
                 errln("FAIL: Construction using CompoundTransliterator(Transliterator transliterators[]," +
                        "UnicodeFilter adoptedFilter = 0)  failed");
