@@ -50,7 +50,7 @@ extension. Java source files have a
 extension and follow the ICU4J naming conventions.
 .PP
 It is customary to name the resource bundles by their locale name,
-e.g. to use a local identifier for the
+i.e. to use a local identifier for the
 .I bundle
 filename, e.g.
 .B ja_JP.txt
