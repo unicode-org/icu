@@ -241,20 +241,20 @@ void IntlTestRBNF::TestFractionalRuleSet()
     int len = fracRules.length();
     int change = 2;
     for (int i = 0; i < len; ++i) {
-      UChar ch = fracRules.charAt(i);
-      if (ch == '\n') {
-	change = 2; // change ok
-      } else if (ch == ':') {
-	change = 1; // change, but once we hit a non-space char, don't change
-      } else if (ch == ' ') {
-	if (change != 0) {
-	  fracRules.setCharAt(i, (UChar)0x200e);
-	}
-      } else {
-	if (change == 1) {
-	  change = 0;
-	}
-      }
+        UChar ch = fracRules.charAt(i);
+        if (ch == '\n') {
+            change = 2; // change ok
+        } else if (ch == ':') {
+            change = 1; // change, but once we hit a non-space char, don't change
+        } else if (ch == ' ') {
+            if (change != 0) {
+                fracRules.setCharAt(i, (UChar)0x200e);
+            }
+        } else {
+            if (change == 1) {
+                change = 0;
+            }
+        }
     }
 
     UErrorCode status = U_ZERO_ERROR;
@@ -1322,7 +1322,7 @@ IntlTestRBNF::TestSwedishSpellout()
             { "12,345,678", "tolv miljoner trehundra\\u00adfyrtiofem\\u00adtusen sexhundra\\u00adsjuttio\\u00e5tta" },
             { "123,456.789", "etthundra\\u00adtjugotre\\u00adtusen fyrahundra\\u00adfemtiosex komma sju \\u00e5tta nio" },
             { "-12,345.678", "minus tolv\\u00adtusen trehundra\\u00adfyrtiofem komma sex sju \\u00e5tta" },
-			{ NULL, NULL }
+            { NULL, NULL }
         };
         doTest(formatter, testDataDefault, TRUE);
 
@@ -1332,16 +1332,19 @@ IntlTestRBNF::TestSwedishSpellout()
             { "1,101", "ettusen etthundra\\u00adett" },
             { "10,001", "tio\\u00adtusen ett" },
             { "21,001", "tjugoen\\u00adtusen ett" },
-			{ NULL, NULL }
+            { NULL, NULL }
         };
 
         formatter->setDefaultRuleSet("%neutrum", status);
-		if (U_SUCCESS(status)) {
-			logln("testing neutrum rules");	
-			doTest(formatter, testDataNeutrum, TRUE);
-		}
+        if (U_SUCCESS(status)) {
+            logln("testing neutrum rules");
+            doTest(formatter, testDataNeutrum, TRUE);
+        }
+        else {
+            errln("Can't test neutrum rules");
+        }
 
-         static const char* testDataYear[][2] = {
+        static const char* testDataYear[][2] = {
             { "101", "etthundra\\u00adett" },
             { "900", "niohundra" },
             { "1,001", "tiohundra\\u00adett" },
@@ -1350,16 +1353,20 @@ IntlTestRBNF::TestSwedishSpellout()
             { "1,234", "tolvhundra\\u00adtrettiofyra" },
             { "2,001", "tjugohundra\\u00adett" },
             { "10,001", "tio\\u00adtusen ett" },
-			{ NULL, NULL }
+            { NULL, NULL }
         };
 
         formatter->setDefaultRuleSet("%year", status);
-		if (U_SUCCESS(status)) {
-			logln("testing year rules");
-			doTest(formatter, testDataYear, TRUE);
-		}
+        if (U_SUCCESS(status)) {
+            logln("testing year rules");
+            doTest(formatter, testDataYear, TRUE);
+        }
+        else {
+            errln("Can't test year rules");
+        }
+
     }
-	delete formatter;
+    delete formatter;
 }
 
 
