@@ -868,7 +868,7 @@ public final class UScript {
         }
         /* we still haven't found it try locale */        
         if(code==USCRIPT_INVALID_CODE){            
-            code = findCodeFromLocale(new Locale(nameOrAbbrOrLocale));
+            code = findCodeFromLocale(new Locale(nameOrAbbrOrLocale,""));
         }
         return code;
     }
