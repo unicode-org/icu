@@ -17,8 +17,8 @@ include $(top_builddir)/icudefs.mk
 subdir = data
 
 #lib icu data for link
-LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
-LIB_STATIC_ICUDATA_NAME=lib$(STATIC_PREFIX)$(ICUDATA_NAME)
+LIB_ICUDATA_NAME=$(LIBPREFIX)$(ICUDATA_NAME)
+LIB_STATIC_ICUDATA_NAME=$(LIBPREFIX)$(STATIC_PREFIX)$(ICUDATA_NAME)
 
 # Allow Windows to override these options
 ifeq ($(PKGDATA_OPTS),)
