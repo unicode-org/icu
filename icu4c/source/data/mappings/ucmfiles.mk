@@ -1,3 +1,5 @@
+# Copyright (c) 1999-2002, International Business Machines Corporation and
+# others. All Rights Reserved.
 # A list of UCM's to build
 # Note: 
 #
