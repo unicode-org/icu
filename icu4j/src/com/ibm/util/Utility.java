@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $ 
- * $Date: 2000/03/10 04:18:00 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/07/12 16:42:16 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -556,6 +556,8 @@ public final class Utility {
         return array;
     }
 
+    static public String LINE_SEPARATOR = System.getProperty("line.separator");
+
     /**
      * Format a String for representation in a source file.  This includes
      * breaking it into lines escaping characters using octal notation
@@ -564,7 +566,7 @@ public final class Utility {
     static public final String formatForSource(String s) {
         StringBuffer buffer = new StringBuffer();
         for (int i=0; i<s.length();) {
-            if (i > 0) buffer.append("+\n");
+            if (i > 0) buffer.append('+').append(LINE_SEPARATOR);
             buffer.append("        \"");
             int count = 11;
             while (i<s.length() && count<80) {
