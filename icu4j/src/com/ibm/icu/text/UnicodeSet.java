@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $ 
- * $Date: 2000/05/24 18:25:51 $ 
- * $Revision: 1.22 $
+ * $Date: 2000/05/24 22:03:13 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -241,22 +241,50 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.22 $ $Date: 2000/05/24 18:25:51 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.23 $ $Date: 2000/05/24 22:03:13 $
  */
 public class UnicodeSet implements UnicodeFilter {
     
-    private static final int LOW = 0x000000;            // LOW <= all valid values. ZERO for codepoints
-    private static final int HIGH = 0x110000;           // HIGH > all valid values. 110000 for codepoints
+    /* Implementation Notes.
+     * 
+     * UnicodeSet currently represents only the characters U+0000 to
+     * U+FFFF.  This allows the API to be written in terms of the Java
+     * char type, which is natural for Java at this time.  Since the
+     * char data type is range-limited, we don't have to do range
+     * checks.
+     *
+     * In order to modify UnicodeSet to work with code points up to
+     * U+10FFFF, do the following: (1) Change the value of HIGH to
+     * 0x110000.  (2) Change every API that takes or returns a char
+     * code point to return an int.  (3) For those APIs taking an int
+     * code point, add a range check that looks like this:
+     *
+     * void foo(int ch) {
+     *   if (ch < MIN_VALUE || ch > MAX_VALUE) {
+     *     throw new IllegalArgumentException("Invalid code point " + ch);
+     *   }
+     *   // ...
+     * }
+     *
+     * (4) Modify toPattern() to handle characters past 0xFFFF.  (5)
+     * Modify parse() to parse escapes from \U100000 to \U10FFFF.
+     * Note uppercase U. (6) Modify MIN_VALUE and MAX_VALUE to be of
+     * type int.
+     */
+
+    private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
+    private static final int HIGH = 0x10000; // HIGH > all valid values. 10000 for code units.
+                                             // 110000 for codepoints
 
     /**
      * Minimum value that can be stored in a UnicodeSet.
      */
-    public static final int MIN_VALUE = LOW;
+    public static final char MIN_VALUE = (char) LOW;
     
     /**
      * Maximum value that can be stored in a UnicodeSet.
      */
-    public static final int MAX_VALUE = HIGH - 1;
+    public static final char MAX_VALUE = (char) (HIGH - 1);
 
     private int len;                            // length used. Array may be longer to prevent multiple reallocs
     private int[] list;                        // The list MUST be terminated with HIGH
@@ -304,7 +332,7 @@ public class UnicodeSet implements UnicodeFilter {
         set(other);
     }
 
-    public UnicodeSet(int start, int end) {
+    public UnicodeSet(char start, char end) {
         this();
         xor(start, end);
     }
@@ -369,16 +397,27 @@ public class UnicodeSet implements UnicodeFilter {
         set(getCategorySet(category));
     }
 
-    public UnicodeSet set(int start, int end) {
+    /**
+     * Make this object represent the range <code>start - end</code>
+     * If <code>end > start</code> then this object is set to an
+     * an empty range.
+     *
+     * @param start first character in the set, inclusive
+     * @param end last character in the set, inclusive
+     */
+    public void set(char start, char end) {
         clear();
         xor(start, end);
-        return this;
     }
 
-    public UnicodeSet set(UnicodeSet other) {
+    /**
+     * Make this object represent the same set as <code>other</code>.
+     * @param other a <code>UnicodeSet</code> whose value will be
+     * copied to this object
+     */
+    public void set(UnicodeSet other) {
         list = (int[]) other.list.clone();
         len = other.len;
-        return this;
     }
 
     /**
@@ -464,21 +503,18 @@ public class UnicodeSet implements UnicodeFilter {
         set(parse(pattern, pos, symbols, ignoreWhitespace));
     }
 
-    private static void _toPat(StringBuffer buf, int c) {
-        if (c > 0xFFFF ||
-            c == '[' ||
+    /**
+     * Append the <code>toPattern()</code> representation of a
+     * character to the given <code>StringBuffer</code>.
+     */
+    private static final void _toPat(StringBuffer buf, char c) {
+        if (c == '[' ||
             c == ']' ||
             c == '-' ||
             c == '\\') {
-            buf.append('\\').append('u');
-            for (int x = 0x1000; x >= 0x0010; x >>= 4) {
-                if (c >= x) break;
-                buf.append('0');
-            }
-            buf.append(Integer.toString(c,16).toUpperCase());
-        } else {
-            buf.append((char) c);
+            buf.append('\\');
         }
+        buf.append((char) c);
     }
 
     /**
@@ -492,8 +528,8 @@ public class UnicodeSet implements UnicodeFilter {
         
         int count = getRangeCount();
         for (int i = 0; i < count; ++i) {
-            int start = getRangeStart(i);
-            int end = getRangeEnd(i);
+            char start = getRangeStart(i);
+            char end = getRangeEnd(i);
             _toPat(result, start);
             if (start != end) {
                 result.append("-");
@@ -529,18 +565,20 @@ public class UnicodeSet implements UnicodeFilter {
     }
 
     /**
-     * Returns <tt>true</tt> if this set contains the specified range
-     * of chars.
+     * Returns <tt>true</tt> if this set contains every character
+     * in the specified range of chars.
+     * If <code>end > start</code> then the results of this method
+     * are undefined.
      *
      * @return <tt>true</tt> if this set contains the specified range
      * of chars.
      */
-    public boolean contains(int first, int last) {
+    public boolean contains(char start, char end) {
         int i = -1;
         while (true) {
-            if (first < list[++i]) break;
+            if (start < list[++i]) break;
         }
-        return ((i & 1) != 0 && last < list[i]);
+        return ((i & 1) != 0 && end < list[i]);
     }
 
     /**
@@ -548,12 +586,13 @@ public class UnicodeSet implements UnicodeFilter {
      *
      * @return <tt>true</tt> if this set contains the specified char.
      */
-    public boolean contains(int c) {
-        // catch degenerate cases
-        if (c == HIGH) {   // catch final, so we don't do it in loop!
-            return (len & 1) == 0;  // even length includes everything
-        }
-        // Set i to the index of the first item greater than ch
+    public boolean contains(char c) {
+//| Not needed unless HIGH > 0x10000
+//|     // catch degenerate cases
+//|     if (c == HIGH) {   // catch final, so we don't do it in loop!
+//|         return (len & 1) == 0;  // even length includes everything
+//|     }
+        // Set i to the index of the start item greater than ch
         // We know we will terminate without length test!
         // LATER: for large sets, add binary search
         int i = -1;
@@ -561,10 +600,6 @@ public class UnicodeSet implements UnicodeFilter {
             if (c < list[++i]) break;
         }
         return ((i & 1) != 0); // return true if odd
-    }
-
-    public final boolean contains(char c) {
-        return contains((int) c);
     }
 
     /**
@@ -581,7 +616,6 @@ public class UnicodeSet implements UnicodeFilter {
          * Then v is contained if xx <= v || v <= yy.  (This is identical to the
          * time zone month containment logic.)
          */
-
         for (int i=0; i<getRangeCount(); ++i) {
             int low = getRangeStart(i);
             int high = getRangeEnd(i);
@@ -599,25 +633,18 @@ public class UnicodeSet implements UnicodeFilter {
     /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
-     * the call leaves this set unchanged.  If <code>last > first</code>
+     * the call leaves this set unchanged.  If <code>end > start</code>
      * then an empty range is added, leaving the set unchanged.
      *
-     * @param first first character, inclusive, of range to be added
+     * @param start first character, inclusive, of range to be added
      * to this set.
-     * @param last last character, inclusive, of range to be added
+     * @param end last character, inclusive, of range to be added
      * to this set.
      */
-    public void add(int first, int last) {
-        if (first <= last) {
-            add(setSmallList(first, last), 2, 0);
+    public void add(char start, char end) {
+        if (start <= end) {
+            add(setSmallList(start, end), 2, 0);
         }
-    }
-
-    /**
-     * For binary compatibility.
-     */
-    public final void add(char first, char last) {
-        add((int) first, (int) last);
     }
 
     /**
@@ -626,23 +653,23 @@ public class UnicodeSet implements UnicodeFilter {
      * the call leaves this set unchanged.
      */
     public final void add(char c) {
-        add((int) c, (int) c);
+        add(c, c);
     }
 
     /**
      * Removes the specified range from this set if it is present.
      * The set will not contain the specified range once the call
-     * returns.  If <code>last > first</code> then an empty range is
+     * returns.  If <code>end > start</code> then an empty range is
      * removed, leaving the set unchanged.
      * 
-     * @param first first character, inclusive, of range to be removed
+     * @param start first character, inclusive, of range to be removed
      * from this set.
-     * @param last last character, inclusive, of range to be removed
+     * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void remove(char first, char last) {
-        if (first <= last) {
-            retain(setSmallList(first, last), 2, 2);
+    public void remove(char start, char end) {
+        if (start <= end) {
+            retain(setSmallList(start, end), 2, 2);
         }
     }
 
@@ -655,6 +682,23 @@ public class UnicodeSet implements UnicodeFilter {
         remove(c, c);
     }
 
+    /**
+     * Complements the specified range in this set.  Any character in
+     * the range will be removed if it is in this set, or will be
+     * added if it is not in this set.  If <code>end > start</code>
+     * then an empty range is xor'ed, leaving the set unchanged.
+     * 
+     * @param start first character, inclusive, of range to be removed
+     * from this set.
+     * @param end last character, inclusive, of range to be removed
+     * from this set.
+     */
+    public void xor(int start, int end) {
+        if (start <= end) {
+            xor(setSmallList(start, end), 2, 0);
+        }
+    }
+    
     /**
      * Returns <tt>true</tt> if the specified set is a <i>subset</i>
      * of this set.
@@ -716,19 +760,23 @@ public class UnicodeSet implements UnicodeFilter {
         retain(c.list, c.len, 2);
     }
 
-    public UnicodeSet xor(int start, int end) {
-        return xor(setSmallList(start, end), 2, 0);
-    }
-    
-    public UnicodeSet xorAll(UnicodeSet other) {
-        xor(other.list, other.len, 0);
-        return this;
+    /**
+     * Complements in this set all elements contained in the specified
+     * set.  Any character in the other set will be removed if it is
+     * in this set, or will be added if it is not in this set.
+     * 
+     * @param c set that defines which elements will be xor'ed from
+     *          this set.
+     */
+    public void xorAll(UnicodeSet c) {
+        xor(c.list, c.len, 0);
     }
     
     /**
-     * Inverts this set.  This operation modifies this set so that
-     * its value is its complement.  This is equivalent to the pseudo code:
-     * <code>this = new UnicodeSet("[\u0000-\uFFFF]").removeAll(this)</code>.
+     * Inverts this set.  This operation modifies this set so that its
+     * value is its complement.  This is equivalent to the pseudo
+     * code: <code>this = new UnicodeSet(UnicodeSet.MIN_VALUE,
+     * UnicodeSet.MAX_VALUE).removeAll(this)</code>.
      */
     public void complement() {
         if (list[0] == LOW) {
@@ -751,31 +799,49 @@ public class UnicodeSet implements UnicodeFilter {
         len = 1;
     }
 
+    /**
+     * Iteration method that returns the number of ranges contained in
+     * this set.
+     * @see #getRangeStart
+     * @see #getRangeEnd
+     */
+    public int getRangeCount() {
+        return len/2;
+    }
+    
+    /**
+     * Iteration method that returns the first character in the
+     * specified range of this set.
+     * @exception ArrayIndexOutOfBoundsException if index is outside
+     * the range <code>0..getRangeCount()-1</code>
+     * @see #getRangeCount
+     * @see #getRangeEnd
+     */
+    public char getRangeStart(int index) {
+        return (char) list[index*2];
+    }
+    
+    /**
+     * Iteration method that returns the last character in the
+     * specified range of this set.
+     * @exception ArrayIndexOutOfBoundsException if index is outside
+     * the range <code>0..getRangeCount()-1</code>
+     * @see #getRangeStart
+     * @see #getRangeEnd
+     */
+    public char getRangeEnd(int index) {
+        return (char) (list[index*2 + 1] - 1);
+    }
+
+    /**
+     * Reallocate this objects internal structures to take up the least
+     * possible space, without changing this object's value.
+     */
     public void compact() {
         if (len == list.length) return;
         int[] temp = new int[len];
         System.arraycopy(list, 0, temp, 0, len);
         list = temp;
-    }
-
-    public int getRangeCount() {
-        return len/2;
-    }
-    
-    public int getRangeStart(int index) {
-        try {
-            return list[index*2];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return HIGH;
-        }
-    }
-    
-    public int getRangeEnd(int index) {
-        try {
-            return list[index*2 + 1] - 1;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return LOW;
-        }
     }
 
     /**
@@ -850,7 +916,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
     private static UnicodeSet parse(String pattern, ParsePosition pos,
-                                       SymbolTable symbols, boolean ignoreWhitespace) {
+                                    SymbolTable symbols, boolean ignoreWhitespace) {
 
         UnicodeSet set = new UnicodeSet();
         boolean invert = false;
@@ -1051,7 +1117,7 @@ public class UnicodeSet implements UnicodeFilter {
                     if (lastOp != 0) {
                         throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     }
-                    set.add(lastChar, lastChar);
+                    set.add((char) lastChar, (char) lastChar);
                     lastChar = -1;
                 }
                 switch (lastOp) {
@@ -1079,7 +1145,7 @@ public class UnicodeSet implements UnicodeFilter {
                     throw new IllegalArgumentException("Invalid range " + lastChar +
                                                        '-' + c);
                 }
-                set.add(lastChar, c);
+                set.add((char) lastChar, c);
                 lastOp = 0;
                 lastChar = -1;
             } else if (lastOp != 0) {
@@ -1088,7 +1154,7 @@ public class UnicodeSet implements UnicodeFilter {
             } else {
                 if (lastChar >= 0) {
                     // We have <char><char>
-                    set.add(lastChar, lastChar);
+                    set.add((char) lastChar, (char) lastChar);
                 }
                 lastChar = c;
             }
@@ -1107,7 +1173,7 @@ public class UnicodeSet implements UnicodeFilter {
             throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         }
         if (lastChar >= 0) {
-            set.add(lastChar, lastChar);
+            set.add((char) lastChar, (char) lastChar);
         }
 
         /**
@@ -1226,22 +1292,22 @@ public class UnicodeSet implements UnicodeFilter {
             // and end of each range for which Character.getType(c)
             // returns the given category integer.
             UnicodeSet set = new UnicodeSet();
-            int first = -1;
-            int last = -2;
+            int start = -1;
+            int end = -2;
             for (int i=0; i<=0xFFFF; ++i) {
                 if (Character.getType((char)i) == cat) {
-                    if ((last+1) == i) {
-                        last = i;
+                    if ((end+1) == i) {
+                        end = i;
                     } else {
-                        if (first >= 0) {
-                            set.add(first, last);
+                        if (start >= 0) {
+                            set.add((char) start, (char) end);
                         }
-                        first = last = i;
+                        start = end = i;
                     }
                 }
             }
-            if (first >= 0) {
-                set.add(first, last);
+            if (start >= 0) {
+                set.add((char) start, (char) end);
             }
             CATEGORY_CACHE[cat] = set;
         }
