@@ -6,6 +6,7 @@
 // *******************************************************************************
 
 nn_NO {
+     Version{ "1.0"}
     // Todo: The following data has been placed here until the aliasing mechanism works properly
     // This data is inherited from nn.
     CollationElements {

@@ -2,7 +2,7 @@
 
 mr {
    LocaleID { "4e" }
-    Version { "0.1" }
+    Version { "1.1" }
     ShortLanguage { mar }
     Languages {
         root { "\u092e\u0930\u093e\u0920\u0940" }
