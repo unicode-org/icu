@@ -20,16 +20,23 @@
 #include "cintltst.h"
 #include "capitst.h"
 #include "unicode/ustring.h"
+#include "unicode/ures.h"
+
+
+U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
+
+
 
 void addCollAPITest(TestNode** root)
 {
-    addTest(root, &TestProperty,        "tscoll/capitst/TestProperty");
-    addTest(root, &TestRuleBasedColl,        "tscoll/capitst/TestRuleBasedColl");
-    addTest(root, &TestCompare,        "tscoll/capitst/TestCompare");
-    addTest(root, &TestSortKey,        "tscoll/capitst/TestSortKey");
-    addTest(root, &TestHashCode,        "tscoll/capitst/TestHashCode");
-    addTest(root, &TestElemIter,        "tscoll/capitst/TestElemIter");
+    addTest(root, &TestProperty,      "tscoll/capitst/TestProperty");
+    addTest(root, &TestRuleBasedColl, "tscoll/capitst/TestRuleBasedColl");
+    addTest(root, &TestCompare,       "tscoll/capitst/TestCompare");
+    addTest(root, &TestSortKey,       "tscoll/capitst/TestSortKey");
+    addTest(root, &TestHashCode,      "tscoll/capitst/TestHashCode");
+    addTest(root, &TestElemIter,      "tscoll/capitst/TestElemIter");
     addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
+    addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");
     
 }
 
@@ -39,6 +46,62 @@ static void doAssert(int condition, const char *message)
         log_err("ERROR :  %s\n", message);
     }
 }
+void TestGetDefaultRules(){
+    int32_t size=0;
+    UErrorCode status=U_ZERO_ERROR;
+    UCollator *coll=NULL;
+    UCollator *coll2=NULL;
+    int32_t len1 = 0, len2=0;
+	uint8_t *binColData = NULL;
+
+    UResourceBundle *res = NULL;
+	UResourceBundle *binColl = NULL;
+	uint8_t *binResult = NULL;
+    UChar *rules=NULL;
+    
+    
+    
+    const UChar * defaultRulesArray=ucol_getDefaultRulesArray(&size);
+    log_verbose("Test the function ucol_getDefaultRulesArray()\n");
+
+    coll = ucol_openRules(defaultRulesArray, size, UCOL_DECOMP_CAN, 0, &status);
+	ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
+	if(U_SUCCESS(status) && coll !=NULL) {
+		binColData = (uint8_t*)ucol_cloneRuleData(coll, &len1, &status);
+        
+    }
+
+     
+    status=U_ZERO_ERROR;
+    res=ures_open(NULL, "root", &status);
+	if(U_FAILURE(status)){
+		log_err("ERROR: Failed to get resource for \"root Locale\" with %s", myErrorName(status));
+		return;
+	}
+    binColl=ures_getByKey(res, "%%Collation", binColl, &status);  
+    if(U_SUCCESS(status)){
+		binResult=(uint8_t*)ures_getBinary(binColl,  &len2, &status);
+        if(U_FAILURE(status)){
+            log_err("ERROR: ures_getBinary() failed\n");
+        }
+    }else{
+		log_err("ERROR: ures_getByKey(locale(default), %%Collation) failed");
+	}
+
+
+    if(len1 != len2){
+        log_err("Error: ucol_getDefaultRulesArray() failed to return the correct length.\n");
+    }
+    if(memcmp(binColData, binResult, len1) != 0){
+        log_err("Error: ucol_getDefaultRulesArray() failed\n");
+    }
+
+    ures_close(res);
+    ucol_close(coll);
+  
+
+}
+
 
 /* Collator Properties
  ucol_open, ucol_strcoll,  getStrength/setStrength
@@ -171,6 +234,7 @@ void TestProperty()
     log_verbose("the display name for french collation in german: %s\n", austrdup(disName) );
     log_verbose("Default collation getDisplayName ended.\n");
     free(disName);
+    
 
        
     
