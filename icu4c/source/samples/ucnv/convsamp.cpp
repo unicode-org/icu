@@ -31,6 +31,8 @@
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/convert.h"  /* C++ Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
+#include "unicode/uloc.h"
+
 
 #include "flagcb.h"
 
@@ -157,6 +159,16 @@ void printBytes(const char  *name = "?",
   printf("\n");
 }
 
+void printUChar(UChar32 ch32)
+{
+    if(ch32 > 0xFFFF) {
+      printf("ch: U+%06X\n", ch32);
+    }
+    else {
+      UChar ch = ch32;
+      printUChars("C", &ch, 1);
+    }
+}
 
 /*******************************************************************
   Very simple C++ sample to convert the word 'Moscow' in Russian, followed
@@ -408,7 +420,6 @@ UErrorCode convsample_05()
 #undef BUFFERSIZE
 
 
-
 /*******************************************************************
   Very simple C++ sample to convert a string into Unicode from SJIS
 
@@ -490,6 +501,63 @@ UErrorCode convsample_12()
 
   return U_ZERO_ERROR;
 }
+
+
+/******************************************************************
+   C: Convert from codepage to Unicode one at a time. 
+*/
+  
+UErrorCode convsample_13()
+{
+  printf("\n\n==============================================\n"
+         "Sample 13: C: simple Big5 -> unicode conversion, char at a time\n");
+
+
+  const char sourceChars[] = { 0x7a, 0x68, 0x3d, 0xa4, 0xa4, 0xa4, 0xe5, 0x2e };
+  //  const char sourceChars[] = { 0x7a, 0x68, 0x3d, 0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87, 0x2e };
+  const char *source, *sourceLimit;
+  UChar32 target;
+  UErrorCode status = U_ZERO_ERROR;
+  UConverter *conv = NULL;
+  int32_t srcCount=0;
+  int32_t dstCount=0;
+  
+  srcCount = sizeof(sourceChars);
+
+  conv = ucnv_open("Big5", &status);
+  U_ASSERT(status);
+
+  source = sourceChars;
+  sourceLimit = sourceChars + sizeof(sourceChars);
+
+  // **************************** START SAMPLE *******************
+
+
+  printBytes("src",source,sourceLimit-source);
+
+  while(source < sourceLimit)
+  {
+    puts("");
+    target = ucnv_getNextUChar (conv,
+                                &source,
+                                sourceLimit,
+                                &status);
+    
+    //    printBytes("src",source,sourceLimit-source);
+    U_ASSERT(status);
+    printUChar(target);
+    dstCount++;
+  }
+  
+  
+  // ************************** END SAMPLE *************************
+  
+  printf("src=%d bytes, dst=%d uchars\n", srcCount, dstCount);
+  ucnv_close(conv);
+
+}
+
+
 
 
 UBool convsample_20_didSubstitute(const char *source)
@@ -704,23 +772,26 @@ void dumpTest()
     fclose(q);
 }
 
+
 int main()
 {
+
   //  dumpTest();
   //  return 0;
 
   printf("DEFCONV=%s, DEVLOC=%s\n", ucnv_getDefaultName(), uloc_getDefault());
 
   
-  convsample_01();
-  convsample_02();
-  convsample_03();
+    convsample_01();
+    convsample_02();
+    convsample_03();
   //  convsample_04();  /* not written yet */
-  convsample_05();
-  convsample_11();
+    convsample_05();
+    convsample_11();
   //  convsample_12(); [fails]
+    convsample_13();
 
-  convsample_20();
-   
+    convsample_20();
+
    return 0;
 }
