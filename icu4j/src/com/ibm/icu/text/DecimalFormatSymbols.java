@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2000/03/10 04:07:19 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/19 12:31:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -135,9 +135,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * character used to represent infinity. Almost always left
+     * String used to represent infinity. Almost always left
      * unchanged.
      */
+     //Bug 4194173 [Richard/GCL]
 
     public String getInfinity() {
         return infinity;
@@ -148,9 +149,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * character used to represent NaN. Almost always left
+     * String used to represent NaN. Almost always left
      * unchanged.
      */
+     //Bug 4194173 [Richard/GCL]
     public String getNaN() {
         return NaN;
     }
@@ -418,7 +420,6 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Finally, set serialVersionOnStream back to the maximum allowed value so that
      * default serialization will work properly if this object is streamed out again.
      *
-     * @since JDK 1.1.6
      */
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
@@ -535,7 +536,6 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     /**
      * The decimal separator used when formatting currency values.
      * @serial
-     * @since JDK 1.1.6
      * @see #getMonetaryDecimalSeparator
      */
     private  char    monetarySeparator; // Field new in JDK 1.1.6
@@ -548,7 +548,6 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * It is retained for backward compatibility.
      *
      * @serial
-     * @since JDK 1.1.6
      */
     private  char    exponential;       // Field new in JDK 1.1.6
 
@@ -607,7 +606,6 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * is always written.
      *
      * @serial
-     * @since JDK 1.1.6
      */
     private int serialVersionOnStream = currentSerialVersion;
 

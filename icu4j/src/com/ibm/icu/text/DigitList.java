@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2001/05/21 23:33:47 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/10/19 12:33:50 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -397,15 +397,20 @@ final class DigitList implements Cloneable {
     private boolean shouldRoundUp(int maximumDigits) {
         boolean increment = false;
         // Implement IEEE half-even rounding
-        if (digits[maximumDigits] > '5') {
-            return true;
-        } else if (digits[maximumDigits] == '5' ) {
-            for (int i=maximumDigits+1; i<count; ++i) {
-                if (digits[i] != '0') {
-                    return true;
+        /*Bug 4243108
+          format(0.0) gives "0.1" if preceded by parse("99.99") [Richard/GCL]
+        */
+        if (maximumDigits < count) {
+            if (digits[maximumDigits] > '5') {
+                return true;
+            } else if (digits[maximumDigits] == '5' ) {
+                for (int i=maximumDigits+1; i<count; ++i) {
+                    if (digits[i] != '0') {
+                        return true;
+                    }
                 }
+                return maximumDigits > 0 && (digits[maximumDigits-1] % 2 != 0);
             }
-            return maximumDigits == 0 || (digits[maximumDigits-1] % 2 != 0);
         }
         return false;
     }
@@ -444,6 +449,12 @@ final class DigitList implements Cloneable {
                 ++maximumDigits; // Increment for use as count
             }
             count = maximumDigits;
+            /*Bug 4217661 DecimalFormat formats 1.001 to "1.00" instead of "1"
+              Eliminate trailing zeros. [Richard/GCL]
+            */
+            while (count > 1 && digits[count-1] == '0') {
+                --count;
+            } //[Richard/GCL]
         }
     }
 

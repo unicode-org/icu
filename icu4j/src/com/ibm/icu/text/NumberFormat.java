@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2001/05/22 20:13:26 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/10/19 12:35:49 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import com.ibm.util.OverlayBundle;
+import java.io.InvalidObjectException; //Bug 4185761 [Richard/GCL]
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
@@ -78,7 +79,8 @@ import com.ibm.util.OverlayBundle;
  * </pre>
  * </blockquote>
  * Use <code>getInstance</code> or <code>getNumberInstance</code> to get the
- * normal number format. Use <code>getCurrencyInstance</code> to get the
+ * normal number format. Use <code>getIntegerInstance</code> to get an
+ * integer number format. Use <code>getCurrencyInstance</code> to get the
  * currency number format. And use <code>getPercentInstance</code> to get a
  * format for displaying percentages. With this format, a fraction like
  * 0.53 is displayed as 53%.
@@ -89,7 +91,7 @@ import com.ibm.util.OverlayBundle;
  * If you want even more control over the format or parsing,
  * or want to give your users more control,
  * you can try casting the <code>NumberFormat</code> you get from the factory methods
- * to a <code>DecimalNumberFormat</code>. This will work for the vast majority
+ * to a <code>DecimalFormat</code>. This will work for the vast majority
  * of locales; just remember to put it in a <code>try</code> block in case you
  * encounter an unusual one.
  *
@@ -140,9 +142,16 @@ import com.ibm.util.OverlayBundle;
  *      numbers: "(12)" for -12.
  * </ol>
  *
+ * <h4>Synchronization</h4>
+ * <p>
+ * Number formats are generally not synchronized. It is recommended to create 
+ * separate format instances for each thread. If multiple threads access a format
+ * concurrently, it must be synchronized externally. 
+ * <p>
+ *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.9 $
+ * @version      $Revision: 1.10 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -292,11 +301,16 @@ public abstract class NumberFormat extends Format{
     public abstract Number parse(String text, ParsePosition parsePosition);
 
     /**
-     * Convenience method.
+     * Parses text from the beginning of the given string to produce a number.
+     * The method may not use the entire text of the given string.
      *
-     * @exception ParseException if the specified string is invalid.
+     * @param text A String whose beginning should be parsed.
+     * @return A Number parsed from the string.
+     * @exception ParseException if the beginning of the specified string 
+     * cannot be parsed.
      * @see #format
      */
+    //Bug 4375399 [Richard/GCL]
     public Number parse(String text) throws ParseException {
         ParsePosition parsePosition = new ParsePosition(0);
         Number result = parse(text, parsePosition);
@@ -333,9 +347,11 @@ public abstract class NumberFormat extends Format{
     /**
      * Returns the default number format for the current default locale.
      * The default format is one of the styles provided by the other
-     * factory methods: getNumberInstance, getCurrencyInstance or getPercentInstance.
+     * factory methods: getNumberInstance, getIntegerInstance,
+     * getCurrencyInstance or getPercentInstance.
      * Exactly which one is locale dependant.
      */
+    //Bug 4408066 [Richard/GCL]
     public final static NumberFormat getInstance() {
         return getInstance(Locale.getDefault(), NUMBERSTYLE);
     }
@@ -362,6 +378,37 @@ public abstract class NumberFormat extends Format{
      */
     public static NumberFormat getNumberInstance(Locale inLocale) {
         return getInstance(inLocale, NUMBERSTYLE);
+    }
+
+    /**
+     * Returns an integer number format for the current default locale. The
+     * returned number format is configured to round floating point numbers
+     * to the nearest integer using IEEE half-even rounding (see {@link 
+     * com.ibm.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
+     * and to parse only the integer part of an input string (see {@link
+     * #isParseIntegerOnly isParseIntegerOnly}).
+     *
+     * @return a number format for integer values
+     */
+    //Bug 4408066 [Richard/GCL]
+    public final static NumberFormat getIntegerInstance() {
+        return getInstance(Locale.getDefault(), INTEGERSTYLE);
+    }
+
+    /**
+     * Returns an integer number format for the specified locale. The
+     * returned number format is configured to round floating point numbers
+     * to the nearest integer using IEEE half-even rounding (see {@link 
+     * com.ibm.math.BigDecimal#ROUND_HALF_EVEN ROUND_HALF_EVEN}) for formatting,
+     * and to parse only the integer part of an input string (see {@link
+     * #isParseIntegerOnly isParseIntegerOnly}).
+     *
+     * @param inLocale the locale for which a number format is needed
+     * @return a number format for integer values
+     */
+    //Bug 4408066 [Richard/GCL]
+    public static NumberFormat getIntegerInstance(Locale inLocale) {
+        return getInstance(inLocale, INTEGERSTYLE);
     }
 
     /**
@@ -580,8 +627,17 @@ public abstract class NumberFormat extends Format{
     // [NEW]
     private static NumberFormat getInstance(Locale desiredLocale,
                                             int choice) {
-        return new DecimalFormat(getPattern(desiredLocale, choice),
+        DecimalFormat format = new DecimalFormat(getPattern(desiredLocale, choice),
                                  new DecimalFormatSymbols(desiredLocale));
+        /*Bug 4408066
+         Add codes for the new method getIntegerInstance() [Richard/GCL]
+        */
+        if (choice == INTEGERSTYLE) {
+            format.setMaximumFractionDigits(0);
+            format.setDecimalSeparatorAlwaysShown(false);
+            format.setParseIntegerOnly(true);
+        }
+        return format;
     }
 
     // [NEW]
@@ -608,7 +664,8 @@ public abstract class NumberFormat extends Format{
         // resources:  Retrieve scientific patterns from our resources.
         if (choice == SCIENTIFICSTYLE) {
             // Temporarily hard code; retrieve from resource later
-            return "0.######E0";
+            /*For ICU compatibility [Richard/GCL]*/
+            return "#E0";
             // return NumberFormat.getBaseStringArray("NumberPatterns")[SCIENTIFICSTYLE];
         }
         // TEMPORARY: Use rounding for Swiss currency
@@ -630,7 +687,11 @@ public abstract class NumberFormat extends Format{
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 
         }
-        return numberPatterns[choice];
+        /*Bug 4408066
+         Add codes for the new method getIntegerInstance() [Richard/GCL]
+        */
+        int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE : choice; //[Richard/GCL]
+        return numberPatterns[entry]; //[Richard/GCL]
     }
 
     public static final String RESOURCE_BASE = "java.text.resources.LocaleElements";
@@ -655,7 +716,6 @@ public abstract class NumberFormat extends Format{
      * Finally, set serialVersionOnStream back to the maximum allowed value so that
      * default serialization will work properly if this object is streamed out again.
      *
-     * @since JDK 1.2
      */
     private void readObject(ObjectInputStream stream)
          throws IOException, ClassNotFoundException
@@ -668,6 +728,14 @@ public abstract class NumberFormat extends Format{
             maximumFractionDigits = maxFractionDigits;
             minimumFractionDigits = minFractionDigits;
         }
+        /*Bug 4185761
+          Validate the min and max fields [Richard/GCL]
+        */
+        if (minimumIntegerDigits > maximumIntegerDigits ||
+            minimumFractionDigits > maximumFractionDigits ||
+            minimumIntegerDigits < 0 || minimumFractionDigits < 0) {
+            throw new InvalidObjectException("Digit count range invalid");
+        }
         serialVersionOnStream = currentSerialVersion;
     }
 
@@ -678,7 +746,6 @@ public abstract class NumberFormat extends Format{
      * (or to <code>Byte.MAX_VALUE</code>, whichever is smaller), for compatibility
      * with the JDK 1.1 version of the stream format.
      *
-     * @since JDK 1.2
      */
     private void writeObject(ObjectOutputStream stream)
          throws IOException
@@ -704,6 +771,10 @@ public abstract class NumberFormat extends Format{
     private static final int CURRENCYSTYLE = 1;
     private static final int PERCENTSTYLE = 2;
     private static final int SCIENTIFICSTYLE = 3;
+    /*Bug 4408066
+      Add Field for the new method getIntegerInstance() [Richard/GCL]
+    */
+    private static final int INTEGERSTYLE = 4;
 
     /**
      * True if the the grouping (i.e. thousands) separator is used when
@@ -802,7 +873,6 @@ public abstract class NumberFormat extends Format{
      * <code>minimumIntegerDigits</code>.
      *
      * @serial
-     * @since JDK 1.2
      * @see #getMaximumIntegerDigits
      */
     private int    maximumIntegerDigits = 40;
@@ -813,7 +883,6 @@ public abstract class NumberFormat extends Format{
      * <code>maximumIntegerDigits</code>.
      *
      * @serial
-     * @since JDK 1.2
      * @see #getMinimumIntegerDigits
      */
     private int    minimumIntegerDigits = 1;
@@ -824,7 +893,6 @@ public abstract class NumberFormat extends Format{
      * <code>minimumFractionDigits</code>.
      *
      * @serial
-     * @since JDK 1.2
      * @see #getMaximumFractionDigits
      */
     private int    maximumFractionDigits = 3;    // invariant, >= minFractionDigits
@@ -835,7 +903,6 @@ public abstract class NumberFormat extends Format{
      * <code>maximumFractionDigits</code>.
      *
      * @serial
-     * @since JDK 1.2
      * @see #getMinimumFractionDigits
      */
     private int    minimumFractionDigits = 0;
@@ -861,7 +928,6 @@ public abstract class NumberFormat extends Format{
      * is always written.
      *
      * @serial
-     * @since JDK 1.2
      */
     private int serialVersionOnStream = currentSerialVersion;
 
