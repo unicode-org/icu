@@ -2,16 +2,16 @@
 .\"
 .\" convrtrs.txt.5: manual page for the convrtrs.txt file
 .\"
-.\" Copyright (C) 2000 IBM, Inc. and others.
+.\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH CONVRTRS.TXT 5 "12 October 2000" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH CONVRTRS.TXT 5 "22 July 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B convrtrs.txt
 \- ICU converters aliases file
 .br
-.B cnvalias.dat
+.B cnvalias.icu
 \- binary ICU converters aliases file
 .SH DESCRIPTION
 The file
@@ -21,7 +21,7 @@ their known aliases. ICU can open a converter given either its real name or
 any of its aliases.
 .B convrtrs.txt
 is read by
-.BR gencnval (8)
+.BR gencnval (1)
 in order to generate the binary data that ICU uses to represent the converters
 aliases information.
 .PP
@@ -48,13 +48,23 @@ can be described by the following BNF grammar:
 .PP
 .RS
 .nf
-converters ::= { converter | comment }
-converter ::= name [ tags ] { alias } [ comment ]
+converters ::= tags { converter }
+converter ::= name [ tags ] { alias }
 alias ::= name [ tags ]
-tags ::= '{' { name } '}'
+tags ::= '{' { tag } '}'
+tag ::= standard{*}
 comment ::= '#' \fIanything\fP
 .fi
 .RE
+.PP
+Line continuation and comment sytax are similar to the GNU make syntax.
+Any lines beginning with whitespace (e.g. U+0020 SPACE or U+0009 HORIZONTAL
+TABULATION) are presumed to be a continuation of the previous line.
+.PP
+The file must start with a list of recognized tags. These tags are used to
+get the correct converter implementation based on the defined standard tag.
+For instance, Shift-JIS on an IBM platform may be different from Shift-JIS
+on a Windows platform.
 .PP
 A
 .I name
@@ -95,25 +105,27 @@ and
 registries of names. The default ICU
 .B convrtrs.txt
 file already uses these tags.
-Note that tags do not need to be declared, they are collected as they
-appear.
+These tags must be declared at the beginning of the file.
 Names appropriate for a given standard can be retrieved
-programmatically by using the
-.BR ucnv_getStandardName (3)
-function.
+programmatically by using the ucnv_getStandardName() or the
+ucnv_openStandardNames() function. The asterisk (U+002A) is
+used to note which standard name is the default, and the
+preceding alias is returned by ucnv_getStandardName(). A standard
+tag may have multiple aliases recognized by the same standard for
+the same converter name.
 .SH CAVEATS
 The
 .B convrtrs.txt
 file is not directly read by ICU. It must be transformed into a binary
 file by
-.BR gencnval (5)
+.BR gencnval (1)
 first. Also, depending on the way ICU was packaged, even the resulting
-.B cnvalias.dat
+.B cnvalias.icu
 file may not be read by ICU. Please refer to the ICU manual for more
 information on which files are effectively read by ICU at runtime, and
 how to produce them.
 .SH COPYRIGHT
-Copyright (C) 2000 IBM, Inc. and others.
+Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
-.BR gencnval (8),
-.BR pkgdata (8)
+.BR gencnval (1),
+.BR pkgdata (1)
