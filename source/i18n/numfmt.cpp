@@ -31,6 +31,7 @@
 #include "unicode/resbund.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
+#include "iculserv.h"
 #include <float.h>
 
 // If no number pattern can be located for a locale, this is the last
@@ -300,6 +301,155 @@ NumberFormat::getAvailableLocales(int32_t& count)
     return Locale::getAvailableLocales(count);
 }
 
+// ------------------------------------------
+//
+// Registration
+//
+//-------------------------------------------
+
+static ICULocaleService* gService = NULL;
+
+// -------------------------------------
+
+class ICUNumberFormatFactory : public ICUResourceBundleFactory {
+protected:
+  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
+// !!! kind is not an EStyles, need to determine how to handle this
+	  return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
+  }
+};
+
+// -------------------------------------
+
+class NFFactory : public LocaleKeyFactory {
+private:
+	NumberFormatFactory* _delegate;
+
+public:
+    NFFactory(NumberFormatFactory* delegate) 
+		: LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
+	    , _delegate(delegate)
+	{
+    }
+
+	virtual ~NFFactory()
+	{
+		delete _delegate;
+	}
+
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
+	{
+        if (handlesKey(key, status)) {
+            const LocaleKey& lkey = (const LocaleKey&)key;
+            Locale loc;
+			lkey.canonicalLocale(loc);
+            int32_t kind = lkey.kind();
+
+            UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)(kind+1));
+            if (result == NULL) {
+                result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
+            }
+            return result;
+        }
+        return NULL;
+    }
+
+protected:
+    /**
+     * Return the set of ids that this factory supports (visible or 
+     * otherwise).  This can be called often and might need to be
+     * cached if it is expensive to create.
+     */
+    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const
+	{
+        return _delegate->getSupportedIDs(status);
+    }
+};
+
+class ICUNumberFormatService : public ICULocaleService {
+public:
+  ICUNumberFormatService()
+    : ICULocaleService("Number Format")
+  {
+    UErrorCode status = U_ZERO_ERROR;
+    registerFactory(new ICUNumberFormatFactory(), status);
+  }
+
+  virtual UObject* cloneInstance(UObject* instance) const {
+	  return ((NumberFormat*)instance)->clone();
+  }
+
+  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
+	LocaleKey& lkey = (LocaleKey&)key;
+	int32_t kind = lkey.kind();
+	Locale loc;
+	lkey.currentLocale(loc);
+	return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
+  }
+
+  virtual UBool isDefault() const {
+	return countFactories() == 1;
+  }
+};
+
+// -------------------------------------
+
+static UMTX gLock = 0;
+
+static ICULocaleService* 
+getService(void)
+{
+  if (gService == NULL) {
+    Mutex mutex(&gLock);
+    if (gService == NULL) {
+      gService = new ICUNumberFormatService();
+    }
+  }
+  return gService;
+}
+
+// -------------------------------------
+
+NumberFormat*
+NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status)
+{
+  if (gService != NULL) {
+    return (NumberFormat*)gService->get(loc, kind, status);
+  } else {
+    return makeInstance(loc, kind, status);
+  }
+}
+
+
+// -------------------------------------
+
+URegistryKey 
+NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
+{
+  return getService()->registerFactory(new NFFactory(toAdopt), status);
+}
+
+// -------------------------------------
+
+UBool 
+NumberFormat::unregister(URegistryKey key, UErrorCode& status)
+{
+  if (U_SUCCESS(status)) {
+    if (gService != NULL) {
+      return gService->unregister(key, status);
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  return FALSE;
+}
+
+// -------------------------------------
+StringEnumeration* 
+NumberFormat::getAvailableLocales(void)
+{
+  return getService()->getAvailableLocales();
+}
+
 // -------------------------------------
 // Checks if the thousand/10 thousand grouping is used in the
 // NumberFormat instance.
@@ -412,9 +562,9 @@ NumberFormat::setMinimumFractionDigits(int32_t newValue)
 // or percent) for the desired locale.
 
 NumberFormat*
-NumberFormat::createInstance(const Locale& desiredLocale,
-                             EStyles style,
-                             UErrorCode& status)
+NumberFormat::makeInstance(const Locale& desiredLocale,
+                           EStyles style,
+                           UErrorCode& status)
 {
     if (U_FAILURE(status)) return NULL;
 
@@ -504,6 +654,20 @@ NumberFormat::createInstance(const Locale& desiredLocale,
 }
 
 U_NAMESPACE_END
+
+// defined in ucln_cmn.h
+
+/**
+ * Release all static memory held by numberformat.  
+ */
+U_CFUNC UBool numfmt_cleanup(void) {
+  if (gService) {
+    delete gService;
+    gService = NULL;
+  }
+  umtx_destroy(&gLock);
+  return TRUE;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
