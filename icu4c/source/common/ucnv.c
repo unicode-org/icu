@@ -1098,7 +1098,9 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
         return 0;
     }
 
-    if(sourceSize<0 || targetSize<0 || source==NULL || targetSize>0 && target==NULL) {
+    if(sourceSize<0 || targetSize<0 || source==NULL
+        || (targetSize>0 && target==NULL))
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -1151,7 +1153,7 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                 pivot2=pivotBuffer;
                 ucnv_fromUnicode(outConverter,
                                  &myTarget, targetLimit,
-                                 &pivot2, pivot,
+                                 (const UChar **)&pivot2, pivot,
                                  NULL,
                                  (UBool)(source==sourceLimit),
                                  pErrorCode);
@@ -1181,7 +1183,7 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
                 target=targetBuffer;
                 ucnv_fromUnicode(outConverter,
                                  &target, targetLimit,
-                                 &pivot2, pivot,
+                                 (const UChar **)&pivot2, pivot,
                                  NULL,
                                  (UBool)(source==sourceLimit),
                                  pErrorCode);
