@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -36,6 +36,28 @@
  */ 
 #ifndef ICU_USE_THREADS
 # define ICU_USE_THREADS 1
+#endif
+
+/**
+ * \def UMTX_CHECK
+ * Encapsulates a safe check for an expression (usually a condition)
+ * for lazy variable inititialization.
+ * On CPUs with weak memory models, this must use memory fence instructions
+ * or mutexes.
+ * @internal
+ */
+#if UMTX_STRONG_MEMORY_MODEL
+
+#define UMTX_CHECK(pMutex, expression, result) \
+    (result)=(expression);
+
+#else
+
+#define UMTX_CHECK(pMutex, expression, result) \
+    umtx_lock(pMutex); \
+    (result)=(expression); \
+    umtx_unlock(pMutex);
+
 #endif
 
 /*
