@@ -132,7 +132,7 @@ void TestSurrogateBehaviour(){
             {  (char)0xe4, (char)0xb8, (char)0x80, (char)0xdc, (char)0x81, (char)0x31, (char)0xeb, (char)0xbf, 
                (char)0x81, (char)0xF0, (char)0xF0, (char)0x90, (char)0x81, (char)0x32};
         
-        /*int32_t fromOffsets[] = { 0x0000, 0x0002, 0x0005, 0x0006, 0x0009, 0x000C, 0x000F }; */
+        int32_t fromOffsets[] = { 0x0000, 0x0002, 0x0005, 0x0006, 0x0009, 0x000C, 0x000F }; 
         /*UTF-8*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", offsets, TRUE, U_ZERO_ERROR ))
@@ -155,8 +155,16 @@ void TestSurrogateBehaviour(){
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", 0, FALSE, U_ZERO_ERROR ))
             log_err("UTF8 -> did not match.\n");
+        if(!convertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", fromOffsets, TRUE, U_ZERO_ERROR ))
+            log_err("UTF8 -> did not match.\n");
+        if(!convertToU(expected, sizeof(expected), 
+            sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", fromOffsets, FALSE, U_ZERO_ERROR ))
+            log_err("UTF8 -> did not match.\n");
         
     }
+    
+
 
 }
 void TestErrorBehaviour(){
@@ -202,15 +210,27 @@ void TestErrorBehaviour(){
      log_verbose("Testing for DBCS and MBCS\n");
     {
         UChar    sampleText[] =   { 0x00a1, 0xd801};
-        UChar    sampleText2[] =   { 0x00a1, 0xd801, 0x00a4};
         const char expected[]=
         {  (char)0xa2, (char)0xae};
+        int32_t offsets[]={(char)0x00, (char)0x01, (char)0x02};
        
-       
+        UChar    sampleText2[] =   { 0x00a1, 0xd801, 0x00a4};
         const char expected2[] = 
              {  (char)0xa2, (char)0xae, (char)0xa1, (char)0xe0, (char)0xa2, (char)0xb4};
 
-        int32_t offsets[]={(char)0x00, (char)0x01, (char)0x02};
+         UChar    sampleText3MBCS[] =   { 0x0001, 0x00a4, 0xdc01};
+        const char expected3MBCS[] = 
+        {   (char)0x01, (char)0xa2, (char)0xb4, (char)0xa1, (char)0xe0};
+        int32_t offsets3MBCS[] = { (char)0x00, (char)0x01, (char)0x02 };
+
+        UChar    sampleText4MBCS[] =   { 0x0061, 0x00a6, 0xdc01};
+        const char expected4MBCS[] = 
+        {   (char)0x61, (char)0x8f, (char)0xa2, (char)0xc3, (char)0xf4, (char)0xfe};
+        int32_t offsets4MBCS[] = { (char)0x00, (char)0x01, (char)0x02 };
+
+       
+
+        
        
 #if 0      
         /*commented untill further modifications in the source*/
@@ -247,6 +267,20 @@ void TestErrorBehaviour(){
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "ibm-1363", offsets, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
+
+        if(!convertFromU(sampleText3MBCS, sizeof(sampleText3MBCS)/sizeof(sampleText3MBCS[0]),
+                expected3MBCS, sizeof(expected3MBCS), "ibm-1363", offsets3MBCS, TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_MBCS] \n");
+        if(!convertFromU(sampleText3MBCS, sizeof(sampleText3MBCS)/sizeof(sampleText3MBCS[0]),
+                expected3MBCS, sizeof(expected3MBCS), "ibm-1363", offsets3MBCS, FALSE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_MBCS] \n");
+
+        if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
+                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, TRUE, U_ZERO_ERROR))
+            log_err("u-> euc-jp [UCNV_MBCS] \n");
+        if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
+                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
+            log_err("u-> euc-jp [UCNV_MBCS] \n");
     
     }
     
@@ -291,7 +325,46 @@ void TestToUnicodeErrorBehaviour()
             log_err("SBCS (ibm-1051)->Unicode  with flush = false did not match.\n");
 
      }
-  
+     log_verbose("Testing error conditions for UTF8\n");
+    {
+        const char sampleText[] = { (char)0x31, (char)0xe4, (char)0xba, (char)0x8c, (char)0xe4, (char)0xb8, };
+        UChar    expectedUTF8[] = {  0x0031, 0x4e8c};
+        int32_t offsets[] = {   0x0000, 0x0001};
+
+        const char sampleText2[] = { (char)0x31, (char)0xff, (char)0xe4, (char)0xba, (char)0x8c};
+        UChar    expected2UTF8[] = {  0x0031, 0xfffd, 0x4e8c};
+        int32_t offsets2[] = {   0x0000, 0x0000, 0x0002};
+
+
+        if(!convertToU(sampleText, sizeof(sampleText), 
+                expectedUTF8, sizeof(expectedUTF8)/sizeof(expectedUTF8[0]), "utf-8", 0, TRUE, U_TRUNCATED_CHAR_FOUND ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText, sizeof(sampleText), 
+                expectedUTF8, sizeof(expectedUTF8)/sizeof(expectedUTF8[0]), "utf-8", 0, FALSE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText, sizeof(sampleText), 
+                expectedUTF8, sizeof(expectedUTF8)/sizeof(expectedUTF8[0]), "utf-8", offsets, TRUE, U_TRUNCATED_CHAR_FOUND ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText, sizeof(sampleText), 
+                expectedUTF8, sizeof(expectedUTF8)/sizeof(expectedUTF8[0]), "utf-8", offsets, FALSE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+
+        if(!convertToU(sampleText2, sizeof(sampleText2), 
+                expected2UTF8, sizeof(expected2UTF8)/sizeof(expected2UTF8[0]), "utf-8", 0, TRUE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText2, sizeof(sampleText2), 
+                expected2UTF8, sizeof(expected2UTF8)/sizeof(expected2UTF8[0]), "utf-8", 0, FALSE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText2, sizeof(sampleText2), 
+                expected2UTF8, sizeof(expected2UTF8)/sizeof(expected2UTF8[0]), "utf-8", offsets2, TRUE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText2, sizeof(sampleText2), 
+                expected2UTF8, sizeof(expected2UTF8)/sizeof(expected2UTF8[0]), "utf-8", offsets2, FALSE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+
+    }
+    
+ 
 }
 void TestGetNextErrorBehaviour(){
    /*Test for unassigned character*/
@@ -309,7 +382,8 @@ void TestGetNextErrorBehaviour(){
         log_err("FAIL in TestGetNextErrorBehaviour(unassigned): Expected: U_INVALID_CHAR_ERROR or 0xfffd ----Got:%s and 0x%lx\n",  myErrorName(err), c);
     }
     ucnv_close(cnv);
-     
+
+            
 }
 UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
@@ -385,11 +459,11 @@ UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int
         log_verbose("comparing %d offsets..\n", targ-buffer);
         if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
             log_err("did not get the expected offsets. for FROM Unicode to %s\n", codepage);
-            puts("Got  : ");
+            printf("\nGot  : ");
 			printSeqErr(buffer, targ-buffer);
 			for(p=buffer;p<targ;p++)
 				printf("%d, ", offsetBuffer[p-buffer]); 
-			puts("\nExpected: ");
+			printf("\nExpected: ");
 			for(i=0; i< (targ-buffer); i++)
 				printf("%d,", expectOffsets[i]);
         }
@@ -465,18 +539,19 @@ UBool convertToU( const char *source, int sourceLen, const UChar *expect, int ex
         if(memcmp(offsetBuffer, expectOffsets, (targ-buffer) * sizeof(int32_t))){
             
             log_err("did not get the expected offsets from %s To UNICODE\n", codepage);
-            puts("\nGot : ");
+            printf("\nGot : ");
             for(p=buffer;p<targ;p++)
 		      printf("%d, ", offsetBuffer[p-buffer]); 
-		    puts("\nExpected: ");
+		    printf("\nExpected: ");
 		    for(i=0; i<(targ-buffer); i++)
 		      printf("%d, ", expectOffsets[i]);
-		    puts("\n");
+		    printf("\nGot result:");
 		    for(i=0; i<(targ-buffer); i++)
 		      printf("%X,", buffer[i]);
-		    puts("\n");
+		    printf("\nFrom Input:");
 		    for(i=0; i<(src-source); i++)
 		      printf("%X,", (unsigned char)source[i]);
+            puts("\n");
 		}
     }
     if(!memcmp(buffer, expect, expectLen*2)){
