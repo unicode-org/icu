@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/10/10 21:35:33 $ 
- * $Revision: 1.13 $
+ * $Date: 2001/10/17 19:17:59 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -52,7 +52,7 @@ public class UnicodeSetTest extends TestFmwk {
         // not used int TOP = 0x200; // Don't need to go over the whole range:
         set = new UnicodeSet("[:L:]");
         for (int i=0; i<0x200; ++i) {
-            boolean l = Character.isLetter((char)i);
+            boolean l = UCharacter.isLetter(i);
             if (l != set.contains((char)i)) {
                 errln("FAIL: L contains " + (char)i + " = " + 
                       set.contains((char)i));
@@ -62,7 +62,7 @@ public class UnicodeSetTest extends TestFmwk {
 
         set = new UnicodeSet("[:Lu:]");
         for (int i=0; i<0x200; ++i) {
-            boolean lu = (Character.getType((char)i) == Character.UPPERCASE_LETTER);
+            boolean lu = (UCharacter.getType(i) == UCharacterCategory.UPPERCASE_LETTER);
             if (lu != set.contains((char)i)) {
                 errln("FAIL: Lu contains " + (char)i + " = " + 
                       set.contains((char)i));
@@ -249,11 +249,13 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Test the [:Latin:] syntax.
      */
-    public void TestScriptSet() {
+    public void TestPropertySet() {
         UnicodeSet set = new UnicodeSet("[:Latin:]");
         expectContainment(set, "aA", "\u0391\u03B1");
-        set = new UnicodeSet("[:Greek:]");
+        set = new UnicodeSet("[\\p{Greek}]");
         expectContainment(set, "\u0391\u03B1", "aA");
+        set = new UnicodeSet("\\P{ GENERAL Category = upper case letter }");
+        expectContainment(set, "abc", "ABC");
     }
 
     /**
@@ -453,7 +455,7 @@ public class UnicodeSetTest extends TestFmwk {
                 }
             }
             if (bad.length() > 0) {
-                logln(Utility.escape("Fail: set " + set + " does not contain " + bad +
+                errln(Utility.escape("FAIL: set " + set + " does not contain " + bad +
                       ", expected containment of " + charsIn));
             } else {
                 logln(Utility.escape("Ok: set " + set + " contains " + charsIn));
@@ -468,7 +470,7 @@ public class UnicodeSetTest extends TestFmwk {
                 }
             }
             if (bad.length() > 0) {
-                logln(Utility.escape("Fail: set " + set + " contains " + bad +
+                errln(Utility.escape("FAIL: set " + set + " contains " + bad +
                       ", expected non-containment of " + charsOut));
             } else {
                 logln(Utility.escape("Ok: set " + set + " does not contain " + charsOut));

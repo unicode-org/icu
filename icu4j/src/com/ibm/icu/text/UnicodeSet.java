@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/10 21:35:05 $
- * $Revision: 1.39 $
+ * $Date: 2001/10/17 19:17:06 $
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -202,60 +202,26 @@ import com.ibm.util.Utility;
  * starting wih 'L', that is, <code>[[:Lu:][:Ll:][:Lt:][:Lm:][:Lo:]]</code>.
  * </table>
  *
- * <p><b>Character categories.</b>
+ * <p><b>Character properties.</b>
  *
- * Character categories are specified using the POSIX-like syntax
- * '[:Lu:]'.  The complement of a category is specified by inserting
- * '^' after the opening '[:'.  The following category names are
- * recognized.  Actual determination of category data uses
- * <code>Character.getType()</code>, so it reflects the underlying
- * implmementation used by <code>Character</code>.  As of Java 2 and
- * JDK 1.1.8, this is Unicode 2.1.2.
+ * <p>Character properties are specified using the POSIX-like syntax
+ * "[:Lu:]" or the Perl-like syntax "\p{Lu}".  The complement of a
+ * category is specified as "[:^Lu:]" or "\P{Lu}".  Actual
+ * determination of category data is accomplished by UCharacter using
+ * the underlying Unicode database.
  *
- * <pre>
- * Normative
- *     Mn = Mark, Non-Spacing
- *     Mc = Mark, Spacing Combining
- *     Me = Mark, Enclosing
+ * <p>For details of the property syntax please see this
+ * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">
+ * draft document</a>.
  *
- *     Nd = Number, Decimal Digit
- *     Nl = Number, Letter
- *     No = Number, Other
- *
- *     Zs = Separator, Space
- *     Zl = Separator, Line
- *     Zp = Separator, Paragraph
- *
- *     Cc = Other, Control
- *     Cf = Other, Format
- *     Cs = Other, Surrogate
- *     Co = Other, Private Use
- *     Cn = Other, Not Assigned
- *
- * Informative
- *     Lu = Letter, Uppercase
- *     Ll = Letter, Lowercase
- *     Lt = Letter, Titlecase
- *     Lm = Letter, Modifier
- *     Lo = Letter, Other
- *
- *     Pc = Punctuation, Connector
- *     Pd = Punctuation, Dash
- *     Ps = Punctuation, Open
- *     Pe = Punctuation, Close
- *    *Pi = Punctuation, Initial quote
- *    *Pf = Punctuation, Final quote
- *     Po = Punctuation, Other
- *
- *     Sm = Symbol, Math
- *     Sc = Symbol, Currency
- *     Sk = Symbol, Modifier
- *     So = Symbol, Other
- * </pre>
- * *Unsupported by Java (and hence unsupported by UnicodeSet).
+ * <p><em>Note:</em> Not all properties are currently supported.
+ * Currently, only the general category, script, and numeric value
+ * properties are supported.  Support for other properties will be
+ * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.39 $ $Date: 2001/10/10 21:35:05 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.40 $ $Date: 2001/10/17 19:17:06 $
+ */
 public class UnicodeSet extends UnicodeFilter {
 
     /* Implementation Notes.
@@ -313,28 +279,11 @@ public class UnicodeSet extends UnicodeFilter {
      * modified using the non-pattern API, this string will be null,
      * indicating that toPattern() must generate a pattern
      * representation from the inversion list.
-     */ 
+     */
     private String pat = null;
 
     private static final int START_EXTRA = 16;         // initial storage. Must be >= 0
     private static final int GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
-
-    private static final String CATEGORY_NAMES =
-        //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
-        //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6   8 9 0 1 2 3 4 5 6 7 8
-        "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCf--CoCsPdPsPePcPoSmScSkSo";
-
-    private static final int UNSUPPORTED_CATEGORY = 17;
-
-    private static final int CATEGORY_COUNT = 29;
-
-    /**
-     * A cache mapping character category integers, as returned by
-     * Character.getType(), to inversion lists.  Entries are initially
-     * null and are created on demand.
-     */
-    private static final UnicodeSet[] CATEGORY_CACHE =
-        new UnicodeSet[CATEGORY_COUNT];
 
     //----------------------------------------------------------------
     // Public API
@@ -408,19 +357,27 @@ public class UnicodeSet extends UnicodeFilter {
         applyPattern(pattern, pos, symbols, true);
     }
 
+    private static final String CATEGORY_NAMES =
+        //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
+        //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6   8 9 0 1 2 3 4 5 6 7 8
+        "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCf--CoCsPdPsPePcPoSmScSkSo";
     /**
-     * Constructs a set from the given Unicode character category.
+     * DEPRECATED - Constructs a set from the given Unicode character
+     * category.
      * @param category an integer indicating the character category as
-     * returned by <code>Character.getType()</code>.
+     * returned by <code>java.lang.Character.getType()</code>.  Note
+     * that this is <em>different</em> from the UCharacterCategory
+     * codes.
      * @exception java.lang.IllegalArgumentException if the given
      * category is invalid.
+     * @deprecated this will be removed Dec-31-2001
      */
     public UnicodeSet(int category) {
-        if (category < 0 || category >= CATEGORY_COUNT ||
-            category == UNSUPPORTED_CATEGORY) {
+        if (category < 0 || category > java.lang.Character.OTHER_SYMBOL ||
+            category == 17) {
             throw new IllegalArgumentException("Invalid category");
         }
-        set(getCategorySet(category));
+        applyPattern(CATEGORY_NAMES.substring(2*category, 2*category+2), false);
     }
 
     /**
@@ -490,6 +447,16 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
+     * Return true if the given position, in the given pattern, appears
+     * to be the start of a UnicodeSet pattern.
+     */
+    public static boolean resemblesPattern(String pattern, int pos) {
+        return ((pos+1) < pattern.length() &&
+                pattern.charAt(pos) == '[') ||
+            UnicodePropertySet.resemblesPattern(pattern, pos);
+    }
+
+    /**
      * Append the <code>toPattern()</code> representation of a
      * character to the given <code>StringBuffer</code>.
      */
@@ -509,6 +476,8 @@ public class UnicodeSet extends UnicodeFilter {
         case '^': // COMPLEMENT:
         case '&': // INTERSECTION:
         case '\\': //BACKSLASH:
+        case '{':
+        case '}':
             buf.append('\\');
             break;
         default:
@@ -607,28 +576,28 @@ public class UnicodeSet extends UnicodeFilter {
             }
             return result;
         }
-        
+
         return _generatePattern(result, escapeUnprintable);
     }
 
     /**
      * Generate and append a string representation of this set to result.
      * This does not use this.pat, the cleaned up copy of the string
-     * passed to applyPattern(). 
+     * passed to applyPattern().
      */
     public StringBuffer _generatePattern(StringBuffer result,
                                          boolean escapeUnprintable) {
         result.append('[');
 
-        // Check against the predefined categories.  We implicitly build
-        // up ALL category sets the first time toPattern() is called.
-        for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
-            if (this.equals(getCategorySet(cat))) {
-                result.append(':');
-                result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
-                return result.append(":]");
-            }
-        }
+//      // Check against the predefined categories.  We implicitly build
+//      // up ALL category sets the first time toPattern() is called.
+//      for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
+//          if (this.equals(getCategorySet(cat))) {
+//              result.append(':');
+//              result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
+//              return result.append(":]");
+//          }
+//      }
 
         int count = getRangeCount();
 
@@ -1205,7 +1174,7 @@ public class UnicodeSet extends UnicodeFilter {
         StringBuffer newPat = new StringBuffer("[");
         int nestedPatStart = -1; // see below for usage
         boolean nestedPatDone = false; // see below for usage
-        
+
         boolean invert = false;
         clear();
 
@@ -1231,8 +1200,9 @@ public class UnicodeSet extends UnicodeFilter {
         // mode 1: '[' seen; if next is '^' or ':' then special
         // mode 2: '[' '^'? seen; parse pattern and close with ']'
         // mode 3: '[:' seen; parse category and close with ':]'
+        // mode 4: ']' seen; parse complete
+        // mode 5: Top-level property pattern seen
         int mode = 0;
-        int colonPos = 0; // Expected pos of ':' in '[:'
         int start = pos.getIndex();
         int i = start;
         int limit = pattern.length();
@@ -1285,9 +1255,11 @@ public class UnicodeSet extends UnicodeFilter {
             // Parse the opening '[' and optional following '^'
             switch (mode) {
             case 0:
-                if (c == '[') {
+                if (UnicodePropertySet.resemblesPattern(pattern, i-1)) {
+                    mode = 3;
+                    break; // Fall through
+                } else if (c == '[') {
                     mode = 1; // Next look for '^'
-                    colonPos = i; // Expect ':' at next offset
                     continue;
                 } else {
                     throw new IllegalArgumentException("Missing opening '['");
@@ -1299,17 +1271,6 @@ public class UnicodeSet extends UnicodeFilter {
                     invert = true;
                     newPat.append((char) c);
                     continue; // Back to top to fetch next character
-                case ':':
-                    if (i-1 == colonPos) {
-                        // '[:' cannot have whitespace in it
-                        --i; // Backup to the '['
-                        c = '[';
-                        mode = 3;
-                        // Fall through and parse category using the same
-                        // code used to parse a nested category.  The mode
-                        // will indicate that this is actually top level.
-                    }
-                    break; // Fall through
                 case '-':
                     isLiteral = true; // Treat leading '-' as a literal
                     break; // Fall through
@@ -1326,12 +1287,47 @@ public class UnicodeSet extends UnicodeFilter {
             // buffer.  Characters in the variable buffer have already
             // benn through escape and variable reference processing.
             if (varValueBuffer == null) {
+                /**
+                 * Handle property set patterns.
+                 */
+                if (UnicodePropertySet.resemblesPattern(pattern, i-1)) {
+                    ParsePosition pp = new ParsePosition(i-1);
+                    nestedSet = UnicodePropertySet.createFromPattern(pattern, pp);
+                    if (nestedSet == null) {
+                        // assert(pp.getIndex() == i-1);
+                        throw new IllegalArgumentException("Invalid property pattern " +
+                                                           pattern.substring(i-1));
+                    }
+                    nestedPatStart = newPat.length();
+                    nestedPatDone = true; // we're going to do it just below
+
+                    // If we have a top-level property pattern, then trim
+                    // off the opening '[' and use the property pattern
+                    // as the entire pattern.
+                    if (mode == 3) {
+                        newPat.deleteCharAt(0);
+                    }
+                    newPat.append(pattern.substring(i-1, pp.getIndex()));
+                    rebuildPattern = true;
+
+                    i = pp.getIndex(); // advance past property pattern
+                    
+                    if (mode == 3) {
+                        // Entire pattern is a category; leave parse
+                        // loop.  This is one of 2 ways we leave this
+                        // loop if the pattern is well-formed.
+                        set(nestedSet);
+                        mode = 5;
+                        break;
+                    }
+                }
+
                 /* Handle escapes.  If a character is escaped, then it assumes its
                  * literal value.  This is true for all characters, both special
                  * characters and characters with no special meaning.  We also
                  * interpret '\\uxxxx' Unicode escapes here (as literals).
                  */
-                if (c == '\\') {
+                else if (c == '\\') {
                     int[] offset = new int[] { i };
                     int escaped = Utility.unescapeAt(pattern, offset);
                     if (escaped == -1) {
@@ -1373,61 +1369,25 @@ public class UnicodeSet extends UnicodeFilter {
                 }
 
                 /* An opening bracket indicates the first bracket of a nested
-                 * subpattern, either a normal pattern or a category pattern.  We
-                 * recognize these here and set nestedSet accordingly.
+                 * subpattern.
                  */
                 else if (!isLiteral && c == '[') {
                     // Record position before nested pattern
                     nestedPatStart = newPat.length();
 
-                    // Handle "[:...:]", representing a character category
-                    if (i < pattern.length() && pattern.charAt(i) == ':') {
-                        ++i;
-                        int j = pattern.indexOf(":]", i);
-                        if (j < 0) {
-                            throw new IllegalArgumentException("Missing \":]\"");
-                        }
-                        String scratch = pattern.substring(i, j);
-                        nestedSet = new UnicodeSet();
-                        nestedSet.applyCategory(scratch);
-                        nestedPatDone = true; // We're going to do it just below
-                        i = j+2; // Advance i past ":]"
-
-                        // Use a rebuilt pattern.  If we are top level,
-                        // then there is already a SET_OPEN in newPat, and
-                        // SET_CLOSE will be appended elsewhere.
-                        if (mode != 3) {
-                            newPat.append('[');
-                        }
-                        newPat.append(':').append(scratch).append(':');
-                        if (mode != 3) {
-                            newPat.append(']');
-                        }
-                        rebuildPattern = true;
-
-                        if (mode == 3) {
-                            // Entire pattern is a category; leave parse
-                            // loop.  This is one of 2 ways we leave this
-                            // loop if the pattern is well-formed.
-                            set(nestedSet);
-                            mode = 4;
-                            break;
-                        }
-                    } else {
-                        // Recurse to get the pairs for this nested set.
-                        // Backup i to '['.
-                        pos.setIndex(--i);
-                        switch (lastOp) {
-                        case '-':
-                        case '&':
-                            newPat.append(lastOp);
-                            break;
-                        }
-                        nestedSet = new UnicodeSet();
-                        nestedSet._applyPattern(pattern, pos, symbols, newPat, ignoreWhitespace);
-                        nestedPatDone = true;
-                        i = pos.getIndex();
+                    // Recurse to get the pairs for this nested set.
+                    // Backup i to '['.
+                    pos.setIndex(--i);
+                    switch (lastOp) {
+                    case '-':
+                    case '&':
+                        newPat.append(lastOp);
+                        break;
                     }
+                    nestedSet = new UnicodeSet();
+                    nestedSet._applyPattern(pattern, pos, symbols, newPat, ignoreWhitespace);
+                    nestedPatDone = true;
+                    i = pos.getIndex();
                 }
             }
 
@@ -1487,7 +1447,7 @@ public class UnicodeSet extends UnicodeFilter {
                 // loop if the pattern is well-formed.
                 if (anchor > 2 || anchor == 1) {
                     throw new IllegalArgumentException("Syntax error near $" + pattern);
-                    
+
                 }
                 if (anchor == 2) {
                     rebuildPattern = true;
@@ -1524,15 +1484,23 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
 
-        if (lastChar != NONE) {
+        if (mode < 4) {
+            throw new IllegalArgumentException("Missing ']'");
+        }
+
+        // Treat a trailing '$' as indicating ETHER.  This code is only
+        // executed if symbols == NULL; otherwise other code parses the
+        // anchor.
+        if (lastChar == SymbolTable.SYMBOL_REF) {
+            rebuildPattern = true;
+            newPat.append(lastChar);
+            add(TransliterationRule.ETHER);
+        }
+        
+        else if (lastChar != NONE) {
             add(lastChar, lastChar);
             _appendToPat(newPat, lastChar, false);
         }
-
-//      if (mode == 0) {
-//          throw new IllegalArgumentException("Missing '[' in \"" +
-//                                             pattern.substring(start) + '"');
-//      }
 
         // Handle unprocessed stuff preceding the closing ']'
         if (lastOp == '-') {
@@ -1543,7 +1511,9 @@ public class UnicodeSet extends UnicodeFilter {
             throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         }
 
-        newPat.append(']');
+        if (mode == 4) {
+            newPat.append(']');
+        }
 
         /**
          * If we saw a '^' after the initial '[' of this pattern, then perform
@@ -1553,21 +1523,6 @@ public class UnicodeSet extends UnicodeFilter {
             complement();
         }
 
-        if (mode != 4) {
-            throw new IllegalArgumentException("Missing ']'");
-        }
-
-//      /**
-//       * i indexes the last character we parsed or is pattern.length().  In
-//       * the latter case, we have run off the end without finding a closing
-//       * ']'.  Otherwise, we know i < pattern.length(), and we set the
-//       * ParsePosition to the next character to be parsed.
-//       */
-//      if (i == limit) {
-//          throw new IllegalArgumentException("Missing ']' in \"" +
-//                                             pattern.substring(start) + '"');
-//      }
-  
         pos.setIndex(i);
 
         // Use the rebuilt pattern (newPat) only if necessary.  Prefer the
@@ -1584,136 +1539,6 @@ public class UnicodeSet extends UnicodeFilter {
                                pattern.substring(start, i+1) + ") -> " +
                                com.ibm.util.Utility.escape(toString()));
         }
-    }
-
-    //----------------------------------------------------------------
-    // Implementation: Generation of Unicode categories
-    //----------------------------------------------------------------
-
-    /**
-     * Sets this object to the given category, given its name.
-     * The category name must be either a two-letter name, such as
-     * "Lu", or a one letter name, such as "L".  One-letter names
-     * indicate the logical union of all two-letter names that start
-     * with that letter.  Case is significant.  If the name starts
-     * with the character '^' then the complement of the given
-     * character set is returned.
-     *
-     * Although individual categories such as "Lu" are cached, we do
-     * not currently cache single-letter categories such as "L" or
-     * complements such as "^Lu" or "^L".  It would be easy to cache
-     * these as well in a hashtable should the need arise.
-     *
-     * NEW: The category name can now be a script name, as defined
-     * by UScript.
-     */
-    private void applyCategory(String catName) {
-        boolean invert = (catName.length() > 1 &&
-                          catName.charAt(0) == '^');
-        if (invert) {
-            catName = catName.substring(1);
-        }
-
-        boolean match = false;
-
-        // BE CAREFUL not to modify the return value from
-        // getCategorySet(int).
-
-        // if we have two characters, search the category map for that
-        // code and either construct and return a UnicodeSet from the
-        // data in the category map or throw an exception
-        if (catName.length() == 2) {
-            int i = CATEGORY_NAMES.indexOf(catName);
-            if (i>=0 && i%2==0) {
-                i /= 2;
-                if (i != UNSUPPORTED_CATEGORY) {
-                    set(getCategorySet(i));
-                    match = true;
-                }
-            }
-        } else if (catName.length() == 1) {
-            // if we have one character, search the category map for
-            // codes beginning with that letter, and union together
-            // all of the matching sets that we find (or throw an
-            // exception if there are no matches)
-            clear();
-            for (int i=0; i<CATEGORY_COUNT; ++i) {
-                if (i != UNSUPPORTED_CATEGORY &&
-                    CATEGORY_NAMES.charAt(2*i) == catName.charAt(0)) {
-                    addAll(getCategorySet(i));
-                    match = true;
-                }
-            }
-        }
-
-        if (!match) {
-            // TODO: Add caching of these, if desired
-            int script = UScript.getCode(catName);
-            if (script != UScript.INVALID_CODE) {
-                match = true;
-                clear();
-                int start = -1;
-                int end = -2;
-                for (int i=MIN_VALUE; i<=MAX_VALUE; ++i) {
-                    if (UScript.getScript(i) == script) {
-                        if ((end+1) == i) {
-                            end = i;
-                        } else {
-                            if (start >= 0) {
-                                add(start, end);
-                            }
-                            start = end = i;
-                        }
-                    }
-                }
-                if (start >= 0) {
-                    add(start, end);
-                }
-            }
-        }
-
-        if (!match) {
-            throw new IllegalArgumentException("Illegal category [:" + catName + ":]");
-        }
-
-        if (invert) {
-            complement();
-        }
-    }
-
-    /**
-     * Returns an inversion list for the given category.  This list is
-     * cached and returned again if this method is called again with
-     * the same parameter.
-     *
-     * Callers MUST NOT MODIFY the returned set.
-     */
-    private static UnicodeSet getCategorySet(int cat) {
-        if (CATEGORY_CACHE[cat] == null) {
-            // Walk through all Unicode characters, noting the start
-            // and end of each range for which Character.getType(c)
-            // returns the given category integer.
-            UnicodeSet set = new UnicodeSet();
-            int start = -1;
-            int end = -2;
-            for (int i=MIN_VALUE; i<=MAX_VALUE; ++i) {
-                if (Character.getType((char)i) == cat) {
-                    if ((end+1) == i) {
-                        end = i;
-                    } else {
-                        if (start >= 0) {
-                            set.add(start, end);
-                        }
-                        start = end = i;
-                    }
-                }
-            }
-            if (start >= 0) {
-                set.add(start, end);
-            }
-            CATEGORY_CACHE[cat] = set;
-        }
-        return CATEGORY_CACHE[cat];
     }
 
     //----------------------------------------------------------------
