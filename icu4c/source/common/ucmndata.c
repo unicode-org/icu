@@ -143,10 +143,10 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
             /* found it */
 #ifdef UDATA_DEBUG
             fprintf(stderr, "FOUND: %p\n",
-                normalizeDataPointer(toc[start].pHeader));
+                UDataMemory_normalizeDataPointer(toc[start].pHeader));
 #endif
 
-            return normalizeDataPointer(toc[start].pHeader);
+            return UDataMemory_normalizeDataPointer(toc[start].pHeader);
         } else {
 #ifdef UDATA_DEBUG
             fprintf(stderr, "NOT found\n");
@@ -161,8 +161,8 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
     }
 }
 
-static commonDataFuncs CmnDFuncs = {offsetTOCLookupFn,  offsetTOCEntryCount};
-static commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCount};
+static const commonDataFuncs CmnDFuncs = {offsetTOCLookupFn,  offsetTOCEntryCount};
+static const commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCount};
 
 
 
@@ -174,7 +174,7 @@ static commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCount};
  *                    and set the appropriate error code.               *
  *                                                                      *
  *----------------------------------------------------------------------*/
-void checkCommonData(UDataMemory *udm, UErrorCode *err) {
+void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
     if (U_FAILURE(*err)) {
         return;
     }

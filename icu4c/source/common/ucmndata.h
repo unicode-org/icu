@@ -75,7 +75,7 @@ typedef struct {
  *     otherwise
  *         set an errorcode.
  */
-void   checkCommonData(UDataMemory *pData, UErrorCode *pErrorCode);
+void   udata_checkCommonData(UDataMemory *pData, UErrorCode *pErrorCode);
 
 
 #endif

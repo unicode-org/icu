@@ -55,7 +55,7 @@ UDataMemory *UDataMemory_createNewInstance(UErrorCode *pErr) {
 
 
 const DataHeader *
-normalizeDataPointer(const void *p) {
+UDataMemory_normalizeDataPointer(const void *p) {
     /* allow the data to be optionally prepended with an alignment-forcing double value */
     const DataHeader *pdh = (const DataHeader *)p;
     if(pdh==NULL || (pdh->dataHeader.magic1==0xda && pdh->dataHeader.magic2==0x27)) {
@@ -67,7 +67,7 @@ normalizeDataPointer(const void *p) {
 
 
 void UDataMemory_setData (UDataMemory *This, const void *dataAddr) {
-    This->pHeader = normalizeDataPointer(dataAddr);
+    This->pHeader = UDataMemory_normalizeDataPointer(dataAddr);
 }
 
 

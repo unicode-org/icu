@@ -352,7 +352,7 @@ static int dlclose(void *handle) {
         *basename=0;
     }
 
-    checkCommonData(&tData, pErrorCode);
+    udata_checkCommonData(&tData, pErrorCode);
     if (U_SUCCESS(*pErrorCode)) {
         /* Don't close the old data - someone might be using it
          * May need to change the global to be a pointer rather than a static struct
