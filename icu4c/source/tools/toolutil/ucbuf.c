@@ -28,6 +28,16 @@
 #define MAX_U_BUF 1500
 #define CONTEXT_LEN 15
 
+struct UCHARBUF {
+    UChar* buffer;
+    UChar* currentPos;
+    UChar* bufLimit;
+    int32_t remaining;
+    FileStream* in;
+    UConverter* conv;
+    UBool showWarning; /* makes this API not produce any errors */
+};
+
 static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
     /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
     char start[4]={ '\xa5', '\xa5', '\xa5', '\xa5' };
@@ -142,8 +152,12 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             int32_t start=0;
             int32_t stop =0;
             int32_t pos =0;
-
-            printf("\n###WARNING: Encountered abnormal bytes while converting input stream to target encoding: %s\n",u_errorName(*err));
+            
+            if( buf->showWarning==TRUE){
+                fprintf(stderr,"\n###WARNING: Encountered abnormal bytes while" 
+                               " converting input stream to target encoding: %s\n",
+                               u_errorName(*err));
+            }
 
             *err = U_ZERO_ERROR;
 
@@ -168,10 +182,13 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             memcpy(postContext,source,stop-start);
             /* null terminate the buffer */
             postContext[stop-start] = 0;
-            /* print out the context */
-            printf("\tPre-context: %s\n",preContext);
-            printf("\tContext: %s\n",context);
-            printf("\tPost-context: %s\n", postContext);
+           
+            if(buf->showWarning ==TRUE){
+                /* print out the context */
+                fprintf(stderr,"\tPre-context: %s\n",preContext);
+                fprintf(stderr,"\tContext: %s\n",context);
+                fprintf(stderr,"\tPost-context: %s\n", postContext);
+            }
             
             /* reset the converter */
             ucnv_reset(buf->conv);
@@ -304,7 +321,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 
 /* open a UCHARBUF */
 U_CAPI UCHARBUF* U_EXPORT2
-ucbuf_open(FileStream* in,const char* cp, UErrorCode* err){
+ucbuf_open(FileStream* in,const char* cp, UBool showWarning, UErrorCode* err){
 
     UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
     int numRead =0;
@@ -314,14 +331,18 @@ ucbuf_open(FileStream* in,const char* cp, UErrorCode* err){
     if(buf){
         buf->in=in;
         buf->conv=NULL;
-        if(cp){
-            if(*cp=='\0'){
-                if(ucbuf_autodetect_nrw(in,&cp,&numRead)){
-                    buf->conv=ucnv_open(cp,err);
-                }
-            }else{
+        buf->showWarning = showWarning;
+        if(!cp ||(cp && *cp=='\0')){
+            /* don't have code page name... try to autodetect */
+            if(ucbuf_autodetect_nrw(in,&cp,&numRead)){
                 buf->conv=ucnv_open(cp,err);
             }
+        }else{
+            buf->conv=ucnv_open(cp,err);
+        }
+
+        if((buf->conv==NULL) && (buf->showWarning==TRUE)){
+            fprintf(stderr,"###WARNING: No converter defined. Using codepage of system.\n");
         }
         buf->remaining=T_FileStream_size(in)-numRead;
         buf->buffer=(UChar*) uprv_malloc(sizeof(UChar)* MAX_U_BUF);
