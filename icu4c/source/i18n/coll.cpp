@@ -100,7 +100,7 @@ CollatorFactory::getDisplayName(const Locale& objectLocale,
 
 class ICUCollatorFactory : public ICUResourceBundleFactory {
  public:
-    ICUCollatorFactory():  ICUResourceBundleFactory(UnicodeString(U_ICUDATA_COLL, (char*)NULL)) { } 
+    ICUCollatorFactory():  ICUResourceBundleFactory(UnicodeString(U_ICUDATA_COLL, -1, US_INV)) { } 
  protected:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const;
 };
@@ -125,7 +125,7 @@ ICUCollatorFactory::create(const ICUServiceKey& key, const ICUService* /* servic
 class ICUCollatorService : public ICULocaleService {
 public:
     ICUCollatorService()
-        : ICULocaleService("Collator")
+        : ICULocaleService(UNICODE_STRING_SIMPLE("Collator"))
     {
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUCollatorFactory(), status);
