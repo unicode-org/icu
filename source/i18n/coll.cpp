@@ -88,6 +88,25 @@ Collator* Collator::createInstance(const Locale&  desiredLocale,
   return collation;
 }
 
+Collator *
+Collator::createInstance(const Locale &loc,
+                         UVersionInfo version,
+                         UErrorCode &status) {
+  Collator *collator;
+  UVersionInfo info;
+
+  collator=new RuleBasedCollator(loc, status);
+  if(U_SUCCESS(status)) {
+    collator->getVersion(info);
+    if(0!=uprv_memcmp(version, info, sizeof(UVersionInfo))) {
+      delete collator;
+      status=U_MISSING_RESOURCE_ERROR;
+      return NULL;
+    }
+  }
+  return collator;
+}
+
 UBool Collator::equals(const UnicodeString& source, 
                           const UnicodeString& target) const
 {
