@@ -43,6 +43,7 @@ enum ufmt_type_info
   ufmt_ustring,    /* UChar* */
   ufmt_last
 };
+typedef enum ufmt_type_info ufmt_type_info;
 
 /**
  * Union representing a uprintf/uscanf argument
@@ -63,7 +64,7 @@ typedef union ufmt_args ufmt_args;
  * @param b An integer
  * @return <TT>a</TT> if </TT>a < b</TT>, <TT>b</TT> otherwise
  */
-#define ufmt_min(a,b) (a) < (b) ? (a) : (b)
+#define ufmt_min(a,b) ((a) < (b) ? (a) : (b))
 
 /**
  * Convert a UChar in a some radix to an integer value.
