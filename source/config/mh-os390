@@ -1,0 +1,60 @@
+## 390-specific setup 
+
+CFLAGS390=	-W0,"langlvl(extended)" -g -Wc,dll,expo
+DEFS390=        -DIBM_OS390 -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED
+ARFLAGS=        -cr
+
+
+## Commands to generate dependency files
+GEN_DEPS.c=	makedep                        
+GEN_DEPS.cc=	makedep
+
+## Commands to compile
+COMPILE.c=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
+COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CPPFLAGS) $(CFLAGS390) $(DEFS390) -c
+
+## Commands to link
+LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands for shared library (dll)                       			
+SHLIB.c=	$(LINK.c) -Wl,dll
+SHLIB.cc=	$(LINK.cc) -Wl,dll
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+
+## Shared object suffix (switch to dll for shared library build)
+SO=		dll
+
+## Special 390 rules
+
+## Build archive from object
+%.a : $(OBJECTS)
+	$(AR) $(ARFLAGS) $@ $(OBJECTS)
+
+## Compilation rules
+%.o :$(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o :$(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec 'touch            $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.c) -f $*.u $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec 'touch              $*.u  > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.cc)  -f $*.u $< > /dev/null 2>&1'
+
+## End 390-specific setup

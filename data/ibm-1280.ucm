@@ -1,0 +1,368 @@
+#
+# IBM-1280 - Apple Greek
+#
+<code_set_name>   "IBM-1280"
+<char_name_mask>  "AXXXX"
+<mb_cur_max>      1
+<mb_cur_min>      1
+<uconv_class>     "SBCS"
+<subchar>         \x1A
+
+CHARMAP
+#
+#ISO 10646      IBM-1280
+#_________      _________
+<U0000>         \x00
+<U0001>         \x01
+<U0002>         \x02
+<U0003>         \x03
+<U0004>         \x04
+<U0005>         \x05
+<U0006>         \x06
+<U0007>         \x07
+<U0008>         \x08
+<U0009>         \x09
+<U000A>         \x0A
+<U000B>         \x0B
+<U000C>         \x0C
+<U000D>         \x0D
+<U000E>         \x0E
+<U000F>         \x0F
+<U0010>         \x10
+<U2318>         \x11
+<U0011>         \x11
+<U2713>         \x12
+<U0012>         \x12
+<U2666>         \x13
+<U0013>         \x13
+<UF8FE>         \x14
+<U0014>         \x14
+<U0015>         \x15
+<U0016>         \x16
+<U0017>         \x17
+<U0018>         \x18
+<U0019>         \x19
+<U001A>         \x1A
+<U001B>         \x1B
+<U001C>         \x1C
+<U001D>         \x1D
+<U001E>         \x1E
+<U001F>         \x1F
+<U0020>         \x20
+<UFF01>         \x21
+<U0021>         \x21
+<UFF02>         \x22
+<U0022>         \x22
+<UFF03>         \x23
+<U0023>         \x23
+<UFF04>         \x24
+<U0024>         \x24
+<UFF05>         \x25
+<U0025>         \x25
+<UFF06>         \x26
+<U0026>         \x26
+<UFF07>         \x27
+<U0027>         \x27
+<UFF08>         \x28
+<U0028>         \x28
+<UFF09>         \x29
+<U0029>         \x29
+<UFF0A>         \x2A
+<U002A>         \x2A
+<UFF0B>         \x2B
+<U002B>         \x2B
+<UFF0C>         \x2C
+<U002C>         \x2C
+<UFF0D>         \x2D
+<U002D>         \x2D
+<UFF0E>         \x2E
+<U002E>         \x2E
+<UFF0F>         \x2F
+<U002F>         \x2F
+<UFF10>         \x30
+<U0030>         \x30
+<UFF11>         \x31
+<U0031>         \x31
+<UFF12>         \x32
+<U0032>         \x32
+<UFF13>         \x33
+<U0033>         \x33
+<UFF14>         \x34
+<U0034>         \x34
+<UFF15>         \x35
+<U0035>         \x35
+<UFF16>         \x36
+<U0036>         \x36
+<UFF17>         \x37
+<U0037>         \x37
+<UFF18>         \x38
+<U0038>         \x38
+<UFF19>         \x39
+<U0039>         \x39
+<UFF1A>         \x3A
+<U003A>         \x3A
+<UFF1B>         \x3B
+<U003B>         \x3B
+<UFF1C>         \x3C
+<U003C>         \x3C
+<UFF1D>         \x3D
+<U003D>         \x3D
+<UFF1E>         \x3E
+<U003E>         \x3E
+<UFF1F>         \x3F
+<U003F>         \x3F
+<UFF20>         \x40
+<U0040>         \x40
+<UFF21>         \x41
+<U0041>         \x41
+<UFF22>         \x42
+<U0042>         \x42
+<UFF23>         \x43
+<U0043>         \x43
+<UFF24>         \x44
+<U0044>         \x44
+<UFF25>         \x45
+<U0045>         \x45
+<UFF26>         \x46
+<U0046>         \x46
+<UFF27>         \x47
+<U0047>         \x47
+<UFF28>         \x48
+<U0048>         \x48
+<UFF29>         \x49
+<U0049>         \x49
+<UFF2A>         \x4A
+<U004A>         \x4A
+<UFF2B>         \x4B
+<U004B>         \x4B
+<UFF2C>         \x4C
+<U004C>         \x4C
+<UFF2D>         \x4D
+<U004D>         \x4D
+<UFF2E>         \x4E
+<U004E>         \x4E
+<UFF2F>         \x4F
+<U004F>         \x4F
+<UFF30>         \x50
+<U0050>         \x50
+<UFF31>         \x51
+<U0051>         \x51
+<UFF32>         \x52
+<U0052>         \x52
+<UFF33>         \x53
+<U0053>         \x53
+<UFF34>         \x54
+<U0054>         \x54
+<UFF35>         \x55
+<U0055>         \x55
+<UFF36>         \x56
+<U0056>         \x56
+<UFF37>         \x57
+<U0057>         \x57
+<UFF38>         \x58
+<U0058>         \x58
+<UFF39>         \x59
+<U0059>         \x59
+<UFF3A>         \x5A
+<U005A>         \x5A
+<UFF3B>         \x5B
+<U005B>         \x5B
+<UFF3C>         \x5C
+<U005C>         \x5C
+<UFF3D>         \x5D
+<U005D>         \x5D
+<UFF3E>         \x5E
+<U005E>         \x5E
+<UFF3F>         \x5F
+<U005F>         \x5F
+<UFF40>         \x60
+<U0060>         \x60
+<UFF41>         \x61
+<U0061>         \x61
+<UFF42>         \x62
+<U0062>         \x62
+<UFF43>         \x63
+<U0063>         \x63
+<UFF44>         \x64
+<U0064>         \x64
+<UFF45>         \x65
+<U0065>         \x65
+<UFF46>         \x66
+<U0066>         \x66
+<UFF47>         \x67
+<U0067>         \x67
+<UFF48>         \x68
+<U0068>         \x68
+<UFF49>         \x69
+<U0069>         \x69
+<UFF4A>         \x6A
+<U006A>         \x6A
+<UFF4B>         \x6B
+<U006B>         \x6B
+<UFF4C>         \x6C
+<U006C>         \x6C
+<UFF4D>         \x6D
+<U006D>         \x6D
+<UFF4E>         \x6E
+<U006E>         \x6E
+<UFF4F>         \x6F
+<U006F>         \x6F
+<UFF50>         \x70
+<U0070>         \x70
+<UFF51>         \x71
+<U0071>         \x71
+<UFF52>         \x72
+<U0072>         \x72
+<UFF53>         \x73
+<U0073>         \x73
+<UFF54>         \x74
+<U0074>         \x74
+<UFF55>         \x75
+<U0075>         \x75
+<UFF56>         \x76
+<U0076>         \x76
+<UFF57>         \x77
+<U0077>         \x77
+<UFF58>         \x78
+<U0078>         \x78
+<UFF59>         \x79
+<U0079>         \x79
+<UFF5A>         \x7A
+<U007A>         \x7A
+<UFF5B>         \x7B
+<U007B>         \x7B
+<UFF5C>         \x7C
+<U007C>         \x7C
+<UFF5D>         \x7D
+<U007D>         \x7D
+<UFF5E>         \x7E
+<U007E>         \x7E
+<U007F>         \x7F
+<U00C4>         \x80      # la180000  Adieresis
+<U00B9>         \x81      # nd011000  onesuperior
+<U00B2>         \x82      # nd021000  twosuperior
+<U00C9>         \x83      # le120000  Eacute
+<U00B3>         \x84      # nd031000  threesuperior
+<U00D6>         \x85      # lo180000  Odieresis
+<U00DC>         \x86      # lu180000  Udieresis
+<U03F4>         \x87      # sd730000  acutedieresis
+<U00E0>         \x88      # la130000  agrave
+<U00E2>         \x89      # la150000  acircumflex
+<U00E4>         \x8A      # la170000  adieresis
+<U00B4>         \x8B      # sd110900  acute
+<U00A8>         \x8C      # sd170000  dieresis
+<U00E7>         \x8D      # lc410000  ccedilla
+<U00E9>         \x8E      # le110000  eacute
+<U00E8>         \x8F      # le130000  egrave
+<U00EA>         \x90      # le150000  ecircumflex
+<U00EB>         \x91      # le170000  edieresis
+<U00A3>         \x92      # sc020000  sterling
+<U2122>         \x93      # sm540000  trademark
+<U00EE>         \x94      # li150000  icircumflex
+<U00EF>         \x95      # li170000  idieresis
+<U2022>         \x96      # sm570000  bullet1
+<U00BD>         \x97      # nf010000  onehalf
+<U2030>         \x98      # sm560000  perthousand
+<U00F4>         \x99      # lo150000  ocircumflex
+<U00F6>         \x9A      # lo170000  odieresis
+<U00A6>         \x9B      # sm650000  brokenbar
+<U00AD>         \x9C      # sp320000  syllable
+<U00F9>         \x9D      # lu130000  ugrave
+<U00FB>         \x9E      # lu150000  ucircumflex
+<U00FC>         \x9F      # lu170000  udieresis
+<U2020>         \xA0      # sm340000  dagger
+<U0393>         \xA1      # gg020000  Gamma
+<U0394>         \xA2      # gd020000  Delta
+<U0398>         \xA3      # gt620000  Theta
+<U039B>         \xA4      # gl020000  Lambda
+<U039E>         \xA5      # gx020000  Xi
+<U03A0>         \xA6      # gp020000  Pi
+<U00DF>         \xA7      # ls610000  germandbls
+<U00AE>         \xA8      # sm530000  registered
+<U00A9>         \xA9      # sm520000  copyright
+<U03A3>         \xAA      # gs020000  Sigma
+<U03AA>         \xAB      # gi180000  Iotadieresis
+<U00A7>         \xAC      # sm240000  section
+<U2260>         \xAD      # sa540000  notequal
+<U00B0>         \xAE      # sm190000  degree
+<U00B3>         \xAF      # sd630900  periodcentered
+<U0391>         \xB0      # ga020000  Alpha
+<U00B1>         \xB1      # sa020000  plusminus
+<U2264>         \xB2      # sa520000  lessequal
+<U2265>         \xB3      # sa530000  greaterequal
+<U00A5>         \xB4      # sc050000  yen
+<U0392>         \xB5      # gb020000  Beta
+<U0395>         \xB6      # ge020000  Epsilon
+<U0396>         \xB7      # gz020000  Zeta
+<U0397>         \xB8      # ge320000  Eta
+<U0399>         \xB9      # gi020000  Iota
+<U039A>         \xBA      # gk020000  Kappa
+<U039C>         \xBB      # gm020000  Mu
+<U03A6>         \xBC      # gf020000  Phi
+<U03AB>         \xBD      # gu180000  Upsilondieresis
+<U03A8>         \xBE      # gp620000  Psi
+<U03A9>         \xBF      # go320000  Omega
+<U03AC>         \xC0      # ga110000  alphaacute
+<U039D>         \xC1      # gn020000  Nu
+<U00AC>         \xC2      # sm660000  logicalnot
+<U039F>         \xC3      # go020000  Omicron
+<U03A1>         \xC4      # gr020000  Rho
+<U2248>         \xC5      # sa700000  approxequal
+<U03A4>         \xC6      # gt020000  Tau
+<U00AB>         \xC7      # sp170000  guillemotleft
+<U00BB>         \xC8      # sp180000  guillemotright
+<U2026>         \xC9      # sv520000  ellipsis
+<U00A0>         \xCA      # sp300000  reqspace
+<U03A5>         \xCB      # gu020000  Upsilon
+<U03A7>         \xCC      # gh020000  Chi
+<U0386>         \xCD      # ga120000  Alphaacute
+<U0388>         \xCE      # ge120000  Epsilonacute
+<U0153>         \xCF      # lo510000  oe
+<U2013>         \xD0      # ss680000  endash
+<U2015>         \xD1      # sm120000  longdash
+<U201C>         \xD2      # sp210000  quotedblleft
+<U201D>         \xD3      # sp220000  quotedblright
+<U2018>         \xD4      # sp190000  quoteleft
+<U2019>         \xD5      # sp200000  quoteright
+<U00F7>         \xD6      # sa060000  divide
+<U0389>         \xD7      # ge720000  Etaacute
+<U038A>         \xD8      # gi120000  Iotaacute
+<U038C>         \xD9      # go120000  Omicronacute
+<U038E>         \xDA      # gu120000  Upsilonacute
+<U03AD>         \xDB      # ge110000  epsilonacute
+<U03AE>         \xDC      # ge710000  etaacute
+<U03AF>         \xDD      # gi110000  iotaacute
+<U03CC>         \xDE      # go110000  omicronacute
+<U038F>         \xDF      # go720000  Omegaacute
+<U03CD>         \xE0      # gu110000  upsilonacute
+<U03B1>         \xE1      # ga010000  alpha
+<U03B2>         \xE2      # gb010000  beta
+<U03C8>         \xE3      # gp610000  psi
+<U03B4>         \xE4      # gd010000  delta
+<U03B5>         \xE5      # ge010000  epsilon
+<U03C6>         \xE6      # gf010000  phi
+<U03B3>         \xE7      # gg010000  gamma
+<U03B7>         \xE8      # ge310000  eta
+<U03B9>         \xE9      # gi010000  iota
+<U03BE>         \xEA      # gx010000  xi
+<U03BA>         \xEB      # gk010000  kappa
+<U03BB>         \xEC      # gl010000  lambda
+<U03BC>         \xED      # gm010000  micro
+<U03BD>         \xEE      # gn010000  nu
+<U03BF>         \xEF      # go010000  omicron
+<U03C0>         \xF0      # gp010000  pi
+<U03CE>         \xF1      # go710000  omegaacute
+<U03C1>         \xF2      # gr010000  rho
+<U03C3>         \xF3      # gs010000  sigma
+<U03C4>         \xF4      # gt010000  tau
+<U03B8>         \xF5      # gt610000  theta
+<U03C9>         \xF6      # go310000  omega
+<U03C2>         \xF7      # gs610000  sigma1
+<U03C7>         \xF8      # gh010000  chi
+<U03C5>         \xF9      # gu010000  upsilon
+<U03B6>         \xFA      # gz010000  zeta
+<U03CA>         \xFB      # gi170000  iotadieresis
+<U03CB>         \xFC      # gu170000  upsilondieresis
+<U0390>         \xFD      # gi730000  iotaacutedia
+<U03B0>         \xFE      # gu730000  upsilonacutedia
+END CHARMAP

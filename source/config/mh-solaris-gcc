@@ -1,0 +1,46 @@
+## Solaris-specific setup using gcc
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R
+LD_RPATH_PRE=	
+
+## Shared object suffix
+SO=		so
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End Solaris-specific setup

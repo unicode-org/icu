@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+fi {
+    CollationElements { "& V ; w , W & Z < a\u030A , A\u030A< a\u0308 , A\u0308 "
+        "< o\u0308 , O\u0308< o\u030B , O\u030B ; \u00F8 , \u00D8&  Y ; u\u030B, U\u030B"
+        " ; u\u0308 , U\u0308" }
+    Countries { 
+        FI { "Suomi" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "H:mm:ss z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "d. MMMM'ta 'yyyy",
+            "d. MMMM'ta 'yyyy",
+            "d.M.yyyy",
+            "d.M.yyyy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "su",
+            "ma",
+            "ti",
+            "ke",
+            "to",
+            "pe",
+            "la",
+    }
+    DayNames { 
+            "sunnuntai",
+            "maanantai",
+            "tiistai",
+            "keskiviikko",
+            "torstai",
+            "perjantai",
+            "lauantai",
+    }
+    Languages { 
+        fi { "suomi" }
+    }
+    LocaleID { "040b" }
+    LocaleString { "f" }
+    MonthAbbreviations { 
+            "tammi",
+            "helmi",
+            "maalis",
+            "huhti",
+            "touko",
+            "kes\u00E4",
+            "hein\u00E4",
+            "elo",
+            "syys",
+            "loka",
+            "marras",
+            "joulu",
+            "",
+    }
+    MonthNames { 
+            "tammikuu",
+            "helmikuu",
+            "maaliskuu",
+            "huhtikuu",
+            "toukokuu",
+            "kes\u00E4kuu",
+            "hein\u00E4kuu",
+            "elokuu",
+            "syyskuu",
+            "lokakuu",
+            "marraskuu",
+            "joulukuu",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "fin" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

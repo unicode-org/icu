@@ -1,0 +1,25 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+mk_MK {
+    CurrencyElements { 
+            "Den",
+            "MKD",
+            ",",
+    }
+    LocaleString { "mk_MK" }
+    NumberPatterns { 
+            "#,##0.###;(#,##0.###)",
+            "\u00A4 #,##0.##;-\u00A4 #,##0.##",
+            "#,##0%",
+    }
+    ShortCountry { "MKD" }
+}

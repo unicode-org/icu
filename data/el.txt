@@ -1,0 +1,125 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+el {
+    AmPmMarkers { 
+            "\u03C0\u03BC",
+            "\u03BC\u03BC",
+    }
+    CollationElements { "& \u0361 = \u0387 = \u03F3 & \u00B5 < \u0374 < \u0375 <"
+        " \u037A < \u037E < \u0384 < \u0385 & Z < \u03B1 , \u0391 ; \u03AC , \u0386 < \u03B2"
+        " , \u0392 ; \u03D0 < \u03B3 , \u0393 < \u03B4 , \u0394 < \u03B5 , \u0395 ; \u03AD"
+        " , \u0388 < \u03B6 , \u0396 < \u03B7 , \u0397 ; \u03AE , \u0389 < \u03B8 , \u0398"
+        " ; \u03D1 < \u03B9 , \u0399 ; \u03AF , \u038A ; \u03CA , \u03AA ; \u0390 < \u03BA"
+        " , \u039A ; \u03F0 < \u03BB , \u039B < \u03BC , \u039C < \u03BD , \u039D < \u03BE"
+        " , \u039E < \u03BF , \u039F ; \u03CC , \u038C < \u03C0 , \u03A0 ; \u03D6 < \u03C1"
+        " , \u03A1 ; \u03F1 < \u03C3 , \u03C2 , \u03A3 ; \u03F2 < \u03C4 , \u03A4 < \u03C5"
+        " , \u03A5 ; \u03CD , \u038E ; \u03CB , \u03AB = \u03D4 ; \u03B0 ; \u03D2 ; \u03D3"
+        " < \u03C6 , \u03A6 ; \u03D5 < \u03C7 , \u03A7 < \u03C8 , \u03A8 < \u03C9 , \u03A9"
+        " ; \u03CE , \u038F , \u03DA , \u03DC , \u03DE , \u03E0 < \u03E3 , \u03E2 < \u03E5"
+        " , \u03E4 < \u03E7 , \u03E6 < \u03E9 , \u03E8 < \u03EB , \u03EA < \u03ED , \u03EC"
+        " < \u03EF , \u03EE & \u03BC = \u00B5 " }
+    Countries { 
+        GR { "\u0395\u03BB\u03BB\u03AC\u03B4\u03B1" }
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "h:mm:ss a z",
+            "h:mm:ss a z",
+            "h:mm:ss a",
+            "h:mm a",
+            "EEEE, d MMMM yyyy",
+            "d MMMM yyyy",
+            "d MMM yyyy",
+            "d/M/yyyy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "\u039A\u03C5\u03C1",
+            "\u0394\u03B5\u03C5",
+            "\u03A4\u03C1\u03B9",
+            "\u03A4\u03B5\u03C4",
+            "\u03A0\u03B5\u03BC",
+            "\u03A0\u03B1\u03C1",
+            "\u03A3\u03B1\u03B2",
+    }
+    DayNames { 
+            "\u039A\u03C5\u03C1\u03B9\u03B1\u03BA\u03AE",
+            "\u0394\u03B5\u03C5\u03C4\u03AD\u03C1\u03B1",
+            "\u03A4\u03C1\u03AF\u03C4\u03B7",
+            "\u03A4\u03B5\u03C4\u03AC\u03C1\u03C4\u03B7",
+            "\u03A0\u03AD\u03BC\u03C0\u03C4\u03B7",
+            "\u03A0\u03B1\u03C1\u03B1\u03C3\u03BA\u03B5\u03C5\u03AE",
+            "\u03A3\u03AC\u03B2\u03B2\u03B1\u03C4\u03BF",
+    }
+    Languages { 
+        el { "\u03B5\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC" }
+    }
+    LocaleID { "0408" }
+    LocaleString { "el" }
+    MonthAbbreviations { 
+            "\u0399\u03B1\u03BD",
+            "\u03A6\u03B5\u03B2",
+            "\u039C\u03B1\u03C1",
+            "\u0391\u03C0\u03C1",
+            "\u039C\u03B1\u03CA",
+            "\u0399\u03BF\u03C5\u03BD",
+            "\u0399\u03BF\u03C5\u03BB",
+            "\u0391\u03C5\u03B3",
+            "\u03A3\u03B5\u03C0",
+            "\u039F\u03BA\u03C4",
+            "\u039D\u03BF\u03B5",
+            "\u0394\u03B5\u03BA",
+            "",
+    }
+    MonthNames { 
+            "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+            "\u03A6\u03B5\u03B2\u03C1\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
+            "\u039C\u03AC\u03C1\u03C4\u03B9\u03BF\u03C2",
+            "\u0391\u03C0\u03C1\u03AF\u03BB\u03B9\u03BF\u03C2",
+            "\u039C\u03AC\u03CA\u03BF\u03C2",
+            "\u0399\u03BF\u03CD\u03BD\u03B9\u03BF\u03C2",
+            "\u0399\u03BF\u03CD\u03BB\u03B9\u03BF\u03C2",
+            "\u0391\u03CD\u03B3\u03BF\u03C5\u03C3\u03C4\u03BF\u03C2",
+            "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+            "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2",
+            "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+            "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "ell" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

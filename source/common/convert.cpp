@@ -1,0 +1,411 @@
+
+/*******************************************************************************
+*                                                                              *
+* COPYRIGHT:                                                                   *
+*   (C) Copyright International Business Machines Corporation,  1998           *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure    *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
+*                                                                              *
+*******************************************************************************/
+/* C++ wrappers for the ICUs Codeset Conversion Routines*/
+
+class Locale;
+class UnicodeString;
+class Mutex;
+
+#include "utypes.h"
+#include "resbund.h"
+#include "cmemory.h"
+#include "mutex.h"
+extern "C" {
+#include "ucnv_io.h"
+#include "ucnv_bld.h"
+#include "ucnv.h"
+}
+#include "convert.h"
+
+
+
+UnicodeConverterCPP::UnicodeConverterCPP()
+{
+    UErrorCode err = ZERO_ERROR;
+    myUnicodeConverter = ucnv_open(NULL, &err);
+}
+UnicodeConverterCPP::UnicodeConverterCPP(const char* name, UErrorCode& err)
+{
+    myUnicodeConverter = ucnv_open(name, &err);
+}
+
+UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& err)
+{
+  char myName[MAX_CONVERTER_NAME_LENGTH];
+  int i;
+  name.extract(0, i = name.size(), myName);
+  myName[i]='\0';
+  myUnicodeConverter = ucnv_open(myName, &err);
+}
+
+
+UnicodeConverterCPP::UnicodeConverterCPP(int32_t codepageNumber,
+                                         UCNV_PLATFORM platform,
+                                         UErrorCode& err)
+{
+    myUnicodeConverter = ucnv_openCCSID(codepageNumber,
+                                   platform,
+                                   &err);
+}
+
+UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&  that)
+{
+    {
+        /*Decrements the overwritten converter's ref count
+         *Increments the assigner converter's ref count
+         */
+      Mutex updateReferenceCounters;
+      myUnicodeConverter->sharedData->referenceCounter--;
+      that.myUnicodeConverter->sharedData->referenceCounter++;
+    }
+
+    *myUnicodeConverter = *(that.myUnicodeConverter);
+    return *this;
+}
+
+bool_t UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
+{
+  if ((myUnicodeConverter->sharedData    == that.myUnicodeConverter->sharedData) &&
+      (myUnicodeConverter->fromCharErrorBehaviour == that.myUnicodeConverter->fromCharErrorBehaviour) &&
+      (myUnicodeConverter->toUnicodeStatus == that.myUnicodeConverter->toUnicodeStatus) &&
+      (myUnicodeConverter->subCharLen == that.myUnicodeConverter->subCharLen) &&
+      (icu_memcmp(myUnicodeConverter->subChar, that.myUnicodeConverter->subChar, myUnicodeConverter->subCharLen) == 0) &&
+      (myUnicodeConverter->UCharErrorBufferLength == that.myUnicodeConverter->UCharErrorBufferLength) &&
+      (myUnicodeConverter->charErrorBufferLength == that.myUnicodeConverter->charErrorBufferLength) &&
+      (icu_memcmp(myUnicodeConverter->UCharErrorBuffer, that.myUnicodeConverter->UCharErrorBuffer, myUnicodeConverter->UCharErrorBufferLength) == 0) &&
+      (icu_memcmp(myUnicodeConverter->charErrorBuffer, that.myUnicodeConverter->charErrorBuffer, myUnicodeConverter->charErrorBufferLength) == 0) &&
+      (myUnicodeConverter->fromUCharErrorBehaviour == that.myUnicodeConverter->fromUCharErrorBehaviour))
+  return TRUE;
+  else return FALSE;
+}
+
+bool_t UnicodeConverterCPP::operator!=(const UnicodeConverterCPP& that) const
+{
+  return !(*this == that);
+}
+
+UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeConverterCPP&  that)
+{
+  /*increments the referenceCounter to let the static table know
+   *it has one more client
+   */
+    myUnicodeConverter = new UConverter;
+    {
+      Mutex updateReferenceCounter;
+      that.myUnicodeConverter->sharedData->referenceCounter++;
+    }
+    *myUnicodeConverter = *(that.myUnicodeConverter);
+}
+
+
+UnicodeConverterCPP::~UnicodeConverterCPP()
+{
+    ucnv_close(myUnicodeConverter);
+}
+
+ void
+UnicodeConverterCPP::fromUnicodeString(char*                    target,
+                                       int32_t&                 targetSize,
+                                       const UnicodeString&     source,
+                                       UErrorCode&               err) const
+{
+  const UChar* mySource = NULL;
+  int32_t mySourceLength = 0;
+  UConverter myConverter;
+  char *myTarget = NULL;
+
+  if (FAILURE(err)) return;
+
+  if ((myUnicodeConverter == NULL) || source.isBogus() || (targetSize <= 0))
+    {
+      err = ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+
+  /*makes a local copy of the UnicodeConverter*/
+  myConverter = *myUnicodeConverter;
+
+  /*Removes all state info on the UnicodeConverter*/
+  ucnv_reset(&myConverter);
+
+
+  mySourceLength = source.size();
+  mySource = source.getUChars();
+  myTarget = target;
+  ucnv_fromUnicode(&myConverter,
+                 &myTarget,
+                 target + targetSize,
+                 &mySource,
+                 mySource + mySourceLength,
+		   NULL,
+		   TRUE,
+                 &err);
+  targetSize = myTarget - target;
+
+  return;
+}
+
+ void
+UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
+                                     const char*            source,
+                                     int32_t                sourceSize,
+                                     UErrorCode&             err) const
+{
+  const char* mySource = source;
+  const char* mySourceLimit = source + sourceSize;
+  UChar* myTargetUChars = NULL;
+  UChar* myTargetUCharsAlias = NULL;
+  int32_t myTargetUCharsLength = 0;
+  UConverter myConverter;
+
+  if (FAILURE(err)) return;
+  if ((myUnicodeConverter == NULL) || target.isBogus() || (sourceSize <= 0))
+    {
+      err = ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+
+  /*makes a local bitwise copy of the UnicodeConverter*/
+  myConverter = *myUnicodeConverter;
+
+  /*Removes all state info on the UnicodeConverter*/
+  ucnv_reset(&myConverter);
+  /*Allocates the theoritically (Not counting added bytes from the error functions) max buffer
+   *on a "normal" call, only one iteration will be necessary.
+   */
+  myTargetUChars =
+    (UChar*)icu_malloc(sizeof(UChar)*(myTargetUCharsLength = (sourceSize/(int32_t)getMinBytesPerChar())));
+
+  if (myTargetUChars == NULL)
+    {
+      err = MEMORY_ALLOCATION_ERROR;
+      return;
+    }
+  /*renders the target clean*/
+  target.remove();
+
+  /*Will loop until (re-use the same buffer) until no more memory is requested
+   *or an error (other than INDEX_OUTOF_BOUNDS) is encountered
+   */
+  do
+    {
+      err = ZERO_ERROR;
+      myTargetUCharsAlias = myTargetUChars;
+      ucnv_toUnicode(&myConverter,
+                   &myTargetUCharsAlias,
+                   myTargetUChars + myTargetUCharsLength,
+                   &mySource,
+                   mySourceLimit,
+		     NULL,
+		     TRUE,
+		     &err);
+
+      /*appends what we got thus far to the UnicodeString*/
+      target.replace((UTextOffset)target.size(),
+             myTargetUCharsAlias - myTargetUChars,
+             myTargetUChars,
+             myTargetUCharsAlias - myTargetUChars);
+      /*Checks for the integrity of target (UnicodeString) as it adds data to it*/
+      if (target.isBogus()) err = MEMORY_ALLOCATION_ERROR;
+    } while (err == INDEX_OUTOFBOUNDS_ERROR);
+
+
+  icu_free(myTargetUChars);
+
+  return;
+}
+
+
+
+void
+UnicodeConverterCPP::fromUnicode(char*&                 target,
+                                 const char*            targetLimit,
+                                 const UChar*&        source,
+                                 const UChar*         sourceLimit,
+				 int32_t *offsets,
+				 bool_t                 flush,
+                                 UErrorCode&             err)
+{
+    ucnv_fromUnicode(myUnicodeConverter,
+                   &target,
+                   targetLimit,
+                   &source,
+                   sourceLimit,
+		     offsets,
+                   flush,
+                   &err);
+}
+
+
+
+void
+UnicodeConverterCPP::toUnicode(UChar*&           target,
+                   const UChar*      targetLimit,
+                   const char*&        source,
+                   const char*         sourceLimit,
+			       int32_t* offsets,
+                   bool_t              flush,
+                   UErrorCode&          err)
+{
+    ucnv_toUnicode(myUnicodeConverter,
+                 &target,
+                 targetLimit,
+                 &source,
+                 sourceLimit,
+		   offsets,
+                 flush,
+                 &err);
+}
+
+const char*
+UnicodeConverterCPP::getName(UErrorCode&  err) const
+{
+  return ucnv_getName(myUnicodeConverter, &err);
+}
+
+ int8_t
+UnicodeConverterCPP::getMaxBytesPerChar() const
+{
+    return ucnv_getMaxCharSize(myUnicodeConverter);
+}
+
+int8_t
+UnicodeConverterCPP::getMinBytesPerChar() const
+{
+    return ucnv_getMinCharSize(myUnicodeConverter);
+}
+
+void
+UnicodeConverterCPP::getSubstitutionChars(char*             subChars,
+                                          int8_t&           len,
+                                          UErrorCode&        err) const
+{
+    ucnv_getSubstChars(myUnicodeConverter,
+                        subChars,
+                        &len,
+                        &err);
+}
+
+void
+UnicodeConverterCPP::setSubstitutionChars(const char*       subChars,
+                                          int8_t            len,
+                                          UErrorCode&        err)
+{
+    ucnv_setSubstChars(myUnicodeConverter,
+                        subChars,
+                        len,
+                        &err);
+}
+
+
+void
+UnicodeConverterCPP::resetState()
+{
+    ucnv_reset(myUnicodeConverter);
+}
+
+
+int32_t
+UnicodeConverterCPP::getCodepage(UErrorCode& err) const
+{
+    return ucnv_getCCSID(myUnicodeConverter, &err);
+}
+
+UCNV_ToUCallBack
+UnicodeConverterCPP::getMissingCharAction() const
+{
+    return ucnv_getToUCallBack(myUnicodeConverter);
+}
+
+UCNV_FromUCallBack
+UnicodeConverterCPP::getMissingUnicodeAction() const
+{
+    return ucnv_getFromUCallBack(myUnicodeConverter);
+}
+
+
+void
+UnicodeConverterCPP::setMissingCharAction(UCNV_ToUCallBack  action,
+                                          UErrorCode&         err)
+{
+    ucnv_setToUCallBack(myUnicodeConverter, action, &err);
+}
+
+void
+UnicodeConverterCPP::setMissingUnicodeAction(UCNV_FromUCallBack   action,
+                                             UErrorCode&             err)
+{
+    ucnv_setFromUCallBack(myUnicodeConverter, action, &err);
+}
+
+
+void
+UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
+                                    UnicodeString&  displayName) const
+{
+
+  UErrorCode err = ZERO_ERROR;
+  ResourceBundle rb("", displayLocale, err);
+  char tablename[MAX_CONVERTER_NAME_LENGTH];
+
+  if (SUCCESS(err))
+    {
+      rb.getString(UnicodeString(tablename), displayName, err);
+    }
+
+  if (FAILURE(err))
+    {
+      /*Error While creating the resource bundle use the internal name instead*/
+      displayName.remove();
+      displayName = getName(err); /*Get the raw ASCII name*/
+
+    }
+
+  return;
+
+}
+
+
+UCNV_PLATFORM
+UnicodeConverterCPP::getCodepagePlatform(UErrorCode &err) const
+{
+    return ucnv_getPlatform(myUnicodeConverter, &err);
+}
+
+UCNV_TYPE UnicodeConverterCPP::getType() const
+{
+  return ucnv_getType(myUnicodeConverter);
+}
+
+void UnicodeConverterCPP::getStarters(bool_t starters[256],
+				 UErrorCode& err) const
+{
+  ucnv_getStarters(myUnicodeConverter,
+		   starters,
+		   &err);
+  return;
+}
+
+const char* const*
+UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
+{
+  num = ucnv_countAvailable();
+  return AVAILABLE_CONVERTERS_NAMES;
+
+}
+
+int32_t  UnicodeConverterCPP::flushCache()
+{
+  return ucnv_flushCache();
+}
+
+
+
