@@ -17,12 +17,129 @@
 #include "unicode/uiter.h"
 #include "citrtest.h"
 
+
+class  SCharacterIterator : public CharacterIterator {
+public:
+    SCharacterIterator(const UnicodeString& textStr){
+        text = textStr;
+        pos=0;
+        textLength = textStr.length();
+        begin = 0;
+        end=textLength;
+
+    }
+
+    virtual ~SCharacterIterator(){};
+
+                                
+    void setText(const UnicodeString& newText){
+        text = newText;
+    }
+
+    virtual void getText(UnicodeString& result){
+        text.extract(0,text.length(),result);
+    }
+    virtual UClassID getDynamicClassID(void) const{ 
+        return getStaticClassID(); 
+    }
+
+    static UClassID getStaticClassID(void){ 
+        return (UClassID)(&fgClassID); 
+    }
+    virtual UBool operator==(const ForwardCharacterIterator& that) const{
+        return TRUE;
+    }
+
+    virtual CharacterIterator* clone(void) const {
+        return NULL;
+    }
+    virtual int32_t hashCode(void) const{
+        return DONE;
+    }
+    virtual UChar nextPostInc(void){ return text.charAt(pos++);}
+    virtual UChar32 next32PostInc(void){return text.char32At(pos++);}
+    virtual UBool hasNext(){ return TRUE;};
+    virtual UChar first(){return DONE;};
+    virtual UChar32 first32(){return DONE;};
+    virtual UChar last(){return DONE;};
+    virtual UChar32 last32(){return DONE;};
+    virtual UChar setIndex(int32_t pos){return DONE;};
+    virtual UChar32 setIndex32(int32_t pos){return DONE;};
+    virtual UChar current() const{return DONE;};
+    virtual UChar32 current32() const{return DONE;};
+    virtual UChar next(){return DONE;};
+    virtual UChar32 next32(){return DONE;};
+    virtual UChar previous(){return DONE;};
+    virtual UChar32 previous32(){return DONE;};
+    virtual int32_t move(int32_t delta,CharacterIterator::EOrigin origin){    
+        switch(origin) {
+        case kStart:
+            pos = begin + delta;
+            break;
+        case kCurrent:
+            pos += delta;
+            break;
+        case kEnd:
+            pos = end + delta;
+            break;
+        default:
+            break;
+        }
+
+        if(pos < begin) {
+            pos = begin;
+        } else if(pos > end) {
+            pos = end;
+        }
+
+        return pos;
+    };
+    virtual int32_t move32(int32_t delta, CharacterIterator::EOrigin origin){    
+        switch(origin) {
+        case kStart:
+            pos = begin;
+            if(delta > 0) {
+                UTF_FWD_N(text, pos, end, delta);
+            }
+            break;
+        case kCurrent:
+            if(delta > 0) {
+                UTF_FWD_N(text, pos, end, delta);
+            } else {
+                UTF_BACK_N(text, begin, pos, -delta);
+            }
+            break;
+        case kEnd:
+            pos = end;
+            if(delta < 0) {
+                UTF_BACK_N(text, begin, pos, -delta);
+            }
+            break;
+        default:
+            break;
+        }
+
+        return pos;
+    };
+    virtual UBool hasPrevious(){return TRUE;};
+
+  SCharacterIterator&  operator=(const SCharacterIterator&    that){
+     text = that.text;
+     return *this;
+  }
+
+
+private:
+    UnicodeString text;
+    static const char fgClassID;
+};
+const char SCharacterIterator::fgClassID=0;
+
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 CharIterTest::CharIterTest()
 {
 }
-
 void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite LocaleTest: ");
@@ -32,12 +149,45 @@ void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         case 2: name = "TestIteration"; if (exec) TestIteration(); break;
         case 3: name = "TestIterationUChar32"; if (exec) TestIterationUChar32(); break;
         case 4: name = "TestUCharIterator"; if (exec) TestUCharIterator(); break;
-        case 5: name = "TestCharIteratorSubClasses"; if (exec) TestCharIteratorSubClasses(); break;
-
+        case 5: name = "TestCoverage"; if(exec) TestCoverage(); break;
+        case 6: name = "TestCharIteratorSubClasses"; if (exec) TestCharIteratorSubClasses(); break;
         default: name = ""; break; //needed to end loop
     }
 }
 
+void CharIterTest::TestCoverage(){
+    UnicodeString  testText("Now is the time for all good men to come to the aid of their country.");
+    UnicodeString testText2("\\ud800\\udc01deadbeef");
+    testText2 = testText2.unescape();
+    SCharacterIterator* test = new SCharacterIterator(testText);
+    if(test->firstPostInc()!= 0x004E){
+        errln("Failed: firstPostInc() failed");
+    }
+    if(test->getIndex()!=1){
+        errln("Failed: getIndex().");
+    }
+    if(test->getLength()!=testText.length()){
+        errln("Failed: getLength()");
+    }
+    test->setToStart();
+    if(test->getIndex()!=0){
+        errln("Failed: setToStart().");
+    }
+    test->setToEnd();
+    if(test->getIndex()!=testText.length()){
+        errln("Failed: setToEnd().");
+    }
+    if(test->startIndex() != 0){
+        errln("Failed: startIndex()");
+    }
+    test->setText(testText2);
+    if(test->first32PostInc()!= testText2.char32At(0)){
+        errln("Failed: first32PostInc() failed");
+    }
+ 
+    delete test;
+    
+}
 void CharIterTest::TestConstructionAndEquality() {
     UnicodeString  testText("Now is the time for all good men to come to the aid of their country.");
     UnicodeString  testText2("Don't bother using this string.");

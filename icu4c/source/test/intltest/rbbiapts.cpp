@@ -137,6 +137,20 @@ void RBBIAPITest::TestCloneEquals()
     delete biequal;
 }
 
+void RBBIAPITest::TestBoilerPlate()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    BreakIterator* a = BreakIterator::createLineInstance(Locale("hi"), status);
+    BreakIterator* b = BreakIterator::createLineInstance(Locale("hi_IN"),status);
+    if(*a!=*b){
+        errln("Failed: boilerplate method operator!= does not return correct results");
+    }
+    BreakIterator* c = BreakIterator::createLineInstance(Locale("th"),status);
+    if(*c==*a){
+        errln("Failed: boilerplate method opertator== does not return correct results");
+    }
+}
+
 void RBBIAPITest::TestgetRules()
 {
     UErrorCode status=U_ZERO_ERROR;
