@@ -18,6 +18,7 @@
 #include "unicode/nultrans.h"
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "unicode/rep.h"
 
 int32_t getInt(UnicodeString str)

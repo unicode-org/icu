@@ -116,8 +116,8 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     const char* testTextchars= {"Now is the time for all good men to come to the aid of their country."};
     const char* testText2chars={"Don't bother using this string."};
 
-    UChar *testText=(UChar*)malloc(sizeof(UChar) * (strlen(testTextchars)+1));
-    UChar *testText2=(UChar*)malloc(sizeof(UChar) * (strlen(testText2chars)+1));
+    UChar *testText = new UChar[strlen(testTextchars)+1];
+    UChar *testText2 = new UChar[strlen(testText2chars)+1];
 
     u_uastrcpy(testText,  testTextchars);
     u_uastrcpy(testText2, testText2chars);
@@ -184,8 +184,8 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
         errln("operator= failed");
 
     
-    free(testText);
-    free(testText2);
+    delete testText;
+    delete testText2;
 
     delete test1;
     delete test2;

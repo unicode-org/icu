@@ -151,7 +151,7 @@ void BasicNormalizerTest::TestPrevious()
   Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
   
   logln("testing decomp...");
-  int i;
+  uint32_t i;
   for (i = 0; i < ARRAY_LENGTH(canonTests); i++) {
     backAndForth(norm, canonTests[i][0]);
   }
@@ -225,7 +225,7 @@ void BasicNormalizerTest::TestHangulCompose()
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
   norm->setMode(Normalizer::COMPOSE);
-  for (int i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
+  for (uint32_t i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
   delete norm;
@@ -247,7 +247,7 @@ void BasicNormalizerTest::TestHangulDecomp()
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
   norm->setMode(Normalizer::DECOMP);
-  for (int i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
+  for (uint32_t i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
   delete norm;
