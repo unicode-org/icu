@@ -1210,12 +1210,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
-    case doOctal:
-        error(U_REGEX_UNIMPLEMENTED);
-        break;
-
-
-
     case doPossessivePlus:
         // Possessive ++ quantifier.
         // Compiles to
