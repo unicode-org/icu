@@ -113,24 +113,23 @@ binary-indep: build install
 	#
 	# build icu-i18ndata from the source data
 	#
-	test -d debian/icu-i18ndata/$(datasrcdir) || \
-	    mkdir -p debian/icu-i18ndata/$(datasrcdir)
-	install -m 644 $(srcdir)/../data/*.txt \
-	    $(srcdir)/../data/*.brk \
-	    debian/icu-i18ndata/$(datasrcdir)
-	cd debian/icu-i18ndata/$(datasrcdir) && \
-	    $(RM) convrtrs.txt
+	for d in locales translit brkitr; do \
+	    test -d debian/icu-i18ndata/$(datasrcdir)/$$d || \
+	        mkdir -p debian/icu-i18ndata/$(datasrcdir)/$$d; \
+	    install -m 644 $(srcdir)/data/$$d/*.* \
+	        debian/icu-i18ndata/$(datasrcdir)/$$d; \
+	done
 	#
 	# build icu-data from the source data
 	#
-	test -d debian/icu-data/$(datasrcdir) || \
-	    mkdir -p debian/icu-data/$(datasrcdir)
-	install -m 644 $(srcdir)/../data/*.ucm \
-	    debian/icu-data/$(datasrcdir)
-	test -d debian/icu-data/$(datasrcdir)/unidata || \
-	    mkdir -p debian/icu-data/$(datasrcdir)/unidata
-	install -m 644 $(srcdir)/../data/unidata/*.* \
-	    debian/icu-data/$(datasrcdir)/unidata
+	for d in mappings unidata misc; do \
+	    test -d debian/icu-data/$(datasrcdir)/$$d || \
+	        mkdir -p debian/icu-data/$(datasrcdir)/$$d; \
+	    install -m 644 $(srcdir)/data/$$d/*.* \
+	        debian/icu-data/$(datasrcdir)/$$d; \
+	done
+	cd debian/icu-data/$(datasrcdir)/mappings && \
+	    $(RM) convrtrs.txt && ln -s /etc/icu/convrtrs.txt .
 
 # Build architecture-dependent files here.
 binary-arch: build install
