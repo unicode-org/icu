@@ -1,0 +1,10 @@
+*.debhelper
+docs
+*files
+tmp
+libicu16
+icu
+icu-locales
+icu-data
+icu-i18ndata
+
