@@ -57,7 +57,7 @@ typedef void* UTransliterator;
  * B to A when operating in the reverse direction.
  * @stable
  */
-typedef enum _UTransDirection {
+typedef enum UTransDirection {
     
     /**
      * UTRANS_FORWARD means from <source> to <target> for a
@@ -99,7 +99,7 @@ typedef enum _UTransDirection {
  *
  * @stable
  */
-typedef struct _UTransPosition {
+typedef struct UTransPosition {
 
     /**
      * Beginning index, inclusive, of the context to be considered for
