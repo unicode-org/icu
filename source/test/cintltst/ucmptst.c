@@ -22,7 +22,6 @@
 
 
 static void TestUCMP8API(void);
-/*static void TestUCMPE32API(void);*/
 
 void addCompactArrayTest(TestNode** root);
 
@@ -31,12 +30,29 @@ void
 addCompactArrayTest(TestNode** root)
 {
     addTest(root, &TestUCMP8API,   "ucmptst/TestUCMP8API");
-/*    addTest(root, &TestUCMPE32API,  "ucmptst/TestUCMPE32API");*/
+}
+
+static void query(CompactByteArray *array) {
+      int32_t i = 0;
+      const uint8_t *valuesSet=(uint8_t *)ucmp8_getArray(array);
+      for(i =0 ; i< 10; i++ ){
+          if(valuesSet[0] != (uint8_t)0xFD ){
+               log_err("ERROR: did not get the values expected values\n");
+               break;
+          }
+      }
 }
 
 static void TestUCMP8API(){
     UErrorCode status = U_ZERO_ERROR;
     CompactByteArray* ucmp8Array=NULL;
+    CompactByteArray* pAliaser=NULL;
+    CompactByteArray* pAdopter=NULL;
+
+    CompactByteArray aliaser;
+    CompactByteArray adopter;
+
+
     CompactByteArray ucmp8Array1;
     CompactByteArray ucmp8Array2;
     CompactByteArray ucmp8Clone;
@@ -114,13 +130,7 @@ static void TestUCMP8API(){
     /*ucmp8_setRange*/
     ucmp8_compact(&ucmp8Array1, 1);
     ucmp8_setRange(&ucmp8Array1, 0,  10, (uint8_t)0xFD);
-    valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
-    for(i =0 ; i< 10; i++ ){
-        if(valuesSet[0] != (uint8_t)0xFD ){
-             log_err("ERROR: ucmp8_set() failed\n");
-             break;
-        }
-    }
+    query(&ucmp8Array1);
 
     log_verbose("Testing ucmp8_flattenMem()\n");
     {
@@ -141,140 +151,57 @@ static void TestUCMP8API(){
                 log_err("ERROR: ucmp8_initFromData() failed\n");
                 status = U_ZERO_ERROR;
             } else {
-              valuesSet=(uint8_t*)ucmp8_getArray(&ucmp8Clone);
-              for(i =0 ; i< 10; i++ ){
-                  if(valuesSet[0] != (uint8_t)0xFD ){
-                       log_err("ERROR: did not get the values back from flattened clone\n");
-                       break;
-                  }
-              }
+              query(&ucmp8Clone);
               ucmp8_close(&ucmp8Clone);
             }
         }
         uprv_mstrm_close(MS);
     }
 
-    ucmp8_close(ucmp8Array);
+/*
+openAdopt, initAdopt, openAlias, initAlias
+*/
+    log_verbose("Testing aliasers and adopters\n");
+    {
+      int32_t count = ucmp8_getCount(&ucmp8Array1);
+      const uint16_t *tIndex = ucmp8_getIndex(&ucmp8Array1);
+      const int8_t *tValues = ucmp8_getArray(&ucmp8Array1);
+      uint16_t *index = (uint16_t *)malloc(UCMP8_kIndexCount*sizeof(uint16_t));
+      int8_t *values = (int8_t *)malloc(count);
+
+      memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
+      memcpy(values, tValues, count);
+
+
+      ucmp8_close(ucmp8Array);
+
+      ucmp8_initAlias(&aliaser, index, values, count);
+      query(&aliaser);
+      ucmp8_close(&aliaser);
+
+      pAliaser = ucmp8_openAlias(index, values, count);
+      query(pAliaser);
+      ucmp8_close(pAliaser);
+
+      ucmp8_initAdopt(&adopter, index, values, count);
+      query(&adopter);
+      ucmp8_close(&adopter);
+
+      index = (uint16_t *)malloc(UCMP8_kIndexCount*sizeof(uint16_t));
+      values = (int8_t *)malloc(count);
+
+      memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
+      memcpy(values, tValues, count);
+
+      pAdopter = ucmp8_openAdopt(index, values, count);
+      query(pAdopter);
+      ucmp8_close(pAdopter);
+
+    }
     ucmp8_close(&ucmp8Array1);
     ucmp8_close(&ucmp8Array2);
+    ucmp8_close(ucmp8Array);
+
 }
 
 
-#if 0
-struct {
-  UChar lead;
-  UChar trail;
-  int32_t value;
-} testCmpe32array[] = {
-  { 0x0, 0x0020, 0x00000020 },
-  { 0x0, 0x0040, 0x00000040 },
-  { 0x0, 0x004B, 0x0000004B },
-  { 0x0, 0x00AC, 0x000000AC },
-  { 0x0, 0x0400, 0x00000400 },
-  { 0x0, 0xa123, 0x0000a123 },
-  { 0x0, 0xeeee, 0x0000eeee },
-  { 0xd800, 0xdc00, 0x0001000 },
-  { 0xd900, 0xdc00, 0x0005000 }
-};
-
-
-static void fillup(CompactEIntArray *a) {
-  int32_t i = 0;
-  for(i = 0; i<sizeof(testCmpe32array)/sizeof(testCmpe32array[0]); i++) {
-    if(testCmpe32array[i].lead == 0) {
-      ucmpe32_set32(a, testCmpe32array[i].trail, testCmpe32array[i].value);
-    } else {
-      ucmpe32_setSurrogate(a, testCmpe32array[i].lead, testCmpe32array[i].trail, testCmpe32array[i].value);
-    }
-  }
-}
-
-static void query(CompactEIntArray *a) {
-  int32_t i = 0;      
-  int32_t result = 0;
-  for(i = 0; i<sizeof(testCmpe32array)/sizeof(testCmpe32array[0]); i++) {
-    if(testCmpe32array[i].lead == 0) {
-      result = ucmpe32_get(a, testCmpe32array[i].trail);
-      if(result != testCmpe32array[i].value) {
-        log_err("Wrong value for %04X, expected %08X, got %08X\n", 
-          testCmpe32array[i].trail, testCmpe32array[i].value, result);
-      }
-    } else {
-      if(a->fCompact == TRUE) {
-        result = ucmpe32_get(a, testCmpe32array[i].lead);
-        result = ucmpe32_getSurrogate(a, result, testCmpe32array[i].trail);
-        if(result != ucmpe32_getSurrogateEx(a, testCmpe32array[i].lead, testCmpe32array[i].trail)) {
-          log_err("results for getsurrogate and getsurrogateex do not match in compacted array\n");
-        }
-      } else {
-        result = ucmpe32_getSurrogateEx(a, testCmpe32array[i].lead, testCmpe32array[i].trail);
-      }
-      if(result != testCmpe32array[i].value) {
-        log_err("Wrong value for %04X %04X, expected %08X, got %08X\n", 
-          testCmpe32array[i].lead, testCmpe32array[i].trail, testCmpe32array[i].value, result);
-      }
-    }
-  }
-}
-
-static void TestUCMPE32API(){
-    CompactEIntArray *ucmpe32Array=NULL, *ucmpe32Clone = NULL;
-    UErrorCode status = U_ZERO_ERROR;
-
-    /*ucmpe32_open*/
-    log_verbose("Testing ucmpe32_open()\n");
-    ucmpe32Array=ucmpe32_open(UCOL_NOT_FOUND, UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), &status);
-    if(U_FAILURE(status) || ucmpe32Array == NULL){
-        log_err("ERROR: ucmpe32_open() failed\n");
-        status = U_ZERO_ERROR;
-    } else {
-        fillup(ucmpe32Array);
-        query(ucmpe32Array);
-
-        log_verbose("Testing ucmpe32_clone()\n");
-        ucmpe32Clone=ucmpe32_clone(ucmpe32Array, &status);
-        if(U_FAILURE(status) || ucmpe32Clone == NULL){
-            log_err("ERROR: ucmpe32_clone() failed\n");
-            status = U_ZERO_ERROR;
-        } else {
-            query(ucmpe32Clone);
-            ucmpe32_close(ucmpe32Clone);
-            ucmpe32Clone = NULL;
-        }
-
-        log_verbose("Testing ucmpe32_flattenMem()\n");
-        {
-            UMemoryStream *MS = uprv_mstrm_openNew(65536);
-            int32_t size = ucmpe32_flattenMem(ucmpe32Array, MS);
-            int32_t len = 0;
-            const uint8_t *buff = NULL; 
-            if(size > 0) {
-                log_err("Managed to flatten uncompacted array\n");
-            }
-            ucmpe32_compact(ucmpe32Array);
-            query(ucmpe32Array);
-            
-            /* try after compacting */
-            size = ucmpe32_flattenMem(ucmpe32Array, MS);
-            buff = uprv_mstrm_getBuffer(MS, &len);
-            
-            if(size == 0 || len == 0 || buff == NULL) {
-                log_err("Unable to flatten!\n");
-            } else {
-                log_verbose("Testing ucmpe32_openFromData()\n");
-                ucmpe32Clone = ucmpe32_openFromData(&buff, &status);
-                if(U_FAILURE(status) || ucmpe32Clone == NULL){
-                    log_err("ERROR: ucmpe32_openFromData() failed\n");
-                    status = U_ZERO_ERROR;
-                } else {
-                    query(ucmpe32Clone);
-                    ucmpe32_close(ucmpe32Clone);
-                    ucmpe32Clone = NULL;
-                }
-            }
-            uprv_mstrm_close(MS);
-        }
-        ucmpe32_close(ucmpe32Array);
-    }
-}
-#endif
