@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/21 01:22:29 $ 
- * $Revision: 1.46 $
+ * $Date: 2003/02/27 18:35:54 $ 
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -828,9 +828,9 @@ public class UnicodeSetTest extends TestFmwk {
             "\u03D6", // 1.1
             "\u03D8\u03D9", // 3.2
 
-            "[:Age=3.2:]",
-            "\u03D8\u03D9",
-            "\u03D6", // 1.1
+            "[:Age=3.1:]", 
+            "\\u1800\\u3400\\U0002f800", 
+            "\\u0220\\u034f\\u30ff\\u33ff\\ufe73\\U00010000\\U00050000", 
 
             // JB#2350: Case_Sensitive
             "[:Case Sensitive:]",
@@ -1329,9 +1329,9 @@ public class UnicodeSetTest extends TestFmwk {
         StringBuffer bad = new StringBuffer();
         if (charsIn != null) {
             charsIn = Utility.unescape(charsIn);
-            for (int i=0; i<charsIn.length(); ++i) {
+            for (int i=0; i<charsIn.length(); ) {
                 int c = UTF16.charAt(charsIn,i);
-                if(c>0xffff) i++;
+                i += UTF16.getCharCount(c);
                 if (!set.contains(c)) {
                     UTF16.append(bad,c);
                 }
@@ -1346,10 +1346,11 @@ public class UnicodeSetTest extends TestFmwk {
         if (charsOut != null) {
             charsOut = Utility.unescape(charsOut);
             bad.setLength(0);
-            for (int i=0; i<charsOut.length(); ++i) {
-                char c = charsOut.charAt(i);
+            for (int i=0; i<charsOut.length(); ) {
+                int c = UTF16.charAt(charsOut,i);
+                i += UTF16.getCharCount(c);
                 if (set.contains(c)) {
-                    bad.append(c);
+                    UTF16.append(bad, c);
                 }
             }
             if (bad.length() > 0) {

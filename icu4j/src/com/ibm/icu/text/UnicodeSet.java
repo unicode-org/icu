@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/18 20:12:17 $
- * $Revision: 1.92 $
+ * $Date: 2003/02/27 18:35:52 $
+ * $Revision: 1.93 $
  *
  *****************************************************************************************
  */
@@ -2693,11 +2693,18 @@ public class UnicodeSet extends UnicodeFilter {
         }
     }
 
+    // VersionInfo for unassigned characters
+    static final VersionInfo NO_VERSION = VersionInfo.getInstance(0, 0, 0, 0);
+
     private static class VersionFilter implements Filter {
         VersionInfo version;
         VersionFilter(VersionInfo version) { this.version = version; }
         public boolean contains(int ch) {
-            return UCharacter.getAge(ch) == version;
+            VersionInfo v = UCharacter.getAge(ch);
+            // Reference comparison ok; VersionInfo caches and reuses
+            // unique objects.
+            return v != NO_VERSION &&
+                   v.compareTo(version) <= 0;
         }
     }
 
