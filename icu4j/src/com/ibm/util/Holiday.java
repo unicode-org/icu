@@ -2,7 +2,10 @@
 
 package com.ibm.util;
 
-import java.util.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Date;
+import java.util.MissingResourceException;
 
 /**
  * An abstract class representing a holiday.  This class simply adds

@@ -40,7 +40,16 @@
  */
 package com.ibm.text;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.DataInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
+
 import com.ibm.util.CompactByteArray;
 
 /**

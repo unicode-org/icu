@@ -2,7 +2,10 @@
 
 package com.ibm.util;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.SimpleTimeZone;
 
 public class SimpleDateRule implements DateRule
 {
