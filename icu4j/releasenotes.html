@@ -9,8 +9,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/Attic/releasenotes.html,v $
-* $Date: 2002/08/15 18:15:29 $
-* $Revision: 1.4 $
+* $Date: 2002/08/15 20:58:15 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 -->
@@ -94,6 +94,18 @@ Reserved. </p>
       <p>For further detailed information about the ICU4J library, please refer to the
       <A href="readme.html">ReadMe.</A>
       </p>
+
+      <p><b>Warnings</b></p>
+      <p>
+         In release 2.2, there is a limitation with pattern handling with DecimalFormat when a percent or permille sign is included.
+      </p>
+      <p>
+      <ul>
+          <li> Quoted percent or permille signs, which should be treated as literals, are instead treated as if they were unquoted.
+          <li> Patterns involving percent or permille signs will be generated with localized pattern characters for those signs, when a non-localized pattern is requested.  If such a pattern is subsequently applied to a DecimalFormat as a non-localized pattern, the percent or permille signs will not be recognized if they differ from the non-localized signs in the locale being used.
+      </ul>
+      </p>
+      <p>These problems will be fixed in the next release.</p>
 
 <hr size="2" width="100%" align="center">
 
