@@ -825,11 +825,12 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
 
 /**
  * Gives the number of standards associated to converter names.
+ * @param pErrorCode result of operation
  * @return number of standards
  * @stable
  */
 U_CAPI uint16_t U_EXPORT2
-ucnv_countStandards(void);
+ucnv_countStandards(UErrorCode *pErrorCode);
 
 /**
  * Gives the name of the standard at given index of standard list.
