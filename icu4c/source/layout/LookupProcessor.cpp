@@ -164,8 +164,17 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
         for (le_int32 tag = 0; featureOrder[tag] != emptyTag; tag += 1) {
             featureTag = featureOrder[tag];
-            featureTable = featureListTable->getFeatureTable(featureTag);
-            count = selectLookups(featureTable, featureTag, order);
+            count = 0;
+
+            for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
+                le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
+
+                featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
+
+                if (featureTag == featureOrder[tag]) {
+                    count += selectLookups(featureTable, featureTag, order + count);
+                }
+            }
 
             if (count > 1) {
                 OpenTypeUtilities::sort(&lookupOrderArray[order], count);
