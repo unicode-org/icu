@@ -95,7 +95,7 @@ UnicodeString *
 StringEnumeration::setChars(const char *s, int32_t length, UErrorCode &status) {
     if(U_SUCCESS(status) && s!=NULL) {
         if(length<0) {
-            length=uprv_strlen(s);
+            length=(int32_t)uprv_strlen(s);
         }
 
         UChar *buffer=unistr.getBuffer(length+1);
@@ -269,7 +269,7 @@ ucharstrenum_next(UEnumeration* en,
     }
     const char* result = ((const char**)e->uenum.context)[e->index++];
     if (resultLength) {
-        *resultLength = uprv_strlen(result);
+        *resultLength = (int32_t)uprv_strlen(result);
     }
     return result;
 }

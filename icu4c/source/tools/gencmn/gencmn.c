@@ -593,44 +593,44 @@ allocString(uint32_t length) {
 
 static char * 
 pathToFullPath(const char *path) {
-  int32_t length;
-  int32_t newLength;
-  char *fullPath;
-  int32_t n;
+    int32_t length;
+    int32_t newLength;
+    char *fullPath;
+    int32_t n;
 
-  length = (uint32_t)(uprv_strlen(path) + 1);
-  newLength = (length + 1 + uprv_strlen(options[10].value));
-  fullPath = uprv_malloc(newLength);
-  if(options[10].doesOccur) {
-    uprv_strcpy(fullPath, options[10].value);
-    uprv_strcat(fullPath, U_FILE_SEP_STRING);
-  } else {
-    fullPath[0] = 0;
-  }
-  n = uprv_strlen(fullPath);
-  uprv_strcat(fullPath, path);
-  
-  if(!embed) {
+    length = (uint32_t)(uprv_strlen(path) + 1);
+    newLength = (length + 1 + (int32_t)uprv_strlen(options[10].value));
+    fullPath = uprv_malloc(newLength);
+    if(options[10].doesOccur) {
+        uprv_strcpy(fullPath, options[10].value);
+        uprv_strcat(fullPath, U_FILE_SEP_STRING);
+    } else {
+        fullPath[0] = 0;
+    }
+    n = (int32_t)uprv_strlen(fullPath);
+    uprv_strcat(fullPath, path);
+
+    if(!embed) {
 #if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
 #if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
-    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
-    for(;fullPath[n];n++) {
-      if(fullPath[n] == U_FILE_ALT_SEP_CHAR) {
-        fullPath[n] = U_FILE_SEP_CHAR;
-      }
-    }
+        /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+        for(;fullPath[n];n++) {
+            if(fullPath[n] == U_FILE_ALT_SEP_CHAR) {
+                fullPath[n] = U_FILE_SEP_CHAR;
+            }
+        }
 #endif
 #endif
 #if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
-    /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
-    for(;fullPath[n];n++) {
-      if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR) {
-        fullPath[n] = U_FILE_SEP_CHAR;
-      }
-    }
+        /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+        for(;fullPath[n];n++) {
+            if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR) {
+                fullPath[n] = U_FILE_SEP_CHAR;
+            }
+        }
 #endif
-  }
-  return fullPath;
+    }
+    return fullPath;
 }
 
 static int

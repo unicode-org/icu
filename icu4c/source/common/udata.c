@@ -358,7 +358,7 @@ static void TinyString_init(TinyString *This) {
 
 static void TinyString_append(TinyString *This, const char *what) {
     int32_t  newLen;
-    newLen = This->length + uprv_strlen(what); 
+    newLen = This->length + (int32_t)uprv_strlen(what); 
     if (newLen >= This->fCapacity) { 
         int32_t newCapacity = newLen * 2; 
         char *newBuf = (char *)uprv_malloc(newCapacity+1); 
@@ -481,7 +481,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
       }
       iter->packageStub[0] = U_FILE_SEP_CHAR;
       uprv_strcpy(iter->packageStub+1, pkg);
-      iter->packageStubLen = uprv_strlen(iter->packageStub);
+      iter->packageStubLen = (int32_t)uprv_strlen(iter->packageStub);
 
 #ifdef UDATA_DEBUG
         fprintf(stderr, "STUB=%s [%d]\n", iter->packageStub, iter->packageStubLen);
@@ -490,7 +490,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
 
     /** Item **/
     iter->basename = findBasename(item);
-    iter->basenameLen = uprv_strlen(iter->basename);
+    iter->basenameLen = (int32_t)uprv_strlen(iter->basename);
 
     if(iter->basename == NULL) {
         iter->nextPath = NULL;
@@ -503,7 +503,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
         iter->itemPath[0] = 0;
         iter->nextPath = iter->path;
     } else { 
-        int32_t  itemPathLen = iter->basename-item;
+        int32_t  itemPathLen = (int32_t)(iter->basename-item);
         if (itemPathLen >= U_DATA_PATHITER_BUFSIZ) {
             char *t = (char *)uprv_malloc(itemPathLen+1);
             if (t != NULL) {
@@ -534,7 +534,7 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
      *   Get an upper bound of possible string size, and make sure that the buffer
      *   is big enough (sum of length of each piece, 2 extra delimiters, + trailing NULL) */
     {
-        int32_t  maxPathLen = uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + iter->packageStubLen + 3;  
+        int32_t  maxPathLen = (int32_t)uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + iter->packageStubLen + 3;  
         iter->pathBuffer = iter->pathBufferA;
         if (maxPathLen >= U_DATA_PATHITER_BUFSIZ) {
             iter->pathBuffer = (char *)uprv_malloc(maxPathLen);
@@ -586,16 +586,16 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
         
         if(iter->nextPath == iter->itemPath) { /* we were processing item's path. */
             iter->nextPath = iter->path; /* start with regular path next tm. */
-            pathLen = uprv_strlen(path);
+            pathLen = (int32_t)uprv_strlen(path);
         } else {
             /* fix up next for next time */
             iter->nextPath = uprv_strchr(path, U_PATH_SEP_CHAR);
             if(iter->nextPath == NULL) {
                 /* segment: entire path */
-                pathLen = uprv_strlen(path); 
+                pathLen = (int32_t)uprv_strlen(path); 
             } else {
                 /* segment: until next segment */
-                pathLen = iter->nextPath - path;
+                pathLen = (int32_t)(iter->nextPath - path);
                 if(*iter->nextPath) { /* skip divider */
                     iter->nextPath ++;
                 }
@@ -671,7 +671,7 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
             {
                 uprv_strcpy(iter->pathBuffer + pathLen,
                             iter->suffix);
-                pathLen += uprv_strlen(iter->suffix);
+                pathLen += (int32_t)uprv_strlen(iter->suffix);
             }
             
         }
@@ -1126,37 +1126,36 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     
     if(path==NULL) {
-      TinyString_append(&pkgName, U_ICUDATA_NAME); 
+        TinyString_append(&pkgName, U_ICUDATA_NAME); 
     } else {
         const char *pkg;
         const char *first;
         pkg = uprv_strrchr(path, U_FILE_SEP_CHAR);
         first = uprv_strchr(path, U_FILE_SEP_CHAR);
-      if(uprv_pathIsAbsolute(path) || 
-            (pkg != first)) { /* more than one slash in the path- not a tree name */
-        /* see if this is an /absolute/path/to/package  path */
-        if(pkg) {
-          TinyString_append(&pkgName, pkg+1);
+        if(uprv_pathIsAbsolute(path) || (pkg != first)) { /* more than one slash in the path- not a tree name */
+            /* see if this is an /absolute/path/to/package  path */
+            if(pkg) {
+                TinyString_append(&pkgName, pkg+1);
+            } else {
+                TinyString_append(&pkgName, path);
+            }
         } else {
-          TinyString_append(&pkgName, path);
+            treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
+            if(treeChar) { 
+                TinyString_append(&treeName, treeChar+1); /* following '-' */
+                if(!isICUData) {
+                    TinyString_appendn(&pkgName, path, (int32_t)(treeChar-path));
+                } else {
+                    TinyString_append(&pkgName, U_ICUDATA_NAME);
+                }
+            } else {
+                if(!isICUData) {
+                    TinyString_append(&pkgName, path);
+                } else {
+                    TinyString_append(&pkgName, U_ICUDATA_NAME);
+                }
+            }
         }
-      } else {
-        treeChar = uprv_strchr(path, U_TREE_SEPARATOR);
-        if(treeChar) { 
-          TinyString_append(&treeName, treeChar+1); /* following '-' */
-          if(!isICUData) {
-            TinyString_appendn(&pkgName, path, treeChar-path);
-          } else {
-            TinyString_append(&pkgName, U_ICUDATA_NAME);
-          }
-        } else {
-          if(!isICUData) {
-            TinyString_append(&pkgName, path);
-          } else {
-            TinyString_append(&pkgName, U_ICUDATA_NAME);
-          }
-        }
-      }
     }
 
 #ifdef UDATA_DEBUG
@@ -1174,11 +1173,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
     tocEntrySuffixIndex = tocEntryName.length;
 
     if(treeName.s[0]) {
-      TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
-      TinyString_append(&tocEntryName, treeName.s);
+        TinyString_append(&tocEntryName, U_TREE_ENTRY_SEP_STRING);
+        TinyString_append(&tocEntryName, treeName.s);
 
-      TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
-      TinyString_append(&tocEntryPath, treeName.s);
+        TinyString_append(&tocEntryPath, U_FILE_SEP_STRING);
+        TinyString_append(&tocEntryPath, treeName.s);
     }
 
     TinyString_append(&oldIndFileName, "_");
