@@ -635,7 +635,11 @@ int processArgs(const TestNode* root,
 static void help ( const char *argv0 )
 {
     printf("Usage: %s [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] [ -no_err_msg]\n"
-           "                [ -h ] [-t_info | -t_error | -t_warn | -t_verbose] [-tz [zone]] [ /path/to/test ]\n",
+           "                [ -h ] [-t_info | -t_error | -t_warn | -t_verbose]"
+#if !UCONFIG_NO_FORMATTING
+           " [-tz [zone]]"
+#endif
+           " [ /path/to/test ]\n",
             argv0);
     printf("    -l  To get a list of test names\n");
     printf("    -e  to do exhaustive testing\n");
@@ -648,9 +652,11 @@ static void help ( const char *argv0 )
     printf("    -t_info | -t_error | -t_warn | -t_verbose  Enable ICU tracing\n");
     printf("    -no_err_msg (same as -n) \n");
     printf("    -r  repeat tests after calling u_cleanup \n");
+#if !UCONFIG_NO_FORMATTING
     /* NOTE: the -tz [zone] option is parsed by cintltst. I know, ugly. */
     printf("    -tz [zone] To set default time zone.  If no zone is given\n"
            "        then don't set default time zone (use host zone).\n");
+#endif
     printf("    -[/subtest]  To run a subtest \n");
     printf("    eg: to run just the utility tests type: cintltest /tsutil) \n");
 }
