@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Pair.java,v $
-* $Date: 2001/09/19 23:33:52 $
-* $Revision: 1.3 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -48,5 +48,10 @@ public final class Pair implements java.lang.Comparable, Cloneable {
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+    
+    public String toString() {
+        return '(' + (first == null ? "null" : first.toString())
+            + ',' + (second == null ? "null" : second.toString()) + ')';
     }
 }

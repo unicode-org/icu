@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/06/04 01:59:02 $
-* $Revision: 1.14 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -65,13 +65,14 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
             else if (arg.equalsIgnoreCase("verifyNormalizationStability")) VerifyUCD.verifyNormalizationStability();
             
-            else if (arg.equalsIgnoreCase("hanTransliterator")) GenerateHanTransliterator.main(0);
+            else if (arg.equalsIgnoreCase("definitionTransliterator")) GenerateHanTransliterator.main(0);
             else if (arg.equalsIgnoreCase("romajiTransliterator")) GenerateHanTransliterator.main(1);
             else if (arg.equalsIgnoreCase("pinYinTransliterator")) GenerateHanTransliterator.main(2);
             else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
             
             else if (arg.equalsIgnoreCase("checkBIDI")) VerifyUCD.checkBIDI();
             else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
+            else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();

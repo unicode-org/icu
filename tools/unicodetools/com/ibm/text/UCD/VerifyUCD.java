@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/05/31 01:41:03 $
-* $Revision: 1.14 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -843,6 +843,7 @@ can help you narrow these down.
     }
 
     static final String names[] = {"LOWER", "TITLE", "UPPER", "(UNC)", "MIXED"};
+    static final String names2[] = {"LOWER", "TITLE", "UPPER", "FOLD"};
     static final String lowerNames[] = {"", "Other_Lower"};
     static final String upperNames[] = {"", "Other_Upper"};
 
@@ -852,13 +853,50 @@ can help you narrow these down.
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
             if (!Default.ucd.isAssigned(cp) || Default.ucd.isPUA(cp)) continue;
+            
+            boolean failed = false;
             String fullTest = Default.ucd.getCase(Default.ucd.getCase(cp, FULL, UPPER), FULL, LOWER);
             String simpleTest = Default.ucd.getCase(Default.ucd.getCase(cp, SIMPLE, UPPER), SIMPLE, LOWER);
 
             String full = Default.ucd.getCase(cp, FULL, FOLD);
             String simple = Default.ucd.getCase(cp, SIMPLE, FOLD);
-
-            boolean failed = false;
+            
+            String realTest = "\u0360" + UTF16.valueOf(cp) + "\u0334";
+            
+            int ccc = Default.ucd.getCombiningClass(cp);
+            
+            for (byte style = FOLD; style < CASE_LIMIT; ++style) {
+                
+                String fold_NFD = Default.nfd.normalize(Default.ucd.getCase(realTest, FULL, style));
+                String NFD_fold = Default.ucd.getCase(Default.nfd.normalize(realTest), FULL, style);
+                if (!fold_NFD.equals(NFD_fold)) {
+                    Utility.fixDot();
+                    System.out.println("Case check fails at " + Default.ucd.getCodeAndName(cp));
+                    System.out.println("\t" + names2[style] + ", then NFD: " + Default.ucd.getCodeAndName(fold_NFD));
+                    System.out.println("\tNFD, then " + names2[style] + ": " + Default.ucd.getCodeAndName(NFD_fold));
+                    failed = true;
+                }
+            }
+            
+            /*
+            
+            int ccc = Default.ucd.getCombiningClass(cp);
+                
+            int cp2;
+            for (int i = 0; i < full.length(); i += UTF16.getCharCount(cp2)) {
+                cp2 = UTF16.charAt(full, i);
+                int ccc2 = Default.ucd.getCombiningClass(cp2);
+                if (ccc2 != ccc) {
+                    System.out.println("Case fold CCC fails at " + Default.ucd.getCodeAndName(cp));
+                    System.out.println("\tFull case folding:" + ccc2 + ", " + Default.ucd.getCodeAndName(full));
+                    System.out.println("\tccc:" + ccc);
+                    System.out.println("\tccc:" + ccc2 + ", " + Default.ucd.getCodeAndName(cp2));
+                    failed = true;
+                }
+            }
+            
+            */
+            
             if (!full.equals(fullTest)) {
                 Utility.fixDot();
                 System.out.println("Case fold fails at " + Default.ucd.getCodeAndName(cp));

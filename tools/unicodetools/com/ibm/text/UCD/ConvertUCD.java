@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2002/04/24 02:38:53 $
-* $Revision: 1.7 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -331,7 +331,7 @@ public final class ConvertUCD implements UCD_Types {
 
     static void readBlocks() throws Exception {
         System.out.println("Reading 'Blocks'");
-        BufferedReader input = Utility.openUnicodeFile(blocksname, version, true);
+        BufferedReader input = Utility.openUnicodeFile(blocksname, version, true, false);
         String line = "";
         try {
     	    String[] parts = new String[20];
@@ -376,7 +376,7 @@ public final class ConvertUCD implements UCD_Types {
         }
         String tempVersion = version;
         if (version.equals(UCD.latestVersion)) tempVersion = "";
-        BufferedReader input = Utility.openUnicodeFile(labels[0], tempVersion, true);
+        BufferedReader input = Utility.openUnicodeFile(labels[0], tempVersion, true, false);
         if (input == null) {
             System.out.println("COULDN'T OPEN: " + labels[0]);
             return;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.13 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -782,6 +782,139 @@ final class UCD_Names implements UCD_Types {
     };
     
     static final String[] NF_NAME = {"NFD", "NFC", "NFKD", "NFKC"};
+    
+    static final String[][] NAME_ABBREVIATIONS = {
+        {"CJK UNIFIED IDEOGRAPH-", "CJK-"},
+        {"CJK COMPATIBILITY IDEOGRAPH-", "CJKC-"},
+        {"IDEOGRAPHIC TELEGRAPH SYMBOL FOR", "ITSF."},
+        
+        {"BRAILLE PATTERN DOTS-", "BPD-"},
+        {"CANADIAN SYLLABICS WEST-", "CSW."},
+        /*{"LATIN SMALL LETTER", "LSL."},
+        {"LATIN CAPITAL LETTER", "LCL."},
+        {"GREEK SMALL LETTER", "GSL."},
+        {"GREEK CAPITAL LETTER", "GCL."},
+        {"CYRILLIC SMALL LETTER", "GSL."},
+        {"CYRILLIC CAPITAL LETTER", "GCL."},
+        {"BYZANTINE MUSICAL SYMBOL", "BMS."},
+        {"YI SYLLABLE", "YS."},
+        {"ETHIOPIC SYLLABLE", "ES."},
+        {"HANGUL SYLLABLE", "HS."},
+        {"CANADIAN SYLLABICS", "CS."},
+        {"ARABIC LETTER", "ALt."},
+        {"ARABIC LIGATURE", "AL."},
+        */
+        
+        {"MATHEMATICAL SANS-SERIF", "MSS."},
+        {"MATHEMATICAL SERIF", "MS."},
+        {"BOLD ITALIC", "BI."},
+        {"ISOLATED FORM", "IF."},
+        {"FINAL FORM", "FF."},
+        {"INITIAL FORM", "IF."},
+        {"VOWEL SIGN", "VS."},
+        {"KANGXI RADICAL", "KR."},
+        {"MUSICAL SYMBOL", "MS."},
+        {"SMALL LETTER", "SL."},
+        {"CAPITAL LETTER", "CL."},
+        
+        {"LIGATURE", "Lg."},
+        {"SYLLABICS", "Ss."},
+        {"MATHEMATICAL", "M."},
+        {"LETTER", "L."},
+        {"SYLLABLE", "S."},
+        {"SYMBOL", "Sy."},
+        {"WITH", "W."},
+        {"CAPITAL", "C."},
+        {"SMALL", "C."},
+        {"COMBINING", "Cm."},
+        {"HANGUL", "H."},
+    };
+    
+    /*
+LETTER: 23598
+MATHEMATICAL:   11976
+SYLLABLE:       11872
+CAPITAL:        8918
+WITH:   8008
+COMPATIBILITY:  7800
+SMALL:  7740
+IDEOGRAPH:      6165
+SYLLABICS:      5670
+ARABIC: 5646
+CANADIAN:       5040
+LATIN:  4840
+SYMBOL: 4626
+LIGATURE:       4048
+MUSICAL:        3255
+FORM:   3044
+ETHIOPIC:       2760
+RADICAL:        2695
+HANGUL: 2670
+ITALIC: 2526
+YI:     2468
+BOLD:   2256
+BYZANTINE:      2214
+
+COMPATIBILITY/IDEOGRAPH:        13800
+YI/SYLLABLE:    12815
+CANADIAN/SYLLABICS:     11340
+CAPITAL/LETTER: 10948
+SMALL/LETTER:   10692
+CJK/COMPATIBILITY:      10200
+ARABIC/LIGATURE:        7110
+IDEOGRAPH/-:    6600
+MUSICAL/SYMBOL: 6510
+MATHEMATICAL/SANS:      5848
+LATIN/SMALL:    5786
+MATHEMATICAL/BOLD:      5678
+ETHIOPIC/SYLLABLE:      5389
+LATIN/CAPITAL:  5330
+ARABIC/LETTER:  4992
+BYZANTINE/MUSICAL:      4182
+BRAILLE/PATTERN:        3825
+ISOLATED/FORM:  3068
+PATTERN/DOTS:   3060
+KANGXI/RADICAL: 2996
+SYLLABICS/CARRIER:      2975
+-/SERIF:        2576
+ITALIC/CAPITAL: 2520
+BOLD/ITALIC:    2420
+KATAKANA/LETTER:        2415
+FINAL/FORM:     2400
+SERIF/BOLD:     2300
+SANS/-: 2208
+ITALIC/SMALL:   2184
+MONGOLIAN/LETTER:       2080
+MATHEMATICAL/ITALIC:    2071
+INITIAL/FORM:   2064
+CYRILLIC/CAPITAL:       2032
+
+CJK/COMPATIBILITY/IDEOGRAPH:    16200
+COMPATIBILITY/IDEOGRAPH/-:      15000
+LATIN/SMALL/LETTER:     9306
+LATIN/CAPITAL/LETTER:   8160
+MATHEMATICAL/SANS/-:    6536
+BYZANTINE/MUSICAL/SYMBOL:       5904
+BRAILLE/PATTERN/DOTS:   5100
+CANADIAN/SYLLABICS/CARRIER:     4550
+SANS/-/SERIF:   4416
+PATTERN/DOTS/-: 3570
+GREEK/SMALL/LETTER:     2934
+CYRILLIC/CAPITAL/LETTER:        2852
+-/SERIF/BOLD:   2760
+MATHEMATICAL/BOLD/ITALIC:       2640
+CYRILLIC/SMALL/LETTER:  2604
+GREEK/CAPITAL/LETTER:   2580
+
+CJK/COMPATIBILITY/IDEOGRAPH/-:  17400
+MATHEMATICAL/SANS/-/SERIF:      8600
+BRAILLE/PATTERN/DOTS/-: 5610
+SANS/-/SERIF/BOLD:      3910
+CANADIAN/SYLLABICS/WEST/-:      2200
+IDEOGRAPHIC/TELEGRAPH/SYMBOL/FOR:       2176
+-/SERIF/BOLD/ITALIC:    2090
+    */
+    
 
 /*
     static {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/05/31 01:41:03 $
-* $Revision: 1.9 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -100,12 +100,29 @@ public final class Normalizer implements UCD_Types {
         // then compose if the form requires.
 
         if (source.length() != 0) {
-            internalDecompose(source, target);
+            internalDecompose(source, target, true, compatibility);
             if (composition) {
                 internalCompose(target);
             }
         }
         return target;
+    }
+
+    /**
+    * Normalizes text according to the chosen form,
+    * replacing contents of the target buffer.
+    * @param   source      the original text, unnormalized
+    * @param   target      the resulting normalized text
+    */
+    public boolean isFCD(String source) {
+        if (source.length() == 0) return true;
+        StringBuffer noReorder = new StringBuffer();
+        StringBuffer reorder = new StringBuffer();
+
+        internalDecompose(source, noReorder, false, false);
+        internalDecompose(source, reorder, true, false);
+        
+        return reorder.toString().equals(noReorder.toString());
     }
 
     /**
@@ -280,13 +297,13 @@ public final class Normalizer implements UCD_Types {
     * @param   source      the original text, unnormalized
     * @param   target      the resulting normalized text
     */
-    private void internalDecompose(String source, StringBuffer target) {
+    private void internalDecompose(String source, StringBuffer target, boolean reorder, boolean compat) {
         StringBuffer buffer = new StringBuffer();
         int ch32;
         for (int i = 0; i < source.length(); i += UTF16.getCharCount(ch32)) {
             buffer.setLength(0);
             ch32 = UTF16.charAt(source, i);
-            data.getRecursiveDecomposition(ch32, buffer, compatibility);
+            data.getRecursiveDecomposition(ch32, buffer, compat);
 
             // add all of the characters in the decomposition.
             // (may be just the original character, if there was
@@ -297,7 +314,7 @@ public final class Normalizer implements UCD_Types {
                 ch = UTF16.charAt(buffer, j);
                 int chClass = data.getCanonicalClass(ch);
                 int k = target.length(); // insertion point
-                if (chClass != 0) {
+                if (chClass != 0 && reorder) {
 
                     // bubble-sort combining marks as necessary
 
@@ -466,27 +483,27 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
             return isFirst.get(cp);
         }
 
-        boolean normalizationDiffers(int cp, boolean composition, boolean compatibility) {
+        boolean normalizationDiffers(int cp, boolean composition, boolean compat) {
             byte dt = ucd.getDecompositionType(cp);
             if (!composition) {
-                if (compatibility) return dt >= CANONICAL;
+                if (compat) return dt >= CANONICAL;
                 else return dt == CANONICAL;
             } else {
                 // almost the same, except that we add back in the characters
                 // that RECOMPOSE
-                if (compatibility) return dt >= CANONICAL && !compatibilityRecompose.get(cp);
+                if (compat) return dt >= CANONICAL && !compatibilityRecompose.get(cp);
                 else return dt == CANONICAL && !canonicalRecompose.get(cp);
             }
         }
 
-        public void getRecursiveDecomposition(int cp, StringBuffer buffer, boolean compatibility) {
+        public void getRecursiveDecomposition(int cp, StringBuffer buffer, boolean compat) {
             byte dt = ucd.getDecompositionType(cp);
-            // we know we decompose all CANONICAL, plus > CANONICAL if compatibility is TRUE.
-            if (dt == CANONICAL || dt > CANONICAL && compatibility) {
+            // we know we decompose all CANONICAL, plus > CANONICAL if compat is TRUE.
+            if (dt == CANONICAL || dt > CANONICAL && compat) {
                 String s = ucd.getDecompositionMapping(cp);
                 for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
                     cp = UTF16.charAt(s, i);
-                    getRecursiveDecomposition(cp, buffer, compatibility);
+                    getRecursiveDecomposition(cp, buffer, compat);
                 }
             } else {
                 UTF16.append(buffer, cp);
