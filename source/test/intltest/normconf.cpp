@@ -285,7 +285,6 @@ UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
     char *end = NULL;
     UChar32 c;
     int32_t i;
-    int32_t pos = 0;
     for (i=0; i<outputLength; ++i) {
         // skip whitespace
         while(*t == ' ' || *t == '\t') {
