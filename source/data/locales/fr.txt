@@ -299,6 +299,7 @@ fr {
         km { "khmer" }
         kn { "kannada" }
         ko { "cor\u00E9en" }
+        kok { "konkani" }
         kr { "kanouri" }
         ks { "kashmiri" }
         ku { "kurde" }
