@@ -54,7 +54,8 @@ static  int32_t itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
   do{
       digit = (int)(i % radix);
       buffer[length++]=(UChar)(digit<=9?(0x0030+digit):(0x0030+digit+7));
-  }while(i=i/radix);
+      i=i/radix;
+  }while(i);
 
   while (length < pad)   
       buffer[length++] = (UChar) 0x0030;/*zero padding */
