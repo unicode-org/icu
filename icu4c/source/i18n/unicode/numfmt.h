@@ -672,8 +672,8 @@ private:
     static const int32_t fgMinIntegerDigits;
 
 protected:
-    char validLocale[50];
-    char actualLocale[50];
+    char validLocale[ULOC_FULLNAME_CAPACITY];
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
 
 private:
 

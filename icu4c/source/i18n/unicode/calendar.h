@@ -1998,8 +1998,8 @@ private:
      */
     static uint8_t julianDayToDayOfWeek(double julian);
 
-    char validLocale[50];
-    char actualLocale[50];
+    char validLocale[ULOC_FULLNAME_CAPACITY];
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
 
  public:
     /** 

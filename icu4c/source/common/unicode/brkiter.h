@@ -598,8 +598,8 @@ protected:
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
 
     /** @internal */
-    char actualLocale[50];
-    char validLocale[50];
+    char actualLocale[ULOC_FULLNAME_CAPACITY];
+    char validLocale[ULOC_FULLNAME_CAPACITY];
 private:
     /**
      * The assignment operator has no real implementation.
