@@ -41,6 +41,7 @@
 #include "unicode/tblcoll.h"
 #include "cmemory.h"
 
+
 // Collator public methods -----------------------------------------------
 
 Collator* Collator::createInstance(UErrorCode& success) 
@@ -90,19 +91,19 @@ Collator* Collator::createInstance(const Locale&  desiredLocale,
 UBool Collator::equals(const UnicodeString& source, 
                           const UnicodeString& target) const
 {
-  return (compare(source, target) == UCOL_EQUAL);
+  return (compare(source, target) == EQUAL);
 }
 
 UBool Collator::greaterOrEqual(const UnicodeString& source, 
                                   const UnicodeString& target) const
 {
-  return (compare(source, target) != UCOL_LESS);
+  return (compare(source, target) != LESS);
 }
 
 UBool Collator::greater(const UnicodeString& source, 
                            const UnicodeString& target) const
 {
-  return (compare(source, target) == UCOL_GREATER);
+  return (compare(source, target) == GREATER);
 }
 
 const Locale* Collator::getAvailableLocales(int32_t& count) 
@@ -156,8 +157,8 @@ Collator::Collator()
 * @param collationStrength collation strength
 * @param decompositionMode 
 */
-Collator::Collator(UCollationStrength collationStrength,
-                         UNormalizationMode decompositionMode)
+Collator::Collator(UCollationStrength /* collationStrength */,
+                         UNormalizationMode /* decompositionMode */)
 {
 }
 
@@ -165,7 +166,7 @@ Collator::~Collator()
 {
 }
 
-Collator::Collator(const Collator& other)
+Collator::Collator(const Collator& /* other */)
 {
 }
 
