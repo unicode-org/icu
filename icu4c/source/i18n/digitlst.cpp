@@ -219,7 +219,7 @@ DigitList::fitsIntoLong(UBool ignoreNegativeZero)
 
     // Trim trailing zeros after the decimal point. This does not change
     // the represented value.
-    while (fCount > fDecimalAt && fDigits[fCount - 1] == '0')
+    while (fCount > fDecimalAt && fCount > 0 && fDigits[fCount - 1] == '0')
         --fCount;
 
     if (fCount == 0) {
