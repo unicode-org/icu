@@ -212,7 +212,7 @@ $(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODED
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
 
 # unorm.icu
-$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT)
+$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
@@ -232,7 +232,7 @@ $(BUILDDIR)/$(ICUDT)tz.icu: $(MISCSRCDIR)/timezone.txt $(TOOLDIR)/gentz/gentz$(E
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gentz/gentz -d $(BUILDDIR) $(MISCSRCDIR)/timezone.txt
 
 # uidna.spp
-$(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT)
+$(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unames.icu $(BUILDDIR)/$(ICUDT)pnames.icu
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
@@ -241,7 +241,7 @@ $(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gens
 thaidict.brk: $(SRCDATADIR)/thaidict.brk
 	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
-$(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT)
+$(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT) $(DAT_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genbrk/genbrk -r $< -o $@
 
 ####################################################    CNV
@@ -254,10 +254,10 @@ $(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEE
 
 all-RES:  $(RES_FILES)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unorm.icu
+$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
@@ -385,7 +385,7 @@ $(TESTOUTDIR)/$(TESTDT)nam.typ: $(TESTBUILDDIR)/$(TESTDT)te_IN.res
 	cp $< $@
 
 
-testdata: $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
+testdata: packagedata $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
 packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
 	$(INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
