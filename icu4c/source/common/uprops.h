@@ -202,19 +202,32 @@ U_CFUNC int32_t
 uprv_getMaxValues(int32_t column);
 
 /**
+ * \var uprv_comparePropertyNames
  * Unicode property names and property value names are compared
  * "loosely". Property[Value]Aliases.txt say:
  *   "With loose matching of property names, the case distinctions, whitespace,
  *    and '_' are ignored."
  *
- * This function does just that, for ASCII (char *) name strings.
+ * This function does just that, for (char *) name strings.
  * It is almost identical to ucnv_compareNames() but also ignores
- * ASCII White_Space characters (U+0009..U+000d).
+ * C0 White_Space characters (U+0009..U+000d, and U+0085 on EBCDIC).
  *
  * @internal
  */
+
 U_CAPI int32_t U_EXPORT2
-uprv_comparePropertyNames(const char *name1, const char *name2);
+uprv_compareASCIIPropertyNames(const char *name1, const char *name2);
+
+U_CAPI int32_t U_EXPORT2
+uprv_compareEBCDICPropertyNames(const char *name1, const char *name2);
+
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define uprv_comparePropertyNames uprv_compareASCIIPropertyNames
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+#   define uprv_comparePropertyNames uprv_compareEBCDICPropertyNames
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
 
 /** Turn a bit index into a bit flag. @internal */
 #define FLAG(n) ((uint32_t)1<<(n))
