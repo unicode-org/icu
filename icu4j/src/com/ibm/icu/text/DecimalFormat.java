@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/19 07:13:36 $ 
- * $Revision: 1.27 $
+ * $Date: 2003/04/21 22:55:46 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -475,7 +475,7 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setEndIndex(result.length());
             }
 
-            addPadding(result, 0, 0);
+            addPadding(result, fieldPosition, 0, 0);
             return result;
         }
 
@@ -518,7 +518,7 @@ public class DecimalFormat extends NumberFormat {
 
             int suffixLen = appendAffix(result, isNegative, false);
 
-            addPadding(result, prefixLen, suffixLen);
+            addPadding(result, fieldPosition, prefixLen, suffixLen);
             return result;
         }
 
@@ -1037,12 +1037,12 @@ public class DecimalFormat extends NumberFormat {
         int suffixLen = appendAffix(result, isNegative, false);
 
         // [NEW]
-        addPadding(result, prefixLen, suffixLen);
+        addPadding(result, fieldPosition, prefixLen, suffixLen);
         return result;
     }
 
     // [NEW]
-    private final void addPadding(StringBuffer result,
+    private final void addPadding(StringBuffer result, FieldPosition fieldPosition,
                                   int prefixLen, int suffixLen) {
         if (formatWidth > 0) {
             int len = formatWidth - result.length();
@@ -1064,6 +1064,11 @@ public class DecimalFormat extends NumberFormat {
                 case PAD_AFTER_SUFFIX:
                     result.append(padding);
                     break;
+                }
+                if (padPosition == PAD_BEFORE_PREFIX ||
+                    padPosition == PAD_AFTER_PREFIX) {
+                    fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + len);
+                    fieldPosition.setEndIndex(fieldPosition.getEndIndex() + len);
                 }
             }
         }
@@ -2416,7 +2421,7 @@ public class DecimalFormat extends NumberFormat {
                                              Currency.SYMBOL_NAME,
                                              isChoiceFormat);
                         if (isChoiceFormat[0]) {
-                            // Two modes here: If doFormat is fale, we set up
+                            // Two modes here: If doFormat is false, we set up
                             // currencyChoice.  If doFormat is true, we use the
                             // previously created currencyChoice to format the
                             // value in digitList.
@@ -2428,7 +2433,7 @@ public class DecimalFormat extends NumberFormat {
                                 if (currencyChoice == null) {
                                     currencyChoice = new ChoiceFormat(s);
                                 }
-                                // We could almost null or "" here, since the
+                                // We could almost return null or "" here, since the
                                 // expanded affixes are almost not used at all
                                 // in this situation.  However, one method --
                                 // toPattern() -- still does use the expanded
