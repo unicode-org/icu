@@ -387,7 +387,7 @@ static uint32_t fbHigh[3] = {0, /*0,*/UCOL_COMMON_TOP2, 0};
 static uint32_t fbLow[3] = {0, /*0,*/UCOL_COMMON_BOT2, 0};
 
 U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, uint32_t strength, UErrorCode *status) {
-
+/* TODO: rename to enum names */
   uint32_t high, low, count=1;
 
   if(strength == UCOL_SECONDARY) {
@@ -395,9 +395,9 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
     high = 0xFFFFFFFF;
     count = 0xFF - UCOL_COMMON_TOP2;
   } else {
-    low = 0x03000000;
+    low = UCOL_BYTE_COMMON << 24; //0x05000000;
     high = 0x40000000;
-    count = 0x40 - 0x30;
+    count = 0x40 - UCOL_BYTE_COMMON;
   }
 
   if(tok->next != NULL && tok->next->strength == strength) {
@@ -405,7 +405,7 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
   } 
 
   g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
-  g->current = 0x03000000;
+  g->current = UCOL_BYTE_COMMON;
 
   if(g->noOfRanges == 0) {
     *status = U_INTERNAL_PROGRAM_ERROR;
