@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Greek_Latin.txt
-// Date: Fri Nov 30 19:39:30 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // Greek_Latin
@@ -18,8 +18,8 @@ translit_Greek_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Greek_Latin.txt,v $
-// $Date: 2001/12/01 04:30:28 $
-// $Revision: 1.7 $
+// $Date: 2001/12/03 20:51:18 $
+// $Revision: 1.8 $
 //--------------------------------------------------------------------
 
 // Rules are predicated on running NFD first, and NFC afterwards

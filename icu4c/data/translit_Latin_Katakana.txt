@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Latin_Katakana.txt
-// Date: Mon Dec  3 10:28:39 2001
+// Date: Mon Dec  3 11:44:30 2001
 //--------------------------------------------------------------------
 
 // Latin_Katakana
@@ -18,8 +18,8 @@ translit_Latin_Katakana {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Latin_Katakana.txt,v $
-// $Date: 2001/12/03 18:30:30 $
-// $Revision: 1.7 $
+// $Date: 2001/12/03 20:51:19 $
+// $Revision: 1.8 $
 //--------------------------------------------------------------------
 
 // note: a global filter is more efficient, but MUST include all source chars

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Hiragana_Katakana.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // Hiragana_Katakana
