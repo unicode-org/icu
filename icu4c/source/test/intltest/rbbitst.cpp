@@ -2172,8 +2172,8 @@ RBBIWordMonkey::RBBIWordMonkey() {
     fMungedPositions = NULL;
     fOrigPositions   = NULL;
 
-    fGCFMatcher = new RegexMatcher("\\X(?:\\p{Format}\\p{Grapheme_Extend}*)*", NULL, status);
-    fGCMatcher  = new RegexMatcher("\\X", NULL, status);
+    fGCFMatcher = new RegexMatcher("\\X(?:\\p{Format}\\p{Grapheme_Extend}*)*", 0, status);
+    fGCMatcher  = new RegexMatcher("\\X", 0, status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
