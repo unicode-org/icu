@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertJavaLocale.java,v $ 
- * $Date: 2002/02/16 03:05:27 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/12/12 02:08:46 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.util.*;
 The ConvertJavaLocale application converts java locales to 
 Java and ICU Locale files.  It's usage is as follows
 
-    ConvertJavaLocale [-11] [-12] [-icu] locale...
+    ConvertJavaLocale [-11] [-12] [-icu] [-package] locale...
 
 Usage
 
@@ -151,7 +151,7 @@ public class ConvertJavaLocale {
     }
     
     private void printUsage() {
-        System.err.println("Usage: ConvertJavaLocale [-11] [-12] [-icu] localeName");
+        System.err.println("Usage: ConvertJavaLocale [-11] [-12] [-icu] [-package] <package name> localeName");
     }
     
     private short identifyOptions(String[] options) {
