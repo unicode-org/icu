@@ -19,6 +19,7 @@
 
 #include "ucol_bld.h" 
 #include "ucln_in.h" 
+#include "unicode/uchar.h"
 
 
 static const InverseTableHeader* invUCA = NULL;

@@ -11,7 +11,6 @@
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
 #include "unicode/ustring.h"
-#include "cpputils.h"
 
 U_NAMESPACE_USE
 

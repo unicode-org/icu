@@ -22,15 +22,16 @@
 *                         supplementary code points, etc.
 */
 
+#include "cmemory.h"
+#include "ustr_imp.h"
+#include "umutex.h"
+#include "unormimp.h"
+
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/chariter.h"
 #include "unicode/udata.h"
 #include "unicode/unorm.h"
-#include "cmemory.h"
-#include "ustr_imp.h"
-#include "umutex.h"
-#include "unormimp.h"
 
 /*
  * This new implementation of the normalization code loads its data from

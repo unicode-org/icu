@@ -8,9 +8,10 @@
 **********************************************************************
 */
 
+#include "cmemory.h"
 #include "unesctrn.h"
 #include "util.h"
-#include "cmemory.h"
+#include "unicode/uchar.h"
 
 U_NAMESPACE_BEGIN
 

@@ -8,10 +8,7 @@
 #ifndef USTRFMT_H
 #define USTRFMT_H
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "unicode/utypes.h"
-#include "cstring.h"
 
 U_CAPI double U_EXPORT2 
 uprv_strtod(const char* source, char** end);

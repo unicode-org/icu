@@ -22,20 +22,19 @@
 #include "ucol_elm.h"
 #include "bocsu.h"
 
+#include "unormimp.h"
+#include "cstring.h"
+#include "umutex.h"
+#include "uhash.h"
+#include "ucln_in.h" 
+
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/unorm.h"
-#include "unicode/normlzr.h"
 #include "unicode/udata.h"
-
-#include "unormimp.h"
-#include "cpputils.h"
-#include "cstring.h"
-#include "umutex.h"
-#include "uhash.h"
-#include "ucln_in.h" 
+#include "unicode/uchar.h"
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>
