@@ -106,36 +106,36 @@ TimeZone::initSystemTimeZones(void)
     // Total Java zones: 289
     // Not all Unix zones become Java zones due to duplication and overlap.
     //----------------------------------------------------------
-
-    kSystemTimeZones[0] =
+    int n = 0;
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-11*U_MILLIS_PER_HOUR, "Pacific/Niue" /*NUT*/);
     // Pacific/Niue Niue(NU)    -11:00  -   NUT
     //----------------------------------------------------------
-    kSystemTimeZones[1] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-11*U_MILLIS_PER_HOUR, "Pacific/Apia" /*WST*/);
     // Pacific/Apia W Samoa(WS) -11:00  -   WST # W Samoa Time
-    kSystemTimeZones[2] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-11*U_MILLIS_PER_HOUR, "MIT" /*alias for Pacific/Apia*/);
     //----------------------------------------------------------
-    kSystemTimeZones[3] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-11*U_MILLIS_PER_HOUR, "Pacific/Pago_Pago" /*SST*/);
     // Pacific/Pago_Pago    American Samoa(US)  -11:00  -   SST # S=Samoa
     //----------------------------------------------------------
-    kSystemTimeZones[4] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "Pacific/Tahiti" /*TAHT*/);
     // Pacific/Tahiti   French Polynesia(PF)    -10:00  -   TAHT    # Tahiti Time
     //----------------------------------------------------------
-    kSystemTimeZones[5] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "Pacific/Fakaofo" /*TKT*/);
     // Pacific/Fakaofo  Tokelau Is(TK)  -10:00  -   TKT # Tokelau Time
     //----------------------------------------------------------
-    kSystemTimeZones[6] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "Pacific/Honolulu" /*HST*/);
     // Pacific/Honolulu Hawaii(US)  -10:00  -   HST
-    kSystemTimeZones[7] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "HST" /*alias for Pacific/Honolulu*/);
     //----------------------------------------------------------
-    kSystemTimeZones[8] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "America/Adak" /*HA%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR, fgStatus);
@@ -143,7 +143,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Adak Alaska(US)  -10:00  US  HA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[9] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-10*U_MILLIS_PER_HOUR, "Pacific/Rarotonga" /*CK%sT*/,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, (int32_t)(0.5*U_MILLIS_PER_HOUR), fgStatus);
@@ -151,31 +151,31 @@ TimeZone::initSystemTimeZones(void)
     // Rule Cook    1979    max -   Oct lastSun 0:00    0:30    HS
     // Pacific/Rarotonga    Cook Is(CK) -10:00  Cook    CK%sT
     //----------------------------------------------------------
-    kSystemTimeZones[10] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(-9.5*U_MILLIS_PER_HOUR), "Pacific/Marquesas" /*MART*/);
     // Pacific/Marquesas    French Polynesia(PF)    -9:30   -   MART    # Marquesas Time
     //----------------------------------------------------------
-    kSystemTimeZones[11] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-9*U_MILLIS_PER_HOUR, "Pacific/Gambier" /*GAMT*/);
     // Pacific/Gambier  French Polynesia(PF)    -9:00   -   GAMT    # Gambier Time
     //----------------------------------------------------------
-    kSystemTimeZones[12] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-9*U_MILLIS_PER_HOUR, "America/Anchorage" /*AK%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule US  1967    max -   Oct lastSun 2:00    0   S
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Anchorage    Alaska(US)  -9:00   US  AK%sT
-    kSystemTimeZones[13] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-9*U_MILLIS_PER_HOUR, "AST" /*alias for America/Anchorage*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[14] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(-8.5*U_MILLIS_PER_HOUR), "Pacific/Pitcairn" /*PNT*/);
     // Pacific/Pitcairn Pitcairn(PN)    -8:30   -   PNT # Pitcairn Time
     //----------------------------------------------------------
-    kSystemTimeZones[15] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-8*U_MILLIS_PER_HOUR, "America/Vancouver" /*P%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -183,7 +183,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Vanc    1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Vancouver    British Columbia(CA)    -8:00   Vanc    P%sT
     //----------------------------------------------------------
-    kSystemTimeZones[16] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-8*U_MILLIS_PER_HOUR, "America/Tijuana" /*P%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -191,26 +191,26 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mexico  1996    max -   Oct lastSun 2:00    0   S
     // America/Tijuana  Mexico(MX)  -8:00   Mexico  P%sT
     //----------------------------------------------------------
-    kSystemTimeZones[17] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-8*U_MILLIS_PER_HOUR, "America/Los_Angeles" /*P%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule US  1967    max -   Oct lastSun 2:00    0   S
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Los_Angeles  US Pacific time, represented by Los Angeles(US) -8:00   US  P%sT
-    kSystemTimeZones[18] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-8*U_MILLIS_PER_HOUR, "PST" /*alias for America/Los_Angeles*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[19] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "America/Dawson_Creek" /*MST*/);
     // America/Dawson_Creek British Columbia(CA)    -7:00   -   MST
     //----------------------------------------------------------
-    kSystemTimeZones[20] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "America/Phoenix" /*MST*/);
     // America/Phoenix  ?(US)   -7:00   -   MST     
-    kSystemTimeZones[21] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "America/Edmonton" /*M%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -218,7 +218,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Edm 1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Edmonton Alberta(CA) -7:00   Edm M%sT
     //----------------------------------------------------------
-    kSystemTimeZones[22] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "America/Mazatlan" /*M%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -226,47 +226,47 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mexico  1996    max -   Oct lastSun 2:00    0   S
     // America/Mazatlan Mexico(MX)  -7:00   Mexico  M%sT
     //----------------------------------------------------------
-    kSystemTimeZones[23] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "America/Denver" /*M%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule US  1967    max -   Oct lastSun 2:00    0   S
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Denver   US Mountain time, represented by Denver(US) -7:00   US  M%sT
-    kSystemTimeZones[24] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "MST" /*alias for America/Denver*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[25] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Belize" /*C%sT*/);
     // America/Belize   Belize(BZ)  -6:00   -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[26] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Regina" /*CST*/);
     // America/Regina   Saskatchewan(CA)    -6:00   -   CST
     //----------------------------------------------------------
-    kSystemTimeZones[27] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "Pacific/Galapagos" /*GALT*/);
     // Pacific/Galapagos    Ecuador(EC) -6:00   -   GALT    # Galapagos Time
     //----------------------------------------------------------
-    kSystemTimeZones[28] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Guatemala" /*C%sT*/);
     // America/Guatemala    Guatemala(GT)   -6:00   -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[29] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Tegucigalpa" /*C%sT*/);
     // America/Tegucigalpa  Honduras(HN)    -6:00   -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[30] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/El_Salvador" /*C%sT*/);
     // America/El_Salvador  El Salvador(SV) -6:00   -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[31] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Costa_Rica" /*C%sT*/);
     // America/Costa_Rica   Costa Rica(CR)  -6:00   -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[32] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Winnipeg" /*C%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -274,7 +274,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Winn    1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Winnipeg Manitoba(CA)    -6:00   Winn    C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[33] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "Pacific/Easter" /*EAS%sT*/,
       Calendar::OCTOBER, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -282,7 +282,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Chile   1970    max -   Mar Sun>=9  0:00    0   -
     // Pacific/Easter   Chile(CL)   -6:00   Chile   EAS%sT
     //----------------------------------------------------------
-    kSystemTimeZones[34] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Mexico_City" /*C%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -290,57 +290,57 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mexico  1996    max -   Oct lastSun 2:00    0   S
     // America/Mexico_City  Mexico(MX)  -6:00   Mexico  C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[35] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "America/Chicago" /*C%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule US  1967    max -   Oct lastSun 2:00    0   S
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Chicago  US Central time, represented by Chicago(US) -6:00   US  C%sT
-    kSystemTimeZones[36] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-6*U_MILLIS_PER_HOUR, "CST" /*alias for America/Chicago*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[37] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Porto_Acre" /*AST*/);
     // America/Porto_Acre   Brazil(BR)  -5:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[38] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Bogota" /*CO%sT*/);
     // America/Bogota   Colombia(CO)    -5:00   -   CO%sT   # Colombia Time
     //----------------------------------------------------------
-    kSystemTimeZones[39] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Guayaquil" /*ECT*/);
     // America/Guayaquil    Ecuador(EC) -5:00   -   ECT # Ecuador Time
     //----------------------------------------------------------
-    kSystemTimeZones[40] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Jamaica" /*EST*/);
     // America/Jamaica  Jamaica(JM) -5:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[41] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Cayman" /*EST*/);
     // America/Cayman   Cayman Is(KY)   -5:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[42] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Managua" /*EST*/);
     // America/Managua  Nicaragua(NI)   -5:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[43] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Panama" /*EST*/);
     // America/Panama   Panama(PA)  -5:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[44] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Lima" /*PE%sT*/);
     // America/Lima Peru(PE)    -5:00   -   PE%sT   # Peru Time
     //----------------------------------------------------------
-    kSystemTimeZones[45] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Indianapolis" /*EST*/);
     // America/Indianapolis Indiana(US) -5:00   -   EST
-    kSystemTimeZones[46] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "IET" /*alias for America/Indianapolis*/);
     //----------------------------------------------------------
-    kSystemTimeZones[47] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Nassau" /*E%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -348,7 +348,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Bahamas 1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Nassau   Bahamas(BS) -5:00   Bahamas E%sT
     //----------------------------------------------------------
-    kSystemTimeZones[48] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Montreal" /*E%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -356,7 +356,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mont    1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Montreal Ontario, Quebec(CA) -5:00   Mont    E%sT
     //----------------------------------------------------------
-    kSystemTimeZones[49] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Havana" /*C%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, 8, -Calendar::SUNDAY /*DOW>=DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -364,7 +364,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Cuba    1997    max -   Oct Sun>=8  0:00s   0   S
     // America/Havana   Cuba(CU)    -5:00   Cuba    C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[50] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Port-au-Prince" /*E%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -372,7 +372,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Haiti   1988    max -   Oct lastSun 1:00s   0   S
     // America/Port-au-Prince   Haiti(HT)   -5:00   Haiti   E%sT
     //----------------------------------------------------------
-    kSystemTimeZones[51] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/Grand_Turk" /*E%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -380,109 +380,109 @@ TimeZone::initSystemTimeZones(void)
     // Rule TC  1987    max -   Apr Sun>=1  0:00    1:00    D
     // America/Grand_Turk   Turks and Caicos(TC)    -5:00   TC  E%sT
     //----------------------------------------------------------
-    kSystemTimeZones[52] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "America/New_York" /*E%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule US  1967    max -   Oct lastSun 2:00    0   S
     // Rule US  1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/New_York US Eastern time, represented by New York(US)    -5:00   US  E%sT
-    kSystemTimeZones[53] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-5*U_MILLIS_PER_HOUR, "EST" /*alias for America/New_York*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[54] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Antigua" /*AST*/);
     // America/Antigua  Antigua and Barbuda(AG) -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[55] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Anguilla" /*AST*/);
     // America/Anguilla Anguilla(AI)    -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[56] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Curacao" /*AST*/);
     // America/Curacao  Curacao(AN) -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[57] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Aruba" /*AST*/);
     // America/Aruba    Aruba(AW)   -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[58] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Barbados" /*A%sT*/);
     // America/Barbados Barbados(BB)    -4:00   -   A%sT
     //----------------------------------------------------------
-    kSystemTimeZones[59] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/La_Paz" /*BOT*/);
     // America/La_Paz   Bolivia(BO) -4:00   -   BOT # Bolivia Time
     //----------------------------------------------------------
-    kSystemTimeZones[60] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Manaus" /*WST*/);
     // America/Manaus   Brazil(BR)  -4:00   -   WST
     //----------------------------------------------------------
-    kSystemTimeZones[61] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Dominica" /*AST*/);
     // America/Dominica Dominica(DM)    -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[62] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Santo_Domingo" /*AST*/);
     // America/Santo_Domingo    Dominican Republic(DO)  -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[63] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Grenada" /*AST*/);
     // America/Grenada  Grenada(GD) -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[64] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Guadeloupe" /*AST*/);
     // America/Guadeloupe   Guadeloupe(GP)  -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[65] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Guyana" /*GYT*/);
     // America/Guyana   Guyana(GY)  -4:00   -   GYT
     //----------------------------------------------------------
-    kSystemTimeZones[66] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/St_Kitts" /*AST*/);
     // America/St_Kitts St Kitts-Nevis(KN)  -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[67] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/St_Lucia" /*AST*/);
     // America/St_Lucia St Lucia(LC)    -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[68] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Martinique" /*AST*/);
     // America/Martinique   Martinique(MQ)  -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[69] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Montserrat" /*AST*/);
     // America/Montserrat   Montserrat(MS)  -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[70] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Puerto_Rico" /*AST*/);
     // America/Puerto_Rico  Puerto Rico(PR) -4:00   -   AST
-    kSystemTimeZones[71] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "PRT" /*alias for America/Puerto_Rico*/);
     //----------------------------------------------------------
-    kSystemTimeZones[72] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Port_of_Spain" /*AST*/);
     // America/Port_of_Spain    Trinidad and Tobago(TT) -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[73] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/St_Vincent" /*AST*/);
     // America/St_Vincent   St Vincent and the Grenadines(VC)   -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[74] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Tortola" /*AST*/);
     // America/Tortola  British Virgin Is(VG)   -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[75] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/St_Thomas" /*AST*/);
     // America/St_Thomas    Virgin Is(VI)   -4:00   -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[76] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Caracas" /*VET*/);
     // America/Caracas  Venezuela(VE)   -4:00   -   VET
     //----------------------------------------------------------
-    kSystemTimeZones[77] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "Antarctica/Palmer" /*CL%sT*/,
       Calendar::OCTOBER, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -490,7 +490,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule ChileAQ 1970    max -   Mar Sun>=9  0:00    0   -
     // Antarctica/Palmer    USA - year-round bases(AQ)  -4:00   ChileAQ CL%sT
     //----------------------------------------------------------
-    kSystemTimeZones[78] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "Atlantic/Bermuda" /*A%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -498,7 +498,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Bahamas 1987    max -   Apr Sun>=1  2:00    1:00    D
     // Atlantic/Bermuda Bermuda(BM) -4:00   Bahamas A%sT
     //----------------------------------------------------------
-    kSystemTimeZones[79] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Cuiaba" /*W%sT*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::FEBRUARY, 11, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -506,7 +506,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Brazil  1999    max -   Feb Sun>=11 0:00    0   S
     // America/Cuiaba   Brazil(BR)  -4:00   Brazil  W%sT
     //----------------------------------------------------------
-    kSystemTimeZones[80] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Halifax" /*A%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -514,7 +514,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Halifax 1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Halifax  ?(CA)   -4:00   Halifax A%sT
     //----------------------------------------------------------
-    kSystemTimeZones[81] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "Atlantic/Stanley" /*FK%sT*/,
       Calendar::SEPTEMBER, 8, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::APRIL, 16, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -522,7 +522,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Falk    1996    max -   Sep Sun>=8  0:00    1:00    S
     // Atlantic/Stanley Falklands(FK)   -4:00   Falk    FK%sT
     //----------------------------------------------------------
-    kSystemTimeZones[82] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Thule" /*A%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -530,7 +530,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Thule   1993    max -   Oct lastSun 2:00    0   S
     // America/Thule    ?(GL)   -4:00   Thule   A%sT
     //----------------------------------------------------------
-    kSystemTimeZones[83] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Asuncion" /*PY%sT*/,
       Calendar::OCTOBER, 1, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 1, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -538,7 +538,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Para    1997    max -   Oct 1   0:00    1:00    S
     // America/Asuncion Paraguay(PY)    -4:00   Para    PY%sT
     //----------------------------------------------------------
-    kSystemTimeZones[84] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-4*U_MILLIS_PER_HOUR, "America/Santiago" /*CL%sT*/,
       Calendar::OCTOBER, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 9, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -546,36 +546,36 @@ TimeZone::initSystemTimeZones(void)
     // Rule Chile   1970    max -   Mar Sun>=9  0:00    0   -
     // America/Santiago Chile(CL)   -4:00   Chile   CL%sT
     //----------------------------------------------------------
-    kSystemTimeZones[85] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(-3.5*U_MILLIS_PER_HOUR), "America/St_Johns" /*N%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule StJohns 1960    max -   Oct lastSun 2:00    0   S
     // Rule StJohns 1989    max -   Apr Sun>=1  2:00    1:00    D
     // America/St_Johns Canada(CA)  -3:30   StJohns N%sT
-    kSystemTimeZones[86] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Fortaleza" /*EST*/);
     // America/Fortaleza    Brazil(BR)  -3:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[87] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Cayenne" /*GFT*/);
     // America/Cayenne  French Guiana(GF)   -3:00   -   GFT
     //----------------------------------------------------------
-    kSystemTimeZones[88] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Paramaribo" /*SRT*/);
     // America/Paramaribo   Suriname(SR)    -3:00   -   SRT
     //----------------------------------------------------------
-    kSystemTimeZones[89] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Montevideo" /*UY%sT*/);
     // America/Montevideo   Uruguay(UY) -3:00   -   UY%sT
     //----------------------------------------------------------
-    kSystemTimeZones[90] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Buenos_Aires" /*AR%sT*/);
     // America/Buenos_Aires Argentina(AR)   -3:00   -   AR%sT
-    kSystemTimeZones[91] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "AGT" /*alias for America/Buenos_Aires*/);
     //----------------------------------------------------------
-    kSystemTimeZones[92] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Godthab" /*WG%sT*/,
       Calendar::MARCH, -1, Calendar::SATURDAY /*DOW_IN_DOM*/, 22*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SATURDAY /*DOW_IN_DOM*/, 22*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -583,7 +583,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // America/Godthab  ?(GL)   -3:00   EU  WG%sT
     //----------------------------------------------------------
-    kSystemTimeZones[93] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Miquelon" /*PM%sT*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -591,35 +591,35 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mont    1987    max -   Apr Sun>=1  2:00    1:00    D
     // America/Miquelon St Pierre and Miquelon(PM)  -3:00   Mont    PM%sT   # Pierre & Miquelon Time
     //----------------------------------------------------------
-    kSystemTimeZones[94] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "America/Sao_Paulo" /*E%sT*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::FEBRUARY, 11, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule Brazil  1998    max -   Oct Sun>=1  0:00    1:00    D
     // Rule Brazil  1999    max -   Feb Sun>=11 0:00    0   S
     // America/Sao_Paulo    Brazil(BR)  -3:00   Brazil  E%sT
-    kSystemTimeZones[95] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-3*U_MILLIS_PER_HOUR, "BET" /*alias for America/Sao_Paulo*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::FEBRUARY, 11, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[96] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-2*U_MILLIS_PER_HOUR, "America/Noronha" /*FST*/);
     // America/Noronha  Brazil(BR)  -2:00   -   FST
     //----------------------------------------------------------
-    kSystemTimeZones[97] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-2*U_MILLIS_PER_HOUR, "Atlantic/South_Georgia" /*GST*/);
     // Atlantic/South_Georgia   South Georgia(GS)   -2:00   -   GST # South Georgia Time
     //----------------------------------------------------------
-    kSystemTimeZones[98] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-1*U_MILLIS_PER_HOUR, "Atlantic/Jan_Mayen" /*EGT*/);
     // Atlantic/Jan_Mayen   ?(NO)   -1:00   -   EGT
     //----------------------------------------------------------
-    kSystemTimeZones[99] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-1*U_MILLIS_PER_HOUR, "Atlantic/Cape_Verde" /*CVT*/);
     // Atlantic/Cape_Verde  Cape Verde(CV)  -1:00   -   CVT
     //----------------------------------------------------------
-    kSystemTimeZones[100] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-1*U_MILLIS_PER_HOUR, "America/Scoresbysund" /*EG%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -627,7 +627,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // America/Scoresbysund ?(GL)   -1:00   EU  EG%sT
     //----------------------------------------------------------
-    kSystemTimeZones[101] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-1*U_MILLIS_PER_HOUR, "Atlantic/Azores" /*AZO%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -635,77 +635,77 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Atlantic/Azores  Portugal(PT)    -1:00   EU  AZO%sT
     //----------------------------------------------------------
-    kSystemTimeZones[102] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Ouagadougou" /*GMT*/);
     // Africa/Ouagadougou   Burkina Faso(BF)    0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[103] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Abidjan" /*GMT*/);
     // Africa/Abidjan   Cote D'Ivoire(CI)   0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[104] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Accra" /*%s*/);
     // Africa/Accra Ghana(GH)   0:00    -   %s
     //----------------------------------------------------------
-    kSystemTimeZones[105] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Banjul" /*GMT*/);
     // Africa/Banjul    Gambia(GM)  0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[106] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Conakry" /*GMT*/);
     // Africa/Conakry   Guinea(GN)  0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[107] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Bissau" /*GMT*/);
     // Africa/Bissau    Guinea-Bissau(GW)   0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[108] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Atlantic/Reykjavik" /*GMT*/);
     // Atlantic/Reykjavik   Iceland(IS) 0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[109] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Monrovia" /*GMT*/);
     // Africa/Monrovia  Liberia(LR) 0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[110] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Casablanca" /*WET*/);
     // Africa/Casablanca    Morocco(MA) 0:00    -   WET
     //----------------------------------------------------------
-    kSystemTimeZones[111] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Timbuktu" /*GMT*/);
     // Africa/Timbuktu  Mali(ML)    0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[112] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Nouakchott" /*GMT*/);
     // Africa/Nouakchott    Mauritania(MR)  0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[113] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Atlantic/St_Helena" /*GMT*/);
     // Atlantic/St_Helena   St Helena(SH)   0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[114] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Freetown" /*%s*/);
     // Africa/Freetown  Sierra Leone(SL)    0:00    -   %s
     //----------------------------------------------------------
-    kSystemTimeZones[115] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Dakar" /*GMT*/);
     // Africa/Dakar Senegal(SN) 0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[116] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Sao_Tome" /*GMT*/);
     // Africa/Sao_Tome  Sao Tome and Principe(ST)   0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[117] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Africa/Lome" /*GMT*/);
     // Africa/Lome  Togo(TG)    0:00    -   GMT
     //----------------------------------------------------------
-    kSystemTimeZones[118] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "GMT" /*GMT*/);
     // GMT  -(-)    0:00    -   GMT
-    kSystemTimeZones[119] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "UTC" /*alias for GMT*/);
     //----------------------------------------------------------
-    kSystemTimeZones[120] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Atlantic/Faeroe" /*WE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -713,7 +713,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Atlantic/Faeroe  Denmark, Faeroe Islands, and Greenland(DK)  0:00    EU  WE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[121] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Atlantic/Canary" /*WE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -721,7 +721,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Atlantic/Canary  Spain(ES)   0:00    EU  WE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[122] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Europe/Dublin" /*GMT/IST*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -729,7 +729,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Dublin    ---(IE) 0:00    EU  GMT/IST
     //----------------------------------------------------------
-    kSystemTimeZones[123] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Europe/Lisbon" /*WE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -737,7 +737,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Lisbon    Portugal(PT)    0:00    EU  WE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[124] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(0*U_MILLIS_PER_HOUR, "Europe/London" /*GMT/BST*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -745,55 +745,55 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/London    ---(GB) 0:00    EU  GMT/BST
     //----------------------------------------------------------
-    kSystemTimeZones[125] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Luanda" /*WAT*/);
     // Africa/Luanda    Angola(AO)  1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[126] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Porto-Novo" /*WAT*/);
     // Africa/Porto-Novo    Benin(BJ)   1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[127] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Bangui" /*WAT*/);
     // Africa/Bangui    Central African Republic(CF)    1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[128] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Kinshasa" /*WAT*/);
     // Africa/Kinshasa  Democratic Republic of Congo(CG)    1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[129] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Douala" /*WAT*/);
     // Africa/Douala    Cameroon(CM)    1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[130] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Libreville" /*WAT*/);
     // Africa/Libreville    Gabon(GA)   1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[131] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Malabo" /*WAT*/);
     // Africa/Malabo    Equatorial Guinea(GQ)   1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[132] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Niamey" /*WAT*/);
     // Africa/Niamey    Niger(NE)   1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[133] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Lagos" /*WAT*/);
     // Africa/Lagos Nigeria(NG) 1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[134] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Ndjamena" /*WAT*/);
     // Africa/Ndjamena  Chad(TD)    1:00    -   WAT
     //----------------------------------------------------------
-    kSystemTimeZones[135] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Tunis" /*CE%sT*/);
     // Africa/Tunis Tunisia(TN) 1:00    -   CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[136] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Algiers" /*CET*/);
     // Africa/Algiers   Algeria(DZ) 1:00    -   CET
     //----------------------------------------------------------
-    kSystemTimeZones[137] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Andorra" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -801,7 +801,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Andorra   Andorra(AD) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[138] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Tirane" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -809,7 +809,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Tirane    Albania(AL) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[139] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Vienna" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -817,7 +817,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Vienna    Austria(AT) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[140] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Brussels" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -825,7 +825,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Brussels  Belgium(BE) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[141] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Zurich" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -833,7 +833,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Zurich    Switzerland(CH) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[142] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Prague" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -841,7 +841,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Prague    Czech Republic(CZ)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[143] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Berlin" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -849,7 +849,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Berlin    Germany(DE) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[144] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Copenhagen" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -857,7 +857,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Copenhagen    Denmark, Faeroe Islands, and Greenland(DK)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[145] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Madrid" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -865,7 +865,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Madrid    Spain(ES)   1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[146] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Gibraltar" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -873,7 +873,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Gibraltar Gibraltar(GI)   1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[147] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Budapest" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -881,7 +881,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Budapest  Hungary(HU) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[148] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Rome" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -889,7 +889,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Rome  Italy(IT)   1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[149] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Vaduz" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -897,7 +897,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Vaduz Liechtenstein(LI)   1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[150] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Luxembourg" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -905,7 +905,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Luxembourg    Luxembourg(LU)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[151] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Tripoli" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::THURSDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, 1, -Calendar::THURSDAY /*DOW>=DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -913,7 +913,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Libya   1997    max -   Oct Thu>=1  2:00s   0   -
     // Africa/Tripoli   Libya(LY)   1:00    Libya   CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[152] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Monaco" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -921,7 +921,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Monaco    Monaco(MC)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[153] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Malta" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -929,7 +929,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Malta Malta(MT)   1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[154] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Africa/Windhoek" /*WA%sT*/,
       Calendar::SEPTEMBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -937,7 +937,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Namibia 1995    max -   Apr Sun>=1  2:00    0   -
     // Africa/Windhoek  Namibia(NA) 1:00    Namibia WA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[155] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Amsterdam" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -945,7 +945,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Amsterdam Netherlands(NL) 1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[156] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Oslo" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -953,7 +953,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Oslo  Norway(NO)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[157] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Warsaw" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -961,7 +961,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule W-Eur   1996    max -   Oct lastSun 1:00s   0   -
     // Europe/Warsaw    Poland(PL)  1:00    W-Eur   CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[158] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Stockholm" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -969,7 +969,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Stockholm Sweden(SE)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[159] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Belgrade" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -977,69 +977,69 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Belgrade  Yugoslavia(YU)  1:00    EU  CE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[160] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "Europe/Paris" /*CE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule EU  1981    max -   Mar lastSun 1:00u   1:00    S
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Paris France(FR)  1:00    EU  CE%sT
-    kSystemTimeZones[161] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(1*U_MILLIS_PER_HOUR, "ECT" /*alias for Europe/Paris*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[162] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Bujumbura" /*CAT*/);
     // Africa/Bujumbura Burundi(BI) 2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[163] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Gaborone" /*CAT*/);
     // Africa/Gaborone  Botswana(BW)    2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[164] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Lubumbashi" /*CAT*/);
     // Africa/Lubumbashi    Democratic Republic of Congo(CG)    2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[165] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Maseru" /*SAST*/);
     // Africa/Maseru    Lesotho(LS) 2:00    -   SAST
     //----------------------------------------------------------
-    kSystemTimeZones[166] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Blantyre" /*CAT*/);
     // Africa/Blantyre  Malawi(ML)  2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[167] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Maputo" /*CAT*/);
     // Africa/Maputo    Mozambique(MZ)  2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[168] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Kigali" /*CAT*/);
     // Africa/Kigali    Rwanda(RW)  2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[169] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Khartoum" /*CA%sT*/);
     // Africa/Khartoum  Sudan(SD)   2:00    -   CA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[170] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Mbabane" /*SAST*/);
     // Africa/Mbabane   Swaziland(SZ)   2:00    -   SAST
     //----------------------------------------------------------
-    kSystemTimeZones[171] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Lusaka" /*CAT*/);
     // Africa/Lusaka    Zambia(ZM)  2:00    -   CAT
     //----------------------------------------------------------
-    kSystemTimeZones[172] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Harare" /*CAT*/);
     // Africa/Harare    Zimbabwe(ZW)    2:00    -   CAT
-    kSystemTimeZones[173] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "CAT" /*alias for Africa/Harare*/);
     //----------------------------------------------------------
-    kSystemTimeZones[174] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Johannesburg" /*SAST*/);
     // Africa/Johannesburg  South Africa(ZA)    2:00    -   SAST
     //----------------------------------------------------------
-    kSystemTimeZones[175] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Sofia" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1047,7 +1047,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-Eur   1996    max -   Oct lastSun 0:00    0   -
     // Europe/Sofia Bulgaria(BG)    2:00    E-Eur   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[176] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Minsk" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1055,7 +1055,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Minsk Belarus(BY) 2:00    Russia  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[177] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Asia/Nicosia" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1063,7 +1063,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Cyprus  1981    max -   Mar lastSun 0:00    1:00    S
     // Asia/Nicosia Cyprus(CY)  2:00    Cyprus  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[178] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Tallinn" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1071,19 +1071,19 @@ TimeZone::initSystemTimeZones(void)
     // Rule C-Eur   1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Tallinn   Estonia(EE) 2:00    C-Eur   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[179] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Africa/Cairo" /*EE%sT*/,
       Calendar::APRIL, -1, Calendar::FRIDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::FRIDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule Egypt   1995    max -   Apr lastFri 1:00    1:00    S
     // Rule Egypt   1995    max -   Sep lastFri 3:00    0   -
     // Africa/Cairo Egypt(EG)   2:00    Egypt   EE%sT
-    kSystemTimeZones[180] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "ART" /*alias for Africa/Cairo*/,
       Calendar::APRIL, -1, Calendar::FRIDAY /*DOW_IN_DOM*/, 1*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::FRIDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[181] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Helsinki" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1091,7 +1091,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Helsinki  Finland(FI) 2:00    EU  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[182] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Athens" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1099,7 +1099,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Athens    Greece(GR)  2:00    EU  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[183] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Asia/Jerusalem" /*I%sT*/,
       Calendar::MARCH, 15, -Calendar::FRIDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1107,7 +1107,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Zion    1999    max -   Sep Sun>=1  0:00    0   S
     // Asia/Jerusalem   Israel(IL)  2:00    Zion    I%sT
     //----------------------------------------------------------
-    kSystemTimeZones[184] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Asia/Amman" /*EE%sT*/,
       Calendar::APRIL, 1, -Calendar::FRIDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, 15, -Calendar::FRIDAY /*DOW>=DOM*/, 1*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1115,7 +1115,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule    Jordan   1995    max -   Sep Fri>=15 0:00s   0   -
     // Asia/Amman   Jordan(JO)  2:00    Jordan  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[185] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Asia/Beirut" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1123,7 +1123,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Lebanon 1993    max -   Sep lastSun 0:00    0   -
     // Asia/Beirut  Lebanon(LB) 2:00    Lebanon EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[186] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Vilnius" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1131,7 +1131,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule C-Eur   1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Vilnius   Lithuania(LT)   2:00    C-Eur   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[187] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Riga" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1139,7 +1139,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Latvia  1992    max -   Sep lastSun 2:00s   0   -
     // Europe/Riga  Latvia(LV)  2:00    Latvia  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[188] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Chisinau" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1147,7 +1147,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-Eur   1996    max -   Oct lastSun 0:00    0   -
     // Europe/Chisinau  Moldova(MD) 2:00    E-Eur   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[189] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Bucharest" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1155,7 +1155,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-Eur   1996    max -   Oct lastSun 0:00    0   -
     // Europe/Bucharest Romania(RO) 2:00    E-Eur   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[190] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Asia/Damascus" /*EE%sT*/,
       Calendar::APRIL, 1, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, 1, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1163,7 +1163,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Syria   1994    max -   Oct 1   0:00    0   -
     // Asia/Damascus    Syria(SY)   2:00    Syria   EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[191] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Kiev" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1171,81 +1171,81 @@ TimeZone::initSystemTimeZones(void)
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Kiev  Ukraine(UA) 2:00    EU  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[192] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Istanbul" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule EU  1981    max -   Mar lastSun 1:00u   1:00    S
     // Rule EU  1996    max -   Oct lastSun 1:00u   0   -
     // Europe/Istanbul  Turkey(TR)  2:00    EU  EE%sT
-    kSystemTimeZones[193] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "EET" /*alias for Europe/Istanbul*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[194] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Bahrain" /*AST*/);
     // Asia/Bahrain Bahrain(BH) 3:00    -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[195] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Djibouti" /*EAT*/);
     // Africa/Djibouti  Djibouti(DJ)    3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[196] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Asmera" /*EAT*/);
     // Africa/Asmera    Eritrea(ER) 3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[197] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Addis_Ababa" /*EAT*/);
     // Africa/Addis_Ababa   Ethiopia(ET)    3:00    -   EAT
-    kSystemTimeZones[198] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "EAT" /*alias for Africa/Addis_Ababa*/);
     //----------------------------------------------------------
-    kSystemTimeZones[199] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Nairobi" /*EAT*/);
     // Africa/Nairobi   Kenya(KE)   3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[200] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Indian/Comoro" /*EAT*/);
     // Indian/Comoro    Comoros(KM) 3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[201] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Kuwait" /*AST*/);
     // Asia/Kuwait  Kuwait(KW)  3:00    -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[202] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Indian/Antananarivo" /*EAT*/);
     // Indian/Antananarivo  Madagascar(MK)  3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[203] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Qatar" /*AST*/);
     // Asia/Qatar   Qatar(QA)   3:00    -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[204] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Mogadishu" /*EAT*/);
     // Africa/Mogadishu Somalia(SO) 3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[205] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Dar_es_Salaam" /*EAT*/);
     // Africa/Dar_es_Salaam Tanzania(TZ)    3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[206] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Africa/Kampala" /*EAT*/);
     // Africa/Kampala   Uganda(UG)  3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[207] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Aden" /*AST*/);
     // Asia/Aden    Yemen(YE)   3:00    -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[208] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Indian/Mayotte" /*EAT*/);
     // Indian/Mayotte   Mayotte(YT) 3:00    -   EAT
     //----------------------------------------------------------
-    kSystemTimeZones[209] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Riyadh" /*AST*/);
     // Asia/Riyadh  Saudi Arabia(SA)    3:00    -   AST
     //----------------------------------------------------------
-    kSystemTimeZones[210] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Asia/Baghdad" /*A%sT*/,
       Calendar::APRIL, 1, 0 /*DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, 1, 0 /*DOM*/, 4*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1253,7 +1253,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Iraq    1991    max -   Oct 1   3:00s   0   D
     // Asia/Baghdad Iraq(IQ)    3:00    Iraq    A%sT
     //----------------------------------------------------------
-    kSystemTimeZones[211] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Europe/Simferopol" /*MSK/MSD*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1261,7 +1261,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Crimea  1996    max -   Oct lastSun 0:00u   0   -
     // Europe/Simferopol    Ukraine(UA) 3:00    Crimea  MSK/MSD
     //----------------------------------------------------------
-    kSystemTimeZones[212] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(3*U_MILLIS_PER_HOUR, "Europe/Moscow" /*MSK/MSD*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1269,45 +1269,45 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Moscow    Russia(RU)  3:00    Russia  MSK/MSD
     //----------------------------------------------------------
-    kSystemTimeZones[213] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(3.5*U_MILLIS_PER_HOUR), "Asia/Tehran" /*IR%sT*/,
       Calendar::MARCH, 21, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, 23, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule Iran    1997    1999    -   Mar 21  0:00    1:00    S
     // Rule Iran    1997    1999    -   Sep 23  0:00    0   -
     // Asia/Tehran  Iran(IR)    3:30    Iran    IR%sT
-    kSystemTimeZones[214] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(3.5*U_MILLIS_PER_HOUR), "MET" /*alias for Asia/Tehran*/,
       Calendar::MARCH, 21, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, 23, 0 /*DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[215] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Asia/Dubai" /*GST*/);
     // Asia/Dubai   United Arab Emirates(AE)    4:00    -   GST
     //----------------------------------------------------------
-    kSystemTimeZones[216] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Indian/Mauritius" /*MUT*/);
     // Indian/Mauritius Mauritius(MU)   4:00    -   MUT # Mauritius Time
     //----------------------------------------------------------
-    kSystemTimeZones[217] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Asia/Muscat" /*GST*/);
     // Asia/Muscat  Oman(OM)    4:00    -   GST
     //----------------------------------------------------------
-    kSystemTimeZones[218] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Indian/Reunion" /*RET*/);
     // Indian/Reunion   Reunion(RE) 4:00    -   RET # Reunion Time
     //----------------------------------------------------------
-    kSystemTimeZones[219] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Indian/Mahe" /*SCT*/);
     // Indian/Mahe  Seychelles(SC)  4:00    -   SCT # Seychelles Time
     //----------------------------------------------------------
-    kSystemTimeZones[220] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Asia/Yerevan" /*AM%sT*/);
     // Asia/Yerevan Armenia(AM) 4:00    -   AM%sT
-    kSystemTimeZones[221] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "NET" /*alias for Asia/Yerevan*/);
     //----------------------------------------------------------
-    kSystemTimeZones[222] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Asia/Baku" /*AZ%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 5*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 5*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1315,7 +1315,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule EUAsia  1996    max -   Oct lastSun 1:00u   0   -
     // Asia/Baku    Azerbaijan(AZ)  4:00    EUAsia  AZ%sT
     //----------------------------------------------------------
-    kSystemTimeZones[223] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Asia/Aqtau" /*AQT%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1323,7 +1323,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-EurAsia   1996    max -   Oct lastSun 0:00    0   -
     // Asia/Aqtau   Kazakhstan(KZ)  4:00    E-EurAsia   AQT%sT
     //----------------------------------------------------------
-    kSystemTimeZones[224] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(4*U_MILLIS_PER_HOUR, "Europe/Samara" /*SAM%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1331,45 +1331,45 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Samara    Russia(RU)  4:00    Russia  SAM%sT
     //----------------------------------------------------------
-    kSystemTimeZones[225] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(4.5*U_MILLIS_PER_HOUR), "Asia/Kabul" /*AFT*/);
     // Asia/Kabul   Afghanistan(AF) 4:30    -   AFT
     //----------------------------------------------------------
-    kSystemTimeZones[226] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Indian/Kerguelen" /*TFT*/);
     // Indian/Kerguelen France - year-round bases(FR)   5:00    -   TFT # ISO code TF Time
     //----------------------------------------------------------
-    kSystemTimeZones[227] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Tbilisi" /*GET*/);
     // Asia/Tbilisi Georgia(GE) 5:00    -   GET
     //----------------------------------------------------------
-    kSystemTimeZones[228] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Indian/Chagos" /*IOT*/);
     // Indian/Chagos    British Indian Ocean Territory(IO)  5:00    -   IOT # BIOT Time
     //----------------------------------------------------------
-    kSystemTimeZones[229] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Indian/Maldives" /*MVT*/);
     // Indian/Maldives  Maldives(MV)    5:00    -   MVT # Maldives Time
     //----------------------------------------------------------
-    kSystemTimeZones[230] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Dushanbe" /*TJT*/);
     // Asia/Dushanbe    Tajikistan(TJ)  5:00    -   TJT # Tajikistan Time
     //----------------------------------------------------------
-    kSystemTimeZones[231] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Ashkhabad" /*TMT*/);
     // Asia/Ashkhabad   Turkmenistan(TM)    5:00    -   TMT # Turkmenistan Time
     //----------------------------------------------------------
-    kSystemTimeZones[232] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Tashkent" /*UZT*/);
     // Asia/Tashkent    Uzbekistan(UZ)  5:00    -   UZT # Uzbekistan Time
     //----------------------------------------------------------
-    kSystemTimeZones[233] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Karachi" /*PKT*/);
     // Asia/Karachi Pakistan(PK)    5:00    -   PKT # Pakistan Time
-    kSystemTimeZones[234] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "PLT" /*alias for Asia/Karachi*/);
     //----------------------------------------------------------
-    kSystemTimeZones[235] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Bishkek" /*KG%sT*/,
       Calendar::APRIL, 7, -Calendar::SUNDAY /*DOW>=DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1377,7 +1377,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Kirgiz  1991    max -   Sep lastSun 0:00    0   -
     // Asia/Bishkek Kirgizstan(KG)  5:00    Kirgiz  KG%sT   # Kirgizstan Time
     //----------------------------------------------------------
-    kSystemTimeZones[236] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Aqtobe" /*AQT%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1385,7 +1385,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-EurAsia   1996    max -   Oct lastSun 0:00    0   -
     // Asia/Aqtobe  Kazakhstan(KZ)  5:00    E-EurAsia   AQT%sT
     //----------------------------------------------------------
-    kSystemTimeZones[237] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(5*U_MILLIS_PER_HOUR, "Asia/Yekaterinburg" /*YEK%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1393,31 +1393,31 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Yekaterinburg   Russia(RU)  5:00    Russia  YEK%sT  # Yekaterinburg Time
     //----------------------------------------------------------
-    kSystemTimeZones[238] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(5.5*U_MILLIS_PER_HOUR), "Asia/Calcutta" /*IST*/);
     // Asia/Calcutta    India(IN)   5:30    -   IST
-    kSystemTimeZones[239] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(5.5*U_MILLIS_PER_HOUR), "IST" /*alias for Asia/Calcutta*/);
     //----------------------------------------------------------
-    kSystemTimeZones[240] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(5.75*U_MILLIS_PER_HOUR), "Asia/Katmandu" /*NPT*/);
     // Asia/Katmandu    Nepal(NP)   5:45    -   NPT # Nepal Time
     //----------------------------------------------------------
-    kSystemTimeZones[241] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Antarctica/Mawson" /*MAWT*/);
     // Antarctica/Mawson    Australia - territories(AQ) 6:00    -   MAWT    # Mawson Time
     //----------------------------------------------------------
-    kSystemTimeZones[242] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Colombo" /*LKT*/);
     // Asia/Colombo Sri Lanka(LK)   6:00    -   LKT
     //----------------------------------------------------------
-    kSystemTimeZones[243] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Dacca" /*BDT*/);
     // Asia/Dacca   Bangladesh(BD)  6:00    -   BDT # Bangladesh Time
-    kSystemTimeZones[244] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "BST" /*alias for Asia/Dacca*/);
     //----------------------------------------------------------
-    kSystemTimeZones[245] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Alma-Ata" /*ALM%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1425,7 +1425,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule E-EurAsia   1996    max -   Oct lastSun 0:00    0   -
     // Asia/Alma-Ata    Kazakhstan(KZ)  6:00    E-EurAsia   ALM%sT
     //----------------------------------------------------------
-    kSystemTimeZones[246] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Novosibirsk" /*NOV%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1433,41 +1433,41 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Novosibirsk Russia(RU)  6:00    Russia  NOV%sT
     //----------------------------------------------------------
-    kSystemTimeZones[247] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(6.5*U_MILLIS_PER_HOUR), "Indian/Cocos" /*CCT*/);
     // Indian/Cocos Cocos(CC)   6:30    -   CCT # Cocos Islands Time
     //----------------------------------------------------------
-    kSystemTimeZones[248] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(6.5*U_MILLIS_PER_HOUR), "Asia/Rangoon" /*MMT*/);
     // Asia/Rangoon Burma / Myanmar(MM) 6:30    -   MMT # Myanmar Time
     //----------------------------------------------------------
-    kSystemTimeZones[249] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Indian/Christmas" /*CXT*/);
     // Indian/Christmas Australian miscellany(AU)   7:00    -   CXT # Christmas Island Time
     //----------------------------------------------------------
-    kSystemTimeZones[250] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Jakarta" /*JAVT*/);
     // Asia/Jakarta Indonesia(ID)   7:00    -   JAVT
     //----------------------------------------------------------
-    kSystemTimeZones[251] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Phnom_Penh" /*ICT*/);
     // Asia/Phnom_Penh  Cambodia(KH)    7:00    -   ICT
     //----------------------------------------------------------
-    kSystemTimeZones[252] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Vientiane" /*ICT*/);
     // Asia/Vientiane   Laos(LA)    7:00    -   ICT
     //----------------------------------------------------------
-    kSystemTimeZones[253] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Saigon" /*ICT*/);
     // Asia/Saigon  Vietnam(VN) 7:00    -   ICT
-    kSystemTimeZones[254] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "VST" /*alias for Asia/Saigon*/);
     //----------------------------------------------------------
-    kSystemTimeZones[255] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Bangkok" /*ICT*/);
     // Asia/Bangkok Thailand(TH)    7:00    -   ICT
     //----------------------------------------------------------
-    kSystemTimeZones[256] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(7*U_MILLIS_PER_HOUR, "Asia/Krasnoyarsk" /*KRA%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1475,57 +1475,57 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Krasnoyarsk Russia(RU)  7:00    Russia  KRA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[257] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Antarctica/Casey" /*WST*/);
     // Antarctica/Casey Australia - territories(AQ) 8:00    -   WST # Western (Aus) Standard Time
     //----------------------------------------------------------
-    kSystemTimeZones[258] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Australia/Perth" /*WST*/);
     // Australia/Perth  Australia(AU)   8:00    -   WST
     //----------------------------------------------------------
-    kSystemTimeZones[259] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Brunei" /*BNT*/);
     // Asia/Brunei  Brunei(BN)  8:00    -   BNT
     //----------------------------------------------------------
-    kSystemTimeZones[260] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Hong_Kong" /*C%sT*/);
     // Asia/Hong_Kong   China(HK)   8:00    -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[261] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Ujung_Pandang" /*BORT*/);
     // Asia/Ujung_Pandang   Indonesia(ID)   8:00    -   BORT
     //----------------------------------------------------------
-    kSystemTimeZones[262] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Ishigaki" /*CST*/);
     // Asia/Ishigaki    Japan(JP)   8:00    -   CST
     //----------------------------------------------------------
-    kSystemTimeZones[263] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Macao" /*C%sT*/);
     // Asia/Macao   Macao(MO)   8:00    -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[264] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Kuala_Lumpur" /*MYT*/);
     // Asia/Kuala_Lumpur    Malaysia(MY)    8:00    -   MYT # Malaysia Time
     //----------------------------------------------------------
-    kSystemTimeZones[265] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Manila" /*PH%sT*/);
     // Asia/Manila  Philippines(PH) 8:00    -   PH%sT
     //----------------------------------------------------------
-    kSystemTimeZones[266] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Singapore" /*SGT*/);
     // Asia/Singapore   Singapore(SG)   8:00    -   SGT
     //----------------------------------------------------------
-    kSystemTimeZones[267] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Taipei" /*C%sT*/);
     // Asia/Taipei  Taiwan(TW)  8:00    -   C%sT
     //----------------------------------------------------------
-    kSystemTimeZones[268] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Shanghai" /*C%sT*/);
     // Asia/Shanghai    China(CN)   8:00    -   C%sT
-    kSystemTimeZones[269] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "CTT" /*alias for Asia/Shanghai*/);
     //----------------------------------------------------------
-    kSystemTimeZones[270] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Ulan_Bator" /*ULA%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR,
       Calendar::SEPTEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 0*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1533,7 +1533,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Mongol  1997    max -   Sep lastSun 0:00    0   -
     // Asia/Ulan_Bator  Mongolia(MN)    8:00    Mongol  ULA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[271] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(8*U_MILLIS_PER_HOUR, "Asia/Irkutsk" /*IRK%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1541,29 +1541,29 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Irkutsk Russia(RU)  8:00    Russia  IRK%sT
     //----------------------------------------------------------
-    kSystemTimeZones[272] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Asia/Jayapura" /*JAYT*/);
     // Asia/Jayapura    Indonesia(ID)   9:00    -   JAYT
     //----------------------------------------------------------
-    kSystemTimeZones[273] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Asia/Pyongyang" /*KST*/);
     // Asia/Pyongyang   ?(KP)   9:00    -   KST
     //----------------------------------------------------------
-    kSystemTimeZones[274] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Asia/Seoul" /*K%sT*/);
     // Asia/Seoul   ?(KR)   9:00    -   K%sT
     //----------------------------------------------------------
-    kSystemTimeZones[275] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Pacific/Palau" /*PWT*/);
     // Pacific/Palau    Palau(PW)   9:00    -   PWT # Palau Time
     //----------------------------------------------------------
-    kSystemTimeZones[276] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Asia/Tokyo" /*JST*/);
     // Asia/Tokyo   Japan(JP)   9:00    -   JST
-    kSystemTimeZones[277] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "JST" /*alias for Asia/Tokyo*/);
     //----------------------------------------------------------
-    kSystemTimeZones[278] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(9*U_MILLIS_PER_HOUR, "Asia/Yakutsk" /*YAK%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1571,13 +1571,13 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Yakutsk Russia(RU)  9:00    Russia  YAK%sT
     //----------------------------------------------------------
-    kSystemTimeZones[279] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(9.5*U_MILLIS_PER_HOUR), "Australia/Darwin" /*CST*/);
     // Australia/Darwin Australia(AU)   9:30    -   CST
-    kSystemTimeZones[280] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(9.5*U_MILLIS_PER_HOUR), "ACT" /*alias for Australia/Darwin*/);
     //----------------------------------------------------------
-    kSystemTimeZones[281] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(9.5*U_MILLIS_PER_HOUR), "Australia/Adelaide" /*CST*/,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1585,27 +1585,27 @@ TimeZone::initSystemTimeZones(void)
     // Rule AS  1995    max -   Mar lastSun 2:00s   0   -
     // Australia/Adelaide   South Australia(AU) 9:30    AS  CST
     //----------------------------------------------------------
-    kSystemTimeZones[282] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Pacific/Truk" /*TRUT*/);
     // Pacific/Truk Micronesia(FM)  10:00   -   TRUT    # Truk Time
     //----------------------------------------------------------
-    kSystemTimeZones[283] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Pacific/Guam" /*GST*/);
     // Pacific/Guam Guam(GU)    10:00   -   GST
     //----------------------------------------------------------
-    kSystemTimeZones[284] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Pacific/Saipan" /*MPT*/);
     // Pacific/Saipan   N Mariana Is(MP)    10:00   -   MPT
     //----------------------------------------------------------
-    kSystemTimeZones[285] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Pacific/Port_Moresby" /*PGT*/);
     // Pacific/Port_Moresby Papua New Guinea(PG)    10:00   -   PGT # Papua New Guinea Time
     //----------------------------------------------------------
-    kSystemTimeZones[286] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Australia/Brisbane" /*EST*/);
     // Australia/Brisbane   Australia(AU)   10:00   -   EST
     //----------------------------------------------------------
-    kSystemTimeZones[287] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Asia/Vladivostok" /*VLA%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1613,19 +1613,19 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Vladivostok Russia(RU)  10:00   Russia  VLA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[288] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Australia/Sydney" /*EST*/,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule AN  1987    max -   Oct lastSun 2:00s   1:00    -
     // Rule AN  1996    max -   Mar lastSun 2:00s   0   -
     // Australia/Sydney New South Wales(AU) 10:00   AN  EST
-    kSystemTimeZones[289] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "AET" /*alias for Australia/Sydney*/,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[290] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(10.5*U_MILLIS_PER_HOUR), "Australia/Lord_Howe" /*LHST*/,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, (int32_t)(0.5*U_MILLIS_PER_HOUR),fgStatus);
@@ -1633,21 +1633,21 @@ TimeZone::initSystemTimeZones(void)
     // Rule LH  1996    max -   Mar lastSun 2:00s   0   -
     // Australia/Lord_Howe  Lord Howe Island(AU)    10:30   LH  LHST
     //----------------------------------------------------------
-    kSystemTimeZones[291] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "Pacific/Ponape" /*PONT*/);
     // Pacific/Ponape   Micronesia(FM)  11:00   -   PONT    # Ponape Time
     //----------------------------------------------------------
-    kSystemTimeZones[292] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "Pacific/Efate" /*VU%sT*/);
     // Pacific/Efate    Vanuatu(VU) 11:00   -   VU%sT   # Vanuatu Time
     //----------------------------------------------------------
-    kSystemTimeZones[293] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "Pacific/Guadalcanal" /*SBT*/);
     // Pacific/Guadalcanal  Solomon Is(SB)  11:00   -   SBT # Solomon Is Time
-    kSystemTimeZones[294] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "SST" /*alias for Pacific/Guadalcanal*/);
     //----------------------------------------------------------
-    kSystemTimeZones[295] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "Pacific/Noumea" /*NC%sT*/,
       Calendar::NOVEMBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1655,7 +1655,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule NC  1997    max -   Nov lastSun 2:00s   1:00    S
     // Pacific/Noumea   New Caledonia(NC)   11:00   NC  NC%sT
     //----------------------------------------------------------
-    kSystemTimeZones[296] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(11*U_MILLIS_PER_HOUR, "Asia/Magadan" /*MAG%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1663,43 +1663,43 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Magadan Russia(RU)  11:00   Russia  MAG%sT
     //----------------------------------------------------------
-    kSystemTimeZones[297] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(11.5*U_MILLIS_PER_HOUR), "Pacific/Norfolk" /*NFT*/);
     // Pacific/Norfolk  Norfolk(NF) 11:30   -   NFT # Norfolk Time
     //----------------------------------------------------------
-    kSystemTimeZones[298] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Kosrae" /*KOST*/);
     // Pacific/Kosrae   Micronesia(FM)  12:00   -   KOST    # Kosrae Time
     //----------------------------------------------------------
-    kSystemTimeZones[299] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Tarawa" /*GILT*/);
     // Pacific/Tarawa   Kiribati(KI)    12:00   -   GILT    # Gilbert Is Time
     //----------------------------------------------------------
-    kSystemTimeZones[300] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Majuro" /*MHT*/);
     // Pacific/Majuro   Marshall Is(MH) 12:00   -   MHT
     //----------------------------------------------------------
-    kSystemTimeZones[301] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Nauru" /*NRT*/);
     // Pacific/Nauru    Nauru(NR)   12:00   -   NRT
     //----------------------------------------------------------
-    kSystemTimeZones[302] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Funafuti" /*TVT*/);
     // Pacific/Funafuti Tuvalu(TV)  12:00   -   TVT # Tuvalu Time
     //----------------------------------------------------------
-    kSystemTimeZones[303] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Wake" /*WAKT*/);
     // Pacific/Wake Wake(US)    12:00   -   WAKT    # Wake Time
     //----------------------------------------------------------
-    kSystemTimeZones[304] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Wallis" /*WFT*/);
     // Pacific/Wallis   Wallis and Futuna(WF)   12:00   -   WFT # Wallis & Futuna Time
     //----------------------------------------------------------
-    kSystemTimeZones[305] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Fiji" /*FJT*/);
     // Pacific/Fiji Fiji(FJ)    12:00   -   FJT # Fiji Time
     //----------------------------------------------------------
-    kSystemTimeZones[306] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Antarctica/McMurdo" /*NZ%sT*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 15, -Calendar::SUNDAY /*DOW>=DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1707,7 +1707,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule NZAQ    1990    max -   Mar Sun>=15 2:00s   0   S
     // Antarctica/McMurdo   USA - year-round bases(AQ)  12:00   NZAQ    NZ%sT
     //----------------------------------------------------------
-    kSystemTimeZones[307] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Asia/Kamchatka" /*PET%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1715,19 +1715,19 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Kamchatka   Russia(RU)  12:00   Russia  PET%sT
     //----------------------------------------------------------
-    kSystemTimeZones[308] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "Pacific/Auckland" /*NZ%sT*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 15, -Calendar::SUNDAY /*DOW>=DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     // Rule NZ  1990    max -   Oct Sun>=1  2:00s   1:00    D
     // Rule NZ  1990    max -   Mar Sun>=15 2:00s   0   S
     // Pacific/Auckland New Zealand(NZ) 12:00   NZ  NZ%sT
-    kSystemTimeZones[309] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(12*U_MILLIS_PER_HOUR, "NST" /*alias for Pacific/Auckland*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::MARCH, 15, -Calendar::SUNDAY /*DOW>=DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[310] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(12.75*U_MILLIS_PER_HOUR), "Pacific/Chatham" /*CHA%sT*/,
       Calendar::OCTOBER, 1, -Calendar::SUNDAY /*DOW>=DOM*/, (int32_t)(2.75*U_MILLIS_PER_HOUR),
       Calendar::MARCH, 15, -Calendar::SUNDAY /*DOW>=DOM*/, (int32_t)(3.75*U_MILLIS_PER_HOUR), 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1735,15 +1735,15 @@ TimeZone::initSystemTimeZones(void)
     // Rule Chatham 1991    max -   Mar Sun>=15 2:45s   0   S
     // Pacific/Chatham  New Zealand(NZ) 12:45   Chatham CHA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[311] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(13*U_MILLIS_PER_HOUR, "Pacific/Enderbury" /*PHOT*/);
     // Pacific/Enderbury    Kiribati(KI)    13:00   -   PHOT
     //----------------------------------------------------------
-    kSystemTimeZones[312] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(13*U_MILLIS_PER_HOUR, "Pacific/Tongatapu" /*TOT*/);
     // Pacific/Tongatapu    Tonga(TO)   13:00   -   TOT
     //----------------------------------------------------------
-    kSystemTimeZones[313] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(13*U_MILLIS_PER_HOUR, "Asia/Anadyr" /*ANA%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1751,22 +1751,22 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Asia/Anadyr  Russia(RU)  13:00   Russia  ANA%sT
     //----------------------------------------------------------
-    kSystemTimeZones[314] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(14*U_MILLIS_PER_HOUR, "Pacific/Kiritimati" /*LINT*/);
     // Pacific/Kiritimati   Kiribati(KI)    14:00   -   LINT
-    kSystemTimeZones[315] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(-7*U_MILLIS_PER_HOUR, "PNT" /*alias for America/Phoenix*/);
     //----------------------------------------------------------
-    kSystemTimeZones[316] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone((int32_t)(-3.5*U_MILLIS_PER_HOUR), "CNT" /*alias for America/St_Johns*/,
       Calendar::APRIL, 1, -Calendar::SUNDAY /*DOW>=DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
     //----------------------------------------------------------
-    kSystemTimeZones[317] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(10*U_MILLIS_PER_HOUR, "Antarctica/DumontDUrville" /*DDUT*/);
     // Antarctica/DumontDUrville    France - year-round bases(AQ)   10:00   -   DDUT    # Dumont-d'Urville Time
     //----------------------------------------------------------
-    kSystemTimeZones[318] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(2*U_MILLIS_PER_HOUR, "Europe/Kaliningrad" /*EE%sT*/,
       Calendar::MARCH, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 2*U_MILLIS_PER_HOUR,
       Calendar::OCTOBER, -1, Calendar::SUNDAY /*DOW_IN_DOM*/, 3*U_MILLIS_PER_HOUR, 1*U_MILLIS_PER_HOUR,fgStatus);
@@ -1774,7 +1774,7 @@ TimeZone::initSystemTimeZones(void)
     // Rule Russia  1996    max -   Oct lastSun 2:00s   0   -
     // Europe/Kaliningrad   Russia(RU)  2:00    Russia  EE%sT
     //----------------------------------------------------------
-    kSystemTimeZones[319] =
+    kSystemTimeZones[n++] =
     new SimpleTimeZone(6*U_MILLIS_PER_HOUR, "Asia/Thimbu" /*BTT*/);
     // Asia/Thimbu  Bhutan(BT)  6:00    -   BTT # Bhutan Time
     //----------------------------------------------------------
