@@ -396,7 +396,7 @@ void SimpleDateFormat::parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& s
     fCalendar->setTime(startDate, status);
     if(U_SUCCESS(status)) {
         fDefaultCenturyStart = startDate;
-        fDefaultCenturyStartYear = fCalendar->get(Calendar::YEAR, status);
+        fDefaultCenturyStartYear = fCalendar->get(UCAL_YEAR, status);
     }
 }
     
@@ -478,16 +478,16 @@ SimpleDateFormat::format(const Formattable& obj,
 //----------------------------------------------------------------------
 
 // Map index into pattern character string to Calendar field number.
-const Calendar::EDateFields
+const UCalendarDateFields
 SimpleDateFormat::fgPatternIndexToCalendarField[] =
 {
-    Calendar::ERA, Calendar::YEAR, Calendar::MONTH, Calendar::DATE, 
-    Calendar::HOUR_OF_DAY, Calendar::HOUR_OF_DAY, Calendar::MINUTE, 
-    Calendar::SECOND, Calendar::MILLISECOND, Calendar::DAY_OF_WEEK,
-    Calendar::DAY_OF_YEAR, Calendar::DAY_OF_WEEK_IN_MONTH, 
-    Calendar::WEEK_OF_YEAR, Calendar::WEEK_OF_MONTH, 
-    Calendar::AM_PM, Calendar::HOUR, Calendar::HOUR, Calendar::ZONE_OFFSET,
-    Calendar::YEAR_WOY, Calendar::DOW_LOCAL
+    UCAL_ERA, UCAL_YEAR, UCAL_MONTH, UCAL_DATE, 
+    UCAL_HOUR_OF_DAY, UCAL_HOUR_OF_DAY, UCAL_MINUTE, 
+    UCAL_SECOND, UCAL_MILLISECOND, UCAL_DAY_OF_WEEK,
+    UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK_IN_MONTH, 
+    UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, 
+    UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR, UCAL_ZONE_OFFSET,
+    UCAL_YEAR_WOY, UCAL_DOW_LOCAL
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -531,7 +531,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     }
 
     patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
-    Calendar::EDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
+    UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
     int32_t value = cal.get(field, status);
     if (U_FAILURE(status)) {
         return;
@@ -568,7 +568,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "k" and "kk", write out the hour, adjusting midnight to appear as "24"
     case kHourOfDay1Field:
         if (value == 0) 
-            zeroPaddingNumber(appendTo, cal.getMaximum(Calendar::HOUR_OF_DAY) + 1, count, maxIntCount);
+            zeroPaddingNumber(appendTo, cal.getMaximum(UCAL_HOUR_OF_DAY) + 1, count, maxIntCount);
         else 
             zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
@@ -602,7 +602,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // as "12"
     case kHour1Field:
         if (value == 0) 
-            zeroPaddingNumber(appendTo, cal.getLeastMaximum(Calendar::HOUR) + 1, count, maxIntCount);
+            zeroPaddingNumber(appendTo, cal.getLeastMaximum(UCAL_HOUR) + 1, count, maxIntCount);
         else 
             zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
@@ -617,8 +617,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         UnicodeString str;
         int32_t zoneIndex = fSymbols->getZoneIndex(cal.getTimeZone().getID(str));
         if (zoneIndex == -1) {
-            value = cal.get(Calendar::ZONE_OFFSET, status) +
-                    cal.get(Calendar::DST_OFFSET, status);
+            value = cal.get(UCAL_ZONE_OFFSET, status) +
+                    cal.get(UCAL_DST_OFFSET, status);
 
             if (value < 0) {
                 appendTo += fgGmtMinus;
@@ -631,7 +631,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             appendTo += (UChar)0x003A /*':'*/;
             zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
         }
-        else if (cal.get(Calendar::DST_OFFSET, status) != 0) {
+        else if (cal.get(UCAL_DST_OFFSET, status) != 0) {
             if (count >= 4) 
                 appendTo += fSymbols->fZoneStrings[zoneIndex][3];
             else 
@@ -946,7 +946,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         if (parsedDate < internalGetDefaultCenturyStart())
         {
             // We can't use add here because that does a complete() first.
-            cal.set(Calendar::YEAR, internalGetDefaultCenturyStartYear() + 100);
+            cal.set(UCAL_YEAR, internalGetDefaultCenturyStartYear() + 100);
         }
         delete copy;
     }
@@ -979,7 +979,7 @@ SimpleDateFormat::parse(const UnicodeString& text, UErrorCode& status) const
 
 int32_t SimpleDateFormat::matchString(const UnicodeString& text,
                               int32_t start,
-                              Calendar::EDateFields field,
+                              UCalendarDateFields field,
                               const UnicodeString* data,
                               int32_t dataCount,
                               Calendar& cal) const
@@ -987,7 +987,7 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     int32_t i = 0;
     int32_t count = dataCount;
 
-    if (field == Calendar::DAY_OF_WEEK) i = 1;
+    if (field == UCAL_DAY_OF_WEEK) i = 1;
 
     // There may be multiple strings in the data[] array which begin with
     // the same prefix (e.g., Cerven and Cervenec (June and July) in Czech).
@@ -1084,7 +1084,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
 
-    Calendar::EDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
+    UCalendarDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
 
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
@@ -1131,7 +1131,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
     switch (patternCharIndex) {
     case kEraField:
-        return matchString(text, start, Calendar::ERA, fSymbols->fEras, fSymbols->fErasCount, cal);
+        return matchString(text, start, UCAL_ERA, fSymbols->fEras, fSymbols->fErasCount, cal);
     case kYearField:
         // If there are 3 or more YEAR pattern characters, this indicates
         // that the year value is to be treated literally, without any
@@ -1156,7 +1156,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             value += (fDefaultCenturyStartYear/100)*100 +
                 (value < ambiguousTwoDigitYear ? 100 : 0);
         }
-        cal.set(Calendar::YEAR, value);
+        cal.set(UCAL_YEAR, value);
         return pos.getIndex();
     case kYearWOYField:
         // Comment is the same as for kYearFiels - look above
@@ -1169,7 +1169,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             value += (fDefaultCenturyStartYear/100)*100 +
                 (value < ambiguousTwoDigitYear ? 100 : 0);
         }
-        cal.set(Calendar::YEAR_WOY, value);
+        cal.set(UCAL_YEAR_WOY, value);
         return pos.getIndex();
     case kMonthField:
         if (count <= 2) // i.e., M or MM.
@@ -1177,7 +1177,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Don't want to parse the month if it is a string
             // while pattern uses numeric style: M or MM.
             // [We computed 'value' above.]
-            cal.set(Calendar::MONTH, value - 1);
+            cal.set(UCAL_MONTH, value - 1);
             return pos.getIndex();
         }
         else
@@ -1186,38 +1186,38 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // Want to be able to parse both short and long forms.
             // Try count == 4 first:
             int32_t newStart = 0;
-            if ((newStart = matchString(text, start, Calendar::MONTH,
+            if ((newStart = matchString(text, start, UCAL_MONTH,
                                       fSymbols->fMonths, fSymbols->fMonthsCount, cal)) > 0)
                 return newStart;
             else // count == 4 failed, now try count == 3
-                return matchString(text, start, Calendar::MONTH,
+                return matchString(text, start, UCAL_MONTH,
                                    fSymbols->fShortMonths, fSymbols->fShortMonthsCount, cal);
         }
     case kHourOfDay1Field:
         // [We computed 'value' above.]
-        if (value == cal.getMaximum(Calendar::HOUR_OF_DAY) + 1) 
+        if (value == cal.getMaximum(UCAL_HOUR_OF_DAY) + 1) 
             value = 0;
-        cal.set(Calendar::HOUR_OF_DAY, value);
+        cal.set(UCAL_HOUR_OF_DAY, value);
         return pos.getIndex();
     case kDayOfWeekField:
         {
             // Want to be able to parse both short and long forms.
             // Try count == 4 (DDDD) first:
             int32_t newStart = 0;
-            if ((newStart = matchString(text, start, Calendar::DAY_OF_WEEK,
+            if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fWeekdays, fSymbols->fWeekdaysCount, cal)) > 0)
                 return newStart;
             else // DDDD failed, now try DDD
-                return matchString(text, start, Calendar::DAY_OF_WEEK,
+                return matchString(text, start, UCAL_DAY_OF_WEEK,
                                    fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, cal);
         }
     case kAmPmField:
-        return matchString(text, start, Calendar::AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, cal);
+        return matchString(text, start, UCAL_AM_PM, fSymbols->fAmPms, fSymbols->fAmPmsCount, cal);
     case kHour1Field:
         // [We computed 'value' above.]
-        if (value == cal.getLeastMaximum(Calendar::HOUR)+1) 
+        if (value == cal.getLeastMaximum(UCAL_HOUR)+1) 
             value = 0;
-        cal.set(Calendar::HOUR, value);
+        cal.set(UCAL_HOUR, value);
         return pos.getIndex();
     case kTimezoneField:
         {
@@ -1245,7 +1245,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         if ((text.length() - start) > gmtLen &&
             (lcaseText.compare(start, gmtLen, lcaseGMT, 0, gmtLen)) == 0)
         {
-            cal.set(Calendar::DST_OFFSET, 0);
+            cal.set(UCAL_DST_OFFSET, 0);
 
             pos.setIndex(start + gmtLen);
 
@@ -1254,7 +1254,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else if( text[pos.getIndex()] == 0x002D /*'-'*/ )
                 sign = -1;
             else {
-                cal.set(Calendar::ZONE_OFFSET, 0 );
+                cal.set(UCAL_ZONE_OFFSET, 0 );
                 return pos.getIndex();
             }
 
@@ -1313,11 +1313,11 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     // There are similar cases of such caseCompare() uses elsewhere in ICU.
                     if (0 == (text.caseCompare(start, zs->length(), *zs, 0))) {
                         TimeZone *tz = TimeZone::createTimeZone(fSymbols->fZoneStrings[i][0]);
-                        cal.set(Calendar::ZONE_OFFSET, tz->getRawOffset());
+                        cal.set(UCAL_ZONE_OFFSET, tz->getRawOffset());
                         // Must call set() with something -- TODO -- Fix this to
                         // use the correct DST SAVINGS for the zone.
                         delete tz;
-                        cal.set(Calendar::DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
+                        cal.set(UCAL_DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
                         return (start + fSymbols->fZoneStrings[i][j].length());
                     }
                 }
@@ -1362,10 +1362,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
 
             if (cal.getTimeZone().useDaylightTime())
             {
-                cal.set(Calendar::DST_OFFSET, U_MILLIS_PER_HOUR);
+                cal.set(UCAL_DST_OFFSET, U_MILLIS_PER_HOUR);
                 offset -= U_MILLIS_PER_HOUR;
             }
-            cal.set(Calendar::ZONE_OFFSET, offset);
+            cal.set(UCAL_ZONE_OFFSET, offset);
 
             return pos.getIndex();
         }
@@ -1582,9 +1582,9 @@ SimpleDateFormat::initializeSystemDefaultCentury()
         if (calendar != NULL && U_SUCCESS(status))
         {
             calendar->setTime(Calendar::getNow(), status);
-            calendar->add(Calendar::YEAR, -80, status);
+            calendar->add(UCAL_YEAR, -80, status);
             fgSystemDefaultCenturyStart = calendar->getTime(status);
-            fgSystemDefaultCenturyStartYear = calendar->get(Calendar::YEAR, status);
+            fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
             delete calendar;
         }
         // We have no recourse upon failure unless we want to propagate the failure

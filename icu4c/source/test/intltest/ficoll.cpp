@@ -58,13 +58,13 @@ const UChar CollationFinnishTest::testTargetCases[][CollationFinnishTest::MAX_TO
     {0x76, 0x61, 0x74, 0}
 };
 
-const Collator::EComparisonResult CollationFinnishTest::results[] = {
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::LESS,
+const UCollationResult CollationFinnishTest::results[] = {
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_LESS,
     // test primary > 4
-    Collator::EQUAL,
+    UCOL_EQUAL,
 };
 
 void CollationFinnishTest::TestTertiary(/* char* par */)

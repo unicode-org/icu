@@ -342,7 +342,7 @@ void RuleBasedCollator::getVersion(UVersionInfo versionInfo) const
     }
 }
 
-Collator::EComparisonResult RuleBasedCollator::compare(
+UCollationResult RuleBasedCollator::compare(
                                                const UnicodeString& source,
                                                const UnicodeString& target,
                                                int32_t length) const
@@ -350,20 +350,20 @@ Collator::EComparisonResult RuleBasedCollator::compare(
   return compare(source.getBuffer(), uprv_min(length,source.length()), target.getBuffer(), uprv_min(length,target.length()));
 }
 
-Collator::EComparisonResult RuleBasedCollator::compare(const UChar* source,
+UCollationResult RuleBasedCollator::compare(const UChar* source,
                                                        int32_t sourceLength,
                                                        const UChar* target,
                                                        int32_t targetLength)
                                                        const
 {
-  return getEComparisonResult(ucol_strcoll(ucollator, source, sourceLength,
-                                                     target, targetLength));
+  return ucol_strcoll(ucollator, source, sourceLength,
+                                                     target, targetLength);
 }
 
 /**
 * Compare two strings using this collator
 */
-Collator::EComparisonResult RuleBasedCollator::compare(
+UCollationResult RuleBasedCollator::compare(
                                              const UnicodeString& source,
                                              const UnicodeString& target) const
 {

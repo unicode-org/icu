@@ -119,21 +119,21 @@ CollationAPITest::TestProperty(/* char* par */)
       }
     }
 
-    doAssert((col->compare("ab", "abc") == Collator::LESS), "ab < abc comparison failed");
-    doAssert((col->compare("ab", "AB") == Collator::LESS), "ab < AB comparison failed");
-    doAssert((col->compare("blackbird", "black-bird") == Collator::GREATER), "black-bird > blackbird comparison failed");
-    doAssert((col->compare("black bird", "black-bird") == Collator::LESS), "black bird > black-bird comparison failed");
-    doAssert((col->compare("Hello", "hello") == Collator::GREATER), "Hello > hello comparison failed");
+    doAssert((col->compare("ab", "abc") == UCOL_LESS), "ab < abc comparison failed");
+    doAssert((col->compare("ab", "AB") == UCOL_LESS), "ab < AB comparison failed");
+    doAssert((col->compare("blackbird", "black-bird") == UCOL_GREATER), "black-bird > blackbird comparison failed");
+    doAssert((col->compare("black bird", "black-bird") == UCOL_LESS), "black bird > black-bird comparison failed");
+    doAssert((col->compare("Hello", "hello") == UCOL_GREATER), "Hello > hello comparison failed");
 
 
     /*start of update [Bertrand A. D. 02/10/98]*/
-    doAssert((col->compare("ab", "abc", 2) == Collator::EQUAL), "ab = abc with length 2 comparison failed");
-    doAssert((col->compare("ab", "AB", 2) == Collator::LESS), "ab < AB  with length 2 comparison failed");
-    doAssert((col->compare("ab", "Aa", 1) == Collator::LESS), "ab < Aa  with length 1 comparison failed");
-    doAssert((col->compare("ab", "Aa", 2) == Collator::GREATER), "ab > Aa  with length 2 comparison failed");
-    doAssert((col->compare("black-bird", "blackbird", 5) == Collator::EQUAL), "black-bird = blackbird with length of 5 comparison failed");
-    doAssert((col->compare("black bird", "black-bird", 10) == Collator::LESS), "black bird < black-bird with length 10 comparison failed");
-    doAssert((col->compare("Hello", "hello", 5) == Collator::GREATER), "Hello > hello with length 5 comparison failed");
+    doAssert((col->compare("ab", "abc", 2) == UCOL_EQUAL), "ab = abc with length 2 comparison failed");
+    doAssert((col->compare("ab", "AB", 2) == UCOL_LESS), "ab < AB  with length 2 comparison failed");
+    doAssert((col->compare("ab", "Aa", 1) == UCOL_LESS), "ab < Aa  with length 1 comparison failed");
+    doAssert((col->compare("ab", "Aa", 2) == UCOL_GREATER), "ab > Aa  with length 2 comparison failed");
+    doAssert((col->compare("black-bird", "blackbird", 5) == UCOL_EQUAL), "black-bird = blackbird with length of 5 comparison failed");
+    doAssert((col->compare("black bird", "black-bird", 10) == UCOL_LESS), "black bird < black-bird with length 10 comparison failed");
+    doAssert((col->compare("Hello", "hello", 5) == UCOL_GREATER), "Hello > hello with length 5 comparison failed");
     /*end of update [Bertrand A. D. 02/10/98]*/
 
 
@@ -552,7 +552,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
 
     col->getCollationKey(test1, sortk1, key1Status);
     doAssert((sortk1.compareTo(col->getCollationKey(test2, sortk2, key2Status)))
-                 == Collator::GREATER,
+                 == UCOL_GREATER,
                 "Result should be \"Abcda\" >>> \"abcda\"");
 
     CollationKey sortk3(sortk2), sortkNew, sortkEmpty;
@@ -565,11 +565,11 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert((sortk1 == sortkNew), "The sort keys assignment failed");
     doAssert((sortk1.hashCode() == sortkNew.hashCode()), "sort key hashCode() failed");
     doAssert((sortkNew != sortk3), "The sort keys should be different");
-    doAssert(sortk1.compareTo(sortk3) == Collator::GREATER, "Result should be \"Abcda\" >>> \"abcda\"");
-    doAssert(sortk2.compareTo(sortk3) == Collator::EQUAL, "Result should be \"abcda\" == \"abcda\"");
-    doAssert(sortkEmpty.compareTo(sortk1) == Collator::LESS, "Result should be (empty key) <<< \"Abcda\"");
-    doAssert(sortk1.compareTo(sortkEmpty) == Collator::GREATER, "Result should be \"Abcda\" >>> (empty key)");
-    doAssert(sortkEmpty.compareTo(sortkEmpty) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
+    doAssert(sortk1.compareTo(sortk3) == UCOL_GREATER, "Result should be \"Abcda\" >>> \"abcda\"");
+    doAssert(sortk2.compareTo(sortk3) == UCOL_EQUAL, "Result should be \"abcda\" == \"abcda\"");
+    doAssert(sortkEmpty.compareTo(sortk1) == UCOL_LESS, "Result should be (empty key) <<< \"Abcda\"");
+    doAssert(sortk1.compareTo(sortkEmpty) == UCOL_GREATER, "Result should be \"Abcda\" >>> (empty key)");
+    doAssert(sortkEmpty.compareTo(sortkEmpty) == UCOL_EQUAL, "Result should be (empty key) == (empty key)");
 
     int32_t    cnt1, cnt2, cnt3, cnt4;
     uint8_t* byteArray1 = 0;
@@ -601,12 +601,12 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(memcmp(byteArray2, sortk2_compat, strlen(sortk2_compat)) == 0,
              "Binary format for 'abcda' sortkey different!");
     */
-    doAssert(sortk1.compareTo(sortk4) == Collator::EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
-    doAssert(sortk2.compareTo(sortk5) == Collator::EQUAL, "CollationKey::toByteArray(sortk2) Failed.");
-    doAssert(sortk4.compareTo(sortk5) == Collator::GREATER, "sortk4 >>> sortk5 Failed");
-    doAssert(sortk1.compareTo(sortk6) == Collator::EQUAL, "CollationKey::getByteArray(sortk1) Failed.");
-    doAssert(sortk2.compareTo(sortk7) == Collator::EQUAL, "CollationKey::getByteArray(sortk2) Failed.");
-    doAssert(sortk6.compareTo(sortk7) == Collator::GREATER, "sortk6 >>> sortk7 Failed");
+    doAssert(sortk1.compareTo(sortk4) == UCOL_EQUAL, "CollationKey::toByteArray(sortk1) Failed.");
+    doAssert(sortk2.compareTo(sortk5) == UCOL_EQUAL, "CollationKey::toByteArray(sortk2) Failed.");
+    doAssert(sortk4.compareTo(sortk5) == UCOL_GREATER, "sortk4 >>> sortk5 Failed");
+    doAssert(sortk1.compareTo(sortk6) == UCOL_EQUAL, "CollationKey::getByteArray(sortk1) Failed.");
+    doAssert(sortk2.compareTo(sortk7) == UCOL_EQUAL, "CollationKey::getByteArray(sortk2) Failed.");
+    doAssert(sortk6.compareTo(sortk7) == UCOL_GREATER, "sortk6 >>> sortk7 Failed");
 
     logln("Equality tests : ");
     doAssert(sortk1 == sortk4, "sortk1 == sortk4 Failed.");
@@ -629,7 +629,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     col->setStrength(Collator::SECONDARY);
     doAssert(col->getCollationKey(test1, sortk1, key1Status).compareTo(
                                   col->getCollationKey(test2, sortk2, key2Status))
-                                  == Collator::EQUAL,
+                                  == UCOL_EQUAL,
                                   "Result should be \"Abcda\" == \"abcda\"");
     delete col;
 }
@@ -1047,11 +1047,11 @@ void CollationAPITest::TestSortKey()
     CollationKey key3;
     col->getCollationKey(test3, u_strlen(test3), key3, status);
 
-    doAssert(key1.compareTo(key2) == Collator::GREATER,
+    doAssert(key1.compareTo(key2) == UCOL_GREATER,
         "Result should be \"Abcda\" > \"abcda\"");
-    doAssert(key2.compareTo(key1) == Collator::LESS,
+    doAssert(key2.compareTo(key1) == UCOL_LESS,
         "Result should be \"abcda\" < \"Abcda\"");
-    doAssert(key2.compareTo(key3) == Collator::EQUAL,
+    doAssert(key2.compareTo(key3) == UCOL_EQUAL,
         "Result should be \"abcda\" ==  \"abcda\"");
 
     int32_t keylength = 0;
@@ -1111,9 +1111,9 @@ void CollationAPITest::TestSortKey()
     col->getCollationKey(test2, u_strlen(test2), key2, status);
     col->getCollationKey(test3, u_strlen(test3), key3, status);
 
-    doAssert(key1.compareTo(key2) == Collator::EQUAL,
+    doAssert(key1.compareTo(key2) == UCOL_EQUAL,
         "Result should be \"Abcda\" == \"abcda\"");
-    doAssert(key2.compareTo(key3) == Collator::EQUAL,
+    doAssert(key2.compareTo(key3) == UCOL_EQUAL,
         "Result should be \"abcda\" ==  \"abcda\"");
 
     tempkey = key2.getByteArray(keylength);
@@ -1745,12 +1745,12 @@ class TestCollator: Collator
 {
 public:
     virtual Collator* clone(void) const;
-	virtual EComparisonResult compare(const UnicodeString& source, 
+	virtual UCollationResult compare(const UnicodeString& source, 
                                       const UnicodeString& target) const;
-	virtual EComparisonResult compare(const UnicodeString& source,
+	virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
                                       int32_t length) const;
-	virtual EComparisonResult compare(const UChar* source, 
+	virtual UCollationResult compare(const UChar* source, 
 		                              int32_t sourceLength, 
 									  const UChar* target, 
 									  int32_t targetLength) const;
@@ -1793,29 +1793,29 @@ inline UBool TestCollator::operator!=(const TestCollator& other) const {
 }
 
 #define returnEComparisonResult(data) \
-	                    if (data < 0) return Collator::LESS;\
-			    if (data > 0) return Collator::GREATER;\
-                        return Collator::EQUAL;
+	                    if (data < 0) return UCOL_LESS;\
+			    if (data > 0) return UCOL_GREATER;\
+                        return UCOL_EQUAL;
 
 Collator* TestCollator::clone() const
 {
 	return new TestCollator();
 }
 
-Collator::EComparisonResult TestCollator::compare(const UnicodeString& source, 
+UCollationResult TestCollator::compare(const UnicodeString& source, 
                                         const UnicodeString& target) const
 {
     returnEComparisonResult(source.compare(target));
 }
 
-Collator::EComparisonResult TestCollator::compare(const UnicodeString& source,
+UCollationResult TestCollator::compare(const UnicodeString& source,
                                         const UnicodeString& target,
                                         int32_t length) const
 {
 	returnEComparisonResult(source.compare(0, length, target));
 }
 
-Collator::EComparisonResult TestCollator::compare(const UChar* source, 
+UCollationResult TestCollator::compare(const UChar* source, 
 		                                int32_t sourceLength, 
 									    const UChar* target, 
 									    int32_t targetLength) const

@@ -29,7 +29,7 @@
 class SeqElement {
 public:
   UnicodeString source;
-  Collator::EComparisonResult relation;
+  UCollationResult relation;
 };
 
 class DataDrivenCollatorTest: public IntlTestCollator {

@@ -59,16 +59,16 @@ const UChar CollationDanishTest::testTargetCases[][CollationDanishTest::MAX_TOKE
     {(UChar)0x004C /* 'L' */, (UChar)0x0079 /* 'y' */, (UChar)0x0062 /* 'b' */, (UChar)0x0065 /* 'e' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */}
 };
 
-const Collator::EComparisonResult CollationDanishTest::results[] = {
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::LESS,
+const UCollationResult CollationDanishTest::results[] = {
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_LESS,
     /* test primary > 5*/
-    Collator::EQUAL,
-    Collator::LESS,
-    Collator::EQUAL
+    UCOL_EQUAL,
+    UCOL_LESS,
+    UCOL_EQUAL
 };
 
 const UChar CollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN] = {
@@ -202,13 +202,13 @@ void CollationDanishTest::TestTertiary(/* char* par */)
     logln("Test internet data list : ");
     for (i = 0; i < 53; i++) {
         for (j = i+1; j < 54; j++) {
-            doTest(myCollation, testBugs[i], testBugs[j], Collator::LESS);
+            doTest(myCollation, testBugs[i], testBugs[j], UCOL_LESS);
         }
     }
     logln("Test NT data list : ");
     for (i = 0; i < 52; i++) {
         for (j = i+1; j < 53; j++) {
-            doTest(myCollation, testNTList[i], testNTList[j], Collator::LESS);
+            doTest(myCollation, testNTList[i], testNTList[j], UCOL_LESS);
         }
     }
 }

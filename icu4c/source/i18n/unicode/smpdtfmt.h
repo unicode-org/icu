@@ -676,7 +676,7 @@ private:
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
      */
-    int32_t matchString(const UnicodeString& text, int32_t start, Calendar::EDateFields field,
+    int32_t matchString(const UnicodeString& text, int32_t start, UCalendarDateFields field,
                         const UnicodeString* stringArray, int32_t stringArrayCount, Calendar& cal) const;
 
     /**
@@ -771,7 +771,7 @@ private:
     /**
      * Used to map pattern characters to Calendar field identifiers.
      */
-    static const Calendar::EDateFields fgPatternIndexToCalendarField[];
+    static const UCalendarDateFields fgPatternIndexToCalendarField[];
 
     /**
      * Map index into pattern character string to DateFormat field number

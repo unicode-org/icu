@@ -82,21 +82,21 @@ const UChar CollationGermanTest::testTargetCases[][CollationGermanTest::MAX_TOKE
     {0x53, 0x74, 0x72, 0x61, 0x73, 0x73, 0x65, 0}
 };
 
-const Collator::EComparisonResult CollationGermanTest::results[][2] =
+const UCollationResult CollationGermanTest::results[][2] =
 {
       //  Primary                Tertiary
-        { Collator::LESS,        Collator::LESS },
-        { Collator::EQUAL,        Collator::LESS },
-        { Collator::GREATER,    Collator::GREATER },
-        { Collator::GREATER,    Collator::GREATER },
-        { Collator::GREATER,    Collator::GREATER },
-        { Collator::EQUAL,        Collator::LESS },
-        { Collator::EQUAL,        Collator::EQUAL },
-        { Collator::LESS,        Collator::LESS },
-        { Collator::EQUAL,        Collator::GREATER },
-        { Collator::EQUAL,        Collator::EQUAL },
-        { Collator::LESS,        Collator::LESS },
-        { Collator::EQUAL,        Collator::GREATER }
+        { UCOL_LESS,        UCOL_LESS },
+        { UCOL_EQUAL,        UCOL_LESS },
+        { UCOL_GREATER,    UCOL_GREATER },
+        { UCOL_GREATER,    UCOL_GREATER },
+        { UCOL_GREATER,    UCOL_GREATER },
+        { UCOL_EQUAL,        UCOL_LESS },
+        { UCOL_EQUAL,        UCOL_EQUAL },
+        { UCOL_LESS,        UCOL_LESS },
+        { UCOL_EQUAL,        UCOL_GREATER },
+        { UCOL_EQUAL,        UCOL_EQUAL },
+        { UCOL_LESS,        UCOL_LESS },
+        { UCOL_EQUAL,        UCOL_GREATER }
 };
 
 

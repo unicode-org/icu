@@ -350,7 +350,7 @@ public:
      *                an error status.
      * @stable ICU 2.0
      */
-    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
+    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
@@ -363,7 +363,7 @@ public:
      *                an error status.
      * @stable ICU 2.0
      */
-    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
+    virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * (Overrides Calendar) Returns minimum value for the given field. e.g. for
@@ -372,7 +372,7 @@ public:
      * @return         minimum value for the given field
      * @stable ICU 2.0
      */
-    virtual int32_t getMinimum(EDateFields field) const;
+    virtual int32_t getMinimum(UCalendarDateFields field) const;
 
     /**
      * (Overrides Calendar) Returns maximum value for the given field. e.g. for
@@ -381,7 +381,7 @@ public:
      * @return         maximum value for the given field
      * @stable ICU 2.0
      */
-    virtual int32_t getMaximum(EDateFields field) const;
+    virtual int32_t getMaximum(UCalendarDateFields field) const;
 
     /**
      * (Overrides Calendar) Returns highest minimum value for the given field if varies.
@@ -391,7 +391,7 @@ public:
      *                 Otherwise same as getMinimum().
      * @stable ICU 2.0
      */
-    virtual int32_t getGreatestMinimum(EDateFields field) const;
+    virtual int32_t getGreatestMinimum(UCalendarDateFields field) const;
 
     /**
      * (Overrides Calendar) Returns lowest maximum value for the given field if varies.
@@ -401,7 +401,7 @@ public:
      *                 Otherwise same as getMaximum(). 
      * @stable ICU 2.0
      */
-    virtual int32_t getLeastMaximum(EDateFields field) const;
+    virtual int32_t getLeastMaximum(UCalendarDateFields field) const;
 
     /**
      * Return the minimum value that this field could have, given the current date.
@@ -410,7 +410,7 @@ public:
      * @return         the minimum value that this field could have, given the current date.
      * @stable ICU 2.0
      */
-    int32_t getActualMinimum(EDateFields field) const;
+    int32_t getActualMinimum(UCalendarDateFields field) const;
 
     /**
      * Return the maximum value that this field could have, given the current date.
@@ -421,7 +421,7 @@ public:
      * @return         the maximum value that this field could have, given the current date.
      * @stable ICU 2.0
      */
-    int32_t getActualMaximum(EDateFields field) const;
+    int32_t getActualMaximum(UCalendarDateFields field) const;
 
     /**
      * (Overrides Calendar) Return true if the current date for this Calendar is in
@@ -618,7 +618,7 @@ private:
     /**
      * Validates the value of the given time field.  True if it's valid.
      */
-    UBool boundsCheck(int32_t value, EDateFields field) const;
+    UBool boundsCheck(int32_t value, UCalendarDateFields field) const;
 
     /**
      * Return the pseudo-time-stamp for two fields, given their
@@ -756,7 +756,7 @@ inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
   // accordingly.  We add 1 because Julian day 0 is Monday.
   int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
 
-  uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + SUNDAY) : SUNDAY));
+  uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + UCAL_SUNDAY) : UCAL_SUNDAY));
   return result;
 }
 

@@ -199,12 +199,12 @@ CalendarTimeZoneTest::dateToFields(UDate date, int32_t& y, int32_t& m, int32_t& 
     if (cal == 0) return;
     UErrorCode status = U_ZERO_ERROR;
     cal->setTime(date, status);
-    y = cal->get(Calendar::YEAR, status) - 1900;
-    m = cal->get(Calendar::MONTH, status);
-    d = cal->get(Calendar::DATE, status);
-    hr = cal->get(Calendar::HOUR_OF_DAY, status);
-    min = cal->get(Calendar::MINUTE, status);
-    sec = cal->get(Calendar::SECOND, status);
+    y = cal->get(UCAL_YEAR, status) - 1900;
+    m = cal->get(UCAL_MONTH, status);
+    d = cal->get(UCAL_DATE, status);
+    hr = cal->get(UCAL_HOUR_OF_DAY, status);
+    min = cal->get(UCAL_MINUTE, status);
+    sec = cal->get(UCAL_SECOND, status);
     releaseCalendar(cal);
 }
 
