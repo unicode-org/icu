@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/WriteJavaScriptInfo.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.3 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,7 @@ import com.ibm.text.utility.*;
 public class WriteJavaScriptInfo implements UCD_Types {
     
     static public void assigned() throws IOException {
-        PrintWriter log = Utility.openPrintWriter("assigned.js");
+        PrintWriter log = Utility.openPrintWriter("assigned.js", Utility.LATIN1_UNIX);
         UCD ucd = UCD.make();
         boolean wasIn = false;
         int lastWritten = -100;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.15 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -1170,12 +1170,20 @@ to guarantee identifier closure.
                 && ((char1 - SBase) % TCount) == 0);
     }
 
+    static boolean isVowelJamo(int cp) {
+        return (VBase <= cp && cp < VLimit);
+    }
+
     static boolean isTrailingJamo(int cp) {
-        return (VBase <= cp && cp < VLimit) || (TBase <= cp && cp < TLimit);
+        return (TBase <= cp && cp < TLimit);
     }
 
     static boolean isLeadingJamo(int cp) {
         return (LBase <= cp && cp < LLimit);
+    }
+
+    static boolean isNonLeadJamo(int cp) {
+        return (VBase <= cp && cp < VLimit) || (TBase <= cp && cp < TLimit);
     }
 
     private void fillFromFile(String version) {

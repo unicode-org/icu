@@ -12,14 +12,15 @@ public final class NFSkippable extends UnicodeProperty {
     
     private Normalizer nf;
     private Normalizer nfd;
+    private UCD ucd;
     private boolean composes;
     private int[] realTrailers = new int[100];
     private int realTrailerCount = 0;
     
-    public NFSkippable(byte normalizerMode, String unicodeVersion) {
+    public NFSkippable(byte normalizerMode, UCD inputUCD) {
         isStandard = false;
-        ucd = UCD.make(unicodeVersion);
-        nf = new Normalizer(normalizerMode, unicodeVersion);
+        this.ucd = inputUCD;
+        nf = new Normalizer(normalizerMode, ucd.getVersion());
         name = nf.getName() + "_Skippable";
         shortName = nf.getName() + "_Skip";
         header = "# Derived Property: " + name
@@ -28,7 +29,7 @@ public final class NFSkippable extends UnicodeProperty {
             + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
             + "\r\n#            The length of a normalized string is not necessarily the sum of the lengths of the normalized characters!";
 
-        nfd = new Normalizer(Normalizer.NFD, unicodeVersion);
+        nfd = new Normalizer(Normalizer.NFD, ucd.getVersion());
         composes = normalizerMode == Normalizer.NFC || normalizerMode == Normalizer.NFKC;
         
         // preprocess to find possible trailers
@@ -36,7 +37,7 @@ public final class NFSkippable extends UnicodeProperty {
         if (composes) for (int cp2 = 0; cp2 <= 0x10FFFF; ++cp2) {
             if (nf.isTrailing(cp2)) {
                 //System.out.println("Trailing: " + ucd.getCodeAndName(cp2));
-                if (ucd.isTrailingJamo(cp2)) {
+                if (ucd.isNonLeadJamo(cp2)) {
                     //System.out.println("Jamo: " + ucd.getCodeAndName(cp2));
                     continue;
                 }
@@ -190,18 +191,21 @@ public final class NFSkippable extends UnicodeProperty {
     static int limit = 0x10FFFF; // full version = 10ffff, for testing may use smaller
     
     public static void main (String[] args) throws java.io.IOException {
+        Default.setUCD();
         
-        String version = ""; // Unicode version, "" = latest released
-        
-        PrintWriter out = Utility.openPrintWriter("NFSafeSets.txt");
+        PrintWriter out = Utility.openPrintWriter("NFSafeSets.txt", Utility.UTF8_WINDOWS);
+        out.println("NFSafeSets");
+        out.println("Version: " + Default.ucd.getVersion());
+        out.println("Date: " + Default.getDate());
+        out.println();
         
         for (int mode = NFD_UnsafeStart; mode <= NFKC_UnsafeStart; ++mode) {
-            UnicodeProperty up = DerivedProperty.make(mode, UCD.make(version));
+            UnicodeProperty up = DerivedProperty.make(mode, Default.ucd);
             generateSet(out, "UNSAFE[" + Normalizer.getName((byte)(mode-NFD_UnsafeStart)) + "]", up);
         }
         
         for (byte mode = NFD; mode <= NFKC; ++mode) {
-            NFSkippable skipper = new NFSkippable(mode,version);
+            NFSkippable skipper = new NFSkippable(mode, Default.ucd);
             generateSet(out, "SKIPPABLE[" + Normalizer.getName(mode) + "]", skipper);
         }
         
@@ -219,9 +223,9 @@ public final class NFSkippable extends UnicodeProperty {
             
         String rSet = result.toPattern(true);          
         rSet = replace(rSet, "\\U", "\\\\U");
+        rSet = replace(rSet, "\\u", "\\\\u");
         out.println(label + " = new UnicodeSet(");
         writeStringInPieces(out, rSet, ", false);");
-        out.println();
             
         rSet = result.toPattern(false);
         out.println("/*Unicode: ");

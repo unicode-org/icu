@@ -246,7 +246,7 @@ public class NormalizerSample implements UCD_Types {
             for (int i = 0; i < 0x10FFFF; ++i) {
                 if (!ucd.isAssigned(i)) continue;
                 if (ucd.isPUA(i)) continue;
-                if (ucd.isTrailingJamo(i)) isSecond.set(i);
+                if (ucd.isNonLeadJamo(i)) isSecond.set(i);
                 byte dt = ucd.getDecompositionType(i);
                 if (dt != CANONICAL) continue;
                 if (!ucd.getBinaryProperty(i, CompositionExclusion)) {

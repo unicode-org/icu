@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/05/31 01:41:04 $
-* $Revision: 1.10 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -41,7 +41,7 @@ public class GenerateCaseFolding implements UCD_Types {
         PICK_SHORT = NF_CLOSURE = normalized;
         
         Default.setUCD();
-        log = Utility.openPrintWriter("CaseFoldingLog" + GenerateData.getFileSuffix(true));
+        log = Utility.openPrintWriter("CaseFoldingLog" + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
         System.out.println("Writing Log: " + "CaseFoldingLog" + GenerateData.getFileSuffix(true));
         
         System.out.println("Making Full Data");
@@ -57,7 +57,7 @@ public class GenerateCaseFolding implements UCD_Types {
         if (normalized) filename += "-Normalized";
         String directory = "DerivedData/";
         String newFile = directory + filename + GenerateData.getFileSuffix(true);
-        PrintWriter out = Utility.openPrintWriter(newFile);
+        PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true));
         
         out.println("# CaseFolding" + GenerateData.getFileSuffix(false));
@@ -444,7 +444,8 @@ public class GenerateCaseFolding implements UCD_Types {
         String suffix2 = "";
         if (normalize) suffix2 = "-Normalized";
         
-        PrintWriter log = Utility.openPrintWriter("SpecialCasingExceptions" + suffix2 + GenerateData.getFileSuffix(true));
+        PrintWriter log = Utility.openPrintWriter("SpecialCasingExceptions"
+            + suffix2 + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
         
         for (int ch = 0; ch <= 0x10FFFF; ++ch) {
             Utility.dot(ch);
@@ -555,7 +556,7 @@ public class GenerateCaseFolding implements UCD_Types {
         
         System.out.println("Writing");
         String newFile = "DerivedData/SpecialCasing" + suffix2 + GenerateData.getFileSuffix(true);
-        PrintWriter out = Utility.openPrintWriter(newFile);
+        PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = GenerateData.generateBat("DerivedData/", "SpecialCasing", suffix2 + GenerateData.getFileSuffix(true));
         out.println("# SpecialCasing" + GenerateData.getFileSuffix(false));
         out.println(GenerateData.generateDateLine());

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2002/06/15 02:47:12 $
-* $Revision: 1.5 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ class UData implements UCD_Types {
     byte numericType = NUMERIC_NONE;
 
     byte eastAsianWidth = EAN;
-    byte lineBreak = LBXX;
+    byte lineBreak = LB_XX;
     byte joiningType = JT_U;
     byte joiningGroup = NO_SHAPING;
     byte script = COMMON_SCRIPT;
@@ -196,7 +196,7 @@ class UData implements UCD_Types {
         if (full || !Double.isNaN(numericValue)) result.append(" nv='").append(numericValue).append('\'');
 
         if (full || eastAsianWidth != EAN) result.append(" ea='").append(UCD_Names.EA[eastAsianWidth]).append('\'');
-        if (full || lineBreak != LBAL) result.append(" lb='").append(UCD_Names.LB[lineBreak]).append('\'');
+        if (full || lineBreak != LB_AL) result.append(" lb='").append(UCD_Names.LB[lineBreak]).append('\'');
         if (full || joiningType != JT_U) result.append(" jt='").append(UCD_Names.JOINING_TYPE[joiningType]).append('\'');
         if (full || joiningGroup != NO_SHAPING) result.append(" jg='").append(UCD_Names.JOINING_GROUP[joiningGroup]).append('\'');
         if (full || age != 0) result.append(" ag='").append(UCD_Names.AGE[age]).append('\'');

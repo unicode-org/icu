@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.8 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -125,12 +125,6 @@ public class TestData implements UCD_Types {
         }
     }
 
-
-    static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.S' GMT'");
-
-    static {
-        myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
 
     //Remove "d1" from DerivedJoiningGroup-3.1.0d1.txt type names
 
