@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Hiragana_Latin.txt
-// Date: Fri Nov 30 19:39:31 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // Hiragana_Latin
@@ -18,8 +18,8 @@ translit_Hiragana_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Hira_Latn.txt,v $
-// $Date: 2001/12/01 04:30:28 $
-// $Revision: 1.4 $
+// $Date: 2001/12/03 20:51:18 $
+// $Revision: 1.5 $
 //--------------------------------------------------------------------
 
 ":: [\u3041-\u3094\u3099\u309D-\u309E\u30AC\u30AE\u30B0\u30B2\u30B4\u30B6\u30B8\u30BA\u30BC\u30BE\u30C0\u30C2\u30C5\u30C7\u30C9\u30D0\u30D3\u30D6\u30D9\u30DC\u30F4\u30F7-\u30FA\u30FE] ;"

@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Fullwidth_Halfwidth.txt
-// Date: Mon Dec  3 10:28:46 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // Fullwidth_Halfwidth

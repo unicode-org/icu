@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Gujarati.txt
-// Date: Fri Nov 30 19:39:31 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Gujarati

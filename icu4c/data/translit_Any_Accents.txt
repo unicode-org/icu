@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Any_Accents.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Mon Dec  3 11:44:29 2001
 //--------------------------------------------------------------------
 
 // Any_Accents
@@ -18,8 +18,8 @@ translit_Any_Accents {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Any_Accents.txt,v $
-// $Date: 2001/11/30 21:24:15 $
-// $Revision: 1.3 $
+// $Date: 2001/12/03 20:51:18 $
+// $Revision: 1.4 $
 //--------------------------------------------------------------------
 
 ":: NFD (NFC) ;"
