@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -119,13 +119,13 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "cmemory.h"
-#include "cstring.h"
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "uarrsort.h"
 #include "unewdata.h"
 #include "uoptions.h"
 #include "uparse.h"
@@ -224,8 +224,8 @@ compressLines(void);
 static int16_t
 compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop);
 
-static int
-compareWords(const void *word1, const void *word2);
+static int32_t
+compareWords(const void *context, const void *word1, const void *word2);
 
 static void
 generateData(const char *dataDir);
@@ -571,9 +571,12 @@ static void
 compress() {
     uint32_t i, letterCount;
     int16_t wordNumber;
+    UErrorCode errorCode;
 
     /* sort the words in reverse order by weight */
-    qsort(words, wordCount, sizeof(Word), compareWords);
+    errorCode=U_ZERO_ERROR;
+    uprv_sortArray(words, wordCount, sizeof(Word),
+                    compareWords, NULL, FALSE, &errorCode);
 
     /* remove the words that do not save anything */
     while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -619,7 +622,9 @@ compress() {
         }
 
         /* sort these words in reverse order by weight */
-        qsort(words+tokenCount, wordCount-tokenCount, sizeof(Word), compareWords);
+        errorCode=U_ZERO_ERROR;
+        uprv_sortArray(words+tokenCount, wordCount-tokenCount, sizeof(Word),
+                        compareWords, NULL, FALSE, &errorCode);
 
         /* remove the words that do not save anything */
         while(wordCount>0 && words[wordCount-1].weight<1) {
@@ -823,8 +828,8 @@ compressLine(uint8_t *s, int16_t length, int16_t *pGroupTop) {
     return length;
 }
 
-static int
-compareWords(const void *word1, const void *word2) {
+static int32_t
+compareWords(const void *context, const void *word1, const void *word2) {
     /* reverse sort by word weight */
     return ((Word *)word2)->weight-((Word *)word1)->weight;
 }
