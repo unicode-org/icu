@@ -44,7 +44,7 @@ addUTF8Test(TestNode** root)
   addTest(root, &TestAppendChar,        "utf8tst/TestAppendChar"    );
 }
 
-void TestCodeUnitValues()
+static void TestCodeUnitValues()
 {
     static uint8_t codeunit[]={0x00, 0x65, 0x7e, 0x7f, 0xc0, 0xc4, 0xf0, 0xfd, 0x80, 0x81, 0xbc, 0xbf,};
     
@@ -70,7 +70,8 @@ void TestCodeUnitValues()
         }
     }
 }
-void TestCharLength()
+
+static void TestCharLength()
 {
     static uint32_t codepoint[]={
         1, 0x0061,
@@ -104,7 +105,8 @@ void TestCharLength()
         }
     }
 }
-void TestGetChar()
+
+static void TestGetChar()
 {
     static uint8_t input[]={
     /*  code unit,*/
@@ -169,7 +171,7 @@ void TestGetChar()
 
 }
 
-void TestNextPrevChar(){
+static void TestNextPrevChar(){
 
     static uint8_t input[]={0x61, 0xf0, 0x90, 0x90, 0x81, 0xc0, 0x80, 0xfd, 0xbf, 0xc0, 0x61, 0x81, 0x90, 0x90, 0xf0, 0x00};
     static uint32_t result[]={
@@ -313,7 +315,8 @@ void TestNextPrevChar(){
     }
 
 }
-void TestFwdBack(){ 
+
+static void TestFwdBack(){ 
     static uint8_t input[]={0x61, 0xF0, 0x90, 0x90, 0x81, 0xff, 0x62, 0xc0, 0x80, 0x7f, 0x8f, 0xc0, 0x63, 0x81, 0x90, 0x90, 0xF0, 0x00};
     static uint16_t fwd_unsafe[] ={1, 5, 6, 7,  9, 10, 11, 13, 14, 15, 16,  20, };
     static uint16_t fwd_safe[]   ={1, 5, 6, 7, 9, 10, 11,  12, 13, 14, 15, 16, 17, 18};
@@ -392,7 +395,8 @@ void TestFwdBack(){
         }
     }
 }
-void TestSetChar(){
+
+static void TestSetChar(){
     static uint8_t input[]={0x61, 0xe4, 0xba, 0x8c, 0x7f, 0xfe, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x00};
     static uint16_t start_unsafe[]={0, 1, 1, 1, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13};
     static uint16_t start_safe[]  ={0, 1, 1, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
@@ -435,7 +439,8 @@ void TestSetChar(){
          i++;
     }
 }
-void TestAppendChar(){
+
+static void TestAppendChar(){
     static uint8_t s[11]={0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x00};
     static uint32_t test[]={
      /*append-position(unsafe),  CHAR to be appended  */
@@ -603,12 +608,12 @@ void TestAppendChar(){
    
 
 }
-void printUChars(uint8_t *uchars, int16_t len){
+
+static void printUChars(uint8_t *uchars, int16_t len){
     int16_t i=0;
     for(i=0; i<len; i++){
         printf("0x%02x ", *(uchars+i));
     }
 }
-
 
 

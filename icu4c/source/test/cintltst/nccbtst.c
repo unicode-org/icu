@@ -32,7 +32,7 @@ static int32_t  gInBufferSize = 0;
 static int32_t  gOutBufferSize = 0;
 static char     gNuConvTestName[1024];
 
-void printSeq(const uint8_t* a, int len)
+static void printSeq(const uint8_t* a, int len)
 {
     int i=0;
     log_verbose("\n{");
@@ -40,7 +40,8 @@ void printSeq(const uint8_t* a, int len)
         log_verbose("0x%02X, ", a[i++]);
     log_verbose("}\n");
 }
-void printUSeq(const UChar* a, int len)
+
+static void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("{");
@@ -49,7 +50,7 @@ void printUSeq(const UChar* a, int len)
     log_verbose("}\n");
 }
 
-void printSeqErr(const uint8_t* a, int len)
+static void printSeqErr(const uint8_t* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
@@ -57,7 +58,8 @@ void printSeqErr(const uint8_t* a, int len)
         fprintf(stderr, "  0x%02x, ", a[i++]);
     fprintf(stderr, "}\n");
 }
-void printUSeqErr(const UChar* a, int len)
+
+static void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
@@ -65,13 +67,14 @@ void printUSeqErr(const UChar* a, int len)
         fprintf(stderr, "0x%04x, ", a[i++]);
     fprintf(stderr,"}\n");
 }
-void setNuConvTestName(const char *codepage, const char *direction)
+
+static void setNuConvTestName(const char *codepage, const char *direction)
 {
-  sprintf(gNuConvTestName, "[testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
-      codepage,
-      direction,
-      gInBufferSize,
-      gOutBufferSize);
+    sprintf(gNuConvTestName, "[testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+            codepage,
+            direction,
+            gInBufferSize,
+            gOutBufferSize);
 }
 
 
@@ -86,21 +89,23 @@ void addTestConvertErrorCallBack(TestNode** root)
     addTest(root, &TestSingleByteCallBack,  "tsconv/nccbtst/TestSingleByteCallBack");
 }
 
-void TestSkipCallBack()
+static void TestSkipCallBack()
 {
     TestSkip(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestSkip(1,NEW_MAX_BUFFER);
     TestSkip(1,1);
     TestSkip(NEW_MAX_BUFFER, 1);
 }
-void TestStopCallBack()
+
+static void TestStopCallBack()
 {
     TestStop(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestStop(1,NEW_MAX_BUFFER);
     TestStop(1,1);
     TestStop(NEW_MAX_BUFFER, 1);
 }
-void TestSubCallBack()
+
+static void TestSubCallBack()
 {
     TestSub(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestSub(1,NEW_MAX_BUFFER);
@@ -113,28 +118,32 @@ void TestSubCallBack()
 
 
 }
-void TestSubWithValueCallBack()
+
+static void TestSubWithValueCallBack()
 {
     TestSubWithValue(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestSubWithValue(1,NEW_MAX_BUFFER);
     TestSubWithValue(1,1);
     TestSubWithValue(NEW_MAX_BUFFER, 1);
 }
-void TestLegalAndOtherCallBack()
+
+static void TestLegalAndOtherCallBack()
 {
     TestLegalAndOthers(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestLegalAndOthers(1,NEW_MAX_BUFFER);
     TestLegalAndOthers(1,1);
     TestLegalAndOthers(NEW_MAX_BUFFER, 1);
 }
-void TestSingleByteCallBack()
+
+static void TestSingleByteCallBack()
 {
     TestSingleByte(NEW_MAX_BUFFER, NEW_MAX_BUFFER);
     TestSingleByte(1,NEW_MAX_BUFFER);
     TestSingleByte(1,1);
     TestSingleByte(NEW_MAX_BUFFER, 1);
 }
-void TestSkip(int32_t inputsize, int32_t outputsize)
+
+static void TestSkip(int32_t inputsize, int32_t outputsize)
 {
     UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
     UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
@@ -453,7 +462,8 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
     }
 
 }
-void TestStop(int32_t inputsize, int32_t outputsize)
+
+static void TestStop(int32_t inputsize, int32_t outputsize)
 {
     UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
     UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
@@ -688,7 +698,8 @@ void TestStop(int32_t inputsize, int32_t outputsize)
     }
 
 }
-void TestSub(int32_t inputsize, int32_t outputsize)
+
+static void TestSub(int32_t inputsize, int32_t outputsize)
 {
     UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
     UChar sampleText2[]=    { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
@@ -879,7 +890,7 @@ void TestSub(int32_t inputsize, int32_t outputsize)
 
 }
 
-void TestSubWithValue(int32_t inputsize, int32_t outputsize)
+static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 {
     UChar   sampleText[] =  { 0x0000, 0xAC00, 0xAC01, 0xEF67, 0xD700 };
     UChar  sampleText2[] =  { 0x6D63, 0x6D64, 0x6D65, 0x6D66 };
@@ -1206,7 +1217,8 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             log_err("LMBCS->u with substitute with value did not match.\n"); 
     }
 }
-void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
+
+static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
 {
     UChar    legalText[] =  { 0x0000, 0xAC00, 0xAC01, 0xD700 };
     const uint8_t templegal949[] ={ 0x00, 0xb0, 0xa1, 0xb0, 0xa2, 0xc8, 0xd3 };
@@ -1249,7 +1261,8 @@ void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
         log_err("ibm-943->u with stop did not match.\n");
 
 }
-void TestSingleByte(int32_t inputsize, int32_t outputsize)
+
+static void TestSingleByte(int32_t inputsize, int32_t outputsize)
 {
     const uint8_t sampleText[] = {
         0x82, 0xa9, 0x61, 0x62, 0x63 , 0x82,
@@ -1265,7 +1278,8 @@ void TestSingleByte(int32_t inputsize, int32_t outputsize)
             (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub, NULL, 0 ))
         log_err("ibm-943->u with subst did not match.\n");
 }
-void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
+
+static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
 {
       /*EBCDIC_STATEFUL*/
         UChar ebcdic_inputTest[] = { 0x0061, 0x6d64, 0x0061, 0x00A2, 0x6d65 };

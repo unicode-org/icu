@@ -40,12 +40,12 @@ static void TestSingleByte(int32_t inputsize, int32_t outputsize);
 static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize);
 
 UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-			    const char *codepage, UConverterFromUCallback callback, const int32_t *expectOffsets,
+                const char *codepage, UConverterFromUCallback callback, const int32_t *expectOffsets,
                 const char *mySubChar, int8_t len);
 
 
 UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-		       const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
                const char *mySubChar, int8_t len);
 
 

@@ -19,16 +19,18 @@
 #include "cintltst.h"
 #include "umemstrm.h"
 
-void TestMemoryStreamAPI();
+static void TestMemoryStreamAPI();
 static void printUSeqErr(const uint8_t *a, int len);
 
-void printUSeqErr(const uint8_t *a, int len)
+static void printUSeqErr(const uint8_t *a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+ ");
-    while (i<len) fprintf(stderr, "0x%02x ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%02x ", a[i++]);
     fprintf(stderr,"}\n");
 }
+
 void
 addMemoryStreamTest(TestNode** root)
 {
@@ -36,7 +38,7 @@ addMemoryStreamTest(TestNode** root)
 
 }
 
-void TestMemoryStreamAPI(){
+static void TestMemoryStreamAPI(){
     UMemoryStream *memStream=NULL;
     int32_t size=999, x=0;
     const uint8_t *gotBuffer=0;

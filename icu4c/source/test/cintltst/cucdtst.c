@@ -117,7 +117,7 @@ void addUnicodeTest(TestNode** root)
 /*==================================================== */
 /* test u_toupper() and u_tolower()                    */
 /*==================================================== */
-void TestUpperLower()
+static void TestUpperLower()
 {
     const UChar upper[] = {0x41, 0x42, 0x00b2, 0x01c4, 0x01c6, 0x01c9, 0x01c8, 0x01c9, 0x000c, 0x0000};
     const UChar lower[] = {0x61, 0x62, 0x00b2, 0x01c6, 0x01c6, 0x01c9, 0x01c9, 0x01c9, 0x000c, 0x0000};
@@ -171,7 +171,7 @@ void TestUpperLower()
 
  
 /* test isLetter(u_isapha()) and isDigit(u_isdigit()) */
-void TestLetterNumber()
+static void TestLetterNumber()
 {
     UChar i = 0x0000;
 
@@ -217,7 +217,7 @@ void TestLetterNumber()
 }
 
 /* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue(),u_CharCellWidth() */
-void TestMisc()
+static void TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
     const UChar sampleNonSpaces[] = {0x61, 0x62, 0x63, 0x64, 0x74};
@@ -327,7 +327,7 @@ void TestMisc()
 
 
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
-void TestControlPrint()
+static void TestControlPrint()
 {
     const UChar sampleControl[] = {0x001b, 0x0097, 0x0082};
     const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
@@ -417,7 +417,7 @@ void TestIdentifier()
 }
 
 /* tests for u_charType(), u_isTitle(), and u_toTitle(),u_charDirection and u_charScript()*/
-void TestUnicodeData()
+static void TestUnicodeData()
 {
     FILE*   input = 0;
     char    buffer[1000];
@@ -551,8 +551,9 @@ void TestUnicodeData()
 
 
 }
+
 /*internal functions ----*/
-int32_t MakeProp(char* str) 
+static int32_t MakeProp(char* str) 
 {
     int32_t result = 0;
     char* matchPosition =0;

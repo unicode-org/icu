@@ -1119,7 +1119,7 @@ AllocateTextBoundary();
                     c == 0xfeff)
                     continue;
                 work[2] = c;
-		ubrk_setText(e, work, u_strlen(work), &status);
+                ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
                 log_err("FAIL: Error in setting text on the word break Iterator in testLineInvaiants:\n %s \n", myErrorName(status));
                 return;

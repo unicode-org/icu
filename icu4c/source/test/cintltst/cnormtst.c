@@ -223,7 +223,7 @@ void TestCompatDecompCompose()
 
 
 
-void assertEqual(const UChar* result, const UChar* expected, int32_t index)
+static void assertEqual(const UChar* result, const UChar* expected, int32_t index)
 {
     if(u_strcmp(result, expected)!=0){
         log_err("ERROR in decomposition at index = %d. EXPECTED: %s , GOT: %s\n", index, austrdup(expected),
@@ -231,7 +231,7 @@ void assertEqual(const UChar* result, const UChar* expected, int32_t index)
     }
 }
 
-void TestNull_check(UChar *src, int32_t srcLen, 
+static void TestNull_check(UChar *src, int32_t srcLen, 
                     UChar *exp, int32_t expLen,
                     UNormalizationMode mode,
                     const char *name)

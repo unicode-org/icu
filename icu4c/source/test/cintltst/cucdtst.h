@@ -18,6 +18,8 @@
 #define _CUNDTST
 
 
+U_CFUNC void setUpDataTable(void);
+U_CFUNC void cleanUpDataTable(void);
 
 static void TestUpperLower(void);
 static void TestLetterNumber(void);
@@ -28,9 +30,7 @@ static void TestUnicodeData(void);
 static void TestStringFunctions(void);
 
 /* internal methods used */
-int32_t MakeProp(char* str);
-int32_t MakeDir(char* str);
+static int32_t MakeProp(char* str);
+static int32_t MakeDir(char* str);
 
-void setUpDataTable(void);
-U_CFUNC void cleanUpDataTable(void);
 #endif

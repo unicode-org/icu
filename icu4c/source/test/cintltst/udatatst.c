@@ -638,7 +638,7 @@ void TestAppData()
   if(!u_strcmp(icuString, appString))
   {
     log_err("%s:%d: Error! Expected ICU and App root version strings to be DIFFERENT but they are both %s and %s\n", __FILE__, __LINE__, austrdup(icuString),
-	    austrdup(appString));
+    austrdup(appString));
   }
   else
   {

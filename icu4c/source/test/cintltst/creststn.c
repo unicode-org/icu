@@ -174,7 +174,7 @@ void addNEWResourceBundleTest(TestNode** root)
 
 
 /***************************************************************************************/
-void TestAliasConflict(void) {
+static void TestAliasConflict(void) {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *he = NULL;
     UResourceBundle *iw = NULL;
@@ -193,7 +193,7 @@ void TestAliasConflict(void) {
     ures_close(he);
 }
 
-void TestNewTypes() {
+static void TestNewTypes() {
     UResourceBundle* theBundle = NULL;
     char action[256];
     char testdatapath[256];
@@ -265,7 +265,7 @@ void TestNewTypes() {
 
 }
 
-void TestBinaryCollationData(){
+static void TestBinaryCollationData(){
     UErrorCode status=U_ZERO_ERROR;
     const char*        directory=NULL;
     const char*      locale="te";
@@ -316,7 +316,8 @@ void TestBinaryCollationData(){
     ures_close(teRes);
 
 }
-void TestAPI(){
+
+static void TestAPI() {
     UErrorCode status=U_ZERO_ERROR;
     const char*        directory=NULL;
     int32_t len=0;
@@ -409,7 +410,8 @@ void TestAPI(){
 
 
 }
-void TestErrorConditions(){
+
+static void TestErrorConditions(){
     UErrorCode status;
     const char*        directory=NULL;
     const char *key=NULL;
@@ -618,7 +620,7 @@ void TestErrorConditions(){
 
 }
 
-void TestResourceBundles()
+static void TestResourceBundles()
 {
 
   testTag("only_in_Root", TRUE, FALSE, FALSE);
@@ -635,7 +637,7 @@ void TestResourceBundles()
 }
 
 
-void TestConstruction1()
+static void TestConstruction1()
 {
     UResourceBundle *test1 = 0, *test2 = 0;
     const UChar *result1, *result2;
@@ -701,7 +703,7 @@ void TestConstruction1()
     ures_close(test2);
 }
 
-void TestConstruction2()
+static void TestConstruction2()
 {
 
     UChar temp[7];
@@ -757,7 +759,7 @@ void TestConstruction2()
 /*****************************************************************************/
 /*****************************************************************************/
 
-UBool testTag(const char* frag,
+static UBool testTag(const char* frag,
            UBool in_Root,
            UBool in_te,
            UBool in_te_IN)
@@ -1176,12 +1178,12 @@ UBool testTag(const char* frag,
     return pass;
 }
 
-void record_pass()
+static void record_pass()
 {
     ++pass;
 }
 
-void record_fail()
+static void record_fail()
 {
     ++fail;
 }
@@ -1191,7 +1193,7 @@ void record_fail()
  * are set correctly
  */
 
-void TestFallback()
+static void TestFallback()
 {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle *fr_FR = NULL;
@@ -1239,7 +1241,7 @@ void TestFallback()
     ures_close(fr_FR);
 }
 
-void printUChars(UChar* uchars){
+static void printUChars(UChar* uchars){
     int16_t i=0;
     for(i=0; i<u_strlen(uchars); i++){
         printf("%04X ", *(uchars+i));

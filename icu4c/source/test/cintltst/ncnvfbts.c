@@ -33,36 +33,43 @@ static int32_t  gInBufferSize = 0;
 static int32_t  gOutBufferSize = 0;
 static char     gNuConvTestName[1024];
 
-void printSeq(const unsigned char* a, int len)
+static void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("{");
-    while (i<len) log_verbose("0x%02x ", a[i++]);
-    log_verbose("}\n");
-}
-void printUSeq(const UChar* a, int len)
-{
-    int i=0;
-    log_verbose("{U+");
-    while (i<len) log_verbose("0x%04x ", a[i++]);
+    while (i<len)
+        log_verbose("0x%02x ", a[i++]);
     log_verbose("}\n");
 }
 
-void printSeqErr(const unsigned char* a, int len)
+static void printUSeq(const UChar* a, int len)
+{
+    int i=0;
+    log_verbose("{U+");
+    while (i<len)
+        log_verbose("0x%04x ", a[i++]);
+    log_verbose("}\n");
+}
+
+static void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
-    while (i<len)  fprintf(stderr, "0x%02x ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%02x ", a[i++]);
     fprintf(stderr, "}\n");
 }
-void printUSeqErr(const UChar* a, int len)
+
+static void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+");
-    while (i<len) fprintf(stderr, "0x%04x ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%04x ", a[i++]);
     fprintf(stderr,"}\n");
 }
-void TestConverterFallBack(void)
+
+static void TestConverterFallBack(void)
 {
    TestConvertFallBackWithBufferSizes(10,10);
    TestConvertFallBackWithBufferSizes(2,3);
@@ -98,7 +105,7 @@ void addTestConverterFallBack(TestNode** root)
    This convenience function lets us make the error messages actually useful.
 */
 
-void setNuConvTestName(const char *codepage, const char *direction)
+static void setNuConvTestName(const char *codepage, const char *direction)
 {
   sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
       codepage,
@@ -108,7 +115,7 @@ void setNuConvTestName(const char *codepage, const char *direction)
 }
 
 
-UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, UBool fallback, int32_t *expectOffsets)
 {
 
@@ -271,7 +278,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     }
 }
 
-UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
+static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, UBool fallback, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;

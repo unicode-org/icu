@@ -71,33 +71,38 @@ static void TestFlushInternalBuffer();  /*for improved code coverage in ucnv_cnv
 static void TestWithBufferSize(int32_t osize, int32_t isize);
 
 
-void printSeq(const unsigned char* a, int len)
+static void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("\n{");
-    while (i<len) log_verbose("0x%02X ", a[i++]);
+    while (i<len)
+        log_verbose("0x%02X ", a[i++]);
     log_verbose("}\n");
 }
+
 static void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("\n{");
-    while (i<len) log_verbose("%0x04X ", a[i++]);
+    while (i<len)
+        log_verbose("%0x04X ", a[i++]);
     log_verbose("}\n");
 }
 
-void printSeqErr(const unsigned char* a, int len)
+static void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "\n{");
     while (i<len)  fprintf(stderr, "0x%02X ", a[i++]);
     fprintf(stderr, "}\n");
 }
+
 static void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "\n{");
-    while (i<len) fprintf(stderr, "0x%04X ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%04X ", a[i++]);
     fprintf(stderr,"}\n");
 }
 
@@ -112,8 +117,9 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
 
 }
+
 /*test surrogate behaviour*/
-void TestSurrogateBehaviour(){
+static void TestSurrogateBehaviour(){
     log_verbose("Testing for SBCS and LATIN_1\n");
     {
         UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
@@ -153,11 +159,11 @@ void TestSurrogateBehaviour(){
     }
     log_verbose("Testing for ISO-2022-jp\n");
     {
-        	    UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
         const uint8_t expected[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
                                     0x31,0x1b,0x28,0x42,0x1A,0x1b,0x28,0x42, 0x32};
-        
+
 
         int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,3,3,3,5,5,5,5 };
 
@@ -215,10 +221,10 @@ void TestSurrogateBehaviour(){
     }
         log_verbose("Testing for HZ\n");
     {
-        	    UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
         const uint8_t expected[] = {0x7E ,0x7B, 0x52, 0x3B, 0x36, 0x21, 0x7E, 0x7D, 0x31,0x7E, 0x7D, 0x1A,0x7E, 0x7D,0x32 };
-        
+
 
         int32_t offsets[] = {0,0,0,0,1,1,2,2,2,3,3,3,5,5,5};
 
@@ -274,8 +280,9 @@ void TestSurrogateBehaviour(){
 
 
 }
+
 /*test various error behaviours*/
-void TestErrorBehaviour(){
+static void TestErrorBehaviour(){
     log_verbose("Testing for SBCS and LATIN_1\n");
     {
 #if 0 
@@ -586,8 +593,9 @@ void TestErrorBehaviour(){
 
 
 }
+
 /*test different convertToUnicode error behaviours*/
-void TestToUnicodeErrorBehaviour()
+static void TestToUnicodeErrorBehaviour()
 {
     log_verbose("Testing error conditions for DBCS\n");
     {
@@ -679,7 +687,7 @@ void TestToUnicodeErrorBehaviour()
 
 }
 
-void TestGetNextErrorBehaviour(){
+static void TestGetNextErrorBehaviour(){
    /*Test for unassigned character*/
     static const char input1[]={ 0x70 };
     const char* source=(const char*)input1;
@@ -701,7 +709,7 @@ void TestGetNextErrorBehaviour(){
 }
 
 /*Regression test for utf8 converter*/
-void TestRegression(){
+static void TestRegression(){
     uint8_t *buffer=0;
     UChar32 c;
     char *targ;
@@ -793,8 +801,9 @@ void TestRegression(){
     free(buffer);
 
 }
+
 /*Walk through the available converters*/
-void TestAvailableConverters(){
+static void TestAvailableConverters(){
     UErrorCode status=U_ZERO_ERROR;
     UConverter *conv=NULL;
     int32_t i=0;
@@ -811,14 +820,14 @@ void TestAvailableConverters(){
 
 }
 
-void TestFlushInternalBuffer(){
+static void TestFlushInternalBuffer(){
     TestWithBufferSize(MAX_LENGTH, 1);
     TestWithBufferSize(1, 1);
     TestWithBufferSize(1, MAX_LENGTH);
     TestWithBufferSize(MAX_LENGTH, MAX_LENGTH);
 }
 
-void TestWithBufferSize(int32_t insize, int32_t outsize){
+static void TestWithBufferSize(int32_t insize, int32_t outsize){
 
     gInBufferSize =insize;
     gOutBufferSize = outsize;
@@ -889,7 +898,7 @@ void TestWithBufferSize(int32_t insize, int32_t outsize){
 
 }
 
-UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
 {
 
@@ -978,7 +987,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
 }
 
 
-UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int expectLen, 
+static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int expectLen, 
                const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1075,7 +1084,7 @@ UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int
 }
 
 
-UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1241,7 +1250,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
     }
 }
 
-UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
+static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;

@@ -32,20 +32,20 @@
      * @bug 4108758 - Make sure it works with contracting characters
      * 
      */
-    void TestPrevious(void);
+    static void TestPrevious(void);
     
     /**
      * Test for getOffset() and setOffset()
      */
-    void TestOffset(void);
+    static void TestOffset(void);
     /**
      * Test for setText()
      */
-    void TestSetText(void);
+    static void TestSetText(void);
     /** @bug 4108762
      * Test for getMaxExpansion()
      */
-    void TestMaxExpansion(void);
+    static void TestMaxExpansion(void);
     
     
     /*------------------------------------------------------------------------
@@ -57,7 +57,7 @@
     /**
      * Verify that getMaxExpansion works on a given set of collation rules
      */
-    void verifyExpansion(UChar* rules, const UChar tests[], int32_t testCount);
+    static void verifyExpansion(UChar* rules, const UChar tests[], int32_t testCount);
       
       
     /**
