@@ -118,7 +118,7 @@ typedef struct UConverter_1_4 UConverter_1_4;
 /*Reads the header of the table file and fills in basic knowledge about the converter
  *in "converter"
  */
-static void readHeaderFromFile(UConverter_1_4* myConverter, FileStream* convFile, UErrorCode* err);
+static void readHeaderFromFile(UConverter_1_4* myConverter, FileStream* convFile, const char* converterName, UErrorCode* err);
 
 /*Reads the rest of the file, and fills up the shared objects if necessary*/
 static void loadMBCSTableFromFile(FileStream* convFile, UConverter_1_4* converter, UErrorCode* err);
@@ -460,6 +460,7 @@ int32_t getCodepageNumberFromName(char* name)
 /*Reads the header of the table file and fills in basic knowledge about the converter in "converter"*/
 void readHeaderFromFile(UConverter_1_4* myConverter,
                         FileStream* convFile,
+                        const char* converterName,
                         UErrorCode* err)
 {
   char storeLine[UCNV_MAX_LINE_TEXT];
@@ -499,10 +500,16 @@ void readHeaderFromFile(UConverter_1_4* myConverter,
           /*get name tag*/
           else if (uprv_strcmp(key, "code_set_name") == 0) 
             {
-              uprv_strcpy(myConverter->sharedData->name, value);
-              myConverter->sharedData->platform = getPlatformFromName(value);
-              myConverter->sharedData->codepage = getCodepageNumberFromName(value);
-              
+              if (uprv_strlen(value) != 0) 
+              {
+                  uprv_strcpy(myConverter->sharedData->name, value);
+                  myConverter->sharedData->platform = getPlatformFromName(value);
+                  myConverter->sharedData->codepage = getCodepageNumberFromName(value);
+              } else {
+                  uprv_strcpy(myConverter->sharedData->name, converterName);
+                  myConverter->sharedData->platform = UCNV_IBM;
+              }
+            	                    
             }
 
           /*get conversion type*/
@@ -912,7 +919,7 @@ UConverterSharedData_1_4* createConverterFromTableFile(const char* converterName
   mySharedData->dataMemory = NULL; /* for init */
 
   myConverter.sharedData = mySharedData;
-  readHeaderFromFile(&myConverter, convFile, err);
+  readHeaderFromFile(&myConverter, convFile, converterName, err);
 
   if (U_FAILURE(*err)) return NULL;
   

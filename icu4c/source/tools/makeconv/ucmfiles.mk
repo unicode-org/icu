@@ -58,4 +58,5 @@ ibm-37-s390.ucm ibm-1047-s390.ucm\
 ibm-1140-s390.ucm ibm-1142-s390.ucm ibm-1143-s390.ucm ibm-1144-s390.ucm\
 ibm-1145-s390.ucm ibm-1146-s390.ucm ibm-1147-s390.ucm ibm-1148-s390.ucm\
 ibm-1149-s390.ucm ibm-1153-s390.ucm ibm-12712-s390.ucm ibm-16804-s390.ucm\
-lmb-excp.ucm ibm-851.ucm
+ebcdic-xml-us.ucm lmb-excp.ucm ibm-851.ucm
+
