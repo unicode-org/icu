@@ -92,6 +92,22 @@ void StringTest::runIndexedTest(int32_t index, bool_t exec, char *&name, char *p
             }
         }
         break;
+    case 4:
+        name="Test_UNICODE_STRING";
+        if(exec) {
+            UnicodeString ustringVar=UNICODE_STRING("aZ0 -", 5);
+            if( ustringVar.length()!=5 ||
+                ustringVar[0]!=0x61 ||
+                ustringVar[1]!=0x5a ||
+                ustringVar[2]!=0x30 ||
+                ustringVar[3]!=0x20 ||
+                ustringVar[4]!=0x2d
+            ) {
+                errln("Test_UNICODE_STRING: UNICODE_STRING does not work right! "
+                      "See unistr.h and utypes.h with platform.h.");
+            }
+        }
+        break;
     default:
         name="";
         break;
