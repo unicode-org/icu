@@ -103,6 +103,13 @@ void ParsePositionTest::TestFieldPosition()
         errln("*** FP constructor(int) or getField");
     }
 
+    FieldPosition fpc(fp);
+    if (fpc.getField() == 7) {
+        logln("FP Constructor(FP&) passed");
+    } else {
+        errln("*** FP Constructor(FP&)");
+    }
+
     FieldPosition fph( 3 );
     if ( fph.getField() != 3) 
         errln("*** FP getField or heap constr.");
