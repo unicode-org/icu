@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/30 18:08:19 $
- * $Revision: 1.58 $
+ * $Date: 2001/10/31 01:17:06 $
+ * $Revision: 1.59 $
  *
  *****************************************************************************************
  */
@@ -1616,24 +1616,6 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     //======================================================================
-    // icu4j ONLY
-    // These tests are not mirrored (yet) in icu4c at
-    // source/test/intltest/transtst.cpp
-    //======================================================================
-
-    /**
-     * Test anchor masking
-     */
-    public void TestAnchorMasking() {
-        String rule = "^a > Q; a > q;";
-        try {
-            Transliterator t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
-        } catch (IllegalArgumentException e) {
-            errln("FAIL: " + rule + " => " + e);
-        }
-    }
-
-    //======================================================================
     // Ram's tests
     //======================================================================
  /* this test performs  test of rules in ISO 15915 */
@@ -1912,6 +1894,35 @@ public class TransliteratorTest extends TestFmwk {
             gotResult = source[i];
             expect(latinToDevToLatin,(source[i]),(source[i]));
             expect(devToLatinToDev,(expected[i]),(expected[i]));
+        }
+    }
+
+    /**
+     * Test instantiation from a locale.
+     */
+    public void TestLocaleInstantiation() {
+        Transliterator t = Transliterator.getInstance("ru_RU-Latin");
+        expect(t, "\u0430", "a");
+
+        t = Transliterator.getInstance("en-el");
+        expect(t, "a", "\u1F00");
+    }
+
+    //======================================================================
+    // icu4j ONLY
+    // These tests are not mirrored (yet) in icu4c at
+    // source/test/intltest/transtst.cpp
+    //======================================================================
+
+    /**
+     * Test anchor masking
+     */
+    public void TestAnchorMasking() {
+        String rule = "^a > Q; a > q;";
+        try {
+            Transliterator t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+        } catch (IllegalArgumentException e) {
+            errln("FAIL: " + rule + " => " + e);
         }
     }
 
