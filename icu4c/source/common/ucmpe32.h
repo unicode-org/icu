@@ -79,6 +79,7 @@ typedef struct CompactEIntArray{
   int32_t stage2DefaultTop;
   int32_t fDefaultValue;
   int32_t fSurrogateValue;
+  int32_t fLeadSurrogateValue;
   int32_t stage2Size;
 } CompactEIntArray;
 
@@ -89,7 +90,7 @@ typedef struct CompactEIntArray{
  * @param defaultValue the default value for all characters not explicitly in the array
  */
 U_CAPI CompactEIntArray* U_EXPORT2 
-ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, UErrorCode *status);
+ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, int32_t leadSurrogateValue, UErrorCode *status);
 
 /**
  * Opens a compacted read-only array from
