@@ -1273,6 +1273,10 @@ InputPath=.\unicode\ushape.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustr_imp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\ustring.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
