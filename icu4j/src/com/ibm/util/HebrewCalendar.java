@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/HebrewCalendar.java,v $ 
- * $Date: 2000/10/27 22:25:52 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/11/18 00:30:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -64,6 +64,7 @@ import java.util.Locale;
  * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
+ * @author Alan Liu
  */
 public class HebrewCalendar extends Calendar {
 
@@ -124,35 +125,31 @@ public class HebrewCalendar extends Calendar {
      */
     private static final long EPOCH_MILLIS = -180799862400000L; // 1/1/1 HY
 
-    // Useful millisecond constants
-    private static final int  SECOND_MS = 1000;
-    private static final int  MINUTE_MS = 60*SECOND_MS;
-    private static final int  HOUR_MS   = 60*MINUTE_MS;
-    private static final long DAY_MS    = 24*HOUR_MS;
-    private static final long WEEK_MS   = 7*DAY_MS;
-
-    /**
-     * The minimum and maximum values for all of the fields, for validation
-     */
-    private static final int MinMax[][] = {
-        // Min         Greatest Min    Least Max            Max
-        {   0,              0,              0,              0         },  // ERA
-        {   1,              1,        5000000,        5000000         },  // YEAR
-        {   0,              0,             12,             12         },  // MONTH
-        {   0,              0,             51,             56         },  // WEEK_OF_YEAR
-        {   0,              0,              5,              6         },  // WEEK_OF_MONTH
-        {   1,              1,             29,             30         },  // DAY_OF_MONTH
-        {   1,              1,            353,            385         },  // DAY_OF_YEAR
-        {   1,              1,              7,              7         },  // DAY_OF_WEEK
-        {  -1,             -1,              4,              6         },  // DAY_OF_WEEK_IN_MONTH
-        {   0,              0,              1,              1         },  // AM_PM
-        {   0,              0,             11,             11         },  // HOUR
-        {   0,              0,             23,             23         },  // HOUR_OF_DAY
-        {   0,              0,             59,             59         },  // MINUTE
-        {   0,              0,             59,             59         },  // SECOND
-        {   0,              0,            999,            999         },  // MILLISECOND
-        { -12*HOUR_MS,    -12*HOUR_MS,     12*HOUR_MS,     12*HOUR_MS },  // ZONE_OFFSET
-        {   0,              0,              1*HOUR_MS,      1*HOUR_MS },
+    private static final int LIMITS[][] = {
+        // Minimum  Greatest    Least  Maximum
+        //           Minimum  Maximum
+        {        0,        0,       0,       0 }, // ERA
+        {        1,        1, 5000000, 5000000 }, // YEAR
+        {        0,        0,      12,      12 }, // MONTH
+        {        1,        1,      51,      56 }, // WEEK_OF_YEAR
+        {        0,        0,       5,       6 }, // WEEK_OF_MONTH
+        {        1,        1,      29,      30 }, // DAY_OF_MONTH
+        {        1,        1,     353,     385 }, // DAY_OF_YEAR
+        {/*                                  */}, // DAY_OF_WEEK
+        {       -1,       -1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
+        {/*                                  */}, // AM_PM
+        {/*                                  */}, // HOUR
+        {/*                                  */}, // HOUR_OF_DAY
+        {/*                                  */}, // MINUTE
+        {/*                                  */}, // SECOND
+        {/*                                  */}, // MILLISECOND
+        {/*                                  */}, // ZONE_OFFSET
+        {/*                                  */}, // DST_OFFSET
+        { -5000001, -5000001, 5000001, 5000001 }, // YEAR_WOY
+        {/*                                  */}, // DOW_LOCAL
+        { -5000000, -5000000, 5000000, 5000000 }, // EXTENDED_YEAR
+        {/*                                  */}, // JULIAN_DAY
+        {/*                                  */}, // MILLISECONDS_IN_DAY
     };
 
     /**
@@ -184,7 +181,7 @@ public class HebrewCalendar extends Calendar {
      * Although this can be calculated from the MONTH_LENGTH table,
      * keeping it around separately makes some calculations a lot faster
      */
-    private static final int NUM_DAYS[][] = {
+    private static final int MONTH_START[][] = {
         // Deficient  Normal     Complete
         {    0,          0,          0  },          // (placeholder)
         {   30,         30,         30  },          // Tishri
@@ -205,7 +202,7 @@ public class HebrewCalendar extends Calendar {
     /**
      * The cumulative # of days to the end of each month in a leap year
      */
-    private static final int LEAP_NUM_DAYS[][] = {
+    private static final int LEAP_MONTH_START[][] = {
         // Deficient  Normal     Complete
         {    0,          0,          0  },          // (placeholder)
         {   30,         30,         30  },          // Tishri
@@ -226,14 +223,6 @@ public class HebrewCalendar extends Calendar {
     //-------------------------------------------------------------------------
     // Data Members...
     //-------------------------------------------------------------------------
-
-    /**
-     * Since TimeZone rules are all defined in terms of GregorianCalendar,
-     * we need a GregorianCalendar object for doing time zone calculations
-     * There's no point in lazy-allocating this since it's needed for
-     * almost anything this class does.
-     */
-    private static GregorianCalendar gregorian = new GregorianCalendar();
 
     private static CalendarCache cache = new CalendarCache();
     
@@ -341,99 +330,6 @@ public class HebrewCalendar extends Calendar {
     }
 
     //-------------------------------------------------------------------------
-    // Minimum / Maximum access functions
-    //-------------------------------------------------------------------------
-
-    /**
-     * Returns the minimum value for the given field.
-     * e.g. for DAY_OF_MONTH, 1
-     *
-     * @param field The field whose minimum value is desired.
-     *
-     * @see com.ibm.util.Calendar#getMinimum
-     */
-    public int getMinimum(int field)
-    {
-        return MinMax[field][0];
-    }
-
-    /**
-     * Returns the highest minimum value for the given field.  For the Hebrew
-     * calendar, this always returns the same result as <code>getMinimum</code>.
-     *
-     * @param field The field whose greatest minimum value is desired.
-     *
-     * @see #getMinimum
-     */
-    public int getGreatestMinimum(int field)
-    {
-        return MinMax[field][1];
-    }
-
-    /**
-     * Returns the maximum value for the given field.
-     * e.g. for {@link #DAY_OF_MONTH DAY_OF_MONTH}, 30
-     *
-     * @param field The field whose maximum value is desired.
-     *
-     * @see #getLeastMaximum
-     * @see #getActualMaximum
-     */
-    public int getMaximum(int field)
-    {
-        return MinMax[field][3];
-    }
-
-    /**
-     * Returns the lowest maximum value for the given field.  For most fields,
-     * this returns the same result as {@link #getMaximum getMaximum}.  However,
-     * for some fields this can be a lower number. For example,
-     * the maximum {@link #DAY_OF_MONTH DAY_OF_MONTH} in the Hebrew caleandar varies
-     * from month to month, so this method returns 29 while <code>getMaximum</code>
-     * returns 30.
-     *
-     * @param field The field whose least maximum value is desired.
-     *
-     * @see #getMaximum
-     * @see #getActualMaximum
-     */
-    public int getLeastMaximum(int field)
-    {
-        return MinMax[field][2];
-    }
-
-    /**
-     * Return the maximum value that a field could have, given the current date.
-     * For example, with the date "Kislev 3, 5757" and the {@link #DAY_OF_MONTH DAY_OF_MONTH} field,
-     * the actual maximum would be 29; for "Kislev 3, 5758" it would be 30,
-     * since the length of the month Kislev varies from year to year.
-     *
-     * @param field The field whose actual maximum value is desired.
-     *
-     * @see #getMaximum
-     * @see #getLeastMaximum
-     */
-    public int getActualMaximum(int field)
-    {
-        if (!isSet(YEAR) || !isSet(MONTH)) {
-            complete();
-        }
-        switch (field) {
-          case MONTH:
-            return isLeapYear(fields[YEAR]) ? 13 : 12;
-
-          case DAY_OF_MONTH:
-            return monthLength(fields[YEAR], fields[MONTH]);
-
-          case DAY_OF_YEAR:
-            return yearLength(fields[YEAR]);
-
-          default:
-            return super.getActualMaximum(field);
-        }   
-    }
-        
-    //-------------------------------------------------------------------------
     // Rolling and adding functions overridden from Calendar
     //
     // These methods call through to the default implementation in IBMCalendar
@@ -469,34 +365,70 @@ public class HebrewCalendar extends Calendar {
     public void add(int field, int amount)
     {
         switch (field) {
-          case MONTH: 
+        case MONTH: 
             {
-                //
-                // MONTH is tricky, because the number of months per year varies
-                // It's easiest to just convert to an absolute # of months
-                // since the epoch, do the addition, and convert back.
-                //
-                int month = (235 * get(YEAR) - 234) / 19 + get(MONTH);
-                month += amount;
+//~             // This seems like a good idea but it isn't working :( - Alan
 
-                // Now convert back to year and month values
-                int year = (19 * month + 234) / 235;
-                month -= (235 * year - 234) / 19;
-                
-                // In a non-leap year, months after the (missing) leap month
-                // must be bumped up by one.
-                // TODO: but only if we started before the leap month
-                if (month >= ADAR_1 && !isLeapYear(year)) {
-                    month++;
+//~             // MONTH is tricky, because the number of months per year varies
+//~             // It's easiest to just convert to an absolute # of months
+//~             // since the epoch, do the addition, and convert back.
+//~             int month = (235 * get(YEAR) - 234) / 19 + get(MONTH);
+//~             month += amount;
+
+//~             // Now convert back to year and month values
+//~             int year = (19 * month + 234) / 235;
+//~             month -= (235 * year - 234) / 19;
+//~             
+//~             // In a non-leap year, months after the (missing) leap month
+//~             // must be bumped up by one.
+//~             // TODO: but only if we started before the leap month
+//~             if (month >= ADAR_1 && !isLeapYear(year)) {
+//~                 month++;
+//~             }
+//~             set(YEAR, year);
+//~             set(MONTH, month);
+//~             pinField(DAY_OF_MONTH);
+
+                // We can't just do a set(MONTH, get(MONTH) + amount).  The
+                // reason is ADAR_1.  Suppose amount is +2 and we land in
+                // ADAR_1 -- then we have to bump to ADAR_2 aka ADAR.  But
+                // if amount is -2 and we land in ADAR_1, then we have to
+                // bump the other way -- down to SHEVAT.  - Alan 11/00
+                int month = get(MONTH);
+                int year = get(YEAR);
+                //public static final int SHEVAT = 4;
+                //public static final int ADAR_1 = 5;
+                //public static final int ADAR = 6;
+                if (amount > 0) {
+                    while (amount-- > 0) {
+                        ++month;
+                        if (month == ADAR_1 && !isLeapYear(year)) {
+                            ++month;
+                        }
+                        if (month > ELUL) { // Last month of year
+                            month = 0;
+                            ++year;
+                        }
+                    }
+                } else {
+                    while (amount++ < 0) {
+                        --month;
+                        if (month == ADAR_1 && !isLeapYear(year)) {
+                            --month;
+                        }
+                        if (month < 0) {
+                            month = ELUL; // Last month of year
+                            --year;
+                        }
+                    }
                 }
-                this.set(YEAR, year);
-                this.set(MONTH, month);
-
+                set(MONTH, month);
+                set(YEAR, year);
                 pinField(DAY_OF_MONTH);
                 break;
             }
-
-          default:
+            
+        default:
             super.add(field, amount);
             break;
         }
@@ -536,18 +468,17 @@ public class HebrewCalendar extends Calendar {
     public void roll(int field, int amount)
     {
         switch (field) {
-          case MONTH:
+        case MONTH:
             {
                 int month = get(MONTH);
                 int year = get(YEAR);
                 
                 boolean leapYear = isLeapYear(year);
-                int yearLength = leapYear ? 13 : 12;
+                int yearLength = monthsInYear(year);
                 int newMonth = month + (amount % yearLength);
                 //
                 // If it's not a leap year and we're rolling past the missing month
                 // of ADAR_1, we need to roll an extra month to make up for it.
-                // TODO: fix cases like Av + 12 -> Tammuz
                 //
                 if (!leapYear) {
                     if (amount > 0 && month < ADAR_1 && newMonth >= ADAR_1) {
@@ -560,385 +491,13 @@ public class HebrewCalendar extends Calendar {
                 pinField(DAY_OF_MONTH);
                 return;
             }
-          default:
+        default:
             super.roll(field, amount);
         }
     }
 
     //-------------------------------------------------------------------------
-    // Functions for converting from field values to milliseconds and back...
-    //
-    // These are overrides of abstract methods on com.ibm.util.Calendar
-    //-------------------------------------------------------------------------
-
-    /**
-     * Converts time field values to UTC as milliseconds.
-     *
-     * @exception IllegalArgumentException if an unknown field is given.
-     */
-    protected void computeTime()
-    {
-        if (isTimeSet) return;
-
-        if (!isLenient() && !validateFields())
-            throw new IllegalArgumentException("Invalid field values for HebrewCalendar");
-
-        if (isSet(ERA) && internalGet(ERA) != 0)
-            throw new IllegalArgumentException("ERA out of range in HebrewCalendar");
-
-        // The year is required.  We don't have to check if it's unset,
-        // because if it is, by definition it will be 0.
-
-        int year = internalGet(YEAR);
-        long dayNumber = 0, date = 0;
-
-        if (year <= 0) {
-            throw new IllegalArgumentException("YEAR out of range in HebrewCalendar");
-        }
-
-        // The following code is somewhat convoluted. The various nested
-        //  if's handle the different cases of what fields are present.
-        if (isSet(MONTH) &&
-            (isSet(DATE) ||
-             (isSet(DAY_OF_WEEK) &&
-              (isSet(WEEK_OF_MONTH) || isSet(DAY_OF_WEEK_IN_MONTH))
-             )))
-        {
-            // We have the month specified. Make it 1-based for the algorithm.
-            int month = internalGet(MONTH);
-            
-            // normalize month
-            // TODO: I think this is wrong, since months/year can vary
-            if (month < 0) {
-                year += month / 13 - 1;
-                month = 13 + month % 13;
-            } else if (month > 12) {
-                year += month / 13;
-                month = month % 13;
-            }
-
-            dayNumber = startOfYear(year);
-            if (isLeapYear(year)) {
-                dayNumber += LEAP_NUM_DAYS[month][yearType(year)];
-            } else {
-                dayNumber += NUM_DAYS[month][yearType(year)];
-            }
-
-            if (isSet(DATE))
-            {
-                date = internalGet(DATE);
-            }
-            else
-            {
-                // Compute from day of week plus week number or from the day of
-                // week plus the day of week in month.  The computations are
-                // almost identical.
-
-                // Find the day of the week for the first of this month.  This
-                // is zero-based, with 0 being the locale-specific first day of
-                // the week.  Add 1 to get the 1st day of month.  Subtract
-                // getFirstDayOfWeek() to make 0-based.
-                int fdm = absoluteDayToDayOfWeek(dayNumber + 1) - getFirstDayOfWeek();
-                if (fdm < 0) fdm += 7;
-
-                // Find the start of the first week.  This will be a date from
-                // 1..-6.  It represents the locale-specific first day of the
-                // week of the first day of the month, ignoring minimal days in
-                // first week.
-                date = 1 - fdm + internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
-
-                if (isSet(WEEK_OF_MONTH))
-                {
-                    // Adjust for minimal days in first week.
-                    if ((7 - fdm) < getMinimalDaysInFirstWeek()) date += 7;
-
-                    // Now adjust for the week number.
-                    date += 7 * (internalGet(WEEK_OF_MONTH) - 1);
-                }
-                else
-                {
-                    // Adjust into the month, if needed.
-                    if (date < 1) date += 7;
-
-                    // We are basing this on the day-of-week-in-month.  The only
-                    // trickiness occurs if the day-of-week-in-month is
-                    // negative.
-                    int dim = internalGet(DAY_OF_WEEK_IN_MONTH);
-                    if (dim >= 0) {
-                        date += 7*(dim - 1);
-                    } else {
-                        // Move date to the last of this day-of-week in this
-                        // month, then back up as needed.  If dim==-1, we don't
-                        // back up at all.  If dim==-2, we back up once, etc.
-                        // Don't back up past the first of the given day-of-week
-                        // in this month.  Note that we handle -2, -3,
-                        // etc. correctly, even though values < -1 are
-                        // technically disallowed.
-                        date += ((monthLength(year, fields[MONTH]) - date) / 7 + dim + 1) * 7;
-                    }
-                }
-            }
-            dayNumber += date;
-        }
-        else if (isSet(DAY_OF_YEAR)) {
-            dayNumber = startOfYear(year) + internalGet(DAY_OF_YEAR);
-        }
-        else if (isSet(DAY_OF_WEEK) && isSet(WEEK_OF_YEAR))
-        {
-            dayNumber = startOfYear(year);
-
-            // Compute from day of week plus week of year
-
-            // Find the day of the week for the first of this year.  This
-            // is zero-based, with 0 being the locale-specific first day of
-            // the week.  Add 1 to get the 1st day of month.  Subtract
-            // getFirstDayOfWeek() to make 0-based.
-            int fdy = absoluteDayToDayOfWeek(dayNumber + 1) - getFirstDayOfWeek();
-            if (fdy < 0) fdy += 7;
-
-            // Find the start of the first week.  This may be a valid date
-            // from 1..7, or a date before the first, from 0..-6.  It
-            // represents the locale-specific first day of the week
-            // of the first day of the year.
-
-            // First ignore the minimal days in first week.
-            date = 1 - fdy + internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
-
-            // Adjust for minimal days in first week.
-            if ((7 - fdy) < getMinimalDaysInFirstWeek()) date += 7;
-
-            // Now adjust for the week number.
-            date += 7 * (internalGet(WEEK_OF_YEAR) - 1);
-
-            dayNumber += date;
-        }
-        else {    // Not enough information
-            throw new IllegalArgumentException("Not enough fields set to calculate time");
-        }
-
-        long millis = dayNumber * DAY_MS + EPOCH_MILLIS;
-
-        // Now we can do the time portion of the conversion.
-        int millisInDay = 0;
-
-        // Hours
-        if (isSet(HOUR_OF_DAY))
-            // Don't normalize here; let overflow bump into the next period.
-            // This is consistent with how we handle other fields.
-            millisInDay += internalGet(HOUR_OF_DAY);
-
-        else if (isSet(HOUR))
-        {
-            // Don't normalize here; let overflow bump into the next period.
-            // This is consistent with how we handle other fields.
-            millisInDay += internalGet(HOUR);
-            millisInDay += 12 * internalGet(AM_PM);
-        }
-
-        // Minutes. We use the fact that unset == 0
-        millisInDay *= 60;
-        millisInDay += internalGet(MINUTE);
-
-        // Seconds. unset == 0
-        millisInDay *= 60;
-        millisInDay += internalGet(SECOND);
-
-        // Milliseconds. unset == 0
-        millisInDay *= 1000;
-        millisInDay += internalGet(MILLISECOND);
-
-        // Now add date and millisInDay together, to make millis contain local wall
-        // millis, with no zone or DST adjustments
-        millis += millisInDay;
-
-        //
-        // Compute the time zone offset and DST offset.
-        // Since the TimeZone API expects the Gregorian year, month, etc.,
-        // We have to convert to local Gregorian time in order to
-        // figure out the time zone calculations.  This is a bit slow, but
-        // it saves us from doing some *really* nasty calculations here.
-        //
-        TimeZone zone = getTimeZone();
-        int dstOffset = 0;
-        
-        if (zone.useDaylightTime()) {
-            synchronized(gregorian) {
-                gregorian.setTimeZone(zone);
-                gregorian.setTime(new Date(millis));    // "millis" is local wall clock time
-                dstOffset = gregorian.get(DST_OFFSET);
-            }
-        }
-        // Store our final computed GMT time, with timezone adjustments.
-        time = millis - dstOffset - zone.getRawOffset();
-        isTimeSet = true;
-    }
-
-    /**
-     * Validates the value of the given time field.
-     */
-    private boolean boundsCheck(int value, int field)
-    {
-        return value >= getMinimum(field) && value <= getMaximum(field);
-    }
-
-
-    /**
-     * Validates the values of the set time fields.
-     */
-    private boolean validateFields()
-    {
-        for (int field = 0; field < FIELD_COUNT; field++)
-        {
-            // Ignore DATE and DAY_OF_YEAR which are handled below
-            if (field != DATE &&
-                field != DAY_OF_YEAR &&
-                isSet(field) &&
-                !boundsCheck(internalGet(field), field))
-
-                return false;
-        }
-
-        // Values differ in Least-Maximum and Maximum should be handled
-        // specially.
-        if (isSet(DATE))
-        {
-            int date = internalGet(DATE);
-            return (date >= getMinimum(DATE) &&
-                    date <= monthLength(fields[YEAR], fields[MONTH]));
-        }
-
-        if (isSet(DAY_OF_YEAR))
-        {
-            int days = internalGet(DAY_OF_YEAR);
-
-            if (days < 1 || days > yearLength(internalGet(YEAR)))
-                    return false;
-        }
-
-        if (isSet(YEAR))
-        {
-            int year = internalGet(YEAR);
-            if (year < 1)
-                return false;
-        }
-
-        // Handle DAY_OF_WEEK_IN_MONTH, which must not have the value zero.
-        // We've checked against minimum and maximum above already.
-        if (isSet(DAY_OF_WEEK_IN_MONTH) &&
-            0 == internalGet(DAY_OF_WEEK_IN_MONTH)) return false;
-
-        return true;
-    }
-
-    /**
-     * Convert the time as milliseconds since 1/1/1970 to the Calendar fields
-     * such as YEAR, MONTH and DAY.
-     */
-    protected void computeFields()
-    {
-        if (areFieldsSet) return;
-
-        // The following algorithm only works for dates from the start of the Hebrew
-        // calendar onward.
-        if (time < EPOCH_MILLIS && !isLenient()) {
-            throw new IllegalArgumentException("HebrewCalendar does not handle dates before 1/1/1 AM");
-        }
-
-        //
-        // Compute the time zone offset and DST offset.
-        // Since the TimeZone API expects the Gregorian year, month, etc.,
-        // We have to convert to local Gregorian time in order to
-        // figure out the time zone calculations.  This is a bit slow, but
-        // it saves us from doing some *really* nasty calculations here.
-        //
-        TimeZone zone = getTimeZone();
-        int rawOffset = zone.getRawOffset();
-        int dstOffset = 0;                     // Extra DST offset
-
-        if (zone.useDaylightTime()) {
-            synchronized(gregorian) {
-                gregorian.setTimeZone(zone);
-                gregorian.setTime(new Date(time));
-                dstOffset = gregorian.get(DST_OFFSET);
-            }
-        }
-
-        long localMillis = time + rawOffset + dstOffset;
-
-        // We need to find out which Hebrew year the given time is in.
-        // Once we know that, we find the time when the year started,
-        // and everything else is straightforward
-
-        long epochMillis = localMillis - EPOCH_MILLIS;  // Millis since epoch
-        long d = epochMillis / DAY_MS;                  // Days
-        long m = (d * DAY_PARTS) / MONTH_PARTS;         // Months (approx)
-
-        int year = (int)((19 * m + 234) / 235) + 1;     // Years (approx)
-        long ys  = startOfYear(year);                   // 1st day of year
-        int dayOfYear = (int)(d - ys);
-
-        // Because of the postponement rules, it's possible to guess wrong.  Fix it.
-        while (dayOfYear < 1) {
-            year--;
-            ys  = startOfYear(year);
-            dayOfYear = (int)(d - ys);
-        }
-
-        int dayOfWeek = absoluteDayToDayOfWeek((long)d);
-
-        // Now figure out which month we're in, and the date within that month
-        int yearType = yearType(year);
-        int numDays[][] = isLeapYear(year) ? LEAP_NUM_DAYS : NUM_DAYS;
-
-        int month = 0;
-        while (dayOfYear > numDays[month][yearType]) {
-            month++;
-        }
-        month--;
-        int date = dayOfYear - numDays[month][yearType];
-
-        fields[ERA] = 0;
-        fields[YEAR] = year;
-        fields[MONTH] = month;
-        fields[DATE] = date;
-
-        fields[DAY_OF_YEAR] = dayOfYear;
-        fields[DAY_OF_WEEK] = dayOfWeek;
-
-        fields[WEEK_OF_YEAR] = weekNumber(dayOfYear, dayOfWeek);
-        fields[WEEK_OF_MONTH] = weekNumber(date, dayOfWeek);
-
-        fields[DAY_OF_WEEK_IN_MONTH] = (date-1) / 7 + 1;
-
-        //long days = (long) (localMillis / DAY_MS);
-        //int millisInDay = (int) (localMillis - (days * DAY_MS));
-        //if (millisInDay < 0) millisInDay += DAY_MS;
-        
-        int millisInDay = (int)(localMillis % DAY_MS);
-
-        // Fill in all time-related fields based on millisInDay.
-        fields[MILLISECOND] = millisInDay % 1000;
-        millisInDay /= 1000;
-        fields[SECOND] = millisInDay % 60;
-        millisInDay /= 60;
-        fields[MINUTE] = millisInDay % 60;
-        millisInDay /= 60;
-        fields[HOUR_OF_DAY] = millisInDay;
-        fields[AM_PM] = millisInDay / 12;
-        fields[HOUR] = millisInDay % 12;
-
-        fields[ZONE_OFFSET] = rawOffset;
-        fields[DST_OFFSET] = dstOffset;
-
-        areFieldsSet = true;
-
-        // Careful here: We are manually setting the isSet flags to true, so we
-        // must be sure that the above code actually does set all these fields.
-        _TEMPORARY_markAllFieldsSet();
-    }
-
-    //-------------------------------------------------------------------------
-    // Functions for converting from milliseconds to field values
+    // Support methods
     //-------------------------------------------------------------------------
 
     // Hebrew date calculations are performed in terms of days, hours, and
@@ -1011,7 +570,7 @@ public class HebrewCalendar extends Calendar {
             cache.put(year, day);
         }
         return day;
-    };
+    }
 
     /**
      * Find the day of the week for a given day
@@ -1026,22 +585,14 @@ public class HebrewCalendar extends Calendar {
     }
 
     /**
-     * Returns the number of days in the given Hebrew year
-     */
-    private static int yearLength(int year)
-    {
-        return (int)(startOfYear(year+1) - startOfYear(year));
-    }
-
-    /**
      * Returns the the type of a given year.
      *  0   "Deficient" year with 353 or 383 days
      *  1   "Normal"    year with 354 or 384 days
      *  2   "Complete"  year with 355 or 385 days
      */
-    private static int yearType(int year)
+    private final int yearType(int year)
     {
-        int yearLength = yearLength(year);
+        int yearLength = handleGetYearLength(year);
 
         if (yearLength > 380) {
            yearLength -= 30;        // Subtract length of leap month.
@@ -1064,15 +615,37 @@ public class HebrewCalendar extends Calendar {
     }
 
     /**
+     * Determine whether a given Hebrew year is a leap year
+     *
+     * The rule here is that if (year % 19) == 0, 3, 6, 8, 11, 14, or 17.
+     * The formula below performs the same test, believe it or not.
+     */
+    private static final boolean isLeapYear(int year) {
+        return (year * 12 + 17) % 19 >= 12;
+    }
+
+    private static int monthsInYear(int year) {
+        return isLeapYear(year) ? 13 : 12;
+    }
+
+    //-------------------------------------------------------------------------
+    // Calendar framework
+    //-------------------------------------------------------------------------
+
+    protected int handleGetLimit(int field, int limitType) {
+        return LIMITS[field][limitType];
+    }
+
+    /**
      * Returns the length of the given month in the given year
      */
-    private static int monthLength(int year, int month)
-    {
+    protected int handleGetMonthLength(int extendedYear, int month) {
+
         switch (month) {
             case HESHVAN:
             case KISLEV:
                 // These two month lengths can vary
-                return MONTH_LENGTH[month][yearType(year)];
+                return MONTH_LENGTH[month][yearType(extendedYear)];
                 
             default:
                 // The rest are a fixed length
@@ -1081,20 +654,113 @@ public class HebrewCalendar extends Calendar {
     }
 
     /**
-     * Determine whether a given Hebrew year is a leap year
-     *
-     * The rule here is that if (year % 19) == 0, 3, 6, 8, 11, 14, or 17.
-     * The formula below performs the same test, believe it or not.
+     * Returns the number of days in the given Hebrew year
      */
-    private static boolean isLeapYear(int year)
-    {
-        return (year * 12 + 17) % 19 >= 12;
+    protected int handleGetYearLength(int eyear) {
+        return (int)(startOfYear(eyear+1) - startOfYear(eyear));
     }
 
-    
-    static private void debug(String str) {
-        if (false) {
-            System.out.println(str);
+    //-------------------------------------------------------------------------
+    // Functions for converting from milliseconds to field values
+    //-------------------------------------------------------------------------
+
+    /**
+     * Subclasses may override this method to compute several fields
+     * specific to each calendar system.  These are:
+     *
+     * <ul><li>ERA
+     * <li>YEAR
+     * <li>MONTH
+     * <li>DAY_OF_MONTH
+     * <li>DAY_OF_YEAR
+     * <li>EXTENDED_YEAR</ul>
+     * 
+     * Subclasses can refer to the DAY_OF_WEEK and DOW_LOCAL fields,
+     * which will be set when this method is called.  Subclasses can
+     * also call the getGregorianXxx() methods to obtain Gregorian
+     * calendar equivalents for the given Julian day.
+     *
+     * <p>In addition, subclasses should compute any subclass-specific
+     * fields, that is, fields from BASE_FIELD_COUNT to
+     * getFieldCount() - 1.
+     */
+    protected void handleComputeFields(int julianDay) {
+        long d = julianDay - 347997;
+        long m = (d * DAY_PARTS) / MONTH_PARTS;         // Months (approx)
+        int year = (int)((19 * m + 234) / 235) + 1;     // Years (approx)
+        long ys  = startOfYear(year);                   // 1st day of year
+        int dayOfYear = (int)(d - ys);
+
+        // Because of the postponement rules, it's possible to guess wrong.  Fix it.
+        while (dayOfYear < 1) {
+            year--;
+            ys  = startOfYear(year);
+            dayOfYear = (int)(d - ys);
         }
+
+        // Now figure out which month we're in, and the date within that month
+        int yearType = yearType(year);
+        int monthStart[][] = isLeapYear(year) ? LEAP_MONTH_START : MONTH_START;
+
+        int month = 0;
+        while (dayOfYear > monthStart[month][yearType]) {
+            month++;
+        }
+        month--;
+        int dayOfMonth = dayOfYear - monthStart[month][yearType];
+
+        internalSet(ERA, 0);
+        internalSet(YEAR, year);
+        internalSet(EXTENDED_YEAR, year);
+        internalSet(MONTH, month);
+        internalSet(DAY_OF_MONTH, dayOfMonth);
+        internalSet(DAY_OF_YEAR, dayOfYear);       
     }
-};
+
+    //-------------------------------------------------------------------------
+    // Functions for converting from field values to milliseconds
+    //-------------------------------------------------------------------------
+
+    protected int handleGetExtendedYear() {
+        int year;
+        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
+            year = internalGet(EXTENDED_YEAR, 1); // Default to year 1
+        } else {
+            year = internalGet(YEAR, 1); // Default to year 1
+        }
+        return year;
+    }
+
+    // Return JD of start of given month/year
+    protected int handleComputeMonthStart(int eyear, int month) {
+
+        // Resolve out-of-range months.  This is necessary in order to
+        // obtain the correct year.
+        if (month < 0) {
+            while (month < 0) {
+                month += monthsInYear(--eyear);
+            }
+        } else if (month > 0) {
+            for (;;) {
+                int monthsInYear = monthsInYear(eyear);
+                if (month < monthsInYear) {
+                    break;
+                }
+                ++eyear;
+                month -= monthsInYear;
+            }
+        }
+
+        long day = startOfYear(eyear);
+
+        if (month != 0) {
+            if (isLeapYear(eyear)) {
+                day += LEAP_MONTH_START[month][yearType(eyear)];
+            } else {
+                day += MONTH_START[month][yearType(eyear)];
+            }
+        }
+
+        return (int) (day + 347997);
+    }
+}

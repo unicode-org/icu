@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/JapaneseCalendar.java,v $ 
- * $Date: 2000/10/17 18:26:45 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/11/18 00:30:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -43,6 +43,7 @@ import java.util.Locale;
  * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
+ * @author Alan Liu
  */
 public class JapaneseCalendar extends GregorianCalendar {
     
@@ -97,8 +98,8 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @param date      The date to which the new calendar is set.
      */
     public JapaneseCalendar(Date date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
-        this.setTime(date);
+        this();
+        setTime(date);
     }
 
     /**
@@ -142,7 +143,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     public JapaneseCalendar(int year, int month, int date) {
         super(year, month, date);
-        set(ERA, eras.length - 1);
+        set(ERA, CURRENT_ERA);
     }
 
     /**
@@ -168,149 +169,60 @@ public class JapaneseCalendar extends GregorianCalendar {
                              int minute, int second)
     {
         super(year, month, date, hour, minute, second);
-        set(ERA, eras.length - 1);
+        set(ERA, CURRENT_ERA);
     }
 
-    /**
-     * Override of the <code>GregorianCalendar</code> method that computes the
-     * fields such as YEAR, MONTH, and DATE from the date in milliseconds
-     * since 1/1/1970 AD.
-     * <p>
-     * This method calls {@link GregorianCalendar#computeFields} to do most
-     * of the work, then determines the imperial era corresponding to the
-     * Gregorian date and adjusts the {@link #YEAR YEAR} and {@link #ERA ERA}
-     * fields accordingly.
-     */
-    protected void computeFields() {
-        // Let GregorianCalendar do its thing.
-        super.computeFields();
-        
-        fromGregorian();
-        
-        //
-        // If the date was too early for this calendar, throw an exception,
-        // but only after we've made all the fields consistent
-        //
-        if (fields[YEAR] < 1 && !isLenient()) {
-            throw new IllegalArgumentException("Year out of range");
-        }
-    }
-
-    /**
-     * Override of the <code>GregorianCalendar</code> method that computes the 
-     * elapsed time in milliseconds since 1/1/1970 AD from the fields such
-     * as YEAR, MONTH, and DATE.
-     * <p>
-     * This method adjusts the {@link #YEAR YEAR} and {@link #ERA ERA} from their
-     * values in the Japanese calendar to the corresponding Gregorian values, calls
-     * {@link GregorianCalendar#computeTime} to do the real millisecond
-     * calculation, and then restores the Japanese <code>YEAR</code> and
-     * <code>ERA</code>.
-     */
-    protected void computeTime() {
-        int year = fields[YEAR];
-        int era = fields[ERA];
-
-        // If we're in strict mode, make sure that the year actually
-        // falls within the era, i.e. isn't < 1 or > era length
-        if (era < 0 || era >= eras.length) {
-            throw new IllegalArgumentException("Era out of range");
-        }
-        if (!isLenient() && (year < 1
-            || era < eras.length && year > (eras[(era+1)*3] - eras[era*3] + 1))) {
-                throw new IllegalArgumentException("Year out of range");
-        }
-        
-        // Adjust the year and era to the corresponding Gregorian values
-        toGregorian();
-        try {
-            // Let GregorianCalendar do its thing.
-            super.computeTime();
-        }
-        finally {
-            // Set the year and era back to the original values
-            fields[YEAR] = year;
-            fields[ERA] = era;
-        }
-    }
-
-    public void add(int field, int amount) {
-        toGregorian();
-        try {
-            super.add(field, amount);
-        }
-        finally {
-            fromGregorian();
-        }
-    }
-    
-    public void roll(int field, int amount) {
-        toGregorian();
-        try {
-            super.roll(field, amount);
-        }
-        finally {
-            fromGregorian();
-        }
-    }
-    
-    //-------------------------------------------------------------------------
-    // Methods for converting between Gregorian and Buddhist calendars
     //-------------------------------------------------------------------------
 
-    /**
-     * Convert the YEAR and ERA fields from Japanese to Gregorian values
-     * Return the (Buddhist) value of the YEAR field on input;
-     */
-    private void toGregorian() {
-        int year = fields[YEAR] + eras[fields[ERA] * 3] - 1;
-        int era = AD;
-        
-        if (year < 1) {
-            year = 1 - year;
-            era = BC;
+    protected int handleGetExtendedYear() {
+        int year;
+        // TODO reimplement this to be faster?
+        if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR &&
+            newerField(EXTENDED_YEAR, ERA) == EXTENDED_YEAR) {
+            year = internalGet(EXTENDED_YEAR, 1);
+        } else {
+            // Subtract one because year starts at 1
+            year = internalGet(YEAR) + ERAS[internalGet(ERA) * 3] - 1;
         }
-        fields[ERA] = era;
-        fields[YEAR] = year;
+        return year;
     }
-    
-    /**
-     * Adjust the year and era from Gregorian to Japanese values
-     */
-    private void fromGregorian() {
-        // Figure out which emperor's reign we're in, and adjust the
-        // year and era accordingly.
-        int year = fields[ERA] == AD ? fields[YEAR] : 1 - fields[YEAR];
 
-        // Binary search...
-        int low = 0, high = eras.length / 3;
+    protected void handleComputeFields(int julianDay) {
+        super.handleComputeFields(julianDay);
+        int year = internalGet(EXTENDED_YEAR);
+
+        // Binary search
+        int low = 0, high = ERAS.length / 3;
         
         while (low < high - 1) {
-            int i = (low + high + 1) / 2;
-            
-            int diff = year  - eras[i*3 + 0];
+            int i = (low + high) / 2;
+            int diff = year - ERAS[i*3];
+
+            // If years are the same, then compare the months, and if those
+            // are the same, compare days of month.  In the ERAS array
+            // months are 1-based for easier maintenance.
             if (diff == 0) {
-                // Years were the same; compare the months.  In the eras
-                // array months are 1-based for easier maintenance.
-                diff = fields[MONTH] - (eras[i*3 + 1] - 1);
+                diff = internalGet(MONTH) - (ERAS[i*3 + 1] - 1);
+                if (diff == 0) {
+                    diff = internalGet(DAY_OF_MONTH) - ERAS[i*3 + 2];
+                }
             }
-            if (diff == 0) {
-                diff = fields[DATE]  - eras[i*3 + 2];
-            }
-            if (diff > 0) {
+            if (diff >= 0) {
                 low = i;
             } else {
                 high = i;
             }
         }
 
-        // Now we've found the last era that starts before this date,
-        // so adjust the year to count from the start of that era.
-        fields[ERA] = low;
-        fields[YEAR] = year - eras[low*3 + 0] + 1;
+        // Now we've found the last era that starts before this date, so
+        // adjust the year to count from the start of that era.  Note that
+        // all dates before the first era will fall into the first era by
+        // the algorithm.
+        internalSet(ERA, low);
+        internalSet(YEAR, year - ERAS[low*3] + 1);
     }
-    
-    private static final int[] eras = {
+
+    private static final int[] ERAS = {
     //  Gregorian date of each emperor's ascension
     //  Years are AD, months are 1-based.
     //  Year  Month Day
@@ -556,15 +468,61 @@ public class JapaneseCalendar extends GregorianCalendar {
     // Public constants for some of the recent eras that folks might use...
     //-------------------------------------------------------------------------
 
+    // Constant for the current era.  This must be regularly updated.
+    static public final int CURRENT_ERA = (ERAS.length / 3) - 1;
+    
     /** Constant for the era starting on Sept. 8, 1868 AD */
-    static public final int MEIJI = eras.length - 4;
+    static public final int MEIJI = CURRENT_ERA - 3;
 
     /** Constant for the era starting on July 30, 1912 AD */
-    static public final int TAISHO = eras.length - 3;
+    static public final int TAISHO = CURRENT_ERA - 2;
     
     /** Constant for the era starting on Dec. 25, 1926 AD */
-    static public final int SHOWA = eras.length - 2;
+    static public final int SHOWA = CURRENT_ERA - 1;
 
     /** Constant for the era starting on Jan. 7, 1989 AD */
-    static public final int HEISEI = eras.length - 1;
-};
+    static public final int HEISEI = CURRENT_ERA;
+
+    /**
+     * Partial limits table for limits that differ from GregorianCalendar's.
+     * The YEAR max limits are filled in the first time they are needed.
+     */
+    private static int LIMITS[][] = {
+        // Minimum  Greatest        Least      Maximum
+        //           Minimum      Maximum
+        {        0,        0, CURRENT_ERA, CURRENT_ERA }, // ERA
+        {        1,        1,           0,           0 }, // YEAR
+    };
+
+    private static boolean YEAR_LIMIT_KNOWN = false;
+
+    /**
+     * Override GregorianCalendar.  We should really handle YEAR_WOY and
+     * EXTENDED_YEAR here too to implement the 1..5000000 range, but it's
+     * not critical.
+     */
+    protected int handleGetLimit(int field, int limitType) {
+        switch (field) {
+        case ERA:
+            return LIMITS[field][limitType];
+        case YEAR:
+            if (!YEAR_LIMIT_KNOWN) {
+                int min = ERAS[3] - ERAS[0];
+                int max = min;
+                for (int i=6; i<ERAS.length; i+=3) {
+                    int d = ERAS[i] - ERAS[i-3];
+                    if (d < min) {
+                        min = d;
+                    } else if (d > max) {
+                        max = d;
+                    }
+                }
+                LIMITS[field][LEAST_MAXIMUM] = min;
+                LIMITS[field][MAXIMUM] = max;
+            }
+            return LIMITS[field][limitType];
+        default:
+            return super.handleGetLimit(field, limitType);
+        }
+    }
+}
