@@ -4832,7 +4832,7 @@ ucol_addLatinOneEntry(UCollator *coll, UChar ch, uint32_t CE,
     *primShift -= 8;
   }
   if(primary2 != 0) {
-    if(primShift < 0) {
+    if(*primShift < 0) {
       coll->latinOneCEs[ch] = UCOL_BAIL_OUT_CE;
       coll->latinOneCEs[coll->latinOneTableLen+ch] = UCOL_BAIL_OUT_CE;
       coll->latinOneCEs[2*coll->latinOneTableLen+ch] = UCOL_BAIL_OUT_CE;
