@@ -91,6 +91,34 @@ static UMTX              gIncDecMutex          = NULL;
 static UBool             gMutexPoolInitialized = FALSE;
 static char              gMutexesInUse[MAX_MUTEXES];   
 
+/* ICU_WIN32_DETECT_MUTEX_DEADLOCK
+ *
+ * On WIN32 mutexes are reentrant.  This makes it difficult to debug
+ * deadlocking problems that show up on POSIXy platforms, where
+ * mutexes deadlock upon reentry.  To enable checking code for all
+ * mutexes that duplicates the recursion checking that is always done
+ * for the global mutex (using gRecursionCount), define this symbol.
+ *
+ * This is for debugging purposes.
+ *
+ * This has no effect on non-WIN32 platforms, non-DEBUG builds, and
+ * non-ICU_USE_THREADS builds.
+ *
+ * Note: The CRITICAL_SECTION structure already has a RecursionCount
+ * member that can be used for this purpose, but portability to
+ * Win98/NT/2K needs to be tested before use.  Works fine on XP.
+ * After portability is confirmed, the built-in RecursionCount can be
+ * used, and the gRecursionCountPool can be removed.
+ *
+ * Note: The checking only happens if there is no custom pMutexLockFn
+ * defined.  Use one function, not two (don't use pMutexLockFn and
+ * pMutexUnlockFn) so the increment and decrement of the recursion
+ * count don't get out of sync.  Users might set just one function,
+ * e.g., to perform a custom action, followed by a standard call
+ * to EnterCriticalSection.
+ */
+#define ICU_WIN32_DETECT_MUTEX_DEADLOCK
+
 #if defined(WIN32) 
 /*-------------------------------------------------------------
  *
@@ -100,9 +128,12 @@ static char              gMutexesInUse[MAX_MUTEXES];
 static CRITICAL_SECTION  gMutexes[MAX_MUTEXES];
 static CRITICAL_SECTION  gGlobalWinMutex;
 
-/* Detect Recursive locking of the global mutex.  For debugging only. */
+/* Detect recursive locking on WIN32.  For debugging only. */
 #if defined(_DEBUG) && (ICU_USE_THREADS==1)
-static int32_t gRecursionCount = 0;       
+#ifdef ICU_WIN32_DETECT_MUTEX_DEADLOCK
+static int32_t gRecursionCountPool[MAX_MUTEXES]; /* see comments above */
+#endif
+static int32_t gRecursionCount = 0; /* detect global mutex locking */      
 #endif
 
 
@@ -195,6 +226,23 @@ umtx_lock(UMTX *mutex)
         gRecursionCount++;                /* Recursion causes deadlocks on Unixes.              */
         U_ASSERT(gRecursionCount == 1);   /* Detection works on Windows.  Debug problems there. */
     }
+#ifdef ICU_WIN32_DETECT_MUTEX_DEADLOCK
+    /* This handles gGlobalMutex too, but only if there is no pMutexLockFn */
+    else if (pMutexLockFn == NULL) { /* see comments above */
+        int i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
+        U_ASSERT(i >= 0 && i < MAX_MUTEXES);
+        ++gRecursionCountPool[i];
+
+        U_ASSERT(gRecursionCountPool[i] == 1); /* !Detect Deadlock! */
+
+        /* This works and is fast, but needs testing on Win98/NT/2K.
+           See comments above. [alan]
+          U_ASSERT((CRITICAL_SECTION*)*mutex >= &gMutexes[0] &&
+                   (CRITICAL_SECTION*)*mutex <= &gMutexes[MAX_MUTEXES]);
+          U_ASSERT(((CRITICAL_SECTION*)*mutex)->RecursionCount == 1);
+        */
+    }
+#endif
 #endif /*_DEBUG*/
 }
 
@@ -220,6 +268,24 @@ umtx_unlock(UMTX* mutex)
         gRecursionCount--;
         U_ASSERT(gRecursionCount == 0);  /* Detect unlock of an already unlocked mutex */
     }
+#ifdef ICU_WIN32_DETECT_MUTEX_DEADLOCK
+    /* This handles gGlobalMutex too, but only if there is no pMutexLockFn */
+    else if (pMutexLockFn == NULL) { /* see comments above */
+        int i = ((CRITICAL_SECTION*)*mutex) - &gMutexes[0];
+        U_ASSERT(i >= 0 && i < MAX_MUTEXES);
+        --gRecursionCountPool[i];
+
+        U_ASSERT(gRecursionCountPool[i] == 0); /* !Detect Deadlock! */
+
+        /* This works and is fast, but needs testing on Win98/NT/2K.
+           Note that RecursionCount will be 1, not 0, since we haven't
+           left the CRITICAL_SECTION yet.  See comments above. [alan]
+          U_ASSERT((CRITICAL_SECTION*)*mutex >= &gMutexes[0] &&
+                   (CRITICAL_SECTION*)*mutex <= &gMutexes[MAX_MUTEXES]);
+          U_ASSERT(((CRITICAL_SECTION*)*mutex)->RecursionCount == 1);
+        */
+    }
+#endif
 #endif
 
     if (pMutexUnlockFn) {
@@ -274,6 +340,9 @@ static void initGlobalMutex() {
         int i;
         for (i=0; i<MAX_MUTEXES; i++) {
             InitializeCriticalSection(&gMutexes[i]);
+#ifdef ICU_WIN32_DETECT_MUTEX_DEADLOCK
+            gRecursionCountPool[i] = 0; /* see comments above */
+#endif
         }
         gMutexPoolInitialized = TRUE;
     }
@@ -383,6 +452,7 @@ umtx_destroy(UMTX *mutex) {
         /* Return this mutex to the pool of available mutexes, if it came from the
          *  pool in the first place.
          */
+        /* TODO use pointer math here, instead of iterating! */
         int i;
         for (i=0; i<MAX_MUTEXES; i++)  {
             if (*mutex == &gMutexes[i]) {
