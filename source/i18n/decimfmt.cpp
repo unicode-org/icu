@@ -185,6 +185,7 @@ DecimalFormat::construct(UErrorCode&             status,
     fNegPrefixPattern = fNegSuffixPattern = NULL;
     fMultiplier = 1;
     fGroupingSize = 3;
+    fGroupingSize2 = 0;
     fDecimalSeparatorAlwaysShown = FALSE;
     fIsCurrencyFormat = FALSE;
     fUseExponentialNotation = FALSE;
@@ -283,6 +284,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
     fRoundingDouble = rhs.fRoundingDouble;
     fMultiplier = rhs.fMultiplier;
     fGroupingSize = rhs.fGroupingSize;
+    fGroupingSize2 = rhs.fGroupingSize2;
     fDecimalSeparatorAlwaysShown = rhs.fDecimalSeparatorAlwaysShown;
     if(fSymbols == NULL) 
     fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
@@ -396,6 +398,10 @@ DecimalFormat::operator==(const Format& that) const
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         printf("Grouping Size %ld != %ld", fGroupingSize, other->fGroupingSize);
     }
+    if (fGroupingSize2 != other->fGroupingSize2) {
+        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        printf("Secondary Grouping Size %ld != %ld", fGroupingSize2, other->fGroupingSize2);
+    }
     if (fDecimalSeparatorAlwaysShown != other->fDecimalSeparatorAlwaysShown) {
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         printf("Dec Sep Always %d != %d", fDecimalSeparatorAlwaysShown, other->fDecimalSeparatorAlwaysShown);
@@ -439,6 +445,7 @@ DecimalFormat::operator==(const Format& that) const
                  *fRoundingIncrement == *other->fRoundingIncrement)) &&
         fMultiplier == other->fMultiplier &&
         fGroupingSize == other->fGroupingSize &&
+        fGroupingSize2 == other->fGroupingSize2 &&
         fDecimalSeparatorAlwaysShown == other->fDecimalSeparatorAlwaysShown &&
         fUseExponentialNotation == other->fUseExponentialNotation &&
         (!fUseExponentialNotation ||
@@ -642,6 +649,28 @@ DecimalFormat::format(  const Formattable& obj,
     return NumberFormat::format(obj, result, fieldPosition, status);
 }
 
+/**
+ * Return true if a grouping separator belongs at the given
+ * position, based on whether grouping is in use and the values of
+ * the primary and secondary grouping interval.
+ * @param pos the number of integer digits to the right of
+ * the current position.  Zero indicates the position after the
+ * rightmost integer digit.
+ * @return true if a grouping character belongs at the current
+ * position.
+ */
+UBool DecimalFormat::isGroupingPosition(int32_t pos) const {
+    UBool result = FALSE;
+    if (isGroupingUsed() && (pos > 0) && (fGroupingSize > 0)) {
+        if ((fGroupingSize2 > 0) && (pos > fGroupingSize)) {
+            result = ((pos - fGroupingSize) % fGroupingSize2) == 0;
+        } else {
+            result = pos % fGroupingSize == 0;
+        }
+    }
+    return result;
+}
+
 //------------------------------------------------------------------------------
 
 /**
@@ -836,12 +865,9 @@ DecimalFormat::subformat(UnicodeString& result,
                 result += (zero);
             }
 
-            // Output grouping separator if necessary.  Don't output a
-            // grouping separator if i==0 though; that's at the end of
-            // the integer part.
-            if (isGroupingUsed() && i>0 && (fGroupingSize != 0) && (i % fGroupingSize == 0))
-            {
-                result += (grouping);
+            // Output grouping separator if necessary.
+            if (isGroupingPosition(i)) {
+                result.append(grouping);
             }
         }
 
@@ -1702,6 +1728,22 @@ DecimalFormat::setGroupingSize(int32_t newValue)
 }
  
 //------------------------------------------------------------------------------
+ 
+int32_t
+DecimalFormat::getSecondaryGroupingSize() const
+{
+    return fGroupingSize2;
+}
+ 
+//------------------------------------------------------------------------------
+ 
+void
+DecimalFormat::setSecondaryGroupingSize(int32_t newValue)
+{
+    fGroupingSize2 = newValue;
+}
+
+//------------------------------------------------------------------------------
 // Checks if to show the decimal separator.
  
 UBool
@@ -1981,16 +2023,18 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 	result.append(padSpec);
       }
       int32_t sub0Start = result.length();
+      int32_t g = isGroupingUsed() ? uprv_max(0, fGroupingSize) : 0;
+      if (g > 0 && fGroupingSize2 > 0 && fGroupingSize2 != fGroupingSize) {
+          g += fGroupingSize2;
+      }
       int32_t maxIntDig = fUseExponentialNotation ? getMaximumIntegerDigits() :
-	(uprv_max(uprv_max(fGroupingSize, getMinimumIntegerDigits()),
+	(uprv_max(uprv_max(g, getMinimumIntegerDigits()),
 		 roundingDecimalPos) + 1);
       for (i = maxIntDig; i > 0; --i) {
-	if (isGroupingUsed() && fGroupingSize != 0
-	    && i % fGroupingSize == 0
-	    && i < maxIntDig
-	    && !fUseExponentialNotation) {
-	  result.append(group);
-	}
+          if (!fUseExponentialNotation && i<maxIntDig &&
+              isGroupingPosition(i)) {
+              result.append(group);
+          }
 	if (! roundingDigits.empty()) {
 	  int32_t pos = roundingDecimalPos - i;
 	  if (pos >= 0 && pos < roundingDigits.length()) {
@@ -2033,12 +2077,14 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                    : fNegativePrefix.length() + fNegativeSuffix.length());
             while (add > 0) {
                 result.insert(sub0Start, digit);
+                ++maxIntDig;
                 --add;
-                if (isGroupingUsed() && fGroupingSize != 0
-                    && ++maxIntDig % fGroupingSize == 0
-                    && add > 1) {
+                // Only add a grouping separator if we have at least
+                // 2 additional characters to be added, so we don't
+                // end up with ",###".
+                if (add>1 && isGroupingPosition(maxIntDig)) {
                     result.insert(sub0Start, group);
-                    --add;
+                    --add;                        
                 }
             }
         }
@@ -2162,6 +2208,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         int32_t multiplier = 1;
         int32_t digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0;
         int8_t groupingCount = -1;
+        int8_t groupingCount2 = -1;
         int32_t padPos = -1;
         UChar padChar = 0;
         int32_t roundingPos = -1;
@@ -2222,6 +2269,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                         return;
                     }
+                    groupingCount2 = groupingCount;
                     groupingCount = 0;
                 } else if (ch == decimalSeparator) {
                     if (decimalPos >= 0) {
@@ -2428,7 +2476,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             (decimalPos >= 0 &&
              (decimalPos < digitLeftCount ||
               decimalPos > (digitLeftCount + zeroDigitCount))) ||
-            groupingCount == 0 ||
+            groupingCount == 0 || groupingCount2 == 0 ||
             subpart > 2) { // subpart > 2 == unmatched quote
             debug("Syntax error")
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2485,6 +2533,8 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     ? (digitLeftCount + zeroDigitCount - decimalPos) : 0);
             setGroupingUsed(groupingCount > 0);
             fGroupingSize = (groupingCount > 0) ? groupingCount : 0;
+            fGroupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
+                ? groupingCount2 : 0;
             fMultiplier = multiplier;
             setDecimalSeparatorAlwaysShown(decimalPos == 0
                     || decimalPos == digitTotalCount);
@@ -2543,6 +2593,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         fIsCurrencyFormat = FALSE;
         setGroupingUsed(FALSE);
         fGroupingSize = 0;
+        fGroupingSize2 = 0;
         fMultiplier = 1;
         setDecimalSeparatorAlwaysShown(FALSE);
         fFormatWidth = 0;
