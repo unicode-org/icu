@@ -19,8 +19,9 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
-#include "cmemory.h"
 #include "unicode/ushape.h"
+#include "cmemory.h"
+#include "putilimp.h"
 #include "ustr_imp.h"
 
 #if UTF_SIZE<16

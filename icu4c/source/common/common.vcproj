@@ -526,6 +526,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\putilimp.h">
+			</File>
+			<File
 				RelativePath=".\unicode\pwin32.h">
 				<FileConfiguration
 					Name="Release|Win32">

@@ -13,6 +13,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/locid.h"
+#include "putilimp.h"
 
 #include <float.h>
 #include <stdio.h>    // for sprintf

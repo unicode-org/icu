@@ -45,6 +45,7 @@
 #include "ucln_in.h"
 #include "cstring.h"
 #include "utracimp.h"
+#include "putilimp.h"
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>

@@ -12,6 +12,7 @@
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
+#include "putilimp.h"
 
 void TimeZoneBoundaryTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {

@@ -19,6 +19,7 @@
 #include "uvector.h"
 #include "tridpars.h"
 #include "hash.h"
+#include "putilimp.h"
 
 //------------------------------------------------------------
 // Constants

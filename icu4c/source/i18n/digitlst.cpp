@@ -27,6 +27,7 @@
 #include "unicode/putil.h"
 #include "digitlst.h"
 #include "cstring.h"
+#include "putilimp.h"
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>

@@ -27,6 +27,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uset.h"
+#include "putilimp.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"

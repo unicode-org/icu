@@ -56,6 +56,7 @@
 #include "cstring.h"
 #include "umutex.h"
 #include "uassert.h"
+#include "putilimp.h"
 
 U_NAMESPACE_BEGIN
 
