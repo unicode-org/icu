@@ -89,7 +89,7 @@ public:
 
 private:
 
-    UBool       doParseActions(EParseAction a, RBBIRuleChar &c);
+    UBool       doParseActions(EParseAction a);
     void        error(UErrorCode e);                   // error reporting convenience function.
     void        fixOpStack(RBBINode::OpPrecedence p);
                                                        //   a character.

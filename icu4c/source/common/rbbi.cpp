@@ -111,6 +111,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator() {
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
+: BreakIterator(other)
 {
     this->init();
     *this = other;

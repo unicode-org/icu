@@ -128,7 +128,7 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 
 // Creates a simple text boundary for character breaks.
 BreakIterator*
-BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
+BreakIterator::createCharacterInstance(const Locale& /* key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -156,7 +156,7 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 
 // Creates a simple text boundary for sentence breaks.
 BreakIterator*
-BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
+BreakIterator::createSentenceInstance(const Locale& /*key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -184,7 +184,7 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 
 // Creates a simple text boundary for title casing breaks.
 BreakIterator*
-BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
+BreakIterator::createTitleInstance(const Locale& /* key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files.  This function will have to be made fully general 
