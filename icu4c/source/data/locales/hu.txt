@@ -1,4 +1,4 @@
-﻿// ***************************************************************************
+// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -8,56 +8,56 @@
 hu {
     Version{ "2.0" }
     collations {
-      standard { 
-        Version { "2.0" }
-        Sequence { 
-            "& C < cs <<< Cs <<< CS"
-            "& D < dz <<< Dz <<< DZ"
-            "& DZ < dzs <<< Dzs <<< DZS"
-            "& G < gy <<< Gy <<< GY"
-            "& L < ly <<< Ly <<< LY"
-            "& N < ny <<< Ny <<< NY"
-            "& S < sz <<< Sz <<< SZ"
-            "& T < ty <<< Ty <<< TY"
-            "& Z < zs <<< Zs <<< ZS"
+        standard { 
+            Version { "2.0" }
+            Sequence {
+                "& C < cs <<< Cs <<< CS"
+                "& D < dz <<< Dz <<< DZ"
+                "& DZ < dzs <<< Dzs <<< DZS"
+                "& G < gy <<< Gy <<< GY"
+                "& L < ly <<< Ly <<< LY"
+                "& N < ny <<< Ny <<< NY"
+                "& S < sz <<< Sz <<< SZ"
+                "& T < ty <<< Ty <<< TY"
+                "& Z < zs <<< Zs <<< ZS"
+
+                // vowels
+                "& O < \u00F6 <<< \u00D6 << \u0151 <<< \u0150"
+                "& U < \u00FC <<< \u00DC << \u0171 <<< \u0170"
+
+                // special contraction/expansions for doubled letters
+                "& cs <<< ccs / cs"
+                "& Cs <<< Ccs / cs"
+                "& CS <<< CCS / CS"
+                "& dz <<< ddz / dz"
+                "& Dz <<< Ddz / dz"
+                "& DZ <<< DDZ / DZ"
+                "& dzs <<< ddzs / dzs"
+                "& Dzs <<< Ddzs / dzs"
+                "& DZS <<< DDZS / DZS"
+                "& gy <<< ggy / gy"
+                "& Gy <<< Ggy / gy"
+                "& GY <<< GGY / GY"
+                "& ly <<< lly / ly"
+                "& Ly <<< Lly / ly"
+                "& LY <<< LLY / LY"
+                "& ny <<< nny / ny"
+                "& Ny <<< Nny / ny"
+                "& NY <<< NNY / NY"
+                "& sz <<< ssz / sz"
+                "& Sz <<< Ssz / sz"
+                "& SZ <<< SSZ / SZ"
+                "& ty <<< tty / ty"
+                "& Ty <<< Tty / ty"
+                "& TY <<< TTY / TY"
+                "& zs <<< zzs / zs"
+                "& Zs <<< Zzs / zs"
+                "& ZS <<< ZZS / ZS"
+            }
             
-            // vowels
-            "& O < ö <<< Ö << ő <<< Ő"
-            "& U < ü <<< Ü << ű <<< Ű"
-            
-            // special contraction/expansions for doubled letters
-            "& cs <<< ccs / cs"
-            "& Cs <<< Ccs / cs"
-            "& CS <<< CCS / CS"
-            "& dz <<< ddz / dz"
-            "& Dz <<< Ddz / dz"
-            "& DZ <<< DDZ / DZ"
-            "& dzs <<< ddzs / dzs"
-            "& Dzs <<< Ddzs / dzs"
-            "& DZS <<< DDZS / DZS"
-            "& gy <<< ggy / gy"
-            "& Gy <<< Ggy / gy"
-            "& GY <<< GGY / GY"
-            "& ly <<< lly / ly"
-            "& Ly <<< Lly / ly"
-            "& LY <<< LLY / LY"
-            "& ny <<< nny / ny"
-            "& Ny <<< Nny / ny"
-            "& NY <<< NNY / NY"
-            "& sz <<< ssz / sz"
-            "& Sz <<< Ssz / sz"
-            "& SZ <<< SSZ / SZ"
-            "& ty <<< tty / ty"
-            "& Ty <<< Tty / ty"
-            "& TY <<< TTY / TY"
-            "& zs <<< zzs / zs"
-            "& Zs <<< Zzs / zs"
-            "& ZS <<< ZZS / ZS"
-            
-            // Note: bércsík may be ranked before or after bérczerge depending on its morphology: 
-            // bér+csík (after bérczerge) or bérc+sík (before bérczerge).
-            // A SHY can be used to make the difference        
-        }
+            // Note: b\u00C3\u00A9rcs\u00C3\u00ADk may be ranked before or after b\u00C3\u00A9rczerge depending on its morphology: 
+            // b\u00C3\u00A9r+cs\u00C3\u00ADk (after b\u00C3\u00A9rczerge) or b\u00C3\u00A9rc+s\u00C3\u00ADk (before b\u00C3\u00A9rczerge).
+            // A SHY can be used to make the difference                }
       }
     }
     Countries { 
@@ -303,133 +303,131 @@ hu {
         //ZW { "Zimbabwe" }
     }
     Languages { 
-        ab { "abh\u00E1z" }
         aa { "afar" }
+        ab { "abh\u00E1z" }
         af { "afrikai" }
-        sq { "alb\u00E1n" }
         am { "amhara" }
         ar { "arab" }
-        hy { "\u00F6rm\u00E9ny" }
         as { "assz\u00E1mi" }
         ay { "ajmara" }
         az { "azerbajdzs\u00E1ni" }
         ba { "bask\u00EDr" }
-        eu { "baszk" }
-        bn { "beng\u00E1li" }
-        dz { "but\u00E1ni" }
+        be { "belorusz" }
+        bg { "bolg\u00E1r" }
         bh { "bihari" }
         bi { "bislama" }
+        bn { "beng\u00E1li" }
+        bo { "tibeti" }
         br { "breton" }
-        bg { "bolg\u00E1r" }
-        my { "burmai" }
-        be { "belorusz" }
-        km { "kambodzsai" }
         ca { "katal\u00E1n" }
-        zh { "k\u00EDnai" }
         co { "korzikai" }
-        hr { "horv\u00E1t" }
         cs { "cseh" }
+        cy { "walesi" }
         da { "d\u00E1n" }
-        nl { "holland" }
+        de { "n\u00E9met" }
+        dz { "but\u00E1ni" }
+        el { "g\u00F6r\u00F6g" }
         en { "angol" }
         eo { "eszperant\u00F3" }
+        es { "spanyol" }
         et { "\u00E9szt" }
-        fo { "fer\u00F6eri" }
-        fj { "fidzsi" }
+        eu { "baszk" }
+        fa { "perzsa" }
         fi { "finn" }
+        fj { "fidzsi" }
+        fo { "fer\u00F6eri" }
         fr { "francia" }
         fy { "fr\u00EDz" }
+        ga { "\u00EDr" }
+        gd { "sk\u00F3t (gael)" }
         gl { "gal\u00EDciai" }
-        ka { "gr\u00FAz" }
-        de { "n\u00E9met" }
-        el { "g\u00F6r\u00F6g" }
-        kl { "gr\u00F6nlandi" }
         gn { "guarani" }
         gu { "gudzsar\u00E1ti" }
         ha { "hausza" }
         he { "h\u00E9ber" }
-        iw { "h\u00E9ber" }
         hi { "hindi" }
+        hr { "horv\u00E1t" }
         hu { "magyar" }
-        is { "izlandi" }
-        id { "indon\u00E9z" }
-        in { "indon\u00E9z" }
+        hy { "\u00F6rm\u00E9ny" }
         ia { "interlingua" }
+        id { "indon\u00E9z" }
         ie { "interlingue" }
-        iu { "inuktitut" }
         ik { "inupiak" }
-        ga { "\u00EDr" }
+        is { "izlandi" }
         it { "olasz" }
+        iu { "inuktitut" }
         ja { "jap\u00E1n" }
-        jw { "j\u00E1vai" }
-        kn { "kannada" }
-        ks { "kasm\u00EDri" }
+        jv { "j\u00E1vai" }
+        ka { "gr\u00FAz" }
         kk { "kazah" }
-        rw { "kiruanda" }
-        ky { "kirgiz" }
-        rn { "kirundi" }
+        kl { "gr\u00F6nlandi" }
+        km { "kambodzsai" }
+        kn { "kannada" }
         ko { "koreai" }
+        ks { "kasm\u00EDri" }
         ku { "kurd" }
-        lo { "laoszi" }
+        ky { "kirgiz" }
         la { "latin" }
-        lv { "lett" }
         ln { "lingala" }
+        lo { "laoszi" }
         lt { "litv\u00E1n" }
-        mk { "maced\u00F3n" }
+        lv { "lett" }
         mg { "madagaszk\u00E1ri" }
-        ms { "mal\u00E1j" }
-        ml { "malajalam" }
-        mt { "m\u00E1ltai" }
         mi { "maori" }
-        mr { "marati" }
-        mo { "moldvai" }
+        mk { "maced\u00F3n" }
+        ml { "malajalam" }
         mn { "mongol" }
+        mo { "moldvai" }
+        mr { "marati" }
+        ms { "mal\u00E1j" }
+        mt { "m\u00E1ltai" }
+        my { "burmai" }
         na { "naurui" }
         ne { "nep\u00E1li" }
+        nl { "holland" }
         no { "norv\u00E9g" }
         oc { "okszit\u00E1n" }
-        or { "orija" }
         om { "orom\u00F3i" }
-        ps { "pastu (afg\u00E1n)" }
-        fa { "perzsa" }
-        pl { "lengyel" }
-        pt { "portug\u00E1l" }
+        or { "orija" }
         pa { "pandzs\u00E1bi" }
+        pl { "lengyel" }
+        ps { "pastu (afg\u00E1n)" }
+        pt { "portug\u00E1l" }
         qu { "kecsua" }
         rm { "r\u00E9torom\u00E1n" }
+        rn { "kirundi" }
         ro { "rom\u00E1n" }
         ru { "orosz" }
-        sm { "szamoai" }
-        sg { "sango" }
+        rw { "kiruanda" }
         sa { "szanszkrit" }
-        gd { "sk\u00F3t (gael)" }
-        sr { "szerb" }
-        sh { "szerb-horv\u00E1t" }
-        st { "szeszot\u00F3" }
-        tn { "szecsu\u00E1ni" }
-        sn { "sona" }
         sd { "szindi" }
+        sg { "sango" }
+        sh { "szerb-horv\u00E1t" }
         si { "szingal\u00E9z" }
-        ss { "sziszuati" }
         sk { "szlov\u00E1k" }
         sl { "szlov\u00E9n" }
+        sm { "szamoai" }
+        sn { "sona" }
         so { "szom\u00E1li" }
-        es { "spanyol" }
+        sq { "alb\u00E1n" }
+        sr { "szerb" }
+        ss { "sziszuati" }
+        st { "szeszot\u00F3" }
         su { "szundan\u00E9z" }
-        sw { "szuah\u00E9li" }
         sv { "sv\u00E9d" }
-        tl { "tagalog" }
-        tg { "tadzsik" }
+        sw { "szuah\u00E9li" }
         ta { "tamil" }
-        tt { "tat\u00E1r" }
         te { "telugu" }
+        tg { "tadzsik" }
         th { "thai" }
-        bo { "tibeti" }
         ti { "tigrinya" }
-        to { "tonga" }
-        ts { "conga" }
-        tr { "t\u00F6r\u00F6k" }
         tk { "t\u00FCrkm\u00E9n" }
+        tl { "tagalog" }
+        tn { "szecsu\u00E1ni" }
+        to { "tonga" }
+        tr { "t\u00F6r\u00F6k" }
+        ts { "conga" }
+        tt { "tat\u00E1r" }
         tw { "tui" }
         ug { "ujgur" }
         uk { "ukr\u00E1n" }
@@ -437,13 +435,12 @@ hu {
         uz { "\u00FCzb\u00E9g" }
         vi { "vietn\u00E1mi" }
         vo { "volap\u00FCk" }
-        cy { "walesi" }
         wo { "volof" }
         xh { "hosza" }
-        ji { "zsid\u00F3" }
         yi { "zsid\u00F3" }
         yo { "joruba" }
         za { "zsuang" }
+        zh { "k\u00EDnai" }
         zu { "zulu" }
     }
     AmPmMarkers { 
@@ -553,18 +550,18 @@ hu {
     }
 
     MonthNames_islamic {
-            "Moharrem",                 // Muharram
-            "Safar",                    // Safar
-            "R\u00E9bi el avvel",       // Rabi' al-awwal
-            "R\u00E9bi el accher",      // Rabi' al-thani
-            "Dsem\u00E1di el avvel",    // Jumada al-awwal
-            "Dsem\u00E1di el accher",   // Jumada al-thani
-            "Redseb",                   // Rajab
-            "Sab\u00E1n",               // Sha'ban
-            "Ramad\u00E1n",             // Ramadan
-            "Sevv\u00E1l",              // Shawwal
-            "Ds\u00FCl kade",           // Dhu al-Qi'dah
-            "Ds\u00FCl hedse",          // Dhu al-Hijjah
+        "Moharrem",                 // Muharram
+        "Safar",                    // Safar
+        "R\u00E9bi el avvel",       // Rabi' al-awwal
+        "R\u00E9bi el accher",      // Rabi' al-thani
+        "Dsem\u00E1di el avvel",    // Jumada al-awwal
+        "Dsem\u00E1di el accher",   // Jumada al-thani
+        "Redseb",                   // Rajab
+        "Sab\u00E1n",               // Sha'ban
+        "Ramad\u00E1n",             // Ramadan
+        "Sevv\u00E1l",              // Shawwal
+        "Ds\u00FCl kade",           // Dhu al-Qi'dah
+        "Ds\u00FCl hedse",          // Dhu al-Hijjah
     }
     MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "hu/MonthNames_islamic"
@@ -580,25 +577,25 @@ hu {
         "hu/MonthAbbreviations_islamic"
     }
     MonthNames_hebrew {
-                "Tisri",                        // Tishri
-                "Hesv\u00E1n",                  // Heshvan
-                "Kiszl\u00E9v",                 // Kislev
-                "T\u00E9v\u00E9sz",             // Tevet
-                "Sv\u00E1t",                    // Shevat
-                "\u00C1d\u00E1r ris\u00F3n",    // Adar I
-                "\u00C1d\u00E1r s\u00E9ni",     // Adar
-                "Nisz\u00E1n",                  // Nisan
-                "Ij\u00E1r",                    // Iyar
-                "Sziv\u00E1n",                  // Sivan
-                "Tamuz",                        // Tamuz
-                "\u00C1v",                      // Av
-                "Elul",                         // Elul
+        "Tisri",                        // Tishri
+        "Hesv\u00E1n",                  // Heshvan
+        "Kiszl\u00E9v",                 // Kislev
+        "T\u00E9v\u00E9sz",             // Tevet
+        "Sv\u00E1t",                    // Shevat
+        "\u00C1d\u00E1r ris\u00F3n",    // Adar I
+        "\u00C1d\u00E1r s\u00E9ni",     // Adar
+        "Nisz\u00E1n",                  // Nisan
+        "Ij\u00E1r",                    // Iyar
+        "Sziv\u00E1n",                  // Sivan
+        "Tamuz",                        // Tamuz
+        "\u00C1v",                      // Av
+        "Elul",                         // Elul
     }
     MonthAbbreviations_hebrew:alias {
        "hu/MonthNames_hebrew" // no data
     }
     Eras_hebrew:array {
-                "T\u00C9"
+        "T\u00C9"
     }
 
 }
