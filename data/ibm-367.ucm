@@ -18,6 +18,7 @@
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
 <subchar>                     \x1A
+<icu:state>                   0-7f
 #
 CHARMAP
 #
