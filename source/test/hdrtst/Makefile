@@ -58,7 +58,6 @@ hdrdir:
 	  ln -s $$dir/*.h . ; \
 	done
 	rm unicode/pwin32.h
-	@echo "COMPILE.cc = $(COMPILE.cc)"
 
 cpptest:
 	@echo "C++ test #######################################################"
