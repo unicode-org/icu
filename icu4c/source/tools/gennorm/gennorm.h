@@ -18,6 +18,7 @@
 #define __GENPROPS_H__
 
 #include "unicode/utypes.h"
+#include "uset.h"
 
 /* file definitions */
 #define DATA_NAME "unorm"
@@ -34,6 +35,8 @@ typedef struct Norm {
     uint32_t *nfd, *nfkd;
     uint32_t value32; /* temporary variable for generating runtime norm32 and fcd values */
     int32_t fncIndex;
+    USet *canonStart;
+    UBool unsafeStart;
 } Norm;
 
 /* global flags */

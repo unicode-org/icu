@@ -73,15 +73,17 @@ enum {
 
 /* value constants for auxTrie */
 enum {
-    _NORM_AUX_CANON_FLAG_SHIFT=11,
+    _NORM_AUX_UNSAFE_SHIFT=14,
     _NORM_AUX_FNC_SHIFT=20,
     _NORM_AUX_COMP_EX_SHIFT=30,
     _NORM_AUX_IS_LEAD_SHIFT=31
 };
 
-#define _NORM_AUX_MAX_FNC       ((int32_t)1<<(_NORM_AUX_COMP_EX_SHIFT-_NORM_AUX_FNC_SHIFT))
+#define _NORM_AUX_MAX_CANON_SET     ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
+#define _NORM_AUX_MAX_FNC           ((int32_t)1<<(_NORM_AUX_COMP_EX_SHIFT-_NORM_AUX_FNC_SHIFT))
 
-#define _NORM_AUX_CANON_SET_MASK    (((uint32_t)1<<_NORM_AUX_CANON_FLAG_SHIFT)-1)
+#define _NORM_AUX_CANON_SET_MASK    (_NORM_AUX_MAX_CANON_SET-1)
+#define _NORM_AUX_UNSAFE_MASK       ((uint32_t)1<<_NORM_AUX_UNSAFE_SHIFT)
 #define _NORM_AUX_FNC_MASK          ((uint32_t)(_NORM_AUX_MAX_FNC-1)<<_NORM_AUX_FNC_SHIFT)
 #define _NORM_AUX_COMP_EX_MASK      ((uint32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
 #define _NORM_AUX_IS_LEAD_MASK      ((uint32_t)1<<_NORM_AUX_IS_LEAD_SHIFT)
@@ -104,7 +106,7 @@ enum {
     _NORM_INDEX_FCD_TRIE_SIZE,          /* number of bytes in FCD trie */
 
     _NORM_INDEX_AUX_TRIE_SIZE,          /* number of bytes in the auxiliary trie */
-    _NORM_INDEX_UNICODE_SET_COUNT,      /* number of int32_t in the UnicodeSet array */
+    _NORM_INDEX_CANON_SET_COUNT,        /* number of uint16_t in the array of serialized USet */
 
     _NORM_INDEX_TOP=32                  /* changing this requires a new formatVersion */
 };
@@ -280,7 +282,8 @@ unorm_internalIsFullCompositionExclusion(UChar32 c);
  *
  * UTrie auxTrie;                               -- size in bytes=indexes[_NORM_INDEX_AUX_TRIE_SIZE]
  *
- * int32_t unicodeSets[unicodeSetsTop]          -- unicodeSetsTop=indexes[_NORM_INDEX_UNICODE_SET_COUNT]
+ * uint16_t canonStartSets[canonStartSetsTop]   -- canonStartSetsTop=indexes[_NORM_INDEX_CANON_SET_COUNT]
+ *                                                 serialized USets, see uset.c
  *
  *
  * The indexes array contains lengths and sizes of the following arrays and structures
@@ -459,9 +462,12 @@ unorm_internalIsFullCompositionExclusion(UChar32 c);
  * 29..20   index into extraData[] to FC_NFKC_Closure string (bit 31==0),
  *          or lead surrogate offset (bit 31==1)
  * 19..16   skippable flags
- * 15..13   reserved
- *     11   flag: not a safe starter for canonical closure
- * 10.. 0   index to UnicodeSet for canonical closure
+ *     15   reserved
+ *     14   flag: not a safe starter for canonical closure
+ * 13.. 0   index to serialized USet for canonical closure
+ *            the set lists the code points whose decompositions start with
+ *            the one that this data is for
+ *          for how USets are serialized see uset.c
  *
  * - FC_NFKC_Closure strings in extraData[]
  *
