@@ -382,6 +382,10 @@ SOURCE=.\ustream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustrfmt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustring.c
 # ADD CPP /Za
 # End Source File
@@ -1357,6 +1361,10 @@ InputPath=.\unicode\ustream.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ustrfmt.h
 # End Source File
 # Begin Source File
 

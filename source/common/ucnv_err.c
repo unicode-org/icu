@@ -20,6 +20,7 @@
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 #include "unicode/ucnv.h"
+#include "ustrfmt.h"
 
 #define VALUE_STRING_LENGTH 32
 /*Magic # 32 = 4(number of char in value string) * 8(max number of bytes per char for any converter) */
