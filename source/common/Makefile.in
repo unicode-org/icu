@@ -135,7 +135,7 @@ unicode/platform.h: $(srcdir)/unicode/platform.h.in $(top_builddir)/config.statu
 $(TARGET) : $(OBJECTS)
 	$(SHLIB.cc) -o $@ $^ $(LIBS)
 
-ifneq ($(MAKECMDGOALS),distclean)
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 
