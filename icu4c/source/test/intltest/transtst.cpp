@@ -1889,6 +1889,10 @@ void TransliteratorTest::TestNFDChainRBT() {
     Transliterator* t = Transliterator::createFromRules(
                                "TEST", "::NFD; aa > Q; a > q;",
                                UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln("FAIL: Transliterator::createFromRules failed with %s", u_errorName(ec));
+        return;
+    }
     expect(*t, "aa", "Q");
     delete t;
 
