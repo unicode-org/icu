@@ -28,6 +28,7 @@
 #define CHECK(status,str) if (U_FAILURE(status)) { log_err("FAIL: %s\n", str); return; }
 
 void addNumFrDepTest(TestNode** root);
+static void TestCurrencyPreEuro();
 
 void addNumFrDepTest(TestNode** root)
 {
@@ -36,6 +37,7 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestExponential, "tsformat/cnmdptst/TestExponential");
   addTest(root, &TestCurrencySign, "tsformat/cnmdptst/TestCurrencySign");
   addTest(root, &TestCurrency,  "tsformat/cnmdptst/TestCurrency");
+  addTest(root, &TestCurrencyPreEuro,  "tsformat/cnmdptst/TestCurrencyPreEuro");
   addTest(root, &TestRounding487, "tsformat/cnmdptst/TestRounding487");
   addTest(root, &TestDoubleAttribute, "tsformat/cnmdptst/TestDoubleAttribute");
   addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
@@ -393,12 +395,14 @@ static void TestCurrency(void)
   UChar *str=NULL, *res=NULL;
   int32_t lneed, i;
   UFieldPosition pos;
+  char cStr[100]; 
   UErrorCode status = U_ZERO_ERROR;
-  const char* locale[]={"fr_CA", "de_DE", "fr_FR"};
+  const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
   const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
   log_verbose("\nTesting the number format with different currency patterns\n");
   for(i=0; i < 3; i++)
     {
+      cStr[0]=0;
       currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
       if(U_FAILURE(status)){
           log_err("Error in the construction of number format with style currency:\n%s\n",
@@ -417,7 +421,67 @@ static void TestCurrency(void)
       }
       res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_uastrcpy(res, result[i]);
-      if (u_strcmp(str, res) != 0) log_err("FAIL: Expected %s\n", result[i]);
+      u_UCharsToChars(str,cStr,u_strlen(res));
+      if (u_strcmp(str, res) != 0){
+          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
+      }
+      unum_close(currencyFmt);
+      uprv_free(str);
+      uprv_free(res);
+    }
+}
+/**
+ * Test localized currency patterns for PREEURO variants.
+ */
+static void TestCurrencyPreEuro(void)
+{
+  UNumberFormat *currencyFmt;
+  UChar *str=NULL, *res=NULL;
+  int32_t lneed, i;
+  UFieldPosition pos;
+  UErrorCode status = U_ZERO_ERROR;
+
+  const char* locale[]={
+        "ca_ES_PREEURO",  "de_LU_PREEURO",  "en_IE_PREEURO",              "fi_FI_PREEURO",  "fr_LU_PREEURO",  "it_IT_PREEURO",  
+        "pt_PT_PREEURO",  "de_AT_PREEURO",  "el_GR_PREEURO",              "es_ES_PREEURO",  "fr_BE_PREEURO",  "ga_IE_PREEURO",  
+        "nl_BE_PREEURO",  "de_DE_PREEURO",  "en_BE_PREEURO",              "eu_ES_PREEURO",  "fr_FR_PREEURO",  "gl_ES_PREEURO",  
+        "nl_NL_PREEURO",
+  };
+
+  const char* result[]={
+        "Pts 2",          "2 F",            "IR\\u00A31.50",              "1,50 mk",        "1,50 F",         "L. 2", 
+        "2 Esc.",         "\\u00F6S 1,50",  "1,50 \\u0394\\u03C1\\u03C7", "2 Pts",          "1,50 FB",        "\\u00a31.50", 
+        "1,50 BF",        "1,50 DM",        "1,50 BF",                    "Pts 1,5",        "1,50 F",         "Pta 1,5", 
+        "fl 1,50"
+  };
+
+  log_verbose("\nTesting the number format with different currency patterns\n");
+  for(i=0; i < 19; i++)
+    {
+      char cStr[20]={0};
+      currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
+      if(U_FAILURE(status)){
+          log_err("Error in the construction of number format with style currency:\n%s\n",
+                  myErrorName(status));
+      }
+      lneed=0;
+      lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+      if(status==U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        str=(UChar*)uprv_malloc(sizeof(UChar) * (lneed+1) );
+        pos.field = 0;
+        unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+      }
+      if(U_FAILURE(status)) {
+        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+      }
+      res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
+      u_unescape(result[i],res,strlen(result[i])+1);
+      u_UCharsToChars(str,cStr,u_strlen(str));
+      if (u_strcmp(str, res) != 0){
+          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
+      }
+      
       unum_close(currencyFmt);
       uprv_free(str);
       uprv_free(res);
