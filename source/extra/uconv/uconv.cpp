@@ -8,7 +8,7 @@
 /*
  * uconv(1): an iconv(1)-like converter using ICU.
  *
- * Original code by Jonas Utterström <jonas.utterstrom@vittran.norrnod.se>
+ * Original code by Jonas Utterstr&#x00F6;m <jonas.utterstrom@vittran.norrnod.se>
  * contributed in 1999.
  *
  * Conversion to the C conversion API and many improvements by

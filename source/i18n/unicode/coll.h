@@ -185,7 +185,7 @@ public:
      * Diacritical differences on the same base letter represent a secondary
      * difference. Set comparison level to SECONDARY to ignore tertiary
      * differences. Use this to set the strength of a Collator object.<br>
-     * Example of secondary difference, "ä" >> "a".
+     * Example of secondary difference, "&#x00E4;" >> "a".
      *
      * Uppercase and lowercase versions of the same character represents a
      * tertiary difference.  Set comparison level to TERTIARY to include all
@@ -195,7 +195,7 @@ public:
      *
      * Two characters are considered "identical" when they have the same unicode
      * spellings.<br>
-     * For example, "ä" == "ä".
+     * For example, "&#x00E4;" == "&#x00E4;".
      *
      * UCollationStrength is also used to determine the strength of sort keys
      * generated from Collator objects.

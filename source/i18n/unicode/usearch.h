@@ -24,7 +24,7 @@
  * C Apis for an engine that provides language-sensitive text searching based 
  * on the comparison rules defined in a <tt>UCollator</tt> data struct,
  * see <tt>ucol.h</tt>. This ensures that language eccentricity can be 
- * handled, e.g. for the German collator, characters ß and SS will be matched 
+ * handled, e.g. for the German collator, characters &#x00DF; and SS will be matched 
  * if case is chosen to be ignored. 
  * See the <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
@@ -45,10 +45,10 @@
  * option 1. Some canonical equivalent of P matches some canonical equivalent 
  *           of S'
  * option 2. P matches S' and if P starts or ends with a combining mark, 
- *           there exists no non-ignorable combining mark before or after S’ 
+ *           there exists no non-ignorable combining mark before or after S' 
  *           in S respectively. 
  * </pre>
- * Option 2. will be the default·
+ * Option 2. will be the default.
  * <p>
  * This search has APIs similar to that of other text iteration mechanisms 
  * such as the break iterators in <tt>ubrk.h</tt>. Using these 

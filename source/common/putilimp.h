@@ -200,7 +200,7 @@ U_INTERNAL double  U_EXPORT2 uprv_round(double x);
  *
  * If the TZ value is not set, t_tzset() attempts to use the time zone
  * information specified by the operating system. Under Windows NT
- * and Windows 95, this information is specified in the Control Panel’s
+ * and Windows 95, this information is specified in the Control Panel's
  * Date/Time application.
  * @internal
  */

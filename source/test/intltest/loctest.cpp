@@ -56,7 +56,7 @@ const char* rawData[33][8] = {
         // display variant (French)
         {   "",     "",     "",     "",     "NY",     "",     "",   "" },
         // display name (French)
-        //{   "anglais (États-Unis)", "français (France)", "catalan (Espagne)", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
+        //{   "anglais (Etats-Unis)", "francais (France)", "catalan (Espagne)", "grec (Grece)", "norvegien (Norvege,Nynorsk)", "italien", "xx (YY)" },
         {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)", "italien", "xx (YY)", "chinois (han simplifi\\u00E9, Chine)" }, // STILL not right
 
 

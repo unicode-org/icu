@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
  * language-sensitive text searching based on the comparison rules defined
  * in a {@link RuleBasedCollator} object.
  * StringSearch ensures that language eccentricity can be 
- * handled, e.g. for the German collator, characters ß and SS will be matched 
+ * handled, e.g. for the German collator, characters &#x00DF; and SS will be matched 
  * if case is chosen to be ignored.
  * See the <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
@@ -49,7 +49,7 @@ U_NAMESPACE_BEGIN
  *           there exists no non-ignorable combining mark before or after S? 
  *           in S respectively. 
  * </pre>
- * Option 2. will be the default·
+ * Option 2. will be the default.
  * <p>
  * This search has APIs similar to that of other text iteration mechanisms 
  * such as the break iterators in <tt>BreakIterator</tt>. Using these 
