@@ -522,6 +522,8 @@ public:
   }
 };
 
+U_NAMESPACE_END
+
 U_CAPI void U_EXPORT2
 udat_setSymbols(    UDateFormat             *format,
             UDateFormatSymbolType   type,
@@ -565,7 +567,5 @@ udat_setSymbols(    UDateFormat             *format,
     break;
   }
 }
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
