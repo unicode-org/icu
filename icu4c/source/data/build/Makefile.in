@@ -25,7 +25,6 @@ TESTOBJDATADIR=$(top_builddir)/test/testdata
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADIR)/ucmfiles.mk
 
 OBJDATADIR=.
-CURDIR=$(shell /bin/pwd)
 
 # relative lib links from pkgdata are the same as for tmp
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
