@@ -893,21 +893,6 @@ private:
   */
   UCollationStrength getUCollationStrength(
     const Collator::ECollationStrength &strength) const;
-
-  /**
-  * Converts C's Normalizer::EMode to UNormalizationMode
-  * @param mode member of the enum Normalizer::EMode
-  * @return UNormalizationMode equivalent of Normalizer::EMode
-  */
-  UNormalizationMode getUNormalizationMode(const Normalizer::EMode &mode) const;
-
-  /**
-  * Converts C++'s UNormalizationMode to Normalizer::EMode
-  * @param mode member of the enum UNormalizationMode
-  * @return Normalizer::EMode equivalent of UNormalizationMode
-  */
-  Normalizer::EMode getNormalizerEMode(const UNormalizationMode &mode) const;
-
 };
 
 // inline method implementation ---------------------------------------------
@@ -981,44 +966,6 @@ inline UCollationStrength RuleBasedCollator::getUCollationStrength(
     return UCOL_TERTIARY;
   }
   return UCOL_IDENTICAL;
-}
-
-inline UNormalizationMode RuleBasedCollator::getUNormalizationMode(
-                                            const Normalizer::EMode &mode) const
-{
-  switch (mode)
-  {
-  case Normalizer::NO_OP : 
-    return UCOL_NO_NORMALIZATION;
-  case Normalizer::COMPOSE :
-    return UCOL_DECOMP_CAN_COMP_COMPAT;
-  case Normalizer::COMPOSE_COMPAT :
-    return UCOL_DECOMP_COMPAT_COMP_CAN;
-  case Normalizer::DECOMP :
-    return UCOL_DECOMP_CAN;
-  case Normalizer::DECOMP_COMPAT :
-    return UCOL_DECOMP_COMPAT;
-  }
-  return UCOL_DEFAULT_NORMALIZATION;
-}
-
-inline Normalizer::EMode RuleBasedCollator::getNormalizerEMode(
-                                           const UNormalizationMode &mode) const
-{
-  switch (mode)
-  {
-  case UCOL_NO_NORMALIZATION :
-    return Normalizer::NO_OP;
-  case UCOL_DECOMP_CAN :
-    return Normalizer::DECOMP;
-  case UCOL_DECOMP_COMPAT :
-    return Normalizer::DECOMP_COMPAT;
-  case UCOL_DECOMP_CAN_COMP_COMPAT :
-    return Normalizer::COMPOSE;
-  case UCOL_DECOMP_COMPAT_COMP_CAN :
-    return Normalizer::COMPOSE_COMPAT;
-  }
-  return Normalizer::DECOMP_COMPAT;
 }
 
 #endif
