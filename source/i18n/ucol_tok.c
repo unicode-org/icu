@@ -324,6 +324,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 
       UBool inChars = TRUE;
       UBool inQuote = FALSE;
+      UBool wasInQuote = FALSE;
       UChar *optionEnd = NULL;
 
       newStrength = UCOL_TOK_UNSET; 
@@ -339,12 +340,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           } else {
             if ((newCharsLen == 0) || inChars) {
               if(newCharsLen == 0) {
-                charsOffset = src->current - src->source;
+                charsOffset = src->extraCurrent - src->source;
               }
               newCharsLen++;
             } else {
               if(newExtensionsLen == 0) {
-                extensionOffset = src->current - src->source;
+                extensionOffset = src->extraCurrent - src->source;
               }
               newExtensionsLen++;
             }
@@ -357,6 +358,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 goto EndOfLoop;
               }
 
+              /* if we start with strength, we'll reset to top */
+              if(lastToken == NULL) {
+                top = TRUE;
+                newStrength = UCOL_TOK_RESET;
+                goto EndOfLoop;
+              }
               newStrength = UCOL_IDENTICAL;
               break;
 
@@ -365,6 +372,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 goto EndOfLoop;
               }
 
+              /* if we start with strength, we'll reset to top */
+              if(lastToken == NULL) {
+                top = TRUE;
+                newStrength = UCOL_TOK_RESET;
+                goto EndOfLoop;
+              }
               newStrength = UCOL_TERTIARY;
               break;
 
@@ -373,6 +386,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 goto EndOfLoop;
               }
 
+              /* if we start with strength, we'll reset to top */
+              if(lastToken == NULL) {
+                top = TRUE;
+                newStrength = UCOL_TOK_RESET;
+                goto EndOfLoop;
+              }
               newStrength = UCOL_SECONDARY;
               break;
 
@@ -381,6 +400,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 goto EndOfLoop;
               }
 
+              /* if we start with strength, we'll reset to top */
+              if(lastToken == NULL) {
+                top = TRUE;
+                newStrength = UCOL_TOK_RESET;
+                goto EndOfLoop;
+              }
               /* before this, do a scan to verify whether this is */
               /* another strength */
               if(*(src->current+1) == 0x003C) {
@@ -436,22 +461,30 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               inChars = FALSE;
               break;
 
+            /* found a quote, we're gonna start copying */
             case 0x0027/*'\''*/:
               inQuote = TRUE;
-              ch = *(++(src->current)); /*pattern[++index]; */
+              wasInQuote = TRUE;
 
               if (newCharsLen == 0) {
-                charsOffset = src->current - src->source;
+                charsOffset = src->extraCurrent - src->source;
                 newCharsLen++;
-              } else if (inChars) {
-                if(newCharsLen == 0) {
-                  charsOffset = src->current - src->source;
+              } else if (inChars) { /* we're reading some chars */
+                charsOffset = src->extraCurrent - src->source;
+                if(newCharsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+                  src->extraCurrent += newCharsLen;
                 }
                 newCharsLen++;
               } else {
+                if(newExtensionsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - newExtensionsLen, newExtensionsLen*sizeof(UChar));
+                  src->extraCurrent += newExtensionsLen;
+                }
                 newExtensionsLen++;
               }
 
+              ch = *(++(src->current)); /*pattern[++index]; */
               break;
 
             /* '@' is french only if the strength is not currently set */
@@ -491,10 +524,20 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             }
         }
 
+        if(wasInQuote) {
+          if(ch != 0x27) {
+            *src->extraCurrent++ = ch;
+          }
+          if(src->extraCurrent == src->extraEnd) {
+            /* reallocate */
+          }
+        }
+
           src->current++;
         }
 
      EndOfLoop:
+        wasInQuote = FALSE;
       if (newStrength == UCOL_TOK_UNSET) {
         return 0;
       }
@@ -721,6 +764,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           src->resultLen++;
           uhash_put(uchars2tokens, sourceToken, sourceToken, status);
         } else { /* reset to something already in rules */
+          top = FALSE;
         }
       }
       /*  7 After all this, set LAST to point to sourceToken, and goto step 3. */  
@@ -739,5 +783,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
 void ucol_tok_closeTokenList(UColTokenParser *src) {
   uhash_close(uchars2tokens);
   uprv_free(src->lh);
+  uprv_free(src->source);
 }
 
