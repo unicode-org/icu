@@ -57,7 +57,7 @@ static UOption options[]={
 };
 
 void usageAndDie(int retCode) {
-        printf("Usage: genbrk [-v] [-options] -r rule-file -o output-file\n", progName);
+        printf("Usage: %s [-v] [-options] -r rule-file -o output-file\n", progName);
         printf("\tRead in break iteration rules text and write out the binary data\n"
             "options:\n"
             "\t-h or -? or --help  this usage text\n"

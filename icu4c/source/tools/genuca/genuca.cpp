@@ -267,7 +267,6 @@ static int32_t compareCEs(uint32_t *source, uint32_t *target) {
 }
 
 static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
-  uint32_t comp = 0;
   uint32_t position = inversePos;
   uint32_t saveElement = element->CEs[0];
   int32_t compResult = 0;
@@ -917,9 +916,9 @@ struct {
       fprintf(stderr, "UCA version not specified. Cannot create data file!\n");
       return -1;
     }
-    {
+/*    {
         uint32_t trieWord = utrie_get32(t->mapping, 0xDC01, NULL);
-    }
+    }*/
 
     if (VERBOSE) {
         fprintf(stdout, "\nLines read: %i\n", line);
@@ -1035,9 +1034,6 @@ int main(int argc, char* argv[]) {
             "\t                    followed by path, defaults to %s\n",
             argv[0], u_getDataDirectory());
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
-    }
-    {
-        UChar32 tch = U16_GET_SUPPLEMENTARY(0xD801, 0xDC25);
     }
     if(options[3].doesOccur) {
       fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
