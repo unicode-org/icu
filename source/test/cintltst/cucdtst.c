@@ -2386,7 +2386,11 @@ TestAdditionalProperties() {
         u_getIntPropertyMaxValue(UCHAR_BLOCK)!=(int32_t)UBLOCK_COUNT-1 ||
         u_getIntPropertyMaxValue(UCHAR_LINE_BREAK)!=(int32_t)U_LB_COUNT-1 ||
         u_getIntPropertyMaxValue(UCHAR_SCRIPT)!=(int32_t)USCRIPT_CODE_LIMIT-1 ||
-        u_getIntPropertyMaxValue(0x2345)!=-1 /*JB#2410*/
+        u_getIntPropertyMaxValue(0x2345)!=-1 /*JB#2410*/ ||
+        u_getIntPropertyMaxValue(UCHAR_DECOMPOSITION_TYPE) != (int32_t) (U_DT_COUNT - 1) ||
+        u_getIntPropertyMaxValue(UCHAR_JOINING_GROUP) !=  (int32_t) (U_JG_COUNT -1) ||
+        u_getIntPropertyMaxValue(UCHAR_JOINING_TYPE) != (int32_t) (U_JT_COUNT -1) ||
+        u_getIntPropertyMaxValue(UCHAR_EAST_ASIAN_WIDTH) != (int32_t) (U_EA_COUNT -1)
     ) {
         log_err("error: u_getIntPropertyMaxValue() wrong\n");
     }
