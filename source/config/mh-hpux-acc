@@ -3,14 +3,14 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.21 2000/10/19 22:58:07 srl Exp $
+## $Id: mh-hpux-acc,v 1.22 2001/07/16 23:34:12 aheninger Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
 GEN_DEPS.cc= 	:
 
 ## Commands to compile
-COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c +ESlit
 COMPILE.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
