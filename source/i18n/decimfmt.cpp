@@ -1499,6 +1499,9 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                 literalMatch = TRUE;
                 i += len;
                 pos += len;
+                if (i == affix.length()) {
+                    break;
+                }
                 c = affix.char32At(i);
                 len = U16_LENGTH(c);
                 if (!uprv_isRuleWhiteSpace(c)) {
