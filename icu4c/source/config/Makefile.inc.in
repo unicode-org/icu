@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -21,7 +21,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = @LIBS@ 
 ICUPREFIX = icu
-ICULIBS = $(LIBS) -l$(ICUPREFIX)uc -l$(ICUPREFIX)i18n
+ICULIBS = $(LIBS) -L$(libdir) -l$(ICUPREFIX)uc -l$(ICUPREFIX)i18n
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
