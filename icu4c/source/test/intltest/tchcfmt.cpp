@@ -84,7 +84,7 @@ TestChoiceFormat::TestSimpleExample( void )
     delete formequal; 
     
     //Testing adoptChoices() 
-    double *limitsToAdopt = new double[7];
+    double *limitsToAdopt = (double *)uprv_malloc(7 * sizeof(double));
     UnicodeString *monthNamesToAdopt = new UnicodeString[7];
 
     uprv_arrayCopy(monthNames, monthNamesToAdopt, 7);
@@ -376,7 +376,7 @@ TestChoiceFormat::TestComplexExample( void )
         it_errln("***  ChoiceFormat contructor( newPattern, status) or toPattern result!");
     }
 
-    double* d_a = new double[2];
+    double* d_a = (double *)uprv_malloc(2 * sizeof(double));
     if (!d_a) { it_errln("*** allocation error."); return; }
     d_a[0] = 1.0; d_a[1] = 2.0;
 
