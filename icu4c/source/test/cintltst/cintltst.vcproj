@@ -181,6 +181,9 @@
 				RelativePath=".\ccolltst.h">
 			</File>
 			<File
+				RelativePath=".\cctest.c">
+			</File>
+			<File
 				RelativePath=".\ccurrtst.c">
 			</File>
 			<File
@@ -236,6 +239,9 @@
 			</File>
 			<File
 				RelativePath=".\cmsccoll.c">
+			</File>
+			<File
+				RelativePath=".\colutil.c">
 			</File>
 			<File
 				RelativePath=".\cturtst.c">
@@ -449,6 +455,9 @@
 		<Filter
 			Name="properties &amp; sets"
 			Filter="">
+			<File
+				RelativePath=".\cucdapi.c">
+			</File>
 			<File
 				RelativePath=".\cucdtst.c">
 			</File>

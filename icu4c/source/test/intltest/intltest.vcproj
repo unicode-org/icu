@@ -612,6 +612,9 @@
 			<File
 				RelativePath=".\tstnorm.h">
 			</File>
+			<File
+				RelativePath=".\tstnrapi.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="properties &amp; sets"
