@@ -5748,7 +5748,7 @@ if test "$ac_cv_func_dllload" = "yes"; then
     CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 
-ac_config_files="$ac_config_files README icudefs.mk Makefile data/Makefile data/build/Makefile common/Makefile config/Makefile.inc i18n/Makefile layout/Makefile extra/Makefile extra/ustdio/Makefile tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/pkgdata/Makefile tools/pkgdata/icupkg.inc tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genqchk/Makefile tools/genfchk/Makefile tools/genprops/Makefile tools/dumpce/Makefile test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile test/ieeetest/Makefile test/collperf/Makefile test/thaitest/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile common/unicode/platform.h"
+ac_config_files="$ac_config_files README icudefs.mk Makefile data/Makefile data/build/Makefile common/Makefile config/Makefile.inc i18n/Makefile layout/Makefile extra/Makefile extra/ustdio/Makefile tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genuca/Makefile tools/pkgdata/Makefile tools/pkgdata/icupkg.inc tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/gennorm/Makefile tools/genqchk/Makefile tools/genfchk/Makefile tools/genprops/Makefile tools/dumpce/Makefile test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile test/ieeetest/Makefile test/collperf/Makefile test/thaitest/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile common/unicode/platform.h"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -6045,6 +6045,7 @@ Try \`$0 --help' for more information." >&2;}
   'tools/gennames/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/gennames/Makefile" ;;
   'tools/toolutil/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/toolutil/Makefile" ;;
   'tools/gentest/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/gentest/Makefile" ;;
+  'tools/gennorm/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/gennorm/Makefile" ;;
   'tools/genqchk/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/genqchk/Makefile" ;;
   'tools/genfchk/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/genfchk/Makefile" ;;
   'tools/genprops/Makefile' ) CONFIG_FILES="$CONFIG_FILES tools/genprops/Makefile" ;;
@@ -6063,12 +6064,12 @@ Try \`$0 --help' for more information." >&2;}
   'common/icucfg.h' ) CONFIG_HEADERS="$CONFIG_HEADERS common/icucfg.h" ;;
 
   # This is an error.
-  -*) { { echo "$as_me:6066: error: unrecognized option: $1
+  -*) { { echo "$as_me:6067: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
    { (exit 1); exit 1; }; } ;;
-  *) { { echo "$as_me:6071: error: invalid argument: $1" >&5
+  *) { { echo "$as_me:6072: error: invalid argument: $1" >&5
 echo "$as_me: error: invalid argument: $1" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -6356,7 +6357,7 @@ done; }
   esac
 
   if test x"$ac_file" != x-; then
-    { echo "$as_me:6359: creating $ac_file" >&5
+    { echo "$as_me:6360: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
     rm -f "$ac_file"
   fi
@@ -6374,7 +6375,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:6377: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:6378: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -6387,7 +6388,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:6390: error: cannot find input file: $f" >&5
+           { { echo "$as_me:6391: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -6448,7 +6449,7 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   * )   ac_file_in=$ac_file.in ;;
   esac
 
-  test x"$ac_file" != x- && { echo "$as_me:6451: creating $ac_file" >&5
+  test x"$ac_file" != x- && { echo "$as_me:6452: creating $ac_file" >&5
 echo "$as_me: creating $ac_file" >&6;}
 
   # First look for the input files in the build tree, otherwise in the
@@ -6459,7 +6460,7 @@ echo "$as_me: creating $ac_file" >&6;}
       -) echo $tmp/stdin ;;
       [\\/$]*)
          # Absolute (can't be DOS-style, as IFS=:)
-         test -f "$f" || { { echo "$as_me:6462: error: cannot find input file: $f" >&5
+         test -f "$f" || { { echo "$as_me:6463: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          echo $f;;
@@ -6472,7 +6473,7 @@ echo "$as_me: error: cannot find input file: $f" >&2;}
            echo $srcdir/$f
          else
            # /dev/null tree
-           { { echo "$as_me:6475: error: cannot find input file: $f" >&5
+           { { echo "$as_me:6476: error: cannot find input file: $f" >&5
 echo "$as_me: error: cannot find input file: $f" >&2;}
    { (exit 1); exit 1; }; }
          fi;;
@@ -6589,7 +6590,7 @@ cat >>$CONFIG_STATUS <<\EOF
   rm -f $tmp/in
   if test x"$ac_file" != x-; then
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
-      { echo "$as_me:6592: $ac_file is unchanged" >&5
+      { echo "$as_me:6593: $ac_file is unchanged" >&5
 echo "$as_me: $ac_file is unchanged" >&6;}
     else
       ac_dir=`$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
