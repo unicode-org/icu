@@ -2,8 +2,9 @@
 # Date: 2002-03-19,23:31:18 GMT [MD]
 #
 # Note: Code points whose decomposition changed since the Unicode version
-# for this NormalizationTest.txt are commented out and are only tested with
-# the current NormalizationTest.txt in icu/source/data/unidata/.
+# for this NormalizationTest.txt have corrected test results in order to pass
+# all tests.
+# See also the current NormalizationTest.txt in icu/source/data/unidata/.
 # See NormalizationCorrections.txt
 # and search for "NormalizationCorrections" in this file.
 # markus 2003mar05
@@ -15944,6 +15945,8 @@ FFEE;FFEE;FFEE;25CB;25CB;
 2F866;5A66;5A66;5A66;5A66;
 2F867;36EE;36EE;36EE;36EE;
 # NormalizationCorrections-4.0.0.txt -- 2F868;2136A;2136A;2136A;2136A;
+2F868;36FC;36FC;36FC;36FC;
+
 2F869;5B08;5B08;5B08;5B08;
 2F86A;5B3E;5B3E;5B3E;5B3E;
 2F86B;5B3E;5B3E;5B3E;5B3E;
@@ -15956,6 +15959,8 @@ FFEE;FFEE;FFEE;25CB;25CB;
 2F872;5BFF;5BFF;5BFF;5BFF;
 2F873;5C06;5C06;5C06;5C06;
 # NormalizationCorrections-4.0.0.txt -- 2F874;5F33;5F33;5F33;5F33;
+2F874;5F53;5F53;5F53;5F53;
+
 2F875;5C22;5C22;5C22;5C22;
 2F876;3781;3781;3781;3781;
 2F877;5C60;5C60;5C60;5C60;
@@ -16127,6 +16132,8 @@ FFEE;FFEE;FFEE;25CB;25CB;
 2F91D;24263;24263;24263;24263;
 2F91E;719C;719C;719C;719C;
 # NormalizationCorrections-4.0.0.txt -- 2F91F;43AB;43AB;43AB;43AB;
+2F91F;243AB;243AB;243AB;243AB;
+
 2F920;7228;7228;7228;7228;
 2F921;7235;7235;7235;7235;
 2F922;7250;7250;7250;7250;
@@ -16191,6 +16198,8 @@ FFEE;FFEE;FFEE;25CB;25CB;
 2F95D;25AA7;25AA7;25AA7;25AA7;
 2F95E;25AA7;25AA7;25AA7;25AA7;
 # NormalizationCorrections-4.0.0.txt -- 2F95F;7AAE;7AAE;7AAE;7AAE;
+2F95F;7AEE;7AEE;7AEE;7AEE;
+
 2F960;4202;4202;4202;4202;
 2F961;25BAB;25BAB;25BAB;25BAB;
 2F962;7BC6;7BC6;7BC6;7BC6;
@@ -16287,6 +16296,8 @@ FFEE;FFEE;FFEE;25CB;25CB;
 2F9BD;876B;876B;876B;876B;
 2F9BE;8786;8786;8786;8786;
 # NormalizationCorrections-4.0.0.txt -- 2F9BF;4D57;4D57;4D57;4D57;
+2F9BF;45D7;45D7;45D7;45D7;
+
 2F9C0;87E1;87E1;87E1;87E1;
 2F9C1;8801;8801;8801;8801;
 2F9C2;45F9;45F9;45F9;45F9;
