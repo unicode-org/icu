@@ -64,9 +64,9 @@ const static UCollationResult results[] = {
     UCOL_GREATER,
     UCOL_EQUAL,
     UCOL_LESS,
+    UCOL_GREATER,
     UCOL_LESS,
-    UCOL_LESS,
-    UCOL_LESS,
+    UCOL_GREATER,
     UCOL_LESS,
     UCOL_LESS                                          /*  11 */
 };
