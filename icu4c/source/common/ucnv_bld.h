@@ -140,7 +140,12 @@ UConverterSharedData;
 
 
 /*Defines a UConverter, the lightweight mutable part the user sees */
-U_CFUNC
+
+U_CDECL_BEGIN /* We must declare the following as 'extern "C"' so that if ucnv
+                 itself is compiled under C++, the linkage of the funcptrs will
+                 work.
+	      */
+
 struct UConverter
   {
     int32_t toUnicodeStatus;	/*Used to internalize stream status information */
@@ -197,6 +202,8 @@ struct UConverter
 				   pass context to them
 				 */
   };
+
+U_CDECL_END /* end of UConverter */
 
 typedef struct UConverter UConverter;
 
