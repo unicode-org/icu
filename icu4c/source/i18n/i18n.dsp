@@ -1902,10 +1902,6 @@ SOURCE=.\rematch.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\remtrans.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\repattrn.cpp
 # End Source File
 # End Group
@@ -2023,6 +2019,10 @@ SOURCE=.\rbt_set.cpp
 # Begin Source File
 
 SOURCE=.\rbt_set.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\remtrans.cpp
 # End Source File
 # Begin Source File
 
