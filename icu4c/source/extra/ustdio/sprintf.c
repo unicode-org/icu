@@ -10,8 +10,10 @@
 *
 * Modification History:
 *
-*   Date        Name        Description
-*   02/08/00    george      Creation. Copied from uprintf.c
+*   Date        Name            Description
+*   02/08/2000  george          Creation. Copied from uprintf.c
+*   03/27/2002  Mark Schneckloth Many fixes regarding alignment, null termination
+*       (mschneckloth@atomz.com) and other various problems.
 *******************************************************************************
 */
 
@@ -192,31 +194,31 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
     UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    
+
     /* 0x30 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    
+
     /* 0x40 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
     UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
-    
+
     /* 0x50 */
     UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
     UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    
+
     /* 0x60 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_CHAR,
     UFMT_INT,           UFMT_SCIENTIFIC,    UFMT_DOUBLE,        UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_INT,           UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_COUNT,         UFMT_OCTAL,
-    
+
     /* 0x70 */
     UFMT_POINTER,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_STRING,
     UFMT_EMPTY,         UFMT_UINT,          UFMT_EMPTY,         UFMT_EMPTY,
@@ -235,7 +237,7 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
 
 static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* (null) */
 
-int32_t 
+int32_t
 u_sprintf(UChar       *buffer,
           const char    *locale,
           const char    *patternSpecification,
@@ -243,15 +245,15 @@ u_sprintf(UChar       *buffer,
 {
     va_list ap;
     int32_t written;
-    
+
     va_start(ap, patternSpecification);
     written = u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
     va_end(ap);
-    
+
     return written;
 }
 
-int32_t 
+int32_t
 u_sprintf_u(UChar     *buffer,
             const char     *locale,
             const UChar    *patternSpecification,
@@ -259,11 +261,11 @@ u_sprintf_u(UChar     *buffer,
 {
     va_list ap;
     int32_t written;
-    
+
     va_start(ap, patternSpecification);
     written = u_vsnprintf_u(buffer, INT32_MAX, locale, patternSpecification, ap);
     va_end(ap);
-    
+
     return written;
 }
 
@@ -276,7 +278,7 @@ u_vsprintf(UChar       *buffer,
     return u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
 }
 
-int32_t 
+int32_t
 u_snprintf(UChar       *buffer,
            int32_t         count,
            const char    *locale,
@@ -285,15 +287,15 @@ u_snprintf(UChar       *buffer,
 {
     va_list ap;
     int32_t written;
-    
+
     va_start(ap, patternSpecification);
     written = u_vsnprintf(buffer, count, locale, patternSpecification, ap);
     va_end(ap);
-    
+
     return written;
 }
 
-int32_t 
+int32_t
 u_snprintf_u(UChar     *buffer,
              int32_t        count,
              const char     *locale,
@@ -302,11 +304,11 @@ u_snprintf_u(UChar     *buffer,
 {
     va_list ap;
     int32_t written;
-    
+
     va_start(ap, patternSpecification);
     written = u_vsnprintf_u(buffer, count, locale, patternSpecification, ap);
     va_end(ap);
-    
+
     return written;
 }
 
@@ -319,20 +321,20 @@ u_vsnprintf(UChar       *buffer,
 {
     int32_t written;
     UChar *pattern;
-    
+
     /* convert from the default codepage to Unicode */
-    pattern = ufmt_defaultCPToUnicode(patternSpecification, 
+    pattern = ufmt_defaultCPToUnicode(patternSpecification,
         strlen(patternSpecification));
     if(pattern == 0) {
         return 0;
     }
-    
+
     /* do the work */
     written = u_vsnprintf_u(buffer, count, locale, pattern, ap);
-    
+
     /* clean up */
     uprv_free(pattern);
-    
+
     return written;
 }
 
@@ -349,7 +351,7 @@ u_strset(UChar *str, int32_t count, UChar c) {
 static int32_t
 u_minstrncpy(u_localized_string *output, const UChar *str, int32_t count) {
     int32_t size = ufmt_min(count, output->available);
-    
+
     u_strncpy(output->str + (output->len - output->available), str, size);
     output->available -= size;
     return size;
@@ -361,29 +363,34 @@ u_sprintf_pad_and_justify(u_localized_string *output,
                           const UChar                 *result,
                           int32_t                     resultLen)
 {
-    int32_t written;
-    
+    int32_t written = 0;
+
     resultLen = ufmt_min(resultLen, output->available);
-    written = resultLen;
-    
+
     /* pad and justify, if needed */
     if(info->fWidth != -1 && resultLen < info->fWidth) {
         int32_t paddingLeft = info->fWidth - resultLen;
         int32_t outputPos = output->len - output->available;
-        
+  
         if (paddingLeft + resultLen > output->available) {
             paddingLeft = output->available - resultLen;
+            if (paddingLeft < 0) {
+                paddingLeft = 0;
+            }
+            /* paddingLeft = output->available - resultLen;*/
         }
         written += paddingLeft;
-        
+
         /* left justify */
         if(info->fLeft) {
             written += u_minstrncpy(output, result, resultLen);
             u_strset(&output->str[outputPos + resultLen], paddingLeft, info->fPadChar);
+            output->available -= paddingLeft;
         }
         /* right justify */
         else {
-            u_strset(&output->str[outputPos + resultLen], paddingLeft, info->fPadChar);
+            u_strset(&output->str[outputPos], paddingLeft, info->fPadChar);
+            output->available -= paddingLeft;
             written += u_minstrncpy(output, result, resultLen);
         }
     }
@@ -391,7 +398,7 @@ u_sprintf_pad_and_justify(u_localized_string *output,
     else {
         written = u_minstrncpy(output, result, resultLen);
     }
-    
+
     return written;
 }
 
@@ -421,7 +428,7 @@ u_sprintf_string_handler(u_localized_string *output,
     UChar *s;
     int32_t len, written;
     const char *arg = (const char*)(args[0].ptrValue);
-    
+
     /* convert from the default codepage to Unicode */
     if (arg)
         s = ufmt_defaultCPToUnicode(arg, strlen(arg));
@@ -432,10 +439,10 @@ u_sprintf_string_handler(u_localized_string *output,
         return 0;
     }
     len = u_strlen(s);
-    
+
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
-    
+
     /* precision takes precedence over width */
     /* determine if the string should be truncated */
     if(info->fPrecision != -1 && len > info->fPrecision) {
@@ -445,12 +452,12 @@ u_sprintf_string_handler(u_localized_string *output,
     else {
         written = u_sprintf_pad_and_justify(output, info, s, len);
     }
-    
+
     /* clean up */
     if (gNullStr != s) {
         uprv_free(s);
     }
-    
+
     return written;
 }
 
@@ -465,23 +472,23 @@ u_sprintf_integer_handler(u_localized_string *output,
     UChar            result        [USPRINTF_BUFFER_SIZE];
     int32_t        minDigits     = -1;
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* mask off any necessary bits */
     if(info->fIsShort)
         num &= UINT16_MAX;
     else if(! info->fIsLong || ! info->fIsLongLong)
         num &= UINT32_MAX;
-    
+
     /* get the formatter */
     format = u_locbund_getNumberFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* set the minimum integer digits */
     if(info->fPrecision != -1) {
         /* clone the stream's bundle if it isn't owned */
@@ -490,12 +497,12 @@ u_sprintf_integer_handler(u_localized_string *output,
             output->fOwnBundle = TRUE;
             format           = u_locbund_getNumberFormat(output->fBundle);
         }
-        
+
         /* set the minimum # of digits */
         minDigits = unum_getAttribute(format, UNUM_MIN_INTEGER_DIGITS);
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, info->fPrecision);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* clone the stream's bundle if it isn't owned */
@@ -504,18 +511,18 @@ u_sprintf_integer_handler(u_localized_string *output,
             output->fOwnBundle = TRUE;
             format           = u_locbund_getNumberFormat(output->fBundle);
         }
-        
+
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     if(minDigits != -1)
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -527,19 +534,19 @@ u_sprintf_hex_handler(u_localized_string *output,
     long            num         = (long) (args[0].intValue);
     UChar            result         [USPRINTF_BUFFER_SIZE];
     int32_t         len        = USPRINTF_BUFFER_SIZE;
-    
-    
+
+
     /* mask off any necessary bits */
     if(info->fIsShort)
         num &= UINT16_MAX;
     else if(! info->fIsLong || ! info->fIsLongLong)
         num &= UINT32_MAX;
-    
+
     /* format the number, preserving the minimum # of digits */
     ufmt_ltou(result, &len, num, 16,
         (UBool)(info->fSpec == 0x0078),
         (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
-    
+
     /* convert to alt form, if desired */
     if(num != 0 && info->fAlt && len < USPRINTF_BUFFER_SIZE - 2) {
         /* shift the formatted string right by 2 chars */
@@ -548,7 +555,7 @@ u_sprintf_hex_handler(u_localized_string *output,
         result[1] = info->fSpec;
         len += 2;
     }
-    
+
     return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
@@ -560,19 +567,19 @@ u_sprintf_octal_handler(u_localized_string *output,
     long            num         = (long) (args[0].intValue);
     UChar            result         [USPRINTF_BUFFER_SIZE];
     int32_t         len        = USPRINTF_BUFFER_SIZE;
-    
-    
+
+
     /* mask off any necessary bits */
     if(info->fIsShort)
         num &= UINT16_MAX;
     else if(! info->fIsLong || ! info->fIsLongLong)
         num &= UINT32_MAX;
-    
+
     /* format the number, preserving the minimum # of digits */
     ufmt_ltou(result, &len, num, 8,
         FALSE, /* doesn't matter for octal */
         info->fPrecision == -1 && info->fZero ? info->fWidth : info->fPrecision);
-    
+
     /* convert to alt form, if desired */
     if(info->fAlt && result[0] != 0x0030 && len < USPRINTF_BUFFER_SIZE - 1) {
         /* shift the formatted string right by 1 char */
@@ -580,7 +587,7 @@ u_sprintf_octal_handler(u_localized_string *output,
         result[0] = 0x0030;
         len += 1;
     }
-    
+
     return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
@@ -592,16 +599,16 @@ u_sprintf_uinteger_handler(u_localized_string *output,
 {
     u_sprintf_spec_info uint_info;
     ufmt_args uint_args;
-    
+
     memcpy(&uint_info, info, sizeof(u_sprintf_spec_info));
     memcpy(&uint_args, args, sizeof(ufmt_args));
-    
+
     uint_info.fPrecision = 0;
     uint_info.fAlt  = FALSE;
-    
+
     /* Get around int32_t limitations */
     uint_args.doubleValue = ((double) ((uint32_t) (uint_args.intValue)));
-    
+
     return u_sprintf_double_handler(output, &uint_info, &uint_args);
 }
 
@@ -616,33 +623,33 @@ u_sprintf_double_handler(u_localized_string *output,
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    
+
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
     num &= DBL_MAX;*/
-    
+
     /* get the formatter */
     format = u_locbund_getNumberFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* clone the stream's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle    = u_locbund_clone(output->fBundle);
         output->fOwnBundle = TRUE;
         format           = u_locbund_getNumberFormat(output->fBundle);
     }
-    
+
     /* set the number of decimal digits */
-    
+
     /* save the formatter's state */
     minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
     maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-    
+
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
@@ -660,20 +667,20 @@ u_sprintf_double_handler(u_localized_string *output,
         /* # of decimal digits is 6 if precision not specified regardless of locale */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -686,19 +693,19 @@ u_sprintf_char_handler(u_localized_string *output,
     UChar *s;
     int32_t len, written;
     unsigned char arg = (unsigned char)(args[0].intValue);
-    
+
     /* convert from default codepage to Unicode */
     s = ufmt_defaultCPToUnicode((const char *)&arg, 1);
     if(s == 0) {
         return 0;
     }
-    
+
     /* Remember that this may be a surrogate pair */
     len = u_strlen(s);
-    
+
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
-    
+
     /* precision takes precedence over width */
     /* determine if the string should be truncated */
     if(info->fPrecision != -1 && len > info->fPrecision) {
@@ -708,10 +715,10 @@ u_sprintf_char_handler(u_localized_string *output,
         /* determine if the string should be padded */
         written = u_sprintf_pad_and_justify(output, info, s, len);
     }
-    
+
     /* clean up */
     uprv_free(s);
-    
+
     return written;
 }
 
@@ -724,11 +731,11 @@ u_sprintf_pointer_handler(u_localized_string *output,
     long            num         = (long) (args[0].intValue);
     UChar            result         [USPRINTF_BUFFER_SIZE];
     int32_t         len        = USPRINTF_BUFFER_SIZE;
-    
-    
+
+
     /* format the pointer in hex */
     ufmt_ltou(result, &len, num, 16, TRUE, info->fPrecision);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
@@ -747,34 +754,34 @@ u_sprintf_scientific_handler(u_localized_string *output,
     UChar srcExpBuf[USPRINTF_EXP_BUFFER_SIZE];
     int32_t srcLen, expLen;
     UChar expBuf[USPRINTF_EXP_BUFFER_SIZE];
-    
-    
+
+
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
     num &= DBL_MAX;*/
-    
+
     /* get the formatter */
     format = u_locbund_getScientificFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* clone the stream's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle    = u_locbund_clone(output->fBundle);
         output->fOwnBundle = TRUE;
         format           = u_locbund_getScientificFormat(output->fBundle);
     }
-    
+
     srcLen = unum_getSymbol(format,
         UNUM_EXPONENTIAL_SYMBOL,
         srcExpBuf,
         sizeof(srcExpBuf),
         &status);
-    
+
     /* Upper/lower case the e */
     if (info->fSpec == (UChar)0x65 /* e */) {
         expLen = u_strToLower(expBuf, (int32_t)sizeof(expBuf),
@@ -788,19 +795,19 @@ u_sprintf_scientific_handler(u_localized_string *output,
             output->fBundle->fLocale,
             &status);
     }
-    
+
     unum_setSymbol(format,
         UNUM_EXPONENTIAL_SYMBOL,
         expBuf,
         expLen,
         &status);
-    
+
     /* set the number of decimal digits */
-    
+
     /* save the formatter's state */
     minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
     maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-    
+
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
@@ -818,26 +825,26 @@ u_sprintf_scientific_handler(u_localized_string *output,
         /* # of decimal digits is 6 if precision not specified */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-    
+
     unum_setSymbol(format,
         UNUM_EXPONENTIAL_SYMBOL,
         srcExpBuf,
         srcLen,
         &status);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -850,18 +857,18 @@ u_sprintf_date_handler(u_localized_string *output,
     UDateFormat        *format;
     UChar            result        [USPRINTF_BUFFER_SIZE];
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* get the formatter */
     format = u_locbund_getDateFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* format the date */
     udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -874,18 +881,18 @@ u_sprintf_time_handler(u_localized_string *output,
     UDateFormat        *format;
     UChar            result        [USPRINTF_BUFFER_SIZE];
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* get the formatter */
     format = u_locbund_getTimeFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* format the time */
     udat_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -901,34 +908,34 @@ u_sprintf_percent_handler(u_localized_string *output,
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
     num &= DBL_MAX;*/
-    
+
     /* get the formatter */
     format = u_locbund_getPercentFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* clone the stream's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle     = u_locbund_clone(output->fBundle);
         output->fOwnBundle     = TRUE;
         format           = u_locbund_getPercentFormat(output->fBundle);
     }
-    
+
     /* set the number of decimal digits */
-    
+
     /* save the formatter's state */
     minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
     maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-    
+
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
@@ -946,20 +953,20 @@ u_sprintf_percent_handler(u_localized_string *output,
         /* # of decimal digits is 6 if precision not specified */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -975,34 +982,34 @@ u_sprintf_currency_handler(u_localized_string *output,
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
     num &= DBL_MAX;*/
-    
+
     /* get the formatter */
     format = u_locbund_getCurrencyFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* clone the stream's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle     = u_locbund_clone(output->fBundle);
         output->fOwnBundle     = TRUE;
         format           = u_locbund_getCurrencyFormat(output->fBundle);
     }
-    
+
     /* set the number of decimal digits */
-    
+
     /* save the formatter's state */
     minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
     maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-    
+
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
@@ -1020,20 +1027,20 @@ u_sprintf_currency_handler(u_localized_string *output,
         /* # of decimal digits is 6 if precision not specified */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -1044,16 +1051,16 @@ u_sprintf_ustring_handler(u_localized_string *output,
 {
     int32_t len, written;
     const UChar *arg = (const UChar*)(args[0].ptrValue);
-    
+
     /* allocate enough space for the buffer */
     if (!arg) {
         arg = gNullStr;
     }
     len = u_strlen(arg);
-    
+
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
-    
+
     /* precision takes precedence over width */
     /* determine if the string should be truncated */
     if(info->fPrecision != -1 && len > info->fPrecision) {
@@ -1063,7 +1070,7 @@ u_sprintf_ustring_handler(u_localized_string *output,
         /* determine if the string should be padded */
         written = u_sprintf_pad_and_justify(output, info, arg, len);
     }
-    
+
     return written;
 }
 
@@ -1076,11 +1083,11 @@ u_sprintf_uchar_handler(u_localized_string *output,
 {
     int32_t written = 0;
     UChar arg = (UChar)(args[0].intValue);
-    
-    
+
+
     /* width = minimum # of characters to write */
     /* precision = maximum # of characters to write */
-    
+
     /* precision takes precedence over width */
     /* determine if the char should be printed */
     if(info->fPrecision != -1 && info->fPrecision < 1) {
@@ -1091,7 +1098,7 @@ u_sprintf_uchar_handler(u_localized_string *output,
         /* determine if the string should be padded */
         written = u_sprintf_pad_and_justify(output, info, &arg, 1);
     }
-    
+
     return written;
 }
 
@@ -1102,9 +1109,9 @@ u_sprintf_scidbl_handler(u_localized_string *output,
 {
     u_sprintf_spec_info scidbl_info;
     double      num = args[0].doubleValue;
-    
+
     memcpy(&scidbl_info, info, sizeof(u_sprintf_spec_info));
-    
+
     /* determine whether to use 'd', 'e' or 'f' notation */
     if (scidbl_info.fPrecision == -1 && num == uprv_trunc(num))
     {
@@ -1137,11 +1144,11 @@ u_sprintf_count_handler(u_localized_string *output,
                         const ufmt_args            *args)
 {
     int *count = (int*)(args[0].ptrValue);
-    
+
     /* in the special case of count, the u_printf_spec_info's width */
     /* will contain the # of chars written thus far */
     *count = info->fWidth;
-    
+
     return 0;
 }
 
@@ -1157,34 +1164,34 @@ u_sprintf_spellout_handler(u_localized_string *output,
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    
-    
+
+
     /* mask off any necessary bits */
     /*  if(! info->fIsLongDouble)
     num &= DBL_MAX;*/
-    
+
     /* get the formatter */
     format = u_locbund_getSpelloutFormat(output->fBundle);
-    
+
     /* handle error */
     if(format == 0)
         return 0;
-    
+
     /* set the appropriate flags on the formatter */
-    
+
     /* clone the stream's bundle if it isn't owned */
     if(! output->fOwnBundle) {
         output->fBundle    = u_locbund_clone(output->fBundle);
         output->fOwnBundle = TRUE;
         format           = u_locbund_getSpelloutFormat(output->fBundle);
     }
-    
+
     /* set the number of decimal digits */
-    
+
     /* save the formatter's state */
     minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
     maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-    
+
     if(info->fPrecision != -1) {
         /* set the # of decimal digits */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
@@ -1202,20 +1209,20 @@ u_sprintf_spellout_handler(u_localized_string *output,
         /* # of decimal digits is 6 if precision not specified */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
     }
-    
+
     /* set whether to show the sign */
     if(info->fShowSign) {
         /* set whether to show the sign*/
         /* {sfb} TODO */
     }
-    
+
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
-    
+
     /* restore the number format */
     unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
     unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-    
+
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
 
@@ -1233,59 +1240,56 @@ u_vsnprintf_u(UChar    *buffer,
     int32_t           patCount;
     int32_t           written = 0;
     uint16_t          handlerNum;
-    
-    ufmt_args         args;  
+
+    ufmt_args         args;
     u_localized_string outStr;
     u_sprintf_spec    spec;
     ufmt_type_info    info;
     u_sprintf_handler handler;
-    
+
     if (count < 0) {
         count = INT32_MAX;
     }
-    
+
     outStr.str = buffer;
     outStr.len = count;
     outStr.available = count;
-    
+
     /* if locale is 0, use the default */
     if(locale == 0) {
         locale = uloc_getDefault();
     }
     outStr.fBundle = u_loccache_get(locale);
-    
+
     if(outStr.fBundle == 0) {
         return 0;
     }
     outStr.fOwnBundle     = FALSE;
-    
+
     /* iterate through the pattern */
     while(outStr.available > 0) {
-        
+
         /* find the next '%' */
         lastAlias = alias;
         while(*alias != UP_PERCENT && *alias != 0x0000) {
             alias++;
         }
-        
+
         /* write any characters before the '%' */
         if(alias > lastAlias) {
             written += u_minstrncpy(&outStr, lastAlias, (int32_t)(alias - lastAlias));
         }
-        
+
         /* break if at end of string */
         if(*alias == 0x0000) {
-            if (outStr.available > 0) {
-                outStr.str[written] = 0; /* NULL terminate it just in case */
-            }
             break;
         }
-        
+
         /* parse the specifier */
         patCount = u_sprintf_parse_spec(alias, &spec);
-        
+
         /* fill in the precision and width, if specified out of line */
-        
+
         /* width specified out of line */
         if(spec.fInfo.fWidth == -2) {
             if(spec.fWidthPos == -1) {
@@ -1295,14 +1299,14 @@ u_vsnprintf_u(UChar    *buffer,
             else {
                 /* handle positional parameter */
             }
-            
+
             /* if it's negative, take the absolute value and set left alignment */
             if(spec.fInfo.fWidth < 0) {
                 spec.fInfo.fWidth     *= -1;
                 spec.fInfo.fLeft     = TRUE;
             }
         }
-        
+
         /* precision specified out of line */
         if(spec.fInfo.fPrecision == -2) {
             if(spec.fPrecisionPos == -1) {
@@ -1312,66 +1316,55 @@ u_vsnprintf_u(UChar    *buffer,
             else {
                 /* handle positional parameter */
             }
-            
+
             /* if it's negative, set it to zero */
             if(spec.fInfo.fPrecision < 0)
                 spec.fInfo.fPrecision = 0;
         }
-        
+
         handlerNum = (uint16_t)(spec.fInfo.fSpec - USPRINTF_BASE_FMT_HANDLERS);
         if (handlerNum < USPRINTF_NUM_FMT_HANDLERS) {
             /* query the info function for argument information */
             info = g_u_sprintf_infos[ handlerNum ].info;
-            if(info > ufmt_simple_percent) { 
+            if(info > ufmt_simple_percent) {
                 switch(info) {
-                    
                 case ufmt_count:
                     /* set the spec's width to the # of chars written */
                     spec.fInfo.fWidth = written;
-                    
                 case ufmt_char:
                 case ufmt_uchar:
                 case ufmt_int:
                     args.intValue = va_arg(ap, int);
                     break;
-                    
                 case ufmt_wchar:
                     args.wcharValue = va_arg(ap, wchar_t);
                     break;
-                    
                 case ufmt_string:
                     args.ptrValue = va_arg(ap, char*);
                     break;
-                    
                 case ufmt_wstring:
                     args.ptrValue = va_arg(ap, wchar_t*);
                     break;
-                    
                 case ufmt_ustring:
                     args.ptrValue = va_arg(ap, UChar*);
                     break;
-                    
                 case ufmt_pointer:
                     args.ptrValue = va_arg(ap, void*);
                     break;
-                    
                 case ufmt_float:
                     args.floatValue = (float) va_arg(ap, double);
                     break;
-                    
                 case ufmt_double:
                     args.doubleValue = va_arg(ap, double);
                     break;
-                    
                 case ufmt_date:
                     args.dateValue = va_arg(ap, UDate);
                     break;
-                    
                 default:
                     break;  /* Should never get here */
                 }
             }
-            
+
             /* call the handler function */
             handler = g_u_sprintf_infos[ handlerNum ].handler;
             if(handler != 0) {
@@ -1386,11 +1379,16 @@ u_vsnprintf_u(UChar    *buffer,
             /* just echo unknown tags */
             written += u_minstrncpy(&outStr, lastAlias, (int32_t)(alias - lastAlias));
         }
-        
+
         /* update the pointer in pattern and continue */
         alias += patCount;
     }
-  
+
+    // Terminate the buffer, if there's room.
+    if (outStr.available > 0) {
+        buffer[outStr.len - outStr.available] = 0x0000;
+    }
+
     /* Release the cloned bundle, if we cloned it. */
     if(outStr.fOwnBundle) {
         u_locbund_delete(outStr.fBundle);
