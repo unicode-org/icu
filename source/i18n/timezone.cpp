@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2004, International Business Machines Corporation and    *
+* Copyright (C) 1997-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -179,38 +179,39 @@ static UBool getOlsonMeta() {
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
     UnicodeString copy;
-    copy.fastCopyFrom(id);
-    const UChar* buf = copy.getTerminatedBuffer();
-    const UChar* u = NULL;
-    
-    int32_t count = ures_getSize(array);
-    int32_t start = 0;
-    int32_t i;
+    const UChar *u;
     int32_t len;
-    int32_t limit = count;
-    if(U_FAILURE(status) || (count < 1)) { 
+    
+    int32_t start = 0;
+    int32_t limit = ures_getSize(array);
+    int32_t mid;
+    int32_t lastMid = INT32_MAX;
+    if(U_FAILURE(status) || (limit < 1)) { 
         return -1;
     }
-    U_DEBUG_TZ_MSG(("fisa: Looking for %s, between %d and %d\n", U_DEBUG_TZ_STR(buf), start, limit));
+    U_DEBUG_TZ_MSG(("fisa: Looking for %s, between %d and %d\n", U_DEBUG_TZ_STR(UnicodeString(id).getTerminatedBuffer()), start, limit));
     
-    while(U_SUCCESS(status) && (start<limit-1)) {
-        i = (int32_t)((start+limit)/2);
-        u = ures_getStringByIndex(array, i, &len, &status);
-        U_DEBUG_TZ_MSG(("tz: compare to %s, %d .. [%d] .. %d\n", U_DEBUG_TZ_STR(u), start, i, limit));
-        int r = u_strcmp(buf,u);
-        if((r==0) && U_SUCCESS(status)) {
-            U_DEBUG_TZ_MSG(("fisa: found at %d\n", i));
-            return i;
-        } else if(r<0) {
-            limit = i;
-        } else {
-            start = i;
+    for (;;) {
+        mid = (int32_t)((start + limit) / 2);
+        if (lastMid == mid) {   /* Have we moved? */
+            break;  /* We haven't moved, and it wasn't found. */
         }
-    }
-    u = ures_getStringByIndex(array, start, &len, &status);
-    if(u_strcmp(buf,u)==0) {
-        U_DEBUG_TZ_MSG(("fisa: finally found at %d\n", start));
-        return start;
+        lastMid = mid;
+        u = ures_getStringByIndex(array, mid, &len, &status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        U_DEBUG_TZ_MSG(("tz: compare to %s, %d .. [%d] .. %d\n", U_DEBUG_TZ_STR(u), start, mid, limit));
+        copy.setTo(TRUE, u, len);
+        int r = id.compare(copy);
+        if(r==0) {
+            U_DEBUG_TZ_MSG(("fisa: found at %d\n", mid));
+            return mid;
+        } else if(r<0) {
+            limit = mid;
+        } else {
+            start = mid;
+        }
     }
     U_DEBUG_TZ_MSG(("fisa: not found\n"));
     return -1;
