@@ -241,10 +241,16 @@ dnl by renaming some .c files to .cpp
 case "${host}" in
 	*-*-hpux*) 	
 		for file in tools/gencol/gencol samples/date/date \
-		  samples/cal/cal test/cintltst/cintltst
+		  samples/cal/cal test/cintltst/cintltst \
+		  tools/makeconv/makeconv tools/genrb/genrb \
+		  tools/rbdump/read tools/genccode/genccode \
+		  tools/gencmn/gencmn tools/gencnval/gencnval \
+		  tools/gennames/gennames
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
+                  else
+		    echo "# $file.c does not exist or is already renamed [warning]"
 		  fi
 		done
 	;;
