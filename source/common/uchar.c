@@ -20,8 +20,6 @@
 ********************************************************************************************
 */
 #include "unicode/utypes.h"
-#include "ucmp16.h"
-#include "ucmp8.h"
 #include "umutex.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
