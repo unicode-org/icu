@@ -120,9 +120,9 @@ cleanpackage:
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt
-	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
-	( cd build ; $(INVOKE) $(PKGDATA) -m dll -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION) )
-	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) icudata.$(SO))
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
+	( cd build ; $(INVOKE) $(PKGDATA) -m dll -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(libdir) )
+	(cd $(DESTDIR)$(libdir); $(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO))
 
 install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
