@@ -1,0 +1,31 @@
+<!-- 
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/Attic/ResultXML.xml,v $
+ * $Date: 2002/12/18 03:56:41 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE difference_xml SYSTEM "./ResultXML.dtd" >
+
+<difference_xml>
+    <difference_element parent_node="test" node_name="test" id="1" index="test">
+        <icu case_diff="false" > </icu>
+        <ibm_toronto case_diff="false"> </ibm_toronto>
+        <windows case_diff="false"> </windows>
+        <sun_jdk case_diff="false"> </sun_jdk>
+        <ibm_jdk case_diff="false"> </ibm_jdk>
+        <solaris case_diff="false"> </solaris>
+        <apple case_diff="false"> </apple>
+        <hp_ux case_diff="false"> </hp_ux>
+        <other case_diff="false"> </other>
+    </difference_element>
+</difference_xml>

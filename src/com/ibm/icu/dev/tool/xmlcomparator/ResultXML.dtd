@@ -1,0 +1,42 @@
+<!-- 
+/**
+ *******************************************************************************
+ * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/Attic/ResultXML.dtd,v $
+ * $Date: 2002/12/18 03:56:41 $
+ * $Revision: 1.2 $
+ *
+ *******************************************************************************
+ */
+-->
+<!ELEMENT difference_xml (difference_element)* >
+
+<!ELEMENT difference_element ( icu | ibm_toronto | windows | sun_jdk | ibm_jdk | solaris | apple | hp_ux | other)* >
+<!ATTLIST difference_element parent_node NMTOKEN #IMPLIED >
+<!ATTLIST difference_element node_name NMTOKEN #IMPLIED >
+<!ATTLIST difference_element index NMTOKEN #IMPLIED >
+<!ATTLIST difference_element id ID #REQUIRED >
+
+
+
+<!ELEMENT icu (#PCDATA) >
+<!ATTLIST icu case_diff NMTOKEN #IMPLIED >
+<!ELEMENT ibm_toronto (#PCDATA) >
+<!ATTLIST ibm_toronto case_diff NMTOKEN #IMPLIED >
+<!ELEMENT windows (#PCDATA) >
+<!ATTLIST windows case_diff NMTOKEN #IMPLIED >
+<!ELEMENT sun_jdk (#PCDATA) >
+<!ATTLIST sun_jdk case_diff NMTOKEN #IMPLIED >
+<!ELEMENT ibm_jdk (#PCDATA) >
+<!ATTLIST ibm_jdk case_diff NMTOKEN #IMPLIED >
+<!ELEMENT solaris (#PCDATA) >
+<!ATTLIST solaris case_diff NMTOKEN #IMPLIED >
+<!ELEMENT apple (#PCDATA) >
+<!ATTLIST apple case_diff NMTOKEN #IMPLIED >
+<!ELEMENT hp_ux (#PCDATA) >
+<!ATTLIST hp_ux case_diff NMTOKEN #IMPLIED >
+<!ELEMENT other (#PCDATA) >
+<!ATTLIST other case_diff NMTOKEN #IMPLIED >
