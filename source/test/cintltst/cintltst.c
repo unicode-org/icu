@@ -479,11 +479,13 @@ const char *ctest_dataOutDir()
  */
 void ctest_setICU_DATA() {
 
-
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
      */
-    u_setDataDirectory(ctest_dataOutDir());
+    if (getenv("ICU_DATA") == NULL) {
+        /* If ICU_DATA isn't set, set it to the usual location */
+        u_setDataDirectory(ctest_dataOutDir());
+    }
 }
 
 UChar* CharsToUChars(const char* str) {
