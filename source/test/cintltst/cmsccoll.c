@@ -1330,7 +1330,8 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   UChar rlz[2048] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
-  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+  /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API andcompiler errors */
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
@@ -1538,7 +1539,8 @@ static void TestUCARules() {
   UCollator *UCAfromRules = NULL;
   UCollator *coll = ucol_open("", &status);
   uint32_t ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, 256);
-  log_verbose("TestUCAZero\n");
+
+  log_verbose("TestUCARules\n");
   if(ruleLen > 256) {
     rules = (UChar *)malloc((ruleLen+1)*sizeof(UChar));
     ruleLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rules, ruleLen);
@@ -1558,7 +1560,6 @@ static void TestUCARules() {
   if(rules != b) {  
     free(rules);
   }
-
 }
 
 
@@ -1743,9 +1744,11 @@ static void TestRedundantRules() {
   for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
     log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
     rlen = u_unescape(rules[i], rlz, 2048);
-    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+
+    /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
     rlen = u_unescape(expectedRules[i], rlz, 2048);
-    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
 
     testAgainstUCA(cresulting, credundant, "expected", TRUE, &status);
 
@@ -2172,29 +2175,28 @@ static void TestGetCaseBit() {
 #endif
 
 static void TestHangulTailoring() {
-  static const char *koreanData[] = {
-    "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475", 
-    "\\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef", 
-    "\\u6b4c", "\\u73c2", "\\u75c2", "\\u7a3c", "\\u82db", "\\u8304", "\\u8857", "\\u8888", 
-    "\\u8a36", "\\u8cc8", "\\u8dcf", "\\u8efb", "\\u8fe6", "\\u99d5", 
-	"\\u4EEE", "\\u50A2", "\\u5496", "\\u54FF", "\\u5777", "\\u5B8A", "\\u659D", "\\u698E", 
-	"\\u6A9F", "\\u73C8", "\\u7B33", "\\u801E", "\\u8238", "\\u846D", "\\u8B0C"
-  };
+    static const char *koreanData[] = {
+        "\\uac00", "\\u4f3d", "\\u4f73", "\\u5047", "\\u50f9", "\\u52a0", "\\u53ef", "\\u5475", 
+            "\\u54e5", "\\u5609", "\\u5ac1", "\\u5bb6", "\\u6687", "\\u67b6", "\\u67b7", "\\u67ef", 
+            "\\u6b4c", "\\u73c2", "\\u75c2", "\\u7a3c", "\\u82db", "\\u8304", "\\u8857", "\\u8888", 
+            "\\u8a36", "\\u8cc8", "\\u8dcf", "\\u8efb", "\\u8fe6", "\\u99d5", 
+            "\\u4EEE", "\\u50A2", "\\u5496", "\\u54FF", "\\u5777", "\\u5B8A", "\\u659D", "\\u698E", 
+            "\\u6A9F", "\\u73C8", "\\u7B33", "\\u801E", "\\u8238", "\\u846D", "\\u8B0C"
+    };
 
-  const char *rules = 
+    const char *rules = 
         "&\\uac00 <<< \\u4f3d <<< \\u4f73 <<< \\u5047 <<< \\u50f9 <<< \\u52a0 <<< \\u53ef <<< \\u5475 " 
         "<<< \\u54e5 <<< \\u5609 <<< \\u5ac1 <<< \\u5bb6 <<< \\u6687 <<< \\u67b6 <<< \\u67b7 <<< \\u67ef " 
         "<<< \\u6b4c <<< \\u73c2 <<< \\u75c2 <<< \\u7a3c <<< \\u82db <<< \\u8304 <<< \\u8857 <<< \\u8888 " 
         "<<< \\u8a36 <<< \\u8cc8 <<< \\u8dcf <<< \\u8efb <<< \\u8fe6 <<< \\u99d5 " 
-	    "<<< \\u4EEE <<< \\u50A2 <<< \\u5496 <<< \\u54FF <<< \\u5777 <<< \\u5B8A <<< \\u659D <<< \\u698E "
-	    "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C";
+        "<<< \\u4EEE <<< \\u50A2 <<< \\u5496 <<< \\u54FF <<< \\u5777 <<< \\u5B8A <<< \\u659D <<< \\u698E "
+        "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C";
 
 
-  log_verbose("Using start of korean rules\n");
-  genericRulesStarter(rules, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
-  log_verbose("Using ko__LOTUS locale\n");
-  genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
-  
+    log_verbose("Using start of korean rules\n");
+    genericRulesStarter(rules, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+    log_verbose("Using ko__LOTUS locale\n");
+    genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
 }
 
 static void TestCompressOverlap() {
