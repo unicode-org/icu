@@ -493,6 +493,8 @@ print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErro
 static void
 printNoteElements(struct UString *src, UErrorCode *status){
 
+#if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
+
     int32_t capacity = 0;
     UChar* note = NULL;
     int32_t noteLen = 0;
@@ -520,10 +522,19 @@ printNoteElements(struct UString *src, UErrorCode *status){
         }
     }
     uprv_free(note);
+#else
+    
+    fprintf(stderr, "Warning: Could not output comments to XLIFF file. ICU has been built without RegularExpression support.\n");
+
+#endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
+
 }
 
 static void
 printComments(struct UString *src, const char *resName, UBool printTranslate, UErrorCode *status){
+
+#if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
+
     int32_t capacity = src->fLength;
     char* buf = NULL;
     int32_t bufLen = 0;
@@ -570,6 +581,11 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
         write_tabs(out);
         print(desc, descLen, "<!--", "-->", status);
     }
+#else
+
+    fprintf(stderr, "Warning: Could not output comments to XLIFF file. ICU has been built without RegularExpression support.\n");
+
+#endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
 
 }
 /* Writing Functions */
@@ -1294,7 +1310,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     uprv_strncpy(originalFileName, filename + first, index);
 
     if(uprv_strcmp(originalFileName, srBundle->fLocale) != 0) {
-        fprintf(stdout, "warning! The file name is not same as the resource name!\n");
+        fprintf(stdout, "Warning: The file name is not same as the resource name!\n");
     }
 
     temp = originalFileName;
