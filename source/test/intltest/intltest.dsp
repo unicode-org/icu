@@ -544,6 +544,10 @@ SOURCE=.\itmajor.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\itrbbi.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ittrans.h
 # End Source File
 # Begin Source File
@@ -585,6 +589,10 @@ SOURCE=.\nmfmapts.h
 # Begin Source File
 
 SOURCE=.\nmfmtrt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\normconf.h
 # End Source File
 # Begin Source File
 
@@ -632,6 +640,10 @@ SOURCE=.\tchcfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\testutil.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfsmalls.h
 # End Source File
 # Begin Source File
@@ -645,6 +657,14 @@ SOURCE=.\tmsgfmt.h
 # Begin Source File
 
 SOURCE=.\transapi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\transrt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\transtst.h
 # End Source File
 # Begin Source File
 
@@ -696,6 +716,10 @@ SOURCE=.\tzregts.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\tztest.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucdtest.h
 # End Source File
 # Begin Source File
@@ -705,14 +729,6 @@ SOURCE=.\ufltlgts.h
 # Begin Source File
 
 SOURCE=.\unhxtrts.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\i18n\uniset.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\common\unicode\ures.h
 # End Source File
 # Begin Source File
 
