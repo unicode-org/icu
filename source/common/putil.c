@@ -1024,57 +1024,55 @@ static const char* detectWindowsTimeZone() {
         return NULL;
     }
     
-    if (firstMatch == lastMatch) { /* Offset+Rules matched exactly once */
-        return ZONE_MAP[firstMatch].icuid;
-    }
-
-    /* Offset+Rules lookup yielded >= 2 matches.  Try to match the
-       localized display name.  Get the name from the registry (not
-       the API). This avoids conversion issues.  Use the standard
-       name, since Windows modifies the daylight name to match the
-       standard name if there is no DST. */
-    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                          CURRENT_ZONE_REGKEY,
-                          0,
-                          KEY_QUERY_VALUE,
-                          &hkey);
-    if (result != ERROR_SUCCESS) {
-        RegCloseKey(hkey); /* should not happen */
-        return NULL;
-    }
-    stdNameSize = sizeof(stdName);
-    result = RegQueryValueEx(hkey,
-                             (LPTSTR)STANDARD_NAME_REGKEY,
-                             NULL,
-                             NULL,
-                             (LPBYTE)stdName,
-                             &stdNameSize);
-    RegCloseKey(hkey);
-
-    /* Scan through our list again (just the range of zones that
-       matched) and try for a name match. */
-    for (j=firstMatch; j<=lastMatch; j++) {
-        result = openTZRegKey(&hkey, ZONE_MAP[j].winid, winType);
+    if (firstMatch != lastMatch) {
+        /* Offset+Rules lookup yielded >= 2 matches.  Try to match the
+           localized display name.  Get the name from the registry
+           (not the API). This avoids conversion issues.  Use the
+           standard name, since Windows modifies the daylight name to
+           match the standard name if there is no DST. */
+        result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                              CURRENT_ZONE_REGKEY,
+                              0,
+                              KEY_QUERY_VALUE,
+                              &hkey);
         if (result == ERROR_SUCCESS) {
-            stdRegNameSize = sizeof(stdRegName);
+            stdNameSize = sizeof(stdName);
             result = RegQueryValueEx(hkey,
-                                     (LPTSTR)STD_REGKEY,
+                                     (LPTSTR)STANDARD_NAME_REGKEY,
                                      NULL,
                                      NULL,
-                                     (LPBYTE)stdRegName,
-                                     &stdRegNameSize);
-        }
-        RegCloseKey(hkey);
-        if (result == ERROR_SUCCESS &&
-            stdRegNameSize == stdNameSize &&
-            memcmp(stdName, stdRegName, stdNameSize) == 0) {
-            break;
+                                     (LPBYTE)stdName,
+                                     &stdNameSize);
+            RegCloseKey(hkey);
+
+            /* Scan through the Windows time zone data in the registry
+               again (just the range of zones with matching TZIs) and
+               look for a standard display name match. */
+            for (j=firstMatch; j<=lastMatch; j++) {
+                result = openTZRegKey(&hkey, ZONE_MAP[j].winid, winType);
+                if (result == ERROR_SUCCESS) {
+                    stdRegNameSize = sizeof(stdRegName);
+                    result = RegQueryValueEx(hkey,
+                                             (LPTSTR)STD_REGKEY,
+                                             NULL,
+                                             NULL,
+                                             (LPBYTE)stdRegName,
+                                             &stdRegNameSize);
+                }
+                RegCloseKey(hkey);
+                if (result == ERROR_SUCCESS &&
+                    stdRegNameSize == stdNameSize &&
+                    memcmp(stdName, stdRegName, stdNameSize) == 0) {
+                    firstMatch = j; /* record the match */
+                    break;
+                }
+            }
+        } else {
+            RegCloseKey(hkey); /* should never get here */
         }
     }
 
-    /* One of the display names should match; if not, take the first
-       Offset+Rules match. */
-    return ZONE_MAP[j <= lastMatch ? j : firstMatch].icuid;
+    return ZONE_MAP[firstMatch].icuid;
 }
 
 /**
