@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/02/16 03:05:57 $ 
-* $Revision: 1.3 $
+* $Date: 2002/02/28 23:42:04 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,18 +17,16 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import com.ibm.icu.impl.ICUBinary;
-import com.ibm.icu.util.*;
-
 
 /**
 * <p>Internal reader class for ICU data file uname.dat containing 
 * Unicode codepoint name data.</p> 
 * <p>This class simply reads unames.dat, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
-* <a href=UCharacterNamehtml>com.ibm.icu.text.UCharacterName</a>.
+* <a href=UCharacterName.html>com.ibm.icu.lang.UCharacterName</a>.
 * </p> 
 * <p>For more information about the format of unames.dat refer to
-* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/text/readme.html>
+* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/lang/readme.html>
 * ReadMe</a>.<\p>
 * <p>unames.dat which is in big-endian format is jared together with this 
 * package.</p>
@@ -185,7 +183,7 @@ final class UCharacterNameReader
         byte type      = m_dataInputStream_.readByte();
         byte variant   = m_dataInputStream_.readByte();
         if (!result.setInfo(rangestart, rangeend, type, variant)) {
-            return null;
+        	return null;
         }
                          
         int size = m_dataInputStream_.readChar();
