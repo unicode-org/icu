@@ -525,6 +525,82 @@ UnicodeString::doCompare( UTextOffset start,
   return lengthResult;
 }
 
+/* String compare in code point order - doCompare() compares in code unit order. */
+int8_t
+UnicodeString::doCompareCodePointOrder(UTextOffset start,
+                                       int32_t length,
+                                       const UChar *srcChars,
+                                       UTextOffset srcStart,
+                                       int32_t srcLength) const
+{
+  // compare illegal string values
+  if(isBogus()) {
+    if(srcChars==0) {
+      return 0;
+    } else {
+      return -1;
+    }
+  } else if(srcChars==0) {
+    return 1;
+  }
+
+  // pin indices to legal values
+  pinIndices(start, length);
+
+  // get the correct pointer
+  const UChar *chars = getArrayStart();
+
+  // are we comparing the same buffer contents?
+  chars += start;
+  srcChars += srcStart;
+  if(chars == srcChars) {
+    return 0;
+  }
+
+  UTextOffset minLength;
+  int8_t lengthResult;
+
+  // are we comparing different lengths?
+  if(length != srcLength) {
+    if(length < srcLength) {
+      minLength = length;
+      lengthResult = -1;
+    } else {
+      minLength = srcLength;
+      lengthResult = 1;
+    }
+  } else {
+    minLength = length;
+    lengthResult = 0;
+  }
+
+  static const UChar utf16Fixup[32]={
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0x2000, 0xf800, 0xf800, 0xf800, 0xf800
+  };
+  UChar c1, c2;
+  int32_t diff;
+
+  /* rotate each code unit's value so that surrogates get the highest values */
+  while(minLength>0) {
+    c1=*chars;
+    c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
+    c2=*srcChars;
+    c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
+
+    /* now c1 and c2 are in UTF-32-compatible order */
+    diff=(int32_t)c1-(int32_t)c2;
+    if(diff!=0) {
+      return (int8_t)(diff >> 15 | 1);
+    }
+    ++chars;
+    ++srcChars;
+    --minLength;
+  }
+  return lengthResult;
+}
+
 void
 UnicodeString::doExtract(UTextOffset start,
              int32_t length,
