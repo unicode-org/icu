@@ -184,29 +184,15 @@ RBBINode *RBBINode::flattenVariables() {
     }
 
     if (fLeftChild != NULL) {
-        if (fLeftChild->fType==varRef) {
-            RBBINode *oldChild   = fLeftChild;
-            fLeftChild           = oldChild->cloneTree();
-            fLeftChild->fParent  = this;
-            delete oldChild;
-        } else {
-            fLeftChild->flattenVariables();
-        }
+        fLeftChild = fLeftChild->flattenVariables();
+        fLeftChild->fParent  = this;
     }
-    
     if (fRightChild != NULL) {
-        if (fRightChild->fType==varRef) {
-            RBBINode *oldChild   = fRightChild;
-            fRightChild          = oldChild->cloneTree();
-            fRightChild->fParent = this;
-            delete oldChild;
-        } else {
-            fRightChild->flattenVariables();
-        }
+        fRightChild = fRightChild->flattenVariables();
+        fRightChild->fParent = this;
     }
     return this;
 }
-
 
 
 //-------------------------------------------------------------------------
