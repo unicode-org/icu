@@ -1,15 +1,14 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 2001, International Business Machines
+// *   Copyright (C) 2001-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 zh_MO {
-    Version{ "1.0" }
+    Version{ "1.1" }
     CollationElements { 
 	    Version { "1.0" }
-		Override { "FALSE" }
 		Sequence { "&[top]<\u5159<\u515B<\u515E<\u515D<\u5161<\u5163<\u55E7<\u74E9<\u7CCE<\u4E00<\u4E59"
         "<\u4E01<\u4E03<\u4E43<\u4E5D<\u4E86<\u4E8C<\u4EBA<\u513F<\u5165<\u516B<\u51E0<\u5200"
         "<\u5201<\u529B<\u5315<\u5341<\u535C<\u53C8<\u4E09<\u4E0B<\u4E08<\u4E0A<\u4E2B<\u4E38"
@@ -1101,55 +1100,54 @@ zh_MO {
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
     }
 
-
     CurrencyElements{
-      "P",
-      "MOP",
-      "."
+        "P",
+        "MOP",
+        "."
     }
     DateTimePatterns { 
-            "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
-            "ahh'\u6642'mm'\u5206'ss'\u79D2'",
-            "ahh:mm:ss",
-            "ah:mm",
-            "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
-            "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
-            "yyyy'\u5E74'M'\u6708'd'\u65E5'",
-            "yy'\u5E74'M'\u6708'd'\u65E5'",
-            "{1} {0}",
+        "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
+        "ahh'\u6642'mm'\u5206'ss'\u79D2'",
+        "ahh:mm:ss",
+        "ah:mm",
+        "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
+        "yyyy'\u5E74'MM'\u6708'dd'\u65E5' EEEE",
+        "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+        "yy'\u5E74'M'\u6708'd'\u65E5'",
+        "{1} {0}",
     }
     DayAbbreviations { 
-            "\u65E5",
-            "\u4E00",
-            "\u4E8C",
-            "\u4E09",
-            "\u56DB",
-            "\u4E94",
-            "\u516D",
+        "\u65E5",
+        "\u4E00",
+        "\u4E8C",
+        "\u4E09",
+        "\u56DB",
+        "\u4E94",
+        "\u516D",
     }
     LocaleID { "1404" }
-    LocaleString { "zh_MO" }
+//    LocaleString { "zh_MO" }
     MonthAbbreviations { 
-            "1\u6708",
-            "2\u6708",
-            "3\u6708",
-            "4\u6708",
-            "5\u6708",
-            "6\u6708",
-            "7\u6708",
-            "8\u6708",
-            "9\u6708",
-            "10\u6708",
-            "11\u6708",
-            "12\u6708",
-            "",
+        "1\u6708",
+        "2\u6708",
+        "3\u6708",
+        "4\u6708",
+        "5\u6708",
+        "6\u6708",
+        "7\u6708",
+        "8\u6708",
+        "9\u6708",
+        "10\u6708",
+        "11\u6708",
+        "12\u6708",
     }
     NumberPatterns { 
-            "#,##0.###;-#,##0.###",
-            "\u00A4#,##0.00;(\u00A4#,##0.00)",
-            "#,##0%",
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
     }
-    ShortCountry { "MAC" }
+//    ShortCountry { "MAC" }
 //    zoneStrings { 
 //        {
 //                "CTT",

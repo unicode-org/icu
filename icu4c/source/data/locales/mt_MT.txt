@@ -1,12 +1,17 @@
-// Copyright (c) 1998-2000 IBM, Inc. and Others
+// ***************************************************************************
+// *
+// *   Copyright (C) 1998-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
 // Maltese, Malta locale
 // srl@monkey.sbay.org
 
 mt_MT {
       
-    // No version  here - bump the parent.
+    Version { "1.0" }
 
-    ShortCountry { MLT }
+//    ShortCountry { MLT }
 
     CurrencyElements {
         "Lm",
@@ -17,7 +22,8 @@ mt_MT {
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;(\u00A4#,##0.00)",
-        "#,##0%"
+        "#,##0%",
+        "#E0",
     }
 
     LocaleID {"043A"}

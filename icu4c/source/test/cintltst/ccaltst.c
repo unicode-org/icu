@@ -138,6 +138,7 @@ static void TestCalendar()
     datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,NULL,0,&status);
     if(U_FAILURE(status)){
         log_err("FAIL: error in creating the dateformat : %s\n", myErrorName(status));
+        return;
     }
     log_verbose("PASS: The current date and time fetched is %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datdef, now)) );
     
@@ -293,6 +294,7 @@ static void TestGetSetDateAPI()
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat : %s\n", myErrorName(status));
+        return;
     }
     
 

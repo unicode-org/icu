@@ -172,7 +172,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
     addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
     addTest(root, &TestGetVersion,      "tsutil/creststn/TestGetVersion");
-    addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
+    addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAliasConflict");
     addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
     addTest(root, &TestEmptyTypes,      "tsutil/creststn/TestEmptyTypes");
     addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
@@ -217,24 +217,29 @@ static void TestAliasConflict(void) {
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
     if(U_FAILURE(status)) { 
-        log_err("Failed to get resource with %s", myErrorName(status));
+        log_err("Failed to get resource with %s\n", myErrorName(status));
     }
     ures_close(iw);
-    result = ures_getStringByKey(he, "ShortLanguage", &resultLen, &status);
+    result = ures_getStringByKey(he, "localPatternChars", &resultLen, &status);
     if(U_FAILURE(status) || result == NULL) { 
-        log_err("Failed to get resource with %s", myErrorName(status));
+        log_err("Failed to get resource localPatternChars with %s\n", myErrorName(status));
     }
     ures_close(he);
 
     size = sizeof(norwayNames)/sizeof(norwayNames[0]);
     for(i = 0; i < size; i++) {
-      norway = ures_open(NULL, norwayNames[i], &status);
-      realName = ures_getLocale(norway, &status);
-      log_verbose("ures_getLocale(\"%s\")=%s\n", norwayNames[i], realName);
-      if(strcmp(norwayLocales[i], realName) != 0) {
-        log_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
-      }
-      ures_close(norway);
+        status = U_ZERO_ERROR;
+        norway = ures_open(NULL, norwayNames[i], &status);
+        if(U_FAILURE(status)) { 
+            log_err("Failed to get resource with %s for %s\n", myErrorName(status), norwayNames[i]);
+            continue;
+        }
+        realName = ures_getLocale(norway, &status);
+        log_verbose("ures_getLocale(\"%s\")=%s\n", norwayNames[i], realName);
+        if(realName == NULL || strcmp(norwayLocales[i], realName) != 0) {
+            log_err("Wrong locale name for %s, expected %s, got %s\n", norwayNames[i], norwayLocales[i], realName);
+        }
+        ures_close(norway);
     }
 }
 
@@ -245,7 +250,7 @@ static void TestDecodedBundle(){
     UResourceBundle* resB; 
     int32_t len =0;
     const UChar* srcFromRes;
-    UChar src[] = {
+    static const UChar src[] = {
               0x30a7,0x30a8,0x30c9,0x0061,0xFFFD,0x30f3,0x30c0,0x30b0,0x30b3,0x30c5,
               0x30d5,0x30d9,0x30ca,0x30eb,0x305a,0x304a,0x3049,0x3048,0x3046,
               0x3044,0x3053,0x3054,0x3064,0x3074,0x3084,0x3093,0x3062,0x3060,
@@ -1658,10 +1663,10 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* and this is a Fallback, to fr */
-    junk = ures_getStringByKey(fr_FR, "ShortLanguage", &resultLen, &status);
+    junk = ures_getStringByKey(fr_FR, "DayNames", &resultLen, &status);
     if(status != U_USING_FALLBACK_ERROR)
     {
-        log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
+        log_err("Expected U_USING_FALLBACK_ERROR when trying to get DayNames from fr_FR, got %d\n", 
             status);
     }
     

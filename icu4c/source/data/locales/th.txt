@@ -1,24 +1,20 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1999-2001, International Business Machines
+// *   Copyright (C) 1999-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 th {
-   BreakDictionaryData:import { "../brkitr/thaidict.brk" }
-    AmPmMarkers { 
-            "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
-            "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
-    }
-     Version{ "1.1.1" }
+    BreakDictionaryData:import { "../brkitr/thaidict.brk" }
+    Version{ "1.2" }
     // -------------------- ibm.597 --------------------
     //
     // First put in all of the consonants, after Z
     //
     CollationElements {
-	    Version { "2.0" }
-		Sequence { "[normalization on]& Z "
+        Version { "2.0" }
+        Sequence { "[normalization on]& Z "
         "< \u0E01 "                   //  KO KAI
         "< \u0E02 "                   //  KHO KHAI
         "< \u0E03 "                   //  KHO KHUAT
@@ -136,7 +132,7 @@ th {
         // This rare symbol also comes after all characters.  But when it is
         // used in combination with RU and LU, the combination is treated as
         // a separate letter, ala "CH" sorting after "C" in traditional Spanish.
-		// see above.
+        // see above.
         "< \u0E45 "                   //  LAKKHANGYAO
 
         // Tonal marks are primary ignorables but are treated as secondary
@@ -153,97 +149,100 @@ th {
         // These are supposed to be ignored, so I'm treating them as controls
         "& \u0001 "
         "= \u0E3A "                   //  PHINTHU
-        "= '.' "                      //  period 
-		}
+        "= '.'"                      //  period 
+        }
     }
     Countries { 
         TH { "\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28\u0E44\u0E17\u0E22" }
     }
     DateTimePatterns { 
-            "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
-            "\u0E34\u0E19\u0E32\u0E17\u0E35'",
-            "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
-            "H:mm:ss",
-            "H:mm",
-            "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
-            "d MMMM yyyy",
-            "d MMM yyyy",
-            "d/M/yyyy",
-            "{1}, {0}",
+        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
+        "\u0E34\u0E19\u0E32\u0E17\u0E35'",
+        "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
+        "d MMMM yyyy",
+        "d MMM yyyy",
+        "d/M/yyyy",
+        "{1}, {0}",
     }
     DayAbbreviations { 
-            "\u0E2D\u0E32.",
-            "\u0E08.",
-            "\u0E2D.",
-            "\u0E1E.",
-            "\u0E1E\u0E24.",
-            "\u0E28.",
-            "\u0E2A.",
+        "\u0E2D\u0E32.",
+        "\u0E08.",
+        "\u0E2D.",
+        "\u0E1E.",
+        "\u0E1E\u0E24.",
+        "\u0E28.",
+        "\u0E2A.",
     }
     DayNames { 
-            "\u0E27\u0E31\u0E19\u0E2D\u0E32\u0E17\u0E34\u0E15\u0E22\u0E4C",
-            "\u0E27\u0E31\u0E19\u0E08\u0E31\u0E19\u0E17\u0E23\u0E4C",
-            "\u0E27\u0E31\u0E19\u0E2D\u0E31\u0E07\u0E04\u0E32\u0E23",
-            "\u0E27\u0E31\u0E19\u0E1E\u0E38\u0E18",
-            "\u0E27\u0E31\u0E19\u0E1E\u0E24\u0E2B\u0E31\u0E2A\u0E1A\u0E14\u0E35",
-            "\u0E27\u0E31\u0E19\u0E28\u0E38\u0E01\u0E23\u0E4C",
-            "\u0E27\u0E31\u0E19\u0E40\u0E2A\u0E32\u0E23\u0E4C",
+        "\u0E27\u0E31\u0E19\u0E2D\u0E32\u0E17\u0E34\u0E15\u0E22\u0E4C",
+        "\u0E27\u0E31\u0E19\u0E08\u0E31\u0E19\u0E17\u0E23\u0E4C",
+        "\u0E27\u0E31\u0E19\u0E2D\u0E31\u0E07\u0E04\u0E32\u0E23",
+        "\u0E27\u0E31\u0E19\u0E1E\u0E38\u0E18",
+        "\u0E27\u0E31\u0E19\u0E1E\u0E24\u0E2B\u0E31\u0E2A\u0E1A\u0E14\u0E35",
+        "\u0E27\u0E31\u0E19\u0E28\u0E38\u0E01\u0E23\u0E4C",
+        "\u0E27\u0E31\u0E19\u0E40\u0E2A\u0E32\u0E23\u0E4C",
+    }
+    AmPmMarkers { 
+        "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
+        "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
     }
     Eras { 
-            "\u0E1B\u0E35\u0E01\u0E48\u0E2D\u0E19\u0E04\u0E23\u0E34\u0E2A\u0E15\u0E4C\u0E01\u0E32"
-            "\u0E25\u0E17\u0E35\u0E48",
-            "\u0E04.\u0E28.",
+        "\u0E1B\u0E35\u0E01\u0E48\u0E2D\u0E19\u0E04\u0E23\u0E34\u0E2A\u0E15\u0E4C\u0E01\u0E32"
+        "\u0E25\u0E17\u0E35\u0E48",
+
+        "\u0E04.\u0E28.",
     }
     Languages { 
         th { "\u0E44\u0E17\u0E22" }
     }
     LocaleID { "1e" }
-    LocaleString { "th" }
+//    LocaleString { "th" }
     MonthAbbreviations { 
-            "\u0E21.\u0E04.",
-            "\u0E01.\u0E1E.",
-            "\u0E21\u0E35.\u0E04.",
-            "\u0E40\u0E21.\u0E22.",
-            "\u0E1E.\u0E04.",
-            "\u0E21\u0E34.\u0E22.",
-            "\u0E01.\u0E04.",
-            "\u0E2A.\u0E04.",
-            "\u0E01.\u0E22.",
-            "\u0E15.\u0E04.",
-            "\u0E1E.\u0E22.",
-            "\u0E18.\u0E04.",
-            "",
+        "\u0E21.\u0E04.",
+        "\u0E01.\u0E1E.",
+        "\u0E21\u0E35.\u0E04.",
+        "\u0E40\u0E21.\u0E22.",
+        "\u0E1E.\u0E04.",
+        "\u0E21\u0E34.\u0E22.",
+        "\u0E01.\u0E04.",
+        "\u0E2A.\u0E04.",
+        "\u0E01.\u0E22.",
+        "\u0E15.\u0E04.",
+        "\u0E1E.\u0E22.",
+        "\u0E18.\u0E04.",
     }
     MonthNames { 
-            "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21",
-            "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C",
-            "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21",
-            "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19",
-            "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21",
-            "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19",
-            "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21",
-            "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21",
-            "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19",
-            "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21",
-            "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
-            "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
-            "",
+        "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21",
+        "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C",
+        "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21",
+        "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19",
+        "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21",
+        "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19",
+        "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21",
+        "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21",
+        "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19",
+        "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21",
+        "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
+        "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
     }
-    ShortLanguage { "tha" }
+//    ShortLanguage { "tha" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
-                "THA",
-                "Thailand Time",
-                "THA",
-                "Thailand Time",
-                "THA",
-                "Bangkok",
+            "THA",
+            "Thailand Time",
+            "THA",
+            "Thailand Time",
+            "THA",
+            "Bangkok",
         }
     }
-    LocaleScript{ 
-                "Thai", // Script Name  
-    }
+//    LocaleScript{ 
+//                "Thai", // Script Name  
+//    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

@@ -75,13 +75,13 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     {   "", "", "hrvatski (Hrvatska)", "", "" },
 
     /* display langage (Greek) */
-    {   "", "", "", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac", "" },
+    {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac", "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac" },
     /* display country (Greek) */
-    {   "", "", "", "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",               "" },
+    {   "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2", "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1", "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1", "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1" },
     /* display variant (Greek) */
     {   "", "", "", "",                                                         "" },
     /* display name (Greek) */
-    {   "", "", "", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)", "" }
+    {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2)", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac (\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1)", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)", "" }
 };
 
 static UChar*** dataTable=0;
@@ -721,19 +721,19 @@ setUpDataTable();
 
 
         if (0 !=u_strcmp(testLang,expectedLang))  {
-            log_err(" Display Language mismatch: %s  versus  %s\n", austrdup(testLang), austrdup(expectedLang));
+            log_err(" Display Language mismatch: %s  versus  %s inLocale=%s\n", austrdup(testLang), austrdup(expectedLang), inLocale);
         }
 
         if (0 != u_strcmp(testCtry,expectedCtry))   {
-            log_err(" Display Country mismatch: %s  versus  %s\n", austrdup(testCtry), austrdup(expectedCtry));
+            log_err(" Display Country mismatch: %s  versus  %s inLocale=%s\n", austrdup(testCtry), austrdup(expectedCtry), inLocale);
         }
 
         if (0 != u_strcmp(testVar,expectedVar))    {
-            log_err(" Display Variant mismatch: %s  versus  %s\n", austrdup(testVar), austrdup(expectedVar));
+            log_err(" Display Variant mismatch: %s  versus  %s inLocale=%s\n", austrdup(testVar), austrdup(expectedVar), inLocale);
         }
 
         if(0 != u_strcmp(testName, expectedName))    {    
-            log_err(" Display Name mismatch: %s  versus  %s\n", austrdup(testName), austrdup(expectedName));
+            log_err(" Display Name mismatch: %s  versus  %s inLocale=%s\n", austrdup(testName), austrdup(expectedName), inLocale);
         }
 
         if(testName!=&_NUL) {

@@ -1,120 +1,214 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 sv {
-    CollationElements { 
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "& Z < \u00E6 , \u00C6 < a\u030A , A\u030A , aa , aA , A"
+    Version{ "1.0" }
+    CollationElements {
+        Version { "1.0" }
+        Sequence { "& Z < \u00E6 , \u00C6 < a\u030A , A\u030A , aa , aA , A"
         "a , AA< a\u0308 , A\u0308 < o\u0308 , O\u0308 ; u\u030B , U\u030B < o\u030B , O"
         "\u030B ; \u00F8 , \u00D8 & V ; w , W& Y, u\u0308 , U\u0308" }
-	}
+    }
     Countries { 
+        AE { "F\u00f6renade Arabemiraten" }
+        AL { "Albanien" }
+        AS { "Asien" }
+        AT { "\u00d6sterrike" }
+        AU { "Australien" }
+        BA { "Bosnien" }
+        BE { "Belgien" }
+        BG { "Bulgarien" }
+        BR { "Brasilien" }
+        BY { "Vitryssland" }
+        CA { "Kanada" }
+        CH { "Schweiz" }
+        CN { "Kina (folkrepubliken)" }
+        CZ { "Tjeckien" }
+        DE { "Tyskland" }
+        DK { "Danmark" }
+        DO { "Dominikanska republiken" }
+        DZ { "Algeriet" }
+        EE { "Estland" }
+        EG { "Egypten" }
+        ES { "Spanien" }
+        FR { "Frankrike" }
+        GB { "Storbritannien" }
+        GR { "Grekland" }
+        HR { "Kroatien" }
+        HU { "Ungern" }
+        ID { "Indonesien" }
+        IE { "Irland" }
+        IN { "Indien" }
+        IS { "Island" }
+        IT { "Italien" }
+        JO { "Jordanien" }
+        KR { "Korea" }
+        LA { "LatinAmerika" }
+        LB { "Libanon" }
+        LI { "Lichtenstein" }
+        LT { "Litauen" }
+        LU { "Luxemburg" }
+        LV { "Lettland" }
+        MA { "Marocko" }
+        MK { "Makedonien" }
+        MX { "Mexiko" }
+        NL { "Nederl\u00e4nderna" }
+        NO { "Norge" }
+        NZ { "Nya Zeeland" }
+        PL { "Polen" }
+        RO { "Rum\u00e4nien" }
+        RU { "Ryssland" }
+        SA { "Saudiarabien" }
         SE { "Sverige" }
+        SI { "Slovenien" }
+        SK { "Slovakien" }
+        SP { "Serbien" }
+        SY { "Syrien" }
+        TN { "Tunisien" }
+        TR { "Turkiet" }
+        UA { "Ukraina" }
+//        US { "USA" }
+        YE { "Jemen" }
+        ZA { "Sydafrika" }
     }
     DateTimeElements { 
-            "2",
-            "4",
+        "2",
+        "4",
     }
     DateTimePatterns { 
-            "'kl 'H:mm z",
-            "HH:mm:ss z",
-            "HH:mm:ss",
-            "HH:mm",
-            "'den 'd MMMM yyyy",
-            "'den 'd MMMM yyyy",
-            "yyyy-MMM-dd",
-            "yyyy-MM-dd",
-            "{1} {0}",
+        "'kl 'H:mm z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "'den 'd MMMM yyyy",
+        "'den 'd MMMM yyyy",
+        "yyyy-MMM-dd",
+        "yyyy-MM-dd",
+        "{1} {0}",
     }
     DayAbbreviations { 
-            "s\u00F6",
-            "m\u00E5",
-            "ti",
-            "on",
-            "to",
-            "fr",
-            "l\u00F6",
+        "s\u00F6",
+        "m\u00E5",
+        "ti",
+        "on",
+        "to",
+        "fr",
+        "l\u00F6",
     }
     DayNames { 
-            "s\u00F6ndag",
-            "m\u00E5ndag",
-            "tisdag",
-            "onsdag",
-            "torsdag",
-            "fredag",
-            "l\u00F6rdag",
+        "s\u00F6ndag",
+        "m\u00E5ndag",
+        "tisdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "l\u00F6rdag",
     }
     Languages { 
+        ar { "arabiska" }
+        ba { "baskiska" }
+        be { "vitryska" }
+        bg { "bulgariska" }
+        ca { "katalanska" }
+        cs { "tjeckiska" }
+        da { "danska" }
+        de { "tyska" }
+        el { "grekiska" }
+        en { "engelska" }
+        es { "spanska" }
+        et { "estniska" }
+        fi { "finska" }
+        fr { "franska" }
+        he { "hebreiska" }
+        hr { "kroatiska" }
+        hu { "ungerska" }
+        it { "italienska" }
+        ja { "apanska" }
+        ko { "koreanska" }
+        lt { "litauiska" }
+        lv { "lettiska" }
+        mk { "makedonskt" }
+        nl { "nederl\u00e4ndskt" }
+        no { "norska" }
+        pl { "polska" }
+        pt { "portugisiskt" }
+        ro { "rum\u00e4nskt" }
+        ru { "ryska" }
+        sk { "slovakiska" }
+        sl { "slovenskt" }
+        sq { "albanska" }
+        sr { "serbiska" }
         sv { "svenska" }
+        th { "thail\u00e4ndska" }
+        tr { "turkiska" }
+        uk { "ukrainska" }
+        zh { "kinesiska" }
     }
     LocaleID { "1d" }
-    LocaleString { "sv" }
+//    LocaleString { "sv" }
     MonthAbbreviations { 
-            "jan",
-            "feb",
-            "mar",
-            "apr",
-            "maj",
-            "jun",
-            "jul",
-            "aug",
-            "sep",
-            "okt",
-            "nov",
-            "dec",
-            "",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
     }
     MonthNames { 
-            "januari",
-            "februari",
-            "mars",
-            "april",
-            "maj",
-            "juni",
-            "juli",
-            "augusti",
-            "september",
-            "oktober",
-            "november",
-            "december",
-            "",
+        "januari",
+        "februari",
+        "mars",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "augusti",
+        "september",
+        "oktober",
+        "november",
+        "december",
     }
     NumberElements { 
-            ",",
-            "\u00A0",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
     }
     Eras { 
-            "f.Kr.",
-            "e.Kr.",
+        "f.Kr.",
+        "e.Kr.",
     }
-    ShortLanguage { "swe" }
+//    ShortLanguage { "swe" }
     zoneStrings { 
         {
-                "Europe/Stockholm",
-                "Central European Time",
-                "MET",
-                "Central European Time (DST)",
-                "MET",
-             	"Stockholm",
+            "Europe/Stockholm",
+            "Central European Time",
+            "MET",
+            "Central European Time (DST)",
+            "MET",
+            "Stockholm",
         }
     }
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
-    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

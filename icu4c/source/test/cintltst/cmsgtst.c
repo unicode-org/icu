@@ -481,17 +481,17 @@ static void TestMessageFormatWithValist( void )
             result=(UChar*)realloc(result,sizeof(UChar) * resultlength);
             CallFormatMessage( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
                 &status, 1, 3456.00, d1);
-    }
-    if(U_FAILURE(status)){
-        log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
-    }
-    if(u_strcmp(result, testResultStrings[i])==0){
-        log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
-    }
-    else{
-        log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
-            austrdup(result), austrdup(testResultStrings[i]) );
-    }
+        }
+        if(U_FAILURE(status)){
+            log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
+        }
+        if(u_strcmp(result, testResultStrings[i])==0){
+            log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
+        }
+        else{
+            log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
+                austrdup(result), austrdup(testResultStrings[i]) );
+        }
     }
     free(result);
     free(str);
@@ -608,6 +608,7 @@ static void OpenMessageFormatTest(void)
     if(U_FAILURE(status))
     {
         log_err("umsg_open failed with pattern %s. Error: \n", PAT, u_errorName(status));
+        return;
     }
    
     /* Test umsg_open with parse error  */
@@ -617,7 +618,7 @@ static void OpenMessageFormatTest(void)
     if(U_FAILURE(status))
     {
         log_err("umsg_open with parseError failed with pattern %s. Error: %s\n", PAT, u_errorName(status));
-
+        return;
     }
     
     /* Test umsg_clone                  */

@@ -1,41 +1,42 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 es_HN {
+    Version { "1.0" }
     CurrencyElements { 
-            "L.",
-            "HNL",
-            ".",
+        "L.",
+        "HNL",
+        ".",
     }
     DateTimePatterns { 
-            "hh:mm:ss a z",
-            "hh:mm:ss a z",
-            "hh:mm:ss a",
-            "hh:mm a",
-            "EEEE dd' de 'MMMM' de 'yyyy",
-            "dd' de 'MMMM' de 'yyyy",
-            "MM/dd/yyyy",
-            "MM/dd/yy",
-            "{1} {0}",
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE dd' de 'MMMM' de 'yyyy",
+        "dd' de 'MMMM' de 'yyyy",
+        "MM/dd/yyyy",
+        "MM/dd/yy",
+        "{1} {0}",
     }
     LocaleID { "480a" }
-    LocaleString { "es_HN" }
-    NumberElements { 
-            ".",
-            ",",
-            ";",
-            "%",
-            "0",
-            "#",
-            "-",
-            "E",
-            "\u2030",
-            "\u221E",
-            "\uFFFD",
-    }
-    ShortCountry { "HND" }
+//    LocaleString { "es_HN" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+//    ShortCountry { "HND" }
 }

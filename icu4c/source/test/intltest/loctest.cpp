@@ -63,13 +63,13 @@ const char* rawData[27][7] = {
         {   "", "", "hrvatski (Hrvatska)", "", "",  "", "xx (YY)" },
 
         // display langage (Greek)[actual values listed below]
-    {   "",  "", "", "",    "", "", "" },
+        {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac", "",    "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac", "", "" },
         // display country (Greek)[actual values listed below]
-    {   "",  "", "", "",    "", "", "" },
+        {   "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2", "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1", "",    "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1", "", "" },
         // display variant (Greek)
         {   "",     "",     "",     "",     "", "", "" },
         // display name (Greek)[actual values listed below]
-    {   "",  "", "", "",    "", "", "" },
+        {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2)", "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)", "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac (\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1)", "",    "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, Nynorsk)", "", "" },
 
         // display langage (<root>)
         {   "English",  "French",   "Croatian", "Greek",    "Norwegian",    "Italian",  "xx" },

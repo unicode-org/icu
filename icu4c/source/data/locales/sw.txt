@@ -1,6 +1,6 @@
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
@@ -9,88 +9,86 @@
 
 
 sw {
-    Version { "x0.2" }
+    Version { "1.0" }
 
-//    Countries { 	// This does not need to be overridden
+//    Countries {   // This does not need to be overridden
 //        KE { "Kenya" }
 //        TZ { "Tanzania" }
 //    }
     DateTimeElements { 
-            "2",
-            "1",
+        "2",
+        "1",
     }
-    DayAbbreviations {	// The DayNames are correct, but DayAbbreviations are only guesses.
-            "Jpi",
-            "Jtt",
-            "Jnn",
-            "Jtn",
-            "Alh",
-            "Iju",
-            "Jmo",
+    DayAbbreviations {  // The DayNames are correct, but DayAbbreviations are only guesses.
+        "Jpi",
+        "Jtt",
+        "Jnn",
+        "Jtn",
+        "Alh",
+        "Iju",
+        "Jmo",
     }
     DayNames { 
-            "Jumapili",
-            "Jumatatu",
-            "Jumanne",
-            "Jumatano",
-            "Alhamisi",
-            "Ijumaa",
-            "Jumamosi",
+        "Jumapili",
+        "Jumatatu",
+        "Jumanne",
+        "Jumatano",
+        "Alhamisi",
+        "Ijumaa",
+        "Jumamosi",
     }
     Eras { 
-            "KK",
-            "BK",
+        "KK",
+        "BK",
     }
     Languages { 
         sw  { "Kiswahili" }
     }
     LocaleID { "0041" }
-    LocaleString { "sw" }
+//    LocaleString { "sw" }
     MonthAbbreviations { 
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "Mei",
-            "Jun",
-            "Jul",
-            "Ago",
-            "Sep",
-            "Okt",
-            "Nov",
-            "Des",
-            "",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
     }
     MonthNames { 
-            "Januari",
-            "Februari",
-            "Machi",
-            "Aprili",
-            "Mei",
-            "Juni",
-            "Julai",
-            "Agosti",
-            "Septemba",
-            "Oktoba",
-            "Novemba",
-            "Desemba",
-            "",
+        "Januari",
+        "Februari",
+        "Machi",
+        "Aprili",
+        "Mei",
+        "Juni",
+        "Julai",
+        "Agosti",
+        "Septemba",
+        "Oktoba",
+        "Novemba",
+        "Desemba",
     }
-    ShortLanguage { "swa" }
+//    ShortLanguage { "swa" }
     zoneStrings { 
         {
-                "Africa/Nairobi",
-                "Saa za Africa Mashariki",	// East African Time
-                "EAT",
-                "Saa za Africa Mashariki",
-                "EAT",
-                "Nairobi",
+            "Africa/Nairobi",
+            "Saa za Africa Mashariki",  // East African Time
+            "EAT",
+            "Saa za Africa Mashariki",
+            "EAT",
+            "Nairobi",
         }
     }
-    LocaleScript{ 
-                "Latn",  // ISO 15924 Name 
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 
-    }
 // /**************** Info Below is needed ****************/
 // NumberElements{}
 // AmPmMarkers{}

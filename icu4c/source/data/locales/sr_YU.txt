@@ -1,18 +1,19 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 sr_YU {
+    Version{ "1.0" }
     CurrencyElements { 
-            "\u0414\u0438\u043D",
-            "YUN",
-            ",",
+        "\u0414\u0438\u043D",
+        "YUN",
+        ",",
     }
-    LocaleString { "sr_YU" }
+//    LocaleString { "sr_YU" }
     /* Discarding duplicate data for tag: NumberPatterns */
-    ShortCountry { "YUG" }
+//    ShortCountry { "YUG" }
     LocaleID { "0c1a" }
 }
