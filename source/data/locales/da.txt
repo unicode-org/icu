@@ -62,6 +62,7 @@ da {
         CN { "Kina" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        CU { "Cuba" }
         CV { "Kap Verde" }
         CX { "Jule\u00F8en" }
         CY { "Cypern" }
@@ -114,6 +115,8 @@ da {
         //IL { "Israel" }
         IN { "Indien" }
         //IO { "British Indian Ocean Territory" }
+        IQ { "Irak" }
+        //IR { "Den Islamiske Republik Iran" }
         IS { "Island" }
         IT { "Italien" }
         //JM { "Jamaica" }
@@ -125,7 +128,8 @@ da {
         //KI { "Kiribati" }
         KM { "Comorerne" }
         KN { "Saint Kitts og Nevis" }
-        KR { "Republikken Korea" }
+        KP { "Nordkorea" }    // alternate name { "Den Demokratiske Folkerepublik Korea" }
+        KR { "Sydkorea" }    // alternate name { "Republikken Korea" }
         //KW { "Kuwait" }
         KY { "Cayman\u00F8erne" }
         KZ { "Kasakhstan" }
@@ -139,6 +143,7 @@ da {
         LT { "Litauen" }
         //LU { "Luxembourg" }
         LV { "Letland" }
+        LY { "Libyen" }
         MA { "Marokko" }
         //MC { "Monaco" }
         MD { "Republikken Moldova" }
@@ -195,6 +200,7 @@ da {
         SA { "Saudi-Arabien" }
         SB { "Salomon\u00F8erne" }
         SC { "Seychellerne" }
+        //SD { "Sudan" }
         SE { "Sverige" }
         //SG { "Singapore" }
         SH { "St. Helena" }
@@ -208,6 +214,7 @@ da {
         SR { "Surinam" }
         ST { "Sao Tome og Principe" }
         //SV { "El Salvador" }
+        SY { "Syrien" }
         //SZ { "Swaziland" }
         //TC { "Turks and Caicos Islands" }
         TD { "Tchad" }

@@ -14,103 +14,115 @@ fr {
     Countries { 
         AD { "Andorre" }
         AE { "Emirats Arabes Unis" }
+        AG { "Antigua et Barbuda" }
         AL { "Albanie" }
-        AM { "Arm\u00e9nie" }
-        AN { "Antilles N\u00e9erlandaises" }
+        AM { "Arm\u00E9nie" }
+        AN { "Antilles N\u00E9erlandaises" }
         AR { "Argentine" }
-        AS { "Samoa Am\u00e9ricaines" }
+        AS { "Samoa Am\u00E9ricaines" }
         AT { "Autriche" }
         AU { "Australie" }
-        AZ { "Azerba\u00efdjan" }
+        AZ { "Azerba\u00EFdjan" }
 
-        BA { "Bosnie-Herz\u00e9govine" }
+        BA { "Bosnie-Herz\u00E9govine" }
         BB { "Barbade" }
         BE { "Belgique" }
         BG { "Bulgarie" }
-        BH { "Bahre\u00efn" }
+        BH { "Bahre\u00EFn" }
         BM { "Bermudes" }
         BO { "Bolivie" }
-        BR { "Br\u00e9sil" }
+        BR { "Br\u00E9sil" }
         BT { "Bhoutan" }
-        BY { "Bi\u00e9lo-Russie" }
-        BZ { "B\u00e9lize" }
+        BV { "\u00CEle Bouvet" }
+        BY { "B\u00E9larus" }
+        BZ { "Belize" }
 
-        CD { "R\u00e9publique D\u00e9mocratique du Congo" }
-        CF { "R\u00e9publique  Centrafricaine" }
+        CC { "\u00CEles Cocos" }
+        CD { "R\u00E9publique D\u00E9mocratique du Congo" }
+        CF { "R\u00E9publique  Centrafricaine" }
         CH { "Suisse" }
+        CK { "\u00CEles Sandwich du Sud" }
         CL { "Chili" }
         CM { "Cameroun" }
         CN { "Chine" }
         CO { "Colombie" }
         CV { "Cap Vert" }
+        CX { "\u00CEle Christmas" }
         CY { "Chypre" }
-        CZ { "R\u00e9publique Tch\u00e8que" }
+        CZ { "R\u00E9publique Tch\u00E8que" }
 
         DE { "Allemagne" }
         DK { "Danemark" }
         DM { "Dominique" }
-        DO { "R\u00e9publique Dominicaine" }
-        DZ { "Alg\u00e9rie" }
+        DO { "R\u00E9publique Dominicaine" }
+        DZ { "Alg\u00E9rie" }
 
         EC { "Equateur" }
         EE { "Estonie" }
         EG { "Egypte" }
         EH { "Sahara Occidental" }
-        ER { "Erythr\u00e9e" }
+        ER { "Erythr\u00E9e" }
         ES { "Espagne" }
         ET { "Ethiopie" }
 
         FI { "Finlande" }
         FJ { "Fidji" }
-        FM { "Micron\u00e9sie" }
+        FK { "\u00CEles Falkland (Malvinas)" }
+        FM { "Micron\u00E9sie" }
+        FO { "\u00CEles F\u00E9ro\u00E9" }
 
         GB { "Royaume-Uni" }
         GD { "Grenade" }
-        GE { "G\u00e9orgie" }
+        GE { "G\u00E9orgie" }
         GF { "Guyane Fran\u00e7aise" }
         GL { "Groenland" }
         GM { "Gambie" }
-        GN { "Guin\u00e9e" }
-        GQ { "Guin\u00e9e Equatoriale" }
-        GR { "Gr\u00e8ce" }
-        GW { "Guin\u00e9e-Bissau" }
+        GN { "Guin\u00E9e" }
+        GQ { "Guin\u00E9e Equatoriale" }
+        GR { "Gr\u00E8ce" }
+        GS { "G\u00E9orgie du Sud, \u00CEles Sandwich du Sud" }
+        GW { "Guin\u00E9e-Bissau" }
         //GY { "Guyana" }
 
         HK { "Hong-Kong R.A.S." }
+        HM { "\u00CEles Heard et MacDonald" }
         HR { "Croatie" }
-        HT { "Ha\u00efti" }
+        HT { "Ha\u00EFti" }
         HU { "Hongrie" }
 
-        ID { "Indon\u00e9sie" }
+        ID { "Indon\u00E9sie" }
         IE { "Irlande" }
-        IL { "Isra\u00ebl" }
+        IL { "Isra\u00EBl" }
         IN { "Inde" }
-        IQ { "Irak" }
+        IO { "Territoire Britannique de l'Oc\u00E9an Indien" }
         IS { "Islande" }
         IT { "Italie" }
 
-        JM { "Jama\u00efque" }
+        JM { "Jama\u00EFque" }
         JO { "Jordanie" }
         JP { "Japon" }
 
         KH { "Cambodge" }
         KM { "Comores" }
-        KP { "Cor\u00e9e du Nord" }
-        KR { "Cor\u00e9e du Sud" }
-        KW { "Kowe\u00eft" }
+        KN { "Saint Kitts et Nevis" }
+        KP { "Cor\u00E9e du Nord" }    // alternate name { "Cor\u00E9e, R\u00E9publique populaire d\u00E9mocratique de" }
+        KR { "Cor\u00E9e du Sud" }    // alternate name { "Cor\u00E9e, R\u00E9publique de" }
+        KW { "Kowe\u00EFt" }
 
         LB { "Liban" }
         LC { "Sainte-Lucie" }
-        LR { "Lib\u00e9ria" }
+        LR { "Lib\u00E9ria" }
         LT { "Lithuanie" }
         LV { "Lettonie" }
         LY { "Libye" }
 
         MA { "Maroc" }
         //MD { "Moldavie" }
-        MK { "Mac\u00e9doine" }
+        MH { "\u00CEles Marshall" }
+        MK { "Mac\u00E9doine" }
         MN { "Mongolie" }
-        MO { "Macao R.A.S." }
+        MO { "Macao R.A.S. de Chine" }
+        MP { "Mariannes du Nord" }
         MR { "Mauritanie" }
         MT { "Malte" }
         MU { "Maurice" }
@@ -118,48 +130,53 @@ fr {
         MY { "Malaisie" }
 
         NA { "Namibie" }
-        NC { "Nouvelle-Cal\u00e9donie" }
-        NG { "Nig\u00e9ria" }
+        NC { "Nouvelle-Cal\u00E9donie" }
+        NF { "\u00CEle Norfolk" }
+        NG { "Nig\u00E9ria" }
         NL { "Pays-Bas" }
-        NP { "N\u00e9pal" }
-        NO { "Norv\u00e8ge" }
-        NU { "Niu\u00e9" }
-        NZ { "Nouvelle-Z\u00e9lande" }
+        NO { "Norv\u00E8ge" }
+        NP { "N\u00E9pal" }
+        NU { "Niu\u00E9" }
+        NZ { "Nouvelle-Z\u00E9lande" }
 
-        PE { "P\u00e9rou" }
-        PF { "Polyn\u00e9sie Fran\u00e7aise" }
-        PG { "Papouasie-Nouvelle-Guin\u00e9e" }
+        PE { "P\u00E9rou" }
+        PF { "Polyn\u00E9sie Fran\u00E7aise" }
+        PG { "Papouasie-Nouvelle-Guin\u00E9e" }
         PL { "Pologne" }
-        PM { "Saint-Pierre-et-Miquelon" }
+        PM { "Saint Pierre et Miquelon" }
         PR { "Porto Rico" }
+        PS { "Territoire Palestinien" }
         PW { "Palaos" }
 
         RO { "Roumanie" }
         RU { "Russie" }
 
         SA { "Arabie Saoudite" }
+        SB { "\u00CEles Salomon" }
         SD { "Soudan" }
-        SE { "Su\u00e8de" }
+        SE { "Su\u00E8de" }
         SG { "Singapour" }
-        SH { "Sainte-H\u00e9l\u00e8ne" }
-        SI { "Slov\u00e9nie" }
+        SH { "Sainte-H\u00E9l\u00E8ne" }
+        SI { "Slov\u00E9nie" }
+        SJ { "Svalbard et \u00CEle Jan Mayen" }
         SK { "Slovaquie" }
         SM { "Saint-Marin" }
-        SN { "S\u00e9n\u00e9gal" }
+        SN { "S\u00E9n\u00E9gal" }
         SO { "Somalie" }
         SP { "Serbie" }
-        ST { "Sao Tom\u00e9-et-Principe" }
+        ST { "Sao Tom\u00E9-et-Principe" }
         SY { "Syrie" }
 
+        TC { "\u00CEles Turks et Ca\u00EFques" }
         TD { "Tchad" }
-        TF { "Terres Fran\u00e7aise Australes" }
-        TH { "Tha\u00eflande" }
+        TF { "Terres Australes Fran\u00E7aises" }
+        TH { "Tha\u00EFlande" }
         TJ { "Tadjikistan" }
-        TL { "Timor" }
+        //TL { "Timor" }
         TN { "Tunisie" }
         TR { "Turquie" }
-        TT { "Trinit\u00e9-et-Tobago" }
-        TW { "Ta\u00efwan, Province de Chine" }
+        TT { "Trinit\u00E9 et Tobago" }
+        TW { "Ta\u00EFwan, Province de Chine" }
         TZ { "Tanzanie" }
 
         UG { "Ouganda" }
@@ -167,17 +184,18 @@ fr {
         US { "\u00C9tats-Unis" }
         UZ { "Ouzb\u00e9kistan" }
 
-        VE { "V\u00e9n\u00e9zuela" }
-        VG { "Iles Vierges Britanniques" }
-        VI { "Iles Vierges Am\u00e9ricaines" }
+        VA { "Le Saint-Si\u00E8ge (Etat de la Cit\u00E9 du Vatican)" }
+        VC { "Saint Vincent et les Grenadines" }
+        VE { "Venezuela" }
+        VG { "\u00CEles Vierges Britanniques" }
+        VI { "\u00CEles Vierges des \u00C9tats-Unis" }
 
         WF { "Wallis et Futuna" }
 
-        YE { "Y\u00e9men" }
+        YE { "Y\u00E9men" }
         YU { "Yougoslavie" }
 
         ZA { "Afrique du Sud" }
-        //ZR { "Za\u00efre" } // Zaire is now the Democratic Republic of Congo (CD)
         ZM { "Zambie" }
     }
 

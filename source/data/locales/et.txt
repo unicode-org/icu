@@ -63,6 +63,7 @@ et {
         CN { "Hiina" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        CU { "Kuuba" }
         CV { "Cabo Verde" }
         CX { "J\u00F5ulusaar" }
         CY { "K\u00FCpros" }
@@ -115,6 +116,8 @@ et {
         IL { "Iisrael" }
         //IN { "India" }
         IO { "Briti India ookeani ala" }
+        IQ { "Iraak" }
+        IR { "Iraan" }
         IS { "Island" }
         IT { "Itaalia" }
         //JM { "Jamaica" }
@@ -126,7 +129,8 @@ et {
         //KI { "Kiribati" }
         KM { "Komoorid" }
         KN { "Saint Kitts ja Nevis" }
-        KR { "Korea Vabariik" }
+        KP { "P\u00F5hja-Korea" }    // alternate name { "Korea RDV" }
+        KR { "L\u00F5una-Korea" }    // alternate name { "Korea Vabariik" }
         KW { "Kuveit" }
         KY { "Kaimani saared" }
         KZ { "Kasahstan" }
@@ -140,6 +144,7 @@ et {
         LT { "Leedu" }
         LU { "Luksemburg" }
         LV { "L\u00E4ti" }
+        LY { "Liib\u00FCa" }
         MA { "Maroko" }
         //MC { "Monaco" }
         //MD { "Moldova" }
@@ -196,6 +201,7 @@ et {
         SA { "Saudi Araabia" }
         SB { "Saalomoni Saared" }
         SC { "Seiiellid" }
+        SD { "Sudaan" }
         SE { "Rootsi" }
         SG { "Singapur" }
         //SH { "Saint Helena" }
@@ -209,6 +215,7 @@ et {
         //SR { "Suriname" }
         ST { "Sao Tom\u00E9 ja Principe" }
         //SV { "El Salvador" }
+        SY { "S\u00FC\u00FCria" }
         SZ { "Svaasimaa" }
         TC { "Turks ja Caicos" }
         TD { "Tiaad" }
