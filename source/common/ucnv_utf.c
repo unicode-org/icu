@@ -2434,7 +2434,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         switch(state) {
         case 0:
             b=*source;
-            if(b==0xfe) {
+            if(b==(char)0xfe) {
                 state=1; /* could be FE FF */
             } else if(b==(char)0xff) {
                 state=5; /* could be FF FE */
@@ -2457,8 +2457,6 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 }
             } else {
                 /* switch to UTF-16BE and pass the previous bytes */
-                state=8;
-
                 if(source!=pArgs->source) {
                     /* just reset the source */
                     source=pArgs->source;
@@ -2476,6 +2474,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     pArgs->sourceLimit=sourceLimit;
                     pArgs->flush=oldFlush;
                 }
+                state=8;
                 continue;
             }
             break;
@@ -2688,7 +2687,6 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             } else {
                 /* switch to UTF-32BE and pass the previous bytes */
                 int32_t count=source-pArgs->source; /* number of bytes from this buffer */
-                state=8;
 
                 /* reset the source */
                 source=pArgs->source;
@@ -2710,6 +2708,7 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     pArgs->sourceLimit=sourceLimit;
                     pArgs->flush=oldFlush;
                 }
+                state=8;
                 continue;
             }
             break;
