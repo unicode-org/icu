@@ -4,8 +4,6 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.207 2004/04/01 00:21:57 grhoten-oss Exp $
-
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
 

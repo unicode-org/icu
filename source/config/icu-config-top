@@ -5,7 +5,6 @@
 #******************************************************************************
 #   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.1 $
 #******************************************************************************
 # This script is designed to aid configuration of ICU.
 # rpath links a library search path right into the binaries.

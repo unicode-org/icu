@@ -3,8 +3,6 @@
 * Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-**********************************************************************
 */
 #ifndef USETITER_H
 #define USETITER_H

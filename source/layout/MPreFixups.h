@@ -1,10 +1,5 @@
 /*
  * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.h,v $
- * $Date: 2003/09/24 21:05:13 $
- * $Revision: 1.4 $
- *
  */
 
 #ifndef __MPREFIXUPS_H

@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.7 $
+# conversion sample code
 # Usage:
 #  - configure, build, install ICU
 #  - ensure that 'icu-config' is in the PATH (PREFIX/bin/icu-config) 

@@ -1,10 +1,5 @@
 /*
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
- * $Date: 2004/03/25 19:27:43 $
- * $Revision: 1.17 $
- *
  */
 
 #include "LETypes.h"

@@ -5,8 +5,6 @@
 // *
 // ***************************************************************************
 //
-// $Revision: 1.8 $ 
-// $Tag: 
 // Singapore English locale: Data By Syn Wee Quek
 
 en_SG {
