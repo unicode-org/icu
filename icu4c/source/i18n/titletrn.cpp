@@ -107,7 +107,9 @@ void TitlecaseTransliterator::handleTransliterate(
     // Convert things after a cased character toLower; things
     // after an uncased, non-case-ignorable character toTitle.  Case-ignorable
     // characters are copied directly and do not change the mode.
-    UCaseContext csc={ &text };
+    UCaseContext csc;
+    uprv_memset(&csc, 0, sizeof(csc));
+    csc.p = &text;
     csc.start = offsets.contextStart;
     csc.limit = offsets.contextLimit;
 
