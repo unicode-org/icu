@@ -67,73 +67,73 @@ static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
 /* tables updated per http://www.egt.ie/standards/iso639 
-	and http://lcweb.loc.gov/standards/iso639-2/ 
-	to include the revisions up to 2001/7/27 *CWB*/
+    and http://lcweb.loc.gov/standards/iso639-2/ 
+    to include the revisions up to 2001/7/27 *CWB*/
 /* The 3 character codes are the terminology codes like RFC 3066.  
-	This is compatible with prior ICU codes */
+    This is compatible with prior ICU codes */
 /* "in" "iw" "ji" "jw" & "sh" have been withdrawn but are still in 
-	the table but now at the end of the table because 
-	3 character codes are duplicates.  This avoids bad searches
-	going from 3 to 2 character codes.*/
+    the table but now at the end of the table because 
+    3 character codes are duplicates.  This avoids bad searches
+    going from 3 to 2 character codes.*/
 
 static const char * const _languages[] = {
-	"aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",
-	"afh", "aka", "akk", "ale", "alg", "am",  "ang", "apa",
-	"ar",  "arc", "arn", "arp", "art", "arw", "as",  "ath",
-	"aus", "ava", "awa", "ay",  "az",  "ba",  "bad", "bai",
-	"bal", "bam", "ban", "bas", "bat", "be",  "bej", "bem",
-	"ber", "bg",  "bh",  "bho", "bi",  "bik", "bin", "bla",
-	"bn",  "bnt", "bo",  "br",  "bra", "bs",  "btk", "bua",
-	"bug", "ca",  "cad", "cai", "car", "cau", "ce",  "ceb",
-	"cel", "ch",  "chb", "chg", "chk", "chm", "chn", "cho",
-	"chp", "chr", "chy", "cmc", "co",  "cop", "cpe", "cpf",
-	"cpp", "cre", "crp", "cs",  "cu",  "cus", "cv",  "cy",
-	"da",  "dak", "day", "de",  "del", "den", "dgr", "din",
-	"div", "doi", "dra", "dua", "dum", "dyu", "dz",  "efi",
-	"egy", "eka", "el",  "elx", "en",  "enm", "eo",  "es",
-	"et",  "eu",  "ewe", "ewo", "fa",  "fan", "fat", "fi",
-	"fiu", "fj",  "fo",  "fon", "fr",  "frm", "fro", "ful",
-	"fur", "fy",  "ga",  "gaa", "gay", "gba", "gd",  "gem",
-	"gez", "gil", "gl",  "gmh", "gn",  "goh", "gon", "gor",
-	"got", "grb", "grc", "gu",  "gv",  "gwi", "ha",  "hai",
-	"haw", "he",  "hi",  "hil", "him", "hit", "hmn", "ho",
-	"hr",  "hu",  "hup", "hy",  "hz",  "ia",  "iba", "ibo",
-	"id",  "ie",  "ijo", "ik",  "ilo", "inc", "ine", "ira",
-	"iro", "is",  "it",  "iu",  "ja",  "jpr", "jrb", "jv",
-	"ka",  "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",
-	"kha", "khi", "kho", "ki",  "kj",  "kk",  "kl",  "km",
-	"kmb", "kn",  "ko",  "kok", "kon", "kos", "kpe", "kro",
-	"kru", "ks",  "ku",  "kum", "kut", "kv",  "kw",  "ky",
-	"la",  "lad", "lah", "lam", "lb",  "lez", "ln",  "lo",
-	"lol", "loz", "lt",  "lua", "lub", "lug", "lui", "lun",
-	"luo", "lus", "lv",  "mad", "mag", "mai", "mak", "man",
-	"map", "mas", "mdr", "men", "mg",  "mga", "mh",  "mi",
-	"mic", "min", "mis", "mk",  "mkh", "ml",  "mn",  "mnc",
-	"mni", "mno", "mo",  "moh", "mos", "mr",  "ms",  "mt",
-	"mul", "mun", "mus", "mwr", "my",  "myn", "na",  "nah",
-	"nai", "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia",
-	"nic", "niu", "nl",  "nn",  "no",  "non", "nr",  "nso",
-	"nub", "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",
-	"oji", "om",  "or",  "os",  "osa", "ota", "oto", "pa",
-	"paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",
-	"phn", "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",
-	"qu",  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa",
-	"rom", "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal",
-	"sam", "sas", "sat", "sc",  "sco", "sd",  "se",  "sel",
-	"sem", "sg",  "sga", "sgn", "shn", "si",  "sid", "sio",
-	"sit", "sk",  "sl",  "sla", "sm",  "smi", "sn",  "snk",
-	"so",  "sog", "son", "sq",  "sr",  "srr", "ss",  "ssa",
-	"st",  "su",  "suk", "sus", "sux", "sv",  "sw",  "syr",
-	"ta",  "tai", "te",  "tem", "ter", "tet", "tg",  "th",
-	"ti",  "tig", "tiv", "tk",  "tkl", "tl",  "tli", "tmh",
-	"tn",  "to",  "tog", "tpi", "tr",  "ts",  "tsi", "tt",
-	"tum", "tut", "tvl", "tw",  "ty",  "tyv", "ug",  "uga",
-	"uk",  "umb", "und", "ur",  "uz",  "vai", "ven", "vi",
-	"vo",  "vot", "wak", "wal", "war", "was", "wen", "wo",
-	"xh",  "yao", "yap", "yi",  "yo",  "ypk", "za",  "zap",
-	"zen", "zh",  "znd", "zu",  "zun", 
+    "aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",
+    "afh", "aka", "akk", "ale", "alg", "am",  "ang", "apa",
+    "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ath",
+    "aus", "ava", "awa", "ay",  "az",  "ba",  "bad", "bai",
+    "bal", "bam", "ban", "bas", "bat", "be",  "bej", "bem",
+    "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin", "bla",
+    "bn",  "bnt", "bo",  "br",  "bra", "bs",  "btk", "bua",
+    "bug", "ca",  "cad", "cai", "car", "cau", "ce",  "ceb",
+    "cel", "ch",  "chb", "chg", "chk", "chm", "chn", "cho",
+    "chp", "chr", "chy", "cmc", "co",  "cop", "cpe", "cpf",
+    "cpp", "cre", "crp", "cs",  "cu",  "cus", "cv",  "cy",
+    "da",  "dak", "day", "de",  "del", "den", "dgr", "din",
+    "div", "doi", "dra", "dua", "dum", "dyu", "dz",  "efi",
+    "egy", "eka", "el",  "elx", "en",  "enm", "eo",  "es",
+    "et",  "eu",  "ewe", "ewo", "fa",  "fan", "fat", "fi",
+    "fiu", "fj",  "fo",  "fon", "fr",  "frm", "fro", "ful",
+    "fur", "fy",  "ga",  "gaa", "gay", "gba", "gd",  "gem",
+    "gez", "gil", "gl",  "gmh", "gn",  "goh", "gon", "gor",
+    "got", "grb", "grc", "gu",  "gv",  "gwi", "ha",  "hai",
+    "haw", "he",  "hi",  "hil", "him", "hit", "hmn", "ho",
+    "hr",  "hu",  "hup", "hy",  "hz",  "ia",  "iba", "ibo",
+    "id",  "ie",  "ijo", "ik",  "ilo", "inc", "ine", "ira",
+    "iro", "is",  "it",  "iu",  "ja",  "jpr", "jrb", "jv",
+    "ka",  "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",
+    "kha", "khi", "kho", "ki",  "kj",  "kk",  "kl",  "km",
+    "kmb", "kn",  "ko",  "kok", "kon", "kos", "kpe", "kro",
+    "kru", "ks",  "ku",  "kum", "kut", "kv",  "kw",  "ky",
+    "la",  "lad", "lah", "lam", "lb",  "lez", "ln",  "lo",
+    "lol", "loz", "lt",  "lua", "lub", "lug", "lui", "lun",
+    "luo", "lus", "lv",  "mad", "mag", "mai", "mak", "man",
+    "map", "mas", "mdr", "men", "mg",  "mga", "mh",  "mi",
+    "mic", "min", "mis", "mk",  "mkh", "ml",  "mn",  "mnc",
+    "mni", "mno", "mo",  "moh", "mos", "mr",  "ms",  "mt",
+    "mul", "mun", "mus", "mwr", "my",  "myn", "na",  "nah",
+    "nai", "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia",
+    "nic", "niu", "nl",  "nn",  "no",  "non", "nr",  "nso",
+    "nub", "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",
+    "oji", "om",  "or",  "os",  "osa", "ota", "oto", "pa",
+    "paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",
+    "phn", "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",
+    "qu",  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa",
+    "rom", "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal",
+    "sam", "sas", "sat", "sc",  "sco", "sd",  "se",  "sel",
+    "sem", "sg",  "sga", "sgn", "shn", "si",  "sid", "sio",
+    "sit", "sk",  "sl",  "sla", "sm",  "smi", "sn",  "snk",
+    "so",  "sog", "son", "sq",  "sr",  "srr", "ss",  "ssa",
+    "st",  "su",  "suk", "sus", "sux", "sv",  "sw",  "syr",
+    "ta",  "tai", "te",  "tem", "ter", "tet", "tg",  "th",
+    "ti",  "tig", "tiv", "tk",  "tkl", "tl",  "tli", "tmh",
+    "tn",  "to",  "tog", "tpi", "tr",  "ts",  "tsi", "tt",
+    "tum", "tut", "tvl", "tw",  "ty",  "tyv", "ug",  "uga",
+    "uk",  "umb", "und", "ur",  "uz",  "vai", "ven", "vi",
+    "vo",  "vot", "wak", "wal", "war", "was", "wen", "wo",
+    "xh",  "yao", "yap", "yi",  "yo",  "ypk", "za",  "zap",
+    "zen", "zh",  "znd", "zu",  "zun", 
 NULL,
-	"in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
+    "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
 };
 
@@ -141,119 +141,119 @@ NULL
 if one exists otherwise use the three letter code */
 
 static const char * const _languages3[] = {
-/*	"aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",    */
-	"aar", "abk", "ace", "ach", "ada", "ave", "afr", "afa",
-/*	"afh", "aka", "akk", "ale", "alg", "am",  "ang", "apa",    */
-	"afh", "aka", "akk", "ale", "alg", "amh", "ang", "apa",
-/*	"ar",  "arc", "arn", "arp", "art", "arw", "as",  "ath",    */
-	"ara", "arc", "arn", "arp", "art", "arw", "asm", "ath",
-/*	"aus", "ava", "awa", "ay",  "az",  "ba",  "bad", "bai",    */
-	"aus", "ava", "awa", "aym", "aze", "bak", "bad", "bai",
-/*	"bal", "bam", "ban", "bas", "bat", "be",  "bej", "bem",    */
-	"bal", "bam", "ban", "bas", "bat", "bel", "bej", "bem",
-/*	"ber", "bg",  "bh",  "bho", "bi",  "bik", "bin", "bla",    */
-	"ber", "bul", "bih", "bho", "bis", "bik", "bin", "bla",
-/*	"bn",  "bnt", "bo",  "br",  "bra", "bs",  "btk", "bua",    */
-	"ben", "bnt", "bod", "bre", "bra", "bos", "btk", "bua",
-/*	"bug", "ca",  "cad", "cai", "car", "cau", "ce",  "ceb",    */
-	"bug", "cat", "cad", "cai", "car", "cau", "che", "ceb",
-/*	"cel", "ch",  "chb", "chg", "chk", "chm", "chn", "cho",    */
-	"cel", "cha", "chb", "chg", "chk", "chm", "chn", "cho",
-/*	"chp", "chr", "chy", "cmc", "co",  "cop", "cpe", "cpf",    */
-	"chp", "chr", "chy", "cmc", "cos", "cop", "cpe", "cpf",
-/*	"cpp", "cre", "crp", "cs",  "cu",  "cus", "cv",  "cy",     */
-	"cpp", "cre", "crp", "ces", "chu", "cus", "chv", "cym",
-/*	"da",  "dak", "day", "de",  "del", "den", "dgr", "din",    */
-	"dan", "dak", "day", "deu", "del", "den", "dgr", "din",
-/*	"div", "doi", "dra", "dua", "dum", "dyu", "dz",  "efi",    */
-	"div", "doi", "dra", "dua", "dum", "dyu", "dzo", "efi",
-/*	"egy", "eka", "el",  "elx", "en",  "enm", "eo",  "es",     */
-	"egy", "eka", "ell", "elx", "eng", "enm", "epo", "spa",
-/*	"et",  "eu",  "ewe", "ewo", "fa",  "fan", "fat", "fi",     */
-	"est", "eus", "ewe", "ewo", "fas", "fan", "fat", "fin",
-/*	"fiu", "fj",  "fo",  "fon", "fr",  "frm", "fro", "ful",    */
-	"fiu", "fij", "fao", "fon", "fra", "frm", "fro", "ful",
-/*	"fur", "fy",  "ga",  "gaa", "gay", "gba", "gd",  "gem",    */
-	"fur", "fry", "gle", "gaa", "gay", "gba", "gla", "gem",
-/*	"gez", "gil", "gl",  "gmh", "gn",  "goh", "gon", "gor",    */
-	"gez", "gil", "glg", "gmh", "grn", "goh", "gon", "gor",
-/*	"got", "grb", "grc", "gu",  "gv",  "gwi", "ha",  "hai",    */
-	"got", "grb", "grc", "guj", "glv", "gwi", "hau", "hai",
-/*	"haw", "he",  "hi",  "hil", "him", "hit", "hmn", "ho",     */
-	"haw", "heb", "hin", "hil", "him", "hit", "hmn", "hmo",
-/*	"hr",  "hu",  "hup", "hy",  "hz",  "ia",  "iba", "ibo",    */
-	"hrv", "hun", "hup", "hye", "her", "ina", "iba", "ibo",
-/*	"id",  "ie",  "ijo", "ik",  "ilo", "inc", "ine", "ira",    */
-	"ind", "ile", "ijo", "ipk", "ilo", "inc", "ine", "ira",
-/*	"iro", "is",  "it",  "iu",  "ja",  "jpr", "jrb", "jv",     */
-	"iro", "isl", "ita", "iku", "jpn", "jpr", "jrb", "jaw",
-/*	"ka",  "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",    */
-	"kat", "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",
-/*	"kha", "khi", "kho", "ki",  "kj",  "kk",  "kl",  "km",     */
-	"kha", "khi", "kho", "kik", "kua", "kaz", "kal", "khm",
-/*	"kmb", "kn",  "ko",  "kok", "kon", "kos", "kpe", "kro",    */
-	"kmb", "kan", "kor", "kok", "kon", "kos", "kpe", "kro",
-/*	"kru", "ks",  "ku",  "kum", "kut", "kv",  "kw",  "ky",     */
-	"kru", "kas", "kur", "kum", "kut", "kom", "cor", "kir",
-/*	"la",  "lad", "lah", "lam", "lb",  "lez", "ln",  "lo",     */
-	"lat", "lad", "lah", "lam", "ltz", "lez", "lin", "lao",
-/*	"lol", "loz", "lt",  "lua", "lub", "lug", "lui", "lun",    */
-	"lol", "loz", "lit", "lua", "lub", "lug", "lui", "lun",
-/*	"luo", "lus", "lv",  "mad", "mag", "mai", "mak", "man",    */
-	"luo", "lus", "lav", "mad", "mag", "mai", "mak", "man",
-/*	"map", "mas", "mdr", "men", "mg",  "mga", "mh",  "mi",     */
-	"map", "mas", "mdr", "men", "mlg", "mga", "mah", "mri",
-/*	"mic", "min", "mis", "mk",  "mkh", "ml",  "mn",  "mnc",    */
-	"mic", "min", "mis", "mkd", "mkh", "mal", "mon", "mnc",
-/*	"mni", "mno", "mo",  "moh", "mos", "mr",  "ms",  "mt",     */
-	"mni", "mno", "mol", "moh", "mos", "mar", "msa", "mlt",
-/*	"mul", "mun", "mus", "mwr", "my",  "myn", "na",  "nah",    */
-	"mul", "mun", "mus", "mwr", "mya", "myn", "nau", "nah",
-/*	"nai", "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia",    */
-	"nai", "nob", "nde", "nds", "nep", "new", "ndo", "nia",
-/*	"nic", "niu", "nl",  "nn",  "no",  "non", "nr",  "nso",    */
-	"nic", "niu", "nld", "nno", "nor", "non", "nbl", "nso",
-/*	"nub", "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",     */
-	"nub", "nav", "nya", "nym", "nyn", "nyo", "nzi", "oci",
-/*	"oji", "om",  "or",  "os",  "osa", "ota", "oto", "pa",     */
-	"oji", "orm", "ori", "oss", "osa", "ota", "oto", "pan",
-/*	"paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",    */
-	"paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",
-/*	"phn", "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",     */
-	"phn", "pli", "pol", "pon", "pra", "pro", "pus", "por",
-/*	"qu",  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa",    */
-	"que", "raj", "rap", "rar", "roh", "run", "ron", "roa",
-/*	"rom", "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal",    */
-	"rom", "rus", "kin", "san", "sad", "sah", "sai", "sal",
-/*	"sam", "sas", "sat", "sc",  "sco", "sd",  "se",  "sel",    */
-	"sam", "sas", "sat", "srd", "sco", "snd", "sme", "sel",
-/*	"sem", "sg",  "sga", "sgn", "shn", "si",  "sid", "sio",    */
-	"sem", "sag", "sga", "sgn", "shn", "sin", "sid", "sio",
-/*	"sit", "sk",  "sl",  "sla", "sm",  "smi", "sn",  "snk",    */
-	"sit", "slk", "slv", "sla", "smo", "smi", "sna", "snk",
-/*	"so",  "sog", "son", "sq",  "sr",  "srr", "ss",  "ssa",    */
-	"som", "sog", "son", "sqi", "srp", "srr", "ssw", "ssa",
-/*	"st",  "su",  "suk", "sus", "sux", "sv",  "sw",  "syr",    */
-	"sot", "sun", "suk", "sus", "sux", "swe", "swa", "syr",
-/*	"ta",  "tai", "te",  "tem", "ter", "tet", "tg",  "th",     */
-	"tam", "tai", "tel", "tem", "ter", "tet", "tgk", "tha",
-/*	"ti",  "tig", "tiv", "tk",  "tkl", "tl",  "tli", "tmh",    */
-	"tir", "tig", "tiv", "tuk", "tkl", "tgl", "tli", "tmh",
-/*	"tn",  "to",  "tog", "tpi", "tr",  "ts",  "tsi", "tt",     */
-	"tsn", "ton", "tog", "tpi", "tur", "tso", "tsi", "tat",
-/*	"tum", "tut", "tvl", "tw",  "ty",  "tyv", "ug",  "uga",    */
-	"tum", "tut", "tvl", "twi", "tah", "tyv", "uig", "uga",
-/*	"uk",  "umb", "und", "ur",  "uz",  "vai", "ven", "vi",     */
-	"ukr", "umb", "und", "urd", "uzb", "vai", "ven", "vie",
-/*	"vo",  "vot", "wak", "wal", "war", "was", "wen", "wo",     */
-	"vol", "vot", "wak", "wal", "war", "was", "wen", "wol",
-/*	"xh",  "yao", "yap", "yi",  "yo",  "ypk", "za",  "zap",    */
-	"xho", "yao", "yap", "yid", "yor", "ypk", "zha", "zap",
-/*	"zen", "zh",  "znd", "zu",  "zun",                         */
-	"zen", "zho", "znd", "zul", "zun",  
+/*  "aa",  "ab",  "ace", "ach", "ada", "ae",  "af",  "afa",    */
+    "aar", "abk", "ace", "ach", "ada", "ave", "afr", "afa",
+/*  "afh", "aka", "akk", "ale", "alg", "am",  "ang", "apa",    */
+    "afh", "aka", "akk", "ale", "alg", "amh", "ang", "apa",
+/*  "ar",  "arc", "arn", "arp", "art", "arw", "as",  "ath",    */
+    "ara", "arc", "arn", "arp", "art", "arw", "asm", "ath",
+/*  "aus", "ava", "awa", "ay",  "az",  "ba",  "bad", "bai",    */
+    "aus", "ava", "awa", "aym", "aze", "bak", "bad", "bai",
+/*  "bal", "bam", "ban", "bas", "bat", "be",  "bej", "bem",    */
+    "bal", "bam", "ban", "bas", "bat", "bel", "bej", "bem",
+/*  "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin", "bla",    */
+    "ber", "bul", "bih", "bho", "bis", "bik", "bin", "bla",
+/*  "bn",  "bnt", "bo",  "br",  "bra", "bs",  "btk", "bua",    */
+    "ben", "bnt", "bod", "bre", "bra", "bos", "btk", "bua",
+/*  "bug", "ca",  "cad", "cai", "car", "cau", "ce",  "ceb",    */
+    "bug", "cat", "cad", "cai", "car", "cau", "che", "ceb",
+/*  "cel", "ch",  "chb", "chg", "chk", "chm", "chn", "cho",    */
+    "cel", "cha", "chb", "chg", "chk", "chm", "chn", "cho",
+/*  "chp", "chr", "chy", "cmc", "co",  "cop", "cpe", "cpf",    */
+    "chp", "chr", "chy", "cmc", "cos", "cop", "cpe", "cpf",
+/*  "cpp", "cre", "crp", "cs",  "cu",  "cus", "cv",  "cy",     */
+    "cpp", "cre", "crp", "ces", "chu", "cus", "chv", "cym",
+/*  "da",  "dak", "day", "de",  "del", "den", "dgr", "din",    */
+    "dan", "dak", "day", "deu", "del", "den", "dgr", "din",
+/*  "div", "doi", "dra", "dua", "dum", "dyu", "dz",  "efi",    */
+    "div", "doi", "dra", "dua", "dum", "dyu", "dzo", "efi",
+/*  "egy", "eka", "el",  "elx", "en",  "enm", "eo",  "es",     */
+    "egy", "eka", "ell", "elx", "eng", "enm", "epo", "spa",
+/*  "et",  "eu",  "ewe", "ewo", "fa",  "fan", "fat", "fi",     */
+    "est", "eus", "ewe", "ewo", "fas", "fan", "fat", "fin",
+/*  "fiu", "fj",  "fo",  "fon", "fr",  "frm", "fro", "ful",    */
+    "fiu", "fij", "fao", "fon", "fra", "frm", "fro", "ful",
+/*  "fur", "fy",  "ga",  "gaa", "gay", "gba", "gd",  "gem",    */
+    "fur", "fry", "gle", "gaa", "gay", "gba", "gla", "gem",
+/*  "gez", "gil", "gl",  "gmh", "gn",  "goh", "gon", "gor",    */
+    "gez", "gil", "glg", "gmh", "grn", "goh", "gon", "gor",
+/*  "got", "grb", "grc", "gu",  "gv",  "gwi", "ha",  "hai",    */
+    "got", "grb", "grc", "guj", "glv", "gwi", "hau", "hai",
+/*  "haw", "he",  "hi",  "hil", "him", "hit", "hmn", "ho",     */
+    "haw", "heb", "hin", "hil", "him", "hit", "hmn", "hmo",
+/*  "hr",  "hu",  "hup", "hy",  "hz",  "ia",  "iba", "ibo",    */
+    "hrv", "hun", "hup", "hye", "her", "ina", "iba", "ibo",
+/*  "id",  "ie",  "ijo", "ik",  "ilo", "inc", "ine", "ira",    */
+    "ind", "ile", "ijo", "ipk", "ilo", "inc", "ine", "ira",
+/*  "iro", "is",  "it",  "iu",  "ja",  "jpr", "jrb", "jv",     */
+    "iro", "isl", "ita", "iku", "jpn", "jpr", "jrb", "jaw",
+/*  "ka",  "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",    */
+    "kat", "kaa", "kab", "kac", "kam", "kar", "kau", "kaw",
+/*  "kha", "khi", "kho", "ki",  "kj",  "kk",  "kl",  "km",     */
+    "kha", "khi", "kho", "kik", "kua", "kaz", "kal", "khm",
+/*  "kmb", "kn",  "ko",  "kok", "kon", "kos", "kpe", "kro",    */
+    "kmb", "kan", "kor", "kok", "kon", "kos", "kpe", "kro",
+/*  "kru", "ks",  "ku",  "kum", "kut", "kv",  "kw",  "ky",     */
+    "kru", "kas", "kur", "kum", "kut", "kom", "cor", "kir",
+/*  "la",  "lad", "lah", "lam", "lb",  "lez", "ln",  "lo",     */
+    "lat", "lad", "lah", "lam", "ltz", "lez", "lin", "lao",
+/*  "lol", "loz", "lt",  "lua", "lub", "lug", "lui", "lun",    */
+    "lol", "loz", "lit", "lua", "lub", "lug", "lui", "lun",
+/*  "luo", "lus", "lv",  "mad", "mag", "mai", "mak", "man",    */
+    "luo", "lus", "lav", "mad", "mag", "mai", "mak", "man",
+/*  "map", "mas", "mdr", "men", "mg",  "mga", "mh",  "mi",     */
+    "map", "mas", "mdr", "men", "mlg", "mga", "mah", "mri",
+/*  "mic", "min", "mis", "mk",  "mkh", "ml",  "mn",  "mnc",    */
+    "mic", "min", "mis", "mkd", "mkh", "mal", "mon", "mnc",
+/*  "mni", "mno", "mo",  "moh", "mos", "mr",  "ms",  "mt",     */
+    "mni", "mno", "mol", "moh", "mos", "mar", "msa", "mlt",
+/*  "mul", "mun", "mus", "mwr", "my",  "myn", "na",  "nah",    */
+    "mul", "mun", "mus", "mwr", "mya", "myn", "nau", "nah",
+/*  "nai", "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia",    */
+    "nai", "nob", "nde", "nds", "nep", "new", "ndo", "nia",
+/*  "nic", "niu", "nl",  "nn",  "no",  "non", "nr",  "nso",    */
+    "nic", "niu", "nld", "nno", "nor", "non", "nbl", "nso",
+/*  "nub", "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",     */
+    "nub", "nav", "nya", "nym", "nyn", "nyo", "nzi", "oci",
+/*  "oji", "om",  "or",  "os",  "osa", "ota", "oto", "pa",     */
+    "oji", "orm", "ori", "oss", "osa", "ota", "oto", "pan",
+/*  "paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",    */
+    "paa", "pag", "pal", "pam", "pap", "pau", "peo", "phi",
+/*  "phn", "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",     */
+    "phn", "pli", "pol", "pon", "pra", "pro", "pus", "por",
+/*  "qu",  "raj", "rap", "rar", "rm",  "rn",  "ro",  "roa",    */
+    "que", "raj", "rap", "rar", "roh", "run", "ron", "roa",
+/*  "rom", "ru",  "rw",  "sa",  "sad", "sah", "sai", "sal",    */
+    "rom", "rus", "kin", "san", "sad", "sah", "sai", "sal",
+/*  "sam", "sas", "sat", "sc",  "sco", "sd",  "se",  "sel",    */
+    "sam", "sas", "sat", "srd", "sco", "snd", "sme", "sel",
+/*  "sem", "sg",  "sga", "sgn", "shn", "si",  "sid", "sio",    */
+    "sem", "sag", "sga", "sgn", "shn", "sin", "sid", "sio",
+/*  "sit", "sk",  "sl",  "sla", "sm",  "smi", "sn",  "snk",    */
+    "sit", "slk", "slv", "sla", "smo", "smi", "sna", "snk",
+/*  "so",  "sog", "son", "sq",  "sr",  "srr", "ss",  "ssa",    */
+    "som", "sog", "son", "sqi", "srp", "srr", "ssw", "ssa",
+/*  "st",  "su",  "suk", "sus", "sux", "sv",  "sw",  "syr",    */
+    "sot", "sun", "suk", "sus", "sux", "swe", "swa", "syr",
+/*  "ta",  "tai", "te",  "tem", "ter", "tet", "tg",  "th",     */
+    "tam", "tai", "tel", "tem", "ter", "tet", "tgk", "tha",
+/*  "ti",  "tig", "tiv", "tk",  "tkl", "tl",  "tli", "tmh",    */
+    "tir", "tig", "tiv", "tuk", "tkl", "tgl", "tli", "tmh",
+/*  "tn",  "to",  "tog", "tpi", "tr",  "ts",  "tsi", "tt",     */
+    "tsn", "ton", "tog", "tpi", "tur", "tso", "tsi", "tat",
+/*  "tum", "tut", "tvl", "tw",  "ty",  "tyv", "ug",  "uga",    */
+    "tum", "tut", "tvl", "twi", "tah", "tyv", "uig", "uga",
+/*  "uk",  "umb", "und", "ur",  "uz",  "vai", "ven", "vi",     */
+    "ukr", "umb", "und", "urd", "uzb", "vai", "ven", "vie",
+/*  "vo",  "vot", "wak", "wal", "war", "was", "wen", "wo",     */
+    "vol", "vot", "wak", "wal", "war", "was", "wen", "wol",
+/*  "xh",  "yao", "yap", "yi",  "yo",  "ypk", "za",  "zap",    */
+    "xho", "yao", "yap", "yid", "yor", "ypk", "zha", "zap",
+/*  "zen", "zh",  "znd", "zu",  "zun",                         */
+    "zen", "zho", "znd", "zul", "zun",  
 NULL,
-/*	"in",  "iw",  "ji",  "jw",  "sh",                          */
-	"ind", "heb", "yid", "jaw", "srp",
+/*  "in",  "iw",  "ji",  "jw",  "sh",                          */
+    "ind", "heb", "yid", "jaw", "srp",
 NULL
 };
 /* This list MUST contain a three-letter code for every two-letter code in the
@@ -266,106 +266,106 @@ NULL
  updated to include 1999/12/03 revisions *CWB*/
 
 static const char * const _countries[] = {
-	"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
-	"AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
-	"BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
-	"BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
-	"BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
-	"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
-	"CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
-	"DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
-	"ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
-	"GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
-	"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
-	"GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
-	"ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
-	"IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
-	"KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
-	"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
-	"LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
-	"ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
-	"MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
-	"NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
-	"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
-	"PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
-	"PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
-	"SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
-	"SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
-	"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
-	"TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",
-	"TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
-	"VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
-	"WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
+    "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",
+    "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",
+    "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",
+    "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",
+    "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",
+    "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",
+    "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",
+    "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",
+    "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",
+    "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",
+    "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",
+    "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",
+    "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",
+    "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",
+    "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",
+    "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",
+    "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",
+    "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",
+    "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",
+    "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",
+    "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",
+    "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",
+    "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",
+    "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",
+    "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",
+    "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",
+    "TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",
+    "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",
+    "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",
+    "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",  
 NULL,
-	"FX",  "ZR",   /* obsolete country codes */
+    "FX",  "ZR",   /* obsolete country codes */
 NULL
 };
 /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
 static const char * const _countries3[] = {
-/*	"AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
-	"AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
-/*	"AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
-	"AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
-/*	"BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
-	"BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
-/*	"BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
-	"BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
-/*	"BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
-	"BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
-/*	"CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
-	"CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
-/*	"CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
-	"CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
-/*	"DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
-	"DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
-/*	"ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
-	"ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
-/*	"GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
-	"GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
-/*	"GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
-	"GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
-/*	"GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
-	"GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
-/*	"ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
-	"IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
-/*	"IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
-	"ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
-/*	"KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
-	"COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
-/*	"LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
-	"LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
-/*	"LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
-	"LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
-/*	"ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
-	"MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
-/*	"MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
-	"MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
-/*	"NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
-	"NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
-/*	"NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
-	"NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
-/*	"PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
-	"PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
-/*	"PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
-	"PLW", "PRY", "QAT", "REU", "ROM", "RUS", "RWA", "SAU",
-/*	"SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
-	"SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
-/*	"SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
-	"SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
-/*	"SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
-	"SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
-/*	"TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",     */
-	"TKL", "TKM", "TUN", "TON", "TMP", "TUR", "TTO", "TUV",
-/*	"TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
-	"TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
-/*	"VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
-	"VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
-/*	"WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
-	"WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
+/*  "AD",  "AE",  "AF",  "AG",  "AI",  "AL",  "AM",  "AN",     */
+    "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "ANT",
+/*  "AO",  "AQ",  "AR",  "AS",  "AT",  "AU",  "AW",  "AZ",     */
+    "AGO", "ATA", "ARG", "ASM", "AUT", "AUS", "ABW", "AZE",
+/*  "BA",  "BB",  "BD",  "BE",  "BF",  "BG",  "BH",  "BI",     */
+    "BIH", "BRB", "BGD", "BEL", "BFA", "BGR", "BHR", "BDI",
+/*  "BJ",  "BM",  "BN",  "BO",  "BR",  "BS",  "BT",  "BV",     */
+    "BEN", "BMU", "BRN", "BOL", "BRA", "BHS", "BTN", "BVT",
+/*  "BW",  "BY",  "BZ",  "CA",  "CC",  "CD",  "CF",  "CG",     */
+    "BWA", "BLR", "BLZ", "CAN", "CCK", "COD", "CAF", "COG",
+/*  "CH",  "CI",  "CK",  "CL",  "CM",  "CN",  "CO",  "CR",     */
+    "CHE", "CIV", "COK", "CHL", "CMR", "CHN", "COL", "CRI",
+/*  "CU",  "CV",  "CX",  "CY",  "CZ",  "DE",  "DJ",  "DK",     */
+    "CUB", "CPV", "CXR", "CYP", "CZE", "DEU", "DJI", "DNK",
+/*  "DM",  "DO",  "DZ",  "EC",  "EE",  "EG",  "EH",  "ER",     */
+    "DMA", "DOM", "DZA", "ECU", "EST", "EGY", "ESH", "ERI",
+/*  "ES",  "ET",  "FI",  "FJ",  "FK",  "FM",  "FO",  "FR",     */
+    "ESP", "ETH", "FIN", "FJI", "FLK", "FSM", "FRO", "FRA",
+/*  "GA",  "GB",  "GD",  "GE",  "GF",  "GH",  "GI",  "GL",     */
+    "GAB", "GBR", "GRD", "GEO", "GUF", "GHA", "GIB", "GRL",
+/*  "GM",  "GN",  "GP",  "GQ",  "GR",  "GS",  "GT",  "GU",     */
+    "GMB", "GIN", "GLP", "GNQ", "GRC", "SGS", "GTM", "GUM",
+/*  "GW",  "GY",  "HK",  "HM",  "HN",  "HR",  "HT",  "HU",     */
+    "GNB", "GUY", "HKG", "HMD", "HND", "HRV", "HTI", "HUN",
+/*  "ID",  "IE",  "IL",  "IN",  "IO",  "IQ",  "IR",  "IS",     */
+    "IDN", "IRL", "ISR", "IND", "IOT", "IRQ", "IRN", "ISL",
+/*  "IT",  "JM",  "JO",  "JP",  "KE",  "KG",  "KH",  "KI",     */
+    "ITA", "JAM", "JOR", "JPN", "KEN", "KGZ", "KHM", "KIR",
+/*  "KM",  "KN",  "KP",  "KR",  "KW",  "KY",  "KZ",  "LA",     */
+    "COM", "KNA", "PRK", "KOR", "KWT", "CYM", "KAZ", "LAO",
+/*  "LB",  "LC",  "LI",  "LK",  "LR",  "LS",  "LT",  "LU",     */
+    "LBN", "LCA", "LIE", "LKA", "LBR", "LSO", "LTU", "LUX",
+/*  "LV",  "LY",  "MA",  "MC",  "MD",  "MG",  "MH",  "MK",     */
+    "LVA", "LBY", "MAR", "MCO", "MDA", "MDG", "MHL", "MKD",
+/*  "ML",  "MM",  "MN",  "MO",  "MP",  "MQ",  "MR",  "MS",     */
+    "MLI", "MMR", "MNG", "MAC", "MNP", "MTQ", "MRT", "MSR",
+/*  "MT",  "MU",  "MV",  "MW",  "MX",  "MY",  "MZ",  "NA",     */
+    "MLT", "MUS", "MDV", "MWI", "MEX", "MYS", "MOZ", "NAM",
+/*  "NC",  "NE",  "NF",  "NG",  "NI",  "NL",  "NO",  "NP",     */
+    "NCL", "NER", "NFK", "NGA", "NIC", "NLD", "NOR", "NPL",
+/*  "NR",  "NU",  "NZ",  "OM",  "PA",  "PE",  "PF",  "PG",     */
+    "NRU", "NIU", "NZL", "OMN", "PAN", "PER", "PYF", "PNG",
+/*  "PH",  "PK",  "PL",  "PM",  "PN",  "PR",  "PS",  "PT",     */
+    "PHL", "PAK", "POL", "SPM", "PCN", "PRI", "PSE", "PRT",
+/*  "PW",  "PY",  "QA",  "RE",  "RO",  "RU",  "RW",  "SA",     */
+    "PLW", "PRY", "QAT", "REU", "ROM", "RUS", "RWA", "SAU",
+/*  "SB",  "SC",  "SD",  "SE",  "SG",  "SH",  "SI",  "SJ",     */
+    "SLB", "SYC", "SDN", "SWE", "SGP", "SHN", "SVN", "SJM",
+/*  "SK",  "SL",  "SM",  "SN",  "SO",  "SR",  "ST",  "SV",     */
+    "SVK", "SLE", "SMR", "SEN", "SOM", "SUR", "STP", "SLV",
+/*  "SY",  "SZ",  "TC",  "TD",  "TF",  "TG",  "TH",  "TJ",     */
+    "SYR", "SWZ", "TCA", "TCD", "ATF", "TGO", "THA", "TJK",
+/*  "TK",  "TM",  "TN",  "TO",  "TP",  "TR",  "TT",  "TV",     */
+    "TKL", "TKM", "TUN", "TON", "TMP", "TUR", "TTO", "TUV",
+/*  "TW",  "TZ",  "UA",  "UG",  "UM",  "US",  "UY",  "UZ",     */
+    "TWN", "TZA", "UKR", "UGA", "UMI", "USA", "URY", "UZB",
+/*  "VA",  "VC",  "VE",  "VG",  "VI",  "VN",  "VU",  "WF",     */
+    "VAT", "VCT", "VEN", "VGB", "VIR", "VNM", "VUT", "WLF",
+/*  "WS",  "YE",  "YT",  "YU",  "ZA",  "ZM",  "ZW",            */
+    "WSM", "YEM", "MYT", "YUG", "ZAF", "ZMB", "ZWE",
 NULL,
-/*	"FX",  "ZR",   */
-	"FXX", "ZAR",
+/*  "FX",  "ZR",   */
+    "FXX", "ZAR",
 NULL
 };
 /* This list MUST contain a three-letter code for every two-letter code in
@@ -391,13 +391,6 @@ static void _lazyEvaluate_installedLocales(void);
  */
 #define _isTerminator(a)  ((a==0)||(a=='.')||(a=='@'))
 
-
-
-/*******************************************************************************
-  API function definitions
-*******************************************************************************/
-
-
 static int16_t _findIndex(const char* const* list, const char* key)
 {
     const char* const* anchor = list;
@@ -410,7 +403,7 @@ static int16_t _findIndex(const char* const* list, const char* key)
         }
         list++;
     }
-	list++;     /* skip first NULL *CWB*/
+    list++;     /* skip first NULL *CWB*/
     while (*list)    /* scan obsolete table */
     {
         if (uprv_strcmp(key, *list) == 0) 
@@ -421,6 +414,30 @@ static int16_t _findIndex(const char* const* list, const char* key)
     }
     return -1;
 }
+
+/* count the length of src while copying it to dest; return strlen(src) */
+U_INLINE int32_t
+_copyCount(char *dest, int32_t destCapacity, const char *src) {
+    const char *anchor;
+    char c;
+
+    anchor=src;
+    for(;;) {
+        if((c=*src)==0) {
+            return src-anchor;
+        }
+        if(destCapacity<=0) {
+            return (src-anchor)+uprv_strlen(src);
+        }
+        ++src;
+        *dest++=c;
+        --destCapacity;
+    }
+}
+
+/*******************************************************************************
+  API function definitions
+*******************************************************************************/
 
 const char* uloc_getDefault()
 {
@@ -485,9 +502,7 @@ _getLanguage(const char *localeID,
              const char **pEnd) {
     int32_t i=0;
     int32_t offset;
-    char lang[5]; /* temporary buffer to hold language code for searching */
-
-    uprv_memset(lang,0,4);
+    char lang[4]={ 0, 0, 0, 0 }; /* temporary buffer to hold language code for searching */
 
     /* if it starts with i- or x- then copy that prefix */
     if(_isIDPrefix(localeID)) {
@@ -506,24 +521,19 @@ _getLanguage(const char *localeID,
         if(i<languageCapacity) {
             language[i]=(char)uprv_tolower(*localeID);
         }
-	if(i < 3)
-	{
-	  lang[i] = (char)uprv_tolower(*localeID);
-	}
+        if(i<3) {
+            lang[i]=(char)uprv_tolower(*localeID);
+        }
         i++;
         localeID++;
     }
 
-    if(i == 3)
-    {
-      /* convert 3 character code to 2 character code if possible *CWB*/
-      offset = _findIndex(_languages3, lang);
-      if(offset >= 0)
-      {
-	if(languageCapacity >= 2)
-	  uprv_strncpy(language, _languages[offset], languageCapacity);
-	i = strlen(_languages[offset]);
-      }
+    if(i==3) {
+        /* convert 3 character code to 2 character code if possible *CWB*/
+        offset=_findIndex(_languages3, lang);
+        if(offset>=0) {
+            i=_copyCount(language, languageCapacity, _languages[offset]);
+        }
     }
 
     if(pEnd!=NULL) {
@@ -538,11 +548,9 @@ uloc_getLanguage(const char*    localeID,
          int32_t languageCapacity,
          UErrorCode* err)
 {
-	/* uloc_getLanguage will return a 2 character iso-639
-		code if one exists. *CWB*/
+    /* uloc_getLanguage will return a 2 character iso-639 code if one exists. *CWB*/
     int32_t i=0;
-    
-    
+
     if (err==NULL || U_FAILURE(*err)) {
         return 0;
     }
@@ -555,39 +563,32 @@ uloc_getLanguage(const char*    localeID,
     return u_terminateChars(language, languageCapacity, i, err);
 }
 
-
 static int32_t
 _getCountry(const char *localeID,
             char *country, int32_t countryCapacity,
             const char **pEnd) {
     int32_t i=0;
-    char cnty[4];
+    char cnty[4]={ 0, 0, 0, 0 };
     int32_t offset;
 
-    uprv_memset(cnty,0,4);
     /* copy the country as far as possible and count its length */
     while(!_isTerminator(*localeID) && !_isIDSeparator(*localeID)) {
         if(i<countryCapacity) {
             country[i]=(char)uprv_toupper(*localeID);
         }
-        if (i < 3)		/*CWB*/
-	{
-	  cnty[i] = (char)uprv_toupper(*localeID);
-	}
+        if(i<3) {   /*CWB*/
+            cnty[i]=(char)uprv_toupper(*localeID);
+        }
         i++;
         localeID++;
     }
 
     /* convert 3 character code to 2 character code if possible *CWB*/
-    if (i == 3)
-    {
-	offset = _findIndex(_countries3,cnty);
-	if (offset >= 0) 
-	{
-	  if (countryCapacity >= 2)
-	    uprv_strncpy(country, _countries[offset],countryCapacity);
-	     i = uprv_strlen(_countries[offset]);
-	}
+    if(i==3) {
+        offset=_findIndex(_countries3, cnty);
+        if(offset>=0) {
+            i=_copyCount(country, countryCapacity, _countries[offset]);
+        }
     }
 
     if(pEnd!=NULL) {
