@@ -282,15 +282,15 @@ char *austrdup(const UChar* unichars)
     return newString;
 }
 
-char *aescstrdup(const UChar* unichars){
-    int length;
+char *aescstrdup(const UChar* unichars,int32_t length){
     char *newString,*targetLimit,*target;
     UConverterFromUCallback cb;
     const void *p;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter* conv = ucnv_open("US-ASCII",&errorCode);
-
-    length = u_strlen( unichars);
+    if(length==-1){
+        length = u_strlen( unichars);
+    }
     newString = (char*)ctst_malloc ( sizeof(char) * 8 * (length +1));
     target = newString;
     targetLimit = newString+sizeof(char) * 8 * (length +1);
