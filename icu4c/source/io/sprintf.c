@@ -31,14 +31,6 @@
 #include "cmemory.h"
 #include <ctype.h>
 
-typedef struct u_localized_print_string {
-    UChar     *str;     /* Place to write the string */
-    int32_t   available;/* Number of codeunits available to write to */
-    int32_t   len;      /* Maximum number of code units that can be written to output */
-
-    ULocaleBundle  fBundle;     /* formatters */
-} u_localized_print_string;
-
 /* u_minstrncpy copies the minimum number of code units of (count or output->available) */
 static int32_t
 u_sprintf_write(void        *context,
@@ -222,9 +214,6 @@ u_vsnprintf_u(UChar    *buffer,
               const UChar    *patternSpecification,
               va_list        ap)
 {
-    const UChar      *alias = patternSpecification; /* alias the pattern */
-    const UChar      *lastAlias;
-    int32_t          patCount;
     int32_t          written = 0;   /* haven't written anything yet */
 
     u_localized_print_string outStr;
@@ -241,31 +230,8 @@ u_vsnprintf_u(UChar    *buffer,
         return 0;
     }
 
-    /* iterate through the pattern */
-    while(outStr.available > 0) {
-
-        /* find the next '%' */
-        lastAlias = alias;
-        while(*alias != UP_PERCENT && *alias != 0x0000) {
-            alias++;
-        }
-
-        /* write any characters before the '%' */
-        if(alias > lastAlias) {
-            written += (*g_sprintf_stream_handler.write)(&outStr, lastAlias, (int32_t)(alias - lastAlias));
-        }
-
-        /* break if at end of string */
-        if(*alias == 0x0000) {
-            break;
-        }
-
-        /* parse and print the specifier */
-        patCount = u_printf_print_spec(&g_sprintf_stream_handler, alias, &outStr, &outStr.fBundle, (int32_t)(alias - lastAlias), &written, (va_list*)&ap);
-
-        /* update the pointer in pattern and continue */
-        alias += patCount;
-    }
+    /* parse and print the whole format string */
+    u_printf_parse(&g_sprintf_stream_handler, patternSpecification, &outStr, &outStr, &outStr.fBundle, &written, ap);
 
     /* Terminate the buffer, if there's room. */
     if (outStr.available > 0) {

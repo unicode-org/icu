@@ -263,7 +263,7 @@
 #define u_memset u_memset_3_0
 #define u_parseMessage u_parseMessage_3_0
 #define u_parseMessageWithError u_parseMessageWithError_3_0
-#define u_printf_print_spec u_printf_print_spec_3_0
+#define u_printf_parse u_printf_parse_3_0
 #define u_releaseDefaultConverter u_releaseDefaultConverter_3_0
 #define u_scanf_parse u_scanf_parse_3_0
 #define u_setAtomicIncDecFunctions u_setAtomicIncDecFunctions_3_0

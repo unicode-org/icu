@@ -149,36 +149,10 @@ u_vfprintf_u(    UFILE        *f,
              const UChar    *patternSpecification,
              va_list        ap)
 {
-    const UChar      *alias = patternSpecification; /* alias the pattern */
-    const UChar      *lastAlias;
-    int32_t          patCount;
     int32_t          written = 0;   /* haven't written anything yet */
 
-    /* iterate through the pattern */
-    for(;;) {
-
-        /* find the next '%' */
-        lastAlias = alias;
-        while(*alias != UP_PERCENT && *alias != 0x0000) {
-            alias++;
-        }
-
-        /* write any characters before the '%' */
-        if(alias > lastAlias) {
-            written += (*g_stream_handler.write)(f, lastAlias, (int32_t)(alias - lastAlias));
-        }
-
-        /* break if at end of string */
-        if(*alias == 0x0000) {
-            break;
-        }
-
-        /* parse and print the specifier */
-        patCount = u_printf_print_spec(&g_stream_handler, alias, f, &f->str.fBundle, (int32_t)(alias - lastAlias), &written, (va_list*)&ap);
-
-        /* update the pointer in pattern and continue */
-        alias += patCount;
-    }
+    /* parse and print the whole format string */
+    u_printf_parse(&g_stream_handler, patternSpecification, f, NULL, &f->str.fBundle, &written, ap);
 
     /* return # of UChars written */
     return written;
