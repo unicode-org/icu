@@ -519,7 +519,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
           /* test for NULL */
           if(chAlias == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-			return NULL;
+            return NULL;
             }
           u_UCharsToChars(alias, chAlias, len);
           chAlias[len] = 0;
@@ -621,10 +621,10 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     if(resB == NULL) {
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
         /* test for NULL */
-		if (resB == NULL) {
-			*status = U_MEMORY_ALLOCATION_ERROR;
-			return NULL;
-		}
+        if (resB == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
         ures_setIsStackObject(resB, FALSE);
         resB->fResPath = NULL;
     } else {
@@ -678,10 +678,10 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             isStackObject = FALSE;
             r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
             /* test for NULL */
-			if (r == NULL) {
-				*status = U_MEMORY_ALLOCATION_ERROR;
-				return NULL;
-			}
+            if (r == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
         } else {
             isStackObject = ures_isStackObject(r);
             if(U_FAILURE(*status)) {
@@ -691,10 +691,10 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             if(isStackObject == FALSE) {
                 r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
                 /* test for NULL */
-				if (r == NULL) {
-					*status = U_MEMORY_ALLOCATION_ERROR;
-					return NULL;
-				}
+                if (r == NULL) {
+                    *status = U_MEMORY_ALLOCATION_ERROR;
+                    return NULL;
+                }
             }
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
@@ -1479,10 +1479,10 @@ ures_openW(const wchar_t* myPath,
     size_t pathSize = (uprv_wcslen(myPath) + 1) * sizeof(int32_t);
     char *path = (char *)uprv_malloc(pathSize);
     /* test for NULL */
-	if (path == NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		return NULL;
-	}
+    if (path == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
     uprv_wcstombs(path, myPath, pathSize);
 
@@ -1507,10 +1507,10 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
     int32_t pathSize = u_strlen(myPath) + 1;
     char *path = (char *)uprv_malloc(pathSize);
     /* test for NULL */
-	if(path == NULL) {
-		*status = U_MEMORY_ALLOCATION_ERROR;
-		return NULL;
-	}
+    if(path == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
 
     u_UCharsToChars(myPath, path, pathSize);
 

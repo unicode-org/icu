@@ -328,7 +328,7 @@ UnicodeString::UnicodeString(const UnicodeString& that)
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that,
-							 int32_t srcStart)
+                             int32_t srcStart)
   : Replaceable(),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
@@ -339,8 +339,8 @@ UnicodeString::UnicodeString(const UnicodeString& that,
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that,
-							 int32_t srcStart,
-							 int32_t srcLength)
+                             int32_t srcStart,
+                             int32_t srcLength)
   : Replaceable(),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),

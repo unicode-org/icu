@@ -568,10 +568,10 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     }
     cachedBreakPositions = (int32_t *)uprv_malloc((currentBreakPositions.size() + 1) * sizeof(int32_t));
     /* Test for NULL */
-	if(cachedBreakPositions == NULL) {
-		status = U_MEMORY_ALLOCATION_ERROR;
-		return;
-	}
+    if(cachedBreakPositions == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     numCachedBreakPositions = currentBreakPositions.size() + 1;
     cachedBreakPositions[0] = startPos;
 
