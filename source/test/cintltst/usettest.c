@@ -16,6 +16,7 @@
 #define TEST(x) addTest(root, &x, "uset/" # x)
 
 static void TestAPI(void);
+static void Testj2269(void);
 
 void addUSetTest(TestNode** root);
 
@@ -33,11 +34,22 @@ static void expectItems(const USet* set,
 void
 addUSetTest(TestNode** root) {
     TEST(TestAPI);
+    TEST(Testj2269);
 }
 
 /*------------------------------------------------------------------
  * Tests
  *------------------------------------------------------------------*/
+
+static void Testj2269() {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar a[4] = { 0x61, 0x62, 0x63, 0 };
+  UChar b[4] = { 0x61, 0x62, 0x63, 0 };
+  USet *s = uset_open(1, 0);
+  uset_addString(s, a, 3);
+  a[0] = 0x63; a[1] = 0x63;
+  expect(s, "{abc}", "{ccc}", &status);
+}
 
 static const UChar PAT[] = {91,97,45,99,123,97,98,125,93,0}; /* "[a-c{ab}]" */
 static const int32_t PAT_LEN = (sizeof(PAT) / sizeof(PAT[0])) - 1;
