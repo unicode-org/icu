@@ -17,9 +17,7 @@ en {
     Variants{
         PREEURO { "Pre-Euro" }   // PREEURO variant display name
         EURO    { "Euro" }         // EURO variant display name
-        B       { "Bokm\u00e5l" }  // Norwegian variant display name
         NY      { "Nynorsk" }      // Norwegian variant display name
-        AL      { "\u00C5land" }   // Aland variant display name
         POSIX   { "Posix" }
     }
     
@@ -479,6 +477,7 @@ en {
         hmn { "Hmong" }
         ho  { "Hiri Motu" }
         hr  { "Croatian" }
+        ht  { "Haitian" }
         hu  { "Hungarian" }
         hup { "Hupa" }
         hy  { "Armenian" }
