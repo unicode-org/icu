@@ -764,6 +764,7 @@ write_uca_table(const char *filename,
     uprv_memset(contractionCEs, 0, 256*3*sizeof(UChar));
     uint32_t noOfContractions = 0;
     UCAConstants consts;
+    uprv_memset(&consts, 0, sizeof(consts));
 #if 0
     UCAConstants consts = {
       UCOL_RESET_TOP_VALUE,
