@@ -147,6 +147,8 @@ static void TestCanonicalName()
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
         dotestconv("cp65001", "", "UTF-8") &&        /* non-default name due to ordering */
         dotestconv("ISO-2022", "MIME", "ISO_2022") &&/* default name */
+        dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-2000") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "", "ibm-943_P130-2000") &&/* ambiguous alias */
         dotestconv("crazy", "MIME", NULL) &&
         dotestconv("ASCII", "crazy", NULL))
     {
