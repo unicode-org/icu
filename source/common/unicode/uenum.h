@@ -19,11 +19,11 @@
 
 #include "unicode/utypes.h"
 
-/** A collator.
+/** An enumeration object.
  *  For usage in C programs.
  */
 struct UEnumeration;
-/** structure representing a collator object instance */
+/** structure representing an enumeration object instance */
 typedef struct UEnumeration UEnumeration;
 
 /**
