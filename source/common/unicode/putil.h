@@ -134,4 +134,47 @@ U_INTERNAL const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 #   define U_PATH_SEP_STRING ":"
 #endif
 
+/**
+ * Convert char characters to UChar characters.
+ * This utility function is useful only for "invariant characters"
+ * that are encoded in the platform default encoding.
+ * They are a small, constant subset of the encoding and include
+ * just the latin letters, digits, and some punctuation.
+ * For details, see U_CHARSET_FAMILY.
+ *
+ * @param cs Input string, points to <code>length</code>
+ *           character bytes from a subset of the platform encoding.
+ * @param us Output string, points to memory for <code>length</code>
+ *           Unicode characters.
+ * @param length The number of characters to convert; this may
+ *               include the terminating <code>NUL</code>.
+ *
+ * @see U_CHARSET_FAMILY
+ * @stable ICU 2.0
+ */
+U_STABLE void U_EXPORT2
+u_charsToUChars(const char *cs, UChar *us, int32_t length);
+
+/**
+ * Convert UChar characters to char characters.
+ * This utility function is useful only for "invariant characters"
+ * that can be encoded in the platform default encoding.
+ * They are a small, constant subset of the encoding and include
+ * just the latin letters, digits, and some punctuation.
+ * For details, see U_CHARSET_FAMILY.
+ *
+ * @param us Input string, points to <code>length</code>
+ *           Unicode characters that can be encoded with the
+ *           codepage-invariant subset of the platform encoding.
+ * @param cs Output string, points to memory for <code>length</code>
+ *           character bytes.
+ * @param length The number of characters to convert; this may
+ *               include the terminating <code>NUL</code>.
+ *
+ * @see U_CHARSET_FAMILY
+ * @stable ICU 2.0
+ */
+U_STABLE void U_EXPORT2
+u_UCharsToChars(const UChar *us, char *cs, int32_t length);
+
 #endif

@@ -20,6 +20,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/putil.h"
 #include "unicode/ustdio.h"
 #include "unicode/ustring.h"
 #include "uscanf.h"
