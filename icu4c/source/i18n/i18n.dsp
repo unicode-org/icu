@@ -150,6 +150,10 @@ SOURCE=.\dtfmtsym.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\esctrn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\fmtable.cpp
 # End Source File
 # Begin Source File
@@ -339,6 +343,10 @@ SOURCE=.\udat.cpp
 # Begin Source File
 
 SOURCE=.\umsg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unesctrn.cpp
 # End Source File
 # Begin Source File
 
