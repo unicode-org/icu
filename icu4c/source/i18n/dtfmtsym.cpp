@@ -28,6 +28,7 @@
 #include "ucln_in.h"
 #include "mutex.h"
 #include "cmemory.h"
+#include "cstring.h"
  
 // *****************************************************************************
 // class DateFormatSymbols
@@ -535,13 +536,40 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar
 }
 
 ResourceBundle
-DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char * /*type*/, UErrorCode& status )
+DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status )
 {
-  return rb.get(tag, status);
+  char tmp[100];
+  char *fullTag = tmp;
+
+  if(!type || !*type) {
+    type = "gregorian";
+  }
+  
+  int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
+  if(len > 100) {
+    fullTag = (char*)uprv_malloc(len+1);
+  }
+
+  uprv_strcpy(fullTag, tag);
+  uprv_strcat(fullTag, "_");
+  uprv_strcat(fullTag, type);
+
+  ResourceBundle resource = rb.get(fullTag, status);
+
+  if(status == U_MISSING_RESOURCE_ERROR) {
+    status = U_ZERO_ERROR;
+    resource = rb.get(tag, status);
+  }
+
+  if(fullTag != tmp) {  
+    delete fullTag;  // not stack allocated
+  }
+
+  return resource;
 }
 
 void
-DateFormatSymbols::initializeData(const Locale& locale, const char * /* type */, UErrorCode& status, UBool useLastResortData)
+DateFormatSymbols::initializeData(const Locale& locale, const char *type, UErrorCode& status, UBool useLastResortData)
 {
     int32_t i;
 
@@ -600,10 +628,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char * /* type */,
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    initField(&fEras, fErasCount, resource.get(fgErasTag, status), status);
-    initField(&fMonths, fMonthsCount, resource.get(fgMonthNamesTag, status), status);
-    initField(&fShortMonths, fShortMonthsCount, resource.get(fgMonthAbbreviationsTag, status), status);
-    initField(&fAmPms, fAmPmsCount, resource.get(fgAmPmMarkersTag, status), status);
+    initField(&fEras, fErasCount, getData(resource, fgErasTag, type, status), status);
+    initField(&fMonths, fMonthsCount, getData(resource, fgMonthNamesTag, type, status), status);
+    initField(&fShortMonths, fShortMonthsCount, getData(resource, fgMonthAbbreviationsTag, type, status), status);
+    initField(&fAmPms, fAmPmsCount, getData(resource, fgAmPmMarkersTag, type, status), status);
     // fastCopyFrom() - see assignArray comments
     fLocalPatternChars.fastCopyFrom(resource.getStringEx(fgLocalPatternCharsTag, status));
 
@@ -633,7 +661,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char * /* type */,
     }
 
     // {sfb} fixed to handle 1-based weekdays
-    ResourceBundle weekdaysData = resource.get(fgDayNamesTag, status);
+    ResourceBundle weekdaysData = getData(resource, fgDayNamesTag, type, status);
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     /* test for NULL */
@@ -647,7 +675,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char * /* type */,
         fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
 
-    ResourceBundle lsweekdaysData = resource.get(fgDayAbbreviationsTag, status);
+    ResourceBundle lsweekdaysData = getData(resource, fgDayAbbreviationsTag, type, status);
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     /* test for NULL */

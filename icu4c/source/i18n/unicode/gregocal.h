@@ -560,7 +560,7 @@ protected:
      * Called by computeFields. Converts calendar's year into Gregorian Extended Year (where negative = BC)
      * @internal
      */
-    //virtual int32_t getGregorianYear(UErrorCode &status);
+    virtual int32_t getGregorianYear(UErrorCode &status);
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
@@ -580,7 +580,7 @@ protected:
      */
     virtual void computeTime(UErrorCode& status);
 
-private:
+ private:
     GregorianCalendar(); // default constructor not implemented
 
  protected:
@@ -634,6 +634,20 @@ private:
      * @return       the day number with respect to the epoch.  
      */
     virtual UDate getEpochDay(UErrorCode& status);
+
+    /**
+     * Compute the date-based fields given the milliseconds since the epoch start. Do
+     * not compute the time-based fields (HOUR, MINUTE, etc.).
+     *
+     * @param theTime the time in wall millis (either Standard or DST),
+     * whichever is in effect
+     * @param quick if true, only compute the ERA, YEAR, MONTH, DATE,
+     * DAY_OF_WEEK, and DAY_OF_YEAR.
+     * @param status Fill-in parameter which receives the status of this operation.
+     * @internal
+     */
+    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
+
  private:
     /**
      * Compute the julian day number of the given year.
@@ -680,18 +694,6 @@ private:
      * @return the Julian day number
      */
     double computeJulianDay(UBool isGregorian, int32_t year);
-
-    /**
-     * Compute the date-based fields given the milliseconds since the epoch start. Do
-     * not compute the time-based fields (HOUR, MINUTE, etc.).
-     *
-     * @param theTime the time in wall millis (either Standard or DST),
-     * whichever is in effect
-     * @param quick if true, only compute the ERA, YEAR, MONTH, DATE,
-     * DAY_OF_WEEK, and DAY_OF_YEAR.
-     * @param status Fill-in parameter which receives the status of this operation.
-     */
-    void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
 
 
     /**

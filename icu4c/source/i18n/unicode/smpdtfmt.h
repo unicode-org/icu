@@ -572,6 +572,17 @@ public:
      */
     virtual UClassID getDynamicClassID(void) const;
 
+    /**
+     * Set the calendar to be used by this date format. Initially, the default
+     * calendar for the specified or default locale is used.  The caller should
+     * not delete the Calendar object after it is adopted by this call.
+     * Adopting a new calendar will change to the default symbols.
+     *
+     * @param calendarToAdopt    Calendar object to be adopted.
+     * @stable ICU 2.0
+     */
+    virtual void adoptCalendar(Calendar* calendarToAdopt);
+
 private:
     static const char fgClassID;
 
@@ -650,6 +661,23 @@ private:
      * times, represents a numeric field.
      */
     static UBool isNumeric(UChar formatChar, int32_t count);
+
+    /**
+     * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
+     * @param adoptZone  Zone to be adopted, or NULL for TimeZone::createDefault().
+     * @param locale Locale of the calendar
+     * @param status Error code
+     * @return the newly constructed fCalendar
+     */
+    Calendar *initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status);
+
+    /**
+     * initializes fSymbols from parameters.
+     * @param locale Locale of the symbols
+     * @param calendar Alias to Calendar that will be used.
+     * @param status Error code
+     */
+    void initializeSymbols(const Locale& locale, Calendar* calendar, UErrorCode& status);
 
     /**
      * Called by several of the constructors to load pattern data and formatting symbols
@@ -779,6 +807,11 @@ private:
      * The formatting pattern for this formatter.
      */
     UnicodeString       fPattern;
+
+    /**
+     * The original locale used (for reloading symbols)
+     */
+    Locale              fLocale;
 
     /**
      * A pointer to an object containing the strings to use in formatting (e.g.,
