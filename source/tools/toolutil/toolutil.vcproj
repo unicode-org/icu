@@ -159,9 +159,6 @@
 				RelativePath=".\ucm.c">
 			</File>
 			<File
-				RelativePath=".\ucmpwrit.c">
-			</File>
-			<File
 				RelativePath=".\ucmstate.c">
 			</File>
 			<File
@@ -191,9 +188,6 @@
 			</File>
 			<File
 				RelativePath=".\ucm.h">
-			</File>
-			<File
-				RelativePath=".\ucmpwrit.h">
 			</File>
 			<File
 				RelativePath=".\unewdata.h">
