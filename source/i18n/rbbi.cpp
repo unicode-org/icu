@@ -10,6 +10,8 @@
 
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
+#include "rbbi_tbl.h"
+#include "filestrm.h"
 
 /**
  * A token used as a character-category value to identify ignore characters
