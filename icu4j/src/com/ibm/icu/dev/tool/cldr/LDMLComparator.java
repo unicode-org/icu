@@ -145,7 +145,7 @@ public class LDMLComparator {
     private Hashtable requested = new Hashtable();
     private Hashtable deprecatedLanguageCodes = new Hashtable();
     private Hashtable deprecatedCountryCodes = new Hashtable();
-     
+    private TreeSet vettingSet = new TreeSet();
     private String  encoding   = "UTF-8"; // default encoding
     
     //PN added
@@ -292,6 +292,7 @@ public class LDMLComparator {
                         indexwriter.println("</tr>");
                         is.close();
                     }
+                    // TODO: handle vettingSet; 
                 }
             }
         }catch(Exception e)
@@ -392,6 +393,10 @@ public class LDMLComparator {
                 if (!optionRecognized)
                 {
                     result |= OPT_UNKNOWN;
+                }
+            } else {
+                if(m_Vetting == true) {
+                    vettingSet.add(option);
                 }
             }
         }

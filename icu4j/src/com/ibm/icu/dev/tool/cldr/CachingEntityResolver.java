@@ -41,6 +41,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import com.ibm.icu.dev.tool.UOption;
+
+
 public class CachingEntityResolver implements EntityResolver {
     static final String CLDR_DTD_CACHE = "CLDR_DTD_CACHE";
     private static String gCacheDir = null;

@@ -170,7 +170,7 @@ public class LDML2ICUConverter {
         if(writeSupplemental==true){
             int lastIndex = args[0].lastIndexOf(File.separator, args[0].length()) + 1 /* add  1 to skip past the separator */; 
             fileName = args[0].substring(lastIndex, args[0].length());
-            String xmlfileName = getFullPath(false,args[0]);
+            String xmlfileName = LDMLUtilities.getFullPath(false,args[0],sourceDir, destDir);
             try {
 
                 printInfo("Parsing document "+xmlfileName);
@@ -196,7 +196,7 @@ public class LDML2ICUConverter {
                 long start = System.currentTimeMillis();
                 int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1 /* add  1 to skip past the separator */; 
                 fileName = args[i].substring(lastIndex, args[i].length());
-                String xmlfileName = getFullPath(false,args[i]);
+                String xmlfileName = LDMLUtilities.getFullPath(false,args[i],sourceDir, destDir);
                 /*
                  * debugging code
                  * 
@@ -256,41 +256,6 @@ public class LDML2ICUConverter {
             }
         }
     }
-    private String getFullPath(boolean fileType, String fName){
-        String str;
-        int lastIndex1 = fName.lastIndexOf(File.separator, fName.length()) + 1/* add  1 to skip past the separator */; 
-        int lastIndex2 = fName.lastIndexOf('.', fName.length());
-        if (fileType == true) {
-            if(lastIndex2 == -1){
-                fName = fName.trim() + ".txt";
-            }else{
-                if(!fName.substring(lastIndex2).equalsIgnoreCase(".txt")){
-                    fName =  fName.substring(lastIndex1,lastIndex2) + ".txt";
-                }
-            }
-            if (destDir != null && fName != null) {
-                str = destDir + "/" + fName.trim();                   
-            } else {
-                str = System.getProperty("user.dir") + "/" + fName.trim();
-            }
-        } else {
-            if(lastIndex2 == -1){
-                fName = fName.trim() + ".xml";
-            }else{
-                if(!fName.substring(lastIndex2).equalsIgnoreCase(".xml") && fName.substring(lastIndex2).equalsIgnoreCase(".xlf")){
-                    fName = fName.substring(lastIndex1,lastIndex2) + ".xml";
-                }
-            }
-            if(sourceDir != null && fName != null) {
-                str = sourceDir + "/" + fName;
-            } else if (lastIndex1 > 0) {
-                str = fName;
-            } else {
-                str = System.getProperty("user.dir") + "/" + fName;
-            }
-        }
-        return str;
-    } 
 
     private void createResourceBundle(String xmlfileName) {
          try {
