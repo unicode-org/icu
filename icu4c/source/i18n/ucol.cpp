@@ -37,7 +37,13 @@
 #include <stdio.h>
 #include <limits.h>
 
-
+/* added by synwee for trie manipulation*/
+#define STAGE_1_SHIFT_            10
+#define STAGE_2_SHIFT_            4
+#define STAGE_2_MASK_AFTER_SHIFT_ 0x3F
+#define STAGE_3_MASK_             0xF
+#define LAST_BYTE_MASK_           0xFF
+#define SECOND_LAST_BYTE_SHIFT_   8
 
 static UCollator* UCA = NULL;
 
@@ -78,7 +84,7 @@ isAcceptableUCA(void *context,
 
 inline  void IInit_collIterate(const UCollator *collator, const UChar *sourceString,
                               int32_t sourceLen, collIterate *s) { 
-    (s)->start = (s)->string = (s)->pos = (UChar *)(sourceString); 
+    (s)->string = (s)->pos = (UChar *)(sourceString); 
     (s)->flags = 0;
     (s)->endp = (UChar *)sourceString+sourceLen;
     if (sourceLen >= 0) {
@@ -624,19 +630,233 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
     return order; /* return the CE */
 }
 
+/**
+* Incremental previous normalization happens here. Pick up the range of chars 
+* identifed by FCD, normalize it into the collIterate's writable buffer, 
+* switch the collIterate's state to use the writable buffer.    
+* @param data collation iterator data
+*/
+void collPrevIterNormalize(collIterate *data)
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    UChar      *pEnd   = data->pos + 1;     /* End normalize + 1 */
+    UChar      *pStart = data->fcdPosition; /* Start normalize */
+    uint32_t    normLen;
+
+    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, 
+                              data->writableBuffer, data->writableBufSize, 
+                              &status);
+
+    if (U_FAILURE(status)) { /* This would be buffer overflow */
+        if (data->writableBuffer != data->stackWritableBuffer) {
+            uprv_free( data->writableBuffer);
+        }
+        data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) * 
+                                                    sizeof(UChar));
+        data->writableBufSize = normLen;
+        unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, 
+                        data->writableBuffer, data->writableBufSize, &status);
+    }
+
+    data->pos        = data->writableBuffer + normLen;
+    data->origFlags  = data->flags;
+    data->flags     |= UCOL_ITER_INNORMBUF;
+    data->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+}
 
 
+/**
+* Incremental FCD check for previous iteration and normalize. Called from 
+* getPrevCE when normalization state is suspect.                           
+* When entering, the state is known to be this:                                       
+* o  We are working in the main buffer of the collIterate, not the side 
+*    writable buffer. When in the side buffer, normalization mode is always 
+*    off, so we won't get here.                                                       
+* o  The leading combining class from the current character is 0 or the 
+*    trailing combining class of the previous char was zero.                 
+*    True because the previous call to this function will have always exited     
+*    that way, and we get called for every char where cc might be non-zero.        
+* @param data collation iterate struct
+*/
+inline void collPrevIterFCD(collIterate *data) 
+{
+    UChar32     codepoint;
+    uint8_t     leadingCC;
+    uint8_t     trailingCC = 0;
+    uint16_t    fcd;
+    UBool       needNormalize = FALSE;
+    int         length;
+    
+    length = (data->pos + 1) - data->string;
 
-/* added by synwee for trie manipulation*/
-#define STAGE_1_SHIFT_            10
-#define STAGE_2_SHIFT_            4
-#define STAGE_2_MASK_AFTER_SHIFT_ 0x3F
-#define STAGE_3_MASK_             0xF
-#define LAST_BYTE_MASK_           0xFF
-#define SECOND_LAST_BYTE_SHIFT_   8
+    /* Get the trailing combining class of the current character. */
+    UTF_PREV_CHAR(data->string, 0, length, codepoint);
+    
+    /* trie access */
+    fcd = FCD_STAGE_3_[
+        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+        (codepoint & STAGE_3_MASK_)];
 
+    leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
+    
+    if (leadingCC != 0) {
+        /*
+        The current char has a non-zero leading combining class.  
+        Scan backward until we find a char with a trailing cc of zero.
+        */
+        while (TRUE)
+        {
+            if (length <= 0) {
+                break;
+            }
 
+            UTF_PREV_CHAR(data->string, 0, length, codepoint);
+            
+            /* trie access */
+            fcd = FCD_STAGE_3_[
+                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] + 
+                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+                (codepoint & STAGE_3_MASK_)];
 
+            trailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+
+            if (trailingCC == 0) {
+                break;
+            }
+            
+            if (leadingCC < trailingCC) {
+                needNormalize = TRUE;
+            }
+            
+            leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_); 
+        }
+    }
+    
+    data->fcdPosition = data->string + length;
+
+    if (needNormalize) {
+        collPrevIterNormalize(data);
+    }
+}
+
+/**
+* Inline function that gets a simple CE.
+* So what it does is that it will first check the expansion buffer. If the 
+* expansion buffer is not empty, ie the end pointer to the expansion buffer 
+* is different from the string pointer, we return the collation element at the 
+* return pointer and decrement it.
+* For more complicated CEs it resorts to getComplicatedCE.
+* @param coll collator data
+* @param data collation iterator struct
+* @param status error status
+*/
+inline uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data, 
+                               UErrorCode *status) 
+{
+    uint32_t result = UCOL_NULLORDER;
+    if (data->CEpos > data->CEs) {                                           
+        data->toReturn --;                                                      
+        result = *(data->toReturn);                                            
+        if (data->CEs == data->toReturn) {                                     
+            data->CEpos = data->toReturn = data->CEs;                           
+        }                                                                        
+    }                                                                          
+    else {     
+        UChar ch;
+        /* 
+        Loop handles case when incremental normalize switches to or from the 
+        side buffer / original string, and we need to start again to get the 
+        next character.
+        */
+        while (TRUE) {                       
+            if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
+                /* 
+                Normal path for strings when length is specified.
+                Not in side buffer because it is always null terminated.
+                */
+                if (data->pos <= data->string) {
+                    /* End of the main source string */
+                    return UCOL_NO_MORE_CES;
+                }
+            }
+            else {
+                /* we are in the side buffer. */
+                if (data->pos <= data->writableBuffer) {
+                    /* 
+                    At the start of the normalize side buffer. 
+                    Go back to string.
+                    */
+                    data->pos   = data->fcdPosition;
+                    data->flags = data->origFlags;
+                    continue;
+                }
+            }
+            data->pos --;
+            ch = *(data->pos);
+        
+            /* 
+            * if there's no fcd and/or normalization stuff to do. 
+            * if the current character is not fcd.
+            * Trailing combining class == 0.
+            * Note if pos is in the writablebuffer, norm is always 0
+            */
+            if ((data->flags & UCOL_ITER_NORM) == 0 || 
+                data->fcdPosition <= data->pos ||
+                ch < 0xC0) {
+                break;
+            }
+        
+            if (ch < NFC_ZERO_CC_BLOCK_LIMIT_) {
+                /* if next character is FCD */
+                if (data->pos == data->string) {
+                    /* First char of string is always OK for FCD check */
+                    break;
+                }
+            
+                /* Not first char of string, do the FCD fast test */
+                if (*(data->pos - 1) < NFC_ZERO_CC_BLOCK_LIMIT_) {
+                    break;
+                }
+            }
+        
+            /* Need a more complete FCD check and possible normalization. */
+            collPrevIterFCD(data);
+            if ((data->flags & UCOL_ITER_INNORMBUF) == 0) {
+                /*  No normalization. Go ahead and process the char. */
+                break;
+            }
+        
+            /* 
+            Some normalization happened.  
+            Next loop picks up a char from the normalization buffer.        
+            */
+        }
+    
+        if (ch <= 0xFF) {                                                      
+          result = coll->latinOneMapping[ch];                               
+        }                                                                      
+        else {                                                                   
+            if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
+                UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->string && 
+                UCOL_ISTHAIPREVOWEL(*(data->pos -1))) 
+            {                      
+                result = UCOL_THAI;                                                
+            }                                                                    
+            else {                                                               
+                result = ucmp32_get(coll->mapping, ch);                        
+            }                                                                    
+        }
+        
+        if (result >= UCOL_NOT_FOUND) {                                       
+            result = getSpecialPrevCE(coll, result, data, status);      
+            if (result == UCOL_NOT_FOUND) {                                     
+                result = ucol_getPrevUCA(ch, data, status);                  
+            }
+        }                
+    }
+    return result;
+}
 
 
 /*    collIterNormalize     Incremental Normalization happens here.                       */
@@ -644,32 +864,29 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 /*                          normalize it into the collIterate's writable buffer,          */
 /*                          switch the collIterate's state to use the writable buffer.    */
 /*                                                                                        */
-void  collIterNormalize(collIterate *collationSource)
- {
-     UErrorCode  status = U_ZERO_ERROR;
-     UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
-     UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
-     uint32_t    normLen;
+void collIterNormalize(collIterate *collationSource)
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
+    UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
+    uint32_t    normLen;
 
-     normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+    normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
                               collationSource->writableBufSize, &status);
-     if (U_FAILURE(status)) { /* This would be buffer overflow */
-         if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
-             uprv_free( collationSource->writableBuffer);
-         }
-         collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
-         collationSource->writableBufSize = normLen;
-         unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                         collationSource->writableBufSize, &status);
-     }
-     collationSource->pos        = collationSource->writableBuffer;
-     collationSource->origFlags  = collationSource->flags;
-     collationSource->flags     |= UCOL_ITER_INNORMBUF;
-     collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
- };
-
-
-
+    if (U_FAILURE(status)) { /* This would be buffer overflow */
+        if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+            uprv_free( collationSource->writableBuffer);
+        }
+        collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+        collationSource->writableBufSize = normLen;
+        unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                        collationSource->writableBufSize, &status);
+    }
+    collationSource->pos        = collationSource->writableBuffer;
+    collationSource->origFlags  = collationSource->flags;
+    collationSource->flags     |= UCOL_ITER_INNORMBUF;
+    collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+}
 
 
 /* Incremental FCD check and normalize                                                    */
@@ -1077,7 +1294,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       /* at the beggining of the string */
       /* we have to make sure we know what is the situation we're in */
       /* quick fix is by using isUsingWritable, as shown below */
-      if ((collationSource->start < collationSource->pos) &&
+      if ((collationSource->string < collationSource->pos) &&
           (UTF_IS_FIRST_SURROGATE(prevChar = *(collationSource->pos - 1)))) 
       {
         uint32_t cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
@@ -1280,63 +1497,40 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       /* pending surrogate discussion with Markus and Mark */
       return UCOL_NOT_FOUND;
     case THAI_TAG:
-            // ToDo - Fix Thai for reverse iterator.   Stubbed out for now.
-            // Treat Thai as a length one expansion */
-            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-            CE = *CEOffset++;
-           break;
-#if 0
-      if (source->isThai == TRUE) 
-      { /* if we encountered Thai prevowel & the string is not yet touched */
-        source->isThai = FALSE;
-        strend =  source->pos;
-        size = strend - source->string;
-        if (size > UCOL_WRITABLE_BUFFER_SIZE) 
-        {
-          /*
-          someone else has already allocated something
+      if  ((source->flags & UCOL_ITER_INNORMBUF) || /* Already Swapped || */
+            source->string == source->pos        || /* At start of string.|| */
+            /* previous char not Thai prevowel */ 
+            UCOL_ISTHAIBASECONSONANT(*(source->pos)) == FALSE ||
+            UCOL_ISTHAIPREVOWEL(*(source->pos - 1)) == FALSE) 
+      {
+          /* Treat Thai as a length one expansion */
+          /* find the offset to expansion table */
+          CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); 
+          CE = *CEOffset ++;
+      }
+      else
+      {
+          /* 
+          Move the prevowel and the following base Consonant into the 
+          normalization buffer with their order swapped
           */
-          if (source->writableBuffer != source->stackWritableBuffer) {
-            uprv_free(source->writableBuffer);
-          }
-          source->writableBuffer = 
-            (UChar *)uprv_malloc(size * sizeof(UChar));
-          source->isThai = FALSE;
-        } 
-        UChar *sourceCopy = source->string;
-        UChar *targetCopy = source->writableBuffer;
-        while (sourceCopy < strend) {
-            if (UCOL_ISTHAIPREVOWEL(*sourceCopy) &&      
-            /* This is the combination that needs to be swapped */
-                UCOL_ISTHAIBASECONSONANT(*(sourceCopy + 1))) {
-                *(targetCopy)     = *(sourceCopy + 1);
-                *(targetCopy + 1) = *(sourceCopy);
-                targetCopy += 2;
-                sourceCopy += 2;
-            } 
-            else {
-                *(targetCopy ++) = *(sourceCopy ++);
-            }
-        }
-        source->pos   = targetCopy;
-        source->start = source->writableBuffer;
-        source->endp  = targetCopy;
-        source->CEpos = source->toReturn = source->CEs;
-        CE = UCOL_IGNORABLE;
-      } 
-      else 
-      { 
-        /* 
-        we have already played with the string, so treat Thai as a length one 
-        expansion 
-        */
-        /* find the offset to expansion table */
-        CEOffset = (uint32_t *)coll->image + getExpansionOffset(CE); 
-        CE = *CEOffset ++;
+          source->writableBuffer[0] = *source->pos;
+          source->writableBuffer[1] = *(source->pos - 1);
+          source->writableBuffer[2] = 0;
+            
+          /* 
+          Indicate where to continue in main input string after exhausting 
+          the writableBuffer 
+          */
+          source->fcdPosition       = source->pos - 1; 
+          source->pos               = source->writableBuffer + 2;
+          source->origFlags         = source->flags;
+          source->flags            |= UCOL_ITER_INNORMBUF;
+          source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+            
+          CE = UCOL_IGNORABLE;
       }
       break;
-#endif
-
     case CONTRACTION_TAG:
       /* This should handle contractions */
       for(;;)
@@ -1352,7 +1546,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                       (UCharOffset - coll->contractionIndex));
         }
 
-        if (source->pos <= source->start) { 
+        if (source->pos <= source->string) { 
           /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 

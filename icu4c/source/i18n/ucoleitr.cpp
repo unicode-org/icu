@@ -20,7 +20,7 @@
 #include "ucol_imp.h"
 #include "cmemory.h"
 
-#define BUFFER_LENGTH 100
+#define BUFFER_LENGTH             100
 
 typedef struct collIterate collIterator;
 
@@ -52,12 +52,6 @@ ucol_openElements(const UCollator  *coll,
 
   result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
 
-  /* gets the correct length of the null-terminated string */
-  if (textLength == -1) {
-    textLength = u_strlen(text);
-  }
-
-  result->length_ = textLength;
   result->reset_   = TRUE;
   result->normalization_ = UNORM_DEFAULT;
 
@@ -86,12 +80,16 @@ ucol_reset(UCollationElements *elems)
 {
   collIterate *ci = &(elems->iteratordata_);
   elems->reset_   = TRUE;
-  ci->start       = ci->string;
   ci->pos         = ci->string;
-  ci->endp        = ci->string + elems->length_;
+  if (ci->endp == NULL) {
+    ci->endp      = ci->string + u_strlen(ci->string);
+  }
   ci->CEpos       = ci->toReturn = ci->CEs;
+  ci->flags       = UCOL_ITER_HASLEN;
+  if (ci->coll->normalizationMode == UCOL_ON) {
+    ci->flags |= UCOL_ITER_NORM;
+  }
   
-  /* ci->isThai      = TRUE;  */
   if (ci->stackWritableBuffer != ci->writableBuffer) {
     uprv_free(ci->writableBuffer);
     ci->writableBuffer = ci->stackWritableBuffer;
@@ -109,40 +107,8 @@ ucol_next(UCollationElements *elems,
 
   elems->reset_ = FALSE;
 
-#if 0
-#ifdef _DEBUG
-  if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
-    {                       
-      result = *((elems->iteratordata_).toReturn++);                                      
-      if ((elems->iteratordata_).CEpos == (elems->iteratordata_).toReturn)
-        (elems->iteratordata_).CEpos = (elems->iteratordata_).toReturn = 
-        (elems->iteratordata_).CEs; 
-    } 
-    else 
-      if ((elems->iteratordata_).pos < (elems->iteratordata_).endp) 
-      {                        
-        UChar ch = *(elems->iteratordata_).pos++;     
-        if (ch <= 0xFF)
-          (result) = (elems->iteratordata_.coll)->latinOneMapping[ch];                                          
-        else
-          (result) = ucmp32_get((elems->iteratordata_.coll)->mapping, ch);                                      
-                                                                                    
-        if((result) >= UCOL_NOT_FOUND) 
-        {
-          (result) = getSpecialCE((elems->iteratordata_.coll), (result), 
-                                  &(elems->iteratordata_), (status));        
-          if ((result) == UCOL_NOT_FOUND)
-            (result) = ucol_getNextUCA(ch, &(elems->iteratordata_), (status));                                                                            
-        }                                                                               
-      } 
-      else
-        (result) = UCOL_NO_MORE_CES;
-#else
-      UCOL_GETNEXTCE(result, elems->iteratordata_.coll, elems->iteratordata_, status);
-#endif
-#endif
-      result = ucol_getNextCE(elems->iteratordata_.coll, &elems->iteratordata_, status);
-
+  result = ucol_getNextCE(elems->iteratordata_.coll, &elems->iteratordata_, 
+                          status);
   
   if (result == UCOL_NO_MORE_CES) {
     result = UCOL_NULLORDER;
@@ -162,62 +128,19 @@ ucol_previous(UCollationElements *elems,
     uint32_t result;
 
     if (elems->reset_ && 
-        (elems->iteratordata_.pos == elems->iteratordata_.string))
-      elems->iteratordata_.pos = elems->iteratordata_.endp;
+        (elems->iteratordata_.pos == elems->iteratordata_.string)) {
+        if (elems->iteratordata_.endp == NULL) {
+            elems->iteratordata_.endp = elems->iteratordata_.string + 
+                                        u_strlen(elems->iteratordata_.string);
+            elems->iteratordata_.flags |= UCOL_ITER_HASLEN;
+        }
+        elems->iteratordata_.pos = elems->iteratordata_.endp;
+    }
 
     elems->reset_ = FALSE;
 
-#if 1
-// #ifdef _DEBUG
-    // TODO:  Fix Thai for reworked iterators.
-    const UCollator   *coll  = elems->iteratordata_.coll;
-          collIterate *data  = &(elems->iteratordata_);
-          int32_t     length = elems->length_;
-
-    if (data->CEpos > data->CEs) 
-    {              
-      data->toReturn --;
-      (result) = *(data->toReturn);                                           
-      if (data->CEs == data->toReturn)                                
-        data->CEpos = data->toReturn = data->CEs; 
-    }                                                                          
-    else 
-    {                    
-      if (data->pos == data->start) {
-        if (data->pos < data->start) {
-          fprintf(stderr, "less pos:%x string:%x writable:%x\n", data->pos, data->string, data->writableBuffer);
-        }
-        (result) = UCOL_NO_MORE_CES;                                                                                                                    
-      } 
-      else 
-      {                  
-        data->pos --;                                 
-      
-        UChar ch = *(data->pos);
-        if (ch <= 0xFF)                                                
-          (result) = (coll)->latinOneMapping[ch];                                                                                       
-        else {
-          /* if (data->isThai &&  UCOL_ISTHAIBASECONSONANT(ch) && data->pos > data->start 
-              && UCOL_ISTHAIPREVOWEL(*(data->pos -1))) {
-            result = UCOL_THAI;                     
-          } 
-          else */ {  
-            (result) = ucmp32_get((coll)->mapping, ch);
-          }
-        }
-                                                                       
-        if ((result) >= UCOL_NOT_FOUND) 
-        {
-          (result) = getSpecialPrevCE(coll, result, data, status);      
-          if ((result) == UCOL_NOT_FOUND)
-            (result) = ucol_getPrevUCA(ch, data, status);                                      
-        }                                                                      
-      }                                                                        
-    } 
-#else
-    UCOL_GETPREVCE(result, elems->iteratordata_.coll, elems->iteratordata_, 
-                   elems->length_, status);
-#endif
+    result = ucol_getPrevCE(elems->iteratordata_.coll, &(elems->iteratordata_), 
+                            status);
     
     if (result == UCOL_NO_MORE_CES) {
       result = UCOL_NULLORDER;
@@ -251,8 +174,6 @@ ucol_setText(      UCollationElements *elems,
     textLength = u_strlen(text);
   }
 
-  elems->length_ = textLength;
-
   if (elems->isWritable && elems->iteratordata_.string != NULL)
   {
     uprv_free(elems->iteratordata_.string);
@@ -268,7 +189,7 @@ U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
-  return ci->pos - ci->start;
+  return ci->pos - ci->string;
 }
 
 U_CAPI void
@@ -285,10 +206,14 @@ ucol_setOffset(UCollationElements    *elems,
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
-  /* ci->isThai      = TRUE; */
+  ci->flags       = UCOL_ITER_HASLEN;
+  if (ci->coll->normalizationMode == UCOL_ON) {
+    ci->flags |= UCOL_ITER_NORM;
+  }
   if (ci->stackWritableBuffer != ci->writableBuffer)
   {
     uprv_free(ci->writableBuffer);
+    /* reseting UCOL_ITER_INNORMBUF */
     ci->writableBuffer = ci->stackWritableBuffer;
   }
 }

@@ -27,6 +27,7 @@
 #include "unicode/coleitr.h"
 #include "ucol_imp.h"
 #include "cmemory.h"
+#include "unicode/ustring.h"
 
 
 /* Constants --------------------------------------------------------------- */
@@ -41,7 +42,8 @@ CollationElementIterator::CollationElementIterator(
                                          : isDataOwned_(TRUE)
 {
   UErrorCode status = U_ZERO_ERROR;
-  m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, &status);
+  m_data_ = ucol_openElements(other.m_data_->iteratordata_.coll, NULL, 0, 
+                              &status);
   *this = other;
 }
 
@@ -83,15 +85,23 @@ UBool CollationElementIterator::operator==(
   
   if (m_data_ == that.m_data_)
     return TRUE;
+
+  int length = 0;
+  if (this->m_data_->iteratordata_.flags & UCOL_ITER_HASLEN > 0) {
+      length = this->m_data_->iteratordata_.endp -
+               this->m_data_->iteratordata_.string;
+  }
+  else {
+      length = u_strlen(this->m_data_->iteratordata_.string);
+  }
   
   return (this->m_data_->normalization_ == that.m_data_->normalization_ &&
-    this->m_data_->length_ == that.m_data_->length_ &&
     this->m_data_->reset_  == that.m_data_->reset_ &&
     uprv_memcmp(this->m_data_->iteratordata_.string, 
-                that.m_data_->iteratordata_.string,
-                this->m_data_->length_) == 0 &&
+                that.m_data_->iteratordata_.string, length) == 0 &&
     this->getOffset() == that.getOffset() &&  
-    /* this->m_data_->iteratordata_.isThai == that.m_data_->iteratordata_.isThai && */
+    /* this->m_data_->iteratordata_.isThai == 
+                                      that.m_data_->iteratordata_.isThai && */
     this->m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll);
 }
 
@@ -126,19 +136,20 @@ void CollationElementIterator::setOffset(UTextOffset newOffset,
 void CollationElementIterator::setText(const UnicodeString& source,
                                        UErrorCode& status)
 {
-  if (U_FAILURE(status))
+  if (U_FAILURE(status)) {
     return;
+  }
   int32_t length = source.length();
-  UChar *string = new UChar[length];
+  UChar *string = (UChar *)uprv_malloc(sizeof(UChar) * length);
   source.extract(0, length, string);
 	
-  m_data_->length_ = length;
-
   if (m_data_->isWritable && 
-      m_data_->iteratordata_.string != NULL)
+      m_data_->iteratordata_.string != NULL) {
     uprv_free(m_data_->iteratordata_.string);
+  }
   m_data_->isWritable = TRUE;
-  init_collIterate(m_data_->iteratordata_.coll, string, length, &m_data_->iteratordata_);
+  init_collIterate(m_data_->iteratordata_.coll, string, length, 
+                   &m_data_->iteratordata_);
 }
 
 // Sets the source to the new character iterator.
@@ -149,7 +160,7 @@ void CollationElementIterator::setText(CharacterIterator& source,
     return;
     
   int32_t length = source.getLength();
-  UChar *buffer = new UChar[length];
+  UChar *buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
   /* 
   Using this constructor will prevent buffer from being removed when
   string gets removed
@@ -157,13 +168,12 @@ void CollationElementIterator::setText(CharacterIterator& source,
   UnicodeString string;
   source.getText(string);
   string.extract(0, length, buffer);
-  m_data_->length_ = length;
-
-  if (m_data_->isWritable && 
-      m_data_->iteratordata_.string != NULL)
+  
+  if (m_data_->isWritable && m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
   m_data_->isWritable = TRUE;
-  init_collIterate(m_data_->iteratordata_.coll, buffer, length, &m_data_->iteratordata_);
+  init_collIterate(m_data_->iteratordata_.coll, buffer, length, 
+                   &m_data_->iteratordata_);
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
@@ -210,7 +220,7 @@ CollationElementIterator::CollationElementIterator(
     return;
  
   int32_t length = sourceText.length();
-  UChar *string = new UChar[length];
+  UChar *string = (UChar *)uprv_malloc(sizeof(UChar) * length);
   /* 
   Using this constructor will prevent buffer from being removed when
   string gets removed
@@ -254,7 +264,7 @@ CollationElementIterator::CollationElementIterator(
   }
   */
   int32_t length = sourceText.getLength();
-  UChar *buffer = new UChar[length];
+  UChar *buffer = (UChar *)uprv_malloc(sizeof(UChar) * length);
   /* 
   Using this constructor will prevent buffer from being removed when
   string gets removed
@@ -267,37 +277,73 @@ CollationElementIterator::CollationElementIterator(
   m_data_->isWritable = TRUE;
 }
 
-/* CollationElementIterator private methods -------------------------------- */
+/* CollationElementIterator protected methods ----------------------------- */
 
 const CollationElementIterator& CollationElementIterator::operator=(
                                          const CollationElementIterator& other)
 {
   if (this != &other)
   {
-    this->m_data_->normalization_ = other.m_data_->normalization_;
-    this->m_data_->length_        = other.m_data_->length_;
-    this->m_data_->reset_         = other.m_data_->reset_;
+      UCollationElements *ucolelem      = this->m_data_;
+      UCollationElements *otherucolelem = other.m_data_;
+      collIterate        *coliter       = &(ucolelem->iteratordata_);
+      collIterate        *othercoliter  = &(otherucolelem->iteratordata_);
+      int                length         = othercoliter->endp == NULL ?
+                                          u_strlen(othercoliter->string) : 
+                                    othercoliter->endp - othercoliter->string;
+
+      ucolelem->normalization_ = otherucolelem->normalization_;
+      ucolelem->reset_         = otherucolelem->reset_;
+      ucolelem->isWritable     = TRUE;
     
+      /* create a duplicate of string */
+      coliter->string   = (UChar *)uprv_malloc(length * sizeof(UChar));
+      uprv_memcpy(coliter->string, othercoliter->string,
+                  length * sizeof(UChar));
 
-    this->m_data_->iteratordata_.string   = other.m_data_->iteratordata_.string;
-    this->m_data_->iteratordata_.start    = other.m_data_->iteratordata_.start;
-    this->m_data_->iteratordata_.endp     = other.m_data_->iteratordata_.endp;
-    this->m_data_->iteratordata_.pos      = other.m_data_->iteratordata_.pos;
-    this->m_data_->iteratordata_.toReturn = other.m_data_->iteratordata_.CEs + 
-          (other.m_data_->iteratordata_.toReturn - other.m_data_->iteratordata_.CEs);
-    this->m_data_->iteratordata_.CEpos    = other.m_data_->iteratordata_.CEs + 
-          (other.m_data_->iteratordata_.CEpos - other.m_data_->iteratordata_.CEs);
-    uprv_memcpy(this->m_data_->iteratordata_.CEs, other.m_data_->iteratordata_.CEs, 
-                UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
-    /* this->m_data_->iteratordata_.isThai   = other.m_data_->iteratordata_.isThai; */
-    this->m_data_->isWritable = other.m_data_->isWritable;
+      /* start and end of string */
+      coliter->endp = coliter->endp = coliter->string + length;
 
-    uprv_memcpy(this->m_data_->iteratordata_.stackWritableBuffer, 
-                other.m_data_->iteratordata_.stackWritableBuffer, 
-                UCOL_WRITABLE_BUFFER_SIZE * sizeof(UChar));
-    /* writablebuffer is not used at the moment, not used */
-    this->m_data_->iteratordata_.coll = other.m_data_->iteratordata_.coll;
-    this->isDataOwned_ = FALSE;
+      /* handle writable buffer here */
+      coliter->writableBufSize = othercoliter->writableBufSize;
+      if (othercoliter->stackWritableBuffer == othercoliter->writableBuffer) {
+        uprv_memcpy(coliter->stackWritableBuffer, 
+                    othercoliter->stackWritableBuffer, 
+                    UCOL_WRITABLE_BUFFER_SIZE * sizeof(UChar));
+        coliter->writableBuffer = coliter->stackWritableBuffer;
+      }
+      else {
+        coliter->writableBuffer = (UChar *)uprv_malloc(
+                                     coliter->writableBufSize * sizeof(UChar));
+        uprv_memcpy(coliter->writableBuffer, othercoliter->writableBuffer,
+                    coliter->writableBufSize * sizeof(UChar));
+      }
+         
+      /* current position */
+      if (othercoliter->pos >= othercoliter->string && 
+          othercoliter->pos <= othercoliter->endp) {
+          coliter->pos = coliter->string + 
+                        (othercoliter->pos - othercoliter->string);
+      }
+      else {
+        coliter->pos = coliter->writableBuffer + 
+                        (othercoliter->pos - othercoliter->writableBuffer);
+      }
+
+      /* CE buffer */
+      uprv_memcpy(coliter->CEs, othercoliter->CEs, 
+                  UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
+      coliter->toReturn = coliter->CEs + 
+                         (othercoliter->toReturn - othercoliter->CEs);
+      coliter->CEpos    = othercoliter->CEs + 
+                         (othercoliter->CEpos - othercoliter->CEs);
+    
+      coliter->fcdPosition = coliter->string + 
+                            (othercoliter->fcdPosition - othercoliter->string);
+      coliter->flags       = othercoliter->flags | UCOL_ITER_HASLEN;
+      coliter->origFlags   = othercoliter->origFlags;
+      coliter->coll = othercoliter->coll;
+      this->isDataOwned_ = TRUE;
   }
 
   return *this;
