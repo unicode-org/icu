@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctestfw", "..\tools\ctestfw
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "decmn", "..\tools\gencmn\decmn.vcproj", "{20869594-A3DD-4A75-8068-99B03A5CF4E4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "derb", "..\TOOLS\GENRB\derb.vcproj", "{D3065ADB-8820-4CC7-9B6C-9510833961A3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "derb", "..\tools\genrb\derb.vcproj", "{D3065ADB-8820-4CC7-9B6C-9510833961A3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genbrk", "..\tools\genbrk\genbrk.vcproj", "{C2BE5000-7501-4E87-9724-B8D82494FAE6}"
 EndProject
@@ -31,7 +31,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genrb", "..\tools\genrb\gen
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gentest", "..\tools\gentest\gentest.vcproj", "{77C78066-746F-4EA6-B3FE-B8C8A4A97891}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genuca", "..\TOOLS\genuca\genuca.vcproj", "{86829694-A375-4C58-B4EA-96EF514E3225}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genuca", "..\tools\genuca\genuca.vcproj", "{86829694-A375-4C58-B4EA-96EF514E3225}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i18n", "..\i18n\i18n.vcproj", "{0178B127-6269-407D-B112-93877BB62776}"
 EndProject
@@ -49,7 +49,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "makedata", "..\data\makedat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pkgdata", "..\tools\pkgdata\pkgdata.vcproj", "{4C8454FE-81D3-4CA3-9927-29BA96F03DAC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stubdata", "..\STUBDATA\stubdata.vcproj", "{203EC78A-0531-43F0-A636-285439BDE025}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stubdata", "..\stubdata\stubdata.vcproj", "{203EC78A-0531-43F0-A636-285439BDE025}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "toolutil", "..\tools\toolutil\toolutil.vcproj", "{6B231032-3CB5-4EED-9210-810D666A23A0}"
 EndProject
@@ -59,7 +59,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ustdio", "..\extra\ustdio\u
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gensprep", "..\tools\gensprep\gensprep.vcproj", "{631C23CE-6C1D-4875-88F0-85E0A42B36EA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icuswap", "..\..\..\..\dev\icu\source\tools\icuswap\icuswap.vcproj", "{6FC24387-370C-4561-9582-7A819749E2C5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "icuswap", "..\tools\icuswap\icuswap.vcproj", "{6FC24387-370C-4561-9582-7A819749E2C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
