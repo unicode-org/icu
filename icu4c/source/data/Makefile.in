@@ -123,12 +123,12 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-
-distclean-local: clean-local
-	$(RMV) Makefile
 ifneq ($(wildcard .links),)
 	$(RMV) UnicodeData-$(UNICODE_VERSION).txt thaidict.brk unidata .links
 endif
+
+distclean-local: clean-local
+	$(RMV) Makefile
 
 check-local:
 

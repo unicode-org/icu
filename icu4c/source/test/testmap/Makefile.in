@@ -45,7 +45,7 @@ top_builddir = ../..
 subdir = test/testmap
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = testmap
@@ -99,7 +99,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS)
+	$(RMV) Makefile
 
 check-local: all-local
 	ICU_DATA=NOTHING ./$(TARGET)

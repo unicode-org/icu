@@ -109,12 +109,6 @@ AC_ARG_ENABLE(shared,
     [ENABLE_SHARED=YES]
 )
 AC_SUBST(ENABLE_SHARED)
-if test x$ENABLE_SHARED = xYES
-then
-    CPPFLAGS="$CPPFLAGS \$(PICCPPFLAGS)"
-    CFLAGS="$CFLAGS \$(PICFLAGS)"
-    CXXFLAGS="$CXXFLAGS \$(PICFLAGS)"
-fi
 
 dnl Check whether to build static libraries
 AC_ARG_ENABLE(static,
@@ -553,6 +547,14 @@ if test $hpuxcma = true; then
 fi
 dnl END special 
 
+dnl Now that we're done using CPPFLAGS etc. for tests, we can change it
+dnl for build.
+if test x$ENABLE_SHARED = xYES
+then
+    CPPFLAGS="$CPPFLAGS \$(PICCPPFLAGS)"
+    CFLAGS="$CFLAGS \$(PICFLAGS)"
+    CXXFLAGS="$CXXFLAGS \$(PICFLAGS)"
+fi
 
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then
 	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"

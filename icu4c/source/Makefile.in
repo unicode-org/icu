@@ -71,7 +71,7 @@ EXTRA_DATA =
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive 
+check check-local check-recursive clean-recursive-with-twist
 
 ## Clear suffix list
 .SUFFIXES :
@@ -79,16 +79,19 @@ check check-local check-recursive
 ## List of standard targets
 all: all-local all-recursive
 install: install-recursive install-local
-clean: clean-recursive clean-local
+clean: clean-recursive-with-twist clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive check-local
+
+LOCAL_SUBDIRS = $(SUBDIRS)
+CLEAN_FIRST_SUBDIRS = tools
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
+	list='$(LOCAL_SUBDIRS)'; for subdir in $$list; do \
 	  echo "Making $$target in $$subdir"; \
 	  if test "$$subdir" = "."; then \
 	    dot_seen=yes; \
@@ -101,6 +104,9 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	if test "$$dot_seen" = "no"; then \
 	  $(MAKE) "$$target-local" || exit; \
 	fi
+
+clean-recursive-with-twist:
+	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out tools,$($(CLEAN_FIRST_SUBDIRS)))'
 
 all-local: $(srcdir)/configure
 

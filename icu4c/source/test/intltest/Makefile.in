@@ -42,7 +42,7 @@ top_builddir = ../..
 subdir = test/intltest
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = intltest
@@ -96,7 +96,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS)
+	$(RMV) Makefile
 
 check-local: all-local
 	 ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT ./$(TARGET) 

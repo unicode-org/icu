@@ -49,7 +49,7 @@ top_builddir = ../..
 subdir = tools/makeconv
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
 
 ## Target information
 TARGET = makeconv
@@ -121,7 +121,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 

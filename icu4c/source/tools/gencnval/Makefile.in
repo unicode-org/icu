@@ -57,7 +57,7 @@ top_builddir = ../..
 subdir = tools/gencnval
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(GENERATED_MAN_FILES)
+CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(RES_FILES) $(TEST_FILES)
 
 ## Target information
 TARGET = gencnval
@@ -111,7 +111,7 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
+	$(RMV) Makefile
 
 check-local: all-local
 
