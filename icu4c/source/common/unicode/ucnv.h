@@ -487,7 +487,7 @@ ucnv_reset (UConverter * converter);
  * Unicode to a known default state. It will also empty the internal
  * output buffers used for the conversion to Unicode codepoints.
  * @param converter the Unicode converter
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI void U_EXPORT2 
 ucnv_resetToUnicode(UConverter *converter);
@@ -498,7 +498,7 @@ ucnv_resetToUnicode(UConverter *converter);
  * Unicode to a known default state. It will also empty the internal output
  * buffers used for the conversion from Unicode codepoints.
  * @param converter the Unicode converter
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI void U_EXPORT2 
 ucnv_resetFromUnicode(UConverter *converter);
@@ -1071,6 +1071,7 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
  * @see ucnv_getStandardName
  * @see uenum_close
  * @see uenum_next
+ * @draft ICU 2.2
  */
 U_CAPI UEnumeration *
 ucnv_openStandardNames(const char *convName,
