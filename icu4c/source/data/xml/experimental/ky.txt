@@ -8,6 +8,9 @@
 ky{
     Version{ "x0.1" }
     LocaleID:int { 0x40 }
+    Languages {
+        ky { "\u041A\u044B\u0440\u0433\u044B\u0437" }
+    }
 //    ShortLanguage{
 //        "KYR"
 //    }

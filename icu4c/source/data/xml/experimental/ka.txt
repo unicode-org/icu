@@ -11,6 +11,9 @@ ka{
     Languages {
         ka { "\u10E5\u10D0\u10E0\u10D7\u10E3\u10DA\u10D8" }
     }
+    Countries {
+        GE { "\u10E1\u10D0\u10E5\u10D0\u10E0\u10D7\u10D5\u10D4\u10DA\u10DD" }
+    }
 //    ShortLanguage{
 //        "KAT"
 //    }
