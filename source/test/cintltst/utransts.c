@@ -173,6 +173,71 @@ static void TestAPI() {
     }
 }
 
+static void TestUnicodeIDs() {
+    UEnumeration *uenum;
+    UTransliterator *utrans;
+    const UChar *id, *id2;
+    int32_t idLength, id2Length, count, count2;
+
+    UErrorCode errorCode;
+
+    errorCode=U_ZERO_ERROR;
+    uenum=utrans_openIDs(&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("utrans_openIDs() failed - %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    count=uenum_count(uenum, &errorCode);
+    if(U_FAILURE(errorCode) || count<1) {
+        log_err("uenum_count(transliterator IDs)=%d - %s\n", count, u_errorName(errorCode));
+    }
+
+    count=0;
+    for(;;) {
+        id=uenum_unext(uenum, &idLength, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("uenum_unext(transliterator ID %d) failed - %s\n", count, u_errorName(errorCode));
+            break;
+        }
+        if(id==NULL) {
+            break;
+        }
+
+        if(++count==5) {
+            /* try to actually open only a few transliterators */
+            continue;
+        }
+
+        utrans=utrans_openU(id, idLength, UTRANS_FORWARD, NULL, 0, NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("utrans_openU(%s) failed - %s\n", aescstrdup(id, idLength), u_errorName(errorCode));
+            continue;
+        }
+
+        id2=utrans_getUnicodeID(utrans, &id2Length);
+        if(idLength!=id2Length || 0!=u_memcmp(id, id2, idLength)) {
+            log_err("utrans_getUnicodeID(%s) does not match the original ID\n", aescstrdup(id, idLength));
+        }
+
+        utrans_close(utrans);
+    }
+
+    uenum_reset(uenum, &errorCode);
+    if(U_FAILURE(errorCode) || count<1) {
+        log_err("uenum_reset(transliterator IDs) failed - %s\n", u_errorName(errorCode));
+    } else {
+        count2=uenum_count(uenum, &errorCode);
+        if(U_FAILURE(errorCode) || count<1) {
+            log_err("2nd uenum_count(transliterator IDs)=%d - %s\n", count2, u_errorName(errorCode));
+        } else if(count!=count2) {
+            log_err("uenum_unext(transliterator IDs) returned %d IDs but uenum_count() after uenum_reset() claims there are %d\n", count, count2);
+        }
+    }
+
+    uenum_close(uenum);
+}
+
 static void TestOpenInverse(){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
@@ -271,9 +336,12 @@ static void TestClone(){
 static void TestRegisterUnregister(){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
-    UTransliterator* rules=NULL;
+    UTransliterator* rules=NULL, *rules2;
     UTransliterator* inverse1=NULL;
     UChar rule[]={ 0x0061, 0x003c, 0x003e, 0x0063}; /*a<>b*/
+
+    U_STRING_DECL(ID, "TestA-TestB", 11);
+    U_STRING_INIT(ID, "TestA-TestB", 11);
 
     /* Make sure it doesn't exist */
     t1=utrans_open("TestA-TestB", UTRANS_FORWARD,NULL,0,NULL, &status);
@@ -295,6 +363,14 @@ static void TestRegisterUnregister(){
         log_err("FAIL: utrans_openRules(a<>B) failed with error=%s\n", myErrorName(status));
         return;
     }
+
+    /* clone it so we can register it a second time */
+    rules2=utrans_clone(rules, &status);
+    if(U_FAILURE(status)) {
+        log_err("FAIL: utrans_clone(a<>B) failed with error=%s\n", myErrorName(status));
+        return;
+    }
+
     status=U_ZERO_ERROR;
     /* Register it */
     utrans_register(rules, &status);
@@ -320,7 +396,34 @@ static void TestRegisterUnregister(){
         log_err("FAIL: TestA-TestB isn't unregistered\n");
         return;
     }
-    
+    utrans_close(t1);
+
+    /* now with utrans_unregisterID(const UChar *) */
+    status=U_ZERO_ERROR;
+    utrans_register(rules2, &status);
+    if(U_FAILURE(status)){
+        log_err("FAIL: 2nd utrans_register failed with error=%s\n", myErrorName(status));
+        return;
+    }
+    status=U_ZERO_ERROR;
+    /* Now check again -- should exist now*/
+    t1= utrans_open("TestA-TestB", UTRANS_FORWARD, NULL,0,NULL,&status);
+    if(U_FAILURE(status) || t1 == NULL){
+        log_err("FAIL: 2nd TestA-TestB not registered\n");
+        return;
+    }
+    utrans_close(t1);
+   
+    /*unregister the instance*/
+    status=U_ZERO_ERROR;
+    utrans_unregisterID(ID, -1);
+    /* now Make sure it doesn't exist */
+    t1=utrans_openU(ID, -1, UTRANS_FORWARD,NULL,0,NULL, &status);
+    if(U_SUCCESS(status) || t1 != NULL) {
+        log_err("FAIL: 2nd TestA-TestB isn't unregistered\n");
+        return;
+    }
+
     utrans_close(t1);
     utrans_close(inverse1);
 }
@@ -376,7 +479,7 @@ static void TestFilter() {
     UChar filt[128];
     UChar buf[128];
     UChar exp[128];
-    char cbuf[128];
+    char *cbuf;
     int32_t limit;
     const char* DATA[] = {
         "[^c]", /* Filter out 'c' */
@@ -420,9 +523,7 @@ static void TestFilter() {
             goto exit;
         }
         
-        /*u_austrcpy(cbuf, buf);*/
-        u_UCharsToChars(buf, cbuf, u_strlen(buf)+1);
-        /*u_uastrcpy(exp, DATA[i+2]);*/
+        cbuf=aescstrdup(buf, -1);
         u_charsToUChars(DATA[i+2], exp, strlen(DATA[i+2])+1);
         if (0 == u_strcmp(buf, exp)) {
             log_verbose("Ok: %s | %s -> %s\n", DATA[i+1], DATA[i], cbuf);
@@ -494,7 +595,10 @@ static void _expect(const UTransliterator* trans,
     UChar from[CAP];
     UChar to[CAP];
     UChar buf[CAP];
-    char id[CAP];
+    const UChar *ID;
+    int32_t IDLength;
+    const char *id;
+
     UErrorCode status = U_ZERO_ERROR;
     int32_t limit;
     UTransPosition pos;
@@ -504,7 +608,8 @@ static void _expect(const UTransliterator* trans,
     u_uastrcpy(from, cfrom);
     u_uastrcpy(to, cto);
 
-    utrans_getID(trans, id, CAP);
+    ID = utrans_getUnicodeID(trans, &IDLength);
+    id = aescstrdup(ID, IDLength);
 
     /* utrans_transUChars() */
     u_strcpy(buf, from);
