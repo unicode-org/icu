@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -309,18 +309,18 @@ void AnyTransliterator::registerIDs() {
     UErrorCode ec;
     Hashtable seen(TRUE);
 
-    int32_t sourceCount = Transliterator::countAvailableSources();
+    int32_t sourceCount = Transliterator::_countAvailableSources();
     for (int32_t s=0; s<sourceCount; ++s) {
         UnicodeString source;
-        Transliterator::getAvailableSource(s, source);
+        Transliterator::_getAvailableSource(s, source);
 
         // Ignore the "Any" source
         if (source.caseCompare(ANY, 0 /*U_FOLD_CASE_DEFAULT*/) == 0) continue;
 
-        int32_t targetCount = Transliterator::countAvailableTargets(source);
+        int32_t targetCount = Transliterator::_countAvailableTargets(source);
         for (int32_t t=0; t<targetCount; ++t) {
             UnicodeString target;
-            Transliterator::getAvailableTarget(t, source, target);
+            Transliterator::_getAvailableTarget(t, source, target);
 
             // Only process each target once
             if (seen.geti(target) != 0) continue;
@@ -331,11 +331,11 @@ void AnyTransliterator::registerIDs() {
             UScriptCode targetScript = scriptNameToCode(target);
             if (targetScript == USCRIPT_INVALID_CODE) continue;
 
-            int32_t variantCount = Transliterator::countAvailableVariants(source, target);
+            int32_t variantCount = Transliterator::_countAvailableVariants(source, target);
             // assert(variantCount >= 1);
             for (int32_t v=0; v<variantCount; ++v) {
                 UnicodeString variant;
-                Transliterator::getAvailableVariant(v, source, target, variant);
+                Transliterator::_getAvailableVariant(v, source, target, variant);
                 
                 UnicodeString id;
                 TransliteratorIDParser::STVtoID(ANY, target, variant, id);
