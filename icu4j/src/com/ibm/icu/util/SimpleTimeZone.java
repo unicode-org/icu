@@ -675,6 +675,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Queries if the given date is in Daylight Savings Time.
+     * @stable
      */
     public boolean inDaylightTime(Date date)
     {

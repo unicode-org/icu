@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/12/04 16:38:52 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -75,47 +75,85 @@ public class HebrewCalendar extends Calendar {
     // Tons o' Constants...
     //-------------------------------------------------------------------------
 
-    /** Constant for Tishri, the 1st month of the Hebrew year. @stable */
+
+    /** 
+     * Constant for Tishri, the 1st month of the Hebrew year. 
+     * @stable 
+     */
     public static final int TISHRI = 0;
 
-    /** Constant for Heshvan, the 2nd month of the Hebrew year. @stable */
+    /**
+     * Constant for Heshvan, the 2nd month of the Hebrew year. 
+     * @stable 
+     */
     public static final int HESHVAN = 1;
 
-    /** Constant for Kislev, the 3rd month of the Hebrew year. @stable */
+    /**
+     * Constant for Kislev, the 3rd month of the Hebrew year. 
+     * @stable 
+     */
     public static final int KISLEV = 2;
 
-    /** Constant for Tevet, the 4th month of the Hebrew year. @stable */
+    /**
+     * Constant for Tevet, the 4th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int TEVET = 3;
 
-    /** Constant for Shevat, the 5th month of the Hebrew year. @stable */
+    /**
+     * Constant for Shevat, the 5th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int SHEVAT = 4;
 
     /**
      * Constant for Adar I, the 6th month of the Hebrew year
      * (present in leap years only). In non-leap years, the calendar
      * jumps from Shevat (5th month) to Adar (7th month).
+     * @stable
      */
     public static final int ADAR_1 = 5;
 
-    /** Constant for the Adar, the 7th month of the Hebrew year. @stable */
+    /** 
+     * Constant for the Adar, the 7th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int ADAR = 6;
 
-    /** Constant for Nisan, the 8th month of the Hebrew year. @stable */
+    /**
+     * Constant for Nisan, the 8th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int NISAN = 7;
 
-    /** Constant for Iyar, the 9th month of the Hebrew year. @stable */
+    /**
+     * Constant for Iyar, the 9th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int IYAR = 8;
 
-    /** Constant for Sivan, the 10th month of the Hebrew year. @stable */
+    /**
+     * Constant for Sivan, the 10th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int SIVAN = 9;
 
-    /** Constant for Tammuz, the 11th month of the Hebrew year. @stable */
+    /**
+     * Constant for Tammuz, the 11th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int TAMUZ = 10;
 
-    /** Constant for Av, the 12th month of the Hebrew year. @stable */
+    /**
+     * Constant for Av, the 12th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int AV = 11;
 
-    /** Constant for Elul, the 13th month of the Hebrew year. @stable */
+    /**
+     * Constant for Elul, the 13th month of the Hebrew year. 
+     * @stable 
+     */
     public static final int ELUL = 12;
 
     /**

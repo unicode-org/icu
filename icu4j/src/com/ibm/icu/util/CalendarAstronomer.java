@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/12/04 16:38:52 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -46,6 +46,7 @@ import java.util.*;
  *
  * @author Laura Werner
  * @author Alan Liu
+ * @stable
  */
 public class CalendarAstronomer {
     
@@ -56,12 +57,14 @@ public class CalendarAstronomer {
     /**
      * The number of standard hours in one sidereal day.
      * Approximately 24.93.
+     * @stable
      */
     public static final double SIDEREAL_DAY = 23.93446960027;
     
     /**
      * The number of sidereal hours in one mean solar day.
      * Approximately 24.07.
+     * @stable
      */
     public static final double SOLAR_DAY =  24.065709816;
     
@@ -73,6 +76,7 @@ public class CalendarAstronomer {
      * Approximately 29.53.
      *
      * @see #SIDEREAL_MONTH
+     * @stable
      */
     public static final double SYNODIC_MONTH = 29.530588853;
     
@@ -85,6 +89,7 @@ public class CalendarAstronomer {
      * Approximately 27.32.
      *
      * @see #SYNODIC_MONTH
+     * @stable
      */
     public static final double SIDEREAL_MONTH = 27.32166;
     
@@ -95,6 +100,7 @@ public class CalendarAstronomer {
      * Approximately 365.24
      *
      * @see #SIDEREAL_YEAR
+     * @stable
      */
     public static final double TROPICAL_YEAR = 365.242191;
     
@@ -108,6 +114,7 @@ public class CalendarAstronomer {
      * Approximately 365.25.
      *
      * @see #TROPICAL_YEAR
+     * @stable
      */
     public static final double SIDEREAL_YEAR = 365.25636;
 
@@ -115,16 +122,28 @@ public class CalendarAstronomer {
     // Time-related constants
     //-------------------------------------------------------------------------
 
-    /** The number of milliseconds in one second. */
+    /** 
+     * The number of milliseconds in one second. 
+     * @stable
+     */
     public static final int  SECOND_MS = 1000;
 
-    /** The number of milliseconds in one minute. */
+    /** 
+     * The number of milliseconds in one minute. 
+     * @stable
+     */
     public static final int  MINUTE_MS = 60*SECOND_MS;
 
-    /** The number of milliseconds in one hour. */
+    /** 
+     * The number of milliseconds in one hour. 
+     * @stable
+     */
     public static final int  HOUR_MS   = 60*MINUTE_MS;
 
-    /** The number of milliseconds in one day. */
+    /** 
+     * The number of milliseconds in one day. 
+     * @stable
+     */
     public static final long DAY_MS    = 24*HOUR_MS;
 
     /**
@@ -134,6 +153,7 @@ public class CalendarAstronomer {
      * Note that julian day numbers and
      * the Julian calendar are <em>not</em> the same thing.  Also note that
      * julian days start at <em>noon</em>, not midnight.
+     * @stable
      */
     public static final long JULIAN_EPOCH_MS = -210866760000000L;
     
@@ -158,6 +178,7 @@ public class CalendarAstronomer {
     /**
      * Construct a new <code>CalendarAstronomer</code> object that is initialized to
      * the current date and time.
+     * @stable
      */
     public CalendarAstronomer() {
         this(System.currentTimeMillis());
@@ -166,6 +187,7 @@ public class CalendarAstronomer {
     /**
      * Construct a new <code>CalendarAstronomer</code> object that is initialized to
      * the specified date and time.
+     * @stable
      */
     public CalendarAstronomer(Date d) {
         this(d.getTime());
@@ -177,6 +199,7 @@ public class CalendarAstronomer {
      * January 1, 1970 AD (Gregorian).
      *
      * @see java.util.Date#getTime()
+     * @stable
      */
     public CalendarAstronomer(long aTime) {
         time = aTime;
@@ -194,6 +217,7 @@ public class CalendarAstronomer {
      *                  values signify North, negative South.
      *
      * @see java.util.Date#getTime()
+     * @stable
      */
     public CalendarAstronomer(double longitude, double latitude) {
         this();
@@ -216,6 +240,7 @@ public class CalendarAstronomer {
      *
      * @see #setDate
      * @see #getTime
+     * @stable
      */
     public void setTime(long aTime) {
         time = aTime;
@@ -230,6 +255,7 @@ public class CalendarAstronomer {
      *
      * @see #setTime
      * @see #getDate
+     * @stable
      */
     public void setDate(Date date) {
         setTime(date.getTime());
@@ -247,6 +273,7 @@ public class CalendarAstronomer {
      *
      * @see #getJulianDay
      * @see #JULIAN_EPOCH_MS
+     * @stable
      */
     public void setJulianDay(double jdn) {
         time = (long)(jdn * DAY_MS) + JULIAN_EPOCH_MS;
@@ -261,6 +288,7 @@ public class CalendarAstronomer {
      *
      * @see #setTime
      * @see #getDate
+     * @stable
      */
     public long getTime() {
         return time;
@@ -272,6 +300,7 @@ public class CalendarAstronomer {
      *
      * @see #setDate
      * @see #getTime
+     * @stable
      */
     public Date getDate() {
         return new Date(time);
@@ -284,6 +313,7 @@ public class CalendarAstronomer {
      *
      * @see #setJulianDay
      * @see #JULIAN_EPOCH_MS
+     * @stable
      */
     public double getJulianDay() {
         if (julianDay == INVALID) {
@@ -297,6 +327,7 @@ public class CalendarAstronomer {
      * the number of centuries after 1/1/1900 AD, 12:00 GMT
      *
      * @see #getJulianDay
+     * @stable
      */
     public double getJulianCentury() {
         if (julianCentury == INVALID) {
@@ -307,6 +338,7 @@ public class CalendarAstronomer {
 
     /**
      * Returns the current Greenwich sidereal time, measured in hours
+     * @stable
      */
     public double getGreenwichSidereal() {
         if (siderealTime == INVALID) {
@@ -332,6 +364,7 @@ public class CalendarAstronomer {
     
     /**
      * Returns the current local sidereal time, measured in hours
+     * @stable
      */
     public double getLocalSidereal() {
         return normalize(getGreenwichSidereal() + (double)fGmtOffset/HOUR_MS, 24);
@@ -369,6 +402,7 @@ public class CalendarAstronomer {
      *
      * @param ecliptic  A point in the sky in ecliptic coordinates.
      * @return          The corresponding point in equatorial coordinates.
+     * @stable
      */
     public final Equatorial eclipticToEquatorial(Ecliptic ecliptic)
     {
@@ -382,6 +416,7 @@ public class CalendarAstronomer {
      * @param eclipLat      The ecliptic latitude
      *
      * @return              The corresponding point in equatorial coordinates.
+     * @stable
      */
     public final Equatorial eclipticToEquatorial(double eclipLong, double eclipLat)
     {
@@ -409,13 +444,16 @@ public class CalendarAstronomer {
      * @param eclipLong     The ecliptic longitude
      *
      * @return              The corresponding point in equatorial coordinates.
+     * @stable
      */
     public final Equatorial eclipticToEquatorial(double eclipLong)
     {
         return eclipticToEquatorial(eclipLong, 0);  // TODO: optimize
     }
 
-
+    /**
+     * @stable
+     */
     public Horizon eclipticToHorizon(double eclipLong)
     {
         Equatorial equatorial = eclipticToEquatorial(eclipLong);
@@ -461,6 +499,7 @@ public class CalendarAstronomer {
      * Currently, this method uses an approximation of the two-body Kepler's
      * equation for the earth and the sun.  It does not take into account the
      * perturbations caused by the other planets, the moon, etc.
+     * @stable
      */
     public double getSunLongitude()
     {
@@ -488,6 +527,7 @@ public class CalendarAstronomer {
     /**
      * The position of the sun at this object's current date and time,
      * in equatorial coordinates.
+     * @stable
      */
     public Equatorial getSunPosition() {
         return eclipticToEquatorial(getSunLongitude(), 0);
@@ -502,6 +542,7 @@ public class CalendarAstronomer {
      * Constant representing the vernal equinox.
      * For use with {@link #getSunTime getSunTime}. 
      * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
+     * @stable
      */
     public static final SolarLongitude VERNAL_EQUINOX  = new SolarLongitude(0);
     
@@ -509,6 +550,7 @@ public class CalendarAstronomer {
      * Constant representing the summer solstice.
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "summer" refers to the northern hemisphere's seasons.
+     * @stable
      */
     public static final SolarLongitude SUMMER_SOLSTICE = new SolarLongitude(PI/2);
     
@@ -516,6 +558,7 @@ public class CalendarAstronomer {
      * Constant representing the autumnal equinox.
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
+     * @stable
      */
     public static final SolarLongitude AUTUMN_EQUINOX  = new SolarLongitude(PI);
     
@@ -523,12 +566,14 @@ public class CalendarAstronomer {
      * Constant representing the winter solstice.
      * For use with {@link #getSunTime getSunTime}.
      * Note: In this case, "winter" refers to the northern hemisphere's seasons.
+     * @stable
      */
     public static final SolarLongitude WINTER_SOLSTICE = new SolarLongitude((PI*3)/2);
     
     /**
      * Find the next time at which the sun's ecliptic longitude will have
      * the desired value.  
+     * @stable
      */
     public long getSunTime(double desired, boolean next)
     {
@@ -542,6 +587,7 @@ public class CalendarAstronomer {
     /**
      * Find the next time at which the sun's ecliptic longitude will have
      * the desired value.  
+     * @stable
      */
     public long getSunTime(SolarLongitude desired, boolean next) {
         return getSunTime(desired.value, next);
@@ -550,6 +596,7 @@ public class CalendarAstronomer {
     /**
      * Returns the time (GMT) of sunrise or sunset on the local date to which
      * this calendar is currently set.
+     * @stable
      */
     public long getSunRiseSet(boolean rise)
     {
@@ -585,6 +632,7 @@ public class CalendarAstronomer {
     /**
      * The position of the moon at the time set on this
      * object, in equatorial coordinates.
+     * @stable
      */
     public Equatorial getMoonPosition()
     {
@@ -672,6 +720,7 @@ public class CalendarAstronomer {
      * measured in radians.
      *
      * @see #getMoonPhase
+     * @stable
      */
     public double getMoonAge() {
         // See page 147 of "Practial Astronomy with your Calculator",
@@ -697,6 +746,7 @@ public class CalendarAstronomer {
      * </ul>
      *
      * @see #getMoonAge
+     * @stable
      */
     public double getMoonPhase() {
         // See page 147 of "Practial Astronomy with your Calculator",
@@ -712,24 +762,28 @@ public class CalendarAstronomer {
     /**
      * Constant representing a new moon.
      * For use with {@link #getMoonTime getMoonTime}
+     * @stable
      */
     public static final MoonAge NEW_MOON      = new MoonAge(0);
 
     /**
      * Constant representing the moon's first quarter.
      * For use with {@link #getMoonTime getMoonTime}
+     * @stable
      */
     public static final MoonAge FIRST_QUARTER = new MoonAge(PI/2);
     
     /**
      * Constant representing a full moon.
      * For use with {@link #getMoonTime getMoonTime}
+     * @stable
      */
     public static final MoonAge FULL_MOON     = new MoonAge(PI);
     
     /**
      * Constant representing the moon's last quarter.
      * For use with {@link #getMoonTime getMoonTime}
+     * @stable
      */
     public static final MoonAge LAST_QUARTER  = new MoonAge((PI*3)/2);
     
@@ -740,6 +794,7 @@ public class CalendarAstronomer {
      * @param desired   The desired longitude.
      * @param next      <tt>true</tt> if the next occurrance of the phase
      *                  is desired, <tt>false</tt> for the previous occurrance. 
+     * @stable
      */
     public long getMoonTime(double desired, boolean next)
     {
@@ -758,6 +813,7 @@ public class CalendarAstronomer {
      * @param desired   The desired phase of the moon.
      * @param next      <tt>true</tt> if the next occurrance of the phase
      *                  is desired, <tt>false</tt> for the previous occurrance. 
+     * @stable
      */
     public long getMoonTime(MoonAge desired, boolean next) {
         return getMoonTime(desired.value, next);
@@ -766,6 +822,7 @@ public class CalendarAstronomer {
     /**
      * Returns the time (GMT) of sunrise or sunset on the local date to which
      * this calendar is currently set.
+     * @stable
      */
     public long getMoonRiseSet(boolean rise)
     {
@@ -1037,6 +1094,10 @@ public class CalendarAstronomer {
     private static String hours(long ms) {
         return Double.toString((double)ms / HOUR_MS) + " hours";
     }
+
+    /**
+     * @stable
+     */
     public String local(long localMillis) {
         return new Date(localMillis - TimeZone.getDefault().getRawOffset()).toString();
     }
@@ -1065,6 +1126,7 @@ public class CalendarAstronomer {
          * <p>
          * @param lat The ecliptic latitude, measured in radians.
          * @param lon The ecliptic longitude, measured in radians.
+         * @stable
          */
         public Ecliptic(double lat, double lon) {
             latitude = lat;
@@ -1073,6 +1135,7 @@ public class CalendarAstronomer {
 
         /**
          * Return a string representation of this object
+         * @stable
          */
         public String toString() {
             return Double.toString(longitude*RAD_DEG) + "," + (latitude*RAD_DEG);
@@ -1082,6 +1145,7 @@ public class CalendarAstronomer {
          * The ecliptic latitude, in radians.  This specifies an object's
          * position north or south of the plane of the ecliptic,
          * with positive angles representing north.
+         * @stable
          */
         public final double latitude;
         
@@ -1094,6 +1158,7 @@ public class CalendarAstronomer {
          * <p>
          * A bit of trivia: the first point of Aries is currently in the
          * constellation Pisces, due to the precession of the earth's axis.
+         * @stable
          */
         public final double longitude;
     };
@@ -1112,6 +1177,7 @@ public class CalendarAstronomer {
      *
      * @see CalendarAstronomer.Ecliptic
      * @see CalendarAstronomer.Horizon
+     * @stable
      */
     public static final class Equatorial {
         /**
@@ -1119,6 +1185,7 @@ public class CalendarAstronomer {
          * <p>
          * @param asc The right ascension, measured in radians.
          * @param dec The declination, measured in radians.
+         * @stable
          */
         public Equatorial(double asc, double dec) {
             ascension = asc;
@@ -1128,6 +1195,7 @@ public class CalendarAstronomer {
         /**
          * Return a string representation of this object, with the
          * angles measured in degrees.
+         * @stable
          */
         public String toString() {
             return Double.toString(ascension*RAD_DEG) + "," + (declination*RAD_DEG);
@@ -1136,6 +1204,7 @@ public class CalendarAstronomer {
         /**
          * Return a string representation of this object with the right ascension
          * measured in hours, minutes, and seconds.
+         * @stable
          */
         public String toHmsString() {
             return radToHms(ascension) + "," + radToDms(declination);
@@ -1146,6 +1215,7 @@ public class CalendarAstronomer {
          * This is the position east or west along the equator
          * relative to the sun's position at the vernal equinox,
          * with positive angles representing East.
+         * @stable
          */
         public final double ascension;
         
@@ -1153,6 +1223,7 @@ public class CalendarAstronomer {
          * The declination, in radians.
          * This is the position north or south of the equatorial plane,
          * with positive angles representing north.
+         * @stable
          */
         public final double declination;
     };
@@ -1172,6 +1243,7 @@ public class CalendarAstronomer {
      *
      * @see CalendarAstronomer.Ecliptic
      * @see CalendarAstronomer.Equatorial
+     * @stable
      */
     public static final class Horizon {
         /**
@@ -1179,6 +1251,7 @@ public class CalendarAstronomer {
          * <p>
          * @param alt  The altitude, measured in radians above the horizon.
          * @param azim The azimuth, measured in radians clockwise from north.
+         * @stable
          */
         public Horizon(double alt, double azim) {
             altitude = alt;
@@ -1188,15 +1261,22 @@ public class CalendarAstronomer {
         /**
          * Return a string representation of this object, with the
          * angles measured in degrees.
+         * @stable
          */
         public String toString() {
             return Double.toString(altitude*RAD_DEG) + "," + (azimuth*RAD_DEG);
         }
         
-        /** The object's altitude above the horizon, in radians. */
+        /** 
+         * The object's altitude above the horizon, in radians. 
+         * @stable
+         */
         public final double altitude;
         
-        /** The object's direction, in radians clockwise from north. */
+        /** 
+         * The object's direction, in radians clockwise from north. 
+         * @stable
+         */
         public final double azimuth;
     };
 

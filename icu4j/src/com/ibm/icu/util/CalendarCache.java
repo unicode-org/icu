@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarCache.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/12/04 16:38:52 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -125,6 +125,9 @@ public class CalendarCache
     
     private long[]  keys        = new long[arraySize];
     private long[]  values      = new long[arraySize];
-    
+
+    /**
+     * @internal
+     */
     static public  long EMPTY   = Long.MIN_VALUE;
 }
