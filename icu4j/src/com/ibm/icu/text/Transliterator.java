@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/06/12 17:35:24 $
- * $Revision: 1.77 $
+ * $Date: 2002/06/26 18:12:40 $
+ * $Revision: 1.78 $
  *
  *****************************************************************************************
  */
@@ -250,7 +250,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.77 $ $Date: 2002/06/12 17:35:24 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.78 $ $Date: 2002/06/26 18:12:40 $
  */
 public abstract class Transliterator {
     /**
@@ -1311,11 +1311,61 @@ public abstract class Transliterator {
     }
 
     /**
-     * Return the set of all characters that may be modified by this
-     * Transliterator, ignoring the effect of filters.  The default
-     * implementation returns an empty set.
+     * Returns the set of all characters that may be modified in the
+     * input text by this Transliterator.  This incorporates this
+     * object's current filter; if the filter is changed, the return
+     * value of this function will change.  The default implementation
+     * returns an empty set.  Some subclasses may override {@link
+     * #handleGetSourceSet} to return a more precise result.  The
+     * return result is approximate in any case and is intended for
+     * use by tests, tools, or utilities.
+     * @see #getTargetSet
+     * @see #handleGetSourceSet
      */
-    UnicodeSet getSourceSet() {
+    public final UnicodeSet getSourceSet() {
+        UnicodeSet set = handleGetSourceSet();
+        if (filter != null) {
+            UnicodeSet filterSet;
+            // Most, but not all filters will be UnicodeSets.  Optimize for
+            // the high-runner case.
+            try {
+                filterSet = (UnicodeSet) filter;
+            } catch (ClassCastException e) {
+                filterSet = new UnicodeSet();
+                filter.getMatchSet(filterSet);
+            }
+            set.retainAll(filterSet);
+        }
+        return set;
+    }
+
+    /**
+     * Framework method that returns the set of all characters that
+     * may be modified in the input text by this Transliterator,
+     * ignoring the effect of this object's filter.  The base class
+     * implementation returns the empty set.  Subclasses that wish to
+     * implement this should override this method.
+     * @return the set of characters that this transliterator may
+     * modify.  The set may be modified, so subclasses should return a
+     * newly-created object.
+     * @see #getSourceSet
+     * @see #getTargetSet
+     */
+    protected UnicodeSet handleGetSourceSet() {
+        return new UnicodeSet();
+    }
+
+    /**
+     * Returns the set of all characters that may be generated as
+     * replacement text by this transliterator.  The default
+     * implementation returns the empty set.  Some subclasses may
+     * override this method to return a more precise result.  The
+     * return result is approximate in any case and is intended for
+     * use by tests, tools, or utilities requiring such
+     * meta-information.
+     * @see #getTargetSet
+     */
+    public UnicodeSet getTargetSet() {
         return new UnicodeSet();
     }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/02/25 22:43:58 $
- * $Revision: 1.54 $
+ * $Date: 2002/06/26 18:12:39 $
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.icu.impl.data.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.54 $ $Date: 2002/02/25 22:43:58 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.55 $ $Date: 2002/06/26 18:12:39 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -451,15 +451,26 @@ public class RuleBasedTransliterator extends Transliterator {
 
     /**
      * Return the set of all characters that may be modified by this
-     * Transliterator, ignoring the effect of filters.
+     * Transliterator, ignoring the effect of our filter.
      */
-    UnicodeSet getSourceSet() {
+    protected UnicodeSet handleGetSourceSet() {
         return data.ruleSet.getSourceSet();
+    }
+
+    /**
+     * Returns the set of all characters that may be generated as
+     * replacement text by this transliterator.
+     */
+    public UnicodeSet getTargetSet() {
+        return data.ruleSet.getTargetSet();
     }
 }
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.55  2002/06/26 18:12:39  alan
+ * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
+ *
  * Revision 1.54  2002/02/25 22:43:58  ram
  * Move Utility class to icu.impl
  *

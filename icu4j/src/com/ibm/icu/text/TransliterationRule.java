@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2002/02/25 22:43:57 $
- * $Revision: 1.45 $
+ * $Date: 2002/06/26 18:12:39 $
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.45 $ $Date: 2002/02/25 22:43:57 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.46 $ $Date: 2002/06/26 18:12:39 $
  */
 class TransliterationRule {
 
@@ -579,10 +579,21 @@ class TransliterationRule {
         }
         return toUnionTo;
     }
+
+    /**
+     * Union the set of all characters that may be emitted by this rule
+     * into the given set.
+     */
+    UnicodeSet getTargetSet(UnicodeSet toUnionTo) {
+        return output.getReplacementSet(toUnionTo);
+    }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.46  2002/06/26 18:12:39  alan
+ * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
+ *
  * Revision 1.45  2002/02/25 22:43:57  ram
  * Move Utility class to icu.impl
  *
