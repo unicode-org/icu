@@ -1394,7 +1394,7 @@ u_vsnprintf_u(UChar    *buffer,
         alias += patCount;
     }
 
-    // Terminate the buffer, if there's room.
+    /* Terminate the buffer, if there's room. */
     if (outStr.available > 0) {
         buffer[outStr.len - outStr.available] = 0x0000;
     }
