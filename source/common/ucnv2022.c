@@ -314,14 +314,22 @@ UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
 static const char* getEndOfBuffer_2022(const char** source,
                                        const char* sourceLimit,
                                        UBool flush); 
+/* Type def for refactoring changeState_2022 code*/
+typedef enum{
+    ISO_2022=0,
+    ISO_2022_JP=1,
+    ISO_2022_CN=2,
+} Variant2022;
+
 /*runs through a state machine to determine the escape sequence - codepage correspondance
 *changes the pointer pointed to be _this->extraInfo
 */
-static  void changeState_2022(UConverter* _this,
+static void changeState_2022(UConverter* _this,
                                 const char** source, 
                                 const char* sourceLimit,
-                                UBool flush,
+                                UBool flush,Variant2022 var,int* plane,
                                 UErrorCode* err); 
+
 
 UCNV_TableStates_2022 getKey_2022(char source,
                                     int32_t* key,
@@ -330,8 +338,15 @@ UCNV_TableStates_2022 getKey_2022(char source,
 /*********** ISO 2022 Converter Protos ***********/
 static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t* version, UErrorCode *errorCode);
 static void _ISO2022Close(UConverter *converter);
-static void _ISO2022Reset(UConverter *converter);   
+static void _ISO2022Reset(UConverter *converter); 
 
+/************ protos of functions for setting the initial state *********************/
+static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
+static void setInitialStateFromUnicodeJPCN(UConverterDataISO2022 *myConverterData);
+static void setInitialStateToUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
+static void setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
+  
+/*************** Converter implemenations ******************/
 static UConverterImpl _ISO2022Impl={
     UCNV_ISO_2022,
     
@@ -399,14 +414,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->myConverterArray[8]=   NULL;
             
             /* initialize the state variables */
-            myConverterData->toUnicodeCurrentState =ASCII;
-            myConverterData->fromUnicodeCurrentState= ASCII;
-            myConverterData->targetIndex = 0;
-            myConverterData->sourceIndex =0;
-            myConverterData->isEscapeAppended=FALSE;
-            myConverterData->isShiftAppended=FALSE;
-            myConverterData->isFirstBuffer = TRUE;
-            myConverterData->isLocaleSpecified=TRUE;
+            setInitialStateToUnicodeJPCN(cnv, myConverterData);
+            setInitialStateFromUnicodeJPCN(myConverterData);
 
             /*set the substitution chars*/
             ucnv_setSubstChars(cnv,"\x1b\x28\x42\x1A", 4, errorCode);
@@ -437,20 +446,12 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             
-            /* in ISO-2022-KR the desginator sequence appears only once
-            * in a file so we append it only once
-            */
-            cnv->charErrorBufferLength = 4;
-            cnv->charErrorBuffer[0] = 0x1b;
-            cnv->charErrorBuffer[1] = 0x24;
-            cnv->charErrorBuffer[2] = 0x29;
-            cnv->charErrorBuffer[3] = 0x43;
-            
             /* initialize the state variables */
+            setInitialStateToUnicodeKR(cnv, myConverterData);
+            setInitialStateFromUnicodeKR(cnv,myConverterData);
+
             myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
-            myConverterData->isLocaleSpecified=TRUE;
-            myConverterData->isShiftAppended=FALSE;
-            
+
             /*set the substitution chars*/
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
             
@@ -473,14 +474,9 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->myConverterArray[4] = NULL;
             
             /*initialize the state variables*/
-            myConverterData->toUnicodeCurrentState =ASCII;
-            myConverterData->fromUnicodeCurrentState =ASCII;
-            myConverterData->targetIndex = 0;
-            myConverterData->sourceIndex =0;
-            myConverterData->isEscapeAppended=FALSE;
-            myConverterData->isShiftAppended=FALSE;
-            myConverterData->isLocaleSpecified=TRUE;
-            /*set the substitution chars*/
+            setInitialStateToUnicodeJPCN(cnv, myConverterData);
+            setInitialStateFromUnicodeJPCN(myConverterData);
+
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
             /* set the function pointers to appropriate funtions */
             _ISO2022Impl.toUnicode		        = UConverter_toUnicode_ISO_2022_CN;
@@ -525,7 +521,7 @@ _ISO2022Close(UConverter *converter) {
    UConverter **array = ((UConverterDataISO2022 *) (converter->extraInfo))->myConverterArray;
     
     if (converter->extraInfo != NULL) {
-        /*ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);*/
+
         /*close the array of converter pointers and free the memory*/
         while(*array!=NULL){
             if(*array==((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter){
@@ -554,25 +550,62 @@ _ISO2022Reset(UConverter *converter) {
     }
     else {
         /* reset the state variables */
-        myConverterData->toUnicodeCurrentState =ASCII;
-        myConverterData->fromUnicodeCurrentState =ASCII;
-        myConverterData->targetIndex = 0;
-        myConverterData->sourceIndex =0;
-        myConverterData->isEscapeAppended=FALSE;
-        myConverterData->isShiftAppended=FALSE;
-        
+        setInitialStateToUnicodeJPCN(converter, myConverterData);
+        setInitialStateFromUnicodeJPCN(myConverterData);
+        setInitialStateToUnicodeKR(converter, myConverterData);
+        setInitialStateFromUnicodeKR(converter, myConverterData);
     }
-    if (converter->mode == UCNV_SO){
-        
+    if (converter->mode == UCNV_SO && !myConverterData->isLocaleSpecified){
+
         ucnv_close (myConverterData->currentConverter);
-        myConverterData->currentConverter = NULL;
-        converter->mode = UCNV_SI;
+        myConverterData->currentConverter=NULL;
     }
-    myConverterData->isFirstBuffer=TRUE;
-    
+
 }
 
+static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData ){
+    myConverterData->toUnicodeCurrentState =ASCII;
+    myConverterData->targetIndex = 0;
+    myConverterData->sourceIndex =0;
+    myConverterData->currentConverter = NULL;
+    myConverterData->isFirstBuffer = TRUE;
+    converter->mode = UCNV_SI;
 
+}
+
+static void setInitialStateFromUnicodeJPCN(UConverterDataISO2022 *myConverterData){
+    myConverterData->fromUnicodeCurrentState= ASCII;
+    myConverterData->targetIndex = 0;
+    myConverterData->sourceIndex =0;
+    myConverterData->isEscapeAppended=FALSE;
+    myConverterData->isShiftAppended=FALSE;
+    myConverterData->isLocaleSpecified=TRUE;
+}
+
+static void setInitialStateToUnicodeKR(UConverter* converter, UConverterDataISO2022 *myConverterData){
+
+    myConverterData->isLocaleSpecified=TRUE;
+    converter->mode = UCNV_SI;
+    myConverterData->currentConverter = myConverterData->fromUnicodeConverter;
+
+}
+
+static void setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData){
+   /* in ISO-2022-KR the desginator sequence appears only once
+    * in a file so we append it only once
+    */
+    if( converter->charErrorBufferLength==0){
+
+        converter->charErrorBufferLength = 4;
+        converter->charErrorBuffer[0] = 0x1b;
+        converter->charErrorBuffer[1] = 0x24;
+        converter->charErrorBuffer[2] = 0x29;
+        converter->charErrorBuffer[3] = 0x43;
+    }
+    myConverterData->isLocaleSpecified=TRUE;
+    myConverterData->isShiftAppended=FALSE;
+    
+}
 
 /**********************************************************************************
 *  ISO-2022 Converter
@@ -583,6 +616,7 @@ _ISO2022Reset(UConverter *converter) {
 U_CFUNC UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err){
     const char* mySourceLimit;
+    int plane=0; /*dummy variable*/
     /*Arguments Check*/
     if  (args->sourceLimit < args->source){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -607,6 +641,8 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args
 	           &(args->source), 
                args->sourceLimit,
                TRUE,
+               ISO_2022,
+               &plane,
                err);
     }while(args->source < args->sourceLimit);
     
@@ -645,7 +681,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     const char *mySourceLimit;
     char const* sourceStart;
     UConverter *saveThis;
-    
+    int plane =0 ;/*dummy variable*/
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -711,10 +747,12 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
         
         sourceStart = args->source;
         changeState_2022(args->converter,
-            &(args->source), 
-            args->sourceLimit,
-            args->flush,
-            err);
+	           &(args->source), 
+               args->sourceLimit,
+               TRUE,
+               ISO_2022,
+               &plane,
+               err);
         /* args->source = sourceStart; */
         
         
@@ -733,7 +771,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
     const char* mySourceLimit;
     char const* sourceStart;
     UConverter* saveThis = NULL;
-    
+    int plane =0;/*dummy variable*/
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -814,10 +852,12 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
         
         sourceStart = args->source;
         changeState_2022(args->converter,
-            &(args->source), 
-            args->sourceLimit,
-            args->flush,
-            err);
+	           &(args->source), 
+               args->sourceLimit,
+               TRUE,
+               ISO_2022,
+               &plane,
+               err);
         myOffset += args->source - sourceStart;
         
     }while(mySourceLimit != args->sourceLimit);
@@ -868,162 +908,6 @@ UCNV_TableStates_2022 getKey_2022(char c,
 }
 
 
-
-static void changeState_2022(UConverter* _this,
-                             const char** source, 
-                             const char* sourceLimit,
-                             UBool flush,
-                             UErrorCode* err){
-    UConverter* myUConverter;
-    UCNV_TableStates_2022 value;
-    UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
-    uint32_t key = myData2022->key;
-    const char* chosenConverterName = NULL;
-    const char* sourceStart =*source;
-    int32_t offset;
-    
-    /*In case we were in the process of consuming an escape sequence
-    we need to reprocess it */
-    
-    do{
-        
-        /* Needed explicit cast for key on MVS to make compiler happy - JJD */
-        if(**source == UCNV_SI || **source==UCNV_SO){
-            if(sourceStart == *source)
-                (*source)++;
-            return;
-        }
-        value = getKey_2022(**source,(int32_t *) &key, &offset);
-        switch (value){
-        case VALID_NON_TERMINAL_2022 : 
-            break;
-            
-        case VALID_TERMINAL_2022:
-            {
-                (*source)++;
-                chosenConverterName = escSeqStateTable_Result_2022[offset];
-                key	= 0;
-                goto DONE;
-            };
-            break;
-            
-        case INVALID_2022:
-            {
-                myData2022->key = key;
-                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                return;
-            }
-        case VALID_SS2_SEQUENCE:
-            {
-                (*source)++;
-                key	= 0;
-                goto DONE;
-            }
-            
-        case VALID_MAYBE_TERMINAL_2022:
-            {
-                const char* mySource = (*source+1);
-                int32_t myKey =	key;
-                UCNV_TableStates_2022 myValue = value;
-                int32_t myOffset=0;
-                if(*mySource==ESC_2022){
-                    while ((mySource < sourceLimit) && 
-                        ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue ==	VALID_NON_TERMINAL_2022))){
-                        myValue	= getKey_2022(*(mySource++), &myKey, &myOffset);
-                    }
-                }
-                else{
-                    (*source)++;
-                    myValue=(UCNV_TableStates_2022) 1;
-                    myOffset = 7;
-                }
-                
-                switch (myValue){
-                case INVALID_2022:
-                    {
-                        /*Backs off*/
-                        chosenConverterName = escSeqStateTable_Result_2022[offset];
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                case VALID_TERMINAL_2022:
-                    {
-                        /*uses longer escape sequence*/
-                        chosenConverterName = escSeqStateTable_Result_2022[myOffset];
-                        key	= 0;
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                    /* Not expected. Added to make the gcc happy */
-                case VALID_SS2_SEQUENCE:
-                    {
-                        (*source)++;
-                        key	= 0;
-                        goto DONE;
-                    }
-                    
-                case VALID_NON_TERMINAL_2022: 
-                    
-                case VALID_MAYBE_TERMINAL_2022:
-                    {
-                        if (flush){
-                            /*Backs off*/
-                            chosenConverterName = escSeqStateTable_Result_2022[offset];
-                            value = VALID_TERMINAL_2022;
-                            key = 0;
-                            goto DONE;
-                        }
-                        else{
-                            key = myKey;
-                            value = VALID_NON_TERMINAL_2022;
-                        }
-                    };
-                    break;
-                };
-                break;
-            };
-            break;
-        }
-    }while (++(*source) < sourceLimit);
-    
-DONE:
-    myData2022->key = key;
-    
-    if ((value == VALID_NON_TERMINAL_2022) || (value == VALID_MAYBE_TERMINAL_2022)) {
-        return;
-    }
-    if (value > 0 ) {
-        if(value==3){
-            _this->mode = UCNV_SI;
-            myUConverter =myData2022->currentConverter;
-        }
-        else{
-            _this->mode = UCNV_SI;
-            ucnv_close(myData2022->currentConverter);
-            myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
-            
-        }
-        if (U_SUCCESS(*err)){
-            /*Customize the converter with the attributes set on the 2022 converter*/
-            myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
-            myUConverter->fromUContext = _this->fromUContext;
-            myUConverter->fromCharErrorBehaviour = _this->fromCharErrorBehaviour;
-            myUConverter->toUContext = _this->toUContext;
-            
-            uprv_memcpy(myUConverter->subChar, 
-                _this->subChar,
-                myUConverter->subCharLen	= _this->subCharLen);
-            
-            _this->mode = UCNV_SO;
-        }
-    }
-    
-    return;
-}
 
 /*Checks the characters of the buffer against valid 2022 escape sequences
 *if the match we return a pointer to the initial start of the sequence otherwise
@@ -1175,8 +1059,8 @@ static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 
 
 U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args, UErrorCode* err){
+
     UChar* mySource =(UChar*)args->source;
-    
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     UConverterCallbackReason reason;
     UBool isEscapeAppended = FALSE;
@@ -1184,13 +1068,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     unsigned char *myTarget = (unsigned char *) args->target; 
     const UChar *saveSource;
     char *saveTarget;
-    uint32_t targetValue=0;
-    
     int32_t myTargetLength = args->targetLimit - args->target;
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t length  =0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
     CompactByteArray  *myFromUnicodeSBCS = NULL;
@@ -1310,11 +1191,14 @@ getTrail:
                                 myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                     
                                 targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                    
-                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                               
+                                /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                }
+                                } */
                                 /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
                                 targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
@@ -1325,32 +1209,18 @@ getTrail:
                                 myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
                                 myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
                                 targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
-                        
+                                
+                                /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*
                                 if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback== TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                }
+                                } */
                             }
                             break;
-                    
-                        case MBCS:
-                            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                                mySourceChar,&targetValue,args->converter->useFallback);
-                    
-                            targetUniChar = (UChar32) targetValue;
-                    
-                            if(length==0x0000){
-                                targetUniChar = missingCharMarker;
-                                *err =U_ZERO_ERROR;
-                            } 
-                            /* only DBCS or SBCS characters are	expected*/
-                            else if(length > 2){
-                                reason =UCNV_ILLEGAL;
-                                *err =U_INVALID_CHAR_FOUND;
-                                goto CALLBACK;
-                            }
-                            break;
-                    
+
                         case LATIN1:
                             if(mySourceChar < 0x0100){
                                 targetUniChar = mySourceChar;
@@ -1482,7 +1352,12 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
-
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == mySourceLength) && args->flush){
+        setInitialStateFromUnicodeJPCN(myConverterData);
+    }
     /*save the state and return */
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -1501,13 +1376,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     unsigned char *myTarget = (unsigned char *) args->target; 
     const UChar *saveSource;
     char *saveTarget;
-    uint32_t targetValue=0;
     int32_t *saveOffsets ;
     int32_t myTargetLength = args->targetLimit - args->target;
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t length  =0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
     CompactByteArray  *myFromUnicodeSBCS = NULL;
@@ -1629,10 +1502,14 @@ getTrail:
                     
                                 targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
                     
-                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                /* There are no fallbacks in ISO_8859_1, ISO_8859_7,JISX201 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                }
+                                } */
+
                                 /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
                                 targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
@@ -1643,32 +1520,18 @@ getTrail:
                                 myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
                                 myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
                                 targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
-                        
+                                /* There are no fallbacks in JISX208,JISX212, KSC5601,GB2312 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*
                                 if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback== TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
                                 }
+                                */
                             }
                             break;
-                    
-                        case MBCS:
-                            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                                mySourceChar,&targetValue,args->converter->useFallback);
-                    
-                            targetUniChar = (UChar32) targetValue;
-                    
-                            if(length==0x0000){
-                                targetUniChar = missingCharMarker;
-                                *err =U_ZERO_ERROR;
-                            } 
-                            /* only DBCS or SBCS characters are	expected*/
-                            else if(length > 2){
-                                reason =UCNV_ILLEGAL;
-                                *err =U_INVALID_CHAR_FOUND;
-                                goto CALLBACK;
-                            }
-                            break;
-                    
+
                         case LATIN1:
                             if(mySourceChar < 0x0100){
                                 targetUniChar = mySourceChar;
@@ -1806,6 +1669,13 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == mySourceLength) && args->flush){
+        setInitialStateFromUnicodeJPCN(myConverterData);
+    }
+
     /*save the state and return */
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -1993,164 +1863,7 @@ static StateEnum nextStateToUnicodeJP[3][MAX_STATES_2022]= {
         ,INVALID_STATE          ,INVALID_STATE
     }
 };
-static void changeState_2022_JP(UConverter* _this,
-                             const char** source, 
-                             const char* sourceLimit,
-                             UBool flush,
-                             UErrorCode* err){
-    UConverter* myUConverter;
-    UCNV_TableStates_2022 value;
-    UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
-    uint32_t key = myData2022->key;
-    const char* chosenConverterName = NULL;
-    const char* sourceStart =*source;
-    int32_t offset;
-    
-    /*In case we were in the process of consuming an escape sequence
-    we need to reprocess it */
-    
-    do{
-        
-        /* Needed explicit cast for key on MVS to make compiler happy - JJD */
-        if(**source == UCNV_SI || **source==UCNV_SO){
-            if(sourceStart == *source)
-                (*source)++;
-            return;
-        }
-        value = getKey_2022(**source,(int32_t *) &key, &offset);
-        switch (value){
-        case VALID_NON_TERMINAL_2022 : 
-            break;
-            
-        case VALID_TERMINAL_2022:
-            {
-                (*source)++;
-                chosenConverterName = escSeqStateTable_Result_2022[offset];
-                key	= 0;
-                goto DONE;
-            };
-            break;
-            
-        case INVALID_2022:
-            {
-                myData2022->key = key;
-                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                return;
-            }
-        case VALID_SS2_SEQUENCE:
-            {
-                (*source)++;
-                key	= 0;
-                goto DONE;
-            }
-            
-        case VALID_MAYBE_TERMINAL_2022:
-            {
-                const char* mySource = (*source+1);
-                int32_t myKey =	key;
-                UCNV_TableStates_2022 myValue = value;
-                int32_t myOffset=0;
-                if(*mySource==ESC_2022){
-                    while ((mySource < sourceLimit) && 
-                        ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue ==	VALID_NON_TERMINAL_2022))){
-                        myValue	= getKey_2022(*(mySource++), &myKey, &myOffset);
-                    }
-                }
-                else{
-                    (*source)++;
-                    myValue=(UCNV_TableStates_2022) 1;
-                    myOffset = 9;
-                }
-                
-                switch (myValue){
-                case INVALID_2022:
-                    {
-                        /*Backs off*/
-                        chosenConverterName = escSeqStateTable_Result_2022[offset];
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                case VALID_TERMINAL_2022:
-                    {
-                        /*uses longer escape sequence*/
-                        chosenConverterName = escSeqStateTable_Result_2022[myOffset];
-                        key	= 0;
-                        value = VALID_TERMINAL_2022;
-                        goto DONE;
-                    };
-                    break;
-                    
-                    /* Not expected. Added to make the gcc happy */
-                case VALID_SS2_SEQUENCE:
-                    {
-                        (*source)++;
-                        key	= 0;
-                        goto DONE;
-                    }
-                    
-                case VALID_NON_TERMINAL_2022: 
-                    
-                case VALID_MAYBE_TERMINAL_2022:
-                    {
-                        if (flush){
-                            /*Backs off*/
-                            chosenConverterName = escSeqStateTable_Result_2022[offset];
-                            value = VALID_TERMINAL_2022;
-                            key = 0;
-                            goto DONE;
-                        }
-                        else{
-                            key = myKey;
-                            value = VALID_NON_TERMINAL_2022;
-                        }
-                    };
-                    break;
-                };
-                break;
-            };
-            break;
-        }
-    }while (++(*source) < sourceLimit);
-    
-DONE:
-    myData2022->key = key;
-    
-    if ((value == VALID_NON_TERMINAL_2022) || (value == VALID_MAYBE_TERMINAL_2022)) {
-        return;
-    }
-    if (value > 0 ) {
-        if(value==3){
-            _this->mode = UCNV_SI;
-            myUConverter =myData2022->currentConverter;
-        }
-        else{
-            StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
-            _this->mode = UCNV_SI;
-            myData2022->currentConverter = myUConverter = 
-                (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
-            myData2022->toUnicodeCurrentState = tempState;  
-            *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
-            
-        }
-        if (U_SUCCESS(*err)){
-            /*Customize the converter with the attributes set on the 2022 converter*/
-            myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
-            myUConverter->fromUContext = _this->fromUContext;
-            myUConverter->fromCharErrorBehaviour = _this->fromCharErrorBehaviour;
-            myUConverter->toUContext = _this->toUContext;
-            
-            uprv_memcpy(myUConverter->subChar, 
-                _this->subChar,
-                myUConverter->subCharLen	= _this->subCharLen);
-            
-            _this->mode = UCNV_SO;
-        }
-    }
-    
-    return;
-}
+
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                                               UErrorCode* err){
@@ -2158,7 +1871,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
     const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
-    char *tempLimit = &tempBuf[2]+1; 
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
     const char *mySourceLimit = args->sourceLimit;
@@ -2167,6 +1879,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
+    int plane=0; /*dummy variable*/
     pBuf = &tempBuf[0];
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -2228,8 +1941,8 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                         goto SAVE_STATE;
                     }
                     mySource--;
-                    changeState_2022_JP(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,err);
+                    changeState_2022(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
                     if(U_FAILURE(*err)){
                         goto SAVE_STATE;
                     }
@@ -2290,24 +2003,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     }
                 
                     break;
-                
-                case MBCS:
-                
-                    if(args->converter->toUnicodeStatus == 0x00){
-                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
-                        continue;
-                    }
-                    else{
-                        tempBuf[0] = (char) (args->converter->toUnicodeStatus);
-                        tempBuf[1] = (char) (mySourceChar);
-                        args->converter->toUnicodeStatus = 0x00;
-                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                        pBuf = &tempBuf[0];
-                        tempLimit = &tempBuf[2]+1;
-                        targetUniChar	= _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData,
-                             &pBuf,tempLimit,args->converter->useFallback);
-                    }
-                    break;
                     
                 case LATIN1:
                     if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
@@ -2321,6 +2016,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                     goto SAVE_STATE;
+                
+                default :
+                    break;
+                    /*not expected*/
 
             }
             if(targetUniChar < 0xfffe){
@@ -2343,17 +2042,13 @@ SAVE_STATE:
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
                     
-                    if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
-                        myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
-                        myConverterType[myData->toUnicodeCurrentState]== LATIN1){
-                    
-                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char) mySourceChar;
-                    }
-                    else{
+                    if(myConverterType[myData->toUnicodeCurrentState] > SBCS){
                         
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
-    
+                    }
+                    else{
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char) mySourceChar;
                     }
 
                     args->target = myTarget;
@@ -2387,6 +2082,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeJPCN(args->converter,myData);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -2394,10 +2096,8 @@ SAVE_STATE:
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[2];
-    const char* pBuf;
     const char *mySource = ( char *) args->source;
-    UChar *myTarget = args->target;
-    char *tempLimit = &tempBuf[2]+1; 
+    UChar *myTarget = args->target; 
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
     const char *mySourceLimit = args->sourceLimit;
@@ -2406,7 +2106,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
-    
+    int plane = 0; /*dummy variable*/
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -2466,8 +2166,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                         goto SAVE_STATE;
                     }
                     mySource--;
-                    changeState_2022_JP(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,err);
+                    changeState_2022(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
+
                     if(U_FAILURE(*err)){
                         goto SAVE_STATE;
                     }
@@ -2528,24 +2229,6 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     }
                 
                     break;
-                
-                case MBCS:
-                
-                    if(args->converter->toUnicodeStatus == 0x00){
-                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
-                        continue;
-                    }
-                    else{
-                        tempBuf[0] = (char) (args->converter->toUnicodeStatus);
-                        tempBuf[1] = (char) (mySourceChar);
-                        args->converter->toUnicodeStatus = 0x00;
-                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
-                        pBuf = &tempBuf[0];
-                        tempLimit = &tempBuf[2]+1;
-                        targetUniChar	= _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData,
-                            &pBuf,tempLimit,args->converter->useFallback);
-                    }
-                    break;
                     
                 case LATIN1:
                     if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
@@ -2559,17 +2242,17 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
                     goto SAVE_STATE;
-
+                default:
+                    /* For non-valid state MBCS and others */
+                    break;
             }
             if(targetUniChar < 0xfffe){
-                if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
-                    myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
-                    myConverterType[myData->toUnicodeCurrentState]== LATIN1){
+                if(myConverterType[myData->toUnicodeCurrentState] > SBCS ){
 
-                    args->offsets[myTarget - args->target]=	mySource - args->source -1;
+                    args->offsets[myTarget - args->target]=	mySource - args->source -2;
                 }
                 else{
-                    args->offsets[myTarget - args->target]=	mySource - args->source - 2;
+                    args->offsets[myTarget - args->target]=	mySource - args->source - 1;
                 }
                 *(myTarget++)=(UChar)targetUniChar;
                 targetUniChar=missingCharMarker;
@@ -2585,18 +2268,16 @@ SAVE_STATE:
                     UConverterCallbackReason reason;
                     int32_t currentOffset ;
                     int32_t My_i = myTarget - args->target;
-                    if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
-                        myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
-                        myConverterType[myData->toUnicodeCurrentState]== LATIN1){
+                    if(myConverterType[myData->toUnicodeCurrentState] > SBCS){
 
-                        currentOffset=	mySource - args->source -1;
-                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =(char) mySourceChar;
-                    }
-                    else{
                         currentOffset=	mySource - args->source - 2;
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
-    
+                    }
+                    else{
+
+                        currentOffset=	mySource - args->source -1;
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =(char) mySourceChar;
                     }
                     
                     
@@ -2644,6 +2325,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeJPCN(args->converter,myData);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -2832,13 +2520,19 @@ CALLBACK:
         
     }
     /*If at the end of conversion we are still carrying state information
-    *flush is TRUE, we can deduce that the input stream is truncated
-    */
+     *flush is TRUE, we can deduce that the input stream is truncated
+     */
     if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == sourceLength) && args->flush){
         if (U_SUCCESS(*err)){
             *err = U_TRUNCATED_CHAR_FOUND;
             args->converter->toUnicodeStatus = 0x00;
         }
+    }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == sourceLength) && args->flush){
+        setInitialStateFromUnicodeKR(args->converter,myConverterData);
     }
 
     args->target += myTargetIndex;
@@ -3034,6 +2728,12 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == sourceLength) && args->flush){
+        setInitialStateFromUnicodeKR(args->converter,myConverterData);
+    }
 
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -3055,6 +2755,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
+    int plane = 0; /*dummy variable*/
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     
     
@@ -3096,11 +2797,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
                     }
                     else{
                         mySource--;
-                        changeState_2022(args->converter,
-                                            &mySource, 
-                                            args->sourceLimit,
-                                            args->flush,
-                                            err);
+                        changeState_2022(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,ISO_2022,&plane, err);
+
                        
                     }
                     if(U_FAILURE(*err)){
@@ -3159,8 +2858,15 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
+                    if(myData->toUnicodeCurrentState== DBCS){
+                
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);    
+                    }
+                    else{
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
+                    }
+
                     args->target = myTarget;
                     args->source = mySource;
                     ToU_CALLBACK_MACRO( args->converter->toUContext,
@@ -3193,6 +2899,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeKR(args->converter,myData);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -3210,7 +2923,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
-    
+    int plane =0; /*dummy variable */
     
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -3254,11 +2967,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
                     }
                     else{
                         mySource--;
-                        changeState_2022(args->converter,
-                                            &mySource, 
-                                            args->sourceLimit,
-                                            args->flush,
-                                            err);
+                        changeState_2022(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,ISO_2022,&plane, err);
+
                        
                     }
                     if(U_FAILURE(*err)){
@@ -3371,6 +3082,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeKR(args->converter,myData);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -3557,8 +3275,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     int plane = 0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    CompactByteArray  *myFromUnicodeSBCS = NULL;
-    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
+
     UChar32 targetUniChar = missingCharMarker;
     
     StateEnumCN currentState=ASCII;
@@ -3644,33 +3361,20 @@ getTrail:
                 do{
                     switch (myConverterTypeCN[currentState]){
                     
-                        case SBCS:
-                            if(mySourceChar<0xffff){
-                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
-                        
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                        
-                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                }
-                        
-                            }
-                            /* ucmp8_getU returns 0	for missing char so explicitly set it missingCharMarker*/
-                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                            break;
-                    
                         case DBCS:
                             if(mySourceChar<0xffff){
                                 myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
                                 myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
                                 targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
-                        
+                               
+                                /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*
                                 if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                }
+                                } */
                             }
                             if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
                                 targetUniChar=missingCharMarker;
@@ -3835,13 +3539,19 @@ CALLBACK:
     }/* end while(mySourceIndex<mySourceLength) */
     
     /*If at the end of conversion we are still carrying state information
-    *flush is TRUE, we can deduce that the input stream is truncated
-    */
+     *flush is TRUE, we can deduce that the input stream is truncated
+     */
     if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
         if (U_SUCCESS(*err)){
             *err = U_TRUNCATED_CHAR_FOUND;
             args->converter->toUnicodeStatus = 0x00;
         }
+    }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == mySourceLength) && args->flush){
+        setInitialStateFromUnicodeJPCN(myConverterData);
     }
 
     /*save the state and return */
@@ -3871,8 +3581,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
     int plane = 0;
     CompactShortArray *myFromUnicodeDBCS = NULL;
     CompactShortArray *myFromUnicodeDBCSFallback = NULL;
-    CompactByteArray  *myFromUnicodeSBCS = NULL;
-    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
     UChar32 targetUniChar = missingCharMarker;
     int32_t currentOffset=0;
     StateEnumCN currentState=ASCII;
@@ -3957,34 +3665,19 @@ getTrail:
             else{
                 do{
                     switch (myConverterTypeCN[currentState]){
-                    
-                        case SBCS:
-                            if(mySourceChar<0xffff){
-                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
-                        
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                        
-                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
-                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
-                                }
-                        
-                            }
-                            /* ucmp8_getU returns 0	for missing char so explicitly set it missingCharMarker*/
-                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                            break;
-                    
+                                                                                       
                         case DBCS:
                             if(mySourceChar<0xffff){
                                 myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
                                 myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
                                 targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
-                        
-                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
+                                /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
+                                 * safely ignore the codepaths below
+                                 */
+                                /*if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
                                     (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                                     targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
-                                }
+                                } */
                             }
                             if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
                                 targetUniChar=missingCharMarker;
@@ -4161,6 +3854,12 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == mySourceLength) && args->flush){
+        setInitialStateFromUnicodeJPCN(myConverterData);
+    }
 
     
     /*save the state and return */
@@ -4201,17 +3900,18 @@ static StateEnum nextStateToUnicodeCN[2][MAX_STATES_2022]= {
     }
 };
 
-static void changeState_2022_CN(UConverter* _this,
+static void changeState_2022(UConverter* _this,
                                 const char** source, 
                                 const char* sourceLimit,
-                                UBool flush,int* plane,
+                                UBool flush,Variant2022 var,
+                                int* plane,
                                 UErrorCode* err){
     UConverter* myUConverter;
     UCNV_TableStates_2022 value;
     UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
     uint32_t key = myData2022->key;
     const char* chosenConverterName = NULL;
-    const char* sourceStart =*source;
+/*    const char* sourceStart =*source;*/
     char c;
     char cnvName[20];
     int32_t offset;
@@ -4221,21 +3921,6 @@ static void changeState_2022_CN(UConverter* _this,
     
     do{
         
-        /* Needed explicit cast for key on MVS to make compiler happy - JJD */
-        if(**source == UCNV_SI ){
-            if(sourceStart == *source){
-                (*source)++;
-                value=(UCNV_TableStates_2022) 1;
-                offset	= 6;
-                goto DONE;
-            }
-        }
-        if(**source ==UCNV_SO){
-            if(sourceStart == *source){
-                (*source)++;
-                return;
-            }
-        }
         value = getKey_2022(**source,(int32_t *) &key, &offset);
         switch (value){
         case VALID_NON_TERMINAL_2022 : 
@@ -4364,12 +4049,33 @@ DONE:
             myUConverter =myData2022->currentConverter;
         }
         else{
-             StateEnumCN tempState=nextStateToUnicodeCN[myData2022->version][offset];
-            _this->mode = UCNV_SI;
-            myData2022->currentConverter = myUConverter = 
-                (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
-            myData2022->toUnicodeCurrentState = tempState;
-            *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
+            switch(var){
+                case ISO_2022:
+                    _this->mode = UCNV_SI;
+                    ucnv_close(myData2022->currentConverter);
+                    myData2022->currentConverter = myUConverter = ucnv_open(chosenConverterName, err);
+                    break;
+                case ISO_2022_JP:
+                    {
+                         StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
+                        _this->mode = UCNV_SI;
+                        myData2022->currentConverter = myUConverter = 
+                            (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
+                        myData2022->toUnicodeCurrentState = tempState;  
+                        *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
+                    }
+                    break;
+                case ISO_2022_CN:
+                    {
+                         StateEnumCN tempState=nextStateToUnicodeCN[myData2022->version][offset];
+                        _this->mode = UCNV_SI;
+                        myData2022->currentConverter = myUConverter = 
+                            (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
+                        myData2022->toUnicodeCurrentState = tempState;
+                        *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
+                    }
+                    break;
+            }
             
         }
         if (U_SUCCESS(*err)){
@@ -4428,7 +4134,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 * are assumed to be ASCII according to RFC-1922
                 */
                     
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->toUnicodeCurrentState = ASCII1;
                     myData->plane=plane = 0;
              }
             
@@ -4437,7 +4143,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus !=	0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->toUnicodeCurrentState = ASCII1;
                     myData->plane=plane = 0;
                     break;
                 
@@ -4445,7 +4151,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus !=	0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->toUnicodeCurrentState = ASCII1;
                     myData->plane=plane = 0;
                     break;
                 
@@ -4453,7 +4159,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->toUnicodeCurrentState = SBCS;
+                    myData->toUnicodeCurrentState = ASCII1;
                     myData->plane=plane = 0;
                     continue;
                 
@@ -4477,8 +4183,8 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         goto SAVE_STATE;
                     }
                     mySource--;
-                    changeState_2022_CN(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,&plane,err);
+                    changeState_2022(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,ISO_2022_CN,&plane,err);
                 
                     myData->plane=plane;
                     if(plane>0){
@@ -4488,7 +4194,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                                 uprv_stricmp("latin_1", 
                                 myData->currentConverter->sharedData->staticData->name)==0){
                     
-                        myData->toUnicodeCurrentState=SBCS;
+                        myData->toUnicodeCurrentState=ASCII1;
                     }
                     if(U_FAILURE(*err)){
                         goto SAVE_STATE;
@@ -4498,7 +4204,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
             
             switch(myData->toUnicodeCurrentState){
                 
-                case SBCS:
+                case ASCII1:
                 
                     if(args->converter->fromUnicodeStatus == 0x00){
                         targetUniChar = (UChar)	 mySourceChar;
@@ -4522,14 +4228,17 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
                         args->converter->toUnicodeStatus =0x00;
                     
-                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
-                        if(targetUniChar> 0xfffe){
+                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar); 
+                        /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
+                         * safely ignore the codepaths below
+                         */
+                        /*if(targetUniChar> 0xfffe){
                             if((args->converter->useFallback == TRUE) && 
                                 (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                                 targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
                             }
-                        }
+                        } */
                     }
                 
                     break;
@@ -4580,7 +4289,7 @@ SAVE_STATE:
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
                     switch(myData->toUnicodeCurrentState){
-                        case SBCS:
+                        case ASCII1:
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
                             break;
 
@@ -4628,6 +4337,14 @@ SAVE_STATE:
         }
     }
     
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeJPCN(args->converter,myData);
+    }
+
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -4669,7 +4386,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus !=	0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = SBCS;
+                myData->toUnicodeCurrentState = ASCII1;
                 myData->plane=plane = 0;
                 break;
                 
@@ -4677,7 +4394,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus !=	0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = SBCS;
+                myData->toUnicodeCurrentState = ASCII1;
                 myData->plane=plane = 0;
                 break;
                 
@@ -4685,7 +4402,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus != 0x00){
                     goto SAVE_STATE;
                 }
-                myData->toUnicodeCurrentState = SBCS;
+                myData->toUnicodeCurrentState = ASCII1;
                 myData->plane=plane = 0;
                 continue;
                 
@@ -4709,8 +4426,8 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     goto SAVE_STATE;
                 }
                 mySource--;
-                changeState_2022_CN(args->converter,&(mySource), 
-                    args->sourceLimit, args->flush,&plane,err);
+                changeState_2022(args->converter,&(mySource), 
+                    args->sourceLimit, args->flush,ISO_2022_CN,&plane,err);
                 
                 myData->plane=plane;
                 if(plane>0){
@@ -4720,7 +4437,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                             uprv_stricmp("latin_1", 
                             myData->currentConverter->sharedData->staticData->name)==0){
                     
-                    myData->toUnicodeCurrentState=SBCS;
+                    myData->toUnicodeCurrentState=ASCII1;
                 }
                 if(U_FAILURE(*err)){
                     goto SAVE_STATE;
@@ -4731,7 +4448,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
             
             switch(myData->toUnicodeCurrentState){
                 
-            case SBCS:
+            case ASCII1:
                 
                 if(args->converter->fromUnicodeStatus == 0x00){
                     targetUniChar = (UChar)	 mySourceChar;
@@ -4756,13 +4473,17 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     args->converter->toUnicodeStatus =0x00;
                     
                     targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
+                    /* There are no fallbacks in ISO-IR-165 or GB_2312_1 so we can
+                     * safely ignore the codepaths below
+                     */
+                    /*
                     if(targetUniChar> 0xfffe){
                         if((args->converter->useFallback == TRUE) && 
                             (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
                             
                             targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
                         }
-                    }
+                    } */
                 }
                 
                 break;
@@ -4793,7 +4514,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     goto SAVE_STATE;
             }
             if(targetUniChar < 0xfffe){
-                if(myData->toUnicodeCurrentState == SBCS){
+                if(myData->toUnicodeCurrentState == ASCII1){
                     args->offsets[myTarget - args->target]=	mySource - args->source - 1;
                 }
                 else{
@@ -4813,7 +4534,7 @@ SAVE_STATE:
                     
                     
                     switch(myData->toUnicodeCurrentState){
-                        case SBCS:
+                        case ASCII1:
                             currentOffset=	mySource - args->source -1;
                             args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
                             break;
@@ -4881,6 +4602,14 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        setInitialStateToUnicodeJPCN(args->converter,myData);
+    }
+
+
     args->target = myTarget;
     args->source = mySource;
 }
