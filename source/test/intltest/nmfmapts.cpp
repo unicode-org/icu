@@ -267,12 +267,12 @@ public:
 
    virtual inline UClassID getDynamicClassID() const
    {
-	   return (UClassID)gID;
+	   return (UClassID)&gID;
    }
 
    static inline UClassID getStaticClassID()
    {
-		return (UClassID)gID;
+		return (UClassID)&gID;
    }
 
 private:
