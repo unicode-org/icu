@@ -88,3 +88,5 @@ $Other_Grapheme_Extend = [$Grapheme_Extend - [$GC:Me $GC:Mn]]
 
 # Testing
 $script:greek = $×script:greek
+$gc:lm = $script:inherited
+

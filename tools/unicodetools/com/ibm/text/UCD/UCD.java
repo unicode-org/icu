@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/03/11 19:03:16 $
-* $Revision: 1.33 $
+* $Date: 2004/06/26 00:26:16 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -479,6 +479,41 @@ public final class UCD implements UCD_Types {
         double numericValue;
         byte numericType;
     }
+    
+    public UnicodeMap getHanValue(String propertyName) {
+        UnicodeMap result = new UnicodeMap();
+        try {
+            BufferedReader in = Utility.openUnicodeFile("Unihan", version, true, Utility.UTF8); 
+            int lineCounter = 0;
+            while (true) {
+                Utility.dot(++lineCounter);
+                
+                String line = in.readLine();
+                if (line == null) break;
+                if (line.length() < 6) continue;
+                if (line.charAt(0) == '#') continue;
+                line = line.trim();
+                
+                int tabPos = line.indexOf('\t');
+                int tabPos2 = line.indexOf('\t', tabPos+1);
+                
+                String property = line.substring(tabPos+1, tabPos2).trim();
+                if (!property.equalsIgnoreCase(propertyName)) continue;
+                
+                String scode = line.substring(2, tabPos).trim();
+                int code = Integer.parseInt(scode, 16);
+                String propertyValue = line.substring(tabPos2+1).trim();
+                result.put(code, propertyValue);
+            }
+            in.close();
+        } catch (Exception e) {
+            throw new ChainException("Han File Processing Exception", null, e);
+        } finally {
+            Utility.fixDot();
+        }
+        return result;
+    }
+
     
     void populateHanExceptions() {
         hanExceptions = new IntMap();

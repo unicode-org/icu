@@ -5,22 +5,29 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2004/04/17 18:21:39 $
-* $Revision: 1.15 $
+* $Date: 2004/06/26 00:26:16 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import java.io.*;
+
 import com.ibm.text.utility.*;
 
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeMap;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UnicodeMatcher;
+import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.ULocale;
 
 
 import java.util.*;
@@ -250,7 +257,242 @@ public final class GenerateHanTransliterator implements UCD_Types {
     static final boolean DO_SIMPLE = true;
     static final boolean SKIP_OVERRIDES = true;
     
-    public static void main(int typeIn) {
+    static PrintWriter out2;
+    
+    public static void fixedMandarin() throws IOException {
+        UnicodeMap kMandarin = Default.ucd().getHanValue("kMandarin");
+        UnicodeMap kHanyuPinlu = Default.ucd().getHanValue("kHanyuPinlu");
+        UnicodeSet gotMandarin = kMandarin.getSet(null).complement();
+        UnicodeSet gotHanyu = kHanyuPinlu.getSet(null).complement();
+        UnicodeSet gotAtLeastOne = new UnicodeSet(gotMandarin).addAll(gotHanyu);
+        Map outmap = new TreeMap(Collator.getInstance(new ULocale("zh")));
+        for (UnicodeSetIterator it = new UnicodeSetIterator(gotAtLeastOne); it.next(); ) {
+            //String code = UTF16.valueOf(it.codepoint);
+            String hanyu = (String) kHanyuPinlu.getValue(it.codepoint);
+            String mandarin = (String) kMandarin.getValue(it.codepoint);
+            String hPinyin = hanyu == null ? null : digitPinyin_accentPinyin.transliterate(getUpTo(hanyu,'('));
+            String mPinyin = mandarin == null ? null : digitPinyin_accentPinyin.transliterate(getUpTo(mandarin.toLowerCase(),' '));
+            String uPinyin = hPinyin != null ? hPinyin : mPinyin;
+            UnicodeSet s = (UnicodeSet) outmap.get(uPinyin);
+            if (s == null) {
+                s = new UnicodeSet();
+                outmap.put(uPinyin, s); 
+            }
+            s.add(it.codepoint);
+        }
+        String filename = "Raw_Transliterator_Han_Latin.txt";
+        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, filename);
+        for (Iterator it = outmap.keySet().iterator(); it.hasNext();) {
+            String pinyin = (String) it.next();
+            UnicodeSet uset = (UnicodeSet) outmap.get(pinyin);
+            if (uset.size() == 1) {
+                UnicodeSetIterator usi = new UnicodeSetIterator(uset);
+                usi.next();
+                out.println(UTF16.valueOf(usi.codepoint) + ">" + pinyin + ";");
+            } else {
+                out.println(uset.toPattern(false) + ">" + pinyin + ";");
+            }
+        }
+        out.close();
+    }
+    
+    public static class PairComparator implements Comparator {
+        Comparator first;
+        Comparator second;
+        PairComparator(Comparator first, Comparator second) {
+            this.first = first;
+            this.second = second;
+        }
+        public int compare(Object o1, Object o2) {
+            Pair p1 = (Pair)o1;
+            Pair p2 = (Pair)o2;
+            int result = first.compare(p1.first, p2.first);
+            if (result != 0) return result;
+            return second.compare(p1.second, p2.second);
+        }
+    }
+    
+    public static void quickMandarin() throws Exception {
+        UnicodeMap gcl = new UnicodeMap();
+        addField("C:\\DATA\\dict\\", "gcl_icu.txt", 2, 3, gcl);
+        addField("C:\\DATA\\dict\\", "gcl_other.txt", 2, 5, gcl);        
+        Transliterator icuPinyin = Transliterator.getInstance("han-latin");
+        UnicodeMap kMandarin = Default.ucd().getHanValue("kMandarin");
+        UnicodeMap kHanyuPinlu = Default.ucd().getHanValue("kHanyuPinlu");
+        UnicodeSet gotMandarin = kMandarin.getSet(null).complement();
+        UnicodeSet gotHanyu = kHanyuPinlu.getSet(null).complement();
+        UnicodeSet gotAtLeastOne = new UnicodeSet(gotMandarin).addAll(gotHanyu);
+        int counter = 0;
+        int hCount = 0;
+        log = Utility.openPrintWriter("Mandarin_First.txt", Utility.UTF8_WINDOWS);
+        log.println("N\tCode\tChar\tUnihan\tICU\tGCL\tkHanyuPinlu / kMandarin");
+        UnicodeMap reformed = new UnicodeMap();
+        for (UnicodeSetIterator it = new UnicodeSetIterator(gotAtLeastOne); it.next(); ) {
+            String code = UTF16.valueOf(it.codepoint);
+            String hanyu = (String) kHanyuPinlu.getValue(it.codepoint);
+            String mandarin = (String) kMandarin.getValue(it.codepoint);
+            String hPinyin = hanyu == null ? null : digitPinyin_accentPinyin.transliterate(getUpTo(hanyu,'('));
+            String mPinyin = mandarin == null ? null : digitPinyin_accentPinyin.transliterate(getUpTo(mandarin.toLowerCase(),' '));
+            String uPinyin = hPinyin != null ? hPinyin : mPinyin;
+
+            String iPinyin = icuPinyin.transliterate(code).trim();
+            if (iPinyin.equals(code)) iPinyin = null;
+            String gPinyin = (String) gcl.getValue(it.codepoint);
+            
+            if (hPinyin != null) reformed.put(it.codepoint, hPinyin);
+            else if (gPinyin != null) reformed.put(it.codepoint, gPinyin);
+            else if (mPinyin != null) reformed.put(it.codepoint, mPinyin);
+            else if (iPinyin != null) reformed.put(it.codepoint, iPinyin);
+            
+            if (gPinyin != null && !gPinyin.equals(uPinyin)) {
+                log.println((++counter) + "\t" + Utility.hex(it.codepoint) + "\t" + code
+                    + "\t" + (uPinyin == null ? "" : uPinyin)
+                    + "\t" + (iPinyin == null ? "" : iPinyin.equals(gPinyin) ? "" : iPinyin)
+                    + "\t" + (gPinyin == null ? "" : gPinyin)
+                    + "\t" + (hanyu == null ? "" : hanyu + " / ")
+                    + (mandarin == null ? "" : mandarin)
+                     );
+                if (hanyu != null) hCount++;
+                continue;
+            }
+            if (true) continue;
+            if (isEqualOrNull(uPinyin, iPinyin)) continue;
+            log.println((++counter) + "\t" + Utility.hex(it.codepoint) + "\t" + code
+                + "\t" + (uPinyin == null ? "" : uPinyin)
+                + "\t" + (iPinyin == null ? "" : iPinyin)
+                + "\t" + (gPinyin == null ? "" : gPinyin)
+                + "\t" + (hanyu == null ? "" : hanyu + " / ")
+                + (mandarin == null ? "" : mandarin)
+                 );
+        }
+        log.println("kHanyuPinlu count: " + hCount);
+        
+        Collator col = Collator.getInstance(new Locale("zh","","PINYIN"));
+        UnicodeSet tailored = col.getTailoredSet().addAll(gotAtLeastOne);
+        Collator pinyinCollator = new RuleBasedCollator(
+            "&[before 1] a < \u0101 <<< \u0100 << \u00E1 <<< \u00C1 << \u01CE <<< \u01CD << \u00E0 <<< \u00C0 << a <<< A" +
+            "&[before 1] e < \u0113 <<< \u0112 << \u00E9 <<< \u00C9 << \u011B <<< \u011A << \u00E8 <<< \u00C8 << e <<< A" +
+            "&[before 1] i < \u012B <<< \u012A << \u00ED <<< \u00CD << \u01D0 <<< \u01CF << \u00EC <<< \u00CC << i <<< I" +
+            "&[before 1] o < \u014D <<< \u014C << \u00F3 <<< \u00D3 << \u01D2 <<< \u01D1 << \u00F2 <<< \u00D2 << o <<< O" +
+            "&[before 1] u < \u016B <<< \u016A << \u00FA <<< \u00DA << \u01D4 <<< \u01D3 << \u00F9 <<< \u00D9 << u <<< U" +
+            " << \u01D6 <<< \u01D5 << \u01D8 <<< \u01D7 << \u01DA <<< \u01D9 << \u01DC <<< \u01DB << \u00FC");
+        printSortedChars("ICU_Pinyin_Sort.txt", col, tailored, reformed, kHanyuPinlu, kMandarin, pinyinCollator);
+        /*
+        MultiComparator mcol = new MultiComparator(new Comparator[] {
+                new UnicodeMapComparator(reformed, pinyinCollator), col});
+        printSortedChars("ICU_Pinyin_Sort2.txt", mcol, tailored);
+        */
+        log.close();
+    }
+    
+    static class UnicodeMapComparator implements Comparator {
+        UnicodeMap map;
+        Comparator comp;
+        UnicodeMapComparator(UnicodeMap map, Comparator comp) {
+            this.map = map;
+            this.comp = comp;
+        }
+        public int compare(Object o1, Object o2) {
+            int c1 = UTF16.charAt((String) o1,0);
+            int c2 = UTF16.charAt((String) o2,0);
+            Object v1 = map.getValue(c1);
+            Object v2 = map.getValue(c2);
+            if (v1 == null) {
+                if (v2 == null) return 0;
+                return -1;
+            } else if (v2 == null) return 1;
+            return comp.compare(v1, v2);
+        }
+    }
+    
+    static class MultiComparator implements Comparator {
+        private Comparator[] comparators;
+    
+        public MultiComparator (Comparator[] comparators) {
+            this.comparators = comparators;
+        }
+    
+        /* Lexigraphic compare. Returns the first difference
+         * @return zero if equal. Otherwise +/- (i+1) 
+         * where i is the index of the first comparator finding a difference
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(Object arg0, Object arg1) {
+            for (int i = 0; i < comparators.length; ++i) {
+                int result = comparators[i].compare(arg0, arg1);
+                if (result == 0) continue;
+                if (result > 0) return i+1;
+                return -(i+1);
+            }
+            return 0;
+        }
+    }
+
+    private static void printSortedChars(String file, Comparator col, UnicodeSet tailored,
+         UnicodeMap map, UnicodeMap hanyu, UnicodeMap mand, Comparator p2)
+        throws IOException {
+        Set set = new TreeSet(col);
+        PrintWriter pw = Utility.openPrintWriter(file, Utility.UTF8_WINDOWS);
+        for (UnicodeSetIterator it = new UnicodeSetIterator(tailored); it.next(); ) {
+            set.add(UTF16.valueOf(it.codepoint));
+        }
+        String lastm = "";
+        String lasts = "";
+        for (Iterator it2 = set.iterator(); it2.hasNext(); ) {
+            String s = (String)it2.next();
+            String m = map == null ? null : (String) map.getValue(UTF16.charAt(s,0));
+            if (m == null) m = "";
+            String info = m;
+            if (p2.compare(lastm,m) > 0) {
+                info = info + "\t" + lastm + " > " + m + "\t";
+                Object temp;
+                temp = hanyu.getValue(UTF16.charAt(lasts,0));
+                if (temp != null) info += "[" + temp + "]";
+                temp = mand.getValue(UTF16.charAt(lasts,0));
+                if (temp != null) info += "[" + temp + "]";
+                info += " > ";
+                temp = hanyu.getValue(UTF16.charAt(s,0));
+                if (temp != null) info += "[" + temp + "]";
+                temp = mand.getValue(UTF16.charAt(s,0));
+                if (temp != null) info += "[" + temp + "]";                
+            } 
+            pw.println(Utility.hex(s) + "\t" + s + "\t" + info);
+            lastm = m;
+            lasts = s;
+        }
+        pw.close();
+    }
+    
+    static void addField(String dir, String file, int hexCodeFieldNumber, int valueNumber, UnicodeMap result) throws IOException {
+        BufferedReader br = BagFormatter.openUTF8Reader(dir, file);
+        while (true) {
+            String line = br.readLine();
+            if (line == null) break;
+            line = line.trim();
+            if (line.length() == 0) continue;
+            if (line.startsWith("\uFEFF")) line = line.substring(1);
+            if (line.startsWith("#") || line.length() == 0) continue;
+            String[] pieces = Utility.split(line,'\t');
+            result.put(Integer.parseInt(pieces[hexCodeFieldNumber], 16), pieces[valueNumber]);
+        }
+        br.close();
+    }
+    
+    static boolean isEqualOrNull(String a, String b) {
+        if (a == null || b == null) return true;
+        return a.equals(b);
+    }
+    public static String getUpTo(String s, char ch) {
+        int pos = s.indexOf(ch);
+        if (pos < 0) return s;
+        return s.substring(0,pos);   
+    }
+    
+    public static void main(int typeIn) throws IOException {
+        if (typeIn == CHINESE) {
+            fixedMandarin();
+            return;
+        }
     	type = typeIn;
     	
         try {
@@ -298,7 +540,11 @@ public final class GenerateHanTransliterator implements UCD_Types {
             log.println();
             log.println("@Unihan Data");
             log.println();
+            out2 = BagFormatter.openUTF8Writer(GEN_DIR, "unihan_kmandarinDump.txt");
+            
             readUnihanData(key);
+            
+            out2.close();
 
             if (false) {
                 readCDICT();
@@ -1796,6 +2042,8 @@ Bad pinyin data: \u4E7F	?	LE
     static Map cdict = new TreeMap();
     static Map simplifiedToTraditional = new HashMap();
     static Map traditionalToSimplified = new HashMap();
+    
+    static UnicodeMap kHanyuPinlu = new UnicodeMap();
   
     static void readUnihanData(String key) throws java.io.IOException {
 
@@ -1833,7 +2081,16 @@ Bad pinyin data: \u4E7F	?	LE
                 traditionalToSimplified.put(UTF16.valueOf(code), propertyValue);
             }
             
-            if (property.equals(key) || key.equals("kJapaneseOn") && property.equals("kJapaneseKun")) {
+            if (key.equals("kMandarin") && property.equals("kHanyuPinlu")) {
+                // U+64D4   kHanyuPinlu dan1(297), dan4(61), dan5(36)
+                String[] piece = Utility.split(propertyValue,'(');
+                String pinyin = digitToPinyin(piece[0], line);
+                log.println(scode + "\t" + pinyin + "\t" + line);
+                kHanyuPinlu.put(Integer.parseInt(scode,16), pinyin);
+            }
+            if (property.equals(key) 
+                || key.equals("kJapaneseOn") && property.equals("kJapaneseKun")
+                ) {
                 storeDef(out, code, propertyValue, line);
             }            
         }
@@ -1885,6 +2142,7 @@ Bad pinyin data: \u4E7F	?	LE
             definition = definition.substring(0, end3);
             
             definition = digitToPinyin(definition, line);
+            out2.println(Utility.hex(cp) + '\t' + UTF16.valueOf(cp) + "\t" + definition.toLowerCase());
         }
         if (type == DEFINITION) {
             definition = removeMatched(definition,'(', ')', line);
