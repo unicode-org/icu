@@ -15,6 +15,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/uloc.h"
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
 /**
@@ -693,6 +694,17 @@ unum_setSymbol(UNumberFormat *fmt,
                int32_t length,
                UErrorCode *status);
 
+
+/** Get the locale for this number format object. You can choose between valid and actual locale.
+ *  @param cal The calendar object
+ *  @param type type of the locale we're looking for (valid or actual) 
+ *  @param status error code for the operation
+ *  @return the locale name
+ */
+U_CAPI const char* U_EXPORT2
+unum_getLocaleByType(const UNumberFormat *fmt,
+                     ULocDataLocaleType type,
+                     UErrorCode* status); 
 
 /******************* Obsolete API ***************************/
 /**
