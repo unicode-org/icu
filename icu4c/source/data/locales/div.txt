@@ -6,8 +6,8 @@
 // ***************************************************************************
 
 div {
-    Version{ "x0.1" }
-    LocaleID:int { 0x046 }
+    Version{ "x0.2" }
+    LocaleID:int { 0x65 }
     AmPmMarkers{
         "\u0789\u0786",
         "\u0789\u078A"
@@ -70,7 +70,7 @@ div {
         ",",
         "\u060C",
         "%",
-        "\u060C",
+        "\u0660",
         "#",
         "-",
         "E",
@@ -84,11 +84,11 @@ div {
         "#,##,##0%",
         "#E0",
     }
-    LocaleScript{
+    LocaleScript:array {
         "THAA"
     }
 
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
              "[normalization on]"
