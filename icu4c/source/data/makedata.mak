@@ -38,6 +38,11 @@ ICUP=$(ICUP:\source\data\build\..\..\..=)
 #     WARNING:  NOT THE SAME AS ICU_DATA environment variable.  Confusing.
 ICUDATA=$(ICUP)\data
 
+#
+#  ICUDATA_RELATIVE_PATH
+#     Another name to the source directory. Used for the inference rules because
+#     spaces are not allowed in the directory name.
+ICUDATA_RELATIVE_PATH=..\..\..\data
 
 #
 #  DLL_OUTPUT
@@ -150,7 +155,7 @@ RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 #				Building the common dll in $(ICUBLD) unconditionally copies it to $(DLL_OUTPUT) too.
 #
 #############################################################################
-ALL : GODATA "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" testdata $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
+ALL : GODATA "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" testdata "$(TESTDATAOUT)\test1.cnv" "$(TESTDATAOUT)\test3.cnv" "$(TESTDATAOUT)\test4.cnv"
 	@echo All targets are up to date
 
 #
@@ -159,7 +164,7 @@ ALL : GODATA "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" testdata $(TESTDATAOUT)\test1.cn
 testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
 	@echo building testdata...
-	nmake /nologo /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) TESTDATAOUT=$(TESTDATAOUT) ICUDATA=$(ICUDATA)
+	nmake /nologo /f "$(TESTDATA)\testdata.mk" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" PKGOPT="$(PKGOPT)" CFG=$(CFG) TESTDATAOUT="$(TESTDATAOUT)" ICUDATA="$(ICUDATA)"
 	@cd "$(ICUDBLD)"
 
 
@@ -169,7 +174,7 @@ BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$
 #  pkgdata will drop all output files (.dat, .dll, .lib) into the target (ICUDBLD) directory.
 #  move the .dll and .lib files to their final destination afterwards.
 #
-"$(ICUDBLD)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res $(ICUP)\source\stubdata\stubdatabuilt.txt
+"$(ICUDBLD)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(ICUDBLD)" -s . <<pkgdatain.txt
@@ -254,24 +259,22 @@ CLEAN :
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Batch inference rule for creating converters
-{$(ICUDATA)}.ucm.cnv::
+{$(ICUDATA_RELATIVE_PATH)}.ucm.cnv:
 	@echo Generating converters
-	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(@D)" $**
 
 # Inference rule for creating converters
-{$(ICUDATA)}.txt.res:
+{$(ICUDATA_RELATIVE_PATH)}.txt.res:
 	@echo Making Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(ICUDATA)" -d$(@D) $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(ICUDATA)" -d"$(@D)" $(?F)
 
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
 	@echo Creating data DLL version information from $**
-	@rc.exe /i ..\..\..\include\ /r /fo "$@" $**
+	rc.exe /i ..\..\..\include\ /r /fo "$@" $**
 
 # Targets for unames.dat
-unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
+unames.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUDATA)\unidata\UnicodeData.txt"
@@ -322,5 +325,5 @@ tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe -q ucadata.dat uprops.dat unorm.dat
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat uprops.dat unorm.dat
 
