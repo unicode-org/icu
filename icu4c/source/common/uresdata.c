@@ -778,7 +778,7 @@ ures_swap(const UDataSwapper *ds,
     const UDataInfo *pInfo;
     const Resource *inBundle;
     Resource rootRes;
-    int32_t headerSize, maxTableLength;
+    int32_t headerSize, maxTableLength, stringsLength;
 
     Row rows[STACK_ROW_CAPACITY];
     int32_t resort[STACK_ROW_CAPACITY];
@@ -839,14 +839,26 @@ ures_swap(const UDataSwapper *ds,
 
     if(length>=0) {
         Resource *outBundle=(Resource *)((char *)outData+headerSize);
+        const uint8_t *inChars;
 
         /* copy the bundle for binary and inaccessible data */
         if(inData!=outData) {
             uprv_memcpy(outBundle, inBundle, 4*top);
         }
 
-        /* swap the key strings */
-        ds->swapInvChars(ds, inBundle+1, 4*(bottom-1), outBundle+1, pErrorCode);
+        /* swap the key strings, but not the padding bytes (0xaa) after the last string and its NUL */
+        inChars=(const uint8_t *)(inBundle+1);
+        stringsLength=4*(bottom-1);
+        while(stringsLength>0 && inChars[stringsLength-1]!=0) {
+            --stringsLength;
+        }
+
+        ds->swapInvChars(ds, inChars, stringsLength, outBundle+1, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            udata_printError(ds, "ures_swapResource().swapInvChars(keys) failed - %s\n",
+                             u_errorName(*pErrorCode));
+            return 0;
+        }
 
         /* allocate the temporary table for sorting resource tables */
         tempTable.keyChars=(const char *)outBundle; /* sort by outCharset */
