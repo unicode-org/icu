@@ -16,15 +16,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-#include "cstring.h"
-#include "cintltst.h"
-#include "cucdtst.h"
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "cstring.h"
+#include "cmemory.h"
+#include "cintltst.h"
+#include "cucdtst.h"
 #include "uparse.h"
 
 /* prototypes --------------------------------------------------------------- */
@@ -37,6 +38,9 @@ TestMirroring();
 
 static void
 TestUnescape();
+
+static void
+TestCaseMapping();
 
 /* test data ---------------------------------------------------------------- */
 #ifndef MIN
@@ -117,6 +121,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUnescape, "tsutil/cucdtst/TestUnescape");
+    addTest(root, &TestCaseMapping, "tsutil/cucdtst/TestCaseMapping");
 }
 
 /*==================================================== */
@@ -797,7 +802,25 @@ static void TestStringFunctions()
         }
     }
 
-cleanUpDataTable();
+    cleanUpDataTable();
+
+    /* test u_strcmpCodePointOrder() */
+    {
+        /* these strings are in ascending order */
+        static const UChar strings[5][3]={
+            { 0x61, 0 },            /* U+0061 */
+            { 0x20ac, 0 },          /* U+20ac */
+            { 0xff61, 0 },          /* U+ff61 */
+            { 0xd800, 0xdc02, 0 },  /* U+10002 */
+            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
+        };
+
+        for(i=0; i<4; ++i) {
+            if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
+                log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
+            }
+        }
+    }
 }
 
 static void TestStringSearching()
@@ -1232,4 +1255,184 @@ TestUnescape() {
     }
 
     /* ### TODO: test u_unescapeAt() */
+}
+
+/* test string case mapping functions --------------------------------------- */
+
+static void
+TestCaseMapping() {
+    static const UChar
+
+    beforeLower[]= { 0x61, 0x42, 0x49,  0x3a3, 0xdf, 0x3a3, 0x2f, 0xd93f, 0xdfff },
+    lowerRoot[]=   { 0x61, 0x62, 0x69,  0x3c3, 0xdf, 0x3c2, 0x2f, 0xd93f, 0xdfff },
+    lowerTurkish[]={ 0x61, 0x62, 0x131, 0x3c3, 0xdf, 0x3c2, 0x2f, 0xd93f, 0xdfff },
+
+    beforeUpper[]= { 0x61, 0x42, 0x69,  0x3c2, 0xdf,       0x3c3, 0x2f, 0xfb03,           0xd93f, 0xdfff },
+    upperRoot[]=   { 0x41, 0x42, 0x49,  0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0xd93f, 0xdfff },
+    upperTurkish[]={ 0x41, 0x42, 0x130, 0x3a3, 0x53, 0x53, 0x3a3, 0x2f, 0x46, 0x46, 0x49, 0xd93f, 0xdfff };
+
+    UChar buffer[32];
+    int32_t length;
+    UErrorCode errorCode;
+
+    /* lowercase with root locale and separate buffers */
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToLower(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR,
+                        "",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strToLower(root locale)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(lowerRoot, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* lowercase with turkish locale and in the same buffer */
+    uprv_memcpy(buffer, beforeLower, sizeof(beforeLower));
+    buffer[sizeof(beforeLower)/U_SIZEOF_UCHAR]=0;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToLower(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        buffer, -1, /* implicit srcLength */
+                        "tr",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(lowerTurkish)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(lowerTurkish, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strToLower(turkish locale)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(lowerTurkish, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* uppercase with root locale and in the same buffer */
+    uprv_memcpy(buffer, beforeUpper, sizeof(beforeUpper));
+    errorCode=U_ZERO_ERROR;
+    length=u_strToUpper(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        buffer, sizeof(beforeUpper)/U_SIZEOF_UCHAR,
+                        "",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(upperRoot, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strToUpper(root locale)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(upperRoot, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* uppercase with turkish locale and separate buffers */
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToUpper(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR,
+                        "tr",
+                        &errorCode);
+    if( U_FAILURE(errorCode) ||
+        length!=(sizeof(upperTurkish)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(upperTurkish, buffer, length*U_SIZEOF_UCHAR)!=0 ||
+        buffer[length]!=0
+    ) {
+        log_err("error in u_strToUpper(turkish locale)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(upperTurkish, buffer, length*U_SIZEOF_UCHAR)==0 && buffer[length]==0 ? "yes" : "no");
+    }
+
+    /* test preflighting */
+    buffer[0]=buffer[2]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToLower(buffer, 2, /* set destCapacity=2 */
+                        beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR,
+                        "",
+                        &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
+        uprv_memcmp(lowerRoot, buffer, 2*U_SIZEOF_UCHAR)!=0 ||
+        buffer[2]!=0xabcd
+    ) {
+        log_err("error in u_strToLower(root locale preflighting)=%ld error=%s string matches: %s\n",
+            length,
+            u_errorName(errorCode),
+            uprv_memcmp(lowerRoot, buffer, 2*U_SIZEOF_UCHAR)==0 && buffer[2]==0xabcd ? "yes" : "no");
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=u_strToUpper(NULL, 0,
+                        beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR,
+                        "tr",
+                        &errorCode);
+    if( errorCode!=U_BUFFER_OVERFLOW_ERROR ||
+        length!=(sizeof(upperTurkish)/U_SIZEOF_UCHAR)
+    ) {
+        log_err("error in u_strToUpper(turkish locale pure preflighting)=%ld error=%s\n",
+            length,
+            u_errorName(errorCode));
+    }
+
+    /* test error handling */
+    errorCode=U_ZERO_ERROR;
+    length=u_strToLower(NULL, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR,
+                        "",
+                        &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error in u_strToLower(root locale dest=NULL)=%ld error=%s\n",
+            length,
+            u_errorName(errorCode));
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToLower(buffer, -1,
+                        beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR,
+                        "",
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strToLower(root locale destCapacity=-1)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToUpper(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        NULL, sizeof(beforeUpper)/U_SIZEOF_UCHAR,
+                        "tr",
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strToUpper(turkish locale src=NULL)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
+
+    buffer[0]=0xabcd;
+    errorCode=U_ZERO_ERROR;
+    length=u_strToUpper(buffer, sizeof(buffer)/U_SIZEOF_UCHAR,
+                        beforeUpper, -2,
+                        "tr",
+                        &errorCode);
+    if( errorCode!=U_ILLEGAL_ARGUMENT_ERROR ||
+        buffer[0]!=0xabcd
+    ) {
+        log_err("error in u_strToUpper(turkish locale srcLength=-2)=%ld error=%s buffer[0]==0x%lx\n",
+            length,
+            u_errorName(errorCode),
+            buffer[0]);
+    }
 }
