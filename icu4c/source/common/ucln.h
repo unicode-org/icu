@@ -57,7 +57,9 @@ typedef enum ECleanupLibraryType {
     UCLN_COMMON /* This must be the last one to cleanup. */
 } ECleanupLibraryType;
 
-typedef UBool cleanupFunc(void);
+U_CDECL_BEGIN
+typedef UBool U_CALLCONV cleanupFunc(void);
+U_CDECL_END
 
 U_CAPI void U_EXPORT2 ucln_registerCleanup(ECleanupLibraryType type,
                                            cleanupFunc *func);
