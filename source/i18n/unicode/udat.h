@@ -455,10 +455,10 @@ typedef enum UDateFormatSymbolType {
     UDAT_LOCALIZED_CHARS
 } UDateFormatSymbolType;
 
+struct UDateFormatSymbols;
 /** Date format symbols.
  *  For usage in C programs.
  */
-struct UDateFormatSymbols;
 typedef struct UDateFormatSymbols UDateFormatSymbols;
 
 /**
