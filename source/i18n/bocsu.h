@@ -149,6 +149,9 @@ U_CFUNC int32_t
 u_writeIdenticalLevelRun(const UChar *s, int32_t length, uint8_t *p);
 
 U_CFUNC int32_t
+u_writeIdenticalLevelRunTwoChars(UChar32 first, UChar32 second, uint8_t *p);
+
+U_CFUNC int32_t
 u_lengthOfIdenticalLevelRun(const UChar *s, int32_t length);
 
 U_CFUNC uint8_t *
