@@ -309,7 +309,7 @@ u_file_write_flush(    const UChar     *chars,
             u_UCharsToChars(mySource, myTarget, count);
             myTarget += count;
         }
-        numConverted = (myTarget - f->fCharBuffer);
+        numConverted = (int32_t)(myTarget - f->fCharBuffer);
 
         if (numConverted > 0) {
             /* write the converted bytes */
@@ -353,7 +353,7 @@ ufile_fill_uchar_buffer(UFILE *f)
 
 
     /* shift the buffer if it isn't empty */
-    dataSize = f->fUCLimit - f->fUCPos;
+    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
     if(dataSize != 0) {
         memmove(f->fUCBuffer,
             f->fUCPos,
@@ -369,17 +369,17 @@ ufile_fill_uchar_buffer(UFILE *f)
     maxCPBytes = availLength / (f->fConverter!=NULL?(2*ucnv_getMinCharSize(f->fConverter)):1);
 
     /* Read in the data to convert */
-    bytesRead = fread(f->fCharBuffer,
+    bytesRead = (int32_t)fread(f->fCharBuffer,
         sizeof(char),
         ufmt_min(maxCPBytes, UFILE_CHARBUFFER_SIZE),
         f->fFile);
 
     /* Set up conversion parameters */
-    status    = U_ZERO_ERROR;
-    mySource       = f->fCharBuffer;
-    mySourceEnd     = f->fCharBuffer + bytesRead;
-    myTarget     = f->fUCBuffer + dataSize;
-    bufferSize    = UFILE_UCHARBUFFER_SIZE;
+    status      = U_ZERO_ERROR;
+    mySource    = f->fCharBuffer;
+    mySourceEnd = f->fCharBuffer + bytesRead;
+    myTarget    = f->fUCBuffer + dataSize;
+    bufferSize  = UFILE_UCHARBUFFER_SIZE;
 
     if(f->fConverter != NULL) { /* We have a valid converter */
         /* Perform the conversion */
@@ -424,7 +424,7 @@ u_fgets(UFILE        *f,
     --n;
 
     /* determine the amount of data in the buffer */
-    dataSize = f->fUCLimit - f->fUCPos;
+    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
 
     /* if the buffer contains more data than requested, operate on the buffer */
     if(dataSize > n) {
@@ -467,7 +467,7 @@ u_fgets(UFILE        *f,
     do {
 
         /* determine the amount of data in the buffer */
-        dataSize = f->fUCLimit - f->fUCPos;
+        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
 
         /* find the first occurrence of a delimiter character, if present */
         alias = f->fUCPos;
@@ -567,14 +567,14 @@ u_fgetcx(UFILE        *f)
     }
 
     /* Determine the amount of data in the buffer */
-    length = f->fUCLimit - f->fUCPos;
+    length = (int32_t)(f->fUCLimit - f->fUCPos);
 
     /* The longest escape sequence is \Uhhhhhhhh; make sure
     we have at least that many characters */
     if (length < 10) {
         /* fill the buffer */
         ufile_fill_uchar_buffer(f);
-        length = f->fUCLimit - f->fUCPos;
+        length = (int32_t)(f->fUCLimit - f->fUCPos);
     }
 
     /* Process the escape */
@@ -613,7 +613,7 @@ u_file_read(    UChar        *chars,
     ufile_fill_uchar_buffer(f);
 
     /* determine the amount of data in the buffer */
-    dataSize = f->fUCLimit - f->fUCPos;
+    dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
 
     /* if the buffer contains the amount requested, just copy */
     if(dataSize > count) {
@@ -631,7 +631,7 @@ u_file_read(    UChar        *chars,
     do {
 
         /* determine the amount of data in the buffer */
-        dataSize = f->fUCLimit - f->fUCPos;
+        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
 
         /* copy the current data in the buffer */
         memcpy(chars + read, f->fUCPos, dataSize * sizeof(UChar));
