@@ -21,6 +21,7 @@
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "ucln.h"
+#include "cmemory.h"
 
 static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
     NULL,
@@ -89,6 +90,7 @@ u_cleanup(void)
      * resource checkers don't complain. [grhoten]
      */
     umtx_destroy(NULL);
+    cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
 }
 
 
@@ -103,14 +105,7 @@ u_cleanup(void)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     /* Make sure the global mutexes are initialized. */
-    /*
-     * NOTE:  This section of code replicates functionality from GlobalMutexInitialize()
-     *        in the file mutex.cpp.  Any changes must be made in both places.
-     *        TODO:  combine them.
-     */
-    umtx_init(NULL);
-    ucnv_init(status);
-    ures_init(status);
+     u_ICUStaticInitFunc();
 
     /* Do any required init for services that don't have open operations
      * and use "only" the double-check initialization method for performance
@@ -126,3 +121,52 @@ u_init(UErrorCode *status) {
     unorm_haveData(status);
 #endif
 }
+
+
+/*
+ *  ICU Static Initialization Function
+ *
+ *     Does that portion of ICU's initialization that wants to happen at C++
+ *     static initialization time.  Can also be called directly if the same
+ *     initialization is needed later.
+ *
+ *     The effect is to initialize mutexes that are required during the
+ *     lazy initialization of other parts of ICU.
+ */
+U_CFUNC UBool u_ICUStaticInitFunc()
+{
+    UErrorCode status = U_ZERO_ERROR;
+
+#if (ICU_USE_THREADS == 1)
+/* Initialize mutexes only if threading is supported */
+    UBool heapInUse = cmemory_inUse();
+    umtx_init(NULL);
+    ucnv_init(&status);
+    ures_init(&status);
+    if (heapInUse == FALSE) {
+        /* If there was no use of ICU prior to calling this static init function,
+         *  pretend that there is still no use, even though the various inits may
+         *  have done some heap allocation. */
+        cmemory_clearInUse();
+    }
+#endif /* ICU_USE_THREADS==1 */
+    return TRUE;
+}
+
+
+/*
+ *  Static Uninitialization Function
+ *
+ *     Reverse the effects of ICU static initialization.
+ *     This is needed by u_setMutexFunctions(), which must get rid of any mutexes,
+ *     and associated memory, before swapping in the user's mutex funcs.
+ *
+ *     Do NOT call cmemory_cleanup().  We don't want to cancel the effect of
+ *     any u_setHeapFunctions().
+ */
+U_CFUNC void u_ICUStaticUnInitFunc() {
+    ucnv_cleanup();
+    ures_cleanup();
+    umtx_destroy(NULL);
+}
+

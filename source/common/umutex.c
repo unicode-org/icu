@@ -35,6 +35,7 @@
 /* Check our settings... */
 #include "unicode/utypes.h"
 #include "uassert.h"
+#include "ucln_cmn.h"
 
 
 #if defined(POSIX) && (ICU_USE_THREADS==1)
@@ -71,12 +72,15 @@
 
 #if (ICU_USE_THREADS == 1)
 
-/* the global mutex. Use it proudly and wash it often. */
+/* the global mutex.  */
 static UMTX    gGlobalMutex = NULL;
+
+/* Detect Recursive entries.  For debugging only. */
 # ifdef _DEBUG
-static int32_t gRecursionCount = 0;       /* Detect Recursive entries.  For debugging only. */
+static int32_t gRecursionCount = 0;       
 # endif
 
+/* Declare the predefined mutexes.  */
 #if defined(WIN32)
 static CRITICAL_SECTION gPlatformMutex;
 
@@ -88,7 +92,20 @@ static pthread_mutex_t gIncDecMutex;      /* For use by atomic inc/dec, on Unixe
 #endif /* ICU_USE_THREADS==1 */
 
 
+/*
+ *  User mutex implementatin functions.  If non-null, call back to these rather than
+ *  directly using the system (Posix or Windows) APIs.
+ *    (declarations are in uclean.h)
+ */
+static UMtxInit      *pMutexInit    = NULL;
+static UMtxDestroy   *pMutexDestroy = NULL;
+static UMtxLock      *pMutexLock    = NULL;
+static UMtxUnlock    *pMutexUnlock  = NULL;
+static void          *gMutexContext = NULL;
 
+/*
+ * umtx_isInitialized
+ */
 U_CAPI UBool U_EXPORT2
 umtx_isInitialized(UMTX *mutex)
 {
@@ -108,6 +125,11 @@ umtx_isInitialized(UMTX *mutex)
 #endif /* ICU_USE_THREADS==1 */
 }
 
+
+
+/*
+ * umtx_lock
+ */
 U_CAPI void  U_EXPORT2
 umtx_lock(UMTX *mutex)
 {
@@ -133,35 +155,43 @@ umtx_lock(UMTX *mutex)
         }
     }
 
+    if (pMutexLock != NULL) {
+        (*pMutexLock)(gMutexContext, mutex);
+    } else {
+
 #if defined(WIN32)
-
-    EnterCriticalSection((CRITICAL_SECTION*) *mutex);
-    #ifdef _DEBUG
-    if (mutex == &gGlobalMutex) {
-        gRecursionCount++;
-        U_ASSERT(gRecursionCount == 1);
-    }
-    #endif /*_DEBUG*/
-
+        EnterCriticalSection((CRITICAL_SECTION*) *mutex);
+#ifdef _DEBUG
+        if (mutex == &gGlobalMutex) {
+            gRecursionCount++;
+            U_ASSERT(gRecursionCount == 1);
+        }
+#endif /*_DEBUG*/
+  
 #elif defined(POSIX)
-
 #  ifdef POSIX_DEBUG_REENTRANCY
-    if (gInMutex == TRUE && mutex == &gGlobalMutex) /* in the mutex -- possible deadlock*/
-        if(pthread_equal(gLastThread, pthread_self()))
-            WeAreDeadlocked();
+        if (gInMutex == TRUE && mutex == &gGlobalMutex) /* in the mutex -- possible deadlock*/
+            if(pthread_equal(gLastThread, pthread_self()))
+                WeAreDeadlocked();
 #  endif
-    pthread_mutex_lock((pthread_mutex_t*) *mutex);
-
+            pthread_mutex_lock((pthread_mutex_t*) *mutex);
+            
 #  ifdef POSIX_DEBUG_REENTRANCY
-    if (mutex == &gGlobalMutex) {
-        gLastThread = pthread_self();
-        gInMutex = TRUE;
+            if (mutex == &gGlobalMutex) {
+                gLastThread = pthread_self();
+                gInMutex = TRUE;
+            }
+#  endif /* POSIX_DEBUG_REENTRANCY */
+#endif   /* cascade of platforms */
     }
-#  endif
-#endif
 #endif /* ICU_USE_THREADS==1 */
 }
 
+
+
+/*
+ * umtx_unlock
+ */
 U_CAPI void  U_EXPORT2
 umtx_unlock(UMTX* mutex)
 {
@@ -176,9 +206,12 @@ umtx_unlock(UMTX* mutex)
         return; /* jitterbug 135, fix for multiprocessor machines */
     }
 
+    if (pMutexUnlock) {
+        (*pMutexUnlock)(gMutexContext, mutex);
+    } else {
 #if defined (WIN32)
     #ifdef _DEBUG
-    if (mutex == &gGlobalMutex) {
+        if (mutex == &gGlobalMutex) {
         gRecursionCount--;
         U_ASSERT(gRecursionCount == 0);
     }
@@ -194,7 +227,8 @@ umtx_unlock(UMTX* mutex)
     }
 #endif
 
-#endif
+#endif  /* cascade of platforms */
+    }
 #endif /* ICU_USE_THREADS == 1 */
 }
 
@@ -205,6 +239,20 @@ umtx_unlock(UMTX* mutex)
  */
 #if (ICU_USE_THREADS == 1)
 static UMTX umtx_raw_init(void  *mem) {
+    if (pMutexInit != NULL) {
+        UErrorCode status = U_ZERO_ERROR;
+        if (mem == NULL) {
+            mem = uprv_malloc(sizeof(UMTX));
+            if (mem == NULL) {return NULL;}
+        }
+        (*pMutexInit)(gMutexContext, (UMTX *)mem, &status);
+        if (U_FAILURE(status)) {
+            /* TODO:  how should errors here be handled? */
+            uprv_free(mem);
+            return NULL;
+        }
+    } else {
+
     #if defined (WIN32)
         if (mem == NULL) {
             mem = uprv_malloc(sizeof(CRITICAL_SECTION));
@@ -213,6 +261,7 @@ static UMTX umtx_raw_init(void  *mem) {
         InitializeCriticalSection((CRITICAL_SECTION*)mem);
     #elif defined( POSIX )
         if (mem == NULL) {
+            /* TODO:  think about eliminating this malloc.  */
             mem = uprv_malloc(sizeof(pthread_mutex_t));
             if (mem == NULL) {return NULL;}
         }
@@ -221,7 +270,9 @@ static UMTX umtx_raw_init(void  *mem) {
         # else
             pthread_mutex_init((pthread_mutex_t*)mem, NULL);
         # endif
-    #endif
+    #endif /* cascade of platforms */
+    }
+
     return (UMTX *)mem;
 }
 #endif  /* ICU_USE_THREADS */
@@ -274,7 +325,9 @@ umtx_init(UMTX *mutex)
         }
         umtx_unlock(NULL);
         
-        umtx_destroy(&tMutex);  /* NOP if (tmutex == NULL)  */
+        if (tMutex != NULL) {
+            umtx_destroy(&tMutex); 
+        }
     }
 #endif /* ICU_USE_THREADS==1 */
 }
@@ -308,13 +361,48 @@ umtx_destroy(UMTX *mutex) {
 }
 
 
-#if (ICU_USE_THREADS == 1) 
+
+U_CAPI void U_EXPORT2 
+u_setMutexFunctions(void *context, UMtxInit *i, UMtxDestroy *d, UMtxLock *l, UMtxUnlock *u,
+                    UErrorCode *status) {
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    if (i==NULL || d==NULL || l==NULL || u==NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    /* If ICU is not in an initial state, disallow this operation. */
+    if (cmemory_inUse()) {
+        *status = U_INVALID_STATE_ERROR;
+        return;
+    }
+
+    /* Destroy the mutexes that C++ static initialization creates */
+    u_ICUStaticUnInitFunc();
+
+    /* Swap in the mutex function pointers.  */
+    pMutexInit    = i;
+    pMutexDestroy = d;
+    pMutexLock    = l;
+    pMutexUnlock  = u;
+    gMutexContext = context;
+
+    /*
+     * Re-do the equivalent of ICU's static initialization,
+     *   which will recreate the default, resource bundle and converter mutexes
+     */
+    u_ICUStaticInitFunc();
+}
+
 
 
 /*
  *  umtx_atomic_inc
  *  umtx_atomic_dec
  */
+#if (ICU_USE_THREADS == 1) 
 
 #if defined (WIN32)
 /*

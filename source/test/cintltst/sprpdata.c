@@ -28,8 +28,8 @@
 static void
 parseMappings(const char *filename, UStringPrepProfile* data, UBool reportError, UErrorCode *pErrorCode);
 
-static void 
-compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping, int32_t mapLength, 
+static void
+compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping, int32_t mapLength,
                UStringPrepType option);
 
 static void
@@ -48,10 +48,10 @@ strprepProfileLineFn(void *context,
     const char* typeName;
     uint32_t rangeStart=0,rangeEnd =0;
     const char* filename = (const char*) context;
- 
+
     typeName = fields[2][0];
     map = fields[1][0];
-   
+
     if(strstr(typeName, usprepTypeNames[USPREP_UNASSIGNED])!=NULL){
 
         u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
@@ -72,7 +72,7 @@ strprepProfileLineFn(void *context,
 
         /* parse the mapping string */
         length=u_parseCodePoints(map, mapping, sizeof(mapping)/4, pErrorCode);
-        
+
         /* compare the mapping */
         compareMapping(data, code,mapping, length,USPREP_MAP);
 
@@ -113,8 +113,8 @@ getValues(uint32_t result, int32_t* value, UBool* isIndex){
 
     UStringPrepType type;
     if(result == 0){
-        /* 
-         * Initial value stored in the mapping table 
+        /*
+         * Initial value stored in the mapping table
          * just return USPREP_TYPE_LIMIT .. so that
          * the source codepoint is copied to the destination
          */
@@ -127,7 +127,7 @@ getValues(uint32_t result, int32_t* value, UBool* isIndex){
         /* ascertain if the value is index or delta */
         if(result & 0x02){
             *isIndex = TRUE;
-            *value = result  >> 2; 
+            *value = result  >> 2;
 
         }else{
             *isIndex = FALSE;
@@ -144,8 +144,8 @@ getValues(uint32_t result, int32_t* value, UBool* isIndex){
     return type;
 }
 
-static void 
-compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,int32_t mapLength, 
+static void
+compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
                UStringPrepType type){
     uint32_t result = 0;
     int32_t length=0;
@@ -153,12 +153,12 @@ compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,i
     UStringPrepType retType;
     int32_t value=0, index=0, delta=0;
     int32_t* indexes = data->indexes;
-    UTrie trie = data->sprepTrie;  
+    UTrie trie = data->sprepTrie;
     const uint16_t* mappingData = data->mappingData;
     int32_t realLength =0;
     int32_t j=0;
     int8_t i=0;
-    
+
     UTRIE_GET16(&trie, codepoint, result);
     retType = getValues(result,&value,&isIndex);
 
@@ -188,19 +188,19 @@ compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,i
         length = (retType == USPREP_DELETE)? 0 :  1;
     }
 
-    /* figure out the real length */ 
+    /* figure out the real length */
     for(j=0; j<mapLength; j++){
         if(mapping[j] > 0xFFFF){
             realLength +=2;
         }else{
             realLength++;
-        }      
+        }
     }
 
     if(realLength != length){
         log_err( "Did not get the expected length. Expected: %i Got: %i\n", mapLength, length);
     }
-    
+
     if(isIndex){
         for(i =0; i< mapLength; i++){
             if(mapping[i] <= 0xFFFF){
@@ -225,7 +225,7 @@ compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping,i
 }
 
 static void
-compareFlagsForRange(UStringPrepProfile* data, 
+compareFlagsForRange(UStringPrepProfile* data,
                      uint32_t start, uint32_t end,
                      UStringPrepType type){
 
@@ -233,17 +233,17 @@ compareFlagsForRange(UStringPrepProfile* data,
     UStringPrepType retType;
     UBool isIndex=FALSE;
     int32_t value=0;
-    UTrie trie = data->sprepTrie;  
-/*        
-    // supplementary code point 
+    UTrie trie = data->sprepTrie;
+/*
+    // supplementary code point
     UChar __lead16=UTF16_LEAD(0x2323E);
     int32_t __offset;
 
-    // get data for lead surrogate 
+    // get data for lead surrogate
     (result)=_UTRIE_GET_RAW((&idnTrie), index, 0, (__lead16));
     __offset=(&idnTrie)->getFoldingOffset(result);
 
-    // get the real data from the folded lead/trail units 
+    // get the real data from the folded lead/trail units
     if(__offset>0) {
         (result)=_UTRIE_GET_RAW((&idnTrie), index, __offset, (0x2323E)&0x3ff);
     } else {
@@ -267,10 +267,10 @@ compareFlagsForRange(UStringPrepProfile* data,
 
         start++;
     }
-    
+
 }
 
-void 
+void
 doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t options, UErrorCode* errorCode){
 
     const char *testdatapath = loadTestData(errorCode);

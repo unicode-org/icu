@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -19,14 +19,30 @@
 ******************************************************************************
 */
 #include "cmemory.h"
+#include "unicode/uclean.h"
 
 /* uprv_malloc(0) returns a pointer to this read-only data. */                
 static const int32_t zeroMem[] = {0, 0, 0, 0, 0, 0};
 
+/* Function Pointers for user-supplied heap functions  */
+static void         *pContext;
+static UMemAlloc    *pAlloc;
+static UMemRealloc  *pRealloc;
+static UMemFree     *pFree;
+
+/* Flag indicating whether any heap allocations have happened.
+ *   Used to prevent changing out the heap functions after allocations have been made */
+static UBool   gHeapInUse;
+
 U_CAPI void * U_EXPORT2
 uprv_malloc(size_t s) {
     if (s > 0) {
-        return malloc(s);
+        gHeapInUse = TRUE;
+        if (pAlloc) {
+            return (*pAlloc)(pContext, s);
+        } else {
+            return malloc(s);
+        }
     } else {
         return (void *)zeroMem;
     }
@@ -37,17 +53,74 @@ uprv_realloc(void * buffer, size_t size) {
     if (buffer == zeroMem) {
         return uprv_malloc(size);
     } else if (size == 0) {
-        free(buffer);
+        if (pFree) {
+            (*pFree)(pContext, buffer);
+        } else {
+            free(buffer);
+        }
         return (void *)zeroMem;
     } else {
-        return realloc(buffer, size);
+        gHeapInUse = TRUE;
+        if (pRealloc) {
+            return (*pRealloc)(pContext, buffer, size);
+        } else {
+            return realloc(buffer, size);
+        }
     }
 }
 
 U_CAPI void U_EXPORT2
 uprv_free(void *buffer) {
     if (buffer != zeroMem) {
-        free(buffer);
+        if (pFree) {
+            (*pFree)(pContext, buffer);
+        } else {
+            free(buffer);
+        }
     }
 }
 
+U_CAPI void U_EXPORT2
+u_setMemoryFunctions(void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f,  UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return;
+    }
+    if (a==NULL || r==NULL || f==NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    if (gHeapInUse) {
+        *status = U_INVALID_STATE_ERROR;
+        return;
+    }
+    pContext  = context;
+    pAlloc    = a;
+    pRealloc  = r;
+    pFree     = f;
+}
+
+
+U_CFUNC UBool cmemory_cleanup(void) {
+    pContext   = NULL;
+    pAlloc     = NULL;
+    pRealloc   = NULL;
+    pFree      = NULL;
+    gHeapInUse = FALSE;
+    return TRUE;
+}
+
+
+/*
+ *   gHeapInUse
+ *       Return True if ICU has allocated any memory.
+ *       Used by u_SetMutexFunctions() and similar to verify that ICU has not
+ *               been used, that it is in a pristine initial state.
+ */
+U_CFUNC UBool cmemory_inUse() {
+    return gHeapInUse;
+}
+
+U_CFUNC void cmemory_clearInUse() {
+    gHeapInUse = FALSE;
+}
