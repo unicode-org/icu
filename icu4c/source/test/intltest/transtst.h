@@ -261,6 +261,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestParseError();
 
+    /**
+     * Make sure sets on output are disallowed.
+     */
+    void TestOutputSet();
+
     //======================================================================
     // Support methods
     //======================================================================

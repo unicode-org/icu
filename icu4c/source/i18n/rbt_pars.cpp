@@ -93,7 +93,7 @@ public:
 
     virtual const UnicodeString* lookup(const UnicodeString& s) const;
 
-    virtual const UnicodeSet* lookupSet(UChar32 ch) const;
+    virtual const UnicodeMatcher* lookupMatcher(UChar32 ch) const;
 
     virtual UnicodeString parseReference(const UnicodeString& text,
                                          ParsePosition& pos, int32_t limit) const;
@@ -113,15 +113,15 @@ const UnicodeString* ParseData::lookup(const UnicodeString& name) const {
 /**
  * Implement SymbolTable API.
  */
-const UnicodeSet* ParseData::lookupSet(UChar32 ch) const {
+const UnicodeMatcher* ParseData::lookupMatcher(UChar32 ch) const {
     // Note that we cannot use data.lookupSet() because the
     // set array has not been constructed yet.
-    const UnicodeSet* set = NULL;
+    const UnicodeMatcher* set = NULL;
     int32_t i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         int32_t i = ch - data->variablesBase;
         set = (i < variablesVector->size()) ?
-            (UnicodeSet*) variablesVector->elementAt(i) : 0;
+            (UnicodeMatcher*) variablesVector->elementAt(i) : 0;
     }
     return set;
 }
@@ -1137,7 +1137,8 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         // - allow arbitrary cursor offsets and do runtime checking.
         //(right->cursorOffset > (left->text.length() - left->post)) ||
         //(-right->cursorOffset > left->ante) ||
-        right->anchorStart || right->anchorEnd) {
+        right->anchorStart || right->anchorEnd ||
+        !isValidOutput(right->text)) {
 
         return syntaxError(U_MALFORMED_RULE, rule, start);
     }
@@ -1159,6 +1160,21 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
                                  status), status);
 
     return pos;
+}
+
+/**
+ * Return true if the given string looks like valid output, that is,
+ * does not contain quantifiers or other special input-only elements.
+ */
+UBool TransliteratorParser::isValidOutput(const UnicodeString& output) const {
+    for (int32_t i=0; i<output.length(); ++i) {
+        UChar32 c = output.char32At(i);
+        i += UTF_CHAR_LENGTH(c);
+        if (parseData->lookupMatcher(c) != NULL) {
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 /**
