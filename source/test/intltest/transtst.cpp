@@ -156,7 +156,8 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(66,TestSurrogateCasing);
         TESTCASE(67,TestFunction);
         TESTCASE(68,TestInvalidBackRef);
-        TESTCASE(69,TestUserFunction);
+        TESTCASE(69,TestMulticharStringSet);
+        TESTCASE(70,TestUserFunction);
 
         default: name = ""; break;
     }
@@ -3385,6 +3386,48 @@ void TransliteratorTest::TestInvalidBackRef(void) {
     } else {
         logln((UnicodeString)"Ok: . > $1; => " + u_errorName(ec));
     }
+}
+
+void TransliteratorTest::TestMulticharStringSet() {
+    // Basic testing
+    const char* rule =
+        "       [{aa}]       > x;"
+        "         a          > y;"
+        "       [b{bc}]      > z;"
+        "[{gd}] { e          > q;"
+        "         e } [{fg}] > r;" ;
+        
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator* t = Transliterator::createFromRules("Test", rule, UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        delete t;
+        errln("FAIL: createFromRules failed");
+        return;
+    }
+        
+    expect(*t, "a aa ab bc d gd de gde gdefg ddefg",
+           "y x yz z d gd de gdq gdqfg ddrfg");
+    delete t;
+
+    // Overlapped string test.  Make sure that when multiple
+    // strings can match that the longest one is matched.
+    rule =
+        "    [a {ab} {abc}]    > x;"
+        "           b          > y;"
+        "           c          > z;"
+        " q [t {st} {rst}] { e > p;" ;
+        
+    t = Transliterator::createFromRules("Test", rule, UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        delete t;
+        errln("FAIL: createFromRules failed");
+        return;
+    }
+        
+    expect(*t, "a ab abc qte qste qrste",
+           "x x x qtp qstp qrstp");
+    delete t;
 }
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
