@@ -246,39 +246,17 @@ public final class CollationKey implements Comparable
      */
     public int compareTo(CollationKey target)
     {
-        // syn wee todo check if there's a unsigned byte comparison 
-    	int i = 0;
-    	while (m_key_[i] != 0 && target.m_key_[i] != 0) {
-            byte key = m_key_[i];
-            byte targetkey = target.m_key_[i];
-            if (key == targetkey) {
-                i ++;
-                continue;
-            }
-            if (key >= 0) {
-                if (targetkey < 0 || key < targetkey) {
-                    return -1;
-                }
-                // target key has to be positive and less than key
-                return 1;
-            }
-            else {
-                // key is negative
-                if (targetkey >= 0 || key > targetkey) {
-                    return 1;
-                }
-                return -1;
-            }
-    	}
-    	// last comparison if we encounter a 0
-        if (m_key_[i] == target.m_key_[i]) {
-            return 0;
-        }
-        if (m_key_[i] == 0) {
-            return -1;
-        }
-        // target is 0
-        return 1;
+	for (int i = 0;; ++i) {
+	    int l = m_key_[i]&0xff;
+	    int r = target.m_key_[i]&0xff;
+	    if (l < r) {
+		return -1;
+	    } else if (l > r) {
+		return 1;
+	    } else if (l == 0) {
+		return 0;
+	    }
+	}
     }
 
     /**
