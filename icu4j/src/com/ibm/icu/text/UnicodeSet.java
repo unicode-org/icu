@@ -2842,7 +2842,9 @@ public class UnicodeSet extends UnicodeFilter {
      * @param valueAlias
      * @param symbols if not null, then symbols are first called to see if a property
      * is available. If true, then everything else is skipped.
-     * @return
+     * @return this set
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
                                          String valueAlias, SymbolTable symbols) {
@@ -3543,7 +3545,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @deprecated
      * @author medavis
      */
-    abstract public static class XSymbolTable implements SymbolTable {
+    abstract static class XSymbolTable implements SymbolTable {
         public UnicodeMatcher lookupMatcher(int i) {
 			return null;}
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {

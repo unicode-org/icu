@@ -634,42 +634,36 @@ public abstract class NumberFormat extends UFormat {
      * supports.  When registered, the locales it supports extend or override the
      * locales already supported by ICU.
      *
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static abstract class NumberFormatFactory {
         /**
          * Value passed to format requesting a default number format.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
 
         /**
          * Value passed to format requesting a currency format.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
 
         /**
          * Value passed to format requesting a percent format.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
 
         /**
          * Value passed to format requesting a scientific format.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public static final int FORMAT_SCIENTIFIC = SCIENTIFICSTYLE;
 
         /**
          * Value passed to format requesting an integer format.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
@@ -678,8 +672,7 @@ public abstract class NumberFormat extends UFormat {
          * If not visible, the locales supported by this factory will not
          * be listed by getAvailableLocales.  This value must not change.
          * @return true if the factory is visible.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         ///CLOVER:OFF
         public boolean visible() {
@@ -691,8 +684,7 @@ public abstract class NumberFormat extends UFormat {
          * Returns an immutable collection of the locale names directly 
          * supported by this factory.
          * @return the supported locale names.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
          public abstract Set getSupportedLocaleNames();
 
@@ -704,14 +696,12 @@ public abstract class NumberFormat extends UFormat {
          * @param loc the locale for which to create the format
          * @param formatType the type of format
          * @return the NumberFormat, or null.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public abstract NumberFormat createFormat(ULocale loc, int formatType);
 
         /**
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected NumberFormatFactory() {
         }
@@ -719,24 +709,21 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
         final Set localeNames;
         final boolean visible;
 
         /**
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public SimpleNumberFormatFactory(ULocale locale) {
             this(locale, true);
         }
         
         /**
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());
@@ -744,16 +731,14 @@ public abstract class NumberFormat extends UFormat {
         }
 
         /**
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public final boolean visible() {
             return visible;
         }
 
         /**
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public final Set getSupportedLocaleNames() {
             return localeNames;
@@ -821,8 +806,7 @@ public abstract class NumberFormat extends UFormat {
      * key that can be used to unregister this factory.
      * @param factory the factory to register
      * @return a key with which to unregister the factory
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6 
      */
     public static Object registerFactory(NumberFormatFactory factory) {
         if (factory == null) {
@@ -836,8 +820,7 @@ public abstract class NumberFormat extends UFormat {
      * registerInstance or registerFactory).
      * @param registryKey a key obtained from registerFactory
      * @return true if the object was successfully unregistered
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static boolean unregister(Object registryKey) {
         if (registryKey == null) {
@@ -1055,8 +1038,7 @@ public abstract class NumberFormat extends UFormat {
      * currency format.
      * @param theCurrency new currency object to use.  May be null for
      * some subclasses.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public void setCurrency(Currency theCurrency) {
         currency = theCurrency;
@@ -1065,8 +1047,7 @@ public abstract class NumberFormat extends UFormat {
     /**
      * Gets the <tt>Currency</tt> object used to display currency
      * amounts.  This may be null.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public Currency getCurrency() {
         return currency;
@@ -1450,8 +1431,7 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * Empty constructor.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     protected NumberFormat() {
     }

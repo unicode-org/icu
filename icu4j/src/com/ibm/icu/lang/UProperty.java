@@ -309,8 +309,7 @@ public interface UProperty
      * <p>Either the source of a case
      * mapping or _in_ the target of a case mapping. Not the same as
      * the general category Cased_Letter.</p>
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int CASE_SENSITIVE = 34;
 
@@ -508,9 +507,8 @@ public interface UProperty
     /** 
      * Enumerated property Hangul_Syllable_Type, new in Unicode 4.
      * Returns HangulSyllableType values. 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */
+     * @stable ICU 2.6 
+     */
     public static final int HANGUL_SYLLABLE_TYPE = 0x100B;
 
     /**

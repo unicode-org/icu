@@ -237,8 +237,7 @@ public final class UScript {
     public static final int TIBETAN      = 39;  /* Tibt */
     /**
      * Unified Canadian Aboriginal Symbols
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int CANADIAN_ABORIGINAL = 40;  /* Cans */
     /**
@@ -274,58 +273,58 @@ public final class UScript {
     /**
      * Braille
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int BRAILLE      = 46;  /* Brai */
     /**
      * Cypriot
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */  
+     * @stable ICU 2.6 
+     * 
+     */  
     public static final int CYPRIOT              = 47;  /* Cprt */ 
     /**
      * Limbu
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */       
+     * @stable ICU 2.6 
+     * 
+     */       
     public static final int LIMBU                = 48;  /* Limb */ 
     /**
      * Linear B
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int LINEAR_B     = 49;  /* Linb */ 
     /**
      * Osmanya
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int OSMANYA              = 50;  /* Osma */ 
     /**
      * Shavian
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int SHAVIAN              = 51;  /* Shaw */ 
     /**
      * Tai Le
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int TAI_LE               = 52;  /* Tale */ 
     /**
      * Ugaritic
      * New script in Unicode 4 
-     * @draft ICU 2.6 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     * */ 
+     * @stable ICU 2.6 
+     * 
+     */ 
     public static final int UGARITIC     = 53;  /* Ugar */ 
     /**
      * New script code in Unicode 4.0.1

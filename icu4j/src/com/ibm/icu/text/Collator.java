@@ -306,8 +306,7 @@ public abstract class Collator implements Comparator, Cloneable
 
     /**
      * Clone the collator.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      * @return a clone of this collator.
      */
     public Object clone() throws CloneNotSupportedException {
@@ -320,8 +319,7 @@ public abstract class Collator implements Comparator, Cloneable
      * A factory used with registerFactory to register multiple collators and provide
      * display names for them.  If standard locale display names are sufficient, 
      * Collator instances may be registered instead.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static abstract class CollatorFactory {
         /**
@@ -330,8 +328,7 @@ public abstract class Collator implements Comparator, Cloneable
          * be listed by getAvailableLocales.
          *
          * @return true if this factory is visible
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public boolean visible() {
             return true;
@@ -342,8 +339,7 @@ public abstract class Collator implements Comparator, Cloneable
          * is not supported, return null.
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public abstract Collator createCollator(ULocale loc);
 
@@ -353,8 +349,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param objectLocale the locale identifying the collator
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
             if (visible()) {
@@ -372,15 +367,13 @@ public abstract class Collator implements Comparator, Cloneable
          * supported by this factory.
          *
          * @return the set of supported locale IDs.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         public abstract Set getSupportedLocaleIDs();
 
         /**
          * Empty default constructor.
-         * @draft ICU 2.6
-         * @deprecated This is a draft API and might change in a future release of ICU.
+         * @stable ICU 2.6
          */
         protected CollatorFactory() {
         }
@@ -474,8 +467,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param factory the factory to register
      * @return an object that can be used to unregister the registered factory.
      *
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final Object registerFactory(CollatorFactory factory) {
         return getShim().registerFactory(factory);
@@ -485,8 +477,7 @@ public abstract class Collator implements Comparator, Cloneable
      * Unregister a collator previously registered using registerInstance.
      * @param registryKey the object previously returned by registerInstance.
      * @return true if the collator was successfully unregistered.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final boolean unregister(Object registryKey) {
         if (shim == null) {
@@ -631,8 +622,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param objectLocale the locale of the collator
      * @param displayLocale the locale for the collator's display name
      * @return the display name
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
         return getShim().getDisplayName(ULocale.forLocale(objectLocale), 
@@ -655,8 +645,7 @@ public abstract class Collator implements Comparator, Cloneable
      * Get the name of the collator for the objectLocale, localized for the current locale.
      * @param objectLocale the locale of the collator
      * @return the display name
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     static public String getDisplayName(Locale objectLocale) {
         return getShim().getDisplayName(ULocale.forLocale(objectLocale), ULocale.getDefault());
@@ -870,8 +859,7 @@ public abstract class Collator implements Comparator, Cloneable
      *            element for the variable top has more than two bytes
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public abstract int setVariableTop(String varTop);
     
@@ -880,8 +868,7 @@ public abstract class Collator implements Comparator, Cloneable
      * Lower 16 bits are undefined and should be ignored.
      * @return the variable top value of a Collator.
      * @see #setVariableTop
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public abstract int getVariableTop();
     
@@ -893,13 +880,13 @@ public abstract class Collator implements Comparator, Cloneable
      *               getVariableTop
      * @see #getVariableTop
      * @see #setVariableTop
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public abstract void setVariableTop(int varTop);
 
-    /** Get the version of this collator object.
-     *  @return the version object associated with this collator
+    /** 
+     * Get the version of this collator object.
+     * @return the version object associated with this collator
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */

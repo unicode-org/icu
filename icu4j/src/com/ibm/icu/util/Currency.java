@@ -45,16 +45,14 @@ public class Currency extends MeasureUnit implements Serializable {
     /**
      * Selector for getName() indicating a symbolic name for a
      * currency, such as "$" for USD.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int SYMBOL_NAME = 0;
 
     /**
      * Selector for ucurr_getName indicating the long name for a
      * currency, such as "US Dollar" for USD.
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static final int LONG_NAME = 1;
 
@@ -192,8 +190,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * registerInstance).
      * @param registryKey the registry key returned from registerInstance
      * @see #registerInstance
-     * @draft ICU 2.6
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @stable ICU 2.6
      */
     public static boolean unregister(Object registryKey) {
         if (registryKey == null) {
@@ -641,7 +638,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
     // -------- BEGIN ULocale boilerplate --------
 
-    /*
+    /**
      * Return the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
@@ -662,7 +659,8 @@ public class Currency extends MeasureUnit implements Serializable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @obsolete ICU 3.2
+     * @obsolete ICU 3.2 to be removed
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
 	return ULocale.ROOT;

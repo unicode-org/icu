@@ -350,10 +350,10 @@ public class CheckTags {
                 break;
 
             case OBSOLETE:
-		foundObsoleteTag = true;
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
                 }
+		foundObsoleteTag = true;
                 foundRequiredTag = true;
                 break;
 
