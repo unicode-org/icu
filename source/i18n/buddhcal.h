@@ -26,7 +26,19 @@ U_NAMESPACE_BEGIN
 /**
  * Concrete class which provides the Buddhist calendar.
  * <P>
- *  <i>(stuff pasted here from java)
+ * <code>BuddhistCalendar</code> is a subclass of <code>GregorianCalendar</code>
+ * that numbers years since the birth of the Buddha.  This is the civil calendar
+ * in some predominantly Buddhist countries such as Thailand, and it is used for
+ * religious purposes elsewhere.
+ * <p>
+ * The Buddhist calendar is identical to the Gregorian calendar in all respects
+ * except for the year and era.  Years are numbered since the birth of the
+ * Buddha in 543 BC (Gregorian), so that 1 AD (Gregorian) is equivalent to 544
+ * BE (Buddhist Era) and 1998 AD is 2541 BE.
+ * <p>
+ * The Buddhist Calendar has only one allowable era: <code>BE</code>.  If the
+ * calendar is not in lenient mode (see <code>setLenient</code>), dates before
+ * 1/1/1 BE are rejected as an illegal argument.
  * <p>
  * @internal
  */
@@ -110,10 +122,10 @@ public:
     static inline UClassID getStaticClassID(void);
 
     /**
-     * return the calendar type, "gregorian".
+     * return the calendar type, "buddhist".
      *
      * @return calendar type
-     * @internal
+     * @draft ICU 2.6
      */
     virtual const char * getType() const;
 
