@@ -13,6 +13,7 @@
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
 *   02/25/00    weiv        Overhaul to write udata
+*   5/10/01     Ram			removed ustdio dependency
 *******************************************************************************
 */
 
@@ -22,7 +23,6 @@
 #include "uhash.h"
 #include "cmemory.h"
 #include "read.h"
-#include "unicode/ustdio.h"
 #include "ustr.h"
 #include "reslist.h"
 #include "unicode/ustring.h"
@@ -179,19 +179,19 @@ static UBool compareUString(const void* ustr1, const void* ustr2) {
                                ((struct UString*)ustr2)->fChars);
 }
 
-static char *getModificationData(struct UFILE *file, UErrorCode *status) {
+static char *getModificationData(UCHARBUF* buf, UErrorCode *status) {
     enum ETokenType modType;
     struct UString modToken;
     char *retValue = NULL;
 
     ustr_init(&modToken);
-    modType = getNextToken(file, &modToken, status);
+    modType = getNextToken(buf, &modToken, status);
     if(U_SUCCESS(*status) && modType == tok_open_brace) {
-        modType = getNextToken(file, &modToken, status);
+        modType = getNextToken(buf, &modToken, status);
         if(U_SUCCESS(*status) && modType == tok_string) {
             retValue = uprv_malloc(u_strlen(modToken.fChars)+1);
             u_UCharsToChars(modToken.fChars, retValue, u_strlen(modToken.fChars)+1);
-            modType = getNextToken(file, &modToken, status);
+            modType = getNextToken(buf, &modToken, status);
             if(U_SUCCESS(*status) && modType == tok_close_brace) {
                 return retValue;
             } else {
@@ -212,10 +212,9 @@ int32_t lineCount = 0;
 char lastTag[200] = "";
 
 struct SRBRoot*
-parse(FileStream *f, const char *cp, const char *inputDir,
+parse(UCHARBUF* buf, const char *cp, const char *inputDir,
       UErrorCode *status)
 {
-    struct UFILE *file;
     enum ETokenType type;
     enum ENode node;
     struct STransition t;
@@ -261,10 +260,9 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     node = eInitial;
     data = 0;
 
-    file = u_finit((FILE *)f, 0, cp);
     lineCount = 1;
-/*  file = u_finit(f, cp, status); */
-    if(file == NULL) {
+
+    if(buf == NULL) {
         setErrorText("Could not initialize input file - most probably because of wrong converter\n");
         *status = U_INVALID_FORMAT_ERROR;
         goto finish;
@@ -273,7 +271,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     bundle = bundle_open(status);
     rootTable = bundle -> fRoot;
 
-    if(U_FAILURE(*status) || file == NULL) {
+    if(U_FAILURE(*status) || buf == NULL) {
         goto finish;
     }
 
@@ -282,7 +280,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         /* Collation tailoring rules version */
         UVersionInfo version;
         /* get next token from stream */
-        type = getNextToken(file, &token, status);
+        type = getNextToken(buf, &token, status);
         if(U_FAILURE(*status)) {
             goto finish;
         }
@@ -304,6 +302,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         default:
             break;
         }
+
 
         t = GETTRANSITION(node, type);
         node = t.fNext;
@@ -364,7 +363,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                       uint8_t val = 0;
                       uint8_t *newValue;
                       fprintf(stdout, "bin\n");
-                      binaryValue = getModificationData(file, status);
+                      binaryValue = getModificationData(buf, status);
                       if(U_SUCCESS(*status) && binaryValue != NULL) {
                         /* do the parsing & outputing of the data */
                         fprintf(stdout, "Will parse binary value  %s and store it in tag: %s\n", binaryValue, cTag);
@@ -395,7 +394,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                       char *intValue;
                       int32_t val;
                       fprintf(stdout, "int\n");
-                      intValue = getModificationData(file, status);
+                      intValue = getModificationData(buf, status);
                       if(U_SUCCESS(*status) && intValue != NULL) {
                         /* do the parsing & outputing of the data */
                         fprintf(stdout, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
@@ -422,7 +421,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                       uint8_t *binData;
                       char *fileName;
                       fprintf(stdout, "import\n");
-                      fileName = getModificationData(file, status);
+                      fileName = getModificationData(buf, status);
                       if(U_SUCCESS(*status) && fileName != NULL) {
                         /* do the reading & outputing of the file */
                         fprintf(stdout, "Will read %s and store it in tag:  %s\n", fileName, cTag);
@@ -493,16 +492,11 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 
           /* Record a singleton string */
         case eStr:
-            /* check if we have reached here after finding %%UCARULES */
+			/* check if we have reached here after finding %%UCARULES */
             if(ucaEl==TRUE){
-                UChar *c,*end,*ucaRulesStr;
                 FileStream *in =NULL;
-                UFILE* ufile=NULL;
-                int fileLength = 0;
                 char fileName[256]={'\0'};
                 char cs[128] = { '\0'};
-                const char* cpStr=NULL;
-                char start[3] ={'0'};
                 ucaEl=FALSE; /* reset ucaEL */
                 /* make the fileName including the directory */
                 uprv_strcat(fileName,inputDir);
@@ -513,41 +507,37 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 uprv_strcat(fileName, cs);
                 /* open the file */
                 in = T_FileStream_open(fileName, "rb");
-                T_FileStream_read(in, start, 3);
-                if(start[0] == '\xFE' && start[1] == '\xFF') {
-                    cpStr = "UTF16_BigEndian";
-                } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-                    cpStr = "UTF16_LittleEndian";
-                } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-                    cpStr = "UTF8";
-                }
-                ufile = u_finit((FILE*) in,0, cpStr);
-                if(in && ufile){
-                    fileLength =T_FileStream_size(in);
-                    ucaRulesStr = (UChar*)uprv_malloc(sizeof(UChar) * fileLength);
-                    c= ucaRulesStr;
-                    end = ucaRulesStr + fileLength/2;
-                    /* read in the rulses */
-                    while(c < end) {
-                      *c++ = u_fgetc(ufile);
-                    }
-                     /* couldn't read all chars */
-                    if(c < end) {
-                        fprintf(stderr, "Error! Couldn't read all chars from input file %s for tag %s\n", fileName, cTag);
-                    }else{
-                        /* Add it to bundle */
-                        temp = string_open(bundle,cTag, ucaRulesStr, fileLength/2, status);
-                        table_add(rootTable, temp, status);
-                        put(data, &tag, status);
-                        if(U_FAILURE(*status)) {
-                            goto finish;
-                        }
-                        temp = NULL;
-                    }
-                    uprv_free(ucaRulesStr);
+                if(in){
+					const char* cp;
+					UChar c=0;
+					UCHARBUF* ucbuf;
+					int size = T_FileStream_size(in);
+					UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
+					UChar* target = pTarget;
+					UChar* targetLimit = pTarget+size;
+					if(ucbuf_autodetect(in,&cp)){
+					}
+					ucbuf= ucbuf_open(in,cp,status);
+					do{
+						c = (UChar)ucbuf_getc(ucbuf,status);
+						unescape(ucbuf,status);
+						*(target++) = c;
+					}while(c!=U_EOF && (target<targetLimit));
+					                
+					/* Add it to bundle */
+					temp = string_open(bundle,cTag, pTarget, target-pTarget, status);
+					table_add(rootTable, temp, status);
+					put(data, &tag, status);
+					if(U_FAILURE(*status)) {
+						goto finish;
+					}
+					temp = NULL;
+					/* clean up */
+					uprv_free(pTarget);
                 }else{
                     fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag );
                     goto finish;
+
                 }
 
             }else{
@@ -815,8 +805,8 @@ finish:
     /*uprv_free(cTag);*/
     /*uprv_free(cSubTag);*/
 
-    if(file != 0)
-        u_fclose(file);
-
+    /*if(buf != 0)
+        ucbuf_close(buf);
+*/
     return bundle;
 }

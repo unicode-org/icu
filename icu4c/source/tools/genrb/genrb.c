@@ -12,17 +12,17 @@
 *
 *   Date        Name        Description
 *   05/25/99    stephen     Creation.
+*   5/10/01     Ram			removed ustdio dependency
 *******************************************************************************
 */
 
 #include <stdio.h>
-
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-
+#include "ucbuf.h"
 U_CDECL_BEGIN
 
 extern int32_t lineCount;
@@ -180,6 +180,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
   FileStream *in;
   struct SRBRoot *data;
   char *rbname;
+  UCHARBUF* ucbuf;
 
   if(U_FAILURE(*status)) return;
 
@@ -213,28 +214,14 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     setErrorText("File not found");
     return;
   } else { /* auto detect popular encodings */
-      UBool autodetect = FALSE;
-      char start[3];
-      T_FileStream_read(in, start, 3);
-      if(start[0] == '\xFE' && start[1] == '\xFF') {
-          cp = "UTF16_BigEndian";
-          autodetect = TRUE;
-      } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-          cp = "UTF16_LittleEndian";
-          autodetect = TRUE;
-      } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-          cp = "UTF8";
-          autodetect = TRUE;
-      }
-      T_FileStream_rewind(in);
-      if(autodetect == TRUE) {
+      if(ucbuf_autodetect(in,&cp)) {
           printf("Autodetected encoding %s\n", cp);
       }
   }
-
+  ucbuf = ucbuf_open(in,cp,status);
 
   /* Parse the data into an SRBRoot */
-  data = parse(in, cp, inputDir, status);
+  data = parse(ucbuf, cp, inputDir, status);
 
   /* Determine the target rb filename */
   rbname = make_res_filename(filename, outputDir,  status);
@@ -252,6 +239,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
  finish:
 
+  ucbuf_close(ucbuf);
   /* Clean up */
   T_FileStream_close(in);
 

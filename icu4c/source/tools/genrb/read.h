@@ -12,6 +12,7 @@
 *
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
+*   5/10/01     Ram			removed ustdio dependency
 *******************************************************************************
 */
 
@@ -19,8 +20,8 @@
 #define READ_H 1
 
 #include "unicode/utypes.h"
-#include "unicode/ustdio.h"
 #include "ustr.h"
+#include "ucbuf.h"
 
 /* The types of tokens which may be returned by getNextToken. */
 enum ETokenType
@@ -43,7 +44,8 @@ enum ETokenType
   tok_token_type_count = 12 /* Number of "real" token types */
 };
 
-enum ETokenType getNextToken(UFILE *f,
+UChar unescape(UCHARBUF* buf, UErrorCode *status);
+enum ETokenType getNextToken(UCHARBUF* buf,
 			     struct UString *token,
 			     UErrorCode *status);
 

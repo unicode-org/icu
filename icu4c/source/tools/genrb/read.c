@@ -12,12 +12,12 @@
 *
 *   Date        Name        Description
 *   05/26/99    stephen     Creation.
+*   5/10/01     Ram			removed ustdio dependency
 *******************************************************************************
 */
 
 #include "read.h"
 #include "error.h"
-#include "unicode/ustdio.h"
 #include "unicode/ustring.h"
 
 #define OPENBRACE    0x007B
@@ -46,13 +46,12 @@ static UBool didInit=FALSE;
 extern int32_t lineCount;
 
 /* Protos */
-static enum ETokenType getStringToken(UFILE *f, UChar initialChar,
+static enum ETokenType getStringToken(UCHARBUF* buf, UChar initialChar,
                       struct UString *token,
                       UErrorCode *status);
-static UChar unescape(UFILE *f, UErrorCode *status);
-static UChar getNextChar(UFILE *f, UBool skipwhite, UErrorCode *status);
-static void seekUntilNewline(UFILE *f, UErrorCode *status);
-static void seekUntilEndOfComment(UFILE *f, UErrorCode *status);
+static UChar getNextChar(UCHARBUF* buf, UBool skipwhite, UErrorCode *status);
+static void seekUntilNewline(UCHARBUF* buf, UErrorCode *status);
+static void seekUntilEndOfComment(UCHARBUF* buf, UErrorCode *status);
 static UBool isWhitespace(UChar c);
 static UBool isNewline(UChar c);
 
@@ -65,7 +64,7 @@ static UBool isNewline(UChar c);
    never return eString twice in a row; instead, multiple adjacent
    string tokens will be merged into one, with no intervening
    space. */
-enum ETokenType getNextToken(UFILE *f,
+enum ETokenType getNextToken(UCHARBUF* buf,
                              struct UString *token,
                              UErrorCode *status)
 {
@@ -77,7 +76,7 @@ enum ETokenType getNextToken(UFILE *f,
       return tok_error;
 
     /* Skip whitespace */
-    c = getNextChar(f, TRUE, status);
+    c = getNextChar(buf, TRUE, status);
     if(U_FAILURE(*status))
       return tok_error;
 
@@ -93,7 +92,7 @@ enum ETokenType getNextToken(UFILE *f,
       tokenType = getStringToken(f, c, token, status);
       break;
 */
-    default:           return getStringToken(f, c, token, status);
+    default:           return getStringToken(buf, c, token, status);
     }
 /*
     if(!didInit) {
@@ -137,7 +136,7 @@ enum ETokenType getNextToken(UFILE *f,
    well.  If two adjacent strings are quoted, they are merged without
    intervening space.  Otherwise a single SPACE character is
    inserted. */
-static enum ETokenType getStringToken(UFILE *f,
+static enum ETokenType getStringToken(UCHARBUF* buf,
                                       UChar initialChar,
                                       struct UString *token,
                                       UErrorCode *status)
@@ -171,7 +170,7 @@ static enum ETokenType getStringToken(UFILE *f,
       lastStringWasQuoted = TRUE;
 
       for(;;) {
-        c = u_fgetc(f);
+        c = (UChar)ucbuf_getc(buf,status);
         /*  c = u_fgetc(f, status);*/
 
         /* EOF reached */
@@ -184,7 +183,7 @@ static enum ETokenType getStringToken(UFILE *f,
         if(c == QUOTE)
           break;
         if(c == ESCAPE)
-          c = unescape(f, status);
+          c = unescape(buf, status);
         ustr_ucat(token, c, status);
         if(U_FAILURE(*status))
           return tok_error;
@@ -199,17 +198,17 @@ static enum ETokenType getStringToken(UFILE *f,
       lastStringWasQuoted = FALSE;
 
       if(c == ESCAPE)
-        c = unescape(f, status);
+        c = unescape(buf, status);
       ustr_ucat(token, c, status);
       if(U_FAILURE(*status))
         return tok_error;
 
       for(;;) {
         /* DON'T skip whitespace */
-        c = getNextChar(f, FALSE, status);
+        c = getNextChar(buf, FALSE, status);
         /* EOF reached */
         if(c == (UChar)U_EOF) {
-          u_fungetc(c, f);
+          ucbuf_ungetc(c, buf);
           return tok_string;
         }
 
@@ -222,7 +221,7 @@ static enum ETokenType getStringToken(UFILE *f,
            || c == COMMA
            /*|| c == COLON*/)
           {
-            u_fungetc(c, f);
+            ucbuf_ungetc(c, buf);
             /*u_fungetc(c, f, status);*/
             break;
           }
@@ -231,7 +230,7 @@ static enum ETokenType getStringToken(UFILE *f,
           break;
 
         if(c == ESCAPE)
-          c = unescape(f, status);
+          c = unescape(buf, status);
         ustr_ucat(token, c, status);
         if(U_FAILURE(*status))
           return tok_error;
@@ -239,12 +238,12 @@ static enum ETokenType getStringToken(UFILE *f,
     }
 
     /* DO skip whitespace */
-    c = getNextChar(f, TRUE, status);
+    c = getNextChar(buf, TRUE, status);
     if(U_FAILURE(*status))
       return tok_string;
 
     if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA/* || c == COLON*/) {
-       u_fungetc(c, f);
+       ucbuf_ungetc(c, buf);
        /*u_fungetc(c, f, status);*/
       return tok_string;
     }
@@ -253,7 +252,7 @@ static enum ETokenType getStringToken(UFILE *f,
 
 /* Retrieve the next character, ignoring comments.  If skipwhite is
    true, whitespace is skipped as well. */
-static UChar getNextChar(UFILE *f,
+static UChar getNextChar(UCHARBUF* buf,
                          UBool skipwhite,
                          UErrorCode *status)
 {
@@ -263,7 +262,7 @@ static UChar getNextChar(UFILE *f,
     return U_EOF;
 
   for(;;) {
-    c = u_fgetc(f);
+    c =(UChar) ucbuf_getc(buf,status);
     /*c = u_fgetc(f, status);*/
     if(c == (UChar)U_EOF)
       return U_EOF;
@@ -275,23 +274,23 @@ static UChar getNextChar(UFILE *f,
     if(c != SLASH)
       return c;
 
-    c = u_fgetc(f);
+    c = (UChar)ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
     if(c == (UChar)U_EOF)
       return U_EOF;
 
     switch(c) {
     case SLASH:
-      seekUntilNewline(f, status);
+      seekUntilNewline(buf, status);
       break;
 
     case ASTERISK:
       /* Note that we silently ignore an unterminated comment */
-      seekUntilEndOfComment(f, status);
+      seekUntilEndOfComment(buf, status);
       break;
 
     default:
-        u_fungetc(c, f);
+        ucbuf_ungetc(c, buf);
         /*u_fungetc(c, f, status);*/
       /* If get() failed this is a NOP */
       return SLASH;
@@ -299,7 +298,7 @@ static UChar getNextChar(UFILE *f,
   }
 }
 
-static void seekUntilNewline(UFILE *f,
+static void seekUntilNewline(UCHARBUF* buf,
                              UErrorCode *status)
 {
   UChar c;
@@ -308,7 +307,7 @@ static void seekUntilNewline(UFILE *f,
     return;
 
   do {
-    c = u_fgetc(f);
+    c = (UChar)ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
   } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
 
@@ -316,7 +315,7 @@ static void seekUntilNewline(UFILE *f,
     err = kItemNotFound;*/
 }
 
-static void seekUntilEndOfComment(UFILE *f,
+static void seekUntilEndOfComment(UCHARBUF* buf,
                                   UErrorCode *status)
 {
   UChar c, d;
@@ -325,13 +324,13 @@ static void seekUntilEndOfComment(UFILE *f,
     return;
 
   do {
-    c = u_fgetc(f);
+    c =(UChar) ucbuf_getc(buf,status);
     /*  c = u_fgetc(f, status);*/
     if(c == ASTERISK) {
-        d = u_fgetc(f);
+        d =(UChar) ucbuf_getc(buf,status);
         /*  d = u_fgetc(f, status);*/
       if(d != SLASH)
-        u_fungetc(d, f);
+        ucbuf_ungetc(d, buf);
         /*u_fungetc(d, f, status);*/
       else
         break;
@@ -344,15 +343,15 @@ static void seekUntilEndOfComment(UFILE *f,
   }
 }
 
-static UChar unescape(UFILE *f,
+UChar unescape(UCHARBUF* buf,
                       UErrorCode *status)
 {
   if(U_FAILURE(*status))
     return U_EOF;
   /* We expect to be called after the ESCAPE has been seen, but
    * u_fgetcx needs an ESCAPE to do its magic. */
-  u_fungetc(ESCAPE, f);
-  return (UChar) u_fgetcx(f);
+  ucbuf_ungetc(ESCAPE, buf);
+  return (UChar) ucbuf_getcx(buf,status);
 }
 
 static UBool isWhitespace(UChar c)
