@@ -80,19 +80,25 @@
  * The process condition code to be used with the callbacks.  
  */
 typedef enum {
-    UCNV_UNASSIGNED = 0,  /* The code point is unassigned */
-    UCNV_ILLEGAL = 1,     /* The code point is illegal, for example, 
+    UCNV_UNASSIGNED = 0,  /**< The code point is unassigned.
+                             The error code U_INVALID_CHAR_FOUND will be set. */
+    UCNV_ILLEGAL = 1,     /**< The code point is illegal. For example, 
                              \x81\x2E is illegal in SJIS because \x2E
                              is not a valid trail byte for the \x81 
-                             lead byte. */
-    UCNV_IRREGULAR = 2,   /* The codepoint is not a regular sequence in 
-                             the encoding. For example, \xC0\xE1 would
-                             be irregular in UTF-8 because \x61 represents
-                             the same character. */
-    UCNV_RESET = 3,       /* The callback is called with this reason when a
+                             lead byte.
+                             Also, starting with Unicode 3.0.1, non-shortest byte sequences
+                             in UTF-8 (like \xC1\xA1 instead of \x61 for U+0061)
+                             are also illegal, not just irregular.
+                             The error code U_ILLEGAL_CHAR_FOUND will be set. */
+    UCNV_IRREGULAR = 2,   /**< The codepoint is not a regular sequence in 
+                             the encoding. For example, \xED\xA0\x80..\xED\xBF\xBF
+                             are irregular UTF-8 byte sequences for single surrogate
+                             code points.
+                             The error code U_INVALID_CHAR_FOUND will be set. */
+    UCNV_RESET = 3,       /**< The callback is called with this reason when a
                              'reset' has occured. Callback should reset all
                              state. */
-    UCNV_CLOSE = 4        /* Called when the converter is closed. The
+    UCNV_CLOSE = 4        /**< Called when the converter is closed. The
                              callback should release any allocated memory.*/
 } UConverterCallbackReason;
 

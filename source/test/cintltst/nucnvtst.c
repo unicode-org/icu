@@ -1360,9 +1360,9 @@ static TestUTF8() {
     /* test input */
     static const uint8_t in[]={
         0x61,
-        0xc0, 0x80,
-        0xe0, 0x80, 0x80,
-        0xf0, 0x80, 0x80, 0x80,
+        0xc2, 0x80,
+        0xe0, 0xa0, 0x80,
+        0xf0, 0x90, 0x80, 0x80,
         0xf4, 0x84, 0x8c, 0xa1,
         0xf0, 0x90, 0x90, 0x81
     };
@@ -1371,9 +1371,9 @@ static TestUTF8() {
     static const uint32_t results[]={
         /* number of bytes read, code point */
         1, 0x61,
-        2, 0,
-        3, 0,
-        4, 0,
+        2, 0x80,
+        3, 0x800,
+        4, 0x10000,
         4, 0x104321,
         4, 0x10401
     };
@@ -1381,9 +1381,13 @@ static TestUTF8() {
     /* error test input */
     static const uint8_t in2[]={
         0x61,
+        0xc0, 0x80,                     /* illegal non-shortest form */
+        0xe0, 0x80, 0x80,               /* illegal non-shortest form */
+        0xf0, 0x80, 0x80, 0x80,         /* illegal non-shortest form */
         0xc0, 0xc0,                     /* illegal trail byte */
         0xf4, 0x90, 0x80, 0x80,         /* 0x110000 out of range */
         0xf8, 0x80, 0x80, 0x80, 0x80,   /* too long */
+        0xfe,                           /* illegal byte altogether */
         0x62
     };
 
@@ -1391,7 +1395,7 @@ static TestUTF8() {
     static const uint32_t results2[]={
         /* number of bytes read, code point */
         1, 0x61,
-        12, 0x62
+        22, 0x62
     };
 
     UConverterToUCallback cb;
@@ -1913,11 +1917,9 @@ TestISO_2022() {
         0x1b, 0x25, 0x42, 0x31,
         0x32,
         0x61,
-        0xc0, 0x80,
-        0xe0, 0x80, 0x80,
-        0xf0, 0x80, 0x80, 0x80,
-
-
+        0xc2, 0x80,
+        0xe0, 0xa0, 0x80,
+        0xf0, 0x90, 0x80, 0x80
     };
 
 
@@ -1928,9 +1930,9 @@ TestISO_2022() {
         4, 0x0031,
         1, 0x0032,
         1, 0x61,
-        2, 0,
-        3, 0,
-        4, 0,
+        2, 0x80,
+        3, 0x800,
+        4, 0x10000,
 
     };
 
