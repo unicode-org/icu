@@ -48,9 +48,9 @@ U_NAMESPACE_BEGIN
  * To override ALL ICU memory management, including that from plain C code,
  * replace the allocation functions declared in cmemory.h
  *
- * UObject contains pure virtual methods to allow derived classes like Format
- * (which used to be base classes themselves before UObject was introduced)
- * to have pure virtual methods.
+ * UObject does not contain default implementations of virtual methods
+ * like getDynamicClassID to allow derived classes such as Format
+ * to declare these as pure virtual.
  *
  * It is likely that a future ICU release will split UObject to
  * separate out a new "more base" class for only the
