@@ -33,12 +33,13 @@
 #define UNICODE_AMP_CODEPOINT           0x0026
 #define UNICODE_HASH_CODEPOINT          0x0023
 #define UNICODE_SEMICOLON_CODEPOINT     0x003B
+#define UNICODE_PLUS_CODEPOINT          0x002B
 #define UCNV_PRV_ESCAPE_ICU      0
 #define UCNV_PRV_ESCAPE_C       'C'
 #define UCNV_PRV_ESCAPE_XML_DEC 'D'
 #define UCNV_PRV_ESCAPE_XML_HEX 'X'
 #define UCNV_PRV_ESCAPE_JAVA    'J'
-
+#define UCNV_PRV_ESCAPE_CODEPOINT 'U'
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
 U_CAPI void    U_EXPORT2
@@ -254,6 +255,16 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
             }
             valueString[valueStringLength++] = (UChar) UNICODE_SEMICOLON_CODEPOINT; /* adding ; */
           break;
+
+        case UCNV_PRV_ESCAPE_CODEPOINT:
+          while (i < length)
+          {
+            valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;    /* adding U */
+            valueString[valueStringLength++] = (UChar) UNICODE_PLUS_CODEPOINT; /* adding + */
+            valueStringLength += uprv_itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+          }
+          break;
+
        default:
           while (i < length)
           {
