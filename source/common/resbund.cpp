@@ -198,7 +198,7 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other)
     UErrorCode status = U_ZERO_ERROR;
 
     if (other.resource) {
-        resource = copyResb(0, other.resource, &status);
+        resource = ures_copyResb(0, other.resource, &status);
     } else {
         /* Copying a bad resource bundle */
         resource = NULL;
@@ -212,7 +212,7 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other)
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err) {
     if (res) {
-        resource = copyResb(0, res, &err);
+        resource = ures_copyResb(0, res, &err);
         if(U_SUCCESS(err)) {
             fRealLocale = Locale(ures_getRealLocale(resource, &err));
         }
@@ -241,7 +241,7 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     }
     UErrorCode status = U_ZERO_ERROR;
     if (other.resource) {
-        resource = copyResb(0, other.resource, &status);
+        resource = ures_copyResb(0, other.resource, &status);
     } else {
         /* Copying a bad resource bundle */
         resource = NULL;

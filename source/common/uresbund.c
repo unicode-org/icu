@@ -24,7 +24,6 @@
 
 /* this is just for internal purposes. DO NOT USE! */
 static void entryCloseInt(UResourceDataEntry *resB);
-void entryClose(UResourceDataEntry *resB);
 
 
 /*
@@ -92,7 +91,7 @@ static void entryIncrease(UResourceDataEntry *entry) {
  *  Internal function. Tries to find a resource in given Resource 
  *  Bundle, as well as in its parents
  */
-const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
+static const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
     UResourceDataEntry *resB = resBundle->fData;
     int32_t indexR = -1;
     int32_t i = 0;
@@ -485,7 +484,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, const Resour
     return resB;
 }
 
-UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
+UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
     UBool isStackObject;
     if(U_FAILURE(*status) || r == original) {
         return r;
@@ -727,7 +726,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
         case RES_INT:
         case RES_BINARY:
         case RES_STRING:
-            return copyResb(fillIn, resB, status);
+            return ures_copyResb(fillIn, resB, status);
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
@@ -769,7 +768,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
         case RES_INT:
         case RES_BINARY:
         case RES_STRING:
-            return copyResb(fillIn, resB, status);
+            return ures_copyResb(fillIn, resB, status);
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexR, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
@@ -998,7 +997,7 @@ static void entryCloseInt(UResourceDataEntry *resB) {
  *  API: closes a resource bundle and cleans up.
  */
 
-void entryClose(UResourceDataEntry *resB) {
+static void entryClose(UResourceDataEntry *resB) {
   umtx_lock(&resbMutex);
   entryCloseInt(resB);
   umtx_unlock(&resbMutex);
