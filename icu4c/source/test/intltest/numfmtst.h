@@ -87,6 +87,13 @@ public:
                    int32_t pos, int32_t width, UChar pad) {
         expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
     }
+    void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                   int32_t pos, int32_t width, UnicodeString& pad);
+    void expectPad(DecimalFormat& fmt, const char *pat,
+                   int32_t pos, int32_t width, UnicodeString& pad) {
+        expectPad(fmt, UnicodeString(pat, ""), pos, width, pad);
+    }
+
     void expectPat(DecimalFormat& fmt, const UnicodeString& exp);
     void expectPat(DecimalFormat& fmt, const char *exp) {
         expectPat(fmt, UnicodeString(exp, ""));

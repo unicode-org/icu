@@ -10,7 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "intltest.h"
-
+#include "unicode/dcfmtsym.h"
 /**
  * Tests for DecimalFormatSymbols
  **/
@@ -22,6 +22,9 @@ private:
      * Test the API of DecimalFormatSymbols; primarily a simple get/set set.
      */
     void testSymbols(char *par);
+
+     /** helper functions**/
+    void Verify(double value, UnicodeString& pattern, DecimalFormatSymbols sym, UnicodeString& expected);
 };
 
 #endif

@@ -692,6 +692,28 @@ void NumberFormatTest::TestPad(void) {
            int32_t(0), "0.0______ g-m/s^2", status);
     expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
            1.0/3, "0.33333__ g-m/s^2", status);
+
+     
+   //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
+    DecimalFormat fmt("#", US, status);
+    CHECK(status, "DecimalFormat constructor");
+    UnicodeString padString("P");
+    fmt.setPadCharacter(padString);
+    expectPad(fmt, "*P##.##", DecimalFormat::kPadBeforePrefix, 5, padString);
+    fmt.setPadCharacter((UnicodeString)"^");
+    expectPad(fmt, "*^#", DecimalFormat::kPadBeforePrefix, 1, (UnicodeString)"^");
+    //commented untill implementation is complete
+  /*  fmt.setPadCharacter((UnicodeString)"^^^");
+    expectPad(fmt, "*^^^#", DecimalFormat::kPadBeforePrefix, 3, (UnicodeString)"^^^");
+    padString.remove();
+    padString.append((UChar)0x0061);
+    padString.append((UChar)0x0302);
+    fmt.setPadCharacter(padString);
+    UChar patternChars[]={0x002a, 0x0061, 0x0302, 0x0061, 0x0302, 0x0023, 0x0000};
+    UnicodeString pattern(patternChars);
+    expectPad(fmt, pattern , DecimalFormat::kPadBeforePrefix, 4, padString);
+ */
+    
 }
 
 /**
@@ -704,7 +726,7 @@ void NumberFormatTest::TestPatterns2(void) {
 
     DecimalFormat fmt("#", US, status);
     CHECK(status, "DecimalFormat constructor");
-
+    
     UChar hat = 0x005E; /*^*/
 
     expectPad(fmt, "*^#", DecimalFormat::kPadBeforePrefix, 1, hat);
@@ -760,32 +782,35 @@ void NumberFormatTest::TestPatterns2(void) {
 
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                                  int32_t pos) {
-    expectPad(fmt, pat, pos, 0, (UChar)0);
+    expectPad(fmt, pat, pos, 0, (UnicodeString)"");
 }
-
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                                  int32_t pos, int32_t width, UChar pad) {
+    expectPad(fmt, pat, pos, width, UnicodeString(pad));
+}
+void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
+                                 int32_t pos, int32_t width, UnicodeString& pad) {
     int32_t apos = 0, awidth = 0;
-    UChar apad = 0;
+    UnicodeString apadStr="";
     UErrorCode status = U_ZERO_ERROR;
     fmt.applyPattern(pat, status);
     if (U_SUCCESS(status)) {
         apos = fmt.getPadPosition();
         awidth = fmt.getFormatWidth();
-        apad = fmt.getPadCharacter();
+        apadStr=fmt.getPadCharacterString();
     } else {
         apos = -1;
         awidth = width;
-        apad = pad;
+        apadStr = pad;
     }
-    if (apos == pos && awidth == width && apad == pad) {
+    if (apos == pos && awidth == width && apadStr == pad) {
         logln(UnicodeString("Ok   \"") + pat + "\" pos=" + apos +
               ((pos == ILLEGAL) ? UnicodeString() :
-               (UnicodeString(" width=") + awidth + " pad=" + UnicodeString(apad))));
+               (UnicodeString(" width=") + awidth + " pad=" + apadStr)));
     } else {
         errln(UnicodeString("FAIL \"") + pat + "\" pos=" + apos +
-              " width=" + awidth + " pad=" + UnicodeString(apad) +
-              ", expected " + pos + " " + width + " " + UnicodeString(pad));
+              " width=" + awidth + " pad=" + apadStr +
+              ", expected " + pos + " " + width + " " + pad);
     }
 }
 
