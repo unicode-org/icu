@@ -28,6 +28,20 @@ public final class TestUtility {
 	  return result;
 	}
 	
+	public static String replace(String source, String toBeReplaced, String replacement) {
+	    StringBuffer results = new StringBuffer();
+	    int len = toBeReplaced.length();
+	    for (int i = 0; i < source.length(); ++i) {
+	        if (source.regionMatches(false, i, toBeReplaced, 0, len)) {
+	            results.append(replacement);
+	            i += len - 1; // minus one, since we will increment
+	        } else {
+	            results.append(source.charAt(i));
+	        }
+	    }
+	    return results.toString();
+	}
+	
     // COMMENTED OUT ALL THE OLD SCRIPT STUFF
     /*
     public static byte getScript(char c) {
