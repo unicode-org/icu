@@ -146,296 +146,12 @@ LINK32=link.exe
 # Name "i18n - Win32 Debug"
 # Name "i18n - Win64 Release"
 # Name "i18n - Win64 Debug"
-# Begin Group "Source Files"
+# Begin Group "collation"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=.\anytrans.cpp
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\bocsu.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\calendar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\choicfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\coleitr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\coll.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\cpdtrans.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\datefmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\dcfmtsym.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\decimfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\dtfmtsym.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\esctrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\fmtable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\format.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\funcrepl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\gregocal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\hextouni.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msgfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\name2uni.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nfrs.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nfrule.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nfsubs.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nortrans.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nultrans.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\numfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\quant.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbnf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbt_data.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbt_pars.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbt_rule.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rbt_set.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\regexcmp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\rematch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\remtrans.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\repattrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\search.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\simpletz.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\smpdtfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\sortkey.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\strmatch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\strrepl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\stsearch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\tblcoll.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\timezone.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\titletrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\tolowtrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\toupptrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\translit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\transreg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\tridpars.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucln_in.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_bld.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_cnt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_elm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_tok.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_wgt.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucoleitr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucurr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\udat.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\umsg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unesctrn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\uni2name.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unifltlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unitohex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unum.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\usearch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\utrans.cpp
-# End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\anytrans.h
 # End Source File
 # Begin Source File
 
@@ -443,97 +159,7 @@ SOURCE=.\bocsu.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\calendar.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\calendar.h
-
-"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\calendar.h
-
-"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\calendar.h
-
-"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\calendar.h
-
-"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\choicfmt.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\choicfmt.h
-
-"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\choicfmt.h
-
-"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\choicfmt.h
-
-"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\choicfmt.h
-
-"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\coleitr.cpp
 # End Source File
 # Begin Source File
 
@@ -545,7 +171,7 @@ SOURCE=.\unicode\coleitr.h
 InputPath=.\unicode\coleitr.h
 
 "..\..\include\unicode\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -555,7 +181,7 @@ InputPath=.\unicode\coleitr.h
 InputPath=.\unicode\coleitr.h
 
 "..\..\include\unicode\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -565,7 +191,7 @@ InputPath=.\unicode\coleitr.h
 InputPath=.\unicode\coleitr.h
 
 "..\..\include\unicode\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -575,12 +201,16 @@ InputPath=.\unicode\coleitr.h
 InputPath=.\unicode\coleitr.h
 
 "..\..\include\unicode\coleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\coll.cpp
 # End Source File
 # Begin Source File
 
@@ -592,7 +222,7 @@ SOURCE=.\unicode\coll.h
 InputPath=.\unicode\coll.h
 
 "..\..\include\unicode\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -602,7 +232,7 @@ InputPath=.\unicode\coll.h
 InputPath=.\unicode\coll.h
 
 "..\..\include\unicode\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -612,7 +242,7 @@ InputPath=.\unicode\coll.h
 InputPath=.\unicode\coll.h
 
 "..\..\include\unicode\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -622,7 +252,7 @@ InputPath=.\unicode\coll.h
 InputPath=.\unicode\coll.h
 
 "..\..\include\unicode\coll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -631,50 +261,518 @@ InputPath=.\unicode\coll.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\cpdtrans.h
+SOURCE=.\search.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\search.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\cpdtrans.h
+InputPath=.\unicode\search.h
 
-"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\cpdtrans.h
+InputPath=.\unicode\search.h
 
-"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\cpdtrans.h
+InputPath=.\unicode\search.h
 
-"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\cpdtrans.h
+InputPath=.\unicode\search.h
 
-"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\sortkey.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\sortkey.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\sortkey.h
+
+"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\sortkey.h
+
+"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\sortkey.h
+
+"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\sortkey.h
+
+"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\stsearch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\stsearch.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\stsearch.h
+
+"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\stsearch.h
+
+"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\stsearch.h
+
+"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\stsearch.h
+
+"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tblcoll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\tblcoll.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\tblcoll.h
+
+"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\tblcoll.h
+
+"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\tblcoll.h
+
+"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\tblcoll.h
+
+"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucol.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucol.h
+
+"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucol.h
+
+"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucol.h
+
+"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucol.h
+
+"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_bld.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_bld.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_cnt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_cnt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_elm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_elm.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_tok.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_tok.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_wgt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_wgt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucoleitr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucoleitr.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucoleitr.h
+
+"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\usearch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\usearch.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\usearch.h
+
+"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usearch.h
+
+"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\usearch.h
+
+"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usearch.h
+
+"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\usrchimp.h
+# End Source File
+# End Group
+# Begin Group "formatting"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\calendar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\calendar.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\calendar.h
+
+"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\calendar.h
+
+"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\calendar.h
+
+"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\calendar.h
+
+"..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\choicfmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\choicfmt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\choicfmt.h
+
+"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\choicfmt.h
+
+"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\choicfmt.h
+
+"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\choicfmt.h
+
+"..\..\include\unicode\choicfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\datefmt.cpp
 # End Source File
 # Begin Source File
 
@@ -686,7 +784,7 @@ SOURCE=.\unicode\datefmt.h
 InputPath=.\unicode\datefmt.h
 
 "..\..\include\unicode\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -696,7 +794,7 @@ InputPath=.\unicode\datefmt.h
 InputPath=.\unicode\datefmt.h
 
 "..\..\include\unicode\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -706,7 +804,7 @@ InputPath=.\unicode\datefmt.h
 InputPath=.\unicode\datefmt.h
 
 "..\..\include\unicode\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -716,12 +814,16 @@ InputPath=.\unicode\datefmt.h
 InputPath=.\unicode\datefmt.h
 
 "..\..\include\unicode\datefmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\dcfmtsym.cpp
 # End Source File
 # Begin Source File
 
@@ -733,7 +835,7 @@ SOURCE=.\unicode\dcfmtsym.h
 InputPath=.\unicode\dcfmtsym.h
 
 "..\..\include\unicode\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -743,7 +845,7 @@ InputPath=.\unicode\dcfmtsym.h
 InputPath=.\unicode\dcfmtsym.h
 
 "..\..\include\unicode\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -753,7 +855,7 @@ InputPath=.\unicode\dcfmtsym.h
 InputPath=.\unicode\dcfmtsym.h
 
 "..\..\include\unicode\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -763,12 +865,16 @@ InputPath=.\unicode\dcfmtsym.h
 InputPath=.\unicode\dcfmtsym.h
 
 "..\..\include\unicode\dcfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\decimfmt.cpp
 # End Source File
 # Begin Source File
 
@@ -780,7 +886,7 @@ SOURCE=.\unicode\decimfmt.h
 InputPath=.\unicode\decimfmt.h
 
 "..\..\include\unicode\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -790,7 +896,7 @@ InputPath=.\unicode\decimfmt.h
 InputPath=.\unicode\decimfmt.h
 
 "..\..\include\unicode\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -800,7 +906,7 @@ InputPath=.\unicode\decimfmt.h
 InputPath=.\unicode\decimfmt.h
 
 "..\..\include\unicode\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -810,12 +916,16 @@ InputPath=.\unicode\decimfmt.h
 InputPath=.\unicode\decimfmt.h
 
 "..\..\include\unicode\decimfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\dtfmtsym.cpp
 # End Source File
 # Begin Source File
 
@@ -827,7 +937,7 @@ SOURCE=.\unicode\dtfmtsym.h
 InputPath=.\unicode\dtfmtsym.h
 
 "..\..\include\unicode\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -837,7 +947,7 @@ InputPath=.\unicode\dtfmtsym.h
 InputPath=.\unicode\dtfmtsym.h
 
 "..\..\include\unicode\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -847,7 +957,7 @@ InputPath=.\unicode\dtfmtsym.h
 InputPath=.\unicode\dtfmtsym.h
 
 "..\..\include\unicode\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -857,16 +967,12 @@ InputPath=.\unicode\dtfmtsym.h
 InputPath=.\unicode\dtfmtsym.h
 
 "..\..\include\unicode\dtfmtsym.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\esctrn.h
 # End Source File
 # Begin Source File
 
@@ -878,7 +984,7 @@ SOURCE=.\unicode\fieldpos.h
 InputPath=.\unicode\fieldpos.h
 
 "..\..\include\unicode\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -888,7 +994,7 @@ InputPath=.\unicode\fieldpos.h
 InputPath=.\unicode\fieldpos.h
 
 "..\..\include\unicode\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -898,7 +1004,7 @@ InputPath=.\unicode\fieldpos.h
 InputPath=.\unicode\fieldpos.h
 
 "..\..\include\unicode\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -908,12 +1014,16 @@ InputPath=.\unicode\fieldpos.h
 InputPath=.\unicode\fieldpos.h
 
 "..\..\include\unicode\fieldpos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\fmtable.cpp
 # End Source File
 # Begin Source File
 
@@ -925,7 +1035,7 @@ SOURCE=.\unicode\fmtable.h
 InputPath=.\unicode\fmtable.h
 
 "..\..\include\unicode\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -935,7 +1045,7 @@ InputPath=.\unicode\fmtable.h
 InputPath=.\unicode\fmtable.h
 
 "..\..\include\unicode\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -945,7 +1055,7 @@ InputPath=.\unicode\fmtable.h
 InputPath=.\unicode\fmtable.h
 
 "..\..\include\unicode\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -955,12 +1065,16 @@ InputPath=.\unicode\fmtable.h
 InputPath=.\unicode\fmtable.h
 
 "..\..\include\unicode\fmtable.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\format.cpp
 # End Source File
 # Begin Source File
 
@@ -972,7 +1086,7 @@ SOURCE=.\unicode\format.h
 InputPath=.\unicode\format.h
 
 "..\..\include\unicode\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -982,7 +1096,7 @@ InputPath=.\unicode\format.h
 InputPath=.\unicode\format.h
 
 "..\..\include\unicode\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -992,7 +1106,7 @@ InputPath=.\unicode\format.h
 InputPath=.\unicode\format.h
 
 "..\..\include\unicode\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1002,7 +1116,7 @@ InputPath=.\unicode\format.h
 InputPath=.\unicode\format.h
 
 "..\..\include\unicode\format.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1011,7 +1125,7 @@ InputPath=.\unicode\format.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\funcrepl.h
+SOURCE=.\gregocal.cpp
 # End Source File
 # Begin Source File
 
@@ -1023,7 +1137,7 @@ SOURCE=.\unicode\gregocal.h
 InputPath=.\unicode\gregocal.h
 
 "..\..\include\unicode\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1033,7 +1147,7 @@ InputPath=.\unicode\gregocal.h
 InputPath=.\unicode\gregocal.h
 
 "..\..\include\unicode\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1043,7 +1157,7 @@ InputPath=.\unicode\gregocal.h
 InputPath=.\unicode\gregocal.h
 
 "..\..\include\unicode\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1053,7 +1167,7 @@ InputPath=.\unicode\gregocal.h
 InputPath=.\unicode\gregocal.h
 
 "..\..\include\unicode\gregocal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1062,50 +1176,7 @@ InputPath=.\unicode\gregocal.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\hextouni.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\hextouni.h
-
-"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\hextouni.h
-
-"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\hextouni.h
-
-"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\hextouni.h
-
-"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\msgfmt.cpp
 # End Source File
 # Begin Source File
 
@@ -1117,7 +1188,7 @@ SOURCE=.\unicode\msgfmt.h
 InputPath=.\unicode\msgfmt.h
 
 "..\..\include\unicode\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1127,7 +1198,7 @@ InputPath=.\unicode\msgfmt.h
 InputPath=.\unicode\msgfmt.h
 
 "..\..\include\unicode\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1137,7 +1208,7 @@ InputPath=.\unicode\msgfmt.h
 InputPath=.\unicode\msgfmt.h
 
 "..\..\include\unicode\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1147,16 +1218,12 @@ InputPath=.\unicode\msgfmt.h
 InputPath=.\unicode\msgfmt.h
 
 "..\..\include\unicode\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\name2uni.h
 # End Source File
 # Begin Source File
 
@@ -1164,7 +1231,15 @@ SOURCE=.\nfrlist.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\nfrs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\nfrs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrule.cpp
 # End Source File
 # Begin Source File
 
@@ -1172,58 +1247,15 @@ SOURCE=.\nfrule.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\nfsubs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\nfsubs.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\nortrans.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\nultrans.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\nultrans.h
-
-"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\nultrans.h
-
-"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\nultrans.h
-
-"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\nultrans.h
-
-"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\numfmt.cpp
 # End Source File
 # Begin Source File
 
@@ -1235,7 +1267,7 @@ SOURCE=.\unicode\numfmt.h
 InputPath=.\unicode\numfmt.h
 
 "..\..\include\unicode\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1245,7 +1277,7 @@ InputPath=.\unicode\numfmt.h
 InputPath=.\unicode\numfmt.h
 
 "..\..\include\unicode\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1255,7 +1287,7 @@ InputPath=.\unicode\numfmt.h
 InputPath=.\unicode\numfmt.h
 
 "..\..\include\unicode\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1265,7 +1297,7 @@ InputPath=.\unicode\numfmt.h
 InputPath=.\unicode\numfmt.h
 
 "..\..\include\unicode\numfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1274,7 +1306,7 @@ InputPath=.\unicode\numfmt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\quant.h
+SOURCE=.\rbnf.cpp
 # End Source File
 # Begin Source File
 
@@ -1286,7 +1318,7 @@ SOURCE=.\unicode\rbnf.h
 InputPath=.\unicode\rbnf.h
 
 "..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1296,7 +1328,7 @@ InputPath=.\unicode\rbnf.h
 InputPath=.\unicode\rbnf.h
 
 "..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1306,7 +1338,7 @@ InputPath=.\unicode\rbnf.h
 InputPath=.\unicode\rbnf.h
 
 "..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1316,7 +1348,7 @@ InputPath=.\unicode\rbnf.h
 InputPath=.\unicode\rbnf.h
 
 "..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1325,45 +1357,49 @@ InputPath=.\unicode\rbnf.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\rbt.h
+SOURCE=.\simpletz.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\simpletz.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\rbt.h
+InputPath=.\unicode\simpletz.h
 
-"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\rbt.h
+InputPath=.\unicode\simpletz.h
 
-"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\rbt.h
+InputPath=.\unicode\simpletz.h
 
-"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\rbt.h
+InputPath=.\unicode\simpletz.h
 
-"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1372,20 +1408,391 @@ InputPath=.\unicode\rbt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbt_data.h
+SOURCE=.\smpdtfmt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbt_pars.h
+SOURCE=.\unicode\smpdtfmt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\smpdtfmt.h
+
+"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\smpdtfmt.h
+
+"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\smpdtfmt.h
+
+"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\smpdtfmt.h
+
+"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbt_rule.h
+SOURCE=.\timezone.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbt_set.h
+SOURCE=.\unicode\timezone.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\timezone.h
+
+"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\timezone.h
+
+"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\timezone.h
+
+"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\timezone.h
+
+"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
+# Begin Source File
+
+SOURCE=.\tzdat.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucal.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucal.h
+
+"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucal.h
+
+"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucal.h
+
+"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucal.h
+
+"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucurr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ucurr.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucurr.h
+
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\udat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\udat.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\udat.h
+
+"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\udat.h
+
+"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\udat.h
+
+"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\udat.h
+
+"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\umsg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\umsg.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\umsg.h
+
+"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\umsg.h
+
+"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\umsg.h
+
+"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\umsg.h
+
+"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\umsg_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\unum.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\unum.h
+
+"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\unum.h
+
+"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\unum.h
+
+"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\unum.h
+
+"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "misc"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\i18n.rc
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucln_in.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucln_in.h
+# End Source File
+# End Group
+# Begin Group "regex"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\unicode\regex.h
@@ -1396,7 +1803,7 @@ SOURCE=.\unicode\regex.h
 InputPath=.\unicode\regex.h
 
 "..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1406,7 +1813,7 @@ InputPath=.\unicode\regex.h
 InputPath=.\unicode\regex.h
 
 "..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1416,7 +1823,7 @@ InputPath=.\unicode\regex.h
 InputPath=.\unicode\regex.h
 
 "..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1426,12 +1833,16 @@ InputPath=.\unicode\regex.h
 InputPath=.\unicode\regex.h
 
 "..\..\include\unicode\regex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\regexcmp.cpp
 # End Source File
 # Begin Source File
 
@@ -1447,195 +1858,311 @@ SOURCE=.\regeximp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\rematch.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\remtrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\repattrn.cpp
+# End Source File
+# End Group
+# Begin Group "transforms"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\anytrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\anytrans.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cpdtrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\cpdtrans.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\cpdtrans.h
+
+"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\cpdtrans.h
+
+"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\cpdtrans.h
+
+"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\cpdtrans.h
+
+"..\..\include\unicode\cpdtrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\esctrn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\esctrn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\funcrepl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\funcrepl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\hextouni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\hextouni.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\hextouni.h
+
+"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\hextouni.h
+
+"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\hextouni.h
+
+"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\hextouni.h
+
+"..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\name2uni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\name2uni.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nortrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\nortrans.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nultrans.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\nultrans.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\quant.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\quant.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\rbt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\rbt.h
+
+"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\rbt.h
+
+"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\rbt.h
+
+"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\rbt.h
+
+"..\..\include\unicode\rbt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_data.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_data.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_pars.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_pars.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_rule.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_rule.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_set.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbt_set.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\remtrans.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\search.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\search.h
-
-"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\search.h
-
-"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\search.h
-
-"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\search.h
-
-"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\simpletz.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\simpletz.h
-
-"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\simpletz.h
-
-"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\simpletz.h
-
-"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\simpletz.h
-
-"..\..\include\unicode\simpletz.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\smpdtfmt.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\smpdtfmt.h
-
-"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\smpdtfmt.h
-
-"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\smpdtfmt.h
-
-"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\smpdtfmt.h
-
-"..\..\include\unicode\smpdtfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\sortkey.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\sortkey.h
-
-"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\sortkey.h
-
-"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\sortkey.h
-
-"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\sortkey.h
-
-"..\..\include\unicode\sortkey.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\strmatch.cpp
 # End Source File
 # Begin Source File
 
@@ -1643,144 +2170,11 @@ SOURCE=.\strmatch.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\stsearch.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\stsearch.h
-
-"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\stsearch.h
-
-"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\stsearch.h
-
-"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\stsearch.h
-
-"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\strrepl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\tblcoll.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\tblcoll.h
-
-"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\tblcoll.h
-
-"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\tblcoll.h
-
-"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\tblcoll.h
-
-"..\..\include\unicode\tblcoll.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\timezone.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\timezone.h
-
-"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\timezone.h
-
-"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\timezone.h
-
-"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\timezone.h
-
-"..\..\include\unicode\timezone.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\titletrn.cpp
 # End Source File
 # Begin Source File
 
@@ -1788,11 +2182,23 @@ SOURCE=.\titletrn.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\tolowtrn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\tolowtrn.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\toupptrn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\toupptrn.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\translit.cpp
 # End Source File
 # Begin Source File
 
@@ -1804,7 +2210,7 @@ SOURCE=.\unicode\translit.h
 InputPath=.\unicode\translit.h
 
 "..\..\include\unicode\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1814,7 +2220,7 @@ InputPath=.\unicode\translit.h
 InputPath=.\unicode\translit.h
 
 "..\..\include\unicode\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1824,7 +2230,7 @@ InputPath=.\unicode\translit.h
 InputPath=.\unicode\translit.h
 
 "..\..\include\unicode\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1834,12 +2240,16 @@ InputPath=.\unicode\translit.h
 InputPath=.\unicode\translit.h
 
 "..\..\include\unicode\translit.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\transreg.cpp
 # End Source File
 # Begin Source File
 
@@ -1847,325 +2257,15 @@ SOURCE=.\transreg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\tridpars.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\tridpars.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\tzdat.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ucal.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucal.h
-
-"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucal.h
-
-"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucal.h
-
-"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucal.h
-
-"..\..\include\unicode\ucal.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucln_in.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ucol.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucol.h
-
-"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucol.h
-
-"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucol.h
-
-"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucol.h
-
-"..\..\include\unicode\ucol.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_bld.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_cnt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_elm.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_imp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_tok.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucol_wgt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ucoleitr.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucoleitr.h
-
-"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucoleitr.h
-
-"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucoleitr.h
-
-"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucoleitr.h
-
-"..\..\include\unicode\ucoleitr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ucurr.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ucurr.h
-
-"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\udat.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\udat.h
-
-"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\udat.h
-
-"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\udat.h
-
-"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\udat.h
-
-"..\..\include\unicode\udat.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\umsg.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\umsg.h
-
-"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\umsg.h
-
-"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\umsg.h
-
-"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\umsg.h
-
-"..\..\include\unicode\umsg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\umsg_imp.h
+SOURCE=.\unesctrn.cpp
 # End Source File
 # Begin Source File
 
@@ -2173,7 +2273,15 @@ SOURCE=.\unesctrn.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\uni2name.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uni2name.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unifltlg.cpp
 # End Source File
 # Begin Source File
 
@@ -2185,7 +2293,7 @@ SOURCE=.\unicode\unifltlg.h
 InputPath=.\unicode\unifltlg.h
 
 "..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2195,7 +2303,7 @@ InputPath=.\unicode\unifltlg.h
 InputPath=.\unicode\unifltlg.h
 
 "..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2205,7 +2313,7 @@ InputPath=.\unicode\unifltlg.h
 InputPath=.\unicode\unifltlg.h
 
 "..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2215,7 +2323,7 @@ InputPath=.\unicode\unifltlg.h
 InputPath=.\unicode\unifltlg.h
 
 "..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2232,7 +2340,7 @@ SOURCE=.\unicode\unirepl.h
 InputPath=.\unicode\unirepl.h
 
 "..\..\include\unicode\unirepl.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2242,7 +2350,7 @@ InputPath=.\unicode\unirepl.h
 InputPath=.\unicode\unirepl.h
 
 "..\..\include\unicode\unirepl.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2252,7 +2360,7 @@ InputPath=.\unicode\unirepl.h
 InputPath=.\unicode\unirepl.h
 
 "..\..\include\unicode\unirepl.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2262,12 +2370,16 @@ InputPath=.\unicode\unirepl.h
 InputPath=.\unicode\unirepl.h
 
 "..\..\include\unicode\unirepl.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\unitohex.cpp
 # End Source File
 # Begin Source File
 
@@ -2279,7 +2391,7 @@ SOURCE=.\unicode\unitohex.h
 InputPath=.\unicode\unitohex.h
 
 "..\..\include\unicode\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2289,7 +2401,7 @@ InputPath=.\unicode\unitohex.h
 InputPath=.\unicode\unitohex.h
 
 "..\..\include\unicode\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2299,7 +2411,7 @@ InputPath=.\unicode\unitohex.h
 InputPath=.\unicode\unitohex.h
 
 "..\..\include\unicode\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2309,7 +2421,7 @@ InputPath=.\unicode\unitohex.h
 InputPath=.\unicode\unitohex.h
 
 "..\..\include\unicode\unitohex.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2318,101 +2430,7 @@ InputPath=.\unicode\unitohex.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\unum.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\unum.h
-
-"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\unum.h
-
-"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\unum.h
-
-"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\unum.h
-
-"..\..\include\unicode\unum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\usearch.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\usearch.h
-
-"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\usearch.h
-
-"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\usearch.h
-
-"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\usearch.h
-
-"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\usrchimp.h
+SOURCE=.\utrans.cpp
 # End Source File
 # Begin Source File
 
@@ -2424,7 +2442,7 @@ SOURCE=.\unicode\utrans.h
 InputPath=.\unicode\utrans.h
 
 "..\..\include\unicode\utrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2434,7 +2452,7 @@ InputPath=.\unicode\utrans.h
 InputPath=.\unicode\utrans.h
 
 "..\..\include\unicode\utrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2444,7 +2462,7 @@ InputPath=.\unicode\utrans.h
 InputPath=.\unicode\utrans.h
 
 "..\..\include\unicode\utrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2454,22 +2472,12 @@ InputPath=.\unicode\utrans.h
 InputPath=.\unicode\utrans.h
 
 "..\..\include\unicode\utrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
 !ENDIF 
 
-# End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# Begin Source File
-
-SOURCE=.\i18n.rc
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
 # End Source File
 # End Group
 # End Target
