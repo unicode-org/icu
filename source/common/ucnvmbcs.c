@@ -3,7 +3,7 @@
 *   Copyright (C) 2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
-*   file name:  ucnv_mbcs.cpp
+*   file name:  ucnvmbcs.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
