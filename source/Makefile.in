@@ -14,6 +14,9 @@ top_builddir = .
 
 include $(top_builddir)/icudefs.mk
 
+docdir = $(datadir)/doc
+docsubdir = $(PACKAGE)
+
 ##
 
 ## Build directory information
@@ -34,6 +37,8 @@ include @platform_make_fragment@
 @SAMPLES_TRUE@SAMPLE = samples
 @SAMPLES_FALSE@SAMPLE = 
 
+DOXYGEN = @DOXYGEN@
+
 ## Files to remove for 'make clean'
 CLEANFILES = *~ 
 
@@ -47,7 +52,8 @@ EXTRA_DATA =
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive clean-recursive-with-twist
+check check-local check-recursive clean-recursive-with-twist install-icu \
+doc install-doc
 
 ## Clear suffix list
 .SUFFIXES :
@@ -59,6 +65,12 @@ clean: clean-recursive-with-twist clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive check-local
+
+doc: Doxyfile
+	$(DOXYGEN)
+
+Doxyfile: $(srcdir)/Doxyfile.in
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 LOCAL_SUBDIRS = $(SUBDIRS)
 CLEAN_FIRST_SUBDIRS = tools
@@ -86,7 +98,8 @@ clean-recursive-with-twist:
 
 all-local: $(srcdir)/configure icudefs.mk
 
-install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
+install-local: install-icu install-doc
+install-icu: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
@@ -97,22 +110,13 @@ install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ READ
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
+install-doc: doc
+	$(RM) -r $(DESTDIR)$(docdir)/$(docsubdir)
+	$(MKINSTALLDIRS) $(DESTDIR)$(docdir)/$(docsubdir)
+	$(INSTALL_DATA) doc/html/* $(DESTDIR)$(docdir)/$(docsubdir)
 
 $(DESTDIR)$(pkglibdir)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
-
-## Generate HTML documentation
-doc:
-	@uniq=`date '+%y%m%d9/30/99M%S'`; \
-	tmpdir="/tmp/icu-$$uniq"; \
-	list='$(DOCDIRS)'; for subdir in $$list; do \
-	  echo "Making install-headers in $$subdir"; \
-	  (cd $$subdir && \
-		$(MAKE) includedir=$$tmpdir/include install-headers); \
-	done; \
-	echo "Generating html documentation..."; \
-	doc++ -H -d $$tmpdir/html $$tmpdir/include/*.h > /dev/null 2>&1; \
-	$(RMV) $$tmpdir
 
 dist-local:
 
