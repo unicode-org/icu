@@ -38,8 +38,8 @@ static const char* copyRight =   "/* \n"
                                  " *\n"
                                  " *******************************************************************************\n"
                                  " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/16 04:17:12 $ \n"
-                                 " * $Revision: 1.2 $ \n"
+                                 " * $Date: 2002/03/19 17:49:17 $ \n"
+                                 " * $Revision: 1.3 $ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -733,7 +733,7 @@ res_write_java(struct SResource *res,UErrorCode *status) {
 }
 
 void 
-bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, UErrorCode *status) {
+bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, char *writtenFilename, int writtenFilenameLen, UErrorCode *status) {
 
     UNewDataMemory *mem        = NULL;
     uint32_t        usedOffset = 0;
@@ -759,6 +759,11 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         strcat(fileName,className);
         strcat(fileName,".java");
     }
+
+    if (writtenFilename) {
+        uprv_strncpy(writtenFilename, fileName, writtenFilenameLen);
+    }
+
     if (U_FAILURE(*status)) {
         return;
     }

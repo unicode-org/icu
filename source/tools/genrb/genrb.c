@@ -181,6 +181,8 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     char           *openFileName = NULL;
     char           *inputDirBuf  = NULL;
 
+    char           outputFileName[256];
+
     if (U_FAILURE(*status)) {
         return;
     }
@@ -267,9 +269,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }
     if(write_java== FALSE){
         /* Write the data to the file */
-        bundle_write(data, outputDir, status);
+        bundle_write(data, outputDir, outputFileName, sizeof(outputFileName), status);
     }else{
-        bundle_write_java(data,outputDir,outputEnc, status);
+        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName), status);
+    }
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "couldn't write bundle %s\n", outputFileName);
     }
     bundle_close(data, status);
 
