@@ -14,6 +14,13 @@
 // Date there: 1999-apr-19
 
 de {
+    // This shouldn't be used, but valid data should be here.
+    // vorm. -> vormittags -> in the morning
+    // nachm. -> nachmittags -> in the afternoon
+    AmPmMarkers {
+            "vorm.",
+            "nachm.",
+    }
     Countries {
         AF { "Afghanistan" }
         EG { "\u00c4gypten" }
