@@ -146,10 +146,9 @@ enum {
     UPROPS_DEPRECATED,
     UPROPS_SOFT_DOTTED,
     UPROPS_LOGICAL_ORDER_EXCEPTION,
-
-    /* derivedPropListNames[] in genprops/props2.c, not easily derivable */
-    UPROPS_XID_START,
-    UPROPS_XID_CONTINUE,
+    UPROPS_XID_START,                           /* derivedPropListNames[] in genprops/props2.c, */
+    UPROPS_XID_CONTINUE,                        /* not easily derivable */
+    UPROPS_ID_START_EXCEPTIONS,                 /* PropList.txt Unicode 4 */
 
     UPROPS_BINARY_1_TOP
 };
