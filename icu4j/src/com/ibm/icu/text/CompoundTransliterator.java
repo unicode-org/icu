@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2000/03/10 04:07:19 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/03/10 04:07:19 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/06/28 20:31:43 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -273,23 +273,23 @@ public class CompoundTransliterator extends Transliterator {
          *    abc/u0041/u0041/u    
          *    S C L
          */
-        int cursor = index.cursor;
-        int limit = index.limit;
+        int cursor = index.__start;
+        int limit = index.__contextLimit;
         int globalLimit = limit;
         /* globalLimit is the overall limit.  We keep track of this
-         * since we overwrite index.limit with the previous
-         * index.cursor.  After each transliteration, we update
+         * since we overwrite index.__contextLimit with the previous
+         * index.__start.  After each transliteration, we update
          * globalLimit for insertions or deletions that have happened.
          */
 
         for (int i=0; i<trans.length; ++i) {
-            index.cursor = cursor; // Reset cursor
-            index.limit = limit;
+            index.__start = cursor; // Reset cursor
+            index.__contextLimit = limit;
 
             if (DEBUG) {
                 System.out.print(Utility.escape(i + ": \"" +
-                    substring(text, index.start, index.cursor) + '|' +
-                    substring(text, index.cursor, index.limit) +
+                    substring(text, index.__contextStart, index.__start) + '|' +
+                    substring(text, index.__start, index.__contextLimit) +
                     "\" -> \""));
             }
 
@@ -297,19 +297,19 @@ public class CompoundTransliterator extends Transliterator {
 
             if (DEBUG) {
                 System.out.println(Utility.escape(
-                    substring(text, index.start, index.cursor) + '|' +
-                    substring(text, index.cursor, index.limit) +
+                    substring(text, index.__contextStart, index.__start) + '|' +
+                    substring(text, index.__start, index.__contextLimit) +
                     '"'));
             }
 
             // Adjust overall limit for insertions/deletions
-            globalLimit += index.limit - limit;
-            limit = index.cursor; // Move limit to end of committed text
+            globalLimit += index.__contextLimit - limit;
+            limit = index.__start; // Move limit to end of committed text
         }
         // Cursor is good where it is -- where the last
         // transliterator left it.  Limit needs to be put back
         // where it was, modulo adjustments for deletions/insertions.
-        index.limit = globalLimit;
+        index.__contextLimit = globalLimit;
     }
 
     /**

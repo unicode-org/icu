@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/05/23 16:51:28 $ 
- * $Revision: 1.20 $
+ * $Date: 2000/06/28 20:31:27 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -293,12 +293,12 @@ public class TransliteratorTest extends TestFmwk {
             }
             String str = s.toString();
             // Show the start index '{' and the cursor '|'
-            log.append(str.substring(0, index.start)).
+            log.append(str.substring(0, index.__contextStart)).
                 append('{').
-                append(str.substring(index.start,
-                                     index.cursor)).
+                append(str.substring(index.__contextStart,
+                                     index.__start)).
                 append('|').
-                append(str.substring(index.cursor));
+                append(str.substring(index.__start));
             if (str.equals(DATA[i+1])) {
                 logln(log.toString());
             } else {
@@ -599,9 +599,9 @@ public void TestJ277() {
             // Append the string buffer with a vertical bar '|' where
             // the committed index is.
             String s = rsource.toString();
-            log.append(s.substring(0, index.cursor)).
+            log.append(s.substring(0, index.__start)).
                 append('|').
-                append(s.substring(index.cursor));
+                append(s.substring(index.__start));
         }
         
         // As a final step in keyboard transliteration, we must call

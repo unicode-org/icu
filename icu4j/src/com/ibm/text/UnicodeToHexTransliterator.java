@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2000/03/22 01:59:55 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import java.util.*;
  * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/03/22 01:59:55 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/06/28 20:31:43 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -291,8 +291,8 @@ public class UnicodeToHexTransliterator extends Transliterator {
          * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",
          * assuming the prefix is "U+". 
          */
-        int cursor = offsets.cursor;
-        int limit = offsets.limit;
+        int cursor = offsets.__start;
+        int limit = offsets.__contextLimit;
 
         UnicodeFilter filter = getFilter();
         StringBuffer hex = new StringBuffer(prefix);
@@ -323,7 +323,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
             limit += len;
         }
 
-        offsets.limit = limit;
-        offsets.cursor = cursor;
+        offsets.__contextLimit = limit;
+        offsets.__start = cursor;
     }
 }

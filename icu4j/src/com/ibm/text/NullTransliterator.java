@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NullTransliterator.java,v $ 
- * $Date: 2000/03/10 04:07:21 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/06/28 20:31:43 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -37,6 +37,6 @@ public class NullTransliterator extends Transliterator {
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
-        offsets.cursor = offsets.limit;
+        offsets.__start = offsets.__contextLimit;
     }
 }
