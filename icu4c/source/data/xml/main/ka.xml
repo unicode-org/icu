@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml draft="true">
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="x0.2"/>
+		<generation date="2004-06-01" />
 		<language type="ka" /> 
 	</identity>
 	<localeDisplayNames>
@@ -206,6 +211,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[:Geor:]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Geor</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<numbers>
 		<symbols>

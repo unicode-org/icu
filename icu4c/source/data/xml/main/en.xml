@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
-		<generation date="2004-05-27" />
+		<version number="3.0"/>
+		<generation date="2004-06-01" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -804,6 +809,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -2801,4 +2811,84 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%simplified:
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+zero; one; two; three; four; five; six; seven; eight; nine;
+ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
+seventeen; eighteen; nineteen;
+20: twenty[-&gt;&gt;];
+30: thirty[-&gt;&gt;];
+40: forty[-&gt;&gt;];
+50: fifty[-&gt;&gt;];
+60: sixty[-&gt;&gt;];
+70: seventy[-&gt;&gt;];
+80: eighty[-&gt;&gt;];
+90: ninety[-&gt;&gt;];
+100: &lt;&lt; hundred[ &gt;&gt;];
+1000: &lt;&lt; thousand[ &gt;&gt;];
+1,000,000: &lt;&lt; million[ &gt;&gt;];
+1,000,000,000: &lt;&lt; billion[ &gt;&gt;];
+1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+%default:
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+=%simplified=;
+100: &lt;&lt; hundred[ &gt;%%and&gt;];
+1000: &lt;&lt; thousand[ &gt;%%and&gt;];
+100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
+1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
+1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
+1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
+1,000,000,000,000,000: =#,##0=;
+%%and:
+and =%default=;
+100: =%default=;
+%%commas:
+' and =%default=;
+100: , =%default=;
+1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
+1,000,000: , =%default=;%%lenient-parse:
+   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="ordinal">
+%main:
+=#,##0==%%abbrev=;
+%%abbrev:
+th; st; nd; rd; th;
+20: &gt;&gt;;
+100: &gt;&gt;;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+%with-words:
+0 seconds; 1 second; =0= seconds;
+60/60: &lt;%%min&lt;[, &gt;&gt;];
+3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
+%%min:
+0 minutes; 1 minute; =0= minutes;
+%%hr:
+0 hours; 1 hour; =0= hours;
+%in-numerals:
+=0= sec.;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
+%%min-sec:
+0: :=00=;
+60/60: &lt;0&lt;&gt;&gt;;
+%%hr-min-sec:
+0: :=00=;
+60/60: &lt;00&lt;&gt;&gt;;
+3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
+%%lenient-parse:
+&amp; ':' = '.' = ' ' = '-';
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
