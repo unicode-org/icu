@@ -1829,7 +1829,7 @@ findStringSetMismatch(const UChar *string, int32_t langSize,
 
     for (strIdx = 0; strIdx < langSize; strIdx++) {
         if (!uset_contains(exemplarSet, string[strIdx])
-            && string[strIdx] != 0x0020 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d) {
+            && string[strIdx] != 0x0020 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d && string[strIdx] != 0x0027) {
             if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
                 return strIdx;
             }
