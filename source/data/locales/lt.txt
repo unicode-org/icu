@@ -27,6 +27,10 @@ lt {
         "yy.M.d",
         "{1} {0}",
     }
+    DateTimeElements:intvector {
+        2,
+        1, // "Minimal Days in First Week" is unknown. Root value used instead
+    }
     DayAbbreviations { 
         "Sk",
         "Pr",
