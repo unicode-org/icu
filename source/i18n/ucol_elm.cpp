@@ -825,6 +825,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
         element->mapCE = uprv_uca_addPrefix(t, UCOL_NOT_FOUND, element, status);
         uCE = (UCAElements *)uprv_malloc(sizeof(UCAElements));
         uprv_memcpy(uCE, element, sizeof(UCAElements));
+        uCE->cPoints = uCE->uchars;
         uhash_put(t->prefixLookup, uCE, uCE, status);
       }
     }
