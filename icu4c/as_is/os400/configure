@@ -20,6 +20,10 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-static         build static libraries [default=no]"
 ac_help="$ac_help
+  --enable-debug          build debug libraries [default=no]"
+ac_help="$ac_help
+  --enable-release        build release libraries [default=yes]"
+ac_help="$ac_help
   --enable-renaming       add a version suffix to symbols [default=yes]"
 ac_help="$ac_help
   --enable-rpath          use rpath when linking [default is only if necessary]"
@@ -582,7 +586,6 @@ echo "$ac_t""release $VERSION, library $LIB_VERSION" 1>&6
 UNICODE_VERSION="4"
 
 
-CPPFLAGS="${CPPFLAGS} -I."
 
 
 # Extract the first word of "gcc", so it can be a program name with args.
@@ -1512,6 +1515,7 @@ fi
 
 
 
+
 	echo $ac_n "checking which Makefile fragment to use""... $ac_c" 1>&6
 echo "configure:1518: checking which Makefile fragment to use" >&5
 if eval "test \"`echo '$''{'icu_cv_host_frag'+set}'`\" = set"; then
@@ -1695,6 +1699,38 @@ if test "${enable_static+set}" = set; then
 	     yes|"") enabled=yes; ENABLE_STATIC=YES ;;
 	     no) ;;
 	     *) ;;
+    esac
+fi
+
+echo "$ac_t""$enabled" 1>&6
+
+
+echo $ac_n "checking whether to build debug libraries""... $ac_c" 1>&6
+echo "configure:1710: checking whether to build debug libraries" >&5
+enabled=no
+ENABLE_DEBUG=0
+# Check whether --enable-debug or --disable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval="$enable_debug"
+   case "${enableval}" in
+         yes|"") enabled=yes; ENABLE_DEBUG=1 ;;
+         *) ;;
+    esac
+fi
+
+echo "$ac_t""$enabled" 1>&6
+
+
+echo $ac_n "checking whether to build release libraries""... $ac_c" 1>&6
+echo "configure:1726: checking whether to build release libraries" >&5
+enabled=yes
+ENABLE_RELEASE=1
+# Check whether --enable-release or --disable-release was given.
+if test "${enable_release+set}" = set; then
+  enableval="$enable_release"
+   case "${enableval}" in
+         no) enabled=no; ENABLE_RELEASE=0 ;;
+         *) ;;
     esac
 fi
 
@@ -4214,9 +4250,12 @@ s%@host_vendor@%$host_vendor%g
 s%@host_os@%$host_os%g
 s%@EXEEXT@%$EXEEXT%g
 s%@ARFLAGS@%$ARFLAGS%g
+s%@COMPILE_LINK_ENVVAR@%$COMPILE_LINK_ENVVAR%g
 s%@LIB_M@%$LIB_M%g
 s%@ENABLE_SHARED@%$ENABLE_SHARED%g
 s%@ENABLE_STATIC@%$ENABLE_STATIC%g
+s%@ENABLE_DEBUG@%$ENABLE_DEBUG%g
+s%@ENABLE_RELEASE@%$ENABLE_RELEASE%g
 s%@RANLIB@%$RANLIB%g
 s%@AR@%$AR%g
 s%@U_DISABLE_RENAMING@%$U_DISABLE_RENAMING%g
