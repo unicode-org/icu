@@ -1388,7 +1388,6 @@ public class LDML2ICUConverter {
             }else if( name.equals(LDMLConstants.ERA)){
                 map.put(type, val);
             }else{
-            
                 System.err.println("Encountered unknown element: "+name);
                 System.exit(-1);
             }
