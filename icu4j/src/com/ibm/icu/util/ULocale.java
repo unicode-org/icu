@@ -1955,7 +1955,7 @@ public final class ULocale implements Serializable {
     private static String getTableString(String tableName, String subtableName, String item, String displayLocaleID) {
         if (item.length() > 0) {
             try {
-                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocaleID);
+                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
                 return getTableString(tableName, subtableName, item, bundle);
             } catch (Exception e) {
 //              System.out.println("gtsu: " + e.getMessage());
@@ -1985,7 +1985,10 @@ public final class ULocale implements Serializable {
                         return table.getString();
                     }
                     catch (MissingResourceException e) {
-                        table = table.getWithFallback("Fallback");
+                        String fallbackLocale = table.getWithFallback("Fallback").getString();
+                        if(fallbackLocale.equals(table.getULocale().localeID)){
+                        	return item;
+                        }
                         bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(table.getString()));
                     }
                 }
@@ -2333,7 +2336,7 @@ public final class ULocale implements Serializable {
 
         final String[] tableNames = { "Languages", "Scripts", "Countries", "Variants" };
 
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocaleID);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, displayLocaleID);
 
         StringBuffer buf = new StringBuffer();
 
