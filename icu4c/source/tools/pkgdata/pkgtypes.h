@@ -92,6 +92,7 @@ typedef struct UPKGOptions_
   const char *shortName;   /* name of what we're building */
   const char *targetDir;
   const char *tmpDir;
+  const char *srcDir;
   const char *options;     /* Options arg */
   const char *mode;        /* Mode of building */
   const char *comment;     /* comment string */

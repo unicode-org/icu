@@ -28,32 +28,57 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
-void findSuffixesAndObjects(CharList *infiles, CharList **suffixes, CharList **objects)
+void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
-  char *p;
+  char *p, *baseName;
   char tmp[1024];
-  CharList *sTail = NULL, *oTail = NULL;
+  char stanza[1024];
+  char cfile[1024];
+  CharList *oTail = NULL;
+  CharList *infiles;
+  CharList *parents = NULL, *commands = NULL;
+
+  infiles = o->filePaths;
+
 
   for(;infiles;infiles = infiles->next) {
-    p = uprv_strrchr(infiles->str, '.');
+    baseName = findBasename(infiles->str);
+    p = uprv_strrchr(baseName, '.');
     if( (p == NULL) || (*p == '\0' ) ) {
       continue;
     }
 
-    uprv_strncpy(tmp, infiles->str, p-infiles->str);
+    uprv_strncpy(tmp, baseName, p-baseName);
     p++;
 
-    uprv_strcpy(tmp+(p-1-infiles->str), "_"); /* to append */
+    uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
     uprv_strcat(tmp, p);
     uprv_strcat(tmp, OBJ_SUFFIX);
 
     *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
 
-    if(pkg_listContains(*suffixes, p)) {
-      continue; 
-    }
+    /* write source list */
+    strcpy(cfile,tmp);
+    strcpy(cfile+strlen(cfile)-strlen(OBJ_SUFFIX), ".c" );
 
-    *suffixes = pkg_appendToList(*suffixes, &sTail, uprv_strdup(p));
+
+    /* Make up parents.. */
+    parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
+
+    /* make up commands.. */
+    sprintf(stanza, "$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<");
+    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+    sprintf(stanza, "$(COMPILE.cc) -o $@ $(TEMP_DIR)/%s", cfile);
+    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+    sprintf(stanza, "$(TEMP_DIR)/%s", tmp);
+    pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
+
+    pkg_deleteList(parents);
+    pkg_deleteList(commands);
+    parents = NULL;
+    commands = NULL;
   }
 
 }
@@ -62,7 +87,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 {
   char tmp[1024];
   CharList *tail = NULL;
-  CharList *suffixes =NULL, *objects = NULL;
+  CharList *objects = NULL;
   CharList *iter;
 
   if(U_FAILURE(*status)) { 
@@ -100,6 +125,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     return;
   }
   
+  T_FileStream_writeLine(makefile, "ifneq ($(strip $(HPUX_JUNK_OBJ)),)\n"
+                                   "  HPUX_JUNK_OBJ=$(TEMP_DIR)/$(HPUX_JUNK_OBJ)\n"
+                                   "endif\n\n");
+
+
   T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(TARGET) $(TARGETDIR)\$(DLLTARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
   T_FileStream_writeLine(makefile, "\n\n");
   
@@ -117,7 +147,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, tmp);
 
   /* Write compile rules */
-  findSuffixesAndObjects(o->files, &suffixes, &objects);
+  writeObjRules(o, makefile, &objects);
 
   sprintf(tmp, "# List file for gencmn:\n"
           "CMNLIST=%s%s%s_dll.lst\n\n",
@@ -138,31 +168,51 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\tdone;\n\n");
   }
 
-  T_FileStream_writeLine(makefile, "icudata_dat.c: $(CMNLIST)\n\n"
-               "\t$(TOOL) $(GENCMN) -S -d $(TARGETDIR) 0 $(CMNLIST)\n\n");
+  T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
+  if(!strcmp(o->shortName, "icudata")) {
+    T_FileStream_writeLine(makefile, "$(TEMP_DIR)/icudata_dat.c: $(CMNLIST)\n\n"
+                           "\t$(TOOL) $(GENCMN) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
+    sprintf(tmp, "TOCOBJ= icudata_dat%s \n\n", OBJ_SUFFIX);
+    T_FileStream_writeLine(makefile, tmp);
+  }
 
-  sprintf(tmp, "OBJECTS= icudata_dat%s ", OBJ_SUFFIX);
-  T_FileStream_writeLine(makefile, tmp);
+  T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
   pkg_writeCharListWrap(makefile, objects, " ", " \\\n");
   T_FileStream_writeLine(makefile, "\n\n");
+  T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_DIR)/%)\n\n");
 
+#if 0
   for(iter=suffixes; iter; iter = iter->next) {
-    sprintf(tmp, "%%_%s.c: %%.%s\n\t$(TOOL) $(GENCCODE) $<\n\n",
+    sprintf(tmp, "$(TEMP_DIR)/%%_%s.c: %%.%s\n\t$(TOOL) $(GENCCODE) -d $(TEMP_DIR) $<\n\n",
             iter->str,iter->str);
     T_FileStream_writeLine(makefile, tmp);
   }
-  
-  T_FileStream_writeLine(makefile,"build-objs: $(OBJECTS)\n\n");
+#endif
+
+#if 0
+  for(iter=objects; iter; iter = iter->next) {
+    char sourcefile[200];
+    strcpy(sourcefile,iter->str);
+    strcpy(sourcefile+strlen(sourcefile)-strlen(OBJ_SUFFIX), ".c" );
+    sprintf(tmp, "$(TEMP_DIR)/%s: $(TEMP_DIR)/%s\n\t$(COMPILE.cc) -o $@ $<\n\n",
+            iter->str,sourcefile);
+    T_FileStream_writeLine(makefile, tmp);
+  }
+#endif
+
+  T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.cc) -o $@ $<\n\n");
+
+  T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
   
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES)\n"
                                    "\t$(SHLIB.c) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ)\n"
                                    "\t-ls -l $@\n\n");
 
-  T_FileStream_writeLine(makefile, "hpux_junk_obj.cpp:\n"
+  T_FileStream_writeLine(makefile, "$(TEMP_DIR)/hpux_junk_obj.cpp:\n"
                                    "	echo \"void to_emit_cxx_stuff_in_the_linker(){}\" >> hpux_junk_obj.cpp\n"
                                    "\n"
-                                   "hpux_junk_obj.o: hpux_junk_obj.cpp\n"
+                                   "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                    "	$(COMPILE.cc) -o $@ $<\n"
                                    "\n");
 
@@ -170,7 +220,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "\n\n");
   
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(TARGET)\n"
-                                   "\t$(INSTALL-S) $(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
+                                   "\t$(INSTALL-S) $(TARGETDIR)/$(TARGET) $(INSTALLTO)/$(TARGET)\n\n");
 
 #endif /* NOT win32 */
 

@@ -96,7 +96,7 @@ CharList *pkg_prependToList(CharList *l, const char *str)
  */
 CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
 {
-  CharList *endptr, *tmp;
+  CharList *endptr = NULL, *tmp;
 
   if(end == NULL)
   {
