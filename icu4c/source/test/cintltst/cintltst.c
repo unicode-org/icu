@@ -57,7 +57,7 @@ static void TestMutex(void) {
     }
 }
 
-void addSetup(TestNode** root);
+U_CFUNC void addSetup(TestNode** root);
 
 void addSetup(TestNode** root)
 {
