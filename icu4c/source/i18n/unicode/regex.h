@@ -316,6 +316,10 @@ private:
     int32_t         fFrameSize;    // Size of a state stack frame in the 
                                    //   execution engine.
 
+    int32_t         fDataSize;     // The size of the data needed by the pattern that
+                                   //   does not go on the state stack, but has just
+                                   //   a single copy per matcher.
+
     UVector32       *fGroupMap;     // Map from capture group number to position of
                                    //   the group's variables in the matcher stack frame.
 
@@ -686,6 +690,9 @@ private:
     REStackFrame        *fFrame;           // After finding a match, the last active stack
                                            //   frame, which will contain the capture group results.
                                            //   NOT valid while match engine is running.
+
+    int32_t             *fData;            // Data area for use by the compiled pattern.
+    int32_t             fSmallData[8];     //   Use this for data if it's enough.
 
     /**
      * The address of this static class variable serves as this class's ID

@@ -549,8 +549,31 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
 
     case doOpenAtomicParen:
-        // Open Atomic Paren.
-        error(U_REGEX_UNIMPLEMENTED);
+        // Open Atomic Paren.  (?>
+        //   Compile to a
+        //      - NOP, which later may be replaced if the parenthesized group 
+        //         has a quantifier, followed by
+        //      - STO_SP  save state stack position, so it can be restored at the ")"
+        //      - NOP, which may later be replaced by a save-state if there
+        //             is an '|' alternation within the parens.
+        {
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+            int32_t  varLoc    = fRXPat->fDataSize;    // Reserve a data location for saving the
+            fRXPat->fDataSize += 1;                    //  state stack ptr.
+            int32_t  stoOp     = URX_BUILD(URX_STO_SP, varLoc);
+            fRXPat->fCompiledPat->addElement(stoOp, *fStatus);
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the two NOPs.  Depending on what follows in the pattern, the
+            //   NOPs may be changed to SAVE_STATE or JMP ops, with a target
+            //   address of the end of the parenthesized group.
+            fParenStack.push(-3, *fStatus);           // Begin a new frame.
+            fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first NOP
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+        }
+         break;
+
         break;
 
     case doOpenLookAhead:
@@ -1218,6 +1241,19 @@ void  RegexCompile::handleCloseParen() {
             fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
         }
         break;
+    case -3:
+        // Atomic Parenthesis.
+        //   Insert a LD_SP operation to restore the state stack to the position
+        //   it was when the atomic parens were entered.
+        {
+            int32_t   stoOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen+1);
+            U_ASSERT(URX_TYPE(stoOp) == URX_STO_SP);
+            int32_t   stoLoc = URX_VAL(stoOp);
+            int32_t   ldOp   = URX_BUILD(URX_LD_SP, stoLoc);
+            fRXPat->fCompiledPat->addElement(ldOp, *fStatus);
+        }
+        break;
+
     default:
         U_ASSERT(FALSE);
     }
@@ -1324,6 +1360,9 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
     op = URX_BUILD(LoopOp, topOfBlock);
     fRXPat->fCompiledPat->addElement(op, *fStatus);
 
+    if (fIntervalLow > fIntervalUpper && fIntervalUpper != -1) {
+        error(U_REGEX_MAX_LT_MIN);
+    }
 
 }
 

@@ -115,6 +115,7 @@ void RegexPattern::init() {
     fStaticSets       = NULL;
     fMatcher          = NULL;
     fFrameSize        = 0;
+    fDataSize         = 0;
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
@@ -468,6 +469,8 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_CTR_LOOP_NG:
     case URX_CTR_LOOP_P:
     case URX_RELOC_OPRND:
+    case URX_STO_SP:
+    case URX_LD_SP:
 
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);

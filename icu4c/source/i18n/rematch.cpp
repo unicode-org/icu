@@ -19,6 +19,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "uassert.h"
+#include "cmemory.h"
 #include "uvector.h"
 #include "uvectr32.h"
 #include "regeximp.h"
@@ -39,6 +40,11 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fInputLength       = 0;
     UErrorCode  status = U_ZERO_ERROR;
     fStack             = new UVector32(status);   // TODO:  do something with status.
+    fData              = fSmallData;
+    if (pat->fDataSize > sizeof(fSmallData)/sizeof(fSmallData[0])) {
+        fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t));      // TODO:  null check
+    }
+        
     reset();
 }
 
@@ -46,6 +52,9 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 
 RegexMatcher::~RegexMatcher() {
     delete fStack;
+    if (fData != fSmallData) {
+        delete fData;
+    }
 }
 
 
@@ -417,6 +426,7 @@ REStackFrame *RegexMatcher::resetStack() {
     //  they indicate that a group has not yet matched anything.
     fStack->removeAllElements();
     UErrorCode  status = U_ZERO_ERROR;    // TODO:  do something with status
+
     int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, status);
     int i;
     for (i=0; i<fPattern->fFrameSize; i++) {
@@ -574,7 +584,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         }
         printf("\n");
         printf("\n");
-        printf("PatLoc  inputIdx  char\n");
+        printf("               PatLoc  inputIdx  char\n");
     }
     #endif
 
@@ -607,7 +617,8 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
         #ifdef REGEX_RUN_DEBUG
-            printf("inputIdx=%d   inputChar=%c    ", fp->fInputIdx, fInput->char32At(fp->fInputIdx));
+            printf("inputIdx=%d   inputChar=%c   sp=%d  ", fp->fInputIdx,
+                fInput->char32At(fp->fInputIdx), (int32_t *)fp-fStack->getBuffer());
             fPattern->dumpOp(fp->fPatIdx);
         #endif
         fp->fPatIdx++;
@@ -969,6 +980,87 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                     fp = StateSave(fp, fp->fPatIdx, frameSize, status);
                 }
                 fp->fPatIdx = opValue + 4;    // Loop back.
+            }
+            break;
+
+        case URX_CTR_INIT_NG:
+            {
+                U_ASSERT(opValue >= 0 && opValue < frameSize-2);
+                fp->fExtra[opValue] = 0;       //  Set the loop counter variable to zero
+
+                // Pick up the three extra operands that CTR_INIT has, and
+                //    skip the pattern location counter past 
+                int32_t instrOperandLoc = fp->fPatIdx;
+                fp->fPatIdx += 3;
+                int32_t loopLoc  = URX_VAL(pat[instrOperandLoc]);
+                int32_t minCount = pat[instrOperandLoc+1];
+                int32_t maxCount = pat[instrOperandLoc+2];
+                U_ASSERT(minCount>=0);
+                U_ASSERT(maxCount>=minCount || maxCount==-1);
+                U_ASSERT(loopLoc>fp->fPatIdx);
+
+                if (minCount == 0) {
+                    if (maxCount != 0) {
+                        fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                    }
+                    fp->fPatIdx = loopLoc+1;   // Continue with stuff after repeated block
+                } 
+            }
+            break;
+
+        case URX_CTR_LOOP_NG:
+            {
+                U_ASSERT(opValue>0 && opValue < fp->fPatIdx-2);
+                int32_t initOp = pat[opValue];
+                U_ASSERT(URX_TYPE(initOp) == URX_CTR_INIT_NG);
+                int32_t *pCounter = &fp->fExtra[URX_VAL(initOp)];
+                int32_t minCount  = pat[opValue+2];
+                int32_t maxCount = pat[opValue+3];
+                // Increment the counter.  Note: we're not worrying about counter
+                //   overflow, since the data comes from UnicodeStrings, which
+                //   stores its length in an int32_t.
+                (*pCounter)++;
+                U_ASSERT(*pCounter > 0);
+
+                if ((uint32_t)*pCounter >= (uint32_t)maxCount) {
+                    // The loop has matched the maximum permitted number of times.
+                    //   Break out of here with no action.  Matching will
+                    //   continue with the following pattern.
+                    U_ASSERT(*pCounter == maxCount || maxCount == -1);
+                    break;
+                }
+
+                if (*pCounter < minCount) {
+                    // We haven't met the minimum number of matches yet.
+                    //   Loop back for another one.
+                    fp->fPatIdx = opValue + 4;    // Loop back.
+                } else {
+                    // We do have the minimum number of matches.
+                    //   Fall into the following pattern, but first do
+                    //   a state save to the top of the loop, so that a failure
+                    //   in the following pattern will try another iteration of the loop.
+                    fp = StateSave(fp, opValue + 4, frameSize, status);
+                }
+            }
+            break;
+
+        case URX_STO_SP:
+            U_ASSERT(opValue >= 0 && opValue < fPattern->fDataSize);
+            fData[opValue] = fStack->size();
+            break;
+
+        case URX_LD_SP:
+            {
+                U_ASSERT(opValue >= 0 && opValue < fPattern->fDataSize);
+                int32_t newStackSize = fData[opValue];
+                U_ASSERT(newStackSize <= fStack->size());
+                REStackFrame *newFP = (REStackFrame *)(fStack->getBuffer() + newStackSize - frameSize);
+                int32_t i;
+                for (i=0; i<frameSize; i++) {
+                    newFP[i] = fp[i];
+                }
+                fp = newFP;
+                fStack->setSize(newStackSize);
             }
             break;
 
