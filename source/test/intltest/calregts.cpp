@@ -1643,6 +1643,21 @@ void CalendarRegressionTest::Test4197699() {
     }
 }
 
+    enum Action { ADD=1, ROLL=2 };
+    enum Sign { PLUS=1, MINUS=2 };
+
+#define     ONE_HOUR (60*60*1000)
+#define ONE_DAY (24*ONE_HOUR)
+
+    typedef struct {
+        Calendar::EDateFields field;
+        int8_t actionMask; // ADD or ROLL or both
+        int8_t signMask; // PLUS or MINUS or both
+        int32_t amount;
+        int32_t before; // ms before cutover
+        int32_t after;  // ms after cutover
+	} J81_DATA;
+
 /**
  * Rolling and adding across the Gregorian cutover should work as expected.
  * Jitterbug 81.
@@ -1650,8 +1665,6 @@ void CalendarRegressionTest::Test4197699() {
 void CalendarRegressionTest::TestJ81() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString temp, temp2, temp3;
-    int32_t ONE_HOUR = (int32_t)60*60*1000;
-    int32_t ONE_DAY = (int32_t)24*ONE_HOUR;
     int32_t i;
     GregorianCalendar cal(TimeZone::createTimeZone("GMT"), status);
     SimpleDateFormat fmt("HH:mm 'w'w 'd'D E d MMM yyyy", Locale::US, status);
@@ -1757,18 +1770,12 @@ void CalendarRegressionTest::TestJ81() {
     }
     status = U_ZERO_ERROR;
 
+#define ADD_ROLL  ADD|ROLL
+#define PLUS_MINUS PLUS|MINUS
     // Test cases
-    enum Action { ADD=1, ROLL=2 };
-    enum Sign { PLUS=1, MINUS=2 };
-    struct {
-        Calendar::EDateFields field;
-        int8_t actionMask; // ADD or ROLL or both
-        int8_t signMask; // PLUS or MINUS or both
-        int32_t amount;
-        int32_t before; // ms before cutover
-        int32_t after;  // ms after cutover
-    } DATA[] = {
-        { Calendar::WEEK_OF_YEAR, ADD|ROLL, PLUS|MINUS, 1, -ONE_DAY, +6*ONE_DAY },
+    J81_DATA DATA[] = {
+        { Calendar::WEEK_OF_YEAR, ADD_ROLL, PLUS_MINUS, 1, -ONE_DAY, +6*ONE_DAY },
+        { Calendar::WEEK_OF_YEAR, ADD_ROLL, PLUS_MINUS, 1, -ONE_DAY, +6*ONE_DAY },
         { Calendar::WEEK_OF_MONTH, ADD|ROLL, PLUS|MINUS, 1, -ONE_DAY, +6*ONE_DAY },
         { Calendar::DAY_OF_MONTH, ADD|ROLL, PLUS|MINUS, 2, -ONE_DAY, +1*ONE_DAY },
         { Calendar::DAY_OF_MONTH, ROLL, PLUS, -6, -ONE_DAY, +14*ONE_DAY },
