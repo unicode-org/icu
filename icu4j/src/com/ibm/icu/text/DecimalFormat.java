@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2004/02/12 01:01:38 $ 
- * $Revision: 1.42 $
+ * $Date: 2004/02/19 00:32:14 $ 
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -25,12 +25,13 @@ import java.io.ObjectInputStream;
 
 /**
  * <code>DecimalFormat</code> is a concrete subclass of
- * <code>NumberFormat</code> that formats decimal numbers. It has a variety of
+ * {@link NumberFormat} that formats decimal numbers. It has a variety of
  * features designed to make it possible to parse and format numbers in any
  * locale, including support for Western, Arabic, or Indic digits.  It also
- * supports different flavors of numbers, including integers (123), fixed-point
- * numbers (123.4), scientific notation (1.23E4), percentages (12%), and
- * currency amounts ($123).  All of these flavors can be easily localized.
+ * supports different flavors of numbers, including integers ("123"),
+ * fixed-point numbers ("123.4"), scientific notation ("1.23E4"), percentages
+ * ("12%"), and currency amounts ("$123").  All of these flavors can be easily
+ * localized.
  *
  * <p><strong>This is an enhanced version of <code>DecimalFormat</code> that
  * is based on the standard version in the JDK.  New or changed functionality
@@ -38,11 +39,11 @@ import java.io.ObjectInputStream;
  * <strong><font face=helvetica color=red>NEW</font></strong> or
  * <strong><font face=helvetica color=red>CHANGED</font></strong>.</strong>
  *
- * <p>To obtain a <code>NumberFormat</code> for a specific locale (including the
+ * <p>To obtain a {@link NumberFormat} for a specific locale (including the
  * default locale) call one of <code>NumberFormat</code>'s factory methods such
- * as <code>getInstance()</code>. Do not call the <code>DecimalFormat</code>
+ * as {@link NumberFormat#getInstance}. Do not call the <code>DecimalFormat</code>
  * constructors directly, unless you know what you are doing, since the
- * <code>NumberFormat</code> factory methods may return subclasses other than
+ * {@link NumberFormat} factory methods may return subclasses other than
  * <code>DecimalFormat</code>. If you need to customize the format object, do
  * something like this:
  *
@@ -50,17 +51,9 @@ import java.io.ObjectInputStream;
  * NumberFormat f = NumberFormat.getInstance(loc);
  * if (f instanceof DecimalFormat) {
  *     ((DecimalFormat) f).setDecimalSeparatorAlwaysShown(true);
- * }
- * </pre></blockquote>
+ * }</pre></blockquote>
  *
- * <h4>Synchronization</h4>
- * <p>
- * Decimal formats are not synchronized. It is recommended that you create 
- * separate format instances for each thread. If multiple threads access a format
- * concurrently, it must be synchronized externally. 
- * <p>
- *
- * <p><strong>Example</strong>
+ * <p><strong>Example Usage</strong>
  *
  * <blockquote><pre>
  * <strong>// Print out a number using the localized number, currency,
@@ -88,124 +81,146 @@ import java.io.ObjectInputStream;
  *             // Assume format is a DecimalFormat
  *             System.out.print(": " + ((DecimalFormat) format).toPattern()
  *                              + " -> " + form.format(myNumber));
- *         } catch (IllegalArgumentException e) {}
+ *         } catch (Exception e) {}
  *         try {
  *             System.out.println(" -> " + format.parse(form.format(myNumber)));
  *         } catch (ParseException e) {}
  *     }
- * }
- * </pre></blockquote>
- *
- * <p><strong>Notes</strong>
+ * }</pre></blockquote>
  *
  * <h4>Patterns</h4>
  *
  * <p>A <code>DecimalFormat</code> consists of a <em>pattern</em> and a set of
  * <em>symbols</em>.  The pattern may be set directly using
- * <code>applyPattern()</code>, or indirectly using the API methods.  The
- * symbols are stored in a <code>DecimalFormatSymbols</code> object.  When using
- * the <code>NumberFormat</code> factory methods, the pattern and symbols are
- * read from localized <code>ResourceBundle</code>s provided by ICU.
+ * {@link #applyPattern}, or indirectly using other API methods which
+ * manipulate aspects of the pattern, such as the minimum number of integer
+ * digits.  The symbols are stored in a {@link DecimalFormatSymbols}
+ * object.  When using the {@link NumberFormat} factory methods, the
+ * pattern and symbols are read from ICU's locale data.
  * 
- * <table bgcolor="#ccccff" border="0" cellspacing="3" cellpadding="3" summary="Example patterns">
- *
- * </table>
- *
  * <h4>Special Pattern Characters</h4>
  *
  * <p>Many characters in a pattern are taken literally; they are matched during
  * parsing and output unchanged during formatting.  Special characters, on the
  * other hand, stand for other characters, strings, or classes of characters.
- * They must be quoted, unless noted otherwise, if they are to appear in the
- * prefix or suffix as literals.
+ * For example, the '#' character is replaced by a localized digit.  Often the
+ * replacement character is the same as the pattern character; in the U.S. locale,
+ * the ',' grouping character is replaced by ','.  However, the replacement is
+ * still happening, and if the symbols are modified, the grouping character
+ * changes.  Some special characters affect the behavior of the formatter by
+ * their presence; for example, if the percent character is seen, then the
+ * value is multiplied by 100 before being displayed.
+ *
+ * <p>To insert a special character in a pattern as a literal, that is, without
+ * any special meaning, the character must be quoted.  There are some exceptions to
+ * this which are noted below.
  *
  * <p>The characters listed here are used in non-localized patterns.  Localized
  * patterns use the corresponding characters taken from this formatter's
- * <code>DecimalFormatSymbols</code> object instead, and these characters lose
+ * {@link DecimalFormatSymbols} object instead, and these characters lose
  * their special status.  Two exceptions are the currency sign and quote, which
  * are not localized.
  *
  * <blockquote>
  * <table border=0 cellspacing=3 cellpadding=0 summary="Chart showing symbol,
  *  location, localized, and meaning.">
- *     <tr bgcolor="#ccccff">
- *          <th align=left>Symbol
- *          <th align=left>Location
- *          <th align=left>Localized?
- *          <th align=left>Meaning
- *     <tr valign=top>
- *          <td><code>0</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Digit
- *     <tr valign=top bgcolor="#eeeeff">
- *          <td><code>#</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Digit, zero shows as absent
- *     <tr valign=top>
- *          <td><code>.</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Decimal separator or monetary decimal separator
- *     <tr valign=top bgcolor="#eeeeff">
- *          <td><code>-</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Minus sign
- *     <tr valign=top>
- *          <td><code>,</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Grouping separator
- *     <tr valign=top bgcolor="#eeeeff">
- *          <td><code>E</code>
- *          <td>Number
- *          <td>Yes
- *          <td>Separates mantissa and exponent in scientific notation.
- *              <em>Need not be quoted in prefix or suffix.</em>
- *     <tr valign=top>
- *          <td><code>;</code>
- *          <td>Subpattern boundary
- *          <td>Yes
- *          <td>Separates positive and negative subpatterns
- *     <tr valign=top bgcolor="#eeeeff">
- *          <td><code>%</code>
- *          <td>Prefix or suffix
- *          <td>Yes
- *          <td>Multiply by 100 and show as percentage
- *     <tr valign=top>
- *          <td><code>&#92;u2030</code>
- *          <td>Prefix or suffix
- *          <td>Yes
- *          <td>Multiply by 1000 and show as per mille
- *     <tr valign=top bgcolor="#eeeeff">
- *          <td><code>&#164;</code> (<code>&#92;u00A4</code>)
- *          <td>Prefix or suffix
- *          <td>No
- *          <td>Currency sign, replaced by currency symbol.  If
- *              doubled, replaced by international currency symbol.
- *              If present in a pattern, the monetary decimal separator
- *              is used instead of the decimal separator.
- *     <tr valign=top>
- *          <td><code>'</code>
- *          <td>Prefix or suffix
- *          <td>No
- *          <td>Used to quote special characters in a prefix or suffix,
- *              for example, <code>"'#'#"</code> formats 123 to
- *              <code>"#123"</code>.  To create a single quote
- *              itself, use two in a row: <code>"# o''clock"</code>.
+ *   <tr bgcolor="#ccccff">
+ *     <th align=left>Symbol
+ *     <th align=left>Location
+ *     <th align=left>Localized?
+ *     <th align=left>Meaning
+ *   <tr valign=top>
+ *     <td><code>0</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Digit
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>1-9</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td><strong><font face=helvetica color=red>NEW</font></strong>
+ *         '1' through '9' indicate rounding.
+ *   <tr valign=top>
+ *     <td><code>#</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Digit, zero shows as absent
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>.</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Decimal separator or monetary decimal separator
+ *   <tr valign=top>
+ *     <td><code>-</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Minus sign
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>,</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Grouping separator
+ *   <tr valign=top>
+ *     <td><code>E</code>
+ *     <td>Number
+ *     <td>Yes
+ *     <td>Separates mantissa and exponent in scientific notation.
+ *         <em>Need not be quoted in prefix or suffix.</em>
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>+</code>
+ *     <td>Exponent
+ *     <td>Yes
+ *     <td><strong><font face=helvetica color=red>NEW</font></strong>
+ *         Prefix positive exponents with localized plus sign.
+ *         <em>Need not be quoted in prefix or suffix.</em>
+ *   <tr valign=top>
+ *     <td><code>;</code>
+ *     <td>Subpattern boundary
+ *     <td>Yes
+ *     <td>Separates positive and negative subpatterns
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>%</code>
+ *     <td>Prefix or suffix
+ *     <td>Yes
+ *     <td>Multiply by 100 and show as percentage
+ *   <tr valign=top>
+ *     <td><code>&#92;u2030</code>
+ *     <td>Prefix or suffix
+ *     <td>Yes
+ *     <td>Multiply by 1000 and show as per mille
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>&#164;</code> (<code>&#92;u00A4</code>)
+ *     <td>Prefix or suffix
+ *     <td>No
+ *     <td>Currency sign, replaced by currency symbol.  If
+ *         doubled, replaced by international currency symbol.
+ *         If present in a pattern, the monetary decimal separator
+ *         is used instead of the decimal separator.
+ *   <tr valign=top>
+ *     <td><code>'</code>
+ *     <td>Prefix or suffix
+ *     <td>No
+ *     <td>Used to quote special characters in a prefix or suffix,
+ *         for example, <code>"'#'#"</code> formats 123 to
+ *         <code>"#123"</code>.  To create a single quote
+ *         itself, use two in a row: <code>"# o''clock"</code>.
+ *   <tr valign=top bgcolor="#eeeeff">
+ *     <td><code>*</code>
+ *     <td>Prefix or suffix boundary
+ *     <td>Yes
+ *     <td><strong><font face=helvetica color=red>NEW</font></strong>
+ *         Pad escape, precedes pad character
  * </table>
  * </blockquote>
  *
  * <p>A <code>DecimalFormat</code> pattern contains a postive and negative
  * subpattern, for example, "#,##0.00;(#,##0.00)".  Each subpattern has a
- * prefix, numeric part, and suffix.  If there is no explicit negative
- * subpattern, the localized minus sign, typically '-', is prefixed to the
- * positive form. That is, "0.00" alone is equivalent to "0.00;-0.00".  If there
+ * prefix, a numeric part, and a suffix.  If there is no explicit negative
+ * subpattern, the negative subpattern is the localized minus sign prefixed to the
+ * positive subpattern. That is, "0.00" alone is equivalent to "0.00;-0.00".  If there
  * is an explicit negative subpattern, it serves only to specify the negative
  * prefix and suffix; the number of digits, minimal digits, and other
- * characteristics are all the same as the positive pattern. That means that
+ * characteristics are ignored in the negative subpattern. That means that
  * "#,##0.0#;(#)" has precisely the same result as "#,##0.0#;(#,##0.0#)".
  *
  * <p>The prefixes, suffixes, and various symbols used for infinity, digits,
@@ -213,64 +228,112 @@ import java.io.ObjectInputStream;
  * values, and they will appear properly during formatting.  However, care must
  * be taken that the symbols and strings do not conflict, or parsing will be
  * unreliable.  For example, either the positive and negative prefixes or the
- * suffixes must be distinct for <code>DecimalFormat.parse()</code> to be able
+ * suffixes must be distinct for {@link #parse} to be able
  * to distinguish positive from negative values.  Another example is that the
  * decimal separator and thousands separator should be distinct characters, or
  * parsing will be impossible.
  *
- * <p>The grouping separator is commonly used for thousands, but in some
- * countries it separates ten-thousands. The grouping size is a constant number
- * of digits between the grouping characters, such as 3 for 100,000,000 or 4 for
- * 1,0000,0000.
- * If you supply a pattern with multiple grouping characters, the interval
- * between the last one and the end of the integer determines the primary
- * grouping size, and the interval between the last two determines
- * the secondary grouping size (see below); all others are ignored.
- * So "#,##,###,####" == "###,###,####" == "##,#,###,####".
- *
- * <P>Some locales have two different grouping intervals:  One used for the
- * least significant integer digits (the primary grouping size), and
- * one used for all others (the secondary grouping size).  For example,
- * if the primary grouping interval is 3, and the secondary is 2, then
- * this corresponds to the pattern "#,##,##0", and the number 123456789
- * is formatted as "12,34,56,789".
- *
- * <p><code>DecimalFormat</code> parses all Unicode characters that represent
- * decimal digits, as defined by <code>Character.digit()</code>.  In addition,
- * <code>DecimalFormat</code> also recognizes as digits the ten consecutive
- * characters starting with the localized zero digit defined in the
- * <code>DecimalFormatSymbols</code> object.  During formatting, the
- * <code>DecimalFormatSymbols</code>-based digits are output.
+ * <p>The <em>grouping separator</em> is a character that separates clusters of
+ * integer digits to make large numbers more legible.  It commonly used for
+ * thousands, but in some locales it separates ten-thousands.  The <em>grouping
+ * size</em> is the number of digits between the grouping separators, such as 3
+ * for "100,000,000" or 4 for "1 0000 0000". There are actually two different
+ * grouping sizes: One used for the least significant integer digits, the
+ * <em>primary grouping size</em>, and one used for all others, the
+ * <em>secondary grouping size</em>.  In most locales these are the same, but
+ * sometimes they are different. For example, if the primary grouping interval
+ * is 3, and the secondary is 2, then this corresponds to the pattern
+ * "#,##,##0", and the number 123456789 is formatted as "12,34,56,789".  If a
+ * pattern contains multiple grouping separators, the interval between the last
+ * one and the end of the integer defines the primary grouping size, and the
+ * interval between the last two defines the secondary grouping size. All others
+ * are ignored, so "#,##,###,####" == "###,###,####" == "##,#,###,####".
  *
  * <p>Illegal patterns, such as "#.#.#" or "#.###,###", will cause
- * <code>DecimalFormat</code> to throw an <code>IllegalArgumentException</code>
+ * <code>DecimalFormat</code> to throw an {@link IllegalArgumentException}
  * with a message that describes the problem.
  *
- * <p>If <code>DecimalFormat.parse(String, ParsePosition)</code> fails to parse
+ * <h4>Pattern BNF</h4>
+ *
+ * <pre>
+ * pattern    := subpattern (';' subpattern)?
+ * subpattern := prefix? number suffix?
+ * number     := integer ('.' fraction)? exponent?
+ * prefix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
+ * suffix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
+ * integer    := '#'* '0'* '0'
+ * fraction   := '0'* '#'*
+ * exponent   := 'E' '+'? '0'* '0'
+ * padSpec    := '*' padChar
+ * padChar    := '&#92;u0000'..'&#92;uFFFD' - quote
+ * &#32;
+ * Notation:
+ *   X*       0 or more instances of X
+ *   X?       0 or 1 instances of X
+ *   X..Y     any character from X up to Y, inclusive
+ *   S - T    characters in S, except those in T
+ * </pre>
+ * The first subpattern is for positive numbers. The second (optional)
+ * subpattern is for negative numbers.
+ * 
+ * <p>Not indicated in the BNF syntax above:
+ * <ul><li>The grouping separator ',' can occur inside the integer portion between the
+ * most significant digit and the least significant digit.
+ *
+ * <li><font color=red face=helvetica><strong>NEW</strong></font>
+ *     Two grouping intervals are recognized: That between the
+ *     decimal point and the first grouping symbol, and that
+ *     between the first and second grouping symbols. These
+ *     intervals are identical in most locales, but in some
+ *     locales they differ. For example, the pattern
+ *     &quot;#,##,###&quot; formats the number 123456789 as
+ *     &quot;12,34,56,789&quot;.</li>
+ * 
+ * <li>
+ * <strong><font face=helvetica color=red>NEW</font></strong>
+ * The pad specifier <code>padSpec</code> may appear before the prefix,
+ * after the prefix, before the suffix, after the suffix, or not at all.
+ *
+ * <li>
+ * <strong><font face=helvetica color=red>NEW</font></strong>
+ * In place of '0', the digits '1' through '9' may be used to
+ * indicate a rounding increment.
+ * </ul>
+ *
+ * <h4>Parsing</h4>
+ *
+ * <p><code>DecimalFormat</code> parses all Unicode characters that represent
+ * decimal digits, as defined by {@link UCharacter#digit}.  In addition,
+ * <code>DecimalFormat</code> also recognizes as digits the ten consecutive
+ * characters starting with the localized zero digit defined in the
+ * {@link DecimalFormatSymbols} object.  During formatting, the
+ * {@link DecimalFormatSymbols}-based digits are output.
+ *
+ * <p>If {@link #parse(String, ParsePosition)} fails to parse
  * a string, it returns <code>null</code> and leaves the parse position
- * unchanged.  The convenience method <code>DecimalFormat.parse(String)</code>
- * indicates parse failure by throwing a <code>ParseException</code>.
+ * unchanged.  The convenience method {@link #parse(String)}
+ * indicates parse failure by throwing a {@link java.text.ParseException}.
  *
- * <p><strong>Special Cases</strong>
+ * <p><strong>Special Values</strong>
  *
- * <p><code>NaN</code> is formatted as a single character, typically
+ * <p><code>NaN</code> is represented as a single character, typically
  * <code>&#92;uFFFD</code>.  This character is determined by the
- * <code>DecimalFormatSymbols</code> object.  This is the only value for which
+ * {@link DecimalFormatSymbols} object.  This is the only value for which
  * the prefixes and suffixes are not used.
  *
- * <p>Infinity is formatted as a single character, typically
+ * <p>Infinity is represented as a single character, typically
  * <code>&#92;u221E</code>, with the positive or negative prefixes and suffixes
  * applied.  The infinity character is determined by the
- * <code>DecimalFormatSymbols</code> object.
+ * {@link DecimalFormatSymbols} object.
  *
- * <p>
- * <strong>Scientific Notation</strong>
+ * <h4>Scientific Notation</h4>
  *
  * <p>Numbers in scientific notation are expressed as the product of a mantissa
- * and a power of ten, for example, 1234 can be expressed as 1.234 x 10^3.  The
- * mantissa is often in the range 1.0 <= x < 10.0, but it need not be.
- * <code>DecimalFormat</code> can be instructed to format and parse scientific
- * notation through the API or via a pattern.  In a pattern, the exponent
+ * and a power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
+ * mantissa is typically in the half-open interval [1.0, 10.0) or sometimes [0.0, 1.0),
+ * but it need not be.  <code>DecimalFormat</code> supports arbitrary mantissas.
+ * <code>DecimalFormat</code> can be instructed to use scientific
+ * notation through the API or through the pattern.  In a pattern, the exponent
  * character immediately followed by one or more digit characters indicates
  * scientific notation.  Example: "0.###E0" formats the number 1234 as
  * "1.234E3".
@@ -305,16 +368,16 @@ import java.io.ObjectInputStream;
  * <li>Exponential patterns may not contain grouping separators.
  * </ul>
  *
- * <p>
+ * <h4>
  * <strong><font face=helvetica color=red>NEW</font></strong>
- * <strong>Padding</strong>
+ * Padding</h4>
  *
  * <p><code>DecimalFormat</code> supports padding the result of
- * <code>format()</code> to a specific width.  Padding may be specified either
+ * {@link #format} to a specific width.  Padding may be specified either
  * through the API or through the pattern syntax.  In a pattern the pad escape
  * character, followed by a single pad character, causes padding to be parsed
  * and formatted.  The pad escape character is '*' in unlocalized patterns, and
- * can be localized using <code>DecimalFormatSymbols.setPadEscape()</code>.  For
+ * can be localized using {@link DecimalFormatSymbols#setPadEscape}.  For
  * example, <code>"$*x#,##0.00"</code> formats 123 to <code>"$xx123.00"</code>,
  * and 1234 to <code>"$1,234.00"</code>.
  *
@@ -322,6 +385,8 @@ import java.io.ObjectInputStream;
  * <li>When padding is in effect, the width of the positive subpattern,
  * including prefix and suffix, determines the format width.  For example, in
  * the pattern <code>"* #0 o''clock"</code>, the format width is 10.
+ *
+ * <li>The width is counted in 16-bit code units (Java <code>char</code>s).
  *
  * <li>Some parameters which usually do not matter have meaning when padding is
  * used, because the pattern width is significant with padding.  In the pattern
@@ -331,12 +396,16 @@ import java.io.ObjectInputStream;
  *
  * <li>Padding may be inserted at one of four locations: before the prefix,
  * after the prefix, before the suffix, or after the suffix.  If padding is
- * specified in any other location, <code>DecimalFormat.applyPattern()</code>
- * throws an <code>IllegalArgumentException</code>.  If there is no prefix,
- * before the prefix and after the prefix are equivalent, likewise for the
- * suffix.
+ * specified in any other location, {@link #applyPattern} throws an {@link
+ * IllegalArgumentException}.  If there is no prefix, before the
+ * prefix and after the prefix are equivalent, likewise for the suffix.
  *
- * <li>The pad character may not be a quote.
+ * <li>When specified in a pattern, the 16-bit <code>char</code> immediately
+ * following the pad escape is the pad character. This may be any character,
+ * including a special pattern character. That is, the pad escape
+ * <em>escapes</em> the following character. If there is no character after
+ * the pad escape, then the pattern is illegal.
+ *
  * </ul>
  *
  * <p>
@@ -355,9 +424,9 @@ import java.io.ObjectInputStream;
  * not affect parsing or change any numerical values.
  *
  * <li>A <em>rounding mode</em> determines how values are rounded; see the
- * <code>java.math.BigDecimal</code> documentation for a description of the
+ * {@link java.math.BigDecimal} documentation for a description of the
  * modes.  Rounding increments specified in patterns use the default mode,
- * <code>ROUND_HALF_EVEN</code>.
+ * {@link java.math.BigDecimal#ROUND_HALF_EVEN}.
  *
  * <li>Some locales use rounding in their currency formats to reflect the
  * smallest currency denomination.
@@ -366,96 +435,10 @@ import java.io.ObjectInputStream;
  * behave identically to digit '0'.
  * </ul>
  *
- * <p><strong>Pattern Syntax</strong>
- * <pre>
- * pattern    := subpattern{';' subpattern}
- * subpattern := {prefix}number{suffix}
- * number     := integer{'.' fraction}{exponent}
- * prefix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
- * suffix     := '&#92;u0000'..'&#92;uFFFD' - specialCharacters
- * integer    := '#'* '0'* '0'
- * fraction   := '0'* '#'*
- * exponent   := 'E' {'+'} '0'* '0'
- * padSpec    := '*' padChar
- * padChar    := '&#92;u0000'..'&#92;uFFFD' - quote
- * &#32;
- * Notation:
- *   X*       0 or more instances of X
- *   { X }    0 or 1 instances of X
- *   X..Y     any character from X up to Y, inclusive
- *   S - T    characters in S, except those in T
- * </pre>
- * The first subpattern is for positive numbers. The second (optional)
- * subpattern is for negative numbers.
- * 
- * <p>Not indicated in the BNF syntax above:
- * <ul><li>The grouping separator ',' can occur inside the integer portion between the
- * most significant digit and the least significant digit.
+ * <h4>Synchronization</h4>
  *
- * <li><font color=red face=helvetica><strong>NEW</strong></font>
- *     Two grouping intervals are recognized: That between the
- *     decimal point and the first grouping symbol, and that
- *     between the first and second grouping symbols. These
- *     intervals are identical in most locales, but in some
- *     locales they differ. For example, the pattern
- *     &quot;#,##,###&quot; formats the number 123456789 as
- *     &quot;12,34,56,789&quot;.</li>
- * 
- * <li>
- * <strong><font face=helvetica color=red>NEW</font></strong>
- * The pad specifier <code>padSpec</code> may appear before the prefix,
- * after the prefix, before the suffix, after the suffix, or not at all.
- *
- * <li>
- * <strong><font face=helvetica color=red>NEW</font></strong>
- * In place of '0', the digits '1' through '9' may be used to
- * indicate a rounding increment.
- * </ul>
- *
- * <p><strong>Special Pattern Characters</strong>
- *
- * <p>Here are the special characters used in the pattern, with notes on their
- * usage.  Special characters must be quoted, unless noted otherwise, if they
- * are to appear in the prefix or suffix.  This does not apply to those listed
- * with location "prefix or suffix."  Such characters should only be quoted in
- * order to remove their special meaning.
- *
- * <p><table border=1>
- * <tr><th>Symbol<th>Location<th>Meaning</tr>
- * <tr><td>0-9<td>Number<td>Digit.
- *                  <strong><font face=helvetica color=red>NEW</font></strong>
- *                  '1' through '9' indicate rounding</tr>
- * <tr><td>#<td>Number<td>Digit, zero shows as absent</tr>
- * <tr><td>.<td>Number<td>Decimal separator or monetary decimal separator</tr>
- * <tr><td>,<td>Number<td>Grouping separator</tr>
- * <tr><td>E<td>Number
- *          <td>Separates mantissa and exponent in scientific notation.
- *              <em>Need not be quoted in prefix or suffix.</em></tr>
- * <tr><td><strong><font face=helvetica color=red>NEW</font></strong>
- *         +<td>Exponent
- *          <td>Prefix positive exponents with localized plus sign.
- *              <em>Need not be quoted in prefix or suffix.</em></tr>
- * <tr><td>;<td>Subpattern boundary
- *          <td>Separates positive and negative subpatterns</tr>
- * <tr><td>%<td>Prefix or suffix<td>Multiply by 100 and show as percentage</tr>
- * <tr><td>&#92;u2030<td>Prefix or suffix
- *                   <td>Multiply by 1000 and show as per mille</tr>
- * <tr><td>&#92;u00A4<td>Prefix or suffix
- *                   <td>Currency sign, replaced by currency symbol.  If
- *                   doubled, replaced by international currency symbol.
- *                   If present in a pattern, the monetary decimal separator
- *                   is used instead of the decimal separator.</tr>
- * <tr><td>'<td>Prefix or suffix
- *          <td>Used to quote special characters in a prefix or suffix,
- *              for example, <code>"'#'#"</code> formats 123 to
- *              <code>"#123"</code>.  To create a single quote
- *              itself, use two in a row: <code>"# o''clock"</code>.</tr>
- * <tr><td><strong><font face=helvetica color=red>NEW</font></strong>
- *         *<td>Prefix or suffix boundary
- *          <td>Pad escape, precedes pad character</tr>
- * </table>
- * </pre>
- *
+ * <p><code>DecimalFormat</code> objects are not synchronized.  Multiple
+ * threads should not access one formatter concurrently.
  *
  * @see          java.text.Format
  * @see          NumberFormat
@@ -1336,18 +1319,18 @@ public class DecimalFormat extends NumberFormat {
                 char ch = text.charAt(position);
 
                 /* We recognize all digit ranges, not only the Latin digit range
-                 * '0'..'9'.  We do so by using the Character.digit() method,
+                 * '0'..'9'.  We do so by using the UCharacter.digit() method,
                  * which converts a valid Unicode digit to the range 0..9.
                  *
                  * The character 'ch' may be a digit.  If so, place its value
                  * from 0 to 9 in 'digit'.  First try using the locale digit,
                  * which may or MAY NOT be a standard Unicode digit range.  If
                  * this fails, try using the standard Unicode digit ranges by
-                 * calling Character.digit().  If this also fails, digit will
+                 * calling UCharacter.digit().  If this also fails, digit will
                  * have a value outside the range 0..9.
                  */
                 digit = ch - zero;
-                if (digit < 0 || digit > 9) digit = Character.digit(ch, 10);
+                if (digit < 0 || digit > 9) digit = UCharacter.digit(ch, 10);
 
                 if (digit == 0)
                 {
@@ -1427,7 +1410,7 @@ public class DecimalFormat extends NumberFormat {
                               code:  digit = Character.digit(ch, 10);
                               [Richard/GCL]
                             */
-                            digit = Character.digit(text.charAt(pos), 10);
+                            digit = UCharacter.digit(text.charAt(pos), 10);
                         }
                         if (digit >= 0 && digit <= 9) {
                             exponentDigits.append((char)(digit + '0'));
@@ -2079,8 +2062,9 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
-     * Set the character used to pad to the format width.  This has no effect
-     * unless padding is enabled.
+     * Set the character used to pad to the format width.  If padding
+     * is not enabled, then this will take effect if padding is later
+     * enabled.
      * @param padChar the pad character
      * @see #setFormatWidth
      * @see #getFormatWidth
