@@ -793,7 +793,7 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
 }
 
 
-U_INLINE void 
+static U_INLINE void 
 CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args, 
                                const UChar* source, 
                                unsigned char** target, 
@@ -803,7 +803,7 @@ CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args,
                                int len, 
                                UErrorCode* err);
 
-U_INLINE  void 
+static U_INLINE void 
 MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          UChar32 c,  
                                          uint32_t* value, 
@@ -811,13 +811,13 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          int* length, 
                                          int outputType);
 
-U_INLINE void 
+static U_INLINE void 
 MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
                                        UChar32 c, 
                                        uint32_t* retval, 
                                        UBool useFallback);
 
-U_INLINE void 
+static U_INLINE void 
 CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args, 
                                const UChar* source, 
                                unsigned char** target, 
@@ -850,7 +850,7 @@ CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args,
  * any future change in _MBCSFromUChar32() function should be reflected in 
  * this macro
  */
-U_INLINE  void 
+static U_INLINE void 
 MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          UChar32 c,  
                                          uint32_t* value, 
@@ -904,11 +904,12 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
         *length=0;
     }
 }
+
 /* This inline function replicates code in _MBCSSingleFromUChar32() function in ucnvmbcs.c
  * any future change in _MBCSSingleFromUChar32() function should be reflected in 
  * this macro
  */
-U_INLINE void 
+static U_INLINE void 
 MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
                                        UChar32 c, 
                                        uint32_t* retval, 
