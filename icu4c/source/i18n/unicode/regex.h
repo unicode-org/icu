@@ -60,6 +60,7 @@ class UnicodeSet;
 struct REStackFrame;
 struct Regex8BitSet;
 class  RuleBasedBreakIterator;
+class  RegexCImpl;
 
 
 
@@ -383,6 +384,7 @@ private:
 
     friend class RegexCompile;
     friend class RegexMatcher;
+    friend class RegexCImpl;
 
     //
     //  Implementation Methods
@@ -817,6 +819,7 @@ private:
     RegexMatcher(const RegexMatcher &other);
     RegexMatcher &operator =(const RegexMatcher &rhs);
     friend class RegexPattern;
+    friend class RegexCImpl;
 
 
     //
@@ -856,6 +859,7 @@ private:
                                            //   reported, or that permanently disables this matcher.
 
     RuleBasedBreakIterator  *fWordBreakItr;
+
 
 };
 
