@@ -803,7 +803,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         int32_t  totest1Offs[]        = { 0, 1, 2, 3, 5, }; 
 
         const uint8_t test1input[]    = { 0x00, 0x05, 0x06, 0x07, 0x08, 0x09};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0xdbc4, 0xde34, 0xfffd, 0xfffd};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0xdbc4, 0xde34, 0xfffd, 0xfffd};
         int32_t fromtest1Offs[]       = { 0, 1, 2, 3, 3, 4, 5};
 
         /*from Unicode*/
@@ -828,7 +828,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         int32_t  totest3Offs[]        = { 0, 1, 2, 3, 3, 3, 4, 6, 6, 6, 8}; 
 
         const uint8_t test3input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x0b,  0x07,  0x01, 0x02, 0x0a, 0x01, 0x02, 0x0c,};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
         int32_t fromtest3Offs[]       = { 0, 1, 2, 3, 6, 6, 7, 7, 10 };
 
         /*from Unicode*/
@@ -853,7 +853,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         int32_t  totest4Offs[]        = { 0, 1, 2, 3, 3, 3, 3, 4, 6, 6, 6, 6, 8,}; 
 
         const uint8_t test4input[]    = { 0x00, 0x05, 0x06, 0x01, 0x02, 0x03, 0x0b,  0x07,  0x01, 0x02, 0x03, 0x0a, 0x01, 0x02, 0x03, 0x0c,};
-        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0xfffd, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
+        const UChar expectedUnicode[] = { 0x20ac, 0x0005, 0x0006, 0x000b, 0xdbc4, 0xde34, 0xd84d, 0xdc56, 0xfffd};
         int32_t fromtest4Offs[]       = { 0, 1, 2, 3, 7, 7, 8, 8, 12,};
 
         /*from Unicode*/
