@@ -8,6 +8,8 @@
 #
 #	12/10/1999	weiv	Created
 
+U_ICUDATA_NAME=icudt17l
+
 #If no config, we default to debug
 !IF "$(CFG)" == ""
 CFG=Debug
@@ -44,7 +46,7 @@ TESTDATA=$(ICUP)\source\test\testdata
 DLL_OUTPUT=$(ICUP)\bin
 TESTDATAOUT=$(TESTDATA)
 #TESTDATAOUT=$(DLL_OUTPUT)
-!MESSAGE ICU_DATA is not set! icudata.dll will go to $(DLL_OUTPUT)
+!MESSAGE ICU_DATA is not set! $(U_ICUDATA_NAME).dll will go to $(DLL_OUTPUT)
 !ELSE
 DLL_OUTPUT=$(ICUDATA)
 TESTDATAOUT=$(TESTDATA)
@@ -70,7 +72,7 @@ NULL=
 NULL=nul
 !ENDIF
 
-# Adjust the path to find DLLs. If icudata.dll really needs to be in $(ICUP)\bin\$(CFG),
+# Adjust the path to find DLLs. If $(U_ICUDATA_NAME).dll really needs to be in $(ICUP)\bin\$(CFG),
 # then add $(ICUP)\bin\$(CFG) to this path, as the other DLLs are in $(ICUP)\bin.
 PATH = $(PATH);$(ICUP)\bin
 
@@ -108,15 +110,15 @@ RB_FILES = $(GENRB_SOURCE:.txt=.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  test.dat  "$(DLL_OUTPUT))\testdat1.dll" "$(DLL_OUTPUT))\testdat2.dll" "$(DLL_OUTPUT)\icudata.dll" test1.cnv test3.cnv test4.cnv GOBACK #icudata.dat
+ALL : GODATA  test.dat  "$(DLL_OUTPUT))\testdat1.dll" "$(DLL_OUTPUT))\testdat2.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" test1.cnv test3.cnv test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
 	@echo All targets are up to date
 
 BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
 
 #invoke pkgdata
-"$(DLL_OUTPUT)\icudata.dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(RB_FILES) $(TRANSLIT_FILES)
 	@echo Building icu data
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p icudata -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(ICUDATA)" <<pkgdatain.txt
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(ICUDATA)" <<pkgdatain.txt
 uprops.dat
 unames.dat
 cnvalias.dat
@@ -197,7 +199,7 @@ CLEAN :
 	-@erase "tz*.*"
 	-@erase "ibm*_cnv.c"
 	-@erase "*_brk.c"
-	-@erase "icudata.*"
+	-@erase "icudt*.*"
 	-@erase "*.obj"
 	-@erase "sent.brk"
 	-@erase "char.brk"
