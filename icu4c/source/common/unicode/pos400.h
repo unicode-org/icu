@@ -55,6 +55,8 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 1
 
+#define HAVE_DLOPEN     0
+
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
 #define ICU_USE_THREADS 1
 
@@ -124,9 +126,22 @@ as/400 machines.
 /* Information about wchar support                                           */
 /*===========================================================================*/
 
+#define U_HAVE_WCHAR_H   1
 #define U_SIZEOF_WCHAR_T 2
 
 #define U_HAVE_WCSCPY    1
+
+/*===========================================================================*/
+/* Information about POSIX support                                           */
+/*===========================================================================*/
+
+#define U_HAVE_NL_LANGINFO              0
+#define U_HAVE_NL_LANGINFO_CODESET      0
+#define U_NL_LANGINFO_CODESET
+
+#define U_TZSET
+#define U_TIMEZONE
+#define U_TZNAME
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
