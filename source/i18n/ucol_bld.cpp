@@ -674,33 +674,6 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
           len--;
         }
       }
-#if 0 
-      /* old version, works bad for expansions longer than one */
-      if((expt = (UColToken *)uhash_get(tailored, (void *)tok->expansion)) != NULL) { /* expansion is tailored */
-        /* just copy CEs from tailored token to this one */
-        for(i = 0; i<expt->noOfCEs; i++) {
-          tok->expCEs[i] = expt->CEs[i];
-        }
-        tok->noOfExpCEs = expt->noOfCEs;
-      } else { /* need to pick it from the UCA */
-        /* first, get the UChars from the rules */
-        /* then pick CEs out until there is no more and stuff them into expansion */
-        UChar source[256],buff[256];
-        collIterate s;
-        uint32_t order = 0;
-        uprv_memcpy(buff, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
-        unorm_normalize(buff, len, UNORM_NFD, 0, source, 256, status);
-        init_collIterate(src->UCA, source, len, &s);
-
-        for(;;) {
-          UCOL_GETNEXTCE(order, src->UCA, s, status);
-          if(order == UCOL_NO_MORE_CES) {
-              break;
-          }
-          tok->expCEs[tok->noOfExpCEs++] = order;
-        }
-      }
-#endif
     } else {
       tok->noOfExpCEs = 0;
     }
@@ -774,58 +747,145 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
 
 }
 
-/* These are some normalizer constants */
-#define STR_INDEX_SHIFT  2 //Must agree with the constants used in NormalizerBuilder
-#define STR_LENGTH_MASK 0x0003
 
-int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
-    /* either 0 or MAX_COMPAT = 11177 if we want just canonical */
-    int32_t minDecomp = 11177;
-    int32_t resSize = 0;
-    uint16_t offset = ucmp16_getu(DecompData::offsets, curChar);
-    uint16_t index  = (uint16_t)(offset & DecompData::DECOMP_MASK);
+/* This function handles the special CEs like contractions, expansions, surrogates, Thai */
+/* It is called by both getNextCE and getNextUCA                                         */
+uint32_t uprv_getSpecialDynamicCE(const tempUCATable *t, uint32_t CE, collIterate *source, UErrorCode *status) {
+  uint32_t i = 0; /* general counter */
+  uint32_t firstCE = UCOL_NOT_FOUND;
+  UChar *firstUChar = source->pos;
+  //uint32_t CE = *source->CEpos;
+  for (;;) {
+    const uint32_t *CEOffset = NULL;
+    const UChar *UCharOffset = NULL;
+    UChar schar, tchar;
+    uint32_t size = 0;
+    switch(getCETag(CE)) {
+    case NOT_FOUND_TAG:
+      /* This one is not found, and we'll let somebody else bother about it... no more games */
+      return CE;
+    case CHARSET_TAG:
+    case SURROGATE_TAG:
+      return UCOL_NOT_FOUND;
+    case CONTRACTION_TAG:
+      /* This should handle contractions */
+      for (;;) {
+        /* First we position ourselves at the begining of contraction sequence */
+        /*const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);*/
+        ContractionTable *ctb = t->contractions->elements[getContractOffset(CE)];
+        const UChar *ContractionStart = UCharOffset = ctb->codePoints;
 
-    if (index > minDecomp) {
-        if ((offset & DecompData::DECOMP_RECURSE) != 0) {
-            // Let Normalizer::decompose() handle recursive decomp
-            UnicodeString temp(curChar);
-            UnicodeString res;
-            UErrorCode status = U_ZERO_ERROR;
-            Normalizer::decompose(temp, minDecomp > 0,
-                                  /*hangul ? Normalizer::IGNORE_HANGUL : 0,*/
-                                  Normalizer::IGNORE_HANGUL,
-                                  res, status);
-            resSize = uprv_fillOutputString(res, result, 356, &status);
-
-        } else {
-          const UChar *source = (const UChar*)&(DecompData::contents);
-            uint16_t ind = (int16_t)(index >> STR_INDEX_SHIFT);
-            uint16_t length = (int16_t)(index & STR_LENGTH_MASK);
-
-            if (length == 0) {
-                UChar ch;
-                while ((ch = source[ind++]) != 0x0000) {
-                    result[resSize++] = ch;
-                }
-            } else {
-                while (length-- > 0) {
-                    result[resSize++] = source[ind++];
-                }
+        if (source->pos>=source->endp) { 
+                                           /* this is the end of string.  (Null terminated handled later,
+                                            when the null doesn't match the contraction sequence.)     */
+          {
+            /*CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));*/ /* So we'll pick whatever we have at the point... */
+            CE = *(ctb->CEs+(UCharOffset - ContractionStart)); /* So we'll pick whatever we have at the point... */
+            if (CE == UCOL_NOT_FOUND) {
+              source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
+              if(firstCE != UCOL_NOT_FOUND) {
+                CE = firstCE;
+              }
             }
+          }
+          break;
         }
-        return resSize;
-    } 
-#if 0
-    else if (hangul && curChar >= Normalizer::HANGUL_BASE && curChar < Normalizer::HANGUL_LIMIT) {
-        Normalizer::hangulToJamo(curChar, result, (uint16_t)minDecomp);
-        /* this has something to do with jamo hangul, check tomorrow */
-    } 
-#endif
-    else {
-        /*result += curChar;  this doesn't decompose */
-      return 0;
-    }
 
+        /* we need to convey the notion of having a backward search - most probably through the context object */
+        /* if (backwardsSearch) offset += contractionUChars[(int16_t)offset]; else UCharOffset++;  */
+        UCharOffset++; /* skip the backward offset, see above */
+
+
+        schar = *source->pos++;
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          UCharOffset++;
+        }
+        if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
+          UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
+          /*source->pos = firstUChar; *//* spit all the not found chars, which led us in this contraction */
+          source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
+        } 
+        /*CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));*/
+        CE = *(ctb->CEs + (UCharOffset - ContractionStart));
+
+        if(CE == UCOL_NOT_FOUND) {
+          source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
+          if(firstCE != UCOL_NOT_FOUND) {
+            CE = firstCE;
+          }
+          break;
+        } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
+        /* this is contraction, and we will continue. However, we can fail along the */
+        /* th road, which means that we have part of contraction correct */
+          /*uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));*/
+          uint32_t tempCE = *(ctb->CEs);
+          if(tempCE != UCOL_NOT_FOUND) {
+            firstCE = *(ctb->CEs);
+            /*firstCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));*/
+            firstUChar = source->pos-1;
+          }
+        } else {
+          break;
+        }
+      }
+      break;
+    case EXPANSION_TAG:
+    case THAI_TAG:
+      /* This should handle expansion. */
+      /* NOTE: we can encounter both continuations and expansions in an expansion! */
+      /* I have to decide where continuations are going to be dealt with */
+      CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (headersize>>2)); /* find the offset to expansion table */
+      size = getExpansionCount(CE);
+      CE = *CEOffset++;
+      if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+        for(i = 1; i<size; i++) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      } else { /* else, we do */
+        while(*CEOffset != 0) {
+          *(source->CEpos++) = *CEOffset++;
+        }
+      }
+      return CE;
+    default:
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      CE=0;
+      break;
+    }
+    if (CE <= UCOL_NOT_FOUND) break;
+  }
+  return CE;
+}
+
+uint32_t uprv_ucol_getNextDynamicCE(tempUCATable *t, collIterate *collationSource, UErrorCode *status) {
+  uint32_t order;
+  if (collationSource->CEpos > collationSource->toReturn) {       /* Are there any CEs from previous expansions? */
+    order = *(collationSource->toReturn++);                         /* if so, return them */
+    if(collationSource->CEpos == collationSource->toReturn) {
+      collationSource->CEpos = collationSource->toReturn = collationSource->CEs; 
+    }
+    return order;
+  }
+
+  UChar ch;
+
+  if (collationSource->pos >= collationSource->endp) {
+      // Ran off of the end of the main source string.  We're done.
+      return UCOL_NO_MORE_CES;
+  }
+  ch = *collationSource->pos++;
+
+  order = ucmp32_get(t->mapping, ch);                        /* we'll go for slightly slower trie */
+
+  if(order >= UCOL_NOT_FOUND) {                                   /* if a CE is special */
+    order = uprv_getSpecialDynamicCE(t, order, collationSource, status);       /* and try to get the special CE */
+
+    if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
+      order = ucol_getNextUCA(ch, collationSource, status);
+    }
+  } 
+
+  return order; /* return the CE */
 }
 
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
@@ -838,101 +898,12 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
 
   init_collIterate(src->UCA, decomp, noOfDec, &colIt);
 
-  
-  while(j<noOfDec) {
-    colIt.pos = decomp+j;
-    CE = ucmp32_get(t->mapping, decomp[j]);
-    if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
-      if(lastNotFound) {
-        lastNotFound = FALSE;
-        j = firstIndex;
-      }
-      if(firstFound == UCOL_NOT_FOUND) {
-        colIt.pos++;
-        CE = ucol_getNextUCA(decomp[j], &colIt, status);
-        result[resLen++] = CE;
-        while(colIt.CEpos>colIt.toReturn) {
-          result[resLen++] = *(colIt.toReturn)++;
-        }
-        colIt.CEpos = colIt.toReturn = colIt.CEs;
-        j = colIt.pos - colIt.string-1;
-      } else { /* there was some stuff found in contraction */
-        result[resLen++] = firstFound;
-        j = firstIndex;
-        firstFound = UCOL_NOT_FOUND;
-        //firstIndex = 0;
-        continue;
-      }
-
-    } else if(CE < UCOL_NOT_FOUND) { /*normal CE */
-      result[resLen++] = CE;
-    } else { /* special CE, contraction, expansion or Thai */
-      for(;;) {
-        uint32_t tag = getCETag(CE);
-        if(tag == THAI_TAG || tag == EXPANSION_TAG) {
-            uint32_t *CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (headersize>>2)); /* find the offset to expansion table */
-            uint32_t size = getExpansionCount(CE);
-            if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
-              for(i = 0; i<size; i++) {
-                 result[resLen++] = *CEOffset++;
-              }
-            } else { /* else, we do */
-              while(*CEOffset != 0) {
-                result[resLen++] = *CEOffset++;
-              }
-            }
-            break;
-        } else if(tag == CONTRACTION_TAG) {
-            ContractionTable *ctb = t->contractions->elements[getContractOffset(CE)];
-            UChar c = decomp[++j];
-            /* what if this is already over */
-            i = 0;
-            while(c > ctb->codePoints[i] && i < ctb->position) {
-              i++;
-            }
-            if(c == ctb->codePoints[i] && j<noOfDec) {
-              CE = ctb->CEs[i];
-            } else {
-              CE = ctb->CEs[0];
-              j--;
-            }
-            if(CE == UCOL_NOT_FOUND) {
-              lastNotFound = TRUE;
-              j--;
-              break;
-            } else if(CE > UCOL_NOT_FOUND) {
-              if((tag = getCETag(CE)) == CONTRACTION_TAG) { 
-              /* this is tricky - we're not closed, so for Japanese, */
-              /*  we want to record the first success */
-              /* i.e. 0x30D0 decomposes to 0x30CF 0x3099 */
-              /* 0x30CF is contraction in table */
-              /* there are no 0x30CF 0x3099 in table, but there are   */
-              /* longer contractions. If we don't note that we're already */
-              /* had something, we'll return not found and pick the wrong */
-              /* guys from UCA. I think getComplicatedCE needs to be checked */
-              /* for this type of error */
-                if(ctb->CEs[0] != UCOL_NOT_FOUND) {
-                  firstFound = ctb->CEs[0];
-                  firstIndex = j-1;
-                }
-              }
-                continue;
-            } else {
-              result[resLen++] = CE;
-              break;
-            }
-        }
-      }
-
-    }
-    if(resLen >= resultSize) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    j++;
-    if(!lastNotFound) {
-      firstIndex = j;
-    }
+  result[resLen] = uprv_ucol_getNextDynamicCE(t, &colIt, status);
+  while(result[resLen] != UCOL_NO_MORE_CES) {
+    resLen++;
+    result[resLen] = uprv_ucol_getNextDynamicCE(t, &colIt, status);
   }
+
   return resLen;
 }
   
