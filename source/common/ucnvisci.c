@@ -1461,17 +1461,21 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
     int32_t idx;
     int32_t fromUnicodeDelta;
     uint8_t offset;
+    static const uint8_t versionToScriptOffset[MALAYALAM+1] = {
+    /*  0, 1, 2, 3, 4, 5, 6, 7, 8 */
+        0, 4, 1, 2, 3, 7, 5, 5, 6
+    };
     if (cnv->options > MALAYALAM) {
         /* sanity check */
         *pErrorCode = U_UNSUPPORTED_ERROR;
         return;
     }
+    offset = versionToScriptOffset[cnv->options];
     fromUnicodeDelta = ((UConverterDataISCII*)(cnv->extraInfo))->currentDeltaFromUnicode;
-    offset = (uint8_t)(cnv->options - (cnv->options >= KANNADA)); /* Kannada and Telegu are merged */
 
     for (idx = 0; idx < DELTA; idx++) {
         if ((validityTable[idx] << offset) & DELTA) {
-            uset_add(set, fromUnicodeTable[idx] + fromUnicodeDelta + INDIC_BLOCK_BEGIN - ASCII_END);
+            uset_add(set, idx + fromUnicodeDelta + INDIC_BLOCK_BEGIN);
         }
     }
     if (cnv->options <= ORIYA) {
