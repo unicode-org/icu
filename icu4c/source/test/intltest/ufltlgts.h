@@ -60,7 +60,7 @@ public:
                                 const UnicodeString& source,
                                 const UnicodeString& expectedResult);
 
-	void UnicodeFilterLogicTest::expectAux(const UnicodeString& tag,
+	void expectAux(const UnicodeString& tag,
                                    const UnicodeString& summary, bool_t pass,
                                    const UnicodeString& expectedResult); 
 
