@@ -32,8 +32,6 @@ static void TestResourceBundles(void);
 **/
 static void TestConstruction1(void);
 
-static void TestConstruction2(void);
-
 static void TestAliasConflict(void);
 
 static void TestFallback(void);
