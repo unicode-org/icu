@@ -561,17 +561,18 @@ static void TestOffset()
     int32_t offset;
     int32_t *orders;
     int32_t orderLength=0;
+    int     count = 0;
     test1=(UChar*)malloc(sizeof(UChar) * 50);
     test2=(UChar*)malloc(sizeof(UChar) * 50);
     u_uastrcpy(test1, "What subset of all possible test cases?");
     u_uastrcpy(test2, "has the highest probability of detecting");
     en_us = ucol_open("en_US", &status);
     log_verbose("Testing getOffset and setOffset for CollationElements\n");
-    iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
+    iter = ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
-    ucol_close(en_us);
+        ucol_close(en_us);
         return;
     }
     /* Run all the way through the iterator, then get the offset */
@@ -609,6 +610,68 @@ static void TestOffset()
     ucol_closeElements(pristine);
     ucol_closeElements(iter);
     free(orders);
+
+    /* testing offsets in normalization buffer */
+    test1[0] = 0x61;
+    test1[1] = 0x300;
+    test1[2] = 0x316;
+    test1[3] = 0x62;
+    test1[4] = 0;
+    ucol_setAttribute(en_us, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    iter = ucol_openElements(en_us, test1, 4, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
+            myErrorName(status));
+        ucol_close(en_us);
+        return;
+    }
+
+    count = 0;
+    while (ucol_next(iter, &status) != UCOL_NULLORDER &&
+        U_SUCCESS(status)) {
+        switch (count) {
+        case 0:
+            if (ucol_getOffset(iter) != 1) {
+                log_err("ERROR: Offset of iteration should be 0\n");
+            }
+            break;
+        case 3:
+            if (ucol_getOffset(iter) != 4) {
+                log_err("ERROR: Offset of iteration should be 4\n");
+            }
+            break;
+        default:
+            if (ucol_getOffset(iter) != 3) {
+                log_err("ERROR: Offset of iteration should be 3\n");
+            }
+        }
+        count ++;
+    }
+
+    ucol_reset(iter);
+    count = 0;
+    while (ucol_previous(iter, &status) != UCOL_NULLORDER &&
+        U_SUCCESS(status)) {
+        switch (count) {
+        case 0:
+            if (ucol_getOffset(iter) != 3) {
+                log_err("ERROR: Offset of iteration should be 3\n");
+            }
+            break;
+        default:
+            if (ucol_getOffset(iter) != 0) {
+                log_err("ERROR: Offset of iteration should be 0\n");
+            }
+        }
+        count ++;
+    }
+    
+    if(U_FAILURE(status)){
+        log_err("ERROR: in iterating collation elements %s\n",
+            myErrorName(status));
+    }
+
+    ucol_closeElements(iter);
     ucol_close(en_us);
     free(test1);
     free(test2);
