@@ -1608,6 +1608,8 @@ static void TestUScriptCodeAPI(){
         "ucas", "arabic",
         /* test bogus */
         "asfdasd", "5464", "12235",
+        /* test the last index */
+        "zyyy", "YI",
         '\0'  
         };
         UScriptCode expected[] ={
@@ -1630,6 +1632,7 @@ static void TestUScriptCodeAPI(){
             USCRIPT_UCAS, USCRIPT_ARABIC,
             /* bogus names should return invalid code */
             USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
+            USCRIPT_YI, USCRIPT_YI,
         };
 
         UErrorCode err = U_ZERO_ERROR;
@@ -1757,12 +1760,13 @@ static void TestUScriptCodeAPI(){
                 0x0001D1AA, /* USCRIPT_INHERITED*/
                 0x00020000, /* USCRIPT_HAN*/
                 0x00000D02, /* USCRIPT_MALAYALAM*/
-                0x00000D00, /* USCRIPT_INVALID_CODE */
+                0x00000D00, /* USCRIPT_COMMON */
                 0x00000000, /* USCRIPT_COMMON*/
                 0x0001D169, /* USCRIPT_INHERITED*/
                 0x0001D182, /* USCRIPT_INHERITED*/
                 0x0001D18B, /* USCRIPT_INHERITED*/
                 0x0001D1AD, /* USCRIPT_INHERITED*/
+                0x00110000, /* USCRIPT_INVALID_CODE */
         };
 
         UScriptCode expected[] = {
@@ -1783,12 +1787,13 @@ static void TestUScriptCodeAPI(){
                 USCRIPT_INHERITED,
                 USCRIPT_HAN ,
                 USCRIPT_MALAYALAM,
-                USCRIPT_INVALID_CODE,
+                USCRIPT_COMMON,
                 USCRIPT_COMMON,
                 USCRIPT_INHERITED ,
                 USCRIPT_INHERITED ,
                 USCRIPT_INHERITED ,
                 USCRIPT_INHERITED ,
+                USCRIPT_INVALID_CODE,
         };
         UScriptCode code = USCRIPT_INVALID_CODE;
         UErrorCode status = U_ZERO_ERROR;
