@@ -52,10 +52,21 @@ void u_cleanup(void)
     locale_cleanup();
     uloc_cleanup();
     ustring_cleanup();
+    UnicodeConverter_cleanup(); /* <-- deprecated code */
     ucnv_cleanup();
     ucnv_io_cleanup();
     ures_cleanup();
     udata_cleanup();
     putil_cleanup();
+
+    /*
+     * WARNING! Destroying the global mutex can cause synchronization
+     * problems.  ICU must be reinitialized from a single thread
+     * before the library is used again.  You never want two
+     * threads trying to initialize the global mutex at the same
+     * time. The global mutex is being destroyed so that heap and
+     * resource checkers don't complain. [grhoten]
+     */
+    umtx_destroy(NULL);
 }
 
