@@ -495,5 +495,23 @@ nl {
     MonthAbbreviations_islamic-civil:alias {
         "nl/MonthAbbreviations_islamic"
     }
+    MonthNames_hebrew {
+                "Tisjrie",      // Tishri
+                "Chesjwan",     // Heshvan
+                "Kislev",       // Kislev
+                "Tevet",        // Tevet
+                "Sjevat",       // Shevat
+                "Adar",         // Adar I
+                "Adar B",       // Adar
+                "Nisan",        // Nisan
+                "Ijar",         // Iyar
+                "Sivan",        // Sivan
+                "Tammoez",      // Tamuz
+                "Av",           // Av
+                "Elloel",       // Elul
+    }
+    MonthAbbreviations_hebrew:alias {
+       "nl/MonthNames_hebrew" // no data
+    }
 
 }
