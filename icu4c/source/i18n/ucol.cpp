@@ -54,11 +54,10 @@ extern "C" UBool checkFCD(const UChar*, int32_t, UErrorCode*);
 
 /* Fixup table a la Markus */
 /* see http://www.ibm.com/software/developer/library/utf16.html for further explanation */
-static uint8_t utf16fixup[32] = {
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
+static const UChar utf16Fixup[32]={
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0x2000, 0xf800, 0xf800, 0xf800, 0xf800
 };
 
 static UBool U_CALLCONV
@@ -4342,6 +4341,32 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
   }
 }
 
+/* String compare in code point order - u_strcmp() compares in code unit order. */
+U_CFUNC int32_t 
+u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t     n) {
+    UChar c1, c2;
+    int32_t diff;
+
+    /* rotate each code unit's value so that surrogates get the highest values */
+    if(n > 0) {
+      for(;;) {
+          c1=*s1;
+          c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
+          c2=*s2;
+          c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
+        
+          /* now c1 and c2 are in UTF-32-compatible order */
+          diff=(int32_t)c1-(int32_t)c2;
+          if(diff!=0 || --n == 0) {
+              return diff;
+          }
+          ++s1;
+          ++s2;
+      }
+    } else {
+      return 0;
+    }
+}
 
 
 /****************************************************************************/
