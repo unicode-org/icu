@@ -41,7 +41,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
         return;
     }
     
-    uprv_strcpy(tmp, LIB_PREFIX "$(NAME)" UDATA_SO_SUFFIX);
+    uprv_strcpy(tmp, LIB_PREFIX "$(LIBNAME)" UDATA_SO_SUFFIX);
     
     /* We should be the only item. So we don't care about the order. */
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
@@ -60,11 +60,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     
     /*390port start*/
 #ifdef OS390BATCH
-    if (uprv_strcmp(o->shortName, U_LIBICUDATA_NAME) == 0)
+    if (uprv_strcmp(o->libName, U_LIBICUDATA_NAME) == 0)
         sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMI" U_ICU_VERSION_SHORT "DA)'\"\n\n");
-    else if (uprv_strcmp(o->shortName, "testdata") == 0)
+    else if (uprv_strcmp(o->libName, "testdata") == 0)
         sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMI" U_ICU_VERSION_SHORT "TE)'\"\n\n");
-    else if (uprv_strcmp(o->shortName, U_LIBICUDATA_NAME"_stub") == 0)
+    else if (uprv_strcmp(o->libName, U_LIBICUDATA_NAME"_stub") == 0)
         sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMI" U_ICU_VERSION_SHORT "D1)'\"\n\n");
     T_FileStream_writeLine(makefile, tmp);
 #endif
@@ -145,9 +145,14 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     
     T_FileStream_writeLine(makefile, "# 'TOCOBJ' contains C Table of Contents objects [if any]\n");
     
-    sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
-                 "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
-    
+    if(!o->embed) {
+      sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
+                 "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -s $(SRCDIR) -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
+    } else {
+      sprintf(tmp, "$(TEMP_DIR)/$(NAME)_dat.c: $(CMNLIST)\n"
+                 "\t$(INVOKE) $(GENCMN) -e $(ENTRYPOINT) -n $(NAME) -S -E -d $(TEMP_DIR) 0 $(CMNLIST)\n\n");
+    }
+
     T_FileStream_writeLine(makefile, tmp);
     sprintf(tmp, "TOCOBJ= $(NAME)_dat%s \n\n", OBJ_SUFFIX);
     T_FileStream_writeLine(makefile, tmp);

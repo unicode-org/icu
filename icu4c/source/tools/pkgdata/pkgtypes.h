@@ -71,9 +71,6 @@ UBool  pkg_listContains(CharList *l, const char *str);
  */
 void pkg_deleteList(CharList *l);
 
-
-
-
 /*
  * Mode package function
  */
@@ -102,8 +99,9 @@ typedef struct UPKGOptions_
   const char *shortName;   /* name of what we're building */
   const char *cShortName;   /* name of what we're building as a C identifier */
   const char *entryName;   /* special entrypoint name */
-  const char *targetDir;
-  const char *tmpDir;
+  const char *targetDir;  /* dir for packaged data to go */
+  const char *dataDir;    /* parent of dir for package (default: tmpdir) */
+  const char *tmpDir;     
   const char *srcDir;
   const char *options;     /* Options arg */
   const char *mode;        /* Mode of building */
@@ -113,13 +111,16 @@ typedef struct UPKGOptions_
   const char *makeFile;    /* Makefile path */
   const char *install;     /* Where to install to (NULL = don't install) */
   const char *icuroot;     /* where does ICU lives */
-
+  const char *libName;     /* name for library (default: shortName) */
+  UBool      compatMode;
   UBool      rebuild;
   UBool      clean;
   UBool      nooutput;
   UBool      verbose;
   UBool      hadStdin;     /* Stdin was a dependency - don't make anything depend on the file list coming in. */
   UBool      numeric;      /* use numeric, short, temporary file names */
+  
+  int32_t    embed;   /* embedded package - i.e.  .../mypkg_myfile.res  files */
 
   UPKGMODE  *fcn;          /* Handler function */
 } UPKGOptions;

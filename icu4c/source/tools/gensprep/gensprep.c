@@ -147,7 +147,7 @@ main(int argc, char* argv[]) {
     options[SOURCEDIR].value="";
     options[UNICODE_VERSION].value="0"; /* don't assume the unicode version */
     options[BUNDLE_NAME].value = DATA_NAME;
-    options[PACKAGE_NAME].value = U_ICUDATA_NAME;
+    options[PACKAGE_NAME].value = NULL;
     options[NORMALIZE].value = "";
 
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
