@@ -270,10 +270,10 @@ public class SimpleDateFormat extends DateFormat {
     private static Hashtable cachedLocaleData = new Hashtable(3);
 
     /**
-     * If true, this object supports fast formatting using
-     * the subFormat variant that takes a StringBuffer.
+     * If true, this object supports fast formatting using the
+     * subFormat variant that takes a StringBuffer.
      */
-    private transient boolean fastFormat;
+    private transient boolean useFastFormat;
 
     /**
      * Construct a SimpleDateFormat using the default pattern for the default
@@ -321,6 +321,21 @@ public class SimpleDateFormat extends DateFormat {
         this.pattern = pattern;
         this.formatData = (DateFormatSymbols) formatData.clone();
         initialize(Locale.getDefault());
+    }
+
+    /**
+     * Package-private constructor that allows a subclass to specify
+     * whether it supports fast formatting.
+     *
+     * TODO make this API public.
+     */
+    SimpleDateFormat(String pattern, DateFormatSymbols formatData,
+                     boolean useFastFormat) {
+        this.pattern = pattern;
+        this.formatData = (DateFormatSymbols) formatData.clone();
+        initialize(Locale.getDefault());
+        // this.useFastFormat is set by initialize(); fix it up afterwards
+        this.useFastFormat = useFastFormat;
     }
 
     // try caching
@@ -423,7 +438,7 @@ public class SimpleDateFormat extends DateFormat {
         // Currently, we only support fast formatting in SimpleDateFormat
         // itself.  TODO add constructor parameters to allow subclasses
         // to say that they implement fast formatting.
-        fastFormat = (getClass() == SimpleDateFormat.class);
+        useFastFormat = (getClass() == SimpleDateFormat.class);
     }
 
     /* Initialize the fields we use to disambiguate ambiguous years. Separate
@@ -482,7 +497,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
-        if (!fastFormat) {
+        if (!useFastFormat) {
             return slowFormat(cal, toAppendTo, pos);
         }
 
@@ -501,7 +516,7 @@ public class SimpleDateFormat extends DateFormat {
                 // ch is a date-time pattern character to be interpreted
                 // by subFormat(); count the number of times it is repeated
                 for (j=i+1; j<n && pattern.charAt(j)==ch; ++j) {}
-                subFormat(toAppendTo, ch, j-i, pos, formatData, cal);
+                subFormat(toAppendTo, ch, j-i, toAppendTo.length(), pos, cal);
                 i = j;
             } else if (ch == '\'') {
                 // Handle an entire quoted string, included embedded
@@ -637,184 +652,29 @@ public class SimpleDateFormat extends DateFormat {
                                Calendar cal)
         throws IllegalArgumentException
     {
-        int     maxIntCount = Integer.MAX_VALUE;
-        String  current = "";
-
-        int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);
-        if (patternCharIndex == -1) {
-            throw new IllegalArgumentException("Illegal pattern character " +
-                                               "'" + ch + "'");
-        }
-
-        int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
-        int value = cal.get(field);
-
-        switch (patternCharIndex) {
-        case 0: // 'G' - ERA
-            current = formatData.eras[value];
-            break;
-        case 1: // 'y' - YEAR
-            /* According to the specification, if the number of pattern letters ('y') is 2, 
-             * the year is truncated to 2 digits; otherwise it is interpreted as a number. 
-             * But the original code process 'y', 'yy', 'yyy' in the same way. and process 
-             * patterns with 4 or more than 4 'y' characters in the same way. 
-             * So I change the codes to meet the specification. [Richard/GCl]
-             */
-            if (count == 2)
-                current = zeroPaddingNumber(value, 2, 2); // clip 1996 to 96
-            else //count = 1 or count > 2
-                current = zeroPaddingNumber(value, count, maxIntCount);
-            break;
-        case 2: // 'M' - MONTH
-            if (count >= 4)
-                current = formatData.months[value];
-            else if (count == 3)
-                current = formatData.shortMonths[value];
-            else
-                current = zeroPaddingNumber(value+1, count, maxIntCount);
-            break;
-        case 4: // 'k' - HOUR_OF_DAY (1..24)
-            if (value == 0)
-                current = zeroPaddingNumber(
-                                            cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
-                                            count, maxIntCount);
-            else
-                current = zeroPaddingNumber(value, count, maxIntCount);
-            break;
-        case 8: // 'S' - FRACTIONAL_SECOND
-            // Fractional seconds left-justify
-            {
-                StringBuffer buf = new StringBuffer();
-                numberFormat.setMinimumIntegerDigits(Math.min(3, count));
-                numberFormat.setMaximumIntegerDigits(maxIntCount);
-                if (count == 1) {
-                    value = (value + 50) / 100;
-                } else if (count == 2) {
-                    value = (value + 5) / 10;
-                }
-                FieldPosition p = new FieldPosition(0);
-                numberFormat.format((long) value, buf, p);
-                if (count > 3) {
-                    numberFormat.setMinimumIntegerDigits(count - 3);
-                    numberFormat.format(0L, buf, p);
-                }
-                current = buf.toString();
-            }
-            break;
-        case 9: // 'E' - DAY_OF_WEEK
-            if (count >= 4)
-                current = formatData.weekdays[value];
-            else // count < 4, use abbreviated form if exists
-                current = formatData.shortWeekdays[value];
-            break;
-        case 14: // 'a' - AM_PM
-            current = formatData.ampms[value];
-            break;
-        case 15: // 'h' - HOUR (1..12)
-            if (value == 0)
-                current = zeroPaddingNumber(
-                                            cal.getLeastMaximum(Calendar.HOUR)+1,
-                                            count, maxIntCount);
-            else
-                current = zeroPaddingNumber(value, count, maxIntCount);
-            break;
-        case 17: // 'z' - ZONE_OFFSET
-            int zoneIndex
-                = formatData.getZoneIndex (cal.getTimeZone().getID());
-            if (zoneIndex == -1)
-            {
-                // For time zones that have no names, use strings
-                // GMT+hours:minutes and GMT-hours:minutes.
-                // For instance, France time zone uses GMT+01:00.
-                StringBuffer zoneString = new StringBuffer();
-
-                value = cal.get(Calendar.ZONE_OFFSET) +
-                    cal.get(Calendar.DST_OFFSET);
-
-                if (value < 0)
-                {
-                    zoneString.append(GMT_MINUS);
-                    value = -value; // suppress the '-' sign for text display.
-                }
-                else
-                    zoneString.append(GMT_PLUS);
-                zoneString.append(
-                                  zeroPaddingNumber((int)(value/millisPerHour), 2, 2));
-                zoneString.append(':');
-                zoneString.append(
-                                  zeroPaddingNumber(
-                                                    (int)((value%millisPerHour)/millisPerMinute), 2, 2));
-                current = zoneString.toString();
-            }
-            else if (cal.get(Calendar.DST_OFFSET) != 0)
-            {
-                if (count >= 4)
-                    current = formatData.zoneStrings[zoneIndex][3];
-                else
-                    // count < 4, use abbreviated form if exists
-                    current = formatData.zoneStrings[zoneIndex][4];
-            }
-            else
-            {
-                if (count >= 4)
-                    current = formatData.zoneStrings[zoneIndex][1];
-                else
-                    current = formatData.zoneStrings[zoneIndex][2];
-            }
-            break;
-        case 23: // 'Z' - TIMEZONE_RFC
-            {
-                char sign = '+';
-                value = (cal.get(Calendar.ZONE_OFFSET) +
-                         cal.get(Calendar.DST_OFFSET)) / millisPerMinute;
-                if (value < 0) {
-                    value = -value;
-                    sign = '-';
-                }
-                value = (value / 3) * 5 + (value % 60); // minutes => KKmm
-                StringBuffer buf = new StringBuffer();
-                buf.append(sign).append(zeroPaddingNumber(value, 4, 4));
-                current = buf.toString();
-            }
-            break;
-        default:
-            // case 3: // 'd' - DATE
-            // case 5: // 'H' - HOUR_OF_DAY (0..23)
-            // case 6: // 'm' - MINUTE
-            // case 7: // 's' - SECOND
-            // case 10: // 'D' - DAY_OF_YEAR
-            // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
-            // case 12: // 'w' - WEEK_OF_YEAR
-            // case 13: // 'W' - WEEK_OF_MONTH
-            // case 16: // 'K' - HOUR (0..11)
-            // case 18: // 'Y' - YEAR_WOY
-            // case 19: // 'e' - DOW_LOCAL
-            // case 20: // 'u' - EXTENDED_YEAR
-            // case 21: // 'g' - JULIAN_DAY
-            // case 22: // 'A' - MILLISECONDS_IN_DAY
-
-            current = zeroPaddingNumber(value, count, maxIntCount);
-            break;
-        } // switch (patternCharIndex)
-
-        // Set the FieldPosition (for the first occurence only)
-        if (pos.getBeginIndex() == pos.getEndIndex() &&
-            pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
-            pos.setBeginIndex(beginOffset);
-            pos.setEndIndex(beginOffset + current.length());
-        }
-
-        return current;
+        // Note: formatData is ignored
+        StringBuffer buf = new StringBuffer();
+        subFormat(buf, ch, count, beginOffset, pos, cal);
+        return buf.toString();
     }
 
     /**
-     * Internal high-speed method.  Reuses a StringBuffer for results
-     * instead of creating a String on the heap for each call.
+     * Format a single field; useFastFormat variant.  Reuses a
+     * StringBuffer for results instead of creating a String on the
+     * heap for each call.
+     *
+     * NOTE We don't really need the beginOffset parameter, EXCEPT for
+     * the need to support the slow subFormat variant (above) which
+     * has to pass it in to us.
+     *
+     * TODO make this API public
+     *
+     * @internal
      */
-    private void subFormat(StringBuffer buf,
-                           char ch, int count,
-                           FieldPosition pos, DateFormatSymbols formatData,
-                           Calendar cal) {
+    protected void subFormat(StringBuffer buf,
+                             char ch, int count, int beginOffset,
+                             FieldPosition pos,
+                             Calendar cal) {
         final int maxIntCount = Integer.MAX_VALUE;
         final int bufstart = buf.length();
 
@@ -970,17 +830,18 @@ public class SimpleDateFormat extends DateFormat {
         // Set the FieldPosition (for the first occurence only)
         if (pos.getBeginIndex() == pos.getEndIndex() &&
             pos.getField() == PATTERN_INDEX_TO_DATE_FORMAT_FIELD[patternCharIndex]) {
-            pos.setBeginIndex(bufstart);
-            pos.setEndIndex(buf.length());
+            pos.setBeginIndex(beginOffset);
+            pos.setEndIndex(beginOffset + buf.length() - bufstart);
         }
     }
 
     /**
      * Internal high-speed method.  Reuses a StringBuffer for results
      * instead of creating a String on the heap for each call.
+     * @internal
      */
-    private void zeroPaddingNumber(StringBuffer buf, int value,
-                                   int minDigits, int maxDigits) {
+    protected void zeroPaddingNumber(StringBuffer buf, int value,
+                                     int minDigits, int maxDigits) {
         FieldPosition pos = new FieldPosition(-1);
         numberFormat.setMinimumIntegerDigits(minDigits);
         numberFormat.setMaximumIntegerDigits(maxDigits);
