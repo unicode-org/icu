@@ -77,19 +77,18 @@ UChar* myDateFormat(UDateFormat* dat, UDate d1)
 {
     UChar *result1=NULL;
     int32_t resultlength, resultlengthneeded;
-    UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
 
 
     resultlength=0;
-    resultlengthneeded=udat_format(dat, d1, NULL, resultlength, &pos, &status);
+    resultlengthneeded=udat_format(dat, d1, NULL, resultlength, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         /*result1=(UChar*)malloc(sizeof(UChar) * resultlength);  *//* this leaks for now */
         result1=(UChar*)ctst_malloc(sizeof(UChar) * resultlength);
-        udat_format(dat, d1, result1, resultlength, &pos, &status);    
+        udat_format(dat, d1, result1, resultlength, NULL, &status);    
     }
     if(U_FAILURE(status))
     {
