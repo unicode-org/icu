@@ -22,6 +22,9 @@
 #                                          regex test pattern should not compile.
 #                                   d      dump the compiled pattern
 #                                   t      trace operation of match engine.
+#                                   2-9    a digit between 2 and 9, specifies the number of 
+#                                          times to execute find().  The expected results are
+#                                          for the last find() in the sequence.
 #                                 White space must be present between the flags and the match string.
 #
 
@@ -400,6 +403,64 @@
 "\D"                              "<0>\u0100</0>DEF"
 "\D"                              "123<0>\u0100</0>DEF"
 
+#
+#bug 4024, new line sequence handling
+#
+"(?m)^"                           "<0></0>AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+"(?m)^"                       2   "AA\u000d\u000a<0></0>BB\u000d\u000aCC\u000d\u000a"
+"(?m)^"                       3   "AA\u000d\u000aBB\u000d\u000a<0></0>CC\u000d\u000a"
+"(?m)^"                       4   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+
+"(?m)$"                           "AA<0></0>\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+"(?m)$"                       2   "AA\u000d\u000aBB<0></0>\u000d\u000aCC\u000d\u000a"
+"(?m)$"                       3   "AA\u000d\u000aBB\u000d\u000aCC<0></0>\u000d\u000a"
+"(?m)$"                       4   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a<0></0>"
+"(?m)$"                       5   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+
+"$"                               "AA\u000d\u000aBB\u000d\u000aCC<0></0>\u000d\u000a"
+"$"                           2   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a<0></0>"
+"$"                           3   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+
+"$"                               "\u000a\u0000a<0></0>\u000a"
+"$"                           2   "\u000a\u0000a\u000a<0></0>"
+"$"                           3   "\u000a\u0000a\u000a"
+
+"$"                               "<0></0>"
+"$"                           2   ""
+
+"$"                               "<0></0>\u000a"
+"$"                           2   "\u000a<0></0>"
+"$"                           3   "\u000a"
+
+"^"                               "<0></0>"
+"^"                           2   ""
+
+# No matching ^ at interior new-lines if not in multi-line mode.
+"^"                               "<0></0>AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+"^"                           2   "AA\u000d\u000aBB\u000d\u000aCC\u000d\u000a"
+
+#
+# Dot-matches-any mode, and stopping at new-lines if off.
+#
+"."                               "<0>1</0>23\u000aXYZ"
+"."                           2   "1<0>2</0>3\u000aXYZ"
+"."                           3   "12<0>3</0>\u000aXYZ"
+"."                           4   "123\u000a<0>X</0>YZ"    # . doesn't match newlines
+"."                           4   "123\u000c<0>X</0>YZ"
+"."                           4   "123\u000d<0>X</0>YZ"
+"."                           4   "123\u000d\u000a<0>X</0>YZ"
+"."                           4   "123\u0085<0>X</0>YZ"
+"."                           4   "123\u2028<0>X</0>YZ"
+"."                           4   "123\u2029<0>X</0>YZ"
+"."                           4s  "123<0>\u000a</0>XYZ"    # . matches any
+"."                           4s  "123<0>\u000c</0>XYZ"
+"."                           4s  "123<0>\u000d</0>XYZ"
+"."                           4s  "123<0>\u000d\u000a</0>XYZ"
+"."                           4s  "123<0>\u0085</0>XYZ"
+"."                           4s  "123<0>\u2028</0>XYZ"
+"."                           4s  "123<0>\u2029</0>XYZ"
+".{6}"                            "123\u000a\u000dXYZ"
+".{6}"                         s  "<0>123\u000a\u000dX</0>Y"
 #
 #  Random debugging, Temporary
 #
