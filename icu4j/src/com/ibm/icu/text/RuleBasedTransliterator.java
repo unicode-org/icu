@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/09/21 21:24:04 $ 
- * $Revision: 1.44 $
+ * $Date: 2001/09/24 19:57:17 $ 
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.44 $ $Date: 2001/09/21 21:24:04 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.45 $ $Date: 2001/09/24 19:57:17 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -542,7 +542,7 @@ public class RuleBasedTransliterator extends Transliterator {
             /**
              * Implement SymbolTable API.
              */
-            public UnicodeSet lookupSet(char ch) {
+            public UnicodeSet lookupSet(int ch) {
                 // Note that we cannot use data.lookupSet() because the
                 // set array has not been constructed yet.
                 int i = ch - data.setVariablesBase;
@@ -1579,6 +1579,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.45  2001/09/24 19:57:17  alan
+ * jitterbug 60: implement toPattern in UnicodeSet; update UnicodeFilter.contains to take an int; update UnicodeSet to support code points to U+10FFFF
+ *
  * Revision 1.44  2001/09/21 21:24:04  alan
  * jitterbug 64: allow ::ID blocks in rules
  *

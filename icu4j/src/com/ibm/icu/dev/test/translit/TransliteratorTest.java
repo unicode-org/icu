@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/09/21 21:23:34 $ 
- * $Revision: 1.45 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
+ * $Date: 2001/09/24 19:56:41 $
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -48,14 +48,12 @@ public class TransliteratorTest extends TestFmwk {
                 throw ex;
             }
 
-            // TODO remove check for class when we implement full
-            // toRules().
-            if (t != null && t instanceof RuleBasedTransliterator) {
+            if (t != null) {
                 // Now test toRules
                 String rules = null;
                 try {
-                    rules = ((RuleBasedTransliterator)t).toRules(true);
-                
+                    rules = t.toRules(true);
+
                     Transliterator u = Transliterator.createFromRules("x",
                                            rules, Transliterator.FORWARD);
                 } catch (IllegalArgumentException ex2) {
@@ -74,7 +72,7 @@ public class TransliteratorTest extends TestFmwk {
         } catch (IllegalArgumentException ex) {
             logln("OK: Bogus ID handled properly");
         }
-        
+
         ms = System.currentTimeMillis() - ms;
         logln("Elapsed time: " + ms + " ms");
     }
@@ -223,7 +221,7 @@ public class TransliteratorTest extends TestFmwk {
      * Basic test of keyboard.
      */
     public void TestKeyboard() {
-        Transliterator t = new RuleBasedTransliterator("<ID>", 
+        Transliterator t = new RuleBasedTransliterator("<ID>",
                                                        "psch>Y;"
                                                        +"ps>y;"
                                                        +"ch>x;"
@@ -246,7 +244,7 @@ public class TransliteratorTest extends TestFmwk {
      * Basic test of keyboard with cursor.
      */
     public void TestKeyboard2() {
-        Transliterator t = new RuleBasedTransliterator("<ID>", 
+        Transliterator t = new RuleBasedTransliterator("<ID>",
                                                        "ych>Y;"
                                                        +"ps>|y;"
                                                        +"ch>x;"
@@ -381,7 +379,7 @@ public class TransliteratorTest extends TestFmwk {
     public void TestFiltering() {
         Transliterator hex = Transliterator.getInstance("Any-Hex");
         hex.setFilter(new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 return c != 'c';
             }
         });
@@ -398,7 +396,7 @@ public class TransliteratorTest extends TestFmwk {
     /**
      * Test anchors
      */
-    public void TestAnchors() { 
+    public void TestAnchors() {
         expect("^ab  > 01 ;" +
                " ab  > |8 ;" +
                "  b  > k ;" +
@@ -406,7 +404,7 @@ public class TransliteratorTest extends TestFmwk {
                " 8x  > 77 ;",
 
                "ababbabxabx",
-               "018k7745");  
+               "018k7745");
         expect("$s = [z$] ;" +
                "$s{ab    > 01 ;" +
                "   ab    > |8 ;" +
@@ -440,7 +438,7 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestJ277() {
         Transliterator gl = Transliterator.getInstance("Greek-Latin");
-        
+
         char sigma = (char)0x3C3;
         char upsilon = (char)0x3C5;
         char nu = (char)0x3BD;
@@ -517,7 +515,7 @@ public class TransliteratorTest extends TestFmwk {
 
         // Try a custom Hex-Any
         // \\uXXXX and &#xXXXX;
-        HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;"); 
+        HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;");
         expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
                "abcd5fx012&#x00033;");
 
@@ -740,7 +738,7 @@ public class TransliteratorTest extends TestFmwk {
         if (!got.equals(exp)) {
             errln("FAIL: Inverse of " + ID + " is " + got +
                   ", expected " + exp);
-        }        
+        }
     }
 
     /**
@@ -752,18 +750,18 @@ public class TransliteratorTest extends TestFmwk {
             "Hex[aeiou]-Any",
             "quizzical",
             "q\\u0075\\u0069zz\\u0069c\\u0061l",
-            
+
             "Any[aeiou]-Hex;Hex[^5]-Any",
             "Any[^5]-Hex;Hex[aeiou]-Any",
             "quizzical",
             "q\\u0075izzical",
-            
+
             "Null[abc]",
             "Null[abc]",
             "xyz",
             "xyz",
         };
-        
+
         for (int i=0; i<DATA.length; i+=4) {
             String ID = DATA[i];
             Transliterator t = Transliterator.getInstance(ID);
@@ -796,6 +794,109 @@ public class TransliteratorTest extends TestFmwk {
                "Th qck brwn fx.");
     }
 
+    public void TestToRules() {
+        String RBT = "rbt";
+        String SET = "set";
+        String[] DATA = {
+            RBT,
+            "$a=\\u4E61; [$a] > A;",
+            "[\\u4E61] > A;",
+
+            RBT,
+            "$white=[[:Zs:][:Zl:]]; $white{a} > A;",
+            "[[:Zs:][:Zl:]]{a} > A;",
+
+            SET,
+            "[[:Zs:][:Zl:]]",
+            "[[:Zs:][:Zl:]]",
+
+            SET,
+            "[:Ps:]",
+            "[:Ps:]",
+
+            SET,
+            "[:L:]",
+            "[:L:]",
+
+            SET,
+            "[[:L:]-[A]]",
+            "[[:L:]-[A]]",
+
+            SET,
+            "[~[:Lu:][:Ll:]]",
+            "[~[:Lu:][:Ll:]]",
+
+            SET,
+            "[~[a-z]]",
+            "[~[a-z]]",
+
+            RBT,
+            "$white=[:Zs:]; $black=[^$white]; $black{a} > A;",
+            "[^[:Zs:]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[[a-z]-$a]; $b{a} > A;",
+            "[[a-z]-[:Zs:]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[$a&[a-z]]; $b{a} > A;",
+            "[[:Zs:]&[a-z]]{a} > A;",
+
+            RBT,
+            "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
+            "[x[:Zs:]]{a} > A;",
+        };
+
+        for (int d=0; d < DATA.length; d+=3) {
+            if (DATA[d] == RBT) {
+                // Transliterator test
+                Transliterator t = Transliterator.createFromRules("ID",
+                                       DATA[d+1], Transliterator.FORWARD);
+                if (t == null) {
+                    errln("FAIL: createFromRules failed");
+                    return;
+                }
+                String rules, escapedRules;
+                rules = t.toRules(false);
+                escapedRules = t.toRules(true);
+                String expRules = Utility.unescape(DATA[d+2]);
+                String expEscapedRules = DATA[d+2];
+                if (rules.equals(expRules)) {
+                    logln("Ok: " + DATA[d+1] +
+                          " => " + Utility.escape(rules));
+                } else {
+                    errln("FAIL: " + DATA[d+1] +
+                          " => " + Utility.escape(rules + ", exp " + expRules));
+                }
+                if (escapedRules.equals(expEscapedRules)) {
+                    logln("Ok: " + DATA[d+1] +
+                          " => " + escapedRules);
+                } else {
+                    errln("FAIL: " + DATA[d+1] +
+                          " => " + escapedRules + ", exp " + expEscapedRules);
+                }
+
+            } else {
+                // UnicodeSet test
+                String pat = DATA[d+1];
+                String expToPat = DATA[d+2];
+                UnicodeSet set = new UnicodeSet(pat);
+
+                // Adjust spacing etc. as necessary.
+                String toPat;
+                toPat = set.toPattern(true);
+                if (expToPat.equals(toPat)) {
+                    logln("Ok: " + pat +
+                          " => " + toPat);
+                } else {
+                    errln("FAIL: " + pat +
+                          " => " + Utility.escape(toPat) +
+                          ", exp " + Utility.escape(pat));
+                }
+            }
+        }
+    }
+
     /**
      * Test the case mapping transliterators.
      */
@@ -806,7 +907,7 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator.getInstance("Any-Lower[^xyzXYZ]");
         Transliterator toTitle =
             Transliterator.getInstance("Any-Title[^xyzXYZ]");
-        
+
         expect(toUpper, "The quick brown fox jumped over the lazy dogs.",
                "THE QUICK BROWN FOx JUMPED OVER THE LAzy DOGS.");
         expect(toLower, "The quIck brown fOX jUMPED OVER THE LAzY dogs.",
@@ -857,7 +958,7 @@ public class TransliteratorTest extends TestFmwk {
                     errln("FAIL: " + DATA[i+2] +
                           " create ID \"" + DATA[i] + "\" => \"" +
                           t.getID() + "\", exp \"" + DATA[i+1] + "\"");
-                }   
+                }
             } catch (IllegalArgumentException e) {
                 errln("FAIL: " + DATA[i+2] +
                       " create ID \"" + DATA[i] + "\"");
@@ -875,52 +976,52 @@ public class TransliteratorTest extends TestFmwk {
             // Input               Decomposed            Composed
             {"cat",                "cat",                "cat"               },
             {"\u00e0ardvark",      "a\u0300ardvark",     "\u00e0ardvark"     },
-                                                         
+
             {"\u1e0a",             "D\u0307",            "\u1e0a"            }, // D-dot_above
             {"D\u0307",            "D\u0307",            "\u1e0a"            }, // D dot_above
-                                                         
+
             {"\u1e0c\u0307",       "D\u0323\u0307",      "\u1e0c\u0307"      }, // D-dot_below dot_above
             {"\u1e0a\u0323",       "D\u0323\u0307",      "\u1e0c\u0307"      }, // D-dot_above dot_below
             {"D\u0307\u0323",      "D\u0323\u0307",      "\u1e0c\u0307"      }, // D dot_below dot_above
-                                                         
+
             {"\u1e10\u0307\u0323", "D\u0327\u0323\u0307","\u1e10\u0323\u0307"}, // D dot_below cedilla dot_above
             {"D\u0307\u0328\u0323","D\u0328\u0323\u0307","\u1e0c\u0328\u0307"}, // D dot_above ogonek dot_below
-                                                         
+
             {"\u1E14",             "E\u0304\u0300",      "\u1E14"            }, // E-macron-grave
             {"\u0112\u0300",       "E\u0304\u0300",      "\u1E14"            }, // E-macron + grave
             {"\u00c8\u0304",       "E\u0300\u0304",      "\u00c8\u0304"      }, // E-grave + macron
-                                                         
+
             {"\u212b",             "A\u030a",            "\u00c5"            }, // angstrom_sign
             {"\u00c5",             "A\u030a",            "\u00c5"            }, // A-ring
-                                                         
+
             {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated with 3.0
             {"\u00fd\uFB03n",      "y\u0301\uFB03n",     "\u00fd\uFB03n"     },	//updated with 3.0
-                                                         
+
             {"Henry IV",           "Henry IV",           "Henry IV"          },
             {"Henry \u2163",       "Henry \u2163",       "Henry \u2163"      },
-                                                         
+
             {"\u30AC",             "\u30AB\u3099",       "\u30AC"            }, // ga (Katakana)
             {"\u30AB\u3099",       "\u30AB\u3099",       "\u30AC"            }, // ka + ten
             {"\uFF76\uFF9E",       "\uFF76\uFF9E",       "\uFF76\uFF9E"      }, // hw_ka + hw_ten
             {"\u30AB\uFF9E",       "\u30AB\uFF9E",       "\u30AB\uFF9E"      }, // ka + hw_ten
             {"\uFF76\u3099",       "\uFF76\u3099",       "\uFF76\u3099"      }, // hw_ka + ten
-                                                         
+
             {"A\u0300\u0316",      "A\u0316\u0300",      "\u00C0\u0316"      },
-        };                                                
-                                                          
-        String[][] COMPAT = {                        
+        };
+
+        String[][] COMPAT = {
             // Input               Decomposed            Composed
             {"\uFB4f",             "\u05D0\u05DC",       "\u05D0\u05DC"      }, // Alef-Lamed vs. Alef, Lamed
-                                                         
+
             {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated for 3.0
             {"\u00fd\uFB03n",      "y\u0301ffin",        "\u00fdffin"        }, // ffi ligature -> f + f + i
-                                                         
+
             {"Henry IV",           "Henry IV",           "Henry IV"          },
             {"Henry \u2163",       "Henry IV",           "Henry IV"          },
-                                                         
+
             {"\u30AC",             "\u30AB\u3099",       "\u30AC"            }, // ga (Katakana)
             {"\u30AB\u3099",       "\u30AB\u3099",       "\u30AC"            }, // ka + ten
-                                                         
+
             {"\uFF76\u3099",       "\u30AB\u3099",       "\u30AC"            }, // hw_ka + ten
         };
 
@@ -960,7 +1061,7 @@ public class TransliteratorTest extends TestFmwk {
         expect(t, "\u010dx", "c\u030C");
         }
     }
-    
+
     /**
      * Test compound RBT rules.
      */
@@ -1116,7 +1217,7 @@ public class TransliteratorTest extends TestFmwk {
                 append('|').
                 append(s.substring(index.start));
         }
-        
+
         // As a final step in keyboard transliteration, we must call
         // transliterate to finish off any pending partial matches that
         // were waiting for more input.
@@ -1135,7 +1236,7 @@ public class TransliteratorTest extends TestFmwk {
                   result.equals(expectedResult),
                   expectedResult);
     }
-    
+
     void expectAux(String tag, String summary, boolean pass,
                    String expectedResult) {
         if (pass) {

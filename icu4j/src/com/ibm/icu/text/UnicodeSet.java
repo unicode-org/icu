@@ -5,21 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/09/20 21:20:00 $
- * $Revision: 1.33 $
+ * $Date: 2001/09/24 19:57:18 $
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
 package com.ibm.text;
 
 import java.text.*;
+import com.ibm.util.Utility;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
  * represent <em>character classes</em> used in regular expressions.
  * Such classes specify a subset of the set of all Unicode characters,
  * which in this implementation is the characters from U+0000 to
- * U+FFFF, ignoring surrogates.
+ * U+10FFFF.
  *
  * <p><code>UnicodeSet</code> supports two APIs. The first is the
  * <em>operand</em> API that allows the caller to modify the value of
@@ -184,7 +185,7 @@ import java.text.*;
  * through 'z' and all letters in between, in Unicode order
  * <tr valign=top><td nowrap><code>[^a-z]</code><td>The set containing
  * all characters but 'a' through 'z',
- * that is, U+0000 through 'a'-1 and 'z'+1 through U+FFFF
+ * that is, U+0000 through 'a'-1 and 'z'+1 through U+10FFFF
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>][<em>pat2</em>]]</code>
  * <td>The union of sets specified by <em>pat1</em> and <em>pat2</em>
  * <tr valign=top><td nowrap><code>[[<em>pat1</em>]&[<em>pat2</em>]]</code>
@@ -254,10 +255,11 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.33 $ $Date: 2001/09/20 21:20:00 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.34 $ $Date: 2001/09/24 19:57:18 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
+     * NOTE: This conversion has been completed as of 2.0.
      *
      * UnicodeSet currently represents only the characters U+0000 to
      * U+FFFF.  This allows the API to be written in terms of the Java
@@ -285,23 +287,34 @@ public class UnicodeSet implements UnicodeFilter {
      */
 
     private static final int LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
-    private static final int HIGH = 0x10000; // HIGH > all valid values. 10000 for code units.
+    private static final int HIGH = 0x110000; // HIGH > all valid values. 10000 for code units.
                                              // 110000 for codepoints
 
     /**
      * Minimum value that can be stored in a UnicodeSet.
      */
-    public static final char MIN_VALUE = (char) LOW;
+    public static final int MIN_VALUE = LOW;
 
     /**
      * Maximum value that can be stored in a UnicodeSet.
      */
-    public static final char MAX_VALUE = (char) (HIGH - 1);
+    public static final int MAX_VALUE = HIGH - 1;
 
     private int len;      // length used; list may be longer to minimize reallocs
     private int[] list;   // MUST be terminated with HIGH
     private int[] rangeList; // internal buffer
     private int[] buffer; // internal buffer
+
+    /**
+     * The pattern representation of this set.  This may not be the
+     * most economical pattern.  It is the pattern supplied to
+     * applyPattern(), with variables substituted and whitespace
+     * removed.  For sets constructed without applyPattern(), or
+     * modified using the non-pattern API, this string will be null,
+     * indicating that toPattern() must generate a pattern
+     * representation from the inversion list.
+     */ 
+    private String pat = null;
 
     private static final int START_EXTRA = 16;         // initial storage. Must be >= 0
     private static final int GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
@@ -349,7 +362,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @param start first character, inclusive, of range
      * @param end last character, inclusive, of range
      */
-    public UnicodeSet(char start, char end) {
+    public UnicodeSet(int start, int end) {
         this();
         complement(start, end);
     }
@@ -418,7 +431,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @param start first character in the set, inclusive
      * @rparam end last character in the set, inclusive
      */
-    public void set(char start, char end) {
+    public void set(int start, int end) {
         clear();
         complement(start, end);
     }
@@ -431,6 +444,7 @@ public class UnicodeSet implements UnicodeFilter {
     public void set(UnicodeSet other) {
         list = (int[]) other.list.clone();
         len = other.len;
+        pat = other.pat;
     }
 
     /**
@@ -473,24 +487,6 @@ public class UnicodeSet implements UnicodeFilter {
             throw new IllegalArgumentException("Parse of \"" + pattern +
                                                "\" failed at " + i);
         }
-    }
-
-    /**
-     * Append the <code>toPattern()</code> representation of a
-     * character to the given <code>StringBuffer</code>.
-     */
-    private static final void _toPat(StringBuffer buf, char c) {
-        // Okay to let ':' pass through
-        switch (c) {
-        case '[':
-        case ']':
-        case '-':
-        case '^':
-        case '&':
-        case '\\':
-            buf.append('\\');
-        }
-        buf.append(c);
     }
 
     /**
@@ -575,6 +571,53 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public String toPattern(boolean escapeUnprintable) {
         StringBuffer result = new StringBuffer();
+        return _toPattern(result, escapeUnprintable).toString();
+    }
+
+    /**
+     * Append a string representation of this set to result.  This will be
+     * a cleaned version of the string passed to applyPattern(), if there
+     * is one.  Otherwise it will be generated.
+     */
+    private StringBuffer _toPattern(StringBuffer result,
+                                    boolean escapeUnprintable) {
+        if (pat != null) {
+            int i;
+            int backslashCount = 0;
+            for (i=0; i<pat.length(); ++i) {
+                char c = pat.charAt(i);
+                if (escapeUnprintable && _isUnprintable(c)) {
+                    // If the unprintable character is preceded by an odd
+                    // number of backslashes, then it has been escaped.
+                    // Before unescaping it, we delete the final
+                    // backslash.
+                    if ((backslashCount % 2) == 1) {
+                        result.setLength(result.length() - 1);
+                    }
+                    _escapeUnprintable(result, c);
+                    backslashCount = 0;
+                } else {
+                    result.append(c);
+                    if (c == '\\') {
+                        ++backslashCount;
+                    } else {
+                        backslashCount = 0;
+                    }
+                }
+            }
+            return result;
+        }
+        
+        return _generatePattern(result, escapeUnprintable);
+    }
+
+    /**
+     * Generate and append a string representation of this set to result.
+     * This does not use this.pat, the cleaned up copy of the string
+     * passed to applyPattern(). 
+     */
+    public StringBuffer _generatePattern(StringBuffer result,
+                                         boolean escapeUnprintable) {
         result.append('[');
 
         // Check against the predefined categories.  We implicitly build
@@ -583,7 +626,7 @@ public class UnicodeSet implements UnicodeFilter {
             if (this.equals(getCategorySet(cat))) {
                 result.append(':');
                 result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
-                return result.append(":]").toString();
+                return result.append(":]");
             }
         }
 
@@ -623,7 +666,7 @@ public class UnicodeSet implements UnicodeFilter {
             }
         }
 
-        return result.append(']').toString();
+        return result.append(']');
     }
 
     /**
@@ -659,7 +702,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @return <tt>true</tt> if this set contains the specified range
      * of chars.
      */
-    public boolean contains(char start, char end) {
+    public boolean contains(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
         int i = -1;
         while (true) {
             if (start < list[++i]) break;
@@ -674,7 +723,10 @@ public class UnicodeSet implements UnicodeFilter {
      * <code>charAt()</code>.
      * @return an index from 0..size()-1, or -1
      */
-    public int indexOf(char c) {
+    public int indexOf(int c) {
+        if (c < MIN_VALUE || c > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
+        }
         int i = 0;
         int n = 0;
         for (;;) {
@@ -697,7 +749,7 @@ public class UnicodeSet implements UnicodeFilter {
      * <code>indexOf()</code>.
      * @param index an index from 0..size()-1
      */
-    public char charAt(int index) {
+    public int charAt(int index) {
         if (index >= 0) {
             for (int i=0; i < len;) {
                 int start = list[i++];
@@ -716,12 +768,14 @@ public class UnicodeSet implements UnicodeFilter {
      *
      * @return <tt>true</tt> if this set contains the specified char.
      */
-    public boolean contains(char c) {
-//| Not needed unless HIGH > 0x10000
-//|     // catch degenerate cases
-//|     if (c == HIGH) {   // catch final, so we don't do it in loop!
-//|         return (len & 1) == 0;  // even length includes everything
-//|     }
+    public boolean contains(int c) {
+        if (c < MIN_VALUE || c > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(c, 6));
+        }
+        // catch degenerate cases (not needed unless HIGH > 0x10000
+        if (c == HIGH) {   // catch final, so we don't do it in loop!
+            return (len & 1) == 0;  // even length includes everything
+        }
         // Set i to the index of the start item greater than ch
         // We know we will terminate without length test!
         // LATER: for large sets, add binary search
@@ -771,7 +825,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @param end last character, inclusive, of range to be added
      * to this set.
      */
-    public void add(char start, char end) {
+    public void add(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
         if (start <= end) {
             add(range(start, end), 2, 0);
         }
@@ -782,7 +842,7 @@ public class UnicodeSet implements UnicodeFilter {
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
      */
-    public final void add(char c) {
+    public final void add(int c) {
         add(c, c);
     }
 
@@ -796,7 +856,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @param end last character, inclusive, of range to be retained
      * to this set.
      */
-    public void retain(char start, char end) {
+    public void retain(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
         if (start <= end) {
             retain(range(start, end), 2, 0);
         } else {
@@ -807,7 +873,7 @@ public class UnicodeSet implements UnicodeFilter {
     /**
      * Retain the specified character from this set if it is present.
      */
-    public final void retain(char c) {
+    public final void retain(int c) {
         retain(c, c);
     }
 
@@ -822,7 +888,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void remove(char start, char end) {
+    public void remove(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
         if (start <= end) {
             retain(range(start, end), 2, 2);
         }
@@ -833,7 +905,7 @@ public class UnicodeSet implements UnicodeFilter {
      * The set will not contain the specified character once the call
      * returns.
      */
-    public final void remove(char c) {
+    public final void remove(int c) {
         remove(c, c);
     }
 
@@ -848,7 +920,13 @@ public class UnicodeSet implements UnicodeFilter {
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void complement(char start, char end) {
+    public void complement(int start, int end) {
+        if (start < MIN_VALUE || start > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(start, 6));
+        }
+        if (end < MIN_VALUE || end > MAX_VALUE) {
+            throw new IllegalArgumentException("Invalid code point U+" + Utility.hex(end, 6));
+        }
         if (start <= end) {
             xor(range(start, end), 2, 0);
         }
@@ -859,7 +937,7 @@ public class UnicodeSet implements UnicodeFilter {
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
      */
-    public final void complement(char c) {
+    public final void complement(int c) {
         complement(c, c);
     }
 
@@ -878,6 +956,7 @@ public class UnicodeSet implements UnicodeFilter {
             list[0] = LOW;
             ++len;
         }
+        pat = null;
     }
 
     /**
@@ -960,6 +1039,7 @@ public class UnicodeSet implements UnicodeFilter {
     public void clear() {
         list[0] = HIGH;
         len = 1;
+        pat = null;
     }
 
     /**
@@ -980,8 +1060,8 @@ public class UnicodeSet implements UnicodeFilter {
      * @see #getRangeCount
      * @see #getRangeEnd
      */
-    public char getRangeStart(int index) {
-        return (char) list[index*2];
+    public int getRangeStart(int index) {
+        return list[index*2];
     }
 
     /**
@@ -992,8 +1072,8 @@ public class UnicodeSet implements UnicodeFilter {
      * @see #getRangeStart
      * @see #getRangeEnd
      */
-    public char getRangeEnd(int index) {
-        return (char) (list[index*2 + 1] - 1);
+    public int getRangeEnd(int index) {
+        return (list[index*2 + 1] - 1);
     }
 
     /**
@@ -1052,7 +1132,7 @@ public class UnicodeSet implements UnicodeFilter {
      * Return a programmer-readable string representation of this object.
      */
     public String toString() {
-        return getClass().getName() + '{' + toPattern(false) + '}';
+        return getClass().getName() + '(' + toPattern(false) + ')';
     }
 
     //----------------------------------------------------------------
@@ -1081,13 +1161,37 @@ public class UnicodeSet implements UnicodeFilter {
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
-    void applyPattern(String pattern, ParsePosition pos,
-                      SymbolTable symbols, boolean ignoreWhitespace) {
+    void applyPattern(String pattern,
+                      ParsePosition pos,
+                      SymbolTable symbols,
+                      boolean ignoreWhitespace) {
 
+        // Need to build the pattern in a temporary string because
+        // _applyPattern calls add() etc., which set pat to empty.
+        StringBuffer rebuiltPat = new StringBuffer();
+        _applyPattern(pattern, pos, symbols, rebuiltPat, ignoreWhitespace);
+        pat = rebuiltPat.toString();
+    }
+
+    void _applyPattern(String pattern, ParsePosition pos,
+                       SymbolTable symbols, StringBuffer rebuiltPat,
+                       boolean ignoreWhitespace) {
+
+        // If the pattern contains any of the following, we save a
+        // rebuilt (variable-substituted) copy of the source pattern:
+        // - a category
+        // - an intersection or subtraction operator
+        // - an anchor (trailing '$', indicating RBT ether)
+        boolean rebuildPattern = false;
+        StringBuffer newPat = new StringBuffer("[");
+        int nestedPatStart = -1; // see below for usage
+        boolean nestedPatDone = false; // see below for usage
+        
         boolean invert = false;
         clear();
 
-        int lastChar = -1; // This is either a char (0..FFFF) or -1
+        final int NONE = -1;
+        int lastChar = NONE; // This is either a char (0..10FFFF) or -1
         char lastOp = 0;
 
         /* This loop iterates over the characters in the pattern.  We start at
@@ -1109,7 +1213,7 @@ public class UnicodeSet implements UnicodeFilter {
         // mode 2: '[' '^'? seen; parse pattern and close with ']'
         // mode 3: '[:' seen; parse category and close with ':]'
         int mode = 0;
-        int openPos = 0; // offset to opening '['
+        int colonPos = 0; // Expected pos of ':' in '[:'
         int start = pos.getIndex();
         int i = start;
         int limit = pattern.length();
@@ -1120,33 +1224,37 @@ public class UnicodeSet implements UnicodeFilter {
         char[] varValueBuffer = null;
         int ivarValueBuffer = 0;
         int anchor = 0;
-        for (; i<limit; i+=((varValueBuffer==null)?1:0)) {
+        int c;
+        while (i<limit) {
             /* If the next element is a single character, c will be set to it,
              * and nestedSet will be null.  In this case isLiteral indicates
              * whether the character should assume special meaning if it has
              * one.  If the next element is a nested set, either via a variable
              * reference, or via an embedded "[..]"  or "[:..:]" pattern, then
-             * nestedSet will be set to the i-list for the nested set, and
+             * nestedSet will be set to the pairs list for the nested set, and
              * c's value should be ignored.
              */
             UnicodeSet nestedSet = null;
             boolean isLiteral = false;
-            char c;
             if (varValueBuffer != null) {
                 if (ivarValueBuffer < varValueBuffer.length) {
-                    c = varValueBuffer[ivarValueBuffer++];
+                    c = UTF16.charAt(varValueBuffer, 0, varValueBuffer.length, ivarValueBuffer);
+                    ivarValueBuffer += UTF16.getCharCount(c);
                     nestedSet = symbols.lookupSet(c); // may be NULL
+                    nestedPatDone = false;
                 } else {
                     varValueBuffer = null;
-                    c = pattern.charAt(i);
+                    c = UTF16.charAt(pattern, i);
+                    i += UTF16.getCharCount(c);
                 }
             } else {
-                c = pattern.charAt(i);
+                c = UTF16.charAt(pattern, i);
+                i += UTF16.getCharCount(c);
             }
 
             // Ignore whitespace.  This is not Unicode whitespace, but Java
             // whitespace, a subset of Unicode whitespace.
-            if (ignoreWhitespace && Character.isWhitespace(c)) {
+            if (ignoreWhitespace && UCharacter.isWhitespace(c)) {
                 continue;
             }
 
@@ -1160,7 +1268,7 @@ public class UnicodeSet implements UnicodeFilter {
             case 0:
                 if (c == '[') {
                     mode = 1; // Next look for '^'
-                    openPos = i;
+                    colonPos = i; // Expect ':' at next offset
                     continue;
                 } else {
                     throw new IllegalArgumentException("Missing opening '['");
@@ -1170,14 +1278,17 @@ public class UnicodeSet implements UnicodeFilter {
                 switch (c) {
                 case '^':
                     invert = true;
+                    newPat.append((char) c);
                     continue; // Back to top to fetch next character
                 case ':':
-                    if (i == openPos+1) {
+                    if (i-1 == colonPos) {
                         // '[:' cannot have whitespace in it
-                        --i;
+                        --i; // Backup to the '['
                         c = '[';
                         mode = 3;
-                        // Fall through and parse category normally
+                        // Fall through and parse category using the same
+                        // code used to parse a nested category.  The mode
+                        // will indicate that this is actually top level.
                     }
                     break; // Fall through
                 case '-':
@@ -1202,27 +1313,19 @@ public class UnicodeSet implements UnicodeFilter {
                  * interpret '\\uxxxx' Unicode escapes here (as literals).
                  */
                 if (c == '\\') {
-                    ++i;
-                    if (i < limit) {
-                        c = pattern.charAt(i);
-                        isLiteral = true;
-                        if (c == 'u') {
-                            if ((i+4) >= limit) {
-                                throw new IllegalArgumentException("Invalid \\u escape");
-                            }
-                            c = '\u0000';
-                            for (int j=(++i)+4; i<j; ++i) { // [sic]
-                                int digit = Character.digit(pattern.charAt(i), 16);
-                                if (digit<0) {
-                                    throw new IllegalArgumentException("Invalid \\u escape");
-                                }
-                                c = (char) ((c << 4) | digit);
-                            }
-                            --i; // Move i back to last parsed character
-                        }
-                    } else {
-                        throw new IllegalArgumentException("Trailing '\\'");
+                    int[] offset = new int[] { i };
+                    int escaped = Utility.unescapeAt(pattern, offset);
+                    if (escaped == -1) {
+                        int sta = Math.max(i - 8, 0);
+                        int lim = Math.min(i + 16, pattern.length());
+                        throw new IllegalArgumentException("Invalid escape sequence " +
+                                                           pattern.substring(sta, i-1) +
+                                                           "|" +
+                                                           pattern.substring(i-1, lim));
                     }
+                    i = offset[0];
+                    isLiteral = true;
+                    c = escaped;
                 }
 
                 /* Parse variable references.  These are treated as literals.  If a
@@ -1232,7 +1335,7 @@ public class UnicodeSet implements UnicodeFilter {
                  * Set variables are only looked up if varCharToSet is not null.
                  */
                 else if (symbols != null && !isLiteral && c == SymbolTable.SYMBOL_REF) {
-                    pos.setIndex(++i);
+                    pos.setIndex(i);
                     String name = symbols.parseReference(pattern, pos, limit);
                     if (name != null) {
                         varValueBuffer = symbols.lookup(name);
@@ -1246,7 +1349,6 @@ public class UnicodeSet implements UnicodeFilter {
                         // Got a null; this means we have an isolated $.
                         // Tentatively assume this is an anchor.
                         anchor = 1;
-                        --i; // Back up so loop increment works properly
                     }
                     continue; // Back to the top to get varValueBuffer[0]
                 }
@@ -1256,28 +1358,56 @@ public class UnicodeSet implements UnicodeFilter {
                  * recognize these here and set nestedSet accordingly.
                  */
                 else if (!isLiteral && c == '[') {
+                    // Record position before nested pattern
+                    nestedPatStart = newPat.length();
+
                     // Handle "[:...:]", representing a character category
-                    char d = charAfter(pattern, i);
-                    if (d == ':') {
-                        i += 2;
+                    if (i < pattern.length() && pattern.charAt(i) == ':') {
+                        ++i;
                         int j = pattern.indexOf(":]", i);
                         if (j < 0) {
                             throw new IllegalArgumentException("Missing \":]\"");
                         }
+                        String scratch = pattern.substring(i, j);
                         nestedSet = new UnicodeSet();
-                        nestedSet.applyCategory(pattern.substring(i, j));
-                        i = j+1; // Make i point to ']' in ":]"
+                        nestedSet.applyCategory(scratch);
+                        nestedPatDone = true; // We're going to do it just below
+                        i = j+2; // Advance i past ":]"
+
+                        // Use a rebuilt pattern.  If we are top level,
+                        // then there is already a SET_OPEN in newPat, and
+                        // SET_CLOSE will be appended elsewhere.
+                        if (mode != 3) {
+                            newPat.append('[');
+                        }
+                        newPat.append(':').append(scratch).append(':');
+                        if (mode != 3) {
+                            newPat.append(']');
+                        }
+                        rebuildPattern = true;
+
                         if (mode == 3) {
-                            // Entire pattern is a category; leave parse loop
+                            // Entire pattern is a category; leave parse
+                            // loop.  This is one of 2 ways we leave this
+                            // loop if the pattern is well-formed.
                             set(nestedSet);
+                            mode = 4;
                             break;
                         }
                     } else {
-                        // Recurse to get the i-list for this nested set.
-                        pos.setIndex(i); // Add 2 to point AFTER op
+                        // Recurse to get the pairs for this nested set.
+                        // Backup i to '['.
+                        pos.setIndex(--i);
+                        switch (lastOp) {
+                        case '-':
+                        case '&':
+                            newPat.append(lastOp);
+                            break;
+                        }
                         nestedSet = new UnicodeSet();
-                        nestedSet.applyPattern(pattern, pos, symbols, ignoreWhitespace);
-                        i = pos.getIndex() - 1; // - 1 to point at ']'
+                        nestedSet._applyPattern(pattern, pos, symbols, newPat, ignoreWhitespace);
+                        nestedPatDone = true;
+                        i = pos.getIndex();
                     }
                 }
             }
@@ -1291,12 +1421,23 @@ public class UnicodeSet implements UnicodeFilter {
              * ']' have special meanings.
              */
             if (nestedSet != null) {
-                if (lastChar >= 0) {
+                if (lastChar != NONE) {
                     if (lastOp != 0) {
                         throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     }
                     add((char) lastChar, (char) lastChar);
-                    lastChar = -1;
+                    if (nestedPatDone) {
+                        // If there was a character before the nested set,
+                        // then we need to insert it in newPat before the
+                        // pattern for the nested set.  This position was
+                        // recorded in nestedPatStart.
+                        StringBuffer s = new StringBuffer();
+                        _appendToPat(s, lastChar, false);
+                        newPat.insert(nestedPatStart, s.toString());
+                    } else {
+                        _appendToPat(newPat, lastChar, false);
+                    }
+                    lastChar = NONE;
                 }
                 switch (lastOp) {
                 case '-':
@@ -1309,7 +1450,19 @@ public class UnicodeSet implements UnicodeFilter {
                     addAll(nestedSet);
                     break;
                 }
+
+                // Get the pattern for the nested set, if we haven't done so
+                // already.
+                if (!nestedPatDone) {
+                    if (lastOp != 0) {
+                        newPat.append(lastOp);
+                    }
+                    nestedSet._toPattern(newPat, false);
+                }
+                rebuildPattern = true;
+
                 lastOp = 0;
+
             } else if (!isLiteral && c == ']') {
                 // Final closing delimiter.  This is the only way we leave this
                 // loop if the pattern is well-formed.
@@ -1318,11 +1471,14 @@ public class UnicodeSet implements UnicodeFilter {
                     
                 }
                 if (anchor == 2) {
+                    rebuildPattern = true;
+                    newPat.append(SymbolTable.SYMBOL_REF);
                     add(TransliterationRule.ETHER);
                 }
+                mode = 4;
                 break;
             } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
-                lastOp = c;
+                lastOp = (char) c;
             } else if (lastOp == '-') {
                 if (lastChar >= c) {
                     // Don't allow redundant (a-a) or empty (b-a) ranges;
@@ -1330,36 +1486,45 @@ public class UnicodeSet implements UnicodeFilter {
                     throw new IllegalArgumentException("Invalid range " + lastChar +
                                                        '-' + c);
                 }
-                add((char) lastChar, c);
+                add(lastChar, c);
+                _appendToPat(newPat, lastChar, false);
+                newPat.append('-');
+                _appendToPat(newPat, c, false);
                 lastOp = 0;
-                lastChar = -1;
+                lastChar = NONE;
             } else if (lastOp != 0) {
                 // We have <set>&<char> or <char>&<char>
                 throw new IllegalArgumentException("Unquoted " + lastOp);
             } else {
-                if (lastChar >= 0) {
+                if (lastChar != NONE) {
                     // We have <char><char>
                     add((char) lastChar, (char) lastChar);
+                    _appendToPat(newPat, lastChar, false);
                 }
                 lastChar = c;
             }
         }
 
-        if (mode == 0) {
-            throw new IllegalArgumentException("Missing '[' in \"" +
-                                               pattern.substring(start) + '"');
+        if (lastChar != NONE) {
+            add(lastChar, lastChar);
+            _appendToPat(newPat, lastChar, false);
         }
+
+//      if (mode == 0) {
+//          throw new IllegalArgumentException("Missing '[' in \"" +
+//                                             pattern.substring(start) + '"');
+//      }
 
         // Handle unprocessed stuff preceding the closing ']'
         if (lastOp == '-') {
             // Trailing '-' is treated as literal
             add(lastOp, lastOp);
+            newPat.append('-');
         } else if (lastOp == '&') {
             throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         }
-        if (lastChar >= 0) {
-            add((char) lastChar, (char) lastChar);
-        }
+
+        newPat.append(']');
 
         /**
          * If we saw a '^' after the initial '[' of this pattern, then perform
@@ -1369,17 +1534,30 @@ public class UnicodeSet implements UnicodeFilter {
             complement();
         }
 
-        /**
-         * i indexes the last character we parsed or is pattern.length().  In
-         * the latter case, we have run off the end without finding a closing
-         * ']'.  Otherwise, we know i < pattern.length(), and we set the
-         * ParsePosition to the next character to be parsed.
-         */
-        if (i == limit) {
-            throw new IllegalArgumentException("Missing ']' in \"" +
-                                               pattern.substring(start) + '"');
+        if (mode != 4) {
+            throw new IllegalArgumentException("Missing ']'");
         }
-        pos.setIndex(i+1);
+
+//      /**
+//       * i indexes the last character we parsed or is pattern.length().  In
+//       * the latter case, we have run off the end without finding a closing
+//       * ']'.  Otherwise, we know i < pattern.length(), and we set the
+//       * ParsePosition to the next character to be parsed.
+//       */
+//      if (i == limit) {
+//          throw new IllegalArgumentException("Missing ']' in \"" +
+//                                             pattern.substring(start) + '"');
+//      }
+  
+        pos.setIndex(i);
+
+        // Use the rebuilt pattern (newPat) only if necessary.  Prefer the
+        // generated pattern.
+        if (rebuildPattern) {
+            rebuiltPat.append(newPat.toString());
+        } else {
+            _generatePattern(rebuiltPat, false);
+        }
 
         if (false) {
             // Debug parser
@@ -1494,14 +1672,6 @@ public class UnicodeSet implements UnicodeFilter {
     // Implementation: Utility methods
     //----------------------------------------------------------------
 
-    /**
-     * Returns the character after the given position, or '\uFFFE' if
-     * there is none.
-     */
-    private static final char charAfter(String str, int i) {
-        return ((++i) < str.length()) ? str.charAt(i) : '\uFFFE';
-    }
-
     private void ensureCapacity(int newLen) {
         if (newLen <= list.length) return;
         int[] temp = new int[newLen + GROW_EXTRA];
@@ -1571,6 +1741,7 @@ public class UnicodeSet implements UnicodeFilter {
         int[] temp = list;
         list = buffer;
         buffer = temp;
+        pat = null;
         return this;
     }
 
@@ -1668,6 +1839,7 @@ public class UnicodeSet implements UnicodeFilter {
         int[] temp = list;
         list = buffer;
         buffer = temp;
+        pat = null;
         return this;
     }
 
@@ -1738,6 +1910,7 @@ public class UnicodeSet implements UnicodeFilter {
         int[] temp = list;
         list = buffer;
         buffer = temp;
+        pat = null;
         return this;
     }
 

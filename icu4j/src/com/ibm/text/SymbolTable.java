@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SymbolTable.java,v $ 
- * $Date: 2000/08/30 20:40:30 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/09/24 19:57:18 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -41,8 +41,9 @@ public interface SymbolTable {
     /**
      * Lookup the UnicodeSet associated with the given character, and
      * return it.  Return <tt>null</tt> if not found.
+     * @param ch a 32-bit code point from 0 to 0x10FFFF.
      */
-    UnicodeSet lookupSet(char ch);
+    UnicodeSet lookupSet(int ch);
 
     /**
      * Parse a symbol reference name from the given string, starting
