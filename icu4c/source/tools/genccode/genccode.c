@@ -127,7 +127,7 @@ main(int argc, char* argv[]) {
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-n or --name        symbol prefix, followed by the prefix\n"
             "\t-e or --entrypoint  entry point name, followed by the name\n"
-	    "\t-r or --revision    Specify a version\n"
+            "\t-r or --revision    Specify a version\n"
 #ifdef CAN_GENERATE_OBJECTS
             "\t-o or --object      write a .obj file instead of .c\n"
 #endif
