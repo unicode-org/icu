@@ -57,6 +57,10 @@
      * Test ucol_getAvailable and ucol_countAvailable()
      **/
     void TestGetAll(void);
+    /**
+     * Test ucol_GetDefaultRules ()
+     **/
+    void TestGetDefaultRules(void);
 
     
  
