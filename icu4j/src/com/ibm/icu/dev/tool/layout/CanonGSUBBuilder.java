@@ -3,12 +3,6 @@
  * Copyright (C) 2002-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/CanonGSUBBuilder.java,v $ 
- * $Date: 2004/05/03 21:07:28 $ 
- * $Revision: 1.1 $
- *
- *******************************************************************************
  */
 
 
@@ -16,8 +10,6 @@ package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UTF16;
-import java.util.Vector;
 
 /**
  * @author Eric Mader
