@@ -116,17 +116,13 @@ void CharIterTest::TestConstructionAndEquality() {
 
 }
 void CharIterTest::TestConstructionAndEqualityUChariter() {
-    const char testTextchars[]= "Now is the time for all good men to come to the aid of their country.";
-    const char testText2chars[]="Don't bother using this string.";
+    U_STRING_DECL(testText, "Now is the time for all good men to come to the aid of their country.", 69);
+    U_STRING_DECL(testText2, "Don't bother using this string.", 31);
 
-    UChar *testText = new UChar[sizeof(testTextchars)];
-    UChar *testText2 = new UChar[sizeof(testText2chars)];
-
-    u_uastrcpy(testText,  testTextchars);
-    u_uastrcpy(testText2, testText2chars);
+    U_STRING_INIT(testText, "Now is the time for all good men to come to the aid of their country.", 69);
+    U_STRING_INIT(testText2, "Don't bother using this string.", 31);
 
     UnicodeString result, result4, result5;
-
 
     UCharCharacterIterator* test1 = new UCharCharacterIterator(testText, u_strlen(testText));
     UCharCharacterIterator* test2 = new UCharCharacterIterator(testText, u_strlen(testText), 5);
@@ -135,6 +131,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     UCharCharacterIterator* test5 = (UCharCharacterIterator*)test1->clone();
     UCharCharacterIterator* test6 = new UCharCharacterIterator(*test1);
 
+    // j785: length=-1 will use u_strlen()
     UCharCharacterIterator* test7a = new UCharCharacterIterator(testText, -1);
     UCharCharacterIterator* test7b = new UCharCharacterIterator(testText, -1);
     UCharCharacterIterator* test7c = new UCharCharacterIterator(testText, -1, 2, 20, 5);
@@ -146,8 +143,8 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
 
     if (test8a->startIndex() < 0)
         errln("Construction failed: startIndex is negative");
-    if (test8b->endIndex() > (UTextOffset)sizeof(testTextchars))
-        errln("Construction failed: endIndex is greater than the text length");
+    if (test8b->endIndex() != u_strlen(testText))
+        errln("Construction failed: endIndex is different from the text length");
     if (test8c->getIndex() < test8c->startIndex() || test8c->endIndex() < test8c->getIndex())
         errln("Construction failed: index is invalid");
 
@@ -170,7 +167,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     test7b->getText(result4);
     test7c->getText(result5);
 
-    if(result != "" || result4 != "" || result5  != "")
+    if(result != UnicodeString(testText) || result4 != result || result5 != result)
         errln("error in construction");
     
     test1->getText(result);
@@ -191,17 +188,13 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     test1->setIndex(5);
     if (*test1 != *test2 || *test1 == *test5)
         errln("setIndex() failed");
-    test8b->setIndex32(0);
-    if (*test8a != *test8b)
+    test8b->setIndex32(5);
+    if (test8b->getIndex()!=5)
         errln("setIndex32() failed");
 
     *test1 = *test3;
     if (*test1 != *test3 || *test1 == *test5)
         errln("operator= failed");
-
-    
-    delete testText;
-    delete testText2;
 
     delete test1;
     delete test2;
