@@ -896,6 +896,29 @@ SOURCE=.\ucnv_bld.h
 # Begin Source File
 
 SOURCE=.\unicode\ucnv_cb.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ucnv_cb.h
+
+"..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy       unicode\ucnv_cb.h      ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ucnv_cb.h
+
+"..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy       unicode\ucnv_cb.h      ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
