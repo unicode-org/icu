@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/12/03 20:45:20 $ 
-* $Revision: 1.28 $
+* $Date: 2002/12/13 20:20:01 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -1396,9 +1396,8 @@ public final class RuleBasedCollator extends Collator
      * If no resource bundle is associated with the locale, UCA is used 
      * instead.
      * @param locale
-     * @exception Exception thrown when there's an error creating the Collator
      */
-    RuleBasedCollator(Locale locale) // throws Exception
+    RuleBasedCollator(Locale locale)
     {
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
         initUtility();
