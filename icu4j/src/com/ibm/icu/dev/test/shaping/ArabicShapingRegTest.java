@@ -405,6 +405,25 @@ public class ArabicShapingRegTest extends TestFmwk {
             }
         }
     }
+    
+    public void testEquals()
+    {
+        ArabicShaping as1 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
+        ArabicShaping as2 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
+        ArabicShaping as3 = new ArabicShaping(LETTERS_UNSHAPE | TEXT_DIRECTION_LOGICAL | LENGTH_FIXED_SPACES_AT_BEGINNING);
+        
+        if (! as1.equals(as1)) {
+            err("as1: " + as1 + " does not equal itself!\n");
+        }
+        
+        if (! as1.equals(as2)) {
+            err("as1: " + as1 + ", as2: " + as2 + " are not equal, but should be.\n");
+        }
+        
+        if (as1.equals(as3)) {
+            err("as1: " + as1 + ", as3: " + as3 + " are equal but should not be.\n");
+        }
+    }
 
     public void reportTestFailure(int index, TestData test, ArabicShaping shaper, String result, Exception error) {
         StringBuffer buf = new StringBuffer();
