@@ -311,6 +311,17 @@ void TestConvert()
         err=U_ZERO_ERROR;
       
     }
+    log_verbose("Testing ucnv_open() with converter name greater than 7 characters\n");
+    {
+         UConverter *cnv=NULL;
+         err=U_ZERO_ERROR;
+         cnv=ucnv_open("ibm-949,Madhu", &err);
+         if(U_FAILURE(err)){
+            log_err("FAILURE! ucnv_open(\"ibm-949,Madhu\", err)  failed. %s\n", myErrorName(err));
+         }
+         ucnv_close(cnv);
+
+    }
       /*Testing ucnv_convert()*/
     {
         int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
