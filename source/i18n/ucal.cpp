@@ -76,9 +76,26 @@ U_CAPI int32_t U_EXPORT2
 ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec) {
     int32_t result = 0;
     TimeZone* zone = _createTimeZone(zoneID, -1, ec);
-    if (U_SUCCESS(*ec) &&
-        zone->getDynamicClassID() == SimpleTimeZone::getStaticClassID()) {
-        result = ((SimpleTimeZone*) zone)->getDSTSavings();
+    if (U_SUCCESS(*ec)) {
+        if (zone->getDynamicClassID() == SimpleTimeZone::getStaticClassID()) {
+            result = ((SimpleTimeZone*) zone)->getDSTSavings();
+        } else {
+            // Since there is no getDSTSavings on TimeZone, we use a
+            // heuristic: Starting with the current time, march
+            // forwards for one year, looking for DST savings.
+            // Stepping by weeks is sufficient.
+            UDate d = Calendar::getNow();
+            for (int32_t i=0; i<53; ++i, d+=U_MILLIS_PER_DAY*7.0) {
+                int32_t raw, dst;
+                zone->getOffset(d, FALSE, raw, dst, *ec);
+                if (U_FAILURE(*ec)) {
+                    break;
+                } else if (dst != 0) {
+                    result = dst;
+                    break;
+                }
+            }
+        }
     }
     delete zone;
     return result;
