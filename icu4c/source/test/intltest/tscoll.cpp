@@ -16,7 +16,10 @@
 ***********************************************************************/
 
 #include "unicode/utypes.h"
-#include "tscoll.h"
+#include "unicode/uchar.h"
+
+
+#include "dadrcoll.h"
 
 #include "encoll.h"
 #include "frcoll.h"
@@ -40,6 +43,7 @@
 #include "srchtest.h"
 #include "cntabcol.h"
 #include "lcukocol.h"
+
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -287,9 +291,56 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
+    case 19:
+      name = "DataDrivenTest";
+      if (exec) {
+        logln("DataDrivenTest---"); logln("");
+        DataDrivenCollatorTest test;
+        callTest( test, par );
+      }
+      break;
+
     default: name = ""; break;
     }
 }
+
+void 
+IntlTestCollator::doTestVariant(Collator* col, UnicodeString &source, UnicodeString &target, Collator::EComparisonResult result)
+{   
+  UErrorCode status = U_ZERO_ERROR;
+
+  Collator::EComparisonResult compareResult = col->compare(source, target);
+
+  CollationKey srckey, tgtkey;
+  col->getCollationKey(source, srckey, status);
+  col->getCollationKey(target, tgtkey, status);
+  if (U_FAILURE(status)){
+    errln("Creation of collation keys failed\n");
+  }
+  Collator::EComparisonResult keyResult = srckey.compareTo(tgtkey);
+
+  reportCResult(source, target, srckey, tgtkey, compareResult, keyResult, result, result);
+/*
+  if (compareResult != result) {
+    errln("String comparison failed in variant test\n");
+  }
+  if (keyResult != result) {
+    errln("Collation key comparison failed in variant test\n");
+  }
+*/
+}
+
+void 
+IntlTestCollator::doTest(Collator* col, UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
+{
+  doTestVariant(col, source, target, result);
+  if(result == Collator::LESS) {
+    doTestVariant(col, target, source, Collator::GREATER);
+  } else if (result == Collator::GREATER) {
+    doTestVariant(col, target, source, Collator::LESS);
+  }
+}
+
 
 // used for collation result reporting, defined here for convenience
 // (maybe moved later)
