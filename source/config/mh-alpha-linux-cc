@@ -16,9 +16,6 @@ SHAREDLIBCPPFLAGS = -DPIC
 LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
-# Use int for int32_t
-DEFS += -D_LP64
-
 # The tests need complete IEEE floating point support
 CFLAGS += -ieee
 CXXFLAGS += -ieee
