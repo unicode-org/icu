@@ -28,7 +28,6 @@ icu4c/source/data/brkitr/wordLE.brk -text
 icu4c/source/data/brkitr/word_thBE.brk -text
 icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/data/unidata/UCARules.txt -text svneol=unset#application/octet-stream
-icu4c/source/samples/translit/U0080.pdf -text
 icu4c/source/samples/ucnv/data01.ut8 -text svneol=unset#application/octet-stream
 icu4c/source/samples/ucnv/data02.bin -text svneol=unset#application/octet-stream
 icu4c/source/test/collperf/readme.html svneol=native#text/html
