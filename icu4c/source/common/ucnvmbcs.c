@@ -799,7 +799,14 @@ _MBCSOpen(UConverter *cnv,
           uint32_t options,
           UErrorCode *pErrorCode) {
     if((options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        if(cnv->sharedData->table->mbcs.swapLFNLStateTable==NULL) {
+        /* do this because double-checked locking is broken */
+        UBool isCached;
+
+        umtx_lock(NULL);
+        isCached=cnv->sharedData->table->mbcs.swapLFNLStateTable!=NULL;
+        umtx_unlock(NULL);
+
+        if(!isCached) {
             if(!_EBCDICSwapLFNL(cnv->sharedData, pErrorCode)) {
                 /* the option does not apply, remove it */
                 cnv->options&=~UCNV_OPTION_SWAP_LFNL;

@@ -445,7 +445,14 @@ unames_cleanup()
 static UBool
 isDataLoaded(UErrorCode *pErrorCode) {
     /* load UCharNames from file if necessary */
-    if(uCharNames==NULL) {
+    UBool isCached;
+
+    /* do this because double-checked locking is broken */
+    umtx_lock(NULL);
+    isCached=uCharNames!=NULL;
+    umtx_unlock(NULL);
+
+    if(!isCached) {
         UCharNames *names;
         UDataMemory *data;
 
