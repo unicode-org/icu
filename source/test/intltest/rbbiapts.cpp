@@ -734,6 +734,73 @@ void RBBIAPITest::TestBug2190() {
 }
 
 
+void RBBIAPITest::TestRegistration() {
+  UErrorCode status = U_ZERO_ERROR;
+  BreakIterator* thai_word = BreakIterator::createWordInstance("th_TH", status);
+  BreakIterator* root_word = BreakIterator::createWordInstance("", status);
+  const UObject* key = BreakIterator::registerBreak(thai_word, "xx", BREAK_WORD, status);
+
+  {
+	  if (*thai_word == *root_word) {
+			errln("thai not different from root");
+	  }
+  }
+
+  {
+    BreakIterator* result = BreakIterator::createWordInstance("xx_XX", status);
+    if (*result != *thai_word) {
+      errln("result not equal");
+    }
+    delete result;
+  }
+  
+  {
+    StringEnumeration* avail = BreakIterator::getAvailableLocales();
+    UBool found = FALSE;
+    while (const UnicodeString* p = avail->snext(status)) {
+      if (p->compare("xx") == 0) {
+	found = TRUE;
+	break;
+      }
+    }
+    delete avail;
+    if (!found) {
+      errln("did not find test locale");
+    }
+  }
+
+  {
+    UBool unreg = BreakIterator::unregisterBreak(key, status);
+    if (!unreg) {
+      errln("unable to unregister");
+    }
+  }
+
+  {
+    BreakIterator* result = BreakIterator::createWordInstance("xx", status);
+    BreakIterator* root = BreakIterator::createWordInstance("", status);
+      if (*root != *result) {
+	errln("did not get root break");
+      }
+    delete root;
+    delete result;
+  }
+
+  {
+    StringEnumeration* avail = BreakIterator::getAvailableLocales();
+    UBool found = FALSE;
+    while (const UnicodeString* p = avail->snext(status)) {
+      if (p->compare("xx") == 0) {
+	found = TRUE;
+	break;
+      }
+    }
+    delete avail;
+    if (found) {
+      errln("found test locale");
+    }
+  }
+}
 
 //---------------------------------------------
 // runIndexedTest
@@ -755,6 +822,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
         case  9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
         case 10: name = "TestBug2190"; if (exec) TestBug2190(); break;
+        case 11: name = "TestRegistration"; if (exec) TestRegistration(); break;
 
         default: name = ""; break; /*needed to end loop*/
     }

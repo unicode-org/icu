@@ -41,10 +41,24 @@ U_NAMESPACE_END
 #include "unicode/chariter.h"
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
+#include "unicode/strenum.h"
 
+#include "mutex.h"
+#include "iculserv.h"
 
 U_NAMESPACE_BEGIN
 
+/**
+ * Used in registration of break iterators.
+ */
+typedef enum {
+  BREAK_CHARACTER,
+  BREAK_WORD,
+  BREAK_LINE,
+  BREAK_SENTENCE,
+  BREAK_TITLE,
+} UBreakType;
+  
 /**
  * The BreakIterator class implements methods for finding the location
  * of boundaries in text. BreakIterator is an abstract base class.
@@ -453,7 +467,9 @@ public:
                                                        UErrorCode& status);
 
     /**
-     * Get the set of Locales for which TextBoundaries are installed
+     * Get the set of Locales for which TextBoundaries are installed.
+     * <p><b>Note:</b> this will not return locales added through the register
+     * call.</p>
      * @param count the output parameter of number of elements in the locale list
      * @return available locales
      * @stable
@@ -513,6 +529,42 @@ public:
      */
     inline UBool isBufferClone(void);
 
+    /**
+     * Register a new break iterator of the indicated kind, to use in the given locale.
+     * The break iterator will be adoped.  Clones of the iterator will be returned
+     * if a request for a break iterator of the given kind matches or falls back to
+     * this locale.
+     */
+    static const UObject* registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status);
+
+    /**
+     * Unregister a previously-registered BreakIterator using the key returned from the
+     * register call.  Key becomes invalid after this call and should not be used again.
+     * Returns TRUE if the iterator for the key was successfully unregistered.
+     */
+    static UBool unregisterBreak(const UObject* key, UErrorCode& status);
+
+    /**
+     * Return a StringEnumeration over the available locales, including registered locales.
+     */
+    static StringEnumeration* getAvailableLocales(void);
+
+ private:
+    static ICULocaleService* fgService;
+    static UMTX fgLock;
+    static ICULocaleService* getService(void);
+
+    static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
+    static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
+    static BreakIterator* makeLineInstance(const Locale& loc, UErrorCode& status);
+    static BreakIterator* makeSentenceInstance(const Locale& loc, UErrorCode& status);
+    static BreakIterator* makeTitleInstance(const Locale& loc, UErrorCode& status);
+
+    static BreakIterator* createInstance(const Locale& loc, UBreakType kind, UErrorCode& status);
+    static BreakIterator* makeInstance(const Locale& loc, int32_t kind, UErrorCode& status);
+
+    friend class ICUBreakIteratorFactory;
+	friend class ICUBreakIteratorService;
 
 protected:
     BreakIterator();
