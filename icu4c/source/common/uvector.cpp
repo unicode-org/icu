@@ -48,7 +48,7 @@ UVector::~UVector() {
 }
 
 void UVector::addElement(void* obj) {
-    if (ensureCapacity(count)) {
+    if (ensureCapacity(count+1)) {
         elements[count++] = obj;
     }
 }
@@ -79,15 +79,10 @@ void* UVector::elementAt(int32_t index) const {
 }
 
 void UVector::removeElementAt(int32_t index) {
-    if (0 <= index && index < count) {
-        if (deleter != 0) {
-            (*deleter)(elements[index]);
-        }
-        for (int32_t i=index; i<count; ++i) {
-            elements[i] = elements[i+1];
-        }
+    void* e = orphanElementAt(index);
+    if (e != 0 && deleter != 0) {
+        (*deleter)(e);
     }
-    /* else index out of range */
 }
 
 bool_t UVector::removeElement(void* obj) {
@@ -153,6 +148,28 @@ UVector::Comparer UVector::setComparer(Comparer d) {
 
 bool_t UVector::isOutOfMemory() {
     return outOfMemory;
+}
+
+/**
+ * Removes the element at the given index from this vector and
+ * transfer ownership of it to the caller.  After this call, the
+ * caller owns the result and must delete it and the vector entry
+ * at 'index' is removed, shifting all subsequent entries back by
+ * one index and shortening the size of the vector by one.  If the
+ * index is out of range or if there is no item at the given index
+ * then 0 is returned and the vector is unchanged.
+ */
+void* UVector::orphanElementAt(int32_t index) {
+    void* e = 0;
+    if (0 <= index && index < count) {
+        e = elements[index];
+        for (int32_t i=index; i<count; ++i) {
+            elements[i] = elements[i+1];
+        }
+		--count;
+    }
+    /* else index out of range */
+    return e;
 }
 
 UStack::UStack(int32_t initialCapacity) :
