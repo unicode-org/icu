@@ -243,7 +243,7 @@ public final class UScript {
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
 
         // if rb is not a strict fallback of the requested locale, return null
-        if (!LocaleUtility.isFallbackOf(rb.getLocale(), locale)) {
+        if (rb==null || !LocaleUtility.isFallbackOf(rb.getLocale(), locale)) {
             return null;
         }
 
