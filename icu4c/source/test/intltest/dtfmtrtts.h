@@ -78,6 +78,7 @@ static double randDouble(double range)
 
 protected:
     UBool failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg, const UnicodeString& str);
 
 private:
 
