@@ -528,38 +528,16 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
 
 /* conversions between char* and UChar* ------------------------------------- */
 
-UChar* u_uastrcpy(UChar *ucs1,
-          const char *s2 )
-{
-  UConverter *cnv = getDefaultConverter();
-  if(cnv != NULL) {
-    UErrorCode err = U_ZERO_ERROR;
-    ucnv_toUChars(cnv,
-                    ucs1,
-                    MAX_STRLEN,
-                    s2,
-                    uprv_strlen(s2),
-                    &err);
-    releaseDefaultConverter(cnv);
-    if(U_FAILURE(err)) {
-      *ucs1 = 0;
-    }
-  } else {
-    *ucs1 = 0;
-  }
-  return ucs1;
-}
-
 /*
  returns the minimum of (the length of the null-terminated string) and n.
 */
-static int32_t u_astrnlen(const char *ucs1, int32_t n)
+static int32_t u_astrnlen(const char *s1, int32_t n)
 {
     int32_t len = 0;
 
-    if (ucs1)
+    if (s1)
     {
-        while (*(ucs1++) && n--)
+        while (*(s1++) && n--)
         {
             len++;
         }
@@ -568,7 +546,7 @@ static int32_t u_astrnlen(const char *ucs1, int32_t n)
 }
 
 UChar* u_uastrncpy(UChar *ucs1,
-           const char *s2 ,
+           const char *s2,
            int32_t n)
 {
   UChar *target = ucs1;
@@ -596,6 +574,76 @@ UChar* u_uastrncpy(UChar *ucs1,
     *ucs1 = 0;
   }
   return ucs1;
+}
+
+UChar* u_uastrcpy(UChar *ucs1,
+          const char *s2 )
+{
+  UConverter *cnv = getDefaultConverter();
+  if(cnv != NULL) {
+    UErrorCode err = U_ZERO_ERROR;
+    ucnv_toUChars(cnv,
+                    ucs1,
+                    MAX_STRLEN,
+                    s2,
+                    uprv_strlen(s2),
+                    &err);
+    releaseDefaultConverter(cnv);
+    if(U_FAILURE(err)) {
+      *ucs1 = 0;
+    }
+  } else {
+    *ucs1 = 0;
+  }
+  return ucs1;
+}
+
+/*
+ returns the minimum of (the length of the null-terminated string) and n.
+*/
+static int32_t u_ustrnlen(const UChar *ucs1, int32_t n)
+{
+    int32_t len = 0;
+
+    if (ucs1)
+    {
+        while (*(ucs1++) && n--)
+        {
+            len++;
+        }
+    }
+    return len;
+}
+
+char* u_austrncpy(char *s1,
+        const UChar *ucs2,
+        int32_t n)
+{
+  char *target = s1;
+  UConverter *cnv = getDefaultConverter();
+  if(cnv != NULL) {
+    UErrorCode err = U_ZERO_ERROR;
+    ucnv_reset(cnv);
+    ucnv_fromUnicode(cnv,
+                  &target,
+                  s1+n,
+                  &ucs2,
+                  ucs2+u_ustrnlen(ucs2, n),
+                  NULL,
+                  TRUE,
+                  &err);
+    ucnv_reset(cnv); /* be good citizens */
+    releaseDefaultConverter(cnv);
+    if(U_FAILURE(err) && (err != U_BUFFER_OVERFLOW_ERROR) ) {
+      *s1 = 0; /* failure */
+    }
+    if(target < (s1+n)) { /* U_BUFFER_OVERFLOW_ERROR isn't an err, just means no termination will happen. */
+      *target = 0;  /* terminate */
+    }
+  } else {
+    *s1 = 0;
+  }
+  return s1;
 }
 
 char* u_austrcpy(char *s1,
