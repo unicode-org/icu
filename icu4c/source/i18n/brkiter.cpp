@@ -48,8 +48,8 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
     BreakIterator* result = NULL;
     const char* filename = "word";
 
-    UnicodeString temp;
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status))
+        return NULL;
     if (!uprv_strcmp(key.getLanguage(), "th"))
     {
         filename = "word_th";
@@ -57,18 +57,16 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
-    if (!U_FAILURE(status)) {
-
-            if(!uprv_strcmp(filename, "word_th")) {
-                filename = "thaidict.brk";
-
-                result = new DictionaryBasedBreakIterator(file, (char *)filename, status);
-            }
-            else {
-	      result = new RuleBasedBreakIterator(file);
-            }
+    if (U_SUCCESS(status)) {
+        if(!uprv_strcmp(filename, "word_th")) {
+            filename = "thaidict.brk";
+            result = new DictionaryBasedBreakIterator(file, filename, status);
+        }
+        else {
+            result = new RuleBasedBreakIterator(file);
+        }
     }
-    
+
     return result;
 }
 
@@ -84,8 +82,8 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
     BreakIterator* result = NULL;
     const char* filename = "line";
 
-    UnicodeString temp;
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status))
+        return NULL;
     if (!uprv_strcmp(key.getLanguage(), "th"))
     {
         filename = "line_th";
@@ -94,17 +92,14 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-
-          if (!uprv_strcmp(key.getLanguage(), "th")) {
-                const char* dataDir = u_getDataDirectory();
-                filename = "thaidict.brk";
-                result = new DictionaryBasedBreakIterator(file, (char *)filename, status);
-            }
-            else {
-                result = new RuleBasedBreakIterator(file);
-            }
+        if (!uprv_strcmp(key.getLanguage(), "th")) {
+            filename = "thaidict.brk";
+            result = new DictionaryBasedBreakIterator(file, filename, status);
+        }
+        else {
+            result = new RuleBasedBreakIterator(file);
+        }
     }
-    
 
     return result;
 }
@@ -119,15 +114,15 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
     // default rules files and the alternate rules files for Thai.  This function
     // will have to be made fully general at some time in the future!
     BreakIterator* result = NULL;
-    const char* filename = "char";
+    static const char filename[] = "char";
 
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status))
+        return NULL;
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-	  result = new RuleBasedBreakIterator(file);
+        result = new RuleBasedBreakIterator(file);
     }
-    
 
     return result;
 }
@@ -142,15 +137,16 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
     // default rules files and the alternate rules files for Thai.  This function
     // will have to be made fully general at some time in the future!
     BreakIterator* result = NULL;
-    const char* filename = "sent";
+    static const char filename[] = "sent";
 
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status))
+        return NULL;
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-	  result = new RuleBasedBreakIterator(file);
+        result = new RuleBasedBreakIterator(file);
     }
-    
+
     return result;
 }
 
