@@ -1775,6 +1775,9 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 * This function tries to get a maximum expansion count from UCA, 
 * @param order last collation element to look for in expansion sequence
 * @param status error status
+* @return maximum size of the expansion sequences ending with the collation 
+*         element or 1 if collation element does not occur at the end of any 
+*         expansion sequence
 */
 uint8_t ucol_getMaxExpansionUCA(uint32_t order) 
 {

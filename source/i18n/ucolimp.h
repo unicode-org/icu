@@ -18,7 +18,8 @@
 * Modification history
 * Date        Name      Comments
 * 02/16/2001  synwee    Added UCOL_GETPREVCE for the use in ucoleitr
-* 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator                      
+* 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator   
+* 03/02/2001  synwee    Added UCOL_IMPLICIT_CE                    
 */
 
 #ifndef UCOL_IMP_H
@@ -185,6 +186,9 @@ struct incrementalContext {
 #define UCOL_SECIGNORABLE 0
 #define UCOL_TERIGNORABLE 0
 
+#define UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK     0x80200080
+#define UCOL_IMPLICIT_MISCELLANEOUS_LAST_CE_MASK 0x04000083
+
 /* get weights from a CE */
 #define UCOL_PRIMARYORDER(order) (isLongPrimary((order))?(((order) & UCOL_LONGPRIMARYORDERMASK)>> UCOL_LONGPRIMARYORDERSHIFT):(((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT))
 #define UCOL_SECONDARYORDER(order) (isLongPrimary((order))?UCOL_UNMARKED:((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
@@ -307,13 +311,16 @@ struct incrementalContext {
   if (*start == order) {                                                     \
     result = *((coll)->expansionCESize + (start - (coll)->endExpansionCE));  \
   }                                                                          \
-  else                                                                       \
-  if (*limit == order) {                                                     \
-    result = *(coll->expansionCESize + (limit - coll->endExpansionCE));      \
-  }                                                                          \
-  else {                                                                     \
-    result = 0;                                                              \
-  }                                                                          \
+  else if (*limit == order) {                                                \
+         result = *(coll->expansionCESize + (limit - coll->endExpansionCE)); \
+       }                                                                     \
+       else if (order ^ UCOL_IMPLICIT_SURROGATE_LAST_CE_MASK == 0 ||         \
+                order ^ UCOL_IMPLICIT_MISCELLANEOUS_LAST_CE_MASK == 0) {     \
+              result = 2;                                                    \
+            }                                                                \
+            else {                                                           \
+              result = 1;                                                    \
+            }                                                                \
 }
 
 /* 
@@ -321,12 +328,13 @@ struct incrementalContext {
 * Used in the Boyer Moore algorithm.
 * @param coll const UCollator pointer
 * @param order last collation element of the expansion sequence
-* @param result size of the longest expansion with argument collation element
-*        as the last element
+* @return maximum size of the expansion sequences ending with the collation 
+*         element or 1 if collation element does not occur at the end of any 
+*         expansion sequence
 */
 #define UCOL_GETMAXEXPANSION(coll, order, result) {                          \
   UCOL_GETCOLLATORMAXEXPANSION((coll), (order), (result));                   \
-  if ((result) != 0) {                                                       \
+  if ((result) == 1) {                                                       \
     result = ucol_getMaxExpansionUCA((order));                               \
   }                                                                          \
 }
