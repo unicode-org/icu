@@ -30,6 +30,15 @@ U_CDECL_BEGIN
 /*==========================================================================*/
 /* Unicode version number                                                   */
 /*==========================================================================*/
+/**
+ * Unicode version number, default for the current ICU version.
+ * The actual Unicode Character Database (UCD) data is stored in uprops.dat
+ * and may be generated from UCD files from a different Unicode version.
+ * Call u_getUnicodeVersion to get the actual Unicode version of the data.
+ *
+ * @see u_getUnicodeVersion
+ * @stable
+ */
 #define U_UNICODE_VERSION "3.1.1"
 
 /**
@@ -62,6 +71,12 @@ U_CDECL_BEGIN
  * @stable 
  */
 #define UCHAR_MAX_VALUE 0x10ffff
+
+/**
+ * Get a single-bit bit set (a flag) from a bit number 0..31.
+ * @draft ICU 2.1
+ */
+#define U_MASK(x) ((uint32_t)1<<(x))
 
 /**
  * Selection constants for Unicode properties.
@@ -283,6 +298,78 @@ enum UCharCategory
 };
 
 typedef enum UCharCategory UCharCategory;
+
+/**
+ * U_GC_XX_MASK constants are bit flags corresponding to Unicode
+ * general category values.
+ * For each category, the nth bit is set if the numeric value of the
+ * corresponding UCharCategory constant is n.
+ *
+ * There are also some U_GC_Y_MASK constants for groups of general categories
+ * like L& for all letter categories.
+ *
+ * @see u_charType
+ * @see U_GET_GC_MASK
+ * @see UCharCategory
+ * @draft ICU 2.1
+ */
+#define U_GC_CN_MASK    U_MASK(U_GENERAL_OTHER_TYPES)
+
+#define U_GC_LU_MASK    U_MASK(U_UPPERCASE_LETTER)
+#define U_GC_LL_MASK    U_MASK(U_LOWERCASE_LETTER)
+#define U_GC_LT_MASK    U_MASK(U_TITLECASE_LETTER)
+#define U_GC_LM_MASK    U_MASK(U_MODIFIER_LETTER)
+#define U_GC_LO_MASK    U_MASK(U_OTHER_LETTER)
+
+#define U_GC_MN_MASK    U_MASK(U_NON_SPACING_MARK)
+#define U_GC_ME_MASK    U_MASK(U_ENCLOSING_MARK)
+#define U_GC_MC_MASK    U_MASK(U_COMBINING_SPACING_MARK)
+
+#define U_GC_ND_MASK    U_MASK(U_DECIMAL_DIGIT_NUMBER)
+#define U_GC_NL_MASK    U_MASK(U_LETTER_NUMBER)
+#define U_GC_NO_MASK    U_MASK(U_OTHER_NUMBER)
+
+#define U_GC_ZS_MASK    U_MASK(U_SPACE_SEPARATOR)
+#define U_GC_ZL_MASK    U_MASK(U_LINE_SEPARATOR)
+#define U_GC_ZP_MASK    U_MASK(U_PARAGRAPH_SEPARATOR)
+
+#define U_GC_CC_MASK    U_MASK(U_CONTROL_CHAR)
+#define U_GC_CF_MASK    U_MASK(U_FORMAT_CHAR)
+#define U_GC_CO_MASK    U_MASK(U_PRIVATE_USE_CHAR)
+#define U_GC_CS_MASK    U_MASK(U_SURROGATE)
+
+#define U_GC_PD_MASK    U_MASK(U_DASH_PUNCTUATION)
+#define U_GC_PS_MASK    U_MASK(U_START_PUNCTUATION)
+#define U_GC_PE_MASK    U_MASK(U_END_PUNCTUATION)
+#define U_GC_PC_MASK    U_MASK(U_CONNECTOR_PUNCTUATION)
+#define U_GC_PO_MASK    U_MASK(U_OTHER_PUNCTUATION)
+
+#define U_GC_SM_MASK    U_MASK(U_MATH_SYMBOL)
+#define U_GC_SC_MASK    U_MASK(U_CURRENCY_SYMBOL)
+#define U_GC_SK_MASK    U_MASK(U_MODIFIER_SYMBOL)
+#define U_GC_SO_MASK    U_MASK(U_OTHER_SYMBOL)
+
+#define U_GC_PI_MASK    U_MASK(U_INITIAL_PUNCTUATION)
+#define U_GC_PF_MASK    U_MASK(U_FINAL_PUNCTUATION)
+
+
+#define U_GC_L_MASK \
+            (U_GC_LU_MASK|U_GC_LL_MASK|U_GC_LT_MASK|U_GC_LM_MASK|U_GC_LO_MASK)
+
+#define U_GC_M_MASK (U_GC_MN_MASK|U_GC_ME_MASK|U_GC_MC_MASK)
+
+#define U_GC_N_MASK (U_GC_ND_MASK|U_GC_NL_MASK|U_GC_NO_MASK)
+
+#define U_GC_Z_MASK (U_GC_ZS_MASK|U_GC_ZL_MASK|U_GC_ZP_MASK)
+
+#define U_GC_C_MASK \
+            (U_GC_CN_MASK|U_GC_CC_MASK|U_GC_CF_MASK|U_GC_CO_MASK|U_GC_CS_MASK)
+
+#define U_GC_P_MASK \
+            (U_GC_PD_MASK|U_GC_PS_MASK|U_GC_PE_MASK|U_GC_PC_MASK|U_GC_PO_MASK| \
+             U_GC_PI_MASK|U_GC_PF_MASK)
+
+#define U_GC_S_MASK (U_GC_SM_MASK|U_GC_SC_MASK|U_GC_SK_MASK|U_GC_SO_MASK)
 
 /**
  * This specifies the language directional property of a character set.
@@ -1236,6 +1323,18 @@ u_charCellWidth(UChar32 c);
  */
 U_CAPI int8_t U_EXPORT2
 u_charType(UChar32 c);
+
+/**
+ * Get a single-bit bit set for the general category of a character.
+ * This bit set can be compared bitwise with U_GC_SM_MASK, U_GC_L_MASK, etc.
+ * Same as U_MASK(u_charType(c)).
+ *
+ * @see u_charType
+ * @see UCharCategory
+ * @see U_GC_CN_MASK
+ * @draft ICU 2.1
+ */
+#define U_GET_GC_MASK(c) U_MASK(u_charType(c))
 
 /**
  * Callback from u_enumCharTypes(), is called for each contiguous range
