@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/02/19 19:13:30 $ 
-* $Revision: 1.23 $
+* $Date: 2003/02/21 01:21:33 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -740,6 +740,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
     		case UProperty.XID_START: {
         		return compareAdditionalType(getAdditional(codepoint, 1),
         		                             XID_START_PROPERTY_);
+    		}
+    		case UProperty.CASE_SENSITIVE: {
+        		return isCaseSensitive(codepoint);
     		}
     		default:
         		// not a known binary property
@@ -2090,5 +2093,48 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private boolean compareAdditionalType(int property, int type) 
     {
     	return (property & (1 << type)) != 0;
+    }
+
+    /**
+     * Returns true if the given code point is either the source of a case
+     * mapping or _in_ the target of a case mapping.  Not the same as the
+     * general category Cased_Letter.
+     *
+     * @param cp the code point to test
+     * @return true if cp is case sensitive
+     */
+    private static boolean isCaseSensitive(int cp) {
+        return CASE_SENSITIVE.contains(cp);
+    }
+
+    private static UnicodeSet CASE_SENSITIVE = null;
+
+    // MACHINE-GENERATED; Unicode version 3.2.0.0; DO NOT EDIT; See com.ibm.icu.dev.tools.translit.UnicodeSetCloseOver
+    private static final String CASE_SENSITIVE_RANGES =
+        "AZaz\u00B5\u00B5\u00C0\u00D6\u00D8\u00F6\u00F8\u0137\u0139\u017F\u0181"+
+        "\u018C\u018E\u0199\u019C\u01A9\u01AC\u01B9\u01BC\u01BD\u01BF\u01BF\u01C4"+
+        "\u0220\u0222\u0233\u0253\u0254\u0256\u0257\u0259\u0259\u025B\u025B\u0260"+
+        "\u0260\u0263\u0263\u0268\u0269\u026F\u026F\u0272\u0272\u0275\u0275\u0280"+
+        "\u0280\u0283\u0283\u0288\u0288\u028A\u028B\u0292\u0292\u02BC\u02BC\u02BE"+
+        "\u02BE\u0300\u0301\u0307\u0308\u030A\u030A\u030C\u030C\u0313\u0313\u0331"+
+        "\u0331\u0342\u0342\u0345\u0345\u0386\u0386\u0388\u038A\u038C\u038C\u038E"+
+        "\u03A1\u03A3\u03CE\u03D0\u03D1\u03D5\u03D6\u03D8\u03F2\u03F4\u03F5\u0400"+
+        "\u0481\u048A\u04BF\u04C1\u04CE\u04D0\u04F5\u04F8\u04F9\u0500\u050F\u0531"+
+        "\u0556\u0561\u0587\u1E00\u1E9B\u1EA0\u1EF9\u1F00\u1F15\u1F18\u1F1D\u1F20"+
+        "\u1F45\u1F48\u1F4D\u1F50\u1F57\u1F59\u1F59\u1F5B\u1F5B\u1F5D\u1F5D\u1F5F"+
+        "\u1F7D\u1F80\u1FB4\u1FB6\u1FBC\u1FBE\u1FBE\u1FC2\u1FC4\u1FC6\u1FCC\u1FD0"+
+        "\u1FD3\u1FD6\u1FDB\u1FE0\u1FEC\u1FF2\u1FF4\u1FF6\u1FFC\u2126\u2126\u212A"+
+        "\u212B\u2160\u217F\u24B6\u24E9\uFB00\uFB06\uFB13\uFB17\uFF21\uFF3A\uFF41"+
+        "\uFF5A\uD801\uDC00\uD801\uDC25\uD801\uDC28\uD801\uDC4D";
+
+    static {
+        CASE_SENSITIVE = new UnicodeSet();
+        for (int i=0; i<CASE_SENSITIVE_RANGES.length(); ) {
+            int start = UTF16.charAt(CASE_SENSITIVE_RANGES, i);
+            i += UTF16.getCharCount(start);
+            int end = UTF16.charAt(CASE_SENSITIVE_RANGES, i);
+            i += UTF16.getCharCount(end);
+            CASE_SENSITIVE.add(start, end);
+        }
     }
 }
