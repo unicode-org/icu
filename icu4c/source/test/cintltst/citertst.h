@@ -83,6 +83,10 @@
     * Tests the discontiguos contractions
     */
     static void TestDiscontiguos(void);
+    /**
+    * Tests that the iterators bails out when the CEBuffer is exhausted
+    */
+    static void TestCEBufferOverflow(void);
     
     /*------------------------------------------------------------------------
      Internal utilities
