@@ -197,11 +197,9 @@ void TestConstruction2()
   const char*     directory;
   const char*    locale="te_IN";
   wchar_t widedirectory[256];
-  char testdatapath[256];
+  const char *testdatapath;
 
-  directory= u_getDataDirectory();
-  uprv_strcpy(testdatapath, directory);
-  uprv_strcat(testdatapath, "testdata");
+  testdatapath=loadTestData(&err);
   mbstowcs(widedirectory, testdatapath, 256);
 
   log_verbose("Testing ures_openW().......\n");
