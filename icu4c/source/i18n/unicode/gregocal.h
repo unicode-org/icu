@@ -22,8 +22,6 @@
 #ifndef GREGOCAL_H
 #define GREGOCAL_H
 
-#include <stdio.h>
-
 #include "unicode/calendar.h"
 
 /**
@@ -438,22 +436,6 @@ protected:
 
 private: 
     /**
-     * Return the year that corresponds to the <code>WEEK_OF_YEAR</code> field.
-     * This may be one year before or after the calendar year stored
-     * in the <code>YEAR</code> field.  For example, January 1, 1999 is considered
-     * Friday of week 53 of 1998 (if minimal days in first week is
-     * 2 or less, and the first day of the week is Sunday).  Given
-     * these same settings, the ISO year of January 1, 1999 is
-     * 1998.
-     * <p>
-     * Warning: This method will complete all fields.
-     * @return the year corresponding to the <code>WEEK_OF_YEAR</code> field, which
-     * may be one year before or after the <code>YEAR</code> field.
-     * @see #WEEK_OF_YEAR
-     */
-    int32_t getISOYear(UErrorCode& status);
-
-    /**
      * Return the ERA.  We need a special method for this because the
      * default ERA is AD, but a zero (unset) ERA is BC.
      */
@@ -483,6 +465,15 @@ private:
      * is day zero.
      */
     UDate getEpochDay(UErrorCode& status);
+
+    static double computeJulianDayOfYear(bool_t isGregorian, int32_t year,
+                                         bool_t& isLeap);
+
+    int32_t computeRelativeDOW() const;
+
+    int32_t computeRelativeDOW(double julianDay) const;
+
+    int32_t computeDOYfromWOY(double julianDayOfYear) const;
 
     /**
      * Compute the Julian day number under either the Gregorian or the
@@ -538,7 +529,7 @@ private:
      * is unset, then the aggregate is unset.  Otherwise, the
      * aggregate is the later of the two stamps.
      */
-    EStampValues aggregateStamp(EStampValues stamp_a, EStampValues stamp_b);
+    int32_t aggregateStamp(int32_t stamp_a, int32_t stamp_b);
 
     /**
      * The point at which the Gregorian calendar rules are used, measured in
