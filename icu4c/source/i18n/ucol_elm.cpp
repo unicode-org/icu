@@ -121,7 +121,7 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
-  t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
+  t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);
   t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
   uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 

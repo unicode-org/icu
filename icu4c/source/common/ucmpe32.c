@@ -25,7 +25,7 @@
 /* builder data ------------------------------------------------------------- */
 
 CompactEIntArray* 
-ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, UErrorCode *status)
+ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, int32_t leadSurrogateValue, UErrorCode *status)
 {
   int32_t *bla;
   CompactEIntArray* this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
@@ -62,6 +62,7 @@ ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, UErrorCode *status)
   this_obj->stage2DefaultTop = 0;
   this_obj->fDefaultValue = defaultValue;
   this_obj->fSurrogateValue = surrogateValue;
+  this_obj->fLeadSurrogateValue = leadSurrogateValue;
   for(bla = this_obj->stage2; bla<this_obj->stage2+INIT_UCMPE32_STAGE2_SIZE; bla++) {
   /*for(bla = this_obj->stage2; bla<this_obj->stage2+_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {*/
     *bla = this_obj->fDefaultValue;
@@ -139,6 +140,7 @@ ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
 
 }
 
+/*#include <stdio.h>*/
 void  
 ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 {
@@ -156,10 +158,21 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 
         i=code>>_UCMPE32_TRIE_SHIFT;
         j=this_obj->stage1[i];
+        /*
+    if(code > 0xFFFF) {
+      fprintf(stdout, 
+              "Cp %05X (%04X %04X): Stage1 offset %04X, value %04X, ", 
+              code, UTF16_LEAD(code), UTF16_TRAIL(code), i, j);
+    }
+        */
         if(j<=this_obj->stage2DefaultTop) {
             /* allocate a stage 2 block */
-            int32_t *p, *bla, value;           
-            value = this_obj->stage2[j]; /* pick the value the empty block was filled with */
+            int32_t *p=NULL, bla=0;           
+            /*
+    if(code > 0xFFFF) {
+      fprintf(stdout, "S2 bef: %04X ", this_obj->stage2Top);
+    }
+            */
             if(this_obj->stage2Size < (this_obj->stage2Top + _UCMPE32_STAGE_2_BLOCK_COUNT)) {
               this_obj->stage2 = (int32_t *)uprv_realloc(this_obj->stage2, 2*this_obj->stage2Size);
               if(this_obj->stage2 == NULL) {
@@ -167,13 +180,24 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
               this_obj->stage2Size *= 2;
             }
             p = this_obj->stage2+this_obj->stage2Top;
-            for(bla = p; bla<p+_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {
-              *bla = value; /* fill the newly allocated block with the default values for that block */
+            for(bla = 0; bla<_UCMPE32_STAGE_2_BLOCK_COUNT; bla++) {
+              *(p+bla) = this_obj->stage2[j+bla]; 
+              /* fill the newly allocated block with the default values for that block */
             }
             this_obj->stage2Top += _UCMPE32_STAGE_2_BLOCK_COUNT;
-
+            
             this_obj->stage1[i]=j=(uint16_t)(p-this_obj->stage2);
-        }
+            /*
+            if(code > 0xFFFF) {
+ fprintf(stdout, "aft: %04X\n", this_obj->stage2Top);
+   }
+            */
+                        } 
+        /*
+else if(code>0xFFFF) {
+                          fprintf(stdout, "\n");
+                        }
+        */
         stage2Block=j;
     }
 
@@ -236,6 +260,9 @@ foldLeadSurrogate(CompactEIntArray* this_obj,
     if(s2<=this_obj->stage2DefaultTop) {
         /* allocate a new stage 2 block in stage (the memory is there from makeAll32()/makeFCD()) */
         s2=this_obj->stage1[leadSurrogate>>_UCMPE32_TRIE_SHIFT]=(uint16_t)this_obj->stage2Top;
+        for(i = 0; i<_UCMPE32_STAGE_2_BLOCK_COUNT; i++) {
+          this_obj->stage2[this_obj->stage2Top+i] = this_obj->fLeadSurrogateValue;
+        }
         this_obj->stage2Top+=_UCMPE32_STAGE_2_BLOCK_COUNT;
     }
     this_obj->stage2[s2+(leadSurrogate&_UCMPE32_STAGE_2_MASK)]=leadNorm32;
@@ -352,6 +379,7 @@ ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
 
   this_obj->fDefaultValue = orig->fDefaultValue;
   this_obj->fSurrogateValue = orig->fSurrogateValue;
+  this_obj->fLeadSurrogateValue = orig->fLeadSurrogateValue;
 
   this_obj->stage1Top = orig->stage1Top;
   this_obj->stage1 = (uint16_t *)uprv_malloc(this_obj->stage1Top*sizeof(uint16_t));
