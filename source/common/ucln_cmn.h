@@ -27,6 +27,8 @@ U_CFUNC UBool unorm_cleanup(void);
 
 U_CFUNC UBool uchar_cleanup(void);
 
+U_CFUNC UBool pname_cleanup(void);
+
 U_CFUNC UBool locale_cleanup(void);
 
 U_CFUNC UBool uloc_cleanup(void);
@@ -49,6 +51,6 @@ U_CFUNC UBool udata_cleanup(void);
 
 U_CFUNC UBool putil_cleanup(void);
 
-U_CFUNC UBool upropset_cleanup(void);
+U_CFUNC UBool uset_cleanup(void);
 
 #endif
