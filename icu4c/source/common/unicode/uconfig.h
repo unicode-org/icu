@@ -31,6 +31,11 @@
  * \def UCONFIG_ONLY_COLLATION
  * This switch turns off modules that are not needed for collation.
  *
+ * It does not turn off legacy conversion because that is necessary
+ * for ICU to work on EBCDIC platforms (for the default converter).
+ * If you want "only collation" and do not build for EBCDIC,
+ * then you can #define UCONFIG_NO_LEGACY_CONVERSION 1 as well.
+ *
  * @draft ICU 2.4
  */
 #ifndef UCONFIG_ONLY_COLLATION
@@ -39,7 +44,6 @@
 
 #if UCONFIG_ONLY_COLLATION
     /* common library */
-#   define UCONFIG_NO_LEGACY_CONVERSION 1
 #   define UCONFIG_NO_BREAK_ITERATION 1
 
     /* i18n library */
@@ -58,6 +62,9 @@
  * - Unicode charsets (UTF-7/8/16/32, CESU-8, SCSU, BOCU-1)
  * - US-ASCII
  * - ISO-8859-1
+ *
+ * Turning off legacy conversion is not possible on EBCDIC platforms
+ * because they need ibm-37 or ibm-1047 default converters.
  *
  * @draft ICU 2.4
  */
