@@ -219,8 +219,8 @@ void TimeZoneRegressionTest:: Test4084933() {
     int32_t offset8 = tz->getOffset(1,
         1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000)-1);
 
-    int32_t SToffset = -8 * 60*60*1000L;
-    int32_t DToffset = -7 * 60*60*1000L;
+    int32_t SToffset = (int32_t)(-8 * 60*60*1000L);
+    int32_t DToffset = (int32_t)(-7 * 60*60*1000L);
     if (offset1 != SToffset || offset2 != SToffset ||
         offset3 != SToffset || offset4 != DToffset ||
         offset5 != DToffset || offset6 != SToffset ||

@@ -220,7 +220,7 @@ parseCodePoints(const char *s,
         }
 
         /* read one code point */
-        value=uprv_strtoul(s, &end, 16);
+        value=(uint32_t)uprv_strtoul(s, &end, 16);
         if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
             fprintf(stderr, "genprops: syntax error parsing code point at %s\n", s);
             *pErrorCode=U_PARSE_ERROR;
@@ -260,14 +260,14 @@ mirrorLineFn(void *context,
              UErrorCode *pErrorCode) {
     char *end;
 
-    mirrorMappings[mirrorCount][0]=uprv_strtoul(fields[0][0], &end, 16);
+    mirrorMappings[mirrorCount][0]=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 0 at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
-    mirrorMappings[mirrorCount][1]=uprv_strtoul(fields[1][0], &end, 16);
+    mirrorMappings[mirrorCount][1]=(uint32_t)uprv_strtoul(fields[1][0], &end, 16);
     if(end<=fields[1][0] || end!=fields[1][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 1 at %s\n", fields[1][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -306,7 +306,7 @@ specialCasingLineFn(void *context,
     char *end;
 
     /* get code point */
-    specialCasings[specialCasingCount].code=uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
+    specialCasings[specialCasingCount].code=(uint32_t)uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
     end=(char *)skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
@@ -400,7 +400,7 @@ caseFoldingLineFn(void *context,
     char status;
 
     /* get code point */
-    caseFoldings[caseFoldingCount].code=uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
+    caseFoldings[caseFoldingCount].code=(uint32_t)uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
     end=(char *)skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
@@ -540,7 +540,7 @@ unicodeDataLineFn(void *context,
     p.numericValue=0x80000000;
 
     /* get the character code, field 0 */
-    p.code=uprv_strtoul(fields[0][0], &end, 16);
+    p.code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in field 0 at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -588,7 +588,7 @@ unicodeDataLineFn(void *context,
 
     /* decimal digit value, field 6 */
     if(fields[6][0]<fields[6][1]) {
-        value=uprv_strtoul(fields[6][0], &end, 10);
+        value=(uint32_t)uprv_strtoul(fields[6][0], &end, 10);
         if(end!=fields[6][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n",
                 (unsigned long)p.code);
@@ -600,7 +600,7 @@ unicodeDataLineFn(void *context,
 
     /* digit value, field 7 */
     if(fields[7][0]<fields[7][1]) {
-        value=uprv_strtoul(fields[7][0], &end, 10);
+        value=(uint32_t)uprv_strtoul(fields[7][0], &end, 10);
         if(end!=fields[7][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n",
                 (unsigned long)p.code);
@@ -623,10 +623,10 @@ unicodeDataLineFn(void *context,
             isNegative=FALSE;
         }
 
-        value=uprv_strtoul(s, &end, 10);
+        value=(uint32_t)uprv_strtoul(s, &end, 10);
         if(value>0 && *end=='/') {
             /* field 8 may contain a fractional value, get the denominator */
-            p.denominator=uprv_strtoul(end+1, &end, 10);
+            p.denominator=(uint32_t)uprv_strtoul(end+1, &end, 10);
             if(p.denominator==0) {
                 fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n",
                     (unsigned long)p.code);
@@ -660,7 +660,7 @@ unicodeDataLineFn(void *context,
     }
 
     /* get uppercase mapping, field 12 */
-    value=uprv_strtoul(fields[12][0], &end, 16);
+    value=(uint32_t)uprv_strtoul(fields[12][0], &end, 16);
     if(end!=fields[12][1]) {
         fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n",
             (unsigned long)p.code);
@@ -670,7 +670,7 @@ unicodeDataLineFn(void *context,
     p.upperCase=value;
 
     /* get lowercase value, field 13 */
-    value=uprv_strtoul(fields[13][0], &end, 16);
+    value=(uint32_t)uprv_strtoul(fields[13][0], &end, 16);
     if(end!=fields[13][1]) {
         fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n",
             (unsigned long)p.code);
@@ -680,7 +680,7 @@ unicodeDataLineFn(void *context,
     p.lowerCase=value;
 
     /* get titlecase value, field 14 */
-    value=uprv_strtoul(fields[14][0], &end, 16);
+    value=(uint32_t)uprv_strtoul(fields[14][0], &end, 16);
     if(end!=fields[14][1]) {
         fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n",
             (unsigned long)p.code);
