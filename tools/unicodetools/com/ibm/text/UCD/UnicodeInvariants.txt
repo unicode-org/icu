@@ -1,0 +1,60 @@
+﻿# Invariance tests
+# Each line indicates an invariant set relationship to be tested,
+# and is of the form:
+#
+# 	line := set relation set
+#
+#   relation := '='             // has identical contents to
+#            := ('>' | '⊃')    // is proper superset of
+#            := ('≥' | '⊇')    // is superset of 
+#            := ('<' | '⊂')    // is proper subset of
+#            := ('≤' | '⊆')    // is subset of
+#            := '!'             // has no intersection
+#            := '?'             // none of the above (they overlap, and neither contains the other)
+#
+# A set is a standard UnicodeSet, but where $pv can be used to express properties
+#
+# 	pv := '$' '×'? prop (('=' | ':') value)?
+#
+# The × indicates that the property is the previous released version.
+#  That is, if the version is 4.0.1, then the × version is 4.0.0
+# If the value is missing, it is defaulted to true
+# If the value is of the form «...», then the ... is interpreted as a regular expression
+# The property can be the short or long form as in the PropertyAliases.txt
+# The value (if enumerated) can be the short or long form as in PropertyValueAliases.txt
+#
+# A UnicodeSet is a boolean combinations of properties and character ranges, as you would see in
+#  Perl or other regular-expression languages. Examples:
+#	[$General_Category:Unassigned-[a-zA-Z]]
+# For details, see http://oss.software.ibm.com/icu/userguide/unicodeSet.html
+#
+# WARNING: do not use \p{...} or [:...:] syntax, since those will be
+# ICU's current version of properties, not the current snapshot's.
+# Use the $ notation for properties (listed above) instead.
+#
+# When this file is parsed, an error message may contain <@>
+#  to indicate the location of an error in the input line.
+
+# The following not very interesting, but show examples of use
+
+#$GC:Zs ! $GC:Zp
+#$East_Asian_Width:Neutral ? $GC:Uppercase_Letter
+$GC:Zs ? $Name:«.*SPACE.*»
+
+# Examples of parsing errors
+
+# $LBA:Neutral =  $GC:Zp # example of non-existant property
+# $LB:foo =  $GC:Zp # example of non-existant value
+# $GC:Zs @ $GC:Zp # example of unknown relation
+
+# The following should be real invariants
+# For illustration, different alias styles are used
+
+$Line_Break:Unknown = [$General_Category:Unassigned $GeneralCategory:PrivateUse]
+$LB:OP = $GC:Ps
+$General_Category:Decimal_Number = $Numeric_Type:Decimal
+$Whitespace ⊃ [$GC:Zs $GC:Zp $GC:Zl]
+$ID_Start ⊇ $×ID_Start
+$ID_Continue ⊇ $×ID_Continue
+
+
