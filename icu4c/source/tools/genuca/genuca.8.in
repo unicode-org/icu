@@ -23,9 +23,12 @@
 .BI "\-s\fP, \fB\-\-copyright"
 ]
 [
+.BI "\-s\fP, \fB\-\-sourcedir" " source"
+]
+[
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
-.IR bundle " \.\.\."
+.IR file
 .SH DESCRIPTION
 .B genuca
 create the UCA data table source files passed on
@@ -54,6 +57,12 @@ Display extra informative messages during execution.
 .TP
 .BI "\-s\fP, \fB\-\-copyright"
 Include a copyright notice into the binary data.
+.TP
+.BI "\-s\fP, \fB\-\-sourcedir" " source"
+Set the source directory to
+.IR source .
+The default source directory is specified by the environment variable
+.BR ICU_DATA .
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
