@@ -23,32 +23,9 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/ustdio.h"
+#include "uprintf.h"
 #include "ufmt_cmn.h"
 #include "locbund.h"
-
-/**
- * Struct encapsulating a single uprintf format specification.
- */
-struct u_sprintf_spec_info {
-  UChar     fSpec;          /* Conversion specification */
-
-  int32_t    fPrecision;    /* Precision  */
-  int32_t    fWidth;        /* Width  */
-
-  UChar     fPadChar;       /* Padding character  */
-
-  UBool     fAlt;           /* # flag  */
-  UBool     fSpace;         /* Space flag  */
-  UBool     fLeft;          /* - flag  */
-  UBool     fShowSign;      /* + flag  */
-  UBool     fZero;          /* 0 flag  */
-
-  UBool     fIsLongDouble;  /* L flag  */
-  UBool     fIsShort;       /* h flag  */
-  UBool     fIsLong;        /* l flag  */
-  UBool     fIsLongLong;    /* ll flag  */
-};
-typedef struct u_sprintf_spec_info u_sprintf_spec_info;
 
 struct u_localized_string {
   UChar     *str;     /* Place to write the string */
@@ -70,7 +47,7 @@ typedef struct u_localized_string u_localized_string;
  * @return The number of Unicode characters written to <TT>stream</TT>.
  */
 typedef int32_t (*u_sprintf_handler) (u_localized_string *output,
-                        const u_sprintf_spec_info  *info,
+                        const u_printf_spec_info  *info,
                         const ufmt_args            *args);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

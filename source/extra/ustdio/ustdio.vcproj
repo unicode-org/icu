@@ -148,13 +148,7 @@
 				RelativePath=".\sprintf.c">
 			</File>
 			<File
-				RelativePath=".\sprntf_p.c">
-			</File>
-			<File
 				RelativePath=".\sscanf.c">
-			</File>
-			<File
-				RelativePath=".\sscanf_p.c">
 			</File>
 			<File
 				RelativePath=".\ufile.c">
@@ -209,13 +203,7 @@
 				RelativePath=".\sprintf.h">
 			</File>
 			<File
-				RelativePath=".\sprntf_p.h">
-			</File>
-			<File
 				RelativePath=".\sscanf.h">
-			</File>
-			<File
-				RelativePath=".\sscanf_p.h">
 			</File>
 			<File
 				RelativePath=".\ufile.h">

@@ -27,7 +27,7 @@
 #include "unicode/udat.h"
 #include "unicode/uloc.h"
 #include "sscanf.h"
-#include "sscanf_p.h"
+#include "uscanf_p.h"
 #include "uscanset.h"
 #include "locbund.h"
 #include "loccache.h"
@@ -90,11 +90,11 @@
 #define UFMT_EMPTY {ufmt_empty, NULL}
 
 typedef struct u_sscanf_info {
-    enum ufmt_type_info info;
+    ufmt_type_info info;
     u_sscanf_handler handler;
 } u_sscanf_info;
 
-#define USCANF_NUM_FMT_HANDLERS sizeof(g_u_sscanf_infos)
+#define USCANF_NUM_FMT_HANDLERS 108
 
 /* We do not use handlers for 0-0x1f */
 #define USCANF_BASE_FMT_HANDLERS 0x20
@@ -110,7 +110,9 @@ u_sscanf_skip_leading_ws(u_localized_string    *input,
 
     /* skip all leading ws in the stream */
     while( ((c = input->str[count]) != U_EOF) && (c == pad || u_isWhitespace(c)) )
+    {
         count++;
+    }
 
     if(c == U_EOF)
         count++;
@@ -122,7 +124,7 @@ u_sscanf_skip_leading_ws(u_localized_string    *input,
 
 static int32_t 
 u_sscanf_simple_percent_handler(u_localized_string    *input,
-                                const u_sscanf_spec_info     *info,
+                                const u_scanf_spec_info     *info,
                                 ufmt_args             *args,
                                 const UChar        *fmt,
                                 int32_t            *consumed)
@@ -137,7 +139,7 @@ u_sscanf_simple_percent_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_string_handler(u_localized_string    *input,
-                        const u_sscanf_spec_info     *info,
+                        const u_scanf_spec_info     *info,
                         ufmt_args             *args,
                         const UChar        *fmt,
                         int32_t            *consumed)
@@ -187,9 +189,6 @@ u_sscanf_string_handler(u_localized_string    *input,
         ++count;
     }
 
-    /* clean up */
-    u_releaseDefaultConverter(conv);
-
     /* put the final character we read back on the stream */
     if(c != U_EOF)
         input->pos--;
@@ -197,13 +196,16 @@ u_sscanf_string_handler(u_localized_string    *input,
     /* add the terminator */
     *alias = 0x00;
 
+    /* clean up */
+    u_releaseDefaultConverter(conv);
+
     /* we converted 1 arg */
     return 1;
 }
 
 static int32_t
 u_sscanf_ustring_handler(u_localized_string    *input,
-                         const u_sscanf_spec_info *info,
+                         const u_scanf_spec_info *info,
                          ufmt_args        *args,
                          const UChar        *fmt,
                          int32_t            *consumed)
@@ -244,14 +246,14 @@ u_sscanf_ustring_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_count_handler(u_localized_string    *input,
-                       const u_sscanf_spec_info     *info,
+                       const u_scanf_spec_info     *info,
                        ufmt_args        *args,
                        const UChar        *fmt,
                        int32_t            *consumed)
 {
     int *converted = (int*)(args[0].ptrValue);
 
-    /* in the special case of count, the u_sscanf_spec_info's width */
+    /* in the special case of count, the u_scanf_spec_info's width */
     /* will contain the # of items converted thus far */
     *converted = info->fWidth;
 
@@ -261,7 +263,7 @@ u_sscanf_count_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_double_handler(u_localized_string    *input,
-                        const u_sscanf_spec_info     *info,
+                        const u_scanf_spec_info     *info,
                         ufmt_args        *args,
                         const UChar        *fmt,
                         int32_t            *consumed)
@@ -306,7 +308,7 @@ u_sscanf_double_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_scientific_handler(u_localized_string    *input,
-                            const u_sscanf_spec_info     *info,
+                            const u_scanf_spec_info     *info,
                             ufmt_args           *args,
                             const UChar            *fmt,
                             int32_t            *consumed)
@@ -351,7 +353,7 @@ u_sscanf_scientific_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_scidbl_handler(u_localized_string    *input,
-                        const u_sscanf_spec_info     *info,
+                        const u_scanf_spec_info     *info,
                         ufmt_args        *args,
                         const UChar        *fmt,
                         int32_t            *consumed)
@@ -422,7 +424,7 @@ u_sscanf_scidbl_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_integer_handler(u_localized_string    *input,
-                         const u_sscanf_spec_info *info,
+                         const u_scanf_spec_info *info,
                          ufmt_args        *args,
                          const UChar        *fmt,
                          int32_t            *consumed)
@@ -469,7 +471,7 @@ u_sscanf_integer_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_uinteger_handler(u_localized_string    *input,
-                          const u_sscanf_spec_info *info,
+                          const u_scanf_spec_info *info,
                           ufmt_args        *args,
                           const UChar        *fmt,
                           int32_t            *consumed)
@@ -489,7 +491,7 @@ u_sscanf_uinteger_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_currency_handler(u_localized_string    *input,
-                          const u_sscanf_spec_info     *info,
+                          const u_scanf_spec_info     *info,
                           ufmt_args            *args,
                           const UChar            *fmt,
                           int32_t            *consumed)
@@ -534,7 +536,7 @@ u_sscanf_currency_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_percent_handler(u_localized_string    *input,
-                         const u_sscanf_spec_info *info,
+                         const u_scanf_spec_info *info,
                          ufmt_args        *args,
                          const UChar        *fmt,
                          int32_t            *consumed)
@@ -579,7 +581,7 @@ u_sscanf_percent_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_date_handler(u_localized_string    *input,
-                      const u_sscanf_spec_info     *info,
+                      const u_scanf_spec_info     *info,
                       ufmt_args        *args,
                       const UChar        *fmt,
                       int32_t            *consumed)
@@ -620,7 +622,7 @@ u_sscanf_date_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_time_handler(u_localized_string    *input,
-                      const u_sscanf_spec_info     *info,
+                      const u_scanf_spec_info     *info,
                       ufmt_args        *args,
                       const UChar        *fmt,
                       int32_t            *consumed)
@@ -661,7 +663,7 @@ u_sscanf_time_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_char_handler(u_localized_string    *input,
-                      const u_sscanf_spec_info     *info,
+                      const u_scanf_spec_info     *info,
                       ufmt_args        *args,
                       const UChar        *fmt,
                       int32_t            *consumed)
@@ -694,7 +696,7 @@ u_sscanf_char_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_uchar_handler(u_localized_string    *input,
-                       const u_sscanf_spec_info     *info,
+                       const u_scanf_spec_info     *info,
                        ufmt_args        *args,
                        const UChar        *fmt,
                        int32_t            *consumed)
@@ -718,7 +720,7 @@ u_sscanf_uchar_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_spellout_handler(u_localized_string    *input,
-                          const u_sscanf_spec_info     *info,
+                          const u_scanf_spec_info     *info,
                           ufmt_args             *args,
                           const UChar            *fmt,
                           int32_t            *consumed)
@@ -763,7 +765,7 @@ u_sscanf_spellout_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_hex_handler(u_localized_string    *input,
-                     const u_sscanf_spec_info     *info,
+                     const u_scanf_spec_info     *info,
                      ufmt_args            *args,
                      const UChar            *fmt,
                      int32_t            *consumed)
@@ -809,7 +811,7 @@ u_sscanf_hex_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_octal_handler(u_localized_string    *input,
-                       const u_sscanf_spec_info     *info,
+                       const u_scanf_spec_info     *info,
                        ufmt_args         *args,
                        const UChar        *fmt,
                        int32_t            *consumed)
@@ -846,7 +848,7 @@ u_sscanf_octal_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_pointer_handler(u_localized_string    *input,
-                         const u_sscanf_spec_info *info,
+                         const u_scanf_spec_info *info,
                          ufmt_args        *args,
                          const UChar        *fmt,
                          int32_t            *consumed)
@@ -877,7 +879,7 @@ u_sscanf_pointer_handler(u_localized_string    *input,
 
 static int32_t
 u_sscanf_scanset_handler(u_localized_string    *input,
-                         const u_sscanf_spec_info *info,
+                         const u_scanf_spec_info *info,
                          ufmt_args        *args,
                          const UChar        *fmt,
                          int32_t            *consumed)
@@ -1009,7 +1011,7 @@ u_vsscanf(const UChar   *buffer,
  characters 20-7F from Unicode. Using any other codepage specific
  characters will make it very difficult to format the string on
  non-Unicode machines */
-static const u_sscanf_info g_u_sscanf_infos[108] = {
+static const u_sscanf_info g_u_sscanf_infos[USCANF_NUM_FMT_HANDLERS] = {
 /* 0x20 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_SIMPLE_PERCENT,UFMT_EMPTY,         UFMT_EMPTY,
@@ -1048,10 +1050,10 @@ static const u_sscanf_info g_u_sscanf_infos[108] = {
 };
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vsscanf_u(const UChar    *buffer,
-            const char     *locale,
-            const UChar    *patternSpecification,
-            va_list        ap)
+u_vsscanf_u(const UChar *buffer,
+            const char  *locale,
+            const UChar *patternSpecification,
+            va_list     ap)
 {
     const UChar     *alias;
     int32_t         count, converted, temp;
@@ -1059,7 +1061,7 @@ u_vsscanf_u(const UChar    *buffer,
 
     ufmt_args       args;
     u_localized_string inStr;
-    u_sscanf_spec   spec;
+    u_scanf_spec    spec;
     ufmt_type_info  info;
     u_sscanf_handler handler;
 
@@ -1097,7 +1099,7 @@ u_vsscanf_u(const UChar    *buffer,
             break;
 
         /* parse the specifier */
-        count = u_sscanf_parse_spec(alias, &spec);
+        count = u_scanf_parse_spec(alias, &spec);
 
         /* update the pointer in pattern */
         alias += count;
