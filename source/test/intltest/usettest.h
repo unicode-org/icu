@@ -1,10 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
-*   Corporation and others.  All Rights Reserved.
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   10/20/99    alan        Creation.
+*   03/22/2000  Madhu       Added additional tests
 **********************************************************************
 */
 
@@ -29,6 +29,9 @@ private:
     void TestPatterns(void);
     void TestCategories(void);
     void TestAddRemove(void);
+	void TestCloneEqualHash(void);
+
+	void doAssert(bool_t, const char*);
 
     void expectContainment(const UnicodeSet& set,
                            const UnicodeString& setName,
