@@ -30,7 +30,6 @@
 #include <stdlib.h>
 
 #include "cmemory.h"
-#include "cstring.h"
 
 // This is the UConverter headerfile
 #include "unicode/ucnv.h"
@@ -247,7 +246,7 @@ static int printTransliterators(const char *pname, int canon) {
             }
             utrans_getAvailableID(i, buf, buflen);
             if (len >= buflen) {
-                uprv_strcpy(buf + buflen - 4, "...");
+                strcpy(buf + buflen - 4, "...");
             }
         }
 
@@ -271,7 +270,9 @@ static int printTransliterators(const char *pname, int canon) {
 
 // Convert a file from one encoding to another
 static UBool convertFile(const char* fromcpage, 
+                         UConverterToUCallback toucallback,
                          const char* tocpage,
+                         UConverterFromUCallback fromucallback,
                          const char *translit,
                          FILE* infile, 
                          FILE* outfile)
@@ -285,6 +286,10 @@ static UBool convertFile(const char* fromcpage,
     char* buffiter;
     const size_t readsize = buffsize-1;
     char* buff = 0;
+
+    UConverterFromUCallback oldfromucallback;
+    UConverterToUCallback oldtoucallback;
+    const void *oldcontext;
 
     const UChar* cuniiter;
     UChar* uniiter;
@@ -318,14 +323,25 @@ static UBool convertFile(const char* fromcpage,
              u_wmsg_errorName(err));
       goto error_exit;
     }
+    ucnv_setToUCallBack(convfrom, toucallback, 0, &oldtoucallback, &oldcontext, &err);
+    if (U_FAILURE(err))
+    {
+      u_wmsg("cantSetCallback", u_wmsg_errorName(err));
+      goto error_exit;
+    }
 
     convto = ucnv_open(tocpage, &err);
-
     if (U_FAILURE(err))
     {
       UnicodeString str(tocpage,"");
       u_wmsg("cantOpenToCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
+      goto error_exit;
+    }
+    ucnv_setFromUCallBack(convto, fromucallback, 0, &oldfromucallback, &oldcontext, &err);
+    if (U_FAILURE(err))
+    {
+      u_wmsg("cantSetCallback", u_wmsg_errorName(err));
       goto error_exit;
     }
 
@@ -465,6 +481,9 @@ int main(int argc, char** argv)
     const char *translit = 0;
     const char* infilestr = 0;
 
+    UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_SUBSTITUTE;
+    UConverterToUCallback toucallback = UCNV_TO_U_CALLBACK_SUBSTITUTE;
+
     char** iter = argv+1;
     char** end = argv+argc;    
 
@@ -545,6 +564,12 @@ int main(int argc, char** argv)
         {
             usage(pname, 0);
         }
+        else if (!strcmp("-c", *iter)) {
+            fromucallback = UCNV_FROM_U_CALLBACK_SKIP;
+        }
+        else if (!strcmp("-i", *iter)) {
+            toucallback = UCNV_TO_U_CALLBACK_SKIP;
+        }
         else if (**iter == '-' && (*iter)[1]) {
             usage(pname, 1);
         } else if (!infilestr) {
@@ -613,7 +638,7 @@ int main(int argc, char** argv)
 #endif
 
   initMsg(pname);
-    if (!convertFile(fromcpage, tocpage, translit, infile, stdout))
+    if (!convertFile(fromcpage, toucallback, tocpage, fromucallback, translit, infile, stdout))
         goto error_exit;
 
     goto normal_exit;
