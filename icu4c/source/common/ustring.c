@@ -481,7 +481,15 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     }
 
     /* If no special forms are recognized, then consider
-     * the backslash to generically escape the next character. */
+     * the backslash to generically escape the next character.
+     * Deal with surrogate pairs. */
+    if (UTF_IS_FIRST_SURROGATE(c) && *offset < length) {
+        UChar c2 = charAt(*offset, context);
+        if (UTF_IS_SECOND_SURROGATE(c2)) {
+            ++(*offset);
+            return UTF16_GET_PAIR_VALUE(c, c2);
+        }
+    }
     return c;
 
  err:
