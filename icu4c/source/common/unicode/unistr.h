@@ -1467,8 +1467,10 @@ public:
 
   /**
    * Return the length of the UnicodeString object.  
-   * The length is the number of characters in the text.
+   * The length is the number of UChar code units are in the UnicodeString.
+   * If you want the number of code points, please use countChar32().
    * @return the length of the UnicodeString object
+   * @see countChar32
    * @stable ICU 2.0
    */
   inline int32_t length(void) const;
@@ -1483,6 +1485,7 @@ public:
    * @param start the index of the first code unit to check
    * @param length the number of UChar code units to check
    * @return the number of code points in the specified code units
+   * @see length
    * @stable ICU 2.0
    */
   int32_t
