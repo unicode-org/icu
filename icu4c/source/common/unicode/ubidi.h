@@ -112,11 +112,11 @@
  * // render runs on a line sequentially, always from left to right
  *
  * // prepare rendering a new line
- *void startLine(UBiDiDirection textDirection, int lineWidth);
+ * void startLine(UBiDiDirection textDirection, int lineWidth);
  *
  * // render a run of text and advance to the right by the run width
  * // the text[start..limit-1] is always in logical order
- *void renderRun(const UChar *text, int32_t start, int32_t limit,
+ * void renderRun(const UChar *text, int32_t start, int32_t limit,
  *               UBiDiDirection textDirection, Style style);
  *
  * // We could compute a cross-product
@@ -129,7 +129,7 @@
  *
  * // render a directional run with
  * // (possibly) multiple style runs intersecting with it
- *void renderDirectionalRun(const UChar *text,
+ * void renderDirectionalRun(const UChar *text,
  *                           int32_t start, int32_t limit,
  *                           UBiDiDirection direction,
  *                           const StyleRun *styleRuns, int styleRunCount) {
@@ -313,6 +313,7 @@
  * <li><code>paraLevel</code> can be set to the
  * pesudo-level values <code>UBIDI_DEFAULT_LTR</code>
  * and <code>UBIDI_DEFAULT_RTL</code>.</li>
+ * </ul>
  *
  * @see ubidi_setPara
  *
@@ -1161,11 +1162,8 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,
                    UErrorCode *pErrorCode);
+
 /*#define BIDI_SAMPLE_CODE*/
-/*@}*/
-
-/*@}*/
-
 /*@}*/
 
 #endif

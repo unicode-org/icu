@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2001, International Business Machines
+*   Copyright (C) 1998-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -3999,16 +3999,16 @@ inline const UChar*
 UnicodeString::getArrayStart() const
 { return fArray; }
 
-U_NAMESPACE_END
-
-//========================================
-// Static members
-//========================================
-U_NAMESPACE_BEGIN
 
 //========================================
 // class UCharReference
 //========================================
+
+/**
+ * A proxy class to allow the UnicodeString::operator[] function to
+ * work as a readable and a writable operator.
+ * @stable
+ */
 class U_COMMON_API UCharReference : public UObject {
 public:
   UCharReference();
