@@ -276,6 +276,10 @@ SOURCE=.\susctest.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\stdnmtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmptst.c
 # End Source File
 # Begin Source File
