@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="1.0-alpha"/>
-		<generation date="2003-10-02" />
+		<version number="3.0"/>
+		<generation date="2003-12-03" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -72,6 +72,7 @@
 			<language type="btk">Batak</language>
 			<language type="bua">Buriat</language>
 			<language type="bug">Buginese</language>
+			<language type="byn">Blin</language>
 			<language type="ca">Catalan</language>
 			<language type="cad">Caddo</language>
 			<language type="cai">Central American Indian (Other)</language>
@@ -474,60 +475,61 @@
 			<language type="zun">Zuni</language>
 		</languages>
 		<scripts>
-			<script type="ARAB">Arabic</script>
-			<script type="ARMN">Armenian</script>
-			<script type="BENG">Bengali</script>
-			<script type="BOPO">Bopomofo</script>
-			<script type="BRAI">Braille</script>
-			<script type="BUHD">Buhid</script>
-			<script type="CANS">Unified Canadian Aboriginal Symbols</script>
-			<script type="CHER">Cherokee</script>
-			<script type="CPRT">Cypriot</script>
-			<script type="CYRL">Cyrillic</script>
-			<script type="DEVA">Devanagari</script>
-			<script type="DSRT">Deseret</script>
-			<script type="ETHI">Ethiopic</script>
-			<script type="GEOR">Georgian</script>
-			<script type="GOTH">Gothic</script>
-			<script type="GREK">Greek</script>
-			<script type="GUJR">Gujarati</script>
-			<script type="GURU">Gurmukhi</script>
-			<script type="HANG">Hangul</script>
-			<script type="HANI">Han</script>
-			<script type="HANO">Hanunoo</script>
-			<script type="HEBR">Hebrew</script>
-			<script type="HIRA">Hiragana</script>
-			<script type="ITAL">Old_italic</script>
-			<script type="KANA">Katakana</script>
-			<script type="KHMR">Khmer</script>
-			<script type="KNDA">Kannada</script>
-			<script type="LAOO">Lao</script>
-			<script type="LATN">Latin</script>
-			<script type="LIMB">Limbu</script>
-			<script type="LINB">Linear B</script>
-			<script type="MLYM">Malayalam</script>
-			<script type="MONG">Mongolian</script>
-			<script type="MYMR">Myanmar</script>
-			<script type="OGAM">Ogham</script>
-			<script type="ORYA">Oriya</script>
-			<script type="OSMA">Osmanya</script>
-			<script type="QAAC">Coptic</script>
-			<script type="QAAI">Inherited</script>
-			<script type="RUNR">Runic</script>
-			<script type="SHAW">Shavian</script>
-			<script type="SINH">Sinhala</script>
-			<script type="SYRC">Syriac</script>
-			<script type="TAGB">Tagbanwa</script>
-			<script type="TALE">Tai Le</script>
-			<script type="TAML">Tamil</script>
-			<script type="TELU">Telugu</script>
-			<script type="TGLG">Tagalog</script>
-			<script type="THAA">Thana</script>
-			<script type="THAI">Thai</script>
-			<script type="TIBT">Tibetan</script>
-			<script type="UGAR">Ugaritic</script>
-			<script type="YIII">Yi</script>
-			<script type="ZYYY">Common</script>
+			<script type="Arab">Arabic</script>
+			<script type="Armn">Armenian</script>
+			<script type="Beng">Bengali</script>
+			<script type="Bopo">Bopomofo</script>
+			<script type="Brai">Braille</script>
+			<script type="Buhd">Buhid</script>
+			<script type="Cans">Unified Canadian Aboriginal Symbols</script>
+			<script type="Cher">Cherokee</script>
+			<script type="Cprt">Cypriot</script>
+			<script type="Cyrl">Cyrillic</script>
+			<script type="Deva">Devanagari</script>
+			<script type="Dsrt">Deseret</script>
+			<script type="Ethi">Ethiopic</script>
+			<script type="Geor">Georgian</script>
+			<script type="Goth">Gothic</script>
+			<script type="Grek">Greek</script>
+			<script type="Gujr">Gujarati</script>
+			<script type="Guru">Gurmukhi</script>
+			<script type="Hang">Hangul</script>
+			<script type="Hani">Han</script>
+			<script type="Hano">Hanunoo</script>
+			<script type="Hans">Simplified Han</script>
+			<script type="Hant">Traditional Han</script>
+			<script type="Hebr">Hebrew</script>
+			<script type="Hira">Hiragana</script>
+			<script type="Ital">Old Italic</script>
+			<script type="Kana">Katakana</script>
+			<script type="Khmr">Khmer</script>
+			<script type="Knda">Kannada</script>
+			<script type="Laoo">Lao</script>
+			<script type="Latn">Latin</script>
+			<script type="Limb">Limbu</script>
+			<script type="Linb">Linear B</script>
+			<script type="Mlym">Malayalam</script>
+			<script type="Mong">Mongolian</script>
+			<script type="Mymr">Myanmar</script>
+			<script type="Ogam">Ogham</script>
+			<script type="Orya">Oriya</script>
+			<script type="Osma">Osmanya</script>
+			<script type="Qaac">Coptic</script>
+			<script type="Qaai">Inherited</script>
+			<script type="Runr">Runic</script>
+			<script type="Shaw">Shavian</script>
+			<script type="Sinh">Sinhala</script>
+			<script type="Syrc">Syriac</script>
+			<script type="Tagb">Tagbanwa</script>
+			<script type="Tale">Tai Le</script>
+			<script type="Taml">Tamil</script>
+			<script type="Telu">Telugu</script>
+			<script type="Tglg">Tagalog</script>
+			<script type="Thaa">Thaana</script>
+			<script type="Tibt">Tibetan</script>
+			<script type="Ugar">Ugaritic</script>
+			<script type="Yiii">Yi</script>
+			<script type="Zyyy">Common</script>
 		</scripts>
 		<territories>
 			<territory type="AD">Andorra</territory>
@@ -775,14 +777,18 @@
 			<variant type="EURO">Euro</variant>
 			<variant type="NY">Nynorsk</variant>
 			<variant type="POSIX">Posix</variant>
-			<variant type="PREEURO">Pre-Euro</variant>
 		</variants>
+		<keys>
+			<key type="calendar">Calendar</key>
+			<key type="collation">Collation</key>
+		</keys>
 		<types>
-			<type type="DIRECT" key="collation">Direct Order</type>
-			<type type="PHONEBOOK" key="collation">Phonebook Order</type>
-			<type type="PINYIN" key="collation">Pinyin Order</type>
-			<type type="STROKE" key="collation">Stroke Order</type>
-			<type type="TRADITIONAL" key="collation">Traditional</type>
+			<type type="traditional" key="calendar">Traditional Calendar</type>
+			<type type="direct" key="collation">Direct Order</type>
+			<type type="phonebook" key="collation">Phonebook Order</type>
+			<type type="pinyin" key="collation">Pinyin Order</type>
+			<type type="stroke" key="collation">Stroke Order</type>
+			<type type="traditional" key="collation">Traditional</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
@@ -917,6 +923,32 @@
 				</short>
 				<exemplarCity>Los Angeles</exemplarCity>
 			</zone>
+			<zone type="Los Angeles">
+				<long>
+					<generic>Pacific Standard Time</generic>
+					<standard>Pacific Standard Time</standard>
+					<daylight>Pacific Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>America/Los_Angeles</generic>
+					<standard>PST</standard>
+					<daylight>PDT</daylight>
+				</short>
+				<exemplarCity>Los Angeles</exemplarCity>
+			</zone>
+			<zone type="Denver">
+				<long>
+					<generic>Mountain Standard Time</generic>
+					<standard>Mountain Standard Time</standard>
+					<daylight>Mountain Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>MST</generic>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+				<exemplarCity>Denver</exemplarCity>
+			</zone>
 			<zone type="Denver">
 				<long>
 					<generic>Mountain Standard Time</generic>
@@ -929,6 +961,19 @@
 					<daylight>MDT</daylight>
 				</short>
 				<exemplarCity>Denver</exemplarCity>
+			</zone>
+			<zone type="Phoenix">
+				<long>
+					<generic>Mountain Standard Time</generic>
+					<standard>Mountain Standard Time</standard>
+					<daylight>Mountain Standard Time</daylight>
+				</long>
+				<short>
+					<generic>PNT</generic>
+					<standard>MST</standard>
+					<daylight>MST</daylight>
+				</short>
+				<exemplarCity>Phoenix</exemplarCity>
 			</zone>
 			<zone type="Phoenix">
 				<long>
@@ -956,6 +1001,19 @@
 				</short>
 				<exemplarCity>Chicago</exemplarCity>
 			</zone>
+			<zone type="Chicago">
+				<long>
+					<generic>Central Standard Time</generic>
+					<standard>Central Standard Time</standard>
+					<daylight>Central Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>America/Chicago</generic>
+					<standard>CST</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Chicago</exemplarCity>
+			</zone>
 			<zone type="New York">
 				<long>
 					<generic>Eastern Standard Time</generic>
@@ -964,6 +1022,19 @@
 				</long>
 				<short>
 					<generic>EST</generic>
+					<standard>EST</standard>
+					<daylight>EDT</daylight>
+				</short>
+				<exemplarCity>New York</exemplarCity>
+			</zone>
+			<zone type="New York">
+				<long>
+					<generic>Eastern Standard Time</generic>
+					<standard>Eastern Standard Time</standard>
+					<daylight>Eastern Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>America/New_York</generic>
 					<standard>EST</standard>
 					<daylight>EDT</daylight>
 				</short>
@@ -982,6 +1053,32 @@
 				</short>
 				<exemplarCity>Indianapolis</exemplarCity>
 			</zone>
+			<zone type="Indianapolis">
+				<long>
+					<generic>Eastern Standard Time</generic>
+					<standard>Eastern Standard Time</standard>
+					<daylight>Eastern Standard Time</daylight>
+				</long>
+				<short>
+					<generic>America/Indianapolis</generic>
+					<standard>EST</standard>
+					<daylight>EST</daylight>
+				</short>
+				<exemplarCity>Indianapolis</exemplarCity>
+			</zone>
+			<zone type="Honolulu">
+				<long>
+					<generic>Hawaii Standard Time</generic>
+					<standard>Hawaii Standard Time</standard>
+					<daylight>Hawaii Standard Time</daylight>
+				</long>
+				<short>
+					<generic>HST</generic>
+					<standard>HST</standard>
+					<daylight>HST</daylight>
+				</short>
+				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
 			<zone type="Honolulu">
 				<long>
 					<generic>Hawaii Standard Time</generic>
@@ -994,6 +1091,32 @@
 					<daylight>HST</daylight>
 				</short>
 				<exemplarCity>Honolulu</exemplarCity>
+			</zone>
+			<zone type="Anchorage">
+				<long>
+					<generic>Alaska Standard Time</generic>
+					<standard>Alaska Standard Time</standard>
+					<daylight>Alaska Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>AST</generic>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
+			</zone>
+			<zone type="Anchorage">
+				<long>
+					<generic>Alaska Standard Time</generic>
+					<standard>Alaska Standard Time</standard>
+					<daylight>Alaska Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>America/Anchorage</generic>
+					<standard>AST</standard>
+					<daylight>ADT</daylight>
+				</short>
+				<exemplarCity>Anchorage</exemplarCity>
 			</zone>
 			<zone type="Halifax">
 				<long>
@@ -1021,6 +1144,19 @@
 				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
+			<zone type="St. Johns">
+				<long>
+					<generic>Newfoundland Standard Time</generic>
+					<standard>Newfoundland Standard Time</standard>
+					<daylight>Newfoundland Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>America/St_Johns</generic>
+					<standard>CNT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>St. Johns</exemplarCity>
+			</zone>
 			<zone type="Paris">
 				<long>
 					<generic>Central European Standard Time</generic>
@@ -1029,6 +1165,19 @@
 				</long>
 				<short>
 					<generic>ECT</generic>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+				<exemplarCity>Paris</exemplarCity>
+			</zone>
+			<zone type="Paris">
+				<long>
+					<generic>Central European Standard Time</generic>
+					<standard>Central European Standard Time</standard>
+					<daylight>Central European Daylight Time</daylight>
+				</long>
+				<short>
+					<generic>Europe/Paris</generic>
 					<standard>CET</standard>
 					<daylight>CEST</daylight>
 				</short>
@@ -1086,6 +1235,19 @@
 				</short>
 				<exemplarCity>Tokyo</exemplarCity>
 			</zone>
+			<zone type="Tokyo">
+				<long>
+					<generic>Japan Standard Time</generic>
+					<standard>Japan Standard Time</standard>
+					<daylight>Japan Standard Time</daylight>
+				</long>
+				<short>
+					<generic>Asia/Tokyo</generic>
+					<standard>JST</standard>
+					<daylight>JST</daylight>
+				</short>
+				<exemplarCity>Tokyo</exemplarCity>
+			</zone>
 			<zone type="Bucharest">
 				<long>
 					<generic>Eastern European Standard Time</generic>
@@ -1107,6 +1269,19 @@
 				</long>
 				<short>
 					<generic>CTT</generic>
+					<standard>CTT</standard>
+					<daylight>CDT</daylight>
+				</short>
+				<exemplarCity>Shanghai</exemplarCity>
+			</zone>
+			<zone type="Shanghai">
+				<long>
+					<generic>China Standard Time</generic>
+					<standard>China Standard Time</standard>
+					<daylight>China Standard Time</daylight>
+				</long>
+				<short>
+					<generic>Asia/Shanghai</generic>
 					<standard>CTT</standard>
 					<daylight>CDT</daylight>
 				</short>

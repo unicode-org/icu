@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="am" /> 
 	</identity>
 	<localeDisplayNames>
@@ -29,6 +29,7 @@
 			<language type="bn">በንጋሊኛ</language>
 			<language type="bo">ትበትንኛ</language>
 			<language type="br">ብሬቶንኛ</language>
+			<language type="byn">ብሊን</language>
 			<language type="ca">ካታላንኛ</language>
 			<language type="co">ኮርሲካኛ</language>
 			<language type="cs">ቼክኛ</language>

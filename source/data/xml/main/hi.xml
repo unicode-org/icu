@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="hi" /> 
 	</identity>
 	<localeDisplayNames>
@@ -159,23 +159,174 @@
 			<language type="zu">ज़ुलू</language>
 		</languages>
 		<territories>
+			<territory type="AD">अन्डोरा</territory>
+			<territory type="AE">संयुक्त अरब अमीरात</territory>
+			<territory type="AF">अफगानिस्तान</territory>
+			<territory type="AG">एन्टिगुवा और बारबूडा</territory>
+			<territory type="AL">अल्बानिया</territory>
+			<territory type="AM">आर्मेनिया</territory>
+			<territory type="AO">अंगोला</territory>
+			<territory type="AR">अर्जेन्टीना</territory>
+			<territory type="AT">ऑस्ट्रिया</territory>
+			<territory type="AU">ऑस्ट्रेलिया</territory>
+			<territory type="AZ">अजरबैजान</territory>
+			<territory type="BA">बोसनिया हर्जिगोविना</territory>
+			<territory type="BB">बारबाडोस</territory>
+			<territory type="BD">बंगलादेश</territory>
+			<territory type="BE">बेल्जियम</territory>
+			<territory type="BF">बर्किना फासो</territory>
+			<territory type="BG">बुल्गारिया</territory>
+			<territory type="BH">बहरैन</territory>
+			<territory type="BI">बुरुंडी</territory>
+			<territory type="BJ">बेनिन</territory>
+			<territory type="BN">ब्रूनइ</territory>
+			<territory type="BO">बोलीविया</territory>
+			<territory type="BR">ब्राजील</territory>
+			<territory type="BS">बहामा</territory>
+			<territory type="BT">भूटान</territory>
+			<territory type="BW">बोत्स्वाना</territory>
+			<territory type="BY">बेलारूस</territory>
+			<territory type="BZ">बेलिज</territory>
+			<territory type="CA">कनाडा</territory>
+			<territory type="CC">किंशासा</territory>
+			<territory type="CF">सेंट्रल अफ्रीकन रिपब्लिक</territory>
+			<territory type="CG">कांगो</territory>
+			<territory type="CH">स्विस</territory>
+			<territory type="CI">आईवरी कोस्ट</territory>
+			<territory type="CL">चिली</territory>
+			<territory type="CM">कामेरान</territory>
+			<territory type="CN">चीन</territory>
+			<territory type="CO">कोलम्बिया</territory>
+			<territory type="CR">कोस्टारीका</territory>
+			<territory type="CU">क्यूबा</territory>
+			<territory type="CV">कैप वर्त</territory>
+			<territory type="CY">साइप्रस</territory>
+			<territory type="CZ">चेक गणराज्य</territory>
+			<territory type="DE">जर्मनी</territory>
+			<territory type="DJ">जिबूती</territory>
+			<territory type="DK">डेनमार्क</territory>
+			<territory type="DM">डोमिनिका</territory>
+			<territory type="DO">डोमिनिकन गणराज्य</territory>
+			<territory type="DZ">अल्जीरिया</territory>
+			<territory type="EC">इक्वाडोर</territory>
+			<territory type="EE">एस्टोनिया</territory>
+			<territory type="EG">मिस्र</territory>
+			<territory type="EH">पश्चिमी सहारा</territory>
+			<territory type="ER">इरिट्रिया</territory>
+			<territory type="ES">स्पेन</territory>
+			<territory type="ET">इथियोपिया</territory>
+			<territory type="FI">फिनलैंड</territory>
+			<territory type="FJ">फिजी</territory>
+			<territory type="FR">फ्रांस</territory>
 			<territory type="GR">ग्रीस</territory>
 			<territory type="GT">गोतेदाला</territory>
 			<territory type="GW">गीनी-बिसाउ</territory>
 			<territory type="GY">गुयाना</territory>
-			<territory type="HN">हाॅनडुरास</territory>
-			<territory type="HR">क्रोशीया</territory>
-			<territory type="HT">हाईटी</territory>
-			<territory type="HU">हंगेरी</territory>
+			<territory type="HN">हाण्डूरस</territory>
+			<territory type="HR">क्रोशिया</territory>
+			<territory type="HT">हाइती</territory>
+			<territory type="HU">हंगरी</territory>
+			<territory type="ID">इंडोनेशिया</territory>
+			<territory type="IE">आयरलैंड</territory>
+			<territory type="IL">इसराइल</territory>
 			<territory type="IN">भारत</territory>
+			<territory type="IQ">इराक</territory>
+			<territory type="IR">ईरान</territory>
+			<territory type="IS">आइसलैंड</territory>
+			<territory type="IT">इटली</territory>
+			<territory type="JM">जमाइका</territory>
+			<territory type="JO">जोर्डन</territory>
+			<territory type="JP">जापान</territory>
+			<territory type="KE">केन्या</territory>
+			<territory type="KG">किर्गिज</territory>
+			<territory type="KH">कम्बोडिया</territory>
+			<territory type="KM">कोमोरस</territory>
+			<territory type="KN">सेंट किट्स और नेविस</territory>
+			<territory type="KP">उत्तर कोरिया</territory>
+			<territory type="KR">दक्षिण कोरिया</territory>
+			<territory type="KW">कुवैत</territory>
+			<territory type="KZ">कजाखस्तान</territory>
+			<territory type="LA">लाओस</territory>
+			<territory type="LB">लेबनान</territory>
+			<territory type="LC">सेंट लूसिया</territory>
+			<territory type="LI">लिकटेंस्टीन</territory>
+			<territory type="LK">श्रीलंका</territory>
+			<territory type="LR">लाइबेरिया</territory>
+			<territory type="LS">लेसोथो</territory>
+			<territory type="LT">लिथुआनिया</territory>
+			<territory type="LU">लक्समबर्ग</territory>
+			<territory type="LV">लात्विया</territory>
+			<territory type="LY">लीबिया</territory>
+			<territory type="MA">मोरक्को</territory>
+			<territory type="MC">मोनाको</territory>
+			<territory type="MD">मोल्डाविया</territory>
+			<territory type="MG">मदागास्कर</territory>
+			<territory type="MK">मैसेडोनिया</territory>
+			<territory type="ML">माली</territory>
+			<territory type="MM">म्यानमार</territory>
+			<territory type="MN">मंगोलिया</territory>
+			<territory type="MR">मॉरिटानिया</territory>
+			<territory type="MT">माल्टा</territory>
+			<territory type="MU">मौरिस</territory>
+			<territory type="MV">मालदीव</territory>
+			<territory type="MW">मलावी</territory>
+			<territory type="MX">मेक्सिको</territory>
+			<territory type="MY">मलेशिया</territory>
+			<territory type="MZ">मोजाम्बिक</territory>
+			<territory type="PA">पनामा</territory>
 			<territory type="PE">पेरू</territory>
-			<territory type="TL">ईस्ट टिमोर</territory>
-			<territory type="TM">तुक्रमेनिस्तान</territory>
-			<territory type="UY">उरूगुए</territory>
-			<territory type="VA">वाॅटिकन</territory>
+			<territory type="PG">पापुआ न्यू गिनी</territory>
+			<territory type="PH">फिलीपिंस</territory>
+			<territory type="PK">पाकिस्तान</territory>
+			<territory type="PL">पोलैंड</territory>
+			<territory type="PT">पुर्तगाल</territory>
+			<territory type="PY">पारागुए</territory>
+			<territory type="QA">कतर</territory>
+			<territory type="RO">रोमानिया</territory>
+			<territory type="RU">रूस</territory>
+			<territory type="RW">रूआण्डा</territory>
+			<territory type="SA">सऊदी अरब</territory>
+			<territory type="SD">सूडान</territory>
+			<territory type="SE">स्वीडन</territory>
+			<territory type="SG">सिंगापुर</territory>
+			<territory type="SI">स्लोवेनिया</territory>
+			<territory type="SK">स्लोवाकिया</territory>
+			<territory type="SL">सियरालेओन</territory>
+			<territory type="SM">सैन मेरीनो</territory>
+			<territory type="SN">सेनेगल</territory>
+			<territory type="SO">सोमालिया</territory>
+			<territory type="SR">सुरिनाम</territory>
+			<territory type="ST">साउ-तोम-प्रिंसिप</territory>
+			<territory type="SV">अल साल्वाडोर</territory>
+			<territory type="SY">सीरिया</territory>
+			<territory type="SZ">सुआजीलैंड</territory>
+			<territory type="TD">चाड</territory>
+			<territory type="TG">टोगो</territory>
+			<territory type="TH">थाइलैंड</territory>
+			<territory type="TJ">ताजिकिस्तान</territory>
+			<territory type="TM">तुर्कमेनिस्तान</territory>
+			<territory type="TN">तुनिशिया</territory>
+			<territory type="TO">टोंगा</territory>
+			<territory type="TR">तुर्की</territory>
+			<territory type="TT">ट्रिनिडाड और टोबैगो</territory>
+			<territory type="TV">तुवालु</territory>
+			<territory type="TW">ताइवान</territory>
+			<territory type="TZ">तंजानिया</territory>
+			<territory type="UA">यूक्रेन</territory>
+			<territory type="UG">युगांडा</territory>
+			<territory type="US">संयुक्त राज्य अमरिका</territory>
+			<territory type="UY">युरूगुए</territory>
+			<territory type="UZ">उजबेकिस्तान</territory>
+			<territory type="VA">वैटिकन</territory>
+			<territory type="VE">वेनेजुएला</territory>
 			<territory type="VG">ब्रिटिश वर्जीन ऌईलैंडस्</territory>
 			<territory type="VI">ईउ, एस वर्जीन आईलैंडस्</territory>
-			<territory type="VU">सानुअतु</territory>
+			<territory type="VN">वियतनाम</territory>
+			<territory type="VU">वानुअतु</territory>
+			<territory type="YE">यमन</territory>
+			<territory type="ZA">दक्षिण अफ्रीका</territory>
+			<territory type="ZM">जाम्बिया</territory>
+			<territory type="ZW">जिम्बाब्वे</territory>
 		</territories>
 </localeDisplayNames>
 <characters>
@@ -245,8 +396,6 @@
 			</eras>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<symbols>
@@ -271,322 +420,6 @@
 	</currencies>
 </numbers>
 <collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset><last_non_ignorable/></reset>
-			<pc>ॐ।॥॰०१२३४५६७८९अआइईउऊऋॠऌॡऍऎएऐऑऒओऔक</pc>
-			<p>क़</p>
-			<i>क़</i>
-			<p>कँ</p>
-			<p>कं</p>
-			<p>कः</p>
-			<p>क॑</p>
-			<p>क॒</p>
-			<p>क॓</p>
-			<p>क॔</p>
-			<p>कऽ</p>
-			<p>क्</p>
-			<p>का</p>
-			<p>कि</p>
-			<p>की</p>
-			<p>कु</p>
-			<p>कू</p>
-			<p>कृ</p>
-			<p>कॄ</p>
-			<p>कॢ</p>
-			<p>कॣ</p>
-			<p>कॅ</p>
-			<p>कॆ</p>
-			<p>के</p>
-			<p>कै</p>
-			<p>कॉ</p>
-			<p>कॊ</p>
-			<p>को</p>
-			<pc>कौख</pc>
-			<p>ख़</p>
-			<i>ख़</i>
-			<p>खँ</p>
-			<p>खं</p>
-			<p>खः</p>
-			<p>ख॑</p>
-			<p>ख॒</p>
-			<p>ख॓</p>
-			<p>ख॔</p>
-			<p>खऽ</p>
-			<p>ख्</p>
-			<p>खा</p>
-			<p>खि</p>
-			<p>खी</p>
-			<p>खु</p>
-			<p>खू</p>
-			<p>खृ</p>
-			<p>खॄ</p>
-			<p>खॢ</p>
-			<p>खॣ</p>
-			<p>खॅ</p>
-			<p>खॆ</p>
-			<p>खे</p>
-			<p>खै</p>
-			<p>खॉ</p>
-			<p>खॊ</p>
-			<p>खो</p>
-			<pc>खौग</pc>
-			<p>ग़</p>
-			<i>ग़</i>
-			<p>गँ</p>
-			<p>गं</p>
-			<p>गः</p>
-			<p>ग॑</p>
-			<p>ग॒</p>
-			<p>ग॓</p>
-			<p>ग॔</p>
-			<p>गऽ</p>
-			<p>ग्</p>
-			<p>गा</p>
-			<p>गि</p>
-			<p>गी</p>
-			<p>गु</p>
-			<p>गू</p>
-			<p>गृ</p>
-			<p>गॄ</p>
-			<p>गॢ</p>
-			<p>गॣ</p>
-			<p>गॅ</p>
-			<p>गॆ</p>
-			<p>गे</p>
-			<p>गै</p>
-			<p>गॉ</p>
-			<p>गॊ</p>
-			<p>गो</p>
-			<pc>गौघङचछज</pc>
-			<p>ज़</p>
-			<i>ज़</i>
-			<p>जँ</p>
-			<p>जं</p>
-			<p>जः</p>
-			<p>ज॑</p>
-			<p>ज॒</p>
-			<p>ज॓</p>
-			<p>ज॔</p>
-			<p>जऽ</p>
-			<p>ज्</p>
-			<p>जा</p>
-			<p>जि</p>
-			<p>जी</p>
-			<p>जु</p>
-			<p>जू</p>
-			<p>जृ</p>
-			<p>जॄ</p>
-			<p>जॢ</p>
-			<p>जॣ</p>
-			<p>जॅ</p>
-			<p>जॆ</p>
-			<p>जे</p>
-			<p>जै</p>
-			<p>जॉ</p>
-			<p>जॊ</p>
-			<p>जो</p>
-			<pc>जौझञटठड</pc>
-			<p>ड़</p>
-			<i>ड़</i>
-			<p>डँ</p>
-			<p>डं</p>
-			<p>डः</p>
-			<p>ड॑</p>
-			<p>ड॒</p>
-			<p>ड॓</p>
-			<p>ड॔</p>
-			<p>डऽ</p>
-			<p>ड्</p>
-			<p>डा</p>
-			<p>डि</p>
-			<p>डी</p>
-			<p>डु</p>
-			<p>डू</p>
-			<p>डृ</p>
-			<p>डॄ</p>
-			<p>डॢ</p>
-			<p>डॣ</p>
-			<p>डॅ</p>
-			<p>डॆ</p>
-			<p>डे</p>
-			<p>डै</p>
-			<p>डॉ</p>
-			<p>डॊ</p>
-			<p>डो</p>
-			<pc>डौढ</pc>
-			<p>ढ़</p>
-			<i>ढ़</i>
-			<p>ढँ</p>
-			<p>ढं</p>
-			<p>ढः</p>
-			<p>ढ॑</p>
-			<p>ढ॒</p>
-			<p>ढ॓</p>
-			<p>ढ॔</p>
-			<p>ढऽ</p>
-			<p>ढ्</p>
-			<p>ढा</p>
-			<p>ढि</p>
-			<p>ढी</p>
-			<p>ढु</p>
-			<p>ढू</p>
-			<p>ढृ</p>
-			<p>ढॄ</p>
-			<p>ढॢ</p>
-			<p>ढॣ</p>
-			<p>ढॅ</p>
-			<p>ढॆ</p>
-			<p>ढे</p>
-			<p>ढै</p>
-			<p>ढॉ</p>
-			<p>ढॊ</p>
-			<p>ढो</p>
-			<pc>ढौणतथदधन</pc>
-			<p>ऩ</p>
-			<i>ऩ</i>
-			<p>नँ</p>
-			<p>नं</p>
-			<p>नः</p>
-			<p>न॑</p>
-			<p>न॒</p>
-			<p>न॓</p>
-			<p>न॔</p>
-			<p>नऽ</p>
-			<p>न्</p>
-			<p>ना</p>
-			<p>नि</p>
-			<p>नी</p>
-			<p>नु</p>
-			<p>नू</p>
-			<p>नृ</p>
-			<p>नॄ</p>
-			<p>नॢ</p>
-			<p>नॣ</p>
-			<p>नॅ</p>
-			<p>नॆ</p>
-			<p>ने</p>
-			<p>नै</p>
-			<p>नॉ</p>
-			<p>नॊ</p>
-			<p>नो</p>
-			<pc>नौपफ</pc>
-			<p>फ़</p>
-			<i>फ़</i>
-			<p>फँ</p>
-			<p>फं</p>
-			<p>फः</p>
-			<p>फ॑</p>
-			<p>फ॒</p>
-			<p>फ॓</p>
-			<p>फ॔</p>
-			<p>फऽ</p>
-			<p>फ्</p>
-			<p>फा</p>
-			<p>फि</p>
-			<p>फी</p>
-			<p>फु</p>
-			<p>फू</p>
-			<p>फृ</p>
-			<p>फॄ</p>
-			<p>फॢ</p>
-			<p>फॣ</p>
-			<p>फॅ</p>
-			<p>फॆ</p>
-			<p>फे</p>
-			<p>फै</p>
-			<p>फॉ</p>
-			<p>फॊ</p>
-			<p>फो</p>
-			<pc>फौबभमय</pc>
-			<p>य़</p>
-			<i>य़</i>
-			<p>यँ</p>
-			<p>यं</p>
-			<p>यः</p>
-			<p>य॑</p>
-			<p>य॒</p>
-			<p>य॓</p>
-			<p>य॔</p>
-			<p>यऽ</p>
-			<p>य्</p>
-			<p>या</p>
-			<p>यि</p>
-			<p>यी</p>
-			<p>यु</p>
-			<p>यू</p>
-			<p>यृ</p>
-			<p>यॄ</p>
-			<p>यॢ</p>
-			<p>यॣ</p>
-			<p>यॅ</p>
-			<p>यॆ</p>
-			<p>ये</p>
-			<p>यै</p>
-			<p>यॉ</p>
-			<p>यॊ</p>
-			<p>यो</p>
-			<pc>यौर</pc>
-			<p>ऱ</p>
-			<i>ऱ</i>
-			<p>रँ</p>
-			<p>रं</p>
-			<p>रः</p>
-			<p>र॑</p>
-			<p>र॒</p>
-			<p>र॓</p>
-			<p>र॔</p>
-			<p>रऽ</p>
-			<p>र्</p>
-			<p>रा</p>
-			<p>रि</p>
-			<p>री</p>
-			<p>रु</p>
-			<p>रू</p>
-			<p>रृ</p>
-			<p>रॄ</p>
-			<p>रॢ</p>
-			<p>रॣ</p>
-			<p>रॅ</p>
-			<p>रॆ</p>
-			<p>रे</p>
-			<p>रै</p>
-			<p>रॉ</p>
-			<p>रॊ</p>
-			<p>रो</p>
-			<pc>रौलळ</pc>
-			<p>ऴ</p>
-			<i>ऴ</i>
-			<p>ळँ</p>
-			<p>ळं</p>
-			<p>ळः</p>
-			<p>ळ॑</p>
-			<p>ळ॒</p>
-			<p>ळ॓</p>
-			<p>ळ॔</p>
-			<p>ळऽ</p>
-			<p>ळ्</p>
-			<p>ळा</p>
-			<p>ळि</p>
-			<p>ळी</p>
-			<p>ळु</p>
-			<p>ळू</p>
-			<p>ळृ</p>
-			<p>ळॄ</p>
-			<p>ळॢ</p>
-			<p>ळॣ</p>
-			<p>ळॅ</p>
-			<p>ळॆ</p>
-			<p>ळे</p>
-			<p>ळै</p>
-			<p>ळॉ</p>
-			<p>ळॊ</p>
-			<p>ळो</p>
-			<pc>ळौवशषसह़ँंः॒॑॓॔ऽ्ािीुूृॄॢॣॅॆेैॉॊो</pc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
 	<collation type="DIRECT" >
 		<rules>
 			<reset><last_non_ignorable/></reset>

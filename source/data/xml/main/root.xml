@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="5.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="" /> 
 	</identity>
 	<localeDisplayNames>
@@ -73,6 +73,7 @@
 			<language type="btk">btk</language>
 			<language type="bua">bua</language>
 			<language type="bug">bug</language>
+			<language type="byn">byn</language>
 			<language type="ca">ca</language>
 			<language type="cad">cad</language>
 			<language type="cai">cai</language>
@@ -179,6 +180,7 @@
 			<language type="hmn">hmn</language>
 			<language type="ho">ho</language>
 			<language type="hr">hr</language>
+			<language type="ht">ht</language>
 			<language type="hu">hu</language>
 			<language type="hup">hup</language>
 			<language type="hy">hy</language>
@@ -474,60 +476,62 @@
 			<language type="zun">zun</language>
 		</languages>
 		<scripts>
-			<script type="ARAB">ARAB</script>
-			<script type="ARMN">ARMN</script>
-			<script type="BENG">BENG</script>
-			<script type="BOPO">BOPO</script>
-			<script type="BRAI">BRAI</script>
-			<script type="BUHD">BUHD</script>
-			<script type="CANS">CANS</script>
-			<script type="CHER">CHER</script>
-			<script type="CPRT">CPRT</script>
-			<script type="CYRL">CYRL</script>
-			<script type="DEVA">DEVA</script>
-			<script type="DSRT">DSRT</script>
-			<script type="ETHI">ETHI</script>
-			<script type="GEOR">GEOR</script>
-			<script type="GOTH">GOTH</script>
-			<script type="GREK">GREK</script>
-			<script type="GUJR">GUJR</script>
-			<script type="GURU">GURU</script>
-			<script type="HANG">HANG</script>
-			<script type="HANI">HANI</script>
-			<script type="HANO">HANO</script>
-			<script type="HEBR">HEBR</script>
-			<script type="HIRA">HIRA</script>
-			<script type="ITAL">ITAL</script>
-			<script type="KANA">KANA</script>
-			<script type="KHMR">KHMR</script>
-			<script type="KNDA">KNDA</script>
-			<script type="LAOO">LAOO</script>
-			<script type="LATN">LATN</script>
-			<script type="LIMB">LIMB</script>
-			<script type="LINB">LINB</script>
-			<script type="MLYM">MLYM</script>
-			<script type="MONG">MONG</script>
-			<script type="MYMR">MYMR</script>
-			<script type="OGAM">OGAM</script>
-			<script type="ORYA">ORYA</script>
-			<script type="OSMA">OSMA</script>
-			<script type="QAAC">QAAC</script>
-			<script type="QAAI">QAAI</script>
-			<script type="RUNR">RUNR</script>
-			<script type="SHAW">SHAW</script>
-			<script type="SINH">SINH</script>
-			<script type="SYRC">SYRC</script>
-			<script type="TAGB">TAGB</script>
-			<script type="TALE">TALE</script>
-			<script type="TAML">TAML</script>
-			<script type="TELU">TELU</script>
-			<script type="TGLG">TGLG</script>
-			<script type="THAA">THAA</script>
-			<script type="THAI">THAI</script>
-			<script type="TIBT">TIBT</script>
-			<script type="UGAR">UGAR</script>
-			<script type="YIII">YIII</script>
-			<script type="ZYYY">ZYYY</script>
+			<script type="Arab">Arab</script>
+			<script type="Armn">Armn</script>
+			<script type="Beng">Beng</script>
+			<script type="Bopo">Bopo</script>
+			<script type="Brai">Brai</script>
+			<script type="Buhd">Buhd</script>
+			<script type="Cans">Cans</script>
+			<script type="Cher">Cher</script>
+			<script type="Cprt">Cprt</script>
+			<script type="Cyrl">Cyrl</script>
+			<script type="Deva">Deva</script>
+			<script type="Dsrt">Dsrt</script>
+			<script type="Ethi">Ethi</script>
+			<script type="Geor">Geor</script>
+			<script type="Goth">Goth</script>
+			<script type="Grek">Grek</script>
+			<script type="Gujr">Gujr</script>
+			<script type="Guru">Guru</script>
+			<script type="Hang">Hang</script>
+			<script type="Hani">Hani</script>
+			<script type="Hano">Hano</script>
+			<script type="Hans">Hans</script>
+			<script type="Hant">Hant</script>
+			<script type="Hebr">Hebr</script>
+			<script type="Hira">Hira</script>
+			<script type="Ital">Ital</script>
+			<script type="Kana">Kana</script>
+			<script type="Khmr">Khmr</script>
+			<script type="Knda">Knda</script>
+			<script type="Laoo">Laoo</script>
+			<script type="Latn">Latn</script>
+			<script type="Limb">Limb</script>
+			<script type="Linb">Linb</script>
+			<script type="Mlym">Mlym</script>
+			<script type="Mong">Mong</script>
+			<script type="Mymr">Mymr</script>
+			<script type="Ogam">Ogam</script>
+			<script type="Orya">Orya</script>
+			<script type="Osma">Osma</script>
+			<script type="Qaac">Qaac</script>
+			<script type="Qaai">Qaai</script>
+			<script type="Runr">Runr</script>
+			<script type="Shaw">Shaw</script>
+			<script type="Sinh">Sinh</script>
+			<script type="Syrc">Syrc</script>
+			<script type="Tagb">Tagb</script>
+			<script type="Tale">Tale</script>
+			<script type="Taml">Taml</script>
+			<script type="Telu">Telu</script>
+			<script type="Tglg">Tglg</script>
+			<script type="Thaa">Thaa</script>
+			<script type="Thai">Thai</script>
+			<script type="Tibt">Tibt</script>
+			<script type="Ugar">Ugar</script>
+			<script type="Yiii">Yiii</script>
+			<script type="Zyyy">Zyyy</script>
 		</scripts>
 		<territories>
 			<territory type="AD">AD</territory>
@@ -773,25 +777,32 @@
 			<territory type="ZW">ZW</territory>
 		</territories>
 		<variants>
-			<variant type="AL">AL</variant>
-			<variant type="B">B</variant>
 			<variant type="EURO">EURO</variant>
 			<variant type="Fallback"></variant>
 			<variant type="NY">NY</variant>
 			<variant type="POSIX">POSIX</variant>
-			<variant type="PREEURO">PREEURO</variant>
+			<variant type="REVISED">REVISED</variant>
 		</variants>
 		<keys>
-			<key type="Calendar">Calendar</key>
-			<key type="Collation">Collation</key>
+			<key type="calendar">CALENDAR</key>
+			<key type="collation">COLLATION</key>
+			<key type="currency">CURRENCY</key>
 		</keys>
 		<types>
-			<type type="DIRECT" key="collation">DIRECT</type>
+			<type type="Fallback" key="calendar"></type>
+			<type type="buddhist" key="calendar">BUDDHIST</type>
+			<type type="chinese" key="calendar">CHINESE</type>
+			<type type="gregorian" key="calendar">GREGORIAN</type>
+			<type type="hebrew" key="calendar">HEBREW</type>
+			<type type="islamic" key="calendar">ISLAMIC</type>
+			<type type="japanese" key="calendar">JAPANESE</type>
+			<type type="traditional" key="calendar">TRADITIONAL</type>
 			<type type="Fallback" key="collation"></type>
-			<type type="PHONEBOOK" key="collation">PHONEBOOK</type>
-			<type type="PINYIN" key="collation">PINYIN</type>
-			<type type="STROKE" key="collation">STROKE</type>
-			<type type="TRADITIONAL" key="collation">TRADITIONAL</type>
+			<type type="direct" key="collation">DIRECT</type>
+			<type type="phonebook" key="collation">PHONEBOOK</type>
+			<type type="pinyin" key="collation">PINYIN</type>
+			<type type="stroke" key="collation">STROKE</type>
+			<type type="traditional" key="collation">TRADITIONAL</type>
 		</types>
 	</localeDisplayNames>
 	<layout>
@@ -863,8 +874,8 @@
 				<pm>PM</pm>
 				<eras>
 					<eraAbbr>
-						<era type="1">CE</era>
-						<era type="2">BCE</era>
+						<era type="1">BCE</era>
+						<era type="2">CE</era>
 					</eraAbbr>
 				</eras>
 				<dateFormats>
@@ -1008,11 +1019,6 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<collations version="3.1.1">
-		<collation  >
-			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="0.0" />
-		</collation  >
-	</collations >
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:ruleBasedNumberFormats>
 			<icu:ruleBasedNumberFormat type="spellout">

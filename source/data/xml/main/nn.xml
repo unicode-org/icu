@@ -8,14 +8,14 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="nn" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="nb">Norsk bokmål</language>
-			<language type="nn">Norsk nynorsk</language>
-			<language type="no">Norsk</language>
+			<language type="nb">norsk bokmål</language>
+			<language type="nn">norsk nynorsk</language>
+			<language type="no">norsk</language>
 		</languages>
 		<territories>
 			<territory type="NO">Noreg</territory>
@@ -181,30 +181,4 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>Z</reset>
-			<p>æ</p>
-			<t>Æ</t>
-			<p>ä</p>
-			<t>Ä</t>
-			<p>ø</p>
-			<t>Ø</t>
-			<p>ö</p>
-			<t>Ö</t>
-			<p>ő</p>
-			<t>Ő</t>
-			<p>å</p>
-			<t>Å</t>
-			<t>aa</t>
-			<t>aA</t>
-			<t>Aa</t>
-			<t>AA</t>
-			<reset>V</reset>
-			<t>w</t>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
 </ldml>

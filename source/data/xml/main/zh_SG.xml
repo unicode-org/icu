@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="zh" /> 
 		<territory type="SG" /> 
 	</identity>
@@ -21,12 +21,10 @@
 		<territories>
 			<territory type="AU">澳洲</territory>
 			<territory type="CZ">捷克</territory>
-			<territory type="GL">格陵兰</territory>
 			<territory type="ID">印尼</territory>
 			<territory type="KR">南韩</territory>
 			<territory type="MK">马其顿</territory>
 			<territory type="NZ">纽西兰</territory>
-			<territory type="PR">波多黎各</territory>
 			<territory type="SA">沙地阿拉伯</territory>
 		</territories>
 </localeDisplayNames>
@@ -88,8 +86,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<decimalFormats>
