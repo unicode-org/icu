@@ -338,6 +338,8 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         default:
             return 0; /* undefined */
         }
+    } else if(which==UCHAR_GENERAL_CATEGORY_MASK) {
+        return U_MASK(u_charType(c));
     } else {
         return 0; /* undefined */
     }
@@ -398,6 +400,8 @@ u_getIntPropertyMaxValue(UProperty which) {
         default:
             return -1; /* undefined */
         }
+    } else if(which==UCHAR_GENERAL_CATEGORY_MASK) {
+        return U_MASK(U_CHAR_CATEGORY_COUNT)-1;
     } else {
         return -1; /* undefined */
     }
