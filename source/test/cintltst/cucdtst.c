@@ -2000,7 +2000,7 @@ static void TestUScriptCodeAPI(){
 
 struct RunTestData
 {
-    char *runText;
+    const char *runText;
     UScriptCode runCode;
 };
 
@@ -2048,7 +2048,7 @@ CheckScriptRuns(UScriptRun *scriptRun, int32_t *runStarts, const RunTestData *te
 static void
 TestUScriptRunAPI()
 {
-    const RunTestData testData[] = {
+    static const RunTestData testData[] = {
         {"\\u0020\\u0946\\u0939\\u093F\\u0928\\u094D\\u0926\\u0940\\u0020", USCRIPT_DEVANAGARI},
         {"\\u0627\\u0644\\u0639\\u0631\\u0628\\u064A\\u0629\\u0020", USCRIPT_ARABIC},
         {"\\u0420\\u0443\\u0441\\u0441\\u043A\\u0438\\u0439\\u0020", USCRIPT_CYRILLIC},
