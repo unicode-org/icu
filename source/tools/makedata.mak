@@ -41,7 +41,7 @@ TESTDATA=$(ICUP)\source\test\testdata
 
 #If ICU_DATA is not set, we want to output stuff in binary directory
 !IF "$(ICU_DATA)" == ""
-DLL_OUTPUT=$(ICUP)\bin\$(CFG)
+DLL_OUTPUT=$(ICUP)\bin
 TESTDATAOUT=$(TESTDATA)
 #TESTDATAOUT=$(DLL_OUTPUT)
 !MESSAGE ICU_DATA is not set! icudata.dll will go to $(DLL_OUTPUT)
@@ -70,7 +70,9 @@ NULL=
 NULL=nul
 !ENDIF
 
-PATH = $(PATH);$(ICUP)\bin;$(ICUP)\bin\$(CFG)
+# Adjust the path to find DLLs. If icudata.dll really needs to be in $(ICUP)\bin\$(CFG),
+# then add $(ICUP)\bin\$(CFG) to this path, as the other DLLs are in $(ICUP)\bin.
+PATH = $(PATH);$(ICUP)\bin
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
