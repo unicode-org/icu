@@ -33,7 +33,7 @@ SingleTableProcessor::~SingleTableProcessor()
 {
 }
 
-void SingleTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
+void SingleTableProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
 {
     const LookupSingle *entries = singleTableLookupTable->entries;
     le_int32 glyph;

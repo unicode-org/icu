@@ -36,7 +36,7 @@ void IndicRearrangementProcessor::beginStateTable()
 }
 
 ByteOffset IndicRearrangementProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 &currGlyph,
-        le_int32 glyphCount, EntryTableIndex index)
+        le_int32 /*glyphCount*/, EntryTableIndex index)
 {
     const IndicRearrangementStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);

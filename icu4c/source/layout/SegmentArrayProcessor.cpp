@@ -33,7 +33,7 @@ SegmentArrayProcessor::~SegmentArrayProcessor()
 {
 }
 
-void SegmentArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
+void SegmentArrayProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
 {
     const LookupSegment *segments = segmentArrayLookupTable->segments;
     le_int32 glyph;

@@ -27,7 +27,7 @@ const char OpenTypeLayoutEngine::fgClassID=0;
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),
-      fSubstitutionFilter(NULL), fFeatureOrder(NULL)
+      fFeatureOrder(NULL), fSubstitutionFilter(NULL)
 {
     static le_uint32 gdefTableTag = LE_MAKE_TAG('G', 'D', 'E', 'F');
     static le_uint32 gposTableTag = LE_MAKE_TAG('G', 'P', 'O', 'S');
@@ -58,7 +58,7 @@ void OpenTypeLayoutEngine::reset()
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL),
-      fSubstitutionFilter(NULL), fFeatureOrder(NULL)
+      fFeatureOrder(NULL), fSubstitutionFilter(NULL)
 {
     setScriptAndLanguageTags();
 }
@@ -101,7 +101,7 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
         return 0;
     }
 
-    if (chars == NULL || offset < 0 || count < 0) {
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
         success = LE_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

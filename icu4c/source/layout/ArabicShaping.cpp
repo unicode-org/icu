@@ -203,7 +203,7 @@ GlyphShaper::~GlyphShaper()
     // nothing to do
 }
 
-void GlyphShaper::init(LEUnicode ch, le_int32 outIndex, le_bool isloate)
+void GlyphShaper::init(LEUnicode /*ch*/, le_int32 outIndex, le_bool /*isloate*/)
 {
     charTags[outIndex] = tagArray;
 }

@@ -33,7 +33,7 @@ SegmentSingleProcessor::~SegmentSingleProcessor()
 {
 }
 
-void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
+void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
 {
     const LookupSegment *segments = segmentSingleLookupTable->segments;
     le_int32 glyph;

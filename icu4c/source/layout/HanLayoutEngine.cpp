@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/04/12 00:37:11 $ $Revision: 1.1 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/05/13 00:44:33 $ $Revision: 1.2 $
  */
 
 #include "LETypes.h"
@@ -37,8 +37,8 @@ const LETag tradFeatureTag = LE_MAKE_TAG('t', 'r', 'a', 'd');
 
 const LETag features[] = {loclFeatureTag, emptyTag};
 
-le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success)
+le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
+        LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&featureTags, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;

@@ -19,7 +19,7 @@ const LETag hebrewTags[] =
     ligaFeatureTag, emptyTag
 };
 
-void HebrewShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
+void HebrewShaping::shape(const LEUnicode * /*chars*/, le_int32 /*offset*/, le_int32 charCount, le_int32 /*charMax*/,
                           le_bool rightToLeft, const LETag **tags)
 {
 
