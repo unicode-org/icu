@@ -1,6 +1,7 @@
-package test.translit;
+package com.ibm.test.translit;
 import test.IntlTest;
 import com.ibm.text.*;
+import com.ibm.test.*;
 import java.text.*;
 import java.util.*;
 
@@ -8,7 +9,7 @@ import java.util.*;
  * @test
  * @summary General test of UnicodeSet
  */
-public class UnicodeSetTest extends IntlTest {
+public class UnicodeSetTest extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new UnicodeSetTest().run(args);
