@@ -76,8 +76,8 @@ const Collator::EComparisonResult CollationTurkishTest::results[] = {
     Collator::GREATER,
     // test priamry > 8
     Collator::LESS,
-    Collator::EQUAL,
-    Collator::EQUAL
+    Collator::LESS,
+    Collator::GREATER
 };
 
 void CollationTurkishTest::doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result)
