@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/21 21:25:28 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/07/26 16:20:16 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -195,7 +195,7 @@ public final class NormalizerBuilder
             }
         }
 
-        outv("\nLargest composed char: " + uinfo.hex(largestChar));
+        outv("\nLargest composed char: " + hex(largestChar));
 
         // Form the binary compositions
         outv("\nGenerating pairwise compositions...");
@@ -232,14 +232,14 @@ public final class NormalizerBuilder
                     // If the decomp is in canonical order, we're in trouble,
                     // since that means there's no way to generate this composed
                     // character from its canonically decomposed equivalent.
-                    err("No pairwise compose of " + uinfo.hex(decomp) +
-                            " > " + uinfo.hex(ch) + " " + uinfo.getName(ch,true) );
+                    err("No pairwise compose of " + hex(decomp) +
+                            " > " + hex(ch) + " " + uinfo.getName(ch,true) );
                 }
                 else {
                     // If the decomp is *not* in canonical order, it's not as
                     // bad, since composition will still work as long as
-                    warn("No pairwise compose of non-canon " + uinfo.hex(decomp) +
-                            " > " + uinfo.hex(ch) + " " + uinfo.getName(ch,true) );
+                    warn("No pairwise compose of non-canon " + hex(decomp) +
+                            " > " + hex(ch) + " " + uinfo.getName(ch,true) );
                 }
             }
 
@@ -505,8 +505,8 @@ public final class NormalizerBuilder
             if (uinfo.hasCanonicalDecomposition(ch)) {
 
                 if (ch == 0x0f77) {
-                    outv("0F77: decomps.get() = " + uinfo.hex(decomps.get(ch)));
-                    outv("0F77: fullDecomp = " + uinfo.hex(uinfo.getFullDecomposition(ch,false)));
+                    outv("0F77: decomps.get() = " + hex(decomps.get(ch)));
+                    outv("0F77: fullDecomp = " + hex(uinfo.getFullDecomposition(ch,false)));
                 }
 
                 canonIndex = putLength(replace, decomps.get(ch), compatIndex);
@@ -665,8 +665,8 @@ public final class NormalizerBuilder
                 //
                 int index = put(replace, explodeCompat.get(ch), 0);
 
-                outv(uinfo.hex(ch) + " is base and has compat explosion "
-                                  + uinfo.hex(explodeCompat.get(ch)) );
+                outv(hex(ch) + " is base and has compat explosion "
+                                  + hex(explodeCompat.get(ch)) );
 
                 addChar(lookup, ch, EXPLODING_BASE, index);
                 usedIndices.set(index);
@@ -799,8 +799,8 @@ public final class NormalizerBuilder
                 int index = put(replace, String.valueOf(remap), singleton);
                 addChar(lookup, ch, EXPLODING_BASE, index);
 
-                outv("Canonical singleton " + uinfo.hex(ch) +
-                     " remaps to " + uinfo.hex(remap) + " index=" + index); 
+                outv("Canonical singleton " + hex(ch) +
+                     " remaps to " + hex(remap) + " index=" + index); 
             }
         }
 
@@ -965,7 +965,7 @@ public final class NormalizerBuilder
             char oldValue = lookup.elementAt(ch);
             err(typeName(type) + " char is also "
                   + typeName(oldValue & TYPE_MASK) + ": "
-                  + uinfo.hex(ch) + "  " + uinfo.getName(ch,true));
+                  + hex(ch) + "  " + uinfo.getName(ch,true));
         }
         else if ((index << INDEX_SHIFT) > 65536) {
             err("not enough bits: index " + index + " << INDEX_SHIFT = " + (index << INDEX_SHIFT));
@@ -983,13 +983,13 @@ public final class NormalizerBuilder
         if (oldValue != IGNORE) {
             err("Exploding char is already " + typeName(oldValue & TYPE_MASK)
                              + " (index " + oldIndex + "): "
-                             + uinfo.hex(ch) + "  " + uinfo.getName(ch,true));
+                             + hex(ch) + "  " + uinfo.getName(ch,true));
         }
 
         if (oldIndex != 0) {
             err("Exploding char is already " + typeName(oldValue & TYPE_MASK)
                              + " (index " + oldIndex + "): "
-                             + uinfo.hex(ch) + "  " + uinfo.getName(ch,true));
+                             + hex(ch) + "  " + uinfo.getName(ch,true));
         }
         else if ((index << INDEX_SHIFT) > 65536) {
             err("not enough bits: index " + index + " << INDEX_SHIFT = " + (index << INDEX_SHIFT));
@@ -1044,8 +1044,15 @@ public final class NormalizerBuilder
     }
 
     //--------------------------------------------------------------------------------
-    // Source file headers
-    //
+    // Output & formatting
+
+    static final String hex(String s) {
+        return UInfo.hex(s);
+    }
+
+    static final String hex(char c) {
+        return UInfo.hex(c);
+    }
 
     void out(String str) {
         System.out.println(str);
