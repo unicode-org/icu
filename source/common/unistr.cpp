@@ -118,7 +118,14 @@ UnicodeString::removeRef()
 
 int32_t
 UnicodeString::refCount() const 
-{ return *((int32_t *)fArray - 1); }
+{ 
+    umtx_lock(NULL);
+    // Note: without the lock to force a memory barrier, we might see a very
+    //       stale value on some multi-processor systems.
+    int32_t  count = *((int32_t *)fArray - 1);
+    umtx_unlock(NULL);
+    return count;
+ }
 
 void
 UnicodeString::releaseArray() {
