@@ -1,13 +1,24 @@
 #include "genuca.h"
 #include "cnttable.h"
+#include "uoptions.h"
+#include "toolutil.h"
 
 #include <stdlib.h>
+
+#ifdef XP_MAC_CONSOLE
+#include <console.h>
+#endif
 
 ExpansionTable expansions;
 CntTable *contractions;
 CompactIntArray *mapping = NULL;
 /*UHashtable *elements = NULL;*/
 UCAElements le;
+
+/*
+ * Global - verbosity
+ */
+UBool VERBOSE = FALSE;
 
 void deleteElement(void *element) {
     UCAElements *el = (UCAElements *)element;
@@ -205,8 +216,8 @@ uint32_t contSize = 0;
 
 void addNewInverse(UCAElements *element, UErrorCode *status) {
 
-  if(isContinuation(element->CEs[1])) {
-    fprintf(stderr, "+");
+  if(VERBOSE && isContinuation(element->CEs[1])) {
+    fprintf(stdout, "+");
   }
   inversePos++;
   inverseTable[inversePos][0] = element->CEs[0];
@@ -270,7 +281,8 @@ uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   return inversePos;
 }
 
-InverseTableHeader *assembleInverseTable(UErrorCode *status) {
+InverseTableHeader *assembleInverseTable(UErrorCode *status)
+{
   uint32_t i = 0;
   InverseTableHeader *result = NULL;
   uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
@@ -301,45 +313,36 @@ InverseTableHeader *assembleInverseTable(UErrorCode *status) {
     return NULL;
   }
 
-  {
+  return result; 
+}
+
+
+void writeOutInverseData(InverseTableHeader *data,
+                  const char *outputDir,
+                  UErrorCode *status)
+{
     UNewDataMemory *pData;
     
     long dataLength;
 
-#ifdef WIN32
-    char *currdir = _getcwd(NULL, 0);
-#else
-    char *currdir = getcwd(NULL, 0);
-#endif
-    pData=udata_create(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, &invDataInfo,
+    pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invDataInfo,
                        U_COPYRIGHT_STRING, status);
-
-    if(currdir != NULL) {
-        free(currdir);
-    }
-
 
     if(U_FAILURE(*status)) {
         fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
-        free(result);
-        return 0;
+        return;
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out inverse table\n");
-    udata_writeBlock(pData, result, result->byteSize);
+    fprintf(stdout, "Writing out inverse UCA table\n");
+    udata_writeBlock(pData, data, data->byteSize);
 
     /* finish up */
     dataLength=udata_finish(pData, status);
     if(U_FAILURE(*status)) {
         fprintf(stderr, "Error: error %d writing the output file\n", *status);
-        free(result);
-        return 0;
+        return;
     }
-  }
-  return result; 
-
-
 }
 
 
@@ -752,7 +755,10 @@ void reverseElement(UCAElements *el) {
 
 }
 
-void writeOutData(UCATableHeader *data, UErrorCode *status) {
+void writeOutData(UCATableHeader *data,
+                  const char *outputDir,
+                  UErrorCode *status)
+{
     if(U_FAILURE(*status)) {
         return;
     }
@@ -761,22 +767,8 @@ void writeOutData(UCATableHeader *data, UErrorCode *status) {
     
     long dataLength;
 
-#ifdef WIN32
-    char *currdir = _getcwd(NULL, 0);
-#else
-    char *currdir = getcwd(NULL, 0);
-#endif
-/*
-    pData=udata_create(getcwd(NULL, 0), UCA_DATA_TYPE, UCA_DATA_NAME, &dataInfo,
+    pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &dataInfo,
                        U_COPYRIGHT_STRING, status);
-*/
-    pData=udata_create(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, &dataInfo,
-                       U_COPYRIGHT_STRING, status);
-
-    if(currdir != NULL) {
-        free(currdir);
-    }
-
 
     if(U_FAILURE(*status)) {
         fprintf(stderr, "Error: unable to create data memory, error %d\n", *status);
@@ -784,7 +776,7 @@ void writeOutData(UCATableHeader *data, UErrorCode *status) {
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out table\n");
+    fprintf(stdout, "Writing out UCA table\n");
     udata_writeBlock(pData, data, data->size);
 
     /* finish up */
@@ -795,20 +787,24 @@ void writeOutData(UCATableHeader *data, UErrorCode *status) {
     }
 }
 
-int main(int argc, char* argv[]) {
-    FILE *data = fopen("FractionalUCA.txt", "r");
+static int32_t
+write_uca_table(const char *filename,
+                const char *outputDir,
+                UBool includeCopyright,
+                UErrorCode *status)
+{
+    FILE *data = fopen(filename, "r");
     //FILE *data = fopen("uca30codepointsort.txt", "r");
     int32_t i = 0, j = 0, k = 0, line = 0, thai = 0;
     int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
     int32_t terValue[0xffff], secValue[0xffff];
     int32_t sizeBreakDown[35][35][35];
-    UErrorCode status = U_ZERO_ERROR;
     UCAElements *element = NULL;
     UChar variableTopValue = 0;
     UBool foundVariableTop = FALSE;
 
     if(data == NULL) {
-        fprintf(stderr, "Couldn't open file\n");
+        fprintf(stderr, "Couldn't open file: %s\n", filename);
         return -1;
     }
 
@@ -824,7 +820,7 @@ int main(int argc, char* argv[]) {
 
 
     mapping = ucmp32_open(UCOL_UNMAPPED);
-    contractions = uprv_cnttab_open(mapping, &status);
+    contractions = uprv_cnttab_open(mapping, status);
     ucmp32_setRange(mapping, 0, 0xFFFF, UCOL_NOT_FOUND);
 
     /*
@@ -838,12 +834,12 @@ int main(int argc, char* argv[]) {
     }
 
     while(!feof(data)) {
-        if(U_FAILURE(status)) {
+        if(U_FAILURE(*status)) {
             fprintf(stderr, "Something returned an error %i while processing line: %i\nExiting...", status, line);
-            exit(status);
+            exit(*status);
         }
 
-        element = readAnElement(data, &status);
+        element = readAnElement(data, status);
         line++;
         if(element != NULL) {
             /* this does statistics on CE lengths, but is currently broken */
@@ -876,14 +872,16 @@ int main(int argc, char* argv[]) {
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
-            uint32_t invResult = addToInverse(element, &status);
-            uint32_t result = addAnElement(element, &status);
+            uint32_t invResult = addToInverse(element, status);
+            uint32_t result = addAnElement(element, status);
             //deleteElement(element);
         }
     }
 
 
-    fprintf(stderr, "Lines read: %i\n", line);
+    if (VERBOSE) {
+        fprintf(stdout, "\nLines read: %i\n", line);
+    }
 
 
 
@@ -917,10 +915,11 @@ int main(int argc, char* argv[]) {
     }
 */
     /* test */
-    UCATableHeader *myData = assembleTable(variableTopValue, &status);  
-    writeOutData(myData, &status);
+    UCATableHeader *myData = assembleTable(variableTopValue, status);  
+    writeOutData(myData, outputDir, status);
 
-    InverseTableHeader *inverse = assembleInverseTable(&status);
+    InverseTableHeader *inverse = assembleInverseTable(status);
+    writeOutInverseData(inverse, outputDir, status);
 /*
     uint32_t *itab = (uint32_t *)((uint8_t *)inverse + inverse->table);
     UChar *conts = (UChar *)((uint8_t *)inverse + inverse->conts);
@@ -950,7 +949,78 @@ int main(int argc, char* argv[]) {
     ucmp32_close(myData->mapping);
 
     free(myData);
-
+    free(inverse);
+    fclose(data);
 
 	return 0;
 }
+
+static UOption options[]={
+    UOPTION_HELP_H,              /* 0  Numbers for those who*/ 
+    UOPTION_HELP_QUESTION_MARK,  /* 1   can't count. */
+    UOPTION_COPYRIGHT,           /* 2 */
+    UOPTION_VERSION,             /* 3 */
+    UOPTION_DESTDIR,             /* 4 */
+    UOPTION_VERBOSE              /* 5 */
+};
+
+int main(int argc, char* argv[]) {
+    UErrorCode status = U_ZERO_ERROR;
+    const char* destdir;
+    UBool haveCopyright;
+
+#ifdef XP_MAC_CONSOLE
+    argc = ccommand((char***)&argv);
+#endif
+
+    /* preset then read command line options */
+    options[4].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    } else if(argc<2) {
+        argc=-1;
+    }
+    if(argc<=1 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] file\n"
+            "\tRead in UCA collation text data and write out the binary collation data\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-V or --version     show a version message\n"
+            "\t\t-c or --copyright   include a copyright notice\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-v or --verbose     Turn on verbose output\n",
+            argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+    }
+
+    if(options[3].doesOccur) {
+      fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
+            dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
+      fprintf(stdout, "Copyright (C) 2000-2001, International Business Machines\n");
+      fprintf(stdout, "Corporation and others.  All Rights Reserved.\n");
+        exit(0);
+    }
+
+    /* get the options values */
+    haveCopyright = options[2].doesOccur;
+    destdir = options[4].value;
+    VERBOSE = options[5].doesOccur;
+
+    argv++;
+    return write_uca_table(getLongPathname(*argv), destdir, haveCopyright, &status);
+}
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
