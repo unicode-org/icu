@@ -1,256 +1,143 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:36
+// * Source File: \work\locale\common\main\\eu.xml
 // *
 // ***************************************************************************
-
-eu {
-    Version { "2.0" }
-    Countries {
-        //Fallback{ "en" }
-
-        //AD { "Andorra" }
-        AE { "Arabiar Emirrerri Batuak" }
-        AF { "Afganistan" }
-        AG { "Antigua eta Barbuda" }
-        //AL { "Albania" }
-        //AM { "Armenia" }
-        //AO { "Angola" }
-        AQ { "Antartika" }
-        //AR { "Argentina" }
-        //AT { "Austria" }
-        //AU { "Australia" }
-        //AZ { "Azerbaijan" }
-
-        BA { "Bosnia-Herzegovina" }
-        //BB { "Barbados" }
-        //BD { "Bangladesh" }
-        BE { "Belgika" }
-        //BF { "Burkina Faso" }
-        //BG { "Bulgaria" }
-        //BH { "Bahrain" }
-        //BI { "Burundi" }
-        //BJ { "Benin" }
-        //BN { "Brunei" }
-        BO { "Bolibia" }
-        BR { "Brasil" }
-        BS { "Bahamak" }
-        //BT { "Bhutan" }
-        //BW { "Botswana" }
-        BY { "Bielorrusia" }
-        //BZ { "Belize" }
-
-        CA { "Kanada" }
-        //CD { "Democratic Errepublika del Congo" }
-        CF { "Afrika Erdiko Errepublika" }
-        CG { "Kongo" }
-        CH { "Suitza" }
-        CI { "Boli Kosta" }
-        CL { "Txile" }
-        CM { "Kamerun" }
-        CN { "Txina" }
-        CO { "Kolonbia" }
-        //CR { "Costa Rica" }
-        //CS { "Serbia eta Montenegro" } // TODO: if we allow this, then SP must go away
-        CU { "Kuba" }
-        CV { "Cabo Verde" }
-        CY { "Zipre" }
-        CZ { "Txekiar errepublika" }
-
-        DE { "Alemania" }
-        DJ { "Djibuti" }
-        DK { "Danimarka" }
-        DM { "Dominika" }
-        DO { "Dominikar Errepublika" }
-        DZ { "Aljeria" }
-
-        EC { "Ekuador" }
-        //EE { "Estonia" }
-        EG { "Egipto" }
-        EH { "Mendebaldeko Sahara" }
-        //ER { "Eritrea" }
-        ES { "Espainia" }
-        ET { "Etiopia" }
-
-        FI { "Finlandia" }
-        //FJ { "Fiji" }
-        FM { "Mikronesia" }
-        FR { "Frantzia" }
-
-        //GA { "Gabon" }
-        //GB { "United Kingdom" }
-        //GD { "Grenada" }
-        //GE { "Georgia" }
-        //GH { "Ghana" }
-        //GM { "Gambia" }
-        GN { "Ginea" }
-        GQ { "Ekuatore Ginea" }
-        GR { "Grezia" }
-        //GT { "Guatemala" }
-        GW { "Ginea-Bissau" }
-        //GY { "Guyana" }
-
-        //HN { "Honduras" }
-        HR { "Kroazia" }
-        //HT { "Haiti" }
-        HU { "Hungaria" }
-
-        //ID { "Indonesia" }
-        IE { "Irlanda" }
-        //IL { "Israel" }
-        //IN { "India" }
-        IQ { "Irak" }
-        //IR { "Iran" }
-        IS { "Islandia" }
-        IT { "Italia" }
-
-        JM { "Jamaika" }
-        JO { "Jordania" }
-        JP { "Japonia" }
-
-        KE { "Kenia" }
-        KG { "Kirgizistan" }
-        KH { "Kanbodia" }
-        //KI { "Kiribati" }
-        KM { "Komoreak" }
-        KN { "Saint Kitts eta Nevis" }
-        KP { "Ipar Korea" }
-        KR { "Hego Korea" }
-        //KW { "Kuwait" }
-        //KZ { "Kazakhstan" }
-
-        //LA { "Laos" }
-        LB { "Libano" }
-        LC { "Santa Luzia" }
-        //LI { "Liechtenstein" }
-        //LK { "Sri Lanka" }
-        //LR { "Liberia" }
-        //LS { "Lesotho" }
-        LT { "Lituania" }
-        LU { "Luxenburgo" }
-        LV { "Letonia" }
-        LY { "Libia" }
-
-        MA { "Maroko" }
-        MC { "Monako" }
-        MD { "Moldavia" }
-        MG { "Madagaskar" }
-        MH { "Marshall uharteak" }
-        MK { "Mazedonia" }
-        //ML { "Mali" }
-        //MM { "Myanmar" }
-        //MN { "Mongolia" }
-        //MR { "Mauritania" }
-        //MT { "Malta" }
-        MU { "Maurizio" }
-        MV { "Maldivak" }
-        //MW { "Malawi" }
-        MX { "Mexiko" }
-        MY { "Malasia" }
-        MZ { "Mozambike" }
-
-        //NA { "Namibia" }
-        //NE { "Niger" }
-        //NG { "Nigeria" }
-        NI { "Nikaragua" }
-        NL { "Herbehereak" }
-        NO { "Norvegia" }
-        //NP { "Nepal" }
-        //NR { "Nauru" }
-        NZ { "Zeelanda Berria" }
-
-        //OM { "Oman" }
-
-        //PA { "Panama" }
-        //PE { "Peru" }
-        PG { "Papua Ginea Berria" }
-        PH { "Filipinak" }
-        //PK { "Pakistan" }
-        PL { "Polonia" }
-        //PT { "Portugal" }
-        //PW { "Palau" }
-        PY { "Paraguai" }
-
-        QA { "Katar" }
-
-        RO { "Errumania" }
-        RU { "Errusia" }
-        RW { "Ruanda" }
-
-        //SA { "Saudi Arabia" }
-        SB { "Salomon uharteak" }
-        SC { "Seychelleak" }
-        //SD { "Sudan" }
-        SE { "Suedia" }
-        SG { "Singapur" }
-        SI { "Eslovenia" }
-        SK { "Eslovakia" }
-        SL { "Sierra Leona" }
-        //SM { "San Marino" }
-        //SN { "Senegal" }
-        //SO { "Somalia" }
-        SP { "Serbia" }
-        SR { "Surinam" }
-        ST { "Sao Tom\u00e9 eta Principe" }
-        //SV { "El Salvador" }
-        SY { "Siria" }
-        SZ { "Swazilandia" }
-
-        TD { "Txad" }
-        //TG { "Togo" }
-        TH { "Tailandia" }
-        TJ { "Tadjikistan" }
-        //TL { "Timor-Leste" }    // This was called East Timor
-        //TM { "Turkmenistan" }
-        //TN { "Tunisia" }
-        //TO { "Tonga" }
-        TR { "Turkia" }
-        TT { "Trinidad eta Tobago" }
-        //TV { "Tuvalu" }
-        //TW { "Taiwan" }
-        //TZ { "Tanzania" }
-
-        UA { "Ukraina" }
-        //UG { "Uganda" }
-        US { "Ameriketako Estatu Batuak" }
-        UY { "Uruguai" }
-        //UZ { "Uzbekistan" }
-
-        VA { "Vatikano" }
-        VC { "Saint Vincent eta Grenadinak" }
-        //VE { "Venezuela" }
-        //VN { "Vietnam" }
-        //VU { "Vanuatu" }
-
-        //WS { "Samoa" }
-
-        //YE { "Yemen" }
-
-        ZA { "Hegoafrika" }
-        //ZM { "Zambia" }
-        //ZW { "Zimbabwe" }
+eu{
+    Countries{
+        AE{"Arabiar Emirrerri Batuak"}
+        AF{"Afganistan"}
+        AG{"Antigua eta Barbuda"}
+        AQ{"Antartika"}
+        BA{"Bosnia-Herzegovina"}
+        BE{"Belgika"}
+        BO{"Bolibia"}
+        BR{"Brasil"}
+        BS{"Bahamak"}
+        BY{"Bielorrusia"}
+        CA{"Kanada"}
+        CF{"Afrika Erdiko Errepublika"}
+        CG{"Kongo"}
+        CH{"Suitza"}
+        CI{"Boli Kosta"}
+        CL{"Txile"}
+        CM{"Kamerun"}
+        CN{"Txina"}
+        CO{"Kolonbia"}
+        CU{"Kuba"}
+        CV{"Cabo Verde"}
+        CY{"Zipre"}
+        CZ{"Txekiar errepublika"}
+        DE{"Alemania"}
+        DJ{"Djibuti"}
+        DK{"Danimarka"}
+        DM{"Dominika"}
+        DO{"Dominikar Errepublika"}
+        DZ{"Aljeria"}
+        EC{"Ekuador"}
+        EG{"Egipto"}
+        EH{"Mendebaldeko Sahara"}
+        ES{"Espainia"}
+        ET{"Etiopia"}
+        FI{"Finlandia"}
+        FM{"Mikronesia"}
+        FR{"Frantzia"}
+        GN{"Ginea"}
+        GQ{"Ekuatore Ginea"}
+        GR{"Grezia"}
+        GW{"Ginea-Bissau"}
+        HR{"Kroazia"}
+        HU{"Hungaria"}
+        IE{"Irlanda"}
+        IQ{"Irak"}
+        IS{"Islandia"}
+        IT{"Italia"}
+        JM{"Jamaika"}
+        JO{"Jordania"}
+        JP{"Japonia"}
+        KE{"Kenia"}
+        KG{"Kirgizistan"}
+        KH{"Kanbodia"}
+        KM{"Komoreak"}
+        KN{"Saint Kitts eta Nevis"}
+        KP{"Ipar Korea"}
+        KR{"Hego Korea"}
+        LB{"Libano"}
+        LC{"Santa Luzia"}
+        LT{"Lituania"}
+        LU{"Luxenburgo"}
+        LV{"Letonia"}
+        LY{"Libia"}
+        MA{"Maroko"}
+        MC{"Monako"}
+        MD{"Moldavia"}
+        MG{"Madagaskar"}
+        MH{"Marshall uharteak"}
+        MK{"Mazedonia"}
+        MU{"Maurizio"}
+        MV{"Maldivak"}
+        MX{"Mexiko"}
+        MY{"Malasia"}
+        MZ{"Mozambike"}
+        NI{"Nikaragua"}
+        NL{"Herbehereak"}
+        NO{"Norvegia"}
+        NZ{"Zeelanda Berria"}
+        PG{"Papua Ginea Berria"}
+        PH{"Filipinak"}
+        PL{"Polonia"}
+        PY{"Paraguai"}
+        QA{"Katar"}
+        RO{"Errumania"}
+        RU{"Errusia"}
+        RW{"Ruanda"}
+        SB{"Salomon uharteak"}
+        SC{"Seychelleak"}
+        SE{"Suedia"}
+        SG{"Singapur"}
+        SI{"Eslovenia"}
+        SK{"Eslovakia"}
+        SL{"Sierra Leona"}
+        SP{"Serbia"}
+        SR{"Surinam"}
+        ST{"Sao Tomé eta Principe"}
+        SY{"Siria"}
+        SZ{"Swazilandia"}
+        TD{"Txad"}
+        TH{"Tailandia"}
+        TJ{"Tadjikistan"}
+        TR{"Turkia"}
+        TT{"Trinidad eta Tobago"}
+        UA{"Ukraina"}
+        US{"Ameriketako Estatu Batuak"}
+        UY{"Uruguai"}
+        VA{"Vatikano"}
+        VC{"Saint Vincent eta Grenadinak"}
+        ZA{"Hegoafrika"}
     }
-    Currencies {
-        ESP { 
-            "\u20A7", 
+    Currencies{
+        ESP{
+            "₧",
             "ESP",
-            :array{
-                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/
-		",",  /*decimal sperator*/   
-                ".", /*grouping separator*/
-                
+            {
+                "¤ #,##0;-¤ #,##0",
+                ",",
+                ".",
             }
         }
     }
-    Languages {
-        eu { "euskara" }
+    ExemplarCharacters{"[a-zñç]"}
+    Languages{
+        eu{"euskara"}
     }
-    LocaleScript{  
-        "Latn",  // ISO 15924 Name 
+    LocaleScript{
+        "Latn",
     }
-    ExemplarCharacters { "[a-z\u00f1\u00e7]" }
-    NumberElements {
+    NumberElements{
         ",",
         ".",
         ";",
@@ -259,16 +146,14 @@ eu {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-
-    // /**************** Info Below is needed ****************/
-    // Eras{}
-    // localPatternChars{}
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             dayNames{
                 format{

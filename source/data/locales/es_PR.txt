@@ -1,30 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:32
+// * Source File: \work\locale\common\main\\es_PR.xml
 // *
 // ***************************************************************************
-
-es_PR {
-    Version{ "2.0" }
-//    NumberElements { 
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    // Currency display names
-    Currencies {
-        USD { "$", "D\u00F3lar Americano" }
+es_PR{
+    Currencies{
+        USD{
+            "$",
+            "Dólar Americano",
+        }
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "hh:mm:ss a z",

@@ -1,23 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:54
+// * Source File: \work\locale\common\main\\hy_AM.xml
 // *
-// *   Data by :
-// *         Bedo Agopian    www.agosoft.com
-// *         Aram Airapetian
-// *         Arminco Global Telecommunications
-// *         Jora Manoucherians
-// *         Richard Youatt
 // ***************************************************************************
-
 hy_AM{
-    Version { "1.0" }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             eras{
-                "\u0554\u2024\u0531\u2024",      // K.A.
-                "\u0554\u2024\u0535\u2024"       // K.E.
+                abbreviated{
+                    "Ք․Ա․",
+                    "Ք․Ե․",
+                }
             }
         }
     }

@@ -1,20 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:7
+// * Source File: \work\locale\common\main\\kok_IN.xml
 // *
 // ***************************************************************************
-// Konkani locale
-
-kok_IN {
-    Version { "2.0" }
-    NumberPatterns {
+kok_IN{
+    NumberPatterns{
         "##,##,##0.###;-##,##,##0.###",
-        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "¤ ##,##,##0.00;-¤ ##,##,##0.00",
         "##,##,##0%",
         "#E0",
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",
@@ -25,7 +27,7 @@ kok_IN {
                 "d MMMM yyyy",
                 "dd-MM-yyyy",
                 "d-M-yy",
-                "{1} {0}"
+                "{1} {0}",
             }
         }
     }

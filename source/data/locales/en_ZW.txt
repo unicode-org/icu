@@ -1,13 +1,28 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:17
+// * Source File: \work\locale\common\main\\en_ZW.xml
 // *
 // ***************************************************************************
-
-en_ZW {
-    Version { "2.0" }
+en_ZW{
+    Currencies{
+        ZWD{
+            "Z$",
+            "Zimbabwean Dollar",
+        }
+    }
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤#,##0.00;-¤#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a",
@@ -21,14 +36,5 @@ en_ZW {
                 "{1} {0}",
             }
         }
-    }
-    Currencies{
-        ZWD { "Z$",  "Zimbabwean Dollar"      } // 04/18/1980- Zimbabwean Dollar
-    }
-    NumberPatterns {
-        "#,##0.###;-#,##0.###",
-        "\u00a4#,##0.00;-\u00a4#,##0.00",
-        "#,##0%",
-        "#E0",
     }
 }

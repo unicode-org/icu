@@ -1,36 +1,35 @@
 ﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:50
+// * Source File: \work\locale\common\main\\gl.xml
 // *
 // ***************************************************************************
-
-gl {
-    Version { "2.0" }
-    Countries {
-        ES { "España" }
+gl{
+    Countries{
+        ES{"España"}
     }
-    // Currency display names
-    Currencies {
-        ESP {
-            "\u20A7", 
-            "ESP", 
-            :array{
-                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/  
-                ",",  /*decimal sperator*/ 
-                ".", /*grouping separator*/
-                
+    Currencies{
+        ESP{
+            "₧",
+            "ESP",
+            {
+                "¤ #,##0;-¤ #,##0",
+                ",",
+                ".",
             }
-        } // Spanish Peseta
+        }
     }
-    Languages {
-        gl { "galego" }
+    ExemplarCharacters{"[a-záéíóúüñ]"}
+    Languages{
+        gl{"galego"}
     }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
+    LocaleScript{
+        "Latn",
     }
-    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1]" }
-    NumberElements { 
+    NumberElements{
         ",",
         ".",
         ";",
@@ -44,16 +43,9 @@ gl {
         "�",
         "+",
     }
-    
-    // /**************** Info Below is needed ****************/
-    // Countries{}
-    // Eras{}
-    // Languages{}
-    // ShortLanguage { }
-    // localPatternChars{}
-    //
-
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             dayNames{
                 format{

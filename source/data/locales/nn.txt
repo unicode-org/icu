@@ -1,48 +1,158 @@
 ﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:18
+// * Source File: \work\locale\common\main\\nn.xml
 // *
 // ***************************************************************************
-
 nn{
-    Version { "2.0" }
-    Countries {
-        Fallback{ "nb" }
-        NO { "Noreg" }
+    Countries{
+        AE{"De forente arabiske emiratene"}
+        AG{"Antigua og Barbuda"}
+        AN{"De nederlandske antiller"}
+        AQ{"Antarktis"}
+        AS{"Amerikansk Samoa"}
+        AT{"Østerrike"}
+        AZ{"Aserbajdsjan"}
+        BA{"Bosnia og Hercegovina"}
+        BE{"Belgia"}
+        BN{"Brunei Darussalam"}
+        BR{"Brasil"}
+        BV{"Bouvetøya"}
+        BY{"Hviterussland"}
+        CC{"Kokosøyene (Keelingøyene)"}
+        CD{"Kongo, Den demokratiske republikken"}
+        CF{"Den sentralafrikanske republikk"}
+        CG{"Kongo"}
+        CH{"Sveits"}
+        CI{"Elfenbenskysten"}
+        CK{"Cookøyene"}
+        CM{"Kamerun"}
+        CN{"Kina"}
+        CV{"Kapp Verde"}
+        CX{"Christmasøya"}
+        CY{"Kypros"}
+        CZ{"Tsjekkia"}
+        DE{"Tyskland"}
+        DK{"Danmark"}
+        DO{"Den dominikanske republikk"}
+        DZ{"Algerie"}
+        EE{"Estland"}
+        EH{"Vest-Sahara"}
+        ES{"Spania"}
+        ET{"Etiopia"}
+        FK{"Falklandsøyene (Malvinas)"}
+        FM{"Mikronesiaføderasjonen"}
+        FO{"Færøyene"}
+        FR{"Frankrike"}
+        GB{"Storbritannia"}
+        GF{"Fransk Guyana"}
+        GL{"Grønland"}
+        GQ{"Ekvatorial-Guinea"}
+        GR{"Hellas"}
+        GS{"Sør-Georgia og Sør-Sandwich-øyene"}
+        HK{"Hong Kong S.A.R. (Kina)"}
+        HM{"Heard- og McDonaldsøyene"}
+        HR{"Kroatia"}
+        HU{"Ungarn"}
+        IE{"Irland"}
+        IO{"Britiske områder i det indiske hav"}
+        IQ{"Irak"}
+        IS{"Island"}
+        IT{"Italia"}
+        KG{"Kirgisistan"}
+        KH{"Kambodsja"}
+        KM{"Komorene"}
+        KN{"St. Christopher og Nevis"}
+        KP{"Nord-Korea"}
+        KR{"Sør-Korea"}
+        KY{"Caymanøyene"}
+        KZ{"Kasakhstan"}
+        LA{"Laos, Den folkedemokratiske republikken"}
+        LB{"Libanon"}
+        LC{"St. Lucia"}
+        LT{"Litauen"}
+        MA{"Marokko"}
+        MG{"Madagaskar"}
+        MH{"Marshalløyene"}
+        MK{"Makedonia, Republikken"}
+        MO{"Macao S.A.R. (Kina)"}
+        MP{"Nord-Marianene"}
+        MV{"Maldivene"}
+        MZ{"Mosambik"}
+        NC{"Ny-Caledonia"}
+        NF{"Norfolkøyene"}
+        NL{"Nederland"}
+        NO{"Noreg"}
+        PF{"Fransk Polynesia"}
+        PG{"Papua Ny-Guinea"}
+        PH{"Filippinene"}
+        PL{"Polen"}
+        PM{"St. Pierre og Miquelon"}
+        PS{"Palestinsk territorium"}
+        RE{"Reunion"}
+        RU{"Den russiske føderasjon"}
+        SB{"Salomonøyene"}
+        SC{"Seychellene"}
+        SE{"Sverige"}
+        SJ{"Svalbard og Jan Mayen"}
+        SR{"Surinam"}
+        ST{"Sao Tome og Principe"}
+        TC{"Turks- og Caicosøyene"}
+        TD{"Tchad"}
+        TF{"Franske sørområder"}
+        TJ{"Tadsjikistan"}
+        TL{"Øst-Timor"}
+        TR{"Tyrkia"}
+        TT{"Trinidad og Tobago"}
+        UA{"Ukraina"}
+        UM{"USAs mindre øyer"}
+        US{"USA"}
+        UZ{"Usbekistan"}
+        VA{"Vatikanstaten"}
+        VC{"St. Vincent og Grenadinene"}
+        VG{"Jomfruøyene (britisk)"}
+        VI{"Jomfruøyene (USA)"}
+        WF{"Wallis og Futuna"}
+        YU{"Jugoslavia"}
+        ZA{"Sør-Afrika"}
     }
-    // Currency display names
-    Currencies {
-        NOK { "kr", "NOK" }
+    Currencies{
+        NOK{
+            "kr",
+            "NOK",
+        }
     }
-
-    Languages {
-        nb { "norsk bokm\u00E5l" }
-        nn { "norsk nynorsk" }
-        no { "norsk" }
+    ExemplarCharacters{"[a-zæåøéóôàüǎ]"}
+    Languages{
+        nb{"norsk bokmål"}
+        nn{"norsk nynorsk"}
+        no{"norsk"}
     }
-    ExemplarCharacters { "[a-z\u00e6\u00e5\u00f8\u00e9\u00f3\u00f4\u00e0\u00fc\u01ce]" }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
+    LocaleScript{
+        "Latn",
     }
-    NumberElements {
+    NumberElements{
         ",",
-        "\u00A0",
+        " ",
         ";",
         "%",
         "0",
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
+            DateTimeElements:intvector{
                 2,
                 4,
             }
@@ -61,7 +171,7 @@ nn{
                 format{
                     abbreviated{
                         "su",
-                        "m\u00E5",
+                        "må",
                         "ty",
                         "on",
                         "to",
@@ -70,7 +180,7 @@ nn{
                     }
                     wide{
                         "sundag",
-                        "m\u00E5ndag",
+                        "måndag",
                         "tysdag",
                         "onsdag",
                         "torsdag",
@@ -80,8 +190,10 @@ nn{
                 }
             }
             eras{
-                "f.Kr.",
-                "e.Kr.",
+                abbreviated{
+                    "f.Kr.",
+                    "e.Kr.",
+                }
             }
             monthNames{
                 format{

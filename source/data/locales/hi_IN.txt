@@ -1,21 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:52
+// * Source File: \work\locale\common\main\\hi_IN.xml
 // *
 // ***************************************************************************
-// srl@monkey.sbay.org, with help from Shehnaz Nagpurwala and Anwar Nagpurwala
-// Hindi locale. Need to work on unicodizing more of the text..
-
-hi_IN {
-    Version { "2.0" }
-    NumberPatterns {
+hi_IN{
+    NumberPatterns{
         "##,##,##0.###;-##,##,##0.###",
-        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "¤ ##,##,##0.00;-¤ ##,##,##0.00",
         "##,##,##0%",
         "#E0",
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",
@@ -26,12 +27,14 @@ hi_IN {
                 "d MMMM yyyy",
                 "dd-MM-yyyy",
                 "d-M-yy",
-                "{1} {0}"
+                "{1} {0}",
             }
-            weekend:intvector { // Sunday
-             1, 0,   // onset dow, millis in day  (Sunday 12:00am)
-             2, 0    // cease dow, millis in day  (Monday 12:00am)
-           }
+            weekend:intvector{
+                1,
+                0,
+                2,
+                0,
+            }
         }
     }
 }

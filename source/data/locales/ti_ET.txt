@@ -1,52 +1,35 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:37
+// * Source File: \work\locale\common\main\\ti_ET.xml
 // *
 // ***************************************************************************
-// * Tigrigna language locale for Ethiopia.
-// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-
-ti_ET {
-    Version{ "2.0" }
-    // Measurement { "Metric" }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns {
+ti_ET{
+    Currencies{
+        ETB{
+            "$",
+            "ETB",
+        }
+    }
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "¤#,##0.00;-¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    // PaperSize {
-    //    Height { "297" }
-    //    Width { "210" }
-    //    Units { "mm" }
-    // }
-
-    // Currency display names
-    Currencies {
-        ETB { "$", "ETB" }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
+                "EEEE፣ dd MMMM መዓልቲ yyyy G",
                 "dd MMMM yyyy",
                 "dd-MMM-yy",
                 "dd/MM/yy",

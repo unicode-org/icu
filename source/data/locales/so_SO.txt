@@ -1,46 +1,24 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:29
+// * Source File: \work\locale\common\main\\so_SO.xml
 // *
 // ***************************************************************************
-// * Somali language locale for Somalia.
-// * Contributed by :
-// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
-// *    Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
-// *    Department of Linguistics and Translation, Universite de Montreal, Montreal
-
-
-so_SO {
-    Version{ "2.0" }
-    // Measurement { "Metric" }
-//    NumberElements {
-//        ".",
-//        ",",
-//        ";",
-//        "%",
-//        "0",
-//        "#",
-//        "-",
-//        "E",
-//        "\u2030",
-//        "\u221E",
-//        "\uFFFD",
-//    }
-    NumberPatterns {
+so_SO{
+    Currencies{
+        SOS{
+            "$",
+            "SOS",
+        }
+    }
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "¤#,##0.00;-¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-    // PaperSize {
-    //    Height { "297" }
-    //    Width { "210" }
-    //    Units { "mm" }
-    // }
-
-    // Currency display names
-    Currencies {
-        SOS { "$", "SOS" }
-    }
+    Version{"1.2"}
 }
