@@ -365,7 +365,7 @@ UnicodeString&
 LocaleKeyFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
     if ((_coverage & 0x1) == 0) {
         UErrorCode status = U_ZERO_ERROR;
-		if (isSupportedID(id, status)) {
+        if (isSupportedID(id, status)) {
             Locale loc;
             LocaleUtility::initLocaleFromName(id, loc);
             return loc.getDisplayName(locale, result);
@@ -382,8 +382,8 @@ LocaleKeyFactory::handleCreate(const Locale& loc, int32_t kind, const ICUService
 
 UBool
 LocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) const {
-	const Hashtable* ids = getSupportedIDs(status);
-	return ids && ids->get(id);
+    const Hashtable* ids = getSupportedIDs(status);
+    return ids && ids->get(id);
 }
 
 const Hashtable*
@@ -452,7 +452,7 @@ SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* servi
 UBool
 SimpleLocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) const
 {
-	return id == _id;
+    return id == _id;
 }
 
 void
