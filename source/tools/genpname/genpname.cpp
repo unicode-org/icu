@@ -667,6 +667,9 @@ void Builder::computeOffsets() {
         printf("header   \t offset=%4d  size=%5d\n", 0, off);
     }
 
+    // PropertyAliases must have no v-table and must be
+    // padded (if necessary) to the next 32-bit boundary.
+    U_ASSERT(offsetof(PropertyAliases, enumToName_offset) == 0);
     U_ASSERT(sizeof(header) % sizeof(int32_t) == 0);
 
     #define COMPUTE_OFFSET(foo) COMPUTE_OFFSET2(foo,int32_t)
