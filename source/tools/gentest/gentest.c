@@ -52,7 +52,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
     /* preset then read command line options */
     options[2].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);

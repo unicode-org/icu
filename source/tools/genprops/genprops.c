@@ -59,7 +59,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
     char filename[300];
     const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
     char *basename=NULL;

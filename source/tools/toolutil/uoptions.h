@@ -106,9 +106,16 @@ struct UOption {
  * If an option is not recognized or an argument missing, then
  * the parser returns with the negative index of the argv[] entry
  * where the error was detected.
+ *
+ * The OS/400 compiler requires that argv either be "char* argv[]",
+ * or "const char* const argv[]", and it will not accept, 
+ * "const char* argv[]" as a definition for main().
+ *
+ * @param argv This parameter is modified
+ * @param options This parameter is modified
  */
 U_CAPI int U_EXPORT2
-u_parseArgs(int argc, const char *argv[],
+u_parseArgs(int argc, char* argv[],
             int optionCount, UOption options[]);
 
 #endif

@@ -133,10 +133,10 @@ char *
 char *
   strtoupper (char *name)
 {
-  int32_t i = 0;
-
-  while (name[i] = (char)uprv_toupper(name[i]))
-    i++;
+  do {
+    *name = (char)uprv_toupper(*name);
+  }
+  while (*(name++));
 
   return name;
 }
@@ -250,7 +250,7 @@ static UOption options[]={
     UOPTION_VERBOSE              /* 5 */
 };
 
-int main(int argc, const char *argv[])
+int main(int argc, char* argv[])
 {
     UConverterSharedData* mySharedData = NULL; 
     UErrorCode err = U_ZERO_ERROR;
@@ -354,7 +354,8 @@ int main(int argc, const char *argv[])
         }
 
       /*removes the extension if any is found*/
-      if (dot = uprv_strrchr(outBasename, '.')) 
+      dot = uprv_strrchr(outBasename, '.');
+      if (dot) 
         {
           *dot = '\0';
         }

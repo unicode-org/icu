@@ -104,7 +104,7 @@ const char options_help[][160]={
 
 
 int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
   FileStream  *out;
   UPKGOptions  o;
   CharList    *tail;

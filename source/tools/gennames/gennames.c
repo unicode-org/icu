@@ -204,7 +204,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, const char *argv[]) {
+main(int argc, char* argv[]) {
     UVersionInfo version;
     UBool store10Names=FALSE;
 
@@ -279,6 +279,9 @@ lineFn(void *context,
     char *name1Start, *name2Start;
     int16_t name1Length, name2Length;
 
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
     /* get the character code */
     code=uprv_strtoul(fields[0][0], NULL, 16);
 
@@ -381,7 +384,7 @@ skipNoise(char *line, int16_t start, int16_t limit) {
     char c;
 
     /* skip anything that is not part of a word in this sense */
-    while(start<limit && !('A'<=(c=line[start]) && c<='Z' || '0'<=c && c<='9')) {
+    while(start<limit && !(('A'<=(c=line[start]) && c<='Z') || ('0'<=c && c<='9'))) {
         ++start;
     }
 
@@ -393,7 +396,7 @@ getWord(char *line, int16_t start, int16_t limit) {
     char c=0; /* initialize to avoid a compiler warning although the code was safe */
 
     /* a unicode character name word consists of A-Z0-9 */
-    while(start<limit && ('A'<=(c=line[start]) && c<='Z' || '0'<=c && c<='9')) {
+    while(start<limit && (('A'<=(c=line[start]) && c<='Z') || ('0'<=c && c<='9'))) {
         ++start;
     }
 

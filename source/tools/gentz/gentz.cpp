@@ -29,7 +29,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "unicode/udata.h"
+//#include "unicode/udata.h"
 #include "unewdata.h"
 #include "uoptions.h"
 #include "tzdat.h"
@@ -106,7 +106,7 @@ class gentz {
     UBool useCopyright;
 
 public:
-    int     main(int argc, const char *argv[]);
+    int     gentzMain(int argc, char *argv[]);
 private:
     int32_t  writeTzDatFile(const char *destdir);
     void     parseTzTextFile(FileStream* in);
@@ -137,12 +137,12 @@ private:
     void    die(const char* msg);
 };
 
-int main(int argc, const char *argv[]) {
+int main(int argc, char *argv[]) {
     gentz x;
 #ifdef XP_MAC_CONSOLE
 	argc=ccommand((char***)&argv);
 #endif
-    return x.main(argc, argv);
+    return x.gentzMain(argc, argv);
 }
 
 const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60; // seconds
@@ -164,7 +164,7 @@ static UOption options[]={
     UOPTION_DESTDIR
 };
 
-int gentz::main(int argc, const char *argv[]) {
+int gentz::gentzMain(int argc, char* argv[]) {
     /* preset then read command line options */
     options[3].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
