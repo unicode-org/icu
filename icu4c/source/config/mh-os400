@@ -44,6 +44,8 @@ LIBICU-UC = $(top_srcdir)/common/libicuuc.o
 LIBICU-I18N = $(top_srcdir)/i18n/libicui18n.o
 LIBCTESTFW = $(top_srcdir)/tools/ctestfw/libctestfw.o
 LIBICU-TOOLUTIL = $(top_srcdir)/tools/toolutil/libicutoolutil.o
+LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
+
 ## Special OS400 rules
 
 ## Build archive from shared object
