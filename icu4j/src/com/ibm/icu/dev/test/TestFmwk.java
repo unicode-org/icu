@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/11/28 17:59:56 $ 
- * $Revision: 1.22 $
+ * $Date: 2001/11/28 22:51:46 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -21,6 +21,7 @@ import java.io.*;
 import java.text.*;
 import com.ibm.text.UTF16;
 import com.ibm.util.Utility;
+import com.ibm.text.UnicodeSet;
 
 
 /**
@@ -314,6 +315,11 @@ public class TestFmwk implements TestLog {
     private static class ASCIIWriter extends PrintWriter {
         private Writer w;
         private StringBuffer buffer = new StringBuffer();
+        
+        // Characters that we think are printable but that escapeUnprintable
+        // doesn't
+        private static final UnicodeSet S =
+            new UnicodeSet("[\\u0009\\u000A\\u000D]");
 
         public ASCIIWriter(Writer w, boolean autoFlush) {
             super(w, autoFlush);
@@ -326,7 +332,7 @@ public class TestFmwk implements TestLog {
         public void write(int c) {
             synchronized(lock) {
                 buffer.setLength(0);
-                if (c!=13 && Utility.escapeUnprintable(buffer, c)) {
+                if (!S.contains(c) && Utility.escapeUnprintable(buffer, c)) {
                     super.write(buffer.toString());
                 } else {
                     super.write(c);
@@ -341,7 +347,7 @@ public class TestFmwk implements TestLog {
                 while (off < limit) {
                     int c = UTF16.charAt(buf, 0, buf.length, off);
                     off += UTF16.getCharCount(c);
-                    if (c!=13 && Utility.escapeUnprintable(buffer, c)) {
+                    if (!S.contains(c) && Utility.escapeUnprintable(buffer, c)) {
                         super.write(buffer.toString());
                         buffer.setLength(0);
                     } else {
