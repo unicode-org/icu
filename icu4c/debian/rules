@@ -69,7 +69,7 @@ clean:
 	# Add here commands to clean up after the build process.
 	-$(MAKE) -C $(srcdir) distclean
 
-	rm debian/icu.postinst
+	rm -f $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
 
 install: build
