@@ -194,7 +194,7 @@ class TransliteratorRegistry : public UMemory {
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
      * @return the number of IDs currently registered with the system.
-     * @draft
+     * @internal
      */
     int32_t countAvailableIDs(void);
 
@@ -206,7 +206,7 @@ class TransliteratorRegistry : public UMemory {
      * @return the index-th available ID.  index must be between 0
      *         and countAvailableIDs() - 1, inclusive.  If index is out of
      *         range, the result of getAvailableID(0) is returned.
-     * @draft
+     * @internal
      */
     const UnicodeString& getAvailableID(int32_t index);
 
