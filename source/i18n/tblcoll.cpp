@@ -294,7 +294,7 @@ NormalizerIterator::current(void) const
         }
     }
 
-    return cursor->current();
+    return (UChar)cursor->current();
 }
 
 
@@ -305,7 +305,7 @@ NormalizerIterator::next(void)
     if (text != 0) {
         return ((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
     }
-    return cursor->next();
+    return (UChar)cursor->next();
 }
 
 inline

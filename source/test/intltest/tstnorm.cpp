@@ -268,14 +268,14 @@ UnicodeString BasicNormalizerTest::hex(const UnicodeString& s) {
 }
 
 
-inline static void insert(UnicodeString& dest, int pos, UChar ch)
+inline static void insert(UnicodeString& dest, int pos, UChar32 ch)
 {
-    dest.replace(pos, 0, &ch, 1);
+    dest.replace(pos, 0, ch);
 }
 
 void BasicNormalizerTest::backAndForth(Normalizer* iter, const UnicodeString& input)
 {
-    UChar ch;
+    UChar32 ch;
     iter->setText(input, status);
 
     // Run through the iterator forwards and stick it into a StringBuffer
@@ -342,7 +342,7 @@ void BasicNormalizerTest::assertEqual(const UnicodeString&    input,
     int index = 0;
     UnicodeString result;
 
-    for (UChar ch = iter->first(); ch != iter->DONE; ch = iter->next()) {
+    for (UChar32 ch = iter->first(); ch != iter->DONE; ch = iter->next()) {
         result += ch;
     }
     if (result != expected) {
