@@ -73,7 +73,7 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     SWAP32(l);
     rowIndex = new int16_t[l];
     T_FileStream_read(in, rowIndex, l * sizeof (int16_t) );
-    for (int i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         SWAP16(rowIndex[i]);
     }
 
@@ -82,14 +82,14 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     SWAP32(l);
     rowIndexFlagsIndex = new int16_t[l];
     T_FileStream_read(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
-    for (int i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         SWAP16(rowIndexFlagsIndex[i]);
     }
     T_FileStream_read(in, &l, 4);
     SWAP32(l);
     rowIndexFlags = new int32_t[l];
     T_FileStream_read(in, rowIndexFlags, l * sizeof(int32_t));
-    for (int i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         SWAP32(rowIndexFlags[i]);
     }
 
@@ -104,7 +104,7 @@ BreakDictionary::readDictionaryFile(FileStream* in)
     SWAP32(l);
     table = new int16_t[l];
     T_FileStream_read(in, table, l * sizeof(int16_t) );
-    for (int i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         SWAP16(table[i]);
     }
 
