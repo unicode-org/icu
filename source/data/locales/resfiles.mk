@@ -25,6 +25,7 @@
 
 GENRB_SOURCE = root.txt index.txt\
 af.txt af_ZA.txt\
+am.txt am_ET.txt\
 ar.txt ar_AE.txt ar_BH.txt ar_DZ.txt ar_EG.txt\
 ar_IQ.txt ar_IN.txt ar_JO.txt ar_KW.txt ar_LB.txt ar_LY.txt\
 ar_MA.txt ar_OM.txt ar_QA.txt ar_SA.txt ar_SD.txt\
@@ -81,6 +82,7 @@ nb.txt nb_NO.txt\
 nl.txt nl_BE.txt nl_BE_EURO.txt nl_NL.txt nl_NL_EURO.txt\
 nn.txt nn_NO.txt\
 no.txt no_NO.txt no_NO_NY.txt\
+om.txt om_ET.txt om_KE.txt\
 pl.txt pl_PL.txt\
 pt.txt pt_BR.txt pt_PT.txt pt_PT_EURO.txt\
 ro.txt ro_RO.txt\
@@ -95,6 +97,7 @@ sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
 th.txt th_TH.txt\
+ti.txt ti_ET.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
