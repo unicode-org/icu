@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.8 $ $Date: 2000/02/03 18:10:05 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.9 $ $Date: 2000/02/10 07:38:01 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -291,6 +291,13 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public UnicodeSet() {
         pairs = new StringBuffer();
+    }
+
+    /**
+     * Constructs a copy of an existing set.
+     */
+    public UnicodeSet(UnicodeSet other) {
+        pairs = new StringBuffer(other.getPairs());
     }
 
     /**
