@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
- * $Date: 2003/08/28 23:03:47 $
- * $Revision: 1.2 $ 
+ * $Date: 2003/11/14 00:09:37 $
+ * $Revision: 1.3 $ 
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import com.ibm.icu.impl.LocaleUtility;
 
 /**
  *
- * IDNA API implements the IDNA protocol as defined in the <a href="(http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.
+ * IDNA API implements the IDNA protocol as defined in the <a href="http://www.ietf.org/rfc/rfc3490.txt">IDNA RFC</a>.
  * The draft defines 2 operations: ToASCII and ToUnicode. Domain labels 
  * containing non-ASCII code points are required to be processed by
  * ToASCII operation before passing it to resolver libraries. Domain names
@@ -57,21 +57,21 @@ public final class IDNA {
      * Option to prohibit processing of unassigned codepoints in the input and
      * do not check if the input conforms to STD-3 ASCII rules.
      * 
-     * @see  convertToASCII convertToUnicode
+     * @see  #convertToASCII #convertToUnicode
      * @draft ICU 2.8
      */
     public static final int DEFAULT             = 0x0000;
     /** 
      * Option to allow processing of unassigned codepoints in the input
      * 
-     * @see  convertToASCII convertToUnicode
+     * @see  #convertToASCII #convertToUnicode
      * @draft ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED    = 0x0001;
     /** 
      * Option to check if input conforms to STD-3 ASCII rules
      * 
-     * @see convertToASCII convertToUnicode
+     * @see #convertToASCII #convertToUnicode
      * @draft ICU 2.8
      */
     public static final int USE_STD3_RULES      = 0x0002;
@@ -200,7 +200,7 @@ public final class IDNA {
      * @return true if the char is a label separator
      * @draft ICU 2.8
      */
-    public static boolean isLabelSeparator(int ch){
+    private static boolean isLabelSeparator(int ch){
         switch(ch){
             case 0x002e:
             case 0x3002:

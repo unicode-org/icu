@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrep.java,v $
- * $Date: 2003/08/28 23:03:47 $
- * $Revision: 1.2 $ 
+ * $Date: 2003/11/14 00:09:37 $
+ * $Revision: 1.3 $ 
  *
  *****************************************************************************************
  */
@@ -59,7 +59,7 @@ public final class StringPrep {
     /** 
      * Option to prohibit processing of unassigned code points in the input
      * 
-     * @see   prepare
+     * @see   #prepare
      * @draft ICU 2.8
      */
     public static final int DEFAULT = 0x0000;
@@ -67,7 +67,7 @@ public final class StringPrep {
     /** 
      * Option to allow processing of unassigned code points in the input
      * 
-     * @see   prepare
+     * @see   #prepare
      * @draft ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED = 0x0001;
@@ -160,8 +160,7 @@ public final class StringPrep {
      * The object does not hold a reference to the input steam, so the stream can be
      * closed after the method returns.
      * 
-     * @param inputStream The stream for reading the StringPrep profile binary
-     * @return StringPrep object created from the input stream
+     * @param inputStream The stream for reading the StringPrep profile binarySun 
      * @throws IOException
      * @draft ICU 2.8
      */
