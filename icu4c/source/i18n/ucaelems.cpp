@@ -90,6 +90,12 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UC
   MaxExpansionTable *maxet = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
   t->image = image;
+  if(UCA == NULL) {
+    t->image->jamoSpecial = FALSE;
+  } else {
+    t->image->jamoSpecial = UCA->image->jamoSpecial;
+  }
+
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
@@ -338,6 +344,9 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
                              (uint8_t)element->noOfCEs,
                              t->maxExpansions,
                              status);
+    if(UCOL_ISJAMO(element->cPoints[0])) {
+      t->image->jamoSpecial = TRUE;
+    }
   }
 
   CE = ucmp32_get(mapping, element->cPoints[0]);
@@ -346,6 +355,9 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     int32_t  i;
     for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
         unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+    }
+    if(UCOL_ISJAMO(element->cPoints[0])) {
+      t->image->jamoSpecial = TRUE;
     }
 
     /* then we need to deal with it */
