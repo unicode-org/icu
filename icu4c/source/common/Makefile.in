@@ -76,7 +76,7 @@ brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
 icuserv.o iculserv.o icunotif.o uenum.o ustrenum.o \
 uidna.o usprep.o punycode.o \
-cwchar.o filestrm.o umemstrm.o util.o parsepos.o utrace.o locbased.o
+cwchar.o filestrm.o util.o parsepos.o utrace.o locbased.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

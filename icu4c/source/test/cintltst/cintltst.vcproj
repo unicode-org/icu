@@ -456,9 +456,6 @@
 				RelativePath=".\hpmufn.c">
 			</File>
 			<File
-				RelativePath=".\mstrmtst.c">
-			</File>
-			<File
 				RelativePath=".\putiltst.c">
 			</File>
 			<File

@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2001, International Business Machines Corporation and
+ * Copyright (c) 1996-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  */
@@ -16,7 +16,6 @@
 */
 #define ICU_UCMP8_VERSION 0x01260000
 
-#include "umemstrm.h"
 #include "unicode/utypes.h"
 
 /*====================================
@@ -227,12 +226,17 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp8_getIndex(const CompactByteArray* array);
 U_CAPI  void U_EXPORT2 ucmp8_compact(CompactByteArray* array, 
                  uint32_t cycle);
 
-/** Expanded takes the array back to a 65536 element array*/
-/*  @param array The CompactByteArray to be expanded*/
+/** Expanded takes the array back to a 65536 element array
+ *  @param array The CompactByteArray to be expanded
+ */
 U_CAPI  void U_EXPORT2 ucmp8_expand(CompactByteArray* array);
 
-/** (more) INTERNAL USE ONLY **/
-U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, UMemoryStream *MS);
+/** 
+ * Flatten into a memory structure. Pass in NULL to pre-flight to get the required size.
+ * @internal
+ */
+U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem(const CompactByteArray* array, uint8_t *MS);
+
 /* initializes an existing CBA from memory.  Will cause ucmp8_close() to not deallocate anything. */
 U_CAPI  void U_EXPORT2 ucmp8_initFromData(CompactByteArray* array, const uint8_t **source, UErrorCode *status);
 

@@ -1,7 +1,7 @@
 /*
 ********************************************************************
 * COPYRIGHT:
-* Copyright (c) 1997-2003, International Business Machines Corporation and
+* Copyright (c) 1997-2004, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************
 */
@@ -500,26 +500,29 @@ ucmp8_compact(CompactByteArray* this_obj,
     } /* endif (!this_obj->fCompact)*/
 }
 
-U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, UMemoryStream *MS)
+#define MEMORY_WRITE(destAddr, source, sizeSoFar, len) \
+        if (destAddr) {\
+            uprv_memcpy(destAddr+sizeSoFar, source, len);\
+        }\
+        size += (len)
+
+U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, uint8_t *MS)
 {
     int32_t size = 0;
+    static const int32_t version = ICU_UCMP8_VERSION;
 
-    uprv_mstrm_write32(MS, ICU_UCMP8_VERSION);
-    size += 4;
+    MEMORY_WRITE(MS, &version, size, 4);
 
-    uprv_mstrm_write32(MS, array->fCount);
-    size += 4;
+    MEMORY_WRITE(MS, &array->fCount, size, 4);
 
-    uprv_mstrm_writeBlock(MS, array->fIndex, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
-    size += sizeof(array->fIndex[0])*UCMP8_kIndexCount;
+    MEMORY_WRITE(MS, array->fIndex, size, sizeof(array->fIndex[0])*UCMP8_kIndexCount);
 
-    uprv_mstrm_writeBlock(MS, array->fArray, sizeof(array->fArray[0])*array->fCount);
-    size += sizeof(array->fArray[0])*array->fCount;
+    MEMORY_WRITE(MS, array->fArray, size, sizeof(array->fArray[0])*array->fCount);
 
     while(size%4) /* end padding */
     {
-        uprv_mstrm_writePadding(MS, 1); /* Pad total so far to even size */
-        size += 1;
+        uint8_t pad = 0;
+        MEMORY_WRITE(MS, &pad, size, 1);
     }
 
     return size;
