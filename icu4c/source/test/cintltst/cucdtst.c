@@ -610,8 +610,8 @@ static void TestUnicodeData()
     }
 #endif
 
-    if (ublock_getCode((UChar)0x0041 != UBLOCK_BASIC_LATIN)) {
-        log_err("Unicode character script property failed !\n");
+    if (ublock_getCode((UChar)0x0041) != UBLOCK_BASIC_LATIN) {
+        log_err("Unicode character script property failed! Expected : %i Got: %i \n", UBLOCK_BASIC_LATIN,ublock_getCode((UChar)0x0041));
     }
 
     errorCode=U_ZERO_ERROR;
