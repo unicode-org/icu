@@ -9,7 +9,7 @@ import java.util.Hashtable;
  * @author Vladimir Weinstein
  */
 public class LongHashtable {
-    static final String copyright = "Copyright © 2002 Unicode, Inc.";
+    static final String copyright = "Copyright (C) 2002 Unicode, Inc.";
     
     public LongHashtable (int defaultValue) {
         this.defaultValue = defaultValue;
