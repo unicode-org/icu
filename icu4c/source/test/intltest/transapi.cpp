@@ -780,7 +780,6 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
                  errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
              continue;
              }
-        } else {
            log = s + " => ";
            t->finishTransliteration(s, index);
         }
