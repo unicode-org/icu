@@ -8,27 +8,7 @@
 // Singapore English locale: Data By Syn Wee Quek
 
 en_SG {
-
     Version { "2.0" }
-
-
-//    ShortCountry { "SIN" } // copied to zh_SG.txt
-
-    zoneStrings { 
-        {
-            "SST",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore Standard Time",
-            "SST",
-            "Singapore"
-        }
-    }
-    Currencies{
-        SGD { "$",  "Singapore Dollar"     } // 8/9/1965-
-        USD { "US$",     "USD" } // US Dollar
-    }
-
     calendar{
         gregorian{
             DateTimePatterns{
@@ -42,6 +22,19 @@ en_SG {
                 "dd/MM/yy",
                 "{1} {0}"
             }
+        }
+    }
+    Currencies{
+        SGD { "$",  "Singapore Dollar"     } // 8/9/1965-
+    }
+    zoneStrings { 
+        {
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore"
         }
     }
 }
