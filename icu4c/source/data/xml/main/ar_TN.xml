@@ -7,20 +7,16 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="ar"></language>
-		<territory type="TUN">TN</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="ar" /> 
+		<territory type="TN" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthAbbr>
 					<month type="1">يناير</month>

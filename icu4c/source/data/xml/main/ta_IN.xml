@@ -7,20 +7,13 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="ta"></language>
-		<territory type="IND">IN</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="ta" /> 
+		<territory type="IN" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<dateFormats>
 					<default type="medium"/>

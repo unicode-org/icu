@@ -7,20 +7,13 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="de"></language>
-		<territory type="LUX">LU</territory>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="de" /> 
+		<territory type="LU" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<week>
 					<minDays count="1"/>
@@ -65,22 +58,22 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation type="PHONEBOOK" >
-		<rules>
-			<reset>ae</reset>
-			<t>ä</t>
-			<reset>AE</reset>
-			<t>Ä</t>
-			<reset>oe</reset>
-			<t>ö</t>
-			<reset>OE</reset>
-			<t>Ö</t>
-			<reset>ue</reset>
-			<t>ü</t>
-			<reset>UE</reset>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation type="PHONEBOOK" >
+			<rules>
+				<reset>ae</reset>
+				<t>ä</t>
+				<reset>AE</reset>
+				<t>Ä</t>
+				<reset>oe</reset>
+				<t>ö</t>
+				<reset>OE</reset>
+				<t>Ö</t>
+				<reset>ue</reset>
+				<t>ü</t>
+				<reset>UE</reset>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

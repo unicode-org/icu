@@ -7,22 +7,15 @@
 >
 <ldml>
 	<identity>
-		<version number="x0.3">Various notes and changes in version x0.3</version>
-		<generation date="2003-06-25" />
-		<language type="mn"></language>
+		<version number="x0.3"/>
+		<generation date="2003-06-26" />
+		<language type="mn" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="mn">Монгол хэл</language>
 		</languages>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[а-я і є ї ґ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -33,7 +26,6 @@
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">1 дүгээр сар</month>

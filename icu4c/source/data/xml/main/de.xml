@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="de"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="de" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -243,24 +243,16 @@
 			<territory type="ZM">Sambia</territory>
 			<territory type="ZW">Simbabwe</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 		<types>
 			<type type="PHONEBOOK" key="collation">Telefonbuch-Sortierregeln</type>
 		</types>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ä ö ü ß]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmsSEDFwWahKzJe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Januar</month>
@@ -1149,27 +1141,59 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation type="PHONEBOOK" >
-		<rules>
-			<reset>ae</reset>
-			<t>ä</t>
-			<reset>AE</reset>
-			<t>Ä</t>
-			<reset>oe</reset>
-			<t>ö</t>
-			<reset>OE</reset>
-			<t>Ö</t>
-			<reset>ue</reset>
-			<t>ü</t>
-			<reset>UE</reset>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">%alt-ones:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />    null; eins; =%%main=;<cp hex="000A" />%%main:<cp hex="000A" />    null; ein; zwei; drei; vier; fünf; sechs; sieben; acht; neun;<cp hex="000A" />    zehn; elf; zwölf; &gt;&gt;zehn;<cp hex="000A" />    20: [&gt;&gt;und]zwanzig;<cp hex="000A" />    30: [&gt;&gt;und]dreißig;<cp hex="000A" />    40: [&gt;&gt;und]vierzig;<cp hex="000A" />    50: [&gt;&gt;und]fünfzig;<cp hex="000A" />    60: [&gt;&gt;und]sechzig;<cp hex="000A" />    70: [&gt;&gt;und]siebzig;<cp hex="000A" />    80: [&gt;&gt;und]achtzig;<cp hex="000A" />    90: [&gt;&gt;und]neunzig;<cp hex="000A" />    100: hundert[&gt;%alt-ones&gt;];<cp hex="000A" />    200: &lt;&lt;hundert[&gt;%alt-ones&gt;];<cp hex="000A" />    1000: tausend[&gt;%alt-ones&gt;];<cp hex="000A" />    2000: &lt;&lt;tausend[&gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000: eine Million[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000: &lt;&lt; Millionen[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000: eine Milliarde[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000,000: &lt;&lt; Milliarden[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000,000: eine Billion[ &gt;%alt-ones&gt;];<cp hex="000A" />    2,000,000,000,000: &lt;&lt; Billionen[ &gt;%alt-ones&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;%%lenient-parse:<cp hex="000A" />    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; '-'<cp hex="000A" />    &amp; ae , ä &amp; ae , Ä<cp hex="000A" />    &amp; oe , ö &amp; oe , Ö<cp hex="000A" />    &amp; ue , ü &amp; ue , Ü<cp hex="000A" /></icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation type="PHONEBOOK" >
+			<rules>
+				<reset>ae</reset>
+				<t>ä</t>
+				<reset>AE</reset>
+				<t>Ä</t>
+				<reset>oe</reset>
+				<t>ö</t>
+				<reset>OE</reset>
+				<t>Ö</t>
+				<reset>ue</reset>
+				<t>ü</t>
+				<reset>UE</reset>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%alt-ones:
+    -x: minus &gt;&gt;;
+    x.x: &lt;&lt; komma &gt;&gt;;
+    null; eins; =%%main=;
+%%main:
+    null; ein; zwei; drei; vier; fünf; sechs; sieben; acht; neun;
+    zehn; elf; zwölf; &gt;&gt;zehn;
+    20: [&gt;&gt;und]zwanzig;
+    30: [&gt;&gt;und]dreißig;
+    40: [&gt;&gt;und]vierzig;
+    50: [&gt;&gt;und]fünfzig;
+    60: [&gt;&gt;und]sechzig;
+    70: [&gt;&gt;und]siebzig;
+    80: [&gt;&gt;und]achtzig;
+    90: [&gt;&gt;und]neunzig;
+    100: hundert[&gt;%alt-ones&gt;];
+    200: &lt;&lt;hundert[&gt;%alt-ones&gt;];
+    1000: tausend[&gt;%alt-ones&gt;];
+    2000: &lt;&lt;tausend[&gt;%alt-ones&gt;];
+    1,000,000: eine Million[ &gt;%alt-ones&gt;];
+    2,000,000: &lt;&lt; Millionen[ &gt;%alt-ones&gt;];
+    1,000,000,000: eine Milliarde[ &gt;%alt-ones&gt;];
+    2,000,000,000: &lt;&lt; Milliarden[ &gt;%alt-ones&gt;];
+    1,000,000,000,000: eine Billion[ &gt;%alt-ones&gt;];
+    2,000,000,000,000: &lt;&lt; Billionen[ &gt;%alt-ones&gt;];
+    1,000,000,000,000,000: =#,##0=;%%lenient-parse:
+    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; '-'
+    &amp; ae , ä &amp; ae , Ä
+    &amp; oe , ö &amp; oe , Ö
+    &amp; ue , ü &amp; ue , Ü
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

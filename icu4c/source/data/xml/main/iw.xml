@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="iw"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="iw" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,14 +18,7 @@
 		<territories>
 			<territory type="IL">ישראל</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[[:Hebr:]‏‎]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -37,7 +30,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">ינואר</month>
@@ -157,29 +149,47 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>Z</reset>
-			<pc>אבגדהוװױזחטיײך</pc>
-			<t>כ</t>
-			<pc>לם</pc>
-			<t>מ</t>
-			<p>ן</p>
-			<t>נ</t>
-			<pc>סעף</pc>
-			<t>פ</t>
-			<p>ץ</p>
-			<t>צ</t>
-			<pc>קרש</pc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">zero (incomplete data); אהד; שגיים; שלושה;<cp hex="000A" />4: אדבצה; חגוישה; ששה;<cp hex="000A" />7: שבצה; שמוגה; תשצה;<cp hex="000A" />10: צשדה[ &gt;&gt;];<cp hex="000A" />20: צשדים[ &gt;&gt;];<cp hex="000A" />30: שלושים[ &gt;&gt;];<cp hex="000A" />40: אדבצים[ &gt;&gt;];<cp hex="000A" />50: חמישים[ &gt;&gt;];<cp hex="000A" />60: ששים[ &gt;&gt;];<cp hex="000A" />70: שבצים[ &gt;&gt;];<cp hex="000A" />80: שמוגים[ &gt;&gt;];<cp hex="000A" />90: תשצים[ &gt;&gt;];<cp hex="000A" />100: מאה[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; מאה[ &gt;&gt;];<cp hex="000A" />1000: אלף[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; אלף[ &gt;&gt;];<cp hex="000A" />1,000,000: =#,##0= (incomplete data);</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+	<collations version="3.1.1">
+		<collation  >
+			<settings normalization="on"  />
+			<rules>
+				<reset>Z</reset>
+				<pc>אבגדהוװױזחטיײך</pc>
+				<t>כ</t>
+				<pc>לם</pc>
+				<t>מ</t>
+				<p>ן</p>
+				<t>נ</t>
+				<pc>סעף</pc>
+				<t>פ</t>
+				<p>ץ</p>
+				<t>צ</t>
+				<pc>קרש</pc>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+zero (incomplete data); אהד; שגיים; שלושה;
+4: אדבצה; חגוישה; ששה;
+7: שבצה; שמוגה; תשצה;
+10: צשדה[ &gt;&gt;];
+20: צשדים[ &gt;&gt;];
+30: שלושים[ &gt;&gt;];
+40: אדבצים[ &gt;&gt;];
+50: חמישים[ &gt;&gt;];
+60: ששים[ &gt;&gt;];
+70: שבצים[ &gt;&gt;];
+80: שמוגים[ &gt;&gt;];
+90: תשצים[ &gt;&gt;];
+100: מאה[ &gt;&gt;];
+200: &lt;&lt; מאה[ &gt;&gt;];
+1000: אלף[ &gt;&gt;];
+2000: &lt;&lt; אלף[ &gt;&gt;];
+1,000,000: =#,##0= (incomplete data);
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

@@ -7,25 +7,15 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0">Various notes and changes in version 3.0</version>
-		<generation date="2003-06-25" />
-		<language type="af"></language>
+		<version number="3.0"/>
+		<generation date="2003-06-26" />
+		<language type="af" /> 
 	</identity>
-	<localeDisplayNames>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
-	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z á é è â ê î ô û ë ï ö]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Januarie</month>

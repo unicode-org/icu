@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0">Various notes and changes in version 3.0</version>
-		<generation date="2003-06-25" />
-		<language type="eo"></language>
+		<version number="3.0"/>
+		<generation date="2003-06-26" />
+		<language type="eo" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -47,21 +47,13 @@
 			<territory type="TR">Turkujo</territory>
 			<territory type="US">Usono</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ŭ ĉ ĝ ĥ ĵ ŝ]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmslTDUSnahKzJd</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">januaro</month>
@@ -219,7 +211,27 @@
 	</collations >
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komo &gt;&gt;;<cp hex="000A" />nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;<cp hex="000A" />10: dek[ &gt;&gt;];<cp hex="000A" />20: &lt;&lt;dek[ &gt;&gt;];<cp hex="000A" />100: cent[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt;cent[ &gt;&gt;];<cp hex="000A" />1000: mil[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;mil[ &gt;&gt;];<cp hex="000A" />10000: dekmil[ &gt;&gt;];<cp hex="000A" />11000&gt;: &lt;&lt; mil[ &gt;&gt;];<cp hex="000A" />1,000,000: miliono[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; milionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000: miliardo[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: biliono[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: =#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="spellout">
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; komo &gt;&gt;;
+nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;
+10: dek[ &gt;&gt;];
+20: &lt;&lt;dek[ &gt;&gt;];
+100: cent[ &gt;&gt;];
+200: &lt;&lt;cent[ &gt;&gt;];
+1000: mil[ &gt;&gt;];
+2000: &lt;&lt;mil[ &gt;&gt;];
+10000: dekmil[ &gt;&gt;];
+11000&gt;: &lt;&lt; mil[ &gt;&gt;];
+1,000,000: miliono[ &gt;&gt;];
+2,000,000: &lt;&lt; milionoj[ &gt;&gt;];
+1,000,000,000: miliardo[ &gt;&gt;];
+2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];
+1,000,000,000,000: biliono[ &gt;&gt;];
+2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+
+			</icu:ruleBasedNumberFormat>
 		</icu:ruleBasedNumberFormats>
 	</special>
 </ldml>

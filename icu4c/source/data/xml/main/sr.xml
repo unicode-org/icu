@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="sr"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="sr" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -261,14 +261,7 @@
 			<territory type="ZM">Замбија</territory>
 			<territory type="ZW">Зимбабве</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[а-и к-ш ђ ј љ њ ћ џ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -280,7 +273,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">јануар</month>
@@ -414,10 +406,10 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<suppress_contractions>[Ѐ-џ]</suppress_contractions>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
+		</collation  >
+	</collations >
 </ldml>

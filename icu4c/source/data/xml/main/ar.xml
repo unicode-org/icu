@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="ar"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="ar" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -35,10 +35,6 @@
 			<territory type="TN">تونس</territory>
 			<territory type="YE">اليمن</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
 	<layout>
 		<orientation lines="top-to-bottom" characters="right-to-left" />
@@ -54,7 +50,6 @@
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">يناير</month>
@@ -272,20 +267,20 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>Z</reset>
-			<p>ء</p>
-			<sc>آأؤإئ</sc>
-			<pc>ابپة</pc>
-			<i>ت</i>
-			<pc>ثجچحخدذرزژسشصضطظعغفقكگلمنهوى</pc>
-			<s>ي</s>
-			<pc>ٰٱٲٳٴٵٶٷٸٹٺٻټٽٿڀځڂڃڄڅڇڈډڊڋڌڍڎڏڐڑڒړڔڕږڗڙښڛڜڝڞڟڠڡڢڣڤڥڦڧڨکڪګڬڭڮڰڱڲڳڴڵڶڷںڻڼڽھۀہۂۃۄۅۆۇۈۉۊۋیۍێېۑےۓە</pc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<settings normalization="on"  />
+			<rules>
+				<reset>Z</reset>
+				<p>ء</p>
+				<sc>آأؤإئ</sc>
+				<pc>ابپة</pc>
+				<i>ت</i>
+				<pc>ثجچحخدذرزژسشصضطظعغفقكگلمنهوى</pc>
+				<s>ي</s>
+				<pc>ٰٱٲٳٴٵٶٷٸٹٺٻټٽٿڀځڂڃڄڅڇڈډڊڋڌڍڎڏڐڑڒړڔڕږڗڙښڛڜڝڞڟڠڡڢڣڤڥڦڧڨکڪګڬڭڮڰڱڲڳڴڵڶڷںڻڼڽھۀہۂۃۄۅۆۇۈۉۊۋیۍێېۑےۓە</pc>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
 </ldml>

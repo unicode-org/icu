@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="pl"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,20 +18,12 @@
 		<territories>
 			<territory type="PL">Polska</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">styczeń</month>
@@ -169,36 +161,36 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>A</reset>
-			<p>ą</p>
-			<t>Ą</t>
-			<reset>C</reset>
-			<p>ć</p>
-			<t>Ć</t>
-			<reset>E</reset>
-			<p>ę</p>
-			<t>Ę</t>
-			<reset>L</reset>
-			<p>ł</p>
-			<t>Ł</t>
-			<reset>N</reset>
-			<p>ń</p>
-			<t>Ń</t>
-			<reset>O</reset>
-			<p>ó</p>
-			<t>Ó</t>
-			<reset>S</reset>
-			<p>ś</p>
-			<t>Ś</t>
-			<reset>Z</reset>
-			<p>ź</p>
-			<t>Ź</t>
-			<p>ż</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>A</reset>
+				<p>ą</p>
+				<t>Ą</t>
+				<reset>C</reset>
+				<p>ć</p>
+				<t>Ć</t>
+				<reset>E</reset>
+				<p>ę</p>
+				<t>Ę</t>
+				<reset>L</reset>
+				<p>ł</p>
+				<t>Ł</t>
+				<reset>N</reset>
+				<p>ń</p>
+				<t>Ń</t>
+				<reset>O</reset>
+				<p>ó</p>
+				<t>Ó</t>
+				<reset>S</reset>
+				<p>ś</p>
+				<t>Ś</t>
+				<reset>Z</reset>
+				<p>ź</p>
+				<t>Ź</t>
+				<p>ż</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2" />
+		</collation  >
+	</collations >
 </ldml>

@@ -7,22 +7,15 @@
 >
 <ldml>
 	<identity>
-		<version number="x0.1">Various notes and changes in version x0.1</version>
-		<generation date="2003-06-25" />
-		<language type="ky"></language>
+		<version number="x0.1"/>
+		<generation date="2003-06-26" />
+		<language type="ky" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="ky">Кыргыз</language>
 		</languages>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[а-я і є ї ґ]</exemplarCharacters>
 		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -33,7 +26,6 @@
 	</characters>
 	<dates>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">Январь</month>
@@ -106,9 +98,9 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>

@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="da"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="da" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,21 +18,13 @@
 		<territories>
 			<territory type="DK">Danmark</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z æ å ø á é í ó ú ý]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">januar</month>
@@ -183,41 +175,41 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>A</reset>
-			<p>ǽ</p>
-			<t>Ǽ</t>
-			<reset>Z</reset>
-			<p>æ</p>
-			<t>Æ</t>
-			<s>ä</s>
-			<t>Ä</t>
-			<p>ø</p>
-			<t>Ø</t>
-			<s>ö</s>
-			<t>Ö</t>
-			<s>ő</s>
-			<t>Ő</t>
-			<p>å</p>
-			<t>Å</t>
-			<t>aa</t>
-			<t>aA</t>
-			<t>Aa</t>
-			<t>AA</t>
-			<reset>V</reset>
-			<tc>wW</tc>
-			<reset>Y</reset>
-			<s>ü</s>
-			<t>Ü</t>
-			<reset>D</reset>
-			<p>ð</p>
-			<t>Ð</t>
-			<reset>T</reset>
-			<p>þ</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>A</reset>
+				<p>ǽ</p>
+				<t>Ǽ</t>
+				<reset>Z</reset>
+				<p>æ</p>
+				<t>Æ</t>
+				<s>ä</s>
+				<t>Ä</t>
+				<p>ø</p>
+				<t>Ø</t>
+				<s>ö</s>
+				<t>Ö</t>
+				<s>ő</s>
+				<t>Ő</t>
+				<p>å</p>
+				<t>Å</t>
+				<t>aa</t>
+				<t>aA</t>
+				<t>Aa</t>
+				<t>AA</t>
+				<reset>V</reset>
+				<tc>wW</tc>
+				<reset>Y</reset>
+				<s>ü</s>
+				<t>Ü</t>
+				<reset>D</reset>
+				<p>ð</p>
+				<t>Ð</t>
+				<reset>T</reset>
+				<p>þ</p>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+		</collation  >
+	</collations >
 </ldml>

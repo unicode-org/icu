@@ -7,9 +7,9 @@
 >
 <ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-06-25" />
-		<language type="ca"></language>
+		<version number="2.0"/>
+		<generation date="2003-06-26" />
+		<language type="ca" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
@@ -18,21 +18,13 @@
 		<territories>
 			<territory type="ES">Espanya</territory>
 		</territories>
-		<keys>
-			<key type="collation">collation</key>
-			<key type="calendar">calendar</key>
-		</keys>
 	</localeDisplayNames>
-	<layout>
-		<orientation lines="top-to-bottom" characters="left-to-right" />
-	</layout>
 	<characters>
 		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
 	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
 					<month type="1">gener</month>
@@ -160,22 +152,22 @@
 			</currency>
 		</currencies>
 	</numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings backwards="on"  />
-		<rules>
-			<reset>C</reset>
-			<p>ch</p>
-			<t>Ch</t>
-			<t>CH</t>
-			<reset>L</reset>
-			<p>ll</p>
-			<t>l·l</t>
-			<t>Ll</t>
-			<t>L·l</t>
-			<t>LL</t>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<collations version="3.1.1">
+		<collation  >
+			<settings backwards="on"  />
+			<rules>
+				<reset>C</reset>
+				<p>ch</p>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>L</reset>
+				<p>ll</p>
+				<t>l·l</t>
+				<t>Ll</t>
+				<t>L·l</t>
+				<t>LL</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
 </ldml>
