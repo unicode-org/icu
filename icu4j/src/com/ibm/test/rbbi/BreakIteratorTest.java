@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BreakIteratorTest.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ * $RCSfile: BreakIteratorTest.java,v $ $Revision: 1.2 $ $Date: 2000/03/02 00:38:29 $
 */
 /*
  * (C) IBM Corp. 1997-1998.  All Rights Reserved.
@@ -13,7 +13,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.test.RuleBasedBreakIterator;
+package com.ibm.test.rbbi;
 
 import com.ibm.test.*;
 import com.ibm.text.BreakIterator;

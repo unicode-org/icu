@@ -1,9 +1,9 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/02/28 04:04:49 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.3 $ $Date: 2000/03/02 00:37:58 $
 #
 
 TOPDIR=		../../../../..
-PACKAGE=	com.ibm.test.RuleBasedBreakIterator
+PACKAGE=	com.ibm.test.rbbi
 
 include $(TOPDIR)/src/build/defs.gmk
 
