@@ -18,7 +18,7 @@ U_NAMESPACE_BEGIN
 // deserialization
 //=================================================================================
 
-BreakDictionary::BreakDictionary(char* dictionaryFilename, UErrorCode& status)
+BreakDictionary::BreakDictionary(const char* dictionaryFilename, UErrorCode& status)
 {
     if (U_FAILURE(status)) return;
     
