@@ -9,8 +9,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/Attic/releasenotes.html,v $
-* $Date: 2002/08/15 20:58:15 $
-* $Revision: 1.5 $
+* $Date: 2002/08/15 23:54:40 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 -->
@@ -18,72 +18,67 @@
 
 <body bgcolor="#FFFFFF">
 <!--#include virtual="/icu/ssi/header.html" --> 
-    <h2 align="center">International Components for Unicode for Java</h2>
-    <h3 align="center">Release Notes for ICU4J 2.2</h3>
-<hr size="2" width="100%" align="center">
-
-<p>COPYRIGHT: <br>
-Copyright (c) 2002 International Business Machines Corporation and others. All Rights
-Reserved. </p>
+    <h2>International Components for Unicode for Java</h2>
+    <h3>Release Notes for ICU4J 2.2</h3>
 
 <hr size="2" width="100%" align="center">
-    <P>
-      <B>This Release - Version 2.2</B><BR><br>
-      This release note corresponds to ICU4J version 2.2, released on or around 15 Aug 2002.  For the current
+    <p><b>Release Date</b><br>
+    August 15th, 2002</p>
+
+<p>For the most recent
       release, see the <a href="http://oss.software.ibm.com/icu4j/download/index.html">
       ICU4J download site</a>.
-    </P>
-    <P><B>License</B></P>
-    <P>
-    Please read and understand the <a href="./license.html">license</a> 
-    included with this release before installing and using the ICU4J libraries. 
     </P>
 
     <p><B>What's new in Release 2.2</B></p>
 
-<p>(Please also note the <b>packaging</b> and <b>data changes</b> introduced with ICU4J 2.1,
-<a href="#2.1changes">described below</a>.)</p>
+<ul>
+  <li><b>Unicode 3.2 support</b>
     <ul>
-      <li><a href="#collation">Collation Enhancements</a></li>
-      <ul>
-        <li>Faster</li>
-	<li>Smaller CollationKeys</li>
-	<li>More options, for example, case ordering</li>
-        <li>Supports Unicode 3.2</li>
-      </ul>	
-      <li>Normalizer Enhancements</li>
-      <ul>
-	<li>Faster</li>
-        <li>Supports Unicode 3.2</li>
-      </ul>
-      <li>Transform (nee Transliterator) enhancements</li>
-      <ul>
-        <li>Added getSourceSet() and getTargetSet()</li>
-        <li>Added Any-X transliterator, with 16 new system transliterators
-      </ul>
-      <li>UnicodeSet enhancements</li>
-      <ul>
-        <li>Unicode 3.2 binary properties</li>
-        <li>Full support for multicharacter strings</li>
-        <li>Performance improvements</li>
-      </ul>
-      <li>Added Replaceable.hasMetaData()</li>
-      <li>Improved foreign currency support (similar to JDK 1.4's)</li>
+      <li>All properties and algorithms are upgraded to <a href="http://www.unicode.org/reports/tr28/">Unicode
+        3.2</a>.
+      <li>The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode
+        Collation Algorithm</a>) table is updated to the current version 3.1.1,
+        with Unicode 3.2-based canonical closure.
+      <li>Most Unicode properties are now <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">available
+        via direct APIs, and in UnicodeSet</a>.</li>
     </ul>
-
-<p><b>Enhancements from Release 2.1 (partial list)</b></p>
+  </li>
+  <li><b>Collation</b><br>
+    The collation engine has been completely rewritten to be conformant to the
+    latest version of the UCA, and to use the same performance enhancements
+    available in ICU4C. Compared to the JDK, it is dramatically faster, has much
+    smaller sort keys, more customization, and better and additional
+    locale-specific data. For more details, see <a href="#collation">Collation
+    Enhancements</a> below.
+  <li><b>Normalization</b><br>
+    The Normalization service adds several high performance functions for:
     <ul>
-    <li><a href="#repackage">Package restructuring</a></li>
-    <li><a name="2.1changes">Changes for JDK 1.4</a>
-    <ul>
-        <li><a href="#ResourceData">ICU Resource Data added to ICU4J</a></li>
-	<li>ICU4J size increase because of new resource data, clients can trim
+      <li>fast concatenation, preserving NFC and NFD.
+      <li>fast detection of normalized text
+      <li>fast canonical equivalance and/or case-insensitive matching</li>
     </ul>
-    </ul>
+  <li><b>Transliteration</b><br>
+    There are now transliterators for all scripts used by ICU locales. In
+    addition, mixed-script text can be automatically transliterated to a target
+    script.
+  <li><b>Alternate currency formatting</b><br>
+    ICU permits arbitrary currencies to be formatted for display according to
+    arbitrary locales, such as formatting Yen amounts for the US.
+  <li><b>UnicodeSets</b><br>
+    UnicodeSets now permit strings as well as characters, so that they can
+    contain grapheme-clusters. UnicodeSetIterator provides a fast mechanism for
+    iterating through the contents (code points and strings) of a UnicodeSet.
+    For code points the iteration is either by individual code point or by
+    ranges.
+  <li><b>General&nbsp; improvements</b><br>
+    Performance has been enhanced in a number of services, and a number of
+    significant bugs have been fixed.</li>
+</ul>
+  <p>Please also note the <a href="#repackage">packaging</a> and <a href="#ResourceData">resource data</a> changes
+    introduced with ICU4J 2.1, described below.</p>
 
      <P><B>Reference Platforms</B></P>
-      <P>
-      In release 2.2, there are 2 known non-reference platform compilers that fail compiling ICU4J source code, IBM JDK 1.3.1_02 and Jikes 1.16. Use ICU4J on unsupported JVMs and non-reference platform compilers at your own risk.</P>
       <p>
       The reference platforms for version 2.2 are:<ul>
 <li> Win2000, IBM JDK 1.3
@@ -91,9 +86,8 @@ Reserved. </p>
 <li> AIX 5.1, IBM JDK 1.3
 </ul>
       </p>
-      <p>For further detailed information about the ICU4J library, please refer to the
-      <A href="readme.html">ReadMe.</A>
-      </p>
+      <P>
+      In release 2.2, there are 2 known non-reference platform compilers that fail compiling ICU4J source code, IBM JDK 1.3.1_02 and Jikes 1.16. Use ICU4J on unsupported JVMs and non-reference platform compilers at your own risk.</P>
 
       <p><b>Warnings</b></p>
       <p>
@@ -106,6 +100,12 @@ Reserved. </p>
       </ul>
       </p>
       <p>These problems will be fixed in the next release.</p>
+
+<p><b>For More Information</b></p>
+
+      <p>For further detailed information about the ICU4J library, please refer to the
+      <A href="readme.html">ReadMe.</A>
+      </p>
 
 <hr size="2" width="100%" align="center">
 
@@ -139,6 +139,7 @@ Reserved. </p>
 </ul>
 </p>
 
+<hr size="2" width="100%" align="center">
     <h3><a name="repackage">Package Restructuring</a></h3> 
 
 <p>Starting with enhancement release 2.1 of ICU4J, the cvs repository
@@ -178,6 +179,7 @@ be construed to mean that such classes will necessarily be 'promoted'
 to full public classes in the future. Clients are warned not to depend
 on anything in this package.</p>
 
+<hr size="2" width="100%" align="center">
     <h3><a name="ResourceData">ICU Resource Data added to ICU4J</a></h3>
 <p>Starting with JDK 1.4, the resource information that used to be
 available through public classes in java.text.resources is no longer
@@ -217,6 +219,13 @@ size.
 </p>
 <p>For information about modifying resource information, please see
 the <a href=readme.html>readme</a>.</p>
+<hr size="2" width="100%" align="center">
+    <h3><B>License</B></h3>
+    <P>
+    Please read and understand the <a href="./license.html">license</a> 
+    included with this release before installing and using the ICU4J libraries. 
+    </P>
+
 <hr size="2" width="100%" align="center">
 <p><i><font size="-1">Copyright (C) 2002 International Business Machines Corporation and others.  All Rights Reserved.</font></i></p>
 <!--#include virtual="/icu/ssi/footer.html" --> 
