@@ -3,8 +3,6 @@
 * Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/test/usetperf/Attic/usetperf.cpp,v $ 
-**********************************************************************
 * 2002-09-20 aliu Created.
 */
 
