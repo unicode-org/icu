@@ -1436,14 +1436,30 @@ void  RegexCompile::handleCloseParen() {
     case -2:
         // Capturing Parentheses.
         //   Insert a End Capture op into the pattern.
-        //   Grab the group number from the start capture op
+        //   If this capture group contains other nested capture groups, e.g.
+        //       (a|(b))+
+        //   emit the variant END_CAPTURE_N, with an extra operand containing
+        //   the number of the last nested group.
+        //   The group number of this cg is obtained from the start capture op
         //      and put it into the end-capture op.
         {
             int32_t   captureOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen+1);
             U_ASSERT(URX_TYPE(captureOp) == URX_START_CAPTURE);
+
             int32_t   frameVarLocation = URX_VAL(captureOp);
-            int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, frameVarLocation);
-            fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
+            int32_t lastCG = fRXPat->fGroupMap->size();
+            int32_t lastCGframeVarLoc = fRXPat->fGroupMap->elementAti(lastCG-1);
+            if (frameVarLocation == lastCGframeVarLoc) {
+                // There are no nested capture groups.  The current one is the
+                //   last one that was encountered.  Emit tha plain END_CAPTURE.
+                int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, frameVarLocation);
+                fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
+            } else {
+                // There are nested Captures Groups.
+                int32_t  endCaptureOp = URX_BUILD(URX_END_CAPTURE_N, frameVarLocation);
+                fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
+                fRXPat->fCompiledPat->addElement(lastCG, *fStatus);
+            }
         }
         break;
     case -3:
