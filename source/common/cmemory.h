@@ -37,4 +37,26 @@
 #define uprv_memset(buffer, mark, size) U_STANDARD_CPP_NAMESPACE memset(buffer, mark, size)
 #define uprv_memcmp(buffer1, buffer2, size) U_STANDARD_CPP_NAMESPACE memcmp(buffer1, buffer2,size)
 
+/**
+ * This should align the memory properly on any machine.
+ * This is very useful for the safeClone functions.
+ */
+typedef union {
+    long    t1;
+    double  t2;
+    void   *t3;
+} UAlignedMemory;
+
+/**
+ * Get the amount of bytes that a pointer is off by from
+ * the previous aligned pointer
+ */
+#define U_ALIGNMENT_OFFSET(ptr) (((long)ptr) & (sizeof(UAlignedMemory) - 1))
+
+/**
+ * Get the amount of bytes to add to a pointer
+ * in order to get the next aligned address
+ */
+#define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
+
 #endif

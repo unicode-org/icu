@@ -1086,7 +1086,14 @@ static void TestConvertSafeClone()
 {
 #define CLONETEST_CONVERTER_COUNT 8
 
-    char charBuffer [20];
+    char charBuffer [21];   /* Leave at an odd number for alignment testing */
+    uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
+    int32_t bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
+    UConverter * someConverters [CLONETEST_CONVERTER_COUNT];
+    UConverter * someClonedConverters [CLONETEST_CONVERTER_COUNT];
+    UConverter * cnv;
+    UErrorCode err = U_ZERO_ERROR;
+
     char *pCharBuffer;
     const char *pConstCharBuffer;
     const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
@@ -1100,13 +1107,6 @@ static void TestConvertSafeClone()
     const UChar * pUniBuffer;
     const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
     int index;
-
-    UConverter * someConverters [CLONETEST_CONVERTER_COUNT];
-    UConverter * someClonedConverters [CLONETEST_CONVERTER_COUNT];
-    UConverter * cnv;
-    UErrorCode err = U_ZERO_ERROR;
-    uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
-    int32_t bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
 
     /* one 'regular' & all the 'private stateful' converters */
     someConverters[0] = ucnv_open("ibm-1047", &err);

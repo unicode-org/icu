@@ -38,7 +38,6 @@ static void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *word, *sentence, *line, *character, *b, *bogus;
-    UChar text[50];
     UTextOffset start,pos,end,to;
     int32_t i;
     int32_t count = 0;
@@ -46,11 +45,11 @@ static void TestBreakIteratorCAPI()
     UBreakIterator * someIterators [CLONETEST_ITERATOR_COUNT];
     UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
     UBreakIterator * brk;
+    UChar text[51];     /* Keep this odd to test for 64-bit memory alignment */
     uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
-    status  = U_ZERO_ERROR;
 
 
 /*test ubrk_open()*/
