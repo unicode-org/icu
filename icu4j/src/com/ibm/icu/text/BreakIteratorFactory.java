@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2004/01/12 22:50:16 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/01/26 23:04:28 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -36,6 +36,7 @@ import com.ibm.icu.util.ULocale;
 final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
 
     public Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+        iter.setText(new java.text.StringCharacterIterator(""));
         return service.registerObject(iter, locale, kind);
     }
     
