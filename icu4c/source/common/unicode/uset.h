@@ -28,7 +28,6 @@
 #define __USET_H__
 
 #include "unicode/utypes.h"
-#include "unicode/umisc.h"
 
 #ifndef UCNV_H
 struct USet;
