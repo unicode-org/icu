@@ -35,7 +35,7 @@ RuleBasedBreakIteratorTables::RuleBasedBreakIteratorTables(UDataMemory* memory)
       numCategories = (int32_t)im[0];
       description = UnicodeString(TRUE, (UChar*)((int32_t)im[1] + base), -1);
       charCategoryTable = ucmp8_openAlias((uint16_t*)((int32_t)im[2] + base),
-					  (int8_t*)((int32_t)im[3] + base), 0);
+                      (int8_t*)((int32_t)im[3] + base), 0);
       stateTable = (int16_t*)((int32_t)im[4] + base);
       backwardsStateTable = (int16_t*)((int32_t)im[5] + base);
       endStates = (int8_t*)((int32_t)im[6] + base);
@@ -74,9 +74,9 @@ RuleBasedBreakIteratorTables::~RuleBasedBreakIteratorTables() {
     }
     else {
         uprv_free(charCategoryTable);
-	if(fMemory != 0) {
-	  udata_close(fMemory);
-	}
+        if(fMemory != 0) {
+          udata_close(fMemory);
+        }
     }
 }
 
@@ -104,9 +104,10 @@ RuleBasedBreakIteratorTables::hashCode() const {
 /**
  * Looks up a character's category (i.e., its category for breaking purposes,
  * not its Unicode category)
+ * The ignored parameter is used by derived implementations.
  */
 int32_t
-RuleBasedBreakIteratorTables::lookupCategory(UChar c, BreakIterator* ignored) const {
+RuleBasedBreakIteratorTables::lookupCategory(UChar c, BreakIterator* /*ignored*/) const {
     return ucmp8_get(charCategoryTable, c);
 }
 
