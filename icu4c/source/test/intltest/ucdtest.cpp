@@ -320,14 +320,21 @@ UnicodeTest::unicodeDataLineFn(void *context,
     int8_t type;
     UnicodeTest *me=(UnicodeTest *)context;
 
+    if(U_FAILURE(*pErrorCode)) {
+        me->errln("error: unicodeDataLineFn called with pErrorCode=%d\n", pErrorCode);
+        return;
+    }
+
     /* get the character code, field 0 */
     c=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         me->errln("error: syntax error in field 0 at %s\n" + UnicodeString(fields[0][0], ""));
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
     if((uint32_t)c>=0x110000) {
         me->errln("error in UnicodeData.txt: code point %lu out of range\n" + c);
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
 
@@ -357,26 +364,34 @@ UnicodeTest::unicodeDataLineFn(void *context,
     }
     if(Unicode::getType(c)!=type) {
         me->errln("error: Unicode::getType(U+%04lx)==%u instead of %u\n", c, Unicode::getType(c), type);
+        *pErrorCode = U_PARSE_ERROR;
+        return;
     }
 
     /* get canonical combining class, field 3 */
     value=uprv_strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
         me->errln("error: syntax error in field 3 at code 0x%lx\n", c);
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
     if(value>255) {
         me->errln("error in UnicodeData.txt: combining class %lu out of range\n", value);
+        *pErrorCode = U_PARSE_ERROR;
         return;
     }
     if(value!=Unicode::getCombiningClass(c)) {
         me->errln("error: Unicode::getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, Unicode::getCombiningClass(c), value);
+        *pErrorCode = U_PARSE_ERROR;
+        return;
     }
 
     /* get BiDi category, field 4 */
     *fields[4][1]=0;
     if(Unicode::characterDirection(c)!=me->MakeDir(fields[4][0])) {
         me->errln("error: Unicode::characterDirection(U+%04lx)==%u instead of %u (%s)\n", c, Unicode::characterDirection(c), me->MakeDir(fields[4][0]), fields[4][0]);
+        *pErrorCode = U_PARSE_ERROR;
+        return;
     }
 
     /* get uppercase mapping, field 12 */
@@ -384,15 +399,20 @@ UnicodeTest::unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[12][0], &end, 16);
         if(end!=fields[12][1]) {
             me->errln("error: syntax error in field 12 at code 0x%lx\n", c);
+            *pErrorCode = U_PARSE_ERROR;
             return;
         }
         if((UChar32)value!=Unicode::toUpperCase(c)) {
             me->errln("error: Unicode::toUpperCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toUpperCase(c), value);
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     } else {
         /* no case mapping: the API must map the code point to itself */
         if(c!=Unicode::toUpperCase(c)) {
             me->errln("error: U+%04lx does not have an uppercase mapping but Unicode::toUpperCase()==U+%04lx\n", c, Unicode::toUpperCase(c));
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     }
 
@@ -401,15 +421,20 @@ UnicodeTest::unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[13][0], &end, 16);
         if(end!=fields[13][1]) {
             me->errln("error: syntax error in field 13 at code 0x%lx\n", c);
+            *pErrorCode = U_PARSE_ERROR;
             return;
         }
         if((UChar32)value!=Unicode::toLowerCase(c)) {
             me->errln("error: Unicode::toLowerCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toLowerCase(c), value);
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     } else {
         /* no case mapping: the API must map the code point to itself */
         if(c!=Unicode::toLowerCase(c)) {
             me->errln("error: U+%04lx does not have a lowercase mapping but Unicode::toLowerCase()==U+%04lx\n", c, Unicode::toLowerCase(c));
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     }
 
@@ -418,15 +443,20 @@ UnicodeTest::unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[14][0], &end, 16);
         if(end!=fields[14][1]) {
             me->errln("error: syntax error in field 14 at code 0x%lx\n", c);
+            *pErrorCode = U_PARSE_ERROR;
             return;
         }
         if((UChar32)value!=Unicode::toTitleCase(c)) {
             me->errln("error: Unicode::toTitleCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toTitleCase(c), value);
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     } else {
         /* no case mapping: the API must map the code point to itself */
         if(c!=Unicode::toTitleCase(c)) {
             me->errln("error: U+%04lx does not have a titlecase mapping but Unicode::toTitleCase()==U+%04lx\n", c, Unicode::toTitleCase(c));
+            *pErrorCode = U_PARSE_ERROR;
+            return;
         }
     }
 }
@@ -461,6 +491,7 @@ void UnicodeTest::TestUnicodeData()
     }
     if(U_FAILURE(errorCode)) {
         errln("error parsing UnicodeData.txt: %s\n" + UnicodeString(u_errorName(errorCode), ""));
+        return;
     }
 
     // test Unicode::getCharName()
