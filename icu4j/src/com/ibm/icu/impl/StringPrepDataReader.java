@@ -1,4 +1,9 @@
 /*
+ ******************************************************************************
+ * Copyright (C) 2003, International Business Machines Corporation and   *
+ * others. All Rights Reserved.                                               *
+ ******************************************************************************
+ *
  * Created on May 2, 2003
  *
  * To change the template for this generated file go to

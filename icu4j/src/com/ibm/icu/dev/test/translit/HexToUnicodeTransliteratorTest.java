@@ -1,13 +1,13 @@
 
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/Attic/HexToUnicodeTransliteratorTest.java,v $ 
- * $Date: 2003/09/18 21:00:34 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/12/20 03:07:09 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */

@@ -1,7 +1,11 @@
 /*****************************************************************************************
+ *
+ * Copyright (C) 1996-2003, International Business Machines
+ * Corporation and others.  All Rights Reserved.
+ *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2003/06/06 22:20:29 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/12/20 03:06:51 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  **/
@@ -22,13 +26,6 @@
  * 4217661 4243011 4243108 4330377 4233840
  * @summary Regression tests for NumberFormat and associated classes
  */
-
-/***************************************************************************
-*
-*   Copyright (C) 1996-2003, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-************************************************************************/
 
 package com.ibm.icu.dev.test.format;
 

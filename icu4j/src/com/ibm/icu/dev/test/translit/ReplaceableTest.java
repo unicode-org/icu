@@ -1,12 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2003/09/18 20:59:46 $
- * $Revision: 1.17 $
+ * $Date: 2003/12/20 03:07:09 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */

@@ -7,7 +7,7 @@ import com.ibm.icu.impl.Utility;
 /* ------------------------------------------------------------------ */
 /* BigDecimal -- Decimal arithmetic for Java                          */
 /* ------------------------------------------------------------------ */
-/* Copyright IBM Corporation, 1996, 2000.  All Rights Reserved.       */
+/* Copyright IBM Corporation, 1996-2003.  All Rights Reserved.       */
 /*                                                                    */
 /* The BigDecimal class provides immutable arbitrary-precision        */
 /* floating point (including integer) decimal numbers.                */

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -13,7 +13,7 @@ import com.ibm.icu.lang.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.20 $ $Date: 2003/06/27 15:57:54 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.21 $ $Date: 2003/12/20 03:07:10 $
  */
 final class NormalizationTransliterator extends Transliterator {
     

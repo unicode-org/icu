@@ -1,14 +1,14 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1996-2002, International Business Machines
+ *   Copyright (C) 1996-2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/myLocaleElements.java,v $ 
- * $Date: 2003/11/21 19:46:25 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/12/20 03:07:06 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */

@@ -1,12 +1,12 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2000, International Business Machines Corporation and   *
+* Copyright (C) 1996-2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrieBuilder.java,v $ 
-* $Date: 2003/08/20 00:19:19 $ 
-* $Revision: 1.4 $
+* $Date: 2003/12/20 03:06:55 $ 
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -32,7 +32,7 @@ import java.util.Arrays;
  *     <LI>Smaller memory footprint.
  * </UL>
  * This is a direct port from the ICU4C version
- * @version            $Revision: 1.4 $
+ * @version            $Revision: 1.5 $
  * @author             Syn Wee Quek
  */
 public class IntTrieBuilder extends TrieBuilder

@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewHoliday.java,v $ 
- * $Date: 2003/12/01 21:18:55 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/12/20 03:07:07 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
