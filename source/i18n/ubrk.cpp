@@ -73,6 +73,17 @@ ubrk_openRules(const UChar *rules,
   return 0;
 }
 
+U_CAPI UBreakIterator *
+ubrk_safeClone(
+          const UBreakIterator *bi,
+          void *stackBuffer,
+          int32_t *pBufferSize,
+          UErrorCode *status)
+{
+	return 0; /* Hey! Add code here! */
+}
+
+
 U_CAPI void
 ubrk_close(UBreakIterator *bi)
 {
