@@ -304,11 +304,11 @@ static void TestBinaryCollationData(){
             }
 
         }else{
-            log_err("ERROR: ures_getByKey(locale(te), %%Collation) failed");
+            log_err("ERROR: ures_getByKey(locale(te), %%Collation) failed\n");
         }
     }
     else{
-        log_err("ERROR: ures_getByKey(locale(te), CollationElements) failed");
+        log_err("ERROR: ures_getByKey(locale(te), CollationElements) failed\n");
         return;
     }
     ures_close(binColl);
