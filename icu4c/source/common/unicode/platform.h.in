@@ -40,7 +40,9 @@
  *
  */
 
+#ifndef U_IOSTREAM_SOURCE
 #define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE@
+#endif
 
 /* Determines whether specific types are available */
 #ifndef HAVE_INT8_T
