@@ -333,14 +333,12 @@ public:
 	  return ((BreakIterator*)instance)->clone();
   }
 
-  // not currently called because ICUBreakIteratorFactory is always registered and always handles the local
-  // eventually
   virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
 	LocaleKey& lkey = (LocaleKey&)key;
 	int32_t kind = lkey.kind();
 	Locale loc;
 	lkey.currentLocale(loc);
-	return BreakIterator::makeInstance(loc, kind, status); // default to root
+	return BreakIterator::makeInstance(loc, kind, status);
   }
 
   virtual UBool isDefault() const {
