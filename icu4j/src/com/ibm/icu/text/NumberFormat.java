@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2004/01/08 22:27:02 $ 
- * $Revision: 1.35 $
+ * $Date: 2004/03/24 18:29:02 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -917,6 +917,24 @@ public abstract class NumberFormat extends UFormat {
         return currency;
     }
     
+    /**
+     * Sets the minimum integer digits count directly, with no range
+     * pinning. For use by subclasses.
+     * @internal
+     */
+    protected void internalSetMinimumIntegerDigits(int n) {
+        minimumIntegerDigits = n;
+    }
+
+    /**
+     * Sets the maximum integer digits count directly, with no range
+     * pinning. For use by subclasses.
+     * @internal
+     */
+    protected void internalSetMaximumIntegerDigits(int n) {
+        maximumIntegerDigits = n;
+    }
+
     // =======================privates===============================
 
     // Hook for service
