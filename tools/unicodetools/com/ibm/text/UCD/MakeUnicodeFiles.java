@@ -1169,6 +1169,7 @@ public class MakeUnicodeFiles {
             String line = in.readLine();
             if (line == null) break;
             if (line.startsWith("\uFEFF")) line = line.substring(1);
+            out.println(line);
             line = line.trim();
             int pos = line.indexOf('#');
             if (pos >= 0) line = line.substring(0,pos).trim();
@@ -1232,9 +1233,9 @@ public class MakeUnicodeFiles {
                     break;
                 default: throw new IllegalArgumentException("Internal Error");
             }
-            out.println(String.valueOf(ok).toUpperCase(Locale.ENGLISH) + ":\t" + line);
             if (ok) continue;
             out.println();
+            out.println(String.valueOf(ok).toUpperCase(Locale.ENGLISH));
             out.println("**** START Error Info ****");
             bf.showSetDifferences(out, rightSide, rightSet, leftSide, leftSet);
             out.println("**** END Error Info ****");

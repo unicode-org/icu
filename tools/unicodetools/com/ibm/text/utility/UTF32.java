@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/UTF32.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2004/04/17 18:21:38 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -53,28 +53,28 @@ package com.ibm.text.utility;
 <pre>
 // iteration forwards: Original
 for (int i = 0; i < s.length(); ++i) {
-    char ch = s.charAt(i);
-    doSomethingWith(ch);
+Â Â Â Â char ch = s.charAt(i);
+Â Â Â Â doSomethingWith(ch);
 }
 
 // iteration forwards: Changes for UTF-32
 int ch;
 for (int i = 0; i < s.length(); i+=UTF32.count16(ch)) {
-    ch = UTF32.char32At(s,i);
-    doSomethingWith(ch);
+Â Â Â Â ch = UTF32.char32At(s,i);
+Â Â Â Â doSomethingWith(ch);
 }
 
 // iteration backwards: Original
 for (int i = s.length()-1; i >= 0; --i) {
-    char ch = s.charAt(i);
-    doSomethingWith(ch);
+Â Â Â Â char ch = s.charAt(i);
+Â Â Â Â doSomethingWith(ch);
 }
 
 // iteration backwards: Changes for UTF-32
 int ch;
 for (int i = s.length()-1; i > 0; i-=UTF32.count16(ch)) {
-    ch = UTF32.char32At(s,i);
-    doSomethingWith(ch);
+Â Â Â Â ch = UTF32.char32At(s,i);
+Â Â Â Â doSomethingWith(ch);
 }
 
 * </pre>

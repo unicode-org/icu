@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2004/02/07 01:01:15 $
-* $Revision: 1.14 $
+* $Date: 2004/04/17 18:21:39 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -547,18 +547,18 @@ public final class GenerateHanTransliterator implements UCD_Types {
         "e", "ei", "er", "en", "eng",
         "i", "ia", "iao", "ie", "iu", "ian", "in", "iang", "ing", "iong",
         "u", "ua", "uo", "uai", "ui", "uan", "un", "uang", "ueng",
-        "¸", "¸e", "¸an", "¸n"
+        "√º", "√ºe", "√ºan", "√ºn"
     };
     // Don't bother with the following rules; just add w,y to initials
-    // When ìiî stands alone, a ìyî will be added before it as ìyiî. 
-    //      If ìiî is the first letter of the syllable it will be changed to ìyî. 
-    // When ìuî stands alone, a ìwî will be added before it as ìwuî. 
-    //      If ìuî is the first letter of the syllable it will be changed to ìwî. e.g. ìuang -> wangî. 
-    // When ì¸î stands alone, a ìyî will be added before it and ì¸î will be changed to ìuî as ìyuî. 
-    //      If ì¸î is the first letter of the syllable, then the spelling will be changed to ìyuî. e.g. ì¸an -> yuanî. 
-    //Note: The nasal final ìuengî never occurs after an initial but always form a syllable by itself.
-    // The ìoî in ìiouî is hidden, so it will be wrote as ìiuî. But, donít forget to pronounce it. 
-    // The ìeî in ìueiî is hidden, so it will be wrote as ìuiî. But, donít forget to pronounce it. 
+    // When ‚Äúi‚Äù stands alone, a ‚Äúy‚Äù will be added before it as ‚Äúyi‚Äù. 
+    //      If ‚Äúi‚Äù is the first letter of the syllable it will be changed to ‚Äúy‚Äù. 
+    // When ‚Äúu‚Äù stands alone, a ‚Äúw‚Äù will be added before it as ‚Äúwu‚Äù. 
+    //      If ‚Äúu‚Äù is the first letter of the syllable it will be changed to ‚Äúw‚Äù. e.g. ‚Äúuang -> wang‚Äù. 
+    // When ‚Äú√º‚Äù stands alone, a ‚Äúy‚Äù will be added before it and ‚Äú√º‚Äù will be changed to ‚Äúu‚Äù as ‚Äúyu‚Äù. 
+    //      If ‚Äú√º‚Äù is the first letter of the syllable, then the spelling will be changed to ‚Äúyu‚Äù. e.g. ‚Äú√ºan -> yuan‚Äù. 
+    //Note: The nasal final ‚Äúueng‚Äù never occurs after an initial but always form a syllable by itself.
+    // The ‚Äúo‚Äù in ‚Äúiou‚Äù is hidden, so it will be wrote as ‚Äúiu‚Äù. But, don‚Äôt forget to pronounce it. 
+    // The ‚Äúe‚Äù in ‚Äúuei‚Äù is hidden, so it will be wrote as ‚Äúui‚Äù. But, don‚Äôt forget to pronounce it. 
     
     
     public static final String[] pinyin_bopomofo = {
@@ -749,9 +749,9 @@ public final class GenerateHanTransliterator implements UCD_Types {
 	"long", "\u310c\u3128\u3125",
 	"lou", "\u310c\u3121",
 	"lu", "\u310c\u3128",
-	"l¸", "\u310c\u3129",
+	"l√º", "\u310c\u3129",
 	"luan", "\u310c\u3128\u3122",
-	"l¸e", "\u310c\u3129\u311d",
+	"l√ºe", "\u310c\u3129\u311d",
 	"lun", "\u310c\u3128\u3123",
 	"luo", "\u310c\u3128\u311b",
 	"m", "\u3107",
@@ -796,9 +796,9 @@ public final class GenerateHanTransliterator implements UCD_Types {
 	"nong", "\u310b\u3128\u3125",
 	"nou", "\u310b\u3121",
 	"nu", "\u310b\u3128",
-	"n¸", "\u310b\u3129",
+	"n√º", "\u310b\u3129",
 	"nuan", "\u310b\u3128\u3122",
-	"n¸e", "\u310b\u3129\u311d",
+	"n√ºe", "\u310b\u3129\u311d",
 	"nuo", "\u310b\u3128\u311b",
 	"o", "\u311b",
 	"ou", "\u3121",
@@ -1007,52 +1007,52 @@ public final class GenerateHanTransliterator implements UCD_Types {
     }
     
     /*
-    U+347C	∑	li˘	#lyuË  
-U+3500	∑	l¸Ë	#lvË
-U+3527	∑	li˘	#ly˘
-U+3729	∑	‡o	#‡u
-U+380E	∑	jÌ	#jjÌ
-U+3825	∑	l∑	#lv∑
-U+3A3C	∑	l¸Ë	#luË
-U+3B5A	∑	li∑	#ly∑ *** l¸?
-U+3CB6	∑	l∑	#lv∑
-U+3D56	∑	ni˘	#ny˘ *** n¸?
-U+3D88	∑	li∑ng	#li∑ng
-U+3EF2	∑	li∑	#ly∑*** l¸?
-U+3F94	∑	li∑	#ly∑*** l¸?
-U+4071	∑	‡o	#‡u
-U+40AE	∑	li˘	#lyuË *** l¸e?
-U+430E	∑	li˘	#lyuË *** l¸e?
-U+451E	∑	li˘	#ly˘ *** l¸?
-U+4588	∑	n¸Ë	#nuË
-U+458B	∑	n¸Ë	#nuË
-U+45A1	∑	ni˘	#ny˘ *** n¸?
-U+4610	∑	ni˘	#ny˘ *** n¸?
-U+46BC	∑	ni˘	#ny˘ *** n¸?
-U+46DA	∑	li˘	#lyuË *** l¸e?
-U+4896	∑	li˘	#ly˘ *** l¸?
-U+4923	∑	li˘	#lyuË *** l¸e?
-U+4968	∑	li˘	#ly˘ *** l¸?
-U+4A0B	∑	ni˘	#nyuË *** n¸e?
-U+4AC4	∑	chuÚ	#chu‡
-U+4D08	∑	∑o	#∑u
-U+4D8A	∑	ni˘	#ny˘ *** n¸?
-U+51CA	∑	qÌng	#q˝ng
-U+51D6	∑	zhu∑n	#zhu∑n *** this is probably zh∑n 
-U+5481	∑	g‡n	#gËm
-U+5838	∑	fÈng	#f˙ng
-U+639F	∑	l¸∑	#lu∑ *** this pronunciation surprises me, but I don't know...
-U+66D5	∑	y‡n	#yi‡n
-U+6B3B	∑	chu∑	#chu∑ *** chua _is_ ok after all, my table missed an entry
-U+6B56	∑	chu∑	#chu∑ *** chua 
-U+6C7C	∑	ni∑	#ni∑u
-U+6E6D	∑	qi˙	#qiÛu
-U+6F71	∑	y∑	#yi∑
-U+7493	∑	xi˘	#xiÚu
-U+7607	∑	zh∑ng	#zh∑ng *** I suspect zh∑ng
-U+7674	∑	lu·n	#l¸·n
-U+7867	∑	y∑ng	#i∑ng
-U+7878	∑	n¸Ë	#nuË
+    U+347C	¬∑	li√π	#lyu√®  
+U+3500	¬∑	l√º√®	#lv√®
+U+3527	¬∑	li√π	#ly√π
+U+3729	¬∑	√†o	#√†u
+U+380E	¬∑	j√≠	#jj√≠
+U+3825	¬∑	l¬∑	#lv¬∑
+U+3A3C	¬∑	l√º√®	#lu√®
+U+3B5A	¬∑	li¬∑	#ly¬∑ *** l√º?
+U+3CB6	¬∑	l¬∑	#lv¬∑
+U+3D56	¬∑	ni√π	#ny√π *** n√º?
+U+3D88	¬∑	li¬∑ng	#li¬∑ng
+U+3EF2	¬∑	li¬∑	#ly¬∑*** l√º?
+U+3F94	¬∑	li¬∑	#ly¬∑*** l√º?
+U+4071	¬∑	√†o	#√†u
+U+40AE	¬∑	li√π	#lyu√® *** l√ºe?
+U+430E	¬∑	li√π	#lyu√® *** l√ºe?
+U+451E	¬∑	li√π	#ly√π *** l√º?
+U+4588	¬∑	n√º√®	#nu√®
+U+458B	¬∑	n√º√®	#nu√®
+U+45A1	¬∑	ni√π	#ny√π *** n√º?
+U+4610	¬∑	ni√π	#ny√π *** n√º?
+U+46BC	¬∑	ni√π	#ny√π *** n√º?
+U+46DA	¬∑	li√π	#lyu√® *** l√ºe?
+U+4896	¬∑	li√π	#ly√π *** l√º?
+U+4923	¬∑	li√π	#lyu√® *** l√ºe?
+U+4968	¬∑	li√π	#ly√π *** l√º?
+U+4A0B	¬∑	ni√π	#nyu√® *** n√ºe?
+U+4AC4	¬∑	chu√≤	#chu√†
+U+4D08	¬∑	¬∑o	#¬∑u
+U+4D8A	¬∑	ni√π	#ny√π *** n√º?
+U+51CA	¬∑	q√≠ng	#q√Ωng
+U+51D6	¬∑	zhu¬∑n	#zhu¬∑n *** this is probably zh¬∑n 
+U+5481	¬∑	g√†n	#g√®m
+U+5838	¬∑	f√©ng	#f√∫ng
+U+639F	¬∑	l√º¬∑	#lu¬∑ *** this pronunciation surprises me, but I don't know...
+U+66D5	¬∑	y√†n	#yi√†n
+U+6B3B	¬∑	chu¬∑	#chu¬∑ *** chua _is_ ok after all, my table missed an entry
+U+6B56	¬∑	chu¬∑	#chu¬∑ *** chua 
+U+6C7C	¬∑	ni¬∑	#ni¬∑u
+U+6E6D	¬∑	qi√∫	#qi√≥u
+U+6F71	¬∑	y¬∑	#yi¬∑
+U+7493	¬∑	xi√π	#xi√≤u
+U+7607	¬∑	zh¬∑ng	#zh¬∑ng *** I suspect zh¬∑ng
+U+7674	¬∑	lu√°n	#l√º√°n
+U+7867	¬∑	y¬∑ng	#i¬∑ng
+U+7878	¬∑	n√º√®	#nu√®
 */
     
     static Transliterator fixTypos = Transliterator.createFromRules("fix_typos", 
@@ -1061,12 +1061,12 @@ U+7878	∑	n¸Ë	#nuË
         +"$cons{iou}$nlet   > iu;"
         +"$cons{em}$nlet    > an;"
         +"$cons{uen}$nlet   > ueng;"
-        +"$cons{ve}$nlet    > ¸e;"
-        +"$cons{v}$nlet     > ¸;"
+        +"$cons{ve}$nlet    > √ºe;"
+        +"$cons{v}$nlet     > √º;"
         +"$cons{yue}$nlet   > iu;"
         +"$cons{yng}$nlet   > ing;"
         +"$cons{yu}$nlet    > iu;"
-        //+"$cons{ue}       > ¸e;"
+        //+"$cons{ue}       > √ºe;"
         +"jj                > j;"
         //+"$nlet{ng}$nlet  > eng;"
         //+"$nlet{n}$nlet   > en;"
@@ -1076,13 +1076,13 @@ U+7878	∑	n¸Ë	#nuË
         // new fixes        
         +"zhueng}$nlet       > zhong;"
         +"zhuen}$nlet       > zhuan;"
-        +"lue > l¸e;"
+        +"lue > l√ºe;"
         +"liong > liang;"
-        +"nue > n¸e;"
+        +"nue > n√ºe;"
         +"chua > chuo;"
         +"yian > yan;"
         +"yie > ye;"
-        +"l¸an > luan;"
+        +"l√ºan > luan;"
         +"iong > yong;"
         , Transliterator.FORWARD);
     
@@ -1113,7 +1113,7 @@ U+7878	∑	n¸Ë	#nuË
         try {
             
             // chinese_frequency.txt
-            // 1	ÁöÑ	1588561	1588561	3.5008%
+            // 1	√ß≈°‚Äû	1588561	1588561	3.5008%
             // japanese_frequency.txt
             // 1 ? 17176
             
@@ -1421,7 +1421,7 @@ U+7878	∑	n¸Ë	#nuË
     @Unihan Data
 
 Bad pinyin data: \u4E7F	?	LE
-\u7684	?	de, de, dÌ, dÏ
+\u7684	?	de, de, d√≠, d√¨
 */
 
     static void fixChineseOverrides() throws IOException {
@@ -2024,7 +2024,7 @@ Bad pinyin data: \u4E7F	?	LE
                     + "# otherwise 'o'\n"
                     + "# otherwise last vowel\n"
                     + "::NFC;\n"
-                    + "$vowel = [aAeEiIoOuU¸‹];\n"
+                    + "$vowel = [aAeEiIoOuU√º√ú];\n"
                     + "$consonant = [[a-z A-Z] - [$vowel]];\n"
                     + "$digit = [1-5];\n"
                     + "([aAeE]) ($vowel* $consonant*) ($digit) > $1 &digit-tone($3) $2;\n"
@@ -2054,10 +2054,10 @@ Bad pinyin data: \u4E7F	?	LE
                         if (i > 0) {
                             char last = result.charAt(result.length()-1);
                             if (last == 'u') {
-                                result.setCharAt(result.length()-1, '¸');
+                                result.setCharAt(result.length()-1, '√º');
                                 continue main;
                             } else if (last == 'U') {
-                                result.setCharAt(result.length()-1, '‹');
+                                result.setCharAt(result.length()-1, '√ú');
                                 continue main;
                             }
                         }
@@ -2085,22 +2085,22 @@ Bad pinyin data: \u4E7F	?	LE
             for (int i = source.length()-2; i >= 0; --i) {
                 ch = source.charAt(i);
                 if (ch == ':') {
-                    ch = '‹';
+                    ch = '√ú';
                     --i;
                 }
                 if ('0' <= ch && ch <= '9') break;
-                if (ch != '‹' && (ch < 'A' || ch > 'Z')) {
+                if (ch != '√ú' && (ch < 'A' || ch > 'Z')) {
                     Utility.fixDot();
                     System.out.println("Warning: non-ASCII in " + hex.transliterate(source) + " (" + hex.transliterate(debugLine) + ")");
                     break;
                 }
                 if (!gotIt) switch (ch) {
-                    case 'A': ch = "A¡\u0102¿\u0100".charAt(num); gotIt = true; break;
-                    case 'E': ch = "E…\u0114»\u0112".charAt(num); gotIt = true; break;
-                    case 'I': ch = "IÕ\u012CÃ\u012A".charAt(num); gotIt = true; break;
-                    case 'O': ch = "O”\u014E“\u014C".charAt(num); gotIt = true; break;
-                    case 'U': ch = "U⁄\u016CŸ\u016A".charAt(num); gotIt = true; break;
-                    case '‹': ch = "‹\u01D7\u01D9\u01DB\u01D5".charAt(num); gotIt = true; break;
+                    case 'A': ch = "A√Å\u0102√Ä\u0100".charAt(num); gotIt = true; break;
+                    case 'E': ch = "E√â\u0114√à\u0112".charAt(num); gotIt = true; break;
+                    case 'I': ch = "I√ç\u012C√å\u012A".charAt(num); gotIt = true; break;
+                    case 'O': ch = "O√ì\u014E√í\u014C".charAt(num); gotIt = true; break;
+                    case 'U': ch = "U√ö\u016C√ô\u016A".charAt(num); gotIt = true; break;
+                    case '√ú': ch = "√ú\u01D7\u01D9\u01DB\u01D5".charAt(num); gotIt = true; break;
                 }
                 handlePinyinTemp.insert(0,ch);
             }

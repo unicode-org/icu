@@ -10,7 +10,7 @@ import com.ibm.text.utility.*;
 /**
  * Implements Unicode Normalization Forms C, D, KC, KD.<br>
  * See UTR#15 for details.<br>
- * Copyright © 1998-1999 Unicode, Inc. All Rights Reserved.<br>
+ * Copyright Â© 1998-1999 Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
  * No liability is assumed for incidental and consequential damages

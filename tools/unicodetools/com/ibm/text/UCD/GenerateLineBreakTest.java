@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateLineBreakTest.java,v $
-* $Date: 2004/02/07 01:01:15 $
-* $Revision: 1.4 $
+* $Date: 2004/04/17 18:21:39 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -398,23 +398,23 @@ public class GenerateLineBreakTest implements UCD_Types {
         if (before == LB_CR && after == LB_LF) return false;
         if (before == LB_BK || before == LB_LF || before == LB_CR) return true;
 
-        //LB 3b  Don’t break before hard line breaks.
+        //LB 3b  Donâ€™t break before hard line breaks.
         rule="3b";
         if (after == LB_BK || after == LB_LF | after == LB_CR) return false;
 
-        // LB 4  Don’t break before spaces or zero-width space.
-        // × SP
-        // × ZW
+        // LB 4  Donâ€™t break before spaces or zero-width space.
+        // Ã— SP
+        // Ã— ZW
 
         rule="4";
         if (after == LB_SP || after == LB_ZW) return false;
 
         // LB 5 Break after zero-width space.
-        // ZW ÷
+        // ZW Ã·
         rule="5";
         if (before == LB_ZW) return true;
 
-        // LB 6  Don’t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
+        // LB 6  Donâ€™t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
         rule="6";
         if (after == LB_CM) return false;
         
@@ -441,8 +441,8 @@ public class GenerateLineBreakTest implements UCD_Types {
         rule="7";
         if (setBase && before == LB_SP) before = LB_ID;
 
-        // LB 8  Don’t break before ‘]’ or ‘!’ or ‘;’ or ‘/’,  even after spaces.
-        // × CL, × EX, × IS, × SY
+        // LB 8  Donâ€™t break before â€˜]â€™ or â€˜!â€™ or â€˜;â€™ or â€˜/â€™,  even after spaces.
+        // Ã— CL, Ã— EX, Ã— IS, Ã— SY
         rule="8";
         if (after == LB_CL || after == LB_EX || after == LB_SY | after == LB_IS) return false;
 
@@ -456,31 +456,31 @@ public class GenerateLineBreakTest implements UCD_Types {
             }
         }
 
-        // LB 9  Don’t break after ‘[’, even after spaces.
-        // OP SP* ×
+        // LB 9  Donâ€™t break after â€˜[â€™, even after spaces.
+        // OP SP* Ã—
         rule="9";
         if (lastNonSpace == LB_OP) return false;
 
-        // LB 10  Don’t break within ‘”[’, , even with intervening spaces.
-        // QU SP* × OP
+        // LB 10  Donâ€™t break within â€˜â€[â€™, , even with intervening spaces.
+        // QU SP* Ã— OP
         rule="10";
         if (lastNonSpace == LB_QU && after == LB_OP) return false;
 
-        // LB 11  Don’t break within ‘]h’, even with intervening spaces.
-        // CL SP* × NS
+        // LB 11  Donâ€™t break within â€˜]hâ€™, even with intervening spaces.
+        // CL SP* Ã— NS
         rule="11";
         if (lastNonSpace == LB_CL && after == LB_NS) return false;
 
-        // LB 11a  Don’t break within ‘——’, even with intervening spaces.
-        // B2 × B2
+        // LB 11a  Donâ€™t break within â€˜â€”â€”â€™, even with intervening spaces.
+        // B2 Ã— B2
         rule="11a";
         if (lastNonSpace == LB_B2 && after == LB_B2) return false;
 
 
         if (recommended) {
-            // LB 13  Don’t break before or after NBSP or WORD JOINER
-            // × GL
-            // GL ×
+            // LB 13  Donâ€™t break before or after NBSP or WORD JOINER
+            // Ã— GL
+            // GL Ã—
 
             rule="11b";
             if (after == LB_GL || before == LB_GL) return false;
@@ -490,36 +490,36 @@ public class GenerateLineBreakTest implements UCD_Types {
 
         rule="12";
         // LB 12  Break after spaces
-        // SP ÷
+        // SP Ã·
 
         if (before == LB_SP) return true;
 
         if (!recommended) {
-            // LB 13  Don’t break before or after NBSP or WORD JOINER
-            // × GL
-            // GL ×
+            // LB 13  Donâ€™t break before or after NBSP or WORD JOINER
+            // Ã— GL
+            // GL Ã—
 
             rule="13";
             if (after == LB_GL || before == LB_GL) return false;
         }
 
         rule="14";
-        // LB 14  Don’t break before or after ‘”’
-        // × QU
-        // QU ×
+        // LB 14  Donâ€™t break before or after â€˜â€â€™
+        // Ã— QU
+        // QU Ã—
         if (before == LB_QU || after == LB_QU) return false;
 
-        // LB 15  Don’t break before hyphen-minus, other hyphens, fixed-width spaces,
+        // LB 15  Donâ€™t break before hyphen-minus, other hyphens, fixed-width spaces,
         // small kana and other non- starters,  or after acute accents:
-        // × BA
-        // × HY
-        // × NS
-        // BB ×
+        // Ã— BA
+        // Ã— HY
+        // Ã— NS
+        // BB Ã—
         
         if (recommended) {
         // LB 14a  Break before and after CB
-        // CB ÷
-        // ÷ CB
+        // CB Ã·
+        // Ã· CB
             if (before == LB_CB || after == LB_CB) return true;       
         
         }
@@ -532,51 +532,51 @@ public class GenerateLineBreakTest implements UCD_Types {
 
         if (!recommended) {
             // LB 15b  Break after hyphen-minus, and before acute accents:
-            // HY ÷
-            // ÷ BB
+            // HY Ã·
+            // Ã· BB
 
             rule="15b";
             if (before == LB_HY) return true;
             if (after == LB_BB) return true;
         }
 
-        // LB 16  Don’t break between two ellipses, or between letters or numbers and ellipsis:
-        // AL × IN
-        // ID × IN
-        // IN × IN
-        // NU × IN
-        // Examples: ’9...’, ‘a...’, ‘H...’
+        // LB 16  Donâ€™t break between two ellipses, or between letters or numbers and ellipsis:
+        // AL Ã— IN
+        // ID Ã— IN
+        // IN Ã— IN
+        // NU Ã— IN
+        // Examples: â€™9...â€™, â€˜a...â€™, â€˜H...â€™
         rule="16";
         if ((before == LB_NU || before == LB_AL || before == LB_ID) && after == LB_IN) return false;
         if (before == LB_IN && after == LB_IN) return false;
 
         // Don't break alphanumerics.
-        // LB 17  Don’t break within ‘a9’, ‘3a’, or ‘H%’
-        // ID × PO
-        // AL × NU
-        // NU × AL
+        // LB 17  Donâ€™t break within â€˜a9â€™, â€˜3aâ€™, or â€˜H%â€™
+        // ID Ã— PO
+        // AL Ã— NU
+        // NU Ã— AL
         // Numbers are of the form PR ? ( OP | HY ) ? NU (NU | IS) * CL ?  PO ?
-        // Examples:   $(12.35)    2,1234    (12)¢    12.54¢
+        // Examples:   $(12.35)    2,1234    (12)Â¢    12.54Â¢
         // This is approximated with the following rules. (Some cases already handled above,
-        // like ‘9,’, ‘[9’.)
+        // like â€˜9,â€™, â€˜[9â€™.)
         rule="17";
         if (before == LB_ID && after == LB_PO) return false;
         if (before == LB_AL && after == LB_NU) return false;
         if (before == LB_NU && after == LB_AL) return false;
 
-        // LB 18  Don’t break between the following pairs of classes.
-        // CL × PO
-        // HY × NU
-        // IS × NU
-        // NU × NU
-        // NU × PO
-        // PR × AL
-        // PR × HY
-        // PR × ID
-        // PR × NU
-        // PR × OP
-        // SY × NU
-        // Example pairs: ‘$9’, ‘$[’, ‘$-‘, ‘-9’, ‘/9’, ‘99’, ‘,9’,  ‘9%’ ‘]%’
+        // LB 18  Donâ€™t break between the following pairs of classes.
+        // CL Ã— PO
+        // HY Ã— NU
+        // IS Ã— NU
+        // NU Ã— NU
+        // NU Ã— PO
+        // PR Ã— AL
+        // PR Ã— HY
+        // PR Ã— ID
+        // PR Ã— NU
+        // PR Ã— OP
+        // SY Ã— NU
+        // Example pairs: â€˜$9â€™, â€˜$[â€™, â€˜$-â€˜, â€˜-9â€™, â€˜/9â€™, â€˜99â€™, â€˜,9â€™,  â€˜9%â€™ â€˜]%â€™
 
         rule="18";
         if (before == LB_CL && after == LB_PO) return false;
@@ -595,23 +595,23 @@ public class GenerateLineBreakTest implements UCD_Types {
 
         if (recommended) {
             // LB 15b  Break after hyphen-minus, and before acute accents:
-            // HY ÷
-            // ÷ BB
+            // HY Ã·
+            // Ã· BB
 
             rule="18b";
             if (before == LB_HY) return true;
             if (after == LB_BB) return true;
         }
 
-        // LB 19  Don’t break between alphabetics (“at”)
-        // AL × AL
+        // LB 19  Donâ€™t break between alphabetics (â€œatâ€)
+        // AL Ã— AL
 
         rule="19";
         if (before == LB_AL && after == LB_AL) return false;
 
         // LB 20  Break everywhere else
-        // ALL ÷
-        // ÷ ALL
+        // ALL Ã·
+        // Ã· ALL
 
         rule="20";
         return true;
@@ -754,7 +754,7 @@ public class GenerateLineBreakTest implements UCD_Types {
                 // Do not break between linking characters and letters, or before linking characters. This provides for Indic graphemes, where virama (halant) will link character clusters together.
      
                 rule = "12";
-                //Link Extend* × LetterBase  (12) 
+                //Link Extend* Ã— LetterBase  (12) 
                 if (after == LetterBase || after == L || after == V || after == T || after == LV || after == LVT) {
                     int backOffset = findLastNon(source, offset, Extend, recommended);
                     if (backOffset >= 0) {
