@@ -491,11 +491,12 @@ print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErro
     }
 }
 static void 
-printNote(struct UString *src, UErrorCode *status){
+printNoteElements(struct UString *src, UErrorCode *status){
 
     int32_t capacity = 0;
     UChar* note = NULL;
     int32_t noteLen = 0;
+    int32_t count = 0,i;
 
     if(src == NULL){
         return;
@@ -504,13 +505,20 @@ printNote(struct UString *src, UErrorCode *status){
     capacity = src->fLength;
     note  = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
 
-    noteLen  = getNote(src->fChars,src->fLength, &note, capacity, status);
-
-    if(noteLen > 0){
-        write_tabs(out);
-        print(note, noteLen,"<note>", "</note>", status);
+    count = getCount(src->fChars,src->fLength, UPC_NOTE, status);
+    if(U_FAILURE(*status)){
+        return;
     }
-
+    for(i=0; i < count; i++){
+        noteLen =  getAt(src->fChars,src->fLength, &note, capacity, i, UPC_NOTE, status);
+        if(U_FAILURE(*status)){
+            return;
+        }
+        if(noteLen > 0){
+            write_tabs(out);
+            print(note, noteLen,"<note>", "</note>", status);
+        }
+    }
     uprv_free(note);
 }
 
@@ -612,7 +620,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
         T_FileStream_write(out,buf,bufLen);
         T_FileStream_write(out,valStrEnd,uprv_strlen(valStrEnd));
         
-        printNote(res->fComment, status);
+        printNoteElements(res->fComment, status);
 
         tabCount--;
         write_tabs(out);
@@ -651,7 +659,7 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
 
         T_FileStream_write(out,valStrEnd,uprv_strlen(valStrEnd));
 
-        printNote(res->fComment, status);
+        printNoteElements(res->fComment, status);
 
         tabCount--;
         write_tabs(out);
@@ -720,7 +728,7 @@ alias_write_xml(struct SResource *res, const char* id, const char* language, UEr
     T_FileStream_write(out,buf,bufLen);
     T_FileStream_write(out, endKey, uprv_strlen(endKey));
      
-    printNote(res->fComment, status);
+    printNoteElements(res->fComment, status);
 
     tabCount--;
     write_tabs(out);
@@ -751,7 +759,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
         T_FileStream_write(out, "\"", 1);
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
             printComments(res->fComment, sid, FALSE, status);
-            printNote(res->fComment, status);
+            printNoteElements(res->fComment, status);
         }else{
             T_FileStream_write(out,">\n", 2);
         }
@@ -765,7 +773,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
         T_FileStream_write(out, endKey, uprv_strlen(endKey));
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
             printComments(res->fComment, sid, FALSE, status);
-            printNote(res->fComment, status);
+            printNoteElements(res->fComment, status);
         }else{
             T_FileStream_write(out,">\n", 2);
         }
@@ -837,7 +845,7 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
         T_FileStream_write(out, endKey, uprv_strlen(endKey));    
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
             printComments(res->fComment, sid, FALSE, status);
-            printNote(res->fComment, status);
+            printNoteElements(res->fComment, status);
         }else{
             T_FileStream_write(out,">\n", 2);
         }
@@ -930,7 +938,7 @@ int_write_xml(struct SResource *res, const char* id, const char* language, UErro
     T_FileStream_write(out,buf,len);
     
     T_FileStream_write(out, valIntEnd, uprv_strlen(valIntEnd));
-    printNote(res->fComment, status);
+    printNoteElements(res->fComment, status);
     tabCount--;
     write_tabs(out);
     T_FileStream_write(out, intEnd, uprv_strlen(intEnd));
@@ -1019,7 +1027,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         write_tabs(out);
         T_FileStream_write(out, valEnd, uprv_strlen(valEnd));
         
-        printNote(res->fComment, status); 
+        printNoteElements(res->fComment, status); 
         tabCount--;
         write_tabs(out);
         T_FileStream_write(out,end,uprv_strlen(end));
@@ -1080,7 +1088,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         tabCount--;
         write_tabs(out);
         T_FileStream_write(out, valEnd, uprv_strlen(valEnd));
-        printNote(res->fComment, status);
+        printNoteElements(res->fComment, status);
 
         tabCount--;
         write_tabs(out);
@@ -1134,7 +1142,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
-                printNote(res->fComment, status);
+                printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
             }
@@ -1156,7 +1164,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
-                printNote(res->fComment, status);
+                printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
             }
@@ -1186,7 +1194,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
-                printNote(res->fComment, status);
+                printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
             }
@@ -1201,7 +1209,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
 
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
                 printComments(res->fComment, sid, FALSE, status);
-                printNote(res->fComment, status);
+                printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
             }
