@@ -1466,7 +1466,8 @@ UBool Transliterator::initializeRegistry() {
                 UnicodeString id(ures_getKey(colBund));
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
                 const char* typeStr = ures_getKey(res);
-                UChar type = (UChar)*typeStr;
+                UChar type;
+                u_charsToUChars(typeStr, &type, 1);
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
