@@ -408,6 +408,11 @@ public class UnicodeSetTest extends TestFmwk {
             errln("FAIL, size should be 10, but is " + set.size() +
                   ": " + set);
         }
+        set.clear();
+        set.complement();
+        if (set.size() != 0x110000) {
+            errln("FAIL, size should be 0x110000, but is" + set.size());
+        }
 
         // contains(first, last)
         set.clear();
