@@ -282,6 +282,11 @@ typedef void* UClassID;
  * and to import them from outside.
  */
 
+/**
+ * \def U_USTDIO_API
+ * Set to export library symbols from inside the ustdio library,
+ * and to import them from outside.
+ */
 
 #if defined(U_COMBINED_IMPLEMENTATION)
 #define U_COMMON_API  U_EXPORT

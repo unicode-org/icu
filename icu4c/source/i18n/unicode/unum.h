@@ -114,7 +114,7 @@
 typedef void* UNumberFormat;
 
 /** The possible number format styles. */
-enum UNumberFormatStyle {
+typedef enum UNumberFormatStyle {
     /** Ignore style specification and open the pattern */
     UNUM_IGNORE=0,
     /** Decimal format */
@@ -129,10 +129,9 @@ enum UNumberFormatStyle {
     UNUM_SPELLOUT,
     /** Default format */
     UNUM_DEFAULT = UNUM_DECIMAL
-};
-typedef enum UNumberFormatStyle UNumberFormatStyle;
+} UNumberFormatStyle;
 
-enum UNumberFormatRoundingMode {
+typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_CEILING,
     UNUM_ROUND_FLOOR,
     UNUM_ROUND_DOWN,
@@ -140,16 +139,14 @@ enum UNumberFormatRoundingMode {
     UNUM_FOUND_HALFEVEN,
     UNUM_ROUND_HALFDOWN,
     UNUM_ROUND_HALFUP
-};
-typedef enum UNumberFormatRoundingMode UNumberFormatRoundingMode;
+} UNumberFormatRoundingMode;
 
-enum UNumberFormatPadPosition {
+typedef enum UNumberFormatPadPosition {
     UNUM_PAD_BEFORE_PREFIX,
     UNUM_PAD_AFTER_PREFIX,
     UNUM_PAD_BEFORE_SUFFIX,
     UNUM_PAD_AFTER_SUFFIX
-};
-typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
+} UNumberFormatPadPosition;
 
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
@@ -361,7 +358,7 @@ U_CAPI int32_t U_EXPORT2
 unum_countAvailable(void);
 
 /** The possible UNumberFormat numeric attributes */
-enum UNumberFormatAttribute {
+typedef enum UNumberFormatAttribute {
   /** Parse integers only */
   UNUM_PARSE_INT_ONLY,
   /** Use grouping separator */
@@ -394,19 +391,7 @@ enum UNumberFormatAttribute {
   UNUM_PADDING_POSITION,
   /** Secondary grouping size */
   UNUM_SECONDARY_GROUPING_SIZE
-};
-typedef enum UNumberFormatAttribute UNumberFormatAttribute;
-
-/*====================================================
-======================================================
-    ---> Add to UErrorCode !!!! --->
-typedef enum {
-    AttributeNotSupported,
-    PropertyNotSupported
-} UErrorCode;
-    ---> Add to UErrorCode !!!! --->
-======================================================
-====================================================*/
+} UNumberFormatAttribute;
 
 /**
 * Get a numeric attribute associated with a UNumberFormat.
@@ -486,7 +471,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             double                 newValue);
 
 /** The possible UNumberFormat text attributes */
-enum UNumberFormatTextAttribute{
+typedef enum UNumberFormatTextAttribute {
   /** Positive prefix */
   UNUM_POSITIVE_PREFIX,
   /** Positive suffix */
@@ -499,8 +484,7 @@ enum UNumberFormatTextAttribute{
   UNUM_PADDING_CHARACTER,
   /** The ISO currency code */
   UNUM_CURRENCY_CODE
-};
-typedef enum UNumberFormatTextAttribute UNumberFormatTextAttribute;
+} UNumberFormatTextAttribute;
 
 /**
 * Get a text attribute associated with a UNumberFormat.
@@ -563,14 +547,14 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         int32_t                 resultLength,
         UErrorCode*             status);
 
-/* The maximum size for a textual number format symbol. */
+/** The maximum size for a textual number format symbol. */
 #define UNFSYMBOLSMAXSIZE 10
 
 /**
  * Constants for specifying a number format symbol.
  * @stable
  */
-enum UNumberFormatSymbol {
+typedef enum UNumberFormatSymbol {
   /** The decimal separator */
   UNUM_DECIMAL_SEPARATOR_SYMBOL,
   /** The grouping separator */
@@ -605,8 +589,7 @@ enum UNumberFormatSymbol {
   UNUM_NAN_SYMBOL,
   /** count symbol constants */
   UNUM_FORMAT_SYMBOL_COUNT
-};
-typedef enum UNumberFormatSymbol UNumberFormatSymbol;
+} UNumberFormatSymbol;
 
 /**
 * Get a symbol associated with a UNumberFormat.
