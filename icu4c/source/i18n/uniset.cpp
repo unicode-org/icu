@@ -1118,11 +1118,11 @@ const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
 //----------------------------------------------------------------
 
 /**
- * Returns the character after the given position, or '\uFFFF' if
+ * Returns the character after the given position, or '\uFFFE' if
  * there is none.
  */
 UChar UnicodeSet::charAfter(const UnicodeString& str, int32_t i) {
-    return ((++i) < str.length()) ? str.charAt(i) : (UChar)0xFFFF;
+    return ((++i) < str.length()) ? str.charAt(i) : (UChar)0xFFFE;
 }
 
 void UnicodeSet::ensureCapacity(int32_t newLen) {

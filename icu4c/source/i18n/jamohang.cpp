@@ -65,7 +65,7 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text, UTransPosi
     UChar last = filteredCharAt(text, cursor++);
     UnicodeString str("a", 1);
     while (cursor <= limit) {
-        UChar next = 0xFFFF; // go over end of string, just in case
+        UChar next = 0xFFFE; // go over end of string, just in case
         if (cursor < limit) next = filteredCharAt(text, cursor);
         UChar replacement = composeHangul(last, next, count);
         if (replacement != last) {
@@ -73,7 +73,7 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text, UTransPosi
             text.handleReplaceBetween(cursor-1, cursor-1 + count, str);
             limit = limit - count + 1; // fix up limit 2 => -1, 1 => 0
             last = replacement;
-            if (next == 0xFFFF) break;
+            if (next == 0xFFFE) break;
             // don't change cursor, so we revisit char
         } else {
             ++cursor;
