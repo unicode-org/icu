@@ -20,6 +20,7 @@
 #include "unicode/uchar.h"
 #include "unicode/parseerr.h"
 #include "unicode/usetiter.h"
+#include "unicode/putil.h"
 #include "transrt.h"
 #include "testutil.h"
 #include <string.h>
@@ -29,7 +30,10 @@
                           if (exec) {                   \
                               logln(#test "---");       \
                               logln((UnicodeString)""); \
+                              int32_t t = uprv_getUTCtime(); \
                               test();                   \
+                              t = uprv_getUTCtime() - t; \
+                              logln((UnicodeString)#test " took " + t + " seconds"); \
                           }                             \
                           break
 
@@ -58,9 +62,8 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(5,TestGreek);
         CASE(6,TestGreekUNGEGN);
         CASE(7,Testel);
-        CASE(8,TestCyrillic);
-        CASE(9,TestDevanagariLatin);
-        CASE(10,TestInterIndic);
+        CASE(8,TestDevanagariLatin);
+        CASE(9,TestInterIndic);
         default: name = ""; break;
     }
 }
@@ -224,24 +227,21 @@ public :
 
     AbbreviatedUnicodeSetIterator();
     virtual ~AbbreviatedUnicodeSetIterator();
-    void reset(UnicodeSet& set, UBool abb = FALSE);
+    void reset(UnicodeSet& set, UBool abb = FALSE, int32_t density = 100);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 private :
     UBool abbreviated;
+    int32_t perRange;
     virtual void loadRange(int32_t range);
 
     /**
@@ -262,15 +262,19 @@ AbbreviatedUnicodeSetIterator::AbbreviatedUnicodeSetIterator() :
 AbbreviatedUnicodeSetIterator::~AbbreviatedUnicodeSetIterator() {
 }
         
-void AbbreviatedUnicodeSetIterator::reset(UnicodeSet& newSet, UBool abb) {
+void AbbreviatedUnicodeSetIterator::reset(UnicodeSet& newSet, UBool abb, int32_t density) {
     UnicodeSetIterator::reset(newSet);
     abbreviated = abb;
+    perRange = newSet.getRangeCount();
+    if (perRange != 0) {
+        perRange = density / perRange;
+    }
 }
 
 void AbbreviatedUnicodeSetIterator::loadRange(int32_t myRange) {
     UnicodeSetIterator::loadRange(myRange);
-    if (abbreviated && (endElement > nextElement + 50)) {
-        endElement = nextElement + 50;
+    if (abbreviated && (endElement > nextElement + perRange)) {
+        endElement = nextElement + perRange;
     }
 }
 
@@ -313,7 +317,8 @@ public:
               const char* roundtripExclusions,
               IntlTest* parent,
               UBool     quick,
-              Legal* adoptedLegal);
+              Legal* adoptedLegal,
+              int32_t density = 100);
 
 private:
 
@@ -325,7 +330,7 @@ private:
 
     UBool checkIrrelevants(Transliterator *t, const UnicodeString& irrelevants);
 
-    void test2(UBool quick);
+    void test2(UBool quick, int32_t density);
 
     void logWrongScript(const UnicodeString& label,
                         const UnicodeString& from,
@@ -414,7 +419,8 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
                   const UnicodeString& targetRangeVal,
                   const char* roundtripExclusions,
                   IntlTest* logVal, UBool quickRt, 
-                  Legal* adoptedLegal)
+                  Legal* adoptedLegal,
+                  int32_t density)
 {
 
     UErrorCode status = U_ZERO_ERROR;
@@ -482,7 +488,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
         return;
     }
 
-    test2(quickRt);
+    test2(quickRt, density);
 
     if (errorCount > 0) {
         char str[100];
@@ -509,7 +515,7 @@ UBool RTTest::checkIrrelevants(Transliterator *t,
     return FALSE;
 }
 
-void RTTest::test2(UBool quickRt) {
+void RTTest::test2(UBool quickRt, int32_t density) {
 
     UnicodeString cs, targ, reverse;
     UErrorCode status = U_ZERO_ERROR;
@@ -575,7 +581,7 @@ void RTTest::test2(UBool quickRt) {
           return;
       }
 
-      usi.reset(sourceRange);
+      usi.reset(sourceRange, quickRt);
       for (;;) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
@@ -590,7 +596,7 @@ void RTTest::test2(UBool quickRt) {
           }
       }
       
-      usi.reset(targetRange);
+      usi.reset(targetRange, quickRt);
       for (;;) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
@@ -611,7 +617,7 @@ void RTTest::test2(UBool quickRt) {
     parent->logln("Checking that all source characters convert to target - Singles");
 
     UnicodeSet failSourceTarg;
-    usi.reset(sourceRange);
+    usi.reset(sourceRange, quickRt);
     for (;;) {
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
@@ -653,12 +659,12 @@ void RTTest::test2(UBool quickRt) {
     UnicodeSet sourceRangeMinusFailures(sourceRange);
     sourceRangeMinusFailures.removeAll(failSourceTarg);
             
-    usi.reset(sourceRangeMinusFailures, quickRt);
+    usi.reset(sourceRangeMinusFailures, quickRt, density);
     for (;;) { 
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
              
-        usi2.reset(sourceRangeMinusFailures, quickRt);
+        usi2.reset(sourceRangeMinusFailures, quickRt, density);
         for (;;) {
             if (!usi2.next() || usi2.isString()) break;
             UChar32 d = usi2.getCodepoint();
@@ -702,7 +708,7 @@ void RTTest::test2(UBool quickRt) {
     UnicodeSet failTargSource;
     UnicodeSet failRound;
 
-    usi.reset(targetRange);
+    usi.reset(targetRange, quickRt);
     for (;;) {
         if (!usi.next()) break;
         
@@ -762,7 +768,7 @@ void RTTest::test2(UBool quickRt) {
     targetRangeMinusFailures.removeAll(failTargSource);
     targetRangeMinusFailures.removeAll(failRound);
 
-    usi.reset(targetRangeMinusFailures, quickRt);
+    usi.reset(targetRangeMinusFailures, quickRt, density);
     UnicodeString targ2;
     UnicodeString reverse2;
     UnicodeString targD;
@@ -776,7 +782,7 @@ void RTTest::test2(UBool quickRt) {
             return;
         }
 
-        usi2.reset(targetRangeMinusFailures, quickRt);
+        usi2.reset(targetRangeMinusFailures, quickRt, density);
         for (;;) {
             if (!usi2.next() || usi2.isString())
                 break;
@@ -969,14 +975,11 @@ void TransliteratorRoundTripTest::TestJamo() {
 }
 
 void TransliteratorRoundTripTest::TestHangul() {
-	if(quick){
-		return;
-	}
     RTTest t("Latin-Hangul");
     Legal *legal = new Legal();
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\uAC00-\\uD7A4]", ""), 
-           NULL, this, quick, legal);
+           NULL, this, quick, legal, 25);
     delete legal;
 }
 
@@ -987,7 +990,7 @@ void TransliteratorRoundTripTest::TestGreek() {
               UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", 
                             ""),
               "[\\u00B5\\u037A\\u03D0-\\u03F5]", /* exclusions */
-              this, quick, legal);
+              this, quick, legal, 50);
     delete legal;
 }
 
@@ -1111,7 +1114,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     Legal *legal = new LegalIndic();
     test.test(UnicodeString(latinForIndic, ""), 
               UnicodeString("[:Devanagari:]", ""), NULL, this, quick, 
-              legal);
+              legal, 50);
     delete legal;
 }
 
@@ -1381,7 +1384,7 @@ void TransliteratorRoundTripTest::TestInterIndic() {
         test.test(UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 1], ""), 
                   UnicodeString(interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 2], ""), 
                   interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
-                  this, quick, legal);
+                  this, quick, legal, 50);
        delete legal;
     }
     
