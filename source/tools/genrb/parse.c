@@ -497,9 +497,12 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             if(ucaEl==TRUE){
                 UChar *c,*end,*ucaRulesStr;    
                 FileStream *in =NULL;
+                UFILE* ufile=NULL;
                 int fileLength = 0;
                 char fileName[256]={'\0'};
                 char cs[128] = { '\0'};
+                char* cp=NULL;
+                char start[3] ={'0'};
                 ucaEl=FALSE; /* reset ucaEL */
                 /* make the fileName including the directory */
                 uprv_strcat(fileName,inputDir);
@@ -510,21 +513,30 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 uprv_strcat(fileName, cs);
                 /* open the file */
                 in = T_FileStream_open(fileName, "rb");
-                if(in){
+                T_FileStream_read(in, start, 3);
+                if(start[0] == '\xFE' && start[1] == '\xFF') {
+                    cp = "UTF16_BigEndian";
+                } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+                     cp = "UTF16_LittleEndian";
+                } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+                    cp = "UTF8";
+                }
+                ufile = u_finit((FILE*) in,0, cp);
+                if(in && ufile){
                     fileLength =T_FileStream_size(in);
                     ucaRulesStr = (UChar*)uprv_malloc(sizeof(UChar) * fileLength);
                     c= ucaRulesStr;
-                    end = ucaRulesStr + fileLength;
+                    end = ucaRulesStr + fileLength/2;
                     /* read in the rulses */
-                    while(c < end && ! (T_FileStream_error(in) || T_FileStream_eof(in))) {
-                      *c++ = (UChar) T_FileStream_getc(in);
+                    while(c < end) {
+                      *c++ = u_fgetc(ufile);
                     }
                      /* couldn't read all chars */
                     if(c < end) {
                         fprintf(stderr, "Error! Couldn't read all chars from input file %s for tag %s\n", fileName, cTag);
                     }else{
                         /* Add it to bundle */
-                        temp = string_open(bundle,cTag, ucaRulesStr, fileLength, status);
+                        temp = string_open(bundle,cTag, ucaRulesStr, fileLength/2, status);
                         table_add(rootTable, temp, status);
                         put(data, &tag, status);
                         if(U_FAILURE(*status)) {
