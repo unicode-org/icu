@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/08/21 23:42:03 $
- * $Revision: 1.48 $
+ * $Date: 2003/09/13 00:38:49 $
+ * $Revision: 1.49 $
  *
  *****************************************************************************************
  */
@@ -160,6 +160,7 @@ public class TestFmwk extends AbstractTestLog {
                             newTarget = this.new Target(names[i]);
                         }
                     } else {
+                        /// syn wee check here
                         TestFmwk test = getSubtest(i, groupOnly);
                         if (test != null) {
                             newTarget = test.new ClassTarget();
@@ -247,6 +248,14 @@ public class TestFmwk extends AbstractTestLog {
     public class Target {
         private Target next;
         public final String name;
+        /**
+         * Caller class that run this target
+         */
+        public Target caller;
+        /**
+         * Flag to indicate if this class is or has been executed
+         */
+        public boolean flag = false;
 
         public Target(String name) {
             this.name = name;
@@ -260,6 +269,17 @@ public class TestFmwk extends AbstractTestLog {
         public Target getNext() {
             return next;
         }
+        
+        public void printName()
+        {
+            if (caller != null && !caller.flag) {
+                params.indentLevel --;
+                caller.printName();
+                params.indentLevel ++;
+            }
+            params.writeTestName(name);
+            flag = true;
+        }
 
         public void run() {
             Locale.setDefault(defaultLocale);
@@ -268,16 +288,11 @@ public class TestFmwk extends AbstractTestLog {
             if (!validate()) {
                 params.writeTestInvalid(name);
             } else {
-                params.writeTestName(name);
-
-                int oldError = params.errorCount;
-                int oldInvalid = params.invalidCount;
-
                 execute();
-
-                params.writeTestResult(oldError, oldInvalid);
             }
         }
+        
+
 
         protected boolean validate() {
             return false;
@@ -297,8 +312,6 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         public void run() {
-            params.writeTestName(name);
-            params.writeTestResult(params.errorCount, params.invalidCount);
         }
     }
 
@@ -319,6 +332,12 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         protected void execute() {
+            ///
+            if (params.filter != null && name.toLowerCase().indexOf(params.filter) < 0) {
+                params.invalidCount ++;
+                return;
+            }
+            printName();
             if (params.inDocMode()) {
                 params.writeTestDescription(getDescription());
             } else {
@@ -336,12 +355,13 @@ public class TestFmwk extends AbstractTestLog {
                           +" accessed under name " + name);
                 }
             }
+            params.writeTestResult(params.errorCount, params.invalidCount);
         }
     }
 
     public class ClassTarget extends Target {
         String targetName;
-
+        
         public ClassTarget() {
             this(null);
         }
@@ -366,11 +386,18 @@ public class TestFmwk extends AbstractTestLog {
 
             params.indentLevel++;
             Target target = randomize(getTargets(targetName));
+            int olderrorcount = params.errorCount;
+            int oldinvalidcount = params.invalidCount;
             while (target != null) {
+                ///
+                target.caller = this;
                 target.run();
                 target = target.next;
             }
             params.indentLevel--;
+            if (flag) { // closing the printout brackets
+                params.writeTestResult(olderrorcount, oldinvalidcount);
+            }
         }
 
         private Target randomize(Target t) {
@@ -498,7 +525,7 @@ public class TestFmwk extends AbstractTestLog {
                         usageError = true;
                     }
                 } else if (arg.startsWith("-filter:")) {
-                    params.filter = arg.substring(8);
+                    params.filter = arg.substring(8).toLowerCase();
                 } else {
                     System.out.println("*** Error: unrecognized argument: " + args[i]);
                     exitCode = 1;
@@ -763,7 +790,10 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n" +
                            "       To run all tests, specify -e10.  Giving -e with no <n> is\n" +
                            "       the same as -e5.");
-        System.out.println(" -filter:<str> ?");
+        System.out.println(" -filter:<str> Filters away test methods with \n"
+                         + "               names that do not contain the \n"
+                         + "               argument <str>.\n" 
+                         + "               This operation is case insensitive.");
         System.out.println(" -h[elp] Print this help text and exit.");
         System.out.println(" -l[ist] List immediate targets of this test");
         System.out.println("   -la, -listAll List immediate targets of this test, and all subtests");
