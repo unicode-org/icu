@@ -466,6 +466,8 @@ ibm-1383_P110-2000 { UTR22* }
                         csGB2312    # China EUC. x-euc-cn is a MIME name
                         ibm-1383_VPUA
 
+ibm-5478_P100-1995 { UTR22* } ibm-5478 { IBM* } # This gb_2312_80 DBCS mapping is needed by iso-2022.
+
 ibm-964_P110-2000 { UTR22* }                # Taiwan EUC. x-euc-tw is a MIME name
                         ibm-964 { IBM* JAVA }
                         EUC-TW
