@@ -44,6 +44,6 @@ en_IN {
     }
 
     Currencies {
-        INR { "\u00A90#Rs|1#Re|1<Rs", "\u00A90#Rupees|1#Rupee|1<Rupees" }
+        INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
     }
 }
