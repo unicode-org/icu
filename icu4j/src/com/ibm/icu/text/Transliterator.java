@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.5 $ $Date: 2000/01/06 01:36:36 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/06 17:38:25 $
  */
 public abstract class Transliterator {
     /**
@@ -880,9 +880,12 @@ public abstract class Transliterator {
             }
         } catch (MissingResourceException e) {}
 
+        // Register non-rule-based transliterators
         registerClass(HexToUnicodeTransliterator._ID,
                       HexToUnicodeTransliterator.class);
         registerClass(UnicodeToHexTransliterator._ID,
                       UnicodeToHexTransliterator.class);
+        registerClass(NullTransliterator._ID,
+                      NullTransliterator.class);
     }
 }
