@@ -2796,7 +2796,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     } else {
 		localCollator = (UCollator *)stackBuffer;
     	memcpy(localCollator, coll, sizeof(UCollator));
-		localCollator->freeOnClose = TRUE;
+		localCollator->freeOnClose = FALSE;
 	}
 	return localCollator;      
 }
