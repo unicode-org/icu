@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -26,16 +26,16 @@ import com.ibm.icu.util.ULocale;
  * <code>StringSearch</code> uses a version of the fast Boyer-Moore search
  * algorithm that has been adapted to work with the large character set of
  * Unicode. Refer to 
- * <a href=http://oss.software.ibm.com/icu/docs/papers/efficient_text_searching_in_java.html>
+ * <a href="http://icu.sourceforge.net/docs/papers/efficient_text_searching_in_java.html">
  * "Efficient Text Searching in Java"</a>, published in the 
  * <i>Java Report</i> on February, 1999, for further information on the 
  * algorithm.
  * </p>
  * <p>
  * Users are also strongly encouraged to read the section on 
- * <a href=http://oss.software.ibm.com/icu/userguide/searchString.html>
+ * <a href="http://icu.sourceforge.net/userguide/searchString.html">
  * String Search</a> and 
- * <a href=http://oss.software.ibm.com/icu/userguide/Collate_Intro.html>
+ * <a href="http://icu.sourceforge.net/userguide/Collate_Intro.html">
  * Collation</a> in the user guide before attempting to use this class.
  * </p>
  * <p>
@@ -132,7 +132,7 @@ import com.ibm.icu.util.ULocale;
  * </p>
  * <p>
  * Consult the 
- * <a href=http://oss.software.ibm.com/icu/userguide/searchString.html>
+ * <a href="http://icu.sourceforge.net/userguide/searchString.html">
  * String Search</a> user guide and the <code>SearchIterator</code> 
  * documentation for more information and examples of use.
  * </p>
