@@ -115,12 +115,12 @@ void DateFormatRegressionTest::Test4052408(void)
     str = fmt->format(dt, str);
     logln(str);
     
-    if(str != "5/3/1997 8:55 AM")
-        errln("Fail: Test broken; Want 5/3/1997 8:55 AM Got " + str);   
+    if(str != "5/3/97 8:55 AM")
+        errln("Fail: Test broken; Want 5/3/97 8:55 AM Got " + str);   
     
     UnicodeString expected[] = {
         (UnicodeString) "", //"ERA_FIELD",
-        (UnicodeString) "1997", //"YEAR_FIELD",
+        (UnicodeString) "97", //"YEAR_FIELD",
         (UnicodeString) "5", //"MONTH_FIELD",
         (UnicodeString) "3", //"DATE_FIELD",
         (UnicodeString) "", //"HOUR_OF_DAY1_FIELD",
