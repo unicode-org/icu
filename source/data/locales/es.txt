@@ -7,6 +7,12 @@
 
 es {
     Version { "3.0" }
+    Types {
+        TRADITIONAL { "Tradicional" }
+    }
+    Variants {
+        REVISED { "Revisado" }
+    }
     CollationElements { 
         Version { "1.0" }
         Sequence { "& N < n\u0303<<< N\u0303" }
@@ -181,7 +187,7 @@ es {
         PA { "Panam\u00E1" }
         PE { "Per\u00FA" }
         PF { "Polinesia Francesa" }
-        PG { "Pap\u00FAa-Nueva Guinea" }
+        PG { "Pap\u00FAa Nueva Guinea" }
         //PH { "Islas Filipinas" }  // Original value
         PH { "Filipinas" }
         PK { "Pakist\u00E1n" }
@@ -213,7 +219,7 @@ es {
         //SM { "San Marino" }
         //SN { "Senegal" }
         //SO { "Somalia" }
-        SP { "Servia" }
+        SP { "Serbia" }
         //SR { "Surinam" }
         ST { "Santo Tom\u00E9 y Pr\u00EDncipe" }
         //SV { "El Salvador" }
@@ -320,11 +326,13 @@ es {
         eu { "vasco" }
         fa { "farsi" }
         fi { "finland\u00E9s" }
-        fo { "faro\u00E9s" }
+        fo { "fero\u00E9s" }
         fr { "franc\u00E9s" }
         ga { "irland\u00E9s" }
         gl { "gallego" }
         gu { "goujarat\u00ED" }
+        gv { "ga\u00E9lico man\u00E9s" }
+		haw { "hawaiano" }
         he { "hebreo" }
         hi { "hindi" }
         hr { "croata" }
@@ -333,6 +341,7 @@ es {
         id { "indonesio" }
         is { "island\u00e9s" }
         it { "italiano" }
+		iu { "inuktitut" }
         ja { "japon\u00E9s" }
         ka { "georgiano" }
         kk { "kazajo" }
@@ -350,33 +359,37 @@ es {
         mk { "macedonio" }
         mn { "mongol" }
         mr { "marathi" }
-        ms { "malaisio" }
+        ms { "malayo" }
         mt { "malt\u00e9s" }
         my { "birmano" }
         nl { "holand\u00E9s" }
+		nb { "bokmal noruego" }
         no { "noruego" }
+ 		nn { "nynorsk noruego" }
+        om { "oromo" }
         pa { "punjab\u00ED" }
         pl { "polaco" }
         pt { "portugu\u00E9s" }
         ro { "rumano" }
         ru { "ruso" }
-        sh { "serbo-croata" }
+        sh { "serbocroata" }
         sk { "eslovaco" }
         sl { "esloveno" }
         so { "somal\u00ED" }
         sq { "alban\u00E9s" }
-        sr { "servio" }
+        sr { "serbio" }
         sv { "sueco" }
         sw { "swahili" }
+ 		ta { "tamil" }
         te { "telugu" }
         th { "tailand\u00E9s" }
         ti { "tigrinya" }
         tr { "turco" }
-        tt { "tataro" }
-        vi { "vietnam\u00E9s" }
+        tt { "t\u00E1taro" }
         uk { "ucraniano" }
         ur { "urdu" }
         uz { "uzbeko" }
+        vi { "vietnamita" }
         zh { "chino" }
         zu { "zul\u00FA" }
     }

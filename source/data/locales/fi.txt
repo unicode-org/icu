@@ -77,10 +77,12 @@ fi {
         IE { "Irlanti" }
         IN { "Intia" }
         IO { "Brittil\u00E4inen Intian valtameren alue" }
+        IQ { "Irak" }
         IS { "Islanti" }
         IT { "Italia" }
         JO { "Jordania" }
         JP { "Japani" }
+        KE { "Kenia" }
         KG { "Kirgisia" }
         KH { "Kambodza" }
         KM { "Komorit" }
@@ -154,6 +156,8 @@ fi {
     }
     Languages { 
         Fallback{ "en"}
+        af { "afrikanhollanti" }
+        am { "amharan kieli" }
         ar { "arabia" }
         az { "azerbaizani" }
         be { "valkoven\u00e4j\u00e4" }
@@ -166,50 +170,71 @@ fi {
         de { "saksa" }
         el { "kreikka" }
         en { "englanti" }
+        eo { "esperanto" }
         es { "espanja" }
         et { "viro" }
-        eu{ "baski" }         
+        eu { "baski" }
         fa { "farsi" }
         fi { "suomi" }
+        fo { "f\u00e4\u00e4ri" }
         fr { "ranska" }
+        ga { "iiri" }
+        gl { "galicia" }
+        gu { "gujarati" }
+        gv { "manx" }
+        haw { "havaiji" }
         he { "heprea" }
         hi { "hindi" }
         hr { "kroaatti" }
         hu { "unkari" }
+        hy { "armenia" }
         id { "indonesia" }
+        is { "islanti" }
         it { "italia" }
+        iu { "eskimo" }
         ja { "japani" }
         ka { "georgia" }
         kk { "kazakki" }
+        kl { "gr\u00f6\u00f6nlandi" }
         km { "khmer" }
         kn { "kannada" }
         ko { "korea" }
         ku { "kurdi" }
+        kw { "korni" }
         la { "latina" }
         lt { "liettua" }
         lv { "latvia" }
         mk { "makedonia" }
         mr { "marathi" }
+        mt { "malta" }
         my { "burma" }
+        nb { "kirjanorja" }
         nl { "hollanti" }
         no { "norja" }
+        nn { "uusnorja" }
+        om { "oromo" }
         pl { "puola" }
         pt { "portugali" }
         ro { "romania" }
         ru { "ven\u00e4j\u00e4" }
+        sh { "serbokroatia" }
         sk { "slovakki" }
         sl { "sloveeni" }
+        so { "somali" }
         sq { "albania" }
         sr { "serbia" }
         sv { "ruotsi" }
         sw { "suahili" }
+        ta { "tamili" }
         te { "telugu" }
         th { "thai" }
+        ti { "tigrinja" }
         tk { "tagalog" }
         tr { "turkki" }
         uk { "ukraina" }
         ur { "urdu" }
         uz { "uzbekki" }
+        vi { "vietnam" }
         zh { "kiina" }
     }
     DateTimeElements:intvector { 

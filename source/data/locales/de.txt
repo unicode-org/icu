@@ -20,9 +20,12 @@ de {
     Version{ "3.0" }
     Variants{
         Fallback{"en"}
+        PREEURO { "Vor-Euro" }
+        REVISED { "Revidiert" }
     }
     Types{
-             PHONEBOOK { "Telefonbuch-Sortierregeln" }
+        PHONEBOOK { "Telefonbuch-Sortierregeln" }
+        TRADITIONAL { "Traditionell" }
     }
     // This shouldn't be used, but valid data should be here.
     // vorm. -> vormittags -> in the morning
@@ -298,8 +301,6 @@ de {
         //EH { "West Sahara" }
         //HK { "Hong Kong S.A.R., China" }
         SP { "Serbien" }
-        // Zaire is now the Democratic Republic of Congo (CD)
-        // same as in root: ZR { "Zaire" }
     }
     DateTimeElements:intvector { 
         2,
@@ -348,17 +349,17 @@ de {
         Fallback{ "en"}
         // ? aa { "Afar" }
         ab { "Abchasisch" }
-        // same as in root? af { "Afrikaans" }
+        // af { "Afrikaans" }
         am { "Amharisch" } // ?
         ar { "Arabisch" }
-        // ? as { "Assamese" }
-        // ? ay { "Aymara" }
+        as { "Assamesisch" }
+        ay { "Aimara" }
         az { "Aserbaidschanisch" }
-        // ? ba { "Bashkir" }
+        ba { "Baschkirisch" }
         be { "Wei\u00dfrussisch" }
         bg { "Bulgarisch" }
-        // ? bh { "Bihari" }
-        // ? bi { "Bislama" }
+        bh { "Biharisch" }
+        // bi { "Bislama" }
         bn { "Bengalisch" } // ?
         bo { "Tibetisch" }
         br { "Bretonisch" }
@@ -371,7 +372,7 @@ de {
         dz { "Bhutanisch" }
         el { "Griechisch" }
         en { "Englisch" }
-        // same as in root: eo { "Esperanto" }
+        // eo { "Esperanto" }
         es { "Spanisch" }
         et { "Estnisch" }
         eu { "Baskisch" }
@@ -380,21 +381,23 @@ de {
         fi { "Finnisch" }
         fo { "F\u00e4r\u00f6isch" }
         fr { "Franz\u00f6sisch" }
-        fy { "Frisisch" }
+        fy { "Friesisch" }
         ga { "Irisch" }
         gd { "Schottisch-G\u00e4lisch" }
         gl { "Galizisch" } // Galizianisch??
         // ? gn { "Guarani" }
         // ? gu { "Gujarati" }
+        // gv { "Manx" }
         // ? ha { "Hausa" }
+        haw { "Hawaiianisch" }
         he { "Hebr\u00e4isch" }
-        // same as in root? hi { "Hindi" }
+        // hi { "Hindi" }
         hr { "Kroatisch" }
         hu { "Ungarisch" }
         hy { "Armenisch" }
-        // same as in root: ia { "Interlingua" }
+        // ia { "Interlingua" }
         id { "Indonesisch" }
-        // same as in root: ie { "Interlingue" }
+        // ie { "Interlingue" }
         // ? ik { "Inupiak" }
         //in { "Indonesisch" }  // Use "id" instead
         is { "Isl\u00e4ndisch" }
@@ -408,77 +411,77 @@ de {
         ka { "Georgisch" }
         kk { "Kasachisch" }
         kl { "Gr\u00f6nl\u00e4ndisch" }
-        km { "Kkambodschanisch" }
-        // ? kn { "Kannada" }
+        km { "Kambodschanisch" }
+        // kn { "Kannada" }
         ko { "Koreanisch" }
         ks { "Kaschmirisch" } // ?
         ku { "Kurdisch" }
-        // ? rw { "Kinyarwanda" }
         ky { "Kirgisisch" }
-        la { "Latein" }
+        la { "Latein" } // Lateinisch doesn't seem correct
         // ? ln { "Lingala" }
-        // ? lo { "Laothian" }
+        lo { "Laotisch" }
         lt { "Litauisch" }
         lv { "Lettisch" }
-        // ? mg { "Malagasy" }
-        // ? mi { "Maori" }
+        mg { "Madagassisch" }
+        // mi { "Maori" }
         mk { "Mazedonisch" }
-        // ? ml { "Malayalam" }
+        // ml { "Malayalam" }
         mn { "Mongolisch" }
-        mo { "Moldawisch" }
-        // ? mr { "Marathi" }
-        // ? ms { "Malay" }
+        mo { "Moldauisch" }
+        // mr { "Marathi" }
+        ms { "Malaiisch" }
         mt { "Maltesisch" }
         my { "Burmesisch" }
         na { "Nauruisch" }
         nb { "Norwegisch Bokm\u00e5l" }
         ne { "Nepalesisch" }
-        nl { "Holl\u00e4ndisch" }
+        nl { "Niederl\u00e4ndisch" } // "Holl\u00e4ndisch" is not correct
         nn { "Norwegisch Nynorsk" }
         no { "Norwegisch" }
-        // ? oc { "Occitan" }
-        // ? or { "Oriya" }
+        oc { "Okzitanisch" }
+        or { "Orija" }
         // ? om { "Oromo (Afan)" }
-        // ? pa { "Punjabi" }
+        pa { "Pandschabisch" }
         pl { "Polnisch" }
-        // ? ps { "Pashto (Pushto)" }
+        ps { "Afghanisch (Paschtu)" }
         pt { "Portugiesisch" }
-        // ? qu { "Quechua" }
+        // qu { "Quechua" }
         rm { "R\u00e4toromanisch" }
         // ? rn { "Kirundi" }
         ro { "Rum\u00e4nisch" }
         ru { "Russisch" }
-        // same as in root: sa { "Sanskrit" }
-        // ? sd { "Sindhi" }
-        // ? sg { "Sangro" }
+        rw { "Ruandisch" } // Kinyarwanda?
+        // sa { "Sanskrit" }
+        // sd { "Sindhi" }
+        sg { "Sango" }
         sh { "Serbo-Kroatisch" }
-        // ? si { "Singhalese" }
+        si { "Singhalesisch" }
         sk { "Slowakisch" }
         sl { "Slowenisch" }
         sm { "Samoanisch" }
-        // ? sn { "Shona" }
-        so { "Somalisch" }
+        // sn { "Shona" }
+        // so { "Somali" } // "Somalisch" is incorrect
         sq { "Albanisch" }
         sr { "Serbisch" }
-        // ? ss { "Siswati" }
-        // ? st { "Sesotho" }
-        // ? su { "Sundanese" }
-        // ? sw { "Swahili" }
+        ss { "Swazi" }
+        st { "Sotho" }
+        su { "Sudanesisch" }
+        sw { "Suaheli" }
         sv { "Schwedisch" }
-        // ? ta { "Tamil" }
+        ta { "Tamilisch" }
         // ? te { "Telugu" }
         tg { "Tadschikisch" }
-        // same as in root? th { "Thai" }
-        // ? ti { "Tigrinya" }
-        tk { "T\u00fcrkmenisch" } // Turkmenisch??
+        // th { "Thai" }
+        ti { "Tigrinja" }
+        tk { "Turkmenisch" } // "T\u00fcrkmenisch" is a typo
         // ? tl { "Tagalog" }
-        // ? tn { "Setswana" }
-        // ? to { "Tonga" }
+        tn { "Tsuana" }
+        to { "Tongaisch" }
         tr { "T\u00fcrkisch" }
-        // ? ts { "Tsonga" }
-        // ? tt { "Tatar" }
-        // ? tw { "Twi" }
-        // ? ug { "Uighur" }
+        // ts { "Tsonga" }
+        tt { "Tatarisch" }
+        // tw { "Twi" }
+        // ug { "Uighur" }
         uk { "Ukrainisch" }
         // ? ur { "Urdu" }
         uz { "Usbekisch" }
@@ -487,10 +490,10 @@ de {
         // ? wo { "Wolof" }
         // ? xh { "Xhosa" }
         yi { "Jiddisch" }
-        // ? yo { "Yoruba" }
-        // ? za { "Zhuang" }
+        yo { "Joruba" }
+        za { "Zapotekisch" }
         zh { "Chinesisch" }
-        // same as in root?? zu { "Zulu" }
+        // zu { "Zulu" }
     }
     MonthAbbreviations { 
         "Jan",
