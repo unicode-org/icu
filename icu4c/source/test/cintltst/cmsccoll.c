@@ -1555,7 +1555,7 @@ static void TestFCDProblem(void) {
 
 #define NORM_BUFFER_TEST_LEN 32
 typedef struct {
-  UChar u;
+  UChar32 u;
   UChar NFC[NORM_BUFFER_TEST_LEN];
   UChar NFD[NORM_BUFFER_TEST_LEN];
 } tester;
@@ -1568,40 +1568,64 @@ static void TestComposeDecompose(void) {
 
     const char *locName = NULL;
 
-    UChar u = 0;
-    /*
-    UChar NFC[256] = {0};
-    UChar NFD[256] = {0};
-    */
     uint32_t nfcSize;
     uint32_t nfdSize;
-    tester **t = uprv_malloc(0xFFFF * sizeof(tester *));
+    tester **t = uprv_malloc(0x30000 * sizeof(tester *));
     uint32_t noCases = 0;
     UCollator *coll = NULL;
+    UChar32 u = 0;
+    UChar comp[NORM_BUFFER_TEST_LEN];
+    uint32_t len = 0;
 
     t[0] = (tester *)uprv_malloc(sizeof(tester));
 
-    for(u = 0; u < 0xFFFF; u++) {
-        nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
-        nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
+    for(u = 0; u < 0x30000; u++) {
+      len = 0;
+      UTF_APPEND_CHAR_UNSAFE(comp, len, u);
+        nfcSize = unorm_normalize(comp, len, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
+        nfdSize = unorm_normalize(comp, len, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
 
-        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
+        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0) 
+          || (len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0))) {
             t[noCases]->u = u;
+            if(len != nfdSize || (uprv_memcmp(comp, t[noCases]->NFD, nfdSize * sizeof(UChar)) != 0)) {
+              u_strncpy(t[noCases]->NFC, comp, len);
+              t[noCases]->NFC[len] = 0;
+            }
             noCases++;
             t[noCases] = (tester *)uprv_malloc(sizeof(tester));
             uprv_memset(t[noCases], 0, sizeof(tester));
-        }
+        } 
     }
 
     log_verbose("Testing UCA extensively\n");
     coll = ucol_open("", &status);
-
     for(u=0; u<noCases; u++) {
+      if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
+        log_err("Failure: codePoint %05X fails TestComposeDecompose in the UCA\n", t[u]->u);
         doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+      }
     }
+    /*
+    for(u = 0; u < 0x30000; u++) {
+      if(!(u&0xFFFF)) {
+        log_verbose("%08X ", u);
+      }
+      uprv_memset(t[noCases], 0, sizeof(tester));
+      t[noCases]->u = u;
+      len = 0;
+      UTF_APPEND_CHAR_UNSAFE(comp, len, u);
+      comp[len] = 0;
+      nfcSize = unorm_normalize(comp, len, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
+      nfdSize = unorm_normalize(comp, len, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
+      doTest(coll, comp, t[noCases]->NFD, UCOL_EQUAL);
+      doTest(coll, comp, t[noCases]->NFC, UCOL_EQUAL);
+    }
+    */
 
     ucol_close(coll);
 
+    log_verbose("Testing locales, number of cases = %i\n", noCases);
     for(i = 0; i<noOfLoc; i++) {
         status = U_ZERO_ERROR;
         locName = uloc_getAvailable(i);
@@ -1621,7 +1645,7 @@ static void TestComposeDecompose(void) {
 
             for(u=0; u<noCases; u++) {
               if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
-                log_err("Failure: codePoint %04X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
+                log_err("Failure: codePoint %05X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
                 doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
               }
             }
@@ -2657,9 +2681,9 @@ static void TestLimitations() {
   }
   /* variable top:  */
   {
-    static const char *rule2 = "&\\u2010<x=[variable top]<z";
+    /*static const char *rule2 = "&\\u2010<x=[variable top]<z";*/
     static const char *rule = "&\\u2010<x<[variable top]=z";
-    static const char *rule3 = "&' '<x<[variable top]=z";
+    /*static const char *rule3 = "&' '<x<[variable top]=z";*/
     static const char *tlimit01[] = {" ", "z", "zb", "a", " b", "xb", "b", "c" };
     static const char *tlimit02[] = {"-", "-x", "x","xb", "-z", "z", "zb", "-a", "a", "-b", "b", "c"};
     static const char *tlimit03[] = {" ", "xb", "z", "zb", "a", " b", "b", "c" };
@@ -2682,7 +2706,7 @@ static void TestLimitations() {
     static const char *tlimit02[] = {"c","CH","cH","Ch","ch"};
     static const UColAttribute att[] = { UCOL_CASE_FIRST};
     static const UColAttributeValue valOn[] = { UCOL_UPPER_FIRST};
-    static const UColAttributeValue valOff[] = { UCOL_OFF};
+    /*static const UColAttributeValue valOff[] = { UCOL_OFF};*/
     log_verbose("case level\n");
     genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
     genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
@@ -2961,8 +2985,6 @@ static void TestExtremeCompression() {
 }
 
 static void TestSurrogates() {
-  UErrorCode status = U_ZERO_ERROR;
-
   static const char *test[] = {
     "z","\\ud900\\udc25",  "\\ud805\\udc50",
        "\\ud800\\udc00y",  "\\ud800\\udc00r",
@@ -3123,7 +3145,7 @@ static void TestNewJapanese() {
     "\\u3071\\u3071", /* H\\u309cH\\u309c */
     "\\u30d1\\u30d1", /* K\\u309cK\\u309c */
   };
-
+  /*
   static const char *test3[] = {
     "\\u221er\\u221e",
     "\\u221eR#",
@@ -3154,6 +3176,7 @@ static void TestNewJapanese() {
     "tt8",
     "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
+  */
   genericLocaleStarter("ja", test1, sizeof(test1)/sizeof(test1[0]));
   genericLocaleStarter("ja", test2, sizeof(test2)/sizeof(test2[0]));
   /*genericLocaleStarter("ja", test3, sizeof(test3)/sizeof(test3[0]));*/
@@ -3250,14 +3273,16 @@ static void TestBeforePrefixFailure() {
 static void TestPrefixCompose() {
   const char* rule1 = 
         "&\\u30a7<<<\\u30ab|\\u30fc=\\u30ac|\\u30fc";
+  /*
   const char* test[] = {
       "\\u30c6\\u30fc\\u30bf", 
       "\\u30c6\\u30a7\\u30bf",
   };
+  */
   { 
     UErrorCode status = U_ZERO_ERROR;
-    uint32_t i = 0;
-    UCollationElements *it = NULL;
+    /*uint32_t i = 0;*/
+    /*UCollationElements *it = NULL;*/
 /*    uint32_t CE;*/
     UChar string[256];
     uint32_t uStringLen;
