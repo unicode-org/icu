@@ -66,7 +66,11 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
     public UResourceBundle getParent(){
         return (UResourceBundle)parent;   
     }
-    
+
+    protected void setParent(ResourceBundle parent) {
+        this.parent = parent;
+    }
+
     private ICUResourceBundle getBundle(){
         int type = RES_GET_TYPE(rootResource);
         if(type==TABLE){
@@ -272,7 +276,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             return ICUResourceBundleImpl.this.getParent();  
         }
         protected void setParent(ResourceBundle parent){
-            ICUResourceBundleImpl.this.parent = parent;   
+            ICUResourceBundleImpl.this.setParent(parent);
         }
 	}
 	private class ResourceTable32 extends ICUResourceBundle implements Resource {
@@ -353,7 +357,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             return ICUResourceBundleImpl.this.getParent();  
         }
         protected void setParent(ResourceBundle parent){
-            ICUResourceBundleImpl.this.parent = parent;   
+            ICUResourceBundleImpl.this.setParent(parent);   
         }
           
 	}
