@@ -42,7 +42,7 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 void addTestConvert(TestNode** root)
 {
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
-
+    addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
 }
 
 void TestConvert() 
@@ -984,4 +984,80 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 
 {
     return (MIA==(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP)?(UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE:(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP;
+}
+
+/**
+ * Test the converter alias API, specifically the fuzzy matching of
+ * alias names and the alias table integrity.  Make sure each
+ * converter has at least one alias (itself), and that its listed
+ * aliases map back to itself.  Check some hard-coded UTF8 and
+ * ISO_2022 aliases to make sure they work.
+ */
+void TestAlias() {
+    int32_t i, ncnv;
+    UErrorCode status = U_ZERO_ERROR;
+
+    /* Predetermined aliases that we expect to map back to ISO_2022
+     * and UTF8.  UPDATE THIS DATA AS NECESSARY. */
+    const char* ISO_2022_NAMES[] = 
+        {"ISO_2022", "iso-2022", "2022",
+         "cp2022", "iso2022", "iso_2022"};
+    int32_t ISO_2022_NAMES_LENGTH =
+        sizeof(ISO_2022_NAMES) / sizeof(ISO_2022_NAMES[0]);
+    const char *UTF8_NAMES[] =
+        { "UTF8", "utf-8", "utf8", "ibm-1208",
+          "utf_8", "ibm1208", "cp1208" };
+    int32_t UTF8_NAMES_LENGTH =
+        sizeof(UTF8_NAMES) / sizeof(UTF8_NAMES[0]);
+
+    /* When there are bugs in gencnval or in ucnv_io, converters can
+       appear to have no aliases. */
+    ncnv = ucnv_countAvailable();
+    log_verbose("%d converters\n", ncnv);
+    for (i=0; i<ncnv; ++i) {
+        const char *name = ucnv_getAvailableName(i);
+        const char *alias0;
+        uint16_t na = ucnv_countAliases(name, &status);
+        uint16_t j;
+
+        if (na == 0) {
+            log_err("FAIL: Converter \"%s\" (i=%d)"
+                    " has no aliases; expect at least one\n",
+                    name, i);
+            continue;
+        }
+
+        alias0 = ucnv_getAlias(name, 0, &status);
+        for (j=1; j<na; ++j) {
+            const char *alias = ucnv_getAlias(name, j, &status);
+            /* Make sure each alias maps back to the the same list of
+               aliases.  Assume that if alias 0 is the same, the whole
+               list is the same (this should always be true). */
+            const char *mapBack = ucnv_getAlias(alias, 0, &status);
+            if (0 != uprv_strcmp(alias0, mapBack)) {
+                log_err("FAIL: Converter \"%s\" -> "
+                        "alias[%d]=\"%s\" -> "
+                        "alias[0]=\"%s\", exp. \"%s\"\n",
+                        name, j, alias, mapBack, alias0);
+            }
+        }
+    }
+
+    /* Check a list of predetermined aliases that we expect to map
+     * back to ISO_2022 and UTF8. */
+    for (i=1; i<ISO_2022_NAMES_LENGTH; ++i) {
+        const char* mapBack = ucnv_getAlias(ISO_2022_NAMES[i], 0, &status);
+        if (0 != uprv_strcmp(mapBack, ISO_2022_NAMES[0])) {
+            log_err("FAIL: \"%s\" -> \"%s\", expect ISO_2022\n",
+                    ISO_2022_NAMES[i], mapBack);
+        }
+    }
+
+    for (i=1; i<UTF8_NAMES_LENGTH; ++i) {
+        const char* mapBack = ucnv_getAlias(UTF8_NAMES[i], 0, &status);
+        if (0 != uprv_strcmp(mapBack, UTF8_NAMES[0])) {
+            log_err("FAIL: \"%s\" -> \"%s\", expect UTF8\n",
+                    UTF8_NAMES[i], mapBack);
+        }
+    }
 }
