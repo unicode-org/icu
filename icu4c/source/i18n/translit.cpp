@@ -101,12 +101,6 @@ static const UChar EMPTY[] = {0}; //""
 U_NAMESPACE_BEGIN
 
 /**
- * Class identifier for subclasses of Transliterator that do not
- * define their class (anonymous subclasses).
- */
-const char Transliterator::fgClassID = 0; // Value is irrelevant
-
-/**
  * Return TRUE if the given UTransPosition is valid for text of
  * the given length.
  */

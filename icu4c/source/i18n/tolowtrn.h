@@ -60,14 +60,14 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID();
 
  protected:
 
@@ -84,17 +84,12 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
                                      UTransPosition& offsets, 
                                      UBool isIncremental) const;
 
- private:
+private:
 
     Locale loc;
     UChar* buffer;
     static const char _ID[];
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
 
 U_NAMESPACE_END

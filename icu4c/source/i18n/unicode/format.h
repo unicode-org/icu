@@ -225,9 +225,6 @@ public:
      * Concrete subclasses of Format must implement getDynamicClassID()
      * and also a static method and data member:
      *
-     *      static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     *      static char fgClassID;
-     *
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.

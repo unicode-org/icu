@@ -121,247 +121,234 @@ U_NAMESPACE_BEGIN
 class U_I18N_API CollationElementIterator : public UObject {
 public: 
 
-  // CollationElementIterator public data member ------------------------------
+    // CollationElementIterator public data member ------------------------------
 
-  /**
-  * NULLORDER indicates that an error has occured while processing
-  * @stable ICU 2.0
-  */
-  static int32_t const NULLORDER;
+    /**
+    * NULLORDER indicates that an error has occured while processing
+    * @stable ICU 2.0
+    */
+    static int32_t const NULLORDER;
 
-  // CollationElementIterator public constructor/destructor -------------------
+    // CollationElementIterator public constructor/destructor -------------------
 
-  /**
-  * Copy constructor.
-  *
-  * @param other    the object to be copied from
-  * @stable ICU 2.0
-  */
-  CollationElementIterator(const CollationElementIterator& other);
+    /**
+    * Copy constructor.
+    *
+    * @param other    the object to be copied from
+    * @stable ICU 2.0
+    */
+    CollationElementIterator(const CollationElementIterator& other);
 
-  /** 
-  * Destructor
-  * @stable ICU 2.0
-  */
-  ~CollationElementIterator();
-  
-  // CollationElementIterator public methods ----------------------------------
+    /** 
+    * Destructor
+    * @stable ICU 2.0
+    */
+    ~CollationElementIterator();
 
-  /**
-  * Returns true if "other" is the same as "this"
-  *
-  * @param other    the object to be compared
-  * @return         true if "other" is the same as "this"
-  * @stable ICU 2.0
-  */
-  UBool operator==(const CollationElementIterator& other) const;
+    // CollationElementIterator public methods ----------------------------------
 
-  /**
-  * Returns true if "other" is not the same as "this".
-  *
-  * @param other    the object to be compared
-  * @return         true if "other" is not the same as "this"
-  * @stable ICU 2.0
-  */
-  UBool operator!=(const CollationElementIterator& other) const;
+    /**
+    * Returns true if "other" is the same as "this"
+    *
+    * @param other    the object to be compared
+    * @return         true if "other" is the same as "this"
+    * @stable ICU 2.0
+    */
+    UBool operator==(const CollationElementIterator& other) const;
 
-  /**
-  * Resets the cursor to the beginning of the string.
-  * @stable ICU 2.0
-  */
-  void reset(void);
-    
-  /**
-  * Gets the ordering priority of the next character in the string.
-  * @param status the error code status.
-  * @return the next character's ordering. otherwise returns NULLORDER if an 
-  *         error has occured or if the end of string has been reached
-  * @stable ICU 2.0
-  */
-  int32_t next(UErrorCode& status);
+    /**
+    * Returns true if "other" is not the same as "this".
+    *
+    * @param other    the object to be compared
+    * @return         true if "other" is not the same as "this"
+    * @stable ICU 2.0
+    */
+    UBool operator!=(const CollationElementIterator& other) const;
 
-  /**
-  * Get the ordering priority of the previous collation element in the string.
-  * @param status the error code status.
-  * @return the previous element's ordering. otherwise returns NULLORDER if an 
-  *         error has occured or if the start of string has been reached
-  * @stable ICU 2.0
-  */
-  int32_t previous(UErrorCode& status);
+    /**
+    * Resets the cursor to the beginning of the string.
+    * @stable ICU 2.0
+    */
+    void reset(void);
 
-  /**
-  * Gets the primary order of a collation order.
-  * @param order the collation order
-  * @return the primary order of a collation order.
-  * @stable ICU 2.0
-  */
-  static int32_t primaryOrder(int32_t order);
+    /**
+    * Gets the ordering priority of the next character in the string.
+    * @param status the error code status.
+    * @return the next character's ordering. otherwise returns NULLORDER if an 
+    *         error has occured or if the end of string has been reached
+    * @stable ICU 2.0
+    */
+    int32_t next(UErrorCode& status);
 
-  /**
-  * Gets the secondary order of a collation order.
-  * @param order the collation order
-  * @return the secondary order of a collation order.
-  * @stable ICU 2.0
-  */
-  static int32_t secondaryOrder(int32_t order);
+    /**
+    * Get the ordering priority of the previous collation element in the string.
+    * @param status the error code status.
+    * @return the previous element's ordering. otherwise returns NULLORDER if an 
+    *         error has occured or if the start of string has been reached
+    * @stable ICU 2.0
+    */
+    int32_t previous(UErrorCode& status);
 
-  /**
-  * Gets the tertiary order of a collation order.
-  * @param order the collation order
-  * @return the tertiary order of a collation order.
-  * @stable ICU 2.0
-  */
-  static int32_t tertiaryOrder(int32_t order);
+    /**
+    * Gets the primary order of a collation order.
+    * @param order the collation order
+    * @return the primary order of a collation order.
+    * @stable ICU 2.0
+    */
+    static int32_t primaryOrder(int32_t order);
 
-  /**
-  * Return the maximum length of any expansion sequences that end with the 
-  * specified comparison order.
-  * @param order a collation order returned by previous or next.
-  * @return maximum size of the expansion sequences ending with the collation 
-  *         element or 1 if collation element does not occur at the end of any 
-  *         expansion sequence
-  * @stable ICU 2.0
-  */
-  int32_t getMaxExpansion(int32_t order) const;
+    /**
+    * Gets the secondary order of a collation order.
+    * @param order the collation order
+    * @return the secondary order of a collation order.
+    * @stable ICU 2.0
+    */
+    static int32_t secondaryOrder(int32_t order);
 
-  /**
-  * Gets the comparison order in the desired strength. Ignore the other
-  * differences.
-  * @param order The order value
-  * @stable ICU 2.0
-  */
-  int32_t strengthOrder(int32_t order) const;
+    /**
+    * Gets the tertiary order of a collation order.
+    * @param order the collation order
+    * @return the tertiary order of a collation order.
+    * @stable ICU 2.0
+    */
+    static int32_t tertiaryOrder(int32_t order);
 
-  /**
-  * Sets the source string.
-  * @param str the source string.
-  * @param status the error code status.
-  * @stable ICU 2.0
-  */
-  void setText(const UnicodeString& str, UErrorCode& status);
+    /**
+    * Return the maximum length of any expansion sequences that end with the 
+    * specified comparison order.
+    * @param order a collation order returned by previous or next.
+    * @return maximum size of the expansion sequences ending with the collation 
+    *         element or 1 if collation element does not occur at the end of any 
+    *         expansion sequence
+    * @stable ICU 2.0
+    */
+    int32_t getMaxExpansion(int32_t order) const;
 
-  /**
-  * Sets the source string.
-  * @param str the source character iterator.
-  * @param status the error code status.
-  * @stable ICU 2.0
-  */
-  void setText(CharacterIterator& str, UErrorCode& status);
+    /**
+    * Gets the comparison order in the desired strength. Ignore the other
+    * differences.
+    * @param order The order value
+    * @stable ICU 2.0
+    */
+    int32_t strengthOrder(int32_t order) const;
 
-  /**
-  * Checks if a comparison order is ignorable.
-  * @param order the collation order.
-  * @return TRUE if a character is ignorable, FALSE otherwise.
-  * @stable ICU 2.0
-  */
-  static UBool isIgnorable(int32_t order);
+    /**
+    * Sets the source string.
+    * @param str the source string.
+    * @param status the error code status.
+    * @stable ICU 2.0
+    */
+    void setText(const UnicodeString& str, UErrorCode& status);
 
-  /**
-  * Gets the offset of the currently processed character in the source string.
-  * @return the offset of the character.
-  * @stable ICU 2.0
-  */
-  int32_t getOffset(void) const;
+    /**
+    * Sets the source string.
+    * @param str the source character iterator.
+    * @param status the error code status.
+    * @stable ICU 2.0
+    */
+    void setText(CharacterIterator& str, UErrorCode& status);
 
-  /**
-  * Sets the offset of the currently processed character in the source string.
-  * @param newOffset the new offset.
-  * @param status the error code status.
-  * @return the offset of the character.
-  * @stable ICU 2.0
-  */
-  void setOffset(int32_t newOffset, UErrorCode& status);
+    /**
+    * Checks if a comparison order is ignorable.
+    * @param order the collation order.
+    * @return TRUE if a character is ignorable, FALSE otherwise.
+    * @stable ICU 2.0
+    */
+    static UBool isIgnorable(int32_t order);
 
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   *
-   * @draft ICU 2.2
-   */
-  virtual inline UClassID getDynamicClassID() const;
+    /**
+    * Gets the offset of the currently processed character in the source string.
+    * @return the offset of the character.
+    * @stable ICU 2.0
+    */
+    int32_t getOffset(void) const;
 
-  /**
-   * ICU "poor man's RTTI", returns a UClassID for this class.
-   *
-   * @draft ICU 2.2
-   */
-  static inline UClassID getStaticClassID();
+    /**
+    * Sets the offset of the currently processed character in the source string.
+    * @param newOffset the new offset.
+    * @param status the error code status.
+    * @return the offset of the character.
+    * @stable ICU 2.0
+    */
+    void setOffset(int32_t newOffset, UErrorCode& status);
+
+    /**
+    * ICU "poor man's RTTI", returns a UClassID for the actual class.
+    *
+    * @draft ICU 2.2
+    */
+    virtual UClassID getDynamicClassID() const;
+
+    /**
+    * ICU "poor man's RTTI", returns a UClassID for this class.
+    *
+    * @draft ICU 2.2
+    */
+    static UClassID getStaticClassID();
 
 protected:
   
-  // CollationElementIterator protected constructors --------------------------
-  /**
-  * @stable ICU 2.0
-  */
-  friend class RuleBasedCollator;
+    // CollationElementIterator protected constructors --------------------------
+    /**
+    * @stable ICU 2.0
+    */
+    friend class RuleBasedCollator;
 
-  /**
-  * CollationElementIterator constructor. This takes the source string and the 
-  * collation object. The cursor will walk thru the source string based on the 
-  * predefined collation rules. If the source string is empty, NULLORDER will 
-  * be returned on the calls to next().
-  * @param sourceText    the source string.
-  * @param order         the collation object.
-  * @param status        the error code status.
-  * @stable ICU 2.0
-  */
-  CollationElementIterator(const UnicodeString& sourceText,
-                           const RuleBasedCollator* order, UErrorCode& status);
+    /**
+    * CollationElementIterator constructor. This takes the source string and the 
+    * collation object. The cursor will walk thru the source string based on the 
+    * predefined collation rules. If the source string is empty, NULLORDER will 
+    * be returned on the calls to next().
+    * @param sourceText    the source string.
+    * @param order         the collation object.
+    * @param status        the error code status.
+    * @stable ICU 2.0
+    */
+    CollationElementIterator(const UnicodeString& sourceText,
+        const RuleBasedCollator* order, UErrorCode& status);
 
-  /**
-  * CollationElementIterator constructor. This takes the source string and the 
-  * collation object.  The cursor will walk thru the source string based on the 
-  * predefined collation rules.  If the source string is empty, NULLORDER will 
-  * be returned on the calls to next().
-  * @param sourceText    the source string.
-  * @param order         the collation object.
-  * @param status        the error code status.
-  * @stable ICU 2.0
-  */
-  CollationElementIterator(const CharacterIterator& sourceText,
-                           const RuleBasedCollator* order, UErrorCode& status);
-  
-  // CollationElementIterator protected methods -------------------------------
+    /**
+    * CollationElementIterator constructor. This takes the source string and the 
+    * collation object.  The cursor will walk thru the source string based on the 
+    * predefined collation rules.  If the source string is empty, NULLORDER will 
+    * be returned on the calls to next().
+    * @param sourceText    the source string.
+    * @param order         the collation object.
+    * @param status        the error code status.
+    * @stable ICU 2.0
+    */
+    CollationElementIterator(const CharacterIterator& sourceText,
+        const RuleBasedCollator* order, UErrorCode& status);
 
-  /**
-  * Assignment operator
-  *
-  * @param other    the object to be copied
-  * @stable ICU 2.0
-  */
-  const CollationElementIterator&
-                              operator=(const CollationElementIterator& other);
+    // CollationElementIterator protected methods -------------------------------
+
+    /**
+    * Assignment operator
+    *
+    * @param other    the object to be copied
+    * @stable ICU 2.0
+    */
+    const CollationElementIterator&
+        operator=(const CollationElementIterator& other);
 
 private:
-  CollationElementIterator(); // default constructor not implemented
+    CollationElementIterator(); // default constructor not implemented
 
-  // CollationElementIterator private data members ----------------------------
+    // CollationElementIterator private data members ----------------------------
 
-  /**
-  * Data wrapper for collation elements
-  */
-  UCollationElements *m_data_;
+    /**
+    * Data wrapper for collation elements
+    */
+    UCollationElements *m_data_;
 
-  /**
-  * Indicates if m_data_ belongs to this object.
-  */
-  UBool isDataOwned_;
+    /**
+    * Indicates if m_data_ belongs to this object.
+    */
+    UBool isDataOwned_;
 
-  /**
-   * The address of this static class variable serves as this class's ID
-   * for ICU "poor man's RTTI".
-   */
-  static const char fgClassID;
 };
 
 // CollationElementIterator inline method defination --------------------------
-
-inline UClassID
-CollationElementIterator::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-CollationElementIterator::getDynamicClassID() const
-{ return CollationElementIterator::getStaticClassID(); }
 
 /**
 * Get the primary order of a collation order.
@@ -370,8 +357,8 @@ CollationElementIterator::getDynamicClassID() const
 */
 inline int32_t CollationElementIterator::primaryOrder(int32_t order)
 {
-  order &= RuleBasedCollator::PRIMARYORDERMASK;
-  return (order >> RuleBasedCollator::PRIMARYORDERSHIFT);
+    order &= RuleBasedCollator::PRIMARYORDERMASK;
+    return (order >> RuleBasedCollator::PRIMARYORDERSHIFT);
 }
 
 /**
@@ -381,8 +368,8 @@ inline int32_t CollationElementIterator::primaryOrder(int32_t order)
 */
 inline int32_t CollationElementIterator::secondaryOrder(int32_t order)
 {
-  order = order & RuleBasedCollator::SECONDARYORDERMASK;
-  return (order >> RuleBasedCollator::SECONDARYORDERSHIFT);
+    order = order & RuleBasedCollator::SECONDARYORDERMASK;
+    return (order >> RuleBasedCollator::SECONDARYORDERSHIFT);
 }
 
 /**
@@ -392,17 +379,17 @@ inline int32_t CollationElementIterator::secondaryOrder(int32_t order)
 */
 inline int32_t CollationElementIterator::tertiaryOrder(int32_t order)
 {
-  return (order &= RuleBasedCollator::TERTIARYORDERMASK);
+    return (order &= RuleBasedCollator::TERTIARYORDERMASK);
 }
 
 inline int32_t CollationElementIterator::getMaxExpansion(int32_t order) const
 {
-  return ucol_getMaxExpansion(m_data_, (uint32_t)order);
+    return ucol_getMaxExpansion(m_data_, (uint32_t)order);
 }
 
 inline UBool CollationElementIterator::isIgnorable(int32_t order)
 {
-  return (primaryOrder(order) == RuleBasedCollator::PRIMIGNORABLE);
+    return (primaryOrder(order) == RuleBasedCollator::PRIMIGNORABLE);
 }
 
 U_NAMESPACE_END

@@ -226,14 +226,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
     /**
@@ -249,64 +249,51 @@ private:
     * Creates a collation key with a string.
     */
 
-	/**
-	* If this CollationKey has capacity less than newSize,
-	* its internal capacity will be increased to newSize.
-	* @param newSize minimum size this CollationKey has to have
-	* @return this CollationKey
-	*/
+    /**
+    * If this CollationKey has capacity less than newSize,
+    * its internal capacity will be increased to newSize.
+    * @param newSize minimum size this CollationKey has to have
+    * @return this CollationKey
+    */
     CollationKey&           ensureCapacity(int32_t newSize);
-	/**
-	* Set the CollationKey to a "bogus" or invalid state
-	* @return this CollationKey
-	*/
+    /**
+    * Set the CollationKey to a "bogus" or invalid state
+    * @return this CollationKey
+    */
     CollationKey&           setToBogus(void);
-	/**
-	* Resets this CollationKey to an empty state
-	* @return this CollationKey
-	*/
+    /**
+    * Resets this CollationKey to an empty state
+    * @return this CollationKey
+    */
     CollationKey&           reset(void);
-	
-	/**
-	* Allow private access to RuleBasedCollator
-	*/
+    
+    /**
+    * Allow private access to RuleBasedCollator
+    */
     friend  class           RuleBasedCollator;
-	/**
-	* Bogus status
-	*/
+    /**
+    * Bogus status
+    */
     UBool                   fBogus;
-	/**
-	* Size of fBytes used to store the sortkey. i.e. up till the 
-	* null-termination.
-	*/
+    /**
+    * Size of fBytes used to store the sortkey. i.e. up till the 
+    * null-termination.
+    */
     int32_t                 fCount;
-	/**
-	* Full size of the fBytes
-	*/
+    /**
+    * Full size of the fBytes
+    */
     int32_t                 fCapacity;
-	/**
-	* Unique hash value of this CollationKey
-	*/
+    /**
+    * Unique hash value of this CollationKey
+    */
     int32_t                 fHashCode;
-	/**
-	* Array to store the sortkey
-	*/
+    /**
+    * Array to store the sortkey
+    */
     uint8_t*                fBytes;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID
-CollationKey::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-CollationKey::getDynamicClassID() const
-{ return CollationKey::getStaticClassID(); }
 
 inline UBool
 CollationKey::operator!=(const CollationKey& other) const

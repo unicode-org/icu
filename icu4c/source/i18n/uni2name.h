@@ -58,14 +58,14 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID();
 
  protected:
 
@@ -81,15 +81,10 @@ class U_I18N_API UnicodeNameTransliterator : public Transliterator {
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
 
- private:
+private:
 
     static const char _ID[];
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
 
 U_NAMESPACE_END

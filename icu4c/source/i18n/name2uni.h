@@ -24,14 +24,7 @@ U_NAMESPACE_BEGIN
  * @author Alan Liu
  */
 class U_I18N_API NameUnicodeTransliterator : public Transliterator {
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-
- public:
+public:
 
     /**
      * Constructs a transliterator.
@@ -65,14 +58,14 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID();
 
  protected:
 

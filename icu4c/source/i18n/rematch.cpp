@@ -2122,7 +2122,7 @@ breakFromLoop:
 
 
 
-const char RegexMatcher::fgClassID = 0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegexMatcher)
 
 U_NAMESPACE_END
 

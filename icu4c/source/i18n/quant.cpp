@@ -16,7 +16,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char Quantifier::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Quantifier)
 
 Quantifier::Quantifier(UnicodeFunctor *adoptedMatcher,
                        uint32_t _minCount, uint32_t _maxCount) {

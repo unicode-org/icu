@@ -20,7 +20,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char UppercaseTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UppercaseTransliterator)
 
 const char UppercaseTransliterator::_ID[] = "Any-Upper";
 

@@ -39,7 +39,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ChoiceFormat)
 
 // Special characters used by ChoiceFormat.  There are two characters
 // used interchangeably to indicate <=.  Either is parsed, but only
@@ -52,8 +52,8 @@ const char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
 #define MINUS        ((UChar)0x002D)   /*-*/
 #define INFINITY     ((UChar)0x221E)
 
-const UChar ChoiceFormat::fgPositiveInfinity[] = {INFINITY, 0};
-const UChar ChoiceFormat::fgNegativeInfinity[] = {MINUS, INFINITY, 0};
+static const UChar gPositiveInfinity[] = {INFINITY, 0};
+static const UChar gNegativeInfinity[] = {MINUS, INFINITY, 0};
 #define POSITIVE_INF_STRLEN 1
 #define NEGATIVE_INF_STRLEN 2
 
@@ -322,9 +322,9 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
 
             double limit;
             buf.trim();
-            if (!buf.compare(fgPositiveInfinity, POSITIVE_INF_STRLEN)) {
+            if (!buf.compare(gPositiveInfinity, POSITIVE_INF_STRLEN)) {
                 limit = uprv_getInfinity();
-            } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_INF_STRLEN)) {
+            } else if (!buf.compare(gNegativeInfinity, NEGATIVE_INF_STRLEN)) {
                 limit = -uprv_getInfinity();
             } else {
                 limit = stod(buf);

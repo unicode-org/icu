@@ -38,7 +38,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char CollationElementIterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationElementIterator)
 
 /* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;

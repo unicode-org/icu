@@ -21,7 +21,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char UnicodeNameTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeNameTransliterator)
 
 const char UnicodeNameTransliterator::_ID[] = "Any-Name";
 

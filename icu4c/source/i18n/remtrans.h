@@ -64,14 +64,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID();
 
  private:
 
@@ -79,12 +79,6 @@ public:
      * Factory method
      */
     static Transliterator* _create(const UnicodeString& ID, Token context);
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
 
 U_NAMESPACE_END

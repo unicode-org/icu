@@ -23,7 +23,7 @@
 
 U_NAMESPACE_BEGIN
 
-const char TitlecaseTransliterator::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TitlecaseTransliterator)
 
 /**
  * ID for this transliterator.

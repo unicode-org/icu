@@ -338,14 +338,14 @@ public:
      *
      * @draft ICU 2.4
      */
-    virtual inline UClassID getDynamicClassID() const; 
+    virtual UClassID getDynamicClassID() const; 
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.4
      */
-    static inline UClassID getStaticClassID(); 
+    static UClassID getStaticClassID(); 
 
 private:
     //
@@ -394,12 +394,6 @@ private:
     UnicodeSet     *fInitialChars;  
     UChar32         fInitialChar;
     Regex8BitSet   *fInitialChars8;
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 
     friend class RegexCompile;
     friend class RegexMatcher;
@@ -786,14 +780,14 @@ public:
     *
     * @draft ICU 2.2
     */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
 private:
     // Constructors and other object boilerplate are private.
@@ -840,21 +834,7 @@ private:
     UErrorCode          fDeferredStatus;   // Save error state if that cannot be immediately
                                            //   reported, or that permanently disables this matcher.
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char   fgClassID;
-
-
 };
-
-inline UClassID RegexPattern::getStaticClassID() { return (UClassID)&fgClassID; }
-inline UClassID RegexPattern::getDynamicClassID() const { return getStaticClassID(); }
-
-inline UClassID RegexMatcher::getStaticClassID() { return (UClassID)&fgClassID; }
-inline UClassID RegexMatcher::getDynamicClassID() const { return getStaticClassID(); }
-
 
 U_NAMESPACE_END
 #endif  // UCONFIG_NO_REGULAR_EXPRESSIONS

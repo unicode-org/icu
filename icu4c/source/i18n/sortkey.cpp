@@ -43,7 +43,7 @@ U_NAMESPACE_BEGIN
 #define kInvalidHashCode ((int32_t)0)
 #define kEmptyHashCode ((int32_t)1)
 
-const char CollationKey::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CollationKey)
 
 CollationKey::CollationKey()
     : UObject(), fBogus(FALSE), fCount(0), fCapacity(0),
