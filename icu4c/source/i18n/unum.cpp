@@ -550,12 +550,12 @@ unum_getSymbols(const UNumberFormat* fmt,
   dfs->getCurrencySymbol(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->currency, temp.getUChars(), len);
-  syms->currency[len > 0 ? len + 1 : 0] = 0x0000;
+  syms->currency[len > 0 ? len : 0] = 0x0000;
 
   dfs->getInternationalCurrencySymbol(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->intlCurrency, temp.getUChars(), len);
-  syms->intlCurrency[len > 0 ? len + 1 : 0] = 0x0000;
+  syms->intlCurrency[len > 0 ? len : 0] = 0x0000;
   
   syms->monetarySeparator    = dfs->getMonetaryDecimalSeparator();
   syms->exponential         = dfs->getExponentialSymbol();
@@ -565,12 +565,12 @@ unum_getSymbols(const UNumberFormat* fmt,
   dfs->getInfinity(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->infinity, temp.getUChars(), len);
-  syms->infinity[len > 0 ? len + 1 : 0] = 0x0000;
+  syms->infinity[len > 0 ? len : 0] = 0x0000;
 
   dfs->getNaN(temp);
   len = uprv_min(temp.length(), UNFSYMBOLSMAXSIZE);
   u_strncpy(syms->naN, temp.getUChars(), len);
-  syms->naN[len > 0 ? len + 1 : 0] = 0x0000;
+  syms->naN[len > 0 ? len : 0] = 0x0000;
 }
 
 U_CAPI void
