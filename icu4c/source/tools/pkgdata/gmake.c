@@ -15,6 +15,14 @@
 * Emit a GNU makefile
 */
 
+#include "unicode/utypes.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "filestrm.h"
+#include "toolutil.h"
+#include "unewdata.h"
+#include "uoptions.h"
+#include "pkgtypes.h"
 #include "makefile.h"
 #include <stdio.h>
 #include <string.h>
@@ -130,3 +138,84 @@ pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o)
   /* nothing */
 }
 
+
+void
+pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects, const char* objSuffix)
+{
+  const char *p, *baseName;
+  char *tmpPtr;
+  char tmp[1024];
+  char stanza[1024];
+  char cfile[1024];
+  CharList *oTail = NULL;
+  CharList *infiles;
+  CharList *parents = NULL, *commands = NULL;
+  int32_t genFileOffset = 0;  /* offset from beginning of .c and .o file name, use to chop off package name for AS/400 */
+
+  infiles = o->filePaths;
+
+#if defined (OS400)
+  if(infiles != NULL) {
+    baseName = findBasename(infiles->str);
+    p = uprv_strchr(baseName, '_');
+    if(p != NULL) { 
+      genFileOffset = (p-baseName)+1; /* "package_"  - name + underscore */
+    }
+  }
+#endif
+
+  for(;infiles;infiles = infiles->next) {
+    baseName = findBasename(infiles->str);
+    p = uprv_strrchr(baseName, '.');
+    if( (p == NULL) || (*p == '\0' ) ) {
+      continue;
+    }
+
+    uprv_strncpy(tmp, baseName, p-baseName);
+    p++;
+
+    uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
+    uprv_strcat(tmp, p);
+    uprv_strcat(tmp, objSuffix );
+
+    /* iSeries cannot have '-' in the .o objects. */
+    for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
+      if ( *tmpPtr == '-' ) {
+        *tmpPtr = '_';
+      }
+    }
+
+    *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp + genFileOffset)); /* Offset for AS/400 */
+
+    /* write source list */
+    strcpy(cfile,tmp);
+    strcpy(cfile+strlen(cfile)-strlen(objSuffix), ".c" ); /* replace .o with .c */
+
+    /* Make up parents.. */
+    parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
+
+    /* make up commands.. */
+    sprintf(stanza, "@$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
+    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+    if(genFileOffset > 0) {    /* for AS/400 */
+      sprintf(stanza, "@mv $(TEMP_PATH)%s $(TEMP_PATH)%s", cfile, cfile+genFileOffset);
+      commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+    }
+
+    sprintf(stanza, "@$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile+genFileOffset); /* for AS/400 */
+    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+    sprintf(stanza, "@$(RMV) $(TEMP_DIR)/%s", cfile+genFileOffset);
+    commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
+
+    sprintf(stanza, "$(TEMP_PATH)%s", tmp+genFileOffset); /* for AS/400 */
+    pkg_mak_writeStanza(makefile, o, stanza, parents, commands);
+
+    pkg_deleteList(parents);
+    pkg_deleteList(commands);
+    parents = NULL;
+    commands = NULL;
+  }
+
+}
