@@ -850,7 +850,10 @@ struct {
     /* first set up constants for implicit calculation */
     uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN);
     /* do the closure */
-    uprv_uca_canonicalClosure(t, status);
+    int32_t noOfClosures = uprv_uca_canonicalClosure(t, status);
+    if(noOfClosures != 0) {
+      fprintf(stderr, "Warning: %i canonical closures occured!\n", noOfClosures);
+    }
 
     /* test */
     UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
