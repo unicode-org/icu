@@ -59,10 +59,10 @@
  * See unicode/uset.h
  *
  * @see ucnv_getUnicodeSet
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 struct USet;
-/** @draft ICU 2.6 */
+/** @stable ICU 2.6 */
 typedef struct USet USet;
 
 #endif
@@ -777,21 +777,19 @@ ucnv_getStarters(const UConverter* converter,
                  UBool starters[256],
                  UErrorCode* err);
 
-#ifndef U_HIDE_DRAFT_API
 
 /**
  * Selectors for Unicode sets that can be returned by ucnv_getUnicodeSet().
  * @see ucnv_getUnicodeSet
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef enum UConverterUnicodeSet {
-    /** Select the set of roundtrippable Unicode code points. @draft ICU 2.6 */
+    /** Select the set of roundtrippable Unicode code points. @stable ICU 2.6 */
     UCNV_ROUNDTRIP_SET,
-    /** Number of UConverterUnicodeSet selectors. @draft ICU 2.6 */
+    /** Number of UConverterUnicodeSet selectors. @stable ICU 2.6 */
     UCNV_SET_COUNT
 } UConverterUnicodeSet;
 
-#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Returns the set of Unicode code points that can be converted by an ICU converter.
@@ -825,9 +823,9 @@ typedef enum UConverterUnicodeSet {
  * @see UConverterUnicodeSet
  * @see uset_open
  * @see uset_close
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
                    USet *setFillIn,
                    UConverterUnicodeSet whichSet,
@@ -1315,9 +1313,9 @@ ucnv_getNextUChar(UConverter * converter,
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars
  * @see ucnv_toUChars
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
                char **target, const char *targetLimit,
                const char **source, const char *sourceLimit,
@@ -1433,9 +1431,9 @@ ucnv_convert(const char *toConverterName,
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars
  * @see ucnv_toUChars
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucnv_toAlgorithmic(UConverterType algorithmicType,
                    UConverter *cnv,
                    char *target, int32_t targetCapacity,
@@ -1485,9 +1483,9 @@ ucnv_toAlgorithmic(UConverterType algorithmicType,
  * @see ucnv_toUnicode
  * @see ucnv_fromUChars
  * @see ucnv_toUChars
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ucnv_fromAlgorithmic(UConverter *cnv,
                      UConverterType algorithmicType,
                      char *target, int32_t targetCapacity,

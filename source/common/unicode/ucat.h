@@ -66,7 +66,7 @@ U_CDECL_BEGIN
 /**
  * An ICU message catalog descriptor, analogous to nl_catd.
  * 
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef UResourceBundle* u_nl_catd;
 
@@ -99,9 +99,9 @@ typedef UResourceBundle* u_nl_catd;
  * catalog. If the ec parameter indicates failure, then NULL will be
  * returned.
  * 
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT u_nl_catd U_EXPORT2
+U_STABLE u_nl_catd U_EXPORT2
 u_catopen(const char* name, const char* locale, UErrorCode* ec);
 
 /**
@@ -110,9 +110,9 @@ u_catopen(const char* name, const char* locale, UErrorCode* ec);
  * @param catd a message catalog descriptor to be closed. May be NULL,
  * in which case no action is taken.
  * 
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_catclose(u_nl_catd catd);
 
 /**
@@ -145,9 +145,9 @@ u_catclose(u_nl_catd catd);
  * which ec indicates a failing error code upon entry to this
  * function.
  * 
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT const UChar* U_EXPORT2
+U_STABLE const UChar* U_EXPORT2
 u_catgets(u_nl_catd catd, int32_t set_num, int32_t msg_num,
           const UChar* s,
           int32_t* len, UErrorCode* ec);

@@ -95,7 +95,7 @@
  * It implies turning off several other services as well, for example
  * collation and IDNA.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #ifndef UCONFIG_NO_NORMALIZATION
 #   define UCONFIG_NO_NORMALIZATION 0
@@ -125,7 +125,7 @@
  * \def UCONFIG_NO_IDNA
  * This switch turns off IDNA.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 #ifndef UCONFIG_NO_IDNA
 #   define UCONFIG_NO_IDNA 0

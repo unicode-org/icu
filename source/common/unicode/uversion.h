@@ -59,7 +59,7 @@
 
 /** The current ICU minor version as an integer. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.6
+ *  @stable ICU 2.6
  */
 #define U_ICU_VERSION_MINOR_NUM 2
 
@@ -71,7 +71,7 @@
 
 /** Glued version suffix for renamers 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.6
+ *  @stable ICU 2.6
  */
 #define U_ICU_VERSION_SUFFIX _3_2
 
@@ -84,7 +84,7 @@
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.6
+ *  @stable ICU 2.6
  */
 #define U_ICU_VERSION_SHORT "32"
 
