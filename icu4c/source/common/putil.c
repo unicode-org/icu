@@ -72,8 +72,13 @@
 
 /* include system headers */
 #ifdef WIN32
-#   include <wtypes.h>
-#   include <winnls.h>
+#   define WIN32_LEAN_AND_MEAN
+#   define NOGDI
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
+#   include <windows.h>
 #   include "locmap.h"
 #elif defined(OS2)
 #   define INCL_DOSMISC
@@ -1295,7 +1300,6 @@ u_getDataDirectory(void) {
            data in the hardcoded path */
         if(path==NULL || *path==0) {
             char fileBuffer[1024];      /* XXX sloppy, should be FILE_MAX. */
-            size_t length;
             FileStream *f;
 
             /* ICU_DATA_DIR may be set as a compile option */
@@ -1322,7 +1326,7 @@ u_getDataDirectory(void) {
                 uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING LIB_PREFIX U_ICUDATA_NAME UDATA_SO_SUFFIX);
 #           elif defined(UDATA_MAP)
                 uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING U_ICUDATA_NAME "." DATA_TYPE); /* XXX Sloppy, won't be good enough on OS390 probably. */
-#	    elif defined(UDATA_FILES)
+#           elif defined(UDATA_FILES)
                 uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING "uprops.dat");
 #           endif
 
