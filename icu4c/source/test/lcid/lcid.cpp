@@ -27,8 +27,10 @@ testLCID(const char *localeName,
     uint32_t lcid;
     uint32_t expectedLCID;
     char lcidStringC[1024];
-    ResourceBundle posixLocale((char *)0, Locale(posixName), status);
-
+    char cLocaleName[256] =  {'\0'};
+    
+    u_UCharsToChars(posixName.getUChars(),cLocaleName,posixName.length());
+    ResourceBundle posixLocale((char *)0, Locale(cLocaleName), status);
     if(status != U_ZERO_ERROR) {
         if(U_SUCCESS(status)) {
             printf("ERROR: Locale %-5s not installed, and it should be!\n", localeName);
