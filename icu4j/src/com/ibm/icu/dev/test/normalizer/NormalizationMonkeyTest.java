@@ -26,10 +26,6 @@ public class NormalizationMonkeyTest extends TestFmwk {
     UnicodeNormalizer unicode_NFKC;
     
     public NormalizationMonkeyTest() {
-        unicode_NFD = new UnicodeNormalizer(UnicodeNormalizer.D, true);
-        unicode_NFC = new UnicodeNormalizer(UnicodeNormalizer.C, true);
-        unicode_NFKD = new UnicodeNormalizer(UnicodeNormalizer.KD, true);
-        unicode_NFKC = new UnicodeNormalizer(UnicodeNormalizer.KC, true);
     }
     
     public static void main(String[] args) throws Exception {
@@ -37,6 +33,22 @@ public class NormalizationMonkeyTest extends TestFmwk {
     }
     
     public void TestNormalize() {
+        if (unicode_NFD == null) {
+            try {
+                unicode_NFD = new UnicodeNormalizer(UnicodeNormalizer.D, true);
+                unicode_NFC = new UnicodeNormalizer(UnicodeNormalizer.C, true);
+                unicode_NFKD = new UnicodeNormalizer(UnicodeNormalizer.KD, true);
+                unicode_NFKC = new UnicodeNormalizer(UnicodeNormalizer.KC, true);
+            }
+            catch (Exception e) {
+                String msg = "Normalization tests could not be run: " + e.getMessage();
+                if (isModularBuild()) {
+                    warnln(msg);
+                } else {
+                    errln(msg);
+                }
+            }
+        }
         int i = 0;
         while (i < loopCount) {
             String source = getTestSource();
