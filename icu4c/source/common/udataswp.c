@@ -143,6 +143,26 @@ uprv_readDirectUInt32(uint32_t x) {
     return x;
 }
 
+static void U_CALLCONV
+uprv_writeSwapUInt16(uint16_t *p, uint16_t x) {
+    *p=(uint16_t)((x<<8)|(x>>8));
+}
+
+static void U_CALLCONV
+uprv_writeDirectUInt16(uint16_t *p, uint16_t x) {
+    *p=x;
+}
+
+static void U_CALLCONV
+uprv_writeSwapUInt32(uint32_t *p, uint32_t x) {
+    *p=(uint32_t)((x<<24)|((x<<8)&0xff0000)|((x>>8)&0xff00)|(x>>24));
+}
+
+static void U_CALLCONV
+uprv_writeDirectUInt32(uint32_t *p, uint32_t x) {
+    *p=x;
+}
+
 U_CAPI int16_t U_EXPORT2
 udata_readInt16(const UDataSwapper *ds, int16_t x) {
     return (int16_t)ds->readUInt16((uint16_t)x);
@@ -151,6 +171,49 @@ udata_readInt16(const UDataSwapper *ds, int16_t x) {
 U_CAPI int32_t U_EXPORT2
 udata_readInt32(const UDataSwapper *ds, int32_t x) {
     return (int32_t)ds->readUInt32((uint32_t)x);
+}
+
+/**
+ * Swap a block of invariant, NUL-terminated strings, but not padding
+ * bytes after the last string.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+udata_swapInvStringBlock(const UDataSwapper *ds,
+                         const void *inData, int32_t length, void *outData,
+                         UErrorCode *pErrorCode) {
+    const char *inChars;
+    int32_t stringsLength;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* reduce the strings length to not include bytes after the last NUL */
+    inChars=(const char *)inData;
+    stringsLength=length;
+    while(stringsLength>0 && inChars[stringsLength-1]!=0) {
+        --stringsLength;
+    }
+
+    /* swap up to the last NUL */
+    ds->swapInvChars(ds, inData, stringsLength, outData, pErrorCode);
+
+    /* copy the bytes after the last NUL */
+    if(inData!=outData && length>stringsLength) {
+        uprv_memcpy((char *)outData+stringsLength, inChars+stringsLength, length-stringsLength);
+    }
+
+    /* return the length including padding bytes */
+    if(U_SUCCESS(*pErrorCode)) {
+        return length;
+    } else {
+        return 0;
+    }
 }
 
 U_CAPI void U_EXPORT2
@@ -275,6 +338,9 @@ udata_openSwapper(UBool inIsBigEndian, uint8_t inCharset,
 
     swapper->readUInt16= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt16 : uprv_readSwapUInt16;
     swapper->readUInt32= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt32 : uprv_readSwapUInt32;
+
+    swapper->writeUInt16= outIsBigEndian==U_IS_BIG_ENDIAN ? uprv_writeDirectUInt16 : uprv_writeSwapUInt16;
+    swapper->writeUInt32= outIsBigEndian==U_IS_BIG_ENDIAN ? uprv_writeDirectUInt32 : uprv_writeSwapUInt32;
 
     swapper->compareInvChars= outCharset==U_ASCII_FAMILY ? uprv_compareInvAscii : uprv_compareInvEbcdic;
 
