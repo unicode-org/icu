@@ -127,18 +127,19 @@ public class XMLValidator {
 
         // Local class: cheap non-printing ErrorHandler
         // This is used to suppress validation warnings
+        final String filename2 = filename;
         ErrorHandler nullHandler = new ErrorHandler() {
             public void warning(SAXParseException e) throws SAXException {
-                System.err.println(filename + ": Warning: " + e.getMessage());
+                System.err.println(filename2 + ": Warning: " + e.getMessage());
 
             }
             public void error(SAXParseException e) throws SAXException {
                 int col = e.getColumnNumber();
-                System.err.println(filename + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + " Element " + e.getPublicId()
+                System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + ": ERROR: Element " + e.getPublicId()
                                    + " is not valid because " + e.getMessage());
             }
             public void fatalError(SAXParseException e) throws SAXException {
-                System.err.println(filename + ": error");
+                System.err.println(filename2 + ": ERROR ");
                 throw e;
             }
         };
