@@ -25,6 +25,8 @@
 #include "unicode/rep.h"
 #include "unicode/uchar.h"
 
+struct UConverter;          // unicode/ucnv.h
+
 class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
@@ -1245,6 +1247,8 @@ public:
    * Copy the characters in the range 
    * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
    * in a specified codepage.
+   * The output string is NUL-terminated.
+   *
    * @param start offset of first character which will be copied
    * @param startLength the number of characters to extract
    * @param target the target buffer for extraction
@@ -1256,7 +1260,7 @@ public:
    * If <TT>target</TT> is NULL, then the number of bytes required for
    * <TT>target</TT> is returned. It is assumed that the target is big enough
    * to fit all of the characters.
-   * @return the number of characters written to <TT>target</TT>
+   * @return the output string length, not including the terminating NUL
    * @stable
    */
   inline int32_t extract(UTextOffset start,
@@ -1268,6 +1272,12 @@ public:
    * Copy the characters in the range 
    * [<tt>start</TT>, <tt>start + length</TT>) into an array of characters
    * in a specified codepage.
+   * This function does not write any more than <code>targetLength</code>
+   * characters but returns the length of the entire output string
+   * so that one can allocate a larger buffer and call the function again
+   * if necessary.
+   * The output string is NUL-terminated if possible.
+   *
    * @param start offset of first character which will be copied
    * @param startLength the number of characters to extract
    * @param target the target buffer for extraction
@@ -1279,7 +1289,7 @@ public:
    * subset ("invariant characters") of the platform encoding. See utypes.h.
    * If <TT>target</TT> is NULL, then the number of bytes required for
    * <TT>target</TT> is returned.
-   * @return the number of characters written to <TT>target</TT>
+   * @return the output string length, not including the terminating NUL
    * @stable
    */
   int32_t extract(UTextOffset start,
@@ -1287,6 +1297,26 @@ public:
            char *target,
            uint32_t targetLength,
            const char *codepage = 0) const;
+
+  /**
+   * Convert the UnicodeString into a codepage string using an existing UConverter.
+   * The output string is NUL-terminated if possible.
+   *
+   * This function avoids the overhead of opening and closing a converter if
+   * multiple strings are extracted.
+   *
+   * @param dest destination string buffer, can be NULL if destCapacity==0
+   * @param destCapacity the number of chars available at dest
+   * @param cnv the converter object to be used (ucnv_resetFromUnicode() will be called),
+   *        or NULL for the default converter
+   * @param errorCode normal ICU error code
+   * @return the length of the output string, not counting the terminating NUL;
+   *         if the length is greater than destCapacity, then the string will not fit
+   *         and a buffer of the indicated length would need to be passed in
+   */
+  int32_t extract(char *dest, int32_t destCapacity,
+                  UConverter *cnv,
+                  UErrorCode &errorCode) const;
 
   /* Length operations */
 
@@ -2161,6 +2191,32 @@ public:
         const char *codepage = 0);
 
   /**
+   * char * / UConverter constructor.
+   * This constructor uses an existing UConverter object to
+   * convert the codepage string to Unicode and construct a UnicodeString
+   * from that.
+   *
+   * The converter is reset at first.
+   * If the error code indicates a failure before this constructor is called,
+   * or if an error occurs during conversion or construction,
+   * then the string will be bogus.
+   *
+   * This function avoids the overhead of opening and closing a converter if
+   * multiple strings are constructed.
+   *
+   * @param src input codepage string
+   * @param srcLength length of the input string, can be -1 for NUL-terminated strings
+   * @param cnv converter object (ucnv_resetToUnicode() will be called),
+   *        can be NULL for the default converter
+   * @param errorCode normal ICU error code
+   */
+  UnicodeString(
+        const char *src, int32_t srcLength,
+        UConverter *cnv,
+        UErrorCode &errorCode);
+
+
+  /**
    * Copy constructor.
    * @param that The UnicodeString object to copy.
    * @stable
@@ -2384,6 +2440,12 @@ private:
   inline void pinIndices(UTextOffset& start,
                          int32_t& length) const;
 
+  /* Internal extract() using UConverter. */
+  int32_t doExtract(UTextOffset start, int32_t length,
+                    char *dest, int32_t destCapacity,
+                    UConverter *cnv,
+                    UErrorCode &errorCode) const;
+
   /*
    * Real constructor for converting from codepage data.
    * It assumes that it is called with !fRefCounted.
@@ -2398,6 +2460,15 @@ private:
                         int32_t dataLength,
                         const char *codepage);
 
+  /*
+   * Worker function for creating a UnicodeString from
+   * a codepage string using a UConverter.
+   */
+  void
+  doCodepageCreate(const char *codepageData,
+                   int32_t dataLength,
+                   UConverter *converter,
+                   UErrorCode &status);
   /*
    * This function is called when write access to the array
    * is necessary.
@@ -3099,8 +3170,11 @@ UnicodeString::extract(UTextOffset start,
                int32_t length,
                char *dst,
                const char *codepage) const
-// This dstSize value will be checked explicitly
-{return extract(start, length, dst, 0xffffffff, codepage);}
+
+{
+  // This dstSize value will be checked explicitly
+  return extract(start, length, dst, dst!=0 ? 0xffffffff : 0, codepage);
+}
 
 inline void  
 UnicodeString::extractBetween(UTextOffset start, 
