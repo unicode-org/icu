@@ -23,34 +23,6 @@
 *   On Windows: cl ucmstrip.c
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#error File moved to charset/source/ucmtools/ on 2002-nov-06
 
-extern int
-main(int argc, const char *argv[]) {
-    char line[200];
-    char *s, *end;
-    unsigned long b, i, mappingsTop=0;
-
-    /* parse the input file from stdin */
-    /* skip lines until and including the one with "created on" */
-    for(;;) {
-        if(gets(line)==NULL) {
-            return 0;
-        }
-        if(0==strncmp(line, "# File created on ", 18)) {
-            break;
-        }
-    }
-
-    /* write all lines except with <uconv_class> and <icu:state> and <code_set_name> */
-    for(;;) {
-        if(gets(line)==NULL) {
-            return 0;
-        }
-        if(0!=strncmp(line, "<uconv_class>", 13) && 0!=strncmp(line, "<icu:state>", 11) && 0!=strncmp(line, "<code_set_name>", 14)) {
-            puts(line);
-        }
-    }
-}
+/* see http://oss.software.ibm.com/cvs/icu/charset/source/ucmtools/ */
