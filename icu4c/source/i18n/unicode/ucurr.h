@@ -3,9 +3,6 @@
 * Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.13 $
-**********************************************************************
 */
 #ifndef _UCURR_H_
 #define _UCURR_H_

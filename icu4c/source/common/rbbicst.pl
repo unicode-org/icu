@@ -203,12 +203,6 @@ if ($javaOutput) {
     print " * Copyright (C) 2003,\n";
     print " * International Business Machines Corporation and others. All Rights Reserved.\n";
     print " *******************************************************************************\n";
-    print " *\n";
-    print " * \$Source: /xsrl/Nsvn/icu/icu/source/common/rbbicst.pl,v $\n";
-    print " * \$Date: 2003/12/18 23:13:17 $\n";
-    print " * \$Revision: 1.9 $\n";
-    print " *\n";
-    print " *******************************************************************************\n";
     print " */\n";
     print " \n";
     print "package com.ibm.icu.text;\n";
