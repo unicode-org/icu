@@ -21,6 +21,11 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * A UnicodeSet.  Use the uset_* API to manipulate.  Create with
+ * uset_open*, and destroy with uset_close.
+ * @draft ICU 2.4
+ */
 struct USet;
 typedef struct USet USet;
 
@@ -31,6 +36,7 @@ enum {
 /**
  * A serialized form of a Unicode set.  Limited manipulations are
  * possible directly on a serialized set.  See below.
+ * @draft ICU 2.4
  */
 struct USerializedSet {
     const uint16_t *array;
@@ -51,6 +57,7 @@ typedef struct USerializedSet USerializedSet;
  * @param end last character of the range, inclusive
  * @return a newly created USet.  The caller must call uset_close() on
  * it when done.
+ * @draft ICU 2.4
  */
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end);
@@ -62,6 +69,7 @@ uset_open(UChar32 start, UChar32 end);
  * @param patternLength the length of the pattern, or -1 if null
  * terminated
  * @param ec the error code
+ * @draft ICU 2.4
  */
 U_CAPI USet* U_EXPORT2
 uset_openPattern(const UChar* pattern, int32_t patternLength,
@@ -71,6 +79,7 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
  * Disposes of the storage used by a USet object.  This function should
  * be called exactly once for objects returned by uset_open().
  * @param set the object to dispose of
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_close(USet* set);
@@ -88,6 +97,7 @@ uset_close(USet* set);
  * U+000A, U+0020..U+007E.
  * @param ec error code.
  * @return length of string, possibly larger than resultCapacity
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_toPattern(const USet* set,
@@ -100,6 +110,7 @@ uset_toPattern(const USet* set,
  * uset_contains(set, c) will return TRUE.
  * @param set the object to which to add the character
  * @param c the character to add
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_add(USet* set, UChar32 c);
@@ -121,6 +132,7 @@ uset_addRange(USet* set, UChar32 start, UChar32 end);
  * @param set the object to which to add the character
  * @param str the string to add
  * @param strLen the length of the string or -1 if null terminated.
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_addString(USet* set, const UChar* str, int32_t strLen);
@@ -130,6 +142,7 @@ uset_addString(USet* set, const UChar* str, int32_t strLen);
  * uset_contains(set, c) will return FALSE.
  * @param set the object from which to remove the character
  * @param c the character to remove
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_remove(USet* set, UChar32 c);
@@ -151,6 +164,7 @@ uset_removeRange(USet* set, UChar32 start, UChar32 end);
  * @param set the object to which to add the character
  * @param str the string to remove
  * @param strLen the length of the string or -1 if null terminated.
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_removeString(USet* set, const UChar* str, int32_t strLen);
@@ -160,6 +174,7 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen);
  * its value is its complement.  This operation does not affect
  * the multicharacter strings, if any.
  * @param set the set
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_complement(USet* set);
@@ -168,6 +183,7 @@ uset_complement(USet* set);
  * Removes all of the elements from this set.  This set will be
  * empty after this call returns.
  * @param set the set
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_clear(USet* set);
@@ -177,6 +193,7 @@ uset_clear(USet* set);
  * strings.
  * @param set the set
  * @return true if set is empty
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_isEmpty(const USet* set);
@@ -185,6 +202,7 @@ uset_isEmpty(const USet* set);
  * Returns TRUE if the given USet contains the given character.
  * @param set the set
  * @return true if set contains c
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_contains(const USet* set, UChar32 c);
@@ -206,6 +224,7 @@ uset_containsRange(const USet* set, UChar32 start, UChar32 end);
  * @param str the string
  * @param strLen the length of the string or -1 if null terminated.
  * @return true if set contains str
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_containsString(const USet* set, const UChar* str, int32_t strLen);
@@ -216,6 +235,7 @@ uset_containsString(const USet* set, const UChar* str, int32_t strLen);
  * @param set the set
  * @return a non-negative integer counting the characters and strings
  * contained in set
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_size(const USet* set);
@@ -226,6 +246,7 @@ uset_size(const USet* set);
  * @param set the set
  * @return a non-negative integer counting the character ranges
  * and/or strings contained in set
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_getItemCount(const USet* set);
@@ -246,6 +267,7 @@ uset_getItemCount(const USet* set);
  * @return the length of the string (>= 2), or 0 if the item is a
  * range, in which case it is the range *start..*end, or -1 if
  * itemIndex is out of range
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_getItem(const USet* set, int32_t itemIndex,
@@ -304,6 +326,7 @@ uset_getItem(const USet* set, int32_t itemIndex,
  * @return the total length of the serialized format, including
  * the header, that is, n+2*m+(m!=0?2:1), or 0 on error other
  * than U_BUFFER_OVERFLOW_ERROR.
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_serialize(const USet* set, uint16_t* dest, int32_t destCapacity, UErrorCode* pErrorCode);
@@ -314,6 +337,7 @@ uset_serialize(const USet* set, uint16_t* dest, int32_t destCapacity, UErrorCode
  * @param src pointer to start of array
  * @param srcLength length of array
  * @return true if the given array is valid, otherwise false
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcLength);
@@ -321,6 +345,7 @@ uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcL
 /**
  * Set the USerializedSet to contain the given character (and nothing
  * else).
+ * @draft ICU 2.4
  */
 U_CAPI void U_EXPORT2
 uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c);
@@ -330,6 +355,7 @@ uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c);
  * character.
  * @param set the serialized set
  * @return true if set contains c
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_serializedContains(const USerializedSet* set, UChar32 c);
@@ -341,6 +367,7 @@ uset_serializedContains(const USerializedSet* set, UChar32 c);
  * @param set the serialized set
  * @return a non-negative integer counting the character ranges
  * contained in set
+ * @draft ICU 2.4
  */
 U_CAPI int32_t U_EXPORT2
 uset_getSerializedRangeCount(const USerializedSet* set);
@@ -356,6 +383,7 @@ uset_getSerializedRangeCount(const USerializedSet* set);
  * @param pEnd pointer to variable to receive last character in range,
  * inclusive
  * @return true if rangeIndex is valid, otherwise false
+ * @draft ICU 2.4
  */
 U_CAPI UBool U_EXPORT2
 uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
