@@ -37,9 +37,10 @@
 
 #include "unicode/uwmsg.h"
 
-#if defined(WIN32) || defined(U_CYGWIN)
+#if (defined(WIN32) || defined(U_CYGWIN)) && !defined(__STRICT_ANSI__)
 #include <io.h>
 #include <fcntl.h>
+#define USE_FILENO_BINARY_MODE 1
 #endif
 
 #ifdef UCONVMSG_LINK
@@ -638,7 +639,7 @@ ConvertFile::convertFile(const char *pname,
     } else {
         infilestr = "-";
         infile = stdin;
-#if defined(WIN32) || defined(U_CYGWIN)
+#ifdef USE_FILENO_BINARY_MODE
         if (setmode(fileno(stdin), O_BINARY) == -1) {
             initMsg(pname);
             u_wmsg(stderr, "cantSetInBinMode");
@@ -989,7 +990,7 @@ ConvertFile::convertFile(const char *pname,
                         errtag = "problemCvtFromUOut";
                     }
 
-                    length = (int8_t)sprintf(pos, "%u", ferroffset);
+                    length = (int8_t)sprintf(pos, "%u", (int)ferroffset);
 
                     // output the code points that caused the error
                     UnicodeString str;
@@ -1339,7 +1340,7 @@ main(int argc, char **argv)
     } else {
         outfilestr = "-";
         outfile = stdout;
-#if defined(WIN32) || defined(U_CYGWIN)
+#ifdef USE_FILENO_BINARY_MODE
         if (setmode(fileno(outfile), O_BINARY) == -1) {
             u_wmsg(stderr, "cantSetOutBinMode");
             exit(-1);
