@@ -434,7 +434,7 @@ ja {
             "&\u309A = \u309A"
 
             // Equaling normal and halfwidth/fullwidth characters
-            "&' '=\u3000" // IDEOGRAPHIC SPACE
+            "&' '='\u3000'" // IDEOGRAPHIC SPACE
             "&'\u0020' = '\uFFE3'" // SPACE
             "&'\u0021' = '\uFF01'" // EXCLAMATION MARK
             "&'\u0022' = '\uFF02'" // QUOTATION MARK
