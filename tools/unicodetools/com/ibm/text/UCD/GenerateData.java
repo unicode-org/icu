@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.29 $
+* $Date: 2003/08/20 03:46:41 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -362,17 +362,17 @@ public class GenerateData implements UCD_Types {
             } else if (propAbb.equals("blk")) {
                 type = CATALOG_PROP;
             } else if (propAbb.equals("na")) {
-                type = DESCRIPTIVE_PROP;
+                type = MISC_PROP;
             } else if (propAbb.equals("na1")) {
-                type = DESCRIPTIVE_PROP;
+                type = MISC_PROP;
             } else if (propAbb.equals("isc")) {
-                type = DESCRIPTIVE_PROP;
+                type = MISC_PROP;
             }
             addLine(sorted, UCD_Names.PROP_TYPE_NAMES[type][1], propAbb, prop);
             checkDuplicate(duplicates, accumulation, propAbb, prop);
             if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
         }
-        addLine(sorted, UCD_Names.PROP_TYPE_NAMES[CATALOG_PROP][1], "URS", "Unicode_Radical_Stroke");
+        addLine(sorted, UCD_Names.PROP_TYPE_NAMES[MISC_PROP][1], "URS", "Unicode_Radical_Stroke");
         // TODO: merge above
  
         for (int k = 0; k < UCD_Names.SUPER_CATEGORIES.length; ++k) {
@@ -529,7 +529,11 @@ public class GenerateData implements UCD_Types {
         Utility.appendFile("PropertyAliasHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
         log.println();
-        Utility.print(log, sorted, "\r\n", new MyBreaker(true));
+        int count = Utility.print(log, sorted, "\r\n", new MyBreaker(true));
+        log.println();
+        log.println();
+        log.println(HORIZONTAL_LINE);
+        log.println("# Total: \t" + count);
         log.println();
         log.close();
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
@@ -588,6 +592,7 @@ public class GenerateData implements UCD_Types {
     
     static class MyBreaker implements Utility.Breaker {
         boolean status;
+        int count;
         
         public MyBreaker(boolean status) {
             this.status = status;

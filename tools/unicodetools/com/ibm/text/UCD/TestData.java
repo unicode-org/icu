@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2003/07/07 15:58:57 $
-* $Revision: 1.11 $
+* $Date: 2003/08/20 03:46:42 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -28,8 +28,31 @@ import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
 	public static void main (String[] args) throws IOException {
-        
         Default.setUCD();
+        
+        if (true) return;
+        
+        UnicodeSet sterm = UnifiedProperty.getSet("Sentence_Terminal", Default.ucd);
+        UnicodeSet term = UnifiedProperty.getSet("Terminal_Punctuation", Default.ucd);
+        UnicodeSet po = new UnicodeSet("[:po:]");
+        UnicodeSet empty = new UnicodeSet();
+        
+        Utility.showSetDifferences(
+            "Sentence_Terminal", sterm, 
+            "Empty", empty, 
+            true, Default.ucd);
+
+        Utility.showSetDifferences(
+            "Sentence_Terminal", sterm, 
+            "Terminal_Punctuation", term, 
+            true, Default.ucd);
+
+        Utility.showSetDifferences(
+            "Terminal_Punctuation", term, 
+            "Punctuation_Other", po, 
+            true, Default.ucd);
+        
+        if (true) return;
         
         UnicodeSet us = getSetForName("LATIN LETTER.*P");
         Utility.showSetNames("",us,false,Default.ucd);
@@ -84,6 +107,8 @@ public class TestData implements UCD_Types {
 			log.close();
 		}
 	}
+    
+
     
     static private UnicodeSet getSetForName(String regexPattern) {
         UnicodeSet result = new UnicodeSet();
