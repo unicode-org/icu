@@ -1127,6 +1127,9 @@ static void TestGetSetAttribute(void)
     UChar           pattern[32];
     UChar           text[128];
     UStringSearch  *strsrch;
+
+    memset(pattern, 0, 32*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
           
     open();
     if (usearch_getAttribute(NULL, USEARCH_OVERLAP) != USEARCH_DEFAULT ||
@@ -1441,6 +1444,9 @@ static void TestContraction(void)
     UErrorCode     status = U_ZERO_ERROR;
     int            count = 0;
     UStringSearch *strsrch;
+    memset(rules, 0, 128*sizeof(UChar));
+    memset(pattern, 0, 128*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
 
     u_unescape(CONTRACTIONRULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
@@ -1477,6 +1483,10 @@ static void TestIgnorable(void)
     UErrorCode     status = U_ZERO_ERROR;
     UStringSearch *strsrch;
     uint32_t       count = 0;
+
+    memset(rules, 0, 128*sizeof(UChar));
+    memset(pattern, 0, 128*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
 
     u_unescape(IGNORABLERULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
@@ -1920,6 +1930,9 @@ static void TestGetSetOffsetCanonical(void)
     UErrorCode     status  = U_ZERO_ERROR;
     UStringSearch *strsrch;
 
+    memset(pattern, 0, 32*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
+
     open();
     strsrch = usearch_openFromCollator(pattern, 16, text, 32, EN_US_, NULL, 
                                        &status);
@@ -2016,6 +2029,9 @@ static void TestContractionCanonical(void)
     UErrorCode     status = U_ZERO_ERROR;
     int            count = 0;
     UStringSearch *strsrch;
+    memset(rules, 0, 128*sizeof(UChar));
+    memset(pattern, 0, 128*sizeof(UChar));
+    memset(text, 0, 128*sizeof(UChar));
 
     u_unescape(CONTRACTIONRULE, rules, 128);
     collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON,

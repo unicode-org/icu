@@ -661,9 +661,12 @@ static void TestFileStream(void){
 		log_data_err("T_FileStream_write failed %s\n",fileName);
 	}
 
-	T_FileStream_close(stream);
-	
+        /* weiv: I think we should first set error and then close the stream */
+
 	T_FileStream_setError(stream);
+
+	T_FileStream_close(stream);
+
 	if(!T_FileStream_remove(fileName)){
 		log_data_err("T_FileStream_remove failed to delete %s\n",fileName);
 	}
