@@ -307,6 +307,11 @@ import com.ibm.icu.util.UResourceBundle;
             old = key;           
         }
         empty.getDifference(old, "", buffer);
+        if (finalComment != null) {
+        	buffer.append("\r\n<!--\r\n");
+            buffer.append(finalComment);
+            buffer.append("\r\n-->");
+        }
         return buffer.toString();
     }
     
@@ -427,6 +432,8 @@ import com.ibm.icu.util.UResourceBundle;
     static class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
+        String comment;
+
         Element(String elementName, Attributes attributes) {
             //elementOrdering.add(elementName);
             this.elementName = elementName;
@@ -444,15 +451,20 @@ import com.ibm.icu.util.UResourceBundle;
         static final int NO_VALUE = 0, START_VALUE = 1, END_VALUE = 2;
         public String toString(int type, boolean path) {
             String a = attributes.toString(path);
+            String result;
             if (path) {
                 if (type == NO_VALUE) return elementName + a + "-NOVALUE";
                 if (type == END_VALUE) return "END-" + elementName + ">";
-                return elementName + a;
+                result = elementName + a;
             } else {
-                if (type == NO_VALUE) return "<" + elementName + a + "/>";
-                if (type == END_VALUE) return "</" + elementName + ">";
-                return "<" + elementName + a + ">";
+                if (type == NO_VALUE) result = "<" + elementName + a + "/>";
+                if (type == END_VALUE) result = "</" + elementName + ">";
+                else result = "<" + elementName + a + ">";
+                if (comment != null) {
+                    result += "\r\n<!-- " + comment + "-->";
+                }
             }
+            return result;
         }
         public int compareTo(Object o) {
             if (o == null) return 1;
@@ -464,11 +476,15 @@ import com.ibm.icu.util.UResourceBundle;
         public boolean equals(Object o) {
         	return compareTo(o) == 0;
         }
+        public void addComment(String in_comment) {
+            if (comment == null) comment = in_comment;
+            else comment += "\r\n" + in_comment;
+            return;
+        }
     }
     
     static class ElementChain implements Comparable {
         List contexts;
-        String comment;
         
         ElementChain() {
             contexts = new ArrayList();
@@ -516,11 +532,6 @@ import com.ibm.icu.util.UResourceBundle;
                 Element e = (Element) contexts.get(i);
                 if (path) buffer.append("/" + e.toString(path));
                 else buffer.append(e.toString(path));
-            }
-            if (comment != null) {
-            	buffer.append("\r\n<!-- ");
-                buffer.append(comment);
-                buffer.append("\r\n-->");
             }
             return buffer.toString();
         }
@@ -581,11 +592,6 @@ import com.ibm.icu.util.UResourceBundle;
                 out.append(((Element)contexts.get(csize-1)).toString(Element.END_VALUE, false));
             }
             out.append("\r\n");
-            if (comment != null) {
-                out.append("\r\n<!-- ");
-                out.append(comment);
-                out.append("\r\n-->");
-            }
         }
 
         /**
@@ -603,10 +609,17 @@ import com.ibm.icu.util.UResourceBundle;
 		/**
 		 * @param comment
 		 */
-		public void addComment(String comment) {
-            if (this.comment == null) this.comment = comment;
-            else this.comment += "\r\n" + comment;
-		}
+        public void addComment(String comment) {
+        	int count = contexts.size();
+        	if (count == 0) {
+        		System.out.println("Skipping start comment for now");
+        		//if (startComment == null) startComment = comment;
+        		//else startComment += "\r\n" + comment;
+        		return;
+        	}
+        	Element ec = (Element) contexts.get(count-1);
+        	ec.addComment(comment);
+        }
     }
     
     static int compareInt(int a, int b) {
@@ -778,17 +791,6 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     String startComment;
-    
-    void addComment(String comment) {
-        int count = data.size();
-        if (count == 0) {
-            if (startComment == null) startComment = comment;
-            else startComment += "\r\n" + comment;
-            return;
-        }
-        ElementChain ec = (ElementChain) data.get(count-1);
-    	ec.addComment(comment);
-    }
     
     static SidewaysView sidewaysView = new SidewaysView();
     
@@ -1044,10 +1046,13 @@ import com.ibm.icu.util.UResourceBundle;
 		public void comment(char[] ch, int start, int length) throws SAXException {
             if (commentStack != 0) return;
             String comment = new String(ch, start,length);
-            addComment(comment);
+            if (finalComment == null) finalComment = comment;
+            else finalComment += "\r\n" + comment;
             if (DEBUG2) System.out.println("comment: " + comment);
 		}
     };
+    
+    String finalComment = null;
     
     XMLReader createXMLReader() {
 		try { // Xerces
