@@ -334,7 +334,7 @@ u_vsscanf(const UChar   *buffer,
     else {
         pattern = patBuffer;
     }
-    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
+    u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
     converted = u_vsscanf_u(buffer, locale, pattern, ap);

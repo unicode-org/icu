@@ -338,7 +338,7 @@ u_vsnprintf(UChar       *buffer,
     else {
         pattern = patBuffer;
     }
-    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
+    u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
     written = u_vsnprintf_u(buffer, count, locale, pattern, ap);

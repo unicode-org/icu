@@ -331,7 +331,7 @@ u_vfscanf(UFILE        *f,
     else {
         pattern = buffer;
     }
-    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
+    u_charsToUChars(patternSpecification, pattern, size);
 
     /* do the work */
     converted = u_vfscanf_u(f, pattern, ap);
