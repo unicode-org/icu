@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/StringUCharacterIterator.java,v $ 
- * $Date: 2004/01/09 03:07:13 $ 
- * $Revision: 1.3 $
+ * $Date: 2004/01/22 19:26:48 $ 
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -183,7 +183,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
      * @exception IndexOutOfBounds exception if there is not enough
      *            room after offset in the array, or if offset &lt; 0.
      */
-    ///CLOVER: OFF
+    ///CLOVER:OFF
     public int getText(char[] fillIn, int offset)
     {
     	int length = m_text_.length();
@@ -193,9 +193,9 @@ public final class StringUCharacterIterator extends UCharacterIterator
         m_text_.getChars(0, length, fillIn, offset);
         return length;
     }
-    ///CLOVER: ON
+    ///CLOVER:ON
     /**
-     * Convenience method for returning the underlying text storage as as 
+     * Convenience method for returning the underlying text storage as as
      * string
      * @return the underlying text storage in the iterator as a string
      */
