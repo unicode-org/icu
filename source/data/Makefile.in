@@ -93,10 +93,12 @@ cleanpackage:
 
 check-local:
 
+# During this INVOKE we only want to use stubdata.
+# We don't want to try to write over files that we are using.
 packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
-	$(INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
+	$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) $(BUILDDIR)/icudata.lst
 ifneq ($(ENABLE_STATIC),)
-	$(INVOKE) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
+	$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -p $(ICUDATA_NAME) -m static $(BUILDDIR)/icudata.lst
 endif
 
 ## Install ICU data.
