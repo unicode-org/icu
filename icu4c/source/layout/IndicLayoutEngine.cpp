@@ -45,7 +45,7 @@ IndicOpenTypeLayoutEngine::~IndicOpenTypeLayoutEngine()
 // Input: characters, tags
 // Output: glyphs, char indices
 le_int32 IndicOpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-					LEGlyphStorage &glyphStorage, LEErrorCode &success)
+                    LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -91,19 +91,19 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
         return 0;
     }
 
-	glyphStorage.allocateGlyphArray(worstCase, rightToLeft, success);
-	glyphStorage.allocateAuxData(success);
+    glyphStorage.allocateGlyphArray(worstCase, rightToLeft, success);
+    glyphStorage.allocateAuxData(success);
 
-	if (LE_FAILURE(success)) {
-		LE_DELETE_ARRAY(outChars);
-		return 0;
-	}
+    if (LE_FAILURE(success)) {
+        LE_DELETE_ARRAY(outChars);
+        return 0;
+    }
 
     // NOTE: assumes this allocates featureTags...
     // (probably better than doing the worst case stuff here...)
-	le_int32 outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups);
+    le_int32 outCharCount = IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, glyphStorage, &fMPreFixups);
 
-	glyphStorage.adoptGlyphCount(outCharCount);
+    glyphStorage.adoptGlyphCount(outCharCount);
     return outCharCount;
 }
 

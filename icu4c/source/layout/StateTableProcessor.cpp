@@ -46,7 +46,7 @@ void StateTableProcessor::process(LEGlyphStorage &glyphStorage)
 
     // XXX: reverse? 
     le_int32 currGlyph = 0;
-	le_int32 glyphCount = glyphStorage.getGlyphCount();
+    le_int32 glyphCount = glyphStorage.getGlyphCount();
 
     beginStateTable();
 

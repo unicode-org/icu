@@ -1,8 +1,7 @@
 
 /*
- * @(#)LESwaps.h	1.3 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -20,13 +19,13 @@ U_NAMESPACE_BEGIN
  * @stable ICU 2.8
  */
 #if defined(U_IS_BIG_ENDIAN)
-	#if U_IS_BIG_ENDIAN
-		#define SWAPW(value) (value)
-	#else
-		#define SWAPW(value) LESwaps::swapWord(value)
-	#endif
+    #if U_IS_BIG_ENDIAN
+        #define SWAPW(value) (value)
+    #else
+        #define SWAPW(value) LESwaps::swapWord(value)
+    #endif
 #else
-	#define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
+    #define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
 #endif
 
 /**
@@ -36,13 +35,13 @@ U_NAMESPACE_BEGIN
  * @stable ICU 2.8
  */
 #if defined(U_IS_BIG_ENDIAN)
-	#if U_IS_BIG_ENDIAN
-		#define SWAPL(value) (value)
-	#else
-		#define SWAPL(value) LESwaps::swapLong(value)
-	#endif
+    #if U_IS_BIG_ENDIAN
+        #define SWAPL(value) (value)
+    #else
+        #define SWAPL(value) LESwaps::swapLong(value)
+    #endif
 #else
-	#define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
+    #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
 #endif
 
 /**

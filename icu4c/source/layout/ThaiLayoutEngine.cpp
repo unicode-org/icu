@@ -74,7 +74,7 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
         return 0;
     }
 
-	glyphStorage.allocateGlyphArray(count * 2, FALSE, success);
+    glyphStorage.allocateGlyphArray(count * 2, FALSE, success);
 
     if (LE_FAILURE(success)) {
         LE_DELETE_ARRAY(outChars);
@@ -87,7 +87,7 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
 
     LE_DELETE_ARRAY(outChars);
 
-	glyphStorage.adoptGlyphCount(glyphCount);
+    glyphStorage.adoptGlyphCount(glyphCount);
     return glyphCount;
 }
 
