@@ -1433,21 +1433,11 @@ del common/libicuuc.o
     <p>Note: When packaging a Windows application for distribution and
     installation on user systems, copies of the ICU DLLs should be included
     with the application, and installed for exclusive use by the application.
-    This is the only way to insure that your app is running with the same
+    This is the only way to insure that your application is running with the same
     version of ICU, built with exactly the same options, that you developed and
     tested with. Refer to Microsoft's guidelines on the usage of DLLs, or
     search for the phrase "DLL hell" on <a href=
     "http://msdn.microsoft.com/">msdn.microsoft.com</a>.</p>
-
-    <h4>Linking with Runtime libraries</h4>
-
-    <p>All the DLLs link with the C runtime library "Debug Multithreaded DLL"
-    or "Multithreaded DLL." (This is changed through the Project Settings
-    dialog, on the C/C++ tab, under Code Generation.) It is important that any
-    executable or other DLL you build which uses the International Components
-    for Unicode DLLs links with these runtime libraries as well. If you do not
-    do this, you will get random memory errors when you run the executable.<br>
-    </p>
 
     <h3><a name="ImportantNotesUnix" href="#ImportantNotesUnix">Unix Type
     Platform</a></h3>
