@@ -472,7 +472,7 @@ public:
    *
    * @param index the desired index in the input text.
    * @return      the normalized character from the text at index
-   * @deprecated To be removed after 2002-aug-31. Use setIndexOnly().
+   * @obsolete ICU 2.4. Use setIndexOnly() instead since this API will be removed in that release.
    */
   UChar32              setIndex(int32_t index);
 #endif
@@ -712,14 +712,14 @@ public:
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption
-     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
+     * @obsolete ICU 2.4. Obsolete option, to be removed (or moved to private for documentation) in that release.
      */
     IGNORE_HANGUL     = 0x001
   };
 
   /**
    * This tells us what the bits in the "mode" mean.
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   enum {
     COMPAT_BIT         = 1,
@@ -730,7 +730,7 @@ public:
 
   /**
    * The mode of a Normalizer object
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   enum EMode {
     /**
@@ -744,7 +744,7 @@ public:
      * altogether.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_NONE from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_NONE from UNormalizationMode instead since this API will be removed in that release.
      */
     NO_OP         = 0,
     
@@ -761,7 +761,7 @@ public:
      * <b>C</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFC from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_NFC from UNormalizationMode instead since this API will be removed in that release.
      */
     COMPOSE         = COMPOSE_BIT,
 
@@ -778,7 +778,7 @@ public:
      * <b>KC</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFKC from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_NFKC from UNormalizationMode instead since this API will be removed in that release.
      */
     COMPOSE_COMPAT     = COMPOSE_BIT | COMPAT_BIT,
 
@@ -795,7 +795,7 @@ public:
      * <b>D</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFD from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_NFD from UNormalizationMode instead since this API will be removed in that release.
      */
     DECOMP         = DECOMP_BIT,
 
@@ -812,12 +812,12 @@ public:
      * <b>KD</b>.
      * <p>
      * @see #setMode
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFKD from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_NFKD from UNormalizationMode instead since this API will be removed in that release.
      */
     DECOMP_COMPAT     = DECOMP_BIT | COMPAT_BIT,
 
     /**
-     * @deprecated To be removed after 2002-sep-30. Use UNORM_FCD from UNormalizationMode.
+     * @obsolete ICU 2.4. Use UNORM_FCD from UNormalizationMode instead since this API will be removed in that release.
      */
     FCD = FCD_BIT
   };
@@ -830,7 +830,7 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   Normalizer(const UnicodeString& str, 
          EMode mode);
@@ -851,7 +851,7 @@ public:
    *              Currently the only available option is {@link #IGNORE_HANGUL}
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   Normalizer(const UnicodeString& str, 
          EMode mode, 
@@ -866,7 +866,7 @@ public:
    *
    * @param length Lenght of the string
    * @param mode  The normalization mode.
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   Normalizer(const UChar* str,
          int32_t length,
@@ -900,7 +900,7 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   Normalizer(const CharacterIterator& iter, 
          EMode mode);
@@ -918,7 +918,7 @@ public:
    *              Currently the only available option is {@link #IGNORE_HANGUL}
    *              If you want the default behavior corresponding to one of the
    *              standard Unicode Normalization Forms, use 0 for this argument
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   Normalizer(const CharacterIterator& iter, 
          EMode mode, 
@@ -942,7 +942,7 @@ public:
    * @param result    The normalized string (on output).
    *
    * @param status    The error code.
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   inline static void
   normalize(const UnicodeString& source, 
@@ -965,7 +965,7 @@ public:
    * @paran mode         normalization format
    * @param status A pointer to an UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   inline static UNormalizationCheckResult
   quickCheck(const UnicodeString& source,
@@ -977,7 +977,7 @@ public:
    * @param mode member of the enum Normalizer::EMode
    * @param status error codes status
    * @return UNormalizationMode equivalent of Normalizer::EMode
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   inline static UNormalizationMode getUNormalizationMode(EMode mode, 
                                                   UErrorCode& status);
@@ -987,7 +987,7 @@ public:
   * @param mode member of the enum UNormalizationMode
   * @param status error codes status
   * @return Normalizer::EMode equivalent of UNormalizationMode
-  * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+  * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
   */
   inline static EMode getNormalizerEMode(UNormalizationMode mode, 
                                          UErrorCode& status);
@@ -1016,7 +1016,7 @@ public:
    * </ul>
    *
    * @see #getMode
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   inline void setMode(EMode newMode);
 
@@ -1024,7 +1024,7 @@ public:
    * Return the basic operation performed by this <code>Normalizer</code>
    *
    * @see #setMode
-   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   * @obsolete ICU 2.4. Use UNormalizationMode instead since this API will be removed in that release.
    */
   inline EMode getMode(void) const;
 #endif /* ICU_NORMALIZER_USE_DEPRECATES */

@@ -888,185 +888,185 @@ enum UBlockCode {
 #ifdef ICU_UCHAR_USE_DEPRECATES
     ,
 
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BASIC_LATIN = 1,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LATIN_1_SUPPLEMENT=2,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LATIN_EXTENDED_A=3,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LATIN_EXTENDED_B=4,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_IPA_EXTENSIONS=5,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SPACING_MODIFIER_LETTERS=6,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_COMBINING_DIACRITICAL_MARKS=7,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GREEK=8,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CYRILLIC=9,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ARMENIAN=10,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HEBREW=11,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ARABIC=12,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SYRIAC=13,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_THAANA=14,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_DEVANAGARI=15,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BENGALI=16,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GURMUKHI=17,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GUJARATI=18,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ORIYA=19,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_TAMIL=20,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_TELUGU=21,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_KANNADA=22,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MALAYALAM=23,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SINHALA=24,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_THAI=25,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LAO=26,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_TIBETAN=27,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MYANMAR=28,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GEORGIAN=29,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HANGUL_JAMO=30,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ETHIOPIC=31,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CHEROKEE=32,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS=33,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_OGHAM=34,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_RUNIC=35,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_KHMER=36,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MONGOLIAN=37,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LATIN_EXTENDED_ADDITIONAL=38,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GREEK_EXTENDED=39,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GENERAL_PUNCTUATION=40,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SUPERSCRIPTS_AND_SUBSCRIPTS=41,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CURRENCY_SYMBOLS=42,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_COMBINING_MARKS_FOR_SYMBOLS=43,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LETTERLIKE_SYMBOLS=44,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_NUMBER_FORMS=45,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ARROWS=46,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MATHEMATICAL_OPERATORS=47,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MISCELLANEOUS_TECHNICAL=48,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CONTROL_PICTURES=49,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_OPTICAL_CHARACTER_RECOGNITION=50,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ENCLOSED_ALPHANUMERICS=51,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BOX_DRAWING=52,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BLOCK_ELEMENTS=53,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_GEOMETRIC_SHAPES=54,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_MISCELLANEOUS_SYMBOLS=55,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_DINGBATS=56,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BRAILLE_PATTERNS=57,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_RADICALS_SUPPLEMENT=58,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_KANGXI_RADICALS=59,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS=60,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_SYMBOLS_AND_PUNCTUATION=61,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HIRAGANA=62,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_KATAKANA=63,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BOPOMOFO=64,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HANGUL_COMPATIBILITY_JAMO=65,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_KANBUN=66,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_BOPOMOFO_EXTENDED=67,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ENCLOSED_CJK_LETTERS_AND_MONTHS=68,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_COMPATIBILITY=69,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A=70,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_UNIFIED_IDEOGRAPHS=71,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_YI_SYLLABLES=72,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_YI_RADICALS=73,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HANGUL_SYLLABLES=74,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HIGH_SURROGATES=75,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HIGH_PRIVATE_USE_SURROGATES=76,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_LOW_SURROGATES=77,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_PRIVATE_USE_AREA=78,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_COMPATIBILITY_IDEOGRAPHS=79,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ALPHABETIC_PRESENTATION_FORMS=80,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ARABIC_PRESENTATION_FORMS_A=81,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_COMBINING_HALF_MARKS=82,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CJK_COMPATIBILITY_FORMS=83,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SMALL_FORM_VARIANTS=84,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_ARABIC_PRESENTATION_FORMS_B=85,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SPECIALS=86,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_HALFWIDTH_AND_FULLWIDTH_FORMS=87,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_SCRIPT_COUNT=UBLOCK_COUNT,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,
-    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    /** @obsolete ICU 2.4. Use the enum that begins with UBLOCK instead since this API will be removed in that release. */
     U_NO_SCRIPT = UBLOCK_COUNT
 #endif /* ICU_UCHAR_USE_DEPRECATES */
 };
@@ -1076,19 +1076,19 @@ typedef enum UBlockCode UBlockCode;
 
 /**
  * Values returned by the u_getCellWidth() function.
- * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
+ * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
  */
 typedef enum UCellWidth
 {
-    /** @stable ICU 2.0 */
+    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_ZERO_WIDTH              = 0,
-    /** @stable ICU 2.0 */
+    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_HALF_WIDTH              = 1,
-    /** @stable ICU 2.0 */
+    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_FULL_WIDTH              = 2,
-    /** @stable ICU 2.0 */
+    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_NEUTRAL_WIDTH           = 3,
-    /** @stable ICU 2.0 */
+    /** @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release. */
     U_CELL_WIDTH_COUNT
 } UCellWidth;
 
@@ -2512,10 +2512,10 @@ u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *p
 
 #ifdef ICU_UCHAR_USE_DEPRECATES
 /**
- *@deprecated Use ublock_getCode instead. Remove after Aug,2002
+ * @obsolete ICU 2.4. Use ublock_getCode() instead since this API will be removed in that release.
  */
 #define u_charScript ublock_getCode
-/** @deprecated  Use the enum UCharBlock instead. Remove after Aug,2002*/
+/** @obsolete ICU 2.4. Use UBlockCode instead since this API will be removed in that release. */
 typedef UBlockCode UCharScript;
 #endif /* ICU_UCHAR_USE_DEPRECATES */
 
