@@ -684,7 +684,7 @@ class TestFilter3 : public UnicodeFilter {
 
 
 void TransliteratorAPITest::TestGetAdoptFilter(){
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     Transliterator *t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
     if(t == 0)
