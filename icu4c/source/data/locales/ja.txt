@@ -1571,12 +1571,24 @@ ja {
         "H:mm:ss:z",
         "H:mm:ss",
         "H:mm",
-        "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+        "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yyyy/MM/dd",
         "yy/MM/dd",
         "{1} {0}",
     }
+    DateTimePatterns_japanese {
+        "H'\u6642'mm'\u5206'ss'\u79D2'z",
+        "H:mm:ss:z",
+        "H:mm:ss",
+        "H:mm",
+        "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+        "Gy'\u5E74'M'\u6708'd'\u65E5'",
+        "G yy/MM/dd",
+        "G yy/MM/dd",
+        "{1} {0}",
+    }
+
     DayAbbreviations { 
         "\u65E5",
         "\u6708",
@@ -2861,17 +2873,4 @@ ja {
             "\u662D\u548C",             // 1926 Showa
             "\u5E73\u6210"             // 1989 Heisei
     }
-
-    DateTimePatterns_japanese { 
-        "H'\u6642'mm'\u5206'ss'\u79D2'z",
-        "H:mm:ss:z",
-        "H:mm:ss",
-        "H:mm",
-        "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-        "Gy'\u5E74'M'\u6708'd'\u65E5'",
-        "G yy/MM/dd",
-        "G yy/MM/dd",
-        "{1} {0}",
-    }
-
 }
