@@ -546,7 +546,6 @@ public class GregorianCalendar extends Calendar {
 
     /**
      * Roll a field by a signed amount.
-     * @since 1.2
      * @stable
      */
     public void roll(int field, int amount) {
@@ -616,7 +615,6 @@ public class GregorianCalendar extends Calendar {
     /**
      * Return the minimum value that this field could have, given the current date.
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
-     * @since 1.2
      * @stable
      */
     public int getActualMinimum(int field) {
@@ -628,7 +626,6 @@ public class GregorianCalendar extends Calendar {
      * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
      * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
      * for some years the actual maximum for MONTH is 12, and for others 13.
-     * @since 1.2
      * @stable
      */
     public int getActualMaximum(int field) {

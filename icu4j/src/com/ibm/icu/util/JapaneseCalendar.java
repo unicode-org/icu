@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/04 16:38:52 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -183,6 +183,9 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     //-------------------------------------------------------------------------
 
+    /**
+     * @stable
+     */
     protected int handleGetExtendedYear() {
         int year;
         // TODO reimplement this to be faster?
@@ -491,18 +494,33 @@ public class JapaneseCalendar extends GregorianCalendar {
     //-------------------------------------------------------------------------
 
     // Constant for the current era.  This must be regularly updated.
+    /**
+     * @stable
+     */
     static public final int CURRENT_ERA = (ERAS.length / 3) - 1;
     
-    /** Constant for the era starting on Sept. 8, 1868 AD */
+    /** 
+     * Constant for the era starting on Sept. 8, 1868 AD.
+     * @stable 
+     */
     static public final int MEIJI = CURRENT_ERA - 3;
 
-    /** Constant for the era starting on July 30, 1912 AD */
+    /** 
+     * Constant for the era starting on July 30, 1912 AD. 
+     * @stable 
+     */
     static public final int TAISHO = CURRENT_ERA - 2;
     
-    /** Constant for the era starting on Dec. 25, 1926 AD */
+    /** 
+     * Constant for the era starting on Dec. 25, 1926 AD. 
+     * @stable 
+     */
     static public final int SHOWA = CURRENT_ERA - 1;
 
-    /** Constant for the era starting on Jan. 7, 1989 AD */
+    /** 
+     * Constant for the era starting on Jan. 7, 1989 AD. 
+     * @stable 
+     */
     static public final int HEISEI = CURRENT_ERA;
 
     /**

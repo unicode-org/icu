@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/12/04 16:38:52 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -82,40 +82,76 @@ public class IslamicCalendar extends Calendar {
     // Constants...
     //-------------------------------------------------------------------------
     
-    /** Constant for Muharram, the 1st month of the Islamic year. @stable */
+    /**
+     * Constant for Muharram, the 1st month of the Islamic year. 
+     * @stable 
+     */
     public static final int MUHARRAM = 0;
 
-    /** Constant for Safar, the 2nd month of the Islamic year. @stable */
+    /**
+     * Constant for Safar, the 2nd month of the Islamic year. 
+     * @stable 
+     */
     public static final int SAFAR = 1;
 
-    /** Constant for Rabi' al-awwal (or Rabi' I), the 3rd month of the Islamic year. @stable */
+    /**
+     * Constant for Rabi' al-awwal (or Rabi' I), the 3rd month of the Islamic year. 
+     * @stable 
+     */
     public static final int RABI_1 = 2;
 
-    /** Constant for Rabi' al-thani or (Rabi' II), the 4th month of the Islamic year. @stable */
+    /**
+     * Constant for Rabi' al-thani or (Rabi' II), the 4th month of the Islamic year. 
+     * @stable 
+     */
     public static final int RABI_2 = 3;
 
-    /** Constant for Jumada al-awwal or (Jumada I), the 5th month of the Islamic year. @stable */
+    /**
+     * Constant for Jumada al-awwal or (Jumada I), the 5th month of the Islamic year. 
+     * @stable 
+     */
     public static final int JUMADA_1 = 4;
 
-    /** Constant for Jumada al-thani or (Jumada II), the 6th month of the Islamic year. @stable */
+    /**
+     * Constant for Jumada al-thani or (Jumada II), the 6th month of the Islamic year. 
+     * @stable 
+     */
     public static final int JUMADA_2 = 5;
 
-    /** Constant for Rajab, the 7th month of the Islamic year. @stable */
+    /**
+     * Constant for Rajab, the 7th month of the Islamic year. 
+     * @stable 
+     */
     public static final int RAJAB = 6;
 
-    /** Constant for Sha'ban, the 8th month of the Islamic year. @stable */
+    /**
+     * Constant for Sha'ban, the 8th month of the Islamic year. 
+     * @stable 
+     */
     public static final int SHABAN = 7;
 
-    /** Constant for Ramadan, the 9th month of the Islamic year. @stable */
+    /**
+     * Constant for Ramadan, the 9th month of the Islamic year. 
+     * @stable 
+     */
     public static final int RAMADAN = 8;
 
-    /** Constant for Shawwal, the 10th month of the Islamic year. @stable */
+    /**
+     * Constant for Shawwal, the 10th month of the Islamic year. 
+     * @stable 
+     */
     public static final int SHAWWAL = 9;
 
-    /** Constant for Dhu al-Qi'dah, the 11th month of the Islamic year. @stable */
+    /**
+     * Constant for Dhu al-Qi'dah, the 11th month of the Islamic year. 
+     * @stable 
+     */
     public static final int DHU_AL_QIDAH = 10;
 
-    /** Constant for Dhu al-Hijjah, the 12th month of the Islamic year. @stable */
+    /**
+     * Constant for Dhu al-Hijjah, the 12th month of the Islamic year. 
+     * @stable 
+     */
     public static final int DHU_AL_HIJJAH = 11;
 
 
@@ -291,6 +327,9 @@ public class IslamicCalendar extends Calendar {
         {/*                                  */}, // MILLISECONDS_IN_DAY
     };
 
+    /**
+     * @stable
+     */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
     }
@@ -450,6 +489,7 @@ public class IslamicCalendar extends Calendar {
      *
      * @param year  The hijri year
      * @param year  The hijri month, 0-based
+     * @stable
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
 
@@ -469,6 +509,7 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Return the number of days in the given Islamic year
+     * @stable
      */
     protected int handleGetYearLength(int extendedYear) {
         if (civil) {
@@ -484,6 +525,9 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     // Return JD of start of given month/year
+    /**
+     * @stable
+     */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return (int) monthStart(eyear, month) + 1948439;
     }    
@@ -492,6 +536,9 @@ public class IslamicCalendar extends Calendar {
     // Functions for converting from milliseconds to field values
     //-------------------------------------------------------------------------
 
+    /**
+     * @stable
+     */
     protected int handleGetExtendedYear() {
         int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
@@ -516,6 +563,7 @@ public class IslamicCalendar extends Calendar {
      * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
      * method is called. The getGregorianXxx() methods return Gregorian
      * calendar equivalents for the given Julian day.
+     * @stable
      */
     protected void handleComputeFields(int julianDay) {
         int year, month, dayOfMonth, dayOfYear;

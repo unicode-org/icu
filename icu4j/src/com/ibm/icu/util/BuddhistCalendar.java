@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2002/10/02 20:20:25 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/12/04 16:38:53 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -36,6 +36,7 @@ import java.util.Locale;
  *
  * @author Laura Werner
  * @author Alan Liu
+ * @stable
  */
 public class BuddhistCalendar extends GregorianCalendar {
     
@@ -50,12 +51,14 @@ public class BuddhistCalendar extends GregorianCalendar {
      * value for the Buddhist calendar.
      *
      * @see com.ibm.icu.util.Calendar#ERA
+     * @stable
      */
     public static final int BE = 0;
     
     /**
      * Constructs a <code>BuddhistCalendar</code> using the current time
      * in the default time zone with the default locale.
+     * @stable
      */
     public BuddhistCalendar() {
         super();
@@ -66,6 +69,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the given time zone with the default locale.
      *
      * @param zone the given time zone.
+     * @stable
      */
     public BuddhistCalendar(TimeZone zone) {
         super(zone);
@@ -76,6 +80,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the default time zone with the given locale.
      *
      * @param aLocale the given locale.
+     * @stable
      */
     public BuddhistCalendar(Locale aLocale) {
         super(aLocale);
@@ -88,6 +93,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param zone the given time zone.
      *
      * @param aLocale the given locale.
+     * @stable
      */
     public BuddhistCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
@@ -98,6 +104,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
+     * @stable
      */
     public BuddhistCalendar(Date date) {
         this();
@@ -114,6 +121,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      *                  The value is 0-based. e.g., 0 for January.
      *
      * @param date      The value used to set the calendar's {@link #DATE DATE} time field.
+     * @stable
      */
     public BuddhistCalendar(int year, int month, int date) {
         super(year, month, date);
@@ -135,6 +143,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * @param minute    The value used to set the calendar's {@link #MINUTE MINUTE} time field.
      *
      * @param second    The value used to set the calendar's {@link #SECOND SECOND} time field.
+     * @stable
      */
     public BuddhistCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -151,7 +160,10 @@ public class BuddhistCalendar extends GregorianCalendar {
     
     // Starts in -543 AD, ie 544 BC
     private static final int BUDDHIST_ERA_START = -543;
-    
+
+    /**
+     * @stable
+     */    
     protected int handleGetExtendedYear() {
         int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
@@ -164,10 +176,16 @@ public class BuddhistCalendar extends GregorianCalendar {
     }
 
     // Return JD of start of given month/year
+    /**
+     * @stable
+     */    
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return super.handleComputeMonthStart(eyear + BUDDHIST_ERA_START, month, useMonth);
     }
 
+    /**
+     * @stable
+     */    
     protected void handleComputeFields(int julianDay) {
         super.handleComputeFields(julianDay);
         int y = internalGet(EXTENDED_YEAR) - BUDDHIST_ERA_START;
@@ -180,6 +198,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * Override GregorianCalendar.  There is only one Buddhist ERA.  We
      * should really handle YEAR, YEAR_WOY, and EXTENDED_YEAR here too to
      * implement the 1..5000000 range, but it's not critical.
+     * @stable
      */
     protected int handleGetLimit(int field, int limitType) {
         if (field == ERA) {
@@ -188,6 +207,7 @@ public class BuddhistCalendar extends GregorianCalendar {
         return super.handleGetLimit(field, limitType);
     }
 
+    /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
         if (factory == null) {
@@ -203,4 +223,5 @@ public class BuddhistCalendar extends GregorianCalendar {
         }
         return factory;
     }
+    */
 }
