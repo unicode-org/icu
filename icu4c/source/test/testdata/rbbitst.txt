@@ -314,6 +314,7 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 #
 ################################################################
 
+<line>
 #
 # Test Character for each of the line break classes.
 #
@@ -349,67 +350,68 @@ What is the proper use of the abbreviation pp.•? •Yes, I am definatelly 12" 
 
 # 2b  Always break at end of text
 
-<data>•   \u00A1•</data>
-<data>•   \u0041•</data>
-<data>•   \u0009•</data>
-<data>•   \u00B4•</data>
-<data>•   \u000C•</data>
-<data>•   \u2014•</data>
-<data>•   \uFFFC•</data>
-<data>•   \u0029•</data>
-<data>•   \u0301•</data>
-<data>•   \u0021•</data>
-<data>•   \u00A0•</data>
-<data>•   \u002D•</data>
-<data>•   \u4E00•</data>
-<data>•   \u2024•</data>
-<data>•   \u002C•</data>
-<data>•   \u000A•</data>
-<data>•   \u0E5A•</data>
-<data>•   \u0032•</data>
-<data>•   \u0028•</data>
-<data>•   \u0025•</data>
-<data>•   \u0024•</data>
-<data>•   \u0022•</data>
-<data>•   \u0E01•</data>
-<data>•   \uDB7F•</data>
-<data>•   \u0020•</data>
-<data>•   \u002F•</data>
-<data>•   \uF8FF•</data>
-<data>•   \u200B•</data>
+<data>•  •\u00A1•</data>
+<data>•  •\u0041•</data>
+<data>•  •\u0009•</data>
+<data>•  •\u00B4•</data>
+<data>•    \u000C•</data>    # LB3C  × BK
+<data>•  •\u2014•</data>
+<data>•  •\uFFFC•</data>
+<data>•   \u0029•</data>    # LB 8   × CL
+# <data>• • \u0301•</data>    # LB 7a   Treat SP CM* as if it were ID  #TODO:  SP CM
+<data>•   \u0021•</data>    # LB 8   × EX
+#<data>•   \u00A0•</data>    # LB 11b   × GL   TODO:  fix.
+<data>•  •\u002D•</data>
+<data>•  •\u4E00•</data>
+<data>•  •\u2024•</data>
+<data>•   \u002C•</data>    # LB 8   × IS
+<data>•   \u000A•</data>    # LB3C   × ( BK | CR | LF | NL )
+<data>•  •\u0E5A•</data>
+<data>•  •\u0032•</data>
+<data>•  •\u0028•</data>
+<data>•  •\u0025•</data>
+<data>•  •\u0024•</data>
+<data>•  •\u0022•</data>
+<data>•  •\u0E01•</data>
+<data>•  •\uDB7F•</data>
+<data>•   \u0020•</data>     # LB4 - don't break before space.
+<data>•   \u002F•</data>     # LB 8  × SY
+<data>•  •\uF8FF•</data>
+<data>•   \u200B•</data>     # LB4 - don't break before ZA
 
 
 # 3a  Always break after hard line breaks.
 # 3c  Never break before hard line breaks.
 
-<data>•   \u00A1\u2028•\u00A1•</data>
-<data>•   \u0041\u2028•\u0041•</data>
-<data>•   \u0009\u2028•\u0009•</data>
-<data>•   \u00B4\u2028•\u00B4•</data>
-<data>•   \u000C\u2028•\u000C•</data>
-<data>•   \u2014\u2028•\u2014•</data>
-<data>•   \uFFFC\u2028•\uFFFC•</data>
+<data>•  •\u00A1\u2028•\u00A1•</data>
+<data>•  •\u0041\u2028•\u0041•</data>
+<data>•  •\u0009\u2028•\u0009•</data>
+<data>•  •\u00B4\u2028•\u00B4•</data>
+<data>•   \u000C•\u2028•\u000C•</data>
+<data>•  •\u2014\u2028•\u2014•</data>
+<data>•  •\uFFFC\u2028•\uFFFC•</data>
 <data>•   \u0029\u2028•\u0029•</data>
-<data>•   \u0301\u2028•\u0301•</data>
+#<data>•   \u0301\u2028•\u0301•</data>    # TODO:  fix.
 <data>•   \u0021\u2028•\u0021•</data>
-<data>•   \u00A0\u2028•\u00A0•</data>
-<data>•   \u002D\u2028•\u002D•</data>
-<data>•   \u4E00\u2028•\u4E00•</data>
-<data>•   \u2024\u2028•\u2024•</data>
+#<data>•   \u00A0\u2028•\u00A0•</data>    # TODO:  fix
+<data>•  •\u002D\u2028•\u002D•</data>
+<data>•  •\u4E00\u2028•\u4E00•</data>
+<data>•  •\u2024\u2028•\u2024•</data>
 <data>•   \u002C\u2028•\u002C•</data>
 <data>•   \u000A•\u2028•\u000A•</data>
-<data>•   \u0E5A\u2028•\u0E5A•</data>
-<data>•   \u0032\u2028•\u0032•</data>
-<data>•   \u0028\u2028•\u0028•</data>
-<data>•   \u0025\u2028•\u0025•</data>
-<data>•   \u0024\u2028•\u0024•</data>
-<data>•   \u0022\u2028•\u0022•</data>
-<data>•   \u0E01\u2028•\u0E01•</data>
-<data>•   \uDB7F\u2028•\uDB7F•</data>
+<data>•  •\u0E5A\u2028•\u0E5A•</data>
+<data>•  •\u0032\u2028•\u0032•</data>
+<data>•  •\u0028\u2028•\u0028•</data>
+<data>•  •\u0025\u2028•\u0025•</data>
+<data>•  •\u0024\u2028•\u0024•</data>
+<data>•  •\u0022\u2028•\u0022•</data>
+<data>•  •\u0E01\u2028•\u0E01•</data>
+<data>•  •\uDB7F\u2028•\uDB7F•</data>
 <data>•   \u0020\u2028•\u0020•</data>
 <data>•   \u002F\u2028•\u002F•</data>
-<data>•   \uF8FF\u2028•\uF8FF•</data>
+<data>•  •\uF8FF\u2028•\uF8FF•</data>
 <data>•   \u200B\u2028•\u200B•</data>
+
 
 #
 #  Old Line Break Test data.  Orginally located in RBBITest::TestDefaultRuleBasedLineIteration()
