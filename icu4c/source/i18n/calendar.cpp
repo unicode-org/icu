@@ -685,26 +685,14 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 #if !UCONFIG_NO_SERVICE
   if(u->getDynamicClassID() == UnicodeString::getStaticClassID()) {
     // It's a unicode string telling us what type of calendar to load ("gregorian", etc)
-    char tmp[ULOC_FULLNAME_CAPACITY];
     const UnicodeString& str = *(UnicodeString*)u;
-    // Extract a char* out of it..
-    int32_t len = str.length();
-    int32_t actLen = sizeof(tmp)-1;
-    if(len > actLen) {
-      len = actLen;
-    }
-    str.extract(0,len,tmp);
-    tmp[len]=0;
     
-#ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "Calendar::createInstance(%s), fetched string %s..\n", (const char*)aLocale.getName(), tmp);
-#endif
-
     // Create a Locale over this string
-    Locale l = Locale::createFromName(tmp);
+    Locale l("");
+    LocaleUtility::initLocaleFromName(str, l);
 
 #ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "looking up [%s].. should be %s\n",l.getName(), tmp);
+    fprintf(stderr, "Calendar::createInstance(%s), looking up [%s]\n", aLocale.getName(), l.getName());
 #endif
 
     Locale actualLoc2;
