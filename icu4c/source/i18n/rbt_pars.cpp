@@ -31,6 +31,7 @@
 #include "uvector.h"
 #include "util.h"
 #include "cmemory.h"
+#include "uprops.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
@@ -417,7 +418,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
         // Since all syntax characters are in the BMP, fetching
         // 16-bit code units suffices here.
         UChar c = rule.charAt(pos++);
-        if (u_isWhitespace(c)) {
+        if (uprv_isRuleWhiteSpace(c)) {
             // Ignore whitespace.  Note that this is not Unicode
             // spaces, but Java spaces -- a subset, representing
             // whitespace likely to be seen in code.
@@ -943,7 +944,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
     while (pos < limit && U_SUCCESS(status)) {
         UChar c = rule.charAt(pos++);
-        if (u_isWhitespace(c)) {
+        if (uprv_isRuleWhiteSpace(c)) {
             // Ignore leading whitespace.
             continue;
         }
@@ -964,7 +965,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             rule.compare(pos, ID_TOKEN_LEN, ID_TOKEN) == 0) {
             pos += ID_TOKEN_LEN;
             c = rule.charAt(pos);
-            while (u_isWhitespace(c) && pos < limit) {
+            while (uprv_isRuleWhiteSpace(c) && pos < limit) {
                 ++pos;
                 c = rule.charAt(pos);
             }

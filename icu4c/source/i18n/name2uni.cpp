@@ -11,6 +11,7 @@
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 #include "name2uni.h"
+#include "uprops.h"
 
 // As of Unicode 3.0.0, the longest name is 83 characters long.
 #define LONGEST_NAME 83
@@ -116,7 +117,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             // to a single space.  If closeDelimiter is found, exit
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is found, exit the loop.
-            if (u_isWhitespace(c)) {
+            if (uprv_isRuleWhiteSpace(c)) {
                 // Ignore leading whitespace
                 if (ibuf != 0 && buf[ibuf-1] != (UChar)0x0020) {
                     buf[ibuf++] = (UChar)0x0020 /* */;
