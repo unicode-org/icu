@@ -663,7 +663,7 @@ public class LDML2ICUConverter {
         // now fetch the specials and append to the real bundle
         if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
             if(specialsDoc == null) {
-                System.err.println("Could not open ICU special bundle " + specialsDir + File.separator + locName + ".xml - no specials written.");
+                System.err.println("INFO: writing ICU res bundle without specials, missing " + specialsDir + File.separator + locName + ".xml");
             } else {
                 if(table.comment == null) {
                     table.comment = "";
@@ -3227,7 +3227,7 @@ public class LDML2ICUConverter {
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            System.out.println("INFO: Creating ICU ResourceBundle: "+outputFileName);
+            System.out.println("INFO: writing ICU res bundle: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
 
@@ -3342,7 +3342,7 @@ public class LDML2ICUConverter {
                         HashMap fromToMap = new HashMap();
                         HashMap fromXpathMap = new HashMap();
                         HashMap fromFiles = new HashMap();
-                        
+                        HashMap aliasFromFiles = new HashMap();
                         
                         // 1. get the list of input XML files
                         FileFilter myFilter = new FileFilter() { 
@@ -3357,9 +3357,8 @@ public class LDML2ICUConverter {
                         File inFiles[] = depF.listFiles(myFilter);
                         
                         int nrInFiles = inFiles.length;
-                        String inFileText = "";
                         if(writeDraft == false) {
-                            System.out.print("Parsing " + nrInFiles + " XML locales to check draft status ");
+                            System.out.print("Parsing " + nrInFiles + " LDML locale files to check draft status: ");
                         }
                         for(int i=0;i<nrInFiles;i++) {
                             boolean thisOK = true;
@@ -3381,10 +3380,6 @@ public class LDML2ICUConverter {
                             if(thisOK) {
                                 System.out.print(".");
                                 fromFiles.put(inFiles[i].getName(),inFiles[i]); // add to hash
-                                if((i%5)==4) {
-                                    inFileText = inFileText + "\\\n";
-                                }
-                                inFileText = inFileText +(i==0?" ":" ") +  (inFiles[i].getName()).substring(0,inFiles[i].getName().indexOf('.'))+".txt";
                             } else {
                                 System.out.print("d");
                             }
@@ -3392,48 +3387,63 @@ public class LDML2ICUConverter {
                         if(writeDraft==false) {
                             System.out.println("");
                         }
-                        // System.out.println("In Files: " + inFileText);
-                        String aliasFilesList = "";
                         
                         for(Node alias=node.getFirstChild();alias!=null;alias=alias.getNextSibling()){
                             if(alias.getNodeType()!=Node.ELEMENT_NODE){
                                 continue;
                             }
                             try {
-                                String from = LDMLUtilities.getAttributeValue(alias,"from");
-                                String to = LDMLUtilities.getAttributeValue(alias,"to");
-                                String xpath = null;
-                                if(to.indexOf('@')!=-1) {
-                                    xpath = LDMLUtilities.getAttributeValue(alias,"xpath");
-                                    if(xpath==null) {
-                                        System.err.println("Malformed alias - '@' but no xpath: " + alias.toString());
+                                String aliasKind = alias.getNodeName();
+                                
+                                if(aliasKind.equals("alias")) {
+                                    String from = LDMLUtilities.getAttributeValue(alias,"from");
+                                    String to = LDMLUtilities.getAttributeValue(alias,"to");
+                                    String xpath = null;
+                                    if(to.indexOf('@')!=-1) {
+                                        xpath = LDMLUtilities.getAttributeValue(alias,"xpath");
+                                        if(xpath==null) {
+                                            System.err.println("Malformed alias - '@' but no xpath: " + alias.toString());
+                                            System.exit(-1);
+                                            return; //NOTREACHED
+                                        }
+                                    }
+                                    if((from==null)||(to==null)) {
+                                        System.err.println("Malformed alias - no 'from' or no 'to': " + alias.toString());
                                         System.exit(-1);
                                         return; //NOTREACHED
                                     }
-                                }
-                                if((from==null)||(to==null)) {
-                                    System.err.println("Malformed alias - no 'from' or no 'to': " + alias.toString());
-                                    System.exit(-1);
-                                    return; //NOTREACHED
-                                }
-                                String toFileName = to;
-                                if(xpath!=null) {
-                                    toFileName=to.substring(0,to.indexOf('@'));
-                                }
-                                if(!fromFiles.containsKey(toFileName+".xml")) {
-                                    System.out.println("WARNING: Alias but no input file - skipping: " + from + " -> " + toFileName + ".xml" );
-                                } else {
-                                    // System.out.println("Had file " + toFileName + ".xml");
-                                    aliasFilesList = aliasFilesList + " " + from + ".txt"; 
-                                    ULocale fromLocale = new ULocale(from);
-                                    fromToMap.put(fromLocale,new ULocale(to));
+                                    String toFileName = to;
                                     if(xpath!=null) {
-                                        fromXpathMap.put(fromLocale,xpath);
+                                        toFileName=to.substring(0,to.indexOf('@'));
                                     }
-                                    
-                                    // write an individual file
-                                    writeDeprecatedLocale(from+".txt", fromLocale, new ULocale(to), xpath);
-                                } 
+                                    if(fromFiles.containsKey(from + ".xml")) {
+                                        throw new IllegalArgumentException("Can't be both a synthetic alias locale AND XML - consider using <aliasLocale source=\"" + from + "\"/> instead. ");
+                                    }
+                                    if(!fromFiles.containsKey(toFileName+".xml")) {
+                                        System.out.println("WARNING: Alias from \"" + from + "\" not generated, because it would point to a nonexistent LDML file " + toFileName + ".xml" );
+                                    } else {
+                                        // System.out.println("Had file " + toFileName + ".xml");
+                                        aliasFromFiles.put(from,new File(depF,from + ".xml"));
+                                        ULocale fromLocale = new ULocale(from);
+                                        fromToMap.put(fromLocale,new ULocale(to));
+                                        if(xpath!=null) {
+                                            fromXpathMap.put(fromLocale,xpath);
+                                        }
+                                        
+                                        // write an individual file
+                                        writeDeprecatedLocale(from+".txt", fromLocale, new ULocale(to), xpath);
+                                    }
+                                } else if(aliasKind.equals("aliasLocale")) {
+                                    String source = LDMLUtilities.getAttributeValue(alias,"locale");
+                                    if(!fromFiles.containsKey(source+".xml")) {
+                                        System.out.println("WARNING: Alias file " + source + ".xml named in deprecates list but not present. Ignoring alias entry.");
+                                    } else {
+                                        aliasFromFiles.put(source+".xml",new File(depF,source+".xml"));
+                                        fromFiles.remove(source+".xml");
+                                    }
+                                } else {
+                                    throw new IllegalArgumentException("Unknown alias kind: " + aliasKind);
+                                }
                                 // DEBUGGING LINE
                                 //  System.out.println("FROM: " + from + ", TO: " + to + ((xpath!=null)?(", XPATH: " + xpath):("")));
                             } catch(Exception e) {
@@ -3443,6 +3453,10 @@ public class LDML2ICUConverter {
                             }
                         }
                         
+                        // System.out.println("In Files: " + inFileText);
+                        String inFileText = fileMapToList(fromFiles);
+                        String aliasFilesList = fileMapToList(aliasFromFiles);
+
                         // Now- write the actual items (resfiles.mk, etc)
                         writeResourceMakefile(myTreeName,aliasFilesList,inFileText);                        
                         
@@ -3460,6 +3474,20 @@ public class LDML2ICUConverter {
         System.out.println("done.");
         System.err.println("Error: did not find tree " + myTreeName + " in the deprecated alias table.");
         System.exit(0);
+    }
+
+    private static String fileMapToList(Map files)
+    {
+        String out = "";
+        int i = 0;
+        for(Iterator e = files.values().iterator();e.hasNext();) {
+            File f = (File)e.next();
+            if((++i%5)==0) {
+                out = out + "\\\n";
+            }
+            out = out +(i==0?" ":" ") +  (f.getName()).substring(0,f.getName().indexOf('.'))+".txt";
+        }
+        return out;
     }
     
     private void writeDeprecatedLocale(String fileName, ULocale fromLocale, ULocale toLocale, String xpath)
@@ -3570,9 +3598,10 @@ public class LDML2ICUConverter {
         
         String resfiles_mk_name = destDir + File.separator +  shortstub+"files.mk";
         try {
-            System.out.println(" Writing ICU build file: " + resfiles_mk_name);
+            System.out.println("INFO: writing ICU build file: " + resfiles_mk_name);
             PrintStream resfiles_mk = new PrintStream(new  FileOutputStream(resfiles_mk_name) ); 
-            resfiles_mk.println( "# generated." );
+            resfiles_mk.println( "# Generated by LDML2ICUConverter, from LDML source files. " );
+            resfiles_mk.println("");
             resfiles_mk.println( stub + "_ALIAS_SOURCE = " + aliasFilesList );
             resfiles_mk.println( "" );
             resfiles_mk.println( "" );
