@@ -2157,16 +2157,6 @@ Calendar::internalSet(EDateFields field, int32_t value)
     internalSet((UCalendarDateFields) field, value);
 }
 
-inline uint8_t Calendar::julianDayToDayOfWeek(double julian)
-{
-  // If julian is negative, then julian%7 will be negative, so we adjust
-  // accordingly.  We add 1 because Julian day 0 is Monday.
-  int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
-
-  uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7+UCAL_SUNDAY ) : UCAL_SUNDAY));
-  return result;
-}
-
 inline int32_t  Calendar::weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek)
 {
   return weekNumber(dayOfPeriod, dayOfPeriod, dayOfWeek);
