@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DumbTextComponent.java,v $ 
- * $Date: 2001/11/28 22:24:29 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/29 01:21:13 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -434,6 +434,7 @@ public class DumbTextComponent extends Canvas
     }
 
     public void insertText(String text) {
+        if (activeStart == -1) activeStart = selection.getStart();
         replaceRange(text, selection.getStart(), selection.getEnd());
     }
 
