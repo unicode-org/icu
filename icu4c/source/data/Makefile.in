@@ -27,7 +27,7 @@ subdir = data
 include @platform_make_fragment@
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(SPECIALTESTDATA)
+CLEANFILES = *~ $(SPECIALTESTDATA) $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO)
 
 DOCDIRS = 
 SUBDIRS = build
