@@ -173,11 +173,7 @@ ucnv_io_cleanup()
         aliasData = NULL;
     }
 
-    if (availableConverters) {
-        uprv_free((char **)availableConverters);
-        availableConverters = NULL;
-    }
-    availableConverterCount = 0;
+    ucnv_io_flushAvailableConverterCache();
 
     aliasData = NULL;
     aliasTable = NULL;
@@ -404,6 +400,17 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
     }
 
    return NULL;
+}
+
+void
+ucnv_io_flushAvailableConverterCache() {
+    if (availableConverters) {
+        umtx_lock(NULL);
+        uprv_free((char **)availableConverters);
+        availableConverters = NULL;
+        umtx_unlock(NULL);
+    }
+    availableConverterCount = 0;
 }
 
 static void ucnv_io_loadAvailableConverterList(void) {
