@@ -2551,6 +2551,7 @@ static void TestCyrillicTailoring(void) {
       "\\u0410\\u0306a",
       "\\u04d0A"
   };
+
     /* Russian overrides contractions, so this test is not valid anymore */
     /*genericLocaleStarter("ru", test, 3);*/ 
 
@@ -2561,6 +2562,23 @@ static void TestCyrillicTailoring(void) {
     genericRulesStarter("&Z < \\u0410 < \\u04d0", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410 < \\u0410\\u0301", test, 3);
     genericRulesStarter("&Z < \\u0410 < \\u0410\\u0301", test, 3);
+}
+
+static void TestSuppressContractions(void) {
+
+  static const char *testNoCont2[] = {
+      "\\u0410\\u0302a",
+      "\\u0410\\u0306b",
+      "\\u0410c"            
+  };
+  static const char *testNoCont[] = {
+      "a\\u0410",            
+      "A\\u0410\\u0306",
+      "\\uFF21\\u0410\\u0302"
+  };
+    
+  genericRulesStarter("[suppressContractions [\\u0400-\\u047f]]", testNoCont, 3);
+  genericRulesStarter("[suppressContractions [\\u0400-\\u047f]]", testNoCont2, 3);
 }
 
 static void TestContraction(void) {
@@ -3625,15 +3643,14 @@ static void TestRuleOptions(void) {
 
 
 static void TestUnicodeSetRules(void) {
-
   static struct {
     const char *rules;
     const char *data[50];
     const uint32_t len;
   } tests[] = {  
     /* - all befores here amount to zero */
-    { "[optimize [\\uAC00-\\uD7FF]]&a = a", 
-    { "a", "b"}, 2} /* you cannot go before first tertiary ignorable */
+    { "[optimize [\\uAC00-\\uD7FF]]", 
+    { "a", "b"}, 2} 
   };
   uint32_t i;
 
@@ -3641,8 +3658,9 @@ static void TestUnicodeSetRules(void) {
   for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
   }
-
 }
+
+#define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
 {
@@ -3688,7 +3706,8 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
-    addTest(root, &TestUnicodeSetRules, "tscoll/cmsccoll/TestUnicodeSetRules");
+    TEST(TestUnicodeSetRules);
+    TEST(TestSuppressContractions);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
