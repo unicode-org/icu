@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/19 00:18:44 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/03/20 22:55:33 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -249,16 +249,15 @@ public class CanonicalIterator {
             while (it2.hasNext()) {
                 String possible = (String) it2.next();
                 
+/*               
 				String attempt = Normalizer.normalize(possible, Normalizer.DECOMP, 0);
 				if (attempt.equals(segment)) {
-					if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
-					result.add(possible);
-
-/*
-                if (isEquivalent(possible, Normalizer.DECOMP)) {
+*/
+                if (Normalizer.isEquivalent(possible, segment, Normalizer.DECOMP, 0)) {
+             	               	
             		if (PROGRESS) System.out.println("Adding Permutation: " + NAME.transliterate(possible));
                 	result.add(possible);
-*/
+
                 } else {
             		if (PROGRESS) System.out.println("-Skipping Permutation: " + NAME.transliterate(possible));
                 }
@@ -271,14 +270,7 @@ public class CanonicalIterator {
         return finalResult;
     }
     
-    /**
-     * TODO: Should be method on Normalizer; and MUCH faster
-     */
      
-    private boolean isEquivalent(String possible, Normalizer.Mode normalizerType) {
-        return possible.equals(Normalizer.normalize(possible, normalizerType, 0));
-	}
-    
     private Set getEquivalents2(String segment) {
         Set result = new HashSet();
         if (PROGRESS) System.out.println("Adding: " + NAME.transliterate(segment));
@@ -323,7 +315,9 @@ public class CanonicalIterator {
     private Set extract(int comp, String segment, int segmentPos, StringBuffer buffer) {
         if (PROGRESS) System.out.println(" extract: " + NAME.transliterate(UTF16.valueOf(comp))
             + ", " + NAME.transliterate(segment.substring(segmentPos)));
-        String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
+            
+        //String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
+        String decomp = Normalizer.normalize(comp, Normalizer.DECOMP, 0);
         
         // See if it matches the start of segment (at segmentPos)
         boolean ok = false;
@@ -369,9 +363,13 @@ public class CanonicalIterator {
         String remainder = buffer.toString();
         
         // brute force approach
-        // check to make sure result is canonically equivalent
+        // to check to make sure result is canonically equivalent
+        /*
         String trial = Normalizer.normalize(UTF16.valueOf(comp) + remainder, Normalizer.DECOMP, 0);
         if (!segment.regionMatches(segmentPos, trial, 0, segment.length() - segmentPos)) return null;
+        */
+        
+        if (!Normalizer.isEquivalent(UTF16.valueOf(comp) + remainder, segment.substring(segmentPos), Normalizer.DECOMP, 0)) return null;
         
         // get the remaining combinations
         return getEquivalents2(remainder);
@@ -399,12 +397,11 @@ public class CanonicalIterator {
     
         // TODO: WARNING, NORMALIZER doesn't have supplementaries yet !!;
         // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
-    private static int LAST_UNICODE = 0xFFFF;
+    private static int LAST_UNICODE = 0x10FFFF;
     static {
         buildData();
     }
     
-    // TODO: public just for testing
     private static void buildData() {
 
         if (PROGRESS) System.out.println("Getting Safe Start");
@@ -419,13 +416,12 @@ public class CanonicalIterator {
         if (PROGRESS) System.out.println("Getting Containment");
         for (int cp = 0; cp <= LAST_UNICODE; ++cp) {
             if (PROGRESS & (cp & 0x7FF) == 0) System.out.print('.');
-            // TODO: For efficiency, need extra function plus overloads
-            // Normalizer.normalizationDiffers(String source,...)
-            // Normalizer.normalizationDiffers(int char32,...)
-            // Normalizer.normalize(char32,...);
-            String istr = UTF16.valueOf(cp);
-            String decomp = Normalizer.normalize(istr, Normalizer.DECOMP, 0);
-            if (decomp.equals(istr)) continue;
+            
+            if (Normalizer.isNormalized(cp, Normalizer.DECOMP, 0)) continue;
+
+            //String istr = UTF16.valueOf(cp);
+            String decomp = Normalizer.normalize(cp, Normalizer.DECOMP, 0);
+            //if (decomp.equals(istr)) continue;
             
             // add each character in the decomposition to canBeIn 
             
