@@ -26,10 +26,12 @@ sbindir = @sbindir@
 datadir = @datadir@
 libdir = @libdir@
 includedir = @includedir@
+sysconfdir = @sysconfdir@
 
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
+pkgsysconfdir = $(sysconfdir)/@PACKAGE@
 
 ## Build directory information
 top_builddir = ..
@@ -159,7 +161,8 @@ DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB) $(DATAFILESR)
 CLEANFILES = *~ $(BRK_FILES)
 
 install-udata: install-pkgdata
-	$(INSTALL_DATA) $(top_srcdir)/../data/convrtrs.txt $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
+	$(INSTALL_DATA) $(top_srcdir)/../data/convrtrs.txt $(DESTDIR)$(pkgsysconfdir)
 
 install-local: all-local install-udata
 
