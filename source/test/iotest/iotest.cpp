@@ -40,10 +40,12 @@ using namespace std;
 U_CDECL_BEGIN
 #ifdef WIN32
 const UChar NEW_LINE[] = {0x0d,0x0a,0};
-#define C_NEW_LINE "\x0d\x0a"
+const char C_NEW_LINE[] = {0x0d,0x0a,0};
+#define UTF8_NEW_LINE "\x0d\x0a"
 #else
 const UChar NEW_LINE[] = {0x0a,0};
-#define C_NEW_LINE "\x0a"
+const char C_NEW_LINE[] = {'\n',0};
+#define UTF8_NEW_LINE "\x0a"
 #endif
 U_CDECL_END
 
@@ -650,7 +652,7 @@ static void DataDrivenPrintfPrecision(void) {
 static void TestStream(void) {
 #if U_IOSTREAM_SOURCE >= 198506
     char testStreamBuf[512];
-    static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x32\x31\x20" C_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
+    static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x32\x31\x20" UTF8_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
     ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
     istrstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64", 0);
     const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
