@@ -817,6 +817,12 @@ void loadMBCSTableFromFile(FileStream* convFile, UConverterSharedData* sharedDat
                   /* skip subchar mappings */
                   continue;
                 }
+              else if(*line == '3')
+              {
+                  /* set only a fallback mapping from codepage to Unicode */
+                  isOK &= MBCSAddToUnicode(mbcsData, mbcsBytes, mbcsLength, unicodeValue, 1);
+                  continue;
+              }
               else
                 {
                   isFallback = (int8_t)(*line == '1');
