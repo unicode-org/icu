@@ -1,7 +1,7 @@
 /*
 *****************************************************************************
-* Copyright (C) 2001-2003, International Business Machines orporation and others.  
-* All Rights Reserved.
+* Copyright (C) 2001-2004, International Business Machines orporation  
+* and others. All Rights Reserved.
 ****************************************************************************/
 
 #include "unicode/utypes.h"
