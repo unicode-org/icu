@@ -62,7 +62,7 @@ CFG=makedata - Win32 Debug
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
-# PROP Cmd_Line "NMAKE /f makedata.mak icudbld=$(MAKEDIR) cfg=debug"
+# PROP Cmd_Line "NMAKE /f makedata.mak icumake=$(MAKEDIR) cfg=debug"
 # PROP Rebuild_Opt "clean all"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
@@ -98,15 +98,27 @@ SOURCE=.\makedata.mak
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\resfiles.mk
+SOURCE=.\locales\resfiles.mk
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\test\testdata\testdata.mk
+SOURCE=..\test\testdata\testdata.mk
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\data\ucmfiles.mk
+SOURCE=.\translit\trnsfiles.mk
+# End Source File
+# Begin Source File
+
+SOURCE=.\mappings\ucmcore.mk
+# End Source File
+# Begin Source File
+
+SOURCE=.\mappings\ucmebcdic.mk
+# End Source File
+# Begin Source File
+
+SOURCE=.\mappings\ucmfiles.mk
 # End Source File
 # End Group
 # End Target
