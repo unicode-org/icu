@@ -32,7 +32,7 @@ public:
     enum EToken_Len { MAX_TOKEN_LEN = 128 };
 
     CollationMonkeyTest();
-    ~CollationMonkeyTest();
+    virtual ~CollationMonkeyTest();
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     // utility function used in tests, returns absolute value

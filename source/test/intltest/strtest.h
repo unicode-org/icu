@@ -26,7 +26,7 @@
 class StringTest : public IntlTest {
 public:
     StringTest() {}
-    ~StringTest() {}
+    virtual ~StringTest() {}
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
 
