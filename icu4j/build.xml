@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/08/27 03:11:27 $
-* $Revision: 1.77 $
+* $Date: 2003/09/17 20:36:51 $
+* $Revision: 1.78 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -81,6 +81,8 @@
         <property name="build.dir" value="classes"/>
         <property name="doc.dir" value="doc"/>
         <property name="jar.file" value="icu4j.jar"/>
+        <property name="jarSrc.file" value="icu4jsrc.jar"/>
+        <property name="jarDocs.file" value="icu4jdocs.jar"/>
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="icu4j.module.manifest" value="${src.dir}/com/ibm/icu/manifest.module.stub"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
@@ -225,11 +227,35 @@
         </copy>
     </target>
 
+	<!-- Creates the 3 release jar archives for distribution -->
+	<target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
+	
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
+            manifest="${icu4j.manifest}"/>
+    </target>
+
+    <target name="jarSrc" depends="init">
+        <!--Create a jar archive of just the source for distribution.  The
+        zip file will be created in the directory above the root ICU4J
+        directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
+        and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
+        eliminates old archive copies like SpecialCasing-2.txt and
+        UnicodeData-2.1.8.txt -->
+        <jar jarfile="${jarSrc.file}"
+            compress="true"
+            basedir="."
+            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"
+          manifest="${icu4j.manifest}"/>
+    </target>
+
+    <target name="jarDocs" depends="docs">
+        <jar jarfile="${jarDocs.file}"
+            compress="true"
+            basedir="${doc.dir}"
             manifest="${icu4j.manifest}"/>
     </target>
 
@@ -272,30 +298,6 @@
         <zip zipfile="${richedit.zip.file}"
             basedir="${richedit.dir}"
             includes="doc/**/*,richedit.jar,license.html"/>
-    </target>
-
-    <target name="zip" depends="docs,jar">
-        <!--Create a zip archive of the source, docs, and jar file for
-        distribution.  The zip file will be created in the directory above
-        the root ICU4J directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
-        and ${src.dir}/data/unicode/SpecialCasing-*.txt
-        eliminates old archive copies like SpecialCasing-2.txt and
-        UnicodeData-2.1.8.txt etc -->
-        <zip zipfile="${zip.file}"
-            basedir="."
-            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
-    </target>
-
-    <target name="zipSrc" depends="init">
-        <!--Create a zip archive of just the source for distribution.  The
-        zip file will be created in the directory above the root ICU4J
-        directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
-        and ${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt
-        eliminates old archive copies like SpecialCasing-2.txt and
-        UnicodeData-2.1.8.txt -->
-        <zip zipfile="${zipSrc.file}"
-            basedir="."
-            excludes="${richedit.dir}/**/*,test_*,${src.dir}/com/ibm/icu/dev/data/unicode//UnicodeData-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing-*.txt,${src.dir}/com/ibm/icu/dev/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
     </target>
 
     <target name="check" depends="tests">
