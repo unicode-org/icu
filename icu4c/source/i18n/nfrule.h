@@ -48,7 +48,7 @@ public:
     UBool operator==(const NFRule& rhs) const;
     UBool operator!=(const NFRule& rhs) const { return !operator==(rhs); }
 
-    ERuleType getType() const { return (ERuleType)(baseValue <= 0 ? llong_asInt(baseValue) : kOtherRule); }
+    ERuleType getType() const { return (ERuleType)(baseValue <= 0 ? baseValue.asInt() : kOtherRule); }
     void setType(ERuleType ruleType) { baseValue = (int32_t)ruleType; }
 
     llong getBaseValue() const { return baseValue; }
@@ -56,7 +56,7 @@ public:
 
     double getDivisor() const { return uprv_pow(radix, exponent); }
 
-    void doFormat(llong number, UnicodeString& toAppendTo, int32_t pos) const;
+    void doFormat(const llong &number, UnicodeString& toAppendTo, int32_t pos) const;
     void doFormat(double  number, UnicodeString& toAppendTo, int32_t pos) const;
 
     UBool doParse(const UnicodeString& text, 

@@ -82,7 +82,7 @@ public:
      * rule text begins (this value is added to this substitution's
      * position to determine exactly where to insert the new text)
      */
-    virtual void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
+    virtual void doSubstitution(const llong &number, UnicodeString& toInsertInto, int32_t pos) const;
     virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     
 protected:
@@ -95,7 +95,7 @@ protected:
      * @param The number being formatted
      * @return The result of performing the opreration on the number
      */
-    virtual llong  transformNumber(llong number) const = 0;
+    virtual llong  transformNumber(const llong &number) const = 0;
     virtual double transformNumber(double number) const = 0;
     
 public:
@@ -211,7 +211,7 @@ public:
         const UnicodeString& description,
         UErrorCode& status);
     
-    llong transformNumber(llong number) const { return number; }
+    llong transformNumber(const llong &number) const { return number; }
     double transformNumber(double number) const { return number; }
     double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return newRuleValue; }
     double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
@@ -247,7 +247,7 @@ public:
     
     UBool operator==(const NFSubstitution& rhs) const;
     
-    llong transformNumber(llong number) const {
+    llong transformNumber(const llong &number) const {
         return number / ldivisor;
     }
     
@@ -290,10 +290,10 @@ public:
     
     UBool operator==(const NFSubstitution& rhs) const;
     
-    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
+    void doSubstitution(const llong &number, UnicodeString& toInsertInto, int32_t pos) const;
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
     
-    llong transformNumber(llong number) const { return number % ldivisor; }
+    llong transformNumber(const llong &number) const { return number % ldivisor; }
     double transformNumber(double number) const { return uprv_fmod(number, divisor); }
     
     UBool doParse(const UnicodeString& text, 
@@ -329,7 +329,7 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    llong transformNumber(llong number) const { return number; }
+    llong transformNumber(const llong &number) const { return number; }
     double transformNumber(double number) const { return uprv_floor(number); }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
     double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
@@ -356,8 +356,8 @@ public:
     UBool operator==(const NFSubstitution& rhs) const;
     
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-    void doSubstitution(llong /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    llong transformNumber(llong /*number*/) const { return llong(0,0); }
+    void doSubstitution(const llong &/*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    llong transformNumber(const llong &/*number*/) const { return llong(0,0); }
     double transformNumber(double number) const { return number - uprv_floor(number); }
     
     UBool doParse(const UnicodeString& text,
@@ -387,7 +387,7 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    llong transformNumber(llong number) const { return llong_abs(number); }
+    llong transformNumber(const llong &number) const { return number.abs(); }
     double transformNumber(double number) const { return uprv_fabs(number); }
     double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return -newRuleValue; }
     double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
@@ -417,7 +417,7 @@ public:
     
     UBool operator==(const NFSubstitution& rhs) const;
     
-    llong transformNumber(llong number) const { return number * ldenominator; }
+    llong transformNumber(const llong &number) const { return number * ldenominator; }
     double transformNumber(double number) const { return uprv_round(number * denominator); }
     
     UBool doParse(const UnicodeString& text, 
@@ -454,8 +454,8 @@ public:
     
     void toString(UnicodeString& /*result*/) const {}
     void doSubstitution(double /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    void doSubstitution(llong /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
-    llong transformNumber(llong /*number*/) const { return llong(0,0); }
+    void doSubstitution(const llong &/*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    llong transformNumber(const llong &/*number*/) const { return llong(0,0); }
     double transformNumber(double /*number*/) const { return 0; }
     UBool doParse(const UnicodeString& /*text*/,
                 ParsePosition& /*parsePosition*/, 
