@@ -23,7 +23,7 @@ ifneq ($(ENABLE_STATIC),)
 TARGET = $(LIBSICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).$(A)
 endif
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)
 DEFS += -DT_CTEST_IMPLEMENTATION
 
 

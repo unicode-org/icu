@@ -38,7 +38,7 @@ DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 LDFLAGS += $(LDFLAGSICUTOOLUTIL)
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw $(LIBCPPFLAGS)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common $(LIBCPPFLAGS)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = propsvec.o toolutil.o unewdata.o ucm.o ucmstate.o ucmpwrit.o uoptions.o uparse.o ucbuf.o uperf.o
