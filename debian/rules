@@ -69,13 +69,13 @@ $(builddir)/configure-stamp:
 build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
 
 # Build some Debian files
-DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst
+DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst README.Debian.libicu$(major)-dev
 
 debian/%: debian/%.in
 	cd $(builddir) \
 	  && CONFIG_FILES=$(builddir_relative_topdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-debian/libicu$(major).%: debian/libicu.%
+debian/%libicu$(major)%: debian/%libicu%
 	cp $< $@
 
 debian-files: $(addprefix debian/,$(DEBIAN_FILES))
@@ -202,7 +202,7 @@ endif
 #	dh_installdebconf
 	dh_installdocs
 	dh_installexamples $(srcdir)/samples/*
-	find debian/libicu-dev -name CVS -o -name .cvsignore | xargs $(RM) -r
+	find debian/libicu$(major)-dev -name CVS -o -name .cvsignore | xargs $(RM) -r
 	dh_installmenu
 #	dh_installemacsen
 #	dh_installpam
