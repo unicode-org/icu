@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/10/09 18:56:58 $ 
-* $Revision: 1.13 $
+* $Date: 2002/11/16 01:01:05 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -313,7 +313,9 @@ public abstract class Collator implements Comparator, Cloneable
     {
         return getInstance(Locale.getDefault());
     }
-    
+
+    // begin registry stuff
+
     /**
      * Gets the Collator for the desired locale.
      * @param locale the desired locale.
@@ -361,11 +363,13 @@ public abstract class Collator implements Comparator, Cloneable
         return service;
     }
 
-    public static final Object register(Collator collator, Locale locale) {
+    /* @prototype */
+    /* public */ static final Object register(Collator collator, Locale locale) {
         return getService().registerObject(collator, locale);
     }
 
-    public static final boolean unregister(Object registryKey) {
+    /* @prototype */
+    /* public */ static final boolean unregister(Object registryKey) {
         if (service != null) {
             return service.unregisterFactory((Factory)registryKey);
         }
@@ -380,9 +384,12 @@ public abstract class Collator implements Comparator, Cloneable
         }
     }
 
-    public static final Map getDisplayNames(Locale locale) {
+    /* @prototype */
+    /* public */ static final Map getDisplayNames(Locale locale) {
         return getService().getDisplayNames(locale);
     }
+
+    // end registry stuff
 
     /**
      * <p>Returns this Collator's strength property. The strength property 
