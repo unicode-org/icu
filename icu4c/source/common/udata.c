@@ -731,7 +731,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
                         lib=NO_LIBRARY;
                     }
                 } else {
-                    *pErrorCode=errorCode;
                     if(!isICUData) {
                         UNLOAD_LIBRARY(lib);
                     }
@@ -761,7 +760,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* look for the entry point */
             p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
             if(p==NULL) {
-                *pErrorCode=errorCode;
                 UNLOAD_LIBRARY(lib);
             }
         }
@@ -789,7 +787,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* look for the entry point */
             p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
             if(p==NULL) {
-                *pErrorCode=errorCode;
                 UNLOAD_LIBRARY(lib);
             }
         }
@@ -836,7 +833,13 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* data not found */
     if(U_SUCCESS(*pErrorCode)) {
-        *pErrorCode=U_FILE_ACCESS_ERROR;
+        if(U_SUCCESS(errorCode)) {
+            /* file not found */
+            *pErrorCode=U_FILE_ACCESS_ERROR;
+        } else {
+            /* entry point not found or rejected */
+            *pErrorCode=errorCode;
+        }
     }
     return NULL;
 }
