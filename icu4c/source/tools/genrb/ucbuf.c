@@ -197,6 +197,7 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
             buf->conv=NULL;
         }
         if(U_FAILURE(*err)){
+            fprintf(stderr, "Could not open codepage [%s]: %s\n", cp, u_errorName(*err));
             return NULL;
         }
         buf=ucbuf_fillucbuf(buf,err);
