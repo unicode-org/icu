@@ -438,6 +438,14 @@ static void TestStringFunctions()
             if(u_strcmpCodePointOrder(strings[i], strings[i+1])>=0) {
                 log_err("error: u_strcmpCodePointOrder() fails for string %d and the following one\n", i);
             }
+            if(u_strncmpCodePointOrder(strings[i], strings[i+1], 10)>=0) {
+                log_err("error: u_strncmpCodePointOrder() fails for string %d and the following one\n", i);
+            }
+
+            /* There are at least 2 UChars in each string - verify that strncmp()==memcmp(). */
+            if(u_strncmpCodePointOrder(strings[i], strings[i+1], 2)!=u_memcmpCodePointOrder(strings[i], strings[i+1], 2)) {
+                log_err("error: u_strncmpCodePointOrder(2)!=u_memcmpCodePointOrder(2) for string %d and the following one\n", i);
+            }
 
             /* test u_strCompare(TRUE) */
             len1=u_strlen(strings[i]);
