@@ -152,47 +152,58 @@ strcpy_returnEnd(char *dest, const char *src) {
     return dest;
 }
 
-/*------------------------------------------------------------------------------*
- *                                                                              *
- *  setPathGetBasename   given a (possibly partial) path of an item             *
- *                       to be opened, compute a full directory path and leave  *
- *                       it in pathBuffer.  Returns a pointer to the null at    *
- *                       the end of the computed path.                          *
- *                       Overwrites any contents in the output pathBuffer       *
- *                                                                              *
+/*------------------------------------------------------------------------------
+ *                                                                              
+ *  computeDirPath   given a user-supplied path of an item to be opened,             
+ *                         compute and return 
+ *                            - the full directory path to be used 
+ *                              when opening the file.
+ *                            - Pointer to null at end of above returned path    
+ *
+ *                       Parameters:
+ *                          path:        input path.  Buffer is not altered.
+ *                          pathBuffer:  Output buffer.  Any contents are overwritten.
+ *
+ *                       Returns:
+ *                          Pointer to null termination in returned pathBuffer.
+ *
+ *                    TODO:  This works the way ICU historically has, but the
+ *                           whole data fallback search path is so complicated that
+ *                           proabably almost no one will ever really understand it,
+ *                           the potential for confusion is large.  (It's not just 
+ *                           this one function, but the whole scheme.)
+ *                            
  *------------------------------------------------------------------------------*/
 static char *
-setPathGetBasename(const char *path, char *pathBuffer) {
-    if(path==NULL) {
-        /* copy the ICU_DATA path to the path buffer */
-        path=u_getDataDirectory();
-        if(path!=NULL && *path!=0) {
-            return strcpy_returnEnd(pathBuffer, path);
+computeDirPath(const char *path, char *pathBuffer) {
+    char   *finalSlash;       /* Ptr to last dir separator in input path, or null if none. */
+    int     pathLen;          /* Length of the returned directory path                     */
+    
+    finalSlash = 0;
+    if (path != 0) {
+        finalSlash = uprv_strrchr(path, U_FILE_SEP_CHAR);
+    }
+    
+    *pathBuffer = 0;
+    if (finalSlash == 0) {
+        /* No user-supplied path.  
+         * Copy the ICU_DATA path to the path buffer and return that*/
+        const char *icuDataDir;
+        icuDataDir=u_getDataDirectory();
+        if(icuDataDir!=NULL && *icuDataDir!=0) {
+            return strcpy_returnEnd(pathBuffer, icuDataDir);
         } else {
-            /* there is no path */
+            /* there is no icuDataDir either.  Just return the empty pathBuffer. */
             return pathBuffer;
         }
-    } else {
-        /* find the last file sepator in the input path */
-        char *basename=uprv_strrchr(path, U_FILE_SEP_CHAR);
-        if(basename==NULL) {
-            /* copy the ICU_DATA path to the path buffer */
-            path=u_getDataDirectory();
-            if(path!=NULL && *path!=0) {
-                return strcpy_returnEnd(pathBuffer, path);
-            } else {
-                /* there is no path */
-                return pathBuffer;
-            }
-        } else {
-            /* copy the path to the path buffer */
-            ++basename;
-            uprv_memcpy(pathBuffer, path, basename-path);
-            basename=pathBuffer+(basename-path);
-            *basename=0;
-            return basename;
-        }
-    }
+    } 
+    
+    /* User supplied path did contain a directory portion.
+     * Copy it to the output path buffer */
+    pathLen = finalSlash - path + 1;
+    uprv_memcpy(pathBuffer, path, pathLen);
+    *(pathBuffer+pathLen) = 0;
+    return pathBuffer+pathLen;
 }
 
 
@@ -396,10 +407,22 @@ openCommonData(
     }
 
 
-    /* request is NOT for ICU Data.
-    * Is the requested data already cached?  */
+    /* request is NOT for ICU Data.  */
+
+    /* Find the base name portion of the supplied path.   */
+    /*   inBasename will be left pointing somewhere within the original path string.      */
     inBasename=findBasename(path);
-    {
+    if(*inBasename==0) {
+        /* no basename.     This will happen if the original path was a directory name,   */
+        /*    like  "a/b/c/".   (Fallback to separate files will still work.)             */
+        *pErrorCode=U_FILE_ACCESS_ERROR;
+        return NULL;
+    }
+
+   /* Is the requested common data file already open and cached?                     */
+   /*   Note that the cache is keyed by the base name only.  The rest of the path,   */
+   /*     if any, is not considered.                                                 */
+   {
         UDataMemory  *dataToReturn = udata_findCachedData(inBasename);
         if (dataToReturn != NULL) {
             return dataToReturn;
@@ -409,22 +432,16 @@ openCommonData(
     /* Requested item is not in the cache.
      * Hunt it down, trying all the fall back locations.
      */
-    basename=setPathGetBasename(path, pathBuffer);
-    if(*inBasename==0) {
-        /* no basename, no common data */
-        *pErrorCode=U_FILE_ACCESS_ERROR;
-        return NULL;
-    }
-
-
-    /* set up the file name */
-    suffix=strcpy_returnEnd(basename, inBasename);
-    uprv_strcpy(suffix, ".dat");
 
     /* try path/basename first, then basename only */
+    basename=computeDirPath(path, pathBuffer);       /*  pathBuffer = directory path */
+    suffix=strcpy_returnEnd(basename, inBasename);   /*     append the base name.    */
+    uprv_strcpy(suffix, ".dat");                     /*     append ".dat"            */
+
     uprv_mapFile(&tData, pathBuffer);
 
     if (!UDataMemory_isLoaded(&tData)) {
+        /* The data didn't open.  Try again without the directory portion of the name */
         if (basename!=pathBuffer) {
             uprv_mapFile(&tData, basename);
         }
@@ -721,7 +738,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* the data was not found in the common data,  look further, */
     /* try to get an individual data file */
-    basename=setPathGetBasename(path, pathBuffer);
+    basename=computeDirPath(path, pathBuffer);
     if(isICUData) {
         inBasename=COMMON_DATA_NAME;
     } else {
