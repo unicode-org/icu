@@ -1438,8 +1438,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       uint32_t hanFixup = 0;
 
       if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
-        hanFixup = 0x08000000;
-        /*hanFixup = 0x04000000;*/
+        hanFixup = 0x04000000;
       }
       if (last0 < 0) {
           cp += IMPLICIT_HAN_SHIFT_; // shift so HAN shares single block
@@ -1615,8 +1614,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       uint32_t hanFixup = 0;
 
       if ((0x3400 <= cp && cp <= 0x4DB5) || (0x4E00 <= cp && cp <= 0x9FA5) || (0xF900 <= cp && cp <= 0xFA2D)) {
-        hanFixup = 0x08000000;
-        /*hanFixup = 0x04000000;*/
+        hanFixup = 0x04000000;
       }
 
       if (last0 < 0) {

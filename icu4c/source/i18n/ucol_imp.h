@@ -420,10 +420,8 @@ enum {
 }; 
 
 #define UCOL_RESET_TOP_VALUE 0x9F000303
-#define UCOL_NEXT_TOP_VALUE  0xE4960303
-/*#define UCOL_NEXT_TOP_VALUE  0xE8960303*/
-#define PRIMARY_IMPLICIT_MIN 0xE4000000
-/*#define PRIMARY_IMPLICIT_MIN 0xE8000000*/
+#define UCOL_NEXT_TOP_VALUE  0xE8960303
+#define PRIMARY_IMPLICIT_MIN 0xE8000000
 #define PRIMARY_IMPLICIT_MAX 0xF0000000
 
 /* These constants can be changed - sortkey size is affected by them */
