@@ -12,7 +12,7 @@ ru {
     CollationElements { 
       Version { "1.1" }
       Sequence { 
-        "[suppressContractions [\\u0400-\\u045f]]"
+        "[suppressContractions [\u0400-\u045f]]"
       }
     }
     Countries { 
