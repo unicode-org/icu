@@ -152,6 +152,8 @@ ibm-1281                mactr                   # Apple Turkish
 ibm-1282                macce                   # Apple Central Europe
 ibm-1283                maccy                   # Apple Cyrillic
 
+ibm-1051                hp-roman8 roman8 r8 csHPRoman8  # HP Latin1
+
 # Added for more euro support
 
 ibm-849                cp1131          # PC Belarus (w/ euro update)
