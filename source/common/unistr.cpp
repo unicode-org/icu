@@ -94,7 +94,12 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
 U_NAMESPACE_BEGIN
 
 const char UnicodeString::fgClassID=0;
+
+#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
+
 const char UCharReference::fgClassID=0;
+
+#endif
 
 //========================================
 // Reference Counting functions, put at top of file so that optimizing compilers
@@ -502,11 +507,15 @@ UnicodeString::numDisplayCells( int32_t start,
   return result;
 }
 
+#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
+
 UCharReference
 UnicodeString::operator[] (int32_t pos)
 {
   return UCharReference(this, pos);
 }
+
+#endif
 
 UnicodeString UnicodeString::unescape() const {
     UnicodeString result;

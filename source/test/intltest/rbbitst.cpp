@@ -2140,11 +2140,14 @@ void RBBITest::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 
     breaksLen = breaks.length();
     for (i = 0; i < breaksLen; i++) {
-        UChar c1 = work[1] = breaks[i];
+        UChar c1 = breaks[i];
+        work.setCharAt(1, c1);
         for (j = 0; j < testCharsLen; j++) {
-            UChar c0 = work[0] = testChars[j];
+            UChar c0 = testChars[j];
+            work.setCharAt(0, c0);
             for (int k = 0; k < testCharsLen; k++) {
-                UChar c2 = work[2] = testChars[k];
+                UChar c2 = testChars[k];
+                work.setCharAt(2, c2);
 
                 // if a cr is followed by lf, ps, ls or etx, don't do the check (that's
                 // not supposed to work)
@@ -2195,9 +2198,9 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 
     // a break should never occur between CR and LF
     for (i = 0; i < testCharsLen; i++) {
-        work[0] = testChars[i];
+        work.setCharAt(0, testChars[i]);
         for (j = 0; j < testCharsLen; j++) {
-            work[3] = testChars[j];
+            work.setCharAt(3, testChars[j]);
             tb.setText(work);
             for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
@@ -2221,7 +2224,7 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
             u_charType(c1) == U_CONTROL_CHAR  ||  u_charType(c1) == U_FORMAT_CHAR) {
             continue;
         }
-        work[1] = c1;
+        work.setCharAt(1, c1);
         for (j = 0; j < testCharsLen; j++) {
             UChar c2 = testChars[j];
             type = u_charType(c2);
@@ -2229,7 +2232,7 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
                 (type != U_ENCLOSING_MARK)) {
                 continue;
             }
-            work[2] = c2;
+            work.setCharAt(2, c2);
             tb.setText(work);
             for (int k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
@@ -2382,7 +2385,7 @@ void RBBITest::TestJapaneseLineBreak()
     }
 
     for (i = 0; i < precedingChars.length(); i++) {
-        testString[1] = precedingChars[i];
+        testString.setCharAt(1, precedingChars[i]);
         iter->setText(testString);
         int32_t j = iter->first();
         if (j != 0)
@@ -2398,7 +2401,7 @@ void RBBITest::TestJapaneseLineBreak()
     }
 
     for (i = 0; i < followingChars.length(); i++) {
-        testString[1] = followingChars[i];
+        testString.setCharAt(1, followingChars[i]);
         iter->setText(testString);
         int j = iter->first();
         if (j != 0)
