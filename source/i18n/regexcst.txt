@@ -77,6 +77,8 @@ term:
     '['                  n expr-quant     		            doScanUnicodeSet
     '('                  n open-paren            ^expr-quant          
     '.'                  n expr-quant                               doDotAny
+    '^'                  n term                                     doCaret
+    '$'                  n term                                     doDollar
     '\'                  n backslash
     eof		           finish
     default                errorDeath                               doRuleError
@@ -133,6 +135,7 @@ open-paren-extended:
     '='                  n  term            ^expr-cont              doOpenLookAhead        #  (?=
     '!'                  n  term            ^expr-cont              doOpenLookAheadNeg     #  (?!
     '<'                  n  open-paren-lookbehind
+    '#'                  n  paren-comment
     default                 errorDeath                              doBadOpenParenType
     
 open-paren-lookbehind:
@@ -141,6 +144,15 @@ open-paren-lookbehind:
     default                 errorDeath                              doBadOpenParenType
     
 
+#
+#   paren-comment    We've got a (?# ... )  style comment.  Eat pattern text till we get to the ')'
+#                    TODO:  should parens nest here?  Check what perl does.
+#
+paren-comment:
+    ')'                  n  term
+    default              n  paren-comment
+    
+    
 #
 #  quant-star     Scanning a '*' quantifier.  Need to look ahead to decide
 #                 between plain '*', '*?', '*+'
@@ -188,22 +200,10 @@ interval-value:
     
 interval-close:
     white_space          n  interval-close
-    '}'                  n  expr-cont-no-interval                   doTagValue
+    '}'                  n  expr-cont                               doTagValue
     default                 errorDeath                              doNumberExpectedError
     
     
-    
-#
-#  expr-cont-no-tag    Expression, continuation.  At a point where additional terms are
-#                                            allowed, but not required.  Just like
-#                                            expr-cont, above, except that no interval
-#                                            specification {min, max}  is permitted.
-#
-expr-cont-no-interval:
-    quoted                  term                                    
-    '|'                  n  term                                    doExprOrOperator
-    ')'                  n  pop                                     doExprRParen
-    default                 term                   
     
     
 #
@@ -217,6 +217,7 @@ backslash:
    'd'			 n  expr-quant				    doBackslashd
    'D'                   n  expr-quant                              doBackslashD
    'G'                   n  term                                    doBackslashG
+   'N'			 n  expr-quant                              doNamedChar      #   \N{NAME}  named char
    'p'			    expr-quant                              doProperty       #   \p{Lu}  style property
    'P'			    expr-quant                              doProperty
    'Q'                   n  term                                    doEnterQuoteMode
@@ -225,8 +226,10 @@ backslash:
    'W'                   n  expr-quant                              doBackslashW
    'w'                   n  expr-quant                              doBackslashw
    'X'                   n  expr-quant                              doBackslashX
+   'x'                   n  expr-quant                              doBackslashx
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
+   digit_char	         n  expr-quant			            doBackRef
    
    default               n  string				    doStartString   
 

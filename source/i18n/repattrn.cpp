@@ -421,7 +421,11 @@ static char *opNames[] = {
         "URX_BACKSLASH_G",
         "URX_BACKSLASH_W",
         "URX_BACKSLASH_X",
-        "URX_BACKSLASH_Z"
+        "URX_BACKSLASH_Z",
+        "URX_DOTANY_ALL",
+        "URX_BACKSLASH_D",
+        "URX_CARET",
+        "URX_DOLLAR"
 };
 
 void   RegexPattern::dump() {
@@ -470,8 +474,11 @@ void   RegexPattern::dump() {
         case URX_STATE_SAVE:
         case URX_JMP:
         case URX_BACKSLASH_B:
+        case URX_BACKSLASH_D:
         case URX_BACKSLASH_W:
         case URX_BACKSLASH_Z:
+        case URX_CARET:
+        case URX_DOLLAR:
             // types with an integer operand field.
             printf("%d", val);
             break;

@@ -449,26 +449,28 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
 
     case doOpenAtomicParen:
-        // Open Paren.
+        // Open Atomic Paren.
+        error(U_REGEX_UNIMPLEMENTED);
         break;
 
     case doOpenLookAhead:
         // Open Paren.
+        error(U_REGEX_UNIMPLEMENTED);
         break;
 
     case doOpenLookAheadNeg:
         // Open Paren.
+        error(U_REGEX_UNIMPLEMENTED);
         break;
 
     case doOpenLookBehind:
         // Open Paren.
+        error(U_REGEX_UNIMPLEMENTED);
         break;
 
     case doOpenLookBehindNeg:
         // Open Paren.
-        break;
-
-    case doExprRParen:
+        error(U_REGEX_UNIMPLEMENTED);
         break;
 
     case doCloseParen:
@@ -702,6 +704,14 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOTANY, 0), *fStatus);
         break;
 
+    case doCaret:       // TODO:  multi-line mode flag.
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_CARET, 0), *fStatus);
+        break;
+
+
+    case doDollar:       // TODO:  multi-line mode flag.
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOLLAR, 0), *fStatus);
+        break;
 
     case doBackslashA:
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_A, 0), *fStatus);
@@ -751,8 +761,15 @@ UBool RegexCompile::doParseActions(EParseAction action)
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_X, 0), *fStatus);
         break;        
 
+    case doBackslashx:              // \x{abcd}   alternate hex format
+        //  TODO:  implement 
+        error(U_REGEX_UNIMPLEMENTED);
+        break;
+            
+
+
     case doBackslashZ:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_Z, 1), *fStatus);
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOLLAR, 0), *fStatus);
         break;        
 
     case doBackslashz:
@@ -781,6 +798,16 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doEnterQuoteMode:
         // Just scanned a \Q.  Put character scanner into quote mode.
         fQuoteMode = TRUE;
+        break;
+
+    case doBackRef:
+        //  TODO:  implement back references.
+        error(U_REGEX_UNIMPLEMENTED);
+        break;
+
+    case doNamedChar:            // \N{NAMED_CHAR}
+        //  TODO:  implement 
+        error(U_REGEX_UNIMPLEMENTED);
         break;
             
     default:
@@ -951,15 +978,10 @@ void RegexCompile::error(UErrorCode e) {
         *fStatus = e;
         fParseErr->line  = fLineNum;
         fParseErr->offset = fCharNum;
-        fParseErr->preContext[0] = 0;
+        fParseErr->preContext[0] = 0;    // TODO:  copy in some input pattern text
         fParseErr->preContext[0] = 0;
     }
 }
-
-
-
-
-
 
 
 

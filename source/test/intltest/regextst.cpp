@@ -54,6 +54,10 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 4: name = "Extended";
             if (exec) Extended(); 
             break;
+        case 5: name = "Errors";
+            if (exec) Errors(); 
+            break;
+
         default: name = ""; 
             break; //needed to end loop
     }
@@ -163,7 +167,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 //
 //       usage:
 //          REGEX_FIND("pattern",  "input text");
-//          REGEX_FIND_S("pattern",  "input text",  expected status);
+//          REGEX_ERR("pattern",   expected status);
 //
 //          The input text is unescaped.  The pattern is not.
 //          The input text is marked with the expected match positions
@@ -177,7 +181,6 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 // REGEX_FIND is invoked via a macro, which allows capturing the source file line
 //            number for use in error messages.
 #define REGEX_FIND(pat, text) regex_find(pat, text, U_ZERO_ERROR, __LINE__);
-#define REGEX_FIND_S(pat, text, status) regex_find(pat, text, status, __LINE__);
 
 
 //  Set a value into a UVector at position specified by a decimal number in
@@ -300,6 +303,52 @@ cleanupAndReturn:
     delete callerPattern;
 }
  
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------
+//
+//    REGEX_ERR       Macro + invocation function to simplify writing tests
+//                       regex tests for incorrect patterns
+//
+//       usage:
+//          REGEX_ERR("pattern",   expected error line, column, expected status);
+//
+//---------------------------------------------------------------------------
+#define REGEX_ERR(pat, line, col, status) regex_err(pat, line, col, status, __LINE__);
+
+void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
+                          UErrorCode expectedStatus, int line) {
+    UnicodeString       pattern(pat);
+
+    UErrorCode          status         = U_ZERO_ERROR;
+    UParseError         pe;
+    RegexPattern        *callerPattern = NULL;
+
+    //
+    //  Compile the caller's pattern
+    //
+    UnicodeString patString(pat);
+    callerPattern = RegexPattern::compile(patString, 0, pe, status);
+    if (status != expectedStatus) {
+        errln("Line %d: unexpected error %s compiling pattern.", line, u_errorName(status));
+    } else {
+        if (status != U_ZERO_ERROR) {
+            if (pe.line != errLine || pe.offset != errCol) {
+                errln("Line %d: incorrect line/offset from UParseError.  Expected %d/%d; got %d/%d.\n",
+                    line, errLine, errCol, pe.line, pe.offset);
+            }
+        }
+    }
+
+    delete callerPattern;
+}
+
+
 
 //---------------------------------------------------------------------------
 //
@@ -429,8 +478,8 @@ void RegexTest::Basic() {
     
     // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
     REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
-    // REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L (or whatever) TODO: bug in Unescape
-    // REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape  TODO: bug in Unescape
+    REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L 
+    REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape 
     REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
     REGEX_TESTLM("\\n", "\\u000a", TRUE, TRUE);        // new line
     REGEX_TESTLM("\\r", "\\u000d", TRUE, TRUE);        //  CR
@@ -1087,7 +1136,66 @@ void RegexTest::Extended() {
 
     // \X  consume one combining char sequence.
     REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-        "<0><1>A</1><2>B</2><3> </3></0>");
+        "<0><1>A</1><2>B</2><3> </3><4>\\r\\n</4></0>");
+    REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
+        "<0><1>A\\u0301</1><2>\n</2><3>\\u0305</3><4>a\\u0302\\u0303\\u0304</4></0>");
+
+    // ^ matches only at beginning of line
+    REGEX_FIND(".*^(Hello)", "<0><1>Hello</1></0> Hello Hello Hello Goodbye");
+    REGEX_FIND(".*(Hello)",  "<0>Hello Hello Hello <1>Hello</1></0> Goodbye");
+    REGEX_FIND(".*^(Hello)", " Hello Hello Hello Hello Goodbye");   // No Match
+
+    // $ matches only at end of line, or before a newline preceding the end of line
+    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
+    REGEX_FIND(".*?(Goodbye)", "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye");
+    REGEX_FIND(".*?(Goodbye)$", "Hello Goodbye> Goodbye Goodbye ");  // No Match
+
+    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
+    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
+    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n");
+    REGEX_FIND(".*?(Goodbye)$", "Hello Goodbye Goodbye Goodbye\\n\\n");  // No Match
+    
+    // \Z matches at end of input, like $ with default flags.
+    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
+    REGEX_FIND(".*?(Goodbye)", "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye");
+    REGEX_FIND(".*?(Goodbye)\\Z", "Hello Goodbye> Goodbye Goodbye ");  // No Match
+    REGEX_FIND("here$", "here\\nthe end");   // No Match
+
+    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
+    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
+    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n");
+    REGEX_FIND(".*?(Goodbye)\\Z", "Hello Goodbye Goodbye Goodbye\\n\\n");  // No Match
+    
+    // \z matches only at the end of string.
+    //    no special treatment of new lines.
+    //    no dependencies on flag settings.
+    REGEX_FIND(".*?(Goodbye)\\z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
+    REGEX_FIND(".*?(Goodbye)\\z", "Hello Goodbye Goodbye Goodbye ");  // No Match
+    REGEX_FIND("here$", "here\\nthe end");   // No Match
+
+    REGEX_FIND(".*?(Goodbye)\\z", "Hello Goodbye Goodbye Goodbye\\n");   // No Match
+    REGEX_FIND(".*?(Goodbye)\\n\\z", "<0>Hello Goodbye Goodbye <1>Goodbye</1>\\n</0>");
+    
+    // (?# comment) doesn't muck up pattern
+    REGEX_FIND("Hello (?# this is a comment) world", "  <0>Hello  world</0>...");
+
+}
+
+
+
+//---------------------------------------------------------------------------
+//
+//      Errors     Check for error handling in patterns.
+//
+//---------------------------------------------------------------------------
+void RegexTest::Errors() {
+    // \escape sequences that aren't implemented yet.
+    REGEX_ERR("No (support) for \\1 BackReferences yet.", 1, 19,  U_REGEX_UNIMPLEMENTED);
+    REGEX_ERR("named chars \\N{GREEK CAPITAL LETTER ALPHA} not implementd", 1, 14, U_REGEX_UNIMPLEMENTED);
+    REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
+
+    // Missing close parentheses
+    //REGEX_ERR("Comment (?# with no close", 1, 0, U_REGEX_INTERNAL_ERROR);
 }
 
 
