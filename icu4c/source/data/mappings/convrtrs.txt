@@ -105,6 +105,7 @@ ibm-1281                mactr                   # Apple Turkish
 ibm-1282                macce                   # Apple Central Europe
 ibm-1283                maccy                   # Apple Cyrillic
 ibm-834                 #Korean Host DBCS
+
 # EBCDIC codepages
 
 ibm-16804              IBM420 ebcdic-cp-ar1 csIBM420 ibm-420         ebcdic-ar  cp420 cpibm16804       # EBCDIC Arabic (w/ euro update)
@@ -167,3 +168,18 @@ ibm-1159               cp28709         # SBCS T-Ch Host (w/ euro update)
 ibm-9027               cp835           # DBCS T-Ch Host (w/ euro update)
 ibm-5123               cp1027          # Host Roman Jis (w/ euro update)
 ibm-16684              cp300           # Jis + Roman Jis Host (w/ euro update)
+
+# EBCDIC codepages for S/390, with LF and NL codes swapped
+
+ibm-1140-s390      IBM037-s390 ebcdic-cp-ca-s390 ebcdic-cp-wt-s390 ebcdic-cp-nl-s390 csIBM037-s390 ebcdic-us-s390 cp37-s390  ebcdic-cp-us-s390 cp037-s390 cpibm1140-s390             # EBCDIC US... (w/ euro update)
+ibm-1142-s390      IBM277-s390 EBCDIC-CP-DK-s390 EBCDIC-CP-NO-s390 csIBM277-s390 ebcdic-dk-s390 cp277-s390 cpibm1142-s390       # EBCDIC Denmark... (w/ euro update)
+ibm-1143-s390      IBM278-s390 ebcdic-cp-fi-s390 ebcdic-cp-se-s390 csIBM278-s390 ebcdic-sv-s390 cp278-s390 cpibm1143-s390       # EBCDIC Sweden (w/ euro update)
+ibm-1144-s390      IBM280-s390 ebcdic-cp-it-s390 csIBM280-s390 csEBCDICIT-s390 ebcdic-it-s390   cp280-s390 cpibm1144-s390       # EBCDIC Italy (w/ euro update)
+ibm-1145-s390      IBM284-s390 ebcdic-cp-es-s390 csIBM284-s390 csEBCDICES-s390 ebcdic-es-s390  cp284-s390 cpibm1145-s390       # EBCDIC Spain (w/ euro update)
+ibm-1146-s390      IBM285-s390 ebcdic-cp-gb-s390 csIBM285-s390 ebcdic-gb-s390  cp285-s390 cpibm1146-s390       # EBCDIC UK Ireland (w/ euro update)
+ibm-1147-s390      IBM297-s390 ebcdic-cp-fr-s390 csIBM297-s390 csEBCDICFR-s390 ebcdic-fr-s390  cp297-s390 cpibm1147-s390       # EBCDIC France (w/ euro update)
+ibm-1148-s390      IBM500-s390 ebcdic-cp-be-s390 ebcdic-cp-ch-s390 csIBM500-s390 IBM274-s390 cp274-s390 csIBM274-s390 ebcdic-be-s390  cp500-s390 cpibm1148-s390       #!!! EBCDIC International Latin1 (w/ euro update)
+ibm-1149-s390      IBM871-s390 ebcdic-cp-is-s390 csIBM871-s390 ebcdic-is-s390  cp871-s390 cpibm1149-s390       # EBCDIC Iceland (w/ euro update)
+ibm-1153-s390      IBM870-s390 ebcdic-cp-roece-s390 ebcdic-cp-yu-s390 csIBM870-s390 cp870-s390 cpibm1153-s390 # EBCDIC latin 2 (w/ euro update)
+ibm-12712-s390     IBM424-s390 ebcdic-cp-he-s390 csIBM424-s390 ebcdic-he-s390  cp424-s390 ibm-424-s390 cpibm12712-s390       # EBCDIC Hebrew (w/ euro, new sheqel, control charaters update)
+ibm-16804-s390     IBM420-s390 ebcdic-cp-ar1-s390 csIBM420-s390 ibm-420-s390 ebcdic-ar-s390 cp420-s390 cpibm16804-s390       # EBCDIC Arabic (w/ euro update)
