@@ -341,7 +341,7 @@ main(int argc, const char *argv[]) {
     if(rc < 0) {
       fprintf(stderr, "# Failed, rc=%d\n", rc);
     }
-    return rc;
+    return rc < 128 ? rc : (rc >> 8);
   }
 
   return 0;
