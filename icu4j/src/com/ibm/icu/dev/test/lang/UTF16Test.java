@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2001/09/06 16:32:54 $ 
-* $Revision: 1.8 $
+* $Date: 2001/12/04 20:09:07 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.icu.test.text;
 import com.ibm.test.TestFmwk;
 import com.ibm.text.UCharacter;
 import com.ibm.text.UTF16;
+import com.ibm.util.Utility;
 
 /**
 * Testing class for UTF16
@@ -45,7 +46,7 @@ public final class UTF16Test extends TestFmwk
       int strsize = strbuff.length();
       int arraysize = strsize;
         
-      strbuff.getChars(0, strsize, array, 0);
+      Utility.getChars(strbuff, 0, strsize, array, 0);
       for (int i = 1; i < UCharacter.MAX_VALUE; i += 100)
       {
           UTF16.append(strbuff, i);
@@ -476,7 +477,7 @@ public final class UTF16Test extends TestFmwk
   {
     StringBuffer strbuff = new StringBuffer("0123456789");
     char array[] = new char[128];
-    strbuff.getChars(0, strbuff.length(), array, 0);
+    Utility.getChars(strbuff, 0, strbuff.length(), array, 0);
     int length = 10;
     UTF16.insert(strbuff, 5, 't');
     UTF16.insert(strbuff, 5, 's');
@@ -657,7 +658,7 @@ public final class UTF16Test extends TestFmwk
   {
     StringBuffer strbuff = new StringBuffer("012345");
     char array[] = new char[128];
-    strbuff.getChars(0, strbuff.length(), array, 0);
+    Utility.getChars(strbuff, 0, strbuff.length(), array, 0);
     int length = 6;
     for (int i = 0; i < length; i ++) {
         UTF16.setCharAt(strbuff, i, '0');

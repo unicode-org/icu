@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2001/12/03 18:35:33 $
- * $Revision: 1.17 $
+ * $Date: 2001/12/04 20:09:07 $
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -1234,5 +1234,27 @@ public final class Utility {
                                            Replaceable input,
                                            Transliterator.Position pos) { 
         return formatInput(appendTo, (ReplaceableString) input, pos);
+    }
+
+    /**
+    * Similar to StringBuffer.getChars, version 1.3.
+    * Since JDK 1.2 implements StringBuffer.getChars differently, this method 
+    * is here to provide consistent results.
+    * To be removed after JDK 1.2 ceased to be the reference platform.
+    * @param src source string buffer
+    * @param srcBegin offset to the start of the src to retrieve from
+    * @param srcEnd offset to the end of the src to retrieve from
+    * @param dst char array to store the retrieved chars
+    * @param dstBegin offset to the start of the destination char array to 
+    *                 store the retrieved chars
+    * @draft since ICU4J 2.0
+    */
+    public static void getChars(StringBuffer src, int srcBegin, int srcEnd, 
+                                char dst[], int dstBegin) 
+    {	
+        if (srcBegin == srcEnd) {	    
+            return;
+        }	
+        src.getChars(srcBegin, srcEnd, dst, dstBegin);
     }
 }

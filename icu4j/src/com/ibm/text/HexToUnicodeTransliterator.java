@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2001/09/28 20:27:02 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/12/04 20:09:07 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
 package com.ibm.text;
 import java.util.*;
+import com.ibm.util.Utility;
 
 /**
  * A transliterator that converts from hexadecimal Unicode escape
@@ -23,7 +24,7 @@ import java.util.*;
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.10 $ $Date: 2001/09/28 20:27:02 $
+ * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.11 $ $Date: 2001/12/04 20:09:07 $
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -252,7 +253,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
         this.pattern = pattern;
         int len = affixes.length();
         this.affixes = new char[len];
-        affixes.getChars(0, len, this.affixes, 0);
+        Utility.getChars(affixes, 0, len, this.affixes, 0);
     }
 
     /**
