@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Fullwidth_Halfwidth.txt
-// Date: Fri Feb  8 15:53:54 2002
+// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Fullwidth_Halfwidth.txt
+// Date: Fri Mar  1 16:15:45 2002
 //--------------------------------------------------------------------
 
 // Fullwidth_Halfwidth
@@ -14,10 +14,7 @@
 t_FWidth_HWidth {
   Rule {
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
-// Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
-// Date: Tue Jan 23 12:41:57 2001
 //--------------------------------------------------------------------
 
 // Fullwidth-Halfwidth

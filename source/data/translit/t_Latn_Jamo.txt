@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Latin_Jamo.txt
-// Date: Fri Feb  8 15:53:55 2002
+// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Latin_Jamo.txt
+// Date: Fri Mar  1 16:15:45 2002
 //--------------------------------------------------------------------
 
 // Latin_Jamo
@@ -14,8 +14,7 @@
 t_Latn_Jamo {
   Rule {
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
-// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
 //- N.B. DO NOT put any filters, NFD, etc. here -- those are aliased in

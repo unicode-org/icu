@@ -1,11 +1,11 @@
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: Transliterator_index.txt
-// Date: Fri Feb  8 15:53:55 2002
+// Date: Fri Mar  1 16:15:45 2002
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -20,8 +20,14 @@
 
 translit_index {
   RuleBasedTransliteratorIDs {
-// Copyright (c) 2001, International Business Machines Corporation and
-// others. All Rights Reserved.
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others. All Rights Reserved.
+//--------------------------------------------------------------------
+// $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/translit_index.txt,v $
+// $Date: 2002/03/02 00:35:09 $
+// $Revision: 1.21 $
+//--------------------------------------------------------------------
 //
 // TRANSLITERATOR INDEX FILE.  This file lists the non-algorithmic
 // system transliterators.  It allows arbitrary mappings between

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Oriya_InterIndic.txt
-// Date: Fri Feb  8 15:53:55 2002
+// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Oriya_InterIndic.txt
+// Date: Fri Mar  1 16:15:45 2002
 //--------------------------------------------------------------------
 
 // Oriya_InterIndic
@@ -14,21 +14,9 @@
 t_Orya_InterIndic {
   Rule {
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
-// Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
-// THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_Oriya_InterIndic.utf8.txt
-// Date: Thu Mar  1 20:03:55 2001
 //--------------------------------------------------------------------
-// Oriya_InterIndic
-//--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
-// Corporation and others.  All Rights Reserved.
-//--------------------------------------------------------------------
-// Date: Tue Jan 23 12:42:07 2001
-//--------------------------------------------------------------------
+
 // Oriya-InterIndic
 //:: NFD (NFC) ;
 //\u0B21\u0B3C>\uE05C;# LETTER RRA
