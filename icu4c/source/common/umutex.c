@@ -34,6 +34,7 @@
 
 /* Check our settings... */
 #include "unicode/utypes.h"
+#include "uassert.h"
 
 
 #if defined(POSIX) && (ICU_USE_THREADS==1)
@@ -72,6 +73,7 @@
 
 /* the global mutex. Use it proudly and wash it often. */
 static UMTX    gGlobalMutex = NULL;
+static int32_t gRecursionCount;       /* Detect Recursive entries.  For debugging only. */
 
 #if defined(WIN32)
 static CRITICAL_SECTION gPlatformMutex;
@@ -116,6 +118,12 @@ umtx_lock(UMTX *mutex)
 #if defined(WIN32)
 
     EnterCriticalSection((CRITICAL_SECTION*) *mutex);
+    #ifdef _DEBUG
+    if (mutex == &gGlobalMutex) {
+        gRecursionCount++;
+        U_ASSERT(gRecursionCount == 1);
+    }
+    #endif /*_DEBUG*/
 
 #elif defined(POSIX)
 
@@ -151,6 +159,12 @@ umtx_unlock(UMTX* mutex)
     }
 
 #if defined (WIN32)
+    #ifdef _DEBUG
+    if (mutex == &gGlobalMutex) {
+        gRecursionCount--;
+        U_ASSERT(gRecursionCount == 0);
+    }
+    #endif /*_DEBUG*/
     LeaveCriticalSection((CRITICAL_SECTION*)*mutex);
 
 #elif defined (POSIX)
