@@ -40,6 +40,7 @@ The following names can be supplied as the argument for platform:
     HP-UX11ACC              Use the Advanced C++ compiler on HP-UX 11
     HP-UX11CC               Use HP's C++ compiler on HP-UX 11
     LinuxRedHat             Use the GNU C++ compiler on Linux
+	LINUX/ECC               Use the Intel ECC compiler on Linux
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
     QNX                     Use QNX's QCC compiler on QNX/Neutrino
     SOLARISCC               Use Sun's CC compiler on Solaris
@@ -236,6 +237,12 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        ;;
+    LINUX/ECC)
+        THE_OS="Linux"
+        THE_COMP="Intel ECC 70"
+        CC=ecc; export CC
+        CXX=ecc; export CXX
         ;;
     CygWin)
         THE_OS="CygWin"
