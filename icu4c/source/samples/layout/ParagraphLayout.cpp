@@ -16,13 +16,17 @@
 
 #include "Utilities.h"
 #include "usc_impl.h" /* this is currently private! */
+#include "cstring.h"  /* this too! */
 
 #include "ParagraphLayout.h"
+
+#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 struct ParagraphLayout::StyleRunInfo
 {
       LayoutEngine   *engine;
 const LEFontInstance *font;
+const Locale         *locale;
       LEGlyphID      *glyphs;
       float          *positions;
       UScriptCode     script;
@@ -135,7 +139,7 @@ le_int32 StyleRuns::getRuns(le_int32 runLimits[], le_int32 styleIndices[])
  * process, rather for all scripts which require
  * complex processing for correct rendering.
  */
-le_bool ParagraphLayout::fComplexTable[] = {
+static const le_bool complexTable[] = {
     false , /* Zyyy */
     false,  /* Qaai */
     true,   /* Arab */
@@ -214,13 +218,14 @@ le_bool ParagraphLayout::fComplexTable[] = {
  *
  */
 ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
-                                 const FontRuns  *fontRuns,
-                                 const ValueRuns *levelRuns,
-                                 const ValueRuns *scriptRuns,
+                                 const FontRuns   *fontRuns,
+                                 const ValueRuns  *levelRuns,
+                                 const ValueRuns  *scriptRuns,
+                                 const LocaleRuns *localeRuns,
                                  UBiDiLevel paragraphLevel, le_bool vertical)
                                  : fChars(chars), fCharCount(count),
-                                   fFontRuns(NULL), fLevelRuns(levelRuns), fScriptRuns(scriptRuns),
-                                   fVertical(vertical), fClientLevels(true), fClientScripts(true), fEmbeddingLevels(NULL),
+                                   fFontRuns(NULL), fLevelRuns(levelRuns), fScriptRuns(scriptRuns), fLocaleRuns(localeRuns),
+                                   fVertical(vertical), fClientLevels(true), fClientScripts(true), fClientLocales(true), fEmbeddingLevels(NULL),
                                    fAscent(0), fDescent(0), fLeading(0),
                                    fGlyphToCharMap(NULL), fCharToGlyphMap(NULL), fGlyphWidths(NULL), fGlyphCount(0),
                                    fParaBidi(NULL), fLineBidi(NULL),
@@ -237,10 +242,14 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         computeScripts();
     }
 
+    if (localeRuns == NULL) {
+        computeLocales();
+    }
+
     computeSubFonts(fontRuns);
 
     // now intersect the font, direction and script runs...
-    const RunArray *styleRunArrays[] = {fFontRuns, fLevelRuns, fScriptRuns};
+    const RunArray *styleRunArrays[] = {fFontRuns, fLevelRuns, fScriptRuns, fLocaleRuns};
     le_int32  styleCount = sizeof styleRunArrays / sizeof styleRunArrays[0];
     StyleRuns styleRuns(styleRunArrays, styleCount);
     LEErrorCode layoutStatus = LE_NO_ERROR;
@@ -264,11 +273,12 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         fStyleRunInfo[run].runBase   = runStart;
         fStyleRunInfo[run].runLimit  = fStyleRunLimits[run];
         fStyleRunInfo[run].script    = (UScriptCode) fScriptRuns->getValue(styleIndices[2]);
+        fStyleRunInfo[run].locale    = fLocaleRuns->getLocale(styleIndices[3]);
         fStyleRunInfo[run].level     = (UBiDiLevel) fLevelRuns->getValue(styleIndices[1]);
         fStyleRunInfo[run].glyphBase = fGlyphCount;
 
         fStyleRunInfo[run].engine = LayoutEngine::layoutEngineFactory(fStyleRunInfo[run].font,
-            fStyleRunInfo[run].script, nullLanguageCode, layoutStatus);
+            fStyleRunInfo[run].script, getLanguageCode(fStyleRunInfo[run].locale), layoutStatus);
 
         fStyleRunInfo[run].glyphCount = fStyleRunInfo[run].engine->layoutChars(fChars, runStart, fStyleRunLimits[run] - runStart, fCharCount,
             fStyleRunInfo[run].level & 1, 0, 0, layoutStatus);
@@ -349,6 +359,13 @@ ParagraphLayout::~ParagraphLayout()
         fScriptRuns = NULL;
 
         fClientScripts = true;
+    }
+
+    if (! fClientLocales) {
+        delete fLocaleRuns;
+        fLocaleRuns = NULL;
+
+        fClientLocales = true;
     }
 
     if (fEmbeddingLevels != NULL) {
@@ -553,6 +570,17 @@ void ParagraphLayout::computeScripts()
     fScriptRuns = scriptRuns;
 }
 
+void ParagraphLayout::computeLocales()
+{
+    LocaleRuns *localeRuns = new LocaleRuns(0);
+    const Locale *defaultLocale = &Locale::getDefault();
+
+    localeRuns->add(defaultLocale, fCharCount);
+
+    fLocaleRuns    = localeRuns;
+    fClientLocales = false;
+}
+
 void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
 {
     const RunArray *styleRunArrays[] = {fontRuns, fScriptRuns};
@@ -592,12 +620,14 @@ void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
 void ParagraphLayout::computeMetrics()
 {
     le_int32 i, count = fFontRuns->getCount();
+    le_int32 maxDL = 0;
 
     for (i = 0; i < count; i += 1) {
         const LEFontInstance *font = fFontRuns->getFont(i);
         le_int32 ascent  = font->getAscent();
         le_int32 descent = font->getDescent();
         le_int32 leading = font->getLeading();
+        le_int32 dl      = descent + leading;
 
         if (ascent > fAscent) {
             fAscent = ascent;
@@ -610,8 +640,88 @@ void ParagraphLayout::computeMetrics()
         if (leading > fLeading) {
             fLeading = leading;
         }
+
+        if (dl > maxDL) {
+            maxDL = dl;
+        }
     }
+
+    fLeading = maxDL - fDescent;
 }
+
+#if 1
+struct LanguageMap
+{
+    const char *localeCode;
+    le_int32 languageCode;
+};
+
+static const LanguageMap languageMap[] =
+{
+    {"ara", araLanguageCode}, // Arabic
+    {"asm", asmLanguageCode}, // Assamese
+    {"ben", benLanguageCode}, // Bengali
+    {"fas", farLanguageCode}, // Farsi
+    {"guj", gujLanguageCode}, // Gujarati
+    {"heb", iwrLanguageCode}, // Hebrew
+    {"hin", hinLanguageCode}, // Hindi
+    {"jpn", janLanguageCode}, // Japanese
+    {"kan", kanLanguageCode}, // Kannada
+    {"kas", kshLanguageCode}, // Kashmiri
+    {"kok", kokLanguageCode}, // Konkani
+    {"kor", korLanguageCode}, // Korean
+//  {"mal_XXX", malLanguageCode}, // Malayalam - Traditional
+    {"mal", mlrLanguageCode}, // Malayalam - Reformed
+    {"mar", marLanguageCode}, // Marathi
+    {"mni", mniLanguageCode}, // Manipuri
+    {"ori", oriLanguageCode}, // Oriya
+    {"san", sanLanguageCode}, // Sanskrit
+    {"snd", sndLanguageCode}, // Sindhi
+    {"sin", snhLanguageCode}, // Sinhalese
+    {"syr", syrLanguageCode}, // Syriac
+    {"tam", tamLanguageCode}, // Tamil
+    {"tel", telLanguageCode}, // Telugu
+    {"tha", thaLanguageCode}, // Thai
+    {"urd", urdLanguageCode}, // Urdu
+    {"yid", jiiLanguageCode}, // Yiddish
+//  {"zhp", zhpLanguageCode}, // Chinese - Phonetic
+    {"zho", zhsLanguageCode}, // Chinese
+    {"zho_CHN", zhsLanguageCode}, // Chinese - China
+    {"zho_HKG", zhsLanguageCode}, // Chinese - Hong Kong
+    {"zho_MAC", zhtLanguageCode}, // Chinese - Macao
+    {"zho_SGP", zhsLanguageCode}, // Chinese - Singapore
+    {"zho_TWN", zhtLanguageCode}  // Chinese - Taiwan
+};
+
+le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
+{
+    char code[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    const char *language = locale->getISO3Language();
+    const char *country  = locale->getISO3Country();
+
+    uprv_strcat(code, language);
+
+    if ((uprv_strcmp(language, "zho") == 0) && country != NULL) {
+        uprv_strcat(code, "_");
+        uprv_strcat(code, country);
+    }
+
+    for (le_int32 i = 0; i < ARRAY_SIZE(languageMap); i += 1) {
+        if (uprv_strcmp(code, languageMap[i].localeCode) == 0) {
+            return languageMap[i].languageCode;
+        }
+    }
+
+    return nullLanguageCode;
+}
+#elif
+
+// TODO - dummy implementation for right now...
+le_int32 ParagraphLayout::getLanguageCode(const Locale *locale)
+{
+    return nullLanguageCode;
+}
+#endif
 
 le_bool ParagraphLayout::isComplex(UScriptCode script)
 {
@@ -619,7 +729,7 @@ le_bool ParagraphLayout::isComplex(UScriptCode script)
         return false;
     }
 
-    return fComplexTable[script];
+    return complexTable[script];
 }
 
 le_int32 ParagraphLayout::previousBreak(le_int32 charIndex)
@@ -860,10 +970,13 @@ void ParagraphLayout::Line::append(const LEFontInstance *font, UBiDiDirection di
 
 void ParagraphLayout::Line::computeMetrics()
 {
+    le_int32 maxDL = 0;
+
     for (le_int32 i = 0; i < fRunCount; i += 1) {
         le_int32 ascent  = fRuns[i]->getAscent();
         le_int32 descent = fRuns[i]->getDescent();
         le_int32 leading = fRuns[i]->getLeading();
+        le_int32 dl      = descent + leading;
 
         if (ascent > fAscent) {
             fAscent = ascent;
@@ -876,5 +989,11 @@ void ParagraphLayout::Line::computeMetrics()
         if (leading > fLeading) {
             fLeading = leading;
         }
+
+        if (dl > maxDL) {
+            maxDL = dl;
+        }
     }
+
+    fLeading = maxDL - fDescent;
 }

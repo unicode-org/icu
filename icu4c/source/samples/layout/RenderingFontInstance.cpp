@@ -30,8 +30,8 @@ struct TableCacheEntry
 };
 
 RenderingFontInstance::RenderingFontInstance(RenderingSurface *surface, le_int16 pointSize)
-  : fSurface(surface), fPointSize(pointSize), fUnitsPerEM(0), fAscent(0), fDescent(), fLeading(0),
-    fDeviceScaleX(1), fDeviceScaleY(1), fTableCache(NULL), fTableCacheCurr(0), fTableCacheSize(0), fMapper(NULL)
+  : FontTableCache(), fSurface(surface), fPointSize(pointSize), fUnitsPerEM(0), fAscent(0), fDescent(), fLeading(0),
+    fDeviceScaleX(1), fDeviceScaleY(1), /*fTableCache(NULL), fTableCacheCurr(0), fTableCacheSize(0),*/ fMapper(NULL)
 {
     // we expect the subclass to call
     // initMapper() and initFontTableCache
@@ -39,12 +39,15 @@ RenderingFontInstance::RenderingFontInstance(RenderingSurface *surface, le_int16
 
 RenderingFontInstance::~RenderingFontInstance()
 {
+#if 0
     flushFontTableCache();
     delete[] fTableCache;
+#endif
 
     delete fMapper;
 }
 
+#if 0
 void RenderingFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count,
                                        le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const
 {
@@ -127,32 +130,39 @@ const void *RenderingFontInstance::getFontTable(LETag tableTag) const
 
     return fTableCache[realThis->fTableCacheCurr++].table;
 };
+#else
+const void *RenderingFontInstance::getFontTable(LETag tableTag) const
+{
+    return FontTableCache::find(tableTag);
+}
+#endif
 
-RFIErrorCode RenderingFontInstance::initMapper()
+LEErrorCode RenderingFontInstance::initMapper()
 {
     LETag cmapTag = 0x636D6170; // 'cmap'
     const CMAPTable *cmap = (const CMAPTable *) readFontTable(cmapTag);
 
     if (cmap == NULL) {
-        return RFI_MISSING_FONT_TABLE_ERROR;
+        return LE_MISSING_FONT_TABLE_ERROR;
     }
 
     fMapper = CMAPMapper::createUnicodeMapper(cmap);
 
     if (fMapper == NULL) {
-        return RFI_MISSING_FONT_TABLE_ERROR;
+        return LE_MISSING_FONT_TABLE_ERROR;
     }
 
-    return RFI_NO_ERROR;
+    return LE_NO_ERROR;
 }
 
-RFIErrorCode RenderingFontInstance::initFontTableCache()
+#if 0
+LEErrorCode RenderingFontInstance::initFontTableCache()
 {
     fTableCacheSize = TABLE_CACHE_INIT;
     fTableCache = new TableCacheEntry[fTableCacheSize];
 
     if (fTableCache == 0) {
-        return RFI_OUT_OF_MEMORY_ERROR;
+        return LE_MEMORY_ALLOCATION_ERROR;
     }
 
     for (int i = 0; i < fTableCacheSize; i += 1) {
@@ -160,7 +170,7 @@ RFIErrorCode RenderingFontInstance::initFontTableCache()
         fTableCache[i].table = NULL;
     }
 
-    return RFI_NO_ERROR;
+    return LE_NO_ERROR;
 }
 
 void RenderingFontInstance::flushFontTableCache()
@@ -171,3 +181,5 @@ void RenderingFontInstance::flushFontTableCache()
 
     fTableCacheCurr = 0;
 }
+#endif
+
