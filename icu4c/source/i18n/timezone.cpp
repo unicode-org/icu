@@ -98,11 +98,23 @@ UBool timeZone_cleanup()
 
 U_NAMESPACE_BEGIN
 
-// TODO cleanup
-static int32_t OLSON_ZONE_START = -1;
-static int32_t OLSON_ZONE_COUNT = 0;
+/**
+ * The Olson data is stored the "zoneinfo" resource bundle.
+ * Sub-resources are organized into three ranges of data: Zones, final
+ * rules, and country tables.  There is also a meta-data resource
+ * which has six integers: The start and count values for the three
+ * ranges.  E.g., 10, 15, 3, 7, 0, 3 means that sub resources at index
+ * 0..2 are country maps, 3..9 are final rules, and 10..24 are zones.
+ *
+ * We currently only need to know the zone range.
+ */
+static int32_t OLSON_ZONE_START = -1; // starting index of zones
+static int32_t OLSON_ZONE_COUNT = 0;  // count of zones
 
-// TODO docs, cleanup
+/**
+ * Given a pointer to an open "zoneinfo" resource, load up the Olson
+ * meta-data. Return TRUE if successful.
+ */
 static UBool getOlsonMeta(const UResourceBundle* top) {
     if (OLSON_ZONE_START < 0) {
         UErrorCode ec = U_ZERO_ERROR;
@@ -122,6 +134,9 @@ static UBool getOlsonMeta(const UResourceBundle* top) {
     return (OLSON_ZONE_START >= 0);
 }
 
+/**
+ * Load up the Olson meta-data. Return TRUE if successful.
+ */
 static UBool getOlsonMeta() {
     if (OLSON_ZONE_START < 0) {
         UErrorCode ec = U_ZERO_ERROR;
@@ -134,7 +149,14 @@ static UBool getOlsonMeta() {
     return (OLSON_ZONE_START >= 0);
 }
 
-// TODO docs, cleanup
+// TODO: #ifdef out this code after 8-Nov-2003
+// #ifdef ICU_TIMEZONE_USE_DEPRECATES
+
+/**
+ * Load all the ids from the "zoneinfo" resource bundle into a static
+ * array that we hang onto.  This is _only_ used to implement the
+ * deprecated createAvailableIDs() API.
+ */
 static UBool loadOlsonIDs() {
     if (OLSON_IDS != 0) {
         return TRUE;
@@ -187,6 +209,8 @@ static UBool loadOlsonIDs() {
     delete[] ids;
     return TRUE;
 }
+
+// #endif //ICU_TIMEZONE_USE_DEPRECATES
 
 // -------------------------------------
 
@@ -804,9 +828,6 @@ TimeZone::createEnumeration(const char* country) {
 // TODO: #ifdef out this code after 8-Nov-2003
 // #ifdef ICU_TIMEZONE_USE_DEPRECATES
 
-// This stuff is just here so the deprecated createAvailableIDs() API
-// continues to work with the new 2.8 time zones.
-
 const UnicodeString** 
 TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
 {
@@ -831,9 +852,7 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
 
     UnicodeString s;
     for (int32_t i=0; i<OLSON_ZONE_COUNT; ++i) {
-        // This is VERY inefficient -- but this code is going away
-        // soon so it doesn't matter.  This is just for backward
-        // compatibility...
+        // This is VERY inefficient.
         TimeZone* z = TimeZone::createTimeZone(OLSON_IDS[i]);
         // Make sure we get back the ID we wanted (if the ID is
         // invalid we get back GMT).
