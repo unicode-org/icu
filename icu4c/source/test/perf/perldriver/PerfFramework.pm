@@ -23,6 +23,7 @@ my $extraArgs; # stuff that always gets passed to the test program
 my $iterCount = 0;
 my $NUMPASSES = 4;
 my $TIME = 2;
+my $ITERATIONS;   #Added by Doug
 my $DATADIR;
 
 sub setupOptions {
@@ -38,6 +39,11 @@ sub setupOptions {
 	
   if($options{"dataDir"}) {
     $DATADIR = $options{"dataDir"};
+  }
+  
+  # Added by Doug
+  if ($options{"iterations"}) {
+  	$ITERATIONS = $options{"iterations"};
   }
 }
 
@@ -113,7 +119,13 @@ sub compareLoop {
     # first we calibrate. Use time from somewhere
     # first test is used for calibration
       ($program, @argsAndTest) = split(/\ /, @{ $tests{$i} }[$j]);
-      my $commandLine = "$program -t $TIME -p $NUMPASSES $locAndData @argsAndTest";
+      #Modified by Doug
+      my $commandLine;
+      if ($ITERATIONS) {
+      	$commandLine = "$program -i $ITERATIONS -p $NUMPASSES $locAndData @argsAndTest";
+      } else {
+      	$commandLine = "$program -t $TIME -p $NUMPASSES $locAndData @argsAndTest";
+    	}
       #my $commandLine = "$program -i 5 -p $NUMPASSES $locAndData @argsAndTest";
       my @res = measure1($commandLine);
       store("$i, $program @argsAndTest", @res);
