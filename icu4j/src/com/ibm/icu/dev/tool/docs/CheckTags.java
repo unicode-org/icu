@@ -180,7 +180,7 @@ public class CheckTags {
 
     static final String[] tagKinds = {
         "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws, @obsolete, @exception"
+        "@param", "@return", "@throws", "@obsolete", "@exception"
     };
 
     static final int UNKNOWN = -1;
