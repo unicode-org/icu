@@ -615,17 +615,18 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     if (U_FAILURE(intStatus)) 
     {
       intStatus = U_ZERO_ERROR;
-
+      /*
       unsigned long size = 0;
       const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
-
+      */
       /*
       synwee : have to use ucol for this
       constructFromRules(defaultrules, intStatus);
       */
+      /*
       UCollator *collator = ucol_openRules(defaultrules, size, 
         UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &intStatus);
-      
+      */
       if (intStatus == U_ZERO_ERROR)
         status = U_USING_DEFAULT_ERROR;
       else
