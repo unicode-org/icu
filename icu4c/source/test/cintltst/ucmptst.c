@@ -135,19 +135,20 @@ static void TestUCMP8API(){
         int32_t len = 0;
         int32_t size = ucmp8_flattenMem(&ucmp8Array1, NULL);
         uint8_t *buff = malloc(size);
+        uint8_t *buffLocation = buff;
         len = ucmp8_flattenMem(&ucmp8Array1, buff);
         
-        if(size == 0 || len == 0 || buff == NULL) {
+        if(size != len || size == 0 || len == 0 || buff == NULL) {
             log_err("Unable to flatten!\n");
         } else {
             log_verbose("Testing ucmp8_initFromData()\n");
-            ucmp8_initFromData(&ucmp8Clone, &buff, &status);
-            if(U_FAILURE(status) || ucmp8_isBogus(&ucmp8Clone) == TRUE){
+            ucmp8_initFromData(&ucmp8Clone, &buffLocation, &status);
+            if(U_FAILURE(status) || ucmp8_isBogus(&ucmp8Clone) == TRUE || (buffLocation-buff) != len){
                 log_err("ERROR: ucmp8_initFromData() failed\n");
                 status = U_ZERO_ERROR;
             } else {
-              query(&ucmp8Clone);
-              ucmp8_close(&ucmp8Clone);
+                query(&ucmp8Clone);
+                ucmp8_close(&ucmp8Clone);
             }
         }
         free(buff);
