@@ -121,6 +121,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateFormatSymbols)
  * with a locale and calendar
  */
 const char gErasTag[]="eras";
+const char gAbbreviatedTag[] = "abbreviated";
 const char gMonthNamesTag[]="monthNames";
 const char gDayNamesTag[]="dayNames";
 const char gNamesWideTag[]="wide";
@@ -579,8 +580,8 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     CalendarData calData(locale, type, status);
     ResourceBundle nonCalendarData((char*)0, locale, status);
 
-    ResourceBundle data = calData.getBundleByKey(gErasTag, status); // load the first data item
-
+    ResourceBundle eras = calData.getBundleByKey(gErasTag, status); // load the first data item
+    ResourceBundle data = eras.getWithFallback(gAbbreviatedTag, status); 
     if (U_FAILURE(status))
     {
         if (useLastResortData)

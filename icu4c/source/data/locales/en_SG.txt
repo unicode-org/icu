@@ -1,15 +1,22 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:12
+// * Source File: \work\locale\common\main\\en_SG.xml
 // *
 // ***************************************************************************
-//
-// Singapore English locale: Data By Syn Wee Quek
-
-en_SG {
-    Version { "2.0" }
+en_SG{
+    Currencies{
+        SGD{
+            "$",
+            "Singapore Dollar",
+        }
+    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "a hh:mm:ss",
@@ -20,21 +27,18 @@ en_SG {
                 "dd MMM yyyy",
                 "dd-MMM-yy",
                 "dd/MM/yy",
-                "{1} {0}"
+                "{1} {0}",
             }
         }
     }
-    Currencies{
-        SGD { "$",  "Singapore Dollar"     } // 8/9/1965-
-    }
-    zoneStrings { 
+    zoneStrings{
         {
             "SST",
             "Singapore Standard Time",
             "SST",
             "Singapore Standard Time",
             "SST",
-            "Singapore"
+            "Singapore",
         }
     }
 }

@@ -1,10 +1,12 @@
-// *******************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2001, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:0
+// * Source File: \work\locale\common\main\\iw_IL.xml
 // *
-// *******************************************************************************
-
-iw_IL {
-   "%%ALIAS" { "he_IL" } 
+// ***************************************************************************
+iw_IL{
+    "%%ALIAS"{"he_IL"}
 }

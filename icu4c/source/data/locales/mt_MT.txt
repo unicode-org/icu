@@ -1,20 +1,18 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1998-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:12
+// * Source File: \work\locale\common\main\\mt_MT.xml
 // *
 // ***************************************************************************
-// Maltese, Malta locale
-// srl@monkey.sbay.org
-// Note: please see the 'mt.txt' file for more information.
-// ** Maltese Standardization Authority http://www.msa.org.mt - MSA 200:2003 "Maltese Data and Information Requirements on Information and Communication Technology" is now the normative document for this data file.  [MSA 200:2003]
-
-mt_MT {
-    Version { "2.1" } // October, 2003
-    NumberPatterns {
+mt_MT{
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;-\u00A4#,##0.00",  // [MSA 200:2003 4.4]
+        "¤#,##0.00;-¤#,##0.00",
         "#,##0%",
-        "#E0"
+        "#E0",
     }
+    Version{"1.2"}
 }

@@ -1,13 +1,25 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:26
+// * Source File: \work\locale\common\main\\es_ES.xml
 // *
 // ***************************************************************************
-
-es_ES {
-    Version { "2.0" }
-    NumberElements {
+es_ES{
+    Currencies{
+        ESP{
+            "₧",
+            "peseta española",
+            {
+                "#,##0 ¤;-#,##0 ¤",
+                ",",
+                ".",
+            }
+        }
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -16,29 +28,20 @@ es_ES {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    NumberPatterns { 
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0.00 ¤;-#,##0.00 ¤",
         "#,##0%",
         "#E0",
     }
-    Currencies{
-        ESP { 
-            "\u20A7",
-            "peseta espa\u00F1ola", 
-            :array{
-                "#,##0 \u00A4;-#,##0 \u00A4", /*currency pattern*/ 
-                ",",  /*decimal sperator*/  
-                "."  /*grouping separator*/
-            }
-       }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH'H'mm''ss\" z",

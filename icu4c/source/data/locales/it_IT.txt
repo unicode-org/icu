@@ -1,18 +1,27 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:59
+// * Source File: \work\locale\common\main\\it_IT.xml
 // *
 // ***************************************************************************
-
-it_IT {
-    Version{ "2.0" }
-//    NumberPatterns { 
-//        "#,##0.###;-#,##0.###",
-//        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
-//        "#,##0%",
-//    }
+it_IT{
+    Currencies{
+        ITL{
+            "₤",
+            "Lira Italiana",
+            {
+                "¤ #,##0;-¤ #,##0",
+                ",",
+                ".",
+            }
+        }
+    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -24,17 +33,6 @@ it_IT {
                 "dd/MMM/yy",
                 "dd/MM/yy",
                 "{1} {0}",
-            }
-        }
-    }
-    Currencies{
-        ITL { 
-            "\u20A4", 
-            "Lira Italiana", 
-            :array{
-                "\u00A4 #,##0;-\u00A4 #,##0", /* currency pattern */
-                ",", /* decimal separator */
-                ".", /* grouping separator */
             }
         }
     }

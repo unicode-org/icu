@@ -1,18 +1,26 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:11
+// * Source File: \work\locale\common\main\\en_NZ.xml
 // *
 // ***************************************************************************
-
-en_NZ {
-    Version { "2.0" }
-    // Currency display names
-    Currencies {
-        NZD { "$", "New Zealand Dollar" }
-        USD { "US$", "US Dollar" }
+en_NZ{
+    Currencies{
+        NZD{
+            "$",
+            "New Zealand Dollar",
+        }
+        USD{
+            "US$",
+            "US Dollar",
+        }
     }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a z",

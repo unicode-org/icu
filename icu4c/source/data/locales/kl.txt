@@ -1,27 +1,30 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:5
+// * Source File: \work\locale\common\main\\kl.xml
 // *
 // ***************************************************************************
-
 kl{
-    Version { "2.0" }
-    Countries {
-        GL { "Kalaallit Nunaat" }
+    Countries{
+        GL{"Kalaallit Nunaat"}
     }
-    // Currency display names
-    Currencies {
-        DKK { "kr", "DKK" }
+    Currencies{
+        DKK{
+            "kr",
+            "DKK",
+        }
     }
-    Languages {
-        kl { "kalaallisut" }
+    ExemplarCharacters{"[a-záéíúâêîôûæåøãĩũĸ]"}
+    Languages{
+        kl{"kalaallisut"}
     }
-    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00fa\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u00e5\u00f8\u00e3\u0129\u0169\u0138]" }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
+    LocaleScript{
+        "Latn",
     }
-    NumberElements { 
+    NumberElements{
         ",",
         ".",
         ";",
@@ -30,21 +33,14 @@ kl{
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-
-    // /**************** Info Below is needed ****************/
-    // Countries{}
-    // Eras{}
-    // Languages{}
-    // ShortLanguage { }
-    // localPatternChars{}
-    //
-
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             dayNames{
                 format{

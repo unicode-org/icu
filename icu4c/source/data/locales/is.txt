@@ -1,197 +1,179 @@
 ﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:55
+// * Source File: \work\locale\common\main\\is.xml
 // *
 // ***************************************************************************
-
-is {
-    Version{ "2.0" }
-    Countries { 
-        AE { "Sameinte arab\u00edsku fyrstad\u00e6min" }
-        AF { "Afganistan" }
-        AG { "Antigua og Barbuda" }
-        AL { "Alban\u00eda" }
-        AM { "Armen\u00eda" }
-        AO { "Ang\u00f3la" }
-        AR { "Argent\u00edna" }
-        AT { "Austurr\u00edki" }
-        AU { "\u00c1stral\u00eda" }
-
-        BA { "Bosn\u00eda-Hersegov\u00edna" }
-        BB { "Belg\u00eda" }
-        BG { "B\u00falgar\u00eda" }
-        BI { "B\u00far\u00fand\u00ed" }
-        BO { "B\u00f3liv\u00eda" }
-        BR { "Brasil\u00eda" }
-        BS { "Bahama eyjar" }
-        BT { "Bh\u00fatan" }
-        BY { "Hv\u00edta R\u00fassland" }
-
-        CA { "Kanada" }
-        CF { "Mi\u00f0-Afr\u00edku ly\u00f0veldi\u00f0" }
-        CG { "Kong\u00f3" }
-        CH { "Sviss" }
-        CI { "F\u00edlabeinsstr\u00f6ndin" }
-        CM { "Kamer\u00fan" }
-        CN { "K\u00edna" }
-        CO { "K\u00f3lumb\u00eda" }
-        CR { "Kostar\u00edka" }
-        //CS { "Serb\u00eda og Svartfjallaland" } // TODO: if we allow this, then SP must go away
-        CU { "K\u00faba" }
-        CV { "Gr\u00e6nh\u00f6f\u00f0aeyjar" }
-        CY { "K\u00fdpur" }
-        CZ { "T\u00e9kkland" }
-
-        DE { "\u00de\u00fdskaland" }
-        DK { "Danm\u00f6rk" }
-        DO { "D\u00f3min\u00edska l\u00fd\u00f0veldi\u00f0" }
-        DZ { "Als\u00edr" }
-
-        EC { "Ekvador" }
-        EE { "Eistland" }
-        EG { "Egyptaland" }
-        EH { "Vestur-Sahara" }
-        ER { "Er\u00edtrea" }
-        ES { "Sp\u00e1nn" }
-        ET { "E\u00fe\u00ed\u00f3p\u00eda" }
-
-        FI { "Finnland" }
-        FM { "Mikr\u00f3nes\u00eda" }
-        FR { "Frakkland" }
-
-        GB { "St\u00f3ra Bretland" }
-        GE { "Georg\u00eda" }
-        GH { "Gana" }
-        GN { "G\u00ednea" }
-        GQ { "Mi\u00f0baugs G\u00ednea" }
-        GR { "Grikkland" }
-        GT { "Gvatemala" }
-        GW { "G\u00ednea-Bissau" }
-
-        HN { "Hond\u00faras" }
-        HR { "Kr\u00f3at\u00eda" }
-        HT { "Ha\u00edt\u00ed" }
-        HU { "Ungverjaland" }
-
-        ID { "Ind\u00f3nes\u00eda" }
-        IE { "\u00cdrland" }
-        IL { "\u00cdsrael" }
-        IN { "Indland" }
-        IQ { "\u00cdrak" }
-        IR { "\u00cdran" }
-        IS { "\u00cdsland" }
-        IT { "\u00cdtal\u00eda" }
-
-        JM { "Jama\u00edka" }
-        JO { "J\u00f3rdan\u00eda" }
-
-        KE { "Ken\u00fda" }
-        KG { "Kirgisistan" }
-        KH { "Kamb\u00f3d\u00eda" }
-        KI { "Kiribat\u00ed" }
-        KM { "Comoro eyjar" }
-        KN { "Saint Kitts og Nevis" }
-        KP { "Nor\u00f0ur-K\u00f3rea" }
-        KR { "Su\u00f0ur-K\u00f3rea" }
-        KW { "K\u00faveit" }
-        KZ { "Kasakstan" }
-
-        LB { "L\u00edbanon" }
-        LC { "Saint L\u00fasia" }
-        LR { "L\u00edber\u00eda" }
-        LS { "Les\u00f3t\u00f3" }
-        LT { "Lith\u00e1en" }
-        LU { "L\u00faxemborg" }
-        LV { "Lettland" }
-        LY { "L\u00fdb\u00eda" }
-
-        MA { "Marokk\u00f3" }
-        MC { "M\u00f3nac\u00f3" }
-        MD { "Moldov\u00eda" }
-        MG { "Madagaskar" }
-        MH { "Marshalleyjar" }
-        MK { "Maked\u00f3n\u00eda" }
-        //MM { "B\u00farma" } // Burma? Should be Myanmar?
-        MN { "Mong\u00f3l\u00eda" }
-        MR { "M\u00e1ritan\u00eda" }
-        MU { "M\u00e1rit\u00edus" }
-        MV { "Mald\u00edveyjar" }
-        MX { "Mex\u00edk\u00f3" }
-        MY { "Malas\u00eda" }
-        MZ { "M\u00f3samb\u00edk" }
-
-        NA { "Namib\u00eda" }
-        NE { "N\u00edger" }
-        NG { "N\u00edger\u00eda" }
-        NI { "N\u00edkarag\u00faa" }
-        NL { "Ni\u00f0url\u00f6nd" }
-        NO { "Noregur" }
-        NZ { "N\u00fdja-Sj\u00e1land" }
-
-        OM { "\u00d3man" }
-
-        PE { "Per\u00fa" }
-        PG { "Pap\u00faa N\u00fdja G\u00ednea" }
-        PH { "Filipseyjar" }
-        PL { "P\u00f3lland" }
-        PT { "Port\u00fagal" }
-        PW { "Palaueyjar" }
-        PY { "Paragv\u00e6" }
-
-        QA { "Katar" }
-
-        RO { "R\u00famen\u00eda" }
-        RU { "R\u00fassland" }
-        RW { "R\u00faanda" }
-
-        SA { "S\u00e1di Arab\u00eda" }
-        SB { "Sal\u00f3mons eyjar" }
-        SC { "Seychelle eyjar" }
-        SD { "S\u00fadan" }
-        SE { "Sv\u00ed\u00fejo\u00f0" }
-        SI { "Sl\u00f3ven\u00eda" }
-        SK { "Sl\u00f3vak\u00eda" }
-        SO { "S\u00f3mal\u00eda" }
-        SP { "Serb\u00eda" }
-        SR { "S\u00farinam" }
-        ST { "Sao Tome og Prins\u00edpe" }
-        SY { "S\u00fdrland" }
-        SZ { "Svasiland" }
-
-        TH { "T\u00e6land" }
-        TJ { "Tadjikistan" }
-        TM { "T\u00farkmenistan" }
-        TN { "T\u00fanis" }
-        TR { "Tyrkland" }
-        TT { "Trinidad og Tobago" }
-        TV { "T\u00faval\u00fa" }
-        TW { "T\u00e6van" }
-        TZ { "Tansan\u00eda" }
-
-        UA { "\u00dakra\u00edna" }
-        UG { "\u00daganda" }
-        US { "Bandar\u00edki Nor\u00f0ur-Amer\u00edku" }
-        UY { "\u00dar\u00fagv\u00e6" }
-        UZ { "\u00dasbekistan" }
-
-        VA { "Vat\u00edkani\u00f0" }
-        VC { "Saint Vinsent og Grenad\u00edneyjar" }
-        VE { "Venes\u00faela" }
-
-        WS { "Sam\u00f3a" }
-
-        YE { "Jemen" }
-
-        ZA { "Su\u00f0ur-Afr\u00edka" }
+is{
+    Countries{
+        AE{"Sameinte arabísku fyrstadæmin"}
+        AF{"Afganistan"}
+        AG{"Antigua og Barbuda"}
+        AL{"Albanía"}
+        AM{"Armenía"}
+        AO{"Angóla"}
+        AR{"Argentína"}
+        AT{"Austurríki"}
+        AU{"Ástralía"}
+        BA{"Bosnía-Hersegovína"}
+        BB{"Belgía"}
+        BG{"Búlgaría"}
+        BI{"Búrúndí"}
+        BO{"Bólivía"}
+        BR{"Brasilía"}
+        BS{"Bahama eyjar"}
+        BT{"Bhútan"}
+        BY{"Hvíta Rússland"}
+        CA{"Kanada"}
+        CF{"Mið-Afríku lyðveldið"}
+        CG{"Kongó"}
+        CH{"Sviss"}
+        CI{"Fílabeinsströndin"}
+        CM{"Kamerún"}
+        CN{"Kína"}
+        CO{"Kólumbía"}
+        CR{"Kostaríka"}
+        CU{"Kúba"}
+        CV{"Grænhöfðaeyjar"}
+        CY{"Kýpur"}
+        CZ{"Tékkland"}
+        DE{"Þýskaland"}
+        DK{"Danmörk"}
+        DO{"Dóminíska lýðveldið"}
+        DZ{"Alsír"}
+        EC{"Ekvador"}
+        EE{"Eistland"}
+        EG{"Egyptaland"}
+        EH{"Vestur-Sahara"}
+        ER{"Erítrea"}
+        ES{"Spánn"}
+        ET{"Eþíópía"}
+        FI{"Finnland"}
+        FM{"Mikrónesía"}
+        FR{"Frakkland"}
+        GB{"Stóra Bretland"}
+        GE{"Georgía"}
+        GH{"Gana"}
+        GN{"Gínea"}
+        GQ{"Miðbaugs Gínea"}
+        GR{"Grikkland"}
+        GT{"Gvatemala"}
+        GW{"Gínea-Bissau"}
+        HN{"Hondúras"}
+        HR{"Króatía"}
+        HT{"Haítí"}
+        HU{"Ungverjaland"}
+        ID{"Indónesía"}
+        IE{"Írland"}
+        IL{"Ísrael"}
+        IN{"Indland"}
+        IQ{"Írak"}
+        IR{"Íran"}
+        IS{"Ísland"}
+        IT{"Ítalía"}
+        JM{"Jamaíka"}
+        JO{"Jórdanía"}
+        KE{"Kenýa"}
+        KG{"Kirgisistan"}
+        KH{"Kambódía"}
+        KI{"Kiribatí"}
+        KM{"Comoro eyjar"}
+        KN{"Saint Kitts og Nevis"}
+        KP{"Norður-Kórea"}
+        KR{"Suður-Kórea"}
+        KW{"Kúveit"}
+        KZ{"Kasakstan"}
+        LB{"Líbanon"}
+        LC{"Saint Lúsia"}
+        LR{"Líbería"}
+        LS{"Lesótó"}
+        LT{"Litháen"}
+        LU{"Lúxemborg"}
+        LV{"Lettland"}
+        LY{"Lýbía"}
+        MA{"Marokkó"}
+        MC{"Mónacó"}
+        MD{"Moldovía"}
+        MG{"Madagaskar"}
+        MH{"Marshalleyjar"}
+        MK{"Makedónía"}
+        MN{"Mongólía"}
+        MR{"Máritanía"}
+        MU{"Máritíus"}
+        MV{"Maldíveyjar"}
+        MX{"Mexíkó"}
+        MY{"Malasía"}
+        MZ{"Mósambík"}
+        NA{"Namibía"}
+        NE{"Níger"}
+        NG{"Nígería"}
+        NI{"Níkaragúa"}
+        NL{"Niðurlönd"}
+        NO{"Noregur"}
+        NZ{"Nýja-Sjáland"}
+        OM{"Óman"}
+        PE{"Perú"}
+        PG{"Papúa Nýja Gínea"}
+        PH{"Filipseyjar"}
+        PL{"Pólland"}
+        PT{"Portúgal"}
+        PW{"Palaueyjar"}
+        PY{"Paragvæ"}
+        QA{"Katar"}
+        RO{"Rúmenía"}
+        RU{"Rússland"}
+        RW{"Rúanda"}
+        SA{"Sádi Arabía"}
+        SB{"Salómons eyjar"}
+        SC{"Seychelle eyjar"}
+        SD{"Súdan"}
+        SE{"Svíþjoð"}
+        SI{"Slóvenía"}
+        SK{"Slóvakía"}
+        SO{"Sómalía"}
+        SP{"Serbía"}
+        SR{"Súrinam"}
+        ST{"Sao Tome og Prinsípe"}
+        SY{"Sýrland"}
+        SZ{"Svasiland"}
+        TH{"Tæland"}
+        TJ{"Tadjikistan"}
+        TM{"Túrkmenistan"}
+        TN{"Túnis"}
+        TR{"Tyrkland"}
+        TT{"Trinidad og Tobago"}
+        TV{"Túvalú"}
+        TW{"Tævan"}
+        TZ{"Tansanía"}
+        UA{"Úkraína"}
+        UG{"Úganda"}
+        US{"Bandaríki Norður-Ameríku"}
+        UY{"Úrúgvæ"}
+        UZ{"Úsbekistan"}
+        VA{"Vatíkanið"}
+        VC{"Saint Vinsent og Grenadíneyjar"}
+        VE{"Venesúela"}
+        WS{"Samóa"}
+        YE{"Jemen"}
+        ZA{"Suður-Afríka"}
     }
-    Currencies {
-        ISK { "kr.", "ISK" }
+    Currencies{
+        ISK{
+            "kr.",
+            "ISK",
+        }
     }
-    Languages { 
-        is { "\u00EDslenska" }
+    ExemplarCharacters{"[a-záéíóúýöæðþ]"}
+    Languages{
+        is{"íslenska"}
     }
-    NumberElements { 
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -200,17 +182,14 @@ is {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-
-    LocaleScript{   
-        "Latn",  // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fd\u00f6\u00e6\u00f0\u00fe]" }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -227,20 +206,20 @@ is {
                 format{
                     abbreviated{
                         "sun",
-                        "m\u00E1n",
-                        "\u00FEri",
-                        "mi\u00F0",
+                        "mán",
+                        "þri",
+                        "mið",
                         "fim",
-                        "f\u00F6s",
+                        "fös",
                         "lau",
                     }
                     wide{
                         "sunnudagur",
-                        "m\u00E1nudagur",
-                        "\u00FEri\u00F0judagur",
-                        "mi\u00F0vikudagur",
+                        "mánudagur",
+                        "þriðjudagur",
+                        "miðvikudagur",
                         "fimmtudagur",
-                        "f\u00F6studagur",
+                        "föstudagur",
                         "laugardagur",
                     }
                 }
@@ -252,27 +231,27 @@ is {
                         "feb",
                         "mar",
                         "apr",
-                        "ma\u00ED",
-                        "j\u00FAn",
-                        "j\u00FAl",
-                        "\u00E1g\u00FA",
+                        "maí",
+                        "jún",
+                        "júl",
+                        "ágú",
                         "sep",
                         "okt",
-                        "n\u00F3v",
+                        "nóv",
                         "des",
                     }
                     wide{
-                        "jan\u00FAar",
-                        "febr\u00FAar",
+                        "janúar",
+                        "febrúar",
                         "mars",
-                        "apr\u00EDl",
-                        "ma\u00ED",
-                        "j\u00FAn\u00ED",
-                        "j\u00FAl\u00ED",
-                        "\u00E1g\u00FAst",
+                        "apríl",
+                        "maí",
+                        "júní",
+                        "júlí",
+                        "ágúst",
                         "september",
-                        "okt\u00F3ber",
-                        "n\u00F3vember",
+                        "október",
+                        "nóvember",
                         "desember",
                     }
                 }

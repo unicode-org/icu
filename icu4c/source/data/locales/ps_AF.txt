@@ -1,41 +1,41 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 2003-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:20
+// * Source File: \work\locale\common\main\\ps_AF.xml
 // *
 // ***************************************************************************
-
-// Created by Roozbeh Pournader <roozbeh@sharif.edu> and Michael Everson <everson@evertype.com>
-
-ps_AF {
-    Version { "1.0" }
+ps_AF{
+    NumberElements{
+        "٫",
+        "٬",
+        ";",
+        "٪",
+        "۰",
+        "#",
+        "−",
+        "×۱۰^",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "#,##0 ¤;-#,##0 ¤",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
-                7,      // Saturday
+            DateTimeElements:intvector{
+                7,
                 1,
             }
         }
-    }
-    NumberPatterns { 
-        "#,##0.###;-#,##0.###",
-        "#,##0 \u00a4;-#,##0 \u00a4",
-        "#,##0%", // The percent sign appears on the right side.
-                  // Acad says it should appear on the left (like fa_IR).
-        "#E0",
-    }
-    NumberElements { 
-        "\u066b",
-        "\u066c",
-        ";",
-        "\u066a",
-        "\u06f0",
-        "#",
-        "\u2212",
-        "\u00d7\u06f1\u06f0^",
-        "\u2030",
-        "\u221e",
-        "\ufffd",
-        "+",
     }
 }

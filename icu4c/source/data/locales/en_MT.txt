@@ -1,35 +1,32 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1998-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/19 23:10
+// * Source File: \work\locale\common\main\\en_MT.xml
 // *
 // ***************************************************************************
-// English, Malta locale
-// Note: please see the 'mt.txt' file for more information.
-// ** Maltese Standardization Authority http://www.msa.org.mt - MSA 200:2003 "Maltese Data and Information Requirements on Information and Communication Technology" is now the normative document for this data file.  [MSA 200:2003]
-// srl@monkey.sbay.org
-
-en_MT {
-    Version{ "2.1" } // Oct 2003
-
-    NumberPatterns {
+en_MT{
+    Currencies{
+        GBP{
+            "GBP",
+            "British Pound Sterling",
+        }
+    }
+    NumberPatterns{
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;-\u00A4#,##0.00", // [MSA 200:2003 4.4]
+        "¤#,##0.00;-¤#,##0.00",
         "#,##0%",
         "#E0",
     }
-
-
-    Currencies{
-        //MTP { "\u00A3", "Maltese Pound"}  (Obsolete)
-        GBP { "GBP", "British Pound Sterling" } // British Pound Sterling.  (Entered here to prevent GBP from showing up with the pound symbol, and being confused with MTL.)
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
-                1,       // Sunday (il-Hadd) is first day of calendar week
-                4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
-                //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
+            DateTimeElements:intvector{
+                1,
+                4,
             }
             DateTimePatterns{
                 "HH:mm:ss z",

@@ -1,20 +1,30 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/20 0:10
+// * Source File: \work\locale\common\main\\mk.xml
 // *
 // ***************************************************************************
-
-mk {
-    Version { "2.0"}
-    Countries { 
-        MK { "\u041C\u0430\u043A\u0435\u0434\u043E\u043D\u0438\u0458\u0430" }
+mk{
+    Countries{
+        MK{"Македонија"}
     }
-
-    Languages { 
-        mk { "\u043C\u0430\u043A\u0435\u0434\u043E\u043D\u0441\u043A\u0438" }
+    Currencies{
+        MKD{
+            "Den",
+            "MKD",
+        }
     }
-    NumberElements { 
+    ExemplarCharacters{"[а-и к-ш ѐ ѓ ѕ ј љ њ ќ ѝ џ]"}
+    Languages{
+        mk{"македонски"}
+    }
+    LocaleScript{
+        "Cyrl",
+    }
+    NumberElements{
         ",",
         ".",
         ";",
@@ -23,27 +33,18 @@ mk {
         "#",
         "-",
         "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
+        "‰",
+        "∞",
+        "�",
         "+",
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
-
-    LocaleScript{   
-        "Cyrl",     // ISO 15924 Name 
-    }
-    ExemplarCharacters { "[\u0430-\u0438 \u043a-\u0448 \u0450 \u0453 \u0455 \u0458 \u0459 \u045a \u045c \u045d \u045f]" }
-
-    // Currency display names
-    Currencies {
-        MKD { "Den", "MKD" }
-    }
+    Version{"1.2"}
     calendar{
+        
         gregorian{
-            DateTimeElements:intvector {
+            DateTimeElements:intvector{
                 2,
-                1, // "Minimal Days in First Week" is unknown. Root value used instead
+                1,
             }
             DateTimePatterns{
                 "HH:mm:ss z",
@@ -59,61 +60,64 @@ mk {
             dayNames{
                 format{
                     abbreviated{
-                        "\u043D\u0435\u0434.",
-                        "\u043F\u043E\u043D.",
-                        "\u0432\u0442.",
-                        "\u0441\u0440\u0435.",
-                        "\u0447\u0435\u0442.",
-                        "\u043F\u0435\u0442.",
-                        "\u0441\u0430\u0431.",
+                        "нед.",
+                        "пон.",
+                        "вт.",
+                        "сре.",
+                        "чет.",
+                        "пет.",
+                        "саб.",
                     }
                     wide{
-                        "\u043D\u0435\u0434\u0435\u043B\u0430",
-                        "\u043F\u043E\u043D\u0435\u0434\u0435\u043B\u043D\u0438\u043A",
-                        "\u0432\u0442\u043E\u0440\u043D\u0438\u043A",
-                        "\u0441\u0440\u0435\u0434\u0430",
-                        "\u0447\u0435\u0442\u0432\u0440\u0442\u043E\u043A",
-                        "\u043F\u0435\u0442\u043E\u043A",
-                        "\u0441\u0430\u0431\u043E\u0442\u0430",
+                        "недела",
+                        "понеделник",
+                        "вторник",
+                        "среда",
+                        "четврток",
+                        "петок",
+                        "сабота",
                     }
                 }
             }
             eras{
-                "\u043F\u0440.\u043D.\u0435.",
-                "\u0430\u0435.",
+                abbreviated{
+                    "пр.н.е.",
+                    "ае.",
+                }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "\u0458\u0430\u043D.",
-                        "\u0444\u0435\u0432.",
-                        "\u043C\u0430\u0440.",
-                        "\u0430\u043F\u0440.",
-                        "\u043C\u0430\u0458.",
-                        "\u0458\u0443\u043D.",
-                        "\u0458\u0443\u043B.",
-                        "\u0430\u0432\u0433.",
-                        "\u0441\u0435\u043F\u0442.",
-                        "\u043E\u043A\u0442.",
-                        "\u043D\u043E\u0435\u043C.",
-                        "\u0434\u0435\u043A\u0435\u043C.",
+                        "јан.",
+                        "фев.",
+                        "мар.",
+                        "апр.",
+                        "мај.",
+                        "јун.",
+                        "јул.",
+                        "авг.",
+                        "септ.",
+                        "окт.",
+                        "ноем.",
+                        "декем.",
                     }
                     wide{
-                        "\u0458\u0430\u043D\u0443\u0430\u0440\u0438",
-                        "\u0444\u0435\u0432\u0440\u0443\u0430\u0440\u0438",
-                        "\u043C\u0430\u0440\u0442",
-                        "\u0430\u043F\u0440\u0438\u043B",
-                        "\u043C\u0430\u0458",
-                        "\u0458\u0443\u043D\u0438",
-                        "\u0458\u0443\u043B\u0438",
-                        "\u0430\u0432\u0433\u0443\u0441\u0442",
-                        "\u0441\u0435\u043F\u0442\u0435\u043C\u0432\u0440\u0438",
-                        "\u043E\u043A\u0442\u043E\u043C\u0432\u0440\u0438",
-                        "\u043D\u043E\u0435\u043C\u0432\u0440\u0438",
-                        "\u0434\u0435\u043A\u0435\u043C\u0432\u0440\u0438",
+                        "јануари",
+                        "февруари",
+                        "март",
+                        "април",
+                        "мај",
+                        "јуни",
+                        "јули",
+                        "август",
+                        "септември",
+                        "октомври",
+                        "ноември",
+                        "декември",
                     }
                 }
             }
         }
     }
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
 }
