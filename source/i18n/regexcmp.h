@@ -111,7 +111,7 @@ private:
                                int32_t end);
     int32_t     maxMatchLength(int32_t start,
                                int32_t end);
-    int32_t     matchStartType();
+    void        matchStartType();
 
 
     UErrorCode                    *fStatus;

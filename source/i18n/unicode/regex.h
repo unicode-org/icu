@@ -351,7 +351,10 @@ private:
                                    //   regex character classes, e.g. Word.
 
     int32_t         fStartType;    // Info on how a match must start.
-    int32_t         fStartInfo;    //   Data, interpretation depends on start type.
+    int32_t         fInitialStringIdx;     //  
+    int32_t         fInitialStringLen;
+    UnicodeSet     *fInitialChars;  
+    UChar32         fInitialChar;
 
     /**
      * The address of this static class variable serves as this class's ID
