@@ -155,6 +155,11 @@
 #       endif /* HPUX shl_load */
 #   else /* not ICU_USE_SHL_LOAD */
         /* 'de facto standard' dlopen etc. */
+#ifdef PTX
+#ifndef RTLD_GLOBAL
+#define RTLD_GLOBAL 0
+#endif
+#endif
 #       include <dlfcn.h>
 #   endif
 
@@ -204,7 +209,7 @@
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
 /* ### Todo: auto detect mmap(). Until then, just add your platform here. */
-#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390)
+#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390) || defined(PTX)
     typedef size_t MemoryMap;
 
 #   define NO_MAP 0

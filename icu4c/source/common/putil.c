@@ -39,6 +39,7 @@
 #endif
 
 /* Define _XOPEN_SOURCE for Solaris and friends. */
+#ifndef PTX
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
 #endif
@@ -49,6 +50,7 @@
 #endif
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
+#endif
 #endif
 
 /* Include standard headers. */
@@ -1403,12 +1405,12 @@ uprv_nextDouble(double d, UBool next)
   double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
   if (epsilon == 0) epsilon = smallValue; /* for very small d's*/
   if (!next) epsilon = -epsilon;
-  double last_eps = epsilon * 2.0;
   /* avoid higher precision possibly used for temporay values*/
 #ifdef OS390
   last_eps = epsilon * 2.0;
   sum = d + epsilon;
 #else
+  double last_eps = epsilon * 2.0;
   double sum = d + epsilon; 
 #endif
   while ((sum != d) && (epsilon != last_eps)) {
