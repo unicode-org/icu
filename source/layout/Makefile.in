@@ -73,6 +73,7 @@ ContextualSubstSubtables.o \
 CoverageTables.o \
 CursiveAttachmentSubtables.o \
 DeviceTables.o \
+ExtensionSubtables.o \
 Features.o \
 GDEFMarkFilter.o \
 GlyphDefinitionTables.o \
