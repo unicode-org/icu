@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998 - 2002. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998 - 2003. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -10,6 +10,11 @@
 
 #ifndef __SCRIPTANDLANGUAGES_H
 #define __SCRIPTANDLANGUAGES_H
+
+/**
+ * \file
+ * \internal
+ */
 
 #include "LETypes.h"
 #include "LEScripts.h"
