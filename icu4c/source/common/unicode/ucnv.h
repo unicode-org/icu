@@ -760,7 +760,25 @@ U_CAPI void
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode);
 
 /**
- * returns a standard name for a given converter name.
+ * Gives the number of standards associated to converter names.
+ * @return number of standards
+ * @stable
+ */
+U_CAPI uint16_t
+ucnv_countStandards(void);
+
+/**
+ * Gives the name of the standard at given index of standard list.
+ * @param n index in standard list
+ * @param pErrorCode result of operation
+ * @return returns the name of the standard at given index
+ * @stable
+ */
+U_CAPI const char *
+ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode);
+
+/**
+ * Returns a standard name for a given converter name.
  *
  * @param name original converter name
  * @param standard name of the standard governing the names; MIME and IANA
@@ -768,7 +786,7 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
  * @return returns the standard converter name;
  *         if a standard converter name cannot be determined,
  *         then <code>NULL</code> is returned
- *
+ * @stable
  */
 U_CAPI const char *ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorCode);
 

@@ -48,7 +48,7 @@
  * followed by its aliases. All offsets to strings are offsets from the
  * beginning of the data.
  *
- * More formal file data structure (data format 2.0):
+ * More formal file data structure (data format 2.1):
  *
  * uint16_t aliasCount;
  * uint16_t aliasOffsets[aliasCount];
@@ -60,9 +60,18 @@
  *     uint16_t aliasCount;
  * } converters[converterCount];
  *
+ * uint16_t tagCount;
+ * uint16_t taggedAliasesOffsets[tagCount][converterCount];
+ * char tags[] = { "Tag0\Tag1\0..." };
+ *
  * char strings[]={
  *     "Converter0\0Alias1\0Alias2\0...Converter1\0Converter2\0Alias0\Alias1\0..."
  * };
+ *
+ * The code included here can read versions 2 and 2.1 of the data format.
+ * Version 2 does not have tag information, but since the code never refers
+ * to strings[] by its base offset, it's okay.
+ *
  */
 
 #define DATA_NAME "cnvalias"
@@ -70,6 +79,9 @@
 
 static UDataMemory *aliasData=NULL;
 static const uint16_t *aliasTable=NULL;
+
+static const uint16_t *converterTable = NULL;
+static const uint16_t *tagTable = NULL;
 
 static UBool
 isAcceptable(void *context,
@@ -83,7 +95,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]==2;
+        pInfo->formatVersion[0]>1;
 }
 
 static UBool
@@ -95,6 +107,7 @@ haveAliasData(UErrorCode *pErrorCode) {
     /* load converter alias data from file if necessary */
     if(aliasData==NULL) {
         UDataMemory *data;
+        UDataInfo info;
         const uint16_t *table=NULL;
 
         /* open the data outside the mutex block */
@@ -104,6 +117,7 @@ haveAliasData(UErrorCode *pErrorCode) {
         }
 
         table=(const uint16_t *)udata_getMemory(data);
+        udata_getInfo(data, &info);
 
         /* in the mutex block, set the data for this process */
         umtx_lock(NULL);
@@ -112,6 +126,11 @@ haveAliasData(UErrorCode *pErrorCode) {
             data=NULL;
             aliasTable=table;
             table=NULL;
+	    converterTable = aliasTable + 1 + 2 * *aliasTable;
+
+            if (info.formatVersion[0] > 2) {
+                tagTable = converterTable + 1 + 2 * *converterTable;
+            }
         }
         umtx_unlock(NULL);
 
@@ -134,6 +153,31 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     } else {
         return TRUE;
     }
+}
+
+static int16_t getTagNumber(const char *tagname) {
+    if (tagTable) {
+	int16_t tag, count = (int16_t) *tagTable;
+	const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
+
+	char name[100];
+	int i;
+
+	/* convert the tag name to lowercase to do case-insensitive comparisons */
+	for(i = 0; i < sizeof(name) - 1 && *tagname; ++i) {
+	    name[i] = uprv_tolower(*tagname++);
+	}
+	name[i] = 0;
+
+	for (tag = 0; count--; ++tag) {
+	    if (!charsetNameCmp(name, tags)) {
+		return tag;
+	    }
+	    tags += strlen(tags);
+	}
+    }
+
+    return -1;
 }
 
 /**
@@ -272,9 +316,56 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
 }
 
 U_CFUNC uint16_t
+ucnv_io_countStandards(UErrorCode *pErrorCode) {
+    if (haveAliasData(pErrorCode)) {
+	if (!tagTable) {
+	    *pErrorCode = U_INVALID_FORMAT_ERROR;
+	    return 0;
+	}
+
+	return *tagTable;
+    }
+
+    return 0;
+}
+
+U_CFUNC const char *
+ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
+    if (haveAliasData(pErrorCode) && tagTable) {
+	const char *p = (const char *) tagTable + 1 + *tagTable * *converterTable;
+	int16_t count = (int16_t) *tagTable;
+
+	while (n-- && count--) {
+	    p += strlen(p);
+	}
+
+	return count >= 0 ? p : NULL;
+    }
+
+    return NULL;
+}
+
+U_CFUNC const char *
+ucnv_io_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
+   if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+        const uint16_t *p = findAlias(alias);
+        if(p != NULL) {
+	    int16_t tag = getTagNumber(standard);
+
+	    if (tag > -1) {
+		uint16_t offset = tagTable[1 + tag * *converterTable + (p - converterTable) / 2];
+		return offset ? (const char *) aliasTable + offset : NULL;
+	    }
+	}
+   }
+
+   return NULL;
+}
+
+U_CFUNC uint16_t
 ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
-        return aliasTable[1+2*(*aliasTable)];
+        return *converterTable;
     }
     return 0;
 }
@@ -282,7 +373,7 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
 U_CFUNC const char *
 ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
-        const uint16_t *p=aliasTable+1+2*(*aliasTable);
+        const uint16_t *p=converterTable;
         if(n<*p) {
             return (const char *)aliasTable+p[1+2*n];
         }
@@ -293,7 +384,7 @@ ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
 U_CFUNC void
 ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
-        const uint16_t *p=aliasTable+1+2*(*aliasTable);
+        const uint16_t *p=converterTable;
         uint16_t count=*p++;
         while(count>0) {
             *aliases++=(const char *)aliasTable+*p;
@@ -407,3 +498,13 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
         }
     }
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
+
