@@ -9,7 +9,7 @@
 #include "unicode/utypes.h"
 /**
  * \file
- * \brief Description of BreakIterator C API
+ * \brief C API: BreakIterator 
  *
  * <h2> BreakIterator C API </h2>
  *

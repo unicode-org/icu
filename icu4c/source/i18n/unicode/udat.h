@@ -12,7 +12,7 @@
 #include "unicode/unum.h"
 /**
  * \file
- * \brief Description of DateFormat C API
+ * \brief C API: DateFormat 
  *
  * <h2> Date Format C API</h2>
  *
