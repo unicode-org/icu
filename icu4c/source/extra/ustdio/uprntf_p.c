@@ -1135,6 +1135,7 @@ u_printf_print_spec(const u_printf_stream_handler *streamHandler,
             /* pad character specified */
         case FLAG_PAREN:
 
+            /* TODO test that all four are numbers */
             /* first four characters are hex values for pad char */
             info->fPadChar = (UChar)ufmt_digitvalue(*s++);
             info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));

@@ -45,9 +45,9 @@ typedef struct {
 #endif
 
 typedef struct u_localized_string {
-    UChar       *fBuffer;       /* Place to write the string */
     UChar       *fPos;          /* current pos in fUCBuffer */
     const UChar *fLimit;        /* data limit in fUCBuffer */
+    UChar       *fBuffer;       /* Place to write the string */
 
 #if !UCONFIG_NO_FORMATTING
     ULocaleBundle  fBundle; /* formatters */
