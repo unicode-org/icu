@@ -655,11 +655,6 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     const char *realLimit=pArgs->sourceLimit;
 
-    if(pArgs->source>=realLimit) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0xffff;
-    }
-
     pArgs->target=buffer;
     pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
 
@@ -671,12 +666,15 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
         if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_INDEX_OUTOFBOUNDS_ERROR) {
             return 0xffff;
         } else if(pArgs->target!=buffer) {
+            if(*pErrorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
+                *pErrorCode=U_ZERO_ERROR;
+            }
             return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
         }
     }
 
-    /* no output */
-    *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+    /* no output because of empty input or only state changes and skipping callbacks */
+    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     return 0xffff;
 }
 
