@@ -170,8 +170,8 @@ public:
         
         
     /**
-     * These constants are provided for backwards compatibility only,
-     * and are deprecated.  Please use the C++ style constants defined above.
+     * These constants are provided for backwards compatibility only.
+     * Please use the C++ style constants defined above.
      */
         ERA_FIELD                     = kEraField,
         YEAR_FIELD                     = kYearField,
@@ -222,8 +222,8 @@ public:
         
         
     /**
-     * These constants are provided for backwards compatibility only,
-     * and are deprecated.  Please use the C++ style constants defined above.
+     * These constants are provided for backwards compatibility only.
+     * Please use the C++ style constants defined above.
      */       
         FULL        = kFull,
         LONG        = kLong,

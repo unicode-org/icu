@@ -142,8 +142,8 @@ public:
 
 
     /**
-     * These constants are provided for backwards compatibility only,
-     * and are deprecated.  Please use the C++ style constants defined above.
+     * These constants are provided for backwards compatibility only.
+     * Please use the C++ style constants defined above.
      * @stable ICU 2.0
      */
         INTEGER_FIELD        = kIntegerField,
