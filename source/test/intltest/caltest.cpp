@@ -9,6 +9,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/simpletz.h"
+#include <math.h>
  
 // *****************************************************************************
 // class CalendarTest
@@ -128,6 +129,13 @@ void CalendarTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char
             if (exec) {
                 logln("TestAddRollExtensive---"); logln("");
                 TestAddRollExtensive();
+            }
+            break;
+        case 16:
+            name = "TestDOW_LOCALandYEAR_WOY";
+            if (exec) {
+                logln("TestDOW_LOCALandYEAR_WOY---"); logln("");
+                TestDOW_LOCALandYEAR_WOY();
             }
             break;
         default: name = ""; break;
@@ -1122,7 +1130,132 @@ CalendarTest::TestDOWProgression()
 }
  
 // -------------------------------------
- 
+
+void
+CalendarTest::TestDOW_LOCALandYEAR_WOY()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t times = 20;
+    Calendar *cal=Calendar::createInstance(Locale::GERMANY, status);
+    if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
+    SimpleDateFormat *sdf=new SimpleDateFormat("YYYY'-W'ww-ee", Locale::GERMANY, status);
+    if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
+    sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-dd"), status);
+    if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
+    cal->set(1997, Calendar::DECEMBER, 25);
+	doYEAR_WOYLoop(cal, sdf, times, status);
+    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
+    cal->set(1998, Calendar::DECEMBER, 25);
+	doYEAR_WOYLoop(cal, sdf, times, status);
+    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
+    cal->set(1582, Calendar::OCTOBER, 1);
+//	doYEAR_WOYLoop(cal, sdf, times, status);
+    loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
+
+    return;
+}
+
+// -------------------------------------
+
+void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
+    Calendar *calclone;
+    
+    for(int i = 0; i<times; i++) {
+        calclone = cal->clone();
+        cal->add(field,1,errorCode);
+        if (U_FAILURE(errorCode)) { errln("Error in add"); delete calclone; return; }
+        calclone->add(field2,1,errorCode);
+        if (U_FAILURE(errorCode)) { errln("Error in add"); delete calclone; return; }
+        if(cal->getTime(errorCode) != calclone->getTime(errorCode)) {
+            delete calclone;
+            errln("Results of add differ!");
+            return;
+        }
+        delete calclone;
+    }
+
+    for(i = 0; i<times; i++) {
+        calclone = cal->clone();
+        cal->roll(field,(int32_t)1,errorCode);
+        if (U_FAILURE(errorCode)) { errln("Error in roll"); delete calclone; return; }
+        calclone->roll(field2,(int32_t)1,errorCode);
+        if (U_FAILURE(errorCode)) { errln("Error in roll"); delete calclone; return; }
+        if(cal->getTime(errorCode) != calclone->getTime(errorCode)) {
+            delete calclone;
+            errln("Different!");
+            return;
+        }
+        delete calclone;
+    }
+}
+
+// -------------------------------------
+
+void
+CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf, 
+                                    int32_t times, UErrorCode& errorCode) {
+
+	char s[100];
+    UnicodeString us;
+    UDate tst, original;
+    Calendar *tstres = new GregorianCalendar(Locale::GERMANY, errorCode);
+    for(int i=0; i<times; ++i) {
+        sdf->format(cal->getTime(errorCode), us, errorCode);
+        //logln("expected: "+us);
+        if (U_FAILURE(errorCode)) { errln("Format error"); return; }
+        tst=sdf->parse(us,errorCode);
+        if (U_FAILURE(errorCode)) { errln("Parse error"); return; }
+        tstres->clear();
+        tstres->setTime(tst, errorCode);
+        //logln((UnicodeString)"Parsed week of year is "+tstres->get(Calendar::WEEK_OF_YEAR, errorCode));
+        if (U_FAILURE(errorCode)) { errln("Set time error"); return; }
+        original = cal->getTime(errorCode);
+        us.remove();
+        sdf->format(tst, us, errorCode);
+        //logln("got: "+us);
+        if (U_FAILURE(errorCode)) { errln("Get time error"); return; }
+        s[us.extract(0, us.length(), s)]=0;
+        if(fabs(original-tst)>U_MILLIS_PER_DAY) {
+            us.remove();
+            sdf->format(original, us, errorCode);
+            errln("Parsed time doesn't match with regular");
+            logln("expected "+us);
+            us.remove();
+            sdf->format(tst, us, errorCode);
+            logln("got "+us);
+//            errorCode = U_INTERNAL_PROGRAM_ERROR;
+//            return;
+        }
+        tstres->clear();
+        tstres->set(Calendar::YEAR_WOY, cal->get(Calendar::YEAR_WOY, errorCode));
+        tstres->set(Calendar::WEEK_OF_YEAR, cal->get(Calendar::WEEK_OF_YEAR, errorCode));
+        tstres->set(Calendar::DOW_LOCAL, cal->get(Calendar::DOW_LOCAL, errorCode));
+        if(cal->get(Calendar::YEAR, errorCode) != tstres->get(Calendar::YEAR, errorCode)) {
+            errln("Different Year!");
+            logln((UnicodeString)"Expected "+cal->get(Calendar::YEAR, errorCode));
+            logln((UnicodeString)"Got "+tstres->get(Calendar::YEAR, errorCode));
+            return;
+        }
+        if(cal->get(Calendar::DAY_OF_YEAR, errorCode) != tstres->get(Calendar::DAY_OF_YEAR, errorCode)) {
+            errln("Different Day Of Year!");
+            logln((UnicodeString)"Expected "+cal->get(Calendar::DAY_OF_YEAR, errorCode));
+            logln((UnicodeString)"Got "+tstres->get(Calendar::DAY_OF_YEAR, errorCode));
+            return;
+        }
+        cal->add(Calendar::DATE, 1, errorCode);
+        if (U_FAILURE(errorCode)) { errln("Add error"); return; }
+        us.remove();
+    }
+    delete (tstres);
+}
+// -------------------------------------
+  
 void
 CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 {
