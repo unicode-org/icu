@@ -341,6 +341,188 @@ static void DataDrivenPrintf(void) {
     }
 }
 
+static void DataDrivenScanf(void) {
+    UErrorCode errorCode;
+    TestDataModule *dataModule;
+    TestData *testData;
+    const DataMap *testCase;
+    DataDrivenLogger logger;
+    UChar uBuffer[512];
+    char cBuffer[512];
+    char cFormat[sizeof(cBuffer)];
+    char cExpected[sizeof(cBuffer)];
+    UnicodeString tempStr;
+    UChar format[512];
+    UChar expectedResult[512];
+    UChar argument[512];
+    int32_t i;
+    int8_t i8, expected8;
+    int16_t i16, expected16;
+    int32_t i32, expected32;
+    int64_t i64, expected64;
+    double dbl, expectedDbl;
+    int32_t uBufferLenReturned;
+
+    const char *fileLocale = "en_US_POSIX";
+    //int32_t uFileBufferLenReturned;
+    //UFILE *testFile;
+
+    errorCode=U_ZERO_ERROR;
+    dataModule=TestDataModule::getTestDataModule("icuio", logger, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        testData=dataModule->createTestData("scanf", errorCode);
+        if(U_SUCCESS(errorCode)) {
+            for(i=0; testData->nextCase(testCase, errorCode); ++i) {
+                if(U_FAILURE(errorCode)) {
+                    log_err("error retrieving icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+/*                testFile = u_fopen(STANDARD_TEST_FILE, "w", fileLocale, "UTF-8");
+                if (!testFile) {
+                    log_err("Can't open test file - %s\n",
+                            STANDARD_TEST_FILE);
+                }*/
+                u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
+                uBuffer[sizeof(uBuffer)/sizeof(uBuffer[0])-1] = 0;
+                tempStr=testCase->getString("format", errorCode);
+                tempStr.extract(format, sizeof(format)/sizeof(format[0]), errorCode);
+                tempStr=testCase->getString("result", errorCode);
+                tempStr.extract(expectedResult, sizeof(expectedResult)/sizeof(expectedResult[0]), errorCode);
+                tempStr=testCase->getString("argument", errorCode);
+                tempStr.extract(argument, sizeof(argument)/sizeof(argument[0]), errorCode);
+                u_austrncpy(cBuffer, format, sizeof(cBuffer));
+                if(U_FAILURE(errorCode)) {
+                    log_err("error retrieving icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+                log_verbose("Test %d: format=\"%s\"\n", i, cBuffer);
+                switch (testCase->getString("argumentType", errorCode)[0]) {
+                case 0x64:  // 'd' double
+                    expectedDbl = atof(u_austrcpy(cBuffer, expectedResult));
+                    uBufferLenReturned = u_sscanf_u(argument, format, &dbl);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, dbl);
+                    if (dbl != expectedDbl) {
+                        log_err("error in scanf test case Got: %f Exp: %f\n",
+                                dbl, expectedDbl);
+                    }
+                    break;
+                case 0x31:  // '1' int8_t
+                    expected8 = (int8_t)uto64(argument);
+                    uBufferLenReturned = u_sscanf_u(argument, format, &i8);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, i8);
+                    if (i8 != expected8) {
+                        log_err("error in scanf test case Got: %02X Exp: %02X\n",
+                                i8, expected8);
+                    }
+                    break;
+                case 0x32:  // '2' int16_t
+                    expected16 = (int16_t)uto64(argument);
+                    uBufferLenReturned = u_sscanf_u(argument, format, &i16);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, i16);
+                    if (i16 != expected16) {
+                        log_err("error in scanf test case Got: %04X Exp: %04X\n",
+                                i16, expected16);
+                    }
+                    break;
+                case 0x34:  // '4' int32_t
+                    expected32 = (int32_t)uto64(argument);
+                    uBufferLenReturned = u_sscanf_u(argument, format, &i32);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, i32);
+                    if (i32 != expected32) {
+                        log_err("error in scanf test case Got: %08X Exp: %08X\n",
+                                i32, expected32);
+                    }
+                    break;
+                case 0x38:  // '8' int64_t
+                    expected64 = uto64(argument);
+                    uBufferLenReturned = u_sscanf_u(argument, format, &i64);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, i64);
+                    if (i64 != expected64) {
+                        log_err("error in scanf 64-bit. Test case = %d\n", i);
+                    }
+                    break;
+                case 0x73:  // 's' char *
+                    u_austrncpy(cExpected, uBuffer, sizeof(cBuffer));
+                    uBufferLenReturned = u_sscanf_u(argument, format, cBuffer);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, cBuffer);
+                    if (strcmp(cBuffer, cExpected) != 0) {
+                        log_err("error in scanf char * string. Test case = %d\n", i);
+                    }
+                    break;
+                case 0x53:  // 'S' UChar *
+                    uBufferLenReturned = u_sscanf_u(argument, format, uBuffer);
+                    //uFileBufferLenReturned = u_fscanf_u(testFile, format, argument);
+                    if (u_strcmp(uBuffer, expectedResult) != 0) {
+                        log_err("error in scanf UChar * string. Test case = %d\n", i);
+                    }
+                    break;
+                }
+                if (uBufferLenReturned != 1) {
+                    log_err("error scanf converted %d arguments\n", uBufferLenReturned);
+                }
+/*                if (u_strcmp(uBuffer, expectedResult) != 0) {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cFormat, format, sizeof(cFormat));
+                    u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE string test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                            i, cFormat, cBuffer, cExpected);
+                }
+                if (uBuffer[uBufferLenReturned-1] == 0
+                    || uBuffer[uBufferLenReturned] != 0
+                    || uBuffer[uBufferLenReturned+1] != 0x2A
+                    || uBuffer[uBufferLenReturned+2] != 0x2A)
+                {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE test case %d - \"%s\" wrong amount of characters was written. Got %d.\n",
+                            i, cBuffer, uBufferLenReturned);
+                }*/
+/*                u_fclose(testFile);
+                testFile = u_fopen(STANDARD_TEST_FILE, "r", fileLocale, "UTF-8");
+                if (!testFile) {
+                    log_err("Can't open test file - %s\n",
+                            STANDARD_TEST_FILE);
+                }
+                uBuffer[0];
+                u_fgets(uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]), testFile);
+                if (u_strcmp(uBuffer, expectedResult) != 0) {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cFormat, format, sizeof(cFormat));
+                    u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE file test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                            i, cFormat, cBuffer, cExpected);
+                }
+                if (uFileBufferLenReturned != uBufferLenReturned)
+                {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE uFileBufferLenReturned(%d) != uBufferLenReturned(%d)\n",
+                            uFileBufferLenReturned, uBufferLenReturned);
+                }
+*/
+                if(U_FAILURE(errorCode)) {
+                    log_err("error running icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+//                u_fclose(testFile);
+            }
+            delete testData;
+        }
+        delete dataModule;
+    }
+    else {
+        log_err("Failed: could not load test icuio data\n");
+    }
+}
+
 static void DataDrivenPrintfPrecision(void) {
     UErrorCode errorCode;
     TestDataModule *dataModule;
@@ -524,8 +706,9 @@ static void addAllTests(TestNode** root) {
     addFileTest(root);
     addStringTest(root);
 
-    addTest(root, &DataDrivenPrintf, "data/DataDrivenPrintf");
-    addTest(root, &DataDrivenPrintfPrecision, "data/DataDrivenPrintfPrecision");
+    addTest(root, &DataDrivenPrintf, "datadriv/DataDrivenPrintf");
+    addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
+    addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
     addTest(root, &TestStream, "stream/TestStream");
 }
 

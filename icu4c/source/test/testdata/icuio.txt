@@ -136,5 +136,13 @@ icuio {
                 }
             }
         }
+        scanf {
+            Headers { "format", "argument", "argumentType", "result" }
+            Cases {
+                {
+                    "%e", "1.200000e+000", "d", "1.2"
+                }
+            }
+        }
     }
 }
