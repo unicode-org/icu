@@ -1,3 +1,4 @@
+
 # Copyright (c) 2001 IBM, Inc. and others
 
 #
@@ -7,7 +8,7 @@
 # Usage:
 #    See the instructions in the parent Makefile,
 #          icu/source/samples/ufortune/Makefile.
-#          This subproject builds the ICU resource file for ufortune.
+#          This subproject builds the ICU resource files for ufortune.
 #          It is normally invoked from the parent directory,
 #            although the resources can be built from here.
 #
@@ -45,7 +46,7 @@ TARGET=libfortune_resources.$(SO)
 	$(INVOKE) $(sbindir)/genrb -d . $<
 
 # Resource files.  Add new ones for additional locales here.
-RESFILES=root.res
+RESFILES=root.res es.res
 
 
 # All object files (C or C++)
@@ -65,8 +66,7 @@ distclean clean:
 	-$(RMV) $(DEPS)
 
 $(TARGET): $(RESFILES)
-	echo $(RESFILES) > res-file-list
-	$(INVOKE) $(sbindir)/pkgdata --name fortune_resources -v -O $(ICU_INC) --mode dll -d .  res-file-list
+	$(INVOKE) $(sbindir)/pkgdata --name fortune_resources -v -O $(ICU_INC) --mode dll -d .  res-file-list.txt
 	cp $(TARGET) ..
 
 # Make check: simply runs the sample, logged to a file
