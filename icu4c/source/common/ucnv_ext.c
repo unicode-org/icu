@@ -122,7 +122,7 @@ static int32_t
 ucnv_extMatchToU(const int32_t *cx,
                  const char *pre, int32_t preLength,
                  const char *src, int32_t srcLength,
-                 const UChar **pResult, int32_t *pResultLength,
+                 uint32_t *pMatchValue,
                  UBool useFallback, UBool flush) {
     const uint32_t *toUTable, *toUSection;
 
@@ -211,28 +211,21 @@ ucnv_extMatchToU(const int32_t *cx,
     }
 
     /* return result */
-    matchValue=UCNV_EXT_TO_U_MASK_ROUNDTRIP(matchValue);
-    if(UCNV_EXT_TO_U_IS_CODE_POINT(matchValue)) {
-        *pResultLength=-(int32_t)matchValue;
-    } else {
-        *pResultLength=UCNV_EXT_TO_U_GET_LENGTH(matchValue);
-        *pResult=UCNV_EXT_ARRAY(cx, UCNV_EXT_TO_U_UCHARS_INDEX, UChar)+UCNV_EXT_TO_U_GET_INDEX(matchValue);
-    }
-
+    *pMatchValue=UCNV_EXT_TO_U_MASK_ROUNDTRIP(matchValue);
     return matchLength;
 }
 
 static U_INLINE void
-ucnv_extWriteToU(UConverter *cnv,
-                 const UChar *result, int32_t resultLength,
+ucnv_extWriteToU(UConverter *cnv, const int32_t *cx,
+                 uint32_t value,
                  UChar **target, const UChar *targetLimit,
                  int32_t **offsets, int32_t srcIndex,
                  UErrorCode *pErrorCode) {
     /* output the result */
-    if(resultLength<0) {
+    if(UCNV_EXT_TO_U_IS_CODE_POINT(value)) {
         /* output a single code point */
         ucnv_toUWriteCodePoint(
-            cnv, UCNV_EXT_TO_U_GET_CODE_POINT(-resultLength),
+            cnv, UCNV_EXT_TO_U_GET_CODE_POINT(value),
             target, targetLimit,
             offsets, srcIndex,
             pErrorCode);
@@ -240,7 +233,9 @@ ucnv_extWriteToU(UConverter *cnv,
         /* output a string - with correct data we have resultLength>0 */
         ucnv_toUWriteUChars(
             cnv,
-            result, resultLength,
+            UCNV_EXT_ARRAY(cx, UCNV_EXT_TO_U_UCHARS_INDEX, UChar)+
+                UCNV_EXT_TO_U_GET_INDEX(value),
+            UCNV_EXT_TO_U_GET_LENGTH(value),
             target, targetLimit,
             offsets, srcIndex,
             pErrorCode);
@@ -258,22 +253,22 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
                         int32_t **offsets, int32_t srcIndex,
                         UBool flush,
                         UErrorCode *pErrorCode) {
-    const UChar *result;
-    int32_t resultLength, match;
+    uint32_t value;
+    int32_t match;
 
     /* try to match */
     match=ucnv_extMatchToU(cx,
                            (const char *)cnv->toUBytes, firstLength,
                            *src, (int32_t)(srcLimit-*src),
-                           &result, &resultLength,
+                           &value,
                            cnv->useFallback, flush);
     if(match>0) {
         /* advance src pointer for the consumed input */
         *src+=match-firstLength;
 
         /* write result to target */
-        ucnv_extWriteToU(cnv,
-                         result, resultLength,
+        ucnv_extWriteToU(cnv, cx,
+                         value,
                          target, targetLimit,
                          offsets, srcIndex,
                          pErrorCode);
@@ -307,42 +302,31 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
 #if 0
 /* ### TODO */
 
-U_CFUNC int32_t
+U_CFUNC UChar32
 ucnv_extSimpleMatchToU(const int32_t *cx,
-                       UChar32 cp, uint32_t *pValue,
+                       UChar32 cp,
                        UBool useFallback,
                        UErrorCode *pErrorCode) {
-    const uint8_t *result;
-    int32_t resultLength, match;
+    uint32_t value;
+    int32_t match;
 
     /* try to match */
     match=ucnv_extMatchToU(cx,
-                             cp,
-                             NULL, 0,
-                             NULL, 0,
-                             &result, &resultLength,
-                             useFallback, TRUE);
-    if(match>=2) {
+                           cp,
+                           NULL, 0,
+                           NULL, 0,
+                           &value,
+                           useFallback, TRUE);
+    if(match>0) {
         /* write result for simple, single-character conversion */
-        if(resultLength<0) {
-            resultLength=-resultLength;
-            *pValue=(uint32_t)UCNV_EXT_TO_U_GET_DATA(resultLength);
-            return UCNV_EXT_TO_U_GET_LENGTH(resultLength);
-        } else if(resultLength==4) {
-            /* de-serialize a 4-byte result */
-            *pValue=
-                ((uint32_t)result[0]<<24)|
-                ((uint32_t)result[1]<<16)|
-                ((uint32_t)result[2]<<8)|
-                result[3];
-            return 4;
+        if(UCNV_EXT_TO_U_IS_CODE_POINT(value)) {
+            return UCNV_EXT_TO_U_GET_CODE_POINT(value);
         }
     }
 
     /*
      * return no match because
-     * - match>1 && resultLength>4: result too long for simple conversion
-     * - match==1: no match found, <subchar1> preferred
+     * - match>0 && value points to string: simple conversion cannot handle multiple code points
      * - match==0: no match found in the first place
      * - match<0: partial match, not supported for simple conversion (and flush==TRUE)
      */
@@ -359,13 +343,13 @@ U_CFUNC void
 ucnv_extContinueMatchToU(UConverter *cnv,
                          UConverterToUnicodeArgs *pArgs, int32_t srcIndex,
                          UErrorCode *pErrorCode) {
-    const UChar *result;
-    int32_t resultLength, match, length;
+    uint32_t value;
+    int32_t match, length;
 
     match=ucnv_extMatchToU(cnv->sharedData->table->mbcs.extIndexes,
                            cnv->preToU, cnv->preToULength,
                            pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
-                           &result, &resultLength,
+                           &value,
                            cnv->useFallback, pArgs->flush);
     if(match>0) {
         if(match>=cnv->preToULength) {
@@ -380,8 +364,8 @@ ucnv_extContinueMatchToU(UConverter *cnv,
         }
 
         /* write result */
-        ucnv_extWriteToU(cnv,
-                         result, resultLength,
+        ucnv_extWriteToU(cnv, cnv->sharedData->table->mbcs.extIndexes,
+                         value,
                          &pArgs->target, pArgs->targetLimit,
                          &pArgs->offsets, srcIndex,
                          pErrorCode);
@@ -493,12 +477,7 @@ ucnv_extFindFromU(const UChar *fromUSection, int32_t length, UChar u) {
  * @param preLength length of pre, >=0
  * @param src UChars that can be used to complete a match
  * @param srcLength length of src, >=0
- * @param pResult [out] address of pointer to result bytes
- *                      set only in case of a match
- * @param pResultLength [out] address of result length variable;
- *                            gets a negative value if the length variable
- *                            itself contains the length and bytes, encoded in
- *                            the format of fromUTableValues[] and then inverted
+ * @param pMatchValue [out] output result value for the match from the data structure
  * @param useFallback "use fallback" flag, usually from cnv->useFallback
  * @param flush TRUE if the end of the input stream is reached
  * @return >1: matched, return value=total match length (number of input units matched)
@@ -516,7 +495,7 @@ ucnv_extMatchFromU(const int32_t *cx,
                    UChar32 firstCP,
                    const UChar *pre, int32_t preLength,
                    const UChar *src, int32_t srcLength,
-                   const uint8_t **pResult, int32_t *pResultLength,
+                   uint32_t *pMatchValue,
                    UBool useFallback, UBool flush) {
     const uint16_t *stage12, *stage3;
     const uint32_t *stage3b;
@@ -651,44 +630,33 @@ ucnv_extMatchFromU(const int32_t *cx,
         return 1;
     }
 
-    matchValue=UCNV_EXT_FROM_U_MASK_ROUNDTRIP(matchValue);
-    length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(matchValue);
-    if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
-        *pResultLength=-(int32_t)matchValue;
-    } else {
-        *pResultLength=length;
-        *pResult=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_BYTES_INDEX, uint8_t)+UCNV_EXT_FROM_U_GET_DATA(matchValue);
-    }
-
+    *pMatchValue=UCNV_EXT_FROM_U_MASK_ROUNDTRIP(matchValue);
     return matchLength;
 }
 
 static U_INLINE void
-ucnv_extWriteFromU(UConverter *cnv,
-                   const uint8_t *result, int32_t resultLength,
+ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
+                   uint32_t value,
                    char **target, const char *targetLimit,
                    int32_t **offsets, int32_t srcIndex,
                    UErrorCode *pErrorCode) {
     uint8_t buffer[4];
+    const uint8_t *result;
+    int32_t length;
+
+    length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(value);
+    value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
 
     /* output the result */
-    if(resultLength<0) {
+    if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
         /*
          * Generate a byte array and then write it below.
          * This is not the fastest possible way, but it should be ok for
          * extension mappings, and it is much simpler.
          * Offset and overflow handling are only done once this way.
          */
-        uint8_t *p;
-        uint32_t value;
-
-        resultLength=-resultLength;
-        value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(resultLength);
-        resultLength=UCNV_EXT_FROM_U_GET_LENGTH(resultLength);
-        /* resultLength<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH==3 */
-
-        p=buffer;
-        switch(resultLength) {
+        uint8_t *p=buffer;
+        switch(length) {
         case 3:
             *p++=(uint8_t)(value>>16);
         case 2:
@@ -699,10 +667,12 @@ ucnv_extWriteFromU(UConverter *cnv,
             break; /* will never occur */
         }
         result=buffer;
+    } else {
+        result=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_BYTES_INDEX, uint8_t)+value;
     }
 
     /* with correct data we have resultLength>0 */
-    ucnv_fromUWriteBytes(cnv, (const char *)result, resultLength,
+    ucnv_fromUWriteBytes(cnv, (const char *)result, length,
                          target, targetLimit,
                          offsets, srcIndex,
                          pErrorCode);
@@ -719,22 +689,22 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
                           int32_t **offsets, int32_t srcIndex,
                           UBool flush,
                           UErrorCode *pErrorCode) {
-    const uint8_t *result;
-    int32_t resultLength, match;
+    uint32_t value;
+    int32_t match;
 
     /* try to match */
     match=ucnv_extMatchFromU(cx, cp,
                              NULL, 0,
                              *src, (int32_t)(srcLimit-*src),
-                             &result, &resultLength,
+                             &value,
                              cnv->useFallback, flush);
     if(match>=2) {
         /* advance src pointer for the consumed input */
         *src+=match-2; /* remove 2 for the initial code point */
 
         /* write result to target */
-        ucnv_extWriteFromU(cnv,
-                           result, resultLength,
+        ucnv_extWriteFromU(cnv, cx,
+                           value,
                            target, targetLimit,
                            offsets, srcIndex,
                            pErrorCode);
@@ -770,24 +740,29 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
                          UChar32 cp, uint32_t *pValue,
                          UBool useFallback,
                          UErrorCode *pErrorCode) {
-    const uint8_t *result;
-    int32_t resultLength, match;
+    uint32_t value;
+    int32_t match;
 
     /* try to match */
     match=ucnv_extMatchFromU(cx,
                              cp,
                              NULL, 0,
                              NULL, 0,
-                             &result, &resultLength,
+                             &value,
                              useFallback, TRUE);
     if(match>=2) {
         /* write result for simple, single-character conversion */
-        if(resultLength<0) {
-            resultLength=-resultLength;
-            *pValue=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(resultLength);
-            return UCNV_EXT_FROM_U_GET_LENGTH(resultLength);
-        } else if(resultLength==4) {
+        int32_t length;
+        
+        length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(value);
+        value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
+
+        if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
+            *pValue=value;
+            return length;
+        } else if(length==4) {
             /* de-serialize a 4-byte result */
+            const uint8_t *result=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_BYTES_INDEX, uint8_t)+value;
             *pValue=
                 ((uint32_t)result[0]<<24)|
                 ((uint32_t)result[1]<<16)|
@@ -815,14 +790,14 @@ U_CFUNC void
 ucnv_extContinueMatchFromU(UConverter *cnv,
                            UConverterFromUnicodeArgs *pArgs, int32_t srcIndex,
                            UErrorCode *pErrorCode) {
-    const uint8_t *result;
-    int32_t resultLength, match;
+    uint32_t value;
+    int32_t match;
 
     match=ucnv_extMatchFromU(cnv->sharedData->table->mbcs.extIndexes,
                              cnv->preFromUFirstCP,
                              cnv->preFromU, cnv->preFromULength,
                              pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
-                             &result, &resultLength,
+                             &value,
                              cnv->useFallback, pArgs->flush);
     if(match>=2) {
         match-=2; /* remove 2 for the initial code point */
@@ -842,8 +817,8 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
         cnv->preFromUFirstCP=U_SENTINEL;
 
         /* write result */
-        ucnv_extWriteFromU(cnv,
-                           result, resultLength,
+        ucnv_extWriteFromU(cnv, cnv->sharedData->table->mbcs.extIndexes,
+                           value,
                            &pArgs->target, pArgs->targetLimit,
                            &pArgs->offsets, srcIndex,
                            pErrorCode);
