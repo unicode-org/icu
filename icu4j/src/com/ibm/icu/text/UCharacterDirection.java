@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterDirection.java $ 
-* $Date: 2001/02/26 23:49:20 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/27 17:33:46 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -41,93 +41,82 @@ public final class UCharacterDirection
   /**
   * Directional type R
   */
-	public static final int RIGHT_TO_LEFT              = LEFT_TO_RIGHT + 1;
+	public static final int RIGHT_TO_LEFT              = 1;
 	/**
   * Directional type EN
   */
-	public static final int EUROPEAN_NUMBER            = RIGHT_TO_LEFT + 1;
+	public static final int EUROPEAN_NUMBER            = 2;
 	/**
   * Directional type ES
   */
-	public static final int EUROPEAN_NUMBER_SEPARATOR  = EUROPEAN_NUMBER + 1;
+	public static final int EUROPEAN_NUMBER_SEPARATOR  = 3;
 	/**
   * Directional type ET
   */
-	public static final int EUROPEAN_NUMBER_TERMINATOR = 
-	                                               EUROPEAN_NUMBER_SEPARATOR + 1;
+	public static final int EUROPEAN_NUMBER_TERMINATOR = 4;
   /**
   * Directional type AN
   */	                                               
-	public static final int ARABIC_NUMBER               = 
-	                                              EUROPEAN_NUMBER_TERMINATOR + 1;
+	public static final int ARABIC_NUMBER              = 5;
 	/**
   * Directional type CS
   */
-	public static final int COMMON_NUMBER_SEPARATOR     = ARABIC_NUMBER + 1;
+	public static final int COMMON_NUMBER_SEPARATOR    = 6;
 	/**
   * Directional type B
   */
-	public static final int BLOCK_SEPARATOR             = 
-	                                                 COMMON_NUMBER_SEPARATOR + 1;
+	public static final int BLOCK_SEPARATOR            = 7;
 	/**
   * Directional type S
   */      
-	public static final int SEGMENT_SEPARATOR           = BLOCK_SEPARATOR + 1;
+	public static final int SEGMENT_SEPARATOR          = 8;
 	/**
   * Directional type WS
   */
-	public static final int WHITE_SPACE_NEUTRAL         = SEGMENT_SEPARATOR + 1;
+	public static final int WHITE_SPACE_NEUTRAL        = 9;
 	
 	// start of 11 ---------------
 	
 	/**
   * Directional type ON
   */
-	public static final int OTHER_NEUTRAL               = 
-	                                                     WHITE_SPACE_NEUTRAL + 1;
+	public static final int OTHER_NEUTRAL              = 10;
 	/**
   * Directional type LRE
   */
-	public static final int LEFT_TO_RIGHT_EMBEDDING     = OTHER_NEUTRAL + 1;
+	public static final int LEFT_TO_RIGHT_EMBEDDING    = 11;
 	/**
   * Directional type LRO
   */
-	public static final int LEFT_TO_RIGHT_OVERRIDE      = 
-	                                                 LEFT_TO_RIGHT_EMBEDDING + 1;  
+	public static final int LEFT_TO_RIGHT_OVERRIDE     = 12;  
   /**
   * Directional type AL
   */
-	public static final int RIGHT_TO_LEFT_ARABIC        = 
-	                                                  LEFT_TO_RIGHT_OVERRIDE + 1;
+	public static final int RIGHT_TO_LEFT_ARABIC       = 13;
 	/**
   * Directional type RLE
   */
-	public static final int RIGHT_TO_LEFT_EMBEDDING     = 
-	                                                    RIGHT_TO_LEFT_ARABIC + 1;
+	public static final int RIGHT_TO_LEFT_EMBEDDING    = 14;
 	/**
   * Directional type RLO
   */
-	public static final int RIGHT_TO_LEFT_OVERRIDE      = 
-	                                                 RIGHT_TO_LEFT_EMBEDDING + 1;
+	public static final int RIGHT_TO_LEFT_OVERRIDE     = 15;
 	/**
   * Directional type PDF
   */
-	public static final int POP_DIRECTIONAL_FORMAT      = 
-	                                                  RIGHT_TO_LEFT_OVERRIDE + 1;
+	public static final int POP_DIRECTIONAL_FORMAT     = 16;
 	/**
   * Directional type NSM
   */
-	public static final int DIR_NON_SPACING_MARK        = 
-	                                                  POP_DIRECTIONAL_FORMAT + 1;
+	public static final int DIR_NON_SPACING_MARK       = 17;
 	/**
   * Directional type BN
   */
-	public static final int BOUNDARY_NEUTRAL            = 
-	                                                    DIR_NON_SPACING_MARK + 1;
+	public static final int BOUNDARY_NEUTRAL           = 18;
 	/**
   * Number of directional type
   */
-	public static final int CHAR_DIRECTION_COUNT = BOUNDARY_NEUTRAL + 1;
+	public static final int CHAR_DIRECTION_COUNT       = 19;
 	
 	/**
 	* Gets the name of the argument direction
