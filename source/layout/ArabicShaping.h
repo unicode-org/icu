@@ -49,6 +49,8 @@ public:
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                       le_bool rightToLeft, Shaper &shaper);
 
+    static const LETag *getFeatureOrder();
+
     static const le_uint8 glyphSubstitutionTable[];
   //static le_uint8 ligatureSubstitutionSubtable[];
     static const le_uint8 glyphDefinitionTable[];
@@ -71,6 +73,7 @@ public:
 private:
     const LETag **charTags;
 
+#if 0
     static const LETag isolFeatureTag; // 'isol'
     static const LETag initFeatureTag; // 'init'
     static const LETag mediFeatureTag; // 'medi'
@@ -80,6 +83,7 @@ private:
     static const LETag markFeatureTag; // 'mark'
 
     static const LETag emptyTag;
+#endif
 
     static const LETag tagArray[];
 
