@@ -69,22 +69,22 @@ static void TestFileFromICU(UFILE *myFile) {
     *n = -1234;
 
     /* Test fprintf */
-	u_fprintf(myFile, "Signed decimal integer %%d: %d\n", *n);
-	u_fprintf(myFile, "Signed decimal integer %%i: %i\n", *n);
-	u_fprintf(myFile, "Unsigned octal integer %%o: %o\n", *n);
-	u_fprintf(myFile, "Unsigned decimal integer %%u: %u\n", *n);
-	u_fprintf(myFile, "Lowercase unsigned hexadecimal integer %%x: %x\n", *n);
-	u_fprintf(myFile, "Uppercase unsigned hexadecimal integer %%X: %X\n", *n);
-	u_fprintf(myFile, "Float %%f: %f\n", myFloat);
-	u_fprintf(myFile, "Lowercase float %%e: %e\n", myFloat);
-	u_fprintf(myFile, "Uppercase float %%E: %E\n", myFloat);
-	u_fprintf(myFile, "Lowercase float %%g: %g\n", myFloat);
-	u_fprintf(myFile, "Uppercase float %%G: %G\n", myFloat);
-//	u_fprintf(myFile, "Pointer %%p: %p\n", myFile);
-	u_fprintf(myFile, "Char %%c: %c\n", 'A');
-	u_fprintf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
-	u_fprintf(myFile, "String %%s: %s\n", "My-String");
-	u_fprintf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
+    u_fprintf(myFile, "Signed decimal integer %%d: %d\n", *n);
+    u_fprintf(myFile, "Signed decimal integer %%i: %i\n", *n);
+    u_fprintf(myFile, "Unsigned octal integer %%o: %o\n", *n);
+    u_fprintf(myFile, "Unsigned decimal integer %%u: %u\n", *n);
+    u_fprintf(myFile, "Lowercase unsigned hexadecimal integer %%x: %x\n", *n);
+    u_fprintf(myFile, "Uppercase unsigned hexadecimal integer %%X: %X\n", *n);
+    u_fprintf(myFile, "Float %%f: %f\n", myFloat);
+    u_fprintf(myFile, "Lowercase float %%e: %e\n", myFloat);
+    u_fprintf(myFile, "Uppercase float %%E: %E\n", myFloat);
+    u_fprintf(myFile, "Lowercase float %%g: %g\n", myFloat);
+    u_fprintf(myFile, "Uppercase float %%G: %G\n", myFloat);
+//    u_fprintf(myFile, "Pointer %%p: %p\n", myFile);
+    u_fprintf(myFile, "Char %%c: %c\n", 'A');
+    u_fprintf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
+    u_fprintf(myFile, "String %%s: %s\n", "My-String");
+    u_fprintf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
     u_fprintf(myFile, "Date %%D (non-ANSI): %D\n", myDate);
     u_fprintf(myFile, "Time %%T (non-ANSI): %T\n", myDate);
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
@@ -114,69 +114,69 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("%%d Got: %d, Expected: %d\n", *newValuePtr, *n);
     }
     *newValuePtr = 1;
-	u_fscanf(myFile, "Signed decimal integer %%i: %i\n", newValuePtr);
+    u_fscanf(myFile, "Signed decimal integer %%i: %i\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%i Got: %i, Expected: %i\n", *newValuePtr, *n);
     }
     *newValuePtr = 1;
-	u_fscanf(myFile, "Unsigned octal integer %%o: %o\n", newValuePtr);
+    u_fscanf(myFile, "Unsigned octal integer %%o: %o\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%o Got: %o, Expected: %o\n", *newValuePtr, *n);
     }
     *newValuePtr = 1;
-	u_fscanf(myFile, "Unsigned decimal integer %%u: %u\n", newValuePtr);
+    u_fscanf(myFile, "Unsigned decimal integer %%u: %u\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%u Got: %u, Expected: %u\n", *newValuePtr, *n);
     }
     *newValuePtr = 1;
-	u_fscanf(myFile, "Lowercase unsigned hexadecimal integer %%x: %x\n", newValuePtr);
+    u_fscanf(myFile, "Lowercase unsigned hexadecimal integer %%x: %x\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%x Got: %x, Expected: %x\n", *newValuePtr, *n);
     }
     *newValuePtr = 1;
-	u_fscanf(myFile, "Uppercase unsigned hexadecimal integer %%X: %X\n", newValuePtr);
+    u_fscanf(myFile, "Uppercase unsigned hexadecimal integer %%X: %X\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%X Got: %X, Expected: %X\n", *newValuePtr, *n);
     }
     *newDoubleValuePtr = -1.0;
-	u_fscanf(myFile, "Float %%f: %f\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Float %%f: %f\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%f Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-	u_fscanf(myFile, "Lowercase float %%e: %e\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Lowercase float %%e: %e\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%e Got: %e, Expected: %e\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-	u_fscanf(myFile, "Uppercase float %%E: %E\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Uppercase float %%E: %E\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%E Got: %E, Expected: %E\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-	u_fscanf(myFile, "Lowercase float %%g: %g\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Lowercase float %%g: %g\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%g Got: %g, Expected: %g\n", *newDoubleValuePtr, myFloat);
     }
     *newDoubleValuePtr = -1.0;
-	u_fscanf(myFile, "Uppercase float %%G: %G\n", newDoubleValuePtr);
+    u_fscanf(myFile, "Uppercase float %%G: %G\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
-//	u_fscanf(myFile, "Pointer %%p: %p\n", newDoubleValue);
-	u_fscanf(myFile, "Char %%c: %c\n", myString);
+//  u_fscanf(myFile, "Pointer %%p: %p\n", newDoubleValue);
+    u_fscanf(myFile, "Char %%c: %c\n", myString);
     if (*myString != 'A') {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
-	u_fscanf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", myUString);
+    u_fscanf(myFile, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", myUString);
     if (*myUString != L'A') {
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
-	u_fscanf(myFile, "String %%s: %s\n", myString);
+    u_fscanf(myFile, "String %%s: %s\n", myString);
     if (strcmp(myString, "My-String")) {
         log_err("%%s Got: %s, Expected: My String\n", myString);
     }
-	u_fscanf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
+    u_fscanf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
     if (u_strcmp(myUString, L"My-String")) {
         log_err("%%S Got: %S, Expected: My String\n", myUString);
     }
@@ -230,6 +230,26 @@ static void TestFile() {
     TestFileFromICU(u_finit(standardFile, NULL, NULL));
     fclose(standardFile);
 */
+}
+
+static void TestCodepage() {
+    UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    if (u_fgetcodepage(myFile) == NULL
+        || strcmp(u_fgetcodepage(myFile), ucnv_getDefaultName()) != 0)
+    {
+        log_err("Didn't get the proper default codepage. Got %s expected: %s\n",
+            u_fgetcodepage(myFile), ucnv_getDefaultName());
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en", NULL);
+    if (u_fgetcodepage(myFile) == NULL
+        || strcmp(u_fgetcodepage(myFile), "ISO-8859-1") != 0)
+    {
+        log_err("Didn't get the proper default codepage for \"en\". Got %s expected: iso-8859-1\n",
+            u_fgetcodepage(myFile));
+    }
+    u_fclose(myFile);
 }
 
 
@@ -381,22 +401,22 @@ static void TestString() {
 
     *n = -1234;
 
-/*	u_snprintf(uStringBuf, 28, NULL, "Signed decimal integer d: %d\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Signed decimal integer i: %i\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Unsigned octal integer o: %o\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Unsigned decimal integer %%u: %u\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Lowercase unsigned hexadecimal integer x: %x\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Uppercase unsigned hexadecimal integer X: %X\n", *n);
-	u_snprintf(uStringBuf, 3, NULL, "Float f: %f\n", myFloat);
-	u_snprintf(uStringBuf, 3, NULL, "Lowercase float e: %e\n", myFloat);
-	u_snprintf(uStringBuf, 3, NULL, "Uppercase float E: %E\n", myFloat);
-	u_snprintf(uStringBuf, 3, NULL, "Lowercase float g: %g\n", myFloat);
-	u_snprintf(uStringBuf, 3, NULL, "Uppercase float G: %G\n", myFloat);
-//	u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
-	u_snprintf(uStringBuf, 3, NULL, "Char c: %c\n", 'A');
-	u_sprintf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
-	u_sprintf(uStringBuf, NULL, "String %%s: %s\n", "My-String");
-	u_sprintf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
+/*    u_snprintf(uStringBuf, 28, NULL, "Signed decimal integer d: %d\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Signed decimal integer i: %i\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Unsigned octal integer o: %o\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Unsigned decimal integer %%u: %u\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Lowercase unsigned hexadecimal integer x: %x\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Uppercase unsigned hexadecimal integer X: %X\n", *n);
+    u_snprintf(uStringBuf, 3, NULL, "Float f: %f\n", myFloat);
+    u_snprintf(uStringBuf, 3, NULL, "Lowercase float e: %e\n", myFloat);
+    u_snprintf(uStringBuf, 3, NULL, "Uppercase float E: %E\n", myFloat);
+    u_snprintf(uStringBuf, 3, NULL, "Lowercase float g: %g\n", myFloat);
+    u_snprintf(uStringBuf, 3, NULL, "Uppercase float G: %G\n", myFloat);
+//    u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
+    u_snprintf(uStringBuf, 3, NULL, "Char c: %c\n", 'A');
+    u_sprintf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
+    u_sprintf(uStringBuf, NULL, "String %%s: %s\n", "My-String");
+    u_sprintf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
     u_sprintf(uStringBuf, NULL, "Date %%D (non-ANSI): %D\n", myDate);
     u_sprintf(uStringBuf, NULL, "Time %%T (non-ANSI): %T\n", myDate);
     u_sprintf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P\n", myFloat);
@@ -404,98 +424,98 @@ static void TestString() {
     u_sprintf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V\n", *n);*/
 
     /* Test sprintf */
-	u_sprintf(uStringBuf, NULL, "Signed decimal integer d: %d\n", *n);
+    u_sprintf(uStringBuf, NULL, "Signed decimal integer d: %d\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Signed decimal integer d: %d\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Signed decimal integer d: %d\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%d Got: %d, Expected: %d\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Signed decimal integer i: %i\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Signed decimal integer i: %i\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Signed decimal integer i: %i\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%i Got: %i, Expected: %i\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Unsigned octal integer o: %o\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Unsigned octal integer o: %o\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Unsigned octal integer o: %o\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%o Got: %o, Expected: %o\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Unsigned decimal integer %%u: %u\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Unsigned decimal integer %%u: %u\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Unsigned decimal integer %%u: %u\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%u Got: %u, Expected: %u\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Lowercase unsigned hexadecimal integer x: %x\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Lowercase unsigned hexadecimal integer x: %x\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Lowercase unsigned hexadecimal integer x: %x\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%x Got: %x, Expected: %x\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Uppercase unsigned hexadecimal integer X: %X\n", *n);
     *newValuePtr = 1;
-	u_sscanf(uStringBuf, NULL, "Uppercase unsigned hexadecimal integer X: %X\n", newValuePtr);
+    u_sscanf(uStringBuf, NULL, "Uppercase unsigned hexadecimal integer X: %X\n", newValuePtr);
     if (*n != *newValuePtr) {
         log_err("%%X Got: %X, Expected: %X\n", *newValuePtr, *n);
     }
 
     u_sprintf(uStringBuf, NULL, "Float f: %f\n", myFloat);
     *newDoubleValuePtr = -1.0;
-	u_sscanf(uStringBuf, NULL, "Float f: %f\n", newDoubleValuePtr);
+    u_sscanf(uStringBuf, NULL, "Float f: %f\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%f Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, NULL, "Lowercase float e: %e\n", myFloat);
     *newDoubleValuePtr = -1.0;
-	u_sscanf(uStringBuf, NULL, "Lowercase float e: %e\n", newDoubleValuePtr);
+    u_sscanf(uStringBuf, NULL, "Lowercase float e: %e\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%e Got: %e, Expected: %e\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, NULL, "Uppercase float E: %E\n", myFloat);
     *newDoubleValuePtr = -1.0;
-	u_sscanf(uStringBuf, NULL, "Uppercase float E: %E\n", newDoubleValuePtr);
+    u_sscanf(uStringBuf, NULL, "Uppercase float E: %E\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%E Got: %E, Expected: %E\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, NULL, "Lowercase float g: %g\n", myFloat);
     *newDoubleValuePtr = -1.0;
-	u_sscanf(uStringBuf, NULL, "Lowercase float g: %g\n", newDoubleValuePtr);
+    u_sscanf(uStringBuf, NULL, "Lowercase float g: %g\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%g Got: %g, Expected: %g\n", *newDoubleValuePtr, myFloat);
     }
 
     u_sprintf(uStringBuf, NULL, "Uppercase float G: %G\n", myFloat);
     *newDoubleValuePtr = -1.0;
-	u_sscanf(uStringBuf, NULL, "Uppercase float G: %G\n", newDoubleValuePtr);
+    u_sscanf(uStringBuf, NULL, "Uppercase float G: %G\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
 
 //    u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
-	u_sprintf(uStringBuf, NULL, "Char c: %c\n", 'A');
-	u_sscanf(uStringBuf, NULL, "Char c: %c\n", myString);
+    u_sprintf(uStringBuf, NULL, "Char c: %c\n", 'A');
+    u_sscanf(uStringBuf, NULL, "Char c: %c\n", myString);
     if (*myString != 'A') {
         log_err("%%c Got: %c, Expected: A\n", *myString);
     }
 
     u_sprintf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", L'A');
-	u_sscanf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", myUString);
+    u_sscanf(uStringBuf, NULL, "UChar %%K (non-ANSI, should be %%C for Microsoft?): %K\n", myUString);
     if (*myUString != L'A') {
         log_err("%%C Got: %C, Expected: A\n", *myUString);
     }
 
     u_sprintf(uStringBuf, NULL, "String %%s: %s\n", "My-String");
-	u_sscanf(uStringBuf, NULL, "String %%s: %s\n", myString);
+    u_sscanf(uStringBuf, NULL, "String %%s: %s\n", myString);
     if (strcmp(myString, "My-String")) {
         log_err("%%s Got: %s, Expected: My-String\n", myString);
     }
@@ -504,7 +524,7 @@ static void TestString() {
     }
 
     u_sprintf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
-	u_sscanf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
+    u_sscanf(uStringBuf, NULL, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", myUString);
     if (u_strcmp(myUString, L"My-String")) {
         log_err("%%S Got: %S, Expected: My String\n", myUString);
     }
@@ -539,7 +559,7 @@ static void TestString() {
 
 //    u_sprintf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V\n", *n);
 
-//	u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
+//  u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
 //    u_sscanf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V\n", *n);
 }
 
@@ -747,6 +767,7 @@ static void TestStream() {
 
 static void addAllTests(TestNode** root) {
     addTest(root, &TestFile, "fileapi/TestFile");
+    addTest(root, &TestCodepage, "fileapi/TestCodepage");
     addTest(root, &TestFilePrintCompatibility, "fileapi/TestFilePrintCompatibility");
     addTest(root, &TestString, "strapi/TestString");
     addTest(root, &TestStringCompatibility, "strapi/TestStringCompatibility");
