@@ -27,10 +27,6 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-#ifdef DEBUG
-#include <stdio.h>
-#endif
-
 /**
  * Get the next non-ignorable ASCII character from a property name
  * and lowercases it.
@@ -584,76 +580,14 @@ strrch(const char* source,uint32_t sourceLen,char find){
 #endif
 
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USet* set, UErrorCode *pErrorCode) {
+uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
 
-    uset_clear(set);
-
 #if !UCONFIG_NO_NORMALIZATION
-    unorm_addPropertyStarts(set, pErrorCode);
+    unorm_addPropertyStarts(sa, pErrorCode);
 #endif
-    uchar_addPropertyStarts(set, pErrorCode);
-    ucase_addPropertyStarts(uchar_getCaseProps(pErrorCode), set, pErrorCode);
-
-#ifdef DEBUG
-    {
-        UChar* result=NULL;
-        int32_t resultCapacity=0;
-        int32_t bufLen = uset_toPattern(set,result,resultCapacity,TRUE,pErrorCode);
-        char* resultChars = NULL;
-        if(*pErrorCode == U_BUFFER_OVERFLOW_ERROR){
-            uint32_t len = 0, add=0;
-            char *buf=NULL, *current = NULL;
-            *pErrorCode = U_ZERO_ERROR;
-            resultCapacity = bufLen;
-            result = (UChar*) uprv_malloc(resultCapacity * U_SIZEOF_UCHAR);
-            bufLen = uset_toPattern(set,result,resultCapacity,TRUE,pErrorCode);
-            resultChars = (char*) uprv_malloc(len+1);
-            u_UCharsToChars(result,resultChars,bufLen);
-            resultChars[bufLen] = 0;
-            buf = resultChars;
-            /*printf(resultChars);*/
-             while(len < bufLen){
-                    add = 70-5/* for ", +\n */;
-                    current = buf +len;
-                    if (add < (bufLen-len)) {
-                        uint32_t index = strrch(current,add,'\\');
-                        if (index > add) {
-                            index = add;
-                        } else {
-                            int32_t num =index-1;
-                            uint32_t seqLen;
-                            while(num>0){
-                                if(current[num]=='\\'){
-                                    num--;
-                                }else{
-                                    break;
-                                }
-                            }
-                            if ((index-num)%2==0) {
-                                index--;
-                            }
-                            seqLen = (current[index+1]=='u') ? 6 : 2;
-                            if ((add-index) < seqLen) {
-                                add = index + seqLen;
-                            }
-                        }
-                    }
-                    fwrite("\"",1,1,stdout);
-                    if(len+add<bufLen){
-                        fwrite(current,1,add,stdout);
-                        fwrite("\" +\n",1,4,stdout);
-                    }else{
-                        fwrite(current,1,bufLen-len,stdout);
-                    }
-                    len+=add;
-                }
-
-        }
-        uprv_free(result);
-        uprv_free(resultChars);
-    }
-#endif
+    uchar_addPropertyStarts(sa, pErrorCode);
+    ucase_addPropertyStarts(uchar_getCaseProps(pErrorCode), sa, pErrorCode);
 }

@@ -28,19 +28,19 @@
 
 U_CFUNC void
 ucnv_getCompleteUnicodeSet(const UConverter *cnv,
-                   USet *set,
+                   USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode) {
-    uset_addRange(set, 0, 0x10ffff);
+    sa->addRange(sa->set, 0, 0x10ffff);
 }
 
 U_CFUNC void
 ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
-                               USet *set,
+                               USetAdder *sa,
                                UConverterUnicodeSet which,
                                UErrorCode *pErrorCode) {
-    uset_addRange(set, 0, 0xd7ff);
-    uset_addRange(set, 0xe000, 0x10ffff);
+    sa->addRange(sa->set, 0, 0xd7ff);
+    sa->addRange(sa->set, 0xe000, 0x10ffff);
 }
 
 U_CFUNC void

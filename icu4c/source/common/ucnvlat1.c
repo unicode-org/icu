@@ -332,10 +332,10 @@ noMoreInput:
 
 static void
 _Latin1GetUnicodeSet(const UConverter *cnv,
-                     USet *set,
+                     USetAdder *sa,
                      UConverterUnicodeSet which,
                      UErrorCode *pErrorCode) {
-    uset_addRange(set, 0, 0xff);
+    sa->addRange(sa->set, 0, 0xff);
 }
 
 static const UConverterImpl _Latin1Impl={
@@ -534,10 +534,10 @@ _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
 
 static void
 _ASCIIGetUnicodeSet(const UConverter *cnv,
-                    USet *set,
+                    USetAdder *sa,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode) {
-    uset_addRange(set, 0, 0x7f);
+    sa->addRange(sa->set, 0, 0x7f);
 }
 
 static const UConverterImpl _ASCIIImpl={
