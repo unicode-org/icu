@@ -71,7 +71,7 @@ name2uni.o uni2name.o unitohex.o nortrans.o quant.o transreg.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o esctrn.o unesctrn.o \
 funcrepl.o strrepl.o tridpars.o \
 ucurr.o digitlst.o \
-regexcmp.o rematch.o repattrn.o regexst.o
+regexcmp.o rematch.o repattrn.o regexst.o ulocdata.o
 
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
