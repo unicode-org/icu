@@ -1504,8 +1504,8 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         break;
 
                     case SBCS:
-                       MBCS_SINGLE_FROM_UCHAR32(sharedData,sourceChar,targetByteUnit,useFallback);
-                       // targetByteUnit=(uint16_t)_MBCSSingleFromUChar32(sharedData,sourceChar,useFallback);
+                        MBCS_SINGLE_FROM_UCHAR32(sharedData,sourceChar,targetByteUnit,useFallback);
+                        /*targetByteUnit=(uint16_t)_MBCSSingleFromUChar32(sharedData,sourceChar,useFallback);*/
                         /*
                          * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
                          * which becomes the same as missingCharMarker with the cast to uint16_t.
