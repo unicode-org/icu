@@ -53,8 +53,8 @@ sl_SI.txt sq.txt sq_AL.txt sr.txt sr_YU.txt \
 sv.txt sv_SE.txt th.txt th_TH.txt tr.txt \
 tr_TR.txt uk.txt uk_UA.txt vi.txt vi_VN.txt \
 zh.txt zh_CN.txt zh_HK.txt zh_TW.txt \
-$(TRANS)expcon.txt $(TRANS)kbdescl1.txt $(TRANS)larabic.txt \
-$(TRANS)ldevan.txt $(TRANS)lgreek.txt $(TRANS)lhalfwid.txt \
-$(TRANS)lhebrew.txt $(TRANS)lkana.txt $(TRANS)lrussian.txt \
-$(TRANS)quotes.txt $(TRANS)ucname.txt \
+$(TRANS)fullhalf.txt $(TRANS)index.txt $(TRANS)kbdescl1.txt \
+$(TRANS)larabic.txt $(TRANS)lcyril.txt $(TRANS)ldevan.txt \
+$(TRANS)lgreek.txt $(TRANS)lhebrew.txt $(TRANS)ljamo.txt \
+$(TRANS)lkana.txt $(TRANS)quotes.txt $(TRANS)ucname.txt \
 $(TEST)default.txt $(TEST)te.txt $(TEST)te_IN.txt
