@@ -199,6 +199,7 @@ uto64(const UChar     *buffer)
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenPrintf(void)
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -355,12 +356,14 @@ static void U_CALLCONV DataDrivenPrintf(void)
     else {
         log_err("Failed: could not load test icuio data\n");
     }
+#endif
 }
 U_CDECL_END
 
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenScanf(void)
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -545,12 +548,14 @@ static void U_CALLCONV DataDrivenScanf(void)
     else {
         log_err("Failed: could not load test icuio data\n");
     }
+#endif
 }
 U_CDECL_END
 
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenPrintfPrecision(void)
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -666,6 +671,7 @@ static void U_CALLCONV DataDrivenPrintfPrecision(void)
     else {
         log_err("Failed: could not load test icuio data\n");
     }
+#endif
 }
 U_CDECL_END
 
@@ -744,9 +750,11 @@ static void addAllTests(TestNode** root) {
     addFileTest(root);
     addStringTest(root);
 
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &DataDrivenPrintf, "datadriv/DataDrivenPrintf");
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
+#endif
     addTest(root, &TestStream, "stream/TestStream");
 }
 
