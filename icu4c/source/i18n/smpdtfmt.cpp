@@ -39,7 +39,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
-#include "uprops.h"
+#include "util.h"
 #include "gregoimp.h" 
 #include "cstring.h"
 #include "uassert.h"
