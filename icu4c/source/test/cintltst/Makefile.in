@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/cintltst
-## Copyright (c) 1999, International Business Machines Corporation and
+## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -50,7 +50,7 @@ INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(t
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
-ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o		\
+ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o 	\
 cdattst.o cdetst.o cdtdptst.o cdtrgtst.o cestst.o cfintst.o cformtst.o	\
 cfrtst.o cg7coll.o chashtst.o cintltst.o citertst.o cjaptst.o cloctst.o \
 cmsccoll.o cmsgtst.o	\
