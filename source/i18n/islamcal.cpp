@@ -364,7 +364,7 @@ int32_t IslamicCalendar::handleGetYearLength(int32_t extendedYear) const {
 /**
  * @draft ICU 2.4
  */
-int32_t IslamicCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
+int32_t IslamicCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /* useMonth */) const {
   return monthStart(eyear, month) + 1948439;
 }    
 
@@ -401,7 +401,7 @@ int32_t IslamicCalendar::handleGetExtendedYear() {
  * calendar equivalents for the given Julian day.
      * @draft ICU 2.4
      */
-void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
+void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
     int32_t year, month, dayOfMonth, dayOfYear;
     UDate startDate;
     int32_t days = julianDay - 1948440;

@@ -54,8 +54,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OlsonTimeZone)
  * Default constructor.  Creates a time zone with an empty ID and
  * a fixed GMT offset of zero.
  */
-OlsonTimeZone::OlsonTimeZone() : finalZone(0), finalYear(INT32_MAX),
-                                 finalMillis(DBL_MAX) {
+OlsonTimeZone::OlsonTimeZone() : finalYear(INT32_MAX), finalMillis(DBL_MAX), finalZone(0) {
     constructEmpty();
 }
 
@@ -80,7 +79,8 @@ void OlsonTimeZone::constructEmpty() {
 OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
                              UErrorCode& ec) :
-    finalZone(0), finalYear(INT32_MAX), finalMillis(DBL_MAX) {
+  finalYear(INT32_MAX), finalMillis(DBL_MAX), finalZone(0)
+{
     U_DEBUG_TZ_MSG(("OlsonTimeZone(%s)\n", ures_getKey((UResourceBundle*)res)));
     if ((top == NULL || res == NULL) && U_SUCCESS(ec)) {
         ec = U_ILLEGAL_ARGUMENT_ERROR;
