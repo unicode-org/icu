@@ -7,9 +7,10 @@
 // *******************************************************************************
 
 ga{
-   Version { "x0.0" }
+   Version { "1.0" }
 
-    DayAbbreviations { 
+    
+   DayAbbreviations { 
             "Domh",
             "Luan",
             "Máirt",
