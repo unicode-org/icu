@@ -540,6 +540,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
 
     uint8_t variableMax1 = coll->variableMax1;
     uint8_t variableMax2 = coll->variableMax2;
@@ -561,6 +562,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     for(;;) {
           order = ucol_getNextCE(coll, s, &status);
           /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
+          
+          if((order & 0xFFFFFFBF) == 0) {
+            continue;
+          }
 
           if(order == UCOL_NO_MORE_CES) {
               break;
@@ -615,17 +620,21 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }               
 
             if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
-              if (secondary == UCOL_COMMON2) {
-                c2++;
-              } else {
-                if(c2 > 0) {
-    			  if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
-                    currentSize += (c2/UCOL_TOP_COUNT2)+1;
-                  } else {
-                    currentSize += (c2/UCOL_BOT_COUNT2)+1;
+              if(!isFrenchSec){
+                if (secondary == UCOL_COMMON2) {
+                  c2++;
+                } else {
+                  if(c2 > 0) {
+    			    if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+                      currentSize += (c2/UCOL_TOP_COUNT2)+1;
+                    } else {
+                      currentSize += (c2/UCOL_BOT_COUNT2)+1;
+                    }
+                    c2 = 0;
                   }
-                  c2 = 0;
+                  currentSize++;
                 }
+              } else {
                 currentSize++;
               }
             }
@@ -635,7 +644,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                 currentSize++;
                 caseShift = 7;
               }
-              caseShift--;
+              if(tertiary > 0) {
+                caseShift--;
+              }
             }
 
             if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
@@ -833,8 +844,8 @@ ucol_calcSortKey(const    UCollator    *coll,
             primary2 = (order >>= 8) & 0xFF;;
             primary1 = order >>= 8;
 
-            if(isFlagged(ce)) { 
 #if 0
+            if(isFlagged(ce)) { 
               if(isLongPrimary(ce)) {
                 /* if we have a long primary, we'll mark secondary unmarked & add min value to tertiary */
                 primary3 = secondary;
@@ -843,9 +854,10 @@ ucol_calcSortKey(const    UCollator    *coll,
                   primary1 = scriptOrder[primary1];
                 }
               }
-#endif /* we have decided to scrap long primaries */
               tertiary &= 0x3F;
             } else {
+#endif /* we have decided to scrap long primaries */
+            if(!isContinuation(ce)) {
               /* it appears tht something should be done with the case bit */
               /* however, it is not clear when */
               if(upperFirst) { /* if there is a case bit */
@@ -907,17 +919,8 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }               
 
-              if(doCase) {
-                if (caseShift  == 0) {
-                  *cases++ = 0x80;
-                  sortKeySize++;
-                  caseShift = 7;
-                }
-                /**(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);*/
-                *(cases-1) |= caseBit << (caseShift--);
-              }
-
-              if(secondary > compareSec) { 
+            if(secondary > compareSec) { 
+              if(!isFrenchSec) {
                 /* This is compression code. */
                 if (secondary == UCOL_COMMON2 && !(isContinuation(ce))) {
 				  ++count2;
@@ -944,23 +947,37 @@ ucol_calcSortKey(const    UCollator    *coll,
 				  }
                   *secondaries++ = secondary;
                   sortKeySize++;
-                  if(isFrenchSec) {
-                    /* Do the special handling for French secondaries */
-                    /* We need to get continuation elements and do intermediate restore */
-                    /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
-                    if(isContinuation(ce)) {
-                      if (frenchStartPtr == NULL) {
-                        frenchStartPtr = secondaries - 2;
-                      }
-                      frenchEndPtr = secondaries-1;
-                    } else if (frenchStartPtr != NULL) {
-                        /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
-                      uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
-                      frenchStartPtr = NULL;
+                }
+              } else {
+                  *secondaries++ = secondary;
+                  sortKeySize++;
+                  /* Do the special handling for French secondaries */
+                  /* We need to get continuation elements and do intermediate restore */
+                  /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
+                  if(isContinuation(ce)) {
+                    if (frenchStartPtr == NULL) {
+                      frenchStartPtr = secondaries - 2;
                     }
+                    frenchEndPtr = secondaries-1;
+                  } else if (frenchStartPtr != NULL) {
+                      /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                    uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+                    frenchStartPtr = NULL;
                   }
+                }            
+              }
+
+              if(doCase) {
+                if (caseShift  == 0) {
+                  *cases++ = 0x80;
+                  sortKeySize++;
+                  caseShift = 7;
+                }
+                if(tertiary > 0) {
+                  *(cases-1) |= caseBit << (caseShift--);
                 }
               }
+
               if(tertiary > compareTer) { 
                 /* This is compression code. */
                 /* sequence size check is included in the if clause */
@@ -1051,7 +1068,7 @@ ucol_calcSortKey(const    UCollator    *coll,
           if(frenchStartPtr != NULL) { 
             uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
           }           
-          for(i = 1; i<secsize; i++) {
+          for(i = 0; i<secsize; i++) {
               *(primaries++) = *(secondaries-i-1);
           }
         } else { 
@@ -1512,8 +1529,8 @@ ucol_strcoll(    const    UCollator    *coll,
         init_collIterate(target, targetLength == -1 ? u_strlen(target) : targetLength, &tColl, FALSE);
     } else { /* TODO: This is bad behaved if we're working with small buffers */
              /* We really need the normalization quick check here*/
-	    UNormalizationMode normMode = ucol_getNormalization(coll);
-        normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLength, &status);
+	    /*UNormalizationMode normMode = ucol_getNormalization(coll);*/
+        normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
         /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
         /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
         /* would be hard to track all the exit points.                                                            */
@@ -1521,12 +1538,12 @@ ucol_strcoll(    const    UCollator    *coll,
             UColAttributeValue mode = coll->normalizationMode;
             normSourceP = (UChar *)uprv_malloc((normSourceLength+1)*sizeof(UChar));
             status = U_ZERO_ERROR;
-            normSourceLength = u_normalize(source, sourceLength, normMode, 0, normSourceP, normSourceLength+1, &status);
-            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength, &status);
+            normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSourceP, normSourceLength+1, &status);
+            normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength, &status);
             if(U_FAILURE(status)) { /* This would be buffer overflow */
                 normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
                 status = U_ZERO_ERROR;
-                normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+                normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
             }
             ((UCollator *)coll)->normalizationMode = UCOL_OFF;
             UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
@@ -1537,12 +1554,12 @@ ucol_strcoll(    const    UCollator    *coll,
             }
             return result;
         }
-        normTargetLength = u_normalize(target, targetLength, normMode, 0, normTarget, normTargetLength, &status);
+        normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
         if(U_FAILURE(status)) { /* This would be buffer overflow */
             UColAttributeValue mode = coll->normalizationMode;
             normTargetP = (UChar *)uprv_malloc((normTargetLength+1)*sizeof(UChar));
             status = U_ZERO_ERROR;
-            normTargetLength = u_normalize(target, targetLength, normMode, 0, normTargetP, normTargetLength+1, &status);
+            normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTargetP, normTargetLength+1, &status);
             ((UCollator *)coll)->normalizationMode = UCOL_OFF;
             UCollationResult result = ucol_strcoll(coll, normSourceP, normSourceLength, normTargetP, normTargetLength);
             ((UCollator *)coll)->normalizationMode = mode;
@@ -1575,9 +1592,8 @@ ucol_strcoll(    const    UCollator    *coll,
     uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
     uint32_t *sCEend = sCEs+512, *tCEend = tCEs+512;
 
-    uint32_t LVT = shifted*((coll->variableMax1)<<24 | (coll->variableMax2-1)<<16);
+    uint32_t LVT = shifted*((coll->variableMax1)<<24 | (coll->variableMax2)<<16);
 
-    UBool stopS = FALSE, stopT = FALSE;
     uint32_t secS = 0, secT = 0;
 
     uint32_t sOrder=0, tOrder=0;
@@ -1625,6 +1641,9 @@ ucol_strcoll(    const    UCollator    *coll,
           return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
         }
 
+#if 0
+        /* This is abridged version of the loop                 */
+        /* should work the same, but it's harder to understand  */
         for(;;) {
           /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
           sOrder = ucol_getNextCE(coll, &sColl, &status);
@@ -1661,6 +1680,7 @@ ucol_strcoll(    const    UCollator    *coll,
         }
         sOrder &= 0xFFFF0000;
         sInShifted = FALSE;
+
         for(;;) {
           /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
           tOrder = ucol_getNextCE(coll, &tColl, &status);
@@ -1697,10 +1717,54 @@ ucol_strcoll(    const    UCollator    *coll,
         }
         tOrder &= 0xFFFF0000;
         tInShifted = FALSE;
+#endif 
 
-#if 0
-        /* This is a pure working form of the loop, in case somebody needs */
-        /* to understand it */
+        for(;;) {
+          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+          sOrder = ucol_getNextCE(coll, &sColl, &status);
+          if(sOrder == 0x00010101) {
+            *(sCEs++) = sOrder;
+            break;
+          } else if((sOrder & 0xFFFFFFBF) == 0) {
+            continue;
+          } else if(isContinuation(sOrder)) {
+            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
+              if(sInShifted) {
+                sOrder &= 0xFFFF0000;
+                *(sCEs++) = sOrder;
+                continue;
+              } else {
+                *(sCEs++) = sOrder;
+                break;
+              }
+            } else { /* Just lower level values */
+              if(sInShifted) {
+                continue;
+              } else {
+                *(sCEs++) = sOrder;
+                continue;
+              }
+            }
+          } else { /* regular */
+            if(sOrder > LVT) {
+              *(sCEs++) = sOrder;
+              break;
+            } else {
+              if((sOrder & 0xFFFF0000) > 0) {
+                sInShifted = TRUE;
+                sOrder &= 0xFFFF0000;
+                *(sCEs++) = sOrder;
+                continue;
+              } else {
+                *(sCEs++) = sOrder;
+                continue;
+              }
+            }
+          }
+        }
+        sOrder &= 0xFFFF0000;
+        sInShifted = FALSE;
+
         for(;;) {
           /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
           tOrder = ucol_getNextCE(coll, &tColl, &status);
@@ -1744,7 +1808,8 @@ ucol_strcoll(    const    UCollator    *coll,
             }
           }
         }
-#endif 
+        tOrder &= 0xFFFF0000;
+        tInShifted = FALSE;
 
         if(sOrder == tOrder) {
             if(sOrder == 0x00010000) {
@@ -1767,9 +1832,9 @@ ucol_strcoll(    const    UCollator    *coll,
 
 
     if(checkSecTer) {
-      sCEs = sCEsArray;
-      tCEs = tCEsArray;
       if(!isFrenchSec) { /* normal */
+        sCEs = sCEsArray;
+        tCEs = tCEsArray;
         for(;;) {
           while (secS == 0 && secS != 0x0100) {
             secS = *(sCEs++) & 0xFF00;
@@ -1793,15 +1858,81 @@ ucol_strcoll(    const    UCollator    *coll,
           } 
         }
       } else { /* do the French */
+        uint32_t *sCESave = NULL;
+        uint32_t *tCESave = NULL;
+        sCEs = sCEend-2; /* this could also be sCEs-- if needs to be optimized */
+        tCEs = tCEend-2;
+        for(;;) {
+          while (secS == 0 && sCEs >= sCEsArray && secS != 0x0100) {
+            if(sCESave == 0) {
+              secS = *(sCEs--) & 0xFF80;
+              if(isContinuation(secS)) {
+                while(isContinuation(secS = *(sCEs--) & 0xFF80));
+                /* after this, secS has the start of continuation, and sCEs points before that */
+                sCESave = sCEs; /* we save it, so that we know where to come back AND that we need to go forward */
+                sCEs+=2;  /* need to point to the first continuation CP */
+                /* However, now you can just continue doing stuff */
+              }
+            } else {
+              secS = *(sCEs++) & 0xFF80;
+              if(!isContinuation(secS)) { /* This means we have finished with this cont */
+                sCEs = sCESave;          /* reset the pointer to before continuation */
+                sCESave = 0;
+                continue;
+              }
+            }
+            secS &= 0xFF00; /* remove the continuation bit */
+          }
+
+          while(secT == 0 && tCEs >= tCEsArray && secT != 0x0100) {
+            if(tCESave == 0) {
+              secT = *(tCEs--) & 0xFF80;
+              if(isContinuation(secT)) {
+                while(isContinuation(secT = *(tCEs--) & 0xFF80));
+                /* after this, secS has the start of continuation, and sCEs points before that */
+                tCESave = tCEs; /* we save it, so that we know where to come back AND that we need to go forward */
+                tCEs+=2;  /* need to point to the first continuation CP */
+                /* However, now you can just continue doing stuff */
+              }
+            } else {
+              secT = *(tCEs++) & 0xFF80;
+              if(!isContinuation(secT)) { /* This means we have finished with this cont */
+                tCEs = tCESave;          /* reset the pointer to before continuation */
+                tCESave = 0;
+                continue;
+              }
+            }
+            secT &= 0xFF00; /* remove the continuation bit */
+          }
+
+          if(secS == secT) {
+            if(secS == 0x0100 || (sCEs < sCEsArray && tCEs < tCEsArray)) {
+              break;
+            } else {
+              secS = 0; secT = 0; 
+              continue;
+            }
+          } else if(secS < secT) {
+            return UCOL_LESS;
+          } else {
+            return UCOL_GREATER;
+          } 
+        }
       }
     }
 
+    /* doing the case bit */
     if(checkCase) {
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        secS = *(sCEs++) & 0xFF;
-        secT = *(tCEs++) & 0xFF;
+        while(secS & 0x3F == 0 || secS & 0x3F != 0x01) {
+          secS = *(sCEs++) & 0xFF;
+        }
+
+        while(secT & 0x3F == 0 || secT & 0x3F != 0x01) {
+          secT = *(tCEs++) & 0xFF;
+        }
 
         if((secS & 0x40) < (secT & 0x40)) {
           return UCOL_LESS;
@@ -1809,7 +1940,7 @@ ucol_strcoll(    const    UCollator    *coll,
           return UCOL_GREATER;
         } 
         if((secS & 0x3F) == (secT & 0x3F)) {
-          if((secS & 0x3F) == 0x0100) {
+          if((secS & 0x3F) == 0x01) {
             break;
           } 
         } 
@@ -1899,11 +2030,6 @@ ucol_strcoll(    const    UCollator    *coll,
       }
     }
 
-
-
-
-#if 0
-
     /*  For IDENTICAL comparisons, we use a bitwise character comparison */
     /*  as a tiebreaker if all else is equal */
     /*  NOTE: The java code compares result with 0, and  */
@@ -1935,7 +2061,6 @@ ucol_strcoll(    const    UCollator    *coll,
             result = UCOL_GREATER;
         }
     }
-#endif
 
     return result;
 }
