@@ -2,6 +2,7 @@ package com.ibm.text.UCD;
 
 import java.util.*;
 import com.ibm.text.*;
+import com.ibm.icu.text.UTF16;
 
 import com.ibm.text.utility.*;
 

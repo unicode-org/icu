@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/12/03 19:29:35 $ 
-* $Revision: 1.8 $
+* $Date: 2002/03/15 01:57:01 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ import java.io.IOException;
 import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
-import com.ibm.text.UTF16;
+import com.ibm.icu.text.UTF16;
 
 //import com.ibm.text.CollationData.*;
 

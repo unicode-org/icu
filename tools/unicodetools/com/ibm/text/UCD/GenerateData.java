@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.14 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -19,8 +19,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import com.ibm.text.utility.*;
-import com.ibm.text.UTF16;
-import com.ibm.text.UnicodeSet;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 
 public class GenerateData implements UCD_Types {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.6 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.text.UCD;
 
 import java.util.*;
-import com.ibm.text.*;
+import com.ibm.icu.text.UTF16;
 
 import com.ibm.text.utility.*;
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2001/10/31 00:01:28 $ 
-* $Revision: 1.4 $
+* $Date: 2002/03/15 01:57:01 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import java.io.*;
 //import com.ibm.text.unicode.*;
 import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
+import com.ibm.icu.text.Normalizer;
 
 public class WriteHTMLCollation implements UCD_Types {
     public static final String copyright = 

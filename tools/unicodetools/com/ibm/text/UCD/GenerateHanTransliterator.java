@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.2 $
+* $Date: 2002/03/15 01:57:01 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,7 @@
 package com.ibm.text.UCD;
 import java.io.*;
 import com.ibm.text.utility.*;
-import com.ibm.text.UTF16;
+import com.ibm.icu.text.UTF16;
 import java.util.*;
 
 
