@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2002/08/13 22:07:57 $
- * $Revision: 1.47 $
+ * $Date: 2002/12/09 16:39:58 $
+ * $Revision: 1.48 $
  *
  *******************************************************************************
  */
@@ -58,44 +58,76 @@ public class RoundTripTest extends TestFmwk {
     static String KATAKANA_ITERATION = "[\u30FD\u30FE]";
     static String HIRAGANA_ITERATION = "[\u309D\u309E]";
     
+    //------------------------------------------------------------------
+    // AbbreviatedUnicodeSetIterator
+    //------------------------------------------------------------------
+
+    static class AbbreviatedUnicodeSetIterator extends UnicodeSetIterator {
+
+        private boolean abbreviated;
+        private int perRange;
+
+        public AbbreviatedUnicodeSetIterator() {
+            super();
+            abbreviated = false;
+        }
+
+        public void reset(UnicodeSet newSet, boolean abb) {
+            reset(newSet, abb, 100);
+        }
+
+        public void reset(UnicodeSet newSet, boolean abb, int density) {
+            super.reset(newSet);
+            abbreviated = abb;
+// TODO: Get this working
+//            perRange = newSet.getRangeCount();
+//            if (perRange != 0) {
+//                perRange = density / perRange;
+//            }
+            perRange = 50;
+        }
+
+        protected void loadRange(int myRange) {
+            super.loadRange(myRange);
+            if (abbreviated && (endElement > nextElement + perRange)) {
+                endElement = nextElement + perRange;
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------
+
+    public void showElapsed(long start, String name) {
+        double dur = (System.currentTimeMillis() - start) / 1000.0;
+        logln(name + " took " + dur + " seconds");
+    }
+
     public void TestKana() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Katakana-Hiragana")
           .test(KATAKANA, "[" + HIRAGANA + LENGTH + "]", "[" + HALFWIDTH_KATAKANA + LENGTH + "]", this, new Legal());
+        showElapsed(start, "TestKana");
     }
 
     public void TestHiragana() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Hiragana")
           .test("[a-zA-Z]", HIRAGANA, HIRAGANA_ITERATION, this, new Legal());
+        showElapsed(start, "TestHiragana");
     }
     
     public void TestKatakana() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Katakana")
           .test("[a-zA-Z]", KATAKANA, "[" + KATAKANA_ITERATION + HALFWIDTH_KATAKANA + "]", this, new Legal());
+        showElapsed(start, "TestKatakana");
     }
 
-// Some transliterators removed for 2.0
-
-//  public void TestArabic() throws IOException, ParseException {
-//      new Test("Latin-Arabic", 
-//        TestUtility.LATIN_SCRIPT, TestUtility.ARABIC_SCRIPT)
-//        .test("[a-zA-Z]", "[\u0620-\u065F-[\u0640]]", this);
-//  }
-
-//  public void TestHebrew() throws IOException, ParseException {
-//      new Test("Latin-Hebrew", 
-//        TestUtility.LATIN_SCRIPT, TestUtility.HEBREW_SCRIPT)
-//        .test(null, "[\u05D0-\u05EF]", this);
-//  }
-
-//  public void TestHangul() throws IOException, ParseException {
-//      Test t = new TestHangul();
-//      t.setPairLimit(30); // Don't run full test -- too long
-//      t.test(null, null, this);
-//  }
-
     public void TestJamo() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Jamo")
             .test("[a-zA-Z]", "[\u1100-\u1112 \u1161-\u1175 \u11A8-\u11C2]", "", this, new LegalJamo());
+        showElapsed(start, "TestJamo");
     }
 
 /*
@@ -110,8 +142,10 @@ public class RoundTripTest extends TestFmwk {
 */
 
     public void TestHangul() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         Test t = new Test("Latin-Hangul");
         t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
+        showElapsed(start, "TestHangul");
     }
     
     public void TestSingle() {
@@ -120,49 +154,60 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void TestGreek() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Greek")
         .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
             "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
             this, new LegalGreek(true));
+        showElapsed(start, "TestGreek");
     }
 
     public void TestGreekUNGEGN() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Greek/UNGEGN")
           .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
+        showElapsed(start, "TestGreekUNGEGN");
     }
 
     public void Testel() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-el")
           .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
+        showElapsed(start, "Testel");
     }
 
     public void TestCyrillic() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Cyrillic")
           .test("[a-zA-Z\u0110\u0111]", "[\u0400-\u045F]", null, this, new Legal());
+        showElapsed(start, "TestCyrillic");
     }
     
     static final String ARABIC = "[\u060C\u061B\u061F\u0621\u0627-\u063A\u0641-\u0655\u0660-\u066C\u067E\u0686\u0698\u06A4\u06AD\u06AF\u06CB-\u06CC\u06F0-\u06F9]";
 
     public void TestArabic() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Arabic")
           .test("[a-zA-Z\u02BE\u02BF]", ARABIC, "[a-zA-Z\u02BE\u02BF\u207F]", null, this, new Legal()); // 
+        showElapsed(start, "TestArabic");
     }
     
     public void TestHebrew() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-Hebrew")
           .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
+        showElapsed(start, "TestHebrew");
     }
     
     public void TestThai() throws IOException, ParseException {
-        //System.out.println("\nTest commented out, to be reinstated later");
-        
+        long start = System.currentTimeMillis();
         new Test("Latin-Thai")
           .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[\u0E01-\u0E3A\u0E40-\u0E5B]", null, this, new LegalThai());
-        
+        showElapsed(start, "TestThai");
     }
     
     //----------------------------------
@@ -229,8 +274,10 @@ public class RoundTripTest extends TestFmwk {
                                    "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
                                    
     public void TestDevanagariLatin() throws IOException, ParseException {
+        long start = System.currentTimeMillis();
         new Test("Latin-DEVANAGARI")
           .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965]]", "[\u0965]", this, new LegalIndic());
+        showElapsed(start, "TestDevanagariLatin");
     }
     
     private static final String [][] array= new String[][]{
@@ -587,6 +634,7 @@ public class RoundTripTest extends TestFmwk {
         };
 
     public void TestInterIndic() throws Exception{
+        long start = System.currentTimeMillis();
         int num = array.length;
         if (isQuick()) {
             logln("Testing only 5 of "+ array.length+" Skipping rest (use -e for exhaustive)");
@@ -599,6 +647,7 @@ public class RoundTripTest extends TestFmwk {
                 array[i][3],
                 this, new LegalIndic());
         }
+        showElapsed(start, "TestInterIndic");
     }
  
     //---------------
@@ -945,8 +994,8 @@ public class RoundTripTest extends TestFmwk {
 
             Transliterator sourceToTarget = Transliterator.getInstance(transliteratorID);
             Transliterator targetToSource = sourceToTarget.getInverse();
-            UnicodeSetIterator usi = new UnicodeSetIterator();
-            UnicodeSetIterator usi2 = new UnicodeSetIterator();
+            AbbreviatedUnicodeSetIterator usi = new AbbreviatedUnicodeSetIterator();
+            AbbreviatedUnicodeSetIterator usi2 = new AbbreviatedUnicodeSetIterator();
             
             log.logln("Checking that at least one irrevant characters is not NFC'ed");
                 
@@ -1058,10 +1107,9 @@ public class RoundTripTest extends TestFmwk {
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
             
-            boolean skipSome = log.getInclusion() < 10;
+            boolean quickRt = log.getInclusion() < 10;
             
-            usi.reset(sourceRangeMinusFailures);
-            usi.setAbbreviated(skipSome);
+            usi.reset(sourceRangeMinusFailures, quickRt);
             
             while (usi.next()) {
                 int c = usi.codepoint;
@@ -1072,8 +1120,7 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                 */
-                usi2.reset(sourceRangeMinusFailures);
-            	usi2.setAbbreviated(skipSome);
+                usi2.reset(sourceRangeMinusFailures, quickRt);
                 
                 while (usi2.next()) {
                     int d = usi2.codepoint;
@@ -1159,8 +1206,7 @@ public class RoundTripTest extends TestFmwk {
                     !targetRange.contains(c)) continue;
                     */
             
-            usi.reset(targetRangeMinusFailures);
-            usi.setAbbreviated(skipSome);
+            usi.reset(targetRangeMinusFailures, quickRt);
             	
             while (usi.next()) {
                 int c = usi.codepoint;
@@ -1175,8 +1221,7 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                         */
-                usi2.reset(targetRangeMinusFailures);
-            	usi2.setAbbreviated(skipSome);
+                usi2.reset(targetRangeMinusFailures, quickRt);
             	
             	while (usi2.next()) {
                     int d = usi2.codepoint;
