@@ -1577,6 +1577,14 @@ protected:
     UBool      fAreAllFieldsSet;
 
     /**
+     * True if all fields have been virtually set, but have not yet been
+     * computed.  This occurs only in setTimeInMillis().  A calendar set
+     * to this state will compute all fields from the time if it becomes
+     * necessary, but otherwise will delay such computation.
+     */
+    UBool fAreFieldsVirtuallySet;
+
+    /**
      * Get the current time without recomputing.
      *
      * @return     the current time without recomputing.
