@@ -428,11 +428,21 @@ inline UBool isBreakUnit(const UStringSearch *strsrch, int32_t start,
             for (int32_t count = 0; count < strsrch->pattern.CELength;
                  count ++) {
                 uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+                if (ce == UCOL_IGNORABLE) {
+                    count --;
+                    continue;
+                }
                 if (U_FAILURE(status) || ce != strsrch->pattern.CE[count]) {
                     return FALSE;
                 }
             }
-            if (ucol_next(coleiter, &status) != (int32_t)UCOL_NULLORDER) {
+            uint32_t nextce = ucol_next(coleiter, &status);
+            while (ucol_getOffset(coleiter) == (end - start)
+                   && getCE(strsrch, nextce) == UCOL_IGNORABLE) {
+                nextce = ucol_next(coleiter, &status);
+            }
+            if (ucol_getOffset(coleiter) == (end - start)
+                && nextce != UCOL_NULLORDER) {
                 // extra collation elements at the end of the match
                 return FALSE;
             }
