@@ -44,6 +44,10 @@ class VectorOfPToExpandTable;
 class RuleBasedCollator;
 class CollationElementIterator;
 
+// This is just temporary, for prototyping.
+struct collIterate;
+typedef void *  UCollator;
+
 //=============================================================================
 
 /**
@@ -125,6 +129,13 @@ private:
      */
     friend class RuleBasedCollator;
     friend class CollationElementIterator;
+
+// This is just temporary, for prototyping.
+    friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+    friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
+        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
+    friend int32_t ucol_getSortKeyEx(const    UCollator    *coll, const    UChar        *source,
+        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
 
     UBool                      isFrenchSec;
     int16_t                     maxSecOrder;

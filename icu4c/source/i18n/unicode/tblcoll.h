@@ -67,6 +67,10 @@ class NormalizerIterator; // see tblcoll.cpp
 class Collator;
 class TableCollationData;
 
+// This is just temporary, for prototyping.
+struct collIterate;
+typedef void *  UCollator;
+
 /**
  * The RuleBasedCollator class provides the simple implementation of Collator,
  * using data-driven tables.  The user can create a customized table-based
@@ -587,6 +591,13 @@ private:
         
   // TableCollationData ONLY needs access to UNMAPPED
   friend class TableCollationData;
+
+// This is just temporary, for prototyping.
+  friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+  friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
+        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
+  friend int32_t ucol_getSortKeyEx(const    UCollator    *coll, const    UChar        *source,
+        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
 
 
   /** Default constructor

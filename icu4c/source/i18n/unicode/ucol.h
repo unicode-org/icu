@@ -541,6 +541,16 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t            resultLength);
 
 /**
+ * see the above comment. This is the placeholder for the new implementation
+ */
+U_CAPI int32_t
+ucol_getSortKeyEx(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t        sourceLength,
+        uint8_t        *result,
+        int32_t        resultLength);
+
+/**
  * Generate a hash code for a collation key.
  * A hash code is a 32-bit value suitable for use as a key in a hashtable.
  * @param key The collation key.

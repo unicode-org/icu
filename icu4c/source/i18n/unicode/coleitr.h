@@ -33,6 +33,10 @@ class Normalizer;
 class VectorOfPToContractElement;
 class RuleBasedCollator;
 
+// This is just temporary, for prototyping.
+struct collIterate;
+typedef void *  UCollator;
+
 /**
  * The CollationElementIterator class is used as an iterator to walk through
  * each character of an international string. Use the iterator to return the
@@ -298,6 +302,10 @@ private:
                                      UBool forward, UErrorCode& status);
 
     friend  class   RuleBasedCollator;
+
+// This is just temporary, for prototyping.
+  friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+
     static  const   int32_t         UNMAPPEDCHARVALUE;
 
             Normalizer*            text;       // owning 
