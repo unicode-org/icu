@@ -22,20 +22,25 @@
 #include "unicode/putil.h"
 
 #include "cintltst.h"
+#include "umutex.h"
 
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
+#include "unicode/uclean.h"
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
 #endif
 
+#ifdef CTST_LEAK_CHECK
+U_CFUNC void ctst_init(void);
+#endif
+
+
 /* ### TODO: remove when the new normalization implementation is finished */
 #include "unormimp.h"
-
-U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
 
 static char* _testDirectory=NULL;
 
@@ -54,6 +59,9 @@ int main(int argc, const char* const argv[])
     UResourceBundle *rb;
     UConverter *cnv;
 
+#ifdef CTST_LEAK_CHECK
+    ctst_init();
+#endif
 
     /* If no ICU_DATA environment was set, try to fake up one. */
     ctest_setICU_DATA();
@@ -110,9 +118,9 @@ int main(int argc, const char* const argv[])
 
     /* To check for leaks */
 
-    ucnv_flushCache();
-    ucnv_orphanAllConverters(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
+    u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
         /* above function must be enabled in ucnv_bld.c */
+    umtx_destroy(NULL);
 #endif
 
     return nerrors ? 1 : 0;
@@ -301,21 +309,27 @@ char *aescstrdup(const UChar* unichars){
 
 
 #define CTST_MAX_ALLOC 10000
+/* Array used as a queue */
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC];
 static int ctst_allocated = 0;
-static UBool ctst_free = 0;
+static UBool ctst_free = FALSE;
+
+void ctst_init(void) {
+    int i;
+    for(i=0; i<CTST_MAX_ALLOC; i++) {
+        ctst_allocated_stuff[i] = NULL;
+    }
+}
 
 void *ctst_malloc(size_t size) {
-    ctst_allocated ++;
-    if(ctst_allocated == CTST_MAX_ALLOC) {
+    if(ctst_allocated >= CTST_MAX_ALLOC - 1) {
         ctst_allocated = 0;
-        ctst_free = 1;
+        ctst_free = TRUE;
     }
-    if(ctst_free == 1) {
+    if(ctst_allocated_stuff[ctst_allocated]) {
         free(ctst_allocated_stuff[ctst_allocated]);
     }
-    ctst_allocated_stuff[ctst_allocated] = malloc(size);
-    return ctst_allocated_stuff[ctst_allocated];
+    return ctst_allocated_stuff[ctst_allocated++] = malloc(size);
 }
 
 #ifdef CTST_LEAK_CHECK
