@@ -94,11 +94,11 @@ class UnicodeStreamer;      // unicode/ustream.h
  *     uses this aliased buffer for as long as it is not modified, and it will never
  *     attempt to modify or release the buffer. This has copy-on-write semantics:
  *     When the string object is modified, then the buffer contents is first copied
- *     into writeable memory (inside the object for short strings, or allocated
+ *     into writable memory (inside the object for short strings, or allocated
  *     buffer for longer strings). When a UnicodeString with a read-only alias
  *     is assigned to another UnicodeString, then both string objects will
  *     share the same read-only alias.</li>
- * <li>A UnicodeString can be constructed or setTo() such that it aliases a writeable
+ * <li>A UnicodeString can be constructed or setTo() such that it aliases a writable
  *     buffer instead of copying the characters. The difference from the above is that
  *     the string object will write through to this aliased buffer for write
  *     operations. Only when the capacity of the buffer is not sufficient is
@@ -108,7 +108,7 @@ class UnicodeStreamer;      // unicode/ustream.h
  *     string contents if the dst buffer is different from the buffer of the string
  *     object itself. If a string grows and shrinks during a sequence of operations,
  *     then it will not use the same buffer any more, but may fit into it again.
- *     When a UnicodeString with a writeable alias is assigned to another UnicodeString,
+ *     When a UnicodeString with a writable alias is assigned to another UnicodeString,
  *     then the contents is always copied. The destination string will not alias
  *     to the buffer that the source string aliases.</li>
  * </ol></p>
@@ -1476,7 +1476,7 @@ public:
                        int32_t textLength);
 
   /**
-   * Aliasing setTo() function, analogous to the writeable-aliasing UChar* constructor.
+   * Aliasing setTo() function, analogous to the writable-aliasing UChar* constructor.
    * The text will be used for the UnicodeString object, but
    * it will not be released when the UnicodeString is destroyed.
    * This has write-through semantics:
@@ -2070,6 +2070,90 @@ public:
    */
   UnicodeString &foldCase(uint32_t options=U_FOLD_CASE_DEFAULT);
 
+  //========================================
+  // Access to the internal buffer
+  //========================================
+
+  /**
+   * Get a read/write pointer to the internal buffer.
+   * The buffer is guaranteed to be large enough for at least minCapacity UChars,
+   * writable, and is still owned by the UnicodeString object.
+   * Calls to getBuffer(minCapacity) must not be nested, and
+   * must be matched with calls to releaseBuffer(newLength).
+   * If the string buffer was read-only or shared,
+   * then it will be reallocated and copied.
+   *
+   * An attempted nested call will return 0, and will not further modify the
+   * state of the UnicodeString object.
+   *
+   * While the buffer is "open" between getBuffer(minCapacity)
+   * and releaseBuffer(newLength), the following applies:
+   * - The string length is set to 0.
+   * - Any read API call on the UnicodeString object will behave like on a 0-length string.
+   * - Any write API call on the UnicodeString object is disallowed and will have no effect.
+   * - You can read from and write to the returned buffer.
+   * - The previous string contents will still be in the buffer;
+   *   if you want to use it, then you need to call length() before getBuffer(minCapacity).
+   *   If the length() was greater than minCapacity, then any contents after minCapacity
+   *   may be lost.
+   *   The buffer contents is not NUL-terminated by getBuffer().
+   * - You must call releaseBuffer(newLength) before and in order to
+   *   return to normal UnicodeString operation.
+   *
+   * @param minCapacity the minimum number of UChars that are to be available
+   *        in the buffer, starting at the returned pointer;
+   *        default to the current string capacity if minCapacity==-1
+   * @return a writable pointer to the internal string buffer,
+   *         or 0 if an error occurs (nested calls, out of memory)
+   *
+   * @see releaseBuffer
+   * @draft
+   */
+  UChar *getBuffer(int32_t minCapacity);
+
+  /**
+   * Release a read/write buffer on a UnicodeString object with an
+   * "open" getBuffer(minCapacity).
+   * This function must be called in a matched pair with getBuffer(minCapacity).
+   * releaseBuffer(newLength) must be called if and only if a getBuffer(minCapacity) is "open".
+   *
+   * It will set the string length to newLength, at most to the current capacity.
+   * If newLength==-1 then it will set the length according to the
+   * first NUL in the buffer, or to the capacity if there is no NUL.
+   *
+   * After calling releaseBuffer(newLength) the UnicodeString is back to normal operation.
+   *
+   * @param newLength the new length of the UnicodeString object;
+   *        defaults to the current capacity if newLength is greater than that;
+   *        if newLength==-1, it defaults to u_strlen(buffer) but not more than
+   *        the current capacity of the string
+   *
+   * @see getBuffer(int32_t minCapacity)
+   * @draft
+   */
+  void releaseBuffer(int32_t newLength=-1);
+
+  /**
+   * Get a read-only pointer to the internal buffer.
+   * This can be called at any time on a valid UnicodeString.
+   *
+   * It returns 0 if the string is empty or bogus, or
+   * during an "open" getBuffer(minCapacity)
+   * (at which time the string length is set to 0 anyway).
+   *
+   * It can be called as many times as desired.
+   * The pointer that it returns will remain valid until the UnicodeString object is modified,
+   * at which time the pointer is semantically invalidated and must not be used any more.
+   *
+   * The buffer contents is not NUL-terminated.
+   *
+   * @return a read-only pointer to the internal string buffer,
+   *         or 0 if the string is empty or bogus
+   *
+   * @see getBuffer(int32_t minCapacity)
+   * @draft
+   */
+  inline const UChar *getBuffer() const;
 
   //========================================
   // Constructors
@@ -2149,7 +2233,7 @@ public:
                 int32_t textLength);
 
   /**
-   * Writeable-aliasing UChar* constructor.
+   * Writable-aliasing UChar* constructor.
    * The text will be used for the UnicodeString object, but
    * it will not be released when the UnicodeString is destroyed.
    * This has write-through semantics:
@@ -2528,16 +2612,18 @@ private:
     kEmptyHashCode=1, // hash code for empty string
 
     // bit flag values for fFlags
-    kIsBogus=1, // this string is bogus, i.e., not valid
-    kUsingStackBuffer=2, // fArray==fStackBuffer
-    kRefCounted=4, // there is a refCount field before the characters in fArray
-    kBufferIsReadonly=8, // do not write to this buffer
+    kIsBogus=1,         // this string is bogus, i.e., not valid
+    kUsingStackBuffer=2,// fArray==fStackBuffer
+    kRefCounted=4,      // there is a refCount field before the characters in fArray
+    kBufferIsReadonly=8,// do not write to this buffer
+    kOpenGetBuffer=16,  // getBuffer(minCapacity) was called (is "open"),
+                        // and releaseBuffer(newLength) must be called
 
     // combined values for convenience
     kShortString=kUsingStackBuffer,
     kLongString=kRefCounted,
     kReadonlyAlias=kBufferIsReadonly,
-    kWriteableAlias=0
+    kWritableAlias=0
   };
 
   friend class UnicodeConverter;
@@ -2569,14 +2655,6 @@ private:
   uint16_t  fPadding;       // padding to align the fStackBuffer for UTF-32
 #endif
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
-
-public:
-
-  //========================================
-  // Non-public API - will be removed!
-  //========================================
-  /* @deprecated Remove after 2000-dec-31. There is no public replacement. */
-  const UChar* getUChars() const;
 };
 
 //========================================
@@ -3262,6 +3340,15 @@ UnicodeString::length() const
 inline int32_t 
 UnicodeString::hashCode() const
 { return doHashCode(); }
+
+inline const UChar *
+UnicodeString::getBuffer() const {
+  if(fLength>0) {
+    return fArray;
+  } else {
+    return 0;
+  }
+}
 
 //========================================
 // Write alias methods
