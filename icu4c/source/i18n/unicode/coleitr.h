@@ -274,7 +274,7 @@ private:
      * @return the next contracting character's ordering.  Returns NULLORDER
      * if the end of string is reached.
      */
-            int32_t             nextContractChar(   UChar     ch,
+            int32_t             nextContractChar(   UChar32     ch,
                                                     UErrorCode&  status);
 
     /**
@@ -285,12 +285,12 @@ private:
      * @return the previous contracting character's ordering.  Returns NULLORDER
      * if the start of string is reached.
      */
-            int32_t             prevContractChar(   UChar     ch,
+            int32_t             prevContractChar(   UChar32     ch,
                                                     UErrorCode&  status);
     
-    inline static UBool isThaiPreVowel(UChar ch);
+    inline static UBool isThaiPreVowel(UChar32 ch);
                  
-    inline static UBool isThaiBaseConsonant(UChar ch);
+    inline static UBool isThaiBaseConsonant(UChar32 ch);
                  
     VectorOfInt* makeReorderedBuffer(UChar colFirst,
                                      int32_t lastValue,
@@ -378,15 +378,15 @@ CollationElementIterator::isIgnorable(int32_t order)
  * Determine if a character is a Thai vowel (which sorts after
  * its base consonant).
  */
-inline UBool CollationElementIterator::isThaiPreVowel(UChar ch) {
-    return (ch >= (UChar)0x0E40) && (ch <= (UChar)0X0E44);
+inline UBool CollationElementIterator::isThaiPreVowel(UChar32 ch) {
+    return ((uint32_t)ch - 0xe40) <= (0xe44 - 0xe40);
 }
 
 /**
  * Determine if a character is a Thai base consonant
  */
-inline UBool CollationElementIterator::isThaiBaseConsonant(UChar ch) {
-    return (ch >= (UChar)0x0E01) && (ch <= (UChar)0x0E2E);
+inline UBool CollationElementIterator::isThaiBaseConsonant(UChar32 ch) {
+    return ((uint32_t)ch - 0xe01) <= (0xe2e - 0xe01);
 }
 
 #endif
