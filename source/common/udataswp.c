@@ -27,26 +27,6 @@
 
 /* swapping primitives ------------------------------------------------------ */
 
-/* generic noop swapper for when nothing needs to be done */
-static int32_t U_CALLCONV
-uprv_swapNone(const UDataSwapper *ds,
-              const void *inData, int32_t length, void *outData,
-              UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    if(ds==NULL || inData==NULL || length<0 || outData==NULL) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    if(length>0 && inData!=outData) {
-        uprv_memcpy(outData, inData, length);
-    }
-
-    return length;
-}
-
 static int32_t U_CALLCONV
 uprv_swapArray16(const UDataSwapper *ds,
                  const void *inData, int32_t length, void *outData,
@@ -78,6 +58,24 @@ uprv_swapArray16(const UDataSwapper *ds,
 }
 
 static int32_t U_CALLCONV
+uprv_copyArray16(const UDataSwapper *ds,
+                 const void *inData, int32_t length, void *outData,
+                 UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&1)!=0 || outData==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    if(length>0 && inData!=outData) {
+        uprv_memcpy(outData, inData, length);
+    }
+    return length;
+}
+
+static int32_t U_CALLCONV
 uprv_swapArray32(const UDataSwapper *ds,
                  const void *inData, int32_t length, void *outData,
                  UErrorCode *pErrorCode) {
@@ -104,6 +102,24 @@ uprv_swapArray32(const UDataSwapper *ds,
         --count;
     }
 
+    return length;
+}
+
+static int32_t U_CALLCONV
+uprv_copyArray32(const UDataSwapper *ds,
+                 const void *inData, int32_t length, void *outData,
+                 UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || length<0 || (length&3)!=0 || outData==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    if(length>0 && inData!=outData) {
+        uprv_memcpy(outData, inData, length);
+    }
     return length;
 }
 
@@ -257,15 +273,16 @@ udata_openSwapper(UBool inIsBigEndian, uint8_t inCharset,
     swapper->readUInt16= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt16 : uprv_readSwapUInt16;
     swapper->readUInt32= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt32 : uprv_readSwapUInt32;
 
-    swapper->compareInvChars= inCharset==U_ASCII_FAMILY ? uprv_compareInvAscii : uprv_compareInvEbcdic;
+    if(inCharset==U_ASCII_FAMILY) {
+        swapper->compareInvChars=uprv_compareInvAscii;
+        swapper->swapInvChars= outCharset==U_ASCII_FAMILY ? uprv_copyAscii : uprv_ebcdicFromAscii;
+    } else /* U_EBCDIC_FAMILY */ {
+        swapper->compareInvChars=uprv_compareInvEbcdic;
+        swapper->swapInvChars= outCharset==U_EBCDIC_FAMILY ? uprv_copyEbcdic : uprv_asciiFromEbcdic;
+    }
 
-    swapper->swapArray16= inIsBigEndian==outIsBigEndian ? uprv_swapNone : uprv_swapArray16;
-    swapper->swapArray32= inIsBigEndian==outIsBigEndian ? uprv_swapNone : uprv_swapArray32;
-
-    swapper->swapInvChars=
-        inCharset==outCharset ? uprv_swapNone :
-        inCharset==U_ASCII_FAMILY ? uprv_ebcdicFromAscii :
-        uprv_asciiFromEbcdic;
+    swapper->swapArray16= inIsBigEndian==outIsBigEndian ? uprv_copyArray16 : uprv_swapArray16;
+    swapper->swapArray32= inIsBigEndian==outIsBigEndian ? uprv_copyArray32 : uprv_swapArray32;
 
     return swapper;
 }
