@@ -11,30 +11,29 @@
  *   created by: Eric R. Mader
  */
 
-#include "unicode/utypes.h"
-#include "unicode/uscript.h"
+#include "LETypes.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 struct TestInput
 {
-    char *fontName;
-    UChar *text;
-    int32_t textLength;
-    UScriptCode scriptCode;
-    UBool rightToLeft;
+    char      *fontName;
+    LEUnicode *text;
+    le_int32   textLength;
+    le_int32   scriptCode;
+    le_bool    rightToLeft;
 };
 
-extern int32_t testCount;
+extern le_int32 testCount;
 
 extern TestInput testInputs[];
 
 struct TestResult
 {
-    int32_t glyphCount;
-    uint16_t *glyphs;
-    int32_t *indices;
-    float *positions;
+    le_int32   glyphCount;
+    LEGlyphID *glyphs;
+    le_int32  *indices;
+    float     *positions;
 };
 
 extern TestResult testResults[];
