@@ -134,6 +134,12 @@ public:
     * Tests GetLocale for a Collator
     */
     void TestGetLocale();
+
+    /**
+    * Tests bounds API
+    */
+    void TestBounds();
+
 private:
     // If this is too small for the test data, just increase it.
     // Just don't make it too large, otherwise the executable will get too big
