@@ -3,6 +3,7 @@ Section: libs
 Priority: optional
 Maintainer: Yves Arrouye <yves@debian.org>
 Standards-Version: 3.1.1
+Build-Depends: debhelper
 
 Package: libicu-dev
 Section: devel
@@ -13,7 +14,7 @@ Description: International Components for Unicode (development files)
  ICU is a C++ and C library that provides robust and full-featured Unicode
  support. This package contains the development files for ICU.
  
-Package: libicu@LIB_VERSION_MAJOR@
+Package: libicu18
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
@@ -60,7 +61,7 @@ Description: Data for ICU (source files)
  also all the table-based converters provided in the ICU distribution.
  .
  This package contains uncompiled source data. Precompiled data are in the
- `libicu@LIB_VERSION_MAJOR@' package.
+ `libicu${major}' package.
 
 Package: icu-i18ndata
 Priority: extra
