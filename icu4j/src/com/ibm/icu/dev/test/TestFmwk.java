@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2001/10/10 21:50:55 $ 
- * $Revision: 1.18 $
+ * $Date: 2001/11/14 18:07:05 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import java.lang.reflect.*;
 import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
+import java.util.Comparator;
 import java.io.*;
 import java.text.*;
 
@@ -69,6 +70,17 @@ public class TestFmwk implements TestLog {
 		} else {
 			methodsToRun = testMethods.elements();
 		}
+
+        methodsToRun = new SortedEnumeration(methodsToRun,
+            new Comparator() {
+                public int compare(Object a, Object b) {
+                    return ((Method)a).getName().compareToIgnoreCase(
+                           ((Method)b).getName());
+                }
+                public boolean equals(Object o) {
+                    return false;
+                }
+            });
 
         int oldClassCount = params.errorCount;
 
@@ -335,6 +347,30 @@ public class TestFmwk implements TestLog {
     	public int         indentLevel = 0;
     	public boolean     needLineFeed = false;
     	public int         errorCount = 0;
+    }
+
+    private static class SortedEnumeration implements Enumeration {
+        private Object[] sorted;
+        private int pos;
+
+        public SortedEnumeration(Enumeration unsorted, Comparator c) {
+            Vector v = new Vector();
+            while (unsorted.hasMoreElements()) {
+                v.addElement(unsorted.nextElement());
+            }
+            sorted = new Object[v.size()];
+            v.copyInto(sorted);
+            java.util.Arrays.sort(sorted, c);
+            pos = 0;
+        }
+
+        public boolean hasMoreElements() {
+            return pos < sorted.length;
+        }
+
+        public Object nextElement() {
+            return pos < sorted.length ? sorted[pos++] : null;
+        }
     }
 
 	private TestParams params = null;
