@@ -1,5 +1,5 @@
 /*
-* Copyright © {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
