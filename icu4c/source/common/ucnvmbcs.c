@@ -3303,6 +3303,7 @@ getTrail:
                             c=UTF16_GET_PAIR_VALUE(c, trail);
                             if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                 /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+                                cnv->fromUnicodeStatus=prevLength; /* save the old state */
                                 /* callback(unassigned) */
                                 goto unassigned;
                             }
