@@ -18,9 +18,15 @@
 ******************************************************************************
 */
 
+#include "unicode/ustring.h"
+
 #include "uresimp.h"
 #include "cwchar.h"
 #include "ucln_cmn.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "uhash.h"
+#include "umutex.h"
 
 /* this is just for internal purposes. DO NOT USE! */
 static void entryCloseInt(UResourceDataEntry *resB);

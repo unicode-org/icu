@@ -10,13 +10,7 @@
 
 #include "unicode/ures.h"
 
-#include "unicode/uloc.h"
-#include "unicode/ustring.h"
-#include "cmemory.h"
-#include "cstring.h"
 #include "uresdata.h"
-#include "uhash.h"
-#include "umutex.h"
 
 #define kRootLocaleName         "root"
 
@@ -32,7 +26,7 @@
 #define MAGIC1 19700503
 #define MAGIC2 19641227
 
-
+/*
 enum UResEntryType {
     ENTRY_OK = 0,
     ENTRY_GOTO_ROOT = 1,
@@ -41,6 +35,7 @@ enum UResEntryType {
 };
 
 typedef enum UResEntryType UResEntryType;
+*/
 
 struct UResourceDataEntry;
 typedef struct UResourceDataEntry UResourceDataEntry;
@@ -51,7 +46,7 @@ struct UResourceDataEntry {
     uint32_t fCountExisting; /* how much is this resource used */
     ResourceData fData; /* data for low level access */
     UResourceDataEntry *fParent; /*next resource in fallback chain*/
-    UResEntryType fStatus;
+/*    UResEntryType fStatus;*/
     UErrorCode fBogus;
     int32_t fHashKey; /* for faster access in the hashtable */
 };
