@@ -1313,6 +1313,10 @@ static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size)
   UChar t2[256] = {0};
 
   uint32_t i = 0, j = 0;
+  log_verbose("testing sequence:\n");
+  for(i = 0; i < size; i++) {
+    log_verbose("%s\n", s[i]);
+  }
 
   for(i = 0; i < size-1; i++) {
     for(j = i+1; j < size; j++) {
@@ -1333,6 +1337,29 @@ static void genericLocaleStarter(const char *locale, const char *s[], uint32_t s
     genericOrderingTest(coll, s, size);
   } else {
     log_err("Unable to open collator for locale %s\n", locale);
+  }
+}
+
+static void genericRulesStarterWithOptions(const char *rules, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize) {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rlz[2048] = { 0 };
+  uint32_t rlen = u_unescape(rules, rlz, 2048);
+  uint32_t i;
+
+  /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+
+  log_verbose("Rules starter for %s\n", rules);
+
+  log_verbose("Setting attributes\n");
+  for(i = 0; i < attsize; i++) {
+    ucol_setAttribute(coll, attrs[i], values[i], &status);
+  }
+
+  if(U_SUCCESS(status)) {
+    genericOrderingTest(coll, s, size);
+  } else {
+    log_err("Unable to open collator with rules %s\n", rules);
   }
 }
 
@@ -2485,6 +2512,94 @@ static void TestExpansion() {
     }
 }
 
+static void TestLimitations() {
+  /* recursive expansions */
+  {
+    static const char *rule = "&a=b/c&d=c/e";
+    static const char *tlimit01[] = {"add","b","adf"};
+    static const char *tlimit02[] = {"aa","b","af"};
+    log_verbose("recursive expansions\n");
+    genericRulesStarter(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]));
+    genericRulesStarter(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]));
+  }
+  /* contractions spanning expansions */
+  {
+    static const char *rule = "&a<<<c/e&g<<<eh";
+    static const char *tlimit01[] = {"ad","c","af","f","ch","h"};
+    static const char *tlimit02[] = {"ad","c","ch","af","f","h"};
+    log_verbose("contractions spanning expansions\n");
+    genericRulesStarter(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]));
+    genericRulesStarter(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]));
+  }
+  /* normalization: nulls in contractions */
+  {
+    static const char *rule = "&a<<<\\u0000\\u0302";
+    static const char *tlimit01[] = {"a","\\u0000\\u0302\\u0327"};
+    static const char *tlimit02[] = {"\\u0000\\u0302\\u0327","a"};
+    static const UColAttribute att[] = { UCOL_DECOMPOSITION_MODE };
+    static const UColAttribute valOn[] = { UCOL_ON };
+    static const UColAttribute valOff[] = { UCOL_OFF };
+
+    log_verbose("NULL in contractions\n");
+    genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOn, 1);
+    genericRulesStarterWithOptions(rule, tlimit02, 2, att, valOn, 1);
+    genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOff, 1);
+    genericRulesStarterWithOptions(rule, tlimit02, 2, att, valOff, 1);
+
+  }
+  /* normalization: contractions spanning normalization */
+  {
+    static const char *rule = "&a<<<\\u0000\\u0302";
+    static const char *tlimit01[] = {"a","\\u0000\\u0302\\u0327"};
+    static const char *tlimit02[] = {"\\u0000\\u0302\\u0327","a"};
+    static const UColAttribute att[] = { UCOL_DECOMPOSITION_MODE };
+    static const UColAttribute valOn[] = { UCOL_ON };
+    static const UColAttribute valOff[] = { UCOL_OFF };
+
+    log_verbose("contractions spanning normalization\n");
+    genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOn, 1);
+    genericRulesStarterWithOptions(rule, tlimit02, 2, att, valOn, 1);
+    genericRulesStarterWithOptions(rule, tlimit01, 2, att, valOff, 1);
+    genericRulesStarterWithOptions(rule, tlimit02, 2, att, valOff, 1);
+
+  }
+  /* variable top:  */
+  {
+    static const char *rule2 = "&\\u2010<x=[variable top]<z";
+    static const char *rule = "&\\u2010<x<[variable top]=z";
+    static const char *rule3 = "&' '<x<[variable top]=z";
+    static const char *tlimit01[] = {" ", "z", "zb", "a", " b", "xb", "b", "c" };
+    static const char *tlimit02[] = {"-", "-x", "x","xb", "-z", "z", "zb", "-a", "a", "-b", "b", "c"};
+    static const char *tlimit03[] = {" ", "xb", "z", "zb", "a", " b", "b", "c" };
+    static const UColAttribute att[] = { UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH };
+    static const UColAttribute valOn[] = { UCOL_SHIFTED, UCOL_QUATERNARY };
+    static const UColAttribute valOff[] = { UCOL_NON_IGNORABLE, UCOL_TERTIARY };
+
+    log_verbose("variable top\n");
+    genericRulesStarterWithOptions(rule, tlimit03, sizeof(tlimit03)/sizeof(tlimit03[0]), att, valOn, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOff, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOff, sizeof(att)/sizeof(att[0]));
+
+  }
+  /* case level */
+  {
+    static const char *rule = "&c<ch<<<cH<<<Ch<<<CH";
+    static const char *tlimit01[] = {"c","CH","Ch","cH","ch"};
+    static const char *tlimit02[] = {"c","CH","cH","Ch","ch"};
+    static const UColAttribute att[] = { UCOL_CASE_FIRST};
+    static const UColAttribute valOn[] = { UCOL_UPPER_FIRST};
+    static const UColAttribute valOff[] = { UCOL_OFF};
+    log_verbose("case level\n");
+    genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOn, sizeof(att)/sizeof(att[0]));
+    genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOn, sizeof(att)/sizeof(att[0]));
+    /*genericRulesStarterWithOptions(rule, tlimit01, sizeof(tlimit01)/sizeof(tlimit01[0]), att, valOff, sizeof(att)/sizeof(att[0]));*/
+    /*genericRulesStarterWithOptions(rule, tlimit02, sizeof(tlimit02)/sizeof(tlimit02[0]), att, valOff, sizeof(att)/sizeof(att[0]));*/
+  }
+
+}
+
 static void TestBocsuCoverage() {
   UErrorCode status = U_ZERO_ERROR;
   char *testString = "\\u0041\\u0441\\u4441\\U00044441\\u4441\\u0441\\u0041";
@@ -2499,13 +2614,168 @@ static void TestBocsuCoverage() {
   klen = ucol_getSortKey(coll, test, tlen, key, 256);
 
   ucol_close(coll);
-  
+}
 
+static void TestVariableTopSetting() {
+  UErrorCode status = U_ZERO_ERROR;
+  const UChar *current = NULL;
+  uint32_t varTopOriginal, varTop1, varTop2;
+  UCollator *coll = ucol_open("", &status);
 
+  uint32_t strength = 0;
+  uint8_t specs = 0;
+  uint32_t chOffset = 0; 
+  uint32_t chLen = 0;
+  uint32_t exOffset = 0; 
+  uint32_t exLen = 0;
+  uint32_t oldChOffset = 0; 
+  uint32_t oldChLen = 0;
+  uint32_t oldExOffset = 0; 
+  uint32_t oldExLen = 0;
+
+  UBool startOfRules = TRUE;
+  UColTokenParser src;
+  UColOptionSet opts;
+
+  UChar *rulesCopy = NULL;
+  uint32_t rulesLen;
+
+  UCollationResult result;
+
+  UChar first[256] = { 0 };
+  UChar second[256] = { 0 };
+  uint32_t firstLen = 0;
+  uint32_t secondLen = 0;
+
+  src.opts = &opts;
+
+  log_verbose("Slide variable top over UCARules\n");
+  rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, 0);
+  rulesCopy = (UChar *)uprv_malloc((rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+  rulesLen = ucol_getRulesEx(coll, UCOL_FULL_RULES, rulesCopy, rulesLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
+
+  if(U_SUCCESS(status) && rulesLen > 0) {
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+    src.source = src.current = rulesCopy;
+    src.end = rulesCopy+rulesLen;
+    src.extraCurrent = src.end;
+    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+    while ((current = ucol_tok_parseNextToken(&src, &strength,
+                      &chOffset, &chLen, &exOffset, &exLen,
+                      &specs, startOfRules, &status)) != NULL) {
+      startOfRules = FALSE;
+      if(0) {
+        log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
+      }
+      if(strength == UCOL_PRIMARY) {
+        status = U_ZERO_ERROR;
+        varTopOriginal = ucol_getVariableTop(coll, &status);
+        varTop1 = ucol_setVariableTop(coll, rulesCopy+oldChOffset, oldChLen, &status);
+        if(U_FAILURE(status)) {
+          if(status == U_PRIMARY_TOO_LONG_ERROR) {
+            log_verbose("= Expected failure for %04X =", *(rulesCopy+oldChOffset));
+          } else {
+            log_err("Unexpected failure setting variable top for %04X at offset %d. Error %s\n", *(rulesCopy+oldChOffset), oldChOffset, u_errorName(status));
+          }
+          continue;
+        }
+        varTop2 = ucol_getVariableTop(coll, &status);
+        if((varTop1 & 0xFFFF0000) != (varTop2 & 0xFFFF0000)) {
+          log_err("cannot retrieve set varTop value!\n");
+          continue;
+        }
+
+        if((varTop1 & 0xFFFF0000) > 0 && oldExLen == 0) {
+
+          u_strncpy(first, rulesCopy+oldChOffset, oldChLen);
+          u_strncpy(first+oldChLen, rulesCopy+chOffset, chLen);
+          u_strncpy(first+oldChLen+chLen, rulesCopy+oldChOffset, oldChLen);
+          first[2*oldChLen+chLen] = 0;
+
+          if(oldExLen == 0) {
+            u_strncpy(second, rulesCopy+chOffset, chLen);
+            second[chLen] = 0;
+          } else { /* This is skipped momentarily, but should work once UCARules are fully UCA conformant */
+            u_strncpy(second, rulesCopy+oldExOffset, oldExLen);
+            u_strncpy(second+oldChLen, rulesCopy+chOffset, chLen);
+            u_strncpy(second+oldChLen+chLen, rulesCopy+oldExOffset, oldExLen);
+            second[2*oldExLen+chLen] = 0;
+          }
+          result = ucol_strcoll(coll, first, -1, second, -1);
+          if(result == UCOL_EQUAL) {
+            doTest(coll, first, second, UCOL_EQUAL);
+          } else {
+            log_verbose("Suspicious strcoll result for %04X and %04X\n", *(rulesCopy+oldChOffset), *(rulesCopy+chOffset));
+          }
+        }
+      }
+      if(strength != UCOL_TOK_RESET) {
+        oldChOffset = chOffset; 
+        oldChLen = chLen;
+        oldExOffset = exOffset; 
+        oldExLen = exLen;
+      }
+    }
+  }
+  status = U_ZERO_ERROR;
+
+  log_verbose("Testing setting variable top to contractions\n");
+  {
+    uint32_t tailoredCE = UCOL_NOT_FOUND;
+    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
+    while(*conts != 0) {
+      if(*(conts+2) == 0) {
+        varTop1 = ucol_setVariableTop(coll, conts, -1, &status);
+      } else {
+        varTop1 = ucol_setVariableTop(coll, conts, 3, &status);
+      }
+      if(U_FAILURE(status)) {
+        log_err("Couldn't set variable top to a contraction\n");
+      }
+      conts+=3;
+    }
+
+    status = U_ZERO_ERROR;
+
+    first[0] = 0x0040;
+    first[1] = 0x0050;
+    first[2] = 0x0000;
+
+    ucol_setVariableTop(coll, first, -1, &status);
+
+    if(U_SUCCESS(status)) {
+      log_err("Invalid contraction succeded in setting variable top!\n");
+    }
+
+  }
+
+  log_verbose("Test restoring variable top\n");
+
+  status = U_ZERO_ERROR;
+  ucol_restoreVariableTop(coll, varTopOriginal, &status);
+  if(varTopOriginal != ucol_getVariableTop(coll, &status)) {
+    log_err("Couldn't restore old variable top\n");
+  }
+
+  log_verbose("Testing calling with error set\n");
+
+  status = U_INTERNAL_PROGRAM_ERROR;
+  varTop1 = ucol_setVariableTop(coll, first, 1, &status);
+  varTop2 = ucol_getVariableTop(coll, &status);
+  ucol_restoreVariableTop(coll, varTop2, &status);
+  varTop1 = ucol_setVariableTop(NULL, first, 1, &status);
+  varTop2 = ucol_getVariableTop(NULL, &status);
+  ucol_restoreVariableTop(NULL, varTop2, &status);
+  if(status != U_INTERNAL_PROGRAM_ERROR) {
+    log_err("Bad reaction to passed error!\n");
+  }
 }
 
 void addMiscCollTest(TestNode** root)
 {
+    /*addTest(root, &TestLimitations, "tscoll/cmsccoll/TestLimitations");*/
+    addTest(root, &TestVariableTopSetting, "tscoll/cmsccoll/TestVariableTopSetting");
     addTest(root, &TestBocsuCoverage, "tscoll/cmsccoll/TestBocsuCoverage");
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
