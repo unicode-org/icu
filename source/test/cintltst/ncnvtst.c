@@ -408,8 +408,8 @@ void TestRegression(){
     char *targ;
     char *targetLimit;
     UChar *source;
-    UChar *src=0;
-    UChar *sourceLimit=0;
+    const UChar *src=0;
+    const UChar *sourceLimit=0;
     UChar *extractedTargetBuffer=0;
     UChar *extractedTarget=0;
     UChar *target=0;
@@ -464,7 +464,7 @@ void TestRegression(){
     ucnv_toUnicode(conv, 
                    &extractedTarget, 
                    limit, 
-                   &targ, 
+                   (const char **) &targ, 
                    targetLimit, 
                    NULL, 
                    TRUE, 
