@@ -23,6 +23,8 @@
 #include "ufile.h"
 #include "unicode/uloc.h"
 #include "loccache.h"
+#include "unicode/ures.h"
+#include "unicode/ucnv.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -118,6 +120,29 @@ ufile_lookup_codepage(const char *locale)
   return 0;
 }
 
+bool_t hasICUData() {
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *cnv = NULL;
+    UResourceBundle *r = NULL;
+    
+    r = ures_open(NULL, NULL, &status);
+    if(U_FAILURE(status)) {
+        return FALSE;
+    } else {
+        ures_close(r);
+    }
+
+    cnv = ucnv_open(NULL, &status);
+    if(cnv == NULL) {
+        return FALSE;
+    } else {
+        ucnv_close(cnv);
+    }
+
+    return TRUE;
+}
+
+
 
 UFILE*
 u_fopen(const char    *filename,
@@ -181,7 +206,7 @@ u_finit(FILE        *f,
     const char    *codepage)
 {
   UErrorCode     status         = U_ZERO_ERROR;
-  bool_t     useSysCP     = (locale == 0 && codepage == 0);
+  bool_t     useSysCP     = (locale == NULL && codepage == NULL);
   UFILE     *result     = (UFILE*) malloc(sizeof(UFILE));
   if(result == 0)
     return 0;
@@ -192,27 +217,31 @@ u_finit(FILE        *f,
   result->fFile = f;
 #endif
   result->fOwnFile = FALSE;
-
-  /* if locale is 0, use the default */
-  if(locale == 0)
-    locale = uloc_getDefault();
-
-  result->fBundle = u_loccache_get(locale);
-  if(result->fBundle == 0) {
-    fclose(result->fFile);
-    free(result);
-    return 0;
-  }
-
   result->fOwnBundle     = FALSE;
   result->fUCPos     = result->fUCBuffer;
   result->fUCLimit     = result->fUCBuffer;
   result->fConverter = NULL;
+  result->fBundle = NULL;
+
+  if(hasICUData() == TRUE) {
+      /* if locale is 0, use the default */
+      if(locale == 0)
+        locale = uloc_getDefault();
+
+      result->fBundle = u_loccache_get(locale);
+      if(result->fBundle == 0) {
+        fclose(result->fFile);
+        free(result);
+        return 0;
+      }
+  } else {
+      /* bootstrap mode */
+      return result;
+  }
 
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
-    codepage = ufile_lookup_codepage(locale);
-  
+    codepage = ufile_lookup_codepage(locale); 
     /* if the codepage is still 0, the default codepage will be used */
     if(codepage == 0) {
         result->fConverter = ucnv_open(0, &status);
@@ -222,16 +251,16 @@ u_finit(FILE        *f,
             return 0;
         }
     }
-  } else if (strlen(codepage)>strlen("")) {
+  } else if (*codepage != '\0') {
       result->fConverter = ucnv_open(codepage, &status);
       if(U_FAILURE(status) || result->fConverter == 0) {
         fclose(result->fFile);
         free(result);
         return 0;
       }
-  }   else if(useSysCP)  /* if both locale and codepage are 0, use the system default codepage */
+  } else if(useSysCP) { /* if both locale and codepage are 0, use the system default codepage */
     codepage = 0;
-
+  }
   return result;
 }
 
