@@ -180,7 +180,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * This is a special purpose function defined by the ChoiceFormat API
  * documentation.
  * It is not a general purpose function and not defined for NaN or Infinity
- * @draft
+ * @deprecated This will be removed after 2002-Jun-30. Use the ChoiceFormat closures API instead.
  */
 U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
 
