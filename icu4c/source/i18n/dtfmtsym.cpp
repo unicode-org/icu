@@ -433,6 +433,14 @@ DateFormatSymbols::getPatternChars(void)
 
 //------------------------------------------------------
 
+const UChar *
+DateFormatSymbols::getPatternUChars(void)
+{
+    return gPatternChars;
+}
+
+//------------------------------------------------------
+
 UnicodeString&
 DateFormatSymbols::getLocalPatternChars(UnicodeString& result) const
 {
