@@ -44,6 +44,11 @@ enum
     _da = _dv | IndicClassTable::CF_POS_ABOVE,
     _dr = _dv | IndicClassTable::CF_POS_AFTER,
     _lm = _dv | IndicClassTable::CF_LENGTH_MARK,
+    _l1 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_1 | IndicClassTable::CF_POS_BEFORE,
+    _a1 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_1 | IndicClassTable::CF_POS_ABOVE,
+    _r2 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_2 | IndicClassTable::CF_POS_AFTER,
+    _m2 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_2 | IndicClassTable::CF_LENGTH_MARK,
+    _m3 = IndicClassTable::CC_SPLIT_VOWEL_PIECE_3 | IndicClassTable::CF_LENGTH_MARK,
     _vr = IndicClassTable::CC_VIRAMA,
 
     // split matras
@@ -88,9 +93,9 @@ static const IndicClassTable::CharClass bengCharClasses[] =
     _xx, _ma, _mp, _mp, _xx, _i2, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _i2, // 0980 - 098F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0990 - 099F
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _bb, _ct, _ct, _pb, // 09A0 - 09AF
-    _rv, _xx, _ct, _xx, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _dr, _dl, // 09B0 - 09BF
-    _dr, _db, _db, _db, _db, _xx, _xx, _dl, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
-    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _dr, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 09D0 - 09DF
+    _rv, _xx, _ct, _xx, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _r2, _dl, // 09B0 - 09BF
+    _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
+    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 09D0 - 09DF
     _iv, _iv, _dv, _dv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 09E0 - 09EF
     _ct, _ct, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx                           // 09F0 - 09FA
 };
@@ -123,9 +128,9 @@ static const IndicClassTable::CharClass oryaCharClasses[] =
     _xx, _ma, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
     _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0B10 - 0B1F
     _ct, _ct, _ct, _ct, _bb, _ct, _ct, _ct, _bb, _xx, _ct, _ct, _bb, _bb, _bb, _pb, // 0B20 - 0B2F
-    _rv, _xx, _bb, _bb, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _dr, _da, // 0B30 - 0B3F
-    _dr, _db, _db, _db, _xx, _xx, _xx, _dl, _s1, _xx, _xx, _s2, _s3, _vr, _xx, _xx, // 0B40 - 0B4F
-    _xx, _xx, _xx, _xx, _xx, _xx, _da, _dr, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 0B50 - 0B5F
+    _rv, _xx, _bb, _bb, _xx, _xx, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _r2, _da, // 0B30 - 0B3F
+    _dr, _db, _db, _db, _xx, _xx, _xx, _l1, _s1, _xx, _xx, _s2, _s3, _vr, _xx, _xx, // 0B40 - 0B4F
+    _xx, _xx, _xx, _xx, _xx, _xx, _m2, _m2, _xx, _xx, _xx, _xx, _cn, _cn, _xx, _cn, // 0B50 - 0B5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0B60 - 0B6F
     _xx                                                                             // 0B70
 };
@@ -135,9 +140,9 @@ static const IndicClassTable::CharClass tamlCharClasses[] =
     _xx, _xx, _ma, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _xx, _iv, _iv, // 0B80 - 0B8F
     _iv, _xx, _iv, _iv, _iv, _ct, _xx, _xx, _xx, _ct, _ct, _xx, _ct, _xx, _ct, _ct, // 0B90 - 0B9F
     _xx, _xx, _xx, _ct, _ct, _xx, _xx, _xx, _ct, _ct, _ct, _xx, _xx, _xx, _ct, _ct, // 0BA0 - 0BAF
-    _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _dr, _dr, // 0BB0 - 0BBF
-    _da, _dr, _dr, _xx, _xx, _xx, _dl, _dl, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0BC0 - 0BCF
-    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _dr, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0BD0 - 0BDF
+    _ct, _ct, _ct, _ct, _ct, _ct, _xx, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _r2, _dr, // 0BB0 - 0BBF
+    _da, _dr, _dr, _xx, _xx, _xx, _l1, _l1, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0BC0 - 0BCF
+    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0BD0 - 0BDF
     _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0BE0 - 0BEF
     _xx, _xx, _xx                                                                   // 0BF0 - 0BF2
 };
@@ -149,8 +154,8 @@ static const IndicClassTable::CharClass teluCharClasses[] =
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C10 - 0C1F
     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0C20 - 0C2F
     _bb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _da, _da, // 0C30 - 0C3F
-    _da, _dr, _dr, _dr, _dr, _xx, _da, _da, _s1, _xx, _da, _da, _da, _vr, _xx, _xx, // 0C40 - 0C4F
-    _xx, _xx, _xx, _xx, _xx, _da, _db, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0C50 - 0C5F
+    _da, _dr, _dr, _dr, _dr, _xx, _a1, _da, _s1, _xx, _da, _da, _da, _vr, _xx, _xx, // 0C40 - 0C4F
+    _xx, _xx, _xx, _xx, _xx, _da, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0C50 - 0C5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0C60 - 0C6F
 };
 
@@ -166,8 +171,8 @@ static const IndicClassTable::CharClass kndaCharClasses[] =
     _iv, _xx, _iv, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, // 0C90 - 0C9F
     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _bb, // 0CA0 - 0CAF
     _rb, _ct, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _xx, _xx, _xx, _xx, _dr, _da, // 0CB0 - 0CBF
-    _s1, _dr, _dr, _lm, _lm, _xx, _da, _s2, _s3, _xx, _s4, _s5, _da, _vr, _xx, _xx, // 0CC0 - 0CCF
-    _xx, _xx, _xx, _xx, _xx, _lm, _lm, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _ct, _xx, // 0CD0 - 0CDF
+    _s1, _dr, _r2, _lm, _lm, _xx, _a1, _s2, _s3, _xx, _s4, _s5, _da, _vr, _xx, _xx, // 0CC0 - 0CCF
+    _xx, _xx, _xx, _xx, _xx, _m3, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _ct, _xx, // 0CD0 - 0CDF
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0CE0 - 0CEF
 };
 
@@ -178,9 +183,9 @@ static const IndicClassTable::CharClass mlymCharClasses[] =
     _xx, _xx, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _iv, _iv, // 0D00 - 0D0F
     _iv, _xx, _iv, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _bb, // 0D10 - 0D1F
     _ct, _ct, _ct, _bb, _ct, _bb, _bb, _ct, _ct, _xx, _ct, _ct, _ct, _ct, _ct, _pb, // 0D20 - 0D2F
-    _pb, _cn, _bb, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _dr, _dr, // 0D30 - 0D3F
-    _dr, _dr, _dr, _dr, _xx, _xx, _dl, _dl, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0D40 - 0D4F
-    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _dr, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
+    _pb, _cn, _bb, _ct, _ct, _pb, _ct, _ct, _ct, _ct, _xx, _xx, _xx, _xx, _r2, _dr, // 0D30 - 0D3F
+    _dr, _dr, _dr, _dr, _xx, _xx, _l1, _l1, _dl, _xx, _s1, _s2, _s3, _vr, _xx, _xx, // 0D40 - 0D4F
+    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _m2, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0D50 - 0D5F
     _iv, _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0D60 - 0D6F
 };
 

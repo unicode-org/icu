@@ -42,9 +42,18 @@ struct IndicClassTable
         CC_CONSONANT_WITH_NUKTA =  6,
         CC_NUKTA                =  7,
         CC_DEPENDENT_VOWEL      =  8,
+#if 1
+        CC_SPLIT_VOWEL_PIECE_1  =  9,
+        CC_SPLIT_VOWEL_PIECE_2  = 10,
+        CC_SPLIT_VOWEL_PIECE_3  = 11,
+        CC_VIRAMA               = 12,
+        CC_ZERO_WIDTH_MARK      = 13,
+        CC_COUNT                = 14
+#else
         CC_VIRAMA               =  9,
         CC_ZERO_WIDTH_MARK      = 10,
         CC_COUNT                = 11
+#endif
     };
 
     enum CharClassFlags
@@ -196,7 +205,9 @@ inline le_bool IndicClassTable::isVattu(CharClass charClass)
 
 inline le_bool IndicClassTable::isMatra(CharClass charClass)
 {
-    return (charClass & CF_CLASS_MASK) == CC_DEPENDENT_VOWEL;
+    charClass &= CF_CLASS_MASK;
+
+    return charClass >= CC_DEPENDENT_VOWEL && charClass <= CC_SPLIT_VOWEL_PIECE_3;
 }
 
 inline le_bool IndicClassTable::isSplitMatra(CharClass charClass)
