@@ -561,7 +561,7 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  * @param destCapacity size of the buffer for the result
  * @return size of the result. If the buffer is big enough size is always
  *         src1Length+src2Length-1
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
@@ -613,7 +613,7 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
  *         Lower 16 bits are undefined
  * @see ucol_getVariableTop
  * @see ucol_restoreVariableTop
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI uint32_t U_EXPORT2 
 ucol_setVariableTop(UCollator *coll, 
@@ -629,7 +629,7 @@ ucol_setVariableTop(UCollator *coll,
  * @return the variable top value of a Collator.
  * @see ucol_setVariableTop
  * @see ucol_restoreVariableTop
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
 
@@ -642,7 +642,7 @@ U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode 
  * @param status error code (not changed by function)
  * @see ucol_getVariableTop
  * @see ucol_setVariableTop
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI void U_EXPORT2 
 ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status);

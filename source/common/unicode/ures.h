@@ -200,7 +200,7 @@ ures_open(const char*    path,
  * @param status fills in the outgoing error code. Either U_ZERO_ERROR or U_MISSING_RESOURCE_ERROR
  * @return      a newly allocated resource bundle or NULL if it doesn't exist.
  * @see ures_close
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_openDirect(const char* path, 
@@ -402,7 +402,7 @@ ures_getBinary(const UResourceBundle* resourceBundle,
  * @see ures_getString
  * @see ures_getInt
  * @see ures_getUInt
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI const int32_t* U_EXPORT2 
 ures_getIntVector(const UResourceBundle* resourceBundle, 
@@ -423,7 +423,7 @@ ures_getIntVector(const UResourceBundle* resourceBundle,
  * @see ures_getIntVector
  * @see ures_getBinary
  * @see ures_getString
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI uint32_t U_EXPORT2 
 ures_getUInt(const UResourceBundle* resourceBundle, 
@@ -443,7 +443,7 @@ ures_getUInt(const UResourceBundle* resourceBundle,
  * @see ures_getIntVector
  * @see ures_getBinary
  * @see ures_getString
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2 
 ures_getInt(const UResourceBundle* resourceBundle, 
@@ -627,7 +627,7 @@ U_NAMESPACE_BEGIN
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
  * @return        an UnicodeString object. If there is an error, string is bogus
- * @draft ICU 2.0
+ * @stable
  */
 inline UnicodeString 
 ures_getUnicodeString(const UResourceBundle *resB, 
@@ -646,7 +646,7 @@ ures_getUnicodeString(const UResourceBundle *resB,
  * @param key               fill in for key associated with this string
  * @param status            fills in the outgoing error code
  * @return an UnicodeString object.
- * @draft ICU 2.0
+ * @stable
  */
 inline UnicodeString 
 ures_getNextUnicodeString(UResourceBundle *resB, 
@@ -665,7 +665,7 @@ ures_getNextUnicodeString(UResourceBundle *resB,
  * @param index             an index to the wanted string.
  * @param status            fills in the outgoing error code
  * @return                  an UnicodeString object. If there is an error, string is bogus
- * @draft ICU 2.0
+ * @stable
  */
 inline UnicodeString 
 ures_getUnicodeStringByIndex(const UResourceBundle *resB, 
@@ -685,7 +685,7 @@ ures_getUnicodeStringByIndex(const UResourceBundle *resB,
  * @param key               a key associated with the wanted string
  * @param status            fills in the outgoing error code
  * @return                  an UnicodeString object. If there is an error, string is bogus
- * @draft ICU 2.0
+ * @stable
  */
 inline UnicodeString 
 ures_getUnicodeStringByKey(const UResourceBundle *resB, 
