@@ -35,8 +35,10 @@
 #include "umutex.h"
 #include "uhash.h"
 
+#ifdef UCOL_DEBUG
 #include <stdio.h>
 #include <limits.h>
+#endif
 
 /* added by synwee for trie manipulation*/
 #define STAGE_1_SHIFT_            10
@@ -61,8 +63,8 @@ static const UChar utf16Fixup[32]={
 };
 
 static UBool U_CALLCONV
-isAcceptableUCA(void *context,
-             const char *type, const char *name,
+isAcceptableUCA(void * /*context*/,
+             const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo){
   /* context, type & name are intentionally not used */
     if( pInfo->size>=20 &&
@@ -343,7 +345,7 @@ ucol_openRules(    const    UChar                  *rules,
   /*src.source = rules;*/
   src.source = (UChar *)uprv_malloc((2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
-  if(nSize > 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE || *status == U_BUFFER_OVERFLOW_ERROR) {
+  if(nSize > (uint32_t)(2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE) || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     src.source = (UChar *)realloc(src.source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src.source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
