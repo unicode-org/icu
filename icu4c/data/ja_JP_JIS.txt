@@ -115,7 +115,7 @@ ja_JP_JIS {
           "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
 
         // Iteration mark  
-        "&\u30a1<<<\u30a1|\u30fd=\u3041|\u309d              // SMALL A
+        "&\u30a1<<<\u30a1|\u30fd=\u3041|\u309d"             // SMALL A
         "&[before 3]\u30a2<<<\u30a2|\u30fd=\u3042|\u309d"   // A
 
         "&\u30a3<<<\u30a3|\u30fd=\u3043|\u309d"             // SMALL I
