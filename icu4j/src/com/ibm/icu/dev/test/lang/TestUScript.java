@@ -11,7 +11,6 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 
 public class TestUScript extends TestFmwk {
 
