@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -20,6 +20,7 @@ fr {
         AD { "Andorre" }
         AE { "\u00c9mirats Arabes Unis" }
         AG { "Antigua et Barbuda" }
+        AQ { "Antarctique" }
         AL { "Albanie" }
         AM { "Arm\u00E9nie" }
         AN { "Antilles N\u00E9erlandaises" }
@@ -64,11 +65,11 @@ fr {
 
         EC { "\u00C9quateur" }
         EE { "Estonie" }
-        EG { "Egypte" }
+        EG { "\u00C9gypte" }
         EH { "Sahara Occidental" }
         ER { "\u00C9rythr\u00e9e" }
         ES { "Espagne" }
-        ET { "Ethiopie" }
+        ET { "\u00C9thiopie" }
 
         FI { "Finlande" }
         FJ { "Fidji" }
@@ -87,7 +88,7 @@ fr {
         GR { "Gr\u00E8ce" }
         GS { "G\u00E9orgie du Sud, \u00CEles Sandwich du Sud" }
         GW { "Guin\u00E9e-Bissau" }
-        GY { "Guyane" }
+        GY { "Guyana" }
 
         HK { "Hong-Kong R.A.S." }
         HM { "\u00CEles Heard et MacDonald" }
@@ -97,6 +98,7 @@ fr {
 
         ID { "Indon\u00E9sie" }
         IE { "Irlande" }
+        //IQ { "Iraq" }
         IL { "Isra\u00EBl" }
         IN { "Inde" }
         IO { "Territoire Britannique de l'Oc\u00E9an Indien" }
@@ -107,6 +109,7 @@ fr {
         JO { "Jordanie" }
         JP { "Japon" }
 
+        KG { "Kirghizistan" }
         KH { "Cambodge" }
         KM { "Comores" }
         KN { "Saint Kitts et Nevis" }
@@ -125,6 +128,7 @@ fr {
         //MD { "Moldavie" }
         MH { "\u00CEles Marshall" }
         MK { "Mac\u00E9doine" }
+        //MM { "Myanmar" }
         MN { "Mongolie" }
         MO { "Macao R.A.S. de Chine" }
         MP { "Mariannes du Nord" }
@@ -148,7 +152,7 @@ fr {
         PF { "Polyn\u00E9sie Fran\u00E7aise" }
         PG { "Papouasie-Nouvelle-Guin\u00E9e" }
         PL { "Pologne" }
-        PM { "Saint Pierre et Miquelon" }
+        PM { "Saint-Pierre-et-Miquelon" }
         PR { "Porto Rico" }
         PS { "Territoire Palestinien" }
         PW { "Palaos" }
@@ -180,8 +184,8 @@ fr {
         //TL { "Timor" }
         TN { "Tunisie" }
         TR { "Turquie" }
-        TT { "Trinit\u00E9 et Tobago" }
-        TW { "Ta\u00EFwan, Province de Chine" }
+        TT { "Trinit\u00E9-et-Tobago" }
+        TW { "Ta\u00EFwan" }
         TZ { "Tanzanie" }
 
         UG { "Ouganda" }
@@ -207,7 +211,7 @@ fr {
 
     // Currency display names
     Currencies {
-        AED { "AED", "dirham des E A.U." } // UAE Dirham
+        AED { "AED", "dirham des \u00c9mirats Arabes Unis" } // UAE Dirham
         AFA { "AFA", "afghani" } // Afghani
         ALL { "ALL", "lek" } // Leck
         ANG { "ANG", "florin des Antilles n\u00E9erl." } // Netherlands Antillan Guilder
@@ -253,7 +257,7 @@ fr {
         EUR { "\u20AC", "euro" } // Euro
         FIM { "FIM", "mark finlandais" } // Markka
         FJD { "FJD", "dollar de Fidji" } // Fiji Dollar
-        FKP { "FKP", "livre des Falkland" } // Falkland Islands Pound
+        FKP { "FKP", "livre des Falkland (Malvinas)" } // Falkland Islands Pound
         FRF { "F", "franc fran\u00E7ais" } // French Franc
         GBP { "\u00A3", "livre sterling" } // Pound Sterling
         GHC { "GHC", "cedi" } // Cedi
@@ -287,7 +291,7 @@ fr {
         KPW { "KPW", "won nord-cor\u00E9en" } // North Korean Won
         KRW { "KRW", "won" } // Won
         KWD { "KWD", "dinar koweitien" } // Kuwaiti Dinar
-        KYD { "KYD", "dollar des Caimanes" } // Cayman Islands Dollar
+        KYD { "KYD", "dollar des \u00EEles Ca\u00EFmans" } // Cayman Islands Dollar
         LAK { "LAK", "kip" } // Kip
         LBP { "LBP", "livre libanaise" } // Lebanese Pound
         LKR { "LKR", "roupie de Sri Lanka" } // Sri Lanka Rupee
@@ -351,7 +355,7 @@ fr {
         TWD { "TWD", "dollar ta\u00EFwanien" } // New Taiwan Dollar
         TZS { "TZS", "shilling de Tanzanie" } // Tanzanian Shilling
         UGS { "UGS", "shilling ougandais" } // Uganda Shilling
-        USD { "$", "dollar des Etats-Unis" } // US Dollar
+        USD { "$", "dollar des \u00C9tats-Unis" } // US Dollar
         UYP { "UYP", "peso uruguayen" } // Uruguayan Peso
         VEB { "VEB", "bolivar" } // Bolivar
         VND { "VND", "dong" } // Dong
@@ -368,7 +372,7 @@ fr {
         ZAR { "ZAR", "rand" } // Rand
         ZMK { "ZMK", "kwacha" } // Kwacha
         ZRZ { "ZRZ", "za\u00EFre" } // Zaire
-        ZWD { "ZWD", "Zimbabwe dollar" } // Zimbabwe Dollar
+        ZWD { "ZWD", "dollar du Zimbabwe" } // Zimbabwe Dollar
     }
     DateTimePatterns { 
         "HH' h 'mm z",
@@ -785,10 +789,20 @@ fr {
     }
     Types {
         collation{
-            traditional{ "Traditionnel Ordonnancement" }
+            direct      { "Ordre direct" }
+            phonebook   { "Ordre de l'annuaire" }
+            pinyin      { "Ordre pinyin" }
+            stroke      { "Ordre des traits" }
+            traditional { "Ordre traditionnel" }
         }
         calendar{
-            traditional{ "Traditionnel Calendrier" }
+            japanese    { "Calendrier japonais"  }
+            buddhist    { "Calendrier bouddhiste" }
+            islamic     { "Calendrier musulman"   }
+            islamic-civil { "Calendrier civil musulman" }
+            hebrew      { "Calendrier h\u00E9bra\u00EFque" }
+            chinese     { "Calendrier chinois" }
+            gregorian   { "Calendrier gr\u00E9gorien" }
         }
     }
     Variants {
@@ -804,18 +818,18 @@ fr {
     //}
 
     MonthNames_islamic {
-            "Mouharram",            // Muharram
-            "Safar",                // Safar
-            "Rabi'-oul-Aououal",    // Rabi' al-awwal
-            "Rabi'-out-Tani",       // Rabi' al-thani
-            "Djoumada-l-Oula",      // Jumada al-awwal
-            "Djoumada-t-Tania",     // Jumada al-thani
-            "Radjab",               // Rajab
-            "Cha'ban",              // Sha'ban
-            "Ramadan",              // Ramadan
-            "Chaououal",            // Shawwal
-            "Dou-l-Qa'da",          // Dhu al-Qi'dah
-            "Dou-l-Hidjja",         // Dhu al-Hijjah
+        "Mouharram",            // Muharram
+        "Safar",                // Safar
+        "Rabi'-oul-Aououal",    // Rabi' al-awwal
+        "Rabi'-out-Tani",       // Rabi' al-thani
+        "Djoumada-l-Oula",      // Jumada al-awwal
+        "Djoumada-t-Tania",     // Jumada al-thani
+        "Radjab",               // Rajab
+        "Cha'ban",              // Sha'ban
+        "Ramadan",              // Ramadan
+        "Chaououal",            // Shawwal
+        "Dou-l-Qa'da",          // Dhu al-Qi'dah
+        "Dou-l-Hidjja",         // Dhu al-Hijjah
     }
     MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
         "fr/MonthNames_islamic"
@@ -828,19 +842,19 @@ fr {
         "fr/MonthAbbreviations_islamic"
     }
     MonthNames_hebrew {
-                "Tisseri",      // Tishri
-                "Hesvan",       // Heshvan
-                "Kislev",       // Kislev
-                "T\u00e9beth",  // Tevet
-                "Sch\u00e9bat", // Shevat
-                "Adar",         // Adar I
-                "Adar II",      // Adar
-                "Nissan",       // Nisan
-                "Iyar",         // Iyar
-                "Sivan",        // Sivan
-                "Tamouz",       // Tamuz
-                "Ab",           // Av
-                "Elloul",       // Elul
+        "Tisseri",      // Tishri
+        "Hesvan",       // Heshvan
+        "Kislev",       // Kislev
+        "T\u00e9beth",  // Tevet
+        "Sch\u00e9bat", // Shevat
+        "Adar",         // Adar I
+        "Adar II",      // Adar
+        "Nissan",       // Nisan
+        "Iyar",         // Iyar
+        "Sivan",        // Sivan
+        "Tamouz",       // Tamuz
+        "Ab",           // Av
+        "Elloul",       // Elul
     }
     MonthAbbreviations_hebrew:alias {
        "fr/MonthNames_hebrew" // no data
