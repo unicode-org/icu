@@ -100,7 +100,7 @@ prepareReorder(const UBiDiLevel *levels, UTextOffset length,
 
 /* ubidi_setLine ------------------------------------------------------------ */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_setLine(const UBiDi *pParaBiDi,
               UTextOffset start, UTextOffset limit,
               UBiDi *pLineBiDi,
@@ -108,7 +108,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     UTextOffset length;
 
     /* check the argument values */
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     } else if(pParaBiDi==NULL || pLineBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -214,7 +214,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
     return;
 }
 
-CAPI UBiDiLevel U_EXPORT2
+U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex) {
     /* return paraLevel if in the trailing WS run, otherwise the real level */
     if(pBiDi==NULL || charIndex<0 || pBiDi->length<=charIndex) {
@@ -226,11 +226,11 @@ ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex) {
     }
 }
 
-CAPI const UBiDiLevel * U_EXPORT2
+U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     UTextOffset start, length;
 
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
     } else if(pBiDi==NULL || (length=pBiDi->length)<=0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -268,7 +268,7 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     }
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
                     UTextOffset *pLogicalLimit, UBiDiLevel *pLevel) {
     UTextOffset length;
@@ -336,9 +336,9 @@ setTrailingWSStart(UBiDi *pBiDi) {
 
 /* runs API functions ------------------------------------------------------- */
 
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return -1;
     } else if(pBiDi==NULL || pBiDi->runCount<0 && !getRuns(pBiDi)) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -348,7 +348,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     }
 }
 
-CAPI UBiDiDirection U_EXPORT2
+U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
                    UTextOffset *pLogicalStart, UTextOffset *pLength) {
     if( pBiDi==NULL || runIndex<0 ||
@@ -659,7 +659,7 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
 
 /* reorder a line based on a levels array (L2) ------------------------------ */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
     UTextOffset start, limit, sumOfSosEos;
     UBiDiLevel minLevel, maxLevel;
@@ -722,7 +722,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *
     } while(--maxLevel>=minLevel);
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap) {
     UTextOffset start, end, limit, temp;
     UBiDiLevel minLevel, maxLevel;
@@ -822,9 +822,9 @@ prepareReorder(const UBiDiLevel *levels, UTextOffset length,
 
 /* API functions for logical<->visual mapping ------------------------------- */
 
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -867,9 +867,9 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
     }
 }
 
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -929,7 +929,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
     }
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) {
     UBiDiLevel *levels;
 
@@ -943,7 +943,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode)
     }
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) {
     /* ubidi_countRuns() checks all of its and our arguments */
     if(ubidi_countRuns(pBiDi, pErrorCode)<=0) {
@@ -975,7 +975,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) 
     }
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length) {
     if(srcMap!=NULL && destMap!=NULL) {
         srcMap+=length;

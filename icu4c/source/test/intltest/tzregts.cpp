@@ -53,7 +53,7 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
 bool_t 
 TimeZoneRegressionTest::failure(UErrorCode status, const char* msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }
@@ -102,17 +102,17 @@ void TimeZoneRegressionTest:: Test4073215()
         errln("Fail: DST not active");
     GregorianCalendar *cal = new GregorianCalendar(97, Calendar::JANUARY, 31, status);
     failure(status, "new GregorianCalendar");
-    if (z->inDaylightTime(cal->getTime(status), status) || FAILURE(status) ) {
+    if (z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status) ) {
         errln("Fail: DST not working as expected");
     }
     cal->set(97, Calendar::MARCH, 1);
     failure(status, "GregorianCalendar->set()");
-    if (! z->inDaylightTime(cal->getTime(status), status) || FAILURE(status) ) {
+    if (! z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status) ) {
         errln("Fail: DST not working as expected");
     }
     cal->set(97, Calendar::MARCH, 31);
     failure(status, "GregorianCalendar->set()");
-    if (z->inDaylightTime(cal->getTime(status), status) || FAILURE(status)) {
+    if (z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status)) {
         errln("Fail: DST not working as expected");
     }
 
@@ -278,12 +278,12 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
     int32_t date = testCal->get(Calendar::DATE, status);
     int32_t dow  = testCal->get(Calendar::DAY_OF_WEEK, status);
     while(millis < 0) {
-        millis += kMillisPerDay;
+        millis += U_MILLIS_PER_DAY;
         --date;
         dow = Calendar::SUNDAY + ((dow - Calendar::SUNDAY + 6) % 7);
     }
-    while (millis >= kMillisPerDay) {
-        millis -= kMillisPerDay;
+    while (millis >= U_MILLIS_PER_DAY) {
+        millis -= U_MILLIS_PER_DAY;
         ++date;
         dow = Calendar::SUNDAY + ((dow - Calendar::SUNDAY + 1) % 7);
     }
@@ -365,7 +365,7 @@ void TimeZoneRegressionTest:: Test4126678()
     cal->set(1998 - 1900, Calendar::APRIL, 5, 10, 0);
     //Date dt = new Date(1998-1900, Calendar::APRIL, 5, 10, 0);
     
-    if (! tz->inDaylightTime(cal->getTime(status), status) || FAILURE(status))
+    if (! tz->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status))
         errln("We're not in Daylight Savings Time and we should be.\n");
 
     //cal.setTime(dt);
@@ -449,7 +449,7 @@ void TimeZoneRegressionTest:: Test4154537() {
     // tzb differs from tza
     SimpleTimeZone *tzb = new SimpleTimeZone(0, "b", 0, 1, 0, 0, 3, 1, 0, 0, status);
     
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         errln("Couldn't create TimeZones");
 
     if (tz1->useDaylightTime() || tz2->useDaylightTime() ||
@@ -524,7 +524,7 @@ void TimeZoneRegressionTest:: Test4154542()
         //} catch (IllegalArgumentException e) {
         //    ex = e;
         //}
-        if (SUCCESS(status) != shouldBeGood) {
+        if (U_SUCCESS(status) != shouldBeGood) {
             errln(UnicodeString("setStartRule(month=") + month + ", day=" + day +
                   ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                   (shouldBeGood ? (") should work")
@@ -538,7 +538,7 @@ void TimeZoneRegressionTest:: Test4154542()
         //} catch (IllegalArgumentException e) {
         //   ex = e;
         //}
-        if (SUCCESS(status) != shouldBeGood) {
+        if (U_SUCCESS(status) != shouldBeGood) {
             errln(UnicodeString("setEndRule(month=") + month + ", day=" + day +
                   ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                   (shouldBeGood ? (") should work")
@@ -556,7 +556,7 @@ void TimeZoneRegressionTest:: Test4154542()
         //} catch (IllegalArgumentException e) {
         //    ex = e;
         //}
-        if (SUCCESS(status) != shouldBeGood) {
+        if (U_SUCCESS(status) != shouldBeGood) {
             errln(UnicodeString("SimpleTimeZone(month=") + month + ", day=" + day +
                   ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                   (shouldBeGood ? (", <end>) should work")// + ex)
@@ -574,7 +574,7 @@ void TimeZoneRegressionTest:: Test4154542()
         //} catch (IllegalArgumentException e) {
         //    ex = e;
         //}
-        if (SUCCESS(status) != shouldBeGood) {
+        if (U_SUCCESS(status) != shouldBeGood) {
             errln(UnicodeString("SimpleTimeZone(<start>, month=") + month + ", day=" + day +
                   ", dayOfWeek=" + dayOfWeek + ", time=" + time +
                   (shouldBeGood ? (") should work")// + ex)
@@ -626,7 +626,7 @@ TimeZoneRegressionTest::Test4154525()
                     break;
             }
                 
-            if(FAILURE(status)) {
+            if(U_FAILURE(status)) {
                 if(valid) {
                     errln(UnicodeString("Fail: DST savings of ") + savings + " to " + method + " gave " + errorName(status));
                 } 
@@ -701,7 +701,7 @@ TimeZoneRegressionTest::Test4154650()
        //} catch (IllegalArgumentException ex) {
          //   e = ex;
         //}
-        if(good != SUCCESS(status)) {
+        if(good != U_SUCCESS(status)) {
             errln(UnicodeString("Fail: getOffset(") +
                   DATA[i+1] + ", " + DATA[i+2] + ", " + DATA[i+3] + ", " +
                   DATA[i+4] + ", " + DATA[i+5] + ", " + DATA[i+6] +
@@ -819,7 +819,7 @@ TimeZoneRegressionTest::TestJDK12API()
     // verify error checking
     int32_t offset3 = pst->getOffset(1,
         1997, (Calendar::EDateFields)-1, 26, Calendar::SUNDAY, (2*60*60*1000), status);
-    if(SUCCESS(status))
+    if(U_SUCCESS(status))
         errln("FAILURE: getOffset() succeeded with -1 for month");
 
     status = U_ZERO_ERROR;

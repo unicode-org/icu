@@ -35,7 +35,7 @@ strlist_open(UErrorCode *status)
 {
   struct SList *list;
   
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
@@ -60,7 +60,7 @@ strlist_close(struct SList *list,
 {
   int32_t i;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eStringList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -84,7 +84,7 @@ strlist_add(struct SList *list,
 {
   int32_t index;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   if(list->fType != eStringList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -115,7 +115,7 @@ strlist_grow(struct SList *list,
   int32_t newCapacity;
   UChar **newData;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   if(list->fType != eStringList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -157,7 +157,7 @@ strlist2d_open(UErrorCode *status)
 {
   struct SList *list;
   
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
@@ -178,7 +178,7 @@ strlist2d_open(UErrorCode *status)
   strlist2d_grow(list, status);
   strlist2d_growRows(list, status);
 
-  if(SUCCESS(*status)) {
+  if(U_SUCCESS(*status)) {
     list->u.fStringList2d.fRows[0] = 0;
     list->u.fStringList2d.fRowCount = 1;
   }
@@ -192,7 +192,7 @@ strlist2d_close(struct SList *list,
 {
   int32_t i;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   if(list->fType != eStringList2d) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -215,7 +215,7 @@ void
 strlist2d_newRow(struct SList *list,
 		 UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -224,7 +224,7 @@ strlist2d_newRow(struct SList *list,
   
   if(list->u.fStringList2d.fRowCount == list->u.fStringList2d.fRowCapacity)
     strlist2d_growRows(list, status);
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   list->u.fStringList2d.fRows[(list->u.fStringList2d.fRowCount)++] = 
     list->u.fStringList2d.fCount;
 }
@@ -235,7 +235,7 @@ void strlist2d_add(struct SList *list,
 {
   int32_t index;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -266,7 +266,7 @@ strlist2d_grow(struct SList *list,
   int32_t newCapacity;
   UChar **newData;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -309,7 +309,7 @@ strlist2d_growRows(struct SList *list,
   int32_t newCapacity;
   int32_t *newRows;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -341,7 +341,7 @@ taglist_open(UErrorCode *status)
 {
   struct SList *list;
   
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
@@ -364,7 +364,7 @@ void
 taglist_close(struct SList *list,
 	      UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -386,7 +386,7 @@ taglist_grow(struct SList *list,
   int32_t newCapacity;
   struct SStringPair *newData;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -422,7 +422,7 @@ taglist_add(struct SList *list,
   int32_t index;
   struct SStringPair pair;
   
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -461,7 +461,7 @@ taglist_get(const struct SList *list,
 {
   int32_t i;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   if(list->fType != eTaggedList) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;

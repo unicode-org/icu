@@ -47,11 +47,11 @@ ustr_cpy(struct UString *dst,
 	 const struct UString *src, 
 	 UErrorCode *status)
 {
-  if(FAILURE(*status) || dst == src) return;
+  if(U_FAILURE(*status) || dst == src) return;
   
   if(dst->fCapacity < src->fLength) {
     ustr_resize(dst, ALLOCATION(src->fLength), status);
-    if(FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
   }
 
   icu_memcpy(dst->fChars, src->fChars, sizeof(UChar) * src->fLength);
@@ -64,11 +64,11 @@ ustr_setlen(struct UString *s,
 	    int32_t len,
 	    UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(s->fCapacity < (len + 1)) {
     ustr_resize(s, ALLOCATION(len), status);
-    if(FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
   }
 
   s->fLength = len;
@@ -89,11 +89,11 @@ ustr_ncat(struct UString *dst,
 	  int32_t n, 
 	  UErrorCode *status)
 {
-  if(FAILURE(*status) || dst == src) return;
+  if(U_FAILURE(*status) || dst == src) return;
   
   if(dst->fCapacity < (dst->fLength + n)) {
     ustr_resize(dst, ALLOCATION(dst->fLength + n), status);
-    if(FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
   }
   
   icu_memcpy(dst->fChars + dst->fLength, src->fChars, 
@@ -107,11 +107,11 @@ ustr_ucat(struct UString *dst,
 	  UChar c, 
 	  UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   if(dst->fCapacity < (dst->fLength + 1)) {
     ustr_resize(dst, ALLOCATION(dst->fLength + 1), status);
-    if(FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
   }
   
   icu_memcpy(dst->fChars + dst->fLength, &c, 
@@ -126,7 +126,7 @@ ustr_resize(struct UString *s,
 	    int32_t len, 
 	    UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* +1 for trailing 0x0000 */
   s->fChars = (UChar*) icu_realloc(s->fChars, sizeof(UChar) * (len + 1));

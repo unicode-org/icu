@@ -26,7 +26,7 @@
 ===============================================*/
 #include "normlzr.h"
 #include "cpputils.h"
-CAPI int32_t
+U_CAPI int32_t
 u_normalize(const UChar*            source,
         int32_t                 sourceLength, 
         UNormalizationMode      mode, 
@@ -35,7 +35,7 @@ u_normalize(const UChar*            source,
         int32_t                 resultLength,
         UErrorCode*             status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   Normalizer::EMode normMode;
   switch(mode) {
@@ -65,11 +65,11 @@ u_normalize(const UChar*            source,
   return actualLen;
 }
 
-CAPI UCollator*
+U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   Collator *col = 0;
 
@@ -86,14 +86,14 @@ ucol_open(    const    char         *loc,
   return (UCollator*)col;
 }
 
-CAPI UCollator*
+U_CAPI UCollator*
 ucol_openRules(    const    UChar                  *rules,
         int32_t                 rulesLength,
         UNormalizationMode      mode,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   int32_t len = (rulesLength == -1 ? u_strlen(rules) : rulesLength);
   const UnicodeString ruleString((UChar*)rules, len, len);
@@ -131,13 +131,13 @@ ucol_openRules(    const    UChar                  *rules,
   return (UCollator*) col;
 }
 
-CAPI void
+U_CAPI void
 ucol_close(UCollator *coll)
 {
   delete (Collator*)coll;
 }
 
-CAPI UCollationResult
+U_CAPI UCollationResult
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -151,7 +151,7 @@ ucol_strcoll(    const    UCollator    *coll,
   return (UCollationResult) ((Collator*)coll)->compare(tempSource, tempTarget);
 }
 
-CAPI bool_t
+U_CAPI bool_t
 ucol_greater(    const    UCollator        *coll,
         const    UChar            *source,
         int32_t            sourceLength,
@@ -162,7 +162,7 @@ ucol_greater(    const    UCollator        *coll,
       == UCOL_GREATER);
 }
 
-CAPI bool_t
+U_CAPI bool_t
 ucol_greaterOrEqual(    const    UCollator    *coll,
             const    UChar        *source,
             int32_t        sourceLength,
@@ -173,7 +173,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
       != UCOL_LESS);
 }
 
-CAPI bool_t
+U_CAPI bool_t
 ucol_equal(        const    UCollator        *coll,
             const    UChar            *source,
             int32_t            sourceLength,
@@ -184,20 +184,20 @@ ucol_equal(        const    UCollator        *coll,
       == UCOL_EQUAL);
 }
 
-CAPI UCollationStrength
+U_CAPI UCollationStrength
 ucol_getStrength(const UCollator *coll)
 {
   return (UCollationStrength) ((Collator*)coll)->getStrength();
 }
 
-CAPI void
+U_CAPI void
 ucol_setStrength(    UCollator                *coll,
             UCollationStrength        strength)
 {
   ((Collator*)coll)->setStrength((Collator::ECollationStrength)strength);
 }
 
-CAPI UNormalizationMode
+U_CAPI UNormalizationMode
 ucol_getNormalization(const UCollator* coll)
 {
   switch(((Collator*)coll)->getDecomposition()) {
@@ -218,7 +218,7 @@ ucol_getNormalization(const UCollator* coll)
   }
 }
 
-CAPI void
+U_CAPI void
 ucol_setNormalization(  UCollator            *coll,
             UNormalizationMode    mode)
 {
@@ -244,14 +244,14 @@ ucol_setNormalization(  UCollator            *coll,
   ((Collator*)coll)->setDecomposition(normMode);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_getDisplayName(    const    char        *objLoc,
             const    char        *dispLoc,
             UChar             *result,
             int32_t         resultLength,
             UErrorCode        *status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   UnicodeString dst(result, resultLength, resultLength);
   Collator::getDisplayName(Locale().init(objLoc), Locale().init(dispLoc), dst);
@@ -260,19 +260,19 @@ ucol_getDisplayName(    const    char        *objLoc,
   return actLen;
 }
 
-CAPI const char*
+U_CAPI const char*
 ucol_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_countAvailable()
 {
   return uloc_countAvailable();
 }
 
-CAPI const UChar*
+U_CAPI const UChar*
 ucol_getRules(    const    UCollator        *coll, 
         int32_t            *length)
 {
@@ -281,7 +281,7 @@ ucol_getRules(    const    UCollator        *coll,
   return rules.getUChars();
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
@@ -298,7 +298,7 @@ ucol_getSortKey(const    UCollator    *coll,
   UErrorCode         status = U_ZERO_ERROR;
 
   ((Collator*)coll)->getCollationKey(string, key, status);
-  if(FAILURE(status)) 
+  if(U_FAILURE(status)) 
     return 0;
 
   bytes = key.getByteArray(count);
@@ -313,7 +313,7 @@ ucol_getSortKey(const    UCollator    *coll,
   return count;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_keyHashCode(    const    uint8_t*    key, 
             int32_t        length)
 {
@@ -340,50 +340,50 @@ ucol_openElements(    const    UCollator            *coll,
   return (UCollationElements*) iter;
 }
 
-CAPI void
+U_CAPI void
 ucol_closeElements(UCollationElements *elems)
 {
   delete (CollationElementIterator*)elems;
 }
 
-CAPI void
+U_CAPI void
 ucol_reset(UCollationElements *elems)
 {
   ((CollationElementIterator*)elems)->reset();
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_next(    UCollationElements    *elems,
         UErrorCode            *status)
 {
-  if(FAILURE(*status)) return UCOL_NULLORDER;
+  if(U_FAILURE(*status)) return UCOL_NULLORDER;
 
   return ((CollationElementIterator*)elems)->next(*status);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_previous(    UCollationElements    *elems,
         UErrorCode            *status)
 {
-  if(FAILURE(*status)) return UCOL_NULLORDER;
+  if(U_FAILURE(*status)) return UCOL_NULLORDER;
 
   return ((CollationElementIterator*)elems)->previous(*status);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 ucol_getMaxExpansion(    const    UCollationElements    *elems,
             int32_t                order)
 {
   return ((CollationElementIterator*)elems)->getMaxExpansion(order);
 }
 
-CAPI void
+U_CAPI void
 ucol_setText(UCollationElements        *elems,
          const    UChar                    *text,
          int32_t                    textLength,
          UErrorCode                *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
   const UnicodeString src((UChar*)text, len, len);
@@ -391,18 +391,18 @@ ucol_setText(UCollationElements        *elems,
   ((CollationElementIterator*)elems)->setText(src, *status);
 }
 
-CAPI UTextOffset
+U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
   return ((CollationElementIterator*)elems)->getOffset();
 }
 
-CAPI void
+U_CAPI void
 ucol_setOffset(    UCollationElements    *elems,
         UTextOffset            offset,
         UErrorCode            *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   ((CollationElementIterator*)elems)->setOffset(offset, *status);
 }

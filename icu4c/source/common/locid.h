@@ -171,10 +171,11 @@
  * </blockquote>
  */
 typedef struct ULocale ULocale;
+typedef struct UHashtable UHashtable;
 
-#define LANG_CAPACITY 3
-#define COUNTRY_CAPACITY 3
-#define FULLNAME_CAPACITY 50
+#define ULOC_LANG_CAPACITY 3
+#define ULOC_COUNTRY_CAPACITY 3
+#define ULOC_FULLNAME_CAPACITY 50
 
 class U_COMMON_API Locale 
 {
@@ -532,11 +533,11 @@ private:
      */
     
     void setHashCode(void);
-    char language[LANG_CAPACITY];
-    char country[COUNTRY_CAPACITY];
+    char language[ULOC_LANG_CAPACITY];
+    char country[ULOC_COUNTRY_CAPACITY];
     char* variant;
     char* fullName;
-    char fullNameBuffer[FULLNAME_CAPACITY];
+    char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
     int32_t khashCode;
     
     static Locale *localeList;

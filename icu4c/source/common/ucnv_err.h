@@ -23,10 +23,10 @@
  *        UErrorCode err = U_ZERO_ERROR;
  *        UConverter* myConverter = T_UConverter_create("ibm-949", &err);
  *
- *        if (SUCCESS(err))
+ *        if (U_SUCCESS(err))
  *        {
- *       T_UConverter_setMissingUnicodeAction(myConverter, (MissingUnicodeAction)MissingUnicodeAction_STOP, &err);
- *       T_UConverter_setMissingCharAction(myConverter, (MissingCharAction)MissingCharAction_SUBSTITUTE, &err);
+ *       T_UConverter_setMissingUnicodeAction(myConverter, (MissingUnicodeAction)UCNV_FROM_U_CALLBACK_STOP, &err);
+ *       T_UConverter_setMissingCharAction(myConverter, (MissingCharAction)UCNV_TO_U_CALLBACK_SUBSTITUTE, &err);
  *        }
  *        ...
  *
@@ -44,7 +44,7 @@
 
 
 /*Functor STOPS at the ILLEGAL_SEQUENCE */
-CAPI void U_EXPORT2 MissingUnicodeAction_STOP (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (UConverter * _this,
 				     char **target,
 				     const char *targetLimit,
 				     const UChar ** source,
@@ -55,7 +55,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_STOP (UConverter * _this,
 
 
 /*Functor STOPS at the ILLEGAL_SEQUENCE */
-CAPI void U_EXPORT2 MissingCharAction_STOP (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (UConverter * _this,
 				  UChar ** target,
 				  const UChar * targetLimit,
 				  const char **source,
@@ -68,7 +68,7 @@ CAPI void U_EXPORT2 MissingCharAction_STOP (UConverter * _this,
 
 
 /*Functor SKIPs the ILLEGAL_SEQUENCE */
-CAPI void U_EXPORT2 MissingUnicodeAction_SKIP (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (UConverter * _this,
 				     char **target,
 				     const char *targetLimit,
 				     const UChar ** source,
@@ -83,7 +83,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_SKIP (UConverter * _this,
  * store the left over data in target, before transcoding the "source Stream"
  */
 
-CAPI void U_EXPORT2 MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 					   char **target,
 					   const char *targetLimit,
 					   const UChar ** source,
@@ -101,7 +101,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_SUBSTITUTE (UConverter * _this,
  * store the left over data in target, before transcoding the "source Stream"
  */
 
-CAPI void U_EXPORT2 MissingUnicodeAction_SUBSTITUTEwithValue (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 						    char **target,
 						    const char *targetLimit,
 						    const UChar ** source,
@@ -112,7 +112,7 @@ CAPI void U_EXPORT2 MissingUnicodeAction_SUBSTITUTEwithValue (UConverter * _this
 
 
 /*Functor SKIPs the ILLEGAL_SEQUENCE */
-CAPI void U_EXPORT2 MissingCharAction_SKIP (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (UConverter * _this,
 				  UChar ** target,
 				  const UChar * targetLimit,
 				  const char **source,
@@ -127,7 +127,7 @@ CAPI void U_EXPORT2 MissingCharAction_SKIP (UConverter * _this,
  * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  */
-CAPI void U_EXPORT2 MissingCharAction_SUBSTITUTE (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 					UChar ** target,
 					const UChar * targetLimit,
 					const char **source,
@@ -143,7 +143,7 @@ CAPI void U_EXPORT2 MissingCharAction_SUBSTITUTE (UConverter * _this,
  * store the left over data in target, before transcoding the "source Stream"
  */
 
-CAPI void U_EXPORT2 MissingCharAction_SUBSTITUTEwithValue (UConverter * _this,
+U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
 						 UChar ** target,
 						 const UChar * targetLimit,
 						 const char **source,

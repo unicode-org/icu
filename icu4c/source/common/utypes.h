@@ -14,7 +14,7 @@
 *
 *   Date        Name        Description
 *   12/11/96    helena      Creation.
-*   02/27/97    aliu        Added typedefs for ClassID, int8, int16, int32,
+*   02/27/97    aliu        Added typedefs for UClassID, int8, int16, int32,
 *                           uint8, uint16, and uint32.
 *   04/01/97    aliu        Added XP_CPLUSPLUS and modified to work under C as
 *                            well as C++.
@@ -112,17 +112,17 @@ typedef uint16_t UChar;
 
 
 /*===========================================================================*/
-/* For C wrappers, we use the symbol CAPI.                                   */
+/* For C wrappers, we use the symbol U_CAPI.                                   */
 /* This works properly if the includer is C or C++.                          */
-/* Functions are declared   CAPI return-type U_EXPORT2 function-name() ...   */
+/* Functions are declared   U_CAPI return-type U_EXPORT2 function-name() ...   */
 /*===========================================================================*/
 
 #ifdef XP_CPLUSPLUS
-#   define C_FUNC extern "C"
+#   define U_CFUNC extern "C"
 #else
-#   define C_FUNC
+#   define U_CFUNC
 #endif
-#define CAPI C_FUNC U_EXPORT
+#define U_CAPI U_CFUNC U_EXPORT
 
 
 /* Define NULL pointer value  if it isn't already defined */
@@ -149,21 +149,21 @@ typedef uint16_t UChar;
 typedef double UDate;
 
 /* Common time manipulation constants */
-#define kMillisPerSecond        (1000)
-#define kMillisPerMinute       (60000)
-#define kMillisPerHour       (3600000)
-#define kMillisPerDay       (86400000)
+#define U_MILLIS_PER_SECOND        (1000)
+#define U_MILLIS_PER_MINUTE       (60000)
+#define U_MILLIS_PER_HOUR       (3600000)
+#define U_MILLIS_PER_DAY       (86400000)
 
 
 /*===========================================================================*/
-/* ClassID-based RTTI */
+/* UClassID-based RTTI */
 /*===========================================================================*/
 
 /**
- * ClassID is used to identify classes without using RTTI, since RTTI
+ * UClassID is used to identify classes without using RTTI, since RTTI
  * is not yet supported by all C++ compilers.  Each class hierarchy which needs
  * to implement polymorphic clone() or operator==() defines two methods,
- * described in detail below.  ClassID values can be compared using
+ * described in detail below.  UClassID values can be compared using
  * operator==(). Nothing else should be done with them.
  *
  * getDynamicClassID() is declared in the base class of the hierarchy as
@@ -171,12 +171,12 @@ typedef double UDate;
  *
  *      class Base {
  *      public:
- *          virtual ClassID getDynamicClassID() const = 0;
+ *          virtual UClassID getDynamicClassID() const = 0;
  *      }
  *
  *      class Derived {
  *      public:
- *          virtual ClassID getDynamicClassID() const
+ *          virtual UClassID getDynamicClassID() const
  *            { return Derived::getStaticClassID(); }
  *      }
  *
@@ -185,18 +185,18 @@ typedef double UDate;
  *
  *      class Derived {
  *      public:
- *          static ClassID getStaticClassID();
+ *          static UClassID getStaticClassID();
  *      private:
  *          static char fgClassID;
  *      }
  *
  *      // In Derived.cpp:
- *      ClassID Derived::getStaticClassID()
- *        { return (ClassID)&Derived::fgClassID; }
+ *      UClassID Derived::getStaticClassID()
+ *        { return (UClassID)&Derived::fgClassID; }
  *      char Derived::fgClassID = 0; // Value is irrelevant
  */
 
-typedef void* ClassID;
+typedef void* UClassID;
 
 /*===========================================================================*/
 /* Shared library/DLL import-export API control                              */
@@ -257,11 +257,11 @@ typedef enum UErrorCode UErrorCode;
 /* Use the following to determine if an UErrorCode represents */
 /* operational success or failure. */
 #ifdef XP_CPLUSPLUS
-inline bool_t SUCCESS(UErrorCode code) { return (bool_t)(code<=U_ZERO_ERROR); }
-inline bool_t FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
+inline bool_t U_SUCCESS(UErrorCode code) { return (bool_t)(code<=U_ZERO_ERROR); }
+inline bool_t U_FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
 #else
-#define SUCCESS(x) ((x)<=U_ZERO_ERROR)
-#define FAILURE(x) ((x)>U_ZERO_ERROR)
+#define U_SUCCESS(x) ((x)<=U_ZERO_ERROR)
+#define U_FAILURE(x) ((x)>U_ZERO_ERROR)
 #endif
 
 

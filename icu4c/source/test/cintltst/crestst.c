@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *  06/14/99     stephen           Updated for RB API changes (no suffix).
 *********************************************************************************
 */
@@ -169,7 +169,7 @@ void TestConstruction1()
   test1=ures_open(directory, NULL, &err);
   test2=ures_open(directory, locale, &err);
 
-  if(FAILURE(err))
+  if(U_FAILURE(err))
     {
       log_err("construction did not succeed :  %s \n", myErrorName(status));
       return;
@@ -179,7 +179,7 @@ void TestConstruction1()
   result2= ures_get(test2, "string_in_Default_te_te_IN", &err);
 
 
-  if (FAILURE(err)) {
+  if (U_FAILURE(err)) {
 
     log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(status));
     return;
@@ -214,14 +214,14 @@ void TestConstruction2()
   log_verbose("Testing ures_openW().......\n");
 
   test4=ures_openW(widedirectory, locale, &err);
-  if(FAILURE(err)){
+  if(U_FAILURE(err)){
     log_err("Error in the construction using ures_openW():  %s\n", myErrorName(err));
     return;
   }
 
   result4=ures_get(test4, "string_in_Default_te_te_IN", &err);
 
-  if (FAILURE(err)) {
+  if (U_FAILURE(err)) {
     log_err("Something threw an error in TestConstruction()  %s\n", myErrorName(err));
     return;
   }
@@ -374,7 +374,7 @@ bool_t testTag(const char* frag,
       status = U_ZERO_ERROR;
 
       ures_get(theBundle, tag, &status);
-      if(SUCCESS(status))
+      if(U_SUCCESS(status))
 	{
 	  status = U_ZERO_ERROR;
 	  string=ures_get(theBundle, tag, &status);
@@ -385,7 +385,7 @@ bool_t testTag(const char* frag,
       CONFIRM_ErrorCode(status, expected_resource_status);
 
 
-      if(SUCCESS(status)){
+      if(U_SUCCESS(status)){
 	expected_string=(UChar*)malloc(sizeof(UChar)*(u_strlen(base) + 3));
 	u_strcpy(expected_string,base);
 	
@@ -426,7 +426,7 @@ bool_t testTag(const char* frag,
 
       index=j;
       ures_getArrayItem(theBundle, tag,index , &status);
-      if(SUCCESS(status))
+      if(U_SUCCESS(status))
         string=ures_getArrayItem(theBundle, tag, index, &status);
 
 
@@ -437,7 +437,7 @@ bool_t testTag(const char* frag,
 
       CONFIRM_ErrorCode(status,expected_status);
 
-      if (SUCCESS(status))
+      if (U_SUCCESS(status))
             {
           UChar element[3];
 
@@ -477,7 +477,7 @@ bool_t testTag(const char* frag,
       row=k;
       col=j;
       ures_get2dArrayItem( theBundle, tag, row, col, &status);
-      if(SUCCESS(status))
+      if(U_SUCCESS(status))
         string=ures_get2dArrayItem(theBundle, tag, row, col, &status);
 
 
@@ -486,7 +486,7 @@ bool_t testTag(const char* frag,
 
       CONFIRM_ErrorCode(status,expected_status);
 
-      if (SUCCESS(status))
+      if (U_SUCCESS(status))
 	{
           UChar element[3];
           u_strcpy(expected_string,base);
@@ -529,7 +529,7 @@ bool_t testTag(const char* frag,
 
 
       ures_getTaggedArrayItem( theBundle, tag, item_tag, &status);
-      if(SUCCESS(status))
+      if(U_SUCCESS(status))
         string=ures_getTaggedArrayItem(theBundle, tag, item_tag, &status);
 
 
@@ -583,7 +583,7 @@ void TestFallback()
   
   log_verbose("Opening fr_FR..");
   fr_FR = ures_open(NULL, "fr_FR", &status);
-  if(FAILURE(status))
+  if(U_FAILURE(status))
     {
       log_err("Couldn't open fr_FR - %d\n", status);
       return;

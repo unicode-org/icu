@@ -7052,7 +7052,7 @@ void CollationISOTest::TestAll( char* par )
         testArray[i] = new UnicodeString(testCases[i], 1);
         keyArray[i] = new CollationKey();
         myCollation->getCollationKey(*testArray[i], *keyArray[i], status);
-        if (FAILURE(status)) {
+        if (U_FAILURE(status)) {
             err("Creating collation key failed");
             return;
         }

@@ -39,7 +39,7 @@ UnicodeConverterCPP::UnicodeConverterCPP(const char* name, UErrorCode& err)
 
 UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& err)
 {
-  char myName[MAX_CONVERTER_NAME_LENGTH];
+  char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
   int i;
   name.extract(0, i = name.size(), myName);
   myName[i]='\0';
@@ -48,7 +48,7 @@ UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& 
 
 
 UnicodeConverterCPP::UnicodeConverterCPP(int32_t codepageNumber,
-                                         UCNV_PLATFORM platform,
+                                         UConverterPlatform platform,
                                          UErrorCode& err)
 {
     myUnicodeConverter = ucnv_openCCSID(codepageNumber,
@@ -122,7 +122,7 @@ UnicodeConverterCPP::fromUnicodeString(char*                    target,
   UConverter myConverter;
   char *myTarget = NULL;
 
-  if (FAILURE(err)) return;
+  if (U_FAILURE(err)) return;
 
   if ((myUnicodeConverter == NULL) || source.isBogus() || (targetSize <= 0))
     {
@@ -166,7 +166,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
   int32_t myTargetUCharsLength = 0;
   UConverter myConverter;
 
-  if (FAILURE(err)) return;
+  if (U_FAILURE(err)) return;
   if ((myUnicodeConverter == NULL) || target.isBogus() || (sourceSize <= 0))
     {
       err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -319,13 +319,13 @@ UnicodeConverterCPP::getCodepage(UErrorCode& err) const
     return ucnv_getCCSID(myUnicodeConverter, &err);
 }
 
-UCNV_ToUCallBack
+UConverterToUCallback
 UnicodeConverterCPP::getMissingCharAction() const
 {
     return ucnv_getToUCallBack(myUnicodeConverter);
 }
 
-UCNV_FromUCallBack
+UConverterFromUCallback
 UnicodeConverterCPP::getMissingUnicodeAction() const
 {
     return ucnv_getFromUCallBack(myUnicodeConverter);
@@ -333,14 +333,14 @@ UnicodeConverterCPP::getMissingUnicodeAction() const
 
 
 void
-UnicodeConverterCPP::setMissingCharAction(UCNV_ToUCallBack  action,
+UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  action,
                                           UErrorCode&         err)
 {
     ucnv_setToUCallBack(myUnicodeConverter, action, &err);
 }
 
 void
-UnicodeConverterCPP::setMissingUnicodeAction(UCNV_FromUCallBack   action,
+UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   action,
                                              UErrorCode&             err)
 {
     ucnv_setFromUCallBack(myUnicodeConverter, action, &err);
@@ -354,14 +354,14 @@ UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
 
   UErrorCode err = U_ZERO_ERROR;
   ResourceBundle rb("", displayLocale, err);
-  char tablename[MAX_CONVERTER_NAME_LENGTH];
+  char tablename[UCNV_MAX_CONVERTER_NAME_LENGTH];
 
-  if (SUCCESS(err))
+  if (U_SUCCESS(err))
     {
       rb.getString(UnicodeString(tablename), displayName, err);
     }
 
-  if (FAILURE(err))
+  if (U_FAILURE(err))
     {
       /*Error While creating the resource bundle use the internal name instead*/
       displayName.remove();
@@ -374,13 +374,13 @@ UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
 }
 
 
-UCNV_PLATFORM
+UConverterPlatform
 UnicodeConverterCPP::getCodepagePlatform(UErrorCode &err) const
 {
     return ucnv_getPlatform(myUnicodeConverter, &err);
 }
 
-UCNV_TYPE UnicodeConverterCPP::getType() const
+UConverterType UnicodeConverterCPP::getType() const
 {
   return ucnv_getType(myUnicodeConverter);
 }

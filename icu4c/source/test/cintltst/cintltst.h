@@ -28,7 +28,7 @@ The main root for C API tests
 #include "utypes.h"
 #include "ctest.h"
 
-C_FUNC void addAllTests(TestNode** root);
+U_CFUNC void addAllTests(TestNode** root);
 
 /**
  *complete a relative path to a full pathname, and convert to platform-specific syntax. 
@@ -37,19 +37,19 @@ C_FUNC void addAllTests(TestNode** root);
  * @maxsize the maximum size of the string
  * @relPath the relative path name
  */
-C_FUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char* relPath ) ;
+U_CFUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char* relPath ) ;
 /**
  *Fetches the current path name of the test directory
  *returns the path of the test directory
  */
-C_FUNC const char* ctest_getTestDirectory(void);
+U_CFUNC const char* ctest_getTestDirectory(void);
 /**
  *
  * sets the path of the test directory
  * @param newDir the test directory to be set
  */
 
-C_FUNC void ctest_setTestDirectory(const char* newDir); 
+U_CFUNC void ctest_setTestDirectory(const char* newDir); 
 /**
  * Convert a const UChar* into a char*
  * Caller owns storage, but in practice this function
@@ -58,7 +58,7 @@ C_FUNC void ctest_setTestDirectory(const char* newDir);
  * @return new char* to the unichars in host format
  */
  
-C_FUNC char *austrdup(const UChar* unichars);
+U_CFUNC char *austrdup(const UChar* unichars);
 
 
 /**

@@ -69,44 +69,44 @@ void TestNumberFormat()
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
     def=unum_open(style, NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error in creating NumberFormat default using unum_open(): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open() with french locale and default style(decimal)\n");
     fr=unum_open(style, "fr_FR", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat (french): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open(currency,NULL,status)\n");
     style=UNUM_CURRENCY;
     /* Can't hardcode the result to assume the default locale is "en_US". */
 	cur_def=unum_open(style, "en_US", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using \n unum_open(currency, NULL, &status) %s\n",
                         myErrorName(status) );
 
     log_verbose("\nTesting unum_open(currency, frenchlocale, status)\n");
     cur_fr=unum_open(style, "fr_FR", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(currency, french, &status): %s\n", 
                 myErrorName(status));
 
     log_verbose("\nTesting unum_open(percent, NULL, status)\n");
     style=UNUM_PERCENT;
     per_def=unum_open(style, NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(percent, NULL, &status): %s\n", myErrorName(status));
 
     log_verbose("\nTesting unum_open(percent,frenchlocale, status)\n");
     per_fr=unum_open(style, "fr_FR", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(percent, french, &status): %s\n", myErrorName(status));
 
     /*
     log_verbose("\nTesting unum_open(spellout, NULL, status)");
     style=UNUM_SPELLOUT;
     spellout_def=unum_open(style, NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("Error: could not create NumberFormat using unum_open(spellout, NULL, &status): %s\n", myErrorName(status));
     */
     
@@ -140,7 +140,7 @@ void TestNumberFormat()
         unum_format(cur_def, l, result, resultlength, &pos1, &status);
     }
 
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
     }
@@ -163,7 +163,7 @@ free(result);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_formatDouble(cur_def, d, result, resultlength, &pos2, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
@@ -177,7 +177,7 @@ free(result);
     parsepos=0;
     log_verbose("\nTesting unum_parseDouble()\n");
     d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
     }
@@ -200,14 +200,14 @@ free(result);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(per_fr, l, result, resultlength, &pos1, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
     
     
     l1=unum_parse(per_fr, result, u_strlen(result), &parsepos, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("parse failed. The error is  : %s\n", myErrorName(status));
     }
@@ -223,7 +223,7 @@ free(result);
     log_verbose("\nTesting unum_openPattern()\n");
     u_uastrcpy(temp1, "#,##0.0#;(#,##0.0#)");
     pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
     log_err("error in unum_openPattern(): %s\n", myErrorName(status) );;
     }
@@ -241,7 +241,7 @@ free(result);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_toPattern(pattern, FALSE, result, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in extracting the pattern from UNumberFormat: %s\n", myErrorName(status));
     }
@@ -267,13 +267,13 @@ free(temp1);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_toPattern(cur_def, FALSE, result, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in extracting the pattern from UNumberFormat: %s\n", myErrorName(status));
     }
 
     cur_frpattern=unum_openPattern(result, u_strlen(result), "fr_FR", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in unum_openPattern(): %s\n", myErrorName(status));
     }
@@ -293,7 +293,7 @@ free(result);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(cur_def, l, result, resultlength, &pos1, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
@@ -301,7 +301,7 @@ free(result);
 
     /*set the symbols of cur_frpattern to cur_def */
     unum_setSymbols(cur_frpattern, &symbols1, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Fail: error in unum_setSymbols: %s\n", myErrorName(status));
     }
 
@@ -337,7 +337,7 @@ free(result);
         temp1=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_format(cur_frpattern, l, temp1, resultlength, &pos1, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
@@ -351,17 +351,17 @@ free(temp1);
     log_verbose("\nTesting getting and setting text attributes\n");
     resultlength=5;
     unum_getTextAttribute(cur_fr, UNUM_NEGATIVE_SUFFIX, temp, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
     }
     unum_setTextAttribute(cur_def, UNUM_NEGATIVE_SUFFIX, temp, u_strlen(temp), &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
     }
     unum_getTextAttribute(cur_def, UNUM_NEGATIVE_SUFFIX, suffix, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
     }
@@ -376,12 +376,12 @@ free(temp1);
     /*checking some more text setter conditions */
     u_uastrcpy(prefix, "+");
     unum_setTextAttribute(def, UNUM_POSITIVE_PREFIX, prefix, u_strlen(prefix) , &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in setting the text attributes : %s\n", myErrorName(status));
     }
     unum_getTextAttribute(def, UNUM_POSITIVE_PREFIX, temp, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in getting the text attributes : %s\n", myErrorName(status));
     }
@@ -393,12 +393,12 @@ free(temp1);
     
     u_uastrcpy(prefix, "+");
     unum_setTextAttribute(def, UNUM_NEGATIVE_PREFIX, prefix, u_strlen(prefix), &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in setting the text attributes : %s\n", myErrorName(status));
     }
     unum_getTextAttribute(def, UNUM_NEGATIVE_PREFIX, temp, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in getting the text attributes : %s\n", myErrorName(status));
     }
@@ -409,13 +409,13 @@ free(temp1);
  
     u_uastrcpy(suffix, "+");
     unum_setTextAttribute(def, UNUM_NEGATIVE_SUFFIX, suffix, u_strlen(suffix) , &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in setting the text attributes: %s\n", myErrorName(status));
     }
     
     unum_getTextAttribute(def, UNUM_NEGATIVE_SUFFIX, temp, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in getting the text attributes : %s\n", myErrorName(status));
     }

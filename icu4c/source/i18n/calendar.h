@@ -166,8 +166,8 @@ public:
         MINUTE,               // Example: 0..59
         SECOND,               // Example: 0..59
         MILLISECOND,          // Example: 0..999
-        ZONE_OFFSET,          // Example: -12*kMillisPerHour..12*kMillisPerHour
-        DST_OFFSET,           // Example: 0 or kMillisPerHour
+        ZONE_OFFSET,          // Example: -12*U_MILLIS_PER_HOUR..12*U_MILLIS_PER_HOUR
+        DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
         FIELD_COUNT,
 
         DAY_OF_MONTH = DATE   // Synonyms
@@ -734,13 +734,13 @@ public:
      * Concrete subclasses of Calendar must implement getDynamicClassID() and also a
      * static method and data member:
      *
-     *      static ClassID getStaticClassID() { return (ClassID)&fgClassID; }
+     *      static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
      *      static char fgClassID;
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const = 0;
 
 protected:
 

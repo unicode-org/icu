@@ -70,7 +70,7 @@ void CollationRegressionTest::Test4048446(char *par)
 
     while (i1->next(status) != CollationElementIterator::NULLORDER)
     {
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("error calling next()");
 
@@ -253,7 +253,7 @@ void CollationRegressionTest::Test4058613(char *par)
     
     Locale::setDefault(Locale::KOREAN, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("Could not set default locale to Locale::KOREAN");
         return;
@@ -263,7 +263,7 @@ void CollationRegressionTest::Test4058613(char *par)
     
     c = Collator::createInstance(status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Could not create a Korean collator");
         Locale::setDefault(oldDefault, status);
@@ -297,7 +297,7 @@ void CollationRegressionTest::Test4059820(char *par)
     
     c = new RuleBasedCollator(rules, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failure building a collator.");
         delete c;
@@ -332,7 +332,7 @@ void CollationRegressionTest::Test4060154(char *par)
     
     c = new RuleBasedCollator(rules, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("failure building collator.");
         delete c;
@@ -395,7 +395,7 @@ void CollationRegressionTest::Test4062418(char *par)
     
     c = (RuleBasedCollator *) Collator::createInstance(Locale::FRANCE, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for Locale::FRANCE");
         delete c;
@@ -474,7 +474,7 @@ void CollationRegressionTest::Test4066696(char *par)
     
     c = (RuleBasedCollator *)Collator::createInstance(Locale::FRANCE, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failure creating collator for Locale::FRANCE");
         delete c;
@@ -558,7 +558,7 @@ void CollationRegressionTest::Test4078588(char *par)
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *rbc = new RuleBasedCollator("< a < bb", status);
 
-    if (rbc == NULL || FAILURE(status))
+    if (rbc == NULL || U_FAILURE(status))
     {
         errln("Failed to create RuleBasedCollator.");
         delete rbc;
@@ -619,7 +619,7 @@ void CollationRegressionTest::Test4087241(char *par)
     
     c = (RuleBasedCollator *) Collator::createInstance(da_DK, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for da_DK locale");
         delete c;
@@ -672,7 +672,7 @@ void CollationRegressionTest::Test4092260(char *par)
     
     c = Collator::createInstance(el, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for el locale.");
         delete c;
@@ -697,7 +697,7 @@ void CollationRegressionTest::Test4095316(char *par)
     Locale el_GR("el", "GR");
     Collator *c = Collator::createInstance(el_GR, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for el_GR locale");
         delete c;
@@ -727,7 +727,7 @@ void CollationRegressionTest::Test4101940(char *par)
     
     c = new RuleBasedCollator(rules, status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create RuleBasedCollator");
         delete c;
@@ -815,7 +815,7 @@ void CollationRegressionTest::Test4124632(char *par)
     
     coll = Collator::createInstance(Locale::JAPAN, status);
     
-    if (coll == NULL || FAILURE(status))
+    if (coll == NULL || U_FAILURE(status))
     {
         errln("Failed to create collator for Locale::JAPAN");
         delete coll;
@@ -826,7 +826,7 @@ void CollationRegressionTest::Test4124632(char *par)
     
     coll->getCollationKey(test, key, status);
 
-    if (key.isBogus() || FAILURE(status))
+    if (key.isBogus() || U_FAILURE(status))
     {
         errln("CollationKey creation failed.");
     }
@@ -846,7 +846,7 @@ void CollationRegressionTest::Test4132736(char *par)
     
     c = Collator::createInstance(Locale::FRANCE, status);
     
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Failed to create a collator for Locale::FRANCE");
         delete c;
@@ -936,7 +936,7 @@ void CollationRegressionTest::Test4141640(char *par)
         
         c = Collator::createInstance(locales[i], status);
 
-        if (c == NULL || FAILURE(status))
+        if (c == NULL || U_FAILURE(status))
         {
             UnicodeString msg, localeName;
 
@@ -968,7 +968,7 @@ void CollationRegressionTest::Test4139572(char *par)
     
     col = Collator::createInstance(l, status);
 
-    if (col == NULL || FAILURE(status))
+    if (col == NULL || U_FAILURE(status))
     {
         errln("Failed to create a collator for es_es locale.");
         delete col;
@@ -980,7 +980,7 @@ void CollationRegressionTest::Test4139572(char *par)
     // this spanish phrase kills it!
     col->getCollationKey("Nombre De Objeto", key, status);
 
-    if (key.isBogus() || FAILURE(status))
+    if (key.isBogus() || U_FAILURE(status))
     {
         errln("Error creating CollationKey for \"Nombre De Ojbeto\"");
     }
@@ -1042,7 +1042,7 @@ void CollationRegressionTest::Test4146160(char *par)
     
     mc = new My4146160Collator(*en_us, status);
 
-    if (mc == NULL || FAILURE(status))
+    if (mc == NULL || U_FAILURE(status))
     {
         errln("Failed to create a My4146160Collator.");
         delete mc;
@@ -1051,7 +1051,7 @@ void CollationRegressionTest::Test4146160(char *par)
 
     mc->getCollationKey("1", key, status);
 
-    if (key.isBogus() || FAILURE(status))
+    if (key.isBogus() || U_FAILURE(status))
     {
         errln("Failure to get a CollationKey from a My4146160Collator.");
         delete mc;
@@ -1113,7 +1113,7 @@ void CollationRegressionTest::compareArray(Collator &c,
 
         c.getCollationKey(source, sourceKey, status);
 
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("Couldn't get collationKey for source");
             continue;
@@ -1121,7 +1121,7 @@ void CollationRegressionTest::compareArray(Collator &c,
 
         c.getCollationKey(target, targetKey, status);
 
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("Couldn't get collationKey for target");
             continue;

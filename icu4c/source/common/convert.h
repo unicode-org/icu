@@ -68,7 +68,7 @@ class U_COMMON_API UnicodeConverterCPP
   *
   */
  UnicodeConverterCPP(int32_t                      codepageNumber,
-             UCNV_PLATFORM  platform,
+             UConverterPlatform  platform,
              UErrorCode&                   err);
 
  ~UnicodeConverterCPP();
@@ -182,7 +182,7 @@ int8_t getMinBytesPerChar(void) const;
  * e.g. SBCS, MBCS, DBCS, UTF8, UTF16_BE, UTF16_LE, ISO_2022, EBCDIC_STATEFUL, LATIN_1
  * @return the type of the converter
  */
-UCNV_TYPE getType(void) const;
+UConverterType getType(void) const;
 
 /**
  *Gets the "starter" bytes for the converters of type MBCS
@@ -256,7 +256,7 @@ const char*  getName( UErrorCode&  err) const;
   * @return the action constant when a Unicode character cannot be converted to a
   * codepage equivalent
   */
- UCNV_ToUCallBack   getMissingCharAction(void) const;
+ UConverterToUCallback   getMissingCharAction(void) const;
 
 /**
  * Return the current setting action taken when a unicode character is missing.
@@ -264,14 +264,14 @@ const char*  getName( UErrorCode&  err) const;
  * @return the action constant when a codepage character cannot be converted to a
  * Unicode eqivalent
  */
- UCNV_FromUCallBack   getMissingUnicodeAction(void) const;
+ UConverterFromUCallback   getMissingUnicodeAction(void) const;
 
  /**
   * Sets the current setting action taken when a character from a codepage is
   * missing. (Currently STOP or SUBSTITUTE).
   * @param action the action constant if an equivalent codepage character is missing
   */
- void  setMissingCharAction(UCNV_ToUCallBack     action,
+ void  setMissingCharAction(UConverterToUCallback     action,
                 UErrorCode&            err);
 
 /**
@@ -281,7 +281,7 @@ const char*  getName( UErrorCode&  err) const;
  * @param action the action constant if an equivalent Unicode character is missing
  * @param err the error status code
 */
- void  setMissingUnicodeAction(UCNV_FromUCallBack  action,
+ void  setMissingUnicodeAction(UConverterFromUCallback  action,
                    UErrorCode&            err);
 /**
  * Returns the localized name of the UnicodeConverter, if for any reason it is
@@ -298,7 +298,7 @@ void getDisplayName(const Locale&   displayLocale,
  * @param err the error code status
  * @return the codepages platform
  */
-UCNV_PLATFORM  getCodepagePlatform(UErrorCode& err) const;
+UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
 
 
  UnicodeConverterCPP&   operator=(const UnicodeConverterCPP& that);

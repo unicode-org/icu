@@ -114,7 +114,7 @@ UnicodeString toString(const Formattable& f) {
         {
             UErrorCode status = U_ZERO_ERROR;
             SimpleDateFormat fmt(status);
-            if (SUCCESS(status)) {
+            if (U_SUCCESS(status)) {
                 FieldPosition pos;
                 fmt.format(f.getDate(), s, pos);
                 s.insert(0, "[Date:");

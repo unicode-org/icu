@@ -186,10 +186,10 @@ Calendar::operator=(const Calendar &right)
 Calendar*
 Calendar::createInstance(UErrorCode& success)
 {
-    if (FAILURE(success)) return 0;
+    if (U_FAILURE(success)) return 0;
     // right now, createInstance will always return an instance of GregorianCalendar
     Calendar* c = new GregorianCalendar(success);
-    if (FAILURE(success)) { delete c; c = 0; }
+    if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
 
@@ -198,10 +198,10 @@ Calendar::createInstance(UErrorCode& success)
 Calendar*
 Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 {
-    if (FAILURE(success)) return 0;
+    if (U_FAILURE(success)) return 0;
     // since the Locale isn't specified, use the default locale
     Calendar* c = new GregorianCalendar(zone, Locale::getDefault(), success);
-    if (FAILURE(success)) { delete c; c = 0; }
+    if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
 
@@ -210,10 +210,10 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 Calendar*
 Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 {
-    if (FAILURE(success)) return 0;
+    if (U_FAILURE(success)) return 0;
     // since the TimeZone isn't specfied, use the default time zone
     Calendar* c = new GregorianCalendar(TimeZone::createDefault(), aLocale, success);
-    if (FAILURE(success)) { delete c; c = 0; }
+    if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
 
@@ -222,7 +222,7 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar*
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         delete zone;
         return 0;
     }
@@ -230,7 +230,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     if (c == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
         delete zone;
-    } else if (FAILURE(success)) {
+    } else if (U_FAILURE(success)) {
         delete c;
         c = 0;
     }
@@ -242,9 +242,9 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 Calendar*
 Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
 {
-    if (FAILURE(success)) return 0;
+    if (U_FAILURE(success)) return 0;
     Calendar* c = new GregorianCalendar(zone, aLocale, success);
-    if (FAILURE(success)) { delete c; c = 0; }
+    if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
 
@@ -343,7 +343,7 @@ Calendar::getAvailableLocales(int32_t& count)
 UDate
 Calendar::getNow()
 {
-    return (UDate)icu_getUTCtime() * kMillisPerSecond; // return as milliseconds
+    return (UDate)icu_getUTCtime() * U_MILLIS_PER_SECOND; // return as milliseconds
 }
 
 // -------------------------------------
@@ -355,7 +355,7 @@ Calendar::getNow()
 double 
 Calendar::getTimeInMillis(UErrorCode& status) const
 {
-    if(FAILURE(status)) 
+    if(U_FAILURE(status)) 
         return 0.0;
 
     if ( ! fIsTimeSet) 
@@ -371,7 +371,7 @@ Calendar::getTimeInMillis(UErrorCode& status) const
  */
 void 
 Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
-    if(FAILURE(status)) 
+    if(U_FAILURE(status)) 
         return;
 
     fIsTimeSet = TRUE;
@@ -392,8 +392,8 @@ Calendar::get(EDateFields field, UErrorCode& status) const
     // field values are only computed when actually requested; for more on when computation
     // of various things happens, see the "data flow in Calendar" description at the top
     // of this file
-    if (SUCCESS(status)) ((Calendar*)this)->complete(status); // Cast away const
-    return SUCCESS(status) ? fFields[field] : 0;
+    if (U_SUCCESS(status)) ((Calendar*)this)->complete(status); // Cast away const
+    return U_SUCCESS(status) ? fFields[field] : 0;
 }
 
 // -------------------------------------
@@ -675,7 +675,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
     // of the characters in the string, or if the value is not in the range
     // 1..7.  (This is used to read the week-count data from the resource files;
     // ResourceBundle returns all data in string form, so we have to convert it here.)
-    if (FAILURE(status)) return 0;
+    if (U_FAILURE(status)) return 0;
 
     int32_t len = string.size();
     char *number = new char[1 + len];
@@ -710,12 +710,12 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     const UnicodeString *dateTimeElements;
     int32_t count;
 
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
     ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         status = U_USING_FALLBACK_ERROR;
         fFirstDayOfWeek = Calendar::SUNDAY;
@@ -724,7 +724,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     }
 
     dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
     if (count != 2)
     {
         status = U_INVALID_FORMAT_ERROR;
@@ -744,7 +744,7 @@ void
 Calendar::updateTime(UErrorCode& status) 
 {
     computeTime(status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         return;
         
     // If we are lenient, we need to recompute the fields to normalize

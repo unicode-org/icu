@@ -266,7 +266,7 @@ typedef enum UCollationStrength UCollationStrength;
  * @return The total buffer size needed; if greater than resultLength,
  * the output was truncated.
  */
-CAPI int32_t
+U_CAPI int32_t
 u_normalize(const UChar*           source,
         int32_t                 sourceLength, 
         UNormalizationMode      mode, 
@@ -283,7 +283,7 @@ u_normalize(const UChar*           source,
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_openRules
  */
-CAPI UCollator*
+U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
@@ -301,7 +301,7 @@ ucol_open(    const    char         *loc,
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_open
  */
-CAPI UCollator*
+U_CAPI UCollator*
 ucol_openRules(    const    UChar        *rules,
         int32_t                 rulesLength,
         UNormalizationMode      mode,
@@ -313,7 +313,7 @@ ucol_openRules(    const    UChar        *rules,
  * Once closed, a UCollator should not be used.
  * @param coll The UCollator to close.
  */
-CAPI void
+U_CAPI void
 ucol_close(UCollator *coll);
 
 /**
@@ -331,7 +331,7 @@ ucol_close(UCollator *coll);
  * @see ucol_greaterOrEqual
  * @see ucol_equal
  */
-CAPI UCollationResult
+U_CAPI UCollationResult
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -351,7 +351,7 @@ ucol_strcoll(    const    UCollator    *coll,
  * @see ucol_greaterOrEqual
  * @see ucol_equal
  */
-CAPI bool_t
+U_CAPI bool_t
 ucol_greater(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -371,7 +371,7 @@ ucol_greater(    const    UCollator    *coll,
  * @see ucol_greater
  * @see ucol_equal
  */
-CAPI bool_t
+U_CAPI bool_t
 ucol_greaterOrEqual(    const    UCollator    *coll,
             const    UChar        *source,
             int32_t            sourceLength,
@@ -391,7 +391,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
  * @see ucol_greater
  * @see ucol_greaterOrEqual
  */
-CAPI bool_t
+U_CAPI bool_t
 ucol_equal(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -406,7 +406,7 @@ ucol_equal(    const    UCollator    *coll,
  * UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_setStrength
  */
-CAPI UCollationStrength
+U_CAPI UCollationStrength
 ucol_getStrength(const UCollator *coll);
 
 /**
@@ -418,7 +418,7 @@ ucol_getStrength(const UCollator *coll);
  * .       UChar *source, *target;
  * .       UErrorCode status = U_ZERO_ERROR;
  * .       UCollator *myCollation = ucol_open("en_US", status);
- * .       if (FAILURE(&status)) return;
+ * .       if (U_FAILURE(&status)) return;
  * .       ucol_setStrength(myCollation, UCOL_PRIMARY);
  * .       u_uastrcpy(source, "abc");
  * .       u_uastrcpy(target, "ABC");
@@ -431,7 +431,7 @@ ucol_getStrength(const UCollator *coll);
  * UCOL_SECONDARY, UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_getStrength
  */
-CAPI void
+U_CAPI void
 ucol_setStrength(    UCollator            *coll,
             UCollationStrength        strength);
 
@@ -444,7 +444,7 @@ ucol_setStrength(    UCollator            *coll,
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
  * @see ucol_setNormalization
  */
-CAPI UNormalizationMode
+U_CAPI UNormalizationMode
 ucol_getNormalization(const UCollator* coll);
 
 /**
@@ -456,7 +456,7 @@ ucol_getNormalization(const UCollator* coll);
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
  * @see ucol_getNormalization
  */
-CAPI void
+U_CAPI void
 ucol_setNormalization(  UCollator        *coll,
             UNormalizationMode    mode);
 
@@ -471,7 +471,7 @@ ucol_setNormalization(  UCollator        *coll,
  * @return The total buffer size needed; if greater than resultLength,
  * the output was truncated.
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_getDisplayName(    const    char        *objLoc,
             const    char        *dispLoc,
             UChar             *result,
@@ -486,7 +486,7 @@ ucol_getDisplayName(    const    char        *objLoc,
  * @return A locale for which collation rules are available, or 0 if none.
  * @see ucol_countAvailable
  */
-CAPI const char*
+U_CAPI const char*
 ucol_getAvailable(int32_t index);
 
 /**
@@ -496,7 +496,7 @@ ucol_getAvailable(int32_t index);
  * @return The number of locales for which collation rules are available.
  * @see ucol_getAvailable
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_countAvailable(void);
 
 /**
@@ -506,7 +506,7 @@ ucol_countAvailable(void);
  * @param length 
  * @return The collation rules.
  */
-CAPI const UChar*
+U_CAPI const UChar*
 ucol_getRules(    const    UCollator    *coll, 
         int32_t            *length);
 
@@ -521,7 +521,7 @@ ucol_getRules(    const    UCollator    *coll,
  * @return The size needed to fully store the sort key..
  * @see ucol_keyHashCode
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -536,7 +536,7 @@ ucol_getSortKey(const    UCollator    *coll,
  * @return A hash code for key.
  * @see ucol_getSortKey
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_keyHashCode(    const    uint8_t*    key, 
             int32_t        length);
 
@@ -599,7 +599,7 @@ typedef struct UCollationElements UCollationElements;
  * @param textLength The number of characters in text, or -1 if null-terminated
  * @param status A pointer to an UErrorCode to receive any errors.
  */
-CAPI UCollationElements*
+U_CAPI UCollationElements*
 ucol_openElements(    const    UCollator       *coll,
             const    UChar           *text,
             int32_t                  textLength,
@@ -622,7 +622,7 @@ ucol_openElements(    const    UCollator       *coll,
  * Once closed, a UCollationElements may no longer be used.
  * @param elems The UCollationElements to close.
  */
-CAPI void
+U_CAPI void
 ucol_closeElements(UCollationElements *elems);
 
 /**
@@ -632,7 +632,7 @@ ucol_closeElements(UCollationElements *elems);
  * @see ucol_next
  * @see ucol_previous
  */
-CAPI void
+U_CAPI void
 ucol_reset(UCollationElements *elems);
 
 /**
@@ -643,7 +643,7 @@ ucol_reset(UCollationElements *elems);
  * @return The next collation elements ordering, or \Ref{UCOL_NULLORDER} if the
  * end of the text is reached.
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_next(    UCollationElements    *elems,
         UErrorCode        *status);
 
@@ -655,7 +655,7 @@ ucol_next(    UCollationElements    *elems,
  * @return The previous collation elements ordering, or \Ref{UCOL_NULLORDER}
  * if the end of the text is reached.
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_previous(    UCollationElements    *elems,
         UErrorCode        *status);
 
@@ -668,7 +668,7 @@ ucol_previous(    UCollationElements    *elems,
  * @return The maximum length of any expansion sequences ending with the 
  * specified order.
  */
-CAPI int32_t
+U_CAPI int32_t
 ucol_getMaxExpansion(    const    UCollationElements    *elems,
             int32_t                order);
 
@@ -681,7 +681,7 @@ ucol_getMaxExpansion(    const    UCollationElements    *elems,
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getText
  */
-CAPI void
+U_CAPI void
 ucol_setText(    UCollationElements    *elems,
         const    UChar        *text,
         int32_t            textLength,
@@ -695,7 +695,7 @@ ucol_setText(    UCollationElements    *elems,
  * @return The offset of the current source character.
  * @see ucol_setOffset
  */
-CAPI UTextOffset
+U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems);
 
 /**
@@ -706,7 +706,7 @@ ucol_getOffset(const UCollationElements *elems);
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getOffset
  */
-CAPI void
+U_CAPI void
 ucol_setOffset(    UCollationElements    *elems,
         UTextOffset        offset,
         UErrorCode        *status);

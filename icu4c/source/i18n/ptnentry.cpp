@@ -63,7 +63,7 @@ PatternEntry::PatternEntry(int32_t newStrength,
   //
   UErrorCode status = U_ZERO_ERROR;
   Normalizer::normalize(newChars, decompMode, 0, chars, status);
-  if (FAILURE(status)) {
+  if (U_FAILURE(status)) {
     chars = newChars;
   }
 }

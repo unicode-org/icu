@@ -133,19 +133,6 @@ icu_getUTCtime()
 #endif
 }
 
-bool_t
-icu_isBigEndian()
-{
-  union
-  {
-    int16_t     fShort;
-    int8_t      fChars[2];
-  } testPattern;
-    
-  testPattern.fShort = 0x1234;
-  return (testPattern.fChars[0] == 0x12);
-}
-
 /*-----------------------------------------------------------------------------
   IEEE 754
   These methods detect and return NaN and infinity values for doubles
@@ -963,12 +950,12 @@ icu_nextDouble(double d, bool_t next)
 static char*
 u_topNBytesOfDouble(double* d, int n)
 {
-  return icu_isBigEndian() ? (char*)d : (char*)(d + 1) - n;
+  return U_IS_BIG_ENDIAN ? (char*)d : (char*)(d + 1) - n;
 }
 
 static char* u_bottomNBytesOfDouble(double* d, int n)
 {
-  return icu_isBigEndian() ? (char*)(d + 1) - n : (char*)d;
+  return U_IS_BIG_ENDIAN ? (char*)(d + 1) - n : (char*)d;
 }
 
 const char* icu_getDefaultCodepage()

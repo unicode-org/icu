@@ -214,7 +214,7 @@ public :
    * @see Locale#getDefault
    * The UErrorCode& err parameter is used to return status information to the user.
    * To check whether the construction succeeded or not, you should check
-   * the value of SUCCESS(err).  If you wish more detailed information, you
+   * the value of U_SUCCESS(err).  If you wish more detailed information, you
    * can check for informational error results which still indicate success.
    * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
    * example, 'de_CH' was requested, but nothing was found there, so 'de' was
@@ -238,7 +238,7 @@ public :
    * @see ResourceLoader
    * The UErrorCode& err parameter is used to return status information to the user.
    * To check whether the construction succeeded or not, you should check
-   * the value of SUCCESS(err).  If you wish more detailed information, you
+   * the value of U_SUCCESS(err).  If you wish more detailed information, you
    * can check for informational error results which still indicate success.
    * U_USING_FALLBACK_ERROR indicates that a fall back locale was used.  For
    * example, 'de_CH' was requested, but nothing was found there, so 'de' was
@@ -259,7 +259,7 @@ public :
    * <pre>
    * .       UErrorCode status = U_ZERO_ERROR;
    * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
-   * .       if (FAILURE(status)) return;
+   * .       if (U_FAILURE(status)) return;
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       // result would be Collator::EQUAL ("abc" == "ABC")
    * .       // (no primary difference between "abc" and "ABC")
@@ -284,7 +284,7 @@ public :
    * <pre>
    * .       UErrorCode status = U_ZERO_ERROR;
    * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
-   * .       if (FAILURE(status)) return;
+   * .       if (U_FAILURE(status)) return;
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       // result would be Collator::EQUAL ("abc" == "ABC")
    * .       // (no primary difference between "abc" and "ABC")
@@ -318,21 +318,21 @@ public :
    * <pre>
    * .       UErrorCode status = U_ZERO_ERROR;
    * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
-   * .       if (FAILURE(status)) return;
+   * .       if (U_FAILURE(status)) return;
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       UErrorCode key1Status, key2Status;
    * .       CollationKey CollationKey1
    * .       CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, key1Status);
    * .       CollationKey CollationKey2
    * .       CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, key2Status);
-   * .       if (FAILURE(key1Status) || FAILURE(key2Status)) { delete myCollation; return; }
+   * .       if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) { delete myCollation; return; }
    * .       // Use CollationKey::compare() to compare the sort keys
    * .       // result would be 0 (CollationKey1 == CollationKey2)
    * .       int result = CollationKey1.compare(CollationKey2);
    * .       myCollation->setStrength(Collator::TERTIARY);
    * .       CollationKey1 = myCollation->getCollationKey("abc", CollationKey1, key1Status);
    * .       CollationKey2 = myCollation->getCollationKey("ABC", CollationKey2, key2Status);
-   * .       if (FAILURE(key1Status) || FAILURE(key2Status)) { delete myCollation; return; }
+   * .       if (U_FAILURE(key1Status) || U_FAILURE(key2Status)) { delete myCollation; return; }
    * .       // Use CollationKey::compareTo to compare the collation keys
    * .       // result would be -1 (CollationKey1 &lt; CollationKey2)
    * .       result = CollationKey1.compareTo(CollationKey2);
@@ -416,7 +416,7 @@ public :
    * <pre>
    * .       UErrorCode status = U_ZERO_ERROR;
    * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
-   * .       if (FAILURE(status)) return;
+   * .       if (U_FAILURE(status)) return;
    * .       myCollation->setStrength(Collator::PRIMARY);
    * .       // result will be "abc" == "ABC"
    * .       // tertiary differences will be ignored
@@ -464,14 +464,14 @@ public :
    * Concrete subclasses of Format must implement getDynamicClassID()
    * and also a static method and data member:
    *
-   *      static ClassID getStaticClassID() { return (ClassID)&fgClassID; }
+   *      static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
    *      static char fgClassID;
    *
    * @return          The class ID for this object. All objects of a
    *                  given class have the same class ID.  Objects of
    *                  other classes have different class IDs.
    */
-  virtual ClassID getDynamicClassID(void) const = 0;
+  virtual UClassID getDynamicClassID(void) const = 0;
 
 protected:
   /**

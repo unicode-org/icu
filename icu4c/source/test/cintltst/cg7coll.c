@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *********************************************************************************
 /**
  * G7CollationTest is a third level test class.  This test performs the examples 
@@ -198,7 +198,7 @@ void TestG7Locales()
     {
         status = U_ZERO_ERROR;
         myCollation = ucol_open(locales[i], &status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             log_err("Error in creating collator in %s:  %s\n", locales[i], myErrorName(status));
             continue;
@@ -208,7 +208,7 @@ void TestG7Locales()
         status = U_ZERO_ERROR;
         tblColl1 = ucol_openRules(defRules, rlen, UCOL_NO_NORMALIZATION, 
                    UCOL_DEFAULT_STRENGTH, &status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             
             log_err("Error in creating collator in %s:  %s\n", locales[i], myErrorName(status));
@@ -245,7 +245,7 @@ void TestDemo1()
     log_verbose("Demo Test 1 : Create a new table collation with rules \" & Z < p, P \" \n");
     status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  :%s\n", myErrorName(status));
         return;
     }
@@ -261,7 +261,7 @@ void TestDemo1()
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err( "Demo Test 1 Rule collation object creation failed. : %s\n", myErrorName(status));
         return;
@@ -292,7 +292,7 @@ void TestDemo2()
     log_verbose("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
     status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));
         return;
     }
@@ -307,7 +307,7 @@ void TestDemo2()
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err( "Demo Test 2 Rule collation object creation failed.: %s\n", myErrorName(status));
         return;
@@ -337,7 +337,7 @@ void TestDemo3()
     log_verbose("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\" \n");
     status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Error in creation of Collator in Demo3  : %s\n", myErrorName(status));
         return;
     }
@@ -352,7 +352,7 @@ void TestDemo3()
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err( "Demo Test 3 Rule collation object creation failed.: %s\n", myErrorName(status));
         return;
@@ -384,7 +384,7 @@ void TestDemo4()
     log_verbose("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"\n");
     status = U_ZERO_ERROR;
     col = ucol_open(NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Error in creation of Collator in Demo1  : %s\n", myErrorName(status));
         return;
     }
@@ -399,7 +399,7 @@ void TestDemo4()
     myCollation = ucol_openRules(newRules, len, UCOL_NO_NORMALIZATION, 
                                                     UCOL_DEFAULT_STRENGTH, &status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err( "Demo Test 4 Rule collation object creation failed.: %s\n", myErrorName(status));
         return;

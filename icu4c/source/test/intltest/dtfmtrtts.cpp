@@ -50,7 +50,7 @@ DateFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name
 bool_t 
 DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }

@@ -153,30 +153,30 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
 	/*From Unicode*/
 	if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
 			expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SKIP, toIBM949Offsskip ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip ))
 		log_err("u-> ibm-949 with skip did not match.\n");
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expskipIBM_943, sizeof(expskipIBM_943), "ibm-943",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SKIP, toIBM943Offsskip ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM943Offsskip ))
 		log_err("u-> ibm-943 with skip did not match.\n");
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SKIP, toIBM930Offsskip ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip ))
 		log_err("u-> ibm-930 with skip did not match.\n");
 
 	/*to Unicode*/
 	if(!testConvertToUnicode(expskipIBM_949, sizeof(expskipIBM_949),
 			 IBM_949skiptoUnicode, sizeof(IBM_949skiptoUnicode)/sizeof(IBM_949skiptoUnicode),"ibm-949",
-	        (UCNV_ToUCallBack)MissingCharAction_SKIP, fromIBM949Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs ))
 		log_err("ibm-949->u with skip did not match.\n");
     if(!testConvertToUnicode(expskipIBM_943, sizeof(expskipIBM_943),
 			 IBM_943skiptoUnicode, sizeof(IBM_943skiptoUnicode)/sizeof(IBM_943skiptoUnicode[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SKIP, fromIBM943Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs ))
 		log_err("ibm-943->u with skip did not match.\n");
     
     if(!testConvertToUnicode(expskipIBM_930, sizeof(expskipIBM_930),
 			 IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
-	        (UCNV_ToUCallBack)MissingCharAction_SKIP, fromIBM930Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs ))
 		log_err("ibm-930->u with skip did not match.\n");
 
 }
@@ -212,29 +212,29 @@ void TestSub(int32_t inputsize, int32_t outputsize)
     /*from unicode*/
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
 			expsubIBM_949, sizeof(expsubIBM_949), "ibm-949", 
-			(UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTE, toIBM949Offssub ))
+			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM949Offssub ))
 		log_err("u-> ibm-949 with subst did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubIBM_943, sizeof(expsubIBM_943), "ibm-943",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTE, toIBM943Offssub ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM943Offssub ))
 		log_err("u-> ibm-943 with subst did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubIBM_930, sizeof(expsubIBM_930), "ibm-930", 
-			(UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTE, toIBM930Offssub ))
+			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM930Offssub ))
 		log_err("u-> ibm-930 with subst did not match.\n");
     
     /*to unicode*/
 	if(!testConvertToUnicode(expsubIBM_949, sizeof(expsubIBM_949),
 			 IBM_949subtoUnicode, sizeof(IBM_949subtoUnicode)/sizeof(IBM_949subtoUnicode[0]),"ibm-949",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE, fromIBM949Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM949Offs ))
 		log_err("ibm-949->u with substitute did not match.\n");
 	if(!testConvertToUnicode(expsubIBM_943, sizeof(expsubIBM_943),
 			 IBM_943subtoUnicode, sizeof(IBM_943subtoUnicode)/sizeof(IBM_943subtoUnicode[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE, fromIBM943Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offs ))
 		log_err("ibm-943->u with substitute did not match.\n");
 	if(!testConvertToUnicode(expsubIBM_930, sizeof(expsubIBM_930),
 			 IBM_930subtoUnicode, sizeof(IBM_930subtoUnicode)/sizeof(IBM_930subtoUnicode[0]),"ibm-930",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE, fromIBM930Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM930Offs ))
 		log_err("ibm-930->u with substitute did not match.\n");
 
 }
@@ -271,23 +271,23 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
     /*from Unicode*/
 	if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
 			expsubwvalIBM_949, sizeof(expsubwvalIBM_949), "ibm-949", 
-			(UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTEwithValue, toIBM949Offs ))
+			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM949Offs ))
 		log_err("u-> ibm-949 with subst with value did not match.\n");
 
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubwvalIBM_943, sizeof(expsubwvalIBM_943), "ibm-943",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTEwithValue, toIBM943Offs ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM943Offs ))
 		log_err("u-> ibm-943 with sub with value did not match.\n");
 
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubwvalIBM_930, sizeof(expsubwvalIBM_930), "ibm-930", 
-			(UCNV_FromUCallBack)MissingUnicodeAction_SUBSTITUTEwithValue, toIBM930Offs ))
+			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs ))
 		log_err("u-> ibm-930 with subst with value did not match.\n");
   
 	/*to Unicode*/
 	if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
 			 IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTEwithValue, fromIBM943Offs ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs ))
 		log_err("ibm-943->u with substitute did not match.\n");
 }
 void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
@@ -312,24 +312,24 @@ void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
     /*checking with a legal value*/
 	if(!testConvertFromUnicode(legalText, sizeof(legalText)/sizeof(legalText[0]),
 			templegal949, sizeof(templegal949), "ibm-949",
-	        (UCNV_FromUCallBack)MissingUnicodeAction_SKIP, to949legal ))
+	        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, to949legal ))
 		log_err("u-> ibm-949 with skip did not match.\n");
     
     /*checking illegal value for ibm-943 with substitute*/ 
     if(!testConvertToUnicode(text943, sizeof(text943),
 			 toUnicode943sub, sizeof(toUnicode943sub)/sizeof(toUnicode943sub[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE, fromIBM943Offssub ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub ))
 		log_err("ibm-943->u with subst did not match.\n");
 	/*checking illegal value for ibm-943 with skip */
 	if(!testConvertToUnicode(text943, sizeof(text943),
 			 toUnicode943skip, sizeof(toUnicode943skip)/sizeof(toUnicode943skip[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SKIP, fromIBM943Offsskip ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offsskip ))
 		log_err("ibm-943->u with skip did not match.\n");
 
 	/*checking illegal value for ibm-943 with stop */
 	if(!testConvertToUnicode(text943, sizeof(text943),
 			 toUnicode943stop, sizeof(toUnicode943stop)/sizeof(toUnicode943stop[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_STOP, fromIBM943Offsstop ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM943Offsstop ))
 		log_err("ibm-943->u with stop did not match.\n");
 
 }
@@ -344,12 +344,12 @@ void TestSingleByte(int32_t inputsize, int32_t outputsize)
 	
     if(!testConvertToUnicode(sampleText, sizeof(sampleText),
 			 toUnicode943sub, sizeof(toUnicode943sub)/sizeof(toUnicode943sub[0]),"ibm-943",
-	        (UCNV_ToUCallBack)MissingCharAction_SUBSTITUTE, fromIBM943Offssub ))
+	        (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub ))
 		log_err("ibm-943->u with subst did not match.\n");
 }
 
 bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
-			    const char *codepage, UCNV_FromUCallBack callback , int32_t *expectOffsets)
+			    const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets)
 {
 	
 		
@@ -368,7 +368,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	const UChar *sourceLimit;
 	bool_t checkOffsets = TRUE;
 	bool_t doFlush;
-	UCNV_FromUCallBack action;
+	UConverterFromUCallback action;
 	char junk[9999];
 	char offset_str[9999];
 	char expOff[9999];
@@ -385,7 +385,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 		    gOutBufferSize);
 
 	conv = ucnv_open(codepage, &status);
-	if(FAILURE(status))
+	if(U_FAILURE(status))
 	{
 		log_err("Couldn't open converter %s\n",codepage);	
 		return FALSE;
@@ -396,7 +396,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	   
     
 	ucnv_setFromUCallBack (conv,  /*action*/callback, &status);
-	if (FAILURE(status)) 
+	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
 	}
@@ -444,7 +444,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	
 	  } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
 	    
-	 if(FAILURE(status))
+	 if(U_FAILURE(status))
 	  {
 	    log_err("Problem tdoing fromUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
 	    return FALSE;
@@ -516,7 +516,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 }
 
 bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
-		       const char *codepage, UCNV_ToUCallBack callback, int32_t *expectOffsets)
+		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets)
 {
 	UErrorCode status = U_ZERO_ERROR;
 	UConverter *conv = 0;
@@ -533,7 +533,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 	char junk[9999];
 	char offset_str[9999];
 	UChar *p;
-	UCNV_ToUCallBack action;	
+	UConverterToUCallback action;	
 
 	int32_t   realBufferSize;
 	UChar *realBufferEnd;
@@ -550,7 +550,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 	log_verbose("\n=========  %s\n", gNuConvTestName);
 
 	conv = ucnv_open(codepage, &status);
-	if(FAILURE(status))
+	if(U_FAILURE(status))
 	{
 		log_err("Couldn't open converter %s\n",gNuConvTestName);
 		return FALSE;
@@ -569,7 +569,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 	
        
 	ucnv_setToUCallBack (conv, callback, &status);
-	if (FAILURE(status)) 
+	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
 	}
@@ -631,7 +631,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 		}
 		
 	}
-	if(FAILURE(status))
+	if(U_FAILURE(status))
 	{
 		log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
 		return FALSE;

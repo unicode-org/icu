@@ -44,39 +44,6 @@
  * uppercase, lowercase, or uncased.
  * <P>
  */
-    
-
-    struct UCharDigitPair{
-        uint16_t fUnicode;
-        int8_t     fValue;
-    };
-    typedef struct UCharDigitPair UCharDigitPair;
-    struct BlockScriptMap {
-        UChar        fFirstCode;
-        UChar        fLastCode;
-    };
-    typedef struct BlockScriptMap BlockScriptMap;
-
-    
-   
-
-    static  bool_t  tablesCreated=FALSE;
-    static  bool_t  ulTablesCreated=FALSE;
-    static  bool_t  dirTablesCreated=FALSE;
-    static  void    createTables(void);
-    static  void    createUlTables(void);
-    static  void    createDirTables(void);
-/**
- * The Unicode C API allows you to query the properties associated with individual 
- * Unicode character values.  
- * <p>
- * The Unicode character information, provided implicitly by the 
- * Unicode character encoding standard, includes information about the script 
- * (for example, symbols or control characters) to which the character belongs,
- * as well as semantic information such as whether a character is a digit or 
- * uppercase, lowercase, or uncased.
- * <P>
- */
 
 /**
  * Constants.
@@ -290,7 +257,7 @@ typedef enum UCellWidth UCellWidth;
  * @see uistitle()
  * @see uislower()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_islower(UChar c);
 
 /**
@@ -303,7 +270,7 @@ u_islower(UChar c);
  * @see uistitle
  * @see utolower()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isupper(UChar c);
 
 /**
@@ -316,7 +283,7 @@ u_isupper(UChar c);
  * @see uislower()
  * @see utotitle()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_istitle(UChar c);
 
 /**
@@ -326,7 +293,7 @@ u_istitle(UChar c);
  * @param ch    the character to be tested
  * @return  true if the character is a digit; false otherwise.
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isdigit(UChar c);
 
 /**
@@ -343,7 +310,7 @@ u_isdigit(UChar c);
  * @see uislower()
  * @see uistitle()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isdefined(UChar c);
 
 /**
@@ -356,7 +323,7 @@ u_isdefined(UChar c);
  * @see uisdigit()
  * @see uisalnum()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isalpha(UChar c);
 
 /**
@@ -365,7 +332,7 @@ u_isalpha(UChar c);
  * @param ch    the character to be tested
  * @return  true if the character is a space character; false otherwise.
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isspace(UChar c);
 
 /**
@@ -376,7 +343,7 @@ u_isspace(UChar c);
  *
  * @see uisprint()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_iscntrl(UChar c);
 
 
@@ -389,7 +356,7 @@ u_iscntrl(UChar c);
  *
  * @see uiscntrl()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isprint(UChar c);
 
 /**
@@ -402,7 +369,7 @@ u_isprint(UChar c);
  * @see uisalpha()
  * @see uisdigit()
  */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isbase(UChar c);
 /**
   * Returns the linguistic direction property of a character.
@@ -412,7 +379,7 @@ u_isbase(UChar c);
   * property.
   * @see UCharDirection
   */
-CAPI UCharDirection U_EXPORT2
+U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar c);
 
 /**
@@ -465,7 +432,7 @@ u_charDirection(UChar c);
  * consonant.  The results may be slightly off with Korean text following different
  * conventions.
  */
-CAPI uint16_t U_EXPORT2
+U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar c);
 
 /**
@@ -475,7 +442,7 @@ u_charCellWidth(UChar c);
  * @return a value of type int, the character category.
  * @see UCharCategory
  */
-CAPI int8_t U_EXPORT2
+U_CAPI int8_t U_EXPORT2
 u_charType(UChar c);
 
 /**
@@ -484,7 +451,7 @@ u_charType(UChar c);
  * @return the numeric value of ch in decimal radix.  This method returns
  * -1 if ch is not a valid digit character.
  */
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar c);
 
 /**
@@ -492,7 +459,7 @@ u_charDigitValue(UChar c);
  * Returns the script associated with a character.
  * @see #UCharScript
  */
-CAPI UCharScript     U_EXPORT2
+U_CAPI UCharScript     U_EXPORT2
 u_charScript(UChar    ch);
 
 /** 
@@ -510,7 +477,7 @@ u_charScript(UChar    ch);
   * @see     u_isalpha
   * @see     u_isIDPart
   */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isIDStart(UChar c);
 /**
   * A convenience method for determining if a Unicode character
@@ -535,7 +502,7 @@ u_isIDStart(UChar c);
   * @see     u_isIDIgnorable
   * @see     u_isIDStart
      */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isIDPart(UChar c);
 /**
   * A convenience method for determining if a Unicode character 
@@ -560,7 +527,7 @@ u_isIDPart(UChar c);
   *          FALSE otherwise.
   * @see     u_isIDPart
   */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isIDIgnorable(UChar c);
     /**
      * A convenience method for determining if a Unicode character
@@ -581,7 +548,7 @@ u_isIDIgnorable(UChar c);
      * @see     u_isalpha
      * @see     u_isIDStart
      */
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isJavaIDStart(UChar c);
     /**
      * A convenience method for determining if a Unicode character 
@@ -611,7 +578,7 @@ u_isJavaIDStart(UChar c);
      * @see     u_isIDPart
      */
 
-CAPI bool_t U_EXPORT2
+U_CAPI bool_t U_EXPORT2
 u_isJavaIDPart(UChar c);
 
 /**
@@ -635,7 +602,7 @@ u_isJavaIDPart(UChar c);
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-CAPI UChar U_EXPORT2
+U_CAPI UChar U_EXPORT2
 u_tolower(UChar c);
 
 /**
@@ -652,7 +619,7 @@ u_tolower(UChar c);
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-CAPI UChar U_EXPORT2
+U_CAPI UChar U_EXPORT2
 u_toupper(UChar c);
 /**
  * The given character is mapped to its titlecase equivalent according to Unicode
@@ -667,7 +634,7 @@ u_toupper(UChar c);
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-CAPI UChar U_EXPORT2
+U_CAPI UChar U_EXPORT2
 u_totitle(UChar c);
 
 /**
@@ -675,7 +642,7 @@ u_totitle(UChar c);
  *The function is used to get the Unicode standard Version that is used
  *@return the Unicode stabdard Version number
  */
-CAPI const char* U_EXPORT2
+U_CAPI const char* U_EXPORT2
 u_getVersion(void);
 
 #endif /*_UCHAR*/

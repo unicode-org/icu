@@ -10,7 +10,7 @@
 *                                                                                       *
 *****************************************************************************************
 */
-// $Revision: 1.2 $
+// $Revision: 1.3 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -120,7 +120,7 @@ private:
 };
 
 #else
- CAPI const char* U_EXPORT2 T_convertToPosix(uint32_t hostid);
+ U_CAPI const char* U_EXPORT2 T_convertToPosix(uint32_t hostid);
 #endif
 #endif
 

@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                      Description            
-*     Madhu Katragadda              Ported for CAPI
+*     Madhu Katragadda              Ported for C API
 *********************************************************************************
 /**
  * CollationDanishTest is a third level test class.  This tests the locale
@@ -225,7 +225,7 @@ void TestTertiary( )
     int32_t i,j;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -255,7 +255,7 @@ void TestPrimary()
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     ucol_setStrength(myCollation, UCOL_PRIMARY);

@@ -175,13 +175,13 @@ public :
      * <pre>
      * .    UErrorCode status = U_ZERO_ERROR;
      * .    Collator *myCollation = Collator::createInstance(Locale::US, status);
-     * .    if (FAILURE(status)) return;
+     * .    if (U_FAILURE(status)) return;
      * .    CollationKey key1, key2;
      * .    UErrorCode status1 = U_ZERO_ERROR, status2 = U_ZERO_ERROR;
      * .    myCollation->getCollationKey("abc", key1, status1);
-     * .    if (FAILURE(status1)) { delete myCollation; return; }
+     * .    if (U_FAILURE(status1)) { delete myCollation; return; }
      * .    myCollation->getCollationKey("ABC", key2, status2);
-     * .    if (FAILURE(status2)) { delete myCollation; return; }
+     * .    if (U_FAILURE(status2)) { delete myCollation; return; }
      * .    // key1.hashCode() != key2.hashCode()
      * </pre>
      * @return the hash value based on the string's collation order.

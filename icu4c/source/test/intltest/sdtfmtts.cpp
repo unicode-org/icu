@@ -30,7 +30,7 @@ void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, ch
                     logln("SimpleDateFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
                     Locale::setDefault(Locale::ENGLISH, status);
-                    if(FAILURE(status)) {
+                    if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
                     testAPI(par);
@@ -53,38 +53,38 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
     logln("Testing SimpleDateFormat constructors");
 
     SimpleDateFormat def(status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (default)");
     }
 
     status = U_ZERO_ERROR;
     const UnicodeString pattern("yyyy.MM.dd G 'at' hh:mm:ss z");
     SimpleDateFormat pat(pattern, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (pattern)");
     }
 
     status = U_ZERO_ERROR;
     SimpleDateFormat pat_fr(pattern, Locale::FRENCH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (pattern French)");
     }
 
     status = U_ZERO_ERROR;
     DateFormatSymbols *symbols = new DateFormatSymbols(Locale::FRENCH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create DateFormatSymbols (French)");
     }
 
     status = U_ZERO_ERROR;
     SimpleDateFormat cust1(pattern, symbols, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (pattern, symbols*)");
     }
 
     status = U_ZERO_ERROR;
     SimpleDateFormat cust2(pattern, *symbols, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Could not create SimpleDateFormat (pattern, symbols)");
     }
 
@@ -124,7 +124,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     res2 = cust1.format(fD, res2, pos2, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: format(Formattable [Date]) failed");
     }
     logln((UnicodeString) "" + fD.getDate() + " formatted to " + res2);
@@ -141,7 +141,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     result2 = def.parse(text, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: parse() failed");
     }
     logln(text + " parsed into " + result2);
@@ -160,13 +160,13 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     UDate startDate = pat.get2DigitYearStart(status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: getTwoDigitStartDate() failed");
     }
     
     status = U_ZERO_ERROR;
     pat_fr.set2DigitYearStart(startDate, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: setTwoDigitStartDate() failed");
     }
 
@@ -189,13 +189,13 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
     logln("Applying pattern " + p1);
     status = U_ZERO_ERROR;
     pat.applyLocalizedPattern(p1, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: applyPattern() failed with " + (int32_t) status);
     }
     UnicodeString s3;
     status = U_ZERO_ERROR;
     s3 = pat.toLocalizedPattern(s3, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: toLocalizedPattern() failed");
     }
     logln("Extracted pattern is " + s3);
@@ -209,7 +209,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(char *par)
 
     status = U_ZERO_ERROR;
     DateFormat *test = new SimpleDateFormat(status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create a SimpleDateFormat");
     }
 

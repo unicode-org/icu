@@ -122,7 +122,7 @@ main(int argc,
   /* print the date */
   date(tz, style, &status);
 
-  return (FAILURE(status) ? 1 : 0);
+  return (U_FAILURE(status) ? 1 : 0);
 }
 
 /* Usage information */
@@ -169,7 +169,7 @@ date(const UChar *tz,
     s = (UChar*) malloc(sizeof(UChar) * (len+1));
     if(s == 0) goto finish;
     udat_format(fmt, ucal_getNow(), s, len + 1, 0, status);
-    if(FAILURE(*status)) goto finish;
+    if(U_FAILURE(*status)) goto finish;
   }
 
   /* print the date string */

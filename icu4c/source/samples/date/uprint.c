@@ -53,7 +53,7 @@ uprint(const UChar *s,
   converter = ucnv_open(0, status);
   
   /* if we failed, clean up and exit */
-  if(FAILURE(*status)) goto finish;
+  if(U_FAILURE(*status)) goto finish;
   
   /* perform the conversion */
   do {

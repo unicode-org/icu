@@ -92,7 +92,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
         s=getStringFromDirProps(tests[i].text, tests[i].length);
         paraLevel=tests[i].paraLevel;
         ubidi_setPara(pBiDi, s, -1, paraLevel, NULL, &errorCode);
-        if(SUCCESS(errorCode)) {
+        if(U_SUCCESS(errorCode)) {
             log_verbose("ubidi_setPara(tests[%d], paraLevel %d) ok, direction %d paraLevel=%d\n",
                     i, paraLevel, ubidi_getDirection(pBiDi), ubidi_getParaLevel(pBiDi));
             lineStart=tests[i].lineStart;
@@ -100,7 +100,7 @@ doTests(UBiDi *pBiDi, UBiDi *pLine) {
                 doTest(pBiDi, i, tests+i, 0);
             } else {
                 ubidi_setLine(pBiDi, lineStart, tests[i].lineLimit, pLine, &errorCode);
-                if(SUCCESS(errorCode)) {
+                if(U_SUCCESS(errorCode)) {
                     log_verbose("ubidi_setLine(%d, %d) ok, direction %d paraLevel=%d\n",
                             lineStart, tests[i].lineLimit, ubidi_getDirection(pLine), ubidi_getParaLevel(pLine));
                     doTest(pLine, i, tests+i, lineStart);
@@ -168,7 +168,7 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart) 
 
     for(i=0; i<len; ++i) {
         logicalIndex=ubidi_getVisualIndex(pBiDi, i, &errorCode);
-        if(FAILURE(errorCode)) {
+        if(U_FAILURE(errorCode)) {
             log_err("ubidi_getVisualIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
             return;
         }
@@ -179,7 +179,7 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart) 
     }
 
     runCount=ubidi_countRuns(pBiDi, &errorCode);
-    if(FAILURE(errorCode)) {
+    if(U_FAILURE(errorCode)) {
         log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;
     }
@@ -221,14 +221,14 @@ testReordering(UBiDi *pBiDi, int testNumber) {
 
     /* get the logical and visual maps from the object */
     ubidi_getLogicalMap(pBiDi, logicalMap1, &errorCode);
-    if(FAILURE(errorCode)) {
+    if(U_FAILURE(errorCode)) {
         log_err("ubidi_getLogicalMap(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;
     }
 
     ubidi_getVisualMap(pBiDi, visualMap1, &errorCode);
 
-    if(FAILURE(errorCode)) {
+    if(U_FAILURE(errorCode)) {
         log_err("ubidi_getVisualMap(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;
     }
@@ -239,7 +239,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
 
     /* get them from the levels array, too */
     icu_memcpy(levels, ubidi_getLevels(pBiDi, &errorCode), length);
-    if(FAILURE(errorCode)) {
+    if(U_FAILURE(errorCode)) {
         log_err("ubidi_getLevels(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;
     }
@@ -249,7 +249,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
 
     /* get the visual map from the runs, too */
     runCount=ubidi_countRuns(pBiDi, &errorCode);
-    if(FAILURE(errorCode)) {
+    if(U_FAILURE(errorCode)) {
         log_err("ubidi_countRuns(tests[%d]): error %s\n", testNumber, myErrorName(errorCode));
         return;
     }
@@ -335,7 +335,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
             log_verbose("bidi reordering error in tests[%d]: logicalMap1[i]!=ubidi_getVisualIndex(i) at i=%d\n", testNumber, i);
             break;
         }
-        if(FAILURE(errorCode)) {
+        if(U_FAILURE(errorCode)) {
             log_verbose("ubidi_getVisualIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
             break;
         }
@@ -343,7 +343,7 @@ testReordering(UBiDi *pBiDi, int testNumber) {
             log_verbose("bidi reordering error in tests[%d]: visualMap1[i]!=ubidi_getLogicalIndex(i) at i=%d\n", testNumber, i);
             break;
         }
-        if(FAILURE(errorCode)) {
+        if(U_FAILURE(errorCode)) {
             log_verbose("ubidi_getLogicalIndex(tests[%d], %d): error %s\n", testNumber, i, myErrorName(errorCode));
             break;
         }

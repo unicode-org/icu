@@ -76,7 +76,7 @@ typedef struct UHashtable UHashtable;
  * @return A pointer to a UHashtable, or 0 if an error occurred.
  * @see uhash_openSize
  */
-CAPI UHashtable*
+U_CAPI UHashtable*
 uhash_open(UHashFunction func,
        UErrorCode *status);
 
@@ -90,7 +90,7 @@ uhash_open(UHashFunction func,
  * @return A pointer to a UHashtable, or 0 if an error occurred.
  * @see uhash_open
  */
-CAPI UHashtable*
+U_CAPI UHashtable*
 uhash_openSize(UHashFunction func,
            int32_t size,
            UErrorCode *status);
@@ -99,11 +99,11 @@ uhash_openSize(UHashFunction func,
  * Close a UHashtable, releasing the memory used.
  * @param hash The UHashtable to close.
  */
-CAPI void
+U_CAPI void
 uhash_close(UHashtable *hash);
 
 
-CAPI void
+U_CAPI void
 uhash_setValueDeleter(UHashtable *hash, ValueDeleter del);
 
 /**
@@ -111,7 +111,7 @@ uhash_setValueDeleter(UHashtable *hash, ValueDeleter del);
  * @param hash The UHashtable to query.
  * @return The number of items stored in hash.
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_size(const UHashtable *hash);
 
 /**
@@ -122,7 +122,7 @@ uhash_size(const UHashtable *hash);
  * @return The hash code associated with value.
  * @see uhash_get
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_put(UHashtable *hash,
       void *value,
       UErrorCode *status);
@@ -135,7 +135,7 @@ uhash_put(UHashtable *hash,
  * @return The hash code associated with value.
  * @see uhash_get
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_putKey(UHashtable *hash,
          int32_t valueKey,
          void *value,
@@ -147,7 +147,7 @@ uhash_putKey(UHashtable *hash,
  * @param key The hash code of the desired value.
  * @return The requested item, or 0 if not found.
  */
-CAPI void*
+U_CAPI void*
 uhash_get(const UHashtable *hash, 
       int32_t key);
 
@@ -158,7 +158,7 @@ uhash_get(const UHashtable *hash,
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return The item removed, or 0 if not found.
  */
-CAPI void*
+U_CAPI void*
 uhash_remove(UHashtable *hash,
          int32_t key,
          UErrorCode *status);
@@ -170,7 +170,7 @@ uhash_remove(UHashtable *hash,
  * the first value, and should subsequently not be changed by the caller.
  * @return The next item in the hash table, or 0 if no items remain.
  */
-CAPI void*
+U_CAPI void*
 uhash_nextElement(const UHashtable *hash,
           int32_t *pos);
 
@@ -190,7 +190,7 @@ uhash_nextElement(const UHashtable *hash,
  * @param parm The ustring (const UChar*) to hash.
  * @return A hash code for parm.
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_hashUString(const void *parm);
 
 /**
@@ -200,7 +200,7 @@ uhash_hashUString(const void *parm);
  * @param parm The string (const char*) to hash.
  * @return A hash code for parm.
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_hashString(const void *parm);
 
 /**
@@ -208,7 +208,7 @@ uhash_hashString(const void *parm);
  * @param parm The long (cast to void*) to hash.
  * @return A hash code for parm.
  */
-CAPI int32_t
+U_CAPI int32_t
 uhash_hashLong(const void *parm);
 
 #endif

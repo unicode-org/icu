@@ -164,7 +164,7 @@ typedef struct UBiDi UBiDi;
  *
  * @return An empty <code>UBiDi</code> object.
  */
-CAPI UBiDi * U_EXPORT2
+U_CAPI UBiDi * U_EXPORT2
 ubidi_open();
 
 /**
@@ -201,7 +201,7 @@ ubidi_open();
  *
  * @return An empty <code>UBiDi</code> object with preallocated memory.
  */
-CAPI UBiDi * U_EXPORT2
+U_CAPI UBiDi * U_EXPORT2
 ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErrorCode);
 
 /**
@@ -221,7 +221,7 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
  * @see ubidi_setPara
  * @see ubidi_setLine
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi);
 
 /**
@@ -292,7 +292,7 @@ ubidi_close(UBiDi *pBiDi);
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
               UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
               UErrorCode *pErrorCode);
@@ -335,7 +335,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
  *
  * @see ubidi_setPara
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_setLine(const UBiDi *pParaBiDi,
               UTextOffset start, UTextOffset limit,
               UBiDi *pLineBiDi,
@@ -352,7 +352,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
  *
  * @see UBiDiDirection
  */
-CAPI UBiDiDirection U_EXPORT2
+U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi);
 
 /**
@@ -362,7 +362,7 @@ ubidi_getDirection(const UBiDi *pBiDi);
  *
  * @return The length of the text that the UBiDi object was created for.
  */
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi);
 
 /**
@@ -374,7 +374,7 @@ ubidi_getLength(const UBiDi *pBiDi);
  *
  * @see UBiDiLevel
  */
-CAPI UBiDiLevel U_EXPORT2
+U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getParaLevel(const UBiDi *pBiDi);
 
 /**
@@ -388,7 +388,7 @@ ubidi_getParaLevel(const UBiDi *pBiDi);
  *
  * @see UBiDiLevel
  */
-CAPI UBiDiLevel U_EXPORT2
+U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex);
 
 /**
@@ -407,7 +407,7 @@ ubidi_getLevelAt(const UBiDi *pBiDi, UTextOffset charIndex);
  *
  * @see UBiDiLevel
  */
-CAPI const UBiDiLevel * U_EXPORT2
+U_CAPI const UBiDiLevel * U_EXPORT2
 ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
 
 /**
@@ -431,7 +431,7 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
  *        This pointer can be <code>NULL</code> if this
  *        value is not necessary.
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
                     UTextOffset *pLogicalLimit, UBiDiLevel *pLevel);
 
@@ -450,7 +450,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, UTextOffset logicalStart,
  *
  * @return The number of runs.
  */
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
 
 /**
@@ -501,7 +501,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode);
  * modifier letters before base characters and second surrogates
  * before first ones.
  */
-CAPI UBiDiDirection U_EXPORT2
+U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
                    UTextOffset *pLogicalStart, UTextOffset *pLength);
 
@@ -527,7 +527,7 @@ ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
  */
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorCode);
 
 /**
@@ -550,7 +550,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
  */
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorCode);
 
 /**
@@ -570,7 +570,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
 
 /**
@@ -590,7 +590,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode)
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
 
 /**
@@ -612,7 +612,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode);
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
 
 /**
@@ -634,7 +634,7 @@ ubidi_reorderLogical(const UBiDiLevel *levels, UTextOffset length, UTextOffset *
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *indexMap);
 
 /**
@@ -650,7 +650,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
  *
  * @param length is the length of each array.
  */
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
 
 /**
@@ -776,7 +776,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  *&nbsp;         UBiDiLevel level;
  *&nbsp; 
  *&nbsp;         count=ubidi_countRuns(para, pErrorCode);
- *&nbsp;         if(SUCCESS(*pErrorCode)) {
+ *&nbsp;         if(U_SUCCESS(*pErrorCode)) {
  *&nbsp;             if(styleRunCount&lt;=1) {
  *&nbsp;                 Style style=styleRuns[0].style;
  *&nbsp; 
@@ -806,7 +806,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  *&nbsp;                      UErrorCode *pErrorCode) {
  *&nbsp;     UBiDi *para;
  *&nbsp; 
- *&nbsp;     if(pErrorCode==NULL || FAILURE(*pErrorCode) || length&lt;=0) {
+ *&nbsp;     if(pErrorCode==NULL || U_FAILURE(*pErrorCode) || length&lt;=0) {
  *&nbsp;         return;
  *&nbsp;     }
  *&nbsp; 
@@ -816,7 +816,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  *&nbsp;     ubidi_setPara(para, text, length,
  *&nbsp;                   textDirection ? UBIDI_DEFAULT_RTL : UBIDI_DEFAULT_LTR,
  *&nbsp;                   NULL, pErrorCode);
- *&nbsp;     if(SUCCESS(*pErrorCode)) {
+ *&nbsp;     if(U_SUCCESS(*pErrorCode)) {
  *&nbsp;         UBiDiLevel paraLevel=1&ubidi_getParaLevel(para);
  *&nbsp;         StyleRun styleRun={ length, styleNormal };
  *&nbsp;         int width;
@@ -853,7 +853,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  *&nbsp;                                  styleRuns, styleRunStart, &styleRunLimit,
  *&nbsp;                                  &width);
  *&nbsp;                     ubidi_setLine(para, start, limit, line, pErrorCode);
- *&nbsp;                     if(SUCCESS(*pErrorCode)) {
+ *&nbsp;                     if(U_SUCCESS(*pErrorCode)) {
  *&nbsp;                         // prepare rendering a new line
  *&nbsp;                         // from either left or right
  *&nbsp;                         startLine(paraLevel, width);

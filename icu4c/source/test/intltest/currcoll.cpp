@@ -71,7 +71,7 @@ void CollationCurrencyTest::currencyTest(char *par)
     Collator::EComparisonResult expectedResult = Collator::EQUAL;
     RuleBasedCollator *c = (RuleBasedCollator *)Collator::createInstance(status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln ("Collator::createInstance() failed!");
         return;
@@ -106,7 +106,7 @@ void CollationCurrencyTest::currencyTest(char *par)
 
             c->getCollationKey(source, sourceKey, status);
 
-            if (FAILURE(status))
+            if (U_FAILURE(status))
             {
                 errln("Couldn't get collationKey for source");
                 continue;
@@ -114,7 +114,7 @@ void CollationCurrencyTest::currencyTest(char *par)
 
             c->getCollationKey(target, targetKey, status);
 
-            if (FAILURE(status))
+            if (U_FAILURE(status))
             {
                 errln("Couldn't get collationKey for target");
                 continue;

@@ -169,7 +169,7 @@ Normalizer::compose(const UnicodeString& source,
             UnicodeString& result, 
             UErrorCode &status)
 {
-  if (FAILURE(status)) {
+  if (U_FAILURE(status)) {
     return;
   }
   result.truncate(0);
@@ -592,7 +592,7 @@ Normalizer::decompose(const UnicodeString& source,
               UnicodeString& result, 
               UErrorCode &status)
 {
-  if (FAILURE(status)) {
+  if (U_FAILURE(status)) {
     return;
   }
   bool_t     hangul = (options & IGNORE_HANGUL) == 0;
@@ -1012,7 +1012,7 @@ void
 Normalizer::setText(const UnicodeString& newText, 
             UErrorCode &status)
 {
-  if (FAILURE(status)) {
+  if (U_FAILURE(status)) {
     return;
   }
   CharacterIterator *newIter = new StringCharacterIterator(newText);
@@ -1033,7 +1033,7 @@ void
 Normalizer::setText(const CharacterIterator& newText, 
             UErrorCode &status) 
 {
-  if (FAILURE(status)) {
+  if (U_FAILURE(status)) {
     return;
   }
   CharacterIterator *newIter = newText.clone();

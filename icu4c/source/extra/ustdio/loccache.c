@@ -51,7 +51,7 @@ u_loccache_get(const char *loc)
     locCount = uloc_countAvailable();
     
     tempCache = uhash_openSize(u_locbund_hash, locCount, &status);
-    if(FAILURE(status)) return 0;
+    if(U_FAILURE(status)) return 0;
     
     /* Lock the cache */
     umtx_lock(0);

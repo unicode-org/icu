@@ -103,7 +103,7 @@ void G7CollationTest::doTest( Collator* myCollation, UnicodeString source, Unico
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
     myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (FAILURE(key1status) || FAILURE(key2status)) {
+    if (U_FAILURE(key1status) || U_FAILURE(key2status)) {
         errln("SortKey generation Failed.\n");
         return;
     }
@@ -123,7 +123,7 @@ void G7CollationTest::TestG7Locales( char* par )
         RuleBasedCollator* tblColl1 = 0;
 
         myCollation = Collator::createInstance(locales[i], status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             UnicodeString msg;
 
@@ -138,7 +138,7 @@ void G7CollationTest::TestG7Locales( char* par )
         const UnicodeString& defRules = ((RuleBasedCollator*)myCollation)->getRules();
         status = U_ZERO_ERROR;
         tblColl1 = new RuleBasedCollator(((RuleBasedCollator*)myCollation)->getRules(), status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             UnicodeString msg, name;
 
@@ -181,7 +181,7 @@ void G7CollationTest::TestDemo1( char* par )
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln( "Demo Test 1 Table Collation object creation failed.");
         return;
@@ -210,7 +210,7 @@ void G7CollationTest::TestDemo2( char* par )
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("Demo Test 2 Table Collation object creation failed.");
         return;
@@ -239,7 +239,7 @@ void G7CollationTest::TestDemo3( char* par )
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("Demo Test 3 Table Collation object creation failed.");
         return;
@@ -268,7 +268,7 @@ void G7CollationTest::TestDemo4( char* par )
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln( "Demo Test 4 Table Collation object creation failed." );
         return;

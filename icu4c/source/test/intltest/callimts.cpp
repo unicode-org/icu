@@ -54,7 +54,7 @@ CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
     UErrorCode status = U_ZERO_ERROR;
     UDate d = millis;
     cal->setTime(millis, exception);
-    if (SUCCESS(exception)) {
+    if (U_SUCCESS(exception)) {
         fmt->format(millis, theDate);
         UDate dt = fmt->parse(theDate, status);
         // allow a small amount of error (drift)

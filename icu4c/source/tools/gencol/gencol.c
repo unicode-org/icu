@@ -99,7 +99,7 @@ main(int argc,
     loc = uloc_getAvailable(i);
     printf("gencol: Creating collation data for locale \"%s\"\n", loc);
     coll = ucol_open(loc, &status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
       printf("gencol: %s for locale \"%s\"", errorName(status), loc);
     }
     else {

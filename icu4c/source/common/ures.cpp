@@ -30,7 +30,7 @@
  * Functions to create and destroy resource bundles.
  */
 
-CAPI UResourceBundle* ures_open(    const char* myPath,
+U_CAPI UResourceBundle* ures_open(    const char* myPath,
                     const char* localeID,
                     UErrorCode* status)
 {
@@ -47,7 +47,7 @@ CAPI UResourceBundle* ures_open(    const char* myPath,
   return (UResourceBundle*) new ResourceBundle(uPath, myLocale.init(localeID), *status);
 }
 
-CAPI UResourceBundle* ures_openW(    const wchar_t* myPath,
+U_CAPI UResourceBundle* ures_openW(    const wchar_t* myPath,
                     const char* localeID,
                     UErrorCode* status)
 {
@@ -62,11 +62,11 @@ CAPI UResourceBundle* ures_openW(    const wchar_t* myPath,
  * Functions to retrieve data from resource bundles.
  */
 
-CAPI const UChar* ures_get(    const UResourceBundle*    resourceBundle,
+U_CAPI const UChar* ures_get(    const UResourceBundle*    resourceBundle,
                 const char*              resourceTag,
                 UErrorCode*               status)
 {
-  if (FAILURE(*status)) return NULL;
+  if (U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -75,16 +75,16 @@ CAPI const UChar* ures_get(    const UResourceBundle*    resourceBundle,
 
   const UnicodeString* tmp =  ((ResourceBundle*)resourceBundle)->getString(resourceTag, *status);
 
-  if (SUCCESS(*status)) return tmp->getUChars();
+  if (U_SUCCESS(*status)) return tmp->getUChars();
   else return NULL;
 }
 
-CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resourceBundle,
+U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     const char*               resourceTag,
                     int32_t                   resourceIndex,
                     UErrorCode*                status)
 {
-  if (FAILURE(*status)) return NULL;
+  if (U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (resourceIndex < 0))
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -93,19 +93,19 @@ CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resourceBundle,
 
   const UnicodeString* tmp =  ((ResourceBundle*)resourceBundle)->getArrayItem(resourceTag, resourceIndex, *status);
 
-  if (SUCCESS(*status)) return tmp->getUChars();
+  if (U_SUCCESS(*status)) return tmp->getUChars();
   else return NULL;
 }
 
 
 
-CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
+U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       int32_t                 rowIndex,
                       int32_t                 columnIndex,
                       UErrorCode*              status)
 {
-  if (FAILURE(*status)) return NULL;
+  if (U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (rowIndex < 0) || (columnIndex < 0))
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -116,16 +116,16 @@ CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                                 rowIndex,
                                 columnIndex,
                                 *status);
-  if (SUCCESS(*status)) return tmp->getUChars();
+  if (U_SUCCESS(*status)) return tmp->getUChars();
   else return NULL;
 }
 
-CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
+U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
                       UErrorCode*              status)
 {
-  if (FAILURE(*status)) return NULL;
+  if (U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || !itemTag)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -135,12 +135,12 @@ CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resourceBundl
   const UnicodeString* tmp =  ((ResourceBundle*)resourceBundle)->getTaggedArrayItem(resourceTag,
                                itemTag,
                                *status);
-  if (SUCCESS(*status)) return tmp->getUChars();
+  if (U_SUCCESS(*status)) return tmp->getUChars();
   else return NULL;
 }
 
 
-CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle)
+U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle)
 {
   if (!resourceBundle) return NULL;
   return ((ResourceBundle*)resourceBundle)->getVersionNumber();
@@ -150,7 +150,7 @@ extern "C" int32_t T_ResourceBundle_countArrayItems(const ResourceBundle* rb,
                              const char* resourceKey,
                              UErrorCode* err);
 
-CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
+U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* err)
 {
@@ -159,7 +159,7 @@ CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
                       err);
 }
 
-CAPI void ures_close(    UResourceBundle*    resourceBundle)
+U_CAPI void ures_close(    UResourceBundle*    resourceBundle)
 {
     delete resourceBundle;
     return;

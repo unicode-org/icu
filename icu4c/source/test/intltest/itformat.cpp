@@ -57,7 +57,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
         delete tz;
         UErrorCode status = U_ZERO_ERROR;
         Locale::setDefault( Locale::ENGLISH, status );
-        if (FAILURE(status)) {
+        if (U_FAILURE(status)) {
             errln("itformat: couldn't set default Locale to ENGLISH!");
         }
     }
@@ -421,7 +421,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
         TimeZone::adoptDefault(saveDefaultTimeZone);
         UErrorCode status = U_ZERO_ERROR;
         Locale::setDefault( saveDefaultLocale, status );
-        if (FAILURE(status)) {
+        if (U_FAILURE(status)) {
             errln("itformat: couldn't re-set default Locale!");
         }
     }

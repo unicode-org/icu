@@ -44,7 +44,7 @@ void NumberFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char
 bool_t 
 NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }

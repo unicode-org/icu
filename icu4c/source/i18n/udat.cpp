@@ -25,7 +25,7 @@
 #include "dtfmtsym.h"
 #include "ustring.h"
 
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_open(            UDateFormatStyle        timeStyle, 
                 UDateFormatStyle        dateStyle,
                 const   char*                locale,
@@ -33,7 +33,7 @@ udat_open(            UDateFormatStyle        timeStyle,
 		      int32_t tzIDLength,
                 UErrorCode*             status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   
   DateFormat *fmt;
   if(locale == 0)
@@ -65,13 +65,13 @@ udat_open(            UDateFormatStyle        timeStyle,
   return (UDateFormat*)fmt;
 }
 
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_openPattern(    const   UChar           *pattern, 
             int32_t         patternLength,
             const   char         *locale,
             UErrorCode      *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   UDateFormat *retVal = 0;
@@ -93,17 +93,17 @@ udat_openPattern(    const   UChar           *pattern,
   return retVal;
 }
 
-CAPI void
+U_CAPI void
 udat_close(UDateFormat* format)
 {
   delete (DateFormat*)format;
 }
 
-CAPI UDateFormat*
+U_CAPI UDateFormat*
 udat_clone(const UDateFormat *fmt,
        UErrorCode *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   Format *res = ((SimpleDateFormat*)fmt)->clone();
   
@@ -115,7 +115,7 @@ udat_clone(const UDateFormat *fmt,
   return (UDateFormat*) res;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 udat_format(    const    UDateFormat*    format,
         UDate           dateToFormat,
         UChar*          result,
@@ -123,7 +123,7 @@ udat_format(    const    UDateFormat*    format,
         UFieldPosition* position,
         UErrorCode*     status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actLen;
 
@@ -144,14 +144,14 @@ udat_format(    const    UDateFormat*    format,
   return actLen;
 }
 
-CAPI UDate
+U_CAPI UDate
 udat_parse(    const    UDateFormat*        format,
         const    UChar*          text,
         int32_t         textLength,
         int32_t         *parsePos,
         UErrorCode      *status)
 {
-  if(FAILURE(*status)) return (UDate)0;
+  if(U_FAILURE(*status)) return (UDate)0;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
   const UnicodeString src((UChar*)text, len, len);
@@ -175,82 +175,82 @@ udat_parse(    const    UDateFormat*        format,
   return res;
 }
 
-CAPI bool_t
+U_CAPI bool_t
 udat_isLenient(const UDateFormat* fmt)
 {
   return ((DateFormat*)fmt)->isLenient();
 }
 
-CAPI void
+U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
             bool_t          isLenient)
 {
   ((DateFormat*)fmt)->setLenient(isLenient);
 }
 
-CAPI const UCalendar*
+U_CAPI const UCalendar*
 udat_getCalendar(const UDateFormat* fmt)
 {
   return (const UCalendar*) ((DateFormat*)fmt)->getCalendar();
 }
 
-CAPI void
+U_CAPI void
 udat_setCalendar(            UDateFormat*    fmt,
                     const   UCalendar*      calendarToSet)
 {
   ((DateFormat*)fmt)->setCalendar(*((Calendar*)calendarToSet));
 }
 
-CAPI const UNumberFormat*
+U_CAPI const UNumberFormat*
 udat_getNumberFormat(const UDateFormat* fmt)
 {
   return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
 }
 
-CAPI void
+U_CAPI void
 udat_setNumberFormat(            UDateFormat*    fmt,
                     const   UNumberFormat*  numberFormatToSet)
 {
   ((DateFormat*)fmt)->setNumberFormat(*((NumberFormat*)numberFormatToSet));
 }
 
-CAPI const char*
+U_CAPI const char*
 udat_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 udat_countAvailable()
 {
   return uloc_countAvailable();
 }
 
-CAPI UDate
+U_CAPI UDate
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                 UErrorCode      *status)
 {
-  if(FAILURE(*status)) return (UDate)0;
+  if(U_FAILURE(*status)) return (UDate)0;
   return ((SimpleDateFormat*)fmt)->get2DigitYearStart(*status);
 }
 
-CAPI void
+U_CAPI void
 udat_set2DigitYearStart(    UDateFormat     *fmt,
                 UDate           d,
                 UErrorCode      *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   ((SimpleDateFormat*)fmt)->set2DigitYearStart(d, *status);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 udat_toPattern(    const   UDateFormat     *fmt,
         bool_t          localized,
         UChar           *result,
         int32_t         resultLength,
         UErrorCode      *status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actLen;
 
@@ -266,7 +266,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 }
 
 // TBD: should this take an UErrorCode?
-CAPI void
+U_CAPI void
 udat_applyPattern(            UDateFormat     *format,
                     bool_t          localized,
                     const   UChar           *pattern,
@@ -282,7 +282,7 @@ udat_applyPattern(            UDateFormat     *format,
     ((SimpleDateFormat*)format)->applyPattern(pat);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 udat_getSymbols(const   UDateFormat             *fmt,
         UDateFormatSymbolType   type,
         int32_t                 index,
@@ -290,7 +290,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
         int32_t                 resultLength,
         UErrorCode              *status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actLen;
 
@@ -359,7 +359,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
   return actLen;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 udat_countSymbols(    const    UDateFormat                *fmt,
             UDateFormatSymbolType    type)
 {
@@ -400,7 +400,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
   return count;
 }
 
-CAPI void
+U_CAPI void
 udat_setSymbols(    UDateFormat             *format,
             UDateFormatSymbolType   type,
             int32_t                 index,
@@ -408,7 +408,7 @@ udat_setSymbols(    UDateFormat             *format,
             int32_t                 valueLength,
             UErrorCode              *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   int32_t count;
   int32_t len = (valueLength == -1 ? u_strlen(value) : valueLength);

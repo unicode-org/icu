@@ -43,7 +43,7 @@ u_finit(FileStream *f,
   result->fUCLimit 	= result->fUCBuffer;
   
   result->fConverter = ucnv_open(0, status);
-  if(FAILURE(*status) || result->fConverter == 0) {
+  if(U_FAILURE(*status) || result->fConverter == 0) {
     T_FileStream_close(result->fFile);
     icu_free(result);
     return 0;
@@ -76,7 +76,7 @@ ufile_fill_uchar_buffer(UFILE *f,
   int32_t		availLength;
   int32_t		dataSize;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* shift the buffer if it isn't empty */
   dataSize = f->fUCLimit - f->fUCPos;
