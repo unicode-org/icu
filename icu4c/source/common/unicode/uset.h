@@ -184,6 +184,15 @@ U_CAPI void U_EXPORT2
 uset_add(USet* set, UChar32 c);
 
 /**
+ * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param s the source string
+ * @draft ICU 2.4
+ */
+U_CAPI void U_EXPORT2
+uset_addAll(USet* set, const USet *additionalSet);
+
+/**
  * Adds the given range of characters to the given USet.  After this call,
  * uset_contains(set, start, end) will return TRUE.
  * @param set the object to which to add the character

@@ -31,6 +31,7 @@
 #if !UCONFIG_NO_LEGACY_CONVERSION
 
 #include "unicode/ucnv.h"
+#include "unicode/uset.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
@@ -116,6 +117,12 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
 /* Protos */
 /***************** ISO-2022 ********************************/
+static void
+_ISO_2022_GetUnicodeSet(const UConverter *cnv,
+                    USet *set,
+                    UConverterUnicodeSet which,
+                    UErrorCode *pErrorCode);
+
 static void 
 T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs * args,
                                              UErrorCode * err);
@@ -369,7 +376,8 @@ static const UConverterImpl _ISO2022Impl={
     NULL,
     _ISO2022getName,
     _ISO_2022_WriteSub,
-    _ISO_2022_SafeClone
+    _ISO_2022_SafeClone,
+    _ISO_2022_GetUnicodeSet
 };
 static const UConverterStaticData _ISO2022StaticData={
     sizeof(UConverterStaticData),
@@ -418,7 +426,8 @@ static const UConverterImpl _ISO2022JPImpl={
     NULL,
     _ISO2022getName,
     _ISO_2022_WriteSub,
-    _ISO_2022_SafeClone
+    _ISO_2022_SafeClone,
+    _ISO_2022_GetUnicodeSet
 };
 static const UConverterStaticData _ISO2022JPStaticData={
     sizeof(UConverterStaticData),
@@ -467,7 +476,8 @@ static const UConverterImpl _ISO2022KRImpl={
     NULL,
     _ISO2022getName,
     _ISO_2022_WriteSub,
-    _ISO_2022_SafeClone
+    _ISO_2022_SafeClone,
+    _ISO_2022_GetUnicodeSet
 };
 static const UConverterStaticData _ISO2022KRStaticData={
     sizeof(UConverterStaticData),
@@ -517,7 +527,8 @@ static const UConverterImpl _ISO2022CNImpl={
     NULL,
     _ISO2022getName,
     _ISO_2022_WriteSub,
-    _ISO_2022_SafeClone
+    _ISO_2022_SafeClone,
+    _ISO_2022_GetUnicodeSet
 };
 static const UConverterStaticData _ISO2022CNStaticData={
     sizeof(UConverterStaticData),
@@ -565,7 +576,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         myConverterData->isFirstBuffer = TRUE;
         cnv->fromUnicodeStatus =FALSE;
         if(locale){
-            uprv_strcpy(myLocale,locale);
+            uprv_strncpy(myLocale, locale, sizeof(myLocale));
             myConverterData->isLocaleSpecified = TRUE;
         }
         myConverterData->version= 0;
@@ -642,8 +653,8 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             uprv_strcpy(myConverterData->locale,"cn");
 
             if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
-               myConverterData->version = 1;
-               uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
+                myConverterData->version = 1;
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
             }else{
                 uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=0");
                 myConverterData->version = 0;
@@ -3404,6 +3415,45 @@ _ISO_2022_SafeClone(
     localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
 
     return &localClone->cnv;
+}
+
+static void
+_ISO_2022_GetUnicodeSet(const UConverter *cnv,
+                    USet *set,
+                    UConverterUnicodeSet which,
+                    UErrorCode *pErrorCode)
+{
+    int32_t i;
+    USet *cnvSet;
+    UConverterDataISO2022* cnvData;
+
+    if (U_FAILURE(*pErrorCode)) {
+        return;
+    }
+    if (cnv->sharedData == &_ISO2022Data) {
+        /* We use UTF-8 in this case */
+        uset_addRange(set, 0, 0xd7FF);
+        uset_addRange(set, 0xE000, 0x10FFFF);
+        return;
+    }
+
+    cnvData = (UConverterDataISO2022*)cnv->extraInfo;
+    if (cnv->sharedData == &_ISO2022KRData && cnvData->currentConverter != NULL) {
+        ucnv_getUnicodeSet(cnvData->currentConverter, set, which, pErrorCode);
+        return;
+    }
+
+    cnvSet = uset_open(0, 0);
+    if (!cnvSet) {
+        *pErrorCode =U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    for (i=0; (i<UCNV_2022_MAX_CONVERTERS) && cnvData->myConverterArray[i]; i++) {
+        ucnv_getUnicodeSet(cnvData->myConverterArray[i], cnvSet, which, pErrorCode);
+        uset_addAll(set, cnvSet /* pErrorCode */);
+    }
+    uset_close(cnvSet);
 }
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
