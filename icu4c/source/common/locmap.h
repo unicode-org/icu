@@ -28,14 +28,17 @@
 /* include this first so that we are sure to get WIN32 defined */
 #include "unicode/utypes.h"
 
-#if defined(WIN32) && !defined(LOCMAP_H)
+#ifndef LOCMAP_H
 #define LOCMAP_H
 
+U_CAPI const char *uprv_defaultCodePageForLocale(const char *locale);
+
+#ifdef WIN32
 #define LANGUAGE_LCID(hostID) (uint16_t)(0x03FF & hostID)
 
 U_CFUNC const char *T_convertToPosix(uint32_t hostid, UErrorCode* status);
 
 U_CFUNC uint32_t T_convertToLCID(const char* posixID, UErrorCode* status);
+#endif /* WIN32 */
 
-
-#endif
+#endif /* LOCMAP_H */
