@@ -37,8 +37,9 @@ enum punycode_status {
 #   endif
 #endif
 
+U_CDECL_BEGIN
 
-U_CFUNC enum punycode_status punycode_encode(
+enum punycode_status  punycode_encode(
   punycode_uint input_length,
   const punycode_uint input[],
   const unsigned char case_flags[],
@@ -70,7 +71,7 @@ U_CFUNC enum punycode_status punycode_encode(
     /* except punycode_bad_input; if not punycode_success, then       */
     /* output_size and output might contain garbage.                  */
 
-U_CFUNC enum punycode_status punycode_decode(
+enum punycode_status punycode_decode(
   punycode_uint input_length,
   const char input[],
   punycode_uint *output_length,
@@ -97,5 +98,6 @@ U_CFUNC enum punycode_status punycode_decode(
     /* output, and case_flags might contain garbage.  On success, the */
     /* decoder will never need to write an output_length greater than */
     /* input_length, because of how the encoding is defined.          */
+U_CDECL_END
 #endif
 

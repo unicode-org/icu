@@ -175,7 +175,7 @@ testData(TestIDNA& test) {
     pTestIDNA = NULL;
     return errorCode;
 }
-
+U_CDECL_BEGIN
 static void U_CALLCONV
 caseMapLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
@@ -201,6 +201,7 @@ caseMapLineFn(void *context,
 
     compareMapping(code,mapping, length, *mapWithNorm, pErrorCode);
 }
+U_CDECL_END
 
 static void
 parseMappings(const char *filename,UBool withNorm, UBool reportError, TestIDNA& test, UErrorCode *pErrorCode) {
@@ -220,6 +221,7 @@ parseMappings(const char *filename,UBool withNorm, UBool reportError, TestIDNA& 
 }
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
+U_CDECL_BEGIN
 
 static void U_CALLCONV
 unicodeDataLineFn(void *context,
@@ -239,6 +241,8 @@ unicodeDataLineFn(void *context,
     compareFlagsForRange(rangeStart,rangeEnd,*isUnassigned, pErrorCode);
 
 }
+
+U_CDECL_END
 
 static void
 parseTable(const char *filename,UBool isUnassigned,TestIDNA& test, UErrorCode *pErrorCode) {
@@ -395,7 +399,7 @@ cleanup() {
 
     return TRUE;
 }
-
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
              const char * /* type */, const char * /* name */,
@@ -427,6 +431,7 @@ getFoldingOffset(uint32_t data) {
         return 0;
     }
 }
+U_CDECL_END
 
 static UBool
 loadIDNData(UErrorCode &errorCode) {

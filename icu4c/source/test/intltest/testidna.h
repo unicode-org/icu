@@ -21,6 +21,7 @@
 #include "intltest.h"
 #include "unicode/parseerr.h"
 
+U_CDECL_BEGIN
 typedef int32_t  
 (*TestFunc) (   const UChar *src, int32_t srcLength,
                 UChar *dest, int32_t destCapacity,
@@ -33,7 +34,7 @@ typedef int32_t
                 UErrorCode *status);
 
 
-
+U_CDECL_END
 
 // test the API
 
