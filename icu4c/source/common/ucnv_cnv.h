@@ -153,7 +153,7 @@ extern const UConverterSharedData
     _ISO2022Data, 
     _LMBCSData1,_LMBCSData2, _LMBCSData3, _LMBCSData4, _LMBCSData5, _LMBCSData6,
     _LMBCSData8,_LMBCSData11,_LMBCSData16,_LMBCSData17,_LMBCSData18,_LMBCSData19,
-    _HZData,_ISCIIData, _SCSUData, _ASCIIData, _UTF7Data, _Bocu1Data;
+    _HZData,_ISCIIData, _SCSUData, _ASCIIData, _UTF7Data, _Bocu1Data, _UTF16Data, _UTF32Data;
 
 U_CDECL_END
 
