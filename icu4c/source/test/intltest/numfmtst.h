@@ -89,6 +89,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestPad(void);
     void TestPatterns2(void);
 
+    /**
+     * Test currency registration.
+     */
+    void TestRegCurrency(void);
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
