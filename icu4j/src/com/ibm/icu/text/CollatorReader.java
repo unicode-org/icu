@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/10/10 03:48:04 $ 
-* $Revision: 1.8 $
+* $Date: 2002/11/14 20:53:06 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -378,9 +378,11 @@ final class CollatorReader
                         public boolean isDataVersionAcceptable(byte version[])
                         {
                             return version[0] == DATA_FORMAT_VERSION_[0] 
-                                   && version[1] == DATA_FORMAT_VERSION_[1] 
-                                   && version[2] == DATA_FORMAT_VERSION_[2] 
-                                   && version[3] == DATA_FORMAT_VERSION_[3];
+                                   && version[1] >= DATA_FORMAT_VERSION_[1];
+                                   // Too harsh 
+                                   //&& version[1] == DATA_FORMAT_VERSION_[1]
+                                   //&& version[2] == DATA_FORMAT_VERSION_[2] 
+                                   //&& version[3] == DATA_FORMAT_VERSION_[3];
                         }
                 };
   
