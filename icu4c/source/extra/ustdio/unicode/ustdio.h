@@ -30,6 +30,7 @@
 #include "unicode/utrans.h"
 
 /*
+    TODO
  The following is a small list as to what is currently wrong/suggestions for
  ustdio.
 
@@ -81,6 +82,7 @@
     a its called without a read operation.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
    0 is returned if the operation was successful and EOF otherwise.
+ * u_fsettransliterator does not support U_READ side of transliteration.
  * More testing is needed.
 */
 
