@@ -358,6 +358,7 @@ void CollationServiceTest::TestRegisterFactory(void)
         if (*fucol != *ncol) {
             errln("collator after unregister does not match original fu_FU");
         }
+	delete ncol;
     }
     
     delete fucol;
