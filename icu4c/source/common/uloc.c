@@ -1313,7 +1313,7 @@ static void _lazyEvaluate_installedLocales()
     UResourceBundle *index = NULL;
     UResourceBundle installed;
     UErrorCode status = U_ZERO_ERROR;
-    char ** temp;
+    const char ** temp;
     int32_t i = 0;
     int32_t localeCount;
     
