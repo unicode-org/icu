@@ -192,6 +192,46 @@ inline void loadState(collIterate *data, const collIterateState *backup,
     }
 }
 
+
+/*
+* collIter_eos()
+*     Checks for a collIterate being positioned at the end of
+*     its source string.
+*
+*/
+inline UBool collIter_eos(collIterate *s) {
+    if ((s->flags & UCOL_ITER_HASLEN) == 0 && *s->pos != 0) {
+        // Null terminated string, but not at null, so not at end.
+        //   Whether in main or normalization buffer doesn't matter.
+        return FALSE;
+    }
+
+    // String with length.  Can't be in normalization buffer, which is always
+    //  null termintated.
+    if (s->flags & UCOL_ITER_HASLEN) {
+        return (s->pos == s->endp);
+    }
+
+    // We are at a null termination, could be either normalization buffer or main string.
+    if ((s->flags & UCOL_ITER_INNORMBUF) == 0) {
+        // At null at end of main string.
+        return TRUE;
+    }
+
+    // At null at end of normalization buffer.  Need to check whether there there are
+    //   any characters left in the main buffer.
+
+    if ((s->origFlags & UCOL_ITER_HASLEN) == 0) {
+        // Null terminated main string.  fcdPosition is the 'return' position into main buf.
+        return (*s->fcdPosition == 0);
+    }
+    else {
+        // Main string with an end pointer.
+        return s->fcdPosition == s->endp;
+    }
+}
+
+
 /**
 * Checks and free writable buffer if it is not the original stack buffer
 * in collIterate. This function does not reassign the writable buffer.
@@ -203,6 +243,9 @@ inline void freeHeapWritableBuffer(collIterate *data)
         uprv_free(data->writableBuffer);
     }
 }
+
+
+
 
 /****************************************************************************/
 /* Following are the open/close functions                                   */
@@ -355,6 +398,7 @@ ucol_openRules(    const    UChar                  *rules,
       fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
     }
 #endif
+    uprv_free(src.opts);
     ucol_tok_closeTokenList(&src);
     return NULL;
   }
@@ -368,13 +412,9 @@ ucol_openRules(    const    UChar                  *rules,
       result->hasRealData = TRUE;
     }
   } else { /* no rules, but no error either */
-    // must be only options
-    // We will init the collator from UCA   
+    /* must be only options */
     result = ucol_initCollator(UCA->image,0,status);
-    // And set only the options
-    UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-    uprv_memcpy(opts, src.opts, sizeof(UColOptionSet));
-    ucol_setOptionsFromHeader(result, opts, status);
+    ucol_setOptionsFromHeader(result, src.opts, status);
     result->freeOptionsOnClose = TRUE;
     result->hasRealData = FALSE;
   }
@@ -388,6 +428,7 @@ ucol_openRules(    const    UChar                  *rules,
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
     ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
   } else {
+    uprv_free(src.opts);
     if(table != NULL) {
       uprv_free(table);
     }
@@ -491,9 +532,9 @@ inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     return (((htbyte >> (hash & 7)) & 1) == 1);
 }
 
-/** 
+/**
 * Approximate determination if a character is at a contraction end.
-* Guaranteed to be TRUE if a character is at the end of a contraction, 
+* Guaranteed to be TRUE if a character is at the end of a contraction,
 * otherwise it is not deterministic.
 * @param c character to be determined
 * @param coll collator
@@ -513,6 +554,21 @@ inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
     return (((htbyte >> (hash & 7)) & 1) == 1);
 }
 
+
+
+/*
+*   i_getCombiningClass()
+*        A fast, at least partly inline version of u_getCombiningClass()
+*        This is a candidate for further optimization.  Used heavily
+*        in contraction processing.
+*/
+inline uint8_t i_getCombiningClass(UChar c, const UCollator *coll) {
+    uint8_t sCC = 0;
+    if (c >= 0x300 && ucol_unsafeCP(c, coll)) {
+        sCC = u_getCombiningClass(c);
+    }
+    return sCC;
+}
 
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
@@ -1184,7 +1240,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             */
         }
 
-        /* attempt to handle contractions, after removal of the backwards 
+        /* attempt to handle contractions, after removal of the backwards
         contraction
         */
         if (!isAtStartPrevIterate(data) && ucol_contractionEndCP(ch, coll)) {
@@ -1383,7 +1439,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
                          UErrorCode *status)
 {
   uint32_t order;
-  if (!isAtStartPrevIterate(collationSource) && 
+  if (!isAtStartPrevIterate(collationSource) &&
       ucol_contractionEndCP(ch, collationSource->coll)) {
       order = UCOL_CONTRACTION;
   }
@@ -1697,14 +1753,17 @@ inline UChar getNextNormalizedChar(collIterate *data)
 {
     UChar  nextch;
     UChar  ch;
-    UBool  innormbuf = (UBool)(data->flags & UCOL_ITER_INNORMBUF);
+    if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 ) {
+         /* if no normalization and not in buffer. */
+         return *(data->pos ++);
+    }
+
     UChar  *pEndWritableBuffer = NULL;
-    if ((data->flags & (UCOL_ITER_NORM | UCOL_ITER_INNORMBUF)) == 0 ||
-        (innormbuf && *data->pos != 0) ||
+    UBool  innormbuf = (UBool)(data->flags & UCOL_ITER_INNORMBUF);
+    if ((innormbuf && *data->pos != 0) ||
         (data->fcdPosition != NULL && !innormbuf &&
         data->pos < data->fcdPosition)) {
         /*
-        if no normalization and not in buffer.
         if next character is in normalized buffer, no further normalization
         is required
         */
@@ -1781,24 +1840,24 @@ inline UChar getNextNormalizedChar(collIterate *data)
     return ch;
 }
 
-/** 
-* Function to copy the buffer into writableBuffer and sets the fcd position to 
+/**
+* Function to copy the buffer into writableBuffer and sets the fcd position to
 * the correct position
 * @param source data string source
 * @param buffer character buffer
 * @param tempdb current position in buffer that has been used up
 */
-inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer, 
+inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
                                      UChar *tempdb)
 {
-    /* okay confusing part here. to ensure that the skipped characters are 
-    considered later, we need to place it in the appropriate position in the 
-    normalization buffer and reassign the pos pointer. simple case if pos 
-    reside in string, simply copy to normalization buffer and 
-    fcdposition = pos, pos = start of normalization buffer. if pos in 
-    normalization buffer, we'll insert the copy infront of pos and point pos 
-    to the start of the normalization buffer. why am i doing these copies? 
-    well, so that the whole chunk of codes in the getNextCE, getSpecialCE does 
+    /* okay confusing part here. to ensure that the skipped characters are
+    considered later, we need to place it in the appropriate position in the
+    normalization buffer and reassign the pos pointer. simple case if pos
+    reside in string, simply copy to normalization buffer and
+    fcdposition = pos, pos = start of normalization buffer. if pos in
+    normalization buffer, we'll insert the copy infront of pos and point pos
+    to the start of the normalization buffer. why am i doing these copies?
+    well, so that the whole chunk of codes in the getNextCE, getSpecialCE does
     not require any changes, which be really painful. */
     uint32_t length = u_strlen(buffer);;
     if (source->flags & UCOL_ITER_INNORMBUF) {
@@ -1830,7 +1889,7 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
 * @param constart index to the start character in the contraction table
 * @return discontiguos collation element offset
 */
-inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
+uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
                                 const UChar *constart)
 {
     /* source->pos currently points to the second combining character after
@@ -1867,7 +1926,7 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
                 *tempbufferpos = 0;
                 source->pos    = temppos - 1;
                 setDiscontiguosAttribute(source, buffer, tempdb);
-                return *(coll->contractionCEs + 
+                return *(coll->contractionCEs +
                                     (tempconstart - coll->contractionIndex));
             }
             constart = tempconstart;
@@ -1932,17 +1991,13 @@ inline uint32_t getDiscontiguos(const UCollator *coll, collIterate *source,
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
-  uint32_t i = 0; /* general counter */
-  uint32_t firstCE = UCOL_NOT_FOUND;
-  //UChar   *firstUChar = source->pos;
-  collIterateState state;
-  backupState(source, &state);
-  //uint32_t CE = *source->CEpos;
   for (;;) {
+    // This loop will repeat only in the case of contractions, and only when a contraction
+    //   is found and the first CE resulting from that contraction is itself a special
+    //   (an expansion, for example.)  All other special CE types are fully handled the
+    //   first time through, and the loop exits.
+
     const uint32_t *CEOffset = NULL;
-    const UChar *UCharOffset = NULL;
-    UChar schar, tchar;
-    uint32_t size = 0;
     switch(getCETag(CE)) {
     case NOT_FOUND_TAG:
       /* This one is not found, and we'll let somebody else bother about it... no more games */
@@ -1980,32 +2035,31 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
       break;
 
     case CONTRACTION_TAG:
+      {
       /* This should handle contractions */
+      collIterateState state;
+      backupState(source, &state);
+      uint32_t firstCE = UCOL_NOT_FOUND;
+      const UChar *UCharOffset;
+      UChar schar, tchar;
+
       for (;;) {
+        /* This loop will run once per source string character, for as long as we     */
+        /*  are matching a potential contraction sequence                  */
+
         /* First we position ourselves at the begining of contraction sequence */
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
-        if (source->pos == source->endp ||
-            /* end of string in non-null terminated string */
-            (*source->pos == 0 && (source->flags & UCOL_ITER_HASLEN) == 0 &&
-            /* end of null-termination string or normalization buffer */
-                ((source->flags & UCOL_ITER_INNORMBUF) == 0 ||
-                /* end of null-terminated string */
-                source->fcdPosition == NULL ||
-                source->fcdPosition == source->endp ||
-                ((source->origFlags & UCOL_ITER_HASLEN) == 0 &&
-                *source->fcdPosition == 0)))) {
-            /* fcd does not point to a valid character*/
+        if (collIter_eos(source)) {
+            // Ran off the end of the source string.
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             // So we'll pick whatever we have at the point...
             if (CE == UCOL_NOT_FOUND) {
-              // spit all the not found chars, which led us in this contraction
-              if(firstCE != UCOL_NOT_FOUND) {
-                CE = firstCE;
-              }
-              loadState(source, &state, TRUE);
+                // back up the source over all the chars we scanned going into this contraction.
+                CE = firstCE;  
+                loadState(source, &state, TRUE);
             }
-          break;
+            break;
         }
 
         uint8_t maxCC = *(UCharOffset)&0xFF; /*get the discontiguos stuff */ /* skip the backward offset, see above */
@@ -2015,72 +2069,94 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
         }
-        if (schar != tchar) {
-          if(maxCC == 0 || schar < 0x0300) { /* only base chars in contraction, so bail out */
-            source->pos --;
-            /* Spit out the last char of the string, wasn't tasty enough */
+
+        if (schar == tchar) {
+            // Found the source string char in the contraction table.
+            //  Pick up the corresponding CE from the table.
             CE = *(coll->contractionCEs +
-                 (ContractionStart - coll->contractionIndex));
-          } else { /* try to go to discontiguos */
-            uint8_t sCC = u_getCombiningClass(schar);
-            if(sCC == 0 || sCC>maxCC || (allSame != 0 && sCC == maxCC)) {
-              source->pos --;
-              /* Spit out the last char of the string, wasn't tasty enough */
-              CE = *(coll->contractionCEs +
-                   (ContractionStart - coll->contractionIndex));
-          } else {
-            UChar tempchar = 0;
-            if (source->pos != source->endp &&
-                (*source->pos != 0 ||
-                    ((source->flags & UCOL_ITER_INNORMBUF) &&
-                    source->fcdPosition != NULL &&
-                    source->fcdPosition != source->endp &&
-                    *source->fcdPosition != 0))) {
+                (UCharOffset - coll->contractionIndex));
+        }
+        else
+        {
+            // Source string char was not in contraction table.
+            //   Unless we have a discontiguous contraction, we have finished
+            //   with this contraction.
+            uint8_t sCC;
+            if (schar < 0x300 ||   
+                maxCC == 0 ||
+                (sCC = i_getCombiningClass(schar, coll)) == 0 ||
+                sCC>maxCC || 
+                (allSame != 0 && sCC == maxCC) ||
+                collIter_eos(source)) {
+                    //  Contraction can not be discontiguous.  
+                    source->pos --;     // back up the source string pointer by one, 
+                                        //  because  the character we just looked at was
+                                        //  not part of the contraction.   */
+                    CE = *(coll->contractionCEs +
+                        (ContractionStart - coll->contractionIndex));
+            } else {
+                //
+                // Contraction is possibly discontiguous.
+                //   Scan more of source string looking for a match
+                //
+                UChar tempchar;
                 /* find the next character if schar is not a base character
-                and we are not yet at the end of the string */
+                    and we are not yet at the end of the string */
                 tempchar = getNextNormalizedChar(source);
                 source->pos --;
+                if (i_getCombiningClass(tempchar, coll) == 0) {
+                    source->pos --;
+                    /* Spit out the last char of the string, wasn't tasty enough */
+                    CE = *(coll->contractionCEs +
+                        (ContractionStart - coll->contractionIndex));
+                } else {
+                    CE = getDiscontiguous(coll, source, ContractionStart);
+                }
             }
-            if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
-                source->pos --;
-                /* Spit out the last char of the string, wasn't tasty enough */
-                CE = *(coll->contractionCEs +
-                     (ContractionStart - coll->contractionIndex));
-            } else {
-                CE = getDiscontiguos(coll, source, ContractionStart);
-            }
-          }
-        }
-        }
-        else {
-            CE = *(coll->contractionCEs +
-                 (UCharOffset - coll->contractionIndex));
         }
 
         if(CE == UCOL_NOT_FOUND) {
-          // source->pos   = firstUChar; /* spit all the not found chars, which led us in this contraction */
+            /* The Source string did not match the contraction that we were checking.  */
+            /*  Back up the source position to undo the effects of having partially    */
+            /*   scanned through what ultimately proved to not be a contraction.       */
           loadState(source, &state, TRUE);
           CE = firstCE;
           break;
-        } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
-        /* this is contraction, and we will continue. However, we can fail along the */
-        /* th road, which means that we have part of contraction correct */
-          uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
-          if(tempCE != UCOL_NOT_FOUND) {
+        }
+        
+        if(!isContraction(CE)) {
+            // The source string char was in the contraction table, and the corresponding
+            //   CE is not a contraction CE.  We completed the contraction, break
+            //   out of loop, this CE will end up being returned.  This is the normal
+            //   way out of contraction handling when the source actually contained
+            //   the contraction.
+            break;
+        }
+        
+
+        // The source string char was in the contraction table, and the corresponding
+        //   CE is IS  a contraction CE.  We will continue looping to check the source
+        //   string for the remaining chars in the contraction.
+        uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+        if(tempCE != UCOL_NOT_FOUND) {
+            // We have scanned a a section of source string for which there is a
+            //  CE from the contraction table.  Remember the CE and scan position, so 
+            //  that we can return to this point if further scanning fails to
+            //  match a longer contraction sequence.
             firstCE = tempCE;
-            /* firstUChar = source->pos-1; */
             backupState(source, &state);
             state.pos --;
-          }
-        } else {
-          break;
         }
       }
       break;
+      }
     case EXPANSION_TAG:
+      {
       /* This should handle expansion. */
       /* NOTE: we can encounter both continuations and expansions in an expansion! */
       /* I have to decide where continuations are going to be dealt with */
+      uint32_t size;
+      uint32_t i;    /* general counter */
       CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
       size = getExpansionCount(CE);
       CE = *CEOffset++;
@@ -2094,6 +2170,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         }
       }
       return CE;
+      }
     case CHARSET_TAG:
       /* probably after 1.8 */
       return UCOL_NOT_FOUND;
@@ -2393,7 +2470,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             /* commented away contraction end checks after adding the checks
             in getPrevCE and getPrevUCA */) {
             /* start of string or this is not the end of any contraction */
-            CE = *(coll->contractionCEs + 
+            CE = *(coll->contractionCEs +
                      (constart - coll->contractionIndex));
             break;
         }
@@ -2408,10 +2485,10 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             if (UCharOffset + 1 == buffer) {
                 /* we have exhausted the buffer */
                 int32_t newsize = source->pos - source->string + 1;
-                strbuffer = (UChar *)uprv_malloc(sizeof(UChar) * 
+                strbuffer = (UChar *)uprv_malloc(sizeof(UChar) *
                                              (newsize + UCOL_MAX_BUFFER));
                 UCharOffset = strbuffer + newsize;
-                uprv_memcpy(UCharOffset, buffer, 
+                uprv_memcpy(UCharOffset, buffer,
                                              UCOL_MAX_BUFFER * sizeof(UChar));
                 UCharOffset --;
             }
@@ -2437,7 +2514,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             *(source->CEpos ++) = CE;
             if (source->CEpos == endCEBuffer) {
                 /* ran out of CE space, bail.
-                there's no guarantee of the right character position after 
+                there's no guarantee of the right character position after
                 this bail*/
                 *status = U_BUFFER_OVERFLOW_ERROR;
                 source->CEpos = source->CEs;
@@ -3029,7 +3106,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                   /* Do the special handling for French secondaries */
                   /* We need to get continuation elements and do intermediate restore */
                   /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
-                  if(notIsContinuation) { 
+                  if(notIsContinuation) {
                     if (frenchStartPtr != NULL) {
                         /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
                       uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
@@ -3040,7 +3117,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                       frenchStartPtr = secondaries - 2;
                     }
                     frenchEndPtr = secondaries-1;
-                  } 
+                  }
                 }
               }
 
@@ -4092,7 +4169,7 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
 }
 
 /* String compare in code point order - u_strcmp() compares in code unit order. */
-U_CFUNC int32_t 
+U_CFUNC int32_t
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t     n) {
     UChar c1, c2;
     int32_t diff;
@@ -4104,7 +4181,7 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t     n) {
           c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
           c2=*s2;
           c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
-        
+
           /* now c1 and c2 are in UTF-32-compatible order */
           diff=(int32_t)c1-(int32_t)c2;
           if(diff!=0 || --n == 0) {
@@ -4428,7 +4505,7 @@ ucol_strcoll( const UCollator    *coll,
             // and there are no more CEs, we advance to the next level
             if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
-            } 
+            }
         } else {
             // if two primaries are different, we are done
             result = (sOrder < tOrder) ?  UCOL_LESS: UCOL_GREATER;
@@ -4440,7 +4517,7 @@ ucol_strcoll( const UCollator    *coll,
         UBool sInShifted = FALSE;
         UBool tInShifted = FALSE;
         // This version of code can be refactored. However, it seems easier to understand this way.
-        // Source loop. Sam as the target loop. 
+        // Source loop. Sam as the target loop.
         for(;;) {
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
           if(sOrder == UCOL_NO_MORE_CES) {
@@ -5137,7 +5214,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
           return UCOL_GREATER;
         }
 
-        if((secS & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY 
+        if((secS & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY
           || (secT & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY ) {
           break;
         } else {
