@@ -8,9 +8,6 @@ public class TransliterationRule$Latin$Devanagari extends ListResourceBundle {
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Description",
-                "Latin to Devanagari" },
-
             { "Rule",
                 //#####################################################################
                 //	Keyboard Transliteration Table

@@ -8,7 +8,17 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Rule", "" // Russian Letters
+            { "Rule", "" 
+            
+                /* This class is designed to be a general Latin-Cyrillic
+                   transliteration. The standard Russian transliterations
+                   are generally used for the letters from Russian,
+                   with additional Cyrillic characters given consistent
+                   mappings.
+                */
+            
+                + "S-hacek=\u0160;"
+                + "s-hacek=\u0161;"
 
                 + "YO=\u0401;"
                 + "J=\u0408;"
@@ -104,24 +114,10 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 + "letter=[[:Lu:][:Ll:]];"
                 + "lower=[[:Ll:]];"     
                 
-                + "Agrave=\u00C0;"
-                + "Egrave=\u00C8;"
-                + "Igrave=\u00CC;"
-                + "Ograve=\u00D2;"
-                + "Ugrave=\u00D9;"
-                + "Ydiaeresis=\u009F;" // Non-standard?
-
-                + "agrave=\u00E0;"
-                + "egrave=\u00E8;"
-                + "igrave=\u00EC;"
-                + "ograve=\u00F2;"
-                + "ugrave=\u00F9;"
-                + "ydiaeresis=\u00FF;"
-
                 /*
                     Modified to combine display transliterator and typing transliterator.
                     The display mapping uses accents for the "soft" vowels.
-                    It does not, although it could, use characters like \u009A instead of digraphs
+                    It does not, although it could, use characters like \u0161 instead of digraphs
                     like sh.
                 */
                 
@@ -177,7 +173,7 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 + "E<>{E};"
                 + "F<>{F};"
                 + "G<>{G};"
-                + "{Igrave}<>{YI};"
+                + "\u00cc<>{YI};"
                 + "I<>{I};"
                 + "KH<>{KH};"
                 + "K<>{K};"
@@ -188,27 +184,28 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 + "P<>{P};"
                 + "R<>{R};"
                 + "SHCH<>{SHCH};"
-                + "SH<>{SH};"
+                + "SH>{SH};"       //+ "SH<{SH};"
+                + "{S-hacek}<>{SH};"
                 + "S<>{S};"
                 + "TS<>{TS};"
                 + "T<>{T};"
                 + "U<>{U};"
                 + "V<>{V};"
-                //AEOU + grave
+                //\u00cc\u00c0\u00c8\u00d2\u00d9
                 + "YE>{YE};"       //+ "YE<{YE};"
-                + "{Egrave}<>{YE};"
+                + "\u00c8<>{YE};"
                 + "YO>{YO};"       //+ "YO<{YO};"
-                + "{Ograve}<>{YO};"
+                + "\u00d2<>{YO};"
                 + "YU>{YU};"       //+ "YU<{YU};"
-                + "{Ugrave}<>{YU};"
+                + "\u00d9<>{YU};"
                 + "YA>{YA};"       //+ "YA<{YA};"
-                + "{Agrave}<>{YA};"
+                + "\u00c0<>{YA};"
                 + "Y<>{Y};"
                 + "ZH<>{ZH};"
                 + "Z<>{Z};"
 
                 + "H<>{HARD};"
-                + "{Ydiaeresis}<>{SOFT};"
+                + "\u0178<>{SOFT};"
                 
                 // Non-russian
                 
@@ -255,7 +252,7 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 + "e<>{e};"
                 + "f<>{f};"
                 + "g<>{g};"
-                + "{igrave}<>{yi};"
+                + "\u00ec<>{yi};"
                 + "i<>{i};"
                 + "kh<>{kh};"
                 + "k<>{k};"
@@ -266,27 +263,28 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 + "p<>{p};"
                 + "r<>{r};"
                 + "shch<>{shch};"
-                + "sh<>{sh};"
+                + "sh>{sh};"       //+ "sh<{sh};"
+                + "{s-hacek}<>{sh};"
                 + "s<>{s};"
                 + "ts<>{ts};"
                 + "t<>{t};"
                 + "u<>{u};"
                 + "v<>{v};"
-                //aeou + grave
+                //\u00ec\u00e0\u00e8\u00f2\u00f9
                 + "ye>{ye};"       //+ "ye<{ye};"
-                + "{egrave}<>{ye};"
+                + "\u00e8<>{ye};"
                 + "yo>{yo};"       //+ "yo<{yo};"
-                + "{ograve}<>{yo};"
+                + "\u00f2<>{yo};"
                 + "yu>{yu};"       //+ "yu<{yu};"
-                + "{ugrave}<>{yu};"
+                + "\u00f9<>{yu};"
                 + "ya>{ya};"       //+ "ya<{ya};"
-                + "{agrave}<>{ya};"
+                + "\u00e0<>{ya};"
                 + "y<>{y};"
                 + "zh<>{zh};"
                 + "z<>{z};"
 
                 + "h<>{hard};"
-                + "{ydiaeresis}<>{soft};"
+                + "\u00ff<>{soft};"
                 
                 // non-russian
                 

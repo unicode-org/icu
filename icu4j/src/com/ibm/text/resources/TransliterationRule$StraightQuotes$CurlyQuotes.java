@@ -8,9 +8,6 @@ public class TransliterationRule$StraightQuotes$CurlyQuotes extends ListResource
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Description",
-                "Use left and right double quotes" },
-
             {   "Rule",
                 // Rewritten using character codes [LIU]
                 "white=[[:Zs:][:Zl:][:Zp:]];"

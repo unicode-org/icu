@@ -2,24 +2,17 @@ package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
 
-/**
- * Rewritten April 1999 to implement Hepburn (kebon shiki)
- * transliteration.  Reference: CJKV Information Processing, Lunde,
- * 1999, pp. 30-35.
- * @author Alan Liu
- */
 public class TransliterationRule$Latin$Kana extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Description",
-                "Lowercase Latin to hiragana; "
-                + "Uppercase Latin to katakana" },
+            // Lowercase Latin to hiragana
+            // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.5 $
+                //# $Revision: 1.6 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.
@@ -559,15 +552,15 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 // THE FOLLOWING ARE NOT REALLY NECESSARY, BUT PRODUCE
                 // SLIGHTLY MORE NATURAL RESULTS.
                 
-                // + "BY>{BI};" // masked by BY> rule above
+              //masked: + "BY>{BI};"
                 + "CY>{SE}{~I};"
                 + "DY>{DE}{~I};"
-                // + "GY>{GI};" // masked
+              //masked: + "GY>{GI};"
                 + "HY>{HI};"
-                // + "KY>{KI};" // masked
-                // + "MY>{MI};" // masked
-                // + "PY>{PI};" // masked
-                // + "RY>{RI};" // masked
+              //masked: + "KY>{KI};"
+              //masked: + "MY>{MI};"
+              //masked: + "PY>{PI};"
+              //masked: + "RY>{RI};"
                 + "SY>{SE}{~I};"
                 + "TY>{TE}{~I};"
                 + "ZY>{ZE}{~I};"
@@ -588,10 +581,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 + "B>{BU};"
                 + "D>{DE};"
-                // + "F>{HU};" // masked
+              //masked: + "F>{HU};"
                 + "G>{GU};"
                 + "H>{HE};"
-                // + "J>{ZI};" // masked
+              //masked: + "J>{ZI};"
                 + "K>{KU};"
                 + "M>{^N};"
                 + "N>{^N};"
@@ -599,9 +592,9 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "R>{RU};"
                 + "S>{SU};"
                 + "T>{TE};"
-                // + "V>{BU};" // masked
-                // + "W>{^U};" // masked
-                // + "X>{KU}{SU};" // masked
+              //masked: + "V>{BU};"
+              //masked: + "W>{^U};"
+              //masked: + "X>{KU}{SU};"
                 + "Y>{^I};"
                 + "Z>{ZU};"
                 
@@ -1036,15 +1029,15 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 // the following are not really necessary, but produce
                 // slightly more natural results.
                 
-                // + "by>{bi};" // masked
+              //masked: + "by>{bi};"
                 + "cy>{se}{~i};"
                 + "dy>{de}{~i};"
-                // + "gy>{gi};" // masked
+              //masked: + "gy>{gi};"
                 + "hy>{hi};"
-                // + "ky>{ki};" // masked
-                // + "my>{mi};" // masked
-                // + "py>{pi};" // masked
-                // + "ry>{ri};" // masked
+              //masked: + "ky>{ki};"
+              //masked: + "my>{mi};"
+              //masked: + "py>{pi};"
+              //masked: + "ry>{ri};"
                 + "sy>{se}{~i};"
                 + "ty>{te}{~i};"
                 + "zy>{ze}{~i};"
@@ -1065,10 +1058,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 + "b>{bu};"
                 + "d>{de};"
-                // + "f>{hu};" // masked
+              //masked: + "f>{hu};"
                 + "g>{gu};"
                 + "h>{he};"
-                // + "j>{zi};" // masked
+              //masked: + "j>{zi};"
                 + "k>{ku};"
                 + "m>{^n};"
                 + "n>{^n};"
@@ -1076,9 +1069,9 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "r>{ru};"
                 + "s>{su};"
                 + "t>{te};"
-                // + "v>{bu};" // masked
-                // + "w>{^u};" // masked
-                // + "x>{ku}{su};" // masked
+              //masked: + "v>{bu};"
+              //masked: + "w>{^u};"
+              //masked: + "x>{ku}{su};"
                 + "y>{^i};"
                 + "z>{zu};"
                 
@@ -1303,8 +1296,8 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "~u<{~u};"
                 + "~e<{~e};"
                 + "~o<{~o};"
-                // + "~ka<{~ka};" // masked by <{~KA} rule
-                // + "~ke<{~ke};" // masked by <{~KE} rule
+              //masked: + "~ka<{~ka};" ({~ka} is an alias for {~KA})
+              //masked: + "~ke<{~ke};" ({~ke} is an alias for {~KE})
                 + "~ya<{~ya};"
                 + "~yu<{~yu};"
                 + "~yo<{~yo};"
@@ -1331,6 +1324,3 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
         };
     }
 }
-
-
-

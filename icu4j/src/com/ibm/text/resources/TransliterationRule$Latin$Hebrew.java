@@ -8,9 +8,6 @@ public class TransliterationRule$Latin$Hebrew extends ListResourceBundle {
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Description",
-                "Latin to Hebrew" },
-
             { "Rule",
                 //variable names, derived from the Unicode names.
 

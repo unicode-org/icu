@@ -8,8 +8,6 @@ public class TransliterationRule$Latin$Arabic extends ListResourceBundle {
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "HasInverse", "1" },
-
             { "Rule",
                 // To Do: finish adding shadda, add sokoon
 
