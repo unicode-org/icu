@@ -634,28 +634,44 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
           u_UCharsToChars(alias, chAlias, len);
 
           if(*chAlias == RES_PATH_SEPARATOR) {
-            /* there is a path included */
-            locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
-            if(locale == NULL) {
-                locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
-            } else {
-                *locale = 0;
-                locale++;
-            }
-            path = chAlias+1;
-            if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
-              path = NULL;
-            }
+              if(*(chAlias+1) == RES_PATH_SEPARATOR) {
+                /* this is an XPath alias, starting with "//" */
+                /* it contains the path to a resource which should be looked up */
+                /* starting in parent */
+                locale = parent->fData->fName; /* this is the parent's name */
+                path = realData->fPath; /* we will be looking in the same package */
+                keyPath = chAlias+2; 
+              } else {
+                /* there is a path included */
+                locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
+                if(locale == NULL) {
+                  locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
+                } else {
+                  *locale = 0;
+                  locale++;
+                }
+                path = chAlias+1;
+                if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
+                  path = NULL;
+                }
+                keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
+                if(keyPath) {
+                  *keyPath = 0;
+                  keyPath++;
+                }
+              }
           } else {
             /* no path, start with a locale */
             locale = chAlias;
+            keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
+            if(keyPath) {
+              *keyPath = 0;
+              keyPath++;
+            }
             path = realData->fPath;
           }
-          keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
-          if(keyPath) {
-            *keyPath = 0;
-            keyPath++;
-          }
+
+
           {
             /* got almost everything, let's try to open */
             /* first, open the bundle with real data */
