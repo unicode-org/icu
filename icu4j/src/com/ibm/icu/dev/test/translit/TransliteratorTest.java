@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/04/04 18:07:08 $ 
- * $Revision: 1.34 $
+ * $Date: 2001/05/23 19:44:12 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -742,11 +742,6 @@ public class TransliteratorTest extends TestFmwk {
             "Null[abc]",
             "xyz",
             "xyz",
-            
-            "Remove[abc]",
-            "Remove[abc]",
-            "axbycz",
-            "xyz",
         };
         
         for (int i=0; i<DATA.length; i+=4) {
@@ -779,6 +774,21 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator t = Transliterator.getInstance("Remove[aeiou]");
         expect(t, "The quick brown fox.",
                "Th qck brwn fx.");
+    }
+
+    /**
+     * Test the case mapping transliterators.
+     */
+    public void TestCaseMap() {
+        Transliterator toUpper =
+            Transliterator.getInstance("Lower-Upper[^xyz]");
+        Transliterator toLower = toUpper.getInverse();
+        toLower.setFilter(new UnicodeSet("[^XYZ]"));
+        
+        expect(toUpper, "The quick brown fox jumped over the lazy dogs.",
+               "THE QUICK BROWN FOx JUMPED OVER THE LAzy DOGS.");
+        expect(toLower, "The quIck brown fOX jUMPED OVER THE LAzY dogs.",
+               "the quick brown foX jumped over the lazY dogs.");
     }
 
     //======================================================================
