@@ -20,7 +20,6 @@ icu4c/data/sent.brk
 icu4c/data/testdat*.*
 icu4c/data/word.brk
 icu4c/data/word_th.brk
-icu4c/debian
 icu4c/debian/*.debhelper
 icu4c/debian/*.substvars
 icu4c/debian/*files
