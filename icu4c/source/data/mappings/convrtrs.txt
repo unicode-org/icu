@@ -75,6 +75,7 @@ UTF32_PlatformEndian     ISO-10646-UCS-4 { IANA } csUCS4 utf-32 { MIME } ucs-4
 UTF32_OppositeEndian
 SCSU { IANA }
 LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
+US-ASCII { MIME }        ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
 ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
 ISO_2022,locale=ja,version=1     ISO-2022-JP-1
@@ -98,7 +99,7 @@ LMBCS-19
 
 # Table-based
 
-ibm-367                 us-ascii { MIME } ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
+ibm-367
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us

@@ -77,6 +77,7 @@ typedef enum {
     UCNV_LMBCS_LAST = UCNV_LMBCS_19,
     UCNV_HZ,
     UCNV_SCSU,
+    UCNV_US_ASCII,
 
     /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES
