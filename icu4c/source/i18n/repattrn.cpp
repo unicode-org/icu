@@ -75,15 +75,18 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fLiteralText      = other.fLiteralText;
     fDeferredStatus   = other.fDeferredStatus;
     fMinMatchLen      = other.fMinMatchLen;
+    fFrameSize        = other.fFrameSize;
+    fDataSize         = other.fDataSize;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
     fStaticSets       = other.fStaticSets; 
+    fStaticSets8      = other.fStaticSets8;
     
     fStartType        = other.fStartType;
     fInitialStringIdx = other.fInitialStringIdx;
     fInitialStringLen = other.fInitialStringLen;
     *fInitialChars    = *other.fInitialChars;
-    *fInitialChars8   = *other.fInitialChars8;
     fInitialChar      = other.fInitialChar;
+    *fInitialChars8   = *other.fInitialChars8;
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
     fCompiledPat->assign(*other.fCompiledPat, fDeferredStatus);
@@ -121,20 +124,26 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 //
 //--------------------------------------------------------------------------
 void RegexPattern::init() {
+    fPattern.remove();
     fFlags            = 0;
+    fCompiledPat      = 0;
+    fLiteralText.remove();
+    fSets             = NULL;
+    fSets8            = NULL;
     fDeferredStatus   = U_ZERO_ERROR;
     fMinMatchLen      = 0;
-    fMaxCaptureDigits = 1;  
-    fStaticSets       = NULL;
     fFrameSize        = 0;
     fDataSize         = 0;
+    fGroupMap         = NULL;
+    fMaxCaptureDigits = 1;  
+    fStaticSets       = NULL;
+    fStaticSets8      = NULL;
     fStartType        = START_NO_INFO;
     fInitialStringIdx = 0;
     fInitialStringLen = 0;
     fInitialChars     = NULL;
-    fInitialChars8    = NULL;
     fInitialChar      = 0;
-    fSets8            = NULL;
+    fInitialChars8    = NULL;
     
     fCompiledPat      = new UVector32(fDeferredStatus);
     fGroupMap         = new UVector32(fDeferredStatus);
@@ -173,14 +182,14 @@ void RegexPattern::zap() {
     }
     delete fSets;
     fSets = NULL;
+    delete[] fSets8;
+    fSets8 = NULL;
     delete fGroupMap;
     fGroupMap = NULL;
     delete fInitialChars;
     fInitialChars = NULL;
     delete fInitialChars8;
     fInitialChars8 = NULL;
-    delete[] fSets8;
-    fSets8 = NULL;
 }
 
 
