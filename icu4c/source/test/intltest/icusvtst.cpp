@@ -667,7 +667,7 @@ ICUServiceTest::testAPI_Two()
     // iterate over the display names
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector names(deleteStringPair, NULL, status);
+        UVector names(userv_deleteStringPair, NULL, status);
         service.getDisplayNames(names, Locale::getGerman(), status);
         for (int i = 0; i < names.size(); ++i) {
             const StringPair* pair = (const StringPair*)names[i];
@@ -707,7 +707,7 @@ ICUServiceTest::testAPI_Two()
     // Rad dude's surfer gal 'replaces' Later's surfer gal
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector names(deleteStringPair, NULL, status);
+        UVector names(userv_deleteStringPair, NULL, status);
         service.getDisplayNames(names, Locale("es"), status);
         for (int i = 0; i < names.size(); ++i) {
             const StringPair* pair = (const StringPair*)names[i];
@@ -878,7 +878,7 @@ ICUServiceTest::testRBF()
     // this should be fast since the display names were cached.
     {
         UErrorCode status = U_ZERO_ERROR;
-        UVector names(deleteStringPair, NULL, status);
+        UVector names(userv_deleteStringPair, NULL, status);
         service.getDisplayNames(names, Locale::getGermany(), status);
         logln("service display names for de_DE");
         for (int i = 0; i < names.size(); ++i) {
@@ -904,7 +904,7 @@ ICUServiceTest::testRBF()
             logln(UnicodeString("\n  --- ") + idNames[i] + " ---");
             {
                 UErrorCode status = U_ZERO_ERROR;
-                UVector names(deleteStringPair, NULL, status);
+                UVector names(userv_deleteStringPair, NULL, status);
                 service.getDisplayNames(names, idNames[i], status);
                 for (int i = 0; i < names.size(); ++i) {
                     const StringPair* pair = (const StringPair*)names[i];
