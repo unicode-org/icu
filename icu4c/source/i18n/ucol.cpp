@@ -2738,7 +2738,7 @@ ucol_strcoll(    const    UCollator    *coll,
     }
     */
     
-    /* Scan the strings.  Find:
+    /* Scan the strings.  Find:                                                             */
     /*    their length, if not given by caller                                              */
     /*    The length of any leading portion that is equal                                   */
     /*    Whether they are exactly equal.  (in which case we just return                    */
@@ -3388,7 +3388,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 #if 0 
     /* This is Andy's fast preparatory scan */
     /* It's good to have it - once the regular function is working */
-    /* Scan the strings.  Find:
+    /* Scan the strings.  Find:                                                             */
     /*    their length, if not given by caller                                              */
     /*    The length of any leading portion that is equal                                   */
     /*    Whether they are exactly equal.  (in which case we just return                    */
