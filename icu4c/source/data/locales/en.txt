@@ -7,6 +7,12 @@
 
 en {
     Version { "3.0" }
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { "&A<<<\u00c6/E &a<<<\u00e6/e" }
+        }
+    }
     Countries {
         //AA {} // Not in ISO-3166 standard
         AD { "Andorra" }
