@@ -60,7 +60,6 @@
 
 U_NAMESPACE_BEGIN
 
-class RuleBasedCollatorStreamer;
 class StringSearch;
 class CollationElementIterator;
 
@@ -352,6 +351,13 @@ public:
   const UnicodeString& getRules(void) const;
 
   /**
+   * Gets the version information for a Collator. 
+   * @param info the version # information, the result will be filled in
+   * @stable
+   */
+  virtual void getVersion(UVersionInfo info) const;
+
+  /**
    * Return the maximum length of any expansion sequences that end with the
    * specified comparison order.
    * @param order a collation order returned by previous or next.
@@ -361,7 +367,7 @@ public:
    * @see CollationElementIterator#getMaxExpansion
    * @stable
    */
-    int32_t getMaxExpansion(int32_t order) const;
+  int32_t getMaxExpansion(int32_t order) const;
 
   /**
    * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -630,11 +636,6 @@ private:
   UnicodeString *urulestring;
 
   // friend classes --------------------------------------------------------
-
-  /**
-  * Streamer used to read/write binary collation data files.
-  */
-  friend class RuleBasedCollatorStreamer;
 
   /**
   * Used to iterate over collation elements in a character source.
