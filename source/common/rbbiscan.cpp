@@ -787,7 +787,7 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
             //    the middle (a variable name, for example.)
             for (;;) {
                 c.fChar = nextCharLL();
-                if (c.fChar == -1       ||  // EOF
+                if (c.fChar == (UChar32)-1 ||  // EOF
                     c.fChar == chCR     ||
                     c.fChar == chLF     ||
                     c.fChar == chNEL    ||
@@ -886,12 +886,12 @@ void RBBIRuleScanner::parse() {
                 // Table row specified "escaped P" and the char is either 'p' or 'P'.
                 break;
             }
-            if (tableEl->fCharClass == 252 && fC.fChar == -1)  {
+            if (tableEl->fCharClass == 252 && fC.fChar == (UChar32)-1)  {
                 // Table row specified eof and we hit eof on the input.
                 break;
             }
 
-            if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 && fC.fChar != -1) {
+            if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 && fC.fChar != (UChar32)-1) {
                 UnicodeSet *uniset = fRuleSets[tableEl->fCharClass-128];
                 if (uniset->contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,

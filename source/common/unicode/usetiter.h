@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.5 $
+* $Revision: 1.6 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -236,7 +236,7 @@ private:
 };
 
 inline UBool UnicodeSetIterator::isString() const {
-    return codepoint == IS_STRING;
+    return codepoint == (UChar32)IS_STRING;
 }
 
 inline UChar32 UnicodeSetIterator::getCodepoint() const {
