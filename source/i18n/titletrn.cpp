@@ -105,9 +105,10 @@ void TitlecaseTransliterator::handleTransliterate(
     // in which case we want to start in toLower mode.  If the
     // prior context is anything else (including empty) then start
     // in toTitle mode.
-    int32_t start = offsets.start;
-    while (start > offsets.contextStart) {
-        UChar c = text.charAt(--start);
+    UChar32 c;
+    int32_t start;
+    for (start = offsets.start - 1; start >= offsets.contextStart; start -= UTF_CHAR_LENGTH(c)) {
+        c = text.char32At(start);
         if (SKIP->contains(c)) {
             continue;
         }
