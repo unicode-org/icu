@@ -72,7 +72,9 @@ private:
      * A value we compute from segments.  The first index into segments[]
      * that is >= anteContextLength.  That is, the first one that is within
      * the forward scanned part of the pattern -- the key or the postContext.
-     * If there are no segments, this has the value -1.
+     * If there are no segments, this has the value -1.  This index is relative
+     * to FIRST_SEG_POS_INDEX; that is, it should be used as follows:
+     * segments[FIRST_SEG_POS_INDEX + firstKeySeg].
      */
     int32_t firstKeySeg;
 
