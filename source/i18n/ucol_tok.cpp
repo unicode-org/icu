@@ -202,9 +202,9 @@ ucolTokSuboption alternateSub[2] = {
 };
 
 ucolTokSuboption caseFirstSub[3] = {
-  {suboption_02, 13, UCOL_LOWER_FIRST},
-  {suboption_03,  7, UCOL_UPPER_FIRST},
-  {suboption_04,  2, UCOL_OFF},
+  {suboption_02, 5, UCOL_LOWER_FIRST},
+  {suboption_03,  5, UCOL_UPPER_FIRST},
+  {suboption_04,  3, UCOL_OFF},
 };
 
 ucolTokSuboption onOffSub[2] = {
@@ -306,7 +306,7 @@ UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, co
   if(i<5) {
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
-        if(u_strncmp(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
+        if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
           ucol_uprv_tok_setOptionInImage(opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
           return TRUE;
         }
