@@ -68,8 +68,6 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   const char *baseName;
 
-  fprintf(stderr, " ####### Warning! Files mode is still experimental. -srl\n");
-
 
   /* Dont' copy files already in tmp */
   for(infiles = o->filePaths;infiles;infiles = infiles->next)
@@ -135,7 +133,10 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   /* commands for the make rule */
   tail = NULL;
-  copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup("$(INSTALL_DATA) $? $(TARGETDIR)"));
+  copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup
+				   ("@for file in $?; do \\\n"
+				    "\t$(INSTALL_DATA) $$file $(TARGETDIR) ; \\\n"
+				    "done;\n\n"));
 
   if(copyFilesRight != NULL)
   {
@@ -152,8 +153,12 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "clean:\n\n");
   }
 
-  sprintf(tmp, "install: $(COPIEDDEST)\n"
-          "\t$(INSTALL_DATA) $(DATAFILEPATHS) $(INSTALLTO)\n\n");
+  sprintf(tmp, "install: \n"
+	  "\techo Installing to $(INSTALLTO) - be patient\n"
+          "\t@for file in $(DATAFILEPATHS) ; do \\\n"
+	  "\t\t$(INSTALL_DATA) $$file  $$INSTALLTO; \\\n"
+	  "\tdone;\n\n");
+
 
   T_FileStream_writeLine(makefile, tmp);
 }
