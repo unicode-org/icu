@@ -167,17 +167,24 @@ UObject *UObjectTest::testClass(UObject *obj,
 void UObjectTest::testIDs()
 {
     ids_count = 0;
+#if !UCONFIG_NO_TRANSLITERATION
     UParseError parseError;
+#endif
     UErrorCode status = U_ZERO_ERROR;
     
     
     //TESTCLASSID_DEFAULT(AbbreviatedUnicodeSetIterator);
     //TESTCLASSID_DEFAULT(AnonymousStringFactory);
+
+#if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_FACTORY(AnyTransliterator, Transliterator::createInstance(UnicodeString("Any-Latin"), UTRANS_FORWARD, parseError, status));
+#endif
     
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
     //TESTCLASSID_DEFAULT(CollationElementIterator);
+#if !UCONFIG_NO_COLLATION
     TESTCLASSID_DEFAULT(CollationKey);
+#endif
     //TESTCLASSID_FACTORY(CompoundTransliterator, Transliterator::createInstance(UnicodeString("Any-Jex;Hangul-Jamo"), UTRANS_FORWARD, parseError, status));
     
     //TESTCLASSID_DEFAULT(DateFormatSymbols);
@@ -189,12 +196,16 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(EventListener);
     
     //TESTCLASSID_DEFAULT(FieldPosition);
+#if !UCONFIG_NO_FORMATTING
     TESTCLASSID_DEFAULT(Formattable);
+#endif
     //TESTCLASSID_DEFAULT(FunctionReplacer);
     
     //TESTCLASSID_DEFAULT(GregorianCalendar);
     
+#if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_FACTORY(EscapeTransliterator, Transliterator::createInstance(UnicodeString("Any-Hex"), UTRANS_FORWARD, parseError, status));
+#endif
         
     //TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
     
@@ -210,10 +221,14 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(NormalizationTransliterator);
     //TESTCLASSID_DEFAULT(Normalizer);
     //TESTCLASSID_DEFAULT(NullTransliterator);
+#if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(NumberFormat);
+#endif
     //TESTCLASSID_DEFAULT(NumeratorSubstitution);
     
+#if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_DEFAULT(ParsePosition);
+#endif
     
     //TESTCLASSID_DEFAULT(Quantifier);
     
@@ -235,9 +250,14 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(TempSearch);
     //TESTCLASSID_DEFAULT(TestMultipleKeyStringFactory);
     //TESTCLASSID_DEFAULT(TestReplaceable);
+#if !UCONFIG_NO_FORMATTING
     TESTCLASSID_ABSTRACT(TimeZone);
+#endif
+
+#if !UCONFIG_NO_TRANSLITERATION
     TESTCLASSID_FACTORY(TitlecaseTransliterator,  Transliterator::createInstance(UnicodeString("Any-Title"), UTRANS_FORWARD, parseError, status));
     TESTCLASSID_ABSTRACT(Transliterator);
+#endif
     
     TESTCLASSID_DEFAULT(UnicodeString);
     //TESTCLASSID_DEFAULT(UStack);
