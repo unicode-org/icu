@@ -492,11 +492,11 @@ void NumberFormatTest::TestCurrencyObject() {
     
 void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
                                       double value, const UnicodeString& string) {
+    UErrorCode ec = U_ZERO_ERROR;
     DecimalFormat& fmt = * (DecimalFormat*) &nf;
-    UnicodeString curr("<none>");
+    char curr[4] = {'-','-','-',0};
     if (*locale.getLanguage() != 0) {
-        UErrorCode ec = U_ZERO_ERROR;
-        curr = UCurrency::forLocale(locale, ec);
+        UCurrency::forLocale(locale, curr, ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UCurrency::forLocale");
             return;
@@ -507,10 +507,25 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
     fmt.format(value, s);
     s.findAndReplace((UChar32)0x00A0, (UChar32)0x0020);
 
-    if (s == string) {
-        logln((UnicodeString)"Ok: " + value + " x " + curr + " => " + prettify(s));
+    // Default display of the number yields "1234.5599999999999"
+    // instead of "1234.56".  Use a formatter to fix this.
+    NumberFormat* f = 
+        NumberFormat::createInstance(Locale::getUS(), ec);
+    UnicodeString v;
+    if (U_FAILURE(ec)) {
+        // Oops; bad formatter.  Use default op+= display.
+        v = (UnicodeString)"" + value;
     } else {
-        errln((UnicodeString)"FAIL: " + value + " x " + curr + " => " + prettify(s) +
+        f->setMaximumFractionDigits(4);
+        f->setGroupingUsed(FALSE);
+        f->format(value, v);
+    }
+    delete f;
+
+    if (s == string) {
+        logln((UnicodeString)"Ok: " + v + " x " + curr + " => " + prettify(s));
+    } else {
+        errln((UnicodeString)"FAIL: " + v + " x " + curr + " => " + prettify(s) +
               ", expected " + prettify(string));
     }
 }

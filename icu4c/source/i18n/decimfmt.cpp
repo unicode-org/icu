@@ -43,6 +43,7 @@
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "unicode/currency.h"
 
 U_NAMESPACE_BEGIN
@@ -234,7 +235,7 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     if (symbolsToAdopt == NULL) {
-        currency = UCurrency::forLocale(Locale::getDefault(), status);
+        UCurrency::forLocale(Locale::getDefault(), currency, status);
     } else {
         setCurrencyForSymbols();
     }
@@ -1438,9 +1439,9 @@ DecimalFormat::setCurrencyForSymbols() {
         def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
         fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
         def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
-        currency = UCurrency::forLocale(fSymbols->getLocale(), ec);
+        UCurrency::forLocale(fSymbols->getLocale(), currency, ec);
     } else {
-        currency.truncate(0); // Use DFS currency info
+        currency[0] = 0; // Use DFS currency info
     }
 }
 
@@ -1937,7 +1938,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                     ++i;
                 }
                 UnicodeString s;
-                if (currency.length() != 0) {
+                if (currency[0] != 0) {
                     s = intl ? currency
                         : UCurrency::getSymbol(currency, fSymbols->getLocale());
                 } else {
@@ -2932,13 +2933,14 @@ void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
  * null.
  * @since ICU 2.2
  */
-void DecimalFormat::setCurrency(const UnicodeString& theCurrency) {
+void DecimalFormat::setCurrency(const char* theCurrency) {
     // If we are a currency format, then modify our affixes to
     // encode the currency symbol for the given currency in our
     // locale, and adjust the decimal digits and rounding for the
     // given currency.
 
-    currency = theCurrency;
+    uprv_strncpy(currency, theCurrency, 3);
+    currency[3] = 0;
 
     if (fIsCurrencyFormat) {
         setRoundingIncrement(UCurrency::getRoundingIncrement(currency));
@@ -2960,7 +2962,7 @@ void DecimalFormat::setCurrency(const UnicodeString& theCurrency) {
  * the standard ones for its locale.
  * @since ICU 2.2
  */
-UnicodeString DecimalFormat::getCurrency() const {
+const char* DecimalFormat::getCurrency() const {
     return currency;
 }
 
