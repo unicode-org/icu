@@ -8,6 +8,8 @@ top_srcdir = @top_srcdir@
 
 top_builddir = ..
 
+PKGDATA_MODE = $(MODE)
+
 include $(top_builddir)/icudefs.mk
 
 include @platform_make_fragment@
@@ -20,11 +22,6 @@ CXXFLAGS = @CXXFLAGS@
 
 ## Build directory information
 subdir = tools
-
-## Allow overriding of package build mode
-ifeq ($(strip $(MODE)),)
-  MODE=@DATA_PACKAGING_MODE@
-endif
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
@@ -45,7 +42,7 @@ CURDIR=$(shell /bin/pwd)
 # relative lib links from pkgdata are the same as for tmp
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
-PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -m $(MODE) 
+PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -m $(PKGDATA_MODE) 
 
 ## Install program information
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -207,8 +204,11 @@ build-local build-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testd
 	(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/icupkg.inc
-	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(pkglibdir)/$(VERSION)
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst -I $(DESTDIR)$(pkglibdir)/$(VERSION))
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION))
+ifeq ($(strip $(PKGDATA_MODE)),dll)
+	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
+endif
 
 clean-pkgdata:
 	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
