@@ -62,10 +62,15 @@ private:
     void     setAdd(UVector *dest, UVector *source);
     UBool    setEquals(UVector *a, UVector *b);
 
+#ifdef RBBI_DEBUG
     void     printSet(UVector *s);
     void     printPosSets(RBBINode *n = NULL);
     void     printStates();
-
+#else
+    #define  printSet(s)
+    #define  printPosSets
+    #define  printStates()
+#endif
 
 private:
     RBBIRuleBuilder  *fRB;

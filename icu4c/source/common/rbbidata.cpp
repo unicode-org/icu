@@ -224,14 +224,11 @@ void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *tab
     }
     RBBIDebugPrintf("\n");
 }
-#else
-/* Use an empty function for non-debug builds to ignore warnings. */
-void  RBBIDataWrapper::printTable(const char *, const RBBIStateTable *) {}
 #endif
 
 
-void  RBBIDataWrapper::printData() {
 #ifdef RBBI_DEBUG
+void  RBBIDataWrapper::printData() {
     RBBIDebugPrintf("RBBI Data at %p\n", (void *)fHeader);
     RBBIDebugPrintf("   Version = %d\n", fHeader->fVersion);
     RBBIDebugPrintf("   total length of data  = %d\n", fHeader->fLength);
@@ -247,8 +244,8 @@ void  RBBIDataWrapper::printData() {
         RBBIDebugPrintf("%c", fRuleSource[c]);
     }
     RBBIDebugPrintf("\n\n");
-#endif
 }
+#endif
 
 U_NAMESPACE_END
 

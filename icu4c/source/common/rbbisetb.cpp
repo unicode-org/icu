@@ -371,8 +371,8 @@ UChar32  RBBISetBuilder::getFirstChar(int32_t category) {
 //                      dump out all of the range definitions.
 //
 //------------------------------------------------------------------------
-void RBBISetBuilder::printRanges() {
 #ifdef RBBI_DEBUG
+void RBBISetBuilder::printRanges() {
     RangeDescriptor       *rlRange;
     int                    i;
 
@@ -390,12 +390,12 @@ void RBBISetBuilder::printRanges() {
                     setName = varRef->fText;
                 }
             }
-            RBBINode::printUnicodeString(setName); RBBIDebugPrintf("  ");
+            RBBI_DEBUG_printUnicodeString(setName); RBBIDebugPrintf("  ");
         }
         RBBIDebugPrintf("\n");
     }
-#endif
 }
+#endif
 
 
 //------------------------------------------------------------------------
@@ -404,6 +404,7 @@ void RBBISetBuilder::printRanges() {
 //                        dump out all of the range groups.
 //
 //------------------------------------------------------------------------
+#ifdef RBBI_DEBUG
 void RBBISetBuilder::printRangeGroups() {
     RangeDescriptor       *rlRange;
     RangeDescriptor       *tRange;
@@ -429,7 +430,7 @@ void RBBISetBuilder::printRangeGroups() {
                         setName = varRef->fText;
                     }
                 }
-                RBBINode::printUnicodeString(setName); RBBIDebugPrintf(" ");
+                RBBI_DEBUG_printUnicodeString(setName); RBBIDebugPrintf(" ");
             }
 
             i = 0;
@@ -446,7 +447,7 @@ void RBBISetBuilder::printRangeGroups() {
     }
     RBBIDebugPrintf("\n");
 }
-
+#endif
 
 
 //------------------------------------------------------------------------
@@ -455,8 +456,8 @@ void RBBISetBuilder::printRangeGroups() {
 //                      dump out all of the set definitions.
 //
 //------------------------------------------------------------------------
-void RBBISetBuilder::printSets() {
 #ifdef RBBI_DEBUG
+void RBBISetBuilder::printSets() {
     int                   i;
 
     RBBIDebugPrintf("\n\nUnicode Sets List\n------------------\n");
@@ -480,17 +481,17 @@ void RBBISetBuilder::printSets() {
                 setName = varRef->fText;
             }
         }
-        RBBINode::printUnicodeString(setName);
+        RBBI_DEBUG_printUnicodeString(setName);
         RBBIDebugPrintf("   ");
-        RBBINode::printUnicodeString(usetNode->fText);
+        RBBI_DEBUG_printUnicodeString(usetNode->fText);
         RBBIDebugPrintf("\n");
         if (usetNode->fLeftChild != NULL) {
-            usetNode->fLeftChild->printTree();
+            usetNode->fLeftChild->printTree(TRUE);
         }
     }
     RBBIDebugPrintf("\n");
-#endif
 }
+#endif
 
 
 

@@ -85,10 +85,16 @@ public:
                                    //    columns in the DFA state table
     int32_t  getTrieSize();        // Size in bytes of the serialized Trie.
     void     serializeTrie(uint8_t *where);  // write out the serialized Trie.
+    UChar32  getFirstChar(int32_t  val);
+#ifdef RBBI_DEBUG
     void     printSets();
     void     printRanges();
     void     printRangeGroups();
-    UChar32  getFirstChar(int32_t  val);
+#else
+    #define printSets()
+    #define printRanges()
+    #define printRangeGroups()
+#endif
 
 private:
     void           numberSets();

@@ -224,7 +224,8 @@ RBBISymbolTableEntry::~RBBISymbolTableEntry() {
 //
 //  RBBISymbolTable::print    Debugging function, dump out the symbol table contents.
 //
-void RBBISymbolTable::print() const {
+#ifdef RBBI_DEBUG
+void RBBISymbolTable::rbbiSymtablePrint() const {
     RBBIDebugPrintf("Variable Definitions\n"
            "Name               Node Val     String Val\n"
            "----------------------------------------------------------------------\n");
@@ -238,9 +239,9 @@ void RBBISymbolTable::print() const {
         }
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
 
-        RBBINode::printUnicodeString(s->key, 15);
+        RBBI_DEBUG_printUnicodeString(s->key, 15);
         RBBIDebugPrintf("   %8p   ", (void *)s->val);
-        RBBINode::printUnicodeString(s->val->fLeftChild->fText);
+        RBBI_DEBUG_printUnicodeString(s->val->fLeftChild->fText);
         RBBIDebugPrintf("\n");
     }
 
@@ -252,12 +253,12 @@ void RBBISymbolTable::print() const {
             break;
         }
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
-        RBBINode::printUnicodeString(s->key);
-        s->val->fLeftChild->printTree();
+        RBBI_DEBUG_printUnicodeString(s->key);
+        s->val->fLeftChild->printTree(TRUE);
         RBBIDebugPrintf("\n");
     }
 }
-
+#endif
 
 
 

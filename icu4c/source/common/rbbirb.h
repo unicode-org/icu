@@ -79,7 +79,14 @@ public:
     virtual RBBINode *lookupNode(const UnicodeString &key) const;
     virtual void      addEntry  (const UnicodeString &key, RBBINode *val, UErrorCode &err);
 
-    virtual void      print() const;
+#ifdef RBBI_DEBUG
+    virtual void      rbbiSymtablePrint() const;
+#else
+    // A do-nothing inline function for non-debug builds.  Member funcs can't be empty
+    //  or the call sites won't compile.
+    int  fFakeField;
+    #define rbbiSymtablePrint() fFakeField=0; 
+#endif
 
 private:
     RBBISymbolTable(const RBBISymbolTable &other); // forbid copying of this class

@@ -1030,17 +1030,17 @@ void RBBIRuleScanner::parse() {
     // We now have a parse tree for the rule expressions
     // and a list of all UnicodeSets that are referenced.
     //
-    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "symbols")) {fSymbolTable->print();}
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "symbols")) {fSymbolTable->rbbiSymtablePrint();}
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "ptree"))
     {
         RBBIDebugPrintf("Completed Forward Rules Parse Tree...\n");
-        fRB->fForwardTree->printTree();
+        fRB->fForwardTree->printTree(TRUE);
         RBBIDebugPrintf("\nCompleted Reverse Rules Parse Tree...\n");
-        fRB->fReverseTree->printTree();
+        fRB->fReverseTree->printTree(TRUE);
         RBBIDebugPrintf("\nCompleted Safe Point Forward Rules Parse Tree...\n");
-        fRB->fSafeFwdTree->printTree();
+        fRB->fSafeFwdTree->printTree(TRUE);
         RBBIDebugPrintf("\nCompleted Safe Point Reverse Rules Parse Tree...\n");
-        fRB->fSafeRevTree->printTree();
+        fRB->fSafeRevTree->printTree(TRUE);
     }
 
 }
@@ -1054,7 +1054,7 @@ void RBBIRuleScanner::parse() {
 void RBBIRuleScanner::printNodeStack(const char *title) {
     int i;
     RBBIDebugPrintf("%s.  Dumping node stack...\n", title);
-    for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree();}
+    for (i=fNodeStackPtr; i>0; i--) {fNodeStack[i]->printTree(TRUE);}
 }
 
 
