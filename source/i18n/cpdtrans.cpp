@@ -13,6 +13,7 @@
 #include "unicode/uniset.h"
 #include "uvector.h"
 #include "tridpars.h"
+#include "cmemory.h"
 
 // keep in sync with Transliterator
 static const UChar ID_SEP   = 0x002D; /*-*/
@@ -182,7 +183,7 @@ void CompoundTransliterator::init(UVector& list,
     // Allocate array
     if (U_SUCCESS(status)) {
         count = list.size();
-        trans = new Transliterator*[count];
+        trans = (Transliterator **)uprv_malloc(count * sizeof(Transliterator *));
         /* test for NULL */
         if (trans == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -261,7 +262,7 @@ void CompoundTransliterator::freeTransliterators(void) {
         for (int32_t i=0; i<count; ++i) {
             delete trans[i];
         }
-        delete[] trans;
+        uprv_free(trans);
     }
     trans = 0;
     count = 0;
@@ -279,8 +280,8 @@ CompoundTransliterator& CompoundTransliterator::operator=(
         trans[i] = 0;
     }
     if (t.count > count) {
-        delete[] trans;
-        trans = new Transliterator*[t.count];
+        uprv_free(trans);
+        trans = (Transliterator **)uprv_malloc(t.count * sizeof(Transliterator *));
     }
     count = t.count;
     for (i=0; i<count; ++i) {
@@ -316,7 +317,7 @@ const Transliterator& CompoundTransliterator::getTransliterator(int32_t index) c
 
 void CompoundTransliterator::setTransliterators(Transliterator* const transliterators[],
                                                 int32_t transCount) {
-    Transliterator** a = new Transliterator*[transCount];
+    Transliterator** a = (Transliterator **)uprv_malloc(transCount * sizeof(Transliterator *));
     for (int32_t i=0; i<transCount; ++i) {
         a[i] = transliterators[i]->clone();
     }
