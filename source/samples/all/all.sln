@@ -1,80 +1,94 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "all", "all.vcproj", "{77513375-9837-491F-9B0D-C03DF3EF583E}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "break", "..\break\break.vcproj", "{794B1E70-7661-4C4F-8083-7CFC1023DB7F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\cal\cal.vcproj", "{F8376996-129E-4650-8F09-72E0E292EFF2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "case", "..\case\case.vcproj", "{0A81FF07-46D8-4208-932C-B788750521F3}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\date\date.vcproj", "{35392F57-D3B4-4259-A053-3A2D5B374D4C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datefmt", "..\datefmt\datefmt.vcproj", "{D1FDD479-324A-45EE-AB27-62ED5D721854}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "layout", "..\layout\layout.vcproj", "{EE80B3B5-40F2-46F2-AC4B-FB929683515C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "legacy", "..\legacy\legacy.vcproj", "{CFD6D1D6-60E8-4A1E-9D31-3B35BB6B482A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgfmt", "..\msgfmt\msgfmt.vcproj", "{0D62472B-CCBF-46CD-AEA1-5DACAD6D05F2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "numfmt", "..\numfmt\numfmt.vcproj", "{CF07EC2D-94A2-4107-9CAF-087150957AFC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "props", "..\props\props.vcproj", "{94D972F4-C678-4170-A6FE-30DE6429D97E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reader", "..\udata\reader.vcproj", "{10EE4F33-B301-47DB-90C7-1082E5460F7F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resources", "..\uresb\resources.vcproj", "{AB75D6BC-660C-4225-A601-CC40294E775E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "strsrch", "..\strsrch\strsrch.vcproj", "{A7BC6C55-74CE-43BC-A31F-6D4FC9DAD98C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "translit", "..\translit\translit.vcproj", "{BDA22320-4F5F-4FFB-8C72-413B3C19631D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uciter8", "..\uciter8\uciter8.vcproj", "{30B33964-F2D9-4FEF-8D9F-D3F8F1A64B50}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ucnv", "..\ucnv\ucnv.vcproj", "{A918AE69-E876-422E-A780-6E508FBA697F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ufortune", "..\ufortune\ufortune.vcproj", "{621EF6F2-9E09-49E0-AF19-8417FE8534DF}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugrep", "..\ugrep\ugrep.vcproj", "{482D52CE-ECE9-4E25-A756-84E3A17F6B30}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uresb", "..\uresb\uresb.vcproj", "{5AD1AEF5-E13B-4411-BDD8-FF735FADAE1B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ustring", "..\ustring\ustring.vcproj", "{3A28CC89-98B6-4E9E-B688-DF5651819759}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "writer", "..\udata\writer.vcproj", "{45D0BE49-661A-41A5-AD81-986655688801}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.0 = {482D52CE-ECE9-4E25-A756-84E3A17F6B30}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.1 = {30B33964-F2D9-4FEF-8D9F-D3F8F1A64B50}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.2 = {A7BC6C55-74CE-43BC-A31F-6D4FC9DAD98C}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.3 = {0A81FF07-46D8-4208-932C-B788750521F3}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.4 = {794B1E70-7661-4C4F-8083-7CFC1023DB7F}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.5 = {45D0BE49-661A-41A5-AD81-986655688801}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.6 = {3A28CC89-98B6-4E9E-B688-DF5651819759}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.7 = {5AD1AEF5-E13B-4411-BDD8-FF735FADAE1B}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.8 = {621EF6F2-9E09-49E0-AF19-8417FE8534DF}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.9 = {A918AE69-E876-422E-A780-6E508FBA697F}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.10 = {BDA22320-4F5F-4FFB-8C72-413B3C19631D}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.11 = {AB75D6BC-660C-4225-A601-CC40294E775E}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.12 = {10EE4F33-B301-47DB-90C7-1082E5460F7F}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.13 = {94D972F4-C678-4170-A6FE-30DE6429D97E}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.14 = {CF07EC2D-94A2-4107-9CAF-087150957AFC}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.15 = {0D62472B-CCBF-46CD-AEA1-5DACAD6D05F2}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.16 = {EE80B3B5-40F2-46F2-AC4B-FB929683515C}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.17 = {D1FDD479-324A-45EE-AB27-62ED5D721854}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.18 = {35392F57-D3B4-4259-A053-3A2D5B374D4C}
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.19 = {F8376996-129E-4650-8F09-72E0E292EFF2}
+		Debug = Debug
+		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.Debug.ActiveCfg = Debug|Win32
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.Debug.Build.0 = Debug|Win32
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.Release.ActiveCfg = Release|Win32
-		{77513375-9837-491F-9B0D-C03DF3EF583E}.Release.Build.0 = Release|Win32
 		{794B1E70-7661-4C4F-8083-7CFC1023DB7F}.Debug.ActiveCfg = Debug|Win32
 		{794B1E70-7661-4C4F-8083-7CFC1023DB7F}.Debug.Build.0 = Debug|Win32
 		{794B1E70-7661-4C4F-8083-7CFC1023DB7F}.Release.ActiveCfg = Release|Win32
