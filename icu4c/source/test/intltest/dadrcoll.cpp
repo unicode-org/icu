@@ -162,7 +162,7 @@ DataDrivenCollatorTest::getTestBundle(const char* bundleName) {
     const char* icu_data = (char*)loadTestData(status);
     char testBundlePath[256] = {'\0'};
     strcpy(testBundlePath, icu_data);
-    strcat(testBundlePath, U_FILE_SEP_STRING".."U_FILE_SEP_STRING"build"U_FILE_SEP_STRING);
+    //strcat(testBundlePath, U_FILE_SEP_STRING".."U_FILE_SEP_STRING"build"U_FILE_SEP_STRING);
     if (testBundle == NULL) {
         testBundle = ures_openDirect(testBundlePath, bundleName, &status);
         if (status != U_ZERO_ERROR) {
