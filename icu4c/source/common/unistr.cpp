@@ -259,7 +259,8 @@ UnicodeString::UnicodeString(const char *codepageData,
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that)
-  : fLength(0),
+  : Replaceable(),
+    fLength(0),
     fCapacity(US_STACKBUF_SIZE),
     fArray(fStackBuffer),
     fFlags(kShortString)
