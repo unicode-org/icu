@@ -245,7 +245,7 @@ static void TestPUtilAPI(void){
         if ((tzoffset % 1800 != 0)) {
             log_err("FAIL: t_timezone may be incorrect. It is not a multiple of 30min.");
         }
-        tzoffset=uprv_getUTCtime();
+        /*tzoffset=uprv_getUTCtime();*/
 
     }
 }
