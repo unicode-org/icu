@@ -11,23 +11,6 @@ ja {
         "\u5348\u524D",
         "\u5348\u5F8C",
     }
-   // Keys{
-   //      collation{""}
-   //      calendar {""}
-   // }
-    Types{
-        collation{
-            traditional { "\u65E7\u5F0F" }
-        }
-        calendar{
-            japanese { "\u548C\u66A6" }
-        }
-    }
-    Variants{
-        //EURO  { "\u30e6\u30fc\u30ed" }
-        //PREEURO { "\u65e7\u901a\u8ca8" }
-        REVISED { "\u6539\u8a02\u7248" }
-    }
     Countries { 
         AD { "\u30A2\u30F3\u30C9\u30E9" }
         AE { "\u30A2\u30E9\u30D6\u9996\u9577\u56FD\u9023\u90A6" }
@@ -327,181 +310,224 @@ ja {
         "\u897F\u66A6",
     }
     Languages { 
-        aa { "\u30a2\u30d5\u30a1\u30fc\u30eb\u8a9e" }
-        ab { "\u30a2\u30d6\u30cf\u30ba\u8a9e" }
-        af { "\u30a2\u30d5\u30ea\u30ab\u30fc\u30f3\u30b9\u8a9e" }
-        am { "\u30a2\u30e0\u30cf\u30e9\u8a9e" }
-        ar { "\u30a2\u30e9\u30d3\u30a2\u8a9e" }
-        as { "\u30a2\u30c3\u30b5\u30e0\u8a9e" }
-        ay { "\u30a2\u30a4\u30de\u30e9\u8a9e" }
-        az { "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3\u8a9e" }
+        aa  { "\u30a2\u30d5\u30a1\u30fc\u30eb\u8a9e" }
+        ab  { "\u30a2\u30d6\u30cf\u30ba\u8a9e" }
+        ae  { "\u30A2\u30F4\u30A7\u30B9\u30BF\u8A9E" }
+        af  { "\u30a2\u30d5\u30ea\u30ab\u30fc\u30f3\u30b9\u8a9e" }
+        ak  { "\u30A2\u30AB\u30F3\u8A9E" }
+        am  { "\u30a2\u30e0\u30cf\u30e9\u8a9e" }
+        an  { "\u30A2\u30E9\u30B4\u30F3\u8A9E" }
+        ar  { "\u30a2\u30e9\u30d3\u30a2\u8a9e" }
+        as  { "\u30a2\u30c3\u30b5\u30e0\u8a9e" }
+        av  { "\u30A2\u30F4\u30A1\u30EB\u8A9E" }
+        ay  { "\u30a2\u30a4\u30de\u30e9\u8a9e" }
+        az  { "\u30a2\u30bc\u30eb\u30d0\u30a4\u30b8\u30e3\u30f3\u8a9e" }
 
-        ba { "\u30d0\u30b7\u30ad\u30fc\u30eb\u8a9e" }
-        be { "\u30d9\u30e9\u30eb\u30fc\u30b7\u8a9e" }
+        ba  { "\u30d0\u30b7\u30ad\u30fc\u30eb\u8a9e" }
         //be { "\u767d\u30ed\u30b7\u30a2\u8a9e" } // Old value
-        bg { "\u30d6\u30eb\u30ac\u30ea\u30a2\u8a9e" }
-        bh { "\u30d3\u30cf\u2015\u30eb\u8a9e" }
-        bi { "\u30d3\u30b9\u30e9\u30de\u8a9e" }
-        bn { "\u30d9\u30f3\u30ac\u30eb\u8a9e" }
-        bo { "\u30c1\u30d9\u30c3\u30c8\u8a9e" }
-        br { "\u30d6\u30eb\u30c8\u30f3\u8a9e" }
+        be  { "\u30d9\u30e9\u30eb\u30fc\u30b7\u8a9e" }
+        bg  { "\u30d6\u30eb\u30ac\u30ea\u30a2\u8a9e" }
+        bh  { "\u30d3\u30cf\u2015\u30eb\u8a9e" }
+        bi  { "\u30d3\u30b9\u30e9\u30de\u8a9e" }
+        bm  { "\u30D0\u30F3\u30D0\u30E9\u8A9E" }
+        bn  { "\u30d9\u30f3\u30ac\u30eb\u8a9e" }
+        bo  { "\u30c1\u30d9\u30c3\u30c8\u8a9e" }
+        br  { "\u30d6\u30eb\u30c8\u30f3\u8a9e" }
+        bs  { "\u30DC\u30B9\u30CB\u30A2\u8A9E"}
 
-        ca { "\u30ab\u30bf\u30ed\u30cb\u30a2\u8a9e" }
-        co { "\u30b3\u30eb\u30b7\u30ab\u8a9e" }
-        cs { "\u30c1\u30a7\u30b3\u8a9e" }
-        cy { "\u30a6\u30a7\u30fc\u30eb\u30ba\u8a9e" }
+        ca  { "\u30ab\u30bf\u30ed\u30cb\u30a2\u8a9e" }
+        ce  { "\u30C1\u30A7\u30C1\u30A7\u30F3\u8A9E" }
+        ch  { "\u30C1\u30E3\u30E2\u30ED\u8A9E" }
+        co  { "\u30b3\u30eb\u30b7\u30ab\u8a9e" }
+        cs  { "\u30c1\u30a7\u30b3\u8a9e" }
+        cu  { "\u6559\u4F1A\u30B9\u30E9\u30D6\u8A9E" }
+        cv  { "\u30C1\u30E5\u30F4\u30A1\u30B7\u30E5\u8A9E" }
+        cy  { "\u30a6\u30a7\u30fc\u30eb\u30ba\u8a9e" }
 
-        da { "\u30c7\u30f3\u30de\u30fc\u30af\u8a9e" }
-        de { "\u30c9\u30a4\u30c4\u8a9e" }
-        dz { "\u30d6\u30fc\u30bf\u30f3\u8a9e" }
+        da  { "\u30c7\u30f3\u30de\u30fc\u30af\u8a9e" }
+        de  { "\u30c9\u30a4\u30c4\u8a9e" }
+        dv  { "\u30C7\u30A3\u30F4\u30A7\u30D2\u8A9E" }
+        dz  { "\u30d6\u30fc\u30bf\u30f3\u8a9e" }
 
+        ee  { "\u30A8\u30A6\u30A7\u8A9E" }
         //el { "\u30ae\u30ea\u30b7\u30a2\u8a9e" } // Old value
-        el { "\u30AE\u30EA\u30B7\u30E3\u8A9E" }
-        en { "\u82f1\u8a9e" }
-        eo { "\u30a8\u30b9\u30da\u30e9\u30f3\u30c8\u8a9e" }
-        es { "\u30b9\u30da\u30a4\u30f3\u8a9e" }
-        et { "\u30a8\u30b9\u30c8\u30cb\u30a2\u8a9e" }
-        eu { "\u30d0\u30b9\u30af\u8a9e" }
+        el  { "\u30AE\u30EA\u30B7\u30E3\u8A9E" }
+        en  { "\u82f1\u8a9e" }
+        eo  { "\u30a8\u30b9\u30da\u30e9\u30f3\u30c8\u8a9e" }
+        es  { "\u30b9\u30da\u30a4\u30f3\u8a9e" }
+        et  { "\u30a8\u30b9\u30c8\u30cb\u30a2\u8a9e" }
+        eu  { "\u30d0\u30b9\u30af\u8a9e" }
 
-        fa { "\u30da\u30eb\u30b7\u30a2\u8a9e" }
-        fi { "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9\u8a9e" }
-        fj { "\u30d5\u30a3\u30b8\u30fc\u8a9e" }
-        fo { "\u30d5\u30a7\u30ed\u30fc\u8a9e" }
-        fr { "\u30d5\u30e9\u30f3\u30b9\u8a9e" }
-        fy { "\u30d5\u30ea\u30b8\u30a2\u8a9e" }
+        fa  { "\u30da\u30eb\u30b7\u30a2\u8a9e" }
+        ff  { "\u30D5\u30E9\u30CB\u8A9E" }
+        fi  { "\u30d5\u30a3\u30f3\u30e9\u30f3\u30c9\u8a9e" }
+        fj  { "\u30d5\u30a3\u30b8\u30fc\u8a9e" }
+        fo  { "\u30d5\u30a7\u30ed\u30fc\u8a9e" }
+        fr  { "\u30d5\u30e9\u30f3\u30b9\u8a9e" }
+        fy  { "\u30d5\u30ea\u30b8\u30a2\u8a9e" }
 
-        ga { "\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9\u8a9e" }
-        gd { "\u30b9\u30b3\u30c3\u30c8\u30e9\u30f3\u30c9\u30fb\u30b2\u30fc\u30eb\u8a9e" }
-        gl { "\u30ac\u30ea\u30b7\u30a2\u8a9e" }
-        gn { "\u30b0\u30ef\u30e9\u30cb\u8a9e" }
-        gu { "\u30b0\u30b8\u30e3\u30e9\u30fc\u30c8\u8a9e" }
-        gv { "\u30de\u30f3\u5cf6\u8a9e" }
+        ga  { "\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9\u8a9e" }
+        gd  { "\u30b9\u30b3\u30c3\u30c8\u30e9\u30f3\u30c9\u30fb\u30b2\u30fc\u30eb\u8a9e" }
+        gez { "\u30B2\u30A8\u30BA\u8A9E" }
+        gl  { "\u30ac\u30ea\u30b7\u30a2\u8a9e" }
+        gn  { "\u30b0\u30ef\u30e9\u30cb\u8a9e" }
+        gu  { "\u30b0\u30b8\u30e3\u30e9\u30fc\u30c8\u8a9e" }
+        gv  { "\u30de\u30f3\u5cf6\u8a9e" }
 
-        ha { "\u30cf\u30a6\u30b5\u8a9e" }
+        ha  { "\u30cf\u30a6\u30b5\u8a9e" }
         haw { "\u30cf\u30ef\u30a4\u8a9e" }
-        he { "\u30d8\u30d6\u30e9\u30a4\u8a9e" }
-        hi { "\u30d2\u30f3\u30c7\u30a3\u30fc\u8a9e" }
-        hr { "\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
-        hu { "\u30cf\u30f3\u30ac\u30ea\u30fc\u8a9e" }
-        hy { "\u30a2\u30eb\u30e1\u30cb\u30a2\u8a9e" }
+        he  { "\u30d8\u30d6\u30e9\u30a4\u8a9e" }
+        hi  { "\u30d2\u30f3\u30c7\u30a3\u30fc\u8a9e" }
+        ho  { "\u30D2\u30EA\u30E2\u30C8\u30A5\u8A9E" }
+        hr  { "\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
+        ht  { "\u30CF\u30A4\u30C1\u8A9E" }
+        hu  { "\u30cf\u30f3\u30ac\u30ea\u30fc\u8a9e" }
+        hy  { "\u30a2\u30eb\u30e1\u30cb\u30a2\u8a9e" }
+        hz  { "\u30D8\u30EC\u30ED\u8A9E" }
 
-        is { "\u30a2\u30a4\u30b9\u30e9\u30f3\u30c9\u8a9e" }
-        id { "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2\u8a9e" }
-        ia { "\u56fd\u969b\u8a9e" }
-        ie { "\u56fd\u969b\u8a9e" }
-        iu { "\u30a4\u30cc\u30af\u30a6\u30c6\u30a3\u30c8\u30c3\u30c8\u8a9e" }
-        ik { "\u30a4\u30cc\u30d4\u30a2\u30c3\u30af\u8a9e" }
-        it { "\u30a4\u30bf\u30ea\u30a2\u8a9e" }
+        ia  { "\u56fd\u969b\u8a9e" }
+        id  { "\u30a4\u30f3\u30c9\u30cd\u30b7\u30a2\u8a9e" }
+        ie  { "\u56fd\u969b\u8a9e" }
+        ig  { "\u30A4\u30DC\u8A9E" }
+        ii  { "\u56DB\u5DDD\u30A4\u8A9E" }
+        ik  { "\u30a4\u30cc\u30d4\u30a2\u30c3\u30af\u8a9e" }
+        io  { "\u30A4\u30C9\u8A9E" }
+        is  { "\u30a2\u30a4\u30b9\u30e9\u30f3\u30c9\u8a9e" }
+        it  { "\u30a4\u30bf\u30ea\u30a2\u8a9e" }
+        iu  { "\u30a4\u30cc\u30af\u30a6\u30c6\u30a3\u30c8\u30c3\u30c8\u8a9e" }
 
-        ja { "\u65e5\u672c\u8a9e" }
-        jv { "\u30b8\u30e3\u30ef\u8a9e" }
-        //jw { "\u30b8\u30e3\u30ef\u8a9e" } // Use jv instead
+        ja  { "\u65e5\u672c\u8a9e" }
+        jv  { "\u30b8\u30e3\u30ef\u8a9e" }
 
-        ka { "\u30b0\u30eb\u30b8\u30a2\u8a9e" }
-        kl { "\u30b0\u30ea\u30fc\u30f3\u30e9\u30f3\u30c9\u8a9e" }
-        kk { "\u30ab\u30b6\u30d5\u8a9e" }
-        km { "\u30ab\u30f3\u30dc\u30b8\u30a2\u8a9e" }
-        kn { "\u30ab\u30f3\u30ca\u30c0\u8a9e" }
-        ko { "\u97d3\u56fd\u8a9e" }
-        ks { "\u30ab\u30b7\u30df\u30fc\u30eb\u8a9e" }
-        ku { "\u30af\u30eb\u30c9\u8a9e" }
-        kw { "\u30b3\u30fc\u30f3\u30a6\u30a9\u30fc\u30eb\u8a9e" }
-        ky { "\u30ad\u30eb\u30ae\u30b9\u8a9e" }
+        ka  { "\u30b0\u30eb\u30b8\u30a2\u8a9e" }
+        kg  { "\u30B3\u30F3\u30B4\u8A9E" }
+        ki  { "\u30AD\u30AF\u30E6\u8A9E" }
+        kj  { "\u30AF\u30A2\u30CB\u30E3\u30DE\u8A9E" }
+        kk  { "\u30ab\u30b6\u30d5\u8a9e" }
+        kl  { "\u30b0\u30ea\u30fc\u30f3\u30e9\u30f3\u30c9\u8a9e" }
+        km  { "\u30ab\u30f3\u30dc\u30b8\u30a2\u8a9e" }
+        kn  { "\u30ab\u30f3\u30ca\u30c0\u8a9e" }
+        ko  { "\u97d3\u56fd\u8a9e" }
+        kr  { "\u30AB\u30CC\u30EA\u8A9E" }
+        ks  { "\u30ab\u30b7\u30df\u30fc\u30eb\u8a9e" }
+        ku  { "\u30af\u30eb\u30c9\u8a9e" }
+        kv  { "\u30B3\u30DF\u8A9E" }
+        kw  { "\u30b3\u30fc\u30f3\u30a6\u30a9\u30fc\u30eb\u8a9e" }
+        ky  { "\u30ad\u30eb\u30ae\u30b9\u8a9e" }
 
-        la { "\u30e9\u30c6\u30f3\u8a9e" }
-        ln { "\u30ea\u30f3\u30ac\u30e9\u8a9e" }
-        lo { "\u30e9\u30aa\u8a9e" }
-        lt { "\u30ea\u30c8\u30a2\u30cb\u30a2\u8a9e" }
+        la  { "\u30e9\u30c6\u30f3\u8a9e" }
+        lb  { "\u30EB\u30AF\u30BB\u30F3\u30D6\u30EB\u30AF\u8A9E" }
+        lg  { "\u30AC\u30F3\u30C0\u8A9E" }
+        li  { "\u30EA\u30F3\u30D6\u30EB\u30D5\u8A9E" }
+        ln  { "\u30ea\u30f3\u30ac\u30e9\u8a9e" }
+        lo  { "\u30e9\u30aa\u8a9e" }
+        lt  { "\u30ea\u30c8\u30a2\u30cb\u30a2\u8a9e" }
+        lu  { "\u30EB\u30D0\u30FB\u30AB\u30BF\u30F3\u30AC\u8A9E" }
         //lv { "\u30e9\u30c8\u30d3\u30a2\u8a9e (\u30ec\u30c3\u30c8\u8a9e)" } // Old value
-        lv { "\u30E9\u30C8\u30D3\u30A2\u8A9E" }
+        lv  { "\u30E9\u30C8\u30D3\u30A2\u8A9E" }
 
-        mg { "\u30de\u30e9\u30ac\u30b7\u30fc\u8a9e" }
-        mi { "\u30de\u30aa\u30ea\u8a9e" }
-        mk { "\u30de\u30b1\u30c9\u30cb\u30a2\u8a9e" }
-        ml { "\u30de\u30e9\u30e4\u2015\u30e9\u30e0\u8a9e" }
-        mn { "\u30e2\u30f3\u30b4\u30eb\u8a9e" }
-        mo { "\u30e2\u30eb\u30c0\u30d3\u30a2\u8a9e" }
-        mr { "\u30de\u30e9\u30fc\u30c6\u30a3\u30fc\u8a9e" }
-        ms { "\u30de\u30e9\u30a4\u8a9e" }
-        mt { "\u30de\u30eb\u30bf\u8a9e" }
-        my { "\u30d3\u30eb\u30de\u8a9e" }
+        mg  { "\u30de\u30e9\u30ac\u30b7\u30fc\u8a9e" }
+        mh  { "\u30DE\u30FC\u30B7\u30E3\u30EB\u8A9E"}
+        mi  { "\u30de\u30aa\u30ea\u8a9e" }
+        mk  { "\u30de\u30b1\u30c9\u30cb\u30a2\u8a9e" }
+        ml  { "\u30de\u30e9\u30e4\u2015\u30e9\u30e0\u8a9e" }
+        mn  { "\u30e2\u30f3\u30b4\u30eb\u8a9e" }
+        mo  { "\u30e2\u30eb\u30c0\u30d3\u30a2\u8a9e" }
+        mr  { "\u30de\u30e9\u30fc\u30c6\u30a3\u30fc\u8a9e" }
+        ms  { "\u30de\u30e9\u30a4\u8a9e" }
+        mt  { "\u30de\u30eb\u30bf\u8a9e" }
+        my  { "\u30d3\u30eb\u30de\u8a9e" }
 
-        na { "\u30ca\u30a6\u30eb\u8a9e" }
-        nb { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30dc\u30af\u30e2\u30fc\u30eb)" }
-        ne { "\u30cd\u30d1\u30fc\u30eb\u8a9e" }
-        nl { "\u30aa\u30e9\u30f3\u30c0\u8a9e" }
-        nn { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30cb\u30e5\u30fc\u30ce\u30eb\u30b9\u30af)" }
-        no { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e" }
+        na  { "\u30ca\u30a6\u30eb\u8a9e" }
+        nb  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30dc\u30af\u30e2\u30fc\u30eb)" }
+        nd  { "\u5317\u30F3\u30C7\u30D9\u30EC\u8A9E" }
+        ne  { "\u30cd\u30d1\u30fc\u30eb\u8a9e" }
+        ng  { "\u30F3\u30C9\u30F3\u30AC\u8A9E" }
+        nl  { "\u30aa\u30e9\u30f3\u30c0\u8a9e" }
+        nn  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e (\u30cb\u30e5\u30fc\u30ce\u30eb\u30b9\u30af)" }
+        no  { "\u30ce\u30eb\u30a6\u30a7\u30fc\u8a9e" }
 
-        oc { "\u30d7\u30ed\u30d0\u30f3\u30b9\u8a9e" }
-        or { "\u30aa\u30ea\u30e4\u30fc\u8a9e" }
-        om { "\u30ac\u30e9\u8a9e" }
+        nr  { "\u5357\u30F3\u30C7\u30D9\u30EC\u8A9E" }
+        nv  { "\u30CA\u30D0\u30DB\u8A9E"}
+        ny  { "\u30CB\u30E3\u30F3\u30B8\u30E3\u8A9E\u3001\u30C1\u30C1\u30A7\u30EF\u8A9E\u3001\u30C1\u30A7\u30EF\u8A9E" }
+        oc  { "\u30d7\u30ed\u30d0\u30f3\u30b9\u8a9e" }
+        oj  { "\u30AA\u30D6\u30B8\u30EF\u8A9E" }
+        om  { "\u30ac\u30e9\u8a9e" }
+        or  { "\u30aa\u30ea\u30e4\u30fc\u8a9e" }
+        os  { "\u30AA\u30BB\u30C8\u8A9E" }
 
-        pa { "\u30d1\u30f3\u30b8\u30e3\u30d6\u8a9e" }
-        pl { "\u30dd\u30fc\u30e9\u30f3\u30c9\u8a9e" }
-        ps { "\u30d1\u30b7\u30e5\u30c8\u30fc\u8a9e" }
-        pt { "\u30dd\u30eb\u30c8\u30ac\u30eb\u8a9e" }
+        pa  { "\u30d1\u30f3\u30b8\u30e3\u30d6\u8a9e" }
+        pi  { "\u30D1\u30FC\u30EA\u8A9E" }
+        pl  { "\u30dd\u30fc\u30e9\u30f3\u30c9\u8a9e" }
+        ps  { "\u30d1\u30b7\u30e5\u30c8\u30fc\u8a9e" }
+        pt  { "\u30dd\u30eb\u30c8\u30ac\u30eb\u8a9e" }
 
-        qu { "\u30b1\u30c1\u30e5\u30a2\u8a9e" }
+        qu  { "\u30b1\u30c1\u30e5\u30a2\u8a9e" }
 
-        rm { "\u30ec\u30c8\uff1d\u30ed\u30de\u30f3\u8a9e" }
-        rn { "\u30eb\u30f3\u30b8\u8a9e" }
-        ro { "\u30eb\u30fc\u30de\u30cb\u30a2\u8a9e" }
-        ru { "\u30ed\u30b7\u30a2\u8a9e" }
-        rw { "\u30eb\u30ef\u30f3\u30c0\u8a9e" }
+        rm  { "\u30ec\u30c8\uff1d\u30ed\u30de\u30f3\u8a9e" }
+        rn  { "\u30eb\u30f3\u30b8\u8a9e" }
+        ro  { "\u30eb\u30fc\u30de\u30cb\u30a2\u8a9e" }
+        ru  { "\u30ed\u30b7\u30a2\u8a9e" }
+        rw  { "\u30eb\u30ef\u30f3\u30c0\u8a9e" }
 
-        sa { "\u30b5\u30f3\u30b9\u30af\u30ea\u30c3\u30c8\u8a9e" }
-        sd { "\u30b7\u30f3\u30c9\u8a9e" }
-        sg { "\u30b5\u30f3\u30b4\u8a9e" }
-        sh { "\u30bb\u30eb\u30dc\uff1d\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
-        si { "\u30b7\u30f3\u30cf\u30e9\u8a9e" }
-        sk { "\u30b9\u30ed\u30d0\u30ad\u30a2\u8a9e" }
-        sl { "\u30b9\u30ed\u30d9\u30cb\u30a2\u8a9e" }
-        sm { "\u30b5\u30e2\u30a2\u8a9e" }
-        sn { "\u30b7\u30e7\u30ca\u8a9e" }
-        so { "\u30bd\u30de\u30ea\u8a9e" }
-        sq { "\u30a2\u30eb\u30d0\u30cb\u30a2\u8a9e" }
-        sr { "\u30bb\u30eb\u30d3\u30a2\u8a9e" }
-        ss { "\u30b7\u30b9\u30ef\u30c6\u30a3\u8a9e" }
-        st { "\u30bb\u30bd\u30c8\u8a9e" }
-        su { "\u30b9\u30f3\u30c0\u8a9e" }
-        sv { "\u30b9\u30a6\u30a7\u30fc\u30c7\u30f3\u8a9e" }
-        sw { "\u30b9\u30ef\u30d2\u30ea\u8a9e" }
+        sa  { "\u30b5\u30f3\u30b9\u30af\u30ea\u30c3\u30c8\u8a9e" }
+        sc  { "\u30B5\u30EB\u30C7\u30FC\u30CB\u30E3\u8A9E" }
+        sd  { "\u30b7\u30f3\u30c9\u8a9e" }
+        se  { "\u5317\u30B5\u30FC\u30DF\u8A9E" }
+        sg  { "\u30b5\u30f3\u30b4\u8a9e" }
+        sh  { "\u30bb\u30eb\u30dc\uff1d\u30af\u30ed\u30a2\u30c1\u30a2\u8a9e" }
+        si  { "\u30b7\u30f3\u30cf\u30e9\u8a9e" }
+        sid { "\u30B7\u30C0\u30E2\u8A9E" }
+        sk  { "\u30b9\u30ed\u30d0\u30ad\u30a2\u8a9e" }
+        sl  { "\u30b9\u30ed\u30d9\u30cb\u30a2\u8a9e" }
+        sm  { "\u30b5\u30e2\u30a2\u8a9e" }
+        sn  { "\u30b7\u30e7\u30ca\u8a9e" }
+        so  { "\u30bd\u30de\u30ea\u8a9e" }
+        sq  { "\u30a2\u30eb\u30d0\u30cb\u30a2\u8a9e" }
+        sr  { "\u30bb\u30eb\u30d3\u30a2\u8a9e" }
+        ss  { "\u30b7\u30b9\u30ef\u30c6\u30a3\u8a9e" }
+        st  { "\u30bb\u30bd\u30c8\u8a9e" }
+        su  { "\u30b9\u30f3\u30c0\u8a9e" }
+        sv  { "\u30b9\u30a6\u30a7\u30fc\u30c7\u30f3\u8a9e" }
+        sw  { "\u30b9\u30ef\u30d2\u30ea\u8a9e" }
+        syr { "\u30B7\u30EA\u30A2\u8A9E" }
+        ta  { "\u30bf\u30df\u30fc\u30eb\u8a9e" }
+        te  { "\u30c6\u30eb\u30b0\u8a9e" }
+        tg  { "\u30bf\u30b8\u30af\u8a9e" }
+        th  { "\u30bf\u30a4\u8a9e" }
+        ti  { "\u30c6\u30a3\u30b0\u30ea\u30cb\u30a2\u8a9e" }
+        tig { "\u30C6\u30A3\u30B0\u30EC\u8A9E" }
+        tk  { "\u30c8\u30eb\u30af\u30e1\u30f3\u8a9e" }
+        tl  { "\u30bf\u30ac\u30ed\u30b0\u8a9e" }
+        tn  { "\u30c4\u30ef\u30ca\u8a9e" }
+        to  { "\u30c8\u30f3\u30ac\u8a9e" }
+        tr  { "\u30c8\u30eb\u30b3\u8a9e" }
+        ts  { "\u30c4\u30a9\u30f3\u30ac\u8a9e" }
+        tt  { "\u30bf\u30bf\u30fc\u30eb\u8a9e" }
+        tw  { "\u30c8\u30a5\u30a4\u8a9e" }
 
-        ta { "\u30bf\u30df\u30fc\u30eb\u8a9e" }
-        te { "\u30c6\u30eb\u30b0\u8a9e" }
-        tg { "\u30bf\u30b8\u30af\u8a9e" }
-        th { "\u30bf\u30a4\u8a9e" }
-        ti { "\u30c6\u30a3\u30b0\u30ea\u30cb\u30a2\u8a9e" }
-        tk { "\u30c8\u30eb\u30af\u30e1\u30f3\u8a9e" }
-        tl { "\u30bf\u30ac\u30ed\u30b0\u8a9e" }
-        tn { "\u30c4\u30ef\u30ca\u8a9e" }
-        to { "\u30c8\u30f3\u30ac\u8a9e" }
-        tr { "\u30c8\u30eb\u30b3\u8a9e" }
-        ts { "\u30c4\u30a9\u30f3\u30ac\u8a9e" }
-        tt { "\u30bf\u30bf\u30fc\u30eb\u8a9e" }
-        tw { "\u30c8\u30a5\u30a4\u8a9e" }
+        ug  { "\u30a6\u30a4\u30b0\u30eb\u8a9e" }
+        uk  { "\u30a6\u30af\u30e9\u30a4\u30ca\u8a9e" }
+        ur  { "\u30a6\u30eb\u30c9\u30a5\u30fc\u8a9e" }
+        uz  { "\u30a6\u30ba\u30d9\u30af\u8a9e" }
 
-        ug { "\u30a6\u30a4\u30b0\u30eb\u8a9e" }
-        uk { "\u30a6\u30af\u30e9\u30a4\u30ca\u8a9e" }
-        ur { "\u30a6\u30eb\u30c9\u30a5\u30fc\u8a9e" }
-        uz { "\u30a6\u30ba\u30d9\u30af\u8a9e" }
+        ve  { "\u30D9\u30F3\u30C0\u8A9E" }
+        vi  { "\u30d9\u30c8\u30ca\u30e0\u8a9e" }
+        vo  { "\u30dc\u30e9\u30d4\u30e5\u30af\u8a9e" }
 
-        vi { "\u30d9\u30c8\u30ca\u30e0\u8a9e" }
-        vo { "\u30dc\u30e9\u30d4\u30e5\u30af\u8a9e" }
+        wa  { "\u30EF\u30ED\u30F3\u8A9E" }
+        wo  { "\u30a6\u30a9\u30ed\u30d5\u8a9e" }
 
-        wo { "\u30a6\u30a9\u30ed\u30d5\u8a9e" }
+        xh  { "\u30b3\u30b5\u8a9e" }
 
-        xh { "\u30b3\u30b5\u8a9e" }
+        yi  { "\u30a4\u30c7\u30a3\u30c3\u30b7\u30e5\u8a9e" }
+        yo  { "\u30e8\u30eb\u30d0\u8a9e" }
 
-        yi { "\u30a4\u30c7\u30a3\u30c3\u30b7\u30e5\u8a9e" }
-        yo { "\u30e8\u30eb\u30d0\u8a9e" }
-
-        za { "\u30c1\u30ef\u30f3\u8a9e" }
-        zh { "\u4e2d\u56fd\u8a9e" }
+        za  { "\u30c1\u30ef\u30f3\u8a9e" }
+        zh  { "\u4e2d\u56fd\u8a9e" }
         //zh_cn { "\u4E2D\u56FD\u8A9E (\u7C21\u4F53\u5B57)" }
         //zh_tw { "\u4E2D\u56FD\u8A9E (\u7E41\u4F53\u5B57)" }
-        zu { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
+        zu  { "\u30ba\u30fc\u30eb\u30fc\u8a9e" }
     }
 
     MonthNames { 
@@ -693,6 +719,66 @@ ja {
          "\u9BE8\u9CE5\u9CF4\u9D8F\u9E97\u9EA6\u9EBB\u9EC4\u9ED2\u9ED9\u9F13\u9F3B\u9F62]"
     }
 
+    Scripts {
+        Arab { "\u30A2\u30E9\u30D3\u30A2\u6587\u5B57" }
+        Armn { "\u30A2\u30EB\u30E1\u30CB\u30A2\u6587\u5B57" }
+        Beng { "\u30D9\u30F3\u30AC\u30EB\u6587\u5B57" }
+        Bopo { "\u6CE8\u97F3\u5B57\u6BCD" }
+        Brai { "\u30D6\u30E9\u30A4\u30E6\u70B9\u5B57" }
+        Buhd { "\u30D6\u30D2\u30C3\u30C9\u6587\u5B57" }
+        Cans { "\u7D71\u5408\u30AB\u30CA\u30C0\u5148\u4F4F\u6C11\u8A18\u53F7" }
+        Cher { "\u30C1\u30A7\u30ED\u30AD\u30FC\u6587\u5B57" }
+        Cprt { "\u30AD\u30D7\u30ED\u30B9\u6587\u5B57" }
+        Cyrl { "\u30AD\u30EA\u30EB\u6587\u5B57" }
+        Deva { "\u30C7\u30FC\u30D0\u30CA\u30FC\u30AC\u30EA\u30FC\u6587\u5B57" }
+        Dsrt { "\u30C7\u30BB\u30EC\u30C3\u30C8\u6587\u5B57" }
+        Ethi { "\u30A8\u30C1\u30AA\u30D4\u30A2\u6587\u5B57" }
+        Geor { "\u30B0\u30EB\u30B8\u30A2\u6587\u5B57" }
+        Goth { "\u30B4\u30FC\u30C8\u6587\u5B57" }
+        Grek { "\u30AE\u30EA\u30B7\u30E3\u6587\u5B57" }
+        Gujr { "\u30B0\u30B8\u30E3\u30E9\u30FC\u30C8\u6587\u5B57" }
+        Guru { "\u30B0\u30EB\u30E0\u30AD\u30FC\u6587\u5B57" }
+        Hang { "\u30CF\u30F3\u30B0\u30EB\u6587\u5B57" }
+        Hano { "\u30CF\u30CC\u30CE\u30AA\u6587\u5B57" }
+        Hani { "\u6F22\u5B57" }
+        Hans { "\u7C21\u4F53\u5B57" }
+        Hant { "\u7E41\u4F53\u5B57" }
+        Hebr { "\u30D8\u30D6\u30E9\u30A4\u6587\u5B57" }
+        Hira { "\u3072\u3089\u304C\u306A" }
+        Ital { "\u53E4\u4EE3\u30A4\u30BF\u30EA\u30A2\u6587\u5B57" }
+        Kana { "\u30AB\u30BF\u30AB\u30CA" }
+        Khmr { "\u30AB\u30F3\u30DC\u30B8\u30A2\u6587\u5B57" }
+        Knda { "\u30AB\u30F3\u30CA\u30C0\u6587\u5B57" }
+        Laoo { "\u30E9\u30AA\u6587\u5B57" }
+        Latn { "\u30E9\u30C6\u30F3\u6587\u5B57" }
+        Limb { "\u30EA\u30F3\u30D6\u6587\u5B57" }
+        Linb { "\u7DDA\u6587\u5B57B" }
+        Mlym { "\u30DE\u30E9\u30E4\u30FC\u30E9\u30E0\u6587\u5B57" }
+        Mong { "\u30E2\u30F3\u30B4\u30EB\u6587\u5B57" }
+        Mymr { "\u30DF\u30E3\u30F3\u30DE\u30FC\u6587\u5B57" }
+        Ogam { "\u30AA\u30AC\u30E0" }
+        Orya { "\u30AA\u30EA\u30E4\u30FC\u6587\u5B57" }
+        Osma { "\u30AA\u30B9\u30DE\u30CB\u30A2\u6587\u5B57" }
+        Qaac { "\u30B3\u30D7\u30C8\u6587\u5B57" } // Coptic is not a formal part of ISO-15924 yet
+        //Qaai { "Inherited" } // PUA
+        Runr { "\u30EB\u30FC\u30F3\u6587\u5B57" }
+        Shaw { "\u30B7\u30E7\u30FC\u6587\u5B57" }
+        Sinh { "\u30B7\u30F3\u30CF\u30E9\u6587\u5B57" }
+        Syrc { "\u30B7\u30EA\u30A2\u6587\u5B57" }
+        Tagb { "\u30BF\u30B0\u30D0\u30F3\u30EF\u6587\u5B57" }
+        Tale { "\u30BF\u30A4\u30EC\u6587\u5B57" }
+        Taml { "\u30BF\u30DF\u30FC\u30EB\u6587\u5B57" }
+        Telu { "\u30C6\u30EB\u30B0\u6587\u5B57" }
+        Tglg { "\u30BF\u30AC\u30ED\u30B0\u6587\u5B57" }
+        Thaa { "\u30BF\u30FC\u30CA\u6587\u5B57" }
+        Thai { "\u30BF\u30A4\u6587\u5B57" }
+        Tibt { "\u30C1\u30D9\u30C3\u30C8\u6587\u5B57" }
+        Ugar { "\u30A6\u30AC\u30EA\u30C8\u6587\u5B57" }
+        Yiii { "\u30A4\u6587\u5B57" }
+        //Zyyy { "Common" } // This may need to become "undetermined script"
+    }
+
+
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
@@ -758,13 +844,15 @@ ja {
         COP { "COP", "\u30B3\u30ED\u30F3\u30D3\u30A2 \u30DA\u30BD" } // Colombian Peso
         CRC { "CRC", "\u30B3\u30B9\u30BF\u30EA\u30AB \u30B3\u30ED\u30FC\u30F3" } // Costa Rican Colon
         CZK { "CZK", "\u30C1\u30A7\u30B3 \u30B3\u30EB\u30CA" } // Czech Koruna
+        DEM { "DEM", "\u30C9\u30A4\u30C4 \u30DE\u30EB\u30AF" }
         DKK { "DKK", "\u30C7\u30F3\u30DE\u30FC\u30AF \u30AF\u30ED\u30FC\u30CD" } // Danish Krone
         DOP { "DOP", "\u30C9\u30DF\u30CB\u30AB \u30DA\u30BD" } // Dominican Peso
         DZD { "DZD", "\u30A2\u30EB\u30B8\u30A7\u30EA\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Algerian Dinar
         EEK { "EEK", "\u30AF\u30EB\u30FC\u30F3" } // Kroon
         EGP { "EGP", "\u30A8\u30B8\u30D7\u30C8 \u30DD\u30F3\u30C9" } // Egyptian Pound
         EUR { "\u20AC", "\u30E6\u30FC\u30ED" } // Euro
-        GBP { "\u00A3", "\u82F1\u8CA8\u30DD\u30F3\u30C9" } // Pound Sterling
+        FRF { "FRF", "\u30D5\u30E9\u30F3\u30B9 \u30D5\u30E9\u30F3"         } // 01/01/1960-2002
+        GBP { "\u00A3", "\u82F1\u8CA8\u30DD\u30F3\u30C9" }
         GEL { "GEL", "\u30E9\u30EA" } // Lari
         GTQ { "GTQ", "\u30B1\u30C3\u30C4\u30A1\u30EB" } // Quetzal
         HKD { "HKD", "\u9999\u6E2F\u30C9\u30EB" } // Hong Kong Dollar
@@ -777,6 +865,7 @@ ja {
         IQD { "IQD", "\u30A4\u30E9\u30AF \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Iraqi Dinar
         IRR { "IRR", "\u30A4\u30E9\u30F3 \u30EA\u30A2\u30EB" } // Iranian Rial
         ISK { "ISK", "\u30A2\u30A4\u30B9\u30E9\u30F3\u30C9 \u30AF\u30ED\u30FC\u30CA" } // Iceland Krona
+        ITL { "\u20A4", "\u30A4\u30BF\u30EA\u30A2 \u30EA\u30E9" }
         JMD { "JMD", "\u30B8\u30E3\u30DE\u30A4\u30AB \u30C9\u30EB" } // Jamaican Dollar
         JOD { "JOD", "\u30E8\u30EB\u30C0\u30F3 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Jordanian Dinar
         JPY { "\uFFE5", "\u5186" } // Yen: JAPAN (JP)
@@ -1070,5 +1159,33 @@ ja {
             "\u5927\u6B63",             // 1912 Taisho
             "\u662D\u548C",             // 1926 Showa
             "\u5E73\u6210"             // 1989 Heisei
+    }
+    Keys{
+        calendar  { "\u66A6" }
+        collation { "\u7167\u5408\u9806\u756A" }
+        currency  { "\u901A\u8CA8" }
+    }
+    Types{
+        collation{
+            direct      { "\u76F4\u63A5\u8457\u9304" }
+            phonebook   { "\u96FB\u8A71\u5E33\u65B9\u5F0F" }
+            pinyin      { "\u62FC\u97F3\u9806" }
+            stroke      { "\u753B\u6570\u9806" }
+            traditional { "\u65E7\u5F0F" }
+        }
+        calendar{
+            buddhist      { "\u4ECF\u66A6" }
+            chinese       { "\u4E2D\u56FD\u66A6" }
+            gregorian     { "\u30B0\u30EC\u30B4\u30EA\u30AA\u66A6" }
+            hebrew        { "\u30D8\u30D6\u30E9\u30A4\u66A6" }
+            islamic       { "\u30A4\u30B9\u30E9\u30E0\u66A6" }
+            islamic-civil { "\u592A\u967D\u30A4\u30B9\u30E9\u30E0\u66A6" }
+            japanese	  { "\u548C\u66A6" }
+        }
+    }
+    Variants{
+        //EURO  { "\u30e6\u30fc\u30ed" }
+        //PREEURO { "\u65e7\u901a\u8ca8" }
+        REVISED { "\u6539\u8a02\u7248" }
     }
 }
