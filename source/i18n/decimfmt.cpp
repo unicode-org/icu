@@ -1486,21 +1486,41 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
     for (int32_t i=0; i<affix.length(); ) {
         UChar32 c = affix.char32At(i);
         int32_t len = U16_LENGTH(c);
-        i += len;
         if (uprv_isRuleWhiteSpace(c)) {
+            // We may have a pattern like: \u200F \u0020
+            //        and input text like: \u200F \u0020
+            // Note that U+200F and U+0020 are RuleWhiteSpace but only
+            // U+0020 is UWhiteSpace.  So we have to first do a direct
+            // match of the run of RULE whitespace in the pattern,
+            // then match any extra characters.
+            UBool literalMatch = FALSE;
+            while (pos < input.length() &&
+                   input.char32At(pos) == c) {
+                literalMatch = TRUE;
+                i += len;
+                pos += len;
+                c = affix.char32At(i);
+                len = U16_LENGTH(c);
+                if (!uprv_isRuleWhiteSpace(c)) {
+                    break;
+                }
+            }
+
             // Advance over run in pattern
             i = skipRuleWhiteSpace(affix, i);
 
             // Advance over run in input text
-            // Must see at least one white space char in input
+            // Must see at least one white space char in input,
+            // unless we've already matched some characters literally.
             int32_t s = pos;
             pos = skipUWhiteSpace(input, pos);
-            if (pos == s) {
+            if (pos == s && !literalMatch) {
                 return -1;
             }
         } else {
             if (pos < input.length() &&
                 input.char32At(pos) == c) {
+                i += len;
                 pos += len;
             } else {
                 return -1;
