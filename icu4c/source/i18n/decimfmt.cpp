@@ -235,7 +235,7 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     if (symbolsToAdopt == NULL) {
-        UCurrency::forLocale(Locale::getDefault(), currency, status);
+        ucurr_forLocale(uloc_getDefault(), currency, &status);
     } else {
         setCurrencyForSymbols();
     }
@@ -1439,7 +1439,7 @@ DecimalFormat::setCurrencyForSymbols() {
         def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
         fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
         def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
-        UCurrency::forLocale(fSymbols->getLocale(), currency, ec);
+        ucurr_forLocale(fSymbols->getLocale().getName(), currency, &ec);
     } else {
         currency[0] = 0; // Use DFS currency info
     }
@@ -1940,7 +1940,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 UnicodeString s;
                 if (currency[0] != 0) {
                     s = intl ? UnicodeString(currency, "")
-                        : UCurrency::getSymbol(currency, fSymbols->getLocale());
+                        : ucurr_getSymbolAsUnicodeString(currency, fSymbols->getLocale());
                 } else {
                     s = intl ? fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
                         : fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
@@ -2943,9 +2943,9 @@ void DecimalFormat::setCurrency(const char* theCurrency) {
     currency[3] = 0;
 
     if (fIsCurrencyFormat) {
-        setRoundingIncrement(UCurrency::getRoundingIncrement(currency));
+        setRoundingIncrement(ucurr_getRoundingIncrement(currency));
 
-        int32_t d = UCurrency::getDefaultFractionDigits(currency);
+        int32_t d = ucurr_getDefaultFractionDigits(currency);
         setMinimumFractionDigits(d);
         setMaximumFractionDigits(d);
 
