@@ -294,11 +294,6 @@ void Paragraph::breakLines(int32_t width, int32_t height)
             // Map the character back to a glyph
             glyph = fGlyphIndices[thisBreak];
 
-            // Check to see if the new glyph is off
-            // the end of the run.
-            if (glyph == stop) {
-                break;
-            }
 
             // If the glyph's not in the run we stopped in, we
             // have to re-synch to the new run
