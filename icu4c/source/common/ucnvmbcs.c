@@ -448,7 +448,8 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
               _this->invalidUCharLength = 1;
              if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
               {
-                  if (mySource < sourceLimit)
+                  /*if (mySource < sourceLimit)*/
+                  if(mySourceIndex < sourceLength)
                   {
                       if (UTF_IS_TRAIL(mySource[mySourceIndex]))
                       {
@@ -615,7 +616,8 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
               _this->invalidUCharLength = 1;
               if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
               {
-                  if (mySource < sourceLimit)
+                  /*if (mySource < sourceLimit)*/
+                  if(mySourceIndex < sourceLength)
                   {
                       if (UTF_IS_TRAIL(mySource[mySourceIndex]))
                       {

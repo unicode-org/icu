@@ -208,7 +208,8 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
               _this->invalidUCharLength = 1;
               if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
               {
-                  if (mySource < sourceLimit)
+                  /*if (mySource < sourceLimit)*/
+                  if(mySourceIndex < sourceLength)
                   {
                       if (UTF_IS_TRAIL(mySource[mySourceIndex]))
                       {
@@ -607,7 +608,8 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
               _this->invalidUCharLength = 1;
               if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
               {
-                  if (mySource < sourceLimit)
+                  /*if (mySource < sourceLimit)*/
+                  if(mySourceIndex < sourceLength)
                   {
                       if (UTF_IS_TRAIL(mySource[mySourceIndex]))
                       {
