@@ -118,8 +118,10 @@ private:
                                                      //   in the rule input string.
     int32_t                       fNextIndex;        // Index of the next character, which
                                                      //   is the first character not yet scanned.
-    UBool                         fQuoteMode;        // Scan is in a quoted region
-    UBool                         fFreeForm;         // Scan mode is free-form, ignore spaces.
+    UBool                         fQuoteMode;        // Scan is in a \Q...\E quoted region
+    UBool                         fInBackslashQuote; // Scan is between a '\' and the following char.
+    UBool                         fEOLComments;      // When scan is just after '(?',  inhibit #... to 
+                                                     //   end of line comments, in favor of (?#...) comments.
     int                           fLineNum;          // Line number in input file.
     int                           fCharNum;          // Char position within the line.
     UChar32                       fLastChar;         // Previous char, needed to count CR-LF

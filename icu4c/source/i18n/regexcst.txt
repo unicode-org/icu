@@ -64,7 +64,7 @@ start:
 #  term.  At a position where we can accept the start most items in a pattern.
 #
 term:
-    quoted               n expr-quant     	                        doLiteralChar
+    quoted               n expr-quant                               doLiteralChar
     rule_char            n expr-quant                               doLiteralChar
     '['                  n expr-quant                               doScanUnicodeSet
     '('                  n open-paren                     
@@ -109,7 +109,7 @@ expr-cont:
 #                      branches into the normal parenthesis sequence as quickly as possible.
 #
 open-paren-quant:
-    '?'                  n  open-paren-quant2
+    '?'                  n  open-paren-quant2                      doSuppressComments
     default                 open-paren
     
 open-paren-quant2:
@@ -122,7 +122,7 @@ open-paren-quant2:
 #                 determine what kind of quantifier it is - plain (, (?:, (?>, or whatever.
 #
 open-paren:
-    '?'                  n  open-paren-extended
+    '?'                  n  open-paren-extended                     doSuppressComments
     default                 term            ^expr-quant             doOpenCaptureParen
     
 open-paren-extended:

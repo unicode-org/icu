@@ -215,7 +215,7 @@ RegexPattern  *RegexPattern::compile(
         return NULL;
     }
 
-    if ((flags & (UREGEX_CANON_EQ | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE)) != 0) {
+    if ((flags & UREGEX_CANON_EQ) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }

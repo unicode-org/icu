@@ -844,9 +844,11 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                    // We are at the start input.  Success.
                    break;
                }
-               // Check the character just before the current pos.
+               // Check whether character just before the current pos is a new-line
+               //   unless we are at the end of input
                UChar  c = inputBuf[fp->fInputIdx - 1]; 
-               if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+               if ((fp->fInputIdx < inputLen) && 
+                   (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
                    //  It's a new-line.  ^ is true.  Success.
                    break;                        
                }
