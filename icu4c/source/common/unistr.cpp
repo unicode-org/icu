@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2001, International Business Machines Corporation and   *
+* Copyright (C) 1999-2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -379,6 +379,18 @@ UnicodeString::UnicodeString(const UnicodeString& that,
     fFlags(kShortString)
 {
   setTo(that, srcStart, srcLength);
+}
+
+// Replaceable base class clone() default implementation, does not clone
+Replaceable *
+Replaceable::clone() const {
+  return NULL;
+}
+
+// UnicodeString overrides clone() with a real implementation
+Replaceable *
+UnicodeString::clone() const {
+  return new UnicodeString(*this);
 }
 
 //========================================
