@@ -183,15 +183,15 @@ int32_t RegexMatcher::end(UErrorCode &err) const {
 
 int32_t RegexMatcher::end(int group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
-        return 0;
+        return -1;
     }
     if (fMatch == FALSE) {
         err = U_REGEX_INVALID_STATE;
-        return 0;
+        return -1;
     }
     if (group < 0 || group > fPattern->fNumCaptureGroups) {
         err = U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
+        return -1;
     }
     int32_t e = -1;
     if (group == 0) {
@@ -404,15 +404,15 @@ int32_t RegexMatcher::start(UErrorCode &err) const {
 
 int32_t RegexMatcher::start(int group, UErrorCode &err) const {
     if (U_FAILURE(err)) {
-        return 0;
+        return -1;
     }
     if (fMatch == FALSE) {
         err = U_REGEX_INVALID_STATE;
-        return 0;
+        return -1;
     }
     if (group < 0 || group > fPattern->fNumCaptureGroups) {
         err = U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
+        return -1;
     }
     int32_t s;
     if (group == 0) {
@@ -424,6 +424,54 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
     return s;
 }
 
+
+
+//--------------------------------------------------------------------------------
+//
+//   isWordBoundary 
+//                     in perl, "xab..cd..", \b is true at positions 0,3,5,7
+//                     For us,
+//                       If the current char is a combining mark, \b is FALSE
+//                       Scan backwards to the first non-combining char
+//                       Pos is a boundary if the current and previous chars are
+//                            opposite in membership in \w set
+//
+//--------------------------------------------------------------------------------
+UBool RegexMatcher::isWordBoundary(int32_t pos) {
+    UBool isBoundary = FALSE;
+    if (pos >=  fInputLength) {
+        // off end of string.  Not a boundary.
+        return FALSE;
+    }
+    
+    // Determine whether char c at Pos is a member of the word set of chars.
+    UChar32  c = fInput->char32At(pos);
+    int8_t ctype = u_charType(c);
+    if (ctype==U_NON_SPACING_MARK || ctype==U_ENCLOSING_MARK) {
+        // Current char is a combining one.  Not a boundary.
+        return FALSE;
+    }
+    UBool cIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(c);
+    
+    // Back up until we come to a non-combining char, determine whether
+    //  that char is a word char.
+    UBool prevCIsWord = FALSE;
+    int32_t prevPos = pos;
+    for (;;) {
+        if (prevPos == 0) {
+            break;
+        }
+        prevPos = fInput->moveIndex32(prevPos, -1);
+        UChar32 prevChar = fInput->char32At(prevPos);
+        int8_t prevCType = u_charType(prevChar);
+        if (!(prevCType==U_NON_SPACING_MARK || prevCType==U_ENCLOSING_MARK)) {
+            prevCIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(prevChar);
+            break;
+        }
+    }
+    isBoundary = cIsWord ^ prevCIsWord;
+    return isBoundary;
+}
 
 
 //--------------------------------------------------------------------------------
@@ -597,10 +645,36 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             break;
 
         case URX_BACKSLASH_B:          // Test for word boundaries
-            if (FALSE) {
-                backTrack(inputIdx, patIdx);
+            {
+                UBool success = isWordBoundary(inputIdx);
+                success ^= (opValue != 0);     // flip sense for \B
+                if (!success) {
+                    backTrack(inputIdx, patIdx);
+                }
             }
             break;
+
+
+        case URX_BACKSLASH_D:
+            {
+                if (inputIdx >= fInputLength) {
+                    backTrack(inputIdx, patIdx);
+                    break;
+                }
+
+                UChar32 c = fInput->char32At(inputIdx);   
+                int8_t ctype = u_charType(c);
+                UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
+                success ^= (opValue != 0);
+                if (success) {
+                    inputIdx = fInput->moveIndex32(inputIdx, 1);
+                } else {
+                    backTrack(inputIdx, patIdx);
+                }
+            }
+            break;
+
+
 
 
         case URX_BACKSLASH_G:          // Test for position at end of previous match
@@ -609,11 +683,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             }
             break;
 
-        case URX_BACKSLASH_W:          // Match word chars   (TODO:  doesn't belong here?
-            if (FALSE) {
-                backTrack(inputIdx, patIdx);
-            }
-            break;
 
         case URX_BACKSLASH_X:          // Match combining character sequence
             if (FALSE) {
@@ -628,6 +697,33 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             break;
 
 
+
+        case URX_STATIC_SETREF:
+            {
+                // Test input character against one of the predefined sets
+                //    (Word Characters, for example)
+                // The high bit of the op value is a flag for the match polarity.
+                //    0:   success if input char is in set.
+                //    1:   success if input char is not in set.
+                UBool success = ((opValue & URX_NEG_SET) == URX_NEG_SET);  
+                opValue &= ~URX_NEG_SET;
+                if (inputIdx < fInputLength) {
+                    // There is input left.  Pick up one char and test it for set membership.
+                    UChar32  c = fInput->char32At(inputIdx);
+                    U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
+                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
+                    if (s->contains(c)) {
+                        success = !success;
+                    }
+                }
+                if (success) {
+                    inputIdx = fInput->moveIndex32(inputIdx, 1);
+                } else {
+                    backTrack(inputIdx, patIdx);
+                }
+            }
+            break;
+            
 
         case URX_SETREF:
             if (inputIdx < fInputLength) {
@@ -648,12 +744,44 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             
 
         case URX_DOTANY:
-            // . matches anything, but does not match if we've run out of input.
-            if (inputIdx < fInputLength) {
-                // There is input left.  Advance one character in it.
+            {
+                // . matches anything
+                if (inputIdx >= fInputLength) {
+                    // At end of input.  Match failed.  Backtrack out.
+                    backTrack(inputIdx, patIdx);
+                    break;
+                }
+                // There is input left.  Advance over one char, unless we've hit end-of-line
+                UChar32 c = fInput->char32At(inputIdx);
                 inputIdx = fInput->moveIndex32(inputIdx, 1);
-            } else {
-            backTrack(inputIdx, patIdx);
+                if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                    // End of line in normal mode.   . does not match.
+                    backTrack(inputIdx, patIdx);
+                    break;
+                }
+            }
+            break;
+            
+            
+        case URX_DOTANY_ALL:
+            {
+                // ., in dot-matches-all (including new lines) mode
+                // . matches anything
+                if (inputIdx >= fInputLength) {
+                    // At end of input.  Match failed.  Backtrack out.
+                    backTrack(inputIdx, patIdx);
+                    break;
+                }
+                // There is input left.  Advance over one char, unless we've hit end-of-line
+                UChar32 c = fInput->char32At(inputIdx);
+                inputIdx = fInput->moveIndex32(inputIdx, 1);
+                if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
+                    // In the case of a CR/LF, we need to advance over both.
+                    UChar32 nextc = fInput->char32At(inputIdx);
+                    if (c == 0x0d && nextc == 0x0a) {
+                        inputIdx = fInput->moveIndex32(inputIdx, 1);
+                    }
+                }
             }
             break;
 
