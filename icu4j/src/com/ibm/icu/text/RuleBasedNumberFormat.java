@@ -595,7 +595,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param description A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
-     * @param a list of localizations for the rule set names in the description.
+     * @param localizations a list of localizations for the rule set names in the description.
      * Each element is an array or strings.  The first string is the ulocale, the
      * remainder are the localizations of the public rule set names, in reverse
      * order from how they they appear in the description.
@@ -633,7 +633,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param description A description of the formatter's desired behavior.
      * See the class documentation for a complete explanation of the description
      * syntax.
-     * @param a list of localizations for the rule set names in the description.
+     * @param localizations a list of localizations for the rule set names in the description.
      * Each element is an array or strings.  The first string is the ulocale, the
      * remainder are the localizations of the public rule set names, in reverse
      * order from how they appear in the description.
@@ -693,7 +693,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
 
         // construct the formatter based on the description
-    // TODO: amend this so we can add the localizations
+        // TODO: amend this so we can add the localizations
         init(description, null);
     }
 
@@ -848,24 +848,40 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ULocale[] getRuleSetDisplayNameLocales() {
-    if (ruleSetDisplayNames != null) {
-        Set s = ruleSetDisplayNames.keySet();
-        String[] locales = (String[])s.toArray(new String[s.size()]);
-        Arrays.sort(locales, String.CASE_INSENSITIVE_ORDER);
-        ULocale[] result = new ULocale[locales.length];
-        for (int i = 0; i < locales.length; ++i) {
-        result[i] = new ULocale(locales[i]);
+        if (ruleSetDisplayNames != null) {
+            Set s = ruleSetDisplayNames.keySet();
+            String[] locales = (String[])s.toArray(new String[s.size()]);
+            Arrays.sort(locales, String.CASE_INSENSITIVE_ORDER);
+            ULocale[] result = new ULocale[locales.length];
+            for (int i = 0; i < locales.length; ++i) {
+                result[i] = new ULocale(locales[i]);
+            }
+            return result;
         }
-        return result;
-    }
-    return null;
+        return null;
     }
 
+    private String[] getNameListForLocale(ULocale locale) {
+        if (locale != null && ruleSetDisplayNames != null) {
+            String[] localeNames = { locale.getBaseName(), ULocale.getDefault().getBaseName() };
+            for (int i = 0; i < localeNames.length; ++i) {
+                String lname = localeNames[i];
+                while (lname.length() > 0) {
+                    String[] names = (String[])ruleSetDisplayNames.get(lname);
+                    if (names != null) {
+                        return names;
+                    }
+                    lname = ULocale.getFallback(lname);
+                }
+            }
+        }
+        return null;
+    }
   
     /**
      * Return the rule set display names for the provided locale.  These are in the same order
      * as those returned by getRuleSetNames.  The locale is matched against the locales for
-     * which there is display name data, using normal fallback rules.  If no locale matches 
+     * which there is display name data, using normal fallback rules.  If no locale matches, 
      * the default display names are returned.  (These are the internal rule set names minus
      * the leading '%'.)
      * @return an array of the locales that have display name information
@@ -874,25 +890,61 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String[] getRuleSetDisplayNames(ULocale locale) {
-    String[] names = null;
-    if (locale != null && ruleSetDisplayNames != null) {
-        String[] localeNames = { locale.getBaseName(), ULocale.getDefault().getBaseName() };
-        for (int i = 0; i < localeNames.length; ++i) {
-        String lname = localeNames[i];
-        while (lname.length() > 0) {
-            names = (String[])ruleSetDisplayNames.get(lname);
-            if (names != null) {
+        String[] names = getNameListForLocale(locale);
+        if (names != null) {
             return (String[])names.clone();
+        }
+        names = getRuleSetNames();
+        for (int i = 0; i < names.length; ++i) {
+            names[i] = names[i].substring(1);
+        }
+        return names;
+    }
+
+    /**
+     * Return the rule set display names for the current default locale.
+     * @return an array of the display names
+     * @draft ICU 3.2
+     * @see #getRuleSetDisplayNames(ULocale)
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String[] getRuleSetDisplayNames() {
+        return getRuleSetDisplayNames(ULocale.getDefault());
+    }
+
+    /**
+     * Return the rule set display name for the provided rule set and locale.  
+     * The locale is matched against the locales for which there is display name data, using
+     * normal fallback rules.  If no locale matches, the default display name is returned.
+     * @return the display name for the rule set
+     * @draft ICU 3.2
+     * @see #getRuleSetDisplayNames
+     * @throws IllegalArgumentException if ruleSetName is not a valid rule set name for this format
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getRuleSetDisplayName(String ruleSetName, ULocale locale) {
+        String[] rsnames = getRuleSetNames();
+        for (int ix = 0; ix < rsnames.length; ++ix) {
+            if (rsnames[ix].equals(ruleSetName)) {
+                String[] names = getNameListForLocale(locale);
+                if (names != null) {
+                    return names[ix];
+                }
+                return rsnames[ix].substring(1);
             }
-            lname = ULocale.getFallback(lname);
         }
-        }
+        throw new IllegalArgumentException("unrecognized rule set name: " + ruleSetName);
     }
-    names = getRuleSetNames();
-    for (int i = 0; i < names.length; ++i) {
-        names[i] = names[i].substring(1);
-    }
-    return names;
+
+    /**
+     * Return the rule set display name for the provided rule set in the current default locale.
+     * @return the display name for the rule set
+     * @draft ICU 3.2
+     * @see #getRuleSetDisplayName(String,ULocale)
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getRuleSetDisplayName(String ruleSetName) {
+        return getRuleSetDisplayName(ruleSetName, ULocale.getDefault());
     }
 
     /**
@@ -1286,8 +1338,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * in the class docs.
      */
     private void init(String description, String[][] localizations) {
-
-    initLocalizations(localizations);
+        initLocalizations(localizations);
 
         // start by stripping the trailing whitespace from all the rules
         // (this is all the whitespace follwing each semicolon in the
@@ -1358,18 +1409,18 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * the localization arrays.
      */
     private void initLocalizations(String[][] localizations) {
-    if (localizations != null) {
-        Map m = new HashMap();
-        for (int i = 0; i < localizations.length; ++i) {
-        String[] data = localizations[i];
-        String locale = data[0];
-        String[] names = new String[data.length-1];
-        System.arraycopy(data, 1, names, 0, names.length);
-        m.put(locale, names);
-        }
+        if (localizations != null) {
+            Map m = new HashMap();
+            for (int i = 0; i < localizations.length; ++i) {
+                String[] data = localizations[i];
+                String locale = data[0];
+                String[] names = new String[data.length-1];
+                System.arraycopy(data, 1, names, 0, names.length);
+                m.put(locale, names);
+            }
 
-        ruleSetDisplayNames = m;
-    }
+            ruleSetDisplayNames = m;
+        }
     }
 
     /**
