@@ -117,6 +117,8 @@ public class JDKTimeZone extends TimeZone {
             }
         } catch (ClassNotFoundException e1) {
             // ok; fall through
+        } catch (SecurityException ex) {
+            // ok; fall through, we're running in a protected context
         } catch (NoSuchMethodException e2) {
             throw new RuntimeException(); // should not occur
         } catch (IllegalAccessException e3) {
