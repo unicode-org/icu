@@ -47,8 +47,6 @@ static  void    createDirTables(void);
 
 char* _ucdVersion=NULL;
 
-const   UChar   MIN_VALUE = 0x0000;
-const   UChar   MAX_VALUE = 0xffff;
 static CompactByteArray *tables;
 static CompactShortArray *ulTables; 
 static CompactByteArray *dirTables;
