@@ -1154,17 +1154,22 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
      * }
      */
     for(;;) {
-        /* convert */
-        toUnicode(pArgs, err);
+        if(U_SUCCESS(*err)) {
+            /* convert */
+            toUnicode(pArgs, err);
 
-        /*
-         * set a flag for whether the converter
-         * successfully processed the end of the input
-         */
-        converterSawEndOfInput=
-            (UBool)(U_SUCCESS(*err) &&
-                    pArgs->flush && pArgs->source==pArgs->sourceLimit &&
-                    cnv->toULength==0);
+            /*
+             * set a flag for whether the converter
+             * successfully processed the end of the input
+             */
+            converterSawEndOfInput=
+                (UBool)(U_SUCCESS(*err) &&
+                        pArgs->flush && pArgs->source==pArgs->sourceLimit &&
+                        cnv->toULength==0);
+        } else {
+            /* handle error from getNextUChar() */
+            converterSawEndOfInput=FALSE;
+        }
 
         /* no callback called yet for this iteration */
         calledCallback=FALSE;
@@ -1216,8 +1221,6 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                      * the entire input stream is consumed
                      * and there is a partial, truncated input sequence left
                      */
-                    uprv_memcpy(cnv->invalidCharBuffer, cnv->toUBytes, cnv->toULength);
-                    cnv->invalidCharLength=cnv->toULength;
 
                     /* inject an error and continue with callback handling */
                     *err=U_TRUNCATED_CHAR_FOUND;
@@ -1237,7 +1240,7 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                         }
 
                         /* reset the converter without calling the callback function */
-                        _reset(cnv, UCNV_RESET_FROM_UNICODE, FALSE);
+                        _reset(cnv, UCNV_RESET_TO_UNICODE, FALSE);
                     }
 
                     /* done successfully */
@@ -1267,8 +1270,11 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
                 }
             }
 
-            /* callback handling */
-            errorInputLength=cnv->invalidCharLength;
+            /* copy toUBytes[] to invalidCharBuffer[] */
+            errorInputLength=cnv->invalidCharLength=cnv->toULength;
+            if(errorInputLength>0) {
+                uprv_memcpy(cnv->invalidCharBuffer, cnv->toUBytes, errorInputLength);
+            }
 
             /* set the converter state to deal with the next character */
             cnv->toULength=0;
@@ -1403,7 +1409,7 @@ ucnv_toUnicode(UConverter *cnv,
     *target=args.target;
 }
 
-/* -------------------------------------------------------------------------- */
+/* ucnv_to/fromUChars() ----------------------------------------------------- */
 
 U_CAPI int32_t U_EXPORT2
 ucnv_fromUChars(UConverter *cnv,
@@ -1527,23 +1533,14 @@ ucnv_toUChars(UConverter *cnv,
     return u_terminateUChars(originalDest, destCapacity, destLength, pErrorCode);
 }
 
-/*
- * ### TODO experimental version
- * this version uses _toUnicodeWithCallback() which saves per-converter
- * implementation and in turn avoids errors in essentially duplicate code
- *
- * compare performance of the old and this new implementation and either
- * keep the old one and make it work with the revised callback and truncation
- * semantics,
- * or remove the old one and the associated implementation functions and
- * use this new one
- */
+/* ucnv_getNextUChar() ------------------------------------------------------ */
+
 U_CAPI UChar32 U_EXPORT2
 ucnv_getNextUChar(UConverter *cnv,
                   const char **source, const char *sourceLimit,
                   UErrorCode *err) {
     UConverterToUnicodeArgs args;
-    UChar buffer[2];
+    UChar buffer[U16_MAX_LENGTH];
     const char *s;
     UChar32 c;
     int32_t i, length;
@@ -1626,31 +1623,52 @@ ucnv_getNextUChar(UConverter *cnv,
     args.size=sizeof(args);
 
     if(c<0) {
-#if 0
-        /* ### TODO reenable native getNextUChar() implementations */
-        if(cnv->sharedData->impl->getNextUChar!=NULL) {
+        /*
+         * call the native getNextUChar() implementation if we are
+         * at a character boundary (toULength==0)
+         *
+         * unlike with _toUnicode(), getNextUChar() implementations must set
+         * U_TRUNCATED_CHAR_FOUND for truncated input,
+         * in addition to setting toULength/toUBytes[]
+         */
+        if(cnv->toULength==0 && cnv->sharedData->impl->getNextUChar!=NULL) {
             c=cnv->sharedData->impl->getNextUChar(&args, err);
-            /* ### TODO handle callbacks, do not combine surrogate pairs */
-            *source=args.source;
-            return c;
+            *source=s=args.source;
+            if(*err==U_INDEX_OUTOFBOUNDS_ERROR) {
+                /* no input, nothing we can do */
+                return 0xffff;
+            } else if(U_SUCCESS(*err) && c>=0) {
+                if(s==sourceLimit) {
+                    /* reset the converter without calling the callback function */
+                    _reset(cnv, UCNV_RESET_TO_UNICODE, FALSE);
+                }
+                return c;
+            /*
+             * else fall through to use _toUnicode() because
+             *   UCNV_GET_NEXT_UCHAR_USE_TO_U: the native function did not want to handle it after all
+             *   U_FAILURE: call _toUnicode() for callback handling (do not output c)
+             */
+            }
         }
-#endif
 
-        /* convert to one UChar in buffer[0] */
+        /* convert to one UChar in buffer[0], or handle getNextUChar() errors */
         _toUnicodeWithCallback(&args, err);
+
+        if(*err==U_BUFFER_OVERFLOW_ERROR) {
+            *err=U_ZERO_ERROR;
+        }
+
+        i=0;
+        length=(int32_t)(args.target-buffer);
     } else {
         /* write the lead surrogate from the overflow buffer */
         buffer[0]=(UChar)c;
         args.target=buffer+1;
+        i=0;
+        length=1;
     }
 
     /* buffer contents starts at i and ends before length */
-    i=0;
-    length=(int32_t)(args.target-buffer);
-
-    if(*err==U_BUFFER_OVERFLOW_ERROR) {
-        *err=U_ZERO_ERROR;
-    }
 
     if(U_FAILURE(*err)) {
         c=0xffff; /* no output */
