@@ -139,9 +139,7 @@ chdir($javaRootDir);
 print "Directory: $javaRootDir\n";
 cmd($cmd);
 
-# Step 7.  Update .jar file.  Since we don't yet generate correct
-# CollationElement_*.res files, leave those as they are.  Do a
-# "jar u" -- update the existing file.
+# Step 7.  Update .jar file.  Do a "jar u" to update the existing file.
 print "\n[Step 7: Update .jar file]\n";
 my $jarFile = "$ICU4J_ROOT/src/$pkg/ICULocaleData.jar";
 my $filesToBePackaged= "$pkg/*.class $pkg/*.col $pkg/*.brk $pkg/*.utf8";
