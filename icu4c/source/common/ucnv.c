@@ -986,8 +986,8 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
       UTF_NEXT_CHAR(converter->UCharErrorBuffer, i, sizeof(converter->UCharErrorBuffer), myUChar);
       /*In this memmove we update the internal buffer by
        *popping the first character.
-         *Note that in the call itself we decrement
-         *UCharErrorBufferLength
+       *Note that in the call itself we decrement
+       *UCharErrorBufferLength
        */
       uprv_memmove (converter->UCharErrorBuffer,
                    converter->UCharErrorBuffer + i,
@@ -1005,7 +1005,13 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
   args.target = NULL;
   args.targetLimit = NULL;
   args.size = sizeof(args);
-  ch = converter->sharedData->impl->getNextUChar(&args, err);
+  if (converter->sharedData->impl->getNextUChar != NULL)
+  {
+	ch = converter->sharedData->impl->getNextUChar(&args, err);
+  } else {
+	/* default implementation */
+	ch = ucnv_getNextUCharFromToUImpl(&args, converter->sharedData->impl->toUnicode, FALSE, err);
+  }
   *source = args.source;
   return ch;
 }

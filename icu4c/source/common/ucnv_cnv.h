@@ -260,4 +260,30 @@ ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex
 #define FROM_U_USE_FALLBACK(useFallback, c) ((useFallback) || (uint32_t)((c)-0xe000)<0x1900 || (uint32_t)((c)-0xf0000)<0x20000)
 #define UCNV_FROM_U_USE_FALLBACK(cnv, c) FROM_U_USE_FALLBACK((cnv)->useFallback, c)
 
+/**
+ * This is a simple implementation of ucnv_getNextUChar() that uses the
+ * converter's toUnicode() function.
+ *
+ * \par
+ * A surrogate pair from a single byte sequence is always
+ * combined to a supplementary code point.
+ * A surrogate pair from consecutive byte sequences is only combined
+ * if collectPairs is set. This is necessary for SCSU
+ * but not allowed for most legacy codepages.
+ *
+ * @param pArgs The argument structure supplied by ucnv_getNextUChar()
+ * @param toU   A function pointer to the converter's toUnicode() function
+ * @param collectPairs indicates whether separate surrogate results from
+ *                     consecutive byte sequences should be combined into
+ *                     a single code point
+ * @param pErrorCode An ICU error code parameter
+ * @return The Unicode code point as a result of a conversion of a minimal
+ *         number of input bytes
+ */
+U_CFUNC UChar32
+ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
+							 T_ToUnicodeFunction toU,
+							 UBool collectPairs,
+							 UErrorCode *pErrorCode);
+
 #endif /* UCNV_CNV */
