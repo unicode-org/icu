@@ -521,6 +521,12 @@ void    RegexCompile::compile(
     fRXPat->fMaxMatchLen = maxMatchLength(3, fRXPat->fCompiledPat->size()-1);
 
     //
+    // Optimization pass:  Categorize how a match can start, for use by find()
+    //  
+    matchStartType();
+
+
+    //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
     //   about the pattern.dump() debug function.  Go through the motions of dumping,
     //   even though, without the #define set, it will do nothing.
@@ -2073,24 +2079,27 @@ UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
 //   matchStartType    Determine how a match can start.
 //                     Used to optimize find() operations.
 //
+//                     Operation is very similar to minMatchLength().  Walk the compiled
+//                     pattern, keeping an on-going minimum-match-length.  For any
+//                     op where the min match coming in is zero, add that ops possible
+//                     starting matches to the possible starts for the overall pattern.
+//
 //----------------------------------------------------------------------------------------
-int32_t   RegexCompile::matchStartType() {
+void   RegexCompile::matchStartType() {
     if (U_FAILURE(*fStatus)) {
-        return 0;
+        return;
     }
 
 
-    int32_t    loc;
-    int32_t    op;
-    int32_t    opType;
-    int32_t    currentLen = 0;
+    int32_t    loc;                    // Location in the pattern of the current op being processed.
+    int32_t    op;                     // The op being processed
+    int32_t    opType;                 // The opcode type of the op
+    int32_t    currentLen = 0;         // Minimum length of a match to this point (loc) in the pattern
+    int32_t    numInitialStrings = 0;  // Number of strings encountered that could match at start.
 
-    UnicodeSet   startingChars;
-    int32_t      startStringIndex;
-    int32_t      startStringLen;
-
-    UBool        atStart = TRUE;     // True if no part of the pattern yet encountered
-                                     //   could have advanced the position in a match.
+    UBool      atStart = TRUE;         // True if no part of the pattern yet encountered
+                                       //   could have advanced the position in a match.
+                                       //   (Maximum match length so far == 0)
 
     // forwardedLength is a vector holding minimum-match-length values that
     //   are propagated forward in the pattern by JMP or STATE_SAVE operations.
@@ -2155,19 +2164,19 @@ int32_t   RegexCompile::matchStartType() {
             if (currentLen == 0) {
                 // This character could appear at the start of a match.
                 //   Add it to the set of possible starting characters.
-                startingChars.add(URX_VAL(op));
+                fRXPat->fInitialChars->add(URX_VAL(op));
             }
             currentLen++;
             atStart = FALSE;
             break;
             
 
-        case URX_SETREF:               // TODO:  Sense of op, invert the set
+        case URX_SETREF:       
             if (currentLen == 0) {
                 int32_t  sn = URX_VAL(op);
                 U_ASSERT(sn > 0 && sn < fRXPat->fSets->size());
                 const UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(sn);
-                startingChars.addAll(*s);
+                fRXPat->fInitialChars->addAll(*s);
             }
             currentLen++;
             atStart = FALSE;
@@ -2183,9 +2192,9 @@ int32_t   RegexCompile::matchStartType() {
                 if (negated) {
                     UnicodeSet sc(*s);
                     sc.complement();
-                    startingChars.addAll(sc);
+                    fRXPat->fInitialChars->addAll(sc);
                 } else {
-                    startingChars.addAll(*s);
+                    fRXPat->fInitialChars->addAll(*s);
                 }
             }
             currentLen++;
@@ -2197,9 +2206,12 @@ int32_t   RegexCompile::matchStartType() {
         case URX_BACKSLASH_D:
             // Digit Char
              if (currentLen == 0) {
-                 UnicodeSet s;   // TODO:  sense of op, invert the set.
+                 UnicodeSet s;   
                  s.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ND_MASK, *fStatus);
-                 startingChars.addAll(s);
+                 if (URX_VAL(op) != 0) {
+                     s.complement();
+                 }
+                 fRXPat->fInitialChars->addAll(s);
             }
             currentLen++;
             atStart = FALSE;
@@ -2215,21 +2227,27 @@ int32_t   RegexCompile::matchStartType() {
                     //   to the set of possible starting match chars.
                     UnicodeSet s(c, c);
                     s.closeOver(USET_CASE);
-                    startingChars.addAll(s);
+                    fRXPat->fInitialChars->addAll(s);
                 } else {
                     // Char has no case variants.  Just add it as-is to the
                     //   set of possible starting chars.
-                    startingChars.add(c);
+                    fRXPat->fInitialChars->add(c);
                 }
             }
             currentLen++;
             atStart = FALSE;
             break;
 
-        case URX_BACKSLASH_W:
+
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
+            if (currentLen == 0) {
+                // These constructs are all bad news when they appear at the start
+                //   of a match.  Any character can begin the match.
+                fRXPat->fInitialChars->clear();
+                fRXPat->fInitialChars->complement();
+            }
             currentLen++;
             atStart = FALSE;
             break;
@@ -2252,12 +2270,14 @@ int32_t   RegexCompile::matchStartType() {
                     }
                 }
             }
+            atStart = FALSE;
             break;
 
         case URX_FAIL:
             // Fails are kind of like a branch, except that the min length was
             //   propagated already, by the state save.
             currentLen = forwardedLength.elementAti(loc+1);
+            atStart = FALSE;
             break;
 
 
@@ -2272,20 +2292,61 @@ int32_t   RegexCompile::matchStartType() {
                     }
                 } 
             }
+            atStart = FALSE;
             break;
             
 
 
 
         case URX_STRING:
-        case URX_STRING_I:
             {
                 loc++;
                 int32_t stringLenOp = fRXPat->fCompiledPat->elementAti(loc);
-                currentLen += URX_VAL(stringLenOp);
+                int32_t stringLen   = URX_VAL(stringLenOp);
+                U_ASSERT(URX_TYPE(stringLenOp) == URX_STRING_LEN);
+                U_ASSERT(stringLenOp >= 2);
+                if (currentLen == 0) {
+                    // Add the starting character of this string to the set of possible starting
+                    //   characters for this pattern.
+                    int32_t stringStartIdx = URX_VAL(op);
+                    UChar32  c = fRXPat->fLiteralText.char32At(stringStartIdx);
+                    fRXPat->fInitialChars->add(c);
+
+                    // Remember this string.  After the entire pattern has been checked,
+                    //  if nothing else is identified that can start a match, we'll use it.
+                    numInitialStrings++;
+                    fRXPat->fInitialStringIdx = stringStartIdx;
+                    fRXPat->fInitialStringLen = stringLen;
+                }
+                    
+                currentLen += stringLen;
+                atStart = FALSE;
             }
             break;
 
+        case URX_STRING_I:
+            {
+                // Case-insensitive string.  Unlike exact-match strings, we won't
+                //   attempt a string search for possible match positions.  But we
+                //   do update the set of possible starting characters.
+                loc++;
+                int32_t stringLenOp = fRXPat->fCompiledPat->elementAti(loc);
+                int32_t stringLen   = URX_VAL(stringLenOp);
+                U_ASSERT(URX_TYPE(stringLenOp) == URX_STRING_LEN);
+                U_ASSERT(stringLenOp >= 2);
+                if (currentLen == 0) {
+                    // Add the starting character of this string to the set of possible starting
+                    //   characters for this pattern.
+                    int32_t stringStartIdx = URX_VAL(op);
+                    UChar32  c = fRXPat->fLiteralText.char32At(stringStartIdx);
+                    UnicodeSet s(c, c);
+                    s.closeOver(USET_CASE);
+                    fRXPat->fInitialChars->addAll(s);
+                }
+                currentLen += stringLen;
+                atStart = FALSE;
+            }
+            break;
 
         case URX_CTR_INIT:
         case URX_CTR_INIT_NG:
@@ -2295,6 +2356,7 @@ int32_t   RegexCompile::matchStartType() {
                 //   so location must be updated accordingly.
                 loc+=3;
             }
+            atStart = FALSE;
             break;
 
 
@@ -2303,6 +2365,7 @@ int32_t   RegexCompile::matchStartType() {
         case URX_CTR_LOOP_P:
             // Loop ops. 
             //  The jump is conditional, backwards only.
+            atStart = FALSE;
             break;
             
             
@@ -2312,8 +2375,6 @@ int32_t   RegexCompile::matchStartType() {
             {
                 // Look-around.  Scan forward until the matching look-ahead end,
                 //   without processing the look-around block.  This is overly pessimistic.
-                //   TODO:  Positive lookahead could recursively do the block, then continue
-                //          with the longer of the block or the value coming in.
                 int32_t  depth = 0;
                 for (;;) {
                     loc++;
@@ -2337,8 +2398,9 @@ int32_t   RegexCompile::matchStartType() {
         case URX_LB_END:
         case URX_LBN_CONT:
         case URX_LBN_END:
-            // Only come here if the matching URX_LA_START or URX_LB_START was not in the
-            //   range being sized, which happens when measuring size of look-behind blocks.
+            U_ASSERT(FALSE);     // Shouldn't get here.  These ops should be 
+                                 //  consumed by the scan in URX_LA_START and LB_START
+
             break;
             
         default:
@@ -2353,8 +2415,41 @@ int32_t   RegexCompile::matchStartType() {
     if (forwardedLength.elementAti(end+1) < currentLen) {
         currentLen = forwardedLength.elementAti(end+1);
     }
-            
-    return currentLen;
+
+
+    // Sort out what we should check for when looking for candidate match start positions.
+    // In order of preference,
+    //     1.   Start of input text buffer.
+    //     2.   A literal string.
+    //     3.   Start of line in multi-line mode.
+    //     4.   A single literal character.
+    //     5.   A character from a set of characters.
+    //
+    if (fRXPat->fStartType == START_START) {
+        // Match only at the start of an input text string.
+        //    start type is already set.  We're done.
+    } else if (numInitialStrings == 1 && fRXPat->fInitialChars->size() == 1) {
+        // Match beginning only with a literal string.
+        UChar32  c = fRXPat->fLiteralText.char32At(fRXPat->fInitialStringIdx);
+        U_ASSERT(fRXPat->fInitialChars->contains(c));
+        fRXPat->fStartType = START_STRING;
+    } else if (fRXPat->fStartType == START_LINE) {
+        // Match at start of line in Mulit-Line mode.
+        // Nothing to do here; everything is already set.
+    } else if (fRXPat->fInitialChars->size() == 1) {
+        // All matches begin with the same char.
+        fRXPat->fStartType   = START_CHAR;
+        fRXPat->fInitialChar = fRXPat->fInitialChars->charAt(0);
+        U_ASSERT(fRXPat->fInitialChar != (UChar32)-1);
+    } else if (fRXPat->fInitialChars->contains((UChar32)0, (UChar32)0x10ffff) == FALSE) {
+        // Matches start with a set of character smaller than the set of all chars.
+        fRXPat->fStartType = START_SET;
+    } else {
+        // Matches can start with anything
+        fRXPat->fStartType = START_NO_INFO;
+    }
+
+    return;
 }
 
 
@@ -2444,7 +2539,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_SETREF:
         case URX_BACKSLASH_D:
         case URX_ONECHAR_I:
-        case URX_BACKSLASH_W:
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
         case URX_DOTANY:
@@ -2662,7 +2756,6 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_SETREF:
         case URX_BACKSLASH_D:
         case URX_ONECHAR_I:
-        case URX_BACKSLASH_W:
         case URX_DOTANY_ALL:  
         case URX_DOTANY:
             currentLen+=2;

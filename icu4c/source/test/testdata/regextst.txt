@@ -279,6 +279,9 @@
 #"^(?:a?b?)*$"	        d         "a--"	
 "^(?:a?b?)*$"	                  "a--"
 
+"This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
+"((?:a|b|c)whoop-dee-do) | [jkl]|zed"             "x"
+"astring|another[bcd]|alpha|a|[a]"  d "x"
 
 #
 #  Regexps from http://www.regexlib.com
