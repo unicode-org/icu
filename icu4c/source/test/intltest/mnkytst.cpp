@@ -214,6 +214,56 @@ CollationMonkeyTest::TestCompare(char* par)
         errln(msg);
     }
 }
+void CollationMonkeyTest::TestRules(char *par){
+    UChar testSourceCases[][10] = {
+    {0x0061, 0x0062, 0x007a, 0},
+    {0x0061, 0x0062, 0x007a, 0},
+    };
+
+    UChar testTargetCases[][10] = {
+    {0x0061, 0x0062, 0x00e4, 0},
+    {0x0061, 0x0062, 0x0061, 0x0308, 0},
+    };
+
+
+    logln("Demo Test 1 : Create a new table collation with rules \"& z < 0x00e4\"");
+    UErrorCode status = U_ZERO_ERROR;
+    Collator *col = Collator::createInstance(status);
+    const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
+    UnicodeString newRules(" & Z < ");
+    newRules.append((UChar)0x00e4);
+    newRules.insert(0, baseRules);
+    RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
+    if (U_FAILURE(status)) {
+        errln( "Demo Test 1 Table Collation object creation failed.");
+        return;
+    }
+    for(int i=0; i<2; i++){
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], Collator::LESS);
+    }
+    delete myCollation;
+
+    delete col;
+
+
+
+}
+void CollationMonkeyTest::doTest(RuleBasedCollator *myCollation, UnicodeString mysource, UnicodeString target, Collator::EComparisonResult result)
+{
+    Collator::EComparisonResult compareResult = myCollation->compare(source, target);
+    CollationKey sortKey1, sortKey2;
+    UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
+    myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
+    myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
+    if (U_FAILURE(key1status) || U_FAILURE(key2status))
+    {
+        errln("SortKey generation Failed.\n");
+        return;
+    }
+
+    Collator::EComparisonResult keyResult = sortKey1.compareTo(sortKey2);
+    reportCResult( mysource, target, sortKey1, sortKey2, compareResult, keyResult, result );
+}
 
 void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
@@ -221,6 +271,7 @@ void CollationMonkeyTest::runIndexedTest( int32_t index, UBool exec, char* &name
     switch (index) {
         case 0: name = "TestCompare";   if (exec)   TestCompare( par ); break;
         case 1: name = "TestCollationKey"; if (exec)    TestCollationKey( par ); break;
+        case 2: name = "TestRules"; if (exec) TestRules(par); break;
         default: name = ""; break;
     }
 }

@@ -44,8 +44,12 @@ public:
     // perform monkey tests using CollationKey::compareTo
     void TestCollationKey( char* par );
 
+    void TestRules(char* par);
+
 private:
     void report(UnicodeString& s, UnicodeString& t, int32_t result, int32_t revResult);
+
+    void doTest(RuleBasedCollator *myCollation, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
     static const UnicodeString source;
 
