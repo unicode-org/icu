@@ -299,9 +299,11 @@ static void printStringBreaks(UnicodeString ustr, int expected[],
     UErrorCode status = U_ZERO_ERROR;
     char name[100];
     printf("code    alpha extend alphanum type line name\n");
-    for (int j = 0; j < ustr.length(); j ++) {
+    int j;
+    for (j = 0; j < ustr.length(); j ++) {
         if (expectedcount > 0) {
-            for (int k = 0; k < expectedcount; k ++) {
+            int k;
+            for (k = 0; k < expectedcount; k ++) {
                 if (j == expected[k]) {
                     printf("------------------------------------------------ %d\n",
                            j);
@@ -949,7 +951,8 @@ void RBBITest::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
         for (j = 0; j < testCharsLen; j++) {
             UChar c0 = testChars[j];
             work.setCharAt(0, c0);
-            for (int k = 0; k < testCharsLen; k++) {
+            int k;
+            for (k = 0; k < testCharsLen; k++) {
                 UChar c2 = testChars[k];
                 work.setCharAt(2, c2);
 
@@ -973,7 +976,8 @@ void RBBITest::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 
                 tb.setText(work);
                 UBool seen2 = FALSE;
-                for (int l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
+                int l;
+                for (l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
                     if (l == 2) {
                         seen2 = TRUE;
                         break;
@@ -1006,7 +1010,8 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
         for (j = 0; j < testCharsLen; j++) {
             work.setCharAt(3, testChars[j]);
             tb.setText(work);
-            for (int32_t k = tb.first(); k != BreakIterator::DONE; k = tb.next())
+            int32_t k;
+            for (k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
                     errln("Break between CR and LF in string U\\%04x U\\%04x U\\%04x U\\%04x",
                         work[0], work[1], work[2], work[3]);
@@ -1038,7 +1043,8 @@ void RBBITest::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
             }
             work.setCharAt(2, c2);
             tb.setText(work);
-            for (int k = tb.first(); k != BreakIterator::DONE; k = tb.next())
+            int k;
+            for (k = tb.first(); k != BreakIterator::DONE; k = tb.next())
                 if (k == 2) {
                     //errln("Break between U+" + UCharToUnicodeString(work[1])
                     //        + " and U+" + UCharToUnicodeString(work[2]));
@@ -1084,7 +1090,8 @@ void RBBITest::TestGetAvailableLocales()
     if (locCount == 0)
         errln("getAvailableLocales() returned an empty list!");
     // Just make sure that it's returning good memory.
-    for (int32_t i = 0; i < locCount; ++i) {
+    int32_t i;
+    for (i = 0; i < locCount; ++i) {
         logln(locList[i].getName());
     }
 }
@@ -1146,7 +1153,8 @@ void RBBITest::TestBug4153072() {
 
     StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
     iter->adoptText(textIterator);
-    for (int index = -1; index < begin + 1; ++index) {
+    int index;
+    for (index = -1; index < begin + 1; ++index) {
         dummy = iter->isBoundary(index);
         if (index < begin && dummy == TRUE) {
             errln((UnicodeString)"Didn't handle preceeding correctly with offset = " + index +
@@ -3051,7 +3059,8 @@ void RBBITest::TestWordBreaks(void)
     "\\u003b\\u0027\\u00b7\\u47a3",
     "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
-    for (int loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    int loop;
+    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
         printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 25);
         UnicodeString ustr(str);
@@ -3063,7 +3072,8 @@ void RBBITest::TestWordBreaks(void)
         int expectedcount = 0;
 
         monkey.setText(ustr);
-        for (int i = 0; i != BreakIterator::DONE; i = monkey.next(i)) {
+        int i;
+        for (i = 0; i != BreakIterator::DONE; i = monkey.next(i)) {
             expected[expectedcount ++] = i;
         }
 
@@ -3135,7 +3145,8 @@ void RBBITest::TestWordBoundary(void)
     "\\u003a\\u0664\\u00b7\\u1fba",
     "\\u003b\\u0027\\u00b7\\u47a3",
     };
-    for (int loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    int loop;
+    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
         printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
@@ -3144,10 +3155,12 @@ void RBBITest::TestWordBoundary(void)
         
         bi->setText(ustr);
         int prev = 0;
-        for (int i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
+        int i;
+        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
             forward[count ++] = i;
             if (i > prev) {
-                for (int j = prev + 1; j < i; j ++) {
+                int j;
+                for (j = prev + 1; j < i; j ++) {
                     if (bi->isBoundary(j)) {
                         printStringBreaks(ustr, forward, count);
                         errln("happy boundary test failed: expected %d not a boundary", 
@@ -3192,7 +3205,8 @@ void RBBITest::TestLineBreaks(void)
      "\\u2034\\u00bb\\u0ae6\\u300c\\u0020\\u31f8\\ufffc",
      "\\u2116\\u0ed2\\uff64\\u02cd\\u2001\\u2060",
     };
-    for (int loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    int loop;
+    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
         printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
@@ -3204,7 +3218,8 @@ void RBBITest::TestLineBreaks(void)
         int expectedcount = 0;
 
         monkey.setText(ustr);
-        for (int i = 0; i != BreakIterator::DONE; i = monkey.next(i)) {
+        int i;
+        for (i = 0; i != BreakIterator::DONE; i = monkey.next(i)) {
             expected[expectedcount ++] = i;
         }
 
@@ -3255,7 +3270,8 @@ void RBBITest::TestSentBreaks(void)
      "Che la dritta via aveo smarrita. He said, that I said, that you said!! ",
      "Don't rock the boat.\\u2029Because I am the daddy, that is why. Not on my time (el timo.)!",
     };
-    for (int loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
+    int loop;
+    for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
         printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 100);
         UnicodeString ustr(str);
@@ -3264,7 +3280,8 @@ void RBBITest::TestSentBreaks(void)
 
         int count = 0;
         bi->setText(ustr);
-        for (int i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
+        int i;
+        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
             forward[count ++] = i;
         }
         int tempcount = count;
