@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2003/01/28 18:55:41 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/02/15 00:29:04 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,6 @@ import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.LocaleUtility;
 
-
 /**
  * @author Ram
  *
@@ -37,9 +36,36 @@ import com.ibm.icu.impl.LocaleUtility;
  * To enable and disable the creation of type comments go to
  * Window>Preferences>Java>Code Generation.
  */
-class BreakIteratorFactory {
-    private static ICULocaleService service;
-    static ICULocaleService getService() {
+final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim {
+
+    public Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+        return getService().registerObject(iter, locale, kind);
+    }
+    
+    public boolean unregister(Object key) {
+        if (service != null) {
+            return service.unregisterFactory((Factory)key);
+        }
+        return false;
+    } 
+    
+    public Locale[] getAvailableLocales() {
+        if (service == null) {
+            return ICULocaleData.getAvailableLocales();
+        } else {
+            return service.getAvailableLocales();
+        }
+    }
+    
+    public BreakIterator createBreakIterator(Locale locale, int kind) {
+        if (service == null) {
+            return createBreakInstance(locale, kind);
+        }
+        return (BreakIterator)service.get(locale, kind);
+    }
+
+    private ICULocaleService service;
+    private ICULocaleService getService() {
         if (service == null) {
             ICULocaleService newService = new ICULocaleService("BreakIterator");
 
@@ -50,7 +76,7 @@ class BreakIteratorFactory {
             }
             newService.registerFactory(new RBBreakIteratorFactory());
 
-            synchronized (BreakIterator.class) {
+            synchronized (this) {
                 if (service == null) {
                     service = newService;
                 }
@@ -58,33 +84,24 @@ class BreakIteratorFactory {
         }
         return service;
     }
-    static boolean unregisterFactory(Object key) {
-        if (service != null) {
-            return service.unregisterFactory((Factory)key);
-        }
-        return false;
-    } 
-    
-    static synchronized Locale[] getAvailableLocales()
-    {
-        if (service == null) {
-            return ICULocaleData.getAvailableLocales();
-        } else {
-            return service.getAvailableLocales();
-        }
+
+
+    private static final String[] KIND_NAMES = {
+        "Character", "Word", "Line", "Sentence", "Title"
+    };
+
+    private static BreakIterator createBreakInstance(Locale locale, int kind) {
+        String prefix = KIND_NAMES[kind];
+        return createBreakInstance(locale, kind, 
+                                   prefix + "BreakRules", 
+                                   prefix + "BreakDictionary");
     }
-    
-    static Object registerInstance(BreakIterator iter, Locale locale, int kind){
-        return getService().registerObject(iter, locale, kind);
-    }
-    
-    static BreakIterator createBreakInstance(Locale where,
+
+    private static BreakIterator createBreakInstance(Locale where,
                                              int kind,
                                              String rulesName,
                                              String dictionaryName) {
 
-//      System.out.println("rulesName: "+rulesName);
-//      System.out.println("dictionaryName: "+dictionaryName);
         ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
 
@@ -108,19 +125,9 @@ class BreakIteratorFactory {
             }
             return new RuleBasedBreakIterator(rules);
         }
-        else
+        else {
             throw new IllegalArgumentException("Invalid break iterator class \"" +
                             classNames[kind] + "\"");
-    }
-    private static final String[] KIND_NAMES = {
-        "Character", "Word", "Line", "Sentence", "Title"
-    };
-
-    static BreakIterator createBreakInstance(Locale locale, int kind) {
-        String prefix = KIND_NAMES[kind];
-
-        return createBreakInstance( locale, kind, 
-                                    prefix + "BreakRules", 
-                                    prefix + "BreakDictionary" );
+        }
     }
 }
