@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Latin_InterIndic.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // Latin_InterIndic
@@ -75,6 +75,7 @@ t_Latn_InterIndic {
     "$lla=\ue033;" 
     "$ela=\ue034;" //compatibility
     "$va=\ue035;"
+    "$vva=\ue081;"
     "$sha=\ue036;"
     "$ssa=\ue037;"
     "$sa=\ue038;"
@@ -293,6 +294,7 @@ t_Latn_InterIndic {
     "l\u0323>$lla|$virama;"
     "l>$la|$virama;"
     "v>$va|$virama;"
+    "w\u0307>$vva|$virama;"
     "w>$va|$virama;"
     "sh>$sha|$virama;"
     "ss>$ssa|$virama;"

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Telugu.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
@@ -22,6 +22,7 @@ t_InterIndic_Telu {
 "\ue001>\u0c01;" // SIGN CANDRABINDU
 "\ue002>\u0c02;" // SIGN ANUSVARA
 "\ue003>\u0c03;" // SIGN VISARGA
+"\uE004>\u0c05;" // FALLBACK TO LETTER A
 "\ue005>\u0c05;" // LETTER A
 "\ue006>\u0c06;" // LETTER AA
 "\ue007>\u0c07;" // LETTER I
@@ -88,9 +89,11 @@ t_InterIndic_Telu {
 "\ue043>\u0c43;" // VOWEL SIGN VOCALIC R
 "\ue044>\u0c44;" // VOWEL SIGN VOCALIC RR
 "\ue045>\u0c46;" // VOWEL SIGN CANDRA E>VOWEL SIGN E
+"\ue046>\u0c46;" // VOWEL SIGN E
 "\ue047>\u0c47;" // VOWEL SIGN EE
 "\ue048>\u0c48;" // VOWEL SIGN AI
 "\ue049>\u0c4a;" // REMAP (indicExceptions.txt): \u0c49>\u0c4a = VOWEL SIGN CANDRA O>VOWEL SIGN O
+"\ue04a>\u0c4a;" // VOWEL SIGN O
 "\ue04b>\u0c4b;" // VOWEL SIGN OO
 "\ue04c>\u0c4c;" // VOWEL SIGN AU
 "\ue04d>\u0c4d;" // SIGN VIRAMA
@@ -115,7 +118,7 @@ t_InterIndic_Telu {
 "\ue062>\u0c3f;" // REMAP (indicExceptions.txt): \u0c62>\u0c3f = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 "\ue063>\u0c40;" // REMAP (indicExceptions.txt): \u0c63>\u0c40 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
 "\ue064>'.'   ;" // FALLBACK FOR DANDA
-"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA      
 "\ue066>\u0c66;" // DIGIT ZERO
 "\ue067>\u0c67;" // DIGIT ONE
 "\ue068>\u0c68;" // DIGIT TWO
@@ -126,27 +129,28 @@ t_InterIndic_Telu {
 "\ue06d>\u0c6d;" // DIGIT SEVEN
 "\ue06e>\u0c6e;" // DIGIT EIGHT
 "\ue06f>\u0c6f;" // DIGIT NINE
-// \ue080>; # UNMAPPED InterIndic-Telugu: ISSHAR
 
-
-"\ue046>\u0c46;" // VOWEL SIGN E
-"\ue04a>\u0c4a;" // VOWEL SIGN O
-"\ue070>;"
-"\ue071>;"
-"\ue072>;"
-"\ue073>;"
-"\ue074>;"
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
-
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0c30;" // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0c30;" // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"       // RUPEE MARK
+"\ue074>;"       // RUPEE SIGN
+"\ue075>;"       // CURRENCY NUMERATOR ONE
+"\ue076>;"       // CURRENCY NUMERATOR TWO
+"\ue077>;"       // CURRENCY NUMERATOR THREE
+"\ue078>;"       // CURRENCY NUMERATOR FOUR
+"\ue079>;"       // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"       // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"       // ISSHAR
+"\uE07C>;"       // TIPPI
+"\uE07D>;"       // ADDAK
+"\uE07E>;"       // IRI
+"\uE07F>;"       // URA
+"\uE080>;"       // EK ONKAR
+"\uE081>\u0c35;"  // FALLBACK FOR ORIYA LETTER WA 
 "0 > \u0c66;"       // FALLBACK FOR TAMIL
 "1 > \u0c67;"
-"\ue0f0 >  \u0c30;"  // FALLBACK RA 
-"\ue0f1 >  \u0c30;"  // FALLBACK RA
+
 //    :: NFC (NFD) ;
 // eof
   }

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Tamil.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Tamil
@@ -22,6 +22,7 @@ t_InterIndic_Taml {
 "\ue001>\u0b82;" // FALLBACK SIGN CANDRABINDU
 "\ue002>\u0b82;" // SIGN ANUSVARA
 "\ue003>\u0b83;" // SIGN VISARGA
+"\uE004>\u0b85;" // FALLBACK TO LETTER A
 "\ue005>\u0b85;" // LETTER A
 "\ue006>\u0b86;" // LETTER AA
 "\ue007>\u0b87;" // LETTER I
@@ -29,7 +30,7 @@ t_InterIndic_Taml {
 "\ue009>\u0b89;" // LETTER U
 "\ue00a>\u0b8a;" // LETTER UU
 "\ue00b>\u0bb0\u0bbf;" // REMAP (indicExceptions.txt): \u0b8b>\u0bb0\u0bbf = LETTER VOCALIC R>LETTER RA.VOWEL SIGN I
-"\ue00c>\u0b87;" // REMAP (indicExceptions.txt): \u0b8c>\u0b87 = LETTER VOCALIC L>LETTER I
+"\ue00c>\u0bb2;" // FALLBACK LETTER LA
 "\ue00d>\u0b8f;" // FALLBACK
 "\ue00e>\u0b8e;" // LETTER E
 "\ue00f>\u0b8f;" // LETTER EE
@@ -115,11 +116,11 @@ t_InterIndic_Taml {
 "\ue05e>\u0baa;" // REMAP (indicExceptions.txt): \u0bde>\u0baa = LETTER FA>LETTER PA
 "\ue05f>\u0baf;" // REMAP (indicExceptions.txt): \u0bdf>\u0baf = LETTER YYA>LETTER YA
 "\ue060>\u0bb0\u0bbf;" // REMAP (indicExceptions.txt): \u0be0>\u0bb0\u0bbf = LETTER VOCALIC RR>LETTER RA.VOWEL SIGN I
-"\ue061>\u0b88;" // REMAP (indicExceptions.txt): \u0be1>\u0b88 = LETTER VOCALIC LL>LETTER II
-"\ue062>\u0bbf;"// FALLBACK VOWEL SIGN VOCALIC L
-"\ue063>\u0bc0;"// FALLBACK VOWEL SIGN VOCALIC LL
+"\ue061>\u0bb3;" // FALLBACK LETTER LLA
+"\ue062>\u0bbf;" // FALLBACK VOWEL SIGN VOCALIC L
+"\ue063>\u0bc0;" // FALLBACK VOWEL SIGN VOCALIC LL
 "\ue064>'.'   ;" // FALLBACK FOR DANDA
-"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA      
 
 "\ue066>\u0030;" // FALLBACK DIGIT ZERO
 
@@ -137,26 +138,29 @@ t_InterIndic_Taml {
 "\ue06e>\u0bee;" // DIGIT EIGHT
 "\ue06f>\u0bef;" // DIGIT NINE
 
-"1000  >\u0BF2;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
-"100   >\u0BF1;"         // UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
-"10    >\u0BF0;"         // UNMAPPED Tamil-InterIndic: NUMBER TEN
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0bc0;" // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0bc0;" // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"       // RUPEE MARK
+"\ue074>;"       // RUPEE SIGN
+"\ue075>;"       // CURRENCY NUMERATOR ONE
+"\ue076>;"       // CURRENCY NUMERATOR TWO
+"\ue077>;"       // CURRENCY NUMERATOR THREE
+"\ue078>;"       // CURRENCY NUMERATOR FOUR
+"\ue079>;"       // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"       // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"       // ISSHAR
+"\uE07C>;"       // TIPPI
+"\uE07D>;"       // ADDAK
+"\uE07E>;"       // IRI
+"\uE07F>;"       // URA
+"\uE080>;"       // EK ONKAR
+"\uE081>\u0bb5;"  // FALLBACK FOR ORIYA LETTER WA 
 
+"1000  >\u0BF2;" // NUMBER ONE THOUSAND
+"100   >\u0BF1;" // NUMBER ONE HUNDRED
+"10    >\u0BF0;" // NUMBER TEN
 
-
-"\ue080>;" // UNMAPPED InterIndic-Tamil: ISSHAR
-"\ue070>\u0BF0;"
-"\ue071>\u0BF2;"
-"\ue072>\u0BF1;"
-"\ue073>;"
-"\ue074>;"
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
-"\ue0f0 >  \u0bb0;"  // FALLBACK RA 
-"\ue0f1 >  \u0bb0;"  // FALLBACK RA
 //    :: NFC (NFD) ;
 // eof
   }

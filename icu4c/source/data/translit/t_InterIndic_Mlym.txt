@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Malayalam.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Malayalam
@@ -22,6 +22,7 @@ t_InterIndic_Mlym {
 "\ue001>\u0d02;" // REMAP (indicExceptions.txt): \u0d01>\u0d02 = SIGN CANDRABINDU>SIGN ANUSVARA
 "\ue002>\u0d02;" // SIGN ANUSVARA
 "\ue003>\u0d03;" // SIGN VISARGA
+"\uE004>\u0d05;" // FALLBACK TO LETTER A
 "\ue005>\u0d05;" // LETTER A
 "\ue006>\u0d06;" // LETTER AA
 "\ue007>\u0d07;" // LETTER I
@@ -118,7 +119,7 @@ t_InterIndic_Mlym {
 "\ue062>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC L
 "\ue063>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC LL
 "\ue064>'.'   ;" // FALLBACK FOR DANDA
-"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA      
 "\ue066>\u0d66;" // DIGIT ZERO
 "\ue067>\u0d67;" // DIGIT ONE
 "\ue068>\u0d68;" // DIGIT TWO
@@ -129,23 +130,26 @@ t_InterIndic_Mlym {
 "\ue06d>\u0d6d;" // DIGIT SEVEN
 "\ue06e>\u0d6e;" // DIGIT EIGHT
 "\ue06f>\u0d6f;" // DIGIT NINE
-"\ue080>;" // UNMAPPED InterIndic-Malayalam: ISSHAR
-"\ue070>;"
-"\ue071>;"
-"\ue072>;"
-"\ue073>;"
-"\ue074>;"
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0d30;" // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0d30;" // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"       // RUPEE MARK
+"\ue074>;"       // RUPEE SIGN
+"\ue075>;"       // CURRENCY NUMERATOR ONE
+"\ue076>;"       // CURRENCY NUMERATOR TWO
+"\ue077>;"       // CURRENCY NUMERATOR THREE
+"\ue078>;"       // CURRENCY NUMERATOR FOUR
+"\ue079>;"       // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"       // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"       // ISSHAR
+"\uE07C>;"       // TIPPI
+"\uE07D>;"       // ADDAK
+"\uE07E>;"       // IRI
+"\uE07F>;"       // URA
+"\uE080>;"       // EK ONKAR
+"\uE081>\u0d35;" // FALLBACK FOR ORIYA LETTER WA 
 "0 > \u0d66;"       // FALLBACK FOR TAMIL
 "1 > \u0d67;"
-"\ue0f0 >  \u0d30;"  // FALLBACK RA 
-"\ue0f1 >  \u0d30;"  // FALLBACK RA
-
 
 //    :: NFC (NFD) ;
 // eof

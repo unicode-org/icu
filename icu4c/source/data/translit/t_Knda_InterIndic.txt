@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Kannada_InterIndic.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // Kannada_InterIndic
@@ -76,6 +76,8 @@ t_Knda_InterIndic {
 "\u0CB7>\uE037;"              // LETTER SSA
 "\u0CB8>\uE038;"              // LETTER SA
 "\u0CB9>\uE039;"              // LETTER HA
+"\u0CBC>\uE03C;"				// SIGN NUKTA
+"\u0CBD>\uE03D;"              // AVAGRAHA
 "\u0CBE>\uE03E;"              // VOWEL SIGN AA
 "\u0CBF>\uE03F;"              // VOWEL SIGN I
 "\u0CC1>\uE041;"              // VOWEL SIGN U
@@ -87,7 +89,7 @@ t_Knda_InterIndic {
 "\u0CCD>\uE04D;"              // SIGN VIRAMA
 "\u0CD5>\uE055;"              // LENGTH MARK
 "\u0CD6>\uE056;"              // AI LENGTH MARK
-"\u0CDE>\uE05E;"              // LETTER FA
+"\u0CDE>\uE034;"              // LETTER LLLA  
 "\u0CE0>\uE060;"              // LETTER VOCALIC RR
 "\u0CE1>\uE061;"              // LETTER VOCALIC LL
 "\u0CE6>\uE066;"              // DIGIT ZERO
