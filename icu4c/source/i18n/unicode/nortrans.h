@@ -17,14 +17,14 @@
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.2 $ $Date: 2001/07/09 16:44:36 $
+ * @version $RCSfile: nortrans.h,v $ $Revision: 1.3 $ $Date: 2001/09/27 23:19:22 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 
     /**
      * The normalization mode of this transliterator.
      */
-    Normalizer::EMode mode;
+    UNormalizationMode fMode;
 
     /**
      * Normalization options for this transliterator.
@@ -36,7 +36,7 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
     /**
      * Factory method.
      */
-    static NormalizationTransliterator* createInstance(Normalizer::EMode m,
+    static NormalizationTransliterator* createInstance(UNormalizationMode mode,
                                                        int32_t opt=0);
 
     /**
@@ -86,7 +86,7 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      * Public users must use the factory method createInstance().
      */
     NormalizationTransliterator(const UnicodeString& id,
-                                Normalizer::EMode m, int32_t opt);
+                                UNormalizationMode mode, int32_t opt);
 };
 
 #endif
