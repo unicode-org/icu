@@ -37,7 +37,7 @@ class TransliteratorRegistry;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.21 $ $Date: 2001/11/14 00:15:20 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.22 $ $Date: 2001/11/14 00:21:56 $
  * @stable
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -81,7 +81,7 @@ public:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @stable
+     * @draft ICU 2.0
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -92,7 +92,7 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
-     * @stable
+     * @draft ICU 2.0
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
