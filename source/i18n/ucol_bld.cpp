@@ -765,16 +765,11 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     // However, now we have to slice the prefix off the main thing - 
     el.prefix = el.prefixChars;
     el.cPoints = el.uchars;
-    if(tok->prefix != 0) { // adjust the source if there is a prefix
-      // need to normalize to NFKC first
-      UChar buffNFKC[256];
-      el.prefixSize = unorm_normalize(src->source+(tok->prefix&0x00FFFFFF), tok->prefix>>24, UNORM_NFKC, 0, buffNFKC, 256, status);
-      for(i = 0; i < el.prefixSize; i++) { // prefixes are going to be looked up backwards
-        // therefore, we will promptly reverse the prefix buffer...
-        //el.prefix[i] = *(src->source+(tok->prefix& 0x00FFFFFF)+(tok->prefix>>24)-i-1);
-        el.prefix[i] = *(buffNFKC+el.prefixSize-i-1);
-      }
-      //uprv_memcpy(el.prefix, (tok->prefix & 0x00FFFFFF) + src->source, el.prefixSize*sizeof(UChar));
+    if(tok->prefix != 0) { // we will just copy the prefix here, and adjust accordingly in the
+      // addPrefix function in ucol_elm. The reason is that we need to add both composed AND
+      // decomposed elements to the unsaf table.
+      el.prefixSize = tok->prefix>>24;
+      uprv_memcpy(el.prefix, src->source + (tok->prefix & 0x00FFFFFF), el.prefixSize*sizeof(UChar));
 
       el.cSize = (tok->source >> 24)-(tok->prefix>>24); 
       uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF)+(tok->prefix>>24) + src->source, el.cSize*sizeof(UChar));
@@ -970,7 +965,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         tailoredCE = ucmpe32_get(t->mapping, *conts);
         if(tailoredCE != UCOL_NOT_FOUND) {         
           UBool needToAdd = TRUE;
-          if(isContraction(tailoredCE)) {
+          if(isCntTableElement(tailoredCE)) {
             if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
               needToAdd = FALSE;
             }
@@ -1048,6 +1043,11 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
               el.prefixSize = 0;
               el.noOfCEs = 1;
               el.CEs[0] = prefix->mapCE;
+              // This character uses a prefix. We have to add it 
+              // to the unsafe table, as it decomposed form is already
+              // in. In Japanese, this happens for \u309e & \u30fe
+              // Since unsafeCPSet is static in ucol_elm, we are going
+              // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
             }
 
             uprv_uca_addAnElement(t, &el, status);
