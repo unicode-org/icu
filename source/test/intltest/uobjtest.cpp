@@ -121,15 +121,6 @@ UObject *UObjectTest::testClass(UObject *obj,
 
 #include "unicode/utypes.h"
 
-// Things we Patch
-#if UOBJTEST_TEST_INTERNALS
-#define protected public   /* to access private factory function */
-#endif
-#include "servloc.h"
-#if UOBJTEST_TEST_INTERNALS
-#undef protected
-#endif
-
 // Internal Things (woo)
 #include "cpdtrans.h"
 #include "rbt.h"
@@ -141,6 +132,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "funcrepl.h"
 #include "servnotf.h"
 #include "serv.h"
+#include "servloc.h"
 #include "name2uni.h"
 #include "nfsubs.h"
 #include "nortrans.h"
@@ -210,6 +202,12 @@ UObject *UObjectTest::testClass(UObject *obj,
 // END includes =============================================================
 
 #define UOBJTEST_TEST_INTERNALS 0   /* do NOT test Internal things - their functions aren't exported on Win32 */
+
+/* The whole purpose of this class is to expose the constructor, and gain access to the superclasses RTTI. */
+class TestLocaleKeyFactory : public LocaleKeyFactory {
+public:
+    TestLocaleKeyFactory(int32_t coverage) : LocaleKeyFactory(coverage) {}
+};
 
 void UObjectTest::testIDs()
 {
@@ -347,9 +345,10 @@ void UObjectTest::testIDs()
     UnicodeString bat("bat");
     TESTCLASSID_FACTORY(LocaleKey, LocaleKey::createWithCanonicalFallback(&baz, &bat, LocaleKey::KIND_ANY, status));
     TESTCLASSID_CTOR(SimpleLocaleKeyFactory, (NULL, UnicodeString("bar"), 8, 12) );
-#if UOBJTEST_TEST_INTERNALS
-    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
-#endif
+    TESTCLASSID_CTOR(TestLocaleKeyFactory, (42));   // Test replacement for LocaleKeyFactory
+//#if UOBJTEST_TEST_INTERNALS
+//    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
+//#endif
 #endif
 
 #if UOBJTEST_DUMP_IDS
