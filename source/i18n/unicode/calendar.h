@@ -573,7 +573,7 @@ public:
      *                an error status.
      * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
      */
-    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) = 0;
+    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls by the given amount on the given
@@ -2111,6 +2111,7 @@ Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
 {
     roll((UCalendarDateFields) field, up, status);
 }
+
 
 // -------------------------------------
 

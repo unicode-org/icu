@@ -103,9 +103,6 @@ U_NAMESPACE_BEGIN
 
 // Implementation of the IslamicCalendar class
 
-const char IslamicCalendar::fgClassID = 0; // Value is irrelevant
-
-
 //-------------------------------------------------------------------------
 // Constructors...
 //-------------------------------------------------------------------------
@@ -463,16 +460,6 @@ if (U_FAILURE(status) || !getTimeZone().useDaylightTime())
 return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
 }
 
-
-// deprecated
-void 
-IslamicCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
-  Calendar::roll((UCalendarDateFields) field, amount, status); 
-}
-
-
-
-
 // default century
 const UDate     IslamicCalendar::fgSystemDefaultCentury        = DBL_MIN;
 const int32_t   IslamicCalendar::fgSystemDefaultCenturyYear    = -1;
@@ -564,6 +551,9 @@ IslamicCalendar::initializeSystemDefaultCentury()
     // out.
   }
 }
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IslamicCalendar)
+
 
 U_NAMESPACE_END
 
