@@ -37,91 +37,6 @@
 #include "ucnvmbcs.h"
 #include "cstring.h"
 
-#define CONCAT_ESCAPE_EX(args,source, target, targetLimit,offsets,strToAppend,len, err){\
-    while(len-->0){\
-        if(target < targetLimit){\
-            *(target++) = (unsigned char) *(strToAppend++);\
-            if(offsets){\
-                *(offsets++) = source -  args->source -1;\
-            }\
-        }\
-        else{\
-            args->converter->charErrorBuffer[(int)args->converter->charErrorBufferLength++] = (unsigned char) *(strToAppend++);\
-            *err =U_BUFFER_OVERFLOW_ERROR;\
-        }\
-    }\
-}
-
-/* This macro replicates code in _MBCSFromUChar32() function in ucnvmbcs.c
- * any future change in _MBCSFromUChar32() function should be reflected in 
- * this macro
- */
-#define  MBCS_FROM_UCHAR32_ISO2022(sharedData,c,  value, useFallback, length, outputType) {\
-    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;\
-    uint32_t stage2Entry;\
-    uint32_t myValue=0;\
-    const uint8_t *p;\
-    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */\
-    if(c<0x10000 || (sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {\
-        stage2Entry=MBCS_STAGE_2_FROM_U(table, c);\
-        /* get the bytes and the length for the output */\
-        if(outputType==MBCS_OUTPUT_2){\
-            myValue=MBCS_VALUE_2_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);\
-            if(myValue<=0xff) {\
-                length=1;\
-            } else {\
-                length=2;\
-            }\
-        }else if(outputType==MBCS_OUTPUT_3){\
-            p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);\
-            myValue=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];\
-            if(myValue<=0xff) {\
-                length=1;\
-            } else if(myValue<=0xffff) {\
-                length=2;\
-            } else {\
-                length=3;\
-            }\
-        }\
-        /* is this code point assigned, or do we use fallbacks? */\
-        if( (stage2Entry&(1<<(16+(c&0xf))))!=0 ||\
-            (FROM_U_USE_FALLBACK(useFallback, c) && (myValue!=0 || c==0))\
-        ) {\
-            /*\
-             * We allow a 0 byte output if the Unicode code point is\
-             * U+0000 and also if the "assigned" bit is set for this entry.\
-             * There is no way with this data structure for fallback output\
-             * for other than U+0000 to be a zero byte.\
-             */\
-            /* assigned */\
-            value=myValue;\
-        } else {\
-            length=0;\
-        }\
-    }else{\
-        length=0;\
-    }\
-}
-#define MBCS_SINGLE_FROM_UCHAR32(sharedData, c,retval, useFallback) { \
-    const uint16_t *table; \
-    int32_t value;\
-    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */\
-    if(c>=0x10000 && !(sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {\
-        value= -1;\
-    }\
-    /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */\
-    table=sharedData->table->mbcs.fromUnicodeTable;\
-    /* get the byte for the output */\
-    value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->table->mbcs.fromUnicodeBytes, c);\
-    /* is this code point assigned, or do we use fallbacks? */\
-    if(useFallback ? value>=0x800 : value>=0xc00) {\
-        value &=0xff;\
-    } else {\
-        value= -1;\
-    }\
-    retval=(uint16_t) value;\
-}
-
 #define UCNV_SS2 "\x1B\x4E"
 #define UCNV_SS3 "\x1B\x4F"
 #define UCNV_SS2_LEN 2
@@ -871,6 +786,120 @@ setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConv
 
 }
 
+
+U_INLINE void 
+CONCAT_ESCAPE_EX(UConverterFromUnicodeArgs* args, 
+                               const UChar* source, 
+                               unsigned char** target, 
+                               const unsigned char* targetLimit,
+                               int32_t** offsets, 
+                               const char* strToAppend,
+                               int len, 
+                               UErrorCode* err){
+
+    unsigned char* myTarget = *target;
+    int32_t* myOffsets = *offsets;
+    while(len-->0){
+        if(myTarget < targetLimit){
+            *(myTarget++) = (unsigned char) *(strToAppend++);
+            if(myOffsets){
+                *(myOffsets++) = source -  args->source -1;
+            }
+        }
+        else{
+            args->converter->charErrorBuffer[(int)args->converter->charErrorBufferLength++] = (unsigned char) *(strToAppend++);
+            *err =U_BUFFER_OVERFLOW_ERROR;
+        }
+    }
+    *target = myTarget;
+    *offsets = myOffsets;
+}
+
+/* This inline function replicates code in _MBCSFromUChar32() function in ucnvmbcs.c
+ * any future change in _MBCSFromUChar32() function should be reflected in 
+ * this macro
+ */
+U_INLINE  void 
+MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
+                                         UChar32 c,  
+                                         uint32_t* value, 
+                                         UBool useFallback, 
+                                         int* length, 
+                                         int outputType) {
+
+    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
+    uint32_t stage2Entry;
+    uint32_t myValue=0;
+    const uint8_t *p;
+    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+    if(c<0x10000 || (sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
+        /* get the bytes and the length for the output */
+        if(outputType==MBCS_OUTPUT_2){
+            myValue=MBCS_VALUE_2_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);
+            if(myValue<=0xff) {
+                *length=1;
+            } else {
+                *length=2;
+            }
+        }else if(outputType==MBCS_OUTPUT_3){
+            p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);
+            myValue=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+            if(myValue<=0xff) {
+                *length=1;
+            } else if(myValue<=0xffff) {
+                *length=2;
+            } else {
+                *length=3;
+            }
+        }
+        /* is this code point assigned, or do we use fallbacks? */
+        if( (stage2Entry&(1<<(16+(c&0xf))))!=0 ||
+            (FROM_U_USE_FALLBACK(useFallback, c) && (myValue!=0 || c==0))
+        ) {
+            /*
+             * We allow a 0 byte output if the Unicode code point is
+             * U+0000 and also if the "assigned" bit is set for this entry.
+             * There is no way with this data structure for fallback output
+             * for other than U+0000 to be a zero byte.
+             */
+            /* assigned */
+            *value=myValue;
+        } else {
+            *length=0;
+        }
+    }else{
+        *length=0;
+    }
+}
+/* This inline function replicates code in _MBCSSingleFromUChar32() function in ucnvmbcs.c
+ * any future change in _MBCSFromUChar32() function should be reflected in 
+ * this macro
+ */
+U_INLINE void 
+MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
+                                       UChar32 c, 
+                                       uint32_t* retval, 
+                                       UBool useFallback) { 
+    const uint16_t *table; 
+    int32_t value;
+    /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
+    if(c>=0x10000 && !(sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+        value= -1;
+    }
+    /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
+    table=sharedData->table->mbcs.fromUnicodeTable;
+    /* get the byte for the output */
+    value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->table->mbcs.fromUnicodeBytes, c);
+    /* is this code point assigned, or do we use fallbacks? */
+    if(useFallback ? value>=0x800 : value>=0xc00) {
+        value &=0xff;
+    } else {
+        value= -1;
+    }
+    *retval=(uint16_t) value;
+}
+
 /**********************************************************************************
 *  ISO-2022 Converter
 *
@@ -1491,7 +1520,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                             /*if(2 == _MBCSFromUChar32(sharedData,sourceChar, &value, useFallback)) {
                                 targetByteUnit = (uint16_t)value;
                             }*/
-                            MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,value,useFallback,length,MBCS_OUTPUT_2);
+                            MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&value,useFallback,&length,MBCS_OUTPUT_2);
                             if(length==2){
                                 targetByteUnit =  value;
                             }
@@ -1504,7 +1533,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         break;
 
                     case SBCS:
-                        MBCS_SINGLE_FROM_UCHAR32(sharedData,sourceChar,targetByteUnit,useFallback);
+                        MBCS_SINGLE_FROM_UCHAR32(sharedData,sourceChar,&targetByteUnit,useFallback);
                         /*targetByteUnit=(uint16_t)_MBCSSingleFromUChar32(sharedData,sourceChar,useFallback);*/
                         /*
                          * If mySourceChar is unassigned, then _MBCSSingleFromUChar32() returns -1
@@ -1564,13 +1593,13 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                     escSeq = escSeqChars[(int)*currentState];
                     len = escSeqCharsLen[(int)*currentState];
 
-                    CONCAT_ESCAPE_EX(args,source, target,targetLimit, offsets, escSeq,len,err);
+                    CONCAT_ESCAPE_EX(args,source, &target,targetLimit, &offsets, escSeq,len,err);
 
                     /* Append SSN for shifting to G2 */
                     if(*currentState==ISO8859_1 || *currentState==ISO8859_7){
                         escSeq = UCNV_SS2;
                         len = UCNV_SS2_LEN;
-                        CONCAT_ESCAPE_EX(args, source, target, targetLimit,offsets, escSeq,len,err);
+                        CONCAT_ESCAPE_EX(args, source, &target, targetLimit,&offsets, escSeq,len,err);
                     }
                 }
                 initIterState = *currentState;
@@ -2020,7 +2049,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
             sourceChar = *source++;
            /* length= _MBCSFromUChar32(converterData->fromUnicodeConverter->sharedData,
                 sourceChar,&targetByteUnit,args->converter->useFallback);*/
-            MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,targetByteUnit,useFallback,length,MBCS_OUTPUT_2);
+            MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetByteUnit,useFallback,(int*)&length,MBCS_OUTPUT_2);
             /* only DBCS or SBCS characters are expected*/
             /* DB haracters with high bit set to 1 are expected */
             if(length > 2 || length==0 ||(((targetByteUnit & 0x8080) != 0x8080)&& length==2)){
@@ -2578,7 +2607,7 @@ getTrail:
                     if(myConverterTypeCN[*currentState] == MBCS){
                         /*len= _MBCSFromUChar32((*currentConverter)->sharedData,sourceChar,
                                                     &targetValue,args->converter->useFallback);*/
-                        MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,targetValue,useFallback,len,MBCS_OUTPUT_3);
+                        MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_3);
                          if(len==3){
                             targetByteUnit = (UChar32) targetValue;
                             planeVal = (uint8_t) ((targetValue)>>16);
@@ -2594,7 +2623,7 @@ getTrail:
                             }
                         }
                     }else if(myConverterTypeCN[*currentState] == DBCS){
-                        MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,targetValue,useFallback,len,MBCS_OUTPUT_2);
+                        MBCS_FROM_UCHAR32_ISO2022(sharedData,sourceChar,&targetValue,useFallback,&len,MBCS_OUTPUT_2);
                         if(len==2){    
                             if(( converterData->version) == 0 && *currentState ==ISO_IR_165){
                                 targetByteUnit = missingCharMarker;
@@ -2631,7 +2660,7 @@ getTrail:
                     temp =(*currentState==CNS_11643) ? ((int)*currentState+lPlane-1):(int)*currentState ;
                     escSeq = escSeqCharsCN[temp];
                     len =escSeqCharsLenCN[temp];
-                    CONCAT_ESCAPE_EX(args,source, target, targetLimit, offsets, escSeq,len,err);
+                    CONCAT_ESCAPE_EX(args,source, &target, targetLimit, &offsets, escSeq,len,err);
                     *plane=lPlane;
                     *isEscapeAppended=TRUE;
 					*isShiftAppended=FALSE;
@@ -2642,7 +2671,7 @@ getTrail:
                     if(!*isShiftAppended){
                         len =shiftSeqCharsLenCN[*currentState];
                         escSeq = shiftSeqCharsCN[*currentState];
-                        CONCAT_ESCAPE_EX(args,source, target, targetLimit, offsets, escSeq,len,err);
+                        CONCAT_ESCAPE_EX(args,source, &target, targetLimit, &offsets, escSeq,len,err);
                         *isShiftAppended=TRUE;
                     }
                 }else if(*currentState!=ASCII1){
@@ -2652,7 +2681,7 @@ getTrail:
 					}
                     len =shiftSeqCharsLenCN[temp];
                     escSeq = shiftSeqCharsCN[temp];
-                    CONCAT_ESCAPE_EX(args,source, target, targetLimit, offsets, escSeq,len,err);
+                    CONCAT_ESCAPE_EX(args,source, &target, targetLimit, &offsets, escSeq,len,err);
 					*isShiftAppended=TRUE;
                 }
 
