@@ -8,14 +8,17 @@
 
 <body>
 <h1>GB 18030</h1>
-<p align="right">Markus Scherer, 2000-oct-21</p>
+<p align="right">Markus Scherer, 2000-nov-30</p>
 
 <p>GB 18030 is a new Chinese codepage standard, published 2000-mar-17, that is designed for 
 <ul>
     <li>Upwards compatibility with the GB 2312-1980 standard</li>
     <li>Compatibility with the GBK specification, updated for Unicode 3.0</li>
     <li>Full coverage of all Unicode code points similar to a UTF</li>
-</ul></p>
+</ul>
+After discussions between the Chinese standards agency and IT companies, GB 18030 was <em>republished</em>.
+On 2000-nov-30, a modified mapping table file was released, and
+the text of the standard is expected to be republished in December.</p>
 
 <p>Byte sequence structure: 
 <ul>
@@ -27,9 +30,9 @@
 <p>Special properties of GB 18030: 
 <ul>
     <li>Huge: 1.6 million codepage code points &mdash; probably the largest codepage</li>
-    <li>Similar to UTF: All 1.1 million Unicode code points U+0000-U+10ffff map to GB 18030 codes.
-        All but 79 Unicode code points can be mapped from GB 18030.
-        (I.e., there are 79 Unicode code points with only fallback mappings to GB 18030.)</li>
+    <li>Similar to UTF: All 1.1 million Unicode code points U+0000-U+10ffff
+        except for surrogates U+d800-U+dfff
+        map to and from GB 18030 codes.</li>
     <li>Most of these mappings, except for parts of the BMP, can be done algorithmically.
         This makes it an unusual mix of a Unicode encoding with a traditional codepage.</li>
     <li>It is not possible for all codepage byte sequences to determine the length of
@@ -39,11 +42,18 @@
 <h2>Generating a GB 18030 mapping table</h2>
 
 <p>GB 18030 is derived from existing standards and specifications,
-and a mapping table can be generated from existing data.
-<em>Note: </em>Following this description does not guarantee compatibility with
-the standard or any particular implementation.
-This section is most useful for understanding the genesis and structure of GB 18030.<br>
-### THIS IS ALPHA-VERSION DATA AND DESCRIPTION AND MAY CHANGE WITHOUT NOTICE</p>
+and a mapping table can be generated from existing data with modifications.<br>
+On 2000-nov-30, the Chinese standards agency released a mapping table that differs
+from the original specification from 2000-mar-17. It changes all four-byte GB sequences
+for Unicode BMP code points, removes any mappings for single surrogates,
+removes all fallback mappings, and changes some mappings to further update the GBK portion to Unicode 3.0.</p>
+
+<p>This following description illustrates the genesis and structure of GB 18030.
+The actual data that is included here contains the actual one- and two-byte GB 18030 mappings
+for Unicode BMP code points as released by the Chinese standards agency.
+To skip the historical discussion, continue at the <a href="#officialdata">discussion of released data</a>.</p>
+
+<p>Historical discussion based on the specification from 2000-mar-17:
 <ol>
     <li>GBK is a specification (not a standard) that is an extension of GB 2312-1980
         to cover the ideographs in Unicode 2.0. Microsoft co-authored GBK.
@@ -74,7 +84,29 @@ This section is most useful for understanding the genesis and structure of GB 18
         for fallbacks from Unicode to the codepage, or a less-than sign for fallbacks from the codepage to Unicode.
         I have marked mappings of the appendix E characters with a star.
         In addition, I have marked mappings that <em>should be</em> in appendix E with a double star.</li>
-    <li>Now compile <a href="gbmake4.c">gbmake4</a> and run it with the above file as stdin input.
+</ol>
+</p>
+
+<p><a name="officialdata"></a>
+The above description explains the state of the data from 2000-mar-17 with corrections.
+On 2000-nov-30, a new mapping table was released that is now the base for the supplied <a href="gbkuni30.txt">gbkuni30.txt</a>.
+Compared with the above, it
+<ul>
+    <li>includes explicit mappings for the ASCII characters</li>
+    <li>corrects the mappings for U+2e97 and U+303e</li>
+    <li>removes any mappings for single surrogates</li>
+    <li>removes all fallback mappings, specifying only roundtrip mappings between GB 18030 and Unicode 3.0</li>
+    <li>changes the mapping for the Euro sign and removes the fullwidth Euro sign</li>
+    <li>re-enumerates all four-byte GB sequences for Unicode BMP code points from U+0080</li>
+</ul>
+This results in a new codepage definition that removes backwards compatibility with GBK for some 80 characters
+because of the lack of fallback mappings.
+The re-enumeration of all four-byte mappings for the Unicode BMP means that about 40000 mappings change from
+the original specification, including about 25000 mappings for characters that are assigned in Unicode 3.0.</p>
+
+<p>This is how the data is prepared for use with ICU, as was done for the actual ICU implementation of the GB 18030 converter:
+<ol>
+    <li>Compile <a href="gbmake4.c">gbmake4</a> and run it with the above file as stdin input.
         You will get as output all the four-byte mappings for all
         BMP code points that do not have a one-byte or two-byte mapping.</li>
     <li>All Unicode code points on the supplementary planes, U+10000-U+10ffff, are mapped as well.
@@ -116,7 +148,9 @@ This section is most useful for understanding the genesis and structure of GB 18
     <li>Also for an ICU MBCS converter, you need to specify a state table for the codepage
         that describes its structure. For example, with the supplementary planes and the
         <a href="ranges.txt">suggested ranges</a> handled algorithmically and therefore
-        declared as "unassigned", see this <a href="gbstates.txt">sample state table</a>.</li>
+        declared as "unassigned", see this <a href="gbstates.txt">sample state table</a>.
+        (Tip: for determining which bytes can be marked as unassigned for the ranges,
+        it helps to sort the ranges by byte sequence values.)</li>
     <li>All valid four-byte codepage code points that do not map to
         any Unicode code point are of course unassigned.
         This includes 9012 sequences with a 0x84 lead byte and 9824 with a 0xe3 lead byte,
