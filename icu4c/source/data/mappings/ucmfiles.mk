@@ -83,6 +83,7 @@ ibm-964_P110-1999.ucm\
 ibm-971_P100-1995.ucm\
 ibm-1363_P110-1997.ucm\
 ibm-1375_P100-2003.ucm\
+ibm-9005_X100-2005.ucm\
 ibm-33722_P120-1999.ucm\
 macos-0_2-10.2.ucm\
 macos-6-10.2.ucm\
