@@ -95,7 +95,7 @@ derivedCorePropsIndex[]={
     UCHAR_GRAPHEME_BASE
 };
 
-U_CAPI void U_CALLCONV
+U_CFUNC void U_CALLCONV
 derivedCorePropsLineFn(void *context,
                         char *fields[][2], int32_t /* fieldCount */,
                         UErrorCode *pErrorCode)
