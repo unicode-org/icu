@@ -62,6 +62,7 @@ icu4c/source/config/Makefile.inc
 icu4c/source/config/icu-config
 icu4c/source/config/icu-config.1
 icu4c/source/data/*.plg
+icu4c/source/data/Debug
 icu4c/source/data/Makefile
 icu4c/source/data/build/*.a
 icu4c/source/data/build/*.c
