@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Aug-28<br>
+    <p>Version: 2002-Sep-19<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -283,9 +283,9 @@
        ICU does not perform any other heuristics any more.</li>
     </ul>
 
-    <p><strong>Note:</strong> while some of the old binary data may be still readable by ICU
-    2.2 (resource bundles, for example), they need to be repackaged in order to
-    be used.</p>
+    <p><strong>Note:</strong> while some of the old binary data may be still
+    readable by ICU 2.2 (resource bundles, for example), they need to be
+    repackaged in order to be used.</p>
 
     <ul>
       <li>If you have individual binary files, you have to rename them so that
@@ -434,13 +434,13 @@
             bundles. The makefile <b>resfiles.mk</b> contains the list of
             resource bundle files.</li>
 
-            <li><b>mappings/</b> Here are the code page converter
-            tables. These .ucm files contain mappings to and from Unicode.
-            These are compiled into .cnv files. <b>convrtrs.txt</b> is the
-            alias mapping table from various converter name formats to ICU
-            internal format and vice versa. It produces cnvalias.icu. The
-            makefiles <b>ucmfiles.mk, ucmcore.mk,</b> and <b>ucmebcdic.mk</b>
-            contain the list of converters to be built.</li>
+            <li><b>mappings/</b> Here are the code page converter tables. These
+            .ucm files contain mappings to and from Unicode. These are compiled
+            into .cnv files. <b>convrtrs.txt</b> is the alias mapping table
+            from various converter name formats to ICU internal format and vice
+            versa. It produces cnvalias.icu. The makefiles <b>ucmfiles.mk,
+            ucmcore.mk,</b> and <b>ucmebcdic.mk</b> contain the list of
+            converters to be built.</li>
 
             <li><b>translit/</b> This directory contains transliterator rules
             as resource bundles, a makefile <b>trnsfiles.mk</b> containing the
@@ -989,15 +989,19 @@
     the packaging scripts or related files are not up to date with the contents
     of ICU at this time, so use them with caution).</p>
 
-    <h3><a name="HowToBuildZOS" href="#HowToBuildZOS">z/OS (os/390)
+    <h3><a name="HowToBuildZOS" href="#HowToBuildZOS">z/OS (OS/390)
     Platform</a></h3>
 
-    <p>If you are building on the z/OS UNIX System Services platform, it is
-    important that you understand a few details:</p>
+    <p>You can install ICU on z/OS or OS/390 (the previous name of z/OS), but
+    IBM tests only the z/OS installation. These platforms commonly are called
+    "MVS". You install ICU in a z/OS UNIX system services file system such as
+    HFS or zFS. On this platform, it is important that you understand a few
+    details:</p>
 
     <ul>
-      <li>APAR PQ58392 may be needed by z/OS 1.2 in order to get some ICU
-      number formatting functions to work properly.</li>
+      <li>APAR PQ58392 may be needed by z/OS 1.2 or 1.3 in order to get some
+      ICU number formatting functions to work properly. The APAR affects C and
+      C++ code.</li>
 
       <li>The gnu utilities gmake and gzip/gunzip are needed and can be
       obtained for z/OS from <a href=
@@ -1018,7 +1022,7 @@
 
       <li>
         <p>z/OS supports both native S/390 hexadecimal floating point and,
-        (with Version 2.6 and later) IEEE binary floating point. This is a
+        (with OS/390 2.6 and later) IEEE binary floating point. This is a
         compile time option. Applications built with IEEE should use ICU dlls
         that are built with IEEE (and vice versa). The environment variable
         IEEE390=1 will cause the z/OS version of ICU to be built with IEEE
@@ -1053,24 +1057,35 @@
       "#HowToBuildUnix">How To Build And Install On Unix</a> section.</li>
     </ul>
 
-    <h4>z/OS Batch (PDS) support</h4>
+    <h4>z/OS (Batch/PDS) support outside the UNIX system services
+    environment</h4>
 
-    <p>By default, ICU builds its libraries into the HFS. In addition, there is
-    a z/OS specific environment variable to build some libraries into the z/OS
-    native file system. This is useful, for example, when your application is
-    externalized via Job Control Language (JCL).</p>
+    <p>By default, ICU builds its libraries into the UNIX file system (HFS). In
+    addition, there is a z/OS specific environment variable (OS390BATCH) to
+    build some libraries into the z/OS native file system. This is useful, for
+    example, when your application is externalized via Job Control Language
+    (JCL).</p>
 
-    <p>The OS390BATCH environment variable enables batch support. When
-    OS390BATCH is set, the libicuuc<i>XX</i>.dll, libicudt<i>XX</i>e.dll, and
-    libicudt<i>XX</i>e_stub.dll binaries are built into the native file system.
-    Turning on OS390BATCH does not turn off the normal HFS build. This means
-    that the HFS dlls will always be created.</p>
+    <p>The OS390BATCH environment variable enables non-UNIX support including
+    the batch environment. When OS390BATCH is set, the libicuuc<i>XX</i>.dll,
+    libicudt<i>XX</i>e.dll, and libicudt<i>XX</i>e_stub.dll binaries are built
+    into data sets (the native file system). Turning on OS390BATCH does not
+    turn off the normal z/OS UNIX build. This means that the The z/OS UNIX
+    (HFS) dlls will always be created.</p>
 
     <p>Two additional environment variables indicate the names of the z/OS data
     sets to use. The LOADMOD environment variable identifies the name of the
     data set that contains the dynamic link libraries (DLLs) and the LOADEXP
     environment variable identifies the name of the data set that contains the
-    side decks, which are normally the files with the .x suffix in the HFS.</p>
+    side decks, which are normally the files with the .x suffix in the UNIX
+    file system.</p>
+
+    <p>A data set is roughly equivalent to a UNIX or Windows file. For most
+    kinds of data sets the operating system maintains record boundaries. UNIX
+    and Windows files are byte streams. Two kinds of data sets are PDS and
+    PDSE. Each data set of these two types contains a directory. It is like a
+    UNIX directory. Each "file" is called a "member". Each member name is
+    limited to eight bytes, normally EBCDIC.</p>
 
     <p>Here is an example of some environment variables that you can set prior
     to building ICU:</p>
@@ -1080,23 +1095,23 @@ LOADMOD=<i>USER</i>.ICU.LOAD
 LOADEXP=<i>USER</i>.ICU.EXP</samp>
 </pre>
 
-    <p>The PDS member names are as follows:</p>
+    <p>The PDS member names for the DLL file names are as follows:</p>
 <pre>
 <samp>IXMI<i>XX</i>UC --&gt; libicuuc<i>XX</i>.dll
 IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll
-IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(When OS390_STUBDATA=1)</i></samp>
+IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(Only when OS390_STUBDATA=1)</i></samp>
 </pre>
 
     <p>You should point the LOADMOD environment variable at a partitioned data
-    set extended (PDS/E) and point the LOADEXP environment variable at a
-    partitioned data set (PDS). The PDS/E can be allocated with the following
+    set extended (PDSE) and point the LOADEXP environment variable at a
+    partitioned data set (PDS). The PDSE can be allocated with the following
     attributes:</p>
 <pre>
 <samp>Data Set Name . . . : <i>USER</i>.ICU.LOAD
-Management class. . : **None**
-Storage class . . . : BASE
-Volume serial . . . : TSO007
-Device type . . . . : 3390
+Management class. . : <i>**None**</i>
+Storage class . . . : <i>BASE</i>
+Volume serial . . . : <i>TSO007</i>
+Device type . . . . : <i>3390</i>
 Data class. . . . . : LOAD
 Organization  . . . : PO
 Record format . . . : U
@@ -1110,15 +1125,15 @@ Data set name type  : LIBRARY</samp>
     <p>The PDS can be allocated with the following attributes:</p>
 <pre>
 <samp>Data Set Name . . . : <i>USER</i>.ICU.EXP
-Management class. . : **None**
-Storage class . . . : BASE
-Volume serial . . . : TSO007
-Device type . . . . : 3390
-Data class. . . . . : **None**
+Management class. . : <i>**None**</i>
+Storage class . . . : <i>BASE</i>
+Volume serial . . . : <i>TSO007</i>
+Device type . . . . : <i>3390</i>
+Data class. . . . . : <i>**None**</i>
 Organization  . . . : PO
 Record format . . . : FB
 Record length . . . : 80
-Block size  . . . . : 3200
+Block size  . . . . : <i>3200</i>
 1st extent cylinders: 3
 Secondary cylinders : 3
 Data set name type  : PDS</samp>
