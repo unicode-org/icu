@@ -69,11 +69,6 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 1
 
-/* Determine whether to disable renaming or not */
-#ifndef U_DISABLE_RENAMING
-#define U_DISABLE_RENAMING 0
-#endif
-
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
