@@ -615,14 +615,14 @@ ucnv_getPlatform (const UConverter * converter,
 
 U_CAPI void U_EXPORT2
 ucnv_getUnicodeSet(const UConverter *cnv,
-                   USet *set,
-                   UConverterUnicodeSet which,
+                   USet *setFillIn,
+                   UConverterUnicodeSet whichSet,
                    UErrorCode *pErrorCode) {
     /* argument checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
-    if(cnv==NULL || set==NULL || which<UCNV_ROUNDTRIP_SET || UCNV_SET_COUNT<=which) {
+    if(cnv==NULL || setFillIn==NULL || whichSet<UCNV_ROUNDTRIP_SET || UCNV_SET_COUNT<=whichSet) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -634,10 +634,10 @@ ucnv_getUnicodeSet(const UConverter *cnv,
     }
 
     /* empty the set */
-    uset_clear(set);
+    uset_clear(setFillIn);
 
     /* call the converter to add the code points it supports */
-    cnv->sharedData->impl->getUnicodeSet(cnv, set, which, pErrorCode);
+    cnv->sharedData->impl->getUnicodeSet(cnv, setFillIn, whichSet, pErrorCode);
 }
 
 U_CAPI void U_EXPORT2
