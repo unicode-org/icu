@@ -143,6 +143,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestCaseMap(void);
 
+    /**
+     * Test the name mapping transliterators.
+     */
+    void TestNameMap(void);
+
     //======================================================================
     // Support methods
     //======================================================================

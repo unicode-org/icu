@@ -57,6 +57,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(22,TestInterIndic);
         TESTCASE(23,TestFilterIDs);
         TESTCASE(24,TestCaseMap);
+        TESTCASE(25,TestNameMap);
         default: name = ""; break;
     }
 }
@@ -980,6 +981,30 @@ void TransliteratorTest::TestCaseMap(void) {
     delete toUpper;
     delete toLower;
     delete toTitle;
+}
+
+/**
+ * Test the name mapping transliterators.
+ */
+void TransliteratorTest::TestNameMap(void) {
+    Transliterator* uni2name =
+        Transliterator::createInstance("Any-Name[^abc]");
+    Transliterator* name2uni =
+        Transliterator::createInstance("Name-Any");
+    if (uni2name==0 || name2uni==0) {
+        errln("FAIL: createInstance returned NULL");
+        delete uni2name;
+        delete name2uni;
+        return;
+    }
+
+    expect(*uni2name, CharsToUnicodeString("\\u00A0abc\\u4E01\\u00B5\\u0A81\\uFFFD\\uFFFF"),
+           CharsToUnicodeString("{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}\\uFFFF"));
+    expect(*name2uni, "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{",
+           CharsToUnicodeString("\\u00A0abc\\u4E01{x\\u00B5\\u0A81\\uFFFD{"));
+
+    delete uni2name;
+    delete name2uni;
 }
 
 //======================================================================
