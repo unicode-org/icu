@@ -259,6 +259,12 @@
 				RelativePath=".\srchtest.h">
 			</File>
 			<File
+				RelativePath="svccoll.cpp">
+			</File>
+			<File
+				RelativePath="svccoll.h">
+			</File>
+			<File
 				RelativePath=".\thcoll.cpp">
 			</File>
 			<File
