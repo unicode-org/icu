@@ -299,7 +299,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
 
 // For internal use by TransliteratorIDParser
 UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-                       UErrorCode& status) :
+                       uint32_t options, UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
     list(0), buffer(0), strings(0)
 {
@@ -310,7 +310,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
             status = U_MEMORY_ALLOCATION_ERROR; 
         }else{
             allocateStrings();
-            applyPattern(pattern, pos, USET_IGNORE_SPACE, NULL, status);
+            applyPattern(pattern, pos, options, NULL, status);
         }
     }
     _dbgct(this);

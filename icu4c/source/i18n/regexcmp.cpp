@@ -232,38 +232,6 @@ static void InitGraphemeClusterSets() {
 
 
 
-
-
-//----------------------------------------------------------------------------------------
-//
-//   caseClose(UnicodeSet)     TODO: replace by the real UnicodeSet memboer function once 
-//                             Alan has it implemented
-//
-//----------------------------------------------------------------------------------------
-static void caseClose(UnicodeSet *theSet) {
-    int32_t   rn;
-    int32_t   numRanges = theSet->getRangeCount();
-
-    for (rn=0; rn<numRanges; rn++) {
-        UChar32 rs = theSet->getRangeStart(rn);
-        UChar32 re = theSet->getRangeEnd(rn);
-        UChar32 c;
-        for (c=rs; c<=re; c++) {
-            UChar32 lowerC = u_tolower(c);
-            UChar32 upperC = u_toupper(c);
-            if (lowerC != c) {
-                theSet->add(lowerC);
-            }
-            if (upperC != c) {
-                theSet->add(upperC);
-            }
-        }
-    }
-}
-
-
-
-
 //----------------------------------------------------------------------------------------
 //
 //  Constructor.
@@ -1173,10 +1141,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
     case doScanUnicodeSet:
         {
             UnicodeSet *theSet = scanSet();
-            if ((fModeFlags & UREGEX_CASE_INSENSITIVE) && theSet != NULL) {
-                caseClose(theSet);   // TODO:  replace with the real function.
-                // theSet->closeOver(USET_CASE);
-            }
             compileSet(theSet);
         }
         break;
@@ -2158,8 +2122,16 @@ UnicodeSet *RegexCompile::scanSet() {
     pos.setIndex(fScanIndex);
     startPos = fScanIndex;
     UErrorCode localStatus = U_ZERO_ERROR;
+    uint32_t   usetFlags = 0;
+    if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+        usetFlags |= USET_CASE_INSENSITIVE;
+    }
+    if (fModeFlags & UREGEX_COMMENTS) {
+        usetFlags |= USET_IGNORE_SPACE;
+    }
+
     uset = new UnicodeSet(fRXPat->fPattern, pos,
-                         localStatus);
+                         usetFlags, localStatus);
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
