@@ -617,6 +617,10 @@ static void TestNumberFormatPadding()
     {
         log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
     }
+    else
+    {
+        unum_close(pattern);
+    }
 
 /*    u_uastrcpy(temp1, "*x#,###,###,##0.0#;(*x#,###,###,##0.0#)"); */
     u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(###,###,##0.0#)");
@@ -667,25 +671,29 @@ free(result);
         {
             log_err("Error in formatting using unum_formatDouble(.....) with padding : %s\n", myErrorName(status));
         }
-        if(u_strcmp(result, temp1)==0)
-            log_verbose("Pass: Number Formatting using unum_formatDouble() padding Successful\n");
         else
-            log_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
-
-
-        /* Testing unum_parse() and unum_parseDouble() */
-        log_verbose("\nTesting padding unum_parseDouble()\n");
-        parsepos=0;
-        d1=unum_parseDouble(pattern, result, u_strlen(result), &parsepos, &status);
-        if(U_FAILURE(status))
         {
-            log_err("padding parse failed. The error is : %s\n", myErrorName(status));
-        }
+            if(u_strcmp(result, temp1)==0)
+                log_verbose("Pass: Number Formatting using unum_formatDouble() padding Successful\n");
+            else
+                log_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
 
-        if(d1!=d)
-            log_err("Fail: Error in padding parsing\n");
-        else
-            log_verbose("Pass: padding parsing successful\n");
+
+            /* Testing unum_parse() and unum_parseDouble() */
+            log_verbose("\nTesting padding unum_parseDouble()\n");
+            parsepos=0;
+            d1=unum_parseDouble(pattern, result, u_strlen(result), &parsepos, &status);
+            if(U_FAILURE(status))
+            {
+                log_err("padding parse failed. The error is : %s\n", myErrorName(status));
+            }
+
+            if(d1!=d)
+                log_err("Fail: Error in padding parsing\n");
+            else
+                log_verbose("Pass: padding parsing successful\n");
+free(result);
+        }
     }
 
     unum_close(pattern);
