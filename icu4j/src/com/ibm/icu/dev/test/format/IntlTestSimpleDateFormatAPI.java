@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2004 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
