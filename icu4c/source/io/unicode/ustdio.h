@@ -77,6 +77,7 @@
  * Make sure that a UFile opened with "rw" can be used after using
     u_fflush with a u_frewind.
  * scanf(%i) should detect what type of number to use.
+ * Add more testing of the alternate format, %#
  * Complete the file documentation with proper doxygen formatting.
     See http://oss.software.ibm.com/pipermail/icu/2003-July/005647.html
 */
@@ -86,52 +87,61 @@
  * \brief C API: Unicode stdio-like API
  *
  * <h2>Unicode stdio-like C API</h2>
-printf
-fmt type        Comment
-%E  double      Scientific with an uppercase exponent
-%e  double      Scientific with a lowercase exponent
-%G  double      Use %E or %f for best format
-%g  double      Use %e or %f for best format
-%f  double      Simple floating point without the exponent
-%X  int32_t     ustdio special uppercase hex radix formatting
-%x  int32_t     ustdio special lowercase hex radix formatting
-%d  int32_t     Decimal format
-%i  int32_t     Same as %d
-%n  int32_t     count (write the number of chars written)
-%o  int32_t     octal ustdio special octal radix formatting
-%u  uint32_t    Decimal format
-%p  void *      Prints the pointer value
-%s  char *      Use default converter or specified converter from fopen
-%hs char *      (Unimplemented) Use invariant converter
-%ls N/A         (Unimplemented) Reserved for future implementation
-%c  char        Use default converter or specified converter from fopen
-%hc char        (Unimplemented) Use invariant converter
-%lc N/A         (Unimplemented) Reserved for future implementation
-%S  UChar *     Null terminated UTF-16 string
-%hS char *      (Unimplemented) Null terminated UTF-8 string
-%lS UChar32 *   (Unimplemented) Null terminated UTF-32 string
-%C  UChar       16-bit Unicode code unit
-%hC char        (Unimplemented) 8-bit Unicode code unit
-%lC UChar32     (Unimplemented) 32-bit Unicode code unit
-%%  N/A         Show a percent sign
+General printf format:<br>
+%[format modifier][width][.precision][type modifier][format]
+
+General scanf format:<br>
+%[*][format modifier][width][type modifier][format]
+
+<table cellspacing="3">
+<tr><td>format</td><td>default<br>type</td><td>description</td></tr>
+<tr><td>%E</td><td>double</td><td>Scientific with an uppercase exponent</td></tr>
+<tr><td>%e</td><td>double</td><td>Scientific with a lowercase exponent</td></tr>
+<tr><td>%G</td><td>double</td><td>Use %E or %f for best format</td></tr>
+<tr><td>%g</td><td>double</td><td>Use %e or %f for best format</td></tr>
+<tr><td>%f</td><td>double</td><td>Simple floating point without the exponent</td></tr>
+<tr><td>%X</td><td>int32_t</td><td>ustdio special uppercase hex radix formatting</td></tr>
+<tr><td>%x</td><td>int32_t</td><td>ustdio special lowercase hex radix formatting</td></tr>
+<tr><td>%d</td><td>int32_t</td><td>Decimal format</td></tr>
+<tr><td>%i</td><td>int32_t</td><td>Same as %d</td></tr>
+<tr><td>%n</td><td>int32_t</td><td>count (write the number of chars written)</td></tr>
+<tr><td>%o</td><td>int32_t</td><td>ustdio special octal radix formatting</td></tr>
+<tr><td>%u</td><td>uint32_t</td><td>Decimal format</td></tr>
+<tr><td>%p</td><td>void *</td><td>Prints the pointer value</td></tr>
+<tr><td>%s</td><td>char *</td><td>Use default converter or specified converter from fopen</td></tr>
+<tr><td>%c</td><td>char</td><td>Use default converter or specified converter from fopen</td></tr>
+<tr><td>%S</td><td>UChar *</td><td>Null terminated UTF-16 string</td></tr>
+<tr><td>%C</td><td>UChar</td><td>16-bit Unicode code unit</td></tr>
+<tr><td>%%</td><td>N/A</td><td>Show a percent sign</td></tr>
+</table>
 
 Format modifiers
-%h    int16_t   short format for %d, %i, %o, %x
-%l    int32_t   long format for %d, %i, %o, %x (no effect)
-%ll   int64_t   long long format for %d, %i, %o, %x
-%h    uint16_t  short format for %u
-%l    uint32_t  long format for %u (no effect)
-%ll   uint64_t  (Unimplemented) long long format for %u
-%-    N/A       Left justify
-%+    N/A       Always show the plus or minus sign. Needs data for plus sign.
-%     N/A       Instead of a "+" output a blank character for positive numbers.
-%#    N/A       Precede octal value with 0, hex with 0x and show the 
-                decimal point for floats.
-%num  N/A       Width of input/output. num is an actual number from 0 to 
-                some large number.
-%.num N/A       Significant digits precision. num is an actual number from
-                0 to some large number. Currently can only specify precision
-                before or after decimal, and not total precision.
+<table>
+<tr><td>modifier</td><td>formats</td><td>type</td><td>comments</td></tr>
+<tr><td>%h</td><td>%d, %i, %o, %x</td><td>int16_t</td><td>short format</td></tr>
+<tr><td>%h</td><td>%u</td><td>uint16_t</td><td>short format</td></tr>
+<tr><td>%h</td><td>c</td><td>char</td><td><b>(Unimplemented)</b> Use invariant converter</td></tr>
+<tr><td>%h</td><td>s</td><td>char *</td><td><b>(Unimplemented)</b> Use invariant converter</td></tr>
+<tr><td>%h</td><td>C</td><td>char</td><td><b>(Unimplemented)</b> 8-bit Unicode code unit</td></tr>
+<tr><td>%h</td><td>S</td><td>char *</td><td><b>(Unimplemented)</b> Null terminated UTF-8 string</td></tr>
+<tr><td>%l</td><td>%d, %i, %o, %x</td><td>int32_t</td><td>long format (no effect)</td></tr>
+<tr><td>%l</td><td>%u</td><td>uint32_t</td><td>long format (no effect)</td></tr>
+<tr><td>%l</td><td>c</td><td>N/A</td><td><b>(Unimplemented)</b> Reserved for future implementation</td></tr>
+<tr><td>%l</td><td>s</td><td>N/A</td><td><b>(Unimplemented)</b> Reserved for future implementation</td></tr>
+<tr><td>%l</td><td>C</td><td>UChar32</td><td><b>(Unimplemented)</b> 32-bit Unicode code unit</td></tr>
+<tr><td>%l</td><td>S</td><td>UChar32 *</td><td><b>(Unimplemented)</b> Null terminated UTF-32 string</td></tr>
+<tr><td>%ll</td><td>%d, %i, %o, %x</td><td>int64_t</td><td>long long format</td></tr>
+<tr><td>%ll</td><td>%u</td><td>uint64_t</td><td><b>(Unimplemented)</b> long long format</td></tr>
+<tr><td>%-</td><td><i>all</i></td><td>N/A</td><td>Left justify</td></tr>
+<tr><td>%+</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Always show the plus or minus sign. Needs data for plus sign.</td></tr>
+<tr><td>% </td><td></td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G<td>N/A</td><td>Instead of a "+" output a blank character for positive numbers.</td></tr>
+<tr><td>%#</td><td></td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G<td>N/A</td><td>Precede octal value with 0, hex with 0x and show the 
+                decimal point for floats.</td></tr>
+<tr><td>%n</td><td><i>all</i></td><td>N/A</td><td>Width of input/output. num is an actual number from 0 to 
+                some large number.</td></tr>
+<tr><td>%.n</td><td>%e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Significant digits precision. num is an actual number from
+                0 to some large number.<br>If * is used in printf, then the precision is passed in as an argument before the number to be formatted.</td></tr>
+</table>
 
 printf modifier
 %*  int32_t     Next argument after this one specifies the width
@@ -211,7 +221,7 @@ u_finit(FILE        *f,
  * The string is usable once u_fclose or u_fflush has been called on the
  * returned UFILE.
  * @param stringBuf The string used for reading or writing.
- * @param count The number of code units available for use in stringBuf
+ * @param capacity The number of code units available for use in stringBuf
  * @param locale The locale whose conventions will be used to format 
  * and parse output. If this parameter is NULL, the default locale will 
  * be used.
@@ -331,7 +341,7 @@ u_fsetcodepage(const char   *codepage,
 
 /**
  * Returns an alias to the converter being used for this file.
- * @param file The UFILE to set.
+ * @param f The UFILE to get the value from
  * @return alias to the converter
  * @draft 3.0
  */
@@ -611,8 +621,6 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
  * Write formatted data to a Unicode string.
  *
  * @param buffer The Unicode String to which to write.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode code units written to <TT>buffer</TT>. This
@@ -634,8 +642,6 @@ u_sprintf(UChar       *buffer,
  *
  * @param buffer The Unicode String to which to write.
  * @param count The number of code units to read.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode code units written to <TT>buffer</TT>. This
@@ -654,8 +660,6 @@ u_snprintf(UChar      *buffer,
  * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string to which to write.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @param ap The argument list to use.
@@ -680,8 +684,6 @@ u_vsprintf(UChar      *buffer,
  *
  * @param buffer The Unicode string to which to write.
  * @param count The number of code units to read.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @param ap The argument list to use.
@@ -699,8 +701,6 @@ u_vsnprintf(UChar     *buffer,
  * Write formatted data to a Unicode string.
  *
  * @param buffer The Unicode string to which to write.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
@@ -721,8 +721,6 @@ u_sprintf_u(UChar      *buffer,
  *
  * @param buffer The Unicode string to which to write.
  * @param count The number of code units to read.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
@@ -740,9 +738,6 @@ u_snprintf_u(UChar     *buffer,
  * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string to which to write.
- * @param count The number of code units to read.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @param ap The argument list to use.
@@ -766,8 +761,7 @@ u_vsprintf_u(UChar     *buffer,
  * null terminated and <TT>count</TT> is returned.
  *
  * @param buffer The Unicode string to which to write.
- * @param locale The locale to use for formatting the numbers, dates and other
- * locale specific information.
+ * @param count The number of code units to read.
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @param ap The argument list to use.
@@ -787,8 +781,6 @@ u_vsnprintf_u(UChar *buffer,
  * Read formatted data from a Unicode string.
  *
  * @param buffer The Unicode string from which to read.
- * @param locale The locale to use for parsing the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
@@ -806,8 +798,6 @@ u_sscanf(const UChar   *buffer,
  * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string from which to read.
- * @param locale The locale to use for parsing the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
  * interpret the variable arguments received and parse the data.
  * @param ap The argument list to use.
@@ -825,8 +815,6 @@ u_vsscanf(const UChar  *buffer,
  * Read formatted data from a Unicode string.
  *
  * @param buffer The Unicode string from which to read.
- * @param locale The locale to use for parsing the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
@@ -844,8 +832,6 @@ u_sscanf_u(const UChar  *buffer,
  * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
  *
  * @param buffer The Unicode string from which to read.
- * @param locale The locale to use for parsing the numbers, dates and other
- * locale specific information.
  * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
  * interpret the variable arguments received and parse the data.
  * @param ap The argument list to use.
