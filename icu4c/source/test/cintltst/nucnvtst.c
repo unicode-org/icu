@@ -2887,8 +2887,6 @@ TestFullRoundtrip(const char* cp){
     TestConv(nsrc,3,cp,"",NULL,0);
 
     for(;i<=0x10FFFF;i++){
-        int j =0;
-
         if(i>=0xD800 && i<=0xDFFF){
             continue;
         }
