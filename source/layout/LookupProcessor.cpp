@@ -178,6 +178,11 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
             for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
                 le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
 
+                // don't add the required feature to the list more than once...
+                if (featureIndex == requiredFeatureIndex) {
+                    continue;
+                }
+
                 featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
 
                 if (featureTag == featureOrder[tag]) {
@@ -195,6 +200,11 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
         for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
             le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
  
+            // don't add the required feature to the list more than once...
+            if (featureIndex == requiredFeatureIndex) {
+                continue;
+            }
+
             featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
             count = selectLookups(featureTable, featureTag, order);
             order += count;
