@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1998-2003, International Business Machines
+ *   Copyright (C) 1998-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -155,12 +155,12 @@ writeConverterData(ConvData *data, const char *cnvName, const char *cnvDir, UErr
     sz2 = udata_finish(mem, status);
     if(size != sz2)
     {
-        fprintf(stderr, "error: wrote %d bytes to the .cnv file but counted %d bytes\n", sz2, size);
+        fprintf(stderr, "error: wrote %u bytes to the .cnv file but counted %u bytes\n", (int)sz2, (int)size);
         *status=U_INTERNAL_PROGRAM_ERROR;
     }
     if(VERBOSE)
     {
-      fprintf(stderr, "- Wrote %d bytes to the udata.\n", sz2);
+      fprintf(stderr, "- Wrote %u bytes to the udata.\n", (int)sz2);
     }
 }
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -486,24 +486,23 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
 
     if(!sourceTOC) {
         FileStream *file;
-        char *fullPath;
 
         fullPath = pathToFullPath(filename);
 
         /* store the pathname */
         if(!embed) {
-          length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
-          s=allocString(length);
-          uprv_strcpy(s, options[6].value);
-          uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
-          uprv_strcat(s, filename);
+            length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+            s=allocString(length);
+            uprv_strcpy(s, options[6].value);
+            uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
+            uprv_strcat(s, filename);
         } else {
-          /* compatibility mode */
-          const char *base;
-          base = findBasename(filename);
-          length = (uint32_t)(uprv_strlen(base) + 1);
-          s=allocString(length);
-          uprv_memcpy(s, base, length);
+            /* compatibility mode */
+            const char *base;
+            base = findBasename(filename);
+            length = (uint32_t)(uprv_strlen(base) + 1);
+            s=allocString(length);
+            uprv_memcpy(s, base, length);
         }
 
         /* get the basename */
@@ -543,20 +542,20 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         char *t;
 
         if(embed) {
-          filename = findBasename(filename);
+            filename = findBasename(filename);
         }
         /* get and store the basename */
         if(!embed) {
-          /* need to include the package name */
-          length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
-          s=allocString(length);
-          uprv_strcpy(s, options[6].value);
-          uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
-          uprv_strcat(s, filename);
+            /* need to include the package name */
+            length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+            s=allocString(length);
+            uprv_strcpy(s, options[6].value);
+            uprv_strcat(s, U_TREE_ENTRY_SEP_STRING);
+            uprv_strcat(s, filename);
         } else {
-          length = (uint32_t)(uprv_strlen(filename) + 1);
-          s=allocString(length);
-          uprv_memcpy(s, filename, length);
+            length = (uint32_t)(uprv_strlen(filename) + 1);
+            s=allocString(length);
+            uprv_memcpy(s, filename, length);
         }
         fixDirToTreePath(s);
         files[fileCount].basename=s;
@@ -643,18 +642,18 @@ compareFiles(const void *file1, const void *file2) {
 static void
 fixDirToTreePath(char *s)
 {
-  char *t;
+#if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR) || ((U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR) && (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR))
+    char *t;
+#endif
 #if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
-  for(t=s;t=uprv_strchr(t,U_FILE_SEP_CHAR);) {
-    *t = U_TREE_ENTRY_SEP_CHAR;
-  }
+    for(t=s;t=uprv_strchr(t,U_FILE_SEP_CHAR);) {
+        *t = U_TREE_ENTRY_SEP_CHAR;
+    }
 #endif
-#if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
-#if (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
-  for(t=s;t=uprv_strchr(t,U_FILE_ALT_SEP_CHAR);) {
-    *t = U_TREE_ENTRY_SEP_CHAR;
-  }
-#endif
+#if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR) && (U_FILE_ALT_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
+    for(t=s;t=uprv_strchr(t,U_FILE_ALT_SEP_CHAR);) {
+        *t = U_TREE_ENTRY_SEP_CHAR;
+    }
 #endif
 }
 /*
