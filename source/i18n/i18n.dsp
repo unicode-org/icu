@@ -865,22 +865,7 @@ InputPath=.\unicode\msgfmt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\name2uni.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\name2uni.h
-
-"..\..\include\unicode\name2uni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    unicode\name2uni.h    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\name2uni.h
 # End Source File
 # Begin Source File
 
@@ -900,22 +885,7 @@ SOURCE=.\nfsubs.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\nortrans.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\nortrans.h
-
-"..\..\include\unicode\nortrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    unicode\nortrans.h    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\nortrans.h
 # End Source File
 # Begin Source File
 
@@ -1132,7 +1102,7 @@ SOURCE=.\rbt_set.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\remtrans.h
+SOURCE=.\remtrans.h
 # End Source File
 # Begin Source File
 
@@ -1329,15 +1299,15 @@ InputPath=.\unicode\timezone.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\titletrn.h
+SOURCE=.\titletrn.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\tolowtrn.h
+SOURCE=.\tolowtrn.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\toupptrn.h
+SOURCE=.\toupptrn.h
 # End Source File
 # Begin Source File
 
@@ -1566,22 +1536,7 @@ InputPath=.\unicode\umsg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\uni2name.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\uni2name.h
-
-"..\..\include\unicode\uni2name.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    unicode\uni2name.h    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\uni2name.h
 # End Source File
 # Begin Source File
 
@@ -1809,7 +1764,7 @@ InputPath=.\unicode\utrans.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\xformtrn.h
+SOURCE=.\xformtrn.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
