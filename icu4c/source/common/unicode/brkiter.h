@@ -615,7 +615,7 @@ private:
      * The assignment operator has no real implementation.
      * It's provided to make the compiler happy. Do not call.
      */
-    BreakIterator& operator=(const BreakIterator&) { return *this; }
+    BreakIterator& operator=(const BreakIterator&);
 };
 
 inline UBool BreakIterator::isBufferClone()
