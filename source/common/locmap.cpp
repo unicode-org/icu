@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.16 $
+// $Revision: 1.17 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -55,16 +55,28 @@ struct ILcidPosixElement
 
 struct ILcidPosixMap
 {
-    uint32_t hostID(const char* fromPosixID) const;
     const char* posixID(uint32_t fromHostID) const;
 
-//    static const char* fgWildCard;
+    /**
+     * Searches for a Windows LCID
+     *
+     * @param posixid the Posix style locale id.
+     * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
+     *               no equivalent Windows LCID.
+     * @return the LCID
+     */
+    uint32_t hostID(const char* fromPosixID) const;
 
-//    uint16_t hostLangID;
-//    const char *posixLangID;
+    /**
+     * Do not call this function. It is called by hostID.
+     * The function is not private because this struct must stay as a C struct,
+     * and this is an internal class.
+     */
+    uint32_t searchPosixIDmap(const char* posixID, UErrorCode* status) const;
 
     uint32_t numRegions;
     const ILcidPosixElement* regionMaps;
+
 };
 
 /////////////////////////////////////////////////
@@ -299,9 +311,9 @@ static const ILcidPosixElement sv[] = {
     {0x041d, "sv_SE"}
 };
 
-ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)    // The MSJDK documentation says the default country is Kenya.
+ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)// The MSJDK documentation says the default country is Kenya.
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
-ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)    //Todo: Data does not exist
+ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
 ILCID_POSIX_ELEMENT_ARRAY(0x041f, tr, tr_TR)
 ILCID_POSIX_ELEMENT_ARRAY(0x0444, tt, tt_RU)    //Todo: Data does not exist
@@ -663,7 +675,7 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
     uint32_t   mid;
     uint32_t   high   = LocaleCount - 1;
     int32_t    compVal;
-    char       langID[256];
+    char       langID[ULOC_FULLNAME_CAPACITY];
 
     // Check for incomplete id.
     if (!posixID || uprv_strlen(posixID) < 2)
@@ -694,7 +706,7 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
 
     // no match found
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
+    return 0;   // return international (root)
 }
 
 
@@ -703,17 +715,87 @@ IGlobalLocales::convertToLCID(const char* posixID, UErrorCode* status)
 uint32_t
 ILcidPosixMap::hostID(const char* posixID) const
 {
-    uint32_t low  = 1;
-    uint32_t mid;
-    uint32_t high = numRegions;
-    int32_t  compVal;
+    UErrorCode status = U_ZERO_ERROR;
+    char     hostID[ULOC_FULLNAME_CAPACITY];
+    char    *hostPtr = hostID;
+    uint32_t value;
+    uint32_t hostLen = strlen(posixID);
+    int32_t  size, hostSize;
 
     // Check for incomplete id. All LCIDs have a default country,
     // and a 0x0400 in 0xFC00 indicates a default country.
     // So Windows may not like hostLangID without a default
     // country.
-    if (!numRegions || strlen(posixID) < 5)
+    if (!numRegions || hostLen < 5)
         return regionMaps->hostID;
+    if (hostLen >= ULOC_FULLNAME_CAPACITY)
+        hostLen = ULOC_FULLNAME_CAPACITY - 1;
+
+    // We do this because the posixID may have a '-' separator and
+    // incorrect string case
+    hostSize = uloc_getLanguage(posixID,
+                                hostID,
+                                ULOC_LANG_CAPACITY + 1,
+                                &status);
+    if (U_SUCCESS(status))
+    {
+        hostPtr += hostSize;
+        hostPtr[-1] = '_';
+        size = uloc_getCountry(posixID,
+                               hostPtr,
+                               ULOC_COUNTRY_CAPACITY + 1,
+                               &status);
+        hostSize += size - 1;
+        if (U_SUCCESS(status) && hostSize < hostLen)
+        {
+            hostPtr += size;
+            hostPtr[-1] = '_';
+            uloc_getVariant(posixID, hostPtr, hostLen - size, &status);
+        }
+    }
+
+    // Try to find it the first time.
+    value = searchPosixIDmap(hostID, &status);
+    if (U_SUCCESS(status)) {
+        return value;
+    }
+
+    // Couldn't find it. Cut off the last part of the locale
+    while (hostPtr > hostID && *hostPtr != '_')
+    {
+        hostPtr--;
+    }
+    if (*hostPtr == '_')
+    {
+        *hostPtr = 0;
+    }
+
+    // Try it again without the last part of the locale
+    status = U_ZERO_ERROR;
+    value = searchPosixIDmap(hostID, &status);
+    if (U_SUCCESS(status)) {
+        return value;
+    }
+
+    // No match found. Return the language
+    return regionMaps->hostID;
+}
+
+/**
+ * Searches for a Windows LCID
+ *
+ * @param posixid the Posix style locale id.
+ * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
+ *               no equivalent Windows LCID.
+ * @return the LCID
+ */
+uint32_t
+ILcidPosixMap::searchPosixIDmap(const char* posixID, UErrorCode* status) const
+{
+    uint32_t low  = 1;
+    uint32_t mid;
+    uint32_t high = numRegions;
+    int32_t  compVal;
 
     // Binary search for the map entry
     // The element at index 0 is always the POSIX wild card,
@@ -733,8 +815,10 @@ ILcidPosixMap::hostID(const char* posixID) const
     }
 
     //no match found
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return regionMaps->hostID;
 }
+
 
 const char*
 ILcidPosixMap::posixID(uint32_t hostID) const
