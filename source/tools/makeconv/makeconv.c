@@ -597,7 +597,7 @@ static void
 readTable(ConvData *data, FileStream* convFile,
           UBool forBase, UCMStates *baseStates,
           UErrorCode *pErrorCode) {
-    char line[200];
+    char line[500];
     char *end;
     UBool isOK;
     
