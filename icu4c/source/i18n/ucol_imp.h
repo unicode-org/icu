@@ -54,43 +54,60 @@
  * Substructures are described in the collation design document at
  * http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/collation/ICU_collation_design.htm
  *
+ * -------------------------------------------------------------
+ *
  * Here is the format of binary collation image.
+ *
+ * Physical order of structures:
+ * - header (UCATableHeader)
+ * - options (UColOptionSet)
+ * - expansions (CE[])
+ * - contractions (UChar[contractionSize] + CE[contractionSize])
+ * - serialized UTrie with mappings of code points to CEs
+ * - max expansion tables (CE[endExpansionCECount] + uint8_t[endExpansionCECount])
+ * - two bit sets for backward processing in strcoll (identical prefixes)
+ *   and for backward CE iteration (each set is uint8_t[UCOL_UNSAFECP_TABLE_SIZE])
+ * - UCA constants (UCAConstants)
+ * - UCA contractions (UChar[contractionUCACombosSize][contractionUCACombosWidth])
+ *
+ * UCATableHeader fields:
  *
  * int32_t size; - image size in bytes
  *
  * Offsets to interesting data. All offsets are in bytes.
  * to get the address add to the header address and cast properly.
- * Offsets are in ascending order if non-zero. 
+ * Some offsets are zero if the corresponding structures are empty.
  *
- * uint32_t options; - offset to default collator options (UColOptionSet *), 1 signed 3-bit value, followed by 7 unsigned 32-bit values, 
- *                     followed by 64 reserved bytes (could be considered 16 32-bit values). See declaration of UColOptionSet for more details
+ * uint32_t options; - offset to default collator options (UColOptionSet *),
+ *                     a set of 32-bit values. See declaration of UColOptionSet for more details
  *
- * uint32_t UCAConsts; - only used in UCA image - structure which holds values for indirect positioning and implicit ranges
- *                       See declaration of UCAConstants structure. This is a field of 37 unsigned 32-bit values used to store 
+ * uint32_t UCAConsts; - only used (!=0) in UCA image - structure which holds values for indirect positioning and implicit ranges
+ *                       See declaration of UCAConstants structure. This is a set of unsigned 32-bit values used to store 
  *                       important constant values that are defined in the UCA and used for building and runtime.
  *
- * uint32_t contractionUCACombos; - only used in UCA image - list of UCA contractions. This is a zero terminated array of UChar[3],
+ * uint32_t contractionUCACombos; - only used (!=0) in UCA image - list of UCA contractions. This is a zero terminated array of UChar[contractionUCACombosWidth],
  *                                  containing contractions from the UCA. These are needed in the build process to copy UCA contractions
  *                                  in case the base contraction symbol is tailored.
  *
- * uint32_t unusedReserved1; -  reserved for future use 
+ * uint32_t magic; - must contain UCOL_HEADER_MAGIC (formatVersion 2.3)
  *
  * uint32_t mappingPosition;  - offset to UTrie (const uint8_t *mappingPosition). This is a serialized UTrie and should be treated as such. 
  *                              Used as a primary lookup table for collation elements.
  *
- * uint32_t expansion;  - offset to expansion table (uint32_t *expansion). This is an array of expansion CEs. 
+ * uint32_t expansion;  - offset to expansion table (uint32_t *expansion). This is an array of expansion CEs. Never 0.
  *
  * uint32_t contractionIndex; - offset to contraction table (UChar *contractionIndex). Used to look up contraction sequences. Contents
- *                              are aligned with the contents of contractionCEs table.
+ *                              are aligned with the contents of contractionCEs table. 0 if no contractions.
  *
  * uint32_t contractionCEs;  - offset to resulting contraction CEs (uint32_t *contractionCEs). When a contraction is resolved in the
  *                             in the contractionIndex table, the resulting index is used to look up corresponding CE in this table. 
- *
+ *                             0 if no contractions.
  * uint32_t contractionSize; - size of contraction table in elements (both Index and CEs). 
  *
  * Tables described below are used for Boyer-Moore searching algorithm - they define the size of longest expansion
  * and last CEs in expansions.
- * uint32_t endExpansionCE; - offset to array of last collation element in expansion (uint32_t *). .
+ * uint32_t endExpansionCE; - offset to array of last collation element in expansion (uint32_t *).
+ *                            Never 0.
  * uint32_t expansionCESize; - array of maximum expansion sizes (uint8_t *)
  * int32_t  endExpansionCECount; - size of endExpansionCE. See UCOL_GETMAXEXPANSION
  *                                 for the usage model
@@ -99,27 +116,31 @@
  * uint32_t unsafeCP; - hash table of unsafe code points (uint8_t *). See ucol_unsafeCP function.
  * uint32_t contrEndCP; - hash table of final code points in contractions (uint8_t *). See ucol_contractionEndCP.              
  *
- * int32_t CEcount; - currently unused
- *
+ * int32_t contractionUCACombosSize; - number of UChar[contractionUCACombosWidth] in contractionUCACombos
+ *                                     (formatVersion 2.3)
  * UBool jamoSpecial; - Jamo special indicator (uint8_t). If TRUE, Jamos are special, so we cannot use simple Hangul decomposition.
- * uint8_t padding[3]; - padding 3 uint8_t 
+ * UBool isBigEndian; - endianness of this collation binary (formatVersion 2.3)
+ * uint8_t charSetFamily; - charset family of this collation binary (formatVersion 2.3)
+ * uint8_t contractionUCACombosWidth; - number of UChars per UCA contraction in contractionUCACombos (formatVersion 2.3)
  *
  * Various version fields
  * UVersionInfo version; - version 4 uint8_t
  * UVersionInfo UCAVersion;  - version 4 uint8_t
  * UVersionInfo UCDVersion;  - version 4 uint8_t
+ * UVersionInfo formatVersion; - version of the format of the collation binary
+ *                               same formatVersion as in ucadata.icu's UDataInfo header
+ *                               (formatVersion 2.3)
  *
- * char charsetName[32];  - currently unused 32 uint8_t
- * uint8_t reserved[56];  - currently unused 64 uint8_t
+ * uint8_t reserved[84];  - currently unused
  *
- * This header is followed by data addressed by offsets in the header. 
+ * -------------------------------------------------------------
  *
  * Inverse UCA is used for constructing collators from rules. It is always an individual file
  * and always has a UDataInfo header. 
  * here is the structure:
  * 
  * uint32_t byteSize; - size of inverse UCA image in bytes
- * uint32_t tableSize; - size of inverse table (number of (inverse elements + 2)*3
+ * uint32_t tableSize; - length of inverse table (number of uint32_t[3] rows)
  * uint32_t contsSize; - size of continuation table (number of UChars in table)
  *
  * uint32_t table; - offset to inverse table (uint32_t *)
