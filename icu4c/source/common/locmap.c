@@ -134,16 +134,10 @@ uprv_defaultCodePageForLocale(const char *locale)
     return NULL;
 }
 
-#ifdef WIN32
-
 /*
  * Note:
- * This code is used only internally by putil.c/uprv_getDefaultLocaleID().
  * The mapping from Win32 locale ID numbers to POSIX locale strings should
- * be the faster one. It is more important to get the LCID to ICU locale
- * mapping correct than to get a correct ICU locale to LCID mapping.
- *
- * In order to test this code, please use the lcid test program.
+ * be the faster one.
  *
  * The LCID values come from winnt.h
  */
@@ -667,7 +661,7 @@ uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 
     /* no match found */
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return "??_??";
+    return NULL;
 }
 
 /*
@@ -743,6 +737,4 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;   /* return international (root) */
 }
-
-#endif
 
