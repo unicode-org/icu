@@ -25,6 +25,7 @@ private:
      * executes tests of API functions, see detailed comments in source code
      **/
     void testAPI(/* char* par */);
+	void testRegistration();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
