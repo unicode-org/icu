@@ -15,7 +15,6 @@
 
 /* FormatTest is a medium top level test for everything in the  C FORMAT API */
 
-#include <stdlib.h>
 #include "cintltst.h"
 #include "cformtst.h"
 
@@ -28,47 +27,15 @@ void addNumFrDepTest(TestNode**);
 void addDtFrDepTest(TestNode**);
 
 
-void checkHeap()
-{
-    int i;
-    void *n[2048];
-
-    log_info("checkHeap...");
-
-
-    for(i=0;i<1;i++)
-    {
-        n[i]= malloc(i+15); 
-    }
-
-  /*  for(i=0;i<2048;i++)
-    {
-      free(n[i]);
-      }*/
-}
-
 void addFormatTest(TestNode** root)
 {
     addCalTest(root);
-
-    /*    addTest(root, &checkHeap, "/tsformat/mallocTest2" ); */
-
     addDateForTest(root);
-
-    /*    addTest(root, &checkHeap, "/tsformat/mallocTest3" ); */
-
     addNumForTest(root);
-
-    /*    addTest(root, &checkHeap, "/tsformat/mallocTest4" );  */
-
     addNumFrDepTest(root);
-
-    /* addTest(root, &checkHeap, "/tsformat/mallocTest5" );  */
-
     addMsgForTest(root);
     addDateForRgrTest(root);
     addDtFrDepTest(root);
-
 
 }
 /*INternal functions used*/
@@ -86,9 +53,8 @@ UChar* myDateFormat(UDateFormat* dat, UDate d1)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
-        /*result1=(UChar*)malloc(sizeof(UChar) * resultlength);  *//* this leaks for now */
         result1=(UChar*)ctst_malloc(sizeof(UChar) * resultlength);
-        udat_format(dat, d1, result1, resultlength, NULL, &status);    
+        udat_format(dat, d1, result1, resultlength, NULL, &status);
     }
     if(U_FAILURE(status))
     {
