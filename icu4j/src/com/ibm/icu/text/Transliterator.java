@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/10/10 20:26:27 $
- * $Revision: 1.47 $
+ * $Date: 2001/10/17 17:43:03 $
+ * $Revision: 1.48 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.47 $ $Date: 2001/10/10 20:26:27 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.48 $ $Date: 2001/10/17 17:43:03 $
  */
 public abstract class Transliterator {
     /**
@@ -1596,9 +1596,13 @@ public abstract class Transliterator {
     /**
      * The factory interface for transliterators.  Transliterator
      * subclasses can register factory objects for IDs using the
-     * registerFactory() method of Transliterator.
+     * registerFactory() method of Transliterator.  When invoked, the
+     * factory object will be passed the ID being instantiated.  This
+     * makes it possible to register one factory method to more than
+     * one ID, or for a factory method to parameterize its result
+     * based on the variant.
      */
     public static interface Factory {
-        Transliterator getInstance();
+        Transliterator getInstance(String ID);
     }
 }
