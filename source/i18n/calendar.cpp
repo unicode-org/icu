@@ -783,7 +783,7 @@ Calendar::getAvailableLocales(int32_t& count)
 UDate
 Calendar::getNow()
 {
-    return (UDate)uprv_getUTCtime() * U_MILLIS_PER_SECOND; // return as milliseconds
+    return uprv_getUTCtime(); // return as milliseconds
 }
 
 // -------------------------------------

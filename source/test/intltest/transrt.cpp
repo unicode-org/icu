@@ -36,10 +36,10 @@
                           if (exec) {                   \
                               logln(#test "---");       \
                               logln((UnicodeString)""); \
-                              int32_t t = uprv_getUTCtime(); \
+                              UDate t = uprv_getUTCtime(); \
                               test();                   \
                               t = uprv_getUTCtime() - t; \
-                              logln((UnicodeString)#test " took " + t + " seconds"); \
+                              logln((UnicodeString)#test " took " + t/U_MILLIS_PER_DAY + " seconds"); \
                           }                             \
                           break
 
