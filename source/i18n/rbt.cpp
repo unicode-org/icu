@@ -29,10 +29,10 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
     }
 }
 
-RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& ID,
+RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
                                  const TransliterationRuleData* theData,
                                  UnicodeFilter* adoptedFilter) :
-    Transliterator(ID, adoptedFilter),
+    Transliterator(id, adoptedFilter),
     data((TransliterationRuleData*)theData), // cast away const
     isDataOwned(FALSE) {
     setMaximumContextLength(data->ruleSet.getMaximumContextLength());
