@@ -2986,35 +2986,47 @@ InputPath=.\unicode\usetiter.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\iculdata.h
+SOURCE=.\serv.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\iculserv.cpp
+SOURCE=.\serv.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\iculserv.h
+SOURCE=.\servlk.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\icunotif.cpp
+SOURCE=.\servlkf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\icunotif.h
+SOURCE=.\servloc.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\icurwlck.h
+SOURCE=.\servls.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\icuserv.cpp
+SOURCE=.\servlu.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\icuserv.h
+SOURCE=.\servnotf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\servnotf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\servrbf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\servslkf.cpp
 # End Source File
 # End Group
 # Begin Group "sprep"

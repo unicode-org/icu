@@ -29,7 +29,7 @@ U_NAMESPACE_END
 
 #include "hash.h"
 #include "uvector.h"
-#include "icunotif.h"
+#include "servnotf.h"
 
 class ICUServiceTest;
 
