@@ -521,7 +521,7 @@ processCombining() {
         }
 
         /* set a marker on the last final trail index in this lead's table */
-        if(combined<=0x1ffff) {
+        if(combined<=0x1fff) {
             *(p-2)|=0x8000;
         } else {
             *(p-3)|=0x8000;
