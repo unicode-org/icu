@@ -1,0 +1,167 @@
+## Makefile.in for ICU - layout
+
+SO_TARGET_VERSION = @LIB_VERSION@
+SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
+
+include $(srcdir)/layoutobj.inc
+
+## Platform-specific setup
+include @platform_make_fragment@
+
+## Build directory information
+subdir = layout
+
+
+SUBDIRS = aat opentype
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS)
+
+## Target information
+
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
+
+TARGET_STUBNAME=layout
+
+ifneq ($(ENABLE_STATIC),)
+TARGET = $(LIBICU)$(TARGET_STUBNAME).a
+RANLIB = @RANLIB@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+SO_TARGET = $(LIBICU)$(TARGET_STUBNAME).$(SO)
+ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
+endif
+
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
+
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(srcdir) -I$(top_builddir)/common -I$(srcdir)/aat -I$(srcdir)/opentype -I$(top_builddir)/common -I$(top_srcdir)/common
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+#LIBS = $(LIBICUUC) @LIBS@
+LIBS= @LIBS@
+
+
+OBJECTS =  $(LAYOUT_OBJS) $(AAT_OBJS:%.o=aat/%.o) $(OPENTYPE_OBJS:%.o=opentype/%.o) 
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
+
+DEPS = $(LAYOUT_OBJS:.o=.d)
+
+## Header files to install
+HEADERS= $(srcdir)/*.h
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library install-headers dist	\
+dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-recursive all-local
+install: install-local
+clean: clean-recursive clean-local
+distclean : distclean-recursive distclean-local
+dist: dist-recursive dist-local
+check: all check-local
+
+## Recursive targets
+all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
+	@dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-local"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) "$$target-local" || exit; \
+	fi
+
+# end recursion
+
+all-local: $(ALL_TARGETS)
+
+install-local: install-headers install-library 
+
+install-library: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)
+ifneq ($(ENABLE_STATIC),)
+	$(INSTALL-L) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+endif
+ifneq ($(ENABLE_SHARED),)
+	$(INSTALL-L) $(FINAL_SO_TARGET) $(DESTDIR)$(libdir)/$(FINAL_SO_TARGET)
+ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
+	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
+	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
+endif
+endif
+
+install-headers:
+	$(MKINSTALLDIRS) $(DESTDIR)$(includedir)/layout
+	@for file in $(HEADERS); do \
+	 echo " $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout"; \
+	 $(INSTALL_DATA) $$file $(DESTDIR)$(includedir)/layout || exit; \
+	done
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(LAYOUT_OBJS) $(ALL_TARGETS)
+#	$(RMV) $(LAYOUT_OBJS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+ifneq ($(ENABLE_STATIC),)
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
+	$(RANLIB) $@
+endif
+
+ifneq ($(ENABLE_SHARED),)
+$(FINAL_SO_TARGET): $(OBJECTS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+endif
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
+
+
