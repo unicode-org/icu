@@ -841,12 +841,21 @@ TestUnescape() {
         0x5a, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6e, 0x3a, 0x20, 0xdbc8, 0xdf45, 0x0a, 0
     };
     int32_t length;
-    
+
+    /* test u_unescape() */
     length=u_unescape(
         "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
         buffer, sizeof(buffer)/sizeof(buffer[0]));
     if(length!=45 || u_strcmp(buffer, expect)!=0) {
-        log_err("failure in u_unescape(): length %d!=44 and/or incorrect result string\n", length);
+        log_err("failure in u_unescape(): length %d!=45 and/or incorrect result string\n", length);
+    }
+
+    /* try preflighting */
+    length=u_unescape(
+        "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
+        NULL, sizeof(buffer)/sizeof(buffer[0]));
+    if(length!=45 || u_strcmp(buffer, expect)!=0) {
+        log_err("failure in u_unescape(preflighting): length %d!=45\n", length);
     }
 
     /* ### TODO: test u_unescapeAt() */
