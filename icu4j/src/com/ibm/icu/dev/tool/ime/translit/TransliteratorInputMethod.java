@@ -331,7 +331,11 @@ public class TransliteratorInputMethod implements InputMethod {
     }
 
     public void dispatchEvent(AWTEvent event) {
-	final int MODIFIERS = InputEvent.CTRL_MASK | InputEvent.META_MASK | InputEvent.ALT_MASK | InputEvent.ALT_GRAPH_MASK;
+	final int MODIFIERS = 
+	    InputEvent.CTRL_MASK | 
+	    InputEvent.META_MASK | 
+	    InputEvent.ALT_MASK | 
+	    InputEvent.ALT_GRAPH_MASK;
 
 	switch (event.getID()) {
 	case MouseEvent.MOUSE_PRESSED:

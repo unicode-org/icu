@@ -1,3 +1,12 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
+
+package com.ibm.icu.dev.tool.ime;
+
 import java.awt.Rectangle;
 import javax.swing.Box;
 import javax.swing.JFrame;
