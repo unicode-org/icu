@@ -160,28 +160,28 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 
 // ---------------------------------------------------------------------------------
 
-static UnicodeString fieldName(Calendar::EDateFields f) {
+static UnicodeString fieldName(UCalendarDateFields f) {
     switch (f) {
-    case Calendar::ERA:           return "ERA";
-    case Calendar::YEAR:          return "YEAR";
-    case Calendar::MONTH:         return "MONTH";
-    case Calendar::WEEK_OF_YEAR:  return "WEEK_OF_YEAR";
-    case Calendar::WEEK_OF_MONTH: return "WEEK_OF_MONTH";
-    case Calendar::DAY_OF_MONTH:  return "DAY_OF_MONTH"; // DATE is synonym for DAY_OF_MONTH
-    case Calendar::DAY_OF_YEAR:   return "DAY_OF_YEAR";
-    case Calendar::DAY_OF_WEEK:   return "DAY_OF_WEEK";
-    case Calendar::DAY_OF_WEEK_IN_MONTH: return "DAY_OF_WEEK_IN_MONTH";
-    case Calendar::AM_PM:         return "AM_PM";
-    case Calendar::HOUR:          return "HOUR";
-    case Calendar::HOUR_OF_DAY:   return "HOUR_OF_DAY";
-    case Calendar::MINUTE:        return "MINUTE";
-    case Calendar::SECOND:        return "SECOND";
-    case Calendar::MILLISECOND:   return "MILLISECOND";
-    case Calendar::ZONE_OFFSET:   return "ZONE_OFFSET";
-    case Calendar::DST_OFFSET:    return "DST_OFFSET";
-    case Calendar::YEAR_WOY:      return "YEAR_WOY";
-    case Calendar::DOW_LOCAL:     return "DOW_LOCAL";
-    case Calendar::FIELD_COUNT:   return "FIELD_COUNT";
+    case UCAL_ERA:           return "ERA";
+    case UCAL_YEAR:          return "YEAR";
+    case UCAL_MONTH:         return "MONTH";
+    case UCAL_WEEK_OF_YEAR:  return "WEEK_OF_YEAR";
+    case UCAL_WEEK_OF_MONTH: return "WEEK_OF_MONTH";
+    case UCAL_DATE:			 return "DAY_OF_MONTH"; // DATE is synonym for DAY_OF_MONTH
+    case UCAL_DAY_OF_YEAR:   return "DAY_OF_YEAR";
+    case UCAL_DAY_OF_WEEK:   return "DAY_OF_WEEK";
+    case UCAL_DAY_OF_WEEK_IN_MONTH: return "DAY_OF_WEEK_IN_MONTH";
+    case UCAL_AM_PM:         return "AM_PM";
+    case UCAL_HOUR:          return "HOUR";
+    case UCAL_HOUR_OF_DAY:   return "HOUR_OF_DAY";
+    case UCAL_MINUTE:        return "MINUTE";
+    case UCAL_SECOND:        return "SECOND";
+    case UCAL_MILLISECOND:   return "MILLISECOND";
+    case UCAL_ZONE_OFFSET:   return "ZONE_OFFSET";
+    case UCAL_DST_OFFSET:    return "DST_OFFSET";
+    case UCAL_YEAR_WOY:      return "YEAR_WOY";
+    case UCAL_DOW_LOCAL:     return "DOW_LOCAL";
+    case UCAL_FIELD_COUNT:   return "FIELD_COUNT";
     default:
         return UnicodeString("") + ((int32_t)f);
     }
@@ -196,7 +196,7 @@ CalendarTest::TestGenericAPI()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
 
-    UDate when = date(90, Calendar::APRIL, 15);
+    UDate when = date(90, UCAL_APRIL, 15);
 
     UnicodeString tzid("TestZone");
     int32_t tzoffset = 123400;
@@ -227,7 +227,7 @@ CalendarTest::TestGenericAPI()
         cal->after(*cal2, status) ||
         U_FAILURE(status)) errln("FAIL: equals/before/after failed");
 
-    cal->roll(Calendar::SECOND, (UBool) TRUE, status);
+    cal->roll(UCAL_SECOND, (UBool) TRUE, status);
     if (failure(status, "Calendar::roll")) return;
     if (!cal->equals(*cal2, status) ||
         cal->before(*cal2, status) ||
@@ -235,7 +235,7 @@ CalendarTest::TestGenericAPI()
         U_FAILURE(status)) errln("FAIL: equals/before/after failed");
 
     // Roll back to January
-    cal->roll(Calendar::MONTH, (int32_t)(1 + Calendar::DECEMBER - cal->get(Calendar::MONTH, status)), status);
+    cal->roll(UCAL_MONTH, (int32_t)(1 + UCAL_DECEMBER - cal->get(UCAL_MONTH, status)), status);
     if (failure(status, "Calendar::roll")) return;
     if (cal->equals(*cal2, status) ||
         cal2->before(*cal, status) ||
@@ -256,9 +256,9 @@ CalendarTest::TestGenericAPI()
         // Later: Check for lenient behavior
     }
 
-    for (i=Calendar::SUNDAY; i<=Calendar::SATURDAY; ++i)
+    for (i=UCAL_SUNDAY; i<=UCAL_SATURDAY; ++i)
     {
-        cal->setFirstDayOfWeek((Calendar::EDaysOfWeek)i);
+        cal->setFirstDayOfWeek((UCalendarDaysOfWeek)i);
         if (cal->getFirstDayOfWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
     }
 
@@ -268,13 +268,13 @@ CalendarTest::TestGenericAPI()
         if (cal->getMinimalDaysInFirstWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
     }
 
-    for (i=0; i<Calendar::FIELD_COUNT; ++i)
+    for (i=0; i<UCAL_FIELD_COUNT; ++i)
     {
-        if (cal->getMinimum((Calendar::EDateFields)i) != cal->getGreatestMinimum((Calendar::EDateFields)i))
+        if (cal->getMinimum((UCalendarDateFields)i) != cal->getGreatestMinimum((UCalendarDateFields)i))
             errln("FAIL: getMinimum doesn't match getGreatestMinimum for field " + i);
-        if (cal->getLeastMaximum((Calendar::EDateFields)i) > cal->getMaximum((Calendar::EDateFields)i))
+        if (cal->getLeastMaximum((UCalendarDateFields)i) > cal->getMaximum((UCalendarDateFields)i))
             errln("FAIL: getLeastMaximum larger than getMaximum for field " + i);
-        if (cal->getMinimum((Calendar::EDateFields)i) >= cal->getMaximum((Calendar::EDateFields)i))
+        if (cal->getMinimum((UCalendarDateFields)i) >= cal->getMaximum((UCalendarDateFields)i))
             errln("FAIL: getMinimum not less than getMaximum for field " + i);
     }
 
@@ -296,18 +296,18 @@ CalendarTest::TestGenericAPI()
 
     cal->getTime(status);
     if (failure(status, "Calendar::getTime")) return;
-    for (i=0; i<Calendar::FIELD_COUNT; ++i)
+    for (i=0; i<UCAL_FIELD_COUNT; ++i)
     {
         switch(i) {
-            case Calendar::YEAR: case Calendar::MONTH: case Calendar::DATE:
-            case Calendar::HOUR_OF_DAY: case Calendar::MINUTE: case Calendar::SECOND:
-                if (!cal->isSet((Calendar::EDateFields)i)) errln("FAIL: Calendar::isSet failed");
+            case UCAL_YEAR: case UCAL_MONTH: case UCAL_DATE:
+            case UCAL_HOUR_OF_DAY: case UCAL_MINUTE: case UCAL_SECOND:
+                if (!cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet failed");
                 break;
             default:
-                if (cal->isSet((Calendar::EDateFields)i)) errln("FAIL: Calendar::isSet failed");
+                if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet failed");
         }
-        cal->clear((Calendar::EDateFields)i);
-        if (cal->isSet((Calendar::EDateFields)i)) errln("FAIL: Calendar::clear/isSet failed");
+        cal->clear((UCalendarDateFields)i);
+        if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed");
     }
 
     delete cal;
@@ -385,17 +385,17 @@ CalendarTest::TestRog()
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* gc = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-    int32_t year = 1997, month = Calendar::APRIL, date = 1;
+    int32_t year = 1997, month = UCAL_APRIL, date = 1;
     gc->set(year, month, date);
-    gc->set(Calendar::HOUR_OF_DAY, 23);
-    gc->set(Calendar::MINUTE, 0);
-    gc->set(Calendar::SECOND, 0);
-    gc->set(Calendar::MILLISECOND, 0);
-    for (int32_t i = 0; i < 9; i++, gc->add(Calendar::DATE, 1, status)) {
+    gc->set(UCAL_HOUR_OF_DAY, 23);
+    gc->set(UCAL_MINUTE, 0);
+    gc->set(UCAL_SECOND, 0);
+    gc->set(UCAL_MILLISECOND, 0);
+    for (int32_t i = 0; i < 9; i++, gc->add(UCAL_DATE, 1, status)) {
         if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
-        if (gc->get(Calendar::YEAR, status) != year ||
-            gc->get(Calendar::MONTH, status) != month ||
-            gc->get(Calendar::DATE, status) != (date + i)) errln("FAIL: Date wrong");
+        if (gc->get(UCAL_YEAR, status) != year ||
+            gc->get(UCAL_MONTH, status) != month ||
+            gc->get(UCAL_DATE, status) != (date + i)) errln("FAIL: Date wrong");
         if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     }
     delete gc;
@@ -419,20 +419,20 @@ void CalendarTest::dowTest(UBool lenient)
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* cal = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-    cal->set(1997, Calendar::AUGUST, 12);
+    cal->set(1997, UCAL_AUGUST, 12);
     cal->getTime(status);
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     cal->setLenient(lenient);
-    cal->set(1996, Calendar::DECEMBER, 1);
-    int32_t dow = cal->get(Calendar::DAY_OF_WEEK, status);
+    cal->set(1996, UCAL_DECEMBER, 1);
+    int32_t dow = cal->get(UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
-    int32_t min = cal->getMinimum(Calendar::DAY_OF_WEEK);
-    int32_t max = cal->getMaximum(Calendar::DAY_OF_WEEK);
+    int32_t min = cal->getMinimum(UCAL_DAY_OF_WEEK);
+    int32_t max = cal->getMaximum(UCAL_DAY_OF_WEEK);
     if (dow < min ||
         dow > max) errln(UnicodeString("FAIL: Day of week ") + (int32_t)dow + " out of range");
-    if (dow != Calendar::SUNDAY) errln("FAIL: Day of week should be SUNDAY");
-    if (min != Calendar::SUNDAY ||
-        max != Calendar::SATURDAY) errln("FAIL: Min/max bad");
+    if (dow != UCAL_SUNDAY) errln("FAIL: Day of week should be SUNDAY");
+    if (min != UCAL_SUNDAY ||
+        max != UCAL_SATURDAY) errln("FAIL: Min/max bad");
     delete cal;
 }
 
@@ -448,10 +448,10 @@ CalendarTest::TestClonesUnique908()
     Calendar *c = Calendar::createInstance(status);
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     Calendar *d = (Calendar*) c->clone();
-    c->set(Calendar::MILLISECOND, 123);
-    d->set(Calendar::MILLISECOND, 456);
-    if (c->get(Calendar::MILLISECOND, status) != 123 ||
-        d->get(Calendar::MILLISECOND, status) != 456) {
+    c->set(UCAL_MILLISECOND, 123);
+    d->set(UCAL_MILLISECOND, 456);
+    if (c->get(UCAL_MILLISECOND, status) != 123 ||
+        d->get(UCAL_MILLISECOND, status) != 456) {
         errln("FAIL: Clones share fields");
     }
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
@@ -500,30 +500,30 @@ CalendarTest::TestDisambiguation765()
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     c->setLenient(FALSE);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::MONTH, Calendar::JUNE);
-    c->set(Calendar::DATE, 3);
-    verify765("1997 third day of June = ", c, 1997, Calendar::JUNE, 3);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_DATE, 3);
+    verify765("1997 third day of June = ", c, 1997, UCAL_JUNE, 3);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::MONTH, Calendar::JUNE);
-    c->set(Calendar::DAY_OF_WEEK_IN_MONTH, 1);
-    verify765("1997 first Tuesday in June = ", c, 1997, Calendar::JUNE, 3);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_DAY_OF_WEEK_IN_MONTH, 1);
+    verify765("1997 first Tuesday in June = ", c, 1997, UCAL_JUNE, 3);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::MONTH, Calendar::JUNE);
-    c->set(Calendar::DAY_OF_WEEK_IN_MONTH, - 1);
-    verify765("1997 last Tuesday in June = ", c, 1997, Calendar::JUNE, 24);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_DAY_OF_WEEK_IN_MONTH, - 1);
+    verify765("1997 last Tuesday in June = ", c, 1997, UCAL_JUNE, 24);
     // IllegalArgumentException e = null;
     status = U_ZERO_ERROR;
     //try {
         c->clear();
-        c->set(Calendar::YEAR, 1997);
-        c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-        c->set(Calendar::MONTH, Calendar::JUNE);
-        c->set(Calendar::DAY_OF_WEEK_IN_MONTH, 0);
+        c->set(UCAL_YEAR, 1997);
+        c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+        c->set(UCAL_MONTH, UCAL_JUNE);
+        c->set(UCAL_DAY_OF_WEEK_IN_MONTH, 0);
         c->getTime(status);
     //}
     //catch(IllegalArgumentException ex) {
@@ -531,25 +531,25 @@ CalendarTest::TestDisambiguation765()
     //}
     verify765("1997 zero-th Tuesday in June = ", status);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::MONTH, Calendar::JUNE);
-    c->set(Calendar::WEEK_OF_MONTH, 1);
-    verify765("1997 Tuesday in week 1 of June = ", c, 1997, Calendar::JUNE, 3);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_WEEK_OF_MONTH, 1);
+    verify765("1997 Tuesday in week 1 of June = ", c, 1997, UCAL_JUNE, 3);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::MONTH, Calendar::JUNE);
-    c->set(Calendar::WEEK_OF_MONTH, 5);
-    verify765("1997 Tuesday in week 5 of June = ", c, 1997, Calendar::JULY, 1);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_MONTH, UCAL_JUNE);
+    c->set(UCAL_WEEK_OF_MONTH, 5);
+    verify765("1997 Tuesday in week 5 of June = ", c, 1997, UCAL_JULY, 1);
     status = U_ZERO_ERROR;
     //try {
         c->clear();
-        c->set(Calendar::YEAR, 1997);
-        c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-        c->set(Calendar::MONTH, Calendar::JUNE);
-        c->set(Calendar::WEEK_OF_MONTH, 0);
-        verify765("1997 Tuesday in week 0 of June = ", c, 1997, Calendar::MAY, 27);
+        c->set(UCAL_YEAR, 1997);
+        c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+        c->set(UCAL_MONTH, UCAL_JUNE);
+        c->set(UCAL_WEEK_OF_MONTH, 0);
+        verify765("1997 Tuesday in week 0 of June = ", c, 1997, UCAL_MAY, 27);
     //}
     //catch(IllegalArgumentException ex) {
     //    errln("FAIL: Exception seen:");
@@ -566,20 +566,20 @@ CalendarTest::TestDisambiguation765()
      * of 1 (for YEAR_WOY 1998) and a DOW of Tuesday, and falls in the
      * _calendar_ year 1997, as specified. - aliu */
     c->clear();
-    c->set(Calendar::YEAR_WOY, 1997); // aliu
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::WEEK_OF_YEAR, 1);
-    verify765("1997 Tuesday in week 1 of yearWOY = ", c, 1996, Calendar::DECEMBER, 31);
+    c->set(UCAL_YEAR_WOY, 1997); // aliu
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_WEEK_OF_YEAR, 1);
+    verify765("1997 Tuesday in week 1 of yearWOY = ", c, 1996, UCAL_DECEMBER, 31);
     c->clear(); // - add test for YEAR
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::WEEK_OF_YEAR, 1);
-    verify765("1997 Tuesday in week 1 of year = ", c, 1997, Calendar::DECEMBER, 30);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_WEEK_OF_YEAR, 1);
+    verify765("1997 Tuesday in week 1 of year = ", c, 1997, UCAL_DECEMBER, 30);
     c->clear();
-    c->set(Calendar::YEAR, 1997);
-    c->set(Calendar::DAY_OF_WEEK, Calendar::TUESDAY);
-    c->set(Calendar::WEEK_OF_YEAR, 10);
-    verify765("1997 Tuesday in week 10 of year = ", c, 1997, Calendar::MARCH, 4);
+    c->set(UCAL_YEAR, 1997);
+    c->set(UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
+    c->set(UCAL_WEEK_OF_YEAR, 10);
+    verify765("1997 Tuesday in week 10 of year = ", c, 1997, UCAL_MARCH, 4);
     //try {
 
     // {sfb} week 0 is no longer a valid week of year
@@ -605,9 +605,9 @@ CalendarTest::verify765(const UnicodeString& msg, Calendar* c, int32_t year, int
 {
     UnicodeString str;
     UErrorCode status = U_ZERO_ERROR;
-    if (c->get(Calendar::YEAR, status) == year &&
-        c->get(Calendar::MONTH, status) == month &&
-        c->get(Calendar::DATE, status) == day) {
+    if (c->get(UCAL_YEAR, status) == year &&
+        c->get(UCAL_MONTH, status) == month &&
+        c->get(UCAL_DATE, status) == day) {
         if (U_FAILURE(status)) { errln("FAIL: Calendar::get failed"); return; }
         logln("PASS: " + msg + dateToString(c->getTime(status), str));
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
@@ -651,7 +651,7 @@ CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     gmtcal->adoptTimeZone(TimeZone::createTimeZone("Africa/Casablanca"));
     gmtcal->set(yr, mo - 1, dt, hr, mn, sc);
-    gmtcal->set(Calendar::MILLISECOND, 0);
+    gmtcal->set(UCAL_MILLISECOND, 0);
     date = gmtcal->getTime(status);
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
     logln("date = " + dateToString(date, str));
@@ -659,18 +659,18 @@ CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_
     if (U_FAILURE(status)) { errln("Calendar::createInstance failed"); return; }
     cal->setTime(date, status);
     if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
-    int32_t offset = cal->getTimeZone().getOffset((uint8_t)cal->get(Calendar::ERA, status),
-                                                  cal->get(Calendar::YEAR, status),
-                                                  cal->get(Calendar::MONTH, status),
-                                                  cal->get(Calendar::DATE, status),
-                                                  (uint8_t)cal->get(Calendar::DAY_OF_WEEK, status),
-                                                  cal->get(Calendar::MILLISECOND, status), status);
+    int32_t offset = cal->getTimeZone().getOffset((uint8_t)cal->get(UCAL_ERA, status),
+                                                  cal->get(UCAL_YEAR, status),
+                                                  cal->get(UCAL_MONTH, status),
+                                                  cal->get(UCAL_DATE, status),
+                                                  (uint8_t)cal->get(UCAL_DAY_OF_WEEK, status),
+                                                  cal->get(UCAL_MILLISECOND, status), status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     logln("offset for " + dateToString(date, str) + "= " + (offset / 1000 / 60 / 60.0) + "hr");
-    int32_t utc = ((cal->get(Calendar::HOUR_OF_DAY, status) * 60 +
-                    cal->get(Calendar::MINUTE, status)) * 60 +
-                   cal->get(Calendar::SECOND, status)) * 1000 +
-        cal->get(Calendar::MILLISECOND, status) - offset;
+    int32_t utc = ((cal->get(UCAL_HOUR_OF_DAY, status) * 60 +
+                    cal->get(UCAL_MINUTE, status)) * 60 +
+                   cal->get(UCAL_SECOND, status)) * 1000 +
+        cal->get(UCAL_MILLISECOND, status) - offset;
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     int32_t expected = ((hr * 60 + mn) * 60 + sc) * 1000;
     if (utc != expected) errln(UnicodeString("FAIL: Discrepancy of ") + (utc - expected) +
@@ -702,15 +702,15 @@ CalendarTest::TestAddSetOrder621()
         delete cal;
         return; 
     }
-    cal->add(Calendar::DATE, - 5, status);
+    cal->add(UCAL_DATE, - 5, status);
     if (U_FAILURE(status)) { 
         errln("Calendar::add failed"); 
         delete cal;
         return; 
     }
-    cal->set(Calendar::HOUR_OF_DAY, 0);
-    cal->set(Calendar::MINUTE, 0);
-    cal->set(Calendar::SECOND, 0);
+    cal->set(UCAL_HOUR_OF_DAY, 0);
+    cal->set(UCAL_MINUTE, 0);
+    cal->set(UCAL_SECOND, 0);
     UnicodeString s;
     dateToString(cal->getTime(status), s);
     if (U_FAILURE(status)) { 
@@ -732,10 +732,10 @@ CalendarTest::TestAddSetOrder621()
         delete cal;
         return; 
     }
-    cal->set(Calendar::HOUR_OF_DAY, 0);
-    cal->set(Calendar::MINUTE, 0);
-    cal->set(Calendar::SECOND, 0);
-    cal->add(Calendar::DATE, - 5, status);
+    cal->set(UCAL_HOUR_OF_DAY, 0);
+    cal->set(UCAL_MINUTE, 0);
+    cal->set(UCAL_SECOND, 0);
+    cal->add(UCAL_DATE, - 5, status);
     if (U_FAILURE(status)) { 
         errln("Calendar::add failed"); 
         delete cal;
@@ -763,28 +763,28 @@ CalendarTest::TestAddSetOrder621()
 void
 CalendarTest::TestAdd520()
 {
-    int32_t y = 1997, m = Calendar::FEBRUARY, d = 1;
+    int32_t y = 1997, m = UCAL_FEBRUARY, d = 1;
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     check520(temp, y, m, d);
-    temp->add(temp->YEAR, 1, status);
+    temp->add(UCAL_YEAR, 1, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
     y++;
     check520(temp, y, m, d);
-    temp->add(temp->MONTH, 1, status);
+    temp->add(UCAL_MONTH, 1, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
     m++;
     check520(temp, y, m, d);
-    temp->add(temp->DATE, 1, status);
+    temp->add(UCAL_DATE, 1, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
     d++;
     check520(temp, y, m, d);
-    temp->add(temp->DATE, 2, status);
+    temp->add(UCAL_DATE, 2, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
     d += 2;
     check520(temp, y, m, d);
-    temp->add(temp->DATE, 28, status);
+    temp->add(UCAL_DATE, 28, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
     d = 1;++m;
     check520(temp, y, m, d);
@@ -800,21 +800,21 @@ void
 CalendarTest::TestAddRollExtensive()
 {
     int32_t maxlimit = 40;
-    int32_t y = 1997, m = Calendar::FEBRUARY, d = 1, hr = 1, min = 1, sec = 0, ms = 0;
+    int32_t y = 1997, m = UCAL_FEBRUARY, d = 1, hr = 1, min = 1, sec = 0, ms = 0;
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
 
-    temp->set(Calendar::HOUR, hr);
-    temp->set(Calendar::MINUTE, min);
-    temp->set(Calendar::SECOND, sec);
-    temp->set(Calendar::MILLISECOND, ms);
+    temp->set(UCAL_HOUR, hr);
+    temp->set(UCAL_MINUTE, min);
+    temp->set(UCAL_SECOND, sec);
+    temp->set(UCAL_MILLISECOND, ms);
 
-    Calendar::EDateFields e;
+    UCalendarDateFields e;
 
     logln("Testing GregorianCalendar add...");
-    e = Calendar::YEAR;
-    while (e < Calendar::FIELD_COUNT) {
+    e = UCAL_YEAR;
+    while (e < UCAL_FIELD_COUNT) {
         int32_t i;
         int32_t limit = maxlimit;
         status = U_ZERO_ERROR;
@@ -828,12 +828,12 @@ CalendarTest::TestAddRollExtensive()
         }
         check520(temp, y, m, d, hr, min, sec, ms, e);
 
-        e = (Calendar::EDateFields) ((int32_t) e + 1);
+        e = (UCalendarDateFields) ((int32_t) e + 1);
     }
 
     logln("Testing GregorianCalendar roll...");
-    e = Calendar::YEAR;
-    while (e < Calendar::FIELD_COUNT) {
+    e = UCAL_YEAR;
+    while (e < UCAL_FIELD_COUNT) {
         int32_t i;
         int32_t limit = maxlimit;
         status = U_ZERO_ERROR;
@@ -847,7 +847,7 @@ CalendarTest::TestAddRollExtensive()
         }
         check520(temp, y, m, d, hr, min, sec, ms, e);
 
-        e = (Calendar::EDateFields) ((int32_t) e + 1);
+        e = (UCalendarDateFields) ((int32_t) e + 1);
     }
 
     delete temp;
@@ -858,28 +858,28 @@ void
 CalendarTest::check520(Calendar* c, 
                         int32_t y, int32_t m, int32_t d, 
                         int32_t hr, int32_t min, int32_t sec, 
-                        int32_t ms, Calendar::EDateFields field)
+                        int32_t ms, UCalendarDateFields field)
 
 {
     UErrorCode status = U_ZERO_ERROR;
-    if (c->get(Calendar::YEAR, status) != y ||
-        c->get(Calendar::MONTH, status) != m ||
-        c->get(Calendar::DATE, status) != d ||
-        c->get(Calendar::HOUR, status) != hr ||
-        c->get(Calendar::MINUTE, status) != min ||
-        c->get(Calendar::SECOND, status) != sec ||
-        c->get(Calendar::MILLISECOND, status) != ms) {
+    if (c->get(UCAL_YEAR, status) != y ||
+        c->get(UCAL_MONTH, status) != m ||
+        c->get(UCAL_DATE, status) != d ||
+        c->get(UCAL_HOUR, status) != hr ||
+        c->get(UCAL_MINUTE, status) != min ||
+        c->get(UCAL_SECOND, status) != sec ||
+        c->get(UCAL_MILLISECOND, status) != ms) {
         errln(UnicodeString("U_FAILURE for field ") + (int32_t)field + 
                 ": Expected y/m/d h:m:s:ms of " +
                 y + "/" + (m + 1) + "/" + d + " " +
               hr + ":" + min + ":" + sec + ":" + ms +
-              "; got " + c->get(Calendar::YEAR, status) +
-              "/" + (c->get(Calendar::MONTH, status) + 1) +
-              "/" + c->get(Calendar::DATE, status) +
-              " " + c->get(Calendar::HOUR, status) + ":" +
-              c->get(Calendar::MINUTE, status) + ":" + 
-              c->get(Calendar::SECOND, status) + ":" +
-              c->get(Calendar::MILLISECOND, status)
+              "; got " + c->get(UCAL_YEAR, status) +
+              "/" + (c->get(UCAL_MONTH, status) + 1) +
+              "/" + c->get(UCAL_DATE, status) +
+              " " + c->get(UCAL_HOUR, status) + ":" +
+              c->get(UCAL_MINUTE, status) + ":" + 
+              c->get(UCAL_SECOND, status) + ":" +
+              c->get(UCAL_MILLISECOND, status)
               );
 
         if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
@@ -897,14 +897,14 @@ CalendarTest::check520(Calendar* c,
 
 {
     UErrorCode status = U_ZERO_ERROR;
-    if (c->get(Calendar::YEAR, status) != y ||
-        c->get(Calendar::MONTH, status) != m ||
-        c->get(Calendar::DATE, status) != d) {
+    if (c->get(UCAL_YEAR, status) != y ||
+        c->get(UCAL_MONTH, status) != m ||
+        c->get(UCAL_DATE, status) != d) {
         errln(UnicodeString("FAILURE: Expected y/m/d of ") +
               y + "/" + (m + 1) + "/" + d + " " +
-              "; got " + c->get(Calendar::YEAR, status) +
-              "/" + (c->get(Calendar::MONTH, status) + 1) +
-              "/" + c->get(Calendar::DATE, status)
+              "; got " + c->get(UCAL_YEAR, status) +
+              "/" + (c->get(UCAL_MONTH, status) + 1) +
+              "/" + c->get(UCAL_DATE, status)
               );
 
         if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
@@ -929,9 +929,9 @@ CalendarTest::TestFieldSet4781()
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
         GregorianCalendar *g2 = new GregorianCalendar(status);
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-        g2->set(Calendar::HOUR, 12, status);
-        g2->set(Calendar::MINUTE, 0, status);
-        g2->set(Calendar::SECOND, 0, status);
+        g2->set(UCAL_HOUR, 12, status);
+        g2->set(UCAL_MINUTE, 0, status);
+        g2->set(UCAL_SECOND, 0, status);
         if (U_FAILURE(status)) { errln("Calendar::set failed"); return; }
         if (*g == *g2) logln("Same");
         else logln("Different");
@@ -1002,7 +1002,7 @@ CalendarTest::TestSecondsZero121()
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     cal->setTime(Calendar::getNow(), status);
     if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
-    cal->set(Calendar::SECOND, 0);
+    cal->set(UCAL_SECOND, 0);
     if (U_FAILURE(status)) { errln("Calendar::set failed"); return; }
     UDate d = cal->getTime(status);
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
@@ -1027,9 +1027,9 @@ CalendarTest::TestAddSetGet0610()
     {
         Calendar *calendar = new GregorianCalendar(status);
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-        calendar->set(1993, Calendar::JANUARY, 4);
+        calendar->set(1993, UCAL_JANUARY, 4);
         logln("1A) " + value(calendar));
-        calendar->add(Calendar::DATE, 1, status);
+        calendar->add(UCAL_DATE, 1, status);
         if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
         UnicodeString v = value(calendar);
         logln("1B) " + v);
@@ -1038,10 +1038,10 @@ CalendarTest::TestAddSetGet0610()
         delete calendar;
     }
     {
-        Calendar *calendar = new GregorianCalendar(1993, Calendar::JANUARY, 4, status);
+        Calendar *calendar = new GregorianCalendar(1993, UCAL_JANUARY, 4, status);
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
         logln("2A) " + value(calendar));
-        calendar->add(Calendar::DATE, 1, status);
+        calendar->add(UCAL_DATE, 1, status);
         if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
         UnicodeString v = value(calendar);
         logln("2B) " + v);
@@ -1050,12 +1050,12 @@ CalendarTest::TestAddSetGet0610()
         delete calendar;
     }
     {
-        Calendar *calendar = new GregorianCalendar(1993, Calendar::JANUARY, 4, status);
+        Calendar *calendar = new GregorianCalendar(1993, UCAL_JANUARY, 4, status);
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
         logln("3A) " + value(calendar));
         calendar->getTime(status);
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
-        calendar->add(Calendar::DATE, 1, status);
+        calendar->add(UCAL_DATE, 1, status);
         if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
         UnicodeString v = value(calendar);
         logln("3B) " + v);
@@ -1071,9 +1071,9 @@ UnicodeString
 CalendarTest::value(Calendar* calendar)
 {
     UErrorCode status = U_ZERO_ERROR;
-    return UnicodeString("") + (int32_t)calendar->get(Calendar::YEAR, status) +
-        "/" + (int32_t)calendar->get(Calendar::MONTH, status) +
-        "/" + (int32_t)calendar->get(Calendar::DATE, status) +
+    return UnicodeString("") + (int32_t)calendar->get(UCAL_YEAR, status) +
+        "/" + (int32_t)calendar->get(UCAL_MONTH, status) +
+        "/" + (int32_t)calendar->get(UCAL_DATE, status) +
         (U_FAILURE(status) ? " FAIL: Calendar::get failed" : "");
 }
  
@@ -1088,13 +1088,13 @@ CalendarTest::TestFields060()
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t year = 1997;
-    int32_t month = Calendar::OCTOBER;
+    int32_t month = UCAL_OCTOBER;
     int32_t dDate = 22;
     GregorianCalendar *calendar = 0;
     calendar = new GregorianCalendar(year, month, dDate, status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     for (int32_t i = 0; i < EXPECTED_FIELDS_length;) {
-        Calendar::EDateFields field = (Calendar::EDateFields)EXPECTED_FIELDS[i++];
+        UCalendarDateFields field = (UCalendarDateFields)EXPECTED_FIELDS[i++];
         int32_t expected = EXPECTED_FIELDS[i++];
         if (calendar->get(field, status) != expected) {
             errln(UnicodeString("Expected field ") + (int32_t)field + " to have value " + (int32_t)expected +
@@ -1106,12 +1106,12 @@ CalendarTest::TestFields060()
 }
  
 int32_t CalendarTest::EXPECTED_FIELDS[] = {
-    Calendar::YEAR, 1997,
-    Calendar::MONTH, Calendar::OCTOBER,
-    Calendar::DAY_OF_MONTH, 22,
-    Calendar::DAY_OF_WEEK, Calendar::WEDNESDAY,
-    Calendar::DAY_OF_WEEK_IN_MONTH, 4,
-    Calendar::DAY_OF_YEAR, 295
+    UCAL_YEAR, 1997,
+    UCAL_MONTH, UCAL_OCTOBER,
+    UCAL_DATE, 22,
+    UCAL_DAY_OF_WEEK, UCAL_WEDNESDAY,
+    UCAL_DAY_OF_WEEK_IN_MONTH, 4,
+    UCAL_DAY_OF_YEAR, 295
 };
  
 const int32_t CalendarTest::EXPECTED_FIELDS_length = (int32_t)(sizeof(CalendarTest::EXPECTED_FIELDS) /
@@ -1145,22 +1145,22 @@ CalendarTest::TestEpochStartFields()
     else {
         c->setTime(d, status);
         if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
-        for (int32_t i = 0; i < Calendar::ZONE_OFFSET;++i) {
-            if (c->get((Calendar::EDateFields)i, status) != EPOCH_FIELDS[i])
+        for (int32_t i = 0; i < UCAL_ZONE_OFFSET;++i) {
+            if (c->get((UCalendarDateFields)i, status) != EPOCH_FIELDS[i])
                 errln(UnicodeString("Expected field ") + i + " to have value " + EPOCH_FIELDS[i] +
-                      "; saw " + c->get((Calendar::EDateFields)i, status) + " instead");
+                      "; saw " + c->get((UCalendarDateFields)i, status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
-        if (c->get(Calendar::ZONE_OFFSET, status) != z->getRawOffset())
+        if (c->get(UCAL_ZONE_OFFSET, status) != z->getRawOffset())
         {
             errln(UnicodeString("Expected field ZONE_OFFSET to have value ") + z->getRawOffset() +
-                  "; saw " + c->get(Calendar::ZONE_OFFSET, status) + " instead");
+                  "; saw " + c->get(UCAL_ZONE_OFFSET, status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
-        if (c->get(Calendar::DST_OFFSET, status) != 0)
+        if (c->get(UCAL_DST_OFFSET, status) != 0)
         {
             errln(UnicodeString("Expected field DST_OFFSET to have value 0") +
-                  "; saw " + c->get(Calendar::DST_OFFSET, status) + " instead");
+                  "; saw " + c->get(UCAL_DST_OFFSET, status) + " instead");
             if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         }
     }
@@ -1183,7 +1183,7 @@ void
 CalendarTest::TestDOWProgression()
 {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *cal = new GregorianCalendar(1972, Calendar::OCTOBER, 26, status);
+    Calendar *cal = new GregorianCalendar(1972, UCAL_OCTOBER, 26, status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     marchByDelta(cal, 24);
     delete cal;
@@ -1209,25 +1209,25 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
     cal->clear();
-    cal->set(1997, Calendar::DECEMBER, 25);
+    cal->set(1997, UCAL_DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
-    //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, /*sdf,*/ times, UCAL_YEAR_WOY, UCAL_YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
     cal->clear();
-    cal->set(1998, Calendar::DECEMBER, 25);
+    cal->set(1998, UCAL_DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
-    //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, /*sdf,*/ times, UCAL_YEAR_WOY, UCAL_YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
     cal->clear();
-    cal->set(1582, Calendar::OCTOBER, 1);
+    cal->set(1582, UCAL_OCTOBER, 1);
     doYEAR_WOYLoop(cal, sdf, times, status);
     //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
 
     delete sdf;
@@ -1252,12 +1252,12 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
      *  Sun Oct 31 1582 / 1582-W42-07 Add(YEAR_WOY, 1) -> Sun Oct 23 1583 / 1583-W42-07
      *                                Add(YEAR, 1)     -> Mon Oct 31 1583 / 1583-W44-01
      */
-    int32_t y   = cal.get(Calendar::YEAR, status);
-    int32_t mon = cal.get(Calendar::MONTH, status);
-    int32_t day = cal.get(Calendar::DATE, status);
-    int32_t ywy = cal.get(Calendar::YEAR_WOY, status);
-    int32_t woy = cal.get(Calendar::WEEK_OF_YEAR, status);
-    int32_t dow = cal.get(Calendar::DOW_LOCAL, status);
+    int32_t y   = cal.get(UCAL_YEAR, status);
+    int32_t mon = cal.get(UCAL_MONTH, status);
+    int32_t day = cal.get(UCAL_DATE, status);
+    int32_t ywy = cal.get(UCAL_YEAR_WOY, status);
+    int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+    int32_t dow = cal.get(UCAL_DOW_LOCAL, status);
     UDate t = cal.getTime(status);
 
     UnicodeString str, str2;
@@ -1266,10 +1266,10 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
 
     fmt.format(t, str.remove());
     str += ".add(YEAR, 1)    =>";
-    cal.add(Calendar::YEAR, 1, status);
-    int32_t y2   = cal.get(Calendar::YEAR, status);
-    int32_t mon2 = cal.get(Calendar::MONTH, status);
-    int32_t day2 = cal.get(Calendar::DATE, status);
+    cal.add(UCAL_YEAR, 1, status);
+    int32_t y2   = cal.get(UCAL_YEAR, status);
+    int32_t mon2 = cal.get(UCAL_MONTH, status);
+    int32_t day2 = cal.get(UCAL_DATE, status);
     fmt.format(cal.getTime(status), str);
     if (y2 != (y+1) || mon2 != mon || day2 != day) {
         str += (UnicodeString)", expected year " +
@@ -1282,10 +1282,10 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     fmt.format(t, str.remove());
     str += ".add(YEAR_WOY, 1)=>";
     cal.setTime(t, status);
-    cal.add(Calendar::YEAR_WOY, 1, status);
-    int32_t ywy2 = cal.get(Calendar::YEAR_WOY, status);
-    int32_t woy2 = cal.get(Calendar::WEEK_OF_YEAR, status);
-    int32_t dow2 = cal.get(Calendar::DOW_LOCAL, status);
+    cal.add(UCAL_YEAR_WOY, 1, status);
+    int32_t ywy2 = cal.get(UCAL_YEAR_WOY, status);
+    int32_t woy2 = cal.get(UCAL_WEEK_OF_YEAR, status);
+    int32_t dow2 = cal.get(UCAL_DOW_LOCAL, status);
     fmt.format(cal.getTime(status), str);
     if (ywy2 != (ywy+1) || woy2 != woy || dow2 != dow) {
         str += (UnicodeString)", expected yearWOY " +
@@ -1298,7 +1298,7 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
 
 // -------------------------------------
 
-void CalendarTest::loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf,*/ int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
+void CalendarTest::loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf,*/ int times, UCalendarDateFields field, UCalendarDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"), errorCode);
     fmt.setCalendar(*cal);
@@ -1357,7 +1357,7 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         if (U_FAILURE(errorCode)) { errln("Parse error"); return; }
         tstres->clear();
         tstres->setTime(tst, errorCode);
-        //logln((UnicodeString)"Parsed week of year is "+tstres->get(Calendar::WEEK_OF_YEAR, errorCode));
+        //logln((UnicodeString)"Parsed week of year is "+tstres->get(UCAL_WEEK_OF_YEAR, errorCode));
         if (U_FAILURE(errorCode)) { errln("Set time error"); return; }
         original = cal->getTime(errorCode);
         us.remove();
@@ -1374,22 +1374,22 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
             logln("got "+us);
         }
         tstres->clear();
-        tstres->set(Calendar::YEAR_WOY, cal->get(Calendar::YEAR_WOY, errorCode));
-        tstres->set(Calendar::WEEK_OF_YEAR, cal->get(Calendar::WEEK_OF_YEAR, errorCode));
-        tstres->set(Calendar::DOW_LOCAL, cal->get(Calendar::DOW_LOCAL, errorCode));
-        if(cal->get(Calendar::YEAR, errorCode) != tstres->get(Calendar::YEAR, errorCode)) {
+        tstres->set(UCAL_YEAR_WOY, cal->get(UCAL_YEAR_WOY, errorCode));
+        tstres->set(UCAL_WEEK_OF_YEAR, cal->get(UCAL_WEEK_OF_YEAR, errorCode));
+        tstres->set(UCAL_DOW_LOCAL, cal->get(UCAL_DOW_LOCAL, errorCode));
+        if(cal->get(UCAL_YEAR, errorCode) != tstres->get(UCAL_YEAR, errorCode)) {
             errln("Different Year!");
-            logln((UnicodeString)"Expected "+cal->get(Calendar::YEAR, errorCode));
-            logln((UnicodeString)"Got "+tstres->get(Calendar::YEAR, errorCode));
+            logln((UnicodeString)"Expected "+cal->get(UCAL_YEAR, errorCode));
+            logln((UnicodeString)"Got "+tstres->get(UCAL_YEAR, errorCode));
             return;
         }
-        if(cal->get(Calendar::DAY_OF_YEAR, errorCode) != tstres->get(Calendar::DAY_OF_YEAR, errorCode)) {
+        if(cal->get(UCAL_DAY_OF_YEAR, errorCode) != tstres->get(UCAL_DAY_OF_YEAR, errorCode)) {
             errln("Different Day Of Year!");
-            logln((UnicodeString)"Expected "+cal->get(Calendar::DAY_OF_YEAR, errorCode));
-            logln((UnicodeString)"Got "+tstres->get(Calendar::DAY_OF_YEAR, errorCode));
+            logln((UnicodeString)"Expected "+cal->get(UCAL_DAY_OF_YEAR, errorCode));
+            logln((UnicodeString)"Got "+tstres->get(UCAL_DAY_OF_YEAR, errorCode));
             return;
         }
-        cal->add(Calendar::DATE, 1, errorCode);
+        cal->add(UCAL_DATE, 1, errorCode);
         if (U_FAILURE(errorCode)) { errln("Add error"); return; }
         us.remove();
     }
@@ -1402,7 +1402,7 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cur = (Calendar*) cal->clone();
-    int32_t initialDOW = cur->get(Calendar::DAY_OF_WEEK, status);
+    int32_t initialDOW = cur->get(UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     int32_t DOW, newDOW = initialDOW;
     do {
@@ -1410,9 +1410,9 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
         DOW = newDOW;
         logln(UnicodeString("DOW = ") + DOW + "  " + dateToString(cur->getTime(status), str));
         if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
-        cur->add(Calendar::DAY_OF_WEEK, delta, status);
+        cur->add(UCAL_DAY_OF_WEEK, delta, status);
         if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
-        newDOW = cur->get(Calendar::DAY_OF_WEEK, status);
+        newDOW = cur->get(UCAL_DAY_OF_WEEK, status);
         if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
         int32_t expectedDOW = 1 + (DOW + delta - 1) % 7;
         if (newDOW != expectedDOW) {
@@ -1479,18 +1479,18 @@ void CalendarTest::TestWOY(void) {
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
     CHECK(status, "Fail: Cannot construct calendar/format");
 
-    Calendar::EDaysOfWeek fdw = (Calendar::EDaysOfWeek) 0;
+    UCalendarDaysOfWeek fdw = (UCalendarDaysOfWeek) 0;
 
     for (int8_t pass=1; pass<=2; ++pass) {
         switch (pass) {
         case 1:
-            fdw = Calendar::MONDAY;
+            fdw = UCAL_MONDAY;
             cal.setFirstDayOfWeek(fdw);
             cal.setMinimalDaysInFirstWeek(4);
             fmt.setCalendar(cal);
             break;
         case 2:
-            fdw = Calendar::MONDAY;
+            fdw = UCAL_MONDAY;
             cal.setFirstDayOfWeek(fdw);
             cal.setMinimalDaysInFirstWeek(2);
             fmt.setCalendar(cal);
@@ -1501,21 +1501,21 @@ void CalendarTest::TestWOY(void) {
         UDate t, t2;
         int32_t t_y, t_woy, t_dow;
         cal.clear();
-        cal.set(1999, Calendar::DECEMBER, 26 + i);
+        cal.set(1999, UCAL_DECEMBER, 26 + i);
         fmt.format(t = cal.getTime(status), str.remove());
         CHECK(status, "Fail: getTime failed");
         logln(str);
 
-        int32_t dow = cal.get(Calendar::DAY_OF_WEEK, status);
-        int32_t woy = cal.get(Calendar::WEEK_OF_YEAR, status);
-        int32_t year = cal.get(Calendar::YEAR, status);
-        int32_t mon = cal.get(Calendar::MONTH, status);
+        int32_t dow = cal.get(UCAL_DAY_OF_WEEK, status);
+        int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+        int32_t year = cal.get(UCAL_YEAR, status);
+        int32_t mon = cal.get(UCAL_MONTH, status);
         CHECK(status, "Fail: get failed");
         int32_t dowLocal = dow - fdw;
         if (dowLocal < 0) dowLocal += 7;
         dowLocal++;
         int32_t yearWoy = year;
-        if (mon == Calendar::JANUARY) {
+        if (mon == UCAL_JANUARY) {
             if (woy >= 52) --yearWoy;
         } else {
             if (woy == 1) ++yearWoy;
@@ -1525,12 +1525,12 @@ void CalendarTest::TestWOY(void) {
         // Since Y/WOY is ambiguous, we do a check of the fields,
         // not of the specific time.
         cal.clear();
-        cal.set(Calendar::YEAR, year);
-        cal.set(Calendar::WEEK_OF_YEAR, woy);
-        cal.set(Calendar::DAY_OF_WEEK, dow);
-        t_y = cal.get(Calendar::YEAR, status);
-        t_woy = cal.get(Calendar::WEEK_OF_YEAR, status);
-        t_dow = cal.get(Calendar::DAY_OF_WEEK, status);
+        cal.set(UCAL_YEAR, year);
+        cal.set(UCAL_WEEK_OF_YEAR, woy);
+        cal.set(UCAL_DAY_OF_WEEK, dow);
+        t_y = cal.get(UCAL_YEAR, status);
+        t_woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+        t_dow = cal.get(UCAL_DAY_OF_WEEK, status);
         CHECK(status, "Fail: get failed");
         if (t_y != year || t_woy != woy || t_dow != dow) {
             str = "Fail: y/woy/dow fields->time => ";
@@ -1542,12 +1542,12 @@ void CalendarTest::TestWOY(void) {
         // Since Y/WOY is ambiguous, we do a check of the fields,
         // not of the specific time.
         cal.clear();
-        cal.set(Calendar::YEAR, year);
-        cal.set(Calendar::WEEK_OF_YEAR, woy);
-        cal.set(Calendar::DOW_LOCAL, dowLocal);
-        t_y = cal.get(Calendar::YEAR, status);
-        t_woy = cal.get(Calendar::WEEK_OF_YEAR, status);
-        t_dow = cal.get(Calendar::DOW_LOCAL, status);
+        cal.set(UCAL_YEAR, year);
+        cal.set(UCAL_WEEK_OF_YEAR, woy);
+        cal.set(UCAL_DOW_LOCAL, dowLocal);
+        t_y = cal.get(UCAL_YEAR, status);
+        t_woy = cal.get(UCAL_WEEK_OF_YEAR, status);
+        t_dow = cal.get(UCAL_DOW_LOCAL, status);
         CHECK(status, "Fail: get failed");
         if (t_y != year || t_woy != woy || t_dow != dowLocal) {
             str = "Fail: y/woy/dow_local fields->time => ";
@@ -1557,9 +1557,9 @@ void CalendarTest::TestWOY(void) {
 
         // Basic fields->time check y_woy/woy/dow
         cal.clear();
-        cal.set(Calendar::YEAR_WOY, yearWoy);
-        cal.set(Calendar::WEEK_OF_YEAR, woy);
-        cal.set(Calendar::DAY_OF_WEEK, dow);
+        cal.set(UCAL_YEAR_WOY, yearWoy);
+        cal.set(UCAL_WEEK_OF_YEAR, woy);
+        cal.set(UCAL_DAY_OF_WEEK, dow);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: getTime failed");
         if (t != t2) {
@@ -1570,9 +1570,9 @@ void CalendarTest::TestWOY(void) {
 
         // Basic fields->time check y_woy/woy/dow_local
         cal.clear();
-        cal.set(Calendar::YEAR_WOY, yearWoy);
-        cal.set(Calendar::WEEK_OF_YEAR, woy);
-        cal.set(Calendar::DOW_LOCAL, dowLocal);
+        cal.set(UCAL_YEAR_WOY, yearWoy);
+        cal.set(UCAL_WEEK_OF_YEAR, woy);
+        cal.set(UCAL_DOW_LOCAL, dowLocal);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: getTime failed");
         if (t != t2) {
@@ -1585,8 +1585,8 @@ void CalendarTest::TestWOY(void) {
         int32_t wrongDow = dow - 3;
         if (wrongDow < 1) wrongDow += 7;
         cal.setTime(t, status);
-        cal.set(Calendar::DAY_OF_WEEK, wrongDow);
-        cal.set(Calendar::DOW_LOCAL, dowLocal);
+        cal.set(UCAL_DAY_OF_WEEK, wrongDow);
+        cal.set(UCAL_DOW_LOCAL, dowLocal);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: set/getTime failed");
         if (t != t2) {
@@ -1599,8 +1599,8 @@ void CalendarTest::TestWOY(void) {
         int32_t wrongDowLocal = dowLocal - 3;
         if (wrongDowLocal < 1) wrongDowLocal += 7;
         cal.setTime(t, status);
-        cal.set(Calendar::DOW_LOCAL, wrongDowLocal);
-        cal.set(Calendar::DAY_OF_WEEK, dow);
+        cal.set(UCAL_DOW_LOCAL, wrongDowLocal);
+        cal.set(UCAL_DAY_OF_WEEK, dow);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: set/getTime failed");
         if (t != t2) {
@@ -1611,8 +1611,8 @@ void CalendarTest::TestWOY(void) {
 
         // Make sure YEAR_WOY disambiguates over YEAR
         cal.setTime(t, status);
-        cal.set(Calendar::YEAR, year - 2);
-        cal.set(Calendar::YEAR_WOY, yearWoy);
+        cal.set(UCAL_YEAR, year - 2);
+        cal.set(UCAL_YEAR_WOY, yearWoy);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: set/getTime failed");
         if (t != t2) {
@@ -1623,8 +1623,8 @@ void CalendarTest::TestWOY(void) {
 
         // Make sure YEAR disambiguates over YEAR_WOY
         cal.setTime(t, status);
-        cal.set(Calendar::YEAR_WOY, yearWoy - 2);
-        cal.set(Calendar::YEAR, year);
+        cal.set(UCAL_YEAR_WOY, yearWoy - 2);
+        cal.set(UCAL_YEAR, year);
         t2 = cal.getTime(status);
         CHECK(status, "Fail: set/getTime failed");
         if (t != t2) {
@@ -1652,20 +1652,20 @@ void CalendarTest::TestWOY(void) {
         int32_t amount;
         for (amount=-7; amount<=7; ++amount) {
             str = "roll(";
-            cal.set(1999, Calendar::DECEMBER, i);
+            cal.set(1999, UCAL_DECEMBER, i);
             UDate t, t2;
             fmt.format(cal.getTime(status), str);
             CHECK(status, "Fail: getTime failed");
             str += UnicodeString(", ") + amount + ") = ";
 
-            cal.roll(Calendar::DOW_LOCAL, amount, status);
+            cal.roll(UCAL_DOW_LOCAL, amount, status);
             CHECK(status, "Fail: roll failed");
 
             t = cal.getTime(status);
             int32_t newDom = i + amount;
             while (newDom < 27) newDom += 7;
             while (newDom > 33) newDom -= 7;
-            cal.set(1999, Calendar::DECEMBER, newDom);
+            cal.set(1999, UCAL_DECEMBER, newDom);
             t2 = cal.getTime(status);
             CHECK(status, "Fail: getTime failed");
             fmt.format(t, str);

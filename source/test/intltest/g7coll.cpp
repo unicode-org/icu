@@ -140,7 +140,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         {
             for (n = j+1; n < FIXEDTESTSET; n++)
             {
-                doTest(tblColl1, testCases[results[i][j]], testCases[results[i][n]], Collator::LESS);
+                doTest(tblColl1, testCases[results[i][j]], testCases[results[i][n]], UCOL_LESS);
             }
         }
 
@@ -170,7 +170,7 @@ void G7CollationTest::TestDemo1(/* char* par */)
     {
         for (n = j+1; n < FIXEDTESTSET; n++)
         {
-            doTest(myCollation, testCases[results[8][j]], testCases[results[8][n]], Collator::LESS);
+            doTest(myCollation, testCases[results[8][j]], testCases[results[8][n]], UCOL_LESS);
         }
     }
 
@@ -199,7 +199,7 @@ void G7CollationTest::TestDemo2(/* char* par */)
     {
         for (n = j+1; n < TOTALTESTSET; n++)
         {
-            doTest(myCollation, testCases[results[9][j]], testCases[results[9][n]], Collator::LESS);
+            doTest(myCollation, testCases[results[9][j]], testCases[results[9][n]], UCOL_LESS);
         }
     }
     
@@ -228,7 +228,7 @@ void G7CollationTest::TestDemo3(/* char* par */)
     {
         for (n = j+1; n < TOTALTESTSET; n++)
         {
-            doTest(myCollation, testCases[results[10][j]], testCases[results[10][n]], Collator::LESS);
+            doTest(myCollation, testCases[results[10][j]], testCases[results[10][n]], UCOL_LESS);
         }
     }
     
@@ -257,7 +257,7 @@ void G7CollationTest::TestDemo4(/* char* par */)
     {
         for (n = j+1; n < TOTALTESTSET; n++)
         {
-            doTest(myCollation, testCases[results[11][j]], testCases[results[11][n]], Collator::LESS);
+            doTest(myCollation, testCases[results[11][j]], testCases[results[11][n]], UCOL_LESS);
         }
     }
 

@@ -50,7 +50,7 @@ public:
 private:
     static const UChar testSourceCases[][MAX_TOKEN_LEN];
     static const UChar testTargetCases[][MAX_TOKEN_LEN];
-    static const Collator::EComparisonResult results[];
+    static const UCollationResult results[];
     static const UChar testBaseCases[][MAX_TOKEN_LEN];
     static const UChar testPlainDakutenHandakutenCases[][MAX_TOKEN_LEN];
     static const UChar testSmallLargeCases[][MAX_TOKEN_LEN];

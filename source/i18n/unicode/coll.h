@@ -207,7 +207,7 @@ public:
   * GREATER is returned if source string is compared to be greater than
   * target string in the compare() method.
   * @see Collator#compare
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6. Use C enum UCollationResult defined in ucol.h
   */
   enum EComparisonResult 
   {
@@ -328,7 +328,7 @@ public:
   * than target
   * @stable ICU 2.0
   **/
-  virtual EComparisonResult compare(const UnicodeString& source, 
+  virtual UCollationResult compare(const UnicodeString& source, 
                                     const UnicodeString& target) const = 0;
 
   /**
@@ -343,7 +343,7 @@ public:
   *         length) is less  than target.   
   * @stable ICU 2.0
   */
-  virtual EComparisonResult compare(const UnicodeString& source,
+  virtual UCollationResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
                                     int32_t length) const = 0;
     
@@ -362,7 +362,7 @@ public:
   *         target
   * @stable ICU 2.0
   */
-  virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
+  virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
                                     const = 0;
 

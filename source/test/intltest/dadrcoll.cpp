@@ -106,15 +106,15 @@ DataDrivenCollatorTest::getNextInSequence(SeqElement &el) {
       case CharacterIterator::DONE:
         break;
       case 0x003C /* < */:
-        el.relation = Collator::LESS;
+        el.relation = UCOL_LESS;
         currChar = CharacterIterator::DONE;
         break;
       case 0x003D /* = */:
-        el.relation = Collator::EQUAL;
+        el.relation = UCOL_EQUAL;
         currChar = CharacterIterator::DONE;
         break;
       case 0x003E /* > */:
-        el.relation = Collator::GREATER;
+        el.relation = UCOL_GREATER;
         currChar = CharacterIterator::DONE;
         break;
       case 0x0027 /* ' */: /* very basic quoting */
@@ -237,7 +237,7 @@ DataDrivenCollatorTest::processTest(TestData *testData) {
 
 void 
 DataDrivenCollatorTest::processSequence(Collator* col, const UnicodeString &sequence) {
-  Collator::EComparisonResult relation = Collator::EQUAL;
+  UCollationResult relation = UCOL_EQUAL;
   UBool hasNext;
   SeqElement *source = NULL;
   SeqElement *target = NULL;
@@ -251,12 +251,12 @@ DataDrivenCollatorTest::processSequence(Collator* col, const UnicodeString &sequ
   sequences.addElement(target, status);
 
   do {
-    relation = Collator::EQUAL;
+    relation = UCOL_EQUAL;
     target = new SeqElement(); 
     hasNext = getNextInSequence(*target);
     for(j = sequences.size(); j > 0; j--) {
       source = (SeqElement *)sequences.elementAt(j-1);
-      if(relation == Collator::EQUAL && source->relation != Collator::EQUAL) {
+      if(relation == UCOL_EQUAL && source->relation != UCOL_EQUAL) {
         relation = source->relation;
       }
       doTest(col, source->source, target->source, relation);     

@@ -95,7 +95,7 @@ public: // package
     virtual void check520(Calendar* c, 
                             int32_t y, int32_t m, int32_t d, 
                             int32_t hr, int32_t min, int32_t sec, 
-                            int32_t ms, Calendar::EDateFields field);
+                            int32_t ms, UCalendarDateFields field);
  
     virtual void check520(Calendar* c, 
                             int32_t y, int32_t m, int32_t d);
@@ -165,7 +165,7 @@ public:
         SimpleDateFormat *sdf, int32_t times, UErrorCode& status);
     // test subroutine used by TestDOW_LOCALandYEAR_WOY
     virtual void loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf, */
-        int times, Calendar::EDateFields field, Calendar::EDateFields field2, 
+        int times, UCalendarDateFields field, UCalendarDateFields field2, 
         UErrorCode& errorCode);
 
     void yearAddTest(Calendar& cal, UErrorCode& status);

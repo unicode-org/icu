@@ -198,10 +198,10 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
     GregorianCalendar *gc = new GregorianCalendar(time_zone->clone(), status);
     gc->setTime(d, status);
     if (failure(status, "GregorianCalendar::setTime")) return;
-    int32_t offset = time_zone->getOffset((uint8_t)gc->get(gc->ERA, status),
-        gc->get(gc->YEAR, status), gc->get(gc->MONTH, status),
-        gc->get(gc->DAY_OF_MONTH, status), (uint8_t)gc->get(gc->DAY_OF_WEEK, status),
-        ((gc->get(gc->HOUR_OF_DAY, status) * 60 + gc->get(gc->MINUTE, status)) * 60 + gc->get(gc->SECOND, status)) * 1000 + gc->get(gc->MILLISECOND, status),
+    int32_t offset = time_zone->getOffset((uint8_t)gc->get(UCAL_ERA, status),
+        gc->get(UCAL_YEAR, status), gc->get(UCAL_MONTH, status),
+        gc->get(UCAL_DATE, status), (uint8_t)gc->get(UCAL_DAY_OF_WEEK, status),
+        ((gc->get(UCAL_HOUR_OF_DAY, status) * 60 + gc->get(UCAL_MINUTE, status)) * 60 + gc->get(UCAL_SECOND, status)) * 1000 + gc->get(UCAL_MILLISECOND, status),
         status);
     if (failure(status, "GregorianCalendar::get")) return;
     if (offset == expDSTOffset) logln(UnicodeString("PASS: getOffset() = ") + (offset / ONE_HOUR));
@@ -221,7 +221,7 @@ TimeZoneBoundaryTest::TestBoundaries()
 #if 1
     {
         logln("--- Test a ---");
-        UDate d = date(97, Calendar::APRIL, 6);
+        UDate d = date(97, UCAL_APRIL, 6);
         TimeZone *z = TimeZone::createTimeZone("PST");
         for (int32_t i = 60; i <= 180; i += 15) {
             UBool inDST = (i >= 120);
@@ -325,7 +325,7 @@ TimeZoneBoundaryTest::TestNewRules()
         SimpleTimeZone *tz;
         logln("-----------------------------------------------------------------");
         logln("Aug 2ndTues .. Mar 15");
-        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_1", Calendar::AUGUST, 2, Calendar::TUESDAY, 2 * (int32_t)ONE_HOUR, Calendar::MARCH, 15, 0, 2 * (int32_t)ONE_HOUR, status);
+        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_1", UCAL_AUGUST, 2, UCAL_TUESDAY, 2 * (int32_t)ONE_HOUR, UCAL_MARCH, 15, 0, 2 * (int32_t)ONE_HOUR, status);
         logln("========================================");
         testUsingBinarySearch(tz, date(97, 0, 1), 858416400000.0);
         logln("========================================");
@@ -333,7 +333,7 @@ TimeZoneBoundaryTest::TestNewRules()
         delete tz;
         logln("-----------------------------------------------------------------");
         logln("Apr Wed>=14 .. Sep Sun<=20");
-        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_2", Calendar::APRIL, 14, - Calendar::WEDNESDAY, 2 *(int32_t)ONE_HOUR, Calendar::SEPTEMBER, - 20, - Calendar::SUNDAY, 2 * (int32_t)ONE_HOUR, status);
+        tz = new SimpleTimeZone(- 8 * (int32_t)ONE_HOUR, "Test_2", UCAL_APRIL, 14, - UCAL_WEDNESDAY, 2 *(int32_t)ONE_HOUR, UCAL_SEPTEMBER, - 20, - UCAL_SUNDAY, 2 * (int32_t)ONE_HOUR, status);
         logln("========================================");
         testUsingBinarySearch(tz, date(97, 0, 1), 861184800000.0);
         logln("========================================");
@@ -350,7 +350,7 @@ TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZ
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
-    UDate d = date(year - 1900, Calendar::JANUARY, 1);
+    UDate d = date(year - 1900, UCAL_JANUARY, 1);
     UDate time = d;
     UDate limit = time + ONE_YEAR + ONE_DAY;
     UBool lastState = z->inDaylightTime(d, status);

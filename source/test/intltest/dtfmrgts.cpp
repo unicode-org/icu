@@ -113,7 +113,7 @@ void DateFormatRegressionTest::Test4052408(void)
 
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::SHORT,
                                                 DateFormat::SHORT, Locale::getUS());
-    UDate dt = date(97, Calendar::MAY, 3, 8, 55);
+    UDate dt = date(97, UCAL_MAY, 3, 8, 55);
     UnicodeString str;
     str = fmt->format(dt, str);
     logln(str);
@@ -211,16 +211,16 @@ void DateFormatRegressionTest::Test4056591(void)
     //try {
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::getUS(), status);
         failure(status, "new SimpleDateFormat");
-        UDate start = date(1809-1900, Calendar::DECEMBER, 25);
+        UDate start = date(1809-1900, UCAL_DECEMBER, 25);
         fmt->set2DigitYearStart(start, status);
         failure(status, "fmt->setTwoDigitStartDate");
         if( (fmt->get2DigitYearStart(status) != start) || failure(status, "get2DigitStartDate"))
             errln("get2DigitYearStart broken");
         UDate dates [] = {
-            date(1809-1900, Calendar::DECEMBER, 25),
-            date(1909-1900, Calendar::DECEMBER, 24),
-            date(1809-1900, Calendar::DECEMBER, 26),
-            date(1861-1900, Calendar::DECEMBER, 25),
+            date(1809-1900, UCAL_DECEMBER, 25),
+            date(1909-1900, UCAL_DECEMBER, 24),
+            date(1809-1900, UCAL_DECEMBER, 26),
+            date(1861-1900, UCAL_DECEMBER, 25),
         };
 
         UnicodeString strings [] = {
@@ -335,8 +335,8 @@ void DateFormatRegressionTest::Test4060212(void)
     failure(status, "new GregorianCalendar");
     cal->setTime(myDate, status);
     failure(status, "cal->setTime");
-    if ((cal->get(Calendar::DAY_OF_YEAR, status) != 40) || failure(status, "cal->get"))
-        errln((UnicodeString) "Fail: Got " + cal->get(Calendar::DAY_OF_YEAR, status) +
+    if ((cal->get(UCAL_DAY_OF_YEAR, status) != 40) || failure(status, "cal->get"))
+        errln((UnicodeString) "Fail: Got " + cal->get(UCAL_DAY_OF_YEAR, status) +
                             " Want 40");
 
     logln("Using yyyy-ddd.hh:mm:ss");
@@ -350,8 +350,8 @@ void DateFormatRegressionTest::Test4060212(void)
     logln( myString );
     cal->setTime(myDate, status);
     failure(status, "cal->setTime");
-    if ((cal->get(Calendar::DAY_OF_YEAR, status) != 40) || failure(status, "cal->get"))
-        errln((UnicodeString) "Fail: Got " + cal->get(Calendar::DAY_OF_YEAR, status) +
+    if ((cal->get(UCAL_DAY_OF_YEAR, status) != 40) || failure(status, "cal->get"))
+        errln((UnicodeString) "Fail: Got " + cal->get(UCAL_DAY_OF_YEAR, status) +
                             " Want 40");
 
     delete formatter;
@@ -477,7 +477,7 @@ void DateFormatRegressionTest::Test4071441(void)
     Calendar *calA = (Calendar*) fmtA->getCalendar();
     Calendar *calB = (Calendar*) fmtB->getCalendar();
     UDate epoch = date(0, 0, 0);
-    UDate xmas = date(61, Calendar::DECEMBER, 25);
+    UDate xmas = date(61, UCAL_DECEMBER, 25);
 
     UErrorCode status = U_ZERO_ERROR;
     calA->setTime(epoch, status);
@@ -752,7 +752,7 @@ void DateFormatRegressionTest::Test4104136(void)
     };
 
     UDate dates [] = {
-        date(70, Calendar::JANUARY, 1, 10, 30),
+        date(70, UCAL_JANUARY, 1, 10, 30),
         -1,
         -1
     };
@@ -874,7 +874,7 @@ void DateFormatRegressionTest::Test4106807(void)
             //logln(df->format(dt)); 
             gc->setTime(dt, status); 
             failure(status, "gc->getTime");
-            logln(UnicodeString("") + gc->get(Calendar::ZONE_OFFSET, status));
+            logln(UnicodeString("") + gc->get(UCAL_ZONE_OFFSET, status));
             failure(status, "gc->get");
             UnicodeString s;
             s = format->format(dt, s, pos);
@@ -951,7 +951,7 @@ void DateFormatRegressionTest::Test4151631(void)
     failure(status, "new SimpleDateFormat");
     UnicodeString result;
     FieldPosition pos(FieldPosition::DONT_CARE);
-    result = format->format(date(1998-1900, Calendar::JUNE, 30, 13, 30, 0), result, pos);
+    result = format->format(date(1998-1900, UCAL_JUNE, 30, 13, 30, 0), result, pos);
     if (result != "TO_DATE('30-06-1998 13:30:00' , 'DD-MM-YYYY HH:MI:SS')") {
         errln("Fail: result=" + result);
     }
@@ -1046,14 +1046,14 @@ void DateFormatRegressionTest::Test4182066(void) {
     int32_t STRINGS_COUNT = (int32_t)(sizeof(STRINGS) / sizeof(STRINGS[0]));
     UDate FAIL_DATE = (UDate) 0;
     UDate DATES[] = {
-        date(2000-1900, Calendar::FEBRUARY, 29),
-        date(2001-1900, Calendar::JANUARY,  23),
-        date(  -1-1900, Calendar::APRIL,     5),
-        date(  -9-1900, Calendar::JANUARY,  23),
-        date(1314-1900, Calendar::NOVEMBER, 12),
-        date(   1-1900, Calendar::OCTOBER,  31),
+        date(2000-1900, UCAL_FEBRUARY, 29),
+        date(2001-1900, UCAL_JANUARY,  23),
+        date(  -1-1900, UCAL_APRIL,     5),
+        date(  -9-1900, UCAL_JANUARY,  23),
+        date(1314-1900, UCAL_NOVEMBER, 12),
+        date(   1-1900, UCAL_OCTOBER,  31),
         FAIL_DATE, // "+1" isn't recognized by US NumberFormat
-        date(   1-1900, Calendar::SEPTEMBER,12),
+        date(   1-1900, UCAL_SEPTEMBER,12),
     };
 
     UnicodeString out;
@@ -1114,7 +1114,7 @@ DateFormatRegressionTest::Test4210209(void) {
     }
     Calendar* calx = (Calendar*)fmt.getCalendar(); // cast away const!
     calx->setLenient(FALSE);
-    UDate d = date(2000-1900, Calendar::FEBRUARY, 29);
+    UDate d = date(2000-1900, UCAL_FEBRUARY, 29);
     UnicodeString s, ss;
     fmt.format(d, s);
     logln(disp.format(d, ss.remove()) + " f> " + pattern +
@@ -1139,7 +1139,7 @@ DateFormatRegressionTest::Test4210209(void) {
     }
     cal.clear();
     cal.setLenient(FALSE);
-    cal.set(2000, Calendar::FEBRUARY, 29); // This should work!
+    cal.set(2000, UCAL_FEBRUARY, 29); // This should work!
     logln(UnicodeString("Attempt to set Calendar to Feb 29 2000: ") +
                         disp.format(cal.getTime(status), ss.remove()));
     if (U_FAILURE(status)) {

@@ -70,19 +70,19 @@ const UChar CollationTurkishTest::testTargetCases[][CollationTurkishTest::MAX_TO
     {0x49, 0x64, 0x65, 0x61, 0}
 };
 
-const Collator::EComparisonResult CollationTurkishTest::results[] = {
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER,
+const UCollationResult CollationTurkishTest::results[] = {
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_GREATER,
     // test priamry > 8
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_GREATER
 };
 
 void CollationTurkishTest::TestTertiary(/* char* par */)

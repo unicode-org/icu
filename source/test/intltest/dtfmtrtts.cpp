@@ -267,7 +267,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             // String usually matches in 1.  Exceptions are checked for here.
             if(smatch > maxSmatch) { // Don't compute unless necessary
                 // Starts in BC, with no era in pattern
-                if( ! hasEra && getField(d[0], Calendar::ERA) == GregorianCalendar::BC)
+                if( ! hasEra && getField(d[0], UCAL_ERA) == GregorianCalendar::BC)
                     maxSmatch = 2;
                 // Starts in DST, no year in pattern
                 else if(fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "foo") &&
@@ -277,14 +277,14 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 // unless timezone isn't used or we aren't close to the DST changover
                 else if (pat.indexOf(UnicodeString("y")) != -1
                         && pat.indexOf(UnicodeString("yyyy")) == -1
-                        && getField(d[0], Calendar::YEAR)
-                            != getField(d[dmatch], Calendar::YEAR)
+                        && getField(d[0], UCAL_YEAR)
+                            != getField(d[dmatch], UCAL_YEAR)
                         && !failure(status, "foo")
                         && ((hasZone
                          && (fmt->getTimeZone().inDaylightTime(d[0], status)
                                 == fmt->getTimeZone().inDaylightTime(d[dmatch], status)
-                            || getField(d[0], Calendar::MONTH) == Calendar::APRIL
-                            || getField(d[0], Calendar::MONTH) == Calendar::OCTOBER))
+                            || getField(d[0], UCAL_MONTH) == UCAL_APRIL
+                            || getField(d[0], UCAL_MONTH) == UCAL_OCTOBER))
                          || !hasZone)
                          )
                 {
@@ -326,7 +326,7 @@ int32_t DateFormatRoundTripTest::getField(UDate d, int32_t f) {
     UErrorCode status = U_ZERO_ERROR;
     getFieldCal->setTime(d, status);
     failure(status, "getfieldCal->setTime");
-    int32_t ret = getFieldCal->get((Calendar::EDateFields)f, status);
+    int32_t ret = getFieldCal->get((UCalendarDateFields)f, status);
     failure(status, "getfieldCal->get");
     return ret;
 }

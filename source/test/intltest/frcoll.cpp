@@ -73,20 +73,20 @@ const UChar CollationFrenchTest::testTargetCases[][CollationFrenchTest::MAX_TOKE
     {0x01df, 0x0000}
 };
 
-const Collator::EComparisonResult CollationFrenchTest::results[] =
+const UCollationResult CollationFrenchTest::results[] =
 {
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS, /*Collator::GREATER,*/
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::LESS, /*Collator::GREATER,*/
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::LESS
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS, /*Collator::GREATER,*/
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_LESS, /*Collator::GREATER,*/
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_LESS
 };
 
 // 0x0300 is grave, 0x0301 is acute
@@ -158,7 +158,7 @@ void CollationFrenchTest::TestSecondary(/* char* par */)
     //test acute and grave ordering
     int32_t i = 0;
     int32_t j;
-    Collator::EComparisonResult expected;
+    UCollationResult expected;
     UErrorCode status = U_ZERO_ERROR;
     //myCollation->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, status);
     myCollation->setStrength(Collator::SECONDARY);
@@ -172,11 +172,11 @@ void CollationFrenchTest::TestSecondary(/* char* par */)
             for (j = 0; j < testAcuteSize; j++)
             {
                 if (i <  j)
-                    expected = Collator::LESS;
+                    expected = UCOL_LESS;
                 else if (i == j)
-                    expected = Collator::EQUAL;
+                    expected = UCOL_EQUAL;
                 else // (i >  j)
-                    expected = Collator::GREATER;
+                    expected = UCOL_GREATER;
                 doTest(myCollation, testAcute[i], testAcute[j], expected );
             }
         }
@@ -191,7 +191,7 @@ void CollationFrenchTest::TestExtra(/* char* par */)
     {
         for (j = i + 1; j < 10; j += 1)
         {
-            doTest(myCollation, testBugs[i], testBugs[j], Collator::LESS);
+            doTest(myCollation, testBugs[i], testBugs[j], UCOL_LESS);
         }
     }
 }

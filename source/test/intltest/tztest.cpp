@@ -135,10 +135,10 @@ TimeZoneTest::TestRuleAPI()
     GregorianCalendar *gc = new GregorianCalendar(*zone, status);
     if (failure(status, "new GregorianCalendar")) return;
     gc->clear();
-    gc->set(1990, Calendar::MARCH, 1);
+    gc->set(1990, UCAL_MARCH, 1);
     UDate marchOneStd = gc->getTime(status); // Local Std time midnight
     gc->clear();
-    gc->set(1990, Calendar::JULY, 1);
+    gc->set(1990, UCAL_JULY, 1);
     UDate julyOneStd = gc->getTime(status); // Local Std time midnight
     if (failure(status, "GregorianCalendar::getTime")) return;
 
@@ -146,8 +146,8 @@ TimeZoneTest::TestRuleAPI()
     int32_t startHour = (int32_t)(2.25 * 3600000);
     int32_t endHour   = (int32_t)(3.5  * 3600000);
 
-    zone->setStartRule(Calendar::MARCH, 1, 0, startHour, status);
-    zone->setEndRule  (Calendar::JULY,  1, 0, endHour, status);
+    zone->setStartRule(UCAL_MARCH, 1, 0, startHour, status);
+    zone->setEndRule  (UCAL_JULY,  1, 0, endHour, status);
 
     delete gc;
     gc = new GregorianCalendar(*zone, status);
@@ -174,8 +174,8 @@ TimeZoneTest::TestRuleAPI()
           " = " + dateToString(expJulyOne));
     }
 
-    testUsingBinarySearch(zone, date(90, Calendar::JANUARY, 1), date(90, Calendar::JUNE, 15), marchOne);
-    testUsingBinarySearch(zone, date(90, Calendar::JUNE, 1), date(90, Calendar::DECEMBER, 31), julyOne);
+    testUsingBinarySearch(zone, date(90, UCAL_JANUARY, 1), date(90, UCAL_JUNE, 15), marchOne);
+    testUsingBinarySearch(zone, date(90, UCAL_JUNE, 1), date(90, UCAL_DECEMBER, 31), julyOne);
 
     if (zone->inDaylightTime(marchOne - 1000, status) ||
         !zone->inDaylightTime(marchOne, status))
@@ -260,7 +260,7 @@ TimeZoneTest::TestVariousAPI518()
 {
     UErrorCode status = U_ZERO_ERROR;
     TimeZone* time_zone = TimeZone::createTimeZone("PST");
-    UDate d = date(97, Calendar::APRIL, 30);
+    UDate d = date(97, UCAL_APRIL, 30);
     UnicodeString str;
     logln("The timezone is " + time_zone->getID(str));
     if (!time_zone->inDaylightTime(d, status)) errln("FAIL: inDaylightTime returned FALSE");
@@ -271,8 +271,8 @@ TimeZoneTest::TestVariousAPI518()
     if (U_FAILURE(status)) { errln("FAIL: Couldn't create GregorianCalendar"); return; }
     gc->setTime(d, status);
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::setTime failed"); return; }
-    if (time_zone->getOffset(gc->AD, gc->get(gc->YEAR, status), gc->get(gc->MONTH, status),
-        gc->get(gc->DAY_OF_MONTH, status), (uint8_t)gc->get(gc->DAY_OF_WEEK, status), 0, status) != - 7 * millisPerHour)
+    if (time_zone->getOffset(gc->AD, gc->get(UCAL_YEAR, status), gc->get(UCAL_MONTH, status),
+        gc->get(UCAL_DATE, status), (uint8_t)gc->get(UCAL_DAY_OF_WEEK, status), 0, status) != - 7 * millisPerHour)
         errln("FAIL: getOffset returned wrong value");
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::set failed"); return; }
     delete gc;
@@ -792,8 +792,8 @@ TimeZoneTest::TestDisplayName()
     // PST zone that has DST all year long.
     SimpleTimeZone *zone2 = new SimpleTimeZone(0, "PST");
 
-    zone2->setStartRule(Calendar::JANUARY, 1, 0, 0, status);
-    zone2->setEndRule(Calendar::DECEMBER, 31, 0, 0, status);
+    zone2->setStartRule(UCAL_JANUARY, 1, 0, 0, status);
+    zone2->setEndRule(UCAL_DECEMBER, 31, 0, 0, status);
 
     UnicodeString inDaylight = (zone2->inDaylightTime(UDate(0), status)? UnicodeString("TRUE"):UnicodeString("FALSE"));
     logln(UnicodeString("Modified PST inDaylightTime->") + inDaylight );
@@ -886,7 +886,7 @@ TimeZoneTest::TestDSTSavings()
     // tests above, but I don't have time to figure out how to do this (or if it's
     // even really a good idea).  Let's consider that a future.  --rtg 1/27/98
     SimpleTimeZone *tz = new SimpleTimeZone(-5 * U_MILLIS_PER_HOUR, "dstSavingsTest",
-                                           Calendar::MARCH, 1, 0, 0, Calendar::SEPTEMBER, 1, 0, 0,
+                                           UCAL_MARCH, 1, 0, 0, UCAL_SEPTEMBER, 1, 0, 0,
                                            (int32_t)(0.5 * U_MILLIS_PER_HOUR), status);
     if(U_FAILURE(status))
         errln("couldn't create TimeZone");
@@ -900,26 +900,26 @@ TimeZoneTest::TestDSTSavings()
         errln(UnicodeString("Set DST offset to 0.5 hour, but got back ") + (tz->getDSTSavings() /
                                                              U_MILLIS_PER_HOUR) + " hours instead.");
 
-    int32_t offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JANUARY, 1,
-                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
+    int32_t offset = tz->getOffset(GregorianCalendar::AD, 1998, UCAL_JANUARY, 1,
+                              UCAL_THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JUNE, 1, Calendar::MONDAY,
+    offset = tz->getOffset(GregorianCalendar::AD, 1998, UCAL_JUNE, 1, UCAL_MONDAY,
                           10 * U_MILLIS_PER_HOUR,status);
     if (offset != -4.5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 6/1/98 should have been -4.5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     tz->setDSTSavings(U_MILLIS_PER_HOUR, status);
-    offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JANUARY, 1,
-                          Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
+    offset = tz->getOffset(GregorianCalendar::AD, 1998, UCAL_JANUARY, 1,
+                          UCAL_THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 1/1/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz->getOffset(GregorianCalendar::AD, 1998, Calendar::JUNE, 1, Calendar::MONDAY,
+    offset = tz->getOffset(GregorianCalendar::AD, 1998, UCAL_JUNE, 1, UCAL_MONDAY,
                           10 * U_MILLIS_PER_HOUR,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10 AM, 6/1/98 (with a 1-hour DST offset) should have been -4 hours, but we got ")
@@ -942,64 +942,64 @@ TimeZoneTest::TestAlternateRules()
 
     // test the day-of-month API
     UErrorCode status = U_ZERO_ERROR;
-    tz.setStartRule(Calendar::MARCH, 10, 12 * U_MILLIS_PER_HOUR, status);
+    tz.setStartRule(UCAL_MARCH, 10, 12 * U_MILLIS_PER_HOUR, status);
     if(U_FAILURE(status))
         errln("tz.setStartRule failed");
-    tz.setEndRule(Calendar::OCTOBER, 20, 12 * U_MILLIS_PER_HOUR, status);
+    tz.setEndRule(UCAL_OCTOBER, 20, 12 * U_MILLIS_PER_HOUR, status);
     if(U_FAILURE(status))
         errln("tz.setStartRule failed");
 
-    int32_t offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 5,
-                              Calendar::THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
+    int32_t offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_MARCH, 5,
+                              UCAL_THURSDAY, 10 * U_MILLIS_PER_HOUR,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/5/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 15,
-                          Calendar::SUNDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_MARCH, 15,
+                          UCAL_SUNDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/15/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 15,
-                          Calendar::THURSDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_OCTOBER, 15,
+                          UCAL_THURSDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/15/98 should have been -4 hours, but we got ")              + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 25,
-                          Calendar::SUNDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_OCTOBER, 25,
+                          UCAL_SUNDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/25/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
     // test the day-of-week-after-day-in-month API
-    tz.setStartRule(Calendar::MARCH, 10, Calendar::FRIDAY, 12 * millisPerHour, TRUE, status);
+    tz.setStartRule(UCAL_MARCH, 10, UCAL_FRIDAY, 12 * millisPerHour, TRUE, status);
     if(U_FAILURE(status))
         errln("tz.setStartRule failed");
-    tz.setEndRule(Calendar::OCTOBER, 20, Calendar::FRIDAY, 12 * millisPerHour, FALSE, status);
+    tz.setEndRule(UCAL_OCTOBER, 20, UCAL_FRIDAY, 12 * millisPerHour, FALSE, status);
     if(U_FAILURE(status))
         errln("tz.setStartRule failed");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 11,
-                          Calendar::WEDNESDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_MARCH, 11,
+                          UCAL_WEDNESDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/11/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::MARCH, 14,
-                          Calendar::SATURDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_MARCH, 14,
+                          UCAL_SATURDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 3/14/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 15,
-                          Calendar::THURSDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_OCTOBER, 15,
+                          UCAL_THURSDAY, 10 * millisPerHour,status);
     if (offset != -4 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/15/98 should have been -4 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
 
-    offset = tz.getOffset(GregorianCalendar::AD, 1998, Calendar::OCTOBER, 17,
-                          Calendar::SATURDAY, 10 * millisPerHour,status);
+    offset = tz.getOffset(GregorianCalendar::AD, 1998, UCAL_OCTOBER, 17,
+                          UCAL_SATURDAY, 10 * millisPerHour,status);
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/17/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");

@@ -50,8 +50,8 @@ const UChar LotusCollationKoreanTest::testTargetCases[][LotusCollationKoreanTest
     {0xac01, 0}
 };
 
-const Collator::EComparisonResult LotusCollationKoreanTest::results[] = {
-    Collator::LESS
+const UCollationResult LotusCollationKoreanTest::results[] = {
+    UCOL_LESS
 };
 
 void LotusCollationKoreanTest::TestTertiary(/* char* par */)

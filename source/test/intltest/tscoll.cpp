@@ -351,13 +351,13 @@ IntlTestCollator::compareUsingPartials(UCollator *coll, const UChar source[], in
 }
 
 void 
-IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result)
+IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, UCollationResult result)
 {   
   UErrorCode status = U_ZERO_ERROR;
 
   UCollator *myCollation = (UCollator *)((RuleBasedCollator *)col)->getUCollator();
 
-  Collator::EComparisonResult compareResult = col->compare(source, target);
+  UCollationResult compareResult = col->compare(source, target);
 
   CollationKey srckey, tgtkey;
   col->getCollationKey(source, srckey, status);
@@ -365,7 +365,7 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
   if (U_FAILURE(status)){
     errln("Creation of collation keys failed\n");
   }
-  Collator::EComparisonResult keyResult = srckey.compareTo(tgtkey);
+  UCollationResult keyResult = srckey.compareTo(tgtkey);
 
   reportCResult(source, target, srckey, tgtkey, compareResult, keyResult, result, result);
 
@@ -464,18 +464,18 @@ IntlTestCollator::doTestVariant(Collator* col, const UnicodeString &source, cons
 }
 
 void
-IntlTestCollator::doTest(Collator* col, const UChar *source, const UChar *target, Collator::EComparisonResult result) {
+IntlTestCollator::doTest(Collator* col, const UChar *source, const UChar *target, UCollationResult result) {
   doTest(col, UnicodeString(source), UnicodeString(target), result);
 }
 
 void 
-IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result)
+IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, UCollationResult result)
 {
   doTestVariant(col, source, target, result);
-  if(result == Collator::LESS) {
-    doTestVariant(col, target, source, Collator::GREATER);
-  } else if (result == Collator::GREATER) {
-    doTestVariant(col, target, source, Collator::LESS);
+  if(result == UCOL_LESS) {
+    doTestVariant(col, target, source, UCOL_GREATER);
+  } else if (result == UCOL_GREATER) {
+    doTestVariant(col, target, source, UCOL_LESS);
   }
 
   UErrorCode status = U_ZERO_ERROR;
@@ -494,10 +494,10 @@ IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const Unico
 void
 IntlTestCollator::reportCResult( const UnicodeString &source, const UnicodeString &target,
              CollationKey &sourceKey, CollationKey &targetKey,
-             Collator::EComparisonResult compareResult,
-             Collator::EComparisonResult keyResult,
-                                Collator::EComparisonResult incResult,
-                         Collator::EComparisonResult expectedResult )
+             UCollationResult compareResult,
+             UCollationResult keyResult,
+                                UCollationResult incResult,
+                         UCollationResult expectedResult )
 {
     if (expectedResult < -1 || expectedResult > 1)
     {
@@ -563,18 +563,18 @@ IntlTestCollator::reportCResult( const UnicodeString &source, const UnicodeStrin
 }
 
 UnicodeString&
-IntlTestCollator::appendCompareResult(Collator::EComparisonResult result,
+IntlTestCollator::appendCompareResult(UCollationResult result,
                   UnicodeString& target)
 {
-    if (result == Collator::LESS)
+    if (result == UCOL_LESS)
     {
         target += "LESS";
     }
-    else if (result == Collator::EQUAL)
+    else if (result == UCOL_EQUAL)
     {
         target += "EQUAL";
     }
-    else if (result == Collator::GREATER)
+    else if (result == UCOL_GREATER)
     {
         target += "GREATER";
     }
