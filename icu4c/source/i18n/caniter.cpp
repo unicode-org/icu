@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/19 07:16:01 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/03/20 05:08:57 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,8 @@
 #include "uset.h"
 #include "unormimp.h"
 #include "caniter.h"
+#include "cmemory.h"
+#include "unicode/ustring.h"
 
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
@@ -239,9 +241,6 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
     //if (PROGRESS) printf("Permute: %s\n", UToS(Tr(source)));
     int32_t i = 0;
 
-    //Hashtable *result = new Hashtable(FALSE, status);
-    //result->setValueDeleter(uhash_deleteUnicodeString);
-    
     // optimization:
     // if zero or one character, just return a set with it
     // we check for length < 2 to keep from counting code points all the time
@@ -299,7 +298,10 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) { //private String[] getEquivalents(String segment) 
     Hashtable *result = new Hashtable(FALSE, status);
-    Hashtable *basic = getEquivalents2(segment, status);
+    UChar USeg[256];
+    int32_t segLen = segment.extract(USeg, 256, status);
+    Hashtable *basic = getEquivalents2(USeg, segLen, status);
+    //Hashtable *basic = getEquivalents2(segment, segLen, status);
     
     // now get all the permutations
     // add only the ones that are canonically equivalent
@@ -363,49 +365,43 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     return finalResult;
 }
 
-Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, UErrorCode &status) {
-    //Set result = new TreeSet();
+Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status) {
+//Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status) {
+
     Hashtable *result = new Hashtable(FALSE, status);
     result->setValueDeleter(uhash_deleteUnicodeString);
 
     //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(segment)));
 
-    //result.add(segment);
-    result->put(segment, new UnicodeString(segment), status);
+    result->put(UnicodeString(segment, segLen), new UnicodeString(segment, segLen), status);
 
-    //StringBuffer workingBuffer = new StringBuffer();
-    UnicodeString workingBuffer;
     USerializedSet starts;
     
     // cycle through all the characters
     UChar32 cp, limit = 0;
     int32_t i = 0, j;
-    for (i = 0; i < segment.length(); i += UTF16_CHAR_LENGTH(cp)) {
+    for (i = 0; i < segLen; i += UTF16_CHAR_LENGTH(cp)) {
         // see if any character is at the start of some decomposition
-        cp = segment.char32At(i);
+        UTF_GET_CHAR(segment, 0, i, segLen, cp);
         if (!unorm_getCanonStartSet(cp, &starts)) {
           continue;
         }
         // if so, see which decompositions match 
         for(j = 0, cp = limit; cp < limit || uset_getSerializedRange(&starts, j++, &cp, &limit); ++cp) {
-            Hashtable *remainder = extract(cp, segment, i, workingBuffer, status);
+            //Hashtable *remainder = extract(cp, segment, segLen, i, status);
+            Hashtable *remainder = extract(cp, segment, segLen, i, status);
             if (remainder == NULL) continue;
             
             // there were some matches, so add all the possibilities to the set.
-            //UnicodeString prefix = segment.substring(0, i) + UTF16.valueOf(cp2);
-            UnicodeString prefix;
-            segment.extract(0, i, prefix);
+            UnicodeString prefix(segment, i);
             prefix += cp;
 
             const UHashElement *ne = NULL;
             int32_t el = -1;
-            //Iterator it = remainder.iterator();
             ne = remainder->nextElement(el);
             while (ne != NULL) {
-                //String item = (String) it.next();
                 UnicodeString item = *((UnicodeString *)(ne->value.pointer));
                 UnicodeString *toAdd = new UnicodeString(prefix);
-                //result.add(prefix + item);
                 *toAdd += item;
                 result->put(*toAdd, toAdd, status);
 
@@ -425,47 +421,54 @@ Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, UErr
  * (with canonical rearrangment!)
  * If so, take the remainder, and return the equivalents 
  */
-Hashtable *CanonicalIterator::extract(UChar32 comp, const UnicodeString &segment, int32_t segmentPos, UnicodeString &buffer, UErrorCode &status) {
+Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_t segLen, int32_t segmentPos, UErrorCode &status) {
+//Hashtable *CanonicalIterator::extract(UChar32 comp, const UnicodeString &segment, int32_t segLen, int32_t segmentPos, UErrorCode &status) {
     //if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
     //if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
 
-    //String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
-    UnicodeString decomp;
-    Normalizer::normalize(comp, UNORM_NFD, 0, decomp, status);
-    
+    const int32_t bufSize = 256; 
+    int32_t bufLen = 0;
+    UChar temp[bufSize];
+
+    const int32_t decompSize = 64;
+    int32_t inputLen = 0;
+    UChar decomp[decompSize];
+    UTF_APPEND_CHAR(temp, inputLen, bufSize, comp);
+    int32_t decompLen = unorm_decompose(decomp, decompSize, temp, inputLen, FALSE, FALSE, &status);
+
+    UChar *buff = temp+inputLen;
+
     // See if it matches the start of segment (at segmentPos)
     UBool ok = FALSE;
     UChar32 cp;
     int32_t decompPos = 0;
-    UChar32 decompCp = decomp.char32At(0);
-    decompPos += UTF16_CHAR_LENGTH(decompCp); // adjust position to skip first char
-    //int decompClass = getClass(decompCp);
-    buffer.truncate(0); // initialize working buffer, shared among callees
+    UChar32 decompCp;
+    UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
     
     int32_t i = 0;
-    for (i = segmentPos; i < segment.length(); i += UTF16_CHAR_LENGTH(cp)) {
-        cp = segment.char32At(i);
+    i = segmentPos;
+    while(i < segLen) {
+      UTF_NEXT_CHAR(segment, i, segLen, cp);
+
         if (cp == decompCp) { // if equal, eat another cp from decomp
 
             //if (PROGRESS) printf("  matches: %s\n", UToS(Tr(UnicodeString(cp))));
 
-            if (decompPos == decomp.length()) { // done, have all decomp characters!
-                //buffer.append(segment.substring(i + UTF16.getCharCount(cp))); // add remaining segment chars
-              buffer.append(segment, i+UTF16_CHAR_LENGTH(cp), segment.length()-i-UTF16_CHAR_LENGTH(cp));
+            if (decompPos == decompLen) { // done, have all decomp characters!
+                //u_strcat(buff+bufLen, segment+i);
+                memcpy(buff+bufLen, segment+i, (segLen-i)*sizeof(UChar));
+                bufLen+=segLen-i;
+                  
                 ok = TRUE;
                 break;
             }
-            decompCp = decomp.char32At(decompPos);
-            decompPos += UTF16_CHAR_LENGTH(decompCp);
-            //decompClass = getClass(decompCp);
+            UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
         } else {
             //if (PROGRESS) printf("  buffer: %s\n", UToS(Tr(UnicodeString(cp))));
 
             // brute force approach
 
-          
-            //UTF16.append(buffer, cp);
-            buffer.append(cp);
+          UTF_APPEND_CHAR(buff, bufLen, bufSize, cp);
 
             /* TODO: optimize
             // since we know that the classes are monotonically increasing, after zero
@@ -484,31 +487,26 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UnicodeString &segment
 
     //if (PROGRESS) printf("Matches\n");
 
-    if (buffer.length() == 0) {
+    if (bufLen == 0) {
       Hashtable *result = new Hashtable(FALSE, status);
       result->setValueDeleter(uhash_deleteUnicodeString);
       result->put("", new UnicodeString(""), status);
       return result; // succeed, but no remainder
     }
 
-    //String remainder = buffer.toString();
-    UnicodeString remainder = buffer;
-    
     // brute force approach
     // check to make sure result is canonically equivalent
-    //String trial = Normalizer.normalize(UTF16.valueOf(comp) + remainder, Normalizer.DECOMP, 0);
-    UnicodeString trial;
-    UnicodeString temp = remainder;
-    temp.insert(0, comp);
-    Normalizer::normalize(temp, UNORM_NFD, 0, trial, status);
+    int32_t tempLen = inputLen + bufLen;
 
-    //if (!segment.regionMatches(segmentPos, trial, 0, segment.length() - segmentPos)) return null;
-    if (segment.indexOf(trial, 0, segment.length() - segmentPos, segmentPos, segment.length() - segmentPos)==-1) {
+    int32_t trialLen = 0;
+    UChar trial[bufSize];
+    unorm_decompose(trial, bufSize, temp, tempLen, FALSE, FALSE, &status);
+
+    if(uprv_memcmp(segment+segmentPos, trial, (segLen - segmentPos)*sizeof(UChar)) != 0) {
       return NULL;
     }
     
-    // get the remaining combinations
-    return getEquivalents2(remainder, status);
+    return getEquivalents2(buff, bufLen, status);
 }
 
 
