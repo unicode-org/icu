@@ -1855,22 +1855,6 @@ SOURCE=.\i18n.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\test\intltest\textfile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\test\intltest\textfile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\test\intltest\tokiter.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\test\intltest\tokiter.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucln_in.c
 # End Source File
 # Begin Source File
