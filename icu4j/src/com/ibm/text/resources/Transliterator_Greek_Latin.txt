@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/01 02:26:53 $
-# $Revision: 1.6 $
+# $Date: 2001/11/01 21:54:13 $
+# $Revision: 1.7 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -145,9 +145,9 @@ $smooth > ;
 
 # insert in Greek
 
+ | $1 $smooth < [^[:L:][:M:]] { ([rR]) } [^hH$smooth$rough] ;
  | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron? $evowel $macron?) } [^$smooth$rough] ;
  | $1 $smooth < [^[:L:][:M:]] { ($evowel $macron?) } [^$evowel$smooth$rough] ;
- | $1 $smooth < [^[:L:][:M:]] { [rR] } [^hH$smooth$rough] ;
 
 # TODO: preserve smooth/rough breathing if not 
 # on initial vowel sequence
