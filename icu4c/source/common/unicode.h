@@ -1,17 +1,9 @@
 /*
 *****************************************************************************************
-*                                                                                       *
-* COPYRIGHT:                                                                            *
-*   (C) Copyright Taligent, Inc.,  1996, 1997                                           *
-*   (C) Copyright International Business Machines Corporation,  1996- 1999              *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.                  *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure             *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                              *
-*                                                                                       *
+*   Copyright (C) 1996-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 *****************************************************************************************
 */
-//  Copyright (C) 1996-1997 Taligent, Inc. All rights reserved.
-//
 //  FILE NAME : unicode.h
 //
 //  CREATED
@@ -27,6 +19,7 @@
 //  CHANGES BY
 //      Madhu Katragadda
 //   5/20/99     Madhu		Added the function getVersion()
+//  11/22/99     aliu       Added MIN_RADIX, MAX_RADIX, digit, forDigit
 //********************************************************************************************
    
          
@@ -213,6 +206,30 @@ public:
         NEUTRAL                 = 3
     };
 
+    /**
+     * The minimum radix available for conversion to and from Strings.  
+     * The constant value of this field is the smallest value permitted 
+     * for the radix argument in radix-conversion methods such as the 
+     * <code>digit</code> method and the <code>forDigit</code>
+     * method. 
+     *
+     * @see     Unicode#digit
+     * @see     Unicode#forDigit
+     */
+    static const int8_t MIN_RADIX;
+
+    /**
+     * The maximum radix available for conversion to and from Strings.
+     * The constant value of this field is the largest value permitted 
+     * for the radix argument in radix-conversion methods such as the 
+     * <code>digit</code> method and the <code>forDigit</code>
+     * method.
+     *
+     * @see     Unicode#digit
+     * @see     Unicode#forDigit
+     */
+    static const int8_t MAX_RADIX;
+
    /**
      * Determines whether the specified UChar is a lowercase character
      * according to Unicode 2.1.2.
@@ -256,6 +273,9 @@ public:
      *
      * @param ch    the character to be tested
      * @return  true if the character is a digit; false otherwise.
+     * @see     Unicode#digit
+     * @see     Unicode#forDigit
+     * @see     Unicode#digitValue
      */
     static  bool_t          isDigit(UChar ch);
 
@@ -625,9 +645,78 @@ public:
      * @param ch the digit character for which to get the numeric value
      * @return the numeric value of ch in decimal radix.  This method returns
      * -1 if ch is not a valid digit character.
+     * @see     Unicode#digit
+     * @see     Unicode#forDigit
+     * @see     Unicode#isDigit
      */
     static int32_t            digitValue(UChar ch);     
+
+    /**
+     * Returns the numeric value of the character <code>ch</code> in the 
+     * specified radix. 
+     * <p>
+     * If the radix is not in the range <code>MIN_RADIX</code>&nbsp;&lt;= 
+     * <code>radix</code>&nbsp;&lt;= <code>MAX_RADIX</code> or if the 
+     * value of <code>ch</code> is not a valid digit in the specified 
+     * radix, <code>-1</code> is returned. A character is a valid digit 
+     * if at least one of the following is true:
+     * <ul>
+     * <li>The method <code>isDigit</code> is true of the character 
+     *     and the Unicode decimal digit value of the character (or its 
+     *     single-character decomposition) is less than the specified radix. 
+     *     In this case the decimal digit value is returned. 
+     * <li>The character is one of the uppercase Latin letters 
+     *     <code>'A'</code> through <code>'Z'</code> and its code is less than
+     *     <code>radix&nbsp;+ 'A'&nbsp;-&nbsp;10</code>. 
+     *     In this case, <code>ch&nbsp;- 'A'&nbsp;+&nbsp;10</code> 
+     *     is returned. 
+     * <li>The character is one of the lowercase Latin letters 
+     *     <code>'a'</code> through <code>'z'</code> and its code is less than
+     *     <code>radix&nbsp;+ 'a'&nbsp;-&nbsp;10</code>. 
+     *     In this case, <code>ch&nbsp;- 'a'&nbsp;+&nbsp;10</code> 
+     *     is returned. 
+     * </ul>
+     *
+     * @param   ch      the character to be converted.
+     * @param   radix   the radix.
+     * @return  the numeric value represented by the character in the
+     *          specified radix.
+     * @see     Unicode#MIN_RADIX
+     * @see     Unicode#MAX_RADIX
+     * @see     Unicode#forDigit
+     * @see     Unicode#digitValue
+     * @see     Unicode#isDigit
+     */
+    static int8_t digit(UChar ch, int8_t radix);
 	
+    /**
+     * Determines the character representation for a specific digit in 
+     * the specified radix. If the value of <code>radix</code> is not a 
+     * valid radix, or the value of <code>digit</code> is not a valid 
+     * digit in the specified radix, the null character
+     * (<code>U+0000</code>) is returned. 
+     * <p>
+     * The <code>radix</code> argument is valid if it is greater than or 
+     * equal to <code>MIN_RADIX</code> and less than or equal to 
+     * <code>MAX_RADIX</code>. The <code>digit</code> argument is valid if
+     * <code>0&nbsp;&lt;= digit&nbsp;&lt;=&nbsp;radix</code>. 
+     * <p>
+     * If the digit is less than 10, then 
+     * <code>'0'&nbsp;+ digit</code> is returned. Otherwise, the value 
+     * <code>'a'&nbsp;+ digit&nbsp;-&nbsp;10</code> is returned. 
+     *
+     * @param   digit   the number to convert to a character.
+     * @param   radix   the radix.
+     * @return  the <code>char</code> representation of the specified digit
+     *          in the specified radix. 
+     * @see     Unicode#MIN_RADIX
+     * @see     Unicode#MAX_RADIX
+     * @see     Unicode#digit
+     * @see     Unicode#digitValue
+     * @see     Unicode#isDigit
+     */
+    static UChar forDigit(int32_t digit, int8_t radix);
+
 	/**
 	 * Retrieves the Unicode Standard Version number that is used
 	 * @return the Unicode Standard Version Number.
@@ -649,7 +738,3 @@ protected:
 
 
 #endif
-
-
-
-
