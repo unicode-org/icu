@@ -103,7 +103,7 @@ class gentz {
 public:
     int     main(int argc, char *argv[]);
 private:
-    int32_t  writeTzDatFile();
+    int32_t  writeTzDatFile(const char *destdir);
     void     parseTzTextFile(FileStream* in);
 
     // High level parsing
@@ -165,6 +165,7 @@ int gentz::main(int argc, char *argv[]) {
     ////////////////////////////////////////////////////////////
     useCopyright = TRUE;
     const char* infile = 0;
+    const char* destdir = 0;
     for (int i=1; i<argc; ++i) {
         const char* arg = argv[i];
         if (arg[0] == '-') {
@@ -190,7 +191,9 @@ int gentz::main(int argc, char *argv[]) {
     if (infile == 0) {
         usage(argv[0]);
     }
-
+    if (destdir == 0) {
+        destdir = u_getDataDirectory();
+    }
     ////////////////////////////////////////////////////////////
     // Read the input file
     ////////////////////////////////////////////////////////////
@@ -208,14 +211,14 @@ int gentz::main(int argc, char *argv[]) {
     ////////////////////////////////////////////////////////////
     // Write the output file
     ////////////////////////////////////////////////////////////
-    int32_t wlen = writeTzDatFile();
+    int32_t wlen = writeTzDatFile(destdir);
     fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
             TZ_DATA_NAME, TZ_DATA_TYPE, wlen);
 
     return 0; // success
 }
 
-int32_t gentz::writeTzDatFile() {
+int32_t gentz::writeTzDatFile(const char *destdir) {
     UNewDataMemory *pdata;
     UErrorCode status = U_ZERO_ERROR;
 
@@ -223,7 +226,7 @@ int32_t gentz::writeTzDatFile() {
     *(uint16_t*)&(dataInfo.dataVersion[0]) = header.versionYear;
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
 
-    pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
+    pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, destdir, &dataInfo,
                          useCopyright ? U_COPYRIGHT_STRING : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");

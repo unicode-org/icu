@@ -61,6 +61,7 @@ extern void
 compactProps(void);
 
 extern void
-generateData(void);
+generateData(const char *dataDir);
 
 #endif
+
