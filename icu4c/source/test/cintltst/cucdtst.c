@@ -2082,7 +2082,7 @@ TestAdditionalProperties() {
          * The following properties are only supported starting with the
          * Unicode version indicated in the second field.
          */
-        { -1, 0x32, 0 },
+        { -1, 0x320, 0 },
 
         { 0x180c, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, TRUE },
         { 0xfe02, UCHAR_DEFAULT_IGNORABLE_CODE_POINT, TRUE },
@@ -2119,6 +2119,16 @@ TestAdditionalProperties() {
 
         { 0xfa11, UCHAR_UNIFIED_IDEOGRAPH, TRUE },
         { 0xfa12, UCHAR_UNIFIED_IDEOGRAPH, FALSE },
+
+        { -1, 0x401, 0 },
+
+        { 0x002e, UCHAR_S_TERM, TRUE },
+        { 0x0061, UCHAR_S_TERM, FALSE },
+
+        { 0x180c, UCHAR_VARIATION_SELECTOR, TRUE },
+        { 0xfe03, UCHAR_VARIATION_SELECTOR, TRUE },
+        { 0xe01ef, UCHAR_VARIATION_SELECTOR, TRUE },
+        { 0xe0200, UCHAR_VARIATION_SELECTOR, FALSE },
 
         /* enum/integer type properties */
 
@@ -2273,7 +2283,7 @@ TestAdditionalProperties() {
 
     /* what is our Unicode version? */
     u_getUnicodeVersion(version);
-    uVersion=(version[0]<<4)|version[1]; /* major/minor version numbers */
+    uVersion=((int32_t)version[0]<<8)|(version[1]<<4)|version[2]; /* major/minor/update version numbers */
 
     u_charAge(0x20, version);
     if(version[0]==0) {
