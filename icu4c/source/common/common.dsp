@@ -887,7 +887,7 @@ InputPath=.\unicode\ucnv.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\ucnv_bld.h
+SOURCE=.\ucnv_bld.h
 # End Source File
 # Begin Source File
 
