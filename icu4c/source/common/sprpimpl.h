@@ -105,51 +105,6 @@ uprv_syntaxError(const UChar* rules,
 
 
 /**
- * Map every character in input stream with mapping character 
- * in the mapping table and populate the output stream.
- * For any individual character the mapping table may specify 
- * that that a character be mapped to nothing, mapped to one 
- * other character or to a string of other characters.
- *
- * @param prep          Profile to use 
- * @param src           Pointer to UChar buffer containing a single label
- * @param srcLength     Number of characters in the source label
- * @param dest          Pointer to the destination buffer to receive the output
- * @param destCapacity  The capacity of destination array
- * @param options
- * @param parseError
- * @param status        ICU error code in/out parameter.
- *                      Must fulfill U_SUCCESS before the function call.
- * @return The number of UChars in the destination buffer
- */
-U_CFUNC int32_t
-usprep_map(  UStringPrepProfile* prep, 
-             const UChar* src, int32_t srcLength, 
-             UChar* dest, int32_t destCapacity,
-             int32_t options,
-             UParseError* parseError,
-             UErrorCode* status );
-
-
-/**
- * Normalize the input stream using Normalization Form KC (NFKC)
- *
- * @param prep          Profile to use 
- * @param src           Pointer to UChar buffer containing a single label
- * @param srcLength     Number of characters in the source label
- * @param dest          Pointer to the destination buffer to receive the output
- * @param destCapacity  The capacity of destination array
- * @param status        ICU error code in/out parameter.
- *                      Must fulfill U_SUCCESS before the function call.
- * @return The number of UChars in the destination buffer
- */
-U_CFUNC int32_t 
-usprep_normalize(   UStringPrepProfile* prep,
-                    const UChar* src, int32_t srcLength, 
-                    UChar* dest, int32_t destCapacity,
-                    UErrorCode* status );
-
-/**
  * Swap StringPrep .spp profile data. See udataswp.h.
  * @internal
  */
