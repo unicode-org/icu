@@ -427,7 +427,7 @@ static void TestfgetsBuffers(void) {
 
     u_fputc(0x3BC, myFile);
     u_fputc(0xFF41, myFile);
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
     u_uastrncpy(buffer, testStr, expectedSize+1);
     for (repetitions = 0; repetitions < 16; repetitions++) {
@@ -436,7 +436,7 @@ static void TestfgetsBuffers(void) {
     }
     u_fclose(myFile);
 
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-16");
     if (u_fgetc(myFile) != 0x3BC) {
         log_err("The first character is wrong\n");
@@ -452,7 +452,7 @@ static void TestfgetsBuffers(void) {
     if (readSize != expectedSize*repetitions) {
         log_err("Buffer is the wrong size. Got %d Expected %d\n", u_strlen(buffer), expectedSize*repetitions);
     }
-    if (buffer[(expectedSize*repetitions) + 1] != 0xDEAD) {
+    if (buffer[(expectedSize*repetitions) + 1] != 0xBEEF) {
         log_err("u_fgets wrote too much data\n");
     }
     if (u_strcmp(buffer, expectedBuffer) != 0) {
@@ -470,7 +470,7 @@ static void TestfgetsBuffers(void) {
 
     u_fputc(0x3BC, myFile);
     u_fputc(0xFF41, myFile);
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
     u_uastrncpy(buffer, testStr, expectedSize+1);
     for (repetitions = 0; repetitions < 16; repetitions++) {
@@ -479,7 +479,7 @@ static void TestfgetsBuffers(void) {
     }
     u_fclose(myFile);
 
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
     if (strcmp(u_fgetcodepage(myFile), "UTF-8") != 0) {
         log_err("Got %s instead of UTF-8\n", u_fgetcodepage(myFile));
@@ -498,7 +498,7 @@ static void TestfgetsBuffers(void) {
     if (readSize != expectedSize*repetitions) {
         log_err("Buffer is the wrong size. Got %d Expected %d\n", u_strlen(buffer), expectedSize*repetitions);
     }
-    if (buffer[(expectedSize*repetitions) + 1] != 0xDEAD) {
+    if (buffer[(expectedSize*repetitions) + 1] != 0xBEEF) {
         log_err("u_fgets wrote too much data\n");
     }
     if (u_strcmp(buffer, expectedBuffer) != 0) {
@@ -512,7 +512,7 @@ static void TestfgetsBuffers(void) {
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
 
     u_fputc(0xFF41, myFile);
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
     u_uastrncpy(buffer, testStr, expectedSize+1);
     for (repetitions = 0; repetitions < 1; repetitions++) {
@@ -521,7 +521,7 @@ static void TestfgetsBuffers(void) {
     }
     u_fclose(myFile);
 
-    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
     if (u_fgets(buffer, 2, myFile) != buffer) {
         log_err("Didn't get the buffer back\n");
@@ -534,13 +534,33 @@ static void TestfgetsBuffers(void) {
     if (buffer[0] != 0xFF41 || buffer[1] != 0) {
         log_err("Did get expected string back\n");
     }
-    if (buffer[2] != 0xDEAD) {
+    if (buffer[2] != 0xBEEF) {
         log_err("u_fgets wrote too much data\n");
     }
     u_fclose(myFile);
 
 }
 
+static void TestFileReadBuffering(void) {
+    UChar buffer[1024];
+    UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-16");
+    int32_t how_many;
+    int32_t repetitions;
+
+    u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
+    for (repetitions = 0; repetitions < 2; repetitions++) {
+        u_file_write(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
+    }
+
+    u_fclose(myFile);
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-16");
+    how_many = u_file_read(buffer, 1024, myFile);
+    if (how_many != 1024 || buffer[1023] != 0xBEEF) {
+        log_err("u_file_read read too much or not enough data\n");
+    }
+    u_fclose(myFile);
+}
 
 static void TestfgetsLineCount(void) {
     UChar buffer[2048];
@@ -574,7 +594,7 @@ static void TestfgetsLineCount(void) {
         char *returnedCharBuffer;
         UChar *returnedUCharBuffer;
 
-        u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+        u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
         returnedCharBuffer = fgets(charBuffer, sizeof(charBuffer)/sizeof(charBuffer[0]), stdFile);
         returnedUCharBuffer = u_fgets(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
 
@@ -594,7 +614,7 @@ static void TestfgetsLineCount(void) {
         if (u_strcmp(buffer, expectedBuffer) != 0) {
             log_err("buffers are different\n");
         }
-        if (buffer[u_strlen(buffer)+1] != 0xDEAD) {
+        if (buffer[u_strlen(buffer)+1] != 0xBEEF) {
             log_err("u_fgets wrote too much\n");
         }
     }
@@ -654,7 +674,7 @@ static void TestfgetsNewLineHandling(void) {
     for (lineIdx = 0; lineIdx < (int32_t)(sizeof(testUStr)/sizeof(testUStr[0])); lineIdx++) {
         UChar *returnedUCharBuffer;
 
-        u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+        u_memset(buffer, 0xBEEF, sizeof(buffer)/sizeof(buffer[0]));
         returnedUCharBuffer = u_fgets(buffer, sizeof(buffer)/sizeof(buffer[0]), myFile);
 
         if (!returnedUCharBuffer) {
@@ -664,7 +684,7 @@ static void TestfgetsNewLineHandling(void) {
         if (u_strcmp(buffer, testUStr[lineIdx]) != 0) {
             log_err("buffers are different at index = %d\n", lineIdx);
         }
-        if (buffer[u_strlen(buffer)+1] != 0xDEAD) {
+        if (buffer[u_strlen(buffer)+1] != 0xBEEF) {
             log_err("u_fgets wrote too much\n");
         }
     }
@@ -1441,6 +1461,7 @@ addFileTest(TestNode** root) {
 #endif
     addTest(root, &StdinBuffering, "file/StdinBuffering");
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
+    addTest(root, &TestFileReadBuffering, "file/TestFileReadBuffering");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
     addTest(root, &TestCodepage, "file/TestCodepage");
