@@ -2506,11 +2506,7 @@ static UBool intPropertyFilter(UChar32 ch, void* context) {
 
 
 /**
- * Generic filter-based scanning code.
- *
- * TODO: Replace this code with something that examines the underlying
- * UCharacter data structures so we can iterate over internally-stored
- * ranges of characters that have a given property.
+ * Generic filter-based scanning code for UCD property UnicodeSets.
  */
 void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
                              void* context,
@@ -2521,9 +2517,8 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     //
     // To improve performance, use the INCLUSIONS set, which
     // encodes information about character ranges that are known
-    // to have identical properties, such as the CJK Ideographs
-    // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
-    // except the first characters of such ranges.
+    // to have identical properties. INCLUSIONS contains
+    // only the first characters of such ranges.
     //
     // TODO Where possible, instead of scanning over code points,
     // use internal property data to initialize UnicodeSets for
@@ -2532,30 +2527,30 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
 
     const UnicodeSet* inclusions = getInclusions();
     if (inclusions == NULL) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
 
     clear();
 
-    int32_t startHasProperty = -1;
-    int limitRange = INCLUSIONS->getRangeCount();
+    UChar32 startHasProperty = -1;
+    int limitRange = inclusions->getRangeCount();
 
     for (int j=0; j<limitRange; ++j) {
         // get current range
-        UChar32 start = INCLUSIONS->getRangeStart(j);
-        UChar32 end = INCLUSIONS->getRangeEnd(j);
+        UChar32 start = inclusions->getRangeStart(j);
+        UChar32 end = inclusions->getRangeEnd(j);
 
         // for all the code points in the range, process
         for (UChar32 ch = start; ch <= end; ++ch) {
-            // only add to the unicodeset on inflection points --
+            // only add to this UnicodeSet on inflection points --
             // where the hasProperty value changes to false
-            if ((*filter)((UChar32) ch, context)) {
+            if ((*filter)(ch, context)) {
                 if (startHasProperty < 0) {
                     startHasProperty = ch;
                 }
             } else if (startHasProperty >= 0) {
-                add((UChar32)startHasProperty, (UChar32)ch-1);
+                add(startHasProperty, ch-1);
                 startHasProperty = -1;
             }
         }
@@ -2837,18 +2832,17 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
 
 const UnicodeSet* UnicodeSet::getInclusions() {
     if (INCLUSIONS == NULL) {
+        UnicodeSet *incl = new UnicodeSet();
+        uprv_getInclusions((USet *)incl);
         umtx_lock(NULL);
         if (INCLUSIONS == NULL) {
-            static int recursionCount;
-            recursionCount++;
-            U_ASSERT(recursionCount == 1);
-            INCLUSIONS = new UnicodeSet();
-            if (INCLUSIONS != NULL) {
-                uprv_getInclusions((USet*) INCLUSIONS);
-            }
-            recursionCount--;
+            INCLUSIONS = incl;
+            incl = NULL;
         }
         umtx_unlock(NULL);
+        if(incl != NULL) {
+            delete incl;
+        }
     }
     return INCLUSIONS;
 }
