@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneTest.java,v $
- * $Date: 2003/10/17 21:46:12 $
- * $Revision: 1.17 $
+ * $Date: 2004/01/05 23:00:14 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */
@@ -821,6 +821,31 @@ public class TimeZoneTest extends TestFmwk
             errln("FAIL: " + laZone + " in JP = " + la);
             errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
         }
+    }
+
+    public void TestFractionalDST() {
+	String tzName = "Australia/Lord_Howe"; // 30 min offset
+	java.util.TimeZone tz_java = java.util.TimeZone.getTimeZone(tzName);
+	int dst_java = 0;
+	try {
+	    // hack so test compiles and runs in both JDK 1.3 and JDK 1.4
+	    final Object[] args = new Object[0];
+	    final Class[] argtypes = new Class[0];
+	    java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
+	    dst_java = ((Integer) m.invoke(tz_java, args)).intValue();   
+	} catch (Exception e) {   
+	}
+	
+	com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
+	int dst_icu = tz_icu.getDSTSavings();
+
+	if (dst_java != dst_icu) {
+	    errln("java reports dst savings of " + dst_java +
+		  " but icu reports " + dst_icu + 
+		  " for tz " + tz_icu.getID());
+	} else {
+	    logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
+	}
     }
 }
 
