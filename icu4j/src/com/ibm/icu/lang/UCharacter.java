@@ -5522,6 +5522,31 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException(e.getMessage());
         }
 
+        /*
+         * In ICU4J 3.2, most Unicode properties were loaded from uprops.icu.
+         * ICU4J 3.4 adds ucase.icu for case mapping properties and
+         * ubidi.icu for bidi/shaping properties and
+         * removes case/bidi/shaping properties from uprops.icu.
+         *
+         * Loading of uprops.icu was always done during class loading of UCharacter.class.
+         * In order to maintain performance for all such properties,
+         * ucase.icu and ubidi.icu are also loaded during class loading of UCharacter.class.
+         * It will not fail if they are missing.
+         * These data items are loaded early to avoid having to synchronize access to them,
+         * for thread safety and performance.
+         *
+         * We try to load these data items at most once.
+         * If it works, we use the resulting singleton object.
+         * If it fails, then we get a dummy object, which always works unless
+         * we are seriously out of memory.
+         * After UCharacter.class loading, we have a never-changing pointer to either the
+         * real singleton or the dummy.
+         *
+         * This method is used in Unicode properties APIs that
+         * do not have a service object and also do not have an error code parameter.
+         * Other API implementations get the singleton themselves
+         * (synchronized), store it in the service object, and report errors.
+         */
         UCaseProps csp;
         try {
             csp=UCaseProps.getSingleton();
