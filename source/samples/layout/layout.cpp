@@ -199,6 +199,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         le_int32 firstLine, lastLine;
 
         hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
 
         si.cbSize = sizeof si;
         si.fMask = SIF_ALL;
