@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/12/03 19:29:34 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -390,6 +390,11 @@ public static byte
     ZAIN = 49,
     LIMIT_JOINING_GROUP = 50;
     
+    static final byte NFD = 0, NFC = 1, NFKD = 2, NFKC = 3;    
+    public static final int
+        NF_COMPATIBILITY_MASK = 2,
+        NF_COMPOSITION_MASK = 1;
+    
     // DERIVED PROPERTY
     
     static final int
@@ -447,6 +452,11 @@ public static byte
         NFC_UnsafeStart = 38,
         NFKD_UnsafeStart = 39,
         NFKC_UnsafeStart = 40,
+
+        NFD_Skippable = 41,
+        NFC_Skippable = 42,
+        NFKD_Skippable = 43,
+        NFKC_Skippable = 44,
 
         LIMIT = 41;
     

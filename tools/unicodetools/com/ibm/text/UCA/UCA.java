@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/10/31 00:01:28 $ 
-* $Revision: 1.7 $
+* $Date: 2001/12/03 19:29:35 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -74,7 +74,7 @@ final public class UCA implements Comparator {
      * Version of the UCA tables to use
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = ""; // ""; // "-2.1.9d7"; 
+    public static final String VERSION = "-3.1.1d1"; // ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
     
     /**
@@ -1019,6 +1019,7 @@ final public class UCA implements Comparator {
             // of the build process.
             String probe = String.valueOf(ch);
             Object value = contractingTable.get(probe);
+            if (value == null) throw new IllegalArgumentException("Missing value for " + Utility.hex(ch));
             
             // We loop, trying to add successive characters to the longest substring.
             while (index < decompositionBuffer.length()) {
@@ -1304,7 +1305,7 @@ final public class UCA implements Comparator {
         IntStack tempStack = new IntStack(100); // used for reversal
         StringBuffer multiChars = new StringBuffer(); // used for contracting chars
         String inputLine = "";
-        while (true) { // try {
+        while (true) try {
             inputLine = in.readLine();
             if (inputLine == null) break;       // means file is done
             String line = cleanLine(inputLine); // remove comments, extra whitespace
@@ -1326,14 +1327,17 @@ final public class UCA implements Comparator {
             
             // collect characters
             char value = getChar(line, position);
+            fixSurrogateContraction(value);
             char value2 = getChar(line, position);
             multiChars.setLength(0);            // clear buffer
             if (value2 != NOT_A_CHAR) {
+                fixSurrogateContraction(value2);
                 multiChars.append(value);       // append until we get terminator
                 multiChars.append(value2);
                 while (true) {
                     value2 = getChar(line, position);
                     if (value2 == NOT_A_CHAR) break;
+                    fixSurrogateContraction(value2);
                     multiChars.append(value2);
                 }
             }
@@ -1410,7 +1414,19 @@ final public class UCA implements Comparator {
         //} catch (Exception e) {
           //  throw new IllegalArgumentException("Malformed line: " + inputLine + "\n " 
             //  + e.getClass().getName() + ": " + e.getMessage());
+        } catch (RuntimeException e) {
+            System.out.println("Error on line: " + inputLine);
+            throw e;
         }
+    }
+    
+    private void fixSurrogateContraction(char ch) {
+        //if (DEBUGCHAR) System.out.println(Utility.hex(ch) + ": " + line.substring(0, position[0]) + "|" + line.substring(position[0]));            
+        if (ch == NOT_A_CHAR || !UTF16.isLeadSurrogate(ch)) return;
+        String chs = String.valueOf(ch);
+        Object probe = contractingTable.get(chs);
+        if (probe != null) return;
+        contractingTable.put(chs, new Integer(0));
     }
     
     private void concat(int[] ces1, int[] ces2) {
@@ -1479,6 +1495,7 @@ final public class UCA implements Comparator {
         Enumeration enum = contractingTable.keys();
         while (enum.hasMoreElements()) {
             String sequence = (String)enum.nextElement();
+            //System.out.println("Contraction: " + Utility.hex(sequence));
             for (int i = sequence.length()-1; i > 0; --i) {
                 String shorter = sequence.substring(0,i);
                 Object probe = contractingTable.get(shorter);
@@ -1550,9 +1567,18 @@ final public class UCA implements Comparator {
      * On output, updated to point to the next place to search.
      *@return the character, or NOT_A_CHAR when done
      */
+    
+    // NOTE in case of surrogates, we buffer up the second character!!
+    char charBuffer = 0;
+    
     private char getChar(String line, int[] position) {
-        int start = position[0];
         char ch;
+        if (charBuffer != 0) {
+            ch = charBuffer;
+            charBuffer = 0;
+            return ch;
+        }
+        int start = position[0];
         while (true) { // trim whitespace
             if (start >= line.length()) return NOT_A_CHAR;
             ch = line.charAt(start);
@@ -1560,12 +1586,24 @@ final public class UCA implements Comparator {
             start++;
         }
         // from above, we have at least one char
-        if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F')) {
-            position[0] = start + 4;
-            return (char)Integer.parseInt(line.substring(start,start+4),16);
+        int hexLimit = start;
+        while ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F')) {
+            hexLimit++;
+            ch = line.charAt(hexLimit);
         }
+        if (hexLimit >= start + 4) {
+            position[0] = hexLimit;
+            int cp = Integer.parseInt(line.substring(start,hexLimit),16);
+            if (cp <= 0xFFFF) return (char)cp;
+            //DEBUGCHAR = true;
+            charBuffer = UTF16.getTrailSurrogate(cp);
+            return UTF16.getLeadSurrogate(cp);
+        }
+        
         return NOT_A_CHAR; 
     }
+    
+    boolean DEBUGCHAR = false;    
     
     BitSet primarySet = new BitSet();
     BitSet secondarySet = new BitSet();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/11/13 02:31:55 $
-* $Revision: 1.5 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -35,6 +35,7 @@ public final class Main {
             } else if (arg.equalsIgnoreCase("build")) {
                 ConvertUCD.main(new String[]{ucdVersion});
             } else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
+            else if (arg.equalsIgnoreCase("testskippable")) NFSkippable.main(null);
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
             else if (arg.equalsIgnoreCase("generateHanTransliterator")) GenerateHanTransliterator.main();

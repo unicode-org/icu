@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2001/10/25 20:35:42 $ 
-* $Revision: 1.5 $
+* $Date: 2001/12/03 19:29:35 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -90,6 +90,7 @@ public class GenOverlap implements UCD_Types {
             addString(s, currCEList);
         }
         
+        /*
         for (int cp = 0x10000; cp <= 0x10FFFF; ++cp) {
             if (!ucd.isRepresented(cp)) continue;
             byte decompType = ucd.getDecompositionType(cp);
@@ -100,6 +101,7 @@ public class GenOverlap implements UCD_Types {
                 System.out.println("Adding: " + ucd.getCodeAndName(cp) + "\t" + celist);
             }
         }
+        */
             
         Utility.fixDot();
         System.out.println("# Completes Count: " + completes.size());

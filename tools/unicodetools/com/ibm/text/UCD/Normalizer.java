@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -40,8 +40,9 @@ public final class Normalizer implements UCD_Types {
      * Create a normalizer for a given form.
      */
     public Normalizer(byte form, String unicodeVersion) {
-        this.composition = (form & COMPOSITION_MASK) != 0;
-        this.compatibility = (form & COMPATIBILITY_MASK) != 0;
+        this.form = form;
+        this.composition = (form & NF_COMPOSITION_MASK) != 0;
+        this.compatibility = (form & NF_COMPATIBILITY_MASK) != 0;
         this.data = getData(unicodeVersion);
     }
 
@@ -53,20 +54,32 @@ public final class Normalizer implements UCD_Types {
     }
 
     /**
-    * Masks for the form selector
-    */
-    public static final byte
-        COMPATIBILITY_MASK = 1,
-        COMPOSITION_MASK = 2;
+     * Return string name
+     */
+    public static String getName(byte form) {
+        return UCD_Names.NF_NAME[form];
+    }
 
     /**
-    * Normalization Form Selector
-    */
-    public static final byte
-        NFD = 0 ,
-        NFKD = COMPATIBILITY_MASK,
-        NFC = COMPOSITION_MASK,
-        NFKC = (byte)(COMPATIBILITY_MASK + COMPOSITION_MASK);
+     * Return string name
+     */
+    public String getName() {
+        return getName(form);
+    }
+
+    /**
+     * Does compose?
+     */
+    public boolean isComposition() {
+        return composition;
+    }
+
+    /**
+     * Does compose?
+     */
+    public boolean isCompatibility() {
+        return compatibility;
+    }
 
     /**
     * Normalizes text according to the chosen form,
@@ -234,6 +247,10 @@ public final class Normalizer implements UCD_Types {
         return this.composition ? data.isTrailing(cp) : false;
     }
 
+    public boolean isLeading(int cp) {
+        return this.composition ? data.isLeading(cp) : false;
+    }
+
 
     // ======================================
     //                  PRIVATES
@@ -242,13 +259,14 @@ public final class Normalizer implements UCD_Types {
     /**
      * The current form.
      */
+    private byte form;
     private boolean composition;
     private boolean compatibility;
 
     /**
     * Decomposes text, either canonical or compatibility,
     * replacing contents of the target buffer.
-    * @param   form        the normalization form. If COMPATIBILITY_MASK
+    * @param   form        the normalization form. If NF_COMPATIBILITY_MASK
     *                      bit is on in this byte, then selects the recursive
     *                      compatibility decomposition, otherwise selects
     *                      the recursive canonical decomposition.
@@ -342,6 +360,7 @@ public final class Normalizer implements UCD_Types {
         private UCD ucd;
         private HashMap compTable = new HashMap();
         private BitSet isSecond = new BitSet();
+        private BitSet isFirst = new BitSet();
         private BitSet canonicalRecompose = new BitSet();
         private BitSet compatibilityRecompose = new BitSet();
         static final int NOT_COMPOSITE = 0xFFFF;
@@ -352,6 +371,7 @@ public final class Normalizer implements UCD_Types {
                 if (!ucd.isAssigned(i)) continue;
                 if (ucd.isPUA(i)) continue;
                 if (ucd.isTrailingJamo(i)) isSecond.set(i);
+                if (ucd.isLeadingJamoComposition(i)) isFirst.set(i);
                 byte dt = ucd.getDecompositionType(i);
                 if (dt != CANONICAL) continue;
                 if (!ucd.getBinaryProperty(i, CompositionExclusion)) {
@@ -364,6 +384,7 @@ public final class Normalizer implements UCD_Types {
                         }
                         int a = UTF16.charAt(s, 0);
                         if (ucd.getCombiningClass(a) != 0) continue;
+                        isFirst.set(a);
 
                         int b = UTF16.charAt(s, UTF16.getCharCount(a));
                         isSecond.set(b);
@@ -427,6 +448,10 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
 
         boolean isTrailing(int cp) {
             return isSecond.get(cp);
+        }
+
+        boolean isLeading(int cp) {
+            return isFirst.get(cp);
         }
 
         boolean normalizationDiffers(int cp, boolean composition, boolean compatibility) {

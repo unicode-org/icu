@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCD;
 
 import java.io.*;
 import com.ibm.text.utility.*;
+import com.ibm.text.UnicodeSet;
 import java.text.NumberFormat;
 
 
@@ -32,6 +33,7 @@ abstract public class PropertyLister implements UCD_Types {
     protected int firstRealCp = -2;
     protected int lastRealCp = -2;
     protected boolean alwaysBreaks = false; // set to true if property only breaks
+    private UnicodeSet set = new UnicodeSet();
 
     public static final byte INCLUDE = 0, BREAK = 1, CONTINUE = 2, EXCLUDE = 3;
 
@@ -65,6 +67,7 @@ abstract public class PropertyLister implements UCD_Types {
 
     public void format(int startCp, int endCp, int realCount) {
         try {
+            set.add(startCp, endCp);
             String prop = propertyName(startCp);
             if (prop.length() > 0) prop = "; " + prop;
             String opt = optionalName(startCp);
@@ -153,6 +156,7 @@ abstract public class PropertyLister implements UCD_Types {
     }
 
     public int print() {
+        set.clear();
         int count = 0;
         firstRealCp = -1;
         byte firstRealCpCat = -1;
@@ -215,6 +219,8 @@ abstract public class PropertyLister implements UCD_Types {
         output.println();
         output.println("# Total code points: " + nf.format(count));
         output.println();
+        System.out.println(headerString());
+        System.out.println(set.toPattern(true));
         return count;
     }
     

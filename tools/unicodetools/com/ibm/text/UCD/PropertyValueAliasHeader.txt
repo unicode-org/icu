@@ -1,0 +1,50 @@
+# DRAFT
+# PropertyValueAliases-3.2.0.txt
+#
+# This file contains aliases for property values used in the UCD.
+# These names can be used for XML formats of UCD data, for regular-expression
+# property tests, and other programmatic textual descriptions of Unicode data.
+# The names are not normative, except where they correspond to normative property
+# values in the UCD. For information on which properties are normative, see
+# UnicodeCharacterDatabase.html.
+#
+# The names may be translated in appropriate environments, and additional
+# aliases may be useful.
+#
+# FORMAT
+#
+# Each line describes a property value name.
+# This consists of three fields, separated by semicolons.
+#
+# First Field: The first field describes the property for which that
+# property value name is used.
+# There is one special pseudo-property: "qc" stands for any quick-check property
+#
+# Second Field: The second field is an abbreviated name.
+# If there is no abbreviated name available, the field is marked with "n/a".
+#
+# Third Field: The third field is a long name.
+#
+# With loose matching of property names, the case distinctions, whitespace,
+# and '_' are ignored.
+#
+# NOTE: The Block property values are in Blocks.txt, and not repeated here.
+# For more information on the use of blocks, see UTR #24: Regular Expression Guidelines
+#
+# NOTE: Currently there is at most one abbreviated name and one long name for
+# property value. However, in the future additional aliases
+# may be added. In such a case, the first line for the property value
+# would have the preferred alias for output.
+#
+# NOTE: The property value names are NOT unique across properties, especially
+# with loose matches. For example,
+# AL means Arabic Letter for the Bidi_Class property, and
+# AL means Alpha_Left for the Combining_Class property, and
+# AL means Alphabetic for the Line_Break property.
+#
+# In addition, some property names may be the same as some property value names:
+# cc means Combining_Class property, and
+# cc means the General_Category property value Control (cc)
+#
+# The combination of property value and property name is, however, unique.
+# For more information, see UTR #24: Regular Expression Guidelines
