@@ -67,9 +67,12 @@ check: all
 distclean-local: clean
 	$(RMV) Makefile
 
-ifeq ($(OS390DATA),1)
-OS390PKG= package390
-OS390INSTALL= install390
+ifeq ($(OS390_STUBDATA),1)
+OS390PKG=package390
+OS390INSTALL=install390
+
+# Additional data for 390
+OS390LIST=$(BUILDDIR)/icudata390.lst
 endif
 
 all-local: icupkg.inc build-local packagedata testdata packagetest $(OS390PKG)
@@ -112,15 +115,15 @@ testdata: $(SPECIALTESTDATA)
 ####
 ####
 #### 390 support
-install390: build/icudata390.lst ./icupkg.inc
+install390: $(BUILDDIR)/icudata390.lst ./icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
 #### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
-package390: build/icudata390.lst build/icudata.lst ./icupkg.inc
-	@$(MKINSTALLDIRS) tmp3901
-	cd build ; $(INVOKE) $(PKGDATA) -s $(BUILDDIR)  -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) icudata390.lst -m dll
-	cp $(top_builddir)/data/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
+package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc
+	@$(MKINSTALLDIRS) $(BUILDDIR)/tmp3901
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll
+	cp $(OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
 
 
 ##### Define all the data files. the build rule that depends on them is below.
@@ -196,13 +199,7 @@ $(TESTBUILDDIR)/testdata.lst: $(SRCLISTDEPS)
 
 build-local: build-data build-testdata
 
-# Additional data for 390
-ifeq ($(OS390DATA),1)
-OS390LIST= icudata390.lst
-endif
-#
-
-build-data: build-dir $(ALL_FILES) $(BUILDDIR)/icudata.lst  $(OS390LIST)
+build-data: build-dir $(ALL_FILES) $(BUILDDIR)/icudata.lst $(OS390LIST)
 
 build-dir:
 	-$(MKINSTALLDIRS) $(OUTDIR) $(BUILDDIR) $(TESTOUTDIR) $(TESTBUILDDIR)
@@ -316,13 +313,14 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ###########
-########### 390 support
+########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
 ALLFILES390=uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
 
-icudata390.lst:  $(SRCLISTDEPS)
+$(BUILDDIR)/icudata390.lst:  $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
 	@-$(RMV) $@
 	@for file in $(ALLFILES390); do \
 	  echo $$file >> $@; \
 	done;
+
