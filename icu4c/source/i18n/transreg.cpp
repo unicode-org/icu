@@ -73,7 +73,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
         t = Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
     } else {
         t = new CompoundTransliterator(ID, aliasID, idSplitPoint,
-                                       trans, pe, ec);
+                                       trans, ec);
         trans = 0; // so we don't delete it later
         if (compoundFilter) {
             t->adoptFilter((UnicodeSet*) compoundFilter->clone());

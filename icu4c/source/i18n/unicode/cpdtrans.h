@@ -32,7 +32,7 @@ class TransliteratorRegistry;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.26 $ $Date: 2002/02/07 00:59:24 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.27 $ $Date: 2002/02/20 00:01:30 $
  * @deprecated To be removed after 2002-sep-30.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -181,7 +181,6 @@ private:
                            const UnicodeString& idBlock,
                            int32_t idSplitPoint,
                            Transliterator *adoptedTrans,
-                           UParseError& parseError,
                            UErrorCode& status);
                            
     /**
@@ -195,7 +194,6 @@ private:
               int32_t idSplitPoint,
               Transliterator *adoptedRbt,
               UBool fixReverseID,
-              UParseError& parseError,
               UErrorCode& status);
 
     void init(UVector& list,
