@@ -1,4 +1,4 @@
-Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2002-2005, International Business Machines Corporation and others. All Rights Reserved.
 This is an exercise for the ICU Workshop (September 2000).
 ** Workshop homepage is:  
   http://icu.sourceforge.net/docs/workshop_2000/agenda.html
@@ -29,7 +29,7 @@ Microsoft Visual C++ 6.0.  It should work on other ICU releases and
 other platforms as well.
 
  MSVC:
-   Open the file "datefmt.dsw" in Microsoft Visual C++.
+   Open the file "datefmt.sln" in Microsoft Visual C++.
 
  Unix:
    - Build and install ICU with a prefix, for example '--prefix=/home/srl/ICU'

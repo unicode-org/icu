@@ -7,12 +7,12 @@ This sample demonstrates
          
 Files:
     citer.cpp      Main source file in C++
-    citer.dsw      Windows MSVC workspace.  Double-click this to get started.
-    citer.dsp      Windows MSVC project file
+    citer.sln      Windows MSVC workspace.  Double-click this to get started.
+    citer.vcproj   Windows MSVC project file
 
 To Build citer on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\citer\citer.dsw
+    2.  In MSVC, open the workspace file icu\samples\citer\citer.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	

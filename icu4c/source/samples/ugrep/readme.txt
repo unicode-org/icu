@@ -19,14 +19,14 @@ specified by the BOM.  Program output is always in the system's default
    
 Files:
     ./ugrep.c                 source code for the sample
-    ./ugrep.dsw               Windows MSVC workspace.  Double-click this to get started.
-    ./ugrep.dsp               Windows MSVC project file.
+    ./ugrep.sln               Windows MSVC workspace.  Double-click this to get started.
+    ./ugrep.vcproj            Windows MSVC project file.
     ./Makefile                Makefile for Unixes.  Needs gmake.
     
 
 To Build ugrep on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\ugrep\ugrep.dsw
+    2.  In MSVC, open the workspace file icu\samples\ugrep\ugrep.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	

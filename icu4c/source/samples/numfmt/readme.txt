@@ -10,12 +10,12 @@ Files:
     capi.c                     C version 
     util.cpp                   formatted output convenience implementation
     util.h                     formatted output convenience header
-    numfmt.dsw                 Windows MSVC workspace.  Double-click this to get started.
-    numfmt.dsp                 Windows MSVC project file
+    numfmt.sln                 Windows MSVC workspace.  Double-click this to get started.
+    numfmt.vcproj              Windows MSVC project file
 
 To Build on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.dsw
+    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.sln
     3.  Choose a Debug or Release build.
     4.  Build.
 	
