@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2004/02/19 01:11:46 $ 
- * $Revision: 1.44 $
+ * $Date: 2004/02/20 19:40:16 $ 
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -3109,6 +3109,10 @@ public class DecimalFormat extends NumberFormat {
                     // Process the prefix / suffix characters
                     // Process unquoted characters seen in prefix or suffix
                     // subpart.
+                    
+                    // Several syntax characters implicitly begins the
+                    // next subpart if we are in the prefix; otherwise
+                    // they are illegal if unquoted.
                     if (ch == digit ||
                         ch == groupingSeparator ||
                         ch == decimalSeparator ||
@@ -3131,13 +3135,13 @@ public class DecimalFormat extends NumberFormat {
                             if ((pos+1) < pattern.length() &&
                                 pattern.charAt(pos+1) == QUOTE) {
                                 ++pos;
-                                // Fall through to append(ch)
+                                affix.append(ch);
                             } else {
                                 subpart += 2; // open quote
-                                continue;
                             }
+                            continue;
                         }
-                        // Fall through to append(ch)
+                        throw new IllegalArgumentException("Unquoted special character");
                     } else if (ch == CURRENCY_SIGN) {
                         // Use lookahead to determine if the currency sign is
                         // doubled or not.
