@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/12 20:19:34 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/12 23:21:52 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -122,7 +122,7 @@ UnicodeString CanonicalIterator::getSource() {
  * Resets the iterator so that one can start again from the beginning.
  */
 void CanonicalIterator::reset() {
-    done = false;
+    done = FALSE;
     for (int i = 0; i < current_length; ++i) {
         current[i] = 0;
     }
