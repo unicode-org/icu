@@ -627,31 +627,35 @@ uprv_free(result);
 
     /*testing spellout format to make sure we can use it successfully.*/
     log_verbose("\nTesting spellout format\n");
+    if (spellout_def)
     {
-    static const int32_t values[] = { 0, -5, 105, 1005, 105050 };
-    for (i = 0; i < LENGTH(values); ++i) {
-        UChar buffer[128];
-        int32_t len;
-        int32_t value = values[i];
-        status = U_ZERO_ERROR;
-        len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
-        if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
-        } else {
-            int32_t pp = 0;
-            int32_t parseResult;
-            char logbuf[256];
-            ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
-            log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
+        static const int32_t values[] = { 0, -5, 105, 1005, 105050 };
+        for (i = 0; i < LENGTH(values); ++i) {
+            UChar buffer[128];
+            int32_t len;
+            int32_t value = values[i];
+            status = U_ZERO_ERROR;
+            len = unum_format(spellout_def, value, buffer, LENGTH(buffer), NULL, &status);
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+            } else {
+                int32_t pp = 0;
+                int32_t parseResult;
+                char logbuf[256];
+                ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
+                log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
 
-            parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
-            if (U_FAILURE(status)) {
-                log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
-            } else if (parseResult != value) {
-                log_err("unum_format result %d != value %d\n", parseResult, value);
+                parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
+                if (U_FAILURE(status)) {
+                    log_err("Error in parsing using unum_format(spellout_fmt, ...): %s\n", myErrorName(status));
+                } else if (parseResult != value) {
+                    log_err("unum_format result %d != value %d\n", parseResult, value);
+                }
             }
         }
     }
+    else {
+        log_err("Spellout format is unavailable\n");
     }
 
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
