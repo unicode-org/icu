@@ -1027,11 +1027,38 @@ ucnv_toUChars(UConverter *cnv,
               UErrorCode *pErrorCode);
 
 /**
- * Will convert a codepage buffer into unicode one character at a time.
- * <p>This function was written to be efficient when transcoding small
- * amounts of data at a time.
- * In that case it will be more efficient than \Ref{ucnv_toUnicode}.
- * When converting large buffers use \Ref{ucnv_toUnicode}.</p>
+ * Convert a codepage buffer into Unicode one character at a time.
+ *
+ * Advantage compared to ucnv_toUnicode() or ucnv_toUChars():
+ * - Faster for small amounts of data, for most converters, e.g.,
+ *   US-ASCII, ISO-8859-1, UTF-8/16/32, and most "normal" charsets.
+ *   (For complex converters, e.g., SCSU, UTF-7 and ISO 2022 variants,
+ *    it uses ucnv_toUnicode() internally.)
+ * - Convenient.
+ *
+ * Limitations compared to ucnv_toUnicode():
+ * - Always assumes flush=TRUE.
+ *   This makes ucnv_getNextUChar() unsuitable for "streaming" conversion,
+ *   that is, for where the input is supplied in multiple buffers,
+ *   because ucnv_getNextUChar() will assume the end of the input at the end
+ *   of the first buffer.
+ * - Does not provide offset output.
+ *
+ * It is possible to "mix" ucnv_getNextUChar() and ucnv_toUnicode() because
+ * ucnv_getNextUChar() uses the current state of the converter
+ * (unlike ucnv_toUChars() which always resets first).
+ * However, if ucnv_getNextUChar() is called after ucnv_toUnicode()
+ * stopped in the middle of a character sequence (with flush=FALSE),
+ * then ucnv_getNextUChar() will always use the slower ucnv_toUnicode()
+ * internally until the next character boundary.
+ * (This is new in ICU 2.6. In earlier releases, ucnv_getNextUChar() had to
+ * start at a character boundary.)
+ *
+ * Instead of using ucnv_getNextUChar(), it is recommended
+ * to convert using ucnv_toUnicode() or ucnv_toUChars()
+ * and then iterate over the text using U16_NEXT() or a UCharIterator (uiter.h)
+ * or a C++ CharacterIterator or similar.
+ * This allows streaming conversion and offset output, for example.
  *
  * <p>Handling of surrogate pairs and supplementary-plane code points:<br>
  * There are two different kinds of codepages that provide mappings for surrogate characters:
