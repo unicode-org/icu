@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/BreakIteratorRules_en_US_TEST.java,v $ 
- * $Date: 2000/07/19 21:17:18 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/09/22 18:52:47 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.net.URL;
  */
 public class BreakIteratorRules_en_US_TEST extends ListResourceBundle {
     private static final URL url =
-        BreakIteratorRules_en_US_TEST.class.getResource("/com/ibm/test/rbbi/english.dict");
+        BreakIteratorRules_en_US_TEST.class.getResource("/com/ibm/data/misc/english.dict");
     
     public Object[][] getContents() {
         return contents;
