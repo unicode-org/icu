@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2003, International Business Machines Corporation and
+ * Copyright (c) 1999-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -203,7 +203,12 @@ setNumberFormatCurrency_2_6(NumberFormat &nf, const char *currency, UErrorCode &
     u_charsToUChars(currency, uCurrency, 4);
 
     // set the currency
+    // in ICU 3.0 this API (which was @draft ICU 2.6) gained a UErrorCode& argument
+#if (U_ICU_VERSION_MAJOR_NUM < 3)
     nf.setCurrency(uCurrency);
+#else
+    nf.setCurrency(uCurrency, errorCode);
+#endif
 }
 
 static const char *const
