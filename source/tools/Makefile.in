@@ -60,7 +60,7 @@ PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
 
-SUBDIRS = ctestfw toolutil makeconv genrb \
+SUBDIRS = ctestfw toolutil makeconv genrb genuca \
 genccode genprops gennames gencmn gencnval gentz gentest pkgdata
 
 ## List of phony targets
