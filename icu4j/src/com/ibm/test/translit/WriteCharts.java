@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/WriteCharts.java,v $
- * $Date: 2001/11/02 00:37:47 $
- * $Revision: 1.1 $
+ * $Date: 2001/11/02 01:01:56 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -61,7 +61,7 @@ public class WriteCharts {
         // check that the source is a script
         int[] scripts = UScript.getCode(target);
         if (scripts.length != 1) {
-            target = "[a-zA-Z]";
+            target = "[:Latin:]";
         } else {
             target = "[:" + target + ":]";
         }
@@ -76,6 +76,8 @@ public class WriteCharts {
             new OutputStreamWriter(
                 new FileOutputStream(filename), "UTF-8"));
         out.print('\uFEFF'); // BOM
+        
+        Transliterator hex = Transliterator.getInstance("Any-Hex");
                 
         // iterate through script
         try {
@@ -102,6 +104,10 @@ public class WriteCharts {
                     String rt = inverse.transliterate(ts);
                     if (!isIn(rt, sourceSet)) flag += "Not in Source Set; ";
                     else if (!ss.equals(rt)) flag = "NO Round Trip; ";
+                    
+                    if (flag.length() != 0) flag += " [" + hex.transliterate(ss)
+                        + "\t" + hex.transliterate(ts)
+                        + "\t" + hex.transliterate(rt) + "]";
                     out.println(ss + "\t" + ts + "\t" + rt + "\t" + flag);
                 }
             }
@@ -119,6 +125,8 @@ public class WriteCharts {
                     String flag = "";
                     
                     if (!isIn(rt, sourceSet)) flag += "Not in Source Set; ";
+                    if (flag.length() != 0) flag += " [" + hex.transliterate(ts)
+                        + "\t" + hex.transliterate(rt) + "]";
                     out.println("-\t" + ts + "\t" + rt + "\t" + flag);
                 }
             }
