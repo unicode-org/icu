@@ -237,9 +237,9 @@ public:
     static Calendar* createInstance(UErrorCode& success);
 
     /**
-     * Creates a Calendar using the given timezone and the default locale. If creation of
-     * a new Calendar is successful, the Calendar takes ownership of zoneToAdopt; the
-     * client should not delete it.
+     * Creates a Calendar using the given timezone and the default locale.
+     * The Calendar takes ownership of zoneToAdopt; the
+     * client must not delete it.
      *
      * @param zoneToAdopt  The given timezone to be adopted.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
@@ -273,9 +273,9 @@ public:
     static Calendar* createInstance(const Locale& aLocale, UErrorCode& success);
 
     /**
-     * Creates a Calendar using the given timezone and given locale. If creation of
-     * a new Calendar is successful, the Calendar takes ownership of zoneToAdopt; the
-     * client should not delete it.
+     * Creates a Calendar using the given timezone and given locale.
+     * The Calendar takes ownership of zoneToAdopt; the
+     * client must not delete it.
      *
      * @param zoneToAdopt  The given timezone to be adopted.
      * @param aLocale      The given locale.
@@ -960,6 +960,15 @@ private:
      */
     static const char* kDateTimeElements;
 };
+
+// -------------------------------------
+
+inline Calendar*
+Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
+{
+    // since the Locale isn't specified, use the default locale
+    return createInstance(zone, Locale::getDefault(), errorCode);
+}
 
 // -------------------------------------
 
