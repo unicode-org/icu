@@ -1329,7 +1329,8 @@ static const struct {
     {0xac00, "HANGUL SYLLABLE GA", ""},
     {0xd7a3, "HANGUL SYLLABLE HIH", ""},
     {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS"},
-    {0xffe5, "FULLWIDTH YEN SIGN", ""}
+    {0xffe5, "FULLWIDTH YEN SIGN", ""},
+    {0x23456, "CJK UNIFIED IDEOGRAPH-23456", ""}
 };
 
 static UBool
