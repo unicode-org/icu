@@ -39,6 +39,8 @@ ConvertThreadTest::ConvertThreadTest() {
 
 
 ConvertThreadTest::~ConvertThreadTest() {
+    ucnv_close(fCnv);
+    fCnv = 0;
 }
 
 void ConvertThreadTest::runOnce() {
