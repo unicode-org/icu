@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/12/03 18:26:52 $
- * $Revision: 1.90 $
+ * $Date: 2001/12/03 20:49:11 $
+ * $Revision: 1.91 $
  *
  *****************************************************************************************
  */
@@ -2199,7 +2199,7 @@ public class TransliteratorTest extends TestFmwk {
 
     static final String[][] testCases = {
 
-        // NORMALIZATION, needs porting to C
+        // NORMALIZATION
         // should add more test cases
         {"NFD" , "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
         {"NFC" , "a\u0300 \u00E0 \u1100\u1161 \uFF76\uFF9E\u03D3"},
