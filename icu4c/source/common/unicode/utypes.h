@@ -504,12 +504,6 @@ typedef enum UErrorCode UErrorCode;
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
-/**
- * Mutex data type.
- * @internal
- */
-typedef void *UMTX;
-
 
 
 /*===========================================================================*/
