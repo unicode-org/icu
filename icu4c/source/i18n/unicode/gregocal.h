@@ -475,10 +475,6 @@ private:
      */
     int32_t internalGetEra() const;
 
-    // this is 2^52 - 1, the largest allowable mantissa with a 0 exponent in a 64-bit double
-    static const UDate EARLIEST_SUPPORTED_MILLIS;
-    static const UDate LATEST_SUPPORTED_MILLIS;
-
     int32_t monthLength(int32_t month) const;
     int32_t monthLength(int32_t month, int32_t year) const;
 
@@ -673,28 +669,6 @@ private:
      */
     static int32_t floorDivide(double numerator, int32_t denominator, int32_t remainder[]);
 
-
-    static const UDate       kPapalCutover;             // Cutover decreed by Pope Gregory
-
-    static const int32_t     kJan1_1JulianDay;        // January 1, year 1 (Gregorian)
-    static const int32_t     kEpochStartAsJulianDay; // January 1, 1970 (Gregorian)
-    static const int32_t     kEpochYear;
-
-    static const int32_t     kNumDays [];
-    static const int32_t     kLeapNumDays [];
-    static const int32_t     kMonthLength [];
-    static const int32_t     kLeapMonthLength [];
-
-    static const int32_t     kMinValues [];
-    static const int32_t     kLeastMaxValues [];
-    static const int32_t     kMaxValues [];
-
-    // Useful millisecond constants
-    static const int32_t    kOneSecond;
-    static const int32_t    kOneMinute;
-    static const int32_t    kOneHour;
-    static const double        kOneDay;
-    static const double        kOneWeek;
 };
 
 
