@@ -96,6 +96,7 @@ icu4c/source/test/ieeetest/Makefile
 icu4c/source/test/ieeetest/Release
 icu4c/source/test/ieeetest/ieeetest
 icu4c/source/test/intltest/*.d
+icu4c/source/test/intltest/*.plg
 icu4c/source/test/intltest/Debug
 icu4c/source/test/intltest/Makefile
 icu4c/source/test/intltest/Release
@@ -129,6 +130,7 @@ icu4c/source/tools/genccode/genccode
 icu4c/source/tools/genccode/tmp
 icu4c/source/tools/gencmn/*.d
 icu4c/source/tools/gencmn/*.pdb
+icu4c/source/tools/gencmn/*.plg
 icu4c/source/tools/gencmn/Debug
 icu4c/source/tools/gencmn/Makefile
 icu4c/source/tools/gencmn/Release
@@ -183,6 +185,7 @@ icu4c/source/tools/gentz/tmp
 icu4c/source/tools/icupkg.inc
 icu4c/source/tools/makeconv/*.d
 icu4c/source/tools/makeconv/*.pdb
+icu4c/source/tools/makeconv/*.plg
 icu4c/source/tools/makeconv/Debug
 icu4c/source/tools/makeconv/Makefile
 icu4c/source/tools/makeconv/Release
