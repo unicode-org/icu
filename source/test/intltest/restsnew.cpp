@@ -504,6 +504,97 @@ NewResourceBundleTest::TestOtherAPI(){
 
     logln("Version returned: [%d.%d.%d.%d]\n", ver[0], ver[1], ver[2], ver[3]);
 
+    logln("Testing C like UnicodeString APIs\n");
+
+    UResourceBundle *testCAPI = NULL, *bundle = NULL, *rowbundle = NULL, *temp = NULL;
+    err = U_ZERO_ERROR;
+    const char* data[]={
+        "string_in_Root_te_te_IN",   "1",
+        "array_in_Root_te_te_IN",    "5",
+        "array_2d_in_Root_te_te_IN", "4",
+    };
+
+
+
+    testCAPI = ures_open(testdatapath, "te_IN", &err);
+
+    if(U_SUCCESS(err)) {
+      // Do the testing
+      // first iteration
+
+      uint32_t i;
+      int32_t count, row=0, col=0;
+      char buf[5];
+      UnicodeString expected;
+      UnicodeString element("TE_IN");
+      UnicodeString action;
+
+
+      for(i=0; i<sizeof(data)/sizeof(data[0]); i=i+2){
+          action = "te_IN";
+          action +=".get(";
+          action += data[i];
+          action +=", err)";
+          err=U_ZERO_ERROR;
+          bundle = ures_getByKey(testCAPI, data[i], bundle, &err); 
+          if(!U_FAILURE(err)){
+              action = "te_IN";
+              action +=".getKey()";
+
+              CONFIRM_EQ((UnicodeString)ures_getKey(bundle), (UnicodeString)data[i]);
+
+              count=0;
+              row=0;
+              while(ures_hasNext(bundle)){
+                  action = data[i];
+                  action +=".getNextString(err)";
+                  row=count;   
+                  UnicodeString got=ures_getNextUnicodeString(bundle, &err);
+                  if(U_SUCCESS(err)){
+                      expected=element;
+                      if(ures_getSize(bundle) > 1){
+                          CONFIRM_EQ(ures_getType(bundle), RES_ARRAY);
+                          expected+=itoa(row, buf);
+                          rowbundle=ures_getByIndex(bundle, row, rowbundle, &err);
+                          if(!U_FAILURE(err) && ures_getSize(rowbundle)>1){
+                              col=0;
+                              while(ures_hasNext(rowbundle)){
+                                  expected=element;
+                                  got=ures_getNextUnicodeString(rowbundle, &err);
+                                  temp = ures_getByIndex(rowbundle, col, temp, &err);
+                                  UnicodeString bla = ures_getUnicodeString(temp, &err);
+                                  UnicodeString bla2 = ures_getUnicodeStringByIndex(rowbundle, col, &err);
+                                  if(!U_FAILURE(err)){
+                                      expected+=itoa(row, buf);
+                                      expected+=itoa(col, buf);
+                                      col++;
+                                      CONFIRM_EQ(got, expected);
+                                      CONFIRM_EQ(bla, expected);
+                                      CONFIRM_EQ(bla2, expected);
+                                  }
+                              }
+                              CONFIRM_EQ(col, ures_getSize(rowbundle));
+                          }
+                      }
+                      else{
+                          CONFIRM_EQ(ures_getType(bundle), (int32_t)RES_STRING);
+                      }
+                  }
+                  CONFIRM_EQ(got, expected);
+                  count++;
+              }
+          }
+      }
+      ures_close(temp);
+      ures_close(rowbundle);
+      ures_close(bundle);
+      ures_close(testCAPI);
+    } else {
+      errln("failed to open a resource bundle\n");
+    }
+
+
+
 
 
 

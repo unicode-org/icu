@@ -493,7 +493,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceB
  * Returns a string in a given resource that has a given key. This procedure works only with table
  * resources. 
  *
- * @param resourceBundle    a resource
+ * @param resB              a resource
  * @param key               a key associated with the wanted string
  * @param len               fill in length of the string
  * @param status            fills in the outgoing error code
@@ -501,6 +501,91 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceB
  * @stable
  */
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* key, int32_t* len, UErrorCode *status);
+
+#ifdef XP_CPLUSPLUS
+#include "unicode/unistr.h"
+
+/**
+ * returns a string from a string resource type
+ *
+ * @param resB              a resource
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return        an UnicodeString object. If there is an error, string is bogus
+ * @draft
+ */
+inline UnicodeString ures_getUnicodeString(const UResourceBundle *resB, UErrorCode* status) {
+    int32_t len = 0;
+    const UChar *r = ures_getString(resB, &len, status);
+    return UnicodeString(TRUE, r, len);
+}
+
+
+/**
+ * Returns the next string in a resource or NULL if there are no more resources 
+ * to iterate over. 
+ *
+ * @param resB              a resource
+ * @param status            fills in the outgoing error code
+ * @return an UnicodeString object.
+ * @draft
+ */
+inline UnicodeString ures_getNextUnicodeString(UResourceBundle *resB, UErrorCode* status) {
+    int32_t len = 0;
+    const UChar* r = ures_getNextString(resB, &len, 0, status);
+    return UnicodeString(TRUE, r, len);
+}
+
+/**
+ * Returns the next string in a resource or NULL if there are no more resources 
+ * to iterate over. 
+ *
+ * @param resB              a resource
+ * @param key               fill in for key associated with this string
+ * @param status            fills in the outgoing error code
+ * @return an UnicodeString object.
+ * @draft
+ */
+inline UnicodeString ures_getNextUnicodeString(UResourceBundle *resB, const char ** key, UErrorCode* status) {
+    int32_t len = 0;
+    const UChar* r = ures_getNextString(resB, &len, key, status);
+    return UnicodeString(TRUE, r, len);
+}
+
+/**
+ * Returns the string in a given resource at the specified index.
+ *
+ * @param resB              a resource
+ * @param index             an index to the wanted string.
+ * @param status            fills in the outgoing error code
+ * @return                  an UnicodeString object. If there is an error, string is bogus
+ * @draft
+ */
+inline UnicodeString ures_getUnicodeStringByIndex(const UResourceBundle *resB, int32_t indexS, UErrorCode* status) {
+    int32_t len = 0;
+    const UChar* r = ures_getStringByIndex(resB, indexS, &len, status);
+    return UnicodeString(TRUE, r, len);
+}
+
+/**
+ * Returns a string in a resource that has a given key. This procedure works only with table
+ * resources. 
+ *
+ * @param resB              a resource
+ * @param key               a key associated with the wanted string
+ * @param status            fills in the outgoing error code
+ * @return                  an UnicodeString object. If there is an error, string is bogus
+ * @draft
+ */
+inline UnicodeString ures_getUnicodeStringByKey(const UResourceBundle *resB, const char* key, UErrorCode* status) {
+    int32_t len = 0;
+    const UChar* r = ures_getStringByKey(resB, key, &len, status);
+    return UnicodeString(TRUE, r, len);
+}
+
+#endif
 
 #endif /*_URES*/
 /*eof*/
