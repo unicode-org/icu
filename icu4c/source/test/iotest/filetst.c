@@ -24,6 +24,7 @@ const char STANDARD_TEST_FILE[] = "iotest-c.txt";
 
 
 static void TestFileFromICU(UFILE *myFile) {
+#if !UCONFIG_NO_FORMATTING
     int32_t n[1];
     float myFloat = -1234.0;
     int32_t newValuePtr[1];
@@ -313,6 +314,7 @@ static void TestFile(void) {
     TestFileFromICU(u_finit(standardFile, NULL, NULL));
     fclose(standardFile);
 */
+#endif
 }
 
 static void TestCodepageAndLocale(void) {
@@ -733,6 +735,7 @@ static void TestCodepage(void) {
 
 }
 
+#if !UCONFIG_NO_FORMATTING
 static void TestFilePrintCompatibility(void) {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", NULL);
     FILE *myCFile;
@@ -865,6 +868,7 @@ static void TestFilePrintCompatibility(void) {
     }
     fclose(myCFile);
 }
+#endif
 
 #define TestFPrintFormat(uFormat, uValue, cFormat, cValue) \
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
@@ -893,6 +897,7 @@ static void TestFilePrintCompatibility(void) {
         log_err("%" uFormat " too much stored\n");\
     }\
 
+#if !UCONFIG_NO_FORMATTING
 static void TestFprintfFormat(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
     static const char abcChars[] = "abc";
@@ -1030,9 +1035,11 @@ static void TestFprintfFormat(void) {
         log_err("%%d %% d %%d too much stored\n");
     }
 }
+#endif
 
 #undef TestFPrintFormat
 
+#if !UCONFIG_NO_FORMATTING
 static void TestFScanSetFormat(const char *format, const UChar *uValue, const char *cValue, UBool expectedToPass) {
     UFILE *myFile;
     UChar uBuffer[256];
@@ -1076,7 +1083,9 @@ static void TestFScanSetFormat(const char *format, const UChar *uValue, const ch
         }
     }
 }
+#endif
 
+#if !UCONFIG_NO_FORMATTING
 static void TestFScanset(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
@@ -1119,7 +1128,8 @@ static void TestFScanset(void) {
 
     /* TODO: Need to specify precision with a "*" */
 }
-
+#endif
+#if !UCONFIG_NO_FORMATTING
 static void TestBadFScanfFormat(const char *format, const UChar *uValue, const char *cValue) {
     UFILE *myFile;
     UChar uBuffer[256];
@@ -1143,14 +1153,16 @@ static void TestBadFScanfFormat(const char *format, const UChar *uValue, const c
         log_err("%s too much stored on a failure\n", format);
     }
 }
-
+#endif
+#if !UCONFIG_NO_FORMATTING
 static void TestBadScanfFormat(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
 
     TestBadFScanfFormat("%[]  ", abcUChars, abcChars);
 }
-
+#endif
+#if !UCONFIG_NO_FORMATTING
 static void Test_u_vfprintf(const char *expectedResult, const char *format, ...) {
     UChar uBuffer[256];
     UChar uBuffer2[256];
@@ -1214,9 +1226,10 @@ static void Test_u_vfprintf(const char *expectedResult, const char *format, ...)
 static void TestVargs(void) {
     Test_u_vfprintf("8 9 a B 8.9", "%d %u %x %X %.1f", 8, 9, 10, 11, 8.9);
 }
-
+#endif
 static void TestTranslitOps(void)
 {
+#if !UCONFIG_NO_TRANSLITERATION
     UFILE *f;
     UErrorCode err = U_ZERO_ERROR;
     UTransliterator *a = NULL, *b = NULL, *c = NULL;
@@ -1309,10 +1322,13 @@ static void TestTranslitOps(void)
 
     utrans_close(c);
     u_fclose(f);
+#endif
 }
 
 static void TestTranslitOut(void)
 {
+#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_TRANSLITERATION
     UFILE *f;
     UErrorCode err = U_ZERO_ERROR;
     UTransliterator *a = NULL, *b = NULL, *c = NULL;
@@ -1387,23 +1403,34 @@ static void TestTranslitOut(void)
     }
 
     fclose(infile);
-
+#endif
+#endif
 }
 
 U_CFUNC void
 addFileTest(TestNode** root) {
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestFile, "file/TestFile");
     addTest(root, &TestCodepageAndLocale, "file/TestCodepageAndLocale");
+#endif
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
     addTest(root, &TestFScanset, "file/TestFScanset");
+#endif
     addTest(root, &TestCodepage, "file/TestCodepage");
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
     addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
     addTest(root, &TestVargs, "file/TestVargs");
+#endif
 
+#if !UCONFIG_NO_TRANSLITERATION
     addTest(root, &TestTranslitOps, "file/translit/ops");
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestTranslitOut, "file/translit/out");
+#endif
+#endif
 }

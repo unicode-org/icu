@@ -19,6 +19,7 @@
 #include <string.h>
 
 static void TestString(void) {
+#if !UCONFIG_NO_FORMATTING
     int32_t n[1];
     float myFloat = -1234.0;
     int32_t newValuePtr[1];
@@ -237,10 +238,11 @@ static void TestString(void) {
             log_err("%%S Long strings differ. Expected the first 10 characters of %s\n", longStr);
         }
     }
-
+#endif
 }
 
 static void TestLocalizedString(void) {
+#if !UCONFIG_NO_FORMATTING
     UChar testStr[256];
     UChar uBuffer[256];
     char cBuffer[256];
@@ -287,8 +289,10 @@ static void TestLocalizedString(void) {
     if (numResult != 1234) {
         log_err("u_fscanf failed to work on a de string Got: %d\n", numResult);
     }
+#endif
 }
 
+#if !UCONFIG_NO_FORMATTING
 #define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
     u_uastrncpy(testStr, "xxxxxxxxxxxxxx", sizeof(testStr)/sizeof(testStr[0]));\
     size = u_snprintf(testStr, limit, format, value);\
@@ -301,8 +305,10 @@ static void TestLocalizedString(void) {
         log_verbose("Got: %s\n", cTestResult);\
     }\
 
+#endif
 
 static void TestSnprintf(void) {
+#if !UCONFIG_NO_FORMATTING
     UChar testStr[256];
     char cTestResult[256];
     int32_t size;
@@ -329,6 +335,7 @@ static void TestSnprintf(void) {
     Test_u_snprintf(11, "%e", 12.34, 11, "1.234000e+0xxx");
     Test_u_snprintf(13, "%e", 12.34, 13, "1.234000e+001x");
     Test_u_snprintf(14, "%e", 12.34, 13, "1.234000e+001");
+#endif
 }
 
 #define TestSPrintFormat(uFormat, uValue, cFormat, cValue) \
@@ -350,6 +357,7 @@ static void TestSnprintf(void) {
     }\
 
 static void TestSprintfFormat(void) {
+#if !UCONFIG_NO_FORMATTING
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
     static const char abcChars[] = "abc";
     UChar uBuffer[256];
@@ -463,12 +471,13 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
     TestSPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
-
+#endif
 }
 
 #undef TestSPrintFormat
 
 static void TestStringCompatibility(void) {
+#if !UCONFIG_NO_FORMATTING
     UChar myUString[256];
     UChar uStringBuf[256];
     char myString[256] = "";
@@ -562,9 +571,11 @@ static void TestStringCompatibility(void) {
             log_err("%%c Got: 0x%x, Expected: 0x%x\n", myString[0], testBuf[0]);
         }
     }
+#endif
 }
 
 static void TestSScanSetFormat(const char *format, const UChar *uValue, const char *cValue, UBool expectedToPass) {
+#if !UCONFIG_NO_FORMATTING
     UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
@@ -596,9 +607,11 @@ static void TestSScanSetFormat(const char *format, const UChar *uValue, const ch
             log_err("%s too much stored on a failure\n", format);
         }
     }
+#endif
 }
 
 static void TestSScanset(void) {
+#if !UCONFIG_NO_FORMATTING
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
 
@@ -639,9 +652,11 @@ static void TestSScanset(void) {
 /*    TestSScanSetFormat("%[a-", abcUChars, abcChars);*/
 
     /* TODO: Need to specify precision with a "*" */
+#endif
 }
 
 static void TestBadSScanfFormat(const char *format, const UChar *uValue, const char *cValue) {
+#if !UCONFIG_NO_FORMATTING
     UChar uBuffer[256];
     int32_t uNumScanned;
 
@@ -653,16 +668,20 @@ static void TestBadSScanfFormat(const char *format, const UChar *uValue, const c
     if (uNumScanned != 0 || uBuffer[0] != 0x2a || uBuffer[1] != 0x2a) {
         log_err("%s too much stored on a failure\n", format);
     }
+#endif
 }
 
 static void TestBadScanfFormat(void) {
+#if !UCONFIG_NO_FORMATTING
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
 
     TestBadSScanfFormat("%[]  ", abcUChars, abcChars);
+#endif
 }
 
 static void Test_u_vfprintf(const char *expectedResult, const char *format, ...) {
+#if !UCONFIG_NO_FORMATTING
     UChar uBuffer[256];
     UChar uBuffer2[256];
     va_list ap;
@@ -684,13 +703,17 @@ static void Test_u_vfprintf(const char *expectedResult, const char *format, ...)
     if (u_strcmp(uBuffer, uBuffer2) != 0) {
         log_err("Got two different results for \"%s\" expected \"%s\"\n", format, expectedResult);
     }
+#endif
 }
 
 static void TestVargs(void) {
+#if !UCONFIG_NO_FORMATTING
     Test_u_vfprintf("8 9 a B 8.9", "%d %u %x %X %.1f", 8, 9, 10, 11, 8.9);
+#endif
 }
 
 static void TestCount(void) {
+#if !UCONFIG_NO_FORMATTING
     UChar testStr[16];
     int16_t i16 = -1;
     int32_t i32 = -1;
@@ -714,10 +737,12 @@ static void TestCount(void) {
     if (i64 != 10) {
         log_err("test 3: scanf did not return 10\n", i64);
     }
+#endif
 }
 
 U_CFUNC void
 addStringTest(TestNode** root) {
+#if !UCONFIG_NO_FORMATTING
     addTest(root, &TestString, "string/TestString");
     addTest(root, &TestLocalizedString, "string/TestLocalizedString");
     addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
@@ -727,6 +752,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
     addTest(root, &TestVargs, "string/TestVargs");
     addTest(root, &TestCount, "string/TestCount");
+#endif
 }
 
 
