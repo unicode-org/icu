@@ -174,7 +174,6 @@ void TestConstruction1()
 {
   UResourceBundle *test1 = 0, *test2 = 0;
   const UChar *result1, *result2;
-  UErrorCode status= U_ZERO_ERROR;
   UErrorCode   err = U_ZERO_ERROR;
   const char*        directory=NULL;
   const char*      locale="te_IN";
@@ -193,7 +192,7 @@ void TestConstruction1()
 
   if(U_FAILURE(err))
     {
-      log_err("construction did not succeed :  %s \n", myErrorName(status));
+      log_err("construction did not succeed :  %s \n", myErrorName(err));
       return;
     }
 
@@ -203,7 +202,7 @@ void TestConstruction1()
 
   if (U_FAILURE(err)) {
 
-    log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(status));
+    log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(err));
     return;
   }
 
