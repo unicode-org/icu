@@ -246,25 +246,6 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         break;
 
     case 16: */
-        name = "BasicNormalizerTest"; 
-        if (exec) {
-            logln("BasicNormalizerTest---"); 
-            logln("");
-            BasicNormalizerTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 16:
-        name = "NormalizerConformanceTest"; 
-        if (exec) {
-            logln("NormalizerConformanceTest---"); logln("");
-            NormalizerConformanceTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 17:
         name = "CollationThaiTest"; 
         if (exec) {
             logln("CollationThaiTest---"); 
@@ -274,7 +255,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
-    case 18: //all
+    case 16: //all
         name = "LotusCollationTest";
 
         name = "LotusCollationKoreanTest"; 
@@ -285,7 +266,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
-    case 19:
+    case 17:
         name = "StringSearchTest"; 
         if (exec) {
             logln("StringSearchTest---"); 
