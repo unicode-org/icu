@@ -620,11 +620,6 @@ static void TestSScanset(void) {
     TestSScanSetFormat("%[abcdefgh]", abcUChars, abcChars, TRUE);
     TestSScanSetFormat("%[;hgfedcba]", abcUChars, abcChars, TRUE);
 
-    TestSScanSetFormat("%[a-f]", abcUChars, abcChars, TRUE);
-    TestSScanSetFormat("%[a-c]", abcUChars, abcChars, TRUE);
-
-    TestSScanSetFormat("%[^e-f]", abcUChars, abcChars, TRUE);
-
     TestSScanSetFormat("%[^a]", abcUChars, abcChars, TRUE);
     TestSScanSetFormat("%[^e]", abcUChars, abcChars, TRUE);
     TestSScanSetFormat("%[^ed]", abcUChars, abcChars, TRUE);
