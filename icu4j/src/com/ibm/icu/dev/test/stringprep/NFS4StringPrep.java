@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java,v $
- * $Date: 2003/08/27 21:13:14 $
- * $Revision: 1.3 $
+ * $Date: 2003/08/27 21:14:23 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
 */
@@ -81,7 +81,7 @@ public final class NFS4StringPrep {
                 throws StringPrepParseException, UnsupportedEncodingException{
         String s = new String(src, "UTF-8");
         UCharacterIterator iter =  UCharacterIterator.getInstance(s);
-        StringBuffer out = prep.prepare(iter,StringPrep.NONE);
+        StringBuffer out = prep.prepare(iter,StringPrep.DEFAULT);
         return out.toString().getBytes("UTF-8");
     }
     
@@ -155,12 +155,12 @@ public final class NFS4StringPrep {
             }
             UCharacterIterator prefix = UCharacterIterator.getInstance(prefixString);
             UCharacterIterator suffix = UCharacterIterator.getInstance(suffixString);
-            out.append(prep.nfsmxp.prepare(prefix,StringPrep.NONE));
+            out.append(prep.nfsmxp.prepare(prefix,StringPrep.DEFAULT));
             out.append(AT_SIGN); // add the delimiter
-            out.append(prep.nfsmxs.prepare(suffix, StringPrep.NONE));
+            out.append(prep.nfsmxs.prepare(suffix, StringPrep.DEFAULT));
         }else{
             UCharacterIterator iter = UCharacterIterator.getInstance(s);
-            out.append(prep.nfsmxp.prepare(iter,StringPrep.NONE));
+            out.append(prep.nfsmxp.prepare(iter,StringPrep.DEFAULT));
             
         }
        return out.toString().getBytes("UTF-8");
