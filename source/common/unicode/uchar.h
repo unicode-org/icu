@@ -1459,6 +1459,23 @@ U_CAPI UChar32 U_EXPORT2
 u_forDigit(int32_t digit, int8_t radix);
 
 /**
+ * Get the "age" of the code point.
+ * The "age" is the Unicode version when the code point was first
+ * designated (as a non-character or for Private Use)
+ * or assigned a character.
+ * This can be useful to avoid emitting code points to receiving
+ * processes that do not accept newer characters.
+ * The data is from the UCD file DerivedAge.txt.
+ *
+ * @param c The code point.
+ * @param versionArray The Unicode version number array, to be filled in.
+ *
+ * @draft ICU 2.1
+ */
+U_CAPI void U_EXPORT2
+u_charAge(UChar32 c, UVersionInfo versionArray);
+
+/**
  * Gets the Unicode version information.  The version array stores the version information
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
  * is then represented as 0x01031F02.
