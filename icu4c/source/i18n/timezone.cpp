@@ -372,6 +372,8 @@ TimeZone::getGMT(void)
 // class TimeZone
 // *****************************************************************************
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZone)
+
 TimeZone::TimeZone()
     :   UObject(), fID()
 {

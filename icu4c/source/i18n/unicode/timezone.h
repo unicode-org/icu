@@ -575,21 +575,25 @@ public:
     virtual TimeZone* clone(void) const = 0;
 
     /**
-     * Returns a unique class ID POLYMORPHICALLY. Pure virtual method. This method is to
+     * Return the class ID for this class.  This is useful only for
+     * comparing to a return value from getDynamicClassID().  
+     * @return The class ID for all objects of this class.
+     * @stable ICU 2.0
+     */
+    static UClassID getStaticClassID(void);
+
+    /**
+     * Returns a unique class ID POLYMORPHICALLY. This method is to
      * implement a simple version of RTTI, since not all C++ compilers support genuine
      * RTTI. Polymorphic operator==() and clone() methods call this method.
      * <P>
-     * Concrete subclasses of TimeZone must implement getDynamicClassID() and also a
-     * static method and data member:
-     * <pre>
-     * .     static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-     * .     static char fgClassID;
-     * </pre>
+     * Concrete subclasses of TimeZone must use the UOBJECT_DEFINE_RTTI_IMPLEMENTATION
+     *  macro from uobject.h in their implementation to provide correct RTTI information.
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const;
 
 protected:
 
