@@ -683,7 +683,7 @@ void ConvertTest::TestAmbiguous()
     };
     UnicodeString asciiResult, sjisResult;
     
-    sjis_cnv = new UnicodeConverter("SJIS", status);
+    sjis_cnv = new UnicodeConverter("ibm-943", status);
     if (U_FAILURE(status))
     {
         errln("Failed to create a SJIS converter\n");
