@@ -46,6 +46,7 @@
 #elif defined(OS2)
 #   define INCL_DOSMISC
 #   define INCL_DOSERRORS
+#   define INCL_DOSMODULEMGR
 #   include <os2.h>
 #elif defined(OS400)
 #   include <float.h>
@@ -758,6 +759,19 @@ getLibraryPath(char *path, int size) {
             }
         }
 #   elif defined(OS2)
+        HMODULE mod=NULLHANDLE;
+        APIRET rc=DosQueryModuleHandle("icuuc.dll", &mod);
+        if(rc==NO_ERROR) {
+            rc=DosQueryModuleName(mod, (LONG)size, path);
+            if(rc==NO_ERROR) {
+                /* remove the basename and the last file separator */
+                char *lastSep=icu_strrchr(path, U_FILE_SEP_CHAR);
+                if(lastSep!=NULL) {
+                    *lastSep=0;
+                    return lastSep-path;
+                }
+            }
+        }
 #   elif defined(OS390)
 #   elif defined(OS400)
 #   elif defined(XP_MAC)
