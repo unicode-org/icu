@@ -1,13 +1,13 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998 - 2003. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2003. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/ScriptAndLanguageTags.h,v $
- * $Date: 2003/05/20 23:38:28 $
- * $Revision: 1.9 $
+ * $Date: 2003/06/03 20:58:22 $
+ * $Revision: 1.10 $
  */
 
 #ifndef __SCRIPTANDLANGUAGES_H

@@ -1,10 +1,10 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2002, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.26 2003/04/24 22:06:46 grhoten-oss Exp $
+## $Id: mh-darwin,v 1.27 2003/06/03 20:52:55 alan Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic

@@ -2,9 +2,9 @@
 /*
  * HanLayoutEngine.h: OpenType processing for Han fonts.
  *
- * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/04/12 00:37:11 $ $Revision: 1.1 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/06/03 20:58:21 $ $Revision: 1.2 $
  */
 
 #ifndef __HANLAYOUTENGINE_H

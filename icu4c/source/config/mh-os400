@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## OS400-specific setup (for cross build)
-## Copyright (c) 1999-2001, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.22 2003/05/30 00:00:22 grhoten-oss Exp $
+## $Id: mh-os400,v 1.23 2003/06/03 20:52:55 alan Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
