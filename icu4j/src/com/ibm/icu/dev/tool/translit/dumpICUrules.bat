@@ -21,7 +21,7 @@ goto endofperl
 # and that they follow a rigid format.
 #
 # The output files are named according to ICU conventions (see NAME_MAP
-# below) and created in the current directory.  They should be manually
+# below) and created in the current directory.	They should be manually
 # checked and then copied into the icu/data directory.  An ICU build must
 # then be initiated, and the standard suite of ICU transliterator tests
 # should be run after that.
@@ -30,7 +30,7 @@ goto endofperl
 
 use Getopt::Long;
 
-my $DIR = "../../text/resources";
+my $DIR = "../../../impl/data";
 my $ID = '';
 
 GetOptions('dir=s' => \$DIR,
@@ -50,9 +50,9 @@ sub usage {
     $me =~ s|.+[/\\]||;
     print "Usage: $me [-dir <dir>] [-id <id>]\n";
     print " --dir <dir> Specify the directory containing the\n";
-    print "             Transliterator_*.txt files\n";
-    print " --id <id>   Specify a single ID to transform, e.g.\n";
-    print "             Fullwidth-Halfwidth\n";
+    print " 	Transliterator_*.txt files\n";
+    print " --id <id>	Specify a single ID to transform, e.g.\n";
+    print " 	Fullwidth-Halfwidth\n";
     die;
 }
 
@@ -63,42 +63,42 @@ mkdir($OUTDIR,0777);
 
 # Mapping from Java file names to ICU file names
 %NAME_MAP = (
-             # An ICU name of "" means the ICU name == the ID
+	 # An ICU name of "" means the ICU name == the ID
 
-             "Any_Accents" => "",
-             "Any_Publishing" => "",
-             "Bengali_InterIndic" => "Beng_InterIndic",
-             "Cyrillic_Latin" => "Cyrl_Latn",
-             "Devanagari_InterIndic" => "Deva_InterIndic",
-             "Fullwidth_Halfwidth" => "FWidth_HWidth",
-             "Greek_Latin" => "Grek_Latn",
-             "Gujarati_InterIndic" => "Gujr_InterIndic",
-             "Gurmukhi_InterIndic" => "Guru_InterIndic",
-             "Hiragana_Katakana" => "Hira_Kana",
-             "Hiragana_Latin" => "Hira_Latn",
-             "InterIndic_Bengali" => "InterIndic_Beng",
-             "InterIndic_Devanagari" => "InterIndic_Deva",
-             "InterIndic_Gujarati" => "InterIndic_Gujr",
-             "InterIndic_Gurmukhi" => "InterIndic_Guru",
-             "InterIndic_Kannada" => "InterIndic_Knda",
-             "InterIndic_Latin" => "InterIndic_Latn",
-             "InterIndic_Malayalam" => "InterIndic_Mlym",
-             "InterIndic_Oriya" => "InterIndic_Orya",
-             "InterIndic_Tamil" => "InterIndic_Taml",
-             "InterIndic_Telugu" => "InterIndic_Telu",
-             "Kannada_InterIndic" => "Knda_InterIndic",
-             "Latin_InterIndic" => "Latn_InterIndic",
-             "Latin_Jamo" => "Latn_Jamo",
-             "Latin_Katakana" => "Latn_Kana",
-             "Malayalam_InterIndic" => "Mlym_InterIndic",
-             "Oriya_InterIndic" => "Orya_InterIndic",
-             "Tamil_InterIndic" => "Taml_InterIndic",
-             "Telugu_InterIndic" => "Telu_InterIndic",
-             
-             "Han_Pinyin" => $JAVA_ONLY,
-             "Kanji_English" => $JAVA_ONLY,
-             "Kanji_OnRomaji" => $JAVA_ONLY,
-             );
+	 "Any_Accents" => "",
+	 "Any_Publishing" => "",
+	 "Bengali_InterIndic" => "Beng_InterIndic",
+	 "Cyrillic_Latin" => "Cyrl_Latn",
+	 "Devanagari_InterIndic" => "Deva_InterIndic",
+	 "Fullwidth_Halfwidth" => "FWidth_HWidth",
+	 "Greek_Latin" => "Grek_Latn",
+	 "Gujarati_InterIndic" => "Gujr_InterIndic",
+	 "Gurmukhi_InterIndic" => "Guru_InterIndic",
+	 "Hiragana_Katakana" => "Hira_Kana",
+	 "Hiragana_Latin" => "Hira_Latn",
+	 "InterIndic_Bengali" => "InterIndic_Beng",
+	 "InterIndic_Devanagari" => "InterIndic_Deva",
+	 "InterIndic_Gujarati" => "InterIndic_Gujr",
+	 "InterIndic_Gurmukhi" => "InterIndic_Guru",
+	 "InterIndic_Kannada" => "InterIndic_Knda",
+	 "InterIndic_Latin" => "InterIndic_Latn",
+	 "InterIndic_Malayalam" => "InterIndic_Mlym",
+	 "InterIndic_Oriya" => "InterIndic_Orya",
+	 "InterIndic_Tamil" => "InterIndic_Taml",
+	 "InterIndic_Telugu" => "InterIndic_Telu",
+	 "Kannada_InterIndic" => "Knda_InterIndic",
+	 "Latin_InterIndic" => "Latn_InterIndic",
+	 "Latin_Jamo" => "Latn_Jamo",
+	 "Latin_Katakana" => "Latn_Kana",
+	 "Malayalam_InterIndic" => "Mlym_InterIndic",
+	 "Oriya_InterIndic" => "Orya_InterIndic",
+	 "Tamil_InterIndic" => "Taml_InterIndic",
+	 "Telugu_InterIndic" => "Telu_InterIndic",
+	 
+	 "Han_Pinyin" => $JAVA_ONLY,
+	 "Kanji_English" => $JAVA_ONLY,
+	 "Kanji_OnRomaji" => $JAVA_ONLY,
+	 );
 
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
@@ -122,8 +122,8 @@ foreach (<$DIR/Transliterator_*.txt>) {
     my ($out, $id) = convertFileName($_);
     if ($out) {
         if ($out eq $JAVA_ONLY) {
-            print STDERR "$id: Java only\n";
-            next;
+	print STDERR "$id: Java only\n";
+	next;
         }
         file($id, $_, $out);
     }
@@ -182,17 +182,26 @@ sub convertIndex {
 translit_index {
   RuleBasedTransliteratorIDs {
 END
-                
+	    
     while (<JAVA_INDEX>) {
+        # ignore $Source $Revision $Date CVS keyword substitutions
+        next if /\$Source/ ;
+        next if /\$Revision/ ;
+        next if /\$Date/ ;
+
+        # we have printed out the copyright info ... ignore one in Java version
+        next if /Copyright/ ;
+        next if /Corporation/;
+
         # Comments; change # to //
         if (s|^(\s*)\#|$1//|) {
-            print C_INDEX;
-            next;
+	print C_INDEX;
+	next;
         }
         # Blank lines
         if (!/\S/) {
-            print C_INDEX;
-            next;
+	print C_INDEX;
+	next;
         }
         # Content lines
         chomp;
@@ -201,26 +210,26 @@ END
         $_=~ s/\\p/\\\\p/g;
         my @a = split(':', $_);
         if ($a[1] eq 'file' || $a[1] eq 'internal') {
-            # Convert the file name
-            my $id;
-            ($a[2], $id) = convertFileName($a[2]);
-            if ($a[2] eq $JAVA_ONLY) {
-                $prefix = '// Java only: ';
-            }
+	# Convert the file name
+	my $id;
+	($a[2], $id) = convertFileName($a[2]);
+	if ($a[2] eq $JAVA_ONLY) {
+	    $prefix = '// Java only: ';
+	}
 
-            # Delete the encoding field
-            splice(@a, 3, 1);
+	# Delete the encoding field
+	splice(@a, 3, 1);
         } elsif ($a[1] eq 'alias') {
-            # Pad out with extra blank fields to make the
-            # 2-d array square
-            push @a, "";
+	# Pad out with extra blank fields to make the
+	# 2-d array square
+	push @a, "";
         } else {
-            die "Can't parse $_";
+	die "Can't parse $_";
         }
         print C_INDEX
-            $prefix, "{ ",
-            join(", ", map("\"$_\"", @a)),
-            " },\n";
+	$prefix, "{ ",
+	join(", ", map("\"$_\"", @a)),
+	" },\n";
     }
 
     print C_INDEX <<END;
@@ -298,8 +307,8 @@ sub file {
 		
         # Look for and delete BOM
         if ($first) {
-            s/^$BOM//;
-            $first = 0;
+	s/^$BOM//;
+	$first = 0;
         }
         
         # Clean the eol junk up
@@ -310,49 +319,49 @@ sub file {
         # concatenated.  Count trailing backslashes; if they are odd,
         # one is trailing.
         if (m|(\\+)$|) {
-            if ((length($1) % 2) == 1) {
-                s|\\$||;
-            }
+	if ((length($1) % 2) == 1) {
+	    s|\\$||;
+	}
         }
 
         # Transform escaped characters
         hideEscapes();
 
         if (/^(\s*)(\#.*)$/) {
-            # Comment-only line
-            my ($white, $cmt) = ($1, $2);
-            $cmt =~ s|\#|//|;
-            $_ = $white . $cmt;
+	# Comment-only line
+	my ($white, $cmt) = ($1, $2);
+	$cmt =~ s|\#|//|;
+	$_ = $white . $cmt;
 
         } elsif (!/\S/) {
-            # Blank line -- leave as-is
+	# Blank line -- leave as-is
 
         } else {
-            # Remove single-quoted matter 
-            my @quotes;
-            my $nquotes = 0;
-            my $x = $_;
-            while (s/^([^\']*)(\'[^\']*\')/$1<<x$nquotes>>/) {
-                push @quotes, $2;
-                ++$nquotes;
-            }
+	# Remove single-quoted matter 
+	my @quotes;
+	my $nquotes = 0;
+	my $x = $_;
+	while (s/^([^\']*)(\'[^\']*\')/$1<<x$nquotes>>/) {
+	    push @quotes, $2;
+	    ++$nquotes;
+	}
 
-            # Extract comment
-            my $cmt = '';
-            if (s|\#(.*)||) {
-                $cmt = '//' . $1;
-            }
-            
-            # Add quotes
-            s|^(\s*)(\S.*?)(\s*)$|$1\"$2\"$3|;
+	# Extract comment
+	my $cmt = '';
+	if (s|\#(.*)||) {
+	    $cmt = '//' . $1;
+	}
+	
+	# Add quotes
+	s|^(\s*)(\S.*?)(\s*)$|$1\"$2\"$3|;
 
-            # Restore single-quoted matter
-            for (my $i=0; $i<$nquotes; ++$i) {
-                s|<<x$i>>|$quotes[$i]|;
-            }
+	# Restore single-quoted matter
+	for (my $i=0; $i<$nquotes; ++$i) {
+	    s|<<x$i>>|$quotes[$i]|;
+	}
 
-            # Restore comment
-            $_ .= $cmt;
+	# Restore comment
+	$_ .= $cmt;
         }
         
         # Restore escaped characters
