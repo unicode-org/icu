@@ -398,7 +398,7 @@ UBool isAmbiguous(void) const;
 
 /**
  * Typedef for backward compatibility
- * @deprecated: Remove in 2.0 release
+ * @deprecated Remove in 2.0 release
  */
 typedef UnicodeConverter UnicodeConverterCPP;   /* Backwards compatibility. */
 
