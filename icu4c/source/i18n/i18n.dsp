@@ -165,7 +165,15 @@ SOURCE=.\gregocal.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\hangjamo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\hextouni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\jamohang.cpp
 # End Source File
 # Begin Source File
 
@@ -718,6 +726,25 @@ InputPath=.\unicode\gregocal.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\hangjamo.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\hangjamo.h
+
+"..\..\include\unicode\hangjamo.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\hangjamo.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\hextouni.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -737,6 +764,25 @@ InputPath=.\unicode\hextouni.h
 
 "..\..\include\unicode\hextouni.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                unicode\hextouni.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\jamohang.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\jamohang.h
+
+"..\..\include\unicode\jamohang.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\jamohang.h    ..\..\include\unicode
 
 # End Custom Build
 
