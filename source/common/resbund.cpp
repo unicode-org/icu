@@ -195,6 +195,14 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
   constructForLocale(path, locale, error);
 }
 
+ResourceBundle::ResourceBundle(UErrorCode &err) {
+  fItemCache = 0;
+  resource = ures_open(0, Locale::getDefault().getName(), &err);
+  if(U_SUCCESS(err)) {
+    fRealLocale = Locale(ures_getRealLocale(resource, &err));
+  }
+}
+
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
 {
@@ -254,6 +262,16 @@ ResourceBundle::ResourceBundle(UResourceBundle *res) {
     fItemCache = 0;
     resource = copyResb(0, res);
 }
+
+ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) {
+  fItemCache = 0;
+  resource = ures_open(path, locale.getName(), &err);
+  if(U_SUCCESS(err)) {
+      fRealLocale = Locale(ures_getRealLocale(resource, &err));
+  }
+}
+
+
 
 ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
 {
@@ -417,6 +435,10 @@ const char*
 ResourceBundle::getVersionNumber()  const
 {
   return ures_getVersionNumber(resource);
+}
+
+void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
+  ures_getVersion(resource, versionInfo);
 }
 
 const Locale &ResourceBundle::getLocale(void) const
