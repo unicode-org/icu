@@ -121,6 +121,25 @@ static void outputString(const char *s, char *outBuf, int32_t *outIx, int32_t ca
     } while (c != 0);
 }
         
+static void outputUString(const UChar *s, int32_t len, 
+                          char *outBuf, int32_t *outIx, int32_t capacity, int32_t indent) {
+    int32_t i = 0;
+    UChar   c;
+    if (s==NULL) {
+        outputString(NULL, outBuf, outIx, capacity, indent);
+        return;
+    }
+
+    for (i=0; i<len || len==-1; i++) {
+        c = s[i];
+        outputHexBytes(c, 2, outBuf, outIx, capacity);
+        outputChar(' ', outBuf, outIx, capacity, indent);
+        if (len == -1 && c==0) {
+            break;
+        }
+    }
+}
+        
 U_CAPI int32_t U_EXPORT2
 utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, va_list args) {
     int32_t   outIx  = 0;
@@ -169,6 +188,14 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
             ptrArg = va_arg(args, char *);
             outputString((const char *)ptrArg, outBuf, &outIx, capacity, indent);
             break;
+
+        case 'S':
+            /* UChar * string, null terminated. */
+            ptrArg = va_arg(args, void *);
+            intArg =(int32_t)va_arg(args, int32_t);
+            outputUString((const unsigned short *)ptrArg, intArg, outBuf, &outIx, capacity, indent);
+            break;
+
 
         case 'b':
             /*  8 bit int  */
@@ -235,7 +262,7 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                 if (ptrPtr == NULL) {
                     outputString("NULL", outBuf, &outIx, capacity, indent);
                 } else {
-                    for (i=0; i<vectorLen; i++) { 
+                    for (i=0; i<vectorLen || vectorLen==-1; i++) { 
                         switch (vectorType) {
                         case 'b':
                             charsToOutput = 2;
@@ -256,22 +283,31 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                         case 'p':
                             charsToOutput = 0;
                             outputPtrBytes(*ptrPtr, outBuf, &outIx, capacity);
+                            longArg = *ptrPtr==NULL? 0: 1;    /* test for null terminated array. */
                             ptrPtr++;
                             break;
                         case 'c':
                             charsToOutput = 0;
                             outputChar(*i8Ptr, outBuf, &outIx, capacity, indent);
+                            longArg = *i8Ptr;    /* for test for null terminated array. */
                             i8Ptr++;
                             break;
                         case 's':
                             charsToOutput = 0;
-                            outputString(i8Ptr, outBuf, &outIx, capacity, indent);
+                            outputString(*ptrPtr, outBuf, &outIx, capacity, indent);
                             outputChar('\n', outBuf, &outIx, capacity, indent);
+                            longArg = *ptrPtr==NULL? 0: 1;   /* for test for null term. array. */
+                            ptrPtr++;
+                            break;
+
                             
                         }
                         if (charsToOutput > 0) {
                             outputHexBytes(longArg, charsToOutput, outBuf, &outIx, capacity);
                             outputChar(' ', outBuf, &outIx, capacity, indent);
+                        }
+                        if (vectorLen == -1 && longArg == 0) {
+                            break;
                         }
                     }
                 }

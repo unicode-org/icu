@@ -16,7 +16,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
-#include "unicode/utrace.h"
+#include "utracimp.h"
 #include "ustr_imp.h"
 #include "unormimp.h"
 #include "ucln_cmn.h"
