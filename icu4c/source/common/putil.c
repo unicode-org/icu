@@ -1971,7 +1971,7 @@ _localeToDefaultCharmapTable [] =
  { "in", "iso-8859-1" },  /* Indonesian */
  { "is", "iso-8859-1" },  /* Icelandic */
  { "it", "iso-8859-1" },  /* Italian  */
- { "iw", "iso-8859-8" },  /* hebrew */
+ { "iw", "iso-8859-8" },  /* hebrew old ISO name */
  { "ja", "Shift_JIS"  },  /* Japanese [was: ja_JP ] */
  { "ji", "iso-8859-8" },  /* Yiddish */
  { "kl", "iso-8859-4" },  /* Greenlandic */
@@ -1980,8 +1980,10 @@ _localeToDefaultCharmapTable [] =
  { "lv", "iso-8859-4" },  /* latvian (lettish) */
  { "mk", "iso-8859-5" },  /* Macedonian */
  { "mt", "iso-8859-3" },  /* Maltese  */
+ { "nb", "iso-8859-1" },  /* Norwegian Bokmal */
  { "nl", "iso-8859-1" },  /* dutch */
- { "no", "iso-8859-1" },  /* Norwegian */
+ { "no", "iso-8859-1" },  /* Norwegian old ISO name*/
+ { "nn", "iso-8859-1" },  /* Norwegian Nynorsk */
  { "pl", "iso-8859-2" },  /* Polish */
  { "pt", "iso-8859-1" },  /* Portugese */
  { "rm", "iso-8859-1" },  /* Rhaeto-romance */
