@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/usetiter.cpp,v $ 
-* $Date: 2002/04/25 23:35:30 $ 
-* $Revision: 1.1 $
+* $Date: 2002/04/30 22:11:47 $ 
+* $Revision: 1.2 $
 **********************************************************************
 */
 #include "unicode/usetiter.h"
@@ -19,18 +19,14 @@ U_NAMESPACE_BEGIN
  * Create an iterator
  * @param set set to iterate over
  */
-UnicodeSetIterator::UnicodeSetIterator(const UnicodeSet& set) :
-    abbreviated(FALSE)
-{
+UnicodeSetIterator::UnicodeSetIterator(const UnicodeSet& set) {
     reset(set);
 }
 
 /**
  * Create an iterator. Convenience for when the contents are to be set later.
  */
-UnicodeSetIterator::UnicodeSetIterator() :
-    abbreviated(FALSE)
-{
+UnicodeSetIterator::UnicodeSetIterator() {
     this->set = NULL;
     reset();
 }
@@ -126,28 +122,9 @@ void UnicodeSetIterator::reset() {
     nextString = 0;
 }
 
-/**
- * Causes the interation to only to part of long ranges
- * @internal -- used only for testing
- */
-void UnicodeSetIterator::setAbbreviated(UBool abbr) {
-    abbreviated = abbr;
-}
-
-/**
- * Causes the interation to only to part of long ranges
- * @internal -- used only for testing
- */
-UBool UnicodeSetIterator::getAbbreviated() {
-    return abbreviated;
-}
-
 void UnicodeSetIterator::loadRange(int32_t range) {
     nextElement = set->getRangeStart(range);
     endElement = set->getRangeEnd(range);
-    if (abbreviated && (endElement > nextElement + 50)) {
-        endElement = nextElement + 50;
-    }
 }
 
 U_NAMESPACE_END
