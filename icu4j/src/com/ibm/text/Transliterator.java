@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/20 17:55:22 $
- * $Revision: 1.63 $
+ * $Date: 2001/11/21 00:00:55 $
+ * $Revision: 1.64 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.63 $ $Date: 2001/11/20 17:55:22 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.64 $ $Date: 2001/11/21 00:00:55 $
  */
 public abstract class Transliterator {
     /**
@@ -657,6 +657,18 @@ public abstract class Transliterator {
                                                 Position pos, boolean incremental);
 
     /**
+     * Rollback makes global filters and compound transliterators very
+     * bulletproof, but it also makes some transliterators completely
+     * non-incremental -- that is, for some transliterators, rollback
+     * is always triggered, until finishTransliteration() is called.
+     * Since this eliminates most of the usefulness of incremental
+     * mode, rollback should usually be disabled.
+     *
+     * This is used by Transliterator and CompoundTransliterator.
+     */
+    static final boolean ROLLBACK = false;
+
+    /**
      * This method breaks up the input text into runs of unfiltered
      * characters.  It passes each such run to
      * <subclass>.handleTransliterate().  Subclasses that can handle the
@@ -759,11 +771,13 @@ public abstract class Transliterator {
             // incremental.  This is the solution implemented here.
             int rollbackStart = 0;
             int rollbackCopy = 0;
-            if (isIncrementalSegment) {
-                // Make a rollback copy at the end of the string
-                rollbackStart = index.start;
-                rollbackCopy = text.length();
-                text.copy(rollbackStart, limit, rollbackCopy);
+            if (ROLLBACK) {
+                if (isIncrementalSegment) {
+                    // Make a rollback copy at the end of the string
+                    rollbackStart = index.start;
+                    rollbackCopy = text.length();
+                    text.copy(rollbackStart, limit, rollbackCopy);
+                }
             }
 
             // Delegate to subclass for actual transliteration.
@@ -776,39 +790,47 @@ public abstract class Transliterator {
             // maintains that.
             globalLimit += delta;
 
-            // If we failed to complete transliterate this segment,
-            // then we are done.  If rollback is required, then do so.
-            if (index.start != index.limit) {
-                if (isIncrementalSegment) {
-                    // Replace [rollbackStart, limit) -- this is the
-                    // original filtered segment -- with
-                    // [rollbackCopy, text.length()), the rollback
-                    // copy, then delete the rollback copy.
+            if (ROLLBACK) {
+                // If we failed to complete transliterate this segment,
+                // then we are done.  If rollback is required, then do so.
+                if (index.start != index.limit) {
+                    if (isIncrementalSegment) {
+                        // Replace [rollbackStart, limit) -- this is the
+                        // original filtered segment -- with
+                        // [rollbackCopy, text.length()), the rollback
+                        // copy, then delete the rollback copy.
+                        rollbackCopy += delta;
+                        int rollbackLen = text.length() - rollbackCopy;
+                    
+                        // Delete the partially transliterated segment
+                        rollbackCopy -= index.limit - rollbackStart;
+                        text.replace(rollbackStart, index.limit, "");
+                    
+                        // Copy the rollback copy back
+                        text.copy(rollbackCopy, text.length(), rollbackStart);
+                    
+                        // Delete the rollback copy
+                        rollbackCopy += rollbackLen;
+                        text.replace(rollbackCopy, text.length(), "");
+                    
+                        // Restore indices
+                        index.start = rollbackStart;
+                        index.limit = limit;
+                        index.contextLimit -= delta;
+                        globalLimit -= delta;
+                    }
+                    break;
+                } else if (isIncrementalSegment) {
+                    // We finished this segment; delete the rollback copy
                     rollbackCopy += delta;
-                    int rollbackLen = text.length() - rollbackCopy;
-                    
-                    // Delete the partially transliterated segment
-                    rollbackCopy -= index.limit - rollbackStart;
-                    text.replace(rollbackStart, index.limit, "");
-                    
-                    // Copy the rollback copy back
-                    text.copy(rollbackCopy, text.length(), rollbackStart);
-                    
-                    // Delete the rollback copy
-                    rollbackCopy += rollbackLen;
                     text.replace(rollbackCopy, text.length(), "");
-                    
-                    // Restore indices
-                    index.start = rollbackStart;
-                    index.limit = limit;
-                    index.contextLimit -= delta;
-                    globalLimit -= delta;
                 }
-                break;
-            } else if (isIncrementalSegment) {
-                // We finished this segment; delete the rollback copy
-                rollbackCopy += delta;
-                text.replace(rollbackCopy, text.length(), "");
+            } else {
+                // If we failed to complete transliterate this segment,
+                // then we are done.
+                if (index.start != index.limit) {
+                    break;
+                }
             }
 
             // If we did completely transliterate this
