@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/Attic/UnicodeFilterLogicTest.java,v $ 
- * $Date: 2002/02/25 22:43:57 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/08/28 16:45:19 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,14 @@ public class UnicodeFilterLogicTest extends TestFmwk {
                 return false;
             else
                 return true;
-       }
+        }
+        public String toPattern(boolean escapeUnprintable) {
+            return "";
+        }
+        public boolean matchesIndexValue(int v) {
+            return false;
+        }
+        public void addMatchSetTo(UnicodeSet toUnionTo) {}
    };
    UnicodeFilter Filter2=new UnicodeFilter() {
         public boolean contains(int c) {
@@ -44,6 +51,13 @@ public class UnicodeFilterLogicTest extends TestFmwk {
             else
                 return true;
         }
+        public String toPattern(boolean escapeUnprintable) {
+            return "";
+        }
+        public boolean matchesIndexValue(int v) {
+            return false;
+        }
+        public void addMatchSetTo(UnicodeSet toUnionTo) {}
    };
 
    public void TestAllFilters() {

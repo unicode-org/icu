@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/08/02 21:18:44 $
- * $Revision: 1.115 $
+ * $Date: 2002/08/28 16:45:18 $
+ * $Revision: 1.116 $
  *
  *****************************************************************************************
  */
@@ -401,6 +401,13 @@ public class TransliteratorTest extends TestFmwk {
             public boolean contains(int c) {
                 return c != 'c';
             }
+            public String toPattern(boolean escapeUnprintable) {
+                return "";
+            }
+            public boolean matchesIndexValue(int v) {
+                return false;
+            }
+            public void addMatchSetTo(UnicodeSet toUnionTo) {}
         });
         String s = "abcde";
         String out = hex.transliterate(s);
