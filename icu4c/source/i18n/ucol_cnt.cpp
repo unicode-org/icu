@@ -64,8 +64,8 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     el->codePoints = (UChar *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(UChar));
     el->position = 0;
     el->size = INIT_EXP_TABLE_SIZE;
-    uprv_memset(el->CEs, 'F', INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
-    uprv_memset(el->codePoints, 'F', INIT_EXP_TABLE_SIZE*sizeof(UChar));
+    uprv_memset(el->CEs, 0, INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+    uprv_memset(el->codePoints, 0, INIT_EXP_TABLE_SIZE*sizeof(UChar));
 
     table->elements[table->size] = el;
 
@@ -245,7 +245,7 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
     }
 
     if((element == 0xFFFFFF) || (tbl = table->elements[element]) == NULL) {
-        tbl = addATableElement(table, &element, status);
+      return 0;
     }
 
     tbl->CEs[tbl->position-1] = value;
