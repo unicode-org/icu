@@ -119,13 +119,13 @@ install-local: all-local
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
 	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+		echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+		$(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	done
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit
 	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
-		$(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
+		echo $(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
+		$(INSTALL_DATA) @DATABUILDDIR@/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
 	done
 
 dist-local:
@@ -151,15 +151,15 @@ $(TARGET) : $(OBJECTS)
 
 @DATABUILDDIR@/../source/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	@ICU_DATA=$(top_builddir)/data/ ./genrb -D@DATABUILDDIR@/../source/test/testdata/ $<
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -D@DATABUILDDIR@/../source/test/testdata/ $<
 
 @DATABUILDDIR@/translit/%.res : $(top_srcdir)/../data/translit/%.txt
 	@echo "Creating translit resource file for $<"
-	@ICU_DATA=$(top_builddir)/data/ ./genrb -D@DATABUILDDIR@/translit/ $<
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -D@DATABUILDDIR@/translit/ $<
 
 @DATABUILDDIR@/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
-	@ICU_DATA=$(top_builddir)/data/ ./genrb -D@DATABUILDDIR@/ $<
+	@ICU_DATA=@DATABUILDDIR@ ./genrb -D@DATABUILDDIR@/ $<
 
 
 # the 'mv' will always fail if you are building in the source dir

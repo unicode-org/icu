@@ -152,7 +152,7 @@ build-basetestdata:
 	@echo Generating the base test data file (base_test.dat) from (test.dat)
 	@cp $(TESTDATAD) $(SRCDATADIR)/$(BASETESTDATA)
 	@ls -l $(SRCDATADIR)/$(BASETESTDATA)
-	
+
 # the files to be installed -- the COMMON ones + any stragglers
 UDATA_FILES=icudata.dat
 UDATA_DLLS=libicudata.$(SO)
@@ -245,14 +245,14 @@ install-everything: install-files install-dlls
 
 install-files:
 	@for file in $(UDATA_FILES); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
+	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 install-dlls:
 	@for file in $(UDATA_DLLS); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
+	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 
