@@ -571,9 +571,8 @@ parseAlias(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 }
 
 static struct SResource *
-parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
+addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
 {
-    struct SResource  *result = NULL;
     struct SResource  *member = NULL;
     struct UString    *tokenValue;
     struct UString     comment;
@@ -582,16 +581,6 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     UVersionInfo       version;
     UBool              override = FALSE;
     uint32_t           line;
-
-    result = table_open(bundle, tag, NULL, status);
-
-    if (result == NULL || U_FAILURE(*status))
-    {
-        return NULL;
-    }
-    if(isVerbose()){
-        printf(" collation elements %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
-    }
     /* '{' . (name resource)* '}' */
     for (;;)
     {
@@ -752,6 +741,102 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     return NULL;*/
 }
 
+static struct SResource *
+parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UErrorCode *status)
+{
+    struct SResource  *result = NULL;
+    struct SResource  *member = NULL;
+    struct SResource  *collationRes = NULL;
+    struct UString    *tokenValue;
+    struct UString     comment;
+    enum   ETokenType  token;
+    char               subtag[1024];
+    uint32_t           line;
+
+    result = table_open(bundle, tag, NULL, status);
+
+    if (result == NULL || U_FAILURE(*status))
+    {
+        return NULL;
+    }
+    if(isVerbose()){
+        printf(" collation elements %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
+    }
+    if(!newCollation) {
+      return addCollation(result, startline, status);
+    } else {
+      for(;;) {
+        ustr_init(&comment);
+        token = getToken(&tokenValue, &comment, &line, status);
+
+        if (token == TOK_CLOSE_BRACE)
+        {
+            return result;
+        }
+
+        if (token != TOK_STRING)
+        {
+            table_close(result, status);
+            *status = U_INVALID_FORMAT_ERROR;
+
+            if (token == TOK_EOF)
+            {
+                error(startline, "unterminated table");
+            }
+            else
+            {
+                error(line, "Unexpected token %s", tokenNames[token]);
+            }
+
+            return NULL;
+        }
+
+        u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(result, status);
+            return NULL;
+        }
+
+        if (uprv_strcmp(subtag, "default") == 0)
+        {
+          member = parseResource(subtag, NULL, status);
+
+          if (U_FAILURE(*status))
+          {
+              table_close(result, status);
+              return NULL;
+          }
+
+          table_add(result, member, line, status);
+        }
+        else
+        {
+          token = getToken(&tokenValue, &comment, &line, status);
+          if(token == TOK_OPEN_BRACE) {
+            collationRes = table_open(bundle, subtag, NULL, status);
+            table_add(result, addCollation(collationRes, startline, status), startline, status);
+          } else {
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+          }
+        }
+
+        /*member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);*/
+
+        /*expect(TOK_CLOSE_BRACE, NULL, NULL, status);*/
+
+        if (U_FAILURE(*status))
+        {
+            table_close(result, status);
+            return NULL;
+        }
+
+      }
+    }
+}
+
 /* Necessary, because CollationElements requires the bundle->fRoot member to be present which,
    if this weren't special-cased, wouldn't be set until the entire file had been processed. */
 static struct SResource *
@@ -848,7 +933,11 @@ parseTable(char *tag, uint32_t startline, const struct UString *comment, UErrorC
 
     if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
     {
-        return parseCollationElements(tag, startline, status);
+        return parseCollationElements(tag, startline, FALSE, status);
+    }
+    if (tag != NULL && uprv_strcmp(tag, "collations") == 0)
+    {
+        return parseCollationElements(tag, startline, TRUE, status);
     }
     if(isVerbose()){
         printf(" table %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
