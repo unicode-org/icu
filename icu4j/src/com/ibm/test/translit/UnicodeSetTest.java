@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
- * $Date: 2001/09/24 19:56:41 $ 
- * $Revision: 1.12 $
+ * $Date: 2001/10/10 21:35:33 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -247,6 +247,16 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     /**
+     * Test the [:Latin:] syntax.
+     */
+    public void TestScriptSet() {
+        UnicodeSet set = new UnicodeSet("[:Latin:]");
+        expectContainment(set, "aA", "\u0391\u03B1");
+        set = new UnicodeSet("[:Greek:]");
+        expectContainment(set, "\u0391\u03B1", "aA");
+    }
+
+    /**
      * Test the indexOf() and charAt() methods.
      */
     public void TestIndexOf() {
@@ -429,6 +439,10 @@ public class UnicodeSetTest extends TestFmwk {
         return pairs.toString();
     }
 
+    /**
+     * Expect the given set to contain the characters in charsIn and
+     * to not contain those in charsOut.
+     */
     void expectContainment(UnicodeSet set, String charsIn, String charsOut) {
         StringBuffer bad = new StringBuffer();
         if (charsIn != null) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/08 17:31:08 $
- * $Revision: 1.38 $
+ * $Date: 2001/10/10 21:35:05 $
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -255,7 +255,7 @@ import com.ibm.util.Utility;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.38 $ $Date: 2001/10/08 17:31:08 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.39 $ $Date: 2001/10/10 21:35:05 $ */
 public class UnicodeSet extends UnicodeFilter {
 
     /* Implementation Notes.
@@ -1660,14 +1660,14 @@ public class UnicodeSet extends UnicodeFilter {
                             end = i;
                         } else {
                             if (start >= 0) {
-                                add((char) start, (char) end);
+                                add(start, end);
                             }
                             start = end = i;
                         }
                     }
                 }
                 if (start >= 0) {
-                    add((char) start, (char) end);
+                    add(start, end);
                 }
             }
         }
@@ -1702,14 +1702,14 @@ public class UnicodeSet extends UnicodeFilter {
                         end = i;
                     } else {
                         if (start >= 0) {
-                            set.add((char) start, (char) end);
+                            set.add(start, end);
                         }
                         start = end = i;
                     }
                 }
             }
             if (start >= 0) {
-                set.add((char) start, (char) end);
+                set.add(start, end);
             }
             CATEGORY_CACHE[cat] = set;
         }
