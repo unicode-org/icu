@@ -544,20 +544,16 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     
     if(U_FAILURE(errorCode)){
         log_err("Did not get DateTimeElements from the bundle %s or %s\n", fromLocale, toLocale);
-        return;
+        goto cleanup;
     }
 
     fromWeekendData = ures_getByKeyWithFallback(fromGregorian, "weekend", NULL, &errorCode); 
     toWeekendData = ures_getByKeyWithFallback(toGregorian, "weekend", NULL, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("Did not get weekend data from the bundle %s or %s\n", fromLocale, toLocale);
-        return;
+        goto cleanup;
     }
 
-    ures_close(fromCalendar);
-    ures_close(toCalendar);
-    ures_close(fromGregorian);
-    ures_close(toGregorian);
     if (strcmp(fromLocale, "ar_IN") != 0)
     {
         int32_t fromSize;
@@ -582,8 +578,7 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
             }
         }
     }
-    ures_close(fromDateTimeElements);
-    ures_close(toDateTimeElements);
+
     /* test for weekend data */
     {
         int32_t fromSize;
@@ -608,8 +603,6 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
             }
         }
     }
-    ures_close(fromWeekendData);
-    ures_close(toWeekendData);
 
     fromArray = ures_getByKey(fromLocaleBund, "CurrencyElements", NULL, &errorCode);
     toArray = ures_getByKey(toLocaleBund, "CurrencyElements", NULL, &errorCode);
@@ -650,6 +643,17 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     }
     ures_close(fromArray);
     ures_close(toArray);
+
+cleanup:
+    ures_close(fromDateTimeElements);
+    ures_close(toDateTimeElements);
+    ures_close(fromWeekendData);
+    ures_close(toWeekendData);
+
+    ures_close(fromCalendar);
+    ures_close(toCalendar);
+    ures_close(fromGregorian);
+    ures_close(toGregorian);
 
     ures_close(fromLocaleBund);
     ures_close(toLocaleBund);
