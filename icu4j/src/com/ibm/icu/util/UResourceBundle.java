@@ -341,7 +341,6 @@ public abstract class UResourceBundle extends ResourceBundle{
         UResourceBundle b = null;
         if(disableFallback){
             ULocale defaultLocale = ULocale.getDefault();
-            localeName = ULocale.getBaseName(localeName);
             String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
             cacheKey.setKeyValues(root, fullName, defaultLocale);
             b = loadFromCache(cacheKey);
