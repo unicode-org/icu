@@ -109,7 +109,7 @@ main(int argc, char **argv)
 		    fprintf(stderr, "Unable to malloc memory for string use: %s\n", strerror(errno));
 		    exit(255);
 		}
-		sprintf(temp_str, "%s %s -x <( echo file %s; echo set args", my_debugger, argv[1], argv[1]);
+		sprintf(temp_str, "%s -batch %s -x <( echo file %s; echo set args", my_debugger, argv[1], argv[1]);
 		curr = temp_str + strlen(temp_str);
 		for(curr_arg = 2; curr_arg < argc; curr_arg++) {
 	    		sprintf(curr, " %s", argv[curr_arg]);
