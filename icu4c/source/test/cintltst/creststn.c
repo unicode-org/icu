@@ -411,7 +411,7 @@ static void TestEmptyTypes() {
     }
     else {
         zeroIntVect=ures_getIntVector(res, &len, &status);
-        if(U_SUCCESS(status) || resArray != NULL || len != 0) {
+        if(!U_SUCCESS(status) || resArray != NULL || len != 0) {
             log_err("Shouldn't get emptyintv\n");
         }
     }
@@ -427,7 +427,7 @@ static void TestEmptyTypes() {
     }
     else {
         binResult=ures_getBinary(res, &len, &status);
-        if(U_SUCCESS(status) || binResult != NULL || len != 0) {
+        if(!U_SUCCESS(status) || binResult != NULL || len != 0) {
             log_err("Shouldn't get emptybin\n");
         }
     }
