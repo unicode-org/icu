@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="zh" /> 
 		<territory type="HK" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="ab">阿布哈西亞文</language>
+			<language type="ae">阿緯斯陀文</language>
 			<language type="af">南非荷蘭文</language>
+			<language type="ak">阿坎文</language>
+			<language type="an">阿拉貢文</language>
 			<language type="as">阿薩姆文</language>
+			<language type="av">阿法文</language>
 			<language type="ay">艾馬拉文</language>
 			<language type="az">亞塞拜然文</language>
 			<language type="ba">巴什客爾文</language>
@@ -24,44 +23,69 @@
 			<language type="bg">保加利亞文</language>
 			<language type="bh">比哈爾文</language>
 			<language type="bi">比斯拉馬文</language>
+			<language type="bo">藏文</language>
+			<language type="bs">波士尼亞文</language>
 			<language type="ca">加泰羅尼亞文</language>
+			<language type="ce">車臣文</language>
+			<language type="ch">查莫洛文</language>
+			<language type="cr">克裡文</language>
+			<language type="cv">楚瓦甚文</language>
 			<language type="cy">威爾士文</language>
 			<language type="da">丹麥文</language>
+			<language type="dv">迪維西文</language>
+			<language type="ee">埃緯文</language>
 			<language type="el">希臘文</language>
 			<language type="eo">世界語</language>
 			<language type="et">愛沙尼亞文</language>
+			<language type="ff">富拉文</language>
 			<language type="fi">芬蘭文</language>
 			<language type="fj">斐濟文</language>
 			<language type="fo">法羅文</language>
 			<language type="fy">弗里斯蘭文</language>
 			<language type="ga">愛爾蘭文</language>
 			<language type="gd">蘇格蘭 - 蓋爾文</language>
+			<language type="gez">吉茲文</language>
 			<language type="gl">加里西亞文</language>
 			<language type="gu">吉亞拉塔文</language>
 			<language type="gv">曼島文</language>
 			<language type="he">希伯來文</language>
 			<language type="hi">北印度文</language>
+			<language type="ho">西里莫圖土文</language>
 			<language type="hr">克羅埃西亞文</language>
+			<language type="ht">海地人</language>
 			<language type="hy">亞美尼亞文</language>
+			<language type="hz">赫雷羅文</language>
 			<language type="ia">拉丁國際文</language>
 			<language type="id">印尼文</language>
 			<language type="ie">拉丁國際文</language>
+			<language type="ig">伊布文</language>
+			<language type="ii">四川話</language>
 			<language type="ik">依奴皮維克文</language>
+			<language type="io">伊朗文</language>
 			<language type="is">冰島文</language>
 			<language type="it">義大利文</language>
 			<language type="iu">因紐特文</language>
 			<language type="ka">喬治亞文</language>
+			<language type="kg">剛果文</language>
+			<language type="ki">吉庫尤人</language>
+			<language type="kj">廣亞馬文</language>
 			<language type="kk">哈薩克文</language>
 			<language type="kl">格陵蘭文</language>
 			<language type="km">高棉文</language>
 			<language type="kn">坎那達文</language>
 			<language type="ko">韓文</language>
+			<language type="kr">卡努裡文</language>
 			<language type="ks">克什米爾文</language>
 			<language type="ku">庫爾德文</language>
 			<language type="kw">康瓦耳文</language>
 			<language type="ky">吉爾吉斯文</language>
+			<language type="lb">盧森堡文</language>
+			<language type="lg">干達文</language>
+			<language type="li">林堡文</language>
 			<language type="lo">寮國文</language>
+			<language type="lu">魯巴加丹加文</language>
 			<language type="mg">馬爾加什文</language>
+			<language type="mh">馬紹爾文</language>
 			<language type="mk">馬其頓文</language>
 			<language type="ml">馬來亞拉姆文</language>
 			<language type="mo">摩爾多瓦文</language>
@@ -71,20 +95,31 @@
 			<language type="my">緬甸文</language>
 			<language type="na">諾魯文</language>
 			<language type="nb">挪威波克默爾文</language>
+			<language type="nd">北地畢列文</language>
 			<language type="ne">尼泊爾文</language>
+			<language type="ng">恩東加文</language>
 			<language type="nl">荷蘭文</language>
 			<language type="nn">新挪威文</language>
+			<language type="nr">南地畢列文</language>
+			<language type="nv">納瓦約文</language>
+			<language type="ny">尼揚賈文</language>
 			<language type="oc">奧西坦文</language>
+			<language type="oj">奧杰布瓦文</language>
 			<language type="or">歐里亞文</language>
+			<language type="os">奧塞提文</language>
+			<language type="pi">巴利文</language>
 			<language type="pl">波蘭文</language>
 			<language type="ps">普什圖文</language>
 			<language type="qu">蓋丘亞文</language>
 			<language type="rm">里托羅曼斯文</language>
 			<language type="ro">羅馬尼亞文</language>
 			<language type="rw">盧安達文</language>
+			<language type="sc">撒丁文</language>
 			<language type="sd">蘇丹文</language>
+			<language type="se">北方薩米文</language>
 			<language type="sh">塞爾維亞克羅埃西亞文</language>
 			<language type="si">僧伽羅文</language>
+			<language type="sid">希達摩文</language>
 			<language type="sl">斯洛維尼亞文</language>
 			<language type="sm">薩摩亞文</language>
 			<language type="sn">塞內加爾文</language>
@@ -93,21 +128,28 @@
 			<language type="sr">塞爾維亞文</language>
 			<language type="su">蘇丹文</language>
 			<language type="sw">史瓦希里文</language>
+			<language type="syr">古敘利亞文</language>
 			<language type="ta">坦米爾文</language>
 			<language type="te">泰盧固文</language>
 			<language type="ti">提格利尼亞文</language>
+			<language type="tig">蒂格雷文</language>
 			<language type="tk">土庫曼文</language>
 			<language type="tn">突尼西亞文</language>
 			<language type="to">東加文</language>
 			<language type="tt">韃靼文</language>
 			<language type="tw">繁體中文</language>
+			<language type="ty">大溪地文</language>
 			<language type="ug">維吾爾文</language>
 			<language type="uk">烏克蘭文</language>
 			<language type="ur">烏爾都文</language>
 			<language type="uz">烏茲別克文</language>
+			<language type="ve">溫達文</language>
+			<language type="wa">瓦隆文</language>
 			<language type="wo">沃爾夫文</language>
 			<language type="xh">班圖文</language>
+			<language type="yi">意第緒文</language>
 			<language type="yo">約魯巴文</language>
+			<language type="za">壯文</language>
 			<language type="zu">祖魯文</language>
 		</languages>
 		<territories>
@@ -318,7 +360,16 @@
 			<variant type="REVISED">已修訂</variant>
 		</variants>
 		<types>
-			<type type="traditional" key="calendar">傳統曆法</type>
+			<type type="buddhist" key="calendar">佛教曆法</type>
+			<type type="chinese" key="calendar">農曆</type>
+			<type type="gregorian" key="calendar">公曆</type>
+			<type type="hebrew" key="calendar">希伯來曆法</type>
+			<type type="islamic" key="calendar">伊斯蘭曆法</type>
+			<type type="islamic-civil" key="calendar">伊斯蘭城市曆法</type>
+			<type type="japanese" key="calendar">日本曆法</type>
+			<type type="direct" key="collation">直接順序</type>
+			<type type="phonebook" key="collation">電話簿順序</type>
+			<type type="pinyin" key="collation">拼音順序</type>
 			<type type="stroke" key="collation">筆劃顺序</type>
 			<type type="traditional" key="collation">傳統曆法</type>
 		</types>
@@ -329,7 +380,7 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthAbbr>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">1月</month>
 					<month type="2">2月</month>
 					<month type="3">3月</month>
@@ -342,8 +393,8 @@
 					<month type="10">10月</month>
 					<month type="11">11月</month>
 					<month type="12">12月</month>
-				</monthAbbr>
-				<dayAbbr>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
 					<day type="sun">日</day>
 					<day type="mon">一</day>
 					<day type="tue">二</day>
@@ -351,7 +402,7 @@
 					<day type="thu">四</day>
 					<day type="fri">五</day>
 					<day type="sat">六</day>
-				</dayAbbr>
+				</dayNames>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

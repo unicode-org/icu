@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="fo" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,21 +11,151 @@
 			<language type="fo">føroyskt</language>
 		</languages>
 		<territories>
+			<territory type="AE">Sameindu Emirríkini</territory>
+			<territory type="AF">Afganistan</territory>
+			<territory type="AG">Antigua og Barbuda</territory>
+			<territory type="AQ">Antarktis</territory>
+			<territory type="AT">Eysturríki</territory>
+			<territory type="AU">Avstralia</territory>
+			<territory type="AZ">Aserbajdsjan</territory>
+			<territory type="BA">Bosnia-Hersegovina</territory>
+			<territory type="BD">Bangladesj</territory>
+			<territory type="BE">Belgia</territory>
+			<territory type="BR">Brasilia</territory>
+			<territory type="BT">Butan</territory>
+			<territory type="BW">Botsvana</territory>
+			<territory type="BY">Hvítarussland</territory>
+			<territory type="BZ">Belis</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CF">Miðafrikalýðveldið</territory>
+			<territory type="CG">Kongo</territory>
+			<territory type="CH">Sveis</territory>
+			<territory type="CI">Fílabeinsstrondin</territory>
+			<territory type="CL">Kili</territory>
+			<territory type="CM">Kamerun</territory>
+			<territory type="CN">Kina</territory>
+			<territory type="CO">Kolombia</territory>
+			<territory type="CR">Kosta Rika</territory>
+			<territory type="CU">Kuba</territory>
+			<territory type="CV">Grønhøvdaoyggjarnar</territory>
+			<territory type="CY">Kýpros</territory>
+			<territory type="CZ">Kekkia</territory>
+			<territory type="DE">Týskland</territory>
+			<territory type="DK">Danmørk</territory>
+			<territory type="DM">Dominika</territory>
+			<territory type="DO">Domingo lýðveldið</territory>
+			<territory type="EC">Ekvador</territory>
+			<territory type="EE">Estland</territory>
+			<territory type="EG">Egyptaland</territory>
+			<territory type="ES">Spania</territory>
+			<territory type="ET">Etiopia</territory>
+			<territory type="FI">Finnland</territory>
+			<territory type="FM">Mikronesia</territory>
 			<territory type="FO">Føroyar</territory>
+			<territory type="FR">Frakland</territory>
+			<territory type="GQ">Ekvator Guinea</territory>
+			<territory type="GR">Grikkaland</territory>
+			<territory type="GW">Guinea Bissau</territory>
+			<territory type="GY">Gujana</territory>
+			<territory type="HR">Kroatia</territory>
+			<territory type="HU">Ungarn</territory>
+			<territory type="IE">Írland</territory>
+			<territory type="IL">Ísrael</territory>
+			<territory type="IQ">Irak</territory>
+			<territory type="IS">Ísland</territory>
+			<territory type="IT">Italia</territory>
+			<territory type="JM">Jameika</territory>
+			<territory type="KE">Kenja</territory>
+			<territory type="KG">Kirgisia</territory>
+			<territory type="KH">Kambodja</territory>
+			<territory type="KM">Komorooyggjarnar</territory>
+			<territory type="KN">Saint Kitts og Nevis</territory>
+			<territory type="KP">Norður-Korea</territory>
+			<territory type="KR">Suður-Korea</territory>
+			<territory type="KW">Kuvait</territory>
+			<territory type="KZ">Kasakstan</territory>
+			<territory type="LB">Libanon</territory>
+			<territory type="LC">Saint Lusia</territory>
+			<territory type="LI">Liktenstein</territory>
+			<territory type="LS">Lesoto</territory>
+			<territory type="LT">Litava</territory>
+			<territory type="LU">Luksemborg</territory>
+			<territory type="LV">Lettland</territory>
+			<territory type="MA">Marokko</territory>
+			<territory type="MC">Monako</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Marshalloyggjarnar</territory>
+			<territory type="MK">Makedónia</territory>
+			<territory type="MR">Móritania</territory>
+			<territory type="MU">Móritius</territory>
+			<territory type="MV">Maldivuoyggjarnar</territory>
+			<territory type="MW">Malavi</territory>
+			<territory type="MX">Meksiko</territory>
+			<territory type="MY">Maleisia</territory>
+			<territory type="MZ">Mosambik</territory>
+			<territory type="NI">Nikaragua</territory>
+			<territory type="NL">Niðurlond</territory>
+			<territory type="NO">Noreg</territory>
+			<territory type="NZ">Ný Sæland</territory>
+			<territory type="PE">Perú</territory>
+			<territory type="PG">Papua Nýguinea</territory>
+			<territory type="PH">Filipsoyggjar</territory>
+			<territory type="PL">Pólland</territory>
+			<territory type="PY">Paraguei</territory>
+			<territory type="QA">Katar</territory>
+			<territory type="RO">Rumenia</territory>
+			<territory type="RU">Russland</territory>
+			<territory type="RW">Ruanda</territory>
+			<territory type="SA">Saudi-Arábia</territory>
+			<territory type="SB">Sálomonoyggjarnar</territory>
+			<territory type="SC">Seyskelloyggjarnar</territory>
+			<territory type="SE">Svøríki</territory>
+			<territory type="SG">Singapor</territory>
+			<territory type="SR">Surinam</territory>
+			<territory type="ST">Sao Tome og Prinsipi</territory>
+			<territory type="SZ">Svasiland</territory>
+			<territory type="TD">Kjad</territory>
+			<territory type="TJ">Tadsjikistan</territory>
+			<territory type="TN">Tunesia</territory>
+			<territory type="TR">Turkaland</territory>
+			<territory type="TT">Trinidad og Tobago</territory>
+			<territory type="TW">Teivan</territory>
+			<territory type="TZ">Tansania</territory>
+			<territory type="UA">Ukreina</territory>
+			<territory type="US">Sambandsríki Amerika</territory>
+			<territory type="UY">Uruguei</territory>
+			<territory type="UZ">Usbekistan</territory>
+			<territory type="VA">Vatikan</territory>
+			<territory type="VC">Saint Vinsent og Grenadinoyggjar</territory>
+			<territory type="VE">Venesuela</territory>
+			<territory type="WS">Sámoa</territory>
+			<territory type="YE">Jemen</territory>
+			<territory type="ZA">Suðurafrika</territory>
+			<territory type="ZM">Sambia</territory>
+			<territory type="ZW">Simbabvi</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z á æ í ð ó ø ú ý]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
+		<exemplarCharacters>[a-záæíðóøúý]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">mai</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">des</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">januar</month>
 					<month type="2">februar</month>
 					<month type="3">mars</month>
@@ -44,21 +169,16 @@
 					<month type="11">november</month>
 					<month type="12">desember</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">mai</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">des</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">sun</day>
+					<day type="mon">mán</day>
+					<day type="tue">týs</day>
+					<day type="wed">mik</day>
+					<day type="thu">hós</day>
+					<day type="fri">frí</day>
+					<day type="sat">ley</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">sunnudagur</day>
 					<day type="mon">mánadagur</day>
 					<day type="tue">týsdagur</day>
@@ -67,15 +187,6 @@
 					<day type="fri">fríggjadagur</day>
 					<day type="sat">leygardagur</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">sun</day>
-					<day type="mon">mán</day>
-					<day type="tue">týs</day>
-					<day type="wed">mik</day>
-					<day type="thu">hós</day>
-					<day type="fri">frí</day>
-					<day type="sat">ley</day>
-				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

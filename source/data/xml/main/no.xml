@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="no" /> 
 	</identity>
 	<localeDisplayNames>
@@ -333,22 +328,44 @@
 			<key type="currency">Valuta</key>
 		</keys>
 		<types>
-			<type type="traditional" key="calendar">Tradisjonell Kalender</type>
 			<type type="traditional" key="collation">Tradisjonell</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zæåøéóôàüǎ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">mai</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">des</month>
+				</monthNames>
+				<monthNames context="format" width="narrow">
+					<month type="1">J</month>
+					<month type="2">F</month>
+					<month type="3">M</month>
+					<month type="4">A</month>
+					<month type="5">M</month>
+					<month type="6">J</month>
+					<month type="7">J</month>
+					<month type="8">A</month>
+					<month type="9">S</month>
+					<month type="10">O</month>
+					<month type="11">N</month>
+					<month type="12">D</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">januar</month>
 					<month type="2">februar</month>
 					<month type="3">mars</month>
@@ -362,21 +379,25 @@
 					<month type="11">november</month>
 					<month type="12">desember</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">mai</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">des</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">sø</day>
+					<day type="mon">ma</day>
+					<day type="tue">ti</day>
+					<day type="wed">on</day>
+					<day type="thu">to</day>
+					<day type="fri">fr</day>
+					<day type="sat">lø</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">S</day>
+					<day type="mon">M</day>
+					<day type="tue">T</day>
+					<day type="wed">O</day>
+					<day type="thu">T</day>
+					<day type="fri">F</day>
+					<day type="sat">L</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">søndag</day>
 					<day type="mon">mandag</day>
 					<day type="tue">tirsdag</day>
@@ -385,25 +406,6 @@
 					<day type="fri">fredag</day>
 					<day type="sat">lørdag</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">sø</day>
-					<day type="mon">ma</day>
-					<day type="tue">ti</day>
-					<day type="wed">on</day>
-					<day type="thu">to</day>
-					<day type="fri">fr</day>
-					<day type="sat">lø</day>
-				</dayAbbr>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">f.Kr.</era>
-						<era type="2">e.Kr.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

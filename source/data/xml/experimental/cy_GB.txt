@@ -12,21 +12,25 @@ cy_GB {
         2,
         1,
     }
-    DateTimePatterns {
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "d MMM yyyy",
-        "dd/MM/yyyy",
-        "{1} {0}",
-    }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "\u00a4#,##0.00;-\u00a4#,##0.00",
         "#,##0%",
         "#E0",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "d MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
     }
 }

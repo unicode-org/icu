@@ -1,36 +1,169 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="af" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="af">Afrikaanse</language>
+			<language type="af">Afrikaans</language>
 		</languages>
 		<territories>
+			<territory type="AE">Verenigde Arabiese Emirate</territory>
+			<territory type="AF">Afganistan</territory>
+			<territory type="AG">Antigua en Barbuda</territory>
+			<territory type="AL">Albanië</territory>
+			<territory type="AM">Armenië</territory>
+			<territory type="AR">Argentinië</territory>
+			<territory type="AT">Oostenryk</territory>
+			<territory type="AU">Australië</territory>
+			<territory type="AZ">Aserbeidjan</territory>
+			<territory type="BA">Bosnië en Herzegowina</territory>
+			<territory type="BD">Bangladesj</territory>
+			<territory type="BE">België</territory>
+			<territory type="BF">Boerkina Fasso</territory>
+			<territory type="BG">Bulgarye</territory>
+			<territory type="BH">Bahrein</territory>
+			<territory type="BN">Broenei</territory>
+			<territory type="BO">Bolivië</territory>
+			<territory type="BR">Brasilië</territory>
+			<territory type="BT">Bhoetan</territory>
+			<territory type="BY">Wit-Rusland</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CF">Sentraal-Afrikaanse Republiek</territory>
+			<territory type="CG">Kongo</territory>
+			<territory type="CH">Switserland</territory>
+			<territory type="CI">Ivoorkus</territory>
+			<territory type="CL">Chili</territory>
+			<territory type="CM">Kameroen</territory>
+			<territory type="CN">Sjina</territory>
+			<territory type="CU">Kuba</territory>
+			<territory type="CV">Kaap Verde</territory>
+			<territory type="CY">Ciprus</territory>
+			<territory type="CZ">Tjeggiese Republiek</territory>
+			<territory type="DE">Duitsland</territory>
+			<territory type="DJ">Djiboeti</territory>
+			<territory type="DK">Denemarke</territory>
+			<territory type="DO">Dominikaanse Republiek</territory>
+			<territory type="DZ">Algerië</territory>
+			<territory type="EE">Estland</territory>
+			<territory type="EG">Egipte</territory>
+			<territory type="EH">Wes-Sahara</territory>
+			<territory type="ES">Spanje</territory>
+			<territory type="ET">Ethiopië</territory>
+			<territory type="FJ">Fidji</territory>
+			<territory type="FM">Mikronesië</territory>
+			<territory type="FR">Frankryk</territory>
+			<territory type="GA">Gaboen</territory>
+			<territory type="GB">Groot-Brittanje</territory>
+			<territory type="GE">Georgië</territory>
+			<territory type="GM">Gambië</territory>
+			<territory type="GN">Guinee</territory>
+			<territory type="GQ">Ekwatoriaal-Guinee</territory>
+			<territory type="GR">Griekeland</territory>
+			<territory type="GW">Guinee-Bissau</territory>
+			<territory type="HR">Kroasië</territory>
+			<territory type="HT">Haïti</territory>
+			<territory type="HU">Hongarye</territory>
+			<territory type="ID">Indonesië</territory>
+			<territory type="IE">Ierland</territory>
+			<territory type="IN">Indië</territory>
+			<territory type="IQ">Irak</territory>
+			<territory type="IS">Ysland</territory>
+			<territory type="IT">Italië</territory>
+			<territory type="JM">Jamaika</territory>
+			<territory type="JO">Jordanië</territory>
+			<territory type="KE">Kenia</territory>
+			<territory type="KG">Kirgisië</territory>
+			<territory type="KH">Kambodja</territory>
+			<territory type="KM">Comore</territory>
+			<territory type="KN">Saint Kitts en Nevis</territory>
+			<territory type="KP">Noord-Korea</territory>
+			<territory type="KR">Suid-Korea</territory>
+			<territory type="KW">Koeweit</territory>
+			<territory type="KZ">Kasakstan</territory>
+			<territory type="LB">Libanon</territory>
+			<territory type="LR">Liberië</territory>
+			<territory type="LT">Litaue</territory>
+			<territory type="LU">Luxemburg</territory>
+			<territory type="LV">Letland</territory>
+			<territory type="LY">Libië</territory>
+			<territory type="MA">Marokko</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Marshall-eilande</territory>
+			<territory type="MK">Macedonië</territory>
+			<territory type="MN">Mongolië</territory>
+			<territory type="MR">Mouritanië</territory>
+			<territory type="MV">Maldive</territory>
+			<territory type="MX">Meksiko</territory>
+			<territory type="MY">Maleisië</territory>
+			<territory type="MZ">Mosambiek</territory>
+			<territory type="NA">Namibië</territory>
+			<territory type="NE">Nigerië</territory>
+			<territory type="NL">Nederland</territory>
+			<territory type="NO">Noorweë</territory>
+			<territory type="NR">Naoeroe</territory>
+			<territory type="NZ">Nieu-Seeland</territory>
+			<territory type="PG">Papoea Nieu-Guinee</territory>
+			<territory type="PH">Filippyne</territory>
+			<territory type="PL">Pole</territory>
+			<territory type="QA">Katar</territory>
+			<territory type="RO">Roemenië</territory>
+			<territory type="RU">Rusland</territory>
+			<territory type="SA">Saoedi-Arabië</territory>
+			<territory type="SB">Solomon Eilande</territory>
+			<territory type="SC">Seychelle</territory>
+			<territory type="SD">Soedan</territory>
+			<territory type="SE">Swede</territory>
+			<territory type="SG">Singapoer</territory>
+			<territory type="SI">Slowenië</territory>
+			<territory type="SK">Slowakye</territory>
+			<territory type="SO">Somalië</territory>
+			<territory type="SP">Serwië</territory>
+			<territory type="ST">Sao Tome en Principe</territory>
+			<territory type="SV">Salvador</territory>
+			<territory type="SY">Sirië</territory>
+			<territory type="TD">Tsjaad</territory>
+			<territory type="TJ">Tadjikistan</territory>
+			<territory type="TM">Turkmenië</territory>
+			<territory type="TN">Tunisië</territory>
+			<territory type="TR">Turkye</territory>
+			<territory type="TT">Trinidad en Tobago</territory>
+			<territory type="TZ">Tanzanië</territory>
+			<territory type="UA">Oekraine</territory>
+			<territory type="US">Verenigde State van Amerika</territory>
+			<territory type="UZ">Oesbekistan</territory>
+			<territory type="VA">Vatikaan</territory>
+			<territory type="VC">Saint Vincent en die Grenadine</territory>
+			<territory type="VN">Viëtnam</territory>
+			<territory type="YE">Jemen</territory>
 			<territory type="ZA">Suid-Afrika</territory>
+			<territory type="ZM">Zambië</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-záéèâêîôûëïöŉ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mei</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Des</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Januarie</month>
 					<month type="2">Februarie</month>
 					<month type="3">Maart</month>
@@ -44,21 +177,16 @@
 					<month type="11">November</month>
 					<month type="12">Desember</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">Mei</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Aug</month>
-					<month type="9">Sep</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Des</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">So</day>
+					<day type="mon">Ma</day>
+					<day type="tue">Di</day>
+					<day type="wed">Wo</day>
+					<day type="thu">Do</day>
+					<day type="fri">Vr</day>
+					<day type="sat">Sa</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Sondag</day>
 					<day type="mon">Maandag</day>
 					<day type="tue">Dinsdag</day>
@@ -67,24 +195,27 @@
 					<day type="fri">Vrydag</day>
 					<day type="sat">Saterdag</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">So</day>
-					<day type="mon">Ma</day>
-					<day type="tue">Di</day>
-					<day type="wed">Wo</day>
-					<day type="thu">Do</day>
-					<day type="fri">Vr</day>
-					<day type="sat">Sa</day>
-				</dayAbbr>
-				<am>VM</am>
-				<pm>NM</pm>
 			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
 		<currencies>
 			<currency type="ZAR">
-				<displayName>ZAR</displayName>
+				<displayName>Rand</displayName>
 				<symbol>R</symbol>
 			</currency>
 		</currencies>

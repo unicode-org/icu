@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ar" /> 
 		<territory type="IQ" /> 
 	</identity>
 	<layout>
 		<orientation lines="top-to-bottom" characters="right-to-left" />
 	</layout>
-	<numbers>
-		<decimalFormats>
-			<decimalFormatLength >
-				<decimalFormat >
-					<pattern>#,##0.###;#,##0.###-</pattern>
-				</decimalFormat>
-			</decimalFormatLength >
-		</decimalFormats>
-		<scientificFormats>
-			<scientificFormatLength >
-				<scientificFormat >
-					<pattern>#E0</pattern>
-				</scientificFormat>
-			</scientificFormatLength >
-		</scientificFormats>
-		<percentFormats>
-			<percentFormatLength >
-				<percentFormat >
-					<pattern>#,##0%</pattern>
-				</percentFormat>
-			</percentFormatLength >
-		</percentFormats>
-		<currencyFormats>
-			<currencyFormatLength >
-				<currencyFormat >
-					<pattern>¤ #,##0.000;¤ #,##0.000-</pattern>
-				</currencyFormat>
-			</currencyFormatLength >
-		</currencyFormats>
-	</numbers>
+<numbers>
+	<decimalFormats>
+		<decimalFormatLength >
+			<decimalFormat >
+				<pattern>#,##0.###;#,##0.###-</pattern>
+			</decimalFormat>
+		</decimalFormatLength >
+	</decimalFormats>
+	<scientificFormats>
+		<scientificFormatLength >
+			<scientificFormat >
+				<pattern>#E0</pattern>
+			</scientificFormat>
+		</scientificFormatLength >
+	</scientificFormats>
+	<percentFormats>
+		<percentFormatLength >
+			<percentFormat >
+				<pattern>#,##0%</pattern>
+			</percentFormat>
+		</percentFormatLength >
+	</percentFormats>
+	<currencyFormats>
+		<currencyFormatLength >
+			<currencyFormat >
+				<pattern>¤ #,##0.000;¤ #,##0.000-</pattern>
+			</currencyFormat>
+		</currencyFormatLength >
+	</currencyFormats>
+</numbers>
 </ldml>

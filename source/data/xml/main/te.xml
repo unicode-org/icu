@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="te" /> 
 	</identity>
 	<localeDisplayNames>
@@ -21,16 +16,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[[:Telu:]‌‍]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Telu</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">జనవరి</month>
 					<month type="2">ఫిబ్రవరి</month>
 					<month type="3">మార్చి</month>
@@ -44,7 +34,7 @@
 					<month type="11">నవంబర్</month>
 					<month type="12">డిసెంబర్</month>
 				</monthNames>
-				<monthAbbr>
+				<monthNames context="format" width="wide">
 					<month type="1">జనవరి</month>
 					<month type="2">ఫిబ్రవరి</month>
 					<month type="3">మార్చి</month>
@@ -57,8 +47,17 @@
 					<month type="10">అక్టోబర్</month>
 					<month type="11">నవంబర్</month>
 					<month type="12">డిసెంబర్</month>
-				</monthAbbr>
-				<dayNames>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ఆది</day>
+					<day type="mon">సోమ</day>
+					<day type="tue">మంగళ</day>
+					<day type="wed">బుధ</day>
+					<day type="thu">గురు</day>
+					<day type="fri">శుక్ర</day>
+					<day type="sat">శని</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">ఆదివారం</day>
 					<day type="mon">సోమవారం</day>
 					<day type="tue">మంగళవారం</day>
@@ -67,15 +66,6 @@
 					<day type="fri">శుక్రవారం</day>
 					<day type="sat">శనివారం</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ఆది</day>
-					<day type="mon">సోమ</day>
-					<day type="tue">మంగళ</day>
-					<day type="wed">బుధ</day>
-					<day type="thu">గురు</day>
-					<day type="fri">శుక్ర</day>
-					<day type="sat">శని</day>
-				</dayAbbr>
 				<am>పూర్వాహ్న</am>
 				<pm>అపరాహ్న</pm>
 			</calendar>

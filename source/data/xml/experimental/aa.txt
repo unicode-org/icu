@@ -12,67 +12,13 @@
 
 aa {
     Version{ "x0.1" }
-    AmPmMarkers {
-        "saaku",
-        "carra",
-    }
     // Currency display names
     Currencies {
         DJF { "FD", "DJF" }
         ERN { "$", "ERN" }
     }
-    DayAbbreviations {
-        "Aca",
-        "Etl",
-        "Tal",
-        "Arb",
-        "Kam",
-        "Gum",
-        "Sab",
-    }
-    DayNames {
-        "Acaada",
-        "Etleeni",
-        "Talaata",
-        "Arbaqa",
-        "Kamiisi",
-        "Gumqata",
-        "Sabti",
-    }
     ExemplarCharacters{ "[a-z]" }
     LocaleScript:array{ "Latn" }
-    MonthAbbreviations {
-        "Qun",
-        "Nah",
-        "Cig",
-        "Agd",
-        "Cax",
-        "Qas",
-        "Qad",
-        "Leq",
-        "Way",
-        "Dit",
-        "Xim",
-        "Kax",
-    }
-    MonthNames {
-        "Qunxa Garablu",
-        "Naharsi Kudo",
-        "Ciggilta Kudo",
-        "Agda Baxisso",
-        "Caxah Alsa",
-        "Qasa Dirri",
-        "Qado Dirri",
-        "Leqeeni",
-        "Waysu",
-        "Diteli",
-        "Ximoli",
-        "Kaxxa Garablu",
-    }
-    Eras { 
-        "Yaasuusuk Duma",
-        "Yaasuusuk Wadir"
-    }
     Languages { 
         aa { "Qafar" }
     }
@@ -85,15 +31,81 @@ aa {
         7,
         1,
     }
-    DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM dd, yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yyyy",
-        "dd/MM/yy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "saaku",
+                "carra",
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM dd, yyyy",
+                "dd MMMM yyyy",
+                "dd-MMM-yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Aca",
+                        "Etl",
+                        "Tal",
+                        "Arb",
+                        "Kam",
+                        "Gum",
+                        "Sab",
+                    }
+                    wide{
+                        "Acaada",
+                        "Etleeni",
+                        "Talaata",
+                        "Arbaqa",
+                        "Kamiisi",
+                        "Gumqata",
+                        "Sabti",
+                    }
+                }
+            }
+            eras{
+                "Yaasuusuk Duma",
+                "Yaasuusuk Wadir"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Qun",
+                        "Nah",
+                        "Cig",
+                        "Agd",
+                        "Cax",
+                        "Qas",
+                        "Qad",
+                        "Leq",
+                        "Way",
+                        "Dit",
+                        "Xim",
+                        "Kax",
+                    }
+                    wide{
+                        "Qunxa Garablu",
+                        "Naharsi Kudo",
+                        "Ciggilta Kudo",
+                        "Agda Baxisso",
+                        "Caxah Alsa",
+                        "Qasa Dirri",
+                        "Qado Dirri",
+                        "Leqeeni",
+                        "Waysu",
+                        "Diteli",
+                        "Ximoli",
+                        "Kaxxa Garablu",
+                    }
+                }
+            }
+        }
     }
 }

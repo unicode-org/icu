@@ -13,10 +13,6 @@
 
 sid {
     Version{ "x0.1" }
-    AmPmMarkers {
-        "soodo",
-        "hawwaro",
-    }
     Countries { 
         ET { "Itiyoophiya" }
     }
@@ -24,44 +20,9 @@ sid {
     Currencies {
         ETB { "$", "ETB" }
     }
-    DayAbbreviations {
-        //"Aca", // Too many days, and this doesn't look right.
-        "Sam",
-        "San",
-        "Mak",
-        "Row",
-        "Ham",
-        "Arb",
-        "Qid",
-    }
-    DayNames {
-        //"Qubee", // Too many days, and this doesn't look right.
-        "Sambata",
-        "Sanyo",
-        "Maakisanyo",
-        "Roowe",
-        "Hamuse",
-        "Arbe",
-        "Qidaame",
-    }
     DateTimeElements:intvector { 
         7,
         1,
-    }
-    DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM dd, yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yyyy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
-    Eras { 
-        "YIA", // Yesus ilama albaani",
-        "YIG", // Yesus ilama gedensaani"
     }
     Languages { 
         sid { "Sidaamu Afo" }
@@ -71,32 +32,83 @@ sid {
     // Sidama also uses a lunar calendar, when the Gregorian calendar is used
     // it is used unmodified:
     // TODO: Get translations for the lunar calendar when the calendar becomes available in ICU.
-    MonthAbbreviations {
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    }
-    MonthNames {
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "soodo",
+                "hawwaro",
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM dd, yyyy",
+                "dd MMMM yyyy",
+                "dd-MMM-yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        //"Aca", // Too many days, and this doesn't look right.
+                        "Sam",
+                        "San",
+                        "Mak",
+                        "Row",
+                        "Ham",
+                        "Arb",
+                        "Qid",
+                    }
+                    wide{
+                        //"Qubee", // Too many days, and this doesn't look right.
+                        "Sambata",
+                        "Sanyo",
+                        "Maakisanyo",
+                        "Roowe",
+                        "Hamuse",
+                        "Arbe",
+                        "Qidaame",
+                    }
+                }
+            }
+            eras{
+                "YIA", // Yesus ilama albaani",
+                "YIG", // Yesus ilama gedensaani"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+            }
+        }
     }
 }

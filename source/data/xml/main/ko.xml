@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ko" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,9 +11,12 @@
 			<language type="aa">아파르어</language>
 			<language type="ab">압카즈어</language>
 			<language type="af">남아공 공용어</language>
+			<language type="ak">아칸어</language>
 			<language type="am">암하라어</language>
+			<language type="an">아라곤어</language>
 			<language type="ar">아랍어</language>
 			<language type="as">아샘어</language>
+			<language type="av">아바릭어</language>
 			<language type="ay">아이마라어</language>
 			<language type="az">아제르바이잔어</language>
 			<language type="ba">바슈키르어</language>
@@ -26,16 +24,25 @@
 			<language type="bg">불가리아어</language>
 			<language type="bh">비하르어</language>
 			<language type="bi">비슬라마어</language>
+			<language type="bm">밤바라어</language>
 			<language type="bn">벵골어</language>
 			<language type="bo">티베트어</language>
 			<language type="br">브르타뉴어</language>
+			<language type="bs">보스니아어</language>
+			<language type="byn">브린어</language>
 			<language type="ca">카탈로니아어</language>
+			<language type="ch">차모로어</language>
 			<language type="co">코르시카어</language>
+			<language type="cr">크리어</language>
 			<language type="cs">체코어</language>
+			<language type="cu">교회슬라브어</language>
+			<language type="cv">추바시어</language>
 			<language type="cy">웨일스어</language>
 			<language type="da">덴마크어</language>
 			<language type="de">독일어</language>
+			<language type="dv">디베히어</language>
 			<language type="dz">부탄어</language>
+			<language type="ee">에웨어</language>
 			<language type="el">그리스어</language>
 			<language type="en">영어</language>
 			<language type="eo">에스페란토어</language>
@@ -43,6 +50,7 @@
 			<language type="et">에스토니아어</language>
 			<language type="eu">바스크어</language>
 			<language type="fa">이란어</language>
+			<language type="ff">풀라어</language>
 			<language type="fi">핀란드어</language>
 			<language type="fj">피지어</language>
 			<language type="fo">페로스어</language>
@@ -50,6 +58,7 @@
 			<language type="fy">프리지아어</language>
 			<language type="ga">아일랜드어</language>
 			<language type="gd">스코갤릭어</language>
+			<language type="gez">게이즈어</language>
 			<language type="gl">갈리시아어</language>
 			<language type="gn">구아라니어</language>
 			<language type="gu">구자라트어</language>
@@ -58,34 +67,49 @@
 			<language type="haw">하와이어</language>
 			<language type="he">히브리어</language>
 			<language type="hi">힌디어</language>
+			<language type="ho">히리 모투어</language>
 			<language type="hr">크로아티아어</language>
+			<language type="ht">아이티어</language>
 			<language type="hu">헝가리어</language>
 			<language type="hy">아르메니아어</language>
 			<language type="ia">인터링거</language>
 			<language type="id">인도네시아어</language>
 			<language type="ie">인터링게어</language>
+			<language type="ig">이그보어</language>
+			<language type="ii">시츄안 이어</language>
 			<language type="ik">이누피아크어</language>
+			<language type="io">이도어</language>
 			<language type="is">아이슬란드어</language>
 			<language type="it">이탈리아어</language>
 			<language type="iu">이눅티투트어</language>
 			<language type="ja">일본어</language>
 			<language type="jv">자바어</language>
 			<language type="ka">그루지야어</language>
+			<language type="kg">콩고어</language>
+			<language type="ki">키쿠유어</language>
+			<language type="kj">쿠안야마어</language>
 			<language type="kk">카자흐어</language>
 			<language type="kl">그린랜드어</language>
 			<language type="km">캄보디아어</language>
 			<language type="kn">카나다어</language>
 			<language type="ko">한국어</language>
+			<language type="kr">칸누리어</language>
 			<language type="ks">카슈미르어</language>
 			<language type="ku">크르드어</language>
+			<language type="kv">코미어</language>
 			<language type="kw">콘월어</language>
 			<language type="ky">키르기스어</language>
 			<language type="la">라틴어</language>
+			<language type="lb">룩셈부르크어</language>
+			<language type="lg">간다어</language>
+			<language type="li">림버거어</language>
 			<language type="ln">링갈라어</language>
 			<language type="lo">라오어</language>
 			<language type="lt">리투아니아어</language>
+			<language type="lu">루바-카탄가어</language>
 			<language type="lv">라트비아어</language>
 			<language type="mg">마다가스카르어</language>
+			<language type="mh">마셜제도어</language>
 			<language type="mi">마오리어</language>
 			<language type="mk">마케도니아어</language>
 			<language type="ml">말라얄람어</language>
@@ -97,14 +121,22 @@
 			<language type="my">버마어</language>
 			<language type="na">나우루어</language>
 			<language type="nb">보크말 노르웨이어</language>
+			<language type="nd">은데벨레어, 북부</language>
 			<language type="ne">네팔어</language>
+			<language type="ng">느동가어</language>
 			<language type="nl">네덜란드어</language>
 			<language type="nn">뉘노르스크 노르웨이어</language>
 			<language type="no">노르웨이어</language>
+			<language type="nr">은데벨레어, 남부</language>
+			<language type="nv">나바호어</language>
+			<language type="ny">니안자어; 치츄어; 츄어</language>
 			<language type="oc">옥시트어</language>
+			<language type="oj">오지브웨이어</language>
 			<language type="om">오로모어 (아판)</language>
 			<language type="or">오리야어</language>
+			<language type="os">오세트어</language>
 			<language type="pa">펀잡어</language>
+			<language type="pi">팔리어</language>
 			<language type="pl">폴란드어</language>
 			<language type="ps">파시토어 (푸시토)</language>
 			<language type="pt">포르투칼어</language>
@@ -115,10 +147,13 @@
 			<language type="ru">러시아어</language>
 			<language type="rw">반투어(루완다)</language>
 			<language type="sa">산스크리트어</language>
+			<language type="sc">사르디니아어</language>
 			<language type="sd">신디어</language>
+			<language type="se">북부 사미어</language>
 			<language type="sg">산고어</language>
 			<language type="sh">세르보크로아티아어</language>
 			<language type="si">스리랑카어</language>
+			<language type="sid">시다모어</language>
 			<language type="sk">슬로바키아어</language>
 			<language type="sl">슬로베니아어</language>
 			<language type="sm">사모아어</language>
@@ -131,11 +166,13 @@
 			<language type="su">순단어</language>
 			<language type="sv">스웨덴어</language>
 			<language type="sw">스와힐리어</language>
+			<language type="syr">시리아어</language>
 			<language type="ta">타밀어</language>
 			<language type="te">텔루구어</language>
 			<language type="tg">타지키스탄어</language>
 			<language type="th">태국어</language>
 			<language type="ti">티그리냐어</language>
+			<language type="tig">티그레어</language>
 			<language type="tk">투르크멘어</language>
 			<language type="tl">타갈로그어</language>
 			<language type="tn">세츠와나어</language>
@@ -144,12 +181,15 @@
 			<language type="ts">통가어</language>
 			<language type="tt">타타르어</language>
 			<language type="tw">트위어</language>
+			<language type="ty">타히티어</language>
 			<language type="ug">위구르어</language>
 			<language type="uk">우크라이나어</language>
 			<language type="ur">우르두어</language>
 			<language type="uz">우즈베크어</language>
+			<language type="ve">벤다어</language>
 			<language type="vi">베트남어</language>
 			<language type="vo">볼라퓌크어</language>
+			<language type="wa">왈론어</language>
 			<language type="wo">올로프어</language>
 			<language type="xh">반투어(남아프리카)</language>
 			<language type="yi">이디시어</language>
@@ -158,6 +198,62 @@
 			<language type="zh">중국어</language>
 			<language type="zu">줄루어</language>
 		</languages>
+		<scripts>
+			<script type="Arab">아랍어</script>
+			<script type="Armn">아르메니아어</script>
+			<script type="Beng">벵골어</script>
+			<script type="Bopo">주음부호</script>
+			<script type="Brai">브라유</script>
+			<script type="Buhd">부히드어</script>
+			<script type="Cans">통합 캐나다 토착어</script>
+			<script type="Cher">체로키어</script>
+			<script type="Cprt">키프로스어</script>
+			<script type="Cyrl">키릴어</script>
+			<script type="Deva">데바니가리어</script>
+			<script type="Dsrt">디저렛어</script>
+			<script type="Ethi">에티오피아어</script>
+			<script type="Geor">그루지아어</script>
+			<script type="Goth">고트어</script>
+			<script type="Grek">그리스어</script>
+			<script type="Gujr">구쟈라티어</script>
+			<script type="Guru">구루묵히</script>
+			<script type="Hang">한국어</script>
+			<script type="Hani">한족어</script>
+			<script type="Hano">하누누어</script>
+			<script type="Hans">중국어 간체</script>
+			<script type="Hant">중국어 번체</script>
+			<script type="Hebr">히브리어</script>
+			<script type="Hira">히라카나</script>
+			<script type="Ital">고이탈리아어</script>
+			<script type="Kana">가타카나</script>
+			<script type="Khmr">크메르어</script>
+			<script type="Knda">칸나다</script>
+			<script type="Laoo">라오어</script>
+			<script type="Latn">라틴어</script>
+			<script type="Limb">림부어</script>
+			<script type="Linb">선형 문자 B</script>
+			<script type="Mlym">말라얄람어</script>
+			<script type="Mong">몽골어</script>
+			<script type="Mymr">미얀마어</script>
+			<script type="Ogam">오그함어</script>
+			<script type="Orya">오리야어</script>
+			<script type="Osma">오스만야어</script>
+			<script type="Qaac">콥트어</script>
+			<script type="Runr">룬 문자</script>
+			<script type="Shaw">샤비안어</script>
+			<script type="Sinh">신할라어</script>
+			<script type="Syrc">시리아어</script>
+			<script type="Tagb">타반와어</script>
+			<script type="Tale">타이 레어</script>
+			<script type="Taml">타밀어</script>
+			<script type="Telu">탤루그어</script>
+			<script type="Tglg">타갈로그어</script>
+			<script type="Thaa">타나어</script>
+			<script type="Thai">태국어</script>
+			<script type="Tibt">티벳어</script>
+			<script type="Ugar">우가릿어</script>
+			<script type="Yiii">이어</script>
+		</scripts>
 		<territories>
 			<territory type="AD">안도라</territory>
 			<territory type="AE">아랍에미리트</territory>
@@ -403,24 +499,34 @@
 		<variants>
 			<variant type="REVISED">개정</variant>
 		</variants>
+		<keys>
+			<key type="calendar">달력</key>
+			<key type="collation">조합</key>
+			<key type="currency">통화</key>
+		</keys>
 		<types>
+			<type type="buddhist" key="calendar">불교력</type>
+			<type type="chinese" key="calendar">중국력</type>
+			<type type="gregorian" key="calendar">태양력</type>
+			<type type="hebrew" key="calendar">히브리력</type>
+			<type type="islamic" key="calendar">이슬람력</type>
+			<type type="islamic-civil" key="calendar">이슬람 상용력</type>
+			<type type="japanese" key="calendar">일본력</type>
+			<type type="direct" key="collation">순서</type>
+			<type type="phonebook" key="collation">전화번호부순</type>
+			<type type="pinyin" key="collation">병음순</type>
+			<type type="stroke" key="collation">자획순</type>
 			<type type="traditional" key="collation">전통 역법</type>
 		</types>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[가-힣]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Hang</icu:script>
-				<icu:script type="2">Hani</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">1월</month>
 					<month type="2">2월</month>
 					<month type="3">3월</month>
@@ -434,7 +540,7 @@
 					<month type="11">11월</month>
 					<month type="12">12월</month>
 				</monthNames>
-				<monthAbbr>
+				<monthNames context="format" width="narrow">
 					<month type="1">1월</month>
 					<month type="2">2월</month>
 					<month type="3">3월</month>
@@ -447,8 +553,40 @@
 					<month type="10">10월</month>
 					<month type="11">11월</month>
 					<month type="12">12월</month>
-				</monthAbbr>
-				<dayNames>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">1월</month>
+					<month type="2">2월</month>
+					<month type="3">3월</month>
+					<month type="4">4월</month>
+					<month type="5">5월</month>
+					<month type="6">6월</month>
+					<month type="7">7월</month>
+					<month type="8">8월</month>
+					<month type="9">9월</month>
+					<month type="10">10월</month>
+					<month type="11">11월</month>
+					<month type="12">12월</month>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">일</day>
+					<day type="mon">월</day>
+					<day type="tue">화</day>
+					<day type="wed">수</day>
+					<day type="thu">목</day>
+					<day type="fri">금</day>
+					<day type="sat">토</day>
+				</dayNames>
+				<dayNames context="format" width="narrow" >
+					<day type="sun">일</day>
+					<day type="mon">월</day>
+					<day type="tue">화</day>
+					<day type="wed">수</day>
+					<day type="thu">목</day>
+					<day type="fri">금</day>
+					<day type="sat">토</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">일요일</day>
 					<day type="mon">월요일</day>
 					<day type="tue">화요일</day>
@@ -457,23 +595,8 @@
 					<day type="fri">금요일</day>
 					<day type="sat">토요일</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">일</day>
-					<day type="mon">월</day>
-					<day type="tue">화</day>
-					<day type="wed">수</day>
-					<day type="thu">목</day>
-					<day type="fri">금</day>
-					<day type="sat">토</day>
-				</dayAbbr>
 				<am>오전</am>
 				<pm>오후</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">기원전</era>
-						<era type="2">서기</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -544,13 +667,1401 @@
 	</dates>
 	<numbers>
 		<currencies>
+			<currency type="ADD">
+				<displayName>안도라 디네르</displayName>
+				<symbol>ADD</symbol>
+			</currency>
+			<currency type="ADP">
+				<displayName>안도라 페세타</displayName>
+				<symbol>ADP</symbol>
+			</currency>
+			<currency type="AED">
+				<displayName>아랍에미레이트 디나르</displayName>
+				<symbol>AED</symbol>
+			</currency>
+			<currency type="AFA">
+				<displayName>아프가니 (1927-2002)</displayName>
+				<symbol>AFA</symbol>
+			</currency>
+			<currency type="AFN">
+				<displayName>아프가니</displayName>
+				<symbol>Af</symbol>
+			</currency>
+			<currency type="AIF">
+				<displayName>아파르와 이사스의 프랑</displayName>
+				<symbol>AIF</symbol>
+			</currency>
+			<currency type="ALK">
+				<displayName>알바니아 레크 (1946-1961)</displayName>
+				<symbol>ALK</symbol>
+			</currency>
+			<currency type="ALL">
+				<displayName>알바니아 레크</displayName>
+				<symbol>lek</symbol>
+			</currency>
+			<currency type="ALV">
+				<displayName>알바니아 레크 발루트</displayName>
+				<symbol>ALV</symbol>
+			</currency>
+			<currency type="ALX">
+				<displayName>알바니아 달러 태환권</displayName>
+				<symbol>ALX</symbol>
+			</currency>
+			<currency type="AMD">
+				<displayName>아르메니아 드람</displayName>
+				<symbol>dram</symbol>
+			</currency>
+			<currency type="ANG">
+				<displayName>네델란드 안틸레스 굴덴</displayName>
+				<symbol>NA f.</symbol>
+			</currency>
+			<currency type="AOA">
+				<displayName>앙골라 콴자</displayName>
+				<symbol>AOA</symbol>
+			</currency>
+			<currency type="AOK">
+				<displayName>앙골라 콴자 (1977-1990)</displayName>
+				<symbol>AOK</symbol>
+			</currency>
+			<currency type="AON">
+				<displayName>앙골라 신귄 콴자 (1990-2000)</displayName>
+				<symbol>AON</symbol>
+			</currency>
+			<currency type="AOR">
+				<displayName>앙골라 콴자 Reajustado (1995-1999)</displayName>
+				<symbol>AOR</symbol>
+			</currency>
+			<currency type="AOS">
+				<displayName>앙골라 에스쿠도</displayName>
+				<symbol>AOS</symbol>
+			</currency>
+			<currency type="ARA">
+				<displayName>아르헨티나 오스트랄</displayName>
+				<symbol>ARA</symbol>
+			</currency>
+			<currency type="ARM">
+				<displayName>아르헨티나 페소 모네다 국영</displayName>
+				<symbol>ARM</symbol>
+			</currency>
+			<currency type="ARP">
+				<displayName>아르헨티나 페소 (1983-1985)</displayName>
+				<symbol>ARP</symbol>
+			</currency>
+			<currency type="ARS">
+				<displayName>아르헨티나 페소</displayName>
+				<symbol>Arg$</symbol>
+			</currency>
+			<currency type="ATS">
+				<displayName>호주 실링</displayName>
+				<symbol>ATS</symbol>
+			</currency>
+			<currency type="AUD">
+				<displayName>호주 달러</displayName>
+				<symbol>$A</symbol>
+			</currency>
+			<currency type="AUP">
+				<displayName>호주 파운드</displayName>
+				<symbol>AUP</symbol>
+			</currency>
+			<currency type="AWG">
+				<displayName>아루바 길더</displayName>
+				<symbol>AWG</symbol>
+			</currency>
+			<currency type="AZM">
+				<displayName>아제르바이젠 마나트</displayName>
+				<symbol>AZM</symbol>
+			</currency>
+			<currency type="BAD">
+				<displayName>보스니아-헤르체고비나 디나르</displayName>
+				<symbol>BAD</symbol>
+			</currency>
+			<currency type="BAM">
+				<displayName>보스니아-헤르체고비나 태환 마르크</displayName>
+				<symbol>KM</symbol>
+			</currency>
+			<currency type="BAN">
+				<displayName>보스니아-헤르체고비나 신 디나르</displayName>
+				<symbol>BAN</symbol>
+			</currency>
+			<currency type="BBD">
+				<displayName>바베이도스 달러</displayName>
+				<symbol>BDS$</symbol>
+			</currency>
+			<currency type="BDT">
+				<displayName>방글라데시 타카</displayName>
+				<symbol>Tk</symbol>
+			</currency>
+			<currency type="BEC">
+				<displayName>벨기에 프랑 (태환)</displayName>
+				<symbol>BEC</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>벨기에 프랑</displayName>
+				<symbol>BF</symbol>
+			</currency>
+			<currency type="BEL">
+				<displayName>벨기에 프랑 (금융)</displayName>
+				<symbol>BEL</symbol>
+			</currency>
+			<currency type="BGL">
+				<displayName>불가리아 동전 렛</displayName>
+				<symbol>lev</symbol>
+			</currency>
+			<currency type="BGM">
+				<displayName>불가리아 사회주의 렛</displayName>
+				<symbol>BGM</symbol>
+			</currency>
+			<currency type="BGN">
+				<displayName>불가리아 신권 렛</displayName>
+				<symbol>BGN</symbol>
+			</currency>
+			<currency type="BGO">
+				<displayName>불가리아 렛 (1879-1952)</displayName>
+				<symbol>BGO</symbol>
+			</currency>
+			<currency type="BGX">
+				<displayName>불가리아 렛 태환권</displayName>
+				<symbol>BGX</symbol>
+			</currency>
+			<currency type="BHD">
+				<displayName>바레인 디나르</displayName>
+				<symbol>BD</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>부룬디 프랑</displayName>
+				<symbol>Fbu</symbol>
+			</currency>
+			<currency type="BMD">
+				<displayName>버뮤다 달러</displayName>
+				<symbol>Ber$</symbol>
+			</currency>
+			<currency type="BMP">
+				<displayName>버뮤다 파운드</displayName>
+				<symbol>BMP</symbol>
+			</currency>
+			<currency type="BND">
+				<displayName>부루나이 달러</displayName>
+				<symbol>BND</symbol>
+			</currency>
+			<currency type="BOB">
+				<displayName>볼리비아노</displayName>
+				<symbol>Bs</symbol>
+			</currency>
+			<currency type="BOL">
+				<displayName>볼리비아노 (1863-1962)</displayName>
+				<symbol>BOL</symbol>
+			</currency>
+			<currency type="BOP">
+				<displayName>볼리비아노 페소</displayName>
+				<symbol>BOP</symbol>
+			</currency>
+			<currency type="BRB">
+				<displayName>볼리비아노  크루제이루 노보 (1967-1986)</displayName>
+				<symbol>BRB</symbol>
+			</currency>
+			<currency type="BRC">
+				<displayName>브라질 크루자두</displayName>
+				<symbol>BRC</symbol>
+			</currency>
+			<currency type="BRE">
+				<displayName>브라질 크루제이루 (1990-1993)</displayName>
+				<symbol>BRE</symbol>
+			</currency>
+			<currency type="BRL">
+				<displayName>브라질 레알</displayName>
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BRN">
+				<displayName>브라질 크루자두 노보</displayName>
+				<symbol>BRN</symbol>
+			</currency>
+			<currency type="BRR">
+				<displayName>브라질 크루제이루</displayName>
+				<symbol>BRR</symbol>
+			</currency>
+			<currency type="BRZ">
+				<displayName>브라질 크루제이루 (1942-1967)</displayName>
+				<symbol>BRZ</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>바하마 달러</displayName>
+				<symbol>BSD</symbol>
+			</currency>
+			<currency type="BSP">
+				<displayName>바하마 달러 파운드</displayName>
+				<symbol>BSP</symbol>
+			</currency>
+			<currency type="BTN">
+				<displayName>부탄 눌투눔</displayName>
+				<symbol>Nu</symbol>
+			</currency>
+			<currency type="BTR">
+				<displayName>부탄 루피</displayName>
+				<symbol>BTR</symbol>
+			</currency>
+			<currency type="BUK">
+				<displayName>버마 차트</displayName>
+				<symbol>BUK</symbol>
+			</currency>
+			<currency type="BUR">
+				<displayName>버마 루피</displayName>
+				<symbol>BUR</symbol>
+			</currency>
+			<currency type="BWP">
+				<displayName>보츠와나 폴라</displayName>
+				<symbol>BWP</symbol>
+			</currency>
+			<currency type="BYB">
+				<displayName>벨라루스 신권 루블 (1994-1999)</displayName>
+				<symbol>BYB</symbol>
+			</currency>
+			<currency type="BYL">
+				<displayName>벨라루스 루블 (1992-1994)</displayName>
+				<symbol>BYL</symbol>
+			</currency>
+			<currency type="BYR">
+				<displayName>벨라루스 루블</displayName>
+				<symbol>Rbl</symbol>
+			</currency>
+			<currency type="BZD">
+				<displayName>벨리즈 달러</displayName>
+				<symbol>BZ$</symbol>
+			</currency>
+			<currency type="BZH">
+				<displayName>영국령 혼두라스 달러</displayName>
+				<symbol>BZH</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>캐나다 달러</displayName>
+				<symbol>Can$</symbol>
+			</currency>
+			<currency type="CDF">
+				<displayName>콩고 프랑 콩골라스</displayName>
+				<symbol>CDF</symbol>
+			</currency>
+			<currency type="CDG">
+				<displayName>콩고 공화국 프랑</displayName>
+				<symbol>CDG</symbol>
+			</currency>
+			<currency type="CDL">
+				<displayName>콩고 자이르</displayName>
+				<symbol>CDL</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>스위스 프랑달러</displayName>
+				<symbol>SwF</symbol>
+			</currency>
+			<currency type="CKD">
+				<displayName>쿡 제도 달러</displayName>
+				<symbol>CKD</symbol>
+			</currency>
+			<currency type="CLC">
+				<displayName>칠레 콘도르</displayName>
+				<symbol>CLC</symbol>
+			</currency>
+			<currency type="CLE">
+				<displayName>칠레 에스쿠도</displayName>
+				<symbol>CLE</symbol>
+			</currency>
+			<currency type="CLP">
+				<displayName>칠레 페소</displayName>
+				<symbol>Ch$</symbol>
+			</currency>
+			<currency type="CNY">
+				<displayName>중국 위안 인민폐</displayName>
+				<symbol>Y</symbol>
+			</currency>
+			<currency type="COB">
+				<displayName>콜롬비아 지폐 페소</displayName>
+				<symbol>COB</symbol>
+			</currency>
+			<currency type="COF">
+				<displayName>콩고 CFA 프랑</displayName>
+				<symbol>COF</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>콜롬비아 페소</displayName>
+				<symbol>Col$</symbol>
+			</currency>
+			<currency type="CRC">
+				<displayName>코스타리카 콜론</displayName>
+				<symbol>C</symbol>
+			</currency>
+			<currency type="CSC">
+				<displayName>체코슬로바키아 코루나</displayName>
+				<symbol>CSC</symbol>
+			</currency>
+			<currency type="CSK">
+				<displayName>체코슬로바키아 동전 코루나</displayName>
+				<symbol>CSK</symbol>
+			</currency>
+			<currency type="CUP">
+				<displayName>쿠바 페소</displayName>
+				<symbol>CUP</symbol>
+			</currency>
+			<currency type="CUX">
+				<displayName>쿠바 태환권 마르크</displayName>
+				<symbol>CUX</symbol>
+			</currency>
+			<currency type="CVE">
+				<displayName>카보베르데 에스쿠도</displayName>
+				<symbol>CVEsc</symbol>
+			</currency>
+			<currency type="CWG">
+				<displayName>쿠라카오 길더</displayName>
+				<symbol>CWG</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>싸이프러스 파운드</displayName>
+				<symbol>£C</symbol>
+			</currency>
+			<currency type="CZK">
+				<displayName>체코 공화국 코루나</displayName>
+				<symbol>CZK</symbol>
+			</currency>
+			<currency type="DDM">
+				<displayName>동독 오스트마르크</displayName>
+				<symbol>DDM</symbol>
+			</currency>
+			<currency type="DEM">
+				<displayName>독일 마르크</displayName>
+				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DES">
+				<displayName>독일 스퍼마르크</displayName>
+				<symbol>DES</symbol>
+			</currency>
+			<currency type="DJF">
+				<displayName>지부티 프랑</displayName>
+				<symbol>DF</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>덴마크 크로네</displayName>
+				<symbol>DKr</symbol>
+			</currency>
+			<currency type="DOP">
+				<displayName>도미니카 페소</displayName>
+				<symbol>RD$</symbol>
+			</currency>
+			<currency type="DZD">
+				<displayName>알제리 디나르</displayName>
+				<symbol>DA</symbol>
+			</currency>
+			<currency type="DZF">
+				<displayName>알제리 신권 프랑</displayName>
+				<symbol>DZF</symbol>
+			</currency>
+			<currency type="DZG">
+				<displayName>알제리 프랑 제르미날</displayName>
+				<symbol>DZG</symbol>
+			</currency>
+			<currency type="ECS">
+				<displayName>에쿠아도르 수크레</displayName>
+				<symbol>ECS</symbol>
+			</currency>
+			<currency type="EEK">
+				<displayName>에스토니아 크룬</displayName>
+				<symbol>EEK</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>이집트 파운드</displayName>
+				<symbol>EGP</symbol>
+			</currency>
+			<currency type="ERN">
+				<displayName>에리트리아 나크파</displayName>
+				<symbol>ERN</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>스페인 페세타</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="ETB">
+				<displayName>이디오피아 비르</displayName>
+				<symbol>Br</symbol>
+			</currency>
+			<currency type="ETD">
+				<displayName>이디오피아 달러</displayName>
+				<symbol>ETD</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>유로화</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>핀란드 마르카</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FIN">
+				<displayName>핀란드 마르카 (1860-1962)</displayName>
+				<symbol>FIN</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>피지 달러</displayName>
+				<symbol>F$</symbol>
+			</currency>
+			<currency type="FJP">
+				<displayName>피지 파운드</displayName>
+				<symbol>FJP</symbol>
+			</currency>
+			<currency type="FKP">
+				<displayName>포클랜드제도 파운드</displayName>
+				<symbol>FKP</symbol>
+			</currency>
+			<currency type="FOK">
+				<displayName>페로제도 크로너</displayName>
+				<symbol>FOK</symbol>
+			</currency>
+			<currency type="FRF">
+				<displayName>프랑스 프랑</displayName>
+				<symbol>FRF</symbol>
+			</currency>
+			<currency type="FRG">
+				<displayName>프랑스 프랑 제르미날/프랑 포앙카레</displayName>
+				<symbol>FRG</symbol>
+			</currency>
+			<currency type="GAF">
+				<displayName>가봉 CFA 프랑</displayName>
+				<symbol>GAF</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>영국령 파운드 스털링</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GEK">
+				<displayName>그루지야 지폐 라리트</displayName>
+				<symbol>GEK</symbol>
+			</currency>
+			<currency type="GEL">
+				<displayName>그루지야 라리</displayName>
+				<symbol>lari</symbol>
+			</currency>
+			<currency type="GHC">
+				<displayName>가나 시디</displayName>
+				<symbol>GHC</symbol>
+			</currency>
+			<currency type="GHO">
+				<displayName>가나 구권 시디</displayName>
+				<symbol>GHO</symbol>
+			</currency>
+			<currency type="GHP">
+				<displayName>가나 파운드</displayName>
+				<symbol>GHP</symbol>
+			</currency>
+			<currency type="GHR">
+				<displayName>가나 재평가 시디</displayName>
+				<symbol>GHR</symbol>
+			</currency>
+			<currency type="GIP">
+				<displayName>지브롤터 파운드</displayName>
+				<symbol>GIP</symbol>
+			</currency>
+			<currency type="GLK">
+				<displayName>그린란드 크로네</displayName>
+				<symbol>GLK</symbol>
+			</currency>
+			<currency type="GMD">
+				<displayName>감비아 달라시</displayName>
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GMP">
+				<displayName>감비아 파운드</displayName>
+				<symbol>GMP</symbol>
+			</currency>
+			<currency type="GNF">
+				<displayName>기니 프랑</displayName>
+				<symbol>GF</symbol>
+			</currency>
+			<currency type="GNI">
+				<displayName>기니 프랑 (1960-1972)</displayName>
+				<symbol>GNI</symbol>
+			</currency>
+			<currency type="GNS">
+				<displayName>기니 시리</displayName>
+				<symbol>GNS</symbol>
+			</currency>
+			<currency type="GPF">
+				<displayName>과달로프 프랑</displayName>
+				<symbol>GPF</symbol>
+			</currency>
+			<currency type="GQF">
+				<displayName>적도 기니 프랑</displayName>
+				<symbol>GQF</symbol>
+			</currency>
+			<currency type="GQP">
+				<displayName>적도 기니 페세타 기니아나</displayName>
+				<symbol>GQP</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>그리스 드라크마</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="GRN">
+				<displayName>그리스 신권 드라크마</displayName>
+				<symbol>GRN</symbol>
+			</currency>
+			<currency type="GTQ">
+				<displayName>과테말라 케트살</displayName>
+				<symbol>Q</symbol>
+			</currency>
+			<currency type="GUF">
+				<displayName>프랑스령 가이아나 프랑 기아나</displayName>
+				<symbol>GUF</symbol>
+			</currency>
+			<currency type="GWE">
+				<displayName>포르투갈령 기니 에스쿠도</displayName>
+				<symbol>GWE</symbol>
+			</currency>
+			<currency type="GWM">
+				<displayName>포르투갈령 기니 밀 레이스</displayName>
+				<symbol>GWM</symbol>
+			</currency>
+			<currency type="GWP">
+				<displayName>기네비쏘 페소</displayName>
+				<symbol>GWP</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName>가이아나 달러</displayName>
+				<symbol>G$</symbol>
+			</currency>
+			<currency type="HKD">
+				<displayName>홍콩 달러</displayName>
+				<symbol>HK$</symbol>
+			</currency>
+			<currency type="HNL">
+				<displayName>온두라스 렘피라</displayName>
+				<symbol>L</symbol>
+			</currency>
+			<currency type="HRD">
+				<displayName>크로아티아 디나르</displayName>
+				<symbol>HRD</symbol>
+			</currency>
+			<currency type="HRK">
+				<displayName>크로아티아 쿠나</displayName>
+				<symbol>HRK</symbol>
+			</currency>
+			<currency type="HTG">
+				<displayName>하이티 구르드</displayName>
+				<symbol>HTG</symbol>
+			</currency>
+			<currency type="HUF">
+				<displayName>헝가리 포린트</displayName>
+				<symbol>Ft</symbol>
+			</currency>
+			<currency type="IBP">
+				<displayName>북부 아일랜드 파운드</displayName>
+				<symbol>IBP</symbol>
+			</currency>
+			<currency type="IDG">
+				<displayName>인도네시아 니카 길더</displayName>
+				<symbol>IDG</symbol>
+			</currency>
+			<currency type="IDJ">
+				<displayName>인도네시아 자바 루피아</displayName>
+				<symbol>IDJ</symbol>
+			</currency>
+			<currency type="IDN">
+				<displayName>인도네시아 신권 루피아</displayName>
+				<symbol>IDN</symbol>
+			</currency>
+			<currency type="IDR">
+				<displayName>인도네시아 루피아</displayName>
+				<symbol>Rp</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>아일랜드 파운드</displayName>
+				<symbol>IR£</symbol>
+			</currency>
+			<currency type="ILL">
+				<displayName>이스라엘 세켈</displayName>
+				<symbol>ILL</symbol>
+			</currency>
+			<currency type="ILP">
+				<displayName>이스라엘 파운드</displayName>
+				<symbol>ILP</symbol>
+			</currency>
+			<currency type="ILS">
+				<displayName>이스라엘 신권 세켈</displayName>
+				<symbol>ILS</symbol>
+			</currency>
+			<currency type="IMP">
+				<displayName>맨도 파운드 스털링</displayName>
+				<symbol>IMP</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>인도 루피</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>이라크 디나르</displayName>
+				<symbol>ID</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>이란 리얄</displayName>
+				<symbol>RI</symbol>
+			</currency>
+			<currency type="ISK">
+				<displayName>아이슬란드 크로나</displayName>
+				<symbol>ISK</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>이탈리아 리라</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JEP">
+				<displayName>저지 파운드 스털링</displayName>
+				<symbol>JEP</symbol>
+			</currency>
+			<currency type="JMD">
+				<displayName>자메이카 달러</displayName>
+				<symbol>J$</symbol>
+			</currency>
+			<currency type="JMP">
+				<displayName>자메이카 파운드</displayName>
+				<symbol>JMP</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>요르단 디나르</displayName>
+				<symbol>JD</symbol>
+			</currency>
 			<currency type="JPY">
-				<displayName>JPY</displayName>
+				<displayName>일본 엔화</displayName>
 				<symbol>￥</symbol>
 			</currency>
+			<currency type="KES">
+				<displayName>케냐 실링</displayName>
+				<symbol>K Sh</symbol>
+			</currency>
+			<currency type="KGS">
+				<displayName>키르기스스탄 솜</displayName>
+				<symbol>som</symbol>
+			</currency>
+			<currency type="KHO">
+				<displayName>캄보디아 구권 리얄</displayName>
+				<symbol>KHO</symbol>
+			</currency>
+			<currency type="KHR">
+				<displayName>캄보디아 리얄</displayName>
+				<symbol>CR</symbol>
+			</currency>
+			<currency type="KID">
+				<displayName>키리바시 달러</displayName>
+				<symbol>KID</symbol>
+			</currency>
+			<currency type="KMF">
+				<displayName>코모르 프랑</displayName>
+				<symbol>CF</symbol>
+			</currency>
+			<currency type="KPP">
+				<displayName>조선 민주주의 인민 공화국 원</displayName>
+				<symbol>KPP</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>조선 민주주의 인민 공화국 원</displayName>
+				<symbol>KPW</symbol>
+			</currency>
+			<currency type="KRH">
+				<displayName>대한민국 환</displayName>
+				<symbol>KRH</symbol>
+			</currency>
+			<currency type="KRO">
+				<displayName>대한민국 구권 원</displayName>
+				<symbol>KRO</symbol>
+			</currency>
 			<currency type="KRW">
-				<displayName>KRW</displayName>
+				<displayName>대한민국 원</displayName>
 				<symbol>￦</symbol>
+			</currency>
+			<currency type="KWD">
+				<displayName>쿠웨이트 디나르</displayName>
+				<symbol>KD</symbol>
+			</currency>
+			<currency type="KYD">
+				<displayName>케이맨 제도 달러</displayName>
+				<symbol>KYD</symbol>
+			</currency>
+			<currency type="KZR">
+				<displayName>카자흐스탄 루블</displayName>
+				<symbol>KZR</symbol>
+			</currency>
+			<currency type="KZT">
+				<displayName>카자흐스탄 텐게</displayName>
+				<symbol>T</symbol>
+			</currency>
+			<currency type="LAK">
+				<displayName>라오스 키프</displayName>
+				<symbol>LAK</symbol>
+			</currency>
+			<currency type="LBP">
+				<displayName>레바논 파운드</displayName>
+				<symbol>LL</symbol>
+			</currency>
+			<currency type="LIF">
+				<displayName>리히텐슈타인 프랑</displayName>
+				<symbol>LIF</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>스리랑카 루피</displayName>
+				<symbol>SL Re</symbol>
+			</currency>
+			<currency type="LNR">
+				<displayName>실론 루피</displayName>
+				<symbol>LNR</symbol>
+			</currency>
+			<currency type="LRD">
+				<displayName>라이베리아 달러</displayName>
+				<symbol>LRD</symbol>
+			</currency>
+			<currency type="LSL">
+				<displayName>레소토 로티</displayName>
+				<symbol>M</symbol>
+			</currency>
+			<currency type="LTL">
+				<displayName>리투아니아 리타</displayName>
+				<symbol>LTL</symbol>
+			</currency>
+			<currency type="LTT">
+				<displayName>룩셈부르크 타로나</displayName>
+				<symbol>LTT</symbol>
+			</currency>
+			<currency type="LUF">
+				<displayName>룩셈부르크 프랑</displayName>
+				<symbol>LUF</symbol>
+			</currency>
+			<currency type="LVL">
+				<displayName>라트비아 라트</displayName>
+				<symbol>LVL</symbol>
+			</currency>
+			<currency type="LVR">
+				<displayName>라트비아 루블</displayName>
+				<symbol>LVR</symbol>
+			</currency>
+			<currency type="LYB">
+				<displayName>리비아 영국 군사령 리라</displayName>
+				<symbol>LYB</symbol>
+			</currency>
+			<currency type="LYD">
+				<displayName>리비아 디나르</displayName>
+				<symbol>LD</symbol>
+			</currency>
+			<currency type="LYP">
+				<displayName>리비아 파운드</displayName>
+				<symbol>LYP</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>모로코 디렘</displayName>
+				<symbol>MAD</symbol>
+			</currency>
+			<currency type="MAF">
+				<displayName>모로코 프랑</displayName>
+				<symbol>MAF</symbol>
+			</currency>
+			<currency type="MCF">
+				<displayName>모나코 프랑 누보</displayName>
+				<symbol>MCF</symbol>
+			</currency>
+			<currency type="MCG">
+				<displayName>모나코 프랑 제르미날</displayName>
+				<symbol>MCG</symbol>
+			</currency>
+			<currency type="MDC">
+				<displayName>몰도바 레이 지폐</displayName>
+				<symbol>MDC</symbol>
+			</currency>
+			<currency type="MDL">
+				<displayName>몰도바 레이</displayName>
+				<symbol>MDL</symbol>
+			</currency>
+			<currency type="MDR">
+				<displayName>몰도바 루블 지폐</displayName>
+				<symbol>MDR</symbol>
+			</currency>
+			<currency type="MGA">
+				<displayName>마다가스카르 아리아리</displayName>
+				<symbol>MGA</symbol>
+			</currency>
+			<currency type="MGF">
+				<displayName>마다가스카르 프랑</displayName>
+				<symbol>MGF</symbol>
+			</currency>
+			<currency type="MHD">
+				<displayName>마샬 군도 달러</displayName>
+				<symbol>MHD</symbol>
+			</currency>
+			<currency type="MKD">
+				<displayName>마케도니아 디나르</displayName>
+				<symbol>MDen</symbol>
+			</currency>
+			<currency type="MKN">
+				<displayName>마케도니아 디나르 (1992-1993)</displayName>
+				<symbol>MKN</symbol>
+			</currency>
+			<currency type="MLF">
+				<displayName>말리 프랑</displayName>
+				<symbol>MLF</symbol>
+			</currency>
+			<currency type="MMK">
+				<displayName>미얀마 키얏</displayName>
+				<symbol>MMK</symbol>
+			</currency>
+			<currency type="MMX">
+				<displayName>미얀마 달러 태환권</displayName>
+				<symbol>MMX</symbol>
+			</currency>
+			<currency type="MNT">
+				<displayName>몽골 투그릭</displayName>
+				<symbol>Tug</symbol>
+			</currency>
+			<currency type="MOP">
+				<displayName>마카오 파타카</displayName>
+				<symbol>MOP</symbol>
+			</currency>
+			<currency type="MQF">
+				<displayName>말티니크 프랑</displayName>
+				<symbol>MQF</symbol>
+			</currency>
+			<currency type="MRO">
+				<displayName>모리타니 우기야</displayName>
+				<symbol>UM</symbol>
+			</currency>
+			<currency type="MTL">
+				<displayName>몰타 리라</displayName>
+				<symbol>Lm</symbol>
+			</currency>
+			<currency type="MTP">
+				<displayName>몰타 파운드</displayName>
+				<symbol>MTP</symbol>
+			</currency>
+			<currency type="MUR">
+				<displayName>모리셔스 루피</displayName>
+				<symbol>MUR</symbol>
+			</currency>
+			<currency type="MVP">
+				<displayName>몰디브 제도 루피</displayName>
+				<symbol>MVP</symbol>
+			</currency>
+			<currency type="MVR">
+				<displayName>몰디브 제도 루피아</displayName>
+				<symbol>MVR</symbol>
+			</currency>
+			<currency type="MWK">
+				<displayName>말라위 콰쳐</displayName>
+				<symbol>MK</symbol>
+			</currency>
+			<currency type="MWP">
+				<displayName>말라위 파운드</displayName>
+				<symbol>MWP</symbol>
+			</currency>
+			<currency type="MXN">
+				<displayName>멕시코 페소</displayName>
+				<symbol>MEX$</symbol>
+			</currency>
+			<currency type="MXP">
+				<displayName>멕시코 실버 페소 (1861-1992)</displayName>
+				<symbol>MXP</symbol>
+			</currency>
+			<currency type="MYR">
+				<displayName>말레이지아 링기트</displayName>
+				<symbol>RM</symbol>
+			</currency>
+			<currency type="MZE">
+				<displayName>모잠비크 에스쿠도</displayName>
+				<symbol>MZE</symbol>
+			</currency>
+			<currency type="MZM">
+				<displayName>모잠비크 메티칼</displayName>
+				<symbol>Mt</symbol>
+			</currency>
+			<currency type="NAD">
+				<displayName>나미비아 달러</displayName>
+				<symbol>N$</symbol>
+			</currency>
+			<currency type="NCF">
+				<displayName>뉴 칼레도니아 프랑 제르미날</displayName>
+				<symbol>NCF</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>니제르 나이라</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NGP">
+				<displayName>니제르 파운드</displayName>
+				<symbol>NGP</symbol>
+			</currency>
+			<currency type="NIC">
+				<displayName>니카라과 코르도바</displayName>
+				<symbol>NIC</symbol>
+			</currency>
+			<currency type="NIO">
+				<displayName>니카라과 코르도바 오로</displayName>
+				<symbol>NIO</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>네델란드 길더</displayName>
+				<symbol>NLG</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>노르웨이 크로네</displayName>
+				<symbol>NKr</symbol>
+			</currency>
+			<currency type="NPR">
+				<displayName>네팔 루피</displayName>
+				<symbol>Nrs</symbol>
+			</currency>
+			<currency type="NZD">
+				<displayName>뉴질랜드 달러</displayName>
+				<symbol>$NZ</symbol>
+			</currency>
+			<currency type="NZP">
+				<displayName>뉴질랜드 파운드</displayName>
+				<symbol>NZP</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>오만 리얄</displayName>
+				<symbol>RO</symbol>
+			</currency>
+			<currency type="OMS">
+				<displayName>오만 리얄 사이디</displayName>
+				<symbol>OMS</symbol>
+			</currency>
+			<currency type="PAB">
+				<displayName>파나마 발보아</displayName>
+				<symbol>PAB</symbol>
+			</currency>
+			<currency type="PEI">
+				<displayName>페루 인티</displayName>
+				<symbol>PEI</symbol>
+			</currency>
+			<currency type="PEN">
+				<displayName>페루 솔 누에보</displayName>
+				<symbol>PEN</symbol>
+			</currency>
+			<currency type="PES">
+				<displayName>페루 솔</displayName>
+				<symbol>PES</symbol>
+			</currency>
+			<currency type="PGK">
+				<displayName>파푸아뉴기니 키나</displayName>
+				<symbol>PGK</symbol>
+			</currency>
+			<currency type="PHP">
+				<displayName>필리핀 페소</displayName>
+				<symbol>PHP</symbol>
+			</currency>
+			<currency type="PKR">
+				<displayName>파키스탄 루피</displayName>
+				<symbol>Pra</symbol>
+			</currency>
+			<currency type="PLN">
+				<displayName>폴란드 즐로티</displayName>
+				<symbol>Zl</symbol>
+			</currency>
+			<currency type="PLZ">
+				<displayName>폴란드 즐로티 (1950-1995)</displayName>
+				<symbol>PLZ</symbol>
+			</currency>
+			<currency type="PSP">
+				<displayName>팔레스타인 파운드</displayName>
+				<symbol>PSP</symbol>
+			</currency>
+			<currency type="PTC">
+				<displayName>포르투갈 콘토</displayName>
+				<symbol>PTC</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>포르투갈 에스쿠도</displayName>
+				<symbol>PTE</symbol>
+			</currency>
+			<currency type="PYG">
+				<displayName>파라과이 과라니</displayName>
+				<symbol>PYG</symbol>
+			</currency>
+			<currency type="QAR">
+				<displayName>카타르 리얄</displayName>
+				<symbol>QR</symbol>
+			</currency>
+			<currency type="REF">
+				<displayName>리유니온 프랑</displayName>
+				<symbol>REF</symbol>
+			</currency>
+			<currency type="ROL">
+				<displayName>루마니아 레이</displayName>
+				<symbol>leu</symbol>
+			</currency>
+			<currency type="RON">
+				<displayName>루마니아 신권 레이</displayName>
+				<symbol>RON</symbol>
+			</currency>
+			<currency type="RUB">
+				<displayName>러시아 루블</displayName>
+				<symbol>RUB</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>러시아 루블 (1991-1998)</displayName>
+				<symbol>RUR</symbol>
+			</currency>
+			<currency type="RWF">
+				<displayName>르완다 프랑</displayName>
+				<symbol>RWF</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>사우디아라비아 리얄</displayName>
+				<symbol>SRl</symbol>
+			</currency>
+			<currency type="SAS">
+				<displayName>사우디아라비아 자치령 리얄</displayName>
+				<symbol>SAS</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>솔로몬 제도 달러</displayName>
+				<symbol>SI$</symbol>
+			</currency>
+			<currency type="SCR">
+				<displayName>세이쉴 루피</displayName>
+				<symbol>SR</symbol>
+			</currency>
+			<currency type="SDD">
+				<displayName>수단 디나르</displayName>
+				<symbol>SDD</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>수단 파운드</displayName>
+				<symbol>SDP</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>스웨덴 크로나</displayName>
+				<symbol>SKr</symbol>
+			</currency>
+			<currency type="SGD">
+				<displayName>싱가폴 달러</displayName>
+				<symbol>S$</symbol>
+			</currency>
+			<currency type="SHP">
+				<displayName>세인트헬레나 파운드</displayName>
+				<symbol>SHP</symbol>
+			</currency>
+			<currency type="SIB">
+				<displayName>슬로베니아 톨라르 본스</displayName>
+				<symbol>SIB</symbol>
+			</currency>
+			<currency type="SIT">
+				<displayName>슬로베니아 톨라르</displayName>
+				<symbol>SIT</symbol>
+			</currency>
+			<currency type="SKK">
+				<displayName>슬로바키아 코루나</displayName>
+				<symbol>Sk</symbol>
+			</currency>
+			<currency type="SLL">
+				<displayName>시에라리온 리온</displayName>
+				<symbol>SLL</symbol>
+			</currency>
+			<currency type="SML">
+				<displayName>산마리노 리라</displayName>
+				<symbol>SML</symbol>
+			</currency>
+			<currency type="SOS">
+				<displayName>소말리아 실링</displayName>
+				<symbol>So. Sh.</symbol>
+			</currency>
+			<currency type="SQS">
+				<displayName>소말리랜드 실링</displayName>
+				<symbol>SQS</symbol>
+			</currency>
+			<currency type="SRG">
+				<displayName>수리남 길더</displayName>
+				<symbol>Sf</symbol>
+			</currency>
+			<currency type="SSP">
+				<displayName>스코틀랜드 파운드</displayName>
+				<symbol>SSP</symbol>
+			</currency>
+			<currency type="STD">
+				<displayName>상투메 프린시페 도브라</displayName>
+				<symbol>Db</symbol>
+			</currency>
+			<currency type="STE">
+				<displayName>상투메 프린시페 에스쿠도</displayName>
+				<symbol>STE</symbol>
+			</currency>
+			<currency type="SUN">
+				<displayName>소련 신권 루블</displayName>
+				<symbol>SUN</symbol>
+			</currency>
+			<currency type="SUR">
+				<displayName>소련 루블</displayName>
+				<symbol>SUR</symbol>
+			</currency>
+			<currency type="SVC">
+				<displayName>엘살바도르 콜론</displayName>
+				<symbol>SVC</symbol>
+			</currency>
+			<currency type="SYP">
+				<displayName>시리아 파운드</displayName>
+				<symbol>LS</symbol>
+			</currency>
+			<currency type="SZL">
+				<displayName>스와질란드 릴랑게니</displayName>
+				<symbol>E</symbol>
+			</currency>
+			<currency type="TCC">
+				<displayName>터크스케이커스 크라운</displayName>
+				<symbol>TCC</symbol>
+			</currency>
+			<currency type="THB">
+				<displayName>태국 바트</displayName>
+				<symbol>THB</symbol>
+			</currency>
+			<currency type="TJR">
+				<displayName>타지키스탄 루블</displayName>
+				<symbol>TJR</symbol>
+			</currency>
+			<currency type="TJS">
+				<displayName>타지키스탄 소모니</displayName>
+				<symbol>TJS</symbol>
+			</currency>
+			<currency type="TMM">
+				<displayName>투르크메니스탄 마나트</displayName>
+				<symbol>TMM</symbol>
+			</currency>
+			<currency type="TND">
+				<displayName>튀니지 디나르</displayName>
+				<symbol>TND</symbol>
+			</currency>
+			<currency type="TOS">
+				<displayName>통가 파운드 스털링</displayName>
+				<symbol>TOS</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>티모르 에스쿠도</displayName>
+				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TPP">
+				<displayName>티모르 파타카</displayName>
+				<symbol>TPP</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>터기 리라</displayName>
+				<symbol>TL</symbol>
+			</currency>
+			<currency type="TTD">
+				<displayName>트리니다드 토바고 달러</displayName>
+				<symbol>TT$</symbol>
+			</currency>
+			<currency type="TTO">
+				<displayName>트리니다드 토바고 구권 달러</displayName>
+				<symbol>TTO</symbol>
+			</currency>
+			<currency type="TVD">
+				<displayName>투발루 달러</displayName>
+				<symbol>TVD</symbol>
+			</currency>
+			<currency type="TWD">
+				<displayName>대만 신권 달러</displayName>
+				<symbol>NT$</symbol>
+			</currency>
+			<currency type="TZS">
+				<displayName>탄자니아 실링</displayName>
+				<symbol>T Sh</symbol>
+			</currency>
+			<currency type="UAH">
+				<displayName>우크라이나 그리브나</displayName>
+				<symbol>UAH</symbol>
+			</currency>
+			<currency type="UGS">
+				<displayName>우간다 실링 (1966-1987)</displayName>
+				<symbol>UGS</symbol>
+			</currency>
+			<currency type="UGX">
+				<displayName>우간다 실링</displayName>
+				<symbol>U Sh</symbol>
+			</currency>
+			<currency type="UYF">
+				<displayName>우루과이 페소 푸에르떼</displayName>
+				<symbol>UYF</symbol>
+			</currency>
+			<currency type="UYP">
+				<displayName>우루과이 페소 (1975-1993)</displayName>
+				<symbol>UYP</symbol>
+			</currency>
+			<currency type="UYU">
+				<displayName>우루과이 페소 우루과요</displayName>
+				<symbol>Ur$</symbol>
+			</currency>
+			<currency type="UZC">
+				<displayName>우즈베키스탄 숨 쿠폰</displayName>
+				<symbol>UZC</symbol>
+			</currency>
+			<currency type="UZS">
+				<displayName>우즈베키스탄 숨</displayName>
+				<symbol>UZS</symbol>
+			</currency>
+			<currency type="VAL">
+				<displayName>바티칸 리라</displayName>
+				<symbol>VAL</symbol>
+			</currency>
+			<currency type="VDD">
+				<displayName>북 베트남 피아스타 동 베트</displayName>
+				<symbol>VDD</symbol>
+			</currency>
+			<currency type="VDN">
+				<displayName>북 베트남 신권 동</displayName>
+				<symbol>VDN</symbol>
+			</currency>
+			<currency type="VDP">
+				<displayName>북 베트남 베트민 피아스타 동 베트</displayName>
+				<symbol>VDP</symbol>
+			</currency>
+			<currency type="VEB">
+				<displayName>베네주엘라 볼리바르</displayName>
+				<symbol>Be</symbol>
+			</currency>
+			<currency type="VGD">
+				<displayName>영국령 버진 아일랜드 달러</displayName>
+				<symbol>VGD</symbol>
+			</currency>
+			<currency type="VND">
+				<displayName>베트남 동</displayName>
+				<symbol>VND</symbol>
+			</currency>
+			<currency type="VNN">
+				<displayName>베트남 신권 동</displayName>
+				<symbol>VNN</symbol>
+			</currency>
+			<currency type="VNR">
+				<displayName>베트남 공화국 동</displayName>
+				<symbol>VNR</symbol>
+			</currency>
+			<currency type="VNS">
+				<displayName>베트남 국영 동</displayName>
+				<symbol>VNS</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>바누아투 바투</displayName>
+				<symbol>VT</symbol>
+			</currency>
+			<currency type="WSP">
+				<displayName>서 사모아 파운드</displayName>
+				<symbol>WSP</symbol>
+			</currency>
+			<currency type="WST">
+				<displayName>서 사모아 탈라</displayName>
+				<symbol>WST</symbol>
+			</currency>
+			<currency type="XAD">
+				<displayName>아시아 디나르 계산 단위</displayName>
+				<symbol>XAD</symbol>
+			</currency>
+			<currency type="XAM">
+				<displayName>아시아 기금 연합 통화 단위</displayName>
+				<symbol>XAM</symbol>
+			</currency>
+			<currency type="XAU">
+				<displayName>금</displayName>
+				<symbol>XAU</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>동카리브 달러</displayName>
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XDR">
+				<displayName>특별인출권</displayName>
+				<symbol>XDR</symbol>
+			</currency>
+			<currency type="XEU">
+				<displayName>유럽 환율 단위</displayName>
+				<symbol>XEU</symbol>
+			</currency>
+			<currency type="XFO">
+				<displayName>프랑스 Gold 프랑</displayName>
+				<symbol>XFO</symbol>
+			</currency>
+			<currency type="XFU">
+				<displayName>프랑스 UIC-프랑</displayName>
+				<symbol>XFU</symbol>
+			</currency>
+			<currency type="XID">
+				<displayName>이슬람 디나르</displayName>
+				<symbol>XID</symbol>
+			</currency>
+			<currency type="XMF">
+				<displayName>프랑스 메트로폴리탄 누보 프랑</displayName>
+				<symbol>XMF</symbol>
+			</currency>
+			<currency type="XPS">
+				<displayName>파운드 스털링</displayName>
+				<symbol>XPS</symbol>
+			</currency>
+			<currency type="XSS">
+				<displayName>실링 스털링</displayName>
+				<symbol>XSS</symbol>
+			</currency>
+			<currency type="YDD">
+				<displayName>예멘 디나르</displayName>
+				<symbol>YDD</symbol>
+			</currency>
+			<currency type="YER">
+				<displayName>예멘 리알</displayName>
+				<symbol>YRl</symbol>
+			</currency>
+			<currency type="YUD">
+				<displayName>유고슬라비아 동전 디나르</displayName>
+				<symbol>YUD</symbol>
+			</currency>
+			<currency type="YUF">
+				<displayName>유고슬라비아 연합 디나르</displayName>
+				<symbol>YUF</symbol>
+			</currency>
+			<currency type="YUG">
+				<displayName>유고슬라비아 1994 디나르</displayName>
+				<symbol>YUG</symbol>
+			</currency>
+			<currency type="YUM">
+				<displayName>유고슬라비아 노비 디나르</displayName>
+				<symbol>YUM</symbol>
+			</currency>
+			<currency type="YUN">
+				<displayName>유고슬라비아 전환 디나르</displayName>
+				<symbol>YUN</symbol>
+			</currency>
+			<currency type="YUO">
+				<displayName>유고슬라비아 10월 디나르</displayName>
+				<symbol>YUO</symbol>
+			</currency>
+			<currency type="YUR">
+				<displayName>유고슬라비아 개량 디나르</displayName>
+				<symbol>YUR</symbol>
+			</currency>
+			<currency type="ZAL">
+				<displayName>남아프리카 랜드 (금융)</displayName>
+				<symbol>ZAL</symbol>
+			</currency>
+			<currency type="ZAP">
+				<displayName>남아프리카 파운드</displayName>
+				<symbol>ZAP</symbol>
+			</currency>
+			<currency type="ZAR">
+				<displayName>남아프리카 랜드</displayName>
+				<symbol>R</symbol>
+			</currency>
+			<currency type="ZMK">
+				<displayName>쟘비아 콰쳐</displayName>
+				<symbol>ZMK</symbol>
+			</currency>
+			<currency type="ZMP">
+				<displayName>쟘비아 파운드</displayName>
+				<symbol>ZMP</symbol>
+			</currency>
+			<currency type="ZRN">
+				<displayName>자이르 신권 자이르</displayName>
+				<symbol>ZRN</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>자이르 자이르</displayName>
+				<symbol>ZRZ</symbol>
+			</currency>
+			<currency type="ZWD">
+				<displayName>짐비브웨 달러</displayName>
+				<symbol>Z$</symbol>
 			</currency>
 		</currencies>
 	</numbers>

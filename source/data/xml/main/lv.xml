@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="lv" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,17 +285,26 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z ā ē ī ō ū ģ ķ ļ ņ ŗ č š ž]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mai</month>
+					<month type="6">Jūn</month>
+					<month type="7">Jūl</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">janvāris</month>
 					<month type="2">februāris</month>
 					<month type="3">marts</month>
@@ -314,21 +318,16 @@
 					<month type="11">novembris</month>
 					<month type="12">decembris</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">Mai</month>
-					<month type="6">Jūn</month>
-					<month type="7">Jūl</month>
-					<month type="8">Aug</month>
-					<month type="9">Sep</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Dec</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Sv</day>
+					<day type="mon">P</day>
+					<day type="tue">O</day>
+					<day type="wed">T</day>
+					<day type="thu">C</day>
+					<day type="fri">Pk</day>
+					<day type="sat">S</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">svētdiena</day>
 					<day type="mon">pirmdiena</day>
 					<day type="tue">otrdiena</day>
@@ -337,25 +336,6 @@
 					<day type="fri">piektdiena</day>
 					<day type="sat">sestdiena</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Sv</day>
-					<day type="mon">P</day>
-					<day type="tue">O</day>
-					<day type="wed">T</day>
-					<day type="thu">C</day>
-					<day type="fri">Pk</day>
-					<day type="sat">S</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="mon"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">pmē</era>
-						<era type="2">mē</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="gl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -21,16 +16,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-záéíóúüñ]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Xan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Abr</month>
+					<month type="5">Mai</month>
+					<month type="6">Xuñ</month>
+					<month type="7">Xul</month>
+					<month type="8">Ago</month>
+					<month type="9">Set</month>
+					<month type="10">Out</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Xaneiro</month>
 					<month type="2">Febreiro</month>
 					<month type="3">Marzo</month>
@@ -44,21 +48,16 @@
 					<month type="11">Novembro</month>
 					<month type="12">Decembro</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Xan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Abr</month>
-					<month type="5">Mai</month>
-					<month type="6">Xuñ</month>
-					<month type="7">Xul</month>
-					<month type="8">Ago</month>
-					<month type="9">Set</month>
-					<month type="10">Out</month>
-					<month type="11">Nov</month>
-					<month type="12">Dec</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Dom</day>
+					<day type="mon">Lun</day>
+					<day type="tue">Mar</day>
+					<day type="wed">Mér</day>
+					<day type="thu">Xov</day>
+					<day type="fri">Ven</day>
+					<day type="sat">Sáb</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Domingo</day>
 					<day type="mon">Luns</day>
 					<day type="tue">Martes</day>
@@ -67,15 +66,6 @@
 					<day type="fri">Venres</day>
 					<day type="sat">Sábado</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Dom</day>
-					<day type="mon">Lun</day>
-					<day type="tue">Mar</day>
-					<day type="wed">Mér</day>
-					<day type="thu">Xov</day>
-					<day type="fri">Ven</day>
-					<day type="sat">Sáb</day>
-				</dayAbbr>
 			</calendar>
 		</calendars>
 	</dates>

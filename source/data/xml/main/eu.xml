@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="eu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,21 +11,138 @@
 			<language type="eu">euskara</language>
 		</languages>
 		<territories>
+			<territory type="AE">Arabiar Emirrerri Batuak</territory>
+			<territory type="AF">Afganistan</territory>
+			<territory type="AG">Antigua eta Barbuda</territory>
+			<territory type="AQ">Antartika</territory>
+			<territory type="BA">Bosnia-Herzegovina</territory>
+			<territory type="BE">Belgika</territory>
+			<territory type="BO">Bolibia</territory>
+			<territory type="BR">Brasil</territory>
+			<territory type="BS">Bahamak</territory>
+			<territory type="BY">Bielorrusia</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CF">Afrika Erdiko Errepublika</territory>
+			<territory type="CG">Kongo</territory>
+			<territory type="CH">Suitza</territory>
+			<territory type="CI">Boli Kosta</territory>
+			<territory type="CL">Txile</territory>
+			<territory type="CM">Kamerun</territory>
+			<territory type="CN">Txina</territory>
+			<territory type="CO">Kolonbia</territory>
+			<territory type="CU">Kuba</territory>
+			<territory type="CV">Cabo Verde</territory>
+			<territory type="CY">Zipre</territory>
+			<territory type="CZ">Txekiar errepublika</territory>
+			<territory type="DE">Alemania</territory>
+			<territory type="DJ">Djibuti</territory>
+			<territory type="DK">Danimarka</territory>
+			<territory type="DM">Dominika</territory>
+			<territory type="DO">Dominikar Errepublika</territory>
+			<territory type="DZ">Aljeria</territory>
+			<territory type="EC">Ekuador</territory>
+			<territory type="EG">Egipto</territory>
+			<territory type="EH">Mendebaldeko Sahara</territory>
 			<territory type="ES">Espainia</territory>
+			<territory type="ET">Etiopia</territory>
+			<territory type="FI">Finlandia</territory>
+			<territory type="FM">Mikronesia</territory>
+			<territory type="FR">Frantzia</territory>
+			<territory type="GN">Ginea</territory>
+			<territory type="GQ">Ekuatore Ginea</territory>
+			<territory type="GR">Grezia</territory>
+			<territory type="GW">Ginea-Bissau</territory>
+			<territory type="HR">Kroazia</territory>
+			<territory type="HU">Hungaria</territory>
+			<territory type="IE">Irlanda</territory>
+			<territory type="IQ">Irak</territory>
+			<territory type="IS">Islandia</territory>
+			<territory type="IT">Italia</territory>
+			<territory type="JM">Jamaika</territory>
+			<territory type="JO">Jordania</territory>
+			<territory type="JP">Japonia</territory>
+			<territory type="KE">Kenia</territory>
+			<territory type="KG">Kirgizistan</territory>
+			<territory type="KH">Kanbodia</territory>
+			<territory type="KM">Komoreak</territory>
+			<territory type="KN">Saint Kitts eta Nevis</territory>
+			<territory type="KP">Ipar Korea</territory>
+			<territory type="KR">Hego Korea</territory>
+			<territory type="LB">Libano</territory>
+			<territory type="LC">Santa Luzia</territory>
+			<territory type="LT">Lituania</territory>
+			<territory type="LU">Luxenburgo</territory>
+			<territory type="LV">Letonia</territory>
+			<territory type="LY">Libia</territory>
+			<territory type="MA">Maroko</territory>
+			<territory type="MC">Monako</territory>
+			<territory type="MD">Moldavia</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Marshall uharteak</territory>
+			<territory type="MK">Mazedonia</territory>
+			<territory type="MU">Maurizio</territory>
+			<territory type="MV">Maldivak</territory>
+			<territory type="MX">Mexiko</territory>
+			<territory type="MY">Malasia</territory>
+			<territory type="MZ">Mozambike</territory>
+			<territory type="NI">Nikaragua</territory>
+			<territory type="NL">Herbehereak</territory>
+			<territory type="NO">Norvegia</territory>
+			<territory type="NZ">Zeelanda Berria</territory>
+			<territory type="PG">Papua Ginea Berria</territory>
+			<territory type="PH">Filipinak</territory>
+			<territory type="PL">Polonia</territory>
+			<territory type="PY">Paraguai</territory>
+			<territory type="QA">Katar</territory>
+			<territory type="RO">Errumania</territory>
+			<territory type="RU">Errusia</territory>
+			<territory type="RW">Ruanda</territory>
+			<territory type="SB">Salomon uharteak</territory>
+			<territory type="SC">Seychelleak</territory>
+			<territory type="SE">Suedia</territory>
+			<territory type="SG">Singapur</territory>
+			<territory type="SI">Eslovenia</territory>
+			<territory type="SK">Eslovakia</territory>
+			<territory type="SL">Sierra Leona</territory>
+			<territory type="SP">Serbia</territory>
+			<territory type="SR">Surinam</territory>
+			<territory type="ST">Sao Tomé eta Principe</territory>
+			<territory type="SY">Siria</territory>
+			<territory type="SZ">Swazilandia</territory>
+			<territory type="TD">Txad</territory>
+			<territory type="TH">Tailandia</territory>
+			<territory type="TJ">Tadjikistan</territory>
+			<territory type="TR">Turkia</territory>
+			<territory type="TT">Trinidad eta Tobago</territory>
+			<territory type="UA">Ukraina</territory>
+			<territory type="US">Ameriketako Estatu Batuak</territory>
+			<territory type="UY">Uruguai</territory>
+			<territory type="VA">Vatikano</territory>
+			<territory type="VC">Saint Vincent eta Grenadinak</territory>
+			<territory type="ZA">Hegoafrika</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zñç]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">urt</month>
+					<month type="2">ots</month>
+					<month type="3">mar</month>
+					<month type="4">api</month>
+					<month type="5">mai</month>
+					<month type="6">eka</month>
+					<month type="7">uzt</month>
+					<month type="8">abu</month>
+					<month type="9">ira</month>
+					<month type="10">urr</month>
+					<month type="11">aza</month>
+					<month type="12">abe</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">urtarrila</month>
 					<month type="2">otsaila</month>
 					<month type="3">martxoa</month>
@@ -44,21 +156,16 @@
 					<month type="11">azaroa</month>
 					<month type="12">abendua</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">urt</month>
-					<month type="2">ots</month>
-					<month type="3">mar</month>
-					<month type="4">api</month>
-					<month type="5">mai</month>
-					<month type="6">eka</month>
-					<month type="7">uzt</month>
-					<month type="8">abu</month>
-					<month type="9">ira</month>
-					<month type="10">urr</month>
-					<month type="11">aza</month>
-					<month type="12">abe</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ig</day>
+					<day type="mon">al</day>
+					<day type="tue">as</day>
+					<day type="wed">az</day>
+					<day type="thu">og</day>
+					<day type="fri">or</day>
+					<day type="sat">lr</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">igandea</day>
 					<day type="mon">astelehena</day>
 					<day type="tue">asteartea</day>
@@ -67,15 +174,6 @@
 					<day type="fri">ostirala</day>
 					<day type="sat">larunbata</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ig</day>
-					<day type="mon">al</day>
-					<day type="tue">as</day>
-					<day type="wed">az</day>
-					<day type="thu">og</day>
-					<day type="fri">or</day>
-					<day type="sat">lr</day>
-				</dayAbbr>
 			</calendar>
 		</calendars>
 	</dates>

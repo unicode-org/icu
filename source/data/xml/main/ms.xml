@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="1.0"/>
-		<generation date="2003-12-19" />
+		<version number="1.1"/>
+		<generation date="2004-05-13" />
 		<language type="ms" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="ms">bahasa Melayu</language>
+			<language type="ms">Bahasa Melayu</language>
 		</languages>
 		<territories>
 			<territory type="AD">Andorra</territory>
-			<territory type="AE">United Arab Emirates</territory>
+			<territory type="AE">Emiriah Arab Bersatu</territory>
 			<territory type="AF">Afghanistan</territory>
-			<territory type="AG">Antigua and Barbuda</territory>
+			<territory type="AG">Antigua dan Barbuda</territory>
 			<territory type="AI">Anguilla</territory>
 			<territory type="AL">Albania</territory>
 			<territory type="AM">Armenia</territory>
@@ -32,7 +27,7 @@
 			<territory type="AU">Australia</territory>
 			<territory type="AW">Aruba</territory>
 			<territory type="AZ">Azerbaijan</territory>
-			<territory type="BA">Bosnia and Herzegovina</territory>
+			<territory type="BA">Bosnia dan Herzegovina</territory>
 			<territory type="BB">Barbados</territory>
 			<territory type="BD">Bangladesh</territory>
 			<territory type="BE">Belgium</territory>
@@ -51,43 +46,43 @@
 			<territory type="BW">Botswana</territory>
 			<territory type="BY">Belarus</territory>
 			<territory type="BZ">Belize</territory>
-			<territory type="CA">Canada</territory>
+			<territory type="CA">Kanada</territory>
 			<territory type="CC">Cocos Islands</territory>
 			<territory type="CD">Democratic Republic of the Congo</territory>
-			<territory type="CF">Central African Republic</territory>
+			<territory type="CF">Republik Afrika Tengah</territory>
 			<territory type="CG">Congo</territory>
 			<territory type="CH">Switzerland</territory>
-			<territory type="CI">Côte d'Ivoire</territory>
+			<territory type="CI">Pantai Gading</territory>
 			<territory type="CK">Cook Islands</territory>
-			<territory type="CL">Chile</territory>
-			<territory type="CM">Cameroon</territory>
-			<territory type="CN">China</territory>
+			<territory type="CL">Cile</territory>
+			<territory type="CM">Kamerun</territory>
+			<territory type="CN">Cina</territory>
 			<territory type="CO">Colombia</territory>
-			<territory type="CR">Costa Rica</territory>
+			<territory type="CR">Kosta Rika</territory>
 			<territory type="CU">Cuba</territory>
 			<territory type="CV">Cape Verde</territory>
 			<territory type="CX">Christmas Island</territory>
-			<territory type="CY">Cyprus</territory>
-			<territory type="CZ">Czech Republic</territory>
-			<territory type="DE">Germany</territory>
-			<territory type="DJ">Djibouti</territory>
+			<territory type="CY">Kibris</territory>
+			<territory type="CZ">Republik Czech</territory>
+			<territory type="DE">Jerman</territory>
+			<territory type="DJ">Jibouti</territory>
 			<territory type="DK">Denmark</territory>
 			<territory type="DM">Dominica</territory>
-			<territory type="DO">Dominican Republic</territory>
-			<territory type="DZ">Algeria</territory>
+			<territory type="DO">Republik Dominican</territory>
+			<territory type="DZ">Aljazair</territory>
 			<territory type="EC">Ecuador</territory>
 			<territory type="EE">Estonia</territory>
-			<territory type="EG">Egypt</territory>
-			<territory type="EH">Western Sahara</territory>
+			<territory type="EG">Mesir</territory>
+			<territory type="EH">Sahara Barat</territory>
 			<territory type="ER">Eritrea</territory>
-			<territory type="ES">Spain</territory>
+			<territory type="ES">Sepanyol</territory>
 			<territory type="ET">Ethiopia</territory>
 			<territory type="FI">Finland</territory>
 			<territory type="FJ">Fiji</territory>
 			<territory type="FK">Falkland Islands</territory>
 			<territory type="FM">Micronesia</territory>
 			<territory type="FO">Faroe Islands</territory>
-			<territory type="FR">France</territory>
+			<territory type="FR">Perancis</territory>
 			<territory type="Fallback">en</territory>
 			<territory type="GA">Gabon</territory>
 			<territory type="GB">United Kingdom</territory>
@@ -101,80 +96,80 @@
 			<territory type="GN">Guinea</territory>
 			<territory type="GP">Guadeloupe</territory>
 			<territory type="GQ">Equatorial Guinea</territory>
-			<territory type="GR">Greece</territory>
+			<territory type="GR">Yunani</territory>
 			<territory type="GS">South Georgia and South Sandwich Islands</territory>
 			<territory type="GT">Guatemala</territory>
 			<territory type="GU">Guam</territory>
-			<territory type="GW">Guinea-Bissau</territory>
+			<territory type="GW">Guinea Bissau</territory>
 			<territory type="GY">Guyana</territory>
 			<territory type="HK">Hong Kong S.A.R., China</territory>
 			<territory type="HM">Heard Island and McDonald Islands</territory>
 			<territory type="HN">Honduras</territory>
 			<territory type="HR">Croatia</territory>
 			<territory type="HT">Haiti</territory>
-			<territory type="HU">Hungary</territory>
+			<territory type="HU">Hungari</territory>
 			<territory type="ID">Indonesia</territory>
 			<territory type="IE">Ireland</territory>
 			<territory type="IL">Israel</territory>
-			<territory type="IN">India</territory>
+			<territory type="IN">Hindia</territory>
 			<territory type="IO">British Indian Ocean Territory</territory>
 			<territory type="IQ">Iraq</territory>
 			<territory type="IR">Iran</territory>
 			<territory type="IS">Iceland</territory>
-			<territory type="IT">Italy</territory>
-			<territory type="JM">Jamaica</territory>
+			<territory type="IT">Itali</territory>
+			<territory type="JM">Jamaika</territory>
 			<territory type="JO">Jordan</territory>
-			<territory type="JP">Japan</territory>
+			<territory type="JP">Jepun</territory>
 			<territory type="KE">Kenya</territory>
 			<territory type="KG">Kyrgyzstan</territory>
-			<territory type="KH">Cambodia</territory>
+			<territory type="KH">Kemboja</territory>
 			<territory type="KI">Kiribati</territory>
 			<territory type="KM">Comoros</territory>
-			<territory type="KN">Saint Kitts and Nevis</territory>
-			<territory type="KP">North Korea</territory>
-			<territory type="KR">South Korea</territory>
+			<territory type="KN">Saint Kitts dan Nevis</territory>
+			<territory type="KP">Utara Korea</territory>
+			<territory type="KR">Selatan Korea</territory>
 			<territory type="KW">Kuwait</territory>
 			<territory type="KY">Cayman Islands</territory>
 			<territory type="KZ">Kazakhstan</territory>
 			<territory type="LA">Laos</territory>
-			<territory type="LB">Lebanon</territory>
+			<territory type="LB">Lubnan</territory>
 			<territory type="LC">Saint Lucia</territory>
 			<territory type="LI">Liechtenstein</territory>
 			<territory type="LK">Sri Lanka</territory>
 			<territory type="LR">Liberia</territory>
 			<territory type="LS">Lesotho</territory>
 			<territory type="LT">Lithuania</territory>
-			<territory type="LU">Luxembourg</territory>
+			<territory type="LU">Luksembourg</territory>
 			<territory type="LV">Latvia</territory>
 			<territory type="LY">Libya</territory>
-			<territory type="MA">Morocco</territory>
+			<territory type="MA">Maghribi</territory>
 			<territory type="MC">Monaco</territory>
 			<territory type="MD">Moldova</territory>
-			<territory type="MG">Madagascar</territory>
-			<territory type="MH">Marshall Islands</territory>
+			<territory type="MG">Madagaskar</territory>
+			<territory type="MH">Kepulauan Marshall</territory>
 			<territory type="MK">Macedonia</territory>
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Myanmar</territory>
 			<territory type="MN">Mongolia</territory>
-			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MO">Macao S.A.R., China</territory>
 			<territory type="MP">Northern Mariana Islands</territory>
 			<territory type="MQ">Martinique</territory>
 			<territory type="MR">Mauritania</territory>
 			<territory type="MS">Montserrat</territory>
 			<territory type="MT">Malta</territory>
 			<territory type="MU">Mauritius</territory>
-			<territory type="MV">Maldives</territory>
+			<territory type="MV">Maldiv</territory>
 			<territory type="MW">Malawi</territory>
-			<territory type="MX">Mexico</territory>
+			<territory type="MX">Meksiko</territory>
 			<territory type="MY">Malaysia</territory>
-			<territory type="MZ">Mozambique</territory>
+			<territory type="MZ">Mozambik</territory>
 			<territory type="NA">Namibia</territory>
 			<territory type="NC">New Caledonia</territory>
 			<territory type="NE">Niger</territory>
 			<territory type="NF">Norfolk Island</territory>
 			<territory type="NG">Nigeria</territory>
 			<territory type="NI">Nicaragua</territory>
-			<territory type="NL">Netherlands</territory>
+			<territory type="NL">Belanda</territory>
 			<territory type="NO">Norway</territory>
 			<territory type="NP">Nepal</territory>
 			<territory type="NR">Nauru</territory>
@@ -185,14 +180,14 @@
 			<territory type="PE">Peru</territory>
 			<territory type="PF">French Polynesia</territory>
 			<territory type="PG">Papua New Guinea</territory>
-			<territory type="PH">Philippines</territory>
+			<territory type="PH">Filipina</territory>
 			<territory type="PK">Pakistan</territory>
 			<territory type="PL">Poland</territory>
 			<territory type="PM">Saint Pierre and Miquelon</territory>
 			<territory type="PN">Pitcairn</territory>
 			<territory type="PR">Puerto Rico</territory>
 			<territory type="PS">Palestinian Territory</territory>
-			<territory type="PT">Portugal</territory>
+			<territory type="PT">Feringgi</territory>
 			<territory type="PW">Palau</territory>
 			<territory type="PY">Paraguay</territory>
 			<territory type="QA">Qatar</territory>
@@ -200,50 +195,50 @@
 			<territory type="RO">Romania</territory>
 			<territory type="RU">Russia</territory>
 			<territory type="RW">Rwanda</territory>
-			<territory type="SA">Saudi Arabia</territory>
-			<territory type="SB">Solomon Islands</territory>
+			<territory type="SA">Arab Saudi</territory>
+			<territory type="SB">Kepulauan Solomon</territory>
 			<territory type="SC">Seychelles</territory>
 			<territory type="SD">Sudan</territory>
 			<territory type="SE">Sweden</territory>
-			<territory type="SG">Singapore</territory>
+			<territory type="SG">Singapura</territory>
 			<territory type="SH">Saint Helena</territory>
 			<territory type="SI">Slovenia</territory>
 			<territory type="SJ">Svalbard and Jan Mayen</territory>
 			<territory type="SK">Slovakia</territory>
-			<territory type="SL">Sierra Leone</territory>
+			<territory type="SL">Siera Leon</territory>
 			<territory type="SM">San Marino</territory>
 			<territory type="SN">Senegal</territory>
 			<territory type="SO">Somalia</territory>
 			<territory type="SP">Serbia</territory>
-			<territory type="SR">Suriname</territory>
-			<territory type="ST">Sao Tome and Principe</territory>
+			<territory type="SR">Surinam</territory>
+			<territory type="ST">Sao Tome dan Principe</territory>
 			<territory type="SV">El Salvador</territory>
 			<territory type="SY">Syria</territory>
 			<territory type="SZ">Swaziland</territory>
 			<territory type="TC">Turks and Caicos Islands</territory>
-			<territory type="TD">Chad</territory>
+			<territory type="TD">Cad</territory>
 			<territory type="TF">French Southern Territories</territory>
 			<territory type="TG">Togo</territory>
 			<territory type="TH">Thailand</territory>
-			<territory type="TJ">Tajikistan</territory>
+			<territory type="TJ">Tadjikistan</territory>
 			<territory type="TK">Tokelau</territory>
 			<territory type="TL">Timor-Leste</territory>
 			<territory type="TM">Turkmenistan</territory>
 			<territory type="TN">Tunisia</territory>
 			<territory type="TO">Tonga</territory>
-			<territory type="TR">Turkey</territory>
-			<territory type="TT">Trinidad and Tobago</territory>
+			<territory type="TR">Turki</territory>
+			<territory type="TT">Trinidad dan Tobago</territory>
 			<territory type="TV">Tuvalu</territory>
 			<territory type="TW">Taiwan</territory>
 			<territory type="TZ">Tanzania</territory>
 			<territory type="UA">Ukraine</territory>
 			<territory type="UG">Uganda</territory>
 			<territory type="UM">United States Minor Outlying Islands</territory>
-			<territory type="US">United States</territory>
+			<territory type="US">Amerika Syarikat</territory>
 			<territory type="UY">Uruguay</territory>
 			<territory type="UZ">Uzbekistan</territory>
 			<territory type="VA">Vatican</territory>
-			<territory type="VC">Saint Vincent and the Grenadines</territory>
+			<territory type="VC">Saint Vincent dan Grenadines</territory>
 			<territory type="VE">Venezuela</territory>
 			<territory type="VG">British Virgin Islands</territory>
 			<territory type="VI">U.S. Virgin Islands</territory>
@@ -251,26 +246,35 @@
 			<territory type="VU">Vanuatu</territory>
 			<territory type="WF">Wallis and Futuna</territory>
 			<territory type="WS">Samoa</territory>
-			<territory type="YE">Yemen</territory>
+			<territory type="YE">Yaman</territory>
 			<territory type="YT">Mayotte</territory>
 			<territory type="YU">Yugoslavia</territory>
-			<territory type="ZA">South Africa</territory>
+			<territory type="ZA">Afrika Selatan</territory>
 			<territory type="ZM">Zambia</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mac</month>
+					<month type="4">Apr</month>
+					<month type="5">Mei</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Ogos</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Dis</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Januari</month>
 					<month type="2">Februari</month>
 					<month type="3">Mac</month>
@@ -284,21 +288,16 @@
 					<month type="11">November</month>
 					<month type="12">Disember</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mac</month>
-					<month type="4">Apr</month>
-					<month type="5">Mei</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Ogos</month>
-					<month type="9">Sept</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Dis</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Ahd</day>
+					<day type="mon">Isn</day>
+					<day type="tue">Sel</day>
+					<day type="wed">Rab</day>
+					<day type="thu">Kha</day>
+					<day type="fri">Jum</day>
+					<day type="sat">Sab</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Ahad</day>
 					<day type="mon">Isnin</day>
 					<day type="tue">Selasa</day>
@@ -307,23 +306,14 @@
 					<day type="fri">Jumaat</day>
 					<day type="sat">Sabtu</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Aha</day>
-					<day type="mon">Isn</day>
-					<day type="tue">Sel</day>
-					<day type="wed">Rab</day>
-					<day type="thu">Kha</day>
-					<day type="fri">Jum</day>
-					<day type="sat">Sab</day>
-				</dayAbbr>
 			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
 		<currencies>
 			<currency type="MYR">
-				<displayName>MYR</displayName>
-				<symbol>R</symbol>
+				<displayName>Ringgit Malaysia</displayName>
+				<symbol>RM</symbol>
 			</currency>
 		</currencies>
 	</numbers>

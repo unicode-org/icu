@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="1.0"/>
-		<generation date="2003-12-19" />
+		<version number="2.0"/>
+		<generation date="2004-05-13" />
 		<language type="mt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -57,7 +52,7 @@
 			<language type="be">Belarussu</language>
 			<language type="bej">Beja</language>
 			<language type="bem">Bemba</language>
-			<language type="ber">Berber</language>
+			<language type="ber">Beber</language>
 			<language type="bg">Bulgaru</language>
 			<language type="bh">Biħari</language>
 			<language type="bho">Bojpuri</language>
@@ -69,7 +64,7 @@
 			<language type="bn">Bengali</language>
 			<language type="bnt">Bantu</language>
 			<language type="bo">Tibetjan</language>
-			<language type="br">Breton</language>
+			<language type="br">Brenton</language>
 			<language type="bra">Braj</language>
 			<language type="bs">Bosnijan</language>
 			<language type="btk">Batak</language>
@@ -207,7 +202,7 @@
 			<language type="iro">Lingwi Irogwjani</language>
 			<language type="is">Iżlandiż</language>
 			<language type="it">Taljan</language>
-			<language type="iu">Inuktitut</language>
+			<language type="iu">Inukitut</language>
 			<language type="ja">Ġappuniż</language>
 			<language type="jbo">Lojban</language>
 			<language type="jpr">Lhudi-Persjan</language>
@@ -333,7 +328,7 @@
 			<language type="nzi">Nżima</language>
 			<language type="oc">Provenzal (wara 1500)</language>
 			<language type="oj">Oġibwa</language>
-			<language type="om">Oromo</language>
+			<language type="om">Oromo (Afan)</language>
 			<language type="or">Orija</language>
 			<language type="os">Ossettiku</language>
 			<language type="osa">Osaġjan</language>
@@ -373,8 +368,8 @@
 			<language type="sah">Jakut</language>
 			<language type="sai">Indjan tal-Amerika t'Isfel (Oħra)</language>
 			<language type="sal">Salixan</language>
-			<language type="sam">Samaritan Aramaic</language>
-			<language type="sas">Sasak</language>
+			<language type="sam">Samritan</language>
+			<language type="sas">Saska</language>
 			<language type="sat">Santali</language>
 			<language type="sc">Sardinjan</language>
 			<language type="sco">Skoċċiż</language>
@@ -460,7 +455,7 @@
 			<language type="vai">Vai</language>
 			<language type="ve">Venda</language>
 			<language type="vi">Vjetnamiż</language>
-			<language type="vo">Volapük</language>
+			<language type="vo">Volapuk</language>
 			<language type="vot">Votik</language>
 			<language type="wa">Walloon</language>
 			<language type="wak">Lingwi Wakaxani</language>
@@ -625,7 +620,7 @@
 			<territory type="ML">Mali</territory>
 			<territory type="MM">Mjanmar</territory>
 			<territory type="MN">Mongolja</territory>
-			<territory type="MO">Macao S.A.R. China</territory>
+			<territory type="MO">Macao S.A.R., China</territory>
 			<territory type="MP">Gżejjer Marjana ta' Fuq</territory>
 			<territory type="MQ">Martinik</territory>
 			<territory type="MR">Mawritanja</territory>
@@ -730,16 +725,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Fra</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mej</month>
+					<month type="6">Ġun</month>
+					<month type="7">Lul</month>
+					<month type="8">Awi</month>
+					<month type="9">Set</month>
+					<month type="10">Ott</month>
+					<month type="11">Nov</month>
+					<month type="12">Diċ</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Jannar</month>
 					<month type="2">Frar</month>
 					<month type="3">Marzu</month>
@@ -753,21 +757,16 @@
 					<month type="11">Novembru</month>
 					<month type="12">Diċembru</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Fra</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">Mej</month>
-					<month type="6">Ġun</month>
-					<month type="7">Lul</month>
-					<month type="8">Awi</month>
-					<month type="9">Set</month>
-					<month type="10">Ott</month>
-					<month type="11">Nov</month>
-					<month type="12">Diċ</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Ħad</day>
+					<day type="mon">Tne</day>
+					<day type="tue">Tli</day>
+					<day type="wed">Erb</day>
+					<day type="thu">Ħam</day>
+					<day type="fri">Ġim</day>
+					<day type="sat">Sib</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Il-Ħadd</day>
 					<day type="mon">It-Tnejn</day>
 					<day type="tue">It-Tlieta</day>
@@ -776,26 +775,11 @@
 					<day type="fri">Il-Ġimgħa</day>
 					<day type="sat">Is-Sibt</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Ħad</day>
-					<day type="mon">Tne</day>
-					<day type="tue">Tli</day>
-					<day type="wed">Erb</day>
-					<day type="thu">Ħam</day>
-					<day type="fri">Ġim</day>
-					<day type="sat">Sib</day>
-				</dayAbbr>
-				<eras>
-					<eraAbbr>
-						<era type="1">QK</era>
-						<era type="2">WK</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat >
-							<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
+							<pattern>EEEE, d 'ta''' MMMM yyyy</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="long">
@@ -805,12 +789,12 @@
 					</dateFormatLength >
 					<dateFormatLength type="medium">
 						<dateFormat >
-							<pattern>dd-MMM-yyyy</pattern>
+							<pattern>dd MMM yyyy</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="short">
 						<dateFormat >
-							<pattern>dd/MM/yy</pattern>
+							<pattern>dd/MM/yyyy</pattern>
 						</dateFormat>
 					</dateFormatLength >
 				</dateFormats>
@@ -818,22 +802,22 @@
 					<default type="medium"/>
 					<timeFormatLength type="full">
 						<timeFormat >
-							<pattern>h:mm:ss a z</pattern>
+							<pattern>HH:mm:ss z</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="long">
 						<timeFormat >
-							<pattern>h:mm:ss a z</pattern>
+							<pattern>HH:mm:ss z</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="medium">
 						<timeFormat >
-							<pattern>h:mm:ss a</pattern>
+							<pattern>HH:mm:ss</pattern>
 						</timeFormat>
 					</timeFormatLength >
 					<timeFormatLength type="short">
 						<timeFormat >
-							<pattern>h:mm a</pattern>
+							<pattern>HH:mm</pattern>
 						</timeFormat>
 					</timeFormatLength >
 				</timeFormats>
@@ -847,106 +831,25 @@
 			</calendar>
 		</calendars>
 		<timeZoneNames>
-			<zone type="CET">
+			<zone type="Europe/Malta">
 				<long>
-				<standard>Ħin ta' L-Ewropa Ċentrali</standard>
-				<daylight>Ħin tas-Sajf fl-Ewropa Ċentrali</daylight>
+				<standard>Ħin Ċentrali Ewropew</standard>
+				<daylight>Ħin Ċentrali Ewropew tas-Sajf</daylight>
 				</long>
 				<short>
 					<standard>CET</standard>
 					<daylight>CEST</daylight>
 				</short>
+				<exemplarCity>Valletta</exemplarCity>
 			</zone>
 		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>
 			<currency type="MTL">
-				<displayName>MTL</displayName>
+				<displayName>Lira Maltija</displayName>
 				<symbol>Lm</symbol>
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%simplified:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; punt &gt;&gt;;
-żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;
-għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;
-    sbatax; tmintax; dsatax;
-20: [&gt;&gt; u ]għoxrin;
-30: [&gt;&gt; u ]tletin;
-40: [&gt;&gt; u ]erbgħin;
-50: [&gt;&gt; u ]ħamsin;
-60: [&gt;&gt; u ]sittin;
-70: [&gt;&gt; u ]sebgħin;
-80: [&gt;&gt; u ]tmenin;
-90: [&gt;&gt; u ]disgħin;
-100: mija[ u &gt;&gt;];
-200: mitejn[ u &gt;&gt;];
-1000: &lt;&lt; elf[ u &gt;&gt;];
-2000: &lt;&lt; elfejn[ u &gt;&gt;];
-3000: tliet elef [ u &gt;&gt;];
-1,000,000: &lt;&lt; miljun[ u &gt;&gt;];
-1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];
-1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-%default:
--x: minus &gt;&gt;;
-x.x: &lt;&lt; punt &gt;&gt;;
-=%simplified=;
-100: mija[ &gt;%%and&gt;];
-200: mitejn[ &gt;%%and&gt;];
-300: tlett mija[ &gt;%%and&gt;];
-400: erbgħa mija[ &gt;%%and&gt;];
-500: ħames mija[ &gt;%%and&gt;];
-600: sitt mija[ &gt;%%and&gt;];
-700: sebgħa mija[ &gt;%%and&gt;];
-800: tmin mija[ &gt;%%and&gt;];
-900: disgħa mija[ &gt;%%and&gt;];
-1000: &lt;&lt; elf[ &gt;%%and&gt;];
-100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
-1,000,000,000,000,000: =#,##0=;
-%%and:
-u =%default=;
-100: =%default=;
-%%commas:
-' and =%default=;
-100: , =%default=;
-1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-1,000,000: , =%default=;%%lenient-parse:
-&amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
-
-			</icu:ruleBasedNumberFormat>
-			<icu:ruleBasedNumberFormat type="duration">
-%with-words:
-0 sekondi; 1 sekonda; =0= sekondi;
-60/60: &lt;%%min&lt;[, &gt;&gt;];
-3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
-%%min:
-0 minuti; 1 minuta; =0= minuti;
-%%hr:
-0 siegħat; 1 siegħa; =0= siegħat;
-%in-numerals:
-=0= sek.;
-60: =%%min-sec=;
-3600: =%%hr-min-sec=;
-%%min-sec:
-0: :=00=;
-60/60: &lt;0&lt;&gt;&gt;;
-%%hr-min-sec:
-0: :=00=;
-60/60: &lt;00&lt;&gt;&gt;;
-3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
-%%lenient-parse:
-&amp; ':' = '.' = ' ' = '-';
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>

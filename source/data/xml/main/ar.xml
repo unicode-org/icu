@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="ar" /> 
 	</identity>
 	<localeDisplayNames>
@@ -258,17 +253,72 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[ء-غـ-ٕ٠-٬‌‍‏‎]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Arab</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
+			<calendar type="arabic">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">محرم</month>
+					<month type="2">صفر</month>
+					<month type="3">ربيع الأول</month>
+					<month type="4">ربيع الآخر</month>
+					<month type="5">جمادى الأولى</month>
+					<month type="6">جمادى الآخرة</month>
+					<month type="7">رجب</month>
+					<month type="8">شعبان</month>
+					<month type="9">رمضان</month>
+					<month type="10">شوال</month>
+					<month type="11">ذو القعدة</month>
+					<month type="12">ذو الحجة</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">محرم</month>
+					<month type="2">صفر</month>
+					<month type="3">ربيع الأول</month>
+					<month type="4">ربيع الآخر</month>
+					<month type="5">جمادى الأولى</month>
+					<month type="6">جمادى الآخرة</month>
+					<month type="7">رجب</month>
+					<month type="8">شعبان</month>
+					<month type="9">رمضان</month>
+					<month type="10">شوال</month>
+					<month type="11">ذو القعدة</month>
+					<month type="12">ذو الحجة</month>
+				</monthNames>
+			</calendar>
+			<calendar type="arabic-civil">
+				<monthNames context="format" width="abbreviated">
+					<month type="1">محرم</month>
+					<month type="2">صفر</month>
+					<month type="3">ربيع الأول</month>
+					<month type="4">ربيع الآخر</month>
+					<month type="5">جمادى الأولى</month>
+					<month type="6">جمادى الآخرة</month>
+					<month type="7">رجب</month>
+					<month type="8">شعبان</month>
+					<month type="9">رمضان</month>
+					<month type="10">شوال</month>
+					<month type="11">ذو القعدة</month>
+					<month type="12">ذو الحجة</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
+					<month type="1">محرم</month>
+					<month type="2">صفر</month>
+					<month type="3">ربيع الأول</month>
+					<month type="4">ربيع الآخر</month>
+					<month type="5">جمادى الأولى</month>
+					<month type="6">جمادى الآخرة</month>
+					<month type="7">رجب</month>
+					<month type="8">شعبان</month>
+					<month type="9">رمضان</month>
+					<month type="10">شوال</month>
+					<month type="11">ذو القعدة</month>
+					<month type="12">ذو الحجة</month>
+				</monthNames>
+			</calendar>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
 					<month type="1">يناير</month>
 					<month type="2">فبراير</month>
 					<month type="3">مارس</month>
@@ -282,7 +332,7 @@
 					<month type="11">نوفمبر</month>
 					<month type="12">ديسمبر</month>
 				</monthNames>
-				<monthAbbr>
+				<monthNames context="format" width="wide">
 					<month type="1">يناير</month>
 					<month type="2">فبراير</month>
 					<month type="3">مارس</month>
@@ -295,8 +345,17 @@
 					<month type="10">أكتوبر</month>
 					<month type="11">نوفمبر</month>
 					<month type="12">ديسمبر</month>
-				</monthAbbr>
-				<dayNames>
+				</monthNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">ح</day>
+					<day type="mon">ن</day>
+					<day type="tue">ث</day>
+					<day type="wed">ر</day>
+					<day type="thu">خ</day>
+					<day type="fri">ج</day>
+					<day type="sat">س</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">الأحد</day>
 					<day type="mon">الاثنين</day>
 					<day type="tue">الثلاثاء</day>
@@ -305,27 +364,8 @@
 					<day type="fri">الجمعة</day>
 					<day type="sat">السبت</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">ح</day>
-					<day type="mon">ن</day>
-					<day type="tue">ث</day>
-					<day type="wed">ر</day>
-					<day type="thu">خ</day>
-					<day type="fri">ج</day>
-					<day type="sat">س</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="sat"/>
-				</week>
 				<am>ص</am>
 				<pm>م</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">ق.م</era>
-						<era type="2">م</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

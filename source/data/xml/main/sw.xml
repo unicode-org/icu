@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="sw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -98,16 +93,25 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Latn</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mei</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Ago</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Des</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">Januari</month>
 					<month type="2">Februari</month>
 					<month type="3">Machi</month>
@@ -121,21 +125,16 @@
 					<month type="11">Novemba</month>
 					<month type="12">Desemba</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">Mei</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Ago</month>
-					<month type="9">Sep</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Des</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">Jpi</day>
+					<day type="mon">Jtt</day>
+					<day type="tue">Jnn</day>
+					<day type="wed">Jtn</day>
+					<day type="thu">Alh</day>
+					<day type="fri">Iju</day>
+					<day type="sat">Jmo</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">Jumapili</day>
 					<day type="mon">Jumatatu</day>
 					<day type="tue">Jumanne</day>
@@ -144,25 +143,6 @@
 					<day type="fri">Ijumaa</day>
 					<day type="sat">Jumamosi</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">Jpi</day>
-					<day type="mon">Jtt</day>
-					<day type="tue">Jnn</day>
-					<day type="wed">Jtn</day>
-					<day type="thu">Alh</day>
-					<day type="fri">Iju</day>
-					<day type="sat">Jmo</day>
-				</dayAbbr>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="sat"/>
-				</week>
-				<eras>
-					<eraAbbr>
-						<era type="1">KK</era>
-						<era type="2">BK</era>
-					</eraAbbr>
-				</eras>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

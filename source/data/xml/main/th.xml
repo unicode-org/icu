@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
-[
-      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
-%icu;
-]
->
+<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-19" />
+		<generation date="2004-05-13" />
 		<language type="th" /> 
 	</identity>
 	<localeDisplayNames>
@@ -356,17 +351,81 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[:Thai:]</exemplarCharacters>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-			<icu:scripts>
-				<icu:script type="1">Thai</icu:script>
-			</icu:scripts>
-		</special>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
+			<calendar type="buddhist">
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE'ที่ 'd MMMM G yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>d MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d/M/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H' นาฬิกา 'm' นาที 'ss' วินาที'</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H' นาฬิกา 'm' นาที'</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
 			<calendar type="gregorian">
-				<monthNames>
+				<monthNames context="format" width="abbreviated">
+					<month type="1">ม.ค.</month>
+					<month type="2">ก.พ.</month>
+					<month type="3">มี.ค.</month>
+					<month type="4">เม.ย.</month>
+					<month type="5">พ.ค.</month>
+					<month type="6">มิ.ย.</month>
+					<month type="7">ก.ค.</month>
+					<month type="8">ส.ค.</month>
+					<month type="9">ก.ย.</month>
+					<month type="10">ต.ค.</month>
+					<month type="11">พ.ย.</month>
+					<month type="12">ธ.ค.</month>
+				</monthNames>
+				<monthNames context="format" width="wide">
 					<month type="1">มกราคม</month>
 					<month type="2">กุมภาพันธ์</month>
 					<month type="3">มีนาคม</month>
@@ -380,21 +439,16 @@
 					<month type="11">พฤศจิกายน</month>
 					<month type="12">ธันวาคม</month>
 				</monthNames>
-				<monthAbbr>
-					<month type="1">ม.ค.</month>
-					<month type="2">ก.พ.</month>
-					<month type="3">มี.ค.</month>
-					<month type="4">เม.ย.</month>
-					<month type="5">พ.ค.</month>
-					<month type="6">มิ.ย.</month>
-					<month type="7">ก.ค.</month>
-					<month type="8">ส.ค.</month>
-					<month type="9">ก.ย.</month>
-					<month type="10">ต.ค.</month>
-					<month type="11">พ.ย.</month>
-					<month type="12">ธ.ค.</month>
-				</monthAbbr>
-				<dayNames>
+				<dayNames context="format" width="abbreviated" >
+					<day type="sun">อา.</day>
+					<day type="mon">จ.</day>
+					<day type="tue">อ.</day>
+					<day type="wed">พ.</day>
+					<day type="thu">พฤ.</day>
+					<day type="fri">ศ.</day>
+					<day type="sat">ส.</day>
+				</dayNames>
+				<dayNames context="format" width="wide" >
 					<day type="sun">วันอาทิตย์</day>
 					<day type="mon">วันจันทร์</day>
 					<day type="tue">วันอังคาร</day>
@@ -403,23 +457,8 @@
 					<day type="fri">วันศุกร์</day>
 					<day type="sat">วันเสาร์</day>
 				</dayNames>
-				<dayAbbr>
-					<day type="sun">อา.</day>
-					<day type="mon">จ.</day>
-					<day type="tue">อ.</day>
-					<day type="wed">พ.</day>
-					<day type="thu">พฤ.</day>
-					<day type="fri">ศ.</day>
-					<day type="sat">ส.</day>
-				</dayAbbr>
 				<am>ก่อนเที่ยง</am>
 				<pm>หลังเที่ยง</pm>
-				<eras>
-					<eraAbbr>
-						<era type="1">ปีก่อนคริสต์กาลที่</era>
-						<era type="2">ค.ศ.</era>
-					</eraAbbr>
-				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -484,41 +523,4 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:ruleBasedNumberFormats>
-			<icu:ruleBasedNumberFormat type="spellout">
-%default:
--x: ลบ&gt;&gt;;
-x.x: &lt;&lt;จุด&gt;&gt;&gt;;
-ศูนย์; หนึ่ง; สอง; สาม;
-สี่; ห้า; หก; เจ็ด; แปด;
-เก้า; สิบ; สิบเอ็ด;
-สิบสอง; สิบสาม;
-สิบสี่; สิบห้า;
-สิบหก; สิบเจ็ด;
-สิบแปด; สิบเก้า;
-20: ยี่สิบ[&gt;%%alt-ones&gt;];
-30: สามสิบ[&gt;%%alt-ones&gt;];
-40: สี่สิบ[&gt;%%alt-ones&gt;];
-50: ห้าสิบ[&gt;%%alt-ones&gt;];
-60: หกสิบ[&gt;%%alt-ones&gt;];
-70: เจ็ดสิบ[&gt;%%alt-ones&gt;];
-80: แปดสิบ[&gt;%%alt-ones&gt;];
-90: เก้าสิบ[&gt;%%alt-ones&gt;];
-100: &lt;&lt;ร้อย[&gt;&gt;];
-1000: &lt;&lt;พัน[&gt;&gt;];
-10000: &lt;&lt;หมื่น[&gt;&gt;];
-100000: &lt;&lt;แสน[&gt;&gt;];
-1,000,000: &lt;&lt;ล้าน[&gt;&gt;];
-1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];
-1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];
-1,000,000,000,000,000: =#,##0=;
-%%alt-ones:
-ศูนย์;
-เอ็ด;
-=%default=;
-
-			</icu:ruleBasedNumberFormat>
-		</icu:ruleBasedNumberFormats>
-	</special>
 </ldml>
