@@ -13,7 +13,7 @@
 
 Name: icu
 Version: 1.6.0.1
-Release: 1
+Release: 2
 Requires: libicu16 >= 1.6.0.1
 Summary: International Components for Unicode
 Copyright: IBM Public License
@@ -583,4 +583,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/include/unicode/utf8.h
 /usr/include/unicode/utrans.h
 /usr/include/unicode/utypes.h
+/usr/share/icu/Makefile.inc
+/usr/share/icu/config
 
