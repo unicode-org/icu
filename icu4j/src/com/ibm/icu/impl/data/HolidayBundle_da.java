@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/HolidayBundle_da.java,v $ 
- * $Date: 2000/03/10 04:18:02 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/09/20 22:37:54 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -21,16 +21,16 @@ public class HolidayBundle_da extends ListResourceBundle
 {
     static private final Object[][] fContents =
     {
-        {   "Armistice Day",        "v…benhvile" },
+        {   "Armistice Day",        "v\u00e5benhvile" },
         {   "Ascension",            "himmelfart" },
         {   "Boxing Day",           "anden juledag" },
         {   "Christmas Eve",        "juleaften" },
-        {   "Easter",               "p…ske" },
+        {   "Easter",               "p\u00e5ske" },
         {   "Epiphany",             "helligtrekongersdag" },
         {   "Good Friday",          "langfredag" },
         {   "Halloween",            "allehelgensaften" },
-        {   "Maundy Thursday",      "sk†rtorsdag" },
-        {   "Palm Sunday",          "palmes°ndag" },
+        {   "Maundy Thursday",      "sk\u00e6rtorsdag" },
+        {   "Palm Sunday",          "palmes\u00f8ndag" },
         {   "Pentecost",            "pinse" },
         {   "Shrove Tuesday",       "hvidetirsdag" },
     };
