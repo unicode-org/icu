@@ -16,17 +16,15 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-64bit-libs     build 64-bit libraries [default=yes]"
 ac_help="$ac_help
-  --enable-hpuxcma        build ICU with HPUX CMA threads (only ver>=11) [default=no]"
+  --enable-shared         build shared libraries [default=yes]"
 ac_help="$ac_help
-  --enable-shared[=PKGS]  build shared libraries [default=yes]"
-ac_help="$ac_help
-  --enable-static[=PKGS]  build static libraries [default=no]"
+  --enable-static         build static libraries [default=no]"
 ac_help="$ac_help
   --enable-renaming       add a version suffix to symbols [default=yes]"
 ac_help="$ac_help
   --enable-rpath          use rpath when linking [default is only if necessary]"
 ac_help="$ac_help
-  --enable-threads        build ICU with threads [default=yes]"
+  --enable-threads        build ICU with thread safety [default=yes]"
 ac_help="$ac_help
   --with-iostream=version specify the version of iostream to use (none, old, std, auto) [default=auto]"
 ac_help="$ac_help
@@ -1382,7 +1380,7 @@ fi
     then
         if test "$GCC" = yes
         then
-            CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Winline"
             case "${host}" in
             *-*-solaris*)
                 CFLAGS="$CFLAGS -D__STDC__=0";;
@@ -1390,7 +1388,7 @@ fi
         fi
         if test "$GXX" = yes
         then
-            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Winline"
             case "${host}" in
             *-*-solaris*)
                 CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
@@ -1414,12 +1412,12 @@ echo "configure:1413: checking for 64-bit executable support" >&5
     if test "$ENABLE_64BIT_LIBS" = no; then
         case "${host}" in
         *-*-hpux*)
-            case "${CXX}" in
-            *CC)
-                CFLAGS="${CFLAGS} +DAportable"
-                CXXFLAGS="${CXXFLAGS} +DAportable"
-                ;;
-            esac;;
+#            case "${CXX}" in
+#            *CC)
+#                CFLAGS="${CFLAGS} +DAportable"
+#                CXXFLAGS="${CXXFLAGS} +DAportable"
+#                ;;
+#            esac;;
         esac
     else
         case "${host}" in
@@ -1560,9 +1558,11 @@ alpha*-*-linux-gnu)
 *-*-os400*)	icu_cv_host_frag=mh-os400 ;;
 *-apple-rhapsody*)	icu_cv_host_frag=mh-darwin ;;
 *-apple-darwin*)	icu_cv_host_frag=mh-darwin ;;
+*-*-beos)	icu_cv_host_frag=mh-beos ;;
 *-*-irix*)	icu_cv_host_frag=mh-irix ;;
 *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
 *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
+*-ncr-*)	icu_cv_host_frag=mh-mpras ;;
 *-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *) 		icu_cv_host_frag=mh-unknown ;;
 esac
@@ -1573,50 +1573,7 @@ fi
 echo "$ac_t""$icu_cv_host_frag" 1>&6
 
 
-hpuxcma=false
-
 case "${host}" in
-	*-*-hpux10*)    hpuxcma=true
-			echo $ac_n "checking for floor in -lm""... $ac_c" 1>&6
-echo "configure:1581: checking for floor in -lm" >&5
-ac_lib_var=`echo m'_'floor | sed 'y%./+-%__p_%'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lm  $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 1589 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char floor();
-
-int main() {
-floor()
-; return 0; }
-EOF
-if { (eval echo configure:1600: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -x conftest${ac_exeext}; then
-  del -f conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  del -f conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-del -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  LIB_M="-lm"
-else
-  echo "$ac_t""no" 1>&6
-fi
- ;;
 	*-*-hpux*) 	echo $ac_n "checking for floor in -lm""... $ac_c" 1>&6
 echo "configure:1621: checking for floor in -lm" >&5
 ac_lib_var=`echo m'_'floor | sed 'y%./+-%__p_%'`
@@ -1708,37 +1665,6 @@ fi
 			LIB_M="" ;;
 esac
 
-
-
-if test $hpuxcma = false; then
- # Check whether --enable-hpuxcma or --disable-hpuxcma was given.
-if test "${enable_hpuxcma+set}" = set; then
-  enableval="$enable_hpuxcma"
-  case "${enableval}" in
-	     yes) hpuxcma=true;;
-	     no) hpuxcma=false;;
-		*) { echo "configure: error: bad value ${enableval} for --enable-hpuxcma" 1>&2; exit 1; } ;;
-		esac
-fi
-
-fi
-
-
-
-if test "$hpuxcma" = true; then
-  HPUX_CMA_TRUE=
-  HPUX_CMA_FALSE='#'
-else
-  HPUX_CMA_TRUE='#'
-  HPUX_CMA_FALSE=
-fi
-
-if test $hpuxcma = true; then
-  case "${host}" in
-	*-*-hpux*)	hpuxcma=true ;;
-	*)		{ echo "configure: error: --enable-hpuxcma is not valid on this platform ${host}" 1>&2; exit 1; } ;;
-  esac
-fi
 
 echo $ac_n "checking whether to build shared libraries""... $ac_c" 1>&6
 echo "configure:1744: checking whether to build shared libraries" >&5
@@ -1937,58 +1863,6 @@ fi
 ICU_USE_THREADS=0
 
 if test $threads = true; then
-  if test $hpuxcma = true; then
-    echo $ac_n "checking for pthread_create in -lcma""... $ac_c" 1>&6
-echo "configure:1942: checking for pthread_create in -lcma" >&5
-ac_lib_var=`echo cma'_'pthread_create | sed 'y%./+-%__p_%'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lcma  $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 1950 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char pthread_create();
-
-int main() {
-pthread_create()
-; return 0; }
-EOF
-if { (eval echo configure:1961: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -x conftest${ac_exeext}; then
-  del -f conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  del -f conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-del -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-    ac_tr_lib=HAVE_LIB`echo cma | sed -e 's/[^a-zA-Z0-9_]/_/g' \
-    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
-  cat >> confdefs.h <<EOF
-#define $ac_tr_lib 1
-EOF
-
-  LIBS="-lcma $LIBS"
-
-else
-  echo "$ac_t""no" 1>&6
-fi
-
-  if test $ac_cv_lib_cma_pthread_create = yes; then
-   ICU_USE_THREADS=1
-  fi
- else 
            
   echo $ac_n "checking for pthread_attr_init in -lpthread""... $ac_c" 1>&6
 echo "configure:1994: checking for pthread_attr_init in -lpthread" >&5
@@ -2040,7 +1914,7 @@ fi
   if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
    ICU_USE_THREADS=1
   else
-                  
+               
    
 echo $ac_n "checking for library containing pthread_mutex_destroy""... $ac_c" 1>&6
 echo "configure:2046: checking for library containing pthread_mutex_destroy" >&5
@@ -2049,7 +1923,7 @@ if eval "test \"`echo '$''{'ac_cv_search_pthread_mutex_destroy'+set}'`\" = set";
 else
   ac_func_search_save_LIBS="$LIBS"
 ac_cv_search_pthread_mutex_destroy="no"
-for i in pthread pthreads c_r cma; do
+for i in pthread pthreads c_r ; do
 LIBS="-l$i  $ac_func_search_save_LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2055 "configure"
@@ -2213,8 +2087,13 @@ fi
    if test $ac_cv_func_pthread_mutex_lock = yes; then
      ICU_USE_THREADS=1
    fi
+      case "${host}" in
+   *-pc-cygwin*|*-pc-mingw*)
+     if test "$ac_cv_prog_gcc" = no; then
+              ICU_USE_THREADS=1
+     fi ;;
+   esac
   fi
- fi
 fi
 
 
@@ -4062,7 +3941,9 @@ case "${host}" in
 			ICUDATA_CHAR="e" ;;
 	*-*-nto*)	platform=U_QNX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
-	*-*-irix*)      platform=IRIX ;;
+	*-*-beos)		platform=U_BEOS ;;
+	*-*-irix*)		platform=IRIX ;;
+	*-ncr-*)		platform=U_MPRAS ;;
 	*-sequent-*)	platform=PTX ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
@@ -4089,7 +3970,7 @@ esac
 
 case "${host}" in
 	*-*-hpux*) 	
-		if test "$ac_cv_prog_gcc" != yes; then
+		if test "${icu_cv_host_frag}" = "mh-hpux-cc"; then
 			for file in samples/date/date \
 			  samples/cal/cal test/cintltst/cintltst \
 			  tools/makeconv/makeconv tools/genrb/genrb \
@@ -4098,7 +3979,7 @@ case "${host}" in
 			  tools/gencnval/gencnval tools/gennorm/gennorm \
 			  tools/gennames/gennames tools/gentest/gentest \
 			  tools/pkgdata/pkgdata tools/genprops/genprops \
-			  tools/pkgdata/pkgdata tools/genidna/genidna
+			  tools/gensprep/gensprep
 			do
 			  if test -f $file.c; then
 			    mv $file.c $file.cpp
@@ -4124,10 +4005,6 @@ fi
 
 
 
-
-if test $hpuxcma = true; then
-	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT_4 -DHPUX_CMA"
-fi
 
 
 if test $ICU_USE_THREADS -ne 0
@@ -4254,32 +4131,36 @@ trap 'del -f `echo "README icudefs.mk \
 		layout/Makefile \
 		layoutex/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
-                extra/uconv/Makefile extra/scrptrun/Makefile
+		extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
-		tools/genrb/Makefile  \
-		tools/genuca/Makefile  \
-		tools/pkgdata/Makefile \
-		tools/genccode/Makefile tools/gencmn/Makefile \
-		tools/gencnval/Makefile tools/gentz/Makefile \
-                tools/gennames/Makefile tools/toolutil/Makefile \
-                tools/gentest/Makefile \
+		tools/genrb/Makefile \
+		tools/genuca/Makefile \
+		tools/genccode/Makefile \
+		tools/gencmn/Makefile \
+		tools/gencnval/Makefile \
+		tools/gennames/Makefile \
+		tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
-		tools/genidna/Makefile \
+		tools/gensprep/Makefile \
+		tools/icuswap/Makefile \
+		tools/pkgdata/Makefile \
+		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile \
-                test/cintltst/Makefile test/iotest/Makefile \
+		test/Makefile test/testdata/Makefile \
+		test/intltest/Makefile \
+		test/cintltst/Makefile \
+		test/iotest/Makefile \
 		test/ieeetest/Makefile \
-		test/collperf/Makefile \
-		test/perf/normperf/Makefile \
 		test/thaitest/Makefile \
+		test/testmap/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
 		samples/Makefile samples/date/Makefile \
-                samples/cal/Makefile samples/layout/Makefile \
+		samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h common/icucfg.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -4334,8 +4215,6 @@ s%@host_os@%$host_os%g
 s%@EXEEXT@%$EXEEXT%g
 s%@ARFLAGS@%$ARFLAGS%g
 s%@LIB_M@%$LIB_M%g
-s%@HPUX_CMA_TRUE@%$HPUX_CMA_TRUE%g
-s%@HPUX_CMA_FALSE@%$HPUX_CMA_FALSE%g
 s%@ENABLE_SHARED@%$ENABLE_SHARED%g
 s%@ENABLE_STATIC@%$ENABLE_STATIC%g
 s%@RANLIB@%$RANLIB%g
@@ -4450,32 +4329,36 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		layout/Makefile \
 		layoutex/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
-                extra/uconv/Makefile extra/scrptrun/Makefile
+		extra/uconv/Makefile extra/scrptrun/Makefile
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
-		tools/genrb/Makefile  \
-		tools/genuca/Makefile  \
-		tools/pkgdata/Makefile \
-		tools/genccode/Makefile tools/gencmn/Makefile \
-		tools/gencnval/Makefile tools/gentz/Makefile \
-                tools/gennames/Makefile tools/toolutil/Makefile \
-                tools/gentest/Makefile \
+		tools/genrb/Makefile \
+		tools/genuca/Makefile \
+		tools/genccode/Makefile \
+		tools/gencmn/Makefile \
+		tools/gencnval/Makefile \
+		tools/gennames/Makefile \
+		tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
-		tools/genidna/Makefile \
+		tools/gensprep/Makefile \
+		tools/icuswap/Makefile \
+		tools/pkgdata/Makefile \
+		tools/toolutil/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile \
-                test/cintltst/Makefile test/iotest/Makefile \
+		test/Makefile test/testdata/Makefile \
+		test/intltest/Makefile \
+		test/cintltst/Makefile \
+		test/iotest/Makefile \
 		test/ieeetest/Makefile \
-		test/collperf/Makefile \
-		test/perf/normperf/Makefile \
 		test/thaitest/Makefile \
+		test/testmap/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
 		samples/Makefile samples/date/Makefile \
-                samples/cal/Makefile samples/layout/Makefile \
+		samples/cal/Makefile samples/layout/Makefile \
 		common/unicode/platform.h"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
