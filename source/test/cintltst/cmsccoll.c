@@ -2189,7 +2189,10 @@ static void TestHangulTailoring() {
 	    "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C";
 
 
+  log_verbose("Using start of korean rules\n");
   genericRulesStarter(rules, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+  log_verbose("Using ko__LOTUS locale\n");
+  genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
   
 }
 

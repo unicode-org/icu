@@ -66,7 +66,7 @@ it.txt it_CH.txt it_IT.txt it_IT_EURO.txt\
 iw.txt iw_IL.txt\
 ja.txt ja_JP.txt\
 kl.txt kl_GL.txt\
-ko.txt ko_KR.txt\
+ko.txt ko__LOTUS.txt ko_KR.txt\
 kok.txt kok_IN.txt\
 kw.txt kw_GB.txt\
 lt.txt lt_LT.txt\
@@ -95,7 +95,7 @@ th.txt th_TH.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
-zh.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt
+zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
 
 TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
 larabic.txt lcyril.txt ldevan.txt\

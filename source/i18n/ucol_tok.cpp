@@ -116,7 +116,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
     return;
   }
   rulesToParse = src->source;
-  src->lh = (UColTokListHeader *)uprv_malloc(256*sizeof(UColTokListHeader));
+  src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
   src->resultLen = 0;
   uchars2tokens = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
   uhash_setValueDeleter(uchars2tokens, deleteToken);
@@ -904,6 +904,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               b. Then treat this rule as equivalent to:
               "& abcd < xyz / efg"
           */
+#if 0
           if(newCharsLen > 1) {
             key.source = 0x01000000 | charsOffset;
             sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
@@ -912,6 +913,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               continue;
             }
           }
+#endif
           /* do the reset thing */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;
