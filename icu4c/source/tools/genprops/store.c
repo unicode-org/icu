@@ -296,9 +296,10 @@ enum {
 
     EXCEPTION_BIT=1UL<<EXCEPTION_SHIFT,
     VALUE_BITS=32-VALUE_SHIFT,
-    MAX_VALUE=(1UL<<(VALUE_BITS-1))-1,
-    MIN_VALUE=-(MAX_VALUE+1)
 };
+
+static const int32_t     MAX_VALUE=(1UL<<(VALUE_BITS-1))-1;
+static const int32_t     MIN_VALUE=-((1UL<<(VALUE_BITS-1)));
 
 static uint16_t stage1[STAGE_1_BLOCK], stage2[MAX_STAGE_2_COUNT],
                 stage3[MAX_PROPS_COUNT], map[MAX_PROPS_COUNT];
@@ -516,6 +517,8 @@ addProps(Props *p) {
                 printf("*** code 0x%06x needs an exception because it is irregular\n", p->code);
             } else if(count==1) {
                 printf("*** code 0x%06x needs an exception because its value would be %ld\n", p->code, value);
+            } else if(value<MIN_VALUE || MAX_VALUE<value) {
+                printf("*** code 0x%06x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n", p->code, value, MIN_VALUE,MAX_VALUE);
             } else {
                 printf("*** code 0x%06x needs an exception because it has %u values\n", p->code, count);
             }
@@ -527,7 +530,8 @@ addProps(Props *p) {
         /* allocate and create exception values */
         value=exceptionsTop;
         if(value>=4096) {
-            fprintf(stderr, "genprops: out of exceptions memory\n");
+            fprintf(stderr, "genprops: out of exceptions memory at U+%06x. (%d exceeds allocated space)\n",
+                    p->code, value);
             exit(U_MEMORY_ALLOCATION_ERROR);
         } else {
             uint32_t first=(uint32_t)p->canonicalCombining<<16;
