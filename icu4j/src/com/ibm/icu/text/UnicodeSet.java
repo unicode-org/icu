@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/14 23:14:23 $
- * $Revision: 1.62 $
+ * $Date: 2002/03/15 19:06:34 $
+ * $Revision: 1.63 $
  *
  *****************************************************************************************
  */
@@ -209,7 +209,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.62 $ $Date: 2002/03/14 23:14:23 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.63 $ $Date: 2002/03/15 19:06:34 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -665,6 +665,20 @@ public class UnicodeSet extends UnicodeFilter {
                 return true;
             }
         }
+        if (strings.size() != 0) {
+            Iterator it = strings.iterator();
+            while (it.hasNext()) {
+                String s = (String) it.next();
+                if (s.length() == 0) {
+                    // Empty strings match everything
+                    return true;
+                }
+                int c = UTF16.charAt(s, 0);
+                if ((c & 0xFF) == v) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -676,12 +690,10 @@ public class UnicodeSet extends UnicodeFilter {
                        int limit,
                        boolean incremental) {
         
-        // TODO: find out from Alan what to do!!
-        // Issues: what to do with nullstring
-        // whether to change offset
-            
-        // TODO: probably have to change this part too, just in case strings contains ""??
         if (offset[0] == limit) {
+            // Strings, if any, have length != 0, so we don't worry
+            // about them here.  If we ever allow zero-length strings
+            // we much check for them here.
             if (contains(TransliterationRule.ETHER)) {
                 return incremental ? U_PARTIAL_MATCH : U_MATCH;
             } else {
@@ -692,11 +704,17 @@ public class UnicodeSet extends UnicodeFilter {
             
                 // might separate forward and backward loops later
                 // for now they are combined
+
+                // TODO Improve efficiency of this, at least in the forward
+                // direction, if not in both.  In the forward direction we
+                // can assume the strings are sorted.
             
                 Iterator it = strings.iterator();
                 boolean forward = offset[0] < limit;
-                char firstChar = text.charAt(forward ? offset[0] : offset[0] - 1);
+                char firstChar = text.charAt(offset[0]);
                 
+//                int highWaterLength = 0;
+
                 while (it.hasNext()) {
                     String trial = (String) it.next();
                     if (trial.length() == 0) {
@@ -704,42 +722,41 @@ public class UnicodeSet extends UnicodeFilter {
                     }
                     char c = trial.charAt(forward ? 0 : trial.length() - 1);
                     
-                    // find the first string >= current character
-            
-                    if (c < firstChar) continue;
-                    if (c > firstChar) break; // stop if we pass it up
+                    // We had some more efficient scanning here, but
+                    // it only worked in the case of forward==true.
+                    // TODO implement more efficient scanning through the strings
                     
+                    if (c != firstChar) continue;
+                        
                     // Now check the strings with that first character
                     // do it in an inside loop, with a break-test further down
                     // so we get the first string too
                     
-                    int highWaterLength = 0;
+                    int len = matchRest(text, offset[0], limit, trial);
+
+                    if (len == trial.length()) {
+                        offset[0] += forward ? len : -len;
+                        return U_MATCH;
+                    }
+
                     int maxLen = forward ? limit - offset[0] : offset[0] - limit;
-                    while (true) {
-                        int len = matchRest(text, offset[0], limit, trial);
-                        if (len > highWaterLength) {
-                            if (len == maxLen) {
-                                if (!incremental) {
-                                    offset[0] = limit;
-                                    return U_MATCH;
-                                }
-                                if (trial.length() > maxLen) {
-                                    offset[0] = limit;
-                                    return U_PARTIAL_MATCH;
-                                }
-                            }
-                            highWaterLength = len;
-                        } else if (len < highWaterLength) { // bail if we get smaller, since they are sorted
-                            break;
-                        }
-                        if (!it.hasNext()) break;
-                        trial = (String) it.next();
+                    if (len == maxLen && incremental) {
+                        return U_PARTIAL_MATCH;
                     }
-                    if (highWaterLength > 0) { // got a match
-                        offset[0] += forward ? highWaterLength : -highWaterLength;
-                    }
-                    
+
+                    // This only works if forward==true
+//                    if (len > highWaterLength) {
+//                        highWaterLength = len;
+//                    } else if (len < highWaterLength) { // bail if we get smaller, since they are sorted
+//                        break;
+//                    }
                 }
+
+                // All matches, both partial and complete, are detected above
+//                if (highWaterLength > 0) { // got a match
+//                    offset[0] += forward ? highWaterLength : -highWaterLength;
+//                }
+
             }
             return super.matches(text, offset, limit, incremental);
         }
@@ -763,10 +780,9 @@ public class UnicodeSet extends UnicodeFilter {
         } else {
             maxLen = start - limit;
             if (maxLen > s.length()) maxLen = s.length();
-            for (int i = maxLen - 2; i >= 0 ; --i) {
-                if (text.charAt(limit + i) != s.charAt(i)) return 0;
+            for (int i = 1; i < maxLen; ++i) {
+                if (text.charAt(start - i) != s.charAt(s.length() - i)) return 0;
             }
-            return maxLen;
         }
         return maxLen;
     }
@@ -1813,13 +1829,13 @@ public class UnicodeSet extends UnicodeFilter {
                         --length; // sic; see above
                         UTF16.append(multiCharBuffer, ch);
                     }
-                    if (length < 2) {
+                    if (length < 1) {
                         throw new IllegalArgumentException("Invalid multicharacter string");
                     }
                     // We have new string. Add it to set and continue;
                     // we don't need to drop through to the further
                     // processing
-                    strings.add(multiCharBuffer.toString());
+                    add(multiCharBuffer.toString());
                     newPat.append('{').append(pattern.substring(st, i));
                     rebuildPattern = true;
                     continue;

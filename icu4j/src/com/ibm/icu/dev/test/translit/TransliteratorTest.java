@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/02/25 22:43:57 $
- * $Revision: 1.97 $
+ * $Date: 2002/03/15 19:07:02 $
+ * $Revision: 1.98 $
  *
  *****************************************************************************************
  */
@@ -2475,6 +2475,20 @@ public class TransliteratorTest extends TestFmwk {
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================
+
+    public void TestMulticharStringSet() {
+        String rule =
+            "[{aa}] > x; a > y; [b{bc}] > z; [{dd}] { e > q; e } [{ff}] > r;";
+        
+        Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules failed");
+            return;
+        }
+        
+        expect(t, "a aa ab bc d dd de dde ddeff eff",
+                  "y x yz z d dd de ddq ddqff rff");
+    }
 
     //======================================================================
     // Support methods
