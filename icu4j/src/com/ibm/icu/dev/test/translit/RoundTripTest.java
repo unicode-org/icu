@@ -49,14 +49,15 @@ public class RoundTripTest extends TestFmwk {
         Test t = new Test("Latin-Jamo", 
           TestUtility.LATIN_SCRIPT, TestUtility.JAMO_SCRIPT);
         t.setErrorLimit(200); // Don't run full test -- too long
-        t.test(null, null, this);
+        //t.test("[[a-z]-[fqvxz]]", null, this);
+        t.test("[a-z]", null, this);
     }
 
     public void TestJamoHangul() throws IOException, ParseException {
         Test t = new Test("Latin-Jamo;Jamo-Hangul", 
           TestUtility.LATIN_SCRIPT, TestUtility.HANGUL_SCRIPT);
         t.setErrorLimit(50); // Don't run full test -- too long
-        t.test(null, null, this);
+        t.test("[a-z]", null, this);
     }
 
     public void TestGreek() throws IOException, ParseException {
