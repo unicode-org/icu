@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -404,11 +404,10 @@ public class IntTrieBuilder extends TrieBuilder
      * - removes blocks that are identical with earlier ones
      * - overlaps adjacent blocks as much as possible (if overlap == true)
      * - moves blocks in steps of the data granularity
+     * - moves and overlaps blocks that overlap with multiple values in the overlap region
      *
      * It does not
      * - try to move and overlap blocks that are not already adjacent
-     * - try to move and overlap blocks that overlap with multiple values in 
-     * the overlap region
      * @param overlap flag
      */
     private void compact(boolean overlap) 
@@ -429,21 +428,21 @@ public class IntTrieBuilder extends TrieBuilder
         }
        
         int newStart = DATA_BLOCK_LENGTH;
-        int prevEnd = newStart - 1;
+        int i;
         for (int start = newStart; start < m_dataLength_;) {
             // start: index of first entry of current block
-            // prevEnd: index to last entry of previous block
             // newStart: index where the current block is to be moved
+            //           (right after current end of already-compacted data)
             // skip blocks that are not used 
             if (m_map_[start >>> SHIFT_] < 0) {
                 // advance start to the next block 
                 start += DATA_BLOCK_LENGTH;
-                // leave prevEnd and newStart with the previous block!
+                // leave newStart with the previous block!
                 continue;
             }
             // search for an identical block
             if (start >= overlapStart) {
-                int i = findSameDataBlock(m_data_, newStart, start,
+                i = findSameDataBlock(m_data_, newStart, start,
                                           overlap ? DATA_GRANULARITY_ : DATA_BLOCK_LENGTH);
                 if (i >= 0) {
                     // found an identical block, set the other block's index 
@@ -451,27 +450,20 @@ public class IntTrieBuilder extends TrieBuilder
                     m_map_[start >>> SHIFT_] = i;
                     // advance start to the next block
                     start += DATA_BLOCK_LENGTH;
-                    // leave prevEnd and newStart with the previous block!
+                    // leave newStart with the previous block!
                     continue;
                 }
             }
             // see if the beginning of this block can be overlapped with the 
             // end of the previous block
-            // x: first value in the current block 
-            int x = m_data_[start];
-            int i = 0;
-            if (x == m_data_[prevEnd] && overlap && start >= overlapStart) 
-                {
-                    // overlap by at least one
-                    for (i = 1; i < DATA_BLOCK_LENGTH 
-                             && x == m_data_[start + i] 
-                             && x == m_data_[prevEnd - i]; ++ i) 
-                        {
-                        }
-    
-                    // overlap by i, rounded down for the data block granularity
-                    i &= ~(DATA_GRANULARITY_ - 1);
-                } 
+            if(overlap && start>=overlapStart) {
+                /* look for maximum overlap (modulo granularity) with the previous, adjacent block */
+                for(i=DATA_BLOCK_LENGTH-DATA_GRANULARITY_;
+                    i>0 && !equal_int(m_data_, newStart-i, start, i);
+                    i-=DATA_GRANULARITY_) {}
+            } else {
+                i=0;
+            }
             if (i > 0) {
                 // some overlap
                 m_map_[start >>> SHIFT_] = newStart - i;
@@ -493,11 +485,9 @@ public class IntTrieBuilder extends TrieBuilder
                 newStart += DATA_BLOCK_LENGTH;
                 start = newStart;
             }
-    
-            prevEnd = newStart - 1;
         }
         // now adjust the index (stage 1) table
-        for (int i = 0; i < m_indexLength_; ++ i) {
+        for (i = 0; i < m_indexLength_; ++ i) {
             m_index_[i] = m_map_[Math.abs(m_index_[i]) >>> SHIFT_];
         }
         m_dataLength_ = newStart;
@@ -517,13 +507,7 @@ public class IntTrieBuilder extends TrieBuilder
         dataLength -= DATA_BLOCK_LENGTH;
 
         for (int block = 0; block <= dataLength; block += step) {
-            int i = 0;
-            for (i = 0; i < DATA_BLOCK_LENGTH; ++ i) {
-                if (data[block + i] != data[otherBlock + i]) {
-                    break;
-                }
-            }
-            if (i == DATA_BLOCK_LENGTH) {
+            if(equal_int(data, block, otherBlock, DATA_BLOCK_LENGTH)) {
                 return block;
             }
         }
