@@ -576,6 +576,16 @@ private:
      */
     Locale& init(const char* cLocaleID);
 
+    /*
+     * Internal constructor to allow construction of a locale object with
+     *   NO side effects.   (Default constructor tries to get
+     *   the default locale.)
+     */
+    enum ELocaleType {
+        eBOGUS
+    };
+    Locale(ELocaleType);
+
     /**
      * Initialize the locale cache for commonly used locales
      */

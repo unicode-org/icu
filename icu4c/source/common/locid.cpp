@@ -32,7 +32,6 @@
 
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
-#include "mutex.h"
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
@@ -68,15 +67,16 @@ typedef enum ELocalePos {
     eCANADA_FRENCH,
 
 
-    eDEFAULT,
+    //eDEFAULT,
     eMAX_LOCALES
 } ELocalePos;
 
 /* Use void * to make it properly aligned */
 /* Add 1 for rounding */
-static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
+// static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
 
-static Locale *gLocaleCache = NULL;
+static Locale *gLocaleCache   = NULL;
+static Locale *gDefaultLocale = NULL;
 
 U_NAMESPACE_END
 
@@ -90,10 +90,9 @@ locale_cleanup(void)
         availableLocaleList = NULL;
     }
     availableLocaleListCount = 0;
-    if (gLocaleCache) {
-        gLocaleCache[eDEFAULT].~Locale();
-        gLocaleCache = NULL;
-    }
+
+    delete [] gLocaleCache;
+    delete    gDefaultLocale;
     return TRUE;
 }
 
@@ -101,12 +100,16 @@ U_NAMESPACE_BEGIN
 void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
-
-        Locale *localeCache = Locale::getLocaleCache();
-    {
-        Mutex lock;
-        localeCache[eDEFAULT].init(id);
-    }
+    Locale tempLocale(Locale::eBOGUS);
+    tempLocale.init(id);   // Note:  we do not want to hold the mutex through init(),
+                           //        which is a relatively large, complex function.
+                           //        Hence, the use of a temporary locale.
+    const Locale *defLocale = &Locale::getDefault();
+    
+    umtx_lock(NULL);
+    Locale *ncDefLocale = (Locale *)defLocale;
+    *ncDefLocale = tempLocale;
+    umtx_unlock(NULL);
 }
 U_NAMESPACE_END
 
@@ -115,7 +118,6 @@ U_CFUNC void
 locale_set_default(const char *id)
 {
     U_NAMESPACE_USE
-
     locale_set_default_internal(id);
 }
 /* end */
@@ -151,6 +153,13 @@ Locale::Locale()
 {
     init(NULL);
 }
+
+Locale::Locale(Locale::ELocaleType t) 
+    : UObject(), fullName(fullNameBuffer)
+{
+    setToBogus();
+}
+
 
 Locale::Locale( const   char * newLanguage, 
                 const   char * newCountry, 
@@ -403,15 +412,19 @@ Locale& Locale::init(const char* localeID)
         return *this;
     } while(0);
 
-    if (gLocaleCache) {  // no mutex, but ok.
+    umtx_lock(NULL);
+    UBool defaultLocaleIsOK = (gDefaultLocale != NULL);
+    umtx_unlock(NULL);
+    if (defaultLocaleIsOK) {   
         // when an error occurs, then set the default locale (there is no UErrorCode here)
-        return *this = getLocale(eDEFAULT);
+        *this = getDefault();
     }
     else {
-        // Prevent any possible infinite recursion
+        // Prevent any possible infinite recursion from Locale::getDefault()
         // for bad default Locale IDs
-        return init("en");
+        init("en");
     }
+    return *this;
 }
 
 int32_t
@@ -438,7 +451,22 @@ Locale::setToBogus() {
 const Locale&
 Locale::getDefault() 
 {
-    return getLocale(eDEFAULT);
+    umtx_lock(NULL);
+    UBool needInit = (gDefaultLocale == NULL);
+    umtx_unlock(NULL);
+    if (needInit) {
+        Locale *tLocale = new Locale(Locale::eBOGUS);
+        const char *cLocale = uprv_getDefaultLocaleID();
+        tLocale->init(cLocale);  
+        umtx_lock(NULL);
+        if (gDefaultLocale == NULL) {
+            gDefaultLocale = tLocale;
+            tLocale = NULL;
+        }
+        umtx_unlock(NULL);
+        delete tLocale;
+    }
+    return *gDefaultLocale;
 }
 
 void 
@@ -447,12 +475,12 @@ Locale::setDefault( const   Locale&     newLocale,
 {
     if (U_FAILURE(status))
         return;
-
-    Locale *localeCache = getLocaleCache();
-    {
-        Mutex lock;
-        localeCache[eDEFAULT] = newLocale;
-    }
+    
+    const Locale *defLocale = &Locale::getDefault();
+    umtx_lock(NULL);
+    Locale *ncDefLocale = (Locale *)defLocale;
+    *ncDefLocale = newLocale;
+    umtx_unlock(NULL);
 }
 
 Locale
@@ -701,12 +729,7 @@ Locale::getAvailableLocales(int32_t& count)
             newLocaleList = NULL;
         }
         umtx_unlock(NULL);
-        if (newLocaleList != NULL) {
-            for (locCount=0; locCount<count; locCount++) {
-                newLocaleList[locCount].setToBogus();  // Free any storage held by the locale.
-            }
-            delete []newLocaleList;
-        }
+        delete []newLocaleList;
     }
     count = availableLocaleListCount;
     return availableLocaleList;
@@ -875,55 +898,33 @@ Locale::getLocaleCache(void)
     umtx_unlock(NULL);
     
     if (needInit) {
-        const char *defaultLocale = uprv_getDefaultLocaleID();
-        // Can't use empty parameters, or we'll call this function again.
-        Locale newLocales[] = {
-                Locale("en"),
-                Locale("fr"),
-                Locale("de"),
-                Locale("it"),
-                Locale("ja"),
-                Locale("ko"),
-                Locale("zh"),
-                Locale("fr", "FR"),
-                Locale("de", "DE"),
-                Locale("it", "IT"),
-                Locale("ja", "JP"),
-                Locale("ko", "KR"),
-                Locale("zh", "CN"),
-                Locale("zh", "TW"),
-                Locale("en", "GB"),
-                Locale("en", "US"),
-                Locale("en", "CA"),
-                Locale("fr", "CA"),
-                Locale(defaultLocale)
-        };
-        Locale *localeCache = (Locale *)(gByteLocaleCache);
+        Locale *tLocaleCache = new Locale[eMAX_LOCALES];
+        tLocaleCache[eENGLISH]       = Locale("en");
+        tLocaleCache[eFRENCH]        = Locale("fr");
+        tLocaleCache[eGERMAN]        = Locale("de");
+        tLocaleCache[eITALIAN]       = Locale("it");
+        tLocaleCache[eJAPANESE]      = Locale("ja");
+        tLocaleCache[eKOREAN]        = Locale("ko");
+        tLocaleCache[eCHINESE]       = Locale("zh");
+        tLocaleCache[eFRANCE]        = Locale("fr", "FR");
+        tLocaleCache[eGERMANY]       = Locale("de", "DE");
+        tLocaleCache[eITALY]         = Locale("it", "IT");
+        tLocaleCache[eJAPAN]         = Locale("ja", "JP");
+        tLocaleCache[eKOREA]         = Locale("ko", "KR");
+        tLocaleCache[eCHINA]         = Locale("zh", "CN");
+        tLocaleCache[eTAIWAN]        = Locale("zh", "TW");
+        tLocaleCache[eUK]            = Locale("en", "GB");
+        tLocaleCache[eUS]            = Locale("en", "US");
+        tLocaleCache[eCANADA]        = Locale("en", "CA");
+        tLocaleCache[eCANADA_FRENCH] = Locale("fr", "CA");
         
         umtx_lock(NULL);
         if (gLocaleCache == NULL) {
-            uprv_memcpy(gByteLocaleCache, newLocales, sizeof(newLocales));
-            
-            for (int idx = 0; idx < eMAX_LOCALES; idx++)
-            {
-                if (localeCache[idx].fullName == newLocales[idx].fullNameBuffer)
-                {
-                    localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
-                }
-                else
-                {
-                    // Since we did a memcpy we need to make sure that the local
-                    // Locales do not destroy the memory of the permanent locales.
-                    //
-                    // This can be a memory leak for an extra long default locale,
-                    // but this code shouldn't normally get executed.
-                    localeCache[idx].fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(newLocales[idx].fullName) + 1));
-                    uprv_strcpy(localeCache[idx].fullName, newLocales[idx].fullName);
-                }
-            }
-            gLocaleCache = localeCache;
+            gLocaleCache = tLocaleCache;
+            tLocaleCache = NULL;
         }
         umtx_unlock(NULL);
+        delete [] tLocaleCache;  // Fancy array delete will destruct each member.
     }
     return gLocaleCache;
 }
