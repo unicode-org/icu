@@ -671,6 +671,9 @@ UnicodeMatcher** RuleHalf::createSegments(UErrorCode& status) const {
         return NULL;
     }
     UnicodeMatcher** result = new UnicodeMatcher*[segments.size()];
+    if (result == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
     return (UnicodeMatcher**) segments.toArray((void**) result);
 }
 
