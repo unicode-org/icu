@@ -427,7 +427,7 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 }
 
 //------------------------------------------------------
-static const UnicodeString *gPatternCharsStr = NULL;
+static UnicodeString *gPatternCharsStr = NULL;
 
 U_CFUNC UBool dateFormatSymbols_cleanup() {
     if (gPatternCharsStr != NULL) {
