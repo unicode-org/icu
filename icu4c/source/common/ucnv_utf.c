@@ -61,7 +61,7 @@ const int8_t bytesFromUTF8[256] = {
 
 const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
 
-void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
+U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) args->source;
@@ -203,7 +203,7 @@ donefornow:
   args->converter->mode = ch; /*stores a partially calculated target*/
 }
 
-void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                 UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) args->source;
@@ -695,7 +695,7 @@ const UConverterSharedData _UTF8Data={
 
 /* UTF-16BE ----------------------------------------------------------------- */
 
-void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
+U_CFUNC void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
                                       UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) args->source;
@@ -882,7 +882,7 @@ const UConverterSharedData _UTF16BEData={
 
 /* UTF-16LE ----------------------------------------------------------------- */
 
-void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
+U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
                                        UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) args->source;
