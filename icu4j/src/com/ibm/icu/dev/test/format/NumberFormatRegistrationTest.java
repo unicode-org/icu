@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTest.java,v $
- * $Date: 2003/06/05 21:15:20 $
- * $Revision: 1.4 $
+ * $Date: 2003/06/09 04:53:37 $
+ * $Revision: 1.5 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -64,8 +64,13 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
 	    }
 
             try {
-                NumberFormat.unregister("");
-		errln("unregister of empty string key succeeded");
+                // if no NF has been registered yet, shim is null, so this silently
+                // returns false.  if, on the other hand, a NF has been registered,
+                // this will try to cast the argument to a Factory, and throw
+                // an exception.
+                if (NumberFormat.unregister("")) {
+                    errln("unregister of empty string key succeeded");
+                }
 	    }
             catch (Exception e) {
             }
