@@ -221,6 +221,7 @@ udata_close(UDataMemory *pData) {
 
 #elif defined (LINUX)||defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 
+
 typedef struct {
     uint16_t headerSize;
     uint8_t magic1, magic2;
@@ -248,6 +249,11 @@ struct UDataMemory {
 
 /* Do we need to check the platform here? */
 #include <dlfcn.h>
+
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void*)-1)
+#endif
+
 
 typedef void *Library;
 
