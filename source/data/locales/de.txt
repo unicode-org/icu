@@ -240,7 +240,7 @@ de {
         HM { "Heard und McDonaldinseln" }
         KY { "Kaimaninseln" }
         CC { "Kokosinseln" }
-        MO { "Macau" }
+        MO { "Macau S.A.R.,China" }
         MQ { "Martinique" }
         YT { "Mayotte" }
         MS { "Montserrat" }
@@ -262,7 +262,7 @@ de {
 
         // some entries that are not in the official list:
         EH { "West Sahara" }
-        // same as in root: HK { "Hong Kong" }
+        HK { "Hong Kong S.A.R., China" }
         SP { "Serbien" }
         // Zaire is now the Democratic Republic of Congo (CD)
         // same as in root: ZR { "Zaire" }
@@ -272,7 +272,7 @@ de {
             "4",
     }
     DateTimePatterns { 
-            "H.mm' Uhr 'z",
+            "H:mm' Uhr 'z",
             "HH:mm:ss z",
             "HH:mm:ss",
             "HH:mm",

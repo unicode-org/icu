@@ -772,7 +772,7 @@ Sequence{"&\u0304<<\u0301<<\u030C<<\u0300<<\u0308"
     Countries {
         CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u53F0\u6E7E" }
-        HK { "\u9999\u6E2F" }
+        //HK { "\u9999\u6E2F" }
         SG { "\u65B0\u52A0\u5761"} // from zh_SG.txt
     }
     DayAbbreviations { 

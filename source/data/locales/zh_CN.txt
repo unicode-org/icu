@@ -15,13 +15,13 @@ zh_CN {
     LocaleString { "zh_CN" }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
-            "\u00A4#,##0.00;-\u00A4#,##0.00",
+            "\u4EBA\u6C11\u5E63\u00A4#,##0.00\u5143;-\u4EBA\u6C11\u5E63\u00A4#,##0.00\u5143",
             "#,##0%",
     }
     ShortCountry { "CHN" }
     Countries {
         CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
-        TW { "\u53F0\u6E7E" }
+        //TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
     }
     LocaleID { "0804" }

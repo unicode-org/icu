@@ -93,7 +93,7 @@ sh {
         GY { "Gvajana" }
         HT { "Haiti" }
         HN { "Honduras" }
-        HK { "Hong Kong" }
+        HK { "Hong Kong S.A.R., China" }
         HU { "Ma\u0111arska" }
         IS { "Island" }
         IN { "Indija" }

@@ -13,16 +13,16 @@ ar_IN {
             "INR ",
             ".",
     }
-    DateTimePatterns { 
-            "hh:mm:ss aa z",
-            "hh:mm:ss  z",
-            "hh:mm:ss  z",
-            "hh:mm:ss  z",
-            "EEEE dd MMMM yyyy",
-            "EEEE dd MMMM yyyy",
-            "EEEE dd MMMM yyyy",
-            "EEEE dd MMMM yyyy",
-            "{1} {0}",
+    DateTimePatterns {
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd/mm/yyyy",
+        "d/m/yy",
+        "{1} {0}"
     }
     NumberElements { 
             ".",
