@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -14,41 +14,75 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
-typedef std::basic_string<UChar> stlstring;	
+typedef std::wstring stlstring;	
 
-// Define all constants for test case operations
-#define MAXNUMLINES	40000
-#define MAXSRCLEN 50
-#define LOOPS 10
+/* Define all constants for test case operations */
+#define MAXNUMLINES	40000	//Max number of lines in a test data file
+#define MAXSRCLEN 20		//Max length of one line. maybe a larger number, but it need more mem
+#define LOOPS 100			//Iterations 
+//#define LOOPS 10
 #define catenate_STRLEN 2
 
-const UChar TESTCHAR1 =  'a';
-const UChar* catenate_STR	= L"!!";
+const UChar uTESTCHAR1 =  'a';
+const wchar_t wTESTCHAR1 = 'a';
 const UnicodeString uEMPTY;
 const stlstring sEMPTY;
-const UnicodeString uScan_STRING=L"Dot. 123. Some more data.";
-const stlstring sScan_STRING=L"Dot. 123. Some more data.";
-
-// global variables for all operations
 UnicodeString unistr;
 stlstring stlstr;
-// for concatenation operation
+// Simulate construction with a single-char string for basic_string
+wchar_t simulate[2]={wTESTCHAR1, 0};
+
+/* Constants for scan operation */
+U_STRING_DECL(scan_STRING, "Dot. 123. Some more data.", 25);
+const UnicodeString uScan_STRING=UnicodeString(scan_STRING);
+const stlstring sScan_STRING=stlstring(L"Dot. 123. Some more data.");
+
+/* global variables or constants for concatenation operation */
+U_STRING_DECL(uCatenate_STR, "!!", 2);
+const stlstring sCatenate_STR=stlstring(L"!!");
 static UnicodeString* catICU;
 static stlstring* catStd;
-BOOL bCatenatePrealloc;
-// Simulate construction with a single-char string for basic_string
-UChar simulate[2]={TESTCHAR1, 0};
+UBool bCatenatePrealloc;
 
+/* type defines */
+typedef struct WLine WLine;
+struct  WLine {
+    wchar_t   name[100];
+    int32_t   len;
+}; //struct to store one line of wchar_t string
 
 enum FnType { Fn_ICU, Fn_STD };
 typedef FnType FnType;
 typedef void (*ICUStringPerfFn)(const UChar* src,int32_t srcLen, UnicodeString s0);
-typedef void (*StdStringPerfFn)(const UChar* src,int32_t srcLen, stlstring s0);
+typedef void (*StdStringPerfFn)(const wchar_t* src,int32_t srcLen, stlstring s0);
 
 
 class StringPerfFunction : public UPerfFunction
 {
 public:
+
+	virtual long getEventsPerIteration(){
+		int loops = LOOPS;
+		if (catICU) { delete catICU;}
+		if (catStd) { delete catStd;}
+
+		if (bCatenatePrealloc) {
+	
+			int to_alloc = loops * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN);
+			catICU = new UnicodeString(to_alloc,'a',0);
+			//catICU = new UnicodeString();
+
+			catStd = new stlstring();
+			//catStd -> reserve(loops * MAXNUMLINES * (MAXSRCLEN + catenate_STRLEN));
+			catStd -> reserve(110000000);
+		} else {
+			catICU = new UnicodeString();
+			catStd = new stlstring();
+		}
+
+		return -1;
+    }
+
 	virtual void call(UErrorCode* status)
 	{
         if(line_mode_==TRUE){
@@ -57,7 +91,7 @@ public:
 					if (fnType_==Fn_ICU) {
 						(*fn1_)(lines_[i].name,lines_[i].len,uS0_[i]);
 					} else {
-						(*fn2_)(lines_[i].name,lines_[i].len,sS0_[i]);
+						(*fn2_)(wlines_[i].name,wlines_[i].len,sS0_[i]);
 					}
                 }
             }else{
@@ -65,7 +99,7 @@ public:
                     if (fnType_==Fn_ICU) {
 						(*fn1_)(lines_[i].name,-1,uS0_[i]);
 					} else {
-						(*fn2_)(lines_[i].name,-1,sS0_[i]);
+						(*fn2_)(wlines_[i].name,-1,sS0_[i]);
 					}
                 }
             }
@@ -74,13 +108,13 @@ public:
 				if (fnType_==Fn_ICU) {
 					(*fn1_)(src_,srcLen_,*ubulk_);
 				} else {
-					(*fn2_)(src_,srcLen_,*sbulk_);
+					(*fn2_)(wsrc_,wsrcLen_,*sbulk_);
 				}
             }else{
 				if (fnType_==Fn_ICU) {
 					(*fn1_)(src_,-1,*ubulk_);
 				} else {
-					(*fn2_)(src_,-1,*sbulk_);
+					(*fn2_)(wsrc_,-1,*sbulk_);
 				}
             }
         }
@@ -89,26 +123,27 @@ public:
 	virtual long getOperationsPerIteration()
 	{
         if(line_mode_==TRUE){
-            int32_t totalChars=0;
-            for(int32_t i =0; i< numLines_; i++){
-                totalChars+= lines_[i].len;
-            }
-            return totalChars;
+            return numLines_;
         }else{
-            return srcLen_;
+            return 1;
         }
 	}
 
 	StringPerfFunction(ICUStringPerfFn func, ULine* srcLines, int32_t srcNumLines, UBool uselen)
 	{
+		
 		fn1_ = func;
 		lines_=srcLines;
+		wlines_=NULL;
 		numLines_=srcNumLines;
 		uselen_=uselen;
 		line_mode_=TRUE;
         src_ = NULL;
         srcLen_ = 0;
+		wsrc_ = NULL;
+		wsrcLen_ = 0;
 		fnType_ = Fn_ICU;
+		
 		uS0_=new UnicodeString[numLines_];
 		for(int32_t i=0; i<numLines_; i++) {
 			uS0_[i]=UnicodeString(lines_[i].name, lines_[i].len);
@@ -120,39 +155,43 @@ public:
 
 	StringPerfFunction(StdStringPerfFn func, ULine* srcLines, int32_t srcNumLines, UBool uselen)
 	{
+		
 		fn2_ = func;
 		lines_=srcLines;
+		wlines_=NULL;
 		numLines_=srcNumLines;
 		uselen_=uselen;
 		line_mode_=TRUE;
         src_ = NULL;
         srcLen_ = 0;
+		wsrc_ = NULL;
+		wsrcLen_ = 0;
 		fnType_ = Fn_STD;
-		sS0_=new stlstring[numLines_];
-		for(int32_t i=0; i<numLines_; i++) {		
-			if(uselen_) {
-				sS0_[i]=stlstring(lines_[i].name, lines_[i].len);
-			} else {
-				sS0_[i]=stlstring(lines_[i].name);
-			}
-		} 
+
 		uS0_=NULL;
 		ubulk_=NULL;
 		sbulk_=NULL;
+		
+		//fillin wlines_[], sS0_[]
+		prepareLinesForStd();
 	} 
 
 	StringPerfFunction(ICUStringPerfFn func, UChar* source, int32_t sourceLen, UBool uselen)
 	{
+		
 		fn1_ = func;
 		lines_=NULL;
+		wlines_=NULL;
 		numLines_=0;
 		uselen_=uselen;
 		line_mode_=FALSE;
 		src_ = new UChar[sourceLen];
 		memcpy(src_, source, sourceLen * U_SIZEOF_UCHAR);
         srcLen_ = sourceLen;
-
+		wsrc_ = NULL;
+		wsrcLen_ = 0;
 		fnType_ = Fn_ICU;
+
 		uS0_=NULL;
 		sS0_=NULL;	
 		ubulk_=new UnicodeString(src_,srcLen_);
@@ -161,46 +200,135 @@ public:
 
 	StringPerfFunction(StdStringPerfFn func, UChar* source, int32_t sourceLen, UBool uselen)
 	{
+		
 		fn2_ = func;
 		lines_=NULL;
+		wlines_=NULL;
 		numLines_=0;
 		uselen_=uselen;
 		line_mode_=FALSE;
 		src_ = new UChar[sourceLen];
 		memcpy(src_, source, sourceLen * U_SIZEOF_UCHAR);
         srcLen_ = sourceLen;
-
 		fnType_ = Fn_STD;
+
 		uS0_=NULL;
 		sS0_=NULL;
 		ubulk_=NULL;
-		if(uselen_) {
-			sbulk_=new stlstring(src_,srcLen_);
-		} else {
-			sbulk_=new stlstring(src_);
-		}			 
+
+		//fillin wsrc_, sbulk_
+		prepareBulkForStd();
+					 
 	}
 
 	~StringPerfFunction()
 	{
 		//free(src_);
+		free(wsrc_);
 		delete[] src_;
 		delete ubulk_;
 		delete sbulk_;
 		delete[] uS0_;
 		delete[] sS0_;
+		delete[] wlines_;
 	}
+
+private:
+	void prepareLinesForStd(void)
+	{
+		UErrorCode err=U_ZERO_ERROR;
+		
+		wlines_=new WLine[numLines_];
+        wchar_t ws[100];
+        int32_t wcap = sizeof(ws) / sizeof(*ws);
+        int32_t wl;
+		wchar_t* wcs;
+        
+		sS0_=new stlstring[numLines_];
+		for(int32_t i=0; i<numLines_; i++) {		
+			if(uselen_) {
+				wcs = u_strToWCS(ws, wcap, &wl, lines_[i].name, lines_[i].len, &err);
+				memcpy(wlines_[i].name, wcs, wl * sizeof(wchar_t));
+				wlines_[i].len = wl;
+				sS0_[i]=stlstring(wlines_[i].name, wlines_[i].len);
+			} else {
+				wcs = u_strToWCS(ws, wcap, &wl, lines_[i].name, lines_[i].len-1, &err);
+				memcpy(wlines_[i].name, wcs, wl*sizeof(wchar_t));
+				wlines_[i].len = wl;
+				sS0_[i]=stlstring(wlines_[i].name, wlines_[i].len+1);
+			}
+
+			if (U_FAILURE(err)) {
+				return;
+			}
+		}
+
+	}
+
+	void prepareBulkForStd(void)
+	{
+		UErrorCode err=U_ZERO_ERROR;
+
+		const UChar* uSrc = src_;
+		int32_t uSrcLen = srcLen_;
+		wchar_t* wDest = NULL;
+		int32_t wDestLen = 0;
+		int32_t reqLen= 0 ;
+
+		if(uselen_) {
+			/* pre-flight*/
+			u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen,&err);
+
+			if(err == U_BUFFER_OVERFLOW_ERROR){
+				err=U_ZERO_ERROR;
+				wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen));
+				wDestLen = reqLen;
+				u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen,&err);
+			}
+
+			if (U_SUCCESS(err)) { 
+				wsrc_ = wDest;
+				wsrcLen_ = wDestLen;
+				sbulk_=new stlstring(wsrc_,wsrcLen_); 
+			}
+
+		} else {
+			/* pre-flight*/
+			u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
+
+			if(err == U_BUFFER_OVERFLOW_ERROR){
+				err=U_ZERO_ERROR;
+				wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
+				wDestLen = reqLen+1;
+				u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
+			}
+
+			if (U_SUCCESS(err)) { 
+				wsrc_ = wDest;
+				wsrcLen_ = wDestLen;
+				sbulk_=new stlstring(wsrc_); 
+			}
+		}
+
+		//free(wDest);
+	}
+
 
 private:
 	ICUStringPerfFn fn1_;
 	StdStringPerfFn fn2_;
-	long COUNT_;
+
 	ULine* lines_;
+	WLine* wlines_;
 	int32_t numLines_;
+
 	UBool uselen_;
 	UChar* src_;
-    int32_t srcLen_;
+	int32_t srcLen_;
+	wchar_t* wsrc_;
+	int32_t wsrcLen_;
     UBool line_mode_;
+	
 	//added for preparing testing data
 	UnicodeString* uS0_;
 	stlstring* sS0_;
@@ -260,7 +388,7 @@ inline void ctor(const UChar* src,int32_t srcLen, UnicodeString s0)
 
 inline void ctor1(const UChar* src,int32_t srcLen, UnicodeString s0) 
 {
-	UnicodeString b(TESTCHAR1);
+	UnicodeString b(uTESTCHAR1);
 }
 
 inline void ctor2(const UChar* src,int32_t srcLen, UnicodeString s0) 
@@ -302,11 +430,20 @@ inline void getch(const UChar* src,int32_t srcLen, UnicodeString s0)
 
 inline void catenate(const UChar* src,int32_t srcLen, UnicodeString s0)
 {
-   	*catICU += s0;
-	*catICU += catenate_STR;
+	UTimer mystart, mystop;
+	utimer_getTime(&mystart); 
+	
+	*catICU += s0;
+	
+	utimer_getTime(&mystop);
+    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+	printf("\nmytime=%f \n", mytime);
+
+	*catICU += uCatenate_STR;
 }
 
 volatile int scan_idx;
+U_STRING_DECL(SCAN1, "123", 3);
 
 inline void scan(const UChar* src,int32_t srcLen, UnicodeString s0)
 {
@@ -316,7 +453,7 @@ inline void scan(const UChar* src,int32_t srcLen, UnicodeString s0)
 
 inline void scan1(const UChar* src,int32_t srcLen, UnicodeString s0)
 {
-	scan_idx = uScan_STRING.indexOf(L"123",3);
+	scan_idx = uScan_STRING.indexOf(SCAN1,3);
 }
 
 inline void scan2(const UChar* src,int32_t srcLen, UnicodeString s0)
@@ -328,23 +465,23 @@ inline void scan2(const UChar* src,int32_t srcLen, UnicodeString s0)
 }
 
 
-inline void StdLibCtor(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibCtor(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	stlstring a;
 }
 
-inline void StdLibCtor1(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibCtor1(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 
 	stlstring b(simulate);
 }
 
-inline void StdLibCtor2(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibCtor2(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	stlstring c(sEMPTY);
 }
 
-inline void StdLibCtor3(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibCtor3(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	if (srcLen==-1) {	
 		stlstring d(src); 
@@ -353,52 +490,58 @@ inline void StdLibCtor3(const UChar* src,int32_t srcLen, stlstring s0)
 	}
 }
 
-inline stlstring stl_assign_helper(const UChar* src,int32_t srcLen)
+inline stlstring stl_assign_helper(const wchar_t* src,int32_t srcLen)
 {
 	if (srcLen==-1) { return src;}
 	else { return stlstring(src, srcLen);}
 }
 
-inline void StdLibAssign(const UChar* src,int32_t srcLen, stlstring s0) 
+inline void StdLibAssign(const wchar_t* src,int32_t srcLen, stlstring s0) 
 {
 	stlstr = stl_assign_helper(src,srcLen);
 }
 
-inline void StdLibAssign1(const UChar* src,int32_t srcLen, stlstring s0) 
+inline void StdLibAssign1(const wchar_t* src,int32_t srcLen, stlstring s0) 
 {
 	if (srcLen==-1) { stlstr=src;}
 	else { stlstr.assign(src, srcLen);}
 }
 
-inline void StdLibAssign2(const UChar* src,int32_t srcLen, stlstring s0) 
+inline void StdLibAssign2(const wchar_t* src,int32_t srcLen, stlstring s0) 
 {
 	stlstr=s0;
 }
 
-inline void StdLibGetch(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibGetch(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	s0.at(0);
 }
 
-inline void StdLibCatenate(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibCatenate(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
-	
+	UTimer mystart, mystop;
+	utimer_getTime(&mystart); 
+
     *catStd += s0;
-    *catStd += catenate_STR;
+	*catStd += sCatenate_STR;
+
+	utimer_getTime(&mystop);
+    double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
+	printf("\nmytime=%f \n", mytime);
 	
 }
 
-inline void StdLibScan(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibScan(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	scan_idx = (int) sScan_STRING.find('.');	
 }
 
-inline void StdLibScan1(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibScan1(const wchar_t* src,int32_t srcLen, stlstring s0)
 {
 	scan_idx = (int) sScan_STRING.find(L"123");
 }
 
-inline void StdLibScan2(const UChar* src,int32_t srcLen, stlstring s0)
+inline void StdLibScan2(const wchar_t* src,int32_t srcLen, stlstring s0)
 {	
 	scan_idx = (int) sScan_STRING.find_first_of(L"sm");
 }
