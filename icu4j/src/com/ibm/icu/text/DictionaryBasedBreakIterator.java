@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $
- * $Date: 2002/12/05 01:21:42 $
- * $Revision: 1.11 $
+ * $Date: 2003/06/03 18:34:21 $
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -534,6 +534,7 @@ switch (categoryFlags.length % 4) {
 
         /**
          * No special initialization
+	 * @internal
          */
         public Builder() {
         }
@@ -543,6 +544,7 @@ switch (categoryFlags.length % 4) {
          * the $dictionary tag.  If we see a substitution named DICTIONARY_VAR,
          * parse the substitution expression and store the result in
          * dictionaryChars.
+	 * @internal
          */
         protected void handleSpecialSubstitution(String replace, String replaceWith,
                                                  int startPos, String description) {
@@ -562,6 +564,7 @@ switch (categoryFlags.length % 4) {
          * After the inherited builder has derived the real character categories, we
          * set up the categoryFlags array in the iterator.  This array contains "true"
          * for every character category that includes a dictionary character.
+	 * @internal
          */
         protected void buildCharCategories(Vector tempRuleList) {
             super.buildCharCategories(tempRuleList);
@@ -581,6 +584,9 @@ switch (categoryFlags.length % 4) {
         // which is called by the function above.  This gives us a way to create a separate
         // character category for the dictionary characters even when RuleBasedBreakIterator
         // isn't making a distinction
+	/*
+	 * @internal
+	 */
         protected void mungeExpressionList(Hashtable expressions) {
             expressions.put(dictionaryExpression, dictionaryChars);
         }
