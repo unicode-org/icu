@@ -284,9 +284,9 @@ ibm-12712-s390	       # EBCDIC	Hebrew
 ibm-16804-s390	       # EBCDIC	Arabic
 
 # Added for ISO-2022 support
-jis-x-201			           # Can be used by other converters
-jis-x-208			           # Can be used by other converters if	pure DBCS conversion is needed
-jis-x-212		           # Can be used by other converters if	pure DBCS conversion is needed
+jisx-201			           # Can be used by other converters
+jisx-208			           # Can be used by other converters if	pure DBCS conversion is needed
+jisx-212		           # Can be used by other converters if	pure DBCS conversion is needed
 gb_2312_80-1	           # Can be used by other converters if	pure DBCS conversion is needed
 iso-ir-165		           # Can be used by other converters if	pure DBCS conversion is needed
 cns-11643-1992	           # ISO-2022-CN specific.Cannot be used by other converters
