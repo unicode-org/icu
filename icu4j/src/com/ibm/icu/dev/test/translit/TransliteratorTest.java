@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/03/15 20:09:19 $
- * $Revision: 1.100 $
+ * $Date: 2002/03/27 19:12:05 $
+ * $Revision: 1.101 $
  *
  *****************************************************************************************
  */
@@ -817,10 +817,10 @@ public class TransliteratorTest extends TestFmwk {
         Transliterator name2uni =
             Transliterator.getInstance("Name-Any");
 
-        expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\uFFFF",
-               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}\uFFFF");
-        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{",
-               "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD{");
+        expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF",
+               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}");
+        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
+               "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004{");
     }
 
     /**

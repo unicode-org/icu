@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:10 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/03/27 19:11:37 $ 
+ * $Revision: 1.9 $
  */
 package com.ibm.icu.text;
 import java.util.*;
@@ -89,7 +89,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 break;
 
             case 1: // after open delimiter
-                // Look for [-a-zA-Z0-9].  If \w+ is found, convert it
+                // Look for [-a-zA-Z0-9].  If \s+ is found, convert it
                 // to a single space.  If closeDelimiter is found, exit
                 // the loop.  If any other character is found, exit the
                 // loop.  If the limit is found, exit the loop.
@@ -110,7 +110,7 @@ class NameUnicodeTransliterator extends Transliterator {
                     if (ibuf > 0 && buf[ibuf-1] == (char)0x0020) {
                         --ibuf;
                     }
-                    int ch = UCharacter.getCharFromName(new String(buf, 0, ibuf));
+                    int ch = UCharacter.getCharFromExtendedName(new String(buf, 0, ibuf));
                     if (ch != -1) {
                         // Lookup succeeded
                         String str = UTF16.valueOf(ch);
@@ -134,10 +134,12 @@ class NameUnicodeTransliterator extends Transliterator {
                     c -= 0x0020; // [a-z] => [A-Z]
                 }
 
-                // Check if c =~ [-A-Z0-9]
+                // Check if c =~ [-A-Za-z0-9<>]
                 if (c == (char)0x002D ||
                     (c >= (char)0x0041 && c <= (char)0x005A) ||
-                    (c >= (char)0x0030 && c <= (char)0x0039)) {
+                    (c >= (char)0x0061 && c <= (char)0x007A) ||
+                    (c >= (char)0x0030 && c <= (char)0x0039) ||
+                    c == (char)0x003C || c == (char)0x003E) {
                     buf[ibuf++] = (char) c;
                     // If we go a bit past the longest possible name then abort
                     if (ibuf == (LONGEST_NAME + 4)) {
