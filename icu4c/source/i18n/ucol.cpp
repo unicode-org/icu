@@ -644,7 +644,7 @@ inline  uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 */
 void collPrevIterNormalize(collIterate *data)
 {
-    UErrorCode  status = U_ZERO_ERROR;
+    UErrorCode status  = U_ZERO_ERROR;
     UChar      *pEnd   = data->pos + 1;         /* End normalize + 1 */
     UChar      *pStart;
     uint32_t    normLen;
@@ -661,17 +661,24 @@ void collPrevIterNormalize(collIterate *data)
                               data->writableBuffer, data->writableBufSize, 
                               &status);
 
-    if (U_FAILURE(status)) { /* This would be buffer overflow */
-        if (data->writableBuffer != data->stackWritableBuffer) {
-            uprv_free( data->writableBuffer);
-        }
-        data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) * 
-                                                    sizeof(UChar));
-        data->writableBufSize = normLen;
-        unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, 
+    if (U_FAILURE(status)) {
+        if (status == U_BUFFER_OVERFLOW_ERROR) { /* This would be buffer overflow */
+            if (data->writableBuffer != data->stackWritableBuffer) {
+                uprv_free( data->writableBuffer);
+            }
+            data->writableBuffer = (UChar *)uprv_malloc((normLen + 1) * 
+                                                        sizeof(UChar));
+            /* to handle the zero termination */
+            data->writableBufSize = normLen + 1;
+            status = U_ZERO_ERROR;
+            unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, 
                         data->writableBuffer, data->writableBufSize, &status);
+        }
+        else {
+            return;
+        }
     }
-
+    
     data->pos        = data->writableBuffer + normLen;
     data->origFlags  = data->flags;
     data->flags     |= UCOL_ITER_INNORMBUF;
@@ -901,13 +908,21 @@ void collIterNormalize(collIterate *collationSource)
     normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
                               collationSource->writableBufSize, &status);
     if (U_FAILURE(status)) { /* This would be buffer overflow */
-        if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
-            uprv_free( collationSource->writableBuffer);
+        if (status == U_BUFFER_OVERFLOW_ERROR) {
+            if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+                uprv_free( collationSource->writableBuffer);
+            }
+            collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+            /* to enable null termination */
+            collationSource->writableBufSize = normLen + 1;
+            status = U_ZERO_ERROR;
+            unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                            collationSource->writableBufSize, &status);
+            normLen = 0;
         }
-        collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
-        collationSource->writableBufSize = normLen;
-        unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                        collationSource->writableBufSize, &status);
+        else {
+            return;
+        }
     }
     collationSource->pos        = collationSource->writableBuffer;
     collationSource->origFlags  = collationSource->flags;
