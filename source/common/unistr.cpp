@@ -703,10 +703,11 @@ UnicodeString::doExtract(UTextOffset start,
              UChar *dst,
              UTextOffset dstStart) const
 {
+  // pin indices to legal values
+  pinIndices(start, length);
+
   // do not copy anything if we alias dst itself
   if(fArray + start != dst + dstStart) {
-    // pin indices to legal values
-    pinIndices(start, length);
     us_arrayCopy(getArrayStart(), start, dst, dstStart, length);
   }
 }
@@ -718,8 +719,8 @@ UnicodeString::extract(UChar *dest, int32_t destCapacity,
     if(isBogus() || destCapacity<0 || (destCapacity>0 && dest==0)) {
       errorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
-      if(fLength<=destCapacity) {
-        doExtract(0, fLength, dest, 0);
+      if(fLength>0 && fLength<=destCapacity && fArray!=dest) {
+        uprv_memcpy(dest, fArray, fLength*U_SIZEOF_UCHAR);
       }
       return u_terminateUChars(dest, destCapacity, fLength, &errorCode);
     }
