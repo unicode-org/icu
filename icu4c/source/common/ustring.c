@@ -1481,6 +1481,20 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
         if (result < 0 || result >= 0x110000) {
             goto err;
         }
+        // If an escape sequence specifies a lead surrogate, see if
+        // there is a trail surrogate after it, either as an escape or
+        // as a literal.  If so, join them up into a supplementary.
+        if (*offset < length && U16_IS_LEAD(result)) {
+            int32_t ahead = *offset + 1;
+            c = charAt(*offset, context);
+            if (c == 0x5C /*'\\'*/ && ahead < length) {
+                c = (UChar) u_unescapeAt(charAt, &ahead, length, context);
+            }
+            if (U16_IS_TRAIL(c)) {
+                *offset = ahead;
+                result = U16_GET_SUPPLEMENTARY(result, c);
+            }
+        }
         return result;
     }
 
