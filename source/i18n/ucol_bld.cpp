@@ -23,8 +23,8 @@ static const UChar *rulesToParse = 0;
 static const InverseTableHeader* invUCA = NULL;
 
 static UBool U_CALLCONV
-isAcceptableInvUCA(void *context, 
-             const char *type, const char *name,
+isAcceptableInvUCA(void * /*context*/, 
+             const char * /*type*/, const char * /*name*/,
              const UDataInfo *pInfo){
   /* context, type & name are intentionally not used */
     if( pInfo->size>=20 &&
@@ -413,7 +413,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   return g->current;
 }
 
-U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UErrorCode *status) {
+U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
   /* this one makes the table and stuff */
   uint32_t noOfBytes[3];
   uint32_t i;
@@ -568,7 +568,7 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
         CEparts[UCOL_TERTIARY] = ucol_getSimpleCEGenerator(&Gens[UCOL_TERTIARY], tok, UCOL_TERTIARY, status);
       }
     }
-    ucol_doCE(CEparts, tok, status);
+    ucol_doCE(CEparts, tok);
     tok = tok->next;
   }
 }
@@ -937,7 +937,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     if(U_SUCCESS(*status)) {
       /* copy contractions from the UCA - this is felt mostly for cyrillic*/
 
-      uint32_t ucaCE = UCOL_NOT_FOUND, tailoredCE = UCOL_NOT_FOUND;
+      uint32_t tailoredCE = UCOL_NOT_FOUND;
       uint16_t *conts = (uint16_t *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
       UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
       while(*conts != 0) {
