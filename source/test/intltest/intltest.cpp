@@ -453,6 +453,24 @@ void it_logln( void )
         IntlTest::gTest->logln();
 }
 
+void it_info( UnicodeString message )
+{
+    if (IntlTest::gTest)
+        IntlTest::gTest->info( message );
+}
+
+void it_infoln( UnicodeString message )
+{
+    if (IntlTest::gTest)
+        IntlTest::gTest->infoln( message );
+}
+
+void it_infoln( void )
+{
+    if (IntlTest::gTest)
+        IntlTest::gTest->infoln();
+}
+
 void it_err()
 {
     if (IntlTest::gTest)
@@ -715,6 +733,28 @@ void IntlTest::logln( void )
     }
 }
 
+/**
+* Unconditionally adds given string to the log.
+*/
+void IntlTest::info( const UnicodeString &message )
+{
+  LL_message( message, FALSE );
+}
+
+/**
+* Unconditionally adds given string to the log. Adds a new line to
+* the given message.
+*/
+void IntlTest::infoln( const UnicodeString &message )
+{
+  LL_message( message, TRUE );
+}
+
+void IntlTest::infoln( void )
+{
+  LL_message( "", TRUE );
+}
+
 int32_t IntlTest::IncErrorCount( void )
 {
     errorCount++;
@@ -765,6 +805,31 @@ void IntlTest::logln(const char *fmt, ...)
     if( verbose ) {
         logln(UnicodeString(buffer, ""));
     }
+}
+
+/* convenience functions that include sprintf formatting */
+void IntlTest::info(const char *fmt, ...)
+{
+    char buffer[512];
+    va_list ap;
+
+    va_start(ap, fmt);
+    /* sprintf it just to make sure that the information is valid */
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    info(UnicodeString(buffer, ""));
+}
+
+void IntlTest::infoln(const char *fmt, ...)
+{
+    char buffer[512];
+    va_list ap;
+
+    va_start(ap, fmt);
+    /* sprintf it just to make sure that the information is valid */
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    infoln(UnicodeString(buffer, ""));
 }
 
 void IntlTest::err(const char *fmt, ...)
