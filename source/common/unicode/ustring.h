@@ -90,7 +90,6 @@ u_countChar32(const UChar *s, int32_t length);
  * @return A pointer to <TT>dst</TT>.
  * @stable
  */
-
 U_CAPI UChar* U_EXPORT2
 u_strcat(UChar     *dst, 
     const UChar     *src);
@@ -144,7 +143,7 @@ u_strstr(const UChar *s, const UChar *substring);
  * or a null pointer if there is no such character.
  * If <TT>c</TT> is represented with several UChars, then the returned
  * pointer will point to the first of them.
- * @draft
+ * @stable
  */
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c);
@@ -156,7 +155,7 @@ u_strchr32(const UChar *s, UChar32 c);
  *
  * @return A pointer to the  character in str that matches one of the
  *         characters in accept, or NULL if no such character is found.
- * @draft
+ * @stable
  */
 U_CAPI UChar * U_EXPORT2
 u_strpbrk(const UChar *string, const UChar *matchSet);
@@ -167,7 +166,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet);
  * Works just like C's strcspn but with Unicode.
  *
  * @see u_strspn
- * @draft
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strcspn(const UChar *string, const UChar *matchSet);
@@ -178,7 +177,7 @@ u_strcspn(const UChar *string, const UChar *matchSet);
  * Works just like C's strspn but with Unicode.
  *
  * @see u_strcspn
- * @draft
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_strspn(const UChar *string, const UChar *matchSet);
@@ -201,7 +200,7 @@ u_strspn(const UChar *string, const UChar *matchSet);
  *                which is set by this function.
  * @return A pointer to the next token found in src, or NULL
  *         when there are no more tokens.
- * @draft
+ * @stable
  */
 U_CAPI UChar * U_EXPORT2
 u_strtok_r(UChar    *src, 
@@ -406,15 +405,15 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
 
 
 /**
- * Synonym for uprv_memcpy(), but with UChars only.
- * @draft
+ * Synonym for memcpy(), but with UChars only.
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_memcpy(UChar *dest, const UChar *src, int32_t count);
 
 /**
- * Synonym for uprv_memmove(), but with UChars only.
- * @draft
+ * Synonym for memmove(), but with UChars only.
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_memmove(UChar *dest, const UChar *src, int32_t count);
@@ -426,7 +425,7 @@ u_memmove(UChar *dest, const UChar *src, int32_t count);
  * @param c The character to initialize the string.
  * @param count The maximum number of characters to set.
  * @return A pointer to <TT>dest</TT>.
- * @draft
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_memset(UChar *dest, UChar c, int32_t count);
@@ -440,7 +439,7 @@ u_memset(UChar *dest, UChar c, int32_t count);
  * @return When buf1 < buf2, a negative number is returned.
  *      When buf1 == buf2, 0 is returned.
  *      When buf1 > buf2, a positive number is returned.
- * @draft
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
@@ -471,7 +470,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
  *      <TT>ch</TT>.
  * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
  *      was not found.
- * @draft
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_memchr(UChar *src, UChar ch, int32_t count);
@@ -486,7 +485,7 @@ u_memchr(UChar *src, UChar ch, int32_t count);
  *      <TT>ch</TT>.
  * @return A pointer within src, pointing to <TT>ch</TT>, or NULL if it
  *      was not found.
- * @draft
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_memchr32(UChar *src, UChar32 ch, int32_t count);
