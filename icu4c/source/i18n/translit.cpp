@@ -906,7 +906,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         return NULL;
     }
     
-    // assert(list.size() > 0);
+    U_ASSERT(list.size() > 0);
     Transliterator* t = NULL;
     switch (list.size()) {
     case 1:
