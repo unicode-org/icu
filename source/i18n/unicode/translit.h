@@ -196,26 +196,26 @@ class TransliteratorIDParser;
  *
  * <p>In addition to programmatic IDs, transliterator objects have
  * display names for presentation in user interfaces, returned by
- * {@link #getDisplayName() }.
+ * {@link #getDisplayName }.
  *
  * <p><b>Factory methods and registration</b>
  *
  * <p>In general, client code should use the factory method
- * {@link #createInstance() } to obtain an instance of a
+ * {@link #createInstance } to obtain an instance of a
  * transliterator given its ID.  Valid IDs may be enumerated using
  * <code>getAvailableIDs()</code>.  Since transliterators are mutable,
- * multiple calls to {@link #createInstance() } with the same ID will
+ * multiple calls to {@link #createInstance } with the same ID will
  * return distinct objects.
  *
  * <p>In addition to the system transliterators registered at startup,
  * user transliterators may be registered by calling
  * <code>registerInstance()</code> at run time.  A registered instance
- * acts a template; future calls to {@link #createInstance() } with the ID
+ * acts a template; future calls to {@link #createInstance } with the ID
  * of the registered object return clones of that object.  Thus any
  * object passed to <tt>registerInstance()</tt> must implement
  * <tt>clone()</tt> propertly.  To register a transliterator subclass
  * without instantiating it (until it is needed), users may call
- * {@link registerFactory() }.  In this case, the objects are
+ * {@link #registerFactory }.  In this case, the objects are
  * instantiated by invoking the zero-argument public constructor of
  * the class.
  *
@@ -426,7 +426,7 @@ public:
      * method, there may be untransliterated text that is waiting for
      * more input to resolve an ambiguity.  In order to perform these
      * pending transliterations, clients should call {@link
-     * #finishTransliteration()} after the last call to this
+     * #finishTransliteration } after the last call to this
      * method has been made.
      *
      * @param text the buffer holding transliterated and untransliterated text
@@ -508,7 +508,7 @@ public:
      * @param text the buffer holding transliterated and
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
-     * #transliterate()}
+     * #transliterate }
      * @stable ICU 2.0
      */
     virtual void finishTransliteration(Replaceable& text,
@@ -717,7 +717,7 @@ public:
     /**
      * Returns a name for this transliterator that is appropriate for
      * display to the user in the default locale.  See {@link
-     * #getDisplayName()} for details.
+     * #getDisplayName } for details.
      * @param ID     the string identifier for this transliterator
      * @param result Output param to receive the display name
      * @return       A reference to 'result'.
@@ -914,7 +914,7 @@ public:
      * object's current filter; if the filter is changed, the return
      * value of this function will change.  The default implementation
      * returns an empty set.  Some subclasses may override {@link
-     * #handleGetSourceSet()} to return a more precise result.  The
+     * #handleGetSourceSet } to return a more precise result.  The
      * return result is approximate in any case and is intended for
      * use by tests, tools, or utilities.
      * @param result receives result set; previous contents lost
