@@ -59,7 +59,9 @@ ucol_swapBinary(const UDataSwapper *ds,
      * sizeof(UCATableHeader)==42*4 in ICU 2.8
      * check the length against the header size before reading the size field
      */
-    if(length>=0 && (length<(42*4) || length<(header.size=udata_readInt32(ds, inHeader->size)))) {
+    if(length<0) {
+        header.size=udata_readInt32(ds, inHeader->size);
+    } else if((length<(42*4) || length<(header.size=udata_readInt32(ds, inHeader->size)))) {
         udata_printError(ds, "ucol_swapBinary(): too few bytes (%d after header) for collation data\n",
                          length);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -270,7 +272,9 @@ ucol_swapInverseUCA(const UDataSwapper *ds,
      * sizeof(UCATableHeader)==8*4 in ICU 2.8
      * check the length against the header size before reading the size field
      */
-    if( length>=0 &&
+    if(length<0) {
+        header.byteSize=udata_readInt32(ds, inHeader->byteSize);
+    } else if(
         ((length-headerSize)<(8*4) ||
          (uint32_t)(length-headerSize)<(header.byteSize=udata_readInt32(ds, inHeader->byteSize)))
     ) {
