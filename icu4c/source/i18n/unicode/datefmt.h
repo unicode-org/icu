@@ -237,13 +237,13 @@ public:
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~DateFormat();
 
     /**
      * Equality operator.  Returns true if the two formats have the same behavior.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format&) const;
 
@@ -259,7 +259,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -324,7 +324,7 @@ public:
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
      * @return              Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  UDate date,
                             UnicodeString& appendTo,
@@ -339,7 +339,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(UDate date, UnicodeString& appendTo) const;
 
@@ -351,7 +351,7 @@ public:
      *                  Result is appended to existing contents.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -365,7 +365,7 @@ public:
      *                  'text' cannot be parsed, it will be set to a failure
      *                  code.
      * @result          The parsed UDate value, if successful.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UDate parse( const UnicodeString& text,
                         UErrorCode& status) const;
@@ -412,7 +412,7 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
-     * @stable
+     * @stable ICU 2.0
      */
     UDate parse( const UnicodeString& text,
                  ParsePosition& pos) const;
@@ -441,7 +441,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -452,7 +452,7 @@ public:
      * the date and the time.
      *
      * @return A date/time formatter which the caller owns.
-     * @stable
+     * @stable ICU 2.0
      */
     static DateFormat* createInstance(void);
 
@@ -464,7 +464,7 @@ public:
      *                  SHORT for "h:mm a" in the US locale.
      * @param aLocale   The given locale.
      * @return          A time formatter which the caller owns.
-     * @stable
+     * @stable ICU 2.0
      */
     static DateFormat* createTimeInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
@@ -477,7 +477,7 @@ public:
      *                  SHORT for "M/d/yy" in the US locale.
      * @param aLocale   The given locale.
      * @return          A date formatter which the caller owns.
-     * @stable
+     * @stable ICU 2.0
      */
     static DateFormat* createDateInstance(EStyle style = kDefault,
                                           const Locale& aLocale = Locale::getDefault());
@@ -492,7 +492,7 @@ public:
      *                  For example, SHORT for "h:mm a" in the US locale.
      * @param aLocale   The given locale.
      * @return          A date/time formatter which the caller owns.
-     * @stable
+     * @stable ICU 2.0
      */
     static DateFormat* createDateTimeInstance(EStyle dateStyle = kDefault,
                                               EStyle timeStyle = kDefault,
@@ -503,13 +503,13 @@ public:
      * @param count Filled in with the number of locales in the list that is returned.
      * @return the set of locales for which DateFormats are installed.  The caller
      *  does NOT own this list and must not delete it.
-     * @stable
+     * @stable ICU 2.0
      */
     static const Locale* getAvailableLocales(int32_t& count);
   
     /**
      * Returns true if the formatter is set for lenient parsing.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool isLenient(void) const;
 
@@ -521,14 +521,14 @@ public:
      * 
      * @param lenient  True specifies date/time interpretation to be lenient.
      * @see Calendar::setLenient
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setLenient(UBool lenient);
     
     /**
      * Gets the calendar associated with this date/time formatter.
      * @return the calendar associated with this date/time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const Calendar* getCalendar(void) const;
     
@@ -538,7 +538,7 @@ public:
      * not delete the Calendar object after it is adopted by this call.
      *
      * @param calendarToAdopt    Calendar object to be adopted.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
@@ -547,7 +547,7 @@ public:
      * calendar for the specified or default locale is used.
      *
      * @param newCalendar Calendar object to be set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setCalendar(const Calendar& newCalendar);
 
@@ -556,7 +556,7 @@ public:
      * Gets the number formatter which this date/time formatter uses to format
      * and parse the numeric portions of the pattern.
      * @return the number formatter which this date/time formatter uses.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const NumberFormat* getNumberFormat(void) const;
     
@@ -564,21 +564,21 @@ public:
      * Allows you to set the number formatter.  The caller should
      * not delete the NumberFormat object after it is adopted by this call.
      * @param formatToAdopt     NumberFormat object to be adopted.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void adoptNumberFormat(NumberFormat* formatToAdopt);
 
     /**
      * Allows you to set the number formatter.
      * @param formatToAdopt     NumberFormat object to be set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setNumberFormat(const NumberFormat& newNumberFormat);
 
     /**
      * Returns a reference to the TimeZone used by this DateFormat's calendar.
      * @return the time zone associated with the calendar of DateFormat.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const TimeZone& getTimeZone(void) const;
     
@@ -586,14 +586,14 @@ public:
      * Sets the time zone for the calendar of this DateFormat object. The caller
      * no longer owns the TimeZone object and should not delete it after this call.
      * @param zoneToAdopt the TimeZone to be adopted.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void adoptTimeZone(TimeZone* zoneToAdopt);
 
     /**
      * Sets the time zone for the calendar of this DateFormat object.
      * @param zone the new time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setTimeZone(const TimeZone& zone);
 
@@ -603,19 +603,19 @@ protected:
      * Default constructor.  Creates a DateFormat with no Calendar or NumberFormat
      * associated with it.  This constructor depends on the subclasses to fill in
      * the calendar and numberFormat fields.
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormat();
 
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormat(const DateFormat&);
 
     /**
      * Default assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormat& operator=(const DateFormat&);
 

@@ -184,7 +184,7 @@ public:
      * [Note:] Not all locales support SimpleDateFormat; for full generality,
      * use the factory methods in the DateFormat class.
      * @param status    Output param set to success/failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(UErrorCode& status);
 
@@ -197,7 +197,7 @@ public:
      * use the factory methods in the DateFormat class.
      * @param pattern    the pattern for the format.
      * @param status     Output param set to success/failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      UErrorCode& status);
@@ -212,7 +212,7 @@ public:
      * @param pattern    the pattern for the format.
      * @param locale     the given locale.
      * @param staus      Output param set to success/failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const Locale& locale,
@@ -225,7 +225,7 @@ public:
      * @param pattern           the given pattern for the format.
      * @param formatDataToAdopt the symbols to be adopted.
      * @param staus             Output param set to success/faulure code.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      DateFormatSymbols* formatDataToAdopt,
@@ -238,7 +238,7 @@ public:
      * @param pattern           the given pattern for the format.
      * @param formatDataToAdopt the symbols to be set.
      * @param staus             Output param set to success/faulure code.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
                      const DateFormatSymbols& formatData,
@@ -246,19 +246,19 @@ public:
 
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat(const SimpleDateFormat&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleDateFormat& operator=(const SimpleDateFormat&);
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~SimpleDateFormat();
 
@@ -266,7 +266,7 @@ public:
      * Clone this Format object polymorphically. The caller owns the result and
      * should delete it when done.
      * @return    A copy of the object.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Format* clone(void) const;
 
@@ -275,7 +275,7 @@ public:
      * of different subclasses are considered unequal.
      * @param other    the object to be compared with.
      * @return         true if the given Format objects are semantically equal.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -316,7 +316,7 @@ public:
      *                  if desired. On output: the offsets of the alignment field.
      * @param status    Output param set to success/faulure code.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(  const Formattable& obj,
                                     UnicodeString& appendTo,
@@ -344,7 +344,7 @@ public:
      *                  Result is appended to existing contents.
      * @param status    Input/output success/failure code.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -356,7 +356,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(UDate date, UnicodeString& appendTo) const;
 
@@ -400,7 +400,7 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
-     * @stable
+     * @stable ICU 2.0
      */
     UDate parse( const UnicodeString& text,
                  ParsePosition& pos) const;
@@ -419,7 +419,7 @@ public:
      * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *              an error value if there was a parse error.
      * @return      A valid UDate if the input could be parsed.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UDate parse( const UnicodeString& text,
                         UErrorCode& status) const;
@@ -438,7 +438,7 @@ public:
      * @param d      start UDate used to interpret two-digit year strings.
      * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *               an error value if there was a parse error.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void set2DigitYearStart(UDate d, UErrorCode& status);
 
@@ -455,7 +455,7 @@ public:
      * time at which a SimpleDateFormat object is created.
      * @param status Filled in with U_ZERO_ERROR if the parse was successful, and with
      *               an error value if there was a parse error.
-     * @stable
+     * @stable ICU 2.0
      */
     UDate get2DigitYearStart(UErrorCode& status) const;
 
@@ -463,7 +463,7 @@ public:
      * Return a pattern string describing this date format.
      * @param result Output param to receive the pattern.
      * @return       A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
 
@@ -481,7 +481,7 @@ public:
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
      * @return          A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toLocalizedPattern(UnicodeString& result,
                                               UErrorCode& status) const;
@@ -492,7 +492,7 @@ public:
      * the new pattern)
      *
      * @param pattern   The pattern to be applied.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern);
 
@@ -504,7 +504,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UErrorCode& status);
@@ -515,7 +515,7 @@ public:
      * names and abbreviations, time zone names, AM/PM strings, etc.)
      * @return a copy of the date-time formatting data associated
      * with this date-time formatter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const DateFormatSymbols* getDateFormatSymbols(void) const;
 
@@ -523,14 +523,14 @@ public:
      * Set the date/time formatting symbols.  The caller no longer owns the
      * DateFormatSymbols object and should not delete it after making this call.
      * @param newFormatData the given date-time formatting data.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void adoptDateFormatSymbols(DateFormatSymbols* newFormatSymbols);
 
     /**
      * Set the date/time formatting data.
      * @param newFormatData the given date-time formatting data.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols);
 
@@ -543,7 +543,7 @@ public:
      * .       erived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -556,7 +556,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 

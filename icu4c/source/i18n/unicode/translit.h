@@ -230,7 +230,7 @@ class TransliteratorIDParser;
  * performance obtained by the default implementations in this class.
  *
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 class U_I18N_API Transliterator : public UObject {
 
@@ -332,7 +332,7 @@ public:
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~Transliterator();
 
@@ -348,7 +348,7 @@ public:
      *
      * @return a copy of the object.
      * @see #registerInstance
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Transliterator* clone() const { return 0; }
 
@@ -365,7 +365,7 @@ public:
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
      * <em>new-limit</em> is the return value. If the input offsets are out of bounds,
      * the returned value is -1 and the input string remains unchanged.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t transliterate(Replaceable& text,
                                   int32_t start, int32_t limit) const;
@@ -373,7 +373,7 @@ public:
     /**
      * Transliterates an entire string in place. Convenience method.
      * @param text the string to be transliterated
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text) const;
 
@@ -439,7 +439,7 @@ public:
      * @exception IllegalArgumentException if <code>index</code>
      * is invalid
      * @see UTransPosition
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
                                const UnicodeString& insertion,
@@ -460,7 +460,7 @@ public:
      * <code>index.limit</code>.
      * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, UTransPosition, UnicodeString)
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
                                UChar32 insertion,
@@ -477,7 +477,7 @@ public:
      * #transliterate(Replaceable, UTransPosition, UnicodeString)}.
      * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
                                UErrorCode& status) const;
@@ -491,7 +491,7 @@ public:
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
      * #transliterate()}
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void finishTransliteration(Replaceable& text,
                                        UTransPosition& index) const;
@@ -666,7 +666,7 @@ public:
      *
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMaximumContextLength(void) const;
 
@@ -689,7 +689,7 @@ public:
      * @see #registerInstance
      * @see #registerClass
      * @see #getAvailableIDs
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const UnicodeString& getID(void) const;
 
@@ -700,7 +700,7 @@ public:
      * @param ID     the string identifier for this transliterator
      * @param result Output param to receive the display name
      * @return       A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
                                          UnicodeString& result);
@@ -724,7 +724,7 @@ public:
      *                 localized.
      * @param result   Output param to receive the display name
      * @return         A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getDisplayName(const UnicodeString& ID,
                                          const Locale& inLocale,
@@ -735,7 +735,7 @@ public:
      * if this transliterator uses no filter.
      * @return the filter used by this transliterator, or <tt>NULL</tt>
      *         if this transliterator uses no filter.
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeFilter* getFilter(void) const;
 
@@ -770,7 +770,7 @@ public:
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
      * @param adoptedFilter the new filter to be adopted.
-     * @stable
+     * @stable ICU 2.0
      */
     void adoptFilter(UnicodeFilter* adoptedFilter);
 #endif
@@ -792,7 +792,7 @@ public:
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
      * @see #registerInstance
-     * @stable
+     * @stable ICU 2.0
      */
     Transliterator* createInverse(UErrorCode& status) const;
 
@@ -810,7 +810,7 @@ public:
      * @see #registerInstance
      * @see #getAvailableIDs
      * @see #getID
-     * @stable
+     * @stable ICU 2.0
      */
     static Transliterator* createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
@@ -825,7 +825,7 @@ public:
      * @param dir        either FORWARD or REVERSE.
      * @param status     Output param to filled in with a success or an error.
      * @return A <code>Transliterator</code> object with the given ID
-     * @stable
+     * @stable ICU 2.0
      */
     static Transliterator* createInstance(const UnicodeString& ID,
                                           UTransDirection dir,
@@ -843,7 +843,7 @@ public:
      * @param parseError    Struct to recieve information on position 
      *                      of error if an error is encountered
      * @param status        Output param set to success/failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     static Transliterator* createFromRules(const UnicodeString& ID,
                                            const UnicodeString& rules,
@@ -860,7 +860,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
@@ -921,7 +921,7 @@ public:
      * @param context a context pointer that will be stored and
      * later passed to the factory function when an ID matching
      * the registration ID is being instantiated with this factory.
-     * @stable
+     * @stable ICU 2.0
      */
     static void registerFactory(const UnicodeString& id,
                                 Factory factory,
@@ -942,7 +942,7 @@ public:
      * @see #createInstance
      * @see #registerClass
      * @see #unregister
-     * @stable
+     * @stable ICU 2.0
      */
     static void registerInstance(Transliterator* adoptedObj);
 
@@ -1016,7 +1016,7 @@ public:
      * <code>ID</code>, or <code>null</code> if none was
      * @see #registerInstance
      * @see #registerClass
-     * @stable
+     * @stable ICU 2.0
      */
     static void unregister(const UnicodeString& ID);
 
@@ -1027,7 +1027,7 @@ public:
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
      * @return the number of IDs currently registered with the system. 
-     * @stable
+     * @stable ICU 2.0
      */
     static int32_t countAvailableIDs(void);
 
@@ -1039,14 +1039,14 @@ public:
      * @return      the index-th available ID.  index must be between 0
      *              and countAvailableIDs() - 1, inclusive.  If index is out of
      *              range, the result of getAvailableID(0) is returned.
-     * @stable
+     * @stable ICU 2.0
      */
     static const UnicodeString& getAvailableID(int32_t index);
 
     /**
      * Return the number of registered source specifiers.
      * @return the number of registered source specifiers.
-     * @stable
+     * @stable ICU 2.0
      */
     static int32_t countAvailableSources(void);
     
@@ -1057,7 +1057,7 @@ public:
      * @param result fill-in paramter to receive the source specifier.
      * If index is out of range, result will be empty.
      * @return reference to result
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getAvailableSource(int32_t index,
                                              UnicodeString& result);
@@ -1068,7 +1068,7 @@ public:
      * @param source the given source specifier.
      * @return the number of registered target specifiers for a given
      *         source specifier.
-     * @stable
+     * @stable ICU 2.0
      */
     static int32_t countAvailableTargets(const UnicodeString& source);
     
@@ -1081,7 +1081,7 @@ public:
      * If source is invalid or if index is out of range, result will
      * be empty.
      * @return reference to result
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getAvailableTarget(int32_t index,
                                              const UnicodeString& source,
@@ -1092,7 +1092,7 @@ public:
      * source-target pair.
      * @param source    the source specifiers.
      * @param target    the target specifiers.
-     * @stable
+     * @stable ICU 2.0
      */
     static int32_t countAvailableVariants(const UnicodeString& source,
                                           const UnicodeString& target);
@@ -1108,7 +1108,7 @@ public:
      * specifier.  If source is invalid or if target is invalid or if
      * index is out of range, result will be empty.
      * @return reference to result
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& getAvailableVariant(int32_t index,
                                               const UnicodeString& source,
@@ -1170,7 +1170,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -1195,7 +1195,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
 

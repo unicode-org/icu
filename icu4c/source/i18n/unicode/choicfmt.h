@@ -251,7 +251,7 @@ public:
      * @param pattern   Pattern used to construct object.
      * @param status    Output param to receive success code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     ChoiceFormat(const UnicodeString& newPattern,
                  UErrorCode& status);
@@ -264,7 +264,7 @@ public:
      * @param limits    Array of limit values.
      * @param formats   Array of formats.
      * @param count     Size of 'limits' and 'formats' arrays.
-     * @stable
+     * @stable ICU 2.0
      */
     
     ChoiceFormat(const double* limits,
@@ -296,7 +296,7 @@ public:
      * Copy constructor.
      *
      * @param   ChoiceFormat object to be copied from
-     * @stable
+     * @stable ICU 2.0
      */
     ChoiceFormat(const ChoiceFormat&);
 
@@ -304,13 +304,13 @@ public:
      * Assignment operator.
      *
      * @param   ChoiceFormat object to be copied
-     * @stable
+     * @stable ICU 2.0
      */
     const ChoiceFormat& operator=(const ChoiceFormat&);
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~ChoiceFormat();
 
@@ -319,7 +319,7 @@ public:
      * result and should delete it when done.
      *
      * @return a copy of this object
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Format* clone(void) const;
 
@@ -329,7 +329,7 @@ public:
      *
      * @param other    ChoiceFormat object to be compared 
      * @return         true if other is the same as this. 
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -339,7 +339,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UErrorCode& status);
@@ -363,7 +363,7 @@ public:
      * @param pattern    Output param which will recieve the pattern
      *                   Previous contents are deleted.
      * @return    A reference to 'pattern'
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString &pattern) const;
 
@@ -409,7 +409,7 @@ public:
      *                          &lt;= X &lt; limit[i+1].
      * @param formatsToCopy     The format strings you want to use for each limit.
      * @param count             The size of the above arrays.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setChoices(const double* limitsToCopy,
                             const UnicodeString* formatsToCopy,
@@ -433,7 +433,7 @@ public:
      *
      * @param count    The size of the limits arrays
      * @return the limits.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const double* getLimits(int32_t& count) const;
     
@@ -451,7 +451,7 @@ public:
      *
      * @param count   The size of the arrays
      * @return the formats.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const UnicodeString* getFormats(int32_t& count) const;
 
@@ -464,7 +464,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(double number,
                                   UnicodeString& appendTo,
@@ -478,7 +478,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
@@ -495,7 +495,7 @@ public:
      * @param success   Output param set to success/failure code on
      *                  exit. 
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable* objs,
                                   int32_t cnt,
@@ -514,7 +514,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. 
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -530,7 +530,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. 
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -545,7 +545,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  double number,
                             UnicodeString& appendTo) const;
@@ -559,7 +559,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  int32_t number,
                             UnicodeString& appendTo) const;
@@ -580,7 +580,7 @@ public:
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
     * @see                  NumberFormat::isParseIntegerOnly
-    * @stable
+    * @stable ICU 2.0
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -600,7 +600,7 @@ public:
     *                       If parse fails, return contents are undefined.
     * @param status         Output param with the formatted string.
     * @see                  NumberFormat::isParseIntegerOnly
-    * @stable
+    * @stable ICU 2.0
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -617,7 +617,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -630,7 +630,7 @@ public:
      * .           Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -700,7 +700,7 @@ private:
      *                     of error if an error is encountered.
      * @param status       Output param to receive success code.  If the
      *                     pattern cannot be parsed, set to failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     ChoiceFormat(const UnicodeString& newPattern,
                  UParseError& parseError,

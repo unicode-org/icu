@@ -143,7 +143,7 @@ U_NAMESPACE_BEGIN
  * For example, subtracting 5 days from the date <code>September 12, 1996</code>
  * results in <code>September 7, 1996</code>.
  *
- * @stable
+ * @stable ICU 2.0
  */
 class U_I18N_API Calendar : public UObject {
 public:
@@ -152,7 +152,7 @@ public:
      * Field IDs for date and time. Used to specify date/time fields. ERA is calendar
      * specific. Example ranges given are for illustration only; see specific Calendar
      * subclasses for actual ranges.
-     * @stable
+     * @stable ICU 2.0
      */
     enum EDateFields {
         ERA,                  // Example: 0..1
@@ -184,7 +184,7 @@ public:
      * Useful constant for days of week. Note: Calendar day-of-week is 1-based. Clients
      * who create locale resources for the field of first-day-of-week should be aware of
      * this. For instance, in US locale, first-day-of-week is set to 1, i.e., SUNDAY.
-     * @stable
+     * @stable ICU 2.0
      */
     enum EDaysOfWeek {
         SUNDAY = 1,
@@ -198,7 +198,7 @@ public:
 
     /**
      * Useful constants for month. Note: Calendar month is 0-based.
-     * @stable
+     * @stable ICU 2.0
      */
     enum EMonths {
         JANUARY,
@@ -218,7 +218,7 @@ public:
 
     /**
      * Useful constants for hour in 12-hour clock. Used in GregorianCalendar.
-     * @stable
+     * @stable ICU 2.0
      */
     enum EAmpm {
         AM,
@@ -227,7 +227,7 @@ public:
 
     /**
      * destructor
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~Calendar();
 
@@ -235,7 +235,7 @@ public:
      * Create and return a polymorphic copy of this calendar.
      *
      * @return    a polymorphic copy of this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Calendar* clone(void) const = 0;
 
@@ -247,7 +247,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(UErrorCode& success);
 
@@ -261,7 +261,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
 
@@ -274,7 +274,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(const TimeZone& zone, UErrorCode& success);
 
@@ -286,7 +286,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(const Locale& aLocale, UErrorCode& success);
 
@@ -301,7 +301,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -315,7 +315,7 @@ public:
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     static Calendar* createInstance(const TimeZone& zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -326,7 +326,7 @@ public:
      * @return       An array of Locale objects representing the set of locales for which
      *               Calendars are installed.  The system retains ownership of this list;
      *               the caller must NOT delete it.
-     * @stable
+     * @stable ICU 2.0
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -335,7 +335,7 @@ public:
      * (derived from the system time).
      *
      * @return   The current UTC time in milliseconds.
-     * @stable
+     * @stable ICU 2.0
      */
     static UDate getNow(void);
 
@@ -350,7 +350,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        The current time in UTC (GMT) time, or zero if the operation
      *                failed.
-     * @stable
+     * @stable ICU 2.0
      */
     inline UDate getTime(UErrorCode& status) const { return getTimeInMillis(status); }
 
@@ -362,7 +362,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     inline void setTime(UDate date, UErrorCode& status) { setTimeInMillis(date, status); }
 
@@ -375,7 +375,7 @@ public:
      * @param that  The Calendar object to be compared with.
      * @return      True if the given Calendar is the same as this Calendar; false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Calendar& that) const;
 
@@ -385,7 +385,7 @@ public:
      * @param that  The Calendar object to be compared with.
      * @return      True if the given Calendar is not the same as this Calendar; false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const Calendar& that) const {return !operator==(that);}
 
@@ -413,7 +413,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is equal to the time of
      *                Calendar when; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool equals(const Calendar& when, UErrorCode& status) const;
 
@@ -428,7 +428,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is before the time of
      *                Calendar when; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool before(const Calendar& when, UErrorCode& status) const;
 
@@ -443,7 +443,7 @@ public:
      *                leniency, this will be set to an error status.
      * @return        True if the current time of this Calendar is after the time of
      *                Calendar when; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool after(const Calendar& when, UErrorCode& status) const;
 
@@ -462,7 +462,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void add(EDateFields field, int32_t amount, UErrorCode& status) = 0;
 
@@ -487,7 +487,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     void roll(EDateFields field, UBool up, UErrorCode& status);
 
@@ -511,7 +511,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) = 0;
 
@@ -568,7 +568,7 @@ public:
      * @return the difference, either positive or negative, between
      * this calendar's time and <code>when</code>, in terms of
      * <code>field</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t fieldDifference(UDate when, EDateFields field, UErrorCode& status);
 
@@ -578,7 +578,7 @@ public:
      * given time zone is NULL, this function has no effect.
      *
      * @param value  The given time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     void adoptTimeZone(TimeZone* value);
 
@@ -587,7 +587,7 @@ public:
      * passed in is _not_ adopted; the client is still responsible for deleting it.
      *
      * @param value  The given time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     void setTimeZone(const TimeZone& zone);
 
@@ -597,7 +597,7 @@ public:
      * or this Calendar is destroyed.
      *
      * @return   The time zone object associated with this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     const TimeZone& getTimeZone(void) const;
 
@@ -607,7 +607,7 @@ public:
      * with this Calendar is the default TimeZone as returned by TimeZone::createDefault().
      *
      * @return   The time zone object which was associated with this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     TimeZone* orphanTimeZone(void);
 
@@ -617,7 +617,7 @@ public:
      * @param status Fill-in parameter which receives the status of this operation.
      * @return   True if the current date for this Calendar is in Daylight Savings Time,
      *           false, otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool inDaylightTime(UErrorCode& status) const = 0;
 
@@ -631,7 +631,7 @@ public:
      * @param lenient  True specifies date/time interpretation to be lenient.
      *
      * @see            DateFormat#setLenient
-     * @stable
+     * @stable ICU 2.0
      */
     void setLenient(UBool lenient);
 
@@ -639,7 +639,7 @@ public:
      * Tells whether date/time interpretation is to be lenient.
      *
      * @return   True tells that date/time interpretation is to be lenient.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isLenient(void) const;
 
@@ -647,7 +647,7 @@ public:
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @param value  The given first day of the week.
-     * @stable
+     * @stable ICU 2.0
      */
     void setFirstDayOfWeek(EDaysOfWeek value);
 
@@ -655,7 +655,7 @@ public:
      * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @return   The first day of the week.
-     * @stable
+     * @stable ICU 2.0
      */
     EDaysOfWeek getFirstDayOfWeek(void) const;
 
@@ -666,7 +666,7 @@ public:
      * use value 7.
      *
      * @param value  The given minimal days required in the first week of the year.
-     * @stable
+     * @stable ICU 2.0
      */
     void setMinimalDaysInFirstWeek(uint8_t value);
 
@@ -677,7 +677,7 @@ public:
      * be a full week, getMinimalDaysInFirstWeek returns 7.
      *
      * @return   The minimal days required in the first week of the year.
-     * @stable
+     * @stable ICU 2.0
      */
     uint8_t getMinimalDaysInFirstWeek(void) const;
 
@@ -687,7 +687,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The minimum value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getMinimum(EDateFields field) const = 0;
 
@@ -697,7 +697,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The maximum value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getMaximum(EDateFields field) const = 0;
 
@@ -707,7 +707,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The highest minimum value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getGreatestMinimum(EDateFields field) const = 0;
 
@@ -717,7 +717,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The lowest maximum value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getLeastMaximum(EDateFields field) const = 0;
 
@@ -733,7 +733,7 @@ public:
      * @param field    the field to determine the minimum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the minimum of the given field for the current date of this Calendar
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
 
@@ -751,7 +751,7 @@ public:
      * @param field    the field to determine the maximum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the maximum of the given field for the current date of this Calendar
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getActualMaximum(EDateFields field, UErrorCode& status) const;
 
@@ -766,7 +766,7 @@ public:
      * @param status Fill-in parameter which receives the status of the operation.
      * @return       The value for the given time field, or zero if the field is unset,
      *               and set() has been called for any other field.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t get(EDateFields field, UErrorCode& status) const;
 
@@ -776,7 +776,7 @@ public:
      *
      * @param field  The given time field.
      * @return   True if the given time field has a value set; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isSet(EDateFields field) const;
 
@@ -785,7 +785,7 @@ public:
      *
      * @param field  The given time field.
      * @param value  The value to be set for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     void set(EDateFields field, int32_t value);
 
@@ -797,7 +797,7 @@ public:
      * @param month  The value used to set the MONTH time field. Month value is 0-based.
      *               e.g., 0 for January.
      * @param date   The value used to set the DATE time field.
-     * @stable
+     * @stable ICU 2.0
      */
     void set(int32_t year, int32_t month, int32_t date);
 
@@ -811,7 +811,7 @@ public:
      * @param date    The value used to set the DATE time field.
      * @param hour    The value used to set the HOUR_OF_DAY time field.
      * @param minute  The value used to set the MINUTE time field.
-     * @stable
+     * @stable ICU 2.0
      */
     void set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute);
 
@@ -826,7 +826,7 @@ public:
      * @param hour    The value used to set the HOUR_OF_DAY time field.
      * @param minute  The value used to set the MINUTE time field.
      * @param second  The value used to set the SECOND time field.
-     * @stable
+     * @stable ICU 2.0
      */
     void set(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, int32_t second);
 
@@ -834,7 +834,7 @@ public:
      * Clears the values of all the time fields, making them both unset and assigning
      * them a value of zero. The field values will be determined during the next
      * resolving of time into time fields.
-     * @stable
+     * @stable ICU 2.0
      */
     void clear(void);
 
@@ -844,7 +844,7 @@ public:
      * time into time fields.
      *
      * @param field  The time field to be cleared.
-     * @stable
+     * @stable ICU 2.0
      */
     void clear(EDateFields field);
 
@@ -861,7 +861,7 @@ public:
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -873,7 +873,7 @@ protected:
       *
       * @param success  Indicates the status of Calendar object construction. Returns
       *                 U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
       */
     Calendar(UErrorCode& success);
 
@@ -881,7 +881,7 @@ protected:
      * Copy constructor
      *
      * @param source    Calendar object to be copied from
-     * @stable
+     * @stable ICU 2.0
      */
     Calendar(const Calendar& source);
 
@@ -889,7 +889,7 @@ protected:
      * Default assignment operator
      *
      * @param right    Calendar object to be copied
-     * @stable
+     * @stable ICU 2.0
      */
     Calendar& operator=(const Calendar& right);
 
@@ -901,7 +901,7 @@ protected:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
      *                 U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success);
 
@@ -912,7 +912,7 @@ protected:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
      *                 U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
@@ -922,7 +922,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void computeTime(UErrorCode& status) = 0;
 
@@ -935,7 +935,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void computeFields(UErrorCode& status) = 0;
 
@@ -946,7 +946,7 @@ protected:
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
      * @return the current time as UTC milliseconds from the epoch.
-     * @stable
+     * @stable ICU 2.0
      */
     double getTimeInMillis(UErrorCode& status) const;
 
@@ -956,7 +956,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     void setTimeInMillis( double millis, UErrorCode& status );
 
@@ -967,7 +967,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     void complete(UErrorCode& status);
 
@@ -977,7 +977,7 @@ protected:
      *
      * @param field  The given time field.
      * @return       The value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t internalGet(EDateFields field) const {return fFields[field];}
 
@@ -988,14 +988,14 @@ protected:
      *
      * @param field    The given time field.
      * @param value    The value for the given time field.
-     * @stable
+     * @stable ICU 2.0
      */
     void internalSet(EDateFields field, int32_t value);
 
 protected:
     /**
      * The flag which indicates if the current time is set in the calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool      fIsTimeSet;
 
@@ -1007,14 +1007,14 @@ protected:
      * <P>
      * This should really be named areFieldsInSync, but the old name is retained
      * for backward compatibility.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool      fAreFieldsSet;
 
     /**
      * True if all of the fields have been set.  This is initially false, and set to
      * true by computeFields().
-     * @stable
+     * @stable ICU 2.0
      */
     UBool      fAreAllFieldsSet;
 
@@ -1022,7 +1022,7 @@ protected:
      * Get the current time without recomputing.
      *
      * @return     the current time without recomputing.
-     * @stable
+     * @stable ICU 2.0
      */
     UDate        internalGetTime(void) const     { return fTime; }
 
@@ -1031,24 +1031,24 @@ protected:
      *
      * @param time    The time to be set
      * @return        the current time without recomputing.
-     * @stable
+     * @stable ICU 2.0
      */
     void        internalSetTime(UDate time)     { fTime = time; }
 
     /**
      * The time fields containing values into which the millis is computed.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t     fFields[FIELD_COUNT];
 
     /**
      * The flags which tell if a specified time field for the calendar is set.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool      fIsSet[FIELD_COUNT];
 
     /** Special values of stamp[]
-     * @stable
+     * @stable ICU 2.0
      */
     enum {
         kUnset                 = 0,
@@ -1060,7 +1060,7 @@ protected:
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t        fStamp[FIELD_COUNT];
 

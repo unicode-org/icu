@@ -57,7 +57,7 @@
 U_NAMESPACE_BEGIN
 
 /**
-* @stable
+* @stable ICU 2.0
 */
 class CollationKey;
 
@@ -188,7 +188,7 @@ public:
   *
   * UCollationStrength is also used to determine the strength of sort keys 
   * generated from Collator objects.
-  * @stable
+  * @stable ICU 2.0
   */
   enum ECollationStrength 
   {
@@ -207,7 +207,7 @@ public:
   * GREATER is returned if source string is compared to be greater than
   * target string in the compare() method.
   * @see Collator#compare
-  * @stable
+  * @stable ICU 2.0
   */
   enum EComparisonResult 
   {
@@ -220,7 +220,7 @@ public:
   
   /**
   * Destructor
-  * @stable
+  * @stable ICU 2.0
   */
   virtual ~Collator();
 
@@ -230,7 +230,7 @@ public:
   * Returns true if "other" is the same as "this"
   * @param other Collator object to be compared
   * @return true if other is the same as this.
-  * @stable
+  * @stable ICU 2.0
   */
   virtual UBool operator==(const Collator& other) const;
 
@@ -238,14 +238,14 @@ public:
   * Returns true if "other" is not the same as "this".
   * @param other Collator object to be compared
   * @return true if other is not the same as this.
-  * @stable
+  * @stable ICU 2.0
   */
   virtual UBool operator!=(const Collator& other) const;
 
   /**
   * Makes a shallow copy of the current object.
   * @return a copy of this object
-  * @stable
+  * @stable ICU 2.0
   */
   virtual Collator* clone(void) const = 0;
 
@@ -266,7 +266,7 @@ public:
   * @param err    the error code status.
   * @return       the collation object of the default locale.(for example, en_US)
   * @see Locale#getDefault
-  * @stable
+  * @stable ICU 2.0
   */
   static Collator* createInstance(UErrorCode&  err);
 
@@ -291,7 +291,7 @@ public:
   *               locale.
   * @see Locale
   * @see ResourceLoader
-  * @stable
+  * @stable ICU 2.0
   */
   static Collator* createInstance(const Locale& loc, UErrorCode& err);
 
@@ -326,7 +326,7 @@ public:
   * @return Returns a byte value. GREATER if source is greater
   * than target; EQUAL if source is equal to target; LESS if source is less
   * than target
-  * @stable
+  * @stable ICU 2.0
   **/
   virtual EComparisonResult compare(const UnicodeString& source, 
                                     const UnicodeString& target) const = 0;
@@ -341,7 +341,7 @@ public:
   *         length) is greater than target; EQUAL if source (up to specified 
   *         length) is equal to target; LESS if source (up to the specified 
   *         length) is less  than target.   
-  * @stable
+  * @stable ICU 2.0
   */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
@@ -360,7 +360,7 @@ public:
   * @return Returns a byte value. GREATER if source is greater than target; 
   *         EQUAL if source is equal to target; LESS if source is less than 
   *         target
-  * @stable
+  * @stable ICU 2.0
   */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
@@ -379,7 +379,7 @@ public:
   * @param status the error code status.
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
-  * @stable
+  * @stable ICU 2.0
   */
   virtual CollationKey& getCollationKey(const UnicodeString&  source,
                                         CollationKey& key,
@@ -399,7 +399,7 @@ public:
   * @param status the error code status.
   * @return the collation key of the string based on the collation rules.
   * @see CollationKey#compare
-  * @stable
+  * @stable ICU 2.0
   */
   virtual CollationKey& getCollationKey(const UChar*source, 
                                         int32_t sourceLength,
@@ -407,7 +407,7 @@ public:
                                         UErrorCode& status) const = 0;
   /**
   * Generates the hash code for the collation object
-  * @stable
+  * @stable ICU 2.0
   */
   virtual int32_t hashCode(void) const = 0;
 
@@ -430,7 +430,7 @@ public:
   * @return true if the first string is greater than the second one,
   *         according to the collation rules. false, otherwise.
   * @see Collator#compare
-  * @stable
+  * @stable ICU 2.0
   */
   UBool greater(const UnicodeString& source, const UnicodeString& target) 
                 const;
@@ -442,7 +442,7 @@ public:
   * @return true if the first string is greater than or equal to the second 
   *         one, according to the collation rules. false, otherwise.
   * @see Collator#compare
-  * @stable
+  * @stable ICU 2.0
   */
   UBool greaterOrEqual(const UnicodeString& source, 
                        const UnicodeString& target) const;
@@ -453,7 +453,7 @@ public:
   * @return true if the strings are equal according to the collation rules.  
   *         false, otherwise.
   * @see Collator#compare
-  * @stable
+  * @stable ICU 2.0
   */
   UBool equals(const UnicodeString& source, const UnicodeString& target) const;
         
@@ -465,7 +465,7 @@ public:
   * are ignored.
   * @return the current comparison level.
   * @see Collator#setStrength
-  * @stable
+  * @stable ICU 2.0
   */
   virtual ECollationStrength getStrength(void) const = 0;
   
@@ -487,7 +487,7 @@ public:
   * </pre>
   * @see Collator#getStrength
   * @param newStrength the new comparison level.
-  * @stable
+  * @stable ICU 2.0
   */
   virtual void setStrength(ECollationStrength newStrength) = 0;
 
@@ -498,7 +498,7 @@ public:
   * @param name the fill-in parameter of the return value
   * @return display-able name of the object for the object locale in the
   *         desired language
-  * @stable
+  * @stable ICU 2.0
   */
   static UnicodeString& getDisplayName(const Locale& objectLocale,
                                        const Locale& displayLocale,
@@ -509,7 +509,7 @@ public:
   * @param objectLocale must be from getAvailableLocales
   * @param name the fill-in parameter of the return value
   * @return name of the object for the desired locale in the default language
-  * @stable
+  * @stable ICU 2.0
   */
   static UnicodeString& getDisplayName(const Locale& objectLocale,
                                        UnicodeString& name);
@@ -518,14 +518,14 @@ public:
   * Get the set of Locales for which Collations are installed
   * @param count the output parameter of number of elements in the locale list
   * @return the list of available locales which collations are installed
-  * @stable
+  * @stable ICU 2.0
   */
   static const Locale* getAvailableLocales(int32_t& count);
 
   /**
   * Gets the version information for a Collator. 
   * @param info the version # information, the result will be filled in
-  * @stable
+  * @stable ICU 2.0
   */
   virtual void getVersion(UVersionInfo info) const = 0;
 
@@ -544,7 +544,7 @@ public:
   * @return The class ID for this object. All objects of a given class have 
   *         the same class ID.  Objects of other classes have different class 
   *         IDs.
-  * @stable
+  * @stable ICU 2.0
   */
   virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -578,7 +578,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status) = 0;
 
@@ -589,7 +589,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status) = 0;
 
@@ -598,7 +598,7 @@ public:
    * Lower 16 bits are ignored.
    * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
    * @param status error code (not changed by function)
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void setVariableTop(const uint32_t varTop, UErrorCode &status) = 0;
 
@@ -606,7 +606,7 @@ public:
    * Gets the variable top value of a Collator. 
    * Lower 16 bits are undefined and should be ignored.
    * @param status error code (not changed by function). If error code is set, the return value is undefined.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t getVariableTop(UErrorCode &status) const = 0;
 
@@ -739,7 +739,7 @@ protected:
   * Constructor is different from the old default Collator constructor.
   * The task for determing the default collation strength and normalization 
   * mode is left to the child class.
-  * @stable
+  * @stable ICU 2.0
   */
   Collator();
 
@@ -761,7 +761,7 @@ protected:
   /**
   * Copy constructor.
   * @param other Collator object to be copied from
-  * @stable
+  * @stable ICU 2.0
   */
   Collator(const Collator& other);
   

@@ -493,7 +493,7 @@ class Collator;
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat
- * @stable
+ * @stable ICU 2.0
  */
 class U_I18N_API RuleBasedNumberFormat : public NumberFormat {
 public:
@@ -515,7 +515,7 @@ public:
    * lenient parsing.
    * @param perror The parse error if an error was encountered.
    * @param status The status indicating whether the constructor succeeded.
-   * @stable
+   * @stable ICU 2.0
    */
   RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale, 
                         UParseError& perror, UErrorCode& status);
@@ -531,7 +531,7 @@ public:
    * and URBNF_DURATION, which formats a duration in seconds as hours, minutes, and seconds.
    * @param locale The locale for the formatter.
    * @param status The status indicating whether the constructor succeeded.
-   * @stable
+   * @stable ICU 2.0
    */
   RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& locale, UErrorCode& status);
 
@@ -578,7 +578,7 @@ public:
   /**
    * return the rules that were provided to the RuleBasedNumberFormat.
    * @return the result String that was passed in
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString getRules() const;
 
@@ -587,14 +587,14 @@ public:
    * the function returns null.
    * @param index the index of the ruleset
    * @return the name of the index'th public ruleSet.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString getRuleSetName(int32_t index) const;
 
   /**
    * Return the number of public rule set names.
    * @return the number of public rule set names.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t getNumberOfRuleSetNames() const;
 
@@ -604,7 +604,7 @@ public:
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
    * @return A textual representation of the number.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
                                 UnicodeString& toAppendTo,
@@ -627,7 +627,7 @@ public:
    * @param toAppendTo the string that will hold the (appended) result
    * @param pos the fieldposition
    * @return A textual representation of the number.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString& format(double number,
                                 UnicodeString& toAppendTo,
@@ -642,7 +642,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString& format(int32_t number,
                                 const UnicodeString& ruleSetName,
@@ -674,7 +674,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString& format(double number,
                                 const UnicodeString& ruleSetName,
@@ -689,7 +689,7 @@ public:
    * @param pos the fieldposition
    * @param status the status
    * @return A textual representation of the number.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UnicodeString& format(const Formattable& obj,
                                 UnicodeString& toAppendTo,
@@ -701,7 +701,7 @@ public:
    * @param result Output param which will receive the formatted string.
    * @param status Output param set to success/failure code
    * @return       A reference to 'result'.
-   * @stable
+   * @stable ICU 2.0
    */
   UnicodeString& format(const Formattable& obj,
                         UnicodeString& result,
@@ -712,7 +712,7 @@ public:
    * @param number    the double value to be formatted.
    * @param output    Output param which will receive the formatted string.
    * @return          A reference to 'output'.
-   * @stable
+   * @stable ICU 2.0
    */
    UnicodeString& format(double number,
                          UnicodeString& output) const;
@@ -722,7 +722,7 @@ public:
    * @param number    the long value to be formatted.
    * @param output    Output param which will receive the formatted string.
    * @return          A reference to 'output'.
-   * @stable
+   * @stable ICU 2.0
    */
    UnicodeString& format(int32_t number,
                          UnicodeString& output) const;
@@ -739,7 +739,7 @@ public:
    * in "text" to examine.  On exit, has been updated to contain the position
    * of the first character in "text" that wasn't consumed by the parse.
    * @see #setLenientParseMode
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void parse(const UnicodeString& text,
                      Formattable& result,
@@ -751,7 +751,7 @@ public:
    * @param text   The string to parse
    * @param result the result of the parse, either a double or a long.
    * @status       Output param set to success/failure code.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual inline void parse(const UnicodeString& text,
                       Formattable& result,
@@ -790,7 +790,7 @@ public:
    *
    * @param enabled If true, turns lenient-parse mode on; if false, turns it off.
    * @see RuleBasedCollator
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void setLenient(UBool enabled);
 
@@ -799,7 +799,7 @@ public:
    * by default.
    * @return true if lenient-parse mode is turned on.
    * @see #setLenientParseMode
-   * @stable
+   * @stable ICU 2.0
    */
   virtual inline UBool isLenient(void) const;
 

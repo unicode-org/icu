@@ -112,7 +112,7 @@ class StringEnumeration;
 class U_I18N_API TimeZone : public UObject {
 public:
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~TimeZone();
 
@@ -130,7 +130,7 @@ public:
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
      * @return the GMT time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     static const TimeZone* getGMT(void);
 
@@ -143,7 +143,7 @@ public:
      * cannot be understood.  Return result guaranteed to be non-null.  If you
      * require that the specific zone asked for be returned, check the ID of the
      * return result.
-     * @stable
+     * @stable ICU 2.0
      */
     static TimeZone* createTimeZone(const UnicodeString& ID);
 
@@ -263,7 +263,7 @@ public:
      * @return the number of zones in the equivalency group containing
      * 'id', or zero if 'id' is not a valid system ID
      * @see #getEquivalentID
-     * @stable
+     * @stable ICU 2.0
      */
     static int32_t countEquivalentIDs(const UnicodeString& id);
 
@@ -284,7 +284,7 @@ public:
      * containing 'id', or an empty string if 'id' is not a valid
      * system ID or 'index' is out of range
      * @see #countEquivalentIDs
-     * @stable
+     * @stable ICU 2.0
      */
     static const UnicodeString getEquivalentID(const UnicodeString& id,
                                                int32_t index);
@@ -299,7 +299,7 @@ public:
      *
      * @return   A default TimeZone. Clients are responsible for deleting the time zone
      *           object returned.
-     * @stable
+     * @stable ICU 2.0
      */
     static TimeZone* createDefault(void);
 
@@ -310,7 +310,7 @@ public:
      * passed in; the clent is no longer responsible for deleting it.
      *
      * @param zone  A pointer to the new TimeZone object to use as the default.
-     * @stable
+     * @stable ICU 2.0
      */
     static void adoptDefault(TimeZone* zone);
 
@@ -330,7 +330,7 @@ public:
      * @param that  The TimeZone object to be compared with.
      * @return      True if the given TimeZone is equal to this TimeZone; false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const TimeZone& that) const;
 
@@ -341,7 +341,7 @@ public:
      * @param that  The TimeZone object to be compared with.
      * @return      True if the given TimeZone is not equal to this TimeZone; false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const TimeZone& that) const {return !operator==(that);}
 
@@ -363,7 +363,7 @@ public:
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const = 0;
@@ -389,7 +389,7 @@ public:
      * @param monthLength the length of the given month in days.
      * @param status     Output param to filled in with a success or an error.
      * @return the offset to add *to* GMT to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds,
@@ -400,7 +400,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setRawOffset(int32_t offsetMillis) = 0;
 
@@ -409,7 +409,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getRawOffset(void) const = 0;
 
@@ -418,7 +418,7 @@ public:
      *
      * @param ID  Receives this TimeZone's ID.
      * @return    A reference to 'ID'
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getID(UnicodeString& ID) const;
 
@@ -433,7 +433,7 @@ public:
      * Los Angeles.  They're still those for New York.  Only the ID has changed.)
      *
      * @param ID  The new timezone ID.
-     * @stable
+     * @stable ICU 2.0
      */
     void setID(const UnicodeString& ID);
 
@@ -455,7 +455,7 @@ public:
      * <code>GMT[+-]hh:mm</code>.
      * @param result the human-readable name of this time zone in the default locale.
      * @return       A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getDisplayName(UnicodeString& result) const;
 
@@ -470,7 +470,7 @@ public:
      * @param result the human-readable name of this time zone in the given locale
      *               or in the default locale if the given locale is not recognized.
      * @return       A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getDisplayName(const Locale& locale, UnicodeString& result) const;
 
@@ -484,7 +484,7 @@ public:
      * @param style either <code>LONG</code> or <code>SHORT</code>
      * @param result the human-readable name of this time zone in the default locale.
      * @return       A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result) const;
 
@@ -500,7 +500,7 @@ public:
      * @param result the human-readable name of this time zone in the given locale
      *               or in the default locale if the given locale is not recognized.
      * @return       A refence to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const;
 
@@ -508,7 +508,7 @@ public:
      * Queries if this time zone uses daylight savings time.
      * @return true if this time zone uses daylight savings time,
      * false, otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool useDaylightTime(void) const = 0;
 
@@ -533,7 +533,7 @@ public:
      * @param other the <code>TimeZone</code> object to be compared with
      * @return true if the given zone is the same as this one,
      * with the possible exception of the ID
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool hasSameRules(const TimeZone& other) const;
 
@@ -542,7 +542,7 @@ public:
      * the TimeZone object cloned.
      *
      * @return   A new copy of this TimeZone object.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual TimeZone* clone(void) const = 0;
 
@@ -555,7 +555,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -572,7 +572,7 @@ public:
      * </pre>
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -580,28 +580,28 @@ protected:
 
     /**
      * Default constructor.  ID is initialized to the empty string.
-     * @stable
+     * @stable ICU 2.0
      */
     TimeZone();
 
     /**
      * Construct a timezone with a given ID.
      * @param id a system time zone ID
-     * @stable
+     * @stable ICU 2.0
      */
     TimeZone(const UnicodeString &id);
 
     /**
      * Copy constructor.
      * @param source the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     TimeZone(const TimeZone& source);
 
     /**
      * Default assignment operator.
      * @param rigth the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     TimeZone& operator=(const TimeZone& right);
 

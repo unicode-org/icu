@@ -168,7 +168,7 @@ typedef enum UNumberFormatPadPosition {
 * @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
 * an error occurred.
 * @see unum_open
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UNumberFormat* U_EXPORT2 
 unum_open(  UNumberFormatStyle    style,
@@ -183,7 +183,7 @@ unum_open(  UNumberFormatStyle    style,
 * Close a UNumberFormat.
 * Once closed, a UNumberFormat may no longer be used.
 * @param fmt The formatter to close.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 unum_close(UNumberFormat* fmt);
@@ -194,7 +194,7 @@ unum_close(UNumberFormat* fmt);
  * @param fmt The format to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UNumberFormat identical to fmt.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UNumberFormat* U_EXPORT2 
 unum_clone(const UNumberFormat *fmt,
@@ -217,7 +217,7 @@ unum_clone(const UNumberFormat *fmt,
 * @see unum_parse
 * @see unum_parseDouble
 * @see UFieldPosition
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_format(    const    UNumberFormat*    fmt,
@@ -244,7 +244,7 @@ unum_format(    const    UNumberFormat*    fmt,
 * @see unum_parse
 * @see unum_parseDouble
 * @see UFieldPosition
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_formatDouble(    const    UNumberFormat*  fmt,
@@ -267,7 +267,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 * @see unum_parseDouble
 * @see unum_format
 * @see unum_formatDouble
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_parse(    const   UNumberFormat*  fmt,
@@ -289,7 +289,7 @@ unum_parse(    const   UNumberFormat*  fmt,
 * @see unum_parse
 * @see unum_format
 * @see unum_formatDouble
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI double U_EXPORT2 
 unum_parseDouble(    const   UNumberFormat*  fmt,
@@ -326,7 +326,7 @@ unum_applyPattern(          UNumberFormat  *format,
 * @param index The index of the desired locale.
 * @return A locale for which number formatting patterns are available, or 0 if none.
 * @see unum_countAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const char* U_EXPORT2 
 unum_getAvailable(int32_t index);
@@ -337,7 +337,7 @@ unum_getAvailable(int32_t index);
 * calls to \Ref{unum_getAvailable}.
 * @return The number of locales for which number formatting patterns are available.
 * @see unum_getAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_countAvailable(void);
@@ -392,7 +392,7 @@ typedef enum UNumberFormatAttribute {
 * @see unum_setDoubleAttribute
 * @see unum_getTextAttribute
 * @see unum_setTextAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_getAttribute(const UNumberFormat*          fmt,
@@ -412,7 +412,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
 * @see unum_setDoubleAttribute
 * @see unum_getTextAttribute
 * @see unum_setTextAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 unum_setAttribute(    UNumberFormat*          fmt,
@@ -431,7 +431,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
 * @see unum_setDoubleAttribute
 * @see unum_getTextAttribute
 * @see unum_setTextAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI double U_EXPORT2 
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
@@ -448,7 +448,7 @@ unum_getDoubleAttribute(const UNumberFormat*          fmt,
 * @see unum_getDoubleAttribute
 * @see unum_getTextAttribute
 * @see unum_setTextAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 unum_setDoubleAttribute(    UNumberFormat*          fmt,
@@ -484,7 +484,7 @@ typedef enum UNumberFormatTextAttribute {
 * @see unum_setTextAttribute
 * @see unum_getAttribute
 * @see unum_setAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_getTextAttribute(    const    UNumberFormat*                    fmt,
@@ -505,7 +505,7 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
 * @see unum_getTextAttribute
 * @see unum_getAttribute
 * @see unum_setAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 unum_setTextAttribute(    UNumberFormat*                    fmt,
@@ -523,7 +523,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
 * @param resultLength The maximum size of result.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 unum_toPattern(    const    UNumberFormat*          fmt,
@@ -537,7 +537,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 
 /**
  * Constants for specifying a number format symbol.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UNumberFormatSymbol {
   /** The decimal separator */
@@ -588,7 +588,7 @@ typedef enum UNumberFormatSymbol {
 * @return The length of the symbol; the buffer is not modified if
 *         <code>length&gt;=size</code>
 * @see unum_setSymbol
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(UNumberFormat *fmt,
@@ -607,7 +607,7 @@ unum_getSymbol(UNumberFormat *fmt,
 * @param length The length of the string, or -1 for a zero-terminated string
 * @param status A pointer to an UErrorCode to receive any errors.
 * @see unum_getSymbol
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2
 unum_setSymbol(UNumberFormat *fmt,

@@ -145,7 +145,7 @@ public:
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeToHexTransliterator& operator=(const UnicodeToHexTransliterator&);
 

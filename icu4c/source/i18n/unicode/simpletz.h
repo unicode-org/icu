@@ -74,20 +74,20 @@ public:
     /**
      * Copy constructor
      * @param source the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleTimeZone(const SimpleTimeZone& source);
 
     /**
      * Default assignment operator
      * @param right    the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleTimeZone& operator=(const SimpleTimeZone& right);
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~SimpleTimeZone();
 
@@ -98,7 +98,7 @@ public:
      * @param that  The SimpleTimeZone object to be compared with.
      * @return      True if the given time zone is equal to this time zone; false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const TimeZone& that) const;
 
@@ -111,7 +111,7 @@ public:
      * @param rawOffsetGMT  The given base time zone offset to GMT.
      * @param ID         The timezone ID which is obtained from
      *                   TimeZone.getAvailableIDs.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID);
 
@@ -154,7 +154,7 @@ public:
      * @param savingsDST        The number of milliseconds added to standard time
      *                          to get DST time. Default is one hour.
      * @param status            An UErrorCode to receive the status.
-     * @stable
+     * @stable ICU 2.0
      */
     SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
         int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
@@ -184,7 +184,7 @@ public:
      * not to observe daylight savings time prior to that year; SimpleTimeZone doesn't
      * support historical daylight-savings-time rules.
      * @param year the daylight savings starting year.
-     * @stable
+     * @stable ICU 2.0
      */
     void setStartYear(int32_t year);
 
@@ -228,7 +228,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                       int32_t time, UErrorCode& status);
@@ -247,7 +247,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
                       UErrorCode& status);
@@ -271,7 +271,7 @@ public:
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                       int32_t time, UBool after, UErrorCode& status);
@@ -301,7 +301,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                     int32_t time, UErrorCode& status);
@@ -320,7 +320,7 @@ public:
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time, UErrorCode& status);
 
@@ -343,7 +343,7 @@ public:
      *                      or after dayOfMonth.  If false, this rule selects
      *                      the last dayOfWeek on or before dayOfMonth.
      * @param status An UErrorCode
-     * @stable
+     * @stable ICU 2.0
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                     int32_t time, UBool after, UErrorCode& status);
@@ -369,7 +369,7 @@ public:
      * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
      * @param status     An UErrorCode to receive the status.
      * @return           The offset in milliseconds to add to GMT to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const;
@@ -391,7 +391,7 @@ public:
      * @param prevMonthLength length of the previous month in days.
      * @param status     An UErrorCode to receive the status.
      * @return the offset to add *to* GMT to get local time.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds,
@@ -407,7 +407,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @return   The TimeZone's raw GMT offset.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getRawOffset(void) const;
 
@@ -416,7 +416,7 @@ public:
      * to GMT to get local time, before taking daylight savings time into account).
      *
      * @param offsetMillis  The new raw GMT offset for this time zone.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setRawOffset(int32_t offsetMillis);
 
@@ -426,7 +426,7 @@ public:
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
      * @param status  An UErrorCode to receive the status.
-     * @stable
+     * @stable ICU 2.0
      */
     void setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status);
 
@@ -442,7 +442,7 @@ public:
      * Queries if this TimeZone uses Daylight Savings Time.
      *
      * @return   True if this TimeZone uses Daylight Savings Time; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool useDaylightTime(void) const;
 
@@ -466,7 +466,7 @@ public:
      * Return true if this zone has the same rules and offset as another zone.
      * @param other the TimeZone object to be compared with
      * @return true if the given zone has the same rules and offset as this one
-     * @stable
+     * @stable ICU 2.0
      */
     UBool hasSameRules(const TimeZone& other) const;
 
@@ -475,7 +475,7 @@ public:
      * the TimeZone object cloned.
      *
      * @return   A new copy of this TimeZone object.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual TimeZone* clone(void) const;
 
@@ -489,7 +489,7 @@ public:
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return (UClassID)&fgClassID; }
 
@@ -502,7 +502,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return   The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 

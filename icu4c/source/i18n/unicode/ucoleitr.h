@@ -103,7 +103,7 @@ typedef struct UCollationElements UCollationElements;
  * @param textLength The number of characters in text, or -1 if null-terminated
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return a struct containing collation element information
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UCollationElements* U_EXPORT2 
 ucol_openElements(const UCollator  *coll,
@@ -116,7 +116,7 @@ ucol_openElements(const UCollator  *coll,
  * @param key    the given key.
  * @param length the size of the key array.
  * @return       the hash code.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_keyHashCode(const uint8_t* key, int32_t length);
@@ -125,7 +125,7 @@ ucol_keyHashCode(const uint8_t* key, int32_t length);
  * Close a UCollationElements.
  * Once closed, a UCollationElements may no longer be used.
  * @param elems The UCollationElements to close.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ucol_closeElements(UCollationElements *elems);
@@ -137,7 +137,7 @@ ucol_closeElements(UCollationElements *elems);
  * @param elems The UCollationElements to reset.
  * @see ucol_next
  * @see ucol_previous
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ucol_reset(UCollationElements *elems);
@@ -149,7 +149,7 @@ ucol_reset(UCollationElements *elems);
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return The next collation elements ordering, otherwise returns NULLORDER 
  *         if an error has occured or if the end of string has been reached
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_next(UCollationElements *elems, UErrorCode *status);
@@ -168,7 +168,7 @@ ucol_next(UCollationElements *elems, UErrorCode *status);
  * @return The previous collation elements ordering, otherwise returns 
  *         NULLORDER if an error has occured or if the start of string has 
  *         been reached.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_previous(UCollationElements *elems, UErrorCode *status);
@@ -182,7 +182,7 @@ ucol_previous(UCollationElements *elems, UErrorCode *status);
  * @return maximum size of the expansion sequences ending with the collation 
  *         element or 1 if collation element does not occur at the end of any 
  *         expansion sequence
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
@@ -197,7 +197,7 @@ ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);
  * @param textLength The length of text, or -1 if null-terminated.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getText
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ucol_setText(      UCollationElements *elems, 
@@ -212,7 +212,7 @@ ucol_setText(      UCollationElements *elems,
  * @param elems The UCollationElements to query.
  * @return The offset of the current source character.
  * @see ucol_setOffset
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_getOffset(const UCollationElements *elems);
@@ -227,7 +227,7 @@ ucol_getOffset(const UCollationElements *elems);
  * @param offset The desired character offset.
  * @param status A pointer to an UErrorCode to receive any errors.
  * @see ucol_getOffset
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ucol_setOffset(UCollationElements *elems,

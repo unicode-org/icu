@@ -171,7 +171,7 @@ typedef enum UDateFormatStyle {
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
  * an error occurred.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UDateFormat* U_EXPORT2 
 udat_open(UDateFormatStyle  timeStyle,
@@ -188,7 +188,7 @@ udat_open(UDateFormatStyle  timeStyle,
 * Close a UDateFormat.
 * Once closed, a UDateFormat may no longer be used.
 * @param fmt The formatter to close.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_close(UDateFormat* format);
@@ -199,7 +199,7 @@ udat_close(UDateFormat* format);
  * @param fmt The format to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UDateFormat* U_EXPORT2 
 udat_clone(const UDateFormat *fmt,
@@ -222,7 +222,7 @@ udat_clone(const UDateFormat *fmt,
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
 * @see UFieldPosition
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 udat_format(    const    UDateFormat*    format,
@@ -244,7 +244,7 @@ udat_format(    const    UDateFormat*    format,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed date/time
 * @see udat_format
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UDate U_EXPORT2 
 udat_parse(    const    UDateFormat*    format,
@@ -265,7 +265,7 @@ udat_parse(    const    UDateFormat*    format,
 * to begin parsing.  If not 0, on output the offset at which parsing ended.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see udat_format
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_parseCalendar(const    UDateFormat*    format,
@@ -282,7 +282,7 @@ udat_parseCalendar(const    UDateFormat*    format,
 * @param fmt The formatter to query
 * @return TRUE if fmt is set to perform lenient parsing, FALSE otherwise.
 * @see udat_setLenient
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UBool U_EXPORT2 
 udat_isLenient(const UDateFormat* fmt);
@@ -294,7 +294,7 @@ udat_isLenient(const UDateFormat* fmt);
 * @param fmt The formatter to set
 * @param isLenient TRUE if fmt should perform lenient parsing, FALSE otherwise.
 * @see dat_isLenient
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_setLenient(    UDateFormat*    fmt,
@@ -307,7 +307,7 @@ udat_setLenient(    UDateFormat*    fmt,
 * @param fmt The formatter to query.
 * @return A pointer to the UCalendar used by fmt.
 * @see udat_setCalendar
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const UCalendar* U_EXPORT2 
 udat_getCalendar(const UDateFormat* fmt);
@@ -319,7 +319,7 @@ udat_getCalendar(const UDateFormat* fmt);
 * @param fmt The formatter to set.
 * @param calendarToSet A pointer to an UCalendar to be used by fmt.
 * @see udat_setCalendar
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_setCalendar(            UDateFormat*    fmt,
@@ -332,7 +332,7 @@ udat_setCalendar(            UDateFormat*    fmt,
 * @param fmt The formatter to query.
 * @return A pointer to the UNumberFormat used by fmt to format numbers.
 * @see udat_setNumberFormat
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const UNumberFormat* U_EXPORT2 
 udat_getNumberFormat(const UDateFormat* fmt);
@@ -344,7 +344,7 @@ udat_getNumberFormat(const UDateFormat* fmt);
 * @param fmt The formatter to set.
 * @param numberFormatToSet A pointer to the UNumberFormat to be used by fmt to format numbers.
 * @see udat_getNumberFormat
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_setNumberFormat(            UDateFormat*    fmt,
@@ -357,7 +357,7 @@ udat_setNumberFormat(            UDateFormat*    fmt,
 * @param index The index of the desired locale.
 * @return A locale for which date/time formatting patterns are available, or 0 if none.
 * @see udat_countAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const char* U_EXPORT2 
 udat_getAvailable(int32_t index);
@@ -368,7 +368,7 @@ udat_getAvailable(int32_t index);
 * calls to \Ref{udat_getAvailable}.
 * @return The number of locales for which date/time formatting patterns are available.
 * @see udat_getAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 udat_countAvailable(void);
@@ -381,7 +381,7 @@ udat_countAvailable(void);
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The year relative to which all 2-digit years are interpreted.
 * @see udat_Set2DigitYearStart
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UDate U_EXPORT2 
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
@@ -395,7 +395,7 @@ udat_get2DigitYearStart(    const   UDateFormat     *fmt,
 * @param d The year relative to which all 2-digit years will be interpreted.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see udat_Set2DigitYearStart
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_set2DigitYearStart(    UDateFormat     *fmt,
@@ -412,7 +412,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPattern
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 udat_toPattern(    const   UDateFormat     *fmt,
@@ -429,7 +429,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see udat_toPattern
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_applyPattern(            UDateFormat     *format,
@@ -475,7 +475,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_countSymbols
 * @see udat_setSymbols
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 udat_getSymbols(const   UDateFormat             *fmt,
@@ -495,7 +495,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 * @return The number of symbols of type type.
 * @see udat_getSymbols
 * @see udat_setSymbols
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 udat_countSymbols(    const    UDateFormat                *fmt,
@@ -514,7 +514,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @see udat_getSymbols
 * @see udat_countSymbols
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 udat_setSymbols(    UDateFormat             *format,

@@ -98,7 +98,7 @@ public:
      * @param other    the object to be compared with.
      * @return         Return true if the given Format objects are semantically equal.
      *                 Objects of different subclasses are considered unequal.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const = 0;
 
@@ -107,7 +107,7 @@ public:
      * equal.
      * @param other    the object to be compared with.
      * @return         Return true if the given Format objects are not semantically.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const Format& other) const { return !operator==(other); }
 
@@ -115,7 +115,7 @@ public:
      * Clone this object polymorphically.  The caller is responsible
      * for deleting the result when done.
      * @return    A copy of the object
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Format* clone() const = 0;
 
@@ -127,7 +127,7 @@ public:
      *                  Result is appended to existing contents.
      * @param status    Output parameter filled in with success or failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -147,7 +147,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -191,7 +191,7 @@ public:
      *                  last character successfully parsed. If the
      *                  source is not parsed successfully, this param
      *                  will remain unchanged.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -207,7 +207,7 @@ public:
      *                  If parse fails, return contents are undefined.
      * @param status    Output param to be filled with success/failure
      *                  result code.
-     * @stable
+     * @stable ICU 2.0
      */
     void parseObject(const UnicodeString& source,
                      Formattable& result,
@@ -228,24 +228,24 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID() const = 0;
 
 protected:
     /**
      * Default constructor for subclass use only.  Does nothing.
-     * @stable
+     * @stable ICU 2.0
      */
     Format();
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     Format(const Format&); // Does nothing; for subclasses only
 
     /**
-     * @stable
+     * @stable ICU 2.0
      */
     Format& operator=(const Format&); // Does nothing; for subclasses
 
