@@ -68,7 +68,7 @@ static struct {
   { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
 #endif
-/*  { "ISO_2022", UCNV_ISO_2022 }, this is currently broken */
+  { "ISO_2022", UCNV_ISO_2022 },
   { "LMBCS-1", UCNV_LMBCS_1 },
   { "LMBCS-2", UCNV_LMBCS_2 },
   { "LMBCS-3", UCNV_LMBCS_3 },
