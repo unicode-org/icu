@@ -418,7 +418,7 @@ public:
     void setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status);
 
     /**
-     * @deprecated
+     * @deprecated This will be removed after 2000-Dec-31. Use the other setDSTSavings().
      */
     void setDSTSavings(int32_t millisSavedDuringDST);
 

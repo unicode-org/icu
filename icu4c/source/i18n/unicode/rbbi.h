@@ -299,7 +299,7 @@ RuleBasedBreakIterator(UDataMemory* image);
      * @deprecated This will be removed after 2000-Dec-31.
      * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
      * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
-     * FROM *BOTH* CLASSES.
+     * FROM *BOTH* CLASSES.  Use getText() instead.
      */
     virtual CharacterIterator* createText(void) const;
 
@@ -325,7 +325,7 @@ RuleBasedBreakIterator(UDataMemory* image);
      * @deprecated
      * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
      * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
-     * FROM *BOTH* CLASSES.
+     * FROM *BOTH* CLASSES. Use the other setText() instead.
      */
     virtual void setText(const UnicodeString* newText);
 
