@@ -186,6 +186,10 @@ SOURCE=.\name2uni.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\nortrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\nultrans.cpp
 # End Source File
 # Begin Source File
