@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/03/01 22:55:08 $ 
- * $Revision: 1.26 $
+ * $Date: 2001/03/30 22:50:08 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.text;
 
 import java.util.*;
 import java.text.MessageFormat;
+import java.text.ParsePosition;
 import java.io.UnsupportedEncodingException;
 import com.ibm.text.resources.ResourceReader;
 
@@ -239,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.26 $ $Date: 2001/03/01 22:55:08 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.27 $ $Date: 2001/03/30 22:50:08 $
  */
 public abstract class Transliterator {
     /**
@@ -761,22 +762,41 @@ public abstract class Transliterator {
      * @see #getAvailableIDs
      * @see #getID
      */
-     // changed MED
     public static Transliterator getInstance(String ID, int direction) {
         if (ID.indexOf(';') >= 0) {
             return new CompoundTransliterator(ID, direction, null);
         }
-        if (direction == REVERSE) {
-            int i = ID.indexOf('-');
-            if (i < 0) {
-                throw new IllegalArgumentException("No inverse for: "
-                                                   + ID);
+
+        for (;;) {
+            UnicodeFilter filter = null;
+            int i = ID.indexOf('[');
+            if (i >= 0) {
+                ParsePosition pos = new ParsePosition(i);
+                filter = new UnicodeSet(ID, pos, null);
+                if (pos.getIndex() != ID.length()) {
+                    break; // unparsed junk after ']'
+                }
+                ID = ID.substring(0, i);
             }
-            ID = ID.substring(i+1) + '-' + ID.substring(0, i);
-        }
-        Transliterator t = internalGetInstance(ID);
-        if (t != null) {
-            return t;
+
+            if (direction == REVERSE) {
+                i = ID.indexOf('-');
+                if (i < 0) {
+                    throw new IllegalArgumentException("No inverse for: "
+                                                       + ID);
+                }
+                ID = ID.substring(i+1) + '-' + ID.substring(0, i);
+            }
+
+            Transliterator t = internalGetInstance(ID);
+            if (t != null) {
+                if (filter != null) {
+                    t.setFilter(filter);
+                }
+                return t;
+            }
+        
+            break;
         }
         throw new IllegalArgumentException("Unsupported transliterator: "
                                            + ID);
@@ -785,39 +805,6 @@ public abstract class Transliterator {
     public static final Transliterator getInstance(String ID) {
         return getInstance(ID, FORWARD);
     }
-
-    /*
-    foo(String pattern, ParsePosition pos, int direction) {
-        String id;
-        UnicodeSet filter = null;
-        int start = pos.getIndex();
-        int limit = pattern.length();
-        int i = pattern.indexOf(';', start);
-        if (i >= 0) {
-            limit = i;
-        }
-        i = pattern.indexOf('[', start);
-        if (i >= 0 && i < limit) {
-            limit = i;
-            pos.setIndex(i);
-            filter = new UnicodeSet(pattern, pos, null, null);
-        } else {
-            pos.setIndex(limit);
-        }
-        id = pattern.substring(start, limit);
-        if (direction == REVERSE) {
-            i = id.indexOf('-');
-            if (i < 0) {
-                throw new IllegalArgumentException("No inverse for: " + id);
-            }
-            id = id.substring(i+1) + '-' + id.substring(0, i);
-        }
-        Transliterator t = internalGetInstance(ID);
-        if (filter != null) {
-            t.setFilter(filter);
-        }
-    }
-    */
 
     /**
      * Returns this transliterator's inverse.  See the class
@@ -849,9 +836,11 @@ public abstract class Transliterator {
      */
     private static Transliterator internalGetInstance(String ID) {
         RuleBasedTransliterator.Data data = null;
+        Hashtable sourceCache = cache;
         Object obj = cache.get(ID);
         if (obj == null) {
             obj = internalCache.get(ID);
+            sourceCache = internalCache;
         }
         
         if (obj != null) {
@@ -888,7 +877,7 @@ public abstract class Transliterator {
                         
                         if (r != null) {
                             data = RuleBasedTransliterator.parse(r, dir);
-                            cache.put(ID, data);
+                            sourceCache.put(ID, data);
                             // Fall through to construct transliterator from Data object.
                         }
                     }
