@@ -15,7 +15,6 @@
 
 package com.ibm.icu.dev.tool.docs;
 
-import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
