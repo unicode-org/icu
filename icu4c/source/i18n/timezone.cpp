@@ -483,7 +483,8 @@ TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
 
     uint16_t intcode = 0;
     if (country != NULL && *country != 0) {
-        intcode = (U_UPPER_ORDINAL(country[0]) << 5) + U_UPPER_ORDINAL(country[1]);
+        intcode = (uint16_t)((U_UPPER_ORDINAL(country[0]) << 5)
+            + U_UPPER_ORDINAL(country[1]));
     }
     
     for (;;) {
