@@ -21,7 +21,7 @@
 #include "cstring.h"
 #include "unicode/udata.h"
 
-#if OS390
+#ifdef OS390
 #include <stdlib.h>
 #endif
 
