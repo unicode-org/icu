@@ -140,21 +140,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   
   if (U_SUCCESS(status))
   {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-
-    urulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
+    rules[length - 1] = 0;
+    
+    urulestring = new UnicodeString(TRUE, rules, length);
     
     dataIsOwned = TRUE;
   }
@@ -187,21 +179,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-
-    urulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
+    rules[length - 1] = 0;
+    
+    urulestring = new UnicodeString(TRUE, rules, length);
 
     dataIsOwned = TRUE;
   }
@@ -236,21 +220,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-
-    urulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
+    rules[length - 1] = 0;
+    
+    urulestring = new UnicodeString(TRUE, rules, length);
 
     dataIsOwned = TRUE;
   }
@@ -284,21 +260,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   ucollator = ucol_openRules(pucharrules, length, mode, strength, &status);
   if (U_SUCCESS(status))
   {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-
-    urulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
+    rules[length - 1] = 0;
+    
+    urulestring = new UnicodeString(TRUE, rules, length);
 
     dataIsOwned = TRUE;
   }
@@ -598,23 +566,14 @@ Collator* RuleBasedCollator::safeClone(void)
     return NULL;
   }
   else {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
+    rules[length - 1] = 0;
 
-    UnicodeString *rulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
-
-    RuleBasedCollator *result = new RuleBasedCollator(ucol, rulestring);
+    RuleBasedCollator *result = new RuleBasedCollator(ucol, 
+                                               new UnicodeString(TRUE, rules, length));
     result->dataIsOwned = TRUE;
     return result;
   }
@@ -771,22 +730,14 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = 0;
-    // const UChar *r = ucol_getRules(ucollator, &length);
-
-    UChar temp[StackBufferLen];
-    UChar *rules = temp;
-    length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, StackBufferLen);
-    if (length > StackBufferLen) {
-      rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    }
+    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
+                     + 1;     
+    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
     ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-
-    urulestring = new UnicodeString(rules, length);
-    if (length > StackBufferLen) {
-      uprv_free(rules);
-    }
-
+    rules[length - 1] = 0;
+    
+    urulestring = new UnicodeString(TRUE, rules, length);
+    
     dataIsOwned = TRUE;
   }
   
