@@ -47,7 +47,6 @@ static void TestPatterns(void)
 {
   int32_t pat_length, i, lneed;
   UNumberFormat *fmt;
-  UFieldPosition pos;
   UChar upat[5];
   UChar unewpat[5];
   UChar unum[5];
@@ -84,11 +83,11 @@ static void TestPatterns(void)
         log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
 
       lneed=0;
-      lneed=unum_format(fmt, 0, NULL, lneed, &pos, &status);
+      lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
       if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_format(fmt, 0, str, lneed+1,  &pos, &status);
+        unum_format(fmt, 0, str, lneed+1,  NULL, &status);
       }
       if(U_FAILURE(status)) {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -110,7 +109,6 @@ static void TestQuotes(void)
 {
   int32_t lneed;
   UErrorCode status;
-  UFieldPosition pos;
   UChar pat[15];
   UChar res[15];
   UChar *str=NULL;
@@ -123,11 +121,11 @@ static void TestQuotes(void)
     log_err("Error in number format costruction using pattern \"a'fo''o'b#\"\n");
   }
   lneed=0;
-  lneed=unum_format(fmt, 123, NULL, lneed, &pos, &status);
+  lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_format(fmt, 123, str, lneed+1,  &pos, &status);
+    unum_format(fmt, 123, str, lneed+1,  NULL, &status);
   }
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -151,11 +149,11 @@ static void TestQuotes(void)
     log_err("Error in number format costruction using pattern \"a''b#\"\n");
   }
   lneed=0;
-  lneed=unum_format(fmt, 123, NULL, lneed, &pos, &status);
+  lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_format(fmt, 123, str, lneed+1,  &pos, &status);
+    unum_format(fmt, 123, str, lneed+1,  NULL, &status);
   }
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -177,7 +175,6 @@ static void TestExponential(void)
   int32_t pat_length, val_length, lval_length;
   int32_t ival, ilval, p, v, lneed;
   UNumberFormat *fmt;
-  UFieldPosition pos;
   int32_t ppos;
   UChar *upat;
   UChar pattern[20];
@@ -251,11 +248,11 @@ static void TestExponential(void)
         {
           /*format*/
           lneed=0; 
-          lneed=unum_formatDouble(fmt, val[v], NULL, lneed, &pos, &status);
+          lneed=unum_formatDouble(fmt, val[v], NULL, lneed, NULL, &status);
           if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            unum_formatDouble(fmt, val[v], str, lneed+1,  &pos, &status);
+            unum_formatDouble(fmt, val[v], str, lneed+1,  NULL, &status);
           }
           if(U_FAILURE(status)) {
             log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -283,11 +280,11 @@ static void TestExponential(void)
         {
           /*format*/
           lneed=0; 
-          lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, &pos, &status);
+          lneed=unum_formatDouble(fmt, lval[v], NULL, lneed, NULL, &status);
           if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            unum_formatDouble(fmt, lval[v], str, lneed+1,  &pos, &status);
+            unum_formatDouble(fmt, lval[v], str, lneed+1,  NULL, &status);
           }
           if(U_FAILURE(status)) {
             log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -329,7 +326,6 @@ static void TestCurrencySign(void)
   UChar *str=NULL;
   UChar *pat=NULL;
   UChar *res=NULL;
-  UFieldPosition pos;
   UErrorCode status = U_ZERO_ERROR;
   pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
   u_uastrcpy(pattern, "*#,##0.00;-*#,##0.00");
@@ -339,11 +335,11 @@ static void TestCurrencySign(void)
     log_err("Error in number format construction with pattern  \"\\xA4#,##0.00;-\\xA4#,##0.00\\\" \n");
   }
   lneed=0; 
-  lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, &pos, &status);
+  lneed=unum_formatDouble(fmt, 1234.56, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, 1234.56, str, lneed+1,  &pos, &status);
+    unum_formatDouble(fmt, 1234.56, str, lneed+1, NULL, &status);
   }
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
@@ -353,7 +349,7 @@ static void TestCurrencySign(void)
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, FALSE, pat, lneed+1,  &pos, &status);
+    unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
   }
   log_verbose("Pattern \" %s \" \n", austrdup(pat));
   log_verbose("Format 1234.56 -> %s\n", austrdup(str) );
@@ -366,11 +362,11 @@ static void TestCurrencySign(void)
   free(pat);
 
   lneed=0; 
-  lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, &pos, &status);
+  lneed=unum_formatDouble(fmt, -1234.56, NULL, lneed, NULL, &status);
   if(status==U_BUFFER_OVERFLOW_ERROR){
     status=U_ZERO_ERROR;
     str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-    unum_formatDouble(fmt, -1234.56, str, lneed+1,  &pos, &status);
+    unum_formatDouble(fmt, -1234.56, str, lneed+1, NULL, &status);
   }
   if(U_FAILURE(status)) {
     log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status) );

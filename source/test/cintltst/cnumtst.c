@@ -143,6 +143,7 @@ static void TestNumberFormat()
 
     log_verbose("\nTesting unum_format() \n");
     resultlength=0;
+    pos1.field = 0; /* Integer Section */
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -163,6 +164,11 @@ static void TestNumberFormat()
         log_verbose("Pass: Number formatting using unum_format() successful\n");
     else
         log_err("Fail: Error in number Formatting using unum_format()\n");
+    if(pos1.beginIndex == 1 && pos1.endIndex == 12)
+        log_verbose("Pass: Complete number formatting using unum_format() successful\n");
+    else
+        log_err("Fail: Error in complete number Formatting using unum_format()\nGot: b=%d end=%d\nExpected: b=1 end=12\n",
+                pos1.beginIndex, pos1.endIndex);
 
 free(result);
     result = 0;
@@ -170,6 +176,7 @@ free(result);
     log_verbose("\nTesting unum_formatDouble()\n");
     u_uastrcpy(temp1, "($10,456.37)");
     resultlength=0;
+    pos2.field = 1; /* Fractional Section */
     resultlengthneeded=unum_formatDouble(cur_def, d, NULL, resultlength, &pos2, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
@@ -189,6 +196,11 @@ free(result);
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
     else
         log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
+    if(pos2.beginIndex == 9 && pos2.endIndex == 11)
+        log_verbose("Pass: Complete number formatting using unum_format() successful\n");
+    else
+        log_err("Fail: Error in complete number Formatting using unum_formatDouble()\nGot: b=%d end=%d\nExpected: b=9 end=11",
+                pos1.beginIndex, pos1.endIndex);
 
 
     /* Testing unum_parse() and unum_parseDouble() */
@@ -602,8 +614,8 @@ static void TestNumberFormatPadding()
     UNumberFormat *pattern;
     double d1;
     double d = -10456.37;
+    UFieldPosition pos1;
     int32_t parsepos;
-    UFieldPosition pos2;
 
     /* create a number format using unum_openPattern(....)*/
     log_verbose("\nTesting unum_openPattern() with padding\n");
@@ -656,13 +668,14 @@ free(result);
 /*        u_uastrcpy(temp1, "(xxxxxxx10,456.37)"); */
         u_uastrcpy(temp1, "xxxxx(10,456.37)");
         resultlength=0;
-        resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos2, &status);
+        pos1.field = 1; /* Fraction field */
+        resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos1, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR)
         {
             status=U_ZERO_ERROR;
             resultlength=resultlengthneeded+1;
             result=(UChar*)malloc(sizeof(UChar) * resultlength);
-            unum_formatDouble(pattern, d, result, resultlength, &pos2, &status);
+            unum_formatDouble(pattern, d, result, resultlength, NULL, &status);
         }
         if(U_FAILURE(status))
         {
@@ -674,6 +687,11 @@ free(result);
                 log_verbose("Pass: Number Formatting using unum_formatDouble() padding Successful\n");
             else
                 log_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
+            if(pos1.beginIndex == 13 && pos1.endIndex == 15)
+                log_verbose("Pass: Complete number formatting using unum_formatDouble() successful\n");
+            else
+                log_err("Fail: Error in complete number Formatting using unum_formatDouble()\nGot: b=%d end=%d\nExpected: b=13 end=15\n",
+                        pos1.beginIndex, pos1.endIndex);
 
 
             /* Testing unum_parse() and unum_parseDouble() */
