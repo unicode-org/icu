@@ -798,7 +798,7 @@ typedef enum UColAttributeValue UColAttributeValue;
  * @param status to indicate whether the operation went on smoothly or there were errors
  * @draft API 1.7 freeze
  */
-U_CAPI void ucol_setAttribute(const UCollator *coll, const UColAttribute attr, const UColAttributeValue value, UErrorCode *status);
+U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
 /**
  * Universal attribute getter
@@ -808,7 +808,7 @@ U_CAPI void ucol_setAttribute(const UCollator *coll, const UColAttribute attr, c
  * @param status to indicate whether the operation went on smoothly or there were errors
  * @draft API 1.7 freeze
  */
-U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, const UColAttribute attr, UErrorCode *status);
+U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
 
 /**
  * Thread safe cloning operation

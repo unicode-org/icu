@@ -611,7 +611,7 @@ public:
  * @param status to indicate whether the operation went on smoothly or there were errors
  * @draft API 1.7 freeze
  */
-virtual void setAttribute(const UColAttribute attr, const UColAttributeValue value, UErrorCode &status) = 0;
+virtual void setAttribute(UColAttribute attr, UColAttributeValue value, UErrorCode &status) = 0;
 
 /**
  * Universal attribute getter
@@ -620,7 +620,7 @@ virtual void setAttribute(const UColAttribute attr, const UColAttributeValue val
  * @return attribute value
  * @draft API 1.7 freeze
  */
-virtual UColAttributeValue getAttribute(const UColAttribute attr, UErrorCode &status) = 0;
+virtual UColAttributeValue getAttribute(UColAttribute attr, UErrorCode &status) = 0;
 
 /**
  * Thread safe cloning operation

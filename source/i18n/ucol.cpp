@@ -747,12 +747,12 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
   return ((RuleBasedCollator*)coll)->cloneRuleData(*length,*status);
 }
 
-U_CAPI void ucol_setAttribute(const UCollator *coll, const UColAttribute attr, const UColAttributeValue value, UErrorCode *status) {
+U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
 	*status = U_UNSUPPORTED_ERROR;
 	return;
 }
 
-U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, const UColAttribute attr, UErrorCode *status) {
+U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
 	*status = U_UNSUPPORTED_ERROR;
 	return UCOL_ATTR_DEFAULT;
 }
