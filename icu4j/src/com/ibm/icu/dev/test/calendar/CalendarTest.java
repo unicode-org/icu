@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2000/05/12 23:19:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/10/17 18:32:50 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -63,7 +63,7 @@ public class CalendarTest extends TestFmwk {
         
         // Get a format to use for printing dates in the calendar system we're testing
         // TODO: This is kind of ugly right now . 
-        DateFormat format = IBMCalendar.getDateTimeFormat(cal, DateFormat.SHORT, -1, Locale.getDefault());
+        DateFormat format = Calendar.getDateTimeFormat(cal, DateFormat.SHORT, -1, Locale.getDefault());
         
         ((SimpleDateFormat)format).applyPattern(pattern);
         DateFormat testFmt = (DateFormat)format.clone();
@@ -136,7 +136,7 @@ public class CalendarTest extends TestFmwk {
      * @param roll  <code>true</code> or <code>ROLL</code> to test the <code>roll</code> method;
      *              <code>false</code> or <code>ADD</code> to test the <code>add</code method
      */
-    public void doRollAdd(boolean roll, IBMCalendar cal, int[][] tests)
+    public void doRollAdd(boolean roll, Calendar cal, int[][] tests)
     {
         String name = roll ? "rolling" : "adding";
         
