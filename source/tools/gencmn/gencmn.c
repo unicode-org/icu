@@ -131,21 +131,22 @@ main(int argc, char* argv[]) {
             "Read the list file (default: standard input) and create a common data\n"
                     "file from specified files; omit any larger than maxsize.\n");
             fprintf(where, "\n"
-            "Options: -h, -?, --help              this usage text\n"
-            "         -v, --verbose               verbose output\n"
-            "         -c, --copyright             include the ICU copyright notice\n"
-            "         -C, --comment comment       include a comment string\n"
-            "         -d, --destdir dir           destination directory\n");
-        fprintf(where,
-            "         -n --name filename          output filename, without .type extension\n"
-            "                                     (default: " COMMON_DATA_NAME ")\n"
-            "         -t, --type filetype         type of the destination file\n"
-            "                                     (default: \"" DATA_TYPE "\")\n"
-            "         -S, --source tocfile        write a .c source file with the table of\n"
-            "                                     contents\n"
-            "         -e, --entrypoint name       override the c entrypoint name\n"
-            "                                     (default: \"<name>_<type>\")\n"
-            "         -r, --revision x.x          Set a version (example: 20.1)\n");
+            "Options:\n"
+            "\t-h, -?, --help              this usage text\n"
+            "\t-v, --verbose               verbose output\n"
+            "\t-c, --copyright             include the ICU copyright notice\n"
+            "\t-C, --comment comment       include a comment string\n"
+            "\t-d, --destdir dir           destination directory\n");
+            fprintf(where,
+            "\t-n, --name filename         output filename, without .type extension\n"
+            "\t                            (default: " COMMON_DATA_NAME ")\n"
+            "\t-t, --type filetype         type of the destination file\n"
+            "\t                            (default: \"" DATA_TYPE "\")\n"
+            "\t-S, --source tocfile        write a .c source file with the table of\n"
+            "\t                            contents\n"
+            "\t-e, --entrypoint name       override the c entrypoint name\n"
+            "\t                            (default: \"<name>_<type>\")\n"
+            "\t-r, --revision x.x          Set a version (example: 20.1)\n");
         }
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
