@@ -1066,11 +1066,11 @@ getCaseLocale(const char *locale) {
         return LOC_ROOT;
     }
 
-    if( (locale[0]=='t' && locale[1]=='r') ||
-        (locale[0]=='a' && locale[1]=='z')
+    if( (lang[0]=='t' && lang[1]=='r') ||
+        (lang[0]=='a' && lang[1]=='z')
     ) {
         return LOC_TURKISH;
-    } else if(locale[0]=='l' && locale[1]=='t') {
+    } else if(lang[0]=='l' && lang[1]=='t') {
         return LOC_LITHUANIAN;
     } else {
         return LOC_ROOT;

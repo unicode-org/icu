@@ -136,14 +136,13 @@ void TitlecaseTransliterator::handleTransliterate(
 
     int32_t i = textPos - offsets.contextStart;
     int32_t limit = offsets.limit - offsets.contextStart;
-    UChar32 cp;
+    UChar32 cp, bufferCH;
     int32_t oldLen;
     int32_t newLen;
 
     for (; i < limit; ) {
         UErrorCode status = U_ZERO_ERROR;
         int32_t s = i;
-        buffer[0] = original.charAt(s);
 
         UTF_GET_CHAR(original.getBuffer(), 0, i, original.length(), cp);
         oldLen = UTF_CHAR_LENGTH(cp);
@@ -153,7 +152,8 @@ void TitlecaseTransliterator::handleTransliterate(
                 newLen = u_internalTitleCase(cp, buffer, u_getMaxCaseExpansion(), loc.getName());
             } else {
                 u_strToLower(buffer, u_getMaxCaseExpansion(), original.getBuffer()+s, i-s, loc.getName(), &status);
-                newLen = buffer[0] == original.charAt(s) ? -1 : u_strlen(buffer);
+                UTF_GET_CHAR(buffer, 0, s, u_strlen(buffer), bufferCH);
+                newLen = bufferCH == original.char32At(s) ? -1 : u_strlen(buffer);
             }
             doTitle = !CASED->contains(cp);
             if (newLen >= 0) {

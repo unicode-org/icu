@@ -21,6 +21,7 @@
 #include "unicode/uniset.h"
 #include "unicode/unitohex.h"
 #include "unicode/utypes.h"
+#include "unicode/ustring.h"
 
 /***********************************************************************
 
@@ -143,6 +144,10 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(61,TestEscape);
         TESTCASE(62,TestAnchorMasking);
         TESTCASE(63,TestDisplayName);
+        TESTCASE(64,TestSpecialCases);
+        TESTCASE(65,TestIncrementalProgress);
+        TESTCASE(66,TestSurrogateCasing);
+
         default: name = ""; break;
     }
 }
@@ -2964,6 +2969,189 @@ void TransliteratorTest::TestDisplayName() {
     }
 }
 
+const UnicodeString DESERET_DEE((UChar32)0x10414);
+const UnicodeString DESERET_dee((UChar32)0x1043C);
+
+void TransliteratorTest::TestSpecialCases(void) {
+    const UnicodeString registerRules[] = {
+        "Any-Dev1", "x > X; y > Y;",
+        "Any-Dev2", "XY > Z",
+        "Greek-Latin/FAKE", 
+            CharsToUnicodeString
+            ("[^[:L:][:M:]] { \\u03bc\\u03c0 > b ; \\u03bc\\u03c0 } [^[:L:][:M:]] > b ; [^[:L:][:M:]] { [\\u039c\\u03bc][\\u03a0\\u03c0] > B ; [\\u039c\\u03bc][\\u03a0\\u03c0] } [^[:L:][:M:]] > B ;") 
+    };
+
+    const UnicodeString testCases[] = {
+        // NORMALIZATION, not in C
+        "NFC", CharsToUnicodeString("a\\u0300"), CharsToUnicodeString("\\u00E0"),
+        "NFD", CharsToUnicodeString("\\u00E0"), CharsToUnicodeString("a\\u0300"),
+    
+        // mp -> b BUG
+        "Greek-Latin/UNGEGN", CharsToUnicodeString("(\\u03BC\\u03C0)"), "(b)",
+        "Greek-Latin/FAKE", CharsToUnicodeString("(\\u03BC\\u03C0)"), "(b)",
+    
+        // check for devanagari bug
+        "nfd;Dev1;Dev2;nfc", "xy", "Z",
+
+        // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
+        "Title", CharsToUnicodeString("ab'cD ffi\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
+                 CharsToUnicodeString("Ab'cd Ffi\\u0131ii \\u01C8\\u01C9\\u01C9 ") + DESERET_DEE + DESERET_dee, 
+                 
+        //TODO: enable this test once Titlecase works right
+        /*
+        "Title", CharsToUnicodeString("\\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
+                 CharsToUnicodeString("Ffi\\u0131ii \\u01C8\\u01C9\\u01C9 ") + DESERET_DEE + DESERET_dee, 
+                 */
+        "Upper", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
+                 CharsToUnicodeString("AB'CD FFIII\\u0130 \\u01C7\\u01C7\\u01C7 ") + DESERET_DEE + DESERET_DEE,
+        "Lower", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
+                 CharsToUnicodeString("ab'cd \\uFB00i\\u0131ii \\u01C9\\u01C9\\u01C9 ") + DESERET_dee + DESERET_dee,
+    
+         // FORMS OF S
+        "Greek-Latin/UNGEGN",  CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"), 
+                               CharsToUnicodeString("s ss s\\u0331s\\u0331") ,
+        "Latin-Greek/UNGEGN",  CharsToUnicodeString("s ss s\\u0331s\\u0331"), 
+                               CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3") ,
+        "Greek-Latin",  CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"), 
+                        CharsToUnicodeString("s ss s\\u0331s\\u0331") ,
+        "Latin-Greek",  CharsToUnicodeString("s ss s\\u0331s\\u0331"), 
+                        CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3")
+    };
+
+    UParseError pos;
+    for (int32_t i = 0; i < 6 /*registerRules.length*/; i+=2) {
+        UErrorCode status = U_ZERO_ERROR;
+
+        Transliterator *t = Transliterator::createFromRules(registerRules[0+i], 
+            registerRules[i+1], UTRANS_FORWARD, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Fails: Unable to create the transliterator from rules.");
+        } else {
+            Transliterator::registerInstance(t);
+        }
+    }
+    for (i = 0; i < 36 /*testCases.length*/; i+=3) {
+        UErrorCode status = U_ZERO_ERROR;
+        Transliterator *t = Transliterator::createInstance(testCases[i+0], UTRANS_FORWARD, pos, status);
+        expect(*t, testCases[i+1], testCases[i+2], 0);
+        delete t;
+    }
+}
+
+char* Char32ToEscapedChars(UChar32 ch, char* buffer) {
+    if (ch <= 0xFFFF) {
+        sprintf(buffer, "\\u%04x", ch);
+    } else {
+        sprintf(buffer, "\\u%08x", ch);
+    }
+    return buffer;
+}
+
+void TransliteratorTest::TestSurrogateCasing (void) {
+    // check that casing handles surrogates
+    // titlecase is currently defective
+    char buffer[20];
+    UChar buffer2[20];
+    UChar32 dee;
+    UTF_GET_CHAR(DESERET_dee,0, 0, DESERET_dee.length(), dee);
+    UnicodeString DEE(u_totitle(dee));
+    if (DEE != DESERET_DEE) {
+        err("Fails titlecase of surrogates");
+        err(Char32ToEscapedChars(dee, buffer)); 
+        err(", ");
+        errln(Char32ToEscapedChars(DEE.char32At(0), buffer));
+    }
+        
+    UnicodeString deeDEETest=DESERET_dee + DESERET_DEE;
+    UnicodeString deedeeTest = DESERET_dee + DESERET_dee;
+    UnicodeString DEEDEETest = DESERET_DEE + DESERET_DEE;
+    UErrorCode status= U_ZERO_ERROR;
+
+    u_strToUpper(buffer2, 20, deeDEETest.getBuffer(), deeDEETest.length(), NULL, &status);
+    if (U_FAILURE(status) || (UnicodeString(buffer2)!= DEEDEETest)) {
+        errln("Fails: Can't uppercase surrogates.");
+    }
+        
+    status= U_ZERO_ERROR;
+    u_strToLower(buffer2, 20, deeDEETest.getBuffer(), deeDEETest.length(), NULL, &status);
+    if (U_FAILURE(status) || (UnicodeString(buffer2)!= deedeeTest)) {
+        errln("Fails: Can't lowercase surrogates.");
+    }
+}
+
+// Check to see that incremental gets at least part way through a reasonable string.
+
+void TransliteratorTest::TestIncrementalProgress(void) {
+    UnicodeString test("The Quick Brown Fox Jumped Over The Lazy Dog.");
+    int32_t i = 0, j=0, k=0;
+    int32_t sources = Transliterator::countAvailableSources();
+    for (i = 0; i < sources; i++) {
+        UnicodeString source;
+        Transliterator::getAvailableSource(i, source);
+        if (source != UnicodeString("Latin")) continue;
+        int32_t targets = Transliterator::countAvailableTargets(source);
+        for (j = 0; j < targets; j++) {
+            UnicodeString target;
+            Transliterator::getAvailableTarget(j, source, target);
+            int32_t variants = Transliterator::countAvailableVariants(source, target);
+            for (k =0; k< variants; k++) {
+                UnicodeString variant;
+                UParseError err;
+                UErrorCode status = U_ZERO_ERROR;
+
+                Transliterator::getAvailableVariant(k, source, target, variant);
+                UnicodeString id = source + "-" + target + "/" + variant;
+    
+                Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
+                if (U_FAILURE(status)) {
+                    errln("FAIL: Not able to create transliterator from the composed ID.");
+                }
+                status = U_ZERO_ERROR;
+                UnicodeString result = CheckIncrementalAux(t, test);
+                Transliterator *inv = t->createInverse(status);
+                CheckIncrementalAux(inv, result);
+                delete t;
+                delete inv;
+            }
+        }
+    }
+}
+
+UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t, 
+                                                      const UnicodeString& input) {
+    
+    UTransPosition pos;
+    UnicodeString test = input;
+
+    pos.contextStart = 0;
+    pos.contextLimit = input.length();
+    pos.start = 0;
+    pos.limit = input.length();
+
+    t->transliterate(test, pos.start, pos.limit);
+    UBool gotError = FALSE;
+    if (pos.start == 0) {
+        log("No Progress, ");
+        log(t->getID());
+        log(": ");
+        errln(formatInput(test, input, pos));
+        gotError = TRUE;
+    } else {
+        log("PASS Progress, ");
+        log(t->getID());
+        log(": ");
+        logln(formatInput(test, input, pos));
+    }
+    t->finishTransliteration(test, pos);
+    if (pos.start != pos.limit) {
+        log("Incomplete, ");
+        log(t->getID()); 
+        log(":  ");
+        errln(formatInput(test, input, pos));
+        gotError = TRUE;
+    }
+    return test;
+}
 //======================================================================
 // Support methods
 //======================================================================
@@ -3047,6 +3235,7 @@ void TransliteratorTest::expect(const Transliterator& t,
               expectedResult);
 }
 
+    
 /**
  * @param appendTo result is appended to this param.
  * @param input the string being transliterated
