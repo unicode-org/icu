@@ -429,7 +429,7 @@ processCombining() {
     CombiningTriple *triples;
     uint16_t *p;
     uint32_t combined;
-    uint16_t i, j, count, tableTop, finalIndex;
+    uint16_t i, j, count, tableTop, finalIndex, combinesFwd;
 
     triples=utm_getStart(combiningTriplesMem);
 
@@ -458,7 +458,12 @@ processCombining() {
         /* calculate the length of the combining data for this lead code point in the combiningTable */
         while(j<count && i==triples[j].leadIndex) {
             /* count 2 16-bit units per composition code unit */
-            tableTop+=(uint16_t)(2*UTF16_CHAR_LENGTH(combined=triples[j++].combined));
+            combined=triples[j++].combined;
+            if(combined<=0x1fff) {
+                tableTop+=2;
+            } else {
+                tableTop+=3;
+            }
         }
     }
 
@@ -468,7 +473,7 @@ processCombining() {
         createNorm(combiningCPs[i]&0xffffff)->combiningIndex=combiningIndexes[i]=finalIndex++;
     }
 
-    /* it must be tableTop<0x7fff because bit 15 is used in combiningTable as an end-for-this-lead marker */
+    /* it must be tableTop<=0x7fff because bit 15 is used in combiningTable as an end-for-this-lead marker */
     if(tableTop>=sizeof(combiningTable)/4) {
         fprintf(stderr, "error: gennorm combining table - trying to use %u units, more than the %ld units available\n",
                 tableTop, sizeof(combiningTable)/4);
@@ -490,24 +495,34 @@ processCombining() {
     for(i=0; i<combineBothTop; ++i) {
         /* start a new table */
 
+        combined=0; /* avoid compiler warning */
+
         /* store the combining data for this lead code point in the combiningTable */
         while(j<count && i==triples[j].leadIndex) {
             finalIndex=combiningIndexes[triples[j].trailIndex];
-            combined=triples[j].combined;
-            if(combined<=0xffff) {
-                *p++=finalIndex;
+            combined=triples[j++].combined;
+
+            /* is combined a starter? (i.e., cc==0 && combines forward) */
+            combinesFwd=(uint16_t)((getNorm(combined)->combiningFlags&1)<<13);
+
+            *p++=finalIndex;
+            if(combined<=0x1fff) {
+                *p++=(uint16_t)(combinesFwd|combined);
+            } else if(combined<=0xffff) {
+                *p++=(uint16_t)(0x8000|combinesFwd);
                 *p++=(uint16_t)combined;
             } else {
-                *p++=finalIndex;
-                *p++=(uint16_t)(0xd7c0+(combined>>10));
-                *p++=finalIndex;
+                *p++=(uint16_t)(0xc000|combinesFwd|((combined-0x10000)>>10));
                 *p++=(uint16_t)(0xdc00|(combined&0x3ff));
             }
-            ++j;
         }
 
         /* set a marker on the last final trail index in this lead's table */
-        *(p-2)|=0x8000;
+        if(combined<=0x1ffff) {
+            *(p-2)|=0x8000;
+        } else {
+            *(p-3)|=0x8000;
+        }
     }
 
     /* post condition: tableTop==(p-combiningTable) */
@@ -781,20 +796,18 @@ setHangulJamoSpecials() {
      * The quick check flags are parsed, except for Hangul.
      */
 
-#if 0
     /* set Jamo 1 specials */
     for(c=0x1100; c<=0x1112; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_1;
         norm->combiningFlags=1;
     }
-#endif
 
     /* set Jamo 2 specials */
     for(c=0x1161; c<=0x1175; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_2;
-        norm->combiningFlags=3;
+        norm->combiningFlags=2;
     }
 
     /* set Jamo 3 specials */
