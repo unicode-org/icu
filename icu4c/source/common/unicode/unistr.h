@@ -823,7 +823,7 @@ public:
    *  in <TT>srcText</TT> in the range 
    * [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>), 
    * using bitwise comparison.   
-   * @param text The text to search for.
+   * @param srcText The text to search for.
    * @param srcStart the offset into <TT>srcText</TT> at which
    * to start matching
    * @param srcLength the number of characters in <TT>srcText</TT> to match
@@ -858,7 +858,7 @@ public:
    * Locate in this the first occurrence in the range
    * [<TT>start</TT>, <TT>start + length</TT>) of the characters 
    * in <TT>srcChars</TT>, using bitwise comparison.
-   * @param text The text to search for.
+   * @param srcChars The text to search for.
    * @param srcLength the number of characters in <TT>srcChars</TT>
    * @param start The offset at which searching will start.
    * @param length The number of characters to search
@@ -1041,7 +1041,7 @@ public:
    * Locate in this the last occurrence in the range 
    * [<TT>start</TT>, <TT>start + length</TT>) of the characters 
    * in <TT>srcChars</TT>, using bitwise comparison.
-   * @param text The text to search for.
+   * @param srcChars The text to search for.
    * @param srcLength the number of characters in <TT>srcChars</TT>
    * @param start The offset at which searching will start.
    * @param length The number of characters to search

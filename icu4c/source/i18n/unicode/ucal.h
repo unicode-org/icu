@@ -317,13 +317,13 @@ ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
  * by querying the host operating system. It may be changed with
  * ucal_setDefaultTimeZone() or with the C++ TimeZone API.
  *
- * @param result a buffer to receive the result, or NULL
+ * @param result A buffer to receive the result, or NULL
  *
- * @param resultLength the length of the result buffer
+ * @param resultCapacity The capacity of the result buffer
  *
  * @param ec input/output error code
  *
- * @return the result string length, not including the terminating
+ * @return The result string length, not including the terminating
  * null
  *
  * @draft ICU 2.6
@@ -750,7 +750,7 @@ ucal_clearField(UCalendar*           cal,
 /**
  * Clear all fields in a UCalendar.
  * All fields are represented as 32-bit integers.
- * @param cal The UCalendar to clear.
+ * @param calendar The UCalendar to clear.
  * @see ucal_get
  * @see ucal_set
  * @see ucal_isSet
