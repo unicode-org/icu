@@ -49,29 +49,57 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @stable ICU 2.0
      */
    public ChineseDateFormat(String pattern, Locale locale) {
-        super(pattern, new ChineseDateFormatSymbols(locale));
+        super(pattern, new ChineseDateFormatSymbols(locale), true);
     }
 
+// NOTE: This API still exists; we just inherit it from SimpleDateFormat
+// as of ICU 3.0
+//  /**
+//   * @stable ICU 2.0
+//   */
+//  protected String subFormat(char ch, int count, int beginOffset,
+//                             FieldPosition pos, DateFormatSymbols formatData,
+//                             Calendar cal)  {
+//      switch (ch) {
+//      case 'G': // 'G' - ERA
+//          return zeroPaddingNumber(cal.get(Calendar.ERA), 1, 9);
+//      case 'l': // 'l' - IS_LEAP_MONTH
+//          {
+//              ChineseDateFormatSymbols symbols =
+//                  (ChineseDateFormatSymbols) formatData;
+//              return symbols.getLeapMonth(cal.get(
+//                             ChineseCalendar.IS_LEAP_MONTH));
+//          }
+//      default:
+//          return super.subFormat(ch, count, beginOffset, pos, formatData, cal);
+//      }
+//  }    
+
     /**
-     * @stable ICU 2.0
+     * @internal
      */
-    protected String subFormat(char ch, int count, int beginOffset,
-                               FieldPosition pos, DateFormatSymbols formatData,
-                               Calendar cal)  {
+    protected void subFormat(StringBuffer buf,
+                             char ch, int count, int beginOffset,
+                             FieldPosition pos,
+                             Calendar cal) {
         switch (ch) {
         case 'G': // 'G' - ERA
-            return zeroPaddingNumber(cal.get(Calendar.ERA), 1, 9);
+            zeroPaddingNumber(buf, cal.get(Calendar.ERA), 1, 9);
+            break;
         case 'l': // 'l' - IS_LEAP_MONTH
-            {
-                ChineseDateFormatSymbols symbols =
-                    (ChineseDateFormatSymbols) formatData;
-                return symbols.getLeapMonth(cal.get(
-                               ChineseCalendar.IS_LEAP_MONTH));
-            }
+            buf.append(((ChineseDateFormatSymbols) getSymbols()).
+                       getLeapMonth(cal.get(ChineseCalendar.IS_LEAP_MONTH)));
+            break;
         default:
-            return super.subFormat(ch, count, beginOffset, pos, formatData, cal);
+            super.subFormat(buf, ch, count, beginOffset, pos, cal);
+            break;
         }
-    }    
+
+        // TODO: add code to set FieldPosition for 'G' and 'l' fields. This
+        // is a DESIGN FLAW -- subclasses shouldn't have to duplicate the
+        // code that handles this at the end of SimpleDateFormat.subFormat.
+        // The logic should be moved up into SimpleDateFormat.format.
+    }
 
     /**
      * @stable ICU 2.0
