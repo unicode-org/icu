@@ -19,6 +19,10 @@ SHAREDLIBCPPFLAGS = -DPIC
 LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
+# Commands to link. Link with C++ in case static libraries are used.
+LINK.c=       $(CXX) $(CXXFLAGS) $(LDFLAGS)
+#LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
+
 ## Commands to make a shared library
 SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
 SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
