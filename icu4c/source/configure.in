@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.84 2000/10/18 20:35:21 yves Exp $
+dnl $Id: configure.in,v 1.85 2000/10/19 22:59:55 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -188,9 +188,9 @@ if test $threads = true; then
  dnl (but that was checked above).
  dnl FreeBSD users may need libpthread if they do not have libc_r.
 
- AC_SEARCH_LIBS_FIRST(pthread_create, pthread pthreads c_r cma)
+ AC_SEARCH_LIBS_FIRST(pthread_mutex_destroy, pthread pthreads c_r cma)
 
- if test "$ac_cv_search_pthread_create" != no; then
+ if test "$ac_cv_search_pthread_mutex_destroy" != no; then
   ICU_USE_THREADS=1
  else
    dnl For HP 11
