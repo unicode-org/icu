@@ -577,6 +577,72 @@ static const ILcidPosixMap gPosixIDmap[] = {
 
 static const uint32_t gLocaleCount = sizeof(gPosixIDmap)/sizeof(ILcidPosixMap);
 
+static int32_t
+idCmp(const char* id1, const char* id2)
+{
+    int32_t diffIdx = 0;
+    while (*id1 == *id2 && *id1 != 0) {
+        diffIdx++;
+        id1++;
+        id2++;
+    }
+    return diffIdx;
+}
+
+/**
+ * Searches for a Windows LCID
+ *
+ * @param posixid the Posix style locale id.
+ * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
+ *               no equivalent Windows LCID.
+ * @return the LCID
+ */
+static uint32_t
+hostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
+{
+    int32_t bestIdx = 0;
+    int32_t bestIdxDiff = 0;
+    int32_t posixIDlen = (int32_t)uprv_strlen(posixID) + 1;
+    uint32_t idx;
+
+    for (idx = 0; idx < this_0->numRegions; idx++ ) {
+        int32_t sameChars = idCmp(posixID, this_0->regionMaps[idx].posixID);
+        if (sameChars > bestIdxDiff && this_0->regionMaps[idx].posixID[sameChars] == 0) {
+            if (posixIDlen == sameChars) {
+                /* Exact match */
+                return this_0->regionMaps[idx].hostID;
+            }
+            bestIdxDiff = sameChars;
+            bestIdx = idx;
+        }
+    }
+    if (this_0->regionMaps[bestIdx].posixID[bestIdxDiff] == 0) {
+        *status = U_USING_FALLBACK_WARNING;
+        return this_0->regionMaps[bestIdx].hostID;
+    }
+
+    /*no match found */
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return this_0->regionMaps->hostID;
+}
+
+static const char*
+posixID(const ILcidPosixMap *this_0, uint32_t hostID)
+{
+    uint32_t i;
+    for (i = 0; i <= this_0->numRegions; i++)
+    {
+        if (this_0->regionMaps[i].hostID == hostID)
+        {
+            return this_0->regionMaps[i].posixID;
+        }
+    }
+
+    /* If you get here, then no matching region was found,
+       so return the language id with the wild card region. */
+    return this_0->regionMaps[0].posixID;
+}
+
 /*
 //////////////////////////////////////
 //
@@ -585,8 +651,8 @@ static const uint32_t gLocaleCount = sizeof(gPosixIDmap)/sizeof(ILcidPosixMap);
 /////////////////////////////////////
 */
 
-U_CFUNC const char *
-T_convertToPosix(uint32_t hostid, UErrorCode* status)
+U_CAPI const char *
+uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 {
     uint16_t langID = LANGUAGE_LCID(hostid);
     uint32_t index;
@@ -612,8 +678,8 @@ T_convertToPosix(uint32_t hostid, UErrorCode* status)
 /////////////////////////////////////
 */
 
-U_CFUNC uint32_t
-T_convertToLCID(const char* posixID, UErrorCode* status)
+U_CAPI uint32_t
+uprv_convertToLCID(const char* posixID, UErrorCode* status)
 {
 
     uint32_t   low    = 0;
@@ -678,71 +744,5 @@ T_convertToLCID(const char* posixID, UErrorCode* status)
     return 0;   /* return international (root) */
 }
 
-
-/**
- * Searches for a Windows LCID
- *
- * @param posixid the Posix style locale id.
- * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
- *               no equivalent Windows LCID.
- * @return the LCID
- */
-static uint32_t
-hostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
-{
-    int32_t bestIdx = 0;
-    int32_t bestIdxDiff = 0;
-    int32_t posixIDlen = (int32_t)uprv_strlen(posixID) + 1;
-    uint32_t idx;
-
-    for (idx = 0; idx < this_0->numRegions; idx++ ) {
-        int32_t sameChars = idCmp(posixID, this_0->regionMaps[idx].posixID);
-        if (sameChars > bestIdxDiff && this_0->regionMaps[idx].posixID[sameChars] == 0) {
-            if (posixIDlen == sameChars) {
-                /* Exact match */
-                return this_0->regionMaps[idx].hostID;
-            }
-            bestIdxDiff = sameChars;
-            bestIdx = idx;
-        }
-    }
-    if (this_0->regionMaps[bestIdx].posixID[bestIdxDiff] == 0) {
-        *status = U_USING_FALLBACK_WARNING;
-        return this_0->regionMaps[bestIdx].hostID;
-    }
-
-    /*no match found */
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return this_0->regionMaps->hostID;
-}
-
-static int32_t
-idCmp(const char* id1, const char* id2)
-{
-    int32_t diffIdx = 0;
-    while (*id1 == *id2 && *id1 != 0) {
-        diffIdx++;
-        id1++;
-        id2++;
-    }
-    return diffIdx;
-}
-
-static const char*
-posixID(const ILcidPosixMap *this_0, uint32_t hostID)
-{
-    uint32_t i;
-    for (i = 0; i <= this_0->numRegions; i++)
-    {
-        if (this_0->regionMaps[i].hostID == hostID)
-        {
-            return this_0->regionMaps[i].posixID;
-        }
-    }
-
-    /* If you get here, then no matching region was found,
-       so return the language id with the wild card region. */
-    return this_0->regionMaps[0].posixID;
-}
-
 #endif
+

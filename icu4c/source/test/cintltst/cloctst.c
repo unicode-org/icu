@@ -25,13 +25,12 @@
 #include "unicode/uset.h"
 #include "cintltst.h"
 #include "cstring.h"
+#include "unicode/ures.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-#include "unicode/ures.h"
 #ifdef WIN32
-/* Get the private functions. This is a hack! [grhoten] */
-#include "locmap.c"
+#include "locmap.h"
 #endif
 
 static void TestNullDefault(void);
@@ -1485,7 +1484,7 @@ testLCID(UResourceBundle *currentBundle,
         return;
     }
 
-    lcid = T_convertToLCID(localeName, &status);
+    lcid = uprv_convertToLCID(localeName, &status);
     if (U_FAILURE(status)) {
         if (expectedLCID == 0) {
             log_verbose("INFO:    %-5s does not have any LCID mapping\n",
@@ -1499,7 +1498,7 @@ testLCID(UResourceBundle *currentBundle,
     }
 
     status = U_ZERO_ERROR;
-    uprv_strcpy(lcidStringC, T_convertToPosix(expectedLCID, &status));
+    uprv_strcpy(lcidStringC, uprv_convertToPosix(expectedLCID, &status));
     if (U_FAILURE(status)) {
         log_err("ERROR:   %.4x does not have a POSIX mapping due to %s\n",
             expectedLCID, u_errorName(status));
