@@ -427,6 +427,7 @@ static void TestUnicodeData()
     int32_t unicode;
     int8_t  type;
     char newPath[256];
+    char backupPath[256];
     const char *expectVersion = U_UNICODE_VERSION;  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
     /* expectVersionArray must be filled from u_versionFromString(expectVersionArray, U_UNICODE_VERSION)
        once this function is public. */
@@ -434,10 +435,21 @@ static void TestUnicodeData()
     UVersionInfo versionArray;
     char expectString[256];
 
+    /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
-    strcat(newPath, "UnicodeData-");
-    strcat(newPath, expectVersion);
+    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
     strcat(newPath, ".txt");
+
+#if defined (U_SRCDATADIR) /* points to the icu/data directory */
+    /* If defined, we'll try an alternate directory second */
+    strcpy(backupPath, U_SRCDATADIR);
+#else
+    strcpy(backupPath, u_getDataDirectory());
+    strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    strcat(backupPath, U_FILE_SEP_STRING);
+#endif
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
+    strcat(backupPath, ".txt");
 
     u_versionFromString(expectVersionArray, expectVersion);
     strcpy(expectString, "Unicode Version ");
@@ -461,10 +473,12 @@ static void TestUnicodeData()
     input = fopen(newPath, "r");
 
     if (input == 0) {
-      log_err("Unicode C API test 'fopen' (%s) error\n", newPath);
-      return;
+      input = fopen(backupPath, "r");
+      if (input == 0) {
+        log_err("Unicode C API test 'fopen' err. Could not load either (%s) nor (%s) \n", newPath, backupPath);
+        return;
+      }
     }
-
 
         for(;;) {
             bufferPtr = fgets(buffer, 999, input);
