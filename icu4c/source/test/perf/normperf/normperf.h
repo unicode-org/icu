@@ -8,9 +8,11 @@
 #ifndef _NORMPERF_H
 #define _NORMPERF_H
 
-#include "uperf.h"
 #include "unicode/unorm.h"
 #include "unicode/ustring.h"
+
+#include "unicode/uperf.h"
+#include <stdlib.h>
 
 //  Stubs for Windows API functions when building on UNIXes.
 //

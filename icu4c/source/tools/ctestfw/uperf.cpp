@@ -1,10 +1,11 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2004, International Business Machines Corporation and
+ * Copyright (c) 2002-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "uperf.h"
+#include "unicode/uperf.h"
+#include "uoptions.h"
 #include "cmemory.h"
 #include <stdio.h>
 #include <stdlib.h>

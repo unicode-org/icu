@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -11,8 +11,9 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/ustring.h"
-#include "utimer.h"
-#include "uoptions.h"
+
+#include "unicode/testtype.h"
+#include "unicode/utimer.h"
 #include "ucbuf.h"
 
 U_NAMESPACE_USE
@@ -56,7 +57,7 @@ U_NAMESPACE_USE
  * be timed.  They then call setTestFunction() in their "Test..."
  * method to establish this as the current test functor.
  */
-class U_EXPORT UPerfFunction {
+class T_CTEST_EXPORT_API UPerfFunction {
 public:
     /**
      * Subclasses must implement this method to do the action to be
@@ -99,7 +100,7 @@ public:
 };
 
 
-class U_EXPORT UPerfTest {
+class T_CTEST_EXPORT_API UPerfTest {
 public:
     UBool run();
     UBool runTest( char* name = NULL, char* par = NULL ); // not to be overidden

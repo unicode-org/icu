@@ -8,7 +8,7 @@
 #ifndef _UBRKPERF_H
 #define _UBRKPERF_H
 
-#include "uperf.h"
+#include "unicode/uperf.h"
 
 #include <unicode/brkiter.h>
 
