@@ -114,7 +114,7 @@ typedef const void* URegistryKey;
  *             printTextRange( boundary, start, end );
  *         }
  *    }
- * \code
+ * \endcode
  * </pre>
  * Print each element in reverse order:
  * <pre>
