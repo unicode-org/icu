@@ -76,6 +76,7 @@ id {
             "¤#,##0.00;-¤#,##0.00",
             "#,##0%",
     }
+    LocaleID{ "21"}
             // /**************** Info Below is needed ****************/
             // CollationElements{}
             // Countries{}

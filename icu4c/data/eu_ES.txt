@@ -16,14 +16,14 @@ eu_ES {
             ",",
     }
     DateTimePatterns { 
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "HH:mm:ss ",
-            "yy'-'MM'-'DD  z",
-            "yy'-'MM'-'DD  z",
-            "EEE, YYYY'eko' MMMren DD'a'",
-            "EEE, YYYY'eko' MMMren DD'a'",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "yy'-'MM'-'dd  z",
+            "yy'-'MM'-'dd  z",
+            "EEE, YYYY'eko' MMMren ss'a'",
+            "EEE, YYYY'eko' MMMren ss'a'",
             "{1} {0}",
     }
 
@@ -32,5 +32,5 @@ eu_ES {
             "¤ #,##0.#;-¤ #,##0.#",
             "#,#0%",
     }
-            LocaleID{ "0x042D"}
+    LocaleID{ "042D"}
 }

@@ -79,7 +79,7 @@ fa {
             "#,##0.#¤;#,##0.#- ¤",
             "#,##0%",
     }
-	            
+    LocaleID{ "29"}
             // /**************** Info Below is needed ****************/
             // CollationElements{}
             // Countries{}
