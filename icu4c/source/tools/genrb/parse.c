@@ -1582,6 +1582,9 @@ parseResourceType(UErrorCode *status)
     if (u_strcmp(tokenValue->fChars, k_type_int) == 0) {
         result = RT_INTEGER;
     }
+    else if (u_strcmp(tokenValue->fChars, k_type_bin) == 0) {
+        result = RT_BINARY;
+    }
     else if (result == RT_RESERVED) {
         char tokenBuffer[1024];
         u_austrncpy(tokenBuffer, tokenValue->fChars, sizeof(tokenBuffer));
