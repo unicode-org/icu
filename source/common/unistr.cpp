@@ -193,7 +193,9 @@ UnicodeString::UnicodeString(const char *codepageData,
     fHashCode(kEmptyHashCode),
     fBogus(FALSE)
 {
-  doCodepageCreate(codepageData, dataLength, codepage);
+  if(codepageData != 0) {
+    doCodepageCreate(codepageData, dataLength, codepage);
+  }
 }
 
 //========================================
@@ -370,6 +372,47 @@ UnicodeString::doExtract(UTextOffset start,
 }
 
 
+UTextOffset 
+UnicodeString::indexOf(const UChar *srcChars,
+               UTextOffset srcStart,
+               int32_t srcLength,
+               UTextOffset start,
+               int32_t length) const
+{
+  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength <= 0) {
+    return -1;
+  }
+
+  // now we will only work with srcLength-1
+  --srcLength;
+
+  // get the indices within bounds
+  pinIndices(start, length);
+
+  // set length for the last possible match start position
+  // note the --srcLength above
+  length -= srcLength;
+
+  if(length <= 0) {
+    return -1;
+  }
+
+  const UChar *array = getArrayStart();
+  UTextOffset limit = start + length;
+
+  // search for the first char, then compare the rest of the string
+  // increment srcStart here for that, matching the --srcLength above
+  UChar ch = srcChars[srcStart++];
+
+  do {
+    if(array[start] == ch && (srcLength == 0 || compare(start + 1, srcLength, srcChars, srcStart, srcLength) == 0)) {
+      return start;
+    }
+  } while(++start < limit);
+
+  return -1;
+}
+
 UTextOffset
 UnicodeString::doIndexOf(UChar c,
              UTextOffset start,
@@ -377,15 +420,63 @@ UnicodeString::doIndexOf(UChar c,
 {
   // pin indices
   pinIndices(start, length);
+  if(length == 0) {
+    return -1;
+  }
 
   // find the first occurrence of c
   const UChar *begin = getArrayStart() + start;
   const UChar *limit = begin + length;
 
-  while(begin < limit && *begin != c)
-    ++begin;
+  do {
+    if(*begin == c) {
+      return begin - getArrayStart();
+    }
+  } while(++begin < limit);
 
-  return (begin == limit ? -1 : begin - getArrayStart());
+  return -1;
+}
+
+UTextOffset 
+UnicodeString::lastIndexOf(const UChar *srcChars,
+               UTextOffset srcStart,
+               int32_t srcLength,
+               UTextOffset start,
+               int32_t length) const
+{
+  if(isBogus() || srcChars == 0 || srcStart < 0 || srcLength <= 0) {
+    return -1;
+  }
+
+  // now we will only work with srcLength-1
+  --srcLength;
+
+  // get the indices within bounds
+  pinIndices(start, length);
+
+  // set length for the last possible match start position
+  // note the --srcLength above
+  length -= srcLength;
+
+  if(length <= 0) {
+    return -1;
+  }
+
+  const UChar *array = getArrayStart();
+  UTextOffset pos;
+
+  // search for the first char, then compare the rest of the string
+  // increment srcStart here for that, matching the --srcLength above
+  UChar ch = srcChars[srcStart++];
+
+  pos = start + length;
+  do {
+    if(array[--pos] == ch && (srcLength == 0 || compare(pos + 1, srcLength, srcChars, srcStart, srcLength) == 0)) {
+      return pos;
+    }
+  } while(pos > start);
+
+  return -1;
 }
 
 UTextOffset
@@ -395,14 +486,20 @@ UnicodeString::doLastIndexOf(UChar c,
 {
   // pin indices
   pinIndices(start, length);
+  if(length == 0) {
+    return -1;
+  }
 
-  const UChar *begin = getArrayStart() + start + length;
-  const UChar *limit = begin - length;
+  const UChar *begin = getArrayStart() + start;
+  const UChar *limit = begin + length;
 
-  while(begin > limit && *begin != c)
-    --begin;
+  do {
+    if(*--limit == c) {
+      return limit - getArrayStart();
+    }
+  } while(limit > begin);
 
-  return (begin == limit ? -1 : begin - getArrayStart());
+  return -1;
 }
 
 
