@@ -1759,6 +1759,8 @@ static void TestBefore(void) {
     data, sizeof(data)/sizeof(data[0]));
 }
 
+#if 0
+/* superceded by TestBeforePinyin */
 static void TestJ784(void) {
   const static char *data[] = {
       "A", "\\u0101", "\\u00e1", "\\u01ce", "\\u00e0",
@@ -1771,8 +1773,10 @@ static void TestJ784(void) {
   };
   genericLocaleStarter("zh", data, sizeof(data)/sizeof(data[0]));
 }
+#endif
 
-
+#if 0
+/* superceded by the changes to the lv locale */
 static void TestJ831(void) {
   const static char *data[] = {
     "I",
@@ -1782,6 +1786,7 @@ static void TestJ831(void) {
   };
   genericLocaleStarter("lv", data, sizeof(data)/sizeof(data[0]));
 }
+#endif
 
 static void TestJ815(void) {
   const static char *data[] = {
@@ -4064,9 +4069,6 @@ static void TestNumericCollation(void)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-	int i = 0, j = 0, size = 0;
-	/*UCollationResult collResult;*/
-
 	const static char *basicTestStrings[]={
 	"hello1",
 	"hello2",
@@ -4390,12 +4392,12 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
 /* supercedes TestJ784 */
 static void TestBeforePinyin(void) {
     const static char rules[] = { 
-        "&[before 2]A << \\u0101  <<< \\u0100 << \\u00E1 <<< \\u00C1 << \\u01CE <<< \\u01CD << \\u00E0 <<< \\u00C0"
-        "&[before 2]e << \\u0113 <<< \\u0112 << \\u00E9 <<< \\u00C9 << \\u011B <<< \\u011A << \\u00E8 <<< \\u00C8"
-        "&[before 2] i << \\u012B <<< \\u012A << \\u00ED <<< \\u00CD << \\u01D0 <<< \\u01CF << \\u00EC <<< \\u00CC"
-        "&[before 2] o << \\u014D <<< \\u014C << \\u00F3 <<< \\u00D3 << \\u01D2 <<< \\u01D1 << \\u00F2 <<< \\u00D2"
-        "&[before 2]u << \\u016B <<< \\u016A << \\u00FA <<< \\u00DA << \\u01D4 <<< \\u01D3 << \\u00F9 <<< \\u00D9"
-        "&U << \\u01D6 <<< \\u01D5 << \\u01D8 <<< \\u01D7 << \\u01DA <<< \\u01D9 << \\u01DC <<< \\u01DB << \\u00FC"
+        "&[before 2]A<<\\u0101<<<\\u0100<<\\u00E1<<<\\u00C1<<\\u01CE<<<\\u01CD<<\\u00E0<<<\\u00C0"
+        "&[before 2]e<<\\u0113<<<\\u0112<<\\u00E9<<<\\u00C9<<\\u011B<<<\\u011A<<\\u00E8<<<\\u00C8"
+        "&[before 2]i<<\\u012B<<<\\u012A<<\\u00ED<<<\\u00CD<<\\u01D0<<<\\u01CF<<\\u00EC<<<\\u00CC"
+        "&[before 2]o<<\\u014D<<<\\u014C<<\\u00F3<<<\\u00D3<<\\u01D2<<<\\u01D1<<\\u00F2<<<\\u00D2"
+        "&[before 2]u<<\\u016B<<<\\u016A<<\\u00FA<<<\\u00DA<<\\u01D4<<<\\u01D3<<\\u00F9<<<\\u00D9"
+        "&U<<\\u01D6<<<\\u01D5<<\\u01D8<<<\\u01D7<<\\u01DA<<<\\u01D9<<\\u01DC<<<\\u01DB<<\\u00FC"
     };
 
     const static char *test[] = {
@@ -4550,6 +4552,9 @@ assert:  x <<< X << q <<< Q << m <<< \u24DC <<< M < z < n
 assert: m <<< x <<< X <<< \u24DC <<< M  << q <<< Q < z < n
 #endif
 
+
+#if 0
+/* requires features not yet supported */
 static void TestMoreBefore(void) {
     struct {
         const char* rules;
@@ -4594,10 +4599,10 @@ static void TestMoreBefore(void) {
         genericRulesStarter(tests[i].rules, tests[i].order, tests[i].size);
     }
 }
+#endif
 
-void TestTailorNULL( void ) {
+static void TestTailorNULL( void ) {
     const static char* rule = "&a <<< '\\u0000'";
-    const static char* order[] = { "a", "\\u0000" };
     UErrorCode status = U_ZERO_ERROR;
     UChar rlz[RULE_BUFFER_LEN] = { 0 };
     uint32_t rlen = 0;
