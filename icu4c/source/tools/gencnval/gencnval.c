@@ -23,6 +23,7 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ucnv_io.h" /* charsetNameCmp */
 #include "filestrm.h"
 #include "unewdata.h"
 #include "uoptions.h"
@@ -326,7 +327,7 @@ allocString(uint32_t length) {
 
 static int
 compareAliases(const void *alias1, const void *alias2) {
-    return uprv_stricmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
+    return charsetNameCmp(((Alias*)alias1)->alias, ((Alias*)alias2)->alias);
 }
 
 /*

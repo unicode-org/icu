@@ -136,32 +136,48 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     }
 }
 
-/* compare lowercase str1 with mixed-case str2, both being charset names */
-static int
-charsetNameCmp(const char *str1, const char *str2) {
+/**
+ * Do a fuzzy compare of a two converter/alias names.  The comparison
+ * is case-insensitive.  It also ignores the characters '-', '_', and
+ * ' ' (dash, underscore, and space).  Thus the strings "UTF-8",
+ * "utf_8", and "Utf 8" are exactly equivalent.
+ * 
+ * This is a symmetrical (commutative) operation; order of arguments
+ * is insignificant.  This is an important property for sorting the
+ * list (when the list is preprocessed into binary form) and for
+ * performing binary searches on it at run time.
+ * 
+ * @param name1 a converter name or alias, zero-terminated
+ * @param name2 a converter name or alias, zero-terminated
+ * @return 0 if the names match, or a negative value if the name1
+ * lexically precedes name2, or a positive value if the name1
+ * lexically follows name2.
+ */
+U_CFUNC int
+charsetNameCmp(const char *name1, const char *name2) {
     int rc;
     unsigned char c1, c2;
 
     for (;;) {
-        c1 = (unsigned char) *str1;
-        c2 = (unsigned char) *str2;
-        if (c1 == 0) {
-            if(c2 == 0) {
-                return 0;
-            } else {
-                return -1;
-            }
-        } else if (c2 == 0) {
-            return 1;
-        } else {
-            /* compare non-zero characters with lowercase */
-            rc = (int) c1 - (int) (unsigned char) uprv_tolower(c2);
-            if(rc != 0) {
-                return rc;
-            }
+        /* Ignore delimiters '-', '_', and ' ' */
+        while ((c1 = (unsigned char)*name1) == '-'
+               || c1 == '_' || c1 == ' ') ++name1;
+        while ((c2 = (unsigned char)*name2) == '-'
+               || c2 == '_' || c2 == ' ') ++name2;
+
+        /* If we reach the ends of both strings then they match */
+        if ((c1|c2)==0) {
+            return 0;
         }
-        ++str1;
-        ++str2;
+        
+        /* Case-insensitive comparison */
+        rc = (int)(unsigned char)uprv_tolower(c1) -
+             (int)(unsigned char)uprv_tolower(c2);
+        if (rc!=0) {
+            return rc;
+        }
+        ++name1;
+        ++name2;
     }
 }
 
