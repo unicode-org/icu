@@ -20,7 +20,7 @@ InterIndic_Tamil {
 //--------------------------------------------------------------------
 
 // InterIndic-Tamil
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 // \ue001>; // UNMAPPED InterIndic-Tamil: SIGN CANDRABINDU
 "\ue002>\u0b82;" // SIGN ANUSVARA
 "\ue003>\u0b83;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Tamil {
 "\ue031>\u0bb1;" // LETTER RRA
 "\ue046>\u0bc6;" // VOWEL SIGN E
 "\ue04a>\u0bca;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

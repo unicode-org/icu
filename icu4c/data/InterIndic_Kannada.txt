@@ -20,7 +20,7 @@ InterIndic_Kannada {
 //--------------------------------------------------------------------
 
 // InterIndic-Kannada
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0c82;" // REMAP (indicExceptions.txt): \u0c81>\u0c82 = SIGN CANDRABINDU>SIGN ANUSVARA
 "\ue002>\u0c82;" // SIGN ANUSVARA
 "\ue003>\u0c83;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Kannada {
 "\ue031>\u0cb1;" // LETTER RRA
 "\ue046>\u0cc6;" // VOWEL SIGN E
 "\ue04a>\u0cca;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

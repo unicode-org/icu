@@ -20,7 +20,7 @@ Malayalam_InterIndic {
 //--------------------------------------------------------------------
 
 // Malayalam-InterIndic
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\u0d02>\ue002;" // SIGN ANUSVARA
 "\u0d03>\ue003;" // SIGN VISARGA
 "\u0d05>\ue005;" // LETTER A
@@ -99,7 +99,7 @@ Malayalam_InterIndic {
 "\u0d6d>\ue06d;" // DIGIT SEVEN
 "\u0d6e>\ue06e;" // DIGIT EIGHT
 "\u0d6f>\ue06f;" // DIGIT NINE
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

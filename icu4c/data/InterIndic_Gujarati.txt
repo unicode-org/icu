@@ -20,7 +20,7 @@ InterIndic_Gujarati {
 //--------------------------------------------------------------------
 
 // InterIndic-Gujarati
-":: NFD (NFC) ;"
+//":: NFD (NFC) ;"
 "\ue001>\u0a81;" // SIGN CANDRABINDU
 "\ue002>\u0a82;" // SIGN ANUSVARA
 "\ue003>\u0a83;" // SIGN VISARGA
@@ -118,7 +118,7 @@ InterIndic_Gujarati {
 // \ue083>; // UNMAPPED InterIndic-Gujarati: LETTER RRA (\u0a83 = SIGN VISARGA)
 "\ue047>\u0ac7;" // VOWEL SIGN E
 "\ue04b>\u0acb;" // VOWEL SIGN O
-    ":: NFC (NFD) ;"
+//    ":: NFC (NFD) ;"
 // eof
   }
 }

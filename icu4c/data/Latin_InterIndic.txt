@@ -7,7 +7,7 @@
 
 Latin_InterIndic{
   Rule{
-    ":: NFD (NFC) ;"
+    //":: NFD;"
     //\u0e00 reserved
     //consonants
     "$chandrabindu=\ue001;"
@@ -331,6 +331,6 @@ Latin_InterIndic{
     "8>$eight;"
     "9>$nine;"
     "''>;"
-    ":: NFC (NFD) ;"
+    //":: NFC (NFD) ;"
   }
 }
