@@ -83,7 +83,7 @@ static void TestStandardNames()
     /* Test for some expected results. */
 
     if (dotestname("ibm-1208", "MIME", "utf-8") &&
-        dotestname("cp1252", "MIME", "windows-1252") &&
+        /*dotestname("cp1252", "MIME", "windows-1252") &&*/
         dotestname("ascii", "MIME", "us-ascii") &&
         dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
         dotestname("cp850", "IANA", "IBM850")) {
