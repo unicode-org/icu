@@ -955,6 +955,7 @@ protected:
 protected:
     /**
      * The flag which indicates if the current time is set in the calendar.
+     * @stable
      */
     UBool      fIsTimeSet;
 
@@ -966,12 +967,14 @@ protected:
      * <P>
      * This should really be named areFieldsInSync, but the old name is retained
      * for backward compatibility.
+     * @stable
      */
     UBool      fAreFieldsSet;
 
     /**
      * True if all of the fields have been set.  This is initially false, and set to
      * true by computeFields().
+     * @stable
      */
     UBool      fAreAllFieldsSet;
 
@@ -989,15 +992,19 @@ protected:
 
     /**
      * The time fields containing values into which the millis is computed.
+     * @stable
      */
     int32_t     fFields[FIELD_COUNT];
 
     /**
      * The flags which tell if a specified time field for the calendar is set.
+     * @stable
      */
     UBool      fIsSet[FIELD_COUNT];
 
-    // Special values of stamp[]
+    /** Special values of stamp[]
+     * @stable
+     */
     enum {
         kUnset                 = 0,
         kInternallySet,
@@ -1008,6 +1015,7 @@ protected:
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
+     * @stable
      */
     int32_t        fStamp[FIELD_COUNT];
 
