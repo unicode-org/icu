@@ -45,15 +45,26 @@ uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint)
     return buffer;
 }
 
-/*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
- * and padded with "pad" zeroes
+/***
+ * Fills in a UChar* string with the radix-based representation of a
+ * uint32_t number padded with zeroes to minwidth.  The result
+ * will be null terminated if there is room.
+ *
+ * @param buffer UChar buffer to receive result
+ * @param capacity capacity of buffer
+ * @param i the unsigned number to be formatted
+ * @param radix the radix from 2..36
+ * @param minwidth the minimum width.  If the result is narrower than
+ *        this, '0's will be added on the left.  Must be <=
+ *        capacity.
+ * @return the length of the result, not including any terminating
+ *        null
  */
-#define MAX_DIGITS 10
 U_CAPI int32_t U_EXPORT2
-uprv_itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
+uprv_itou (UChar * buffer, int32_t capacity,
+           uint32_t i, uint32_t radix, int32_t minwidth)
 {
     int32_t length = 0;
-    int32_t num = 0;
     int digit;
     int32_t j;
     UChar temp;
@@ -62,19 +73,18 @@ uprv_itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
         digit = (int)(i % radix);
         buffer[length++]=(UChar)(digit<=9?(0x0030+digit):(0x0030+digit+7));
         i=i/radix;
-    } while(i);
+    } while(i && length<capacity);
 
-    while (length < pad){
+    while (length < minwidth){
         buffer[length++] = (UChar) 0x0030;/*zero padding */
     }
     /* null terminate the buffer */
-    if(length<MAX_DIGITS){
+    if(length<capacity){
         buffer[length] = (UChar) 0x0000;
     }
-    num= (pad>=length) ? pad :length;
 
     /* Reverses the string */
-    for (j = 0; j < (num / 2); j++){
+    for (j = 0; j < (length / 2); j++){
         temp = buffer[(length-1) - j];
         buffer[(length-1) - j] = buffer[j];
         buffer[j] = temp;
