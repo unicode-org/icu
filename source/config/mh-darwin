@@ -16,13 +16,12 @@ COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -dynamic -c
 LIBTOOL=        /usr/bin/libtool
 
 ## Commands to link
-LINK.c=		$(LIBTOOL) $(LDFLAGS) -static
-LINK.cc=	$(LIBTOOL) $(LDFLAGS) -static
+LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(LIBTOOL) $(LDFLAGS) -dynamic
-#SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -dynamic
-SHLIB.cc=	$(LIBTOOL) $(LDFLAGS) -dynamic
+SHLIB.c=	$(CC) -dynamiclib $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared -framework System
+SHLIB.cc=	$(CXX) -dynamiclib $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -framework System
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
