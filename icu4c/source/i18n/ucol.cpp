@@ -231,39 +231,41 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
       return CE;
       break;
     case SURROGATE_TAG:
+      /* pending surrogate discussion with Markus and Mark */
+      return UCOL_NOT_FOUND;
       break;
     case THAI_TAG:
-#if 0      
-     // Thai/Lao reordering
-        if (UCOL_ISTHAIPREVOWEL(*(source->pos)) && 
-			UCOL_ISTHAIBASECONSONANT(*(source->pos+1))) {
-			if(source->isThai == TRUE) {
-				source->isThai = FALSE;
-				if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
-					// allocate a new buffer
-                    source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));
-				} 
-				UChar *sourceCopy = source->pos;
-				UChar *targetCopy = source->writableBuffer;
-				while(sourceCopy < source->len) {
-					if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) && 
-						UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
-						*(targetCopy) = *(sourceCopy+1);
-						*(targetCopy+1) = *(sourceCopy);
-						targetCopy+=2;
-						sourceCopy+=2;
-					} else {
-						*(targetCopy++) = *(sourceCopy++);
-					}
-				}
-				source->pos = source->writableBuffer;
-				source->len = targetCopy;
-				source->CEpos = source->toReturn = source->CEs;
-                return UCOL_IGNORABLE;
-            }
+      /* Thai/Lao reordering */
+      if(source->isThai == TRUE) { /* if we encountered Thai prevowel & the string is not yet touched */
+        source->isThai = FALSE;    /* We will touch the string */
+        if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
+            /* Problematic part - if the stack buffer is too small, we need to allocate */
+            /* However, somebody needs to keep track of that allocated space */
+            /* And context structure is not good for that */
+	        /* allocate a new buffer - This is unfortunate and should be way smarter */
+            /*source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));*/
+        } 
+        UChar *sourceCopy = source->pos;
+        UChar *targetCopy = source->writableBuffer;
+        while(sourceCopy < source->len) {
+	        if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) &&      /* This is the combination that needs to be swapped */
+		        UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
+		        *(targetCopy) = *(sourceCopy+1);
+		        *(targetCopy+1) = *(sourceCopy);
+		        targetCopy+=2;
+		        sourceCopy+=2;
+	        } else {
+		        *(targetCopy++) = *(sourceCopy++);
+	        }
         }
-    }
-#endif
+        source->pos = source->writableBuffer;
+        source->len = targetCopy;
+        source->CEpos = source->toReturn = source->CEs;
+        CE = UCOL_IGNORABLE;
+      } else { /* we have already played with the string, so treat Thai as a length one expansion */
+        CEOffset = coll->expansion+getExpansionOffset(CE); /* find the offset to expansion table */
+        CE = *CEOffset++;
+      }
       break;
     case CONTRACTION_TAG:
       /* This should handle contractions */
@@ -310,6 +312,8 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
       source->toReturn++;
       break;
     case CHARSET_TAG:
+      /* probably after 1.8 */
+      return UCOL_NOT_FOUND;
       break;
     default:
       *status = U_INTERNAL_PROGRAM_ERROR;
@@ -383,6 +387,27 @@ int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t
     
 }
     
+uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, int32_t *secSize, UErrorCode *status) {
+  uint8_t *newStart = NULL;
+
+  if(secStart==second) {
+    newStart=(uint8_t*)uprv_malloc(*secSize*2);
+    if(newStart==NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
+    uprv_memcpy(newStart, secStart, *secondaries-secStart);
+  } else {
+    newStart=(uint8_t*)uprv_realloc(secStart, *secSize*2);
+    if(newStart==NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+    }
+  }
+  *secondaries=newStart+(*secondaries-secStart);
+  *secSize*=2;
+  return newStart;
+}
 
 int32_t
 ucol_calcSortKeyNew(const    UCollatorNew    *coll,
@@ -390,22 +415,27 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         int32_t        sourceLength,
         uint8_t        **result,
         int32_t        resultLength,
-        UBool allocatePrimary)
+        UBool allocatePrimary,
+        UErrorCode *status)
 {
-    uint32_t i = 0; // general purpose counter
+    uint32_t i = 0; /* general purpose counter */
 
-	UErrorCode status = U_ZERO_ERROR;
+    /* Stack allocated buffers for buffers we use */
+    uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER], caseB[UCOL_MAX_BUFFER], quad[UCOL_MAX_BUFFER];
 
-    uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
+    uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert, *cases = caseB, *quads = quad;
 
-    uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
+    if(U_FAILURE(*status)) {
+      return 0;
+    }
 
     if(primaries == NULL && allocatePrimary == TRUE) {
         primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
         resultLength = 2*UCOL_MAX_BUFFER;
     }
 
-    int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
+    int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER, 
+      caseSize = UCOL_MAX_BUFFER, quadSize = UCOL_MAX_BUFFER;
 
     int32_t sortKeySize = 1; // it is always \0 terminated
 
@@ -416,26 +446,28 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
 
-    UColAttributeValue strength = ucol_getAttributeNew(coll, UCOL_STRENGTH, &status);
+    UColAttributeValue strength = ucol_getAttributeNew(coll, UCOL_STRENGTH, status);
 
     UBool  compareSec   = (strength >= UCOL_SECONDARY);
     UBool  compareTer   = (strength >= UCOL_TERTIARY);
     UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
+    UBool  doCase = (ucol_getAttributeNew(coll, UCOL_CASE_LEVEL, status) == UCOL_ON);
+    UBool  lowerFirst = (ucol_getAttributeNew(coll, UCOL_CASE_FIRST, status) == UCOL_LOWER_FIRST);
 
-    sortKeySize += ((compareSec?1:0) + (compareTer?1:0) + (compareQuad?1:0) + (compareIdent?1:0));
+    sortKeySize += ((compareSec?1:0) + (compareTer?1:0) + (doCase?1:0) + (compareQuad?1:0) + (compareIdent?1:0));
 
     collIterate s;
     init_collIterate((UChar *)source, len, &s, FALSE);
 
     // If we need to normalize, we'll do it all at once at the beggining!
-    UColAttributeValue normMode = ucol_getAttributeNew(coll, UCOL_NORMALIZATION_MODE, &status);
+    UColAttributeValue normMode = ucol_getAttributeNew(coll, UCOL_NORMALIZATION_MODE, status);
     if(normMode != UCOL_OFF) {
-        normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, &status);
-        if(U_FAILURE(status)) {
-            status=U_ZERO_ERROR;
+        normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
+        if(U_FAILURE(*status)) {
+            *status=U_ZERO_ERROR;
             normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-            normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), &status);
+            normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
     	normSource[normSourceLen] = 0;
 		s.string = normSource;
@@ -449,11 +481,13 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         return ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
     }
 
-    int32_t minBufferSize = uprv_min(secSize, terSize);
+    int32_t minBufferSize = UCOL_MAX_BUFFER;
 
     uint8_t *primStart = primaries;
     uint8_t *secStart = secondaries;
     uint8_t *terStart = tertiaries;
+    uint8_t *caseStart = cases;
+    uint8_t *quadStart = quads;
 
     uint32_t order = 0;
 
@@ -469,7 +503,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            order = ucol_getNextCENew(coll, &s, &status);
+            order = ucol_getNextCENew(coll, &s, status);
 
             if(order == UCOL_NULLORDER) {
                 finished = TRUE;
@@ -511,12 +545,17 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 if(allocatePrimary == FALSE) {
                     resultOverflow = TRUE;
                     sortKeySize = ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
-                    goto cleanup;
+                    *status = U_MEMORY_ALLOCATION_ERROR;
+                    finished = TRUE;
+                    break;
+                    /*goto cleanup;*/
                 } else {
                     uint8_t *newStart;
                     newStart = (uint8_t *)uprv_realloc(primStart, 2*sortKeySize);
                     if(primStart == NULL) {
-                        /*freak out*/
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        finished = TRUE;
+                        break;
                     }
                     primaries=newStart+(primaries-primStart);
                     resultLength = 2*sortKeySize;
@@ -527,125 +566,116 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         if(finished) {
             break;
         } else {
-            prevBuffSize = minBufferSize;
-            uint8_t *newStart;
-
-            if(secStart==second) {
-                newStart=(uint8_t*)uprv_malloc(2*secSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-                uprv_memcpy(newStart, secStart, secondaries-secStart);
-            } else {
-                newStart=(uint8_t*)uprv_realloc(secStart, 2*secSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-            }
-            secondaries=newStart+(secondaries-secStart);
-            secStart = newStart;
-            secSize*=2;
-
-            if(terStart==tert) {
-                newStart=(uint8_t*)uprv_malloc(2*terSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-                uprv_memcpy(newStart, terStart, tertiaries-terStart);
-            } else {
-                newStart=(uint8_t*)uprv_realloc(terStart, 2*terSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-            }
-            tertiaries=newStart+(tertiaries-terStart);
-            terStart = newStart;
-            terSize*=2;
-
-            minBufferSize = uprv_min(secSize, terSize);
+          prevBuffSize = minBufferSize;
+          secStart = reallocateBuffer(&secondaries, secStart, second, &secSize, status);
+          terStart = reallocateBuffer(&tertiaries, terStart, tert, &terSize, status);
+          caseStart = reallocateBuffer(&cases, caseStart, cases, &caseSize, status);
+          quadStart = reallocateBuffer(&quads, quadStart, quads, &quadSize, status);
+          minBufferSize *= 2;
         }
     }
 
-    if(compareSec) {
-      *(primaries++) = UCOL_LEVELTERMINATOR;
-      uint32_t secsize = secondaries-secStart;
-      if(ucol_getAttributeNew(coll, UCOL_FRENCH_COLLATION, &status) == UCOL_ON) { // do the reverse copy
-          for(i = 0; i<secsize; i++) {
-              *(primaries++) = *(secondaries-i-1);
-          }
-        } else { 
-            uprv_memcpy(primaries, secStart, secsize); 
-            primaries += secsize;
-        }
-
-    }
-
-    if(compareTer) {
-      *(primaries++) = UCOL_LEVELTERMINATOR;
-      uint32_t tersize = tertiaries - terStart;
-      uprv_memcpy(primaries, terStart, tersize);
-      primaries += tersize;
-    }
-
-    if(compareQuad) {
+    if(U_SUCCESS(*status)) {
+      /* we have done all the CE's, now let's put them together to form a key */
+      if(compareSec) {
         *(primaries++) = UCOL_LEVELTERMINATOR;
-    }
-
-    if(compareIdent) {
-		UChar *ident = s.string;
-        uint8_t idByte = 0;
-        sortKeySize += len * sizeof(UChar);
-        *(primaries++) = UCOL_LEVELTERMINATOR;
-        if(sortKeySize <= resultLength) {
-		    while(ident < s.len) {
-                idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                if(idByte < 0x02) {
-                    if(sortKeySize < resultLength) {
-                        *(primaries++) = 0x01;
-                        sortKeySize++;
-                        *(primaries++) = idByte + 1;
-                    }
-                } else {
-                    *(primaries++) = idByte;
-                }
-                idByte = (*(ident) & 0xFF);
-                if(idByte < 0x02) {
-                    if(sortKeySize < resultLength) {
-                        *(primaries++) = 0x01;
-                        sortKeySize++;
-                        *(primaries++) = idByte + 1;
-                    }
-                } else {
-                    *(primaries++) = idByte;
-                }
-
-		      ident++;
-          }
-        } else {
-		    while(ident < s.len) {
-                idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                if(idByte < 0x02) {
-                    sortKeySize++;
-                }
-                idByte = (*(ident) & 0xFF);
-                if(idByte < 0x02) {
-                    sortKeySize++;
-                }
-		      ident++;
+        uint32_t secsize = secondaries-secStart;
+        if(ucol_getAttributeNew(coll, UCOL_FRENCH_COLLATION, status) == UCOL_ON) { // do the reverse copy
+            for(i = 0; i<secsize; i++) {
+                *(primaries++) = *(secondaries-i-1);
             }
-        }
+          } else { 
+              uprv_memcpy(primaries, secStart, secsize); 
+              primaries += secsize;
+          }
 
+      }
+
+      if(doCase) {
+        *(primaries++) = UCOL_LEVELTERMINATOR;
+        uint32_t casesize = cases - caseStart;
+        uprv_memcpy(primaries, caseStart, casesize);
+        primaries += casesize;
+      }
+
+      if(compareTer) {
+        *(primaries++) = UCOL_LEVELTERMINATOR;
+        uint32_t tersize = tertiaries - terStart;
+        uprv_memcpy(primaries, terStart, tersize);
+        primaries += tersize;
+      }
+
+      if(compareQuad) {
+          *(primaries++) = UCOL_LEVELTERMINATOR;
+          uint32_t quadsize = quads - quadStart;
+          uprv_memcpy(primaries, quadStart, quadsize);
+          primaries += quadsize;
+      }
+
+      if(compareIdent) {
+		  UChar *ident = s.string;
+          uint8_t idByte = 0;
+          sortKeySize += len * sizeof(UChar);
+          *(primaries++) = UCOL_LEVELTERMINATOR;
+          if(sortKeySize <= resultLength) {
+		      while(ident < s.len) {
+                  idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                  if(idByte < 0x02) {
+                      if(sortKeySize < resultLength) {
+                          *(primaries++) = 0x01;
+                          sortKeySize++;
+                          *(primaries++) = idByte + 1;
+                      }
+                  } else {
+                      *(primaries++) = idByte;
+                  }
+                  idByte = (*(ident) & 0xFF);
+                  if(idByte < 0x02) {
+                      if(sortKeySize < resultLength) {
+                          *(primaries++) = 0x01;
+                          sortKeySize++;
+                          *(primaries++) = idByte + 1;
+                      }
+                  } else {
+                      *(primaries++) = idByte;
+                  }
+
+		        ident++;
+            }
+          } else {
+		      while(ident < s.len) {
+                  idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+                  if(idByte < 0x02) {
+                      sortKeySize++;
+                  }
+                  idByte = (*(ident) & 0xFF);
+                  if(idByte < 0x02) {
+                      sortKeySize++;
+                  }
+		        ident++;
+              }
+          }
+
+      }
+
+      *(primaries++) = '\0';
+    } else {
+      sortKeySize = 0;
     }
 
-    *(primaries++) = '\0';
-
-cleanup:
     if(terStart != tert) {
         uprv_free(terStart);
     }
     if(secStart != second) {
         uprv_free(secStart);
+    } 
+    if(caseStart != caseB) {
+        uprv_free(caseStart);
     }
+    if(quadStart != quad) {
+        uprv_free(quadStart);
+    }
+
     if(normSource != normBuffer) {
         uprv_free(normSource);
     }
@@ -661,7 +691,8 @@ ucol_getSortKeyNew(const    UCollatorNew    *coll,
         uint8_t        *result,
         int32_t        resultLength)
 {
-    return ucol_calcSortKeyNew(coll, source, sourceLength, &result, resultLength, FALSE);
+  UErrorCode status = U_ZERO_ERROR;
+    return ucol_calcSortKeyNew(coll, source, sourceLength, &result, resultLength, FALSE, &status);
 }
 
 U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
