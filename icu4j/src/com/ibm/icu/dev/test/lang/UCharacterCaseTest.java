@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $ 
-* $Date: 2002/10/03 23:42:02 $ 
-* $Revision: 1.6 $
+* $Date: 2003/01/25 00:05:01 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -651,7 +651,12 @@ public final class UCharacterCaseTest extends TestFmwk
     	"\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
     	
     	"'oH dOn'T tItLeCaSe AfTeR lEtTeR+'", 
-    	"'Oh Don't Titlecase After Letter+'"
+    	"'Oh Don't Titlecase After Letter+'",
+    	
+    	"abc123abc", "Abc123abc",
+    	
+    	"abc123abc", "Abc123Abc", // for abc123abc title break iterator breaks
+    	                          // at offset 6 unlike word break iterator
 	};
 	       
     private static final BreakIterator TITLE_BREAKITERATORS_[] =
@@ -661,6 +666,8 @@ public final class UCharacterCaseTest extends TestFmwk
     	BREAKITERATOR_TITLE_,
     	BREAKITERATOR_CHARACTER_,
     	null,
+    	null,
+    	BREAKITERATOR_WORD_,
     	null
     };
     

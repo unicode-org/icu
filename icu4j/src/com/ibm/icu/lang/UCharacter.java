@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/11 23:37:42 $ 
-* $Revision: 1.60 $
+* $Date: 2003/01/25 00:05:03 $ 
+* $Revision: 1.61 $
 *
 *******************************************************************************
 */
@@ -3190,7 +3190,7 @@ public final class UCharacter
         	if (locale == null) {
         		locale = Locale.getDefault();
         	}
-            breakiter = BreakIterator.getWordInstance(locale);
+            breakiter = BreakIterator.getTitleInstance(locale);
         }
         return PROPERTY_.toTitleCase(locale, str, breakiter);
     }
