@@ -632,7 +632,9 @@ enum UBlockCode {
 
     /** */
     UBLOCK_NO_SCRIPT=UBLOCK_COUNT,
-    
+
+    /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
+    U_CHAR_SCRIPT_COUNT =UBLOCK_COUNT,
     /** @deprecated  Use the enum that begins with UBLOCK. Remove after Aug, 2002*/
     U_NO_SCRIPT = UBLOCK_COUNT
 
