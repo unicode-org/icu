@@ -36,6 +36,7 @@ static void
 TestCharNames();
 
 /* test data ---------------------------------------------------------------- */
+#define MIN(a,b) (a < b ? a : b)
 
 UChar*** dataTable = 0;
 const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
@@ -225,6 +226,10 @@ void TestMisc()
                                          FULL_WIDTH, 
                                          NEUTRAL};
     int i;
+    char icuVersion[U_MAX_VERSION_STRING], temp[U_MAX_VERSION_LEN];
+    UVersionInfo realVersion;
+
+    memset(icuVersion, 0, U_MAX_VERSION_STRING);
     for (i = 0; i < 5; i++) {
       log_verbose("Testing for isspace and nonspaces\n");
         if (!(u_isspace(sampleSpaces[i])) ||
@@ -263,6 +268,24 @@ void TestMisc()
             (u_isdigit(sampleNonDigits[i]))) {
             log_err("Digit char test error : %d   or   %d\n", (int32_t)sampleDigits[i], (int32_t)sampleNonDigits[i]);
         }
+    }
+    /* Tests the ICU version #*/
+    u_getVersion(realVersion);
+    for (i = 0; i < U_MAX_VERSION_LEN; i++ )
+    {
+        int len = 0;
+        itoa(realVersion[i], temp, 10);
+        strcat(icuVersion, temp);
+        len = strlen(icuVersion);
+        if (i != U_MAX_VERSION_LEN-1) 
+        {
+            icuVersion[len] = U_VERSION_DELIMITER;
+            icuVersion[len + 1] = 0;
+        }
+    }
+    if (strncmp(icuVersion, U_ICU_VERSION, MIN(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
+    {
+        log_err("ICU version test failed.\n");
     }
 }
 
