@@ -38,35 +38,6 @@
 #define HAVE_BOOL_T 0
 
 /*===========================================================================*/
-/* Platform/Language determination                                           */
-/*===========================================================================*/
-
-#ifdef macintosh
-#ifdef XP_MAC
-#undef XP_MAC
-#endif
-#define XP_MAC 1
-#include <string.h>
-#endif
-
-//#if defined(__OS2__) || defined(OS//2)
-#if defined(__OS2__)
-  #ifdef OS2
-    #undef OS2
-  #endif
-  #define OS2   1
-#endif
-
-
-
-/* XP_CPLUSPLUS is a cross-platform symbol which should be defined when 
-   using C++.  It should not be defined when compiling under C. */
-#undef XP_CPLUSPLUS
-#ifdef __cplusplus
-#define XP_CPLUSPLUS
-#endif
-
-/*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
 
@@ -106,42 +77,9 @@ typedef unsigned long uint32_t;
 #define T_INT32_MAX (LONG_MAX)
 
 /*===========================================================================*/
-/* Boolean data type                                                         */
-/*===========================================================================*/
-
-#undef TRUE
-#undef FALSE
-
-#if ! HAVE_BOOL_T
-typedef int8_t bool_t;
-#endif
-
-#define TRUE  1
-#define FALSE 0
-
-/*===========================================================================*/
-/* Unicode string offset                                                     */
-/*===========================================================================*/
-typedef int32_t UTextOffset;
-
-/*===========================================================================*/
-/* Unicode character                                                         */
-/*===========================================================================*/
-/* Another common UChar definition is wchar_t.  However, this is valid
- * only if wchar_t is at least 16 bits and in Unicode encoding.  */
-typedef uint16_t UChar;
-
-/*===========================================================================*/
 /* Symbol import-export control                                              */
 /*===========================================================================*/
 
-#ifdef _WIN32
-#define U_EXPORT __declspec(dllexport)
-#define U_IMPORT __declspec(dllimport)
-#elif defined(AS400)
-#define U_EXPORT __declspec(dllexport)
-#define U_IMPORT
-#else
 #define U_EXPORT
+#define U_EXPORT2
 #define U_IMPORT
-#endif
