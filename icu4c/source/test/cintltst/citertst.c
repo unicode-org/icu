@@ -674,32 +674,41 @@ static void TestSmallBuffer()
 {
     UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll;
-    UCollationElements *iter;
+    UCollationElements *testiter,
+                       *iter;
     int                 count = 0;
-    uint32_t           *orders;
+    uint32_t           *testorders,
+                       *orders;
 
-    UChar str[500];
+    UChar teststr[500];
+    UChar str[] = {0x300, 0x31A, 0};
     /*
     creating a long string of decomposable characters,
     since by default the writable buffer is of size 256
     */
     while (count < 500) {
         if ((count & 1) == 0) {
-            str[count ++] = 0x300;
+            teststr[count ++] = 0x300;
         }
         else {
-            str[count ++] = 0x31A;
+            teststr[count ++] = 0x31A;
         }
     }
 
     coll = ucol_open("th_TH", &status);
-    iter = ucol_openElements(coll, str, 500, &status);
+    testiter = ucol_openElements(coll, teststr, 500, &status);
+    iter = ucol_openElements(coll, str, 2, &status);
+
+    orders     = getOrders(iter, &count);
+    if (count != 2) {
+        log_err("Error collation elements size is not 2 for \\u0300\\u031A\n");
+    }
 
     /*
     this will rearrange the string data to 250 characters of 0x300 first then
     250 characters of 0x031A
     */
-    orders = getOrders(iter, &count);
+    testorders = getOrders(testiter, &count);
 
     if (count != 500) {
         log_err("Error decomposition does not give the right sized collation elements\n");
@@ -707,14 +716,16 @@ static void TestSmallBuffer()
 
     while (count != 0) {
         /* UCA collation element for 0x0F76 */
-        if ((count > 250 && orders[-- count] != 0xC003) ||
-            (count <= 250 && orders[-- count] != 0x8803)) {
+        if ((count > 250 && testorders[-- count] != orders[1]) ||
+            (count <= 250 && testorders[-- count] != orders[0])) {
             log_err("Error decomposition does not give the right collation element at %d count\n", count);
             break;
         }
     }
 
+    free(testorders);
     free(orders);
+    ucol_closeElements(testiter);
     ucol_closeElements(iter);
     ucol_close(coll);
 }
