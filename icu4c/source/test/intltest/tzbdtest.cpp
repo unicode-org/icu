@@ -119,7 +119,7 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsIn
 void
 TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsInDST, UDate expectedBoundary, TimeZone* tz)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     UDate min = d;
     UDate max = min + SIX_MONTHS;
@@ -189,7 +189,7 @@ void
 TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, bool_t expUseDaylightTime, bool_t expInDaylightTime, UDate expZoneOffset, UDate expDSTOffset)
 {
     UnicodeString str;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     logln("-- Verifying time " + dateToString(d) + " in zone " + time_zone->getID(str));
     if (time_zone->inDaylightTime(d, status) == expInDaylightTime)
         logln(UnicodeString("PASS: inDaylightTime = ") + (time_zone->inDaylightTime(d, status)?"true":"false"));
@@ -275,7 +275,7 @@ TimeZoneBoundaryTest::TestBoundaries()
 void
 TimeZoneBoundaryTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate d, UDate expectedBoundary)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate min = d;
     UDate max = min + SIX_MONTHS;
     bool_t startsInDST = tz->inDaylightTime(d, status);
@@ -313,7 +313,7 @@ TimeZoneBoundaryTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate d, UDate e
 void
 TimeZoneBoundaryTest::TestNewRules()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (TRUE) {
         SimpleTimeZone *tz;
         logln("-----------------------------------------------------------------");
@@ -340,7 +340,7 @@ TimeZoneBoundaryTest::TestNewRules()
 void
 TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZone* z, int32_t expectedChanges)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     UDate d = date(year - 1900, Calendar::JANUARY, 1);
     UDate time = d;

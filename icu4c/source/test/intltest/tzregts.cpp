@@ -50,24 +50,6 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
     }
 }
 
-const char* 
-TimeZoneRegressionTest::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "int32_tERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 TimeZoneRegressionTest::failure(UErrorCode status, const char* msg)
 {
@@ -108,7 +90,7 @@ void TimeZoneRegressionTest:: Test4073209() {
 // {sfb} will this work using a Calendar?
 void TimeZoneRegressionTest:: Test4073215() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleTimeZone *z = (SimpleTimeZone*) TimeZone::createTimeZone("GMT");
     if (z->useDaylightTime())
         errln("Fail: Fix test to start with non-DST zone");
@@ -237,7 +219,7 @@ void TimeZoneRegressionTest:: Test4096952() {
  * @bug 4109314
  */
 void TimeZoneRegressionTest:: Test4109314() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
     failure(status, "Calendar::createInstance");
     TimeZone *PST = TimeZone::createTimeZone("PST");
@@ -274,7 +256,7 @@ void TimeZoneRegressionTest:: Test4109314() {
 bool_t 
 TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ) 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     // GregorianCalendar testCal = (GregorianCalendar)aCal.clone(); 
 
     int32_t tzOffset, tzRawOffset; 
@@ -374,7 +356,7 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
  */
 void TimeZoneRegressionTest:: Test4126678() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
     failure(status, "Calendar::createInstance");
     TimeZone *tz = TimeZone::createTimeZone("PST");
@@ -457,7 +439,7 @@ void TimeZoneRegressionTest:: Test4151429() {
  * and different DST parameters.
  */
 void TimeZoneRegressionTest:: Test4154537() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     // tz1 and tz2 have no DST and different rule parameters
     SimpleTimeZone *tz1 = new SimpleTimeZone(0, "1", 0, 0, 0, 0, 2, 0, 0, 0, status);
     SimpleTimeZone *tz2 = new SimpleTimeZone(0, "2", 1, 0, 0, 0, 3, 0, 0, 0, status);
@@ -534,7 +516,7 @@ void TimeZoneRegressionTest:: Test4154542()
         int32_t dayOfWeek = DATA[i+3];
         int32_t time      = DATA[i+4];
 
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
 
         //Exception ex = null;
         //try {
@@ -551,7 +533,7 @@ void TimeZoneRegressionTest:: Test4154542()
 
         //ex = null;
         //try {
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
             zone->setEndRule(month, day, dayOfWeek, time, status);
         //} catch (IllegalArgumentException e) {
         //   ex = e;
@@ -566,7 +548,7 @@ void TimeZoneRegressionTest:: Test4154542()
         //ex = null;
         //try {
         // {sfb} need to look into ctor problems! (UErrorCode vs. dst signature confusion)
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
             SimpleTimeZone *temp = new SimpleTimeZone(0, "Z",
                     (int8_t)month, (int8_t)day, (int8_t)dayOfWeek, time,
                     (int8_t)GOOD_MONTH, (int8_t)GOOD_DAY, (int8_t)GOOD_DAY_OF_WEEK, 
@@ -584,7 +566,7 @@ void TimeZoneRegressionTest:: Test4154542()
         delete temp;
         //ex = null;
         //try {
-        status = ZERO_ERROR;
+        status = U_ZERO_ERROR;
             temp = new SimpleTimeZone(0, "Z",
                     (int8_t)GOOD_MONTH, (int8_t)GOOD_DAY, (int8_t)GOOD_DAY_OF_WEEK, 
                     GOOD_TIME,
@@ -622,7 +604,7 @@ TimeZoneRegressionTest::Test4154525()
         // Integer.MAX_VALUE, ?, // no upper limit on DST savings at this time
     };
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     for(int32_t i = 0; i < 10; i+=2) {
         int32_t savings = DATA[i];
         bool_t valid = DATA[i+1] == GOOD;
@@ -660,7 +642,7 @@ TimeZoneRegressionTest::Test4154525()
                     errln(UnicodeString("Fail: DST savings of ") + savings + " accepted by " + method);
                 }
             }
-            status = ZERO_ERROR;
+            status = U_ZERO_ERROR;
             delete z;
         }
     }
@@ -708,7 +690,7 @@ TimeZoneRegressionTest::Test4154650()
 
     int32_t dataLen = sizeof(DATA) / sizeof(DATA[0]);
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     TimeZone *tz = TimeZone::createDefault();
     for(int32_t i = 0; i < dataLen; i += 7) {
         bool_t good = DATA[i] == GOOD;
@@ -725,7 +707,7 @@ TimeZoneRegressionTest::Test4154650()
                   DATA[i+4] + ", " + DATA[i+5] + ", " + DATA[i+6] +
                   (good ? (UnicodeString(") threw ") + errorName(status)) : UnicodeString(") accepts invalid args")));
         }
-        status = ZERO_ERROR; // reset
+        status = U_ZERO_ERROR; // reset
     }
     delete tz;
 }
@@ -738,7 +720,7 @@ TimeZoneRegressionTest::Test4154650()
 void 
 TimeZoneRegressionTest::Test4162593() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::US, status);
     const int32_t ONE_HOUR = 60*60*1000;
 
@@ -821,7 +803,7 @@ TimeZoneRegressionTest::TestJDK12API()
         errln("FAILURE: PST and CST have same rules");
     }
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t offset1 = pst->getOffset(1,
         1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000), status);
     failure(status, "getOffset() failed");
@@ -840,7 +822,7 @@ TimeZoneRegressionTest::TestJDK12API()
     if(SUCCESS(status))
         errln("FAILURE: getOffset() succeeded with -1 for month");
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     cst->setDSTSavings(60*60*1000, status);
     failure(status, "setDSTSavings() failed");
 

@@ -97,24 +97,6 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &n
     }
 }
 
-const char* 
-NumberFormatRegressionTest::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 NumberFormatRegressionTest::failure(UErrorCode status, const UnicodeString& msg)
 {
@@ -209,7 +191,7 @@ void NumberFormatRegressionTest::Test4074620()
 
 void NumberFormatRegressionTest::Test4088161 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     double d = 100;
@@ -238,7 +220,7 @@ void NumberFormatRegressionTest::Test4088161 ()
  */
 void NumberFormatRegressionTest::Test4087245 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *symbols = new DecimalFormatSymbols(status);
     failure(status, "new DecimalFormatSymbols");
     // {sfb} One note about this test: if you pass in a pointer
@@ -267,7 +249,7 @@ void NumberFormatRegressionTest::Test4087245 ()
  */
 void NumberFormatRegressionTest::Test4087535 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     df->setMinimumIntegerDigits(0);
@@ -292,7 +274,7 @@ void NumberFormatRegressionTest::Test4087535 ()
 // {sfb} how do I tell if this worked? --> FieldPosition doesn't change ??
 void NumberFormatRegressionTest::Test4088503 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     df->setGroupingSize(0);
@@ -322,7 +304,7 @@ float
 NumberFormatRegressionTest::assignFloatValue(float returnfloat)
 {
     logln(UnicodeString(" VALUE ") + returnfloat);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nfcommon =  NumberFormat::createCurrencyInstance(Locale::US, status);
     failure(status, "NumberFormat::createCurrencyInstance");
     nfcommon->setGroupingUsed(FALSE);
@@ -349,7 +331,7 @@ NumberFormatRegressionTest::assignFloatValue(float returnfloat)
  */
 void NumberFormatRegressionTest::Test4059870() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *format = new DecimalFormat("00", status);
     failure(status, "new Decimalformat");
     //try {
@@ -372,7 +354,7 @@ void NumberFormatRegressionTest::Test4059870()
 // {sfb} this is silly in C++
 void NumberFormatRegressionTest::Test4083018 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *dfs = new DecimalFormatSymbols(status);
     failure(status, "new DecimalFormatSymbols");
     //try {
@@ -393,7 +375,7 @@ void NumberFormatRegressionTest::Test4083018 ()
 void NumberFormatRegressionTest::Test4071492 ()
 {
     double x = 0.00159999;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
     nf->setMaximumFractionDigits(4);
@@ -414,7 +396,7 @@ void NumberFormatRegressionTest::Test4071492 ()
  */
 void NumberFormatRegressionTest::Test4086575() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf1 = NumberFormat::createInstance(Locale::FRANCE, status);
     failure(status, "NumberFormat::createInstance");
     
@@ -489,7 +471,7 @@ void NumberFormatRegressionTest::Test4068693()
 {
     logln("----- Test Application -----");
     ParsePosition pos(0);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     Formattable d;
@@ -540,7 +522,7 @@ void NumberFormatRegressionTest::Test4069754()
  */
 void NumberFormatRegressionTest::Test4087251 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     //try {
@@ -575,7 +557,7 @@ void NumberFormatRegressionTest::Test4090489 ()
 // {sfb} sprintf doesn't correctly handle the double, so there is nothing
 // that NumberFormat can do.  For some reason, it does not format the last 1.
 
-/*    UErrorCode status = ZERO_ERROR;
+/*    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     df->setMinimumFractionDigits(10);
@@ -601,7 +583,7 @@ void NumberFormatRegressionTest::Test4090504 ()
 {
     double d = 1;
     logln(UnicodeString("d = ") + d);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     UnicodeString sb;
@@ -625,7 +607,7 @@ void NumberFormatRegressionTest::Test4090504 ()
  */
 void NumberFormatRegressionTest::Test4095713 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFOrmat");
     UnicodeString str("0.1234");
@@ -646,7 +628,7 @@ void NumberFormatRegressionTest::Test4095713 ()
 // {sfb} not sure what to do with this one
 void NumberFormatRegressionTest::Test4092561 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
 
@@ -667,7 +649,7 @@ void NumberFormatRegressionTest::Test4092561 ()
  */
 void NumberFormatRegressionTest::Test4092480 ()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *dfFoo = new DecimalFormat(UnicodeString("000"), status);
     failure(status, "new DecimalFormat");
 
@@ -716,7 +698,7 @@ void NumberFormatRegressionTest::Test4092480 ()
  */
 void NumberFormatRegressionTest::Test4087244 () {
     Locale *de = new Locale(UnicodeString("pt"), UnicodeString("PT"));
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
     if (nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
         errln("expected DecimalFormat!");
@@ -775,7 +757,7 @@ void NumberFormatRegressionTest::Test4070798 ()
     UnicodeString expectedCurrency(chars2, 10, 10);
     UnicodeString expectedPercent(chars3, 9, 9);
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::FRANCE, status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
@@ -843,7 +825,7 @@ void NumberFormatRegressionTest::Test4071005 ()
     UnicodeString expectedCurrency(chars2, 10, 10);
     UnicodeString expectedPercent(chars3, 9, 9);
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::CANADA_FRENCH, status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
@@ -903,7 +885,7 @@ void NumberFormatRegressionTest::Test4071014 ()
     UnicodeString expectedCurrency("5.789,99 DM");
     UnicodeString expectedPercent("-578.999%");
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::GERMANY, status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString.remove();
@@ -963,7 +945,7 @@ void NumberFormatRegressionTest::Test4071859 ()
     UnicodeString expectedCurrency("-L. 5.790");
     UnicodeString expectedPercent("-578.999%");
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale::ITALY, status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
@@ -1011,7 +993,7 @@ void NumberFormatRegressionTest::Test4071859 ()
  */
 void NumberFormatRegressionTest::Test4093610()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat("#0.#", status);
     failure(status, "new DecimalFormat");
     UnicodeString s("12.4");
@@ -1052,7 +1034,7 @@ void NumberFormatRegressionTest::roundingTest(DecimalFormat *df, double x, Unico
 void NumberFormatRegressionTest::Test4098741()
 {
     //try {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createPercentInstance(status);
         fmt->setMaximumFractionDigits(20);
         UnicodeString temp;
@@ -1070,7 +1052,7 @@ void NumberFormatRegressionTest::Test4098741()
 void NumberFormatRegressionTest::Test4074454()
 {
     //try {
-    UErrorCode status = ZERO_ERROR;  
+    UErrorCode status = U_ZERO_ERROR;  
     DecimalFormat *fmt = new DecimalFormat("#,#00.00;-#.#", status);
     failure(status, "new DecimalFormat");
       logln("Inconsistent negative pattern is fine.");
@@ -1110,7 +1092,7 @@ void NumberFormatRegressionTest::Test4074454()
 void NumberFormatRegressionTest::Test4099404()
 {
     //try {
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         DecimalFormat *fmt = new DecimalFormat(UnicodeString("000.0#0"), status);
         if(! FAILURE(status))
             errln(UnicodeString("Bug 4099404 failed applying illegal pattern \"000.0#0\""));
@@ -1134,7 +1116,7 @@ void NumberFormatRegressionTest::Test4099404()
  */
 void NumberFormatRegressionTest::Test4101481()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *sdf = new DecimalFormat(UnicodeString("#,##0"), status);
     failure(status, "new DecimalFormat");
     if (sdf->getMinimumIntegerDigits() != 1)
@@ -1146,7 +1128,7 @@ void NumberFormatRegressionTest::Test4101481()
 void NumberFormatRegressionTest::Test4052223()
 {
     //try {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
         DecimalFormat *fmt = new DecimalFormat(UnicodeString("#,#00.00"), status);
         failure(status, "new DecimalFormat");
         Formattable num;
@@ -1163,7 +1145,7 @@ void NumberFormatRegressionTest::Test4052223()
  */
 void NumberFormatRegressionTest::Test4061302()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *fmt = new DecimalFormatSymbols(status);
     failure(status, "new DecimalFormatSymbols");
     UnicodeString currency;
@@ -1198,7 +1180,7 @@ void NumberFormatRegressionTest::Test4061302()
  */
 void NumberFormatRegressionTest::Test4062486()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = new DecimalFormat(UnicodeString("#,##0.00"), status);
     failure(status, "new DecimalFormat");
     UnicodeString formatted;
@@ -1220,7 +1202,7 @@ void NumberFormatRegressionTest::Test4062486()
  */
 void NumberFormatRegressionTest::Test4108738()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::US, status);
     failure(status, "new DecimalFormatSymbols");
     DecimalFormat *df = new DecimalFormat("#,##0.###", syms, status);
@@ -1256,7 +1238,7 @@ void NumberFormatRegressionTest::Test4108738()
  */
 void NumberFormatRegressionTest::Test4106658()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status); // Corrected; see 4147706
     failure(status, "new DecimalFormat");
 #if defined(WIN32) || defined(HPUX)
@@ -1285,7 +1267,7 @@ void NumberFormatRegressionTest::Test4106658()
  */
 void NumberFormatRegressionTest::Test4106662()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     UnicodeString text("x");
@@ -1314,7 +1296,7 @@ void NumberFormatRegressionTest::Test4106662()
  */
 void NumberFormatRegressionTest::Test4114639()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *format = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
     UnicodeString text("time 10:x");
@@ -1332,7 +1314,7 @@ void NumberFormatRegressionTest::Test4114639()
  */
 void NumberFormatRegressionTest::Test4106664()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     // {sfb} long in java is 64 bits
@@ -1361,7 +1343,7 @@ void NumberFormatRegressionTest::Test4106664()
  */
 void NumberFormatRegressionTest::Test4106667()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat(status);
     failure(status, "new DecimalFormat");
     UChar foo [] = { 0x002B };
@@ -1388,7 +1370,7 @@ void NumberFormatRegressionTest::Test4106667()
  */
 void NumberFormatRegressionTest::Test4110936()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
     nf->setMaximumIntegerDigits(128);
@@ -1413,7 +1395,7 @@ void NumberFormatRegressionTest::Test4122840()
     const Locale *locales = Locale::getAvailableLocales(count);
     
     for (int i = 0; i < count; i++) {
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         ResourceBundle *rb = new ResourceBundle(
             icu_getDefaultDataDirectory()/*"java.text.resources.LocaleElements"*/, 
             locales[i], status);
@@ -1503,7 +1485,7 @@ void NumberFormatRegressionTest::Test4122840()
  */
 void NumberFormatRegressionTest::Test4125885()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     double rate = 12.34;
     DecimalFormat *formatDec = new DecimalFormat ("000.00", status);
     failure(status, "new DecimalFormat");
@@ -1533,7 +1515,7 @@ void NumberFormatRegressionTest::Test4125885()
  */
 void NumberFormatRegressionTest::Test4134034() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *nf = new DecimalFormat("##,###,###.00", status);
     failure(status, "new DecimalFormat");
     
@@ -1592,7 +1574,7 @@ void NumberFormatRegressionTest::Test4134300() {
 
     for (int i=0; i< 10; i+=2) {
         UnicodeString result;
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         DecimalFormat *df = new DecimalFormat(DATA[i], status);
         failure(status, "new DecimalFormat");
         FieldPosition pos(FieldPosition::DONT_CARE);
@@ -1615,7 +1597,7 @@ void NumberFormatRegressionTest::Test4134300() {
  */
 void NumberFormatRegressionTest::Test4140009() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::ENGLISH, status);
     failure(status, "new DecimalFormatSymbols");
     DecimalFormat *f = new DecimalFormat(UnicodeString(""), syms, status);
@@ -1656,7 +1638,7 @@ void NumberFormatRegressionTest::Test4141750() {
  */
 void NumberFormatRegressionTest::Test4145457() {
     //try {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nff = NumberFormat::createInstance(status);
     failure(status, "NumberFormat::createInstance");
     if(nff->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
@@ -1730,7 +1712,7 @@ void NumberFormatRegressionTest::Test4145457() {
  */
 void NumberFormatRegressionTest::Test4147295() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *sdf = new DecimalFormat(status);
     UnicodeString pattern("#,###");
     logln("Applying pattern \"" + pattern + "\"");
@@ -1756,7 +1738,7 @@ void NumberFormatRegressionTest::Test4147295()
  */
 void NumberFormatRegressionTest::Test4147706() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *df = new DecimalFormat("#,##0.0##", status);
     failure(status, "new DecimalFormat");
     DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::ENGLISH, status);
@@ -1808,7 +1790,7 @@ NumberFormatRegressionTest::Test4162198()
 {
     // for some reason, DBL_MAX will not round trip. (bug in sprintf/atof)
     double dbl = LONG_MAX * 1000.0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *f = NumberFormat::createInstance(status);
     if(FAILURE(status)) {
         errln("Couldn't create number format");
@@ -1844,7 +1826,7 @@ NumberFormatRegressionTest::Test4162198()
 void 
 NumberFormatRegressionTest::Test4162852() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     for(int32_t i=0; i < 2; ++i) {
         NumberFormat *f = (i == 0) ? NumberFormat::createInstance(status)
             : NumberFormat::createPercentInstance(status);
@@ -1879,7 +1861,7 @@ static double _u_abs(double a) { return a<0?-a:a; }
  * NumberFormat truncates data
  */
 void NumberFormatRegressionTest::Test4167494() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::US, status);
     failure(status, "NumberFormat::createInstance");
 
@@ -1912,7 +1894,7 @@ void NumberFormatRegressionTest::Test4167494() {
  * DecimalFormat.parse() fails when ParseIntegerOnly set to true
  */
 void NumberFormatRegressionTest::Test4170798() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::US, status);
     failure(status, "NumberFormat::createInstance");
     if(nf->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
@@ -1947,7 +1929,7 @@ void NumberFormatRegressionTest::Test4176114() {
         "0,000,000,000,000.0000", "#0,000,000,000,000.0000", // Reported
     };
     int DATA_length = sizeof(DATA) / sizeof(DATA[0]);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString s;
     for (int i=0; i<DATA_length; i+=2) {
         DecimalFormat df(DATA[i], status);
@@ -1979,7 +1961,7 @@ void NumberFormatRegressionTest::Test4179818() {
         1.2501,
         0.9999,
     };
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
     failure(status, "Construct DecimalFormatSymbols");
     DecimalFormat fmt("#", sym, status);
@@ -2010,7 +1992,7 @@ void NumberFormatRegressionTest::Test4179818() {
  * 4212073.
  */
 void NumberFormatRegressionTest::Test4212072() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("#"), sym, status);
@@ -2108,7 +2090,7 @@ void NumberFormatRegressionTest::Test4212072() {
     };
     for (int i=0; i<n; ++i) {
         for (int j=0; j<3; ++j) {
-            status = ZERO_ERROR;
+            status = U_ZERO_ERROR;
             NumberFormat *nf;
             switch (j) {
             case 0:
@@ -2174,7 +2156,7 @@ void NumberFormatRegressionTest::Test4212072() {
  * DecimalFormat.parse() fails for mulipliers 2^n.
  */
 void NumberFormatRegressionTest::Test4216742() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *fmt = (DecimalFormat*) NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
     int32_t DATA[] = { LONG_MIN, LONG_MAX, -100000000, 100000000 };
@@ -2215,7 +2197,7 @@ void NumberFormatRegressionTest::Test4217661() {
     double D[] = {  0.001, 1.001, 0.006,  1.006 };
     char*  S[] = { "0",   "1",   "0.01", "1.01" };
     int D_length = sizeof(D) / sizeof(D[0]);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
     fmt->setMaximumFractionDigits(2);
@@ -2233,7 +2215,7 @@ void NumberFormatRegressionTest::Test4217661() {
  * alphaWorks upgrade
  */
 void NumberFormatRegressionTest::Test4161100() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::US, status);
     failure(status, "createInstance");
     nf->setMinimumFractionDigits(1);
@@ -2255,7 +2237,7 @@ void NumberFormatRegressionTest::Test4161100() {
  * Formatting .5 rounds to "1" instead of "0". (Regression in 1.2.2 RC1)
  */
 void NumberFormatRegressionTest::Test4243011() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("0."), sym, status);
@@ -2285,7 +2267,7 @@ void NumberFormatRegressionTest::Test4243011() {
  * (Regression in 1.2.2 RC1)
  */
 void NumberFormatRegressionTest::Test4243108() {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
     failure(status, "DecimalFormatSymbols ct");
     DecimalFormat fmt(UnicodeString("#.#"), sym, status);

@@ -49,7 +49,6 @@ public:
 
 
 protected:
-    const char* errorName(UErrorCode code);
     bool_t failure(UErrorCode status, const char* msg);
 };
 

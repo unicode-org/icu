@@ -55,8 +55,6 @@ protected:
     // Utility method to get the fields of a date; similar to Date.getYear() etc.
     void dateToFields(UDate date, int32_t& y, int32_t& m, int32_t& d, int32_t& hr, int32_t& min, int32_t& sec);
 
-    static const char* errorName(UErrorCode code);
-
 protected:
     static DateFormat*         fgDateFormat;
     static Calendar*           fgCalendar;

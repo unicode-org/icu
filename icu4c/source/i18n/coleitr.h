@@ -65,7 +65,7 @@ class VectorOfPToContractElement;
  * .  void CollationElementIterator_Example()
  * .  {
  * .      UnicodeString str = "This is a test";
- * .      UErrorCode success = ZERO_ERROR;
+ * .      UErrorCode success = U_ZERO_ERROR;
  * .      RuleBasedCollator* rbc =
  * .          (RuleBasedCollator*) RuleBasedCollator::createInstance(success);
  * .      CollationElementIterator* c =

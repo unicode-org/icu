@@ -119,7 +119,7 @@
  * </P>
  * <blockquote>
  * <pre>
- * .    UErrorCode success = ZERO_ERROR;
+ * .    UErrorCode success = U_ZERO_ERROR;
  * .    UNumberFormat *nf;
  * .    const char* myLocale = "fr_FR";
  * .

@@ -79,7 +79,7 @@ ucol_open(    const    char         *loc,
     col = Collator::createInstance(Locale().init(loc), *status);
 
   if(col == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -124,7 +124,7 @@ ucol_openRules(    const    UChar                  *rules,
                   *status);
 
   if(col == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -295,7 +295,7 @@ ucol_getSortKey(const    UCollator    *coll,
   int32_t         len = (sourceLength == -1 ? u_strlen(source) 
                    : sourceLength);
   UnicodeString     string((UChar*)source, len, len);
-  UErrorCode         status = ZERO_ERROR;
+  UErrorCode         status = U_ZERO_ERROR;
 
   ((Collator*)coll)->getCollationKey(string, key, status);
   if(FAILURE(status)) 
@@ -307,7 +307,7 @@ ucol_getSortKey(const    UCollator    *coll,
   icu_arrayCopy((const int8_t*)bytes, (int8_t*)result, copyLen);
 
   //  if(count > resultLength) {
-  //    *status = BUFFER_OVERFLOW_ERROR;
+  //    *status = U_BUFFER_OVERFLOW_ERROR;
   //  }
 
   return count;
@@ -333,7 +333,7 @@ ucol_openElements(    const    UCollator            *coll,
   CollationElementIterator *iter = 0;
   iter = ((RuleBasedCollator*)coll)->createCollationElementIterator(src);
   if(iter == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 

@@ -32,7 +32,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
-static UErrorCode status = ZERO_ERROR;
+static UErrorCode status = U_ZERO_ERROR;
 
 const UnicodeString CollationRegressionTest::test1 = "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?";
 const UnicodeString CollationRegressionTest::test2 = "Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
@@ -58,7 +58,7 @@ void CollationRegressionTest::Test4048446(char *par)
 {
     CollationElementIterator *i1 = en_us->createCollationElementIterator(test1);
     CollationElementIterator *i2 = en_us->createCollationElementIterator(test1);
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     if (i1 == NULL|| i2 == NULL)
     {
@@ -104,7 +104,7 @@ void CollationRegressionTest::Test4051866(char *par)
 */
 
     UnicodeString rules;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     rules += "< o ";
     rules += "& oe ,o";
@@ -249,7 +249,7 @@ void CollationRegressionTest::Test4058613(char *par)
     // locale
     
     Locale oldDefault = Locale::getDefault();
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     Locale::setDefault(Locale::KOREAN, status);
 
@@ -290,7 +290,7 @@ void CollationRegressionTest::Test4058613(char *par)
 //
 void CollationRegressionTest::Test4059820(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     RuleBasedCollator *c = NULL;
     UnicodeString rules = "< a < b , c/a < d < z";
@@ -318,7 +318,7 @@ void CollationRegressionTest::Test4059820(char *par)
 //
 void CollationRegressionTest::Test4060154(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules;
 
     rules += "< g, G < h, H < i, I < j, J";
@@ -389,7 +389,7 @@ void CollationRegressionTest::Test4060154(char *par)
 //
 void CollationRegressionTest::Test4062418(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     RuleBasedCollator *c = NULL;
     
@@ -469,7 +469,7 @@ void CollationRegressionTest::Test4066189(char *par)
 //
 void CollationRegressionTest::Test4066696(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
     
     c = (RuleBasedCollator *)Collator::createInstance(Locale::FRANCE, status);
@@ -555,7 +555,7 @@ void CollationRegressionTest::Test4079231(char *par)
 //
 void CollationRegressionTest::Test4078588(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *rbc = new RuleBasedCollator("< a < bb", status);
 
     if (rbc == NULL || FAILURE(status))
@@ -613,7 +613,7 @@ void CollationRegressionTest::Test4081866(char *par)
 //
 void CollationRegressionTest::Test4087241(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Locale da_DK("da", "DK");
     RuleBasedCollator *c = NULL;
     
@@ -666,7 +666,7 @@ void CollationRegressionTest::Test4087243(char *par)
 //
 void CollationRegressionTest::Test4092260(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Locale el("el", "");
     Collator *c = NULL;
     
@@ -693,7 +693,7 @@ void CollationRegressionTest::Test4092260(char *par)
 //
 void CollationRegressionTest::Test4095316(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Locale el_GR("el", "GR");
     Collator *c = Collator::createInstance(el_GR, status);
 
@@ -720,7 +720,7 @@ void CollationRegressionTest::Test4095316(char *par)
 //
 void CollationRegressionTest::Test4101940(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
     UnicodeString rules = "< a < b";
     UnicodeString nothing = "";
@@ -810,7 +810,7 @@ void CollationRegressionTest::Test4114076(char *par)
 //
 void CollationRegressionTest::Test4124632(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Collator *coll = NULL;
     
     coll = Collator::createInstance(Locale::JAPAN, status);
@@ -840,7 +840,7 @@ void CollationRegressionTest::Test4124632(char *par)
 //
 void CollationRegressionTest::Test4132736(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     Collator *c = NULL;
     
@@ -926,7 +926,7 @@ void CollationRegressionTest::Test4141640(char *par)
     // try to instantiate one for every locale available on the system
     // in order to prevent this sort of bug from cropping up in the future
     //
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t i, localeCount;
     const Locale *locales = Locale::getAvailableLocales(localeCount);
     
@@ -962,7 +962,7 @@ void CollationRegressionTest::Test4139572(char *par)
     // (and then translated to C++ ;-)
     //
     // create spanish locale and collator
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     Locale l("es", "es");
     Collator *col = NULL;
     
@@ -1034,7 +1034,7 @@ void CollationRegressionTest::Test4146160(char *par)
     // Use a custom collator class whose createCollationElementIterator
     // methods increment a count....
     //
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     CollationKey key;
 
     My4146160Collator::count = 0;
@@ -1109,7 +1109,7 @@ void CollationRegressionTest::compareArray(Collator &c,
         Collator::EComparisonResult compareResult = c.compare(source, target);
 
         CollationKey sourceKey, targetKey;
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
 
         c.getCollationKey(source, sourceKey, status);
 
@@ -1138,7 +1138,7 @@ void CollationRegressionTest::compareArray(Collator &c,
 void CollationRegressionTest::assertEqual(CollationElementIterator &i1, CollationElementIterator &i2)
 {
     int32_t c1, c2, count = 0;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     do
     {

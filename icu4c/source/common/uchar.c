@@ -4655,9 +4655,9 @@ static const UCharDigitPair fCodeDigitTable[] = {
     { 0x4E5D, 9}, /* Han Nine*/
     { 0xFFFF, 0xF}
 };
-static const int8_t  isLetterMask = (1 << UPPERCASE_LETTER) | (1 << LOWERCASE_LETTER) 
-                                    | (1 << TITLECASE_LETTER) | (1 << MODIFIER_LETTER)
-                                    | (1 << OTHER_LETTER);
+static const int8_t  isLetterMask = (1 << U_UPPERCASE_LETTER) | (1 << U_LOWERCASE_LETTER) 
+                                    | (1 << U_TITLECASE_LETTER) | (1 << U_MODIFIER_LETTER)
+                                    | (1 << U_OTHER_LETTER);
 
 
 static const BlockScriptMap fScriptIndex[] = {
@@ -4747,9 +4747,9 @@ static const BlockScriptMap fScriptIndex[] = {
   { 0xFE30, 0xFE4F }, /*CJK_COMPATIBILITY_FORMS */
   { 0xFE50, 0xFE6F }, /*SMALL_FORM_VARIANTS */
   { 0xFE70, 0xFEFE }, /*ARABIC_PRESENTATION_FORMS_B */
-  { 0xFEFF, 0xFEFF }, /*SPECIALS */
+  { 0xFEFF, 0xFEFF }, /*U_SPECIALS */
   { 0xFF00, 0xFFEF }, /*HALFWIDTH_AND_FULLWIDTH_FORMS */
-  { 0xFFF0, 0xFFFD }, /*SPECIALS_2 = "SCRIPT_COUNT" (really specials) */
+  { 0xFFF0, 0xFFFD }, /*SPECIALS_2 = "U_CHAR_SCRIPT_COUNT" (really specials) */
   { 0xFFFF, 0xFFFF } /* END */
 };
 const UChar cellWidthRanges[] =
@@ -4774,22 +4774,22 @@ const UChar cellWidthRanges[] =
 
 const UChar cellWidthValues[] =
     {
-        HALF_WIDTH,    /* general scripts area*/
-        FULL_WIDTH,    /* combining Hangul choseong*/
-        ZERO_WIDTH,    /* combining Hangul jungseong and jongseong*/
-        HALF_WIDTH,    /* Latin extended aAdditional, Greek extended*/
-        NEUTRAL,       /* symbols and punctuation*/
-        FULL_WIDTH,    /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
-        NEUTRAL,       /* surrogates, private use*/
-        FULL_WIDTH,    /* CJK compatibility ideographs*/
-        HALF_WIDTH,    /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
-        FULL_WIDTH,    /* CJK compatibility forms, small form variants*/
-        HALF_WIDTH,    /* Arabic presentation forms B*/
-        FULL_WIDTH,    /* fullwidth ASCII*/
-        HALF_WIDTH,    /* halfwidth CJK punctuation, Katakana, Hangul Jamo*/
-        FULL_WIDTH,    /* fullwidth punctuation and currency signs*/
-        HALF_WIDTH,    /* halfwidth forms, arrows, and shapes*/
-        ZERO_WIDTH     /* specials*/
+        U_HALF_WIDTH,    /* general scripts area*/
+        U_FULL_WIDTH,    /* combining Hangul choseong*/
+        U_ZERO_WIDTH,    /* combining Hangul jungseong and jongseong*/
+        U_HALF_WIDTH,    /* Latin extended aAdditional, Greek extended*/
+        U_NEUTRAL_WIDTH, /* symbols and punctuation*/
+        U_FULL_WIDTH,    /* CJK phonetics & symbols, CJK ideographs, Hangul syllables*/
+        U_NEUTRAL_WIDTH, /* surrogates, private use*/
+        U_FULL_WIDTH,    /* CJK compatibility ideographs*/
+        U_HALF_WIDTH,    /* alphabetic presentation forms, Arabic presentations forms A, combining half marks*/
+        U_FULL_WIDTH,    /* CJK compatibility forms, small form variants*/
+        U_HALF_WIDTH,    /* Arabic presentation forms B*/
+        U_FULL_WIDTH,    /* fullwidth ASCII*/
+        U_HALF_WIDTH,    /* halfwidth CJK punctuation, Katakana, Hangul Jamo*/
+        U_FULL_WIDTH,    /* fullwidth punctuation and currency signs*/
+        U_HALF_WIDTH,    /* halfwidth forms, arrows, and shapes*/
+        U_ZERO_WIDTH     /* specials*/
     };
 
 const int16_t numCellWidthValues = 16;
@@ -4806,7 +4806,7 @@ u_islower(UChar ch)
     if (!tablesCreated) {
         createTables();
     }
-    return (ucmp8_get(tables, ch) == LOWERCASE_LETTER);
+    return (ucmp8_get(tables, ch) == U_LOWERCASE_LETTER);
 }
 
 /*Checks if ch is a upper case letter.*/
@@ -4816,7 +4816,7 @@ u_isupper(UChar ch)
     if (!tablesCreated) {
         createTables();
     }
-    return (ucmp8_get(tables, ch) == UPPERCASE_LETTER);
+    return (ucmp8_get(tables, ch) == U_UPPERCASE_LETTER);
 }
 
 /* Checks if ch is a title case letter; usually upper case letters.*/
@@ -4826,7 +4826,7 @@ u_istitle(UChar ch)
     if (!tablesCreated) {
         createTables();
     }
-    return (ucmp8_get(tables, ch) == TITLECASE_LETTER);
+    return (ucmp8_get(tables, ch) == U_TITLECASE_LETTER);
 }
 
 /* Checks if ch is a decimal digit. */
@@ -4838,7 +4838,7 @@ u_isdigit(UChar ch)
         createTables();
     }
     type = ucmp8_get(tables, ch);
-    return (type == DECIMAL_DIGIT_NUMBER || type == OTHER_NUMBER || type == LETTER_NUMBER);
+    return (type == U_DECIMAL_DIGIT_NUMBER || type == U_OTHER_NUMBER || type == U_LETTER_NUMBER);
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
@@ -4848,7 +4848,7 @@ u_isdefined(UChar ch)
     if (!tablesCreated) {
         createTables();
     }
-    return (ucmp8_get(tables, ch) != UNASSIGNED);
+    return (ucmp8_get(tables, ch) != U_UNASSIGNED);
 }
 
 
@@ -4868,17 +4868,17 @@ UCharScript
 u_charScript(UChar ch)
 {
     int32_t index, j;
-    UCharScript returnValue = NO_SCRIPT;
+    UCharScript returnValue = U_NO_SCRIPT;
 
     index = -1;
     for( j = 0; index == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
             index = j;
-	    if(j == SCRIPT_COUNT) /* "SPECIALS 2" */
-	      index = SPECIALS;
+	    if(j == U_CHAR_SCRIPT_COUNT) /* "U_SPECIALS 2" */
+	      index = U_SPECIALS;
         }
-    if(index >= SCRIPT_COUNT) {
-        returnValue = NO_SCRIPT;
+    if(index >= U_CHAR_SCRIPT_COUNT) {
+        returnValue = U_NO_SCRIPT;
     }
     else if( index != -1 ) {
         returnValue = (UCharScript)index;
@@ -4896,9 +4896,9 @@ u_isbase(UChar ch)
     }
 
     return (u_isalpha(ch) || u_isdigit(ch) ||
-            (((((1 << NON_SPACING_MARK) |
-                (1 << ENCLOSING_MARK) |
-                (1 << COMBINING_SPACING_MARK)) >> u_charType(ch)) & 1) != 0));
+            (((((1 << U_NON_SPACING_MARK) |
+                (1 << U_ENCLOSING_MARK) |
+                (1 << U_COMBINING_SPACING_MARK)) >> u_charType(ch)) & 1) != 0));
 
 }
 
@@ -4912,10 +4912,10 @@ u_iscntrl(UChar ch)
     }
 
     type = ucmp8_get(tables, ch);
-    return (type == CONTROL ||
-            type == FORMAT ||
-            type == LINE_SEPARATOR ||
-            type == PARAGRAPH_SEPARATOR);
+    return (type == U_CONTROL_CHAR ||
+            type == U_FORMAT_CHAR ||
+            type == U_LINE_SEPARATOR ||
+            type == U_PARAGRAPH_SEPARATOR);
 }
 
 /* Checks if the Unicode character is printable.*/
@@ -4927,8 +4927,8 @@ u_isprint(UChar ch)
         createTables();
     }
     type = ucmp8_get(tables, ch);
-    return ((type >= UPPERCASE_LETTER && type <= PARAGRAPH_SEPARATOR) ||
-            (type >= DASH_PUNCTUATION && type <= OTHER_SYMBOL));
+    return ((type >= U_UPPERCASE_LETTER && type <= U_PARAGRAPH_SEPARATOR) ||
+            (type >= U_DASH_PUNCTUATION && type <= U_OTHER_SYMBOL));
 }
 
 /* Checks if the Unicode character is a letter.*/
@@ -4962,11 +4962,11 @@ u_isIDPart(UChar ch)
     }
     type = ucmp8_get(tables, ch);
     return(((isLetterMask & (1 << type)) != 0) ||
-           (type == CONNECTOR_PUNCTUATION) ||
-           (type == DECIMAL_DIGIT_NUMBER) ||
-           (type == LETTER_NUMBER) ||
-           (type == COMBINING_SPACING_MARK) || 
-           (type == NON_SPACING_MARK) ||
+           (type == U_CONNECTOR_PUNCTUATION) ||
+           (type == U_DECIMAL_DIGIT_NUMBER) ||
+           (type == U_LETTER_NUMBER) ||
+           (type == U_COMBINING_SPACING_MARK) || 
+           (type == U_NON_SPACING_MARK) ||
            u_isIDIgnorable(ch));
 }
 
@@ -4990,8 +4990,8 @@ bool_t u_isJavaIDStart(UChar ch)
     }
     type = ucmp8_get(tables, ch);
     return(((isLetterMask & (1 << type)) != 0) ||
-           (type == CURRENCY_SYMBOL) ||
-           (type == CONNECTOR_PUNCTUATION));
+           (type == U_CURRENCY_SYMBOL) ||
+           (type == U_CONNECTOR_PUNCTUATION));
 }
 
 /*Checks if the Unicode character can be a Java identifier part other than starting the
@@ -5005,12 +5005,12 @@ bool_t u_isJavaIDPart(UChar ch)
     }
     type = ucmp8_get(tables, ch);
     return(((isLetterMask & (1 << type)) != 0) ||
-           (type == CURRENCY_SYMBOL) ||
-           (type == CONNECTOR_PUNCTUATION) ||
-           (type == DECIMAL_DIGIT_NUMBER) ||
-           (type == LETTER_NUMBER) ||
-           (type == COMBINING_SPACING_MARK) || 
-           (type == NON_SPACING_MARK) ||
+           (type == U_CURRENCY_SYMBOL) ||
+           (type == U_CONNECTOR_PUNCTUATION) ||
+           (type == U_DECIMAL_DIGIT_NUMBER) ||
+           (type == U_LETTER_NUMBER) ||
+           (type == U_COMBINING_SPACING_MARK) || 
+           (type == U_NON_SPACING_MARK) ||
            u_isIDIgnorable(ch));
 }
 /* Transforms the Unicode character to its lower case equivalent.*/
@@ -5089,9 +5089,9 @@ u_isspace(UChar ch)
         createTables();
     }
     type = ucmp8_get(tables, ch);
-    return ((type == SPACE_SEPARATOR) ||
-            (type == LINE_SEPARATOR) ||
-            (type == PARAGRAPH_SEPARATOR));
+    return ((type == U_SPACE_SEPARATOR) ||
+            (type == U_LINE_SEPARATOR) ||
+            (type == U_PARAGRAPH_SEPARATOR));
 }
 
 /* Gets if the Unicode character's character property.*/
@@ -5116,26 +5116,24 @@ u_charCellWidth(UChar ch)
     /* these Unicode character types are scattered throughout the Unicode range, so
      special-case for them*/
     switch (type) {
-        case UNASSIGNED:
-        case NON_SPACING_MARK:
-        case ENCLOSING_MARK:
-        case LINE_SEPARATOR:
-        case PARAGRAPH_SEPARATOR:
-        case CONTROL:
-        case FORMAT:
-            return ZERO_WIDTH;
+        case U_UNASSIGNED:
+        case U_NON_SPACING_MARK:
+        case U_ENCLOSING_MARK:
+        case U_LINE_SEPARATOR:
+        case U_PARAGRAPH_SEPARATOR:
+        case U_CONTROL_CHAR:
+        case U_FORMAT_CHAR:
+            return U_ZERO_WIDTH;
 
         default:
-            ;   /* fall out the bottom*/
+            /* for all remaining characters, find out which Unicode range they belong to using
+               the table above, and then look up the appropriate return value in that table*/
+            for (i = 0; i < numCellWidthValues; ++i)
+                if (ch < cellWidthRanges[i])
+                    break;
+            --i;
+            return cellWidthValues[i];
     }
-
-    /* for all remaining characters, find out which Unicode range they belong to using
-       the table above, and then look up the appropriate return value in that table*/
-    for (i = 0; i < numCellWidthValues; ++i)
-        if (ch < cellWidthRanges[i])
-            break;
-    --i;
-    return cellWidthValues[i];
 }
 
 int32_t            

@@ -56,7 +56,7 @@ uprint(const UChar *s,
   /* perform the conversion */
   do {
     /* reset the error code */
-    *status = ZERO_ERROR;
+    *status = U_ZERO_ERROR;
 
     /* perform the conversion */
     ucnv_fromUnicode(converter, &myTarget,  myTarget + arraySize,
@@ -70,7 +70,7 @@ uprint(const UChar *s,
     myTarget     = buf;
     arraySize    = BUF_SIZE;
   }
-  while(*status == INDEX_OUTOFBOUNDS_ERROR); 
+  while(*status == U_INDEX_OUTOFBOUNDS_ERROR); 
 
  finish:
   

@@ -33,7 +33,7 @@ u_finit(FileStream *f,
 {
   UFILE *result	= (UFILE*) icu_malloc(sizeof(UFILE));
   if(result == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -97,7 +97,7 @@ ufile_fill_uchar_buffer(UFILE *f,
 		    MIN(maxCPBytes, UFILE_CHARBUFFER_SIZE));
   
   /* Set up conversion parameters */
-  *status	= ZERO_ERROR;
+  *status	= U_ZERO_ERROR;
   mySource   	= f->fCharBuffer;
   mySourceEnd 	= f->fCharBuffer + bytesRead;
   myTarget 	= f->fUCBuffer + dataSize;
@@ -117,4 +117,3 @@ ufile_fill_uchar_buffer(UFILE *f,
   f->fUCPos	= f->fUCBuffer;
   f->fUCLimit 	= myTarget;
 }
-

@@ -671,7 +671,7 @@ UChar* createTestData(Vector *select, int32_t e)
 
 void TestForwardSentenceSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -688,7 +688,7 @@ void TestForwardSentenceSelection()
 
 void TestFirstSentenceSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -704,7 +704,7 @@ void TestFirstSentenceSelection()
 
 void TestLastSentenceSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -720,7 +720,7 @@ void TestLastSentenceSelection()
 
 void TestBackwardSentenceSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -736,7 +736,7 @@ void TestBackwardSentenceSelection()
 
 void TestForwardSentenceIndexSelection()
 {
-   UErrorCode status = ZERO_ERROR;
+   UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -752,7 +752,7 @@ void TestForwardSentenceIndexSelection()
 
 void TestBackwardSentenceIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestSentenceData();
     e = ubrk_open(UBRK_SENTENCE, "en_US", testSentenceText, u_strlen(testSentenceText), &status);
@@ -788,7 +788,7 @@ FreeTextBoundary();
 
 void TestForwardWordSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -805,7 +805,7 @@ void TestForwardWordSelection()
 
 void TestFirstWordSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -821,7 +821,7 @@ void TestFirstWordSelection()
 
 void TestLastWordSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -837,7 +837,7 @@ void TestLastWordSelection()
 
 void TestBackwardWordSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -853,7 +853,7 @@ void TestBackwardWordSelection()
 
 void TestForwardWordIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -869,7 +869,7 @@ void TestForwardWordIndexSelection()
 
 void TestBackwardWordIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestWordData();
     e = ubrk_open(UBRK_WORD, "en_US", testWordText, u_strlen(testWordText), &status);
@@ -907,7 +907,7 @@ FreeTextBoundary();
 
 void TestForwardLineSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -922,7 +922,7 @@ void TestForwardLineSelection()
 
 void TestFirstLineSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -938,7 +938,7 @@ void TestFirstLineSelection()
 
 void TestLastLineSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -954,7 +954,7 @@ void TestLastLineSelection()
 
 void TestBackwardLineSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -970,7 +970,7 @@ void TestBackwardLineSelection()
 
 void TestForwardLineIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -986,7 +986,7 @@ void TestForwardLineIndexSelection()
 
 void TestBackwardLineIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestLineData();
     e = ubrk_open(UBRK_LINE, "en_US", testLineText, u_strlen(testLineText), &status);
@@ -1005,7 +1005,7 @@ void TestLineInvariants()
     UTextOffset i, j, k;
     UChar c;
     UBreakIterator *e;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
    UChar noBreak[10], dashes[10];
    bool_t saw2;
    UChar work[5];
@@ -1024,7 +1024,7 @@ AllocateTextBoundary();
     /* in addition to the other invariants, a line-break iterator should make sure that:
        it doesn't break around the non-breaking characters */
     errorCount=0;
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
     u_strcpy(noBreak, CharsToUCharArray("\\u00a0\\u2007\\u2011\\ufeff"));
     u_uastrcpy(work, "aaa");
     for (i = 0; i < u_strlen(s); i++) {
@@ -1064,11 +1064,11 @@ AllocateTextBoundary();
             work[1] = dashes[j];
             for (k = 0; k < u_strlen(s); k++) {
                  c = s[k];
-                if (u_charType(c) == DECIMAL_DIGIT_NUMBER ||
-                    u_charType(c) == OTHER_NUMBER ||
-                    u_charType(c) == NON_SPACING_MARK ||
-                    u_charType(c) == ENCLOSING_MARK ||
-                    u_charType(c) == CURRENCY_SYMBOL ||
+                if (u_charType(c) == U_DECIMAL_DIGIT_NUMBER ||
+                    u_charType(c) == U_OTHER_NUMBER ||
+                    u_charType(c) == U_NON_SPACING_MARK ||
+                    u_charType(c) == U_ENCLOSING_MARK ||
+                    u_charType(c) == U_CURRENCY_SYMBOL ||
                     c == '\n' || c == '\r' || c == 0x2028 || c == 0x2029 ||
                     c == 0x0003 || c == 0x00a0 || c == 0x2007 || c == 0x2011 ||
                     c == 0xfeff)
@@ -1103,7 +1103,7 @@ FreeTextBoundary();
 
 void TestForwardCharacterSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1119,7 +1119,7 @@ void TestForwardCharacterSelection()
 
 void TestFirstCharacterSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1135,7 +1135,7 @@ void TestFirstCharacterSelection()
 
 void TestLastCharacterSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1151,7 +1151,7 @@ void TestLastCharacterSelection()
 
 void TestBackwardCharacterSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1167,7 +1167,7 @@ void TestBackwardCharacterSelection()
 
 void TestForwardCharacterIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1183,7 +1183,7 @@ void TestForwardCharacterIndexSelection()
 
 void TestBackwardCharacterIndexSelection()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator *e;
     addTestCharacterData();
     e = ubrk_open(UBRK_CHARACTER, "en_US", testCharacterText, u_strlen(testCharacterText), &status);
@@ -1223,7 +1223,7 @@ void TestPreceding()
     UTextOffset p1, p2, p3, p4, f, p;
     UBreakIterator *e;
     UChar words3[15];
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     u_uastrcpy(words3, "aaa bbb ccc");
     log_verbose("Testting preceding...\n");
     e  = ubrk_open(UBRK_WORD, "en_US", words3, u_strlen(words3), &status);
@@ -1251,7 +1251,7 @@ void TestPreceding()
 void TestEndBehaviour()
 {
     int32_t end, previous;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UBreakIterator* wb;
     UChar testString[5];
     u_uastrcpy(testString, "boo");
@@ -1515,13 +1515,13 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
     int l,k;
     UBreakIterator *tb;
     UTextOffset i, j;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar work[3]; 
     UChar breaks[10];
     UChar c;
     bool_t seen2;
     int errorCount = 0;
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
    
     u_uastrcpy(work, "aaa");
     
@@ -1572,11 +1572,11 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
     int32_t k;
     UBreakIterator *tb;
     UTextOffset i, j;
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UChar work[5]; 
     UChar c;
     int32_t errorCount = 0;
-    status=ZERO_ERROR;
+    status=U_ZERO_ERROR;
    
     u_uastrcpy(work, "a\r\na");
     
@@ -1612,8 +1612,8 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
         work[1] = c;
         for (j = 0; j < u_strlen(testChars); j++) {
             c = testChars[j];
-            if ((u_charType(c) != NON_SPACING_MARK) && 
-                (u_charType(c) != ENCLOSING_MARK))
+            if ((u_charType(c) != U_NON_SPACING_MARK) && 
+                (u_charType(c) != U_ENCLOSING_MARK))
                 continue;
             work[2] = c;
             tb=ubrk_open(type, "en_US", work, u_strlen(work), &status);

@@ -50,7 +50,7 @@ ubrk_open(UBreakIteratorType type,
 
   // check for allocation error
   if(result == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -58,7 +58,7 @@ ubrk_open(UBreakIteratorType type,
   UCharCharacterIterator *iter = 0;
   iter = new UCharCharacterIterator(text, textLen);
   if(iter == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     delete result;
     return 0;
   }
@@ -140,4 +140,3 @@ ubrk_countAvailable()
 {
   return uloc_countAvailable();
 }
-

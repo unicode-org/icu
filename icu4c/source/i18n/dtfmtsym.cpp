@@ -436,7 +436,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
             // we just need to produce something that will be semi-intelligible
             // in most locales.
 
-            status = USING_FALLBACK_ERROR;
+            status = U_USING_FALLBACK_ERROR;
 
             fEras = (UnicodeString*)fgLastResortEras;
             fErasCount = sizeof(fgLastResortEras[0]) / sizeof(fgLastResortEras[0]);

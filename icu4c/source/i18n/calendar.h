@@ -230,7 +230,7 @@ public:
      * for deleting the object returned.
      *
      * @param success  Indicates the success/failure of Calendar creation. Filled in
-     *                 with ZERO_ERROR if created successfully, set to a failure result
+     *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
      */
@@ -243,7 +243,7 @@ public:
      *
      * @param zoneToAdopt  The given timezone to be adopted.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
-     *                     with ZERO_ERROR if created successfully, set to a failure result
+     *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
      */
@@ -255,7 +255,7 @@ public:
      *
      * @param zone  The timezone.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
-     *                     with ZERO_ERROR if created successfully, set to a failure result
+     *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
      */
@@ -266,7 +266,7 @@ public:
      *
      * @param aLocale  The given locale.
      * @param success  Indicates the success/failure of Calendar creation. Filled in
-     *                 with ZERO_ERROR if created successfully, set to a failure result
+     *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
      * @return         A Calendar if created successfully. NULL otherwise.
      */
@@ -280,7 +280,7 @@ public:
      * @param zoneToAdopt  The given timezone to be adopted.
      * @param aLocale      The given locale.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
-     *                     with ZERO_ERROR if created successfully, set to a failure result
+     *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
      */
@@ -293,7 +293,7 @@ public:
      * @param zone  The timezone.
      * @param aLocale      The given locale.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
-     *                     with ZERO_ERROR if created successfully, set to a failure result
+     *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
      * @return             A Calendar if created successfully. NULL otherwise.
      */
@@ -749,7 +749,7 @@ protected:
       * TimeZone::createInstance(), and the default locale.
       *
       * @param success  Indicates the status of Calendar object construction. Returns
-      *                 ZERO_ERROR if constructed successfully.
+      *                 U_ZERO_ERROR if constructed successfully.
       */
     Calendar(UErrorCode& success);
 
@@ -770,7 +770,7 @@ protected:
      * @param zoneToAdopt     The given time zone.
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
-     *                 ZERO_ERROR if constructed successfully.
+     *                 U_ZERO_ERROR if constructed successfully.
      */
     Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success);
 
@@ -780,7 +780,7 @@ protected:
      * @param zone     The given time zone.
      * @param aLocale  The given locale.
      * @param success  Indicates the status of Calendar object construction. Returns
-     *                 ZERO_ERROR if constructed successfully.
+     *                 U_ZERO_ERROR if constructed successfully.
      */
     Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
@@ -935,7 +935,7 @@ private:
      *
      * @param desiredLocale  The given locale.
      * @param success        Indicates the status of setting the week count data from
-     *                       the resource for the given locale. Returns ZERO_ERROR if
+     *                       the resource for the given locale. Returns U_ZERO_ERROR if
      *                       constructed successfully.
      */
     void        setWeekCountData(const Locale& desiredLocale, UErrorCode& success);

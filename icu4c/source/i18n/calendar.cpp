@@ -114,7 +114,7 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
     fNextStamp(kMinimumUserStamp)
 {
     if(zone == 0) {
-        success = ILLEGAL_ARGUMENT_ERROR;
+        success = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
@@ -255,7 +255,7 @@ Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode
 bool_t
 Calendar::operator==(const Calendar& that) const
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     // {sfb} is this correct? (Java equals)
     return (getDynamicClassID() == that.getDynamicClassID() && 
         getTimeInMillis(status) == that.getTimeInMillis(status) &&
@@ -681,7 +681,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
 
     int32_t len = string.size();
     char *number = new char[1 + len];
-    if (number == 0) { status = MEMORY_ALLOCATION_ERROR; return 0; }
+    if (number == 0) { status = U_MEMORY_ALLOCATION_ERROR; return 0; }
     char *end;
 
     string.extract(0, len, number);
@@ -691,7 +691,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
     delete[] number;
 
     if (end-number != len || len == 0 || value < 1 || value > 7)
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
 
     return value;
 }
@@ -719,7 +719,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     // hard-coded data.
     if (FAILURE(status))
     {
-        status = USING_FALLBACK_ERROR;
+        status = U_USING_FALLBACK_ERROR;
         fFirstDayOfWeek = Calendar::SUNDAY;
         fMinimalDaysInFirstWeek = 1;
         return;
@@ -729,7 +729,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     if (FAILURE(status)) return;
     if (count != 2)
     {
-        status = INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
         return;
     }
 

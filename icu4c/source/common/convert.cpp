@@ -29,7 +29,7 @@ extern "C" {
 
 UnicodeConverterCPP::UnicodeConverterCPP()
 {
-    UErrorCode err = ZERO_ERROR;
+    UErrorCode err = U_ZERO_ERROR;
     myUnicodeConverter = ucnv_open(NULL, &err);
 }
 UnicodeConverterCPP::UnicodeConverterCPP(const char* name, UErrorCode& err)
@@ -126,7 +126,7 @@ UnicodeConverterCPP::fromUnicodeString(char*                    target,
 
   if ((myUnicodeConverter == NULL) || source.isBogus() || (targetSize <= 0))
     {
-      err = ILLEGAL_ARGUMENT_ERROR;
+      err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
     }
 
@@ -169,7 +169,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
   if (FAILURE(err)) return;
   if ((myUnicodeConverter == NULL) || target.isBogus() || (sourceSize <= 0))
     {
-      err = ILLEGAL_ARGUMENT_ERROR;
+      err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
     }
 
@@ -186,7 +186,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
 
   if (myTargetUChars == NULL)
     {
-      err = MEMORY_ALLOCATION_ERROR;
+      err = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
   /*renders the target clean*/
@@ -197,7 +197,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
    */
   do
     {
-      err = ZERO_ERROR;
+      err = U_ZERO_ERROR;
       myTargetUCharsAlias = myTargetUChars;
       ucnv_toUnicode(&myConverter,
                    &myTargetUCharsAlias,
@@ -214,8 +214,8 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
              myTargetUChars,
              myTargetUCharsAlias - myTargetUChars);
       /*Checks for the integrity of target (UnicodeString) as it adds data to it*/
-      if (target.isBogus()) err = MEMORY_ALLOCATION_ERROR;
-    } while (err == INDEX_OUTOFBOUNDS_ERROR);
+      if (target.isBogus()) err = U_MEMORY_ALLOCATION_ERROR;
+    } while (err == U_INDEX_OUTOFBOUNDS_ERROR);
 
 
   icu_free(myTargetUChars);
@@ -352,7 +352,7 @@ UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
                                     UnicodeString&  displayName) const
 {
 
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   ResourceBundle rb("", displayLocale, err);
   char tablename[MAX_CONVERTER_NAME_LENGTH];
 
@@ -406,6 +406,3 @@ int32_t  UnicodeConverterCPP::flushCache()
 {
   return ucnv_flushCache();
 }
-
-
-

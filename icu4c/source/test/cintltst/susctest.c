@@ -408,7 +408,7 @@ myTest(const UChar *chars,
   int32_t myCharCount = 0;
 
   /* error code */
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
 
 
   /* allocate memory */
@@ -509,7 +509,7 @@ myMultipassTest(const UChar *chars,
   int32_t totalCharsWritten       = 0;
  
   /* error code */
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   
   /* allocate memory */
   myCompressed = (uint8_t*) calloc(myCTargetSize, sizeof(uint8_t));
@@ -525,7 +525,7 @@ myMultipassTest(const UChar *chars,
   
   /* perform the compression in a loop */
   do {      
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myCTarget = myCompressionBuffer;    
     myCSourceAlias = myCSource;
     
@@ -536,7 +536,7 @@ myMultipassTest(const UChar *chars,
 		  chars + len,
 		  &status);
     
-    if(status != INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
+    if(status != U_INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
       printf("Failing status code at line %d.\n", __LINE__);
       exit(1);
     }
@@ -554,7 +554,7 @@ myMultipassTest(const UChar *chars,
     
     totalBytesWritten += (myCTarget - myCompressionBuffer);
     
-  } while(status == INDEX_OUTOFBOUNDS_ERROR/*totalCharsCompressed < len*/);
+  } while(status == U_INDEX_OUTOFBOUNDS_ERROR/*totalCharsCompressed < len*/);
   
   /* reset */
   scsu_reset(&myCompressor);
@@ -564,7 +564,7 @@ myMultipassTest(const UChar *chars,
 
   /* perform the decompression in a loop */
   do {
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     myDTarget = myDecompressionBuffer;
     myDSourceAlias = myDSource;
     
@@ -575,7 +575,7 @@ myMultipassTest(const UChar *chars,
 		    myCompressed + totalBytesWritten,
 		    &status);
     
-    if(status != INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
+    if(status != U_INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
       printf("Failing status code at line %d.\n", __LINE__);
       exit(1);
     }
@@ -593,7 +593,7 @@ myMultipassTest(const UChar *chars,
 
     totalCharsWritten += (myDTarget - myDecompressionBuffer);
   
-  } while(status == INDEX_OUTOFBOUNDS_ERROR/*totalBytesDecompressed < totalBytesWritten*/);
+  } while(status == U_INDEX_OUTOFBOUNDS_ERROR/*totalBytesDecompressed < totalBytesWritten*/);
   
   /* find differences */
   if( printDiffs(chars, len, myDecompressed, totalCharsWritten) == FALSE) {
@@ -677,7 +677,7 @@ segment_test(uint8_t *segment1,
 	     uint8_t *segment2,
 	     int32_t seg2Len)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeCompressor myDecompressor;
 
     const uint8_t *seg1 = segment1;

@@ -209,7 +209,7 @@ int16_t _findIndex(const char* list, int32_t listLength, const char* key)
 const char* uloc_getDefault()
 {
   const char* result = _defaultLocale;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   
   /*lazy evaluates _defaultLocale*/
   if (result == NULL) 
@@ -281,7 +281,7 @@ int32_t uloc_getParent(const char*    localeID,
   /*Sets the error code on case of need*/
   if (i >= parentCapacity )
     {
-      *err = BUFFER_OVERFLOW_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
   if (parentCapacity>0)   parent[icu_min(i,parentCapacity-1)] = '\0';
@@ -314,7 +314,7 @@ uloc_getLanguage(const char*    localeID,
   
   if (i >= languageCapacity )
     {
-      *err = BUFFER_OVERFLOW_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
   if (languageCapacity > 0) 
@@ -362,7 +362,7 @@ int32_t uloc_getCountry(const char* localeID,
   
   if (i >= countryCapacity )
     {
-      *err = BUFFER_OVERFLOW_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
   if (countryCapacity > 0) {country[icu_min(i,countryCapacity-1)] = '\0';}
@@ -398,7 +398,7 @@ int32_t uloc_getVariant(const char* localeID,
   
   if (i >= variantCapacity )
     {
-      *err = BUFFER_OVERFLOW_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
     }
   
   
@@ -414,7 +414,7 @@ int32_t uloc_getName(const char* localeID,
   int i= 0;
   int varSze = 0;
   int cntSze = 0;
-  UErrorCode int_err = ZERO_ERROR;
+  UErrorCode int_err = U_ZERO_ERROR;
   
   if (FAILURE(*err)) return 0;
   /*First we preflight the components in order to ensure a valid return value*/
@@ -424,13 +424,13 @@ int32_t uloc_getName(const char* localeID,
                NULL , 
                0,
                &int_err);
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   varSze = uloc_getVariant(localeID, 
                NULL , 
                0,
                &int_err);
   
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   i = uloc_getLanguage(localeID, 
                NULL,
                0, 
@@ -443,7 +443,7 @@ int32_t uloc_getName(const char* localeID,
   if (varSze) i++;
   i += cntSze + varSze;
   
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   
   uloc_getLanguage(localeID, 
            name,
@@ -480,7 +480,7 @@ const char* uloc_getISO3Language(const char* localeID)
 {
   int16_t index;
   char lang[TEMPBUFSIZE];
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
@@ -494,7 +494,7 @@ const char* uloc_getISO3Country(const char* localeID)
 {
   int16_t index;
   char cntry[TEMPBUFSIZE];
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
@@ -507,7 +507,7 @@ const char* uloc_getISO3Country(const char* localeID)
 
 uint32_t uloc_getLCID(const char* localeID) 
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   char temp[30];
   const UChar* lcid = NULL;
   uint32_t result = 0;
@@ -540,7 +540,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
   bool_t doneDefaultLocale = FALSE;
   char inLanguageBuffer[TEMPBUFSIZE];
   char inLocaleBuffer[TEMPBUFSIZE];
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle;
   const UChar* temp = NULL;  
   bool_t isDefaultLocale = FALSE;
@@ -597,7 +597,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       
       if (SUCCESS(err))
         {
-          UErrorCode err = ZERO_ERROR;
+          UErrorCode err = U_ZERO_ERROR;
           temp = ures_getTaggedArrayItem(bundle,
                          _kLanguages,
                          inLanguageBuffer, 
@@ -607,7 +607,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
           }
 
 
-      err = ZERO_ERROR;
+      err = U_ZERO_ERROR;
 
       /*Iterates down the Locale ID*/
 
@@ -623,7 +623,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       i = u_strlen(result)+1;
       if (i > languageCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
       
       if (languageCapacity >= 1) 
         {
@@ -639,7 +639,7 @@ int32_t uloc_getDisplayLanguage(const char* locale,
       i = langBufSize;
       if (i > languageCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
       
       if (languageCapacity >= 1) 
         {
@@ -665,7 +665,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
   int cntryBufSize;
   bool_t doneDefaultLocale = FALSE;
   char inCountryBuffer[TEMPBUFSIZE];
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle = NULL;
   char inLocaleBuffer[TEMPBUFSIZE];
   bool_t isDefaultLocale = FALSE;
@@ -733,7 +733,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
       ures_close(bundle);
     }
 
-      err = ZERO_ERROR;
+      err = U_ZERO_ERROR;
       uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
       
       inLocale = inLocaleBuffer;
@@ -745,7 +745,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
       i = u_strlen(result)+1;
       if (i > countryCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
 
       if (countryCapacity >= 1)
         {
@@ -761,7 +761,7 @@ int32_t uloc_getDisplayCountry(const char* locale,
       i = cntryBufSize;
       if (i > countryCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
       
       if (countryCapacity >= 1) 
         {
@@ -787,7 +787,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
   bool_t doneDefaultLocale = FALSE;
   char inVariantBuffer[TEMPBUFSIZE];
   char* inVariant = inVariantBuffer;
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   UResourceBundle* bundle;
   char inLocaleBuffer[TEMPBUFSIZE];
   bool_t isDefaultLocale = FALSE;
@@ -816,7 +816,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
   if (varBufSize > 1)
     {
       /*In case the variant is longer than our stack buffers*/
-      if (err == BUFFER_OVERFLOW_ERROR)
+      if (err == U_BUFFER_OVERFLOW_ERROR)
     {
       inVariant = (char*)icu_malloc(varBufSize*sizeof(char)+1);
       if (inVariant == NULL) goto NO_MEMORY;
@@ -826,7 +826,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
           icu_free(inVariant);
           goto NO_MEMORY;
         }
-      err = ZERO_ERROR;
+      err = U_ZERO_ERROR;
       uloc_getVariant(locale, inVariant, varBufSize, &err);
     }
       
@@ -868,7 +868,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
       ures_close(bundle);
     }
 
-      err = ZERO_ERROR;
+      err = U_ZERO_ERROR;
       uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
       
       inLocale = inLocaleBuffer;
@@ -884,7 +884,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
       i = u_strlen(result)+1;
       if (i > variantCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
 
       if (variantCapacity >= 1) 
         {
@@ -900,7 +900,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
       i = varBufSize;
       if (i > variantCapacity)
     {
-      *status = BUFFER_OVERFLOW_ERROR;
+      *status = U_BUFFER_OVERFLOW_ERROR;
       
       if (variantCapacity >= 1) 
         {
@@ -920,7 +920,7 @@ int32_t uloc_getDisplayVariant(const char* locale,
   return i;
 
 NO_MEMORY:
-  *status = MEMORY_ALLOCATION_ERROR;
+  *status = U_MEMORY_ALLOCATION_ERROR;
   return 0;
 }
 
@@ -930,13 +930,13 @@ int32_t uloc_getDisplayName(const char* locale,
                 int32_t nameCapacity,
                 UErrorCode* err) 
 {
-  UErrorCode int_err = ZERO_ERROR;
+  UErrorCode int_err = U_ZERO_ERROR;
   int i = 0;
   int cntSze, varSze;
   bool_t has_lang = TRUE;
   int result_size;
 
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
 
   /*Preflights all the components*/
   cntSze = uloc_getDisplayCountry(locale, 
@@ -944,14 +944,14 @@ int32_t uloc_getDisplayName(const char* locale,
                   NULL , 
                   0,
                   &int_err);
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   varSze = uloc_getDisplayVariant(locale, 
                   inLocale,
                   NULL , 
                   0,
                   &int_err);
   
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   i = uloc_getDisplayLanguage(locale, 
                   inLocale,
                   NULL,
@@ -974,7 +974,7 @@ int32_t uloc_getDisplayName(const char* locale,
       else i += cntSze + 3;
     }
   
-  int_err = ZERO_ERROR;
+  int_err = U_ZERO_ERROR;
   
   result_size = uloc_getDisplayLanguage(locale, 
                     inLocale,
@@ -1191,7 +1191,3 @@ uloc_setDataDirectory(const char* newDirectory)
     umtx_unlock(NULL);
   }
 }
-
-
-
-

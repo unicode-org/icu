@@ -86,7 +86,7 @@
  * .      double filelimits[] = {0,1,2};
  * .      UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
  * .      ChoiceFormat* fileform = new ChoiceFormat(filelimits, filepart, 3 );
- * .      UErrorCode success = ZERO_ERROR;
+ * .      UErrorCode success = U_ZERO_ERROR;
  * .      const Format* testFormats[] = { fileform, NULL, NumberFormat::createInstance(success) };
  * .      MessageFormat* pattform = new MessageFormat("There {0} on {1}", success );
  * .      pattform->setFormats( testFormats, 3 );

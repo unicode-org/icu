@@ -109,7 +109,7 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     decodeRules(status);
 
     if(dstSavings <= 0) {
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
 
@@ -323,7 +323,7 @@ int32_t
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis) const
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     return getOffset(era, year, month, day, dayOfWeek, millis, status);
 }
 
@@ -340,7 +340,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
     // field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
     // this method because it's public API. - liu 8/10/98
     if(month < Calendar::JANUARY || month > Calendar::DECEMBER) {
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
@@ -365,7 +365,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
         || millis >= kMillisPerDay
         || monthLength < 28
         || monthLength > 31) {
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
@@ -522,7 +522,7 @@ SimpleTimeZone::setRawOffset(int32_t offsetMillis)
 void 
 SimpleTimeZone::setDSTSavings(int32_t millisSavedDuringDST) 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     setDSTSavings(millisSavedDuringDST, status);
 }
 
@@ -533,7 +533,7 @@ SimpleTimeZone::setDSTSavings(int32_t millisSavedDuringDST, UErrorCode& status)
 {
     dstSavings = millisSavedDuringDST;
     if(dstSavings <= 0)
-        status = ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
 }
 
 // -------------------------------------
@@ -706,11 +706,11 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (startDay != 0) {
         if (startMonth < Calendar::JANUARY || startMonth > Calendar::DECEMBER) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         if (startTime < 0 || startTime > kMillisPerDay) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         if (startDayOfWeek == 0) {
@@ -728,17 +728,17 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
                 }
             }
             if (startDayOfWeek > Calendar::SATURDAY) {
-                status = ILLEGAL_ARGUMENT_ERROR;
+                status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
         }
         if (startMode == DOW_IN_MONTH_MODE) {
             if (startDay < -5 || startDay > 5) {
-                status = ILLEGAL_ARGUMENT_ERROR;
+                status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
         } else if (startDay > staticMonthLength[startMonth]) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
     }
@@ -757,11 +757,11 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
     if (endDay != 0) {
         if (endMonth < Calendar::JANUARY || endMonth > Calendar::DECEMBER) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         if (endTime < 0 || endTime > kMillisPerDay) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         if (endDayOfWeek == 0) {
@@ -779,17 +779,17 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
                 }
             }
             if (endDayOfWeek > Calendar::SATURDAY) {
-                status = ILLEGAL_ARGUMENT_ERROR;
+                status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
         }
         if (endMode == DOW_IN_MONTH_MODE) {
             if (endDay < -5 || endDay > 5) {
-                status = ILLEGAL_ARGUMENT_ERROR;
+                status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
         } else if (endDay > staticMonthLength[endMonth]) {
-            status = ILLEGAL_ARGUMENT_ERROR;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
     }

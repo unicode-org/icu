@@ -47,24 +47,6 @@ DateFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name
     }
 }
 
-const char* 
-DateFormatRoundTripTest::errorName(UErrorCode code)
-{
-    switch (code) {
-        case ZERO_ERROR:                return "ZERO_ERROR";
-        case ILLEGAL_ARGUMENT_ERROR:    return "ILLEGAL_ARGUMENT_ERROR";
-        case MISSING_RESOURCE_ERROR:    return "MISSING_RESOURCE_ERROR";
-        case INVALID_FORMAT_ERROR:      return "INVALID_FORMAT_ERROR";
-        case FILE_ACCESS_ERROR:         return "FILE_ACCESS_ERROR";
-        case INTERNAL_PROGRAM_ERROR:    return "INTERNAL_PROGRAM_ERROR";
-        case MESSAGE_PARSE_ERROR:       return "MESSAGE_PARSE_ERROR";
-        case MEMORY_ALLOCATION_ERROR:   return "MEMORY_ALLOCATION_ERROR";
-        case USING_FALLBACK_ERROR:      return "USING_FALLBACK_ERROR";
-        case USING_DEFAULT_ERROR:       return "USING_DEFAULT_ERROR";
-        default:                        return "[BOGUS UErrorCode]";
-    }
-}
-
 bool_t 
 DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 {
@@ -80,7 +62,7 @@ DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 
 void DateFormatRoundTripTest::TestDateFormatRoundTrip() 
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
     failure(status, "new SimpleDateFormat");
 
@@ -208,7 +190,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly)
 
             d[0] = generateDate();
 
-            UErrorCode status = ZERO_ERROR;
+            UErrorCode status = U_ZERO_ERROR;
 
             // We go through this loop until we achieve a match or until
             // the maximum loop count is reached.  We record the points at
@@ -312,7 +294,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly)
  */
 int32_t DateFormatRoundTripTest::getField(UDate d, int32_t f) {
     // Should be synchronized, but we're single threaded so it's ok
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     getFieldCal->setTime(d, status);
     failure(status, "getfieldCal->setTime");
     int32_t ret = getFieldCal->get((Calendar::EDateFields)f, status);

@@ -39,7 +39,7 @@ strlist_open(UErrorCode *status)
   
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -63,7 +63,7 @@ strlist_close(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eStringList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -87,7 +87,7 @@ strlist_add(struct SList *list,
   if(FAILURE(*status)) return;
   
   if(list->fType != eStringList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -99,7 +99,7 @@ strlist_add(struct SList *list,
   list->u.fStringList.fData[index] = (UChar*) 
     icu_malloc(sizeof(UChar) * (u_strlen(s) + 1));
   if(list->u.fStringList.fData[index] == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -118,7 +118,7 @@ strlist_grow(struct SList *list,
   if(FAILURE(*status)) return;
   
   if(list->fType != eStringList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -127,7 +127,7 @@ strlist_grow(struct SList *list,
   /* allocate space for the array of strings */
   newData = (UChar**) icu_malloc(sizeof(UChar*) * newCapacity);
   if(newData == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -136,7 +136,7 @@ strlist_grow(struct SList *list,
     newData[i] = (UChar*) 
       icu_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList.fData[i]) + 1));
     if(newData[i] == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j) 
 	icu_free(newData[j]);
       icu_free(newData);
@@ -161,7 +161,7 @@ strlist2d_open(UErrorCode *status)
 
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -195,7 +195,7 @@ strlist2d_close(struct SList *list,
   if(FAILURE(*status)) return;
   
   if(list->fType != eStringList2d) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
@@ -218,7 +218,7 @@ strlist2d_newRow(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -238,7 +238,7 @@ void strlist2d_add(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
@@ -250,7 +250,7 @@ void strlist2d_add(struct SList *list,
   list->u.fStringList2d.fData[index] = (UChar*) 
     icu_malloc(sizeof(UChar) * (u_strlen(s) + 1));
   if(list->u.fStringList2d.fData[index] == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -269,7 +269,7 @@ strlist2d_grow(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -278,7 +278,7 @@ strlist2d_grow(struct SList *list,
   /* allocate space for the array of strings */
   newData = (UChar**) icu_malloc(sizeof(UChar*) * newCapacity);
   if(newData == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -287,7 +287,7 @@ strlist2d_grow(struct SList *list,
     newData[i] = (UChar*) 
       icu_malloc(sizeof(UChar) * (u_strlen(list->u.fStringList2d.fData[i]) + 1));
     if(newData[i] == 0) {
-      *status = MEMORY_ALLOCATION_ERROR;
+      *status = U_MEMORY_ALLOCATION_ERROR;
       for(j = 0; j < i; ++j) 
 	icu_free(newData[j]);
       icu_free(newData);
@@ -312,7 +312,7 @@ strlist2d_growRows(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eStringList2d) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
@@ -321,7 +321,7 @@ strlist2d_growRows(struct SList *list,
   /* allocate space for the array of ints */
   newRows = (int32_t*) icu_malloc(sizeof(int32_t) * newCapacity);
   if(newRows == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
   }
   
   /* copy each int */
@@ -345,7 +345,7 @@ taglist_open(UErrorCode *status)
   
   list = (struct SList*) icu_malloc(sizeof(struct SList));
   if(list == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -367,7 +367,7 @@ taglist_close(struct SList *list,
   if(FAILURE(*status)) return;
 
   if(list->fType != eTaggedList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -389,7 +389,7 @@ taglist_grow(struct SList *list,
   if(FAILURE(*status)) return;
   
   if(list->fType != eTaggedList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
   
@@ -399,7 +399,7 @@ taglist_grow(struct SList *list,
   newData = (struct SStringPair*) 
     icu_malloc(sizeof(struct SStringPair) * newCapacity);
   if(newData == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
@@ -425,19 +425,19 @@ taglist_add(struct SList *list,
   if(FAILURE(*status)) return;
   
   if(list->fType != eTaggedList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
   pair.fKey = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
   if(pair.fKey == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
   pair.fValue = (UChar*) icu_malloc(sizeof(UChar) * (u_strlen(data) + 1));
   if(pair.fValue == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     icu_free(pair.fKey);
     return;
   }
@@ -464,7 +464,7 @@ taglist_get(const struct SList *list,
   if(FAILURE(*status)) return 0;
   
   if(list->fType != eTaggedList) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0;
   }
 

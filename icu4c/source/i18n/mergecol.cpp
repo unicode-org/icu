@@ -64,7 +64,7 @@ MergeCollation::MergeCollation(const    UnicodeString&  pattern,
   
   if (patterns == NULL)
     {
-      status = MEMORY_ALLOCATION_ERROR;
+      status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
 
@@ -73,7 +73,7 @@ MergeCollation::MergeCollation(const    UnicodeString&  pattern,
   if (statusArray == NULL)
     {
       delete patterns;
-      status = MEMORY_ALLOCATION_ERROR;
+      status = U_MEMORY_ALLOCATION_ERROR;
       return;
     }
 
@@ -474,7 +474,7 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
       // must exist!
       if (oldIndex == -1)
     {
-      success = INVALID_FORMAT_ERROR;
+      success = U_INVALID_FORMAT_ERROR;
       return oldIndex;
         }
 
@@ -516,12 +516,10 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
 
       if (i == -1)
     {
-      success = INVALID_FORMAT_ERROR;
+      success = U_INVALID_FORMAT_ERROR;
       return i;
         }
 
       return i + 1;
     }
 }
-
-

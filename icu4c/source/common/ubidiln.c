@@ -114,7 +114,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
               start<0 || start>limit || limit>pParaBiDi->length ||
               pLineBiDi==NULL
     ) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
@@ -233,7 +233,7 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return NULL;
     } else if(pBiDi==NULL || (length=pBiDi->length)<=0) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
@@ -263,7 +263,7 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
         return pBiDi->levels=levels;
     } else {
         /* out of memory */
-        *pErrorCode=MEMORY_ALLOCATION_ERROR;
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 }
@@ -341,7 +341,7 @@ ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return -1;
     } else if(pBiDi==NULL || pBiDi->runCount<0 && !getRuns(pBiDi)) {
-        *pErrorCode=MEMORY_ALLOCATION_ERROR;
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return -1;
     } else {
         return pBiDi->runCount;
@@ -827,7 +827,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL || logicalIndex<0 || pBiDi->length<=logicalIndex) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     } else {
         /* we can do the trivial cases without the runs array */
@@ -838,7 +838,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, UTextOffset logicalIndex, UErrorCode *pErrorC
             return pBiDi->length-logicalIndex-1;
         default:
             if(pBiDi->runCount<0 && !getRuns(pBiDi)) {
-                *pErrorCode=MEMORY_ALLOCATION_ERROR;
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             } else {
                 Run *runs=pBiDi->runs;
@@ -869,7 +869,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return 0;
     } else if(pBiDi==NULL || visualIndex<0 || pBiDi->length<=visualIndex) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     } else {
         /* we can do the trivial cases without the runs array */
@@ -880,7 +880,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, UTextOffset visualIndex, UErrorCode *pErrorC
             return pBiDi->length-visualIndex-1;
         default:
             if(pBiDi->runCount<0 && !getRuns(pBiDi)) {
-                *pErrorCode=MEMORY_ALLOCATION_ERROR;
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             } else {
                 Run *runs=pBiDi->runs;
@@ -931,7 +931,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode)
     if((levels=(UBiDiLevel *)ubidi_getLevels(pBiDi, pErrorCode))==NULL) {
         /* no op */
     } else if(indexMap==NULL) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
         ubidi_reorderLogical(levels, pBiDi->length, indexMap);
     }
@@ -943,7 +943,7 @@ ubidi_getVisualMap(UBiDi *pBiDi, UTextOffset *indexMap, UErrorCode *pErrorCode) 
     if(ubidi_countRuns(pBiDi, pErrorCode)<=0) {
         /* no op */
     } else if(indexMap==NULL) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else {
         /* fill a visual-to-logical index map using the runs[] */
         Run *runs=pBiDi->runs, *runsLimit=runs+pBiDi->runCount;

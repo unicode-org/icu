@@ -25,7 +25,7 @@
 
 
 static UConverter* _defaultConverter = NULL;
-static UErrorCode gErr = ZERO_ERROR;
+static UErrorCode gErr = U_ZERO_ERROR;
 
 #define MAX_STRLEN 0x00FFFFFF
 
@@ -134,7 +134,7 @@ u_strlen(const UChar *s)
 UChar* u_uastrcpy(UChar *ucs1,
           const char *s2 )
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   ucnv_toUChars(defaultConverter,
         ucs1,
         MAX_STRLEN,
@@ -149,7 +149,7 @@ UChar* u_uastrncpy(UChar *ucs1,
            const char *s2 ,
            int32_t n)
 {
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   int32_t end = ucnv_toUChars(defaultConverter,
                   ucs1,
                   n,
@@ -165,7 +165,7 @@ char* u_austrcpy(char *s1,
          const UChar *ucs2 )
 {
   char * anchor = s1;     /* save the start of result string */
-  UErrorCode err = ZERO_ERROR;
+  UErrorCode err = U_ZERO_ERROR;
   int32_t len = ucnv_fromUChars(defaultConverter,
                 s1,
                 MAX_STRLEN,

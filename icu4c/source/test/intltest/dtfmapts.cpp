@@ -29,7 +29,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &n
         case 0: name = "DateFormat API test"; 
                 if (exec) {
                     logln("DateFormat API test---"); logln("");
-                    UErrorCode status = ZERO_ERROR;
+                    UErrorCode status = U_ZERO_ERROR;
                     Locale::setDefault(Locale::ENGLISH, status);
                     if(FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
@@ -54,7 +54,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &n
  */
 void IntlTestDateFormatAPI::TestEquals()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     // Create two objects at different system times
     DateFormat *a = DateFormat::createInstance();
     UDate start = Calendar::getNow();
@@ -83,7 +83,7 @@ void IntlTestDateFormatAPI::TestEquals()
  */
 void IntlTestDateFormatAPI::testAPI(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
 // ======= Test constructors
 
@@ -112,7 +112,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
     UnicodeString res1, res2, res3;
     FieldPosition pos1(0), pos2(0);
     
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res1 = fr->format(d, res1, pos1, status);
     if(FAILURE(status)) {
         errln("ERROR: format() failed (French)");
@@ -139,7 +139,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
     }
     logln(text + " parsed into " + result1.getDate());
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     result2 = def->parse(text, status);
     if(FAILURE(status)) {
         errln("ERROR: parse() failed");
@@ -196,7 +196,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
 
     logln("Testing getStaticClassID()");
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     DateFormat *test = new SimpleDateFormat(status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create a DateFormat");

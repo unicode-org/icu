@@ -136,7 +136,7 @@ adjustWSLevels(UBiDi *pBiDi);
 
 CAPI UBiDi * U_EXPORT2
 ubidi_open() {
-    UErrorCode errorCode=ZERO_ERROR;
+    UErrorCode errorCode=U_ZERO_ERROR;
     return ubidi_openSized(0, 0, &errorCode);
 }
 
@@ -148,14 +148,14 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
     if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
         return NULL;
     } else if(maxLength<0 || maxRunCount<0) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;    /* invalid arguments */
     }
 
     /* allocate memory for the object */
     pBiDi=(UBiDi *)icu_malloc(sizeof(UBiDi));
     if(pBiDi==NULL) {
-        *pErrorCode=MEMORY_ALLOCATION_ERROR;
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
@@ -167,7 +167,7 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
         if( !getInitialDirPropsMemory(pBiDi, maxLength) ||
             !getInitialLevelsMemory(pBiDi, maxLength)
         ) {
-            *pErrorCode=MEMORY_ALLOCATION_ERROR;
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     } else {
         pBiDi->mayAllocateText=TRUE;
@@ -178,7 +178,7 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
             /* use simpleRuns[] */
             pBiDi->runsSize=sizeof(Run);
         } else if(!getInitialRunsMemory(pBiDi, maxRunCount)) {
-            *pErrorCode=MEMORY_ALLOCATION_ERROR;
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         }
     } else {
         pBiDi->mayAllocateRuns=TRUE;
@@ -271,7 +271,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
               (UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel) ||
               length<-1
     ) {
-        *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
@@ -321,7 +321,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
         pBiDi->dirProps=pBiDi->dirPropsMemory;
         getDirProps(pBiDi, text);
     } else {
-        *pErrorCode=MEMORY_ALLOCATION_ERROR;
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
@@ -332,7 +332,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
             pBiDi->levels=pBiDi->levelsMemory;
             direction=resolveExplicitLevels(pBiDi);
         } else {
-            *pErrorCode=MEMORY_ALLOCATION_ERROR;
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
     } else {
@@ -735,7 +735,7 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
         }
         if(level<paraLevel || UBIDI_MAX_EXPLICIT_LEVEL<level) {
             /* level out of bounds */
-            *pErrorCode=ILLEGAL_ARGUMENT_ERROR;
+            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
             return UBIDI_LTR;
         }
     }

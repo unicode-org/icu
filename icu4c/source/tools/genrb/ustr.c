@@ -131,7 +131,7 @@ ustr_resize(struct UString *s,
   /* +1 for trailing 0x0000 */
   s->fChars = (UChar*) icu_realloc(s->fChars, sizeof(UChar) * (len + 1));
   if(s->fChars == 0) {
-    *status = MEMORY_ALLOCATION_ERROR;
+    *status = U_MEMORY_ALLOCATION_ERROR;
     s->fChars = 0;
     s->fLength = s->fCapacity = 0;
     return;

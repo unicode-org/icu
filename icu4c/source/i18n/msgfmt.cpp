@@ -282,7 +282,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     }
     if (braceStack == 0 && part != 0) {
         fMaxOffset = -1;
-        success = INVALID_FORMAT_ERROR;
+        success = U_INVALID_FORMAT_ERROR;
         return;
         //throw new IllegalArgumentException("Unmatched braces in the pattern.");
     }
@@ -309,7 +309,7 @@ MessageFormat::toPattern(UnicodeString& result) const
     } 
     else if (fFormats[i]->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
       
-      UErrorCode status = ZERO_ERROR;
+      UErrorCode status = U_ZERO_ERROR;
       NumberFormat& formatAlias = *(NumberFormat*)fFormats[i];
       NumberFormat *numberTemplate = NumberFormat::createInstance(fLocale, status);
       NumberFormat *currencyTemplate = NumberFormat::createCurrencyInstance(fLocale, status);
@@ -340,7 +340,7 @@ MessageFormat::toPattern(UnicodeString& result) const
       delete integerTemplate;
     } 
     else if (fFormats[i]->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
-      UErrorCode success = ZERO_ERROR;
+      UErrorCode success = U_ZERO_ERROR;
       DateFormat& formatAlias = *(DateFormat*)fFormats[i];
       DateFormat *defaultDateTemplate = DateFormat::createDateInstance(DateFormat::kDefault, fLocale);
       DateFormat *shortDateTemplate = DateFormat::createDateInstance(DateFormat::kShort, fLocale);
@@ -560,7 +560,7 @@ MessageFormat::format(const Formattable& source,
     if (FAILURE(success)) 
         return result;
     if (source.getType() != Formattable::kArray) {
-        success = ILLEGAL_ARGUMENT_ERROR;
+        success = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
     }
     const Formattable* tmpPtr = source.getArray(cnt);
@@ -581,7 +581,7 @@ MessageFormat::format(const Formattable* arguments,
                       UErrorCode& success) const 
 {
     if(/*arguments == NULL ||*/ cnt < 0) {
-        success = ILLEGAL_ARGUMENT_ERROR;
+        success = U_ILLEGAL_ARGUMENT_ERROR;
         return result;
     }
     
@@ -598,7 +598,7 @@ MessageFormat::format(const Formattable* arguments,
         int32_t argumentNumber = fArgumentNumbers[i];
         // Checks the scope of the argument number.
         if (argumentNumber >= cnt) {
-            /*success = ILLEGAL_ARGUMENT_ERROR;
+            /*success = U_ILLEGAL_ARGUMENT_ERROR;
             return result;*/
             result += "{";
             UnicodeString temp;
@@ -644,7 +644,7 @@ MessageFormat::format(const Formattable* arguments,
 #ifdef LIUDEBUG  
             cerr << "Unknown object of type:" << obj.getType() << endl;
 #endif
-            success = ILLEGAL_ARGUMENT_ERROR;
+            success = U_ILLEGAL_ARGUMENT_ERROR;
             return result;
         }
         // Needs to reprocess the ChoiceFormat option by using the MessageFormat
@@ -807,7 +807,7 @@ MessageFormat::parse(const UnicodeString& source,
     // from zero offset of the source text.
     Formattable* result = parse(source, status, cnt);
     if (status.getIndex() == 0) {
-        success = MESSAGE_PARSE_ERROR;
+        success = U_MESSAGE_PARSE_ERROR;
         return NULL;
     }
     return result;
@@ -914,7 +914,7 @@ UnicodeString&
 MessageFormat::itos(int32_t i,
                     UnicodeString& string)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     NumberFormat *myFormat = getNumberFormat(status);
 
     if(FAILURE(status))
@@ -944,7 +944,7 @@ MessageFormat::makeFormat(int32_t position,
     int32_t oldMaxOffset = fMaxOffset;
     argumentNumber = stoi(segments[1], success); // always unlocalized!
     if (argumentNumber < 0 || argumentNumber > 9) {
-        success = INVALID_FORMAT_ERROR;
+        success = U_INVALID_FORMAT_ERROR;
         return;
     }
     fMaxOffset = offsetNumber;
@@ -980,7 +980,7 @@ MessageFormat::makeFormat(int32_t position,
                 ((DecimalFormat*)newFormat)->applyPattern(segments[3], success);
             if(FAILURE(success)) {
                 fMaxOffset = oldMaxOffset;
-                success = ILLEGAL_ARGUMENT_ERROR;
+                success = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
             break;
@@ -1010,7 +1010,7 @@ MessageFormat::makeFormat(int32_t position,
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
                 if(FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
-                    success = ILLEGAL_ARGUMENT_ERROR;
+                    success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
             break;
@@ -1039,7 +1039,7 @@ MessageFormat::makeFormat(int32_t position,
                     ((SimpleDateFormat*)newFormat)->applyPattern(segments[3]);
                 if(FAILURE(success)) {
                     fMaxOffset = oldMaxOffset;
-                    success = ILLEGAL_ARGUMENT_ERROR;
+                    success = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
             break;
@@ -1049,13 +1049,13 @@ MessageFormat::makeFormat(int32_t position,
             newFormat = new ChoiceFormat(segments[3], success);
         if(FAILURE(success)) {
             fMaxOffset = oldMaxOffset;
-            success = ILLEGAL_ARGUMENT_ERROR;
+            success = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         break;
     default:
         fMaxOffset = oldMaxOffset;
-        success = ILLEGAL_ARGUMENT_ERROR;
+        success = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 

@@ -229,7 +229,7 @@ void seekUntilNewline(UFILE *f,
   
   do {
     c = u_fgetc(f, status);
-  } while(! isNewline(c) && c != (UChar)U_EOF && *status == ZERO_ERROR);
+  } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
   
   /*if(FAILURE(*status))
     err = kItemNotFound;*/
@@ -251,10 +251,10 @@ void seekUntilEndOfComment(UFILE *f,
       else
 	break;
     }
-  } while(c != (UChar)U_EOF && *status == ZERO_ERROR);
+  } while(c != (UChar)U_EOF && *status == U_ZERO_ERROR);
 
   if(c == (UChar)U_EOF) {
-    *status = INVALID_FORMAT_ERROR;
+    *status = U_INVALID_FORMAT_ERROR;
     setErrorText("Unterminated comment detected");
   }
 }
@@ -298,7 +298,7 @@ static UChar unescape(UFILE *f,
     else
       maxChars = 4;
     out = 0;
-    while(maxChars != 0 && *status == ZERO_ERROR) {
+    while(maxChars != 0 && *status == U_ZERO_ERROR) {
       c = u_fgetc(f, status);
       if(c == (UChar)U_EOF || FAILURE(*status)) return U_EOF;
       

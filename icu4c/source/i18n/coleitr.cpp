@@ -90,7 +90,7 @@ CollationElementIterator::CollationElementIterator( const UnicodeString& sourceT
       
       text = new Normalizer(sourceText, decomp);
       if (text == NULL) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
       }
     }
 }
@@ -128,7 +128,7 @@ CollationElementIterator::CollationElementIterator( const CharacterIterator& sou
       
       text = new Normalizer(sourceText, decomp);
       if (text == NULL) {
-        status = MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
       }
     }
 }

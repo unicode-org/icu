@@ -18,7 +18,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
-static UErrorCode status = ZERO_ERROR;
+static UErrorCode status = U_ZERO_ERROR;
 
 /**
  * Convert Java-style strings with \u Unicode escapes into UnicodeString objects

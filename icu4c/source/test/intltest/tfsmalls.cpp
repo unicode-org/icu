@@ -27,7 +27,7 @@
 
 static bool_t chkstatus( UErrorCode &status, char* msg = NULL )
 {
-    bool_t ok = (status == ZERO_ERROR);
+    bool_t ok = (status == U_ZERO_ERROR);
     if (!ok) it_errln( msg );
     return ok;
 }
@@ -90,7 +90,7 @@ void test_FieldPosition_example( void )
         12345.6789, -1234.56789, 123.456789, -12.3456789, 1.23456789};
     int32_t dNumSize = (int32_t)(sizeof(doubleNum)/sizeof(double));
 
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
     fmt->setDecimalSeparatorAlwaysShown(TRUE);
     
@@ -164,7 +164,7 @@ void test_FieldPosition( void )
 
 void test_Formattable( void )
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
     Formattable* ftp = new Formattable();
     if (!ftp || !(ftp->getType() == Formattable::kLong) || !(ftp->getLong() == 0)) {

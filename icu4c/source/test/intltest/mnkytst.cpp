@@ -49,7 +49,7 @@ const UnicodeString CollationMonkeyTest::source("-abcdefghijklmnopqrstuvwxyz#&^$
 CollationMonkeyTest::CollationMonkeyTest()
 : myCollator(0)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     myCollator = Collator::createInstance(status);
 }
 
@@ -100,7 +100,7 @@ void CollationMonkeyTest::TestCollationKey( char* par )
     source.extract(MIN(t, tlen), MAX(t, tlen), subt);
 
     CollationKey collationKey1, collationKey2;
-    UErrorCode status1 = ZERO_ERROR, status2= ZERO_ERROR;
+    UErrorCode status1 = U_ZERO_ERROR, status2= U_ZERO_ERROR;
 
     myCollator->setStrength(Collator::TERTIARY);
     myCollator->getCollationKey(subs, collationKey1, status1);

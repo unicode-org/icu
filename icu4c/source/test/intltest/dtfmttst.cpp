@@ -52,7 +52,7 @@ void DateFormatTest::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
 // Test written by Wally Wedel and emailed to me.
 void DateFormatTest::TestWallyWedel()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     /*
      * Instantiate a TimeZone so we can get the ids.
      */
@@ -163,7 +163,7 @@ DateFormatTest::TestEquals()
 void
 DateFormatTest::TestTwoDigitYearDSTParse()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* fullFmt = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);
     SimpleDateFormat *fmt = new SimpleDateFormat("dd-MMM-yy h:mm:ss 'o''clock' a z", Locale::ENGLISH, status);
     //DateFormat* fmt = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, Locale::ENGLISH);
@@ -242,7 +242,7 @@ DateFormatTest::fgCalendarToDateFormatField[] = {
 void
 DateFormatTest::TestFieldPosition(void)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DateFormat* dateFormats[4];
     int32_t dateFormats_length = sizeof(dateFormats) / sizeof(dateFormats[0]);
 
@@ -314,7 +314,7 @@ DateFormatTest::getFieldText(DateFormat* df, int32_t field, UDate date, UnicodeS
 void
 DateFormatTest::TestPartialParse994()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* f = new SimpleDateFormat(status);
     UDate null = 0;
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/17 10:11:42", date(97, 1 - 1, 17, 10, 11, 42));
@@ -331,7 +331,7 @@ DateFormatTest::TestPartialParse994()
 void
 DateFormatTest::tryPat994(SimpleDateFormat* format, const char* pat, const char* str, UDate expected)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate null = 0;
     logln(UnicodeString("Pattern \"") + pat + "\"   String \"" + str + "\"");
     //try {
@@ -372,7 +372,7 @@ DateFormatTest::tryPat994(SimpleDateFormat* format, const char* pat, const char*
 void
 DateFormatTest::TestRunTogetherPattern985()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString format("yyyyMMddHHmmssSSS");
     UnicodeString now, then;
     //bool_t flag;
@@ -399,7 +399,7 @@ DateFormatTest::TestRunTogetherPattern985()
 void
 DateFormatTest::TestRunTogetherPattern917()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* fmt;
     UnicodeString myDate;
     fmt = new SimpleDateFormat("yyyy/MM/dd", status);
@@ -418,7 +418,7 @@ DateFormatTest::TestRunTogetherPattern917()
 void
 DateFormatTest::testIt917(SimpleDateFormat* fmt, UnicodeString& str, UDate expected)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern;
     logln((UnicodeString)"pattern=" + fmt->toPattern(pattern) + "   string=" + str);
     Formattable o;
@@ -447,7 +447,7 @@ DateFormatTest::testIt917(SimpleDateFormat* fmt, UnicodeString& str, UDate expec
 void
 DateFormatTest::TestCzechMonths459()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     DateFormat* fmt = DateFormat::createDateInstance(DateFormat::FULL, Locale("cs", "", ""));
     UnicodeString pattern;
     logln((UnicodeString)"Pattern " + ((SimpleDateFormat*) fmt)->toPattern(pattern));
@@ -484,7 +484,7 @@ DateFormatTest::TestCzechMonths459()
 void
 DateFormatTest::TestLetterDPattern212()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UnicodeString dateString("1995-040.05:01:29");
     UnicodeString bigD("yyyy-DDD.hh:mm:ss");
     UnicodeString littleD("yyyy-ddd.hh:mm:ss");
@@ -515,7 +515,7 @@ DateFormatTest::TestLetterDPattern212()
 void
 DateFormatTest::TestDayOfYearPattern195()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate today = Calendar::getNow();
     int32_t year,month,day,hour,min,sec; dateToFields(today,year,month,day,hour,min,sec);
     UDate expected = date(year, month, day);
@@ -532,7 +532,7 @@ DateFormatTest::TestDayOfYearPattern195()
 void
 DateFormatTest::tryPattern(SimpleDateFormat& sdf, UDate d, const char* pattern, UDate expected)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     if (pattern != 0) sdf.applyPattern(pattern);
     UnicodeString thePat;
     logln((UnicodeString)"pattern: " + sdf.toPattern(thePat));
@@ -560,7 +560,7 @@ DateFormatTest::tryPattern(SimpleDateFormat& sdf, UDate d, const char* pattern, 
 void
 DateFormatTest::TestQuotePattern161()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* formatter = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss a zzz", status);
     UDate currentTime_1 = date(97, Calendar::AUGUST, 13, 10, 42, 28);
     UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
@@ -579,7 +579,7 @@ DateFormatTest::TestQuotePattern161()
 void
 DateFormatTest::TestBadInput135()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     int32_t looks[] = {
         DateFormat::SHORT, DateFormat::MEDIUM, DateFormat::LONG, DateFormat::FULL
     };
@@ -613,7 +613,7 @@ DateFormatTest::TestBadInput135()
                     }
                 //}
                 //catch(ParseException e) {
-                    else status = ZERO_ERROR;
+                    else status = U_ZERO_ERROR;
                 //}
                 //catch(StringIndexOutOfBoundsException e) {
                 //    errln(prefix + "SHOULD NOT HAPPEN: " + (int)status);
@@ -662,7 +662,7 @@ const char* DateFormatTest::inputStrings[] = {
 void
 DateFormatTest::TestBadInput135a()
 {
-  UErrorCode status = ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR;
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   const char* s;
   UDate date;
@@ -680,7 +680,7 @@ DateFormatTest::TestBadInput135a()
   //catch(Exception ex) {
   else
     logln((UnicodeString)"Exception during parse: " + (int32_t)status);
-  status = ZERO_ERROR;
+  status = U_ZERO_ERROR;
   //}
   for (int32_t i = 0; i < sizeof(inputStrings)/sizeof(inputStrings[0]); i += (PFLENGTH + 1)) {
     ParsePosition parsePosition(0);
@@ -741,7 +741,7 @@ DateFormatTest::TestTwoDigitYear()
 void
 DateFormatTest::parse2DigitYear(DateFormat& fmt, const char* str, UDate expected)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     //try {
         UDate d = fmt.parse(str, status);
         UnicodeString thePat;
@@ -763,7 +763,7 @@ DateFormatTest::parse2DigitYear(DateFormat& fmt, const char* str, UDate expected
 void
 DateFormatTest::TestDateFormatZone061()
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     UDate date;
     DateFormat *formatter;
     date= 859248000000.0;
@@ -808,7 +808,7 @@ TimeZone *testdefault = TimeZone::createDefault();
         else
             errln("Test timezone should be GMT, not " + testtimezone);
 
-        UErrorCode status = ZERO_ERROR;
+        UErrorCode status = U_ZERO_ERROR;
         // now try to use the default GMT time zone
         GregorianCalendar *greenwichcalendar =
             new GregorianCalendar(1997, 3, 4, 23, 0, status);

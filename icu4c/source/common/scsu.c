@@ -278,7 +278,7 @@ scsu_compress(UnicodeCompressor *comp,
   }
   /* verify the target buffer can hold at least 4 bytes */
   else if(targetLimit - byteBuffer < 4) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
@@ -836,7 +836,7 @@ scsu_compress(UnicodeCompressor *comp,
   *source = unicharBuffer;
 
   if(unicharBuffer < sourceLimit)
-    *status = INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
 }
 
 void 
@@ -869,7 +869,7 @@ scsu_decompress(UnicodeCompressor *comp,
   }
   /* verify the target buffer can hold at least 1 UChar */
   else if(targetLimit - unicharBuffer < sizeof(UChar)) {
-    *status = ILLEGAL_ARGUMENT_ERROR;
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
     return;
   }
 
@@ -1229,7 +1229,7 @@ scsu_decompress(UnicodeCompressor *comp,
   *source = byteBuffer;
 
   if(byteBuffer < sourceLimit)
-    *status = INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
 }
 
 /** Reset the compressor to its initial state. */

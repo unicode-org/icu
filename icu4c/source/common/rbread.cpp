@@ -93,7 +93,7 @@ read_strlist(FileStream *rb,
   /* Setup the string list */
   retval = new StringList();
   if(retval == 0) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -111,7 +111,7 @@ read_strlist(FileStream *rb,
   /* Allocate space for the array of strings */
   retval->fStrings = new UnicodeString [ retval->fCount ];
   if(retval->fStrings == 0) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     delete retval;
     return 0;
   }
@@ -146,7 +146,7 @@ read_strlist2d(FileStream *rb,
   /* Setup the 2-d string list */
   retval = new String2dList();
   if(retval == 0) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -164,7 +164,7 @@ read_strlist2d(FileStream *rb,
   /* Allocate space for the array of strings */
   retval->fStrings = new UnicodeString* [ retval->fRowCount ];
   if(retval->fStrings == 0) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     delete retval;
     return 0;
   }
@@ -181,7 +181,7 @@ read_strlist2d(FileStream *rb,
     /* Allocate enough space for each item */
     retval->fStrings[i] = new UnicodeString[itemcount];
     if(retval->fStrings[i] == 0) {
-      status = MEMORY_ALLOCATION_ERROR;
+      status = U_MEMORY_ALLOCATION_ERROR;
       /* Complicated cleanup later */
       delete retval;
       return 0;
@@ -218,7 +218,7 @@ read_taglist(FileStream *rb,
   /* Setup the tagged list */
   retval = new TaggedList();
   if(retval == 0) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
@@ -269,7 +269,7 @@ rb_parse(FileStream *f,
   /* Open the hashtable for saving data */
   retval = uhash_open((UHashFunction)uhash_hashUString, &status);
   if(retval == 0 || FAILURE(status)) {
-    status = MEMORY_ALLOCATION_ERROR;
+    status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   uhash_setValueDeleter(retval, RBHashtable_valueDeleter);
@@ -280,7 +280,7 @@ rb_parse(FileStream *f,
   /* Verify the byte ordering matches */
   if(bom != sBOM) {
     uhash_close(retval);
-    status = INVALID_FORMAT_ERROR;
+    status = U_INVALID_FORMAT_ERROR;
     return 0;
   }
 
@@ -338,7 +338,7 @@ rb_parse(FileStream *f,
 
   /* Check if any errors occurred during reading */
   if(T_FileStream_error(f) != 0) {
-    status = FILE_ACCESS_ERROR;
+    status = U_FILE_ACCESS_ERROR;
     delete retval;
     return 0;
   }

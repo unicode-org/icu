@@ -61,7 +61,7 @@ u_file_write(    const UChar     *chars,
         UFILE         *f)
 {
   /* Set up conversion parameters */
-  UErrorCode         status        = ZERO_ERROR;
+  UErrorCode         status        = U_ZERO_ERROR;
   const UChar        *mySource       = chars;
   const UChar        *sourceAlias       = chars;
   const UChar        *mySourceEnd     = chars + count;
@@ -71,7 +71,7 @@ u_file_write(    const UChar     *chars,
  
   /* Perform the conversion in a loop */
   do {
-    status     = ZERO_ERROR;
+    status     = U_ZERO_ERROR;
     sourceAlias = mySource;
     
     ucnv_fromUnicode(f->fConverter,
@@ -92,7 +92,7 @@ u_file_write(    const UChar     *chars,
     written     += (myTarget - f->fCharBuffer);
     myTarget     = f->fCharBuffer;
   }
-  while(status == INDEX_OUTOFBOUNDS_ERROR); 
+  while(status == U_INDEX_OUTOFBOUNDS_ERROR); 
 
   /* return # of chars written */
   return written;
@@ -134,7 +134,7 @@ ufile_fill_uchar_buffer(UFILE *f)
             f->fFile);
   
   /* Set up conversion parameters */
-  status    = ZERO_ERROR;
+  status    = U_ZERO_ERROR;
   mySource       = f->fCharBuffer;
   mySourceEnd     = f->fCharBuffer + bytesRead;
   myTarget     = f->fUCBuffer + dataSize;
@@ -336,8 +336,3 @@ u_file_read(    UChar        *chars,
   
   return read;
 }
-
-
-
-
-

@@ -29,7 +29,7 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* 
         case 0: name = "NumberFormat API test"; 
                 if (exec) {
                     logln("NumberFormat API test---"); logln("");
-                    UErrorCode status = ZERO_ERROR;
+                    UErrorCode status = U_ZERO_ERROR;
                     Locale::setDefault(Locale::ENGLISH, status);
                     if(FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
@@ -48,7 +48,7 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* 
  */
 void IntlTestNumberFormatAPI::testAPI(char *par)
 {
-    UErrorCode status = ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
 
 // ======= Test constructors
 
@@ -59,7 +59,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
         errln("ERROR: Could not create NumberFormat (default)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     NumberFormat *fr = NumberFormat::createInstance(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (French)");
@@ -70,7 +70,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
         errln("ERROR: Could not create NumberFormat (currency, default)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     NumberFormat *cur_fr = NumberFormat::createCurrencyInstance(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (currency, French)");
@@ -81,7 +81,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
         errln("ERROR: Could not create NumberFormat (percent, default)");
     }
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     NumberFormat *per_fr = NumberFormat::createPercentInstance(Locale::FRENCH, status);
     if(FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (percent, French)");
@@ -119,14 +119,14 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
     res4 = cur_fr->format(l, res4, pos2);
     logln((UnicodeString) "" + (int32_t) l + " formatted to " + res4);
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res5 = cur_fr->format(fD, res5, pos3, status);
     if(FAILURE(status)) {
         errln("ERROR: format(Formattable [double]) failed");
     }
     logln((UnicodeString) "" + (int32_t) fD.getDouble() + " formatted to " + res5);
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     res6 = cur_fr->format(fL, res6, pos4, status);
     if(FAILURE(status)) {
         errln("ERROR: format(Formattable [long]) failed");
@@ -153,7 +153,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
     }
     logln(text + " parsed into " + (int32_t) result2.getDouble());
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     fr->parse(text, result3, status);
     if(FAILURE(status)) {
         errln("ERROR: parse() failed");
@@ -212,7 +212,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
 
     logln("Testing getStaticClassID()");
 
-    status = ZERO_ERROR;
+    status = U_ZERO_ERROR;
     NumberFormat *test = new DecimalFormat(status);
     if(FAILURE(status)) {
         errln("ERROR: Couldn't create a NumberFormat");
