@@ -311,16 +311,32 @@ public abstract class PerfTest {
      * until the amount of free memory stabilizes to within 10%.
      */
     protected void gc() {
-        long last;
-        long free = 1;
-        Runtime runtime = Runtime.getRuntime();
-        do {
-            runtime.gc();
-            last = free;
-            free = runtime.freeMemory();
-        } while (((double)Math.abs(free - last)) / free > 0.1);
-        // Wait for the change in free memory to drop under 10%
-        // between successive calls.
+        if (false) {
+            long last;
+            long free = 1;
+            Runtime runtime = Runtime.getRuntime();
+            do {
+                runtime.gc();
+                last = free;
+                free = runtime.freeMemory();
+            } while (((double)Math.abs(free - last)) / free > 0.1);
+            // Wait for the change in free memory to drop under 10%
+            // between successive calls.
+        }
+
+        // From "Java Platform Performance".  This is the procedure
+        // recommended by Javasoft.
+        try {
+            System.gc();
+            Thread.currentThread().sleep(100);
+            System.runFinalization();
+            Thread.currentThread().sleep(100);
+            
+            System.gc();
+            Thread.currentThread().sleep(100);
+            System.runFinalization();
+            Thread.currentThread().sleep(100);
+        } catch (InterruptedException e) {}
     }
 
     /**
