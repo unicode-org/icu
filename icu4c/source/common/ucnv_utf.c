@@ -2346,7 +2346,7 @@ static const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
     "UTF-32LE",
     1232,
-    UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
+    UCNV_IBM, UCNV_UTF32_LittleEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     0,
     0,
