@@ -1516,7 +1516,7 @@ LocaleTest::TestKeywordVariants(void) {
   for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
     status = U_ZERO_ERROR;
     Locale l(testCases[i].localeID);
-    keywords = l.getKeywords(status);
+    keywords = l.createKeywords(status);
 
     if(status != testCases[i].expectedStatus) {
       err("Expected to get status %s. Got %s instead\n", 
