@@ -70,7 +70,6 @@
 #define ALL_TAG_STR "ALL"
 #define ALL_TAG_NUM 1
 #define EMPTY_TAG_NUM 0
-#define USER_TAG_NUM_START 2
 
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo={
@@ -561,7 +560,7 @@ addOfficialTaggedStandards(char *line, int32_t lineLen) {
     uint16_t tagSize;
     static const char WHITESPACE[] = " \t";
 
-    if (tagCount > USER_TAG_NUM_START) {
+    if (tagCount > UCNV_NUM_RESERVED_TAGS) {
         fprintf(stderr, "error(line %d): official tags already added\n", lineNum);
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
@@ -756,7 +755,7 @@ static void
 resolveAliasToConverter(uint16_t alias, uint16_t *tagNum, uint16_t *converterNum) {
     uint16_t idx, idx2, idx3;
 
-    for (idx = USER_TAG_NUM_START; idx < tagCount; idx++) {
+    for (idx = UCNV_NUM_RESERVED_TAGS; idx < tagCount; idx++) {
         for (idx2 = 0; idx2 < converterCount; idx2++) {
             for (idx3 = 0; idx3 < tags[idx].aliasList[idx2].aliasCount; idx3++) {
                 uint16_t aliasNum = tags[idx].aliasList[idx2].aliases[idx3];
@@ -794,7 +793,7 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
     uint32_t uniqueAliasIdx = 0;
     uint32_t idx;
     uint16_t currTagNum, oldTagNum;
-    uint16_t currConvNum;
+    uint16_t currConvNum, oldConvNum;
     const char *lastName;
 
     resolveAliasToConverter(knownAliases[0], &oldTagNum, &currConvNum);
@@ -807,7 +806,8 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
         resolveAliasToConverter(knownAliases[idx], &currTagNum, &currConvNum);
         if (ucnv_compareNames(lastName, GET_ALIAS_STR(knownAliases[idx])) == 0) {
             /* duplicate found */
-            if (currTagNum > oldTagNum) {
+            if ((currTagNum < oldTagNum && currTagNum >= UCNV_NUM_RESERVED_TAGS)
+                || oldTagNum == 0) {
                 oldTagNum = currTagNum;
                 uniqueAliasToConverterArr[uniqueAliasIdx - 1] = currConvNum;
                 uniqueAliasArr[uniqueAliasIdx - 1] = knownAliases[idx] + aliasOffset;
@@ -816,7 +816,7 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
                         GET_ALIAS_STR(knownAliases[idx]),
                         lastName,
                         GET_ALIAS_STR(converters[currConvNum].converter));
-                    if (uniqueAliasToConverterArr[uniqueAliasIdx - 1] != currConvNum) {
+                    if (oldConvNum != currConvNum) {
                         printf(" (alias conflict)");
                     }
                     puts("");
@@ -828,22 +828,24 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
                     printf("folding %s into %s -> %s",
                         GET_ALIAS_STR(knownAliases[idx]),
                         lastName,
-                        GET_ALIAS_STR(converters[currConvNum].converter));
-                    if (uniqueAliasToConverterArr[uniqueAliasIdx - 1] != currConvNum) {
+                        GET_ALIAS_STR(converters[oldConvNum].converter));
+                    if (oldConvNum != currConvNum) {
                         printf(" (alias conflict)");
                     }
                     puts("");
                 }
             }
-            if (uniqueAliasToConverterArr[uniqueAliasIdx - 1] != currConvNum) {
+            if (oldConvNum != currConvNum) {
                 uniqueAliasToConverterArr[uniqueAliasIdx - 1] |= UCNV_AMBIGUOUS_ALIAS_MAP_BIT;
             }
         }
         else {
             uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
+            oldConvNum = currConvNum;
             uniqueAliasArr[uniqueAliasIdx] = knownAliases[idx] + aliasOffset;
             uniqueAliasIdx++;
             lastName = GET_ALIAS_STR(knownAliases[idx]);
+            oldTagNum = currTagNum;
             /*printf("%s -> %s\n", GET_ALIAS_STR(knownAliases[idx]), GET_ALIAS_STR(converters[currConvNum].converter));*/
         }
     }
@@ -935,7 +937,7 @@ writeAliasTable(UNewDataMemory *out) {
 
     /* write the table of tags */
     /* Think of this as the row headers */
-    for(i=USER_TAG_NUM_START; i<tagCount; ++i) {
+    for(i=UCNV_NUM_RESERVED_TAGS; i<tagCount; ++i) {
         udata_write16(out, tags[i].tag);
     }
     /* The empty tag is considered the leftover list, and put that at the end of the priority list. */

@@ -147,11 +147,11 @@ static void TestSurrogateBehaviour(){
 
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", 0 , TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+                expected, sizeof(expected), "ibm-1363", 0 , TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", offsets , TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+                expected, sizeof(expected), "ibm-1363", offsets , TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] not match.\n");
         /*MBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-1363", 0 , TRUE, U_ZERO_ERROR))
@@ -367,26 +367,26 @@ static void TestErrorBehaviour(){
 
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
-            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+                expected, sizeof(expected), "ibm-1363", 0, TRUE, U_TRUNCATED_CHAR_FOUND))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", 0, FALSE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+                expected, sizeof(expected), "ibm-1363", 0, FALSE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
 
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
-            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+                expected, sizeof(expected), "ibm-1363", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", offsets, FALSE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+                expected, sizeof(expected), "ibm-1363", offsets, FALSE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] is supposed to fail\n");
 
         
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "ibm-1362", 0, TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] did not match \n");
+                expected2, sizeof(expected2), "ibm-1363", 0, TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] did not match \n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "ibm-1362", offsets2, TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] did not match \n");
+                expected2, sizeof(expected2), "ibm-1363", offsets2, TRUE, U_ZERO_ERROR))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] did not match \n");
 
         /*MBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -637,15 +637,15 @@ static void TestToUnicodeErrorBehaviour()
         const UChar expected2[] = { 0x00a1 };
 
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1362", 0, TRUE, U_ZERO_ERROR ))
-            log_err("DBCS (ibm-1362)->Unicode  did not match.\n");
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, TRUE, U_ZERO_ERROR ))
+            log_err("DBCS (ibm-1363)->Unicode  did not match.\n");
         if(!convertToU(sampleText, sizeof(sampleText), 
-                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1362", 0, FALSE, U_ZERO_ERROR ))
-            log_err("DBCS (ibm-1362)->Unicode  with flush = false did not match.\n");
+                expected, sizeof(expected)/sizeof(expected[0]), "ibm-1363", 0, FALSE, U_ZERO_ERROR ))
+            log_err("DBCS (ibm-1363)->Unicode  with flush = false did not match.\n");
        
         if(!convertToU(sampleText2, sizeof(sampleText2), 
-                expected2, sizeof(expected2)/sizeof(expected2[0]), "ibm-1362", 0, TRUE, U_TRUNCATED_CHAR_FOUND ))
-            log_err("DBCS (ibm-1362)->Unicode with TRUNCATED CHARACTER  did not match.\n");
+                expected2, sizeof(expected2)/sizeof(expected2[0]), "ibm-1363", 0, TRUE, U_TRUNCATED_CHAR_FOUND ))
+            log_err("DBCS (ibm-1363)->Unicode with TRUNCATED CHARACTER  did not match.\n");
        
     
     }
@@ -1480,16 +1480,16 @@ static void TestResetBehaviour(void){
 
         /*DBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+                expected, sizeof(expected), "ibm-1363", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] not match.\n");
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1362", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+                expected, sizeof(expected), "ibm-1363", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
+            log_err("u-> ibm-1363 [UCNV_DBCS portion] not match.\n");
        
         if(!testConvertToU(expected1, sizeof(expected1), 
-                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "ibm-1362",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
+                sampleText1, sizeof(sampleText1)/sizeof(sampleText1[0]), "ibm-1363",UCNV_TO_U_CALLBACK_SUBSTITUTE , 
                 offsets1, TRUE))
-           log_err("ibm-1362 -> did not match.\n");
+           log_err("ibm-1363 -> did not match.\n");
         /*MBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-1363", UCNV_FROM_U_CALLBACK_SUBSTITUTE , NULL, TRUE))
