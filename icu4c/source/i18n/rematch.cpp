@@ -949,7 +949,8 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
 //
 //--------------------------------------------------------------------------------
 UBool RegexMatcher::isUWordBoundary(int32_t pos) {
-    UErrorCode  status=U_ZERO_ERROR;  
+    UErrorCode  status    = U_ZERO_ERROR;  
+    UBool       returnVal = FALSE;
     
     // If we haven't yet created a break iterator for this matcher, do it now.
     if (fWordBreakItr == NULL) {
@@ -962,20 +963,7 @@ UBool RegexMatcher::isUWordBoundary(int32_t pos) {
         fWordBreakItr->setText(*fInput);
     }
 
-    // If we are not positioned at an RBBI style boundary, \b isn't at a boundary either.
-    if (fWordBreakItr->isBoundary(pos) == FALSE) {
-        return FALSE;
-    }
-
-    // Discard RBBI boundaries where the "words" on both sides have the break
-    //   status of UBRK_WORD_NONE.  Spaces and puncutation, for example.
-    int32_t  prevStatus = fWordBreakItr->getRuleStatus();
-    if (prevStatus >= UBRK_WORD_NUMBER && prevStatus < UBRK_WORD_IDEO_LIMIT) {
-        return TRUE;
-    }
-    fWordBreakItr->next();
-    int32_t  nextStatus = fWordBreakItr->getRuleStatus();
-    UBool    returnVal  = (nextStatus >= UBRK_WORD_NUMBER && nextStatus < UBRK_WORD_IDEO_LIMIT);
+    returnVal = fWordBreakItr->isBoundary(pos);
     return   returnVal;
 }
 
