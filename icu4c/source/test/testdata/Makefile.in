@@ -126,8 +126,8 @@ clean-local:
 
 distclean-local: clean-local
 	$(RMV) Makefile
-ifeq ($(patsubst ..%,,@RELATIVEDATADIR@),@RELATIVEDATADIR@)
-	$(RMV) *.goo *.txt *.bin *.uni
+ifneq ($(wildcard .links),)
+	$(RMV) *.goo *.txt *.bin *.uni .links
 endif
 
 check-local:
@@ -142,6 +142,12 @@ $(top_builddir)/config/Makefile.inc: $(top_srcdir)/config/Makefile.inc.in  $(top
 
 builddata: default.goo
 
+ifneq ($(srcdir),.)
+
 default.goo: $(srcdir)/default.goo
-	ln -sf $(srcdir)/*.goo $(srcdir)/*.txt $(srcdir)*.bin $(srcdir)/*.uni .
+	$(RMV) *.goo *.txt *.bin *.uni
+	ln -s $(srcdir)/*.goo $(srcdir)/*.txt $(srcdir)/*.bin $(srcdir)/*.uni .
+	touch .links
+
+endif
 

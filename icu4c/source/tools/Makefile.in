@@ -48,16 +48,20 @@ endif
 
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
-# @RELATIVEDATADIR@ exists solely for this line.
 
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
 SRCDATADIR=$(top_srcdir)/../data
-OBJDATADIR=$(top_builddir)/@RELATIVEDATADIR@
+OBJDATADIR=$(top_builddir)/data
 # tmpdir is INSIDE pkgdata dir
-TMPDATADIR=./tmp
+TMPDATADIR=tmp
+
+# DATABUILDDIR must be an absolute path because of the way pkgdata is invoked
+# from the temporary directory.
+
+DATABUILDDIR=$(shell cd $(OBJDATADIR) && /bin/pwd)
 
 # relative lib links from pkgdata are the same as for tmp
-PKGDATA=../pkgdata/pkgdata -T . -s @DATABUILDDIR@ -O ./icupkg.inc -d @DATABUILDDIR@ -v -m $(MODE) 
+PKGDATA=../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -v -m $(MODE) 
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -168,10 +172,10 @@ clean-local: clean-pkgdata
 distclean-local: clean-local
 	$(RMV) Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA) icupkg.inc
 	-@if [ -f $(TMPDATADIR)/icudata_dll.mak ]; then \
-		(cd pkgdata ; ./pkgdata -T $(TMPDATADIR) -m dll -p icudata -O @DATABUILDDIR@/icupkg.inc $(TMPDATADIR)/icudata.lst -d @DATABUILDDIR@ --clean ) \
+		(cd pkgdata ; ./pkgdata -T $(TMPDATADIR) -m dll -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
 	fi
 	-@if [ -f $(TMPDATADIR)/icudata_common.mak ]; then \
-		(cd pkgdata; ./pkgdata -T $(TMPDATADIR) -m common -p icudata -O @DATABUILDDIR@/icupkg.inc $(TMPDATADIR)/icudata.lst -d @DATABUILDDIR@ --clean ) \
+		(cd pkgdata; ./pkgdata -T $(TMPDATADIR) -m common -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
 	fi
 	-@$(RMV) $(TMPDATADIR)
 
@@ -185,7 +189,7 @@ $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbf
 
 $(TMPDATADIR)/testdata.lst: Makefile
 	@$(mkinstalldirs) $(TMPDATADIR)
-	@echo @DATABUILDDIR@/test.dat > $@
+	@echo $(DATABUILDDIR)/test.dat > $@
 
 $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 	@$(mkinstalldirs) $(TMPDATADIR)
@@ -193,20 +197,20 @@ $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 
 # build the ICU and test data
 
-build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) @DATABUILDDIR@/test.dat
+build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) $(DATABUILDDIR)/test.dat
 	@$(mkinstalldirs) $(TMPDATADIR)
-	(cd tmp; $(PKGDATA) -p icudata ./icudata.lst   )
-	(cd tmp; $(PKGDATA) -p base    ./testdata.lst  )
-	(cd tmp; $(PKGDATA) -p base_test  ./testdata.lst )
+	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst   )
+	(cd $(TMPDATADIR); $(PKGDATA) -p base    ./testdata.lst  )
+	(cd $(TMPDATADIR); $(PKGDATA) -p base_test  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
 	$(mkinstalldirs) $(TMPDATADIR)  $(DESTDIR)$(pkgdatadir)/$(VERSION)
-	(cd tmp; $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
+	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 
 clean-pkgdata:
 	@$(mkinstalldirs) $(TMPDATADIR)
-	-@(cd tmp; $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc 
 
 check-local:

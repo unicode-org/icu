@@ -3019,23 +3019,6 @@ if test "$ac_cv_lib_dld_shl_load" = "yes"; then
 	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 
-if test -f ./configure.in
-then
-        # they are normal. Build is in .. (note this is mostly for the top level script)
-        DATABUILDDIR=`pwd`/../data/
-        RELATIVEDATADIR=../data/
-else
-        DATABUILDDIR=`pwd`/data/
-        RELATIVEDATADIR=data/
-	cat >> confdefs.h <<\EOF
-#define BUILD_OUT_OF_SOURCE 1
-EOF
-
-fi
-
-
-
-
 
 if test "$ac_cv_func_dllload" = "yes"; then
     CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
@@ -3236,8 +3219,6 @@ s%@platform@%$platform%g
 /@host_frag@/r $host_frag
 s%@host_frag@%%g
 s%@ld_rpath_suf@%$ld_rpath_suf%g
-s%@DATABUILDDIR@%$DATABUILDDIR%g
-s%@RELATIVEDATADIR@%$RELATIVEDATADIR%g
 
 CEOF
 EOF
@@ -3471,15 +3452,7 @@ rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
 
-
-if test -d $DATABUILDDIR
-then
-    :
-else
-    echo creating $DATABUILDDIR
-    mkdir -p $DATABUILDDIR
-fi
-
 if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages above to see why we couldn't find pthread_create()" 1>&6
 fi
+
