@@ -1579,26 +1579,23 @@ public:
   // Constructors
   //========================================
 
-  /**
-   * Dummy enumeration for the disambiguation of function signatures.
-   */
-  enum ESignature {
-    kCodePoint
-  };
-
   /** Construct an empty UnicodeString.  
    * @stable
    */
   UnicodeString();
 
-
   /**
    * Construct a UnicodeString with capacity to hold <TT>capacity</TT> UChars
    * @param capacity the number of UChars this UnicodeString should hold
-   * before a resize is necessary
-   * @stable
+   * before a resize is necessary; if count is greater than 0 and count
+   * code points c take up more space than capacity, then capacity is adjusted
+   * accordingly.
+   * @param c is used to initially fill the string
+   * @param count specifies how many code points c are to be written in the
+   *              string
+   * @draft
    */
-  UnicodeString(int32_t capacity);
+  UnicodeString(int32_t capacity, UChar32 c, int32_t count);
 
   /**
    * Single UChar (code unit) constructor.
@@ -1610,19 +1607,9 @@ public:
   /**
    * Single UChar32 (code point) constructor.
    * @param ch the character to place in the UnicodeString
-   * @param sig is a dummy parameter that guarantees that this
-   *        constructor can be distinguished from
-   *        <code>UnicodeString(int32_t capacity)</code>
-   *        on all platforms
    * @draft
-   *
-   * Usage example:
-   * <pre>
-   * UChar32 c=0x104321;
-   * UnicodeString us(c, UnicodeString::kCodePoint);
-   * </pre>
    */
-  UnicodeString(UChar32 ch, ESignature sig);
+  UnicodeString(UChar32 ch);
 
   /**
    * UChar* constructor.
