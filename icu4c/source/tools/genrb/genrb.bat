@@ -92,6 +92,8 @@ if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
 %1\genrb %2\icu\data\fr_FR_EURO.txt
 %1\genrb %2\icu\data\fr_LU.txt
 %1\genrb %2\icu\data\fr_LU_EURO.txt
+%1\genrb %2\icu\data\hi.txt
+%1\genrb %2\icu\data\hi_IN.txt
 %1\genrb %2\icu\data\hr.txt
 %1\genrb %2\icu\data\hr_HR.txt
 %1\genrb %2\icu\data\hu.txt
@@ -114,6 +116,8 @@ if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
 %1\genrb %2\icu\data\lv_LV.txt
 %1\genrb %2\icu\data\mk.txt
 %1\genrb %2\icu\data\mk_MK.txt
+%1\genrb %2\icu\data\mt.txt
+%1\genrb %2\icu\data\mt_MT.txt
 %1\genrb %2\icu\data\nl.txt
 %1\genrb %2\icu\data\nl_BE.txt
 %1\genrb %2\icu\data\nl_BE_EURO.txt
