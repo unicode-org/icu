@@ -219,7 +219,7 @@ int gentz::MMain(int argc, char* argv[]) {
     ////////////////////////////////////////////////////////////
     int32_t wlen = writeTzDatFile(options[3].value);
     fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
-            TZ_DATA_NAME, TZ_DATA_TYPE, wlen);
+            TZ_DATA_NAME, TZ_DATA_TYPE, (long)wlen);
 
     return 0; // success
 }
@@ -242,6 +242,7 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     // Must be last:
     header.nameTableDelta = header.nameIndexDelta + nameToEquivSize;
 
+/*  // Don't need to check for negative values on unsigned numbers.
     if (header.equivTableDelta < 0 ||
         header.offsetIndexDelta < 0 ||
         header.countryIndexDelta < 0 ||
@@ -249,6 +250,7 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
         header.nameTableDelta < 0) {
         die("Table too big -- negative delta");
     }
+*/
 
     // Convert equivalency table indices to offsets.  This can only
     // be done after the header offsets have been set up.
@@ -327,7 +329,7 @@ void gentz::fixupNameToEquiv() {
     // Now remap index values to offsets
     for (i=0; i<header.count; ++i) {
         uint32_t x = nameToEquiv[i];
-        if (x < 0 || x >= equivCount) {
+        if (x >= equivCount) {
             die("Equiv index out of range");
         }
         nameToEquiv[i] = offsets[x];
@@ -434,7 +436,7 @@ TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
     equivTableSize = (int8_t*)eg - (int8_t*)result;
     readEndMarker(in);
     fprintf(stdout, " Read %lu equivalency table entries, in-memory size %ld bytes\n",
-            equivCount, equivTableSize);
+            (unsigned long)equivCount, (long)equivTableSize);
     return (TZEquivalencyGroup*)result;
 }
 
@@ -507,7 +509,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     }
     readEndMarker(in);
     fprintf(stdout, " Read %lu offset index table entries, in-memory size %ld bytes\n",
-            n, offsetIndexSize);
+            (unsigned long)n, (long)offsetIndexSize);
     return (OffsetIndex*)result;
 }
 
@@ -566,7 +568,7 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
         *(uint16_t*)index = 0; // Clear pad bits
     }
     fprintf(stdout, " Read %lu country index table entries, in-memory size %ld bytes\n",
-            n, countryIndexSize);
+            (unsigned long)n, (long)countryIndexSize);
     return (CountryIndex*)result;
 }
 
@@ -593,7 +595,8 @@ void gentz::parseHeader(FileStream* in) {
     readEndMarker(in);
 
     fprintf(stdout, " Read header, data version %u(%u), in-memory size %ld bytes\n",
-            header.versionYear, header.versionSuffix, sizeof(header));
+            header.versionYear, header.versionSuffix,
+            (unsigned long)sizeof(header));
 }
 
 void gentz::parseDSTRule(char*& p, TZRule& rule) {
@@ -662,7 +665,8 @@ char* gentz::parseNameTable(FileStream* in) {
         die("Name table shorter than declared size");
     }
     readEndMarker(in);
-    fprintf(stdout, " Read %ld names, in-memory size %ld bytes\n", n, nameTableSize);
+    fprintf(stdout, " Read %ld names, in-memory size %ld bytes\n",
+        (long)n, (long)nameTableSize);
     return names;
 }
 
@@ -734,7 +738,7 @@ int32_t gentz::parseInteger(char*& p, char nextExpectedChar,
 void gentz::die(const char* msg) {
     fprintf(stderr, "ERROR, %s\n", msg);
     if (*buffer) {
-        fprintf(stderr, "Input file line %ld: \"%s\"\n", lineNumber, buffer);
+        fprintf(stderr, "Input file line %ld: \"%s\"\n", (long)lineNumber, buffer);
     }
     exit(1);
 }
