@@ -101,15 +101,18 @@ le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIt
 le_int32 LookupProcessor::selectLookups(const FeatureTable *featureTable, LETag featureTag, le_int32 order)
 {
     le_uint16 lookupCount = featureTable? SWAPW(featureTable->lookupCount) : 0;
+    le_int32  store = order;
 
     for (le_uint16 lookup = 0; lookup < lookupCount; lookup += 1) {
         le_uint16 lookupListIndex = SWAPW(featureTable->lookupListIndexArray[lookup]);
 
-        lookupSelectArray[lookupListIndex] = featureTag;
-        lookupOrderArray[order + lookup]   = lookupListIndex;
+        if (lookupSelectArray[lookupListIndex] == notSelected) { 
+            lookupSelectArray[lookupListIndex] = featureTag;
+            lookupOrderArray[store++]   = lookupListIndex;
+        }
     }
 
-    return lookupCount;
+    return store - order;
 }
 
 LookupProcessor::LookupProcessor(const char *baseAddress,
@@ -177,11 +180,6 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
 
             for (le_uint16 feature = 0; feature < featureCount; feature += 1) {
                 le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
-
-                // don't add the required feature to the list more than once...
-                if (featureIndex == requiredFeatureIndex) {
-                    continue;
-                }
 
                 featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
 
