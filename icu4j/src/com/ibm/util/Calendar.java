@@ -322,13 +322,13 @@ import com.ibm.text.SimpleDateFormat;
  * 
  *   <li>The <code>fields[]</code> array is <code>private</code> now
  *     instead of <code>protected</code>.  Subclasses must access it
- *     using the methods <code>internalSet()</code> and
- *     <code>internalGet()</code>.  <b>Motivation:</b> Subclasses should
+ *     using the methods {@link #internalSet} and
+ *     {@link #internalGet}.  <b>Motivation:</b> Subclasses should
  *     not directly access data members.</li>
  * 
  *   <li>The <code>time</code> long word is <code>private</code> now
  *     instead of <code>protected</code>.  Subclasses may access it using
- *     the method <code>internalGetTimeInMillis()</code>, which does not
+ *     the method {@link #internalGetTimeInMillis}, which does not
  *     provoke an update. <b>Motivation:</b> Subclasses should not
  *     directly access data members.</li>
  * 
@@ -339,14 +339,14 @@ import com.ibm.text.SimpleDateFormat;
  *     should not have to reimplement common code. Certain behaviors are
  *     common across calendar systems: The definition and behavior of
  *     week-related fields and time fields, the arithmetic
- *     (<code>add()</code> and <code>roll()</code>) behavior of many
+ *     ({@link #add(int, int) add} and {@link #roll(int, int) roll}) behavior of many
  *     fields, and the field validation system.</li>
  * 
  *   <li>The subclassing API has been completely redesigned.</li>
  * 
  *   <li>The <code>Calendar</code> base class contains some Gregorian
  *     calendar algorithmic support that subclasses can use (specifically
- *     in <code>handleComputeFields()</code>).  Subclasses can use the
+ *     in {@link #handleComputeFields}).  Subclasses can use the
  *     methods <code>getGregorianXxx()</code> to obtain precomputed
  *     values. <b>Motivation:</b> This is required by all
  *     <code>Calendar</code> subclasses in order to implement consistent
@@ -354,7 +354,7 @@ import com.ibm.text.SimpleDateFormat;
  *     already computed data.</li>
  * 
  *   <li>The <code>FIELD_COUNT</code> constant has been removed. Use
- *     <code>getFieldCount()</code>.  In addition, framework API has been
+ *     {@link #getFieldCount}.  In addition, framework API has been
  *     added to allow subclasses to define additional fields.
  *     <b>Motivation: </b>The number of fields is not constant across
  *     calendar systems.</li>
@@ -365,11 +365,11 @@ import com.ibm.text.SimpleDateFormat;
  *     code cannot be guaranteed well-behaved results with dates such as
  *     <code>Date(Long.MIN_VALUE)</code> or
  *     <code>Date(Long.MAX_VALUE)</code>. Instead, the
- *     <code>Calendar</code> constants <code>MIN_DATE</code>,
- *     <code>MAX_DATE</code>, <code>MIN_MILLIS</code>,
- *     <code>MAX_MILLIS</code>, <code>MIN_JULIAN</code>, and
- *     <code>MAX_JULIAN</code> should be used. <b>Motivation:</b> With
- *     the addition of the <code>JULIAN_DAY</code> field, Julian day
+ *     <code>Calendar</code> constants {@link #MIN_DATE},
+ *     {@link #MAX_DATE}, {@link #MIN_MILLIS},
+ *     {@link #MAX_MILLIS}, {@link #MIN_JULIAN}, and
+ *     {@link #MAX_JULIAN} should be used. <b>Motivation:</b> With
+ *     the addition of the {@link #JULIAN_DAY} field, Julian day
  *     numbers must be restricted to a 32-bit <code>int</code>.  This
  *     restricts the overall supported range. Furthermore, restricting
  *     the supported range simplifies the computations by removing
@@ -377,17 +377,17 @@ import com.ibm.text.SimpleDateFormat;
  *     at millis near <code>Long.MIN_VALUE</code> and
  *     <code>Long.MAX_VALUE</code>.</li>
  * 
- *   <li>New fields are implemented: <code>JULIAN_DAY</code> defines
+ *   <li>New fields are implemented: {@link #JULIAN_DAY} defines
  *     single-field specification of the
- *     date. <code>MILLISECONDS_IN_DAY</code> defines a single-field
- *     specification of the wall time. <code>DOW_LOCAL</code> and
- *     <code>YEAR_DOW</code> implement localized day-of-week and
+ *     date. {@link #MILLISECONDS_IN_DAY} defines a single-field
+ *     specification of the wall time. {@link #DOW_LOCAL} and
+ *     {@link #YEAR_WOY} implement localized day-of-week and
  *     week-of-year behavior.</li>
  * 
  *   <li>Subclasses can access millisecond constants
- *     <code>ONE_SECOND</code>, <code>ONE_MINUTE</code>,
- *     <code>ONE_HOUR</code>, <code>ONE_DAY</code>, and
- *     <code>ONE_WEEK</code> defined in <code>Calendar</code>.</li>
+ *     {@link #ONE_SECOND}, {@link #ONE_MINUTE},
+ *     {@link #ONE_HOUR}, {@link #ONE_DAY}, and
+ *     {@link #ONE_WEEK} defined in <code>Calendar</code>.</li>
  * 
  *   <li>New API has been added to suport calendar-specific subclasses
  *     of <code>DateFormat</code>.</li>
@@ -425,19 +425,19 @@ import com.ibm.text.SimpleDateFormat;
  * 
  * <p><b>Subclass computation of time <tt>=&gt;</tt> fields</b>
  * 
- * <p>The <code>ERA</code>, <code>YEAR</code>,
- * <code>EXTENDED_YEAR</code>, <code>MONTH</code>,
- * <code>DAY_OF_MONTH</code>, and <code>DAY_OF_YEAR</code> fields are
+ * <p>The {@link #ERA}, {@link #YEAR},
+ * {@link #EXTENDED_YEAR}, {@link #MONTH},
+ * {@link #DAY_OF_MONTH}, and {@link #DAY_OF_YEAR} fields are
  * computed by the subclass, based on the Julian day. All other fields
  * are computed by <code>Calendar</code>.
  * 
  * <ul>
  * 
- *   <li>Subclasses should implement <code>handleComputeFields()</code>
- *     to compute the <code>ERA</code>, <code>YEAR</code>,
- *     <code>EXTENDED_YEAR</code>, <code>MONTH</code>,
- *     <code>DAY_OF_MONTH</code>, and <code>DAY_OF_YEAR</code> fields,
- *     based on the value of the <code>JULIAN_DAY</code> field. If there
+ *   <li>Subclasses should implement {@link #handleComputeFields}
+ *     to compute the {@link #ERA}, {@link #YEAR},
+ *     {@link #EXTENDED_YEAR}, {@link #MONTH},
+ *     {@link #DAY_OF_MONTH}, and {@link #DAY_OF_YEAR} fields,
+ *     based on the value of the {@link #JULIAN_DAY} field. If there
  *     are calendar-specific fields not defined by <code>Calendar</code>,
  *     they must also be computed. These are the only fields that the
  *     subclass should compute. All other fields are computed by the base
@@ -463,14 +463,14 @@ import com.ibm.text.SimpleDateFormat;
  * 
  * <ul>
  * 
- *   <li>Subclasses should implement <code>handleGetExtendedYear()</code>
+ *   <li>Subclasses should implement {@link #handleGetExtendedYear}
  *     to return the extended year for this calendar system, based on the
- *     <code>YEAR</code>, <code>EXTENDED_YEAR</code>, and any fields that
+ *     {@link #YEAR}, {@link #EXTENDED_YEAR}, and any fields that
  *     the calendar system uses that are larger than a year, such as
- *     <code>ERA</code>.</li>
+ *     {@link #ERA}.</li>
  * 
- *   <li>Subclasses should implement <code>handleComputeMonthStart(int
- *     extendedYear, int month)</code> to return the Julian day number
+ *   <li>Subclasses should implement {@link #handleComputeMonthStart}
+ *     to return the Julian day number
  *     associated with a month and extended year. This is the Julian day
  *     number of the day before the first day of the month. The month
  *     number is zero-based. This computation should not depend on any
@@ -482,32 +482,32 @@ import com.ibm.text.SimpleDateFormat;
  * 
  * <ul>
  * 
- *   <li>Subclasses should implement <code>handleGetMonthLength(int
- *     extendedYear, int month)</code> to return the number of days in a
+ *   <li>Subclasses should implement {@link #handleGetMonthLength}
+ *     to return the number of days in a
  *     given month of a given extended year. The month number, as always,
  *     is zero-based.</li>
  * 
- *   <li>Subclasses should implement <code>handleGetYearLength(int
- *     extendedYear)</code> to return the number of days in the given
+ *   <li>Subclasses should implement {@link #handleGetYearLength}
+ *     to return the number of days in the given
  *     extended year. This method is used by
- *     <code>computeWeekFields()</code> to compute the
- *     <code>WEEK_OF_YEAR</code> and <code>YEAR_WOY</code> fields.</li>
+ *     {@link #computeWeekFields} to compute the
+ *     {@link #WEEK_OF_YEAR} and {@link #YEAR_WOY} fields.</li>
  * 
- *   <li>Subclasses should implement <code>handleGetLimit(int field, int
- *     limitType)</code> to return the <code>MINIMUM</code>,
- *     <code>GREATEST_MINIMUM</code>, <code>LEAST_MAXIMUM</code>, or
- *     <code>MAXIMUM</code> of a field, depending on the value of
+ *   <li>Subclasses should implement {@link #handleGetLimit}
+ *     to return the {@link #MINIMUM},
+ *     {@link #GREATEST_MINIMUM}, {@link #LEAST_MAXIMUM}, or
+ *     {@link #MAXIMUM} of a field, depending on the value of
  *     <code>limitType</code>. This method only needs to handle the
- *     fields <code>ERA</code>, <code>YEAR</code>, <code>MONTH</code>,
- *     <code>WEEK_OF_YEAR</code>, <code>WEEK_OF_MONTH</code>,
- *     <code>DAY_OF_MONTH</code>, <code>DAY_OF_YEAR</code>,
- *     <code>DAY_OF_WEEK_IN_MONTH</code>, <code>YEAR_WOY</code>, and
- *     <code>EXTENDED_YEAR</code>.  Other fields are invariant (with
+ *     fields {@link #ERA}, {@link #YEAR}, {@link #MONTH},
+ *     {@link #WEEK_OF_YEAR}, {@link #WEEK_OF_MONTH},
+ *     {@link #DAY_OF_MONTH}, {@link #DAY_OF_YEAR},
+ *     {@link #DAY_OF_WEEK_IN_MONTH}, {@link #YEAR_WOY}, and
+ *     {@link #EXTENDED_YEAR}.  Other fields are invariant (with
  *     respect to calendar system) and are handled by the base
  *     class.</li>
  * 
- *   <li>Optionally, subclasses may override <code>validateField(int
- *     field)</code> to check any subclass-specific fields. If the
+ *   <li>Optionally, subclasses may override {@link #validateField}
+ *     to check any subclass-specific fields. If the
  *     field's value is out of range, the method should throw an
  *     <code>IllegalArgumentException</code>. The method may call
  *     <code>super.validateField(field)</code> to handle fields in a
@@ -515,18 +515,18 @@ import com.ibm.text.SimpleDateFormat;
  *     <code>getMinimum(field)</code>..<code>getMaximum(field)</code>.</li>
  * 
  *   <li>Optionally, subclasses may override
- *     <code>handleCreateFields()</code> to create an <code>int[]</code>
+ *     {@link #handleCreateFields} to create an <code>int[]</code>
  *     array large enough to hold the calendar's fields. This is only
  *     necessary if the calendar defines additional fields beyond those
  *     defined by <code>Calendar</code>. The length of the result must be
- *     at least <code>BASE_FIELD_COUNT</code> and no more than
- *     <code>MAX_FIELD_COUNT</code>.</li>
+ *     at least {@link #BASE_FIELD_COUNT} and no more than
+ *     {@link #MAX_FIELD_COUNT}.</li>
  * 
  *   <li>Optionally, subclasses may override
- *     <code>handleGetDateFormat()</code> to create a
+ *     {@link #handleGetDateFormat} to create a
  *     <code>DateFormat</code> appropriate to this calendar. This is only
  *     required if a calendar subclass redefines the use of a field (for
- *     example, changes the <code>ERA</code> field from a symbolic field
+ *     example, changes the {@link #ERA} field from a symbolic field
  *     to a numeric one) or defines an additional field.</li>
  * 
  *   <li>Optionally, subclasses may override {@link #roll roll} and
@@ -555,16 +555,16 @@ import com.ibm.text.SimpleDateFormat;
  *     transition between days at <em>local zone midnight</em>.  This
  *     allows ICU4J to centralize the time computations in
  *     <code>Calendar</code> and to maintain basic correpsondences
- *     between calendar systems. Affected fields: <code>AM_PM</code>,
- *     <code>HOUR</code>, <code>HOUR_OF_DAY</code>, <code>MINUTE</code>,
- *     <code>SECOND</code>, <code>MILLISECOND</code>,
- *     <code>ZONE_OFFSET</code>, and <code>DST_OFFSET</code>.</li>
+ *     between calendar systems. Affected fields: {@link #AM_PM},
+ *     {@link #HOUR}, {@link #HOUR_OF_DAY}, {@link #MINUTE},
+ *     {@link #SECOND}, {@link #MILLISECOND},
+ *     {@link #ZONE_OFFSET}, and {@link #DST_OFFSET}.</li>
  * 
  *   <li>DST behavior is normalized. Daylight savings time behavior is
  *     computed the same for all calendar systems, and depends on the
  *     value of several <code>GregorianCalendar</code> fields: the
- *     <code>YEAR</code>, <code>MONTH</code>, and
- *     <code>DAY_OF_MONTH</code>. As a result, <code>Calendar</code>
+ *     {@link #YEAR}, {@link #MONTH}, and
+ *     {@link #DAY_OF_MONTH}. As a result, <code>Calendar</code>
  *     always computes these fields, even for non-Gregorian calendar
  *     systems. These fields are available to subclasses.</li>
  * 
@@ -575,12 +575,12 @@ import com.ibm.text.SimpleDateFormat;
  *     and consistent definition throughout history. For example,
  *     although the Gregorian calendar introduced a discontinuity when
  *     first instituted, the day of week was not disrupted. For this
- *     reason, the fields <code>DAY_OF_WEEK</code>, <code>WEEK_OF_YEAR,
- *     WEEK_OF_MONTH</code>, <code>DAY_OF_WEEK_IN_MONTH</code>,
- *     <code>DOW_LOCAL</code>, <code>YEAR_WOY</code> are all computed in
+ *     reason, the fields {@link #DAY_OF_WEEK}, <code>WEEK_OF_YEAR,
+ *     WEEK_OF_MONTH</code>, {@link #DAY_OF_WEEK_IN_MONTH},
+ *     {@link #DOW_LOCAL}, {@link #YEAR_WOY} are all computed in
  *     a consistent way in the base class, based on the
- *     <code>EXTENDED_YEAR</code>, <code>DAY_OF_YEAR</code>,
- *     <code>MONTH</code>, and <code>DAY_OF_MONTH</code>, which are
+ *     {@link #EXTENDED_YEAR}, {@link #DAY_OF_YEAR},
+ *     {@link #MONTH}, and {@link #DAY_OF_MONTH}, which are
  *     computed by the subclass.</li>
  * 
  * </ul>
@@ -597,10 +597,10 @@ import com.ibm.text.SimpleDateFormat;
  * maximum range of supportable dates as those having Julian day numbers
  * of <code>-0x7F000000</code> to <code>+0x7F000000</code>. This
  * corresponds to years from ~5,000,000 BCE to ~5,000,000 CE. Programmers
- * should use the constants <code>MIN_DATE</code> (or
- * <code>MIN_MILLIS</code> or <code>MIN_JULIAN</code>) and
- * <code>MAX_DATE</code> (or <code>MAX_MILLIS</code> or
- * <code>MAX_JULIAN</code>) in <code>Calendar</code> to specify an
+ * should use the constants {@link #MIN_DATE} (or
+ * {@link #MIN_MILLIS} or {@link #MIN_JULIAN}) and
+ * {@link #MAX_DATE} (or {@link #MAX_MILLIS} or
+ * {@link #MAX_JULIAN}) in <code>Calendar</code> to specify an
  * extremely early or extremely late date.</p>
  * 
  * <p><big><b>General notes</b></big>
@@ -616,23 +616,23 @@ import com.ibm.text.SimpleDateFormat;
  *     its epoch into zero and negative years. Subclasses do not throw
  *     exceptions because a date precedes the historical start of a
  *     calendar system. Instead, they implement
- *     <code>handleGetLimit()</code> to return appropriate limits on
- *     <code>YEAR</code>, <code>ERA</code>, etc. fields. Then, if the
+ *     {@link #handleGetLimit} to return appropriate limits on
+ *     {@link #YEAR}, {@link #ERA}, etc. fields. Then, if the
  *     calendar is set to not be lenient, out-of-range field values will
  *     trigger and exception.</li>
  * 
  *   <li>Calendar system subclasses compute a <em>extended
- *     year</em>. This differs from the <code>YEAR</code> field in that
+ *     year</em>. This differs from the {@link #YEAR} field in that
  *     it ranges over all integer values, including zero and negative
  *     values, and it encapsulates the information of the
- *     <code>YEAR</code> field and all larger fields.  Thus, for the
- *     Gregorian calendar, the <code>EXTENDED_YEAR</code> is computed as
+ *     {@link #YEAR} field and all larger fields.  Thus, for the
+ *     Gregorian calendar, the {@link #EXTENDED_YEAR} is computed as
  *     <code>ERA==AD ? YEAR : 1-YEAR</code>. Another example is the Mayan
  *     long count, which has years (<code>KUN</code>) and nested cycles
  *     of years (<code>KATUN</code> and <code>BAKTUN</code>). The Mayan
- *     <code>EXTENDED_YEAR</code> is computed as <code>TUN + 20 * (KATUN
+ *     {@link #EXTENDED_YEAR} is computed as <code>TUN + 20 * (KATUN
  *     + 20 * BAKTUN)</code>. The <code>Calendar</code> base class uses
- *     the <code>EXTENDED_YEAR</code> field to compute the week-related
+ *     the {@link #EXTENDED_YEAR} field to compute the week-related
  *     fields.</li>
  * 
  * </ul>
@@ -641,7 +641,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.13 $ $Date: 2000/11/21 20:17:39 $
+ * @version      $Revision: 1.14 $ $Date: 2000/11/22 21:26:55 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1079,26 +1079,85 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static final int WEEKEND_CEASE = 3;
 
-    // Useful millisecond constants.  Although ONE_DAY and ONE_WEEK can fit
-    // into ints, they must be longs in order to prevent arithmetic overflow
-    // when performing (bug 4173516).
+    /**
+     * The number of milliseconds in one second.
+     */
     protected static final int  ONE_SECOND = 1000;
+
+    /**
+     * The number of milliseconds in one minute.
+     */
     protected static final int  ONE_MINUTE = 60*ONE_SECOND;
+
+    /**
+     * The number of milliseconds in one hour.
+     */
     protected static final int  ONE_HOUR   = 60*ONE_MINUTE;
+
+    /**
+     * The number of milliseconds in one day.  Although ONE_DAY and
+     * ONE_WEEK can fit into ints, they must be longs in order to prevent
+     * arithmetic overflow when performing (bug 4173516).
+     */
     protected static final long ONE_DAY    = 24*ONE_HOUR;
+
+    /**
+     * The number of milliseconds in one week.  Although ONE_DAY and
+     * ONE_WEEK can fit into ints, they must be longs in order to prevent
+     * arithmetic overflow when performing (bug 4173516).
+     */
     protected static final long ONE_WEEK   = 7*ONE_DAY;
 
-    protected static final int JAN_1_1_JULIAN_DAY = 1721426; // January 1, 1 (Gregorian)
-    protected static final int EPOCH_JULIAN_DAY   = 2440588; // Jaunary 1, 1970 (Gregorian)
+    /**
+     * The Julian day of the Gregorian epoch, that is, January 1, 1 on the
+     * Gregorian calendar.
+     */
+    protected static final int JAN_1_1_JULIAN_DAY = 1721426;
 
+    /**
+     * The Julian day of the epoch, that is, January 1, 1970 on the
+     * Gregorian calendar.
+     */
+    protected static final int EPOCH_JULIAN_DAY   = 2440588;
+
+    /**
+     * The minimum supported Julian day.  This value is equivalent to
+     * <code>MIN_MILLIS</code> and <code>MIN_DATE</code>.
+     * @see #JULIAN_DAY
+     */
     public static final int MIN_JULIAN = -0x7F000000;
     // Get around bug in jikes 1.12 for now:
+
+    /**
+     * The minimum supported epoch milliseconds.  This value is equivalent
+     * to <code>MIN_JULIAN</code> and <code>MIN_DATE</code>.
+     */
     public static final long MIN_MILLIS = -184303902528000000L;
     //public static final long MIN_MILLIS = (MIN_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+
+    /**
+     * The minimum supported <code>Date</code>.  This value is equivalent
+     * to <code>MIN_JULIAN</code> and <code>MIN_MILLIS</code>.
+     */
     public static final Date MIN_DATE = new Date(MIN_MILLIS);
 
+    /**
+     * The maximum supported Julian day.  This value is equivalent to
+     * <code>MAX_MILLIS</code> and <code>MAX_DATE</code>.
+     * @see #JULIAN_DAY
+     */
     public static final int MAX_JULIAN = +0x7F000000;
+
+    /**
+     * The maximum supported epoch milliseconds.  This value is equivalent
+     * to <code>MAX_JULIAN</code> and <code>MAX_DATE</code>.
+     */
     public static final long MAX_MILLIS = (MAX_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+
+    /**
+     * The maximum supported <code>Date</code>.  This value is equivalent
+     * to <code>MAX_JULIAN</code> and <code>MAX_MILLIS</code>.
+     */
     public static final Date MAX_DATE = new Date(MAX_MILLIS);
 
     // Internal notes:
@@ -1232,9 +1291,29 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private static Hashtable cachedLocaleData = new Hashtable(3);
 
-    // Special values of stamp[]
+    /**
+     * Value of the time stamp <code>stamp[]</code> indicating that
+     * a field has not been set since the last call to <code>clear()</code>.
+     * @see #INTERNALLY_SET
+     * @see #MINIMUM_USER_STAMP
+     */
     protected static final int UNSET = 0;
+
+    /**
+     * Value of the time stamp <code>stamp[]</code> indicating that a field
+     * has been set via computations from the time or from other fields.
+     * @see #UNSET
+     * @see #MINIMUM_USER_STAMP
+     */
     protected static final int INTERNALLY_SET = 1;
+
+    /**
+     * If the time stamp <code>stamp[]</code> has a value greater than or
+     * equal to <code>MINIMUM_USER_SET</code> then it has been set by the
+     * user via a call to <code>set()</code>.
+     * @see #UNSET
+     * @see #INTERNALLY_SET
+     */
     protected static final int MINIMUM_USER_STAMP = 2;
 
     /**
@@ -2444,15 +2523,25 @@ public abstract class Calendar implements Serializable, Cloneable {
     // Interface for creating custon DateFormats for different types of Calendars
     //-------------------------------------------------------------------------
 
+    /**
+     * Return a <code>DateFormat</code> appropriate to this calendar.
+     * Subclasses wishing to specialize this behavior should override
+     * <code>handleGetDateFormat()</code>
+     * @see #handleGetDateFormat
+     */
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, Locale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);
     }
 
     /**
-     * Framework method to create a calendar-specific DateFormat object
-     * using the the given pattern.  This method is responsible for
-     * creating the calendar-specific DateFormat and DateFormatSymbols
-     * objects as needed.
+     * Create a <code>DateFormat</code> appropriate to this calendar.
+     * This is a framework method for subclasses to override.  This method
+     * is responsible for creating the calendar-specific DateFormat and
+     * DateFormatSymbols objects as needed.
+     * @param pattern the pattern, specific to the <code>DateFormat</code>
+     * subclass
+     * @param locale the locale for which the symbols should be drawn
+     * @return a <code>DateFormat</code> appropriate to this calendar
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
         DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
@@ -2797,7 +2886,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Sets what the minimal days required in the first week of the year are;
+     * Sets what the minimal days required in the first week of the year are.
      * For example, if the first week is defined as one that contains the first
      * day of the first month of a year, call the method with value 1. If it
      * must be a full week, use value 7.
@@ -2869,6 +2958,15 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     abstract protected int handleGetLimit(int field, int limitType);
 
+    /**
+     * Return a limit for a field.
+     * @param field the field, from 0..</code>getFieldCount()-1</code>
+     * @param limitType the type specifier for the limit
+     * @see #MINIMUM
+     * @see #GREATEST_MINIMUM
+     * @see #LEAST_MAXIMUM
+     * @see #MAXIMUM
+     */
     protected int getLimit(int field, int limitType) {
         switch (field) {
         case DAY_OF_WEEK:
@@ -2888,10 +2986,36 @@ public abstract class Calendar implements Serializable, Cloneable {
         return handleGetLimit(field, limitType);
     }
 
-    // Possible values of limitType for getLimit() and handleGetLimit()
+    /**
+     * Limit type for <code>getLimit()</code> and <code>handleGetLimit()</code>
+     * indicating the minimum value that a field can take (least minimum).
+     * @see #getLimit
+     * @see #handleGetLimit
+     */
     protected static final int MINIMUM = 0;
+
+    /**
+     * Limit type for <code>getLimit()</code> and <code>handleGetLimit()</code>
+     * indicating the greatest minimum value that a field can take.
+     * @see #getLimit
+     * @see #handleGetLimit
+     */
     protected static final int GREATEST_MINIMUM = 1;
+
+    /**
+     * Limit type for <code>getLimit()</code> and <code>handleGetLimit()</code>
+     * indicating the least maximum value that a field can take.
+     * @see #getLimit
+     * @see #handleGetLimit
+     */
     protected static final int LEAST_MAXIMUM = 2;
+
+    /**
+     * Limit type for <code>getLimit()</code> and <code>handleGetLimit()</code>
+     * indicating the maximum value that a field can take (greatest maximum).
+     * @see #getLimit
+     * @see #handleGetLimit
+     */
     protected static final int MAXIMUM = 3;
 
     /**
@@ -2986,12 +3110,12 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Return the time during the day at which the weekend begins in
-     * this calendar system, if getDayOfWeekType(dayOfWeek) ==
-     * WEEKEND_ONSET, or at which the weekend ends, if
-     * getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE.  If
-     * getDayOfWeekType(dayOfWeek) has some other value, then an
-     * exception is thrown.
+     * Return the time during the day at which the weekend begins or end in
+     * this calendar system.  If getDayOfWeekType(dayOfWeek) ==
+     * WEEKEND_ONSET return the time at which the weekend begins.  If
+     * getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE return the time at
+     * which the weekend ends.  If getDayOfWeekType(dayOfWeek) has some
+     * other value, then throw an exception.
      * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
      * THURSDAY, FRIDAY, or SATURDAY
      * @return the milliseconds after midnight at which the
@@ -3513,13 +3637,26 @@ public abstract class Calendar implements Serializable, Cloneable {
         },
     };
 
+    static final boolean DEBUG_RESOLVE = false;
+
     /**
      * Given a precedence table, return the newest field combination in
      * the table, or -1 if none is found.
      *
-     * TODO: Document table format
+     * <p>The precedence table is a 3-dimensional array of integers.  It
+     * may be thought of as an array of groups.  Each group is an array of
+     * lines.  Each line is an array of field numbers.  Within a line, if
+     * all fields are set, then the time stamp of the line is taken to be
+     * the stamp of the most recently set field.  If any field of a line is
+     * unset, then the line fails to match.  Within a group, the line with
+     * the newest time stamp is selected.  The first field of the line is
+     * returned to indicate which line matched.
+     *
+     * <p>If all lines of a group contain at least one unset field, then no
+     * line will match, and the group as a whole will fail to match.  In
+     * that case, the next group will be processed.  If all groups fail to
+     * match, then -1 is returned.
      */
-    static final boolean DEBUG_RESOLVE = false;
     protected int resolveFields(int[][][] precedenceTable) {
         int bestField = -1;
         for (int g=0; g<precedenceTable.length && bestField < 0; ++g) {
@@ -3582,6 +3719,13 @@ public abstract class Calendar implements Serializable, Cloneable {
         return defaultField;
     }
 
+    /**
+     * Ensure that each field is within its valid range by calling {@link
+     * #validateField(int)} on each field that has been set.  This method
+     * should only be called if this calendar is not lenient.
+     * @see #isLenient
+     * @see #validateField(int)
+     */
     protected void validateFields() {
         for (int field = 0; field < fields.length; field++) {
             if (isSet(field)) {
@@ -3591,8 +3735,11 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Subclasses should override this method to validate any calendar-specific
-     * fields.  Generic fields can be handled by super.validateField().
+     * Validate a single field of this calendar.  Subclasses should
+     * override this method to validate any calendar-specific fields.
+     * Generic fields can be handled by
+     * <code>Calendar.validateField()</code>.
+     * @see #validateField(int, int, int)
      */
     protected void validateField(int field) {
         int y;
@@ -3617,6 +3764,13 @@ public abstract class Calendar implements Serializable, Cloneable {
         }
     }
 
+    /**
+     * Validate a single field of this calendar given its minimum and
+     * maximum allowed value.  If the field is out of range, throw a
+     * descriptive <code>IllegalArgumentException</code>.  Subclasses may
+     * use this method in their implementation of {@link
+     * #validateField(int)}.
+     */
     protected final void validateField(int field, int min, int max) {
         int value = fields[field];
         if (value < min || value > max) {
@@ -4029,26 +4183,60 @@ public abstract class Calendar implements Serializable, Cloneable {
     // For subclasses to call
     //----------------------------------------------------------------------
 
+    /**
+     * Return the extended year on the Gregorian calendar as computed by
+     * <code>computeGregorianFields()</code>.
+     * @see #computeGregorianFields
+     */
     protected final int getGregorianYear() {
         return gregorianYear;
     }
 
+    /**
+     * Return the month (0-based) on the Gregorian calendar as computed by
+     * <code>computeGregorianFields()</code>.
+     * @see #computeGregorianFields
+     */
     protected final int getGregorianMonth() {
         return gregorianMonth;
     }
 
+    /**
+     * Return the day of year (1-based) on the Gregorian calendar as
+     * computed by <code>computeGregorianFields()</code>.
+     * @see #computeGregorianFields
+     */
     protected final int getGregorianDayOfYear() {
         return gregorianDayOfYear;
     }
 
+    /**
+     * Return the day of month (1-based) on the Gregorian calendar as
+     * computed by <code>computeGregorianFields()</code>.
+     * @see #computeGregorianFields
+     */
     protected final int getGregorianDayOfMonth() {
         return gregorianDayOfMonth;
     }
 
+    /**
+     * Return the number of fields defined by this calendar.  Valid field
+     * arguments to <code>set()</code> and <code>get()</code> are
+     * <code>0..getFieldCount()-1</code>.
+     */
     public final int getFieldCount() {
         return fields.length;
     }
 
+    /**
+     * Set a field to a value.  Subclasses should use this method when
+     * computing fields.  It sets the time stamp in the
+     * <code>stamp[]</code> array to <code>INTERNALLY_SET</code>.  If a
+     * field that may not be set by subclasses is passed in, an
+     * <code>IllegalArgumentException</code> is thrown.  This prevents
+     * subclasses from modifying fields that are intended to be
+     * calendar-system invariant.
+     */
     protected final void internalSet(int field, int value) {
         if (((1 << field) & internalSetMask) == 0) {
             throw new IllegalArgumentException("Subclass cannot set " +
@@ -4088,10 +4276,22 @@ public abstract class Calendar implements Serializable, Cloneable {
         return (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
     }
 
+    /**
+     * Return the length of a month of the Gregorian calendar.
+     * @param y the extended year
+     * @param m the 0-based month number
+     * @return the number of days in the given month
+     */
     protected static final int gregorianMonthLength(int y, int m) {
         return GREGORIAN_MONTH_COUNT[m][isGregorianLeapYear(y)?1:0];
     }
 
+    /**
+     * Return the length of a previous month of the Gregorian calendar.
+     * @param y the extended year
+     * @param m the 0-based month number
+     * @return the number of days in the month previous to the given month
+     */
     protected static final int gregorianPreviousMonthLength(int y, int m) {
         return (m > 0) ? gregorianMonthLength(y, m-1) : 31;
     }
@@ -4231,7 +4431,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Subclasses may call this method to obtain the current milliseconds.
+     * Return the current milliseconds without recomputing.
      */
     protected final long internalGetTimeInMillis() {
         return time;
