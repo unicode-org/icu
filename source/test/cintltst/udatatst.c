@@ -25,14 +25,14 @@
 
 #include <stdio.h>
 
-void TestUDataOpen();
-void TestUDataOpenChoiceDemo1();
-void TestUDataOpenChoiceDemo2(); 
-void TestUDataGetInfo();
-void TestUDataGetMemory();
-void TestErrorConditions();
-void TestAppData();
-void TestICUDataName();
+static void TestUDataOpen(void);
+static void TestUDataOpenChoiceDemo1(void);
+static void TestUDataOpenChoiceDemo2(void);
+static void TestUDataGetInfo(void);
+static void TestUDataGetMemory(void);
+static void TestErrorConditions(void);
+static void TestAppData(void);
+static void TestICUDataName(void);
 
 void
 addUDataTest(TestNode** root)
@@ -48,7 +48,7 @@ addUDataTest(TestNode** root)
 
 }
 
-void TestUDataOpen(){
+static void TestUDataOpen(){
     int i;
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -109,6 +109,7 @@ void TestUDataOpen(){
     free(path);
     free(testPath);
 }
+
 static UBool
 isAcceptable1(void *context,
              const char *type, const char *name,
@@ -190,7 +191,7 @@ isAcceptable3(void *context,
 
 }
 
-void TestUDataOpenChoiceDemo1() {
+static void TestUDataOpenChoiceDemo1() {
    
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -243,6 +244,7 @@ void TestUDataOpenChoiceDemo1() {
     free(testPath);
 
 }
+
 static UBool
 isAcceptable(void *context, 
              const char *type, const char *name,
@@ -266,7 +268,7 @@ isAcceptable(void *context,
     }
 }
 
-void TestUDataOpenChoiceDemo2() {
+static void TestUDataOpenChoiceDemo2() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
     int i;
@@ -326,8 +328,7 @@ void TestUDataOpenChoiceDemo2() {
 }
 
 
-
-void TestUDataGetInfo() {
+static void TestUDataGetInfo() {
 
     UDataMemory *result;
     /* UDataInfo cf. udata.h */
@@ -407,7 +408,7 @@ void TestUDataGetInfo() {
     free(testPath);
 }
 
-void TestUDataGetMemory() {
+static void TestUDataGetMemory() {
 
     UDataMemory *result;
     const uint16_t *table=NULL;
@@ -449,8 +450,9 @@ void TestUDataGetMemory() {
     udata_close(result);
 
     free(testPath);
- }
-void TestErrorConditions(){
+}
+
+static void TestErrorConditions(){
 
     UDataMemory *result=NULL;
     UErrorCode status=U_ZERO_ERROR;
@@ -570,7 +572,7 @@ void TestErrorConditions(){
 }
 
 /* Test whether apps and ICU can each have their own root.res */
-void TestAppData()
+static void TestAppData()
 {
   UResourceBundle *icu, *app;
   UResourceBundle *tmp = NULL;
@@ -656,7 +658,7 @@ void TestAppData()
   free(testPath);
 }
 
-void TestICUDataName()
+static void TestICUDataName()
 {
 	UVersionInfo icuVersion;
 	char expectDataName[20];
