@@ -238,7 +238,7 @@ static const char * const LANGUAGES_3[] = {
 /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
     "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
 /*  "iu",  "ja",  "jbo", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
-    "iku", "jpn", "jbo", "jpr", "jrb", "jaw", "kat", "kaa", "kab",
+    "iku", "jpn", "jbo", "jpr", "jrb", "jav", "kat", "kaa", "kab",
 /*  "kac", "kam", "kar", "kaw", "kbd", "kg",  "kha", "khi",    */
     "kac", "kam", "kar", "kaw", "kbd", "kon", "kha", "khi",
 /*  "kho", "ki",  "kj",  "kk",  "kl",  "km",  "kmb", "kn",     */
