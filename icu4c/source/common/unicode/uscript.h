@@ -98,6 +98,17 @@ uscript_getName(UScriptCode scriptCode);
 U_CAPI const char* 
 uscript_getShortName(UScriptCode scriptCode);
 
+
+/** 
+ * Gets the script code associated with the given codepoint.
+ * Returns USCRIPT_MALAYAM given 0x0D02 
+ * @param codepoint UChar32 codepoint
+ * @param err the error status code.
+ * @return The UScriptCode 
+ */
+U_CAPI UScriptCode 
+uscript_getScript(UChar32 codepoint, UErrorCode *err);
+
 #endif
 
 
