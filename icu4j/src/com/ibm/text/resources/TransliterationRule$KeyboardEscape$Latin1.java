@@ -2,7 +2,7 @@ package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
 
-public class TransliterationRuleKeyboardEscapeLatin1 extends ListResourceBundle {
+public class TransliterationRule$KeyboardEscape$Latin1 extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */

@@ -2,7 +2,7 @@ package com.ibm.text.resources;
 
 import java.util.ListResourceBundle;
 
-public class TransliterationRuleLatinDevanagari extends ListResourceBundle {
+public class TransliterationRule$Latin$Devanagari extends ListResourceBundle {
     /**
      * Overrides ListResourceBundle
      */
