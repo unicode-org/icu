@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/InfoDialog.java,v $
- * $Date: 2002/08/13 21:50:44 $
- * $Revision: 1.2 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 import java.awt.event.*;

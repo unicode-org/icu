@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/DemoApplet.java,v $ 
- * $Date: 2002/02/16 03:05:00 $ 
- * $Revision: 1.6 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 import java.awt.*;
@@ -24,7 +18,7 @@ import com.ibm.icu.dev.demo.impl.AppletFrame;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.6 $ $Date: 2002/02/16 03:05:00 $
+ * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.7 $ $Date: 2004/03/26 20:01:58 $
  */
 public class DemoApplet extends Applet {
 

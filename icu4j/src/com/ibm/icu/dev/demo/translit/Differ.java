@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Differ.java,v $
-* $Date: 2002/07/26 20:09:01 $
-* $Revision: 1.1 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.demo.translit;

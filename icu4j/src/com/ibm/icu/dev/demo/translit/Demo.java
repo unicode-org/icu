@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2003/06/03 18:49:27 $ 
- * $Revision: 1.27 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.translit;
 
@@ -30,7 +24,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.27 $ $Date: 2003/06/03 18:49:27 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.28 $ $Date: 2004/03/26 20:01:58 $
  */
 public class Demo extends Frame {
 

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/BreakIteratorRules_en_US_DEMO.java,v $ 
- * $Date: 2004/02/06 21:54:04 $ 
- * $Revision: 1.9 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.rbbi;
 
