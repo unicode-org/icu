@@ -19,10 +19,11 @@
 #include "unicode/putil.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
+#include "unicode/uscript.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/uset.h"
 #include "cintltst.h"
-#include "ccolltst.h"
 #include "cstring.h"
 
 #include "unicode/ures.h"
@@ -32,6 +33,7 @@
 #endif
 
 static void TestNullDefault(void);
+static void VerifyTranslation(void);
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -148,6 +150,7 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
     addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");
     addTest(root, &TestConsistentCountryInfo,"tsutil/cloctst/TestConsistentCountryInfo");
+    addTest(root, &VerifyTranslation,        "tsutil/cloctst/VerifyTranslation");
 }
 
 
@@ -1647,6 +1650,7 @@ TestLocaleStructure(void) {
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
+    const char *currLoc;
 
     /* TODO: Compare against parent's data too. This code can't handle fallbacks that some tools do already. */
 /*    char locName[ULOC_FULLNAME_CAPACITY];
@@ -1680,15 +1684,14 @@ TestLocaleStructure(void) {
     }
     for (locIndex = 0; locIndex < locCount; locIndex++) {
         errorCode=U_ZERO_ERROR;
-        currentLocale = ures_open(NULL, uloc_getAvailable(locIndex), &errorCode);
+        currLoc = uloc_getAvailable(locIndex);
+        currentLocale = ures_open(NULL, currLoc, &errorCode);
         if(errorCode != U_ZERO_ERROR) {
             if(U_SUCCESS(errorCode)) {
-                if (strcmp(uloc_getAvailable(locIndex),"sv_FI_AL") != 0) {
-                    /* It's installed, but there is no data.
-                       It's installed for the g18n white paper [grhoten] */
-                    log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
-                        uloc_getAvailable(locIndex));
-                }
+                /* It's installed, but there is no data.
+                   It's installed for the g18n white paper [grhoten] */
+                log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
+                    uloc_getAvailable(locIndex));
             } else {
                 log_err("%%%%%%% Unexpected error %d in %s %%%%%%%",
                     u_errorName(errorCode),
@@ -1700,15 +1703,15 @@ TestLocaleStructure(void) {
         ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
         if(errorCode != U_ZERO_ERROR) {
             log_err("No version information is available for locale %s, and it should be!\n",
-                uloc_getAvailable(locIndex));
+                currLoc);
         }
         else if (ures_getStringByKey(currentLocale, "Version", NULL, &errorCode)[0] == (UChar)(0x78)) {
             log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
-                uloc_getAvailable(locIndex));
+                currLoc);
         }
-        TestKeyInRootRecursive(root, currentLocale, uloc_getAvailable(locIndex));
+        TestKeyInRootRecursive(root, currentLocale, currLoc);
 #ifdef WIN32
-        testLCID(currentLocale, uloc_getAvailable(locIndex));
+        testLCID(currentLocale, currLoc);
 #endif
         ures_close(currentLocale);
     }
@@ -1894,4 +1897,107 @@ TestConsistentCountryInfo(void) {
             }
         }
     }
+}
+
+static int32_t
+findStringSetMismatch(const UChar *string, int32_t langSize, const UChar *exemplarCharacters, int32_t exemplarLen) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    USet *exemplarSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
+    int32_t strIdx;
+    if (U_FAILURE(errorCode)) {
+        log_err("error uset_openPattern returned %s\n", u_errorName(errorCode));
+        return -1;
+    }
+
+    for (strIdx = 0; strIdx < langSize; strIdx++) {
+        if (!uset_contains(exemplarSet, string[strIdx])
+            && string[strIdx] != 0x0020 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d) {
+            return strIdx;
+        }
+    }
+    uset_close(exemplarSet);
+    return -1;
+}
+
+static void VerifyTranslation(void) {
+    UResourceBundle *root, *currentLocale;
+    int32_t locCount = uloc_countAvailable();
+    int32_t locIndex;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    int32_t exemplarLen;
+    const UChar *exemplarCharacters;
+    const char *currLoc;
+    UScriptCode scripts[USCRIPT_CODE_LIMIT];
+    int32_t numScripts;
+
+    if (locCount <= 1) {
+        log_data_err("At least root needs to be installed\n");
+    }
+
+    root = ures_openDirect(NULL, "root", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("Can't open root\n");
+        return;
+    }
+    for (locIndex = 0; locIndex < locCount; locIndex++) {
+        errorCode=U_ZERO_ERROR;
+        currLoc = uloc_getAvailable(locIndex);
+        currentLocale = ures_open(NULL, currLoc, &errorCode);
+        if(errorCode != U_ZERO_ERROR) {
+            if(U_SUCCESS(errorCode)) {
+                /* It's installed, but there is no data.
+                   It's installed for the g18n white paper [grhoten] */
+                log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
+                    uloc_getAvailable(locIndex));
+            } else {
+                log_err("%%%%%%% Unexpected error %d in %s %%%%%%%",
+                    u_errorName(errorCode),
+                    uloc_getAvailable(locIndex));
+            }
+            ures_close(currentLocale);
+            continue;
+        }
+        exemplarCharacters = ures_getStringByKey(currentLocale, "ExemplarCharacters", &exemplarLen, &errorCode);
+        if (U_FAILURE(errorCode)) {
+            log_err("error ures_getStringByKey returned %s\n", u_errorName(errorCode));
+        }
+        else if (QUICK && exemplarLen > 2048) {
+            log_verbose("skipping test for %s\n", currLoc);
+        }
+        else {
+            UChar langBuffer[128];
+            int32_t langSize;
+            int32_t strIdx;
+            langSize = uloc_getDisplayLanguage(currLoc, currLoc, langBuffer, sizeof(langBuffer)/sizeof(langBuffer[0]), &errorCode);
+            if (U_FAILURE(errorCode)) {
+                log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));
+            }
+            else {
+                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen);
+                if (strIdx >= 0) {
+                    log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters.\n",
+                        currLoc, strIdx);
+                }
+            }
+            langSize = uloc_getDisplayCountry(currLoc, currLoc, langBuffer, sizeof(langBuffer)/sizeof(langBuffer[0]), &errorCode);
+            if (U_FAILURE(errorCode)) {
+                log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
+            }
+            else {
+                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen);
+                if (strIdx >= 0) {
+                    log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters.\n",
+                        currLoc, strIdx);
+                }
+            }
+            numScripts = uscript_getCode(currLoc, scripts, sizeof(scripts)/sizeof(scripts[0]), &errorCode);
+            if (numScripts == 0) {
+                log_err("uscript_getCode(%s) doesn't work.\n", currLoc);
+            }
+            /* TODO: test that the scripts are a superset of exemplar characters. */
+        }
+        ures_close(currentLocale);
+    }
+
+    ures_close(root);
 }
