@@ -637,12 +637,13 @@ inline int32_t
 DecimalFormatSymbols::compareInfinity(const UnicodeString& text,
                                       UTextOffset offset) const
 {
+    int32_t symbolLength = fSymbols[kInfinitySymbol].length();
     return text.compare(offset,
-                        fSymbols[kInfinitySymbol].length(),
+                        symbolLength,
                         fSymbols[kInfinitySymbol],
                         0,
-                        fSymbols[kInfinitySymbol].length())
-           ? 0 : fSymbols[kInfinitySymbol].length();
+                        symbolLength)
+           ? 0 : symbolLength;
 }
 
 // -------------------------------------
@@ -666,12 +667,13 @@ DecimalFormatSymbols::setNaN(const UnicodeString& NaN)
 inline int32_t
 DecimalFormatSymbols::compareNaN(const UnicodeString& text, UTextOffset offset) const
 {
+    int32_t symbolLength = fSymbols[kNaNSymbol].length();
     return text.compare(offset,
-                        fSymbols[kNaNSymbol].length(),
+                        symbolLength,
                         fSymbols[kNaNSymbol],
                         0,
-                        fSymbols[kNaNSymbol].length())
-           ? 0 : fSymbols[kNaNSymbol].length();
+                        symbolLength)
+           ? 0 : symbolLength;
 }
 
 // -------------------------------------
@@ -744,12 +746,13 @@ inline int32_t
 DecimalFormatSymbols::compareCurrencySymbol(const UnicodeString& text,
                                             UTextOffset offset) const
 {
+    int32_t symbolLength = fSymbols[kCurrencySymbol].length();
     return text.compare(offset,
-                        fSymbols[kCurrencySymbol].length(),
+                        symbolLength,
                         fSymbols[kCurrencySymbol],
                         0,
-                        fSymbols[kCurrencySymbol].length())
-           ? 0 : fSymbols[kCurrencySymbol].length();
+                        symbolLength)
+           ? 0 : symbolLength;
 }
 
 // -------------------------------------
@@ -774,12 +777,13 @@ inline int32_t
 DecimalFormatSymbols::compareInternationalCurrencySymbol(const UnicodeString& text,
                                                          UTextOffset offset) const
 {
+    int32_t symbolLength = fSymbols[kIntlCurrencySymbol].length();
     return text.compare(offset,
-                        fSymbols[kIntlCurrencySymbol].length(),
+                        symbolLength,
                         fSymbols[kIntlCurrencySymbol],
                         0,
-                        fSymbols[kIntlCurrencySymbol].length())
-           ? 0 : fSymbols[kIntlCurrencySymbol].length();
+                        symbolLength)
+           ? 0 : symbolLength;
 }
 
 // -------------------------------------
