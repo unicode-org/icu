@@ -39,6 +39,7 @@ void addCollIterTest(TestNode** root)
                                 "tscoll/citertst/TestNormalizedUnicodeChar");
     addTest(root, &TestNormalization, "tscoll/citertst/TestNormalization");
     addTest(root, &TestBug672, "tscoll/citertst/TestBug672");
+    addTest(root, &TestBug672Normalize, "tscoll/citertst/TestBug672Normalize");
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
 }
 
@@ -112,6 +113,82 @@ static void TestBug672() {
         log_err("ERROR: Different locales have different offsets at the same character\n");
     }
 }
+
+
+
+//  Running this test with normalization enabled showed up a bug in the incremental
+//    normalization code.
+static void TestBug672Normalize() {
+    UErrorCode  status = U_ZERO_ERROR;
+    UChar       pattern[20];
+    UChar       text[50];
+    int         i;
+    int         result[3][3];
+
+    u_uastrcpy(pattern, "resume");
+    u_uastrcpy(text, "Time to resume updating my resume.");
+
+    for (i = 0; i < 3; ++ i) {
+        UCollator          *coll = ucol_open(LOCALES[i], &status);
+        UCollationElements *pitr = NULL;
+        UCollationElements *titer = NULL;
+
+        ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+
+        pitr = ucol_openElements(coll, pattern, -1, &status);
+        titer = ucol_openElements(coll, text, -1, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: in creation of either the collator or the collation iterator :%s\n",
+                    myErrorName(status));
+            return;
+        }
+
+        log_verbose("locale tested %s\n", LOCALES[i]);
+
+        while (ucol_next(pitr, &status) != UCOL_NULLORDER &&
+               U_SUCCESS(status)) {
+        }
+        if (U_FAILURE(status)) {
+            log_err("ERROR: reversing collation iterator :%s\n",
+                    myErrorName(status));
+            return;
+        }
+        ucol_reset(pitr);
+
+        ucol_setOffset(titer, u_strlen(pattern), &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: setting offset in collator :%s\n",
+                    myErrorName(status));
+            return;
+        }
+        result[i][0] = ucol_getOffset(titer);
+        log_verbose("Text iterator set to offset %d\n", result[i][0]);
+
+        /* Use previous() */
+        ucol_previous(titer, &status);
+        result[i][1] = ucol_getOffset(titer);
+        log_verbose("Current offset %d after previous\n", result[i][1]);
+
+        /* Add one to index */
+        log_verbose("Adding one to current offset...\n");
+        ucol_setOffset(titer, ucol_getOffset(titer) + 1, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: setting offset in collator :%s\n",
+                    myErrorName(status));
+            return;
+        }
+        result[i][2] = ucol_getOffset(titer);
+        log_verbose("Current offset in text = %d\n", result[i][2]);
+        ucol_close(coll);
+    }
+
+    if (uprv_memcmp(result[0], result[1], 3) != 0 ||
+        uprv_memcmp(result[1], result[2], 3) != 0) {
+        log_err("ERROR: Different locales have different offsets at the same character\n");
+    }
+}
+
+
 
 
 /**
