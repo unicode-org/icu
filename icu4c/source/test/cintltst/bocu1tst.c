@@ -855,7 +855,7 @@ TestBOCU1RefDiff(void) {
     log_verbose("                            wD(%8ld)      %s%s\n", i-1, buf1, buf2);
 
     if(countErrors==0) {
-        log_info("writeDiff(-0x10ffff..0x10ffff) works fine\n");
+        log_verbose("writeDiff(-0x10ffff..0x10ffff) works fine\n");
     } else {
         log_err("writeDiff(-0x10ffff..0x10ffff) violates lexical ordering in %d cases\n", countErrors);
     }
@@ -863,7 +863,7 @@ TestBOCU1RefDiff(void) {
     /* output signature byte sequence */
     i=0;
     writePacked(encodeBocu1(&i, 0xfeff), level);
-    log_info("\nBOCU-1 signature byte sequence: %02x %02x %02x\n",
+    log_verbose("\nBOCU-1 signature byte sequence: %02x %02x %02x\n",
             level[0], level[1], level[2]);
 }
 
