@@ -9,8 +9,8 @@ GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -dynamic -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -dynamic -c
+COMPILE.c=	$(CC) -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Extra commands to build and link
 LIBTOOL=        /usr/bin/libtool
@@ -20,8 +20,8 @@ LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) -dynamiclib $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared -framework System
-SHLIB.cc=	$(CXX) -dynamiclib $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -framework System
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared -framework System
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -framework System
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
