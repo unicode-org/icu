@@ -44,8 +44,7 @@ static const UChar NEW_LINE[] = {0x0a,0};
 #define C_NEW_LINE "\n"
 #endif
 
-static void TestFile() {
-    UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+static void TestFileFromICU(UFILE *myFile) {
     int32_t n[1];
     float myFloat = -1234.0;
     UDate myDate = 0.0;
@@ -54,13 +53,13 @@ static void TestFile() {
     UDate myNewDate = -1.0;
     int32_t newValuePtr[1];
     double newDoubleValuePtr[1];
-    UChar myUString[512];
-    UChar uStringBuf[512];
-    char myString[512] = "";
-    char testBuf[512] = "";
+    UChar myUString[256];
+    UChar uStringBuf[256];
+    char myString[256] = "";
+    char testBuf[256] = "";
 
-    u_memset(myUString, 0x0a, sizeof(myUString)/ sizeof(*myUString));
-    u_memset(uStringBuf, 0x0a, sizeof(uStringBuf) / sizeof(*uStringBuf));
+    u_memset(myUString, 0x2a, sizeof(myUString)/ sizeof(*myUString));
+    u_memset(uStringBuf, 0x2a, sizeof(uStringBuf) / sizeof(*uStringBuf));
 
     if (myFile == NULL) {
         log_err("Can't write test file.");
@@ -201,9 +200,12 @@ static void TestFile() {
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
     }
+    *newDoubleValuePtr = -1.0;
+    u_fscanf(myFile, "Spell Out %%V (non-ANSI): %V\n", newDoubleValuePtr);
+    if (myFloat != *newDoubleValuePtr) {
+        log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
+    }
 /*
-    u_fscanf(myFile, "Spell Out %%V (non-ANSI): %V\n", *n);
-
     *n = 1;
     u_fscanf(myFile, "Pointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
     u_fscanf(myFile, "Pointer to integer Value: %d\n", *n);
@@ -214,6 +216,22 @@ static void TestFile() {
 
     u_fclose(myFile);
 }
+
+static void TestFile() {
+/*    FILE *standardFile;*/
+
+    log_verbose("Testing u_fopen\n");
+    TestFileFromICU(u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL));
+
+/* Don't know how to make this work without stdout or stderr */
+/*
+    log_verbose("Testing u_finit\n");
+    standardFile = fopen(STANDARD_TEST_FILE, "wb");
+    TestFileFromICU(u_finit(standardFile, NULL, NULL));
+    fclose(standardFile);
+*/
+}
+
 
 static void TestFilePrintCompatibility() {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", NULL);
@@ -630,7 +648,7 @@ static void TestStringCompatibility() {
             size, expectedSize, cTestResult, expectedStr);\
     }\
     else {\
-        log_verbose("Got: %s", cTestResult);\
+        log_verbose("Got: %s\n", cTestResult);\
     }\
 
 
@@ -697,7 +715,7 @@ static void TestStream() {
     ucnv_setDefaultName("UTF-8");
 
     outTestStream << "Beginning of test ";
-    outTestStream << str1 << "  " << str2 << str3 << 3 << "2 " << 1.0 << NEW_LINE << str4 << ends;
+    outTestStream << str1 << "  " << str2 << str3 << 3 << "2 " << 1.0 << C_NEW_LINE << str4 << ends;
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
     }
