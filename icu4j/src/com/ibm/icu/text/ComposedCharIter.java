@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/ComposedCharIter.java,v $ 
- * $Date: 2002/12/03 22:03:59 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/12/11 23:36:58 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -55,6 +55,7 @@ import com.ibm.icu.impl.Utility;
  * It will be updated as later versions of Unicode are released.
  * @deprecated ICU 2.2
  */
+///CLOVER:OFF
 public final class ComposedCharIter {
     
     /**

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/11 23:30:25 $ 
-* $Revision: 1.59 $
+* $Date: 2002/12/11 23:37:42 $ 
+* $Revision: 1.60 $
 *
 *******************************************************************************
 */
@@ -4170,14 +4170,14 @@ public final class UCharacter
     private static final int SCRIPT_MASK_ = 0x0000007f;
                            
     // private constructor -----------------------------------------------
-      
+    ///CLOVER:OFF  
     /**
      * Private constructor to prevent instantiation
      */
     private UCharacter()
     {
     }
-      
+    ///CLOVER:ON 
     // private methods ---------------------------------------------------
     
     private static int getEuropeanDigit(int ch) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/12/05 01:21:42 $ 
- * $Revision: 1.21 $
+ * $Date: 2002/12/11 23:36:58 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -506,7 +506,7 @@ public abstract class NumberFormat extends Format{
     }
 
     // ===== Factory stuff =====
-
+    ///CLOVER:OFF
     /* @prototype */
     /* public */ static abstract class NumberFormatFactory {
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
@@ -575,7 +575,7 @@ public abstract class NumberFormat extends Format{
             return delegate.getSupportedLocaleNames();
         }
     }
-
+    ///CLOVER:ON
     /**
      * Get the set of Locales for which NumberFormats are installed
      * @return available locales
@@ -588,7 +588,7 @@ public abstract class NumberFormat extends Format{
             return service.getAvailableLocales();
         }
     }
-
+    ///CLOVER:OFF
     /**
      * Registers a new NumberFormat for the provided locale of the defined
      * type.  The returned object is a key that can be used to unregister this
@@ -635,7 +635,7 @@ public abstract class NumberFormat extends Format{
         }
         return service;
     }
-
+    ///CLOVER:OFF
     // ===== End of factory stuff =====
 
     /**
