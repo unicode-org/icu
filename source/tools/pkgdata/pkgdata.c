@@ -16,8 +16,6 @@
 *   (DLL, common data, etc.)
 */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
@@ -29,8 +27,17 @@
 #include "uoptions.h"
 
 #if U_HAVE_POPEN
+/*
+  We define __USE_POSIX2 so that we can get popen and pclose when
+  --enable-strict is used
+*/
+# ifndef __USE_POSIX2
+#  define __USE_POSIX2 1
+# endif
 # include <unistd.h>
 #endif
+#include <stdio.h>
+#include <stdlib.h>
 
 U_CDECL_BEGIN
 #include "pkgtypes.h"
