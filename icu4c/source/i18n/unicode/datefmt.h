@@ -568,18 +568,6 @@ private:
      * @return a date/time formatter, or 0 on failure.
      */
     static DateFormat* create(EStyle timeStyle, EStyle dateStyle, const Locale&);
-
-    /**
-     * fgLocales and fgLocalesCount cache the available locales array that is returned
-     * by getAvailableLocales().
-     */
-    static int32_t          fgLocalesCount;
-
-    /**
-     * fgLocales and fgLocalesCount cache the available locales array that is returned
-     * by getAvailableLocales().
-     */
-    static const Locale*    fgLocales;
 };
 
 inline UnicodeString&
