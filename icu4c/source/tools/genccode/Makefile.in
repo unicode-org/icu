@@ -58,7 +58,7 @@ all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
 install-local: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(SHELL) $(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 dist-local:
 
