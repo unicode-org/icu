@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/02 23:22:57 $
- * $Revision: 1.61 $
+ * $Date: 2001/11/03 04:43:12 $
+ * $Revision: 1.62 $
  *
  *****************************************************************************************
  */
@@ -454,7 +454,7 @@ public class TransliteratorTest extends TestFmwk {
      * Regression test for bugs found in Greek transliteration.
      */
     public void TestJ277() {
-        Transliterator gl = Transliterator.getInstance("Greek-Latin");
+        Transliterator gl = Transliterator.getInstance("Greek-Latin; NFD; [:M:]Remove; NFC");
 
         char sigma = (char)0x3C3;
         char upsilon = (char)0x3C5;
