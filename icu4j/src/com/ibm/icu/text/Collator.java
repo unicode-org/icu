@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/06/21 23:56:44 $ 
-* $Revision: 1.7 $
+* $Date: 2002/06/22 07:23:45 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -15,18 +15,16 @@ package com.ibm.icu.text;
 import java.util.Locale;
 
 /**
-* <p>
-* Collator is an abstract base class, its subclasses performs 
-* locale-sensitive String comparison. A concrete subclass, RuleBasedCollator, 
-* is provided and it allows customization of the collation ordering by the use 
-* of rule sets.
-* </p>
-* <p>
-* Following the 
-* <a href=http://www.unicode.org>Unicode Consortium</a>'s specifications for
-* the <a href=http://www.unicode.org/unicode/reports/tr10/>
-* Unicode Collation Algorithm (UCA)</a>, there are
-* 5 different levels of strength used in comparisons.
+* <p>Collator performs locale-sensitive string comparison. A concrete
+* subclass, RuleBasedCollator, allows customization of the collation
+* ordering by the use of rule sets.</p>
+* 
+* <p>Following the <a href=http://www.unicode.org>Unicode
+* Consortium</a>'s specifications for the 
+* <a href="http://www.unicode.org/unicode/reports/tr10/"> Unicode Collation
+* Algorithm (UCA)</a>, there are 5 different levels of strength used
+* in comparisons:
+*
 * <ul>
 * <li>PRIMARY strength: Typically, this is used to denote differences between 
 *     base characters (for example, "a" &lt; "b"). 
@@ -60,11 +58,12 @@ import java.util.Locale;
 *     are compared, just in case there is no difference. 
 *     For example, Hebrew cantellation marks are only distinguished at this 
 *     strength. This strength should be used sparingly, as only code point 
-*     values differences between two strings is an extremely rare occurrence. 
+*     value differences between two strings is an extremely rare occurrence. 
 *     Using this strength substantially decreases the performance for both 
 *     comparison and collation key generation APIs. This strength also 
 *     increases the size of the collation key.
 * </ul>
+*
 * Unlike the JDK, ICU4J's Collator deals only with 2 decomposition modes, 
 * the canonical decomposition mode and one that does not use any decomposition.
 * The compatibility decomposition mode, java.text.Collator.FULL_DECOMPOSITION
@@ -73,15 +72,13 @@ import java.util.Locale;
 * producing the same results as if the text were normalized in NFD. If 
 * canonical decomposition is turned off, it is the user's responsibility to 
 * ensure that all text is already in the appropriate form before performing
-* a comparison or before getting a CollationKey.
-* </p>
-* <p>
-* For more information about the collation service see the 
+* a comparison or before getting a CollationKey.</p>
+*
+* <p>For more information about the collation service see the 
 * <a href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html">users 
-* guide</a>.
-* </p>
-* <p>
-* Examples of use
+* guide</a>.</p>
+*
+* <p>Examples of use
 * <pre>
 * // Get the Collator for US English and set its strength to PRIMARY
 * Collator usCollator = Collator.getInstance(Locale.US);
@@ -90,8 +87,9 @@ import java.util.Locale;
 *     System.out.println("Strings are equivalent");
 * }
 * 
-* The following example shows how to compare two strings using the Collator 
-* for the default locale. 
+* The following example shows how to compare two strings using the
+* Collator for the default locale.
+*
 * // Compare two strings in the default locale
 * Collator myCollator = Collator.getInstance();
 * myCollator.setDecomposition(NO_DECOMPOSITION);
@@ -114,22 +112,21 @@ import java.util.Locale;
 * @see CollationKey
 * @author Syn Wee Quek
 * @since release 2.2, April 18 2002
-* @draft 2.2
+* @draft 2.2 
 */
-
 public abstract class Collator
 {     
-	// public data members ---------------------------------------------------
-	
-	/**
-     * Strongest collator strength value. Typically, used to denote differences 
-     * between base characters.
-     * See class documentation for more explanation.
+    // public data members ---------------------------------------------------
+        
+    /**
+     * Strongest collator strength value. Typically used to denote differences 
+     * between base characters. See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
      * @draft 2.2
      */
     public final static int PRIMARY = 0;
+
     /**
      * Second level collator strength value. 
      * Accents in the characters are considered secondary differences.
@@ -141,6 +138,7 @@ public abstract class Collator
      * @draft 2.2
      */
     public final static int SECONDARY = 1;
+
     /**
      * Third level collator strength value. 
      * Upper and lower case differences in characters are distinguished at this
@@ -152,19 +150,21 @@ public abstract class Collator
      * @draft 2.2
      */
     public final static int TERTIARY = 2;                            
+
     /**
      * Fourth level collator strength value. 
      * When punctuation is ignored 
-     * <a href=http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation>
+     * <a href="http://www-124.ibm.com/icu/userguide/Collate_Concepts.html#Ignoring_Punctuation">
      * (see Ignoring Punctuations in the user guide)</a> at PRIMARY to TERTIARY 
      * strength, an additional strength level can 
-     * be used to distinguish words with and without punctuation
+     * be used to distinguish words with and without punctuation.
      * See class documentation for more explanation.
      * @see #setStrength
      * @see #getStrength
      * @draft 2.2
      */
     public final static int QUATERNARY = 3;
+
     /**
      * <p>
      * Smallest Collator strength value. When all other strengths are equal, 
@@ -181,36 +181,32 @@ public abstract class Collator
     public final static int IDENTICAL = 15;
 
     /**
-     * <p>
-     * Decomposition mode value. With NO_DECOMPOSITION set, Strings will not be 
-     * decomposed for collation. This is the default 
-     * decomposition setting unless otherwise specified by the locale used
-     * to create the Collator.
-     * </p>
-     * <p>
-     * Note this value is different from JDK's
-     * </p>
+     * <p>Decomposition mode value. With NO_DECOMPOSITION set, Strings
+     * will not be decomposed for collation. This is the default
+     * decomposition setting unless otherwise specified by the locale
+     * used to create the Collator.</p>
+     *
+     * <p><strong>Note</strong> this value is different from the JDK's.</p>
      * @see #CANONICAL_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.2
+     * @draft 2.2 
      */
     public final static int NO_DECOMPOSITION = 16;
+
     /**
-     * <p>
-     * Decomposition mode value. With CANONICAL_DECOMPOSITION set, 
-     * characters that are canonical variants according to Unicode 2.0 will be 
-     * decomposed for collation.
-     * </p>
-     * <p>
-     * CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
+     * <p>Decomposition mode value. With CANONICAL_DECOMPOSITION set,
+     * characters that are canonical variants according to Unicode 2.0
+     * will be decomposed for collation.</p>
+     *
+     * <p>CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
      * described in <a href="http://www.unicode.org/unicode/reports/tr15/">
      * Unicode Technical Report #15</a>.
      * </p>
      * @see #NO_DECOMPOSITION
      * @see #getDecomposition
      * @see #setDecomposition
-     * @draft 2.2
+     * @draft 2.2 
      */
     public final static int CANONICAL_DECOMPOSITION = 1;
     
@@ -219,25 +215,23 @@ public abstract class Collator
     // public setters --------------------------------------------------------
     
     /**
-     * <p>
-     * Sets this Collator's strength property. The strength property 
+     * <p>Sets this Collator's strength property. The strength property 
      * determines the minimum level of difference considered significant 
-     * during comparison.
-     * </p>
-     * <p> 
-     * The default strength for the Collator is TERTIARY, unless specified 
-     * otherwise by the locale used to create the Collator.
-     * </p>
+     * during comparison.</p>
+     * 
+     * <p>The default strength for the Collator is TERTIARY, unless specified 
+     * otherwise by the locale used to create the Collator.</p>
+     *
      * <p>See the Collator class description for an example of use.</p>
-     * @param the new strength value.
+     * @param new Strength the new strength value.
      * @see #getStrength
      * @see #PRIMARY
      * @see #SECONDARY
      * @see #TERTIARY
      * @see #QUATERNARY
      * @see #IDENTICAL
-     * @exception IllegalArgumentException If the new strength value is not one 
-     * 		      of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
+     * @exception IllegalArgumentException if the new strength value is not one 
+     *                of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
      * @draft 2.2
      */
     public void setStrength(int newStrength) 
@@ -253,35 +247,34 @@ public abstract class Collator
     }
     
     /**
-     * <p>
-     * Set the decomposition mode of this Collator. 
-     * Setting this decomposition property with CANONICAL_DECOMPOSITION allows 
-     * the Collator to handle 
-     * un-normalized text properly, producing the same results as if the text 
-     * were normalized. If NO_DECOMPOSITION is set, it is the user's 
-     * responsibility to insure that all text is already in the appropriate 
-     * form before a comparison or before getting a CollationKey. Adjusting
-     * decomposition mode allows the user to select between faster and more
-     * complete collation behavior.
-     * </p>
-     * <p>
-     * Since a great majority of the world languages does not require text
-     * normalization, most locales has NO_DECOMPOSITION has the default 
-     * decomposition mode.
-     * <p>
-     * The default decompositon mode for the Collator is NO_DECOMPOSITON, 
-     * unless specified otherwise by the locale used to create the Collator.
-     * </p>
-     * <p>
-     * See getDecomposition for a description of decomposition mode.
-     * </p>
+     * <p>Set the decomposition mode of this Collator.  Setting this
+     * decomposition property with CANONICAL_DECOMPOSITION allows the
+     * Collator to handle un-normalized text properly, producing the
+     * same results as if the text were normalized. If
+     * NO_DECOMPOSITION is set, it is the user's responsibility to
+     * insure that all text is already in the appropriate form before
+     * a comparison or before getting a CollationKey. Adjusting
+     * decomposition mode allows the user to select between faster and
+     * more complete collation behavior.</p>
+     * 
+     * <p>Since a great many of the world's languages do not require
+     * text normalization, most locales set NO_DECOMPOSITION as the
+     * default decomposition mode.</p>
+     * 
+     * The default decompositon mode for the Collator is
+     * NO_DECOMPOSITON, unless specified otherwise by the locale used
+     * to create the Collator.</p>
+     * 
+     * <p>See getDecomposition for a description of decomposition
+     * mode.</p>
+     * 
      * @param decomposition the new decomposition mode
      * @see #getDecomposition
      * @see #NO_DECOMPOSITION
      * @see #CANONICAL_DECOMPOSITION
      * @exception IllegalArgumentException If the given value is not a valid 
      *            decomposition mode.
-     * @draft 2.2
+     * @draft 2.2 
      */
     public void setDecomposition(int decomposition) 
     {
@@ -324,17 +317,16 @@ public abstract class Collator
      */
     public static final Collator getInstance(Locale locale)
     {
-    	try {
-    		return new RuleBasedCollator(locale);
-    	} 
-    	catch(Exception e) {
-    		return RuleBasedCollator.UCA_;
-    	}
+        try {
+            return new RuleBasedCollator(locale);
+        } 
+        catch(Exception e) {
+            return RuleBasedCollator.UCA_;
+        }
     }
     
     /**
-     * <p>
-     * Returns this Collator's strength property. The strength property 
+     * <p>Returns this Collator's strength property. The strength property 
      * determines the minimum level of difference considered significant.
      * </p>
      * <p>
@@ -376,12 +368,12 @@ public abstract class Collator
     // public other methods -------------------------------------------------
 
     /**
-     * Convenience method for comparing the equality of two text Strings based 
-     * on this Collator's collation rules, strength and decomposition mode.
-     * @param source the source string to be compared with.
-     * @param target the target string to be compared with.
+     * Convenience method for comparing the equality of two text Strings using
+     * this Collator's rules, strength and decomposition mode.
+     * @param source the source string to be compared.
+     * @param target the target string to be compared.
      * @return true if the strings are equal according to the collation
-     *         rules. false, otherwise.
+     *         rules, otherwise false.
      * @see #compare
      * @exception NullPointerException thrown if either arguments is null.
      * @draft 2.2
@@ -412,7 +404,7 @@ public abstract class Collator
     /**
      * <p>
      * Compares the source text String to the target text String according to 
-     * the collation rules, strength and decomposition mode for this Collator. 
+     * this Collator's rules, strength and decomposition mode.
      * Returns an integer less than, 
      * equal to or greater than zero depending on whether the source String is 
      * less than, equal to or greater than the target String. See the Collator
@@ -432,8 +424,8 @@ public abstract class Collator
 
     /**
      * <p>
-     * Transforms the String into a series of bits that can be compared 
-     * bitwise to other CollationKeys. Bits generated depends on the collation
+     * Transforms the String into a CollationKey suitable for efficient
+     * repeated comparison.  The resulting key depends on the collator's
      * rules, strength and decomposition mode.
      * </p> 
      * <p>See the CollationKey class documentation for more information.</p>
@@ -448,7 +440,6 @@ public abstract class Collator
     public abstract CollationKey getCollationKey(String source);
     
     // protected constructor -------------------------------------------------
-
   
     // private data members --------------------------------------------------
     
@@ -456,6 +447,7 @@ public abstract class Collator
      * Collation strength
      */
     private int m_strength_ = TERTIARY;
+
     /**
      * Decomposition mode
      */ 
