@@ -132,17 +132,17 @@ endif
 ####
 ####
 #### 390 support
-install390: $(OUTTMPDIR)/icudata390.lst ./icupkg.inc
+install390: package390
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(OUTTMPDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OUTTMPDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
 ifeq ($(PKGDATA_MODE),dll)
 	$(INSTALL-L) $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(SO_TARGET_VERSION)$(IMPORT_LIB_EXT) $(DESTDIR)$(ICUPKGDATA_DIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(SO_TARGET_VERSION)$(IMPORT_LIB_EXT)
 endif
 
-#### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
-package390: $(OUTTMPDIR)/icudata390.lst $(OUTTMPDIR)/icudata.lst ./icupkg.inc
-	@$(MKINSTALLDIRS) $(BUILDDIR)/tmp3901
-	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(OUTTMPDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING)
+#### $(LIB_ICUDATA_NAME)$(STUB_SUFFIX) is the subset data for batch mode
+package390: $(OUTTMPDIR)/icudata390.lst $(OUTTMPDIR)/icudata.lst ./icupkg.inc packagedata
+	ln -s $(ICUDATA_NAME) $(OUTDIR)/build/$(ICUDATA_NAME)$(STUB_SUFFIX)
+	$(INVOKE) $(PKGDATA) -s $(BUILDDIR)$(STUB_SUFFIX) -T $(OUTTMPDIR) -p $(ICUDATA_NAME)$(STUB_SUFFIX) $(PKGDATA_LIBNAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(OS390LIST) -m dll $(PKGDATA_VERSIONING)
 	cp $(ICUPKGDATA_OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO) $(top_builddir)/stubdata/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX).$(SO)
 
 
@@ -360,11 +360,11 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
 ALLFILES390=uprops.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
-$(OUTTMPDIR)/icudata390.lst:  $(SRCLISTDEPS)
+$(OUTTMPDIR)/icudata390.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
 	@-$(RMV) $@
 	@for file in $(ALLFILES390); do \
-	  echo $(BUILDDIR)/$$file >> $@; \
+	  echo $$file >> $@; \
 	done;
 
 #########################################################################
