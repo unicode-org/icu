@@ -236,8 +236,8 @@ static const u_printf_info g_u_printf_infos[108] = {
 #define UFPRINTF_BUFFER_SIZE 1024
 #define UFPRINTF_SYMBOL_BUFFER_SIZE 8
 
-static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
-static UChar gSpaceStr[] = {0x20, 0}; /* " " */
+static const UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
+static const UChar gSpaceStr[] = {0x20, 0}; /* " " */
 
 int32_t
 u_fprintf(    UFILE        *f,
@@ -409,7 +409,7 @@ u_printf_string_handler(UFILE                 *stream,
         }
     }
     else {
-        s = gNullStr;
+        s = (UChar *)gNullStr;
     }
     len = u_strlen(s);
 
