@@ -4019,7 +4019,7 @@ trap 'rm -fr `echo "README icudefs.mk \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile  test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
@@ -4202,7 +4202,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
 		tools/dumpce/Makefile \
-		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile  test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
 		test/thaitest/Makefile \
