@@ -7,6 +7,7 @@ import com.ibm.icu.text.CollationKey;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.LocaleUtility;
 
 import java.util.Locale;
 import java.util.Vector;
@@ -23,7 +24,7 @@ public class CollationTest extends ModuleTest
             test.TestCIgnorableContraction();
         }*/
     }
-
+ 
     public void TestCIgnorableContraction() {
     	while (nextSettings()) {
     	    processTest();
@@ -78,25 +79,14 @@ public class CollationTest extends ModuleTest
         String locale = settings.getString("TestLocale");
         if (locale != null) {
             // this is a case where we have locale 
-            String lang = null;
-            String country = null;
             try {
                 if (locale.equalsIgnoreCase("root")) {
                     col = (RuleBasedCollator)Collator.getInstance(
                                                                Locale.ENGLISH);
                 }
                 else {
-                    int underscore = locale.indexOf('_');
-                    if (underscore == -1) {
-                        col = (RuleBasedCollator)Collator.getInstance(
-                                                       new Locale(locale, ""));       
-                    }
-                    else {
-                        lang = locale.substring(0, underscore);
-                        country = locale.substring(underscore + 1);
-                        col = (RuleBasedCollator)Collator.getInstance(
-                                                    new Locale(lang, country));          
-                    }
+                    Locale l = LocaleUtility.getLocaleFromName(locale);
+                    col = (RuleBasedCollator)Collator.getInstance(l);          
                 }
             } catch (Exception e) {
                 errln("Error creating collator for locale " + locale);
