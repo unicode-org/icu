@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Gujarati.txt,v $
-# $Date: 2002/07/25 21:20:26 $
-# $Revision: 1.8 $
+# $Date: 2002/08/14 00:40:58 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
 # InterIndic-Gujarati
@@ -115,8 +115,8 @@
 \ue06d>\u0aed; # DIGIT SEVEN
 \ue06e>\u0aee; # DIGIT EIGHT
 \ue06f>\u0aef; # DIGIT NINE
-\ue070>;
-\ue071>;
+\ue070 >  \u0ab0;  # FALLBACK RA 
+\ue071 >  \u0ab0;  # FALLBACK RA
 \ue072>;
 \ue073>;
 \ue074>;
@@ -128,8 +128,7 @@
 \ue07A>;
 0 > \u0ae6;       # FALLBACK FOR TAMIL
 1 > \u0ae7;
-\ue0f0 >  \u0ab0;  # FALLBACK RA 
-\ue0f1 >  \u0ab0;  # FALLBACK RA
+
 #\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
 #    :: NFC (NFD) ;
 # eof
